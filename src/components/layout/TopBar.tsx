@@ -5,7 +5,6 @@ import {
   Search,
   Moon,
   Sun,
-  Menu,
   UserRound,
   Heart,
   Settings,
@@ -31,10 +30,6 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { isMac } from "@/lib/platform";
 
-interface TopBarProps {
-  onMobileMenuOpen: () => void;
-}
-
 // ────────────────────────────────────────────────────────────────────────────
 // The five doors.
 //
@@ -44,8 +39,8 @@ interface TopBarProps {
 // behind the account button instead.
 //
 // Nothing was dropped: the same tree feeds the desktop dropdowns and the
-// mobile sheet, and every route that used to have an entry point still has
-// one. See the redesign report for the full route -> door table.
+// mobile full-screen menu, and every route that used to have an entry point
+// still has one. See the redesign report for the full route -> door table.
 // ────────────────────────────────────────────────────────────────────────────
 
 export interface NavChild {
@@ -140,12 +135,12 @@ export function isNavActive(pathname: string, section: NavSection): boolean {
 // TopBar
 // ────────────────────────────────────────────────────────────────────────────
 
-export function TopBar({ onMobileMenuOpen }: TopBarProps) {
+export function TopBar() {
   const { t } = useTranslation("common");
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
   // Below lg (1024px) the five doors plus the tool cluster no longer fit, so
-  // the doors collapse into the sheet behind the menu button.
+  // the doors move to the full-screen MobileMenu and its floating pill.
   const isCompact = useMediaQuery("(max-width: 1023px)");
   // Reading the resolved theme from context is what keeps this icon honest
   // when the OS flips under a `system` preference. The button is a two-state
@@ -159,17 +154,6 @@ export function TopBar({ onMobileMenuOpen }: TopBarProps) {
 
   return (
     <header className="zn-topbar">
-      {isCompact && (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={onMobileMenuOpen}
-          aria-label={t("actions.menu")}
-        >
-          <Menu />
-        </Button>
-      )}
-
       <Link to="/" viewTransition className="zn-topbar__brand" aria-label={t("app.name")}>
         <Wordmark />
       </Link>

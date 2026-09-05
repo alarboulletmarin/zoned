@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from 
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
-import { MobileSidebar, TopBar, Footer } from "@/components/layout";
+import { MobileMenu, TopBar, Footer } from "@/components/layout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
@@ -207,8 +207,6 @@ function App() {
     prevOnline.current = isOnline;
   }, [isOnline]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
   return (
     <SettingsProvider>
       <ThemeProvider>
@@ -221,14 +219,12 @@ function App() {
             </a>
             <ScrollToTopOnNavigate />
             <div className="zn-app">
-              <TopBar onMobileMenuOpen={() => setMobileSidebarOpen(true)} />
+              <TopBar />
 
-              {/* Mobile slide-over nav (hamburger). Desktop uses the
-                  horizontal nav inside TopBar, no sidebar. */}
-              <MobileSidebar
-                open={mobileSidebarOpen}
-                onOpenChange={setMobileSidebarOpen}
-              />
+              {/* Below 1024px navigation is a full-screen menu behind one
+                  floating pill; it owns its own open state (a native <dialog>).
+                  Desktop keeps the five doors in the header. */}
+              <MobileMenu />
 
               <div className="zn-app__body">
                 <ErrorBoundary>

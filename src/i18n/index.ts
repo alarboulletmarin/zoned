@@ -3,7 +3,7 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 // Boot-critical namespaces, bundled statically for the default language so
-// the first paint (TopBar, Footer, MobileSidebar, toasts) never waits on a
+// the first paint (TopBar, Footer, MobileMenu, toasts) never waits on a
 // network round-trip. Everything else — the other 14 namespaces and the
 // entire inactive language — is loaded through dynamic imports below, which
 // keeps ~120 KB gzip of locale JSON out of the entry chunk.

@@ -458,7 +458,10 @@
   border-radius: var(--r-lg);
 }
 
+/* Blockified: the name is composed with .zn-truncate, and an inline box
+   cannot be clipped — it would run over the buttons beside it. */
 .zn-ct__savedname {
+  display: block;
   font: var(--fw-medium) var(--fs-body-sm) / 1.3 var(--font-text);
 }
 
@@ -722,6 +725,17 @@
   background: var(--surface-page);
   border-block-start: var(--border-rule);
 }
+
+/* Below 1024px the floating menu pill sits over the end of this bar. The bar
+   is pinned to the viewport floor, so the page's --fab-clear reserve cannot
+   move it: it gives up the end of its own gutter instead, and its call stops
+   where the pill starts rather than running behind it. */
+@media (max-width: 1023px) {
+  .zn-rsp__bar {
+    padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
+  }
+}
+
 
 @media (min-width: 1024px) {
   .zn-rsp__bar {

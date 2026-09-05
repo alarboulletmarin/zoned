@@ -721,8 +721,8 @@
         "description": "Pas de formulaire, pas de mot de passe. Ouvre l'app et commence à courir."
       },
       "noData": {
-        "title": "Zéro donnée collectée",
-        "description": "Tout reste dans ton navigateur. Pas de serveur, pas de tracking."
+        "title": "Aucune donnée personnelle",
+        "description": "Aucun compte, aucune donnée d'entraînement envoyée. Seules des vues de page anonymes sont mesurées."
       },
       "openSource": {
         "title": "Open Source",
@@ -853,5 +853,13 @@
     "wipeConfirmBody": "Profil, {{favorites}} favoris, {{plans}} plans et historique des tests. Cette action ne peut pas être annulée.",
     "wipeConfirmButton": "Effacer définitivement",
     "wipeDone": "Données effacées. Rien à annuler."
+  },
+  "mobileMenu": {
+    "goTo": "Aller à",
+    "searchPlaceholder": "Rechercher une séance…",
+    "language": "Changer de langue",
+    "themeDark": "Thème sombre",
+    "themeLight": "Thème clair",
+    "more": "Le reste"
   }
 }

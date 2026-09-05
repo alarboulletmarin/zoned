@@ -34,6 +34,21 @@
   min-inline-size: 0;
 }
 
+/* Below 1024px the menu pill floats over the bottom-right corner for the whole
+   session, and the last row of the page has to clear it.
+
+   The reserve is NOT paid by .zn-app__body: its padding would sit below the
+   footer, and the footer ends on an inverted ink bar — the page colour would
+   show as a band under it on every phone. So the surface that actually ends
+   the document pays. Here that is the page itself, on the routes that hide
+   the footer (`:last-child` is exactly that condition); the footer pays for
+   itself in footer.css. */
+@media (max-width: 1023px) {
+  .zn-main:last-child {
+    padding-block-end: var(--fab-clear);
+  }
+}
+
 .zn-main {
   flex: 1;
   padding-block: var(--sp-12) var(--sp-8);

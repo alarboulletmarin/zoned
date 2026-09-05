@@ -1,0 +1,288 @@
+/* Mobile menu — one floating pill, and the full-screen ink panel behind it.
+ *
+ * Below 1024px the five doors no longer fit in the header, so they move down
+ * here: a single pill in the bottom-right corner, where the thumb already is,
+ * and nothing else floating.
+ *
+ * The panel is a NATIVE <dialog> opened with showModal(). The top layer, the
+ * focus trap, Escape and the focus returning to the trigger are the platform's
+ * — that is why this surface stopped being a Radix Sheet. The one thing the
+ * platform does not hand over is the scroll lock; MobileMenu.tsx writes it.
+ *
+ * The open panel is INK IN BOTH THEMES. It is a printed black card, not a piece
+ * of paper that follows the theme, so it reads --panel-ink-* — the three fixed
+ * tokens colors.css deliberately leaves out of its .dark block — instead of the
+ * semantic aliases. No rule in this file is theme-aware, and none needs to be.
+ *
+ * The 44px touch floor is unconditional here rather than behind
+ * `@media (pointer: coarse)`: this whole surface only exists below 1024px, so
+ * the floor applies to every pointer that can reach it.
+ */
+
+/* ── the two pills, one on top of the other's place ───────────────────── */
+
+/* Closed and open, the button lives at the same coordinates: the panel opens
+   under the thumb and closes under it too. */
+.zn-menu-fab,
+.zn-menu__close {
+  position: fixed;
+  /* Above the page's own floating things — the docked action bars (30) and
+     ScrollToTop (40) — and below every modal layer (50), so an open dialog,
+     sheet or command palette covers the pill instead of being pierced by it.
+     The close pill is in the top layer with its dialog, where this is moot. */
+  z-index: 45;
+  inset-block-end: calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
+  inset-inline-end: var(--sp-13);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-11);
+
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-label);
+  line-height: 1;
+  text-transform: uppercase;
+
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-menu-fab:active,
+.zn-menu__close:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* Closed: solid ink, cream type — the same inversion the selected door in the
+   header wears, so the button reads as "the app's own control".
+   The ring is cream in both themes: invisible against paper, and the only
+   thing separating the pill from the footer's ink bar when the page is
+   scrolled to the floor. */
+.zn-menu-fab {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+  border: var(--bw-rule) solid var(--panel-ink-text);
+  box-shadow: var(--shadow-block);
+}
+
+.zn-menu-fab > svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+}
+
+/* Open: the screen's one accent fill. There is exactly one action on an open
+   menu that is not a destination, and this is it. */
+.zn-menu__close {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: var(--bw-rule) solid var(--accent);
+}
+
+/* ── the panel ────────────────────────────────────────────────────────── */
+
+/* A dialog ships with a border, padding, auto margins and a size capped below
+   the viewport — all four are undone here so it can be the whole screen. */
+.zn-menu {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  inline-size: 100%;
+  max-inline-size: none;
+  block-size: 100vh;
+  block-size: 100dvh;
+  max-block-size: none;
+
+  background: var(--panel-ink);
+  color: var(--panel-ink-text);
+  overflow: hidden;
+}
+
+/* Only the open state gets a display value: the UA rule that hides a closed
+   dialog is `dialog:not([open])`, and an unconditional display here would
+   defeat it. */
+.zn-menu[open] {
+  display: flex;
+  flex-direction: column;
+  animation: zn-menu-in var(--dur-base) var(--ease-out);
+}
+
+@keyframes zn-menu-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.zn-menu::backdrop {
+  background: var(--panel-ink);
+}
+
+.zn-menu__inner {
+  flex: 1;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-14);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  padding-block: calc(var(--sp-15) + env(safe-area-inset-top, 0px)) var(--fab-clear);
+  padding-inline: var(--pad-screen-x);
+
+  animation: zoned-slide-in var(--dur-slow) var(--ease-out);
+}
+
+/* The kicker's own colour is the page's faint ink, which is unreadable on this
+   ground. Same role, the panel's grey. */
+.zn-menu__eyebrow {
+  color: var(--panel-ink-faint);
+}
+
+/* ── the five doors ───────────────────────────────────────────────────── */
+
+.zn-menu__doors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Display type, left-aligned, stacked tight — the doors are the screen. */
+.zn-menu__door {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  min-block-size: var(--hit-min);
+  padding-block: var(--sp-1);
+  color: var(--panel-ink-text);
+  text-decoration: none;
+}
+
+/* The door you are standing in. A disc, not an inversion: the panel is already
+   inverted, so the only mark left that reads at a glance is the accent. */
+.zn-menu__dot {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  flex: none;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+}
+
+/* ── the floor: search, the two switches, everything else ─────────────── */
+
+.zn-menu__foot {
+  margin-block-start: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+/* Shaped like a field, but it is a button: it opens the command palette, which
+   is the app's one search. */
+.zn-menu__search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-10);
+
+  background: transparent;
+  color: var(--panel-ink-faint);
+  border: var(--bw-rule) solid var(--panel-ink-text);
+  border-radius: var(--r-pill);
+
+  font: var(--type-body-sm);
+  text-align: start;
+  cursor: pointer;
+}
+
+.zn-menu__search > svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  color: var(--panel-ink-text);
+}
+
+.zn-menu__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+}
+
+.zn-menu__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-10);
+
+  background: transparent;
+  color: var(--panel-ink-text);
+  border: var(--bw-rule) solid var(--panel-ink-text);
+  border-radius: var(--r-pill);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* Both codes are printed; the one in force is the one in full ink. */
+.zn-menu__lang {
+  color: var(--panel-ink-faint);
+}
+
+.zn-menu__lang[data-on] {
+  color: var(--panel-ink-text);
+}
+
+/* Everything the five doors hold, plus the account pages. The maquette shows
+   five words; these are the other twenty-five routes, and dropping them would
+   be a regression rather than a simplification — so they are printed small,
+   in mono, at the floor of the panel. */
+.zn-menu__rest {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-menu__more {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--sp-11);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-menu__more-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--hit-min);
+
+  color: var(--panel-ink-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  text-decoration: none;
+}
+
+.zn-menu__more-link[aria-current="page"] {
+  color: var(--panel-ink-text);
+}
+
+/* What the pill costs the rest of the app is paid in the files that own the
+   surfaces, not here: --fab-clear in shell.css, footer.css, scroll-to-top.css
+   and shell-misc.css, and --fab-w in the four sheets that dock an action bar
+   to the viewport floor (session, plan-view, plan-weeks, calc-tests). A
+   grouped rule in this file would lose the cascade to three of them, which are
+   imported later and re-state the whole `padding` shorthand. */

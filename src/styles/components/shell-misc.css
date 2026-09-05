@@ -39,6 +39,18 @@
   inset-block-end: calc(var(--sp-8) + var(--sp-20) + var(--sp-15));
 }
 
+/* Below 1024px the floating menu pill owns the bottom-right corner: the banner
+   starts above it rather than under it, and the stacked one keeps the same
+   distance from the card it sits on. */
+@media (max-width: 1023px) {
+  .zn-prompt {
+    inset-block-end: var(--fab-clear);
+  }
+  .zn-prompt[data-stacked] {
+    inset-block-end: calc(var(--fab-clear) + var(--sp-20) + var(--sp-15));
+  }
+}
+
 @media (min-width: 768px) {
   .zn-prompt {
     /* The width this banner has always had; a message this short does not

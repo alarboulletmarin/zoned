@@ -721,8 +721,8 @@
         "description": "No form, no password. Open the app and start running."
       },
       "noData": {
-        "title": "Zero data collected",
-        "description": "Everything stays in your browser. No server, no tracking."
+        "title": "No personal data",
+        "description": "No account, no training data sent. Only anonymous page views are measured."
       },
       "openSource": {
         "title": "Open Source",
@@ -853,5 +853,13 @@
     "wipeConfirmBody": "Profile, {{favorites}} favourites, {{plans}} plans and test history. This cannot be undone.",
     "wipeConfirmButton": "Erase permanently",
     "wipeDone": "Data erased. Nothing to undo."
+  },
+  "mobileMenu": {
+    "goTo": "Go to",
+    "searchPlaceholder": "Search for a workout…",
+    "language": "Change language",
+    "themeDark": "Dark theme",
+    "themeLight": "Light theme",
+    "more": "Everything else"
   }
 }

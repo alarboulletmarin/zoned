@@ -138,6 +138,16 @@
   margin-inline-start: auto;
 }
 
+/* Below 1024px the floating menu pill sits over this corner — over the version,
+   which is pinned to the far end of the bar. The bar pays the pill's clearance
+   itself rather than the shell paying it: the ink has to reach the floor of the
+   document, and a reserve above it would show as a band of page colour. */
+@media (max-width: 1023px) {
+  .zn-footer__bar {
+    padding-block-end: var(--fab-clear);
+  }
+}
+
 @media (max-width: 640px) {
   .zn-footer__version {
     margin-inline-start: 0;

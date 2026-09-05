@@ -57,6 +57,7 @@
 @import "./components/illustration-slot.css" layer(components);
 @import "./components/learn.css" layer(components);
 @import "./components/library.css" layer(components);
+@import "./components/mobile-menu.css" layer(components);
 @import "./components/numbers.css" layer(components);
 @import "./components/nutrition.css" layer(components);
 @import "./components/page-loader.css" layer(components);

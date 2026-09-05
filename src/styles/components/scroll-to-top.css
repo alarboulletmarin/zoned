@@ -23,6 +23,13 @@
     border-color var(--dur-fast) var(--ease-out);
 }
 
+/* Below 1024px the menu pill owns that corner, so this one sits above it. */
+@media (max-width: 1023px) {
+  .zn-btn.zn-scroll-top {
+    bottom: var(--fab-clear);
+  }
+}
+
 /* An outlined button floating over scrolling content still needs paper
    behind it, otherwise the list reads straight through the glyph. */
 .zn-btn.zn-scroll-top[data-variant="outline"] {

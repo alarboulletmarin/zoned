@@ -30,6 +30,21 @@
   --gap-grid: var(--sp-10);
   --gap-stack: var(--sp-7);
   --hit-min: 44px;
+
+  /* The floating menu button's footprint below 1024px: its 44px pill, the 26px
+     it keeps off the screen edge, the phone's safe area, and a 12px gap above
+     it. Anything that would otherwise sit under it — another floating control,
+     the page's own bottom reserve — clears it with this. */
+  --fab-clear: calc(
+    var(--hit-min) + var(--sp-13) + var(--sp-6) + env(safe-area-inset-bottom, 0px)
+  );
+
+  /* The same pill measured across: its icon, its gap, MENU in mono and 22px of
+     padding either side, rounded up to the next step of the grid. The docked
+     action bars — which are pinned to the viewport floor and so cannot be
+     pushed by --fab-clear — keep this much of their end margin free. A longer
+     label than MENU would have to raise this with it. */
+  --fab-w: 120px;
 }
 
 /* Mobile screen margin is 20px, not 40px. Declared as an override of the same
