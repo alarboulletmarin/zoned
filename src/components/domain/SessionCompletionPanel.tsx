@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { rpeColor } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
@@ -11,7 +12,6 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { PlanSession } from "@/types/plan";
 import type { SessionCompletionData } from "@/lib/planStorage";
@@ -90,25 +90,25 @@ function CompletionForm({
   const { t } = useTranslation("plan");
 
   return (
-    <div className={cn(compact ? "p-4" : "flex flex-col gap-4")}>
+    <div className="zn-pcomplete" data-compact={compact || undefined}>
       {/* Title + description */}
-      <div className={compact ? "mb-3" : "px-4 pt-4"}>
-        <p className={cn(compact ? "text-sm font-semibold" : "text-lg font-semibold")}>
+      <div className="zn-pcomplete__head">
+        <p className="zn-pcomplete__title">
           {t("sessionCompletion.sheetTitle")}
         </p>
-        <p className={cn("truncate", compact ? "text-xs text-muted-foreground" : "text-sm text-muted-foreground")}>
-          <span className="font-medium">{t("calendar.weekPrefix")}{weekNumber}</span>
-          {" \u00b7 "}
+        <p className="zn-pcomplete__sub">
+          {t("calendar.weekPrefix")}{weekNumber}
+          {" · "}
           {sessionName}
         </p>
       </div>
 
-      <div className={cn("space-y-4", compact ? "" : "px-4 pb-2")}>
+      <div className="zn-pcomplete__body">
         {/* Choice radio */}
         <div
           role="radiogroup"
           aria-label={t("sessionCompletion.sheetTitle")}
-          className="grid gap-2"
+          className="zn-pcomplete__choices"
         >
           {(
             [
@@ -125,25 +125,12 @@ function CompletionForm({
                 role="radio"
                 aria-checked={selected}
                 onClick={() => setChoice(option.value)}
-                className={cn(
-                  "flex items-start gap-3 rounded-lg border text-left transition-colors",
-                  compact ? "p-2.5" : "p-3",
-                  selected
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:bg-accent",
-                )}
+                className="zn-pcomplete__choice"
               >
-                <span
-                  className={cn(
-                    "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border",
-                    selected ? "border-primary" : "border-muted-foreground/40",
-                  )}
-                >
-                  {selected && <span className="size-2 rounded-full bg-primary" />}
-                </span>
-                <span className="flex-1">
-                  <span className="block text-sm font-medium">{option.label}</span>
-                  <span className="block text-xs text-muted-foreground">{option.hint}</span>
+                <span className="zn-pcomplete__radio" aria-hidden="true" />
+                <span className="zn-pcomplete__label">
+                  <span className="zn-pcomplete__name">{option.label}</span>
+                  <span className="zn-pcomplete__hint">{option.hint}</span>
                 </span>
               </button>
             );
@@ -152,56 +139,49 @@ function CompletionForm({
 
         {/* Modified form */}
         {choice === "modified" && (
-          <div className="space-y-3 rounded-lg border border-dashed border-border bg-muted/30 p-3">
-            <div className="grid grid-cols-2 gap-3">
-              <label className="space-y-1">
-                <span className="block text-xs font-medium text-muted-foreground">
-                  {t("sessionCompletion.actualDuration")}
-                </span>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min={0}
-                  step={1}
-                  value={durationMin}
-                  onChange={(e) => setDurationMin(e.target.value)}
-                  className="w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </label>
-              <label className="space-y-1">
-                <span className="block text-xs font-medium text-muted-foreground">
-                  {t("sessionCompletion.actualDistance")}
-                </span>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min={0}
-                  step={0.1}
-                  value={distanceKm}
-                  onChange={(e) => setDistanceKm(e.target.value)}
-                  className="w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </label>
-            </div>
+          <div className="zn-pcomplete__actual">
+            <label>
+              <span className="zn-kicker zn-kicker--inline zn-plabel">
+                {t("sessionCompletion.actualDuration")}
+              </span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step={1}
+                value={durationMin}
+                onChange={(e) => setDurationMin(e.target.value)}
+                className="zn-pfield"
+              />
+            </label>
+            <label>
+              <span className="zn-kicker zn-kicker--inline zn-plabel">
+                {t("sessionCompletion.actualDistance")}
+              </span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step={0.1}
+                value={distanceKm}
+                onChange={(e) => setDistanceKm(e.target.value)}
+                className="zn-pfield"
+              />
+            </label>
           </div>
         )}
 
         {/* RPE -- shown for completed & modified */}
         {choice !== "skipped" && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">
+          <div className="zn-prpe">
+            <div className="zn-prpe__head">
+              <span className="zn-kicker zn-kicker--inline">
                 {t("sessionCompletion.rpeLabel")}
               </span>
-              <span
-                className="text-xs font-semibold"
-                style={{ color: rpeColor(rpe) }}
-              >
-                {rpe}/10
-              </span>
+              <span className="zn-prpe__value">{rpe}/10</span>
             </div>
             <div
-              className="relative flex h-8 overflow-hidden rounded-lg"
+              className="zn-prpe__scale"
               role="slider"
               aria-valuemin={1}
               aria-valuemax={10}
@@ -210,22 +190,24 @@ function CompletionForm({
             >
               {Array.from({ length: 10 }, (_, i) => {
                 const value = i + 1;
-                const isSelected = rpe === value;
                 return (
                   <button
                     key={value}
                     type="button"
                     onClick={() => setRpe(value)}
-                    className={cn(
-                      "relative flex-1 border-r border-background/20 text-[11px] font-bold text-white/70 transition-all last:border-r-0",
-                      isSelected && "scale-y-110 text-white",
-                    )}
-                    style={{
-                      backgroundColor: rpeColor(value),
-                      opacity: isSelected ? 1 : value <= rpe ? 0.75 : 0.3,
-                    }}
+                    className="zn-prpe__step"
+                    data-selected={rpe === value}
                   >
-                    {value}
+                    <span className="zn-prpe__track">
+                      <span
+                        className="zn-prpe__fill"
+                        style={{
+                          "--zn-rpe-h": `${value * 10}%`,
+                          "--zn-rpe-fill": rpeColor(value),
+                        } as CSSProperties}
+                      />
+                    </span>
+                    <span className="zn-prpe__num">{value}</span>
                   </button>
                 );
               })}
@@ -234,8 +216,8 @@ function CompletionForm({
         )}
 
         {/* Note */}
-        <label className="block space-y-1">
-          <span className="text-xs font-medium text-muted-foreground">
+        <label className="zn-stack" style={{ "--gap": "var(--sp-3)" } as CSSProperties}>
+          <span className="zn-kicker zn-kicker--inline">
             {t("sessionCompletion.noteLabel")}
           </span>
           <textarea
@@ -243,26 +225,21 @@ function CompletionForm({
             onChange={(e) => setNote(e.target.value.slice(0, 280))}
             rows={compact ? 1 : 2}
             placeholder={t("sessionCompletion.notePlaceholder")}
-            className="w-full resize-none rounded-md border border-input bg-background px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            className="zn-pfield"
           />
         </label>
       </div>
 
-      <div className={cn(
-        "flex gap-2",
-        compact ? "pt-2" : "border-t border-border bg-background p-4",
-      )}>
+      <div className="zn-pcomplete__foot">
         <Button
           type="button"
           variant="outline"
-          className="flex-1"
           onClick={onCancel}
         >
           {t("view.cancel")}
         </Button>
         <Button
           type="button"
-          className="flex-1"
           onClick={onSubmit}
         >
           {t("sessionCompletion.save")}
@@ -385,11 +362,7 @@ export function SessionCompletionPanel({
   if (isMobile) {
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent
-          side="bottom"
-          className="max-h-[85vh] overflow-y-auto rounded-t-2xl"
-          overlayClassName="bg-black/30"
-        >
+        <SheetContent side="bottom">
           <CompletionForm {...formProps} />
         </SheetContent>
       </Sheet>
@@ -404,7 +377,7 @@ export function SessionCompletionPanel({
         side="top"
         align="start"
         sideOffset={8}
-        className="w-80 p-0 shadow-xl border rounded-xl"
+        className="zn-pcomplete-pop"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <CompletionForm {...formProps} compact />

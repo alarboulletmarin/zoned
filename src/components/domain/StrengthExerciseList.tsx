@@ -6,10 +6,13 @@
  * - Superset grouping
  * - Expandable form cues
  * - Muscle group badges
+ *
+ * Paint: `src/styles/components/strength.css` (.zn-exercise / .zn-superset).
  */
 
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import type { CSSProperties } from "react";
 import { ChevronDown, ChevronUp } from "@/components/icons";
 import { IntensityBadge } from "./IntensityBadge";
 import { PhaseCard } from "./PhaseCard";
@@ -19,6 +22,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { StrengthBlock, StrengthExercise } from "@/types/strength";
 import { getExerciseById } from "@/data/strength";
 import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
+
+const STACK_SM = { "--gap": "var(--sp-5)" } as CSSProperties;
 
 interface StrengthExerciseListProps {
   blocks: StrengthBlock[];
@@ -70,13 +75,13 @@ export function StrengthExerciseList({ blocks, phase, className }: StrengthExerc
   return (
     <PhaseCard label={phaseLabel} className={className}>
       {isLoading ? (
-        <div className="space-y-2">
+        <div className="zn-stack" style={STACK_SM}>
           {blocks.map((_, i) => (
-            <Skeleton key={i} className="h-20 rounded-lg" />
+            <Skeleton key={i} className="zn-exercise__skeleton" />
           ))}
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="zn-stack" style={STACK_SM}>
           {groups.map((group, gi) => {
             if (group.length === 1) {
               return (
@@ -91,13 +96,10 @@ export function StrengthExerciseList({ blocks, phase, className }: StrengthExerc
 
             // Superset group
             return (
-              <div
-                key={`${phase}-ss-${gi}`}
-                className="border border-dashed border-primary/30 rounded-lg p-2 space-y-2"
-              >
-                <div className="text-xs font-semibold text-primary uppercase tracking-wide px-1">
+              <div key={`${phase}-ss-${gi}`} className="zn-superset">
+                <span className="zn-kicker zn-kicker--inline">
                   {t("detail.superset")} {group[0].supersetGroup}
-                </div>
+                </span>
                 {group.map((block, bi) => (
                   <ExerciseItem
                     key={`${phase}-${gi}-${bi}`}
@@ -166,11 +168,11 @@ function ExerciseItem({ block, exercise, t }: ExerciseItemProps) {
     : [];
 
   return (
-    <div className="p-3 rounded-lg bg-muted/50 space-y-2">
+    <div className="zn-exercise">
       {/* Main layout: images beside details on sm+, stacked on mobile */}
-      <div className="flex gap-3">
+      <div className="zn-row zn-row--start">
         {/* Exercise images (A -> B) — hidden on mobile, shown sm+ */}
-        <div className="shrink-0 hidden sm:block">
+        <div className="zn-fixed zn-exercise__wide">
           <ExerciseImage
             imageSlug={exercise?.imageSlug}
             exerciseName={name}
@@ -179,37 +181,37 @@ function ExerciseItem({ block, exercise, t }: ExerciseItemProps) {
         </div>
 
         {/* Details */}
-        <div className="flex-1 min-w-0 space-y-2">
+        <div className="zn-fill zn-stack" style={STACK_SM}>
           {/* Header row: name + sets x reps */}
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium leading-tight">{name}</p>
+          <div className="zn-row zn-row--start">
+            <div className="zn-fill">
+              <p className="zn-exercise__name">{name}</p>
               {exercise?.isUnilateral && (
-                <span className="text-[10px] text-muted-foreground">
+                <span className="zn-exercise__aside">
                   ({t("detail.perSide")})
                 </span>
               )}
             </div>
-            <div className="text-right shrink-0">
-              <span className="text-sm font-mono font-bold">
+            <div className="zn-fixed">
+              <span className="zn-exercise__dose">
                 {block.sets}x{repsDisplay}
               </span>
-              <div className="text-[10px] text-muted-foreground">
+              <span className="zn-exercise__rest">
                 {t("detail.rest")}: {block.restBetweenSets}
-              </div>
+              </span>
             </div>
           </div>
 
           {/* Metadata row: intensity badge + RPE + notes */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="zn-cluster" style={{ "--gap": "var(--sp-3)" } as CSSProperties}>
             <IntensityBadge intensity={block.intensity} size="sm" />
             {block.rpe != null && (
-              <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+              <span className="zn-exercise__chip">
                 {t("detail.rpe")} {block.rpe}/10
               </span>
             )}
             {block.percentRM != null && (
-              <span className="text-[10px] font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+              <span className="zn-exercise__chip">
                 {block.percentRM}% 1RM
               </span>
             )}
@@ -218,7 +220,8 @@ function ExerciseItem({ block, exercise, t }: ExerciseItemProps) {
           {/* Muscle groups */}
           {exercise && (
             <MuscleGroupBadges
-              muscles={[...exercise.primaryMuscles, ...exercise.secondaryMuscles]}
+              muscles={exercise.primaryMuscles}
+              secondary={exercise.secondaryMuscles}
               size="sm"
               max={4}
             />
@@ -227,7 +230,7 @@ function ExerciseItem({ block, exercise, t }: ExerciseItemProps) {
       </div>
 
       {/* Mobile-only: show images below header */}
-      <div className="sm:hidden">
+      <div className="zn-exercise__narrow">
         <ExerciseImage
           imageSlug={exercise?.imageSlug}
           exerciseName={name}
@@ -237,7 +240,7 @@ function ExerciseItem({ block, exercise, t }: ExerciseItemProps) {
 
       {/* Notes */}
       {block.notes && (
-        <p className="text-xs text-muted-foreground italic">
+        <p className="zn-exercise__note">
           {pickLang(block, "notes") || block.notes}
         </p>
       )}
@@ -248,24 +251,19 @@ function ExerciseItem({ block, exercise, t }: ExerciseItemProps) {
           <button
             type="button"
             onClick={toggleFormCues}
-            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className="zn-exercise__toggle"
           >
             {showFormCues ? (
-              <ChevronUp className="size-3" />
+              <ChevronUp size={13} />
             ) : (
-              <ChevronDown className="size-3" />
+              <ChevronDown size={13} />
             )}
             {t("detail.formCues")}
           </button>
           {showFormCues && (
-            <ul className="mt-1.5 space-y-1 pl-4">
+            <ul className="zn-exercise__cues">
               {formCues.map((cue, i) => (
-                <li
-                  key={i}
-                  className="text-xs text-muted-foreground pl-2 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1 before:h-1 before:rounded-full before:bg-muted-foreground/50"
-                >
-                  {cue}
-                </li>
+                <li key={i}>{cue}</li>
               ))}
             </ul>
           )}

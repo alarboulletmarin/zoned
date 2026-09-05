@@ -121,29 +121,22 @@ export function PlanExportMenu({
           variant={variant}
           size={isSmall ? "sm" : "default"}
           disabled={isExporting}
-          className={isSmall ? "rounded-full font-semibold" : "rounded-full px-5 py-2.5 h-auto font-bold"}
         >
-          {isExporting ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Download className="size-4" />
-          )}
-          <span className={isSmall ? "ml-1" : "ml-2"}>
-            {t("export.title")}
-          </span>
+          {isExporting ? <Loader2 className="zn-spin" /> : <Download />}
+          <span>{t("export.title")}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={handleExportPDF}>
-          <FileText className="size-4" />
+          <FileText />
           {t("export.pdf")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleExportICS}>
-          <Calendar className="size-4" />
+          <Calendar />
           {t("export.calendar")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleExportJSON}>
-          <Download className="size-4" />
+          <Download />
           {t("export.json")}
         </DropdownMenuItem>
       </DropdownMenuContent>

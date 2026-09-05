@@ -1,0 +1,754 @@
+/* The real-world route generator: its form, its address box, its compass and
+   its candidate cards — plus the commute panel, which is the same set of
+   controls wearing the profile screen's card.
+
+   The one rule that shapes the whole family: a field is a drawn box. Full
+   1.5px ink outline, 10px field radius, 44px floor — the same geometry the
+   date field states, so a text input, a number input and a date trigger read
+   as one control family instead of three.
+
+   The screen's single vermillon fill is the Generate button. Everything else
+   that is "on" — a chosen preset, an open chip, the picked candidate —
+   inverts to ink or wears the 2.5px vermillon frame. No second fill. */
+
+/* ── the field ────────────────────────────────────────────────────────── */
+
+/* Shared by the address box, the distance box and the commute duration box.
+   A candidate to move into a shared form layer once a second family needs it. */
+.zn-route-field {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-6) var(--sp-8);
+
+  font: var(--type-body);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-route-field::placeholder {
+  color: var(--text-faint);
+}
+
+.zn-route-field:disabled {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* A number is data: mono, tabular, right-aligned so a column of them lines up.
+   --w states the box width where the caller knows the digit count. */
+.zn-route-field--num {
+  inline-size: var(--w, 92px);
+  padding-inline: var(--sp-5);
+  text-align: end;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The browser spinner is a second, worse control for a value that already has
+   a slider next to it. */
+.zn-route-field--num::-webkit-outer-spin-button,
+.zn-route-field--num::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+/* ── the form panel ───────────────────────────────────────────────────── */
+
+/* Desktop: one sheet of paper holding every fieldset, with the action pinned
+   to its foot. No shadow — the panel sits in the page, it does not float. */
+.zn-route-form {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-11);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* A fieldset carries browser-drawn chrome and a legend that is not a flex
+   item, so the stack here is margin-based rather than a gap. */
+.zn-route-form__field {
+  min-inline-size: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.zn-route-form__field > * + * {
+  margin-block-start: var(--field-gap, var(--sp-5));
+}
+
+.zn-route-form__legend {
+  padding: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--text-body);
+}
+
+/* The compass is a drawing, not a control in a column: it gets the whole
+   width and sits in the middle of it. */
+.zn-route-form__compass {
+  display: flex;
+  justify-content: center;
+}
+
+.zn-route-form__hint {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* The two ends of a slider's travel, printed under it. */
+.zn-route-form__scale {
+  display: flex;
+  justify-content: space-between;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-route-form__coords {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* The action stays in sight however far the aside has scrolled. It bleeds to
+   the panel's edges and pays the padding back itself, so the paper below it is
+   fully covered — the system has no blur and no translucency to hide behind. */
+.zn-route-form__foot {
+  position: sticky;
+  inset-block-end: 0;
+  margin-inline: calc(var(--pad-card) * -1);
+  margin-block-end: calc(var(--pad-card) * -1);
+  padding: var(--sp-6) var(--pad-card);
+
+  background: var(--surface-card);
+  border-block-start: var(--border-rule);
+  border-end-start-radius: var(--r-3xl);
+  border-end-end-radius: var(--r-3xl);
+}
+
+.zn-btn.zn-route-form__submit {
+  inline-size: 100%;
+}
+
+/* The wait, turning. Same 700ms ring rhythm the Spinner primitive uses. */
+.zn-route-spin {
+  animation: zoned-spin 700ms linear infinite;
+}
+
+/* The commute discipline picker never needs the full column width. */
+.zn-commute__select {
+  max-inline-size: 320px;
+}
+
+/* ── presets ──────────────────────────────────────────────────────────── */
+
+/* A quick pick next to the slider. Chosen means fully inverted: the system
+   has no faint tint for a selected state. */
+.zn-route-preset {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 32px;
+  padding: var(--sp-2) var(--sp-5);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+
+  background: transparent;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-route-preset:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+.zn-route-preset:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-route-preset[data-active="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+/* ── the compact bar ──────────────────────────────────────────────────── */
+
+/* Mobile: the form collapses onto the map as a search bar plus a scrolling
+   row of chips. No panel, no outline of its own — the map is the page. */
+.zn-route-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* The chip row scrolls sideways rather than wrapping into orphan lines; the
+   cut right edge is the affordance. The bar itself never scrolls the page. */
+.zn-route-chips {
+  display: flex;
+  gap: var(--sp-4);
+  padding-block-end: var(--sp-1);
+  scrollbar-width: none;
+}
+
+.zn-route-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.zn-route-chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: 36px;
+  padding-inline: var(--sp-7);
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-route-chip:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* Its panel is open: the chip inverts, so the trigger and the sheet it opened
+   read as one object. */
+.zn-route-chip[data-state="open"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+/* The discipline picker: a glyph and a chevron, no words, so it holds the
+   search bar's own height instead of the chip row's. */
+.zn-route-chip--sport {
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-5);
+}
+
+.zn-route-chip--sport > svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+}
+
+.zn-route-chip--num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-route-chip__glyph {
+  flex: none;
+  inline-size: 14px;
+  block-size: 14px;
+  color: var(--text-faint);
+}
+
+.zn-route-chip[data-state="open"] .zn-route-chip__glyph {
+  color: currentColor;
+}
+
+@media (pointer: coarse) {
+  .zn-route-chip {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* The value read out at the head of a chip's panel. */
+.zn-route-readout {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* ── the chip menus ───────────────────────────────────────────────────── */
+
+/* A short list of exclusive options. Narrower than the popover's own 288px,
+   and carrying .zn-popover so it wins whatever order the files import in. */
+.zn-popover.zn-route-menu {
+  inline-size: 176px;
+  padding: var(--sp-2);
+}
+
+.zn-route-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-4) var(--sp-6);
+
+  font: var(--type-body-sm);
+  text-align: start;
+  color: var(--text-body);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-route-menu__item > svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-route-menu__item:hover {
+  background: var(--surface-band);
+}
+
+.zn-route-menu__item[data-active="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+/* ── address search ───────────────────────────────────────────────────── */
+
+.zn-addr {
+  position: relative;
+}
+
+.zn-addr__box {
+  position: relative;
+}
+
+/* Both marks sit inside the field's own inline padding, which is why the
+   input pays 40px on each side rather than the field's usual 16px. */
+.zn-addr__glyph,
+.zn-addr__spinner {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: var(--sp-6);
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-faint);
+}
+
+.zn-addr__spinner {
+  inset-inline: auto var(--sp-6);
+  animation: zoned-spin 700ms linear infinite;
+}
+
+.zn-addr__input {
+  padding-inline: var(--sp-15);
+}
+
+.zn-addr__clear {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--sp-3);
+  transform: translateY(-50%);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sp-14);
+  block-size: var(--sp-14);
+
+  color: var(--text-faint);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-addr__clear:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+/* The suggestion list floats over the map, so it is one of the surfaces
+   allowed the hard offset. The z-index clears Leaflet's own panes. */
+.zn-addr__list {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 1200;
+  margin-block-start: var(--sp-2);
+  padding: var(--sp-2);
+  max-block-size: 264px;
+  overflow-y: auto;
+
+  list-style: none;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-block);
+}
+
+.zn-addr__empty {
+  padding: var(--sp-6);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-addr__option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-5);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-5) var(--sp-6);
+
+  font: var(--type-body-sm);
+  text-align: start;
+  color: var(--text-body);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-addr__option > svg {
+  flex: none;
+  margin-block-start: var(--sp-1);
+  color: var(--text-faint);
+}
+
+.zn-addr__option:hover {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-addr__option:hover > svg {
+  color: inherit;
+}
+
+.zn-addr__label {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ── compass ──────────────────────────────────────────────────────────── */
+
+.zn-compass {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-5);
+  user-select: none;
+}
+
+.zn-compass__dial {
+  position: relative;
+  touch-action: none;
+  cursor: grab;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+.zn-compass__dial--dragging {
+  cursor: grabbing;
+}
+
+/* The graduation. 24 ticks, the four cardinals drawn at rule weight so the
+   quarters are readable without a second colour. */
+.zn-compass__tick {
+  stroke: var(--line-axis);
+  stroke-width: 0.75;
+}
+
+.zn-compass__tick--cardinal {
+  stroke-width: var(--bw-rule);
+}
+
+.zn-compass__cardinal {
+  position: absolute;
+  transform: translate(-50%, -50%);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-label);
+  color: var(--text-faint);
+}
+
+/* North is the reference the whole dial is read against: vermillon type, not
+   a second fill. */
+.zn-compass__cardinal--n {
+  color: var(--text-link);
+}
+
+.zn-compass__needle {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform-origin: 50% 100%;
+}
+
+.zn-compass__needle-shaft {
+  block-size: 100%;
+  inline-size: 100%;
+  background: var(--ink-1);
+  border-radius: var(--r-pill);
+}
+
+.zn-compass__needle-point {
+  position: absolute;
+  inset-block-start: -4px;
+  inset-inline-start: 50%;
+  inline-size: 10px;
+  block-size: 10px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--ink-1);
+  border-radius: var(--r-xs);
+}
+
+.zn-compass__hub {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: var(--sp-6);
+  block-size: var(--sp-6);
+  transform: translate(-50%, -50%);
+
+  background: var(--surface-card);
+  border: var(--bw-heavy) solid var(--line-strong);
+  border-radius: var(--r-pill);
+}
+
+.zn-compass__value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono-label);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-compass__value-cardinal {
+  font-weight: var(--fw-bold);
+  color: var(--text-link);
+}
+
+/* ── candidate card ───────────────────────────────────────────────────── */
+
+/* Three proposals in a column. The picked one wears the 2.5px vermillon frame
+   rather than a fill, so the sketch inside it stays readable. */
+.zn-route-cand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  padding: var(--sp-5);
+
+  text-align: start;
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-route-cand:hover {
+  background: var(--surface-band);
+}
+
+.zn-route-cand:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-route-cand[aria-pressed="true"] {
+  border: var(--border-heavy);
+}
+
+/* The trace inherits its ink from the card, so the picked sketch darkens with
+   the frame instead of needing a colour of its own. */
+.zn-route-cand__map {
+  flex: none;
+  inline-size: 80px;
+  block-size: 56px;
+  color: var(--ink-3);
+}
+
+.zn-route-cand[aria-pressed="true"] .zn-route-cand__map {
+  color: var(--ink-1);
+}
+
+.zn-route-cand__title {
+  margin: 0;
+  min-inline-size: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The current pick, said in words as well as by the frame. */
+.zn-route-cand__flag {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-link);
+}
+
+.zn-route-cand__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-6);
+  margin-block-start: var(--sp-2);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-route-cand__facts > strong {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+@media (pointer: coarse) {
+  .zn-route-cand {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── commute ──────────────────────────────────────────────────────────── */
+
+.zn-commute__label {
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--text-body);
+}
+
+/* One box per weekday. Chosen inverts to ink — same rule as the presets. */
+.zn-commute__day {
+  min-inline-size: 52px;
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-6);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-commute__day:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+.zn-commute__day:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-commute__day[aria-pressed="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-commute__hint {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* A deferred choice is a checkbox, not a switch: nothing here applies until
+   the athlete saves. The native control already draws a box — it only needs
+   the accent and the size. */
+.zn-commute__check {
+  flex: none;
+  margin-block-start: var(--sp-1);
+  inline-size: var(--sp-9);
+  block-size: var(--sp-9);
+  /* Ink, not vermillon: this card already spends its accent on the save
+     button. A checked box is an inversion in this system, like every other
+     retained state. */
+  accent-color: var(--ink-1);
+  cursor: pointer;
+}
+
+.zn-commute__check-label {
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+/* WCAG 2.5.8 — a preset is a control, so it clears 44px on a coarse pointer
+   whatever its drawn height says. */
+@media (pointer: coarse) {
+  .zn-route-preset {
+    min-block-size: var(--hit-min);
+  }
+}

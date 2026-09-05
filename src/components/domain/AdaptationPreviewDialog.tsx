@@ -9,9 +9,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { AlertTriangle } from "@/components/icons";
-import { cn } from "@/lib/utils";
 import { usePickLocale } from "@/lib/i18n-utils";
 import type { AutoChange } from "@/types/plan";
 
@@ -23,6 +21,9 @@ interface AdaptationPreviewDialogProps {
   summaryEn: string;
   onApply: () => void;
 }
+
+/** Ink by default; the one unambiguously good change takes the success hue. */
+type ChangeTone = "up" | "ink" | "quiet";
 
 export function AdaptationPreviewDialog({
   open,
@@ -38,69 +39,51 @@ export function AdaptationPreviewDialog({
   const noChanges = changes.length === 0;
   const displaySummary = pickLocale({ fr: summary, en: summaryEn });
 
-  function changeLabel(change: AutoChange): { label: string; color: string } {
+  function changeLabel(change: AutoChange): { label: string; tone: ChangeTone } {
     if (change.kind === "volume_adjusted" && change.reason === "capacity") {
-      return {
-        label: t("adaptation.volumeIncreased"),
-        color: "text-green-600 dark:text-green-400",
-      };
+      return { label: t("adaptation.volumeIncreased"), tone: "up" };
     }
     if (change.kind === "volume_adjusted") {
-      return {
-        label: t("adaptation.volumeReduced"),
-        color: "text-amber-600 dark:text-amber-400",
-      };
+      return { label: t("adaptation.volumeReduced"), tone: "ink" };
     }
     if (change.kind === "recovery_inserted") {
-      return {
-        label: t("adaptation.recoveryInserted"),
-        color: "text-blue-600 dark:text-blue-400",
-      };
+      return { label: t("adaptation.recoveryInserted"), tone: "ink" };
     }
     if (change.reason === "missed_key") {
-      return {
-        label: t("adaptation.missedKey"),
-        color: "text-orange-600 dark:text-orange-400",
-      };
+      return { label: t("adaptation.missedKey"), tone: "ink" };
     }
-    return { label: change.kind, color: "text-muted-foreground" };
+    return { label: change.kind, tone: "quiet" };
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] overflow-y-auto">
+      <DialogContent className="zn-pdialog">
         <DialogHeader>
           <DialogTitle>{t("adaptation.title")}</DialogTitle>
           <DialogDescription>{t("adaptation.description")}</DialogDescription>
         </DialogHeader>
 
         {noChanges ? (
-          <p className="text-sm text-muted-foreground py-4 text-center">
-            {t("adaptation.noChanges")}
-          </p>
+          <p className="zn-ppreview__empty">{t("adaptation.noChanges")}</p>
         ) : (
-          <div className="space-y-4 py-2">
-            <p className="text-sm bg-muted/50 rounded-lg p-3">
-              {displaySummary}
-            </p>
+          <div className="zn-ppreview">
+            <p className="zn-ppreview__summary">{displaySummary}</p>
 
-            <ul className="space-y-2">
+            <ul className="zn-ppreview__list">
               {changes.map((change, i) => {
-                const { label, color } = changeLabel(change);
+                const { label, tone } = changeLabel(change);
                 return (
-                  <li
-                    key={`change-${i}`}
-                    className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm"
-                  >
-                    <Badge
-                      variant="secondary"
-                      className="shrink-0 text-xs tabular-nums"
-                    >
+                  <li key={`change-${i}`} className="zn-ppreview__item">
+                    <span className="zn-ppreview__week">
                       {t("adaptation.weekN", { week: change.weekNumber })}
-                    </Badge>
-                    <span className={cn("font-medium", color)}>{label}</span>
+                    </span>
+                    <span className="zn-ppreview__label" data-tone={tone}>
+                      {label}
+                    </span>
                     {change.reason === "fatigue" && (
-                      <AlertTriangle className="size-3.5 text-amber-500 shrink-0 ml-auto" />
+                      <span className="zn-ppreview__flag" title={t("adaptation.fatigue")}>
+                        <AlertTriangle size={14} />
+                      </span>
                     )}
                   </li>
                 );

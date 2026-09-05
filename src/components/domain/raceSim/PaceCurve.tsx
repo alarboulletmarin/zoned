@@ -8,6 +8,10 @@ import { cn } from "@/lib/utils";
 /**
  * Shape of the pacing plan, split by split. Faster sits higher.
  *
+ * Ink on paper: a band of sunken paper under the line, the line itself in ink,
+ * and two hairline axes at the fastest and the slowest split — the pair the
+ * caption prints, so the reader can put a number on both edges of the shape.
+ *
  * Only worth drawing when the pace actually moves — on an even plan the curve
  * is a flat line that says nothing the summary sentence doesn't.
  */
@@ -38,15 +42,18 @@ export function PaceCurve({
   const paceUnit = getPaceUnit(unit);
 
   return (
-    <figure className={cn("space-y-1.5", className)}>
-      <figcaption className="flex items-baseline justify-between text-[0.6875rem] uppercase tracking-wider text-muted-foreground">
-        <span>{t("splits.curve")}</span>
-        <span className="tabular-nums normal-case tracking-normal">
+    <figure
+      className={cn("zn-stack zn-rs-curve", className)}
+      style={{ "--gap": "var(--sp-3)" } as React.CSSProperties}
+    >
+      <figcaption className="zn-rs-curve__caption">
+        <span className="zn-kicker">{t("splits.curve")}</span>
+        <span className="zn-rs-curve__range">
           {formatPaceDisplay(fastest)} – {formatPaceDisplay(slowest)}
           {paceUnit}
         </span>
       </figcaption>
-      <div className="relative">
+      <div className="zn-rs-curve__plot">
         <svg
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
@@ -55,30 +62,42 @@ export function PaceCurve({
             fastest: formatPaceDisplay(fastest),
             slowest: formatPaceDisplay(slowest),
           })}
-          className="h-20 w-full rounded-md border bg-muted/30"
+          className="zn-rs-curve__svg"
         >
           <polygon
             points={`0,100 ${points.join(" ")} 100,100`}
-            className="fill-primary/10"
+            className="zn-rs-curve__area"
+          />
+          <line
+            x1="0"
+            y1="6"
+            x2="100"
+            y2="6"
+            vectorEffect="non-scaling-stroke"
+            className="zn-rs-curve__axis"
+          />
+          <line
+            x1="0"
+            y1="94"
+            x2="100"
+            y2="94"
+            vectorEffect="non-scaling-stroke"
+            className="zn-rs-curve__axis"
           />
           <polyline
             points={points.join(" ")}
-            fill="none"
-            strokeWidth={2}
             vectorEffect="non-scaling-stroke"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="stroke-primary"
+            className="zn-rs-curve__line"
           />
         </svg>
         {/* The y axis has no scale, so it says which way is up. */}
-        <span className="pointer-events-none absolute left-2 top-1.5 text-[0.6875rem] text-muted-foreground">
-          {t("splits.curveFaster")}
-        </span>
+        <span className="zn-rs-curve__up">{t("splits.curveFaster")}</span>
       </div>
-      <div className="flex justify-between text-[0.6875rem] text-muted-foreground">
-        <span>{t("splits.curveStart")}</span>
-        <span>{t("splits.curveEnd")}</span>
+      <div className="zn-rs-curve__ends">
+        <span className="zn-kicker">{t("splits.curveStart")}</span>
+        <span className="zn-kicker">{t("splits.curveEnd")}</span>
       </div>
     </figure>
   );

@@ -17,6 +17,9 @@ function getWorkoutZones(workout: WorkoutTemplate): ZoneNumber[] {
   return getWorkoutZoneNumbers(workout);
 }
 
+const HEAD_GAP = { "--gap": "var(--sp-4)" } as React.CSSProperties;
+const GROUP_GAP = { "--gap": "var(--sp-6)" } as React.CSSProperties;
+
 export function ScienceSection({ workout }: ScienceSectionProps) {
   const { t } = useTranslation("session");
   const pick = usePickLang();
@@ -40,103 +43,94 @@ export function ScienceSection({ workout }: ScienceSectionProps) {
   // No card, no title: the enclosing Section already owns both. This used to
   // print "Pourquoi ça marche" a second time right under its own heading.
   return (
-    <div className="space-y-6">
-        {getWorkoutDiscipline(workout) !== "running" && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
-            {t("science.crossDisciplineNote")}
-          </div>
-        )}
-        {/* Rationale */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold flex items-center gap-2">
-              <FlaskConical className="size-4 text-muted-foreground" />
-              {t("science.rationale")}
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              <GlossaryLinkedText
-                text={pick(science, "rationale")}
-              />
-            </p>
-          </div>
+    <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}>
+      {getWorkoutDiscipline(workout) !== "running" && (
+        <p className="zn-science__note">{t("science.crossDisciplineNote")}</p>
+      )}
 
-          {/* Zones solicited */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold flex items-center gap-2">
-              <Brain className="size-4 text-muted-foreground" />
-              {t("science.zonesSolicited")}
-            </h3>
-            <div className="space-y-2">
-              {displayedZoneRationale.map((zr) => (
-                <div key={zr.zone} className="flex items-start gap-3">
-                  <ZoneBadge zone={zr.zone} size="sm" />
-                  <div>
-                    <span className="text-xs font-medium">
-                      {pick(ZONE_META[zr.zone], "label")}
-                    </span>
-                    <p className="text-xs text-muted-foreground">
-                      {pick(zr, "why")}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* Rationale */}
+      <div className="zn-stack" style={GROUP_GAP}>
+        <h3 className="zn-row zn-kicker" style={HEAD_GAP}>
+          <FlaskConical className="zn-science__glyph" />
+          {t("science.rationale")}
+        </h3>
+        <p className="zn-body zn-body--sm zn-muted">
+          <GlossaryLinkedText text={pick(science, "rationale")} />
+        </p>
+      </div>
 
-          {/* Adaptations */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold flex items-center gap-2">
-              <Sparkles className="size-4 text-muted-foreground" />
-              {t("science.adaptations")}
-            </h3>
-            <ul className="space-y-1 ml-6">
-              {pickLangArray<string>(science, "adaptations").map(
-                (adaptation: string, i: number) => (
-                  <li
-                    key={i}
-                    className="text-sm text-muted-foreground list-disc"
-                  >
-                    <GlossaryLinkedText text={adaptation} />
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-
-          {/* References — folded away by default. Full APA citations in 11px
-              grey are a wall of text; the count plus author and year is what
-              a reader scans, and the full record is one tap away. */}
-          {science.references.length > 0 && (
-            <details className="group border-t border-border/60 pt-3">
-              <summary className="flex items-center gap-2 min-h-11 cursor-pointer list-none text-sm font-semibold rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                <BookOpen className="size-4 text-muted-foreground shrink-0" />
-                <span>
-                  {t("science.referencesCount", { count: science.references.length })}
+      {/* Zones solicited */}
+      <div className="zn-stack" style={GROUP_GAP}>
+        <h3 className="zn-row zn-kicker" style={HEAD_GAP}>
+          <Brain className="zn-science__glyph" />
+          {t("science.zonesSolicited")}
+        </h3>
+        <div className="zn-stack">
+          {displayedZoneRationale.map((zr) => (
+            <div key={zr.zone} className="zn-row zn-row--start" style={GROUP_GAP}>
+              <ZoneBadge zone={zr.zone} size="sm" />
+              <div className="zn-fill">
+                <span className="zn-science__zone-name">
+                  {pick(ZONE_META[zr.zone], "label")}
                 </span>
-                <ChevronDown className="size-4 text-foreground/40 transition-transform group-open:rotate-180 shrink-0" />
-              </summary>
-              <ul className="space-y-2 mt-2">
-                {science.references.map((ref: ScientificReference, i: number) => (
-                  <li key={i} className="text-sm">
-                    <span className="font-medium">{ref.authors}</span>{" "}
-                    <span className="text-muted-foreground tabular-nums">({ref.year})</span>
-                    {ref.link && (
-                      <a
-                        href={ref.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ml-2 text-primary hover:underline"
-                      >
-                        {t("science.viewStudy")} →
-                      </a>
-                    )}
-                    <span className="block text-xs text-muted-foreground italic mt-0.5">
-                      {ref.title}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </details>
+                <p className="zn-caption zn-muted">{pick(zr, "why")}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Adaptations */}
+      <div className="zn-stack" style={GROUP_GAP}>
+        <h3 className="zn-row zn-kicker" style={HEAD_GAP}>
+          <Sparkles className="zn-science__glyph" />
+          {t("science.adaptations")}
+        </h3>
+        <ul className="zn-science__list">
+          {pickLangArray<string>(science, "adaptations").map(
+            (adaptation: string, i: number) => (
+              <li key={i}>
+                <GlossaryLinkedText text={adaptation} />
+              </li>
+            )
           )}
+        </ul>
+      </div>
+
+      {/* References — folded away by default. Full APA citations in 11px
+          grey are a wall of text; the count plus author and year is what
+          a reader scans, and the full record is one tap away. */}
+      {science.references.length > 0 && (
+        <details className="zn-science__refs">
+          <summary className="zn-science__summary">
+            <BookOpen className="zn-science__glyph" />
+            <span className="zn-fill">
+              {t("science.referencesCount", { count: science.references.length })}
+            </span>
+            <ChevronDown className="zn-science__chevron" />
+          </summary>
+          <ul className="zn-stack zn-science__reflist" style={GROUP_GAP}>
+            {science.references.map((ref: ScientificReference, i: number) => (
+              <li key={i} className="zn-science__ref">
+                <span className="zn-science__ref-authors">{ref.authors}</span>{" "}
+                <span className="zn-science__ref-year">({ref.year})</span>{" "}
+                {ref.link && (
+                  <a
+                    href={ref.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="zn-clink"
+                    data-size="sm"
+                  >
+                    {t("science.viewStudy")} →
+                  </a>
+                )}
+                <span className="zn-science__ref-title">{ref.title}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
     </div>
   );
 }

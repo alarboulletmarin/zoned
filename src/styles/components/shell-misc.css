@@ -1,0 +1,335 @@
+/* Shell prompts, export menus, and the settings data panel.
+ *
+ * Three jobs that share no markup but do share a voice: they are the moments
+ * the app speaks about itself — the browser has an update, the phone can hold
+ * an icon, a file is not a backup. The system's rule for that voice is: say
+ * what happened, say what is intact, say what to do next.
+ *
+ * The banners float over the page, so they are among the few surfaces allowed
+ * --shadow-block. Everything else here lives inside a dialog or a card, which
+ * already carries its own paper. */
+
+/* ── the floating app banner ──────────────────────────────────────────── */
+
+/* Bottom-right on a wide screen, edge to edge on a phone. One per corner; the
+   install card takes the floor and the update banner stacks above it. */
+.zn-prompt {
+  position: fixed;
+  z-index: 50;
+  inset-inline: var(--sp-8);
+  inset-block-end: var(--sp-8);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  padding: var(--sp-8);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  /* The one shadow, and only because this floats above the page. */
+  box-shadow: var(--shadow-block);
+
+  animation: zoned-slide-in var(--dur-slow) var(--ease-out);
+}
+
+/* Lifted clear of the install card when both are on screen. */
+.zn-prompt[data-stacked] {
+  inset-block-end: calc(var(--sp-8) + var(--sp-20) + var(--sp-15));
+}
+
+@media (min-width: 768px) {
+  .zn-prompt {
+    /* The width this banner has always had; a message this short does not
+       need the full column, and a wider one would read as a dialog. */
+    inline-size: 384px;
+    inset-inline: auto var(--sp-8);
+  }
+}
+
+/* The kind, as an ink disc rather than an accent-tinted glyph: the banner
+   already spends the screen's one vermillon fill on its action button. */
+.zn-prompt__glyph {
+  inline-size: 26px;
+  block-size: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  background: var(--ink-1);
+  color: var(--paper-raised);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+.zn-prompt__glyph > svg {
+  inline-size: 15px;
+  block-size: 15px;
+}
+
+.zn-prompt__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.zn-prompt__title {
+  font: var(--fw-semibold) var(--fs-body) / 1.2 var(--font-text);
+}
+
+.zn-prompt__text {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-prompt__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  margin-block-start: var(--sp-4);
+}
+
+/* The corner dismiss. Same shape as the alert's, because it is the same
+   gesture: make this go away without answering it. */
+.zn-prompt__dismiss {
+  inline-size: 28px;
+  block-size: 28px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-prompt__dismiss:hover {
+  color: var(--ink-1);
+}
+
+.zn-prompt__dismiss:active {
+  transform: translateY(var(--press-shift));
+}
+
+@media (pointer: coarse) {
+  .zn-prompt__dismiss {
+    inline-size: var(--hit-min);
+    block-size: var(--hit-min);
+  }
+}
+
+/* ── a wait inside a control ──────────────────────────────────────────── */
+
+/* The Spinner primitive is a <span role="status">; inside a button it would
+   join the accessible name. An export trigger only needs its own glyph to
+   turn, so it borrows the keyframe and nothing else. */
+.zn-spin {
+  animation: zoned-spin 700ms linear infinite;
+}
+
+/* ── fields the browser draws itself ──────────────────────────────────── */
+
+/* A native <input type="time"> and a native <select>: same paper, same 10px
+   field radius and 44px floor as the Select trigger, so an export form does
+   not read as two different kits stitched together. */
+.zn-native-field {
+  inline-size: 100%;
+  padding: var(--sp-6) var(--sp-8);
+  min-block-size: var(--hit-min);
+
+  font: var(--type-body-sm);
+  color: var(--ink-1);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-native-field:hover {
+  background: var(--surface-band);
+}
+
+/* A time is data, so it counts in mono. */
+.zn-native-field[type="time"] {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The label sits on one line with its glyph; the words come from .zn-label
+   and the row from .zn-row, so only the glyph needs saying. */
+.zn-field-label > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* ── a tile you pick ──────────────────────────────────────────────────── */
+
+/* A training day, a restore mode. Chosen is a full ink inversion — never a
+   tinted fill, which in this system reads as "disabled" rather than "on". */
+.zn-choice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-6);
+
+  text-align: start;
+  background: var(--surface-card);
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* One line instead of two — a checkbox tile rather than a titled option. */
+.zn-choice[data-layout="row"] {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--sp-5);
+  font: var(--type-body-sm);
+}
+
+/* `:not(:disabled)` carries its argument's specificity, so this rule sits at
+   (0,3,0) and would otherwise repaint a chosen tile over its ink inversion —
+   cream text on cream paper. Excluding the pressed state here is what keeps
+   the two separable. */
+.zn-choice:hover:not(:disabled):not([aria-pressed="true"]) {
+  background: var(--surface-band);
+}
+
+/* A chosen tile still answers the pointer: it deepens rather than lightens. */
+.zn-choice[aria-pressed="true"]:hover:not(:disabled) {
+  background: var(--ink-2);
+}
+
+.zn-choice:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-choice[aria-pressed="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-choice:disabled {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+.zn-choice__title {
+  font: var(--type-label);
+}
+
+.zn-choice__text {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* On an inverted tile the second line has to come with it. */
+.zn-choice[aria-pressed="true"] .zn-choice__text {
+  color: var(--ink-on-dark);
+}
+
+/* The check box is drawn in the tile's own ink, so it inverts for free. */
+.zn-choice__box {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  border: var(--bw-rule) solid currentColor;
+  border-radius: var(--r-xs);
+  font-size: var(--fs-mono-xs);
+  line-height: 1;
+}
+
+@media (pointer: coarse) {
+  .zn-choice {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── the FIT transfer guide ───────────────────────────────────────────── */
+
+/* Five steps and a fallback panel: longer than a dialog usually is, so it
+   scrolls inside itself rather than pushing the page. */
+.zn-fit-guide {
+  max-block-size: 85vh;
+  overflow-y: auto;
+}
+
+.zn-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The step number, in mono on an ink disc — a count, not a bullet. */
+.zn-steps__num {
+  inline-size: var(--sp-12);
+  block-size: var(--sp-12);
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+  border-radius: var(--r-pill);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* What to do when the watch is not a Garmin. Sunken paper: it is an aside
+   inside the dialog, not a second dialog. */
+.zn-fit-brands {
+  padding: var(--sp-8);
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+.zn-fit-brands__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Seven days in two columns at every width. .zn-grid deliberately collapses to
+   one column on a phone; a day list that does turns this dialog into a scroll,
+   so the two columns are stated here instead. */
+.zn-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
+}
+
+/* The "no Garmin?" toggle is a link, and a link is type: it sits where the
+   sentence would start, not stretched across the dialog. */
+.zn-fit-guide > .zn-btn[data-variant="link"] {
+  align-self: flex-start;
+}

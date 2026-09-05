@@ -251,3 +251,51 @@ c'est fait pour celui-ci.
 **Règle retenue pour la suite :** chaque écran refait ramène ses textes aux
 longueurs du système dans le même lot, plutôt qu'une passe de rédaction séparée
 à la fin.
+
+### Lot 8 — Les 106 composants de domaine ✅
+
+Le gros levier : les pages composent ces composants, donc chaque famille refaite
+allège toutes les pages qui l'utilisent. **8 461 utilitaires Tailwind tombent à
+65** dans `src/components/domain/` ; sur l'app entière, 24 298 → 13 966.
+
+Dix familles, dix feuilles de style, une revue adversariale chacune. Ce qui en
+ressort et qui mérite d'être su :
+
+**Les couleurs de phase de plan disparaissent.** `PHASE_BG` peignait cinq
+teintes pour base/construction/pic/affûtage/récupération. Le système n'a qu'un
+accent et aucune teinte de phase — et de toute façon huit tables en désaccord
+se disputaient cette couleur sans source de vérité (#114). La phase se lit
+maintenant par son libellé mono déjà imprimé dans la gouttière, plus un filet
+d'encre pleine largeur sur la semaine qui l'ouvre.
+
+**Les types de séance sans zone aérobie** (renforcement, yoga, repos, vélo,
+natation) se ressemblaient tous une fois la rampe d'encre en place. Ils prennent
+le traitement « hors zone » — papier creusé et filet d'encre — plutôt qu'une
+teinte inventée.
+
+**Les 12 couleurs de groupes musculaires restent.** Elles sont catégorielles et
+le système n'a pas de vocabulaire pour douze catégories. `MuscleMap` peint des
+attributs `fill` SVG bruts, que les variables CSS n'atteignent pas de toute
+façon. L'écart est tracé plutôt que masqué.
+
+**Un `Stepper` est né** dans le lot « contribuer » et servira au générateur de
+plan en cinq étapes.
+
+Sept défauts corrigés après revue, dont trois réels et non des préférences :
+un `:hover:not(:disabled)` qui surspécifiait l'état sélectionné et repeignait
+du crème sur du crème ; un `overflow: hidden` qui faisait du tableau du
+calendrier un conteneur de défilement et cassait donc la gouttière collante
+(remplacé par `clip-path`) ; et le libellé d'étape masqué en `display: none`
+sous 640 px, qui privait de nom accessible chaque bouton de retour du
+formulaire de contribution.
+
+Plus quatre violations du système : une deuxième pastille vermillon sur l'écran
+du wizard et sur la carte des trajets, une rotation à 1 s là où la maison tourne
+en 700 ms, et un jour hors plan grisé par `filter: grayscale()` + `opacity` —
+deux choses que le système interdit, remplacées par le papier creusé.
+
+**Reste signalé, non corrigé :** `fr/plan.json` mélange tutoiement et
+vouvoiement (33 occurrences de « vous » contre 1 de « tu »). Aucune chaîne de ce
+lot ne dépassait les longueurs, donc aucune n'a été réécrite, et le handoff
+demande que la bascule d'un fichier se fasse en une fois. À faire avec l'écran
+« plan ».

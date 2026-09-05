@@ -26,10 +26,7 @@ export function ViewModeSelector({
 
   return (
     <div
-      className={cn(
-        "inline-flex items-center gap-0.5 rounded-lg bg-muted p-1",
-        className
-      )}
+      className={cn("zn-segmented", className)}
       role="radiogroup"
       aria-label={t("viewMode.label")}
     >
@@ -43,13 +40,8 @@ export function ViewModeSelector({
             aria-checked={isActive}
             aria-label={t(labelKey)}
             onClick={() => onChange(mode)}
-            className={cn(
-              "inline-flex items-center justify-center rounded-md p-1.5 transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              isActive
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-            )}
+            className="zn-segmented__item zn-viewmode__item"
+            data-icon-only="true"
           >
             <Icon size={18} />
           </button>

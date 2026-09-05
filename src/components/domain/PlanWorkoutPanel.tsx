@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
 import { X, Search, Clock, Loader2, Heart, Dumbbell } from "@/components/icons";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { loadAllWorkouts } from "@/data/workouts";
@@ -11,9 +10,7 @@ import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
-import { SESSION_COLORS } from "@/lib/sessionColors";
-
-// ── Color map (same as PlanCalendar) ──────────────────────────────
+import { SESSION_COLORS, sessionColor } from "@/lib/sessionColors";
 
 // ── Category to sessionType mapping for filter dots ───────────────
 
@@ -205,53 +202,47 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   if (!isOpen) return null;
 
   const panelContent = (
-    <div className="flex flex-col h-full">
+    <div className="zn-planpanel__body">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
-        <h3 className="font-semibold text-sm">
-          {t("workoutPanel.title")}
-        </h3>
+      <div className="zn-planpanel__bar">
+        <h3 className="zn-planpanel__title">{t("workoutPanel.title")}</h3>
         <button
           type="button"
           onClick={onClose}
-          className="p-1 rounded-md hover:bg-muted transition-colors"
+          className="zn-planpanel__close"
           aria-label={t("workoutPanel.close")}
         >
-          <X className="size-4" />
+          <X />
         </button>
       </div>
 
       {/* Hint */}
-      <div className="px-4 py-2 border-b shrink-0 bg-primary/5">
-        <p className="text-xs text-muted-foreground text-center">
-          {inline
-            ? onSelectWorkout
-              ? t("workoutPanel.hintClick")
-              : t("workoutPanel.hintDrag")
-            : t("workoutPanel.hintTap")}
-        </p>
-      </div>
+      <p className="zn-planpanel__hint">
+        {inline
+          ? onSelectWorkout
+            ? t("workoutPanel.hintClick")
+            : t("workoutPanel.hintDrag")
+          : t("workoutPanel.hintTap")}
+      </p>
 
       {/* Search */}
-      <div className="px-4 py-2 border-b shrink-0">
-        <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={t("workoutPanel.searchPlaceholder")}
-            className="w-full rounded-md border bg-background pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
+      <div className="zn-planpanel__search">
+        <Search />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t("workoutPanel.searchPlaceholder")}
+          className="zn-planpanel__input"
+        />
       </div>
 
       {/* Category filter + favorites toggle */}
-      <div className="px-4 py-2 border-b shrink-0 flex items-center gap-2">
+      <div className="zn-planpanel__filters">
         <select
           value={activeFilter}
           onChange={(e) => setActiveFilter(e.target.value)}
-          className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="zn-planpanel__select"
         >
           {FILTERS.map((f) => (
             <option key={f.key} value={f.key}>
@@ -262,28 +253,24 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         <button
           type="button"
           onClick={() => setFavoritesOnly(v => !v)}
-          className={cn(
-            "shrink-0 size-9 rounded-md border flex items-center justify-center transition-colors",
-            favoritesOnly
-              ? "bg-primary/10 border-primary text-primary"
-              : "border-input text-muted-foreground hover:text-foreground"
-          )}
+          className="zn-planpanel__toggle"
+          aria-pressed={favoritesOnly}
           title={t("workoutPanel.favoritesOnly")}
         >
-          <Heart filled={favoritesOnly} className={cn("size-4", favoritesOnly && "text-primary")} />
+          <Heart filled={favoritesOnly} />
         </button>
       </div>
 
       {/* Results list */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-3 py-2 space-y-1.5">
+      <div className="zn-planpanel__list">
         {activeFilter === "strength" ? (
           isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="size-6 animate-spin text-muted-foreground" />
+            <div className="zn-planpanel__state">
+              <Loader2 className="zn-planpanel__loader" />
             </div>
           ) : filteredStrength.length === 0 ? (
-            <div className="text-center py-8 space-y-2">
-              <p className="text-sm text-muted-foreground">
+            <div className="zn-planpanel__state">
+              <p className="zn-body zn-body--sm zn-muted">
                 {favoritesOnly
                   ? t("workoutPanel.noFavoriteStrength")
                   : t("workoutPanel.noMatchingStrength")}
@@ -312,56 +299,43 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                     }
                     if (!inline) onClose();
                   }}
-                  className={cn(
-                    inline
-                      ? "cursor-grab active:cursor-grabbing"
-                      : "cursor-pointer active:scale-95",
-                    "rounded-lg border bg-card p-2.5",
-                    "hover:bg-accent/50 transition-all select-none",
-                  )}
+                  className="zn-planpanel__item"
+                  data-draggable={inline ? "true" : undefined}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <Dumbbell className="size-3 shrink-0 text-violet-500" />
-                        <span className="text-xs font-medium truncate block">
-                          {name}
-                        </span>
-                        <span className="shrink-0 flex items-center gap-0.5 text-[10px] text-muted-foreground">
-                          <Clock className="size-2.5" />
-                          {formatDurationMinutes(session.typicalDuration.min)}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <IntensityBadge intensity={session.intensity} size="sm" />
-                        <span className="text-[10px] text-muted-foreground capitalize">
-                          {tStrength(`categories.${session.category}`)}
-                        </span>
-                      </div>
-                      {muscles && (
-                        <p className="text-[10px] text-muted-foreground/70 truncate">
-                          {muscles}
-                        </p>
-                      )}
-                    </div>
-                    {/* Drag hint */}
-                    <div className="text-muted-foreground/40 shrink-0 mt-1">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                        <circle cx="9" cy="5" r="2" />
-                        <circle cx="15" cy="5" r="2" />
-                        <circle cx="9" cy="12" r="2" />
-                        <circle cx="15" cy="12" r="2" />
-                        <circle cx="9" cy="19" r="2" />
-                        <circle cx="15" cy="19" r="2" />
-                      </svg>
-                    </div>
+                  <div className="zn-planpanel__item-main">
+                    <span className="zn-planpanel__item-name">{name}</span>
+                    <span className="zn-planpanel__item-meta">
+                      <Dumbbell />
+                      <Clock />
+                      {formatDurationMinutes(session.typicalDuration.min)}
+                    </span>
+                    <span className="zn-row" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
+                      <IntensityBadge intensity={session.intensity} size="sm" />
+                      <span className="zn-planpanel__item-sub">
+                        {tStrength(`categories.${session.category}`)}
+                      </span>
+                    </span>
+                    {muscles && (
+                      <span className="zn-planpanel__item-sub">{muscles}</span>
+                    )}
                   </div>
+                  {/* Drag hint */}
+                  <span className="zn-planpanel__grab">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                      <circle cx="9" cy="5" r="2" />
+                      <circle cx="15" cy="5" r="2" />
+                      <circle cx="9" cy="12" r="2" />
+                      <circle cx="15" cy="12" r="2" />
+                      <circle cx="9" cy="19" r="2" />
+                      <circle cx="15" cy="19" r="2" />
+                    </svg>
+                  </span>
                 </div>
               );
             })
           )
         ) : activeFilter === "cross_training" ? (
-          <div className="space-y-1.5">
+          <>
             {CROSS_TRAINING_ITEMS.map((item) => (
               <div
                 key={item.id}
@@ -376,33 +350,31 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                   }
                   if (!inline) onClose();
                 }}
-                className={cn(
-                  inline ? "cursor-grab active:cursor-grabbing" : "cursor-pointer active:scale-95",
-                  "rounded-lg border bg-card p-2.5 hover:bg-accent/50 transition-all select-none"
-                )}
+                className="zn-planpanel__item"
+                data-draggable={inline ? "true" : undefined}
               >
-                <div className="flex items-center gap-2">
-                  <span className="size-2 rounded-full shrink-0 bg-muted-foreground/40" />
-                  <span className="text-xs font-medium">
-                    {t(`crossTraining.${item.translationKey}`)}
-                  </span>
-                </div>
+                {/* No aerobic zone behind a cross-training slot: the mark stays
+                    hollow rather than borrowing a colour it has no claim to. */}
+                <span className="zn-sess__dot" />
+                <span className="zn-planpanel__item-name">
+                  {t(`crossTraining.${item.translationKey}`)}
+                </span>
               </div>
             ))}
-          </div>
+          </>
         ) : isLoading ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="size-6 animate-spin text-muted-foreground" />
+          <div className="zn-planpanel__state">
+            <Loader2 className="zn-planpanel__loader" />
           </div>
         ) : filteredWorkouts.length === 0 ? (
-          <div className="text-center py-8 space-y-2">
-            <p className="text-sm text-muted-foreground">
+          <div className="zn-planpanel__state">
+            <p className="zn-body zn-body--sm zn-muted">
               {favoritesOnly
                 ? t("workoutPanel.noFavorites")
                 : t("workoutPanel.noMatching")}
             </p>
             {favoritesOnly && (
-              <p className="text-xs text-muted-foreground/60">
+              <p className="zn-caption zn-faint">
                 {t("workoutPanel.favoritesHint")}
               </p>
             )}
@@ -410,7 +382,6 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         ) : (
           filteredWorkouts.map((workout) => {
             const sessionType = CATEGORY_SESSION_TYPE[workout.category] || "endurance";
-            const dotColor = SESSION_COLORS[sessionType] || "#9ca3af";
             const name = pick(workout, "name");
 
             return (
@@ -423,50 +394,38 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                   onSelectWorkout(workout.id);
                   onClose();
                 } : undefined}
-                className={cn(
-                  inline
-                    ? "cursor-grab active:cursor-grabbing"
-                    : "cursor-pointer active:scale-95",
-                  "rounded-lg border bg-card p-2.5",
-                  "hover:bg-accent/50 transition-all select-none",
-                )}
+                className="zn-planpanel__item"
+                data-draggable={inline ? "true" : undefined}
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-1.5 mb-0.5">
-                      <span
-                        className="size-2 rounded-full shrink-0"
-                        style={{ backgroundColor: dotColor }}
-                      />
-                      <span className="text-xs font-medium truncate block">
-                        {name}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                      <span className="capitalize">
-                        {(() => {
-                          const filterKey = FILTERS.find(f => f.categories.includes(workout.category))?.key;
-                          return filterKey ? t(`workoutFilter.${filterKey}`) : workout.category;
-                        })()}
-                      </span>
-                      <span className="flex items-center gap-0.5">
-                        <Clock className="size-2.5" />
-                        {formatDurationMinutes(workout.typicalDuration.min)}-{formatDurationMinutes(workout.typicalDuration.max)}
-                      </span>
-                    </div>
-                  </div>
-                  {/* Drag hint */}
-                  <div className="text-muted-foreground/40 shrink-0 mt-1">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                      <circle cx="9" cy="5" r="2" />
-                      <circle cx="15" cy="5" r="2" />
-                      <circle cx="9" cy="12" r="2" />
-                      <circle cx="15" cy="12" r="2" />
-                      <circle cx="9" cy="19" r="2" />
-                      <circle cx="15" cy="19" r="2" />
-                    </svg>
-                  </div>
+                {/* The zone ink, straight off lib/sessionColors.ts. */}
+                <span
+                  className="zn-sess__dot"
+                  style={{ "--zn-dot": sessionColor(sessionType) } as React.CSSProperties}
+                />
+                <div className="zn-planpanel__item-main">
+                  <span className="zn-planpanel__item-name">{name}</span>
+                  <span className="zn-planpanel__item-meta">
+                    <span>
+                      {(() => {
+                        const filterKey = FILTERS.find(f => f.categories.includes(workout.category))?.key;
+                        return filterKey ? t(`workoutFilter.${filterKey}`) : workout.category;
+                      })()}
+                    </span>
+                    <Clock />
+                    {formatDurationMinutes(workout.typicalDuration.min)}-{formatDurationMinutes(workout.typicalDuration.max)}
+                  </span>
                 </div>
+                {/* Drag hint */}
+                <span className="zn-planpanel__grab">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <circle cx="9" cy="5" r="2" />
+                    <circle cx="15" cy="5" r="2" />
+                    <circle cx="9" cy="12" r="2" />
+                    <circle cx="15" cy="12" r="2" />
+                    <circle cx="9" cy="19" r="2" />
+                    <circle cx="15" cy="19" r="2" />
+                  </svg>
+                </span>
               </div>
             );
           })
@@ -479,7 +438,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   // Inline mode: render content directly (used in desktop flex layout)
   if (inline) {
     return (
-      <div className="bg-card border rounded-xl flex flex-col h-[calc(100vh-10rem)] overflow-hidden">
+      <div className="zn-planpanel" data-mode="inline">
         {panelContent}
       </div>
     );
@@ -490,37 +449,19 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
       {/* ── Mobile (<md): Bottom sheet ── */}
       <>
         {/* Backdrop */}
-        <div
-          className={cn(
-            "md:hidden fixed inset-0 z-20",
-            "bg-black/20",
-            "transition-opacity duration-300",
-            isOpen ? "opacity-100" : "opacity-0 pointer-events-none",
-          )}
-          onClick={onClose}
-        />
+        <div className="zn-planpanel__scrim" onClick={onClose} />
         {/* Sheet */}
         <div
           ref={sheetRef}
           onTouchStart={handleSheetDragStart}
           onTouchMove={handleSheetDragMove}
           onTouchEnd={handleSheetDragEnd}
-          className={cn(
-            "md:hidden fixed bottom-0 left-0 right-0 z-30",
-            "bg-background rounded-t-2xl shadow-2xl",
-            "flex flex-col",
-            "transition-transform duration-300",
-            isOpen ? "translate-y-0" : "translate-y-full",
-          )}
-          style={{ height: "60vh" }}
+          className="zn-planpanel"
+          data-mode="sheet"
+          data-open={isOpen}
         >
           {/* Drag handle */}
-          <div
-            data-sheet-handle
-            className="flex justify-center pt-2 pb-1 cursor-grab shrink-0"
-          >
-            <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
-          </div>
+          <div data-sheet-handle className="zn-planpanel__grip" />
           {panelContent}
         </div>
       </>

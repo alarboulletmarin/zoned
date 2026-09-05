@@ -9,8 +9,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Loader2 } from "@/components/icons";
+import { Spinner } from "@/components/ui/spinner";
 import { loadAllWorkouts } from "@/data/workouts";
 import type { WorkoutTemplate } from "@/types";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
@@ -60,9 +59,13 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
     return [...types].sort();
   }, [allWorkouts]);
 
+  /** The chosen filter is the accent as a stroke, never as a second fill. */
+  const filterVariant = (value: string) =>
+    filterType === value ? "outline-primary" : "outline";
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
+      <DialogContent className="zn-pdialog--list">
         <DialogHeader>
           <DialogTitle>
             {t("plans.replaceSession")}
@@ -72,20 +75,18 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3">
-          {/* Search */}
+        <div className="zn-ppick">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t("plans.searchWorkouts")}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="zn-pfield"
           />
 
-          {/* Type filter */}
-          <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+          <div className="zn-ppick__filters">
             <Button
-              variant={filterType === "all" ? "default" : "outline"}
+              variant={filterVariant("all")}
               size="sm"
               onClick={() => setFilterType("all")}
             >
@@ -93,18 +94,18 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
             </Button>
             {/* Show a "Same type" quick filter */}
             <Button
-              variant={filterType === sessionType ? "default" : "outline"}
+              variant={filterVariant(sessionType)}
               size="sm"
               onClick={() => setFilterType(sessionType)}
             >
               {pickLocale(SESSION_TYPE_LABELS[sessionType], sessionType)}
             </Button>
             {availableTypes
-              .filter(t => t !== sessionType)
+              .filter(type => type !== sessionType)
               .map(type => (
                 <Button
                   key={type}
-                  variant={filterType === type ? "default" : "outline"}
+                  variant={filterVariant(type)}
                   size="sm"
                   onClick={() => setFilterType(type)}
                 >
@@ -112,44 +113,37 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
                 </Button>
               ))}
           </div>
-        </div>
 
-        {/* Workout list */}
-        <div className="flex-1 overflow-y-auto space-y-2 min-h-0 mt-2">
           {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="size-6 animate-spin text-muted-foreground" />
+            <div className="zn-ppick__wait">
+              <Spinner />
             </div>
           ) : filteredWorkouts.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
-              {t("plans.noMatchingWorkouts")}
-            </p>
+            <p className="zn-ppick__empty">{t("plans.noMatchingWorkouts")}</p>
           ) : (
-            filteredWorkouts.map((workout) => {
-              const label = SESSION_TYPE_LABELS[workout.sessionType];
-              return (
-                <Card
-                  key={workout.id}
-                  interactive
-                  className="cursor-pointer"
-                  onClick={() => onSelect(workout)}
-                >
-                  <CardContent className="p-3 flex items-center justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium truncate">
+            <ul className="zn-ppick__list">
+              {filteredWorkouts.map((workout) => (
+                <li key={workout.id}>
+                  <button
+                    type="button"
+                    className="zn-ppick__item"
+                    onClick={() => onSelect(workout)}
+                  >
+                    <span className="zn-ppick__text">
+                      <span className="zn-ppick__name">
                         {pick(workout, "name")}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
+                      </span>
+                      <span className="zn-ppick__meta">
                         {workout.typicalDuration.min}-{workout.typicalDuration.max} min
-                      </p>
-                    </div>
-                    <Badge variant="outline" className="shrink-0 text-xs">
-                      {pickLocale(label, workout.sessionType)}
+                      </span>
+                    </span>
+                    <Badge variant="outline">
+                      {pickLocale(SESSION_TYPE_LABELS[workout.sessionType], workout.sessionType)}
                     </Badge>
-                  </CardContent>
-                </Card>
-              );
-            })
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       </DialogContent>

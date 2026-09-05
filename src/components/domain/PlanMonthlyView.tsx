@@ -1,6 +1,5 @@
 import { useState, useMemo, memo, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
 import { Calendar, ChevronLeft, ChevronRight } from "@/components/icons";
 import type { TrainingPlan } from "@/types/plan";
 import { PlanCalendar } from "./PlanCalendar";
@@ -63,11 +62,9 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
   // ── No start date fallback ──────────────────────────────────────
   if (!startDate) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <Calendar className="size-12 text-muted-foreground/50 mb-4" />
-        <p className="text-muted-foreground">
-          {t("monthlyView.noStartDate")}
-        </p>
+      <div className="zn-planpanel__state">
+        <Calendar size={44} />
+        <p className="zn-body zn-muted">{t("monthlyView.noStartDate")}</p>
       </div>
     );
   }
@@ -181,25 +178,20 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
 
   // ── Render ────────────────────────────────────────────────────────
   return (
-    <div className="w-full">
+    <div className="zn-planmonth">
       {/* Month navigation */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="zn-planmonth__nav">
         <button
           type="button"
           onClick={goToPrevMonth}
           disabled={!canGoPrev}
-          className={cn(
-            "p-1.5 rounded-md transition-colors",
-            canGoPrev
-              ? "hover:bg-muted text-foreground"
-              : "text-muted-foreground/30 cursor-not-allowed",
-          )}
+          className="zn-planweek__nav-btn"
           aria-label={t("monthlyView.previousMonth")}
         >
-          <ChevronLeft className="size-5" />
+          <ChevronLeft />
         </button>
 
-        <h3 className="text-sm font-semibold">
+        <h3 className="zn-planmonth__title">
           {monthNames[selectedMonth.month]} {selectedMonth.year}
         </h3>
 
@@ -207,15 +199,10 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
           type="button"
           onClick={goToNextMonth}
           disabled={!canGoNext}
-          className={cn(
-            "p-1.5 rounded-md transition-colors",
-            canGoNext
-              ? "hover:bg-muted text-foreground"
-              : "text-muted-foreground/30 cursor-not-allowed",
-          )}
+          className="zn-planweek__nav-btn"
           aria-label={t("monthlyView.nextMonth")}
         >
-          <ChevronRight className="size-5" />
+          <ChevronRight />
         </button>
       </div>
 

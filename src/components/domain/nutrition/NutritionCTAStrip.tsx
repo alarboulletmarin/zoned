@@ -8,7 +8,6 @@ import {
   Flag,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
-import { cn } from "@/lib/utils";
 
 interface CtaItem {
   to: string;
@@ -28,31 +27,27 @@ export function NutritionCTAStrip() {
   const { t } = useTranslation("nutrition");
 
   return (
-    <section aria-labelledby="cta-strip-heading" className="space-y-4">
-      <h2 id="cta-strip-heading" className="text-xl md:text-2xl font-bold tracking-tight">
+    <section
+      aria-labelledby="cta-strip-heading"
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
+    >
+      <h2 id="cta-strip-heading" className="zn-title" data-level="2">
         {t("hub.ctaStrip.heading")}
       </h2>
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div
+        className="zn-grid"
+        style={{ "--cols": 4, "--cols-md": 2 } as React.CSSProperties}
+      >
         {CTAS.map(({ to, Icon, titleKey, subtitleKey }) => (
-          <Link
-            key={to}
-            to={to}
-            className={cn(
-              "group flex flex-col gap-2 rounded-xl border border-border/50 bg-muted/30 p-4",
-              "transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:shadow-md hover:bg-muted/50",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            )}
-          >
-            <div className="flex items-center justify-between">
-              <Icon className="size-5 text-muted-foreground" aria-hidden="true" />
-              <ArrowRight
-                className="size-4 text-muted-foreground transition-transform motion-safe:group-hover:translate-x-1"
-                aria-hidden="true"
-              />
+          <Link key={to} to={to} className="zn-nut-cta">
+            <div className="zn-nut-cta__head">
+              <Icon aria-hidden="true" />
+              <ArrowRight className="zn-nut-cta__arrow" aria-hidden="true" />
             </div>
-            <div className="space-y-0.5">
-              <p className="text-sm font-semibold leading-tight">{t(titleKey)}</p>
-              <p className="text-xs text-muted-foreground">{t(subtitleKey)}</p>
+            <div>
+              <p className="zn-nut-cta__title">{t(titleKey)}</p>
+              <p className="zn-nut-cta__sub">{t(subtitleKey)}</p>
             </div>
           </Link>
         ))}

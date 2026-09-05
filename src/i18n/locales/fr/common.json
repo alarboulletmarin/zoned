@@ -69,6 +69,7 @@
       "downloaded": "Image enregistrée",
       "copied": "Image copiée dans le presse-papier",
       "linkCopied": "Lien copié dans le presse-papier",
+      "linkCopyFailed": "Copie impossible : ton navigateur a bloqué le presse-papier. Réessaie.",
       "copyUnsupported": "Copie image dispo uniquement en HTTPS (utilise Enregistrer ou Partager)",
       "loading": "Génération de l'image…",
       "error": "Erreur lors de la génération"
@@ -83,17 +84,19 @@
     "garmin": "Garmin (FIT)",
     "selectDateTime": "Choisir date et heure",
     "download": "Télécharger",
+    "dateLabel": "Date",
+    "timeLabel": "Heure",
     "success": {
       "calendar": "Événement calendrier exporté",
-      "image": "Image exportée avec succès",
+      "image": "Image exportée",
       "pdf": "Document PDF exporté",
       "garmin": "Fichier Garmin exporté"
     },
     "error": {
-      "calendar": "Erreur lors de l'export calendrier",
-      "image": "Erreur lors de l'export image",
-      "pdf": "Erreur lors de l'export PDF",
-      "garmin": "Erreur lors de l'export Garmin"
+      "calendar": "L'export calendrier a échoué. Réessaie.",
+      "image": "L'export image a échoué. Réessaie.",
+      "pdf": "L'export PDF a échoué. Réessaie.",
+      "garmin": "L'export Garmin a échoué. Réessaie."
     },
     "loading": {
       "calendar": "Génération du calendrier…",
@@ -300,7 +303,7 @@
     "planSaveFailed": "Impossible d'enregistrer le plan (espace de stockage insuffisant).",
     "notFound": {
       "title": "Page introuvable",
-      "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+      "description": "La page que tu cherches n'existe pas ou a été déplacée.",
       "backHome": "Retour à l'accueil"
     },
     "boundary": {
@@ -346,16 +349,16 @@
     "en": "English"
   },
   "zonePersonalization": {
-    "ctaMessage": "Personnalisez vos zones pour voir vos allures",
+    "ctaMessage": "Personnalise tes zones pour voir tes allures",
     "ctaButton": "Configurer mes zones",
     "dismiss": "Masquer"
   },
   "myZones": {
     "title": "Mes Zones",
-    "description": "Personnalisez vos zones d'entraînement",
+    "description": "Personnalise tes zones d'entraînement",
     "zoneCalculator": {
       "title": "Calculateur de Zones",
-      "description": "Entrez votre FCmax et/ou VMA pour afficher vos zones personnalisées",
+      "description": "Entre ta FCmax et/ou ta VMA pour afficher tes zones personnalisées",
       "fcMax": "Fréquence cardiaque max",
       "vma": "Vitesse Maximale Aérobie",
       "zone": "Zone",
@@ -372,12 +375,12 @@
     },
     "paceCalculator": {
       "title": "Calculateur d'Allures",
-      "description": "Estimez vos temps de course en fonction de votre VMA",
+      "description": "Estime tes temps de course à partir de ta VMA",
       "distance": "Distance",
       "vmaPercent": "% VMA",
       "pace": "Allure",
       "time": "Temps estimé",
-      "noVma": "Entrez votre VMA pour afficher les estimations de temps"
+      "noVma": "Entre ta VMA pour afficher les estimations de temps"
     }
   },
   "search": {
@@ -404,10 +407,10 @@
   },
   "settings": {
     "title": "Paramètres",
-    "description": "Personnalisez votre expérience",
+    "description": "Personnalise ton expérience",
     "theme": {
       "title": "Thème",
-      "description": "Clair, sombre ou selon votre système"
+      "description": "Clair, sombre ou selon ton système"
     },
     "colorPalette": {
       "title": "Palette de couleurs",
@@ -429,7 +432,7 @@
       "description": "Ce que Zoned collecte",
       "noServer": "Aucune donnée personnelle n'est envoyée à un serveur",
       "noAccount": "Aucun compte utilisateur n'est requis",
-      "localStorage": "Toutes vos données restent dans votre navigateur (localStorage)",
+      "localStorage": "Toutes tes données restent dans ton navigateur (localStorage)",
       "analytics": "Vercel Analytics mesure uniquement les pages vues de manière anonyme (pas de cookies, pas d'identification)"
     },
     "scienceMode": {
@@ -439,16 +442,19 @@
       "disabled": "Désactivé"
     },
     "data": {
-      "title": "Vos données",
-      "description": "Exportez ou restaurez vos données (favoris, plans, zones, paramètres)",
+      "title": "Tes données",
+      "description": "Tout vit dans ce navigateur : profil, favoris, plans, zones. Vider le cache efface tout.",
       "exportButton": "Exporter mes données",
       "importButton": "Restaurer mes données",
-      "exportSuccess": "Données exportées avec succès",
-      "importSuccess": "Données restaurées avec succès. La page va se recharger.",
-      "importError": "Impossible de restaurer les données (espace de stockage insuffisant ou sauvegarde corrompue). Aucune modification n'a été conservée.",
-      "invalidFile": "Fichier invalide. Utilisez un fichier exporté par Zoned.",
+      "exportSuccess": "Sauvegarde exportée",
+      "importSuccess": "Données restaurées. La page se recharge.",
+      "importError": "Restauration impossible. Tes données sont intactes, rien n'a changé.",
+      "invalidFile": "Rien n'a changé, ton profil et ton plan sont intacts. Choisis un .json exporté depuis Zoned.",
+      "invalidFileTitle": "Ce fichier n'est pas une sauvegarde Zoned",
+      "chooseAnotherFile": "Choisir un autre fichier",
+      "reading": "Lecture du fichier",
       "confirmTitle": "Restaurer les données ?",
-      "confirmDescription": "Choisissez comment appliquer la sauvegarde avant de restaurer vos données Zoned.",
+      "confirmDescription": "Choisis comment appliquer la sauvegarde.",
       "confirmButton": "Restaurer",
       "restoreModeLabel": "Mode de restauration",
       "replaceModeTitle": "Remplacer",
@@ -458,7 +464,7 @@
     }
   },
   "tips": {
-    "title": "Le saviez-vous ?",
+    "title": "Le savais-tu ?",
     "learnMore": "En savoir plus",
     "dismiss": "Masquer"
   },
@@ -486,14 +492,14 @@
   },
   "donate": {
     "title": "Soutenir le projet",
-    "description": "Zoned est 100% gratuit et open source. Si vous trouvez l'application utile, vous pouvez soutenir son développement.",
+    "description": "Zoned est 100% gratuit et open source. Si l'app t'est utile, tu peux soutenir son développement.",
     "button": "Soutenir le projet",
     "footerLink": "Soutenir"
   },
   "storageWarning": {
-    "title": "Vos données sont stockées localement",
-    "description": "Zoned n'utilise aucun serveur. Vos favoris, plans et paramètres sont enregistrés uniquement dans votre navigateur.",
-    "warning": "Si vous videz le cache de votre navigateur, toutes vos données seront perdues.",
+    "title": "Tes données restent sur cet appareil",
+    "description": "Zoned n'a pas de serveur. Favoris, plans et paramètres vivent dans ton navigateur.",
+    "warning": "Vider le cache du navigateur les efface. Exporte une sauvegarde avant.",
     "exportButton": "Exporter mes données",
     "understand": "J'ai compris"
   },
@@ -530,7 +536,7 @@
       "description": "Règle le nombre de séances, le volume et la séance qualité : le générateur compose une semaine 80/20 équilibrée."
     },
     "planCalendar": {
-      "title": "Organisez votre plan",
+      "title": "Organise ton plan",
       "description": "Glissez une séance vers un autre jour. Appui long ou clic droit pour voir, supprimer ou réordonner."
     },
     "workoutBuilder": {
@@ -549,13 +555,13 @@
   "plans": {
     "backToPlans": "Retour aux plans",
     "createPlan": "Créer un plan",
-    "choosePlanType": "Choisissez le type de plan qui vous convient",
+    "choosePlanType": "Choisis le type de plan qui te convient",
     "myPlans": "Mes plans",
     "createMyPlan": "Créer mon plan",
     "assistedPlan": "Plan assisté",
     "assistedPlanDesc": "Répondez à quelques questions et obtenez un plan généré automatiquement",
     "freePlan": "Plan libre",
-    "freePlanDesc": "Créez un plan vierge et placez vos séances manuellement",
+    "freePlanDesc": "Crée un plan vierge et place tes séances à la main",
     "prebuiltPlans": "Plans prêt-à-l'emploi",
     "prebuiltPlansDesc": "Choisissez un plan structuré et commencez immédiatement",
     "planExported": "Plan exporté",
@@ -581,24 +587,24 @@
     "clickZoneToLearn": "Cliquez sur une zone pour en savoir plus"
   },
   "icsExport": {
-    "chooseTrainingDays": "Choisissez vos jours d'entraînement",
-    "selectDays": "Sélectionnez {{count}} jours pour vos séances hebdomadaires.",
+    "chooseTrainingDays": "Choisis tes jours d'entraînement",
+    "selectDays": "Choisis {{count}} jours pour tes séances de la semaine.",
     "longRunDay": "Jour de la sortie longue",
-    "select": "Sélectionner...",
+    "select": "Choisir…",
     "cancel": "Annuler",
     "export": "Exporter"
   },
   "fitTransfer": {
     "workoutDownloaded": "Séance téléchargée !",
     "fileDownloaded": "Le fichier {{filename}} a été téléchargé.",
-    "step1": "Branchez votre montre Garmin à votre ordinateur avec le câble USB",
-    "step2OsPath": "Votre montre apparaît comme un disque USB : {{path}}",
-    "step3": "Ouvrez le dossier de la montre et naviguez vers : GARMIN → NewFiles",
-    "step4": "Copiez le fichier {{filename}} dans ce dossier",
-    "step5": "Débranchez votre montre en toute sécurité — la séance apparaîtra dans Entraînement → Mes séances",
+    "step1": "Branche ta montre Garmin à ton ordinateur avec le câble USB",
+    "step2OsPath": "Ta montre apparaît comme un disque USB : {{path}}",
+    "step3": "Ouvre le dossier de la montre et va dans : GARMIN → NewFiles",
+    "step4": "Copie le fichier {{filename}} dans ce dossier",
+    "step5": "Débranche ta montre — la séance apparaît dans Entraînement → Mes séances",
     "compatible": "Compatible avec : Forerunner, Fenix, Enduro, Venu, Epix, Instinct, Vivoactive",
-    "noGarmin": "Vous n'avez pas de montre Garmin ?",
-    "fitGarminOnly": "L'export FIT est compatible uniquement avec les montres Garmin. Pour les autres marques, recréez cette séance manuellement dans l'app de votre montre.",
+    "noGarmin": "Tu n'as pas de montre Garmin ?",
+    "fitGarminOnly": "Le FIT ne marche que sur Garmin. Ailleurs, recrée la séance à la main dans l'app de ta montre.",
     "copyInstructions": "Copier les instructions",
     "instructionsCopied": "Instructions copiées !",
     "copyFailed": "Erreur de copie",
@@ -639,11 +645,11 @@
     "savedWorkouts": "{{count}} séance sauvegardée",
     "savedWorkouts_plural": "{{count}} séances sauvegardées",
     "noFavoritesYet": "Pas encore de favoris",
-    "noFavoritesDesc": "Parcourez la bibliothèque et appuyez sur l'icône cœur pour sauvegarder vos séances préférées ici."
+    "noFavoritesDesc": "Parcours la bibliothèque et appuie sur le cœur pour garder tes séances préférées ici."
   },
   "comparePage": {
     "whyComparisons": "Pourquoi ces comparaisons ?",
-    "whyComparisonsDesc": "Zoned est gratuit, open source, ne nécessite aucun compte et ne collecte aucune donnée. Ces différences comptent — ces pages sont là pour vous aider à choisir.",
+    "whyComparisonsDesc": "Zoned est gratuit, open source, ne nécessite aucun compte et ne collecte aucune donnée. Ces différences comptent — ces pages sont là pour t'aider à choisir.",
     "featureComparison": "Comparaison des fonctionnalités",
     "badgeFree": "Gratuit",
     "badgeNoAccount": "Sans compte"
@@ -654,14 +660,14 @@
   "seo": {
     "drawTitle": "Tirer une séance",
     "contribute": "Contribuer",
-    "contributeDesc": "Partagez vos séances d'entraînement préférées avec la communauté Zoned",
+    "contributeDesc": "Partage tes séances préférées avec la communauté Zoned",
     "quiz": "Quiz d'entraînement",
-    "quizDesc": "Répondez à quelques questions pour trouver la séance de course parfaite pour vos objectifs.",
+    "quizDesc": "Réponds à quelques questions pour trouver la séance qui colle à tes objectifs.",
     "settings": "Paramètres",
     "myZones": "Mes Zones",
     "favorites": "Mes Favoris",
     "planNew": "Nouveau plan d'entraînement",
-    "planNewDesc": "Choisissez comment créer votre plan d'entraînement.",
+    "planNewDesc": "Choisis comment créer ton plan d'entraînement.",
     "collectionsDesc": "Des parcours thématiques pour chaque objectif. Parcourez les collections de course à pied.",
     "libraryTitle": "Bibliothèque",
     "aboutSeoTitle": "À propos"
@@ -692,7 +698,7 @@
       },
       "noData": {
         "title": "Zéro donnée collectée",
-        "description": "Tout reste dans votre navigateur. Pas de serveur, pas de tracking."
+        "description": "Tout reste dans ton navigateur. Pas de serveur, pas de tracking."
       },
       "openSource": {
         "title": "Open Source",
@@ -737,7 +743,7 @@
     },
     "articleFaq": {
       "q1": "Ma montre indique Zone 4 mais je me sens en Zone 2. Qui croire ?",
-      "a1": "Faites confiance à vos sensations. La fréquence cardiaque peut être faussée par la chaleur, le stress, la fatigue, la caféine et la position du capteur. La règle d'or pour la Zone 2 : si vous pouvez tenir une conversation normale sans effort, vous êtes dans la bonne zone, peu importe ce qu'affiche votre montre.",
+      "a1": "Fais confiance à tes sensations. La fréquence cardiaque peut être faussée par la chaleur, le stress, la fatigue, la caféine et la position du capteur. La règle d'or pour la Zone 2 : si tu peux tenir une conversation normale sans effort, tu es dans la bonne zone, peu importe ce qu'affiche ta montre.",
       "q2": "Dois-je rester exactement dans ma zone ?",
       "a2": "Non, les zones sont des plages indicatives, pas des cibles au battement près. Être à 3-5 bpm au-dessus ou en-dessous de la limite n'a aucune importance physiologique significative. Ce qui compte, c'est de respecter l'objectif de la séance.",
       "q3": "Combien de fois par semaine dois-je courir ?",
@@ -751,20 +757,20 @@
       "q7": "Comment éviter les blessures ?",
       "a7": "Progresser graduellement (la majorité des blessures viennent d'un volume ou intensité augmentés trop vite). Varier les stimuli (terrains, chaussures en rotation, allures différentes). Faire du renforcement musculaire 15-20 min 2 fois par semaine pour ischio-jambiers, quadriceps, mollets et fessiers. Écouter les signaux d'alerte tôt.",
       "q8": "Matin ou soir, qu'est-ce qui est mieux ?",
-      "a8": "Physiologiquement, le soir a un léger avantage : température corporelle plus élevée, articulations plus mobiles, meilleur temps de réaction. Mais le meilleur moment est celui où vous courez réellement. La constance bat l'optimisation théorique.",
+      "a8": "Physiologiquement, le soir a un léger avantage : température corporelle plus élevée, articulations plus mobiles, meilleur temps de réaction. Mais le meilleur moment est celui où tu cours réellement. La constance bat l'optimisation théorique.",
       "q9": "Puis-je courir tous les jours ?",
       "a9": "C'est possible mais avec des précautions : alterner impérativement jours faciles et durs, garder au moins 1-2 jours par semaine très légers ou en cross-training (vélo, natation), et écouter son corps. Beaucoup de coureurs prospèrent avec 5-6 jours par semaine et 1-2 jours de repos complet. Le repos fait partie de l'entraînement."
     }
   },
   "pwa": {
     "installTitle": "Installer Zoned",
-    "installDesc": "Accédez à Zoned directement depuis votre écran d'accueil, même hors ligne.",
+    "installDesc": "Zoned sur ton écran d'accueil, et disponible hors ligne.",
     "install": "Installer",
     "dismiss": "Plus tard",
     "updateTitle": "Mise à jour disponible",
-    "updateAvailable": "Une nouvelle version de Zoned est disponible.",
+    "updateAvailable": "Une nouvelle version est prête. Ton travail en cours est conservé.",
     "update": "Mettre à jour",
-    "offline": "Vous êtes hors ligne. Vos données restent accessibles.",
+    "offline": "Tu es hors ligne. Tes données restent accessibles.",
     "backOnline": "Connexion rétablie."
   },
   "domain": {

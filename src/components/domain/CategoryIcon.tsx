@@ -61,17 +61,22 @@ interface CategoryIconProps {
   size?: "sm" | "md" | "lg";
 }
 
+/** The three steps the Tailwind `size-4/5/6` classes stood for. */
+const ICON_SIZES: Record<NonNullable<CategoryIconProps["size"]>, number> = {
+  sm: 16,
+  md: 20,
+  lg: 24,
+};
+
 export function CategoryIcon({ category, className, size = "md" }: CategoryIconProps) {
   const Icon =
     CATEGORY_ICONS[category as WorkoutCategory] ??
     STRENGTH_CATEGORY_ICONS[category as StrengthCategory];
-  const sizeClass = {
-    sm: "size-4",
-    md: "size-5",
-    lg: "size-6",
-  }[size];
 
   if (!Icon) return null;
 
-  return <Icon className={cn(sizeClass, className)} />;
+  // The size rides the icon's own prop, which writes width/height attributes:
+  // a class handed in by a call site still overrides them, exactly as it
+  // overrode the utility class before.
+  return <Icon size={ICON_SIZES[size]} className={cn("zn-cat-icon", className)} />;
 }

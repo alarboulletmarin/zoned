@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
 import type { GlossaryTerm } from "@/data/glossary/types";
-import { EditorialTitle } from "@/components/editorial";
 import { useGlossaryCategoryInfo, useRelatedTerms } from "@/hooks/useGlossary";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
@@ -17,6 +16,8 @@ interface GlossaryDetailProps {
   term: GlossaryTerm;
   className?: string;
 }
+
+const BLOCK_GAP = { "--gap": "var(--sp-6)" } as React.CSSProperties;
 
 export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
   const { t, i18n } = useTranslation("glossary");
@@ -31,66 +32,55 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
   const categoryLabel = isEn && category?.labelEn ? category.labelEn : category?.label;
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div
+      className={cn("zn-stack", className)}
+      style={{ "--gap": "var(--sp-13)" } as React.CSSProperties}
+    >
       {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-3">
-          <Badge variant="secondary">{categoryLabel}</Badge>
+      <div className="zn-stack" style={BLOCK_GAP}>
+        <div className="zn-cluster">
+          <Badge variant="outline">{categoryLabel}</Badge>
           {term.zone && <ZoneBadge zone={term.zone} size="md" showLabel />}
         </div>
-        <EditorialTitle as="h1" size="md">
-          {term.acronym && <span className="text-primary not-italic">{term.acronym}</span>}
+        <h1 className="zn-title" data-level="1">
+          {term.acronym && <span className="zn-accent">{term.acronym}</span>}
           {term.acronym && " · "}
           {displayTerm}
-        </EditorialTitle>
+        </h1>
       </div>
 
       {/* Definition */}
-      <div>
-        <p className="text-muted-foreground leading-relaxed text-lg">
-          <GlossaryLinkedText text={fullDef} />
-        </p>
-      </div>
+      <p className="zn-body zn-body--lead">
+        <GlossaryLinkedText text={fullDef} />
+      </p>
 
       {/* Formula */}
       {term.formula && (
-        <div className="bg-muted/50 rounded-lg p-4">
-          <p className="text-sm font-medium text-muted-foreground mb-2">
-            {t("formula")}
-          </p>
-          <code className="text-sm font-mono bg-background px-2 py-1 rounded">
-            {term.formula}
-          </code>
+        <div className="zn-gterm__formula zn-stack" style={BLOCK_GAP}>
+          <span className="zn-kicker zn-kicker--inline">{t("formula")}</span>
+          <code className="zn-gterm__code">{term.formula}</code>
         </div>
       )}
 
       {/* Example */}
       {example && (
-        <div className="bg-primary/5 border-l-4 border-primary rounded-r-lg p-4">
-          <p className="text-sm font-medium text-muted-foreground mb-2">
-            {t("example")}
+        <div className="zn-gterm__example zn-stack" style={BLOCK_GAP}>
+          <span className="zn-kicker zn-kicker--inline">{t("example")}</span>
+          <p className="zn-body zn-body--sm">
+            <GlossaryLinkedText text={example} />
           </p>
-          <p className="text-sm"><GlossaryLinkedText text={example} /></p>
         </div>
       )}
 
       {/* Related Terms */}
       {relatedTerms.length > 0 && (
-        <div>
-          <p className="text-sm font-medium text-muted-foreground mb-3">
-            {t("relatedTerms")}
-          </p>
-          <div className="flex flex-wrap gap-2">
+        <div className="zn-stack" style={BLOCK_GAP}>
+          <span className="zn-kicker">{t("relatedTerms")}</span>
+          <div className="zn-cluster">
             {relatedTerms.map((related) => (
-              <Button
-                key={related.id}
-                variant="outline"
-                size="sm"
-                asChild
-                className="h-8"
-              >
+              <Button key={related.id} variant="outline" size="sm" asChild>
                 <Link to={`/glossary/${related.id}`}>
-                  <Link2 className="h-3 w-3 mr-1.5" />
+                  <Link2 />
                   {related.acronym ?? (isEn && related.termEn ? related.termEn : related.term)}
                 </Link>
               </Button>
@@ -101,24 +91,20 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
 
       {/* External Links */}
       {term.externalLinks && term.externalLinks.length > 0 && (
-        <div>
-          <p className="text-sm font-medium text-muted-foreground mb-3">
-            {t("learnMore")}
-          </p>
-          <div className="space-y-2">
+        <div className="zn-stack" style={BLOCK_GAP}>
+          <span className="zn-kicker">{t("learnMore")}</span>
+          <div className="zn-stack" style={{ "--gap": "var(--sp-2)" } as React.CSSProperties}>
             {term.externalLinks.map((link, i) => (
               <a
                 key={i}
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-primary hover:underline"
+                className="zn-gterm__link"
               >
-                <ExternalLinkIcon className="h-3.5 w-3.5 flex-shrink-0" />
+                <ExternalLinkIcon />
                 <span>{link.label}</span>
-                {link.author && (
-                  <span className="text-muted-foreground">({link.author})</span>
-                )}
+                {link.author && <span className="zn-faint">({link.author})</span>}
               </a>
             ))}
           </div>

@@ -14,7 +14,7 @@
   },
   "commute": {
     "title": "Commute",
-    "description": "If you bike (or jog) to work, enter the commute here so the generator can account for the recurring load.",
+    "description": "Enter your commute so the generator counts that recurring load.",
     "discipline": "Discipline",
     "disciplineCycling": "Cycling",
     "disciplineRunning": "Running",

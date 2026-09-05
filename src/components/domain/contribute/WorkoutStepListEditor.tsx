@@ -1,3 +1,4 @@
+import { useId, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
@@ -64,20 +65,21 @@ export function WorkoutStepListEditor({ steps, onChange, label, depth = 0 }: Wor
   };
 
   return (
-    <div className={cn("space-y-3", depth > 0 && "pl-3 sm:pl-4")}>
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-          {label}
-        </h3>
-        <span className="text-xs text-muted-foreground">{steps.length}</span>
+    <div
+      className={cn("zn-stack", depth > 0 && "zn-contrib-nest")}
+      style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+    >
+      <div className="zn-row zn-row--split">
+        <h3 className="zn-kicker zn-kicker--inline">{label}</h3>
+        <span className="zn-mono zn-faint">{steps.length}</span>
       </div>
 
       {steps.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-muted-foreground/30 p-6 text-center">
-          <p className="text-sm text-muted-foreground">{t("blocks.emptyState")}</p>
+        <div className="zn-contrib-slot">
+          <p className="zn-body zn-body--sm zn-muted">{t("blocks.emptyState")}</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
           {steps.map((step, index) => (
             <WorkoutStepEditor
               key={`${step.kind}-${index}`}
@@ -94,13 +96,16 @@ export function WorkoutStepListEditor({ steps, onChange, label, depth = 0 }: Wor
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row gap-2">
-        <Button type="button" variant="outline" size="sm" className="flex-1" onClick={() => onChange([...steps, createDefaultSegment()])}>
-          <Plus className="size-4" />
+      <div
+        className="zn-row zn-contrib-add"
+        style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+      >
+        <Button type="button" variant="outline" size="sm" onClick={() => onChange([...steps, createDefaultSegment()])}>
+          <Plus />
           {t("blocks.addSegment")}
         </Button>
-        <Button type="button" variant="outline" size="sm" className="flex-1" onClick={() => onChange([...steps, createDefaultRepeat()])}>
-          <Plus className="size-4" />
+        <Button type="button" variant="outline" size="sm" onClick={() => onChange([...steps, createDefaultRepeat()])}>
+          <Plus />
           {t("blocks.addRepeat")}
         </Button>
       </div>
@@ -132,21 +137,21 @@ function WorkoutStepEditor({
   const { t } = useTranslation("contribute");
 
   return (
-    <Card className={cn(depth > 0 && "border-dashed")}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between gap-3">
-          <CardTitle className="text-sm">
+    <Card className={cn(depth > 0 && "zn-contrib-substep")}>
+      <CardHeader>
+        <div className="zn-row zn-row--split">
+          <CardTitle className="zn-contrib-step__kind">
             {step.kind === "segment" ? t("blocks.segment") : t("blocks.repeat")}
           </CardTitle>
-          <div className="flex items-center gap-1">
+          <div className="zn-row" style={{ "--gap": "var(--sp-2)" } as CSSProperties}>
             <Button type="button" variant="ghost" size="icon" disabled={!canMoveUp} onClick={onMoveUp} aria-label={t("blocks.moveUp")}>
-              <ChevronUp className="size-4" />
+              <ChevronUp />
             </Button>
             <Button type="button" variant="ghost" size="icon" disabled={!canMoveDown} onClick={onMoveDown} aria-label={t("blocks.moveDown")}>
-              <ChevronDown className="size-4" />
+              <ChevronDown />
             </Button>
-            <Button type="button" variant="ghost" size="icon" onClick={onRemove} aria-label={t("blocks.removeBlock")}>
-              <Trash2 className="size-4 text-destructive" />
+            <Button type="button" variant="ghost" size="icon" className="zn-contrib-remove" onClick={onRemove} aria-label={t("blocks.removeBlock")}>
+              <Trash2 />
             </Button>
           </div>
         </div>
@@ -170,6 +175,7 @@ function SegmentEditor({
   onChange: (step: WorkoutStepSegment) => void;
 }) {
   const { t } = useTranslation("contribute");
+  const uid = useId();
   const totalSec = step.durationSec ?? 0;
   const minutes = Math.floor(totalSec / 60);
   const seconds = totalSec % 60;
@@ -180,81 +186,112 @@ function SegmentEditor({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4">
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.description")}</label>
+    <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+      <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-description`}>
+            {t("blocks.description")}
+          </label>
           <input
+            id={`${uid}-description`}
             type="text"
             value={step.description}
             onChange={(e) => onChange({ ...step, description: e.target.value })}
             placeholder={t("blocks.descriptionPlaceholder")}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            className="zn-contrib-input"
           />
         </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.descriptionEn")}</label>
+        <div className="zn-contrib-field">
+          <label
+            className="zn-contrib-field__label"
+            data-optional="true"
+            htmlFor={`${uid}-description-en`}
+          >
+            {t("blocks.descriptionEn")}
+          </label>
           <input
+            id={`${uid}-description-en`}
             type="text"
             value={step.descriptionEn ?? ""}
             onChange={(e) => onChange({ ...step, descriptionEn: e.target.value || undefined })}
             placeholder={t("blocks.descriptionEnPlaceholder")}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            className="zn-contrib-input"
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.durationMinutes")}</label>
+      <div
+        className="zn-grid"
+        style={{ "--cols": 4, "--cols-md": 2, "--gap": "var(--sp-6)" } as CSSProperties}
+      >
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-minutes`}>
+            {t("blocks.durationMinutes")}
+          </label>
           <input
+            id={`${uid}-minutes`}
             type="number"
             min={0}
             value={minutes}
             onChange={(e) => updateDuration(Number(e.target.value || 0), seconds)}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            data-mono="true"
+            className="zn-contrib-input"
           />
         </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.durationSeconds")}</label>
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-seconds`}>
+            {t("blocks.durationSeconds")}
+          </label>
           <input
+            id={`${uid}-seconds`}
             type="number"
             min={0}
             max={59}
             value={seconds}
             onChange={(e) => updateDuration(minutes, Number(e.target.value || 0))}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            data-mono="true"
+            className="zn-contrib-input"
           />
         </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.distanceM")}</label>
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-distance`}>
+            {t("blocks.distanceM")}
+          </label>
           <input
+            id={`${uid}-distance`}
             type="number"
             min={0}
             value={step.distanceM ?? ""}
             onChange={(e) => onChange({ ...step, distanceM: e.target.value ? Number(e.target.value) : undefined })}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            data-mono="true"
+            className="zn-contrib-input"
           />
         </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.zone")}</label>
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-zone`}>
+            {t("blocks.zone")}
+          </label>
           <input
+            id={`${uid}-zone`}
             type="text"
             value={step.zone ?? ""}
             onChange={(e) => onChange({ ...step, zone: e.target.value || undefined })}
             placeholder={t("blocks.zonePlaceholder")}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            data-mono="true"
+            className="zn-contrib-input"
           />
         </div>
       </div>
 
-      <div className="space-y-1">
-        <label className="text-xs font-medium text-muted-foreground">{t("blocks.role")}</label>
+      <div className="zn-contrib-field">
+        <label className="zn-contrib-field__label" htmlFor={`${uid}-role`}>
+          {t("blocks.role")}
+        </label>
         <Select
           value={step.role ?? "effort"}
           onValueChange={(value) => onChange({ ...step, role: value as WorkoutStepRole })}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger id={`${uid}-role`}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -280,27 +317,37 @@ function RepeatEditor({
   depth: number;
 }) {
   const { t } = useTranslation("contribute");
+  const uid = useId();
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.count")}</label>
+    <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+      <div
+        className="zn-grid"
+        style={{ "--cols": 2, "--gap": "var(--sp-6)" } as CSSProperties}
+      >
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-count`}>
+            {t("blocks.count")}
+          </label>
           <input
+            id={`${uid}-count`}
             type="number"
             min={1}
             value={step.count}
             onChange={(e) => onChange({ ...step, count: Math.max(1, Number(e.target.value || 1)) })}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            data-mono="true"
+            className="zn-contrib-input"
           />
         </div>
-        <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.unit")}</label>
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-unit`}>
+            {t("blocks.unit")}
+          </label>
           <Select
             value={step.unit ?? "blocks"}
             onValueChange={(value) => onChange({ ...step, unit: value as WorkoutRepeatUnit })}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${uid}-unit`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

@@ -93,7 +93,11 @@
     "lowIntensity": "Faible",
     "mediumIntensity": "Moyen",
     "highIntensity": "Intense",
-    "secondary": "secondaire"
+    "secondary": "secondaire",
+    "imageUnavailable": "Illustration indisponible",
+    "positionStart": "position de départ",
+    "positionEnd": "position finale",
+    "zoomImages": "Agrandir les images de {{name}}"
   },
   "trainingPhases": {
     "base": "Construction",

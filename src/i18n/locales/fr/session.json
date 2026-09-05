@@ -162,5 +162,11 @@
   },
   "provenance": {
     "adaptedFrom": "Adapté de"
+  },
+  "export": {
+    "blockCount_one": "{{count}} bloc",
+    "blockCount_other": "{{count}} blocs",
+    "andMore_one": "+{{count}} autre",
+    "andMore_other": "+{{count}} autres"
   }
 }

@@ -2,8 +2,9 @@ import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Download, Upload } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Card,
   CardContent,
@@ -36,6 +37,8 @@ export function DataExportImport() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [restoreMode, setRestoreMode] = useState<RestoreMode>("replace");
   const [isRestoring, setIsRestoring] = useState(false);
+  const [isReading, setIsReading] = useState(false);
+  const [invalidFile, setInvalidFile] = useState(false);
 
   function handleExport() {
     const backup = buildBackupData((key) => localStorage.getItem(key));
@@ -57,19 +60,27 @@ export function DataExportImport() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setInvalidFile(false);
+    setIsReading(true);
+
     const reader = new FileReader();
     reader.onload = (event) => {
+      setIsReading(false);
       try {
         const parsed = parseBackupData(JSON.parse(event.target?.result as string));
         if (!parsed) {
-          toast.error(t("settings.data.invalidFile"));
+          setInvalidFile(true);
           return;
         }
         setPendingImport(parsed);
         setShowConfirm(true);
       } catch {
-        toast.error(t("settings.data.invalidFile"));
+        setInvalidFile(true);
       }
+    };
+    reader.onerror = () => {
+      setIsReading(false);
+      setInvalidFile(true);
     };
     reader.readAsText(file);
     // Reset so the same file can be selected again
@@ -142,17 +153,24 @@ export function DataExportImport() {
           <CardTitle>{t("settings.data.title")}</CardTitle>
           <CardDescription>{t("settings.data.description")}</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row gap-3">
+        <CardContent
+          className="zn-stack"
+          style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}
+        >
+          <div
+            className="zn-cluster"
+            style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+          >
             <Button variant="outline" onClick={handleExport}>
-              <Download className="size-4" />
+              <Download />
               {t("settings.data.exportButton")}
             </Button>
             <Button
               variant="outline"
+              disabled={isReading}
               onClick={() => fileInputRef.current?.click()}
             >
-              <Upload className="size-4" />
+              <Upload />
               {t("settings.data.importButton")}
             </Button>
             <input
@@ -160,9 +178,32 @@ export function DataExportImport() {
               type="file"
               accept=".json"
               onChange={handleFileSelect}
-              className="hidden"
+              hidden
             />
           </div>
+
+          {isReading ? (
+            <Spinner size={16} inline label={t("settings.data.reading")} />
+          ) : null}
+
+          {invalidFile ? (
+            <Alert
+              kind="error"
+              title={t("settings.data.invalidFileTitle")}
+              action={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {t("settings.data.chooseAnotherFile")}
+                </Button>
+              }
+              onDismiss={() => setInvalidFile(false)}
+            >
+              {t("settings.data.invalidFile")}
+            </Alert>
+          ) : null}
         </CardContent>
       </Card>
 
@@ -174,34 +215,26 @@ export function DataExportImport() {
               {t("settings.data.confirmDescription")}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-3">
-            <p className="text-sm font-medium">{t("settings.data.restoreModeLabel")}</p>
-            <div className="grid gap-2 sm:grid-cols-2">
+          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}>
+            <p className="zn-label">{t("settings.data.restoreModeLabel")}</p>
+            <div className="zn-grid" style={{ "--cols": 2, "--gap": "var(--sp-5)" } as React.CSSProperties}>
               <button
                 type="button"
                 onClick={() => setRestoreMode("replace")}
-                className={cn(
-                  "rounded-lg border p-3 text-left transition-colors",
-                  restoreMode === "replace"
-                    ? "border-primary bg-primary/10"
-                    : "hover:bg-accent/50"
-                )}
+                aria-pressed={restoreMode === "replace"}
+                className="zn-choice"
               >
-                <div className="font-medium text-sm">{t("settings.data.replaceModeTitle")}</div>
-                <div className="text-xs text-muted-foreground mt-1">{t("settings.data.replaceModeDescription")}</div>
+                <span className="zn-choice__title">{t("settings.data.replaceModeTitle")}</span>
+                <span className="zn-choice__text">{t("settings.data.replaceModeDescription")}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setRestoreMode("merge")}
-                className={cn(
-                  "rounded-lg border p-3 text-left transition-colors",
-                  restoreMode === "merge"
-                    ? "border-primary bg-primary/10"
-                    : "hover:bg-accent/50"
-                )}
+                aria-pressed={restoreMode === "merge"}
+                className="zn-choice"
               >
-                <div className="font-medium text-sm">{t("settings.data.mergeModeTitle")}</div>
-                <div className="text-xs text-muted-foreground mt-1">{t("settings.data.mergeModeDescription")}</div>
+                <span className="zn-choice__title">{t("settings.data.mergeModeTitle")}</span>
+                <span className="zn-choice__text">{t("settings.data.mergeModeDescription")}</span>
               </button>
             </div>
           </div>

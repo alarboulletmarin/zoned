@@ -43,48 +43,64 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onCancel()}>
-      <DialogContent className="max-w-sm">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Calendar className="size-5" />
+          <DialogTitle className="zn-row" style={{ "--gap": "var(--sp-5)" } as React.CSSProperties}>
+            <Calendar size={20} />
             {t("export.selectDateTime")}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="export-date" className="text-sm font-medium flex items-center gap-2">
-              <Calendar className="size-4 text-muted-foreground" />
-              Date
+        <form
+          onSubmit={handleSubmit}
+          className="zn-stack"
+          style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}
+        >
+          <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
+            <label
+              htmlFor="export-date"
+              className="zn-row zn-label zn-field-label"
+              style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+            >
+              <Calendar />
+              {t("export.dateLabel")}
             </label>
             <DateInput
               id="export-date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="px-4 py-3 min-h-[44px] text-base"
             />
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="export-time" className="text-sm font-medium flex items-center gap-2">
-              <Clock className="size-4 text-muted-foreground" />
-              {t("export.selectDateTime").includes("heure") ? "Heure" : "Time"}
+          <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
+            <label
+              htmlFor="export-time"
+              className="zn-row zn-label zn-field-label"
+              style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+            >
+              <Clock />
+              {t("export.timeLabel")}
             </label>
             <input
               id="export-time"
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full px-4 py-3 min-h-[44px] text-base border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="zn-native-field"
               required
             />
           </div>
 
-          <div className="flex gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
-              {t("actions.clear")}
+          <div className="zn-row" style={{ "--gap": "var(--sp-5)" } as React.CSSProperties}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              className="zn-fill"
+            >
+              {t("actions.cancel")}
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="zn-fill">
               {t("export.download")}
             </Button>
           </div>

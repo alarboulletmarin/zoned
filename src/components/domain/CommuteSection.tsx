@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Route, Save, Trash2 } from "@/components/icons";
@@ -17,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import {
   clearCommutePattern,
   loadCommutePattern,
@@ -121,23 +120,23 @@ export function CommuteSection() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Route className="size-5" />
+        <CardTitle className="zn-row" style={{ "--gap": "var(--sp-5)" } as CSSProperties}>
+          <Route size={20} />
           {t("commute.title")}
         </CardTitle>
         <CardDescription>{t("commute.description")}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="zn-stack" style={{ "--gap": "var(--sp-13)" } as CSSProperties}>
         {/* Discipline */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-5)" } as CSSProperties}>
+          <label className="zn-commute__label">
             {t("commute.discipline")}
           </label>
           <Select
             value={discipline}
             onValueChange={(v) => setDiscipline(v as CommuteDiscipline)}
           >
-            <SelectTrigger className="max-w-xs">
+            <SelectTrigger className="zn-commute__select">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -152,11 +151,11 @@ export function CommuteSection() {
         </div>
 
         {/* Days of week */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-5)" } as CSSProperties}>
+          <label className="zn-commute__label">
             {t("commute.daysOfWeek")}
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="zn-cluster">
             {DAY_KEYS.map((key, index) => {
               const selected = days.has(index);
               return (
@@ -164,12 +163,8 @@ export function CommuteSection() {
                   key={key}
                   type="button"
                   onClick={() => toggleDay(index)}
-                  className={cn(
-                    "rounded-md border px-3 py-2 text-sm font-medium transition-colors min-w-[52px]",
-                    selected
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-input bg-background hover:bg-muted",
-                  )}
+                  aria-pressed={selected}
+                  className="zn-commute__day"
                 >
                   {t(`commute.${key}`)}
                 </button>
@@ -179,8 +174,8 @@ export function CommuteSection() {
         </div>
 
         {/* Duration */}
-        <div className="space-y-2">
-          <label htmlFor="commuteDuration" className="text-sm font-medium">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-5)" } as CSSProperties}>
+          <label htmlFor="commuteDuration" className="zn-commute__label">
             {t("commute.durationMin")}
           </label>
           <input
@@ -191,44 +186,45 @@ export function CommuteSection() {
             placeholder="30"
             value={durationMin}
             onChange={(e) => handleDurationChange(e.target.value)}
-            className="flex h-10 w-32 rounded-md border border-input bg-transparent px-3 py-1 text-center text-base tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="zn-route-field zn-route-field--num"
+            style={{ "--w": "112px" } as CSSProperties}
           />
-          <p className="text-xs text-muted-foreground">
+          <p className="zn-commute__hint">
             {t("commute.durationHint")}
           </p>
         </div>
 
         {/* Include in plan */}
-        <div className="flex items-start gap-3">
+        <div className="zn-row zn-row--start">
           <input
             id="commuteInclude"
             type="checkbox"
             checked={includeInPlan}
             onChange={(e) => setIncludeInPlan(e.target.checked)}
-            className="mt-1 size-4 rounded border-input accent-primary"
+            className="zn-commute__check"
           />
-          <div className="flex-1">
+          <div className="zn-fill">
             <label
               htmlFor="commuteInclude"
-              className="text-sm font-medium cursor-pointer"
+              className="zn-commute__check-label"
             >
               {t("commute.includeInPlan")}
             </label>
-            <p className="text-xs text-muted-foreground">
+            <p className="zn-commute__hint">
               {t("commute.includeInPlanHint")}
             </p>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2 pt-2">
+        <div className="zn-cluster">
           <Button onClick={handleSave} disabled={!canSave}>
-            <Save className="size-4" />
+            <Save size={16} />
             {t("commute.save")}
           </Button>
           {hasStored && (
             <Button variant="outline" onClick={handleDelete}>
-              <Trash2 className="size-4" />
+              <Trash2 size={16} />
               {t("commute.delete")}
             </Button>
           )}

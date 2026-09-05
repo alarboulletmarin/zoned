@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { Lightbulb, AlertTriangle } from "@/components/icons";
 import { ZoneBadge } from "./ZoneBadge";
 import { PhaseCard } from "./PhaseCard";
 import { cn } from "@/lib/utils";
@@ -9,7 +8,10 @@ import { formatPace } from "@/lib/zones";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { useIsEnglish, usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 import { getWorkoutPhaseSteps, summarizeWorkoutSteps } from "@/lib/workoutStructure";
-import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { formatDurationMinutes, transformSessionBlocks } from "@/components/visualization/transforms";
+import { ZoneBar, type ZoneBarBlock } from "@/components/visualization/ZoneBar";
+import { ZoneScale } from "@/components/visualization/ZoneScale";
+import type { BlockType } from "@/components/visualization/types";
 
 interface WorkoutStructureProps {
   workout: WorkoutTemplate;
@@ -38,6 +40,11 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
       ? userZones
       : userZones?.map(({ paceMinPerKm: _paceMin, paceMaxPerKm: _paceMax, ...rest }) => rest);
 
+  // The segments the timeline already computes, reused to draw each phase its
+  // own profile. No new flattening logic: this is the same call `ZoneBar`'s
+  // own `toZoneBarBlocks` makes, only kept split by phase.
+  const { segments } = transformSessionBlocks(workout);
+
   const phases = [
     {
       key: "warmup" as const,
@@ -60,20 +67,53 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
   ].filter((phase) => phase.steps.length > 0);
 
   return (
-    <div className={cn("space-y-7 sm:space-y-8", className)}>
-      {phases.map((phase) => (
-        <PhaseCard
-          key={phase.key}
-          label={phase.label}
-          summary={shouldShowPhaseSummary(phase.steps) ? phase.summary : null}
-        >
-          {phase.steps.map((step, index) => (
-            <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
-          ))}
-        </PhaseCard>
-      ))}
+    <div className={cn("zn-structure", className)}>
+      {/* The ramp orders the zones but does not name them, so the surface that
+          paints them shows the legend once, above the phases. */}
+      <ZoneScale className="zn-structure__legend" />
+
+      {phases.map((phase) => {
+        const profile = phaseProfile(segments, phase.key);
+        const minutes = segments
+          .filter((segment) => segment.type === phase.key)
+          .reduce((sum, segment) => sum + segment.durationMin, 0);
+
+        return (
+          <PhaseCard
+            key={phase.key}
+            className="zn-phase"
+            label={phase.label}
+            summary={shouldShowPhaseSummary(phase.steps) ? phase.summary : null}
+            meta={
+              profile.length > 0 ? (
+                <span className="zn-phase__profile">
+                  <ZoneBar blocks={profile} condense height={18} className="zn-phase__bar" />
+                  {formatDurationMinutes(minutes)}
+                </span>
+              ) : null
+            }
+          >
+            {phase.steps.map((step, index) => (
+              <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
+            ))}
+          </PhaseCard>
+        );
+      })}
     </div>
   );
+}
+
+/** One phase's blocks for the ZoneBar. `zone: 0` is recovery, not a zone. */
+function phaseProfile(
+  segments: ReturnType<typeof transformSessionBlocks>["segments"],
+  phase: BlockType,
+): ZoneBarBlock[] {
+  return segments
+    .filter((segment) => segment.type === phase)
+    .map((segment) => ({
+      seconds: Math.round(segment.durationMin * 60),
+      zone: segment.isRecovery || segment.zoneNumber == null ? 0 : segment.zoneNumber,
+    }));
 }
 
 /**
@@ -153,39 +193,26 @@ function StepItem({ step, depth, userZones, t, isEnglish }: StepItemProps) {
   const showBetweenPlaceholder = (step.unit === "sets" || step.unit === "blocks") && (!step.between || step.between.length === 0);
 
   return (
-    <div
-      className={cn(
-        "rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3",
-        depth > 0 && "ml-4 sm:ml-6",
-      )}
-    >
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="text-sm font-semibold">{repeatLabel}</p>
-        </div>
-      </div>
+    <div className="zn-repeat" data-depth={depth > 0 ? "nested" : undefined}>
+      <p className="zn-repeat__count">{repeatLabel}</p>
 
-      <div className="space-y-2 border-l border-border/60 pl-3 sm:pl-4">
+      <div className="zn-repeat__group">
         {step.steps.map((child, index) => (
           <StepItem key={`step-${depth}-${index}`} step={child} depth={depth + 1} userZones={userZones} t={t} isEnglish={isEnglish} />
         ))}
       </div>
 
       {(step.between && step.between.length > 0) || showBetweenPlaceholder ? (
-        <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-            {betweenLabel}
-          </p>
+        <div className="zn-repeat__between">
+          <p className="zn-kicker zn-kicker--xs">{betweenLabel}</p>
           {step.between && step.between.length > 0 ? (
-            <div className="space-y-2">
+            <div>
               {step.between.map((child, index) => (
                 <StepItem key={`between-${depth}-${index}`} step={child} depth={depth + 1} userZones={userZones} t={t} isEnglish={isEnglish} />
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground italic">
-              {t("structure.notSpecified")}
-            </p>
+            <p className="zn-repeat__note">{t("structure.notSpecified")}</p>
           )}
         </div>
       ) : null}
@@ -209,11 +236,11 @@ function CompactNestedRepeatItem({
   const betweenSetsLabel = t(`structure.between.${step.unit ?? "blocks"}`);
 
   return (
-    <div className={cn("rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
-      {/* Plain text, not pills: these are counts to read, not controls to
+    <div className="zn-repeat" data-depth={depth > 0 ? "nested" : undefined}>
+      {/* Plain mono, not pills: these are counts to read, not controls to
           press. The previous rounded secondary badges read as toggles. */}
-      <p className="text-sm font-semibold tracking-tight">
-        {setsLabel} <span className="text-muted-foreground font-normal">·</span> {repsLabel}
+      <p className="zn-repeat__count">
+        {setsLabel} · {repsLabel}
       </p>
 
       <RepeatGroup count={inner.count}>
@@ -226,8 +253,8 @@ function CompactNestedRepeatItem({
       </RepeatGroup>
 
       {setBetween.length > 0 && (
-        <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{betweenSetsLabel}</p>
+        <div className="zn-repeat__between">
+          <p className="zn-kicker zn-kicker--xs">{betweenSetsLabel}</p>
           {setBetween.map((segment, index) => (
             <StepRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} muted />
           ))}
@@ -244,14 +271,12 @@ function CompactNestedRepeatItem({
  */
 function RepeatGroup({ count, children }: { count: number; children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-border/40 bg-background/50 p-3">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="font-mono text-xs font-semibold text-foreground tabular-nums shrink-0">
-          {count} ×
-        </span>
-        <span className="h-px flex-1 bg-border/60" />
+    <div className="zn-repeat__group">
+      <div className="zn-repeat__lead">
+        <span className="zn-repeat__count">{count} ×</span>
+        <span className="zn-repeat__rule" />
       </div>
-      <div className="space-y-2 border-l-2 border-border/60 pl-3">{children}</div>
+      <div>{children}</div>
     </div>
   );
 }
@@ -270,7 +295,7 @@ function CompactRepeatItem({
   const showBetweenPlaceholder = (step.unit === "sets" || step.unit === "blocks") && betweenSegments.length === 0;
 
   return (
-    <div className={cn("rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
+    <div className="zn-repeat" data-depth={depth > 0 ? "nested" : undefined}>
       <RepeatGroup count={step.count}>
         {stepSegments.map((segment, index) => (
           <StepRow key={`compact-step-${index}`} step={segment} userZones={userZones} t={t} />
@@ -280,14 +305,12 @@ function CompactRepeatItem({
         ))}
       </RepeatGroup>
 
-      {seriesRecovery && (
-        <p className="text-xs text-muted-foreground tracking-tight">{seriesRecovery}</p>
-      )}
+      {seriesRecovery && <p className="zn-repeat__note">{seriesRecovery}</p>}
 
       {showBetweenPlaceholder && (
-        <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{betweenLabel}</p>
-          <p className="text-sm text-muted-foreground italic">{t("structure.notSpecified")}</p>
+        <div className="zn-repeat__between">
+          <p className="zn-kicker zn-kicker--xs">{betweenLabel}</p>
+          <p className="zn-repeat__note">{t("structure.notSpecified")}</p>
         </div>
       )}
     </div>
@@ -343,46 +366,35 @@ function StepRow({
   const isRecovery = dashed || step.role === "recovery";
 
   return (
+    // A ruled row, the shape the kit's session screen states: zone mark,
+    // label, mono meta. Recovery is not a zone — its rule is the 45 degree
+    // hatch the profile gives an unmeasured block.
     <div
-      className={cn(
-        "rounded-lg border border-border/40 bg-background/80 p-3",
-        muted && "bg-muted/35",
-        isRecovery && "border-dashed border-border/50 bg-muted/20",
-        depth > 0 && "ml-4 sm:ml-6",
-      )}
+      className="zn-step"
+      data-recovery={isRecovery ? "true" : undefined}
+      data-muted={muted ? "true" : undefined}
+      data-depth={depth > 0 ? "nested" : undefined}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1 space-y-1">
-          <div className="flex items-center gap-2 flex-wrap min-w-0">
-            {step.zone ? (
-              <ZoneBadge zone={step.zone} size="sm" showLabel={!targets} />
-            ) : (
-              <span className="inline-flex items-center rounded-full border border-border/60 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
-                {t("structure.noZone")}
-              </span>
-            )}
-            {targets ? (
-              <span className="font-mono text-sm font-semibold text-foreground tabular-nums">
-                {targets}
-              </span>
-            ) : (
-              <GlossaryLinkedText text={description} className="text-sm font-medium min-w-0" as="span" />
-            )}
-          </div>
-          {targets && (
-            <GlossaryLinkedText
-              text={description}
-              className="text-xs text-muted-foreground block min-w-0"
-              as="span"
-            />
+      <div className="zn-step__body">
+        <div className="zn-step__head">
+          {step.zone ? (
+            <ZoneBadge zone={step.zone} size="sm" showLabel={!targets} />
+          ) : (
+            <span className="zn-step__nozone">{t("structure.noZone")}</span>
+          )}
+          {targets ? (
+            <span className="zn-step__targets">{targets}</span>
+          ) : (
+            <GlossaryLinkedText text={description} className="zn-step__label" as="span" />
           )}
         </div>
-        {metaParts.length > 0 && (
-          <span className="font-mono text-sm text-foreground/80 tabular-nums whitespace-nowrap shrink-0">
-            {metaParts.join(" · ")}
-          </span>
+        {targets && (
+          <GlossaryLinkedText text={description} className="zn-step__desc" as="span" />
         )}
       </div>
+      {metaParts.length > 0 && (
+        <span className="zn-step__meta">{metaParts.join(" · ")}</span>
+      )}
     </div>
   );
 }
@@ -400,19 +412,17 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
   const mistakes = pickLangArray<string>(workout, "commonMistakes");
 
   return (
-    <div className={cn("space-y-6", className)}>
+    // The kit's marks rather than two coloured glyphs: an em rule for advice,
+    // a cross for a mistake, both in vermillon type. The success green was a
+    // second hue the system reserves for a success state.
+    <div className={cn("zn-coaching", className)}>
       {tips.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold flex items-center gap-2">
-            <Lightbulb className="size-4 text-success" />
-            {t("coaching.tips")}
-          </h4>
-          <ul className="space-y-1.5">
+        <div className="zn-coaching__group">
+          <h4 className="zn-coaching__title">{t("coaching.tips")}</h4>
+          <ul className="zn-coaching__list">
             {tips.map((tip, index) => (
-              <li
-                key={index}
-                className="text-sm text-muted-foreground pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-success"
-              >
+              <li key={index} className="zn-coaching__item">
+                <span className="zn-coaching__mark" aria-hidden="true">—</span>
                 <GlossaryLinkedText text={tip} />
               </li>
             ))}
@@ -421,17 +431,12 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
       )}
 
       {mistakes.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold flex items-center gap-2">
-            <AlertTriangle className="size-4 text-destructive" />
-            {t("coaching.mistakes")}
-          </h4>
-          <ul className="space-y-1.5">
+        <div className="zn-coaching__group">
+          <h4 className="zn-coaching__title">{t("coaching.mistakes")}</h4>
+          <ul className="zn-coaching__list">
             {mistakes.map((mistake, index) => (
-              <li
-                key={index}
-                className="text-sm text-muted-foreground pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-destructive"
-              >
+              <li key={index} className="zn-coaching__item">
+                <span className="zn-coaching__mark" aria-hidden="true">×</span>
                 <GlossaryLinkedText text={mistake} />
               </li>
             ))}

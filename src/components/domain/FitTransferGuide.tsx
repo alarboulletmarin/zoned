@@ -82,7 +82,7 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
+      <DialogContent className="zn-fit-guide">
         <DialogHeader>
           <DialogTitle>
             {t("fitTransfer.workoutDownloaded")}
@@ -92,43 +92,55 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
           </DialogDescription>
         </DialogHeader>
 
-        <ol className="space-y-3 text-sm">
+        <ol
+          className="zn-stack zn-steps"
+          style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+        >
           {steps.map((step, i) => (
-            <li key={i} className="flex gap-3">
-              <span className="shrink-0 size-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">
+            <li
+              key={i}
+              className="zn-row zn-row--start"
+              style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+            >
+              <span aria-hidden="true" className="zn-steps__num">
                 {i + 1}
               </span>
-              <span className="text-muted-foreground pt-0.5">{step}</span>
+              <span className="zn-body zn-body--sm zn-muted">{step}</span>
             </li>
           ))}
         </ol>
 
-        <p className="text-xs text-muted-foreground">
-          {t("fitTransfer.compatible")}
-        </p>
+        <p className="zn-caption zn-faint">{t("fitTransfer.compatible")}</p>
 
         {/* Other brands toggle */}
-        <button
-          type="button"
+        <Button
+          variant="link"
+          size="sm"
+          aria-expanded={showOtherBrands}
           onClick={() => setShowOtherBrands(!showOtherBrands)}
-          className="text-sm text-primary hover:underline text-left"
         >
           {t("fitTransfer.noGarmin")}
-        </button>
+        </Button>
 
         {showOtherBrands && (
-          <div className="space-y-3 rounded-lg border p-4 text-sm">
-            <p className="text-muted-foreground">
+          <div
+            className="zn-stack zn-fit-brands"
+            style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+          >
+            <p className="zn-body zn-body--sm zn-muted">
               {t("fitTransfer.fitGarminOnly")}
             </p>
             <Button variant="outline" size="sm" onClick={copyInstructions}>
               {t("fitTransfer.copyInstructions")}
             </Button>
-            <ul className="text-xs text-muted-foreground space-y-1">
-              <li>Polar : Polar Flow → {t("domain.fitTransfer.polarPath")}</li>
-              <li>Suunto : Suunto App → {t("domain.fitTransfer.suuntoPath")}</li>
-              <li>COROS : COROS App → Workout → {t("domain.fitTransfer.corosPath")}</li>
-              <li>Apple Watch : {t("domain.fitTransfer.applePath")}</li>
+            <ul
+              className="zn-stack zn-fit-brands__list"
+              style={{ "--gap": "var(--sp-3)" } as React.CSSProperties}
+            >
+              <li className="zn-source">Polar : Polar Flow → {t("domain.fitTransfer.polarPath")}</li>
+              <li className="zn-source">Suunto : Suunto App → {t("domain.fitTransfer.suuntoPath")}</li>
+              <li className="zn-source">COROS : COROS App → Workout → {t("domain.fitTransfer.corosPath")}</li>
+              <li className="zn-source">Apple Watch : {t("domain.fitTransfer.applePath")}</li>
             </ul>
           </div>
         )}

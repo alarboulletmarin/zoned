@@ -47,69 +47,67 @@ export function ZoneDetailModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`zone-${zone ?? 1} max-h-[85vh] overflow-y-auto border-l-4`} style={{ borderLeftColor: 'var(--zone-color)' }}>
+      <DialogContent className="zn-zonedetail">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-3">
-            <span className="zone-badge text-lg">Z{zone}</span>
+          {/* The zone mark is the badge itself — zone.css draws the ramp fill
+              and the Z-code together, so the dialog needs no second tint. */}
+          <DialogTitle className="zn-zonedetail__title">
+            <span className="zn-zone-badge" data-zone={zone ?? 1} data-size="lg">
+              Z{zone}
+            </span>
             <span>{label}</span>
           </DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 mt-2">
+        <div className="zn-zonedetail__body">
           {/* Physiology Section */}
-          <section className="space-y-2">
-            <h4 className="flex items-center gap-2 font-medium text-sm">
-              <Brain className="size-4 text-muted-foreground" />
+          <section className="zn-zonedetail__section">
+            <h4 className="zn-zonedetail__heading">
+              <Brain />
               {t("zones.physiology")}
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {physiology}
-            </p>
+            <p className="zn-zonedetail__text">{physiology}</p>
           </section>
 
           {/* Sensation Section */}
-          <section className="space-y-2">
-            <h4 className="flex items-center gap-2 font-medium text-sm">
-              <Heart className="size-4 text-muted-foreground" />
+          <section className="zn-zonedetail__section">
+            <h4 className="zn-zonedetail__heading">
+              <Heart />
               {t("zones.howItFeels")}
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {sensation}
-            </p>
+            <p className="zn-zonedetail__text">{sensation}</p>
           </section>
 
           {/* Benefit Section */}
-          <section className="space-y-2">
-            <h4 className="flex items-center gap-2 font-medium text-sm">
-              <Sparkles className="size-4 text-muted-foreground" />
+          <section className="zn-zonedetail__section">
+            <h4 className="zn-zonedetail__heading">
+              <Sparkles />
               {t("zones.benefits")}
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {benefit}
-            </p>
+            <p className="zn-zonedetail__text">{benefit}</p>
           </section>
 
           {/* Examples Section */}
-          <section className="space-y-3">
-            <h4 className="flex items-center gap-2 font-medium text-sm">
-              <Dumbbell className="size-4 text-muted-foreground" />
+          <section className="zn-zonedetail__section">
+            <h4 className="zn-zonedetail__heading">
+              <Dumbbell />
               {t("zones.exampleWorkouts")}
             </h4>
-            <div className="space-y-2">
+            <div className="zn-zonedetail__examples">
               {exampleWorkouts.map((workout) => (
                 <Link
                   key={workout.id}
                   to={`/workout/${workout.id}`}
                   onClick={() => onOpenChange(false)}
-                  className="flex items-center justify-between p-2 rounded-md hover:bg-muted transition-colors group"
+                  className="zn-zonedetail__example"
                 >
-                  <span className="text-sm">{pick(workout, "name")}</span>
-                  <ArrowRight className="size-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                  <span>{pick(workout, "name")}</span>
+                  <ArrowRight />
                 </Link>
               ))}
             </div>
-            <Button variant="outline" size="sm" asChild className="w-full mt-2">
+            <Button variant="outline" size="sm" asChild className="zn-zonedetail__all">
               <Link to="/library" onClick={() => onOpenChange(false)}>
                 {t("zones.seeAllWorkouts")}
               </Link>

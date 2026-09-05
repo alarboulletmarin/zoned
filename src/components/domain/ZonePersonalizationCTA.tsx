@@ -31,25 +31,19 @@ export function ZonePersonalizationCTA({ className }: ZonePersonalizationCTAProp
   }
 
   return (
-    <div
-      className={cn(
-        // Stacks vertically on mobile so the button never overlaps the text;
-        // reverts to the original inline row at sm+.
-        "relative flex flex-col gap-3 p-3 rounded-lg",
-        "sm:flex-row sm:items-center sm:justify-between sm:gap-4",
-        "bg-primary/5 border border-primary/20",
-        className
-      )}
-    >
-      {/* pr-10 on mobile keeps the text clear of the absolutely-placed close */}
-      <div className="flex items-start gap-3 pr-10 sm:pr-0">
-        <Settings className="size-4 text-primary shrink-0 mt-0.5 sm:mt-0" />
-        <p className="text-sm text-muted-foreground">
+    // Stacks vertically on mobile so the button never overlaps the text;
+    // reverts to the inline row at 640px.
+    <div className={cn("zn-zone-cta", className)}>
+      {/* The inline-end padding on mobile keeps the text clear of the
+          absolutely-placed close button. */}
+      <div className="zn-zone-cta__body">
+        <Settings className="zn-zone-cta__icon" />
+        <p className="zn-zone-cta__text">
           {t("zonePersonalization.ctaMessage")}
         </p>
       </div>
-      <div className="flex items-center gap-2 sm:shrink-0">
-        <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
+      <div className="zn-zone-cta__actions">
+        <Button variant="outline" size="sm" asChild className="zn-zone-cta__link">
           <Link to="/my-zones">
             {t("zonePersonalization.ctaButton")}
           </Link>
@@ -59,9 +53,9 @@ export function ZonePersonalizationCTA({ className }: ZonePersonalizationCTAProp
           size="icon"
           onClick={handleDismiss}
           aria-label={t("zonePersonalization.dismiss")}
-          className="absolute right-1.5 top-1.5 size-9 sm:static"
+          className="zn-zone-cta__dismiss"
         >
-          <X className="size-4" />
+          <X />
         </Button>
       </div>
     </div>

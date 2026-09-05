@@ -41,60 +41,49 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
       : null;
 
   return (
-    <Link
-      to={`/workout/${workout.id}`}
-      className={cn(
-        `zone-${dominantZone} bg-gradient-to-r from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
-        "flex items-center gap-3 p-3 rounded-xl border border-border/50 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className
-      )}
-    >
+    // No tint behind the row: the zone is the badge at the end, which carries
+    // the code the ink ramp cannot say on its own.
+    <Link to={`/workout/${workout.id}`} className={cn("zn-wrow", className)}>
       {/* Title and mobile duration */}
-      <div className="flex-1 min-w-0">
-        <span className="font-medium text-sm line-clamp-1">
-          {pick(workout, "name")}
-        </span>
+      <div className="zn-wrow__main">
+        <span className="zn-wrow__name">{pick(workout, "name")}</span>
         {/* Mobile: show duration below title */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 sm:hidden">
-          <Clock className="size-3" />
+        <span className="zn-wrow__compact">
+          <Clock />
           <span>
             {duration} {t("common:units.minutes")}
           </span>
-        </div>
+        </span>
       </div>
 
       {/* Desktop: show all info inline */}
-      <div className="hidden sm:flex items-center gap-4 text-sm text-muted-foreground shrink-0">
-        <span className="w-24 truncate">
+      <div className="zn-wrow__facts">
+        <span className="zn-wrow__category">
           {t(`categories.${workout.category}`)}
         </span>
-        <span className="w-16 flex items-center gap-1">
-          <Clock className="size-3.5" />
+        <span className="zn-wrow__duration">
+          <Clock />
           {duration}
         </span>
-        <Badge variant="secondary" className="w-24 justify-center text-xs">
+        <Badge variant="secondary" className="zn-wrow__difficulty">
           {t(`difficulty.${workout.difficulty}`)}
         </Badge>
         {/* Terrain indicators */}
-        <div className="w-20 flex items-center gap-1 text-xs">
-          {workout.environment.requiresTrack && (
-            <Circle className="size-3.5 text-muted-foreground" />
-          )}
+        <span className="zn-wrow__terrain">
+          {workout.environment.requiresTrack && <Circle />}
           {hasTrail && climbLabel ? (
-            <span className="flex items-center gap-1">
-              <Mountain className="size-3.5 text-muted-foreground" />
+            <>
+              <Mountain />
               <span>{climbLabel}</span>
-            </span>
+            </>
           ) : (
-            workout.environment.requiresHills && (
-              <Mountain className="size-3.5 text-muted-foreground" />
-            )
+            workout.environment.requiresHills && <Mountain />
           )}
-        </div>
+        </span>
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-1 shrink-0">
+      <div className="zn-wrow__actions">
         <FavoriteButton workoutId={workout.id} size="sm" />
         <ZoneBadge zone={dominantZone} size="sm" />
       </div>

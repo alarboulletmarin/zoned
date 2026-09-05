@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
  * Plan actions, ranked.
  *
  * Exporting the PDF is what the plan is for — it is the thing that ends up on
- * a phone on race morning — so it is the primary button and it stays reachable
- * instead of sitting at the foot of a very long page.
+ * a phone on race morning — so it is the primary button, and the screen's one
+ * vermillon fill. Save and share stay outlined.
  */
 export function RaceSimActions({
   onExportPdf,
@@ -31,41 +31,37 @@ export function RaceSimActions({
     <Button
       onClick={onExportPdf}
       disabled={exporting}
-      className={variant === "stack" ? "w-full" : "flex-1"}
+      className="zn-rs-actions__pdf"
     >
-      {exporting ? (
-        <Loader2 className="size-4 animate-spin" />
-      ) : (
-        <Download className="size-4" />
-      )}
+      {exporting ? <Loader2 className="zn-rs-actions__spinner" /> : <Download />}
       {t("actions.exportPdf")}
     </Button>
   );
 
   if (variant === "bar") {
     return (
-      <div className={cn("flex gap-2", className)}>
+      <div className={cn("zn-rs-actions", className)} data-variant="bar">
         {pdf}
         <Button variant="outline" size="icon" onClick={onSave} aria-label={t("actions.save")}>
-          <Save className="size-4" />
+          <Save />
         </Button>
         <Button variant="outline" size="icon" onClick={onShare} aria-label={t("actions.share")}>
-          <Share className="size-4" />
+          <Share />
         </Button>
       </div>
     );
   }
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn("zn-rs-actions", className)} data-variant="stack">
       {pdf}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="zn-rs-actions__grid">
         <Button variant="outline" size="sm" onClick={onSave}>
-          <Save className="size-3.5" />
+          <Save />
           {t("actions.save")}
         </Button>
         <Button variant="outline" size="sm" onClick={onShare}>
-          <Share className="size-3.5" />
+          <Share />
           {t("actions.share")}
         </Button>
       </div>

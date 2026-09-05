@@ -14,6 +14,9 @@ export interface RaceSimNavItem {
  * `rail` sits in the sticky left column on desktop; `chips` is the horizontal
  * strip that sticks under the top bar on mobile. Jumping also opens the target
  * section — landing on a collapsed header would be a dead end.
+ *
+ * Where you are is stated once, off `aria-current`: a vermillon edge in the
+ * rail, a full ink inversion on the chip.
  */
 export function RaceSimNav({
   items,
@@ -77,10 +80,7 @@ export function RaceSimNav({
       <nav
         aria-label={t("nav.title")}
         ref={chipsRef}
-        className={cn(
-          "-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-          className,
-        )}
+        className={cn("zn-scroll-x zn-rs-chips", className)}
       >
         {items.map((item) => (
           <button
@@ -89,13 +89,7 @@ export function RaceSimNav({
             data-nav-chip={item.id}
             onClick={() => onJump(item.id)}
             aria-current={current === item.id ? "true" : undefined}
-            className={cn(
-              "shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              current === item.id
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-background text-muted-foreground hover:text-foreground",
-            )}
+            className="zn-rs-chip"
           >
             {item.label}
           </button>
@@ -106,39 +100,26 @@ export function RaceSimNav({
 
   return (
     <nav aria-label={t("nav.title")} className={className}>
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <p className="text-[0.6875rem] font-medium uppercase tracking-wider text-muted-foreground">
-          {t("nav.title")}
-        </p>
+      <div
+        className="zn-row zn-row--split zn-rs-nav__head"
+        style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+      >
+        <p className="zn-kicker">{t("nav.title")}</p>
         {onToggleAll && (
-          <button
-            type="button"
-            onClick={onToggleAll}
-            className="inline-flex items-center gap-1 rounded text-[0.6875rem] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            {allOpen ? (
-              <Minimize2 className="size-3" />
-            ) : (
-              <Maximize2 className="size-3" />
-            )}
+          <button type="button" onClick={onToggleAll} className="zn-rs-nav__toggle">
+            {allOpen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
             {allOpen ? t("nav.collapseAll") : t("nav.expandAll")}
           </button>
         )}
       </div>
-      <ul className="space-y-0.5 border-l">
+      <ul className="zn-rs-nav__list">
         {items.map((item) => (
           <li key={item.id}>
             <button
               type="button"
               onClick={() => onJump(item.id)}
               aria-current={current === item.id ? "true" : undefined}
-              className={cn(
-                "-ml-px block w-full border-l-2 py-1.5 pl-3 text-left text-sm transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                current === item.id
-                  ? "border-primary font-medium text-foreground"
-                  : "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
-              )}
+              className="zn-rs-nav__link"
             >
               {item.label}
             </button>

@@ -51,8 +51,11 @@ export function WarmupChecklist({
   const endTime = minutesToTime(startMin + totalDurationMin);
 
   return (
-    <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+    >
+      <p className="zn-rs-note zn-rs-note--muted">
         {t("warmup.window", {
           start: startTime,
           end: endTime,

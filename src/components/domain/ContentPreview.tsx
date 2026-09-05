@@ -21,22 +21,19 @@ export function ContentPreview(props: ContentPreviewProps) {
 }
 
 // ---------------------------------------------------------------------------
-// Glossary preview (same as former GlossaryTermPreview)
-// ---------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------
 // Close button (top-right corner)
 // ---------------------------------------------------------------------------
 
 function CloseButton({ onClose }: { onClose?: () => void }) {
+  const { t } = useTranslation("common");
   if (!onClose) return null;
   return (
     <button
       onClick={onClose}
-      className="absolute -top-1 -right-1 rounded-full p-1 text-muted-foreground/60 hover:text-foreground hover:bg-muted transition-colors"
-      aria-label="Close"
+      className="zn-preview__close"
+      aria-label={t("actions.close")}
     >
-      <X className="size-3" />
+      <X size={14} />
     </button>
   );
 }
@@ -59,30 +56,28 @@ function GlossaryPreview({ term, onNavigate, onClose }: GlossaryPreviewProps) {
   const shortDef = pickLang(term, "shortDefinition");
 
   return (
-    <div className="relative space-y-1.5 pr-5">
+    <div className="zn-preview">
       <CloseButton onClose={onClose} />
       {/* Header: term name + acronym */}
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-semibold">
+      <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
+        <span className="zn-preview__title">
           {displayTerm}
           {term.acronym && (
-            <span className="text-muted-foreground font-normal">
-              {" "}
-              ({term.acronym})
-            </span>
+            <span className="zn-preview__aside"> ({term.acronym})</span>
           )}
         </span>
         {term.zone && <ZoneBadge zone={term.zone} size="sm" />}
       </div>
 
       {/* Short definition */}
-      <p className="text-xs text-muted-foreground line-clamp-3">{shortDef}</p>
+      <p className="zn-preview__text">{shortDef}</p>
 
       {/* Link to full definition */}
       <Link
         to={`/glossary/${term.id}`}
         onClick={onNavigate}
-        className="text-xs text-primary hover:underline mt-2 inline-flex items-center gap-1"
+        className="zn-clink"
+        data-size="sm"
       >
         {t("seeFullDefinition")}
         <span aria-hidden="true">&rarr;</span>
@@ -110,24 +105,26 @@ function ArticlePreview({ article, onNavigate, onClose }: ArticlePreviewProps) {
   const categoryLabel = t(`content:learn.categories.${article.category}`);
 
   return (
-    <div className="relative space-y-1.5 pr-5">
+    <div className="zn-preview">
       <CloseButton onClose={onClose} />
       {/* Title */}
-      <span className="text-sm font-bold">{title}</span>
+      <span className="zn-preview__title">{title}</span>
 
       {/* Category + read time */}
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <BookOpen className="size-3" />
+      <div
+        className="zn-row zn-kicker zn-kicker--inline"
+        style={{ "--gap": "var(--sp-3)" } as React.CSSProperties}
+      >
+        <BookOpen size={12} />
         <span>{categoryLabel}</span>
-        <span aria-hidden="true">&middot;</span>
-        <Clock className="size-3" />
+        <Clock size={12} />
         <span>
           {article.readTime} {t("common:units.minutes")}
         </span>
       </div>
 
       {/* Description */}
-      <p className="text-xs text-muted-foreground line-clamp-2">
+      <p className="zn-preview__text" style={{ "--lines": 2 } as React.CSSProperties}>
         {description}
       </p>
 
@@ -135,7 +132,8 @@ function ArticlePreview({ article, onNavigate, onClose }: ArticlePreviewProps) {
       <Link
         to={`/learn/${article.slug}`}
         onClick={onNavigate}
-        className="text-xs text-primary hover:underline mt-2 inline-flex items-center gap-1"
+        className="zn-clink"
+        data-size="sm"
       >
         {t("glossary:readArticle")}
         <span aria-hidden="true">&rarr;</span>

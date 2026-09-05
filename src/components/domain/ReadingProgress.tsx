@@ -34,10 +34,10 @@ export function ReadingProgress() {
   if (progress <= 0) return null;
 
   return (
-    <div className="fixed top-12 left-0 right-0 z-40 h-0.5 bg-muted">
-      {/* scaleX, not width: keeps the 150ms smoothing on the compositor */}
+    <div className="zn-readprog">
+      {/* scaleX, not width: keeps the smoothing on the compositor */}
       <div
-        className="h-full w-full bg-primary origin-left transition-transform duration-150 ease-out"
+        className="zn-readprog__fill"
         role="progressbar"
         aria-valuenow={Math.round(progress)}
         aria-valuemin={0}

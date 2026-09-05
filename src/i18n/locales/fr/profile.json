@@ -1,9 +1,9 @@
 {
   "title": "Mon Profil Coureur",
-  "description": "Centralisez vos données physiologiques, temps de référence et records personnels.",
+  "description": "Centralise tes données physiologiques, temps de référence et records personnels.",
   "seo": {
     "title": "Profil Coureur — Zoned",
-    "description": "Votre fiche coureur : données physio, temps de référence, historique de tests et records personnels."
+    "description": "Ta fiche coureur : données physio, temps de référence, historique de tests et records personnels."
   },
   "tabs": {
     "base": "Profil",
@@ -14,13 +14,13 @@
   },
   "commute": {
     "title": "Vélotaf",
-    "description": "Si vous allez travailler à vélo (ou en trottinant), paramétrez le trajet ici pour que le générateur tienne compte de cette charge récurrente.",
+    "description": "Renseigne ton trajet domicile-travail : le générateur compte cette charge récurrente.",
     "discipline": "Discipline",
     "disciplineCycling": "Vélo",
     "disciplineRunning": "Footing",
     "daysOfWeek": "Jours concernés",
     "durationMin": "Durée par trajet (minutes)",
-    "durationHint": "Durée aller simple. Multipliez par 2 si vous faites l'aller-retour.",
+    "durationHint": "Durée aller simple. Double-la si tu fais l'aller-retour.",
     "includeInPlan": "Intégrer au plan",
     "includeInPlanHint": "Si activé, le plan réduit les séances faciles pour éviter la surcharge. Sinon, le vélotaf reste un extra non comptabilisé.",
     "monday": "Lun",
@@ -38,7 +38,7 @@
   },
   "base": {
     "title": "Données de base",
-    "description": "Vos données physiologiques et votre volume d'entraînement actuel.",
+    "description": "Tes données physiologiques et ton volume d'entraînement actuel.",
     "fcMax": "FC Max",
     "fcMaxUnit": "bpm",
     "fcMaxPlaceholder": "Ex : 185",
@@ -82,7 +82,7 @@
   },
   "benchmarks": {
     "title": "Historique des tests",
-    "description": "Suivez l'évolution de vos résultats de tests VMA et autres évaluations.",
+    "description": "Suis l'évolution de tes résultats de tests VMA et autres évaluations.",
     "add": "Ajouter un test",
     "type": "Type de test",
     "selectType": "Sélectionner un type",

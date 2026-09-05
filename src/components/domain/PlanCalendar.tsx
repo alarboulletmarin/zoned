@@ -1,24 +1,19 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye, Dumbbell, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan, PlanSession, IntermediateGoal } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { ZoneScale } from "@/components/visualization";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
-import { SESSION_COLORS } from "@/lib/sessionColors";
+import { SESSION_ZONE, sessionColor } from "@/lib/sessionColors";
 
-// ── Color maps ──────────────────────────────────────────────────────
-
-const PHASE_BG: Record<string, string> = {
-  base: "bg-blue-50/50 dark:bg-blue-950/20",
-  build: "bg-orange-50/50 dark:bg-orange-950/20",
-  peak: "bg-red-50/50 dark:bg-red-950/20",
-  taper: "bg-green-50/50 dark:bg-green-950/20",
-  recovery: "bg-slate-50/50 dark:bg-slate-950/20",
-};
+/** A session type with no aerobic zone gets the hollow mark, never a hue. */
+function isZoned(sessionType: string): boolean {
+  return SESSION_ZONE[sessionType as keyof typeof SESSION_ZONE] != null;
+}
 
 // ── Props ───────────────────────────────────────────────────────────
 
@@ -437,27 +432,21 @@ export const PlanCalendar = memo(function PlanCalendar({
   return (
     <>
       {/* ── Calendar grid ── */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm table-fixed">
+      <div className="zn-plancal">
+        <div className="zn-scroll-x">
+        <table className="zn-plancal__table">
           <colgroup>
-            <col className="w-[90px] md:w-[110px]" />
+            <col className="zn-plancal__col-week" />
             {Array.from({ length: 7 }, (_, i) => (
               <col key={i} />
             ))}
           </colgroup>
           {/* Header row */}
-          <thead>
+          <thead className="zn-plancal__head">
             <tr>
-              <th className="sticky left-0 z-10 bg-background px-2 py-2 text-left text-xs font-medium text-muted-foreground">
-                {t("calendar.week")}
-              </th>
+              <th className="zn-plancal__head-week">{t("calendar.week")}</th>
               {dayHeaders.map((day, i) => (
-                <th
-                  key={i}
-                  className="px-0.5 py-2 text-center text-xs font-medium text-muted-foreground"
-                >
-                  {day}
-                </th>
+                <th key={i}>{day}</th>
               ))}
             </tr>
           </thead>
@@ -491,43 +480,24 @@ export const PlanCalendar = memo(function PlanCalendar({
                 <tr
                   key={week.weekNumber}
                   ref={week.weekNumber === initialWeek ? initialWeekRowRef : undefined}
-                  className={cn(
-                    "border-b border-border/40",
-                    isPhaseStart && "border-t-2 border-t-border",
-                    isCurrent && "bg-primary/10",
-                    !isCurrent && week.isRecoveryWeek && "bg-muted/40",
-                    !isCurrent && !week.isRecoveryWeek && PHASE_BG[week.phase as string]
-                  )}
+                  className="zn-plancal__week"
+                  data-phase-start={isPhaseStart || undefined}
+                  data-current={isCurrent || undefined}
+                  data-recovery={week.isRecoveryWeek || undefined}
                 >
                   {/* Week label column (sticky on mobile) */}
-                  <td
-                    className={cn(
-                      "sticky left-0 z-10 px-2 py-1.5 align-top",
-                      isCurrent && "bg-primary/10",
-                      !isCurrent && week.isRecoveryWeek && "bg-muted/40",
-                      !isCurrent && !week.isRecoveryWeek && "bg-background"
-                    )}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <div
-                        className={cn("size-2 rounded-full shrink-0", phaseMeta.color)}
-                      />
-                      <span className="font-medium text-xs whitespace-nowrap">
-                        {weekLabel}
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-muted-foreground leading-none">
+                  <td className="zn-plancal__gutter">
+                    <div className="zn-plancal__wknum">{weekLabel}</div>
+                    <span className="zn-plancal__phase">
                       {pickLang(phaseMeta, "label")}
                     </span>
                     {week.sessions.length > 0 && (
-                      <span className="text-[9px] text-muted-foreground/70 tabular-nums">
+                      <span className="zn-plancal__volume">
                         ~{Math.round(computeWeekKm(week))}km · {formatDurationMinutes(computeWeekDuration(week))}
                       </span>
                     )}
                     {isCurrent && (
-                      <div className="text-[9px] font-semibold text-primary mt-0.5">
-                        {t("calendar.now")}
-                      </div>
+                      <div className="zn-plancal__now">{t("calendar.now")}</div>
                     )}
                     {/* Completion stats + validate button */}
                     {(() => {
@@ -540,8 +510,8 @@ export const PlanCalendar = memo(function PlanCalendar({
 
                       if (allResolved && resolved > 0) {
                         return (
-                          <div className="text-[9px] text-green-600 dark:text-green-400 font-medium mt-0.5 flex items-center gap-0.5">
-                            <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 6l3 3 5-5" /></svg>
+                          <div className="zn-plancal__done">
+                            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 6l3 3 5-5" /></svg>
                             {done}/{total}
                           </div>
                         );
@@ -552,7 +522,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                           <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); onValidateWeek(week.weekNumber); }}
-                            className="text-[9px] mt-0.5 px-1 py-0.5 rounded bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
+                            className="zn-plancal__validate"
                             title={t("calendar.validateWeek")}
                           >
                             {t("calendar.validateCount", { done, total })}
@@ -607,35 +577,30 @@ export const PlanCalendar = memo(function PlanCalendar({
                         onDragOver={isOutsideMonth ? undefined : (e) => handleDragOver(e, week.weekNumber, dayIndex)}
                         onDragLeave={isOutsideMonth ? undefined : handleDragLeave}
                         onDrop={isOutsideMonth ? undefined : (e) => handleDrop(e, week.weekNumber, dayIndex)}
-                        className={cn(
-                          "px-0.5 py-1 align-top transition-colors",
-                          isDropHere && !isOutsideMonth && "ring-2 ring-primary/50 bg-primary/5 rounded",
-                          isOutsideMonth && "opacity-25",
-                          isFirstOfMonth && "border-l-2 border-l-primary/40",
-                          isBlockedDay && !isOutsideMonth && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
-                        )}
+                        className="zn-plancal__day"
+                        data-drop={(isDropHere && !isOutsideMonth) || undefined}
+                        data-outside={isOutsideMonth || undefined}
+                        data-today={(isToday && !isOutsideMonth) || undefined}
+                        data-month-start={isFirstOfMonth || undefined}
+                        data-blocked={(isBlockedDay && !isOutsideMonth) || undefined}
                       >
                         {isBlockedDay && !isOutsideMonth && (
-                          <span className="text-[8px] font-medium text-muted-foreground/70 block text-center leading-none mb-0.5">
+                          <span className="zn-plancal__blocked-label">
                             {t("unavailability.blocked")}
                           </span>
                         )}
                         {dayOfMonth !== null && (
-                          <span className={cn(
-                            "text-[10px] tabular-nums block text-center mb-0.5",
-                            isToday
-                              ? "font-bold text-primary"
-                              : monthLabel
-                                ? "font-semibold text-primary/70"
-                                : "text-muted-foreground/60"
-                          )}>
+                          <span
+                            className="zn-plancal__date"
+                            data-month-label={monthLabel ? "true" : undefined}
+                          >
                             {monthLabel ? `${dayOfMonth} ${monthLabel}` : dayOfMonth}
                           </span>
                         )}
                         {sessions.length === 0 ? (
-                          !dayOfMonth && !isBlockedDay && <span className="text-xs text-muted-foreground/40 block text-center">—</span>
+                          !dayOfMonth && !isBlockedDay && <span className="zn-plancal__empty">—</span>
                         ) : (
-                          <div className="space-y-0.5">
+                          <div className="zn-plancal__sessions">
                             {sessions.map((session, sIdx) => {
                               const isRaceDay = session.workoutId === "__race_day__";
                               const isIntermediateRace = session.workoutId === "__intermediate_race__";
@@ -670,10 +635,8 @@ export const PlanCalendar = memo(function PlanCalendar({
                                   onTouchMove={isSpecialSession ? undefined : handleTouchMove}
                                   onTouchEnd={isSpecialSession ? undefined : handleTouchEnd}
                                   style={isSpecialSession ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
-                                  className={cn(
-                                    !isSpecialSession && "cursor-grab active:cursor-grabbing",
-                                    isDragging && "opacity-40",
-                                  )}
+                                  className={isSpecialSession ? undefined : "zn-plan-drag"}
+                                  data-dragging={isDragging || undefined}
                                 >
                                   <SessionCell
                                     session={session}
@@ -735,46 +698,46 @@ export const PlanCalendar = memo(function PlanCalendar({
             })}
           </tbody>
         </table>
+        </div>
+
+        {/* The grid paints zone ink, so it carries the ramp's legend once. */}
+        <ZoneScale />
       </div>
 
       {/* ── Context menu (long press mobile / right-click desktop) ── */}
       {contextMenu && (
         <div
-          className="fixed inset-0 z-50"
+          className="zn-plan-menu__scrim"
           onPointerDown={() => setContextMenu(null)}
         >
           <div
-            className="fixed bg-card border rounded-lg shadow-lg py-1 min-w-[160px] z-50"
-            style={{
-              left: contextMenu.x,
-              top: contextMenu.y,
-              transform: "translate(-50%, 4px)",
-            }}
+            className="zn-menu zn-plan-menu"
+            style={{ left: contextMenu.x, top: contextMenu.y }}
             onPointerDown={(e) => e.stopPropagation()}
           >
             {onSessionClick && (
               <button
                 type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                className="zn-menu__item"
                 onClick={() => {
                   onSessionClick(contextMenu.weekNumber, contextMenu.sessionIndex, contextMenu.workoutId);
                   setContextMenu(null);
                 }}
               >
-                <Eye className="size-4 text-muted-foreground shrink-0" />
+                <Eye />
                 {t("calendar.viewSession")}
               </button>
             )}
             {onFindRoute && (
               <button
                 type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                className="zn-menu__item"
                 onClick={() => {
                   onFindRoute(contextMenu.weekNumber, contextMenu.sessionIndex);
                   setContextMenu(null);
                 }}
               >
-                <RouteIcon className="size-4 text-muted-foreground shrink-0" />
+                <RouteIcon />
                 {t("view.findRoute")}
               </button>
             )}
@@ -782,13 +745,13 @@ export const PlanCalendar = memo(function PlanCalendar({
               <>
                 <button
                   type="button"
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                  className="zn-menu__item"
                   onClick={() => {
                     onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex);
                     setContextMenu(null);
                   }}
                 >
-                  <svg viewBox="0 0 24 24" className="size-4 text-green-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12l5 5 9-9" />
                   </svg>
                   {t("completion.toggleDone")}
@@ -798,13 +761,14 @@ export const PlanCalendar = memo(function PlanCalendar({
             {onSessionDelete && (
               <button
                 type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors text-left"
+                className="zn-menu__item"
+                data-variant="destructive"
                 onClick={() => {
                   onSessionDelete(contextMenu.weekNumber, contextMenu.sessionIndex);
                   setContextMenu(null);
                 }}
               >
-                <Trash2 className="size-4 shrink-0" />
+                <Trash2 />
                 {t("calendar.deleteSession")}
               </button>
             )}
@@ -846,11 +810,9 @@ const SessionCell = memo(function SessionCell({
   const pick = usePickLang();
   if (isRaceDay) {
     return (
-      <div className="rounded border border-primary/30 bg-primary/10 px-1 py-1 text-center">
-        <Flag className="size-3 text-primary mx-auto" />
-        <span className="text-[10px] font-semibold text-primary leading-tight block">
-          {t("calendar.race")}
-        </span>
+      <div className="zn-sess" data-kind="race">
+        <Flag className="zn-sess__flag" />
+        <span className="zn-sess__race-label">{t("calendar.race")}</span>
       </div>
     );
   }
@@ -859,18 +821,13 @@ const SessionCell = memo(function SessionCell({
     const distMeta = intermediateRace?.raceDistance ? RACE_DISTANCE_META[intermediateRace.raceDistance] : null;
     const distLabel = distMeta ? pick(distMeta, "label") : intermediateRace?.raceDistance;
     return (
-      <div className="rounded border border-orange-300 bg-orange-50 dark:border-orange-700 dark:bg-orange-900/30 px-1 py-1 text-center">
-        <Flag className="size-3 text-orange-500 mx-auto" />
-        <span className="text-[10px] font-semibold text-orange-700 dark:text-orange-300 leading-tight block">
+      <div className="zn-sess" data-kind="intermediate">
+        <Flag className="zn-sess__flag" />
+        <span className="zn-sess__race-label">
           {distLabel || t("intermediateGoals.raceDayLabel")}
         </span>
         {intermediateRace?.priority && (
-          <span className={cn(
-            "text-[8px] font-bold leading-tight block",
-            intermediateRace.priority === "A" && "text-red-600 dark:text-red-400",
-            intermediateRace.priority === "B" && "text-orange-600 dark:text-orange-400",
-            intermediateRace.priority === "C" && "text-yellow-600 dark:text-yellow-400",
-          )}>
+          <span className="zn-sess__priority" data-priority={intermediateRace.priority}>
             {t(`intermediateGoals.badge.${intermediateRace.priority}`)}
           </span>
         )}
@@ -879,57 +836,54 @@ const SessionCell = memo(function SessionCell({
   }
 
   const isStrength = session.sessionType === "strength" || session.workoutId?.startsWith("STR-");
-  const dotColor = SESSION_COLORS[session.sessionType] || "#9ca3af";
+  const zoned = !isStrength && isZoned(session.sessionType);
   const displayName = workoutName || session.workoutId;
   const isCompleted = session.status === "completed";
   const isSkipped = session.status === "skipped";
   const isModified = session.status === "modified";
 
   return (
-    <div className="relative group" onContextMenu={onContextMenu}>
-      {/* Delete button */}
-      {onFindRoute && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onFindRoute();
-          }}
-          onPointerDown={(e) => e.stopPropagation()}
-          className={cn(
-            "absolute top-0.5 right-5 z-20",
-            "text-muted-foreground hover:text-primary",
-            "hidden sm:group-hover:block",
-            "transition-colors",
-          )}
-          title={t("view.findRoute")}
-        >
-          <RouteIcon className="size-3" />
-        </button>
-      )}
-      {onDelete && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onDelete();
-          }}
-          onPointerDown={(e) => e.stopPropagation()}
-          className={cn(
-            "absolute top-0.5 right-0.5 z-20",
-            "text-muted-foreground hover:text-destructive",
-            "hidden sm:group-hover:block",
-            "transition-colors",
-          )}
-          title={t("calendar.deleteSessionTitle")}
-        >
-          <Trash2 className="size-3" />
-        </button>
-      )}
+    <div
+      className="zn-sess"
+      data-status={session.status}
+      data-unzoned={zoned ? undefined : "true"}
+      onContextMenu={onContextMenu}
+    >
+      <div className="zn-sess__actions">
+        {onFindRoute && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onFindRoute();
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            className="zn-sess__action"
+            title={t("view.findRoute")}
+          >
+            <RouteIcon />
+          </button>
+        )}
+        {onDelete && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onDelete();
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            className="zn-sess__action"
+            data-variant="destructive"
+            title={t("calendar.deleteSessionTitle")}
+          >
+            <Trash2 />
+          </button>
+        )}
+      </div>
 
-      <div className="flex items-start gap-0.5">
+      <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-2)" } as React.CSSProperties}>
         {/* Completion checkbox — outside the clickable area */}
         {onToggleComplete && (
           <button
@@ -949,16 +903,8 @@ const SessionCell = memo(function SessionCell({
               onToggleComplete();
             }}
             onPointerDown={(e) => e.stopPropagation()}
-            className={cn(
-              "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors mt-1",
-              isCompleted
-                ? "bg-green-500 border-green-500 text-white"
-                : isModified
-                  ? "bg-blue-500 border-blue-500 text-white"
-                  : isSkipped
-                    ? "bg-muted border-muted-foreground/30"
-                    : "border-muted-foreground/40 hover:border-primary"
-            )}
+            className="zn-sess__check"
+            data-status={session.status}
             title={
               isCompleted ? t("completion.completed")
                 : isModified ? t("completion.modified")
@@ -967,17 +913,17 @@ const SessionCell = memo(function SessionCell({
             }
           >
             {isCompleted && (
-              <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M2 6l3 3 5-5" />
               </svg>
             )}
             {isModified && (
-              <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
               </svg>
             )}
             {isSkipped && (
-              <svg viewBox="0 0 12 12" className="size-2" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M3 3l6 6M9 3l-6 6" />
               </svg>
             )}
@@ -990,55 +936,39 @@ const SessionCell = memo(function SessionCell({
           tabIndex={onClick ? 0 : undefined}
           onClick={onClick}
           onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } } : undefined}
-          className={cn(
-            "flex-1 min-w-0 rounded px-1 py-1 text-left transition-colors",
-            isStrength
-              ? "bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/30 dark:hover:bg-amber-950/50 border border-amber-300 dark:border-amber-700"
-              : "bg-secondary/60 hover:bg-secondary",
-            isCompleted && !isStrength && "bg-green-500/10 hover:bg-green-500/15 ring-1 ring-green-500/30",
-            isCompleted && isStrength && "ring-1 ring-green-500/30",
-            isModified && !isStrength && "bg-blue-500/10 hover:bg-blue-500/15 ring-1 ring-blue-500/30",
-            isModified && isStrength && "ring-1 ring-blue-500/30",
-            isSkipped && "opacity-50",
-            !onClick && "cursor-default",
-            onClick && "cursor-pointer focus-visible:ring-2 focus-visible:ring-ring"
-          )}
+          className="zn-sess__body"
+          data-clickable={onClick ? "true" : "false"}
         >
-          <div className="flex items-center gap-1">
+          <div className="zn-sess__head">
             {isStrength ? (
-              <Dumbbell className="size-3 text-amber-600 dark:text-amber-400 shrink-0" />
+              <Dumbbell className="zn-sess__icon" />
             ) : (
               <span
-                className="size-1.5 rounded-full shrink-0"
-                style={{ backgroundColor: dotColor }}
+                className="zn-sess__dot"
+                style={zoned ? ({ "--zn-dot": sessionColor(session.sessionType) } as React.CSSProperties) : undefined}
               />
             )}
             {session.isKeySession && (
-              <Star filled className="size-2.5 text-yellow-500 shrink-0" />
+              <span className="zn-sess__key">
+                <Star filled />
+              </span>
             )}
           </div>
-          <span
-            className={cn(
-              "text-[11px] leading-tight font-medium line-clamp-2 mt-0.5 block",
-              isSkipped && "line-through text-muted-foreground",
-              isStrength && !isSkipped && "text-amber-900 dark:text-amber-100"
-            )}
-            title={displayName}
-          >
-          {displayName}
-        </span>
-        {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
-          <span className="text-[10px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
-            <Clock className="size-2.5" />
-            {formatDurationMinutes(session.estimatedDurationMin)}
-            {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
-              <span> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
-            )}
-            {session.rpe && (
-              <span className="ml-1 text-[9px] font-medium text-amber-600">RPE {session.rpe}</span>
-            )}
+          <span className="zn-sess__name" title={displayName}>
+            {displayName}
           </span>
-        )}
+          {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
+            <span className="zn-sess__facts">
+              <Clock />
+              <span className="zn-sess__facts-text">
+                {formatDurationMinutes(session.estimatedDurationMin)}
+                {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
+                  <> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</>
+                )}
+                {session.rpe && <> · RPE {session.rpe}</>}
+              </span>
+            </span>
+          )}
         </div>
       </div>
     </div>

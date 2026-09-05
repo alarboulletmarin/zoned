@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -56,9 +57,7 @@ export function StorageWarning() {
             {t("storageWarning.description")}
           </DialogDescription>
         </DialogHeader>
-        <p className="text-sm font-medium text-destructive">
-          {t("storageWarning.warning")}
-        </p>
+        <Alert kind="warning">{t("storageWarning.warning")}</Alert>
         <DialogFooter>
           <Button variant="outline" onClick={goToExport}>
             {t("storageWarning.exportButton")}

@@ -13,28 +13,36 @@ const PHASES: Phase[] = [
   { key: "long", Icon: Moon },
 ];
 
+/**
+ * The three recovery windows. Ordered by how far they reach past the finish,
+ * so the glyphs walk the ink ramp from the first minutes to the next day.
+ */
 export function RecoveryWindow() {
   const { t } = useTranslation("nutrition");
 
   return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
-      {PHASES.map(({ key, Icon }) => (
-        <div
-          key={key}
-          className="flex flex-col gap-3 rounded-xl border border-green-500/30 bg-gradient-to-br from-green-500/10 via-green-500/5 to-transparent dark:from-green-500/20 p-4"
-        >
-          <div className="flex items-center gap-2">
-            <div className="inline-flex size-9 items-center justify-center rounded-lg bg-green-100 dark:bg-green-950/40">
-              <Icon className="size-4 text-green-700 dark:text-green-300" aria-hidden="true" />
-            </div>
-            <span className="rounded-full bg-green-100 dark:bg-green-950/40 px-2.5 py-0.5 text-xs font-bold text-green-800 dark:text-green-300">
+    <div className="zn-grid" style={{ "--cols": 3 } as React.CSSProperties}>
+      {PHASES.map(({ key, Icon }, idx) => (
+        <div key={key} className="zn-nut-card">
+          <div
+            className="zn-row"
+            style={{ "--gap": "var(--sp-5)" } as React.CSSProperties}
+          >
+            <span
+              className="zn-nut-glyph zn-nut-ramp"
+              data-size="sm"
+              data-step={idx + 1}
+            >
+              <Icon aria-hidden="true" />
+            </span>
+            <span className="zn-nut-tag">
               {t(`hub.recovery.phases.${key}.window`)}
             </span>
           </div>
-          <h3 className="font-semibold leading-tight">
+          <h3 className="zn-nut-card__title">
             {t(`hub.recovery.phases.${key}.title`)}
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="zn-nut-card__text">
             {t(`hub.recovery.phases.${key}.detail`)}
           </p>
         </div>

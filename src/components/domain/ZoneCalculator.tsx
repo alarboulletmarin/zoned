@@ -1,5 +1,11 @@
-import { useState, useEffect, useMemo, useCallback, type ChangeEvent } from "react";
-import { zoneClass } from "@/lib/zoneColors";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  type ChangeEvent,
+  type CSSProperties,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import { Save, Trash2, HeartRate, Gauge, ChevronDown, Dumbbell } from "@/components/icons";
@@ -13,7 +19,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import {
   ZONE_META,
   getDominantZone,
@@ -147,23 +152,23 @@ export function ZoneCalculator() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Gauge className="size-5" />
+        <CardTitle className="zn-calc__card-title">
+          <Gauge />
           {t("myZones.zoneCalculator.title")}
         </CardTitle>
         <CardDescription>
           {t("myZones.zoneCalculator.description")}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="zn-stack" style={{ "--gap": "var(--sp-12)" } as CSSProperties}>
         {/* Inputs */}
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <label htmlFor="fcMax" className="flex items-center gap-2 text-sm font-medium">
-              <HeartRate className="size-4 text-red-500" />
+        <div className="zn-calc__fields">
+          <div className="zn-calc__field">
+            <label htmlFor="fcMax" className="zn-calc__label">
+              <HeartRate />
               {t("myZones.zoneCalculator.fcMax")}
             </label>
-            <div className="flex items-center gap-2">
+            <span className="zn-numfield" data-invalid={fcMaxError ? "true" : undefined}>
               <input
                 id="fcMax"
                 type="number"
@@ -175,28 +180,23 @@ export function ZoneCalculator() {
                   setFcMax(e.target.value);
                   setSaved(false);
                 }}
-                className={cn(
-                  "flex h-9 w-full max-w-[120px] rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2",
-                  fcMaxError
-                    ? "border-red-500 focus-visible:ring-red-500"
-                    : "border-input focus-visible:ring-ring"
-                )}
+                className="zn-numfield__input"
               />
-              <span className="text-sm text-muted-foreground">bpm</span>
-            </div>
+              <span className="zn-numfield__unit">bpm</span>
+            </span>
             {fcMaxError && (
-              <p className="text-xs text-red-500">
+              <p className="zn-calc__error">
                 {t("myZones.zoneCalculator.invalidFcMax")}
               </p>
             )}
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="vma" className="flex items-center gap-2 text-sm font-medium">
-              <Gauge className="size-4 text-blue-500" />
+          <div className="zn-calc__field">
+            <label htmlFor="vma" className="zn-calc__label">
+              <Gauge />
               {t("myZones.zoneCalculator.vma")}
             </label>
-            <div className="flex items-center gap-2">
+            <span className="zn-numfield" data-invalid={vmaError ? "true" : undefined}>
               <input
                 id="vma"
                 type="number"
@@ -209,17 +209,12 @@ export function ZoneCalculator() {
                   setVma(e.target.value);
                   setSaved(false);
                 }}
-                className={cn(
-                  "flex h-9 w-full max-w-[120px] rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2",
-                  vmaError
-                    ? "border-red-500 focus-visible:ring-red-500"
-                    : "border-input focus-visible:ring-ring"
-                )}
+                className="zn-numfield__input"
               />
-              <span className="text-sm text-muted-foreground">{getSpeedUnit(unit)}</span>
-            </div>
+              <span className="zn-numfield__unit">{getSpeedUnit(unit)}</span>
+            </span>
             {vmaError && (
-              <p className="text-xs text-red-500">
+              <p className="zn-calc__error">
                 {t("myZones.zoneCalculator.invalidVma")}
               </p>
             )}
@@ -228,20 +223,23 @@ export function ZoneCalculator() {
 
         {/* Zone Table with Accordion Panels */}
         {hasValues && (
-          <div className="space-y-0 overflow-hidden">
+          <div
+            className="zn-ztable"
+            style={
+              {
+                "--hr-w": prefs.fcMax ? "110px" : "0px",
+                "--pace-w": prefs.vma ? "130px" : "0px",
+              } as CSSProperties
+            }
+          >
             {/* Header row -- hidden on mobile where zone rows stack vertically */}
-            <div className="hidden sm:grid grid-cols-[1fr_auto_auto_32px] items-center border-b px-3 py-2 text-sm font-medium">
+            {/* Four cells always, so the grid columns line up with the rows
+                below whichever of the two inputs is filled in; the unused
+                column is zero-width. */}
+            <div className="zn-ztable__head">
               <span>{t("myZones.zoneCalculator.zone")}</span>
-              {prefs.fcMax && (
-                <span className="min-w-[110px] text-left">
-                  {t("myZones.zoneCalculator.heartRate")}
-                </span>
-              )}
-              {prefs.vma && (
-                <span className="min-w-[130px] text-left">
-                  {t("myZones.zoneCalculator.pace")}
-                </span>
-              )}
+              <span>{prefs.fcMax ? t("myZones.zoneCalculator.heartRate") : ""}</span>
+              <span>{prefs.vma ? t("myZones.zoneCalculator.pace") : ""}</span>
               {/* Spacer for chevron column */}
               <span />
             </div>
@@ -253,76 +251,48 @@ export function ZoneCalculator() {
               const examples = zoneWorkouts[zoneNum];
 
               return (
-                <div key={z.zone} className="border-b last:border-b-0">
+                <div key={z.zone} className="zn-ztable__group">
                   {/* Zone row (clickable) */}
                   <button
                     type="button"
                     onClick={() => toggleZone(zoneNum)}
                     aria-expanded={isExpanded}
                     aria-controls={`zone-panel-${zoneNum}`}
-                    className={cn(
-                      // Mobile: flex column with chevron in top-right corner
-                      // Desktop: 4-column grid
-                      "w-full px-3 py-2 text-left text-xs sm:text-sm transition-colors duration-150",
-                      "hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
-                      "flex flex-col gap-1 sm:grid sm:grid-cols-[1fr_auto_auto_32px] sm:items-center sm:gap-0",
-                      zoneClass(z.zone as ZoneNumber, "bgSoft")
-                    )}
+                    className="zn-ztable__row"
                   >
                     {/* Zone label + chevron row */}
-                    <span className="flex items-center justify-between min-w-0">
-                      <span
-                        className={cn(
-                          "inline-flex items-center gap-2 font-medium min-w-0",
-                          zoneClass(z.zone as ZoneNumber, "text")
-                        )}
-                      >
-                        <span
-                          className={cn(
-                            "size-3 shrink-0 rounded-full",
-                            zoneClass(z.zone as ZoneNumber, "bg")
-                          )}
-                        />
-                        <span className="truncate">
+                    <span className="zn-ztable__label">
+                      <span className="zn-ztable__name">
+                        {/* The legend's own swatch, so a row can never show a
+                            density the legend does not. */}
+                        <span className="zn-zonescale__swatch" aria-hidden="true">
+                          <span className="zn-zonescale__fill" data-zone={zoneNum} />
+                        </span>
+                        <span>
                           Z{z.zone} - {pickLang(meta, "label")}
                         </span>
                       </span>
                       {/* Chevron visible only on mobile (inline with label) */}
-                      <span className="flex items-center justify-center sm:hidden">
-                        <ChevronDown
-                          className={cn(
-                            "size-4 text-muted-foreground transition-transform duration-300",
-                            isExpanded && "rotate-180"
-                          )}
-                        />
+                      <span className="zn-ztable__chevron zn-ztable__chevron--narrow">
+                        <ChevronDown />
                       </span>
                     </span>
 
                     {/* HR & pace values -- stacked on mobile, inline on desktop */}
-                    {(prefs.fcMax || prefs.vma) && (
-                      <span className="flex flex-wrap gap-x-3 gap-y-0.5 pl-5 sm:contents sm:pl-0">
-                        {prefs.fcMax && (
-                          <span className="tabular-nums text-foreground sm:min-w-[110px]">
-                            {z.hrMin}-{z.hrMax} bpm
-                          </span>
-                        )}
-                        {prefs.vma && (
-                          <span className="tabular-nums text-foreground sm:min-w-[130px]">
-                            {formatPace(convertPace(z.paceMinPerKm!, unit))}-
-                            {formatPace(convertPace(z.paceMaxPerKm!, unit))} {getPaceUnit(unit)}
-                          </span>
-                        )}
+                    <span className="zn-ztable__values">
+                      <span className="zn-ztable__value">
+                        {prefs.fcMax ? `${z.hrMin}-${z.hrMax} bpm` : ""}
                       </span>
-                    )}
+                      <span className="zn-ztable__value">
+                        {prefs.vma
+                          ? `${formatPace(convertPace(z.paceMinPerKm!, unit))}-${formatPace(convertPace(z.paceMaxPerKm!, unit))} ${getPaceUnit(unit)}`
+                          : ""}
+                      </span>
+                    </span>
 
                     {/* Chevron visible only on desktop (grid column) */}
-                    <span className="hidden sm:flex items-center justify-center">
-                      <ChevronDown
-                        className={cn(
-                          "size-4 text-muted-foreground transition-transform duration-300",
-                          isExpanded && "rotate-180"
-                        )}
-                      />
+                    <span className="zn-ztable__chevron zn-ztable__chevron--wide">
+                      <ChevronDown />
                     </span>
                   </button>
 
@@ -331,34 +301,27 @@ export function ZoneCalculator() {
                     id={`zone-panel-${zoneNum}`}
                     role="region"
                     aria-labelledby={`zone-row-${zoneNum}`}
-                    className="grid transition-[grid-template-rows] duration-300 ease-in-out"
-                    style={{
-                      gridTemplateRows: isExpanded ? "1fr" : "0fr",
-                    }}
+                    className="zn-ztable__panel"
+                    data-open={isExpanded ? "true" : undefined}
                   >
-                    <div className="overflow-hidden">
-                      <div
-                        className={cn(
-                          "border-l-4 px-3 sm:px-4 py-3 space-y-2",
-                          zoneClass(z.zone as ZoneNumber, "border")
-                        )}
-                      >
+                    <div className="zn-ztable__clip">
+                      <div className="zn-ztable__detail zn-zone-edge" data-zone={zoneNum}>
                         {/* Sensation */}
                         <div>
-                          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          <p className="zn-ztable__term">
                             {t("myZones.zoneCalculator.sensation")}
-                          </span>
-                          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                          </p>
+                          <p className="zn-ztable__text">
                             {pickLang(meta, "sensation")}
                           </p>
                         </div>
 
                         {/* Benefit */}
                         <div>
-                          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          <p className="zn-ztable__term">
                             {t("myZones.zoneCalculator.benefit")}
-                          </span>
-                          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                          </p>
+                          <p className="zn-ztable__text">
                             {pickLang(meta, "benefit")}
                           </p>
                         </div>
@@ -366,22 +329,16 @@ export function ZoneCalculator() {
                         {/* Example workouts */}
                         {examples.length > 0 && (
                           <div>
-                            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
-                              <Dumbbell className="size-3" />
+                            <p className="zn-ztable__term">
+                              <Dumbbell />
                               {t("myZones.zoneCalculator.exampleWorkouts")}
-                            </span>
-                            <ul className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 sm:flex-col sm:gap-x-0 sm:space-y-0.5">
+                            </p>
+                            <ul className="zn-ztable__examples">
                               {examples
                                 .slice(0, isMobile ? MAX_EXAMPLES_MOBILE : MAX_EXAMPLES)
                                 .map((w) => (
                                 <li key={w.id}>
-                                  <Link
-                                    to={`/workout/${w.id}`}
-                                    className={cn(
-                                      "text-xs sm:text-sm underline-offset-2 hover:underline",
-                                      zoneClass(z.zone as ZoneNumber, "text")
-                                    )}
-                                  >
+                                  <Link to={`/workout/${w.id}`} className="zn-ztable__example">
                                     {pickLang(w, "name")}
                                   </Link>
                                 </li>
@@ -399,16 +356,16 @@ export function ZoneCalculator() {
         )}
 
         {/* Actions */}
-        <div className="flex gap-2">
+        <div className="zn-calc__actions">
           <Button onClick={handleSave} disabled={!hasValues || saved || hasErrors}>
-            <Save className="size-4 mr-2" />
+            <Save />
             {saved
               ? t("myZones.zoneCalculator.saved")
               : t("myZones.zoneCalculator.save")}
           </Button>
           {saved && (
             <Button variant="outline" onClick={handleClear}>
-              <Trash2 className="size-4 mr-2" />
+              <Trash2 />
               {t("myZones.zoneCalculator.clear")}
             </Button>
           )}

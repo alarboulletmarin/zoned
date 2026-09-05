@@ -4,10 +4,13 @@
  * Displays two images side-by-side (position A -> position B) for strength exercises.
  * Handles missing images gracefully with a placeholder icon.
  * Clicking on images opens a full-screen zoom modal.
+ *
+ * Paint: `src/styles/components/strength.css` (.zn-eximg / .zn-exzoom).
  */
 
 import { useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Dumbbell, ArrowRight, X } from "@/components/icons";
 
@@ -18,26 +21,17 @@ interface ExerciseImageProps {
   className?: string;
 }
 
-const SIZE_CLASSES = {
-  sm: "h-16",
-  md: "h-24",
-  lg: "h-32",
-} as const;
+/** The empty frame. Its height comes from the --zn-eximg-h the wrapper sets. */
+function Placeholder({ name, showLabel = false }: { name: string; showLabel?: boolean }) {
+  const { t } = useTranslation("strength");
 
-function Placeholder({ size, name, showLabel = false }: { size: "sm" | "md" | "lg"; name: string; showLabel?: boolean }) {
   return (
-    <div className="flex flex-col items-center gap-1">
-      <div
-        className={cn(
-          "flex items-center justify-center rounded-md bg-muted/60 border border-border/40 aspect-[4/3]",
-          SIZE_CLASSES[size],
-        )}
-        aria-label={name}
-      >
-        <Dumbbell className="size-6 text-muted-foreground/40" />
+    <div className="zn-eximg__ph">
+      <div className="zn-eximg__slot" aria-label={name}>
+        <Dumbbell size={22} />
       </div>
       {showLabel && (
-        <span className="text-[10px] text-muted-foreground/60 italic">Illustration non disponible</span>
+        <span className="zn-eximg__caption">{t("detail.imageUnavailable")}</span>
       )}
     </div>
   );
@@ -54,6 +48,7 @@ function ZoomModal({
   srcB: string;
   onClose: () => void;
 }) {
+  const { t } = useTranslation(["strength", "common"]);
   const [visible, setVisible] = useState(false);
 
   // Animate in on mount
@@ -83,45 +78,40 @@ function ZoomModal({
 
   return (
     <div
-      className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 transition-opacity duration-200",
-        visible ? "opacity-100" : "opacity-0",
-      )}
+      className="zn-exzoom"
+      data-visible={visible}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={exerciseName}
     >
       <div
-        className="relative max-w-4xl w-full"
+        className="zn-exzoom__panel"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
+          type="button"
           onClick={onClose}
-          className="absolute -top-10 right-0 text-white/80 hover:text-white transition-colors cursor-pointer"
-          aria-label="Close"
+          className="zn-dialog__close"
+          aria-label={t("common:actions.close")}
         >
-          <X className="size-6" />
+          <X size={16} />
         </button>
 
         {/* Exercise name */}
-        <h3 className="text-white text-center mb-4 font-medium text-lg">
-          {exerciseName}
-        </h3>
+        <h3 className="zn-exzoom__title">{exerciseName}</h3>
 
         {/* Large images - horizontal on desktop, vertical on mobile */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
+        <div className="zn-exzoom__pair">
           <img
             src={srcA}
-            alt={`${exerciseName} - start position`}
-            className="max-h-[60vh] max-w-full sm:max-w-md rounded-lg object-contain"
+            alt={`${exerciseName} — ${t("strength:detail.positionStart")}`}
           />
-          <ArrowRight className="size-6 text-white/60 shrink-0 rotate-90 sm:rotate-0" />
+          <ArrowRight size={22} />
           <img
             src={srcB}
-            alt={`${exerciseName} - end position`}
-            className="max-h-[60vh] max-w-full sm:max-w-md rounded-lg object-contain"
+            alt={`${exerciseName} — ${t("strength:detail.positionEnd")}`}
           />
         </div>
       </div>
@@ -135,6 +125,7 @@ export function ExerciseImage({
   size = "md",
   className,
 }: ExerciseImageProps) {
+  const { t } = useTranslation("strength");
   const [errorA, setErrorA] = useState(false);
   const [errorB, setErrorB] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -145,10 +136,13 @@ export function ExerciseImage({
   const hasImages = !!imageSlug;
   const showPlaceholder = !hasImages || (errorA && errorB);
 
+  const startLabel = t("detail.positionStart");
+  const endLabel = t("detail.positionEnd");
+
   if (showPlaceholder) {
     return (
-      <div className={cn("flex items-center gap-1", className)}>
-        <Placeholder size={size} name={exerciseName} showLabel={!hasImages} />
+      <div className={cn("zn-eximg", className)} data-size={size}>
+        <Placeholder name={exerciseName} showLabel={!hasImages} />
       </div>
     );
   }
@@ -159,11 +153,13 @@ export function ExerciseImage({
   return (
     <>
       <div
-        className={cn("flex items-center gap-1.5 cursor-pointer group", className)}
+        className={cn("zn-eximg", className)}
+        data-size={size}
+        data-zoomable="true"
         onClick={() => setIsZoomed(true)}
         role="button"
         tabIndex={0}
-        aria-label={`Zoom on ${exerciseName} images`}
+        aria-label={t("detail.zoomImages", { name: exerciseName })}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
@@ -173,36 +169,30 @@ export function ExerciseImage({
       >
         {/* Position A (start) */}
         {errorA ? (
-          <Placeholder size={size} name={`${exerciseName} - start`} />
+          <Placeholder name={`${exerciseName} — ${startLabel}`} />
         ) : (
           <img
             src={srcA}
-            alt={`${exerciseName} - start position`}
+            alt={`${exerciseName} — ${startLabel}`}
             loading="lazy"
             onError={handleErrorA}
-            className={cn(
-              "rounded-md border border-border/40 shadow-sm object-cover aspect-[4/3] bg-muted/30 transition-shadow group-hover:shadow-md group-hover:border-border/70",
-              SIZE_CLASSES[size],
-            )}
+            className="zn-eximg__frame"
           />
         )}
 
         {/* Arrow between positions */}
-        <ArrowRight className="size-3.5 text-muted-foreground/50 shrink-0" />
+        <ArrowRight size={14} className="zn-eximg__arrow" />
 
         {/* Position B (end) */}
         {errorB ? (
-          <Placeholder size={size} name={`${exerciseName} - end`} />
+          <Placeholder name={`${exerciseName} — ${endLabel}`} />
         ) : (
           <img
             src={srcB}
-            alt={`${exerciseName} - end position`}
+            alt={`${exerciseName} — ${endLabel}`}
             loading="lazy"
             onError={handleErrorB}
-            className={cn(
-              "rounded-md border border-border/40 shadow-sm object-cover aspect-[4/3] bg-muted/30 transition-shadow group-hover:shadow-md group-hover:border-border/70",
-              SIZE_CLASSES[size],
-            )}
+            className="zn-eximg__frame"
           />
         )}
       </div>

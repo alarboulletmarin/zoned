@@ -1,44 +1,41 @@
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
 import { carbRatios } from "@/data/nutrition";
 
+/**
+ * Glucose-to-fructose ratios and what each one lets the gut absorb.
+ *
+ * The recommended ratio wears the 2.5px vermillon frame, and its label is
+ * vermillon type on the frame — a mark, not a second accent fill.
+ */
 export function RatioGauge() {
   const { t } = useTranslation("nutrition");
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}
+    >
+      <div className="zn-grid" style={{ "--cols": 3 } as React.CSSProperties}>
         {carbRatios.map((row) => (
           <div
             key={row.ratio}
-            className={cn(
-              "relative flex flex-col gap-2 rounded-xl border p-4",
-              row.highlight
-                ? "border-amber-500/50 bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-transparent dark:from-amber-500/25 shadow-sm"
-                : "border-border/50 bg-muted/30"
-            )}
+            className="zn-nut-card"
+            data-emphasis={row.highlight ? "accent" : undefined}
           >
             {row.highlight && (
-              <span className="absolute -top-2 right-3 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+              <span className="zn-nut-card__flag">
                 {t("hub.carbs.ratios.recommended")}
               </span>
             )}
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              {t(row.labelKey)}
-            </p>
-            <p
-              className={cn(
-                "font-mono text-3xl md:text-4xl font-bold tracking-tight",
-                row.highlight ? "text-amber-700 dark:text-amber-300" : "text-foreground"
-              )}
-            >
+            <span className="zn-kicker">{t(row.labelKey)}</span>
+            <p className="zn-nut-figure" data-size="lg">
               {row.ratio}
             </p>
-            <p className="text-sm font-semibold">{t(row.capacityKey)}</p>
+            <p className="zn-nut-card__title">{t(row.capacityKey)}</p>
           </div>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground">{t("hub.carbs.ratios.footnote")}</p>
+      <p className="zn-source zn-nut-foot">{t("hub.carbs.ratios.footnote")}</p>
     </div>
   );
 }

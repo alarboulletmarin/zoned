@@ -15,6 +15,9 @@ export interface ChecklistEntry {
 /**
  * Tickable list. The J-1 checklist was the one block on this page that got
  * this right, so every actionable block now uses it.
+ *
+ * Ticked/unticked is read off the checkbox in CSS rather than re-derived into
+ * class names — the input is the state.
  */
 export function Checklist({
   entries,
@@ -28,72 +31,37 @@ export function Checklist({
   className?: string;
 }) {
   return (
-    <ul className={cn("divide-y", className)}>
-      {entries.map((entry) => {
-        const isChecked = checked[entry.key] ?? false;
-        return (
-          <li key={entry.key}>
-            <label className="flex cursor-pointer items-start gap-3 py-2.5">
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={() => onToggle(entry.key)}
-                className="peer sr-only"
-              />
-              <span
-                aria-hidden
-                className={cn(
-                  "mt-0.5 grid size-[18px] shrink-0 place-items-center rounded border transition-colors",
-                  "peer-checked:border-primary peer-checked:bg-primary peer-checked:text-primary-foreground",
-                  "peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-1",
-                  "[&>svg]:opacity-0 peer-checked:[&>svg]:opacity-100",
-                )}
-              >
-                <Check className="size-3" />
-              </span>
+    <ul className={cn("zn-rs-check", className)}>
+      {entries.map((entry) => (
+        <li key={entry.key} className="zn-rs-check__item">
+          <label className="zn-rs-check__row">
+            <input
+              type="checkbox"
+              checked={checked[entry.key] ?? false}
+              onChange={() => onToggle(entry.key)}
+              className="zn-rs-check__input sr-only"
+            />
+            <span aria-hidden className="zn-rs-check__box">
+              <Check size={12} />
+            </span>
 
-              {entry.time && (
-                <span
-                  className={cn(
-                    "w-11 shrink-0 font-mono text-sm tabular-nums",
-                    isChecked ? "text-muted-foreground/50" : "text-muted-foreground",
-                  )}
-                >
-                  {entry.time}
-                </span>
+            {entry.time && (
+              <span className="zn-rs-check__time">{entry.time}</span>
+            )}
+
+            <span className="zn-rs-check__body">
+              <span className="zn-rs-check__label">{entry.text}</span>
+              {entry.detail && (
+                <span className="zn-rs-check__detail">{entry.detail}</span>
               )}
+            </span>
 
-              <span className="min-w-0 flex-1">
-                <span
-                  className={cn(
-                    "block text-sm",
-                    entry.detail && "font-medium",
-                    isChecked && "text-muted-foreground line-through",
-                  )}
-                >
-                  {entry.text}
-                </span>
-                {entry.detail && (
-                  <span
-                    className={cn(
-                      "mt-0.5 block text-xs text-muted-foreground",
-                      isChecked && "line-through",
-                    )}
-                  >
-                    {entry.detail}
-                  </span>
-                )}
-              </span>
-
-              {entry.meta && (
-                <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 font-mono text-[0.6875rem] tabular-nums text-muted-foreground">
-                  {entry.meta}
-                </span>
-              )}
-            </label>
-          </li>
-        );
-      })}
+            {entry.meta && (
+              <span className="zn-rs-check__meta">{entry.meta}</span>
+            )}
+          </label>
+        </li>
+      ))}
     </ul>
   );
 }

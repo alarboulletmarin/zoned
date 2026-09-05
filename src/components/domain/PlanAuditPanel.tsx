@@ -1,9 +1,11 @@
+import type { ComponentType } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
-import { cn } from "@/lib/utils";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, AlertTriangle, Lightbulb } from "@/components/icons";
+import type { IconProps } from "@/components/icons";
+import { AlertTriangle, ChevronDown, ChevronUp, Info, Lightbulb } from "@/components/icons";
 
 import type { FindingSeverity, PlanFinding } from "@/lib/planGenerator/audit";
 
@@ -15,28 +17,11 @@ interface PlanAuditPanelProps {
   onFix?: (finding: PlanFinding) => void;
 }
 
-const SEVERITY_CONFIG: Record<
-  FindingSeverity,
-  { textColor: string; bgColor: string; borderColor: string; dotColor: string }
-> = {
-  error: {
-    textColor: "text-red-700 dark:text-red-300",
-    bgColor: "bg-red-50 dark:bg-red-950/30",
-    borderColor: "border-red-200 dark:border-red-800",
-    dotColor: "bg-red-500",
-  },
-  warning: {
-    textColor: "text-amber-700 dark:text-amber-300",
-    bgColor: "bg-amber-50 dark:bg-amber-950/30",
-    borderColor: "border-amber-200 dark:border-amber-800",
-    dotColor: "bg-amber-500",
-  },
-  info: {
-    textColor: "text-blue-700 dark:text-blue-300",
-    bgColor: "bg-blue-50 dark:bg-blue-950/30",
-    borderColor: "border-blue-200 dark:border-blue-800",
-    dotColor: "bg-blue-500",
-  },
+/** Each severity gets its own glyph: no state in this system rests on colour. */
+const SEVERITY_GLYPH: Record<FindingSeverity, ComponentType<IconProps>> = {
+  error: AlertTriangle,
+  warning: Info,
+  info: Lightbulb,
 };
 
 export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelProps) {
@@ -52,55 +37,65 @@ export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelPr
 
   const bannerSeverity: FindingSeverity =
     errors.length > 0 ? "error" : warnings.length > 0 ? "warning" : "info";
-  const config = SEVERITY_CONFIG[bannerSeverity];
+
+  const counts = [
+    errors.length > 0 ? t("audit.errors", { count: errors.length }) : null,
+    warnings.length > 0 ? t("audit.warnings", { count: warnings.length }) : null,
+    infos.length > 0 ? t("audit.infos", { count: infos.length }) : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <div className={cn("rounded-lg border", config.borderColor, config.bgColor)}>
-      {/* Header - always visible */}
-      <button
-        type="button"
-        onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between gap-2 px-3 py-2 text-sm"
+    <div className="zn-paudit">
+      <Alert
+        kind={bannerSeverity}
+        title={t("audit.title")}
+        action={
+          <Button
+            variant="outline"
+            size="sm"
+            aria-expanded={expanded}
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded ? t("audit.hideList") : t("audit.showList")}
+            {expanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+          </Button>
+        }
       >
-        <span className={cn("font-medium flex items-center gap-2", config.textColor)}>
-          <AlertTriangle className="size-4" />
-          {t("audit.title")}
-          <span className="text-xs font-normal">
-            {errors.length > 0 && t("audit.errors", { count: errors.length })}
-            {errors.length > 0 && warnings.length > 0 && " \u00B7 "}
-            {warnings.length > 0 && t("audit.warnings", { count: warnings.length })}
-            {(errors.length > 0 || warnings.length > 0) && infos.length > 0 && " \u00B7 "}
-            {infos.length > 0 && t("audit.infos", { count: infos.length })}
-          </span>
-        </span>
-        {expanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
-      </button>
+        {counts}. {t("audit.intact")}
+      </Alert>
 
-      {/* Expanded findings list */}
       {expanded && (
-        <div className="border-t px-3 py-2 space-y-1.5">
+        <ul className="zn-paudit__list">
           {findings.map((finding) => {
-            const fConfig = SEVERITY_CONFIG[finding.severity];
+            const Glyph = SEVERITY_GLYPH[finding.severity];
             return (
-              <div key={finding.id} className="flex items-start gap-2 text-sm">
-                <span className={cn("shrink-0 mt-1.5 size-2 rounded-full", fConfig.dotColor)} />
-                <div className="flex-1 min-w-0">
-                  <span className={fConfig.textColor}>
-                    {pick(finding, "message")}
+              <li
+                key={finding.id}
+                className="zn-paudit__item"
+                data-severity={finding.severity}
+              >
+                <span className="zn-paudit__glyph">
+                  <Glyph size={15} />
+                  <span className="sr-only">
+                    {t(`common:alert.${finding.severity}`)}
                   </span>
+                </span>
+                <span className="zn-paudit__body">
+                  <span className="zn-paudit__msg">{pick(finding, "message")}</span>
                   {finding.suggestion && (
-                    <p className="text-xs mt-0.5 text-muted-foreground italic flex items-center gap-1">
-                      <Lightbulb className="size-3 shrink-0" />
+                    <span className="zn-paudit__hint">
+                      <Lightbulb size={13} />
                       {pick(finding, "suggestion")}
-                    </p>
+                    </span>
                   )}
-                </div>
-                <div className="flex items-center gap-1 shrink-0">
+                </span>
+                <span className="zn-paudit__actions">
                   {onFix && finding.fixable && (
                     <Button
-                      variant="outline"
+                      variant="outline-primary"
                       size="sm"
-                      className="h-6 text-xs px-2 border-primary/30 text-primary hover:bg-primary/10"
                       onClick={() => onFix(finding)}
                     >
                       {t("audit.fix")}
@@ -110,17 +105,17 @@ export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelPr
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 text-xs px-2"
+                      aria-label={t("audit.goToWeek", { week: finding.weekNumber })}
                       onClick={() => onGoToWeek(finding.weekNumber)}
                     >
                       S{finding.weekNumber}
                     </Button>
                   )}
-                </div>
-              </div>
+                </span>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
     </div>
   );

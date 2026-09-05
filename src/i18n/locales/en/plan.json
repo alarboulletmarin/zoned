@@ -229,7 +229,7 @@
     "replaceSession": "Replace session",
     "substituteSession": "Replace with cycling or swimming",
     "substituteTitle": "Swap to another discipline",
-    "substituteDescription": "Target load: ~{{tss}} TSS. Candidates are matched within ±20 %.",
+    "substituteDescription": "Target load ~{{tss}} TSS, within ±20 %.",
     "substituteDescriptionNoTss": "Pick an equivalent session in cycling or swimming.",
     "substituteCycling": "Cycling",
     "substituteSwimming": "Swimming",
@@ -238,7 +238,7 @@
     "substituteMatchExact": "exact match",
     "substituteMatchDeviation": "±{{deviation}}%",
     "substituteLongRunWarningTitle": "Long run: degraded substitution",
-    "substituteLongRunWarningBody": "The long run develops orthopedic adaptations (tendon capillarization, running economy, impact tolerance) that cycling or swimming cannot reproduce. Use this when running is impossible (injury, weather, travel), not as a regular alternative.",
+    "substituteLongRunWarningBody": "Cycling and swimming do not reproduce the orthopedic adaptations of a long run. Keep this swap for the weeks when running is impossible.",
       "sessionSubstituted": "Session swapped",
       "findRoute": "Find a matching route",
       "findWeekRoute": "Route for this week",
@@ -343,7 +343,9 @@
     "peakLongRun": "Peak long run",
     "longRun": "Long run",
     "wk": "wk",
-    "sessionsLower": "sessions"
+    "sessionsLower": "sessions",
+    "analysisFailed": "Detailed analysis unavailable",
+    "analysisFailedBody": "The zone breakdown could not be computed. The plan and its sessions are intact. Reload the page to run the analysis again."
   },
   "calendar": {
     "now": "NOW",
@@ -560,7 +562,8 @@
     "applied": "Rescheduling applied",
     "undo": "Undo",
     "undone": "Rescheduling undone",
-    "blockedDrop": "This day is unavailable"
+    "blockedDrop": "This day is unavailable",
+    "skippedIntact": "The rest of the plan stays as it is, and you can undo right after."
   },
   "crossTraining": {
     "cycling": "Cycling",
@@ -586,7 +589,10 @@
     "goToWeek": "Go to week {{week}}",
     "fix": "Fix",
     "fixApplied": "Fix applied",
-    "fixFailed": "Unable to apply automatic fix"
+    "fixFailed": "Unable to apply automatic fix",
+    "intact": "The plan still works.",
+    "showList": "Show details",
+    "hideList": "Hide details"
   },
   "adaptation": {
     "title": "Plan adaptation",

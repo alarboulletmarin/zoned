@@ -1,54 +1,54 @@
 import { useTranslation } from "react-i18next";
+import {
+  ResponsiveTable,
+  type ResponsiveTableColumn,
+} from "@/components/ui/responsive-table";
 import { carbsPerHourRows } from "@/data/nutrition";
+import type { CarbsRow } from "@/data/nutrition/types";
 
+/**
+ * How many carbs an hour, by race distance.
+ *
+ * A real table, so it is the ported ResponsiveTable: a framed paper grid at
+ * md+, one outlined card per distance below it. The hand-rolled `hidden
+ * sm:table-cell` columns are gone — the card view carries every column with
+ * its own label, which is what those classes were working around.
+ */
 export function CarbsPerHourTable() {
   const { t } = useTranslation("nutrition");
 
+  const columns: ResponsiveTableColumn<CarbsRow>[] = [
+    {
+      key: "distance",
+      header: t("hub.during.headers.distance"),
+      cell: (row) => t(row.distanceKey),
+      hideOnMobile: true,
+    },
+    {
+      key: "carbs",
+      header: t("hub.during.headers.carbsPerHour"),
+      cell: (row) => (
+        <span className="zn-nut-tag">{row.carbsPerHour} g/h</span>
+      ),
+    },
+    {
+      key: "ratio",
+      header: t("hub.during.headers.ratio"),
+      cell: (row) => <span className="zn-mono">{t(row.ratioKey)}</span>,
+    },
+    {
+      key: "total",
+      header: t("hub.during.headers.total"),
+      cell: (row) => t(row.totalKey),
+    },
+  ];
+
   return (
-    <div className="overflow-x-auto rounded-xl border border-border/50 bg-muted/30">
-      <table className="w-full text-sm border-collapse">
-        <thead className="bg-muted/50">
-          <tr>
-            <th className="text-left px-4 py-3 font-semibold">
-              {t("hub.during.headers.distance")}
-            </th>
-            <th className="text-left px-4 py-3 font-semibold">
-              {t("hub.during.headers.carbsPerHour")}
-            </th>
-            <th className="text-left px-4 py-3 font-semibold hidden sm:table-cell">
-              {t("hub.during.headers.ratio")}
-            </th>
-            <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">
-              {t("hub.during.headers.total")}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {carbsPerHourRows.map((row, idx) => (
-            <tr
-              key={row.distanceKey}
-              className={
-                idx !== carbsPerHourRows.length - 1
-                  ? "border-b border-border/40"
-                  : undefined
-              }
-            >
-              <td className="px-4 py-3 font-medium">{t(row.distanceKey)}</td>
-              <td className="px-4 py-3">
-                <span className="rounded-full bg-amber-100 dark:bg-amber-950/40 px-2.5 py-0.5 text-xs font-bold text-amber-800 dark:text-amber-300">
-                  {row.carbsPerHour} g/h
-                </span>
-              </td>
-              <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell font-mono text-xs">
-                {t(row.ratioKey)}
-              </td>
-              <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">
-                {t(row.totalKey)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <ResponsiveTable
+      data={carbsPerHourRows}
+      columns={columns}
+      rowKey="distanceKey"
+      mobileCardTitle={(row) => t(row.distanceKey)}
+    />
   );
 }

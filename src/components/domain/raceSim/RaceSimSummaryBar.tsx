@@ -30,37 +30,19 @@ export function RaceSimSummaryBar({
   const { t } = useTranslation("simulator");
 
   return (
-    <div
-      className={cn(
-        "flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border bg-card px-4 py-3",
-        className,
-      )}
-    >
-      <span className="text-base font-semibold tracking-tight">
-        {distanceLabel}
-      </span>
-      <span className="font-mono text-base font-semibold tabular-nums tracking-tight">
-        {timeLabel}
-      </span>
-      <span className="text-sm tabular-nums text-muted-foreground">
-        {paceLabel}
-      </span>
-      <span className="text-sm text-muted-foreground">
+    <div className={cn("zn-rs-summary", className)}>
+      <span className="zn-rs-summary__distance">{distanceLabel}</span>
+      <span className="zn-rs-summary__time">{timeLabel}</span>
+      <span className="zn-rs-summary__fact">{paceLabel}</span>
+      <span className="zn-rs-summary__note">
         {t("summary.startAt", { time: startTime })}
       </span>
-      {/* A chip rather than a "·" separator: the row wraps on narrow screens
+      {/* A capsule rather than a "·" separator: the row wraps on narrow screens
           and a dangling bullet at the end of a line looks like a typo. */}
-      <span className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
-        {strategyLabel}
-      </span>
+      <span className="zn-rs-summary__chip">{strategyLabel}</span>
 
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onAdjust}
-        className="ml-auto shrink-0"
-      >
-        <Settings className="size-3.5" />
+      <Button variant="outline" size="sm" onClick={onAdjust} className="zn-push">
+        <Settings />
         {t("inputs.adjust")}
       </Button>
     </div>

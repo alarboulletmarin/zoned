@@ -1,38 +1,22 @@
+import type { CSSProperties } from "react";
 import { useState, useEffect, useMemo, memo } from "react";
-import { sessionColorClass } from "@/lib/sessionColors";
+import { sessionColor } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
+import { StatBlock } from "@/components/domain/StatBlock";
+import { ZoneScale } from "@/components/visualization/ZoneScale";
 import { computePlanStats, computeEnhancedPlanAnalysis, computeWeekKm } from "@/lib/planStats";
 import { PHASE_META } from "@/types/plan";
+import type { TrainingPhase } from "@/types";
 import type { TrainingPlan } from "@/types/plan";
 import type { EnhancedPlanAnalysis } from "@/lib/planStats";
 import { getPlanCompletionStats } from "@/lib/planGenerator/adapt";
-import {
-  Calendar,
-  Clock,
-  Route,
-  Star,
-  TrendingUp,
-  Mountain,
-  Timer,
-  Heart,
-  Loader2,
-  ChevronDown,
-} from "@/components/icons";
+import { ChevronDown } from "@/components/icons";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
-
-// ── Constants ────────────────────────────────────────────────────────
-
-const ZONE_COLORS: Record<string, string> = {
-  Z1: "#94a3b8",
-  Z2: "#22c55e",
-  Z3: "#eab308",
-  Z4: "#f97316",
-  Z5: "#ef4444",
-  Z6: "#7c3aed",
-};
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -41,6 +25,72 @@ function formatMinutes(min: number): string {
   const h = Math.floor(min / 60);
   const m = Math.round(min % 60);
   return m > 0 ? `${h}h${m.toString().padStart(2, "0")}` : `${h}h`;
+}
+
+// ── Bar chart ────────────────────────────────────────────────────────
+
+interface ChartBar {
+  key: number;
+  /** 0-100, the share of the tallest bar. */
+  pct: number;
+  phase?: TrainingPhase;
+  recovery?: boolean;
+  title: string;
+  /** Printed under the column. Omitted on every bar = no tick row. */
+  tick?: string;
+}
+
+/**
+ * One column per week: width is the week, height is the figure, ink density is
+ * the phase, and the hatch is a recovery week. The current week is marked by a
+ * vermillon rule under its column rather than by a floating dot.
+ */
+function PhaseChart({
+  bars,
+  currentKey,
+  height,
+}: {
+  bars: ChartBar[];
+  currentKey?: number;
+  height?: "sm" | "md" | "xl";
+}) {
+  const dense = bars.length > 10;
+  const hasTicks = bars.some((bar) => bar.tick != null);
+
+  return (
+    <div className="zn-pchart" data-h={height}>
+      <div className="zn-pchart__cols">
+        {bars.map((bar) => (
+          <div
+            key={bar.key}
+            className="zn-pchart__col"
+            data-current={currentKey === bar.key || undefined}
+          >
+            <span
+              className="zn-pchart__bar"
+              data-phase={bar.phase}
+              data-recovery={bar.recovery || undefined}
+              style={{ "--zn-bar-h": `${bar.pct}%` } as CSSProperties}
+              title={bar.title}
+            />
+          </div>
+        ))}
+      </div>
+      {hasTicks && (
+        <div className="zn-pchart__ticks">
+          {bars.map((bar, i) => (
+            <span
+              key={bar.key}
+              className="zn-pchart__tick"
+              data-dense={(dense && i % 2 !== 0) || undefined}
+            >
+              {bar.tick}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ── Props ────────────────────────────────────────────────────────────
@@ -59,11 +109,13 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
   const stats = useMemo(() => computePlanStats(plan), [plan]);
   const [analysis, setAnalysis] = useState<EnhancedPlanAnalysis | null>(null);
   const [analysisLoading, setAnalysisLoading] = useState(true);
+  const [analysisFailed, setAnalysisFailed] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     setAnalysisLoading(true);
+    setAnalysisFailed(false);
     computeEnhancedPlanAnalysis(plan)
       .then((result) => {
         if (!cancelled) {
@@ -75,6 +127,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         console.error("[PlanStatsSection] Failed to compute enhanced analysis:", err);
         if (!cancelled) {
           setAnalysis(null);
+          setAnalysisFailed(true);
           setAnalysisLoading(false);
         }
       });
@@ -148,91 +201,92 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
   }, [plan.weeks]);
   const maxLoad = Math.max(...weeklyLoads.map(w => w.load), 1);
 
+  const longRunWeeks = useMemo(
+    () =>
+      plan.weeks
+        .filter(w => w.targetLongRunKm && w.targetLongRunKm > 0)
+        .map(w => ({ weekNumber: w.weekNumber, km: w.targetLongRunKm!, phase: w.phase })),
+    [plan.weeks],
+  );
+  const maxLongRun = Math.max(...longRunWeeks.map(w => w.km), 1);
+
+  const completion = useMemo(() => getPlanCompletionStats(plan), [plan]);
+
   return (
-    <Card>
+    <Card size="flush">
       {/* Accordion header */}
       <button
         type="button"
         onClick={() => setIsOpen((v) => !v)}
-        className={cn(
-          "w-full flex items-center justify-between p-4 sm:px-6 transition-colors",
-          "hover:bg-accent/50",
-          isOpen && "border-b",
-        )}
+        aria-expanded={isOpen}
+        className="zn-pstats__toggle"
       >
-        <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold">
-            {t("stats.title")}
-          </h2>
-          {/* Summary badges when collapsed */}
-          {!isOpen && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="hidden sm:inline">
-                {stats.totalSessions} {t("stats.sessions").toLowerCase()}
-              </span>
-              <span className="hidden sm:inline">·</span>
-              <span className="hidden sm:inline">
-                {Math.round(stats.totalDurationMin / 60)}h
-              </span>
-              <span className="hidden sm:inline">·</span>
-              <span className="hidden sm:inline">
-                ~{Math.round(stats.totalEstimatedKm)} km
-              </span>
-            </div>
-          )}
-        </div>
-        <ChevronDown
-          className={cn(
-            "size-5 text-muted-foreground transition-transform duration-200",
-            isOpen && "rotate-180",
-          )}
-        />
+        <h2 className="zn-pstats__heading">{t("stats.title")}</h2>
+
+        {/* Summary facts while the section is shut */}
+        {!isOpen && (
+          <span className="zn-pstats__summary zn-mono">
+            <span>{stats.totalSessions} {t("stats.sessions").toLowerCase()}</span>
+            <span>{Math.round(stats.totalDurationMin / 60)}h</span>
+            <span>~{Math.round(stats.totalEstimatedKm)} km</span>
+          </span>
+        )}
+
+        <ChevronDown size={18} className="zn-pstats__chev" />
       </button>
 
       {/* Accordion content */}
       {isOpen && (
-      <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6 pt-4 space-y-6">
+      <CardContent className="zn-pstats__body">
 
         {/* ── Section 1: Stats Grid ─────────────────────────────────── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <StatCard
-            icon={Calendar}
+        <div className="zn-grid zn-pstats__grid">
+          <StatBlock
+            tone="card"
+            size="sm"
             value={String(stats.totalSessions)}
             label={t("stats.sessions")}
           />
-          <StatCard
-            icon={Clock}
+          <StatBlock
+            tone="card"
+            size="sm"
             value={`${Math.round(stats.totalDurationMin / 60)}h`}
-            label="Total"
+            label={t("stats.total")}
           />
-          <StatCard
-            icon={Route}
+          <StatBlock
+            tone="card"
+            size="sm"
             value={`${Math.round(stats.totalEstimatedKm)} km`}
             label={t("stats.estKm")}
           />
-          <StatCard
-            icon={Star}
+          <StatBlock
+            tone="card"
+            size="sm"
             value={String(stats.keySessionCount)}
             label={t("stats.keySessions")}
           />
-          <StatCard
-            icon={TrendingUp}
+          <StatBlock
+            tone="card"
+            size="sm"
             value={formatMinutes(stats.avgDurationPerWeekMin)}
             label={t("stats.avgWeek")}
           />
-          <StatCard
-            icon={Mountain}
+          <StatBlock
+            tone="card"
+            size="sm"
             value={`S${stats.peakVolumeWeek}`}
-            sublabel={formatMinutes(stats.peakVolumeMin)}
             label={t("stats.peakWeek")}
+            footnote={formatMinutes(stats.peakVolumeMin)}
           />
-          <StatCard
-            icon={Timer}
+          <StatBlock
+            tone="card"
+            size="sm"
             value={formatMinutes(stats.longestSessionMin)}
             label={t("stats.longestSession")}
           />
-          <StatCard
-            icon={Heart}
+          <StatBlock
+            tone="card"
+            size="sm"
             value={String(stats.recoveryWeekCount)}
             label={t("stats.recoveryWeeks")}
           />
@@ -240,53 +294,41 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
         {/* ── Race time prediction ─────────────────────────────────── */}
         {plan.raceTimePrediction && (
-          <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 flex items-center gap-3">
-            <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <Timer className="size-5 text-primary" />
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground">
-                {t("stats.predictedTime")}
-              </p>
-              <p className="text-xl font-bold text-primary">{plan.raceTimePrediction}</p>
-            </div>
-          </div>
+          <StatBlock
+            tone="ink"
+            value={plan.raceTimePrediction}
+            label={t("stats.predictedTime")}
+          />
         )}
 
         {/* ── Current week summary ────────────────────────────────── */}
         {currentWeekData && (
-          <div className="rounded-lg bg-secondary/50 border border-border/50 p-3 space-y-1.5">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">
-                {t("stats.thisWeek")}
-              </h3>
-              <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full",
-                PHASE_META[currentWeekData.week.phase]?.color, "text-white"
-              )}>
-                S{currentWeekData.week.weekNumber} · {pick(PHASE_META[currentWeekData.week.phase], "label")}
-              </span>
+          <div className="zn-pstats__week">
+            <div className="zn-row zn-row--split">
+              <span className="zn-pstats__title">{t("stats.thisWeek")}</span>
+              <Badge variant="outline">
+                S{currentWeekData.week.weekNumber} ·{" "}
+                {pick(PHASE_META[currentWeekData.week.phase], "label")}
+              </Badge>
             </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-              {currentWeekData.week.targetKm && currentWeekData.week.targetKm > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <Route className="size-3.5 text-muted-foreground" />
-                  <span className="font-medium">~{currentWeekData.week.targetKm} km</span>
-                </span>
+            <div className="zn-pstats__facts">
+              {currentWeekData.week.targetKm != null && currentWeekData.week.targetKm > 0 && (
+                <span>~{currentWeekData.week.targetKm} km</span>
               )}
-              <span className="flex items-center gap-1.5">
-                <Calendar className="size-3.5 text-muted-foreground" />
-                <span>{currentWeekData.week.sessions.length} {t("stats.sessionsLower")}</span>
+              <span>
+                {currentWeekData.week.sessions.length} {t("stats.sessionsLower")}
               </span>
               {currentWeekData.longRun && currentWeekData.week.targetLongRunKm && (
-                <span className="flex items-center gap-1.5">
-                  <TrendingUp className="size-3.5 text-muted-foreground" />
-                  <span>{t("stats.longRun")} {currentWeekData.week.targetLongRunKm} km</span>
+                <span>
+                  {t("stats.longRun")} {currentWeekData.week.targetLongRunKm} km
                 </span>
               )}
               {currentWeekData.keySession && (
-                <span className="flex items-center gap-1.5">
-                  <Star className="size-3.5 text-yellow-500" />
-                  <span className="capitalize">{currentWeekData.keySession.sessionType.replace("_", " ")}</span>
+                <span>
+                  {pickLocale(
+                    SESSION_TYPE_LABELS[currentWeekData.keySession.sessionType],
+                    currentWeekData.keySession.sessionType,
+                  )}
                 </span>
               )}
             </div>
@@ -295,153 +337,88 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
         {/* ── Section 2: Weekly km Chart ───────────────────────────── */}
         {weeklyKmData.some(w => w.km > 0) && (
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">
-              {t("stats.weeklyKm")}
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              {t("stats.weeklyKmDesc")}
-            </p>
-            <div className="flex items-end gap-[2px] h-28">
-              {weeklyKmData.map((week) => {
-                const heightPct = maxWeeklyKm > 0 ? (week.km / maxWeeklyKm) * 100 : 0;
-                const phaseColor = PHASE_META[week.phase]?.color || "bg-gray-400";
-                const isCurrent = currentWeek === week.weekNumber;
-                return (
-                  <div key={week.weekNumber} className="flex-1 flex flex-col items-center justify-end h-full relative">
-                    <div
-                      className={cn(phaseColor, week.isRecovery && "opacity-50", "w-full rounded-t-sm min-h-[2px]")}
-                      style={{ height: `${heightPct}%` }}
-                      title={`S${week.weekNumber}: ${Math.round(week.km)}km`}
-                    />
-                    {isCurrent && (
-                      <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex gap-[2px]">
-              {weeklyKmData.map((week, i) => (
-                <div
-                  key={week.weekNumber}
-                  className={cn(
-                    "flex-1 text-center text-[9px] text-muted-foreground",
-                    i % 2 !== 0 && weeklyKmData.length > 10 && "hidden sm:block",
-                  )}
-                >
-                  {week.km > 0 ? Math.round(week.km) : ""}
-                </div>
-              ))}
-            </div>
+          <div className="zn-pstats__block">
+            <span className="zn-pstats__title">{t("stats.weeklyKm")}</span>
+            <p className="zn-pstats__note">{t("stats.weeklyKmDesc")}</p>
+            <PhaseChart
+              currentKey={currentWeek}
+              bars={weeklyKmData.map((week) => ({
+                key: week.weekNumber,
+                pct: (week.km / maxWeeklyKm) * 100,
+                phase: week.phase,
+                recovery: week.isRecovery,
+                title: `S${week.weekNumber} · ${Math.round(week.km)} km`,
+                tick: week.km > 0 ? String(Math.round(week.km)) : "",
+              }))}
+            />
           </div>
         )}
 
         {/* ── Section 2b: Weekly Volume (minutes) Chart ───────────── */}
-        <div className="space-y-2">
-          <h3 className="text-sm font-medium">
-            {t("stats.weeklyVolume")}
-          </h3>
-          <p className="text-xs text-muted-foreground">
-            {t("stats.weeklyVolumeDesc")}
-          </p>
-          <div className="flex items-end gap-[2px] h-32">
-            {stats.weeklyVolumes.map((week) => {
-              const heightPercent =
-                maxVolume > 0 ? (week.durationMin / maxVolume) * 100 : 0;
-              const phaseColor =
-                PHASE_META[week.phase]?.color || "bg-gray-400";
-              const isCurrentWeek = currentWeek === week.weekNumber;
-              return (
-                <div
-                  key={week.weekNumber}
-                  className="flex-1 flex flex-col items-center justify-end h-full relative"
-                >
-                  <div
-                    className={cn(
-                      phaseColor,
-                      week.isRecovery && "opacity-50",
-                      "w-full rounded-t-sm min-h-[2px]",
-                    )}
-                    style={{ height: `${heightPercent}%` }}
-                    title={`S${week.weekNumber}: ${formatMinutes(week.durationMin)}`}
-                  />
-                  {isCurrentWeek && (
-                    <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          {/* Week numbers */}
-          <div className="flex gap-[2px]">
-            {stats.weeklyVolumes.map((week, i) => (
-              <div
-                key={week.weekNumber}
-                className={cn(
-                  "flex-1 text-center text-[9px] text-muted-foreground",
-                  i % 2 !== 0 &&
-                    stats.weeklyVolumes.length > 10 &&
-                    "hidden sm:block",
-                )}
-              >
-                {week.weekNumber}
-              </div>
-            ))}
-          </div>
+        <div className="zn-pstats__block">
+          <span className="zn-pstats__title">{t("stats.weeklyVolume")}</span>
+          <p className="zn-pstats__note">{t("stats.weeklyVolumeDesc")}</p>
+          <PhaseChart
+            height="xl"
+            currentKey={currentWeek}
+            bars={stats.weeklyVolumes.map((week) => ({
+              key: week.weekNumber,
+              pct: maxVolume > 0 ? (week.durationMin / maxVolume) * 100 : 0,
+              phase: week.phase,
+              recovery: week.isRecovery,
+              title: `S${week.weekNumber} · ${formatMinutes(week.durationMin)}`,
+              tick: String(week.weekNumber),
+            }))}
+          />
+
           {/* Phase legend */}
-          <div className="flex flex-wrap gap-3 mt-1">
+          <div className="zn-pstats__legend">
             {Object.entries(PHASE_META)
               .filter(([key]) => key !== "recovery")
               .map(([key, meta]) => (
-                <div
-                  key={key}
-                  className="flex items-center gap-1.5 text-xs text-muted-foreground"
-                >
-                  <div className={cn("size-2.5 rounded-full", meta.color)} />
-                  <span>{pick(meta, "label")}</span>
-                </div>
+                <span key={key} className="zn-pstats__legend-item">
+                  <span className="zn-pswatch" data-phase={key} aria-hidden="true" />
+                  {pick(meta, "label")}
+                </span>
               ))}
+            <span className="zn-pstats__legend-item">
+              <span className="zn-pswatch" data-hatch="true" aria-hidden="true" />
+              {t("stats.recoveryWeeks")}
+            </span>
           </div>
         </div>
 
         {/* ── Section 3: Session Type Distribution ──────────────────── */}
         {sortedTypes.length > 0 && (
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">
-              {t("stats.sessionTypes")}
-            </h3>
+          <div className="zn-pstats__block">
+            <span className="zn-pstats__title">{t("stats.sessionTypes")}</span>
+
             {/* Stacked bar */}
-            <div className="flex rounded-full overflow-hidden h-3">
+            <div className="zn-pstats__mix">
               {sortedTypes.map(([type, count]) => (
-                <div
+                <span
                   key={type}
-                  className={cn(sessionColorClass(type))}
+                  className="zn-pstats__mix-part"
                   style={{
-                    width: `${(count / stats.totalSessions) * 100}%`,
-                  }}
+                    "--zn-part-w": `${(count / stats.totalSessions) * 100}%`,
+                    "--zn-part-fill": sessionColor(type),
+                  } as CSSProperties}
                   title={`${pickLocale(SESSION_TYPE_LABELS[type], type)}: ${count}`}
                 />
               ))}
             </div>
+
             {/* Legend */}
-            <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <div className="zn-pstats__legend">
               {sortedTypes.map(([type, count]) => (
-                <div
-                  key={type}
-                  className="flex items-center gap-1.5 text-xs text-muted-foreground"
-                >
-                  <div
-                    className={cn(
-                      "size-2.5 rounded-full",
-                      sessionColorClass(type),
-                    )}
+                <span key={type} className="zn-pstats__legend-item">
+                  <span
+                    className="zn-pswatch"
+                    aria-hidden="true"
+                    style={{ "--zn-swatch": sessionColor(type) } as CSSProperties}
                   />
-                  <span>
-                    {pickLocale(SESSION_TYPE_LABELS[type], type)} (
-                    {count})
-                  </span>
-                </div>
+                  {pickLocale(SESSION_TYPE_LABELS[type], type)} ({count})
+                </span>
               ))}
             </div>
           </div>
@@ -449,248 +426,193 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
         {/* ── Section 4: Zone Distribution + Target System ──────────── */}
         {analysisLoading ? (
-          <div className="flex items-center justify-center py-6">
-            <Loader2 className="size-5 animate-spin text-muted-foreground" />
+          <div className="zn-pstats__wait">
+            <Spinner />
           </div>
+        ) : analysisFailed ? (
+          <Alert kind="error" title={t("stats.analysisFailed")}>
+            {t("stats.analysisFailedBody")}
+          </Alert>
         ) : (
           analysis && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="zn-pstats__zones">
               {/* Zone distribution */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium">
-                  {t("stats.zoneDistribution")}
-                </h3>
-                <div className="space-y-1.5">
+              <div className="zn-pstats__block">
+                <span className="zn-pstats__title">{t("stats.zoneDistribution")}</span>
+                <div className="zn-pbars">
                   {analysis.zoneDistribution.map(({ zone, minutes, percent }) => (
-                    <div key={zone} className="flex items-center gap-2">
-                      <span className="text-xs font-medium w-6">{zone}</span>
-                      <div className="flex-1 h-2.5 bg-secondary rounded-full overflow-hidden">
-                        <div
-                          className="h-full rounded-full"
-                          style={{ width: `${percent}%`, backgroundColor: ZONE_COLORS[zone] }}
+                    <div key={zone} className="zn-pbars__row">
+                      <span className="zn-pbars__code">{zone}</span>
+                      <span className="zn-pbars__track">
+                        <span
+                          className="zn-pbars__fill"
+                          data-zone={zone.slice(1)}
+                          style={{ "--zn-fill-w": `${percent}%` } as CSSProperties}
                         />
-                      </div>
-                      <span className="text-xs text-muted-foreground w-20 text-right">
+                      </span>
+                      <span className="zn-pbars__value">
                         {percent}% ({formatMinutes(minutes)})
                       </span>
                     </div>
                   ))}
                 </div>
+                <ZoneScale layout="column" showTitle={false} />
               </div>
 
               {/* Target system */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium">
-                  {t("stats.targetSystems")}
-                </h3>
-                <div className="space-y-1.5">
-                  {analysis.targetSystemBreakdown.map(
-                    ({ system, count, percent }) => (
-                      <div key={system} className="flex items-center gap-2">
-                        <span className="text-xs w-28 truncate">
-                          {t(`targetSystems.${system}`, { defaultValue: system })}
-                        </span>
-                        <div className="flex-1 h-2.5 bg-secondary rounded-full overflow-hidden">
-                          <div
-                            className="h-full rounded-full bg-primary/70"
-                            style={{ width: `${percent}%` }}
-                          />
-                        </div>
-                        <span className="text-xs text-muted-foreground w-16 text-right">
-                          {percent}% ({count})
-                        </span>
-                      </div>
-                    ),
-                  )}
+              <div className="zn-pstats__block">
+                <span className="zn-pstats__title">{t("stats.targetSystems")}</span>
+                <div className="zn-pbars">
+                  {analysis.targetSystemBreakdown.map(({ system, count, percent }) => (
+                    <div key={system} className="zn-pbars__row">
+                      <span className="zn-pbars__name zn-truncate">
+                        {t(`targetSystems.${system}`, { defaultValue: system })}
+                      </span>
+                      <span className="zn-pbars__track">
+                        <span
+                          className="zn-pbars__fill"
+                          style={{ "--zn-fill-w": `${percent}%` } as CSSProperties}
+                        />
+                      </span>
+                      <span className="zn-pbars__value">
+                        {percent}% ({count})
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           )
         )}
+
         {/* ── 80/20 Intensity Distribution per week ──────────────── */}
-        <div className="space-y-2">
-          <h3 className="text-sm font-medium">
-            {t("stats.easyHardSplit")}
-          </h3>
-          <div className="flex items-end gap-[2px] h-16">
-            {easyHardPerWeek.map((week) => {
-              const isCurrent = currentWeek === week.weekNumber;
-              return (
+        <div className="zn-pstats__block">
+          <span className="zn-pstats__title">{t("stats.easyHardSplit")}</span>
+          <div className="zn-pchart" data-h="sm">
+            <div className="zn-pchart__cols">
+              {easyHardPerWeek.map((week) => (
                 <div
                   key={week.weekNumber}
-                  className="flex-1 flex flex-col h-full rounded-t-sm overflow-hidden relative"
-                  title={`S${week.weekNumber}: ${week.easyPct}% easy / ${week.hardPct}% hard`}
+                  className="zn-pchart__col"
+                  data-current={currentWeek === week.weekNumber || undefined}
                 >
-                  <div
-                    className="bg-red-400/70 w-full"
-                    style={{ height: `${week.hardPct}%` }}
-                  />
-                  <div
-                    className="bg-green-400/50 w-full flex-1"
-                  />
-                  {isCurrent && (
-                    <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 size-1.5 rounded-full bg-primary" />
-                  )}
+                  <span
+                    className="zn-psplit__col"
+                    style={{ "--zn-hard-h": `${week.hardPct}%` } as CSSProperties}
+                    title={`S${week.weekNumber} · ${week.easyPct}% / ${week.hardPct}%`}
+                  >
+                    <span className="zn-psplit__hard" />
+                    <span className="zn-psplit__easy" />
+                  </span>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-full bg-green-400/50" />
+          <div className="zn-pstats__legend">
+            <span className="zn-pstats__legend-item">
+              <span
+                className="zn-pswatch"
+                aria-hidden="true"
+                style={{ "--zn-swatch": "var(--zone-2)" } as CSSProperties}
+              />
               {t("stats.easyZ12")}
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-full bg-red-400/70" />
+            <span className="zn-pstats__legend-item">
+              <span
+                className="zn-pswatch"
+                aria-hidden="true"
+                style={{ "--zn-swatch": "var(--zone-5)" } as CSSProperties}
+              />
               {t("stats.hardZ3")}
             </span>
-            <span className="text-muted-foreground/50">
-              {t("stats.target8020")}
-            </span>
+            <span className="zn-faint">{t("stats.target8020")}</span>
           </div>
         </div>
 
         {/* ── Training load per week ──────────────────────────────── */}
         {weeklyLoads.some(w => w.load > 0) && (
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">
-              {t("stats.trainingLoad")}
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              {t("stats.trainingLoadDesc")}
-            </p>
-            <div className="flex items-end gap-[2px] h-24">
-              {weeklyLoads.map((week) => {
-                const heightPct = maxLoad > 0 ? (week.load / maxLoad) * 100 : 0;
-                const phaseColor = PHASE_META[week.phase]?.color || "bg-gray-400";
-                const isCurrent = currentWeek === week.weekNumber;
-                return (
-                  <div key={week.weekNumber} className="flex-1 flex flex-col items-center justify-end h-full relative">
-                    <div
-                      className={cn(phaseColor, "w-full rounded-t-sm min-h-[2px]")}
-                      style={{ height: `${heightPct}%` }}
-                      title={`S${week.weekNumber}: ${week.load}`}
-                    />
-                    {isCurrent && (
-                      <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+          <div className="zn-pstats__block">
+            <span className="zn-pstats__title">{t("stats.trainingLoad")}</span>
+            <p className="zn-pstats__note">{t("stats.trainingLoadDesc")}</p>
+            <PhaseChart
+              height="md"
+              currentKey={currentWeek}
+              bars={weeklyLoads.map((week) => ({
+                key: week.weekNumber,
+                pct: (week.load / maxLoad) * 100,
+                phase: week.phase,
+                title: `S${week.weekNumber} · ${week.load}`,
+              }))}
+            />
           </div>
         )}
 
         {/* ── Section 5: Long Run Progression (v2) ─────────────────── */}
-        {plan.weeks.some(w => w.targetLongRunKm && w.targetLongRunKm > 0) && (
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">
-              {t("stats.longRunProgression")}
-            </h3>
-            {(() => {
-              const lrWeeks = plan.weeks
-                .filter(w => w.targetLongRunKm && w.targetLongRunKm > 0)
-                .map(w => ({ weekNumber: w.weekNumber, km: w.targetLongRunKm!, phase: w.phase }));
-              const maxLr = Math.max(...lrWeeks.map(w => w.km), 1);
-              return (
-                <>
-                  <div className="flex items-end gap-[2px] h-24">
-                    {lrWeeks.map((w) => {
-                      const heightPct = (w.km / maxLr) * 100;
-                      const phaseColor = PHASE_META[w.phase]?.color || "bg-gray-400";
-                      return (
-                        <div
-                          key={w.weekNumber}
-                          className="flex-1 flex flex-col items-center justify-end h-full"
-                        >
-                          <div
-                            className={cn(phaseColor, "w-full rounded-t-sm min-h-[2px]")}
-                            style={{ height: `${heightPct}%` }}
-                            title={`S${w.weekNumber}: ${w.km}km`}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="flex gap-[2px]">
-                    {lrWeeks.map((w, i) => (
-                      <div
-                        key={w.weekNumber}
-                        className={cn(
-                          "flex-1 text-center text-[9px] text-muted-foreground",
-                          i % 2 !== 0 && lrWeeks.length > 10 && "hidden sm:block",
-                        )}
-                      >
-                        {w.km}
-                      </div>
-                    ))}
-                  </div>
-                  {plan.peakLongRunKm && (
-                    <p className="text-xs text-muted-foreground">
-                      {t("stats.peak")}: <span className="font-medium text-foreground">{plan.peakLongRunKm} km</span>
-                    </p>
-                  )}
-                </>
-              );
-            })()}
+        {longRunWeeks.length > 0 && (
+          <div className="zn-pstats__block">
+            <span className="zn-pstats__title">{t("stats.longRunProgression")}</span>
+            <PhaseChart
+              height="md"
+              bars={longRunWeeks.map((week) => ({
+                key: week.weekNumber,
+                pct: (week.km / maxLongRun) * 100,
+                phase: week.phase,
+                title: `S${week.weekNumber} · ${week.km} km`,
+                tick: String(week.km),
+              }))}
+            />
+            {plan.peakLongRunKm && (
+              <p className="zn-pstats__note">
+                {t("stats.peak")}: {plan.peakLongRunKm} km
+              </p>
+            )}
           </div>
         )}
 
         {/* ── Section 6: Completion stats (v2) ─────────────────────── */}
-        {(() => {
-          const cs = getPlanCompletionStats(plan);
-          if (cs.completed + cs.skipped === 0) return null;
-          return (
-            <div className="space-y-2">
-              <h3 className="text-sm font-medium">
-                {t("stats.completion")}
-              </h3>
-              <div className="flex items-center gap-3">
-                {/* Progress bar */}
-                <div className="flex-1 h-3 bg-secondary rounded-full overflow-hidden flex">
-                  <div
-                    className="h-full bg-green-500 transition-all"
-                    style={{ width: `${(cs.completed / cs.totalSessions) * 100}%` }}
-                  />
-                  <div
-                    className="h-full bg-muted-foreground/20 transition-all"
-                    style={{ width: `${(cs.skipped / cs.totalSessions) * 100}%` }}
-                  />
-                </div>
-                <span className="text-sm font-medium tabular-nums shrink-0">
-                  {Math.round(cs.completionRate * 100)}%
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <span className="size-2 rounded-full bg-green-500" />
-                  {cs.completed} {t("stats.done")}
-                </span>
-                <span className="flex items-center gap-1">
-                  <span className="size-2 rounded-full bg-muted-foreground/20" />
-                  {cs.skipped} {t("stats.skipped")}
-                </span>
-                <span>{cs.planned} {t("stats.remaining")}</span>
-                {cs.avgRpe !== null && (
-                  <span>{t("stats.rpeAvg")}: {cs.avgRpe.toFixed(1)}</span>
-                )}
-              </div>
+        {completion.completed + completion.skipped > 0 && (
+          <div className="zn-pstats__block">
+            <span className="zn-pstats__title">{t("stats.completion")}</span>
+            <div className="zn-row" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+              <span className="zn-pstats__progress">
+                <span
+                  className="zn-pstats__progress-done"
+                  style={{
+                    "--zn-done-w": `${(completion.completed / completion.totalSessions) * 100}%`,
+                  } as CSSProperties}
+                />
+                <span
+                  className="zn-pstats__progress-skipped"
+                  style={{
+                    "--zn-skipped-w": `${(completion.skipped / completion.totalSessions) * 100}%`,
+                  } as CSSProperties}
+                />
+              </span>
+              <span className="zn-mono zn-fixed">
+                {Math.round(completion.completionRate * 100)}%
+              </span>
             </div>
-          );
-        })()}
+            <div className="zn-pstats__facts">
+              <span>{completion.completed} {t("stats.done")}</span>
+              <span>{completion.skipped} {t("stats.skipped")}</span>
+              <span>{completion.planned} {t("stats.remaining")}</span>
+              {completion.avgRpe !== null && (
+                <span>{t("stats.rpeAvg")} {completion.avgRpe.toFixed(1)}</span>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* ── Section 7: Plan metadata (v2) ────────────────────────── */}
         {(plan.peakWeeklyKm || plan.version) && (
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground pt-2 border-t">
+          <div className="zn-pstats__meta">
             {plan.peakWeeklyKm && (
-              <span>{t("stats.peakVolume")}: <span className="font-medium text-foreground">{plan.peakWeeklyKm} km/{t("stats.wk")}</span></span>
+              <span>{t("stats.peakVolume")} <b>{plan.peakWeeklyKm} km/{t("stats.wk")}</b></span>
             )}
             {plan.peakLongRunKm && (
-              <span>{t("stats.peakLongRun")}: <span className="font-medium text-foreground">{plan.peakLongRunKm} km</span></span>
+              <span>{t("stats.peakLongRun")} <b>{plan.peakLongRunKm} km</b></span>
             )}
-            {plan.version && (
-              <span className="opacity-50">v{plan.version}</span>
-            )}
+            {plan.version && <span>v{plan.version}</span>}
           </div>
         )}
       </CardContent>
@@ -698,36 +620,3 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
     </Card>
   );
 });
-
-// ── StatCard sub-component ───────────────────────────────────────────
-
-function StatCard({
-  icon: Icon,
-  value,
-  sublabel,
-  label,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  value: string;
-  sublabel?: string;
-  label: string;
-}) {
-  return (
-    <div className="flex items-center gap-3 rounded-lg bg-secondary/50 p-3">
-      <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-        <Icon className="size-4 text-primary" />
-      </div>
-      <div>
-        <p className="text-lg font-bold leading-none">
-          {value}
-          {sublabel && (
-            <span className="text-xs font-normal text-muted-foreground ml-1">
-              {sublabel}
-            </span>
-          )}
-        </p>
-        <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
-      </div>
-    </div>
-  );
-}

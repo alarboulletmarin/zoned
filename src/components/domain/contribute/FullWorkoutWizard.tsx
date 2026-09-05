@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useId, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, ArrowRight, ExternalLink, Copy } from "@/components/icons";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  ExternalLink,
+  Copy,
+} from "@/components/icons";
 import { WorkoutStepListEditor } from "./WorkoutStepListEditor";
 import { WorkoutPreview } from "./WorkoutPreview";
 import { StringListEditor } from "./StringListEditor";
 import { submitFullWorkout, copyToClipboard } from "@/lib/issueBuilder";
-import { cn } from "@/lib/utils";
 import { replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import type {
   WorkoutTemplate,
@@ -85,9 +91,12 @@ export function FullWorkoutWizard() {
   const { t } = useTranslation("contribute");
   const pickLang = usePickLang();
   const pickLocale = usePickLocale();
+  const uid = useId();
 
   const [step, setStep] = useState<WizardStep>(1);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  // A required field only states its reason once the writer has left it.
+  const [touched, setTouched] = useState<{ name?: boolean; description?: boolean }>({});
 
   // Full workout state
   const [data, setData] = useState<Partial<WorkoutTemplate>>({
@@ -150,6 +159,10 @@ export function FullWorkoutWizard() {
     return true;
   };
 
+  const nameInvalid = touched.name === true && (data.name?.trim().length ?? 0) === 0;
+  const descriptionInvalid =
+    touched.description === true && (data.description?.trim().length ?? 0) === 0;
+
   // ---------------------------------------------------------------------------
   // Navigation
   // ---------------------------------------------------------------------------
@@ -167,6 +180,13 @@ export function FullWorkoutWizard() {
       setStep((s) => (s - 1) as WizardStep);
     }
   }, [step]);
+
+  // A step already answered stays reachable, which is what the design's Stepper
+  // promises: the trail is navigation, not decoration.
+  const goBackTo = useCallback((target: WizardStep) => {
+    setDirection("backward");
+    setStep(target);
+  }, []);
 
   // ---------------------------------------------------------------------------
   // Submit
@@ -195,10 +215,10 @@ export function FullWorkoutWizard() {
   };
 
   // ---------------------------------------------------------------------------
-  // Progress bar
+  // Stepper
   // ---------------------------------------------------------------------------
 
-  const renderProgressBar = () => {
+  const renderStepper = () => {
     const stepTitles = [
       t("fullWorkout.step1Title"),
       t("fullWorkout.step2Title"),
@@ -207,19 +227,34 @@ export function FullWorkoutWizard() {
     ];
 
     return (
-      <div className="mb-6">
-        <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
-          <span>
-            {t("steps.step")} {step}/{TOTAL_STEPS} - {stepTitles[step - 1]}
-          </span>
-        </div>
-        <div className="h-2 bg-muted rounded-full overflow-hidden">
-          <div
-            className="h-full bg-primary transition-all duration-300 ease-out rounded-full"
-            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
-          />
-        </div>
-      </div>
+      <ol className="zn-stepper">
+        {stepTitles.map((title, index) => {
+          const position = (index + 1) as WizardStep;
+          const done = position < step;
+          const current = position === step;
+
+          return (
+            <li key={position} className="zn-stepper__item">
+              <button
+                type="button"
+                className="zn-stepper__step"
+                data-state={done ? "done" : current ? "current" : "todo"}
+                aria-current={current ? "step" : undefined}
+                disabled={!done && !current}
+                onClick={() => done && goBackTo(position)}
+              >
+                <span className="zn-stepper__rail" aria-hidden="true" />
+                <span className="zn-stepper__name">
+                  <span className="zn-stepper__num">
+                    {done ? <Check size={12} /> : String(position).padStart(2, "0")}
+                  </span>
+                  <span className="zn-stepper__label">{title}</span>
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
     );
   };
 
@@ -229,76 +264,117 @@ export function FullWorkoutWizard() {
 
   const renderStep1 = () => (
     <div
-      className={cn(
-        "space-y-6",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
+      className="zn-stack zn-contrib__pane"
+      data-direction={direction}
+      style={{ "--gap": "var(--sp-11)" } as CSSProperties}
     >
       {/* Name FR */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          {t("fullWorkout.nameLabel")} <span className="text-destructive">*</span>
+      <div className="zn-contrib-field">
+        <label className="zn-contrib-field__label" htmlFor={`${uid}-name`}>
+          {t("fullWorkout.nameLabel")}
+          <span className="zn-contrib-field__req" aria-hidden="true">*</span>
         </label>
         <input
+          id={`${uid}-name`}
           type="text"
+          required
           value={data.name ?? ""}
           onChange={(e) => update({ name: e.target.value })}
-          className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+          onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
+          aria-invalid={nameInvalid || undefined}
+          aria-describedby={nameInvalid ? `${uid}-name-error` : undefined}
+          className="zn-contrib-input"
         />
+        {nameInvalid && (
+          <p id={`${uid}-name-error`} role="alert" className="zn-contrib-field__error">
+            <AlertTriangle size={14} />
+            {t("submit.required")}
+          </p>
+        )}
       </div>
 
       {/* Name EN */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">
+      <div className="zn-contrib-field">
+        <label
+          className="zn-contrib-field__label"
+          data-optional="true"
+          htmlFor={`${uid}-name-en`}
+        >
           {t("fullWorkout.nameEnLabel")}
         </label>
         <input
+          id={`${uid}-name-en`}
           type="text"
           value={data.nameEn ?? ""}
           onChange={(e) => update({ nameEn: e.target.value })}
           placeholder={t("fullWorkout.nameEnPlaceholder")}
-          className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+          className="zn-contrib-input"
         />
       </div>
 
       {/* Description FR */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          {t("fullWorkout.descriptionLabel")} <span className="text-destructive">*</span>
+      <div className="zn-contrib-field">
+        <label className="zn-contrib-field__label" htmlFor={`${uid}-description`}>
+          {t("fullWorkout.descriptionLabel")}
+          <span className="zn-contrib-field__req" aria-hidden="true">*</span>
         </label>
         <textarea
+          id={`${uid}-description`}
+          required
           value={data.description ?? ""}
           onChange={(e) => update({ description: e.target.value })}
+          onBlur={() => setTouched((prev) => ({ ...prev, description: true }))}
           rows={3}
-          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none"
+          aria-invalid={descriptionInvalid || undefined}
+          aria-describedby={descriptionInvalid ? `${uid}-description-error` : undefined}
+          className="zn-contrib-input"
         />
+        {descriptionInvalid && (
+          <p
+            id={`${uid}-description-error`}
+            role="alert"
+            className="zn-contrib-field__error"
+          >
+            <AlertTriangle size={14} />
+            {t("submit.required")}
+          </p>
+        )}
       </div>
 
       {/* Description EN */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">
+      <div className="zn-contrib-field">
+        <label
+          className="zn-contrib-field__label"
+          data-optional="true"
+          htmlFor={`${uid}-description-en`}
+        >
           {t("fullWorkout.descriptionEnLabel")}
         </label>
         <textarea
+          id={`${uid}-description-en`}
           value={data.descriptionEn ?? ""}
           onChange={(e) => update({ descriptionEn: e.target.value })}
           placeholder={t("fullWorkout.descriptionEnPlaceholder")}
           rows={2}
-          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-xs shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none"
+          data-size="sm"
+          className="zn-contrib-input"
         />
       </div>
 
       {/* Category + Difficulty */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
+      <div
+        className="zn-grid"
+        style={{ "--cols": 2, "--gap": "var(--sp-8)" } as CSSProperties}
+      >
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-category`}>
             {t("quickIdea.categoryLabel")}
           </label>
           <Select
             value={data.category ?? "endurance"}
             onValueChange={(v) => update({ category: v as WorkoutCategory })}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${uid}-category`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -314,15 +390,15 @@ export function FullWorkoutWizard() {
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-difficulty`}>
             {t("quickIdea.difficultyLabel")}
           </label>
           <Select
             value={data.difficulty ?? "intermediate"}
             onValueChange={(v) => update({ difficulty: v as Difficulty })}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${uid}-difficulty`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -340,16 +416,19 @@ export function FullWorkoutWizard() {
       </div>
 
       {/* Session Type + Target System */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
+      <div
+        className="zn-grid"
+        style={{ "--cols": 2, "--gap": "var(--sp-8)" } as CSSProperties}
+      >
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-session-type`}>
             {t("fullWorkout.sessionTypeLabel")}
           </label>
           <Select
             value={data.sessionType ?? "endurance"}
             onValueChange={(v) => update({ sessionType: v as SessionType })}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${uid}-session-type`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -362,15 +441,15 @@ export function FullWorkoutWizard() {
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-target-system`}>
             {t("fullWorkout.targetSystemLabel")}
           </label>
           <Select
             value={data.targetSystem ?? "aerobic_base"}
             onValueChange={(v) => update({ targetSystem: v as TargetSystem })}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${uid}-target-system`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -384,17 +463,21 @@ export function FullWorkoutWizard() {
         </div>
       </div>
 
-      {/* Duration Range */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
+      {/* Duration Range — a fieldset, so "Min" is heard as part of the range */}
+      <fieldset className="zn-contrib-group">
+        <legend className="zn-contrib-group__legend">
           {t("fullWorkout.durationLabel")}
-        </label>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">
+        </legend>
+        <div
+          className="zn-grid"
+          style={{ "--cols": 2, "--cols-md": 2, "--gap": "var(--sp-8)" } as CSSProperties}
+        >
+          <div className="zn-contrib-field">
+            <label className="zn-contrib-field__label" htmlFor={`${uid}-duration-min`}>
               {t("fullWorkout.durationMin")}
             </label>
             <input
+              id={`${uid}-duration-min`}
               type="number"
               min={0}
               value={data.typicalDuration?.min ?? 30}
@@ -406,14 +489,15 @@ export function FullWorkoutWizard() {
                   },
                 })
               }
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+              className="zn-contrib-input"
             />
           </div>
-          <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">
+          <div className="zn-contrib-field">
+            <label className="zn-contrib-field__label" htmlFor={`${uid}-duration-max`}>
               {t("fullWorkout.durationMax")}
             </label>
             <input
+              id={`${uid}-duration-max`}
               type="number"
               min={0}
               value={data.typicalDuration?.max ?? 60}
@@ -425,18 +509,19 @@ export function FullWorkoutWizard() {
                   },
                 })
               }
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+              className="zn-contrib-input"
             />
           </div>
         </div>
-      </div>
+      </fieldset>
 
       {/* Environment toggles */}
-      <div className="space-y-3">
-        <label className="text-sm font-medium">
-          {t("environment.title")}
-        </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <fieldset className="zn-contrib-group">
+        <legend className="zn-contrib-group__legend">{t("environment.title")}</legend>
+        <div
+          className="zn-grid"
+          style={{ "--cols": 2, "--gap": "var(--sp-6)" } as CSSProperties}
+        >
           {(
             [
               { key: "requiresHills", label: t("environment.requiresHills") },
@@ -445,12 +530,12 @@ export function FullWorkoutWizard() {
               { key: "prefersSoft", label: t("environment.prefersSoft") },
             ] as const
           ).map(({ key, label }) => (
-            <div
-              key={key}
-              className="flex items-center justify-between rounded-lg border p-3"
-            >
-              <label className="text-sm">{label}</label>
+            <div key={key} className="zn-contrib-toggle">
+              <label className="zn-contrib-toggle__label" htmlFor={`${uid}-${key}`}>
+                {label}
+              </label>
               <Switch
+                id={`${uid}-${key}`}
                 checked={data.environment?.[key] ?? false}
                 onCheckedChange={(checked) =>
                   update({
@@ -464,7 +549,7 @@ export function FullWorkoutWizard() {
             </div>
           ))}
         </div>
-      </div>
+      </fieldset>
     </div>
   );
 
@@ -474,10 +559,9 @@ export function FullWorkoutWizard() {
 
   const renderStep2 = () => (
     <div
-      className={cn(
-        "space-y-8",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
+      className="zn-stack zn-contrib__pane"
+      data-direction={direction}
+      style={{ "--gap": "var(--sp-17)" } as CSSProperties}
     >
       <WorkoutStepListEditor
         steps={data.warmupStructure ?? []}
@@ -491,11 +575,14 @@ export function FullWorkoutWizard() {
         label={t("blocks.mainSet")}
       />
 
-      {!step2Valid && (data.mainSetStructure?.length ?? 0) === 0 && (
-        <p className="text-sm text-destructive text-center">
-          {t("submit.atLeastOneBlock")}
-        </p>
-      )}
+      <div aria-live="polite">
+        {!step2Valid && (data.mainSetStructure?.length ?? 0) === 0 && (
+          <p className="zn-contrib-field__error">
+            <AlertTriangle size={14} />
+            {t("submit.atLeastOneBlock")}
+          </p>
+        )}
+      </div>
     </div>
   );
 
@@ -505,10 +592,9 @@ export function FullWorkoutWizard() {
 
   const renderStep3 = () => (
     <div
-      className={cn(
-        "space-y-8",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
+      className="zn-stack zn-contrib__pane"
+      data-direction={direction}
+      style={{ "--gap": "var(--sp-17)" } as CSSProperties}
     >
       <WorkoutStepListEditor
         steps={data.cooldownStructure ?? []}
@@ -564,36 +650,28 @@ export function FullWorkoutWizard() {
 
   const renderStep4 = () => (
     <div
-      className={cn(
-        "space-y-6",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
+      className="zn-stack zn-contrib__pane"
+      data-direction={direction}
+      style={{ "--gap": "var(--sp-11)" } as CSSProperties}
     >
       <WorkoutPreview data={data} />
 
       {/* Submit buttons */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Button
-          type="button"
-          onClick={handleSubmit}
-          className="flex-1"
-        >
-          <ExternalLink className="size-4" />
+      <div
+        className="zn-row zn-contrib__actions"
+        style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+      >
+        <Button type="button" onClick={handleSubmit}>
+          <ExternalLink />
           {t("submit.generateIssue")}
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={handleCopy}
-        >
-          <Copy className="size-4" />
+        <Button type="button" variant="outline" onClick={handleCopy}>
+          <Copy />
           {t("submit.copyDescription")}
         </Button>
       </div>
 
-      <p className="text-xs text-muted-foreground text-center">
-        {t("submit.thankYou")}
-      </p>
+      <p className="zn-caption zn-faint zn-contrib__note">{t("submit.thankYou")}</p>
     </div>
   );
 
@@ -602,14 +680,12 @@ export function FullWorkoutWizard() {
   // ---------------------------------------------------------------------------
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <p className="text-sm text-muted-foreground">
-          {t("fullWorkout.subtitle")}
-        </p>
-      </div>
+    <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+      <p className="zn-body zn-body--sm zn-muted zn-contrib__lead">
+        {t("fullWorkout.subtitle")}
+      </p>
 
-      {renderProgressBar()}
+      {renderStepper()}
 
       {step === 1 && renderStep1()}
       {step === 2 && renderStep2()}
@@ -617,14 +693,14 @@ export function FullWorkoutWizard() {
       {step === 4 && renderStep4()}
 
       {/* Navigation buttons */}
-      <div className="flex justify-between pt-4 border-t">
+      <div className="zn-row zn-row--split zn-contrib__nav">
         <Button
           type="button"
           variant="outline"
           onClick={goPrev}
           disabled={step === 1}
         >
-          <ArrowLeft className="size-4" />
+          <ArrowLeft />
           {t("steps.previous")}
         </Button>
 
@@ -635,7 +711,7 @@ export function FullWorkoutWizard() {
             disabled={!canGoNext(step)}
           >
             {t("steps.next")}
-            <ArrowRight className="size-4" />
+            <ArrowRight />
           </Button>
         ) : (
           <div /> // Spacer - submit buttons are in step 4 content

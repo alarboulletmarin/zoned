@@ -2,7 +2,7 @@
   "hub": {
     "pageTitle": "Nutrition du coureur",
     "title": "Manger comme tu cours",
-    "subtitle": "Bien manger pour bien courir, c'est plus simple qu'on le croit. Voici l'essentiel, sans jargon : au quotidien, avant la course, pendant, après.",
+    "subtitle": "L'essentiel sans jargon : au quotidien, avant la course, pendant l'effort, après.",
     "eyebrow": "Hub nutrition",
     "seoDescription": "Hub nutrition pour coureurs débutants à confirmés : que manger au quotidien, semaine de course, café, hydratation, suppléments utiles ou marketing, mythes à oublier.",
 
@@ -122,8 +122,8 @@
       "j5": { "title": "Plus de pâtes",     "detail": "Pâtes, riz, patate douce, pain. Vise 6 à 8 g de glucides par kilo de poids." },
       "j4": { "title": "Bien hydrater",     "detail": "1,5 à 2 L d'eau + une boisson avec un peu de sel. Urines jaune paille." },
       "j3": { "title": "Charger en sucres", "detail": "Maintenant 10 à 12 g de glucides par kilo (soit 700-800 g pour 70 kg). Privilégie les sources simples : pâtes blanches, riz blanc, pain blanc." },
-      "j2": { "title": "Sortie de réveil",  "detail": "20-30 min à allure facile pour rester actif sans fatiguer. Surtout pas de nouveauté : ni nouveau gel, ni nouvelles chaussures, ni vêtement jamais porté. Ce que tu utiliseras le jour J doit déjà avoir tourné des semaines." },
-      "j1": { "title": "Repas et préparation","detail": "Repas connu, riche en glucides et pauvre en fibres (pas trop de légumes crus). Coucher tôt. Préparer dossard, vêtements, gels, chaussures, montre — tout posé la veille pour gagner du temps le matin." },
+      "j2": { "title": "Sortie de réveil",  "detail": "20-30 min à allure facile. Rien de nouveau : ni gel, ni chaussures, ni vêtement jamais porté." },
+      "j1": { "title": "Repas et préparation","detail": "Repas connu, riche en glucides, pauvre en fibres. Coucher tôt. Dossard, gels, chaussures et montre posés la veille." },
       "j0": { "title": "Petit-déj 3 h avant","detail": "1 à 3 g de glucides par kilo, faciles à digérer. 500 ml d'eau. Dernier café 90 min avant le départ." }
     },
 
@@ -167,9 +167,9 @@
       "title": "Après l'effort",
       "lede": "On a longtemps dit qu'il fallait manger dans les 30 minutes après l'effort. Faux : la vraie fenêtre est plus large. Ton corps continue d'absorber pendant 4 à 6 heures pour les sucres, et 24 à 48 h pour les protéines. Si tu rentres chez toi et que tu manges normalement dans les 2 heures, c'est bon. La fenêtre courte ne compte vraiment que si tu enchaînes une 2e séance dans la journée.",
       "phases": {
-        "immediate": { "window": "0 à 30 min", "title": "Recharge rapide",      "detail": "Si tu as une autre séance dans moins de 4 h : 1 à 1,2 g de sucre + 0,3 g de protéines par kilo. Le lait au chocolat marche très bien (étude scientifique le prouve). Sinon, attendre le repas suivant suffit." },
-        "short":     { "window": "0 à 2 h",    "title": "Repas complet",       "detail": "Glucides + protéines + un peu de gras + des légumes. Boire jusqu'à compenser 1,5 fois ce que tu as perdu en transpirant. Cerise Montmorency et curcuma aident la récupération (preuves scientifiques 2024)." },
-        "long":      { "window": "24 à 48 h",  "title": "Réparation profonde", "detail": "Répartir les protéines sur 4 prises de 25-30 g. 40 g de fromage blanc avant de dormir. Bien dormir. Éviter l'alcool : il diminue la réparation musculaire de 24 %." }
+        "immediate": { "window": "0 à 30 min", "title": "Recharge rapide",      "detail": "Autre séance dans moins de 4 h : 1 g de sucre + 0,3 g de protéines par kilo. Sinon, le repas suivant suffit." },
+        "short":     { "window": "0 à 2 h",    "title": "Repas complet",       "detail": "Glucides + protéines + un peu de gras + des légumes. Boire 1,5 fois ce que tu as perdu en transpirant." },
+        "long":      { "window": "24 à 48 h",  "title": "Réparation profonde", "detail": "4 prises de 25-30 g de protéines. Bien dormir. Éviter l'alcool : il diminue la réparation musculaire de 24 %." }
       }
     },
 
@@ -191,22 +191,22 @@
         "marketing": "Marketing"
       },
       "caffeine":    { "name": "Caféine",         "dose": "3-6 mg/kg",       "when": "60 min avant",     "rationale": "Le complément le plus prouvé pour courir. Améliore la performance de 2 à 7 % sur les efforts longs. En capsule, le dosage est précis." },
-      "creatine":    { "name": "Créatine",        "dose": "3-5 g/jour",      "when": "Toute l'année",    "rationale": "Mythe à oublier : ça ne fait pas grossir comme un culturiste. Le +1 kg, c'est de l'eau retenue dans les muscles. Utile pour les ultra, le trail, après 40 ans, et les périodes de double séance." },
+      "creatine":    { "name": "Créatine",        "dose": "3-5 g/jour",      "when": "Toute l'année",    "rationale": "Le +1 kg, c'est de l'eau retenue dans les muscles, pas du muscle de culturiste. Utile en ultra, en trail et après 40 ans." },
       "bicarbonate": { "name": "Bicarbonate",     "dose": "0,2-0,3 g/kg",    "when": "1 500 m à 10 km",  "rationale": "Aide à neutraliser l'acidité musculaire sur efforts courts et intenses. La forme Maurten Bicarb System évite les troubles digestifs. Inutile au-delà du marathon." },
       "betaalanine": { "name": "Bêta-alanine",    "dose": "4-6 g/jour ×4-12 sem", "when": "800 m à 5 km", "rationale": "Aide les muscles à mieux gérer la fatigue sur efforts de 1 à 10 minutes. Picotements possibles si on prend une grosse dose d'un coup." },
-      "beetroot":    { "name": "Jus de betterave","dose": "5-15 mmol nitrates", "when": "2-3 h avant",   "rationale": "Améliore l'économie de course (+1-3 %) chez les coureurs amateurs. L'effet diminue chez les coureurs très entraînés. Pas de bain de bouche antiseptique le jour J : il tue les bactéries qui activent la betterave." },
+      "beetroot":    { "name": "Jus de betterave","dose": "5-15 mmol nitrates", "when": "2-3 h avant",   "rationale": "Améliore l'économie de course (+1-3 %) chez les amateurs. Pas de bain de bouche antiseptique le jour J : il tue les bactéries qui l'activent." },
       "collagen":    { "name": "Collagène + vitamine C", "dose": "15 g + 50 mg", "when": "30-60 min avant la séance", "rationale": "Double la production de collagène par les tendons. Utile en cas de tendinite chronique ou de séances avec sauts/plyométrie." },
       "tartcherry":  { "name": "Cerise Montmorency", "dose": "30 ml × 2/jour", "when": "5-7 j avant + après la course", "rationale": "Réduit les courbatures et l'inflammation. Utile après un marathon ou un ultra. Ne pas en prendre toute l'année (ça pourrait freiner les progrès à l'entraînement)." },
       "curcumin":    { "name": "Curcuma",         "dose": "200-1500 mg/jour", "when": "Autour de la course", "rationale": "Anti-inflammatoire naturel. Pour qu'il soit absorbé, il faut une forme spéciale (avec poivre noir ou phytosome). Pas en utilisation continue." },
       "probiotics":  { "name": "Probiotiques",    "dose": "10-30 milliards de bactéries/jour", "when": "4 sem avant la course", "rationale": "Réduit les rhumes et les troubles digestifs en marathon/ultra. Mélange de bactéries Lactobacillus + Bifidobacterium." },
       "omega3":      { "name": "Oméga-3",         "dose": "2 g/jour",        "when": "Toute l'année",    "rationale": "Anti-inflammatoire naturel. Réduit les blessures et accélère la récupération. Si tu manges du poisson gras 2 fois par semaine, tu peux t'en passer." },
       "vitD":        { "name": "Vitamine D",      "dose": "2000-4000 UI",    "when": "Hiver",            "rationale": "1 sportif sur 2 est en manque l'hiver dans le nord de l'Europe. Faire un dosage sanguin. Cible : 30 ng/mL minimum, idéalement 40-50." },
-      "iron":        { "name": "Fer",             "dose": "60-120 mg ×3/sem", "when": "Si ferritine < 35", "rationale": "Les coureuses sont à risque (1 sur 3 manque de fer). Ne jamais se supplémenter sans dosage sanguin. Prendre le matin avec de la vitamine C, à distance du café et du thé." },
+      "iron":        { "name": "Fer",             "dose": "60-120 mg ×3/sem", "when": "Si ferritine < 35", "rationale": "1 coureuse sur 3 manque de fer. Jamais de supplémentation sans dosage sanguin. Le matin avec de la vitamine C, loin du café." },
       "magnesium":   { "name": "Magnésium",       "dose": "200-400 mg",      "when": "Le soir",          "rationale": "Forme bisglycinate (mieux absorbée, douce pour le ventre). Aide le sommeil et la récupération. Inefficace contre les crampes (étude Cochrane 2020)." },
-      "bcaa":        { "name": "BCAA (acides aminés ramifiés)", "dose": "—",  "when": "À éviter",        "rationale": "Inutiles si tu manges assez de protéines. Une portion de poulet ou un yaourt grec contient autant de BCAA qu'un complément, en mieux. Pur argument commercial pour 99 % des coureurs." },
+      "bcaa":        { "name": "BCAA (acides aminés ramifiés)", "dose": "—",  "when": "À éviter",        "rationale": "Inutiles si tu manges assez de protéines. Un yaourt grec en contient autant, en mieux. Argument commercial pour 99 % des coureurs." },
       "lcarnitine":  { "name": "L-carnitine",     "dose": "—",               "when": "À éviter",         "rationale": "Pas absorbée correctement par voie orale. Les études concluent à un effet nul en course. Garde ton argent pour des compléments qui marchent vraiment." },
       "ketones":     { "name": "Cétones",         "dose": "—",               "when": "À éviter",         "rationale": "Très à la mode entre 2018 et 2022, mais aucune preuve d'amélioration en course (revue 2024). Cher, goût difficile, troubles digestifs possibles." },
-      "antioxidants":{ "name": "Antioxydants haute dose", "dose": "—",       "when": "À éviter",         "rationale": "Vitamine C à 1 000 mg + vitamine E à haute dose, prises tous les jours, BLOQUENT les progrès à l'entraînement (étude majeure 2014). Mieux vaut manger des fruits et des légumes." }
+      "antioxidants":{ "name": "Antioxydants haute dose", "dose": "—",       "when": "À éviter",         "rationale": "Vitamine C 1 000 mg + vitamine E à haute dose au quotidien : ça BLOQUE les progrès à l'entraînement (étude 2014). Mange des fruits et des légumes." }
     },
 
     "cramps": {
@@ -225,7 +225,7 @@
       "fix": {
         "label": "Ce qui marche",
         "title": "Étirements + jus de cornichon",
-        "detail": "Étirer le muscle qui crampe le calme presque toujours. Une gorgée de jus de cornichon (ou de moutarde) coupe la crampe en moins d'une minute. Vraie prévention : ne pas partir trop vite et bien construire son entraînement."
+        "detail": "Étirer le muscle le calme presque toujours. Vraie prévention : ne pas partir trop vite et bien construire son entraînement."
       }
     },
 

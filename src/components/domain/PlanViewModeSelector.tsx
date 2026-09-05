@@ -25,10 +25,7 @@ export function PlanViewModeSelector({
 
   return (
     <div
-      className={cn(
-        "inline-flex items-center gap-0.5 rounded-lg bg-muted p-1",
-        className
-      )}
+      className={cn("zn-segmented", className)}
       role="radiogroup"
       aria-label={t("viewMode.label")}
     >
@@ -42,17 +39,11 @@ export function PlanViewModeSelector({
             aria-checked={isActive}
             aria-label={t(labelKey)}
             onClick={() => onChange(mode)}
-            className={cn(
-              "items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              desktopOnly ? "hidden md:inline-flex" : "inline-flex",
-              isActive
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-            )}
+            className="zn-segmented__item zn-viewmode__item"
+            data-desktop-only={desktopOnly ? "true" : undefined}
           >
             <Icon size={16} />
-            <span className="hidden sm:inline">{t(labelKey)}</span>
+            <span className="zn-viewmode__label">{t(labelKey)}</span>
           </button>
         );
       })}

@@ -1,0 +1,1076 @@
+/* Race simulator — the km-by-km plan: the settings form, the anchor rail, the
+   collapsible plan blocks, the pacing table, two data graphics and the
+   race-morning run sheet.
+
+   The kit does not mock this screen, so the arrangement is unchanged: this
+   file only repaints it. Two rules carry most of it:
+
+     - every figure is mono with tabular numerals, so a column of times, paces
+       and distances lines up whatever the digits are;
+     - the two graphics (pace curve, timeline) are ink on paper. 1px hairlines
+       are allowed inside dense data, axis lines are --line-axis, and the only
+       vermillon is the "now" marker — a stroke and a word, not a fill.
+
+   No zone fills are painted anywhere in this family, so no ZoneScale legend is
+   owed: the plan is chronological, not zoned. The screen's single accent fill
+   stays with the PDF button in RaceSimActions. */
+
+/* ── figures ──────────────────────────────────────────────────────────── */
+
+/* Label, figure, fine print. The label is a .zn-kicker; only the number needs
+   paint here, and a number is mono. */
+.zn-rs-stat {
+  min-inline-size: 0;
+}
+
+.zn-rs-stat__value {
+  margin: var(--sp-3) 0 0;
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* The unit trailing a figure — "/km", "kg". It is not the figure. */
+.zn-rs-stat__unit {
+  font-family: var(--font-text);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-regular);
+  letter-spacing: normal;
+  color: var(--text-faint);
+}
+
+.zn-rs-stat__hint {
+  margin: var(--sp-1) 0 0;
+  font: var(--type-caption);
+  color: var(--text-faint);
+}
+
+/* A row of figures: 32px between columns, 16px between wrapped rows. */
+.zn-rs-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--sp-8) var(--sp-14);
+}
+
+/* ── plan section ─────────────────────────────────────────────────────── */
+
+/* Anchored block. The scroll margin keeps a jumped-to heading clear of the
+   sticky chip strip; call sites still override it per breakpoint. */
+.zn-rs-section {
+  scroll-margin-block-start: calc(var(--sp-17) * 2);
+}
+
+.zn-rs-section__card {
+  overflow: hidden;
+}
+
+.zn-rs-section__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  padding: var(--sp-8) var(--sp-10);
+
+  background: transparent;
+  border: 0;
+  color: var(--text-body);
+  text-align: start;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-rs-section__toggle:hover {
+  background: var(--surface-band);
+}
+
+/* The card clips its corners, so the ring sits inside rather than under them. */
+.zn-rs-section__toggle:focus-visible {
+  outline-offset: calc(var(--bw-heavy) * -1);
+}
+
+.zn-rs-section__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-rs-section__icon > svg,
+.zn-rs-block__icon > svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+.zn-rs-section__title {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body) / 1.2 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+/* What a folded section still tells you — "28 min", "9 points". */
+.zn-rs-section__meta {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-rs-section__chevron {
+  flex: none;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-rs-section__toggle[aria-expanded="true"] .zn-rs-section__chevron {
+  transform: rotate(180deg);
+}
+
+.zn-rs-section__panel {
+  padding: var(--sp-8) var(--sp-10);
+  border-block-start: var(--border-rule);
+}
+
+@media (pointer: coarse) {
+  .zn-rs-section__toggle {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── anchor navigation ────────────────────────────────────────────────── */
+
+.zn-rs-nav__head {
+  margin-block-end: var(--sp-5);
+}
+
+.zn-rs-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0;
+
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-rs-nav__toggle:hover {
+  color: var(--text-body);
+}
+
+.zn-rs-nav__toggle > svg {
+  flex: none;
+  inline-size: 13px;
+  block-size: 13px;
+}
+
+/* The rail is a ruled margin, the way a plan is indexed on paper. */
+.zn-rs-nav__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-inline-start: var(--border-divider);
+}
+
+.zn-rs-nav__link {
+  display: block;
+  inline-size: 100%;
+  margin-inline-start: calc(var(--bw-rule) * -1);
+  padding: var(--sp-5) var(--sp-6);
+
+  background: transparent;
+  border: 0;
+  border-inline-start: var(--bw-heavy) solid transparent;
+  text-align: start;
+  cursor: pointer;
+
+  font: var(--type-body-sm);
+  color: var(--text-faint);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-rs-nav__link:hover {
+  color: var(--text-body);
+  border-inline-start-color: var(--line-divider);
+}
+
+/* Where you are standing: the vermillon frame reduced to its one edge. */
+.zn-rs-nav__link[aria-current="true"] {
+  border-inline-start-color: var(--accent);
+  color: var(--text-body);
+  font-weight: var(--fw-semibold);
+}
+
+/* The mobile strip. Bleeds to the screen edge and pays its own margin back so
+   the first and last chip clear the page gutter. */
+.zn-rs-chips {
+  display: flex;
+  gap: var(--sp-3);
+  margin-inline: calc(var(--sp-8) * -1);
+  padding: 0 var(--sp-8) var(--sp-2);
+  scrollbar-width: none;
+}
+
+.zn-rs-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.zn-rs-chip {
+  flex: none;
+  padding: var(--sp-3) var(--sp-6);
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1 var(--font-text);
+  background: var(--surface-page);
+  color: var(--text-muted);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-rs-chip:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+.zn-rs-chip:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* The section you are in is a FULL INK INVERSION — the system's one way of
+   saying "selected". */
+.zn-rs-chip[aria-current="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+  border-color: var(--line-strong);
+}
+
+@media (pointer: coarse) {
+  .zn-rs-nav__link,
+  .zn-rs-chip {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── summary bar ──────────────────────────────────────────────────────── */
+
+/* The inputs, folded back into one line once the plan exists. */
+.zn-rs-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+.zn-rs-summary__distance {
+  font: var(--fw-semibold) var(--fs-body) / 1.2 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-rs-summary__time {
+  font: var(--fw-bold) var(--fs-body) / 1.2 var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-rs-summary__fact {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-rs-summary__note {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* A capsule rather than a "·" separator: the row wraps, and a dangling bullet
+   at the end of a line looks like a typo. */
+.zn-rs-summary__chip {
+  padding: var(--sp-1) var(--sp-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+/* ── the form ─────────────────────────────────────────────────────────── */
+
+/* A field: raised paper, full ink outline, 10px radius, 44px touch floor —
+   the same field the select trigger and the date input already are. */
+.zn-rs-field {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-6) var(--sp-8);
+
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-rs-field::placeholder {
+  color: var(--text-faint);
+}
+
+.zn-rs-field[aria-invalid="true"] {
+  border-color: var(--state-danger);
+}
+
+/* Native steppers are tiny targets and look dated; the value is typed here,
+   not nudged. */
+.zn-rs-field[type="number"] {
+  appearance: textfield;
+}
+
+.zn-rs-field::-webkit-outer-spin-button,
+.zn-rs-field::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+/* A field holding a number rather than words. */
+.zn-rs-field--mono {
+  font-family: var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A field whose value is three characters long has no business being 320px
+   wide: it sits next to its unit instead. */
+.zn-rs-field--short {
+  max-inline-size: calc(var(--sp-19) * 2);
+}
+
+/* The target time is the one figure the whole plan hangs off. */
+.zn-rs-field--time {
+  font: var(--fw-semibold) var(--fs-body-lg) / 1.2 var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The CTA takes the full width of the panel it closes. */
+.zn-rs-form__submit {
+  inline-size: 100%;
+}
+
+.zn-rs-form__hint {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-faint);
+}
+
+.zn-rs-form__hint[data-error="true"] {
+  color: var(--state-danger);
+}
+
+.zn-rs-form__suffix {
+  flex: none;
+  font: var(--type-body-sm);
+  color: var(--text-faint);
+}
+
+/* Two columns whatever the viewport: this form lives in a 320px rail and in a
+   bottom sheet, and neither has room for anything else. */
+.zn-rs-form__choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+
+.zn-rs-choice {
+  padding: var(--sp-5) var(--sp-6);
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1.2 var(--font-text);
+  background: transparent;
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-rs-choice:hover {
+  background: var(--surface-band);
+}
+
+.zn-rs-choice:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* The chosen distance inverts to ink. Nothing scales. */
+.zn-rs-choice[aria-pressed="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-rs-choice--wide {
+  grid-column: 1 / -1;
+}
+
+@media (pointer: coarse) {
+  .zn-rs-choice {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── checklist ────────────────────────────────────────────────────────── */
+
+.zn-rs-check {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-rs-check__item + .zn-rs-check__item {
+  border-block-start: var(--border-divider);
+}
+
+.zn-rs-check__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  padding-block: var(--sp-5);
+  cursor: pointer;
+}
+
+/* Ticked is a full ink inversion, never a tint. The glyph is drawn either way
+   and only its colour changes, so the box never resizes. */
+.zn-rs-check__box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--sp-9);
+  block-size: var(--sp-9);
+  margin-block-start: var(--sp-1);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xs);
+  color: transparent;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-rs-check__box > svg {
+  inline-size: 12px;
+  block-size: 12px;
+}
+
+.zn-rs-check__input:checked + .zn-rs-check__box {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+/* The input is off-screen, so the ring has to land on the box it drives. */
+.zn-rs-check__input:focus-visible + .zn-rs-check__box {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-rs-check__time {
+  flex: none;
+  inline-size: var(--sp-16);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.zn-rs-check__body {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.zn-rs-check__label {
+  display: block;
+  font: var(--type-body-sm);
+}
+
+/* A line with a second line under it leads; a bare line does not need to. */
+.zn-rs-check__body:has(.zn-rs-check__detail) .zn-rs-check__label {
+  font-weight: var(--fw-medium);
+}
+
+.zn-rs-check__detail {
+  display: block;
+  margin-block-start: var(--sp-1);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-rs-check__meta {
+  flex: none;
+  padding: var(--sp-1) var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+/* Done: struck through and faded, read off the checkbox rather than a class
+   the component has to remember to add. */
+.zn-rs-check__input:checked ~ .zn-rs-check__time {
+  color: var(--text-faint);
+}
+
+.zn-rs-check__input:checked ~ .zn-rs-check__body {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+@media (pointer: coarse) {
+  .zn-rs-check__row {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── mental cues ──────────────────────────────────────────────────────── */
+
+.zn-rs-cues {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The kilometre range, in its own column so the cues line up. It grows for a
+   long range rather than clipping one. */
+.zn-rs-cues__range {
+  flex: none;
+  min-inline-size: var(--sp-20);
+  padding: var(--sp-2) var(--sp-4);
+  text-align: center;
+  white-space: nowrap;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+.zn-rs-cues__text {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  font: var(--type-body-sm);
+}
+
+/* ── nutrition ────────────────────────────────────────────────────────── */
+
+.zn-rs-note {
+  margin: 0;
+  font: var(--type-body-sm);
+}
+
+/* The one line that introduces a block: a summary sentence, a time window. */
+.zn-rs-note--muted {
+  color: var(--text-muted);
+}
+
+.zn-rs-tips {
+  padding-block-start: var(--sp-8);
+  border-block-start: var(--border-divider);
+}
+
+.zn-rs-tips__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-rs-tips__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-rs-tips__item > svg {
+  flex: none;
+  inline-size: 14px;
+  block-size: 14px;
+  margin-block-start: 3px;
+}
+
+/* ── splits ───────────────────────────────────────────────────────────── */
+
+.zn-rs-splits__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  align-self: flex-start;
+  padding: 0;
+
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-rs-splits__toggle:hover {
+  color: var(--text-body);
+}
+
+.zn-rs-splits__toggle > svg {
+  flex: none;
+  inline-size: 15px;
+  block-size: 15px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-rs-splits__toggle[aria-expanded="true"] > svg {
+  transform: rotate(180deg);
+}
+
+/* The paper grid: a 1.5px frame, a 16px radius clipping the corners, and
+   hairlines between the rows. */
+.zn-rs-splits__frame {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* Past ten or so rows the table scrolls inside its own box, which is what
+   makes the pinned header legal: it pins to this container, not to the page. */
+.zn-rs-splits__frame[data-scrolls="true"] {
+  max-block-size: calc(var(--sp-19) * 6);
+  overflow-y: auto;
+}
+
+.zn-rs-splits__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.zn-rs-splits__head {
+  background: var(--surface-band);
+}
+
+.zn-rs-splits__head[data-sticky="true"] {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+}
+
+/* Column heads are mono kickers, not sentences. */
+.zn-rs-splits__th {
+  padding: var(--sp-5) var(--sp-6);
+  text-align: start;
+  white-space: nowrap;
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  border-block-end: var(--border-rule);
+}
+
+.zn-rs-splits__td {
+  padding: var(--sp-5) var(--sp-6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-rs-splits__th[data-align="end"],
+.zn-rs-splits__td[data-align="end"] {
+  text-align: end;
+}
+
+/* The distance marker is the signage you read on the course, not the answer. */
+.zn-rs-splits__td--marker {
+  color: var(--text-faint);
+}
+
+.zn-rs-splits__td--total {
+  font-weight: var(--fw-bold);
+}
+
+.zn-rs-splits__row + .zn-rs-splits__row > .zn-rs-splits__td {
+  border-block-start: var(--border-divider);
+}
+
+.zn-rs-splits__row:hover > .zn-rs-splits__td {
+  background: var(--surface-band);
+}
+
+/* ── pace curve ───────────────────────────────────────────────────────── */
+
+.zn-rs-curve {
+  margin: 0;
+}
+
+.zn-rs-curve__caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.zn-rs-curve__range {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-rs-curve__plot {
+  position: relative;
+}
+
+.zn-rs-curve__svg {
+  display: block;
+  inline-size: 100%;
+  block-size: calc(var(--sp-15) * 2);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+}
+
+/* The band under the curve is paper, not a tint: the system has no
+   transparency outside the zone ramp, and this graphic paints no zones. */
+.zn-rs-curve__area {
+  fill: var(--surface-band);
+}
+
+.zn-rs-curve__line {
+  fill: none;
+  stroke: var(--ink-1);
+  stroke-width: var(--bw-rule);
+}
+
+/* The two axis lines are the fastest and the slowest split — the pair the
+   caption prints. 1px, which is what dense data is allowed. */
+.zn-rs-curve__axis {
+  stroke: var(--line-axis);
+  stroke-width: var(--bw-hair);
+}
+
+/* The y axis carries no scale, so it says which way is up. */
+.zn-rs-curve__up {
+  position: absolute;
+  inset-block-start: var(--sp-3);
+  inset-inline-start: var(--sp-5);
+  pointer-events: none;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-rs-curve__ends {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ── timeline ─────────────────────────────────────────────────────────── */
+
+.zn-rs-timeline {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-rs-timeline__row {
+  position: relative;
+  display: flex;
+  gap: var(--sp-6);
+  padding-inline-start: var(--sp-8);
+  border-inline-start: var(--border-divider);
+}
+
+/* The gun. The one row of the day that is not just another line. */
+.zn-rs-timeline__row[data-start="true"] {
+  background: var(--surface-band);
+}
+
+.zn-rs-timeline__dot {
+  position: absolute;
+  inset-inline-start: -5px;
+  inset-block-start: var(--sp-7);
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+
+  background: var(--text-faint);
+  border: var(--bw-rule) solid var(--surface-page);
+  border-radius: var(--r-pill);
+}
+
+.zn-rs-timeline__row[data-start="true"] .zn-rs-timeline__dot {
+  background: var(--ink-1);
+}
+
+.zn-rs-timeline__time {
+  flex: none;
+  inline-size: var(--sp-17);
+  padding-block: var(--sp-5);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.zn-rs-timeline__label {
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--sp-5) var(--sp-6) var(--sp-5) 0;
+  font: var(--type-body-sm);
+}
+
+/* Behind you: still readable, no longer asking for attention. */
+.zn-rs-timeline__row[data-past="true"]:not([data-start="true"]) .zn-rs-timeline__time,
+.zn-rs-timeline__row[data-past="true"]:not([data-start="true"]) .zn-rs-timeline__label {
+  color: var(--text-faint);
+}
+
+.zn-rs-timeline__row[data-start="true"] .zn-rs-timeline__time {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+.zn-rs-timeline__row[data-start="true"] .zn-rs-timeline__label {
+  font: var(--fw-semibold) var(--fs-body) / 1.4 var(--font-text);
+}
+
+/* Now. The only vermillon in the graphic — a stroke and a word, no fill. */
+.zn-rs-now {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding-inline-start: var(--sp-8);
+  border-inline-start: var(--bw-rule) solid var(--accent);
+}
+
+.zn-rs-now__dot {
+  position: absolute;
+  inset-inline-start: -6px;
+  inline-size: var(--sp-6);
+  block-size: var(--sp-6);
+
+  background: var(--accent);
+  border: var(--bw-rule) solid var(--surface-page);
+  border-radius: var(--r-pill);
+}
+
+.zn-rs-now__time {
+  flex: none;
+  inline-size: var(--sp-17);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.zn-rs-now__label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-rs-now__text {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.zn-rs-now__rule {
+  flex: 1;
+  block-size: var(--bw-hair);
+  background: var(--accent);
+}
+
+/* ── race-day sheet ───────────────────────────────────────────────────── */
+
+/* A flush card the sheet fills itself: no chevron, nothing folded, because
+   this is the view you read standing up twelve minutes before the gun.
+
+   Carries .zn-card[data-size="flush"] too: that rule zeroes the block padding
+   at a higher specificity, so a bare .zn-rs-block would lose to it whatever
+   order the two files are imported in. */
+.zn-card[data-size="flush"].zn-rs-block {
+  padding: var(--sp-8) var(--sp-10);
+}
+
+.zn-rs-block__head {
+  margin-block-end: var(--sp-6);
+}
+
+.zn-rs-block__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-rs-block__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body) / 1.2 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+/* What happens next: the one live thing on the page, so it wears the 2.5px
+   vermillon frame. A frame, not a fill — the screen's fill is the PDF button. */
+.zn-card.zn-rs-next {
+  border: var(--border-heavy);
+}
+
+.zn-rs-next__clock {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-rs-next__when {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-6);
+  margin: var(--sp-5) 0 0;
+}
+
+.zn-rs-next__figure {
+  font: var(--fw-bold) var(--fs-h3) / 1 var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-rs-next__in {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-rs-next__label {
+  margin: var(--sp-3) 0 0;
+  font: var(--fw-medium) var(--fs-body) / 1.35 var(--font-text);
+}
+
+.zn-rs-next__note {
+  margin: var(--sp-3) 0 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* Fuelling and recovery: a clock column and what to do at it. */
+.zn-rs-cp {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-rs-cp__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  font: var(--type-body-sm);
+}
+
+.zn-rs-cp__time {
+  flex: none;
+  inline-size: var(--sp-16);
+  font-family: var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.zn-rs-cp__text {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ── actions ──────────────────────────────────────────────────────────── */
+
+.zn-rs-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-rs-actions[data-variant="bar"] {
+  flex-direction: row;
+}
+
+.zn-rs-actions__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+}
+
+/* Exporting the PDF is what the plan is for: it takes the whole width in the
+   rail, and the leftover width in the mobile bar. */
+.zn-rs-actions__pdf {
+  inline-size: 100%;
+}
+
+.zn-rs-actions[data-variant="bar"] .zn-rs-actions__pdf {
+  inline-size: auto;
+  flex: 1;
+}
+
+/* An ink ring with a gap, turning. The same wait the spinner primitive draws. */
+.zn-rs-actions__spinner {
+  animation: zoned-spin 700ms linear infinite;
+}

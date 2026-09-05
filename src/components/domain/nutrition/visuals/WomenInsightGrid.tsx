@@ -6,23 +6,25 @@ export function WomenInsightGrid() {
   const { t } = useTranslation("nutrition");
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div className="zn-grid" style={{ "--cols": 2 } as React.CSSProperties}>
       {womenInsights.map((item) => {
         const Icon = NUTRITION_ICONS[item.iconName];
         return (
-          <div
-            key={item.titleKey}
-            className="flex gap-3 rounded-xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 via-violet-500/5 to-transparent dark:from-violet-500/20 p-4"
-          >
-            <div className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-violet-100 dark:bg-violet-950/40">
-              <Icon
-                className="size-5 text-violet-700 dark:text-violet-300"
-                aria-hidden="true"
-              />
-            </div>
-            <div className="space-y-1">
-              <p className="font-semibold leading-tight">{t(item.titleKey)}</p>
-              <p className="text-sm text-muted-foreground">{t(item.detailKey)}</p>
+          <div key={item.titleKey} className="zn-nut-card">
+            <div
+              className="zn-row zn-row--start"
+              style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+            >
+              <span className="zn-nut-glyph">
+                <Icon aria-hidden="true" />
+              </span>
+              <div
+                className="zn-stack zn-fill"
+                style={{ "--gap": "var(--sp-2)" } as React.CSSProperties}
+              >
+                <p className="zn-nut-card__title">{t(item.titleKey)}</p>
+                <p className="zn-nut-card__text">{t(item.detailKey)}</p>
+              </div>
             </div>
           </div>
         );

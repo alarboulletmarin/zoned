@@ -1,0 +1,420 @@
+/* The contribution surface — a quick idea, or the four-step workout wizard.
+
+   A form is the one place the system's "everything is outlined" rule pays for
+   itself twice: a field is a drawn box on paper, and an invalid field is the
+   same box in vermillon WITH a written reason underneath. Colour never carries
+   a message on its own here.
+
+   Two blocks in this file are deliberately generic:
+
+     .zn-stepper       the design bundle's Stepper — named steps, a 6px rail
+                       each, the current one in vermillon. The plan generator's
+                       five-question wizard is the same component; it should
+                       reuse this rather than grow a second one.
+     .zn-contrib-field the label / control / reason triplet, and the field paint
+                       matching the select trigger (12/16, 44px floor, 10px
+                       radius). Family-prefixed for now because no other ported
+                       family has claimed a form vocabulary yet.
+   ========================================================================== */
+
+/* ── the surface ──────────────────────────────────────────────────────── */
+
+/* The two contribution routes are one collection, so the tabs sit on their ink
+   rule and the panel breathes below it. Carries .zn-tabs so it wins over
+   tabs.css whatever order the two files are imported in. */
+.zn-tabs.zn-contrib__tabs {
+  gap: var(--sp-13);
+}
+
+/* The one sentence under the tab, centred over the form it introduces. */
+.zn-contrib__lead {
+  text-align: center;
+}
+
+/* A wizard step. Motion says where the step came from and nothing else — the
+   keyframes are the app's existing ones, retimed onto the system's step. */
+.zn-contrib__pane {
+  animation: slide-in-right var(--dur-base) var(--ease-out) both;
+}
+
+.zn-contrib__pane[data-direction="backward"] {
+  animation-name: slide-in-left;
+}
+
+/* Previous / next, over the rule that closes the step. */
+.zn-contrib__nav {
+  padding-block-start: var(--sp-11);
+  border-block-start: var(--border-rule);
+}
+
+/* Submit and copy. The first button is the screen's one vermillon fill and
+   takes the width; the second is outlined and stays its own size. */
+.zn-contrib__actions > .zn-btn:first-child {
+  flex: 1;
+}
+
+@media (max-width: 640px) {
+  .zn-contrib__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.zn-contrib__note {
+  text-align: center;
+}
+
+/* ── stepper ──────────────────────────────────────────────────────────── */
+
+/* Where you are, and what is still coming. Steps are named, never numbered
+   alone: "3 sur 4" says nothing about what step 3 asks for. */
+.zn-stepper {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-stepper__item {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.zn-stepper__step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  inline-size: 100%;
+
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  text-align: start;
+  cursor: default;
+}
+
+.zn-stepper__step:not(:disabled) {
+  cursor: pointer;
+}
+
+/* The rail is the progress stroke, not a second fill: 6px of ink for a step
+   already answered, vermillon for the one being answered, sunken paper for
+   what has not been reached. */
+.zn-stepper__rail {
+  display: block;
+  block-size: 6px;
+  border: var(--border-hair);
+  border-radius: var(--r-pill);
+  background: var(--surface-band);
+  transition: background var(--dur-base) var(--ease-out);
+}
+
+.zn-stepper__step[data-state="done"] .zn-stepper__rail {
+  background: var(--ink-1);
+}
+
+/* Ink, not vermillon: the wizard already spends its one accent fill on the
+   primary button, and a second one cancels the first. The current step is
+   already told by its filled number and its bolder label. */
+.zn-stepper__step[aria-current="step"] .zn-stepper__rail {
+  background: var(--ink-1);
+}
+
+.zn-stepper__name {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+}
+
+/* Two digits, mono, or a check once the step is behind you. */
+.zn-stepper__num {
+  display: inline-flex;
+  flex: none;
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  color: var(--text-faint);
+}
+
+.zn-stepper__step[aria-current="step"] .zn-stepper__num {
+  color: var(--accent);
+}
+
+.zn-stepper__label {
+  font: var(--type-body-sm);
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-stepper__step[data-state="done"] .zn-stepper__label {
+  color: var(--text-muted);
+}
+
+.zn-stepper__step[aria-current="step"] .zn-stepper__label {
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--text-body);
+}
+
+/* Four names do not fit a phone. The rails and the numbers still say where you
+   are; only the step being answered keeps its name.
+
+   The label is the button's ONLY text, though, and an answered step is
+   clickable — so it is hidden visually rather than removed from the
+   accessibility tree. `display: none` here left every back-navigation button
+   nameless under 640px. */
+@media (max-width: 640px) {
+  .zn-stepper__step:not([aria-current="step"]) .zn-stepper__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@media (pointer: coarse) {
+  .zn-stepper__step {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── field ────────────────────────────────────────────────────────────── */
+
+.zn-contrib-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+.zn-contrib-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font: var(--type-label);
+  color: var(--text-body);
+}
+
+/* The English mirror of a French field: same control, quieter label. */
+.zn-contrib-field__label[data-optional="true"] {
+  color: var(--text-faint);
+}
+
+/* The asterisk is decoration; the `required` attribute is what the screen
+   reader hears, which is why this span is hidden from it. */
+.zn-contrib-field__req {
+  color: var(--state-danger);
+  font-weight: var(--fw-bold);
+}
+
+/* The written reason. Never the only mark on an invalid field, and never
+   absent from one. */
+.zn-contrib-field__error {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--state-danger);
+}
+
+.zn-contrib-field__error > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+/* A group of fields answering one question — the duration range, the terrain
+   toggles. A fieldset, so the legend is part of every control's name. */
+.zn-contrib-group {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.zn-contrib-group__legend {
+  padding: 0;
+  margin-block-end: var(--sp-6);
+  font: var(--type-label);
+  color: var(--text-body);
+}
+
+/* ── control ──────────────────────────────────────────────────────────── */
+
+/* The same geometry as the select trigger, because they stand in the same
+   column and a form whose boxes disagree reads as two forms. */
+.zn-contrib-input {
+  box-sizing: border-box;
+  inline-size: 100%;
+
+  padding: var(--sp-6) var(--sp-8);
+  min-block-size: var(--hit-min);
+
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+/* A textarea is sized by its rows, and it does not get a drag handle: the grid
+   is the point of the form. */
+textarea.zn-contrib-input {
+  min-block-size: 0;
+  line-height: var(--lh-body-sm);
+  resize: none;
+}
+
+.zn-contrib-input::placeholder {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* The English mirror fields sit one step down the type scale, as they did. */
+.zn-contrib-input[data-size="sm"] {
+  font-size: var(--fs-caption);
+}
+
+/* Counts, durations, distances and zone codes are data: mono and tabular, so a
+   column of them lines up the way the rest of the app prints numbers. */
+.zn-contrib-input[data-mono="true"] {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Invalid: the outline thickens to the 2.5px the system reserves for a marked
+   frame and turns vermillon — and the reason is printed underneath. Sized with
+   border-box so nothing on the row moves. */
+.zn-contrib-input[aria-invalid="true"] {
+  border-color: var(--state-danger);
+  border-width: var(--bw-heavy);
+}
+
+/* A select standing in a field is a field: it takes the whole column. Two
+   classes, so it wins over select.css whichever order the two are imported. */
+.zn-contrib-field > .zn-select-trigger {
+  inline-size: 100%;
+}
+
+.zn-contrib-input:disabled {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* ── list editors ─────────────────────────────────────────────────────── */
+
+/* Nothing in the list yet. A dashed frame, because this is a hole in the form
+   rather than a card sitting in it. */
+.zn-contrib-slot {
+  padding: var(--sp-13);
+  text-align: center;
+
+  background: var(--surface-card);
+  border: var(--border-dashed);
+  border-radius: var(--r-xl);
+}
+
+/* A repeat's own steps, indented behind a divider so the nesting is drawn
+   rather than merely implied by whitespace. */
+.zn-contrib-nest {
+  padding-inline-start: var(--sp-6);
+  border-inline-start: var(--border-divider);
+}
+
+@media (min-width: 641px) {
+  .zn-contrib-nest {
+    padding-inline-start: var(--sp-8);
+  }
+}
+
+/* A step nested inside a repeat is drawn dashed: it belongs to the loop above
+   it rather than standing on the page in its own right. */
+.zn-card.zn-contrib-substep {
+  border: var(--border-dashed);
+}
+
+/* "Segment" / "Répétition" names a control, not a section: interface type, not
+   the card title's display face. */
+.zn-card__title.zn-contrib-step__kind {
+  font: var(--type-label);
+  letter-spacing: normal;
+}
+
+/* The two "add" buttons under a list share the width evenly. */
+.zn-contrib-add > .zn-btn {
+  flex: 1;
+}
+
+/* A single "add" under a list takes the whole column instead. */
+.zn-btn.zn-contrib-add-full {
+  inline-size: 100%;
+}
+
+@media (max-width: 640px) {
+  .zn-contrib-add {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* The control that deletes a row. Danger is vermillon type here, never a
+   second vermillon fill — the screen's fill is still the primary action. */
+.zn-btn[data-variant="ghost"].zn-contrib-remove {
+  color: var(--state-danger);
+}
+
+/* One terrain toggle: the question on the left, the switch on the right. */
+.zn-contrib-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+
+  padding: var(--sp-6) var(--sp-8);
+  min-block-size: var(--hit-min);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-contrib-toggle__label {
+  font: var(--type-body-sm);
+  color: var(--text-body);
+}
+
+/* ── preview ──────────────────────────────────────────────────────────── */
+
+/* The glyph in the preview's title follows the words: same colour, one step
+   smaller, never a decoration that outgrows them. */
+.zn-contrib-preview__title > svg {
+  inline-size: 17px;
+  block-size: 17px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* The preview paints zone fills, so it carries the ramp's legend once, above
+   the visualisations it explains. */
+.zn-contrib-preview__legend {
+  padding-block-end: var(--sp-6);
+  border-block-end: var(--border-divider);
+}

@@ -23,20 +23,14 @@ interface GlossaryLinkedTextProps {
 // Link styles
 // ---------------------------------------------------------------------------
 
-const GLOSSARY_LINK_CLASS =
-  "underline decoration-dotted underline-offset-2 decoration-primary/40 text-inherit hover:text-primary hover:decoration-primary transition-colors cursor-pointer";
-
-const ARTICLE_LINK_CLASS =
-  "underline decoration-dotted underline-offset-2 decoration-blue-400/40 text-inherit hover:text-blue-600 dark:hover:text-blue-400 hover:decoration-blue-500 transition-colors cursor-pointer";
+// One treatment for both kinds — a dotted ink underline (see content.css).
+// A paragraph can carry six of these; two underline colours inside one
+// sentence is noise, not information.
 
 function getLinkHref(content: MatchableContent): string {
   return content.type === "glossary"
     ? `/glossary/${content.data.id}`
     : `/learn/${content.data.slug}`;
-}
-
-function getLinkClass(content: MatchableContent): string {
-  return content.type === "glossary" ? GLOSSARY_LINK_CLASS : ARTICLE_LINK_CLASS;
 }
 
 // ---------------------------------------------------------------------------
@@ -75,7 +69,8 @@ function ContentLink({
       <PopoverTrigger asChild>
         <a
           href={getLinkHref(content)}
-          className={getLinkClass(content)}
+          className="zn-glink"
+          data-kind={content.type}
           // Desktop: hover to open
           onMouseEnter={!isMobile ? scheduleOpen : undefined}
           onMouseLeave={!isMobile ? scheduleClose : undefined}
@@ -94,7 +89,6 @@ function ContentLink({
       <PopoverContent
         side={isMobile ? "bottom" : "top"}
         align="center"
-        className="w-72 p-3"
         // Desktop: keep open while hovering content
         onMouseEnter={!isMobile ? cancelClose : undefined}
         onMouseLeave={!isMobile ? scheduleClose : undefined}

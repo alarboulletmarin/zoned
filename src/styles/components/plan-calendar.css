@@ -1,0 +1,1565 @@
+/* The plan surfaces — a training plan drawn as paper.
+ *
+ * One family, five screens of the same object: the whole-plan grid
+ * (.zn-plancal), one week blown up (.zn-planweek), the month chrome around the
+ * grid (.zn-planmonth), the catalogue you drag from (.zn-planpanel), and the
+ * volume sparkline (.zn-spark). They share the session mark (.zn-sess), the
+ * long-press menu (.zn-plan-menu) and the drag-to-delete target
+ * (.zn-plan-trash), because those are literally the same piece on each screen.
+ *
+ * Three things carry all the meaning here:
+ *
+ *   1. The grid is paper. Weeks are rows, days are columns, and the lines
+ *      between days are ink hairlines — not gaps, not tints. A plan phase gets
+ *      no colour of its own: the system has one accent, and it is spent on the
+ *      primary action.
+ *   2. A session's intensity is the zone ink, read straight off
+ *      lib/sessionColors.ts (which already resolves to --zone-N). A session
+ *      type with no aerobic zone — strength, yoga, cycling, swimming, rest,
+ *      cross-training — is not given an invented hue: its mark goes HOLLOW,
+ *      sunken paper inside an ink hairline. Filled = measurable intensity,
+ *      hollow = none. That reads in greyscale and it never collides with the
+ *      ramp.
+ *   3. Today, and a live drop target, are a 2.5px vermillon frame. Never a
+ *      tint. Locked and completed borrow the same idea at other colours:
+ *      a frame, not a wash.
+ *
+ * Blocked days and rest days both use the system's "unmeasured" mark — the
+ * 45 degree hatch of --zone-recovery — so nothing on this screen has to invent
+ * a texture.
+ */
+
+/* ══ the whole-plan grid ═══════════════════════════════════════════════ */
+
+.zn-plancal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-11);
+}
+
+.zn-plancal__table {
+  inline-size: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+  /* A collapsed table paints its own cell borders over a rounded corner, so
+     the radius has to be clipped rather than merely declared — but `overflow:
+     hidden` would make the table a scroll container, and `position: sticky`
+     resolves against the nearest one. That killed the sticky week gutter.
+     `clip-path` clips the same corners without creating a scrollport. */
+  clip-path: inset(0 round var(--r-2xl));
+}
+
+/* 104px for the week gutter — the width the design bundle states for it. */
+.zn-plancal__col-week {
+  inline-size: 104px;
+}
+
+@media (max-width: 768px) {
+  .zn-plancal__col-week {
+    inline-size: 90px;
+  }
+}
+
+/* ── column heads ─────────────────────────────────────────────────────── */
+
+.zn-plancal__head th {
+  padding: var(--sp-5) var(--sp-6);
+  text-align: start;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  font-weight: var(--fw-regular);
+  color: var(--text-faint);
+
+  background: var(--surface-band);
+  border-block-end: var(--border-rule);
+}
+
+.zn-plancal__head th + th {
+  border-inline-start: var(--border-divider);
+  text-align: center;
+}
+
+/* The week column stays put while the days scroll under it. */
+.zn-plancal__head-week {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 2;
+}
+
+/* ── week rows ────────────────────────────────────────────────────────── */
+
+.zn-plancal__week {
+  border-block-start: var(--border-divider);
+}
+
+/* A phase change is a real rule across the plan, not a change of colour. */
+.zn-plancal__week[data-phase-start="true"] {
+  border-block-start: var(--border-rule);
+}
+
+/* Down weeks read as sunken paper — less ink on the page, which is what a
+   recovery week is. */
+.zn-plancal__week[data-recovery="true"] .zn-plancal__gutter,
+.zn-plancal__week[data-recovery="true"] .zn-plancal__day {
+  background: var(--surface-band);
+}
+
+/* ── the left gutter: week number, phase, volume ──────────────────────── */
+
+.zn-plancal__gutter {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+
+  padding: var(--sp-5) var(--sp-6);
+  vertical-align: top;
+
+  background: var(--surface-card);
+  border-inline-end: var(--border-divider);
+}
+
+/* A <td> has to stay a table-cell or it loses its column, so the gutter stacks
+   its lines in normal flow rather than as a flex column. */
+.zn-plancal__gutter > * {
+  display: block;
+}
+
+.zn-plancal__gutter > * + * {
+  margin-block-start: var(--sp-1);
+}
+
+/* The current week is framed, not filled: the vermillon edge runs down the
+   gutter and the row reads as the one you are in. */
+.zn-plancal__week[data-current="true"] .zn-plancal__gutter {
+  box-shadow: inset var(--bw-heavy) 0 0 0 var(--accent);
+}
+
+.zn-plancal__wknum {
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.1 var(--font-text);
+  white-space: nowrap;
+}
+
+.zn-plancal__phase {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-plancal__volume {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.4;
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* "ACTUEL" — vermillon type, the accent as an identifier rather than a fill. */
+.zn-plancal__now {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-kicker);
+  color: var(--text-link);
+}
+
+/* Week fully closed out. The one added hue in the system, and it is a mark of
+   type here, not a fill. */
+.zn-plancal__done {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--state-success);
+}
+
+.zn-plancal__done > svg {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  flex: none;
+}
+
+/* "Close out the week": an outlined vermillon action, small enough to live in
+   the gutter and still be a real button. */
+.zn-plancal__validate {
+  display: inline-block;
+  padding: var(--sp-1) var(--sp-3);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+
+  color: var(--text-link);
+  background: var(--surface-card);
+  border: var(--bw-hair) solid var(--accent);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-plancal__validate:hover {
+  background: var(--accent-soft);
+}
+
+.zn-plancal__validate:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* ── day cells ────────────────────────────────────────────────────────── */
+
+.zn-plancal__day {
+  position: relative;
+  vertical-align: top;
+  padding: var(--sp-3) var(--sp-2);
+  /* On a table cell `height` is a minimum, so a busy day still grows.
+     96px is the cell height the design bundle states. */
+  block-size: 96px;
+
+  border-inline-start: var(--border-divider);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+/* A month boundary is a real rule, drawn where the month actually turns. */
+.zn-plancal__day[data-month-start="true"] {
+  border-inline-start: var(--border-rule);
+}
+
+/* Outside the month on show: the ink recedes rather than the box fading, so
+   the grid keeps its lines. */
+.zn-plancal__day[data-outside="true"] {
+  color: var(--text-faint);
+  background: var(--surface-band);
+}
+
+/* A day outside the plan recedes by losing its ink, not by being faded: the
+   system forbids both a filter and a transparency outside the zone ramp. The
+   block keeps its outline and its label and drops to the sunken paper, which
+   is the same "not a zone" treatment a recovery block gets. */
+.zn-plancal__day[data-outside="true"] .zn-sess {
+  background: var(--surface-band);
+  color: var(--text-faint);
+  border-color: var(--line-divider);
+}
+
+/* Unavailable: the same 45 degree hatch the system uses for anything
+   unmeasured. */
+.zn-plancal__day[data-blocked="true"] {
+  background-color: var(--surface-band);
+  background-image: var(--zone-recovery);
+}
+
+/* Live drop target — a 2.5px vermillon frame, drawn inside the cell so the
+   grid does not jump by 2.5px on every dragover. */
+.zn-plancal__day[data-drop="true"] {
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+}
+
+/* Today. The vermillon ring is the whole marking; the date below is not
+   recoloured, because the ring already said it. */
+.zn-plancal__day[data-today="true"] {
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+}
+
+.zn-plancal__blocked-label,
+.zn-plancal__date,
+.zn-plancal__empty {
+  display: block;
+  text-align: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-plancal__blocked-label {
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono-label);
+  margin-block-end: var(--sp-1);
+}
+
+.zn-plancal__date {
+  margin-block-end: var(--sp-2);
+}
+
+/* The first of the month names itself, so it gets the emphasis of ink rather
+   than of a second colour. */
+.zn-plancal__date[data-month-label="true"] {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+/* A rest day is blank on purpose — the blank is the rest. The em dash is the
+   faintest mark the page has. */
+.zn-plancal__empty {
+  color: var(--state-disabled-text);
+}
+
+/* The stack of sessions inside one day. */
+.zn-plancal__sessions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+/* The draggable wrapper. Grab cursors and the drag ghost's opacity are the
+   only place transparency is allowed outside the zone ramp: it is the
+   browser's own drag affordance, not decoration. */
+.zn-plan-drag {
+  cursor: grab;
+}
+
+.zn-plan-drag:active {
+  cursor: grabbing;
+}
+
+.zn-plan-drag[data-dragging="true"] {
+  opacity: 0.4;
+}
+
+/* ══ the session mark ══════════════════════════════════════════════════ */
+
+/* One object, two densities: a cell inside the whole-plan grid, a card on the
+   one-week board. Everything else about it is identical, which is the point —
+   the same session should not look like two components. */
+
+.zn-sess {
+  position: relative;
+  padding: var(--sp-2) var(--sp-3);
+
+  background: var(--surface-card);
+  border: var(--border-hair);
+  border-radius: var(--r-sm);
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-sess[data-density="card"] {
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  margin-block-end: var(--sp-2);
+}
+
+/* No aerobic zone behind it: the card sits on sunken paper, which is the same
+   statement the hollow dot makes at a smaller size. */
+.zn-sess[data-unzoned="true"] {
+  background: var(--surface-band);
+}
+
+/* Done: the single added hue, as an edge. */
+.zn-sess[data-status="completed"] {
+  border-color: var(--state-success);
+}
+
+/* Changed after the fact: full ink edge, no third colour. */
+.zn-sess[data-status="modified"] {
+  border-color: var(--line-strong);
+  border-width: var(--bw-rule);
+}
+
+.zn-sess[data-status="skipped"] {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+}
+
+/* Retained through a regeneration — the system's 2.5px vermillon frame, and
+   room on the right for the padlock that says so. */
+.zn-sess[data-locked="true"] {
+  border: var(--border-heavy);
+  padding-inline-end: var(--sp-10);
+}
+
+/* Race day. The plan's one destination, in vermillon type inside a vermillon
+   frame — an identifier, not a second accent fill. */
+.zn-sess[data-kind="race"] {
+  border: var(--border-heavy);
+  text-align: center;
+}
+
+/* An intermediate race is a race, but not the race: ink frame, same shape. */
+.zn-sess[data-kind="intermediate"] {
+  border: var(--border-rule);
+  text-align: center;
+}
+
+.zn-sess__flag {
+  display: block;
+  margin-inline: auto;
+  inline-size: var(--sp-7);
+  block-size: var(--sp-7);
+}
+
+.zn-sess[data-kind="race"] .zn-sess__flag {
+  color: var(--text-link);
+}
+
+.zn-sess__race-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.zn-sess[data-kind="race"] .zn-sess__race-label {
+  color: var(--text-link);
+}
+
+/* A / B / C priority: the ramp again — A is the accent, B is ink, C recedes. */
+.zn-sess__priority {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+}
+
+.zn-sess__priority[data-priority="A"] {
+  color: var(--text-link);
+}
+
+.zn-sess__priority[data-priority="B"] {
+  color: var(--text-body);
+}
+
+/* ── the mark itself ──────────────────────────────────────────────────── */
+
+/* Filled at the session's zone ink (handed in as --zn-dot by the component,
+   which reads lib/sessionColors.ts and therefore --zone-N), or hollow when the
+   session has no aerobic zone. The outline is there in both cases, so Z1 at
+   14% ink is still a visible object on cream. */
+.zn-sess__dot {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  flex: none;
+
+  background: var(--zn-dot, var(--surface-band));
+  border: var(--bw-hair) solid var(--line-strong);
+  border-radius: var(--r-pill);
+}
+
+.zn-sess__icon {
+  inline-size: var(--sp-6);
+  block-size: var(--sp-6);
+  flex: none;
+  color: var(--text-muted);
+}
+
+/* The zone's code next to its ink. The ramp orders the zones, it does not name
+   them, so the mark never travels without its Z-number. */
+.zn-sess__zone {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* A key session. Ink, not gold: the star's shape is the signal. */
+.zn-sess__key {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-body);
+}
+
+.zn-sess__key > svg {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+}
+
+.zn-sess__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-1);
+}
+
+.zn-sess__name {
+  font: var(--fw-medium) var(--fs-caption) / 1.25 var(--font-text);
+  color: var(--text-body);
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 2);
+  line-clamp: var(--lines, 2);
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.zn-sess__name[data-clickable="true"] {
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-sess__name[data-clickable="true"]:hover {
+  color: var(--text-link);
+}
+
+.zn-sess[data-status="skipped"] .zn-sess__name {
+  text-decoration: line-through;
+  color: var(--text-faint);
+}
+
+/* Duration, distance, load. Mono, tabular, and it stays on one line. */
+.zn-sess__facts {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-1);
+  overflow: hidden;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-sess__facts > svg {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  flex: none;
+}
+
+.zn-sess__facts-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Under 640px the cell has room for the duration and nothing else. */
+@media (max-width: 767px) {
+  .zn-sess__fact-wide {
+    display: none;
+  }
+}
+
+/* The clickable body of a cell-density session. */
+.zn-sess__body {
+  flex: 1;
+  min-inline-size: 0;
+  text-align: start;
+  cursor: pointer;
+}
+
+.zn-sess__body[data-clickable="false"] {
+  cursor: default;
+}
+
+/* ── the completion box ───────────────────────────────────────────────── */
+
+/* 14px is below the touch floor on purpose: it sits inside a card that is
+   itself the tap target on a phone, and the long-press menu carries the same
+   action. On a coarse pointer it grows to the floor anyway. */
+.zn-sess__check {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  inline-size: var(--sp-7);
+  block-size: var(--sp-7);
+  padding: 0;
+
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--bw-rule) solid var(--line-strong);
+  border-radius: var(--r-xs);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-sess__check > svg {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+}
+
+.zn-sess__check[data-status="completed"] {
+  background: var(--state-success);
+  border-color: var(--state-success);
+  color: var(--ok-fg);
+}
+
+/* Modified is a full ink inversion — the system's own "on" state. */
+.zn-sess__check[data-status="modified"] {
+  background: var(--surface-inverse);
+  border-color: var(--line-strong);
+  color: var(--text-inverse);
+}
+
+.zn-sess__check[data-status="skipped"] {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+  color: var(--state-disabled-text);
+}
+
+/* ── the per-card actions ─────────────────────────────────────────────── */
+
+/* Hover-only on a fine pointer; touch reaches all of them through the
+   long-press menu, so nothing is lost when they are hidden. */
+.zn-sess__actions {
+  position: absolute;
+  inset-block-start: var(--sp-2);
+  inset-inline-end: var(--sp-2);
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.zn-sess__action {
+  position: relative;
+  display: none;
+  padding: 0;
+  color: var(--text-faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-sess__action > svg {
+  inline-size: var(--sp-7);
+  block-size: var(--sp-7);
+  display: block;
+}
+
+.zn-sess:hover .zn-sess__action {
+  display: block;
+}
+
+.zn-sess__action:hover {
+  color: var(--text-link);
+}
+
+.zn-sess__action[data-variant="destructive"]:hover {
+  color: var(--state-danger);
+}
+
+/* Once a session is locked the padlock stays out: it is state, not an action
+   you have to go looking for. */
+.zn-sess__action[aria-pressed="true"] {
+  display: block;
+  color: var(--text-link);
+}
+
+@media (max-width: 767px) {
+  .zn-sess:hover .zn-sess__action:not([aria-pressed="true"]) {
+    display: none;
+  }
+}
+
+/* ══ one week, blown up ════════════════════════════════════════════════ */
+
+.zn-planweek {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-11);
+}
+
+/* ── week navigation ──────────────────────────────────────────────────── */
+
+.zn-planweek__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.zn-planweek__nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  inline-size: var(--sp-16);
+  block-size: var(--sp-16);
+  padding: 0;
+
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-planweek__nav-btn:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-planweek__nav-btn:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-planweek__nav-btn:disabled {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+.zn-planweek__nav-btn > svg {
+  inline-size: var(--sp-9);
+  block-size: var(--sp-9);
+}
+
+.zn-planweek__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+  text-align: center;
+}
+
+.zn-planweek__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-planweek__title {
+  font: var(--fw-semibold) var(--fs-h4) / 1.05 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-planweek__now {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-link);
+}
+
+.zn-planweek__sub {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* ── week-level actions ───────────────────────────────────────────────── */
+
+.zn-planweek__banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--state-success);
+}
+
+.zn-planweek__banner > svg {
+  inline-size: var(--sp-6);
+  block-size: var(--sp-6);
+  flex: none;
+}
+
+/* An outlined action pill in vermillon type — the accent as a line, not a
+   fill, because the screen's fill belongs to the primary action above. */
+.zn-planweek__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  align-self: center;
+
+  min-block-size: var(--sp-15);
+  padding: var(--sp-4) var(--sp-8);
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  color: var(--text-link);
+  background: var(--surface-card);
+  border: var(--bw-rule) solid var(--accent);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-planweek__pill:hover {
+  background: var(--accent-soft);
+}
+
+.zn-planweek__pill:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-planweek__pill > svg {
+  inline-size: var(--sp-7);
+  block-size: var(--sp-7);
+  flex: none;
+}
+
+/* ── the seven days ───────────────────────────────────────────────────── */
+
+.zn-planweek__board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+.zn-planweek__board[data-recovery="true"] {
+  background: var(--surface-band);
+}
+
+/* Phone: four days then three. Desktop: the week on one line. */
+.zn-planweek__row {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+
+.zn-planweek__week-row {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .zn-planweek__row {
+    display: none;
+  }
+  .zn-planweek__week-row {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--sp-4);
+    align-items: start;
+  }
+}
+
+.zn-planweek__day {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  min-block-size: 80px;
+  padding: var(--sp-4);
+
+  background: var(--surface-page);
+  border: var(--border-divider);
+  border-radius: var(--r-lg);
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.zn-planweek__day[data-desktop="true"],
+.zn-planweek__day[data-single-week="true"] {
+  min-block-size: 120px;
+}
+
+.zn-planweek__day[data-drop="true"] {
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+}
+
+.zn-planweek__day[data-blocked="true"] {
+  background-color: var(--surface-band);
+  background-image: var(--zone-recovery);
+}
+
+.zn-planweek__daylabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-planweek__date {
+  display: block;
+  margin-block-end: var(--sp-2);
+  text-align: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-planweek__date[data-today="true"],
+.zn-planweek__date[data-month-label="true"] {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+.zn-planweek__blocked-label {
+  display: block;
+  margin-block-end: var(--sp-1);
+  text-align: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-planweek__scan {
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+}
+
+.zn-planweek__empty {
+  display: block;
+  margin-block-start: var(--sp-8);
+  text-align: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  color: var(--state-disabled-text);
+}
+
+/* "Add something here" — a dashed outline is the system's mark for an empty
+   slot, the same one the illustration placeholder uses. */
+.zn-planweek__add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  inline-size: 100%;
+
+  padding: var(--sp-6);
+  color: var(--text-faint);
+  background: transparent;
+  border: var(--border-dashed);
+  border-radius: var(--r-md);
+  cursor: pointer;
+
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-planweek__add[data-slot="tail"] {
+  margin-block-start: var(--sp-2);
+  padding: var(--sp-4);
+}
+
+.zn-planweek__add:hover,
+.zn-planweek__add:active {
+  color: var(--text-link);
+  border-color: var(--accent);
+}
+
+.zn-planweek__add-kind {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+}
+
+.zn-planweek__add-plus {
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+}
+
+/* ══ drag-to-delete ════════════════════════════════════════════════════ */
+
+/* Only on screen while a session is in the air. It floats, so it is one of the
+   few places allowed the hard offset. Armed, it inverts to solid ink — the
+   system's "on", rather than a second vermillon fill. */
+.zn-plan-trash {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: var(--sp-20);
+  z-index: 50;
+
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  inline-size: fit-content;
+  margin-inline: auto;
+
+  padding: var(--sp-5) var(--sp-10);
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  color: var(--text-link);
+  background: var(--surface-card);
+  border: var(--bw-rule) solid var(--accent);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-block);
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+@media (min-width: 768px) {
+  .zn-plan-trash {
+    inset-block-end: var(--sp-14);
+  }
+}
+
+.zn-plan-trash[data-armed="true"] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-color: var(--line-strong);
+}
+
+.zn-plan-trash > svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  flex: none;
+}
+
+/* ══ the long-press / right-click menu ═════════════════════════════════ */
+
+/* The surface and the rows are dropdown-menu.css — this is the same object,
+   opened by a different gesture. Only the positioning and the hover state
+   (these are plain buttons, so there is no data-highlighted to read) live
+   here. */
+
+.zn-plan-menu__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.zn-plan-menu {
+  position: fixed;
+  z-index: 50;
+  transform: translate(-50%, var(--sp-2));
+}
+
+.zn-plan-menu .zn-menu__item:hover {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.zn-plan-menu .zn-menu__item[data-variant="destructive"]:hover {
+  background: var(--state-danger);
+  color: var(--accent-fg);
+}
+
+/* ══ the month chrome ══════════════════════════════════════════════════ */
+
+.zn-planmonth {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-11);
+}
+
+.zn-planmonth__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.zn-planmonth__title {
+  font: var(--fw-semibold) var(--fs-h4) / 1.05 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+/* ══ the workout catalogue you drag from ═══════════════════════════════ */
+
+.zn-planpanel {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+/* Docked beside the grid on a wide screen. */
+.zn-planpanel[data-mode="inline"] {
+  block-size: calc(100vh - 160px);
+}
+
+/* As a bottom sheet it floats, which is what earns it the hard offset. */
+.zn-planpanel[data-mode="sheet"] {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 30;
+  block-size: 60vh;
+
+  border-radius: var(--r-4xl) var(--r-4xl) 0 0;
+  box-shadow: var(--shadow-block);
+  transform: translateY(0);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-planpanel[data-mode="sheet"][data-open="false"] {
+  transform: translateY(100%);
+}
+
+@media (min-width: 768px) {
+  .zn-planpanel[data-mode="sheet"] {
+    display: none;
+  }
+}
+
+.zn-planpanel__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: var(--scrim);
+}
+
+@media (min-width: 768px) {
+  .zn-planpanel__scrim {
+    display: none;
+  }
+}
+
+.zn-planpanel__grip {
+  display: flex;
+  justify-content: center;
+  flex: none;
+  padding-block: var(--sp-4) var(--sp-2);
+  cursor: grab;
+}
+
+.zn-planpanel__grip::after {
+  content: "";
+  inline-size: var(--sp-15);
+  block-size: var(--bw-heavy);
+  border-radius: var(--r-pill);
+  background: var(--line-axis);
+}
+
+.zn-planpanel__body {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  min-block-size: 0;
+}
+
+.zn-planpanel__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex: none;
+
+  padding: var(--sp-5) var(--sp-8);
+  border-block-end: var(--border-divider);
+}
+
+.zn-planpanel__title {
+  font: var(--fw-semibold) var(--fs-body) / 1.2 var(--font-display);
+}
+
+.zn-planpanel__close {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  inline-size: var(--sp-14);
+  block-size: var(--sp-14);
+  padding: 0;
+
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-planpanel__close:hover {
+  color: var(--text-body);
+}
+
+.zn-planpanel__hint {
+  flex: none;
+  padding: var(--sp-4) var(--sp-8);
+  text-align: center;
+
+  font: var(--type-caption);
+  color: var(--text-muted);
+  background: var(--surface-band);
+  border-block-end: var(--border-divider);
+}
+
+.zn-planpanel__search {
+  position: relative;
+  flex: none;
+  padding: var(--sp-5) var(--sp-8);
+  border-block-end: var(--border-divider);
+}
+
+.zn-planpanel__search > svg {
+  position: absolute;
+  inset-inline-start: var(--sp-12);
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  inline-size: var(--sp-7);
+  block-size: var(--sp-7);
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.zn-planpanel__input {
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-5) var(--sp-6) var(--sp-5) var(--sp-14);
+
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  background: var(--surface-page);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-planpanel__input::placeholder {
+  color: var(--text-faint);
+}
+
+.zn-planpanel__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex: none;
+
+  padding: var(--sp-5) var(--sp-8);
+  border-block-end: var(--border-divider);
+}
+
+.zn-planpanel__select {
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-5) var(--sp-6);
+
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  background: var(--surface-page);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+}
+
+/* The favourites toggle: outlined off, fully inverted on. */
+.zn-planpanel__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  inline-size: var(--hit-min);
+  block-size: var(--hit-min);
+  padding: 0;
+
+  color: var(--text-muted);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-planpanel__toggle:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+.zn-planpanel__toggle:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-planpanel__toggle[aria-pressed="true"] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-color: var(--line-strong);
+}
+
+.zn-planpanel__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  flex: 1;
+  min-block-size: 0;
+  padding: var(--sp-5) var(--sp-6);
+  overflow-y: auto;
+}
+
+.zn-planpanel__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-block: var(--sp-14);
+  text-align: center;
+}
+
+.zn-planpanel__state > svg {
+  color: var(--text-faint);
+}
+
+/* The wait, and nothing else: an ink glyph turning at a steady rate. */
+.zn-planpanel__loader {
+  color: var(--text-muted);
+  animation: zoned-spin 700ms linear infinite;
+}
+
+/* One draggable row. Same paper and outline as any card in the app, at the
+   density of a list. */
+.zn-planpanel__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  inline-size: 100%;
+
+  padding: var(--sp-5);
+  text-align: start;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  user-select: none;
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-planpanel__item[data-draggable="true"] {
+  cursor: grab;
+}
+
+.zn-planpanel__item[data-draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.zn-planpanel__item:hover {
+  background: var(--surface-band);
+}
+
+.zn-planpanel__item:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-planpanel__item-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.zn-planpanel__item-name {
+  font: var(--fw-medium) var(--fs-body-sm) / 1.25 var(--font-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-planpanel__item-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-planpanel__item-meta > svg {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  flex: none;
+}
+
+.zn-planpanel__item-sub {
+  font: var(--type-caption);
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The six-dot grab mark. Ink at the faintest step, never an emoji. */
+.zn-planpanel__grab {
+  flex: none;
+  margin-block-start: var(--sp-1);
+  color: var(--text-faint);
+}
+
+/* ══ the volume sparkline ══════════════════════════════════════════════ */
+
+/* Weeks as bars on the ink ramp: what is done is dark, what is still ahead is
+   pale, and the week you are in is the one vermillon mark. The second channel
+   is height, which is the volume itself. */
+.zn-spark {
+  inline-size: 100%;
+}
+
+.zn-spark__svg {
+  display: block;
+}
+
+.zn-spark__bar {
+  fill: var(--zone-2);
+}
+
+.zn-spark__bar[data-when="past"] {
+  fill: var(--zone-4);
+}
+
+.zn-spark__bar[data-when="current"] {
+  fill: var(--accent);
+}
+
+.zn-spark__marker {
+  fill: var(--accent);
+}
+
+/* ══ one phase of a session ════════════════════════════════════════════ */
+
+.zn-phase__head {
+  padding-block-end: var(--sp-3);
+  border-block-end: var(--border-divider);
+}
+
+.zn-phase__label {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body) / 1.2 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-phase__summary {
+  margin-block-start: var(--sp-1);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-phase__meta {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* ══ the two view-mode selectors ═══════════════════════════════════════ */
+
+/* Both are .zn-segmented — they are segmented controls, and segmented.css
+   already reads the aria-checked they emit. What is left is the two things
+   only these two have: an icon-only variant, and options that exist only
+   where there is room for them. */
+
+.zn-viewmode__item[data-icon-only="true"] {
+  padding-inline: var(--sp-5);
+}
+
+.zn-viewmode__label {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .zn-viewmode__label {
+    display: inline;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 767px) {
+  .zn-viewmode__item[data-desktop-only="true"] {
+    display: none;
+  }
+}
+
+/* ══ the touch floor ═══════════════════════════════════════════════════ */
+
+/* WCAG 2.5.8. Tailwind carried none of this, which is how a 14px checkbox and
+   a 12px padlock ended up as the only way to close out a session on a phone. */
+@media (pointer: coarse) {
+  .zn-planweek__nav-btn,
+  .zn-planweek__pill,
+  .zn-planweek__add,
+  .zn-planpanel__close,
+  .zn-planpanel__item {
+    min-block-size: var(--hit-min);
+  }
+
+  /* The completion box and the card actions cannot simply grow: seven of them
+     sit in a four-column phone grid. They keep their drawn size and gain the
+     44px target as an invisible extension, which is what the guideline asks
+     for — a target that big, not a mark that big. */
+  .zn-sess__check::after,
+  .zn-sess__action::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--hit-min);
+    block-size: var(--hit-min);
+    transform: translate(-50%, -50%);
+  }
+}

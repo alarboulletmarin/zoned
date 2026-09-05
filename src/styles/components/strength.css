@@ -1,0 +1,545 @@
+/* Strength — the session card, its list rows, and the exercise sheet.
+ *
+ * Two encodings live here and they are deliberately NOT the same one:
+ *
+ *   INTENSITY is ordinal. mobility -> endurance -> hypertrophy -> strength ->
+ *   power is a ramp, and themes.css already binds it to the zone ink ramp
+ *   (--intensity-* == --zone-1/2/3/4/6). So intensity is painted exactly the
+ *   way a zone is: ink density, plus a second redundant channel — the height
+ *   of the step in .zn-str-meter, read straight off --zone-h-*. Nothing is
+ *   re-derived here; every value is one of those two token families.
+ *
+ *   MUSCLE GROUPS are categorical, and there are twelve of them. This system
+ *   has one accent and an ink ramp; it has no vocabulary for twelve
+ *   categories, and inventing eleven more hues would be inventing a second
+ *   design system. The twelve --muscle-* hues from themes.css therefore stay,
+ *   but demoted from a tinted fill to a 1.5px stroke: the badge is paper with
+ *   an ink label, and the hue only draws its outline. What the system CAN say
+ *   is said in ink — involvement is the stroke style and the label's ink
+ *   density (solid + body ink = primary, dashed + muted = secondary) — and
+ *   the ordinal/categorical split is said in the corner radius: intensity is
+ *   a squared chip like a zone badge, a muscle is a pill.
+ *
+ * The cards themselves are .zn-wcard (workout-card.css): a strength session in
+ * the library grid is the same piece of paper as a running one, so it reuses
+ * that shell rather than growing a twin. Only the strength-specific organs are
+ * below.
+ */
+
+/* ── intensity: the ordinal chip ──────────────────────────────────────── */
+
+.zn-intensity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: fit-content;
+  flex: none;
+  white-space: nowrap;
+
+  padding: 4px 9px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+  background: var(--zn-int-fill);
+  color: var(--zn-int-ink);
+}
+
+/* The five steps of the ramp, and the ink that stays legible on each. The
+   fill comes from --intensity-*, the text colour from the zone step that
+   token is bound to — the same Z1-Z3 dark / Z4+ cream rule as .zn-zone-badge. */
+.zn-intensity[data-intensity="mobility"]    { --zn-int-fill: var(--intensity-mobility);    --zn-int-ink: var(--zone-1-text); }
+.zn-intensity[data-intensity="endurance"]   { --zn-int-fill: var(--intensity-endurance);   --zn-int-ink: var(--zone-2-text); }
+.zn-intensity[data-intensity="hypertrophy"] { --zn-int-fill: var(--intensity-hypertrophy); --zn-int-ink: var(--zone-3-text); }
+.zn-intensity[data-intensity="strength"]    { --zn-int-fill: var(--intensity-strength);    --zn-int-ink: var(--zone-4-text); }
+.zn-intensity[data-intensity="power"]       { --zn-int-fill: var(--intensity-power);       --zn-int-ink: var(--zone-6-text); }
+
+.zn-intensity[data-size="sm"] {
+  padding: 3px 7px;
+  font-size: var(--fs-mono-xs);
+}
+
+.zn-intensity[data-size="lg"] {
+  padding: 6px 12px;
+  font-size: var(--fs-mono);
+}
+
+/* ── intensity: the five-step meter ───────────────────────────────────── */
+
+/* The card's profile strip, and the strength analogue of .zn-zonebar: same
+   36px box, same 2px gaps, same 3px inset. Five steps of the ramp, each drawn
+   at its own ink density AND its own height, so the level reads twice; the
+   steps past the session's level keep the outline and lose the fill. */
+.zn-str-meter {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-1);
+
+  block-size: 36px;
+  padding-inline: 3px;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.zn-str-meter__step {
+  flex: 1 1 0;
+  min-inline-size: var(--sp-1);
+
+  border: var(--border-hair);
+  border-block-end: none;
+  border-radius: 2px 2px 0 0;
+  block-size: var(--zn-step-h, 30%);
+}
+
+.zn-str-meter__step[data-reached="true"] {
+  background: var(--zn-step-fill);
+}
+
+.zn-str-meter__step[data-step="1"] { --zn-step-fill: var(--intensity-mobility);    --zn-step-h: var(--zone-h-1); }
+.zn-str-meter__step[data-step="2"] { --zn-step-fill: var(--intensity-endurance);   --zn-step-h: var(--zone-h-2); }
+.zn-str-meter__step[data-step="3"] { --zn-step-fill: var(--intensity-hypertrophy); --zn-step-h: var(--zone-h-3); }
+.zn-str-meter__step[data-step="4"] { --zn-step-fill: var(--intensity-strength);    --zn-step-h: var(--zone-h-4); }
+.zn-str-meter__step[data-step="5"] { --zn-step-fill: var(--intensity-power);       --zn-step-h: var(--zone-h-6); }
+
+/* ── muscle: the categorical pill ─────────────────────────────────────── */
+
+/* Paper fill, ink label, and the muscle's own hue as the stroke — see the file
+   header. --zn-muscle is handed in inline by the component, which is the same
+   escape hatch the app already uses for every zone colour. */
+.zn-muscle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: fit-content;
+  flex: none;
+  white-space: nowrap;
+
+  padding: 3px 9px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--bw-rule) solid var(--zn-muscle, var(--line-divider));
+  border-radius: var(--r-pill);
+}
+
+/* Involvement, in ink: a secondary muscle keeps its hue but loses the solid
+   rule and drops a step of text density. */
+.zn-muscle[data-involvement="secondary"] {
+  border-style: dashed;
+  color: var(--text-muted);
+  font-weight: var(--fw-regular);
+}
+
+/* The "+3 more" tail carries no hue at all — it names no muscle. */
+.zn-muscle[data-involvement="more"] {
+  color: var(--text-faint);
+  font-weight: var(--fw-regular);
+}
+
+.zn-muscle[data-size="sm"] {
+  padding: 2px 7px;
+  font-size: var(--fs-mono-xs);
+}
+
+.zn-muscle[data-size="lg"] {
+  padding: 5px 12px;
+  font-size: var(--fs-mono);
+}
+
+/* ── the list row ─────────────────────────────────────────────────────── */
+
+/* A strength session in the library's list view. Paper on paper: an outline,
+   a colour-only hover, and the 1px press. Nothing lifts and nothing grows a
+   shadow — that is reserved for floating surfaces. */
+.zn-str-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  text-decoration: none;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-str-row:hover {
+  background: var(--surface-band);
+}
+
+.zn-str-row:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-str-row__name {
+  display: block;
+  font: var(--type-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The phone line: the one fact that does not fit the wide row. */
+.zn-str-row__small {
+  margin-block-start: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* The wide row's facts, on a ch grid so the columns line up down the list
+   without a table. Hidden on a phone, where the row keeps only its name. */
+.zn-str-row__facts {
+  display: none;
+  align-items: center;
+  gap: var(--sp-8);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-str-row__col {
+  inline-size: var(--col, 12ch);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .zn-str-row__facts { display: flex; }
+  .zn-str-row__small { display: none; }
+}
+
+@media (pointer: coarse) {
+  .zn-str-row { min-block-size: var(--hit-min); }
+}
+
+/* ── the exercise sheet ───────────────────────────────────────────────── */
+
+/* One exercise inside a phase. A nested item, so a smaller radius and the
+   sunken paper: it reads as something set into the phase card rather than a
+   second card floating on it. */
+.zn-exercise {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-6);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* The image pair sits beside the details on a wide screen and under them on a
+   phone, where the row would squeeze the text to nothing. */
+.zn-exercise__wide { display: none; }
+.zn-exercise__narrow { display: block; }
+
+@media (min-width: 640px) {
+  .zn-exercise__wide { display: block; }
+  .zn-exercise__narrow { display: none; }
+}
+
+.zn-exercise__skeleton {
+  block-size: 96px;
+  border-radius: var(--r-xl);
+}
+
+.zn-exercise__name {
+  margin: 0;
+  font: var(--type-label);
+}
+
+/* "(par côté)" — a qualifier on the name, not a fact of its own. */
+.zn-exercise__aside {
+  font: var(--type-caption);
+  font-size: var(--fs-mono-xs);
+  color: var(--text-faint);
+}
+
+/* Sets x reps: the loudest number on the row, so it is mono and bold. */
+.zn-exercise__dose {
+  display: block;
+  text-align: end;
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-exercise__rest {
+  display: block;
+  text-align: end;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+}
+
+/* RPE and %1RM: measured facts, drawn as data chips rather than badges. */
+.zn-exercise__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+
+  border: var(--border-divider);
+  border-radius: var(--r-sm);
+}
+
+.zn-exercise__note {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-faint);
+}
+
+/* The form-cues disclosure. A text control: no fill, the chevron says the
+   rest. Hover is colour only. */
+.zn-exercise__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  font: var(--type-caption);
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-exercise__toggle:hover {
+  color: var(--text-body);
+}
+
+.zn-exercise__toggle:active {
+  transform: translateY(var(--press-shift));
+}
+
+@media (pointer: coarse) {
+  .zn-exercise__toggle { min-block-size: var(--hit-min); }
+}
+
+.zn-exercise__cues {
+  margin: var(--sp-3) 0 0;
+  padding-inline-start: var(--sp-6);
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* An ink tick rather than a bullet dot — the same 1.5px rule everything else
+   on the page is drawn with. */
+.zn-exercise__cues > li {
+  position: relative;
+  padding-inline-start: var(--sp-5);
+}
+
+.zn-exercise__cues > li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.62em;
+  inline-size: var(--sp-3);
+  border-block-start: var(--border-rule);
+}
+
+/* A superset is a bracket around consecutive exercises: the dashed ink rule
+   the system already uses for anything provisional. */
+.zn-superset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+
+  border: var(--border-dashed);
+  border-radius: var(--r-xl);
+}
+
+/* ── exercise images ──────────────────────────────────────────────────── */
+
+/* Two frames, A then B. Raw pixel heights: the design bundle states no size
+   for a photographic thumbnail, and 4:3 at 64/96/128 is the geometry the
+   existing images were cut for. */
+.zn-eximg {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  inline-size: fit-content;
+}
+
+.zn-eximg[data-size="sm"] { --zn-eximg-h: 64px; }
+.zn-eximg[data-size="md"] { --zn-eximg-h: 96px; }
+.zn-eximg[data-size="lg"] { --zn-eximg-h: 128px; }
+
+.zn-eximg[data-zoomable="true"] {
+  cursor: pointer;
+}
+
+.zn-eximg__frame {
+  display: block;
+  block-size: var(--zn-eximg-h, 96px);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  flex: none;
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+}
+
+.zn-eximg__arrow {
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* The empty frame: the cream 45 degree hatch behind a dashed outline, which is
+   the system's mark for a slot with nothing in it yet. */
+.zn-eximg__ph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.zn-eximg__slot {
+  display: grid;
+  place-items: center;
+  block-size: var(--zn-eximg-h, 96px);
+  aspect-ratio: 4 / 3;
+
+  background: var(--fill-slot);
+  border: var(--border-dashed);
+  border-radius: var(--r-md);
+  color: var(--text-faint);
+}
+
+.zn-eximg__caption {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ── the zoom view ────────────────────────────────────────────────────── */
+
+/* A floating surface, so this is one of the few places --shadow-block is
+   allowed. Flat ink wash behind it: the system has no blur. */
+.zn-exzoom {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-10);
+
+  background: var(--scrim);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.zn-exzoom[data-visible="true"] {
+  opacity: 1;
+}
+
+.zn-exzoom__panel {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 860px;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-4xl);
+  box-shadow: var(--shadow-block);
+}
+
+.zn-exzoom__title {
+  margin: 0;
+  font: var(--type-h3);
+  /* keeps a long name clear of the close button */
+  padding-inline-end: var(--sp-15);
+}
+
+.zn-exzoom__pair {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-8);
+}
+
+.zn-exzoom__pair img {
+  max-block-size: 46vh;
+  max-inline-size: 100%;
+  object-fit: contain;
+
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-exzoom__pair > svg {
+  flex: none;
+  color: var(--text-faint);
+  transform: rotate(90deg);
+}
+
+@media (min-width: 640px) {
+  .zn-exzoom__pair {
+    flex-direction: row;
+  }
+  .zn-exzoom__pair > svg {
+    transform: none;
+  }
+  .zn-exzoom__pair img {
+    max-block-size: 60vh;
+    max-inline-size: 42%;
+  }
+}

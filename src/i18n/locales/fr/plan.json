@@ -1,9 +1,9 @@
 {
   "shared": {
     "title": "Plan partagé",
-    "subtitle": "Ce plan a été partagé avec vous. Il a été régénéré à partir des paramètres du lien.",
+    "subtitle": "Ce plan a été partagé avec toi. Il a été régénéré à partir des paramètres du lien.",
     "add": "Ajouter à mes plans",
-    "added": "Plan ajouté à vos plans",
+    "added": "Plan ajouté à tes plans",
     "generating": "Génération du plan…",
     "invalid": "Ce lien de partage est invalide ou incomplet.",
     "backToPlans": "Mes plans",
@@ -32,7 +32,7 @@
   },
   "empty": {
     "title": "Pas encore de plan",
-    "description": "Créez votre premier plan d'entraînement personnalisé",
+    "description": "Crée ton premier plan d'entraînement personnalisé",
     "cta": "Créer mon premier plan"
   },
   "step": {
@@ -45,8 +45,8 @@
     "summary": "Récapitulatif"
   },
   "purpose": {
-    "title": "Quel est votre objectif ?",
-    "subtitle": "On adapte le plan à votre situation",
+    "title": "Quel est ton objectif ?",
+    "subtitle": "On adapte le plan à ta situation",
     "race": "Préparer une course",
     "raceDesc": "Plan personnalisé pour un objectif précis (5K au marathon)",
     "baseBuilding": "Construire ma base",
@@ -57,7 +57,7 @@
     "beginnerStartDesc": "Programme progressif pour se lancer en courant"
   },
   "goal": {
-    "title": "Dans quel état d'esprit êtes-vous ?",
+    "title": "Dans quel état d'esprit es-tu ?",
     "subtitle": "Cela ajuste l'intensité et le volume du plan",
     "finish": "Finir la course",
     "finishDesc": "Plan conservateur, plus de volume facile, progression douce",
@@ -67,18 +67,18 @@
     "competeDesc": "Plan ambitieux, plus d'intensité, volume élevé"
   },
   "fitness": {
-    "title": "Votre forme actuelle",
-    "subtitle": "Ça nous aide à définir le bon volume de départ. Passez si vous n'êtes pas sûr.",
+    "title": "Ta forme actuelle",
+    "subtitle": "Ça nous aide à définir le bon volume de départ. Passe si tu n'es pas sûr.",
     "weeklyKm": "Volume hebdomadaire (km)",
-    "weeklyKmDesc": "Combien de km courez-vous par semaine actuellement ?",
+    "weeklyKmDesc": "Combien de km cours-tu par semaine actuellement ?",
     "weeklyKmPlaceholder": "ex. 30",
     "longRunKm": "Plus longue sortie récente (km)",
-    "longRunKmDesc": "Votre plus longue course des 2-3 dernières semaines",
+    "longRunKmDesc": "Ta plus longue course des 2-3 dernières semaines",
     "longRunKmPlaceholder": "ex. 12"
   },
   "duration": {
     "title": "Combien de temps ?",
-    "subtitle": "Choisissez la durée de votre plan",
+    "subtitle": "Choisis la durée de ton plan",
     "weeks": "semaines",
     "weeksShort": "sem"
   },
@@ -87,15 +87,15 @@
     "subtitle": "Combien de séances par semaine ?",
     "sessionsPerWeek": "Séances par semaine",
     "longRunDay": "Jour de la sortie longue",
-    "longRunDayDesc": "Votre sortie longue hebdomadaire — la séance clé d'endurance",
+    "longRunDayDesc": "Ta sortie longue hebdomadaire — la séance clé d'endurance",
     "includeStrength": "Inclure le renforcement",
     "includeStrengthDesc": "Ajouter des séances adaptées à chaque phase",
     "strengthFrequency": "Fréquence renforcement",
     "strengthPerWeek": "{{n}}x / sem"
   },
   "distance": {
-    "title": "Choisissez votre distance",
-    "subtitle": "Pour quelle course vous entraînez-vous ?"
+    "title": "Choisis ta distance",
+    "subtitle": "Pour quelle course t'entraînes-tu ?"
   },
   "date": {
     "title": "Quand a lieu la course ?",
@@ -112,15 +112,15 @@
   },
   "raceName": {
     "title": "Nom de la course",
-    "subtitle": "Optionnel - vous pouvez passer cette étape",
+    "subtitle": "Optionnel - tu peux passer cette étape",
     "placeholder": "ex. Marathon de Paris",
     "skip": "Passer",
     "label": "Nom de la course"
   },
   "level": {
-    "title": "Votre niveau de course",
+    "title": "Ton niveau de course",
     "subtitle": "Cela détermine l'intensité des séances",
-    "vmaSuggestion": "Basé sur votre VMA de {{vma}} km/h, nous suggérons le niveau ",
+    "vmaSuggestion": "Basé sur ta VMA de {{vma}} km/h, nous suggérons le niveau ",
     "vmaSuggestionSuffix": "",
     "beginner": "Débutant",
     "beginnerDesc": "1 à 2 sorties/semaine · moins de 15 km/semaine",
@@ -134,13 +134,13 @@
   },
   "config": {
     "title": "Configuration",
-    "subtitle": "Personnalisez votre entraînement",
+    "subtitle": "Personnalise ton entraînement",
     "daysPerWeek": "Jours par semaine",
     "longRunDay": "Jour de sortie longue"
   },
   "pace": {
     "title": "Allure & Dénivelé",
-    "subtitle": "Optionnel - vous pouvez passer cette étape",
+    "subtitle": "Optionnel - tu peux passer cette étape",
     "trailHint": "Le dénivelé est important pour un entraînement trail adapté",
     "targetPace": "Allure cible",
     "targetTime": "Temps cible",
@@ -160,7 +160,7 @@
   },
   "summary": {
     "title": "Récapitulatif",
-    "subtitle": "Vérifiez vos choix avant de générer le plan",
+    "subtitle": "Vérifie tes choix avant de générer le plan",
     "distance": "Distance",
     "date": "Date de course",
     "startDate": "Début",
@@ -190,7 +190,7 @@
   },
   "seo": {
     "createTitle": "Créer un plan d'entraînement",
-    "createDescription": "Créez un plan d'entraînement personnalisé pour votre prochaine course."
+    "createDescription": "Crée un plan d'entraînement personnalisé pour ta prochaine course."
   },
   "view": {
     "title": "Mon plan",
@@ -229,8 +229,8 @@
     "replaceSession": "Remplacer la séance",
     "substituteSession": "Remplacer par vélo ou natation",
     "substituteTitle": "Remplacer par une autre discipline",
-    "substituteDescription": "Charge cible : ~{{tss}} TSS. Les séances proposées sont dans une tolérance de ±20 %.",
-    "substituteDescriptionNoTss": "Choisissez une séance équivalente en vélo ou natation.",
+    "substituteDescription": "Charge cible ~{{tss}} TSS, tolérance ±20 %.",
+    "substituteDescriptionNoTss": "Choisis une séance équivalente en vélo ou en natation.",
     "substituteCycling": "Vélo",
     "substituteSwimming": "Natation",
     "substituteNoMatches": "Aucune séance équivalente dans cette tolérance.",
@@ -238,7 +238,7 @@
     "substituteMatchExact": "match exact",
     "substituteMatchDeviation": "±{{deviation}} %",
     "substituteLongRunWarningTitle": "Sortie longue : substitution en mode dégradé",
-    "substituteLongRunWarningBody": "La sortie longue à pied développe des adaptations orthopédiques (capillarisation tendineuse, économie de course, tolérance à l'impact) que le vélo ou la natation ne reproduisent pas. À utiliser quand la course est impossible (blessure, météo, voyage), pas comme alternative régulière.",
+    "substituteLongRunWarningBody": "Le vélo et la natation ne reproduisent pas les adaptations orthopédiques de la sortie longue. Garde ce remplacement pour les semaines où courir est impossible.",
       "sessionSubstituted": "Séance substituée",
       "findRoute": "Trouver un parcours adapté",
       "findWeekRoute": "Parcours pour cette semaine",
@@ -251,7 +251,7 @@
     "rightClickOptions": "Clic droit pour les options · Glisser pour déplacer",
     "longPressOptions": "Appui long pour les options · Glisser pour déplacer",
     "editDatesTitle": "Modifier les dates",
-    "editDatesDescription": "Définissez une date de début pour votre plan. La date de fin est calculée automatiquement.",
+    "editDatesDescription": "Définis une date de début pour ton plan. La date de fin est calculée automatiquement.",
     "startDate": "Date de début",
     "startNextMonday": "Commencer lundi prochain",
     "startLabel": "Début",
@@ -267,7 +267,7 @@
     "completed": "Fait",
     "skipped": "Passé",
     "modified": "Modifiée",
-    "hint": "Cliquez sur la case pour clôturer la séance",
+    "hint": "Clique sur la case pour clôturer la séance",
     "validate": "Valider la semaine ({{done}}/{{total}} faites)",
     "validated": "Semaine validée",
     "weekValidated": "Semaine {{week}} validée !",
@@ -275,7 +275,7 @@
     "toggleDone": "Clôturer la séance",
     "completedCount": "{{done}}/{{total}} terminées",
     "confirmTitle": "Finaliser cette semaine ?",
-    "confirmDescription": "La semaine {{week}} contient encore {{count}} séance(s) non renseignée(s). Choisissez si vous voulez les marquer explicitement comme passées ou y revenir plus tard.",
+    "confirmDescription": "La semaine {{week}} contient encore {{count}} séance(s) non renseignée(s). Choisis si tu veux les marquer explicitement comme passées ou y revenir plus tard.",
     "markRemainingSkipped": "Marquer les restantes comme passées",
     "keepForLater": "Laisser non renseignées",
     "keptForLater": "{{count}} séance(s) restent non renseignée(s) pour plus tard",
@@ -343,7 +343,9 @@
     "peakLongRun": "Pic sortie longue",
     "longRun": "SL",
     "wk": "sem",
-    "sessionsLower": "séances"
+    "sessionsLower": "séances",
+    "analysisFailed": "Analyse détaillée indisponible",
+    "analysisFailedBody": "Le calcul par zone n'a pas abouti. Le plan et ses séances restent intacts. Recharge la page pour relancer l'analyse."
   },
   "calendar": {
     "now": "ACTUEL",
@@ -398,7 +400,7 @@
     "list": "Liste"
   },
   "monthlyView": {
-    "noStartDate": "Définissez une date de début pour afficher la vue mensuelle",
+    "noStartDate": "Définis une date de début pour afficher la vue mensuelle",
     "setStartDate": "Définir la date",
     "previousMonth": "Mois précédent",
     "nextMonth": "Mois suivant"
@@ -410,32 +412,32 @@
   "workoutPanel": {
     "title": "Ajouter une séance",
     "close": "Fermer",
-    "hintClick": "Cliquez sur une séance pour l'ajouter à votre plan",
-    "hintDrag": "Glissez une séance sur le calendrier pour l'ajouter",
-    "hintTap": "Appuyez sur une séance pour l'ajouter",
+    "hintClick": "Clique sur une séance pour l'ajouter à ton plan",
+    "hintDrag": "Glisse une séance sur le calendrier pour l'ajouter",
+    "hintTap": "Appuie sur une séance pour l'ajouter",
     "searchPlaceholder": "Rechercher une séance...",
     "favoritesOnly": "Favoris uniquement",
     "noFavoriteStrength": "Aucune séance de renfo en favoris",
     "noMatchingStrength": "Aucune séance de renfo correspondante",
     "noFavorites": "Aucune séance en favoris",
     "noMatching": "Aucune séance correspondante",
-    "favoritesHint": "Ajoutez d'abord des séances en favoris depuis la bibliothèque"
+    "favoritesHint": "Ajoute d'abord des séances en favoris depuis la bibliothèque"
   },
   "plansPage": {
     "title": "Mes Plans d'Entraînement",
-    "subtitle": "Des plans structurés pour atteindre vos objectifs",
-    "science": "La science derrière vos plans",
+    "subtitle": "Des plans structurés pour atteindre tes objectifs",
+    "science": "La science derrière tes plans",
     "whatIf": "Simulateur what-if",
     "maxReached": "Limite de 5 plans atteinte",
     "import": "Importer",
-    "importMaxError": "Maximum 5 plans. Supprimez-en un d'abord.",
+    "importMaxError": "Maximum 5 plans. Supprime-en un d'abord.",
     "importSuccess": "Plan importé !",
     "importInvalid": "Fichier de plan invalide",
     "importReadError": "Impossible de lire le fichier",
     "view": "Voir",
-    "buildArc": "Construisez votre progression",
-    "buildArcDesc": "Définissez un objectif, choisissez votre course, et on structure le chemin.",
-    "createFirst": "Créer votre premier plan",
+    "buildArc": "Construis ta progression",
+    "buildArcDesc": "Définis un objectif, choisis ta course, et on structure le chemin.",
+    "createFirst": "Créer ton premier plan",
     "deleteTitle": "Supprimer ce plan ?",
     "deleteConfirm": "\"{{name}}\" sera définitivement supprimé. Cette action est irréversible.",
     "deleteButton": "Supprimer",
@@ -560,7 +562,8 @@
     "applied": "Replanification appliqu\u00e9e",
     "undo": "Annuler",
     "undone": "Replanification annul\u00e9e",
-    "blockedDrop": "Ce jour est indisponible"
+    "blockedDrop": "Ce jour est indisponible",
+    "skippedIntact": "Le reste du plan ne bouge pas, et tu peux annuler juste après."
   },
   "crossTraining": {
     "cycling": "Vélo",
@@ -586,7 +589,10 @@
     "goToWeek": "Voir la semaine {{week}}",
     "fix": "Corriger",
     "fixApplied": "Correction appliqu\u00e9e",
-    "fixFailed": "Impossible d'appliquer la correction automatique"
+    "fixFailed": "Impossible d'appliquer la correction automatique",
+    "intact": "Le plan reste utilisable.",
+    "showList": "Voir le détail",
+    "hideList": "Masquer le détail"
   },
   "adaptation": {
     "title": "Adaptation du plan",
@@ -621,16 +627,16 @@
     "qualityPeak": "Ajouter une s\u00e9ance au seuil ou \u00e0 allure sp\u00e9cifique",
     "qualityPeak2": "Ajouter une 2e s\u00e9ance qualit\u00e9 (tempo, VO2max)",
     "qualityTaper": "Ajouter un rappel d'allure sp\u00e9cifique (court)",
-    "recoveryWeekNote": "Semaine all\u00e9g\u00e9e : privil\u00e9giez les s\u00e9ances faciles, pas d'intensit\u00e9",
-    "phaseBase": "Phase de base \u2014 Construisez votre endurance fondamentale avec du volume facile.",
-    "phaseBuild": "Phase de construction \u2014 Augmentez progressivement l'intensit\u00e9 avec des s\u00e9ances qualit\u00e9.",
-    "phasePeak": "Phase de pic \u2014 Aff\u00fbtez vos allures sp\u00e9cifiques, vous approchez de la forme maximale.",
-    "phaseTaper": "Phase d'aff\u00fbtage \u2014 R\u00e9duisez le volume, gardez un peu d'intensit\u00e9 pour rester frais.",
-    "phaseRecovery": "Semaine de r\u00e9cup\u00e9ration \u2014 Laissez votre corps absorber les adaptations."
+    "recoveryWeekNote": "Semaine all\u00e9g\u00e9e : privil\u00e9gie les s\u00e9ances faciles, pas d'intensit\u00e9",
+    "phaseBase": "Phase de base \u2014 Construis ton endurance fondamentale avec du volume facile.",
+    "phaseBuild": "Phase de construction \u2014 Augmente progressivement l'intensit\u00e9 avec des s\u00e9ances qualit\u00e9.",
+    "phasePeak": "Phase de pic \u2014 Aff\u00fbte tes allures sp\u00e9cifiques, tu approches de la forme maximale.",
+    "phaseTaper": "Phase d'aff\u00fbtage \u2014 R\u00e9duis le volume, garde un peu d'intensit\u00e9 pour rester frais.",
+    "phaseRecovery": "Semaine de r\u00e9cup\u00e9ration \u2014 Laisse ton corps absorber les adaptations."
   },
   "intermediateGoals": {
     "title": "Courses interm\u00e9diaires",
-    "subtitle": "Ajoutez des courses de pr\u00e9paration avant votre objectif principal",
+    "subtitle": "Ajoute des courses de pr\u00e9paration avant ton objectif principal",
     "add": "Ajouter une course",
     "remove": "Retirer",
     "skip": "Passer cette \u00e9tape",

@@ -69,6 +69,7 @@
       "downloaded": "Image saved",
       "copied": "Image copied to clipboard",
       "linkCopied": "Link copied to clipboard",
+      "linkCopyFailed": "Copy blocked by your browser. Try again.",
       "copyUnsupported": "Image copy requires HTTPS (use Save or Share)",
       "loading": "Generating image…",
       "error": "Generation failed"
@@ -83,17 +84,19 @@
     "garmin": "Garmin (FIT)",
     "selectDateTime": "Select date and time",
     "download": "Download",
+    "dateLabel": "Date",
+    "timeLabel": "Time",
     "success": {
       "calendar": "Calendar event exported",
-      "image": "Image exported successfully",
+      "image": "Image exported",
       "pdf": "PDF document exported",
       "garmin": "Garmin file exported"
     },
     "error": {
-      "calendar": "Failed to export calendar event",
-      "image": "Failed to export image",
-      "pdf": "Failed to export PDF",
-      "garmin": "Failed to export Garmin file"
+      "calendar": "Calendar export failed. Try again.",
+      "image": "Image export failed. Try again.",
+      "pdf": "PDF export failed. Try again.",
+      "garmin": "Garmin export failed. Try again."
     },
     "loading": {
       "calendar": "Generating calendar…",
@@ -440,15 +443,18 @@
     },
     "data": {
       "title": "Your data",
-      "description": "Export or restore your data (favorites, plans, zones, settings)",
+      "description": "Everything lives in this browser: profile, favorites, plans, zones. Clearing the cache erases it.",
       "exportButton": "Export my data",
       "importButton": "Restore my data",
-      "exportSuccess": "Data exported successfully",
-      "importSuccess": "Data restored successfully. The page will reload.",
-      "importError": "Couldn't restore your data (not enough storage or corrupted backup). No changes were kept.",
-      "invalidFile": "Invalid file. Use a file exported by Zoned.",
+      "exportSuccess": "Backup exported",
+      "importSuccess": "Data restored. The page is reloading.",
+      "importError": "Restore failed. Your data is untouched, nothing changed.",
+      "invalidFile": "Nothing changed, your profile and plan are intact. Pick a .json exported from Zoned.",
+      "invalidFileTitle": "This file is not a Zoned backup",
+      "chooseAnotherFile": "Choose another file",
+      "reading": "Reading the file",
       "confirmTitle": "Restore data?",
-      "confirmDescription": "Choose how to apply the backup before restoring your Zoned data.",
+      "confirmDescription": "Choose how to apply the backup.",
       "confirmButton": "Restore",
       "restoreModeLabel": "Restore mode",
       "replaceModeTitle": "Replace",
@@ -491,9 +497,9 @@
     "footerLink": "Support"
   },
   "storageWarning": {
-    "title": "Your data is stored locally",
-    "description": "Zoned uses no server. Your favorites, plans and settings are saved only in your browser.",
-    "warning": "If you clear your browser cache, all your data will be lost.",
+    "title": "Your data stays on this device",
+    "description": "Zoned has no server. Favorites, plans and settings live in your browser.",
+    "warning": "Clearing the browser cache erases them. Export a backup first.",
     "exportButton": "Export my data",
     "understand": "I understand"
   },
@@ -758,11 +764,11 @@
   },
   "pwa": {
     "installTitle": "Install Zoned",
-    "installDesc": "Access Zoned directly from your home screen, even offline.",
+    "installDesc": "Zoned on your home screen, and available offline.",
     "install": "Install",
     "dismiss": "Later",
     "updateTitle": "Update available",
-    "updateAvailable": "A new version of Zoned is available.",
+    "updateAvailable": "A new version is ready. Your work in progress is kept.",
     "update": "Update",
     "offline": "You are offline. Your data remains accessible.",
     "backOnline": "Back online."
