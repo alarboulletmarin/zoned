@@ -1,0 +1,374 @@
+/* The workout library screen.
+
+   The page reads top to bottom as one sheet of paper: a mono count, the title,
+   the search; then a discipline strip sitting on a full-width ink rule; then
+   the filters; then the zone legend on a sunken band; then the results. Every
+   band is separated by a rule rather than by blank space — that is what makes
+   a long scroll read as a printed page instead of a feed.
+
+   The screen lives inside the shell's centred column, which already pays the
+   40px (20px mobile) side margin, so the bands do NOT bleed out of it: a
+   negative inline margin here would overflow the viewport at every width
+   between --page-max and --page-max + 2 x the margin, and the page must never
+   scroll sideways. "Full width" on this screen means the width of the column,
+   and every rule runs from one of its edges to the other. */
+
+.zn-lib {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── header ───────────────────────────────────────────────────────────── */
+
+/* Content and search, bottom-aligned: the pill sits on the title's baseline
+   block, not floating above it. */
+.zn-lib__head {
+  align-items: end;
+  padding-block-start: var(--sp-10);
+}
+
+@media (max-width: 900px) {
+  .zn-lib__head {
+    gap: var(--sp-10);
+  }
+}
+
+/* ── search ───────────────────────────────────────────────────────────── */
+
+.zn-lib__search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+
+  /* 12/16 and a 44px floor: the geometry the design's Input states. */
+  padding: 12px 16px;
+  min-block-size: var(--hit-min);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--text-body);
+}
+
+/* The ring is moved, not removed: the drawn pill is the control, so the
+   outline frames the pill instead of the bare text box inside it. */
+.zn-lib__search:has(.zn-lib__search-input:focus-visible) {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-lib__search-glyph {
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-lib__search-input {
+  flex: 1;
+  min-inline-size: 0;
+  border: none;
+  background: transparent;
+  font: var(--type-body);
+  color: inherit;
+}
+
+.zn-lib__search-input:focus-visible {
+  outline: none;
+}
+
+.zn-lib__search-input::placeholder {
+  color: var(--text-faint);
+}
+
+/* Safari draws its own cancel button inside a type=search field. */
+.zn-lib__search-input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.zn-lib__search-clear {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 22px;
+  block-size: 22px;
+  flex: none;
+
+  padding: 0;
+  border: none;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-lib__search-clear:hover {
+  color: var(--ink-1);
+}
+
+/* A 44px target without a 44px box, the same trick the favourite toggle uses. */
+.zn-lib__search-clear::after {
+  content: "";
+  position: absolute;
+  inset: -11px;
+}
+
+/* ── discipline strip ─────────────────────────────────────────────────── */
+
+.zn-lib__strip {
+  margin-block-start: var(--sp-13);
+}
+
+/* Composed onto .zn-tabs__list — same rule, same triggers, plus the wrap and
+   the meta string the library needs on the right. Both classes are named in
+   the selector on purpose: tabs.css is imported after this file, and a single
+   class would lose the tie to the list's own alignment and gap. */
+.zn-tabs__list.zn-lib__tabs {
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-6);
+}
+
+/* The disciplines own their own radiogroup, so the view-mode control next to
+   them is not read as one more discipline. They stretch to the list's height
+   because the active trigger's 2.5px marker has to land on the list rule. */
+.zn-lib__disciplines {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.zn-lib__meta {
+  margin-inline-start: auto;
+  align-self: center;
+  padding-block-end: var(--sp-4);
+  color: var(--text-faint);
+}
+
+.zn-lib__viewmode {
+  align-self: center;
+  margin-block-end: var(--sp-4);
+}
+
+/* ── filters ──────────────────────────────────────────────────────────── */
+
+.zn-lib__filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-9);
+  padding-block: var(--sp-13);
+  border-block-end: var(--border-rule);
+}
+
+.zn-lib__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+/* The mono gutter every filter row hangs off.
+
+   The reference kit states 88px, sized for "Catégorie" and "Niveau". This app
+   also filters by strength family, and "RENFORCEMENT" at 11px mono with 0.14em
+   tracking measures ~98px — it overflowed onto the first chip. 104px fits the
+   longest label the catalogue actually produces and keeps every row aligned on
+   one gutter, which is the point of the rule. */
+.zn-lib__rowlabel {
+  inline-size: 104px;
+  flex: none;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .zn-lib__rowlabel {
+    inline-size: 100%;
+  }
+}
+
+/* The last row: duration, the favourites switch, then the ghost clear button
+   pushed to the far end. */
+.zn-lib__controls {
+  gap: var(--sp-13);
+}
+
+.zn-lib__duration {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 260px;
+  max-inline-size: 100%;
+}
+
+.zn-lib__duration .zn-slider {
+  flex: 1;
+}
+
+.zn-lib__duration-value {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.zn-lib__switch {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: var(--hit-min);
+  cursor: pointer;
+}
+
+/* ── chips ────────────────────────────────────────────────────────────── */
+
+/* A filter value the athlete switches on or off. Selected is a FULL ink
+   inversion, never a tint: a tinted chip and an unselected one are the same
+   shape in greyscale, and this system has to survive greyscale. */
+.zn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+
+  min-block-size: 40px;
+  padding: 8px 15px;
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1.2 var(--font-text);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--ink-1);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-chip:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-chip[aria-checked="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-chip[aria-checked="true"]:hover:not(:disabled) {
+  background: var(--ink-2);
+}
+
+.zn-chip:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-chip:disabled {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+/* "+5 more": a hole in the row, so it is dashed like every other absence. */
+.zn-chip--more {
+  border-style: dashed;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+}
+
+@media (pointer: coarse) {
+  .zn-chip {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── zone legend ──────────────────────────────────────────────────────── */
+
+/* The ramp orders the zones but does not name them, so the screen that paints
+   zone fills carries the legend once, on the sunken band. */
+.zn-lib__legend {
+  padding-block: var(--sp-10);
+  background: var(--surface-band);
+  border-block-end: var(--border-divider);
+}
+
+/* ── results ──────────────────────────────────────────────────────────── */
+
+.zn-lib__results {
+  padding-block: var(--sp-14) var(--sp-17);
+}
+
+/* Compact and list views keep the density they had; the grid vocabulary only
+   states the desktop count, and these two need their own mobile steps. */
+.zn-lib__grid[data-view="compact"] {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .zn-lib__grid[data-view="compact"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .zn-lib__grid[data-view="compact"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Focus view: one session at a time, in a reading column. */
+.zn-lib__focus {
+  gap: var(--sp-15);
+  max-inline-size: var(--page-max-narrow);
+  margin-inline: auto;
+}
+
+.zn-lib__more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-6);
+  padding-block-start: var(--sp-13);
+  color: var(--text-faint);
+}
+
+.zn-lib__sentinel {
+  inline-size: 100%;
+  block-size: 1px;
+}
+
+/* ── skeleton ─────────────────────────────────────────────────────────── */
+
+/* The shape of a session card, drawn in paper and ink. */
+.zn-lib__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--sp-12);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+.zn-lib__skeleton .zn-skeleton {
+  border-radius: var(--r-sm);
+}
+
+.zn-lib__skeleton-title {
+  block-size: var(--sp-11);
+  inline-size: 70%;
+}
+
+.zn-lib__skeleton-line {
+  block-size: var(--sp-6);
+  inline-size: 100%;
+}
+
+.zn-lib__skeleton-line--short {
+  inline-size: 55%;
+}
+
+/* The same 36px the ZoneBar occupies, so nothing jumps when the data lands. */
+.zn-lib__skeleton-bar {
+  block-size: 36px;
+  border-radius: var(--r-md);
+}

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { useState, type RefObject } from "react";
-import { X, Search, Heart } from "@/components/icons";
+import { useState } from "react";
+import { X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -76,16 +76,16 @@ interface WorkoutFiltersProps {
   filters: WorkoutFiltersState;
   onFiltersChange: (filters: WorkoutFiltersState) => void;
   className?: string;
-  searchInputRef?: RefObject<HTMLInputElement | null>;
-  hideSearch?: boolean;
   activityType?: ActivityType;
 }
 
 const DURATION_MIN = 0;
 const DURATION_MAX = 300;
 
-/* ── Chip / tag button ── */
-function FilterChip({
+/* ── Chip ──
+   A filter value the athlete switches on or off. Selected is a full ink
+   inversion, never a tint — the paint lives in `library.css`. */
+function Chip({
   label,
   selected,
   onClick,
@@ -97,29 +97,43 @@ function FilterChip({
   return (
     <button
       type="button"
+      role="checkbox"
+      aria-checked={selected}
       onClick={onClick}
-      className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
-        selected
-          ? "border-primary bg-primary/10 text-primary"
-          : "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
-      )}
+      className="zn-chip"
     >
       {label}
     </button>
   );
 }
 
-/* ── Group heading ── */
-function FilterGroupLabel({ children }: { children: React.ReactNode }) {
+/* ── One filter row: an 88px mono label, then its chips ── */
+function FilterRow({
+  label,
+  children,
+  className,
+}: {
+  label: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+    <div className={cn("zn-lib__row", className)} role="group" aria-label={label}>
+      {/* The row is already named for assistive tech by the group label. */}
+      <span
+        className="zn-kicker zn-kicker--inline zn-lib__rowlabel"
+        aria-hidden="true"
+      >
+        {label}
+      </span>
       {children}
-    </span>
+    </div>
   );
 }
 
-/* ── Expandable chip group — progressive disclosure ── */
+/* ── Expandable chip group — progressive disclosure ──
+   Renders straight into the row rather than into a box of its own, so a long
+   list still reads as one line of chips. */
 function ExpandableChipGroup({
   items,
   initialCount = 4,
@@ -138,27 +152,32 @@ function ExpandableChipGroup({
   const hiddenCount = items.length - initialCount;
 
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <>
       {visible.map((item) => renderChip(item))}
       {!expanded && hiddenCount > 0 && (
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="inline-flex items-center rounded-full border border-dashed border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          className="zn-chip zn-chip--more"
         >
           +{hiddenCount}
         </button>
       )}
-    </div>
+    </>
   );
 }
 
+/**
+ * The filter band: rows of chips under the discipline strip, then the duration
+ * range, the favourites switch and the clear button.
+ *
+ * It is one band on every viewport — the drawer it used to hide behind on
+ * mobile is gone, so the same filters are visible whatever the screen.
+ */
 export function WorkoutFilters({
   filters,
   onFiltersChange,
   className,
-  searchInputRef,
-  hideSearch = false,
   activityType = "all",
 }: WorkoutFiltersProps) {
   const { t } = useTranslation("library");
@@ -226,116 +245,87 @@ export function WorkoutFilters({
   const showStrengthFilters = activityType === "strength";
 
   return (
-    <div className={cn("space-y-4", className)}>
-      {/* Search */}
-      {!hideSearch && (
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <input
-            ref={searchInputRef}
-            type="text"
-            aria-label={t("filters.searchLabel")}
-            placeholder={t("filters.search")}
-            value={filters.searchQuery}
-            onChange={(e) => updateFilter("searchQuery", e.target.value)}
-            className="w-full h-9 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          />
-        </div>
-      )}
-
-      {/* Running: Category */}
+    <section
+      className={cn("zn-lib__filters", className)}
+      aria-label={t("filters.title")}
+    >
+      {/* Running / cycling / swimming: category */}
       {showRunningCategories && (
-        <div className="space-y-1.5">
-          <FilterGroupLabel>{t("filters.category")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-1.5">
-            {categories.map((cat) => (
-              <FilterChip
-                key={cat}
-                label={t(`categories.${cat}`)}
-                selected={filters.category.includes(cat as WorkoutCategory)}
-                onClick={() => toggleFilter("category", cat as WorkoutCategory)}
-              />
-            ))}
-          </div>
-        </div>
+        <FilterRow label={t("filters.category")}>
+          {categories.map((cat) => (
+            <Chip
+              key={cat}
+              label={t(`categories.${cat}`)}
+              selected={filters.category.includes(cat as WorkoutCategory)}
+              onClick={() => toggleFilter("category", cat as WorkoutCategory)}
+            />
+          ))}
+        </FilterRow>
       )}
 
-      {/* Strength: Category */}
+      {/* Strength: category */}
       {showStrengthCategories && (
-        <div className="space-y-1.5">
-          <FilterGroupLabel>{tStrength("title")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-1.5">
-            {strengthCategories.map((cat) => (
-              <FilterChip
-                key={cat}
-                label={tStrength(`categories.${cat}`)}
-                selected={filters.strengthCategory.includes(cat as StrengthCategory)}
-                onClick={() => toggleFilter("strengthCategory", cat as StrengthCategory)}
-              />
-            ))}
-          </div>
-        </div>
+        <FilterRow label={tStrength("title")}>
+          {strengthCategories.map((cat) => (
+            <Chip
+              key={cat}
+              label={tStrength(`categories.${cat}`)}
+              selected={filters.strengthCategory.includes(cat as StrengthCategory)}
+              onClick={() => toggleFilter("strengthCategory", cat as StrengthCategory)}
+            />
+          ))}
+        </FilterRow>
       )}
 
       {/* Difficulty (shared) */}
-      <div className="space-y-1.5">
-        <FilterGroupLabel>{t("filters.difficulty")}</FilterGroupLabel>
-        <div className="flex flex-wrap gap-1.5">
-          {difficultyOptions.map((d) => (
-            <FilterChip
-              key={d}
-              label={t(`difficulty.${d}`)}
-              selected={filters.difficulty.includes(d)}
-              onClick={() => toggleFilter("difficulty", d)}
+      <FilterRow label={t("filters.difficulty")}>
+        {difficultyOptions.map((d) => (
+          <Chip
+            key={d}
+            label={t(`difficulty.${d}`)}
+            selected={filters.difficulty.includes(d)}
+            onClick={() => toggleFilter("difficulty", d)}
+          />
+        ))}
+      </FilterRow>
+
+      {/* Running: terrain */}
+      {showRunningFilters && (
+        <FilterRow label={t("filters.terrain")}>
+          {terrainOptions.map((ter) => (
+            <Chip
+              key={ter}
+              label={t(`terrain.${ter}`)}
+              selected={filters.terrain.includes(ter)}
+              onClick={() => toggleFilter("terrain", ter)}
             />
           ))}
-        </div>
-      </div>
-
-      {/* Running: Terrain */}
-      {showRunningFilters && (
-        <div className="space-y-1.5">
-          <FilterGroupLabel>{t("filters.terrain")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-1.5">
-            {terrainOptions.map((ter) => (
-              <FilterChip
-                key={ter}
-                label={t(`terrain.${ter}`)}
-                selected={filters.terrain.includes(ter)}
-                onClick={() => toggleFilter("terrain", ter)}
-              />
-            ))}
-          </div>
-        </div>
+        </FilterRow>
       )}
 
-      {/* Running: Target System */}
+      {/* Running: target system */}
       {showRunningFilters && (
-        <div className="space-y-1.5">
-          <FilterGroupLabel>{t("filters.targetSystem")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-1.5">
-            {targetSystems.map((sys) => (
-              <FilterChip
-                key={sys}
-                label={t(`targetSystem.${sys}`)}
-                selected={filters.targetSystem.includes(sys)}
-                onClick={() => toggleFilter("targetSystem", sys)}
-              />
-            ))}
-          </div>
-        </div>
+        <FilterRow label={t("filters.targetSystem")}>
+          {targetSystems.map((sys) => (
+            <Chip
+              key={sys}
+              label={t(`targetSystem.${sys}`)}
+              selected={filters.targetSystem.includes(sys)}
+              onClick={() => toggleFilter("targetSystem", sys)}
+            />
+          ))}
+        </FilterRow>
       )}
 
-      {/* Strength: Equipment */}
+      {/* Strength: equipment */}
       {showStrengthFilters && (
-        <div className="space-y-1.5">
-          <FilterGroupLabel>{tStrength("detail.equipmentNeeded")}</FilterGroupLabel>
+        <FilterRow label={tStrength("detail.equipmentNeeded")}>
           <ExpandableChipGroup
             items={strengthEquipmentOptions}
             initialCount={4}
             hasSelected={(eq) => filters.equipment.includes(eq as StrengthEquipment)}
             renderChip={(eq) => (
-              <FilterChip
+              <Chip
                 key={eq}
                 label={tStrength(`equipment.${eq}`)}
                 selected={filters.equipment.includes(eq as StrengthEquipment)}
@@ -343,19 +333,18 @@ export function WorkoutFilters({
               />
             )}
           />
-        </div>
+        </FilterRow>
       )}
 
-      {/* Strength: Muscle Group */}
+      {/* Strength: muscle group */}
       {showStrengthFilters && (
-        <div className="space-y-1.5">
-          <FilterGroupLabel>{tStrength("detail.targetMuscles")}</FilterGroupLabel>
+        <FilterRow label={tStrength("detail.targetMuscles")}>
           <ExpandableChipGroup
             items={muscleGroupOptions}
             initialCount={4}
             hasSelected={(m) => filters.muscleGroup.includes(m as MuscleGroup)}
             renderChip={(m) => (
-              <FilterChip
+              <Chip
                 key={m}
                 label={tStrength(`muscles.${m}`)}
                 selected={filters.muscleGroup.includes(m as MuscleGroup)}
@@ -363,54 +352,53 @@ export function WorkoutFilters({
               />
             )}
           />
-        </div>
+        </FilterRow>
       )}
 
-      {/* Duration Range */}
-      <div className="space-y-3">
-        <FilterGroupLabel>{t("filters.duration")}</FilterGroupLabel>
-        <Slider
-          value={filters.durationRange}
-          min={DURATION_MIN}
-          max={DURATION_MAX}
-          step={5}
-          onValueChange={(value) =>
-            updateFilter("durationRange", value as [number, number])
-          }
-        />
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>{filters.durationRange[0]} min</span>
-          <span>{filters.durationRange[1]} min</span>
+      {/* Duration, favourites, and the way out of every filter above. */}
+      <FilterRow label={t("filters.duration")} className="zn-lib__controls">
+        <div className="zn-lib__duration">
+          <Slider
+            value={filters.durationRange}
+            min={DURATION_MIN}
+            max={DURATION_MAX}
+            step={5}
+            thumbLabel={t("filters.duration")}
+            onValueChange={(value) =>
+              updateFilter("durationRange", value as [number, number])
+            }
+          />
+          <span className="zn-mono zn-lib__duration-value">
+            {t("filters.durationRange", {
+              min: filters.durationRange[0],
+              max: filters.durationRange[1],
+            })}
+          </span>
         </div>
-      </div>
 
-      {/* Favorites Only */}
-      <div className="flex items-center justify-between py-2">
-        <label htmlFor="favoritesOnly" className="flex items-center gap-2 text-sm font-medium cursor-pointer">
-          <Heart className="size-4 text-red-500" />
-          {t("filters.favoritesOnly")}
+        <label className="zn-lib__switch" htmlFor="favoritesOnly">
+          <Switch
+            id="favoritesOnly"
+            aria-label={t("filters.favoritesOnly")}
+            checked={filters.favoritesOnly}
+            onCheckedChange={(checked) => updateFilter("favoritesOnly", checked)}
+          />
+          <span className="zn-label">{t("filters.favoritesOnly")}</span>
         </label>
-        <Switch
-          id="favoritesOnly"
-          aria-label={t("filters.favoritesOnly")}
-          checked={filters.favoritesOnly}
-          onCheckedChange={(checked) => updateFilter("favoritesOnly", checked)}
-        />
-      </div>
 
-      {/* Clear Filters — desktop only (mobile has it in the drawer footer) */}
-      {!hideSearch && hasActiveFilters && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={clearFilters}
-          className="w-full"
-        >
-          <X className="size-4 mr-1" />
-          {t("clearFilters")}
-        </Button>
-      )}
-    </div>
+        {hasActiveFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearFilters}
+            className="zn-push"
+          >
+            <X size={15} />
+            {t("clearFilters")}
+          </Button>
+        )}
+      </FilterRow>
+    </section>
   );
 }
 

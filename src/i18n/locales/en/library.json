@@ -1,5 +1,6 @@
 {
   "title": "Workout Library",
+  "catalogue": "{{workouts}} sessions · {{categories}} categories · {{disciplines}} disciplines",
   "subtitle": "{{count}} scientific training sessions",
   "subtitleStrength": "{{count}} strength sessions",
   "subtitleAll": "{{count}} total sessions",
@@ -9,6 +10,12 @@
     "cycling": "Cycling",
     "swimming": "Swimming",
     "strength": "Strength"
+  },
+  "meta": {
+    "results_one": "{{count}} session",
+    "results_other": "{{count}} sessions",
+    "filters_one": "{{count}} active filter",
+    "filters_other": "{{count}} active filters"
   },
   "viewMode": {
     "label": "View",
@@ -31,6 +38,7 @@
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favorites only",
     "search": "Search...",
+    "searchPlaceholder": "Search: “30/30”, “threshold”, “hills”…",
     "searchLabel": "Search workouts",
     "apply": "Apply",
     "activeFilters": "active filters"
@@ -39,7 +47,10 @@
     "noResults": "No workouts found",
     "noResultsDescription": "Try adjusting your filters to find workouts.",
     "noFavorites": "No favorites yet",
-    "noFavoritesDescription": "Add workouts to your favorites to find them easily here."
+    "noFavoritesDescription": "Add workouts to your favorites to find them easily here.",
+    "filteredOut_one": "{{count}} active filter leaves none of the {{total}} sessions. Clearing it brings them all back.",
+    "filteredOut_other": "{{count}} active filters leave none of the {{total}} sessions. Clearing them brings them all back.",
+    "noMatchForQuery": "“{{query}}” matches none of the {{total}} sessions in the catalogue."
   },
   "terrain": {
     "flat": "Flat preferred",
@@ -79,6 +90,9 @@
       "trail_technical": "Technical trail",
       "mountain": "Mountain"
     }
+  },
+  "zoneBar": {
+    "of": "{{name}} profile"
   },
   "difficulty": {
     "beginner": "Beginner",

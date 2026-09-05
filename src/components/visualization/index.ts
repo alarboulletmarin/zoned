@@ -5,5 +5,8 @@ export { MiniElevationProfile } from "./MiniElevationProfile";
 export { StrengthSessionTimeline } from "./StrengthSessionTimeline";
 export { MuscleDistribution } from "./MuscleDistribution";
 export { MuscleMap } from "./MuscleMap";
+export { ZoneBar, toZoneBarBlocks } from "./ZoneBar";
+export type { ZoneBarBlock } from "./ZoneBar";
+export { ZoneScale } from "./ZoneScale";
 export { transformSessionBlocks, getWorkoutDuration, formatDurationMinutes } from "./transforms";
 export type { ZoneNumber, TimelineSegment, ZoneBreakdown, SessionVisualizationData } from "./types";

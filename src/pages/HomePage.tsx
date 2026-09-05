@@ -1,27 +1,22 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ChevronDown } from "@/components/icons";
-import {
-  EditorialTitle,
-  StaggerGrid,
-  StaggerItem,
-  InteractiveCard,
-  useCountUp,
-  Divider,
-} from "@/components/editorial";
+import { ArrowRight, ChevronDown, ExternalLink } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  ResponsiveTable,
+  type ResponsiveTableColumn,
+} from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
 import { useWorkouts } from "@/hooks";
-import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
+import { useAppStats } from "@/hooks/useAppStats";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
 import { usePlans } from "@/hooks/usePlans";
 import { ZONE_META, type ZoneNumber } from "@/types";
-import { usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import {
-  computeLandingStats,
+  getISOWeek,
   pickWeeklyWorkouts,
   EXPORT_FORMATS,
 } from "@/lib/landing-stats";
@@ -29,31 +24,20 @@ import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import { getQuoteOfTheDay } from "@/data/quotes";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
+import { DoorCard } from "@/components/domain/DoorCard";
+import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
+import { StatBlock } from "@/components/domain/StatBlock";
+import { ZoneRow } from "@/components/domain/ZoneRow";
 import {
   loadUserZonePrefs,
   saveUserZonePrefs,
   calculateAllZones,
   formatPace,
 } from "@/lib/zones";
+import { cn } from "@/lib/utils";
 import type { UserZonePreferences } from "@/types";
 
-// Zone color classes — Tailwind needs static class names so we map explicitly.
-const ZONE_BAR_BG: Record<ZoneNumber, string> = {
-  1: "bg-zone-1",
-  2: "bg-zone-2",
-  3: "bg-zone-3",
-  4: "bg-zone-4",
-  5: "bg-zone-5",
-  6: "bg-zone-6",
-};
-const ZONE_CHIP_BG: Record<ZoneNumber, string> = {
-  1: "bg-zone-1/15 text-zone-1",
-  2: "bg-zone-2/15 text-zone-2",
-  3: "bg-zone-3/15 text-zone-3",
-  4: "bg-zone-4/15 text-zone-4",
-  5: "bg-zone-5/15 text-zone-5",
-  6: "bg-zone-6/15 text-zone-6",
-};
+const ZONES = [1, 2, 3, 4, 5, 6] as const;
 
 // ────────────────────────────────────────────────────────────────────────────
 // Static editorial constants — derived from the codebase, not invented.
@@ -65,7 +49,7 @@ const ZONE_CHIP_BG: Record<ZoneNumber, string> = {
 // ────────────────────────────────────────────────────────────────────────────
 
 interface ResearcherSource {
-  /** Italic, single-line citation as it appears in the card. */
+  /** Single-line citation as it appears in the card. */
   citationKey: string;
   /** Optional external link. We point at PubMed / publisher so the user
    *  always lands on the canonical record. Books usually have no URL. */
@@ -77,20 +61,16 @@ interface Researcher {
   /** One short line under the name describing the contribution. */
   contributionKey: string;
   source: ResearcherSource;
-  /** Short method tag rendered as a mono uppercase caption on every
-   *  surface (mobile card + desktop card). Hard-coded — these are
-   *  named conventions (POLARISED, VDOT, vVO₂max…), not translated. */
+  /** Short method tag rendered as a mono uppercase kicker. Hard-coded —
+   *  these are named conventions (POLARISED, VDOT, vVO₂max…), not
+   *  translated. */
   tag: string;
-  /** Tailwind text-* colour for the tag. Picked per researcher so the
-   *  list reads with a coherent palette rather than a flat grey wash. */
-  tagColor: string;
 }
 
 const RESEARCHERS: Researcher[] = [
   {
     name: "Stephen Seiler",
     tag: "Polarised · 80/20",
-    tagColor: "text-zone-2",
     contributionKey: "homepage:home.s04.researchers.seiler.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.seiler.citation",
@@ -100,7 +80,6 @@ const RESEARCHERS: Researcher[] = [
   {
     name: "Véronique Billat",
     tag: "vVO₂max · 30/30",
-    tagColor: "text-zone-5",
     contributionKey: "homepage:home.s04.researchers.billat.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.billat.citation",
@@ -110,7 +89,6 @@ const RESEARCHERS: Researcher[] = [
   {
     name: "Jack Daniels",
     tag: "VDOT · T/I/R",
-    tagColor: "text-zone-3",
     contributionKey: "homepage:home.s04.researchers.daniels.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.daniels.citation",
@@ -119,7 +97,6 @@ const RESEARCHERS: Researcher[] = [
   {
     name: "Arthur Lydiard",
     tag: "Base building",
-    tagColor: "text-zone-2",
     contributionKey: "homepage:home.s04.researchers.lydiard.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.lydiard.citation",
@@ -128,7 +105,6 @@ const RESEARCHERS: Researcher[] = [
   {
     name: "Tim Noakes",
     tag: "Central governor",
-    tagColor: "text-primary",
     contributionKey: "homepage:home.s04.researchers.noakes.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.noakes.citation",
@@ -137,7 +113,6 @@ const RESEARCHERS: Researcher[] = [
   {
     name: "Wildor Hollmann & Alois Mader",
     tag: "Lactate threshold",
-    tagColor: "text-zone-4",
     contributionKey: "homepage:home.s04.researchers.cologne.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.cologne.citation",
@@ -146,7 +121,6 @@ const RESEARCHERS: Researcher[] = [
   {
     name: "Oliver Faude",
     tag: "Threshold review",
-    tagColor: "text-zone-4",
     contributionKey: "homepage:home.s04.researchers.faude.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.faude.citation",
@@ -156,7 +130,6 @@ const RESEARCHERS: Researcher[] = [
   {
     name: "Iñigo San Millán",
     tag: "Zone 2 · mitochondria",
-    tagColor: "text-zone-2",
     contributionKey: "homepage:home.s04.researchers.sanMillan.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.sanMillan.citation",
@@ -262,37 +235,59 @@ const FAQ_IDS = [
   "data",
 ] as const;
 
-/** Subtle "scroll to discover" cue anchored at the foot of the hero. Pulses
- *  gently; respects prefers-reduced-motion (then it stays static). */
-function ScrollHint() {
-  const reduced = useReducedMotion();
-  const { t } = useTranslation("homepage");
-  return (
-    <div className="hidden md:flex justify-center mt-14 pb-2">
-      <motion.div
-        className="flex flex-col items-center gap-1.5 text-muted-foreground"
-        initial={reduced ? false : { opacity: 0 }}
-        animate={reduced ? undefined : { opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1.2 }}
-      >
-        <span className="font-mono text-[10px] tracking-[0.2em] uppercase">
-          {t("home.hero.scrollHint")}
-        </span>
-        <motion.span
-          aria-hidden
-          animate={reduced ? undefined : { y: [0, 5, 0] }}
-          transition={
-            reduced
-              ? undefined
-              : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
-          }
-          className="inline-block"
-        >
-          <ChevronDown className="size-4" />
-        </motion.span>
-      </motion.div>
-    </div>
-  );
+// Canonical Seiler-style polarised reference — these are *teaching values*,
+// not measurements of the user's library. They illustrate what a well-dosed
+// training week looks like under the 80/20 model.
+const POLARISED_REFERENCE: Record<ZoneNumber, number> = {
+  1: 62,
+  2: 18,
+  3: 6,
+  4: 9,
+  5: 4,
+  6: 1,
+};
+const POLARISED_LOW = POLARISED_REFERENCE[1] + POLARISED_REFERENCE[2];
+const POLARISED_HIGH =
+  POLARISED_REFERENCE[4] + POLARISED_REFERENCE[5] + POLARISED_REFERENCE[6];
+
+// The macrocycle phases, drawn with the zone ink ramp: base is the lightest,
+// taper the densest. There is no phase-colour source of truth in the app yet
+// (issue #114), so the ordered ramp stands in for one — it is the same
+// encoding every other bar on this page uses.
+const PHASE_FILL: Record<string, string> = {
+  base: "var(--zone-2)",
+  build: "var(--zone-3)",
+  peak: "var(--zone-4)",
+  taper: "var(--zone-5)",
+  recovery: "var(--zone-1)",
+};
+const LEGEND_PHASES = ["base", "build", "peak", "taper"] as const;
+
+// ── §03 zone metadata. RPE and the "% FCmax" model lines describe the
+// physiology and don't depend on the user; the bpm and pace columns are
+// computed from their measured FCmax / VMA when available (see
+// calculateAllZones), and this dash appears when nothing has been measured.
+const NOT_MEASURED = "—";
+const ZONE_FC_PERCENT: Record<ZoneNumber, string> = {
+  1: "50–60 % FCmax",
+  2: "60–70 % FCmax",
+  3: "70–80 % FCmax",
+  4: "80–90 % FCmax",
+  5: "90–100 % FCmax",
+  6: "> 100 % FCmax",
+};
+const ZONE_RPE: Record<ZoneNumber, string> = {
+  1: "1–2 / 10",
+  2: "3–4 / 10",
+  3: "5–6 / 10",
+  4: "7 / 10",
+  5: "8–9 / 10",
+  6: "10 / 10",
+};
+
+/** A percentage, French-typeset: a non-breaking space before the sign. */
+function pct(value: number): string {
+  return `${value} %`;
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -300,16 +295,17 @@ function ScrollHint() {
 // ────────────────────────────────────────────────────────────────────────────
 
 export function HomePage() {
-  const { t, i18n } = useTranslation(["homepage", "common", "library"]);
+  const { t } = useTranslation(["homepage", "common", "calculators"]);
   const pickLang = usePickLang();
+  const isEn = useIsEnglish();
   const dailyQuote = useMemo(() => getQuoteOfTheDay(), []);
-  const isEn = i18n.language?.startsWith("en");
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
+
   // User's measured references (VMA, FCmax) — read once at mount. Updates from
-  // the inline form below the zone table re-store these in localStorage and
+  // the inline form above the zone table re-store these in localStorage and
   // bump local state so the table refreshes without a page reload.
-  const [userPrefs, setUserPrefs] = useState<UserZonePreferences | null>(
-    () => loadUserZonePrefs(),
+  const [userPrefs, setUserPrefs] = useState<UserZonePreferences | null>(() =>
+    loadUserZonePrefs(),
   );
   const hasUserZones = !!(userPrefs?.vma || userPrefs?.fcMax);
 
@@ -331,47 +327,23 @@ export function HomePage() {
     setUserPrefs(next);
   };
 
-  // The landing stats and weekly picks need the full library (12 running
-  // category chunks + cycling + swimming + strength). None of it is
-  // LCP-critical — the hero renders without it — so wait for load+idle
+  // Catalogue counts, read straight off the shipped data (never hardcoded).
+  const appStats = useAppStats();
+  const { plans: userPlans } = usePlans();
+  const hasPlans = userPlans.length > 0;
+  const prebuiltPlans = useMemo(() => getAllPrebuiltPlans(), []);
+
+  // The three weekly picks need the workout chunks. None of it is
+  // LCP-critical — the hero renders without them — so wait for load+idle
   // before fetching to keep the bandwidth free for the hero on slow mobile.
   const libraryFetchReady = useIdleAfterLoad();
   const { workouts: runWorkouts } = useWorkouts({ enabled: libraryFetchReady });
-  const { workouts: cyclingWorkouts } = useCrossDisciplineWorkouts("cycling", { enabled: libraryFetchReady });
-  const { workouts: swimWorkouts } = useCrossDisciplineWorkouts("swimming", { enabled: libraryFetchReady });
-  const { workouts: strengthWorkouts } = useStrengthWorkouts({ enabled: libraryFetchReady });
-  const { plans: userPlans } = usePlans();
-  const hasPlans = userPlans.length > 0;
-
-  // Endurance pool — running + cycling + swimming. Strength sessions are on
-  // a different shape (no zones) so we add them only to the headline count.
-  const allEndurance = useMemo(
-    () => [...runWorkouts, ...cyclingWorkouts, ...swimWorkouts],
-    [runWorkouts, cyclingWorkouts, swimWorkouts],
-  );
-  const stats = useMemo(
-    () => computeLandingStats(allEndurance),
-    [allEndurance],
-  );
-  const totalSessions = stats.totalSessions + strengthWorkouts.length;
-
-  const prebuiltPlans = useMemo(() => getAllPrebuiltPlans(), []);
-
-  // ── Hero rotating accent — single italic word punctuating the headline.
-  // Reads "L'entraînement <structuré|lisible|outillé|documenté>, sans bruit."
-  // The whole expression hinges on this word, so the list is kept short.
-  const accentWords = useMemo(
-    () => t("homepage:home.hero.accent", { returnObjects: true }) as string[],
-    [t],
-  );
-  const [accentIndex, setAccentIndex] = useState(0);
-  useEffect(() => {
-    if (accentWords.length <= 1) return;
-    const id = setInterval(() => {
-      setAccentIndex((i) => (i + 1) % accentWords.length);
-    }, 3500);
-    return () => clearInterval(id);
-  }, [accentWords.length]);
+  const { workouts: cyclingWorkouts } = useCrossDisciplineWorkouts("cycling", {
+    enabled: libraryFetchReady,
+  });
+  const { workouts: swimWorkouts } = useCrossDisciplineWorkouts("swimming", {
+    enabled: libraryFetchReady,
+  });
 
   // ── Three weekly suggestions. Pick one run, one bike, one swim from the
   // library — the deterministic week-keyed picker keeps the trio stable for
@@ -383,18 +355,8 @@ export function HomePage() {
       1,
       0,
     )[0];
-    const cycling = pickWeeklyWorkouts(
-      cyclingWorkouts,
-      () => true,
-      1,
-      1,
-    )[0];
-    const swimming = pickWeeklyWorkouts(
-      swimWorkouts,
-      () => true,
-      1,
-      2,
-    )[0];
+    const cycling = pickWeeklyWorkouts(cyclingWorkouts, () => true, 1, 1)[0];
+    const swimming = pickWeeklyWorkouts(swimWorkouts, () => true, 1, 2)[0];
     return [tempo, cycling, swimming].filter(
       (w): w is NonNullable<typeof w> => w != null,
     );
@@ -424,7 +386,7 @@ export function HomePage() {
         }
         if (plans.length === 0) return null;
         // Prefer the beginner plan: easiest difficulty, then shortest.
-        const score = (d: typeof plans[0]["difficulty"]) =>
+        const score = (d: (typeof plans)[0]["difficulty"]) =>
           d === "beginner" ? 0 : d === "intermediate" ? 1 : d === "advanced" ? 2 : 3;
         const canonical = plans.reduce((a, b) => {
           const da = score(a.difficulty);
@@ -432,13 +394,24 @@ export function HomePage() {
           if (da !== db) return da < db ? a : b;
           return a.totalWeeks < b.totalWeeks ? a : b;
         });
-        return { key, plan: canonical, alt: plans.length - 1 };
+        return { key, plan: canonical };
       })
-      .filter((r): r is { key: string; plan: typeof prebuiltPlans[0]; alt: number } => r != null);
+      .filter(
+        (r): r is { key: string; plan: (typeof prebuiltPlans)[0] } => r != null,
+      );
   }, [prebuiltPlans]);
 
+  // The hero kicker: today's date and the ISO week, the way a training log
+  // is dated. Mono, uppercased by the stylesheet.
+  const today = useMemo(() => new Date(), []);
+  const dateLine = `${today.toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  })} · ${t("homepage:home.hero.week", { n: getISOWeek(today) })}`;
+
   const seoDescription = t("common:pages.home.seoDescription", {
-    count: totalSessions || 200,
+    count: appStats.workouts || 200,
   });
 
   // Rich JSON-LD for the homepage. SEOHead already injects WebSite + Organization
@@ -501,7 +474,7 @@ export function HomePage() {
           name: "Combien de séances sont disponibles ?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: `Plus de ${totalSessions || 200} séances de course à pied, plus 10 séances cyclisme et 10 séances natation pour le cross-training, organisées en 6 zones d'intensité.`,
+            text: `Plus de ${appStats.workouts || 200} séances de course à pied, plus 10 séances cyclisme et 10 séances natation pour le cross-training, organisées en 6 zones d'intensité.`,
           },
         },
         {
@@ -516,8 +489,84 @@ export function HomePage() {
     },
   ];
 
+  // The zone atlas, as table rows. One markup for both viewports —
+  // ResponsiveTable turns it into a card per zone below its own breakpoint.
+  const zoneColumns: ResponsiveTableColumn<ZoneNumber>[] = [
+    {
+      key: "zone",
+      header: t("homepage:home.s03.zone"),
+      hideOnMobile: true,
+      cell: (z) => (
+        <span className="zn-home__zcode" data-zone={z}>
+          Z{z}
+        </span>
+      ),
+    },
+    {
+      key: "name",
+      header: t("homepage:home.s03.name"),
+      hideOnMobile: true,
+      cell: (z) => (
+        <button
+          type="button"
+          className="zn-home__zname"
+          onClick={() => setSelectedZone(z)}
+        >
+          {pickLang(ZONE_META[z], "label")}
+        </button>
+      ),
+    },
+    {
+      key: "hr",
+      header: t("homepage:home.s03.hr"),
+      cell: (z) => {
+        const range = personalRanges?.[z];
+        return (
+          <div className="zn-stack" style={{ "--gap": "var(--sp-1)" } as CSSProperties}>
+            <span
+              className={cn("zn-mono", range ? "zn-home__measured" : "zn-faint")}
+            >
+              {range?.hrMin && range?.hrMax
+                ? `${range.hrMin}–${range.hrMax} bpm`
+                : NOT_MEASURED}
+            </span>
+            <span className="zn-mono zn-faint">{ZONE_FC_PERCENT[z]}</span>
+          </div>
+        );
+      },
+    },
+    {
+      key: "rpe",
+      header: t("homepage:home.s03.rpe"),
+      cell: (z) => <span className="zn-mono zn-muted">{ZONE_RPE[z]}</span>,
+    },
+    {
+      key: "adaptation",
+      header: t("homepage:home.s03.adaptation"),
+      cell: (z) => (
+        <span className="zn-body zn-body--sm">
+          {pickLang(ZONE_META[z], "benefit")}
+        </span>
+      ),
+    },
+    {
+      key: "pace",
+      header: t("homepage:home.s03.refPace"),
+      cell: (z) => {
+        const range = personalRanges?.[z];
+        return (
+          <span className={cn("zn-mono", range ? "zn-home__measured" : "zn-faint")}>
+            {range?.paceMinPerKm && range?.paceMaxPerKm
+              ? `${formatPace(range.paceMinPerKm)}–${formatPace(range.paceMaxPerKm)}/km`
+              : NOT_MEASURED}
+          </span>
+        );
+      },
+    },
+  ];
+
   return (
-    <div className="font-sans text-foreground">
+    <div className="zn-home">
       <SEOHead
         title={t("homepage:home.seoTitle")}
         description={seoDescription}
@@ -526,393 +575,307 @@ export function HomePage() {
       />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          HERO — headline + lead + CTAs + sidecar polarised chart
+          HERO — the question the reader is asking, and the two ways out
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="pt-2 md:pt-8 pb-12 md:pb-20">
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 lg:gap-16 items-start">
-          {/* Left column — title + body + CTAs + stat row */}
-          <div className="max-w-[640px]">
-            {/* Headline locked to 3 lines (head / rotating accent / tail) so
-                the hero block keeps the exact same height as the word
-                rotates — no layout jitter between "structuré" and
-                "documenté". Each piece sits on its own line via block. */}
-            <h1 className="font-sans font-semibold text-[40px] sm:text-6xl md:text-[68px] leading-[1.02] tracking-tight mb-8">
-              <span className="block">{t("homepage:home.hero.head")}</span>
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={accentIndex}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.35, ease: [0, 0, 0.2, 1] }}
-                  className="block italic"
-                >
-                  {accentWords[accentIndex]},
-                </motion.span>
-              </AnimatePresence>
-              <span className="block">{t("homepage:home.hero.tail")}</span>
-            </h1>
-
-            <p className="text-[15px] md:text-base leading-[1.65] text-foreground/75 max-w-[520px] mb-8">
-              {t("homepage:home.hero.lead", {
-                sessions: totalSessions,
-                plans: prebuiltPlans.length,
-                calculators: CALCULATORS.length,
-              })}
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 mb-12">
-              <Button asChild size="lg" className="rounded-full px-6">
-                <Link to={hasPlans ? "/plans" : "/plan/new"}>
-                  <ArrowRight className="size-4" />
-                  {t(
-                    hasPlans
-                      ? "homepage:home.hero.ctaPrimaryHasPlans"
-                      : "homepage:home.hero.ctaPrimary",
-                  )}
-                </Link>
-              </Button>
-              <Button asChild variant="outline-primary" size="lg" className="rounded-full px-6">
-                <Link to="/library">
-                  {t("homepage:home.hero.ctaSecondary")}
-                </Link>
-              </Button>
-            </div>
-
-            {/* Stat row — every figure derived, count-up on mount. Each
-                number gets its own accent: the catalogue size in primary
-                (the "headline" stat), then the three companion stats
-                tint Z2 / Z3 / Z5 to walk the eye across the row without
-                competing with the chart sidecar. */}
-            <div className="border-t border-foreground/15 pt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <CountStat
-                target={totalSessions}
-                label={t("homepage:home.stats.sessions")}
-                color="text-primary"
-              />
-              <CountStat
-                target={prebuiltPlans.length}
-                label={`${t("homepage:home.stats.plansFrom")} ${
-                  prebuiltPlans.find((p) => p.raceDistance === "5K") ? "5K" : ""
-                } → ${
-                  prebuiltPlans.find((p) => p.raceDistance === "marathon")
-                    ? "marathon"
-                    : prebuiltPlans[prebuiltPlans.length - 1]?.raceDistance ?? ""
-                }`}
-                color="text-zone-2"
-              />
-              <CountStat
-                target={CALCULATORS.length}
-                label={t("homepage:home.stats.calculators")}
-                color="text-zone-3"
-              />
-              <StatBlock
-                value="0"
-                label={t("homepage:home.stats.trackers")}
-                sub={t("homepage:home.stats.noAccount")}
-                color="text-zone-5"
-              />
-            </div>
+      <section className="zn-home__hero">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-13)" } as CSSProperties}>
+          <span className="zn-kicker">{dateLine}</span>
+          <h1 className="zn-display zn-home__headline">
+            {t("homepage:home.hero.title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-home__lede">
+            {t("homepage:home.hero.lede", {
+              sessions: appStats.workouts,
+              plans: prebuiltPlans.length,
+              calculators: CALCULATORS.length,
+            })}
+          </p>
+          {/* The screen's single vermillon fill lives here and nowhere else. */}
+          <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+            <Button asChild size="lg">
+              <Link to={hasPlans ? "/plans" : "/plan/new"}>
+                {t(
+                  hasPlans
+                    ? "homepage:home.hero.ctaPrimaryHasPlans"
+                    : "homepage:home.hero.ctaPrimary",
+                )}
+                <ArrowRight />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link to="/library">{t("homepage:home.hero.ctaSecondary")}</Link>
+            </Button>
           </div>
-
-          {/* Right column — canonical polarised week reference */}
-          <PolarisedChart />
         </div>
 
-        <ScrollHint />
-      </section>
-
-      {/* Horizontal rule between sections — recurring across the page. */}
-      <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          §01 — Trois entrées
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20">
-
-        <EditorialTitle>{t("homepage:home.s01.title")}</EditorialTitle>
-        <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
-          {t("homepage:home.s01.body")}
-        </p>
-
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-10 divide-y md:divide-y-0 md:divide-x divide-foreground/15">
-          <EntryColumn
-            num="01"
-            title={t("homepage:home.s01.e1Title")}
-            body={t("homepage:home.s01.e1Body")}
-            linkLabel={t("homepage:home.s01.e1Link")}
-            to="/library"
-          />
-          <EntryColumn
-            num="02"
-            title={t("homepage:home.s01.e2Title")}
-            body={t("homepage:home.s01.e2Body")}
-            linkLabel={t("homepage:home.s01.e2Link")}
-            to="/plans"
-          />
-          <EntryColumn
-            num="03"
-            title={t("homepage:home.s01.e3Title")}
-            body={t("homepage:home.s01.e3Body")}
-            linkLabel={t("homepage:home.s01.e3Link")}
-            to="/methodology"
-          />
-        </div>
-      </section>
-
-      <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          §05 — Plans (5K → ultra), data from prebuilt-plans
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20">
-
-        <EditorialTitle>{t("homepage:home.s05.title")}</EditorialTitle>
-        <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
-          {t("homepage:home.s05.body", {
-            count: prebuiltPlans.length,
-            min: Math.min(...prebuiltPlans.map((p) => p.totalWeeks)),
-            max: Math.max(...prebuiltPlans.map((p) => p.totalWeeks)),
-          })}
-        </p>
-        <p className="mt-2 text-sm font-medium text-primary">
-          {t("homepage:home.s05.quick")}
-        </p>
-
-        {/* Mobile: dense 2-col grid (distance + arrow only). Each card
-            jumps to the canonical plan for that distance — matches the
-            calculator-grid pattern. */}
-        <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-3">
-          {planRows.map(({ key, plan }) => (
-            <StaggerItem key={key}>
-              <InteractiveCard
-                to={`/plan/prebuilt/${plan.slug}`}
-                className="block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 rounded-md flex flex-col gap-3 h-full"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="text-base font-sans italic font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
-                    {t(`homepage:home.s05.distance.${key}`)}
-                  </span>
-                  <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                </div>
-                {/* Mini macrocycle bar — same colour scale as the
-                    desktop legend so the user can read base → taper at
-                    a glance even on phones. */}
-                <div className="flex h-1.5 overflow-hidden rounded-sm">
-                  {plan.phases.map((p, i) => {
-                    const span = p.endWeek - p.startWeek + 1;
-                    const pct = (span / plan.totalWeeks) * 100;
-                    return (
-                      <div
-                        key={i}
-                        className={PHASE_COLORS[p.phase] ?? "bg-foreground/20"}
-                        style={{ width: `${pct}%` }}
-                      />
-                    );
-                  })}
-                </div>
-                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground -mt-1">
-                  {plan.totalWeeks} {t("homepage:home.s05.weeks")}
-                </div>
-              </InteractiveCard>
-            </StaggerItem>
-          ))}
-        </StaggerGrid>
-
-        {/* Desktop / tablet: existing full row layout. */}
-        <div className="hidden md:block mt-10 divide-y divide-foreground/15 border-y border-foreground/15">
-          {planRows.map(({ key, plan }) => (
-            <PlanRow
-              key={key}
-              label={t(`homepage:home.s05.distance.${key}`)}
-              plan={plan}
-              t={t}
-            />
-          ))}
-        </div>
-        <PlanPhaseLegend />
-      </section>
-
-      <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          §02 — Trois séances suggérées (déterministe pour la semaine)
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_2.2fr] gap-10">
-          <div>
-
-            <EditorialTitle>{t("homepage:home.s02.title")}</EditorialTitle>
-            <p className="mt-3 text-sm text-foreground/65 max-w-xs leading-relaxed">
-              {t("homepage:home.s02.body")}
-            </p>
-          </div>
-
-          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {suggested.map((w) => (
-              <StaggerItem key={w.id}>
-                <WorkoutCard workout={w} />
-              </StaggerItem>
-            ))}
-          </StaggerGrid>
-        </div>
-      </section>
-
-      <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          §03 — Atlas des zones (table Z1→Z6 dérivée de ZONE_META)
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20">
-
-        <EditorialTitle>
-          {t("homepage:home.s03.title1")}
-          <br />
-          {t("homepage:home.s03.title2")}
-        </EditorialTitle>
-        <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
-          {t("homepage:home.s03.body")}
-        </p>
-
-        <ZonesPersonaliser
-          prefs={userPrefs}
-          hasUserZones={hasUserZones}
-          onSave={updatePrefs}
+        <IllustrationSlot
+          height={400}
+          brief={t("homepage:home.hero.illustrationBrief")}
+          label={t("homepage:home.hero.illustrationLabel")}
         />
+      </section>
 
-        {/* Desktop / tablet: full 6-column table. */}
-        <div className="hidden md:block mt-8 overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55 border-b border-foreground/20">
-                <th className="text-left py-3 pr-4 font-normal w-20">
-                  {t("homepage:home.s03.zone")}
-                </th>
-                <th className="text-left py-3 pr-4 font-normal">
-                  {t("homepage:home.s03.name")}
-                </th>
-                <th className="text-left py-3 pr-4 font-normal w-28">
-                  {t("homepage:home.s03.hr")}
-                </th>
-                <th className="text-left py-3 pr-4 font-normal w-24">
-                  {t("homepage:home.s03.rpe")}
-                </th>
-                <th className="text-left py-3 pr-4 font-normal">
-                  {t("homepage:home.s03.adaptation")}
-                </th>
-                <th className="text-right py-3 pl-4 font-normal w-24">
-                  {t("homepage:home.s03.refPace")}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {([1, 2, 3, 4, 5, 6] as const).map((z) => {
-                const range = personalRanges?.[z];
-                const hrCell =
-                  range?.hrMin && range?.hrMax
-                    ? `${range.hrMin}–${range.hrMax} bpm`
-                    : ZONE_FC_FALLBACK[z];
-                const paceCell =
-                  range?.paceMinPerKm && range?.paceMaxPerKm
-                    ? `${formatPace(range.paceMinPerKm)}–${formatPace(range.paceMaxPerKm)}/km`
-                    : ZONE_PACE_FALLBACK[z];
-                return (
-                  <ZoneRow
-                    key={z}
-                    zone={z}
-                    label={pickLang(ZONE_META[z], "label")}
-                    hrRange={hrCell}
-                    fcPercent={ZONE_FC_PERCENT[z]}
-                    rpe={ZONE_RPE[z]}
-                    benefit={pickLang(ZONE_META[z], "benefit")}
-                    refPace={paceCell}
-                    isPersonal={!!range}
-                    onClick={() => setSelectedZone(z)}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+      {/* ═══════════════════════════════════════════════════════════════════
+          §01 — the three doors, directly under the hero
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section className="zn-home__doors" aria-labelledby="home-doors-title">
+        <h2 id="home-doors-title" className="sr-only">
+          {t("homepage:home.s01.title")}
+        </h2>
+        <DoorCard
+          to="/library"
+          kicker={t("homepage:home.s01.e1Kicker")}
+          title={t("homepage:home.s01.e1Title")}
+          body={t("homepage:home.s01.e1Body")}
+          cta={t("homepage:home.s01.e1Link")}
+        />
+        <DoorCard
+          to="/plans"
+          kicker={t("homepage:home.s01.e2Kicker")}
+          title={t("homepage:home.s01.e2Title")}
+          body={t("homepage:home.s01.e2Body")}
+          cta={t("homepage:home.s01.e2Link")}
+        />
+        <DoorCard
+          to="/methodology"
+          kicker={t("homepage:home.s01.e3Kicker")}
+          title={t("homepage:home.s01.e3Title")}
+          body={t("homepage:home.s01.e3Body")}
+          cta={t("homepage:home.s01.e3Link")}
+        />
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          Fig. 01 — what a well-dosed week looks like
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section
+        className="zn-section zn-split"
+        style={
+          { "--split": "340px 1fr", "--gap": "var(--sp-18)" } as CSSProperties
+        }
+        aria-labelledby="home-fig-title"
+      >
+        <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+          <span className="zn-kicker">{t("homepage:home.hero.fig.kicker")}</span>
+          <h2 id="home-fig-title" className="zn-title" data-level="1">
+            {t("homepage:home.hero.fig.title")}
+          </h2>
+          <p className="zn-body">{t("homepage:home.hero.fig.body")}</p>
+          <span className="zn-source">{t("homepage:home.hero.fig.source")}</span>
         </div>
 
-        {/* Mobile: one card per zone — keeps every column readable
-            without horizontal scrolling. */}
-        <ul className="md:hidden mt-8 space-y-3">
-          {([1, 2, 3, 4, 5, 6] as const).map((z) => {
-            const range = personalRanges?.[z];
-            const hrCell =
-              range?.hrMin && range?.hrMax
-                ? `${range.hrMin}–${range.hrMax} bpm`
-                : ZONE_FC_FALLBACK[z];
-            const paceCell =
-              range?.paceMinPerKm && range?.paceMaxPerKm
-                ? `${formatPace(range.paceMinPerKm)}–${formatPace(range.paceMaxPerKm)}/km`
-                : ZONE_PACE_FALLBACK[z];
-            return (
-              <li key={z}>
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+            {ZONES.map((zone) => (
+              <ZoneRow
+                key={zone}
+                zone={zone}
+                name={t(`homepage:home.hero.fig.zones.z${zone}`)}
+                value={pct(POLARISED_REFERENCE[zone])}
+                percent={POLARISED_REFERENCE[zone]}
+                labelWidth={130}
+              />
+            ))}
+          </div>
+          <div className="zn-home__pair">
+            <StatBlock
+              tone="card"
+              value={pct(POLARISED_LOW)}
+              label={t("homepage:home.hero.fig.lowRange")}
+              footnote={t("homepage:home.hero.fig.lowCaption")}
+            />
+            <StatBlock
+              tone="ink"
+              value={pct(POLARISED_HIGH)}
+              label={t("homepage:home.hero.fig.highRange")}
+              footnote={t("homepage:home.hero.fig.highCaption")}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          The four numbers
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section className="zn-section zn-home__strip">
+        <div className="zn-home__strip-cell">
+          <StatBlock
+            value={String(appStats.workouts)}
+            label={t("homepage:home.stats.sessions")}
+          />
+        </div>
+        <div className="zn-home__strip-cell">
+          <StatBlock
+            value={String(prebuiltPlans.length)}
+            label={t("homepage:home.stats.plansFrom")}
+          />
+        </div>
+        <div className="zn-home__strip-cell">
+          <StatBlock
+            value={String(CALCULATORS.length)}
+            label={t("homepage:home.stats.calculators")}
+          />
+        </div>
+        <div className="zn-home__strip-cell">
+          <StatBlock
+            value="0"
+            label={t("homepage:home.s08.lines.account")}
+          />
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          §05 — one trajectory per distance
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section className="zn-section" aria-labelledby="home-plans-title">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <SectionHead
+            id="home-plans-title"
+            kicker={t("homepage:home.s05.kicker")}
+            title={t("homepage:home.s05.title")}
+            body={t("homepage:home.s05.body", {
+              count: prebuiltPlans.length,
+              min: Math.min(...prebuiltPlans.map((p) => p.totalWeeks)),
+              max: Math.max(...prebuiltPlans.map((p) => p.totalWeeks)),
+            })}
+            note={t("homepage:home.s05.quick")}
+          />
+
+          <ul className="zn-home__plans">
+            {planRows.map(({ key, plan }) => (
+              <li key={key} className="zn-home__plan">
+                <span className="zn-home__plan-name">
+                  {t(`homepage:home.s05.distance.${key}`)}
+                </span>
+                <span className="zn-mono zn-muted zn-home__plan-meta">
+                  {plan.totalWeeks} {t("homepage:home.s05.weeks")}
+                </span>
+                <span className="zn-mono zn-muted zn-home__plan-meta">
+                  {plan.sessionsPerWeek} {t("homepage:home.s05.sessionsPerWeek")}
+                </span>
+                <span className="zn-home__phase-bar" aria-hidden="true">
+                  {plan.phases.map((phase, i) => (
+                    <span
+                      key={i}
+                      className="zn-home__phase"
+                      style={
+                        {
+                          inlineSize: `${((phase.endWeek - phase.startWeek + 1) / plan.totalWeeks) * 100}%`,
+                          "--fill": PHASE_FILL[phase.phase] ?? "var(--zone-1)",
+                        } as CSSProperties
+                      }
+                    />
+                  ))}
+                </span>
+                <Button
+                  asChild
+                  variant="outline-primary"
+                  size="sm"
+                  className="zn-home__plan-cta"
+                >
+                  <Link to={`/plan/prebuilt/${plan.slug}`}>
+                    {t("homepage:home.s05.choose")}
+                    <ArrowRight />
+                  </Link>
+                </Button>
+              </li>
+            ))}
+          </ul>
+
+          <div className="zn-home__legend">
+            <span className="zn-kicker">{t("homepage:home.s05.legend")}</span>
+            {LEGEND_PHASES.map((phase) => (
+              <span
+                key={phase}
+                className="zn-row"
+                style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+              >
+                <span
+                  className="zn-home__swatch"
+                  style={{ "--fill": PHASE_FILL[phase] } as CSSProperties}
+                />
+                <span className="zn-body zn-body--sm zn-muted">
+                  {t(`homepage:home.s05.phases.${phase}`)}
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          §02 — three sessions, deterministic for the ISO week
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section
+        className="zn-section zn-split"
+        style={
+          { "--split": "340px 1fr", "--gap": "var(--sp-18)" } as CSSProperties
+        }
+        aria-labelledby="home-week-title"
+      >
+        <SectionHead
+          id="home-week-title"
+          kicker={t("homepage:home.s02.kicker")}
+          title={t("homepage:home.s02.title")}
+          body={t("homepage:home.s02.body")}
+        />
+        {/* --gap is re-stated here: the section sets one for its own two
+            columns, and custom properties inherit. */}
+        <div className="zn-grid" style={{ "--gap": "var(--gap-grid)" } as CSSProperties}>
+          {suggested.map((w) => (
+            <WorkoutCard key={w.id} workout={w} />
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          §03 — the zone atlas
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section className="zn-section" aria-labelledby="home-zones-title">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <SectionHead
+            id="home-zones-title"
+            kicker={t("homepage:home.s03.kicker")}
+            title={
+              <>
+                {t("homepage:home.s03.title1")}
+                <br />
+                {t("homepage:home.s03.title2")}
+              </>
+            }
+            body={t("homepage:home.s03.body")}
+          />
+
+          <ZonesPersonaliser
+            prefs={userPrefs}
+            hasUserZones={hasUserZones}
+            onSave={updatePrefs}
+          />
+
+          <ResponsiveTable<ZoneNumber>
+            data={[...ZONES]}
+            columns={zoneColumns}
+            rowKey={(z) => z}
+            caption={t("homepage:home.s03.fig")}
+            mobileCardTitle={(z) => (
+              <span
+                className="zn-row"
+                style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+              >
+                <span className="zn-home__zcode" data-zone={z}>
+                  Z{z}
+                </span>
                 <button
                   type="button"
+                  className="zn-home__zname"
                   onClick={() => setSelectedZone(z)}
-                  className="block w-full text-left border border-border rounded-md p-4 hover:bg-accent/30 transition-colors"
                 >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <div className="flex items-baseline gap-3">
-                      <span
-                        className={`inline-flex items-center justify-center px-2 py-1 font-mono text-[11px] rounded-sm ${ZONE_CHIP_BG[z]}`}
-                      >
-                        Z{z}
-                      </span>
-                      <span className="font-semibold text-base">
-                        {pickLang(ZONE_META[z], "label")}
-                      </span>
-                    </div>
-                    <span className="font-mono text-[10px] text-foreground/45 tracking-wider">
-                      {ZONE_FC_PERCENT[z]}
-                    </span>
-                  </div>
-                  <p className="text-sm text-foreground/80 mt-3 leading-snug">
-                    {pickLang(ZONE_META[z], "benefit")}
-                  </p>
-                  <div className="mt-3 pt-3 border-t border-dashed border-border/60 grid grid-cols-3 gap-2 text-xs">
-                    <div>
-                      <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-foreground/45">
-                        {t("homepage:home.s03.hr")}
-                      </p>
-                      <p
-                        className={`font-mono tabular-nums mt-0.5 ${
-                          range ? "text-primary font-semibold" : "text-foreground/60"
-                        }`}
-                      >
-                        {hrCell}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-foreground/45">
-                        {t("homepage:home.s03.rpe")}
-                      </p>
-                      <p className="font-mono tabular-nums mt-0.5 text-foreground/60">
-                        {ZONE_RPE[z]}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-foreground/45">
-                        {t("homepage:home.s03.refPace")}
-                      </p>
-                      <p
-                        className={`font-mono tabular-nums mt-0.5 ${
-                          range ? "text-primary font-semibold" : "text-foreground/60"
-                        }`}
-                      >
-                        {paceCell}
-                      </p>
-                    </div>
-                  </div>
+                  {pickLang(ZONE_META[z], "label")}
                 </button>
-              </li>
-            );
-          })}
-        </ul>
+              </span>
+            )}
+          />
+        </div>
       </section>
 
       <ZoneDetailModal
@@ -922,216 +885,185 @@ export function HomePage() {
         onOpenChange={(open) => !open && setSelectedZone(null)}
       />
 
-      <Divider />
-
       {/* ═══════════════════════════════════════════════════════════════════
-          §04 — Chercheurs et sources de référence
+          §04 — researchers and reference sources
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20">
-        <EditorialTitle>{t("homepage:home.s04.title")}</EditorialTitle>
-        <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
-          {t("homepage:home.s04.body")}
-        </p>
+      <section className="zn-section" aria-labelledby="home-science-title">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <SectionHead
+            id="home-science-title"
+            kicker={t("homepage:home.s04.kicker")}
+            title={t("homepage:home.s04.title")}
+            body={t("homepage:home.s04.body")}
+          />
 
-        {/* Mobile: dense 2-col grid (name + arrow only). Links open the
-            external publication when available, otherwise the methodology
-            hub — matches the calculator-grid pattern on mobile. */}
-        <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-2">
-          {RESEARCHERS.map((r) => {
-            const href = r.source.url ?? "/methodology";
-            const isExternal = !!r.source.url;
-            const cls =
-              "block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 rounded-md flex flex-col h-full";
-            const content = (
-              <>
-                <span
-                  className={`font-mono text-[9px] tracking-[0.14em] uppercase ${r.tagColor} mb-1.5 truncate`}
-                >
-                  {r.tag}
-                </span>
-                <div className="flex items-center gap-2 flex-1">
-                  <span className="text-sm font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
-                    {r.name}
-                  </span>
-                  <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                </div>
-              </>
-            );
-            return (
-              <StaggerItem key={r.name}>
-                {isExternal ? (
-                  <InteractiveCard
-                    href={href}
+          <div className="zn-home__people">
+            {RESEARCHERS.map((r) => (
+              <article key={r.name} className="zn-home__person">
+                <span className="zn-kicker">{r.tag}</span>
+                <h3 className="zn-home__person-name">{r.name}</h3>
+                <p className="zn-body zn-body--sm zn-muted">
+                  {t(r.contributionKey)}
+                </p>
+                <p className="zn-source">{t(r.source.citationKey)}</p>
+                {r.source.url && (
+                  <a
+                    className="zn-home__link"
+                    href={r.source.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={cls}
                   >
-                    {content}
-                  </InteractiveCard>
-                ) : (
-                  <InteractiveCard to={href} className={cls}>
-                    {content}
-                  </InteractiveCard>
+                    {t("homepage:home.s04.viewPublication")}
+                    <ExternalLink />
+                  </a>
                 )}
-              </StaggerItem>
-            );
-          })}
-        </StaggerGrid>
-
-        <StaggerGrid className="hidden md:grid mt-10 grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-          {RESEARCHERS.map((r) => (
-            <StaggerItem key={r.name}>
-              <ResearcherCard researcher={r} t={t} />
-            </StaggerItem>
-          ))}
-        </StaggerGrid>
-
-        {/* Quote of the day — rotates daily through 20 attributable
-            quotes from runners, coaches and sports physicians. */}
-        <blockquote className="mt-16 md:mt-20 max-w-2xl mx-auto text-center">
-          <p className="font-sans italic text-xl md:text-2xl leading-[1.45]">
-            {isEn ? dailyQuote.en : dailyQuote.fr}
-          </p>
-          <p className="mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55">
-            {dailyQuote.author} · {isEn ? dailyQuote.role.en : dailyQuote.role.fr}
-          </p>
-        </blockquote>
-      </section>
-
-      <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          §06 — Calculateurs (grid 3×3, count dérivé du tableau)
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20">
-        <EditorialTitle>{t("homepage:home.s06.title")}</EditorialTitle>
-        <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
-          {t("homepage:home.s06.body")}
-        </p>
-
-        {/* Mobile: dense 2-col grid with title + chevron only — keeps the
-            scroll short. From sm+ each card grows to title + description +
-            CTA, three columns on md+. */}
-        <StaggerGrid className="mt-10 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
-          {CALCULATORS.map((c) => (
-            <StaggerItem key={c.key}>
-              <InteractiveCard
-                to={c.slug}
-                className="block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 sm:p-5 rounded-md flex items-center sm:flex-col sm:items-start gap-2 sm:gap-0 h-full"
-              >
-                <h3 className="text-sm sm:text-base font-semibold sm:mb-1.5 group-hover:text-primary transition-colors flex-1 sm:flex-none leading-snug">
-                  {t(c.titleKey)}
-                </h3>
-                <p className="hidden sm:block text-sm text-muted-foreground leading-snug line-clamp-2">
-                  {t(c.descKey)}
-                </p>
-                <span className="hidden sm:inline-flex mt-auto pt-3 items-center text-xs font-medium text-primary">
-                  {t("calculators:calculateurs.explore")}
-                  <ArrowRight className="size-3 ml-1 transition-transform group-hover:translate-x-0.5" />
-                </span>
-                <ArrowRight className="size-4 sm:hidden text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-              </InteractiveCard>
-            </StaggerItem>
-          ))}
-        </StaggerGrid>
-      </section>
-
-      <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          §08 — Éthos (section sombre inverse) — 4 chiffres factuels
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative w-screen left-1/2 -ml-[50vw] py-16 md:py-24 bg-foreground text-background">
-        <div className="mx-auto max-w-6xl px-4 md:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16">
-          <div>
-            <h2 className="font-sans font-semibold italic text-3xl md:text-5xl leading-[1.05]">
-              {t("homepage:home.s08.title1")}
-              <br />
-              {t("homepage:home.s08.title2")}
-            </h2>
-            <p className="mt-6 text-sm leading-[1.65] text-background/70 max-w-md">
-              {t("homepage:home.s08.body")}
-            </p>
+              </article>
+            ))}
           </div>
 
-          <ul className="space-y-6 md:pt-2">
-            <EthosLine
+          {/* Quote of the day — rotates daily through attributable quotes
+              from runners, coaches and sports physicians. */}
+          <blockquote className="zn-home__quote">
+            <p className="zn-home__quote-text">
+              {isEn ? dailyQuote.en : dailyQuote.fr}
+            </p>
+            <footer className="zn-kicker" style={{ marginBlockStart: "var(--sp-8)" }}>
+              {dailyQuote.author} ·{" "}
+              {isEn ? dailyQuote.role.en : dailyQuote.role.fr}
+            </footer>
+          </blockquote>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          §06 — the calculators
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section className="zn-section" aria-labelledby="home-tools-title">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <SectionHead
+            id="home-tools-title"
+            kicker={t("homepage:home.s06.kicker")}
+            title={t("homepage:home.s06.title")}
+            body={t("homepage:home.s06.body")}
+          />
+          <div className="zn-home__tools">
+            {CALCULATORS.map((c) => (
+              <Link key={c.key} to={c.slug} className="zn-home__tool">
+                <span className="zn-home__tool-name">{t(c.titleKey)}</span>
+                <span className="zn-body zn-body--sm zn-muted">
+                  {t(c.descKey)}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          §08 — ethos, the one inverted band
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section
+        className="zn-section zn-split zn-home__ethos"
+        style={{ "--split": "1fr 1fr", "--gap": "var(--sp-18)" } as CSSProperties}
+        aria-labelledby="home-ethos-title"
+      >
+        <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+          <span className="zn-kicker">{t("homepage:home.s08.kicker")}</span>
+          <h2 id="home-ethos-title" className="zn-display" data-level="3">
+            {t("homepage:home.s08.title1")}
+            <br />
+            {t("homepage:home.s08.title2")}
+          </h2>
+          <p className="zn-body zn-measure">{t("homepage:home.s08.body")}</p>
+        </div>
+
+        <ul className="zn-home__ethos-list">
+          <li>
+            <StatBlock
+              size="lg"
               value="00"
               label={t("homepage:home.s08.lines.trackers")}
             />
-            <EthosLine
+          </li>
+          <li>
+            <StatBlock
+              size="lg"
               value="00"
               label={t("homepage:home.s08.lines.account")}
             />
-            <EthosLine
+          </li>
+          <li>
+            <StatBlock
+              size="lg"
               value="00"
               label={t("homepage:home.s08.lines.network")}
             />
-            <EthosLine
+          </li>
+          <li>
+            <StatBlock
+              size="lg"
               value={String(EXPORT_FORMATS.length).padStart(2, "0")}
               label={t("homepage:home.s08.lines.exports")}
-              sub={EXPORT_FORMATS.map((f) => `.${f}`).join(" · ")}
+              footnote={EXPORT_FORMATS.map((f) => `.${f}`).join(" · ")}
             />
-          </ul>
+          </li>
+        </ul>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          §09 — questions answered in place
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section className="zn-section" aria-labelledby="home-faq-title">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <SectionHead
+            id="home-faq-title"
+            kicker={t("homepage:home.s09.kicker")}
+            title={t("homepage:home.s09.title")}
+          />
+          <div className="zn-home__faq">
+            {FAQ_IDS.map((id, i) => (
+              <details key={id} className="zn-home__faq-item">
+                <summary className="zn-home__faq-q">
+                  <span className="zn-mono zn-faint zn-home__faq-index">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="zn-title" data-level="4">
+                    {t(`homepage:home.s09.q.${id}.q`)}
+                  </span>
+                  <ChevronDown className="zn-home__faq-chevron" />
+                </summary>
+                <p className="zn-body zn-home__faq-a">
+                  {t(`homepage:home.s09.q.${id}.a`)}
+                </p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §09 — FAQ (in-page accordion, real answers — no external link)
+          The last call before the shell's footer
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20">
-        <EditorialTitle>{t("homepage:home.s09.title")}</EditorialTitle>
-
-        <div className="mt-10 border-t border-foreground/15">
-          {FAQ_IDS.map((id, i) => (
-            <details
-              key={id}
-              className="group border-b border-foreground/15 [&[open]>summary>svg]:rotate-180 [&[open]>summary]:bg-accent/40 [&[open]>summary>svg]:text-primary [&[open]>summary>span.q-num]:text-primary"
-            >
-              <summary className="flex items-center gap-4 sm:gap-6 py-5 cursor-pointer list-none hover:bg-accent/30 transition-colors px-2 -mx-2 rounded-sm">
-                <span className="q-num font-mono text-[11px] tracking-[0.15em] text-foreground/50 w-6 shrink-0 transition-colors">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="font-sans italic text-lg md:text-xl flex-1">
-                  {t(`homepage:home.s09.q.${id}.q`)}
-                </span>
-                <ChevronDown className="size-4 text-foreground/40 transition-all shrink-0" />
-              </summary>
-              <div className="pb-5 pl-12 pr-6 text-sm leading-relaxed text-foreground/75 max-w-3xl">
-                {t(`homepage:home.s09.q.${id}.a`)}
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          CTA final — last call before the footer
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 md:py-28 text-center">
-        <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-foreground/55 mb-8">
-          <span className="inline-block h-px w-10 bg-foreground/55 align-middle mr-3" />
-          {t("homepage:home.cta.kicker")}
-          <span className="inline-block h-px w-10 bg-foreground/55 align-middle ml-3" />
-        </p>
-        <h2 className="font-sans font-semibold italic text-3xl md:text-5xl leading-[1.1] max-w-3xl mx-auto">
+      <section className="zn-section zn-home__cta" aria-labelledby="home-cta-title">
+        <span className="zn-kicker">{t("homepage:home.cta.kicker")}</span>
+        <h2
+          id="home-cta-title"
+          className="zn-display zn-home__cta-title"
+          data-level="3"
+        >
           {t("homepage:home.cta.line1")}
           <br />
           {t("homepage:home.cta.line2")}
         </h2>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Button asChild size="lg" className="rounded-full px-6">
+        <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+          <Button asChild size="lg" variant="outline-primary">
             <Link to="/plan/new">
-              <ArrowRight className="size-4" />
               {t("homepage:home.cta.primary")}
+              <ArrowRight />
             </Link>
           </Button>
-          <Button asChild variant="outline-primary" size="lg" className="rounded-full px-6">
-            <Link to="/library">
-              {t("homepage:home.cta.secondary")}
-            </Link>
+          <Button asChild size="lg" variant="outline">
+            <Link to="/library">{t("homepage:home.cta.secondary")}</Link>
           </Button>
         </div>
       </section>
@@ -1140,314 +1072,36 @@ export function HomePage() {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Sub-components — local to the landing. Generic editorial atoms live in
-// src/components/editorial/. The global footer lives in
-// src/components/layout/Footer.tsx and is rendered by App.tsx for every
-// non-fullscreen route, including the home page.
+// Sub-components — local to the landing. The global footer lives in
+// src/components/layout/Footer.tsx and is rendered by App.tsx.
 // ────────────────────────────────────────────────────────────────────────────
 
-function StatBlock({
-  value,
-  label,
-  sub,
-  color,
-}: {
-  value: string;
-  label: string;
-  sub?: string;
-  /** Tailwind text-* class for the big number. Defaults to foreground. */
-  color?: string;
-}) {
-  return (
-    <div>
-      <p
-        className={`font-sans italic text-3xl md:text-4xl leading-none tabular-nums ${color ?? "text-foreground"}`}
-      >
-        {value}
-      </p>
-      <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-foreground/55 mt-2 leading-tight">
-        {label}
-      </p>
-      {sub && (
-        <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-foreground/40 leading-tight">
-          {sub}
-        </p>
-      )}
-    </div>
-  );
-}
-
-/** Stat block whose value animates from 0 to `target` on mount. */
-function CountStat({
-  target,
-  label,
-  color,
-}: {
-  target: number;
-  label: string;
-  color?: string;
-}) {
-  const value = useCountUp(target);
-  return <StatBlock value={String(value)} label={label} color={color} />;
-}
-
-// Canonical Seiler-style polarised reference — these are *teaching values*,
-// not measurements of the user's library. They illustrate what a well-dosed
-// training week looks like under the 80/20 model. Anything that smells like
-// "live data" (TSS, totals) has been removed to avoid mixing both ideas.
-const POLARISED_REFERENCE: Record<ZoneNumber, number> = {
-  1: 62,
-  2: 18,
-  3: 6,
-  4: 9,
-  5: 4,
-  6: 1,
-};
-const POLARISED_LOW = POLARISED_REFERENCE[1] + POLARISED_REFERENCE[2];
-const POLARISED_HIGH =
-  POLARISED_REFERENCE[4] + POLARISED_REFERENCE[5] + POLARISED_REFERENCE[6];
-
-function PolarisedChart() {
-  const { t } = useTranslation("homepage");
-  const reduced = useReducedMotion();
-  const max = Math.max(...Object.values(POLARISED_REFERENCE));
-  const zoneNames: Record<ZoneNumber, string> = {
-    1: t("home.hero.fig.zones.z1"),
-    2: t("home.hero.fig.zones.z2"),
-    3: t("home.hero.fig.zones.z3"),
-    4: t("home.hero.fig.zones.z4"),
-    5: t("home.hero.fig.zones.z5"),
-    6: t("home.hero.fig.zones.z6"),
-  };
-
-  // Bars start collapsed and grow to their target width once the chart
-  // is mounted. Mirrors the "discover, don't announce" intent.
-  const [animated, setAnimated] = useState(reduced);
-  useEffect(() => {
-    if (reduced) {
-      setAnimated(true);
-      return;
-    }
-    const id = window.setTimeout(() => setAnimated(true), 200);
-    return () => window.clearTimeout(id);
-  }, [reduced]);
-
-  return (
-    <div className="border border-border bg-card rounded-lg p-6 md:p-8">
-      <p className="font-sans font-semibold italic text-2xl md:text-3xl leading-tight">
-        {t("home.hero.fig.title")}
-      </p>
-      <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-        {t("home.hero.fig.body")}
-      </p>
-
-      <div className="mt-7 space-y-2.5">
-        {([1, 2, 3, 4, 5, 6] as const).map((zone, i) => {
-          const pct = POLARISED_REFERENCE[zone];
-          return (
-            <div key={zone} className="grid grid-cols-[7.5rem_1fr_2.4rem] items-center gap-3">
-              <div className="flex items-baseline gap-1.5 text-xs min-w-0">
-                <span className="font-mono font-semibold text-foreground/75 shrink-0">
-                  Z{zone}
-                </span>
-                <span className="text-muted-foreground truncate">
-                  {zoneNames[zone]}
-                </span>
-              </div>
-              <div className="h-2.5 bg-foreground/[0.06] rounded-sm overflow-hidden">
-                {/* Animate scaleX, not width: transform runs on the
-                    compositor while width re-layouts every frame (these six
-                    bars were Lighthouse's six non-composited animations).
-                    Width is fixed at the target value; only the scale moves. */}
-                <div
-                  className={`h-full ${ZONE_BAR_BG[zone]} rounded-sm origin-left transition-transform duration-[900ms] ease-out`}
-                  style={{
-                    width: `${(pct / max) * 100}%`,
-                    transform: animated ? "scaleX(1)" : "scaleX(0)",
-                    transitionDelay: reduced ? "0ms" : `${i * 80}ms`,
-                  }}
-                />
-              </div>
-              <span className="font-mono text-xs text-foreground tabular-nums text-right font-semibold">
-                {pct}%
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Two summary chips — the actual takeaway of the figure. */}
-      <div className="mt-6 pt-5 border-t border-dashed border-border grid grid-cols-2 gap-3">
-        <PolarisedSummaryChip
-          rangeLabel={t("home.hero.fig.lowRange")}
-          value={POLARISED_LOW}
-          caption={t("home.hero.fig.lowCaption")}
-          accent="zone-2"
-        />
-        <PolarisedSummaryChip
-          rangeLabel={t("home.hero.fig.highRange")}
-          value={POLARISED_HIGH}
-          caption={t("home.hero.fig.highCaption")}
-          accent="zone-5"
-        />
-      </div>
-    </div>
-  );
-}
-
-function PolarisedSummaryChip({
-  rangeLabel,
-  value,
-  caption,
-  accent,
-}: {
-  rangeLabel: string;
-  value: number;
-  caption: string;
-  accent: "zone-2" | "zone-5";
-}) {
-  const accentBg = accent === "zone-2" ? "bg-zone-2/15" : "bg-zone-5/15";
-  const accentText = accent === "zone-2" ? "text-zone-2" : "text-zone-5";
-  return (
-    <div className={`${accentBg} rounded-md p-3`}>
-      <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground leading-tight">
-        {rangeLabel}
-      </p>
-      <p className={`font-sans font-semibold italic text-2xl mt-1 ${accentText}`}>
-        {value}&thinsp;%
-      </p>
-      <p className="text-[11px] text-muted-foreground mt-0.5 leading-tight">
-        {caption}
-      </p>
-    </div>
-  );
-}
-
-function EntryColumn({
-  num,
+/** The head of a band: mono kicker, then the title, then the body. Every
+ *  section on this page opens the same way, which is what makes the page read
+ *  as one document rather than as a stack of widgets. */
+function SectionHead({
+  id,
+  kicker,
   title,
   body,
-  linkLabel,
-  to,
+  note,
 }: {
-  num: string;
-  title: string;
-  body: string;
-  linkLabel: string;
-  to: string;
+  id: string;
+  kicker: string;
+  title: ReactNode;
+  body?: string;
+  /** One extra line under the body — a practical aside, not a second body. */
+  note?: string;
 }) {
   return (
-    <div className="py-8 md:py-0 md:px-8 first:md:pl-0 last:md:pr-0 flex flex-col">
-      <p className="font-mono text-[11px] tracking-[0.15em] text-foreground/50 mb-3">
-        {num}
-      </p>
-      <h3 className="font-sans italic text-2xl mb-3">{title}</h3>
-      <p className="text-sm leading-[1.65] text-foreground/75 mb-5 flex-1">
-        {body}
-      </p>
-      <Button asChild variant="outline-primary" size="sm" className="self-start">
-        <Link to={to}>
-          {linkLabel}
-          <ArrowRight className="size-3.5" />
-        </Link>
-      </Button>
+    <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+      <span className="zn-kicker">{kicker}</span>
+      <h2 id={id} className="zn-title" data-level="1">
+        {title}
+      </h2>
+      {body && <p className="zn-body zn-measure">{body}</p>}
+      {note && <p className="zn-body zn-body--sm zn-muted zn-measure">{note}</p>}
     </div>
-  );
-}
-
-// ── §03 zone metadata. RPE and the "% FCmax" model lines describe the
-// physiology and don't depend on the user; the bpm and pace columns are
-// computed from their measured FCmax / VMA when available (see calculateAll
-// Zones), and these fallbacks appear when nothing has been measured yet.
-const ZONE_FC_PERCENT: Record<ZoneNumber, string> = {
-  1: "50–60 % FCmax",
-  2: "60–70 % FCmax",
-  3: "70–80 % FCmax",
-  4: "80–90 % FCmax",
-  5: "90–100 % FCmax",
-  6: "> 100 % FCmax",
-};
-const ZONE_FC_FALLBACK: Record<ZoneNumber, string> = {
-  1: "—",
-  2: "—",
-  3: "—",
-  4: "—",
-  5: "—",
-  6: "—",
-};
-const ZONE_RPE: Record<ZoneNumber, string> = {
-  1: "1–2 / 10",
-  2: "3–4 / 10",
-  3: "5–6 / 10",
-  4: "7 / 10",
-  5: "8–9 / 10",
-  6: "10 / 10",
-};
-const ZONE_PACE_FALLBACK: Record<ZoneNumber, string> = {
-  1: "—",
-  2: "—",
-  3: "—",
-  4: "—",
-  5: "—",
-  6: "—",
-};
-
-function ZoneRow({
-  zone,
-  label,
-  hrRange,
-  fcPercent,
-  rpe,
-  benefit,
-  refPace,
-  isPersonal,
-  onClick,
-}: {
-  zone: ZoneNumber;
-  label: string;
-  hrRange: string;
-  fcPercent: string;
-  rpe: string;
-  benefit: string;
-  refPace: string;
-  isPersonal: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <tr
-      className="border-b border-foreground/10 hover:bg-foreground/[0.03] transition-colors cursor-pointer"
-      onClick={onClick}
-    >
-      <td className="py-5 pr-4">
-        <span
-          className={`inline-flex items-center justify-center px-2 py-1 font-mono text-[11px] ${ZONE_CHIP_BG[zone]}`}
-        >
-          Z{zone}
-        </span>
-      </td>
-      <td className="py-5 pr-4">
-        <p className="font-sans italic text-lg leading-tight">{label}</p>
-        <p className="font-mono text-[10px] tracking-wider text-foreground/45 mt-0.5">
-          {fcPercent}
-        </p>
-      </td>
-      <td className="py-5 pr-4 font-mono text-xs tabular-nums">
-        <span className={isPersonal ? "text-primary font-semibold" : "text-foreground/45"}>
-          {hrRange}
-        </span>
-      </td>
-      <td className="py-5 pr-4 font-mono text-xs text-foreground/70 tabular-nums">
-        {rpe}
-      </td>
-      <td className="py-5 pr-4 text-sm leading-snug text-foreground/80">
-        {benefit}
-      </td>
-      <td className="py-5 pl-4 text-right font-mono text-xs tabular-nums">
-        <span className={isPersonal ? "text-primary font-semibold" : "text-foreground/45"}>
-          {refPace}
-        </span>
-      </td>
-    </tr>
   );
 }
 
@@ -1482,243 +1136,68 @@ function ZonesPersonaliser({
 
   if (hasUserZones && !editing) {
     return (
-      <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-        <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-foreground/55">
-          {t("home.s03.personal.label")}
-        </span>
+      <div className="zn-cluster" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+        <span className="zn-kicker">{t("home.s03.personal.label")}</span>
         {prefs?.vma != null && (
-          <span className="font-mono tabular-nums">
-            VMA <strong className="text-foreground font-semibold">{prefs.vma}</strong> km/h
-          </span>
+          <span className="zn-mono zn-muted">VMA {prefs.vma} km/h</span>
         )}
         {prefs?.fcMax != null && (
-          <span className="font-mono tabular-nums">
-            FCmax <strong className="text-foreground font-semibold">{prefs.fcMax}</strong> bpm
-          </span>
+          <span className="zn-mono zn-muted">FCmax {prefs.fcMax} bpm</span>
         )}
-        <button
-          type="button"
-          onClick={() => setEditing(true)}
-          className="text-primary text-sm font-medium underline underline-offset-4 hover:text-primary/80"
-        >
+        <Button type="button" variant="link" onClick={() => setEditing(true)}>
           {t("home.s03.personal.edit")}
-        </button>
+        </Button>
       </div>
     );
   }
 
   return (
-    <form
-      onSubmit={submit}
-      className="mt-6 flex flex-wrap items-end gap-3 p-4 rounded-md border border-dashed border-border bg-card"
-    >
-      <div>
-        <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground mb-2">
-          {t("home.s03.personal.prompt")}
-        </p>
-        <div className="flex flex-wrap items-end gap-3">
-          <label className="flex flex-col text-xs text-muted-foreground">
-            <span className="mb-1">{t("home.s03.personal.vmaLabel")}</span>
-            <input
-              type="number"
-              inputMode="decimal"
-              step="0.1"
-              min="8"
-              max="30"
-              value={vma}
-              onChange={(e) => setVma(e.target.value)}
-              placeholder="16.0"
-              className="w-24 px-2.5 py-1.5 rounded border border-input bg-background text-sm tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
-          </label>
-          <label className="flex flex-col text-xs text-muted-foreground">
-            <span className="mb-1">{t("home.s03.personal.fcMaxLabel")}</span>
-            <input
-              type="number"
-              inputMode="numeric"
-              step="1"
-              min="100"
-              max="250"
-              value={fcMax}
-              onChange={(e) => setFcMax(e.target.value)}
-              placeholder="190"
-              className="w-24 px-2.5 py-1.5 rounded border border-input bg-background text-sm tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
-          </label>
-          <Button type="submit" size="sm">
-            {t("home.s03.personal.submit")}
-          </Button>
-          {editing && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setEditing(false)}
-            >
-              {t("home.s03.personal.cancel")}
-            </Button>
-          )}
-        </div>
+    <form onSubmit={submit} className="zn-home__prefs">
+      <p className="zn-kicker" style={{ flexBasis: "100%" }}>
+        {t("home.s03.personal.prompt")}
+      </p>
+      <div className="zn-home__field">
+        <label className="zn-label" htmlFor="home-vma">
+          {t("home.s03.personal.vmaLabel")}
+        </label>
+        <input
+          id="home-vma"
+          className="zn-home__input"
+          type="number"
+          inputMode="decimal"
+          step="0.1"
+          min="8"
+          max="30"
+          value={vma}
+          onChange={(e) => setVma(e.target.value)}
+          placeholder="16.0"
+        />
       </div>
+      <div className="zn-home__field">
+        <label className="zn-label" htmlFor="home-fcmax">
+          {t("home.s03.personal.fcMaxLabel")}
+        </label>
+        <input
+          id="home-fcmax"
+          className="zn-home__input"
+          type="number"
+          inputMode="numeric"
+          step="1"
+          min="100"
+          max="250"
+          value={fcMax}
+          onChange={(e) => setFcMax(e.target.value)}
+          placeholder="190"
+        />
+      </div>
+      <Button type="submit" variant="outline-primary">
+        {t("home.s03.personal.submit")}
+      </Button>
+      {editing && (
+        <Button type="button" variant="ghost" onClick={() => setEditing(false)}>
+          {t("home.s03.personal.cancel")}
+        </Button>
+      )}
     </form>
   );
 }
-
-function ResearcherCard({
-  researcher,
-  t,
-}: {
-  researcher: Researcher;
-  t: ReturnType<typeof useTranslation>["t"];
-}) {
-  const hasUrl = !!researcher.source.url;
-  return (
-    <article className="pl-5 py-1 border-l border-border transition-colors hover:border-foreground/40">
-      <p
-        className={`font-mono text-[10px] tracking-[0.16em] uppercase ${researcher.tagColor} mb-1.5`}
-      >
-        {researcher.tag}
-      </p>
-      <h3 className="text-lg font-semibold">{researcher.name}</h3>
-      <p className="text-sm text-muted-foreground mt-1 leading-snug">
-        {t(researcher.contributionKey)}
-      </p>
-      <p className="font-sans italic text-sm text-foreground/80 mt-3 leading-snug">
-        {t(researcher.source.citationKey)}
-      </p>
-      {hasUrl && (
-        <a
-          href={researcher.source.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80"
-        >
-          {t("homepage:home.s04.viewPublication")}
-          <ArrowRight className="size-3" />
-        </a>
-      )}
-    </article>
-  );
-}
-
-/** Maps macrocycle phase identifiers to zone-coloured backgrounds. The
- *  same colour scale is reused by the legend below the plan rows so the
- *  reader can decode the segments in one glance. */
-const PHASE_COLORS: Record<string, string> = {
-  base: "bg-zone-2",
-  build: "bg-zone-3",
-  peak: "bg-zone-4",
-  taper: "bg-zone-5",
-  recovery: "bg-zone-1",
-};
-
-function PlanRow({
-  label,
-  plan,
-  t,
-}: {
-  label: string;
-  plan: ReturnType<typeof getAllPrebuiltPlans>[number];
-  t: ReturnType<typeof useTranslation>["t"];
-}) {
-  const reduced = useReducedMotion();
-  return (
-    <motion.div
-      className="grid grid-cols-2 md:grid-cols-[1.2fr_1fr_1fr_2fr_0.8fr] items-center gap-4 py-5"
-      initial={reduced ? false : { opacity: 0, y: 12 }}
-      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
-    >
-      <p className="font-sans italic text-xl md:text-2xl">{label}</p>
-      <p className="text-sm text-foreground/70">
-        {plan.totalWeeks} {t("homepage:home.s05.weeks")}
-      </p>
-      <p className="text-sm text-foreground/70 hidden md:block">
-        {plan.sessionsPerWeek} {t("homepage:home.s05.sessionsPerWeek")}
-      </p>
-      {/* Phase bar — fills in left-to-right when the row enters the
-          viewport. Each segment's width is proportional to its share of
-          the total weeks; same colour code as the legend below. */}
-      <motion.div
-        className="hidden md:flex h-2 overflow-hidden rounded-sm origin-left"
-        initial={reduced ? false : { scaleX: 0 }}
-        whileInView={reduced ? undefined : { scaleX: 1 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease: [0, 0, 0.2, 1], delay: 0.1 }}
-      >
-        {plan.phases.map((p, i) => {
-          const span = p.endWeek - p.startWeek + 1;
-          const pct = (span / plan.totalWeeks) * 100;
-          return (
-            <div
-              key={i}
-              className={PHASE_COLORS[p.phase] ?? "bg-foreground/20"}
-              style={{ width: `${pct}%` }}
-              title={`${p.phase} (${span}w)`}
-            />
-          );
-        })}
-      </motion.div>
-      <Button asChild variant="outline-primary" size="sm" className="justify-self-end">
-        <Link to={`/plan/prebuilt/${plan.slug}`}>
-          {t("homepage:home.s05.choose")}
-          <ArrowRight className="size-3.5" />
-        </Link>
-      </Button>
-    </motion.div>
-  );
-}
-
-/** Tiny legend explaining what the phase-bar colours mean. Anchored
- *  under the plan table; only visible from md+ since the bars are
- *  hidden on mobile (each row reduces to label + weeks + CTA there). */
-function PlanPhaseLegend() {
-  const { t } = useTranslation("homepage");
-  const phases: Array<{ key: string; color: string }> = [
-    { key: "base", color: PHASE_COLORS.base },
-    { key: "build", color: PHASE_COLORS.build },
-    { key: "peak", color: PHASE_COLORS.peak },
-    { key: "taper", color: PHASE_COLORS.taper },
-  ];
-  return (
-    <div className="hidden md:flex flex-wrap items-center gap-x-5 gap-y-2 mt-4 text-xs text-muted-foreground">
-      <span className="font-mono text-[10px] tracking-[0.18em] uppercase">
-        {t("home.s05.legend")}
-      </span>
-      {phases.map((p) => (
-        <span key={p.key} className="inline-flex items-center gap-1.5">
-          <span className={`inline-block w-3.5 h-2 rounded-sm ${p.color}`} />
-          {t(`home.s05.phases.${p.key}`)}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function EthosLine({
-  value,
-  label,
-  sub,
-}: {
-  value: string;
-  label: string;
-  sub?: string;
-}) {
-  return (
-    <li className="grid grid-cols-[80px_1fr] items-baseline gap-4 border-b border-background/15 pb-5">
-      <span className="font-sans italic text-3xl md:text-4xl tabular-nums">
-        {value}
-      </span>
-      <div>
-        <p className="text-sm md:text-base">{label}</p>
-        {sub && (
-          <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-background/55 mt-1">
-            {sub}
-          </p>
-        )}
-      </div>
-    </li>
-  );
-}
-

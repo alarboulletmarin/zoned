@@ -1,23 +1,30 @@
-import { useDeferredValue, useMemo, useState, useEffect, useRef, useCallback } from "react";
+import {
+  useDeferredValue,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  type ComponentType,
+} from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
-  Filter,
   Search,
-  Loader2,
   Dumbbell,
   Run,
   Bike,
   Pool,
   X,
+  type IconProps,
 } from "@/components/icons";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 import { Button } from "@/components/ui/button";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-
-import { WorkoutCardSkeleton } from "@/components/skeletons";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import {
   WorkoutCard,
@@ -39,11 +46,11 @@ import {
   useWorkouts,
   useViewMode,
 } from "@/hooks";
+import { useAppStats } from "@/hooks/useAppStats";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
-import { getWorkoutDuration } from "@/components/visualization";
+import { getWorkoutDuration, ZoneScale } from "@/components/visualization";
 import { categories } from "@/data/workouts";
-import { strengthCategories } from "@/data/strength";
 import type {
   WorkoutCategory,
   AnyWorkoutTemplate,
@@ -56,12 +63,30 @@ import type {
   StrengthEquipment,
   MuscleGroup,
 } from "@/types/strength";
-import { cn } from "@/lib/utils";
 import { normalizeSearch } from "@/lib/search-utils";
 
 // Duration constants (same as in WorkoutFilters)
 const DURATION_MIN = 0;
 const DURATION_MAX = 300;
+
+/** The discipline strip. "all" is a view of the catalogue, not a discipline. */
+const ACTIVITY_TYPES: ActivityType[] = [
+  "all",
+  "running",
+  "cycling",
+  "swimming",
+  "strength",
+];
+const DISCIPLINE_COUNT = ACTIVITY_TYPES.length - 1;
+
+const ACTIVITY_ICONS: Partial<
+  Record<ActivityType, ComponentType<IconProps>>
+> = {
+  running: Run,
+  cycling: Bike,
+  swimming: Pool,
+  strength: Dumbbell,
+};
 
 /**
  * Get average duration for a strength workout
@@ -167,11 +192,10 @@ function parseActivityType(searchParams: URLSearchParams): ActivityType {
 export function LibraryPage() {
   usePageHint("library", "hints.library.title", "hints.library.description");
   const { t, i18n } = useTranslation(["library", "common"]);
-  const { t: tStrength } = useTranslation("strength");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchParams, setSearchParams] = useSearchParams();
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();
+  const stats = useAppStats();
   const { workouts: runningWorkouts, isLoading: isLoadingRunning } =
     useWorkouts();
   const { workouts: strengthWorkouts, isLoading: isLoadingStrength } =
@@ -182,7 +206,6 @@ export function LibraryPage() {
     useCrossDisciplineWorkouts("swimming");
   const { viewMode, setViewMode } = useViewMode();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const filterSectionRef = useRef<HTMLDivElement>(null);
 
   const PAGE_SIZE = 24;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -192,18 +215,7 @@ export function LibraryPage() {
     parseActivityType(searchParams),
   );
 
-  // Temporary filters for mobile (apply/cancel behavior)
-  const [tempFilters, setTempFilters] =
-    useState<WorkoutFiltersState>(defaultFilters);
-
-  const closeMobileFilters = useCallback(() => {
-    setShowMobileFilters(false);
-  }, []);
-
-  useKeyboardShortcuts({
-    searchRef: searchInputRef,
-    onCloseMobileFilters: closeMobileFilters,
-  });
+  useKeyboardShortcuts({ searchRef: searchInputRef });
 
   // Build merged workout list based on activity type
   const allWorkouts: AnyWorkoutTemplate[] = useMemo(() => {
@@ -263,23 +275,6 @@ export function LibraryPage() {
     count += f.equipment.length;
     count += f.muscleGroup.length;
     return count;
-  };
-
-  // Open mobile filters and sync temp state
-  const openMobileFilters = () => {
-    setTempFilters(filters);
-    setShowMobileFilters(true);
-  };
-
-  // Apply temporary filters
-  const applyFilters = () => {
-    setFilters(tempFilters);
-    setShowMobileFilters(false);
-  };
-
-  // Cancel without applying
-  const cancelFilters = () => {
-    setShowMobileFilters(false);
   };
 
   // Initialize filters from URL params
@@ -509,14 +504,6 @@ export function LibraryPage() {
     );
   }, [allWorkouts, deferredFilters, applyFiltersToWorkout]);
 
-  // Calculate temp filtered count for Apply button
-  const tempFilteredCount = useMemo(() => {
-    if (!showMobileFilters) return 0;
-    return allWorkouts.filter((workout) =>
-      applyFiltersToWorkout(workout, tempFilters),
-    ).length;
-  }, [allWorkouts, tempFilters, showMobileFilters, applyFiltersToWorkout]);
-
   // Count active filters
   const activeFiltersCount = useMemo(() => {
     return getActiveFiltersCount(filters);
@@ -534,17 +521,34 @@ export function LibraryPage() {
     onLoadMore: handleLoadMore,
   });
 
-  // Dynamic subtitle based on activity type
-  const subtitleKey =
-    activityType === "strength"
-      ? "subtitleStrength"
-      : activityType === "all"
-        ? "subtitleAll"
-        : "subtitle";
-
   const seoDescription = isEn
     ? `Browse ${allWorkouts.length} science-based training sessions. Filter by category, difficulty, duration, and more.`
     : `Parcourez ${allWorkouts.length} séances d'entraînement scientifiques. Filtrez par catégorie, difficulté, durée et plus.`;
+
+  // The strip's meta line: what is on screen, and what is narrowing it.
+  const metaLine = [
+    t("meta.results", { count: filteredWorkouts.length }),
+    activeFiltersCount > 0
+      ? t("meta.filters", { count: activeFiltersCount })
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  // An empty result states its cause with a number, and offers the way back.
+  const emptyDescription = filters.favoritesOnly
+    ? t("emptyState.noFavoritesDescription")
+    : activeFiltersCount > 0
+      ? t("emptyState.filteredOut", {
+          count: activeFiltersCount,
+          total: allWorkouts.length,
+        })
+      : filters.searchQuery
+        ? t("emptyState.noMatchForQuery", {
+            query: filters.searchQuery,
+            total: allWorkouts.length,
+          })
+        : t("emptyState.noResultsDescription");
 
   return (
     <>
@@ -559,386 +563,201 @@ export function LibraryPage() {
           url: "https://zoned.run/library",
         }}
       />
-      <div className="py-8 max-w-7xl mx-auto">
-        {/* Header */}
-        <div ref={filterSectionRef} className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <EditorialTitle as="h1" size="md">
-                {t("title")}
-              </EditorialTitle>
-              <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
-                {t(subtitleKey, { count: filteredWorkouts.length })}
-              </FadeUp>
-            </div>
 
-            <div className="flex items-center gap-2 shrink-0">
-              {/* View mode selector */}
-              <ViewModeSelector value={viewMode} onChange={setViewMode} />
-
-              {/* Mobile filter button with badge */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={openMobileFilters}
-                aria-label={t("filters.title")}
-                className="lg:hidden relative"
-              >
-                <Filter className="size-4" aria-hidden="true" />
-                <span className="hidden sm:inline ml-2">
-                  {t("filters.title")}
-                </span>
-                {activeFiltersCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
-                    {activeFiltersCount}
-                  </span>
-                )}
-              </Button>
-            </div>
+      <div className="zn-lib">
+        {/* 1 — the catalogue, named and counted, with the way into it */}
+        <section className="zn-split zn-lib__head">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+          >
+            <span className="zn-kicker">
+              {stats.workouts > 0
+                ? t("catalogue", {
+                    workouts: stats.workouts,
+                    categories: categories.length,
+                    disciplines: DISCIPLINE_COUNT,
+                  })
+                : " "}
+            </span>
+            <h1 className="zn-display" data-level="2">
+              {t("title")}
+            </h1>
           </div>
 
-          {/* Activity type toggle */}
-          <div className="mb-4">
-            <div className="flex w-fit max-w-full flex-wrap items-center gap-0.5 rounded-lg border border-border bg-muted/50 p-0.5">
-              {(["all", "running", "cycling", "swimming", "strength"] as const).map(
-                (type) => (
-                  <button
-                    key={type}
-                    onClick={() => handleActivityTypeChange(type)}
-                    className={cn(
-                      "inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-                      activityType === type
-                        ? "bg-background text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    {type === "running" && <Run className="size-3.5" />}
-                    {type === "cycling" && <Bike className="size-3.5" />}
-                    {type === "swimming" && <Pool className="size-3.5" />}
-                    {type === "strength" && <Dumbbell className="size-3.5" />}
-                    {t(`activityToggle.${type}`)}
-                  </button>
-                ),
-              )}
-            </div>
-          </div>
-
-          {/* Mobile search bar */}
-          <div className="lg:hidden relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <div className="zn-lib__search" role="search">
+            <Search size={16} className="zn-lib__search-glyph" />
             <input
               ref={searchInputRef}
-              type="text"
+              type="search"
+              className="zn-lib__search-input"
               aria-label={t("filters.searchLabel")}
-              placeholder={t("filters.search")}
+              placeholder={t("filters.searchPlaceholder")}
               value={filters.searchQuery}
               onChange={(e) =>
                 setFilters({ ...filters, searchQuery: e.target.value })
               }
-              className="w-full h-10 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
+            {filters.searchQuery && (
+              <button
+                type="button"
+                className="zn-lib__search-clear"
+                aria-label={t("common:actions.clear")}
+                onClick={() => setFilters({ ...filters, searchQuery: "" })}
+              >
+                <X size={14} />
+              </button>
+            )}
           </div>
+        </section>
 
-          {/* Category quick filters - mobile only */}
-          <div className="lg:hidden mt-3">
-            <div className="flex flex-wrap gap-2">
-              {/* Running / cycling / swimming categories (shared WorkoutCategory enum) */}
-              {(activityType === "running" ||
-                activityType === "cycling" ||
-                activityType === "swimming" ||
-                activityType === "all") &&
-                categories.map((cat) => (
+        {/* 2 — the discipline strip, on the rule */}
+        <div className="zn-lib__strip">
+          <div className="zn-tabs__list zn-lib__tabs">
+            <div
+              className="zn-lib__disciplines"
+              role="radiogroup"
+              aria-label={t("draw.filters.discipline")}
+            >
+              {ACTIVITY_TYPES.map((type) => {
+                const Icon = ACTIVITY_ICONS[type];
+                const active = activityType === type;
+                return (
                   <button
-                    key={cat}
+                    key={type}
                     type="button"
-                    onClick={() =>
-                      setFilters({
-                        ...filters,
-                        category: filters.category.includes(
-                          cat as WorkoutCategory,
-                        )
-                          ? filters.category.filter((c) => c !== cat)
-                          : [...filters.category, cat as WorkoutCategory],
-                        strengthCategory: [],
-                      })
-                    }
-                    className={cn(
-                      "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
-                      filters.category.includes(cat as WorkoutCategory)
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
-                    )}
+                    role="radio"
+                    aria-checked={active}
+                    data-state={active ? "active" : "inactive"}
+                    className="zn-tabs__trigger"
+                    onClick={() => handleActivityTypeChange(type)}
                   >
-                    {t(`categories.${cat}`)}
+                    {Icon && <Icon size={15} />}
+                    {t(`activityToggle.${type}`)}
                   </button>
-                ))}
-              {/* Strength categories */}
-              {(activityType === "strength" || activityType === "all") &&
-                strengthCategories.map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() =>
-                      setFilters({
-                        ...filters,
-                        category: [],
-                        strengthCategory: filters.strengthCategory.includes(
-                          cat as StrengthCategory,
-                        )
-                          ? filters.strengthCategory.filter((c) => c !== cat)
-                          : [
-                              ...filters.strengthCategory,
-                              cat as StrengthCategory,
-                            ],
-                      })
-                    }
-                    className={cn(
-                      "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
-                      filters.strengthCategory.includes(cat as StrengthCategory)
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
-                    )}
-                  >
-                    {tStrength(`categories.${cat}`)}
-                  </button>
-                ))}
+                );
+              })}
             </div>
+
+            <span className="zn-mono zn-lib__meta">{metaLine}</span>
+            <ViewModeSelector
+              value={viewMode}
+              onChange={setViewMode}
+              className="zn-lib__viewmode"
+            />
           </div>
         </div>
 
-        <div className="flex gap-8">
-          {/* Sidebar Filters - Desktop */}
-          <aside className="hidden lg:block w-80 shrink-0">
-            <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain">
-              <WorkoutFilters
-                filters={filters}
-                onFiltersChange={setFilters}
-                searchInputRef={searchInputRef}
-                activityType={activityType}
-              />
-            </div>
-          </aside>
+        {/* 3 — the filters, one band, every viewport */}
+        <WorkoutFilters
+          filters={filters}
+          onFiltersChange={setFilters}
+          activityType={activityType}
+        />
 
-          {/* Mobile Filters Drawer */}
-          {showMobileFilters && (
-            <div className="fixed inset-0 z-50 lg:hidden">
-              <div
-                className="absolute inset-0 bg-background/80 backdrop-blur-sm"
-                onClick={cancelFilters}
-              />
-              <div
-                className="absolute inset-y-0 right-0 w-full max-w-xs bg-background border-l shadow-lg flex flex-col"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="mobile-filters-title"
-              >
-                {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b shrink-0">
-                  <h2 id="mobile-filters-title" className="font-semibold">
-                    {t("filters.title")}
-                  </h2>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={cancelFilters}
-                    aria-label={t("actions.close")}
-                  >
-                    ×
-                  </Button>
-                </div>
+        {/* 4 — the ink ramp orders the zones, it does not name them */}
+        <div className="zn-lib__legend">
+          <ZoneScale />
+        </div>
 
-                {/* Filters content - scrollable */}
-                <div className="flex-1 overflow-y-auto p-6">
-                  <WorkoutFilters
-                    filters={tempFilters}
-                    onFiltersChange={setTempFilters}
-                    hideSearch
-                    activityType={activityType}
+        {/* 5 — the results */}
+        <section className="zn-lib__results" aria-busy={isLoading}>
+          {isLoading ? (
+            <div className="zn-grid zn-lib__grid">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="zn-lib__skeleton" aria-hidden="true">
+                  <Skeleton className="zn-lib__skeleton-title" />
+                  <Skeleton className="zn-lib__skeleton-line" />
+                  <Skeleton className="zn-lib__skeleton-line zn-lib__skeleton-line--short" />
+                  <Skeleton
+                    variant="zone-shimmer"
+                    className="zn-lib__skeleton-bar"
                   />
+                  <Skeleton className="zn-lib__skeleton-line zn-lib__skeleton-line--short" />
                 </div>
-
-                {/* Footer with Clear / Cancel / Apply */}
-                <div className="border-t p-4 flex flex-col gap-2 shrink-0">
-                  {(tempFilters.category.length > 0 ||
-                    tempFilters.difficulty.length > 0 ||
-                    tempFilters.durationRange[0] !== DURATION_MIN ||
-                    tempFilters.durationRange[1] !== DURATION_MAX ||
-                    tempFilters.terrain.length > 0 ||
-                    tempFilters.targetSystem.length > 0 ||
-                    tempFilters.favoritesOnly ||
-                    tempFilters.strengthCategory.length > 0 ||
-                    tempFilters.equipment.length > 0 ||
-                    tempFilters.muscleGroup.length > 0) && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setTempFilters(defaultFilters)}
-                      className="w-full"
-                    >
-                      <X className="size-4 mr-1" />
-                      {t("clearFilters")}
-                    </Button>
-                  )}
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      onClick={cancelFilters}
-                      className="flex-1"
-                    >
-                      {t("common:actions.cancel")}
-                    </Button>
-                    <Button onClick={applyFilters} className="flex-1">
-                      {t("filters.apply")} ({tempFilteredCount})
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
-          )}
-
-          {/* Workout Display */}
-          <div className="flex-1">
-            {isLoading ? (
-              <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <WorkoutCardSkeleton key={i} className="border-border/50" />
-                ))}
-              </div>
-            ) : filteredWorkouts.length > 0 ? (
-              <>
-                {viewMode === "grid" && (
-                  <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
-                    {visibleWorkouts.map((workout) => (
-                      <WorkoutCard key={workout.id} workout={workout} />
-                    ))}
-                  </div>
-                )}
-
-                {viewMode === "list" && (
-                  <div className="space-y-3">
-                    {visibleWorkouts.map((workout) => (
-                      <WorkoutListItem key={workout.id} workout={workout} />
-                    ))}
-                  </div>
-                )}
-
-                {viewMode === "compact" && (
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                    {visibleWorkouts.map((workout) => (
-                      <WorkoutCardCompact key={workout.id} workout={workout} />
-                    ))}
-                  </div>
-                )}
-
-                {viewMode === "focus" && (
-                  <div className="flex flex-col gap-8 max-w-2xl mx-auto">
-                    {visibleWorkouts.map((workout) => (
-                      <WorkoutCard
-                        key={workout.id}
-                        workout={workout}
-                        expanded
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {/* Pagination: count + infinite scroll */}
-                <div className="mt-6 flex flex-col items-center gap-3">
-                  <p className="text-sm text-muted-foreground">
-                    {t("showingCount", {
-                      visible: visibleWorkouts.length,
-                      total: filteredWorkouts.length,
-                    })}
-                  </p>
-                  {hasMore && (
-                    <>
-                      <div
-                        ref={sentinelRef}
-                        className="w-full h-1"
-                        aria-hidden="true"
-                      />
-                      <div className="flex items-center justify-center py-4">
-                        <Loader2 className="size-5 animate-spin text-muted-foreground" />
-                      </div>
-                    </>
-                  )}
+          ) : filteredWorkouts.length > 0 ? (
+            <>
+              {viewMode === "grid" && (
+                <div className="zn-grid zn-lib__grid">
+                  {visibleWorkouts.map((workout) => (
+                    <WorkoutCard key={workout.id} workout={workout} />
+                  ))}
                 </div>
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                {/* Animated search icon with scan line */}
-                <svg
-                  width="64"
-                  height="64"
-                  viewBox="0 0 64 64"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="mb-4 motion-safe:animate-pulse"
-                  aria-hidden="true"
+              )}
+
+              {viewMode === "list" && (
+                <div
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
                 >
-                  <style>{`
-                  @keyframes lib-scan {
-                    0%, 100% { transform: translateY(12px); opacity: 0; }
-                    20% { opacity: 0.6; }
-                    80% { opacity: 0.6; }
-                    50% { transform: translateY(36px); }
-                  }
-                `}</style>
-                  <circle
-                    cx="28"
-                    cy="28"
-                    r="16"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeOpacity="0.3"
-                    fill="none"
-                  />
-                  <line
-                    x1="40"
-                    y1="40"
-                    x2="52"
-                    y2="52"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeOpacity="0.3"
-                  />
-                  {/* Scan line */}
-                  <line
-                    x1="16"
-                    y1="28"
-                    x2="40"
-                    y2="28"
-                    stroke="var(--zone-3)"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeOpacity="0.6"
-                    style={{ animation: "lib-scan 2.5s ease-in-out infinite" }}
-                  />
-                </svg>
-                <h3 className="text-lg font-medium text-foreground mb-1">
-                  {filters.favoritesOnly
-                    ? t("emptyState.noFavorites")
-                    : t("emptyState.noResults")}
-                </h3>
-                <p className="text-sm text-muted-foreground max-w-sm mb-4">
-                  {filters.favoritesOnly
-                    ? t("emptyState.noFavoritesDescription")
-                    : t("emptyState.noResultsDescription")}
+                  {visibleWorkouts.map((workout) => (
+                    <WorkoutListItem key={workout.id} workout={workout} />
+                  ))}
+                </div>
+              )}
+
+              {viewMode === "compact" && (
+                <div className="zn-grid zn-lib__grid" data-view="compact">
+                  {visibleWorkouts.map((workout) => (
+                    <WorkoutCardCompact key={workout.id} workout={workout} />
+                  ))}
+                </div>
+              )}
+
+              {viewMode === "focus" && (
+                <div className="zn-stack zn-lib__focus">
+                  {visibleWorkouts.map((workout) => (
+                    <WorkoutCard key={workout.id} workout={workout} expanded />
+                  ))}
+                </div>
+              )}
+
+              {/* Pagination: count + infinite scroll */}
+              <div className="zn-lib__more">
+                <p className="zn-mono">
+                  {t("showingCount", {
+                    visible: visibleWorkouts.length,
+                    total: filteredWorkouts.length,
+                  })}
                 </p>
+                {hasMore && (
+                  <>
+                    <div
+                      ref={sentinelRef}
+                      className="zn-lib__sentinel"
+                      aria-hidden="true"
+                    />
+                    <Spinner size={18} />
+                  </>
+                )}
+              </div>
+            </>
+          ) : (
+            <EmptyState
+              variant="no-results"
+              icon={Search}
+              title={
+                filters.favoritesOnly
+                  ? t("emptyState.noFavorites")
+                  : t("emptyState.noResults")
+              }
+              description={emptyDescription}
+              action={
                 <Button
-                  variant="link"
+                  variant="outline"
                   onClick={() => setFilters(defaultFilters)}
                 >
                   {t("clearFilters")}
                 </Button>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <ScrollToTop />
+              }
+            />
+          )}
+        </section>
       </div>
+
+      <ScrollToTop />
     </>
   );
 }

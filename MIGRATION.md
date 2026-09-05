@@ -120,3 +120,98 @@ lui-même.
 
 Vérifié : `tsc --noEmit`, `bun test` (598/598), `vite build`, contrôle visuel de
 `/library` à 1440 px, console sans erreur.
+
+### Lot 3 — États manquants ✅
+
+C'était le trou principal : l'app n'exposait aucun composant maison d'erreur, de
+succès ni d'attente. Une erreur était soit un toast `sonner` qui s'efface, soit
+rien.
+
+`Alert` comble ça. Les quatre genres partagent une forme ; seuls le disque du
+glyphe et le papier changent, parce qu'un aplat vermillon pleine largeur
+dépenserait sur un message l'unique accent de l'écran. Le genre est écrit en
+toutes lettres au-dessus du titre : aucun état ne repose sur la couleur seule.
+
+`Spinner` ne sert que là où la forme de l'attente est inconnue — ailleurs c'est
+un squelette — et prend un libellé, parce qu'un anneau qui tourne seul ne dit
+rien.
+
+Les toasts gardent `sonner` comme transport et changent de rendu. C'est le bon
+échange : `toast.*` est appelé depuis une quarantaine de fichiers, et sonner
+tient déjà la file, l'empilement, le balayage, les minuteries et la région
+`aria-live`. Il expose sa palette en propriétés personnalisées et ses états en
+attributs `data`, donc la refonte tient dans une feuille de style et aucun site
+d'appel ne bouge.
+
+### Lot 4 — Mouvement décoratif ✅
+
+`heart-bounce` (400 ms de mise à l'échelle sur un changement d'état), `blink`
+(sans site d'appel) et le balayage `zone-shimmer` (un dégradé sur les six
+anciennes couleurs) sont supprimés. Le système est explicite : le mouvement dit
+d'où vient une chose ou qu'une attente est réelle, rien d'autre ne bouge.
+
+`FavoriteButton` violait trois règles — un `text-red-500` qui était un second
+accent, un glyphe rempli alors que le jeu d'icônes n'en a pas, et le rebond.
+L'état est porté par `aria-pressed` et le vermillon : annoncé, pas seulement
+coloré.
+
+### Lot 5 — La coquille et les cinq portes ✅
+
+L'en-tête était translucide et flouté ; les deux sont interdits. Il est
+maintenant opaque, sur un filet d'encre pleine largeur, et porte le wordmark.
+
+Cinq portes, libellés seuls, la porte active en inversion d'encre pleine.
+**Aucune route ne bouge** : la table de `src/App.tsx` est identique à l'octet
+près. Les routes qui étaient orphelines de la navigation — favoris, profil, mes
+zones, simulateur, parcours, à propos, contribuer, changelog — ont désormais
+chacune un point d'entrée nommé.
+
+Trois choix qui méritent d'être discutés :
+
+- **L'en-tête repasse dans le flux.** À 80 px, une barre fixe occulterait autant
+  de chaque page en permanence, et passerait par-dessus les sous-en-têtes que le
+  glossaire et le simulateur épinglent à 56 px. C'est un changement perceptible.
+- **La feuille mobile perd ses icônes**, conformément à la règle du système : le
+  jeu n'a pas de glyphe non ambigu pour distinguer « Séances » de « Mon plan ».
+- **`PageContainer` n'était utilisé que par une page**, pas soixante comme le
+  supposait le brief. Les autres tiennent leur colonne du `<main>` de `App.tsx`.
+
+### Lot 6 — Accueil et bibliothèque ✅
+
+Les deux premiers écrans maquettés, plus les six composants du kit qu'ils
+introduisent et que les écrans suivants réutiliseront : `DoorCard`,
+`IllustrationSlot`, `StatBlock`, `ZoneRow`, `ZoneBar`, `ZoneScale`.
+
+**Accueil.** Kicker mono → titre display 88 px → chapô → données, dans cet
+ordre. L'emplacement d'illustration est un trou cerné en tirets sur une trame
+crème, avec le brief imprimé dedans : le système ne génère aucune illustration,
+les doodles seront dessinés à la main et déposés là.
+
+Trois retraits volontaires : le mot d'accent qui tournait dans le hero, le
+chevron « défiler pour découvrir » et l'animation de comptage des chiffres.
+Rien ne bouge pour décorer. Les clés i18n correspondantes sont conservées, elles
+ne sont simplement plus rendues.
+
+Un arbitrage à noter : le kit affiche le bloc « 14 % au-dessus du seuil » en
+aplat vermillon. L'écran dépense déjà son vermillon sur l'action primaire, et la
+règle « un seul aplat par écran » prime — le bloc passe en inversion d'encre.
+
+L'atlas des zones abandonne son double markup bureau/mobile pour la primitive
+`ResponsiveTable` : un seul balisage, et le clic de ligne devient un vrai
+`<button>` là où c'était un `<tr onClick>` sans accès clavier.
+
+**Bibliothèque.** Onglets typographiques sur un filet d'encre, chips en pilule
+dont l'état retenu est une inversion d'encre pleine, la légende `ZoneScale`
+montrée une fois, et les cartes portant le profil de séance : un bloc par
+phase, largeur = temps, intensité codée deux fois par la densité d'encre **et**
+la hauteur de bloc. Une récupération n'est pas une zone : c'est une hachure 45°
+à 26 % de hauteur.
+
+La gouttière des libellés de filtre passe de 88 px (valeur du kit, calibrée sur
+« Catégorie » et « Niveau ») à 104 px : l'app filtre aussi par famille de
+renforcement, et « RENFORCEMENT » débordait sur la première chip.
+
+**Manques signalés, non inventés.** Il n'existe pas de moteur « séance du
+jour » dans l'app ; la porte correspondante du kit a été rabattue sur la
+bibliothèque plutôt que d'inventer un sélecteur. `IllustrationSlot` n'a pas de
+branche « image remplie » tant qu'aucun doodle n'existe.

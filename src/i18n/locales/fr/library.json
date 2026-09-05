@@ -1,5 +1,6 @@
 {
   "title": "Bibliothèque de séances",
+  "catalogue": "{{workouts}} séances · {{categories}} catégories · {{disciplines}} disciplines",
   "subtitle": "{{count}} séances d'entraînement scientifiques",
   "subtitleStrength": "{{count}} séances de renforcement",
   "subtitleAll": "{{count}} séances au total",
@@ -9,6 +10,12 @@
     "cycling": "Vélo",
     "swimming": "Natation",
     "strength": "Renforcement"
+  },
+  "meta": {
+    "results_one": "{{count}} séance",
+    "results_other": "{{count}} séances",
+    "filters_one": "{{count}} filtre actif",
+    "filters_other": "{{count}} filtres actifs"
   },
   "viewMode": {
     "label": "Affichage",
@@ -31,6 +38,7 @@
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favoris uniquement",
     "search": "Rechercher...",
+    "searchPlaceholder": "Rechercher : « 30/30 », « seuil », « côtes »…",
     "searchLabel": "Rechercher des séances",
     "apply": "Appliquer",
     "activeFilters": "filtres actifs"
@@ -39,7 +47,10 @@
     "noResults": "Aucune séance trouvée",
     "noResultsDescription": "Essayez de modifier vos filtres pour trouver des séances.",
     "noFavorites": "Aucun favori",
-    "noFavoritesDescription": "Ajoutez des séances à vos favoris pour les retrouver facilement ici."
+    "noFavoritesDescription": "Ajoutez des séances à vos favoris pour les retrouver facilement ici.",
+    "filteredOut_one": "{{count}} filtre actif ne laisse passer aucune des {{total}} séances. L'effacer les rouvre toutes.",
+    "filteredOut_other": "{{count}} filtres actifs ne laissent passer aucune des {{total}} séances. Les effacer les rouvre toutes.",
+    "noMatchForQuery": "« {{query}} » ne correspond à aucune des {{total}} séances du catalogue."
   },
   "terrain": {
     "flat": "Plat préféré",
@@ -79,6 +90,9 @@
       "trail_technical": "Sentier technique",
       "mountain": "Montagne"
     }
+  },
+  "zoneBar": {
+    "of": "Profil de {{name}}"
   },
   "difficulty": {
     "beginner": "Débutant",

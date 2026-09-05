@@ -32,28 +32,15 @@ export function ZoneBadge({
     : pickLang(ZONE_META[zoneNum], "label");
   const zoneText = isRange ? `Z${span.min}-Z${span.max}` : `Z${zoneNum}`;
 
-  const sizeClasses = {
-    sm: "text-xs px-2 py-0.5",
-    md: "text-xs px-2 py-0.5",
-    lg: "text-sm px-3 py-1",
-  };
-
   return (
     <span
-      className={cn(
-        `zone-${zoneNum}`,
-        "zone-badge",
-        sizeClasses[size],
-        className
-      )}
+      className={cn("zn-zone-badge", className)}
+      data-zone={zoneNum}
+      data-size={size}
       aria-label={`${zoneText} - ${label}`}
     >
       {zoneText}
-      {showLabel && (
-        <span className="ml-1">
-          {label}
-        </span>
-      )}
+      {showLabel && <span className="zn-zone-badge__label">{label}</span>}
     </span>
   );
 }
@@ -72,7 +59,7 @@ export function ZoneBadges({ zones, size = "sm", className }: ZoneBadgesProps) {
   ))].sort();
 
   return (
-    <div className={cn("flex gap-1 flex-wrap", className)}>
+    <div className={cn("zn-cluster", className)}>
       {uniqueZones.map((zone) => (
         <ZoneBadge key={zone} zone={zone} size={size} />
       ))}

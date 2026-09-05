@@ -1,0 +1,29 @@
+/* IllustrationSlot — the reserved hole for a hand-drawn doodle.
+
+   One of the system's two textures: a dashed ink outline over the cream 45°
+   hatch (--fill-slot). The brief stays printed in the hole until a drawing
+   lands there, which is why the slot has type inside it and not a placeholder
+   glyph. */
+
+.zn-slot {
+  block-size: var(--slot-h, 340px);
+  display: grid;
+  place-items: center;
+  padding: var(--pad-card);
+
+  background: var(--fill-slot);
+  border: var(--border-dashed);
+  border-radius: var(--r-3xl);
+}
+
+.zn-slot__brief {
+  max-inline-size: 24ch;
+  text-align: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  line-height: 1.7;
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}

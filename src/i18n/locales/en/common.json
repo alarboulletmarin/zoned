@@ -568,6 +568,10 @@
     "weeksEn": "wk"
   },
   "zones": {
+    "scaleTitle": "Intensity scale",
+    "profile": "Session profile: {{parts}}.",
+    "profileSegment": "{{zone}} {{minutes}} min",
+    "profileRecovery": "recovery {{minutes}} min",
     "physiology": "Physiology",
     "howItFeels": "How it feels",
     "benefits": "Benefits",
