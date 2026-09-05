@@ -1,0 +1,541 @@
+/* Share dialog — the sheet that offers the 37 share templates.
+ *
+ * A phone gets a sheet hinged on the bottom edge; a wide screen gets a
+ * centred panel. Both are floating surfaces, so --shadow-block is allowed.
+ *
+ * The block is named for the component and nothing else: `.zn-dialog` and
+ * `.zn-sheet` already exist and mean the generic primitives, and this panel
+ * is neither — it renders its own DialogPrimitive.Content. The one part it
+ * *does* borrow is `.zn-dialog__close`, which dialog.css states outright is
+ * reusable by anything rendering its own Content.
+ *
+ * The 37 templates inside the frames are deliberately untouched: they are
+ * inline-styled with literal hex because html-to-image captures a detached
+ * node where custom properties do not resolve.
+ */
+
+/* ── panel ────────────────────────────────────────────────────────────── */
+
+/* Phone: hinged on the bottom edge, full width, only the top corners cut. */
+.zn-share-dialog {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 50;
+
+  display: flex;
+  flex-direction: column;
+  max-block-size: 92dvh;
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-4xl) var(--r-4xl) 0 0;
+  box-shadow: var(--shadow-block);
+}
+
+/* Radix parks focus on the panel itself when the sheet opens. That is a
+   container, not a control, so it does not wear the vermillon ring — the
+   first real control inside it does. */
+.zn-share-dialog:focus {
+  outline: none;
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog {
+    inset-inline: auto;
+    bottom: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    inline-size: 100%;
+    max-inline-size: 672px;
+    max-block-size: 92vh;
+    border-radius: var(--r-4xl);
+  }
+}
+
+/* The grab handle. Decoration — it is aria-hidden in the markup, and it is
+   the same 44x4 bar a sheet draws. */
+.zn-share-dialog__grip {
+  flex: none;
+  align-self: center;
+  inline-size: 44px;
+  block-size: 4px;
+  margin-block: var(--sp-4) var(--sp-2);
+  border-radius: var(--r-pill);
+  background: var(--line-divider);
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__grip {
+    display: none;
+  }
+}
+
+/* The shared close glyph is a desktop convention here: on a phone the header
+   already leads with a worded "Fermer", and two closes is one too many. */
+@media (max-width: 639px) {
+  .zn-share-dialog .zn-dialog__close {
+    display: none;
+  }
+}
+
+/* ── header ───────────────────────────────────────────────────────────── */
+
+.zn-share-dialog__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-6) var(--sp-8);
+  border-block-end: var(--border-divider);
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__header {
+    padding: var(--sp-8) var(--sp-12);
+  }
+}
+
+/* The worded close, parked on the left of the centred title. */
+.zn-share-dialog__dismiss {
+  position: absolute;
+  inset-inline-start: var(--sp-8);
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+
+  font: var(--type-label);
+  color: var(--text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-share-dialog__dismiss:hover {
+  color: var(--text-body);
+}
+
+.zn-share-dialog__dismiss:active {
+  transform: translateY(calc(-50% + var(--press-shift)));
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__dismiss {
+    inset-inline-start: var(--sp-12);
+  }
+}
+
+/* The header has to be tall enough to hold a 44px target on its midline. */
+@media (pointer: coarse) {
+  .zn-share-dialog__dismiss {
+    min-block-size: var(--hit-min);
+  }
+  .zn-share-dialog__header {
+    min-block-size: calc(var(--hit-min) + var(--sp-6));
+  }
+}
+
+.zn-share-dialog__title {
+  max-inline-size: 60%;
+}
+
+/* ── carousel ─────────────────────────────────────────────────────────── */
+
+/* On a 390px phone the sheet is capped at 92dvh and the carousel, the caption
+   and the toggle together ask for more than that — so this column scrolls
+   rather than clipping its last child. The track inside keeps its own
+   horizontal scroll; the page itself never moves sideways. */
+.zn-share-dialog__body {
+  flex: 1;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.zn-share-dialog__carousel {
+  position: relative;
+}
+
+/* The two arrows. A pointer gets them; a thumb gets the swipe instead, which
+   is why they only appear at the width where the sheet becomes a panel. */
+.zn-share-dialog__arrow {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+
+  inline-size: 40px;
+  block-size: 40px;
+  padding: 0;
+
+  background: var(--surface-card);
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__arrow {
+    display: grid;
+    place-items: center;
+  }
+}
+
+.zn-share-dialog__arrow--prev {
+  inset-inline-start: var(--sp-6);
+}
+
+.zn-share-dialog__arrow--next {
+  inset-inline-end: var(--sp-6);
+}
+
+.zn-share-dialog__arrow > svg {
+  inline-size: var(--sp-10);
+  block-size: var(--sp-10);
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-share-dialog__arrow:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-share-dialog__arrow:active:not(:disabled) {
+  transform: translateY(calc(-50% + var(--press-shift)));
+}
+
+/* At either end of the 37 there is nowhere to go, and the button says so
+   with the disabled tokens rather than by fading out. */
+.zn-share-dialog__arrow:disabled {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+@media (pointer: coarse) {
+  .zn-share-dialog__arrow {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* The scroll track. It scrolls inside itself — the page never moves
+   sideways — and the side padding is what leaves a peek of the neighbours. */
+.zn-share-dialog__track {
+  display: flex;
+  gap: var(--sp-6);
+  padding-inline: 12%;
+  padding-block: var(--sp-8) var(--sp-6);
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+
+  cursor: grab;
+  user-select: none;
+
+  /* The rail is noise here: the peek slides already say there is more. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.zn-share-dialog__track::-webkit-scrollbar {
+  display: none;
+}
+
+.zn-share-dialog__track:active {
+  cursor: grabbing;
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__track {
+    gap: var(--sp-8);
+    padding-inline: 18%;
+  }
+}
+
+/* ── slide ────────────────────────────────────────────────────────────── */
+
+/* aria-pressed is already on the slide and already means "this is the one",
+   so the selected look reads straight off it. */
+.zn-share-dialog__slide {
+  flex: none;
+  inline-size: 72vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+
+  opacity: 0.8;
+  transform: scale(0.94);
+  cursor: pointer;
+  transition:
+    transform var(--dur-slow) var(--ease-out),
+    opacity var(--dur-slow) var(--ease-out);
+}
+
+.zn-share-dialog__slide[aria-pressed="true"] {
+  opacity: 1;
+  transform: none;
+  cursor: default;
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__slide {
+    inline-size: 58%;
+  }
+}
+
+/* The frame around one template. 1.5px is the house outline; the selected
+   one goes to 2.5px, which is what the system reserves for a kept frame.
+   No shadow: this is a card in a row, not a floating surface. */
+.zn-share-dialog__frame {
+  position: relative;
+  inline-size: 100%;
+  /* Portrait templates are 9:16, so without a cap one preview is taller than
+     the sheet. 46dvh is what leaves the caption and the toggle above the
+     footer on a 390x844 phone without the column having to scroll. */
+  max-block-size: min(46dvh, 420px);
+
+  /* The two tones under the artwork, pinned to the light ramp on purpose.
+     The 37 templates render on their own light background whatever the app
+     theme is — templates/_shared.tsx says so and html-to-image captures them
+     that way — so their ink is dark and never inverts. A mat and a
+     checkerboard that *did* invert put dark ink on a near-black ground: in
+     dark mode a transparent preview became unreadable, which is the one thing
+     the checkerboard exists to prevent. These are --paper-sunken and
+     --paper-raised as light declares them, held rather than followed. */
+  --frame-mat: #efeeea;
+  --frame-mat-alt: #ffffff;
+
+  background: var(--frame-mat);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+  overflow: hidden;
+  pointer-events: none;
+  transition: border-color var(--dur-base) var(--ease-out);
+}
+
+.zn-share-dialog__slide[aria-pressed="true"] .zn-share-dialog__frame {
+  border: var(--border-heavy);
+}
+
+/* The checkerboard behind a transparent preview. Not decoration: it is the
+   only way an alpha channel is visible at all. It is drawn in the pinned
+   pair above, for the reason stated there. */
+.zn-share-dialog__frame--alpha {
+  background-image: conic-gradient(
+    at 50% 50%,
+    var(--frame-mat) 25%,
+    var(--frame-mat-alt) 0 50%,
+    var(--frame-mat) 0 75%,
+    var(--frame-mat-alt) 0
+  );
+  background-size: 20px 20px;
+}
+
+/* The scaled native-resolution mount. Its size is computed per template and
+   stays an inline style; only the centring belongs here. */
+.zn-share-dialog__mount {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ── caption ──────────────────────────────────────────────────────────── */
+
+.zn-share-dialog__caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-4) var(--sp-12) var(--sp-6);
+  text-align: center;
+}
+
+.zn-share-dialog__caption-label {
+  margin: 0;
+  font: var(--type-label);
+  font-weight: var(--fw-semibold);
+  color: var(--text-body);
+}
+
+.zn-share-dialog__counter {
+  margin: 0;
+}
+
+/* ── transparent toggle ───────────────────────────────────────────────── */
+
+.zn-share-dialog__toggle {
+  padding-inline: var(--sp-8);
+  padding-block-end: var(--sp-6);
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__toggle {
+    padding-inline: var(--sp-12);
+  }
+}
+
+/* The whole strip is the label, so the target is the strip and not the
+   44px pill alone. */
+.zn-share-dialog__toggle-label {
+  min-block-size: var(--hit-min);
+  padding: var(--sp-5) var(--sp-6);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  cursor: pointer;
+}
+
+.zn-share-dialog__toggle-hint {
+  font: var(--type-caption);
+  color: var(--text-faint);
+}
+
+/* ── actions ──────────────────────────────────────────────────────────── */
+
+.zn-share-dialog__footer {
+  padding-inline: var(--sp-8);
+  padding-block-start: var(--sp-6);
+  padding-block-end: max(env(safe-area-inset-bottom), var(--sp-8));
+
+  background: var(--surface-band);
+  border-block-start: var(--border-divider);
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__footer {
+    padding-inline: var(--sp-12);
+    padding-block-end: var(--sp-10);
+  }
+}
+
+.zn-share-dialog__footer-kicker {
+  margin: 0 0 var(--sp-6);
+}
+
+.zn-share-dialog__actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  gap: var(--sp-4);
+}
+
+.zn-share-dialog__action {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.zn-share-dialog__action:disabled {
+  cursor: not-allowed;
+}
+
+/* The round face of the action. The press moves this, not the label. */
+.zn-share-dialog__action-icon {
+  display: grid;
+  place-items: center;
+  inline-size: 48px;
+  block-size: 48px;
+
+  background: transparent;
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+@media (min-width: 640px) {
+  .zn-share-dialog__action-icon {
+    inline-size: 56px;
+    block-size: 56px;
+  }
+}
+
+.zn-share-dialog__action-icon > svg {
+  inline-size: var(--sp-10);
+  block-size: var(--sp-10);
+  flex: none;
+  pointer-events: none;
+}
+
+/* The screen's one vermillon fill: sharing is what this sheet is for. */
+.zn-share-dialog__action-icon--primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.zn-share-dialog__action:hover:not(:disabled) .zn-share-dialog__action-icon {
+  background: var(--surface-card);
+}
+
+.zn-share-dialog__action:hover:not(:disabled)
+  .zn-share-dialog__action-icon--primary {
+  background: var(--accent-press);
+}
+
+.zn-share-dialog__action:active:not(:disabled) .zn-share-dialog__action-icon {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-share-dialog__action:disabled .zn-share-dialog__action-icon {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+}
+
+/* The wait, said once: the same ring speed spinner.css uses. */
+.zn-share-dialog__spinner {
+  animation: zoned-spin 700ms linear infinite;
+}
+
+.zn-share-dialog__action-label {
+  font: var(--type-caption);
+  line-height: 1.2;
+  color: var(--text-muted);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.zn-share-dialog__action:disabled .zn-share-dialog__action-label {
+  color: var(--state-disabled-text);
+}
+
+@media (pointer: coarse) {
+  .zn-share-dialog__action {
+    min-block-size: var(--hit-min);
+  }
+}

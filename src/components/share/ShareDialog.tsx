@@ -25,6 +25,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -318,15 +319,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
         <DialogOverlay />
         <DialogPrimitive.Content
           // Mobile bottom-sheet → desktop centered modal.
-          className={cn(
-            "fixed z-50 flex flex-col gap-0 bg-white dark:bg-zinc-950 shadow-2xl outline-none",
-            // Mobile defaults: pinned to the bottom, full width, rounded top.
-            "inset-x-0 bottom-0 max-h-[92dvh] rounded-t-3xl",
-            // Desktop overrides: centered modal, capped width, rounded.
-            "sm:inset-x-auto sm:bottom-auto sm:top-1/2 sm:left-1/2",
-            "sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-2xl",
-            "sm:rounded-3xl sm:max-h-[92vh]",
-          )}
+          className="zn-share-dialog"
         >
           <DialogPrimitive.Title className="sr-only">
             {t("share.title")}
@@ -336,83 +329,50 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
           </DialogPrimitive.Description>
 
           {/* Drag-handle (mobile only) — visual cue this is a sheet. */}
-          <div
-            aria-hidden
-            className="sm:hidden mx-auto mt-2 mb-1 h-1.5 w-12 rounded-full bg-zinc-200 dark:bg-zinc-800"
-          />
+          <div aria-hidden className="zn-share-dialog__grip" />
 
           {/* Header */}
-          <header
-            className={cn(
-              "relative flex items-center justify-center px-4 sm:px-6 py-3 sm:py-4",
-              "border-b border-zinc-100 dark:border-zinc-900",
-            )}
-          >
+          <header className="zn-share-dialog__header">
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className={cn(
-                "absolute left-4 sm:left-6 top-1/2 -translate-y-1/2",
-                "text-sm font-medium text-zinc-700 dark:text-zinc-200",
-                "hover:text-zinc-900 dark:hover:text-white transition-colors",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded",
-              )}
+              className="zn-share-dialog__dismiss"
             >
               {t("share.close")}
             </button>
-            <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-50 truncate max-w-[60%]">
+            <h2
+              className="zn-title zn-truncate zn-share-dialog__title"
+              data-level="4"
+            >
               {t("share.title")}
             </h2>
           </header>
 
           {/* Carousel */}
-          <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-            <div className="relative">
+          <div className="zn-share-dialog__body">
+            <div className="zn-share-dialog__carousel">
               {/* Desktop chevrons — hidden on touch / mobile */}
               <button
                 type="button"
                 onClick={handlePrev}
                 disabled={selectedIndex === 0}
                 aria-label="Previous"
-                className={cn(
-                  "hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-10",
-                  "size-10 rounded-full items-center justify-center",
-                  "bg-white/85 backdrop-blur shadow-md ring-1 ring-zinc-200",
-                  "hover:bg-white transition disabled:opacity-30 disabled:pointer-events-none",
-                  "dark:bg-zinc-900/85 dark:ring-zinc-800",
-                )}
+                className="zn-share-dialog__arrow zn-share-dialog__arrow--prev"
               >
-                <ChevronLeft className="size-5" />
+                <ChevronLeft />
               </button>
               <button
                 type="button"
                 onClick={handleNext}
                 disabled={selectedIndex === SHARE_TEMPLATES.length - 1}
                 aria-label="Next"
-                className={cn(
-                  "hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-10",
-                  "size-10 rounded-full items-center justify-center",
-                  "bg-white/85 backdrop-blur shadow-md ring-1 ring-zinc-200",
-                  "hover:bg-white transition disabled:opacity-30 disabled:pointer-events-none",
-                  "dark:bg-zinc-900/85 dark:ring-zinc-800",
-                )}
+                className="zn-share-dialog__arrow zn-share-dialog__arrow--next"
               >
-                <ChevronRight className="size-5" />
+                <ChevronRight />
               </button>
 
               {/* Scroll track */}
-              <div
-                ref={trackRef}
-                className={cn(
-                  "flex overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory",
-                  "gap-3 sm:gap-4 px-[12%] sm:px-[18%] pt-4 pb-3",
-                  // Drag-to-scroll affordance on devices with a cursor.
-                  "cursor-grab active:cursor-grabbing select-none",
-                  // Hide scrollbar but keep functionality
-                  "[scrollbar-width:none] [-ms-overflow-style:none]",
-                  "[&::-webkit-scrollbar]:hidden",
-                )}
-              >
+              <div ref={trackRef} className="zn-share-dialog__track">
                 {SHARE_TEMPLATES.map((tpl) => (
                   <CarouselSlide
                     key={tpl.id}
@@ -434,36 +394,35 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
             </div>
 
             {/* Caption — label, format, counter */}
-            <div className="px-6 pt-2 pb-3 text-center flex flex-col items-center gap-1">
-              <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 leading-tight">
+            <div className="zn-share-dialog__caption">
+              <p className="zn-share-dialog__caption-label">
                 {t(`share.template.${selected.labelKey}.label`)}
               </p>
-              <p className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              <p className="zn-kicker zn-kicker--inline zn-share-dialog__counter">
                 {selectedIndex + 1} / {SHARE_TEMPLATES.length}
               </p>
             </div>
 
             {/* Transparent toggle — only when supported */}
             {selected.supportsTransparent && (
-              <div className="px-4 sm:px-6 pb-3">
+              <div className="zn-share-dialog__toggle">
                 <label
                   htmlFor="share-transparent"
-                  className={cn(
-                    "flex items-center gap-3 rounded-xl px-3 py-2.5 cursor-pointer",
-                    "bg-zinc-50 dark:bg-zinc-900/60 transition-colors",
-                    "hover:bg-zinc-100 dark:hover:bg-zinc-900",
-                  )}
+                  className="zn-row zn-card-hover zn-share-dialog__toggle-label"
                 >
                   <Switch
                     id="share-transparent"
                     checked={transparent}
                     onCheckedChange={setTransparent}
                   />
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50 leading-tight">
+                  <div
+                    className="zn-stack"
+                    style={{ "--gap": "var(--sp-1)" } as CSSProperties}
+                  >
+                    <span className="zn-label">
                       {t("share.transparent.label")}
                     </span>
-                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-tight mt-0.5">
+                    <span className="zn-share-dialog__toggle-hint">
                       {t("share.transparent.hint")}
                     </span>
                   </div>
@@ -473,22 +432,16 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
           </div>
 
           {/* Actions */}
-          <footer
-            className={cn(
-              "border-t border-zinc-100 dark:border-zinc-900",
-              "px-4 sm:px-6 pt-3 pb-[max(env(safe-area-inset-bottom),16px)] sm:pb-5",
-              "bg-zinc-50/60 dark:bg-zinc-950/60",
-            )}
-          >
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-3">
+          <footer className="zn-share-dialog__footer">
+            <p className="zn-kicker zn-share-dialog__footer-kicker">
               {t("share.shareOn")}
             </p>
-            <div className="flex items-start justify-around gap-2">
+            <div className="zn-share-dialog__actions">
               <ActionButton
                 onClick={handleShare}
                 disabled={!!busy}
                 busy={busy === "share"}
-                icon={<Share className="size-5" />}
+                icon={<Share />}
                 label={t("share.action.share")}
                 primary
               />
@@ -496,14 +449,14 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
                 onClick={handleDownload}
                 disabled={!!busy}
                 busy={busy === "download"}
-                icon={<Download className="size-5" />}
+                icon={<Download />}
                 label={t("share.action.download")}
               />
               <ActionButton
                 onClick={handleCopy}
                 disabled={!!busy || !copySupported}
                 busy={busy === "copy"}
-                icon={<Copy className="size-5" />}
+                icon={<Copy />}
                 label={t("share.action.copy")}
                 title={
                   !copySupported ? t("share.toast.copyUnsupported") : undefined
@@ -513,7 +466,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
                 onClick={handleCopyLink}
                 disabled={!!busy}
                 busy={busy === "copyLink"}
-                icon={<Link2 className="size-5" />}
+                icon={<Link2 />}
                 label={t("share.action.copyLink")}
               />
             </div>
@@ -522,16 +475,10 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
           {/* Top-right close button (desktop convention — alongside the
               left-aligned "Fermer" text button) */}
           <DialogPrimitive.Close
-            className={cn(
-              "hidden sm:flex absolute top-4 right-4 size-8 rounded-full",
-              "items-center justify-center text-zinc-500",
-              "hover:bg-zinc-100 hover:text-zinc-900 transition-colors",
-              "dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
-            )}
+            className="zn-dialog__close"
             aria-label={t("share.close")}
           >
-            <X className="size-4" />
+            <X />
           </DialogPrimitive.Close>
         </DialogPrimitive.Content>
       </DialogPortal>
@@ -585,15 +532,6 @@ function CarouselSlide({
     return () => obs.disconnect();
   }, [descriptor.width, descriptor.height]);
 
-  // Checker pattern behind transparent previews — makes the alpha obvious.
-  const checkerStyle: React.CSSProperties = transparent
-    ? {
-        backgroundImage:
-          "conic-gradient(at 50% 50%, #e5e7eb 25%, #ffffff 0 50%, #e5e7eb 0 75%, #ffffff 0)",
-        backgroundSize: "20px 20px",
-      }
-    : { backgroundColor: "#f8fafc" };
-
   const scaledW = descriptor.width * scale;
   const scaledH = descriptor.height * scale;
 
@@ -614,43 +552,28 @@ function CarouselSlide({
           onSelect();
         }
       }}
-      className={cn(
-        "snap-center shrink-0 flex items-center justify-center",
-        // Slide width — about 70% on mobile, 60% on desktop so a peek of
-        // the neighbouring slides is visible on each side.
-        "w-[72vw] sm:w-[58%]",
-        "transition-transform duration-300",
-        active ? "scale-100" : "scale-[0.94] opacity-80",
-        // Pointer hint when not active — tells users they can click to
-        // focus a peek slide.
-        !active && "cursor-pointer",
-      )}
+      // The slide width leaves a peek of the neighbours on each side; the
+      // selected look reads off aria-pressed, which is already there.
+      className="zn-share-dialog__slide"
     >
       <div
         ref={cellRef}
         className={cn(
-          "relative w-full rounded-2xl overflow-hidden pointer-events-none",
-          "transition-shadow duration-300",
-          active
-            ? "shadow-[0_24px_40px_-12px_rgba(15,23,42,0.32)] ring-2 ring-primary"
-            : "shadow-[0_8px_18px_-8px_rgba(15,23,42,0.18)] ring-1 ring-zinc-200 dark:ring-zinc-800",
+          "zn-share-dialog__frame",
+          // Checkerboard behind a transparent preview — makes the alpha
+          // obvious. Both tones are paper tokens, so it inverts with the theme.
+          transparent && "zn-share-dialog__frame--alpha",
         )}
         style={{
           // Cap height so portrait templates (9:16) don't overflow the
-          // dialog vertically on small screens.
+          // dialog vertically on small screens — the cap itself is in CSS.
           aspectRatio: `${descriptor.width} / ${descriptor.height}`,
-          maxHeight: "min(56dvh, 420px)",
-          ...checkerStyle,
         }}
       >
         {/* Scaled native-resolution mount — captured by html-to-image */}
         <div
-          className="absolute top-1/2 left-1/2"
-          style={{
-            width: scaledW,
-            height: scaledH,
-            transform: "translate(-50%, -50%)",
-          }}
+          className="zn-share-dialog__mount"
+          style={{ width: scaledW, height: scaledH }}
         >
           <div
             ref={(el) => {
@@ -701,32 +624,17 @@ function ActionButton({
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={cn(
-        "flex flex-col items-center gap-1.5 min-w-0 flex-1",
-        "focus:outline-none group",
-      )}
+      className="zn-share-dialog__action"
     >
       <span
         className={cn(
-          "flex items-center justify-center size-12 sm:size-14 rounded-full transition",
-          "shadow-sm",
-          primary
-            ? "bg-primary text-primary-foreground group-hover:opacity-90 group-active:scale-95"
-            : "bg-zinc-100 text-zinc-700 group-hover:bg-zinc-200 group-active:scale-95 dark:bg-zinc-800 dark:text-zinc-100 dark:group-hover:bg-zinc-700",
-          disabled && "opacity-40 pointer-events-none",
-          "group-focus-visible:ring-2 group-focus-visible:ring-primary/50",
+          "zn-share-dialog__action-icon",
+          primary && "zn-share-dialog__action-icon--primary",
         )}
       >
-        {busy ? <Loader2 className="size-5 animate-spin" /> : icon}
+        {busy ? <Loader2 className="zn-share-dialog__spinner" /> : icon}
       </span>
-      <span
-        className={cn(
-          "text-[11px] sm:text-xs font-medium text-zinc-700 dark:text-zinc-300 text-center leading-tight",
-          "max-w-[80px] truncate",
-        )}
-      >
-        {label}
-      </span>
+      <span className="zn-share-dialog__action-label">{label}</span>
     </button>
   );
 }

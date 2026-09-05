@@ -1,7 +1,7 @@
 /* Tabs — typographic slices of one collection, sitting on a full-width ink
    rule. The active tab is marked by weight plus a 2.5px vermillon rule laid
    over the list's own: a paper tab is never a pill and never a tint.
-   Variants come off the data-state attribute Radix already emits. */
+   Variants come off the data-state attribute the trigger emits. */
 
 .zn-tabs {
   display: flex;
@@ -71,8 +71,8 @@
   pointer-events: none;
 }
 
-/* Radix gives the panel tabIndex=0 so a keyboard can reach its content;
-   the focus ring from base.css is left in place on purpose. */
+/* The panel carries tabIndex=0 so a keyboard can reach its content; the
+   focus ring from base.css is left in place on purpose. */
 .zn-tabs__content {
   flex: 1;
 }

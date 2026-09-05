@@ -22,6 +22,13 @@ function Slider({
   /** Human reading of the current value — "15 min" rather than "900". */
   thumbValueText?: string;
 }) {
+  /**
+   * Five call sites hand the name in as a root `aria-label` — the exact trap
+   * the comment above describes — and their thumbs announce as unnamed
+   * sliders. Falling back here names them without touching a call site.
+   */
+  const _thumbLabel = thumbLabel ?? props["aria-label"];
+
   const _values = React.useMemo(
     () =>
       Array.isArray(value)
@@ -52,7 +59,7 @@ function Slider({
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
-          aria-label={thumbLabel}
+          aria-label={_thumbLabel}
           aria-valuetext={thumbValueText}
           className="zn-slider__thumb"
         />

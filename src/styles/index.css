@@ -81,6 +81,7 @@
 @import "./components/search.css" layer(components);
 @import "./components/session.css" layer(components);
 @import "./components/settings.css" layer(components);
+@import "./components/share-dialog.css" layer(components);
 @import "./components/sheet.css" layer(components);
 @import "./components/shell-misc.css" layer(components);
 @import "./components/shell.css" layer(components);
