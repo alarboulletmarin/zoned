@@ -1,0 +1,52 @@
+/* Date field — the trigger that opens the calendar. It is built on the button
+   primitive, so the paint here turns that action pill back into a field: card
+   surface, 10px field radius, the value left and the icon right.
+
+   Every rule carries .zn-btn as well, so it wins over button.css whatever order
+   the two files are imported in. */
+
+.zn-btn.zn-date-input {
+  inline-size: 100%;
+  justify-content: space-between;
+  gap: var(--sp-5);
+
+  padding: var(--sp-6) var(--sp-8);
+  min-block-size: var(--hit-min);
+
+  border-radius: var(--r-lg);
+  font: var(--type-body-sm);
+  text-align: start;
+}
+
+.zn-btn.zn-date-input[data-variant="outline"] {
+  background: var(--surface-card);
+  color: var(--ink-1);
+}
+
+.zn-btn.zn-date-input[data-variant="outline"]:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+/* No date yet: the format hint reads as placeholder, not as a value. */
+.zn-btn.zn-date-input[data-placeholder] {
+  color: var(--text-faint);
+}
+
+.zn-date-input__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-date-input__icon {
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* The calendar brings its own padding and sizes itself, so the popover shell
+   only holds it. Selected with the data-slot too, so it still wins once the
+   popover gets its own port. */
+[data-slot="popover-content"].zn-date-input__popover {
+  inline-size: auto;
+  padding: 0;
+}

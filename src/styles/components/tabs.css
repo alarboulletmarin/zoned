@@ -1,0 +1,85 @@
+/* Tabs — typographic slices of one collection, sitting on a full-width ink
+   rule. The active tab is marked by weight plus a 2.5px vermillon rule laid
+   over the list's own: a paper tab is never a pill and never a tint.
+   Variants come off the data-state attribute Radix already emits. */
+
+.zn-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-tabs__list {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+  inline-size: 100%;
+  border-bottom: var(--border-rule);
+}
+
+.zn-tabs__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  flex-shrink: 0;
+
+  padding: var(--sp-6) var(--sp-8);
+  min-block-size: 40px;
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--ink-3);
+  background: transparent;
+  white-space: nowrap;
+  cursor: pointer;
+
+  /* The marker is the trigger's own bottom border, pulled down by the width
+     of the list rule so the 2.5px vermillon lands on top of it rather than
+     under it. Transparent when inactive, so nothing shifts on selection. */
+  border: none;
+  border-bottom: var(--bw-heavy) solid transparent;
+  margin-bottom: calc(-1 * var(--bw-rule));
+  border-radius: 0;
+
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+/* The icon follows the text: currentColor, no fill, no growth. */
+.zn-tabs__trigger > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-tabs__trigger:hover:not(:disabled) {
+  color: var(--ink-1);
+}
+
+.zn-tabs__trigger[data-state="active"] {
+  color: var(--ink-1);
+  font-weight: var(--fw-semibold);
+  border-bottom-color: var(--accent);
+}
+
+.zn-tabs__trigger:disabled,
+.zn-tabs__trigger[data-disabled] {
+  color: var(--state-disabled-text);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Radix gives the panel tabIndex=0 so a keyboard can reach its content;
+   the focus ring from base.css is left in place on purpose. */
+.zn-tabs__content {
+  flex: 1;
+}
+
+/* WCAG 2.5.8: 44px on a coarse pointer, whatever the desktop density says. */
+@media (pointer: coarse) {
+  .zn-tabs__trigger {
+    min-block-size: var(--hit-min);
+  }
+}

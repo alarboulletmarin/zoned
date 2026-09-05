@@ -23,5 +23,31 @@
 @import "./tokens.css";
 
 @import "./base.css";
+
+/* Hand-written component layer — see components/README.md.
+   _layout and _type are the shared vocabulary; the rest is one file per
+   primitive, in the order they are named in src/components/ui/. */
+@import "./components/_layout.css";
+@import "./components/_type.css";
+@import "./components/badge.css";
+@import "./components/button.css";
+@import "./components/calendar.css";
+@import "./components/card.css";
+@import "./components/date-input.css";
+@import "./components/dialog.css";
+@import "./components/dropdown-menu.css";
+@import "./components/empty-state.css";
+@import "./components/page-loader.css";
+@import "./components/popover.css";
+@import "./components/responsive-table.css";
+@import "./components/scroll-to-top.css";
+@import "./components/segmented.css";
+@import "./components/select.css";
+@import "./components/sheet.css";
+@import "./components/skeleton.css";
+@import "./components/slider.css";
+@import "./components/switch.css";
+@import "./components/tabs.css";
+@import "./components/tooltip.css";
 @import "./animations.css";
 @import "./overrides.css";

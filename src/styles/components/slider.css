@@ -1,0 +1,112 @@
+/* Slider — an ink rail, the chosen span filled solid, an outlined circle for
+   the handle. Radix owns the behaviour and the hidden form mirror; this is
+   only the paint.
+
+   Track and thumb geometry is deliberately single-class: two call sites resize
+   them through arbitrary Tailwind child variants and have to keep winning
+   until Tailwind goes. */
+
+.zn-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.zn-slider[data-orientation="vertical"] {
+  flex-direction: column;
+  inline-size: auto;
+  block-size: 100%;
+  /* a column with no intrinsic height would collapse to nothing */
+  min-block-size: 176px;
+}
+
+.zn-slider[data-disabled] {
+  cursor: not-allowed;
+}
+
+/* ── rail ─────────────────────────────────────────────────────────────── */
+
+.zn-slider__track {
+  position: relative;
+  flex-grow: 1;
+  overflow: hidden;
+  inline-size: 100%;
+  block-size: 3px; /* the rail thickness stated by the design bundle */
+  border-radius: var(--r-pill);
+  background: var(--line-axis);
+}
+
+.zn-slider[data-orientation="vertical"] .zn-slider__track {
+  inline-size: 3px;
+  block-size: 100%;
+}
+
+.zn-slider[data-disabled] .zn-slider__track {
+  background: var(--state-disabled-fill);
+}
+
+/* ── the travelled part ───────────────────────────────────────────────── */
+
+.zn-slider__range {
+  position: absolute;
+  block-size: 100%;
+  background: var(--ink-1);
+}
+
+.zn-slider[data-orientation="vertical"] .zn-slider__range {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.zn-slider[data-disabled] .zn-slider__range {
+  background: var(--state-disabled-border);
+}
+
+/* ── handle ───────────────────────────────────────────────────────────── */
+
+.zn-slider__thumb {
+  display: block;
+  flex: none;
+  box-sizing: border-box;
+  inline-size: 18px;
+  block-size: 18px;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--paper-raised);
+  cursor: grab;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-slider__thumb:hover {
+  background: var(--surface-band);
+}
+
+.zn-slider__thumb:active {
+  cursor: grabbing;
+}
+
+/* Radix puts role="slider" and the tab stop on the thumb, not on the root, so
+   the vermillon ring is declared here — this is the element that takes focus. */
+.zn-slider__thumb:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-slider[data-disabled] .zn-slider__thumb {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* The rail is 3px; the row it lives in has to answer to a thumb. */
+@media (pointer: coarse) {
+  .zn-slider {
+    min-block-size: var(--hit-min);
+  }
+}

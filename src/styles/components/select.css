@@ -1,0 +1,253 @@
+/* Select — a field that opens a floating list.
+
+   Two surfaces, two treatments. The trigger is a FIELD: raised paper, full ink
+   outline, 10px radius, 44px touch floor, chevron on the right. The content is
+   a FLOATING surface: the same paper and outline at a 16px radius, plus the one
+   allowed shadow. Items invert to ink when highlighted, the same rule the
+   dropdown menu follows.
+
+   Radix stays in charge of behaviour and positioning; every custom property it
+   publishes (--radix-select-content-available-height, -transform-origin,
+   -trigger-width, -trigger-height) is read here exactly as the Tailwind arbitrary
+   values read it before. */
+
+/* ── trigger (field) ──────────────────────────────────────────────────── */
+
+.zn-select-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  white-space: nowrap;
+
+  padding: 12px 16px;
+  min-block-size: var(--hit-min);
+
+  font: var(--type-body-sm);
+  color: var(--ink-1);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* No inline-size here on purpose: call sites still hand in w-full / max-w-xs
+   and this file is unlayered, so any width declared here would beat them. */
+
+.zn-select-trigger:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-select-trigger:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-select-trigger:disabled {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+.zn-select-trigger[aria-invalid="true"] {
+  border-color: var(--state-danger);
+}
+
+/* Nothing chosen yet: the value reads as the faintest ink, not as content. */
+.zn-select-trigger[data-placeholder],
+.zn-select-trigger [data-slot="select-value"][data-placeholder] {
+  color: var(--ink-3);
+}
+
+/* The chosen value is one line; it truncates rather than widening the field. */
+.zn-select-trigger > [data-slot="select-value"] {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-select-trigger svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  pointer-events: none;
+}
+
+/* The disclosure chevron — Radix renders it as the trigger's last child. */
+.zn-select-trigger > svg:last-child {
+  color: var(--ink-3);
+}
+
+.zn-select-trigger[data-size="sm"] {
+  padding: 9px 14px;
+  min-block-size: 38px;
+}
+
+/* WCAG 2.5.8: 44px on a coarse pointer whatever the size variant asked for. */
+@media (pointer: coarse) {
+  .zn-select-trigger {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── content (floating surface) ───────────────────────────────────────── */
+
+.zn-select-content {
+  position: relative;
+  z-index: 50;
+
+  /* 8rem carried over verbatim from the previous min-w-[8rem]: it is a layout
+     floor for the popup, not a design value. */
+  min-inline-size: 8rem;
+  max-block-size: var(--radix-select-content-available-height);
+  transform-origin: var(--radix-select-content-transform-origin);
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-block);
+}
+
+/* It arrives from where it was opened. Nothing scales, nothing blinks. */
+.zn-select-content[data-state="open"] {
+  animation: zoned-slide-in var(--dur-base) var(--ease-out);
+}
+
+/* Popper placement nudges the panel off the trigger by 2px on its own side. */
+.zn-select-content--popper[data-side="bottom"] {
+  transform: translateY(var(--sp-1));
+}
+.zn-select-content--popper[data-side="top"] {
+  transform: translateY(calc(var(--sp-1) * -1));
+}
+.zn-select-content--popper[data-side="right"] {
+  transform: translateX(var(--sp-1));
+}
+.zn-select-content--popper[data-side="left"] {
+  transform: translateX(calc(var(--sp-1) * -1));
+}
+
+.zn-select-viewport {
+  padding: var(--sp-2);
+}
+
+.zn-select-viewport--popper {
+  block-size: var(--radix-select-trigger-height);
+  inline-size: 100%;
+  min-inline-size: var(--radix-select-trigger-width);
+  scroll-margin-block: var(--sp-2);
+}
+
+/* ── group label (mono kicker) ────────────────────────────────────────── */
+
+.zn-select-label {
+  padding: var(--sp-3) var(--sp-4);
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ── item ─────────────────────────────────────────────────────────────── */
+
+.zn-select-item {
+  position: relative;
+  display: flex;
+  inline-size: 100%;
+  align-items: center;
+  gap: var(--sp-4);
+
+  padding: var(--sp-3) var(--sp-14) var(--sp-3) var(--sp-6);
+  border-radius: var(--r-pill);
+
+  font: var(--type-body-sm);
+  color: var(--ink-1);
+
+  cursor: default;
+  user-select: none;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+/* Keyboard and pointer share one highlight: the row inverts to solid ink. */
+.zn-select-item[data-highlighted] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.zn-select-item[data-disabled] {
+  color: var(--state-disabled-text);
+  pointer-events: none;
+}
+
+.zn-select-item svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  pointer-events: none;
+}
+
+/* The label span Radix renders last, so an icon inside an option lines up. */
+.zn-select-item > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-select-item-indicator {
+  position: absolute;
+  inset-inline-end: var(--sp-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+@media (pointer: coarse) {
+  .zn-select-item {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── separator ────────────────────────────────────────────────────────── */
+
+.zn-select-separator {
+  block-size: var(--bw-hair);
+  margin: var(--sp-2) calc(var(--sp-2) * -1);
+  background: var(--line-divider);
+  pointer-events: none;
+}
+
+/* ── scroll buttons ───────────────────────────────────────────────────── */
+
+.zn-select-scroll-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--sp-2);
+  color: var(--ink-3);
+  background: var(--surface-card);
+  cursor: default;
+}
+
+.zn-select-scroll-btn svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  pointer-events: none;
+}

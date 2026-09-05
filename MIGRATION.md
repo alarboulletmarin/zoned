@@ -29,6 +29,15 @@ uniquement parce que les exports PDF/PNG ne résolvent pas les variables CSS.
 | CSS écrit à la main plutôt que classes utilitaires | Demande explicite : ni Tailwind ni shadcn. Les composants de référence stylent en `style` inline, ce qui ne sait exprimer ni `:hover`, ni `:focus-visible`, ni une media query — ils contournent avec des gestionnaires JS (`onMouseDown`). Le portage les remplace par de vraies règles CSS. |
 | Les couleurs de groupes musculaires restent telles quelles | Elles sont catégorielles (12 valeurs), et le système n'a pas de vocabulaire pour douze catégories. Traitées dans le lot « force », où l'implication (principal / secondaire) sera encodée par densité d'encre plutôt que l'identité du muscle par teinte. |
 
+## Ce que la refonte n'a pas eu besoin de faire
+
+Le bundle livre un composant `Icon` et un fichier `assets/icon-paths.js` de 123
+glyphes. Vérification faite, **les 123 tracés sont déjà dans
+`src/components/icons/index.tsx`, à l'octet près** — le kit les avait extraits de
+l'app. Le fichier est généré depuis `scripts/data/icon-mapping.csv` et vérifié au
+build par `generate-icons --check`, il suit déjà `currentColor` et porte déjà
+`aria-hidden`. Rien à porter : le système d'icônes de l'app *est* celui du design.
+
 ## Lots
 
 ### Lot 1 — Tokens et bascule visuelle ✅
@@ -75,3 +84,39 @@ qui ne correspondait à aucun thème de l'app.
 
 Vérifié : `tsc --noEmit`, `bun test` (598/598), `vite build`, `qa-zone-colors`,
 `qa-workout-schema`, `qa-zone-audit`.
+
+### Lot 2 — Les 20 primitives en CSS écrit à la main ✅
+
+`src/components/ui/*` ne contient plus une seule classe utilitaire. Chaque
+primitive a sa feuille dans `src/styles/components/`, dont les conventions sont
+écrites dans `components/README.md`.
+
+**Peinture d'abord, comportement ensuite.** Les primitives se stylaient déjà via
+les attributs que Radix émet — `data-state`, `data-side`, `data-variant`,
+`data-slot`, `data-highlighted`, `data-placeholder`. Ce sont des sélecteurs CSS
+valides, donc ils se portent tels quels. Radix reste en place dans ce lot :
+aucune API publique ne bouge, aucun piège de focus ni aucune navigation clavier
+n'est réécrite, et le risque d'accessibilité est nul. Le retrait de Radix est un
+lot séparé.
+
+**Deux fondations partagées.** `_layout.css` et `_type.css` posent le vocabulaire
+que les écrans réutiliseront : la rangée, la pile, la grille de cartes, la marge
+d'écran, la section séparée par un filet d'encre — et les rôles typographiques
+kicker → display → corps → données. Ce n'est pas un Tailwind maison : la
+variation passe par des propriétés personnalisées (`--gap`, `--cols`) plutôt que
+par une classe par valeur, et ce sont les faits que le design system énonce
+lui-même.
+
+**Deux corrections faites au passage, parce qu'on était dans le fichier :**
+
+- `segmented.tsx` exposait un `role="radiogroup"` dont chaque `role="radio"`
+  était tabulable séparément, sans gestion des flèches. C'était un vrai défaut
+  clavier. Il a maintenant un seul arrêt de tabulation et répond à
+  ArrowLeft/ArrowRight/Home/End. Les props sont inchangées.
+- `skeleton.tsx` perd `react-loading-skeleton`, dont le miroitement est un
+  `linear-gradient` balayé — le système interdit les dégradés. Le squelette est
+  désormais un bloc de papier cerné qui pulse, à la forme du contenu attendu.
+- `dialog.tsx` codait `bg-white dark:bg-zinc-950` en dur au lieu d'un token.
+
+Vérifié : `tsc --noEmit`, `bun test` (598/598), `vite build`, contrôle visuel de
+`/library` à 1440 px, console sans erreur.

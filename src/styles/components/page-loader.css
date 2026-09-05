@@ -1,0 +1,40 @@
+/* PageLoader — a route-level wait, with the wait named.
+
+   The ring turns immediately; the words arrive after a second, because a
+   label that flashes for 200ms is noise. Reserved height so the layout does
+   not jump when the page lands. */
+
+.zn-page-loader {
+  display: grid;
+  place-items: center;
+  gap: var(--sp-5);
+  min-block-size: 320px;
+  padding: var(--sp-15);
+}
+
+/* 28px ring, 2px stroke — both stated outright by the design bundle's
+   Spinner. One quarter left open so the rotation is visible. */
+.zn-page-loader__ring {
+  inline-size: 28px;
+  block-size: 28px;
+  border: 2px solid var(--ink-1);
+  border-top-color: transparent;
+  border-radius: var(--r-pill);
+  animation: zoned-spin 700ms linear infinite;
+}
+
+/* Held back one second: under that, the wait is over before it is read. */
+.zn-page-loader__label {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  animation: zn-page-loader-name var(--dur-slow) var(--ease-out) 1s both;
+}
+
+@keyframes zn-page-loader-name {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

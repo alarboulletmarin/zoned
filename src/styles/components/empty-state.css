@@ -1,0 +1,81 @@
+/* EmptyState — a hole in the page, not a card.
+
+   The dashed outline is what tells the two apart: a card is a thing, this is
+   the absence of things. Icon centred in a drawn circle, the cause stated
+   underneath, and the action that undoes it. */
+
+.zn-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--sp-6);
+  padding: var(--sp-17) var(--sp-14);
+
+  background: var(--surface-card);
+  border: var(--border-dashed);
+  border-radius: var(--r-3xl);
+}
+
+/* 52px circle around a 22px glyph — the design bundle states both. */
+.zn-empty__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 52px;
+  block-size: 52px;
+  flex: none;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--text-faint);
+}
+
+.zn-empty__icon > svg {
+  inline-size: 22px;
+  block-size: 22px;
+}
+
+.zn-empty__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h3) / var(--lh-h3) var(--font-display);
+  letter-spacing: var(--ls-h3);
+  color: var(--text-body);
+  max-inline-size: 28ch;
+}
+
+.zn-empty__description {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  max-inline-size: 44ch;
+}
+
+.zn-empty__hint {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-faint);
+  max-inline-size: 44ch;
+}
+
+/* ── variants ─────────────────────────────────────────────────────────────
+   Visual only, and only on the glyph: the frame stays dashed ink whatever
+   the reason the page is empty. */
+
+.zn-empty[data-variant="not-started"] .zn-empty__icon {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Danger and connectivity wear the same vermillon the rest of the system
+   uses for a problem — told apart by the words, not by a second hue. */
+.zn-empty[data-variant="error"] .zn-empty__icon,
+.zn-empty[data-variant="offline"] .zn-empty__icon {
+  color: var(--state-danger);
+  border-color: var(--state-danger);
+}
+
+/* A filter recovery is not a failure: the description carries the count, so
+   it gets the full body ink rather than the muted one. */
+.zn-empty[data-variant="no-results"] .zn-empty__description {
+  color: var(--text-body);
+}

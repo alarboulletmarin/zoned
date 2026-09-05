@@ -1,0 +1,30 @@
+/* Skeleton — the shape of what is coming, drawn in paper and ink.
+
+   No shimmer sweep: the sweep was a moving gradient and the system has none.
+   What is left is a faint fill inside a divider outline, pulsing once every
+   1.4s — the same treatment the design bundle's Skeleton uses.
+
+   Deliberately declares no border-radius, no width and no height. Every call
+   site still sizes and rounds its own blocks with Tailwind (`h-4 w-3/4`,
+   `rounded-full`, `aspect-square`), and this file is unlayered, so anything
+   declared here would beat those utilities and flatten them. */
+
+.zn-skeleton {
+  display: block;
+  background: var(--zn-skeleton-fill, var(--state-disabled-fill));
+  border: var(--border-divider);
+  animation: zoned-pulse 1.4s var(--ease-in-out) infinite;
+}
+
+/* The hero placeholder: one step up the zone ink ramp — the only tinted
+   transparency the system allows — so a large block reads heavier than a
+   text line without a second animation. */
+.zn-skeleton[data-variant="zone-shimmer"] {
+  background: var(--zn-skeleton-fill, var(--zone-1));
+}
+
+/* SkeletonGroup is a theme carrier, not a box: `display: contents` keeps it
+   out of the layout while the custom property still inherits through it. */
+.zn-skeleton-group {
+  display: contents;
+}

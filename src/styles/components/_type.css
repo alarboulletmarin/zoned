@@ -1,0 +1,178 @@
+/* Type roles.
+ *
+ * Three families, three jobs — Bricolage Grotesque displays, Space Grotesk
+ * speaks, JetBrains Mono counts. A screen reads top to bottom as
+ * kicker -> display title -> body -> data, and these are the four classes that
+ * spell that out.
+ *
+ * Sentence capitalisation everywhere, headings included. UPPERCASE belongs to
+ * mono micro-labels only, and never past four words.
+ */
+
+/* ── display ──────────────────────────────────────────────────────────── */
+
+/* The one screen title. --level picks the step: 1 = 88px, 2 = 68px, 3 = 46px. */
+.zn-display {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-display-1);
+  line-height: var(--lh-display-1);
+  letter-spacing: var(--ls-display-1);
+  text-wrap: balance;
+}
+
+.zn-display[data-level="2"] {
+  font-size: var(--fs-display-2);
+  line-height: var(--lh-display-2);
+  letter-spacing: var(--ls-display-2);
+}
+
+.zn-display[data-level="3"] {
+  font-size: var(--fs-display-3);
+  line-height: var(--lh-display-3);
+  letter-spacing: var(--ls-display-3);
+}
+
+/* Section headings. --level 1..4 maps onto the h1..h4 steps; the class does not
+   assume a tag, so an h2 can carry level 3 where the outline demands it. */
+.zn-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+  text-wrap: balance;
+}
+
+.zn-title[data-level="1"] {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--ls-h1);
+}
+
+.zn-title[data-level="3"] {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+}
+
+.zn-title[data-level="4"] {
+  font-size: var(--fs-h4);
+  line-height: var(--lh-h4);
+  letter-spacing: var(--ls-h4);
+}
+
+/* ── text ─────────────────────────────────────────────────────────────── */
+
+.zn-body {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-body);
+}
+
+/* The lead paragraph under a screen title. */
+.zn-body--lead {
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-body-lg);
+  color: var(--text-muted);
+}
+
+.zn-body--sm {
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-sm);
+}
+
+.zn-caption {
+  margin: 0;
+  font: var(--type-caption);
+}
+
+/* An interface label: the words next to a control. */
+.zn-label {
+  font: var(--type-label);
+  color: var(--text-body);
+}
+
+/* ── mono ─────────────────────────────────────────────────────────────── */
+
+/* Data: durations, paces, counts, catalogue ids. Tabular so columns line up. */
+.zn-mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The uppercase micro-label above a title, or over a column of numbers.
+   Four words maximum — past that it stops being a label and starts being a
+   sentence in the wrong case. */
+.zn-kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* The same label, tighter tracking, used inline against a control rather than
+   as a heading. */
+.zn-kicker--inline {
+  letter-spacing: var(--ls-mono-label);
+}
+
+/* The smallest step. 10px is the floor, and only ever uppercase. */
+.zn-kicker--xs {
+  font-size: var(--fs-mono-xs);
+}
+
+/* A cited source, printed under the block it backs. */
+.zn-source {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.7;
+  color: var(--text-faint);
+}
+
+/* ── colour roles ─────────────────────────────────────────────────────── */
+
+.zn-muted {
+  color: var(--text-muted);
+}
+
+.zn-faint {
+  color: var(--text-faint);
+}
+
+/* Vermillon type. The system allows it at 14px or more in semibold (4.0:1 on
+   cream); never for a paragraph, which is why this class also sets the weight. */
+.zn-accent {
+  color: var(--text-link);
+  font-weight: var(--fw-semibold);
+}
+
+.zn-inverse {
+  color: var(--text-inverse);
+}
+
+/* ── flow ─────────────────────────────────────────────────────────────── */
+
+.zn-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 2);
+  line-clamp: var(--lines, 2);
+  overflow: hidden;
+}
+
+.zn-nowrap {
+  white-space: nowrap;
+}

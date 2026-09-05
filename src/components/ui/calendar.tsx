@@ -17,60 +17,27 @@ function Calendar({ className, ...props }: CalendarProps) {
       locale={locale}
       showOutsideDays
       fixedWeeks
+      /* Structure only. react-day-picker puts every day modifier on the cell as
+         a data-* attribute (data-selected, data-today, data-outside,
+         data-disabled, data-hidden), so those states are painted off the
+         attributes in calendar.css rather than through modifier classes. */
       classNames={{
-        root: cn("p-3", className),
-        months: "flex flex-col sm:flex-row gap-2",
-        month: "flex flex-col gap-4",
-        month_caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium capitalize",
-        nav: "flex items-center gap-1",
-        button_previous: cn(
-          "absolute left-1 top-0",
-          "inline-flex items-center justify-center",
-          "size-7 rounded-md",
-          "bg-transparent hover:bg-accent hover:text-accent-foreground",
-          "transition-colors",
-        ),
-        button_next: cn(
-          "absolute right-1 top-0",
-          "inline-flex items-center justify-center",
-          "size-7 rounded-md",
-          "bg-transparent hover:bg-accent hover:text-accent-foreground",
-          "transition-colors",
-        ),
-        month_grid: "w-full border-collapse",
-        weekdays: "flex",
-        weekday:
-          "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]",
-        week: "flex w-full mt-1",
-        day: cn(
-          "relative p-0 text-center text-sm",
-          "focus-within:relative focus-within:z-20",
-          "size-8 rounded-md",
-        ),
-        day_button: cn(
-          "inline-flex items-center justify-center",
-          "size-8 rounded-md",
-          "text-sm font-normal",
-          "transition-colors",
-          "hover:bg-accent hover:text-accent-foreground",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-          "aria-selected:opacity-100",
-        ),
-        selected:
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
-        today: "bg-accent text-accent-foreground",
-        outside: "text-muted-foreground/50",
-        disabled: "text-muted-foreground/30 pointer-events-none",
-        hidden: "invisible",
+        root: cn("zn-cal", className),
+        months: "zn-cal__months",
+        month: "zn-cal__month",
+        month_caption: "zn-cal__caption",
+        caption_label: "zn-cal__caption-label",
+        nav: "zn-cal__nav",
+        button_previous: "zn-cal__nav-btn",
+        button_next: "zn-cal__nav-btn",
+        month_grid: "zn-cal__grid",
+        weekday: "zn-cal__weekday",
+        day: "zn-cal__day",
+        day_button: "zn-cal__day-btn",
       }}
       components={{
         Chevron: ({ orientation }) =>
-          orientation === "left" ? (
-            <ChevronLeft className="size-4" />
-          ) : (
-            <ChevronRight className="size-4" />
-          ),
+          orientation === "left" ? <ChevronLeft /> : <ChevronRight />,
       }}
       {...props}
     />

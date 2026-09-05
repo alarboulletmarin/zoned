@@ -1,0 +1,252 @@
+/* Sheet — the same paper and outline as a dialog, attached to one edge of the
+   viewport. Only the radius changes: the attached edge stays square. A sheet
+   floats, so --shadow-block is allowed here too.
+
+   Side is selected off the data-side attribute the component emits.
+   Reusable parts: .zn-sheet__overlay, .zn-sheet, .zn-sheet__close. */
+
+/* ── overlay ──────────────────────────────────────────────────────────── */
+
+/* Flat ink wash, no backdrop-filter — the system forbids blur. */
+.zn-sheet__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(22, 19, 14, 0.42);
+}
+
+.dark .zn-sheet__overlay {
+  background: rgba(10, 9, 7, 0.72);
+}
+
+@keyframes zn-sheet-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes zn-sheet-overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.zn-sheet__overlay[data-state="open"] {
+  animation: zn-sheet-overlay-in var(--dur-base) var(--ease-out);
+}
+.zn-sheet__overlay[data-state="closed"] {
+  animation: zn-sheet-overlay-out var(--dur-base) var(--ease-out);
+}
+
+/* ── panel ────────────────────────────────────────────────────────────── */
+
+.zn-sheet {
+  position: fixed;
+  z-index: 50;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
+  padding: var(--pad-card);
+  overflow: auto;
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  box-shadow: var(--shadow-block);
+}
+
+/* ── sides ────────────────────────────────────────────────────────────── */
+
+/* Vertical sheets span the width and stop short of the far edge, so the page
+   underneath stays visible. Horizontal ones take a fixed panel width. */
+.zn-sheet[data-side="bottom"],
+.zn-sheet[data-side="top"] {
+  inset-inline: 0;
+  max-block-size: 82%;
+}
+.zn-sheet[data-side="bottom"] {
+  bottom: 0;
+  border-radius: var(--r-4xl) var(--r-4xl) 0 0;
+}
+.zn-sheet[data-side="top"] {
+  top: 0;
+  border-radius: 0 0 var(--r-4xl) var(--r-4xl);
+}
+
+.zn-sheet[data-side="left"],
+.zn-sheet[data-side="right"] {
+  inset-block: 0;
+  inline-size: 420px;
+  max-inline-size: 88%;
+}
+.zn-sheet[data-side="left"] {
+  left: 0;
+  border-radius: 0 var(--r-4xl) var(--r-4xl) 0;
+}
+.zn-sheet[data-side="right"] {
+  right: 0;
+  border-radius: var(--r-4xl) 0 0 var(--r-4xl);
+}
+
+/* The grab handle a vertical sheet is dragged by — decoration, so it is a
+   pseudo-element and never reaches the accessibility tree. */
+.zn-sheet[data-side="bottom"]::before,
+.zn-sheet[data-side="top"]::before {
+  content: "";
+  flex: none;
+  align-self: center;
+  inline-size: 44px;
+  block-size: 4px;
+  border-radius: var(--r-pill);
+  background: var(--line-divider);
+}
+
+/* On a top sheet the handle belongs on the free edge, at the bottom. */
+.zn-sheet[data-side="top"]::before {
+  order: 1;
+}
+
+/* ── motion ───────────────────────────────────────────────────────────── */
+
+/* Each side comes in from its own edge, so the panel says where it came from.
+   Radix keeps the node mounted on [data-state="closed"] to play the exit. */
+@keyframes zn-sheet-in-bottom {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+@keyframes zn-sheet-out-bottom {
+  from { transform: none; }
+  to { transform: translateY(100%); }
+}
+@keyframes zn-sheet-in-top {
+  from { transform: translateY(-100%); }
+  to { transform: none; }
+}
+@keyframes zn-sheet-out-top {
+  from { transform: none; }
+  to { transform: translateY(-100%); }
+}
+@keyframes zn-sheet-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+@keyframes zn-sheet-out-left {
+  from { transform: none; }
+  to { transform: translateX(-100%); }
+}
+@keyframes zn-sheet-in-right {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+@keyframes zn-sheet-out-right {
+  from { transform: none; }
+  to { transform: translateX(100%); }
+}
+
+.zn-sheet[data-side="bottom"][data-state="open"] {
+  animation: zn-sheet-in-bottom var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="bottom"][data-state="closed"] {
+  animation: zn-sheet-out-bottom var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="top"][data-state="open"] {
+  animation: zn-sheet-in-top var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="top"][data-state="closed"] {
+  animation: zn-sheet-out-top var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="left"][data-state="open"] {
+  animation: zn-sheet-in-left var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="left"][data-state="closed"] {
+  animation: zn-sheet-out-left var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="right"][data-state="open"] {
+  animation: zn-sheet-in-right var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="right"][data-state="closed"] {
+  animation: zn-sheet-out-right var(--dur-base) var(--ease-out);
+}
+
+/* ── header / footer ──────────────────────────────────────────────────── */
+
+/* The end padding keeps a long title clear of the close button. */
+.zn-sheet__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-inline-end: var(--sp-15);
+}
+
+.zn-sheet__title {
+  font: var(--type-h3);
+  color: var(--text-body);
+}
+
+.zn-sheet__description {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* Pushed to the bottom edge: this is where the cost of the action lives. */
+.zn-sheet__footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: var(--border-divider);
+}
+
+/* ── close ────────────────────────────────────────────────────────────── */
+
+.zn-sheet__close {
+  position: absolute;
+  top: var(--sp-8);
+  right: var(--sp-8);
+
+  display: grid;
+  place-items: center;
+  inline-size: 36px;
+  block-size: 36px;
+  padding: 0;
+
+  background: transparent;
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-sheet__close > svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-sheet__close:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-sheet__close:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-sheet__close:disabled {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* WCAG 2.5.8 — 44px on a coarse pointer, whatever the drawn size says. */
+@media (pointer: coarse) {
+  .zn-sheet__close {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+}

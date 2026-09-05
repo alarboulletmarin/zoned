@@ -23,7 +23,7 @@ export interface ResponsiveTableColumn<T> {
   mobileLabel?: ReactNode;
   /** Cell renderer. */
   cell: (row: T, rowIndex: number) => ReactNode;
-  /** Tailwind classes appended to <th> and <td>. */
+  /** Extra classes appended to <th> and <td>. */
   className?: string;
   /** Hide this column from the mobile card layout entirely. */
   hideOnMobile?: boolean;
@@ -86,36 +86,30 @@ export function ResponsiveTable<T>({
   const visibleMobileColumns = columns.filter((c) => !c.hideOnMobile);
 
   return (
-    <div className={className}>
+    <div className={cn("zn-table", className)}>
       {/* Desktop: real <table>, hidden on phones */}
-      {/* overflow-x-clip (not auto) with stickyHeader: an overflow:auto
-          ancestor becomes the sticky containing block, which pins the thead
-          56px inside the card and detaches it from page scroll. clip keeps
-          stray overflow contained without creating a scroll container. */}
+      {/* data-sticky drives overflow-x: clip (not auto) in the stylesheet: an
+          overflow:auto ancestor becomes the sticky containing block, which pins
+          the thead 56px inside the card and detaches it from page scroll. clip
+          keeps stray overflow contained without creating a scroll container. */}
       <div
-        className={cn(
-          "hidden md:block",
-          stickyHeader ? "overflow-x-clip" : "overflow-x-auto",
-        )}
+        className="zn-table__scroll"
+        data-sticky={stickyHeader ? "true" : undefined}
       >
-        <table className={cn("w-full text-sm", tableClassName)}>
-          {caption && <caption className="sr-only">{caption}</caption>}
+        <table className={cn("zn-table__table", tableClassName)}>
+          {caption && <caption className="zn-table__caption">{caption}</caption>}
+          {/* Sticky parks the header below the fixed 56px TopBar so it isn't
+              hidden behind it while scrolling (#103). */}
           <thead
-            className={cn(
-              // top-14 clears the fixed h-14 TopBar so the header isn't hidden
-              // behind it while scrolling (#103).
-              stickyHeader && "sticky top-14 bg-background z-10",
-            )}
+            className="zn-table__head"
+            data-sticky={stickyHeader ? "true" : undefined}
           >
-            <tr className="border-b">
+            <tr>
               {columns.map((col) => (
                 <th
                   key={col.key}
                   scope={col.scope ?? "col"}
-                  className={cn(
-                    "py-2 px-3 text-left font-medium text-muted-foreground",
-                    col.className,
-                  )}
+                  className={cn("zn-table__th", col.className)}
                 >
                   {col.header}
                 </th>
@@ -126,15 +120,12 @@ export function ResponsiveTable<T>({
             {data.map((row, rowIndex) => (
               <tr
                 key={getRowKey(row, rowIndex, rowKey)}
-                className={cn(
-                  "border-b last:border-0 hover:bg-muted/40 transition-colors",
-                  rowClassName?.(row, rowIndex),
-                )}
+                className={cn("zn-table__row", rowClassName?.(row, rowIndex))}
               >
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={cn("py-2 px-3", col.className)}
+                    className={cn("zn-table__td", col.className)}
                   >
                     {col.cell(row, rowIndex)}
                   </td>
@@ -146,29 +137,22 @@ export function ResponsiveTable<T>({
       </div>
 
       {/* Mobile: stacked cards */}
-      <div className="md:hidden flex flex-col gap-3">
+      <div className="zn-table__cards">
         {data.map((row, rowIndex) => (
           <div
             key={getRowKey(row, rowIndex, rowKey)}
-            className={cn(
-              "rounded-lg border bg-card p-3 shadow-xs",
-              rowClassName?.(row, rowIndex),
-            )}
+            className={cn("zn-table__card", rowClassName?.(row, rowIndex))}
           >
             {mobileCardTitle && (
-              <div className="mb-2 text-sm font-semibold text-foreground">
-                {mobileCardTitle(row)}
-              </div>
+              <div className="zn-table__card-title">{mobileCardTitle(row)}</div>
             )}
-            <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-sm">
+            <dl className="zn-table__dl">
               {visibleMobileColumns.map((col) => (
                 <Fragment key={col.key}>
-                  <dt className="text-xs font-medium text-muted-foreground self-center">
+                  <dt className="zn-table__dt">
                     {col.mobileLabel ?? col.header}
                   </dt>
-                  <dd className="text-foreground self-center">
-                    {col.cell(row, rowIndex)}
-                  </dd>
+                  <dd className="zn-table__dd">{col.cell(row, rowIndex)}</dd>
                 </Fragment>
               ))}
             </dl>

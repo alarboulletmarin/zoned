@@ -60,7 +60,7 @@ jobs:
       - name: i18n FR/EN parity
         run: bun run check:i18n
 
-      - name: Zone colours match themes.css
+      - name: Zone colours match design/zones.css
         run: bun run scripts/qa-zone-colors.ts
 
       - name: Workout schema

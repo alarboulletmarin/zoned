@@ -1,0 +1,163 @@
+/* Layout vocabulary.
+ *
+ * NOT a utility framework and not a Tailwind reimplementation: these are the
+ * layout facts the design system itself states — a 20px gutter, a 22px stack,
+ * 40px screen margins (20px on mobile), and sections separated by a full-width
+ * ink rule rather than by whitespace.
+ *
+ * Variation goes through custom properties rather than a class per value, so
+ * the set stays small enough to remember:
+ *
+ *   <div className="zn-row" style={{ "--gap": "var(--sp-4)" }}>
+ *   <div className="zn-grid" style={{ "--cols": 3 }}>
+ *
+ * Anything genuinely one-off stays an inline style, which is what 635 places in
+ * this app already do for zone colours. That is the escape hatch, and it is
+ * fine — it is plain CSS.
+ */
+
+/* ── flow ─────────────────────────────────────────────────────────────── */
+
+/* A horizontal run of things on one baseline. The default gap is the gutter. */
+.zn-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap, var(--sp-6));
+  min-inline-size: 0;
+}
+
+/* A vertical stack. The default gap is the system's 14px stack step; a stack of
+   cards or sections passes a bigger one. */
+.zn-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, var(--gap-stack));
+  min-inline-size: 0;
+}
+
+/* A row that wraps — filter chips, tag lists, button groups. */
+.zn-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap, var(--sp-4));
+}
+
+/* Pushes the last child to the far edge without a spacer element. */
+.zn-row--split,
+.zn-cluster--split {
+  justify-content: space-between;
+}
+
+/* Aligns a row to the top instead of the middle — used when one column is a
+   paragraph and the other a single control. */
+.zn-row--start {
+  align-items: flex-start;
+}
+
+.zn-row--baseline {
+  align-items: baseline;
+}
+
+/* The element that takes the leftover width in a row. */
+.zn-fill {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The element that must not be squeezed — an icon, a badge, a fixed control. */
+.zn-fixed {
+  flex: none;
+}
+
+/* Pushes everything after it to the end of the line. */
+.zn-push {
+  margin-inline-start: auto;
+}
+
+/* ── grid ─────────────────────────────────────────────────────────────── */
+
+/* The card grid: 3 columns on desktop, 20px gutters. Pass --cols to change it;
+   it collapses to one column on mobile on its own. */
+.zn-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  gap: var(--gap, var(--gap-grid));
+}
+
+/* An asymmetric two-column panel: content and a sidebar of a stated width. */
+.zn-split {
+  display: grid;
+  grid-template-columns: var(--split, 1fr 420px);
+  gap: var(--gap, var(--sp-17));
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .zn-grid {
+    grid-template-columns: repeat(var(--cols-md, 2), minmax(0, 1fr));
+  }
+  .zn-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .zn-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── page ─────────────────────────────────────────────────────────────── */
+
+/* The screen's side margins. 40px, 20px on mobile — the value comes from
+   --pad-screen-x, which already switches at the breakpoint. */
+.zn-screen {
+  padding-inline: var(--pad-screen-x);
+}
+
+/* A band of the page. Sections are separated by a full-width ink rule, never by
+   blank space: that is what makes the page read as paper rather than as a feed. */
+.zn-section {
+  padding-block: var(--pad-block, var(--sp-17));
+  padding-inline: var(--pad-screen-x);
+  border-block-start: var(--border-rule);
+}
+
+/* The first section on a screen sits under the header's own rule. */
+.zn-section--first {
+  border-block-start: none;
+}
+
+.zn-section--band {
+  background: var(--surface-band);
+}
+
+/* Reading measure. Prose is unreadable past ~70 characters. */
+.zn-measure {
+  max-inline-size: var(--measure, 62ch);
+}
+
+/* Wide content — a table, a chart, a code block — scrolls inside itself.
+   The page must never scroll sideways. */
+.zn-scroll-x {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+/* ── visibility ───────────────────────────────────────────────────────── */
+
+/* Available to assistive technology, invisible on screen.
+   Deliberately NOT prefixed: `sr-only` predates Tailwind, 14 call sites across
+   the app already use it, and renaming them would be churn for nothing. */
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

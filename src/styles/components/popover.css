@@ -1,0 +1,66 @@
+/* Popover — a paper panel that floats over the page, anchored to the control
+   that opened it. One of the five surfaces allowed to carry --shadow-block.
+
+   Layout is deliberately left alone: the reference panel stacks its own
+   children, but this one is a generic container and every call site brings its
+   own arrangement. Only the surface is painted here. */
+
+.zn-popover {
+  z-index: 50;
+
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-block);
+
+  /* Radix measures the anchor and publishes the origin; the entrance grows
+     from the trigger rather than from the middle of the screen. */
+  transform-origin: var(--radix-popover-content-transform-origin);
+
+  /* The 8px the panel travels, signed by the side it opens on. */
+  --zn-popover-x: 0px;
+  --zn-popover-y: 0px;
+}
+
+/* data-side is the side of the trigger the panel landed on, so the panel
+   arrives *from* the trigger: opening downwards means coming from above. */
+.zn-popover[data-side="bottom"] { --zn-popover-y: calc(var(--sp-4) * -1); }
+.zn-popover[data-side="top"] { --zn-popover-y: var(--sp-4); }
+.zn-popover[data-side="right"] { --zn-popover-x: calc(var(--sp-4) * -1); }
+.zn-popover[data-side="left"] { --zn-popover-x: var(--sp-4); }
+
+.zn-popover[data-state="open"] {
+  animation: zn-popover-in var(--dur-base) var(--ease-out);
+}
+
+/* Radix keeps the node mounted until the animation ends, so the closing frame
+   has to hold — hence forwards. */
+.zn-popover[data-state="closed"] {
+  animation: zn-popover-out var(--dur-base) var(--ease-out) forwards;
+}
+
+/* A slide and a fade, nothing else: the panel does not scale. */
+@keyframes zn-popover-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--zn-popover-x), var(--zn-popover-y));
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes zn-popover-out {
+  from {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--zn-popover-x), var(--zn-popover-y));
+  }
+}

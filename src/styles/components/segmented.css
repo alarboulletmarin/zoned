@@ -1,0 +1,91 @@
+/* Segmented — two to four exclusive views of one thing (list vs calendar,
+   km vs miles). An outlined pill track on the sunken paper; the chosen
+   segment inverts to solid ink. Nothing lifts, nothing scales.
+
+   State comes off the aria-checked the radios already emit — no parallel
+   modifier class. */
+
+.zn-segmented {
+  /* Equal columns for any number of options, without the component having to
+     count them: auto-flow lays one track per segment. minmax(0, 1fr) is what
+     lets a seven-day row ellipsis instead of overflowing. */
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--sp-1);
+
+  padding: var(--sp-1);
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+.zn-segmented__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+  min-block-size: 40px;
+
+  /* 6px sides so a seven-day row never clips its initial. */
+  padding: var(--sp-5) var(--sp-3);
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  color: var(--ink-2);
+  background: transparent;
+  border: var(--bw-rule) solid transparent;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* The room comes back as soon as the viewport can pay for it. */
+@media (min-width: 640px) {
+  .zn-segmented__item {
+    padding-inline: var(--sp-5);
+  }
+}
+
+.zn-segmented__item > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-segmented__label {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zn-segmented__item:hover:not([aria-checked="true"]) {
+  color: var(--ink-1);
+}
+
+/* Press is a 1px push down — the stamp meeting the paper. */
+.zn-segmented__item:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* The chosen segment: fully inverted, outlined, still pill. */
+.zn-segmented__item[aria-checked="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+  border-color: var(--line-strong);
+}
+
+/* WCAG 2.5.8: 44px on a coarse pointer. Tailwind never carried this here,
+   which is why a seven-day row was a 34px target on a phone. */
+@media (pointer: coarse) {
+  .zn-segmented__item {
+    min-block-size: var(--hit-min);
+  }
+}

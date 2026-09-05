@@ -74,12 +74,22 @@
     <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
     <link rel="preconnect" href="https://vitals.vercel-insights.com" crossorigin />
 
-    <!-- Self-hosted critical font: single variable woff2 (latin, 300–700)
-         covers every weight incl. the hero h1 (LCP element). crossorigin is
-         required for font preloads even same-origin (CORS-mode fetch). -->
+    <!-- Self-hosted critical faces, latin subsets of the variable woff2s.
+         Space Grotesk carries the interface text; Bricolage Grotesque draws the
+         display title, which is the LCP element on every screen. JetBrains Mono
+         is deliberately NOT preloaded — it only sets micro-labels, and it has a
+         metrics-matched Courier New fallback, so swapping it costs no shift.
+         crossorigin is required for font preloads even same-origin. -->
     <link
       rel="preload"
       href="/fonts/space-grotesk-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/bricolage-grotesque-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin

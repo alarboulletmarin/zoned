@@ -1,0 +1,175 @@
+/* Dialog — a paper panel raised off an ink wash. A dialog is a floating
+   surface, so it is one of the few places --shadow-block is allowed.
+   Radix keeps the behaviour (focus trap, escape, scroll lock); this is paint.
+
+   The parts are reusable by anything rendering its own DialogPrimitive.Content:
+   .zn-dialog__overlay, .zn-dialog, .zn-dialog__close. */
+
+/* ── overlay ──────────────────────────────────────────────────────────── */
+
+/* An ink wash, not a frosted pane: the system forbids blur, so the scrim is a
+   flat rgba ink at the opacity the design bundle states outright. */
+.zn-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(22, 19, 14, 0.42);
+}
+
+/* Dark: an ink wash over an ink page reads as nothing, so the scrim deepens
+   toward the desk colour — the same move borders.css makes for the shadow. */
+.dark .zn-dialog__overlay {
+  background: rgba(10, 9, 7, 0.72);
+}
+
+@keyframes zn-dialog-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes zn-dialog-overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Radix's Presence keeps the node mounted while an animation runs on
+   [data-state="closed"] — that is what plays the exit. */
+.zn-dialog__overlay[data-state="open"] {
+  animation: zn-dialog-overlay-in var(--dur-base) var(--ease-out);
+}
+.zn-dialog__overlay[data-state="closed"] {
+  animation: zn-dialog-overlay-out var(--dur-base) var(--ease-out);
+}
+
+/* ── panel ────────────────────────────────────────────────────────────── */
+
+.zn-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
+
+  inline-size: calc(100% - var(--sp-10) * 2);
+  max-inline-size: 500px;
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-4xl);
+  box-shadow: var(--shadow-block);
+}
+
+/* The panel arrives from 8px below, the same 8px zoned-slide-in uses.
+   Nothing scales: the centring translate is carried through both frames. */
+@keyframes zn-dialog-in {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + var(--sp-4))); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+@keyframes zn-dialog-out {
+  from { opacity: 1; transform: translate(-50%, -50%); }
+  to { opacity: 0; transform: translate(-50%, calc(-50% + var(--sp-4))); }
+}
+
+.zn-dialog[data-state="open"] {
+  animation: zn-dialog-in var(--dur-base) var(--ease-out);
+}
+.zn-dialog[data-state="closed"] {
+  animation: zn-dialog-out var(--dur-base) var(--ease-out);
+}
+
+/* ── header / footer ──────────────────────────────────────────────────── */
+
+/* The end padding keeps a long title clear of the close button. */
+.zn-dialog__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-inline-end: var(--sp-15);
+}
+
+.zn-dialog__title {
+  font: var(--type-h3);
+  color: var(--text-body);
+}
+
+.zn-dialog__description {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* Stacked on a phone with the primary action last, one row on a wider screen. */
+.zn-dialog__footer {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: var(--border-divider);
+}
+
+@media (min-width: 640px) {
+  .zn-dialog__footer {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+/* ── close ────────────────────────────────────────────────────────────── */
+
+/* A circle holding one glyph. The label is the sr-only "Fermer" inside it. */
+.zn-dialog__close {
+  position: absolute;
+  top: var(--sp-8);
+  right: var(--sp-8);
+
+  display: grid;
+  place-items: center;
+  inline-size: 36px;
+  block-size: 36px;
+  padding: 0;
+
+  background: transparent;
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-dialog__close > svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-dialog__close:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-dialog__close:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-dialog__close:disabled {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* WCAG 2.5.8 — 44px on a coarse pointer, whatever the drawn size says. */
+@media (pointer: coarse) {
+  .zn-dialog__close {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+}

@@ -75,21 +75,18 @@ function DateInput({
           variant="outline"
           disabled={disabled}
           aria-label={ariaLabel}
-          className={cn(
-            "w-full justify-between font-normal",
-            !value && "text-muted-foreground",
-            className,
-          )}
+          data-placeholder={value ? undefined : ""}
+          className={cn("zn-date-input", className)}
         >
-          <span>
+          <span className="zn-date-input__value">
             {value
               ? formatDisplayDate(value, isEn)
               : placeholder ?? defaultPlaceholder}
           </span>
-          <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
+          <CalendarIcon className="zn-date-input__icon" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="zn-date-input__popover" align="start">
         <Calendar
           mode="single"
           selected={selected}

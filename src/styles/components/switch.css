@@ -1,0 +1,80 @@
+/* Switch — an outlined pill that inverts when it is on. The knob moves *and*
+   the fill flips, so the state is never carried by colour alone.
+   A switch applies immediately; a deferred choice is a checkbox. */
+
+.zn-switch {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+
+  /* 44x24 track with a 2px gutter — the geometry from the design bundle. */
+  inline-size: 44px;
+  block-size: 24px;
+  padding: 2px;
+
+  background: transparent;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* On: the track floods with ink, the knob turns to paper. */
+.zn-switch[data-state="checked"] {
+  background: var(--ink-1);
+}
+
+.zn-switch:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-switch:disabled,
+.zn-switch[data-disabled] {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+.zn-switch__thumb {
+  display: block;
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+  border-radius: var(--r-pill);
+  background: var(--ink-1);
+  pointer-events: none;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    background var(--dur-base) var(--ease-out);
+}
+
+/* 44 track - 2x1.5 border - 2x2 gutter - 18 knob = 19px of travel. */
+.zn-switch[data-state="checked"] .zn-switch__thumb {
+  transform: translateX(19px);
+  background: var(--paper-page);
+}
+
+.zn-switch:disabled .zn-switch__thumb,
+.zn-switch[data-disabled] .zn-switch__thumb {
+  background: var(--state-disabled-border);
+}
+
+/* WCAG 2.5.8: the drawn track is 24px tall, the target it answers to is 44px.
+   The overlay is a pseudo-element of the button itself, so a thumb landing
+   anywhere in that band still toggles — and the pill keeps its size. */
+@media (pointer: coarse) {
+  .zn-switch::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 50%;
+    block-size: var(--hit-min);
+    transform: translateY(-50%);
+  }
+}

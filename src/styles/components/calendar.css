@@ -1,0 +1,233 @@
+/* Calendar — a paper month grid. The weekday header is a mono micro-label, each
+   day is its own outlined square, the selected day inverts to ink and today
+   keeps a vermillon underline.
+
+   react-day-picker v9 stamps every day modifier on the <td> as a data-*
+   attribute (data-selected, data-today, data-outside, data-disabled,
+   data-hidden), so the states are selected off those instead of a parallel set
+   of modifier classes — which is why the classNames map only names structure. */
+
+.zn-cal {
+  /* the width the two nav buttons take out of the caption row */
+  --zn-cal-nav: calc(34px * 2 + var(--sp-2));
+
+  padding: var(--sp-6);
+  color: var(--ink-1);
+  font: var(--type-body-sm);
+}
+
+/* Nav is a sibling of the months, not of the caption: the months box is what
+   the buttons are positioned against. */
+.zn-cal__months {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 640px) {
+  .zn-cal__months {
+    flex-direction: row;
+    gap: var(--sp-10);
+  }
+}
+
+.zn-cal__month {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+.zn-cal__caption {
+  display: flex;
+  align-items: center;
+  min-block-size: 34px;
+  padding-inline-end: calc(var(--zn-cal-nav) + var(--sp-5));
+}
+
+.zn-cal__caption-label {
+  font: var(--fw-semibold) var(--fs-h4) / 1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+  text-transform: capitalize;
+}
+
+/* ── navigation ───────────────────────────────────────────────────────── */
+
+.zn-cal__nav {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.zn-cal__nav-btn {
+  inline-size: 34px;
+  block-size: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+
+  background: transparent;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--ink-1);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-cal__nav-btn > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-cal__nav-btn:hover:not([aria-disabled="true"]) {
+  background: var(--surface-band);
+}
+
+.zn-cal__nav-btn:active:not([aria-disabled="true"]) {
+  transform: translateY(var(--press-shift));
+}
+
+/* rdp keeps the button in the tab order and marks it aria-disabled rather than
+   disabling it, so the dead state is painted off the aria attribute. */
+.zn-cal__nav-btn[aria-disabled="true"] {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* ── the grid ─────────────────────────────────────────────────────────── */
+
+.zn-cal__grid {
+  inline-size: 100%;
+  table-layout: fixed;
+  /* separate + border-spacing is what puts air between the outlined day cells */
+  border-collapse: separate;
+  border-spacing: var(--sp-2);
+}
+
+.zn-cal__weekday {
+  padding: 0 0 var(--sp-2);
+  font: var(--fw-regular) var(--fs-mono-sm) / 1.3 var(--font-mono);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+.zn-cal__day {
+  padding: 0;
+  text-align: center;
+}
+
+/* the focus ring is 2.5px with a 2px offset — it has to sit above its neighbours */
+.zn-cal__day:focus-within {
+  position: relative;
+  z-index: 1;
+}
+
+.zn-cal__day[data-hidden] {
+  visibility: hidden;
+}
+
+.zn-cal__day-btn {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 36px;
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  border: var(--border-hair);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  color: var(--ink-1);
+
+  font: var(--fw-regular) var(--fs-mono) / 1 var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-cal__day-btn:hover:not(:disabled) {
+  background: var(--surface-band);
+  border-color: var(--line-strong);
+}
+
+.zn-cal__day-btn:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+/* Today: a vermillon rule under the figure, the one accent mark on the grid. */
+.zn-cal__day[data-today] .zn-cal__day-btn::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 3px;
+  inline-size: 16px;
+  block-size: 2px;
+  background: var(--accent);
+}
+
+/* ── day states ───────────────────────────────────────────────────────────
+   Order is the cascade here: outside is the faintest, selected overrides it,
+   and disabled overrides everything — a day you cannot pick never reads picked. */
+
+.zn-cal__day[data-outside] .zn-cal__day-btn {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+}
+
+.zn-cal__day[data-selected] .zn-cal__day-btn,
+.zn-cal__day[data-selected] .zn-cal__day-btn:hover:not(:disabled) {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border: var(--border-heavy);
+}
+
+.zn-cal__day[data-disabled] .zn-cal__day-btn,
+.zn-cal__day-btn:disabled {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border: var(--bw-hair) solid var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* WCAG 2.5.8: 44px minimum on a coarse pointer. The caption has to give the
+   grown nav buttons more room, so the reserved width grows with them. */
+@media (pointer: coarse) {
+  .zn-cal {
+    --zn-cal-nav: calc(var(--hit-min) * 2 + var(--sp-2));
+  }
+  .zn-cal__caption {
+    min-block-size: var(--hit-min);
+  }
+  .zn-cal__nav-btn {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+  .zn-cal__day-btn {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+}

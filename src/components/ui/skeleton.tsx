@@ -1,48 +1,35 @@
 import { cn } from "@/lib/utils";
-import RLSSkeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "zone-shimmer";
 }
 
 /**
- * Skeleton primitive — pulse-style placeholder used while content loads.
+ * Skeleton primitive — placeholder in the shape of the content that is loading.
  *
- * Wraps `react-loading-skeleton` so every block in the app benefits from
- * the shimmer animation while keeping the existing call sites unchanged
- * (`<Skeleton className="h-4 w-3/4" />`). The two custom variants are
- * preserved: the default uses the design-system muted token, and
- * `zone-shimmer` keeps the bespoke rainbow gradient defined in
- * `src/styles/animations.css` for hero/loader moments where the stronger
- * brand-colored sweep reads better than a flat shimmer.
+ * The paint lives in `src/styles/components/skeleton.css` and selects on the
+ * `data-variant` attribute. Call sites are unchanged (`<Skeleton className="h-4
+ * w-3/4" />`): the block still takes its size and its corner radius from the
+ * className, which is why the stylesheet declares neither.
+ *
+ * `react-loading-skeleton` is gone. Its shimmer is a `linear-gradient` swept
+ * across the block and the design system has no gradients, so the library could
+ * not be re-coloured into the redesign — only replaced by the flat pulse the
+ * design bundle's Skeleton uses. `zone-shimmer` survives as a variant name and
+ * now means "the heavier block", one step up the zone ink ramp.
  */
 export function Skeleton({
   className,
   variant = "default",
   ...props
 }: SkeletonProps) {
-  if (variant === "zone-shimmer") {
-    return <div className={cn("rounded-md zone-shimmer", className)} {...props} />;
-  }
   return (
     <div
-      className={cn(
-        "block overflow-hidden rounded-md leading-none",
-        className,
-      )}
+      data-variant={variant}
+      className={cn("zn-skeleton", className)}
       {...props}
-    >
-      <RLSSkeleton
-        height="100%"
-        width="100%"
-        baseColor="var(--muted)"
-        highlightColor="color-mix(in srgb, var(--muted) 70%, var(--background))"
-        duration={1.6}
-        borderRadius="inherit"
-      />
-    </div>
+    />
   );
 }
 
@@ -54,19 +41,26 @@ interface SkeletonGroupProps {
 }
 
 /**
- * SkeletonGroup — provides a shared theme (base / highlight color, shimmer
- * speed) to descendant skeletons. Useful when a section needs a different
- * tone than the global theme — e.g. skeletons rendered on a primary-tinted
- * card need a softer base to stay visible.
+ * SkeletonGroup — gives descendant skeletons a shared fill, for a section that
+ * needs a different tone than the page (skeletons on a tinted card need a
+ * softer base to stay visible).
+ *
+ * Renders `display: contents`, so it adds no box to the layout: the colour
+ * travels down as a custom property. `highlightColor` is accepted and ignored —
+ * there is no sweep left to highlight.
  */
 export function SkeletonGroup({
   baseColor = "var(--muted)",
   highlightColor = "color-mix(in srgb, var(--muted) 70%, var(--background))",
   children,
 }: SkeletonGroupProps) {
+  void highlightColor;
   return (
-    <SkeletonTheme baseColor={baseColor} highlightColor={highlightColor} duration={1.6}>
+    <div
+      className="zn-skeleton-group"
+      style={{ "--zn-skeleton-fill": baseColor } as CSSProperties}
+    >
       {children}
-    </SkeletonTheme>
+    </div>
   );
 }
