@@ -199,6 +199,54 @@ Et **regarder dans la page** avant de valider : un dessin peut tenir seul et
 échouer à côté de la vraie typo, à la vraie taille. Vérifier aussi le thème
 sombre — l'encre suit `currentColor`, l'accent doit rester lisible.
 
+## Les annotations — le trait qui montre
+
+Un registre ajouté après coup, à la demande du propriétaire, sur le modèle des
+notices annotées à la main : une phrase courte en mono, une flèche tracée, et
+parfois quelqu'un qui montre.
+
+**Pourquoi ça ne contredit pas la règle 2.** Une flèche n'est pas un objet
+représenté, c'est une marque d'annotation — du même ordre que la ligne de sol,
+qui n'a jamais compté comme un objet. Elle n'entre en concurrence avec aucun
+glyphe Material, parce qu'aucun ne fait ce travail : montrer un endroit précis
+d'une page. Et la variante avec figure remet un personnage au départ du trait,
+ce qui est le sujet même de la DA.
+
+**La flèche est en encre, jamais en vermillon.** L'accent reste réservé au
+contact avec le sol ; une flèche rouge ferait un second point focal sur chaque
+écran qui en porte une.
+
+**Une figure par écran, au plus.** Les flèches peuvent se répéter, la figure non
+— deux narrateurs se disputent la page. C'est la même discipline que l'aplat
+vermillon unique.
+
+**Jamais en position absolue.** L'annotation se pose dans le flux, juste avant
+ou juste après le bloc qu'elle désigne. Une annotation calée en pixels sur une
+cible qui bouge se retrouve à désigner le vide dès que la colonne change de
+largeur — et la colonne change à chaque largeur d'écran.
+
+Le composant est `src/components/domain/Annotation.tsx`, les quatre flèches sont
+produites par `scripts/doodles/arrows.mjs`.
+
+## Le gainage, deux échecs et une limite
+
+Consigné parce que c'est le seul dessin nommé par le propriétaire qui n'est
+toujours pas livré, et que trois approches ont été essayées.
+
+1. **Contour fermé.** Rejeté par le propriétaire, comme le premier coureur.
+2. **Gréement basculé de 74°.** Rejeté en revue, chiffres à l'appui : le tronçon
+   vermillon de l'avant-bras courait de y=233 à y=251 alors que la ligne de sol
+   était à y=257 — il peignait un membre en l'air. Et la pose lisait « chien tête
+   en bas » : hanches au point haut, épaules retombées.
+3. **Solveur numérique** sur onze angles du gréement, avec les contacts au sol
+   comme contraintes chiffrées et quarante redémarrages. Il satisfait les
+   contraintes et produit quand même une figure couchée.
+
+La cause est structurelle : le bras du gréement part vers l'arrière et son
+avant-bras remonte. Aucune rotation ne lui donne un **bras d'appui vertical**
+sans casser les proportions. Le gainage demande donc sa propre traversée, écrite
+à la main, en transplantant les boucles de tête, de main et de pied de `BASE`.
+
 ## Où les dessins doivent aller
 
 Les trois emplacements actuels ne sont qu'un point de départ. Par ordre de

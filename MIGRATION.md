@@ -343,3 +343,77 @@ Cinq régressions rattrapées après revue, dont deux qui comptaient vraiment :
 
 Plus une interpolation cassée qui imprimait `{{tools}}` littéralement sur le hub
 des calculateurs.
+
+### Lot 13 — Le menu plein écran ✅
+
+La navigation mobile était un bouton icône en haut à gauche ouvrant un tiroir
+Radix. Le coin haut-gauche est le point le plus loin du pouce, et le tiroir
+affichait les cinq portes dans la même typographie que le reste : rien ne disait
+qu'on avait changé de plan.
+
+Un seul bouton, en bas à droite, nommé MENU, et un panneau plein écran sur fond
+encre où les cinq destinations sont en display type. C'est un `<dialog>` natif
+piloté par `showModal()` : la couche supérieure, le piège de focus, Échap et le
+retour du focus au déclencheur viennent de la plateforme. **Un consommateur
+Radix en moins**, et `Sidebar.tsx` supprimé. Le verrou de défilement, lui, est
+écrit — le natif ne le donne pas.
+
+La revue a trouvé cinq défauts réels, dont un qui n'était pas dans le brief :
+**le verrou de défilement fuyait en franchissant 1024 px.** Retirer le `<dialog>`
+du DOM n'émet aucun événement `close`, donc le nettoyage ne jouait jamais et
+`body { overflow: hidden }` restait posé pour toujours sur le bureau. Plus : le
+focus arraché à la palette de commandes, la pilule qui recouvrait quatre barres
+d'action collantes, un `z-index` qui perçait toutes les modales, et une bande
+crème sous le pied de page inversé.
+
+### Lot 14 — Les doodles comme identité ✅
+
+Le déblocage n'est pas un dessin, c'est un **gréement**. Le duo approuvé est une
+traversée de 78 ancres lissée en Catmull-Rom : elle se découpe en douze
+articulations et se repose. `scripts/doodles/rig.mjs` est commité avec les
+dessins — un SVG sans son générateur est un cul-de-sac.
+
+**22 dessins** entrent dans l'app, tous dans l'écriture exacte du dessin validé.
+
+Les dix-neuf états vides se ramènent à **trois situations** — un filtre qui ne
+trouve rien, quelque chose jamais commencé, une panne. Le dessin vit donc dans
+`EmptyState` et se choisit sur la variante : une décision au lieu de dix-neuf, et
+aucun site d'appel modifié.
+
+L'accueil reçoit trois registres et pas un de plus : le duo en tête, un visage
+par porte, et la planche des six zones — le même corps six fois, chaque figure
+encrée de sa zone dans la rampe, l'effort lisible deux fois, par la posture et
+par le poids du trait.
+
+**Les annotations sont neuves et n'étaient pas au plan.** Une flèche tracée à la
+main n'est pas un objet dessiné au sens de la règle 2 : c'est une marque, du même
+ordre que la ligne de sol, et aucun glyphe Material ne fait ce travail. La figure
+qui montre remet un personnage au départ du trait. Une par écran au plus.
+
+Ce qui a échoué : **le gainage, deux fois.** Contour fermé d'abord ; puis une
+pose dont le vermillon peignait l'avant-bras à six unités au-dessus du sol —
+l'inverse exact de la règle qu'il portait. Un solveur numérique sur onze angles
+n'a rien donné de mieux : le gréement ne sait pas faire un bras d'appui vertical.
+C'est une limite, pas un réglage, et elle est écrite dans `docs/doodles.md`.
+
+### Lot 15 — Les verdicts du lot pages ✅
+
+Le lot 12 avait été interrompu en pleine revue. Six juges adversariaux ont rendu
+leur verdict, un seul agent a appliqué les constats confirmés.
+
+Le plus grave n'était pas cosmétique : **cinq des sept calculateurs d'allure
+avaient été restructurés**, colonne unique de 672 px devenue split deux colonnes
+pleine largeur, alors que le handoff impose de garder l'arrangement de ces pages
+— et l'en-tête de la feuille affirmait le contraire de ce qu'elle faisait. Les
+cinq sont revenus à leur colonne unique.
+
+Deux fausses promesses de confidentialité trouvées en parallèle, l'une par la
+revue dans la table de comparaison (`dataCollection: "no"`), l'autre par moi sur
+l'accueil (« 00 tracker tiers », « sans tracker ») — alors que `<Analytics />` de
+Vercel est monté sans condition. Les deux disent maintenant « cookie », ce qui
+est vrai et vérifiable.
+
+Enfin le pied de page mobile, signalé comme un mur : douze liens empilés à 44 px
+de plancher tactile faisaient huit cents pixels. Les liens coulent en deux
+colonnes, sept rangées au lieu de douze. Le plancher tactile ne bouge pas — c'est
+lui qui dit où est la ressource, et sur un téléphone c'est la largeur.
