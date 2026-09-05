@@ -60,7 +60,7 @@
         "kicker": "Fig. 01 — polarised model",
         "source": "Seiler, Scand J Med Sci Sports, 2006",
         "title": "What a well-dosed week looks like",
-        "body": "Weekly training time distributed by effort zone, polarised model. The key rule: 80 % easy, 20 % hard, almost nothing in the middle 'grey zone'.",
+        "body": "Time distributed by effort zone. The rule: 80 % easy, 20 % hard, almost nothing in between.",
         "zones": {
           "z1": "Recovery",
           "z2": "Endurance",
@@ -92,27 +92,27 @@
       "e2Kicker": "Longer term",
       "e3Kicker": "The science",
       "e1Title": "Find today's session",
-      "e1Body": "Filter by discipline, zone, duration, level. Every card states its difficulty and TSS cost before you click. Today's pick adapts to your recent load.",
+      "e1Body": "Filter by discipline, zone, duration, level. Every card states its difficulty and TSS cost.",
       "e1Link": "Library",
       "e2Title": "Follow a structured plan",
-      "e2Body": "From 5K to marathon, 8 to 18 weeks. Transparent load progression, recovery week every 21 days, taper calibrated for race day.",
+      "e2Body": "From 5K to marathon, 8 to 18 weeks, progressive load and taper.",
       "e2Link": "Plans",
       "e3Title": "Understand the science",
-      "e3Body": "Every session cites its method (Seiler, Daniels, Billat, Coggan), the physiological adaptation targeted, the zone, and a verifiable bibliographic reference.",
+      "e3Body": "Every session cites its method, the zone it targets and its published reference.",
       "e3Link": "Methods"
     },
 
     "s02": {
       "kicker": "Suggested this week",
       "title": "Three sessions to stay on the right volume",
-      "body": "Deterministic by ISO week. No A/B, no engagement loop. Click a card to open the full session."
+      "body": "Deterministic by ISO week. No A/B, no engagement loop."
     },
 
     "s03": {
       "kicker": "The zone atlas",
       "title1": "Six zones, six adaptations,",
       "title2": "one coherent grid",
-      "body": "Every session in the library is anchored in this system. Enter your VMA and/or HRmax to compute your personal ranges, or pull them from your profile.",
+      "body": "Enter your VMA or HRmax to compute your ranges. Every session in the catalogue maps onto them.",
       "zone": "Zone",
       "name": "Name",
       "hr": "Heart rate",
@@ -134,7 +134,7 @@
     "s04": {
       "kicker": "The methods",
       "title": "Researchers & reference methods",
-      "body": "Zoned does not push a single method. Every zone, every session rests on published work; here are the official sources you can consult directly.",
+      "body": "Every zone and every session rests on published work. Here are the sources.",
       "viewPublication": "View publication",
       "researchers": {
         "seiler": {
@@ -175,8 +175,8 @@
     "s05": {
       "kicker": "Plans · 5K → Marathon",
       "title": "One trajectory per distance",
-      "body": "{{count}} published plans, {{min}} to {{max}} weeks. Progressive load, recovery week every 21 days, taper calibrated for race day.",
-      "quick": "An active plan in 2 clicks, editable anytime, exportable to PDF or calendar.",
+      "body": "{{count}} plans, {{min}} to {{max}} weeks. Progressive load, recovery every 21 days, taper.",
+      "quick": "An active plan in 2 clicks, exportable to PDF or calendar.",
       "weeks": "weeks",
       "sessionsPerWeek": "sessions / wk",
       "choose": "choose",
@@ -200,7 +200,7 @@
     "s06": {
       "kicker": "Calculators",
       "title": "A toolkit to measure your ranges",
-      "body": "Every computation runs in the browser, no data is sent. Formulas are documented and the source code is readable.",
+      "body": "Every computation runs in your browser. The formulas are documented.",
       "tools": {
         "zones": "Compute your HR and pace zones from your VMA or HRmax.",
         "converter": "Convert between min/km, km/h and min/mile in real time.",
@@ -234,7 +234,7 @@
       "kicker": "Ethos",
       "title1": "No data",
       "title2": "ever leaves your device",
-      "body": "Zoned is built to run entirely locally. No analytics server, no account, no password to remember, no third-party cookies. The code is public and auditable under MIT licence.",
+      "body": "No server, no account, no third-party cookies. Public code under the MIT licence.",
       "lines": {
         "trackers": "Third-party trackers",
         "account": "Account required",
@@ -251,31 +251,31 @@
       "q": {
         "hrm": {
           "q": "Do I need a heart rate strap?",
-          "a": "No. You can calibrate your zones with pace (running, swimming) or power (cycling, via FTP). A heart-rate strap is useful to validate Z1–Z2 and to detect cardiac drift on long runs."
+          "a": "No. Zones calibrate from pace or power. A heart-rate strap mainly helps validate Z1–Z2."
         },
         "export": {
           "q": "How do I send a session to my watch?",
-          "a": "Each session downloads as .fit (Garmin / Wahoo / COROS native workout file), .ics (Apple Calendar, Google Calendar, Outlook), .pdf or .png. Generated routes export as .gpx. Every export runs locally; no file ever transits through a server."
+          "a": ".fit, .ics, .pdf or .png; routes as .gpx. Every export is generated locally."
         },
         "custom": {
           "q": "Can I customise a plan?",
-          "a": "Yes. You can shift weeks (injury, travel), substitute a session (run ↔ bike ↔ swim, session ↔ strength) and move any day with drag-and-drop on the calendar. A free-form plan mode also lets you build a plan from scratch."
+          "a": "Yes: shift a week, substitute a session, drag a day to another. A free-form mode exists too."
         },
         "free": {
           "q": "Is Zoned free?",
-          "a": "Yes, and forever. No paid tier, no locked feature, no ad banner. The project is open-source under MIT licence and funded by voluntary donations."
+          "a": "Yes, and forever. No paid tier, no ads. Open-source under the MIT licence."
         },
         "devices": {
           "q": "What devices does Zoned run on?",
-          "a": "Any modern browser on desktop, tablet or phone. No app to install: Zoned is a PWA, a home-screen shortcut gives you an app-like experience."
+          "a": "Any modern browser. Nothing to install: Zoned is a PWA, a shortcut is enough."
         },
         "offline": {
           "q": "Does Zoned work offline?",
-          "a": "Yes. After the first load, the app and the sessions are cached by the service worker. You can open a workout, run a calculator or check your plan with no connection."
+          "a": "Yes. After the first load the app and the sessions are cached. Sessions, calculators and your plan stay available."
         },
         "data": {
           "q": "Where is my data stored?",
-          "a": "Everything (zones, profile, plans, favourites, routes) lives in your browser's local storage. No account, no server, no third-party cookies. You can export your data as .json from Settings to back it up or move it."
+          "a": "Everything stays in your browser's local storage. Export .json from Settings to back it up or move it."
         }
       }
     },
@@ -291,7 +291,7 @@
     },
 
     "footer": {
-      "tagline": "A scientific training journal, local, free and open. For those who want to understand what they're doing.",
+      "tagline": "A local training journal, free and open.",
       "groups": {
         "product": "Product",
         "science": "Science",
