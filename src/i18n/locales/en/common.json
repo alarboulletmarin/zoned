@@ -1,4 +1,7 @@
 {
+  "accessibility": {
+    "skipToContent": "Skip to content"
+  },
   "app": {
     "name": "Zoned",
     "tagline": "219 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans, route generator and 12 calculators. Free, no account.",
@@ -243,7 +246,11 @@
     "profile": "My Profile",
     "nutrition": "Nutrition",
     "calculators": "Calculators",
-    "primary": "Primary navigation"
+    "primary": "Primary navigation",
+    "today": "Today",
+    "myPlan": "My plan",
+    "understand": "Understand",
+    "myNumbers": "My numbers"
   },
   "topnav": {
     "account": "Account",
@@ -283,7 +290,10 @@
     "learnGuides": "Practical guides",
     "learnGuidesDesc": "Warm-up, race prep, nutrition",
     "learnGlossary": "Glossary",
-    "learnGlossaryDesc": "50+ technical terms"
+    "learnGlossaryDesc": "50+ technical terms",
+    "favoritesDesc": "The sessions you kept",
+    "myZonesDesc": "Your six zones, computed from your VMA",
+    "profileDesc": "Your level, your constraints, your records"
   },
   "errors": {
     "workoutNotFound": "Workout not found",

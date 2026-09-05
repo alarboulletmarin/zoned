@@ -216,14 +216,11 @@ function App() {
           <BrowserRouter>
           <GlossaryMatcherProvider>
           <CommandPaletteProvider>
-            <a
-              href="#main-content"
-              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none"
-            >
-              {t("accessibility.skipToContent", "Aller au contenu")}
+            <a href="#main-content" className="zn-skip">
+              {t("accessibility.skipToContent")}
             </a>
             <ScrollToTopOnNavigate />
-            <div className="min-h-screen bg-background text-foreground flex flex-col">
+            <div className="zn-app">
               <TopBar onMobileMenuOpen={() => setMobileSidebarOpen(true)} />
 
               {/* Mobile slide-over nav (hamburger). Desktop uses the
@@ -233,7 +230,7 @@ function App() {
                 onOpenChange={setMobileSidebarOpen}
               />
 
-              <div className="flex flex-1 min-w-0 flex-col">
+              <div className="zn-app__body">
                 <ErrorBoundary>
                 {/* The Suspense boundary wraps BOTH the page and the footer:
                     with the footer outside, it sat just below the
@@ -245,18 +242,15 @@ function App() {
                     react-router wraps them in startTransition. */}
                 <Suspense
                   fallback={
-                    <main
-                      id="main-content"
-                      className="flex-1 px-4 md:px-6 lg:px-8 pt-20 pb-4"
-                    >
-                      <div className="mx-auto max-w-6xl">
+                    <main id="main-content" className="zn-main">
+                      <div className="zn-page">
                         <div className="min-h-screen" />
                       </div>
                     </main>
                   }
                 >
-                <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 pt-20 pb-4">
-                  <div className="mx-auto max-w-6xl">
+                <main id="main-content" className="zn-main">
+                  <div className="zn-page">
                     <ErrorBoundary>
                         <Routes>
                           <Route path="/" element={<HomePage />} />

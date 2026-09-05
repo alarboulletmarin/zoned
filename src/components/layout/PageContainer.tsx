@@ -1,14 +1,18 @@
 /**
  * PageContainer — the standard outer shell for top-level routes.
  *
- * Centralises the responsive padding ladder (`px-4 sm:px-6 lg:px-8`) and the
- * max-width cap so individual pages don't drift apart. The shell itself
- * stays content-agnostic: pages compose their own headers, hero blocks,
- * grids inside.
+ * Centralises the screen margin (40px, 20px on mobile — the design's
+ * --pad-screen-x) and the max-width cap so individual pages don't drift
+ * apart. The shell itself stays content-agnostic: pages compose their own
+ * headers, hero blocks and grids inside.
  *
  * Use `width="narrow"` for long-form reading (articles, methodology),
- * `width="default"` (max-w-6xl) for typical app pages, and `width="wide"`
- * for dashboards/calendars that need horizontal breathing room.
+ * `width="default"` for typical app pages, and `width="wide"` for
+ * dashboards/calendars that need the full 1360px content column.
+ *
+ * The prop API is unchanged; only the paint moved. Widths are selected off a
+ * data attribute, which is the house rule for variants — see
+ * src/styles/components/shell.css for the caps.
  */
 
 import { type ElementType, type ReactNode } from "react";
@@ -16,18 +20,11 @@ import { cn } from "@/lib/utils";
 
 type Width = "narrow" | "default" | "wide" | "full";
 
-const WIDTH_CLASSES: Record<Width, string> = {
-  narrow: "max-w-3xl",
-  default: "max-w-6xl",
-  wide: "max-w-7xl",
-  full: "max-w-none",
-};
-
 interface PageContainerProps {
   children: ReactNode;
   /** HTML element to render as. Defaults to <div>; pages may pass `as="section"`. */
   as?: ElementType;
-  /** Max-width preset; default = "default" (max-w-6xl). */
+  /** Max-width preset; default = "default". */
   width?: Width;
   /** Append additional classes; merged via cn. */
   className?: string;
@@ -44,12 +41,9 @@ export function PageContainer({
 }: PageContainerProps) {
   return (
     <Comp
-      className={cn(
-        "mx-auto w-full",
-        WIDTH_CLASSES[width],
-        !flush && "px-4 sm:px-6 lg:px-8",
-        className,
-      )}
+      data-width={width}
+      data-flush={flush || undefined}
+      className={cn("zn-page", className)}
     >
       {children}
     </Comp>

@@ -1,0 +1,145 @@
+/* Footer — two parts.
+
+   The link table on card paper, kept because the crawler reads it: four
+   columns divided by ink rules, each headed by a mono uppercase micro-label.
+
+   Then the ink bar the design ends the page on — a full-bleed inversion in
+   mono capitals carrying the licence, the "100 % local" line and the version.
+   It flips with the theme on its own: --surface-inverse and --text-inverse are
+   defined either way round, so the bar is always the opposite of the page. */
+
+.zn-footer {
+  margin-block-start: var(--sp-14);
+  border-block-start: var(--border-rule);
+  background: var(--surface-card);
+}
+
+/* ── link table ───────────────────────────────────────────────────────── */
+
+.zn-footer__body {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: var(--sp-12);
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding-block: var(--sp-17);
+  padding-inline: var(--pad-screen-x);
+}
+
+/* Columns are told apart by a rule, never by empty space. */
+.zn-footer__col + .zn-footer__col {
+  border-inline-start: var(--border-divider);
+  padding-inline-start: var(--sp-12);
+}
+
+.zn-footer__brand {
+  display: inline-flex;
+  align-items: center;
+  margin-block-end: var(--sp-8);
+  color: inherit;
+  text-decoration: none;
+}
+
+.zn-footer__tagline {
+  max-inline-size: 42ch;
+}
+
+.zn-footer__col-title {
+  display: block;
+  margin-block-end: var(--sp-8);
+}
+
+.zn-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-footer__link {
+  color: var(--text-body);
+  font: var(--type-body-sm);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-footer__link:hover {
+  color: var(--text-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Stacked, the vertical divider becomes a horizontal one — same rule, turned
+   with the layout. */
+@media (max-width: 900px) {
+  .zn-footer__body {
+    grid-template-columns: 1fr;
+    gap: var(--sp-10);
+  }
+  .zn-footer__col + .zn-footer__col {
+    border-inline-start: none;
+    padding-inline-start: 0;
+    border-block-start: var(--border-divider);
+    padding-block-start: var(--sp-10);
+  }
+}
+
+@media (pointer: coarse) {
+  .zn-footer__link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── the ink bar ──────────────────────────────────────────────────────── */
+
+.zn-footer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-6) var(--sp-12);
+  padding: var(--sp-9) var(--pad-screen-x);
+
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-block-start: var(--border-rule);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.4;
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+}
+
+.zn-footer__bar a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: inherit;
+  text-decoration: none;
+}
+
+.zn-footer__bar a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-footer__bar svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+/* The version is data, and it sits at the far edge of the bar. */
+.zn-footer__version {
+  margin-inline-start: auto;
+}
+
+@media (max-width: 640px) {
+  .zn-footer__version {
+    margin-inline-start: 0;
+  }
+}

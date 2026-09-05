@@ -306,7 +306,8 @@
       "license": "© {{year}} · ZONED · Logiciel libre, licence MIT",
       "licenses": "Licences tierces",
       "version": "v.{{version}}",
-      "builtInPublic": "Construit en public"
+      "builtInPublic": "Construit en public",
+      "local": "100 % local · sans compte · sans tracker"
     }
   }
 }

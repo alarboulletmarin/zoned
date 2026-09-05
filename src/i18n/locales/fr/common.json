@@ -1,4 +1,7 @@
 {
+  "accessibility": {
+    "skipToContent": "Aller au contenu"
+  },
   "app": {
     "name": "Zoned",
     "tagline": "219 séances course, 10 vélo, 10 natation, 17 renforcement, plans du 5K au marathon, générateur de parcours et 12 calculateurs. Gratuit, sans compte.",
@@ -243,7 +246,11 @@
     "profile": "Mon Profil",
     "nutrition": "Nutrition",
     "calculators": "Calculateurs",
-    "primary": "Navigation principale"
+    "primary": "Navigation principale",
+    "today": "Aujourd'hui",
+    "myPlan": "Mon plan",
+    "understand": "Comprendre",
+    "myNumbers": "Mes chiffres"
   },
   "topnav": {
     "account": "Compte",
@@ -283,7 +290,10 @@
     "learnGuides": "Guides pratiques",
     "learnGuidesDesc": "Échauffement, prépa course, nutrition",
     "learnGlossary": "Glossaire",
-    "learnGlossaryDesc": "50+ termes techniques"
+    "learnGlossaryDesc": "50+ termes techniques",
+    "favoritesDesc": "Les séances que tu as gardées",
+    "myZonesDesc": "Tes six zones, calculées sur ta VMA",
+    "profileDesc": "Ton niveau, tes contraintes, tes records"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

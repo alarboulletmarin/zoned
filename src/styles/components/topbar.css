@@ -1,0 +1,395 @@
+/* Top bar — the wordmark, the five doors, the tool cluster, and the mobile
+   sheet the doors collapse into.
+
+   The bar is opaque cream sitting on a full-width ink rule. No translucency,
+   no backdrop blur: the system has neither, and the rule is what separates the
+   header from the page.
+
+   A door is a pill. The door you are standing in is a FULL INK INVERSION —
+   never a tint — which is the system's one way of saying "selected". */
+
+.zn-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-14);
+  padding: var(--sp-10) var(--pad-screen-x);
+  background: var(--surface-page);
+  border-block-end: var(--border-rule);
+}
+
+@media (max-width: 1023px) {
+  .zn-topbar {
+    gap: var(--sp-6);
+  }
+}
+
+.zn-topbar__brand {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── the five doors ───────────────────────────────────────────────────── */
+
+.zn-topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* A door with children is a disclosure, so the wrapper owns the panel's
+   positioning context and the hover intent. */
+.zn-topbar__section {
+  position: relative;
+}
+
+.zn-topbar__door {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 9px 16px;
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1 var(--font-text);
+  white-space: nowrap;
+  text-decoration: none;
+
+  background: transparent;
+  color: var(--ink-1);
+  /* Transparent rather than absent so the geometry does not jump when the
+     door is selected and grows its ink frame. */
+  border: var(--bw-rule) solid transparent;
+  border-radius: var(--r-pill);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-topbar__door:hover {
+  background: var(--surface-band);
+}
+
+.zn-topbar__door:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* The door you are in. Solid ink, cream type — the inversion, not a wash. */
+.zn-topbar__door[aria-current="page"],
+.zn-topbar__door[data-active="true"] {
+  background: var(--ink-1);
+  border-color: var(--ink-1);
+  color: var(--ink-on-dark);
+  font-weight: var(--fw-semibold);
+}
+
+.zn-topbar__door[aria-current="page"]:hover,
+.zn-topbar__door[data-active="true"]:hover {
+  background: var(--ink-2);
+  border-color: var(--ink-2);
+}
+
+.zn-topbar__door-chevron {
+  inline-size: 12px;
+  block-size: 12px;
+  flex: none;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-topbar__door[aria-expanded="true"] .zn-topbar__door-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── a door's panel ───────────────────────────────────────────────────── */
+
+/* The padded strip keeps the panel contiguous with its trigger, so travelling
+   from one to the other does not cross a gap and dismiss the menu. */
+.zn-topbar__panel {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  z-index: 50;
+  padding-block-start: var(--sp-4);
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.zn-topbar__panel[data-open="false"] {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.zn-topbar__panel[data-open="true"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Hover opens it too — but only when a click has not already taken control,
+   otherwise tap-to-close would be a no-op under the pointer. */
+.zn-topbar__section:hover .zn-topbar__panel[data-open="false"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* A floating surface, so it is one of the few places the hard offset is
+   allowed. One shadow, never stacked. */
+.zn-topbar__panel-card {
+  min-inline-size: 280px;
+  padding: var(--sp-4);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--shadow-block);
+}
+
+.zn-topbar__panel-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-topbar__panel-link {
+  display: block;
+  padding: var(--sp-5) var(--sp-6);
+  border-radius: var(--r-lg);
+  color: var(--text-body);
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-topbar__panel-link:hover,
+.zn-topbar__panel-link[aria-current="page"] {
+  background: var(--surface-band);
+}
+
+.zn-topbar__panel-label {
+  margin: 0;
+  font: var(--type-label);
+}
+
+.zn-topbar__panel-desc {
+  margin: var(--sp-1) 0 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* ── the tool cluster ─────────────────────────────────────────────────── */
+
+.zn-topbar__tools {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+}
+
+@media (max-width: 1023px) {
+  .zn-topbar__tools {
+    gap: var(--sp-4);
+  }
+}
+
+/* Search and language are outlined pills at the same 40px height as the icon
+   circles beside them, so the cluster reads as one row of controls. */
+.zn-topbar__search,
+.zn-topbar__lang {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 40px;
+  background: transparent;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-topbar__search:active,
+.zn-topbar__lang:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-topbar__search {
+  gap: var(--sp-5);
+  min-inline-size: 250px;
+  padding-inline: var(--sp-8);
+  color: var(--text-faint);
+  font: var(--type-body-sm);
+}
+
+.zn-topbar__search:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+.zn-topbar__search > svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+}
+
+/* The keyboard shortcut is data, so it is mono. */
+.zn-topbar__search-hint {
+  margin-inline-start: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+}
+
+/* Below 1280 the doors and the tools together no longer clear a 250px field,
+   so the search collapses to its glyph. The button keeps its aria-label. */
+@media (max-width: 1279px) {
+  .zn-topbar__search {
+    min-inline-size: 0;
+    padding-inline: var(--sp-6);
+  }
+  .zn-topbar__search-text,
+  .zn-topbar__search-hint {
+    display: none;
+  }
+}
+
+.zn-topbar__lang {
+  justify-content: center;
+  min-inline-size: 40px;
+  padding-inline: var(--sp-6);
+  color: var(--ink-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  line-height: 1;
+}
+
+.zn-topbar__lang:hover {
+  background: var(--surface-band);
+}
+
+/* WCAG 2.5.8 — the 44px floor on a coarse pointer, which Tailwind used to
+   carry per-utility and which would vanish silently with it. */
+@media (pointer: coarse) {
+  .zn-topbar__door,
+  .zn-topbar__panel-link,
+  .zn-topbar__search,
+  .zn-topbar__lang {
+    min-block-size: var(--hit-min);
+  }
+  .zn-topbar__lang {
+    min-inline-size: var(--hit-min);
+  }
+}
+
+/* ══ mobile sheet ═════════════════════════════════════════════════════════
+   The doors, opened as paper: groups separated by full-width ink rules, mono
+   uppercase group labels, 44px rows, and no icons — a word is read faster
+   than a guessed pictogram, which is the same reason the design's mobile tab
+   bar is typographic.
+
+   Two classes deep so these win over .zn-sheet whatever order the stylesheets
+   are imported in. */
+
+.zn-sheet.zn-navsheet {
+  gap: 0;
+  padding: 0;
+  inline-size: 320px;
+  max-inline-size: 88vw;
+  background: var(--surface-page);
+}
+
+.zn-sheet__header.zn-navsheet__header {
+  display: flex;
+  align-items: center;
+  /* The end padding clears the sheet's own close button. */
+  padding: var(--sp-10) var(--sp-18) var(--sp-10) var(--sp-10);
+  border-block-end: var(--border-rule);
+}
+
+.zn-navsheet__nav {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.zn-navsheet__group {
+  border-block-end: var(--border-rule);
+}
+
+.zn-navsheet__group:last-child {
+  border-block-end: none;
+}
+
+.zn-navsheet__group-label {
+  display: block;
+  padding: var(--sp-8) var(--sp-10) var(--sp-4);
+}
+
+.zn-navsheet__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-5) var(--sp-10);
+
+  background: transparent;
+  border: 0;
+  color: var(--text-body);
+  font: var(--type-label);
+  text-align: start;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-navsheet__row:hover {
+  background: var(--surface-band);
+}
+
+/* The section you are inside is stated by weight; only a leaf that IS the
+   current page earns the ink inversion. */
+.zn-navsheet__row[data-active="true"] {
+  font-weight: var(--fw-semibold);
+}
+
+.zn-navsheet__row[aria-current="page"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+  font-weight: var(--fw-semibold);
+}
+
+.zn-navsheet__row-chevron {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-navsheet__row[aria-expanded="false"] .zn-navsheet__row-chevron {
+  transform: rotate(-90deg);
+}
+
+.zn-navsheet__sub {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--sp-4);
+}
+
+.zn-navsheet__sub .zn-navsheet__row {
+  padding-inline-start: var(--sp-15);
+  font-weight: var(--fw-regular);
+  color: var(--text-muted);
+}
+
+.zn-navsheet__sub .zn-navsheet__row[aria-current="page"] {
+  color: var(--ink-on-dark);
+  font-weight: var(--fw-medium);
+}
