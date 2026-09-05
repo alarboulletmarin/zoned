@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,17 @@ interface FavoriteButtonProps {
   className?: string;
 }
 
+/**
+ * The favourite toggle.
+ *
+ * Three things the design system settles here. The state is carried by
+ * `aria-pressed` and the accent colour, not by swapping in a filled glyph —
+ * the icon set has no filled variant and a solid heart would be the only one in
+ * the app. The colour is the house vermillon, not a stray red: this system has
+ * one accent, and a second one cancels the first. And nothing bounces: motion
+ * says where something came from or that a wait is real, so a 400ms scale
+ * animation on a state change is decoration and it is gone.
+ */
 export function FavoriteButton({
   workoutId,
   size = "default",
@@ -25,15 +35,10 @@ export function FavoriteButton({
   const { t } = useTranslation("common");
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(workoutId);
-  const [animating, setAnimating] = useState(false);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!favorited) {
-      setAnimating(true);
-      setTimeout(() => setAnimating(false), 400);
-    }
     toggleFavorite(workoutId);
   };
 
@@ -43,23 +48,14 @@ export function FavoriteButton({
     <Button
       variant="ghost"
       size={showLabel ? "sm" : size === "sm" ? "icon-sm" : "icon"}
-      className={cn(
-        "shrink-0 relative after:absolute after:inset-[-6px] after:content-['']",
-        showLabel && "rounded-full px-3 min-h-11 gap-1.5",
-        favorited && "text-red-500 hover:text-red-600",
-        className
-      )}
-      onClick={handleClick}
+      className={cn("zn-favorite", className)}
+      data-labelled={showLabel || undefined}
+      aria-pressed={favorited}
       aria-label={label}
+      onClick={handleClick}
     >
-      <Heart
-        filled={favorited}
-        className={cn(
-          size === "sm" && !showLabel ? "size-4" : "size-5",
-          animating && "animate-heart-bounce"
-        )}
-      />
-      {showLabel && <span className="text-sm">{label}</span>}
+      <Heart className={size === "sm" && !showLabel ? "size-4" : "size-5"} />
+      {showLabel && <span className="zn-favorite__label">{label}</span>}
     </Button>
   );
 }

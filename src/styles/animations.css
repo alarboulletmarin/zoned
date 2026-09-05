@@ -64,39 +64,12 @@
 
 /* ==========================================================================
    MICRO-INTERACTIONS
-   ========================================================================== */
-
-@keyframes heart-bounce {
-  0% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(0.9);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  75% {
-    transform: scale(0.95);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.animate-heart-bounce {
-  animation: heart-bounce var(--duration-slow) cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
+   ==========================================================================
+   `heart-bounce` and `blink` used to live here. The design system says motion
+   only ever reports where something came from or that a wait is real: nothing
+   moves to decorate, nothing changes size, and nothing blinks to catch the eye.
+   A 400ms scale bounce on toggling a favourite was all three. `blink` had no
+   call site at all. */
 
 /* Animated underline for navigation links */
 .nav-link-animated {
@@ -139,50 +112,11 @@
 }
 
 /* ==========================================================================
-   SKELETON LOADING — zone-shimmer variant
-   ========================================================================== */
+   SKELETON LOADING
+   ==========================================================================
+   The `zone-shimmer` sweep lived here: a linear-gradient across the six old
+   zone colours, slid with translateX. Both halves of that are gone — the system
+   has no gradients, and the ramp it swept is now a single ink scale. The
+   skeleton is a flat pulse, in src/styles/components/skeleton.css, and the
+   `zone-shimmer` variant name survives there meaning "the heavier block". */
 
-/* The gradient lives on an oversized pseudo-element moved with translateX
-   instead of animating background-position: transform runs on the compositor,
-   background-position repaints every frame. The pseudo is 600% wide (same as
-   the old background-size) and slides by -500% of the container width
-   (-83.333% of its own width), reproducing the 0%→100% position sweep. */
-@keyframes zone-shimmer {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-83.333%);
-  }
-}
-
-.zone-shimmer {
-  position: relative;
-  overflow: hidden;
-  opacity: 0.35;
-}
-
-.zone-shimmer::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 600%;
-  background: linear-gradient(
-    90deg,
-    var(--zone-1),
-    var(--zone-2),
-    var(--zone-3),
-    var(--zone-4),
-    var(--zone-5),
-    var(--zone-6),
-    var(--zone-1)
-  );
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .zone-shimmer::after {
-    animation: zone-shimmer 3s ease-in-out infinite alternate;
-  }
-}
