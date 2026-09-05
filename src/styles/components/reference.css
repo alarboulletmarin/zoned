@@ -52,6 +52,13 @@
   padding-block-end: var(--sp-17);
 }
 
+/* A rule promises a section. RelatedContent renders nothing at all for the 70
+   glossary terms it has no neighbour for, and an empty reading column must not
+   leave that promise on the paper. */
+.zn-ref__section:has(> .zn-ref__column:empty) {
+  display: none;
+}
+
 .zn-ref__sectionhead {
   margin-block-end: var(--sp-11);
 }
@@ -235,6 +242,7 @@
 .zn-ref__unfilter {
   display: inline-grid;
   place-items: center;
+  position: relative;
   inline-size: 14px;
   block-size: 14px;
   padding: 0;
@@ -250,6 +258,20 @@
 
 .zn-ref__unfilter:hover {
   opacity: 1;
+}
+
+/* badge.css clips its pill, and the extended target below would be clipped
+   with it. Only the capsules that carry the x open up. */
+.zn-badge:has(> .zn-ref__unfilter) {
+  overflow: visible;
+}
+
+/* A 44px target without a 44px box — the badge around it is a <span>, so the
+   coarse-pointer floor of badge.css never reaches this button. */
+.zn-ref__unfilter::after {
+  content: "";
+  position: absolute;
+  inset: -15px;
 }
 
 .zn-ref__groups {

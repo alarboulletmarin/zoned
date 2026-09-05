@@ -211,7 +211,7 @@ export function RaceEquivalencePage() {
           </div>
         )}
 
-        <section className="zn-num__panel zn-tool__band zn-split zn-tool">
+        <section className="zn-num__panel zn-tool__band zn-stack zn-tool">
           {/* The result you already have. */}
           <Card>
             <CardContent

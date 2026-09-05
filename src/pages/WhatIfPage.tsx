@@ -910,6 +910,8 @@ export function WhatIfPage() {
                     {
                       key: "metric",
                       header: t("results.metric"),
+                      // The mobile card already prints this as its title.
+                      hideOnMobile: true,
                       cell: (row) => row.label,
                     },
                     {

@@ -480,10 +480,12 @@
   border-color: transparent;
 }
 
+/* The rule above outranks button.css's floor, so the floor is restated here —
+   the strip is on screen from 768px up, tablets included. */
 @media (pointer: coarse) {
   .zn-btn.zn-rt__pager-step {
-    min-block-size: 34px;
-    inline-size: 34px;
+    min-block-size: var(--hit-min);
+    inline-size: var(--hit-min);
   }
 }
 

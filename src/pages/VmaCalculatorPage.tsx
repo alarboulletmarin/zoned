@@ -152,14 +152,7 @@ export function VmaCalculatorPage() {
           </p>
         </section>
 
-        {/* The preview below paints a whole zone column. */}
-        {paceZones && (
-          <div className="zn-num__legend">
-            <ZoneScale />
-          </div>
-        )}
-
-        <section className="zn-num__panel zn-tool__band zn-split zn-tool">
+        <section className="zn-num__panel zn-tool__band zn-stack zn-tool">
           {/* The race you ran. */}
           <Card>
             <CardContent
@@ -254,6 +247,11 @@ export function VmaCalculatorPage() {
                 <h2 className="zn-title" data-level="4">
                   {t("calculators:calculateurs.vma.paceZonesPreview")}
                 </h2>
+                {/* The table below paints a whole zone column, so the ramp is
+                    named where it is painted — a legend above the form would
+                    appear as the chrono becomes valid and push the field the
+                    runner is typing in down the page. */}
+                <ZoneScale />
                 <ResponsiveTable
                   data={paceZones}
                   rowKey="zone"

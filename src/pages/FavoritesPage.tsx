@@ -45,10 +45,14 @@ export function FavoritesPage() {
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
         >
           <span className="zn-kicker">
-            {t("common:favorites.kicker", {
-              count: favoriteWorkouts.length,
-              total: stats.workouts,
-            })}
+            {/* useAppStats counts the whole catalogue behind two extra chunk
+                loads, so the total is 0 for a beat after this page is ready. */}
+            {stats.workouts > 0
+              ? t("common:favorites.kicker", {
+                  count: favoriteWorkouts.length,
+                  total: stats.workouts,
+                })
+              : " "}
           </span>
           <h1 className="zn-display" data-level="2">
             {t("common:favorites.title")}
@@ -82,9 +86,13 @@ export function FavoritesPage() {
               variant="no-results"
               icon={Heart}
               title={t("common:favorites.noFavoritesYet")}
-              description={t("common:favorites.emptyDescription", {
-                total: stats.workouts,
-              })}
+              description={
+                stats.workouts > 0
+                  ? t("common:favorites.emptyDescription", {
+                      total: stats.workouts,
+                    })
+                  : t("common:favorites.noFavoritesDesc")
+              }
               action={
                 <Button variant="outline" asChild>
                   <Link to="/library">{t("common:favorites.emptyAction")}</Link>

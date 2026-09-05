@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Route, Download } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Segmented } from "@/components/ui/segmented";
 import {
@@ -179,9 +179,14 @@ export function SplitGeneratorPage() {
           </p>
         </section>
 
-        <section className="zn-num__panel zn-tool__band zn-split zn-tool">
+        <section className="zn-num__panel zn-tool__band zn-stack zn-tool">
           {/* The race you are pacing. */}
           <Card>
+            <CardHeader>
+              <CardTitle>
+                {t("calculators:calculateurs.splits.raceParams")}
+              </CardTitle>
+            </CardHeader>
             <CardContent
               className="zn-stack"
               style={{ "--gap": "var(--sp-12)" } as CSSProperties}

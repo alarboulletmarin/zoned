@@ -222,6 +222,14 @@
 }
 
 @media (min-width: 901px) {
+  /* .zn-split starts its items rather than stretching them, so the grid item
+     is exactly as tall as the panel and the sticky range below would be zero.
+     The column takes the row's height back here rather than .zn-split losing
+     an alignment seven other pages rely on. */
+  .zn-draw__layout > aside {
+    align-self: stretch;
+  }
+
   .zn-draw__aside,
   .zn-draw__aside[data-open="false"] {
     display: flex;

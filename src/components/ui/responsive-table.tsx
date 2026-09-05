@@ -47,7 +47,7 @@ interface ResponsiveTableProps<T> {
   /** className applied to the underlying <table>. */
   tableClassName?: string;
   /**
-   * Make the desktop <thead> stick below the fixed TopBar while the page
+   * Make the desktop <thead> stick to the top of the viewport while the page
    * scrolls. Disables the wrapper's horizontal scrolling (sticky cannot
    * escape a scroll container), so the table must fit its container at md+.
    */

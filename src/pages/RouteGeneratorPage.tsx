@@ -480,9 +480,9 @@ export function RouteGeneratorPage() {
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
             className="zn-rt__mapbtn"
-            aria-label={t("form.reverseDirection")}
-            title={t("form.reverseDirection")}
           >
+            {/* No aria-label: the visible text is the name, and it is the one
+                that says whether the trace is already reversed. */}
             <ArrowLeftRight size={15} />
             {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}
           </button>
@@ -621,8 +621,6 @@ export function RouteGeneratorPage() {
               variant="outline"
               size="sm"
               onClick={onReverseTrace}
-              aria-label={t("form.reverseDirection")}
-              title={t("form.reverseDirection")}
             >
               <ArrowLeftRight size={16} />
               {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}

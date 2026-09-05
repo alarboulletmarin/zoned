@@ -49,10 +49,11 @@
   border: 0;
 }
 
-/* 56px is the fixed TopBar: the header parks just below it, never under it. */
+/* The header parks at the top of the viewport: the redesign's TopBar is in
+   flow, not fixed, so there is nothing above to clear. */
 .zn-table__head[data-sticky="true"] {
   position: sticky;
-  inset-block-start: var(--sp-18);
+  inset-block-start: 0;
   z-index: 10;
 }
 

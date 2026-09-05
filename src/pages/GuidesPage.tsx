@@ -2,6 +2,9 @@ import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { DoorCard } from "@/components/domain/DoorCard";
+import { nutritionSections } from "@/data/guides/nutrition";
+import { racePrepSections } from "@/data/guides/race-prep";
+import { warmupRoutines } from "@/data/guides/warmup";
 
 /**
  * The three practical guides.
@@ -15,6 +18,8 @@ import { DoorCard } from "@/components/domain/DoorCard";
 interface GuideEntry {
   id: string;
   kickerKey: string;
+  /** What the kicker counts — read from the guide's own data, never typed. */
+  count: number;
   titleKey: string;
   descriptionKey: string;
   href: string;
@@ -24,6 +29,7 @@ const GUIDES: GuideEntry[] = [
   {
     id: "nutrition",
     kickerKey: "nutrition.kicker",
+    count: nutritionSections.length,
     titleKey: "nutrition.title",
     descriptionKey: "nutrition.description",
     href: "/guides/nutrition",
@@ -31,6 +37,7 @@ const GUIDES: GuideEntry[] = [
   {
     id: "race-prep",
     kickerKey: "racePrep.kicker",
+    count: racePrepSections.length,
     titleKey: "racePrep.title",
     descriptionKey: "racePrep.description",
     href: "/guides/race-prep",
@@ -38,6 +45,7 @@ const GUIDES: GuideEntry[] = [
   {
     id: "warmup",
     kickerKey: "warmup.kicker",
+    count: warmupRoutines.length,
     titleKey: "warmup.title",
     descriptionKey: "warmup.description",
     href: "/guides/warmup",
@@ -92,7 +100,7 @@ export function GuidesPage() {
               <DoorCard
                 key={guide.id}
                 to={guide.href}
-                kicker={t(guide.kickerKey)}
+                kicker={t(guide.kickerKey, { n: guide.count })}
                 title={t(guide.titleKey)}
                 body={t(guide.descriptionKey)}
                 cta={t("explore")}

@@ -288,6 +288,8 @@ export function CssTestPage() {
                   {
                     key: "zone",
                     header: t("calculateurs.css.zone"),
+                    // The mobile card already prints this as its title.
+                    hideOnMobile: true,
                     cell: (zone) => (
                       <span className="zn-ct__zonename">
                         {t(`calculateurs.css.zoneLabel${zone}`)}

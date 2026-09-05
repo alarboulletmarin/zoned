@@ -412,7 +412,7 @@ export function NutritionGuidePage() {
       <SEOHead
         title={t("nutrition.pageTitle")}
         description={t("nutrition.seoDescription")}
-        canonical="/nutrition"
+        canonical="/guides/nutrition"
         jsonLd={[
           {
             "@type": "Article",

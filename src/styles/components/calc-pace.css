@@ -4,11 +4,12 @@
  * The kit does not mock these screens, so the arrangement is unchanged: this
  * file only repaints it, and adds the one frame all seven share.
  *
- * THE FRAME. Every one of these tools is the same sentence: what you type on
- * the left, what comes out on the right. `.zn-tool` is that sentence, composed
- * onto `.zn-split` so it collapses to one column on its own at 900px. The
- * remaining calculators (/calculators/ftp, /calculators/css,
- * /calculators/what-if) can adopt it as-is — nothing in here knows about pace.
+ * THE FRAME. Every one of these tools is the same sentence: what you fill in,
+ * and what prints under it. `.zn-tool` is that sentence, composed onto
+ * `.zn-stack` — one 672px column, centred, exactly the arrangement these
+ * screens had before the repaint. The remaining calculators
+ * (/calculators/ftp, /calculators/css, /calculators/what-if) can adopt it
+ * as-is — nothing in here knows about pace.
  *
  * WHAT THIS FILE DOES NOT REDECLARE. The head band, the lede, the panel, the
  * legend band, the h:m:s row and the numeric table column already exist in
@@ -21,9 +22,12 @@
  * are the ported ResponsiveTable, the figures are StatBlock, the zone chips
  * are ZoneBadge, and the layout verbs come from _layout.css.
  *
- * ZONE FILLS. Five of the seven paint a zone. The three with a whole zone
- * column — the pace table, the VMA preview, the equivalence prediction — carry
- * the ZoneScale legend once, on the `.zn-num__legend` band. The two that show a
+ * ZONE FILLS. Five of the seven paint a zone. The two whose zone column is
+ * there from the first paint — the pace table, the equivalence prediction —
+ * carry the ZoneScale legend once, on the `.zn-num__legend` band; the VMA
+ * preview carries it inside its result instead, since a band appearing above
+ * the form as the chrono becomes valid would push the field being typed in
+ * down the page. The two that show a
  * single chip (converter, treadmill) pass `showLabel` to ZoneBadge instead, so
  * the one zone on screen is named where it is painted rather than through a
  * six-item legend nothing else on the page needs.
@@ -45,11 +49,17 @@
   border-block-start: 0;
 }
 
-/* Fields left, result right. The left column is fixed so a row of figures on
-   the right always has the width to stay on one line. */
-.zn-split.zn-tool {
-  --split: minmax(0, 360px) minmax(0, 1fr);
+/* Form first, result under it, in the 672px reading column these screens have
+   always used. The band itself stays the full width of the page so the ink
+   rule above it still runs from one edge to the other. */
+.zn-stack.zn-tool {
   --gap: var(--sp-17);
+}
+
+.zn-stack.zn-tool > * {
+  inline-size: 100%;
+  max-inline-size: 672px;
+  margin-inline: auto;
 }
 
 /* A control that fills its field. `.zn-calc__field` starts its children at the

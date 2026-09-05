@@ -204,6 +204,8 @@ export function FtpTestPage() {
                   {
                     key: "zone",
                     header: t("calculateurs.ftp.zone"),
+                    // The mobile card already prints this as its title.
+                    hideOnMobile: true,
                     cell: (zone) => (
                       <span className="zn-ct__zonename">
                         {t(`calculateurs.ftp.zoneLabel${zone}`)}
