@@ -250,18 +250,6 @@ const POLARISED_LOW = POLARISED_REFERENCE[1] + POLARISED_REFERENCE[2];
 const POLARISED_HIGH =
   POLARISED_REFERENCE[4] + POLARISED_REFERENCE[5] + POLARISED_REFERENCE[6];
 
-// The macrocycle phases, drawn with the zone ink ramp: base is the lightest,
-// taper the densest. There is no phase-colour source of truth in the app yet
-// (issue #114), so the ordered ramp stands in for one — it is the same
-// encoding every other bar on this page uses.
-const PHASE_FILL: Record<string, string> = {
-  base: "var(--zone-2)",
-  build: "var(--zone-3)",
-  peak: "var(--zone-4)",
-  taper: "var(--zone-5)",
-  recovery: "var(--zone-1)",
-};
-const LEGEND_PHASES = ["base", "build", "peak", "taper"] as const;
 
 // ── §03 zone metadata. RPE and the "% FCmax" model lines describe the
 // physiology and don't depend on the user; the bpm and pace columns are
@@ -365,41 +353,6 @@ export function HomePage() {
   // ── Plans by distance, ordered race-progression. Filter to distances that
   // actually have a plan shipped so empty rows never render.
   //
-  // Each row needs its "canonical" plan for that distance. We can't just pick
-  // the shortest because some recovery plans (retour-blessure, reprise-longue
-  // -pause) are tagged with a raceDistance but are not the entry point for
-  // beginners. Matching by slug prefix instead gives the right row.
-  const planRows = useMemo(() => {
-    const order: Array<{ key: string; distance: string; slugPrefix?: string }> = [
-      { key: "5K", distance: "5K", slugPrefix: "5k-" },
-      { key: "10K", distance: "10K", slugPrefix: "10k-" },
-      { key: "semi", distance: "semi" },
-      { key: "marathon", distance: "marathon" },
-      { key: "trail", distance: "trail" },
-    ];
-    return order
-      .map(({ key, distance, slugPrefix }) => {
-        let plans = prebuiltPlans.filter((p) => p.raceDistance === distance);
-        if (slugPrefix) {
-          const matching = plans.filter((p) => p.slug.startsWith(slugPrefix));
-          if (matching.length > 0) plans = matching;
-        }
-        if (plans.length === 0) return null;
-        // Prefer the beginner plan: easiest difficulty, then shortest.
-        const score = (d: (typeof plans)[0]["difficulty"]) =>
-          d === "beginner" ? 0 : d === "intermediate" ? 1 : d === "advanced" ? 2 : 3;
-        const canonical = plans.reduce((a, b) => {
-          const da = score(a.difficulty);
-          const db = score(b.difficulty);
-          if (da !== db) return da < db ? a : b;
-          return a.totalWeeks < b.totalWeeks ? a : b;
-        });
-        return { key, plan: canonical };
-      })
-      .filter(
-        (r): r is { key: string; plan: (typeof prebuiltPlans)[0] } => r != null,
-      );
-  }, [prebuiltPlans]);
 
   // The hero kicker: today's date and the ISO week, the way a training log
   // is dated. Mono, uppercased by the stylesheet.
@@ -643,6 +596,16 @@ export function HomePage() {
           body={t("homepage:home.s01.e3Body")}
           cta={t("homepage:home.s01.e3Link")}
         />
+        {/* The calculators used to get a section of their own listing all
+            twelve. One door says the same thing: the hub is one click away,
+            and the number is already in the lede. */}
+        <DoorCard
+          to="/calculators"
+          kicker={t("homepage:home.s06.kicker")}
+          title={t("homepage:home.s06.title")}
+          body={t("homepage:home.s06.body")}
+          cta={t("homepage:home.s06.link")}
+        />
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
@@ -724,88 +687,11 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          §05 — one trajectory per distance
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="zn-section" aria-labelledby="home-plans-title">
-        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
-          <SectionHead
-            id="home-plans-title"
-            kicker={t("homepage:home.s05.kicker")}
-            title={t("homepage:home.s05.title")}
-            body={t("homepage:home.s05.body", {
-              count: prebuiltPlans.length,
-              min: Math.min(...prebuiltPlans.map((p) => p.totalWeeks)),
-              max: Math.max(...prebuiltPlans.map((p) => p.totalWeeks)),
-            })}
-            note={t("homepage:home.s05.quick")}
-          />
+      {/* §05 — the plans section lived here. It re-sold what the "Suivre un
+          plan structuré" door already offers three screens higher up, so it
+          folded into that door. /plans stays in the nav, the footer and the
+          palette. */}
 
-          <ul className="zn-home__plans">
-            {planRows.map(({ key, plan }) => (
-              <li key={key} className="zn-home__plan">
-                <span className="zn-home__plan-name">
-                  {t(`homepage:home.s05.distance.${key}`)}
-                </span>
-                <span className="zn-mono zn-muted zn-home__plan-meta">
-                  {plan.totalWeeks} {t("homepage:home.s05.weeks")}
-                </span>
-                <span className="zn-mono zn-muted zn-home__plan-meta">
-                  {plan.sessionsPerWeek} {t("homepage:home.s05.sessionsPerWeek")}
-                </span>
-                <span className="zn-home__phase-bar" aria-hidden="true">
-                  {plan.phases.map((phase, i) => (
-                    <span
-                      key={i}
-                      className="zn-home__phase"
-                      style={
-                        {
-                          inlineSize: `${((phase.endWeek - phase.startWeek + 1) / plan.totalWeeks) * 100}%`,
-                          "--fill": PHASE_FILL[phase.phase] ?? "var(--zone-1)",
-                        } as CSSProperties
-                      }
-                    />
-                  ))}
-                </span>
-                <Button
-                  asChild
-                  variant="outline-primary"
-                  size="sm"
-                  className="zn-home__plan-cta"
-                >
-                  <Link to={`/plan/prebuilt/${plan.slug}`}>
-                    {t("homepage:home.s05.choose")}
-                    <ArrowRight />
-                  </Link>
-                </Button>
-              </li>
-            ))}
-          </ul>
-
-          <div className="zn-home__legend">
-            <span className="zn-kicker">{t("homepage:home.s05.legend")}</span>
-            {LEGEND_PHASES.map((phase) => (
-              <span
-                key={phase}
-                className="zn-row"
-                style={{ "--gap": "var(--sp-4)" } as CSSProperties}
-              >
-                <span
-                  className="zn-home__swatch"
-                  style={{ "--fill": PHASE_FILL[phase] } as CSSProperties}
-                />
-                <span className="zn-body zn-body--sm zn-muted">
-                  {t(`homepage:home.s05.phases.${phase}`)}
-                </span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          §02 — three sessions, deterministic for the ISO week
-          ═══════════════════════════════════════════════════════════════════ */}
       <section
         className="zn-section zn-split"
         style={
@@ -897,29 +783,31 @@ export function HomePage() {
             body={t("homepage:home.s04.body")}
           />
 
-          <div className="zn-home__people">
+          {/* Eight researcher cards used to sit here, each with a tag, a name,
+              a paragraph of contribution and a citation. The system's rule is
+              that science is cited, not invoked — so what survives is the
+              citation itself, in mono, which is exactly the form it prescribes.
+              Every name, source and link is still on the page; only the
+              paragraph around each one is gone. */}
+          <ul className="zn-home__sources">
             {RESEARCHERS.map((r) => (
-              <article key={r.name} className="zn-home__person">
-                <span className="zn-kicker">{r.tag}</span>
-                <h3 className="zn-home__person-name">{r.name}</h3>
-                <p className="zn-body zn-body--sm zn-muted">
-                  {t(r.contributionKey)}
-                </p>
-                <p className="zn-source">{t(r.source.citationKey)}</p>
+              <li key={r.name} className="zn-home__source">
+                <span className="zn-home__source-name">{r.name}</span>
+                <span className="zn-source">{t(r.source.citationKey)}</span>
                 {r.source.url && (
                   <a
                     className="zn-home__link"
                     href={r.source.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`${t("homepage:home.s04.viewPublication")} — ${r.name}`}
                   >
-                    {t("homepage:home.s04.viewPublication")}
                     <ExternalLink />
                   </a>
                 )}
-              </article>
+              </li>
             ))}
-          </div>
+          </ul>
 
           {/* Quote of the day — rotates daily through attributable quotes
               from runners, coaches and sports physicians. */}
@@ -935,29 +823,9 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          §06 — the calculators
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="zn-section" aria-labelledby="home-tools-title">
-        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
-          <SectionHead
-            id="home-tools-title"
-            kicker={t("homepage:home.s06.kicker")}
-            title={t("homepage:home.s06.title")}
-            body={t("homepage:home.s06.body")}
-          />
-          <div className="zn-home__tools">
-            {CALCULATORS.map((c) => (
-              <Link key={c.key} to={c.slug} className="zn-home__tool">
-                <span className="zn-home__tool-name">{t(c.titleKey)}</span>
-                <span className="zn-body zn-body--sm zn-muted">
-                  {t(c.descKey)}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* §06 — the twelve calculator cards lived here. They are a door now:
+          the hub lists them, and a landing page does not need to name all
+          twelve to say they exist. */}
 
       {/* ═══════════════════════════════════════════════════════════════════
           §08 — ethos, the one inverted band

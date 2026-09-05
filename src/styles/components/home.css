@@ -49,12 +49,18 @@
    are the hero's own choices, not the next section. */
 .zn-home__doors {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--gap-grid);
   padding: 0 var(--pad-screen-x) var(--sp-17);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+  .zn-home__doors {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
   .zn-home__doors {
     grid-template-columns: 1fr;
   }
@@ -513,4 +519,49 @@
 
 .zn-home__cta-title {
   max-inline-size: 24ch;
+}
+
+/* ── cited sources ────────────────────────────────────────────────────────
+   One line per source: the name, the citation in mono, and the link out.
+   The system asks that science be cited rather than invoked, and a citation
+   is a line of mono under the block — not a card with a biography. */
+
+.zn-home__sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-block-start: var(--border-divider);
+}
+
+.zn-home__source {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-8);
+  padding-block: var(--sp-6);
+  border-block-end: var(--border-divider);
+}
+
+.zn-home__source-name {
+  flex: none;
+  inline-size: 180px;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.3 var(--font-text);
+}
+
+.zn-home__source .zn-source {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.zn-home__source .zn-home__link {
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .zn-home__source {
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .zn-home__source-name {
+    inline-size: auto;
+  }
 }

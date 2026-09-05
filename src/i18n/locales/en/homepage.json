@@ -199,7 +199,8 @@
 
     "s06": {
       "kicker": "Calculators",
-      "title": "A toolkit to measure your ranges",
+      "title": "Measure my ranges",
+      "link": "Calculators",
       "body": "Every computation runs in your browser. The formulas are documented.",
       "tools": {
         "zones": "Compute your HR and pace zones from your VMA or HRmax.",

@@ -15,7 +15,7 @@
     "featuredWorkouts": "Séances en vedette",
     "viewAll": "Voir tout",
     "strengthForRunners": "Renforcement pour coureurs",
-    "strengthForRunnersDesc": "Séances de renforcement basées sur la science pour améliorer votre économie de course et prévenir les blessures.",
+    "strengthForRunnersDesc": "Séances de renforcement basées sur la science pour améliorer ton économie de course et prévenir les blessures.",
     "seeAll": "Voir tout",
     "browseByCategory": "Parcourir par catégorie",
     "newBadge": "Nouveau",
@@ -46,7 +46,7 @@
       "head": "L'entraînement",
       "tail": "sans bruit",
       "accent": ["structuré", "lisible", "outillé", "documenté"],
-      "lead": "Sachez exactement quoi courir demain. {{plans}} plans d'entraînement du 5K au marathon, {{sessions}} séances expliquées par la science (Seiler, Daniels, Billat, Coggan) et {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans votre navigateur.",
+      "lead": "Sache exactement quoi courir demain. {{plans}} plans d'entraînement du 5K au marathon, {{sessions}} séances expliquées par la science (Seiler, Daniels, Billat, Coggan) et {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans ton navigateur.",
       "ctaPrimary": "Générer mon plan",
       "ctaPrimaryHasPlans": "Voir mes plans",
       "ctaSecondary": "Explorer les séances",
@@ -87,7 +87,7 @@
     "s01": {
       "kicker": "Trois entrées",
       "title": "Un outil par usage, pas par persona",
-      "body": "Zoned ne vous demande pas qui vous êtes. Il vous laisse choisir comment vous voulez l'aborder.",
+      "body": "Zoned ne te demande pas qui tu es. Il te laisse choisir comment l'aborder.",
       "e1Kicker": "Le catalogue",
       "e2Kicker": "À plus long terme",
       "e3Kicker": "La science",
@@ -121,9 +121,9 @@
       "refPace": "Allure",
       "fig": "Fig. 02 — Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil",
       "personal": {
-        "label": "Calculé depuis votre profil",
+        "label": "Calculé depuis ton profil",
         "edit": "Modifier",
-        "prompt": "Calculez vos zones personnalisées. Au moins une valeur suffit.",
+        "prompt": "Calcule tes zones personnalisées. Au moins une valeur suffit.",
         "vmaLabel": "VMA (km/h)",
         "fcMaxLabel": "FCmax (bpm)",
         "submit": "Calculer mes zones",
@@ -199,22 +199,23 @@
 
     "s06": {
       "kicker": "Calculateurs",
-      "title": "Une trousse de calcul pour mesurer vos plages",
+      "title": "Mesurer mes plages",
+      "link": "Calculateurs",
       "body": "Tous les calculs tournent dans ton navigateur. Les formules sont documentées.",
       "tools": {
-        "zones": "Calculez vos zones FC et allures depuis votre VMA ou FCmax.",
+        "zones": "Calcule tes zones FC et allures depuis ta VMA ou ta FCmax.",
         "converter": "Convertissez entre min/km, km/h et min/mile en temps réel.",
         "paceTable": "Toutes les allures de 3:00 à 10:00/km avec temps estimés.",
         "treadmill": "Convertissez vitesse et inclinaison en allure équivalente.",
-        "splits": "Planifiez vos passages pour atteindre votre objectif chrono.",
-        "vma": "Estimez votre VMA à partir d'un résultat de course.",
-        "ftp": "Estimez votre FTP depuis un test 20 minutes ou un ramp test.",
-        "css": "Estimez votre CSS depuis un test 400 m + 200 m.",
-        "equivalence": "Prédisez vos temps sur toutes les distances depuis un résultat.",
-        "ageGraded": "Comparez votre performance au record mondial de votre catégorie.",
+        "splits": "Planifie tes passages pour atteindre ton objectif chrono.",
+        "vma": "Estime ta VMA à partir d'un résultat de course.",
+        "ftp": "Estime ta FTP depuis un test 20 minutes ou un ramp test.",
+        "css": "Estime ta CSS depuis un test 400 m + 200 m.",
+        "equivalence": "Prédis tes temps sur toutes les distances depuis un résultat.",
+        "ageGraded": "Compare ta performance au record mondial de ta catégorie.",
         "raceSimulator": {
           "title": "Simulateur jour de course",
-          "desc": "Plan complet pour votre journée de course : horaires, allures, nutrition, mental."
+          "desc": "Plan complet pour ton jour de course : horaires, allures, nutrition, mental."
         },
         "whatIf": "Comparez deux scénarios d'entraînement et visualisez les différences."
       }
@@ -233,7 +234,7 @@
     "s08": {
       "kicker": "Éthos",
       "title1": "Aucune donnée",
-      "title2": "ne quitte votre appareil",
+      "title2": "ne quitte ton appareil",
       "body": "Pas de serveur, pas de compte, pas de cookie tiers. Code public sous licence MIT.",
       "lines": {
         "trackers": "Tracker tiers",
@@ -284,7 +285,7 @@
 
     "cta": {
       "kicker": "Commencer maintenant",
-      "line1": "Votre prochaine course commence ici",
+      "line1": "Ta prochaine course commence ici",
       "line2": "Un plan complet en deux clics, gratuit, sans compte",
       "primary": "Générer mon plan",
       "secondary": "Explorer les séances"

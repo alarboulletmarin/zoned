@@ -215,3 +215,39 @@ renforcement, et « RENFORCEMENT » débordait sur la première chip.
 jour » dans l'app ; la porte correspondante du kit a été rabattue sur la
 bibliothèque plutôt que d'inventer un sélecteur. `IllustrationSlot` n'a pas de
 branche « image remplie » tant qu'aucun doodle n'existe.
+
+### Lot 7 — Le texte ramené à l'essentiel ✅
+
+Le système énonce des longueurs — sous-titre d'une phrase et vingt mots maximum,
+description de deux lignes, libellé de bouton réduit à un verbe et son objet — et
+les écrans refaits les dépassaient tous. Les cartes de porte tombent de 19-29
+mots à 12-15, calibrées sur celles du kit, qui portent chacune un chiffre plutôt
+qu'un adjectif. Les réponses de la FAQ perdent la moitié de leur longueur sans
+perdre un fait.
+
+Mais raccourcir ne réglait pas le vrai surplus. Le kit tient l'accueil en quatre
+sections ; l'écran en avait douze, et trois d'entre elles revendaient plus bas ce
+que les portes offrent déjà en haut.
+
+- **La section « plans » disparaît.** La porte « Suivre un plan structuré » la
+  portait déjà, trois écrans plus haut.
+- **Les douze cartes de calculateurs deviennent une porte.** Le hub les liste,
+  et une page d'accueil n'a pas besoin de les nommer toutes pour dire qu'elles
+  existent. La grille passe à quatre portes.
+- **Les huit fiches de chercheurs deviennent huit lignes de citation.** La règle
+  du système est que la science est *citée*, pas invoquée : ce qui survit est la
+  citation elle-même, en mono, qui est exactement la forme prescrite. Chaque nom,
+  chaque source et chaque lien reste sur la page ; seul le paragraphe autour
+  disparaît.
+
+Aucun lien interne n'est perdu : `/plans` et les douze calculateurs restent dans
+la navigation, le pied de page et la palette. Douze sections deviennent dix.
+
+`homepage.json` passe entièrement au tutoiement. Le fichier mélangeait les deux —
+le chapô disait déjà « ton navigateur » pendant que la section voisine vouvoyait.
+Le handoff demande que ce basculement se fasse fichier par fichier, en une fois :
+c'est fait pour celui-ci.
+
+**Règle retenue pour la suite :** chaque écran refait ramène ses textes aux
+longueurs du système dans le même lot, plutôt qu'une passe de rédaction séparée
+à la fin.
