@@ -8,6 +8,10 @@
 .zn-popover {
   z-index: 50;
 
+  /* 288px was the shadcn default (w-72) and four call sites still rely on it.
+     A call site that wants another width passes one through className, which
+     wins: this layer sits below Tailwind's utilities. */
+  inline-size: 288px;
   padding: var(--pad-card-sm);
 
   background: var(--surface-card);

@@ -13,14 +13,11 @@
   position: fixed;
   inset: 0;
   z-index: 50;
-  background: rgba(22, 19, 14, 0.42);
+  background: var(--scrim);
 }
 
 /* Dark: an ink wash over an ink page reads as nothing, so the scrim deepens
    toward the desk colour — the same move borders.css makes for the shadow. */
-.dark .zn-dialog__overlay {
-  background: rgba(10, 9, 7, 0.72);
-}
 
 @keyframes zn-dialog-overlay-in {
   from { opacity: 0; }

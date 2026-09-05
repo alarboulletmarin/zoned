@@ -26,28 +26,35 @@
 
 /* Hand-written component layer — see components/README.md.
    _layout and _type are the shared vocabulary; the rest is one file per
-   primitive, in the order they are named in src/components/ui/. */
-@import "./components/_layout.css";
-@import "./components/_type.css";
-@import "./components/badge.css";
-@import "./components/button.css";
-@import "./components/calendar.css";
-@import "./components/card.css";
-@import "./components/date-input.css";
-@import "./components/dialog.css";
-@import "./components/dropdown-menu.css";
-@import "./components/empty-state.css";
-@import "./components/page-loader.css";
-@import "./components/popover.css";
-@import "./components/responsive-table.css";
-@import "./components/scroll-to-top.css";
-@import "./components/segmented.css";
-@import "./components/select.css";
-@import "./components/sheet.css";
-@import "./components/skeleton.css";
-@import "./components/slider.css";
-@import "./components/switch.css";
-@import "./components/tabs.css";
-@import "./components/tooltip.css";
+   primitive, in the order they are named in src/components/ui/.
+
+   Imported INTO @layer components, below Tailwind's utilities, so a call site
+   that still hands a utility class through the `className` prop keeps winning
+   over the component's own rules. Unlayered CSS beats every layer, which would
+   have silently made those pass-through classes no-ops. When Tailwind goes the
+   layer stays: it costs nothing and it documents the intent. */
+@import "./components/_layout.css" layer(components);
+@import "./components/_type.css" layer(components);
+@import "./components/badge.css" layer(components);
+@import "./components/button.css" layer(components);
+@import "./components/calendar.css" layer(components);
+@import "./components/card.css" layer(components);
+@import "./components/date-input.css" layer(components);
+@import "./components/dialog.css" layer(components);
+@import "./components/dropdown-menu.css" layer(components);
+@import "./components/empty-state.css" layer(components);
+@import "./components/page-loader.css" layer(components);
+@import "./components/popover.css" layer(components);
+@import "./components/responsive-table.css" layer(components);
+@import "./components/scroll-to-top.css" layer(components);
+@import "./components/segmented.css" layer(components);
+@import "./components/select.css" layer(components);
+@import "./components/sheet.css" layer(components);
+@import "./components/skeleton.css" layer(components);
+@import "./components/slider.css" layer(components);
+@import "./components/switch.css" layer(components);
+@import "./components/tabs.css" layer(components);
+@import "./components/tooltip.css" layer(components);
+@import "./components/wordmark.css" layer(components);
 @import "./animations.css";
 @import "./overrides.css";

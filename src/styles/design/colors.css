@@ -54,6 +54,10 @@
   --state-disabled-text: rgba(22, 19, 14, 0.38);
   --state-disabled-border: rgba(22, 19, 14, 0.3);
   --state-disabled-fill: rgba(22, 19, 14, 0.06);
+
+  /* The wash behind a modal surface. Flat ink — the system forbids blur, so
+     depth comes from the outline and the hard shadow, not from a frosted pane. */
+  --scrim: rgba(22, 19, 14, 0.42);
 }
 
 /* ==========================================================================
@@ -102,4 +106,8 @@
   --state-disabled-text: rgba(239, 232, 218, 0.38);
   --state-disabled-border: rgba(239, 232, 218, 0.3);
   --state-disabled-fill: rgba(239, 232, 218, 0.07);
+
+  /* Darker on the dark theme: the page below is already ink, so a 42% ink wash
+     would not read as a separation at all. */
+  --scrim: rgba(10, 9, 7, 0.72);
 }

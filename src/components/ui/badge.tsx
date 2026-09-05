@@ -9,9 +9,10 @@ type BadgeVariant = "default" | "secondary" | "destructive" | "outline";
  * Class names for a badge rendered by something that is not this component —
  * a dropdown trigger, a bare `<a>`. Prefer `<Badge asChild>`.
  *
- * The paint lives in `src/styles/components/badge.css` and selects on the
- * `data-variant` attribute, so anything using this helper has to carry that
- * attribute too.
+ * The paint lives in `src/styles/components/badge.css`. `<Badge>` itself is
+ * selected on its `data-variant` attribute; a caller of this helper renders its
+ * own element and never gets that attribute, so the tone rides a modifier class
+ * instead. Both selectors carry the same declarations.
  */
 function badgeVariants({
   variant = "default",
@@ -20,8 +21,7 @@ function badgeVariants({
   variant?: BadgeVariant | null;
   className?: string;
 } = {}) {
-  void variant;
-  return cn("zn-badge", className);
+  return cn("zn-badge", `zn-badge--${variant ?? "default"}`, className);
 }
 
 function Badge({

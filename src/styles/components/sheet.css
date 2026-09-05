@@ -12,12 +12,9 @@
   position: fixed;
   inset: 0;
   z-index: 50;
-  background: rgba(22, 19, 14, 0.42);
+  background: var(--scrim);
 }
 
-.dark .zn-sheet__overlay {
-  background: rgba(10, 9, 7, 0.72);
-}
 
 @keyframes zn-sheet-overlay-in {
   from { opacity: 0; }

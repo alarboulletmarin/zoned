@@ -20,7 +20,7 @@
   gap: var(--sp-5);
   white-space: nowrap;
 
-  padding: 12px 16px;
+  padding: var(--sp-6) var(--sp-8);
   min-block-size: var(--hit-min);
 
   font: var(--type-body-sm);
@@ -89,13 +89,17 @@
 }
 
 .zn-select-trigger[data-size="sm"] {
-  padding: 9px 14px;
+  padding: var(--sp-5) var(--sp-7);
   min-block-size: 38px;
 }
 
 /* WCAG 2.5.8: 44px on a coarse pointer whatever the size variant asked for. */
+/* WCAG 2.5.8. The size selector has to be repeated here: [data-size="sm"] is
+   more specific than the bare class, so a floor written only on .zn-select-trigger
+   would lose to the 38px above and silently drop the small trigger under 44px. */
 @media (pointer: coarse) {
-  .zn-select-trigger {
+  .zn-select-trigger,
+  .zn-select-trigger[data-size="sm"] {
     min-block-size: var(--hit-min);
   }
 }

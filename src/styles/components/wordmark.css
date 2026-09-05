@@ -1,0 +1,17 @@
+/* The brand signature: the name in display black, tight, with a vermillon stop.
+   This is the one place the accent appears without being an action — it is the
+   full stop of a sentence, not a button, and it costs the screen nothing. */
+
+.zn-wordmark {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink-1);
+  white-space: nowrap;
+}
+
+.zn-wordmark__dot {
+  color: var(--accent);
+}

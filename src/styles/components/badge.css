@@ -50,13 +50,21 @@
 
 /* ── tones ────────────────────────────────────────────────────────────── */
 
-.zn-badge[data-variant="default"] {
+/* Each tone answers to two selectors. `<Badge>` sets data-variant, but
+   `badgeVariants()` hands class names to something it does not render — a
+   Radix trigger — which never gets the attribute. The modifier class covers
+   that case. These names are ours, in a hand-written file, so interpolating
+   one is safe: the Tailwind source-scanning trap does not apply here. */
+
+.zn-badge[data-variant="default"],
+.zn-badge--default {
   background: var(--ink-1);
   color: var(--ink-on-dark);
 }
 
 /* Quiet: a fact you read only if you are looking for it. */
-.zn-badge[data-variant="secondary"] {
+.zn-badge[data-variant="secondary"],
+.zn-badge--secondary {
   background: transparent;
   color: var(--ink-3);
   border-color: var(--line-divider);
@@ -64,12 +72,14 @@
 
 /* Danger wears the same vermillon as the primary action — told apart by its
    words and its placement, as everywhere else in this system. */
-.zn-badge[data-variant="destructive"] {
+.zn-badge[data-variant="destructive"],
+.zn-badge--destructive {
   background: var(--state-danger);
   color: var(--accent-fg);
 }
 
-.zn-badge[data-variant="outline"] {
+.zn-badge[data-variant="outline"],
+.zn-badge--outline {
   background: transparent;
   color: var(--ink-1);
   border-color: var(--line-strong);
@@ -86,12 +96,16 @@ button.zn-badge:hover {
   color: var(--ink-1);
 }
 a.zn-badge[data-variant="default"]:hover,
-button.zn-badge[data-variant="default"]:hover {
+button.zn-badge[data-variant="default"]:hover,
+a.zn-badge--default:hover,
+button.zn-badge--default:hover {
   background: var(--ink-2);
   color: var(--ink-on-dark);
 }
 a.zn-badge[data-variant="destructive"]:hover,
-button.zn-badge[data-variant="destructive"]:hover {
+button.zn-badge[data-variant="destructive"]:hover,
+a.zn-badge--destructive:hover,
+button.zn-badge--destructive:hover {
   background: var(--accent-press);
   color: var(--accent-fg);
 }
