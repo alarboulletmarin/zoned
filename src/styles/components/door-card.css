@@ -62,20 +62,18 @@
 
 /* ── two to a row on a phone ──────────────────────────────────────────── */
 
-/* At 175px wide a door holds a kicker, a title and its promise.
-   The explanatory sentence does not fit — it wrapped to five lines and made
-   the pair taller than the stack it replaced — so it goes. Nothing is lost
-   that the destination does not say better on arrival. */
+/* At 161px wide a door holds a kicker, a title, its sentence and its promise.
+   The sentence used to go here: the drawing carried the recognition, and the
+   sentence wrapped to five lines. Now that every door is bare, a door without
+   it is a kicker, a title and a link in a 130px card, and nothing says what
+   is behind it — so the sentence stays, and the pair is measured against the
+   stack it replaced rather than against the drawn pair it was. */
 @media (max-width: 640px) {
   .zn-door {
     gap: var(--sp-4);
     min-block-size: 0;
     padding: var(--sp-8);
     border-radius: var(--r-2xl);
-  }
-
-  .zn-door__body {
-    display: none;
   }
 
   .zn-door__title {
