@@ -597,8 +597,6 @@ export function WorkoutDetailPage() {
             </div>
 
             <FactStrip facts={facts} />
-
-            {!hasUserZones && <ZonePersonalizationCTA />}
           </div>
 
           <IllustrationSlot
@@ -665,6 +663,13 @@ export function WorkoutDetailPage() {
             userZones={hasUserZones ? userZones : undefined}
             className="zn-session__phases"
           />
+
+          {/* The offer to set your zones sits AFTER the session now. It was in
+              the hero, between the facts and the drawing — 123px of aside
+              standing between someone arriving and the workout they came for.
+              Here it lands where it makes sense: right under the steps whose
+              paces it would fill in. */}
+          {!hasUserZones && <ZonePersonalizationCTA className="zn-session__zone-cta" />}
         </section>
 
         {/* 3 — where the time goes, against how to spend it */}

@@ -54,6 +54,15 @@
   padding-block: var(--sp-12) var(--sp-8);
 }
 
+/* The gap between the header rule and the first thing on the page. 24px is
+   right where a page opens on a title; on a phone it is 24px of the ~700 a
+   reader gets before the first scroll. */
+@media (max-width: 640px) {
+  .zn-main {
+    padding-block-start: var(--sp-7);
+  }
+}
+
 /* ── content column ───────────────────────────────────────────────────── */
 
 /* The screen's centred measure plus its side margins — 40px, 20px on mobile,

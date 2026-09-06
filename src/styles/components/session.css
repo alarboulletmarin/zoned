@@ -109,6 +109,32 @@
     gap: var(--sp-12);
     padding-block: var(--sp-13) var(--sp-14);
   }
+
+  /* "Structure de la séance" at h1 is the page's second h1-sized thing, under
+     an actual h1. One step down, and the chart it announces rises with it. */
+  .zn-session .zn-title[data-level="1"] {
+    font-size: var(--fs-h2);
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
+  }
+
+  /* The runner leaves the phone.
+
+     On a wide screen the drawing sits in the hero's second column: it costs
+     nothing, the facts are beside it, and it is what makes the page look like
+     Zoned. Stacked on a phone it is 220px of decoration wedged between the
+     facts and the session — someone opening a workout on their way out the
+     door reads its name, then scrolls past a drawing to reach what they came
+     for. The identity is not worth an extra screen at that moment; it is kept
+     everywhere it does not push the content down. */
+  .zn-session__hero .zn-slot {
+    display: none;
+  }
+}
+
+/* The zone offer, now under the steps rather than in the hero. */
+.zn-session__zone-cta {
+  margin-block-start: var(--sp-13);
 }
 
 /* The hero's text column. 40px between every block is the page's rhythm on a
@@ -487,5 +513,27 @@
 @media (min-width: 901px) {
   .zn-shared__dock {
     display: none;
+  }
+}
+
+/* ── the first screen ─────────────────────────────────────────────────── */
+
+/* Stated here, at the foot of the sheet, rather than in the hero's media block
+   above: .zn-session__trail and .zn-session__fact are both declared further
+   down this file, and a rule at the same specificity that comes first loses.
+
+   What this buys is the reason for the whole block — someone opening a workout
+   sees its name, what it costs and what it is for without scrolling, and the
+   profile starts within the first screen instead of 200px below it. */
+@media (max-width: 640px) {
+  /* One line of 11px mono under a 24px gap, to say where you came from. */
+  .zn-session__trail {
+    padding-block-start: var(--sp-5);
+  }
+
+  /* The facts are the session in four words: they earn their place above the
+     fold, not their desk padding. */
+  .zn-session__fact {
+    padding: var(--sp-7) var(--sp-8);
   }
 }
