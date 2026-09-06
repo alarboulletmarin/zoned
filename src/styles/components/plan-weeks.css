@@ -146,16 +146,18 @@
   border-block-start: var(--border-divider);
 }
 
-/* Race day: the vermillon frame all the way round, like .zn-sess[data-kind]
-   on the calendar. An inset ring rather than a border, because the row lives
-   inside .zn-pw__list — a real border would add 2.5px of height and push every
-   row below it down. */
+/* Jour de course : le contour entier, comme .zn-sess[data-kind] sur le
+   calendrier — et à l'ENCRE depuis que le vermillon ne dit plus que
+   « maintenant ». Un jour de course est une destination, pas l'instant
+   présent ; le drapeau et le mot « Jour de course » que la ligne rend déjà
+   portent l'information sans recourir au ton. L'anneau reste inset : la ligne
+   vit dans .zn-pw__list, une vraie bordure ajouterait 2.5px de hauteur et
+   pousserait toutes les lignes du dessous. */
 .zn-pw__sess[data-kind="race"] {
-  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--line-strong);
 }
 
 .zn-pw__sess[data-kind="race"] .zn-pw__sess-name {
-  color: var(--text-link);
   font-weight: var(--fw-semibold);
 }
 

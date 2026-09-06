@@ -248,7 +248,12 @@
   color: var(--text-body);
   background: transparent;
   border: none;
-  border-block-end: var(--border-heavy);
+  /* Le filet garde ses 2.5px — donc le titre ne remonte pas d'un pixel quand
+     on le renomme — mais il passe à l'encre. C'était la plus large bande
+     vermillon de l'app, et elle ne disait aucun état : c'est le soulignement
+     d'un champ éditable. Le vermillon revient tout seul au focus, par l'anneau
+     de base.css, et redevient donc un signal de focus exclusif. */
+  border-block-end: var(--bw-heavy) solid var(--line-strong);
 }
 
 .zn-planview__facts {
@@ -305,6 +310,14 @@
 /* Les mêmes arêtes que la grille pose, jamais une seconde grammaire. */
 .zn-weeknow__today[data-status="completed"] {
   border-color: var(--state-success);
+}
+
+/* Modifiée après coup. La règle manquait ici alors que plan-calendar.css la
+   pose depuis toujours sur .zn-sess : la carte du jour ne disait pas qu'une
+   séance avait été retouchée. L'arête d'encre pleine, sans troisième couleur ;
+   le crayon de .zn-sess__check porte le second canal. */
+.zn-weeknow__today[data-status="modified"] {
+  border-color: var(--line-strong);
 }
 
 .zn-weeknow__today[data-status="skipped"] {
@@ -679,10 +692,20 @@
   overflow: hidden;
 }
 
-/* The current week wears the 2.5px vermillon frame — the system's "this one"
-   marker, never a tint. */
+/* La semaine en cours porte le cadre vermillon entier — c'est « maintenant »,
+   le seul sens qui garde ce ton — doublé par le badge « Semaine en cours »
+   que l'en-tête rend déjà (WCAG 1.4.1).
+   En outline et non en bordure : la carte gardait une bordure de 1px et
+   passait à 2px en devenant courante, donc elle grandissait de 2px en largeur
+   comme en hauteur et se désalignait de ses voisines dans la colonne. Un
+   outline ne participe pas à la boîte. Et un outline plutôt qu'un box-shadow
+   inset, parce que .zn-planlist__toggle occupe toute la boîte de contenu :
+   son fond de survol passerait PAR-DESSUS un anneau inset, alors que
+   l'outline se peint au-dessus des descendants. Le décalage négatif le range
+   à l'intérieur, où la carte le découpe à son rayon. */
 .zn-planlist__week[data-current="true"] {
-  border: var(--border-heavy);
+  outline: var(--bw-heavy) solid var(--accent);
+  outline-offset: calc(-1 * var(--bw-heavy));
 }
 
 /* The whole week header opens and closes it. */

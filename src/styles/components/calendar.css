@@ -179,14 +179,18 @@
   transform: translateY(var(--press-shift));
 }
 
-/* Today: a vermillon rule under the figure, the one accent mark on the grid. */
-.zn-cal__day[data-today] .zn-cal__day-btn::after {
-  content: "";
-  position: absolute;
-  inset-block-end: 3px;
-  inline-size: 16px;
-  block-size: 2px;
-  background: var(--accent);
+/* Aujourd'hui : l'anneau vermillon sur les quatre côtés, plus le chiffre en
+   gras. C'était le seul tiret de 16×2px de l'app, et la seule autre façon de
+   dire « aujourd'hui » que l'anneau du calendrier du plan — deux formes pour
+   un seul état. C'est désormais la même marque partout.
+   Le ton reste au jour courant et non au jour choisi : depuis que la sélection
+   est une pure inversion d'encre (plus bas), les deux ne sont plus
+   confusables — une case crème cerclée de vermillon contre une pastille
+   d'encre pleine. L'anneau est un inset : la grille ne bouge pas d'un pixel,
+   et il suit le rayon des coins, ce que le tiret ne faisait pas. */
+.zn-cal__day[data-today] .zn-cal__day-btn {
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+  font-weight: var(--fw-bold);
 }
 
 /* ── day states ───────────────────────────────────────────────────────────
@@ -198,11 +202,17 @@
   border-color: var(--state-disabled-border);
 }
 
+/* Choisi : la seule inversion d'encre, la marque « sélectionné » de tout le
+   système. Elle portait EN PLUS un cadre vermillon de 2.5px — un double
+   marquage qui ne hiérarchisait plus rien et qui volait au jour courant le
+   seul ton que la maison réserve à « maintenant ». La bordure retombe sur le
+   filet de base : le bouton est en border-box avec un aspect-ratio de 1, sa
+   boîte ne change pas de taille. */
 .zn-cal__day[data-selected] .zn-cal__day-btn,
 .zn-cal__day[data-selected] .zn-cal__day-btn:hover:not(:disabled) {
   background: var(--surface-inverse);
   color: var(--text-inverse);
-  border: var(--border-heavy);
+  border-color: var(--ink-1);
 }
 
 .zn-cal__day[data-disabled] .zn-cal__day-btn,
@@ -211,6 +221,11 @@
   color: var(--state-disabled-text);
   border: var(--bw-hair) solid var(--state-disabled-border);
   cursor: not-allowed;
+  /* Un jour qu'on ne peut pas choisir ne crie pas « maintenant » : l'anneau
+     d'aujourd'hui tombe avec le reste. La règle est la dernière du bloc, donc
+     elle l'emporte, exactement comme le commentaire ci-dessus l'annonce. */
+  box-shadow: none;
+  font-weight: var(--fw-regular);
 }
 
 /* WCAG 2.5.8: 44px minimum on a coarse pointer. The caption has to give the

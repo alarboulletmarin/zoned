@@ -276,16 +276,42 @@
   background-image: var(--zone-recovery);
 }
 
-/* Live drop target — a 2.5px vermillon frame, drawn inside the cell so the
-   grid does not jump by 2.5px on every dragover. */
+/* Cible de dépôt vivante — anneau d'ENCRE 1.5px + papier creusé.
+   Elle portait jusqu'ici exactement la même déclaration qu'« aujourd'hui »
+   (même 2.5px, même vermillon, sélecteurs frères) : en glissant une séance sur
+   la semaine courante, plus rien ne disait laquelle des deux cellules était
+   la cible. Le vermillon est désormais réservé à « maintenant » ; la cible
+   emprunte la marque « retenu » du système (anneau d'encre + surface creusée),
+   ce qui est exactement ce qu'elle est — la case qui va recevoir.
+   background-color et non background : une journée indisponible garde sa
+   hachure à 45° (background-image) même quand on la survole en glissant.
+   L'anneau reste inset, donc la grille ne bouge pas d'un pixel au dragover. */
 .zn-plancal__day[data-drop="true"] {
+  background-color: var(--surface-band);
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
+}
+
+/* Aujourd'hui. L'anneau vermillon sur les quatre côtés, et le chiffre en gras :
+   la couleur n'est jamais le seul porteur (WCAG 1.4.1), et depuis que la cible
+   de dépôt porte elle aussi un anneau, c'est la graisse qui les départage au
+   premier coup d'œil autant que le ton. */
+.zn-plancal__day[data-today="true"] {
   box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
 }
 
-/* Today. The vermillon ring is the whole marking; the date below is not
-   recoloured, because the ring already said it. */
-.zn-plancal__day[data-today="true"] {
-  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+.zn-plancal__day[data-today="true"] .zn-plancal__date {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+/* On glisse une séance SUR aujourd'hui : les deux marques tombent sur la même
+   case. Elles s'empilent au lieu de s'écraser — le vermillon du jour en
+   premier (0 à 2.5px), l'anneau d'encre de la cible derrière lui (2.5 à 4px).
+   Deux anneaux concentriques, aucun décalage : les deux sont des insets. */
+.zn-plancal__day[data-today="true"][data-drop="true"] {
+  box-shadow:
+    inset 0 0 0 var(--bw-heavy) var(--accent),
+    inset 0 0 0 calc(var(--bw-heavy) + var(--bw-rule)) var(--line-strong);
 }
 
 .zn-plancal__blocked-label,
@@ -363,7 +389,10 @@
 
   transition:
     background var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+    border-color var(--dur-fast) var(--ease-out),
+    /* le verrou est désormais un anneau inset et non plus une bordure :
+       il doit fondre comme les arêtes de statut, pas apparaître d'un coup */
+    box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .zn-sess[data-density="card"] {
@@ -394,17 +423,25 @@
   border-color: var(--state-disabled-border);
 }
 
-/* Retained through a regeneration — the system's 2.5px vermillon frame, and
-   room on the right for the padlock that says so. */
+/* Retenue à travers une régénération. Le vermillon a cessé de dire
+   « verrouillé » : il ne dit plus que « maintenant ». L'information est portée
+   par le cadenas, qui a toujours été là, et par un anneau d'encre posé EN
+   INSET — donc sans toucher la bordure, qui reste libre de porter le statut
+   (fait / modifié / sauté) sans que les deux marques se disputent le même
+   pixel. Bénéfice de bord : la case ne grandissait plus de 2px de chaque côté
+   en devenant verrouillée, elle ne bouge plus du tout. */
 .zn-sess[data-locked="true"] {
-  border: var(--border-heavy);
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
   padding-inline-end: var(--sp-10);
 }
 
-/* Race day. The plan's one destination, in vermillon type inside a vermillon
-   frame — an identifier, not a second accent fill. */
+/* Jour de course. Ce n'est pas « maintenant », c'est une destination : le
+   cadre reste entier et garde ses 2.5px — donc aucun décalage — mais il passe
+   à l'encre. Ce qui le distingue d'une course intermédiaire (1.5px d'encre)
+   est l'épaisseur, et ce qui le nomme est le drapeau plus le mot COURSE en
+   mono capitales, déjà rendus par le composant. */
 .zn-sess[data-kind="race"] {
-  border: var(--border-heavy);
+  border: var(--bw-heavy) solid var(--line-strong);
   text-align: center;
 }
 
@@ -421,10 +458,6 @@
   block-size: var(--sp-7);
 }
 
-.zn-sess[data-kind="race"] .zn-sess__flag {
-  color: var(--text-link);
-}
-
 .zn-sess__race-label {
   display: block;
   font-family: var(--font-mono);
@@ -436,9 +469,9 @@
   color: var(--text-body);
 }
 
-.zn-sess[data-kind="race"] .zn-sess__race-label {
-  color: var(--text-link);
-}
+/* Le drapeau et le mot COURSE restent à l'encre du corps de texte : le
+   vermillon ne dit plus que « maintenant », et ces deux-là disent « où ».
+   Ils ne perdent rien — le mot est déjà en mono capitales et en gras. */
 
 /* A / B / C priority: the ramp again — A is the accent, B is ink, C recedes. */
 .zn-sess__priority {
@@ -916,8 +949,12 @@
   min-block-size: 120px;
 }
 
+/* Même départage que sur la grille du plan : la cible de dépôt prend l'anneau
+   d'encre et le papier creusé, le vermillon reste à « aujourd'hui » seul.
+   background-color, pour ne pas effacer la hachure d'une journée bloquée. */
 .zn-planweek__day[data-drop="true"] {
-  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+  background-color: var(--surface-band);
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
 }
 
 .zn-planweek__day[data-blocked="true"] {
@@ -937,6 +974,14 @@
 .zn-planweek__day[data-today="true"] .zn-planweek__daylabel {
   color: var(--text-body);
   font-weight: var(--fw-bold);
+}
+
+/* On glisse une séance sur la journée courante : les deux anneaux se
+   superposent, le vermillon devant, l'encre juste derrière. */
+.zn-planweek__day[data-today="true"][data-drop="true"] {
+  box-shadow:
+    inset 0 0 0 var(--bw-heavy) var(--accent),
+    inset 0 0 0 calc(var(--bw-heavy) + var(--bw-rule)) var(--line-strong);
 }
 
 /* Transparent tant que la journée est une colonne : les deux spans qu'il
