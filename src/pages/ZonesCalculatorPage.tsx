@@ -1,16 +1,20 @@
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
-import { ZoneScale } from "@/components/visualization";
+import { ZoneFigures } from "@/components/domain/ZoneFigures";
 import { SEOHead } from "@/components/seo";
+import type { ZoneRange } from "@/types";
 
 /**
  * The zones calculator, in the frame the "mes chiffres" door uses: mono
- * kicker, display title, lede, the ink-ramp legend, then the tool. The
- * calculator itself was ported in its own lot and is not restyled here.
+ * kicker, display title, lede, the zone plate, then the tool. The plate is
+ * the legend — six figures on one rule, and once the reader's VMA or FCmax
+ * is in, each figure carries its own range under its code. The calculator
+ * itself was ported in its own lot and is not restyled here.
  */
 export function ZonesCalculatorPage() {
   const { t } = useTranslation("common");
+  const [zones, setZones] = useState<ZoneRange[]>([]);
 
   return (
     <>
@@ -53,13 +57,15 @@ export function ZonesCalculatorPage() {
           </p>
         </section>
 
-        {/* The ramp orders the zones but does not name them: the legend once. */}
-        <div className="zn-num__legend">
-          <ZoneScale />
-        </div>
+        {/* The plate replaces the pill legend: its rule is the band rule
+            between the head and the tool, and the figures stand on it. */}
+        <ZoneFigures
+          label={t("calculators:calculateurs.zones.figuresLabel")}
+          zones={zones}
+        />
 
         <section className="zn-num__panel">
-          <ZoneCalculator />
+          <ZoneCalculator onZonesChange={setZones} />
         </section>
       </div>
     </>

@@ -109,17 +109,14 @@
 
 /* ── the zone table ───────────────────────────────────────────────────── */
 
-/* The legend for the ink ramp, on a sunken band: the six cards under it are
-   the ramp read one zone at a time, and the scale is what names the ramp
-   itself. Shown once per screen, as the system requires of any surface that
-   paints zone fills. */
-.zn-guide__legend {
-  padding: var(--sp-9) var(--sp-10);
+/* The legend for the ink ramp is the zone plate itself: six figures on one
+   rule, code and name under each as graduations. The six cards under it are
+   the ramp read one zone at a time. It sits in the flow, on its own rule — no
+   sunken card around a drawing, which reads as a vignette rather than as the
+   legend it is. Shown once per screen, as the system requires of any surface
+   that paints zone fills. */
+.zn-guide__figures {
   margin-block-end: var(--sp-11);
-
-  background: var(--surface-band);
-  border: var(--border-rule);
-  border-radius: var(--r-2xl);
 }
 
 /* One zone: its badge, its name, and the two facts that define it. Outlined

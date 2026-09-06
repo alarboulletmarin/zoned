@@ -1,4 +1,5 @@
 import {
+  Fragment,
   useState,
   useEffect,
   useMemo,
@@ -10,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import { Save, Trash2, HeartRate, Gauge, ChevronDown, Dumbbell } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { Annotation } from "@/components/domain/Annotation";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
 import {
@@ -23,6 +25,7 @@ import {
   ZONE_META,
   getDominantZone,
   type ZoneNumber,
+  type ZoneRange,
   type UserZonePreferences,
   type WorkoutTemplate,
 } from "@/types";
@@ -72,7 +75,13 @@ function buildZoneWorkoutMap(
   return map;
 }
 
-export function ZoneCalculator() {
+interface ZoneCalculatorProps {
+  /** Les zones recalculées à chaque saisie valide, pour la planche de la page
+      qui les porte sous chaque figure ; vide quand rien n'est connu. */
+  onZonesChange?: (zones: ZoneRange[]) => void;
+}
+
+export function ZoneCalculator({ onZonesChange }: ZoneCalculatorProps = {}) {
   const { t } = useTranslation("common");
   const pickLang = usePickLang();
   const { settings } = useSettings();
@@ -122,14 +131,35 @@ export function ZoneCalculator() {
     }
   }, [sharedFcMax, sharedVma]);
 
-  const prefs: UserZonePreferences = {
-    fcMax: fcMax && !fcMaxError ? parsedFcMax : undefined,
-    vma: vma && !vmaError ? parsedVma : undefined,
-  };
+  const validFcMax = fcMax && !fcMaxError ? parsedFcMax : undefined;
+  const validVma = vma && !vmaError ? parsedVma : undefined;
+  const prefs: UserZonePreferences = { fcMax: validFcMax, vma: validVma };
 
-  const zones = calculateAllZones(prefs);
+  const zones = useMemo(
+    () => calculateAllZones({ fcMax: validFcMax, vma: validVma }),
+    [validFcMax, validVma]
+  );
+  useEffect(() => {
+    onZonesChange?.(zones);
+  }, [zones, onZonesChange]);
+
   const hasValues = prefs.fcMax || prefs.vma;
   const hasErrors = fcMaxError || vmaError;
+
+  // La frontière qui vaut une phrase : l'entrée en Z4. Recalculée depuis les
+  // chiffres du lecteur — la borne basse d'allure de Z4 (la plus lente), et
+  // la borne basse de fréquence. Une ligne par grandeur connue.
+  const z4 = zones.find((z) => z.zone === 4);
+  const thresholdNote = [
+    z4?.paceMaxPerKm !== undefined &&
+      t("calculators:calculateurs.zones.thresholdPace", {
+        pace: `${formatPace(convertPace(z4.paceMaxPerKm, unit))}${getPaceUnit(unit)}`,
+      }),
+    z4?.hrMin !== undefined &&
+      t("calculators:calculateurs.zones.thresholdHr", { bpm: z4.hrMin }),
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const handleSave = () => {
     if (hasValues && !hasErrors) {
@@ -251,105 +281,121 @@ export function ZoneCalculator() {
               const examples = zoneWorkouts[zoneNum];
 
               return (
-                <div key={z.zone} className="zn-ztable__group">
-                  {/* Zone row (clickable) */}
-                  <button
-                    type="button"
-                    onClick={() => toggleZone(zoneNum)}
-                    aria-expanded={isExpanded}
-                    aria-controls={`zone-panel-${zoneNum}`}
-                    className="zn-ztable__row"
-                  >
-                    {/* Zone label + chevron row */}
-                    <span className="zn-ztable__label">
-                      <span className="zn-ztable__name">
-                        {/* The legend's own swatch, so a row can never show a
-                            density the legend does not. */}
-                        <span className="zn-zonescale__swatch" aria-hidden="true">
-                          <span className="zn-zonescale__fill" data-zone={zoneNum} />
+                <Fragment key={z.zone}>
+                  {/* Entre Z3 et Z4, la seule frontière qui vaut une phrase :
+                      une ligne d'annotation à sa place dans la table, la
+                      flèche vers la ligne Z4. Sur bureau la figure qui montre
+                      se tient sur le filet bas de la ligne ; sur téléphone la
+                      flèche seule (annotation.css) — une figure sous 84 px
+                      serait un pictogramme. */}
+                  {zoneNum === 4 && thresholdNote && (
+                    <Annotation
+                      className="zn-ztable__note"
+                      text={thresholdNote}
+                      arrow="down-right"
+                      figure
+                    />
+                  )}
+                  <div className="zn-ztable__group">
+                    {/* Zone row (clickable) */}
+                    <button
+                      type="button"
+                      onClick={() => toggleZone(zoneNum)}
+                      aria-expanded={isExpanded}
+                      aria-controls={`zone-panel-${zoneNum}`}
+                      className="zn-ztable__row"
+                    >
+                      {/* Zone label + chevron row */}
+                      <span className="zn-ztable__label">
+                        <span className="zn-ztable__name">
+                          {/* The legend's own swatch, so a row can never show a
+                              density the legend does not. */}
+                          <span className="zn-zonescale__swatch" aria-hidden="true">
+                            <span className="zn-zonescale__fill" data-zone={zoneNum} />
+                          </span>
+                          <span>
+                            Z{z.zone} - {pickLang(meta, "label")}
+                          </span>
                         </span>
-                        <span>
-                          Z{z.zone} - {pickLang(meta, "label")}
+                        {/* Chevron visible only on mobile (inline with label) */}
+                        <span className="zn-ztable__chevron zn-ztable__chevron--narrow">
+                          <ChevronDown />
                         </span>
                       </span>
-                      {/* Chevron visible only on mobile (inline with label) */}
-                      <span className="zn-ztable__chevron zn-ztable__chevron--narrow">
+
+                      {/* HR & pace values -- stacked on mobile, inline on desktop */}
+                      <span className="zn-ztable__values">
+                        <span className="zn-ztable__value">
+                          {prefs.fcMax ? `${z.hrMin}-${z.hrMax} bpm` : ""}
+                        </span>
+                        <span className="zn-ztable__value">
+                          {prefs.vma
+                            ? `${formatPace(convertPace(z.paceMinPerKm!, unit))}-${formatPace(convertPace(z.paceMaxPerKm!, unit))} ${getPaceUnit(unit)}`
+                            : ""}
+                        </span>
+                      </span>
+
+                      {/* Chevron visible only on desktop (grid column) */}
+                      <span className="zn-ztable__chevron zn-ztable__chevron--wide">
                         <ChevronDown />
                       </span>
-                    </span>
+                    </button>
 
-                    {/* HR & pace values -- stacked on mobile, inline on desktop */}
-                    <span className="zn-ztable__values">
-                      <span className="zn-ztable__value">
-                        {prefs.fcMax ? `${z.hrMin}-${z.hrMax} bpm` : ""}
-                      </span>
-                      <span className="zn-ztable__value">
-                        {prefs.vma
-                          ? `${formatPace(convertPace(z.paceMinPerKm!, unit))}-${formatPace(convertPace(z.paceMaxPerKm!, unit))} ${getPaceUnit(unit)}`
-                          : ""}
-                      </span>
-                    </span>
-
-                    {/* Chevron visible only on desktop (grid column) */}
-                    <span className="zn-ztable__chevron zn-ztable__chevron--wide">
-                      <ChevronDown />
-                    </span>
-                  </button>
-
-                  {/* Expandable panel */}
-                  <div
-                    id={`zone-panel-${zoneNum}`}
-                    role="region"
-                    aria-labelledby={`zone-row-${zoneNum}`}
-                    className="zn-ztable__panel"
-                    data-open={isExpanded ? "true" : undefined}
-                  >
-                    <div className="zn-ztable__clip">
-                      <div className="zn-ztable__detail zn-zone-edge" data-zone={zoneNum}>
-                        {/* Sensation */}
-                        <div>
-                          <p className="zn-ztable__term">
-                            {t("myZones.zoneCalculator.sensation")}
-                          </p>
-                          <p className="zn-ztable__text">
-                            {pickLang(meta, "sensation")}
-                          </p>
-                        </div>
-
-                        {/* Benefit */}
-                        <div>
-                          <p className="zn-ztable__term">
-                            {t("myZones.zoneCalculator.benefit")}
-                          </p>
-                          <p className="zn-ztable__text">
-                            {pickLang(meta, "benefit")}
-                          </p>
-                        </div>
-
-                        {/* Example workouts */}
-                        {examples.length > 0 && (
+                    {/* Expandable panel */}
+                    <div
+                      id={`zone-panel-${zoneNum}`}
+                      role="region"
+                      aria-labelledby={`zone-row-${zoneNum}`}
+                      className="zn-ztable__panel"
+                      data-open={isExpanded ? "true" : undefined}
+                    >
+                      <div className="zn-ztable__clip">
+                        <div className="zn-ztable__detail zn-zone-edge" data-zone={zoneNum}>
+                          {/* Sensation */}
                           <div>
                             <p className="zn-ztable__term">
-                              <Dumbbell />
-                              {t("myZones.zoneCalculator.exampleWorkouts")}
+                              {t("myZones.zoneCalculator.sensation")}
                             </p>
-                            <ul className="zn-ztable__examples">
-                              {examples
-                                .slice(0, isMobile ? MAX_EXAMPLES_MOBILE : MAX_EXAMPLES)
-                                .map((w) => (
-                                <li key={w.id}>
-                                  <Link to={`/workout/${w.id}`} className="zn-ztable__example">
-                                    {pickLang(w, "name")}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
+                            <p className="zn-ztable__text">
+                              {pickLang(meta, "sensation")}
+                            </p>
                           </div>
-                        )}
+
+                          {/* Benefit */}
+                          <div>
+                            <p className="zn-ztable__term">
+                              {t("myZones.zoneCalculator.benefit")}
+                            </p>
+                            <p className="zn-ztable__text">
+                              {pickLang(meta, "benefit")}
+                            </p>
+                          </div>
+
+                          {/* Example workouts */}
+                          {examples.length > 0 && (
+                            <div>
+                              <p className="zn-ztable__term">
+                                <Dumbbell />
+                                {t("myZones.zoneCalculator.exampleWorkouts")}
+                              </p>
+                              <ul className="zn-ztable__examples">
+                                {examples
+                                  .slice(0, isMobile ? MAX_EXAMPLES_MOBILE : MAX_EXAMPLES)
+                                  .map((w) => (
+                                  <li key={w.id}>
+                                    <Link to={`/workout/${w.id}`} className="zn-ztable__example">
+                                      {pickLang(w, "name")}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </Fragment>
               );
             })}
           </div>

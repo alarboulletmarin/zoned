@@ -25,7 +25,10 @@
       "seoBreadcrumb": "Training Zones",
       "title": "Training zones calculator",
       "description": "Enter your max heart rate or vVO2max: the six zones, their heart-rate ranges and their target paces follow.",
-      "kicker": "Zones Z1 to Z6"
+      "kicker": "Zones Z1 to Z6",
+      "figuresLabel": "The six zones drawn: the same runner from a walk to a sprint, and under each figure its zone, with your pace or heart-rate range once your numbers are known.",
+      "thresholdPace": "above {{pace}} you cross the threshold: the debt climbs faster than the pace",
+      "thresholdHr": "above {{bpm}} bpm you cross the threshold: lactate builds up faster than it clears"
     },
     "paces": {
       "seoTitle": "Race Pace Calculator",

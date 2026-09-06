@@ -835,6 +835,58 @@
   border-block-start: var(--border-divider);
 }
 
+/* The threshold note, between Z3 and Z4: an annotation set in the table like
+   a row of its own, between two dividers. Its bottom divider is the ground
+   the pointing figure stands on — the sole bites it by the rule's thickness,
+   computed, not eyeballed — and the arrow heads for the Z4 row but stops
+   8px short of its edge: beside a button, never across it. The text is two
+   sentences, one per known measure, on two lines each at most. */
+.zn-ztable__note {
+  padding: var(--sp-6) var(--sp-8) 0;
+  gap: var(--sp-6);
+  border-block: var(--border-divider);
+}
+
+.zn-ztable__note + .zn-ztable__group {
+  border-block-start: 0;
+}
+
+/* 54ch, not 48: the mono tracks 0.04em, so a 50-character line needs the
+   extra room or the longer sentence breaks onto a third line. */
+.zn-ztable__note .zn-note__text {
+  max-inline-size: 54ch;
+  margin-block-end: var(--sp-6);
+  white-space: pre-line;
+}
+
+.zn-ztable__note .zn-note__arrow {
+  margin-block-end: var(--sp-4);
+}
+
+.zn-ztable__note .zn-note__figure {
+  block-size: 150px;
+  margin-block-end: calc(-1 * var(--bw-rule));
+}
+
+/* On a phone the column inside the card is 250px: beside the arrow the text
+   would run to eight lines. The arrow drops under the text instead, at the
+   end of the line, still heading into the Z4 row. */
+@media (max-width: 640px) {
+  .zn-ztable__note {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .zn-ztable__note .zn-note__text {
+    flex: 1 1 100%;
+    margin-block-end: var(--sp-2);
+  }
+
+  .zn-ztable__note .zn-note__arrow {
+    margin-inline-start: auto;
+  }
+}
+
 /* The whole row is the disclosure. Hover is colour only, press is the 1px
    push, and the open row inverts to ink rather than taking a faint tint. */
 .zn-ztable__row {

@@ -12,7 +12,6 @@ import { SEOHead } from "@/components/seo";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import { ZoneFigures } from "@/components/domain/ZoneFigures";
-import { ZoneScale } from "@/components/visualization";
 import { usePickLang } from "@/lib/i18n-utils";
 import type { ZoneNumber } from "@/types";
 
@@ -364,16 +363,15 @@ export function MethodologyPage() {
             {t("content:methodology.sixZones")}
           </h2>
 
-          {/* La planche ouvre la bande : six postures disent la montée en
-              effort, la rampe nommée dessous les rattache aux zones. Une
-              seule figure par champ de vision — les cartes n'en portent pas. */}
-          <div
-            className="zn-guide__legend zn-stack"
-            style={{ "--gap": "var(--sp-10)" } as CSSProperties}
-          >
-            <ZoneFigures label={t("content:methodology.figuresLabel")} />
-            <ZoneScale />
-          </div>
+          {/* La planche ouvre la bande, dans le flux et pas dans une carte
+              grise — un dessin dans une boîte se lit comme une vignette. Les
+              six postures disent la montée en effort, et les graduations sous
+              la règle les nomment : la planche est la légende. Une seule
+              figure par champ de vision — les cartes n'en portent pas. */}
+          <ZoneFigures
+            label={t("content:methodology.figuresLabel")}
+            className="zn-guide__figures"
+          />
 
           <div className="zn-grid">
             {zones.map((z) => (

@@ -1,17 +1,20 @@
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
 import { PaceCalculator } from "@/components/domain/PaceCalculator";
-import { ZoneScale } from "@/components/visualization";
+import { ZoneFigures } from "@/components/domain/ZoneFigures";
 import { SEOHead } from "@/components/seo";
+import type { ZoneRange } from "@/types";
 
 /**
  * Mes zones — the two calculators that turn one measured value into six
- * zones and a table of race paces. The legend appears once, above both,
- * because the ramp orders the zones without naming them.
+ * zones and a table of race paces. The zone plate appears once, above both:
+ * six figures on one rule, and once the reader's numbers are known each
+ * figure carries its own range under its code.
  */
 export function MyZonesPage() {
   const { t } = useTranslation("common");
+  const [zones, setZones] = useState<ZoneRange[]>([]);
 
   return (
     <>
@@ -31,15 +34,16 @@ export function MyZonesPage() {
           </p>
         </section>
 
-        <div className="zn-num__legend">
-          <ZoneScale />
-        </div>
+        <ZoneFigures
+          label={t("calculators:calculateurs.zones.figuresLabel")}
+          zones={zones}
+        />
 
         <section
           className="zn-num__panel zn-stack"
           style={{ "--gap": "var(--sp-15)" } as CSSProperties}
         >
-          <ZoneCalculator />
+          <ZoneCalculator onZonesChange={setZones} />
           <PaceCalculator />
 
           {/* A computed pace is a target, not a contract — and the source that

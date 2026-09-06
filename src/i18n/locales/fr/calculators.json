@@ -25,7 +25,10 @@
       "seoBreadcrumb": "Zones d'entraînement",
       "title": "Calculateur de zones d'entraînement",
       "description": "Entre ta FCmax ou ta VMA : les six zones, leurs plages de fréquence et leurs allures cibles suivent.",
-      "kicker": "Zones Z1 à Z6"
+      "kicker": "Zones Z1 à Z6",
+      "figuresLabel": "Les six zones dessinées : le même coureur du pas de marche au sprint, et sous chaque figure sa zone, avec ta plage d'allure ou de fréquence quand tes chiffres sont connus.",
+      "thresholdPace": "au-dessus de {{pace}} tu passes le seuil : la dette monte plus vite que l'allure",
+      "thresholdHr": "au-dessus de {{bpm}} bpm tu passes le seuil : le lactate s'accumule plus vite qu'il ne s'élimine"
     },
     "paces": {
       "seoTitle": "Calculateur d'Allures de Course",
