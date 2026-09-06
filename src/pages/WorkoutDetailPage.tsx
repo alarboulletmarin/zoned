@@ -21,7 +21,6 @@ import {
   StravaIcon,
   SlidersHorizontal,
   Pencil,
-  Gauge,
 } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -38,7 +37,6 @@ import {
   WorkoutCardCompact,
   FavoriteButton,
   ZonePersonalizationCTA,
-  ZONE_CTA_INPUT_ID,
   TipCard,
 } from "@/components/domain";
 import {
@@ -453,23 +451,6 @@ export function WorkoutDetailPage() {
         className="zn-cluster zn-session__actions"
         style={{ "--gap": "var(--sp-6)" } as CSSProperties}
       >
-        {/* Without the runner's VMA the page can only describe the session.
-            Making it executable comes first, so the primary action asks for
-            the VMA (it focuses the field under the steps) and Export steps
-            back to an outline until the paces are in. */}
-        {!hasUserZones && (
-          <Button
-            size="lg"
-            onClick={() => {
-              const field = document.getElementById(ZONE_CTA_INPUT_ID);
-              field?.scrollIntoView({ behavior: "smooth", block: "center" });
-              field?.focus({ preventScroll: true });
-            }}
-          >
-            <Gauge />
-            {t("zonePersonalization.submit")}
-          </Button>
-        )}
         <ExportMenu workout={workout} size="lg" variant={hasUserZones ? "default" : "outline"} />
 
         <FavoriteButton workoutId={workout.id} />
@@ -719,7 +700,7 @@ export function WorkoutDetailPage() {
               </p>
             )}
 
-            {!isPhone && actionCluster}
+            {actionCluster}
 
             <FactStrip facts={facts} />
 
@@ -775,6 +756,14 @@ export function WorkoutDetailPage() {
                 })}
               </span>
             </div>
+
+            {/* The VMA field, at the head of the structure: the owner wants the
+                paces, not an aside at the end of the steps nor a bar docked
+                over the page. Here it stands above the blocks it fills in, and
+                the page has one call for it, this one. */}
+            {!hasUserZones && (
+              <ZonePersonalizationCTA className="zn-session__zone-cta" onSaved={refreshUserZones} />
+            )}
 
             <div>
               {/* Le profil est la seule chose de la page qui se lit sur deux
@@ -840,14 +829,6 @@ export function WorkoutDetailPage() {
             className="zn-session__phases"
           />
 
-          {/* The offer to set your zones sits AFTER the session now. It was in
-              the hero, between the facts and the drawing — 123px of aside
-              standing between someone arriving and the workout they came for.
-              Here it lands where it makes sense: right under the steps whose
-              paces it would fill in. */}
-          {!hasUserZones && (
-            <ZonePersonalizationCTA className="zn-session__zone-cta" onSaved={refreshUserZones} />
-          )}
         </section>
 
         {/* 3 — where the time goes, against how to spend it */}
@@ -971,11 +952,6 @@ export function WorkoutDetailPage() {
         </section>
       </div>
 
-      {/* The thumb-zone bar, on a phone and on this page only.
-          Same shape as the shared-session dock below: pinned to the viewport
-          floor, on a rule, giving up the end of its own gutter so the menu
-          pill sits beside it rather than over it. */}
-      {isPhone && <div className="zn-session__dock">{actionCluster}</div>}
     </>
   );
 }
