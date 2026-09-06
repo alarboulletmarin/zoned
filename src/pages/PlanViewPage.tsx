@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, useLocation, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -16,6 +16,7 @@ import {
   Plus,
   Pencil,
   Shuffle,
+  MoreHorizontal,
   Route as RouteIcon,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
@@ -42,12 +43,19 @@ import { auditPlan, type PlanFinding } from "@/lib/planGenerator/audit";
 import { applyAuditFix } from "@/lib/planGenerator/auditFix";
 import { PlanAuditPanel } from "@/components/domain/PlanAuditPanel";
 import { getWorkoutById } from "@/data/workouts";
-import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
+import { computeWeekKm, computeWeekDuration, estimateSessionDurationMin } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { useIsEnglish, usePickLang, usePickLocale, formatDate, formatDateShort, formatDateMedium, formatWeekday } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Section } from "@/components/editorial/Section";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
@@ -169,6 +177,10 @@ export function PlanViewPage() {
   const [showDateDialog, setShowDateDialog] = useState(false);
   const [editStartDate, setEditStartDate] = useState("");
   const [completionTarget, setCompletionTarget] = useState<{ weekNumber: number; sessionIndex: number } | null>(null);
+  // Deux cases portent désormais la même clé de clôture — celle de la bande
+  // « cette semaine » et celle de la grille. On retient celle qui a été
+  // cliquée plutôt que de deviner « la première visible du document ».
+  const completionAnchor = useRef<HTMLElement | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState("");
   const [pendingWeekValidation, setPendingWeekValidation] = useState<{
@@ -484,13 +496,14 @@ export function PlanViewPage() {
     });
   }, [plan, adaptationPreview, reloadPlan, t]);
 
-  const handleToggleComplete = useCallback((weekNumber: number, sessionIndex: number) => {
+  const handleToggleComplete = useCallback((weekNumber: number, sessionIndex: number, anchor?: HTMLElement | null) => {
     if (!plan) return;
     const week = plan.weeks.find(w => w.weekNumber === weekNumber);
     if (!week) return;
     const session = week.sessions[sessionIndex];
     if (!session) return;
     // Open the completion sheet for this session
+    completionAnchor.current = anchor ?? null;
     setCompletionTarget({ weekNumber, sessionIndex });
   }, [plan]);
 
@@ -806,22 +819,72 @@ export function PlanViewPage() {
       ? `${formatDate(plan.config.createdAt)} → ${formatDate(raceDate)}`
       : formatDate(plan.config.createdAt);
 
-  // The four numbers. The week in focus is the current one, clamped so a plan
-  // that has not started reads week 1 and an ended one reads its last week.
+  // La semaine en vue : la semaine courante, bornée pour qu'un plan pas encore
+  // commencé lise la semaine 1 et un plan fini sa dernière.
   const focusWeekNumber = Math.max(1, Math.min(currentWeek || 1, plan.totalWeeks));
   const focusWeek = plan.weeks[focusWeekNumber - 1];
-  const totalSessions = plan.weeks.reduce((sum, w) => sum + w.sessions.length, 0);
-  const doneSessions = plan.weeks.reduce(
-    (sum, w) =>
-      sum +
-      w.sessions.filter(
-        (s) => s.status === "completed" || s.status === "modified",
-      ).length,
-    0,
-  );
-  const donePercent = totalSessions > 0
-    ? Math.round((doneSessions / totalSessions) * 100)
+
+  /* ── ce qui se court cette semaine ──────────────────────────────────────
+     Rien n'est calculé ici qui ne le soit déjà dans lib/. La bande ne fait
+     que choisir : la séance du jour, ce qui reste, la prochaine clé. */
+
+  // dayOfWeek est 0 = lundi (types/plan.ts) ; getDay() est 0 = dimanche.
+  const todayIndex = (new Date().getDay() + 6) % 7;
+  const isFocusCurrent =
+    currentWeek === focusWeekNumber && currentWeek >= 1 && currentWeek <= plan.totalWeeks;
+
+  const weekResolution = focusWeek
+    ? getWeekResolutionSummary(focusWeek)
+    : { completed: 0, skipped: 0, unresolved: 0 };
+
+  const todaySessionIndex =
+    isFocusCurrent && focusWeek
+      ? focusWeek.sessions.findIndex((s) => s.dayOfWeek === todayIndex)
+      : -1;
+  const todaySession =
+    todaySessionIndex >= 0 ? (focusWeek?.sessions[todaySessionIndex] ?? null) : null;
+
+  // Les jalons (course, activité) n'ont pas de fiche derrière eux :
+  // workoutNames ne les contient pas et handleSessionClick les ignore.
+  const sessionLabel = (s: import("@/types/plan").PlanSession) =>
+    s.workoutId === "__race_day__" || s.workoutId === "__intermediate_race__"
+      ? t("view.raceDay")
+      : workoutNames[s.workoutId] || s.workoutId;
+  const isOpenable = (s: import("@/types/plan").PlanSession) =>
+    !s.workoutId.startsWith("__");
+
+  // Temps posé : estimateSessionDurationMin prend la durée réelle quand elle
+  // existe, l'estimée sinon.
+  const weekPlannedMin = focusWeek
+    ? focusWeek.sessions.reduce((sum, s) => sum + s.estimatedDurationMin, 0)
     : 0;
+  const weekDoneMin = focusWeek
+    ? focusWeek.sessions
+        .filter((s) => s.status === "completed" || s.status === "modified")
+        .reduce((sum, s) => sum + estimateSessionDurationMin(s), 0)
+    : 0;
+
+  // La séance à ne pas manquer : la première clé encore ouverte, jamais celle
+  // d'aujourd'hui (elle a déjà sa carte), jamais une déjà passée.
+  const nextKeySession = focusWeek
+    ? focusWeek.sessions.find(
+        (s, i) =>
+          s.isKeySession &&
+          i !== todaySessionIndex &&
+          (!s.status || s.status === "planned") &&
+          (!isFocusCurrent || s.dayOfWeek >= todayIndex),
+      ) ?? null
+    : null;
+
+  // La plage de la semaine, par Intl — pas de table de mois écrite à la main.
+  const focusWeekRange = (() => {
+    if (!parsedPlanStart) return null;
+    const start = new Date(parsedPlanStart);
+    start.setDate(start.getDate() + (focusWeekNumber - 1) * 7);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 6);
+    return `${formatDateShort(start)} – ${formatDateShort(end)}`;
+  })();
 
   return (
     <>
@@ -922,22 +985,9 @@ export function PlanViewPage() {
                 workoutNames={workoutNames}
                 workoutTemplates={workoutTemplates}
               />
-              <Button
-                variant="outline"
-                onClick={() => setShowUnavailabilityManager(true)}
-              >
-                <CalendarOff />
-                {t("unavailability.title")}
-              </Button>
-              <Button
-                variant="outline"
-                disabled={(plan.config.unavailabilities ?? []).length === 0}
-                onClick={handleReschedule}
-              >
-                <Shuffle />
-                {t("reschedule.button")}
-              </Button>
-              {/* Only assisted plans replay from their config — see planShare.ts */}
+              {/* Only assisted plans replay from their config — see planShare.ts.
+                  Partager reste dans la barre : ShareLinkButton ne relaie ni ref
+                  ni gestionnaires, il ne survivrait pas au Slot d'un item de menu. */}
               {isShareablePlan(plan.config) && (
                 <ShareLinkButton
                   buildUrl={() => sharedPlanUrl(plan.config)}
@@ -945,166 +995,186 @@ export function PlanViewPage() {
                   label={t("shared.shareLink")}
                 />
               )}
-              <Button
-                variant="ghost"
-                className="zn-planview__del"
-                onClick={() => setShowDeleteDialog(true)}
-              >
-                <Trash2 />
-                {t("view.delete")}
-              </Button>
+              {/* Nécessaires, jamais quotidiennes : elles ne s'interposent plus
+                  entre le titre et la semaine. */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" aria-label={t("view.moreActions")}>
+                    <MoreHorizontal />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  <DropdownMenuItem onSelect={() => setShowUnavailabilityManager(true)}>
+                    <CalendarOff />
+                    {t("unavailability.title")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={(plan.config.unavailabilities ?? []).length === 0}
+                    onSelect={handleReschedule}
+                  >
+                    <Shuffle />
+                    {t("reschedule.button")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive" onSelect={() => setShowDeleteDialog(true)}>
+                    <Trash2 />
+                    {t("view.delete")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
-          <div className="zn-planview__stats">
-            <StatBlock
-              tone="card"
-              size="sm"
-              value={String(focusWeekNumber)}
-              label={t("view.currentWeek")}
-              footnote={t("shared.weeks", { count: plan.totalWeeks })}
-            />
-            <StatBlock
-              tone="card"
-              size="sm"
-              value={`${focusWeek ? Math.round(computeWeekKm(focusWeek)) : 0} km`}
-              label={t("stats.thisWeek")}
-              footnote={formatDurationMinutes(
-                focusWeek ? computeWeekDuration(focusWeek) : 0,
+          {/* Ce qu'il reste à courir avant dimanche. Colonne de droite sur
+              écran large, premier bloc sous le titre sur téléphone — la
+              grille de .zn-planview__head s'en charge seule. */}
+          {focusWeek && (
+            <section className="zn-weeknow" aria-labelledby="zn-weeknow-title">
+              <div className="zn-weeknow__head">
+                <h2 id="zn-weeknow-title" className="zn-kicker zn-weeknow__title">
+                  {t("stats.thisWeek")}
+                </h2>
+                <span className="zn-mono zn-weeknow__where">
+                  {[
+                    t("view.standingWeek", { week: focusWeekNumber }),
+                    pick(PHASE_META[focusWeek.phase], "label"),
+                    focusWeekRange,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </span>
+              </div>
+
+              {/* La séance du jour, en entier : une colonne de 76px dans la
+                  grille ne peut pas la nommer, une carte pleine largeur si. */}
+              {todaySession ? (
+                <div className="zn-weeknow__today" data-status={todaySession.status}>
+                  {/* Ce n'est pas une case à cocher : elle ouvre le panneau de
+                      clôture, d'où aria-haspopup et non role="checkbox".
+                      Pas de data-completion-key ici : elle passe son propre
+                      élément en ancre, et porter la clé la ferait gagner le
+                      querySelectorAll de repli contre la case de la grille,
+                      qui ancrerait le panneau 700px au-dessus du doigt. */}
+                  <button
+                    type="button"
+                    className="zn-sess__check zn-weeknow__check"
+                    data-status={todaySession.status}
+                    aria-haspopup="dialog"
+                    aria-label={`${
+                      todaySession.status === "completed"
+                        ? t("completion.completed")
+                        : todaySession.status === "modified"
+                          ? t("completion.modified")
+                          : todaySession.status === "skipped"
+                            ? t("completion.skipped")
+                            : t("completion.markDone")
+                    } — ${sessionLabel(todaySession)}`}
+                    onClick={(e) =>
+                      handleToggleComplete(focusWeekNumber, todaySessionIndex, e.currentTarget)
+                    }
+                  >
+                    {todaySession.status === "completed" && (
+                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M2 6l3 3 5-5" />
+                      </svg>
+                    )}
+                    {todaySession.status === "modified" && (
+                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
+                      </svg>
+                    )}
+                    {todaySession.status === "skipped" && (
+                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M3 3l6 6M9 3l-6 6" />
+                      </svg>
+                    )}
+                  </button>
+
+                  {(() => {
+                    const body = (
+                      <>
+                        <span className="zn-kicker zn-kicker--xs zn-kicker--inline">
+                          {t("view.today")}
+                        </span>
+                        <span className="zn-weeknow__name">{sessionLabel(todaySession)}</span>
+                        <span className="zn-mono zn-weeknow__facts">
+                          {formatDurationMinutes(todaySession.estimatedDurationMin)}
+                          {todaySession.targetDistanceKm
+                            ? ` · ${todaySession.targetDistanceKm} km`
+                            : ""}
+                        </span>
+                      </>
+                    );
+                    // Un jour de course n'a pas de fiche à ouvrir : pas de
+                    // bouton mort.
+                    return isOpenable(todaySession) ? (
+                      <button
+                        type="button"
+                        className="zn-weeknow__open"
+                        onClick={() =>
+                          handleSessionClick(
+                            focusWeekNumber,
+                            todaySessionIndex,
+                            todaySession.workoutId,
+                          )
+                        }
+                      >
+                        {body}
+                      </button>
+                    ) : (
+                      <span className="zn-weeknow__open" data-static="true">
+                        {body}
+                      </span>
+                    );
+                  })()}
+                </div>
+              ) : (
+                <p className="zn-mono zn-weeknow__rest">
+                  {isFocusCurrent ? t("view.restToday") : t("view.notStartedYet")}
+                </p>
               )}
-            />
-            <StatBlock
-              tone="card"
-              size="sm"
-              value={String(focusWeek ? focusWeek.sessions.length : 0)}
-              label={t("stats.sessions")}
-              footnote={t("plansPage.sessionsCount", { count: totalSessions })}
-            />
-            <StatBlock
-              tone="ink"
-              size="sm"
-              value={`${donePercent} %`}
-              label={t("stats.completion")}
-              footnote={`${doneSessions} ${t("stats.done")}`}
-            />
-          </div>
+
+              {/* Deux nombres, pas quatre : ce qui reste, et le temps déjà
+                  posé. L'emphase passe par l'inversion à l'encre — l'aplat
+                  vermillon de l'écran appartient à Exporter. */}
+              <div className="zn-weeknow__facts-grid">
+                <StatBlock
+                  tone="card"
+                  size="sm"
+                  value={`${weekResolution.completed}/${focusWeek.sessions.length}`}
+                  label={t("stats.sessions")}
+                  footnote={t("view.sessionsLeft", { count: weekResolution.unresolved })}
+                />
+                {/* Rien de posé, c'est zéro minute, pas zéro seconde :
+                    formatDurationMinutes rend « 0s » sous la minute, ce qui est
+                    juste pour un bloc de séance et absurde pour le compteur
+                    d'une semaine qui n'a pas commencé. */}
+                <StatBlock
+                  tone="ink"
+                  size="sm"
+                  value={weekDoneMin > 0 ? formatDurationMinutes(weekDoneMin) : "0min"}
+                  label={t("view.timeLogged")}
+                  footnote={`/ ${formatDurationMinutes(weekPlannedMin)} · ${Math.round(
+                    computeWeekKm(focusWeek),
+                  )} km`}
+                />
+              </div>
+
+              {nextKeySession && (
+                <p className="zn-weeknow__next">
+                  <Star filled size={14} className="zn-weeknow__star" />
+                  <span className="zn-body zn-body--sm">
+                    {t("view.nextKey")} : {t(`daysShort.${nextKeySession.dayOfWeek}`)} —{" "}
+                    {sessionLabel(nextKeySession)} ·{" "}
+                    {formatDurationMinutes(nextKeySession.estimatedDurationMin)}
+                  </span>
+                </p>
+              )}
+            </section>
+          )}
         </section>
 
-        {/* 2 — the arc of the plan: width is the share, ink is the intensity */}
-        {plan.phases.length > 0 && (
-          <section className="zn-planview__band">
-            <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
-              <span className="zn-kicker">{t("view.phases")}</span>
-              <div
-                className="zn-planview__ribbon"
-                data-standing={standing}
-                style={{
-                  "--zn-at": `${standingAt}%`,
-                  "--zn-fig-aspect": pose.aspect,
-                  "--zn-fig-foot": pose.flip ? 1 - pose.foot : pose.foot,
-                  "--zn-where-chars": standingCaption?.length ?? 0,
-                } as React.CSSProperties}
-              >
-                <pose.Art
-                  className="zn-planview__figure"
-                  data-flip={pose.flip ? "true" : undefined}
-                  aria-hidden="true"
-                  focusable="false"
-                />
-                <div className="zn-planview__track">
-                  {plan.phases.map((phaseRange) => {
-                    const meta = PHASE_META[phaseRange.phase];
-                    const widthPercent =
-                      ((phaseRange.endWeek - phaseRange.startWeek + 1) /
-                        plan.totalWeeks) *
-                      100;
-                    return (
-                      <span
-                        key={`${phaseRange.phase}-${phaseRange.startWeek}`}
-                        className="zn-pswatch"
-                        data-phase={phaseRange.phase}
-                        data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
-                        style={{ "--zn-span": `${widthPercent}%` } as React.CSSProperties}
-                        title={`${pick(meta, "label")} · ${phaseRange.startWeek}–${phaseRange.endWeek}`}
-                      />
-                    );
-                  })}
-                </div>
-                {standing === "on" && (
-                  <span className="zn-planview__now" aria-hidden="true" />
-                )}
-                {standingCaption && (
-                  <span className="zn-planview__where zn-mono">{standingCaption}</span>
-                )}
-              </div>
-              <div className="zn-planview__legend">
-                {plan.phases.map((phaseRange) => (
-                  <span
-                    key={`legend-${phaseRange.phase}-${phaseRange.startWeek}`}
-                    className="zn-planview__legend-item"
-                  >
-                    <span
-                      className="zn-pswatch"
-                      data-phase={phaseRange.phase}
-                      data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
-                      aria-hidden="true"
-                    />
-                    <span className="zn-mono">
-                      {pick(PHASE_META[phaseRange.phase], "label")}
-                      {" · "}
-                      {phaseRange.startWeek}–{phaseRange.endWeek}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
 
-        {/* 3 — what changed, what to look at */}
-        {(ended || plan._lastUndoableChange || auditFindings.length > 0) && (
-          <section className="zn-planview__band">
-            <div className="zn-planview__notes">
-              {/* An ended plan stays viewable as training history. */}
-              {ended && <Alert kind="info">{t("view.planEnded")}</Alert>}
-
-              {plan._lastUndoableChange && (
-                <LastChangePanel
-                  label={plan._lastUndoableChange.label}
-                  labelEn={plan._lastUndoableChange.labelEn}
-                  at={plan._lastUndoableChange.at}
-                  onUndo={() => {
-                    if (undoLastChange(plan.id)) {
-                      reloadPlan();
-                      toast.info(t("lastChange.undone"));
-                    }
-                  }}
-                />
-              )}
-
-              {auditFindings.length > 0 && (
-                <PlanAuditPanel
-                  findings={auditFindings}
-                  onFix={handleAuditFix}
-                  onGoToWeek={(weekNumber) => {
-                    setWeekParam(weekNumber);
-                    // List view: expand the target week
-                    if (planViewMode === "list") {
-                      setExpandedWeeks((prev) => new Set([...prev, weekNumber]));
-                    }
-                    // Scroll to the week header in calendar/list views
-                    requestAnimationFrame(() => {
-                      const el = document.querySelector(`[data-week="${weekNumber}"]`);
-                      el?.scrollIntoView({ behavior: "smooth", block: "center" });
-                    });
-                  }}
-                />
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* 4 — the programme itself */}
+        {/* 2 — the programme itself */}
         <Tabs defaultValue="programme" className="zn-planview__band">
           <TabsList>
             <TabsTrigger value="programme">{t("view.schedule")}</TabsTrigger>
@@ -1112,7 +1182,7 @@ export function PlanViewPage() {
           </TabsList>
 
           <TabsContent value="stats">
-            <PlanStatsSection plan={plan} currentWeek={currentWeek} />
+            <PlanStatsSection plan={plan} currentWeek={currentWeek} collapsible={false} />
           </TabsContent>
 
           <TabsContent value="programme" className="zn-planview__programme">
@@ -1131,32 +1201,41 @@ export function PlanViewPage() {
           <PlanViewModeSelector value={planViewMode} onChange={setPlanViewMode} />
         </div>
 
-        {/* What the marks mean, and how the board is worked */}
-        <div className="zn-planview__hints">
-          <span className="zn-planview__hint">
-            <span className="zn-sess__check" data-status="planned" aria-hidden="true" />
-            <span className="zn-kicker zn-kicker--xs">{t("completion.planned")}</span>
-          </span>
-          <span className="zn-planview__hint">
-            <span className="zn-sess__check" data-status="completed" aria-hidden="true">
-              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M2 6l3 3 5-5" />
-              </svg>
-            </span>
-            <span className="zn-kicker zn-kicker--xs">{t("completion.completed")}</span>
-          </span>
-          <span className="zn-planview__hint">
-            <span className="zn-sess__check" data-status="skipped" aria-hidden="true">
-              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 3l6 6M9 3l-6 6" />
-              </svg>
-            </span>
-            <span className="zn-kicker zn-kicker--xs">{t("completion.skipped")}</span>
-          </span>
-          <span className="zn-caption">{t("completion.hint")}</span>
-          <span className="zn-caption zn-planview__hint-fine">{t("view.rightClickOptions")}</span>
-          <span className="zn-caption zn-planview__hint-coarse">{t("view.longPressOptions")}</span>
-        </div>
+        {/* Ce que les marques veulent dire : utile une fois, servi avant d'être
+            demandé le reste du temps. Replié, le contenu reste dans le DOM. */}
+        <details className="zn-disclosure zn-planview__hints">
+          <summary className="zn-disclosure__summary">
+            <span className="zn-kicker zn-fill">{t("completion.legendTitle")}</span>
+            <ChevronDown className="zn-disclosure__chevron" />
+          </summary>
+          <div className="zn-disclosure__panel zn-planview__hints-body">
+            {(["planned", "completed", "modified", "skipped"] as const).map((status) => (
+              <span key={status} className="zn-planview__hint">
+                <span className="zn-sess__check" data-status={status} aria-hidden="true">
+                  {status === "completed" && (
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M2 6l3 3 5-5" />
+                    </svg>
+                  )}
+                  {status === "modified" && (
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
+                    </svg>
+                  )}
+                  {status === "skipped" && (
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 3l6 6M9 3l-6 6" />
+                    </svg>
+                  )}
+                </span>
+                <span className="zn-kicker zn-kicker--xs">{t(`completion.${status}`)}</span>
+              </span>
+            ))}
+            <span className="zn-caption">{t("completion.hint")}</span>
+            <span className="zn-caption zn-planview__hint-fine">{t("view.rightClickOptions")}</span>
+            <span className="zn-caption zn-planview__hint-coarse">{t("view.longPressOptions")}</span>
+          </div>
+        </details>
 
         {/* ── Week guidance for non-weekly views (free plans only) ── */}
         {plan.config.planMode === "free" && planViewMode !== "weekly" && (() => {
@@ -1724,6 +1803,126 @@ export function PlanViewPage() {
           </TabsContent>
         </Tabs>
 
+        {/* 3 — ce qui a changé, ce qu'il faut regarder : un avertissement
+            d'audit n'est pas plus urgent que la séance du soir */}
+        {(ended || plan._lastUndoableChange || auditFindings.length > 0) && (
+          <section className="zn-planview__band">
+            <div className="zn-planview__notes">
+              {/* An ended plan stays viewable as training history. */}
+              {ended && <Alert kind="info">{t("view.planEnded")}</Alert>}
+
+              {plan._lastUndoableChange && (
+                <LastChangePanel
+                  label={plan._lastUndoableChange.label}
+                  labelEn={plan._lastUndoableChange.labelEn}
+                  at={plan._lastUndoableChange.at}
+                  onUndo={() => {
+                    if (undoLastChange(plan.id)) {
+                      reloadPlan();
+                      toast.info(t("lastChange.undone"));
+                    }
+                  }}
+                />
+              )}
+
+              {auditFindings.length > 0 && (
+                <PlanAuditPanel
+                  findings={auditFindings}
+                  onFix={handleAuditFix}
+                  onGoToWeek={(weekNumber) => {
+                    setWeekParam(weekNumber);
+                    // List view: expand the target week
+                    if (planViewMode === "list") {
+                      setExpandedWeeks((prev) => new Set([...prev, weekNumber]));
+                    }
+                    // Scroll to the week header in calendar/list views
+                    requestAnimationFrame(() => {
+                      const el = document.querySelector(`[data-week="${weekNumber}"]`);
+                      el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                    });
+                  }}
+                />
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* 4 — l'arc du plan : la largeur est la part, l'encre est l'intensité.
+            Il répond à « et sur toute la durée ? », une question qu'on se pose
+            après avoir regardé sa semaine — d'où sa place ici, replié. */}
+        {plan.phases.length > 0 && (
+          <Section
+            collapsible
+            title={t("view.phases")}
+            className="zn-planview__band zn-planview__arc"
+          >
+            <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
+              <div
+                className="zn-planview__ribbon"
+                data-standing={standing}
+                style={{
+                  "--zn-at": `${standingAt}%`,
+                  "--zn-fig-aspect": pose.aspect,
+                  "--zn-fig-foot": pose.flip ? 1 - pose.foot : pose.foot,
+                  "--zn-where-chars": standingCaption?.length ?? 0,
+                } as React.CSSProperties}
+              >
+                <pose.Art
+                  className="zn-planview__figure"
+                  data-flip={pose.flip ? "true" : undefined}
+                  aria-hidden="true"
+                  focusable="false"
+                />
+                <div className="zn-planview__track">
+                  {plan.phases.map((phaseRange) => {
+                    const meta = PHASE_META[phaseRange.phase];
+                    const widthPercent =
+                      ((phaseRange.endWeek - phaseRange.startWeek + 1) /
+                        plan.totalWeeks) *
+                      100;
+                    return (
+                      <span
+                        key={`${phaseRange.phase}-${phaseRange.startWeek}`}
+                        className="zn-pswatch"
+                        data-phase={phaseRange.phase}
+                        data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
+                        style={{ "--zn-span": `${widthPercent}%` } as React.CSSProperties}
+                        title={`${pick(meta, "label")} · ${phaseRange.startWeek}–${phaseRange.endWeek}`}
+                      />
+                    );
+                  })}
+                </div>
+                {standing === "on" && (
+                  <span className="zn-planview__now" aria-hidden="true" />
+                )}
+                {standingCaption && (
+                  <span className="zn-planview__where zn-mono">{standingCaption}</span>
+                )}
+              </div>
+              <div className="zn-planview__legend">
+                {plan.phases.map((phaseRange) => (
+                  <span
+                    key={`legend-${phaseRange.phase}-${phaseRange.startWeek}`}
+                    className="zn-planview__legend-item"
+                  >
+                    <span
+                      className="zn-pswatch"
+                      data-phase={phaseRange.phase}
+                      data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
+                      aria-hidden="true"
+                    />
+                    <span className="zn-mono">
+                      {pick(PHASE_META[phaseRange.phase], "label")}
+                      {" · "}
+                      {phaseRange.startWeek}–{phaseRange.endWeek}
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Section>
+        )}
+
         {/* Unavailability Manager Sheet */}
         <UnavailabilityManager
           open={showUnavailabilityManager}
@@ -1979,12 +2178,18 @@ export function PlanViewPage() {
         const targetWeek = plan.weeks.find(w => w.weekNumber === completionTarget.weekNumber);
         const targetSession = targetWeek?.sessions[completionTarget.sessionIndex] ?? null;
         const targetName = targetSession ? (workoutNames[targetSession.workoutId] || targetSession.workoutId) : "";
-        // Find the visible checkbox (mobile layout duplicates elements with display:none)
-        const anchorEl = Array.from(
-          document.querySelectorAll<HTMLElement>(
-            `[data-completion-key="${completionTarget.weekNumber}-${completionTarget.sessionIndex}"]`,
-          ),
-        ).find((el) => el.offsetWidth > 0) ?? null;
+        // Find the visible checkbox (mobile layout duplicates elements with display:none).
+        // La case cliquée l'emporte : la bande « cette semaine » et la grille
+        // affichent la même clé en même temps, et le repli sur « la première
+        // visible » ancrerait le popover 700px au-dessus du doigt.
+        const anchorEl =
+          completionAnchor.current && completionAnchor.current.offsetWidth > 0
+            ? completionAnchor.current
+            : Array.from(
+                document.querySelectorAll<HTMLElement>(
+                  `[data-completion-key="${completionTarget.weekNumber}-${completionTarget.sessionIndex}"]`,
+                ),
+              ).find((el) => el.offsetWidth > 0) ?? null;
         return (
           <SessionCompletionPanel
             open={true}

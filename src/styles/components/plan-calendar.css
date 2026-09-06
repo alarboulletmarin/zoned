@@ -910,6 +910,21 @@
   background-image: var(--zone-recovery);
 }
 
+/* Aujourd'hui : un filet vermillon sur l'arête de départ, pas un aplat — la
+   forme porte l'information, la couleur ne fait que la doubler. Le padding
+   compense l'épaississement pour que la cellule reste alignée au pixel près
+   sur ses six voisines. Le libellé passe à l'encre pleine et au gras, jamais
+   au vermillon : le système interdit ce ton typographique sous 14px. */
+.zn-planweek__day[data-today="true"] {
+  border-inline-start: var(--bw-heavy) solid var(--accent);
+  padding-inline-start: calc(var(--sp-4) - var(--bw-heavy) + var(--bw-rule));
+}
+
+.zn-planweek__day[data-today="true"] .zn-planweek__daylabel {
+  color: var(--text-body);
+  font-weight: var(--fw-bold);
+}
+
 .zn-planweek__daylabel {
   display: block;
   font-family: var(--font-mono);
@@ -1505,35 +1520,7 @@
   color: var(--text-faint);
 }
 
-/* ══ the two view-mode selectors ═══════════════════════════════════════ */
-
-/* Both are .zn-segmented — they are segmented controls, and segmented.css
-   already reads the aria-checked they emit. What is left is the two things
-   only these two have: an icon-only variant, and options that exist only
-   where there is room for them. */
-
-.zn-viewmode__item[data-icon-only="true"] {
-  padding-inline: var(--sp-5);
-}
-
-.zn-viewmode__label {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .zn-viewmode__label {
-    display: inline;
-    min-inline-size: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-@media (max-width: 767px) {
-  .zn-viewmode__item[data-desktop-only="true"] {
-    display: none;
-  }
-}
+/* ══ the icon-only view-mode selector ══════════════════════════════════ */
 
 /* ══ the touch floor ═══════════════════════════════════════════════════ */
 

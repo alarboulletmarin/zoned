@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo, memo } from "react";
 import { sessionColor } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
 import { Alert } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { StatBlock } from "@/components/domain/StatBlock";
@@ -98,11 +97,13 @@ function PhaseChart({
 interface PlanStatsSectionProps {
   plan: TrainingPlan;
   currentWeek?: number;
+  /** Sous un onglet, la divulgation est déjà faite : ni bascule, ni titre. */
+  collapsible?: boolean;
 }
 
 // ── Component ────────────────────────────────────────────────────────
 
-export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek }: PlanStatsSectionProps) {
+export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek, collapsible = true }: PlanStatsSectionProps) {
   const { t } = useTranslation("plan");
   const pick = usePickLang();
   const pickLocale = usePickLocale();
@@ -162,16 +163,6 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
   }, [plan.weeks]);
   const maxWeeklyKm = Math.max(...weeklyKmData.map(w => w.km), 1);
 
-  // Current week data
-  const currentWeekData = useMemo(() => {
-    if (!currentWeek) return null;
-    const week = plan.weeks.find(w => w.weekNumber === currentWeek);
-    if (!week) return null;
-    const keySession = week.sessions.find(s => s.isKeySession);
-    const longRun = week.sessions.find(s => s.sessionType === "long_run");
-    return { week, keySession, longRun };
-  }, [plan.weeks, currentWeek]);
-
   // 80/20 per week (running sessions only)
   const NON_RUNNING_TYPES = new Set(["strength", "cycling", "swimming", "yoga", "rest", "rest_day", "cross_training"]);
   const easyHardPerWeek = useMemo(() => {
@@ -214,7 +205,9 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
   return (
     <Card size="flush">
-      {/* Accordion header */}
+      {/* Accordion header — absent sous un onglet déjà nommé « Statistiques » :
+          une section ne porte qu'un titre. */}
+      {collapsible && (
       <button
         type="button"
         onClick={() => setIsOpen((v) => !v)}
@@ -234,9 +227,10 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
         <ChevronDown size={18} className="zn-pstats__chev" />
       </button>
+      )}
 
       {/* Accordion content */}
-      {isOpen && (
+      {(isOpen || !collapsible) && (
       <CardContent className="zn-pstats__body">
 
         {/* ── Section 1: Stats Grid ─────────────────────────────────── */}
@@ -299,40 +293,6 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
             value={plan.raceTimePrediction}
             label={t("stats.predictedTime")}
           />
-        )}
-
-        {/* ── Current week summary ────────────────────────────────── */}
-        {currentWeekData && (
-          <div className="zn-pstats__week">
-            <div className="zn-row zn-row--split">
-              <span className="zn-pstats__title">{t("stats.thisWeek")}</span>
-              <Badge variant="outline">
-                S{currentWeekData.week.weekNumber} ·{" "}
-                {pick(PHASE_META[currentWeekData.week.phase], "label")}
-              </Badge>
-            </div>
-            <div className="zn-pstats__facts">
-              {currentWeekData.week.targetKm != null && currentWeekData.week.targetKm > 0 && (
-                <span>~{currentWeekData.week.targetKm} km</span>
-              )}
-              <span>
-                {currentWeekData.week.sessions.length} {t("stats.sessionsLower")}
-              </span>
-              {currentWeekData.longRun && currentWeekData.week.targetLongRunKm && (
-                <span>
-                  {t("stats.longRun")} {currentWeekData.week.targetLongRunKm} km
-                </span>
-              )}
-              {currentWeekData.keySession && (
-                <span>
-                  {pickLocale(
-                    SESSION_TYPE_LABELS[currentWeekData.keySession.sessionType],
-                    currentWeekData.keySession.sessionType,
-                  )}
-                </span>
-              )}
-            </div>
-          </div>
         )}
 
         {/* ── Section 2: Weekly km Chart ───────────────────────────── */}

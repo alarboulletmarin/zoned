@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
-import { CalendarRange, Calendar, CalendarDays, List } from "@/components/icons";
+import { Segmented } from "@/components/ui/segmented";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import type { PlanViewMode } from "@/hooks/usePlanViewMode";
 
 interface PlanViewModeSelectorProps {
@@ -9,11 +9,20 @@ interface PlanViewModeSelectorProps {
   className?: string;
 }
 
-const modes: { value: PlanViewMode; icon: typeof CalendarRange; labelKey: string; desktopOnly?: boolean }[] = [
-  { value: "calendar", icon: CalendarRange, labelKey: "viewMode.calendar", desktopOnly: true },
-  { value: "weekly", icon: Calendar, labelKey: "viewMode.weekly" },
-  { value: "monthly", icon: CalendarDays, labelKey: "viewMode.monthly", desktopOnly: true },
-  { value: "list", icon: List, labelKey: "viewMode.list" },
+/* Pas d'icône : CalendarRange, Calendar et CalendarDays partagent le même cadre
+   extérieur au path près — seul l'intérieur change, soit deux pixels de
+   différence à la taille où le segmented les rend. Le libellé masqué était ce
+   qui réduisait chaque segment à un rond ; rendu, la pilule redevient une
+   pilule sans qu'on touche à son rayon.
+
+   `desktopOnly` se filtre ici et non plus en CSS : usePlanViewMode rabat sur la
+   même bascule, donc le contrôle ne peut plus proposer une vue que la page ne
+   rendra pas. */
+const MODES: { value: PlanViewMode; labelKey: string; desktopOnly?: boolean }[] = [
+  { value: "calendar", labelKey: "viewMode.calendar", desktopOnly: true },
+  { value: "weekly", labelKey: "viewMode.weekly" },
+  { value: "monthly", labelKey: "viewMode.monthly", desktopOnly: true },
+  { value: "list", labelKey: "viewMode.list" },
 ];
 
 export function PlanViewModeSelector({
@@ -22,31 +31,18 @@ export function PlanViewModeSelector({
   className,
 }: PlanViewModeSelectorProps) {
   const { t } = useTranslation("plan");
+  const isMobile = useIsMobile();
 
   return (
-    <div
-      className={cn("zn-segmented", className)}
-      role="radiogroup"
-      aria-label={t("viewMode.label")}
-    >
-      {modes.map(({ value: mode, icon: Icon, labelKey, desktopOnly }) => {
-        const isActive = value === mode;
-        return (
-          <button
-            key={mode}
-            type="button"
-            role="radio"
-            aria-checked={isActive}
-            aria-label={t(labelKey)}
-            onClick={() => onChange(mode)}
-            className="zn-segmented__item zn-viewmode__item"
-            data-desktop-only={desktopOnly ? "true" : undefined}
-          >
-            <Icon size={16} />
-            <span className="zn-viewmode__label">{t(labelKey)}</span>
-          </button>
-        );
-      })}
-    </div>
+    <Segmented<PlanViewMode>
+      value={value}
+      onChange={onChange}
+      label={t("viewMode.label")}
+      className={className}
+      options={MODES.filter((m) => !(isMobile && m.desktopOnly)).map((m) => ({
+        value: m.value,
+        label: t(m.labelKey),
+      }))}
+    />
   );
 }

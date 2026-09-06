@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -91,7 +91,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   blockedDays,
   singleWeek = false,
 }: PlanWeeklyViewProps) {
-  const { t } = useTranslation(["plan", "library"]);
+  const { t } = useTranslation(["plan", "library", "common"]);
   const pickLang = usePickLang();
   // ── Week navigation state ──────────────────────────────────────
   const [selectedWeek, setSelectedWeek] = useState(Math.max(1, initialWeek ?? currentWeek));
@@ -720,8 +720,20 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           </div>
         )}
 
-        {/* The board paints zone ink, so it carries the ramp's legend once. */}
-        {weekData && <ZoneScale />}
+        {/* The board paints zone ink, so it carries the ramp's legend once —
+            repliée, parce qu'on l'apprend une fois et qu'elle coûtait 131px
+            au-dessus du pli chaque jour. */}
+        {weekData && (
+          <details className="zn-disclosure">
+            <summary className="zn-disclosure__summary">
+              <span className="zn-kicker zn-kicker--xs zn-fill">{t("common:zones.scaleTitle")}</span>
+              <ChevronDown className="zn-disclosure__chevron" />
+            </summary>
+            <div className="zn-disclosure__panel">
+              <ZoneScale showTitle={false} />
+            </div>
+          </details>
+        )}
       </div>
 
       {/* ── Trash drop zone (appears while dragging a session) ── */}
@@ -956,6 +968,8 @@ const DayCell = memo(function DayCell({
       onDragLeave={onDragLeave}
       onDrop={(e) => onDrop(e, selectedWeek, dayIndex)}
       className="zn-planweek__day"
+      data-today={isToday || undefined}
+      aria-current={isToday ? "date" : undefined}
       data-desktop={isDesktop || undefined}
       data-single-week={singleWeek || undefined}
       data-drop={isDropHere || undefined}

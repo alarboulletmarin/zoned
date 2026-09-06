@@ -227,6 +227,14 @@
   opacity: 1;
 }
 
+/* Sans survol, le titre était un bouton invisible : le premier appui basculait
+   en champ de saisie et levait le clavier sans qu'on l'ait demandé. */
+@media (pointer: coarse) {
+  .zn-planview__pencil {
+    opacity: 1;
+  }
+}
+
 /* Editing is the same type on the same line — only the ink rule under it says
    the field is live. */
 .zn-planview__rename {
@@ -247,19 +255,164 @@
   color: var(--text-faint);
 }
 
-/* Deleting the plan is the destructive end of the row, so it recedes to a
-   ghost and only wears the vermillon on hover. The fill stays on the export. */
-.zn-planview__del:hover:not(:disabled) {
-  color: var(--state-danger);
+/* ── cette semaine ────────────────────────────────────────────────────── */
+
+/* La réponse à « qu'est-ce que je cours cette semaine », au-dessus du pli.
+   Elle n'invente rien : .zn-stat porte les nombres, .zn-sess__check porte la
+   case — la même marque que la grille, pour qu'il n'y ait pas un second
+   vocabulaire à apprendre — et les états d'arête sont ceux de .zn-sess. Seule
+   la mise en page est neuve. Sur écran large elle occupe la colonne de 380px
+   que .zn-planview__head déclare déjà ; sous 1000px cette grille s'effondre et
+   la bande passe pleine largeur juste sous le titre, c'est-à-dire à sa place. */
+.zn-weeknow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+  min-inline-size: 0;
 }
 
-.zn-planview__stats {
+.zn-weeknow__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2) var(--sp-8);
+}
+
+/* Un vrai h2 — la page n'en avait qu'un, enterré dans un onglet. Il garde
+   l'échelle du kicker : c'est un libellé de bande, pas un titre d'écran. */
+.zn-weeknow__title {
+  margin: 0;
+  font-weight: var(--fw-regular);
+}
+
+.zn-weeknow__where {
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* La séance du jour, pleine largeur, parce que son nom doit tenir. */
+.zn-weeknow__today {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* Les mêmes arêtes que la grille pose, jamais une seconde grammaire. */
+.zn-weeknow__today[data-status="completed"] {
+  border-color: var(--state-success);
+}
+
+.zn-weeknow__today[data-status="skipped"] {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+}
+
+/* Ici la case n'est plus serrée dans une colonne de 76px : elle prend sa
+   taille pour de bon. 24px au pointeur fin satisfait SC 2.5.8 sans extension ;
+   au doigt elle atteint le plancher, et l'extension invisible de
+   plan-calendar.css n'a plus de raison d'être. */
+.zn-weeknow__check {
+  inline-size: var(--sp-12);
+  block-size: var(--sp-12);
+  margin-block-start: var(--sp-1);
+}
+
+.zn-weeknow__check > svg {
+  inline-size: var(--sp-7);
+  block-size: var(--sp-7);
+}
+
+@media (pointer: coarse) {
+  .zn-weeknow__check {
+    inline-size: var(--hit-min);
+    block-size: var(--hit-min);
+  }
+
+  .zn-weeknow__check::after {
+    content: none;
+  }
+}
+
+.zn-weeknow__open {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+  min-block-size: var(--hit-min);
+
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.zn-weeknow__open[data-static="true"] {
+  cursor: default;
+}
+
+/* Le nom entier. Deux lignes de corps, pas six caractères. */
+.zn-weeknow__name {
+  font: var(--fw-semibold) var(--fs-body-lg) / 1.2 var(--font-display);
+  letter-spacing: var(--ls-h4);
+  color: var(--text-body);
+  overflow-wrap: anywhere;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-weeknow__open:not([data-static]):hover .zn-weeknow__name {
+  color: var(--text-link);
+}
+
+.zn-weeknow__today[data-status="skipped"] .zn-weeknow__name {
+  text-decoration: line-through;
+  color: var(--text-faint);
+}
+
+.zn-weeknow__facts,
+.zn-weeknow__rest {
+  margin: 0;
+  color: var(--text-faint);
+}
+
+.zn-weeknow__facts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--sp-6);
 }
 
+/* La séance clé sous un filet : elle appartient à la bande, pas à la carte. */
+.zn-weeknow__next {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  margin: 0;
+  padding-block-start: var(--sp-8);
+  border-block-start: var(--border-divider);
+  color: var(--text-muted);
+}
+
+.zn-weeknow__star {
+  flex: none;
+  margin-block-start: var(--sp-2);
+  color: var(--accent);
+}
+
 /* ── the phase ribbon ─────────────────────────────────────────────────── */
+
+/* Le ruban ferme la page : le filet de bas que .zn-disclosure pose ferait une
+   seconde ligne juste au-dessus du pied. */
+.zn-planview__arc {
+  border-block-end: 0;
+}
 
 /* Width is the phase's share of the plan, ink density is its intensity — the
    same ramp .zn-pchart__bar uses, so the ribbon and the statistics chart can
@@ -428,10 +581,20 @@
   }
 }
 
-/* What the marks mean, and how the board is worked. The three states are mono
+/* Sous 768px la barre d'outils n'a plus que le sélecteur de vue : il prend la
+   ligne plutôt que d'en laisser 80 % vide — deux cibles pleine largeur au lieu
+   de deux pastilles de 29px. */
+@media (max-width: 767px) {
+  .zn-planview__toolbar > .zn-segmented {
+    flex: 1;
+  }
+}
+
+/* What the marks mean, and how the board is worked. The four states are mono
    micro-labels next to the mark itself; the two gestures are sentences, so they
-   are caption type and not mono. */
-.zn-planview__hints {
+   are caption type and not mono. Le tout vit dans un <details> : la légende ne
+   se lit qu'une fois, elle n'a pas à occuper le premier écran chaque jour. */
+.zn-planview__hints-body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
