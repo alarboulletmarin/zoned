@@ -11,6 +11,13 @@
     "swimming": "Swimming",
     "strength": "Strength"
   },
+  "activityToggleShort": {
+    "all": "All",
+    "running": "Run",
+    "cycling": "Bike",
+    "swimming": "Swim",
+    "strength": "Strength"
+  },
   "meta": {
     "results_one": "{{count}} session",
     "results_other": "{{count}} sessions",
@@ -21,7 +28,6 @@
     "label": "View",
     "grid": "Grid",
     "compact": "Compact",
-    "focus": "Focus",
     "list": "List"
   },
   "filters": {

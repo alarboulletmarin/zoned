@@ -1,4 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigationType,
+} from "react-router-dom";
 import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
@@ -151,15 +158,18 @@ function ConditionalFooter() {
 
 function ScrollToTopOnNavigate() {
   const location = useLocation();
+  const navigationType = useNavigationType();
   const [announcement, setAnnouncement] = useState("");
 
   useEffect(() => {
-    // Skip scroll-to-top when returning to a plan with a specific week
-    if (location.pathname.startsWith("/plan/") && location.search.includes("week=")) return;
+    // Un REPLACE, c'est une page qui réécrit son propre état dans l'URL
+    // (les filtres de la bibliothèque, la semaine d'un plan), pas un
+    // changement de page : la position de lecture reste.
+    if (navigationType === "REPLACE") return;
     const state = location.state as { returnScrollY?: number } | null;
     if (state?.returnScrollY != null) return;
     window.scrollTo(0, 0);
-  }, [location.pathname, location.search, location.state]);
+  }, [location.pathname, location.search, location.state, navigationType]);
 
   // Announce page change for screen readers
   useEffect(() => {

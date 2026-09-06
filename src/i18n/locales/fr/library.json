@@ -11,6 +11,13 @@
     "swimming": "Natation",
     "strength": "Renforcement"
   },
+  "activityToggleShort": {
+    "all": "Tout",
+    "running": "Course",
+    "cycling": "Vélo",
+    "swimming": "Natation",
+    "strength": "Renfo"
+  },
   "meta": {
     "results_one": "{{count}} séance",
     "results_other": "{{count}} séances",
@@ -21,7 +28,6 @@
     "label": "Affichage",
     "grid": "Grille",
     "compact": "Compact",
-    "focus": "Focus",
     "list": "Liste"
   },
   "filters": {

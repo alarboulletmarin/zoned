@@ -26,16 +26,15 @@ import { usePickLang } from "@/lib/i18n-utils";
 interface WorkoutCardProps {
   workout: AnyWorkoutTemplate;
   className?: string;
-  expanded?: boolean;
 }
 
-export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) {
+export function WorkoutCard({ workout, className }: WorkoutCardProps) {
   // Branch to strength card if this is a strength workout
   if (isStrengthWorkout(workout)) {
-    return <StrengthWorkoutCard workout={workout} className={className} expanded={expanded} />;
+    return <StrengthWorkoutCard workout={workout} className={className} />;
   }
 
-  return <RunningWorkoutCard workout={workout} className={className} expanded={expanded} />;
+  return <RunningWorkoutCard workout={workout} className={className} />;
 }
 
 /**
@@ -54,7 +53,6 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
 interface WorkoutCardChromeProps {
   workout: WorkoutTemplate;
   className?: string;
-  expanded?: boolean;
   /** Hover affordance: keep on when the card is wrapped in a link. */
   interactive?: boolean;
   /** Content rendered above the title (e.g. discipline · method · n°). */
@@ -71,7 +69,6 @@ interface WorkoutCardChromeProps {
 export function WorkoutCardChrome({
   workout,
   className,
-  expanded,
   interactive = true,
   eyebrow,
   metrics,
@@ -109,11 +106,7 @@ export function WorkoutCardChrome({
   );
 
   return (
-    <article
-      className={cn("zn-wcard", className)}
-      data-interactive={interactive}
-      data-expanded={expanded}
-    >
+    <article className={cn("zn-wcard", className)} data-interactive={interactive}>
       {eyebrow && <div className="zn-wcard__eyebrow">{eyebrow}</div>}
 
       <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}>
@@ -192,13 +185,12 @@ export function WorkoutCardChrome({
 }
 
 /** Internal running-only card with properly typed props */
-function RunningWorkoutCard({ workout, className, expanded }: { workout: WorkoutTemplate; className?: string; expanded?: boolean }) {
+function RunningWorkoutCard({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
   return (
     <Link to={`/workout/${workout.id}`} className="zn-wcard-link">
       <WorkoutCardChrome
         workout={workout}
         className={className}
-        expanded={expanded}
         interactive={false}
       />
     </Link>

@@ -78,10 +78,9 @@ function useEquipmentLabel(workout: StrengthWorkoutTemplate) {
 interface StrengthWorkoutCardProps {
   workout: StrengthWorkoutTemplate;
   className?: string;
-  expanded?: boolean;
 }
 
-export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWorkoutCardProps) {
+export function StrengthWorkoutCard({ workout, className }: StrengthWorkoutCardProps) {
   const { t: tStrength } = useTranslation("strength");
   const { t: tLib } = useTranslation("library");
   const pick = usePickLang();
@@ -90,7 +89,7 @@ export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWo
 
   return (
     <Link to={`/workout/${workout.id}`} className="zn-wcard-link">
-      <article className={cn("zn-wcard", className)} data-expanded={expanded}>
+      <article className={cn("zn-wcard", className)}>
         <div className="zn-row zn-row--start" style={HEAD_ROW}>
           <h3 className="zn-wcard__title zn-fill">{pick(workout, "name")}</h3>
           <FavoriteButton workoutId={workout.id} size="sm" />
@@ -116,7 +115,7 @@ export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWo
           <MuscleGroupBadges
             muscles={workout.primaryMuscleGroups}
             size="sm"
-            max={expanded ? undefined : 3}
+            max={3}
           />
         )}
 

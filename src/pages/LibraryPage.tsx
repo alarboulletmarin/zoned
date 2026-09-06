@@ -214,6 +214,7 @@ export function LibraryPage() {
     useCrossDisciplineWorkouts("swimming");
   const { viewMode, setViewMode } = useViewMode();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const disciplineRailRef = useRef<HTMLDivElement>(null);
 
   const PAGE_SIZE = 24;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -333,6 +334,62 @@ export function LibraryPage() {
         : {}),
     }));
   }, []);
+
+  // Sous 640 le rail des disciplines défile, jamais la page. Un onglet
+  // restauré depuis ?type= doit revenir sous les yeux — même geste que
+  // RaceSimNav, mais en « nearest » : au-dessus de 360px le rail ne défile
+  // pas et l'appel ne bouge rien, donc aucune secousse au montage.
+  useEffect(() => {
+    disciplineRailRef.current
+      ?.querySelector<HTMLElement>(`[data-discipline="${activityType}"]`)
+      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [activityType]);
+
+  // APG « Radio Group » : un seul arrêt de tabulation pour le groupe, les
+  // flèches déplacent le focus ET cochent, avec bouclage. Cassé jusqu'ici —
+  // cinq boutons tabulables, aucun onKeyDown — et bloquant dès que le rail
+  // défile. Mécanique reprise telle quelle de ui/segmented.tsx.
+  const moveDiscipline = useCallback(
+    (index: number) => {
+      const next = ACTIVITY_TYPES[index];
+      if (!next) return;
+      handleActivityTypeChange(next);
+      disciplineRailRef.current
+        ?.querySelectorAll<HTMLButtonElement>('[role="radio"]')
+        [index]?.focus();
+    },
+    [handleActivityTypeChange],
+  );
+
+  const handleDisciplineKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const count = ACTIVITY_TYPES.length;
+      const current = ACTIVITY_TYPES.indexOf(activityType);
+      // Rien de coché : la première option porte l'arrêt de tabulation.
+      const tabStop = current === -1 ? 0 : current;
+
+      switch (event.key) {
+        case "ArrowLeft":
+        case "ArrowUp":
+          moveDiscipline((tabStop - 1 + count) % count);
+          break;
+        case "ArrowRight":
+        case "ArrowDown":
+          moveDiscipline((tabStop + 1) % count);
+          break;
+        case "Home":
+          moveDiscipline(0);
+          break;
+        case "End":
+          moveDiscipline(count - 1);
+          break;
+        default:
+          return;
+      }
+      event.preventDefault();
+    },
+    [activityType, moveDiscipline],
+  );
 
   // Update URL when filters or activity type change
   useEffect(() => {
@@ -629,9 +686,11 @@ export function LibraryPage() {
         <div className="zn-lib__strip">
           <div className="zn-tabs__list zn-lib__tabs">
             <div
+              ref={disciplineRailRef}
               className="zn-lib__disciplines"
               role="radiogroup"
               aria-label={t("draw.filters.discipline")}
+              onKeyDown={handleDisciplineKeyDown}
             >
               {ACTIVITY_TYPES.map((type) => {
                 const Icon = ACTIVITY_ICONS[type];
@@ -642,12 +701,22 @@ export function LibraryPage() {
                     type="button"
                     role="radio"
                     aria-checked={active}
+                    tabIndex={active ? 0 : -1}
+                    data-discipline={type}
                     data-state={active ? "active" : "inactive"}
                     className="zn-tabs__trigger"
                     onClick={() => handleActivityTypeChange(type)}
                   >
                     {Icon && <Icon size={15} />}
-                    {t(`activityToggle.${type}`)}
+                    {/* Le libellé long au-dessus de 640, le court en dessous :
+                        la variante masquée sort de l'arbre d'accessibilité, le
+                        nom accessible reste ce qui est à l'écran. */}
+                    <span className="zn-lib__disc-full">
+                      {t(`activityToggle.${type}`)}
+                    </span>
+                    <span className="zn-lib__disc-short">
+                      {t(`activityToggleShort.${type}`)}
+                    </span>
                   </button>
                 );
               })}
@@ -757,14 +826,6 @@ export function LibraryPage() {
                 <div className="zn-grid zn-lib__grid" data-view="compact">
                   {visibleWorkouts.map((workout) => (
                     <WorkoutCardCompact key={workout.id} workout={workout} />
-                  ))}
-                </div>
-              )}
-
-              {viewMode === "focus" && (
-                <div className="zn-stack zn-lib__focus">
-                  {visibleWorkouts.map((workout) => (
-                    <WorkoutCard key={workout.id} workout={workout} expanded />
                   ))}
                 </div>
               )}
