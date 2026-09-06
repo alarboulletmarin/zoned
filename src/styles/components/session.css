@@ -156,9 +156,12 @@
  * between them, and a vermillon call over a chart is a call you have to look at
  * twice. The second thing a floating control needs, after a shape, is a ground.
  *
- * So: paper at 92%, enough to lift the pills off whatever passes underneath and
- * still show the page moving behind them, on the same rule that separates every
- * other band of this app.
+ * So: paper at 96%, on the same rule that separates every other band of this
+ * app. 92% was the first value and it was four points too generous — a phase
+ * step scrolling under the band stayed readable through it, which is exactly
+ * the confusion the ground is there to prevent. What is left of the
+ * transparency is enough to see that the page is moving, not enough to read
+ * what is moving.
  *
  * The pills take the menu pill's language — it is the older object and it
  * floats over every screen, so it sets the terms. Same 44px height, same
@@ -181,7 +184,7 @@
   /* Stops where the menu pill starts, rather than running behind it. */
   padding-inline-end: calc(var(--sp-13) + var(--fab-w));
 
-  background: color-mix(in srgb, var(--surface-page) 92%, transparent);
+  background: color-mix(in srgb, var(--surface-page) 96%, transparent);
   border-block-start: var(--border-rule);
 }
 
