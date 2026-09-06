@@ -3,7 +3,9 @@ import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
+  Circle,
   Dumbbell,
+  Mountain,
   Link2,
   MoreHorizontal,
   Route,
@@ -292,15 +294,44 @@ export function WorkoutDetailPage() {
     trailMetrics.totalElevationLossM > 0 ||
     trailMetrics.dominantTerrain != null;
 
-  const envRequirements: string[] = [];
+  // Where the session has to be run. A LIST — it stays one.
+  //
+  // These used to be joined with " · " and pushed into `facts`, where the
+  // strip printed them in 20px display type like a measurement. "Nécessite une
+  // piste · Terrain plat préféré" then wrapped to three lines, took its row
+  // from 68px to 109, and left the cell beside it with 40px of nothing. The
+  // comment over `facts` says it out loud: the numbers that decide whether
+  // this is today's session. A sentence is not one of them.
+  //
+  // Chips, under the block, with the marks the session card already uses.
+  //
+  // The labels are library:terrain.*, not session:environment.*. Both exist and
+  // both are correct; the library's are the short ones — "Piste requise" rather
+  // than "Nécessite une piste" — and they keep the required/preferred
+  // distinction that a bare "Piste" would lose. Measured at 390px: the long
+  // pair wrapped to two lines and cost 81px, the short pair sits on one at 40.
+  // It also means the session page and the library filter now name the same
+  // fact with the same words.
+  const envRequirements: { key: string; label: string; icon?: ReactNode }[] = [];
   if (workout.environment.requiresTrack) {
-    envRequirements.push(t("session:environment.requiresTrack"));
+    envRequirements.push({
+      key: "track",
+      label: t("library:terrain.track"),
+      icon: <Circle size={12} />,
+    });
   }
   if (workout.environment.requiresHills && !hasTrail) {
-    envRequirements.push(t("session:environment.requiresHills"));
+    envRequirements.push({
+      key: "hills",
+      label: t("library:terrain.hills"),
+      icon: <Mountain size={12} />,
+    });
   }
   if (workout.environment.prefersFlat) {
-    envRequirements.push(t("session:environment.prefersFlat"));
+    envRequirements.push({
+      key: "flat",
+      label: t("library:terrain.flat"),
+    });
   }
 
   // The strip: the numbers that decide whether this is today's session.
@@ -328,12 +359,6 @@ export function WorkoutDetailPage() {
     label: t("session:stats.target"),
     value: t(`session:targetSystems.${workout.targetSystem}`),
   });
-  if (envRequirements.length > 0) {
-    facts.push({
-      label: t("session:stats.environment"),
-      value: envRequirements.join(" · "),
-    });
-  }
   if (hasTrail && trailMetrics.totalElevationGainM > 0) {
     facts.push({
       label: t("session:stats.elevation"),
@@ -613,6 +638,17 @@ export function WorkoutDetailPage() {
             {!isPhone && actionCluster}
 
             <FactStrip facts={facts} />
+
+            {envRequirements.length > 0 && (
+              <div className="zn-cluster zn-session__env">
+                {envRequirements.map((req) => (
+                  <Badge key={req.key} variant="outline">
+                    {req.icon}
+                    {req.label}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* On a wide screen the runner fills the hero's second column and

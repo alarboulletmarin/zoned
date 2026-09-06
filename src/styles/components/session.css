@@ -274,12 +274,18 @@
 
 /* ── facts ────────────────────────────────────────────────────────────── */
 
-/* Four across, in one outlined block: the numbers that decide whether this is
-   today's session. Rows past the fourth cell wrap and pick up their own rule,
-   so a trail session with six facts still reads as one printed table. */
+/* Three across, in one outlined block: the numbers that decide whether this is
+   today's session — duration, level, target system. Rows past the third cell
+   wrap and pick up their own rule, so a session that also states a distance or
+   a climb still reads as one printed table.
+
+   Three, not four, because the fourth was never a number: the terrain used to
+   be joined into a sentence and printed here in display type. It is a list of
+   chips under the block now (.zn-session__env), which is what it was in the
+   data all along. */
 .zn-session__facts {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0;
 
   background: var(--surface-card);
@@ -299,12 +305,33 @@
   border-block-start: var(--border-divider);
 }
 
-.zn-session__fact:nth-child(-n + 4) {
+.zn-session__fact:nth-child(-n + 3) {
   border-block-start: none;
 }
 
-.zn-session__fact:nth-child(4n) {
+.zn-session__fact:nth-child(3n) {
   border-inline-end: none;
+}
+
+/* A row that does not fill its columns still ends on the block's own edge:
+   the divider of a cell that has no neighbour would hang in the middle of
+   nothing. */
+.zn-session__fact:last-child {
+  border-inline-end: none;
+}
+
+/* And a cell left ALONE on its row takes the row. A trail session states four
+   facts — duration, level, target, climb — so the fourth sat by itself with
+   two thirds of the block empty beside it. Same rule as the phone's two-column
+   version further down, one column count higher. */
+.zn-session__fact:last-child:nth-child(3n + 1) {
+  grid-column: 1 / -1;
+}
+
+/* Where the session has to be run, under the numbers rather than among them.
+   Outlined chips, the same mark the session card uses for the same fact. */
+.zn-session__env {
+  margin-block-start: var(--sp-8);
 }
 
 .zn-session__fact-value {
