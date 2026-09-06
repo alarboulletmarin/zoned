@@ -58,7 +58,19 @@
     min-block-size: 200px;
   }
 
+  /* `inline-size: 100%` plus a free height means a tall drawing takes the
+     column and grows to match: the lone runner on a session page was 350px
+     wide and 400px tall, half a phone screen before the workout itself. So the
+     height is capped — and preserveAspectRatio="xMidYMid meet", the default,
+     scales the drawing down inside that box and centres it.
+
+     The width STAYS at 100%. These files carry a viewBox and no width/height
+     attribute, and `inline-size: auto` on one of those is the trap the project
+     has already paid for once: Firefox then takes the viewBox as the intrinsic
+     size — 440px for the runners — and the slot's parent widens to hold it. */
   .zn-slot--art .zn-slot__art {
+    inline-size: 100%;
     block-size: auto;
+    max-block-size: 220px;
   }
 }

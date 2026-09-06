@@ -11,7 +11,7 @@ import { getWorkoutPhaseSteps, summarizeWorkoutSteps } from "@/lib/workoutStruct
 import { formatDurationMinutes, transformSessionBlocks } from "@/components/visualization/transforms";
 import { ZoneBar, type ZoneBarBlock } from "@/components/visualization/ZoneBar";
 import { ZoneScale } from "@/components/visualization/ZoneScale";
-import type { BlockType } from "@/components/visualization/types";
+import type { BlockType, ZoneNumber } from "@/components/visualization/types";
 
 interface WorkoutStructureProps {
   workout: WorkoutTemplate;
@@ -45,6 +45,18 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
   // own `toZoneBarBlocks` makes, only kept split by phase.
   const { segments } = transformSessionBlocks(workout);
 
+  // The zones this session actually paints, warm-up and cool-down included.
+  // Read off the segments rather than lib/landing-stats' getWorkoutZones,
+  // which only walks the main set: a tempo session would then have named Z3
+  // under a chart that also draws its Z1 warm-up.
+  const paintedZones = [
+    ...new Set(
+      segments
+        .map((segment) => segment.zoneNumber)
+        .filter((zone): zone is ZoneNumber => zone != null),
+    ),
+  ].sort((a, b) => a - b);
+
   const phases = [
     {
       key: "warmup" as const,
@@ -69,8 +81,9 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
   return (
     <div className={cn("zn-structure", className)}>
       {/* The ramp orders the zones but does not name them, so the surface that
-          paints them shows the legend once, above the phases. */}
-      <ZoneScale className="zn-structure__legend" />
+          paints them shows the legend once, above the phases — and only for the
+          zones this session actually touches. */}
+      <ZoneScale className="zn-structure__legend" zones={paintedZones} />
 
       {phases.map((phase) => {
         const profile = phaseProfile(segments, phase.key);

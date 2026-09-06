@@ -505,106 +505,98 @@ export function WorkoutDetailPage() {
               </p>
             )}
 
-            {/* One primary call — the only vermillon fill on the screen. The
-                route hand-off comes second, everything that is a variant of
-                "share this" goes behind the overflow menu. */}
+            {/* One primary call — the only vermillon fill on the screen — the
+                favourite, and one overflow menu.
+
+                Export, route, adjust, edit, share, Strava and copy-link used
+                to be five buttons and a menu: on a phone they stacked into
+                four full-width rows and a caption before the session itself
+                was visible. Everything that is not "send this to my watch" is
+                behind the ⋯ now. Nothing was dropped. */}
             <div
-              className="zn-stack"
-              style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+              className="zn-cluster"
+              style={{ "--gap": "var(--sp-6)" } as CSSProperties}
             >
-              <div
-                className="zn-cluster"
-                style={{ "--gap": "var(--sp-6)" } as CSSProperties}
-              >
-                <ExportMenu workout={workout} size="lg" />
+              <ExportMenu workout={workout} size="lg" />
 
-                {canGenerateRoute && (
-                  <Button variant="secondary" size="lg" asChild>
-                    <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
-                      <Route />
-                      {t("session:actions.findRoute")}
-                    </Link>
-                  </Button>
-                )}
+              <FavoriteButton workoutId={workout.id} />
 
-                {canAdjust && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    size="lg"
-                    onClick={() =>
-                      navigate(
-                        `/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`,
-                      )
-                    }
+                    size="icon"
+                    aria-label={t("session:actions.moreActions")}
                   >
-                    <SlidersHorizontal />
-                    {t("session:actions.adjust")}
+                    <MoreHorizontal />
                   </Button>
-                )}
-
-                {/* A workout of one's own is edited, not copied again. Reached
-                  from Favourites or a bookmark, this page was otherwise a dead
-                  end: the only way back to the editor was through My Workouts. */}
-                {isOwnWorkout && (
-                  <Button variant="outline" size="lg" asChild>
-                    <Link to={`/workout/builder/${workout.id}`}>
-                      <Pencil />
-                      {t("session:actions.edit")}
-                    </Link>
-                  </Button>
-                )}
-
-                <FavoriteButton workoutId={workout.id} />
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      aria-label={t("session:actions.moreActions")}
-                    >
-                      <MoreHorizontal />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setShareOpen(true)}>
-                      <Share />
-                      {t("common:share.trigger")}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {canGenerateRoute && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
+                        <Route />
+                        {t("session:actions.findRoute")}
+                      </Link>
                     </DropdownMenuItem>
+                  )}
+
+                  {canAdjust && (
                     <DropdownMenuItem
-                      onClick={async () => {
-                        const ok = await copyToClipboard(
-                          buildStravaShareText(workout),
-                        );
-                        if (ok) toast.success(t("session:strava.copied"));
-                        else toast.error(t("common:errors.generic"));
-                      }}
+                      onClick={() =>
+                        navigate(
+                          `/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`,
+                        )
+                      }
                     >
-                      <StravaIcon />
-                      {t("session:actions.shareStrava")}
+                      <SlidersHorizontal />
+                      {t("session:actions.adjust")}
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={async () => {
-                        const ok = await copyToClipboard(
-                          publicWorkoutUrl(workout),
-                        );
-                        if (ok) toast.success(t("common:actions.linkCopied"));
-                        else toast.error(t("common:errors.generic"));
-                      }}
-                    >
-                      <Link2 />
-                      {t("common:actions.copyLink")}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                  )}
 
-              {/* What the primary call actually produces. The formats live
-                  inside the export menu; naming them here is what tells a
-                  runner the session reaches their watch at all. */}
-              <p className="zn-mono zn-faint">
-                {t("session:screen.exportFormats")}
-              </p>
+                  {/* A workout of one's own is edited, not copied again. Reached
+                      from Favourites or a bookmark, this page was otherwise a
+                      dead end: the only way back to the editor was through My
+                      Workouts. */}
+                  {isOwnWorkout && (
+                    <DropdownMenuItem asChild>
+                      <Link to={`/workout/builder/${workout.id}`}>
+                        <Pencil />
+                        {t("session:actions.edit")}
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+
+                  <DropdownMenuItem onClick={() => setShareOpen(true)}>
+                    <Share />
+                    {t("common:share.trigger")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      const ok = await copyToClipboard(
+                        buildStravaShareText(workout),
+                      );
+                      if (ok) toast.success(t("session:strava.copied"));
+                      else toast.error(t("common:errors.generic"));
+                    }}
+                  >
+                    <StravaIcon />
+                    {t("session:actions.shareStrava")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      const ok = await copyToClipboard(
+                        publicWorkoutUrl(workout),
+                      );
+                      if (ok) toast.success(t("common:actions.linkCopied"));
+                      else toast.error(t("common:errors.generic"));
+                    }}
+                  >
+                    <Link2 />
+                    {t("common:actions.copyLink")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             <FactStrip facts={facts} />

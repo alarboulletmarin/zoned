@@ -96,7 +96,7 @@
 
 @media (max-width: 1100px) {
   .zn-session__hero {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-14);
   }
 }
@@ -184,6 +184,12 @@
   .zn-session__fact:nth-child(2n) {
     border-inline-end: none;
   }
+  /* Three facts in a two-column grid leave a quarter of the block empty. The
+     odd one out takes the row instead. */
+  .zn-session__fact:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    border-inline-end: none;
+  }
 }
 
 /* ── the profile ──────────────────────────────────────────────────────── */
@@ -229,7 +235,7 @@
 
 @media (max-width: 700px) {
   .zn-session__phases.zn-structure {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -252,7 +258,7 @@
 
 @media (max-width: 900px) {
   .zn-session__split {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .zn-session__half + .zn-session__half {
     border-inline-start: none;
@@ -282,7 +288,7 @@
 
 @media (max-width: 1100px) {
   .zn-session__advice .zn-coaching {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-12);
   }
 }
