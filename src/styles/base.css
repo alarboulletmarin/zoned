@@ -290,6 +290,17 @@ p {
   outline: none;
 }
 
+/* Le second cas, et la même raison de couche. Le panneau du menu mobile prend
+   le focus à l'ouverture (`MobileMenu.tsx`) pour qu'aucune porte ne porte
+   l'anneau quand le menu s'ouvre au doigt ; c'est le conteneur qui défile, pas
+   une commande, et un conteneur ne se signale pas. Son `tabindex="-1"` le fait
+   entrer dans la règle ci-dessus : le reset doit donc être écrit ici, hors
+   couche, car `components/mobile-menu.css` est en @layer components et
+   perdrait — l'anneau ne disparaîtrait pas, il ferait le tour de l'écran. */
+.zn-menu__inner:focus-visible {
+  outline: none;
+}
+
 ::selection {
   background: var(--accent-soft);
   color: var(--ink-1);

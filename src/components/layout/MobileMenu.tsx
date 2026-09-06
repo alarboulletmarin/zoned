@@ -89,6 +89,7 @@ export function MobileMenu() {
   const currentLang = getCurrentLanguage();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   // A mirror of the dialog's own state, kept only so aria-expanded can be
   // honest. The dialog element remains the source of truth.
@@ -165,6 +166,19 @@ export function MobileMenu() {
         aria-controls="mobile-menu"
         onClick={() => {
           dialogRef.current?.showModal();
+          // showModal() ne pose pas le focus sur le dialogue : il le pose sur
+          // le premier descendant tabbable, c'est-à-dire la porte
+          // « Aujourd'hui ». Le navigateur y peint alors l'anneau vermillon de
+          // base.css dès que la dernière interaction comptabilisée était au
+          // clavier — la frappe dans la palette de recherche suffit — alors que
+          // l'ouverture vient d'un doigt. On vise donc le panneau qui défile :
+          // un conteneur ne porte pas d'anneau (le reset est dans base.css,
+          // hors couche, parce que son tabindex le fait entrer dans la règle de
+          // focus globale), et PageDown et les flèches continuent de faire
+          // défiler — ce que le <dialog>, lui, ne saurait pas faire : c'est son
+          // enfant qui a l'overflow. Le premier Tab rend l'anneau à la première
+          // porte.
+          innerRef.current?.focus();
           setOpen(true);
         }}
       >
@@ -178,7 +192,9 @@ export function MobileMenu() {
         className="zn-mobile-menu"
         aria-label={t("actions.menu")}
       >
-        <div className="zn-menu__inner">
+        {/* tabIndex -1 : cible du focus d'ouverture (voir la pastille), sans
+            arrêt de tabulation supplémentaire. */}
+        <div className="zn-menu__inner" ref={innerRef} tabIndex={-1}>
           <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.goTo")}</p>
 
           {/* One door per line. A door with children is a native <details>,
