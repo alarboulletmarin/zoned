@@ -9,7 +9,29 @@
    A door is a pill. The door you are standing in is a FULL INK INVERSION —
    never a tint — which is the system's one way of saying "selected". */
 
+/* The bar stays at the top of the screen for the whole scroll, on every
+   width: the search, the language and the theme are reached without a
+   destination in mind, and so is the wordmark that takes you home. Sticky,
+   not fixed, so the page still pays for its height rather than sliding
+   under it. z-index 40 is the app's docked layer — the same as ScrollToTop,
+   under the menu pill (45), so an open panel covers the bar. The door panels
+   keep their own 50 inside the bar's stacking context.
+
+   Its height is stated as a token so the document can clear it: an anchor,
+   a focused control or a scrollIntoView() lands under the bar otherwise. */
+:root {
+  --topbar-h: calc(var(--hit-min) + 2 * var(--sp-10) + var(--bw-rule));
+}
+
+html {
+  scroll-padding-block-start: var(--topbar-h);
+}
+
 .zn-topbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 40;
+
   display: flex;
   align-items: center;
   gap: var(--sp-14);
@@ -18,9 +40,20 @@
   border-block-end: var(--border-rule);
 }
 
+/* Below 1024px the doors are gone and the bar holds only the wordmark and
+   three bare glyphs. The 20px of air above and below them was measured for a
+   band of pills; around a 44px tool cluster it made an 85px header on a phone,
+   a tenth of the first screen spent on chrome. 8px keeps the 44px targets and
+   the rule, and gives 24px back to the page — on a tablet as well, which
+   shares the breakpoint. */
 @media (max-width: 1023px) {
+  :root {
+    --topbar-h: calc(var(--hit-min) + 2 * var(--sp-4) + var(--bw-rule));
+  }
+
   .zn-topbar {
     gap: var(--sp-6);
+    padding-block: var(--sp-4);
   }
 }
 
