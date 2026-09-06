@@ -333,13 +333,21 @@ function App() {
           {/* Mounted once, outside <Routes>, so the banner survives navigation.
               Stacked above the install card when both are eligible. */}
           <UpdatePrompt stacked={canInstall} />
-          <Toaster
-            richColors
-            closeButton
-            position={isMobile ? "top-center" : "bottom-right"}
-            duration={isMobile ? 2500 : 4000}
-            offset={isMobile ? "calc(env(safe-area-inset-top, 0px) + 12px)" : undefined}
-          />
+          {/* The wrapper is what gets promoted into the top layer while a
+              <dialog> is open — see native-dialog.tsx. A modal dialog paints
+              over everything the document can stack, z-index 999999999
+              included, so without it the "Lien copié" of an open share sheet
+              would land behind its own backdrop. It is a zero-size box: sonner
+              keeps placing and sizing its own list. */}
+          <div className="zn-toast-layer">
+            <Toaster
+              richColors
+              closeButton
+              position={isMobile ? "top-center" : "bottom-right"}
+              duration={isMobile ? 2500 : 4000}
+              offset={isMobile ? "calc(env(safe-area-inset-top, 0px) + 12px)" : undefined}
+            />
+          </div>
           </BrowserRouter>
         </FavoritesProvider>
       </ThemeProvider>

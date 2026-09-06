@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
 import svgr from "vite-plugin-svgr";
 import { VitePWA } from "vite-plugin-pwa";
 import { readFileSync } from "node:fs";
@@ -14,7 +13,6 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
-    tailwindcss(),
     VitePWA({
       // "prompt", not "autoUpdate": a new service worker installs, precaches,
       // then sits in `waiting` until <UpdatePrompt> is told to activate it.

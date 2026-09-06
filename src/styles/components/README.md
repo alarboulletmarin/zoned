@@ -6,8 +6,13 @@ no utility classes, no CSS-in-JS. These files are the paint; the `.tsx` files in
 
 ## Rules
 
-**Prefix every class `zn-`.** The app still ships Tailwind during the migration,
-and a bare `.card` would collide with generated utilities.
+**Prefix every class `zn-`.** Tailwind is gone, so the prefix no longer guards
+against generated utilities — it guards against us. A bare `.card` or `.menu`
+belongs to whoever writes it first, and `.zn-menu` was once carried by both the
+full-screen dialog and every dropdown, which put every dropdown in the app
+full-screen on an ink ground. The prefix keeps the namespace ours; naming a
+class after the one component it paints is what keeps it unambiguous inside it.
+`.sr-only` is the single deliberate exception, and it lives in base.css.
 
 **Variants come from the `data-*` attributes the components already emit** —
 `data-variant`, `data-size`, `data-state`, `data-side`, `data-slot`,
@@ -37,9 +42,9 @@ express a pseudo-class. Here they are actual CSS:
 - `:disabled` / `[data-disabled]` — `--state-disabled-fill` / `-text` / `-border`
 
 **Keep the touch floor.** Anything clickable needs
-`@media (pointer: coarse) { min-block-size: var(--hit-min); }`. Tailwind carried
-this as `[@media(pointer:coarse)]:min-h-11` on every button size; it vanishes
-silently with Tailwind if it is not rewritten here.
+`@media (pointer: coarse) { min-block-size: var(--hit-min); }`. Tailwind used to
+carry this on every button size; these sheets carry it now, in 63 blocks, and
+nothing outside them will. `--hit-min` is 44px.
 
 **Obey the system's hard limits.** No gradient, no blur, no transparency other
 than the zone ink ramp. One shadow — `var(--shadow-block)`, a hard offset with no
@@ -53,6 +58,8 @@ The component's public API: prop names, variant names, default values, the
 already present. A port swaps the `className` string for `cn("zn-thing", className)`
 and nothing else.
 
-`className` stays a pass-through prop. Call sites still hand Tailwind classes in
-during the migration, and they have to keep winning over the base rules — which
-is why `cn` (and `tailwind-merge` inside it) survives until Tailwind is removed.
+`className` stays a pass-through prop, and `cn` still assembles it — it is
+`clsx` alone now, because `tailwind-merge` left with the utilities it arbitrated
+between. Sheets are still imported into `@layer components`, under the empty
+`utilities` layer: the layer costs nothing, and it is what keeps `.sr-only`
+above every component rule.

@@ -17,8 +17,11 @@
  *      accent fill. A fill would swallow the zone badge sitting inside the row,
  *      and the frame reads in greyscale because it is a thickness.
  *
- * Keyboard is CommandPalette.tsx's job (arrows, Enter, Escape) and Radix's
- * (focus trap, scroll lock). Everything below is paint.
+ * The panel is a native <dialog> opened with showModal(), so the scene is its
+ * own ::backdrop and there is no overlay element left to paint. Arrows and
+ * Enter are CommandPalette.tsx's job; Escape, the focus trap and the focus
+ * going back to whatever opened the palette are the platform's. Everything
+ * below is paint.
  */
 
 /* ── the panel ────────────────────────────────────────────────────────── */
@@ -26,12 +29,16 @@
 .zn-cmdk {
   position: fixed;
   top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 50;
-
-  display: flex;
-  flex-direction: column;
+  /* Chrome's `dialog:modal` pins both block edges; the palette hangs from the
+     top only, so the floor is released. */
+  bottom: auto;
+  /* Centred the way the UA centres a modal <dialog> — `margin: auto` between
+     the two inline edges — rather than by a translate. A transform would make
+     the panel the containing block of any `position: fixed` descendant, and
+     the UA's own `margin: auto` would have fought a `left: 50%` for the
+     remaining space. */
+  inset-inline: 0;
+  margin: 0 auto;
 
   /* The same width the dialog takes, so the two floating surfaces measure the
      same: full width less one screen margin either side, capped at 500px. */
@@ -41,8 +48,13 @@
   /* dvh, not vh: on a phone the field is focused immediately and the software
      keyboard eats the bottom of the viewport. vh would keep sizing the panel
      against a viewport that is no longer there. */
+  block-size: fit-content;
   max-block-size: 80vh;
   max-block-size: 80dvh;
+
+  /* The UA gives a dialog 1em of padding and a solid border; the field and the
+     list run edge to edge, so the padding goes. */
+  padding: 0;
 
   background: var(--surface-card);
   color: var(--text-body);
@@ -53,6 +65,16 @@
   /* The field's rule and the scrolling list both run edge to edge; without
      this they would paint over the rounded corners. */
   overflow: hidden;
+
+  pointer-events: auto;
+}
+
+/* Only the open state gets a display value: the UA rule that hides a closed
+   dialog is `dialog:not([open])`. */
+.zn-cmdk[open] {
+  display: flex;
+  flex-direction: column;
+  animation: zn-cmdk-in var(--dur-base) var(--ease-out);
 }
 
 /* Below the sm step the palette is nearly the whole screen, so it sits higher
@@ -63,21 +85,21 @@
   }
 }
 
-@keyframes zn-cmdk-in {
-  from { opacity: 0; transform: translate(-50%, var(--sp-4)); }
-  to   { opacity: 1; transform: translate(-50%, 0); }
-}
-@keyframes zn-cmdk-out {
-  from { opacity: 1; transform: translate(-50%, 0); }
-  to   { opacity: 0; transform: translate(-50%, var(--sp-4)); }
+/* The scene, flat ink — the system forbids blur. */
+.zn-cmdk::backdrop {
+  background: var(--scrim);
+  animation: zn-cmdk-scene-in var(--dur-base) var(--ease-out);
 }
 
-/* Radix keeps the node mounted on [data-state="closed"] while the exit runs. */
-.zn-cmdk[data-state="open"] {
-  animation: zn-cmdk-in var(--dur-base) var(--ease-out);
+/* The dialog's arrival, minus its centring: an 8px rise and a fade, nothing
+   scales. There is no exit — the node is unmounted the moment it closes. */
+@keyframes zn-cmdk-in {
+  from { opacity: 0; transform: translateY(var(--sp-4)); }
+  to   { opacity: 1; transform: none; }
 }
-.zn-cmdk[data-state="closed"] {
-  animation: zn-cmdk-out var(--dur-base) var(--ease-out);
+@keyframes zn-cmdk-scene-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ── the field ────────────────────────────────────────────────────────── */

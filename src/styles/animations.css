@@ -47,19 +47,19 @@
 }
 
 .animate-slide-in-right {
-  animation: slide-in-right var(--duration-slow) ease-out forwards;
+  animation: slide-in-right var(--dur-slow) ease-out forwards;
 }
 
 .animate-slide-in-left {
-  animation: slide-in-left var(--duration-slow) ease-out forwards;
+  animation: slide-in-left var(--dur-slow) ease-out forwards;
 }
 
 .animate-fade-in {
-  animation: fade-in var(--duration-slow) ease-out forwards;
+  animation: fade-in var(--dur-slow) ease-out forwards;
 }
 
 .animate-slide-in-top {
-  animation: slide-in-top var(--duration-normal) ease-out forwards;
+  animation: slide-in-top var(--dur-base) ease-out forwards;
 }
 
 /* ==========================================================================
@@ -86,7 +86,7 @@
   background: currentColor;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform var(--duration-normal) ease-out;
+  transition: transform var(--dur-base) ease-out;
 }
 
 .nav-link-animated:hover::after,
@@ -101,7 +101,7 @@
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: var(--duration-normal);
+  animation-duration: var(--dur-base);
 }
 
 @media (prefers-reduced-motion: reduce) {

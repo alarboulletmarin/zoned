@@ -24,6 +24,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Menu, Search } from "@/components/icons";
 import { useCommandPalette } from "@/components/search";
+import { useScrollLock } from "@/components/ui/native-dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
@@ -116,15 +117,13 @@ export function MobileMenu() {
     return () => dialog.removeEventListener("close", onClose);
   }, [isCompact]);
 
-  // The scroll lock, the one modal behaviour <dialog> does not provide.
-  useEffect(() => {
-    if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [open]);
+  // The scroll lock, the one modal behaviour <dialog> does not provide. It is
+  // the shared, refcounted one: the search button hands off to the command
+  // palette, which is a <dialog> of its own, and the two locks overlap while
+  // this one's `close` event is still queued. Two private locks would each
+  // have saved the body's overflow at a moment the other had already changed
+  // it, and the last one out would have restored `hidden` for good.
+  useScrollLock(open);
 
   // Close on navigation. `close()` on an already-closed dialog is a no-op and
   // fires nothing, so the run on mount costs nothing.

@@ -4,28 +4,26 @@
    ========================================================================== */
 
 @layer base {
+  /* The default border colour of every box, so a rule that sets only a width
+     draws in the divider ink. Preflight resets `border: 0 solid` just above,
+     in base.css; this says which colour that zero-width border would take. */
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
   }
 
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Focus visible for accessibility */
+  /* Focus visible for accessibility. base.css draws the real 2.5px vermillon
+     ring on everything focusable; this is the floor under anything it misses. */
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-ring;
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 
   /* iOS Safari auto-zooms a focused input whenever its computed font-size
      is below 16px. Apply a 16px floor on every editable form control via
-     max() so Tailwind's text-sm/text-xs stays visually compact on desktop
-     but the rendered font-size never drops below the iOS threshold on
-     touch devices. Touch detection via pointer:coarse keeps desktop UIs
-     unaffected. */
+     max() so small type stays visually compact on desktop but the rendered
+     font-size never drops below the iOS threshold on touch devices. Touch
+     detection via pointer:coarse keeps desktop UIs unaffected. */
   @media (pointer: coarse) {
     input,
     textarea,
@@ -59,17 +57,9 @@
 
 /* Reduced motion is handled once, in design/motion.css. */
 
-/* ==========================================================================
-   ACCENT TEXT — WCAG AA contrast fix (#96)
-   `text-primary` maps to orange-500 (`--primary`), which only reaches 2.67:1
-   as text on light backgrounds. Re-point the utility to `--primary-text`
-   (orange-700 in light mode, unchanged in dark) so accent text passes AA
-   without darkening the filled `bg-primary` buttons that share `--primary`.
-   Unlayered so it wins over Tailwind's layered `.text-primary` utility.
-   ========================================================================== */
-.text-primary {
-  color: var(--primary-text);
-}
+/* `.text-primary` lived here. Its whole reason for existing was to outrank
+   Tailwind's own `.text-primary` utility from outside the cascade layers; with
+   Tailwind gone there is no utility to outrank, and no call site left. */
 
 /* ==========================================================================
    ZONE SYSTEM — Utility classes & components
@@ -119,7 +109,7 @@
   width: 4px;
   background: var(--zone-color);
   border-radius: 2px 0 0 2px;
-  transition: background-color var(--duration-normal) ease-in-out;
+  transition: background-color var(--dur-base) ease-in-out;
 }
 
 .zone-badge {
@@ -129,14 +119,14 @@
   padding: 0.25rem 0.5rem;
   background: var(--zone-bg);
   color: var(--zone-text);
-  border-radius: var(--radius-sm, 0.375rem);
+  border-radius: var(--r-sm);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 600;
   transition:
-    background-color var(--duration-normal) ease-in-out,
-    color var(--duration-normal) ease-in-out,
-    transform var(--duration-fast) ease-out;
+    background-color var(--dur-base) ease-in-out,
+    color var(--dur-base) ease-in-out,
+    transform var(--dur-fast) ease-out;
 }
 
 /* The system changes colour on hover and pushes 1px down on press; nothing
@@ -191,7 +181,7 @@
 }
 
 /* ==========================================================================
-   LEAFLET — restore tile/marker max-width that Tailwind's preflight resets
+   LEAFLET — restore tile/marker max-width that the reset in base.css clamps
    ========================================================================== */
 .leaflet-pane img,
 .leaflet-tile,

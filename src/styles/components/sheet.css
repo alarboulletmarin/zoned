@@ -2,45 +2,22 @@
    viewport. Only the radius changes: the attached edge stays square. A sheet
    floats, so --shadow-block is allowed here too.
 
-   Side is selected off the data-side attribute the component emits.
-   Reusable parts: .zn-sheet__overlay, .zn-sheet, .zn-sheet__close. */
-
-/* ── overlay ──────────────────────────────────────────────────────────── */
-
-/* Flat ink wash, no backdrop-filter — the system forbids blur. */
-.zn-sheet__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  background: var(--scrim);
-}
-
-
-@keyframes zn-sheet-overlay-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes zn-sheet-overlay-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-.zn-sheet__overlay[data-state="open"] {
-  animation: zn-sheet-overlay-in var(--dur-base) var(--ease-out);
-}
-.zn-sheet__overlay[data-state="closed"] {
-  animation: zn-sheet-overlay-out var(--dur-base) var(--ease-out);
-}
+   The panel IS a native <dialog> opened with showModal(): the scene is its own
+   ::backdrop, so there is no overlay element and no z-index left to arbitrate.
+   Side is still selected off the data-side attribute sheet.tsx emits.
+   Reusable parts: .zn-sheet, .zn-sheet__close. */
 
 /* ── panel ────────────────────────────────────────────────────────────── */
 
 .zn-sheet {
   position: fixed;
-  z-index: 50;
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-stack);
+  /* The UA centres a modal <dialog> with `margin: auto` between `left: 0` and
+     `right: 0`, and caps it at `calc(100% - 2em - 6px)`. A sheet is hinged on
+     one edge and sized by its side, so all three are undone here and each side
+     states its own box below. */
+  margin: 0;
+  max-inline-size: none;
+  max-block-size: none;
   padding: var(--pad-card);
   overflow: auto;
 
@@ -48,37 +25,77 @@
   color: var(--text-body);
   border: var(--border-rule);
   box-shadow: var(--shadow-block);
+
+  /* A Radix select or menu opened inside parks `pointer-events: none` on the
+     body; the panel opts back in so the sheet around it stays alive. */
+  pointer-events: auto;
+}
+
+/* Only the open state gets a display value: the UA rule that hides a closed
+   dialog is `dialog:not([open])`, and an unconditional `display` would defeat
+   it. */
+.zn-sheet[open] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
+}
+
+/* Flat ink wash, no backdrop-filter — the system forbids blur. */
+.zn-sheet::backdrop {
+  background: var(--scrim);
+  animation: zn-sheet-scene-in var(--dur-base) var(--ease-out);
+}
+
+@keyframes zn-sheet-scene-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ── sides ────────────────────────────────────────────────────────────── */
 
 /* Vertical sheets span the width and stop short of the far edge, so the page
-   underneath stays visible. Horizontal ones take a fixed panel width. */
+   underneath stays visible. Horizontal ones take a fixed panel width.
+   `inline-size` / `block-size` are stated rather than left to the UA, whose
+   `fit-content` on both axes would shrink a sheet to its contents.
+
+   The free edge is released to `auto` on purpose, on BOTH axes: the UA pins
+   `inset-inline: 0` on every dialog and `inset-block: 0` on a modal one, and a
+   box with both edges of an axis and a size on it is over-constrained — the
+   browser drops the far edge (`bottom`, and `right` in LTR). A sheet asked to
+   hang off the floor was drawn against the ceiling; one hinged on the right
+   was drawn against the left. */
 .zn-sheet[data-side="bottom"],
 .zn-sheet[data-side="top"] {
   inset-inline: 0;
+  inline-size: auto;
+  block-size: fit-content;
   max-block-size: 82%;
 }
 .zn-sheet[data-side="bottom"] {
+  top: auto;
   bottom: 0;
   border-radius: var(--r-4xl) var(--r-4xl) 0 0;
 }
 .zn-sheet[data-side="top"] {
   top: 0;
+  bottom: auto;
   border-radius: 0 0 var(--r-4xl) var(--r-4xl);
 }
 
 .zn-sheet[data-side="left"],
 .zn-sheet[data-side="right"] {
   inset-block: 0;
+  block-size: auto;
   inline-size: 420px;
   max-inline-size: 88%;
 }
 .zn-sheet[data-side="left"] {
   left: 0;
+  right: auto;
   border-radius: 0 var(--r-4xl) var(--r-4xl) 0;
 }
 .zn-sheet[data-side="right"] {
+  left: auto;
   right: 0;
   border-radius: var(--r-4xl) 0 0 var(--r-4xl);
 }
@@ -104,63 +121,36 @@
 /* ── motion ───────────────────────────────────────────────────────────── */
 
 /* Each side comes in from its own edge, so the panel says where it came from.
-   Radix keeps the node mounted on [data-state="closed"] to play the exit. */
+   There is no exit: the node is unmounted the moment it closes, and an
+   animation needs an element to play on. */
 @keyframes zn-sheet-in-bottom {
   from { transform: translateY(100%); }
   to { transform: none; }
-}
-@keyframes zn-sheet-out-bottom {
-  from { transform: none; }
-  to { transform: translateY(100%); }
 }
 @keyframes zn-sheet-in-top {
   from { transform: translateY(-100%); }
   to { transform: none; }
 }
-@keyframes zn-sheet-out-top {
-  from { transform: none; }
-  to { transform: translateY(-100%); }
-}
 @keyframes zn-sheet-in-left {
   from { transform: translateX(-100%); }
   to { transform: none; }
-}
-@keyframes zn-sheet-out-left {
-  from { transform: none; }
-  to { transform: translateX(-100%); }
 }
 @keyframes zn-sheet-in-right {
   from { transform: translateX(100%); }
   to { transform: none; }
 }
-@keyframes zn-sheet-out-right {
-  from { transform: none; }
-  to { transform: translateX(100%); }
-}
 
-.zn-sheet[data-side="bottom"][data-state="open"] {
+.zn-sheet[data-side="bottom"][open] {
   animation: zn-sheet-in-bottom var(--dur-base) var(--ease-out);
 }
-.zn-sheet[data-side="bottom"][data-state="closed"] {
-  animation: zn-sheet-out-bottom var(--dur-base) var(--ease-out);
-}
-.zn-sheet[data-side="top"][data-state="open"] {
+.zn-sheet[data-side="top"][open] {
   animation: zn-sheet-in-top var(--dur-base) var(--ease-out);
 }
-.zn-sheet[data-side="top"][data-state="closed"] {
-  animation: zn-sheet-out-top var(--dur-base) var(--ease-out);
-}
-.zn-sheet[data-side="left"][data-state="open"] {
+.zn-sheet[data-side="left"][open] {
   animation: zn-sheet-in-left var(--dur-base) var(--ease-out);
 }
-.zn-sheet[data-side="left"][data-state="closed"] {
-  animation: zn-sheet-out-left var(--dur-base) var(--ease-out);
-}
-.zn-sheet[data-side="right"][data-state="open"] {
+.zn-sheet[data-side="right"][open] {
   animation: zn-sheet-in-right var(--dur-base) var(--ease-out);
-}
-.zn-sheet[data-side="right"][data-state="closed"] {
-  animation: zn-sheet-out-right var(--dur-base) var(--ease-out);
 }
 
 /* ── header / footer ──────────────────────────────────────────────────── */

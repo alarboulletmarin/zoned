@@ -1,58 +1,40 @@
 /* Dialog — a paper panel raised off an ink wash. A dialog is a floating
    surface, so it is one of the few places --shadow-block is allowed.
-   Radix keeps the behaviour (focus trap, escape, scroll lock); this is paint.
 
-   The parts are reusable by anything rendering its own DialogPrimitive.Content:
-   .zn-dialog__overlay, .zn-dialog, .zn-dialog__close. */
+   The panel IS a native <dialog> opened with showModal(), so the scene is its
+   own ::backdrop and there is no overlay element left to paint — nor a z-index
+   to arbitrate, because the top layer is above everything the page can stack.
+   dialog.tsx keeps the rest: the scroll lock, the cleanup on unmount, and the
+   dismissal by clicking the scene.
 
-/* ── overlay ──────────────────────────────────────────────────────────── */
-
-/* An ink wash, not a frosted pane: the system forbids blur, so the scrim is a
-   flat rgba ink at the opacity the design bundle states outright. */
-.zn-dialog__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  background: var(--scrim);
-}
-
-/* Dark: an ink wash over an ink page reads as nothing, so the scrim deepens
-   toward the desk colour — the same move borders.css makes for the shadow. */
-
-@keyframes zn-dialog-overlay-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes zn-dialog-overlay-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-/* Radix's Presence keeps the node mounted while an animation runs on
-   [data-state="closed"] — that is what plays the exit. */
-.zn-dialog__overlay[data-state="open"] {
-  animation: zn-dialog-overlay-in var(--dur-base) var(--ease-out);
-}
-.zn-dialog__overlay[data-state="closed"] {
-  animation: zn-dialog-overlay-out var(--dur-base) var(--ease-out);
-}
+   The parts are reusable by anything rendering its own <dialog>:
+   .zn-dialog, .zn-dialog__close — the share sheet borrows the second. */
 
 /* ── panel ────────────────────────────────────────────────────────────── */
 
 .zn-dialog {
+  /* The UA already centres a modal <dialog> with `inset: 0; margin: auto` and
+     a `fit-content` size, so the panel keeps that instead of the translate it
+     used to carry. That is not tidiness: a transform makes the panel the
+     containing block of every `position: fixed` descendant, and the date
+     pickers and selects that open inside these dialogs are fixed — they would
+     have been positioned against the panel and clipped by it. */
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 50;
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-stack);
+  inset: 0;
+  margin: auto;
 
   inline-size: calc(100% - var(--sp-10) * 2);
   max-inline-size: 500px;
+  block-size: fit-content;
+  /* The UA caps a modal at `calc(100% - 2em - 6px)`; the panel had no cap
+     before and gains none here. Sheets that want one state it themselves
+     (.zn-pdialog, .zn-planview__dialog). */
+  max-block-size: none;
   padding: var(--pad-card);
+
+  /* Undoes the UA's `overflow: auto`: a scroll container would clip the very
+     popovers the paragraph above went to the trouble of un-clipping. */
+  overflow: visible;
 
   background: var(--surface-card);
   color: var(--text-body);
@@ -61,22 +43,42 @@
   box-shadow: var(--shadow-block);
 }
 
-/* The panel arrives from 8px below, the same 8px zoned-slide-in uses.
-   Nothing scales: the centring translate is carried through both frames. */
-@keyframes zn-dialog-in {
-  from { opacity: 0; transform: translate(-50%, calc(-50% + var(--sp-4))); }
-  to { opacity: 1; transform: translate(-50%, -50%); }
-}
-@keyframes zn-dialog-out {
-  from { opacity: 1; transform: translate(-50%, -50%); }
-  to { opacity: 0; transform: translate(-50%, calc(-50% + var(--sp-4))); }
-}
-
-.zn-dialog[data-state="open"] {
+/* Only the open state gets a display value: the UA rule that hides a closed
+   dialog is `dialog:not([open])`, and an unconditional `display` here would
+   defeat it. */
+.zn-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
   animation: zn-dialog-in var(--dur-base) var(--ease-out);
 }
-.zn-dialog[data-state="closed"] {
-  animation: zn-dialog-out var(--dur-base) var(--ease-out);
+
+/* Radix modal layers — a select, a menu — park `pointer-events: none` on the
+   body while they are open and re-enable it on their own content. The panel
+   has to opt back in the same way, or opening a select inside a dialog would
+   go on to deaden the dialog around it. Inherited, so it covers the parts. */
+.zn-dialog {
+  pointer-events: auto;
+}
+
+/* An ink wash, not a frosted pane: the system forbids blur, so the scene is a
+   flat rgba ink at the opacity the design bundle states outright. ::backdrop
+   inherits from the dialog, which is what lets it read the token. */
+.zn-dialog::backdrop {
+  background: var(--scrim);
+  animation: zn-dialog-scene-in var(--dur-base) var(--ease-out);
+}
+
+/* The panel arrives from 8px below, the same 8px zoned-slide-in uses.
+   Nothing scales. There is no exit: the node is unmounted the moment it
+   closes, and an animation needs an element to play on. */
+@keyframes zn-dialog-in {
+  from { opacity: 0; transform: translateY(var(--sp-4)); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes zn-dialog-scene-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ── header / footer ──────────────────────────────────────────────────── */

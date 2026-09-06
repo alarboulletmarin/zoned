@@ -3,11 +3,14 @@
  * A phone gets a sheet hinged on the bottom edge; a wide screen gets a
  * centred panel. Both are floating surfaces, so --shadow-block is allowed.
  *
+ * The panel is a native <dialog> opened with showModal(), so the scene is its
+ * own ::backdrop and there is no overlay element left to paint.
+ *
  * The block is named for the component and nothing else: `.zn-dialog` and
  * `.zn-sheet` already exist and mean the generic primitives, and this panel
- * is neither — it renders its own DialogPrimitive.Content. The one part it
- * *does* borrow is `.zn-dialog__close`, which dialog.css states outright is
- * reusable by anything rendering its own Content.
+ * is neither — it renders its own <dialog>. The one part it *does* borrow is
+ * `.zn-dialog__close`, which dialog.css states outright is reusable by
+ * anything rendering its own panel.
  *
  * The 37 templates inside the frames are deliberately untouched: they are
  * inline-styled with literal hex because html-to-image captures a detached
@@ -20,39 +23,83 @@
 .zn-share-dialog {
   position: fixed;
   inset-inline: 0;
+  /* `top: auto` is load-bearing: Chrome's `dialog:modal` pins both block edges,
+     and a box with top, bottom and a height all set is over-constrained — the
+     browser drops `bottom` and the sheet is drawn against the ceiling. */
+  top: auto;
   bottom: 0;
-  z-index: 50;
-
-  display: flex;
-  flex-direction: column;
+  /* The UA centres a modal <dialog> with `margin: auto` and sizes it
+     `fit-content` on both axes, and gives it 1em of padding — undone, because
+     this panel states its own box. */
+  margin: 0;
+  padding: 0;
+  inline-size: auto;
+  max-inline-size: none;
+  block-size: fit-content;
   max-block-size: 92dvh;
+  overflow: visible;
 
   background: var(--surface-card);
   color: var(--text-body);
   border: var(--border-rule);
   border-radius: var(--r-4xl) var(--r-4xl) 0 0;
   box-shadow: var(--shadow-block);
+
+  pointer-events: auto;
 }
 
-/* Radix parks focus on the panel itself when the sheet opens. That is a
-   container, not a control, so it does not wear the vermillon ring — the
-   first real control inside it does. */
+/* Only the open state gets a display value: the UA rule that hides a closed
+   dialog is `dialog:not([open])`. */
+.zn-share-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: zn-share-dialog-in var(--dur-base) var(--ease-out);
+}
+
+/* The scene, flat ink — the system forbids blur. */
+.zn-share-dialog::backdrop {
+  background: var(--scrim);
+  animation: zn-share-dialog-scene-in var(--dur-base) var(--ease-out);
+}
+
+/* It arrives from the edge it is hinged on. There is no exit: the node is
+   unmounted the moment it closes, and an animation needs an element. */
+@keyframes zn-share-dialog-in {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+@keyframes zn-share-dialog-scene-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* showModal() parks focus on the first control inside, which here is the
+   worded "Fermer". The panel itself never wears the vermillon ring: it is a
+   container, not a control. */
 .zn-share-dialog:focus {
   outline: none;
 }
 
 @media (min-width: 640px) {
+  /* Wide screen: a centred panel, and the arrival becomes the dialog's rise
+     rather than a slide from the floor. */
   .zn-share-dialog {
-    inset-inline: auto;
-    bottom: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    margin: auto;
 
     inline-size: 100%;
     max-inline-size: 672px;
     max-block-size: 92vh;
     border-radius: var(--r-4xl);
+  }
+
+  .zn-share-dialog[open] {
+    animation-name: zn-share-dialog-in-centred;
+  }
+
+  @keyframes zn-share-dialog-in-centred {
+    from { opacity: 0; transform: translateY(var(--sp-4)); }
+    to { opacity: 1; transform: none; }
   }
 }
 

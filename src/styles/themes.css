@@ -1,58 +1,44 @@
 /* ==========================================================================
-   SHADCN COMPATIBILITY LAYER
+   LEGACY VARIABLE NAMES
 
-   Transitional. The redesign's source of truth is src/styles/design/*.css;
-   this file only republishes those tokens under the names the not-yet-migrated
-   shadcn/Tailwind components still read (--background, --foreground, --primary,
-   --border, --radius...).
+   What is left of the shadcn compatibility layer. The whole app is hand-written
+   CSS now and reads `src/styles/design/*.css` directly, so most of the contract
+   went out with Tailwind — every name below has a reader, and only those do:
 
-   Keeping it means the whole app adopts the paper/ink direction before a single
-   component is rewritten. It shrinks with every migrated surface and is deleted
-   with Tailwind itself in the final phase.
+     --background, --muted          inline styles (Skeleton, MiniRouteMap)
+     --muted-foreground             the scrollbar, sessionColors.ts, a timeline
+     --border, --ring               the element defaults in overrides.css
+     --primary                      useZoneColors.ts
+     --discipline-*, --zone-cyclo-*, --zone-swim-*   useZoneColors.ts,
+                                    sessionColors.ts
+     --intensity-*, --muscle-*      the strength surfaces
+
+   Deleted with Tailwind, having lost their last reader with the utilities that
+   read them: --foreground, --card(-foreground), --popover(-foreground),
+   --primary-foreground, --primary-text, --secondary(-foreground), --destructive,
+   --success, --warning, --info, --input, --radius.
 
    Dark mode is NOT redefined here: every value below points at a semantic
-   design token, and those flip under .dark in design/colors.css.
+   design token, and those flip under .dark in design/colors.css. The one
+   exception is the muscle scale at the bottom, which is categorical.
    ========================================================================== */
 
 :root {
-  --radius: var(--r-lg);
-
   /* surfaces */
   --background: var(--surface-page);
-  --foreground: var(--text-body);
-  --card: var(--surface-card);
-  --card-foreground: var(--text-body);
-  --popover: var(--surface-card);
-  --popover-foreground: var(--text-body);
 
   /* the one accent */
   --primary: var(--accent);
-  --primary-foreground: var(--accent-fg);
-  /* Text-only accent. The system allows vermillon type on cream at 14px+
-     semibold (4.0:1) — which is what .text-primary is used for — but never for
-     a paragraph. */
-  --primary-text: var(--accent);
 
-  /* quiet surfaces. shadcn's --secondary/--muted/--accent are all "a band of
-     paper the eye skips", which is exactly --surface-band. */
-  --secondary: var(--surface-band);
-  --secondary-foreground: var(--text-body);
+  /* quiet surfaces. shadcn's --muted is "a band of paper the eye skips",
+     which is exactly --surface-band. */
   --muted: var(--surface-band);
   --muted-foreground: var(--text-muted);
 
-  /* semantic states. The system carries no warning hue: a warning is the
-     accent's soft tint plus an icon and a written reason. */
-  --destructive: var(--state-danger);
-  --success: var(--state-success);
-  --warning: var(--accent);
-  --info: var(--state-info);
-
-  /* Lines. shadcn's --border is the subtle separator, so it maps to the
-     divider, not to the 1.5px ink rule — that rule is drawn deliberately by
-     the redesigned components, not inherited by every box in the app.
-     A form field, however, is outlined in full ink by design. */
+  /* Lines. --border is the subtle separator, so it maps to the divider, not to
+     the 1.5px ink rule — that rule is drawn deliberately by the redesigned
+     components, not inherited by every box in the app. */
   --border: var(--line-divider);
-  --input: var(--line-strong);
   --ring: var(--focus-ring);
 }
 

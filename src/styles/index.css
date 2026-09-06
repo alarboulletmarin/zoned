@@ -1,12 +1,15 @@
 /* Zoned design system — entry point.
 
-   Order matters: the design tokens define the values, the shadcn compatibility
-   layer republishes them under the names the not-yet-migrated components read,
-   and Tailwind's @theme maps them onto utilities. */
+   Order matters: the design tokens define the values, then the aliases layer
+   republishes a handful of them under the older names a few inline styles and
+   hooks still read, then the reset, then the components.
 
-@import "tailwindcss";
-
-@custom-variant dark (&:is(.dark *));
+   Tailwind used to be imported on the first line and it declared these layers
+   itself. It is gone, so the order is declared here — and it has to be, because
+   without this line the layers would be ordered by first appearance, the
+   component sheets would come first, and every base rule would outrank them.
+   `utilities` holds exactly one class, `.sr-only`; see base.css. */
+@layer base, components, utilities;
 
 /* The redesign's source of truth — paper, ink, one accent. */
 @import "./design/fonts.css";
@@ -17,10 +20,10 @@
 @import "./design/borders.css";
 @import "./design/motion.css";
 
-/* Transitional: shadcn variable names + Tailwind theme keys. Both disappear
-   with Tailwind in the final phase. */
+/* Older variable names that inline styles, hooks and index.html still read.
+   `tokens.css` sat next to it and is gone: it was a Tailwind `@theme` block,
+   i.e. a map from these names onto utility classes that no longer exist. */
 @import "./themes.css";
-@import "./tokens.css";
 
 @import "./base.css";
 

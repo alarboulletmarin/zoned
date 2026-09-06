@@ -16,6 +16,10 @@
  * Each template is mounted at its native dimensions inside a CSS-scaled
  * wrapper (`transform: scale(s)`). html-to-image ignores ancestor transforms
  * when capturing — the output PNG is always rendered at native resolution.
+ *
+ * The panel is a native <dialog> opened with showModal() (see
+ * `ui/native-dialog.tsx`), not a Radix content: the top layer, the focus trap,
+ * Escape and the focus going back to the share button are the platform's.
  */
 
 import {
@@ -39,12 +43,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "@/components/icons";
-import {
-  Dialog,
-  DialogPortal,
-  DialogOverlay,
-} from "@/components/ui/dialog";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { NativeDialog } from "@/components/ui/native-dialog";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import {
@@ -66,6 +65,11 @@ interface ShareDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
+
+/** The sheet's accessible name and description. One share sheet is open at a
+ *  time, so fixed ids are honest and read better than generated ones. */
+const TITLE_ID = "share-dialog-title";
+const DESCRIPTION_ID = "share-dialog-description";
 
 export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
   const { t } = useTranslation("common");
@@ -313,176 +317,182 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
     }
   }
 
+  // Mounted only while open: the carousel holds one live mount of every share
+  // template at its native 1080px width, which has no business existing on a
+  // page nobody opened the sheet on.
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogPrimitive.Content
-          // Mobile bottom-sheet → desktop centered modal.
-          className="zn-share-dialog"
+    <NativeDialog
+      // Mobile bottom-sheet → desktop centered modal.
+      className="zn-share-dialog"
+      data-state="open"
+      aria-labelledby={TITLE_ID}
+      aria-describedby={DESCRIPTION_ID}
+      onDismiss={() => onOpenChange(false)}
+    >
+      <h2 id={TITLE_ID} className="sr-only">
+        {t("share.title")}
+      </h2>
+      <p id={DESCRIPTION_ID} className="sr-only">
+        {t("share.subtitle")}
+      </p>
+
+      {/* Drag-handle (mobile only) — visual cue this is a sheet. */}
+      <div aria-hidden className="zn-share-dialog__grip" />
+
+      {/* Header */}
+      <header className="zn-share-dialog__header">
+        <button
+          type="button"
+          onClick={() => onOpenChange(false)}
+          className="zn-share-dialog__dismiss"
         >
-          <DialogPrimitive.Title className="sr-only">
-            {t("share.title")}
-          </DialogPrimitive.Title>
-          <DialogPrimitive.Description className="sr-only">
-            {t("share.subtitle")}
-          </DialogPrimitive.Description>
+          {t("share.close")}
+        </button>
+        <h2
+          className="zn-title zn-truncate zn-share-dialog__title"
+          data-level="4"
+        >
+          {t("share.title")}
+        </h2>
+      </header>
 
-          {/* Drag-handle (mobile only) — visual cue this is a sheet. */}
-          <div aria-hidden className="zn-share-dialog__grip" />
-
-          {/* Header */}
-          <header className="zn-share-dialog__header">
-            <button
-              type="button"
-              onClick={() => onOpenChange(false)}
-              className="zn-share-dialog__dismiss"
-            >
-              {t("share.close")}
-            </button>
-            <h2
-              className="zn-title zn-truncate zn-share-dialog__title"
-              data-level="4"
-            >
-              {t("share.title")}
-            </h2>
-          </header>
-
-          {/* Carousel */}
-          <div className="zn-share-dialog__body">
-            <div className="zn-share-dialog__carousel">
-              {/* Desktop chevrons — hidden on touch / mobile */}
-              <button
-                type="button"
-                onClick={handlePrev}
-                disabled={selectedIndex === 0}
-                aria-label="Previous"
-                className="zn-share-dialog__arrow zn-share-dialog__arrow--prev"
-              >
-                <ChevronLeft />
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                disabled={selectedIndex === SHARE_TEMPLATES.length - 1}
-                aria-label="Next"
-                className="zn-share-dialog__arrow zn-share-dialog__arrow--next"
-              >
-                <ChevronRight />
-              </button>
-
-              {/* Scroll track */}
-              <div ref={trackRef} className="zn-share-dialog__track">
-                {SHARE_TEMPLATES.map((tpl) => (
-                  <CarouselSlide
-                    key={tpl.id}
-                    descriptor={tpl}
-                    workout={workout}
-                    transparent={transparent && tpl.supportsTransparent}
-                    active={selectedId === tpl.id}
-                    wrappersRef={wrappersRef}
-                    slideRefs={slideRefs}
-                    onSelect={() => {
-                      // Suppress click that fires at the end of a drag.
-                      if (dragMovedRef.current) return;
-                      setSelectedId(tpl.id);
-                      scrollToSlide(tpl.id);
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Caption — label, format, counter */}
-            <div className="zn-share-dialog__caption">
-              <p className="zn-share-dialog__caption-label">
-                {t(`share.template.${selected.labelKey}.label`)}
-              </p>
-              <p className="zn-kicker zn-kicker--inline zn-share-dialog__counter">
-                {selectedIndex + 1} / {SHARE_TEMPLATES.length}
-              </p>
-            </div>
-
-            {/* Transparent toggle — only when supported */}
-            {selected.supportsTransparent && (
-              <div className="zn-share-dialog__toggle">
-                <label
-                  htmlFor="share-transparent"
-                  className="zn-row zn-card-hover zn-share-dialog__toggle-label"
-                >
-                  <Switch
-                    id="share-transparent"
-                    checked={transparent}
-                    onCheckedChange={setTransparent}
-                  />
-                  <div
-                    className="zn-stack"
-                    style={{ "--gap": "var(--sp-1)" } as CSSProperties}
-                  >
-                    <span className="zn-label">
-                      {t("share.transparent.label")}
-                    </span>
-                    <span className="zn-share-dialog__toggle-hint">
-                      {t("share.transparent.hint")}
-                    </span>
-                  </div>
-                </label>
-              </div>
-            )}
-          </div>
-
-          {/* Actions */}
-          <footer className="zn-share-dialog__footer">
-            <p className="zn-kicker zn-share-dialog__footer-kicker">
-              {t("share.shareOn")}
-            </p>
-            <div className="zn-share-dialog__actions">
-              <ActionButton
-                onClick={handleShare}
-                disabled={!!busy}
-                busy={busy === "share"}
-                icon={<Share />}
-                label={t("share.action.share")}
-                primary
-              />
-              <ActionButton
-                onClick={handleDownload}
-                disabled={!!busy}
-                busy={busy === "download"}
-                icon={<Download />}
-                label={t("share.action.download")}
-              />
-              <ActionButton
-                onClick={handleCopy}
-                disabled={!!busy || !copySupported}
-                busy={busy === "copy"}
-                icon={<Copy />}
-                label={t("share.action.copy")}
-                title={
-                  !copySupported ? t("share.toast.copyUnsupported") : undefined
-                }
-              />
-              <ActionButton
-                onClick={handleCopyLink}
-                disabled={!!busy}
-                busy={busy === "copyLink"}
-                icon={<Link2 />}
-                label={t("share.action.copyLink")}
-              />
-            </div>
-          </footer>
-
-          {/* Top-right close button (desktop convention — alongside the
-              left-aligned "Fermer" text button) */}
-          <DialogPrimitive.Close
-            className="zn-dialog__close"
-            aria-label={t("share.close")}
+      {/* Carousel */}
+      <div className="zn-share-dialog__body">
+        <div className="zn-share-dialog__carousel">
+          {/* Desktop chevrons — hidden on touch / mobile */}
+          <button
+            type="button"
+            onClick={handlePrev}
+            disabled={selectedIndex === 0}
+            aria-label="Previous"
+            className="zn-share-dialog__arrow zn-share-dialog__arrow--prev"
           >
-            <X />
-          </DialogPrimitive.Close>
-        </DialogPrimitive.Content>
-      </DialogPortal>
-    </Dialog>
+            <ChevronLeft />
+          </button>
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={selectedIndex === SHARE_TEMPLATES.length - 1}
+            aria-label="Next"
+            className="zn-share-dialog__arrow zn-share-dialog__arrow--next"
+          >
+            <ChevronRight />
+          </button>
+
+          {/* Scroll track */}
+          <div ref={trackRef} className="zn-share-dialog__track">
+            {SHARE_TEMPLATES.map((tpl) => (
+              <CarouselSlide
+                key={tpl.id}
+                descriptor={tpl}
+                workout={workout}
+                transparent={transparent && tpl.supportsTransparent}
+                active={selectedId === tpl.id}
+                wrappersRef={wrappersRef}
+                slideRefs={slideRefs}
+                onSelect={() => {
+                  // Suppress click that fires at the end of a drag.
+                  if (dragMovedRef.current) return;
+                  setSelectedId(tpl.id);
+                  scrollToSlide(tpl.id);
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Caption — label, format, counter */}
+        <div className="zn-share-dialog__caption">
+          <p className="zn-share-dialog__caption-label">
+            {t(`share.template.${selected.labelKey}.label`)}
+          </p>
+          <p className="zn-kicker zn-kicker--inline zn-share-dialog__counter">
+            {selectedIndex + 1} / {SHARE_TEMPLATES.length}
+          </p>
+        </div>
+
+        {/* Transparent toggle — only when supported */}
+        {selected.supportsTransparent && (
+          <div className="zn-share-dialog__toggle">
+            <label
+              htmlFor="share-transparent"
+              className="zn-row zn-card-hover zn-share-dialog__toggle-label"
+            >
+              <Switch
+                id="share-transparent"
+                checked={transparent}
+                onCheckedChange={setTransparent}
+              />
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-1)" } as CSSProperties}
+              >
+                <span className="zn-label">
+                  {t("share.transparent.label")}
+                </span>
+                <span className="zn-share-dialog__toggle-hint">
+                  {t("share.transparent.hint")}
+                </span>
+              </div>
+            </label>
+          </div>
+        )}
+      </div>
+
+      {/* Actions */}
+      <footer className="zn-share-dialog__footer">
+        <p className="zn-kicker zn-share-dialog__footer-kicker">
+          {t("share.shareOn")}
+        </p>
+        <div className="zn-share-dialog__actions">
+          <ActionButton
+            onClick={handleShare}
+            disabled={!!busy}
+            busy={busy === "share"}
+            icon={<Share />}
+            label={t("share.action.share")}
+            primary
+          />
+          <ActionButton
+            onClick={handleDownload}
+            disabled={!!busy}
+            busy={busy === "download"}
+            icon={<Download />}
+            label={t("share.action.download")}
+          />
+          <ActionButton
+            onClick={handleCopy}
+            disabled={!!busy || !copySupported}
+            busy={busy === "copy"}
+            icon={<Copy />}
+            label={t("share.action.copy")}
+            title={
+              !copySupported ? t("share.toast.copyUnsupported") : undefined
+            }
+          />
+          <ActionButton
+            onClick={handleCopyLink}
+            disabled={!!busy}
+            busy={busy === "copyLink"}
+            icon={<Link2 />}
+            label={t("share.action.copyLink")}
+          />
+        </div>
+      </footer>
+
+      {/* Top-right close button (desktop convention — alongside the
+          left-aligned "Fermer" text button) */}
+      <button
+        type="button"
+        onClick={() => onOpenChange(false)}
+        className="zn-dialog__close"
+        aria-label={t("share.close")}
+      >
+        <X />
+      </button>
+    </NativeDialog>
   );
 }
 

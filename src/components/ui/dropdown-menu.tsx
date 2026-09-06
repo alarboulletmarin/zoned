@@ -5,6 +5,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { CheckIcon, ChevronRight, CircleIcon } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
+import { useDialogContainer } from "@/components/ui/native-dialog";
 
 function DropdownMenu({
   ...props
@@ -92,8 +93,12 @@ function DropdownMenuContent({
   sideOffset = 4,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+  // Inside an open <dialog> the menu has to be portalled into the dialog: the
+  // panel is in the top layer, and document.body is underneath it.
+  const container = useDialogContainer();
+
   return (
-    <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.Portal container={container}>
       <DropdownMenuPrimitive.Content
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}

@@ -5,6 +5,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { CheckIcon, ChevronDown, ChevronUp } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
+import { useDialogContainer } from "@/components/ui/native-dialog";
 
 type SelectTriggerSize = "sm" | "default";
 
@@ -56,8 +57,12 @@ function SelectContent({
   align = "center",
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
+  // Inside an open <dialog> the list has to be portalled into the dialog: the
+  // panel is in the top layer, and document.body is underneath it.
+  const container = useDialogContainer();
+
   return (
-    <SelectPrimitive.Portal>
+    <SelectPrimitive.Portal container={container}>
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
