@@ -453,7 +453,7 @@ textarea.zn-pfield {
 
 @media (max-width: 768px) {
   .zn-pstats__zones {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

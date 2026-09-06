@@ -337,7 +337,7 @@
 
 @media (max-width: 900px) {
   .zn-pw__editor {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .zn-pw__rail {

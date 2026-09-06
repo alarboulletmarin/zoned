@@ -93,18 +93,32 @@
   align-items: start;
 }
 
+/* Every stacked track is minmax(0, 1fr), never a bare `1fr`.
+
+   `1fr` is shorthand for `minmax(auto, 1fr)`, and that `auto` minimum is the
+   item's MIN-CONTENT: a track written `1fr` refuses to be narrower than the
+   widest unbreakable thing inside it, and the grid then overflows its own
+   container rather than compress. It is silent wherever the min-content
+   happens to be small — the session cards measure 223px min-content in
+   Chrome, which fits a 390px phone — and it overflows the moment an engine
+   computes that intrinsic size differently, which is what put a sideways
+   scrollbar on the home page in Firefox and not in Chrome.
+
+   minmax(0, 1fr) is the same track with the floor removed. Twenty-seven
+   collapse rules across the sheets carried the bare form; they all say
+   minmax(0, 1fr) now. */
 @media (max-width: 900px) {
   .zn-grid {
     grid-template-columns: repeat(var(--cols-md, 2), minmax(0, 1fr));
   }
   .zn-split {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 640px) {
   .zn-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

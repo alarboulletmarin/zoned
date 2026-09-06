@@ -55,7 +55,7 @@
 
 @media (max-width: 768px) {
   .zn-plans__head {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     align-items: start;
   }
 }
@@ -189,7 +189,7 @@
 
 @media (max-width: 1000px) {
   .zn-planview__head {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-13);
   }
 }

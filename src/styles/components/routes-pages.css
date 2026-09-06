@@ -331,7 +331,7 @@
 
 /* The map claims the whole frame once the form is folded away. */
 .zn-rt__grid[data-expanded="true"] {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 @media (min-width: 1280px) {
@@ -390,7 +390,7 @@
   }
 
   .zn-rt__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr;
   }
 
@@ -712,7 +712,7 @@
 
 @media (max-width: 1023px) {
   .zn-rt__split {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

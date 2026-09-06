@@ -56,7 +56,7 @@
 
 @media (max-width: 480px) {
   .zn-num__stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -85,7 +85,7 @@
 
 @media (max-width: 640px) {
   .zn-num__fields {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

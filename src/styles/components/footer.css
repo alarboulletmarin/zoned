@@ -75,7 +75,7 @@
    with the layout. */
 @media (max-width: 900px) {
   .zn-footer__body {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-10);
   }
   .zn-footer__col + .zn-footer__col {
@@ -111,7 +111,7 @@
    propre — c'est le seul cas où la hauteur reprend le dessus. */
 @media (max-width: 379px) {
   .zn-footer__list {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
