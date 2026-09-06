@@ -17,19 +17,54 @@
 /* ── hero ─────────────────────────────────────────────────────────────── */
 
 /* 460px is the illustration column: a fixed slot, not a fraction, because the
-   doodle that lands there is drawn at one size. */
+   doodle that lands there is drawn at one size.
+
+   The hero closes on a full-width ink rule, and that rule is the ground: the
+   duo's files carry no ground line, the bottom of its box is its sole, and
+   the slot (ground="rule") pulls itself down by the rule's thickness so the
+   sole bites the line. Both columns align to the end, so the button row on
+   the left ends on the same rule the duo stands on — the vermillon button and
+   the vermillon soles share one floor. No bottom padding: the rule is the
+   bottom. */
 .zn-home__hero {
   display: grid;
   grid-template-columns: 1fr 460px;
   gap: var(--sp-18);
-  align-items: start;
-  padding: var(--sp-18) var(--pad-screen-x) var(--sp-16);
+  align-items: end;
+  padding: var(--sp-18) var(--pad-screen-x) 0;
+  border-block-end: var(--border-rule);
 }
 
+/* The duo's width. 460px is the column it is drawn for; the slot caps itself
+   at the column it has, so a tablet's single column gets the same 460. */
+.zn-home__duo {
+  --slot-w: 460px;
+}
+
+/* One column: kicker, title, lede, buttons, then the duo on the rule. 16px
+   of gap plus the 6 viewBox units of air above the drawing's head (≈3.5px
+   at 240px wide) puts the runners' ink 19–20px under the buttons. */
 @media (max-width: 1100px) {
   .zn-home__hero {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--sp-14);
+    gap: var(--sp-8);
+  }
+}
+
+/* Phone. Measured at 375×812: the floating MENU pill sits at x 239–349,
+   y 742–786, and a 335px duo (248px tall, box from y 575) ran straight
+   under it — a drawing never passes under a fixed element on the first
+   screen. At 240px the duo is 178px tall, and 32px of air above the hero
+   instead of 56 (the phone band rhythm anyway) puts its ground at y≈733,
+   nine pixels above the pill: the whole hero, rule included, fits the first
+   screen and nothing overlaps. 240px is the top of the range where a figure
+   still explains rather than decorates. */
+@media (max-width: 640px) {
+  .zn-home__hero {
+    padding-block-start: var(--sp-14);
+  }
+  .zn-home__duo {
+    --slot-w: 240px;
   }
 }
 
@@ -45,13 +80,14 @@
 
 /* ── doors ────────────────────────────────────────────────────────────── */
 
-/* The three doors sit directly under the hero with no rule between them: they
-   are the hero's own choices, not the next section. */
+/* The four doors sit directly under the rule that closes the hero: they are
+   the hero's own choices, not the next section, so they get the band's
+   tighter top padding rather than a section's. */
 .zn-home__doors {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--gap-grid);
-  padding: 0 var(--pad-screen-x) var(--sp-17);
+  padding: var(--sp-14) var(--pad-screen-x) var(--sp-17);
 }
 
 @media (max-width: 1100px) {
@@ -62,9 +98,9 @@
 
 /* Two columns all the way down. Stacked, the four doors were 1290px — three
    phone screens of the same card repeated, and the reader had to scroll past
-   all of it to reach the week. Paired, they are one screen: the drawing, the
-   kicker and the title are what a door needs to be recognised, and the
-   sentence under each one is what the destination is for. */
+   all of it to reach the week. Paired, they are one screen: the kicker and
+   the title are what a door needs to be recognised, and the sentence under
+   each one is what the destination is for. */
 @media (max-width: 640px) {
   .zn-home__doors {
     gap: var(--sp-6);

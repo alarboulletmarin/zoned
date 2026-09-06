@@ -23,10 +23,6 @@ import { DoorCard } from "@/components/domain/DoorCard";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { ZoneFigures } from "@/components/domain/ZoneFigures";
 import { StatBlock } from "@/components/domain/StatBlock";
-import DoorSessions from "@/assets/doodles/door-sessions.svg?react";
-import DoorPlan from "@/assets/doodles/door-plan.svg?react";
-import DoorLearn from "@/assets/doodles/door-learn.svg?react";
-import DoorNumbers from "@/assets/doodles/door-numbers.svg?react";
 import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import {
   loadUserZonePrefs,
@@ -408,6 +404,11 @@ export function HomePage() {
       {/* ═══════════════════════════════════════════════════════════════════
           HERO — the question the reader is asking, and the two ways out
           ═══════════════════════════════════════════════════════════════════ */}
+      {/* The hero closes on a full-width ink rule, and the duo stands on it:
+          its files carry no ground line, the bottom of its box is its ground,
+          and that ground is a line the page already draws. On a wide screen
+          the button row ends on the same rule; on a phone the duo comes after
+          the buttons, still on the rule (docs/doodles.md). */}
       <section className="zn-home__hero">
         <div className="zn-stack" style={{ "--gap": "var(--sp-13)" } as CSSProperties}>
           <span className="zn-kicker">{dateLine}</span>
@@ -439,8 +440,12 @@ export function HomePage() {
           </div>
         </div>
 
+        {/* The width lives in home.css (.zn-home__duo): 460px, the column the
+            duo is drawn for, and 240px on a phone where the floating MENU
+            pill would otherwise cover it. The height follows the viewBox. */}
         <IllustrationSlot
-          height={400}
+          ground="rule"
+          className="zn-home__duo"
           art={RunnersDuo}
           brief={t("homepage:home.hero.illustrationBrief")}
           label={t("homepage:home.hero.illustrationLabel")}
@@ -448,15 +453,18 @@ export function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §01 — the three doors, directly under the hero
+          §01 — the four doors, directly under the hero
           ═══════════════════════════════════════════════════════════════════ */}
+      {/* Bare doors: kicker, title, promise. The 64px vignettes went — under
+          84px a crossing line reads as a pictogram, and the one figure this
+          screen gets is the duo above. The five doors keep their drawings at
+          200px in the menu, where they have a ground to stand on. */}
       <section className="zn-home__doors" aria-labelledby="home-doors-title">
         <h2 id="home-doors-title" className="sr-only">
           {t("homepage:home.s01.title")}
         </h2>
         <DoorCard
           to="/library"
-          art={DoorSessions}
           kicker={t("homepage:home.s01.e1Kicker")}
           title={t("homepage:home.s01.e1Title")}
           body={t("homepage:home.s01.e1Body")}
@@ -464,7 +472,6 @@ export function HomePage() {
         />
         <DoorCard
           to="/plans"
-          art={DoorPlan}
           kicker={t("homepage:home.s01.e2Kicker")}
           title={t("homepage:home.s01.e2Title")}
           body={t("homepage:home.s01.e2Body")}
@@ -472,7 +479,6 @@ export function HomePage() {
         />
         <DoorCard
           to="/methodology"
-          art={DoorLearn}
           kicker={t("homepage:home.s01.e3Kicker")}
           title={t("homepage:home.s01.e3Title")}
           body={t("homepage:home.s01.e3Body")}
@@ -483,7 +489,6 @@ export function HomePage() {
             and the number is already in the lede. */}
         <DoorCard
           to="/calculators"
-          art={DoorNumbers}
           kicker={t("homepage:home.s06.kicker")}
           title={t("homepage:home.s06.title")}
           body={t("homepage:home.s06.body")}

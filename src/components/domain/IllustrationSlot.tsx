@@ -11,6 +11,14 @@
  * it, since a drawing needs no dashed rectangle to say "something belongs
  * here". The brief stays the fallback for every slot still waiting.
  *
+ * A drawing is never given a height. Its files carry a viewBox cut at the sole
+ * and no ground line (docs/doodles.md, "Le sol est la règle de la page"): the
+ * slot sets the width, the viewBox sets the ratio, and the bottom of the box IS
+ * the line the figure stands on. A height in px would letterbox the drawing
+ * and float the sole somewhere inside the box, which is exactly the drift the
+ * rule forbids. With `ground="rule"` the slot stands on its parent's bottom
+ * border — see the prop.
+ *
  * Both strings come from the caller so the component itself carries no copy:
  * `brief` is printed, `label` is the accessible name — and `label` names the
  * slot whether or not a drawing is in it.
@@ -26,8 +34,17 @@ interface IllustrationSlotProps {
   label: string;
   /** The landed drawing, imported with `?react`. Falls back to `brief`. */
   art?: FunctionComponent<SVGProps<SVGElement>>;
-  /** Block size in pixels. */
+  /** Block size of the reserved hole, in px. Only the brief uses it: a drawing
+      takes the slot's width and its own viewBox ratio. */
   height?: number;
+  /** Inline size of the drawing, in px. Unset, the drawing takes the column it
+      is in; either way it never exceeds it. */
+  width?: number;
+  /** `"rule"`: the slot stands on its parent's bottom border. The parent lays
+      it out on the cross end (`align-items: end`) and draws the rule as
+      `border-block-end`; the slot pulls itself down by the rule's thickness so
+      the sole bites the line instead of hovering a hairline above it. */
+  ground?: "rule";
   className?: string;
 }
 
@@ -36,14 +53,26 @@ export function IllustrationSlot({
   label,
   art: Art,
   height = 340,
+  width,
+  ground,
   className,
 }: IllustrationSlotProps) {
   return (
     <div
       role="img"
       aria-label={label}
-      className={cn("zn-slot", Art && "zn-slot--art", className)}
-      style={{ "--slot-h": `${height}px` } as CSSProperties}
+      className={cn(
+        "zn-slot",
+        Art && "zn-slot--art",
+        ground === "rule" && "zn-slot--ground",
+        className,
+      )}
+      style={
+        {
+          "--slot-h": `${height}px`,
+          "--slot-w": width === undefined ? undefined : `${width}px`,
+        } as CSSProperties
+      }
     >
       {Art ? (
         <Art className="zn-slot__art" />
