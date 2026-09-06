@@ -22,7 +22,9 @@
   gap: var(--sp-12);
   max-inline-size: var(--page-max);
   margin-inline: auto;
-  padding-block: var(--sp-17);
+  /* 40 px, le même pas que --pad-screen-x : le tableau s'assoit dans une marge
+     carrée à l'intérieur de son filet, au lieu d'une bande de papier vide. */
+  padding-block: var(--sp-15);
   padding-inline: var(--pad-screen-x);
 }
 
@@ -46,19 +48,25 @@
 
 .zn-footer__col-title {
   display: block;
-  margin-block-end: var(--sp-8);
+  margin-block-end: var(--sp-5);
 }
 
 .zn-footer__list {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-5);
+  gap: var(--sp-3);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* Le <li> imposait sinon la ligne du corps (16 px × 1,55 = 24,8) à un lien de
+   14 px : 3,1 px perdus par rangée, 15 px par colonne, pour rien. Un lien en
+   bloc porte sa propre ligne. La règle (pointer: coarse) plus bas redéclare
+   `display` et garde donc le plancher de 44 px — elle vient après dans le
+   fichier, elle gagne. */
 .zn-footer__link {
+  display: block;
   color: var(--text-body);
   font: var(--type-body-sm);
   text-decoration: none;
@@ -71,47 +79,85 @@
   text-underline-offset: 3px;
 }
 
-/* Stacked, the vertical divider becomes a horizontal one — same rule, turned
-   with the layout. */
+/* Empilé, le filet vertical devient horizontal — le même filet, tourné avec la
+   mise en page.
+
+   Et les trois groupes de liens se replient. Douze liens au plancher tactile de
+   44 px font 564 px de pied sur un téléphone : une page d'accueil bis pour un
+   plan du site que personne n'est venu chercher. Le plancher ne bouge pas —
+   c'est la règle de la maison et c'est du AAA ; c'est le NOMBRE de rangées qui
+   bouge : trois têtes de groupe au lieu de douze liens. La tête était déjà là,
+   en étiquette morte ; elle devient la commande qui ouvre le groupe et paie ses
+   44 px avec les rangées qu'elle cache.
+
+   Footer.tsx échange le <span> de tête contre un <details>/<summary> à ce même
+   point de rupture : au-dessus, le tableau à quatre colonnes est intact. Les
+   deux valeurs de 900 px doivent rester d'accord. */
 @media (max-width: 900px) {
   .zn-footer__body {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--sp-10);
+    /* Pas de gap : le filet sépare les groupes, et les 44 px de la tête sont
+       l'air autour d'elle. */
+    gap: 0;
+    padding-block: var(--sp-10) var(--sp-8);
   }
   .zn-footer__col + .zn-footer__col {
     border-inline-start: none;
     padding-inline-start: 0;
     border-block-start: var(--border-divider);
-    padding-block-start: var(--sp-10);
+    padding-block-start: 0;
   }
 
-  /* Douze liens empilés à 44 px de plancher tactile, plus trois intitulés et
-     leurs filets, font huit cents pixels de pied de page : sur un téléphone le
-     document se termine par un mur. Les liens coulent donc en deux colonnes.
+  /* Au bas d'un document de 7 000 px la phrase de marque n'est lue par personne
+     et coûte une rangée pleine. La signature, elle, reste. */
+  .zn-footer__tagline {
+    display: none;
+  }
 
-     Le plancher de 44 px ne bouge pas — il n'est pas négociable, et c'est lui
-     qui impose la mesure : c'est la LARGEUR qui est disponible ici, pas la
-     hauteur. Sept rangées au lieu de douze, la hiérarchie des groupes intacte,
-     et leurs filets toujours là pour les séparer. */
+  /* L'étiquette devient une commande : elle cesse d'être pâle et prend le
+     plancher tactile. */
+  .zn-footer__col-title {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-5);
+    min-block-size: var(--hit-min);
+    margin-block-end: 0;
+    color: var(--text-body);
+  }
+
+  /* <summary> livre un triangle d'ouverture en deux saveurs. Les deux partent :
+     le chevron à droite est la marque, et il tourne avec l'état. Même traitement
+     que les portes du menu (mobile-menu.css) et que la divulgation éditoriale
+     (_layout.css). */
+  .zn-footer__group > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .zn-footer__group > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .zn-footer__chevron {
+    flex: none;
+    margin-inline-start: auto;
+    inline-size: 16px;
+    block-size: 16px;
+    color: var(--text-faint);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .zn-footer__group[open] .zn-footer__chevron {
+    transform: rotate(180deg);
+    color: var(--accent);
+  }
+
+  /* Deux colonnes jusqu'en bas de la gamme : dans un groupe ouvert, un
+     « Générateur de parcours » sur deux lignes coûte 1,7 px, une colonne unique
+     en coûte 88. */
   .zn-footer__list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--sp-2) var(--sp-8);
-  }
-
-  /* Le bloc de marque n'a pas de liste : il garde toute la largeur pour sa
-     signature et sa phrase. */
-  .zn-footer__body {
-    padding-block: var(--sp-13) var(--sp-11);
-  }
-}
-
-/* Sous 380 px, deux colonnes de liens laissent « Générateur de parcours » sur
-   deux lignes et le pied redevient irrégulier. Une seule colonne y est plus
-   propre — c'est le seul cas où la hauteur reprend le dessus. */
-@media (max-width: 379px) {
-  .zn-footer__list {
-    grid-template-columns: minmax(0, 1fr);
+    gap: 0 var(--sp-8);
+    padding-block-end: var(--sp-6);
   }
 }
 
@@ -129,8 +175,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-6) var(--sp-12);
-  padding: var(--sp-9) var(--pad-screen-x);
+  /* Repliée, la barre est un ours d'imprimeur : les rangées serrées, les
+     colonnes écartées. */
+  gap: var(--sp-2) var(--sp-8);
+  padding: var(--sp-6) var(--pad-screen-x);
 
   background: var(--surface-inverse);
   color: var(--text-inverse);

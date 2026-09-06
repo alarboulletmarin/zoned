@@ -9,7 +9,8 @@
  * "100 % local" line and the version.
  */
 
-import { GithubIcon } from "@/components/icons";
+import { ChevronDown, GithubIcon } from "@/components/icons";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Wordmark } from "./Wordmark";
@@ -28,6 +29,13 @@ export function Footer() {
   const { t } = useTranslation(["homepage", "common"]);
   const year = new Date().getFullYear();
 
+  // Sous 900 px les groupes de liens se replient derrière leur intitulé — même
+  // point de rupture que la pile de footer.css, les deux valeurs doivent rester
+  // d'accord. Au-dessus, le DOM est celui d'avant au caractère près : le
+  // prerender tourne à 1280 × 800 (scripts/prerender.ts), donc le HTML statique
+  // que lit le crawler ne change pas d'un octet.
+  const stacked = useMediaQuery("(max-width: 900px)");
+
   return (
     <footer className="zn-footer">
       <div className="zn-footer__body">
@@ -41,6 +49,7 @@ export function Footer() {
         </div>
 
         <FooterColumn
+          stacked={stacked}
           title={t("homepage:home.footer.groups.product")}
           links={[
             { label: t("homepage:home.footer.product.library"), to: "/library" },
@@ -50,6 +59,7 @@ export function Footer() {
           ]}
         />
         <FooterColumn
+          stacked={stacked}
           title={t("homepage:home.footer.groups.science")}
           links={[
             { label: t("homepage:home.footer.science.methodology"), to: "/methodology" },
@@ -58,6 +68,7 @@ export function Footer() {
           ]}
         />
         <FooterColumn
+          stacked={stacked}
           title={t("homepage:home.footer.groups.project")}
           links={[
             { label: t("homepage:home.footer.project.about"), to: "/about" },
@@ -92,33 +103,63 @@ export function Footer() {
 function FooterColumn({
   title,
   links,
+  stacked,
 }: {
   title: string;
   links: Array<{ label: string; to?: string; href?: string }>;
+  stacked: boolean;
 }) {
+  const list = (
+    <ul className="zn-footer__list">
+      {links.map((link) => (
+        <li key={link.label}>
+          {link.to ? (
+            <Link to={link.to} className="zn-footer__link">
+              {link.label}
+            </Link>
+          ) : (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="zn-footer__link"
+            >
+              {link.label}
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+
+  // Au-dessus de 900 px l'intitulé est une étiquette, pas une commande : c'est
+  // le DOM d'aujourd'hui, à l'identique. Deux objets différents, deux éléments
+  // différents — plutôt qu'un seul rendu inerte par du CSS, qui laisserait un
+  // <summary> focusable mais sans effet.
+  if (!stacked) {
+    return (
+      <div className="zn-footer__col">
+        <span className="zn-kicker zn-footer__col-title">{title}</span>
+        {list}
+      </div>
+    );
+  }
+
+  // name= : accordéon exclusif natif, comme les portes du menu mobile
+  // (MobileMenu.tsx). Un seul groupe ouvert à la fois — c'est ce qui BORNE la
+  // hauteur du pied : 538 px au pire, contre 740 px (111 % de vh) si les trois
+  // pouvaient s'ouvrir ensemble.
+  // Le <details> n'est pas contrôlé (aucune prop `open`) : React ne réécrit
+  // jamais l'attribut, donc un pliage fait au doigt survit à tout re-render.
   return (
     <div className="zn-footer__col">
-      <span className="zn-kicker zn-footer__col-title">{title}</span>
-      <ul className="zn-footer__list">
-        {links.map((link) => (
-          <li key={link.label}>
-            {link.to ? (
-              <Link to={link.to} className="zn-footer__link">
-                {link.label}
-              </Link>
-            ) : (
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="zn-footer__link"
-              >
-                {link.label}
-              </a>
-            )}
-          </li>
-        ))}
-      </ul>
+      <details className="zn-footer__group" name="zn-footer">
+        <summary className="zn-kicker zn-footer__col-title">
+          {title}
+          <ChevronDown className="zn-footer__chevron" aria-hidden="true" />
+        </summary>
+        {list}
+      </details>
     </div>
   );
 }
