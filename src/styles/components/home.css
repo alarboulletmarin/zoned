@@ -51,20 +51,25 @@
   }
 }
 
-/* Phone. Measured at 375×812: the floating MENU pill sits at x 239–349,
-   y 742–786, and a 335px duo (248px tall, box from y 575) ran straight
-   under it — a drawing never passes under a fixed element on the first
-   screen. At 240px the duo is 178px tall, and 32px of air above the hero
-   instead of 56 (the phone band rhythm anyway) puts its ground at y≈733,
-   nine pixels above the pill: the whole hero, rule included, fits the first
-   screen and nothing overlaps. 240px is the top of the range where a figure
-   still explains rather than decorates. */
+/* Phone. The floating MENU pill is fixed to the bottom-right corner, so it
+   climbs with a short viewport: on a 375px phone it sits at x 239–349,
+   y 742–786 when the screen is 812 tall but y 597–641 when it is 667 — and a
+   drawing never passes under a fixed element on the first screen. No
+   vertical escape exists on the short phone (even at 180px wide the hero's
+   rule would still land below the top of the pill), so the duo gives way
+   sideways: 240px where the column leaves that much clear of the pill's
+   reserve (--fab-w, the room the docked action bars keep free for it), the
+   column minus that reserve otherwise — 215px on a 375, 200px on a 360.
+   Its box then ends left of the pill at every height, and the figure stays
+   ≥150px tall, well above the ~120px floor under which a figure decorates
+   instead of explaining. 32px of air above the hero instead of 56 is the
+   phone band rhythm anyway. */
 @media (max-width: 640px) {
   .zn-home__hero {
     padding-block-start: var(--sp-14);
   }
   .zn-home__duo {
-    --slot-w: 240px;
+    --slot-w: min(240px, 100% - var(--fab-w));
   }
 }
 

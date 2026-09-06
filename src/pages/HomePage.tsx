@@ -441,8 +441,9 @@ export function HomePage() {
         </div>
 
         {/* The width lives in home.css (.zn-home__duo): 460px, the column the
-            duo is drawn for, and 240px on a phone where the floating MENU
-            pill would otherwise cover it. The height follows the viewBox. */}
+            duo is drawn for, and at most 240px on a phone — less where the
+            floating MENU pill would otherwise cover it. The height follows
+            the viewBox. */}
         <IllustrationSlot
           ground="rule"
           className="zn-home__duo"
