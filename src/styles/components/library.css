@@ -128,11 +128,21 @@
 }
 
 /* The disciplines own their own radiogroup, so the view-mode control next to
-   them is not read as one more discipline. They stretch to the list's height
-   because the active trigger's 2.5px marker has to land on the list rule. */
+   them is not read as one more discipline.
+
+   Ce rail est une SÉLECTION (role=radiogroup, aria-checked), pas une
+   navigation, et il emprunte .zn-tabs__trigger pour sa seule géométrie. Ça
+   n'est plus une contradiction depuis que l'onglet ouvert porte lui aussi la
+   pilule d'encre : les deux états se peignent pareil parce que c'est la même
+   marque, et le sélecteur de vue à cent pixels d'ici (un Segmented) dit
+   désormais « celui-ci » exactement de la même façon.
+
+   Elles ne s'étirent plus à la hauteur du list : c'était pour que le marqueur
+   de 2.5px atteigne le filet. La pilule, elle, se centre — sinon un rail
+   étiré de 54px donnerait un ovale de 54px de haut. */
 .zn-lib__disciplines {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   flex-wrap: wrap;
   gap: var(--sp-2);
 }
@@ -149,30 +159,35 @@
 
 /* Cinq disciplines pèsent 528,8px de composition ; la colonne d'un téléphone
    de 375 en fait 335. Le retour à la ligne coûtait 46,5px de premier écran —
-   mais surtout il DÉCROCHAIT LE MARQUEUR : les onglets tenaient la première
-   ligne du .zn-tabs__list pendant que le filet du list (tabs.css) restait
-   sous la ligne méta, et le trait vermillon flottait au milieu du blanc.
+   mais surtout il DÉCROCHAIT LA RANGÉE de son filet : les onglets tenaient la
+   première ligne du .zn-tabs__list pendant que le filet du list (tabs.css)
+   restait sous la ligne méta, deux lignes plus bas.
 
    Sous 640 la rangée tient sur une ligne : l'icône saute (92px), les flancs
-   passent de 16 à 10 (60px), « Renforcement » prend sa forme courte (57px).
-   320,2px pour 335 : cinq mots entiers, aucun geste, dès 360px de viewport.
-   En deçà le rail défile et laisse un onglet coupé au bord — l'affordance de
-   la maison (.zn-route-chips, routes.css), jamais un dégradé.
+   passent de 16 à 8 (80px), « Renforcement » prend sa forme courte (57px).
+   310,1px mesurés — pour 312 de colonne à 360px de viewport et 327 à 375 :
+   cinq mots entiers, aucun geste, sur les deux. En deçà le rail défile et
+   laisse un onglet coupé au bord — l'affordance de la maison
+   (.zn-route-chips, routes.css), jamais un dégradé.
+
+   C'est cette mesure qui a écarté le <Segmented> pour ce rail : sa grille de
+   colonnes égales donne 59,4px par discipline à 360px, soit 44,4px de
+   libellé — « Course » (47px) et « Natation » (58px) y passeraient à
+   l'ellipse, et un Segmented ne défile pas et ne connaît pas la paire
+   long/court. Le rail garde donc sa forme et prend le bon vocabulaire
+   d'état par tabs.css.
 
    Le filet descend du .zn-tabs__list au rail : c'est lui qui porte désormais
-   la règle sur laquelle le marqueur se pose, et la ligne méta devient la
-   légende qui pend dessous. Conséquence : overflow-x fait calculer overflow-y
-   en `auto`, donc le -1,5px du déclencheur se ferait rogner (mesuré : 1px de
-   défilement vertical parasite) ; il repasse à 0, le filet du rail prend le
-   relais.
+   la règle sous la rangée, et la ligne méta devient la légende qui pend
+   dessous. Le padding qui écarte la pilule du filet descend avec lui.
 
    overflow-x vit DANS la media query, pas via .zn-scroll-x : cette classe
    étant statique dans le JSX, elle laisserait overflow-x actif au-dessus de
-   640 où le déclencheur garde son -1,5px, et rognerait le marqueur sur
-   ordinateur (mesuré à 768 et 1280). */
+   640, où le scrollport rognerait l'anneau de focus sur ordinateur. */
 @media (max-width: 639px) {
   .zn-tabs__list.zn-lib__tabs {
     border-bottom: none;
+    padding-block-end: 0;
   }
 
   .zn-lib__disciplines {
@@ -181,6 +196,7 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    padding-block-end: var(--sp-2);
     border-bottom: var(--border-rule);
     scrollbar-width: none;
   }
@@ -189,9 +205,13 @@
     display: none;
   }
 
+  /* 8px de flanc et non 10 : la bordure complète de la pilule ajoute 1px de
+     chaque côté, soit 10px sur les cinq, et le rail dépassait alors de 4px à
+     375 (331 mesurés pour 327). À 8 le retrait optique reste de 9px, la
+     rangée retombe à 310,1px et les cinq mots tiennent à 360 comme à 375 —
+     mieux qu'avant, où 360 imposait déjà un geste de 8px. */
   .zn-lib__disciplines .zn-tabs__trigger {
-    margin-block-end: 0;
-    padding-inline: var(--sp-5);
+    padding-inline: var(--sp-4);
     /* un onglet atteint au clavier se pose en deçà du bord coupé */
     scroll-margin-inline: var(--sp-3);
   }

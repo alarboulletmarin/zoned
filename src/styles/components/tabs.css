@@ -1,6 +1,15 @@
 /* Tabs — typographic slices of one collection, sitting on a full-width ink
-   rule. The active tab is marked by weight plus a 2.5px vermillon rule laid
-   over the list's own: a paper tab is never a pill and never a tint.
+   rule. L'onglet ouvert porte la pilule d'encre pleine de la porte de la
+   barre du haut (topbar.css:115) : « l'endroit où vous êtes » se dit d'une
+   seule façon dans toute l'app, jamais par une bande de couleur sur un seul
+   côté. Le vermillon quitte ce fichier — il est réservé à « maintenant » et
+   à l'anneau de focus.
+
+   La rangée GARDE son filet d'encre pleine largeur : c'est lui, et rien
+   d'autre, qui distingue une rangée d'onglets d'une piste de segments. Un
+   segment vit DANS une piste contournée sur papier creusé (segmented.css),
+   un onglet vit SUR un filet, sans piste. Même marque, deux contenants.
+
    Variants come off the data-state attribute the trigger emits. */
 
 .zn-tabs {
@@ -14,6 +23,9 @@
   align-items: stretch;
   gap: var(--sp-2);
   inline-size: 100%;
+  /* La pilule ne mord pas le filet : 4px d'air entre les deux. Avant, le
+     marqueur ÉTAIT posé sur le filet, il n'y avait rien à séparer. */
+  padding-block-end: var(--sp-2);
   border-bottom: var(--border-rule);
 }
 
@@ -33,16 +45,17 @@
   white-space: nowrap;
   cursor: pointer;
 
-  /* The marker is the trigger's own bottom border, pulled down by the width
-     of the list rule so the 2.5px vermillon lands on top of it rather than
-     under it. Transparent when inactive, so nothing shifts on selection. */
-  border: none;
-  border-bottom: var(--bw-heavy) solid transparent;
-  margin-bottom: calc(-1 * var(--bw-rule));
-  border-radius: 0;
+  /* Bordure COMPLÈTE transparente au repos, exactement comme la porte de
+     topbar.css:96 et pour la même raison : la pilule d'encre ne fait ensuite
+     que la colorer, la boîte ne bouge pas d'un pixel quand l'onglet s'ouvre.
+     (Avant : bordure basse 2.5px tirée de -1.5px pour se poser SUR le filet
+     du list ; la pilule, elle, s'en écarte par le padding du list.) */
+  border: var(--bw-rule) solid transparent;
+  border-radius: var(--r-pill);
 
   transition:
     color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
 
@@ -54,14 +67,31 @@
   pointer-events: none;
 }
 
+/* Survol = papier creusé, la seule forme déjà uniforme du système (71 règles
+   ailleurs). L'onglet fermé reste du texte nu : c'est ce qui fait ressortir
+   celui qui est ouvert. */
 .zn-tabs__trigger:hover:not(:disabled) {
   color: var(--ink-1);
+  background: var(--surface-band);
 }
 
+/* L'onglet ouvert : encre pleine, texte crème — l'inversion, pas un lavis.
+   Le gras double la couleur (WCAG 1.4.1) : en niveaux de gris, la pilule
+   reste un aplat noir et son libellé reste plus lourd que ses frères, donc
+   l'état survit à la désaturation comme au daltonisme. */
 .zn-tabs__trigger[data-state="active"] {
-  color: var(--ink-1);
+  background: var(--ink-1);
+  border-color: var(--ink-1);
+  color: var(--ink-on-dark);
   font-weight: var(--fw-semibold);
-  border-bottom-color: var(--accent);
+}
+
+/* Survoler l'onglet déjà ouvert doit répondre quelque chose : l'encre
+   s'éclaircit d'un cran, comme la porte de topbar.css:123. */
+.zn-tabs__trigger[data-state="active"]:hover:not(:disabled) {
+  background: var(--ink-2);
+  border-color: var(--ink-2);
+  color: var(--ink-on-dark);
 }
 
 .zn-tabs__trigger:disabled,
