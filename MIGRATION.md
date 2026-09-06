@@ -505,9 +505,9 @@ révélé qu'il testait sous Firefox.
   un panneau (plein écran sous 640, latéral au-dessus). Zéro nouvelle clé i18n :
   `filters.title`, `clearFilters` et `meta.results` existaient.
 - *Séance* — le gros du lot. Une étape par ligne au lieu de trois ; les actions
-  regroupées puis descendues dans une bande sous le pouce ; le terrain sorti du
-  bloc de faits ; le cœur d'un favori enfin plein. **Frise à 708 px au lieu de
-  1 200**, dans le premier écran d'un téléphone de 844.
+  ramenées à trois ; le terrain sorti du bloc de faits ; le cœur d'un favori
+  enfin plein. **Frise à 708 px au lieu de 1 200**, dans le premier écran d'un
+  téléphone de 844.
 
 **Les décisions qui ne se relisent pas dans le code.**
 
@@ -515,14 +515,23 @@ révélé qu'il testait sous Firefox.
   le héros, il repoussait la frise de 732 à 896 px — hors du premier écran, ce
   que le lot venait de corriger. Sous 640 px il ferme donc la séance au lieu de
   l'introduire.
-- *La zone du pouce n'est pas une barre, c'est un sol sous des pastilles.* Le
-  premier essai — un bandeau plat à filet, la pilule du menu flottant à côté —
-  mettait quatre traitements dans une rangée. La pilule du menu est l'objet le
-  plus ancien et flotte sur tous les écrans : c'est elle qui donne la langue,
-  les autres prennent sa hauteur, son rayon, son anneau et son ombre. Le second
-  essai, des pastilles sans fond, était illisible : après la forme, ce qu'il
-  faut à un contrôle flottant, c'est un sol. Papier à 96 % — 92 laissait lire
-  « 30s footing Z1 » au travers.
+- *La barre d'actions ancrée en bas a été construite, puis retirée le soir même.*
+  Elle a coûté trois essais — un bandeau plat que la pilule du menu faisait
+  paraître collée là par accident, puis des pastilles sans fond, correctement
+  posées et illisibles parce qu'un contrôle flottant a besoin d'un sol autant
+  que d'une forme, puis un sol de papier à 96 % (92 laissait lire « 30s footing
+  Z1 » au travers). Elle est morte sur un vrai iPhone : une autre session a
+  ajouté un troisième contrôle dans la rangée, la barre est sortie de l'écran,
+  et le propriétaire l'a fait retirer. Les actions vivent dans l'en-tête à
+  toutes les largeurs (035ca40).
+
+  Ce que l'aller-retour laisse : une barre ancrée dispute au menu la même zone
+  de pouce, et une rangée dimensionnée pour exactement trois contrôles casse le
+  jour où quelqu'un en ajoute un quatrième — ce qui est arrivé en une soirée.
+  **Une seule chose fixe par écran.** Le raisonnement des pastilles reste bon et
+  sert ailleurs : la pilule du menu est l'objet le plus ancien et flotte sur
+  tous les écrans, donc c'est elle qui donne la langue à tout ce qui se pose à
+  côté d'elle.
 - *Le cœur d'un favori est plein.* Le composant justifiait le contour par « le
   jeu d'icônes n'a pas de variante remplie ». C'est faux : `Heart` prend une
   prop `filled`, comme une douzaine de ses voisines.
