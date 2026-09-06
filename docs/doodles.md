@@ -180,7 +180,34 @@ Trouvé en le poussant, pas en le lisant.
   ne descendent pas au sol. Il demande une traversée écrite pour lui, en
   reprenant les boucles de tête, de main et de pied de `BASE`.
 
-## Le cadre est en paysage, la figure est verticale
+## Le sol est la règle de la page (6 septembre 2026)
+
+Décision du propriétaire, qui remplace la section suivante : **le sol dessiné
+quitte les fichiers**. Une figure ne porte plus sa ligne de sol ondulée ; son
+`viewBox` s'arrête à la semelle, et c'est une règle droite de la page qui lui
+sert de sol — filet de section, bord bas d'une carte, ligne de base des
+boutons, axe d'une frise. Le bas du cadre SVG EST la ligne d'appui : poser la
+figure sur un filet, c'est aligner le bas de sa boîte sur ce filet, calcul fait
+depuis le `viewBox`, pas à l'œil.
+
+Ce que ça change pour les règles ci-dessus : la règle 3 tient toujours, le
+vermillon marque l'appui, et l'appui touche désormais une ligne qui existe
+déjà dans la mise en page. La liste de contrôle « une seule ligne de sol » est
+satisfaite par construction.
+
+Et une règle de placement, dans les mots du propriétaire : **à côté, au-dessus
+ou en dessous, jamais au travers ni par-dessus.** Un doodle occupe sa propre
+ligne ou sa propre colonne et touche l'élément par son sol. Il ne chevauche ni
+un texte, ni une frise, ni une carte, ni un bouton.
+
+Les 21 fichiers de figures ont été coupés par un script (le trait des figures
+est identique au byte près, seul le chemin du sol et le `viewBox` changent).
+Les générateurs de `scripts/doodles/` doivent suivre : `svg()` n'émet plus de
+sol, et une régénération doit reproduire ces fichiers à l'identique.
+
+## Le cadre est en paysage, la figure est verticale — remplacé le 6 sept. 2026
+
+*(Conservé pour l'historique ; voir la section précédente.)*
 
 Une silhouette debout serrée dans son propre gabarit fait un trait perdu au
 milieu d'une carte large — vu en page, sur l'état vide de `/plans`, et c'est
