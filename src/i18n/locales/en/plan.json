@@ -438,7 +438,7 @@
     "view": "View",
     "buildArc": "Build your training arc",
     "buildArcDesc": "Set a goal, pick your race, and we'll structure the path.",
-    "createFirst": "Create your first plan",
+    "createFirst": "Create a plan",
     "deleteTitle": "Delete this plan?",
     "deleteConfirm": "\"{{name}}\" will be permanently deleted. This action cannot be undone.",
     "deleteButton": "Delete",

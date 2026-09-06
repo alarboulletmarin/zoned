@@ -155,7 +155,7 @@
   },
   "list": {
     "empty": "Tu n'as pas encore enregistré de parcours.",
-    "emptyCta": "Créer un premier parcours",
+    "emptyCta": "Créer un parcours",
     "softLimitReached": "Tu approches de la limite de {{limit}} parcours sauvegardés. Supprime les plus anciens si besoin.",
     "loops": "Boucles",
     "outAndBacks": "Aller-retours",

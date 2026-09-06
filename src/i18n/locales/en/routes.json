@@ -155,7 +155,7 @@
   },
   "list": {
     "empty": "You haven't saved any route yet.",
-    "emptyCta": "Create a first route",
+    "emptyCta": "Create a route",
     "softLimitReached": "You're nearing the {{limit}}-route soft cap. Delete older ones if needed.",
     "loops": "Loops",
     "outAndBacks": "Out-and-backs",

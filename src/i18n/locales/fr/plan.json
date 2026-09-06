@@ -438,7 +438,7 @@
     "view": "Voir",
     "buildArc": "Construis ta progression",
     "buildArcDesc": "Définis un objectif, choisis ta course, et on structure le chemin.",
-    "createFirst": "Créer ton premier plan",
+    "createFirst": "Créer un plan",
     "deleteTitle": "Supprimer ce plan ?",
     "deleteConfirm": "\"{{name}}\" sera définitivement supprimé. Cette action est irréversible.",
     "deleteButton": "Supprimer",
