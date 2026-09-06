@@ -31,6 +31,7 @@ import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
 
 /**
@@ -53,7 +54,19 @@ export function PrebuiltPlanDetailPage() {
   const prebuilt = slug ? getPrebuiltBySlug(slug) : undefined;
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
-  const [viewMode, setViewMode] = useState<"calendar" | "list">("calendar");
+  const [preferredView, setPreferredView] = useState<"calendar" | "list">(
+    "calendar"
+  );
+
+  /* Sous 768px, sept jours plus la gouttière réclament ~706px de grille pour
+     un titre lisible et l'écran n'en offre que ~342 : la grille tombe à 36px
+     par jour et le titre se réduit à une lettre par ligne. La liste dit les
+     mêmes séances en toutes lettres, donc c'est elle. Valeur DÉRIVÉE, jamais
+     figée dans le useState : une rotation en paysage rend le calendrier au
+     lieu de laisser un radiogroup dont plus rien n'est coché. Même motif que
+     usePlanViewMode, et le seuil a un seul propriétaire : useIsMobile. */
+  const isMobile = useIsMobile();
+  const viewMode = isMobile ? "list" : preferredView;
 
   // Build a read-only TrainingPlan for PlanCalendar
   const previewPlan: TrainingPlan | null = useMemo(() => {
@@ -323,23 +336,29 @@ export function PrebuiltPlanDetailPage() {
               <h2 id="pw-weeks" className="zn-title" data-level="3">
                 {t("prebuilt.weekByWeek")}
               </h2>
-              <Segmented
-                value={viewMode}
-                onChange={setViewMode}
-                label={t("viewMode.label")}
-                options={[
-                  {
-                    value: "calendar",
-                    label: t("viewMode.calendar"),
-                    icon: <CalendarRange size={16} />,
-                  },
-                  {
-                    value: "list",
-                    label: t("viewMode.list"),
-                    icon: <List size={16} />,
-                  },
-                ]}
-              />
+              {/* Retiré en entier sur téléphone, pas filtré à une option :
+                  Segmented rendrait un radiogroup à un seul radio, toujours
+                  coché, toujours un tab stop — un contrôle qui ne contrôle
+                  rien. */}
+              {!isMobile && (
+                <Segmented
+                  value={viewMode}
+                  onChange={setPreferredView}
+                  label={t("viewMode.label")}
+                  options={[
+                    {
+                      value: "calendar",
+                      label: t("viewMode.calendar"),
+                      icon: <CalendarRange size={16} />,
+                    },
+                    {
+                      value: "list",
+                      label: t("viewMode.list"),
+                      icon: <List size={16} />,
+                    },
+                  ]}
+                />
+              )}
             </div>
 
             <ZoneScale />

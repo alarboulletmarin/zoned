@@ -598,7 +598,10 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 <div
                   key={rowIdx}
                   className="zn-planweek__row"
-                  style={{ "--cols": row.length } as React.CSSProperties}
+                  /* Le nombre de colonnes est une donnée, pas un style : un
+                     style inline bat toute feuille de style, et la CSS doit
+                     pouvoir retomber à une colonne sous 640px. */
+                  data-cols={row.length}
                 >
                   {row.map((dayIndex) => {
                     let dayOfMonth: number | null = null;
@@ -980,16 +983,22 @@ const DayCell = memo(function DayCell({
           {t("unavailability.blocked")}
         </span>
       )}
-      <span className="zn-planweek__daylabel">{dayLabel}</span>
-      {dayOfMonth != null && (
-        <span
-          className="zn-planweek__date"
-          data-today={isToday || undefined}
-          data-month-label={monthLabel ? "true" : undefined}
-        >
-          {monthLabel ? `${dayOfMonth} ${monthLabel}` : dayOfMonth}
-        </span>
-      )}
+      {/* Le jour et son quantième forment une seule colonne quand la journée
+          devient une ligne (sous 640px) ; au-dessus, `display: contents`
+          rend ce div transparent et les deux spans restent empilés comme
+          avant. */}
+      <div className="zn-planweek__dayhead">
+        <span className="zn-planweek__daylabel">{dayLabel}</span>
+        {dayOfMonth != null && (
+          <span
+            className="zn-planweek__date"
+            data-today={isToday || undefined}
+            data-month-label={monthLabel ? "true" : undefined}
+          >
+            {monthLabel ? `${dayOfMonth} ${monthLabel}` : dayOfMonth}
+          </span>
+        )}
+      </div>
 
       {scanContent && (
         <div className="zn-planweek__scan" aria-hidden="true">

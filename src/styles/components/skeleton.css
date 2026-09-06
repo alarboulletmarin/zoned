@@ -175,20 +175,31 @@
   inline-size: 20%;
 }
 
-/* Four days then three on a phone, the whole week on one line from 768px —
-   the same two shapes .zn-planweek__row and .zn-planweek__week-row draw, and
-   the reason this is not .zn-grid: .zn-grid collapses to one column at 640px,
-   which would stack seven days into a column half a screen tall. */
+/* Une ligne par jour sous 640px, quatre puis trois jusqu'à 768, la semaine
+   entière au-delà : les trois formes que .zn-planweek__row dessine vraiment.
+   Un squelette qui ne tient pas la même mise en page que son contenu se voit —
+   la page saute au moment où les données arrivent. */
 .zn-planweek-skel__board {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-3);
 }
 
-/* 80px is the phone day; the desktop row is data-desktop and reserves 120px. */
+/* Sous 640px la vraie ligne fait 54px à vide et 79px avec une séance ; 64px
+   est la moyenne, et sept lignes ne coûtent alors pas plus haut que ce qui
+   arrive après. */
 .zn-planweek-skel__day {
-  min-block-size: 80px;
+  min-block-size: 64px;
   border-radius: var(--r-lg);
+}
+
+@media (min-width: 640px) {
+  .zn-planweek-skel__board {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .zn-planweek-skel__day {
+    min-block-size: 80px;
+  }
 }
 
 @media (min-width: 768px) {
