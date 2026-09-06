@@ -28,7 +28,7 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 
 | | |
 |---|---|
-| **219** running workouts | 12 categories from recovery to VMA |
+| **225** running workouts | 12 categories from recovery to VMA |
 | **17** strength sessions | full body, legs, core, plyometrics, mobility |
 | **10** cycling + **10** swimming sessions | Coggan FTP / CSS zones |
 | **9** training plans | 5K → marathon, with strength periodization |
@@ -95,7 +95,7 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 ## Features
 
 ### Workouts
-- **219 running sessions** across 12 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, trail, assessment
+- **225 running sessions** across 12 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, trail, assessment
 - **10 cycling + 10 swimming sessions** with discipline-aware zones (Coggan FTP, CSS) and cross-discipline substitution in plans
 - **17 strength sessions** for runners: full body, legs, core, plyometrics, mobility, prehab, based on Beattie 2017, Rønnestad 2014, Lauersen 2014
 - **46 exercises** with A/B position images, muscle maps, form cues, and progression/regression chains
