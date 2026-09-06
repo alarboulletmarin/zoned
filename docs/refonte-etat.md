@@ -173,3 +173,35 @@ bâti. Aucun appelant aujourd'hui ; le prochain obtiendra une classe inerte.
   d'écart sur une rampe composée vient de là.
 - **Ne pas lancer deux agents sur le même fichier i18n.** Un seul propriétaire
   par fichier et par lot ; les autres rapportent les clés dont ils ont besoin.
+- **À spécificité égale, c'est l'ordre d'import de `styles/index.css` qui
+  tranche — et cet ordre n'est ni alphabétique, ni « primitives d'abord ».**
+  Vérifié : `button.css` est ligne 43, donc AVANT `library.css` (65) et
+  `session.css` (85) — une feuille d'écran bat celle du bouton. Mais `sheet.css`
+  (88) et `zone.css` (107) viennent APRÈS, donc une règle d'écran qui vise un
+  élément portant aussi `.zn-zonebar` ou `.zn-sheet` ne rend rien. Il n'y a pas
+  de règle générale à retenir : lis les numéros de ligne dans `index.css` avant
+  d'écrire un sélecteur d'écran sur un élément qui porte une classe de
+  primitive. Et rien ne t'avertira : ni `tsc`, ni les tests, ni le build ne
+  voient une règle perdante.
+  Quatre cas payés en une session :
+  - `.zn-phase__bar { display: none }` contre `.zn-zonebar { display: flex }` ;
+  - `.zn-session__profile { padding-inline: 5px }` contre `.zn-zonebar`, jamais
+    appliquée depuis son écriture — 3 px et 6 px de rayon au lieu de 5 et 10 ;
+  - `.zn-lib__filters-panel` contre `.zn-sheet[data-side="right"]` ;
+  - `.zn-session__trail` et `.zn-session__fact`, perdantes contre **elles-mêmes**
+    parce que leur bloc `@media` était écrit plus haut dans le fichier que la
+    règle de base.
+
+  Le réflexe : mesurer la valeur calculée après avoir écrit la règle, jamais
+  supposer qu'elle s'applique. Le correctif n'est pas toujours de monter la
+  spécificité — quand la valeur perdante n'a jamais rendu un pixel et que le
+  rendu réel a été relu et validé, on retire la règle. Une règle qui ne
+  s'applique pas se lit comme une intention et livre du vide.
+- **Une classe sans règle n'est pas une classe morte.** `.zn-session__split` et
+  `.zn-session__half` n'ont rien renvoyé à un `grep` sur leur feuille pendant
+  une réécriture ; conclure au code mort et les réinventer a supprimé 344 lignes
+  de `session.css`, dont la gouttière de tout un écran. Avant de conclure,
+  cherche la règle dans **toutes** les feuilles, et compare les sélecteurs du
+  fichier avant/après une réécriture de bloc :
+  `git show HEAD:<f> | grep -oE "^\s*\.[a-z-]+.*\{"` des deux côtés, puis
+  `comm`. Ça prend dix secondes et ça a rattrapé la coupe.
