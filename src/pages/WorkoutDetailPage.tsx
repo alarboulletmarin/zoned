@@ -5,6 +5,7 @@ import {
   type FunctionComponent,
   type ReactNode,
   type SVGProps,
+  useCallback,
 } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -20,6 +21,7 @@ import {
   StravaIcon,
   SlidersHorizontal,
   Pencil,
+  Gauge,
 } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +38,7 @@ import {
   WorkoutCardCompact,
   FavoriteButton,
   ZonePersonalizationCTA,
+  ZONE_CTA_INPUT_ID,
   TipCard,
 } from "@/components/domain";
 import {
@@ -198,7 +201,7 @@ export function WorkoutDetailPage() {
   // Share modal (5 social templates)
   const [shareOpen, setShareOpen] = useState(false);
 
-  useEffect(() => {
+  const refreshUserZones = useCallback(() => {
     const prefs = loadUserZonePrefs();
     if (prefs && (prefs.fcMax || prefs.vma)) {
       const zones = calculateAllZones(prefs);
@@ -209,6 +212,10 @@ export function WorkoutDetailPage() {
       setHasUserZones(false);
     }
   }, []);
+
+  useEffect(() => {
+    refreshUserZones();
+  }, [refreshUserZones]);
 
   if (isLoading) {
     return (
@@ -446,7 +453,24 @@ export function WorkoutDetailPage() {
         className="zn-cluster zn-session__actions"
         style={{ "--gap": "var(--sp-6)" } as CSSProperties}
       >
-        <ExportMenu workout={workout} size="lg" />
+        {/* Without the runner's VMA the page can only describe the session.
+            Making it executable comes first, so the primary action asks for
+            the VMA (it focuses the field under the steps) and Export steps
+            back to an outline until the paces are in. */}
+        {!hasUserZones && (
+          <Button
+            size="lg"
+            onClick={() => {
+              const field = document.getElementById(ZONE_CTA_INPUT_ID);
+              field?.scrollIntoView({ behavior: "smooth", block: "center" });
+              field?.focus({ preventScroll: true });
+            }}
+          >
+            <Gauge />
+            {t("zonePersonalization.submit")}
+          </Button>
+        )}
+        <ExportMenu workout={workout} size="lg" variant={hasUserZones ? "default" : "outline"} />
 
         <FavoriteButton workoutId={workout.id} />
 
@@ -821,7 +845,9 @@ export function WorkoutDetailPage() {
               standing between someone arriving and the workout they came for.
               Here it lands where it makes sense: right under the steps whose
               paces it would fill in. */}
-          {!hasUserZones && <ZonePersonalizationCTA className="zn-session__zone-cta" />}
+          {!hasUserZones && (
+            <ZonePersonalizationCTA className="zn-session__zone-cta" onSaved={refreshUserZones} />
+          )}
         </section>
 
         {/* 3 — where the time goes, against how to spend it */}

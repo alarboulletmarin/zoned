@@ -1279,7 +1279,6 @@
   display: flex;
   align-items: flex-start;
   gap: var(--sp-6);
-  padding-inline-end: var(--sp-15);
 }
 
 .zn-zone-cta__icon {
@@ -1302,8 +1301,17 @@
   gap: var(--sp-4);
 }
 
-.zn-zone-cta__link {
-  inline-size: 100%;
+.zn-zone-cta__help {
+  display: block;
+  margin-block-start: var(--sp-1);
+  font: var(--type-caption);
+  color: var(--text-link);
+}
+
+.zn-zone-cta__error {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--state-danger);
 }
 
 /* On a phone the banner was a full card with a full-width button under two
@@ -1314,22 +1322,12 @@
     gap: var(--sp-5);
     padding: var(--sp-6) var(--sp-7);
   }
-
-  .zn-zone-cta__link {
-    inline-size: auto;
-    align-self: flex-start;
-  }
-}
-
-.zn-zone-cta__dismiss {
-  position: absolute;
-  inset-block-start: var(--sp-3);
-  inset-inline-end: var(--sp-3);
 }
 
 @media (min-width: 640px) {
   .zn-zone-cta {
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: var(--sp-8);
@@ -1340,11 +1338,8 @@
   .zn-zone-cta__actions {
     flex: none;
   }
-  .zn-zone-cta__link {
-    inline-size: auto;
-  }
-  .zn-zone-cta__dismiss {
-    position: static;
+  .zn-zone-cta__error {
+    flex-basis: 100%;
   }
 }
 

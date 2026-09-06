@@ -353,9 +353,9 @@
     "en": "English"
   },
   "zonePersonalization": {
-    "ctaMessage": "Personalize your zones to see your paces",
-    "ctaButton": "Configure my zones",
-    "dismiss": "Dismiss"
+    "ctaMessage": "Enter your VMA to see your paces on every step",
+    "noVma": "I don't know my VMA",
+    "submit": "Show my paces"
   },
   "myZones": {
     "title": "My zones",

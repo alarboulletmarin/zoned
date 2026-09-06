@@ -30,9 +30,11 @@ interface ExportMenuProps {
   /** Applied to the trigger button, e.g. to stretch it as a primary CTA. */
   className?: string;
   size?: "sm" | "default" | "lg";
+  /** "outline" when another action owns the primary slot. */
+  variant?: "default" | "outline";
 }
 
-export function ExportMenu({ workout, className, size = "sm" }: ExportMenuProps) {
+export function ExportMenu({ workout, className, size = "sm", variant = "default" }: ExportMenuProps) {
   const { t } = useTranslation("common");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFitGuide, setShowFitGuide] = useState(false);
@@ -115,7 +117,7 @@ export function ExportMenu({ workout, className, size = "sm" }: ExportMenuProps)
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="default"
+            variant={variant}
             size={size}
             disabled={isExporting}
             className={className}

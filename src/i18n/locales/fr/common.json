@@ -353,9 +353,9 @@
     "en": "English"
   },
   "zonePersonalization": {
-    "ctaMessage": "Personnalise tes zones pour voir tes allures",
-    "ctaButton": "Configurer mes zones",
-    "dismiss": "Masquer"
+    "ctaMessage": "Entre ta VMA pour voir tes allures sur chaque bloc",
+    "noVma": "Je ne connais pas ma VMA",
+    "submit": "Voir mes allures"
   },
   "myZones": {
     "title": "Mes zones",
