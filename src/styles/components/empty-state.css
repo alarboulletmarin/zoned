@@ -1,15 +1,16 @@
-/* EmptyState — la ligne de départ.
+/* EmptyState — the starting line.
 
-   Plus de carte en tirets : ce contour est la texture du trou réservé à un
-   dessin, et une étagère vide n'est pas un trou. À la place, une règle droite
-   qui court sur toute la largeur du conteneur, et la figure qui se tient
-   dessus, à gauche. Le bas du cadre SVG est la ligne d'appui (docs/doodles.md,
-   « Le sol est la règle de la page ») : la scène est un flex aligné en bas dont
-   la bordure basse est la règle, et le dessin déborde de l'épaisseur de cette
-   bordure pour que la semelle vermillon la touche. Calé par le calcul, jamais
-   à l'œil.
+   No dashed card any more: that outline is the texture of the hole reserved
+   for a drawing, and an empty shelf is not a hole. In its place, a straight
+   rule running the full width of the container, and the figure standing on
+   it, on the left. The bottom of the SVG frame is the ground line
+   (docs/doodles.md, "Le sol est la règle de la page"): the scene is a flex box
+   aligned at the end whose bottom border is the rule, and the drawing
+   overflows by the rendered thickness of that border so the vermillon sole
+   touches it. Computed, never by eye.
 
-   Tout est aligné à gauche. Rien au centre, rien sous la pastille MENU. */
+   Everything is left-aligned. Nothing in the centre, nothing under the MENU
+   pill. */
 
 .zn-empty {
   display: flex;
@@ -18,7 +19,7 @@
   text-align: start;
 }
 
-/* La scène : la figure, et la règle qui lui sert de sol. */
+/* The scene: the figure, and the rule that is its ground. */
 .zn-empty__scene {
   display: flex;
   align-items: flex-end;
@@ -26,14 +27,14 @@
   border-block-end: var(--border-rule);
 }
 
-/* La taille est celle du dessin lui-même, désormais un cadre vertical coupé
-   à la semelle : 144 px de haut sur un téléphone, 208 sur un écran large. Le
-   brief donnait 128 à 150 puis 200 à 260 « de large » dans l'ancien cadre en
-   paysage, qui embarquait le sol ; la hauteur est ce qui en reste.
+/* The size is the drawing's own, now a portrait frame cut at the sole: 144px
+   tall on a phone, 208 on a wide screen. The brief said 128 to 150 then 200
+   to 260 "wide" in the old landscape frame, which carried the ground; the
+   height is what is left of that.
 
-   `inline-size: auto` sur un SVG importé avec ?react est le piège déjà payé
-   une fois — mais seulement quand la hauteur est libre elle aussi. Ici elle
-   est fixée, et la largeur vient du rapport du viewBox. */
+   `inline-size: auto` on an SVG imported with ?react is the trap the project
+   has already paid for once — but only when the height is free as well. Here
+   it is fixed, and the width follows the viewBox ratio. */
 .zn-empty__art {
   display: block;
   block-size: 144px;
@@ -42,14 +43,16 @@
   flex: none;
   color: var(--text-body);
 
-  /* La semelle sur la règle : le cadre descend de l'épaisseur du filet, et
-     passe au-dessus de lui — le vermillon de l'appui se pose sur l'encre. */
+  /* The sole on the rule: the frame comes down by the rule's rendered
+     thickness (--rule-bite, borders.css) and paints above it — the vermillon
+     of the contact sits on the ink. */
   position: relative;
   z-index: 1;
-  margin-block-end: calc(-1 * var(--bw-rule));
+  margin-block-end: calc(-1 * var(--rule-bite));
 }
 
-/* Le repli sans dessin : 52px circle around a 22px glyph, posé sur la règle. */
+/* The fallback without a drawing: 52px circle around a 22px glyph, standing
+   on the rule. */
 .zn-empty__icon {
   display: grid;
   place-items: center;
@@ -66,7 +69,7 @@
   block-size: 22px;
 }
 
-/* Sous la règle : titre, cause, action. */
+/* Under the rule: title, cause, action. */
 .zn-empty__body {
   display: flex;
   flex-direction: column;
@@ -103,11 +106,12 @@
   max-inline-size: 44ch;
 }
 
-/* ── écran large ──────────────────────────────────────────────────────────
-   La figure à gauche, les mots à sa droite, et le bouton posé sur la même
-   règle. Les deux boîtes portent chacune leur bordure basse et sont alignées
-   en bas sans écart entre elles, donc les deux filets n'en font qu'un. */
-@media (min-width: 769px) {
+/* ── wide screen ──────────────────────────────────────────────────────────
+   The figure on the left, the words to its right, and the button resting on
+   the same rule. Each of the two boxes carries its own bottom border and they
+   are aligned at the end with no gap between them, so the two rules read as
+   one. 768 is the tablet breakpoint the rest of the app switches at. */
+@media (min-width: 768px) {
   .zn-empty {
     flex-direction: row;
     flex-wrap: wrap;
@@ -130,12 +134,12 @@
     border-block-end: var(--border-rule);
   }
 
-  /* La base du bouton sur la règle, comme la semelle : même débord, même
-     passage au-dessus du filet. */
+  /* The button's base on the rule, like the sole: same overflow, same paint
+     order over the line. */
   .zn-empty__action {
     position: relative;
     z-index: 1;
-    margin-block-end: calc(-1 * var(--bw-rule));
+    margin-block-end: calc(-1 * var(--rule-bite));
   }
 
   .zn-empty__hint {

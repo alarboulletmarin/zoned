@@ -77,7 +77,7 @@ export function EmptyState({
 
   return (
     <div
-      className={cn("zn-empty", Drawing && "zn-empty--art", className)}
+      className={cn("zn-empty", className)}
       data-variant={variant}
     >
       <div className="zn-empty__scene">
