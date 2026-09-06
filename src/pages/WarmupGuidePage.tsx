@@ -257,7 +257,7 @@ export function WarmupGuidePage() {
       <div className="zn-guide">
         {/* 1 — the way back, then what this page is */}
         <section
-          className="zn-stack zn-guide__head"
+          className="zn-stack zn-guide__head zn-guide__head--figure"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
         >
           <Link
@@ -280,7 +280,9 @@ export function WarmupGuidePage() {
           {/* Le seul guide dont le sujet est une posture : le dessin y dit en
               un coup d'œil ce que le titre met une phrase à dire. Les autres
               guides n'en portent pas — un dessin par en-tête ferait une
-              collection, pas une identité. */}
+              collection, pas une identité. La figure se tient sur le filet
+              de la bande qui suit (zn-guide__head--figure) : son fichier
+              n'a plus de sol, le bas de sa boîte est sa ligne d'appui. */}
           <Stretching
             className="zn-guide__art"
             aria-hidden="true"
