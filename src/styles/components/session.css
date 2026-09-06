@@ -85,13 +85,53 @@
 /* ── hero ─────────────────────────────────────────────────────────────── */
 
 /* 400px is the illustration column: a fixed slot, not a fraction, because the
-   doodle that lands there is drawn at one size. */
+   doodle that lands there is drawn at one size.
+
+   The bottom padding is named because the figure has to know it: see the slot
+   rules below. */
 .zn-session__hero {
+  --hero-pad-end: var(--sp-16);
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: var(--sp-18);
   align-items: start;
-  padding: var(--sp-17) var(--pad-screen-x) var(--sp-16);
+  padding: var(--sp-17) var(--pad-screen-x) var(--hero-pad-end);
+}
+
+/* The figure stands on the rule that closes the hero.
+
+   The drawings stop at the sole — the bottom of the viewBox IS the ground line
+   (docs/doodles.md, 6 September) — so putting a figure on a rule is putting the
+   bottom of its box on that rule. The rule here is the next band's top border.
+   The slot is pulled to the end of its row, then down through the hero's own
+   bottom padding and the rule's thickness: its box ends flush with the rule's
+   underside, the sole on the line. Computed from the tokens, never by eye.
+
+   The box has to keep the drawing's ratio for that to be true, so one
+   dimension is auto: a 400x340 box with a 176x289 drawing centred in it would
+   put the sole 0px above the rule for a runner and 60px above it for the
+   plank. z-index 1 keeps the sole over the rule, since the next band comes
+   later in the DOM and would otherwise paint on top of it. */
+.zn-session__hero > .zn-slot {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  block-size: auto;
+  margin-block-end: calc(-1 * (var(--hero-pad-end) + var(--bw-rule)));
+}
+
+/* A stride is taller than wide: height stated, width from the viewBox. */
+.zn-session__hero > .zn-slot .zn-slot__art {
+  inline-size: auto;
+  block-size: var(--slot-h);
+}
+
+/* The plank is wider than tall: it takes its column, height from the viewBox.
+   Capped at the column's desktop width — under 1100px the hero is one column
+   and a 728px plank on a tablet is a drawing that stopped explaining. */
+.zn-session__hero > .zn-session__plank .zn-slot__art {
+  inline-size: min(100%, 400px);
+  block-size: auto;
 }
 
 @media (max-width: 1100px) {
@@ -106,8 +146,9 @@
    name. */
 @media (max-width: 640px) {
   .zn-session__hero {
+    --hero-pad-end: var(--sp-14);
     gap: var(--sp-12);
-    padding-block: var(--sp-13) var(--sp-14);
+    padding-block-start: var(--sp-13);
   }
 
   /* "Structure de la séance" at h1 is the page's second h1-sized thing, under
@@ -116,25 +157,6 @@
     font-size: var(--fs-h2);
     line-height: var(--lh-h2);
     letter-spacing: var(--ls-h2);
-  }
-
-  /* The runner closes the session rather than introducing it — see the note in
-     WorkoutDetailPage.tsx.
-
-     And he stands ON the page, not in a box on it: the negative bottom margin
-     eats the section's own padding so the foot of the drawing lands on the
-     rule that opens the next band. The line he runs on IS the line that
-     divides the page, and his contact — the one vermillon mark a doodle is
-     allowed — sits on it. `position: relative` with z-index 1 is what puts the
-     stroke over that rule instead of under it.
-
-     This is the difference between an illustration parked in a slot and a
-     drawing that belongs to the layout. */
-  .zn-session__figure {
-    position: relative;
-    z-index: 1;
-    margin-block-start: var(--sp-14);
-    margin-block-end: calc(-1 * var(--sp-14));
   }
 }
 
@@ -389,11 +411,77 @@
   border-radius: var(--r-lg);
 }
 
+/* The axis: a hairline, then its two ends in mono. The line is what makes it an
+   axis rather than two captions — and on a phone it is the ground the figure
+   stands on. */
 .zn-session__axis {
   display: flex;
   justify-content: space-between;
   gap: var(--sp-6);
   margin-block-start: var(--sp-5);
+  padding-block-start: var(--sp-5);
+  border-block-start: var(--bw-hair) solid var(--line-axis);
+}
+
+/* ── the stance (phone) ───────────────────────────────────────────────── */
+
+/* The phone's one figure, between the profile and the axis, in the flow: it
+   reserves its own height and covers nothing. Its box ends flush with the
+   underside of the axis hairline — the negative margin is the hairline's
+   thickness — so the sole sits on the line.
+
+   It stands at the minute of the hardest block, and the position is the
+   profile's own flex arithmetic redone here. The blocks grow from a basis of
+   0, so what they share is the width left after the bar's border and inset,
+   the 2px gap between each pair and each block's own two hairline borders —
+   a fraction of the session is not a fraction of the width. --i is the
+   block's index, --n the block count, --at the fraction at the block's
+   centre, --foot where the sole sits across the drawing — all four from
+   WorkoutDetailPage.tsx. Measured on a 50-block 30/30: the sole lands on the
+   first rep's centre to the pixel. The clamp keeps the drawing inside the
+   column when the hardest block is the first or the last; the page must
+   never scroll sideways. */
+.zn-session__stance {
+  /* .zn-zonebar's border, inset, gap and block border. (The 5px inset
+     .zn-session__profile states above never applies — zone.css comes later
+     in the cascade — so the bar's own 3px is what the blocks actually get.) */
+  --stance-inset: calc(var(--bw-rule) + 3px);
+  --stance-gap: var(--sp-1);
+  --stance-block-border: var(--bw-hair);
+  --stance-w: 88px;
+
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  margin-block-start: var(--sp-5);
+  margin-block-end: calc(-1 * var(--bw-hair));
+}
+
+/* The figure takes the gap the axis keeps above itself: the sole is on the
+   hairline, not 10px above it. */
+.zn-session__stance + .zn-session__axis {
+  margin-block-start: 0;
+}
+
+.zn-session__stance-art {
+  flex: none;
+  inline-size: var(--stance-w);
+  block-size: auto;
+  margin-inline-start: clamp(
+    0px,
+    calc(
+      var(--stance-inset) + var(--stance-block-border) +
+        var(--i) * (var(--stance-gap) + 2 * var(--stance-block-border)) +
+        var(--at) *
+        (
+          100% - 2 * var(--stance-inset) - (var(--n) - 1) * var(--stance-gap) -
+            var(--n) * 2 * var(--stance-block-border)
+        ) -
+        var(--foot) * var(--stance-w)
+    ),
+    calc(100% - var(--stance-w))
+  );
 }
 
 /* ── phases ───────────────────────────────────────────────────────────── */

@@ -1,4 +1,11 @@
-import { useState, useEffect, type CSSProperties, type ReactNode } from "react";
+import {
+  useState,
+  useEffect,
+  type CSSProperties,
+  type FunctionComponent,
+  type ReactNode,
+  type SVGProps,
+} from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -39,7 +46,12 @@ import { ExportMenu } from "@/components/domain/ExportMenu";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { Annotation } from "@/components/domain/Annotation";
 import Plank from "@/assets/doodles/plank.svg?react";
-import Runner from "@/assets/doodles/runner.svg?react";
+import Zone1 from "@/assets/doodles/zone-1.svg?react";
+import Zone2 from "@/assets/doodles/zone-2.svg?react";
+import Zone3 from "@/assets/doodles/zone-3.svg?react";
+import Zone4 from "@/assets/doodles/zone-4.svg?react";
+import Zone5 from "@/assets/doodles/zone-5.svg?react";
+import Zone6 from "@/assets/doodles/zone-6.svg?react";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
 import { toast } from "sonner";
@@ -57,6 +69,7 @@ import {
   transformSessionBlocks,
   formatDurationMinutes,
   MiniElevationProfile,
+  type ZoneBarBlock,
   type ZoneNumber,
 } from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
@@ -84,6 +97,48 @@ import {
 import { publicWorkoutUrl } from "@/lib/share/workoutShare";
 
 const PHASE_KEYS = ["warmup", "main", "cooldown"] as const;
+
+/**
+ * The figure IS the data the badge already states: a recovery run walks, a
+ * threshold session runs at threshold, a 30/30 sprints. Six strides, indexed
+ * by the dominant zone. `foot` is where the vermillon sole sits across the
+ * drawing's width — the centre of the accent path, read from each file's
+ * viewBox (zone-4: x 99.7–146.1 in a frame starting at 87.7, 175.5 wide) —
+ * so that on a phone the CONTACT lands on the minute, not the frame's centre.
+ *
+ * Cycling and swimming get no figure: the rig draws no cyclist, and a runner
+ * would contradict the page. Awaiting a decision, not an omission.
+ */
+const STANCES: Record<
+  ZoneNumber,
+  { art: FunctionComponent<SVGProps<SVGElement>>; foot: number }
+> = {
+  1: { art: Zone1, foot: 0.38 },
+  2: { art: Zone2, foot: 0.37 },
+  3: { art: Zone3, foot: 0.31 },
+  4: { art: Zone4, foot: 0.2 },
+  5: { art: Zone5, foot: 0.16 },
+  6: { art: Zone6, foot: 0.16 },
+};
+
+/**
+ * Where the figure stands: the first block of the hardest zone, as its index
+ * in the profile and the fraction of the session at its centre. The profile
+ * lays its blocks out with flex and 2px gaps, so the fraction alone is not a
+ * position — session.css redoes that arithmetic from these two numbers.
+ */
+function hardestBlock(blocks: ZoneBarBlock[]) {
+  const total = blocks.reduce((sum, b) => sum + b.seconds, 0);
+  if (total === 0) return null;
+  const index = blocks.reduce(
+    (best, b, i) => (b.zone > blocks[best].zone ? i : best),
+    0,
+  );
+  const before = blocks
+    .slice(0, index)
+    .reduce((sum, b) => sum + b.seconds, 0);
+  return { index, at: (before + blocks[index].seconds / 2) / total };
+}
 
 type BreadcrumbItem = {
   label: string;
@@ -237,6 +292,11 @@ export function WorkoutDetailPage() {
       : baseDuration;
 
   const profileBlocks = toZoneBarBlocks(workout);
+  // One figure per screen, and only when it can be true: a running stride for
+  // a running session. Where it goes depends on the width — see the hero and
+  // the axis below.
+  const stance = workoutDiscipline === "running" ? STANCES[dominantZone] : null;
+  const stanceAt = stance ? hardestBlock(profileBlocks) : null;
   const phaseCount = PHASE_KEYS.filter(
     (key) => getWorkoutPhaseSteps(workout, key).length > 0,
   ).length;
@@ -651,19 +711,20 @@ export function WorkoutDetailPage() {
             )}
           </div>
 
-          {/* On a wide screen the runner fills the hero's second column and
-              costs nothing. Stacked on a phone he sits between the facts and
-              the session, and at any height that still reads as a figure he
-              pushes the profile out of the first screen — measured: 140px of
-              drawing moves the chart from 732 to 896 on an 844px screen.
+          {/* On a wide screen the figure fills the hero's second column and
+              stands on the rule that closes the hero — the bottom of its box
+              is that rule, see .zn-session__hero in session.css. Stacked on a
+              phone it would sit between the facts and the session, and at any
+              height that still reads as a figure it pushes the profile out of
+              the first screen — measured: 140px of drawing moves the chart
+              from 732 to 896 on an 844px screen.
 
-              So he moves rather than shrinks: below 640 he closes the session
-              instead of introducing it. Same drawing, same slot, one screen
-              further down. */}
-          {!isPhone && (
+              So below 640 it moves rather than shrinks: it stands on the
+              profile's axis instead, at the minute of the hardest block. */}
+          {!isPhone && stance && (
             <IllustrationSlot
               height={340}
-              art={Runner}
+              art={stance.art}
               brief={t("session:illustration.brief")}
               label={t("session:illustration.label")}
             />
@@ -695,19 +756,47 @@ export function WorkoutDetailPage() {
               {/* Le profil est la seule chose de la page qui se lit sur deux
                   axes à la fois. Sans un mot, on le prend pour une frise
                   décorative — d'où l'annotation, qui dit quoi regarder et le
-                  montre. Une par écran : c'est la même discipline que l'aplat
-                  vermillon unique. */}
+                  montre. La flèche seule : la figure de l'écran est la foulée
+                  de la séance (dans le héros, ou sous la frise sur un
+                  téléphone), et une figure par écran, c'est la même discipline
+                  que l'aplat vermillon unique. */}
               <Annotation
                 text={t("session:screen.profileNote")}
                 arrow="down-right"
                 align="start"
-                figure
               />
               <ZoneBar
                 blocks={profileBlocks}
                 height={112}
                 className="zn-session__profile"
               />
+              {/* The phone's one figure: under the profile, standing on the
+                  axis hairline at the minute of the hardest block — the
+                  stride the badge names, at the moment it is run. In the
+                  flow, so it reserves its own height and never covers the
+                  profile; static, never a cursor. Its sole is the contact
+                  the axis measures, which is why the CONTACT sits on the
+                  minute and not the frame. Decorative: the badge and the
+                  profile's own label already say it in words. */}
+              {isPhone && stance && stanceAt && (
+                <div
+                  className="zn-session__stance"
+                  style={
+                    {
+                      "--i": stanceAt.index,
+                      "--n": profileBlocks.length,
+                      "--at": stanceAt.at,
+                      "--foot": stance.foot,
+                    } as CSSProperties
+                  }
+                >
+                  <stance.art
+                    className="zn-session__stance-art"
+                    aria-hidden="true"
+                    focusable="false"
+                  />
+                </div>
+              )}
               <div className="zn-session__axis">
                 <span className="zn-kicker zn-kicker--inline">
                   {t("session:screen.axisStart")}
@@ -733,16 +822,6 @@ export function WorkoutDetailPage() {
               Here it lands where it makes sense: right under the steps whose
               paces it would fill in. */}
           {!hasUserZones && <ZonePersonalizationCTA className="zn-session__zone-cta" />}
-
-          {isPhone && (
-            <IllustrationSlot
-              height={200}
-              art={Runner}
-              brief={t("session:illustration.brief")}
-              label={t("session:illustration.label")}
-              className="zn-session__figure"
-            />
-          )}
         </section>
 
         {/* 3 — where the time goes, against how to spend it */}
@@ -1175,12 +1254,17 @@ function StrengthWorkoutDetail({
               dessiné. Le corriger a été tenté sur vingt tours et le résultat
               était pire — un nœud de chevilles qui perdait l'effilement des
               jambes. À 260 px, la taille de ce bloc, le manque ne se voit pas.
-              Voir docs/doodles.md. */}
+              Voir docs/doodles.md.
+
+              Il se tient sur le filet qui ferme le héros, comme la foulée de la
+              séance de course : le sol EST la règle de la page. Il prend la
+              largeur de sa colonne, et sa hauteur suit le viewBox — pas de
+              hauteur fixée, elle mentirait sur un dessin en paysage. */}
           <IllustrationSlot
-            height={260}
             art={Plank}
             brief={tSession("illustration.strengthBrief")}
             label={tSession("illustration.label")}
+            className="zn-session__plank"
           />
         </section>
 
