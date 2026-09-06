@@ -267,6 +267,15 @@ Une figure par écran. Et un dessin **remplace**, il ne s'ajoute pas : le
 spinner de la coquille, le glyphe d'un état vide, l'alerte du 404 et le disque
 « tu es ici » du menu sont partis avec leur CSS.
 
+**Et la règle qui aurait évité la foulée de la séance** (6 sept. 2026) : avant
+de poser une figure, nommer ce qu'elle retire et ce qu'elle est seule à dire.
+Un dessin a sa propre ligne, se pose sur un filet que la mise en page trace
+déjà pour une autre raison, remplace un ornement qui existait, et change avec
+un état que rien d'autre n'énonce. Une figure posée là où il restait de la
+place, et qui répète ce que la page dit ailleurs, est un dessin pour mettre un
+dessin : la foulée de la séance redisait une quatrième fois la zone dominante,
+et la place qui restait était à l'intérieur d'un graphique.
+
 Le calage se calcule depuis le `viewBox`, jamais à l'œil, et se vérifie mesuré
 en page, en clair et en sombre.
 
@@ -394,15 +403,37 @@ le nom en graduations dessous. Elle remplace la bande de pastilles. Dans la
 table, entre Z3 et Z4, une annotation avec figure sur bureau, flèche seule sur
 téléphone.
 
-**La séance, par zone dominante.** La foulée du héros lit la zone que le badge
-calcule déjà, zone-1 à zone-6 : un marcheur pour un footing, un sprinteur pour
-un 30/30. Sur téléphone elle vient sous la frise, sur la hairline de l'axe, à
-la minute du bloc le plus dur. Le gainage reste au renforcement. **Vélo et
-natation n'ont pas de figure** : le gréement ne dessine pas de cycliste, et un
-coureur contredirait la page. En attente, pas un oubli.
+**La séance.** *La foulée par zone dominante est retirée le 6 septembre 2026 —
+décision du propriétaire, qui remplace l'entrée précédente.* Elle disait la zone
+que le ZoneBadge, le FactStrip, la teinte de la frise et la table de répartition
+énoncent déjà quatre fois : un dessin qui s'ajoute au lieu de remplacer. Et sur
+téléphone elle se posait entre la frise et son axe — 185 px mesurés entre une
+courbe et sa légende, et une semelle calée sur une abscisse de temps, qui se lit
+comme un curseur quoi qu'en dise le commentaire du code. Le sol, lui, était
+juste : l'axe d'une frise reste un sol légitime, ce n'est pas ce qui a été
+retiré.
+
+La figure de l'écran est maintenant **la figure qui montre, au départ du trait
+de l'annotation du profil**, à 200 px de haut sur le bord haut de la ZoneBar —
+le seul filet que cette bande trace déjà. Elle s'efface sous 640 px avec toutes
+les figures d'annotation : le téléphone garde le texte et la flèche. C'est le
+premier appelant de la variante `figure`, restée sans emploi depuis sa création.
+
+**Le gainage reste au renforcement**, sur le filet du héros. **Vélo et natation
+n'ont pas de figure** : le gréement ne dessine pas de cycliste, et un coureur
+contredirait la page. En attente, pas un oubli.
 
 **L'échauffement** (`/guides/warmup`) : l'étirement sur le filet de la bande
-qui suit l'en-tête, 148 px de haut.
+qui suit l'en-tête, 200 px de haut (160 sur téléphone) — la valeur du CSS, qui a
+corrigé les 148 px prescrits ici, le trait rendant alors 0,95 px (`guides.css`).
+
+**La nutrition** (`/nutrition`) : `easy-run` sur le filet de la bande qui suit
+l'en-tête, au même calage que l'échauffement. Le dessin avait sa destination
+écrite dans son générateur (`scripts/doodles/effort.mjs`) et n'y avait jamais
+été posé. Une page de nutrition attrape mécaniquement une gourde ou une
+assiette, que la règle 2 interdit ; l'allure tenue dit le POURQUOI au lieu du
+QUOI, avec un corps. Un seul guide et un seul hub portent une figure : c'est la
+répétition qui ferait collection, pas la classe CSS.
 
 **Hors de l'app** : la coquille de chargement (le duo inliné dans `index.html`,
 sur une règle qui se trace en 400 ms), les images Open Graph

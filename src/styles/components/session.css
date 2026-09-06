@@ -88,14 +88,24 @@
    doodle that lands there is drawn at one size.
 
    The bottom padding is named because the figure has to know it: see the slot
-   rules below. */
+   rules below.
+
+   Le héros ne réserve cette colonne que s'il a quelque chose à y mettre.
+   Depuis que la foulée par zone dominante est partie, seule la séance de
+   renforcement porte encore une figure ; sans le :has, les 225 séances de
+   course gardaient une colonne fantôme de 400 px à droite du chapô — 230 px
+   de vide mesurés à 1280. */
 .zn-session__hero {
   --hero-pad-end: var(--sp-16);
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-18);
   align-items: start;
   padding: var(--sp-17) var(--pad-screen-x) var(--hero-pad-end);
+}
+
+.zn-session__hero:has(> .zn-slot) {
+  grid-template-columns: 1fr 400px;
 }
 
 /* The figure stands on the rule that closes the hero.
@@ -120,12 +130,6 @@
   margin-block-end: calc(-1 * (var(--hero-pad-end) + var(--rule-bite)));
 }
 
-/* A stride is taller than wide: height stated, width from the viewBox. */
-.zn-session__hero > .zn-slot .zn-slot__art {
-  inline-size: auto;
-  block-size: var(--slot-h);
-}
-
 /* The plank is wider than tall: it takes its column, height from the viewBox.
    Capped at the column's desktop width — under 1100px the hero is one column
    and a 728px plank on a tablet is a drawing that stopped explaining. */
@@ -135,7 +139,8 @@
 }
 
 @media (max-width: 1100px) {
-  .zn-session__hero {
+  .zn-session__hero,
+  .zn-session__hero:has(> .zn-slot) {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-14);
   }
@@ -411,23 +416,20 @@
    .zn-zonebar, zone.css is imported after this sheet, and at equal specificity
    the later file wins — measured, 3px and 6px, not 5px and 10px.
 
-   Removed rather than raised. Two pixels of inset are worth less than the two
-   things raising them would cost: the figure that stands on this bar has its
-   --stance-inset calibrated against the 3px that actually apply, and the whole
-   redesign has been reviewed at the rendering the bar really has. A rule that
-   does not apply is worse than the value it wanted — it reads as intent and
-   ships as nothing.
+   Removed rather than raised. Two pixels of inset are worth less than raising
+   them would cost: the whole redesign has been reviewed at the rendering the
+   bar really has. A rule that does not apply is worse than the value it wanted
+   — it reads as intent and ships as nothing.
 
    .zn-session__profile therefore carries NO rule in this sheet. The class stays
    on the element as its name — it is what the profile is called when something
    needs to find it — and everything it looks like comes from .zn-zonebar. If
    you ever need it to differ from a card's bar, the selector has to beat
-   zone.css: .zn-session__profile.zn-zonebar, and then --stance-inset moves
-   with it. */
+   zone.css: .zn-session__profile.zn-zonebar. */
 
 /* The axis: a hairline, then its two ends in mono. The line is what makes it an
-   axis rather than two captions — and on a phone it is the ground the figure
-   stands on. */
+   axis rather than two captions. Il touche de nouveau sa frise à 10px : le
+   voisin qui annulait cette marge — la foulée du téléphone — est parti. */
 .zn-session__axis {
   display: flex;
   justify-content: space-between;
@@ -437,66 +439,42 @@
   border-block-start: var(--bw-hair) solid var(--line-axis);
 }
 
-/* ── the stance (phone) ───────────────────────────────────────────────── */
+/* ── l'annotation du profil ───────────────────────────────────────────── */
 
-/* The phone's one figure, between the profile and the axis, in the flow: it
-   reserves its own height and covers nothing. Its box ends flush with the
-   underside of the axis hairline — the negative margin is the hairline's
-   thickness — so the sole sits on the line.
+/* La figure que la foulée occupait, remise là où elle travaille : au départ du
+   trait, dans l'annotation qui explique le profil. C'est le registre que
+   docs/doodles.md réserve à « un endroit du bloc, pas le bloc entier », et la
+   variante `figure` d'Annotation.tsx n'avait jusqu'ici aucun appelant.
 
-   It stands at the minute of the hardest block, and the position is the
-   profile's own flex arithmetic redone here. The blocks grow from a basis of
-   0, so what they share is the width left after the bar's border and inset,
-   the 2px gap between each pair and each block's own two hairline borders —
-   a fraction of the session is not a fraction of the width. --i is the
-   block's index, --n the block count, --at the fraction at the block's
-   centre, --foot where the sole sits across the drawing — all four from
-   WorkoutDetailPage.tsx. Measured on a 50-block 30/30: the sole lands on the
-   first rep's centre to the pixel. The clamp keeps the drawing inside the
-   column when the hardest block is the first or the last; the page must
-   never scroll sideways. */
-.zn-session__stance {
-  /* .zn-zonebar's border, inset, gap and block border. The 3px is the bar's
-     own, and now the only one stated anywhere: the 5px .zn-session__profile
-     used to claim never won the cascade and has been removed — see the note
-     where it stood. */
-  --stance-inset: calc(var(--bw-rule) + 3px);
-  --stance-gap: var(--sp-1);
-  --stance-block-border: var(--bw-hair);
-  --stance-w: 88px;
+   Le sol est le bord haut de .zn-zonebar — var(--border-rule) sur ses quatre
+   côtés (zone.css), et l'annotation est son frère immédiat sans marge. La
+   figure descend de l'épaisseur RENDUE du filet (--rule-bite, pas --bw-rule :
+   Chrome ramène 1,5 px au pixel entier) pour le mordre, et passe devant dans
+   l'ordre de peinture — la frise vient après dans le DOM et son fond opaque
+   couvrirait la semelle sinon. Même calage que .zn-slot--ground.
 
+   200 px : le cadre coupé fait 174 × 306,8, donc 113 px de large et un trait
+   de 2 unités rendu à 1,30 px — la valeur retenue pour l'échauffement après
+   que 0,95 px a été refusé, le croisement main/cheville se brouillant en
+   dessous (guides.css). Les 84 px du défaut n'ont jamais visé cette figure :
+   ils rendent 0,55 px, sous le demi-pixel, et 84 px de haut est sous le
+   plancher de 120 px que la doctrine fixe pour un cadre portrait.
+
+   Sous 640 px la figure s'efface (annotation.css) : le téléphone garde le
+   texte et la flèche. C'est voulu — c'est là que la foulée coûtait 176 px. */
+.zn-session__note .zn-note__figure {
   position: relative;
   z-index: 1;
-  display: flex;
-  align-items: flex-end;
-  margin-block-start: var(--sp-5);
-  margin-block-end: calc(-1 * var(--bw-hair));
+  block-size: 200px;
+  margin-block-end: calc(-1 * var(--rule-bite));
 }
 
-/* The figure takes the gap the axis keeps above itself: the sole is on the
-   hairline, not 10px above it. */
-.zn-session__stance + .zn-session__axis {
-  margin-block-start: 0;
-}
-
-.zn-session__stance-art {
-  flex: none;
-  inline-size: var(--stance-w);
-  block-size: auto;
-  margin-inline-start: clamp(
-    0px,
-    calc(
-      var(--stance-inset) + var(--stance-block-border) +
-        var(--i) * (var(--stance-gap) + 2 * var(--stance-block-border)) +
-        var(--at) *
-        (
-          100% - 2 * var(--stance-inset) - (var(--n) - 1) * var(--stance-gap) -
-            var(--n) * 2 * var(--stance-block-border)
-        ) -
-        var(--foot) * var(--stance-w)
-    ),
-    calc(100% - var(--stance-w))
-  );
+/* La flèche revient sur la ligne du filet. Son défaut la descend de --sp-8
+   pour mordre dans sa cible ; avec une semelle posée sur ce même filet, elle
+   pendrait quinze pixels sous la figure. Les deux marques partagent maintenant
+   une seule ligne d'appui, qui est le bord du profil qu'elles désignent. */
+.zn-session__note .zn-note__arrow {
+  margin-block-end: 0;
 }
 
 /* ── phases ───────────────────────────────────────────────────────────── */
