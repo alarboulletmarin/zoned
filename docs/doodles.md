@@ -21,11 +21,14 @@ stroke-width: 2 · stroke-linecap: round · stroke-linejoin: round · fill: none
 
 L'encre est `currentColor`, donc un dessin suit le thème sans variante sombre.
 Pas de remplissage, pas d'ombrage, pas de hachure, pas de dégradé, pas de filtre,
-pas de `<text>`, pas de raster. `viewBox` carré, aucun attribut `width`/`height`
-— c'est l'appelant qui dimensionne.
+pas de `<text>`, pas de raster. Aucun attribut `width`/`height` — c'est
+l'appelant qui dimensionne. Le `viewBox` est serré sur le trait et coupé à la
+semelle, donc en portrait pour une figure debout ; il fut carré, puis en
+paysage autour d'un sol dessiné (voir « Le sol est la règle de la page »).
 
-Une ligne de sol ondule légèrement. Une ligne mathématiquement droite se lit
-comme un schéma technique.
+~~Une ligne de sol ondule légèrement.~~ Remplacé le 6 septembre 2026 : le sol
+dessiné a quitté les fichiers, c'est une règle droite de la page qui sert de
+sol (voir « Le sol est la règle de la page »).
 
 ## Les trois règles qui font la signature
 
@@ -126,8 +129,8 @@ bonshommes-bâtons ; le second en a fait huit et a produit des dessins qui se
 lisent. C'est toute la différence.
 
 Puppeteer est déjà une dépendance de développement et Chrome est téléchargé ;
-`scripts/generate-og.ts` montre comment ce dépôt le pilote. Des scripts de rendu
-utilisables traînent dans le répertoire de travail des runs précédents.
+`scripts/doodles/render.mjs` rend une planche de dessins côte à côte, à
+plusieurs largeurs, sur le papier ou sur l'encre.
 
 ## Le gréement
 
@@ -144,7 +147,7 @@ tremblement. Le trait n'est plus à retrouver à chaque dessin, il est acquis ; 
 ne reste que la pose à juger.
 
 ```js
-import { Figure, svg, ground } from "./rig.mjs";
+import { Figure, svg } from "./rig.mjs";
 
 const f = new Figure();                       // la figure approuvée
 f.pose({ leadHip: 20, frontArm: -30, head: 6 });   // degrés, horaire positif
@@ -200,10 +203,72 @@ ou en dessous, jamais au travers ni par-dessus.** Un doodle occupe sa propre
 ligne ou sa propre colonne et touche l'élément par son sol. Il ne chevauche ni
 un texte, ni une frise, ni une carte, ni un bouton.
 
-Les 21 fichiers de figures ont été coupés par un script (le trait des figures
-est identique au byte près, seul le chemin du sol et le `viewBox` changent).
-Les générateurs de `scripts/doodles/` doivent suivre : `svg()` n'émet plus de
-sol, et une régénération doit reproduire ces fichiers à l'identique.
+### La coupe, trois fois le 6 septembre
+
+Le trait des 21 figures n'a pas bougé d'un byte ; seul l'attribut `viewBox` a
+changé, trois fois dans la journée. Les deux premières coupes sont consignées
+parce qu'elles se reproduiraient.
+
+1. **14:57 (3ce7617)** : bas du cadre 0,2 sous l'ordonnée du dessous du pied
+   d'appui, `groundY`. Raté : l'arc de la semelle plonge de 2 à 10 unités plus
+   bas selon la figure, il sortait du cadre — le pied coupé.
+2. **15:13 (efcea06)** : bas du cadre sur le nombre le plus bas du chemin,
+   points de contrôle compris. Raté dans l'autre sens : sur sept figures un
+   point de contrôle descend 3 à 5 unités sous la courbe, et la figure flottait
+   au-dessus du filet — le gainage à 4 px, les portes du menu à 3.
+3. **16:46 (4004451)**, la règle en vigueur : gauche, droite et haut à 6 unités
+   des nombres émis, points de contrôle compris ; bas à 1,2 sous le point le
+   plus bas du **trait rendu** — `strokeBottom` dans `scripts/doodles/rig.mjs`,
+   qui échantillonne chaque cubique, demi-épaisseur du trait comprise. La
+   semelle est entière, et c'est elle, et elle seule, qui touche la règle de
+   la page.
+
+`scripts/doodles/recut.mjs` est cette règle : il l'applique à tous les fichiers
+de `src/assets/doodles/` (les flèches exceptées, elles n'ont pas de sol), ne
+touche qu'au `viewBox`, et repasser dessus ne change rien. `svg()` du gréement
+n'émet plus de sol et cadre de la même façon ; `groundY` ne sert plus au cadre.
+Standing, wondering, pointing, easy-run et plank se régénèrent au byte près.
+
+Quatre endroits du code recopient un cadre en dur : les sept rapports d'aspect
+du ruban du plan (`PlanViewPage.tsx`), les six largeurs de la planche
+(`ZoneFigures.tsx`), la hauteur de sa scène (`zone-figures.css`) et le duo
+inliné dans `index.html`. `src/assets/doodles/frames.test.ts` lit les SVG et
+les vérifie : trois de ces constantes avaient dérivé le 6 septembre. Une
+recoupe fait échouer le test tant qu'elles ne suivent pas.
+
+### Poser une figure sur une règle
+
+Le parent trace la règle en `border-block-end` et aligne la figure sur son bord
+bas. La figure descend ensuite de l'épaisseur **rendue** de la règle, pour la
+mordre : c'est le jeton `--rule-bite`, 1 px, dans
+`src/styles/design/borders.css`. Pas `--bw-rule` : le jeton de la règle dit
+1,5 px, mais Chrome ramène une bordure au pixel CSS entier à tout ratio d'écran
+(mesuré à 1x, 2x et 3x), et avec 1,5 px de marge la semelle passait un
+demi-pixel sous le trait. Firefox trace bien 1,5 px ; la boîte s'arrête alors
+un demi-pixel dans le trait, ce qui est encore dessus. Une seule convention
+pour toutes les semelles. La figure passe devant dans l'ordre de peinture
+(`z-index`), sinon la bande suivante, plus tard dans le DOM, trace son filet
+par-dessus le vermillon.
+
+Les tailles se disent **en hauteur**, depuis la coupe à la semelle. Les cadres
+sont verticaux ; une largeur décrivait l'ancien cadre en paysage qui embarquait
+le sol, et 220 px de large sur une porte coupée en donneraient jusqu'à 490 de
+haut. Entre 120 et 240 px de haut, une figure explique : 144 px sur téléphone
+et 208 sur bureau pour un état vide, 148 pour l'échauffement, 128 et 172 sur le
+ruban du plan, 200 dans le menu.
+
+Sous **84 px de large pour un cadre paysage**, sous **120 px de haut environ
+pour un cadre portrait**, pas de figure : le trait qui se croise devient un
+pictogramme et concurrence les glyphes Material, ce que la règle 2 interdit. En
+dessous, la figure s'efface, elle ne rétrécit pas — le menu la retire sous
+120 px de place, la table des zones garde la flèche seule sur téléphone.
+
+Une figure par écran. Et un dessin **remplace**, il ne s'ajoute pas : le
+spinner de la coquille, le glyphe d'un état vide, l'alerte du 404 et le disque
+« tu es ici » du menu sont partis avec leur CSS.
+
+Le calage se calcule depuis le `viewBox`, jamais à l'œil, et se vérifie mesuré
+en page, en clair et en sombre.
 
 ## Le cadre est en paysage, la figure est verticale — remplacé le 6 sept. 2026
 
@@ -290,33 +355,66 @@ La leçon vaut au-delà du gainage : **un défaut nommé vaut mieux qu'un correc
 qui déplace le problème**. À 260 px, la taille du bloc qui l'affiche, le pied
 manquant est invisible ; le nœud, lui, se voyait.
 
-## Où les dessins doivent aller
+## Où les dessins sont (6 septembre 2026)
 
-Les trois emplacements actuels ne sont qu'un point de départ. Par ordre de
-rendement :
+Cette liste remplace le plan d'origine — états vides, portes, 404, en-têtes,
+partage. Chaque emplacement pose sa figure sur une règle de la page.
 
-**Les états vides — le plus fort levier.** `EmptyState` est importé par 19
-fichiers et affiche aujourd'hui un glyphe Material de 22 px. Un doodle à la
-place et l'app change de registre d'un coup, sur des écrans que les gens voient
-vraiment. Six ou sept dessins : bibliothèque sans résultat, aucun favori, aucun
-plan, aucun parcours, aucune semaine, aucun test enregistré.
+**Le héros de l'accueil.** Le duo se tient sur le filet pleine largeur qui
+ferme le héros ; à gauche, la rangée des boutons finit sur la même règle. 460 px
+de large sur bureau, 240 sur téléphone, sous les boutons, pour que la pastille
+MENU ne le recouvre pas au premier écran.
 
-**Les cinq portes de l'accueil.** Un dessin par porte — aujourd'hui, séances,
-plan, comprendre, chiffres. C'est ce qui rend une page d'accueil reconnaissable
-au premier coup d'œil.
+**Les portes sont nues.** Décision du 6 septembre, qui remplace « un dessin par
+porte » : à 64-88 px dans un coin de carte, le trait devenait un pictogramme.
+`DoorCard` n'a plus de prop `art`, et ne doit pas la retrouver. La figure de la
+porte où l'on est vit dans le **menu plein écran**, à 200 px de haut sur un
+filet sous les six lignes ; le duo tient la place quand aucune porte n'est
+active.
 
-**Le 404.** Le handoff le nomme explicitement comme non maquetté et suggère
-`Alert kind="error"` dans une page vide. Un dessin y est presque obligatoire.
+**Les états vides.** `EmptyState` choisit la figure par variante, voir « Le
+composant ».
 
-**Les en-têtes de section** des guides et de la méthodologie : les six zones,
-l'échauffement, la nutrition. Du dessin *explicatif*, pas décoratif — c'est là
-que le trait continu vaut mieux qu'une icône.
+**Le 404.** La règle part du bord gauche et s'arrête vers 60 % de l'écran ;
+walking-away marche vers le vide à son bout, retourné par CSS — une
+orientation de scène, pas une correction du dessin. Le « 404 » est une cote en
+mono posée après la fin du sol. L'alerte et son glyphe sont partis.
 
-**Hors de l'app, et c'est là que « reconnaissable » se joue vraiment :** les 35
-cartes de partage et l'image OG. C'est ce que les gens voient **avant**
-d'installer. Ces gabarits rendent en PNG via `html-to-image` avec `skipFonts`,
-donc un dessin SVG y passe alors qu'un texte stylé n'y passerait pas — le doodle
-est le bon véhicule pour ces surfaces.
+**Le ruban du plan.** Une figure se tient sur le bord haut du ruban des phases,
+au milieu de la semaine en cours ; la pose dit la phase sous les pieds — marche
+de Z2 en base, foulée de Z3 en construction, sprint de Z5 au pic, allure de Z4
+en affûtage, étirement en récupération. Décision du propriétaire : le trait
+vermillon « maintenant » reste, sous la semelle. Un plan pas commencé attend
+debout sur la ligne de départ, un plan terminé s'en va par le bout.
+
+**La planche des six**, sur la méthodologie et les deux pages de chiffres : six
+figures sur une règle d'un bord à l'autre de la colonne, le même corps à la
+même échelle — une figure penchée est plus large, pas plus grande —, le code et
+le nom en graduations dessous. Elle remplace la bande de pastilles. Dans la
+table, entre Z3 et Z4, une annotation avec figure sur bureau, flèche seule sur
+téléphone.
+
+**La séance, par zone dominante.** La foulée du héros lit la zone que le badge
+calcule déjà, zone-1 à zone-6 : un marcheur pour un footing, un sprinteur pour
+un 30/30. Sur téléphone elle vient sous la frise, sur la hairline de l'axe, à
+la minute du bloc le plus dur. Le gainage reste au renforcement. **Vélo et
+natation n'ont pas de figure** : le gréement ne dessine pas de cycliste, et un
+coureur contredirait la page. En attente, pas un oubli.
+
+**L'échauffement** (`/guides/warmup`) : l'étirement sur le filet de la bande
+qui suit l'en-tête, 148 px de haut.
+
+**Hors de l'app** : la coquille de chargement (le duo inliné dans `index.html`,
+sur une règle qui se trace en 400 ms), les images Open Graph
+(`scripts/generate-og-image.ts`, le duo injecté tel quel) et la bannière du
+README, claire et sombre, générée depuis le même gabarit.
+
+**Le partage est reporté.** Deux des quarante cartes (`PaperSheet`,
+`ZonePlate`) portent déjà le duo et les six, mais elles datent d'avant la
+coupe : la figure y est centrée dans sa boîte, pas posée sur une règle. La
+passe sur les cartes de partage viendra après. Ces gabarits rendent en PNG via
+`html-to-image` avec `skipFonts`, donc un SVG y passe alors qu'un texte stylé
+n'y passerait pas — le doodle reste le bon véhicule pour ces surfaces.
 
 ## Le composant
 
@@ -325,18 +423,32 @@ tirets sur une trame, avec le brief de production imprimé dedans. C'est
 délibéré — un rectangle vide se lit comme un bug, un brief imprimé se lit comme
 une page encore sous presse.
 
-La branche « dessin présent » doit :
+Quand un dessin est là — prop `art`, un SVG importé avec `?react` ; Vite
+embarque `vite-plugin-svgr`, voir comment `src/assets/logo.svg` est importé :
 
-- rendre l'œuvre à la place du brief, en gardant `brief` comme repli quand rien
-  n'est fourni, pour que les emplacements non pourvus soient inchangés ;
-- laisser `role="img"` et le nom accessible `label` intacts, avec ou sans
-  dessin — le nom accessible ne doit jamais dépendre de la présence d'une image ;
-- retirer le contour en tirets et la trame **uniquement** quand un dessin est là ;
-- laisser l'œuvre hériter de `currentColor`, et laisser un élément tracé en
-  `var(--accent)` garder son accent.
+- l'œuvre remplace le brief ; `brief` reste le repli, pour que les emplacements
+  non pourvus soient inchangés ;
+- `role="img"` et le nom accessible `label` ne changent pas, avec ou sans
+  dessin ;
+- le contour en tirets et la trame partent, dans ce seul cas ;
+- l'œuvre hérite de `currentColor`, et un élément tracé en `var(--accent)`
+  garde son accent ;
+- **un dessin ne prend jamais de hauteur.** `height` ne sert qu'au brief. Le
+  slot fixe la largeur — prop `width`, ou `--slot-w` en CSS, parce qu'un style
+  inline ne se surcharge pas par media query — et le `viewBox` donne le ratio.
+  Une hauteur en pixels ferait centrer le dessin (`preserveAspectRatio`) et
+  flotter la semelle dans la boîte ;
+- `ground="rule"` pose le slot sur la bordure basse de son parent, descendu de
+  `--rule-bite`.
 
-Vite embarque `vite-plugin-svgr` : un SVG s'importe comme composant avec
-`?react` (voir comment `src/assets/logo.svg` est importé).
+`src/components/ui/empty-state.tsx` prend un dessin par variante : standing
+pour ce qui n'est pas commencé, wondering pour ce qui n'a rien trouvé et pour
+une panne ; `art` surcharge, `default` garde le glyphe. Une décision au lieu de
+dix-neuf, et le même état porte toujours la même figure. La carte en tirets a
+disparu : ce contour est la texture du trou réservé, et une étagère vide n'est
+pas un trou. La figure se tient à gauche sur une règle qui court sur toute la
+largeur du conteneur ; les mots sous la règle sur téléphone, à côté sur un
+écran large, où le bouton pose sa base sur la même règle.
 
 ## Ce qui a été essayé et écarté
 
