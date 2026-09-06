@@ -58,7 +58,7 @@
       "lede": "{{plans}} plans from 5K to marathon, {{sessions}} sessions explained by the science, {{calculators}} calculators. Free, no account, everything stays in your browser.",
       "week": "week {{n}}",
       "illustrationBrief": "Two runners, continuous 2 px line, no fill, ink currentColor, ground contact in vermillon",
-      "illustrationLabel": "Slot reserved for a hand-drawn illustration",
+      "illustrationLabel": "Two runners drawn in one line",
       "fig": {
         "kicker": "Fig. 01 — polarised model",
         "source": "Seiler, Scand J Med Sci Sports, 2006",

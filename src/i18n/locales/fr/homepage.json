@@ -58,7 +58,7 @@
       "lede": "{{plans}} plans du 5K au marathon, {{sessions}} séances expliquées par la science, {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans ton navigateur.",
       "week": "semaine {{n}}",
       "illustrationBrief": "Duo de coureurs, trait continu 2 px, sans remplissage, encre currentColor, appui au sol en vermillon",
-      "illustrationLabel": "Emplacement réservé à une illustration dessinée à la main",
+      "illustrationLabel": "Deux coureurs dessinés d'un trait",
       "fig": {
         "kicker": "Fig. 01 — modèle polarisé",
         "source": "Seiler, Scand J Med Sci Sports, 2006",
