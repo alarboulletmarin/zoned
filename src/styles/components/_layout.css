@@ -138,6 +138,20 @@
   border-block-start: var(--border-rule);
 }
 
+/* 48px above and below is the band rhythm of a 1440px page. On a phone the same
+   value is 96px of paper between two bands, and a screen that holds seven of
+   them spends most of a viewport on air — measured at 672px on the home page
+   alone. 32px keeps the bands separate without the page reading as a stack of
+   empty frames.
+
+   The fallback is what moves, not the property: a caller that states its own
+   --pad-block still gets it. */
+@media (max-width: 640px) {
+  .zn-section {
+    padding-block: var(--pad-block, var(--sp-14));
+  }
+}
+
 /* The first section on a screen sits under the header's own rule. */
 .zn-section--first {
   border-block-start: none;

@@ -466,10 +466,7 @@ export function WorkoutDetailPage() {
 
         {/* 1 — what the session is, and the one thing to do with it */}
         <section className="zn-session__hero">
-          <div
-            className="zn-stack"
-            style={{ "--gap": "var(--sp-12)" } as CSSProperties}
-          >
+          <div className="zn-stack zn-session__head">
             <div
               className="zn-cluster"
               style={{ "--gap": "var(--sp-5)" } as CSSProperties}

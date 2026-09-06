@@ -101,6 +101,30 @@
   }
 }
 
+/* Same reasoning as .zn-section below 640: the hero pays 48px above and 44px
+   below, which on a phone is a fifth of the viewport before the session's own
+   name. */
+@media (max-width: 640px) {
+  .zn-session__hero {
+    gap: var(--sp-12);
+    padding-block: var(--sp-13) var(--sp-14);
+  }
+}
+
+/* The hero's text column. 40px between every block is the page's rhythm on a
+   1440px screen; on a phone the same seven blocks spend 240px on air alone —
+   more than the drawing beside them. The rhythm halves rather than the blocks
+   shrinking, which is what keeps the type scale intact. */
+.zn-session__head {
+  --gap: var(--sp-12);
+}
+
+@media (max-width: 640px) {
+  .zn-session__head {
+    --gap: var(--sp-9);
+  }
+}
+
 .zn-session__code {
   color: var(--text-link);
   font-weight: var(--fw-bold);

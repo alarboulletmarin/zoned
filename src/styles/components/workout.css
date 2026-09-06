@@ -1207,6 +1207,21 @@
   inline-size: 100%;
 }
 
+/* On a phone the banner was a full card with a full-width button under two
+   lines of text — 133px spent on an aside, above the session it interrupts.
+   The button goes back to its own width and the padding to a note's. */
+@media (max-width: 639px) {
+  .zn-zone-cta {
+    gap: var(--sp-5);
+    padding: var(--sp-6) var(--sp-7);
+  }
+
+  .zn-zone-cta__link {
+    inline-size: auto;
+    align-self: flex-start;
+  }
+}
+
 .zn-zone-cta__dismiss {
   position: absolute;
   inset-block-start: var(--sp-3);
