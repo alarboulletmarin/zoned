@@ -151,12 +151,114 @@
 
 /* ── filters ──────────────────────────────────────────────────────────── */
 
+/* The strip's one button. Outlined rather than bare, unlike the header tools:
+   this is an action inside a band of controls, not a fixture of the shell, and
+   it has to read as pressable next to the discipline triggers. */
+.zn-lib__filters-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-5);
+  align-self: center;
+  margin-block-end: var(--sp-4);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-8);
+
+  background: transparent;
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  font: var(--type-body-sm);
+  white-space: nowrap;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-lib__filters-btn:hover {
+  background: var(--surface-band);
+}
+
+.zn-lib__filters-btn:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* Filters are on: the button carries the inversion, so the state is visible
+   from the results without opening the panel. */
+.zn-lib__filters-btn[data-on] {
+  background: var(--ink-1);
+  border-color: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-lib__filters-count {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 20px;
+  block-size: 20px;
+  padding-inline: var(--sp-3);
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+}
+
+/* On a phone the 420px sheet would leave a strip of scene in front of a wall
+   of chips. It takes the screen instead.
+
+   `[data-side]` is repeated in the selector on purpose: sheet.css states the
+   420px there at the same specificity and is imported after this file, so a
+   two-class selector would lose the tie. */
+@media (max-width: 640px) {
+  .zn-sheet.zn-lib__filters-panel[data-side="right"] {
+    inline-size: 100%;
+    max-inline-size: 100%;
+    border-radius: 0;
+  }
+}
+
+/* The panel scrolls; the footer does not go with it. Its offset undoes the
+   sheet's own bottom padding so it sits flush on the floor. */
+.zn-lib__filters-panel .zn-sheet__footer {
+  position: sticky;
+  inset-block-end: calc(var(--pad-card) * -1);
+  padding-block: var(--sp-8);
+  background: var(--surface-card);
+}
+
+/* Side by side only where two buttons fit. Below that the sheet's own stacking
+   holds, with the count on top: it is the one that closes the panel. */
+@media (min-width: 480px) {
+  .zn-lib__filters-panel .zn-sheet__footer {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--sp-6);
+  }
+}
+
+@media (max-width: 479px) {
+  .zn-lib__filters-panel .zn-sheet__footer {
+    flex-direction: column-reverse;
+  }
+}
+
 .zn-lib__filters {
   display: flex;
   flex-direction: column;
   gap: var(--sp-9);
   padding-block: var(--sp-13);
   border-block-end: var(--border-rule);
+}
+
+/* Inside the panel the band is the whole surface: it needs neither the rule
+   that used to separate it from the results nor the space above it. */
+.zn-lib__filters-panel .zn-lib__filters {
+  padding-block: 0;
+  border-block-end: 0;
 }
 
 .zn-lib__row {
@@ -289,6 +391,15 @@
   padding-block: var(--sp-10);
   background: var(--surface-band);
   border-block-end: var(--border-divider);
+}
+
+/* Below 640 the six swatches wrap onto five lines — four hundred pixels of
+   legend standing between the title and the first session. The cards name
+   their zone in text ("Z3") anyway, so on a phone the ramp goes. */
+@media (max-width: 640px) {
+  .zn-lib__legend {
+    display: none;
+  }
 }
 
 /* ── results ──────────────────────────────────────────────────────────── */

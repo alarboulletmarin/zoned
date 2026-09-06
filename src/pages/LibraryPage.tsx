@@ -12,6 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Search,
+  SlidersHorizontal,
   Dumbbell,
   Run,
   Bike,
@@ -25,6 +26,13 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import {
   WorkoutCard,
@@ -276,6 +284,12 @@ export function LibraryPage() {
     count += f.muscleGroup.length;
     return count;
   };
+
+  // The filter panel. Nine rows of chips, a slider and a switch used to sit
+  // permanently between the title and the first card — on a phone that was a
+  // full screen of controls before a single session was visible. They are the
+  // same controls, moved behind one button that says how many are on.
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Initialize filters from URL params
   const [filters, setFilters] = useState<WorkoutFiltersState>(() => {
@@ -640,6 +654,22 @@ export function LibraryPage() {
             </div>
 
             <span className="zn-mono zn-lib__meta">{metaLine}</span>
+
+            <button
+              type="button"
+              className="zn-lib__filters-btn"
+              aria-haspopup="dialog"
+              aria-expanded={filtersOpen}
+              data-on={activeFiltersCount > 0 || undefined}
+              onClick={() => setFiltersOpen(true)}
+            >
+              <SlidersHorizontal size={15} />
+              {t("filters.title")}
+              {activeFiltersCount > 0 && (
+                <span className="zn-lib__filters-count">{activeFiltersCount}</span>
+              )}
+            </button>
+
             <ViewModeSelector
               value={viewMode}
               onChange={setViewMode}
@@ -648,12 +678,37 @@ export function LibraryPage() {
           </div>
         </div>
 
-        {/* 3 — the filters, one band, every viewport */}
-        <WorkoutFilters
-          filters={filters}
-          onFiltersChange={setFilters}
-          activityType={activityType}
-        />
+        {/* 3 — the filters, behind the strip's button. Same component, same
+            state: only where it is rendered changed. */}
+        <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+          <SheetContent side="right" className="zn-lib__filters-panel">
+            <SheetHeader>
+              <SheetTitle>{t("filters.title")}</SheetTitle>
+            </SheetHeader>
+
+            <div className="zn-lib__filters-body">
+              <WorkoutFilters
+                filters={filters}
+                onFiltersChange={setFilters}
+                activityType={activityType}
+              />
+            </div>
+
+            <SheetFooter>
+              <Button
+                type="button"
+                variant="ghost"
+                disabled={activeFiltersCount === 0}
+                onClick={() => setFilters({ ...defaultFilters, searchQuery: filters.searchQuery })}
+              >
+                {t("clearFilters")}
+              </Button>
+              <Button type="button" onClick={() => setFiltersOpen(false)}>
+                {t("meta.results", { count: filteredWorkouts.length })}
+              </Button>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
 
         {/* 4 — the ink ramp orders the zones, it does not name them */}
         <div className="zn-lib__legend">
