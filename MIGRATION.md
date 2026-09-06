@@ -465,3 +465,95 @@ poignée garde ainsi son contrat clavier natif.
 
 Restent quatre paquets sans équivalent natif : dropdown-menu, popover, select,
 tooltip.
+
+### Lot 19 — La passe mobile, à 390 px ✅
+
+Lot conduit sur retours directs du propriétaire, écran par écran, chaque verdict
+mesuré avant et après. Trois sessions travaillaient la branche en parallèle ;
+ce lot est celui de la session « mobile ».
+
+**Le bug de fond, trouvé en cherchant un scroll latéral.**
+`grid-template-columns: 1fr` est un raccourci pour `minmax(auto, 1fr)`, et cet
+`auto` est un plancher **min-content** : la piste refuse d'être plus étroite que
+l'élément le plus incompressible qu'elle contient, et c'est la grille qui
+déborde de son conteneur au lieu de se comprimer. Les **27** règles
+d'effondrement mobile du projet étaient écrites sous cette forme. Silencieux là
+où le min-content est petit — une carte de séance mesure 223 px en Chrome, ce
+qui tient dans un téléphone — et fatal dès qu'un moteur calcule cette taille
+autrement. C'est ce qui mettait une barre de défilement horizontale sur
+l'accueil en Firefox et pas en Chrome. Vérifié en forçant l'ancienne forme dans
+Chrome : la piste saute de 342 px à 662.
+
+Le diagnostic a coûté cher parce qu'il a été cherché dans le mauvais moteur :
+55 largeurs balayées de 320 à 1400 px en Chrome, zéro débordement. C'est la
+console du propriétaire — `SVGAnimatedString`, `debugger eval code` — qui a
+révélé qu'il testait sous Firefox.
+
+**Ce que le lot a changé, par surface.**
+
+- *Coquille* — les trois contrôles de l'en-tête perdent leurs cercles : posés
+  nus sur le papier, séparés par des filets, cible de 44 px conservée mais plus
+  dessinée. Le menu plein écran remplace sa coulée de 21 liens mono par un
+  `<details>` natif par porte, ouvert seulement là où l'on se trouve.
+- *Accueil* — 10 → 7 sections. Partent : Fig. 01 (qui redisait en barres ce que
+  l'atlas dit en dessins), la bande des quatre chiffres (qui répétait l'accroche
+  **et** débordait), les huit chercheurs. Les quatre portes passent en 2×2 :
+  1 290 → 444 px. Le formulaire « calcule tes zones » quitte l'atlas — c'était la
+  seule chose de la page qui demandait quelque chose avant d'avoir rien montré.
+  **10 011 → 6 317 px** sur téléphone.
+- *Bibliothèque* — neuf rangées de puces derrière un bouton `Filtres · N`, dans
+  un panneau (plein écran sous 640, latéral au-dessus). Zéro nouvelle clé i18n :
+  `filters.title`, `clearFilters` et `meta.results` existaient.
+- *Séance* — le gros du lot. Une étape par ligne au lieu de trois ; les actions
+  regroupées puis descendues dans une bande sous le pouce ; le terrain sorti du
+  bloc de faits ; le cœur d'un favori enfin plein. **Frise à 708 px au lieu de
+  1 200**, dans le premier écran d'un téléphone de 844.
+
+**Les décisions qui ne se relisent pas dans le code.**
+
+- *Le doodle de la séance ne rétrécit pas, il se déplace.* Remis à 140 px dans
+  le héros, il repoussait la frise de 732 à 896 px — hors du premier écran, ce
+  que le lot venait de corriger. Sous 640 px il ferme donc la séance au lieu de
+  l'introduire.
+- *La zone du pouce n'est pas une barre, c'est un sol sous des pastilles.* Le
+  premier essai — un bandeau plat à filet, la pilule du menu flottant à côté —
+  mettait quatre traitements dans une rangée. La pilule du menu est l'objet le
+  plus ancien et flotte sur tous les écrans : c'est elle qui donne la langue,
+  les autres prennent sa hauteur, son rayon, son anneau et son ombre. Le second
+  essai, des pastilles sans fond, était illisible : après la forme, ce qu'il
+  faut à un contrôle flottant, c'est un sol. Papier à 96 % — 92 laissait lire
+  « 30s footing Z1 » au travers.
+- *Le cœur d'un favori est plein.* Le composant justifiait le contour par « le
+  jeu d'icônes n'a pas de variante remplie ». C'est faux : `Heart` prend une
+  prop `filled`, comme une douzaine de ses voisines.
+- *Le terrain n'est pas un chiffre.* `envRequirements` est un `string[]`
+  qu'un `join(" · ")` aplatissait pour le faire entrer dans le bloc de faits,
+  où il s'imprimait en display 20 px comme `1h03`. Les libellés retenus sont
+  ceux de la bibliothèque (`Piste requise`) et non ceux de la séance
+  (`Nécessite une piste`) : courts, et gardant la distinction requis/préféré
+  qu'un `Piste` nu perdrait. La paire longue s'enroulait sur deux lignes à
+  81 px, la courte tient sur une à 32.
+
+**Trois couplages fragiles, à ne pas casser sans mesurer.**
+
+1. `.zn-session__figure` tient par un **accord chiffré** : sa marge basse
+   négative annule exactement le `padding-block` que `.zn-section` prend sous
+   640 px. Si l'une bouge sans l'autre, le pied du dessin ne tombe plus sur le
+   filet. `position: relative` + `z-index: 1` mettent le trait au-dessus.
+2. Le **2×2 des portes** dépendait du dessin : la phrase explicative était
+   masquée parce que le doodle portait la reconnaissance à sa place. Le chantier
+   « doodles = identité » ayant dénudé les portes, la phrase est revenue —
+   mesuré à 375 px : par deux 570 px, empilées 704, donc le 2×2 tient.
+3. Le **nombre de faits d'une séance varie de 3 à 5** — dénivelé en trail,
+   distance en contexte de plan. Deux règles d'orphelin le tiennent : une cellule
+   sans voisine ne tire plus de filet dans le vide, une cellule seule sur sa
+   rangée prend la rangée.
+
+**Une coupe, et ce qui l'a rattrapée.** Un remplacement de bloc dans
+`session.css` allait d'un commentaire de section à un autre et a emporté
+**344 lignes** — dont la gouttière de tout un écran. Le défaut n'a pas été vu
+par `tsc`, ni par les tests, ni par le build : c'est une session voisine qui
+l'a mesuré et signalé. Réparé en repartant du fichier commité, puis en
+réappliquant les deux seuls changements voulus, avec un diff des sélecteurs
+avant/après pour preuve. Les deux pièges qui en sortent sont au journal de
+`docs/refonte-etat.md`.
