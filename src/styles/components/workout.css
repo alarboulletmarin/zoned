@@ -865,7 +865,7 @@
 
 .zn-ztable__note .zn-note__figure {
   block-size: 150px;
-  margin-block-end: calc(-1 * var(--bw-rule));
+  margin-block-end: calc(-1 * var(--rule-bite));
 }
 
 /* On a phone the column inside the card is 250px: beside the arrow the text

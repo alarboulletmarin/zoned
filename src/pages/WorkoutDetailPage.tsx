@@ -1289,7 +1289,7 @@ function StrengthWorkoutDetail({
           <IllustrationSlot
             art={Plank}
             brief={tSession("illustration.strengthBrief")}
-            label={tSession("illustration.label")}
+            label={tSession("illustration.strengthLabel")}
             className="zn-session__plank"
           />
         </section>

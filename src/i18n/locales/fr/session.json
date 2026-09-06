@@ -185,6 +185,7 @@
   "illustration": {
     "brief": "Coureur sur piste vu de côté, trait 2 px, aucun objet, appui au sol en accent",
     "strengthBrief": "Gainage vu de profil, trait 2 px, appuis en accent",
-    "label": "Dessin au trait : une silhouette, l'appui au sol marqué en accent"
+    "label": "La foulée de la séance, dessinée d'un trait, l'appui au sol en accent",
+    "strengthLabel": "Le gainage de la séance, dessiné d'un trait, les appuis en accent"
   }
 }
