@@ -431,23 +431,21 @@ export function WorkoutDetailPage() {
     });
   }
 
-  // The action cluster: send this to my watch, keep it, everything else.
+  // The action cluster, rendered in one of two places.
   //
-  // The ⋯ holds route, adjust, edit, share, Strava and copy-link. It stays:
-  // written out in the flow, those six were a second row of controls competing
-  // with the session itself.
+  // On a wide screen it belongs in the hero, beside the facts. On a phone it
+  // is docked to the floor of the viewport (.zn-session__dock, below 640):
+  // 88px of buttons between the session's name and its profile is 88px of
+  // someone not yet seeing the session.
   //
-  // It lives in the hero at every width. It spent a few hours pinned to the
-  // floor of the viewport below 640px instead — the reasoning was that 88px of
-  // buttons between a session's name and its profile is 88px of someone not
-  // yet seeing the session. On a real iPhone it did not survive: a third
-  // control landed in the row, the bar ran off the edge, and the owner had it
-  // removed. What that cost is worth keeping: a docked bar competes with the
-  // menu pill for the same thumb, and a row sized for exactly three controls
-  // breaks the day someone adds a fourth. One fixed thing per screen.
+  // Three pills, and only three: send this to my watch, keep it, everything
+  // else. The bar is sized for exactly that. A fourth control — the "see my
+  // paces" call that focused the VMA field — landed here for a few hours and
+  // ran off the left edge of a real iPhone; the owner had it removed. The VMA
+  // field under the steps is the page's one entry point for the paces.
   const actionCluster = (
       <div
-        className="zn-cluster"
+        className="zn-cluster zn-session__actions"
         style={{ "--gap": "var(--sp-6)" } as CSSProperties}
       >
         <ExportMenu workout={workout} size="lg" variant={hasUserZones ? "default" : "outline"} />
@@ -699,7 +697,7 @@ export function WorkoutDetailPage() {
               </p>
             )}
 
-            {actionCluster}
+            {!isPhone && actionCluster}
 
             <FactStrip facts={facts} />
 
@@ -755,14 +753,6 @@ export function WorkoutDetailPage() {
                 })}
               </span>
             </div>
-
-            {/* The VMA field, at the head of the structure: the owner wants the
-                paces, not an aside at the end of the steps nor a bar docked
-                over the page. Here it stands above the blocks it fills in, and
-                the page has one call for it, this one. */}
-            {!hasUserZones && (
-              <ZonePersonalizationCTA className="zn-session__zone-cta" onSaved={refreshUserZones} />
-            )}
 
             <div>
               {/* Le profil est la seule chose de la page qui se lit sur deux
@@ -828,6 +818,14 @@ export function WorkoutDetailPage() {
             className="zn-session__phases"
           />
 
+          {/* The offer to set your zones sits AFTER the session now. It was in
+              the hero, between the facts and the drawing — 123px of aside
+              standing between someone arriving and the workout they came for.
+              Here it lands where it makes sense: right under the steps whose
+              paces it would fill in. */}
+          {!hasUserZones && (
+            <ZonePersonalizationCTA className="zn-session__zone-cta" onSaved={refreshUserZones} />
+          )}
         </section>
 
         {/* 3 — where the time goes, against how to spend it */}
@@ -951,6 +949,11 @@ export function WorkoutDetailPage() {
         </section>
       </div>
 
+      {/* The thumb-zone bar, on a phone and on this page only.
+          Same shape as the shared-session dock below: pinned to the viewport
+          floor, on a rule, giving up the end of its own gutter so the menu
+          pill sits beside it rather than over it. */}
+      {isPhone && <div className="zn-session__dock">{actionCluster}</div>}
     </>
   );
 }
