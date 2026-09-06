@@ -7,11 +7,14 @@
  * behave the way a navigation should.
  */
 
-import type { FunctionComponent, SVGProps } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
+/* A door is type only. It carried a doodle for a while; at the 64-88px a card
+   corner allows, the stroke read as one more pictogram, so the figures moved
+   to the mobile menu, where the door you are in stands at 200px on a rule.
+   Every door of the app is bare, on purpose — do not bring the prop back. */
 interface DoorCardProps {
   /** Mono uppercase micro-label above the title. Four words maximum. */
   kicker: string;
@@ -21,15 +24,6 @@ interface DoorCardProps {
   cta: string;
   /** Router path this door opens. */
   to: string;
-  /**
-   * The doodle this door wears, imported with `?react`. Optional: a door
-   * without one keeps the type-only card it has always been, which is what
-   * the doors outside the home page still are.
-   *
-   * It is muet for a screen reader — the kicker and the title already name
-   * the destination, and a figure walking says nothing a link label does not.
-   */
-  art?: FunctionComponent<SVGProps<SVGElement>>;
   className?: string;
 }
 
@@ -39,14 +33,10 @@ export function DoorCard({
   body,
   cta,
   to,
-  art: Art,
   className,
 }: DoorCardProps) {
   return (
-    <Link to={to} className={cn("zn-door", Art && "zn-door--art", className)}>
-      {Art && (
-        <Art className="zn-door__art" aria-hidden="true" focusable="false" />
-      )}
+    <Link to={to} className={cn("zn-door", className)}>
       <span className="zn-kicker">{kicker}</span>
       <span className="zn-door__title">{title}</span>
       <span className="zn-door__body">{body}</span>
