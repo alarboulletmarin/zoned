@@ -100,15 +100,15 @@ import WalkingAway from "@/assets/doodles/walking-away.svg?react";
    plan-panels.css (zone-1 there): the swatch says load, the pose says pace. */
 type Pose = { Art: typeof Zone2; foot: number; aspect: number; flip?: boolean };
 const POSES: Record<TrainingPhase | "before" | "after", Pose> = {
-  base: { Art: Zone2, foot: 0.373, aspect: 0.5704 },
-  build: { Art: Zone3, foot: 0.312, aspect: 0.6133 },
-  peak: { Art: Zone5, foot: 0.161, aspect: 0.6474 },
-  taper: { Art: Zone4, foot: 0.201, aspect: 0.6075 },
-  recovery: { Art: Stretching, foot: 0.37, aspect: 0.3856 },
+  base: { Art: Zone2, foot: 0.373, aspect: 0.5605 },
+  build: { Art: Zone3, foot: 0.312, aspect: 0.6025 },
+  peak: { Art: Zone5, foot: 0.161, aspect: 0.6353 },
+  taper: { Art: Zone4, foot: 0.201, aspect: 0.5965 },
+  recovery: { Art: Stretching, foot: 0.37, aspect: 0.3791 },
   // Standing faces left as drawn; flipped, it looks down the ribbon it is
   // about to start. Walking-away already walks right, off the end.
-  before: { Art: Standing, foot: 0.254, aspect: 0.3803, flip: true },
-  after: { Art: WalkingAway, foot: 0.825, aspect: 0.3796 },
+  before: { Art: Standing, foot: 0.254, aspect: 0.3737, flip: true },
+  after: { Art: WalkingAway, foot: 0.825, aspect: 0.3781 },
 };
 
 

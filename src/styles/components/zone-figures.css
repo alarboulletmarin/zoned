@@ -36,14 +36,14 @@
 }
 
 /* La scène : la figure au centre, posée sur le bord bas, qui est la règle.
-   Sa hauteur est celle de la plus haute figure (Z1, 310.3 u de viewBox depuis efcea06) et
+   Sa hauteur est celle de la plus haute figure (Z1, 310.2 u de viewBox) et
    non celle de sa propre figure : c'est ce qui met les six bords bas sur la
    même ligne quelles que soient la posture et la hauteur des graduations. */
 .zn-zfig__stage {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  block-size: calc(310.3 * var(--zfig-scale) * 1px);
+  block-size: calc(310.2 * var(--zfig-scale) * 1px);
   border-block-end: var(--border-rule);
   color: color-mix(in srgb, var(--ink-1) var(--zfig-floor), var(--zfig-ink));
 }

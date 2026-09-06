@@ -183,14 +183,52 @@ export class Figure {
 
     Le cadre est serré sur le trait à 6 unités près — sur les nombres émis,
     points de contrôle compris, ce qui est le calcul des fichiers coupés par
-    3ce7617 (le duo, dessiné à la main, excepté) — et son bas est posé 1,2 sous
-    le point le plus bas du trait, demi-épaisseur comprise (efcea06) : la
-    semelle est entière, et c'est elle qui touche la règle de la page. Une
-    première coupe à 0,2 sous `groundY` tronquait l'arc de semelle de quatre
-    unités — « le pied coupé », vu par le propriétaire. `groundY` ne sert plus
-    au cadre ; il reste dans la signature pour les appelants. Ces constantes
-    reproduisent standing, wondering, pointing, easy-run et plank au byte
-    près ; ne pas les « arrondir ». */
+    3ce7617 — et son bas est posé 1,2 sous le point le plus bas du TRAIT RENDU
+    (strokeBottom : les cubiques sont échantillonnées, pas leurs points de
+    contrôle), demi-épaisseur comprise : la semelle est entière, et c'est elle
+    qui touche la règle de la page. Deux coupes précédentes ont raté ce point :
+    à 0,2 sous `groundY` l'arc de semelle était tronqué (« le pied coupé »),
+    sur les points de contrôle le cadre descendait 3 à 5 unités sous la semelle
+    et la figure flottait au-dessus du filet. `groundY` ne sert plus au cadre.
+    scripts/doodles/recut.mjs applique la même règle aux dessins sans
+    générateur ; standing, wondering, pointing, easy-run et plank se régénèrent
+    au byte près. */
+/** Le y le plus bas atteint par le trait de ces chemins (commandes absolues
+    M L H V C S Z), en échantillonnant chaque cubique : c'est le dessous de la
+    semelle, là où le cadre s'arrête. */
+export function strokeBottom(ds) {
+  let maxY = -Infinity;
+  const see = (y) => { if (y > maxY) maxY = y; };
+  const cubic = (p0, p1, p2, p3) => {
+    for (let k = 0; k <= 256; k++) {
+      const t = k / 256, mt = 1 - t;
+      see(mt * mt * mt * p0[1] + 3 * mt * mt * t * p1[1] + 3 * mt * t * t * p2[1] + t * t * t * p3[1]);
+    }
+  };
+  for (const d of ds) {
+    const tk = d.match(/[A-Za-z]|-?\d+(?:\.\d+)?/g);
+    let i = 0, cmd = null, cur = [0, 0], start = [0, 0], prevC2 = null;
+    const num = () => Number(tk[i++]);
+    while (i < tk.length) {
+      if (/[A-Za-z]/.test(tk[i])) {
+        cmd = tk[i++];
+        if (/[a-z]/.test(cmd)) throw new Error(`commande relative « ${cmd} » : cadre non calculable`);
+        if (cmd === "Z") { cur = start; prevC2 = null; continue; }
+      }
+      switch (cmd) {
+        case "M": cur = [num(), num()]; start = cur; see(cur[1]); prevC2 = null; cmd = "L"; break;
+        case "L": cur = [num(), num()]; see(cur[1]); prevC2 = null; break;
+        case "H": cur = [num(), cur[1]]; prevC2 = null; break;
+        case "V": cur = [cur[0], num()]; see(cur[1]); prevC2 = null; break;
+        case "C": { const p1 = [num(), num()], p2 = [num(), num()], p3 = [num(), num()]; cubic(cur, p1, p2, p3); prevC2 = p2; cur = p3; break; }
+        case "S": { const p1 = prevC2 ? [2 * cur[0] - prevC2[0], 2 * cur[1] - prevC2[1]] : cur; const p2 = [num(), num()], p3 = [num(), num()]; cubic(cur, p1, p2, p3); prevC2 = p2; cur = p3; break; }
+        default: throw new Error(`commande « ${cmd} » non gérée`);
+      }
+    }
+  }
+  return maxY;
+}
+
 export function svg(paths, groundY) {
   const PAD = 6;
   const body = paths
@@ -199,7 +237,7 @@ export function svg(paths, groundY) {
   const n = paths.flatMap((p) => p.d.match(/-?\d+(?:\.\d+)?/g).map(Number));
   const xs = n.filter((_, i) => i % 2 === 0), ys = n.filter((_, i) => i % 2 === 1);
   const x0 = Math.min(...xs) - PAD, y0 = Math.min(...ys) - PAD;
-  const w = Math.max(...xs) + PAD - x0, h = Math.max(...ys) + 1.2 - y0;
+  const w = Math.max(...xs) + PAD - x0, h = strokeBottom(paths.map((p) => p.d)) + 1.2 - y0;
   return `<svg viewBox="${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 ${body}
 </svg>
