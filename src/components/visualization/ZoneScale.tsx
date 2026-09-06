@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { usePickLang } from "@/lib/i18n-utils";
-import { ZONE_META } from "@/types";
+import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import type { ZoneNumber } from "./types";
 
 const ALL_ZONES: ZoneNumber[] = [1, 2, 3, 4, 5, 6];
@@ -23,9 +22,14 @@ interface ZoneScaleProps {
  * The legend for the ink ramp.
  *
  * The ramp orders the zones — darker is harder — but it does not name them, so
- * every screen that paints zone fills shows this once. Names come from
- * ZONE_META, the same table the zone pages and badges read, so the legend can
- * never disagree with them.
+ * every screen that paints zone fills shows this once.
+ *
+ * Each entry is the ZoneBadge itself with its name beside the code: the very
+ * chip the reader meets in the steps and on the calendar, printed once and
+ * named. It used to be three objects — a grey swatch, a code, a name — that
+ * matched nothing else on the page and wrapped ragged on a phone. Names come
+ * from ZONE_META through the badge, so the legend can never disagree with the
+ * marks it explains.
  */
 export function ZoneScale({
   layout = "row",
@@ -34,7 +38,6 @@ export function ZoneScale({
   className,
 }: ZoneScaleProps) {
   const { t } = useTranslation("common");
-  const pick = usePickLang();
 
   return (
     <div className={cn("zn-zonescale", className)} data-layout={layout}>
@@ -43,17 +46,11 @@ export function ZoneScale({
           {t("zones.scaleTitle")}
         </span>
       )}
-      {zones.map((zone) => (
-        <span key={zone} className="zn-zonescale__item">
-          <span className="zn-zonescale__swatch" aria-hidden="true">
-            <span className="zn-zonescale__fill" data-zone={zone} />
-          </span>
-          <span className="zn-zonescale__code">Z{zone}</span>
-          <span className="zn-zonescale__name">
-            {pick(ZONE_META[zone], "label")}
-          </span>
-        </span>
-      ))}
+      <span className="zn-zonescale__items">
+        {zones.map((zone) => (
+          <ZoneBadge key={zone} zone={zone} showLabel />
+        ))}
+      </span>
     </div>
   );
 }

@@ -103,26 +103,49 @@
 
 /* ── the legend ───────────────────────────────────────────────────────── */
 
+/* The title, then the chips — two flex items under one wrap. On a wide screen
+   the chips sit on the title's line; on a phone the run of chips drops under
+   the title as one block and wraps inside itself, the same gap between every
+   chip. The title is never stranded mid-row between two entries, and no entry
+   is ever cut from its name: each one is a single ZoneBadge. */
 .zn-zonescale {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-11);
+  gap: var(--sp-5) var(--sp-8);
 }
 
-.zn-zonescale[data-layout="column"] {
+.zn-zonescale__items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.zn-zonescale[data-layout="column"],
+.zn-zonescale[data-layout="column"] .zn-zonescale__items {
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--sp-4);
 }
 
-.zn-zonescale__item {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-4);
+/* On a phone the six chips of a full legend wrapped 2 / 3 / 1, the last one
+   alone on its row. A grid instead of a wrap: the columns line up and the ramp
+   reads down as well as across. Only from five chips up — a session's three
+   or four sit on one row and need nothing. 140px is the widest chip, "Z1
+   Récupération", so no column ever clips a name. The full width is stated:
+   as a flex item the box would shrink to one column and stack the six chips
+   beside the title. */
+@media (max-width: 640px) {
+  .zn-zonescale[data-layout="row"] .zn-zonescale__items:has(> :nth-child(5)) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    inline-size: 100%;
+  }
 }
 
-/* 38x20 swatch — one of the raw sizes the design system states outright. */
+/* 38x20 swatch — one of the raw sizes the design system states outright. The
+   legend itself no longer prints one (its entries are ZoneBadge chips); the
+   zones table in ZoneCalculator still does, one per row. */
 .zn-zonescale__swatch {
   display: block;
   inline-size: 38px;
@@ -148,15 +171,3 @@
 .zn-zonescale__fill[data-zone="4"] { --zn-block-fill: var(--zone-4); }
 .zn-zonescale__fill[data-zone="5"] { --zn-block-fill: var(--zone-5); }
 .zn-zonescale__fill[data-zone="6"] { --zn-block-fill: var(--zone-6); }
-
-.zn-zonescale__code {
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  font-weight: var(--fw-bold);
-  color: var(--text-body);
-}
-
-.zn-zonescale__name {
-  font: var(--type-caption);
-  color: var(--text-muted);
-}
