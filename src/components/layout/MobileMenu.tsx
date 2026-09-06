@@ -93,6 +93,12 @@ export function MobileMenu() {
     }
     const onClose = () => {
       setOpen(false);
+      // Every door shuts with the panel. The element outlives its dialog, so
+      // without this the next opening would show the list of pages the last
+      // visit left open, instead of the six lines.
+      dialog.querySelectorAll("details").forEach((door) => {
+        door.open = false;
+      });
       if (handoff.current) {
         handoff.current = false;
         return;
@@ -147,10 +153,14 @@ export function MobileMenu() {
           <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.goTo")}</p>
 
           {/* One door per line. A door with children is a native <details>,
-              closed unless you are standing in it — so the panel is six lines
+              always closed when the panel opens — the disc marks the door you
+              are standing in, without unfolding it — so the panel is six lines
               on opening, and the twenty-five routes are one tap away under the
               door that owns them. <details> also means the disclosure contract
-              (Enter, Space, the open state) is the platform's, not ours. */}
+              (Enter, Space, the open state) is the platform's, not ours — and
+              one `name` shared by every door makes them an exclusive accordion:
+              opening a door closes the one that was open, so the panel never
+              holds two lists of pages at once. */}
           <nav aria-label={t("nav.primary")}>
             <ul className="zn-menu__doors">
               {PRIMARY_NAV.map((section) => {
@@ -173,7 +183,7 @@ export function MobileMenu() {
                 }
                 return (
                   <li key={section.id}>
-                    <details className="zn-menu__group" open={here || undefined}>
+                    <details className="zn-menu__group" name="door">
                       <summary className="zn-display zn-menu__door" data-level="2">
                         {t(section.labelKey)}
                         {here && <span className="zn-menu__dot" aria-hidden="true" />}
@@ -199,7 +209,7 @@ export function MobileMenu() {
               })}
 
               <li>
-                <details className="zn-menu__group">
+                <details className="zn-menu__group" name="door">
                   <summary className="zn-display zn-menu__door" data-level="2">
                     {t("topnav.account")}
                     <ChevronDown className="zn-menu__chevron" aria-hidden="true" />
