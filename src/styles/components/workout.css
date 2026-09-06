@@ -57,6 +57,53 @@
   flex: none;
 }
 
+/* ── the structure, on a phone ────────────────────────────────────────── */
+
+/* The section reads as a table on a wide screen: a zone mark, a name, a
+   duration on the right. On 390px each of those three became its own line —
+   a zone badge that spelled out "Z1-Z2 Récupération → Endurance" took the
+   width on its own, pushing the name below it and leaving the duration
+   stranded across an empty gutter. A two-step phase cost 250px.
+
+   Nothing is removed from the DOM: the badge keeps its full aria-label, the
+   phase keeps its duration. What goes is the part that repeats. */
+@media (max-width: 640px) {
+  .zn-phase {
+    padding: var(--sp-9) var(--sp-10);
+    border-radius: var(--r-2xl);
+  }
+
+  /* The phase profile restates, 96px wide, the shape the full-width chart two
+     hundred pixels above already drew. The duration beside it stays.
+
+     Two classes in the selector: the element is also .zn-zonebar, zone.css is
+     imported after this sheet, and a single class would lose the tie to its
+     `display: flex`. */
+  .zn-phase__profile .zn-phase__bar {
+    display: none;
+  }
+
+  /* "Z1-Z2" is the mark; the zone's name is what the legend is for, and it is
+     printed right above. */
+  .zn-step .zn-zone-badge__label {
+    display: none;
+  }
+
+  /* A capsule that says a step has no zone is a mark for the absence of a
+     mark. The absence says it. */
+  .zn-step__nozone {
+    display: none;
+  }
+
+  /* The between-sets recovery is one row inside a dashed frame with its own
+     label above it. On a phone the frame's padding was worth more than the row
+     it held; the dashes alone say "this is the seam between two sets". */
+  .zn-repeat__between {
+    gap: 0;
+    padding: var(--sp-3) var(--sp-6);
+  }
+}
+
 /* ── a step ──────────────────────────────────────────────────────────── */
 
 /* Ruled rows, not a stack of boxes: a divider above each one, 11px of air

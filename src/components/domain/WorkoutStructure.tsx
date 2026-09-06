@@ -244,18 +244,16 @@ function CompactNestedRepeatItem({
   const innerBetween = (inner.between ?? []) as WorkoutStepSegment[];
   const setBetween = (step.between ?? []) as WorkoutStepSegment[];
 
-  const setsLabel = t(`structure.repeatUnits.${step.unit ?? "blocks"}`, { count: step.count });
-  const repsLabel = t(`structure.repeatUnits.${inner.unit ?? "blocks"}`, { count: inner.count });
   const betweenSetsLabel = t(`structure.between.${step.unit ?? "blocks"}`);
 
   return (
     <div className="zn-repeat" data-depth={depth > 0 ? "nested" : undefined}>
-      {/* Plain mono, not pills: these are counts to read, not controls to
-          press. The previous rounded secondary badges read as toggles. */}
-      <p className="zn-repeat__count">
-        {setsLabel} · {repsLabel}
-      </p>
-
+      {/* "2 séries · 12 répétitions" used to be printed here. The phase already
+          carries its summary — "2 × (12 × 30\"/30\") + 3' récup" — whenever a
+          nested repeat exists, which is exactly when this component renders,
+          and the group below is led by its own "12 ×". Three spellings of one
+          structure, stacked. The summary is the one that survives: it is the
+          shortest and the only one that names the recovery. */}
       <RepeatGroup count={inner.count}>
         {innerSegments.map((segment, index) => (
           <StepRow key={`compact-inner-step-${index}`} step={segment} userZones={userZones} t={t} />
