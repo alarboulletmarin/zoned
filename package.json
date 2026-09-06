@@ -21,6 +21,7 @@
     "generate:sitemap": "bun run scripts/generate-sitemap.ts",
     "generate:licenses": "bun run scripts/generate-licenses.ts",
     "generate:og": "bun run scripts/generate-og-image.ts",
+    "generate:readme-banner": "bun run scripts/generate-readme-banner.ts",
     "generate:icons": "bun run scripts/generate-icons.ts",
     "check:icons": "bun run scripts/generate-icons.ts --check",
     "check:workouts": "bun run scripts/qa-workout-schema.ts",

@@ -1,5 +1,8 @@
 <div align="center">
-  <img src="src/assets/logo.svg" alt="Zoned" width="120" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/readme-banner-dark.png" />
+    <img src="assets/readme-banner-light.png" alt="Zoned — endurance training, explained by the science. Two runners drawn in one line stand on the rule that carries the catalogue numbers." width="1280" />
+  </picture>
 
   # Zoned
 
