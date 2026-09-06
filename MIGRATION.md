@@ -417,3 +417,51 @@ Enfin le pied de page mobile, signalé comme un mur : douze liens empilés à 44
 de plancher tactile faisaient huit cents pixels. Les liens coulent en deux
 colonnes, sept rangées au lieu de douze. Le plancher tactile ne bouge pas — c'est
 lui qui dit où est la ressource, et sur un téléphone c'est la largeur.
+
+### Lot 16 — Les quatre derniers répertoires, et deux gabarits ✅
+
+Visualization, weekly, skeletons, search : les quatre que personne n'avait
+couverts, tombés à zéro utilitaire. Le portage a trouvé quatre défauts que
+personne ne cherchait : la frise coupait la fin des séances denses (segments en
+pourcentage PLUS deux pixels de marge, donc 100 % + 200 px sur un 30/30) ;
+l'étiquette de survol était découpée par un `overflow: hidden` depuis toujours ;
+le dégradé du profil altimétrique avait un identifiant fixe que deux graphiques
+sur la même page se disputaient ; et le texte secondaire de l'infobulle était de
+l'encre sombre sur fond d'encre.
+
+Deux gabarits de partage ajoutés — « Papier » et « Planche des zones » — sans en
+convertir un seul des trente-sept existants. Ce sont les premiers dessins qui
+sortent de l'app.
+
+### Lot 17 — Zéro utilitaire ✅
+
+`ShareDialog` était le dernier fichier. 24 298 utilitaires au départ de la
+refonte, 0 aujourd'hui ; la seule classe non préfixée qui reste est `sr-only`,
+et elle est à nous.
+
+Une collision de classe corrigée, introduite par le lot 13 : `.zn-menu` était
+portée à la fois par le `<dialog>` plein écran et par tous les
+`DropdownMenuContent`. Même couche, même spécificité, feuille du menu importée
+après : chaque menu déroulant de l'app s'affichait en plein écran sur fond
+encre, à 176 px hors du viewport. Deux revues l'ont mesurée indépendamment.
+
+### Lot 18 — Tailwind s'en va ✅
+
+Le framework est retiré, avec `tailwind-merge`, `class-variance-authority`, le
+`@theme` de tokens.css et la couche de compatibilité de themes.css. `clsx`
+reste : c'est le corps de `cn()`, dont la signature ne bouge pas.
+
+Le risque de ce lot n'était pas la compilation mais **le reset perdu** — une app
+qui perd son preflight ne casse pas, elle dérive. La revue a monté un second
+arbre de travail détaché à HEAD, y a réinstallé Tailwind, bâti les deux
+productions, servi chacune sur son port, et comparé huit écrans à deux largeurs
+et deux thèmes : dix-neuf paires sur vingt identiques au pixel.
+
+Cinq paquets Radix partent au total (slot, switch, tabs, dialog, slider). Les
+dialogues passent à l'élément natif sur le modèle du menu plein écran ; le
+slider devient un `<input type="range">`, et pour le filtre de durée qui est une
+plage, DEUX inputs superposés plutôt qu'un contrôle réimplémenté — chaque
+poignée garde ainsi son contrat clavier natif.
+
+Restent quatre paquets sans équivalent natif : dropdown-menu, popover, select,
+tooltip.
