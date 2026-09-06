@@ -117,7 +117,7 @@
   z-index: 1;
   align-self: end;
   block-size: auto;
-  margin-block-end: calc(-1 * (var(--hero-pad-end) + var(--bw-rule)));
+  margin-block-end: calc(-1 * (var(--hero-pad-end) + var(--rule-bite)));
 }
 
 /* A stride is taller than wide: height stated, width from the viewBox. */
