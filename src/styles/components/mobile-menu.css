@@ -223,8 +223,16 @@
   text-decoration: none;
 }
 
+/* La page où l'on est. Le gras et l'encre claire ne suffisaient pas : sur ce
+   fond noir, --panel-ink-faint → --panel-ink-text est un écart porté par la
+   seule couleur, et il fond dès qu'on désature. La pilule inverse le rapport —
+   sur un panneau d'encre, l'inversion est du papier — donc l'état se lit aussi
+   en niveaux de gris. Rien ne bouge : la boîte a déjà ses 44px de min-block-size
+   et son retrait, on ne fait que peindre dedans. */
 .zn-menu__sub-link[aria-current="page"] {
-  color: var(--panel-ink-text);
+  background: var(--panel-ink-text);
+  color: var(--panel-ink);
+  border-radius: var(--r-pill);
   font-weight: var(--fw-semibold);
 }
 

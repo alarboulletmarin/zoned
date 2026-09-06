@@ -175,23 +175,36 @@
   block-size: 13px;
 }
 
-/* The rail is a ruled margin, the way a plan is indexed on paper. */
+/* Le rail réglé est parti avec la bande qu'il portait. Ce composant disait la
+   même chose de deux façons opposées selon la largeur de l'écran : bande
+   vermillon sur l'arête gauche au-dessus de 1024px, inversion d'encre pleine
+   sur les puces en dessous (.zn-rs-chip[aria-current], soixante lignes plus
+   bas) — la page changeait de vocabulaire au redimensionnement. C'est la puce
+   qui avait raison ; le rail adopte sa forme. Et une pilule ne se pose pas sur
+   un filet, donc le filet s'en va avec.
+
+   ZÉRO DÉCALAGE, et le calc de padding est mesuré et non déduit : le filet du
+   rail, la marge négative et la bordure réservée valaient ENSEMBLE 1.5px de
+   retrait une fois rendus, pas 2.5px comme l'arithmétique nominale le laisse
+   croire — Chrome ramène une bordure de 2.5px à 2 et une de 1.5px à 1. Le
+   texte était à listeBorderBox + 13.5px, il y reste. La hauteur ne bouge pas
+   non plus : aucune bordure verticale n'est ajoutée, le padding-block reste à
+   sp-5. */
 .zn-rs-nav__list {
   margin: 0;
   padding: 0;
   list-style: none;
-  border-inline-start: var(--border-divider);
 }
 
 .zn-rs-nav__link {
   display: block;
   inline-size: 100%;
-  margin-inline-start: calc(var(--bw-rule) * -1);
   padding: var(--sp-5) var(--sp-6);
+  padding-inline-start: calc(var(--sp-6) + var(--bw-rule));
 
   background: transparent;
   border: 0;
-  border-inline-start: var(--bw-heavy) solid transparent;
+  border-radius: var(--r-pill);
   text-align: start;
   cursor: pointer;
 
@@ -199,18 +212,19 @@
   color: var(--text-faint);
   transition:
     color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+    background var(--dur-fast) var(--ease-out);
 }
 
 .zn-rs-nav__link:hover {
   color: var(--text-body);
-  border-inline-start-color: var(--line-divider);
+  background: var(--surface-band);
 }
 
-/* Where you are standing: the vermillon frame reduced to its one edge. */
+/* La section où l'on se tient : l'inversion d'encre pleine, mot pour mot celle
+   de .zn-rs-chip[aria-current] plus bas. Le gras la double en niveaux de gris. */
 .zn-rs-nav__link[aria-current="true"] {
-  border-inline-start-color: var(--accent);
-  color: var(--text-body);
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
   font-weight: var(--fw-semibold);
 }
 
@@ -888,14 +902,26 @@
   font: var(--fw-semibold) var(--fs-body) / 1.4 var(--font-text);
 }
 
-/* Now. The only vermillon in the graphic — a stroke and a word, no fill. */
+/* Maintenant. Le filet gauche n'est PAS une bande décorative : c'est le tronc
+   de la frise, le même que .zn-rs-timeline__row porte ligne après ligne, à la
+   même épaisseur et au même retrait. Le supprimer trouerait la colonne
+   verticale sur 40px et décalerait la ligne de 17.5px vers la gauche — c'est
+   pour ça qu'on ne le retire pas : on le repeint.
+
+   Il redevient donc le gris du tronc. Ce qu'on perd est le quatrième canal de
+   trop : la ligne dit déjà « maintenant » par la pastille vermillon, par
+   l'heure en mono gras vermillon, par le mot en capitales vermillon et par le
+   filet horizontal qui le prolonge (RaceTimeline.tsx:69-75). Le vermillon
+   vertical ne disait rien que les trois autres ne disent.
+
+   Géométrie strictement inchangée : 1.5px avant, 1.5px après. */
 .zn-rs-now {
   position: relative;
   display: flex;
   align-items: center;
   gap: var(--sp-6);
   padding-inline-start: var(--sp-8);
-  border-inline-start: var(--bw-rule) solid var(--accent);
+  border-inline-start: var(--border-divider);
 }
 
 .zn-rs-now__dot {

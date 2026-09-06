@@ -195,9 +195,29 @@ html {
   transition: background var(--dur-fast) var(--ease-out);
 }
 
-.zn-topbar__panel-link:hover,
-.zn-topbar__panel-link[aria-current="page"] {
+/* Survol : papier creusé, le seul état déjà uniforme dans toute l'app. */
+.zn-topbar__panel-link:hover {
   background: var(--surface-band);
+}
+
+/* La page où l'on est. Elle partageait sa déclaration avec son propre survol,
+   donc pointer n'importe quel autre lien du panneau le faisait passer pour la
+   page courante. C'est l'inversion d'encre qui dit « ici », comme la porte
+   quatre-vingts lignes plus haut — le rayon ne change pas (r-lg), la boîte non
+   plus : seul le fond est peint. Le libellé prend le gras, second canal exigé
+   par WCAG 1.4.1, et la description hérite de la couleur inversée plutôt que de
+   rester en --text-muted, illisible sur l'encre. */
+.zn-topbar__panel-link[aria-current="page"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-topbar__panel-link[aria-current="page"] .zn-topbar__panel-label {
+  font-weight: var(--fw-semibold);
+}
+
+.zn-topbar__panel-link[aria-current="page"] .zn-topbar__panel-desc {
+  color: inherit;
 }
 
 .zn-topbar__panel-label {
@@ -218,7 +238,8 @@ html {
    page rather than three floating objects.
 
    The 44px target is kept and simply not drawn: the padding carries it, and
-   the underline is the only thing that appears on hover. */
+   the pill of paper is the only thing that appears on hover — the same one the
+   door already uses, twelve lines above. */
 
 .zn-topbar__tools {
   margin-inline-start: auto;
@@ -241,11 +262,13 @@ html {
 
   background: transparent;
   border: 0;
+  border-radius: var(--r-pill);
   color: var(--ink-1);
   cursor: pointer;
 
   font: var(--type-body-sm);
   white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease-out);
 }
 
 /* The hairline between two neighbours. Inset from the top and bottom so it
@@ -259,23 +282,21 @@ html {
   background: var(--line-divider);
 }
 
-/* Hover and focus print a 2px vermillon rule under the control. It is drawn
-   inside the padding so it underlines the label, not the touch target. */
-.zn-topbar__tool::after {
-  content: "";
-  position: absolute;
-  inset-inline: var(--sp-8);
-  inset-block-end: 7px;
-  block-size: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transition: transform var(--dur-fast) var(--ease-out);
-}
+/* Le trait vermillon de 2px sous le libellé est parti. Il servait deux choses
+   à la fois : le survol, qui n'est pas une information (aucun critère ne le
+   demande), et l'ouverture du panneau, qui l'est — mais elle est déjà dite
+   deux fois, par aria-expanded et par le chevron qui pivote de 180°. C'était
+   un troisième canal redondant, et le seul vermillon permanent de la barre :
+   le vermillon ne dit plus que « maintenant » et le focus.
 
-.zn-topbar__tool:hover::after,
-.zn-topbar__tool[aria-expanded="true"]::after,
-.zn-topbar__tool[data-state="open"]::after {
-  transform: scaleX(1);
+   Ce qui le remplace n'est pas une invention : c'est l'aplat de pilule que
+   .zn-topbar__door:hover utilise déjà. La porte et l'outil se comportent enfin
+   pareil, ce qui retire une exception au lieu d'en ajouter une. Le fond ne
+   participe pas à la mise en page : la boîte est rigoureusement identique. */
+.zn-topbar__tool:hover,
+.zn-topbar__tool[aria-expanded="true"],
+.zn-topbar__tool[data-state="open"] {
+  background: var(--surface-band);
 }
 
 .zn-topbar__tool:active {

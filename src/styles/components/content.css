@@ -489,27 +489,32 @@
 
 /* ── the glossary term page ───────────────────────────────────────────── */
 
-.zn-gterm__formula {
-  padding: var(--sp-8);
-  background: var(--surface-band);
-  border: var(--border-rule);
-  border-radius: var(--r-lg);
-}
-
 .zn-gterm__code {
   font-family: var(--font-mono);
   font-size: var(--fs-body-sm);
   color: var(--text-body);
 }
 
-/* A worked example is the one place the term page earns the vermillon frame:
-   2.5px on the leading edge, no tint behind it. */
+/* L'exemple travaillé était une demi-carte : un fond, un padding, un rayon —
+   mais un filet vermillon sur la seule arête gauche et des coins coupés à
+   gauche. Le contour entier ou rien : c'est une carte, elle prend le cadre
+   d'encre complet de sa voisine.
+
+   Le vermillon n'y perd rien, parce qu'il n'y disait rien : le bloc porte déjà
+   son nom en capitales mono (« EXEMPLE » / « FORMULE », GlossaryDetail.tsx:60
+   et :68). C'est le kicker qui distingue les deux blocs, pas la couleur d'un
+   filet — et une fois le cadre identique, deux blocs frères se lisent enfin
+   comme deux blocs frères. La règle est donc mutualisée avec la formule.
+
+   Ce que la conversion déplace, et c'est voulu : le retrait gauche redescend
+   de 22px à 16px et le bloc redevient symétrique, parce que les 22px
+   n'existaient que pour dégager le rail. */
+.zn-gterm__formula,
 .zn-gterm__example {
   padding: var(--sp-8);
-  padding-inline-start: var(--sp-11);
   background: var(--surface-band);
-  border-inline-start: var(--border-heavy);
-  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
 }
 
 .zn-gterm__link {
@@ -552,8 +557,19 @@
   margin-block-end: var(--sp-11);
 }
 
-/* A heading in the list. The active one wears the 2.5px vermillon frame on
-   its leading edge — never a faint tint. */
+/* Un titre de la liste. La bande vermillon de 2.5px sur l'arête gauche est
+   partie : c'était un rail de navigation, pas une carte, et le même état — « la
+   section que je lis » — se disait déjà en aplat d'encre ailleurs dans l'app
+   (.zn-nut-toc__link du hub nutrition). Trois formes pour une information, il
+   n'en reste qu'une : la pilule d'encre pleine inversée.
+
+   ZÉRO DÉCALAGE, et c'est pour ça que la bordure transparente RESTE au lieu de
+   repasser en padding : un fond se peint jusqu'au bord extérieur de la bordure
+   (background-clip vaut border-box par défaut), donc la pilule couvre
+   exactement la boîte d'aujourd'hui sans qu'un seul pixel de texte bouge. La
+   convertir en padding aurait coûté un demi-pixel — Chrome ramène 2.5px à 2 —
+   et un nombre magique dans un système qui n'en veut pas. Mesuré à DSF 1 et 2 :
+   Δ = 0. */
 .zn-toc__item {
   display: block;
   inline-size: 100%;
@@ -566,23 +582,31 @@
   background: none;
   border: none;
   border-inline-start: var(--bw-heavy) solid transparent;
+  border-radius: var(--r-pill);
   cursor: pointer;
 
   transition:
     color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
     background var(--dur-fast) var(--ease-out);
 }
 
+/* Survol : papier creusé, la forme unique du survol dans toute l'app. */
 .zn-toc__item:hover {
   color: var(--text-body);
-  border-inline-start-color: var(--line-divider);
+  background: var(--surface-band);
 }
 
+/* Là où l'on est. L'inversion d'encre — exactement .zn-nut-toc__link[aria-current],
+   copiée pour que le sommaire d'un article et celui du hub nutrition cessent
+   d'être deux dialectes. Le porteur non chromatique est l'inversion elle-même :
+   en niveaux de gris la pilule reste noire et le texte blanc, l'état survit à
+   la désaturation (WCAG 1.4.1). Le gras reste à --fw-medium, la valeur d'avant :
+   un scroll-spy repeint en continu, et passer à semibold ferait respirer la
+   ligne au changement de section — la seule chose qu'on s'interdit ici. */
 .zn-toc__item[aria-current] {
-  color: var(--text-body);
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
   font-weight: var(--fw-medium);
-  border-inline-start-color: var(--accent);
 }
 
 /* The phone version: a summary button that names where you are, and a panel

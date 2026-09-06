@@ -96,21 +96,10 @@
   --zone-text: var(--zone-6-text);
 }
 
-.zone-stripe {
-  position: relative;
-}
-
-.zone-stripe::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--zone-color);
-  border-radius: 2px 0 0 2px;
-  transition: background-color var(--dur-base) ease-in-out;
-}
+/* `.zone-stripe` (bande verticale de 4px à gauche d'une carte) a été retiré :
+   zéro appelant, et le changelog du projet enregistre déjà son remplacement
+   par des bordures hautes. C'était l'archétype même de la bande latérale que
+   ce chantier démonte — elle n'attend plus qu'on la réutilise. */
 
 .zone-badge {
   display: inline-flex;
@@ -140,27 +129,9 @@
   transform: translateY(var(--press-shift));
 }
 
-.intensity-bar {
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    var(--zone-1) 0%,
-    var(--zone-2) 20%,
-    var(--zone-3) 40%,
-    var(--zone-4) 60%,
-    var(--zone-5) 80%,
-    var(--zone-6) 100%
-  );
-  border-radius: 2px;
-}
-
-.intensity-bar.thin {
-  height: 2px;
-}
-
-.intensity-bar.thick {
-  height: 4px;
-}
+/* `.intensity-bar` a été retiré : zéro appelant, et son dégradé était déjà
+   faux — depuis que la rampe de zones est passée à l'encre, il résolvait en
+   gris sur gris et ne disait plus rien. */
 
 .zone-fill {
   background: var(--zone-color);
