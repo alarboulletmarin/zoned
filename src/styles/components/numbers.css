@@ -203,10 +203,15 @@
   border-radius: var(--r-2xl);
 }
 
-/* A row that already holds a saved time wears the 2.5px vermillon frame — the
-   system's "retained" marker, never a tint. */
+/* Une ligne qui porte déjà un temps enregistré double son filet d'ENCRE vers
+   l'intérieur (card.css). Le vermillon lui est retiré : « déjà rempli » n'est
+   ni « maintenant » ni même un choix de l'utilisateur, c'est un constat.
+   Le porteur non chromatique est le contenu lui-même — la ligne affiche le
+   temps qu'elle détient, une ligne vide n'affiche rien.
+   Inset : mesuré, la ligne grandissait de 2px (66 → 68px) dès qu'on y saisissait
+   un temps, et poussait toutes les distances suivantes. */
 .zn-num__row[data-filled="true"] {
-  border: var(--border-heavy);
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
 }
 
 /* ── table ────────────────────────────────────────────────────────────── */

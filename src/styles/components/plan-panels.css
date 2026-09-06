@@ -108,16 +108,52 @@ textarea.zn-pfield {
 .zn-pchart[data-h="xl"] .zn-pchart__cols { block-size: calc(var(--sp-19) * 2); }
 
 .zn-pchart__col {
+  position: relative;
   display: flex;
   align-items: flex-end;
   flex: 1;
   min-inline-size: 0;
   block-size: 100%;
+  /* Réserve d'espace, à garder même vidée de sa couleur : la supprimer
+     remonterait toutes les barres du graphe de 2px. */
   border-block-end: var(--bw-heavy) solid transparent;
 }
 
-.zn-pchart__col[data-current="true"] {
-  border-block-end-color: var(--accent);
+/* LA SEMAINE EN COURS — le filet vermillon qui courait sous la colonne est
+   remplacé par un repère d'encre posé au PLAFOND de la colonne.
+
+   Trois formes ont été essayées et mesurées avant celle-là :
+
+   1. L'anneau autour de la colonne — sans objet : la colonne est une piste
+      vide de toute la hauteur du graphe, l'entourer cadrerait du vide.
+   2. La voie de papier creusé derrière la colonne — rejetée : en thème
+      sombre --surface-band est plus NOIR que le papier de la carte, la voie
+      se lit comme une barre pleine montant au plafond. Une annotation ne
+      doit jamais pouvoir se lire comme une donnée.
+   3. Le filet d'encre sous la colonne, ou l'anneau d'encre sur la barre —
+      rejetés tous deux pour la même raison : la barre est peinte dans la
+      rampe d'ENCRE des zones, de 14 % (affûtage) à 80 % (pic). Une marque
+      d'encre posée contre elle disparaît sur la moitié des phases. Une
+      marque qui ne se voit qu'une fois sur deux, c'est exactement la
+      demi-règle qui a produit le désordre qu'on répare.
+
+   Le plafond de la colonne, lui, est du papier nu quelle que soit la phase et
+   quelle que soit la hauteur de la barre. Le repère y contraste toujours, il
+   est à hauteur constante donc il se balaye d'un coup d'œil, et il est trop
+   détaché des barres pour être pris pour l'une d'elles. Présence contre
+   absence, pas une teinte contre une autre : il survit au niveau de gris
+   (WCAG 1.4.1). Le pseudo-élément est absolu : hors flux, zéro décalage.
+
+   RESTE À FAIRE HORS PÉRIMÈTRE : le libellé de la semaine en gras sous la
+   colonne (data-current à passer sur .zn-pchart__tick,
+   PlanStatsSection.tsx:83) — le second canal idéal, mais c'est un .tsx. */
+.zn-pchart__col[data-current="true"]::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: var(--bw-heavy);
+  background: var(--line-strong);
 }
 
 .zn-pchart__bar {
@@ -862,7 +898,6 @@ textarea.zn-pfield {
   border: var(--border-hair);
   border-radius: var(--r-xs);
   overflow: hidden;
-  transition: border-color var(--dur-fast) var(--ease-out);
 }
 
 .zn-prpe__fill {
@@ -880,9 +915,21 @@ textarea.zn-pfield {
   color: var(--text-faint);
 }
 
-/* Chosen is the 2.5px vermillon frame, never a tint and never a scale. */
+/* Le palier choisi porte l'anneau d'ENCRE sur les quatre côtés, jamais un
+   aplat ni une mise à l'échelle. Le vermillon lui est retiré (card.css).
+
+   POURQUOI outline et pas box-shadow inset comme sur les cartes : la jauge
+   contient un enfant peint, .zn-prpe__fill, tiré dans la rampe d'encre des
+   zones. Une ombre INTERNE se dessine sous les enfants — elle serait mangée
+   par le remplissage ; et posée par-dessus, elle disparaîtrait quand même sur
+   un palier à 80 % d'encre. L'outline se pose à l'EXTÉRIEUR de la piste, sur
+   le papier du panneau : il contraste toujours, dans les deux thèmes.
+   L'outline ne participe pas à la mise en page et suit le rayon des coins.
+   Mesuré : la bordure 1 → 2.5px rognait le remplissage de 2px de large et de
+   1.2px de haut à chaque clic ; il ne bouge plus. */
 .zn-prpe__step[data-selected="true"] .zn-prpe__track {
-  border: var(--border-heavy);
+  outline: var(--bw-rule) solid var(--line-strong);
+  outline-offset: 0;
 }
 
 .zn-prpe__step[data-selected="true"] .zn-prpe__num {

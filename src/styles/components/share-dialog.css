@@ -353,8 +353,9 @@
   }
 }
 
-/* The frame around one template. 1.5px is the house outline; the selected
-   one goes to 2.5px, which is what the system reserves for a kept frame.
+/* The frame around one template. 1.5px is the house outline; l'aperçu retenu
+   double ce filet d'ENCRE vers l'intérieur (card.css) au lieu de prendre le
+   cadre vermillon, désormais réservé à « maintenant » et au focus.
    No shadow: this is a card in a row, not a floating surface. */
 .zn-share-dialog__frame {
   position: relative;
@@ -380,11 +381,22 @@
   border-radius: var(--r-2xl);
   overflow: hidden;
   pointer-events: none;
-  transition: border-color var(--dur-base) var(--ease-out);
 }
 
+/* POURQUOI un outline EXTÉRIEUR et pas l'ombre interne des cartes : l'aperçu
+   remplit le cadre, et son illustration est épinglée à la rampe CLAIRE quel
+   que soit le thème (voir le bloc --frame-mat ci-dessus). Un anneau d'encre
+   posé à l'intérieur serait recouvert par l'illustration ; et en thème sombre
+   l'encre du système est crème — crème sur une illustration claire, on ne
+   voit rien. Posé à l'extérieur, l'anneau tombe sur le papier de la feuille,
+   qui lui suit le thème : il contraste dans les deux cas.
+   L'outline ne participe pas à la mise en page et ne fuit pas dans le PNG
+   exporté — html-to-image capture .zn-share-dialog__mount, un descendant.
+   Deuxième canal, non chromatique, déjà en place plus haut : la diapositive
+   retenue passe de opacity .8 / scale(.94) à opacity 1 / scale 1. */
 .zn-share-dialog__slide[aria-pressed="true"] .zn-share-dialog__frame {
-  border: var(--border-heavy);
+  outline: var(--bw-rule) solid var(--line-strong);
+  outline-offset: 0;
 }
 
 /* The checkerboard behind a transparent preview. Not decoration: it is the

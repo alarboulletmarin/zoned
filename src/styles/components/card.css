@@ -52,12 +52,27 @@
   transform: translateY(var(--press-shift));
 }
 
-/* A chosen card wears the 2.5px vermillon frame, never a tint. Driven by the
-   ARIA state the call site already sets, so no extra prop was invented. */
+/* CHOISI — la déclaration de référence du système. Une carte retenue double
+   son filet d'ENCRE vers l'intérieur ; elle ne prend plus le cadre vermillon.
+
+   POURQUOI l'encre : ce même cadre vermillon 2.5px disait aussi « aujourd'hui »,
+   « cible de dépôt », « verrouillé », « jour de course », « irréversible » — et
+   c'est le dessin de l'anneau de focus (base.css). Dix-sept sens pour une
+   forme. Le vermillon est rendu à « maintenant » et au focus, rien d'autre.
+
+   POURQUOI un box-shadow inset et pas une bordure : mesuré au navigateur, la
+   bordure 1.5 → 2.5px faisait grandir la carte de 2px et poussait sa voisine
+   de 2px vers le bas à chaque choix. L'ombre interne ne participe pas à la
+   mise en page et suit le rayon des coins : 3px d'encre continue sur les
+   quatre côtés, zéro pixel de déplacement.
+
+   WCAG 1.4.1 : la marque n'est pas une teinte mais une ÉPAISSEUR — elle
+   survit au niveau de gris — et aria-selected / aria-current / data-state
+   la portent déjà pour les technologies d'assistance. */
 .zn-card[aria-selected="true"],
 .zn-card[aria-current="true"],
 .zn-card[data-state="selected"] {
-  border: var(--border-heavy);
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
 }
 
 /* WCAG 2.5.8 — a clickable card still answers to the 44px floor on touch. */

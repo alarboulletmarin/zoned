@@ -821,10 +821,19 @@
   transform: translateY(var(--press-shift));
 }
 
-/* The picked track wears the 2.5px vermillon frame on all four edges: the
-   system's "this one" mark, and it survives the hairline above it. */
+/* La piste retenue porte l'anneau d'ENCRE sur les quatre côtés — la marque
+   « choisi » du système (card.css) — et non plus le vermillon, désormais
+   réservé à « maintenant » et au focus.
+
+   Ici l'anneau reste à --bw-heavy et non --bw-rule : la ligne de liste n'a
+   AUCUNE bordure propre (border: none, ce sont les filets de séparation du
+   <li> qui la cadrent), donc l'anneau est tout le contour. 2.5px seul pèse
+   ce que pèsent ailleurs 1.5px de bordure + 1.5px d'anneau.
+
+   Deuxième canal, non chromatique : le papier creusé, déjà là. Il double
+   aussi le survol — c'est l'anneau, une épaisseur, qui les départage. */
 .zn-rt__track[aria-pressed="true"] {
-  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--line-strong);
   background: var(--surface-band);
 }
 

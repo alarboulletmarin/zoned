@@ -122,9 +122,9 @@
 /* One option in a question: a real radio, drawn.
 
    The input is the control — it keeps the group's arrow keys, its name, and
-   its checked state — and the label is the paper around it. Chosen is the
-   2.5px vermillon frame the system reserves for a marked frame, never a tint:
-   a tinted option and an unchosen one are the same shape in greyscale. */
+   its checked state — and the label is the paper around it. Choisi double le
+   filet d'ENCRE vers l'intérieur (card.css), jamais un aplat : une option
+   teintée et une option non choisie sont la même forme en niveaux de gris. */
 .zn-wiz-opt {
   position: relative;
   display: flex;
@@ -153,8 +153,13 @@
   transform: translateY(var(--press-shift));
 }
 
+/* Inset : mesuré, l'option grandissait de 2px (77.5 → 79.5px) et poussait
+   toutes les suivantes du questionnaire. Le fond reste le papier de carte,
+   pour qu'une option cochée ne se confonde pas avec une option survolée.
+   Deuxième canal, non chromatique : .zn-wiz-opt__glyph passe de l'encre pâle
+   à l'encre du texte, plus bas dans ce fichier. */
 .zn-wiz-opt:has(input:checked) {
-  border: var(--border-heavy);
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
   background: var(--surface-card);
 }
 

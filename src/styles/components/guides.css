@@ -243,9 +243,11 @@
 
 /* ── routines ─────────────────────────────────────────────────────────── */
 
-/* Four toggles, one per session type. The chosen one wears the 2.5px
-   vermillon frame — the system's "retained" marker — so the screen's single
-   accent fill is still free for its primary action. */
+/* Four toggles, one per session type. La routine choisie double son filet
+   d'encre vers l'intérieur — la marque « choisi » du système (card.css) —
+   et laisse le vermillon à « maintenant » et au focus. Sur cette page, les
+   onglets au-dessus disaient déjà « ici » en vermillon : deux vermillons pour
+   deux sens différents à 200px l'un de l'autre, il n'en reste plus qu'un. */
 .zn-guide__routine {
   display: flex;
   flex-direction: column;
@@ -275,8 +277,10 @@
   transform: translateY(var(--press-shift));
 }
 
+/* Inset, pas une bordure : la tuile grandissait de 2px et poussait toute la
+   rangée quand on la choisissait (mesuré : 84.8 → 86.8px de haut). */
 .zn-guide__routine[aria-pressed="true"] {
-  border: var(--border-heavy);
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
 }
 
 .zn-guide__routine > svg {
@@ -286,8 +290,11 @@
   color: var(--text-muted);
 }
 
+/* Le second canal, non chromatique : le glyphe passe de l'encre pâle à
+   l'encre du texte. Une VALEUR, pas une teinte — visible en niveaux de gris,
+   là où l'ancien vermillon disparaissait. */
 .zn-guide__routine[aria-pressed="true"] > svg {
-  color: var(--text-link);
+  color: currentColor;
 }
 
 .zn-guide__routinename {

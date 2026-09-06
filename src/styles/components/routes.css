@@ -600,8 +600,10 @@
 
 /* ── candidate card ───────────────────────────────────────────────────── */
 
-/* Three proposals in a column. The picked one wears the 2.5px vermillon frame
-   rather than a fill, so the sketch inside it stays readable. */
+/* Three proposals in a column. Le tracé retenu double son filet d'encre vers
+   l'intérieur — la marque « choisi » du système (card.css) — plutôt qu'un
+   aplat, pour que le croquis reste lisible. Le vermillon lui est retiré : il
+   ne dit plus que « maintenant » et le focus. */
 .zn-route-cand {
   display: flex;
   align-items: center;
@@ -630,8 +632,10 @@
   transform: translateY(var(--press-shift));
 }
 
+/* Inset : mesuré, la carte grandissait de 2px (78 → 80px) et poussait les
+   deux propositions suivantes d'autant. Elle ne bouge plus. */
 .zn-route-cand[aria-pressed="true"] {
-  border: var(--border-heavy);
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
 }
 
 /* The trace inherits its ink from the card, so the picked sketch darkens with
@@ -656,7 +660,10 @@
   white-space: nowrap;
 }
 
-/* The current pick, said in words as well as by the frame. */
+/* The current pick, said in words as well as by the frame. C'est le porteur
+   non chromatique de l'état : le mot n'est rendu que sur la carte retenue
+   (RouteCandidateCard.tsx:51). En encre de texte, plus en vermillon — le mot
+   suffit, et il reste lisible en niveaux de gris. */
 .zn-route-cand__flag {
   flex: none;
   font-family: var(--font-mono);
@@ -664,7 +671,7 @@
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-mono-kicker);
   text-transform: uppercase;
-  color: var(--text-link);
+  color: var(--text-body);
 }
 
 .zn-route-cand__facts {
