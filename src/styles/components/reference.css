@@ -433,27 +433,71 @@
 
 /* ── 404 ──────────────────────────────────────────────────────────────── */
 
-/* A hole in the site, printed like everything else: the code, what happened,
-   and the way back. No illustration, no apology. */
-.zn-ref__void {
+/* Le sol s'arrête ici. La règle part du bord gauche de l'écran et s'arrête
+   vers 60 % de sa largeur ; une figure marche vers le vide à son bout, et le
+   code est une cote en mono imprimée là où le sol a manqué. Puis le titre, la
+   phrase et le bouton, alignés à gauche comme le reste de la colonne : l'écran
+   se lit en une phrase du haut vers le bas. Plus d'alerte, plus de glyphe —
+   le dessin est la phrase.
+
+   C'est la seule surface de cette famille qui déborde de la colonne : le filet
+   doit partir du bord de l'écran pour que sa fin se lise comme une fin. Le
+   débord est vers la gauche seulement (calc(50% - 50vw) depuis une colonne
+   centrée), ce qui ne crée jamais de défilement horizontal. */
+.zn-void {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-10);
-
-  inline-size: 100%;
-  max-inline-size: 46ch;
-  margin-inline: auto;
   padding-block: var(--sp-20);
 }
 
-.zn-ref__void .zn-alert {
-  inline-size: 100%;
+.zn-void__scene {
+  display: flex;
+  align-items: flex-end;
+  align-self: stretch;
+  margin-inline-start: calc(50% - 50vw);
+  margin-block-end: var(--sp-6);
 }
 
-/* The status code, as data. Mono and heavy, because that is what it is — not
-   a display headline, which belongs to the sentence underneath. */
-.zn-ref__code {
+/* Le sol : 60 % de l'écran, la règle en bordure basse, la figure calée à son
+   bout. Le bas du cadre SVG est la ligne d'appui (docs/doodles.md, « Le sol
+   est la règle de la page ») : le cadre descend de l'épaisseur du filet et
+   passe au-dessus de lui, pour que la semelle vermillon le touche. */
+.zn-void__ground {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex: none;
+  inline-size: 60vw;
+  padding-inline-end: var(--sp-4);
+  border-block-end: var(--border-rule);
+}
+
+/* Retournée par CSS pour marcher vers la droite, vers le vide : une
+   orientation de scène, pas une correction d'un dessin validé. La hauteur est
+   fixée et la largeur vient du rapport du viewBox — un SVG ?react aux deux
+   dimensions libres s'effondre. */
+.zn-void__art {
+  display: block;
+  block-size: 180px;
+  inline-size: auto;
+  flex: none;
+  color: var(--text-body);
+  transform: scaleX(-1);
+  position: relative;
+  z-index: 1;
+  margin-block-end: calc(-1 * var(--bw-rule));
+}
+
+/* Le code, comme une donnée : mono, gras, en encre pâle, sa ligne de base
+   posée sur le filet. Avec line-height 1, la boîte de JetBrains Mono descend
+   de 0,14em sous la ligne de base (descente de 0,30em moins un demi-interligne
+   négatif de 0,16em) ; la marge négative rend cette descente, et l'épaisseur
+   du filet remonte les chiffres juste dessus. */
+.zn-void__code {
+  margin-inline-start: var(--sp-7);
+  margin-block-end: calc(-0.14em + var(--bw-rule));
   font-family: var(--font-mono);
   font-size: var(--fs-h1);
   font-weight: var(--fw-bold);
@@ -462,18 +506,12 @@
   color: var(--text-faint);
 }
 
-/* Le dessin du 404. Il est aligné à gauche comme tout le reste de la colonne,
-   et pas centré : l'écran se lit en une phrase du haut vers le bas, et un
-   dessin centré au-dessus d'un texte aligné à gauche casse cet axe. */
-.zn-ref__art {
-  block-size: 132px;
-  inline-size: auto;
-  max-inline-size: 100%;
-  color: var(--text-body);
+.zn-void__body {
+  max-inline-size: 46ch;
 }
 
 @media (max-width: 640px) {
-  .zn-ref__art {
-    block-size: 108px;
+  .zn-void__art {
+    block-size: 160px;
   }
 }

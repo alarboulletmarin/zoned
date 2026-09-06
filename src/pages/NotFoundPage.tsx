@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
-import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import WalkingAway from "@/assets/doodles/walking-away.svg?react";
 
@@ -13,10 +12,13 @@ import WalkingAway from "@/assets/doodles/walking-away.svg?react";
  * still intact, and the way out — because an error with no way forward is a
  * dead end.
  *
- * The drawing is the one docs/doodles.md calls almost mandatory here: a figure
- * seen from behind, walking off. It says what the code and the sentence say —
- * you have gone past the place — without a second sentence, and it is the only
- * screen in the app with nothing else on it to look at.
+ * The drawing is the sentence. The ground rule starts at the left edge of the
+ * screen and stops; a figure walks toward the void past its end, and the
+ * status code is a mono dimension printed where the ground ran out. That is
+ * what the alert and its pictogram used to say — with a figure competing
+ * against a glyph in a pink fill — so both are gone. The figure is the
+ * existing walking-away drawing turned round by CSS: a stage direction, not a
+ * correction of an approved drawing.
  */
 export function NotFoundPage() {
   const { t } = useTranslation("common");
@@ -28,28 +30,20 @@ export function NotFoundPage() {
         description={t("errors.notFound.description")}
         noindex
       />
-      <div className="zn-ref__void">
-        <WalkingAway
-          className="zn-ref__art"
-          aria-hidden="true"
-          focusable="false"
-        />
-        <span className="zn-ref__code" aria-hidden="true">
-          404
-        </span>
+      <div className="zn-void">
+        <div className="zn-void__scene" aria-hidden="true">
+          <div className="zn-void__ground">
+            <WalkingAway className="zn-void__art" focusable="false" />
+          </div>
+          <span className="zn-void__code">404</span>
+        </div>
         <h1 className="zn-display" data-level="3">
           {t("errors.notFound.title")}
         </h1>
-        <Alert
-          kind="error"
-          action={
-            <Button asChild>
-              <Link to="/">{t("errors.notFound.backHome")}</Link>
-            </Button>
-          }
-        >
-          {t("errors.notFound.body")}
-        </Alert>
+        <p className="zn-body zn-void__body">{t("errors.notFound.body")}</p>
+        <Button asChild>
+          <Link to="/">{t("errors.notFound.backHome")}</Link>
+        </Button>
       </div>
     </>
   );
