@@ -183,11 +183,14 @@ export class Figure {
 
     Le cadre est serré sur le trait à 6 unités près — sur les nombres émis,
     points de contrôle compris, ce qui est le calcul des fichiers coupés par
-    3ce7617 (le duo, dessiné à la main, excepté) — et son bas est posé 0,2 sous
-    `groundY`, l'ordonnée du dessous du pied d'appui. L'arc de semelle plonge
-    quatre unités plus bas : coupé par le cadre, c'est lui qui mord la règle de
-    la page. Ces deux constantes reproduisent standing, wondering, pointing,
-    easy-run et plank au byte près ; ne pas les « arrondir ». */
+    3ce7617 (le duo, dessiné à la main, excepté) — et son bas est posé 1,2 sous
+    le point le plus bas du trait, demi-épaisseur comprise (efcea06) : la
+    semelle est entière, et c'est elle qui touche la règle de la page. Une
+    première coupe à 0,2 sous `groundY` tronquait l'arc de semelle de quatre
+    unités — « le pied coupé », vu par le propriétaire. `groundY` ne sert plus
+    au cadre ; il reste dans la signature pour les appelants. Ces constantes
+    reproduisent standing, wondering, pointing, easy-run et plank au byte
+    près ; ne pas les « arrondir ». */
 export function svg(paths, groundY) {
   const PAD = 6;
   const body = paths
@@ -196,7 +199,7 @@ export function svg(paths, groundY) {
   const n = paths.flatMap((p) => p.d.match(/-?\d+(?:\.\d+)?/g).map(Number));
   const xs = n.filter((_, i) => i % 2 === 0), ys = n.filter((_, i) => i % 2 === 1);
   const x0 = Math.min(...xs) - PAD, y0 = Math.min(...ys) - PAD;
-  const w = Math.max(...xs) + PAD - x0, h = groundY + 0.2 - y0;
+  const w = Math.max(...xs) + PAD - x0, h = Math.max(...ys) + 1.2 - y0;
   return `<svg viewBox="${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 ${body}
 </svg>
