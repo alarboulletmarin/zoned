@@ -76,8 +76,8 @@ function buildZoneWorkoutMap(
 }
 
 interface ZoneCalculatorProps {
-  /** Les zones recalculées à chaque saisie valide, pour la planche de la page
-      qui les porte sous chaque figure ; vide quand rien n'est connu. */
+  /** The zones recomputed on every valid entry, for the page's plate that
+      prints them under each figure; empty when nothing is known. */
   onZonesChange?: (zones: ZoneRange[]) => void;
 }
 
@@ -146,9 +146,9 @@ export function ZoneCalculator({ onZonesChange }: ZoneCalculatorProps = {}) {
   const hasValues = prefs.fcMax || prefs.vma;
   const hasErrors = fcMaxError || vmaError;
 
-  // La frontière qui vaut une phrase : l'entrée en Z4. Recalculée depuis les
-  // chiffres du lecteur — la borne basse d'allure de Z4 (la plus lente), et
-  // la borne basse de fréquence. Une ligne par grandeur connue.
+  // The one boundary worth a sentence: entering Z4. Recomputed from the
+  // reader's numbers — Z4's lower pace bound (the slowest), and its lower
+  // heart-rate bound. One line per known quantity.
   const z4 = zones.find((z) => z.zone === 4);
   const thresholdNote = [
     z4?.paceMaxPerKm !== undefined &&
@@ -282,18 +282,16 @@ export function ZoneCalculator({ onZonesChange }: ZoneCalculatorProps = {}) {
 
               return (
                 <Fragment key={z.zone}>
-                  {/* Entre Z3 et Z4, la seule frontière qui vaut une phrase :
-                      une ligne d'annotation à sa place dans la table, la
-                      flèche vers la ligne Z4. Sur bureau la figure qui montre
-                      se tient sur le filet bas de la ligne ; sur téléphone la
-                      flèche seule (annotation.css) — une figure sous 84 px
-                      serait un pictogramme. */}
+                  {/* Between Z3 and Z4, the one boundary worth a sentence: an
+                      annotation row in its place in the table, the arrow
+                      towards the Z4 row. Arrow only, no figure: the page
+                      already has one — the ZoneFigures plate — and one figure
+                      per screen is the rule (docs/doodles.md). */}
                   {zoneNum === 4 && thresholdNote && (
                     <Annotation
                       className="zn-ztable__note"
                       text={thresholdNote}
                       arrow="down-right"
-                      figure
                     />
                   )}
                   <div className="zn-ztable__group">

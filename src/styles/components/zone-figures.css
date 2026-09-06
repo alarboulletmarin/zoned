@@ -53,9 +53,10 @@
   max-inline-size: 100%;
   block-size: auto;
   flex: none;
-  /* La semelle mord la règle de son épaisseur, comme le duo approuvé mordait
-     son sol dessiné : posée dessus, pas au-dessus. */
-  margin-block-end: calc(-1 * var(--bw-rule));
+  /* La semelle mord la règle de son épaisseur rendue (--rule-bite,
+     borders.css), comme le duo approuvé mordait son sol dessiné : posée
+     dessus, pas au-dessus. */
+  margin-block-end: calc(-1 * var(--rule-bite));
 }
 
 /* Les graduations : code, nom, et la plage du lecteur quand elle est connue. */
@@ -109,6 +110,16 @@
     --zfig-scale: 0.56;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     row-gap: var(--sp-10);
+  }
+
+  /* Sur téléphone la seconde rangée tombait sous la pastille MENU au premier
+     écran (Z6 : 102 × 44 px à 375×667, 102 × 17 px à 375×812 avec la plage,
+     graduation « Z6 Sprint » 19 à 43 px). La planche passe sous l'outil :
+     seule position où ni figure ni graduation ne rencontre la pastille à
+     scrollY=0, quelle que soit la hauteur d'écran. .zn-num est une colonne
+     flex (numbers.css), l'ordre suffit. */
+  .zn-num > .zn-zfig {
+    order: 1;
   }
 
   .zn-zfig__cell:nth-child(-n + 3) .zn-zfig__stage {
