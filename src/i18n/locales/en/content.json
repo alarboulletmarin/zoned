@@ -44,7 +44,8 @@
     "keyStudies": "Key studies",
     "viewStudy": "View study",
     "resources": "Resources",
-    "kicker": "{{n}} studies cited"
+    "kicker": "{{n}} studies cited",
+    "figuresLabel": "The six zones drawn: the same body from a walking pace to a sprint, inked darker as the effort rises."
   },
   "planMethodology": {
     "title": "Plan Guide",

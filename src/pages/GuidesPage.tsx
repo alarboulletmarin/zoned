@@ -1,7 +1,8 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, FunctionComponent, SVGProps } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { DoorCard } from "@/components/domain/DoorCard";
+import Stretching from "@/assets/doodles/stretching.svg?react";
 import { nutritionSections } from "@/data/guides/nutrition";
 import { racePrepSections } from "@/data/guides/race-prep";
 import { warmupRoutines } from "@/data/guides/warmup";
@@ -23,6 +24,8 @@ interface GuideEntry {
   titleKey: string;
   descriptionKey: string;
   href: string;
+  /** Le dessin que porte la porte, quand il existe. */
+  art?: FunctionComponent<SVGProps<SVGElement>>;
 }
 
 const GUIDES: GuideEntry[] = [
@@ -49,6 +52,7 @@ const GUIDES: GuideEntry[] = [
     titleKey: "warmup.title",
     descriptionKey: "warmup.description",
     href: "/guides/warmup",
+    art: Stretching,
   },
 ];
 
@@ -104,6 +108,7 @@ export function GuidesPage() {
                 title={t(guide.titleKey)}
                 body={t(guide.descriptionKey)}
                 cta={t("explore")}
+                art={guide.art}
               />
             ))}
           </div>

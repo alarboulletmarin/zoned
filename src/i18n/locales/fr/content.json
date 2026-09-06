@@ -44,7 +44,8 @@
     "keyStudies": "Études fondamentales",
     "viewStudy": "Voir l'étude",
     "resources": "Ressources",
-    "kicker": "{{n}} études citées"
+    "kicker": "{{n}} études citées",
+    "figuresLabel": "Les six zones dessinées : le même corps du pas de marche au sprint, encré de plus en plus foncé à mesure que l'effort monte."
   },
   "planMethodology": {
     "title": "Guide des plans",

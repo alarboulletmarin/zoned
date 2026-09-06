@@ -16,27 +16,43 @@ import { Figure, svg, ground } from "./rig.mjs";
 
 const OUT = new URL("../../src/assets/doodles/", import.meta.url).pathname;
 
-/** Met à plat la semelle avant : plantLead la pose, ceci l'assied. */
-function levelLeadSole(f) {
-  for (let k = 0; k < 6; k++) {
-    const [a, b] = [f.P[63], f.P[65]];
-    const deg = (Math.atan2(a[1] - b[1], a[0] - b[0]) * 180) / Math.PI;
-    if (Math.abs(deg) < 0.15) break;
-    f.pose({ leadFoot: -deg });
+/* L'accent se DÉDUIT du contact, il ne se décrète pas.
+ *
+ * `Figure.LEAD_SOLE` nomme le tronçon qui passe sous le pied avant — mais dans
+ * cette pose la jambe avant n'atteint pas le sol : elle plafonne onze pixels
+ * au-dessus, `plantLead` ne trouve pas de racine encadrée et ne bouge donc
+ * rien. Le vermillon était peint dessus quand même, c'est-à-dire sur un membre
+ * EN L'AIR — la faute exacte que docs/doodles.md interdit, et elle est passée
+ * en production parce qu'à 220 px l'écart fait deux pixels d'écran.
+ *
+ * On cherche donc les ancres réellement au contact, et on ne peint que
+ * celles-là. Une pose où rien ne touche ne reçoit aucun accent, ce qui est la
+ * bonne réponse plutôt qu'un accent décoratif.
+ */
+function contacts(f, sol, tol = 5) {
+  const runs = [];
+  let debut = null;
+  for (let i = 0; i < f.P.length; i++) {
+    const touche = f.P[i][1] >= sol - tol;
+    if (touche && debut === null) debut = i;
+    if (!touche && debut !== null) {
+      if (i - 1 > debut) runs.push([debut, i - 1]);
+      debut = null;
+    }
   }
-  return f;
+  if (debut !== null && f.P.length - 1 > debut) runs.push([debut, f.P.length - 1]);
+  return runs;
 }
 
 function draw(name, spec, { ar = 1.32, ahead = 0.42 } = {}) {
   const f = new Figure().pose(spec);
   f.plantLead({ knee: -5 });
-  levelLeadSole(f);
 
   const b = f.bbox(), gy = f.groundY();
   const h = Math.max(b.h, gy - b.y0) + 10;
   const w = h * ar;
   const x0 = b.x0 - (w - b.w) * (1 - ahead);   // plus de sol devant que derrière
-  const paths = [...f.paths([Figure.LEAD_SOLE]), { d: ground(x0 + 4, x0 + w - 4, gy) }];
+  const paths = [...f.paths(contacts(f, gy)), { d: ground(x0 + 4, x0 + w - 4, gy) }];
   writeFileSync(`${OUT}${name}.svg`, svg(paths, { x0, y0: b.y0, w, h }, { pad: 6 }));
   console.log(`→ ${name}.svg  ${Math.round(w)}x${Math.round(h)}`);
 }
