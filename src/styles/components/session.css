@@ -118,17 +118,11 @@
     letter-spacing: var(--ls-h2);
   }
 
-  /* The runner leaves the phone.
-
-     On a wide screen the drawing sits in the hero's second column: it costs
-     nothing, the facts are beside it, and it is what makes the page look like
-     Zoned. Stacked on a phone it is 220px of decoration wedged between the
-     facts and the session — someone opening a workout on their way out the
-     door reads its name, then scrolls past a drawing to reach what they came
-     for. The identity is not worth an extra screen at that moment; it is kept
-     everywhere it does not push the content down. */
-  .zn-session__hero .zn-slot {
-    display: none;
+  /* The runner closes the session rather than introducing it — see the note in
+     WorkoutDetailPage.tsx. He gets air above him and none below: the zone
+     breakdown's own rule is what follows. */
+  .zn-session__figure {
+    margin-block-start: var(--sp-14);
   }
 }
 
@@ -137,11 +131,49 @@
   margin-block-start: var(--sp-13);
 }
 
-/* On a phone the actions land between the chart and the phases: the profile
-   says what the session is, the buttons say what to do with it. */
+/* ── the docked bar ───────────────────────────────────────────────────── */
+
+/* Below 640 the three actions leave the flow for the thumb zone. They are the
+   only things on this page you do rather than read, and on a phone they were
+   costing 88px between the session's name and its profile wherever they sat.
+
+   The shape is .zn-shared__dock's, which the shared-session screen already
+   proved: pinned to the floor, on a rule, opaque — the system allows no blur —
+   and paying for the menu pill by giving up the end of its own gutter instead
+   of running underneath it.
+
+   z-index 30 is the app's docked-bar layer: under ScrollToTop (40) and the
+   menu pill (45), so an open panel covers it. */
+.zn-session__dock {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 30;
+
+  padding: var(--sp-6) var(--pad-screen-x);
+  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom, 0px));
+  padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
+
+  background: var(--surface-page);
+  border-block-start: var(--border-rule);
+}
+
+/* Export takes what is left once the two glyphs have their own width. The
+   selector is positional because ExportMenu renders its trigger through
+   `asChild`: the button IS the cluster's first child. */
+.zn-session__dock .zn-session__actions {
+  flex-wrap: nowrap;
+}
+
+.zn-session__dock .zn-session__actions > :first-child {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The bar floats over the last band, so the page pays for its height. */
 @media (max-width: 640px) {
-  .zn-session__actions {
-    margin-block-start: var(--sp-11);
+  .zn-session {
+    padding-block-end: calc(var(--hit-min) + var(--sp-13));
   }
 
   .zn-session__phases {

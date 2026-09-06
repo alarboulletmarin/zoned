@@ -614,12 +614,23 @@ export function WorkoutDetailPage() {
             <FactStrip facts={facts} />
           </div>
 
-          <IllustrationSlot
-            height={340}
-            art={Runner}
-            brief={t("session:illustration.brief")}
-            label={t("session:illustration.label")}
-          />
+          {/* On a wide screen the runner fills the hero's second column and
+              costs nothing. Stacked on a phone he sits between the facts and
+              the session, and at any height that still reads as a figure he
+              pushes the profile out of the first screen — measured: 140px of
+              drawing moves the chart from 732 to 896 on an 844px screen.
+
+              So he moves rather than shrinks: below 640 he closes the session
+              instead of introducing it. Same drawing, same slot, one screen
+              further down. */}
+          {!isPhone && (
+            <IllustrationSlot
+              height={340}
+              art={Runner}
+              brief={t("session:illustration.brief")}
+              label={t("session:illustration.label")}
+            />
+          )}
         </section>
 
         {/* 2 — the session itself: the whole profile, then phase by phase */}
@@ -673,8 +684,6 @@ export function WorkoutDetailPage() {
             </div>
           </div>
 
-          {isPhone && actionCluster}
-
           <WorkoutStructure
             workout={workout}
             userZones={hasUserZones ? userZones : undefined}
@@ -687,6 +696,16 @@ export function WorkoutDetailPage() {
               Here it lands where it makes sense: right under the steps whose
               paces it would fill in. */}
           {!hasUserZones && <ZonePersonalizationCTA className="zn-session__zone-cta" />}
+
+          {isPhone && (
+            <IllustrationSlot
+              height={200}
+              art={Runner}
+              brief={t("session:illustration.brief")}
+              label={t("session:illustration.label")}
+              className="zn-session__figure"
+            />
+          )}
         </section>
 
         {/* 3 — where the time goes, against how to spend it */}
@@ -809,6 +828,12 @@ export function WorkoutDetailPage() {
           />
         </section>
       </div>
+
+      {/* The thumb-zone bar, on a phone and on this page only.
+          Same shape as the shared-session dock below: pinned to the viewport
+          floor, on a rule, giving up the end of its own gutter so the menu
+          pill sits beside it rather than over it. */}
+      {isPhone && <div className="zn-session__dock">{actionCluster}</div>}
     </>
   );
 }
