@@ -28,7 +28,7 @@
 
 @media (max-width: 1100px) {
   .zn-home__hero {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-14);
   }
 }
@@ -60,9 +60,14 @@
   }
 }
 
+/* Two columns all the way down. Stacked, the four doors were 1290px — three
+   phone screens of the same card repeated, and the reader had to scroll past
+   all of it to reach the week. Paired, they are one screen: the drawing, the
+   kicker and the title are what a door needs to be recognised, and the
+   sentence under each one is what the destination is for. */
 @media (max-width: 640px) {
   .zn-home__doors {
-    grid-template-columns: 1fr;
+    gap: var(--sp-6);
   }
 }
 
@@ -77,7 +82,7 @@
 
 @media (max-width: 520px) {
   .zn-home__pair {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -115,7 +120,7 @@
 
 @media (max-width: 520px) {
   .zn-home__strip {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .zn-home__strip-cell {
     border-inline-end: none;
@@ -309,7 +314,7 @@
 
 @media (max-width: 900px) {
   .zn-home__people {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -380,7 +385,7 @@
 
 @media (max-width: 520px) {
   .zn-home__tools {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -563,5 +568,19 @@
   }
   .zn-home__source-name {
     inline-size: auto;
+  }
+}
+
+/* ── the week's three sessions ────────────────────────────────────────── */
+
+/* .zn-split stacks at 900px, which is the right line for a two-column band of
+   prose. It is the wrong one here: this split puts a 340px title column and a
+   72px gap in front of a THREE-card grid, so between 901 and 1200 the cards
+   are 142px wide — a name, a profile and a fact line crushed into a strip.
+   The band stacks until the grid can hold three readable columns. */
+@media (max-width: 1200px) {
+  .zn-home__week {
+    grid-template-columns: minmax(0, 1fr);
+    --gap: var(--sp-13);
   }
 }

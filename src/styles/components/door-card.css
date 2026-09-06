@@ -90,3 +90,31 @@
     block-size: 92px;
   }
 }
+
+/* ── two to a row on a phone ──────────────────────────────────────────── */
+
+/* At 175px wide a door holds a drawing, a kicker, a title and its promise.
+   The explanatory sentence does not fit — it wrapped to five lines and made
+   the pair taller than the stack it replaced — so it goes. Nothing is lost
+   that the destination does not say better on arrival. */
+@media (max-width: 640px) {
+  .zn-door {
+    gap: var(--sp-4);
+    min-block-size: 0;
+    padding: var(--sp-8);
+    border-radius: var(--r-2xl);
+  }
+
+  .zn-door__body {
+    display: none;
+  }
+
+  .zn-door__title {
+    font-size: var(--fs-h4);
+    letter-spacing: var(--ls-h4);
+  }
+
+  .zn-door__art {
+    block-size: 64px;
+  }
+}

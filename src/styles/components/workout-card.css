@@ -93,30 +93,10 @@
   font: var(--fw-semibold) var(--fs-h3) / 1.05 var(--font-display);
   letter-spacing: var(--ls-h3);
   overflow-wrap: anywhere;
-}
-
-/* Two lines of description, and the space for two lines whether or not the
-   text fills them: a grid of cards whose meta rows do not line up reads as a
-   dozen different components. */
-.zn-wcard__desc {
-  margin: 0;
-  font: var(--type-body-sm);
-  color: var(--text-muted);
-  min-block-size: 66px;
-
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
-}
-
-/* The focus view gives a session the whole column: nothing is clamped there. */
-.zn-wcard[data-expanded="true"] .zn-wcard__desc {
-  -webkit-line-clamp: none;
-  line-clamp: none;
-  min-block-size: 0;
-  overflow: visible;
+  /* A flex item's floor is its content, not zero. Without this the title
+     pushed the favourite button five pixels past the card's inner edge on a
+     390px screen — measured, not guessed. */
+  min-inline-size: 0;
 }
 
 /* ── facts ────────────────────────────────────────────────────────────── */

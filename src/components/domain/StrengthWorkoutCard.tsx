@@ -96,7 +96,7 @@ export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWo
           <FavoriteButton workoutId={workout.id} size="sm" />
         </div>
 
-        <p className="zn-wcard__desc">{pick(workout, "description")}</p>
+        {/* No prose here either — see the note in WorkoutCard.tsx. */}
 
         <IntensityMeter intensity={workout.intensity} />
 

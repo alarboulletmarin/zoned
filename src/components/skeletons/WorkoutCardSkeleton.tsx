@@ -34,17 +34,9 @@ export function WorkoutCardSkeleton({ className, compact = false }: WorkoutCardS
         <Skeleton className="zn-wcard-skel__fav" />
       </div>
 
-      {/* Optional 2-line description. Flush lines, because the real
-          description is one clamped paragraph and not two stacked blocks. */}
-      {!compact && (
-        <div
-          className="zn-stack zn-wcard-skel__desc"
-          style={{ "--gap": "0px" } as CSSProperties}
-        >
-          <Skeleton className="zn-wcard-skel__line" />
-          <Skeleton className="zn-wcard-skel__line zn-wcard-skel__line--short" />
-        </div>
-      )}
+      {/* The description well went with the description itself: the card is a
+          title, a profile and a fact line, and a skeleton that reserves 66px
+          for prose would hand the reader a jump when the card arrives. */}
 
       {/* Intensity bar */}
       <Skeleton className="zn-wcard-skel__bar" />

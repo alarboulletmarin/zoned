@@ -121,7 +121,12 @@ export function WorkoutCardChrome({
         {showFavorite && <FavoriteButton workoutId={workout.id} size="sm" />}
       </div>
 
-      <p className="zn-wcard__desc">{pick(workout, "description")}</p>
+      {/* The template's prose description used to sit here. A card is a
+          preview: the name says which session it is, the profile says what it
+          costs, and the fact line says the zone, the duration and the level.
+          The paragraph is what the detail page is for — and on a phone it was
+          two clamped lines that broke mid-word. `description` is untouched in
+          the data and still rendered on /workout/:id. */}
 
       {blocks.length > 0 && (
         <ZoneBar

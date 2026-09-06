@@ -117,19 +117,6 @@
   }
 }
 
-/* The description well. .zn-wcard__desc clamps to two lines and reserves 66px
-   whether or not the text fills them, so the meta rows of a card grid line up;
-   two body-sm line boxes stacked flush is what that well actually contains. */
-.zn-wcard-skel__desc {
-  min-block-size: 66px;
-}
-
-.zn-wcard-skel__line {
-  block-size: calc(var(--fs-body-sm) * var(--lh-body-sm));
-}
-
-.zn-wcard-skel__line--short { inline-size: 83%; }
-
 /* The zone profile: ZoneBar is 36px tall with a 6px radius (zone.css). The
    4px bar this replaced was a third of the height the card really reserves. */
 .zn-wcard-skel__bar {

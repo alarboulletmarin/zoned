@@ -1,7 +1,7 @@
 import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, ChevronDown, ExternalLink } from "@/components/icons";
+import { ArrowRight, ChevronDown } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   ResponsiveTable,
@@ -15,25 +15,19 @@ import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
 import { usePlans } from "@/hooks/usePlans";
 import { ZONE_META, type ZoneNumber } from "@/types";
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
-import {
-  getISOWeek,
-  pickWeeklyWorkouts,
-  EXPORT_FORMATS,
-} from "@/lib/landing-stats";
+import { getISOWeek, pickWeeklyWorkouts, EXPORT_FORMATS } from "@/lib/landing-stats";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
-import { getQuoteOfTheDay } from "@/data/quotes";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
 import { DoorCard } from "@/components/domain/DoorCard";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { ZoneFigures } from "@/components/domain/ZoneFigures";
+import { StatBlock } from "@/components/domain/StatBlock";
 import DoorSessions from "@/assets/doodles/door-sessions.svg?react";
 import DoorPlan from "@/assets/doodles/door-plan.svg?react";
 import DoorLearn from "@/assets/doodles/door-learn.svg?react";
 import DoorNumbers from "@/assets/doodles/door-numbers.svg?react";
 import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
-import { StatBlock } from "@/components/domain/StatBlock";
-import { ZoneRow } from "@/components/domain/ZoneRow";
 import {
   loadUserZonePrefs,
   saveUserZonePrefs,
@@ -46,102 +40,6 @@ import type { UserZonePreferences } from "@/types";
 const ZONES = [1, 2, 3, 4, 5, 6] as const;
 
 // ────────────────────────────────────────────────────────────────────────────
-// Static editorial constants — derived from the codebase, not invented.
-// RESEARCHERS surfaces the major scientific figures whose work the app
-// builds on. Each entry points to the canonical source (peer-reviewed paper
-// when one exists, otherwise a reference book). External URLs go to PubMed
-// or the publisher so the user lands on the official record, not a Zoned
-// summary article.
-// ────────────────────────────────────────────────────────────────────────────
-
-interface ResearcherSource {
-  /** Single-line citation as it appears in the card. */
-  citationKey: string;
-  /** Optional external link. We point at PubMed / publisher so the user
-   *  always lands on the canonical record. Books usually have no URL. */
-  url?: string;
-}
-
-interface Researcher {
-  name: string;
-  /** One short line under the name describing the contribution. */
-  contributionKey: string;
-  source: ResearcherSource;
-  /** Short method tag rendered as a mono uppercase kicker. Hard-coded —
-   *  these are named conventions (POLARISED, VDOT, vVO₂max…), not
-   *  translated. */
-  tag: string;
-}
-
-const RESEARCHERS: Researcher[] = [
-  {
-    name: "Stephen Seiler",
-    tag: "Polarised · 80/20",
-    contributionKey: "homepage:home.s04.researchers.seiler.contribution",
-    source: {
-      citationKey: "homepage:home.s04.researchers.seiler.citation",
-      url: "https://pubmed.ncbi.nlm.nih.gov/16774644/",
-    },
-  },
-  {
-    name: "Véronique Billat",
-    tag: "vVO₂max · 30/30",
-    contributionKey: "homepage:home.s04.researchers.billat.contribution",
-    source: {
-      citationKey: "homepage:home.s04.researchers.billat.citation",
-      url: "https://pubmed.ncbi.nlm.nih.gov/9927009/",
-    },
-  },
-  {
-    name: "Jack Daniels",
-    tag: "VDOT · T/I/R",
-    contributionKey: "homepage:home.s04.researchers.daniels.contribution",
-    source: {
-      citationKey: "homepage:home.s04.researchers.daniels.citation",
-    },
-  },
-  {
-    name: "Arthur Lydiard",
-    tag: "Base building",
-    contributionKey: "homepage:home.s04.researchers.lydiard.contribution",
-    source: {
-      citationKey: "homepage:home.s04.researchers.lydiard.citation",
-    },
-  },
-  {
-    name: "Tim Noakes",
-    tag: "Central governor",
-    contributionKey: "homepage:home.s04.researchers.noakes.contribution",
-    source: {
-      citationKey: "homepage:home.s04.researchers.noakes.citation",
-    },
-  },
-  {
-    name: "Wildor Hollmann & Alois Mader",
-    tag: "Lactate threshold",
-    contributionKey: "homepage:home.s04.researchers.cologne.contribution",
-    source: {
-      citationKey: "homepage:home.s04.researchers.cologne.citation",
-    },
-  },
-  {
-    name: "Oliver Faude",
-    tag: "Threshold review",
-    contributionKey: "homepage:home.s04.researchers.faude.contribution",
-    source: {
-      citationKey: "homepage:home.s04.researchers.faude.citation",
-      url: "https://pubmed.ncbi.nlm.nih.gov/19402743/",
-    },
-  },
-  {
-    name: "Iñigo San Millán",
-    tag: "Zone 2 · mitochondria",
-    contributionKey: "homepage:home.s04.researchers.sanMillan.contribution",
-    source: {
-      citationKey: "homepage:home.s04.researchers.sanMillan.citation",
-    },
-  },
-];
 
 // Every calculator surfaced on the home page. Each entry maps 1:1 to an
 // existing route in App.tsx, and the title/desc come from calculators.json
@@ -244,17 +142,6 @@ const FAQ_IDS = [
 // Canonical Seiler-style polarised reference — these are *teaching values*,
 // not measurements of the user's library. They illustrate what a well-dosed
 // training week looks like under the 80/20 model.
-const POLARISED_REFERENCE: Record<ZoneNumber, number> = {
-  1: 62,
-  2: 18,
-  3: 6,
-  4: 9,
-  5: 4,
-  6: 1,
-};
-const POLARISED_LOW = POLARISED_REFERENCE[1] + POLARISED_REFERENCE[2];
-const POLARISED_HIGH =
-  POLARISED_REFERENCE[4] + POLARISED_REFERENCE[5] + POLARISED_REFERENCE[6];
 
 
 // ── §03 zone metadata. RPE and the "% FCmax" model lines describe the
@@ -279,11 +166,6 @@ const ZONE_RPE: Record<ZoneNumber, string> = {
   6: "10 / 10",
 };
 
-/** A percentage, French-typeset: a non-breaking space before the sign. */
-function pct(value: number): string {
-  return `${value} %`;
-}
-
 // ────────────────────────────────────────────────────────────────────────────
 // HomePage
 // ────────────────────────────────────────────────────────────────────────────
@@ -292,7 +174,6 @@ export function HomePage() {
   const { t } = useTranslation(["homepage", "common", "calculators"]);
   const pickLang = usePickLang();
   const isEn = useIsEnglish();
-  const dailyQuote = useMemo(() => getQuoteOfTheDay(), []);
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
 
   // User's measured references (VMA, FCmax) — read once at mount. Updates from
@@ -619,84 +500,13 @@ export function HomePage() {
         />
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          Fig. 01 — what a well-dosed week looks like
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section
-        className="zn-section zn-split"
-        style={
-          { "--split": "340px 1fr", "--gap": "var(--sp-18)" } as CSSProperties
-        }
-        aria-labelledby="home-fig-title"
-      >
-        <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
-          <span className="zn-kicker">{t("homepage:home.hero.fig.kicker")}</span>
-          <h2 id="home-fig-title" className="zn-title" data-level="1">
-            {t("homepage:home.hero.fig.title")}
-          </h2>
-          <p className="zn-body">{t("homepage:home.hero.fig.body")}</p>
-          <span className="zn-source">{t("homepage:home.hero.fig.source")}</span>
-        </div>
-
-        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
-          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-            {ZONES.map((zone) => (
-              <ZoneRow
-                key={zone}
-                zone={zone}
-                name={t(`homepage:home.hero.fig.zones.z${zone}`)}
-                value={pct(POLARISED_REFERENCE[zone])}
-                percent={POLARISED_REFERENCE[zone]}
-                labelWidth={130}
-              />
-            ))}
-          </div>
-          <div className="zn-home__pair">
-            <StatBlock
-              tone="card"
-              value={pct(POLARISED_LOW)}
-              label={t("homepage:home.hero.fig.lowRange")}
-              footnote={t("homepage:home.hero.fig.lowCaption")}
-            />
-            <StatBlock
-              tone="ink"
-              value={pct(POLARISED_HIGH)}
-              label={t("homepage:home.hero.fig.highRange")}
-              footnote={t("homepage:home.hero.fig.highCaption")}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          The four numbers
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="zn-section zn-home__strip">
-        <div className="zn-home__strip-cell">
-          <StatBlock
-            value={String(appStats.workouts)}
-            label={t("homepage:home.stats.sessions")}
-          />
-        </div>
-        <div className="zn-home__strip-cell">
-          <StatBlock
-            value={String(prebuiltPlans.length)}
-            label={t("homepage:home.stats.plansFrom")}
-          />
-        </div>
-        <div className="zn-home__strip-cell">
-          <StatBlock
-            value={String(CALCULATORS.length)}
-            label={t("homepage:home.stats.calculators")}
-          />
-        </div>
-        <div className="zn-home__strip-cell">
-          <StatBlock
-            value="0"
-            label={t("homepage:home.s08.lines.account")}
-          />
-        </div>
-      </section>
+      {/* Fig. 01 — the polarised week — and the four-number strip both lived
+          here. The figure restated in six bars what the zone atlas below says
+          with six drawings, and the strip printed "256 séances · 9 plans · 12
+          calculateurs · 0 compte" one screen under a lede that already says
+          exactly that. On a phone the strip's four labels also collided into
+          each other. Both are gone; /methodology keeps the 80/20 argument and
+          its sources. */}
 
       {/* §05 — the plans section lived here. It re-sold what the "Suivre un
           plan structuré" door already offers three screens higher up, so it
@@ -704,7 +514,7 @@ export function HomePage() {
           palette. */}
 
       <section
-        className="zn-section zn-split"
+        className="zn-section zn-split zn-home__week"
         style={
           { "--split": "340px 1fr", "--gap": "var(--sp-18)" } as CSSProperties
         }
@@ -784,64 +594,18 @@ export function HomePage() {
         onOpenChange={(open) => !open && setSelectedZone(null)}
       />
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          §04 — researchers and reference sources
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="zn-section" aria-labelledby="home-science-title">
-        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
-          <SectionHead
-            id="home-science-title"
-            kicker={t("homepage:home.s04.kicker")}
-            title={t("homepage:home.s04.title")}
-            body={t("homepage:home.s04.body")}
-          />
-
-          {/* Eight researcher cards used to sit here, each with a tag, a name,
-              a paragraph of contribution and a citation. The system's rule is
-              that science is cited, not invoked — so what survives is the
-              citation itself, in mono, which is exactly the form it prescribes.
-              Every name, source and link is still on the page; only the
-              paragraph around each one is gone. */}
-          <ul className="zn-home__sources">
-            {RESEARCHERS.map((r) => (
-              <li key={r.name} className="zn-home__source">
-                <span className="zn-home__source-name">{r.name}</span>
-                <span className="zn-source">{t(r.source.citationKey)}</span>
-                {r.source.url && (
-                  <a
-                    className="zn-home__link"
-                    href={r.source.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${t("homepage:home.s04.viewPublication")} — ${r.name}`}
-                  >
-                    <ExternalLink />
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          {/* Quote of the day — rotates daily through attributable quotes
-              from runners, coaches and sports physicians. */}
-          <blockquote className="zn-home__quote">
-            <p className="zn-home__quote-text">
-              {isEn ? dailyQuote.en : dailyQuote.fr}
-            </p>
-            <footer className="zn-kicker" style={{ marginBlockStart: "var(--sp-8)" }}>
-              {dailyQuote.author} ·{" "}
-              {isEn ? dailyQuote.role.en : dailyQuote.role.fr}
-            </footer>
-          </blockquote>
-        </div>
-      </section>
+      {/* §04 — the researchers, their citations and the quote of the day were
+          here. A landing page makes the claim; /methodology is where it is
+          argued and sourced, and that page carries the same list in full. */}
 
       {/* §06 — the twelve calculator cards lived here. They are a door now:
           the hub lists them, and a landing page does not need to name all
           twelve to say they exist. */}
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §08 — ethos, the one inverted band
+          §08 — ethos, the one inverted band. Kept on the owner's call: the
+          lede and the footer say "local" in words, this says it in figures,
+          and it is the claim the project is built on.
           ═══════════════════════════════════════════════════════════════════ */}
       <section
         className="zn-section zn-split zn-home__ethos"
