@@ -6,11 +6,6 @@ import { RefreshCw, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { watchForegroundUpdates } from "@/lib/swUpdate";
 
-interface Props {
-  /** Lift above the install card when that one is showing too. */
-  stacked?: boolean;
-}
-
 /**
  * The service worker is registered in `prompt` mode: a new version installs in
  * the background, waits, and never replaces the running app without being
@@ -21,7 +16,7 @@ interface Props {
  * else, including the check on returning to the foreground, only ever moves the
  * moment this banner appears earlier.
  */
-export function UpdatePrompt({ stacked = false }: Props) {
+export function UpdatePrompt() {
   const { t } = useTranslation("common");
   const registration = useRef<ServiceWorkerRegistration | null>(null);
 
@@ -48,7 +43,7 @@ export function UpdatePrompt({ stacked = false }: Props) {
   };
 
   return (
-    <div className="zn-prompt" data-stacked={stacked || undefined} role="status">
+    <div className="zn-prompt" role="status">
       <span aria-hidden="true" className="zn-prompt__glyph">
         <RefreshCw />
       </span>

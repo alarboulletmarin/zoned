@@ -11,13 +11,31 @@
 
 /* ── the floating app banner ──────────────────────────────────────────── */
 
-/* Bottom-right on a wide screen, edge to edge on a phone. One per corner; the
-   install card takes the floor and the update banner stacks above it. */
-.zn-prompt {
+/* Bottom-right on a wide screen, edge to edge on a phone. The corner is a
+   stack, not a coordinate: the update banner sits on top of the install card
+   when both are eligible.
+
+   It used to be a constant — the update banner lifted itself by a guessed
+   112px — and the guess was wrong the moment the card below it wrapped onto a
+   second line, which is its normal state on a phone. The two banners covered
+   each other. A flex column cannot be wrong about a height it measures. */
+.zn-prompts {
   position: fixed;
   z-index: 50;
   inset-inline: var(--sp-8);
   inset-block-end: var(--sp-8);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+
+  /* The stack is a zero-height box when nothing is showing, and the page has
+     to stay clickable through it either way. */
+  pointer-events: none;
+}
+
+.zn-prompt {
+  pointer-events: auto;
 
   display: flex;
   align-items: flex-start;
@@ -34,25 +52,16 @@
   animation: zoned-slide-in var(--dur-slow) var(--ease-out);
 }
 
-/* Lifted clear of the install card when both are on screen. */
-.zn-prompt[data-stacked] {
-  inset-block-end: calc(var(--sp-8) + var(--sp-20) + var(--sp-15));
-}
-
-/* Below 1024px the floating menu pill owns the bottom-right corner: the banner
-   starts above it rather than under it, and the stacked one keeps the same
-   distance from the card it sits on. */
+/* Below 1024px the floating menu pill owns the bottom-right corner: the stack
+   starts above it rather than under it. */
 @media (max-width: 1023px) {
-  .zn-prompt {
+  .zn-prompts {
     inset-block-end: var(--fab-clear);
-  }
-  .zn-prompt[data-stacked] {
-    inset-block-end: calc(var(--fab-clear) + var(--sp-20) + var(--sp-15));
   }
 }
 
 @media (min-width: 768px) {
-  .zn-prompt {
+  .zn-prompts {
     /* The width this banner has always had; a message this short does not
        need the full column, and a wider one would read as a dialog. */
     inline-size: 384px;

@@ -339,10 +339,14 @@ function App() {
           </GlossaryMatcherProvider>
           <Analytics />
           <StorageWarning />
-          {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
-          {/* Mounted once, outside <Routes>, so the banner survives navigation.
-              Stacked above the install card when both are eligible. */}
-          <UpdatePrompt stacked={canInstall} />
+          {/* Mounted once, outside <Routes>, so the banners survive navigation.
+              The update comes first in the DOM because it comes first in
+              importance: offering to install a version we already know is
+              stale is the wrong order. The stack puts it on top by itself. */}
+          <div className="zn-prompts">
+            <UpdatePrompt />
+            {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
+          </div>
           {/* The wrapper is what gets promoted into the top layer while a
               <dialog> is open — see native-dialog.tsx. A modal dialog paints
               over everything the document can stack, z-index 999999999
