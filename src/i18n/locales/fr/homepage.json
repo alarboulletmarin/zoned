@@ -119,15 +119,6 @@
       "adaptation": "Adaptation visée",
       "refPace": "Allure",
       "fig": "Fig. 02 — Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil",
-      "personal": {
-        "label": "Calculé depuis ton profil",
-        "edit": "Modifier",
-        "prompt": "Calcule tes zones personnalisées. Au moins une valeur suffit.",
-        "vmaLabel": "VMA (km/h)",
-        "fcMaxLabel": "FCmax (bpm)",
-        "submit": "Calculer mes zones",
-        "cancel": "Annuler"
-      },
       "figuresLabel": "Le même coureur à six intensités, du pas de marche au sprint : plus la zone monte, plus le buste s'engage et plus le trait est sombre."
     },
     "s04": {

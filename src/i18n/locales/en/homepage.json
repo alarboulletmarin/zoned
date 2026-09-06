@@ -119,15 +119,6 @@
       "adaptation": "Targeted adaptation",
       "refPace": "Pace",
       "fig": "Fig. 02 — 6-zone model, calibrated on HRmax / FTP / threshold pace",
-      "personal": {
-        "label": "Computed from your profile",
-        "edit": "Edit",
-        "prompt": "Compute your personalised zones. One value is enough.",
-        "vmaLabel": "VMA (km/h)",
-        "fcMaxLabel": "HRmax (bpm)",
-        "submit": "Compute my zones",
-        "cancel": "Cancel"
-      },
       "figuresLabel": "The same runner at six intensities, from a walk to a sprint: the higher the zone, the more the torso leans and the darker the line."
     },
     "s04": {

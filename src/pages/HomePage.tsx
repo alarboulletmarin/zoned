@@ -30,12 +30,10 @@ import DoorNumbers from "@/assets/doodles/door-numbers.svg?react";
 import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import {
   loadUserZonePrefs,
-  saveUserZonePrefs,
   calculateAllZones,
   formatPace,
 } from "@/lib/zones";
 import { cn } from "@/lib/utils";
-import type { UserZonePreferences } from "@/types";
 
 const ZONES = [1, 2, 3, 4, 5, 6] as const;
 
@@ -177,12 +175,10 @@ export function HomePage() {
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
 
   // User's measured references (VMA, FCmax) — read once at mount. Updates from
-  // the inline form above the zone table re-store these in localStorage and
-  // bump local state so the table refreshes without a page reload.
-  const [userPrefs, setUserPrefs] = useState<UserZonePreferences | null>(() =>
-    loadUserZonePrefs(),
-  );
-  const hasUserZones = !!(userPrefs?.vma || userPrefs?.fcMax);
+  // Read once at mount, and only read: the form that used to write them from
+  // this page is gone, so /my-zones and the runner profile are the only
+  // writers left. Nothing on this screen can change them under the table.
+  const userPrefs = useMemo(() => loadUserZonePrefs(), []);
 
   const personalRanges = useMemo(() => {
     if (!userPrefs) return null;
@@ -196,11 +192,6 @@ export function HomePage() {
       {} as Record<ZoneNumber, (typeof all)[number]>,
     );
   }, [userPrefs]);
-
-  const updatePrefs = (next: UserZonePreferences) => {
-    saveUserZonePrefs(next);
-    setUserPrefs(next);
-  };
 
   // Catalogue counts, read straight off the shipped data (never hardcoded).
   const appStats = useAppStats();
@@ -555,11 +546,12 @@ export function HomePage() {
 
           <ZoneFigures label={t("homepage:home.s03.figuresLabel")} />
 
-          <ZonesPersonaliser
-            prefs={userPrefs}
-            hasUserZones={hasUserZones}
-            onSave={updatePrefs}
-          />
+          {/* The "calcule tes zones personnalisées" form stood here: two inputs
+              and a submit, above the table it filled in. It was the only thing
+              on the landing page asking the reader for something. The table
+              still shows their bpm and pace ranges whenever the values exist —
+              read from the same localStorage — and /my-zones is where they are
+              set, which is a page whose whole job that is. */}
 
           <ResponsiveTable<ZoneNumber>
             data={[...ZONES]}
@@ -750,99 +742,3 @@ function SectionHead({
   );
 }
 
-// ─── ZonesPersonaliser ──────────────────────────────────────────────────────
-// Two compact inputs (VMA, FCmax) shown above the zone table. Submitting them
-// writes the values through saveUserZonePrefs (which also syncs them to the
-// runner profile) and the parent re-renders the table with personalised bpm
-// and pace ranges. When values already exist we show a quiet status line
-// instead so the form doesn't keep nagging set-up users.
-function ZonesPersonaliser({
-  prefs,
-  hasUserZones,
-  onSave,
-}: {
-  prefs: UserZonePreferences | null;
-  hasUserZones: boolean;
-  onSave: (next: UserZonePreferences) => void;
-}) {
-  const { t } = useTranslation("homepage");
-  const [vma, setVma] = useState(prefs?.vma?.toString() ?? "");
-  const [fcMax, setFcMax] = useState(prefs?.fcMax?.toString() ?? "");
-  const [editing, setEditing] = useState(false);
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const v = vma.trim() === "" ? undefined : parseFloat(vma.replace(",", "."));
-    const f = fcMax.trim() === "" ? undefined : parseInt(fcMax, 10);
-    if (v === undefined && f === undefined) return;
-    onSave({ vma: v, fcMax: f });
-    setEditing(false);
-  };
-
-  if (hasUserZones && !editing) {
-    return (
-      <div className="zn-cluster" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
-        <span className="zn-kicker">{t("home.s03.personal.label")}</span>
-        {prefs?.vma != null && (
-          <span className="zn-mono zn-muted">VMA {prefs.vma} km/h</span>
-        )}
-        {prefs?.fcMax != null && (
-          <span className="zn-mono zn-muted">FCmax {prefs.fcMax} bpm</span>
-        )}
-        <Button type="button" variant="link" onClick={() => setEditing(true)}>
-          {t("home.s03.personal.edit")}
-        </Button>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={submit} className="zn-home__prefs">
-      <p className="zn-kicker" style={{ flexBasis: "100%" }}>
-        {t("home.s03.personal.prompt")}
-      </p>
-      <div className="zn-home__field">
-        <label className="zn-label" htmlFor="home-vma">
-          {t("home.s03.personal.vmaLabel")}
-        </label>
-        <input
-          id="home-vma"
-          className="zn-home__input"
-          type="number"
-          inputMode="decimal"
-          step="0.1"
-          min="8"
-          max="30"
-          value={vma}
-          onChange={(e) => setVma(e.target.value)}
-          placeholder="16.0"
-        />
-      </div>
-      <div className="zn-home__field">
-        <label className="zn-label" htmlFor="home-fcmax">
-          {t("home.s03.personal.fcMaxLabel")}
-        </label>
-        <input
-          id="home-fcmax"
-          className="zn-home__input"
-          type="number"
-          inputMode="numeric"
-          step="1"
-          min="100"
-          max="250"
-          value={fcMax}
-          onChange={(e) => setFcMax(e.target.value)}
-          placeholder="190"
-        />
-      </div>
-      <Button type="submit" variant="outline-primary">
-        {t("home.s03.personal.submit")}
-      </Button>
-      {editing && (
-        <Button type="button" variant="ghost" onClick={() => setEditing(false)}>
-          {t("home.s03.personal.cancel")}
-        </Button>
-      )}
-    </form>
-  );
-}

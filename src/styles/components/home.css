@@ -272,38 +272,6 @@
   color: var(--text-body);
 }
 
-/* ── the two measurement inputs above the atlas ───────────────────────── */
-
-.zn-home__prefs {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--sp-8);
-  padding: var(--pad-card-sm);
-  border: var(--border-dashed);
-  border-radius: var(--r-xl);
-  background: var(--surface-card);
-}
-
-.zn-home__field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-}
-
-.zn-home__input {
-  inline-size: 110px;
-  padding: var(--sp-5) var(--sp-6);
-  min-block-size: var(--hit-min);
-
-  font: var(--type-body-sm);
-  font-variant-numeric: tabular-nums;
-  color: var(--text-body);
-  background: var(--surface-page);
-  border: var(--border-rule);
-  border-radius: var(--r-lg);
-}
-
 /* ── researchers ──────────────────────────────────────────────────────── */
 
 .zn-home__people {
