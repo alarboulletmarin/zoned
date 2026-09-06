@@ -515,23 +515,27 @@ révélé qu'il testait sous Firefox.
   le héros, il repoussait la frise de 732 à 896 px — hors du premier écran, ce
   que le lot venait de corriger. Sous 640 px il ferme donc la séance au lieu de
   l'introduire.
-- *La barre d'actions ancrée en bas a été construite, puis retirée le soir même.*
-  Elle a coûté trois essais — un bandeau plat que la pilule du menu faisait
-  paraître collée là par accident, puis des pastilles sans fond, correctement
-  posées et illisibles parce qu'un contrôle flottant a besoin d'un sol autant
-  que d'une forme, puis un sol de papier à 96 % (92 laissait lire « 30s footing
-  Z1 » au travers). Elle est morte sur un vrai iPhone : une autre session a
-  ajouté un troisième contrôle dans la rangée, la barre est sortie de l'écran,
-  et le propriétaire l'a fait retirer. Les actions vivent dans l'en-tête à
-  toutes les largeurs (035ca40).
+- *La zone du pouce est une bande de papier sous des pastilles, et elle tient
+  exactement trois contrôles.* Trois essais pour la forme : un bandeau plat que
+  la pilule du menu faisait paraître collée là par accident ; des pastilles sans
+  fond, correctement posées et illisibles — après la forme, ce qu'il faut à un
+  contrôle flottant, c'est un sol ; puis ce sol, papier à 96 %, parce qu'à 92 on
+  lisait encore « 30s footing Z1 » au travers. La pilule du menu est l'objet le
+  plus ancien et flotte sur tous les écrans : c'est elle qui donne la langue —
+  même hauteur de 44 px, même rayon, même anneau crème, même ombre, même ligne
+  de base. Mesuré à 375 px : Exporter 26–117, favori 129–173, « plus » 185–229,
+  pastille du menu à 239. Zéro recouvrement.
 
-  Ce que l'aller-retour laisse : une barre ancrée dispute au menu la même zone
-  de pouce, et une rangée dimensionnée pour exactement trois contrôles casse le
-  jour où quelqu'un en ajoute un quatrième — ce qui est arrivé en une soirée.
-  **Une seule chose fixe par écran.** Le raisonnement des pastilles reste bon et
-  sert ailleurs : la pilule du menu est l'objet le plus ancien et flotte sur
-  tous les écrans, donc c'est elle qui donne la langue à tout ce qui se pose à
-  côté d'elle.
+  **Elle a été retirée puis remise dans la même soirée, et c'est la leçon.** Une
+  autre session a ajouté un quatrième bouton dans la rangée — « Voir mes
+  allures » — qui l'a fait sortir de l'écran sur un vrai iPhone. Le verdict a
+  d'abord été lu comme « dégage la barre » ; il était « dégage ce bouton ». La
+  barre reste (77b0e67, 178a06c), le bouton est parti, et le champ VMA vit sous
+  les étapes. Une rangée dimensionnée pour exactement trois contrôles casse le
+  jour où quelqu'un en ajoute un quatrième : le commentaire au-dessus
+  d'`actionCluster` le dit désormais dans le fichier, pour que le prochain qui
+  voudra y glisser une action le lise avant.
+
 - *Le cœur d'un favori est plein.* Le composant justifiait le contour par « le
   jeu d'icônes n'a pas de variante remplie ». C'est faux : `Heart` prend une
   prop `filled`, comme une douzaine de ses voisines.
