@@ -189,7 +189,8 @@ export class Figure {
     qui touche la règle de la page. Deux coupes précédentes ont raté ce point :
     à 0,2 sous `groundY` l'arc de semelle était tronqué (« le pied coupé »),
     sur les points de contrôle le cadre descendait 3 à 5 unités sous la semelle
-    et la figure flottait au-dessus du filet. `groundY` ne sert plus au cadre.
+    et la figure flottait au-dessus du filet. Le cadre se calcule depuis les
+    chemins seuls ; `groundY()` reste l'affaire de la pose (plantLead).
     scripts/doodles/recut.mjs applique la même règle aux dessins sans
     générateur ; standing, wondering, pointing, easy-run et plank se régénèrent
     au byte près. */
@@ -229,7 +230,7 @@ export function strokeBottom(ds) {
   return maxY;
 }
 
-export function svg(paths, groundY) {
+export function svg(paths) {
   const PAD = 6;
   const body = paths
     .map((p) => `  <path${p.accent ? ` stroke="var(--accent)"` : ""} d="${p.d}"/>`)

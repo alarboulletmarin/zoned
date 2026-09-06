@@ -109,11 +109,10 @@ function plantForward(f, { knee = -34, bite = 3 } = {}) {
 /** Écrit le SVG. Le cadre est serré sur la figure et coupé à la semelle : le
  *  sol est une règle de la page, pas un trait du fichier. */
 function write(name, f) {
-  const gy = f.groundY();
-  writeFileSync(`${OUT}${name}.svg`, svg(f.paths([Figure.LEAD_SOLE]), gy));
+  writeFileSync(`${OUT}${name}.svg`, svg(f.paths([Figure.LEAD_SOLE])));
   const acc = [...[63, 64, 65].map((i) => f.P[i][1]), ...f.S.map((p) => p[1])];
   console.log(`→ ${name}.svg  ` +
-    `accents ${Math.min(...acc).toFixed(1)}..${Math.max(...acc).toFixed(1)} / sol ${gy.toFixed(1)}`);
+    `accents ${Math.min(...acc).toFixed(1)}..${Math.max(...acc).toFixed(1)} / sol ${f.groundY().toFixed(1)}`);
 }
 
 /* ── 1. l'allure facile ──────────────────────────────────────────────────── */

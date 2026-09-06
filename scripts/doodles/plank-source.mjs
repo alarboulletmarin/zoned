@@ -170,10 +170,10 @@ for (const [a, b] of cuts) {
 }
 paths.push({ d: slice(i, P.length - 1) });
 
-/* Aucun sol dessiné : le cadre se coupe à G et c'est la règle de la page,
-   droite, qui fait le sol. Le contrôle chiffré se lit donc contre G. */
+/* Aucun sol dessiné : le cadre se coupe au trait rendu et c'est la règle de
+   la page, droite, qui fait le sol. Le contrôle chiffré se lit contre G. */
 const out = process.argv[2] || OUT;
-writeFileSync(out, svg(paths, G));
+writeFileSync(out, svg(paths));
 
 // ——— contrôle chiffré ————————————————————————————————————————
 const yy = (a, b) => P.slice(a, b + 1)

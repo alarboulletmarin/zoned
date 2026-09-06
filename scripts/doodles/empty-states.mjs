@@ -48,7 +48,7 @@ function draw(name, spec) {
   f.plantLead({ knee: -5 });
 
   const gy = f.groundY();
-  writeFileSync(`${OUT}${name}.svg`, svg(f.paths(contacts(f, gy)), gy));
+  writeFileSync(`${OUT}${name}.svg`, svg(f.paths(contacts(f, gy))));
   console.log(`→ ${name}.svg  sol ${gy.toFixed(1)}`);
 }
 

@@ -40,5 +40,5 @@ const contacts = (() => {
   if (debut !== null && f.P.length - 1 > debut) runs.push([debut, f.P.length - 1]);
   return runs;
 })();
-writeFileSync(`${OUT}pointing.svg`, svg(f.paths(contacts), gy));
+writeFileSync(`${OUT}pointing.svg`, svg(f.paths(contacts)));
 console.log(`→ pointing.svg  sol ${gy.toFixed(1)}`);

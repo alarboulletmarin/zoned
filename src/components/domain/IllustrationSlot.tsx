@@ -34,12 +34,12 @@ interface IllustrationSlotProps {
   label: string;
   /** The landed drawing, imported with `?react`. Falls back to `brief`. */
   art?: FunctionComponent<SVGProps<SVGElement>>;
-  /** Block size of the reserved hole, in px. Only the brief uses it: a drawing
-      takes the slot's width and its own viewBox ratio. */
+  /** Block size of the reserved hole, in px, exposed as `--slot-h`. The brief's
+      hole is that tall. A drawing ignores it by default — it takes the slot's
+      width (`--slot-w`, set in CSS by the caller) and its own viewBox ratio —
+      unless the caller's CSS reads `--slot-h` back, as session.css does to
+      size the hero's stride by height with the width from the viewBox. */
   height?: number;
-  /** Inline size of the drawing, in px. Unset, the drawing takes the column it
-      is in; either way it never exceeds it. */
-  width?: number;
   /** `"rule"`: the slot stands on its parent's bottom border. The parent lays
       it out on the cross end (`align-items: end`) and draws the rule as
       `border-block-end`; the slot pulls itself down by the rule's thickness so
@@ -53,7 +53,6 @@ export function IllustrationSlot({
   label,
   art: Art,
   height = 340,
-  width,
   ground,
   className,
 }: IllustrationSlotProps) {
@@ -67,12 +66,7 @@ export function IllustrationSlot({
         ground === "rule" && "zn-slot--ground",
         className,
       )}
-      style={
-        {
-          "--slot-h": `${height}px`,
-          "--slot-w": width === undefined ? undefined : `${width}px`,
-        } as CSSProperties
-      }
+      style={{ "--slot-h": `${height}px` } as CSSProperties}
     >
       {Art ? (
         <Art className="zn-slot__art" />
