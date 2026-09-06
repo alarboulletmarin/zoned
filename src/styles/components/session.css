@@ -404,12 +404,26 @@
 /* ── the profile ──────────────────────────────────────────────────────── */
 
 /* The whole session in one bar: width is time, intensity is ink density and
-   block height. 5px of inset and the larger radius are stated by the kit's
-   session profile — the 36px card bar keeps its own 3px. */
-.zn-session__profile {
-  padding-inline: 5px;
-  border-radius: var(--r-lg);
-}
+   block height.
+
+   The kit gives this profile 5px of inset and the larger radius, and a rule
+   here stated both for months. It never applied once: the element is also
+   .zn-zonebar, zone.css is imported after this sheet, and at equal specificity
+   the later file wins — measured, 3px and 6px, not 5px and 10px.
+
+   Removed rather than raised. Two pixels of inset are worth less than the two
+   things raising them would cost: the figure that stands on this bar has its
+   --stance-inset calibrated against the 3px that actually apply, and the whole
+   redesign has been reviewed at the rendering the bar really has. A rule that
+   does not apply is worse than the value it wanted — it reads as intent and
+   ships as nothing.
+
+   .zn-session__profile therefore carries NO rule in this sheet. The class stays
+   on the element as its name — it is what the profile is called when something
+   needs to find it — and everything it looks like comes from .zn-zonebar. If
+   you ever need it to differ from a card's bar, the selector has to beat
+   zone.css: .zn-session__profile.zn-zonebar, and then --stance-inset moves
+   with it. */
 
 /* The axis: a hairline, then its two ends in mono. The line is what makes it an
    axis rather than two captions — and on a phone it is the ground the figure
@@ -442,9 +456,10 @@
    column when the hardest block is the first or the last; the page must
    never scroll sideways. */
 .zn-session__stance {
-  /* .zn-zonebar's border, inset, gap and block border. (The 5px inset
-     .zn-session__profile states above never applies — zone.css comes later
-     in the cascade — so the bar's own 3px is what the blocks actually get.) */
+  /* .zn-zonebar's border, inset, gap and block border. The 3px is the bar's
+     own, and now the only one stated anywhere: the 5px .zn-session__profile
+     used to claim never won the cascade and has been removed — see the note
+     where it stood. */
   --stance-inset: calc(var(--bw-rule) + 3px);
   --stance-gap: var(--sp-1);
   --stance-block-border: var(--bw-hair);
