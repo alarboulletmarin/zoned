@@ -177,18 +177,27 @@ export class Figure {
   static LEAD_SOLE = [63, 65];
 }
 
-/** Une ligne de sol qui ondule — une droite se lit comme un schéma. */
-export const ground = (x0, x1, y, sag = 3) =>
-  cr([[x0, y + sag * 0.4], [x0 + (x1 - x0) * 0.28, y - sag], [x0 + (x1 - x0) * 0.6, y - sag * 0.5],
-      [x0 + (x1 - x0) * 0.84, y + sag * 0.3], [x1, y + sag * 0.6]]);
+/** Assemble le SVG final. Aucun sol n'est dessiné : depuis le 6 septembre
+    2026 (docs/doodles.md, « Le sol est la règle de la page »), c'est une règle
+    droite de la page qui sert de sol, et le bas du cadre EST la ligne d'appui.
 
-/** Assemble le SVG final : viewBox serré sur le contenu, marge égale. */
-export function svg(paths, box, { pad = 12 } = {}) {
-  const W = Math.round(box.w + pad * 2), H = Math.round(box.h + pad * 2);
+    Le cadre est serré sur le trait à 6 unités près — sur les nombres émis,
+    points de contrôle compris, ce qui est le calcul des fichiers coupés par
+    3ce7617 (le duo, dessiné à la main, excepté) — et son bas est posé 0,2 sous
+    `groundY`, l'ordonnée du dessous du pied d'appui. L'arc de semelle plonge
+    quatre unités plus bas : coupé par le cadre, c'est lui qui mord la règle de
+    la page. Ces deux constantes reproduisent standing, wondering, pointing,
+    easy-run et plank au byte près ; ne pas les « arrondir ». */
+export function svg(paths, groundY) {
+  const PAD = 6;
   const body = paths
     .map((p) => `  <path${p.accent ? ` stroke="var(--accent)"` : ""} d="${p.d}"/>`)
     .join("\n");
-  return `<svg viewBox="${(box.x0 - pad).toFixed(1)} ${(box.y0 - pad).toFixed(1)} ${W} ${H}" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  const n = paths.flatMap((p) => p.d.match(/-?\d+(?:\.\d+)?/g).map(Number));
+  const xs = n.filter((_, i) => i % 2 === 0), ys = n.filter((_, i) => i % 2 === 1);
+  const x0 = Math.min(...xs) - PAD, y0 = Math.min(...ys) - PAD;
+  const w = Math.max(...xs) + PAD - x0, h = groundY + 0.2 - y0;
+  return `<svg viewBox="${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 ${body}
 </svg>
 `;

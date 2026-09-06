@@ -10,7 +10,7 @@
  */
 import { writeFileSync } from "node:fs";
 import { cr, rot } from "./lib.mjs";
-import { BASE, ground, svg } from "./rig.mjs";
+import { BASE, svg } from "./rig.mjs";
 
 const OUT = new URL("../../src/assets/doodles/plank.svg", import.meta.url).pathname;
 
@@ -170,42 +170,16 @@ for (const [a, b] of cuts) {
 }
 paths.push({ d: slice(i, P.length - 1) });
 
-const x0 = Math.min(...P.map((p) => p[0])), x1 = Math.max(...P.map((p) => p[0]));
-const y0 = Math.min(...P.map((p) => p[1])), y1 = Math.max(...P.map((p) => p[1]));
-const GA = x0 - 10, GB = x1 + 14, SAG = 3;
-paths.push({ d: ground(GA, GB, G, SAG) });
-
-/* Ordonnée de la ligne de sol à une abscisse : les cinq ancres de ground(),
-   échantillonnées en Catmull-Rom. Sert à prouver le contact, pas à dessiner. */
-const GP = [[GA, G + SAG * 0.4], [GA + (GB - GA) * 0.28, G - SAG],
-            [GA + (GB - GA) * 0.6, G - SAG * 0.5],
-            [GA + (GB - GA) * 0.84, G + SAG * 0.3], [GB, G + SAG * 0.6]];
-function groundYat(X) {
-  let best = null, t = 1 / 6;
-  for (let i = 0; i < GP.length - 1; i++) {
-    const p0 = GP[i - 1] || GP[i], p1 = GP[i], p2 = GP[i + 1], p3 = GP[i + 2] || GP[i + 1];
-    const c1 = [p1[0] + (p2[0] - p0[0]) * t, p1[1] + (p2[1] - p0[1]) * t];
-    const c2 = [p2[0] - (p3[0] - p1[0]) * t, p2[1] - (p3[1] - p1[1]) * t];
-    for (let k = 0; k <= 200; k++) {
-      const s = k / 200, m = 1 - s;
-      const bx = m * m * m * p1[0] + 3 * m * m * s * c1[0] + 3 * m * s * s * c2[0] + s * s * s * p2[0];
-      const by = m * m * m * p1[1] + 3 * m * m * s * c1[1] + 3 * m * s * s * c2[1] + s * s * s * p2[1];
-      if (best === null || Math.abs(bx - X) < best[0]) best = [Math.abs(bx - X), by];
-    }
-  }
-  return best[1];
-}
-
-const box = { x0: x0 - 13, y0: y0 - 15, w: (x1 - x0) + 26, h: (y1 - y0) + 30 };
+/* Aucun sol dessiné : le cadre se coupe à G et c'est la règle de la page,
+   droite, qui fait le sol. Le contrôle chiffré se lit donc contre G. */
 const out = process.argv[2] || OUT;
-writeFileSync(out, svg(paths, box, { pad: 0 }));
+writeFileSync(out, svg(paths, G));
 
 // ——— contrôle chiffré ————————————————————————————————————————
 const yy = (a, b) => P.slice(a, b + 1)
-  .map((p) => `x=${p[0].toFixed(0)} y=${p[1].toFixed(1)} (sol ${groundYat(p[0]).toFixed(1)}, ${(p[1] - groundYat(p[0])).toFixed(1)} dessous)`)
+  .map((p) => `x=${p[0].toFixed(0)} y=${p[1].toFixed(1)} (${(p[1] - G).toFixed(1)} sous le sol)`)
   .join("\n                        ");
-console.log(`→ ${out}  cadre ${Math.round(box.w)}x${Math.round(box.h)} = ${(box.w / box.h).toFixed(2)}:1`);
-console.log(`   sol y=${G}  (la ligne ondule de ${G - 3} à ${G + 1.8})`);
+console.log(`→ ${out}  sol y=${G}`);
 console.log(`   accent avant-bras  ancres ${iN49}..${iN50}  y = ${yy(iN49, iN50)}`);
 console.log(`   accent orteils     ancres ${iToeA}..${iToeB}  y = ${yy(iToeA, iToeB)}`);
 console.log(`   pied éloigné (encre) y max = ${maxY(footF.slice(1, 10)).toFixed(1)}`);

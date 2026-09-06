@@ -6,13 +6,13 @@
  * sur la page.
  *
  * Bras avant tendu à l'horizontale (coude à +90) : au-dessous il propose, au-
- * dessus il salue. Le cadre est serré à droite pour que la main tombe près du
- * bord — la flèche prend le relais juste après.
+ * dessus il salue. Le cadre est serré sur le trait, donc la main tendue
+ * affleure le bord droit — la flèche prend le relais juste après.
  *
  *   bun scripts/doodles/pointing.mjs
  */
 import { writeFileSync } from "node:fs";
-import { Figure, svg, ground } from "./rig.mjs";
+import { Figure, svg } from "./rig.mjs";
 
 const OUT = new URL("../../src/assets/doodles/", import.meta.url).pathname;
 
@@ -23,7 +23,7 @@ const f = new Figure().pose({
 });
 f.plantLead({ knee: -5 });
 
-const b = f.bbox(), gy = f.groundY();
+const gy = f.groundY();
 
 /* L'accent se déduit du contact. Dans cette pose la jambe avant n'atteint pas
    le sol — elle plafonne une dizaine de pixels au-dessus — et peindre
@@ -40,10 +40,5 @@ const contacts = (() => {
   if (debut !== null && f.P.length - 1 > debut) runs.push([debut, f.P.length - 1]);
   return runs;
 })();
-const h = Math.max(b.h, gy - b.y0) + 10;
-const w = h * 0.86;                       // portrait : la figure remplit le cadre
-const x0 = b.x0 - (w - b.w) * 0.62;       // la main tendue affleure le bord droit
-writeFileSync(`${OUT}pointing.svg`,
-  svg([...f.paths(contacts), { d: ground(x0 + 4, x0 + w - 4, gy) }],
-      { x0, y0: b.y0, w, h }, { pad: 6 }));
-console.log(`→ pointing.svg  ${Math.round(w)}x${Math.round(h)}`);
+writeFileSync(`${OUT}pointing.svg`, svg(f.paths(contacts), gy));
+console.log(`→ pointing.svg  sol ${gy.toFixed(1)}`);

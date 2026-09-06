@@ -15,7 +15,7 @@
  *   bun scripts/doodles/effort.mjs
  */
 import { writeFileSync } from "node:fs";
-import { Figure, svg, ground } from "./rig.mjs";
+import { Figure, svg } from "./rig.mjs";
 
 const OUT = new URL("../../src/assets/doodles/", import.meta.url).pathname;
 
@@ -106,20 +106,13 @@ function plantForward(f, { knee = -34, bite = 3 } = {}) {
   return f;
 }
 
-/** Écrit le SVG. Le cadre est en paysage alors que la figure est verticale :
- *  une silhouette seule dans son propre gabarit fait un trait perdu au milieu
- *  d'une carte large. C'est le sol, prolongé de part et d'autre, qui fait le
- *  dessin — comme dans le duo approuvé, qui est en 440x323. La figure regarde
- *  à droite, donc le surplus se répartit 40 % derrière, 60 % devant. */
-function write(name, f, { ar = 1.32, behind = 0.4 } = {}) {
-  const b = f.bbox(), gy = f.groundY();
-  const h = Math.max(b.h, gy - b.y0) + 10;
-  const w = h * ar;
-  const x0 = b.x0 - (w - b.w) * behind;
-  const paths = [...f.paths([Figure.LEAD_SOLE]), { d: ground(x0 + 4, x0 + w - 4, gy) }];
-  writeFileSync(`${OUT}${name}.svg`, svg(paths, { x0, y0: b.y0, w, h }, { pad: 6 }));
+/** Écrit le SVG. Le cadre est serré sur la figure et coupé à la semelle : le
+ *  sol est une règle de la page, pas un trait du fichier. */
+function write(name, f) {
+  const gy = f.groundY();
+  writeFileSync(`${OUT}${name}.svg`, svg(f.paths([Figure.LEAD_SOLE]), gy));
   const acc = [...[63, 64, 65].map((i) => f.P[i][1]), ...f.S.map((p) => p[1])];
-  console.log(`→ ${name}.svg  ${Math.round(w)}x${Math.round(h)}  ` +
+  console.log(`→ ${name}.svg  ` +
     `accents ${Math.min(...acc).toFixed(1)}..${Math.max(...acc).toFixed(1)} / sol ${gy.toFixed(1)}`);
 }
 
@@ -137,7 +130,7 @@ function write(name, f, { ar = 1.32, behind = 0.4 } = {}) {
   });
   levelStand(f);
   plantForward(f, { knee: -34 });
-  write("easy-run", f, { ar: 1.32 });
+  write("easy-run", f);
 }
 
 /* ── 2. l'après-effort ───────────────────────────────────────────────────── */
