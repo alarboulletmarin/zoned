@@ -7,6 +7,14 @@
   --bw-rule: 1.5px;
   --bw-heavy: 2.5px;
 
+  /* The RENDERED thickness of --bw-rule, and the margin a sole takes to stand
+     on a rule: a drawing's box is cut at its sole, so pulling it down by this
+     much puts the sole on the line rather than a hair above it. Chrome floors
+     a 1.5px border to a whole CSS pixel at every device ratio (measured 1px at
+     1x, 2x and 4x); Firefox does draw 1.5px, and the box then ends half a
+     pixel inside the stroke, which is still on it. Stated once, here. */
+  --rule-bite: 1px;
+
   --border-hair: var(--bw-hair) solid var(--line-strong);
   --border-rule: var(--bw-rule) solid var(--line-strong);
   --border-heavy: var(--bw-heavy) solid var(--accent);

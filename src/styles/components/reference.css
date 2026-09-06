@@ -433,17 +433,17 @@
 
 /* ── 404 ──────────────────────────────────────────────────────────────── */
 
-/* Le sol s'arrête ici. La règle part du bord gauche de l'écran et s'arrête
-   vers 60 % de sa largeur ; une figure marche vers le vide à son bout, et le
-   code est une cote en mono imprimée là où le sol a manqué. Puis le titre, la
-   phrase et le bouton, alignés à gauche comme le reste de la colonne : l'écran
-   se lit en une phrase du haut vers le bas. Plus d'alerte, plus de glyphe —
-   le dessin est la phrase.
+/* The ground stops here. The rule starts at the left edge of the screen and
+   ends around 60% of its width; a figure walks towards the void at its end,
+   and the code is a mono dimension printed where the ground ran out. Then the
+   title, the sentence and the button, left-aligned like the rest of the
+   column: the screen reads as one sentence from top to bottom. No alert, no
+   glyph — the drawing is the sentence.
 
-   C'est la seule surface de cette famille qui déborde de la colonne : le filet
-   doit partir du bord de l'écran pour que sa fin se lise comme une fin. Le
-   débord est vers la gauche seulement (calc(50% - 50vw) depuis une colonne
-   centrée), ce qui ne crée jamais de défilement horizontal. */
+   The only surface of this family that bleeds out of the column: the rule has
+   to start at the screen edge for its end to read as an end. The bleed is to
+   the left only (calc(50% - 50vw) from a centred column), which never
+   creates horizontal scroll. */
 .zn-void {
   display: flex;
   flex-direction: column;
@@ -460,10 +460,11 @@
   margin-block-end: var(--sp-6);
 }
 
-/* Le sol : 60 % de l'écran, la règle en bordure basse, la figure calée à son
-   bout. Le bas du cadre SVG est la ligne d'appui (docs/doodles.md, « Le sol
-   est la règle de la page ») : le cadre descend de l'épaisseur du filet et
-   passe au-dessus de lui, pour que la semelle vermillon le touche. */
+/* The ground: 60% of the screen, the rule as its bottom border, the figure
+   set at its end. The bottom of the SVG frame is the ground line
+   (docs/doodles.md, "Le sol est la règle de la page"): the frame comes down
+   by the rule's rendered thickness and paints above it, so the vermillon
+   sole touches it. */
 .zn-void__ground {
   display: flex;
   justify-content: flex-end;
@@ -474,10 +475,10 @@
   border-block-end: var(--border-rule);
 }
 
-/* Retournée par CSS pour marcher vers la droite, vers le vide : une
-   orientation de scène, pas une correction d'un dessin validé. La hauteur est
-   fixée et la largeur vient du rapport du viewBox — un SVG ?react aux deux
-   dimensions libres s'effondre. */
+/* Flipped in CSS to walk to the right, towards the void: a scene direction,
+   not a correction of an approved drawing. The height is fixed and the width
+   follows the viewBox ratio — a ?react SVG with both dimensions free
+   collapses. */
 .zn-void__art {
   display: block;
   block-size: 180px;
@@ -487,17 +488,17 @@
   transform: scaleX(-1);
   position: relative;
   z-index: 1;
-  margin-block-end: calc(-1 * var(--bw-rule));
+  margin-block-end: calc(-1 * var(--rule-bite));
 }
 
-/* Le code, comme une donnée : mono, gras, en encre pâle, sa ligne de base
-   posée sur le filet. Avec line-height 1, la boîte de JetBrains Mono descend
-   de 0,14em sous la ligne de base (descente de 0,30em moins un demi-interligne
-   négatif de 0,16em) ; la marge négative rend cette descente, et l'épaisseur
-   du filet remonte les chiffres juste dessus. */
+/* The code, as a datum: mono, bold, in faint ink, its baseline resting on the
+   rule. At line-height 1 the JetBrains Mono box extends 0.14em below the
+   baseline (0.30em descent minus a negative half-leading of 0.16em); the
+   negative margin gives that descent back, and the rule's rendered thickness
+   (--rule-bite) lifts the digits just above the line. */
 .zn-void__code {
   margin-inline-start: var(--sp-7);
-  margin-block-end: calc(-0.14em + var(--bw-rule));
+  margin-block-end: calc(-0.14em + var(--rule-bite));
   font-family: var(--font-mono);
   font-size: var(--fs-h1);
   font-weight: var(--fw-bold);

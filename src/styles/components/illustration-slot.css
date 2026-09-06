@@ -60,20 +60,14 @@
 
 /* Ground = rule. The parent draws the rule as its border-block-end and lays
    the slot out on the cross end; the slot pulls itself down by the rule's
-   rendered thickness so the bottom of the drawing's box sits on the bottom
-   of the rule. The sole's arc, cut by the viewBox, then ends inside the
-   line: the figure bites the rule rather than hovering a hairline above it,
-   and the accent paints over the ink because a child paints above its
-   parent's border.
-
-   1px, not var(--bw-rule): the token says 1.5px, but Chrome floors a border
-   to a whole CSS pixel at every device ratio (measured: 1px at 1x, 2x and
-   3x), so 1.5px of margin left the sole half a pixel under the line. Firefox
-   does draw the 1.5px; there the box ends half a pixel inside the line,
-   which is still on it. Either way the sole never leaves the rule. */
+   rendered thickness (--rule-bite, borders.css) so the bottom of the
+   drawing's box sits on the bottom of the rule. The sole's arc, cut by the
+   viewBox, then ends inside the line: the figure bites the rule rather than
+   hovering a hairline above it, and the accent paints over the ink because a
+   child paints above its parent's border. */
 .zn-slot--ground {
   position: relative;
-  margin-block-end: -1px;
+  margin-block-end: calc(-1 * var(--rule-bite));
 }
 
 /* An empty slot is sized in px by its caller, which is right on a 1440px page

@@ -489,18 +489,16 @@
    Il se tient sur le filet de la bande qui suit : le fichier n'a plus de sol,
    le bas de sa boîte est sa ligne d'appui (docs/doodles.md, « Le sol est la
    règle de la page »). L'en-tête qui le porte perd donc sa marge basse, et le
-   dessin descend de l'épaisseur rendue du filet pour que sa semelle le morde.
-   1 px et non --bw-rule : le jeton dit 1,5 px, mais Chrome ramène une bordure
-   au pixel CSS entier quel que soit le ratio d'écran (mesuré : 1 px à 1x, 2x
-   et 3x) ; Firefox trace bien 1,5 px, et la boîte s'arrête alors un demi-pixel
-   dans le trait, ce qui est encore dessus. Même calage que .zn-slot--ground.
-   Il passe devant dans l'ordre de peinture, sinon la bande suivante tracerait
-   sa bordure par-dessus la semelle.
+   dessin descend de l'épaisseur rendue du filet (--rule-bite, borders.css)
+   pour que sa semelle le morde. Même calage que .zn-slot--ground. Il passe
+   devant dans l'ordre de peinture, sinon la bande suivante tracerait sa
+   bordure par-dessus la semelle.
 
-   La hauteur reste 148 px (120 sur téléphone) : le cadre coupé fait 118 × 305,
-   soit 57 px de large. Le seuil des 84 px de docs/doodles.md a été écrit pour
-   des cadres en paysage où la largeur faisait 1,3 fois la hauteur ; une
-   figure debout de 148 px se lit, c'est la hauteur qui compte ici. */
+   200 px de haut (160 sur téléphone). Le cadre coupé fait 118 × 305 : à 148 px
+   la figure faisait 56 px de large et son trait de 2 unités rendait à 0,95 px,
+   sous le pixel — le croisement main/cheville se brouillait, un fil seul à
+   gauche d'un en-tête de 1 072 px. À 200 px elle fait 76 px de large et le
+   trait 1,3 px ; elle est seule sur sa ligne, l'en-tête a la place. */
 .zn-guide__head--figure {
   padding-block-end: 0;
 }
@@ -508,16 +506,16 @@
 .zn-guide__art {
   position: relative;
   z-index: 1;
-  block-size: 148px;
+  block-size: 200px;
   inline-size: auto;
   max-inline-size: 100%;
   align-self: flex-start;
-  margin-block-end: -1px;
+  margin-block-end: calc(-1 * var(--rule-bite));
   color: var(--text-body);
 }
 
 @media (max-width: 640px) {
   .zn-guide__art {
-    block-size: 120px;
+    block-size: 160px;
   }
 }
