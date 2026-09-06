@@ -1,24 +1,55 @@
-/* EmptyState — a hole in the page, not a card.
+/* EmptyState — la ligne de départ.
 
-   The dashed outline is what tells the two apart: a card is a thing, this is
-   the absence of things. Icon centred in a drawn circle, the cause stated
-   underneath, and the action that undoes it. */
+   Plus de carte en tirets : ce contour est la texture du trou réservé à un
+   dessin, et une étagère vide n'est pas un trou. À la place, une règle droite
+   qui court sur toute la largeur du conteneur, et la figure qui se tient
+   dessus, à gauche. Le bas du cadre SVG est la ligne d'appui (docs/doodles.md,
+   « Le sol est la règle de la page ») : la scène est un flex aligné en bas dont
+   la bordure basse est la règle, et le dessin déborde de l'épaisseur de cette
+   bordure pour que la semelle vermillon la touche. Calé par le calcul, jamais
+   à l'œil.
+
+   Tout est aligné à gauche. Rien au centre, rien sous la pastille MENU. */
 
 .zn-empty {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: var(--sp-6);
-  padding: var(--sp-17) var(--sp-14);
-
-  background: var(--surface-card);
-  border: var(--border-dashed);
-  border-radius: var(--r-3xl);
+  align-items: flex-start;
+  text-align: start;
 }
 
-/* 52px circle around a 22px glyph — the design bundle states both. */
+/* La scène : la figure, et la règle qui lui sert de sol. */
+.zn-empty__scene {
+  display: flex;
+  align-items: flex-end;
+  align-self: stretch;
+  border-block-end: var(--border-rule);
+}
+
+/* La taille est celle du dessin lui-même, désormais un cadre vertical coupé
+   à la semelle : 144 px de haut sur un téléphone, 208 sur un écran large. Le
+   brief donnait 128 à 150 puis 200 à 260 « de large » dans l'ancien cadre en
+   paysage, qui embarquait le sol ; la hauteur est ce qui en reste.
+
+   `inline-size: auto` sur un SVG importé avec ?react est le piège déjà payé
+   une fois — mais seulement quand la hauteur est libre elle aussi. Ici elle
+   est fixée, et la largeur vient du rapport du viewBox. */
+.zn-empty__art {
+  display: block;
+  block-size: 144px;
+  inline-size: auto;
+  max-inline-size: 100%;
+  flex: none;
+  color: var(--text-body);
+
+  /* La semelle sur la règle : le cadre descend de l'épaisseur du filet, et
+     passe au-dessus de lui — le vermillon de l'appui se pose sur l'encre. */
+  position: relative;
+  z-index: 1;
+  margin-block-end: calc(-1 * var(--bw-rule));
+}
+
+/* Le repli sans dessin : 52px circle around a 22px glyph, posé sur la règle. */
 .zn-empty__icon {
   display: grid;
   place-items: center;
@@ -33,6 +64,16 @@
 .zn-empty__icon > svg {
   inline-size: 22px;
   block-size: 22px;
+}
+
+/* Sous la règle : titre, cause, action. */
+.zn-empty__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+  padding-block-start: var(--sp-10);
 }
 
 .zn-empty__title {
@@ -50,16 +91,62 @@
   max-inline-size: 44ch;
 }
 
+.zn-empty__action {
+  margin-block-start: var(--sp-6);
+}
+
 .zn-empty__hint {
   margin: 0;
+  margin-block-start: var(--sp-6);
   font: var(--type-caption);
   color: var(--text-faint);
   max-inline-size: 44ch;
 }
 
-/* ── variants ─────────────────────────────────────────────────────────────
-   Visual only, and only on the glyph: the frame stays dashed ink whatever
-   the reason the page is empty. */
+/* ── écran large ──────────────────────────────────────────────────────────
+   La figure à gauche, les mots à sa droite, et le bouton posé sur la même
+   règle. Les deux boîtes portent chacune leur bordure basse et sont alignées
+   en bas sans écart entre elles, donc les deux filets n'en font qu'un. */
+@media (min-width: 769px) {
+  .zn-empty {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .zn-empty__scene {
+    align-self: auto;
+    flex: none;
+  }
+
+  .zn-empty__art {
+    block-size: 208px;
+  }
+
+  .zn-empty__body {
+    flex: 1 1 0;
+    padding-block-start: 0;
+    padding-inline-start: var(--sp-12);
+    border-block-end: var(--border-rule);
+  }
+
+  /* La base du bouton sur la règle, comme la semelle : même débord, même
+     passage au-dessus du filet. */
+  .zn-empty__action {
+    position: relative;
+    z-index: 1;
+    margin-block-end: calc(-1 * var(--bw-rule));
+  }
+
+  .zn-empty__hint {
+    flex-basis: 100%;
+  }
+}
+
+/* ── variants ─────────────────────────────────────────────────────────
+   Visual only, and only on the glyph. A drawing keeps its ink whatever the
+   reason the page is empty: the vermillon is reserved for the contact with
+   the ground, and a figure painted red would read as a rendering error. */
 
 .zn-empty[data-variant="not-started"] .zn-empty__icon {
   color: var(--accent);
@@ -77,46 +164,5 @@
 /* A filter recovery is not a failure: the description carries the count, so
    it gets the full body ink rather than the muted one. */
 .zn-empty[data-variant="no-results"] .zn-empty__description {
-  color: var(--text-body);
-}
-
-/* ── un dessin à la place du glyphe ───────────────────────────────────────
-   Le cercle de 52 px et son glyphe de 22 px disent « pas de données ». Un
-   personnage dessiné dit de quelle page il s'agit — et c'est le même trait
-   que le reste de l'app, à la même encre, donc il n'a pas besoin d'un cadre
-   pour appartenir à la page. Le cercle part avec le glyphe.
-
-   La hauteur est plafonnée plutôt que fixée : le dessin porte son propre
-   rapport de forme et le cadre en tirets ne doit pas grandir avec lui. */
-.zn-empty__art {
-  display: block;
-  block-size: 156px;
-  inline-size: auto;
-  max-inline-size: 100%;
-  flex: none;
-  color: var(--text-body);
-}
-
-/* Le dessin occupe déjà l'espace que le cercle prenait ; garder l'écart de
-   base ferait flotter le titre. */
-.zn-empty--art {
-  gap: var(--sp-4);
-}
-
-/* Sur un pointeur grossier la carte est étroite : le dessin cède la place au
-   texte, qui porte l'information. */
-@media (max-width: 640px) {
-  .zn-empty__art {
-    block-size: 128px;
-  }
-}
-
-/* Les variantes teintent le glyphe. Un dessin, lui, garde son encre : le
-   vermillon y est réservé au contact avec le sol, et une figure entièrement
-   rouge lirait comme une erreur de rendu. Seul l'état positif fait exception,
-   et encore : il ne teinte rien, il laisse le trait tel quel. */
-.zn-empty[data-variant="error"] .zn-empty__art,
-.zn-empty[data-variant="offline"] .zn-empty__art,
-.zn-empty[data-variant="not-started"] .zn-empty__art {
   color: var(--text-body);
 }
