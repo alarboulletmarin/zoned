@@ -1413,16 +1413,18 @@
 }
 
 /* ══ the zone edge mark ══════════════════════════════════════════════════
-   A left rule in the zone's own ink, for a surface whose zone is already
-   named in text on the same row: the expanded calculator panel, the scan
-   placeholder. The ramp values stay in zones.css and are not re-derived
-   here; this only says which local property they land in.
+   A frame in the zone's own ink, for a surface whose zone is already named in
+   text on the same row: the expanded calculator panel, the scan placeholder.
+   The ramp values stay in zones.css and are not re-derived here; this only
+   says which local property they land in.
 
-   Last in the file on purpose — it paints over the `border` shorthand of the
-   surface it is added to, and the cascade decides that by source order. */
+   An inset ring rather than a border: it never fights the `border` shorthand
+   of the surface it is added to (so the cascade order stops mattering), it
+   adds no height to the animated calculator panel, and it follows the radius
+   of whatever it is dropped on. */
 
 .zn-zone-edge {
-  border-inline-start: var(--sp-3) solid var(--zn-edge, var(--line-strong));
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--zn-edge, var(--line-strong));
 }
 
 .zn-zone-edge[data-zone="1"] { --zn-edge: var(--zone-1); }

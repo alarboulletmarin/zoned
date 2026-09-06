@@ -146,9 +146,12 @@
   border-block-start: var(--border-divider);
 }
 
-/* Race day: a vermillon stroke down the edge. A stroke, not a second fill. */
+/* Race day: the vermillon frame all the way round, like .zn-sess[data-kind]
+   on the calendar. An inset ring rather than a border, because the row lives
+   inside .zn-pw__list — a real border would add 2.5px of height and push every
+   row below it down. */
 .zn-pw__sess[data-kind="race"] {
-  border-inline-start: var(--bw-heavy) solid var(--accent);
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
 }
 
 .zn-pw__sess[data-kind="race"] .zn-pw__sess-name {
@@ -277,6 +280,24 @@
 
 .zn-pw__wk-toggle[aria-expanded="true"] .zn-pw__wk-chev {
   transform: rotate(180deg);
+}
+
+/* Sur téléphone, la liste est la SEULE vue du programme : le nom de la semaine
+   ne peut plus être le seul élément élastique d'une rangée trop pleine. Le
+   badge, le compteur et le chevron ne cèdent rien, donc « Semaine de
+   récupération — Base » tombait à 46px pour 252px de texte et l'en-tête
+   n'affichait plus que « S… ». On lui donne une base incompressible et on
+   laisse la rangée passer à la ligne : les semaines ordinaires gardent leur
+   rangée unique de 60,8px, seules les longues en prennent une seconde. */
+@media (max-width: 767px) {
+  .zn-pw__wk-toggle {
+    flex-wrap: wrap;
+  }
+
+  .zn-pw__wk-name {
+    flex: 1 0 10ch;
+    white-space: normal;
+  }
 }
 
 .zn-pw__wk-body {

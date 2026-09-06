@@ -57,7 +57,10 @@
   inline-size: 104px;
 }
 
-@media (max-width: 768px) {
+/* 767, pas 768 : le point de rupture appartient à useIsMobile (< 768px) et le
+   reste du fichier l'écrit déjà ainsi. À 768px pile, la page se déclare
+   desktop — la gouttière doit suivre. */
+@media (max-width: 767px) {
   .zn-plancal__col-week {
     inline-size: 90px;
   }
@@ -135,10 +138,15 @@
   margin-block-start: var(--sp-1);
 }
 
-/* The current week is framed, not filled: the vermillon edge runs down the
-   gutter and the row reads as the one you are in. */
+/* The current week is framed, not filled: the vermillon ring closes around the
+   gutter and the row reads as the one you are in. The week number goes bold
+   with it — the colour is never the only carrier (WCAG 1.4.1). */
 .zn-plancal__week[data-current="true"] .zn-plancal__gutter {
-  box-shadow: inset var(--bw-heavy) 0 0 0 var(--accent);
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+}
+
+.zn-plancal__week[data-current="true"] .zn-plancal__wknum {
+  font-weight: var(--fw-bold);
 }
 
 .zn-plancal__wknum {
@@ -860,11 +868,18 @@
   background: var(--surface-band);
 }
 
-/* Phone: four days then three. Desktop: the week on one line. */
+/* Phone: four days then three. Desktop: the week on one line. Le composant
+   annonce la longueur de sa rangée en attribut plutôt qu'en variable inline :
+   la feuille de style reste seule maîtresse du nombre de colonnes, et peut
+   donc le ramener à 1 sous 640px sans !important. */
 .zn-planweek__row {
   display: grid;
-  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--sp-3);
+}
+
+.zn-planweek__row[data-cols="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .zn-planweek__week-row {
@@ -910,19 +925,25 @@
   background-image: var(--zone-recovery);
 }
 
-/* Aujourd'hui : un filet vermillon sur l'arête de départ, pas un aplat — la
-   forme porte l'information, la couleur ne fait que la doubler. Le padding
-   compense l'épaississement pour que la cellule reste alignée au pixel près
-   sur ses six voisines. Le libellé passe à l'encre pleine et au gras, jamais
-   au vermillon : le système interdit ce ton typographique sous 14px. */
+/* Aujourd'hui : le cadre vermillon entier, comme .zn-plancal__day[data-today]
+   le fait déjà sur le calendrier complet. Un anneau inset ne participe pas au
+   layout, donc la cellule reste alignée au pixel près sur ses six voisines et
+   l'anneau suit le rayon des coins. Le libellé passe à l'encre pleine et au
+   gras, jamais au vermillon : le système interdit ce ton sous 14px. */
 .zn-planweek__day[data-today="true"] {
-  border-inline-start: var(--bw-heavy) solid var(--accent);
-  padding-inline-start: calc(var(--sp-4) - var(--bw-heavy) + var(--bw-rule));
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
 }
 
 .zn-planweek__day[data-today="true"] .zn-planweek__daylabel {
   color: var(--text-body);
   font-weight: var(--fw-bold);
+}
+
+/* Transparent tant que la journée est une colonne : les deux spans qu'il
+   contient restent des enfants directs de la cellule, empilés comme avant.
+   Il ne devient une vraie boîte que sous 640px, où il forme la gouttière. */
+.zn-planweek__dayhead {
+  display: contents;
 }
 
 .zn-planweek__daylabel {
@@ -1025,6 +1046,95 @@
 
 .zn-planweek__add-plus {
   font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+}
+
+/* ── sous 640px : une ligne par jour ──────────────────────────────────── */
+
+/* Quatre colonnes sur un écran de 390px, c'est une carte de 87px : « Endur
+   ance… », « Core runni… », « 23m… ». Sous 640px les sept jours passent donc
+   l'un sous l'autre — le jour à gauche, ses séances à droite — et la carte
+   remonte à 190px, assez pour lire « Sortie longue vallonnée » en entier.
+   639/640 n'a qu'un propriétaire, cette feuille : le composant ne pose plus
+   le nombre de colonnes en style inline (il écrit data-cols), donc aucun JS
+   n'a à connaître ce seuil ni à rester d'accord avec lui. */
+@media (max-width: 639px) {
+  .zn-planweek__row,
+  .zn-planweek__row[data-cols="3"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Toujours flex, en ligne qui revient : les enfants d'une journée sont de
+     natures trop diverses (bandeau, séances, bouton d'ajout, carte du tirage)
+     pour tenir dans un gabarit de grille fixe. */
+  .zn-planweek__day {
+    flex-flow: row wrap;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+  }
+
+  /* 80px la cellule (120px en semaine seule) ferait 560 à 840px de haut pour
+     sept lignes dont la moitié est vide. Une journée sans séance est une
+     ligne courte, pas une case vide. */
+  .zn-planweek__day,
+  .zn-planweek__day[data-single-week="true"] {
+    min-block-size: 0;
+  }
+
+  /* La gouttière du jour : « LUN 12 ». Largeur fixe pour que les sept lignes
+     s'alignent, et 64px tient aussi « 1 Jan », le libellé du premier du mois.
+     order:-1 la ramène en tête devant le bandeau INDISPONIBLE, qui la précède
+     dans le DOM parce qu'il la surmonte en mode colonne. */
+  .zn-planweek__dayhead {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-2);
+    flex: none;
+    order: -1;
+    inline-size: var(--sp-19);
+  }
+
+  .zn-planweek__date {
+    margin-block-end: 0;
+    text-align: start;
+  }
+
+  /* Tout ce qui n'est pas la gouttière ni le « + » de fin occupe la largeur
+     qui reste une fois les deux réservés. Largeur figée et non extensible :
+     les sept jours dessinent alors trois colonnes franches — le jour, la
+     séance, le « + » — et une deuxième séance ne peut jamais venir partager
+     la ligne de la première. */
+  .zn-planweek__day > :not(.zn-planweek__dayhead):not(.zn-planweek__add[data-slot="tail"]) {
+    flex: 0 1 calc(100% - var(--sp-19) - var(--hit-min) - 2 * var(--sp-3));
+    min-inline-size: 0;
+    margin-block: 0;
+    text-align: start;
+  }
+
+  /* Une deuxième séance passe à la ligne : elle reprend la gouttière en marge
+     pour se ranger sous la première plutôt que sous le nom du jour. */
+  .zn-planweek__day > .zn-plan-drag ~ :not(.zn-planweek__add[data-slot="tail"]) {
+    margin-inline-start: calc(var(--sp-19) + var(--sp-3));
+  }
+
+  /* Le « + » d'une journée déjà remplie revient au bout de la ligne, carré :
+     sous la carte, il coûtait une deuxième ligne à chacun des sept jours. */
+  .zn-planweek__add[data-slot="tail"] {
+    flex: none;
+    inline-size: var(--hit-min);
+    margin-block-start: 0;
+    padding: var(--sp-3);
+  }
+
+  /* L'écart entre deux séances est désormais le gap de la ligne. */
+  .zn-planweek__day .zn-sess[data-density="card"] {
+    margin-block-end: 0;
+  }
+
+  /* INDISPONIBLE le dit déjà : le tiret ne vaut pas une ligne de plus. */
+  .zn-planweek__day[data-blocked="true"] .zn-planweek__empty {
+    display: none;
+  }
 }
 
 /* ══ drag-to-delete ════════════════════════════════════════════════════ */
