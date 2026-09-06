@@ -448,7 +448,7 @@ export function WorkoutDetailPage() {
         className="zn-cluster zn-session__actions"
         style={{ "--gap": "var(--sp-6)" } as CSSProperties}
       >
-        <ExportMenu workout={workout} size="lg" variant={hasUserZones ? "default" : "outline"} />
+        <ExportMenu workout={workout} size="lg" />
 
         <FavoriteButton workoutId={workout.id} />
 
