@@ -19,11 +19,24 @@
  * native <details> that is closed until you ask for it. That replaces the flat
  * run of twenty-five mono links that used to sit at the floor of the panel —
  * the routes were all there, but in no order anyone could read.
+ *
+ * Under the six lines, the figure of the door you are standing in stands on a
+ * rule that crosses the panel. It replaces the vermillon disc that used to mark
+ * the active line: the doors of the home page and the guides are bare, and
+ * this is where their figures live now — at a size where the stroke reads as a
+ * drawing, not as one more pictogram.
  */
 
+import type { FunctionComponent, SVGProps } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import DoorLearn from "@/assets/doodles/door-learn.svg?react";
+import DoorNumbers from "@/assets/doodles/door-numbers.svg?react";
+import DoorPlan from "@/assets/doodles/door-plan.svg?react";
+import DoorSessions from "@/assets/doodles/door-sessions.svg?react";
+import DoorToday from "@/assets/doodles/door-today.svg?react";
+import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import { ChevronDown, Menu, Search } from "@/components/icons";
 import { useCommandPalette } from "@/components/search";
 import { useScrollLock } from "@/components/ui/native-dialog";
@@ -31,6 +44,17 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import { PRIMARY_NAV, isNavActive } from "./TopBar";
+
+/** One figure per door, keyed by the PRIMARY_NAV id. A page no door owns —
+ *  settings, about, contribute — gets the duo instead, so the panel always
+ *  has exactly one figure and never two. */
+const DOOR_FIGURES: Record<string, FunctionComponent<SVGProps<SVGElement>>> = {
+  today: DoorToday,
+  sessions: DoorSessions,
+  plan: DoorPlan,
+  learn: DoorLearn,
+  numbers: DoorNumbers,
+};
 
 /** The account pages, as their own group at the foot of the doors.
  *
@@ -125,6 +149,11 @@ export function MobileMenu() {
 
   if (!isCompact) return null;
 
+  // The door you are standing in, read once for the whole panel: the figure
+  // changes with the door, not with the page under it.
+  const door = PRIMARY_NAV.find((section) => isNavActive(pathname, section));
+  const Figure = (door && DOOR_FIGURES[door.id]) || RunnersDuo;
+
   return (
     <>
       <button
@@ -153,10 +182,11 @@ export function MobileMenu() {
           <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.goTo")}</p>
 
           {/* One door per line. A door with children is a native <details>,
-              always closed when the panel opens — the disc marks the door you
-              are standing in, without unfolding it — so the panel is six lines
-              on opening, and the twenty-five routes are one tap away under the
-              door that owns them. <details> also means the disclosure contract
+              always closed when the panel opens — the figure under the lines
+              says which door you are standing in, without unfolding it — so
+              the panel is six lines on opening, and the twenty-five routes are
+              one tap away under the door that owns them. <details> also means
+              the disclosure contract
               (Enter, Space, the open state) is the platform's, not ours — and
               one `name` shared by every door makes them an exclusive accordion:
               opening a door closes the one that was open, so the panel never
@@ -164,7 +194,6 @@ export function MobileMenu() {
           <nav aria-label={t("nav.primary")}>
             <ul className="zn-menu__doors">
               {PRIMARY_NAV.map((section) => {
-                const here = isNavActive(pathname, section);
                 if (!section.children?.length) {
                   return (
                     <li key={section.id}>
@@ -176,7 +205,6 @@ export function MobileMenu() {
                         aria-current={pathname === section.to ? "page" : undefined}
                       >
                         {t(section.labelKey)}
-                        {here && <span className="zn-menu__dot" aria-hidden="true" />}
                       </Link>
                     </li>
                   );
@@ -186,7 +214,6 @@ export function MobileMenu() {
                     <details className="zn-menu__group" name="door">
                       <summary className="zn-display zn-menu__door" data-level="2">
                         {t(section.labelKey)}
-                        {here && <span className="zn-menu__dot" aria-hidden="true" />}
                         <ChevronDown className="zn-menu__chevron" aria-hidden="true" />
                       </summary>
                       <ul className="zn-menu__sub">
@@ -242,6 +269,18 @@ export function MobileMenu() {
               </li>
             </ul>
           </nav>
+
+          {/* The ground. A rule across the whole panel, and the figure of the
+              door you are in standing on it, sole on the line — the bottom of
+              the SVG's viewBox is its sole, so the box is aligned on the rule
+              and nothing is placed by eye. Muet for a screen reader: the
+              aria-current on the links already says where you are, and the
+              disc it replaces was aria-hidden too. It takes the room left
+              between the doors and the foot and never more (mobile-menu.css),
+              so it can shrink, then go, but never overlap a line. */}
+          <div className="zn-menu__scene" aria-hidden="true">
+            <Figure className="zn-menu__figure" focusable="false" />
+          </div>
 
           <div className="zn-menu__foot">
             {/* Search is the command palette, opened from here rather than

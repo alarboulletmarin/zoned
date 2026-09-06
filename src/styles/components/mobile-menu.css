@@ -132,12 +132,16 @@
   background: var(--panel-ink);
 }
 
+/* No `gap` here: the room between the blocks is paid by each block itself,
+   because it is not the same everywhere — 32px under the kicker, none between
+   the doors and the ground (the ground's own slack is that room), 16px between
+   the rule and the foot. A uniform gap cost 64px, and on an iPhone SE those
+   are exactly the pixels the figure needs to exist. */
 .zn-menu__inner {
   flex: 1;
   min-block-size: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-14);
   overflow-y: auto;
   overscroll-behavior: contain;
 
@@ -150,6 +154,7 @@
 /* The kicker's own colour is the page's faint ink, which is unreadable on this
    ground. Same role, the panel's grey. */
 .zn-menu__eyebrow {
+  margin-block-end: var(--sp-14);
   color: var(--panel-ink-faint);
 }
 
@@ -181,16 +186,6 @@
 
 .zn-menu__door::-webkit-details-marker {
   display: none;
-}
-
-/* The door you are standing in. A disc, not an inversion: the panel is already
-   inverted, so the only mark left that reads at a glance is the accent. */
-.zn-menu__dot {
-  inline-size: var(--sp-5);
-  block-size: var(--sp-5);
-  flex: none;
-  border-radius: var(--r-pill);
-  background: var(--accent);
 }
 
 /* ── a door's pages ───────────────────────────────────────────────────── */
@@ -233,13 +228,65 @@
   font-weight: var(--fw-semibold);
 }
 
+/* ── the ground: a rule across the panel, and the figure standing on it ── */
+
+/* The scene is the room left between the last door and the foot, and never
+   more: `container-type: size` makes its own content weigh nothing in the
+   flex algorithm, so the figure can never push the foot down or the doors up.
+   Its bottom border is the rule — bled to the screen edges through the
+   panel's padding, the only rule of the panel that crosses it whole. */
+.zn-menu__scene {
+  flex: 1;
+  container-type: size;
+  display: flex;
+  align-items: flex-end;
+  margin-inline: calc(-1 * var(--pad-screen-x));
+  margin-block-end: var(--sp-8);
+  padding-inline: var(--pad-screen-x);
+  border-block-end: var(--bw-rule) solid var(--panel-ink-text);
+}
+
+/* The figure. The bottom of its viewBox IS its sole (the drawn ground left the
+   files on 6 September 2026), so aligning the box on the rule is the whole
+   calage: flex-end puts the box on the rule's top edge, and the negative margin
+   of one rule's thickness lets the sole sit on the line instead of a hair
+   above it. Height, not width, is what it is sized by: the five doors are
+   portrait boxes of different widths cut to the same 240-unit frame, so one
+   height keeps them at one scale, and the duo (landscape) simply comes wider.
+   200px is the size the workshop settled on; below that it takes whatever the
+   scene has, down to 120px — the floor under which a stroke stops explaining
+   and starts competing with the glyphs. `100cqb` is the scene's content
+   height: an svgr import without a size collapses, and this is its size.
+   (Chrome floors a 1.5px border to 1px, so there the box ends half a pixel
+   under the rule — inside the sole's own 2-unit stroke, measured 0.5px.) */
+.zn-menu__figure {
+  block-size: min(200px, 100cqb);
+  inline-size: auto;
+  max-inline-size: 100%;
+  flex: none;
+  margin-block-end: calc(-1 * var(--bw-rule));
+}
+
+/* Under 120px of room the figure goes rather than shrinks into a pictogram —
+   an open door's list of pages, a landscape phone, anything shorter than an
+   iPhone SE. The rule stays, so the panel keeps its structure. Queried on the
+   scene, not the viewport: it is the room that decides, whatever ate it. */
+@container (max-block-size: 119.9px) {
+  .zn-menu__figure {
+    display: none;
+  }
+}
+
 /* ── the floor: search, the two switches, everything else ─────────────── */
 
+/* 8px between the field and the pills, down from 20: the twelve pixels
+   returned are what lets the figure keep its 120px floor on an iPhone SE
+   (375×667) — measured, not guessed: 122.7px left for the scene. */
 .zn-menu__foot {
   margin-block-start: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-10);
+  gap: var(--sp-4);
 }
 
 /* Shaped like a field, but it is a button: it opens the command palette, which
