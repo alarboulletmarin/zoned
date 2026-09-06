@@ -15,14 +15,16 @@
  * two together is what makes that "whatever" be the pill.
  *
  * Nothing is lost against the old drawer: the five doors are the screen, and
- * every child page and account page they used to list is printed in mono at the
- * floor of the panel.
+ * every child page and account page hangs under the door it belongs to, in a
+ * native <details> that is closed until you ask for it. That replaces the flat
+ * run of twenty-five mono links that used to sit at the floor of the panel —
+ * the routes were all there, but in no order anyone could read.
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Menu, Search } from "@/components/icons";
+import { ChevronDown, Menu, Search } from "@/components/icons";
 import { useCommandPalette } from "@/components/search";
 import { useScrollLock } from "@/components/ui/native-dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -30,43 +32,27 @@ import { useTheme } from "@/hooks/useTheme";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import { PRIMARY_NAV, isNavActive } from "./TopBar";
 
-/** Everything behind the account button on desktop, which the compact header
- *  has no room for. Settings leads: it is what the menu is opened for. */
-const ACCOUNT_LINKS = [
-  { to: "/settings", labelKey: "nav.settings" },
-  { to: "/profile", labelKey: "nav.profile" },
-  { to: "/my-zones", labelKey: "nav.myZones" },
-  { to: "/favorites", labelKey: "nav.favorites" },
-  { to: "/workout/builder", labelKey: "nav.builder" },
-  { to: "/contribute", labelKey: "nav.contribute" },
-  { to: "/changelog", labelKey: "nav.changelog" },
-  { to: "/about", labelKey: "nav.about" },
-];
-
-/**
- * The pages under the doors. Built from PRIMARY_NAV rather than copied, so a
- * door that gains a child gains it here too.
+/** The account pages, as their own group at the foot of the doors.
  *
- * Deduped by path — a route already reachable as a door, or listed twice
- * across two doors, is printed once. Nothing is dropped: every path that had a
- * mobile entry point still has one.
- */
-const SECONDARY_LINKS: { to: string; labelKey: string }[] = (() => {
-  const seen = new Set(PRIMARY_NAV.map((section) => section.to));
-  const links: { to: string; labelKey: string }[] = [];
+ *  Only the ones no door already holds: profile, my zones, favorites and the
+ *  builder are children of "Mes chiffres" and "Séances", and printing them in
+ *  two places is what made the old flat list unreadable. */
+const ACCOUNT_LINKS: { to: string; labelKey: string }[] = (() => {
+  const underADoor = new Set<string>();
   for (const section of PRIMARY_NAV) {
-    for (const child of section.children ?? []) {
-      if (seen.has(child.to)) continue;
-      seen.add(child.to);
-      links.push({ to: child.to, labelKey: child.labelKey });
-    }
+    underADoor.add(section.to);
+    for (const child of section.children ?? []) underADoor.add(child.to);
   }
-  for (const item of ACCOUNT_LINKS) {
-    if (seen.has(item.to)) continue;
-    seen.add(item.to);
-    links.push(item);
-  }
-  return links;
+  return [
+    { to: "/settings", labelKey: "nav.settings" },
+    { to: "/profile", labelKey: "nav.profile" },
+    { to: "/my-zones", labelKey: "nav.myZones" },
+    { to: "/favorites", labelKey: "nav.favorites" },
+    { to: "/workout/builder", labelKey: "nav.builder" },
+    { to: "/contribute", labelKey: "nav.contribute" },
+    { to: "/changelog", labelKey: "nav.changelog" },
+    { to: "/about", labelKey: "nav.about" },
+  ].filter((item) => !underADoor.has(item.to));
 })();
 
 export function MobileMenu() {
@@ -160,24 +146,90 @@ export function MobileMenu() {
         <div className="zn-menu__inner">
           <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.goTo")}</p>
 
+          {/* One door per line. A door with children is a native <details>,
+              closed unless you are standing in it — so the panel is six lines
+              on opening, and the twenty-five routes are one tap away under the
+              door that owns them. <details> also means the disclosure contract
+              (Enter, Space, the open state) is the platform's, not ours. */}
           <nav aria-label={t("nav.primary")}>
             <ul className="zn-menu__doors">
-              {PRIMARY_NAV.map((section) => (
-                <li key={section.id}>
-                  <Link
-                    to={section.to}
-                    viewTransition
-                    className="zn-display zn-menu__door"
-                    data-level="2"
-                    aria-current={pathname === section.to ? "page" : undefined}
-                  >
-                    {t(section.labelKey)}
-                    {isNavActive(pathname, section) && (
-                      <span className="zn-menu__dot" aria-hidden="true" />
-                    )}
-                  </Link>
-                </li>
-              ))}
+              {PRIMARY_NAV.map((section) => {
+                const here = isNavActive(pathname, section);
+                if (!section.children?.length) {
+                  return (
+                    <li key={section.id}>
+                      <Link
+                        to={section.to}
+                        viewTransition
+                        className="zn-display zn-menu__door"
+                        data-level="2"
+                        aria-current={pathname === section.to ? "page" : undefined}
+                      >
+                        {t(section.labelKey)}
+                        {here && <span className="zn-menu__dot" aria-hidden="true" />}
+                      </Link>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={section.id}>
+                    <details className="zn-menu__group" open={here || undefined}>
+                      <summary className="zn-display zn-menu__door" data-level="2">
+                        {t(section.labelKey)}
+                        {here && <span className="zn-menu__dot" aria-hidden="true" />}
+                        <ChevronDown className="zn-menu__chevron" aria-hidden="true" />
+                      </summary>
+                      <ul className="zn-menu__sub">
+                        {section.children.map((child) => (
+                          <li key={child.to}>
+                            <Link
+                              to={child.to}
+                              viewTransition
+                              className="zn-menu__sub-link"
+                              aria-current={pathname === child.to ? "page" : undefined}
+                            >
+                              {t(child.labelKey)}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                );
+              })}
+
+              <li>
+                <details className="zn-menu__group">
+                  <summary className="zn-display zn-menu__door" data-level="2">
+                    {t("topnav.account")}
+                    <ChevronDown className="zn-menu__chevron" aria-hidden="true" />
+                  </summary>
+                  <ul className="zn-menu__sub">
+                    {ACCOUNT_LINKS.map((item) => (
+                      <li key={item.to}>
+                        <Link
+                          to={item.to}
+                          viewTransition
+                          className="zn-menu__sub-link"
+                          aria-current={pathname === item.to ? "page" : undefined}
+                        >
+                          {t(item.labelKey)}
+                        </Link>
+                      </li>
+                    ))}
+                    <li>
+                      <a
+                        href="https://github.com/alarboulletmarin/zoned"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="zn-menu__sub-link"
+                      >
+                        GitHub
+                      </a>
+                    </li>
+                  </ul>
+                </details>
+              </li>
             </ul>
           </nav>
 
@@ -220,35 +272,6 @@ export function MobileMenu() {
               </button>
             </div>
 
-            <div className="zn-menu__rest">
-              <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.more")}</p>
-              <nav aria-label={t("mobileMenu.more")}>
-                <ul className="zn-menu__more">
-                  {SECONDARY_LINKS.map((item) => (
-                    <li key={item.to}>
-                      <Link
-                        to={item.to}
-                        viewTransition
-                        className="zn-menu__more-link"
-                        aria-current={pathname === item.to ? "page" : undefined}
-                      >
-                        {t(item.labelKey)}
-                      </Link>
-                    </li>
-                  ))}
-                  <li>
-                    <a
-                      href="https://github.com/alarboulletmarin/zoned"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="zn-menu__more-link"
-                    >
-                      GitHub
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
           </div>
         </div>
 

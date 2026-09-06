@@ -180,89 +180,111 @@
 
 /* ── the tool cluster ─────────────────────────────────────────────────── */
 
+/* Bare controls, no frames and no circles. What separates them is a hairline,
+   the same one the header sits on — so the cluster reads as one strip of the
+   page rather than three floating objects.
+
+   The 44px target is kept and simply not drawn: the padding carries it, and
+   the underline is the only thing that appears on hover. */
+
 .zn-topbar__tools {
   margin-inline-start: auto;
   display: flex;
   align-items: center;
-  gap: var(--sp-5);
+  /* No gap: the hairlines are the spacing. */
+  gap: 0;
 }
 
-@media (max-width: 1023px) {
-  .zn-topbar__tools {
-    gap: var(--sp-4);
-  }
-}
-
-/* Search and language are outlined pills at the same 40px height as the icon
-   circles beside them, so the cluster reads as one row of controls. */
-.zn-topbar__search,
-.zn-topbar__lang {
+.zn-topbar__tool {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  min-block-size: 40px;
+  justify-content: center;
+  gap: var(--sp-5);
+
+  min-block-size: var(--hit-min);
+  min-inline-size: var(--hit-min);
+  padding-inline: var(--sp-8);
+
   background: transparent;
-  border: var(--border-rule);
-  border-radius: var(--r-pill);
+  border: 0;
+  color: var(--ink-1);
   cursor: pointer;
-  transition:
-    background var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
+
+  font: var(--type-body-sm);
+  white-space: nowrap;
 }
 
-.zn-topbar__search:active,
-.zn-topbar__lang:active {
+/* The hairline between two neighbours. Inset from the top and bottom so it
+   reads as a printed rule, not as a border on a box. */
+.zn-topbar__tool + .zn-topbar__tool::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 22%;
+  inline-size: var(--bw-rule);
+  background: var(--line-divider);
+}
+
+/* Hover and focus print a 2px vermillon rule under the control. It is drawn
+   inside the padding so it underlines the label, not the touch target. */
+.zn-topbar__tool::after {
+  content: "";
+  position: absolute;
+  inset-inline: var(--sp-8);
+  inset-block-end: 7px;
+  block-size: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-topbar__tool:hover::after,
+.zn-topbar__tool[aria-expanded="true"]::after,
+.zn-topbar__tool[data-state="open"]::after {
+  transform: scaleX(1);
+}
+
+.zn-topbar__tool:active {
   transform: translateY(var(--press-shift));
 }
 
-.zn-topbar__search {
-  gap: var(--sp-5);
-  min-inline-size: 250px;
-  padding-inline: var(--sp-8);
-  color: var(--text-faint);
-  font: var(--type-body-sm);
+.zn-topbar__tool > svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
 }
 
-.zn-topbar__search:hover {
-  background: var(--surface-band);
-  color: var(--text-body);
-}
-
-.zn-topbar__search > svg {
+/* The search reads as a field on a wide screen — the label and the shortcut
+   are what tell you the palette exists at all. */
+.zn-topbar__tool--search > svg {
   inline-size: 16px;
   block-size: 16px;
-  flex: none;
+}
+
+.zn-topbar__search-text {
+  color: var(--text-faint);
 }
 
 /* The keyboard shortcut is data, so it is mono. */
 .zn-topbar__search-hint {
-  margin-inline-start: auto;
+  margin-inline-start: var(--sp-4);
   font-family: var(--font-mono);
   font-size: var(--fs-mono-sm);
   letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
 }
 
-/* Below 1280 the doors and the tools together no longer clear a 250px field,
-   so the search collapses to its glyph. The button keeps its aria-label. */
+/* Below 1280 the five doors and a written-out search no longer share the bar,
+   so the search falls back to its glyph. The button keeps its aria-label. */
 @media (max-width: 1279px) {
-  .zn-topbar__search {
-    min-inline-size: 0;
-    padding-inline: var(--sp-6);
-    /* Réduit à son glyphe, le bouton tombait à 42 px de large : deux pixels
-       sous le plancher. La largeur minimale le tient sans élargir la barre. */
-    min-inline-size: var(--hit-min);
-  }
   .zn-topbar__search-text,
   .zn-topbar__search-hint {
     display: none;
   }
 }
 
-.zn-topbar__lang {
-  justify-content: center;
-  min-inline-size: 40px;
-  padding-inline: var(--sp-6);
-  color: var(--ink-1);
+.zn-topbar__tool--lang {
   font-family: var(--font-mono);
   font-size: var(--fs-mono);
   font-weight: var(--fw-bold);
@@ -270,13 +292,9 @@
   line-height: 1;
 }
 
-.zn-topbar__lang:hover {
-  background: var(--surface-band);
-}
-
 /* ── the account menu ─────────────────────────────────────────────────── */
 
-/* Everything personal plus settings, behind the outlined circle. A stated
+/* Everything personal plus settings, behind one glyph. A stated
    width rather than the menu's 128px floor: the entries are two words and a
    glyph, and a menu that resizes per label reads as an accident. Only mounted
    above 1024px — below that the same routes live in the full-screen menu.
@@ -291,12 +309,11 @@
    carry per-utility and which would vanish silently with it. */
 @media (pointer: coarse) {
   .zn-topbar__door,
-  .zn-topbar__panel-link,
-  .zn-topbar__search,
-  .zn-topbar__lang {
+  .zn-topbar__panel-link {
     min-block-size: var(--hit-min);
   }
-  .zn-topbar__lang {
-    min-inline-size: var(--hit-min);
-  }
 }
+
+/* .zn-topbar__tool carries the same floor unconditionally, on every pointer:
+   the control has no frame to aim at, so the target has to be there even when
+   a mouse is what finds it. */

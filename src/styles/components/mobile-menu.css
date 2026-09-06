@@ -161,7 +161,9 @@
   padding: 0;
 }
 
-/* Display type, left-aligned, stacked tight — the doors are the screen. */
+/* Display type, left-aligned, stacked tight — the doors are the screen.
+   The same rule dresses a <summary>, so a door that discloses and a door that
+   navigates are the same object on screen. */
 .zn-menu__door {
   display: flex;
   align-items: center;
@@ -170,6 +172,15 @@
   padding-block: var(--sp-1);
   color: var(--panel-ink-text);
   text-decoration: none;
+
+  /* <summary> ships a disclosure triangle in two flavours. Both go: the
+     chevron on the right is the mark, and it turns with the state. */
+  list-style: none;
+  cursor: pointer;
+}
+
+.zn-menu__door::-webkit-details-marker {
+  display: none;
 }
 
 /* The door you are standing in. A disc, not an inversion: the panel is already
@@ -180,6 +191,46 @@
   flex: none;
   border-radius: var(--r-pill);
   background: var(--accent);
+}
+
+/* ── a door's pages ───────────────────────────────────────────────────── */
+
+.zn-menu__chevron {
+  inline-size: 20px;
+  block-size: 20px;
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--panel-ink-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-menu__group[open] > .zn-menu__door .zn-menu__chevron {
+  transform: rotate(180deg);
+}
+
+/* The children hang off a rule, indented under their door — the indent is what
+   says "these belong to the line above". */
+.zn-menu__sub {
+  list-style: none;
+  margin: 0 0 var(--sp-8);
+  padding: 0 0 0 var(--sp-8);
+  border-inline-start: var(--bw-rule) solid var(--panel-ink-faint);
+}
+
+.zn-menu__sub-link {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--hit-min);
+  padding-inline-start: var(--sp-8);
+
+  color: var(--panel-ink-faint);
+  font: var(--type-body-sm);
+  text-decoration: none;
+}
+
+.zn-menu__sub-link[aria-current="page"] {
+  color: var(--panel-ink-text);
+  font-weight: var(--fw-semibold);
 }
 
 /* ── the floor: search, the two switches, everything else ─────────────── */
@@ -250,41 +301,6 @@
 }
 
 .zn-menu__lang[data-on] {
-  color: var(--panel-ink-text);
-}
-
-/* Everything the five doors hold, plus the account pages. The maquette shows
-   five words; these are the other twenty-five routes, and dropping them would
-   be a regression rather than a simplification — so they are printed small,
-   in mono, at the floor of the panel. */
-.zn-menu__rest {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-4);
-}
-
-.zn-menu__more {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: var(--sp-11);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.zn-menu__more-link {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: var(--hit-min);
-
-  color: var(--panel-ink-faint);
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  letter-spacing: var(--ls-mono);
-  text-decoration: none;
-}
-
-.zn-menu__more-link[aria-current="page"] {
   color: var(--panel-ink-text);
 }
 

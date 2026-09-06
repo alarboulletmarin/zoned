@@ -15,7 +15,6 @@ import {
   Plus,
   ChevronDown,
 } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -170,12 +169,20 @@ export function TopBar() {
         </nav>
       )}
 
+      {/* The tool cluster. No frames and no circles: the controls sit bare on
+          the paper, told apart by hairlines. Their 44px target is kept, just
+          not drawn.
+
+          Search, language and theme stay on every viewport — they are the
+          three things reached without a destination in mind, and burying them
+          in the menu cost a tap for each. Only the account door is desktop-
+          only: below 1024px its pages are a group of the full-screen menu. */}
       <div className="zn-topbar__tools">
         <button
           type="button"
           onClick={openPalette}
           aria-label={t("actions.search")}
-          className="zn-topbar__search"
+          className="zn-topbar__tool zn-topbar__tool--search"
         >
           <Search />
           <span className="zn-topbar__search-text">{t("actions.search")}</span>
@@ -189,19 +196,19 @@ export function TopBar() {
           onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
           title={langTitle}
           aria-label={langTitle}
-          className="zn-topbar__lang"
+          className="zn-topbar__tool zn-topbar__tool--lang"
         >
           {langLabel}
         </button>
 
-        <Button
-          variant="outline"
-          size="icon"
+        <button
+          type="button"
           onClick={onThemeToggle}
           aria-label={theme === "light" ? t("theme.dark") : t("theme.light")}
+          className="zn-topbar__tool"
         >
           {theme === "light" ? <Moon /> : <Sun />}
-        </Button>
+        </button>
 
         {!isCompact && <AccountMenu />}
       </div>
@@ -295,16 +302,16 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
   );
 }
 
-/** The account door — everything personal, plus settings, behind one outlined
- *  circle. Click-only (no hover) so it does not fight the nav panels. */
+/** The account door — everything personal, plus settings, behind one glyph.
+ *  Click-only (no hover) so it does not fight the nav panels. */
 function AccountMenu() {
   const { t } = useTranslation("common");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" aria-label={t("topnav.account")}>
+        <button type="button" className="zn-topbar__tool" aria-label={t("topnav.account")}>
           <UserRound />
-        </Button>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="zn-topbar__account-menu">
         <DropdownMenuItem asChild>
