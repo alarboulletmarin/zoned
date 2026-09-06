@@ -137,6 +137,18 @@
   margin-block-start: var(--sp-13);
 }
 
+/* On a phone the actions land between the chart and the phases: the profile
+   says what the session is, the buttons say what to do with it. */
+@media (max-width: 640px) {
+  .zn-session__actions {
+    margin-block-start: var(--sp-11);
+  }
+
+  .zn-session__phases {
+    margin-block-start: var(--sp-12);
+  }
+}
+
 /* The hero's text column. 40px between every block is the page's rhythm on a
    1440px screen; on a phone the same seven blocks spend 240px on air alone —
    more than the drawing beside them. The rhythm halves rather than the blocks

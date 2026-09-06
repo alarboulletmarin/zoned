@@ -47,6 +47,7 @@ import { NutritionRecoverySection } from "@/components/domain/NutritionRecoveryS
 import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Section } from "@/components/editorial/Section";
 import {
   ZoneBar,
@@ -101,6 +102,10 @@ export function WorkoutDetailPage() {
   const navigate = useNavigate();
   const { t } = useTranslation(["session", "library", "common"]);
   const pick = usePickLang();
+  // 640px, the line every mobile rule on this page uses. Read here, above the
+  // loading and not-found returns: a hook after an early return is a hook that
+  // does not run on every render.
+  const isPhone = useMediaQuery("(max-width: 640px)");
 
   const locationState = location.state as {
     from?: string;
@@ -336,6 +341,108 @@ export function WorkoutDetailPage() {
     });
   }
 
+  // The action cluster, rendered in one of two places.
+  //
+  // On a wide screen it belongs in the hero, beside the facts: the drawing
+  // fills the second column and nothing is pushed down. On a phone the hero
+  // is a single stack, and 88px of buttons between the session's name and
+  // its profile is 88px of someone not yet seeing the session. Below 640 it
+  // moves under the chart — you see what the session IS, then what to do
+  // with it.
+  // One primary call — the only vermillon fill on the screen — the favourite,
+  // and one overflow menu. Export, route, adjust, edit, share, Strava and
+  // copy-link used to be five buttons and a menu: on a phone they stacked into
+  // four full-width rows and a caption before the session itself was visible.
+  // Everything that is not "send this to my watch" is behind the ⋯ now.
+  // Nothing was dropped.
+  const actionCluster = (
+      <div
+        className="zn-cluster zn-session__actions"
+        style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+      >
+        <ExportMenu workout={workout} size="lg" />
+
+        <FavoriteButton workoutId={workout.id} />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label={t("session:actions.moreActions")}
+            >
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {canGenerateRoute && (
+              <DropdownMenuItem asChild>
+                <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
+                  <Route />
+                  {t("session:actions.findRoute")}
+                </Link>
+              </DropdownMenuItem>
+            )}
+
+            {canAdjust && (
+              <DropdownMenuItem
+                onClick={() =>
+                  navigate(
+                    `/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`,
+                  )
+                }
+              >
+                <SlidersHorizontal />
+                {t("session:actions.adjust")}
+              </DropdownMenuItem>
+            )}
+
+            {/* A workout of one's own is edited, not copied again. Reached
+                from Favourites or a bookmark, this page was otherwise a
+                dead end: the only way back to the editor was through My
+                Workouts. */}
+            {isOwnWorkout && (
+              <DropdownMenuItem asChild>
+                <Link to={`/workout/builder/${workout.id}`}>
+                  <Pencil />
+                  {t("session:actions.edit")}
+                </Link>
+              </DropdownMenuItem>
+            )}
+
+            <DropdownMenuItem onClick={() => setShareOpen(true)}>
+              <Share />
+              {t("common:share.trigger")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                const ok = await copyToClipboard(
+                  buildStravaShareText(workout),
+                );
+                if (ok) toast.success(t("session:strava.copied"));
+                else toast.error(t("common:errors.generic"));
+              }}
+            >
+              <StravaIcon />
+              {t("session:actions.shareStrava")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                const ok = await copyToClipboard(
+                  publicWorkoutUrl(workout),
+                );
+                if (ok) toast.success(t("common:actions.linkCopied"));
+                else toast.error(t("common:errors.generic"));
+              }}
+            >
+              <Link2 />
+              {t("common:actions.copyLink")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+  );
+
   return (
     <>
       <SEOHead
@@ -502,99 +609,7 @@ export function WorkoutDetailPage() {
               </p>
             )}
 
-            {/* One primary call — the only vermillon fill on the screen — the
-                favourite, and one overflow menu.
-
-                Export, route, adjust, edit, share, Strava and copy-link used
-                to be five buttons and a menu: on a phone they stacked into
-                four full-width rows and a caption before the session itself
-                was visible. Everything that is not "send this to my watch" is
-                behind the ⋯ now. Nothing was dropped. */}
-            <div
-              className="zn-cluster"
-              style={{ "--gap": "var(--sp-6)" } as CSSProperties}
-            >
-              <ExportMenu workout={workout} size="lg" />
-
-              <FavoriteButton workoutId={workout.id} />
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    aria-label={t("session:actions.moreActions")}
-                  >
-                    <MoreHorizontal />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {canGenerateRoute && (
-                    <DropdownMenuItem asChild>
-                      <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
-                        <Route />
-                        {t("session:actions.findRoute")}
-                      </Link>
-                    </DropdownMenuItem>
-                  )}
-
-                  {canAdjust && (
-                    <DropdownMenuItem
-                      onClick={() =>
-                        navigate(
-                          `/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`,
-                        )
-                      }
-                    >
-                      <SlidersHorizontal />
-                      {t("session:actions.adjust")}
-                    </DropdownMenuItem>
-                  )}
-
-                  {/* A workout of one's own is edited, not copied again. Reached
-                      from Favourites or a bookmark, this page was otherwise a
-                      dead end: the only way back to the editor was through My
-                      Workouts. */}
-                  {isOwnWorkout && (
-                    <DropdownMenuItem asChild>
-                      <Link to={`/workout/builder/${workout.id}`}>
-                        <Pencil />
-                        {t("session:actions.edit")}
-                      </Link>
-                    </DropdownMenuItem>
-                  )}
-
-                  <DropdownMenuItem onClick={() => setShareOpen(true)}>
-                    <Share />
-                    {t("common:share.trigger")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={async () => {
-                      const ok = await copyToClipboard(
-                        buildStravaShareText(workout),
-                      );
-                      if (ok) toast.success(t("session:strava.copied"));
-                      else toast.error(t("common:errors.generic"));
-                    }}
-                  >
-                    <StravaIcon />
-                    {t("session:actions.shareStrava")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={async () => {
-                      const ok = await copyToClipboard(
-                        publicWorkoutUrl(workout),
-                      );
-                      if (ok) toast.success(t("common:actions.linkCopied"));
-                      else toast.error(t("common:errors.generic"));
-                    }}
-                  >
-                    <Link2 />
-                    {t("common:actions.copyLink")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            {!isPhone && actionCluster}
 
             <FactStrip facts={facts} />
           </div>
@@ -657,6 +672,8 @@ export function WorkoutDetailPage() {
               </div>
             </div>
           </div>
+
+          {isPhone && actionCluster}
 
           <WorkoutStructure
             workout={workout}
