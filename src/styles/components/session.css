@@ -119,10 +119,22 @@
   }
 
   /* The runner closes the session rather than introducing it — see the note in
-     WorkoutDetailPage.tsx. He gets air above him and none below: the zone
-     breakdown's own rule is what follows. */
+     WorkoutDetailPage.tsx.
+
+     And he stands ON the page, not in a box on it: the negative bottom margin
+     eats the section's own padding so the foot of the drawing lands on the
+     rule that opens the next band. The line he runs on IS the line that
+     divides the page, and his contact — the one vermillon mark a doodle is
+     allowed — sits on it. `position: relative` with z-index 1 is what puts the
+     stroke over that rule instead of under it.
+
+     This is the difference between an illustration parked in a slot and a
+     drawing that belongs to the layout. */
   .zn-session__figure {
+    position: relative;
+    z-index: 1;
     margin-block-start: var(--sp-14);
+    margin-block-end: calc(-1 * var(--sp-14));
   }
 }
 
@@ -131,49 +143,100 @@
   margin-block-start: var(--sp-13);
 }
 
-/* ── the docked bar ───────────────────────────────────────────────────── */
+/* ── the thumb zone ───────────────────────────────────────────────────── */
 
-/* Below 640 the three actions leave the flow for the thumb zone. They are the
-   only things on this page you do rather than read, and on a phone they were
-   costing 88px between the session's name and its profile wherever they sat.
-
-   The shape is .zn-shared__dock's, which the shared-session screen already
-   proved: pinned to the floor, on a rule, opaque — the system allows no blur —
-   and paying for the menu pill by giving up the end of its own gutter instead
-   of running underneath it.
-
-   z-index 30 is the app's docked-bar layer: under ScrollToTop (40) and the
-   menu pill (45), so an open panel covers it. */
+/* A band, and four pills on it.
+ *
+ * Below 640 the three session actions leave the flow: they are the only things
+ * on this page you do rather than read, and wherever they sat they cost 88px
+ * between the session's name and its profile.
+ *
+ * They were pills alone over the page for one revision. They floated correctly
+ * and were unreadable — the profile, the phase cards and the runner all scroll
+ * between them, and a vermillon call over a chart is a call you have to look at
+ * twice. The second thing a floating control needs, after a shape, is a ground.
+ *
+ * So: paper at 92%, enough to lift the pills off whatever passes underneath and
+ * still show the page moving behind them, on the same rule that separates every
+ * other band of this app.
+ *
+ * The pills take the menu pill's language — it is the older object and it
+ * floats over every screen, so it sets the terms. Same 44px height, same
+ * radius, same cream ring, same single shadow, same baseline. Three fills tell
+ * them apart: vermillon for the call, paper for the toggle and the menu, ink
+ * for the pill at the end, which now belongs to the row instead of being parked
+ * beside it.
+ *
+ * z-index 44 puts the band directly under that pill (45) and above the page's
+ * own floating things (30, 40), so the pill lands ON the band. */
 .zn-session__dock {
   position: fixed;
+  z-index: 44;
   inset-inline: 0;
   inset-block-end: 0;
-  z-index: 30;
 
-  padding: var(--sp-6) var(--pad-screen-x);
-  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom, 0px));
-  padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
+  padding-block: var(--sp-8);
+  padding-block-end: calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
+  padding-inline: var(--sp-13);
+  /* Stops where the menu pill starts, rather than running behind it. */
+  padding-inline-end: calc(var(--sp-13) + var(--fab-w));
 
-  background: var(--surface-page);
+  background: color-mix(in srgb, var(--surface-page) 92%, transparent);
   border-block-start: var(--border-rule);
 }
 
-/* Export takes what is left once the two glyphs have their own width. The
-   selector is positional because ExportMenu renders its trigger through
-   `asChild`: the button IS the cluster's first child. */
 .zn-session__dock .zn-session__actions {
   flex-wrap: nowrap;
+  align-items: center;
 }
 
+/* The call takes what the two glyphs leave. The selector is positional because
+   ExportMenu renders its trigger through `asChild`: the button IS the
+   cluster's first child. */
 .zn-session__dock .zn-session__actions > :first-child {
   flex: 1;
   min-inline-size: 0;
 }
 
-/* The bar floats over the last band, so the page pays for its height. */
+/* The pill's geometry, applied to whatever button lands here.
+
+   The height is stated rather than floored: the call is a size="lg" button and
+   would stand 52px tall beside two 44px pills — the sort of eight pixels
+   nobody can name and everybody sees. Its padding comes down with it, so
+   "Exporter" still fits the width the menu pill leaves. */
+.zn-session__dock .zn-btn {
+  block-size: var(--hit-min);
+  min-block-size: var(--hit-min);
+  min-inline-size: var(--hit-min);
+  padding-inline: var(--sp-8);
+  border-radius: var(--r-pill);
+  border: var(--bw-rule) solid var(--panel-ink-text);
+  box-shadow: var(--shadow-block);
+}
+
+/* The toggle and the menu are paper, not transparent: they sit on the band like
+   the filled pill beside them, and a ghost button would show the page
+   scrolling through it.
+
+   Selected by variant, not by slot: ExportMenu opens a dropdown too, so
+   `[data-slot="dropdown-menu-trigger"]` caught the call as well and painted
+   the one vermillon fill on the screen white. */
+.zn-session__dock .zn-btn[data-variant="ghost"],
+.zn-session__dock .zn-btn[data-variant="outline"] {
+  flex: none;
+  background: var(--surface-card);
+  color: var(--ink-1);
+}
+
+.zn-session__dock .zn-favorite[aria-pressed="true"] {
+  color: var(--accent);
+}
+
+/* The band floats over the last thing in the document, so the page pays for
+   its height. */
 @media (max-width: 640px) {
   .zn-session {
-    padding-block-end: calc(var(--hit-min) + var(--sp-13));
+    padding-block-end: calc(var(--hit-min) + var(--sp-16));
   }
 
   .zn-session__phases {

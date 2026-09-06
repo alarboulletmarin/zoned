@@ -18,13 +18,17 @@ interface FavoriteButtonProps {
 /**
  * The favourite toggle.
  *
- * Three things the design system settles here. The state is carried by
- * `aria-pressed` and the accent colour, not by swapping in a filled glyph —
- * the icon set has no filled variant and a solid heart would be the only one in
- * the app. The colour is the house vermillon, not a stray red: this system has
- * one accent, and a second one cancels the first. And nothing bounces: motion
- * says where something came from or that a wait is real, so a 400ms scale
- * animation on a state change is decoration and it is gone.
+ * A saved session wears a FILLED heart. The colour alone was the state, on the
+ * claim that the icon set had no filled variant — it does: `Heart` takes a
+ * `filled` prop, and so do a dozen of its neighbours. An outline that changes
+ * hue asks the reader to remember which hue means saved; a solid shape does
+ * not, and it survives being looked at quickly, which is the only way anyone
+ * looks at a favourite toggle.
+ *
+ * The colour is the house vermillon, not a stray red: this system has one
+ * accent, and a second one cancels the first. And nothing bounces: motion says
+ * where something came from or that a wait is real, so a 400ms scale animation
+ * on a state change is decoration and it is gone.
  */
 export function FavoriteButton({
   workoutId,
@@ -54,7 +58,7 @@ export function FavoriteButton({
       aria-label={label}
       onClick={handleClick}
     >
-      <Heart />
+      <Heart filled={favorited} />
       {showLabel && <span className="zn-favorite__label">{label}</span>}
     </Button>
   );

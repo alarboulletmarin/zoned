@@ -5,10 +5,10 @@ import {
   ArrowLeft,
   Dumbbell,
   Link2,
+  MoreHorizontal,
   Route,
   Share,
   StravaIcon,
-  MoreHorizontal,
   SlidersHorizontal,
   Pencil,
 } from "@/components/icons";
@@ -349,12 +349,13 @@ export function WorkoutDetailPage() {
   // its profile is 88px of someone not yet seeing the session. Below 640 it
   // moves under the chart — you see what the session IS, then what to do
   // with it.
-  // One primary call — the only vermillon fill on the screen — the favourite,
-  // and one overflow menu. Export, route, adjust, edit, share, Strava and
-  // copy-link used to be five buttons and a menu: on a phone they stacked into
-  // four full-width rows and a caption before the session itself was visible.
-  // Everything that is not "send this to my watch" is behind the ⋯ now.
-  // Nothing was dropped.
+  // Three pills: send this to my watch, keep it, everything else.
+  //
+  // The ⋯ holds route, adjust, edit, share, Strava and copy-link. It stays —
+  // written out in the flow those six were a second row of controls competing
+  // with the session — but it is drawn like its neighbours now: same height,
+  // same radius, same ring, same shadow, so the bar reads as one family
+  // instead of a pill, a glyph and a circle.
   const actionCluster = (
       <div
         className="zn-cluster zn-session__actions"
