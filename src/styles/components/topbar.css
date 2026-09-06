@@ -248,6 +248,9 @@
   .zn-topbar__search {
     min-inline-size: 0;
     padding-inline: var(--sp-6);
+    /* Réduit à son glyphe, le bouton tombait à 42 px de large : deux pixels
+       sous le plancher. La largeur minimale le tient sans élargir la barre. */
+    min-inline-size: var(--hit-min);
   }
   .zn-topbar__search-text,
   .zn-topbar__search-hint {
