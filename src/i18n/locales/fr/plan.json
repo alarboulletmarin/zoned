@@ -196,6 +196,7 @@
     "title": "Mon plan",
     "currentWeek": "Semaine en cours",
     "phases": "Phases d'entraînement",
+    "standingWeek": "S{{week}}",
     "sessions": "séances",
     "duration": "{{min}} min",
     "keySession": "Séance clé",

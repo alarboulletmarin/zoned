@@ -263,27 +263,114 @@
 
 /* Width is the phase's share of the plan, ink density is its intensity — the
    same ramp .zn-pchart__bar uses, so the ribbon and the statistics chart can
-   never disagree. The swatches themselves are .zn-pswatch, borrowed whole. */
+   never disagree. The swatches themselves are .zn-pswatch, borrowed whole.
+
+   The ribbon is also the ground. A figure stands on its top edge at the current
+   week, the vermillon "now" rule under its sole, and a mono caption under the
+   rule at the same vertical. The page hands over the week position (--zn-at),
+   the pose's viewBox ratio (--zn-fig-aspect), where along its box the sole
+   touches (--zn-fig-foot) and the caption's length (--zn-where-chars); the
+   rest is arithmetic here, never eyeballed. The figure's height is reserved in
+   the flow as padding, so nothing above it is ever covered; only the inline
+   position is absolute, inside this same block. */
 .zn-planview__ribbon {
+  --zn-fig-h: 128px;
+  --zn-track-h: var(--sp-10);
+  --zn-fig-w: calc(var(--zn-fig-h) * var(--zn-fig-aspect, 0.6));
+  --zn-foot-x: calc(var(--zn-fig-w) * var(--zn-fig-foot, 0.5));
+  /* The box's inline start: sole on the week, but never closer than 4px to
+     the screen edge — at the first and last weeks the figure gives up a few
+     pixels (the rule follows it, still inside the week) rather than the page
+     a horizontal scroll or a hand cut by the edge. */
+  --zn-gutter: calc(var(--pad-screen-x) - var(--sp-2));
+  --zn-x: clamp(
+    calc(var(--zn-gutter) * -1),
+    calc(var(--zn-at, 0%) - var(--zn-foot-x)),
+    calc(100% + var(--zn-gutter) - var(--zn-fig-w))
+  );
   position: relative;
+  padding-block-start: var(--zn-fig-h);
+}
+
+/* Not started: standing at the start line, facing down the ribbon. Ended:
+   walking off the end. Both are placed by the box, flush with the ribbon's
+   ends, so every foot has ground under it and nothing enters the gutter. */
+.zn-planview__ribbon[data-standing="before"] {
+  --zn-x: 0px;
+}
+
+.zn-planview__ribbon[data-standing="after"] {
+  --zn-x: calc(100% - var(--zn-fig-w));
+}
+
+.zn-planview__track {
   display: flex;
   align-items: stretch;
   gap: var(--sp-1);
-  block-size: var(--sp-6);
+  /* 20px, not the legend swatch's 12: under a figure, a 12px band reads as a
+     podium step. */
+  block-size: var(--zn-track-h);
 }
 
-.zn-planview__ribbon .zn-pswatch {
+.zn-planview__track .zn-pswatch {
   inline-size: var(--zn-span, 0%);
   block-size: auto;
 }
 
-/* Where you are, as a stroke. A vermillon rule, never a dot in the margin. */
+/* The figure. Its viewBox ends at the sole, so the box bottom is the contact
+   line: one hairline down from the reserved band, it lands on the underside of
+   the swatch border and the sole sits on the rule. Ink, not the phase tint —
+   the swatch below already carries the phase, and a tinted figure on a tinted
+   band would lose its edge in the dark theme. */
+.zn-planview__figure {
+  position: absolute;
+  inset-block-start: var(--bw-hair);
+  inset-inline-start: var(--zn-x);
+  inline-size: var(--zn-fig-w);
+  block-size: var(--zn-fig-h);
+  color: var(--text-body);
+}
+
+.zn-planview__figure[data-flip="true"] {
+  transform: scaleX(-1);
+}
+
+/* Where you are, as a stroke. A vermillon rule, never a dot in the margin —
+   and it stays under the foot: the owner's call, the sole comes to stand on
+   it. Two pixels over the track on both sides, so it meets the sole. */
 .zn-planview__now {
   position: absolute;
-  inset-block: calc(var(--sp-1) * -1);
-  inset-inline-start: var(--zn-at, 0%);
+  inset-block-start: calc(var(--zn-fig-h) - var(--sp-1));
+  block-size: calc(var(--zn-track-h) + var(--sp-1) * 2);
+  inset-inline-start: calc(var(--zn-x) + var(--zn-foot-x) - var(--bw-heavy) / 2);
   inline-size: var(--bw-heavy);
   background: var(--accent);
+}
+
+/* The caption under the sole: "S6 · CONSTRUCTION · 4–6", centred on the foot.
+   Its width is known before layout because the font is monospace — one
+   advance plus one letter-spacing per character — which is what lets it be
+   clamped inside the ribbon instead of spilling off a phone at week 1. */
+.zn-planview__where {
+  --zn-where-w: calc(var(--zn-where-chars, 0) * (1ch + var(--ls-mono)));
+  display: block;
+  inline-size: fit-content;
+  margin-block-start: var(--sp-4);
+  margin-inline-start: clamp(
+    0px,
+    calc(var(--zn-x) + var(--zn-foot-x) - var(--zn-where-w) / 2),
+    calc(100% - var(--zn-where-w))
+  );
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+@media (min-width: 768px) {
+  .zn-planview__ribbon {
+    --zn-fig-h: 172px;
+    --zn-track-h: var(--sp-12);
+  }
 }
 
 .zn-planview__legend {

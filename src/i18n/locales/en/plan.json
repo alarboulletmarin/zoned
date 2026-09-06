@@ -196,6 +196,7 @@
     "title": "My plan",
     "currentWeek": "Current week",
     "phases": "Training phases",
+    "standingWeek": "W{{week}}",
     "sessions": "sessions",
     "duration": "{{min}} min",
     "keySession": "Key session",

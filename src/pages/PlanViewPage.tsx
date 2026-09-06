@@ -52,7 +52,7 @@ import {
   PHASE_META,
   RACE_DISTANCE_META,
 } from "@/types/plan";
-import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
+import type { AnyWorkoutTemplate, TrainingPhase, WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { SubstituteSessionDialog } from "@/components/domain/SubstituteSessionDialog";
@@ -80,6 +80,36 @@ import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { pickWeekRouteTarget } from "@/lib/routeGenerator/recommendation";
 import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
+import Zone2 from "@/assets/doodles/zone-2.svg?react";
+import Zone3 from "@/assets/doodles/zone-3.svg?react";
+import Zone4 from "@/assets/doodles/zone-4.svg?react";
+import Zone5 from "@/assets/doodles/zone-5.svg?react";
+import Stretching from "@/assets/doodles/stretching.svg?react";
+import Standing from "@/assets/doodles/standing.svg?react";
+import WalkingAway from "@/assets/doodles/walking-away.svg?react";
+
+/* Who stands on the phase ribbon. The pose is the phase under the feet — the
+   same body that walks in Z2 and sprints in Z5 on the zone plate — and the
+   ribbon's top edge is the ground: each SVG's viewBox stops at the sole, so the
+   box bottom is the contact line. `foot` is where along the box the vermillon
+   sole touches (measured on the accent path, not guessed), `aspect` is the
+   viewBox ratio — both feed the CSS so the sole lands on the "now" marker and
+   the box gets a real size (an svgr import with no width collapses). A recovery
+   week stretches; a plan not started stands at the start line; an ended one
+   walks off the end. Taper deliberately differs from the swatch ramp in
+   plan-panels.css (zone-1 there): the swatch says load, the pose says pace. */
+type Pose = { Art: typeof Zone2; foot: number; aspect: number; flip?: boolean };
+const POSES: Record<TrainingPhase | "before" | "after", Pose> = {
+  base: { Art: Zone2, foot: 0.373, aspect: 0.5704 },
+  build: { Art: Zone3, foot: 0.312, aspect: 0.6133 },
+  peak: { Art: Zone5, foot: 0.161, aspect: 0.6474 },
+  taper: { Art: Zone4, foot: 0.201, aspect: 0.6075 },
+  recovery: { Art: Stretching, foot: 0.37, aspect: 0.3856 },
+  // Standing faces left as drawn; flipped, it looks down the ribbon it is
+  // about to start. Walking-away already walks right, off the end.
+  before: { Art: Standing, foot: 0.254, aspect: 0.3803, flip: true },
+  after: { Art: WalkingAway, foot: 0.825, aspect: 0.3796 },
+};
 
 
 export function PlanViewPage() {
@@ -722,6 +752,33 @@ export function PlanViewPage() {
   const raceDate = plan.config.raceDate;
   const ended = isPlanEnded(plan);
 
+  // Where you are is where the foot touches. The figure stands mid-week on the
+  // ribbon and the "now" rule stays under its sole; a plan not started waits at
+  // the start line and an ended one walks off the end (the CSS places those two
+  // by the box, not the foot). The caption names the week, the phase and its
+  // bounds; it exists only while someone is on the ribbon.
+  const standing = ended || currentWeek > plan.totalWeeks ? "after" : currentWeek < 1 ? "before" : "on";
+  const standingPhase = plan.phases.find(
+    (p) => currentWeek >= p.startWeek && currentWeek <= p.endWeek,
+  );
+  const pose =
+    standing !== "on"
+      ? POSES[standing]
+      : plan.weeks[currentWeek - 1]?.isRecoveryWeek
+        ? POSES.recovery
+        : POSES[standingPhase?.phase ?? "base"];
+  const standingAt = standing === "on" ? ((currentWeek - 0.5) / plan.totalWeeks) * 100 : 0;
+  const standingCaption =
+    standing === "on"
+      ? [
+          t("view.standingWeek", { week: currentWeek }),
+          standingPhase ? pick(PHASE_META[standingPhase.phase], "label") : null,
+          standingPhase ? `${standingPhase.startWeek}–${standingPhase.endWeek}` : null,
+        ]
+          .filter(Boolean)
+          .join(" · ")
+      : null;
+
   // The one mono line over the title: what this plan is, when it lands, how
   // long it runs, and the time it is built for.
   const headKicker = [
@@ -938,32 +995,46 @@ export function PlanViewPage() {
           <section className="zn-planview__band">
             <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
               <span className="zn-kicker">{t("view.phases")}</span>
-              <div className="zn-planview__ribbon">
-                {plan.phases.map((phaseRange) => {
-                  const meta = PHASE_META[phaseRange.phase];
-                  const widthPercent =
-                    ((phaseRange.endWeek - phaseRange.startWeek + 1) /
-                      plan.totalWeeks) *
-                    100;
-                  return (
-                    <span
-                      key={`${phaseRange.phase}-${phaseRange.startWeek}`}
-                      className="zn-pswatch"
-                      data-phase={phaseRange.phase}
-                      data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
-                      style={{ "--zn-span": `${widthPercent}%` } as React.CSSProperties}
-                      title={`${pick(meta, "label")} · ${phaseRange.startWeek}–${phaseRange.endWeek}`}
-                    />
-                  );
-                })}
-                {currentWeek >= 1 && currentWeek <= plan.totalWeeks && (
-                  <span
-                    className="zn-planview__now"
-                    aria-hidden="true"
-                    style={{
-                      "--zn-at": `${((currentWeek - 1) / plan.totalWeeks) * 100}%`,
-                    } as React.CSSProperties}
-                  />
+              <div
+                className="zn-planview__ribbon"
+                data-standing={standing}
+                style={{
+                  "--zn-at": `${standingAt}%`,
+                  "--zn-fig-aspect": pose.aspect,
+                  "--zn-fig-foot": pose.flip ? 1 - pose.foot : pose.foot,
+                  "--zn-where-chars": standingCaption?.length ?? 0,
+                } as React.CSSProperties}
+              >
+                <pose.Art
+                  className="zn-planview__figure"
+                  data-flip={pose.flip ? "true" : undefined}
+                  aria-hidden="true"
+                  focusable="false"
+                />
+                <div className="zn-planview__track">
+                  {plan.phases.map((phaseRange) => {
+                    const meta = PHASE_META[phaseRange.phase];
+                    const widthPercent =
+                      ((phaseRange.endWeek - phaseRange.startWeek + 1) /
+                        plan.totalWeeks) *
+                      100;
+                    return (
+                      <span
+                        key={`${phaseRange.phase}-${phaseRange.startWeek}`}
+                        className="zn-pswatch"
+                        data-phase={phaseRange.phase}
+                        data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
+                        style={{ "--zn-span": `${widthPercent}%` } as React.CSSProperties}
+                        title={`${pick(meta, "label")} · ${phaseRange.startWeek}–${phaseRange.endWeek}`}
+                      />
+                    );
+                  })}
+                </div>
+                {standing === "on" && (
+                  <span className="zn-planview__now" aria-hidden="true" />
+                )}
+                {standingCaption && (
+                  <span className="zn-planview__where zn-mono">{standingCaption}</span>
                 )}
               </div>
               <div className="zn-planview__legend">
