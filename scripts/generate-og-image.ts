@@ -1,17 +1,27 @@
 /**
  * USAGE: bun run scripts/generate-og-image.ts
  *
- * Generates Zoned share cards (Wordmark direction):
- *   - public/og-image.png              1200×630  — site-wide card, referenced by index.html
- *   - public/og-<section>.png          1200×630  — one per key section, referenced by
- *                                                  scripts/generate-route-meta.ts
- *   - public/og-images/wordmark-square.png  1080×1080 — Instagram / LinkedIn carousel
+ * Generates the Zoned share cards:
+ *   - public/og-image.png                   1200×630  — site-wide card, referenced by index.html
+ *   - public/og-<section>.png               1200×630  — one per key section, referenced by
+ *                                                       scripts/generate-route-meta.ts
+ *   - public/og-images/wordmark-square.png  1080×1080 — Instagram / LinkedIn
+ *
+ * scripts/generate-readme-banner.ts reuses the pieces exported below for the
+ * README banner (the site card, recomposed in 1280×400) — hence the
+ * `import.meta.main` guard at the bottom.
  *
  * Copy is English: these cards are what social crawlers serve to link previews,
  * and the audience there is predominantly English-speaking. Headline numbers are
  * read from the live catalogue (scripts/site-stats.ts) so they can never drift.
  *
- * Design tokens sourced from the Claude Design handoff (variant A — "Scientific & Calm").
+ * Composition (docs/doodles.md, « le sol est la règle de la page »): the
+ * wordmark, one lede, three numbers with their labels, and the approved duo of
+ * runners — all standing on the one rule. The duo is the drawing itself,
+ * src/assets/doodles/runners-duo.svg, injected untouched; the tokens are the
+ * paper, ink and vermillon of src/styles/design/colors.css; the fonts are the
+ * self-hosted woff2s of public/fonts, embedded so the headless page needs no
+ * server. Every card is 1200×630 or larger, so every card has room for the duo.
  */
 
 import { mkdirSync, writeFileSync, readFileSync } from "fs";
@@ -21,81 +31,90 @@ import { readSiteStats } from "./site-stats";
 
 const ROOT = join(import.meta.dirname, "..");
 const TEMPLATE_PATH = join(import.meta.dirname, "og-wordmark-template.html");
+const DUO_PATH = join(ROOT, "src/assets/doodles/runners-duo.svg");
 
-// --- Format configs (mirror share-cards.jsx `fmt` for ShareWordmarkCard) ---
+// --- Format configs ---------------------------------------------------------
 
-type FormatConfig = {
+export type FormatConfig = {
   name: string;
   w: number;
   h: number;
+  /** Horizontal padding, top padding, bottom padding. */
   pxX: number;
-  pxY: number;
-  wordmarkSize: number;
-  fs: number;
-  sub: number;
-  bulletNumFs: number;
-  bulletFs: number;
-  urlFs: number;
+  pxTop: number;
+  pxBottom: number;
+  wordmarkFs: number;
+  ledeFs: number;
+  /** Max width of the lede, in ch. */
+  ledeMax: number;
+  valueFs: number;
+  labelFs: number;
   metaFs: number;
+  /** Gap between the three numbers. */
+  statGap: number;
+  /** Rendered width of the duo; its height follows the viewBox. */
+  duoW: number;
+  /** Thickness of the rule everything stands on. */
+  rule: number;
 };
 
-// Sizes scale roughly with the story-ui-refonte.html reference (1080×1920 → headline 156, padding 96).
+// The longest stats row (learn: "Practical guides") must fit beside the duo:
+// 1200 − 2×72 − 500 − 40 = 516px for the copy column at these sizes.
 const OG: FormatConfig = {
   name: "og",
   w: 1200, h: 630,
-  pxX: 72, pxY: 56,
-  wordmarkSize: 36,
-  fs: 88, sub: 22,
-  bulletNumFs: 13, bulletFs: 44,
-  urlFs: 28, metaFs: 13,
+  pxX: 72, pxTop: 56, pxBottom: 44,
+  wordmarkFs: 96,
+  ledeFs: 30, ledeMax: 24,
+  valueFs: 72, labelFs: 14, metaFs: 16,
+  statGap: 40,
+  duoW: 500, rule: 2,
 };
 
+// Square: the copy column is only 440px wide next to the duo, so the numbers
+// shrink a notch rather than the figure.
 const SQUARE: FormatConfig = {
   name: "square",
   w: 1080, h: 1080,
-  pxX: 96, pxY: 96,
-  wordmarkSize: 44,
-  fs: 132, sub: 32,
-  bulletNumFs: 16, bulletFs: 60,
-  urlFs: 40, metaFs: 18,
+  pxX: 80, pxTop: 80, pxBottom: 64,
+  wordmarkFs: 96,
+  ledeFs: 34, ledeMax: 22,
+  valueFs: 80, labelFs: 16, metaFs: 16,
+  statGap: 44,
+  duoW: 440, rule: 2,
 };
 
 // --- Card copy -------------------------------------------------------------
 
-type Bullet = { value: string; label: string };
+type Stat = { value: string; label: string };
 
-type Card = {
+export type Card = {
   /** Output path relative to the repo root. */
   out: string;
-  /** Headline may contain <em> (accent italic) and <br />. */
-  headline: string;
-  subline: string;
-  bullets: [Bullet, Bullet, Bullet];
-  footer?: string;
+  /** One sentence or two; wraps to three lines at most at `ledeMax`. */
+  lede: string;
+  stats: [Stat, Stat, Stat];
 };
 
-const DEFAULT_FOOTER = "Free.&nbsp; No account.&nbsp; No tracking.&nbsp; Forever.";
+const FOOTER = "open source &middot; MIT";
 
-function buildCards(stats: ReturnType<typeof readSiteStats>): Card[] {
+export function buildCards(stats: ReturnType<typeof readSiteStats>): Card[] {
   const { workouts, plans, calculators } = stats;
 
   return [
     {
       out: "public/og-image.png",
-      headline: "Structured training,<br /><em>without</em> the noise.",
-      subline: "Science-based endurance training. Everything stays in your browser.",
-      bullets: [
+      lede: "Endurance training, explained by the science. Free, no account.",
+      stats: [
         { value: String(workouts), label: "Workouts" },
-        { value: String(plans), label: "Plans 5K &rarr; marathon" },
+        { value: String(plans), label: "Plans" },
         { value: String(calculators), label: "Calculators" },
       ],
     },
     {
       out: "public/og-library.png",
-      headline: "Every session,<br /><em>filtered</em> your way.",
-      subline:
-        "Run, bike, swim and strength sessions across 12 categories — with exports to Garmin, PDF and calendar.",
-      bullets: [
+      lede: "Every session, filtered your way. Run, bike, swim and strength.",
+      stats: [
         { value: String(workouts), label: "Workouts" },
         { value: "12", label: "Categories" },
         { value: "6", label: "Training zones" },
@@ -103,9 +122,8 @@ function buildCards(stats: ReturnType<typeof readSiteStats>): Card[] {
     },
     {
       out: "public/og-calculators.png",
-      headline: "Know your <em>numbers</em>,<br />not your guesses.",
-      subline: "Zones, paces, VMA, FTP, CSS and race equivalences — computed in your browser.",
-      bullets: [
+      lede: "Know your numbers, not your guesses. Zones, paces, VMA, FTP, CSS.",
+      stats: [
         { value: String(calculators), label: "Calculators" },
         { value: "0", label: "Accounts needed" },
         { value: "&infin;", label: "Free, forever" },
@@ -113,21 +131,17 @@ function buildCards(stats: ReturnType<typeof readSiteStats>): Card[] {
     },
     {
       out: "public/og-plans.png",
-      headline: "A plan that bends<br />when <em>life</em> does.",
-      subline:
-        "Prebuilt or generated plans from 5K to marathon, with periodized strength and one-click rescheduling.",
-      bullets: [
+      lede: "A plan that bends when life does. From 5K to marathon.",
+      stats: [
         { value: String(plans), label: "Prebuilt plans" },
         { value: "4", label: "View modes" },
-        { value: "5K&ndash;42K", label: "Race distances" },
+        { value: "7", label: "Race distances" },
       ],
     },
     {
       out: "public/og-learn.png",
-      headline: "The <em>why</em> behind<br />every session.",
-      subline:
-        "Articles, guides and a glossary grounded in published research — Seiler, Billat, Daniels, Coggan.",
-      bullets: [
+      lede: "The why behind every session. Articles, guides and a glossary.",
+      stats: [
         { value: "12", label: "Articles" },
         { value: "50+", label: "Glossary terms" },
         { value: "3", label: "Practical guides" },
@@ -135,10 +149,8 @@ function buildCards(stats: ReturnType<typeof readSiteStats>): Card[] {
     },
     {
       out: "public/og-race-simulator.png",
-      headline: "Race day,<br /><em>rehearsed</em>.",
-      subline:
-        "Km-by-km pacing, fueling and hydration timing, plus the checklists for the week before.",
-      bullets: [
+      lede: "Race day, rehearsed. Km-by-km pacing, fueling and hydration.",
+      stats: [
         { value: "1 km", label: "Split precision" },
         { value: "3", label: "Checklists" },
         { value: "PDF", label: "Export" },
@@ -149,48 +161,74 @@ function buildCards(stats: ReturnType<typeof readSiteStats>): Card[] {
 
 // --- Template rendering ---
 
-function buildHtml(fmt: FormatConfig, card: Card): string {
+function fontDataUri(file: string): string {
+  return `data:font/woff2;base64,${readFileSync(join(ROOT, "public/fonts", file)).toString("base64")}`;
+}
+
+const FONTS = {
+  FONT_DISPLAY: fontDataUri("bricolage-grotesque-latin.woff2"),
+  FONT_TEXT: fontDataUri("space-grotesk-latin.woff2"),
+  FONT_MONO: fontDataUri("jetbrains-mono-latin.woff2"),
+};
+
+export function buildHtml(fmt: FormatConfig, card: Card, theme: "light" | "dark" = "light"): string {
   let html = readFileSync(TEMPLATE_PATH, "utf-8");
 
   const subs: Record<string, string | number> = {
+    ...FONTS,
+    THEME: theme === "dark" ? "dark" : "",
     W: fmt.w,
     H: fmt.h,
     PX_X: fmt.pxX,
-    PX_Y: fmt.pxY,
-    WORDMARK_SIZE: fmt.wordmarkSize,
-    FS: fmt.fs,
-    SUB: fmt.sub,
-    BULLET_NUM_FS: fmt.bulletNumFs,
-    BULLET_FS: fmt.bulletFs,
-    URL_FS: fmt.urlFs,
+    PX_TOP: fmt.pxTop,
+    PX_BOTTOM: fmt.pxBottom,
+    WORDMARK_FS: fmt.wordmarkFs,
+    LEDE_FS: fmt.ledeFs,
+    LEDE_MAX: fmt.ledeMax,
+    VALUE_FS: fmt.valueFs,
+    LABEL_FS: fmt.labelFs,
     META_FS: fmt.metaFs,
-    HEADLINE: card.headline,
-    SUBLINE: card.subline,
-    B1_VALUE: card.bullets[0].value,
-    B1_LABEL: card.bullets[0].label,
-    B2_VALUE: card.bullets[1].value,
-    B2_LABEL: card.bullets[1].label,
-    B3_VALUE: card.bullets[2].value,
-    B3_LABEL: card.bullets[2].label,
-    FOOTER: card.footer ?? DEFAULT_FOOTER,
+    STAT_GAP: fmt.statGap,
+    DUO_W: fmt.duoW,
+    RULE: fmt.rule,
+    LEDE: card.lede,
+    S1_VALUE: card.stats[0].value,
+    S1_LABEL: card.stats[0].label,
+    S2_VALUE: card.stats[1].value,
+    S2_LABEL: card.stats[1].label,
+    S3_VALUE: card.stats[2].value,
+    S3_LABEL: card.stats[2].label,
+    FOOTER,
+    DUO: readFileSync(DUO_PATH, "utf-8"),
   };
 
   for (const [key, val] of Object.entries(subs)) {
-    html = html.replace(new RegExp(`\\{\\{${key}\\}\\}`, "g"), String(val));
+    // split/join, not replace(): a base64 font holds "$" sequences that
+    // String.replace would interpret.
+    html = html.split(`{{${key}}}`).join(String(val));
   }
   return html;
 }
 
 // --- Screenshot ---
 
-async function captureOne(
+export function launchBrowser() {
+  return puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+  });
+}
+
+export async function captureOne(
   browser: import("puppeteer").Browser,
   fmt: FormatConfig,
-  html: string
+  html: string,
+  scale = 1
 ): Promise<Buffer> {
   const page = await browser.newPage();
-  await page.setViewport({ width: fmt.w, height: fmt.h, deviceScaleFactor: 1 });
+  await page.setViewport({ width: fmt.w, height: fmt.h, deviceScaleFactor: scale });
   await page.setContent(html, { waitUntil: "networkidle0", timeout: 15000 });
+  await page.evaluate(() => document.fonts.ready);
 
   const screenshot = await page.screenshot({
     type: "png",
@@ -216,17 +254,14 @@ async function render(
 // --- Main ---
 
 async function main() {
-  console.log("Generating Zoned share cards (Wordmark direction)...");
+  console.log("Generating Zoned share cards...");
 
   const stats = readSiteStats();
   console.log("Stats:", stats);
 
   const cards = buildCards(stats);
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-  });
+  const browser = await launchBrowser();
 
   try {
     for (const card of cards) {
@@ -241,7 +276,9 @@ async function main() {
   console.log("Done.");
 }
 
-main().catch((err) => {
-  console.error("Failed to generate share cards:", err);
-  process.exit(1);
-});
+if (import.meta.main) {
+  main().catch((err) => {
+    console.error("Failed to generate share cards:", err);
+    process.exit(1);
+  });
+}
