@@ -431,24 +431,23 @@ export function WorkoutDetailPage() {
     });
   }
 
-  // The action cluster, rendered in one of two places.
+  // The action cluster: send this to my watch, keep it, everything else.
   //
-  // On a wide screen it belongs in the hero, beside the facts: the drawing
-  // fills the second column and nothing is pushed down. On a phone the hero
-  // is a single stack, and 88px of buttons between the session's name and
-  // its profile is 88px of someone not yet seeing the session. Below 640 it
-  // moves under the chart — you see what the session IS, then what to do
-  // with it.
-  // Three pills: send this to my watch, keep it, everything else.
+  // The ⋯ holds route, adjust, edit, share, Strava and copy-link. It stays:
+  // written out in the flow, those six were a second row of controls competing
+  // with the session itself.
   //
-  // The ⋯ holds route, adjust, edit, share, Strava and copy-link. It stays —
-  // written out in the flow those six were a second row of controls competing
-  // with the session — but it is drawn like its neighbours now: same height,
-  // same radius, same ring, same shadow, so the bar reads as one family
-  // instead of a pill, a glyph and a circle.
+  // It lives in the hero at every width. It spent a few hours pinned to the
+  // floor of the viewport below 640px instead — the reasoning was that 88px of
+  // buttons between a session's name and its profile is 88px of someone not
+  // yet seeing the session. On a real iPhone it did not survive: a third
+  // control landed in the row, the bar ran off the edge, and the owner had it
+  // removed. What that cost is worth keeping: a docked bar competes with the
+  // menu pill for the same thumb, and a row sized for exactly three controls
+  // breaks the day someone adds a fourth. One fixed thing per screen.
   const actionCluster = (
       <div
-        className="zn-cluster zn-session__actions"
+        className="zn-cluster"
         style={{ "--gap": "var(--sp-6)" } as CSSProperties}
       >
         <ExportMenu workout={workout} size="lg" variant={hasUserZones ? "default" : "outline"} />
