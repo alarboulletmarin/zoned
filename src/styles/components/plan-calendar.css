@@ -1529,6 +1529,17 @@
   overflow-y: auto;
 }
 
+/* Une colonne flex qui défile écrase ses enfants avant de leur donner une barre
+   de défilement : sans `flex`, une carte est `flex: 0 1 auto` et se comprime dès
+   que la pile dépasse la fenêtre. Chrome la retient à sa taille min-content,
+   WebKit non — sur iPhone les cartes perdaient une quinzaine de pixels chacune
+   et leur ligne de faits sortait sous la bordure. Mesuré sur la preview, pas
+   reproductible sous Chrome : c'est pour ça que la règle est ici plutôt que
+   sur .zn-planpanel__item, elle couvre aussi les états vides et le chargement. */
+.zn-planpanel__list > * {
+  flex: none;
+}
+
 .zn-planpanel__state {
   display: flex;
   flex-direction: column;
