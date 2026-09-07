@@ -271,6 +271,7 @@
       "title": "Generate my week",
       "subtitle": "Tune the settings, generate, then create the week to edit it.",
       "action": "Generate my week",
+      "actionShort": "Generate",
       "busy": "Generating…",
       "hint": "Automatically composes 3–6 balanced 80/20 sessions from your settings.",
       "hintRegen": "Recomposes a fresh week from your current settings.",

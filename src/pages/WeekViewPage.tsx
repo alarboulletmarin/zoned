@@ -656,6 +656,9 @@ export function WeekViewPage() {
       {/* The two actions the rail carries, kept in the thumb zone once it is
           gone. One vermillon fill: the draw. */}
       <div className="zn-pw__dock">
+        {/* The short verb, not the rail's full call: the bar has 233px between
+            the screen edge and the menu pill, and "Générer ma semaine" needs
+            215 of them on its own — it clipped mid-word. */}
         <Button
           disabled={scanning}
           onClick={() => handleGenerate(settings)}
@@ -663,15 +666,18 @@ export function WeekViewPage() {
           {scanning ? <Loader2 size={17} /> : <Sparkles size={17} />}
           {scanning
             ? t("library:weekly.generate.busy")
-            : t("library:weekly.generate.action")}
+            : t("library:weekly.generate.actionShort")}
         </Button>
+        {/* Icon only, like the two pills beside the call on a session's own
+            dock: two labels do not fit in what the menu pill leaves. */}
         <Button
           variant="outline"
+          size="icon"
           onClick={() => setSettingsOpen(true)}
           disabled={scanning}
+          aria-label={t("library:weekly.actions.adjust")}
         >
           <Settings size={17} />
-          {t("library:weekly.actions.adjust")}
         </Button>
       </div>
 

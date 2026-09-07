@@ -211,7 +211,10 @@
   /* Stops where the menu pill starts, rather than running behind it. */
   padding-inline-end: calc(var(--sp-13) + var(--fab-w));
 
-  background: color-mix(in srgb, var(--surface-page) 96%, transparent);
+  /* Opaque, like every other dock in the system. The 96% it used to carry was
+     enough for the page to read through the band — the section title and the
+     fact figures showed as ghosts between the pills. */
+  background: var(--surface-page);
   border-block-start: var(--border-rule);
 }
 

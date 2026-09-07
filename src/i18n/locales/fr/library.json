@@ -271,6 +271,7 @@
       "title": "Générer ma semaine",
       "subtitle": "Règle les paramètres, génère, puis crée la semaine pour l'éditer.",
       "action": "Générer ma semaine",
+      "actionShort": "Générer",
       "busy": "Génération…",
       "hint": "Compose automatiquement 3 à 6 séances équilibrées 80/20 selon vos réglages.",
       "hintRegen": "Recompose une nouvelle semaine à partir de vos réglages actuels.",

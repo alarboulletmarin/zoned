@@ -433,11 +433,28 @@
   z-index: 30;
 
   gap: var(--sp-6);
-  padding: var(--sp-6) var(--pad-screen-x);
-  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom));
+  /* Same block rhythm as .zn-session__dock: it puts the pills on the menu
+     pill's own baseline, so the floor of the screen reads as one row of
+     controls instead of a bar with a button floating 6px above it. */
+  padding-block: var(--sp-8);
+  padding-block-end: calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
+  padding-inline: var(--pad-screen-x);
 
   background: var(--surface-page);
   border-block-start: var(--border-rule);
+}
+
+/* The pill's geometry, applied to whatever button lands here. 44px stated
+   rather than floored: a size="lg" call would stand 52px tall beside the 44px
+   menu pill, which is the sort of eight pixels nobody can name and everybody
+   sees. */
+.zn-pw__dock .zn-btn {
+  block-size: var(--hit-min);
+  min-block-size: var(--hit-min);
+  min-inline-size: var(--hit-min);
+  padding-inline: var(--sp-8);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-block);
 }
 
 /* Below 1024px the floating menu pill sits over the end of this bar. The bar
@@ -451,8 +468,15 @@
 }
 
 
+/* The call takes what the rest of the row leaves. `min-inline-size: 0` is the
+   whole point: without it a flex item never shrinks below its min-content
+   width, so "Générer ma semaine" kept its full 251px, overflowed the gutter
+   the bar reserves for the menu pill, and pushed "Régler" clean under it. */
 .zn-pw__dock > .zn-btn:first-child {
   flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 900px) {
@@ -462,7 +486,7 @@
 
   /* Clearance so the dock never covers the last row of the page. */
   .zn-pw[data-dock="true"] {
-    padding-block-end: var(--sp-20);
+    padding-block-end: calc(var(--hit-min) + var(--sp-16));
   }
 }
 
