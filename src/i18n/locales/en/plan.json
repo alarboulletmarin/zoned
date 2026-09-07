@@ -424,7 +424,6 @@
     "close": "Close",
     "hintClick": "Click a workout to add it to your plan",
     "hintDrag": "Drag a workout onto the calendar to add it",
-    "hintTap": "Tap a workout to add it",
     "searchPlaceholder": "Search workouts...",
     "favoritesOnly": "Favorites only",
     "noFavoriteStrength": "No favorite strength sessions",

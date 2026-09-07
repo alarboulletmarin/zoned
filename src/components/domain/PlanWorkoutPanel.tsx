@@ -7,10 +7,13 @@ import { loadAllStrengthSessions } from "@/data/strength";
 import { getCustomWorkouts } from "@/lib/customWorkoutStorage";
 import { useFavorites } from "@/hooks";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
+import { useScrollLock } from "@/components/ui/native-dialog";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
 import { SESSION_COLORS, sessionColor } from "@/lib/sessionColors";
+import { shouldCloseSheet } from "@/lib/sheetDrag";
 
 // ── Category to sessionType mapping for filter dots ───────────────
 
@@ -91,12 +94,25 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const { favorites } = useFavorites();
 
+  // Le calendrier derrière ne bouge plus sous le doigt. Compteur partagé avec
+  // les autres panneaux, donc un dialogue ouvert par-dessus ne le rend pas trop tôt.
+  //
+  // La requête média n'est pas un raffinement : les deux modes sont montés en
+  // même temps et c'est le CSS qui cache la sheet au-dessus de 768px. Sans elle,
+  // ouvrir le panneau latéral sur desktop figeait le défilement de la page
+  // entière au nom d'une sheet que personne ne voyait.
+  const sheetIsOnScreen = useMediaQuery("(max-width: 767px)");
+  useScrollLock(isOpen && !inline && sheetIsOnScreen);
+
   // Touch drag refs for mobile
 
   // Mobile bottom sheet drag-to-close refs
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const sheetDragStartY = useRef<number | null>(null);
   const sheetDragCurrentY = useRef<number | null>(null);
+  /** Dernier point échantillonné, et la vitesse qu'il donne (px/ms). */
+  const sheetDragLast = useRef<{ y: number; t: number } | null>(null);
+  const sheetDragSpeed = useRef(0);
 
   // Load workouts and strength sessions when panel opens
   useEffect(() => {
@@ -165,17 +181,32 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   // ── Mobile bottom sheet drag-to-close ────────────────────────
 
   const handleSheetDragStart = useCallback((e: React.TouchEvent) => {
-    // Only start sheet-drag from the handle bar area
+    // La prise est toute l'en-tête, pas seulement la poignée : celle-ci mesure
+    // 14,5px, un tiers de --hit-min, et le pouce se pose sur le titre.
     const target = e.target as HTMLElement;
     if (!target.closest("[data-sheet-handle]")) return;
-    sheetDragStartY.current = e.touches[0].clientY;
-    sheetDragCurrentY.current = e.touches[0].clientY;
+    const y = e.touches[0].clientY;
+    sheetDragStartY.current = y;
+    sheetDragCurrentY.current = y;
+    sheetDragLast.current = { y, t: e.timeStamp };
+    sheetDragSpeed.current = 0;
+    // Tant que le doigt est posé, la sheet colle au toucher. La transition de
+    // 180ms animait chaque position et la faisait traîner derrière lui.
+    if (sheetRef.current) sheetRef.current.style.transition = "none";
   }, []);
 
   const handleSheetDragMove = useCallback((e: React.TouchEvent) => {
     if (sheetDragStartY.current === null) return;
-    sheetDragCurrentY.current = e.touches[0].clientY;
-    const delta = sheetDragCurrentY.current - sheetDragStartY.current;
+    const y = e.touches[0].clientY;
+
+    const last = sheetDragLast.current;
+    if (last && e.timeStamp > last.t) {
+      sheetDragSpeed.current = (y - last.y) / (e.timeStamp - last.t);
+    }
+    sheetDragLast.current = { y, t: e.timeStamp };
+
+    sheetDragCurrentY.current = y;
+    const delta = y - sheetDragStartY.current;
     if (delta > 0 && sheetRef.current) {
       sheetRef.current.style.transform = `translateY(${delta}px)`;
     }
@@ -184,15 +215,20 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   const handleSheetDragEnd = useCallback(() => {
     if (sheetDragStartY.current === null || sheetDragCurrentY.current === null) return;
     const delta = sheetDragCurrentY.current - sheetDragStartY.current;
+    const speed = sheetDragSpeed.current;
     sheetDragStartY.current = null;
     sheetDragCurrentY.current = null;
+    sheetDragLast.current = null;
+    sheetDragSpeed.current = 0;
 
     if (sheetRef.current) {
+      // La transition d'abord, la position ensuite : le style d'arrivée est
+      // celui qui porte la transition, donc le retour s'anime.
+      sheetRef.current.style.transition = "";
       sheetRef.current.style.transform = "";
     }
 
-    // Close if dragged down more than 100px
-    if (delta > 100) {
+    if (shouldCloseSheet(delta, speed)) {
       onClose();
     }
   }, [onClose]);
@@ -203,8 +239,8 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
 
   const panelContent = (
     <div className="zn-planpanel__body">
-      {/* Header */}
-      <div className="zn-planpanel__bar">
+      {/* Header — et, sur la sheet, la vraie prise du glisser-pour-fermer. */}
+      <div className="zn-planpanel__bar" data-sheet-handle={!inline || undefined}>
         <h3 className="zn-planpanel__title">{t("workoutPanel.title")}</h3>
         <button
           type="button"
@@ -216,14 +252,16 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         </button>
       </div>
 
-      {/* Hint */}
-      <p className="zn-planpanel__hint">
-        {inline
-          ? onSelectWorkout
+      {/* La consigne reste au desktop, où le geste (glisser) ne va pas de soi.
+          Sur la sheet elle coûtait 37px des 251 de liste pour redire ce que
+          l'utilisateur vient de faire en appuyant sur « + ». */}
+      {inline && (
+        <p className="zn-planpanel__hint">
+          {onSelectWorkout
             ? t("workoutPanel.hintClick")
-            : t("workoutPanel.hintDrag")
-          : t("workoutPanel.hintTap")}
-      </p>
+            : t("workoutPanel.hintDrag")}
+        </p>
+      )}
 
       {/* Search */}
       <div className="zn-planpanel__search">
@@ -405,7 +443,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                 <div className="zn-planpanel__item-main">
                   <span className="zn-planpanel__item-name">{name}</span>
                   <span className="zn-planpanel__item-meta">
-                    <span>
+                    <span className="zn-planpanel__item-cat">
                       {(() => {
                         const filterKey = FILTERS.find(f => f.categories.includes(workout.category))?.key;
                         return filterKey ? t(`workoutFilter.${filterKey}`) : workout.category;

@@ -1299,13 +1299,19 @@
   block-size: calc(100vh - 160px);
 }
 
-/* As a bottom sheet it floats, which is what earns it the hard offset. */
+/* As a bottom sheet it floats, which is what earns it the hard offset.
+   z-index 50 is the modal layer mobile-menu.css names: above the floating MENU
+   pill (45), which used to be painted straight through the list. 85dvh rather
+   than 60vh, and dvh rather than vh, because the mobile URL bar owns the
+   difference — at 60vh the list came to 251px of the 487, three cards out of
+   twenty. */
 .zn-planpanel[data-mode="sheet"] {
   position: fixed;
   inset-inline: 0;
   inset-block-end: 0;
-  z-index: 30;
-  block-size: 60vh;
+  z-index: 50;
+  block-size: 85dvh;
+  padding-block-end: env(safe-area-inset-bottom, 0px);
 
   border-radius: var(--r-4xl) var(--r-4xl) 0 0;
   box-shadow: var(--shadow-block);
@@ -1326,7 +1332,9 @@
 .zn-planpanel__scrim {
   position: fixed;
   inset: 0;
-  z-index: 20;
+  /* Same layer as the sheet, which follows it in the DOM and so paints over
+     it. Both had to rise together, or the scrim would have covered the sheet. */
+  z-index: 50;
   background: var(--scrim);
 }
 
@@ -1342,6 +1350,14 @@
   flex: none;
   padding-block: var(--sp-4) var(--sp-2);
   cursor: grab;
+}
+
+/* La prise du glisser-pour-fermer : la poignée ET la barre de titre, soit 67px
+   au lieu des 14,5 de la poignée seule. `touch-action: none` rend le geste au
+   composant — sans elle le navigateur peut lire le même mouvement comme un
+   défilement et voler le doigt en cours de route. */
+.zn-planpanel[data-mode="sheet"] [data-sheet-handle] {
+  touch-action: none;
 }
 
 .zn-planpanel__grip::after {
@@ -1578,23 +1594,38 @@
   min-inline-size: 0;
 }
 
+/* Two lines, not one with an ellipsis: this is the name you are choosing by,
+   and « Footing régénération longue en nature » does not survive 375px on one
+   line. */
 .zn-planpanel__item-name {
   font: var(--fw-medium) var(--fs-body-sm) / 1.25 var(--font-text);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
+/* The facts line, at the size the rest of the app states them: --fs-mono, like
+   .zn-wcard__meta. It sat at --fs-mono-xs — 10px — which is the kicker size,
+   for two things you actually read to pick a session. */
 .zn-planpanel__item-meta {
   display: flex;
   align-items: center;
-  gap: var(--sp-4);
+  gap: var(--sp-5);
 
   font-family: var(--font-mono);
-  font-size: var(--fs-mono-xs);
+  font-size: var(--fs-mono);
   letter-spacing: var(--ls-mono);
   font-variant-numeric: tabular-nums;
   color: var(--text-faint);
+}
+
+/* The category is a micro-label, so it wears the house's mono capitals and
+   stops reading as one more number next to the duration. */
+.zn-planpanel__item-cat {
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
 }
 
 .zn-planpanel__item-meta > svg {
