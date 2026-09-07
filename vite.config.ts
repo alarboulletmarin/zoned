@@ -134,14 +134,23 @@ export default defineConfig({
           // 540KB renderer lives) is a separate entry from "react-dom".
           // Without it the renderer lands in the app entry chunk.
           "vendor-react": ["react", "react-dom", "react-dom/client", "react-router-dom"],
+          // Rien qui ne soit déclaré dans package.json, ni plus ni moins. Un nom de trop ici est une entrée rollup introuvable, donc
+          // un build mort : dialog, slider, switch et tabs étaient restés dans
+          // la liste après que le projet leur a substitué ses propres
+          // primitives (<dialog> natif, ui/slot.tsx), et n'étaient plus dans le
+          // lockfile. La CI, qui installe propre, échouait sur le premier ;
+          // un node_modules local qui les gardait masquait les trois autres.
+          // react-slot est parti aussi : il n'est là qu'en dépendance
+          // transitive de dropdown-menu, et il atterrit de toute façon dans ce
+          // chunk-ci avec l'importateur qui le tire.
+          //
+          // react-popover n'entre PAS : il est bien déclaré et utilisé, mais il
+          // n'a jamais été listé ici, et l'ajouter ferait entrer son poids dans
+          // le chemin de démarrage que le budget Lighthouse borne à 850KB pour
+          // ~740 observés. Réparer ce chunk n'est pas l'occasion de le changer.
           "vendor-radix": [
-            "@radix-ui/react-dialog",
             "@radix-ui/react-dropdown-menu",
             "@radix-ui/react-select",
-            "@radix-ui/react-slider",
-            "@radix-ui/react-slot",
-            "@radix-ui/react-switch",
-            "@radix-ui/react-tabs",
             "@radix-ui/react-tooltip",
           ],
           "vendor-i18n": ["i18next", "i18next-browser-languagedetector", "react-i18next"],
