@@ -353,6 +353,13 @@
   padding-inline-end: var(--sp-2);
 }
 
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-rt__rail > * {
+  flex: none;
+}
+
 .zn-rt__grid[data-expanded="true"] .zn-rt__rail {
   display: none;
 }
@@ -596,6 +603,13 @@
   overscroll-behavior: contain;
   padding: var(--sp-8);
   border-block-start: var(--border-rule);
+}
+
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-rt__panel > * {
+  flex: none;
 }
 
 @media (pointer: coarse) {

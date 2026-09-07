@@ -151,6 +151,13 @@
   animation: zoned-slide-in var(--dur-slow) var(--ease-out);
 }
 
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-menu__inner > * {
+  flex: none;
+}
+
 /* The kicker's own colour is the page's faint ink, which is unreadable on this
    ground. Same role, the panel's grey. */
 .zn-menu__eyebrow {

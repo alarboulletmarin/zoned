@@ -1237,6 +1237,13 @@ textarea.zn-pfield {
   overflow-y: auto;
 }
 
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-ppreview__list > * {
+  flex: none;
+}
+
 .zn-ppreview__item {
   display: flex;
   align-items: center;
@@ -1327,6 +1334,13 @@ textarea.zn-pfield {
   flex: 1;
   min-block-size: 0;
   overflow-y: auto;
+}
+
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-ppick__list > * {
+  flex: none;
 }
 
 .zn-ppick__item {

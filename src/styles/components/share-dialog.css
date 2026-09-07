@@ -210,6 +210,13 @@
   overscroll-behavior: contain;
 }
 
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-share-dialog__body > * {
+  flex: none;
+}
+
 .zn-share-dialog__carousel {
   position: relative;
 }

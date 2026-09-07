@@ -379,6 +379,13 @@
   padding: var(--sp-8);
 }
 
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-wk-gen__body > * {
+  flex: none;
+}
+
 .zn-wk-gen--bare .zn-wk-gen__body {
   flex: none;
   overflow: visible;
