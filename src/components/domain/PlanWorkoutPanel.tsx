@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { X, Search, Clock, Loader2, Heart, Dumbbell } from "@/components/icons";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -9,11 +9,11 @@ import { useFavorites } from "@/hooks";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import { useScrollLock } from "@/components/ui/native-dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useSheetDrag } from "@/hooks/useSheetDrag";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
 import { SESSION_COLORS, sessionColor } from "@/lib/sessionColors";
-import { shouldCloseSheet } from "@/lib/sheetDrag";
 
 // ── Category to sessionType mapping for filter dots ───────────────
 
@@ -104,15 +104,9 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   const sheetIsOnScreen = useMediaQuery("(max-width: 767px)");
   useScrollLock(isOpen && !inline && sheetIsOnScreen);
 
-  // Touch drag refs for mobile
-
-  // Mobile bottom sheet drag-to-close refs
-  const sheetRef = useRef<HTMLDivElement | null>(null);
-  const sheetDragStartY = useRef<number | null>(null);
-  const sheetDragCurrentY = useRef<number | null>(null);
-  /** Dernier point échantillonné, et la vitesse qu'il donne (px/ms). */
-  const sheetDragLast = useRef<{ y: number; t: number } | null>(null);
-  const sheetDragSpeed = useRef(0);
+  // Le glisser-pour-fermer est le même que celui des sheets de la primitive :
+  // hooks/useSheetDrag.ts. La prise est marquée data-sheet-handle ci-dessous.
+  const sheetDrag = useSheetDrag(!inline, onClose);
 
   // Load workouts and strength sessions when panel opens
   useEffect(() => {
@@ -177,61 +171,6 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
     [],
   );
 
-
-  // ── Mobile bottom sheet drag-to-close ────────────────────────
-
-  const handleSheetDragStart = useCallback((e: React.TouchEvent) => {
-    // La prise est toute l'en-tête, pas seulement la poignée : celle-ci mesure
-    // 14,5px, un tiers de --hit-min, et le pouce se pose sur le titre.
-    const target = e.target as HTMLElement;
-    if (!target.closest("[data-sheet-handle]")) return;
-    const y = e.touches[0].clientY;
-    sheetDragStartY.current = y;
-    sheetDragCurrentY.current = y;
-    sheetDragLast.current = { y, t: e.timeStamp };
-    sheetDragSpeed.current = 0;
-    // Tant que le doigt est posé, la sheet colle au toucher. La transition de
-    // 180ms animait chaque position et la faisait traîner derrière lui.
-    if (sheetRef.current) sheetRef.current.style.transition = "none";
-  }, []);
-
-  const handleSheetDragMove = useCallback((e: React.TouchEvent) => {
-    if (sheetDragStartY.current === null) return;
-    const y = e.touches[0].clientY;
-
-    const last = sheetDragLast.current;
-    if (last && e.timeStamp > last.t) {
-      sheetDragSpeed.current = (y - last.y) / (e.timeStamp - last.t);
-    }
-    sheetDragLast.current = { y, t: e.timeStamp };
-
-    sheetDragCurrentY.current = y;
-    const delta = y - sheetDragStartY.current;
-    if (delta > 0 && sheetRef.current) {
-      sheetRef.current.style.transform = `translateY(${delta}px)`;
-    }
-  }, []);
-
-  const handleSheetDragEnd = useCallback(() => {
-    if (sheetDragStartY.current === null || sheetDragCurrentY.current === null) return;
-    const delta = sheetDragCurrentY.current - sheetDragStartY.current;
-    const speed = sheetDragSpeed.current;
-    sheetDragStartY.current = null;
-    sheetDragCurrentY.current = null;
-    sheetDragLast.current = null;
-    sheetDragSpeed.current = 0;
-
-    if (sheetRef.current) {
-      // La transition d'abord, la position ensuite : le style d'arrivée est
-      // celui qui porte la transition, donc le retour s'anime.
-      sheetRef.current.style.transition = "";
-      sheetRef.current.style.transform = "";
-    }
-
-    if (shouldCloseSheet(delta, speed)) {
-      onClose();
-    }
-  }, [onClose]);
 
   // ── Don't render if closed ───────────────────────────────────
 
@@ -490,10 +429,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         <div className="zn-planpanel__scrim" onClick={onClose} />
         {/* Sheet */}
         <div
-          ref={sheetRef}
-          onTouchStart={handleSheetDragStart}
-          onTouchMove={handleSheetDragMove}
-          onTouchEnd={handleSheetDragEnd}
+          {...sheetDrag}
           className="zn-planpanel"
           data-mode="sheet"
           data-open={isOpen}

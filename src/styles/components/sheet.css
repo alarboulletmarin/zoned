@@ -75,6 +75,19 @@
   top: auto;
   bottom: 0;
   border-radius: var(--r-4xl) var(--r-4xl) 0 0;
+
+  /* Le retour du glisser-pour-fermer quand le geste n'aboutit pas. Le hook
+     coupe cette transition tant que le doigt est posé, puis la rend : le
+     panneau suit le toucher, et ne s'anime qu'en revenant à sa place. */
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+/* La prise du geste, sur le bord bas seulement. `touch-action: none` la rend au
+   composant : sans elle, le panneau défile sous le doigt qui voulait le tirer.
+   La poignée est un ::before, qu'aucun événement ne peut viser — c'est la bande
+   de tête, dans useSheetDrag.ts, qui la couvre. */
+.zn-sheet[data-side="bottom"] > [data-slot="sheet-header"] {
+  touch-action: none;
 }
 .zn-sheet[data-side="top"] {
   top: 0;

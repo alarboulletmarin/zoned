@@ -6,6 +6,7 @@ import { X } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { Slot } from "@/components/ui/slot";
 import { NativeDialog } from "@/components/ui/native-dialog";
+import { useSheetDrag } from "@/hooks/useSheetDrag";
 
 /**
  * Sheet — the same paper and outline as a dialog, hinged on one edge.
@@ -66,6 +67,14 @@ function SheetContent({
   const { open, onOpenChange, titleId, descriptionId } =
     useSheetContext("SheetContent");
 
+  // Le glisser-pour-fermer, réservé au bord bas : c'est là que le pouce le
+  // cherche. Les hameçons sont posés avant le retour anticipé, comme le veut
+  // la règle des hooks.
+  const drag = useSheetDrag(
+    open && side === "bottom",
+    React.useCallback(() => onOpenChange?.(false), [onOpenChange]),
+  );
+
   if (!open) return null;
 
   return (
@@ -78,6 +87,7 @@ function SheetContent({
       aria-describedby={descriptionId}
       onDismiss={() => onOpenChange?.(false)}
       {...props}
+      {...drag}
     >
       {children}
       <SheetClose className="zn-sheet__close">
