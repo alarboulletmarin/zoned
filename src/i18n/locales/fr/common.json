@@ -419,6 +419,13 @@
       "title": "Thème",
       "description": "Clair, sombre ou selon ton système"
     },
+    "openingAnimation": {
+      "title": "Animation d'ouverture",
+      "description": "Une figure qui court, le temps que l'app démarre. « Selon le système » suit ton réglage d'accessibilité : si tu as demandé moins d'animations, l'écran s'affiche mais la figure reste immobile. « Toujours » la joue quand même — ce choix t'appartient.",
+      "system": "Selon le système",
+      "always": "Toujours",
+      "never": "Jamais"
+    },
     "colorPalette": {
       "title": "Palette de couleurs",
       "description": "Adaptée à l'accessibilité visuelle",

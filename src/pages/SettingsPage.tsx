@@ -46,7 +46,7 @@ import { changeLanguage } from "@/i18n";
 import { getLatestVersionString } from "@/data/changelog";
 import { BACKUP_STORAGE_KEYS } from "@/lib/backup";
 import type { ThemePreference } from "@/lib/theme";
-import type { UnitSystem } from "@/types/settings";
+import type { OpeningAnimation, UnitSystem } from "@/types/settings";
 
 const REPO_URL = "https://github.com/alarboulletmarin/zoned";
 
@@ -70,7 +70,8 @@ interface AboutRow {
  */
 export function SettingsPage() {
   const { t, i18n } = useTranslation(["common", "routes", "content"]);
-  const { settings, setUnitSystem, setRouteGeneratorEnabled } = useSettings();
+  const { settings, setUnitSystem, setRouteGeneratorEnabled, setOpeningAnimation } =
+    useSettings();
   const { preference: themePreference, setPreference: setThemePreference } =
     useTheme();
   const { favorites } = useFavorites();
@@ -103,6 +104,12 @@ export function SettingsPage() {
     { value: "light", label: t("theme.light") },
     { value: "dark", label: t("theme.dark") },
     { value: "system", label: t("theme.system") },
+  ];
+
+  const openingOptions: { value: OpeningAnimation; label: string }[] = [
+    { value: "system", label: t("settings.openingAnimation.system") },
+    { value: "always", label: t("settings.openingAnimation.always") },
+    { value: "never", label: t("settings.openingAnimation.never") },
   ];
 
   const aboutColumns: ResponsiveTableColumn<AboutRow>[] = [
@@ -278,6 +285,43 @@ export function SettingsPage() {
                     </SelectTrigger>
                     <SelectContent>
                       {themeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* The launch screen. `system` follows the OS reduced-motion
+                    setting; `always` is the only way the app ever plays motion
+                    against it, and it exists because the choice belongs to the
+                    person making it, not to the code. */}
+                <div
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+                >
+                  <label className="zn-label" htmlFor="settings-opening">
+                    {t("settings.openingAnimation.title")}
+                  </label>
+                  <p className="zn-caption zn-muted" id="settings-opening-hint">
+                    {t("settings.openingAnimation.description")}
+                  </p>
+                  <Select
+                    value={settings.openingAnimation}
+                    onValueChange={(value) =>
+                      setOpeningAnimation(value as OpeningAnimation)
+                    }
+                  >
+                    <SelectTrigger
+                      id="settings-opening"
+                      aria-describedby="settings-opening-hint"
+                      className="zn-set__control"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {openingOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

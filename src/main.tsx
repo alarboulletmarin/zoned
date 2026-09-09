@@ -4,14 +4,12 @@ import App from "./App";
 import "./styles/index.css";
 import "./i18n";
 
-/* The shell holds for three full strides before it hands over: --rc-start
-   (0ms — the figure runs from the first frame) plus three times --rc-dur
-   (660ms, the six-frame cycle), both declared in index.html.
+/* The shell holds for two full strides before it hands over: --rc-start
+   (0ms — the figure runs from the first frame) plus twice --rc-dur (660ms, the
+   six-frame cycle), both declared in index.html. 1.56s on screen with the fade.
 
-   1980ms is the owner's "two seconds", landed on a whole number of strides so
-   the figure is never cut mid-step. It is the one number to move if the
-   opening feels long or short; the value below the comment is the only place
-   it is written.
+   It is the one number to move if the opening feels long or short, and it must
+   stay a whole number of strides so the figure is never cut mid-step.
 
    The hold is not a preference, it fixes a defect. The shell used to be
    dismissed on the first frame after the bundle ran, and a warm
@@ -21,7 +19,7 @@ import "./i18n";
    src/assets/doodles/frames.test.ts asserts this is --rc-start plus a WHOLE
    number of --rc-dur cycles, so retuning the cadence can never leave a stride
    cut in half. */
-const SHELL_HOLD_MS = 1980;
+const SHELL_HOLD_MS = 1320;
 
 // Hide loading shell once React mounts
 const hideLoadingShell = () => {
@@ -60,12 +58,15 @@ createRoot(document.getElementById("root")!).render(
    backgrounded tab, the event would never fire, and the shell would still be
    there when the tab came back.
 
-   Under prefers-reduced-motion nothing is held. The figure is frozen on pose 1,
-   so there is nothing to watch, and a minimum display time would be delay
-   bought for no one — which is also why a reduce-motion machine sees the app
-   appear at once, with no opening at all. */
-const holdsStill =
-  window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+   Reduced motion no longer skips the hold. Losing the launch screen entirely
+   is not what that setting asks for — it asks for no vestibular motion, and a
+   held still image is not motion. The shell is shown and held either way; CSS
+   alone decides whether the figure moves (index.html, run-cycle.css). Only an
+   explicit "never" from Settings hands over immediately.
+
+   `dataset.opening` is set before first paint by the inline script in
+   index.html, so it is already there when this runs. */
+const opening = document.documentElement.dataset.opening;
 
 const cycleTime = () => {
   const frame = document.querySelector(".rc-f--1");
@@ -73,7 +74,8 @@ const cycleTime = () => {
   return typeof played === "number" ? played : performance.now();
 };
 
-const remaining = holdsStill ? 0 : Math.max(0, SHELL_HOLD_MS - cycleTime());
+const remaining =
+  opening === "never" ? 0 : Math.max(0, SHELL_HOLD_MS - cycleTime());
 
 if (remaining === 0) requestAnimationFrame(hideLoadingShell);
 else window.setTimeout(hideLoadingShell, remaining);

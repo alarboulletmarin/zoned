@@ -299,9 +299,9 @@ attendait encore 400 ms que la règle se trace, si bien que la coquille
 disparaissait avant même le premier pas. Personne n'a jamais vu l'animation, pas
 « à peine ».
 
-`src/main.tsx` retient donc **1980 ms**, soit trois foulées entières à partir de
+`src/main.tsx` retient donc **1320 ms**, soit deux foulées entières à partir de
 `--rc-start` (zéro : la figure part avec la page), puis un fondu de 240 ms.
-2,2 secondes en tout. Le nombre de foulées est le réglage du propriétaire ; ce
+1,56 seconde en tout. Le nombre de foulées est le réglage du propriétaire ; ce
 qui n'est pas négociable, et que `frames.test.ts` vérifie, c'est qu'il soit
 ENTIER — une durée arrondie à la seconde couperait la figure en plein pas. C'est un **minimum**, pas un délai : sur un chargement
 réellement lent (mesuré à 2627 ms) la retenue ajoute zéro, elle ne complète
@@ -406,6 +406,47 @@ hauteur du crâne relative au bassin, ligne de sol unique, recul du pied planté
 flexion des deux genoux, opposition, symétrie des hauteurs, symétrie de la
 foulée, chronologie de la jambe libre, immobilité du bassin en x. Ils ont tous
 été écrits **après** avoir vu le défaut qu'ils décrivent.
+
+### « Réduire les animations » : ce que ça veut dire ici (9 sept. 2026, le soir)
+
+Le propriétaire garde ce réglage activé sur son téléphone et veut quand même
+voir l'ouverture, qu'il décrit comme « une page de loading quand j'entre sur
+l'app ». La question mérite d'être tranchée par écrit plutôt qu'au cas par cas.
+
+`prefers-reduced-motion` n'est pas « aucune animation ». C'est un signal
+**vestibulaire** : parallaxe, zoom, rotation, grands déplacements, mouvement qui
+simule un déplacement de soi. Le cycle est une figure de 174 × 240 px, centrée,
+dont les six images se substituent **en opacité** — rien ne se déplace, rien ne
+se met à l'échelle, rien ne tourne. C'est plus près d'un spinner que d'un hero
+en parallaxe.
+
+Deux conséquences, et une limite.
+
+**Le repli n'est plus « rien ».** Jusqu'ici, quelqu'un avec le réglage système
+perdait l'écran de chargement entier — pas seulement le mouvement. C'était trop :
+une image fixe ne pose aucun problème vestibulaire. La coquille est donc **tenue
+comme pour tout le monde**, figure figée sur la pose 1. Seul le mouvement tombe,
+et c'est le CSS qui en décide ; `src/main.tsx` ne saute la retenue que sur un
+`never` explicite.
+
+**L'override est un réglage, jamais une décision du code.** `openingAnimation`
+(`system | always | never`, `src/types/settings.ts`) est calqué sur le thème.
+`always` est la seule voie par laquelle du mouvement joue contre la préférence
+système — et elle n'existe que parce que la personne concernée l'a demandée
+elle-même, dans les réglages. Une app qui passerait outre pour tout le monde,
+sans le dire, serait indéfendable ; celle-ci ne le fait pour personne par défaut.
+
+**Le piège, parce qu'il coûterait l'animation en silence.** La coquille vit
+~1,5 s ; `motion.css` arrive avec le bundle à ~180 ms, et son clamp ramène
+**toute** animation à 1 ms avec `!important`. Sous `always` en mode réduit,
+l'ouverture démarrerait puis **se figerait sur l'image 1** à l'arrivée de la
+feuille de style. D'où l'exemption unique de `motion.css`, qui ne vise que
+`.rc-f` et seulement sous `[data-opening="always"]`. Mesuré : six images encore
+après 400 ms, c'est-à-dire après le bundle.
+
+La préférence est lue **avant le premier rendu**, par un second script inline
+dans `index.html` — try/catch séparé de celui du thème, dont le `catch` efface
+la classe sombre.
 
 ### Le repli sans mouvement
 

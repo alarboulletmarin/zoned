@@ -122,6 +122,28 @@
       })();
     </script>
 
+    <!-- The opening animation preference, read before the shell paints for the
+         same reason the theme is: the shell is HTML, it cannot wait for React.
+         A SECOND try/catch, not an extension of the one above — that one's
+         catch clears the dark class, so a JSON parse failure inside it would
+         wipe the theme it had just set. The two failures stay independent.
+         `zoned-settings` is JSON (src/hooks/useSettings.tsx), so this one
+         parses; on an object this size that costs microseconds, and what
+         src/lib/theme.ts calls "load-bearing" is the absence of async and
+         imports, not of parsing. -->
+    <script>
+      (function() {
+        try {
+          var s = JSON.parse(localStorage.getItem('zoned-settings') || '{}');
+          var o = s.openingAnimation;
+          document.documentElement.dataset.opening =
+            (o === 'always' || o === 'never') ? o : 'system';
+        } catch (e) {
+          document.documentElement.dataset.opening = 'system';
+        }
+      })();
+    </script>
+
     <!-- Critical CSS for instant FCP -->
     <style>
       /* The first paint, before any stylesheet loads. Mirrors the paper/ink
@@ -314,16 +336,18 @@
         from { transform: scaleX(0.02); }
         to { transform: scaleX(1); }
       }
+      /* Under reduced motion the shell is still shown and still held — losing
+         the launch screen entirely was never what the setting asks for — but
+         the figure freezes on pose 1, its contact pose, and the fade is cut.
+         `data-opening="always"` is the one way out, and it is set from a
+         preference the person chose in Settings, never inferred by the code. */
       @media (prefers-reduced-motion: reduce) {
-        /* No fade, and src/main.tsx holds nothing: with the figure frozen on
-           pose 1 there is nothing to watch, so a minimum display time would be
-           pure delay bought for no one. */
-        #loading-shell { transition: none; }
-        .shell-scene::after { animation: none; }
+        html:not([data-opening="always"]) #loading-shell { transition: none; }
+        html:not([data-opening="always"]) .shell-scene::after { animation: none; }
         /* No fill-mode on .rc-f, so every group reverts to its base style:
            frame 1, the front-foot strike, holds. It is the only frozen pose
            with a real ground contact, so its vermillon stays honest. */
-        .rc-f { animation: none; }
+        html:not([data-opening="always"]) .rc-f { animation: none; }
       }
 
       /* The shell leaves once BOTH are true: the app has mounted, and the

@@ -10,6 +10,7 @@ import type {
   UserSettings,
   ColorPalette,
   UnitSystem,
+  OpeningAnimation,
 } from "@/types/settings";
 import { DEFAULT_SETTINGS } from "@/types/settings";
 
@@ -20,6 +21,7 @@ interface SettingsContextValue {
   setColorPalette: (palette: ColorPalette) => void;
   setUnitSystem: (unit: UnitSystem) => void;
   setRouteGeneratorEnabled: (enabled: boolean) => void;
+  setOpeningAnimation: (opening: OpeningAnimation) => void;
   resetSettings: () => void;
 }
 
@@ -53,6 +55,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     }
   }, [settings.colorPalette]);
 
+  // Keep the root attribute the inline boot script set in step with the
+  // choice, so a change applies to the next launch without a reload.
+  useEffect(() => {
+    document.documentElement.dataset.opening = settings.openingAnimation;
+  }, [settings.openingAnimation]);
+
   // Persist to localStorage when settings change
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
@@ -70,6 +78,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setSettings((prev) => ({ ...prev, routeGeneratorEnabled: enabled }));
   }, []);
 
+  /* The launch screen paints before this hook exists, so it reads the value
+     straight from localStorage via the inline script in index.html. Mirroring
+     it onto the root element here keeps the two in step when the choice
+     changes mid-session, without a reload. */
+  const setOpeningAnimation = useCallback((opening: OpeningAnimation) => {
+    setSettings((prev) => ({ ...prev, openingAnimation: opening }));
+  }, []);
+
   const resetSettings = useCallback(() => {
     setSettings(DEFAULT_SETTINGS);
   }, []);
@@ -81,6 +97,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setColorPalette,
         setUnitSystem,
         setRouteGeneratorEnabled,
+        setOpeningAnimation,
         resetSettings,
       }}
     >

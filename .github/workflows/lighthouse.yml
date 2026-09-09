@@ -35,8 +35,15 @@
 # budget had before (~1.4-2.0s over the observed median).
 #
 # This is NOT the site getting slower to build: it is the site deliberately
-# showing an opening for 1.3s. If that opening is ever dropped or shortened,
-# put this budget back — the arithmetic above says where.
+# showing an opening. If that opening is ever dropped, put this budget back —
+# the arithmetic above says where.
+#
+# Tightened the same day to 9000ms, because the opening was shortened from
+# three strides to two (SHELL_HOLD_MS 1980 -> 1320). Re-measured on the same
+# box, median of 3: LCP 7236ms -> 6362ms. Projected on the shared runners
+# (~0.6-1.2s slower than that box) that is 7.0-7.6s, so 9000ms restores the
+# 1.4-2.0s cushion this budget was originally calibrated with — rather than
+# leaving a tripwire loosened for a reason that has since shrunk.
 name: Lighthouse CI
 
 on:

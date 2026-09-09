@@ -419,6 +419,13 @@
       "title": "Theme",
       "description": "Light, dark, or follow your system"
     },
+    "openingAnimation": {
+      "title": "Opening animation",
+      "description": "A running figure while the app starts. “Follow the system” respects your accessibility setting: if you asked for less motion, the screen still shows but the figure stays still. “Always” plays it anyway — that call is yours.",
+      "system": "Follow the system",
+      "always": "Always",
+      "never": "Never"
+    },
     "colorPalette": {
       "title": "Color Palette",
       "description": "Adapted for visual accessibility",

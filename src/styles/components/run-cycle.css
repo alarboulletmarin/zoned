@@ -77,7 +77,12 @@
 
 /* Says outright what motion.css's global clamp achieves through the missing
    fill-mode: the shell in index.html carries the same rule, and it never sees
-   motion.css — the bundle has not arrived yet. */
+   motion.css — the bundle has not arrived yet.
+
+   `data-opening="always"` is the opt-in from Settings, mirrored onto the root
+   element before first paint. It is the only way motion plays against the OS
+   preference, and it is the person's own call — see motion.css for the trap
+   this pairs with. */
 @media (prefers-reduced-motion: reduce) {
-  .rc-f { animation: none; }
+  html:not([data-opening="always"]) .rc-f { animation: none; }
 }

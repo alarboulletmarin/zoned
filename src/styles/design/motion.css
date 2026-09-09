@@ -33,4 +33,22 @@
     animation-iteration-count: 1 !important;
     transition-duration: 1ms !important;
   }
+
+  /* The single exemption, and it needs the trap spelt out: the launch shell
+     lives ~1.5s while this stylesheet arrives with the bundle at ~180ms. Under
+     reduced motion the clamp above would therefore catch the run cycle
+     mid-flight and freeze it on frame 1 — the opening would start, then die,
+     for the one person who explicitly asked to see it.
+
+     `data-opening="always"` is set before first paint by the inline script in
+     index.html, from a preference chosen in Settings. Nothing else is exempt,
+     and the code never decides this on someone's behalf. */
+  html[data-opening="always"] .rc-f {
+    animation-duration: var(--rc-dur) !important;
+    animation-iteration-count: infinite !important;
+  }
+  /* And its exit, so the opening someone asked for does not end on a cut. */
+  html[data-opening="always"] #loading-shell {
+    transition-duration: var(--shell-fade) !important;
+  }
 }
