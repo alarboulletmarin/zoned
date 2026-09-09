@@ -37,6 +37,13 @@ async function main() {
     console.log(`\n[${vp.name}] ${vp.w}×${vp.h}`);
     await page.goto(URL, { waitUntil: "networkidle0", timeout: 45000 });
     await page.waitForSelector("main", { timeout: 10000 }).catch(() => {});
+    /* La coquille de chargement tient au moins une foulée (src/main.tsx,
+       SHELL_HOLD_MS) puis s'efface en fondu : sans cette attente, une capture
+       calée sur un délai fixe photographie le splash au lieu de l'app. */
+    await page.waitForFunction(() => {
+      const s = document.getElementById("loading-shell");
+      return !s || getComputedStyle(s).visibility === "hidden";
+    }, { timeout: 10_000 }).catch(() => {});
     await page.evaluateHandle("document.fonts.ready");
     await new Promise((r) => setTimeout(r, 600));
 

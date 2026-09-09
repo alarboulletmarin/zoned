@@ -20,6 +20,23 @@
 # 1475ms. Single runs on identical code ranged 834-2945ms, so 1300ms put the
 # tripwire inside the runner's own noise: it fired on a slow afternoon rather
 # than on a regression. Recheck the budget whenever the boot path changes.
+#
+# LCP recalibrated 2026-09 to 10000ms, because the boot path changed: the
+# loading shell now holds for one full stride of the run cycle before it fades
+# (src/main.tsx, SHELL_HOLD_MS = 1060ms, plus a 240ms fade). It covers the app
+# while it holds, so the app's LCP element is only reported once the cover
+# comes off — LCP moves by the hold, by construction and on purpose.
+#
+# Measured on one machine, median of 3, same commit either side:
+#   without the hold  LCP 5940ms  |  with the hold  LCP 7357ms  (+1417ms)
+# That box runs ~0.6-1.2s faster than the shared runners this budget was set
+# from (6.5-7.1s there against 5.9s here), so the projection on CI is 7.9-8.5s
+# — at or through the old 8500ms ceiling. 10000ms restores the cushion the
+# budget had before (~1.4-2.0s over the observed median).
+#
+# This is NOT the site getting slower to build: it is the site deliberately
+# showing an opening for 1.3s. If that opening is ever dropped or shortened,
+# put this budget back — the arithmetic above says where.
 name: Lighthouse CI
 
 on:

@@ -177,13 +177,33 @@
          « La coquille court » along with what it costs. */
       #loading-shell {
         --accent: var(--primary); /* the duo's soles are stroked in var(--accent) */
-        min-height: 100vh;
+        /* --shell-fade lives here, next to --rc-step and --rc-dur below,
+           because the shell never sees motion.css: the bundle has not arrived.
+           It matches the system's --dur-slow without being able to name it. */
+        --shell-fade: 240ms;
+
+        /* An OVERLAY, not a block in the flow. #root precedes it in the DOM and
+           carries no CSS of its own, so an in-flow shell held past mount would
+           put the app on top and the shell below it. Fixed, the app renders on
+           time underneath and the shell simply covers it — which is also what
+           keeps the LCP budget intact: nothing about React's mount is delayed,
+           only the moment the cover comes off. */
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: var(--bg); /* opaque, or the app shows through */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 40px;
         padding: 0 20px;
+        /* `visibility` is what replaces `display: none`, which cannot be
+           transitioned: it flips in one discrete step once the fade is over,
+           and it takes the shell out of the accessibility tree with it. */
+        transition:
+          opacity var(--shell-fade) ease-out,
+          visibility 0s linear var(--shell-fade);
       }
       .shell-wordmark {
         font-family: "Bricolage Grotesque", "Bricolage Grotesque Fallback", system-ui, sans-serif;
@@ -273,16 +293,23 @@
         0%, 16.66% { opacity: 1; }
         16.67%, 100% { opacity: 0; }
       }
-      /* Two animations, and only two. The rule draws itself, left to right;
-         then the figure runs, six frames at 110ms, for as long as the wait
-         lasts. Both say the same thing — that a wait is real — which is the
-         only thing motion is allowed to say here (src/styles/design/motion.css,
-         and docs/doodles.md « La coquille court »). Nothing else moves. */
+      /* Two animations, and only two, played as one timed sequence: the rule
+         draws itself left to right over 400ms, then the figure runs, six frames
+         at 110ms, for at least one full 660ms stride and for as long as the
+         wait lasts beyond that. src/main.tsx holds the shell to the end of that
+         stride — without it the app mounts first and the runner never takes a
+         single step. That held second is an OPENING, not a report on a real
+         wait, which is a departure from src/styles/design/motion.css written
+         down in docs/doodles.md « La coquille court ». Nothing else moves. */
       @keyframes shell-rule {
         from { transform: scaleX(0); }
         to { transform: scaleX(1); }
       }
       @media (prefers-reduced-motion: reduce) {
+        /* No fade, and src/main.tsx holds nothing: with the figure frozen on
+           pose 1 there is nothing to watch, so a minimum display time would be
+           pure delay bought for no one. */
+        #loading-shell { transition: none; }
         .shell-scene::after { animation: none; }
         /* No fill-mode on .rc-f, so every group reverts to its base style:
            frame 1, the front-foot strike, holds. It is the only frozen pose
@@ -290,9 +317,14 @@
         .rc-f { animation: none; }
       }
 
-      /* Hide shell when app loads */
+      /* The shell leaves once BOTH are true: the app has mounted, and the
+         figure has had time for one full stride (src/main.tsx, SHELL_HOLD_MS).
+         `display` is untouched — scripts/prerender.ts drops the whole element
+         from prerendered files, so nothing downstream depends on it. */
       #loading-shell.hidden {
-        display: none;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none; /* clicks pass through from the first frame */
       }
     </style>
   </head>

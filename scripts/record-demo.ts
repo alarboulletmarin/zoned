@@ -471,6 +471,15 @@ async function recordScenario(scenario: Scenario, videoDir: string): Promise<Rec
 
   // Scenario entry point, fonts ready, cursor parked.
   await page.goto(BASE_URL + (scenario.startPath ?? "/"), { waitUntil: "networkidle" });
+  /* La coquille de chargement tient au moins une foulée (src/main.tsx,
+     SHELL_HOLD_MS) puis s'efface en fondu. On l'attend AVANT de figer
+     trimStartSec, sans quoi le splash se retrouverait au début du GIF. */
+  await page
+    .waitForFunction(() => {
+      const s = document.getElementById("loading-shell");
+      return !s || getComputedStyle(s).visibility === "hidden";
+    }, { timeout: 10_000 })
+    .catch(() => {});
   await page.evaluate(() => document.fonts.ready);
   const park = { x: scenario.viewport.width / 2, y: scenario.viewport.height * 0.6 };
   await page.mouse.move(park.x, park.y);

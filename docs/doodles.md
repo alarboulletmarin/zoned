@@ -252,10 +252,10 @@ Ce que ça dit que rien d'autre ne disait : que l'attente **avance**. Un trait
 figé pendant trois secondes de réseau lent dit qu'on attend, pas qu'il se passe
 quelque chose.
 
-### Les deux entorses, assumées
+### Les trois entorses, assumées
 
 Elles sont écrites ici parce qu'un jour quelqu'un lira les règles et trouvera
-la coquille en infraction. Elle l'est, sciemment.
+la coquille en infraction. Elle l'est, sciemment, et trois fois.
 
 **Trois figures sur un écran.** « Une figure par écran » vaut toujours partout
 ailleurs — le `PageLoader` n'en montre qu'une. La coquille en porte trois parce
@@ -271,6 +271,37 @@ en a deux maintenant. La seconde est **la seconde moitié de la même phrase** :
 elle dit qu'une attente est réelle, ce qui est précisément le seul autre motif
 que la règle autorise. Aucune autre surface n'y a droit — une figure qui court
 ailleurs que sur une attente serait un ornement, et l'ornement reste interdit.
+
+**Une attente fabriquée (9 septembre 2026, le soir).** C'est la plus sérieuse
+des trois, et elle mérite d'être lue deux fois. `motion.css` autorise le
+mouvement pour dire « qu'une attente est réelle » ; la coquille est désormais
+**retenue** une foulée complète avant de s'effacer, donc l'attente qu'elle
+signale, on la fabrique. Elle cesse d'être un indicateur pour devenir une
+ouverture de marque.
+
+Ce qui l'a motivée est un défaut mesuré, pas un goût. La coquille était retirée
+à `requestAnimationFrame`, c'est-à-dire à la première image après l'exécution du
+bundle — et le coureur ne part qu'à `--rc-start`, 400 ms, pour laisser la règle
+se tracer d'abord. Sur le build de production servi depuis le cache, React monte
+à **182 ms**. Le coureur ne faisait donc **jamais un seul pas** : la coquille
+disparaissait pendant que le trait de sol était encore en train de se dessiner.
+Personne n'a jamais vu l'animation, pas « à peine ».
+
+`src/main.tsx` retient donc jusqu'à `--rc-start + --rc-dur` = 1060 ms, puis un
+fondu de 240 ms. C'est un **minimum**, pas un délai : sur un chargement
+réellement lent (mesuré à 2627 ms) la retenue ajoute zéro, elle ne complète
+qu'une attente déjà en cours. Et sous `prefers-reduced-motion` elle ne retient
+rien du tout — la figure est figée sur la pose 1, il n'y a rien à regarder, et
+retenir un dessin immobile serait du délai acheté pour personne.
+
+Ce que ça coûte, en chiffres et sans arrondi : **LCP passe de 5940 à 7357 ms**
+(médiane de 3, même machine, de part et d'autre du changement). La surcouche
+masque l'élément le plus grand de l'app jusqu'au fondu, donc Lighthouse
+l'enregistre 1,4 s plus tard — par construction. Le budget de
+`.lighthouserc.json` est passé de 8500 à 10000 ms, avec l'arithmétique écrite
+dans l'en-tête de `.github/workflows/lighthouse.yml`. Le site ne met pas plus
+longtemps à se construire ; il montre délibérément une ouverture pendant 1,3 s.
+Si un jour cette ouverture saute, le budget se remet où il était.
 
 ### Ce que le cycle a appris du gréement
 

@@ -234,6 +234,13 @@ async function dismissOverlays(page: Page) {
 async function capture(page: Page, surface: Surface, url: string, out: string, w: number, h: number) {
   await page.goto(url, { waitUntil: "networkidle0", timeout: 60_000 });
   await page.waitForSelector("main", { timeout: 20_000 }).catch(() => {});
+  /* La coquille de chargement tient au moins une foulée (src/main.tsx,
+     SHELL_HOLD_MS) puis s'efface en fondu : sans cette attente, une capture
+     calée sur un délai fixe photographie le splash au lieu de l'app. */
+  await page.waitForFunction(() => {
+    const s = document.getElementById("loading-shell");
+    return !s || getComputedStyle(s).visibility === "hidden";
+  }, { timeout: 10_000 }).catch(() => {});
   await page.evaluateHandle("document.fonts.ready");
   // Let entrance animations settle: the app fades content up on mount and a
   // screenshot taken mid-transition shows half-opacity cards.
