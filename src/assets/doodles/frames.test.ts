@@ -45,14 +45,11 @@ describe("les cadres recopiés suivent les fichiers SVG", () => {
     expect(h).toBe(tallest);
   });
 
-  test("index.html : le duo inliné est le fichier, viewBox comprise", () => {
-    const html = read("index.html");
-    const [x, y, w, h] = viewBox("runners-duo");
-    expect(html).toContain(`viewBox="${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}"`);
-    expect(html).toContain(`aspect-ratio: ${w.toFixed(1)} / ${h.toFixed(1)};`);
-    const ds = [...read("src/assets/doodles/runners-duo.svg").matchAll(/ d="([^"]+)"/g)].map((m) => m[1]);
-    for (const d of ds) expect(html).toContain(d);
-  });
+  /* Le duo était inliné ici lui aussi, et ce test le gardait. Il a quitté la
+     coquille le 9 septembre 2026 : une figure par écran, et un dessin remplace
+     au lieu de s'ajouter. Il reste dans le hero, le menu mobile, la feuille de
+     partage et l'image Open Graph — mais plus dans index.html, donc plus rien
+     à garder ici. */
 
   /* Le cycle de foulée est inliné dans la coquille comme le duo, et il porte
      en plus une CADENCE, recopiée elle aussi. Trois endroits doivent

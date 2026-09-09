@@ -239,30 +239,34 @@ recoupe fait échouer le test tant qu'elles ne suivent pas.
 ## La coquille court (9 septembre 2026)
 
 Décision du propriétaire : **la coquille de chargement reçoit une figure qui
-court sur place, image par image**, à côté du duo, qui reste. Six poses de
-110 ms — 660 ms le cycle, soit 182 pas par minute, une allure facile — à neuf
-images par seconde.
+court sur place, image par image**. Six poses de 110 ms — 660 ms le cycle, soit
+182 pas par minute, une allure facile — à neuf images par seconde.
+
+Elle est **seule**. Le duo a tenu la coquille pendant une journée à côté d'elle,
+puis en est sorti : le coureur remplace, il ne s'ajoute pas, et un écran de
+chargement porte une figure. Le duo n'a pas quitté le projet pour autant — hero
+de la page d'accueil, menu mobile, feuille de partage, image Open Graph.
 
 Le sol ne défile pas. C'est la même règle de page, tracée en 400 ms, et le
 bassin de la figure ne bouge pas d'un pixel horizontalement : elle court sur un
-tapis. Les trois figures partagent cette unique ligne de sol, côte à côte,
-jamais au travers.
+tapis. La règle traverse toute la largeur, la figure se pose en son centre.
 
 Ce que ça dit que rien d'autre ne disait : que l'attente **avance**. Un trait
 figé pendant trois secondes de réseau lent dit qu'on attend, pas qu'il se passe
 quelque chose.
 
-### Les trois entorses, assumées
+### Les deux entorses, assumées
 
 Elles sont écrites ici parce qu'un jour quelqu'un lira les règles et trouvera
-la coquille en infraction. Elle l'est, sciemment, et trois fois.
+la coquille en infraction. Elle l'est, sciemment, et deux fois — toutes deux sur
+le mouvement, aucune sur le dessin.
 
-**Trois figures sur un écran.** « Une figure par écran » vaut toujours partout
-ailleurs — le `PageLoader` n'en montre qu'une. La coquille en porte trois parce
-que le propriétaire a demandé que le duo reste : le coureur **s'ajoute** au lieu
-de remplacer, ce qui est aussi une entorse à « un dessin remplace, il ne
-s'ajoute pas ». En échange, la scène tient : une seule ligne de sol, une seule
-direction, trois figures du même trait, et le coureur est le seul qui bouge.
+Il y en eut une troisième pendant une journée : le coureur s'était **ajouté** au
+duo, trois figures sur l'écran de chargement. Elle est réparée. Ce qu'elle aura
+appris, et qui vaut d'être noté : une figure de plus ne se juge pas sur la place
+disponible mais sur ce qu'elle retire, et « un dessin remplace » n'est pas une
+préférence de mise en page — c'est ce qui empêche un écran de devenir une
+vitrine.
 
 **Une seconde animation.** `src/styles/design/motion.css` dit « Motion says
 where something came from, or that a wait is real. Nothing else moves », et
@@ -273,7 +277,7 @@ que la règle autorise. Aucune autre surface n'y a droit — une figure qui cour
 ailleurs que sur une attente serait un ornement, et l'ornement reste interdit.
 
 **Une attente fabriquée (9 septembre 2026, le soir).** C'est la plus sérieuse
-des trois, et elle mérite d'être lue deux fois. `motion.css` autorise le
+des deux, et elle mérite d'être lue deux fois. `motion.css` autorise le
 mouvement pour dire « qu'une attente est réelle » ; la coquille est désormais
 **retenue** une foulée complète avant de s'effacer, donc l'attente qu'elle
 signale, on la fabrique. Elle cesse d'être un indicateur pour devenir une

@@ -165,16 +165,17 @@
         line-gap-override: 0%;
       }
 
-      /* Loading shell — the first image of every launch: the wordmark, then
-         a scene on one rule (docs/doodles.md, « le sol est la règle de la
-         page ») — a figure running in place, and the approved duo standing.
-         It replaced the old pulse logo and spinner rather than joining them.
+      /* Loading shell — the first image of every launch: the wordmark, and one
+         figure running in place on a rule (docs/doodles.md, « le sol est la
+         règle de la page »). It replaced the old pulse logo and spinner rather
+         than joining them, and the approved duo that stood here for a day left
+         the same way: ONE figure per screen, and a drawing replaces, it never
+         adds. The duo is untouched everywhere else — the home hero, the mobile
+         menu, the share sheet, the Open Graph image.
 
-         The runner is what says the wait is ADVANCING; the duo alone said only
-         that a wait existed. Both stand on the same rule and the same ground
-         line, never overlapping — « à côté, au-dessus ou en dessous, jamais au
-         travers ». Owner's decision, recorded in docs/doodles.md under
-         « La coquille court » along with what it costs. */
+         The runner is what says the wait is ADVANCING; a still figure said only
+         that a wait existed. Recorded in docs/doodles.md under « La coquille
+         court » along with what it costs. */
       #loading-shell {
         --accent: var(--primary); /* the duo's soles are stroked in var(--accent) */
         /* --shell-fade lives here, next to --rc-step and --rc-dur below,
@@ -215,19 +216,15 @@
       }
       .shell-wordmark span { color: var(--primary); }
 
-      /* Both drawings are sized as a PERCENTAGE of the scene, not in pixels:
-         the scene alone shrinks with the screen and the two figures follow it
-         together, with no media query and without either one dropping out. At
-         486px they stand 224 and 238 tall; at 335 (a phone) 155 and 164; at
-         280, 129 and 137 — above the 120px floor under which a figure is
-         removed rather than shrunk. */
+      /* The rule runs the full width — a horizon — and the figure stands at
+         its centre. It was briefly narrowed to hold two drawings side by side;
+         with one figure that constraint is gone. */
       .shell-scene {
         position: relative;
-        width: min(486px, 100%);
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: flex-end;
-        gap: 2.7%;
         padding-bottom: 1.5px;
       }
       .shell-scene::after {
@@ -241,31 +238,26 @@
         transform-origin: left;
         animation: shell-rule 400ms ease-out both;
       }
-      /* The rule is the ground. Each figure's viewBox stops at its soles, so
-         the bottom of its box IS the contact line: a negative margin equal to
-         the rule's thickness puts that edge on the rule's bottom edge —
-         computed from the box, never eyeballed. Both paint above the ink rule,
-         so their vermillon soles sit on it and not under it. */
-      .shell-run,
-      .shell-duo {
+      /* The rule is the ground. The figure's viewBox stops at its soles, so the
+         bottom of its box IS the contact line: a negative margin equal to the
+         rule's thickness puts that edge on the rule's bottom edge — computed
+         from the box, never eyeballed. It paints above the ink rule, so the
+         vermillon sole sits on it and not under it.
+
+         174px wide is 240px tall through the viewBox — the top of the range
+         docs/doodles.md sanctions for a figure, which is right here: it is
+         alone, and the shell is the largest surface in the app. It still fits
+         at a 320px viewport without shrinking. */
+      .shell-run {
         position: relative;
         z-index: 1;
         display: block;
-        height: auto;
+        inline-size: 174px;
+        max-inline-size: 100%;
+        block-size: auto;
+        aspect-ratio: 218.6 / 301.2; /* the viewBox — an svg with no size collapses */
         margin-bottom: -1.5px;
         color: var(--fg);
-      }
-      /* The runner's BOX is a little taller than the duo's: its frame has to
-         hold the bounce and the arm swing, so the body fills only 94% of it.
-         At equal box heights the runner would read smaller than the two it
-         stands next to. */
-      .shell-run {
-        width: 35.6%;
-        aspect-ratio: 218.6 / 301.2; /* the viewBox — an svg with no size collapses */
-      }
-      .shell-duo {
-        width: 61.7%;
-        aspect-ratio: 409.6 / 306.4; /* the viewBox — an svg with no size collapses */
       }
 
       /* The run cycle. A copy of src/styles/components/run-cycle.css, which
@@ -334,10 +326,10 @@
     <!-- Loading Shell - displayed instantly, hidden when React mounts -->
     <div id="loading-shell">
       <span class="shell-wordmark">zoned<span>.</span></span>
-      <!-- Two drawings, inlined byte for byte from src/assets/doodles/
-           (the app's bundle is not here yet): run-cycle.svg, six frames of
-           one figure, and runners-duo.svg. Regenerate by pasting the files;
-           src/assets/doodles/frames.test.ts fails if they drift. -->
+      <!-- src/assets/doodles/run-cycle.svg, six frames of one figure, inlined
+           byte for byte (the app's bundle is not here yet). Regenerate by
+           pasting the file; src/assets/doodles/frames.test.ts fails if it
+           drifts, and if its cadence stops matching run-cycle.css. -->
       <div class="shell-scene" role="status" aria-label="Chargement">
         <svg class="shell-run rc" aria-hidden="true" viewBox="34.0 61.6 218.6 301.2" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <g class="rc-f rc-f--1">
@@ -368,12 +360,6 @@
             <path d="M 102.6 344.7C97.3 334.2 71.3 301.3 70.4 281.5C69.4 261.7 92.4 235.5 96.7 225.9C101.1 216.4 93.8 231 96.5 224.1C99.2 217.2 108.6 197.6 112.7 184.6C116.8 171.6 117.4 154.6 121.2 146.1C124.9 137.6 135.7 126.1 135.2 133.8C134.7 141.4 125.5 176.5 117.9 192.1C110.4 207.7 95.6 220.4 89.8 227.4C83.9 234.5 85.4 233.8 82.7 234.3C80.1 234.8 75.4 230.5 74 230.3C72.6 230.1 74 232.1 74.3 232.9C74.6 233.6 75.1 234.4 75.8 234.9C76.4 235.5 77.3 235.9 78.1 236C78.9 236.2 81.2 237.1 80.7 235.7C80.2 234.4 75.2 230.5 75.1 227.9C75 225.3 74.8 228.4 80.2 220.1C85.5 211.8 100.4 194.1 107.4 178.2C114.4 162.2 116.1 135.3 122.2 124.4C128.3 113.5 140.1 115.8 143.9 112.5C147.7 109.3 145.6 106.9 145 104.7C144.5 102.6 141.8 101.6 140.7 99.8C139.5 97.9 138.6 95.8 138.1 93.8C137.6 91.7 137.4 89.4 137.6 87.2C137.7 85.1 138.2 82.8 139 80.8C139.8 78.7 141 76.8 142.4 75.2C143.8 73.5 145.5 72 147.4 70.8C149.2 69.7 151.3 68.7 153.4 68.2C155.5 67.7 157.7 67.6 159.9 67.7C162.1 67.9 164.4 68.3 166.4 69.1C168.4 70 170.3 71.2 172 72.6C173.6 74 175.2 75.7 176.3 77.5C177.5 79.3 178.4 81.4 178.9 83.5C179.4 85.6 179.5 87.9 179.4 90.1C179.2 92.2 178.8 94.5 178 96.5C177.2 98.5 176 100.5 174.6 102.1C173.2 103.8 171.5 105.4 169.6 106.5C167.8 107.5 164.6 106.4 163.5 108.5C162.4 110.6 162.1 114.6 162.8 119.1C163.5 123.6 167.1 124.8 167.7 135.4C168.2 146 168.1 165.1 166.1 182.7C164.1 200.4 158.5 230.1 155.7 241.2C152.9 252.3 152 248.5 149.4 249.4C146.8 250.3 141.6 246.5 140.2 246.5C138.7 246.4 140.3 248.3 140.7 249C141.1 249.8 141.8 250.6 142.5 251C143.2 251.5 144.1 251.7 144.9 251.7C145.7 251.8 148.1 252.4 147.4 251.2C146.8 249.9 141.4 246.5 140.9 244.1C140.4 241.7 142.5 243.1 144.5 236.7C146.5 230.3 151 218.9 152.8 205.8C154.6 192.7 157.7 160 155.3 157.9C152.8 155.8 142.8 181.1 138.2 193.5C133.6 205.8 120.4 225.8 127.5 231.9C134.6 238 166.2 221.9 180.9 229.8C195.5 237.8 207.6 271.3 215.4 279.6C223.1 287.9 223.2 280.8 227.5 279.7C231.9 278.5 238.3 273.3 241.3 272.8C244.4 272.3 244.9 276.3 245.7 276.7C246.5 277 246 275.6 246 275.1C245.9 274.6 245.7 274.1 245.5 273.7C245.2 273.2 244.8 272.8 244.3 272.6C243.9 272.4 242.7 271.4 242.7 272.3C242.8 273.2 246.6 274.9 244.6 277.8C242.7 280.6 236.8 286.9 231.1 289.4C225.4 291.9 220.5 300.2 210.5 292.9C200.4 285.5 187 255.2 170.8 245.3C154.6 235.5 122.6 236.2 113.3 233.7C104 231.2 119.7 220.9 115 230.3C110.3 239.7 86.1 272.9 85.2 289.9C84.4 306.8 103.8 325.3 109.7 331.9C115.6 338.5 115.8 331 120.7 329.6C125.6 328.1 135.6 323.5 139.4 323.1C143.2 322.7 142.7 326.7 143.5 327.1C144.2 327.6 143.9 326.1 143.9 325.6C143.9 325.1 143.7 324.6 143.5 324.2C143.2 323.7 142.8 323.3 142.3 323.1C141.9 322.8 141.1 322.7 140.8 322.6"/>
             <path d="M 140.8 322.6C141.4 323.1 144.1 324.6 144.3 325.7C144.5 326.7 144.8 326.7 142.1 329.1C139.4 331.4 132.5 336.8 128 339.8C123.4 342.8 118.4 345.4 114.8 347C111.3 348.6 108.6 349.7 106.6 349.3C104.5 349 103.3 345.5 102.6 344.7"/>
           </g>
-        </svg>
-        <svg class="shell-duo" aria-hidden="true" viewBox="24.0 69.9 409.6 306.4" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 87.3 367.9C85.6 358.9 94.3 318.9 95.5 303.2C96.7 287.4 96.9 250.1 97.0 241.7C97.1 233.3 95.0 241.7 96.5 236.1C98.0 230.5 106.7 206.5 108.9 196.7C111.1 186.9 111.8 164.2 114.0 157.6C116.3 151.1 129.5 139.1 126.9 144.1C124.3 149.2 103.9 193.1 93.3 198.1C82.7 203.1 49.8 186.0 42.3 183.8C34.8 181.5 34.5 181.5 33.4 179.7C32.4 178.0 34.2 171.2 34.0 170.1C33.8 169.0 32.2 170.8 31.7 171.3C31.2 171.7 30.5 172.8 30.3 173.4C30.1 174.0 30.0 175.4 30.1 176.0C30.2 176.6 30.4 179.0 31.3 178.3C32.1 177.6 34.8 171.0 36.6 170.3C38.4 169.5 39.4 170.8 45.7 172.2C52.0 173.7 78.3 186.4 86.7 181.9C95.1 177.4 107.3 143.3 113.1 135.9C119.0 128.4 131.1 124.8 133.7 122.2C136.3 119.6 134.5 116.3 133.9 114.8C133.3 113.3 130.0 111.7 128.9 110.5C127.9 109.3 126.1 106.4 125.5 104.9C124.9 103.4 124.2 100.1 124.1 98.5C123.9 96.8 124.2 93.5 124.6 91.9C125.0 90.3 126.3 87.2 127.2 85.9C128.1 84.5 130.3 82.0 131.5 80.9C132.7 79.9 135.6 78.1 137.1 77.5C138.6 76.9 141.9 76.2 143.5 76.1C145.2 75.9 148.5 76.2 150.1 76.6C151.7 77.0 154.8 78.3 156.1 79.2C157.5 80.1 160.0 82.3 161.1 83.5C162.1 84.7 163.9 87.6 164.5 89.1C165.1 90.6 165.8 93.9 165.9 95.5C166.1 97.2 165.8 100.5 165.4 102.1C165.0 103.7 163.7 106.8 162.8 108.1C161.9 109.5 159.7 112.0 158.5 113.1C157.3 114.1 153.5 114.7 152.9 116.5C152.2 118.2 152.3 123.8 153.1 127.1C153.9 130.4 156.7 135.7 159.4 142.9C162.1 150.1 170.7 183.3 174.7 184.7C178.7 186.1 188.1 158.7 191.3 154.2C194.4 149.6 197.7 148.3 199.7 148.2C201.8 148.1 206.7 153.3 207.7 153.7C208.7 154.0 208.0 151.7 207.9 151.1C207.8 150.5 207.2 149.2 206.8 148.7C206.4 148.3 205.3 147.5 204.7 147.3C204.1 147.1 201.9 146.0 202.1 147.1C202.3 148.1 206.4 154.0 206.3 155.8C206.1 157.6 204.8 154.9 200.7 161.8C196.6 168.8 179.8 210.7 173.3 211.3C166.8 211.8 153.7 167.4 149.0 166.4C144.2 165.4 137.8 193.6 135.1 203.3C132.4 213.0 122.2 236.2 127.5 243.9C132.8 251.6 170.2 254.5 177.6 264.7C185.1 274.9 184.6 317.1 187.1 325.1C189.7 333.1 194.7 328.6 198.0 328.8C201.3 329.1 211.0 326.7 213.3 327.1C215.5 327.5 215.6 331.7 216.1 332.2C216.5 332.6 216.8 331.2 216.9 330.8C217.0 330.5 217.0 329.6 216.9 329.3C216.8 328.9 216.4 328.2 216.2 327.9C215.9 327.6 215.0 326.5 214.8 327.1C214.6 327.7 216.8 331.4 214.7 332.9C212.6 334.4 202.7 338.9 198.0 339.2C193.3 339.4 181.3 342.9 176.9 334.9C172.4 326.9 170.3 286.5 162.4 275.3C154.4 264.1 119.2 249.8 113.3 245.7C107.4 241.5 115.1 234.9 115.0 242.3C114.9 249.7 114.3 290.1 112.5 304.8C110.7 319.6 100.9 352.6 100.7 360.1C100.5 367.6 107.1 364.2 110.8 365.0C114.4 365.7 127.2 365.2 129.9 366.0C132.5 366.8 131.3 371.0 131.6 371.5C132.0 372.1 132.5 370.7 132.7 370.4C132.8 370.0 133.0 369.2 133.0 368.9C133.0 368.5 132.7 367.7 132.5 367.4C132.3 367.1 131.7 365.8 131.4 366.3"/>
-          <path d="M 345.5 361.5C343.5 352.2 353.5 312.2 351.3 297.2C349.1 282.2 330.0 248.0 327.7 241.4C325.3 234.9 334.8 235.4 332.6 244.7C330.4 253.9 318.7 312.7 310.1 315.6C301.4 318.5 270.7 272.9 263.5 267.8C256.2 262.6 255.4 273.4 252.3 274.5C249.2 275.6 241.0 277.2 238.9 276.8C236.9 276.5 236.2 272.4 235.8 272.0C235.3 271.6 235.1 273.0 235.1 273.4C235.0 273.8 235.0 274.6 235.2 274.9C235.3 275.3 235.7 276.0 236.0 276.2C236.3 276.5 237.3 277.6 237.4 276.9C237.5 276.3 235.8 272.6 237.1 271.2C238.3 269.7 244.3 267.9 247.7 265.5C251.1 263.1 257.8 249.9 264.5 252.2C271.3 254.6 295.6 286.0 301.9 284.4C308.3 282.8 313.8 245.4 315.4 239.3C317.0 233.3 313.0 241.4 314.5 236.1C315.9 230.8 324.7 206.5 326.9 196.7C329.1 186.9 329.8 164.3 332.0 157.6C334.3 151.0 347.3 138.1 345.2 143.6C343.0 149.1 324.5 197.7 315.0 201.6C305.5 205.6 275.9 179.3 269.1 175.3C262.3 171.2 261.3 171.3 260.6 169.4C259.8 167.5 262.9 161.1 262.9 160.0C262.9 158.9 261.0 160.4 260.4 160.7C259.9 161.0 258.9 162.0 258.6 162.6C258.3 163.1 258.0 164.5 258.0 165.1C258.0 165.7 257.8 168.1 258.7 167.6C259.6 167.0 263.4 161.0 265.4 160.6C267.5 160.3 269.5 162.0 274.9 164.7C280.3 167.5 302.0 185.9 309.0 182.4C316.0 178.8 325.5 143.9 330.8 136.4C336.2 128.9 349.0 124.9 351.7 122.2C354.3 119.5 352.5 116.3 351.9 114.8C351.3 113.3 348.0 111.7 346.9 110.5C345.9 109.3 344.1 106.4 343.5 104.9C342.9 103.4 342.2 100.1 342.1 98.5C341.9 96.8 342.2 93.5 342.6 91.9C343.0 90.3 344.3 87.2 345.2 85.9C346.1 84.5 348.3 82.0 349.5 80.9C350.7 79.9 353.6 78.1 355.1 77.5C356.6 76.9 359.9 76.2 361.5 76.1C363.2 75.9 366.5 76.2 368.1 76.6C369.7 77.0 372.8 78.3 374.1 79.2C375.5 80.1 378.0 82.3 379.1 83.5C380.1 84.7 381.9 87.6 382.5 89.1C383.1 90.6 383.8 93.9 383.9 95.5C384.1 97.2 383.8 100.5 383.4 102.1C383.0 103.7 381.7 106.8 380.8 108.1C379.9 109.5 377.7 112.0 376.5 113.1C375.3 114.1 371.5 114.7 370.9 116.5C370.2 118.2 370.2 123.7 371.1 127.1C371.9 130.4 375.1 136.0 377.6 143.5C380.0 151.0 386.6 184.2 390.6 187.0C394.6 189.7 406.3 169.0 409.9 165.6C413.4 162.2 416.9 160.0 419.0 160.0C421.1 160.0 425.6 165.5 426.6 166.0C427.6 166.4 427.0 164.0 427.0 163.4C426.9 162.8 426.4 161.5 426.0 161.0C425.6 160.5 424.5 159.6 424.0 159.4C423.4 159.2 421.3 158.0 421.4 159.0C421.5 160.1 425.4 166.1 425.0 168.0C424.6 169.9 423.1 168.8 418.1 174.4C413.2 180.0 391.8 214.1 385.4 213.0C379.0 212.0 371.0 167.6 367.0 166.4C362.9 165.1 355.8 193.6 353.1 203.3C350.4 213.0 343.6 232.4 345.5 243.9C347.5 255.3 367.1 281.0 368.7 294.8C370.3 308.7 358.5 346.3 358.5 354.5C358.5 362.8 365.4 360.0 369.1 360.9C372.7 361.9 385.3 361.2 387.9 362.0C390.4 362.8 389.3 367.0 389.6 367.5C390.0 368.1 390.5 366.7 390.7 366.4C390.8 366.0 391.0 365.2 391.0 364.9C391.0 364.5 390.7 363.7 390.5 363.4C390.3 363.1 389.7 361.8 389.4 362.3"/>
-          <path stroke="var(--accent)" d="M 131.4 366.3C131.1 366.9 132.9 370.9 130.1 372.0C127.4 373.1 114.6 375.6 109.2 375.0C103.9 374.5 89.0 376.9 87.3 367.9"/>
-          <path stroke="var(--accent)" d="M 389.4 362.3C389.1 362.9 391.0 366.9 388.1 368.0C385.3 369.1 372.3 371.9 366.9 371.1C361.6 370.2 347.5 370.7 345.5 361.5"/>
         </svg>
       </div>
     </div>
