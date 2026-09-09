@@ -216,6 +216,18 @@ async function prerenderRoute(
         // Fallback: trust the HTML check below.
       });
 
+    /* La coquille de chargement est le premier rendu AVANT hydratation. Une
+       page prérendue a déjà son contenu : la coquille n'y sert plus à rien, et
+       elle y pèse — les six images du cycle de foulée font 17 ko de balisage
+       mort, recopiés dans chaque fichier généré (deux langues × toutes les
+       routes du sitemap), et `bun run deploy` fait `git add -f dist`. On la
+       retire DANS la page plutôt qu'à la regex : les <div> imbriqués de la
+       scène rendent tout découpage textuel fragile.
+
+       index.html à la racine — la coquille SPA servie aux routes inconnues —
+       est écrit par Vite et n'est pas concerné. */
+    await page.evaluate(() => document.getElementById("loading-shell")?.remove());
+
     const html = await page.content();
     // Truth source for "did SEOHead render?": inspect the captured HTML
     // directly. Avoids spurious retries when waitForFunction's polling

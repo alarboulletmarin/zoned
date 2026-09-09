@@ -16,59 +16,15 @@
  */
 import { writeFileSync } from "node:fs";
 import { Figure, svg } from "./rig.mjs";
+import { footX, leadSoleY, levelLead, levelStand } from "./pose-tools.mjs";
 
 const OUT = new URL("../../src/assets/doodles/", import.meta.url).pathname;
 
 /* ── outillage ───────────────────────────────────────────────────────────── */
 
-/** Balaye une articulation et retient l'angle qui minimise `cost`. */
-function sweep(f, joint, cost, [lo, hi] = [-90, 90], step = 0.25) {
-  let best = 0, bc = Infinity;
-  for (let d = lo; d <= hi; d += step) {
-    const g = new Figure(f.P, f.S).pose({ [joint]: d });
-    const c = cost(g);
-    if (c < bc) { bc = c; best = d; }
-  }
-  f.pose({ [joint]: best });
-  return +best.toFixed(2);
-}
-
-/** Balaye deux articulations en chaîne et retient le couple qui place au mieux
- *  un ou plusieurs repères. goals : [[indice d'ancre, [x, y], poids]] */
-function aim(f, [j1, j2], goals, r1 = [-170, 170], r2 = [-140, 140]) {
-  const cost = (a, b) => {
-    const g = new Figure(f.P, f.S).pose({ [j1]: a, [j2]: b });
-    return goals.reduce((s, [i, t, w = 1]) => {
-      const p = g.at(i);
-      return s + w * Math.hypot(p[0] - t[0], p[1] - t[1]);
-    }, 0);
-  };
-  let best = [0, 0], bc = Infinity, step = 6;
-  for (let a = r1[0]; a <= r1[1]; a += step)
-    for (let b = r2[0]; b <= r2[1]; b += step) {
-      const c = cost(a, b);
-      if (c < bc) { bc = c; best = [a, b]; }
-    }
-  for (step = 3; step >= 0.25; step /= 2)
-    for (let k = 0; k < 20; k++) {
-      let moved = false;
-      for (const [da, db] of [[step, 0], [-step, 0], [0, step], [0, -step]]) {
-        const c = cost(best[0] + da, best[1] + db);
-        if (c < bc - 1e-4) { bc = c; best = [best[0] + da, best[1] + db]; moved = true; }
-      }
-      if (!moved) break;
-    }
-  f.pose({ [j1]: +best[0].toFixed(1), [j2]: +best[1].toFixed(1) });
-  return f;
-}
-
-const LEAD_FOOT = [56, 57, 58, 59, 60, 61, 62, 63, 64];
-const leadSoleY = (g) => Math.max(...LEAD_FOOT.map((i) => g.P[i][1]));
-const footX = (g) => LEAD_FOOT.reduce((s, i) => s + g.P[i][0], 0) / LEAD_FOOT.length;
-
-/** Met la semelle d'appui à plat après avoir balancé la jambe arrière. */
-const levelStand = (f) =>
-  sweep(f, "standFoot", (g) => Math.abs(g.P[74][1] - g.P[0][1]), [-70, 70]);
+/* `sweep`, `aim`, `levelStand` et `levelLead` vivaient ici. Ils sont partagés
+   avec run-cycle.mjs depuis scripts/doodles/pose-tools.mjs ; ce fichier n'en
+   garde que ce qui lui est propre. */
 
 /** Pose le pied avant au sol, en retenant la solution la plus AVANCÉE.
  *
@@ -100,7 +56,7 @@ function plantForward(f, { knee = -34, bite = 3 } = {}) {
   const a = pick(-90, 90, 1.0);
   if (a === null) throw new Error(`pied avant hors d'atteinte (knee=${knee})`);
   f.pose({ leadHip: a });
-  sweep(f, "leadFoot", (g) => Math.abs(g.P[63][1] - g.P[65][1]), [-70, 70]);
+  levelLead(f);
   const b = pick(-10, 10);
   if (b !== null) f.pose({ leadHip: b });
   return f;

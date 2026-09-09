@@ -6,6 +6,11 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+/* Le gréement lui-même : c'est LUI la source de vérité pour le bas du trait
+   rendu (cubiques échantillonnées, demi-épaisseur comprise). Le réimplémenter
+   ici ferait vérifier au test sa propre copie de la règle au lieu de la vraie.
+   Les fichiers de test sont exclus de tsconfig, donc un .mjs sans types passe. */
+import { strokeBottom } from "../../../scripts/doodles/rig.mjs";
 
 const ROOT = join(import.meta.dir, "../../..");
 const viewBox = (name: string) => {
@@ -47,5 +52,66 @@ describe("les cadres recopiés suivent les fichiers SVG", () => {
     expect(html).toContain(`aspect-ratio: ${w.toFixed(1)} / ${h.toFixed(1)};`);
     const ds = [...read("src/assets/doodles/runners-duo.svg").matchAll(/ d="([^"]+)"/g)].map((m) => m[1]);
     for (const d of ds) expect(html).toContain(d);
+  });
+
+  /* Le cycle de foulée est inliné dans la coquille comme le duo, et il porte
+     en plus une CADENCE, recopiée elle aussi. Trois endroits doivent
+     s'accorder : le SVG (combien d'images), le CSS inline de index.html et
+     src/styles/components/run-cycle.css (leurs délais et leur palier). Une
+     image ajoutée au générateur sans toucher aux deux CSS ferait sauter une
+     pose sur six, en silence. */
+  test("index.html : le cycle inliné est le fichier, cadence comprise", () => {
+    const html = read("index.html");
+    const svg = read("src/assets/doodles/run-cycle.svg");
+    const css = read("src/styles/components/run-cycle.css");
+    const [x, y, w, h] = viewBox("run-cycle");
+
+    expect(html).toContain(`viewBox="${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}"`);
+    expect(html).toContain(`aspect-ratio: ${w} / ${h};`);
+    for (const d of [...svg.matchAll(/ d="([^"]+)"/g)].map((m) => m[1])) expect(html).toContain(d);
+
+    const n = [...svg.matchAll(/class="rc-f rc-f--(\d+)"/g)].length;
+    expect(n).toBeGreaterThanOrEqual(4);
+    for (let i = 1; i <= n; i++) {
+      expect(html, `index.html manque .rc-f--${i}`).toContain(`.rc-f--${i} {`);
+      expect(css, `run-cycle.css manque .rc-f--${i}`).toContain(`.rc-f--${i} {`);
+    }
+    expect([...css.matchAll(/\.rc-f--(\d+) \{ animation-delay/g)].length).toBe(n);
+
+    const num = (src: string, k: string) => Number(src.match(new RegExp(`--rc-${k}:\\s*(\\d+)ms`))![1]);
+    const [step, dur] = [num(html, "step"), num(html, "dur")];
+    expect(dur).toBe(step * n);
+    expect(num(css, "step")).toBe(step);
+    expect(num(css, "dur")).toBe(dur);
+    // la fenêtre visible vaut exactement une image du cycle
+    const stop = Number(html.match(/(\d+\.\d+)%,\s*100% \{ opacity: 0/)![1]);
+    expect(Math.abs(stop - 100 / n)).toBeLessThan(0.02);
+  });
+
+  /* La règle 3 de docs/doodles.md, vérifiée sur les nombres plutôt que de
+     confiance : le vermillon marque un contact RÉEL. Une figure qui court le
+     perd un tiers du temps — elle est en l'air — et un accent peint sur une
+     semelle qui ne touche rien est la faute, pas une licence. */
+  test("run-cycle : une seule ligne de sol, et aucun accent en l'air", () => {
+    const svg = read("src/assets/doodles/run-cycle.svg");
+    const groups = [...svg.matchAll(/<g class="rc-f[^"]*">([\s\S]*?)<\/g>/g)].map((m) => m[1]);
+    expect(groups.length).toBeGreaterThanOrEqual(4);
+    const ds = (g: string) => [...g.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]);
+    const accents = (g: string) => [...g.matchAll(/stroke="var\(--accent\)" d="([^"]+)"/g)].map((m) => m[1]);
+    const posees = groups.filter((g) => accents(g).length > 0);
+    const enVol = groups.filter((g) => accents(g).length === 0);
+    expect(posees.length).toBeGreaterThan(0);
+    expect(enVol.length).toBeGreaterThan(0);
+
+    const sol = Math.max(...posees.map((g) => strokeBottom(accents(g))));
+    for (const g of posees) {
+      // même ligne de sol, et c'est l'accent qui la touche — rien ne passe dessous
+      expect(Math.abs(strokeBottom(accents(g)) - sol)).toBeLessThan(0.25);
+      expect(strokeBottom(ds(g)) - sol).toBeLessThan(0.25);
+    }
+    for (const g of enVol) {
+      // vraiment en l'air : pas « un accent oublié », un décollage qui se voit
+      expect(sol - strokeBottom(ds(g))).toBeGreaterThan(8);
+    }
   });
 });

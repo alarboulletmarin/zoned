@@ -1,0 +1,83 @@
+/* RunCycle — the figure that runs in place, six poses of 110ms each.
+
+   660ms per cycle, i.e. 182 steps per minute — an easy pace — at 9 frames per
+   second. The hard cut is deliberate: this is frame-by-frame animation, not
+   interpolation. At 24 frames per second it would read as poor 3D; at 9, as a
+   drawing.
+
+   The RESTING state — the one that holds when nothing moves — is pose 1, the
+   front-foot strike. It is also the only state under prefers-reduced-motion,
+   and that is why the animation has NO fill-mode: motion.css clamps it to 1ms
+   and one iteration, every group then reverts to its base declaration, and
+   pose 1 holds. A `forwards` here would leave all six groups on their last
+   keyframe — opacity 0 — and THE FIGURE WOULD VANISH. It is the one thing in
+   this file that would fail silently.
+
+   The fallback is a CONTACT pose, never an airborne one: an airborne frame has
+   no accent (it touches nothing) and would float above the page's rule, which
+   docs/doodles.md forbids outright.
+
+   The cadence is in literal milliseconds, not --dur-* tokens: those top out at
+   240ms and are clamped to 1ms under reduced motion, which would break the
+   cycle instead of freezing it cleanly. */
+
+.zn-run-cycle {
+  display: block;
+  /* Width only: the viewBox gives the ratio. A fixed height letterboxes the
+     drawing and floats the sole off the rule (docs/doodles.md, « Poser une
+     figure sur une règle »). */
+  inline-size: var(--rc-w, 176px);
+  /* The sole bites the rule the parent draws, like every other figure: the box
+     comes down by the rule's RENDERED thickness (--rule-bite) and paints above
+     it, so the vermillon of the contact sits on the ink and not under it. Same
+     convention as .zn-empty__art. */
+  position: relative;
+  z-index: 1;
+  margin-block-end: calc(-1 * var(--rule-bite));
+}
+
+.zn-run-cycle .rc {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  color: var(--ink-1);
+}
+
+.rc {
+  --rc-step: 110ms;
+  --rc-dur: 660ms;
+  --rc-start: 0ms;
+}
+
+/* One frame visible at a time. `steps(1)` plus the two duplicated stops make
+   the cut hard whatever timing function is inherited. */
+.rc-f {
+  opacity: 0;
+  animation: rc-frame var(--rc-dur) steps(1) infinite;
+}
+
+/* Pose 1 is visible WITHOUT the animation: it is the base declaration, and so
+   the fallback. It is also first in the DOM, so it is the one that shows if
+   the stylesheet ever arrives late. */
+.rc-f--1 { opacity: 1; }
+
+/* POSITIVE delays. A negative delay would put several frames mid-cycle at t=0
+   and collide with pose 1's base opacity. */
+.rc-f--1 { animation-delay: calc(var(--rc-start) + 0 * var(--rc-step)); }
+.rc-f--2 { animation-delay: calc(var(--rc-start) + 1 * var(--rc-step)); }
+.rc-f--3 { animation-delay: calc(var(--rc-start) + 2 * var(--rc-step)); }
+.rc-f--4 { animation-delay: calc(var(--rc-start) + 3 * var(--rc-step)); }
+.rc-f--5 { animation-delay: calc(var(--rc-start) + 4 * var(--rc-step)); }
+.rc-f--6 { animation-delay: calc(var(--rc-start) + 5 * var(--rc-step)); }
+
+@keyframes rc-frame {
+  0%, 16.66% { opacity: 1; }
+  16.67%, 100% { opacity: 0; }
+}
+
+/* Says outright what motion.css's global clamp achieves through the missing
+   fill-mode: the shell in index.html carries the same rule, and it never sees
+   motion.css — the bundle has not arrived yet. */
+@media (prefers-reduced-motion: reduce) {
+  .rc-f { animation: none; }
+}

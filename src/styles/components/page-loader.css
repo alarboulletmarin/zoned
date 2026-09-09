@@ -1,8 +1,11 @@
 /* PageLoader — a route-level wait, with the wait named.
 
-   The ring turns immediately; the words arrive after a second, because a
+   The figure runs immediately; the words arrive after a second, because a
    label that flashes for 200ms is noise. Reserved height so the layout does
-   not jump when the page lands. */
+   not jump when the page lands.
+
+   The 28px ring that used to turn here is gone: a drawing replaces an
+   ornament, it never joins one (docs/doodles.md, « La coquille court »). */
 
 .zn-page-loader {
   display: grid;
@@ -12,15 +15,20 @@
   padding: var(--sp-15);
 }
 
-/* 28px ring, 2px stroke — both stated outright by the design bundle's
-   Spinner. One quarter left open so the rotation is visible. */
-.zn-page-loader__ring {
-  inline-size: 28px;
-  block-size: 28px;
-  border: 2px solid var(--ink-1);
-  border-top-color: transparent;
-  border-radius: var(--r-pill);
-  animation: zoned-spin 700ms linear infinite;
+/* The figure's ground. It carries no ground line of its own: a rule of the
+   page gives it one, and the sole bites that rule by --rule-bite — computed
+   from the box, never eyeballed (docs/doodles.md, « Poser une figure sur une
+   règle »). Same build as .zn-empty__scene: the rule spans the full width, the
+   figure stands on it, centred.
+
+   140px wide is 193px tall, above the 120px floor under which a figure is
+   removed rather than shrunk. */
+.zn-page-loader__scene {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  justify-self: stretch;
+  border-block-end: var(--border-rule);
 }
 
 /* Held back one second: under that, the wait is over before it is read. */

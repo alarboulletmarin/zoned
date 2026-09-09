@@ -236,6 +236,144 @@ inliné dans `index.html`. `src/assets/doodles/frames.test.ts` lit les SVG et
 les vérifie : trois de ces constantes avaient dérivé le 6 septembre. Une
 recoupe fait échouer le test tant qu'elles ne suivent pas.
 
+## La coquille court (9 septembre 2026)
+
+Décision du propriétaire : **la coquille de chargement reçoit une figure qui
+court sur place, image par image**, à côté du duo, qui reste. Six poses de
+110 ms — 660 ms le cycle, soit 182 pas par minute, une allure facile — à neuf
+images par seconde.
+
+Le sol ne défile pas. C'est la même règle de page, tracée en 400 ms, et le
+bassin de la figure ne bouge pas d'un pixel horizontalement : elle court sur un
+tapis. Les trois figures partagent cette unique ligne de sol, côte à côte,
+jamais au travers.
+
+Ce que ça dit que rien d'autre ne disait : que l'attente **avance**. Un trait
+figé pendant trois secondes de réseau lent dit qu'on attend, pas qu'il se passe
+quelque chose.
+
+### Les deux entorses, assumées
+
+Elles sont écrites ici parce qu'un jour quelqu'un lira les règles et trouvera
+la coquille en infraction. Elle l'est, sciemment.
+
+**Trois figures sur un écran.** « Une figure par écran » vaut toujours partout
+ailleurs — le `PageLoader` n'en montre qu'une. La coquille en porte trois parce
+que le propriétaire a demandé que le duo reste : le coureur **s'ajoute** au lieu
+de remplacer, ce qui est aussi une entorse à « un dessin remplace, il ne
+s'ajoute pas ». En échange, la scène tient : une seule ligne de sol, une seule
+direction, trois figures du même trait, et le coureur est le seul qui bouge.
+
+**Une seconde animation.** `src/styles/design/motion.css` dit « Motion says
+where something came from, or that a wait is real. Nothing else moves », et
+`index.html` disait « The one animation allowed: the rule draws itself ». Il y
+en a deux maintenant. La seconde est **la seconde moitié de la même phrase** :
+elle dit qu'une attente est réelle, ce qui est précisément le seul autre motif
+que la règle autorise. Aucune autre surface n'y a droit — une figure qui court
+ailleurs que sur une attente serait un ornement, et l'ornement reste interdit.
+
+### Ce que le cycle a appris du gréement
+
+Trouvé en le poussant, comme le reste de ce document.
+
+- **Le bassin est un point fixe.** Les ancres 3 et 53 n'apparaissent dans aucun
+  `idx` de `JOINTS` : aucune pose ne les déplace. La figure court donc sur place
+  par construction, et le cadre commun n'a rien à recentrer. La contrepartie :
+  **le gréement ne peut pas rebondir tout seul**. Poser un pied au sol à hauteur
+  fixe fait tout absorber par le genou et le bassin reste à 240,0 sur les six
+  poses. Et la cheville ne rattrape rien — le pied avant plie (`leadFoot` +30
+  descend la pointe de 6,8, donc soulève le corps d'autant) mais le pied d'appui
+  ne plie pas, son pivot [0, 71] est dans l'arc de semelle et +30 ne déplace la
+  pointe que de 2,3. Un rebond par la cheville ne marcherait donc que sur une
+  demi-foulée sur deux, ce qui est une claudication. Le rebond est aux images en
+  vol, et à elles seules : deux niveaux, comme le dessin animé limité.
+
+- **Le genou avant s'inverse en dessous de −58°.** `leadKnee` part de 58,5° de
+  flexion en `BASE` ; à −58 la jambe est droite, en dessous elle plie **à
+  l'envers**. Trois images du premier jet avaient un genou cassé vers l'arrière.
+  Bornes mesurées : `leadKnee` de −56 à +30, `standKnee` de −98 à 0. Le nœud à
+  90° de la section « ce que le gréement ne fait pas » est l'autre bout de la
+  même plage — les deux se contrôlent d'un seul chiffre, la flexion signée.
+
+- **Le demi-cycle ne se retourne pas.** Un cycle de course est symétrique ; ce
+  gréement ne l'est pas. Le bras arrière a 126 unités de portée, le bras avant
+  90 ; le pied avant est une palette de neuf ancres sans semelle, le pied
+  d'appui en a sept plus les sept de `SOLE`. Les six poses sont écrites une par
+  une, sans `flip`. Ce n'est pas une paresse d'outillage, c'est le dessin
+  approuvé.
+
+- **L'assise commune se mesure, elle ne s'écrit pas.** Les deux jambes ne
+  descendent pas aussi loin sous le bassin : portée verticale du bas de
+  l'accent, pied avant 372,1 en avant mais **363,8 en arrière**, pied d'appui
+  368,9 en avant et 375,6 en arrière. Onze unités d'écart — la hanche avant
+  pivote à x=120,4, la jambe avant y pend vers l'avant et arrive en bout de
+  course dès qu'on la tire derrière. Viser une hauteur fixe donnait deux
+  demi-foulées qui rebondissaient **en sens contraire**. Le générateur prend
+  donc le minimum des quatre portées, moins trois unités de marge : au bout de
+  sa course la jambe ne répond plus, et le calage qui corrige en 1:1 n'y
+  converge pas.
+
+- **Le vermillon disparaît en vol.** Deux images sur six n'ont aucun contact,
+  donc aucun accent. `paths()` peignait la semelle en vermillon sans condition ;
+  elle prend maintenant `{ sole: false }`. Un accent sur une semelle en l'air
+  est la faute que la règle 3 interdit, et une figure qui court la commettrait
+  un tiers du temps.
+
+- **Le cadre est commun, et c'est `strokeBottom` qui le tient.** Une translation
+  verticale décale `strokeBottom` d'exactement autant : une mesure, une
+  translation, et les quatre images d'appui posent leur trait au même dixième
+  d'unité. On épingle sur le bas de l'**accent**, pas sur le bas de la figure —
+  sinon une jambe libre qui descend plus bas que la semelle plantée laisse le
+  vermillon en l'air. C'est arrivé, à 2,8 unités.
+
+- **Six images, pas huit.** Six coûtent 6,0 ko gzip ; huit en coûteraient 8.
+  Inlinées à côté du duo, `index.html` passe de 6,6 à 13,5 ko gzip — sous les
+  ~14,6 ko qu'un serveur en initcwnd 10 délivre au premier aller-retour, mais
+  sans beaucoup de marge. Si le budget se resserre, on descend à **quatre
+  images** avant de toucher au reste ; on ne passe **pas** les coordonnées en
+  entier, ça sortirait le cycle de l'écriture des vingt-et-un autres dessins.
+  Six images à neuf par seconde, c'est aussi la cadence du dessin animé à la
+  main : le saccadé est voulu.
+
+### Ce que la relecture a coûté, en huit tours
+
+La méthode de ce document appliquée à une animation. Les nombres ne voient rien
+de ça ; `scripts/doodles/run-sheet.mjs` rend trois planches — la bande des six
+images sur la ligne de sol commune, la pelure d'oignon, et le flip à la cadence
+réelle — parce que chacune montre un défaut que les deux autres cachent.
+
+1. Les bras sortaient **à l'horizontale comme des perches** : les coudes à 60-84
+   les dépliaient. Le dessin approuvé les tient à 150. C'était le défaut le plus
+   laid et le plus vite corrigé.
+2. La jambe libre **reculait dans le temps** sur les images 1 et 4 — plus en
+   arrière qu'à l'image précédente, alors qu'elle revient déjà vers l'avant. Le
+   pas bégayait. Aucun contrôle de hauteur ne l'attrapait.
+3. Le pied libre **croisait le tibia d'appui à hauteur de cheville** et les deux
+   pieds se confondaient en nœud. Il doit passer à hauteur de **genou**.
+4. L'opposition ne se lit **pas dans une image isolée** : sous coude replié le
+   poing avant est devant le bassin à tous les angles. Elle se mesure entre les
+   images, par corrélation entre l'abscisse d'un pied et celle du poing de son
+   côté.
+
+Neuf contrôles vivent maintenant dans le générateur et le font échouer :
+hauteur du crâne relative au bassin, ligne de sol unique, recul du pied planté,
+flexion des deux genoux, opposition, symétrie des hauteurs, symétrie de la
+foulée, chronologie de la jambe libre, immobilité du bassin en x. Ils ont tous
+été écrits **après** avoir vu le défaut qu'ils décrivent.
+
+### Le repli sans mouvement
+
+Sous `prefers-reduced-motion`, c'est **la pose 1, l'appui du pied avant** : la
+seule pose figée qui garde un contact au sol, donc son vermillon. Une image en
+vol y serait sans accent et flotterait au-dessus de la règle.
+
+Et le mécanisme mérite d'être su, parce qu'il échouerait en silence : le cycle
+tourne **sans `animation-fill-mode`**. Le clamp global de `motion.css` ramène
+toute animation à 1 ms et une itération sans toucher au fill-mode ; sans fill,
+chaque groupe revient alors à sa déclaration de base — image 1 visible, 2 à 6
+masquées. Un `forwards` les laisserait toutes sur leur dernière image clé,
+`opacity: 0`, et **la figure disparaîtrait entièrement**.
+
 ### Poser une figure sur une règle
 
 Le parent trace la règle en `border-block-end` et aligne la figure sur son bord

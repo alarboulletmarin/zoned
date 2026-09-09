@@ -125,8 +125,14 @@ export class Figure {
      traversée entière, donc la coupe ne se voit pas.
 
      accents : liste de [a, b] — les tronçons tracés en vermillon. Le contact
-     au sol, jamais autre chose. */
-  paths(accents = []) {
+     au sol, jamais autre chose.
+
+     sole : la semelle sort en vermillon par défaut, parce que dans toutes les
+     poses debout elle EST le contact. Une figure EN L'AIR n'en a aucun — deux
+     images sur six du cycle de foulée — et un accent sur une semelle qui ne
+     touche rien est la faute que la règle 3 interdit, pas une licence. Ces
+     poses-là passent { sole: false } et sortent entièrement en encre. */
+  paths(accents = [], { sole = true } = {}) {
     const cuts = [...accents].sort((u, v) => u[0] - v[0]);
     const out = [];
     let i = 0;
@@ -136,7 +142,7 @@ export class Figure {
       i = b;
     }
     if (i < this.P.length - 1) out.push({ d: crSlice(this.P, i, this.P.length - 1) });
-    out.push({ d: cr(this.S), accent: true });
+    out.push({ d: cr(this.S), accent: sole });
     return out;
   }
 
