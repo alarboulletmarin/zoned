@@ -247,9 +247,17 @@ puis en est sorti : le coureur remplace, il ne s'ajoute pas, et un écran de
 chargement porte une figure. Le duo n'a pas quitté le projet pour autant — hero
 de la page d'accueil, menu mobile, feuille de partage, image Open Graph.
 
-Le sol ne défile pas. C'est la même règle de page, tracée en 400 ms, et le
-bassin de la figure ne bouge pas d'un pixel horizontalement : elle court sur un
-tapis. La règle traverse toute la largeur, la figure se pose en son centre.
+Le sol ne défile pas, et le bassin de la figure ne bouge pas d'un pixel
+horizontalement : elle court sur un tapis. La règle traverse toute la largeur et
+la figure se pose en son centre — mais elle s'ouvre **depuis ce centre**, en
+240 ms, c'est-à-dire depuis la semelle vers les deux bords.
+
+Ce détail n'est pas décoratif. Elle se traçait de la gauche, en 400 ms, et la
+figure attendait ces 400 ms avant de partir pour ne pas courir sur du vide.
+Faire partir la figure à l'instant zéro sans rien changer d'autre aurait laissé
+son vermillon marquer un contact avec rien pendant 200 ms, le temps que le trait
+atteigne le milieu — la faute que la règle 3 interdit. En partant du centre, le
+sol existe sous la semelle dès la première image et se déroule sous ses pas.
 
 Ce que ça dit que rien d'autre ne disait : que l'attente **avance**. Un trait
 figé pendant trois secondes de réseau lent dit qu'on attend, pas qu'il se passe
@@ -285,14 +293,17 @@ ouverture de marque.
 
 Ce qui l'a motivée est un défaut mesuré, pas un goût. La coquille était retirée
 à `requestAnimationFrame`, c'est-à-dire à la première image après l'exécution du
-bundle — et le coureur ne part qu'à `--rc-start`, 400 ms, pour laisser la règle
-se tracer d'abord. Sur le build de production servi depuis le cache, React monte
-à **182 ms**. Le coureur ne faisait donc **jamais un seul pas** : la coquille
-disparaissait pendant que le trait de sol était encore en train de se dessiner.
-Personne n'a jamais vu l'animation, pas « à peine ».
+bundle. Sur le build de production servi depuis le cache, React monte à
+**182 ms**. Le coureur ne faisait donc **jamais un seul pas** — et à l'époque il
+attendait encore 400 ms que la règle se trace, si bien que la coquille
+disparaissait avant même le premier pas. Personne n'a jamais vu l'animation, pas
+« à peine ».
 
-`src/main.tsx` retient donc jusqu'à `--rc-start + --rc-dur` = 1060 ms, puis un
-fondu de 240 ms. C'est un **minimum**, pas un délai : sur un chargement
+`src/main.tsx` retient donc **1980 ms**, soit trois foulées entières à partir de
+`--rc-start` (zéro : la figure part avec la page), puis un fondu de 240 ms.
+2,2 secondes en tout. Le nombre de foulées est le réglage du propriétaire ; ce
+qui n'est pas négociable, et que `frames.test.ts` vérifie, c'est qu'il soit
+ENTIER — une durée arrondie à la seconde couperait la figure en plein pas. C'est un **minimum**, pas un délai : sur un chargement
 réellement lent (mesuré à 2627 ms) la retenue ajoute zéro, elle ne complète
 qu'une attente déjà en cours. Et sous `prefers-reduced-motion` elle ne retient
 rien du tout — la figure est figée sur la pose 1, il n'y a rien à regarder, et
@@ -609,7 +620,7 @@ QUOI, avec un corps. Un seul guide et un seul hub portent une figure : c'est la
 répétition qui ferait collection, pas la classe CSS.
 
 **Hors de l'app** : la coquille de chargement (le duo inliné dans `index.html`,
-sur une règle qui se trace en 400 ms), les images Open Graph
+sur une règle qui s'ouvre en 240 ms), les images Open Graph
 (`scripts/generate-og-image.ts`, le duo injecté tel quel) et la bannière du
 README, claire et sombre, générée depuis le même gabarit.
 

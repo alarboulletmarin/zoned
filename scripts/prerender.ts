@@ -224,9 +224,25 @@ async function prerenderRoute(
        retire DANS la page plutôt qu'à la regex : les <div> imbriqués de la
        scène rendent tout découpage textuel fragile.
 
-       index.html à la racine — la coquille SPA servie aux routes inconnues —
-       est écrit par Vite et n'est pas concerné. */
-    await page.evaluate(() => document.getElementById("loading-shell")?.remove());
+       LA RACINE EST L'EXCEPTION, et elle a failli coûter l'animation entière.
+       « / » est dans le sitemap, donc prérendue comme les autres — et son
+       fichier de sortie EST `dist/index.html`, c'est-à-dire la coquille SPA
+       elle-même, celle que Vercel sert à toutes les routes inconnues (voir le
+       calcul de `outputPath` plus bas). La retirer là revient à supprimer
+       l'ouverture du site. Une version de ce commentaire affirmait le
+       contraire — « index.html à la racine … n'est pas concerné » — c'était
+       faux ; ça ne mordait pas seulement parce que Vercel lance `bun run
+       build`, qui ne prérend pas.
+
+       Sur la racine, on ôte donc la classe `hidden` au lieu de l'élément :
+       React l'a déjà posée au moment de la capture, et sans ce nettoyage la
+       coquille repartirait invisible — le même défaut, par un autre chemin. */
+    await page.evaluate((estRacine) => {
+      const shell = document.getElementById("loading-shell");
+      if (!shell) return;
+      if (estRacine) shell.classList.remove("hidden");
+      else shell.remove();
+    }, route === "/");
 
     const html = await page.content();
     // Truth source for "did SEOHead render?": inspect the captured HTML

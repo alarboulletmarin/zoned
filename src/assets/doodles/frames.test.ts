@@ -84,13 +84,15 @@ describe("les cadres recopiés suivent les fichiers SVG", () => {
     const stop = Number(html.match(/(\d+\.\d+)%,\s*100% \{ opacity: 0/)![1]);
     expect(Math.abs(stop - 100 / n)).toBeLessThan(0.02);
 
-    /* Et la retenue de la coquille vaut le tracé de la règle PLUS une foulée
-       entière. Sans cette ligne, retoucher --rc-step couperait la foulée en
-       deux au chargement sans que rien ne proteste — c'est-à-dire le défaut
-       exact que cette retenue corrige. */
+    /* Et la retenue de la coquille couvre un nombre ENTIER de foulées, à partir
+       du moment où la figure part (--rc-start). C'est la propriété qui compte :
+       une retenue arrondie à la seconde couperait la figure en plein pas, et
+       rien d'autre ne s'en apercevrait. Le nombre de foulées, lui, est libre —
+       c'est le réglage du propriétaire. */
     const start = num(html, "start");
     const hold = Number(read("src/main.tsx").match(/SHELL_HOLD_MS = (\d+)/)![1]);
-    expect(hold, "SHELL_HOLD_MS doit valoir --rc-start + --rc-dur").toBe(start + dur);
+    expect(hold, "SHELL_HOLD_MS doit dépasser --rc-start").toBeGreaterThan(start);
+    expect((hold - start) % dur, "la retenue doit couvrir des foulées entières").toBe(0);
   });
 
   /* La règle 3 de docs/doodles.md, vérifiée sur les nombres plutôt que de

@@ -227,6 +227,13 @@
         align-items: flex-end;
         padding-bottom: 1.5px;
       }
+      /* The rule opens from the CENTRE, which is where the figure stands. At
+         t=0 it is a point exactly under the sole, so the contact the vermillon
+         marks is real from the first frame; it then runs out to both edges
+         while the figure is already running. Drawn from the left instead — as
+         it was while the figure waited 400ms for it — the ground would not
+         reach the sole until 200ms, and the accent would spend that time
+         marking a contact with nothing, which docs/doodles.md forbids. */
       .shell-scene::after {
         content: "";
         position: absolute;
@@ -235,8 +242,8 @@
         bottom: 0;
         height: 1.5px;
         background: var(--fg);
-        transform-origin: left;
-        animation: shell-rule 400ms ease-out both;
+        transform-origin: center;
+        animation: shell-rule 240ms ease-out both;
       }
       /* The rule is the ground. The figure's viewBox stops at its soles, so the
          bottom of its box IS the contact line: a negative margin equal to the
@@ -268,7 +275,7 @@
       .rc {
         --rc-step: 110ms;
         --rc-dur: 660ms;
-        --rc-start: 400ms; /* the rule draws itself first, then the figure runs */
+        --rc-start: 0ms; /* the figure runs from the very first frame */
       }
       .rc-f {
         opacity: 0;
@@ -285,16 +292,26 @@
         0%, 16.66% { opacity: 1; }
         16.67%, 100% { opacity: 0; }
       }
-      /* Two animations, and only two, played as one timed sequence: the rule
-         draws itself left to right over 400ms, then the figure runs, six frames
-         at 110ms, for at least one full 660ms stride and for as long as the
-         wait lasts beyond that. src/main.tsx holds the shell to the end of that
-         stride — without it the app mounts first and the runner never takes a
-         single step. That held second is an OPENING, not a report on a real
-         wait, which is a departure from src/styles/design/motion.css written
-         down in docs/doodles.md « La coquille court ». Nothing else moves. */
+      /* Two animations, and only two, and they start TOGETHER at t=0: the
+         figure runs — six frames at 110ms — while the ground opens from under
+         its sole out to both edges in 240ms. src/main.tsx holds the shell for
+         a whole number of strides (SHELL_HOLD_MS), because without a hold the
+         app mounts first and the runner never takes a single step.
+
+         Nothing waits for anything: the rule used to draw itself first over
+         400ms and the figure only started after, which spent a fifth of the
+         opening on a still image. Those two seconds are an OPENING, not a
+         report on a real wait — a departure from src/styles/design/motion.css
+         written down in docs/doodles.md « La coquille court ». Nothing else
+         moves. */
+      /* It opens from 2%, not from 0. At exactly scaleX(0) the ground has no
+         width at all, and the first painted frame would show the figure with
+         its vermillon marking a contact with nothing — one frame, but the rule
+         it breaks does not have a tolerance. 2% is ~25px at a laptop width,
+         centred under the sole, and reads as the ground starting rather than
+         as a tick. */
       @keyframes shell-rule {
-        from { transform: scaleX(0); }
+        from { transform: scaleX(0.02); }
         to { transform: scaleX(1); }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -310,9 +327,11 @@
       }
 
       /* The shell leaves once BOTH are true: the app has mounted, and the
-         figure has had time for one full stride (src/main.tsx, SHELL_HOLD_MS).
-         `display` is untouched — scripts/prerender.ts drops the whole element
-         from prerendered files, so nothing downstream depends on it. */
+         figure has run its strides (src/main.tsx, SHELL_HOLD_MS). `display` is
+         untouched: scripts/prerender.ts drops the whole element from every
+         prerendered file EXCEPT the root one, which is dist/index.html itself
+         — the SPA shell — and there it clears this class instead, so the
+         opening survives a prerendered build. */
       #loading-shell.hidden {
         opacity: 0;
         visibility: hidden;
