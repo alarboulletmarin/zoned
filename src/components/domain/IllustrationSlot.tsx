@@ -12,12 +12,17 @@
  * here". The brief stays the fallback for every slot still waiting.
  *
  * A drawing is never given a height. Its files carry a viewBox cut at the sole
- * and no ground line (docs/doodles.md, "Le sol est la règle de la page"): the
- * slot sets the width, the viewBox sets the ratio, and the bottom of the box IS
- * the line the figure stands on. A height in px would letterbox the drawing
- * and float the sole somewhere inside the box, which is exactly the drift the
- * rule forbids. With `ground="rule"` the slot stands on its parent's bottom
- * border — see the prop.
+ * and no ground line: the slot sets the width, the viewBox sets the ratio, and
+ * the bottom of the box IS the line the figure stands on. A height in px would
+ * letterbox the drawing and float the sole somewhere inside the box.
+ *
+ * `ground="rule"` stands the slot on its parent's bottom border. **Plus aucun
+ * appel ne l'utilise** depuis le 12 septembre 2026 : les deux qui la passaient
+ * (le héros de l'accueil, le cockpit) mordaient un filet de section, et les
+ * filets de section ont été retirés. La prop reste parce que sept sols
+ * INTERNES à des composants existent encore (état vide, coquille de
+ * chargement, menu mobile, planche des zones, 404) et qu'un futur appelant
+ * peut légitimement s'y poser — voir docs/doodles.md.
  *
  * Both strings come from the caller so the component itself carries no copy:
  * `brief` is printed, `label` is the accessible name — and `label` names the

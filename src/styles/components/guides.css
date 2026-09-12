@@ -73,12 +73,11 @@
 
 /* ── bands ────────────────────────────────────────────────────────────── */
 
-/* One movement of the page, separated from the next by a full-width ink rule
-   rather than by blank space. Not .zn-section: that class pays the screen
-   margin a second time inside .zn-page. */
+/* Un mouvement de la page, séparé du suivant par l'espace seul. Pas
+   .zn-section : cette classe paie la marge d'écran une seconde fois dans
+   .zn-page. */
 .zn-guide__band {
-  padding-block: var(--sp-14);
-  border-block-start: var(--border-rule);
+  padding-block: calc(var(--gap-section) / 2);
 }
 
 .zn-guide__band:last-child {

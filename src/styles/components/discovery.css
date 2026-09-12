@@ -42,21 +42,20 @@
 
 /* ── bands ────────────────────────────────────────────────────────────── */
 
-/* One band of the page, opened by the full-width ink rule that separates it
-   from the one above. Blank space alone would make the page read as a feed. */
+/* Une bande de la page, séparée de la précédente par l'espace seul. Ce
+   commentaire disait « blank space alone would make the page read as a feed » :
+   c'est la doctrine renversée le 12 septembre 2026, voir .zn-section. */
 .zn-disc__group {
-  padding-block: var(--sp-14);
-  border-block-start: var(--border-rule);
+  padding-block: calc(var(--gap-section) / 2);
 }
 
 .zn-disc__grouphead {
   margin-block-end: var(--sp-11);
 }
 
-/* The last band on a screen: results, under the rule, with room below. */
+/* La dernière bande d'un écran : les résultats, avec de la place en dessous. */
 .zn-disc__results {
-  padding-block: var(--sp-14) var(--sp-17);
-  border-block-start: var(--border-rule);
+  padding-block: calc(var(--gap-section) / 2) var(--sp-17);
 }
 
 /* The ink ramp orders the zones but does not name them, so each screen that
@@ -64,10 +63,12 @@
 
    The band draws only its opening rule: the band below it draws its own, and
    two adjacent 1.5px rules would print as a 3px one. */
+/* Le fond sombre suffit à la détacher, comme pour .zn-lib__legend. Le
+   commentaire au-dessus prévenait que « deux filets de 1,5 px voisins
+   s'impriment en 3 px » : le problème disparaît avec les filets. */
 .zn-disc__legend {
   padding-block: var(--sp-10);
   background: var(--surface-band);
-  border-block-start: var(--border-rule);
 }
 
 /* A wait with no shape yet, centred in the band it will fill. */
@@ -205,8 +206,7 @@
 .zn-draw__layout {
   --split: 300px minmax(0, 1fr);
   --gap: var(--sp-15);
-  padding-block: var(--sp-14) var(--sp-17);
-  border-block-start: var(--border-rule);
+  padding-block: calc(var(--gap-section) / 2) var(--sp-17);
 }
 
 .zn-draw__aside {
@@ -405,8 +405,7 @@
 }
 
 .zn-draw__recent {
-  padding-block-start: var(--sp-13);
-  border-block-start: var(--border-divider);
+  padding-block-start: var(--gap-section);
 }
 
 /* A recent draw's name must not push the chip past the column. */
@@ -506,11 +505,10 @@
   border-radius: var(--r-3xl);
 }
 
-/* A phase of the session, opened by its own rule. The chevron turns; nothing
-   else moves. */
+/* Une phase de la séance, ouverte par son écart. Le chevron tourne ; rien
+   d'autre ne bouge. */
 .zn-build__section {
-  padding-block: var(--sp-13);
-  border-block-start: var(--border-divider);
+  padding-block: calc(var(--gap-section) / 2);
 }
 
 .zn-build__sectionhead {

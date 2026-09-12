@@ -183,6 +183,41 @@ Trouvé en le poussant, pas en le lisant.
   ne descendent pas au sol. Il demande une traversée écrite pour lui, en
   reprenant les boucles de tête, de main et de pied de `BASE`.
 
+## Le sol n'est plus la règle de la page (12 septembre 2026)
+
+Décision du propriétaire, qui **renverse la section suivante** : les filets
+horizontaux qui séparaient les sections lui déplaisent, et ils sont retirés de
+toute l'app. La question lui a été posée en nommant le coût ; il a choisi que
+les dessins perdent leur sol.
+
+Ce que ça change, et il faut le lire en entier avant de « réparer » quoi que ce
+soit :
+
+- **Quatre figures n'ont plus de sol** : le duo du héros d'accueil, le gainage
+  du renforcement, l'étirement de l'échauffement, l'allure facile de la
+  nutrition. Elles se tenaient sur un filet de section, et il n'y en a plus.
+- **Leur appui vermillon ne touche donc plus rien.** C'est la règle 3 de ce
+  document en infraction, sciemment. Le vermillon est écrit DANS le fichier
+  SVG par le gréement (`Figure.paths`), donc aucun CSS ne le retire : si cet
+  appui suspendu dérange une fois vu, le correctif est de régénérer ces quatre
+  dessins en encre pleine — `paths(accents, { sole: false })`, comme le font
+  déjà les images en vol du cycle de foulée. **Ne pas remettre un filet sous
+  une figure pour le réparer** : c'est le filet qui a été retiré, pas le sol
+  par accident.
+- **Sept sols survivent**, parce qu'ils sont INTERNES à un composant et non des
+  séparateurs de page : l'état vide (`empty-state.css`), la coquille de
+  chargement, le menu mobile, la planche des six zones, le 404, le ruban de
+  plan, l'annotation de séance. La grande majorité des figures gardent donc
+  leur appui, et `--rule-bite` reste vivant.
+- `ground="rule"` n'a **plus aucun appelant**. La prop reste pour les sols
+  internes ci-dessus ; les deux appels qui la passaient mordaient un filet de
+  section. Celui du cockpit mordait d'ailleurs déjà du vide depuis b70b2dd.
+
+La liste des grounds légitimes de la section suivante — « filet de section,
+bord bas d'une carte, ligne de base des boutons, axe d'une frise » — perd son
+premier terme. Les trois autres tiennent, et c'est là qu'une figure future doit
+se poser.
+
 ## Le sol est la règle de la page (6 septembre 2026)
 
 Décision du propriétaire, qui remplace la section suivante : **le sol dessiné

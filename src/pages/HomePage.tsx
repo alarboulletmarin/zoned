@@ -452,8 +452,14 @@ export function HomePage() {
             duo is drawn for, and at most 240px on a phone — less where the
             floating MENU pill would otherwise cover it. The height follows
             the viewBox. */}
+        {/* Plus de `ground="rule"` : le filet du héros était son sol, et il est
+            parti avec les séparateurs de sections (12 septembre 2026, décision
+            du propriétaire). La prop tirait la figure d'un pixel vers le bas
+            pour mordre un trait qui n'existe plus ; la garder raconterait un
+            contrat que la page ne tient pas. Le duo garde son appui vermillon,
+            qui ne touche donc plus rien — c'est le coût assumé de la
+            décision, écrit dans docs/doodles.md. */}
         <IllustrationSlot
-          ground="rule"
           className="zn-home__duo"
           art={RunnersDuo}
           brief={t("homepage:home.hero.illustrationBrief")}

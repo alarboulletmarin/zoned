@@ -22,7 +22,7 @@ export function ContributePage() {
       />
 
       <div className="zn-contrib-page">
-        <section className="zn-section zn-section--first">
+        <section className="zn-section">
           <div
             className="zn-stack"
             style={{ "--gap": "var(--sp-10)" } as CSSProperties}

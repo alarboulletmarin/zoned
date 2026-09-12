@@ -49,11 +49,9 @@
   max-inline-size: 52ch;
 }
 
-/* A band of the page, on the rule. Sections are separated by a full-width ink
-   rule, never by blank space. */
+/* Une bande de la page. Les sections sont séparées par l'espace seul. */
 .zn-ct__band {
-  padding-block: var(--sp-14);
-  border-block-start: var(--border-rule);
+  padding-block: calc(var(--gap-section) / 2);
 }
 
 .zn-ct__bandhead {
@@ -400,8 +398,7 @@
 /* The ramp orders the zones but does not name them, so the legend is printed
    once, on the sunken band, under the graphic that paints the fills. */
 .zn-ct__legend {
-  padding-block-start: var(--sp-10);
-  border-block-start: var(--border-divider);
+  padding-block-start: calc(var(--gap-section) / 2);
 }
 
 /* ── insights ─────────────────────────────────────────────────────────── */
@@ -693,10 +690,10 @@
 
 /* ── saved simulations ────────────────────────────────────────────────── */
 
+/* Elle payait 40 px de marge et 26 px de padding autour de son filet, soit 66 :
+   un seul écart suffit. */
 .zn-rsp__saved {
-  margin-block-start: var(--sp-15);
-  padding-block-start: var(--sp-13);
-  border-block-start: var(--border-rule);
+  margin-block-start: var(--gap-section);
 }
 
 .zn-rsp__savedtitle {

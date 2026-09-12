@@ -8,9 +8,12 @@
    It flips with the theme on its own: --surface-inverse and --text-inverse are
    defined either way round, so the bar is always the opposite of the page. */
 
+/* Le pied de page n'a plus de filet d'ouverture : son papier de carte
+   (--surface-card contre --surface-page) le sépare déjà de la page, et c'était
+   le seul endroit du dépôt où un changement de surface ET un filet disaient la
+   même frontière. */
 .zn-footer {
-  margin-block-start: var(--sp-14);
-  border-block-start: var(--border-rule);
+  margin-block-start: var(--gap-section);
   background: var(--surface-card);
 }
 

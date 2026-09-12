@@ -327,7 +327,7 @@ export function RouteGeneratorPage() {
       <>
         <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" noindex />
         <div className="zn-rt">
-          <section className="zn-rt__band zn-rt__band--first">
+          <section className="zn-rt__band">
             <EmptyState
               variant="not-started"
               icon={EyeOff}

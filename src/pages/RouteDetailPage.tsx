@@ -67,7 +67,7 @@ export function RouteDetailPage() {
     return (
       <div className="zn-rt">
         <section
-          className="zn-rt__band zn-rt__band--first zn-stack"
+          className="zn-rt__band zn-stack"
           style={{ "--gap": "var(--sp-11)" } as CSSProperties}
         >
           {backLink}
@@ -117,7 +117,7 @@ export function RouteDetailPage() {
       <div className="zn-rt">
         {/* 1 — which route this is, in figures */}
         <section
-          className="zn-rt__band zn-rt__band--first zn-stack"
+          className="zn-rt__band zn-stack"
           style={{ "--gap": "var(--sp-11)" } as CSSProperties}
         >
           {backLink}

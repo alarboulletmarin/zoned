@@ -33,16 +33,11 @@
   flex-direction: column;
 }
 
-/* A band of the page. Same separation rule as .zn-section — an ink line, never
-   blank space — minus the inline padding the column already pays. */
+/* Une bande de la page. Même séparation que .zn-section — l'espace seul —
+   moins le padding en ligne que la colonne paie déjà. La variante `--first`
+   part avec le filet : elle n'existait que pour ne pas le payer. */
 .zn-rt__band {
-  padding-block: var(--pad-block, var(--sp-15));
-  border-block-start: var(--border-rule);
-}
-
-.zn-rt__band--first {
-  border-block-start: none;
-  padding-block-start: var(--sp-11);
+  padding-block: var(--pad-block, calc(var(--gap-section) / 2));
 }
 
 /* The title block: the words on the left, the screen's one primary call on the
@@ -416,9 +411,11 @@
   }
 
   .zn-rt__stage {
+    /* Le contour de carte du bureau dégradait en filet de bande nu sur
+       téléphone. Il n'y a plus de filet de bande : l'écart le remplace. */
     border: none;
-    border-block-start: var(--border-rule);
     border-radius: 0;
+    margin-block-start: calc(var(--gap-section) / 2);
   }
 }
 

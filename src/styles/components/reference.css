@@ -41,11 +41,9 @@
   max-inline-size: 56ch;
 }
 
-/* Every band after the head hangs off the rule that separates it from the one
-   before. */
+/* Chaque bande après la tête se sépare de la précédente par l'espace seul. */
 .zn-ref__section {
-  padding-block: var(--sp-14);
-  border-block-start: var(--border-rule);
+  padding-block: calc(var(--gap-section) / 2);
 }
 
 .zn-ref__section:last-child {

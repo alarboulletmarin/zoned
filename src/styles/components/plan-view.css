@@ -28,12 +28,12 @@
   flex-direction: column;
 }
 
-/* A band of the screen. Same shape as .zn-section, minus the inline padding
-   the shell column already pays. */
+/* Une bande de l'écran. Même forme que .zn-section — la moitié de
+   --gap-section de chaque côté, et plus de filet — moins le padding en ligne
+   que la colonne de la coquille paie déjà. */
 .zn-plans__band,
 .zn-planview__band {
-  padding-block: var(--pad-block, var(--sp-13));
-  border-block-start: var(--border-rule);
+  padding-block: var(--pad-block, calc(var(--gap-section) / 2));
 }
 
 .zn-plans__head,

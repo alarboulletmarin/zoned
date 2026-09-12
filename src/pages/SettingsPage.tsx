@@ -188,7 +188,7 @@ export function SettingsPage() {
       <div className="zn-set">
         {/* 1 — what this screen is, and the two numbers it is about */}
         <section
-          className="zn-section zn-section--first zn-split zn-set__head"
+          className="zn-section zn-split zn-set__head"
           style={
             { "--split": "1fr auto", "--gap": "var(--sp-15)" } as CSSProperties
           }

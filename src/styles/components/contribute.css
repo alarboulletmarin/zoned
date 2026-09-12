@@ -41,10 +41,9 @@
   animation-name: slide-in-left;
 }
 
-/* Previous / next, over the rule that closes the step. */
+/* Précédent / suivant, sous l'écart qui clôt l'étape. */
 .zn-contrib__nav {
-  padding-block-start: var(--sp-11);
-  border-block-start: var(--border-rule);
+  padding-block-start: var(--gap-section);
 }
 
 /* Submit and copy. The first button is the screen's one vermillon fill and
@@ -415,6 +414,5 @@ textarea.zn-contrib-input {
 /* The preview paints zone fills, so it carries the ramp's legend once, above
    the visualisations it explains. */
 .zn-contrib-preview__legend {
-  padding-block-end: var(--sp-6);
-  border-block-end: var(--border-divider);
+  padding-block-end: calc(var(--gap-section) / 2);
 }

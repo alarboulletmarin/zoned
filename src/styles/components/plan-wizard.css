@@ -2,11 +2,11 @@
    /plan/new (the three doors), /plan/new/assisted (the questions) and
    /plan/new/free (the blank plan).
 
-   All three read as one sheet: mono kicker, display title, one sentence, then
-   the form. Header and form are separated by a full-width ink rule, never by
-   blank space — .zn-wiz__band draws it. The screens live inside the shell's
-   .zn-page column, which already pays the 40px (20px mobile) side margin, so
-   the rule spans that column and nothing bleeds out of it.
+   All three read as one sheet: mono kicker, the QUESTION as the display title,
+   one sentence, then the form. Header and form are separated by blank space
+   alone (--gap-section) since 12 September 2026 — .zn-wiz__band drew a
+   full-width ink rule until then. The screens live inside the shell's .zn-page
+   column, which already pays the 40px (20px mobile) side margin.
 
    Everything a form needs is already written elsewhere and is composed rather
    than restated:
@@ -35,15 +35,16 @@
   padding-block: var(--sp-14) var(--sp-17);
 }
 
-/* A band of the screen, under the rule that closes the one above it. */
+/* Une bande de l'écran. Elle payait une marge ET un padding de 32 px autour
+   de son filet, soit 64 px : c'était le seul endroit du dépôt qui payait déjà
+   « espace plus filet », et c'est ce qui en a fait le modèle du token. Sans le
+   filet, un seul écart suffit. */
 .zn-wiz__band {
   display: flex;
   flex-direction: column;
   gap: var(--sp-13);
 
-  margin-block-start: var(--sp-14);
-  padding-block-start: var(--sp-14);
-  border-block-start: var(--border-rule);
+  margin-block-start: var(--gap-section);
 }
 
 /* A control that must not stretch to the column it sits in — the back link,
@@ -377,15 +378,13 @@
  * une chose à choisir, c'est une réponse.
  */
 .zn-wiz__announce {
-  padding-block-start: var(--sp-8);
-  border-block-start: var(--border-rule);
+  padding-block-start: calc(var(--gap-section) / 2);
 }
 
 /* Les deux autres façons d'avoir un plan : une ligne de liens sous les
    pratiques. La question « comment » se pose après « quoi ». */
 .zn-wiz__modes {
-  padding-block-start: var(--sp-8);
-  border-block-start: var(--border-rule);
+  padding-block-start: calc(var(--gap-section) / 2);
 }
 
 .zn-wiz__modes a {

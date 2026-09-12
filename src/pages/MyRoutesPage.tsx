@@ -48,7 +48,7 @@ export function MyRoutesPage() {
 
       <div className="zn-rt">
         {/* 1 — what is stored, counted, and the way to store one more */}
-        <section className="zn-rt__band zn-rt__band--first">
+        <section className="zn-rt__band">
           <div className="zn-rt__head">
             <div
               className="zn-stack zn-rt__headtext"

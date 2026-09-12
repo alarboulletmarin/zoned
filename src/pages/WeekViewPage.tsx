@@ -500,7 +500,7 @@ export function WeekViewPage() {
           </Link>
         </Button>
 
-        <section className="zn-pw__band zn-pw__band--first">
+        <section className="zn-pw__band">
           {/* The board takes the column; the generator is a rail beside it, so
               it never covers or compresses the week being edited. Below 900px
               the rail folds away and the dock carries the same two actions. */}

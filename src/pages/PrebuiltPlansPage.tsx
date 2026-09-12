@@ -66,7 +66,7 @@ export function PrebuiltPlansPage() {
           </Link>
         </Button>
 
-        <section className="zn-pw__band zn-pw__band--first">
+        <section className="zn-pw__band">
           <div
             className="zn-stack"
             style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}

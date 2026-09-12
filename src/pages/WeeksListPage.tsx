@@ -251,7 +251,7 @@ export function WeeksListPage() {
       <SEOHead noindex title={t("weekly.list.title")} canonical="/weeks" />
 
       <div className="zn-pw">
-        <section className="zn-pw__band zn-pw__band--first">
+        <section className="zn-pw__band">
           <div className="zn-pw__head">
             <div
               className="zn-stack zn-pw__headtext"

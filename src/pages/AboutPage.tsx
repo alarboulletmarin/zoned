@@ -73,7 +73,7 @@ export function AboutPage() {
 
       <div className="zn-about">
         {/* 1 — what this is */}
-        <section className="zn-section zn-section--first">
+        <section className="zn-section">
           <div
             className="zn-stack"
             style={{ "--gap": "var(--sp-10)" } as CSSProperties}

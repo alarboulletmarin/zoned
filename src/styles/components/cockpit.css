@@ -69,10 +69,11 @@
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: var(--sp-3);
   align-items: end;
-  /* La bande s'assoit sur un filet : c'est le sol de la page, la même règle
-     que pour les doodles. */
-  padding-block-end: var(--sp-6);
-  border-block-end: var(--border-rule);
+  /* Elle s'asseyait sur un filet — « le sol de la page, la même règle que pour
+     les doodles ». Sans filet, l'écart la sépare de ce qui suit, et il est
+     plus large que les 12 px qu'elle payait : c'est lui, seul, qui doit dire
+     que la semaine se termine là. */
+  padding-block-end: calc(var(--gap-section) / 2);
 }
 
 /* Chaque jour qui porte une séance est un LIEN vers elle : c'est ce qui fait
@@ -165,8 +166,7 @@ a.zn-cockpit__day:active {
 .zn-cockpit__exits {
   font: var(--type-body);
   color: var(--text-muted);
-  padding-block-start: var(--sp-8);
-  border-block-start: var(--border-rule);
+  padding-block-start: calc(var(--gap-section) / 2);
 }
 
 .zn-cockpit__exits a {

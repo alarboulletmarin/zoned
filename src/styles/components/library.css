@@ -1,10 +1,13 @@
 /* The workout library screen.
 
    The page reads top to bottom as one sheet of paper: a mono count, the title,
-   the search; then a discipline strip sitting on a full-width ink rule; then
-   the filters; then the zone legend on a sunken band; then the results. Every
-   band is separated by a rule rather than by blank space — that is what makes
-   a long scroll read as a printed page instead of a feed.
+   the search; then the practice band; then the one row of controls; then the
+   results. Every band is separated by blank space alone (--gap-section) since
+   12 September 2026 — it was a full-width ink rule until then.
+
+   The discipline strip and the view-mode selector this header used to describe
+   have moved into the filters panel; the zone legend keeps its sunken band,
+   which is what detaches it now that it has no rule.
 
    The screen lives inside the shell's centred column, which already pays the
    40px (20px mobile) side margin, so the bands do NOT bleed out of it: a
@@ -125,8 +128,7 @@
   display: flex;
   align-items: center;
   margin-block-start: var(--sp-13);
-  padding-block-end: var(--sp-8);
-  border-block-end: var(--border-rule);
+  padding-block-end: calc(var(--gap-section) / 2);
 }
 
 .zn-lib__practice-rail {
@@ -247,8 +249,7 @@
   align-items: center;
   gap: var(--sp-5) var(--sp-6);
   margin-block-start: var(--sp-11);
-  padding-block-end: var(--sp-8);
-  border-block-end: var(--border-rule);
+  padding-block-end: calc(var(--gap-section) / 2);
 }
 
 .zn-lib__meta {
@@ -403,15 +404,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-9);
-  padding-block: var(--sp-13);
-  border-block-end: var(--border-rule);
+  padding-block: var(--sp-13) calc(var(--gap-section) / 2);
 }
 
-/* Inside the panel the band is the whole surface: it needs neither the rule
-   that used to separate it from the results nor the space above it. */
+/* Dans le panneau, la bande EST toute la surface : elle n'a besoin ni de
+   l'écart qui la séparait des résultats, ni de la place au-dessus. */
 .zn-lib__filters-panel .zn-lib__filters {
   padding-block: 0;
-  border-block-end: 0;
 }
 
 .zn-lib__row {
@@ -540,10 +539,11 @@
 
 /* The ramp orders the zones but does not name them, so the screen that paints
    zone fills carries the legend once, on the sunken band. */
+/* Le fond sombre (--surface-band) suffit à détacher la légende : elle était le
+   seul objet du dépôt à porter un changement de surface ET un filet. */
 .zn-lib__legend {
   padding-block: var(--sp-10);
   background: var(--surface-band);
-  border-block-end: var(--border-divider);
 }
 
 /* Below 640 the six swatches wrap onto five lines — four hundred pixels of

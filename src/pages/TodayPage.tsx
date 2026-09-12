@@ -182,9 +182,11 @@ export function TodayPage() {
           du menu — cockpit et navigation se lisent comme un même système, sans
           un dessin de plus. Le slot dimensionne par la LARGEUR, le viewBox
           donne le ratio : une hauteur en pixels ferait flotter la semelle. */}
+      {/* Pas de `ground="rule"` : `.zn-cockpit` n'a jamais eu de bordure basse
+          depuis que la rangée des portes a été retirée (b70b2dd), donc la prop
+          mordait déjà un filet inexistant. Elle part avec les séparateurs. */}
       {settings.cockpit.art && (
         <IllustrationSlot
-          ground="rule"
           className="zn-cockpit__art"
           art={DoorToday}
           brief={t("today:art.brief")}

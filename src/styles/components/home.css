@@ -1,8 +1,9 @@
 /* Home — the page that answers "what am I running today?".
  *
  * The screen reads top to bottom as one sheet of paper: mono kicker, display
- * title, body, then data. Bands are separated by a full-width ink rule and
- * never by blank space, which is what .zn-section already draws.
+ * title, body, then data. Bands are separated by blank space alone
+ * (--gap-section, half of it per side) since 12 September 2026 — they were
+ * separated by the full-width ink rule .zn-section used to draw.
  *
  * The shell wraps every route in .zn-page, which pays the 40px screen margin
  * once. This page draws rules that must reach the edge of that column, so the
@@ -19,20 +20,24 @@
 /* 460px is the illustration column: a fixed slot, not a fraction, because the
    doodle that lands there is drawn at one size.
 
-   The hero closes on a full-width ink rule, and that rule is the ground: the
-   duo's files carry no ground line, the bottom of its box is its sole, and
-   the slot (ground="rule") pulls itself down by the rule's thickness so the
-   sole bites the line. Both columns align to the end, so the button row on
-   the left ends on the same rule the duo stands on — the vermillon button and
-   the vermillon soles share one floor. No bottom padding: the rule is the
-   bottom. */
+   Le héros se fermait sur un filet pleine largeur, et ce filet ÉTAIT le sol du
+   duo : les deux colonnes s'alignaient sur la fin, le bouton vermillon et les
+   semelles vermillon partageaient un plancher, et le padding bas valait zéro
+   parce que le filet était le bas.
+
+   Le filet est parti avec les séparateurs de sections (12 septembre 2026). Les
+   deux colonnes s'alignent toujours sur la fin — le bouton et les semelles
+   partagent donc encore une ligne, simplement elle n'est plus tracée. La bande
+   paie maintenant son demi-écart en bas, comme les autres. */
 .zn-home__hero {
   display: grid;
   grid-template-columns: 1fr 460px;
   gap: var(--sp-18);
   align-items: end;
-  padding: var(--sp-18) var(--pad-screen-x) 0;
-  border-block-end: var(--border-rule);
+  /* Le padding bas était à ZÉRO parce que le filet était le bas. Sans filet,
+     la bande paie la moitié d'un écart comme les autres — sinon la semelle du
+     duo s'écrase sur le contenu de la bande suivante. */
+  padding: var(--sp-18) var(--pad-screen-x) calc(var(--gap-section) / 2);
 }
 
 /* The duo's width. 460px is the column it is drawn for; the slot caps itself

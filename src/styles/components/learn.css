@@ -32,11 +32,12 @@
   max-inline-size: 56ch;
 }
 
-/* The filter strip sits ON the rule that separates the title from the index,
-   with the count of what is on screen at the far end. */
+/* La bande de filtres, entre le titre et l'index, avec le compte de ce qui est
+   à l'écran au bout. Elle « s'asseyait sur le filet » qui séparait les deux ;
+   c'est maintenant l'écart au-dessus d'elle qui fait ce travail. */
 .zn-learn__strip {
-  padding: var(--sp-11) var(--pad-screen-x);
-  border-block-start: var(--border-rule);
+  margin-block-start: calc(var(--gap-section) / 2);
+  padding: 0 var(--pad-screen-x) var(--sp-11);
 }
 
 .zn-learn__count {
@@ -128,8 +129,7 @@
    desktop — which is what lets the same single table of contents be the
    dropdown above the article on a phone and the sticky list beside it here. */
 .zn-article__body {
-  padding: var(--sp-15) var(--pad-screen-x) var(--sp-17);
-  border-block-start: var(--border-rule);
+  padding: var(--gap-section) var(--pad-screen-x) var(--sp-17);
 }
 
 .zn-article__body > .zn-prose {

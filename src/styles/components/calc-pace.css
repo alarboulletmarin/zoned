@@ -40,15 +40,14 @@
 
 /* ── the frame ────────────────────────────────────────────────────────── */
 
-/* The working band of a tool, under the head. Two bands are separated by a
-   full-width ink rule, never by blank space — unless the ZoneScale band sits
-   between them, which already drew that rule on its own underside. */
-.zn-num__panel.zn-tool__band {
-  border-block-start: var(--border-rule);
-}
+/* La bande de travail d'un outil, sous la tête. Deux bandes se séparent par
+   l'espace seul.
 
-.zn-num__legend + .zn-num__panel.zn-tool__band {
-  border-block-start: 0;
+   Le reset d'adjacence qui suivait est parti avec le filet : il n'existait que
+   pour éviter que la bande de légende et celle-ci n'impriment deux filets de
+   1,5 px côte à côte, soit un trait de 3 px. Sans filet, rien à annuler. */
+.zn-num__panel.zn-tool__band {
+  margin-block-start: var(--gap-section);
 }
 
 /* Form first, result under it, in the 672px reading column these screens have

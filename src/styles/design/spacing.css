@@ -31,6 +31,21 @@
   --gap-stack: var(--sp-7);
   --hit-min: 44px;
 
+  /* L'écart ENTRE deux bandes de page, et le remplaçant du filet d'encre qui
+     les séparait jusqu'au 12 septembre 2026.
+
+     Une bande en paie la MOITIÉ de chaque côté. C'est le seul calcul de ce
+     jeton, et il vaut d'être dit : deux bandes voisines laissent alors
+     exactement UN écart entre leurs contenus, et la première en garde une
+     demie sous le filet de l'en-tête. Garder le padding entier des deux côtés
+     aurait donné 96 px entre deux bandes sur bureau — précisément les « 672 px
+     d'air sur la seule page d'accueil » que _layout.css a déjà mesurés et
+     rejetés du temps où le filet faisait le travail.
+
+     Il remplace sept rythmes différents (26, 32, 40, 48 px selon la feuille)
+     qui disaient tous la même intention. */
+  --gap-section: var(--sp-17);
+
   /* The floating menu button's footprint below 1024px: its 44px pill, the 26px
      it keeps off the screen edge, the phone's safe area, and a 12px gap above
      it. Anything that would otherwise sit under it — another floating control,
@@ -51,4 +66,12 @@
    role so no component needs to know which viewport it is on. */
 @media (max-width: 768px) {
   :root { --pad-screen-x: var(--sp-10); }
+}
+
+/* Sur téléphone, l'écart de section descend d'un cran. Valeur à juger au
+   rendu, pas sur le papier : sans filet, c'est elle seule qui dit « nouvelle
+   section », et elle se paie en longueur de page sur les écrans qui tiennent
+   sept bandes. */
+@media (max-width: 640px) {
+  :root { --gap-section: var(--sp-15); }
 }

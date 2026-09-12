@@ -50,7 +50,7 @@ export function ChangelogPage() {
       />
 
       <div className="zn-log">
-        <section className="zn-section zn-section--first">
+        <section className="zn-section">
           <div
             className="zn-stack"
             style={{ "--gap": "var(--sp-10)" } as CSSProperties}

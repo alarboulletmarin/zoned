@@ -30,16 +30,14 @@
   flex-direction: column;
 }
 
-/* A band. Same separation rule as .zn-section — an ink line, never blank
-   space — minus the inline padding the column already pays. */
-.zn-pw__band {
-  padding-block: var(--pad-block, var(--sp-15));
-  border-block-start: var(--border-rule);
-}
+/* Une bande. Même séparation que .zn-section — l'espace seul — moins le
+   padding en ligne que la colonne paie déjà.
 
-.zn-pw__band--first {
-  border-block-start: none;
-  padding-block-start: var(--sp-11);
+   `--first` gardait un padding réduit parce qu'elle n'avait pas de filet à
+   payer. Sans filet, toutes les bandes sont dans ce cas : la variante n'a plus
+   de raison d'être et part. */
+.zn-pw__band {
+  padding-block: var(--pad-block, calc(var(--gap-section) / 2));
 }
 
 /* The back link is chrome, not a band: it sits above the title with no rule

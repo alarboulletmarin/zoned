@@ -158,7 +158,7 @@ export function PrebuiltPlanDetailPage() {
   if (!prebuilt) {
     return (
       <div className="zn-pw">
-        <section className="zn-pw__band zn-pw__band--first">
+        <section className="zn-pw__band">
           <Alert
             kind="error"
             title={t("prebuilt.notFound")}
@@ -243,7 +243,7 @@ export function PrebuiltPlanDetailPage() {
           </Link>
         </Button>
 
-        <section className="zn-pw__band zn-pw__band--first">
+        <section className="zn-pw__band">
           <div className="zn-pw__head">
             <div
               className="zn-stack zn-pw__headtext"

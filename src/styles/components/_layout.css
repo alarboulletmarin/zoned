@@ -2,8 +2,9 @@
  *
  * NOT a utility framework and not a Tailwind reimplementation: these are the
  * layout facts the design system itself states — a 20px gutter, a 22px stack,
- * 40px screen margins (20px on mobile), and sections separated by a full-width
- * ink rule rather than by whitespace.
+ * 40px screen margins (20px on mobile), and sections separated by blank space
+ * alone (--gap-section) since 12 September 2026 — they were separated by a
+ * full-width ink rule until then; see .zn-section below.
  *
  * Variation goes through custom properties rather than a class per value, so
  * the set stays small enough to remember:
@@ -130,32 +131,33 @@
   padding-inline: var(--pad-screen-x);
 }
 
-/* A band of the page. Sections are separated by a full-width ink rule, never by
-   blank space: that is what makes the page read as paper rather than as a feed. */
+/* Une bande de la page, séparée de la suivante par L'ESPACE SEUL.
+   (12 septembre 2026, décision du propriétaire.)
+
+   Ce commentaire disait exactement le contraire — « separated by a full-width
+   ink rule, never by blank space: that is what makes the page read as paper
+   rather than as a feed » — et il est réécrit ici plutôt que corrigé, parce
+   qu'il était formulé comme une doctrine et non comme un réglage : le prochain
+   lecteur remettrait le filet en croyant réparer un oubli.
+
+   La bande paie la MOITIÉ de --gap-section de chaque côté, jamais l'écart
+   entier. Deux bandes voisines en laissent alors exactement un entre leurs
+   contenus. Garder le padding entier aurait donné 96 px entre deux bandes sur
+   bureau, c'est-à-dire les « 672 px d'air sur la seule page d'accueil » que ce
+   fichier avait déjà mesurés et rejetés du temps où le filet travaillait.
+
+   Le repli est ce qui bouge, pas la propriété : un appelant qui pose son propre
+   --pad-block le garde (WeeksListPage.tsx passe var(--sp-11)). Et il n'y a plus
+   de media query ici — c'est --gap-section qui descend d'un cran sous 640 px,
+   dans design/spacing.css, donc la valeur vit à un seul endroit. */
 .zn-section {
-  padding-block: var(--pad-block, var(--sp-17));
+  padding-block: var(--pad-block, calc(var(--gap-section) / 2));
   padding-inline: var(--pad-screen-x);
-  border-block-start: var(--border-rule);
 }
 
-/* 48px above and below is the band rhythm of a 1440px page. On a phone the same
-   value is 96px of paper between two bands, and a screen that holds seven of
-   them spends most of a viewport on air — measured at 672px on the home page
-   alone. 32px keeps the bands separate without the page reading as a stack of
-   empty frames.
-
-   The fallback is what moves, not the property: a caller that states its own
-   --pad-block still gets it. */
-@media (max-width: 640px) {
-  .zn-section {
-    padding-block: var(--pad-block, var(--sp-14));
-  }
-}
-
-/* The first section on a screen sits under the header's own rule. */
-.zn-section--first {
-  border-block-start: none;
-}
+/* .zn-section--first n'existait que pour annuler le filet de la première bande.
+   Sans filet, elle n'a plus rien à annuler : elle est retirée, et ses quatre
+   appels avec elle (SettingsPage, ChangelogPage, AboutPage, ContributePage). */
 
 .zn-section--band {
   background: var(--surface-band);
@@ -184,13 +186,6 @@
 
 /* ── editorial atoms ──────────────────────────────────────────────────────
    Used by the shared helpers in src/components/editorial/. */
-
-/* The rule between two blocks. */
-.zn-divider {
-  border: 0;
-  border-block-start: var(--border-divider);
-  margin: 0;
-}
 
 /* A card that is itself a link or a button. It answers the pointer by
    changing colour — never by lifting, never by gaining a shadow. The one

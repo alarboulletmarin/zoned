@@ -216,7 +216,7 @@ export function TrackFinderPage() {
       <>
         <SEOHead title={t("trackFinder.title")} description={t("trackFinder.subtitle")} canonical="/routes/tracks" noindex />
         <div className="zn-rt">
-          <section className="zn-rt__band zn-rt__band--first">
+          <section className="zn-rt__band">
             <EmptyState
               variant="not-started"
               icon={EyeOff}
@@ -244,7 +244,7 @@ export function TrackFinderPage() {
 
       <div className="zn-rt">
         {/* 1 — what this screen looks for, and how far it looks */}
-        <section className="zn-rt__band zn-rt__band--first">
+        <section className="zn-rt__band">
           <div className="zn-rt__head">
             <div
               className="zn-stack zn-rt__headtext"

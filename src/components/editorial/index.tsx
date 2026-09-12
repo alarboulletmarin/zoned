@@ -134,15 +134,6 @@ export function useCountUp(target: number, durationMs = 900): number {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Divider
-// ────────────────────────────────────────────────────────────────────────────
-
-/** The ink rule that separates two blocks. */
-export function Divider({ className = "" }: { className?: string }) {
-  return <hr className={cn("zn-divider", className)} />;
-}
-
-// ────────────────────────────────────────────────────────────────────────────
 // Shared class strings
 // ────────────────────────────────────────────────────────────────────────────
 

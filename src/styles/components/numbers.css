@@ -3,7 +3,8 @@
  * Five screens share one sheet of paper: /profile, /my-zones, /calculators,
  * /calculators/zones and /calculators/allures. Each reads top to bottom as a
  * mono kicker, a display title, a lede, then data — and each band is separated
- * from the next by a full-width ink rule rather than by blank space.
+ * from the next by blank space alone (--gap-section) since 12 September 2026.
+ * It was a full-width ink rule until then.
  *
  * The shell already wraps every route in .zn-page, which pays the 40px (20px
  * mobile) screen margin once. "Full width" here therefore means the width of
@@ -240,10 +241,9 @@
 
 /* ── calculators hub ──────────────────────────────────────────────────── */
 
-/* One family of tools per band, separated by the rule. */
+/* Une famille d'outils par bande, séparées par l'espace seul. */
 .zn-num__group {
-  padding-block: var(--sp-14);
-  border-block-start: var(--border-rule);
+  padding-block: calc(var(--gap-section) / 2);
 }
 
 .zn-num__grouphead {

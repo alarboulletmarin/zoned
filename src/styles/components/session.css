@@ -512,10 +512,12 @@
 
 /* ── the split: zones against advice ──────────────────────────────────── */
 
+/* Les deux moitiés gardent leur filet VERTICAL — il sépare deux colonnes de
+   contenu, pas deux sections — mais la bande ne s'ouvre plus sur un filet
+   horizontal. Ses moitiés paient déjà 44 px de padding, donc rien à ajouter. */
 .zn-session__split {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-block-start: var(--border-rule);
 }
 
 .zn-session__half {
@@ -666,12 +668,10 @@
   gap: var(--sp-11);
 }
 
-/* Bands are separated by a rule, not by blank space — here the rule runs the
-   width of the reading column, which is this screen's paper. */
+/* Les bandes se séparent par l'espace seul. Celle-ci payait 44 px de marge ET
+   44 px de padding autour de son filet, soit 88 px : un seul écart suffit. */
 .zn-shared > section {
-  margin-block-start: var(--sp-16);
-  padding-block-start: var(--sp-16);
-  border-block-start: var(--border-rule);
+  margin-block-start: var(--gap-section);
 }
 
 .zn-shared__phase {
