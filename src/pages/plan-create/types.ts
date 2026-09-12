@@ -186,6 +186,20 @@ export interface StepDef {
   nextLabelKey?: string;
   /** Une étape qu'on peut passer sans répondre. */
   showSkip?: boolean;
+  /**
+   * L'étape avance d'elle-même dès qu'on répond — elle n'a donc pas de
+   * « Suivant ».
+   *
+   * Le bouton ne faisait plus rien : la réponse à un choix unique porte déjà
+   * le geste d'avancer, et un bouton primaire qui double le tap précédent est
+   * une décision de plus à prendre, pas une sortie de secours. Il ne reste que
+   * « Retour » — et sur la première question, plus rien du tout.
+   *
+   * Au clavier, où l'auto-avance est délibérément coupée (les flèches
+   * déplacent la sélection sans valider), c'est Entrée sur la réponse qui
+   * avance. `Option` porte les deux.
+   */
+  autoAdvance?: boolean;
   /** L'étape rend sa propre navigation (le récapitulatif génère le plan). */
   ownsNav?: boolean;
 }

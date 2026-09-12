@@ -46,5 +46,6 @@ export const levelStep: StepDef = {
   titleKey: "level.title",
   subtitleKey: "level.subtitle",
   Body: LevelBody,
+  autoAdvance: true,
   isComplete: (form) => !!form.runnerLevel,
 };

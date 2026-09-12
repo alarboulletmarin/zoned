@@ -36,5 +36,6 @@ export const purposeStep: StepDef = {
   titleKey: "purpose.title",
   subtitleKey: "purpose.subtitle",
   Body: PurposeBody,
+  autoAdvance: true,
   isComplete: (form) => !!form.planPurpose,
 };

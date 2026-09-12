@@ -79,6 +79,7 @@ export const practiceStep: StepDef = {
   titleKey: "practice.title",
   subtitleKey: "practice.subtitle",
   Body: PracticeBody,
+  autoAdvance: true,
   /* Une pratique annoncée ne débloque pas la suite : il n'y a pas de suite. */
   isComplete: (form) => !!form.practice && isPracticeLive(form.practice as Practice),
 };

@@ -27,5 +27,6 @@ export const goalStep: StepDef = {
   titleKey: "goal.title",
   subtitleKey: "goal.subtitle",
   Body: GoalBody,
+  autoAdvance: true,
   isComplete: (form) => !!form.trainingGoal,
 };

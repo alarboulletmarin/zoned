@@ -586,22 +586,41 @@ export function PlanCreatePage() {
                 <CardContent className="zn-wiz__pane" data-direction={direction}>
                   <step.Body {...ctx} />
                 </CardContent>
-                <CardFooter className="zn-wiz__nav">
-                  <Button variant="outline" onClick={goBack} disabled={safeIndex === 0}>
-                    <ArrowLeft />
-                    {t("nav.back")}
-                  </Button>
-                  <span className="zn-push" />
-                  {step.showSkip && (
-                    <Button variant="ghost" onClick={goForward}>
-                      {t("nav.skip")}
+                {/* Une étape qui avance d'elle-même n'a pas de « Suivant » :
+                    la réponse EST le geste d'avancer, et un bouton primaire
+                    qui double le tap qu'on vient de faire n'est pas une
+                    sortie de secours, c'est une décision de plus. Il n'y
+                    reste que « Retour » — et sur la première question, où
+                    « Retour » serait désactivé, la barre entière disparaît.
+                    Le clavier garde sa sortie : Entrée sur la réponse
+                    (Option.tsx). */}
+                {(!step.autoAdvance || safeIndex > 0) && (
+                  <CardFooter className="zn-wiz__nav">
+                    <Button variant="outline" onClick={goBack} disabled={safeIndex === 0}>
+                      <ArrowLeft className="zn-wiz__nav-arrow" />
+                      {t("nav.back")}
                     </Button>
-                  )}
-                  <Button onClick={goForward} disabled={!canProceed}>
-                    {step.nextLabelKey ? t(step.nextLabelKey) : t("nav.next")}
-                    <ArrowRight />
-                  </Button>
-                </CardFooter>
+                    {/* « Passer » et « Continuer » dans UN groupe poussé à
+                        droite, au lieu de trois enfants séparés par une cale.
+                        La cale comptait comme un enfant de plus, donc un
+                        écart de plus : les trois boutons demandaient 356 px
+                        pour 348 disponibles à 390 px, et passaient à la
+                        ligne pour huit pixels. */}
+                    {!step.autoAdvance && (
+                      <span className="zn-wiz__nav-end">
+                        {step.showSkip && (
+                          <Button variant="ghost" onClick={goForward}>
+                            {t("nav.skip")}
+                          </Button>
+                        )}
+                        <Button onClick={goForward} disabled={!canProceed}>
+                          {step.nextLabelKey ? t(step.nextLabelKey) : t("nav.next")}
+                          <ArrowRight className="zn-wiz__nav-arrow" />
+                        </Button>
+                      </span>
+                    )}
+                  </CardFooter>
+                )}
               </>
             )}
           </Card>

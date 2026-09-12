@@ -32,5 +32,6 @@ export const durationStep: StepDef = {
   titleKey: "duration.title",
   subtitleKey: "duration.subtitle",
   Body: DurationBody,
+  autoAdvance: true,
   isComplete: (form) => form.totalWeeksOverride > 0,
 };

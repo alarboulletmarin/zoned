@@ -123,6 +123,16 @@
   border-block-start: var(--border-divider);
 }
 
+/* Ce qui va vers l'avant, en un seul bloc poussé à droite : « passer » et
+   « continuer » sont deux façons de faire le même pas, et la barre ne compte
+   plus que deux enfants, donc un seul écart entre eux. */
+.zn-wiz__nav-end {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-inline-start: auto;
+}
+
 /* ── an answer ────────────────────────────────────────────────────────── */
 
 /* One option in a question: a real radio, drawn.
@@ -518,6 +528,28 @@
   .zn-wiz-opt {
     gap: var(--sp-5);
     padding: var(--sp-6) var(--sp-7);
+  }
+
+  /* « Passer » rend sa boîte, pas sa cible.
+     Mesuré : Retour 108, Passer 83, Continuer 129, plus les écarts — 356 px
+     pour 348 disponibles à 390, et les trois tombaient sur deux lignes.
+     « Passer » est une sortie, pas une action de même poids que les deux
+     autres : il perd son rembourrage latéral et se lit comme le mot qu'il est.
+     36 px repris, et la rangée tient sur une ligne de 360 px jusqu'en haut de
+     la gamme. Le plancher de 44 px, lui, ne bouge pas — c'est la hauteur qui
+     fait la cible, pas la largeur d'un rembourrage. */
+  .zn-wiz__nav .zn-btn[data-variant="ghost"] {
+    padding-inline: 0;
+  }
+
+  /* Et les deux flèches de direction rendent leurs 24 px chacune (le glyphe et
+     son écart). Elles répètent ce que le mot dit déjà — « Retour »,
+     « Continuer » ne se lisent pas dans l'autre sens —, et sans elles la
+     rangée passe de 307 px à 260 pour 282 disponibles à 360. Seules les
+     flèches partent : la coche du récapitulatif et le rouet de génération
+     portent, eux, une information que le libellé n'a pas. */
+  .zn-wiz__nav .zn-wiz__nav-arrow {
+    display: none;
   }
 }
 

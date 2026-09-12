@@ -210,7 +210,7 @@ function SummaryBody({
 
         <CardFooter className="zn-wiz__nav">
           <Button variant="outline" onClick={goBack}>
-            <ArrowLeft />
+            <ArrowLeft className="zn-wiz__nav-arrow" />
             {t("nav.back")}
           </Button>
           <span className="zn-push" />

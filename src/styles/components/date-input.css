@@ -47,12 +47,11 @@
    only holds it. Selected with the data-slot too, so it still wins once the
    popover gets its own port.
 
-   Le plafond est celui que Radix mesure — la place qui reste entre l'ancre et
-   le bord de la fenêtre — parce que le panneau n'est PAS plafonné autrement :
-   Radix décale un panneau trop large, il ne le rétrécit pas. Sur un téléphone
-   de 360px la grille du calendrier sortait donc de l'écran et se faisait
-   rogner sur la droite. Le calendrier, lui, sait maintenant tenir dans ce
-   qu'on lui donne (calendar.css). */
+   Le panneau ancré ne sert plus QUE le bureau : sous 640 px le calendrier
+   s'ouvre dans un tiroir du bas (date-input.tsx). Les deux plafonds restent
+   pour la fenêtre courte d'un ordinateur portable — Radix décale un panneau
+   trop grand, il ne le rétrécit jamais, et sans plafond la dernière semaine du
+   mois se retrouverait hors de la fenêtre, inatteignable. */
 [data-slot="popover-content"].zn-date-input__popover {
   inline-size: auto;
   max-inline-size: min(
@@ -60,15 +59,30 @@
     calc(100vw - var(--sp-12))
   );
 
-  /* Et le même plafond en hauteur, pour la même raison : un champ de date au
-     milieu d'un formulaire n'a ni six cents pixels au-dessus ni en dessous, et
-     un panneau qui dépasse laisse la dernière semaine du mois hors d'atteinte.
-     Le défilement interne n'entre en jeu que quand la place manque vraiment —
-     sur téléphone la grille est plafonnée à 320 px de côté (calendar.css), ce
-     qui la fait tenir dans la plupart des cas. */
   max-block-size: var(--radix-popover-content-available-height, none);
   overflow-y: auto;
   overscroll-behavior: contain;
 
+  padding: 0;
+}
+
+/* ── le tiroir du téléphone ───────────────────────────────────────────── */
+
+/* Le calendrier prend la largeur du tiroir et garde son plafond de 320 px
+   (calendar.css) : centré, il tombe sous le pouce plutôt que contre un bord.
+   L'élargir aurait coûté en HAUTEUR — une case est carrée —, et c'est la
+   hauteur qui est rare ici.
+
+   Le calendrier rend tout son rembourrage : le tiroir paie déjà le sien, et
+   les 26 px du bas deviennent 16 parce que l'écart de la grille inscrit déjà
+   3 px sous la dernière semaine. Mesuré à 390 × 560, le plus court des écrans
+   réalistes : 17 px de trop, donc une barre de défilement pour rien. */
+.zn-sheet.zn-date-input__sheet {
+  gap: var(--sp-8);
+  padding-block-end: var(--sp-8);
+}
+
+.zn-date-input__sheet .zn-cal {
+  inline-size: 100%;
   padding: 0;
 }

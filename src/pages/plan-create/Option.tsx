@@ -54,6 +54,17 @@ export function Option({
         name={name}
         checked={checked}
         onChange={onSelect}
+        /* La sortie clavier de l'auto-avance. Les flèches déplacent la
+           sélection dans le groupe sans valider — sinon on ne pourrait pas
+           lire les réponses —, donc il faut un geste qui dise « celle-là, et
+           on continue ». C'est Entrée, et c'est aussi ce qui remplace le
+           bouton « Suivant » retiré de ces étapes. */
+        onKeyDown={(event) => {
+          if (event.key !== "Enter" || !onCommit) return;
+          event.preventDefault();
+          onSelect();
+          onCommit();
+        }}
       />
       {Glyph ? (
         <span className="zn-wiz-opt__glyph" aria-hidden="true">

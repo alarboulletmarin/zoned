@@ -46,5 +46,6 @@ export const distanceStep: StepDef = {
   titleKey: "distance.title",
   subtitleKey: "distance.subtitle",
   Body: DistanceBody,
+  autoAdvance: true,
   isComplete: (form) => !!form.raceDistance,
 };
