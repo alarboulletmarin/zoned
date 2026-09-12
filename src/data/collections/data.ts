@@ -204,7 +204,7 @@ export const collections: Collection[] = [
     name: "Objectif 5K",
     nameEn: "5K Goal",
     description:
-      "Développez votre VMA et votre vitesse pour exploser votre chrono sur 5 km.",
+      "Développe ta VMA et ta vitesse pour exploser ton chrono sur 5 km.",
     descriptionEn:
       "Develop your VO2max speed and pace to smash your 5K personal best",
     icon: "Target",
@@ -229,7 +229,7 @@ export const collections: Collection[] = [
     name: "Objectif 10K",
     nameEn: "10K Goal",
     description:
-      "Travaillez le seuil et le tempo pour tenir l'allure sur 10 kilomètres.",
+      "Travaille le seuil et le tempo pour tenir l'allure sur 10 kilomètres.",
     descriptionEn:
       "Work on threshold and tempo to sustain your pace over 10 kilometers",
     icon: "Target",
@@ -254,7 +254,7 @@ export const collections: Collection[] = [
     name: "Objectif semi-marathon",
     nameEn: "Half-Marathon Goal",
     description:
-      "Combinez endurance, seuil et allure spécifique pour réussir votre semi.",
+      "Combine endurance, seuil et allure spécifique pour réussir ton semi.",
     descriptionEn:
       "Combine endurance, threshold and race pace to nail your half-marathon",
     icon: "Target",
@@ -289,7 +289,7 @@ export const collections: Collection[] = [
     name: "Objectif marathon",
     nameEn: "Marathon Goal",
     description:
-      "Préparez-vous à courir 42 km avec des sorties longues, du tempo et de l'allure spécifique.",
+      "Prépare-toi à courir 42 km avec des sorties longues, du tempo et de l'allure spécifique.",
     descriptionEn:
       "Prepare to run 42K with long runs, tempo work and race-specific pace",
     icon: "Route",
@@ -323,7 +323,7 @@ export const collections: Collection[] = [
     name: "Objectif ultra-trail",
     nameEn: "Ultra-Trail Goal",
     description:
-      "Construisez l'endurance extrême et la résistance nécessaires pour l'ultra-distance.",
+      "Construis l'endurance extrême et la résistance nécessaires pour l'ultra-distance.",
     descriptionEn:
       "Build the extreme endurance and résilience needed for ultra-distance",
     icon: "Mountain",
@@ -360,7 +360,7 @@ export const collections: Collection[] = [
     name: "Progresser en VMA",
     nameEn: "Improve Your VO2max Speed",
     description:
-      "Un programme progressif pour développer votre vitesse maximale aérobie.",
+      "Un programme progressif pour développer ta vitesse maximale aérobie.",
     descriptionEn:
       "A progressive program to develop your maximal aerobic speed",
     icon: "Sprint",

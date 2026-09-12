@@ -35,15 +35,6 @@
     "description": "Crée ton premier plan d'entraînement personnalisé",
     "cta": "Créer mon premier plan"
   },
-  "step": {
-    "distance": "Distance",
-    "date": "Date de course",
-    "name": "Race name",
-    "level": "Niveau",
-    "config": "Configuration",
-    "pace": "Allure & Dénivelé",
-    "summary": "Récapitulatif"
-  },
   "purpose": {
     "title": "Quel est ton objectif ?",
     "subtitle": "On adapte le plan à ta situation",
@@ -141,7 +132,7 @@
   "pace": {
     "title": "Ton allure cible",
     "subtitle": "Optionnel - tu peux passer cette étape",
-    "trailHint": "Le dénivelé est important pour un entraînement trail adapté",
+    "trailHint": "En trail, l'allure ne veut pas dire grand-chose : c'est l'effort et le temps qui comptent. Tu peux passer cette étape.",
     "targetPace": "Allure cible",
     "targetTime": "Temps cible",
     "targetPaceTab": "Allure cible",
@@ -724,7 +715,6 @@
   },
   "wizard": {
     "kicker": "Plan assisté",
-    "title": "Réponds, le plan se construit",
     "lede": "Le volume monte de 10 % par semaine au maximum, avec une semaine allégée toutes les trois.",
     "source": "Mujika & Padilla 2003 · Pfitzinger & Douglas 2009",
     "limitsKicker": "Sans compte, sans rappel",

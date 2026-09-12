@@ -35,15 +35,6 @@
     "description": "Create your first personalized training plan",
     "cta": "Create my first plan"
   },
-  "step": {
-    "distance": "Distance",
-    "date": "Race date",
-    "name": "Race name",
-    "level": "Level",
-    "config": "Configuration",
-    "pace": "Pace & Elevation",
-    "summary": "Summary"
-  },
   "purpose": {
     "title": "What's your goal?",
     "subtitle": "We'll adapt the plan to your situation",
@@ -141,7 +132,7 @@
   "pace": {
     "title": "Your target pace",
     "subtitle": "Optional - you can skip this step",
-    "trailHint": "Elevation data is important for trail-specific training",
+    "trailHint": "On trail, pace does not mean much: effort and time are what count. You can skip this step.",
     "targetPace": "Target pace",
     "targetTime": "Finish time",
     "targetPaceTab": "Target pace",
@@ -724,7 +715,6 @@
   },
   "wizard": {
     "kicker": "Assisted plan",
-    "title": "Answer, and the plan builds itself",
     "lede": "Volume rises by at most 10% a week, with an easier week every three.",
     "source": "Mujika & Padilla 2003 · Pfitzinger & Douglas 2009",
     "limitsKicker": "No account, no reminders",

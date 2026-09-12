@@ -706,6 +706,45 @@ pas un trou. La figure se tient à gauche sur une règle qui court sur toute la
 largeur du conteneur ; les mots sous la règle sur téléphone, à côté sur un
 écran large, où le bouton pose sa base sur la même règle.
 
+## Le dessin jeté du 12 septembre 2026 : comparer au bon voisin
+
+Une figure a été dessinée pour la pratique « trail » — la montée : buste
+penché, genou avant haut, jambe d'appui reculée et plantée. Huit tours de
+relecture, le générateur écrit, le fichier commité. Puis jetée.
+
+La raison est utile à garder : **rastérisée à côté de `door-today`, c'était la
+même pose**, à quelques degrés d'inclinaison près. Et le tour 6 avait justement
+été consacré à ça — « un dessin de plus qui ressemble à un dessin déjà là ne
+sert à rien » — mais la planche comparait la nouvelle figure à `easy-run` et au
+duo, c'est-à-dire à tout sauf au dessin dont elle était le jumeau.
+
+La règle qui en sort, et qui n'était écrite nulle part :
+
+> Avant de dessiner une pose, rastériser la planche des figures **déjà là** et
+> chercher la plus proche. Comparer au voisin le plus ressemblant, pas au plus
+> pratique à comparer.
+
+Ce que le tour 7 a quand même appris et qui reste vrai du gréement, parce que
+ça se paiera de nouveau :
+
+- **`leadHip` positif RECULE la jambe avant**, il ne la lève pas. Pour un genou
+  haut, c'est `leadHip` négatif (la cuisse vient devant) plus `leadKnee`
+  positif (le genou plie davantage).
+- **Une cuisse à l'horizontale ne se lit pas comme une montée mais comme un
+  coup de pied.** C'est l'écart des appuis — `standHip` — qui fait la pente.
+- **Poser une jambe sans remettre la semelle à plat** met la figure sur la
+  pointe : l'accent sort en diagonale et ne touche le bas du cadre que par un
+  orteil. `levelStand` de `pose-tools.mjs` existe pour ça.
+- **Le pied libre passe à hauteur du GENOU d'appui**, jamais plus bas — sinon
+  les deux jambes se nouent en bas de la figure. Ça se mesure, ça ne s'estime
+  pas.
+
+Et la conséquence de la décision : les quatre pratiques portent des figures
+**déjà dessinées** (`src/components/domain/practice-art.ts`). Zéro dessin
+ajouté par ce chantier, un retiré — `catching-breath`, rejeté en revue il y a
+longtemps, dont le fichier traînait encore dans `src/assets/doodles/` sans
+générateur ni appelant.
+
 ## Le logo est le mot, pas une figure (12 septembre 2026)
 
 Le plan de refonte prévoyait un signe dessiné sorti du gréement : « la foulée

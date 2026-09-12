@@ -1,5 +1,12 @@
 # Refonte « minimal doodles » — état et reprise
 
+> **Ce document décrit le PREMIER chantier** — la sortie de Tailwind et le
+> passage au CSS maison. Un second a suivi en septembre 2026, qui recentre l'app
+> sur l'entraînement : son journal est dans [`MIGRATION.md`](../MIGRATION.md),
+> son modèle de domaine dans [`docs/pratiques.md`](pratiques.md), et la décision
+> sur le logo dans [`docs/doodles.md`](doodles.md). Les décisions ci-dessous
+> tiennent toujours ; les chiffres, eux, ont bougé.
+
 Document de passation. Branche `refonte-design`, **rien n'est poussé**.
 Le journal lot par lot est dans `MIGRATION.md` ; la direction artistique des
 dessins est dans `docs/doodles.md`. Ce fichier-ci dit où on en est, ce qui a été
@@ -14,7 +21,7 @@ décidé, et ce qui reste.
 | Tailwind | **retiré** — avec `tailwind-merge` et `class-variance-authority` |
 | Paquets Radix | **9 → 4** (restent dropdown-menu, popover, select, tooltip) |
 | CSS écrit à la main | 74 feuilles |
-| Dessins | **23**, tous issus du gréement |
+| Dessins | **22** figures + 4 flèches, toutes issues du gréement |
 | Commits | 29, aucun poussé |
 | Vert à chaque commit | `tsc`, 610 tests, `bun run build`, 3 portails QA, parité i18n |
 

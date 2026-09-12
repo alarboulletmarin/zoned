@@ -592,7 +592,7 @@
     "prebuiltPlansDesc": "Choisis un plan structuré et commence immédiatement",
     "planExported": "Plan exporté",
     "replaceSession": "Remplacer la séance",
-    "chooseFromLibrary": "Choisissez une séance dans la bibliothèque",
+    "chooseFromLibrary": "Choisis une séance dans la bibliothèque",
     "searchWorkouts": "Rechercher une séance...",
     "all": "Tous",
     "noMatchingWorkouts": "Aucune séance correspondante",
@@ -766,7 +766,7 @@
       "exerciseCredits": "Illustrations des exercices issues de free-exercise-db (Domaine Public)."
     },
     "about": {
-      "seoDescription": "Découvrez Zoned, une bibliothèque open-source de séances de course à pied basée sur les zones.",
+      "seoDescription": "Zoned, une bibliothèque libre de séances de course à pied rangées par zones.",
       "seoOrgDescription": "Une bibliothèque open-source de séances de course à pied basée sur les zones."
     },
     "home": {

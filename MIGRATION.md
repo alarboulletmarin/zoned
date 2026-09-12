@@ -570,3 +570,96 @@ l'a mesuré et signalé. Réparé en repartant du fichier commité, puis en
 réappliquant les deux seuls changements voulus, avec un diff des sélecteurs
 avant/après pour preuve. Les deux pièges qui en sortent sont au journal de
 `docs/refonte-etat.md`.
+
+---
+
+# Second chantier — recentrer sur l'entraînement (septembre 2026)
+
+Branche : `claude/zoned-redesign-ux-9qxvkb`. Un commit par lot, vert à chacun.
+
+La refonte précédente a refait la peinture. Celle-ci est une refonte
+d'**architecture de l'information** et de **parcours** : l'app avait grossi
+jusqu'à noyer son sujet — 61 pages, 64 routes, une navigation à 5 portes et 28
+entrées, et un accueil qui était une landing page éditoriale. L'entraînement
+était un contenu parmi trente.
+
+Le modèle de pratique et la position sur le triathlon sont documentés à part,
+dans [`docs/pratiques.md`](docs/pratiques.md) : ce journal-ci dit ce qui a
+bougé, ce qui a été mesuré, et ce qui s'est révélé faux en route.
+
+## Ce qui change, ce qui ne change pas
+
+**Change** — l'axe de rangement (la pratique), la navigation, l'entrée du
+parcours de plan, le contenu ultra, le logo.
+
+**Ne change pas, sans exception** — `src/lib/planGenerator/**` reçoit **zéro
+édition** : tout ce dont le trail et l'ultra ont besoin (`WEEKLY_KM_TARGETS`,
+`PHASE_DISTRIBUTION`, `TAPER_WEEKS`, `RECOMMENDED_PLAN_WEEKS`) était déjà dans
+`constants.ts`. Ce qui manquait était le *parcours* qui y mène et le
+*contenu*. Les clés `localStorage` gardent leurs noms et leurs formes, aucune
+montée de version ; une préférence nouvelle prend une clé nouvelle
+(`zoned:practice`). Les ~35 pages reléguées **gardent leurs routes** — SEO,
+sitemap, prérendu, liens partagés — et sortent seulement de la nav.
+
+## Trois mesures qui ont déplacé le diagnostic
+
+1. **Le trail avait 28 séances, pas 12.** `terrainType` vit sur les *segments*,
+   pas à la racine du template : se fier à `category === "trail"` en ratait 16.
+   L'essentiel de la charge d'écriture prévue pour le lot contenu n'existait
+   pas.
+2. **Le moteur savait déjà faire trail et ultra.** D'où la ligne dure ci-dessus.
+3. **Le D+ était déjà collecté — à tout le monde, sur l'écran d'allure.** Le
+   champ trail existait ; il était posé sur le mauvais écran, pour les mauvaises
+   personnes.
+
+## Lots
+
+| # | Lot | Ce qui compte |
+|---|---|---|
+| 0 | Socle `Practice` | déduit de `raceDistance`, zéro migration · `practiceIndex`, une seule définition de « ce qui est trail » |
+| 1 | Configurabilité | `enabledPractices` / `disabledModules` / `cockpit` · `sanitizeSettings` (le JSON stocké était lu cru : un `disabledModules: "routes"` faisait lever `.includes()` en plein rendu) · `ModuleGate` **dans** l'élément de route, jamais dans la table du routeur, sinon le prérendu se vide · `colorPalette` mort retiré |
+| 2 | IA 4 portes | 5 portes/28 entrées → 4/14 · `navigation.ts` extrait de `TopBar` (importer le composant tire `@/i18n`, dont `import.meta.glob` n'existe pas hors Vite) · **`nav-coverage.test.ts`** : chaque route statique joignable depuis nav ∪ pied de page ∪ palette ∪ liste blanche |
+| 3 | Cockpit `/today` | livré, **rejeté sur 390 px** par le propriétaire — cinq boîtes de la même forme sur 1838 px, dont trois qui répétaient la pastille MENU |
+| 3 bis | Cockpit « la semaine » | quatre structures construites dans l'app et mesurées à 390 px, le propriétaire a choisi · bande de sept jours, jour courant en **encre** (le bouton est le seul aplat vermillon) · hauteur de barre en **minutes et en pixels** (un pourcentage sur un enfant de colonne flex n'a pas de référence : les sept barres rendaient au minimum) · pied de page réduit à sa barre d'encre, ~400 px gagnés |
+| 4 | Biblio par pratique | `?practice=` partageable · tirage promu en bouton visible · `useRadioRail` (le contrat clavier APG est dû dès qu'on déclare `role="radiogroup"` — ce dépôt l'avait déjà oublié deux fois) · `prefers-reduced-motion` du tirage |
+| 5 | Parcours — extraction pure | 1 609 lignes → 488 + `steps/*` · comportement identique, prouvé en diffant le DOM des 18 rendus d'étape · trois bugs de brouillon corrigés |
+| 6 | Parcours par pratique | la pratique en tête, 4 distances au lieu de 7 · terrain et D+ seulement à qui court dessus · tri = `["practice"]` |
+| 7 | Contenu | 5 séances ultra, 1 plan trail tout prêt, compteurs réels, étiquettes de pratique sur les collections |
+| 8 | Figures de pratique | 1 dessin, 3 réemplois |
+| 9 | Logo | le mot « zoned. », vectorisé |
+| 10 | Tutoiement, docs, revue | ce document, `docs/pratiques.md` |
+
+## Les défauts trouvés en regardant, pas en relisant le code
+
+Ils sont listés parce qu'aucun n'a été attrapé par `tsc`, les tests ou le build.
+
+- L'écran du cockpit disait « aujourd'hui » **quatre fois** avant tout contenu.
+- Le doodle du cockpit faisait **450 px de haut**.
+- Le bouton primaire du cockpit pointait `/plan/:id` : trois taps et une chasse
+  pour ouvrir la séance du jour. Il pointe `/workout/:id`.
+- La colonne du cockpit faisait **1 072 px** avec tout le texte à gauche, soit
+  ~700 px de papier mort à droite.
+- « Étape 2 sur 1 » sur le parcours triathlon : l'index préréglé dépassait un
+  parcours d'une seule étape.
+- Un brouillon écrit avant la refonte reprenait à la **mauvaise question** :
+  l'index 5 valait « niveau » dans l'ancien parcours de 11 étapes et
+  « objectifs intermédiaires » dans le nouveau de 12. On ne fait plus confiance
+  à un index venu d'un autre parcours — on résout par `stepId`.
+- L'étape d'allure s'appelait encore « Allure & Dénivelé » après le déménagement
+  du champ, et sa phrase d'aide parlait d'un champ qui n'était plus là.
+- Trois des huit séances ultra écrites **doublaient** des archétypes déjà au
+  catalogue. Trouvé en filtrant la bibliothèque sur « trail » et en lisant une
+  carte qui n'était pas de moi.
+- La donnée mono des cartes de pratique écrasait la réponse à 390 px :
+  « 52 séances · aucun plan prêt » prenait la moitié de la largeur.
+- Le favicon du signe dessiné avait perdu son vermillon : une échelle arrondie
+  au dixième (0,067 → 0,1) sortait le point du cadre.
+
+## Deux choses à ne pas « réparer »
+
+1. **`src/components/ui/empty-state.tsx` est couvert.** Sa variante `default`
+   rend encore un glyphe de 22 px, ce qui ressemble à un trou. Comptage réel :
+   les 19 appels passent tous une variante, et seules `not-started` et
+   `no-results` sont employées. Le glyphe de `default` ne rend jamais.
+2. **`runners-duo` ne se retouche pas.** Un dessin approuvé ne se corrige plus,
+   et son allure un peu dégingandée *est* le doodle.

@@ -147,7 +147,7 @@
   "planContext": {
     "banner": "Semaine {{week}} · Séance adaptée au volume ({{volume}}%) : ~{{duration}} min",
     "fullSession": "(version complète : {{duration}} min)",
-    "longRunBanner": "Semaine {{week}} · Objectif sortie longue : {{distance}} km (~{{duration}} min à votre allure)",
+    "longRunBanner": "Semaine {{week}} · Objectif sortie longue : {{distance}} km (~{{duration}} min à ton allure)",
     "longRunStructure": "La structure ci-dessous est le guide de base ({{duration}} min)"
   },
   "science": {

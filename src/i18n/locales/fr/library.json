@@ -51,9 +51,9 @@
   },
   "emptyState": {
     "noResults": "Aucune séance trouvée",
-    "noResultsDescription": "Essayez de modifier vos filtres pour trouver des séances.",
+    "noResultsDescription": "Essaie de modifier tes filtres pour trouver des séances.",
     "noFavorites": "Aucun favori",
-    "noFavoritesDescription": "Ajoutez des séances à vos favoris pour les retrouver facilement ici.",
+    "noFavoritesDescription": "Ajoute des séances à tes favoris pour les retrouver facilement ici.",
     "filteredOut_one": "{{count}} filtre actif ne laisse passer aucune des {{total}} séances. L'effacer les rouvre toutes.",
     "filteredOut_other": "{{count}} filtres actifs ne laissent passer aucune des {{total}} séances. Les effacer les rouvre toutes.",
     "noMatchForQuery": "« {{query}} » ne correspond à aucune des {{total}} séances du catalogue."
@@ -112,7 +112,7 @@
     "difficulty": "Difficulté",
     "duration": "Durée"
   },
-  "noResults": "Aucune séance ne correspond à vos critères",
+  "noResults": "Aucune séance ne correspond à tes critères",
   "clearFilters": "Effacer les filtres",
   "showMore": "Voir plus",
   "showingCount": "{{visible}} sur {{total}} séances",
@@ -273,8 +273,8 @@
       "action": "Générer ma semaine",
       "actionShort": "Générer",
       "busy": "Génération…",
-      "hint": "Compose automatiquement 3 à 6 séances équilibrées 80/20 selon vos réglages.",
-      "hintRegen": "Recompose une nouvelle semaine à partir de vos réglages actuels.",
+      "hint": "Compose automatiquement 3 à 6 séances équilibrées 80/20 selon tes réglages.",
+      "hintRegen": "Recompose une nouvelle semaine à partir de tes réglages actuels.",
       "create": "Créer la semaine",
       "namePlaceholder": "Nom de la semaine",
       "defaultName": "Ma semaine",

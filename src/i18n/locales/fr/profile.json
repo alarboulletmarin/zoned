@@ -43,7 +43,7 @@
     "delete": "Supprimer",
     "saved": "Paramètres vélotaf enregistrés",
     "deleted": "Paramètres vélotaf supprimés",
-    "invalid": "Choisissez au moins un jour et une durée valide"
+    "invalid": "Choisis au moins un jour et une durée valide"
   },
   "base": {
     "title": "Données de base",

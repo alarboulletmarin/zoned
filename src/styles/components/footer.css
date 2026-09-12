@@ -222,10 +222,19 @@
 /* Below 1024px the floating menu pill sits over this corner — over the version,
    which is pinned to the far end of the bar. The bar pays the pill's clearance
    itself rather than the shell paying it: the ink has to reach the floor of the
-   document, and a reserve above it would show as a band of page colour. */
+   document, and a reserve above it would show as a band of page colour.
+
+   `--fab-clear` alone only protects a bar that fits on ONE row. Measured on the
+   cockpit at 390px, where the bar wraps to three: the pill landed across the
+   FIRST row and ate "logiciel libre, licence MIT" mid-word. The end padding is
+   what fixes that — it keeps every row clear of the pill's column, whatever the
+   row count, and `--fab-w` is exactly the pill measured across. The version
+   loses its `margin-inline-start: auto` under 640px anyway, so nothing is
+   pushed into the gap. */
 @media (max-width: 1023px) {
   .zn-footer__bar {
     padding-block-end: var(--fab-clear);
+    padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
   }
 }
 

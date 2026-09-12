@@ -388,11 +388,28 @@ export function PlanCreatePage() {
             </Button>
           )}
 
+          {/* LA QUESTION est le titre de l'écran, et c'est le seul.
+              Elle était un `h2` de niveau 3 DANS la carte, sous un `h1` en
+              display qui disait « Réponds, le plan se construit » — la même
+              phrase aux treize étapes. Relu en niveaux de gris et flouté à
+              390 px : la masse la plus lourde de l'écran était la phrase
+              générique, pas ce qu'on demande. Le parcours veut « la question,
+              puis les réponses, puis continuer, rien d'autre » ; la phrase est
+              donc partie et la question a pris sa place.
+
+              Le titre vit ici, HORS de la branche `ownsNav` : le récapitulatif
+              n'a pas de carte de question, et laisser le titre dedans lui
+              aurait retiré son `h1`. */}
           <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
             <span className="zn-kicker">{t("wizard.kicker")}</span>
-            <h1 className="zn-display" data-level="2">
-              {t("wizard.title")}
+            <h1 id={questionId} className="zn-display" data-level="2">
+              {t(step.titleKey)}
             </h1>
+            {step.subtitleKey ? (
+              <p className="zn-body zn-body--sm zn-muted zn-measure">
+                {t(step.subtitleKey, step.subtitleParams?.(form, derived))}
+              </p>
+            ) : null}
           </div>
 
           {/* The promise and its limits are stated once, on the first step —
@@ -487,19 +504,6 @@ export function PlanCreatePage() {
             ) : (
               <>
                 <CardContent className="zn-wiz__pane" data-direction={direction}>
-                  <div
-                    className="zn-stack"
-                    style={{ "--gap": "var(--sp-4)" } as CSSProperties}
-                  >
-                    <h2 id={questionId} className="zn-title" data-level="3">
-                      {t(step.titleKey)}
-                    </h2>
-                    {step.subtitleKey ? (
-                      <p className="zn-body zn-body--sm zn-muted">
-                        {t(step.subtitleKey, step.subtitleParams?.(form, derived))}
-                      </p>
-                    ) : null}
-                  </div>
                   <step.Body {...ctx} />
                 </CardContent>
                 <CardFooter className="zn-wiz__nav">

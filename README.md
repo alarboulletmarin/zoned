@@ -14,7 +14,7 @@
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE) [![Version](https://img.shields.io/badge/version-v0.8.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md) [![Good first issues](https://img.shields.io/github/issues/alarboulletmarin/zoned/good%20first%20issue?style=flat-square&color=7057ff&label=good%20first%20issues)](https://github.com/alarboulletmarin/zoned/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) [![Open issues](https://img.shields.io/github/issues/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/issues) [![Last commit](https://img.shields.io/github/last-commit/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/commits/main) [![Stars](https://img.shields.io/github/stars/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/stargazers)
   <br/>
-  [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev) [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com) [![Bun](https://img.shields.io/badge/Bun-runtime-fbf0df?style=flat-square&logo=bun&logoColor=black)](https://bun.sh)
+  [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev) [![Bun](https://img.shields.io/badge/Bun-runtime-fbf0df?style=flat-square&logo=bun&logoColor=black)](https://bun.sh)
 
   <br/>
 
@@ -246,13 +246,21 @@ Want a high-level tour of how a workout flows from JSON to the rendered detail p
 |-------|------|
 | Framework | React 19 + Vite 7 |
 | Language | TypeScript 5 |
-| Styling | Tailwind CSS 4 + shadcn/ui (Radix UI) |
+| Styling | Hand-written CSS — 74 sheets, `zn-` prefixed, tokens in `src/styles/design/` |
+| Primitives | Radix UI (dropdown-menu, popover, select, tooltip) |
 | Animations | framer-motion (respects `prefers-reduced-motion`) |
-| Charts | Recharts |
+| Charts | None — every figure is drawn in SVG from the app's own data |
+| Illustration | 23 doodles generated from one rig (`scripts/doodles/rig.mjs`) |
 | i18n | i18next (FR / EN) |
 | PWA | Workbox |
 | Analytics | Vercel Analytics (anonymous page views only) |
 | Runtime | Bun |
+
+This table said "Tailwind CSS 4 + shadcn/ui" and "Recharts" for a while after
+none of the three was in the tree: Tailwind was removed with its 24 298
+utilities, shadcn's generated components were replaced by the `zn-` layer, and
+Recharts was never a dependency of this repo. Worth knowing if you find a blog
+post or an answer that assumes otherwise.
 
 ---
 
