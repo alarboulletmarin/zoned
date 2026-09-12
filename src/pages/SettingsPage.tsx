@@ -35,6 +35,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { PRACTICE_META, PRACTICES, type Practice } from "@/types/practice";
+import { MODULE_IDS } from "@/types/settings";
+import { isModuleHidden, visiblePractices } from "@/lib/settingsSchema";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { DataExportImport } from "@/components/domain/DataExportImport";
 import { useAppStats } from "@/hooks/useAppStats";
@@ -70,14 +73,36 @@ interface AboutRow {
  */
 export function SettingsPage() {
   const { t, i18n } = useTranslation(["common", "routes", "content"]);
-  const { settings, setUnitSystem, setRouteGeneratorEnabled, setOpeningAnimation } =
-    useSettings();
+  const {
+    settings,
+    setUnitSystem,
+    setRouteGeneratorEnabled,
+    setOpeningAnimation,
+    setEnabledPractices,
+    setModuleHidden,
+  } = useSettings();
   const { preference: themePreference, setPreference: setThemePreference } =
     useTheme();
   const { favorites } = useFavorites();
   const { plans } = usePlans();
   const stats = useAppStats();
   const [confirmWipe, setConfirmWipe] = useState(false);
+
+  /* Vide veut dire « toutes » côté stockage, mais l'interrupteur doit montrer
+     l'état réel : tout allumé. Décocher écrit donc le complément, et remettre
+     la dernière manquante revient au tableau vide plutôt que de figer une
+     liste qui ne suivrait plus l'arrivée d'une pratique. */
+  const shownPractices = visiblePractices(settings);
+  const togglePractice = (practice: Practice, on: boolean) => {
+    const next = on
+      ? PRACTICES.filter((p) => p === practice || shownPractices.includes(p))
+      : shownPractices.filter((p) => p !== practice);
+    setEnabledPractices(next.length === PRACTICES.length ? [] : [...next]);
+  };
+  const pickPracticeLabel = (practice: Practice) =>
+    i18n.language.startsWith("en")
+      ? PRACTICE_META[practice].labelEn
+      : PRACTICE_META[practice].label;
 
   const language = i18n.language?.startsWith("en") ? "en" : "fr";
 
@@ -388,6 +413,69 @@ export function SettingsPage() {
                   >
                     {t("settingsPage.routesCaveat")}
                   </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Ce que l'app met en avant. Les pratiques partent toutes
+                affichées : le défaut est le tableau vide, personne n'a de
+                question à répondre au premier lancement, et décocher écrit le
+                complément explicite. Masquer un module le retire de la
+                navigation — la route, elle, reste valide (voir ModuleGate). */}
+            <Card className="zn-set__band">
+              <CardHeader>
+                <CardTitle>{t("settingsPage.tailored")}</CardTitle>
+                <CardDescription>{t("settingsPage.tailoredDesc")}</CardDescription>
+              </CardHeader>
+              <CardContent
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+              >
+                <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                  <span className="zn-kicker">{t("settingsPage.practices")}</span>
+                  {PRACTICES.map((practice) => (
+                    <div
+                      key={practice}
+                      className="zn-row zn-row--split zn-row--start"
+                      style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+                    >
+                      <label className="zn-label zn-fill" htmlFor={`settings-practice-${practice}`}>
+                        {pickPracticeLabel(practice)}
+                      </label>
+                      <Switch
+                        id={`settings-practice-${practice}`}
+                        className="zn-fixed"
+                        checked={shownPractices.includes(practice)}
+                        // La dernière pratique ne se décoche pas : une app sans
+                        // aucune pratique n'a plus rien à montrer.
+                        disabled={shownPractices.length === 1 && shownPractices.includes(practice)}
+                        onCheckedChange={(on) => togglePractice(practice, on)}
+                      />
+                    </div>
+                  ))}
+                  <p className="zn-caption zn-muted">{t("settingsPage.practicesHint")}</p>
+                </div>
+
+                <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                  <span className="zn-kicker">{t("settingsPage.modules")}</span>
+                  {MODULE_IDS.map((module) => (
+                    <div
+                      key={module}
+                      className="zn-row zn-row--split zn-row--start"
+                      style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+                    >
+                      <label className="zn-label zn-fill" htmlFor={`settings-module-${module}`}>
+                        {t(`modules.${module}.name`)}
+                      </label>
+                      <Switch
+                        id={`settings-module-${module}`}
+                        className="zn-fixed"
+                        checked={!isModuleHidden(settings, module)}
+                        onCheckedChange={(on) => setModuleHidden(module, !on)}
+                      />
+                    </div>
+                  ))}
+                  <p className="zn-caption zn-muted">{t("settingsPage.modulesHint")}</p>
                 </div>
               </CardContent>
             </Card>

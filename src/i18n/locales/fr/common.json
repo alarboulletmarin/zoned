@@ -861,7 +861,13 @@
     "wipeConfirmTitle": "Effacer toutes tes données ?",
     "wipeConfirmBody": "Profil, {{favorites}} favoris, {{plans}} plans et historique des tests. Cette action ne peut pas être annulée.",
     "wipeConfirmButton": "Effacer définitivement",
-    "wipeDone": "Données effacées. Rien à annuler."
+    "wipeDone": "Données effacées. Rien à annuler.",
+    "tailored": "Sur mesure",
+    "tailoredDesc": "Ce que Zoned met en avant, et ce qu'il laisse de côté.",
+    "practices": "Les pratiques que tu suis",
+    "practicesHint": "Tout est affiché par défaut. Décoche ce que tu ne fais pas : la bibliothèque et les plans s'allègent d'autant.",
+    "modules": "Ce que l'app affiche",
+    "modulesHint": "Masquer retire de la navigation, sans rien supprimer : les liens et les pages restent valides."
   },
   "mobileMenu": {
     "goTo": "Aller à",
@@ -870,5 +876,17 @@
     "themeDark": "Thème sombre",
     "themeLight": "Thème clair",
     "more": "Le reste"
+  },
+  "modules": {
+    "routes": { "name": "Parcours" },
+    "raceSimulator": { "name": "Simulateur de course" },
+    "learn": { "name": "Comprendre" },
+    "collections": { "name": "Collections" },
+    "strength": { "name": "Renforcement" },
+    "hidden": {
+      "title": "{{module}} est masqué",
+      "description": "Tu as masqué cette partie de l'app dans tes réglages. Le lien reste valide — tu peux la réafficher tout de suite.",
+      "cta": "Réafficher"
+    }
   }
 }

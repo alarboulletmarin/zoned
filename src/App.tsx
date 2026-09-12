@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
 import { MobileMenu, TopBar, Footer } from "@/components/layout";
+import { ModuleGate } from "@/components/layout/ModuleGate";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
@@ -293,11 +294,11 @@ function App() {
                           <Route path="/quiz" element={<Navigate to="/library/draw" replace />} />
                           <Route path="/contribute" element={<ContributePage />} />
                           <Route path="/about" element={<AboutPage />} />
-                          <Route path="/learn" element={<LearnPage />} />
+                          <Route path="/learn" element={<ModuleGate module="learn" canonical="/learn"><LearnPage /></ModuleGate>} />
                           <Route path="/methodology" element={<MethodologyPage />} />
-                          <Route path="/learn/:slug" element={<ArticlePage />} />
-                          <Route path="/collections" element={<CollectionsPage />} />
-                          <Route path="/collections/:slug" element={<CollectionDetailPage />} />
+                          <Route path="/learn/:slug" element={<ModuleGate module="learn"><ArticlePage /></ModuleGate>} />
+                          <Route path="/collections" element={<ModuleGate module="collections" canonical="/collections"><CollectionsPage /></ModuleGate>} />
+                          <Route path="/collections/:slug" element={<ModuleGate module="collections"><CollectionDetailPage /></ModuleGate>} />
                           <Route path="/glossary" element={<GlossaryPage />} />
                           <Route path="/glossary/:id" element={<GlossaryTermPage />} />
                           <Route path="/changelog" element={<ChangelogPage />} />
@@ -315,12 +316,12 @@ function App() {
                           <Route path="/plan/prebuilt/:slug" element={<PrebuiltPlanDetailPage />} />
                           <Route path="/plan/shared" element={<SharedPlanPage />} />
                           <Route path="/plan/:id" element={<PlanViewPage />} />
-                          <Route path="/race-simulator" element={<RaceSimulatorPage />} />
+                          <Route path="/race-simulator" element={<ModuleGate module="raceSimulator" canonical="/race-simulator"><RaceSimulatorPage /></ModuleGate>} />
                           <Route path="/race-simulator/shared" element={<RaceSimulatorPage />} />
-                          <Route path="/routes" element={<RouteGeneratorPage />} />
-                          <Route path="/routes/tracks" element={<TrackFinderPage />} />
-                          <Route path="/routes/mine" element={<MyRoutesPage />} />
-                          <Route path="/routes/:id" element={<RouteDetailPage />} />
+                          <Route path="/routes" element={<ModuleGate module="routes" canonical="/routes"><RouteGeneratorPage /></ModuleGate>} />
+                          <Route path="/routes/tracks" element={<ModuleGate module="routes" canonical="/routes/tracks"><TrackFinderPage /></ModuleGate>} />
+                          <Route path="/routes/mine" element={<ModuleGate module="routes"><MyRoutesPage /></ModuleGate>} />
+                          <Route path="/routes/:id" element={<ModuleGate module="routes"><RouteDetailPage /></ModuleGate>} />
                           <Route path="/compare" element={<CompareHubPage />} />
                           <Route path="/compare/:slug" element={<CompareDetailPage />} />
                           <Route path="*" element={<NotFoundPage />} />

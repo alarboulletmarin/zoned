@@ -861,7 +861,13 @@
     "wipeConfirmTitle": "Erase all your data?",
     "wipeConfirmBody": "Profile, {{favorites}} favourites, {{plans}} plans and test history. This cannot be undone.",
     "wipeConfirmButton": "Erase permanently",
-    "wipeDone": "Data erased. Nothing to undo."
+    "wipeDone": "Data erased. Nothing to undo.",
+    "tailored": "Tailored",
+    "tailoredDesc": "What Zoned puts up front, and what it leaves aside.",
+    "practices": "The disciplines you train for",
+    "practicesHint": "Everything is shown by default. Uncheck what you don't do: the library and plans get lighter.",
+    "modules": "What the app shows",
+    "modulesHint": "Hiding removes it from navigation without deleting anything: the links and pages still work."
   },
   "mobileMenu": {
     "goTo": "Go to",
@@ -870,5 +876,17 @@
     "themeDark": "Dark theme",
     "themeLight": "Light theme",
     "more": "Everything else"
+  },
+  "modules": {
+    "routes": { "name": "Routes" },
+    "raceSimulator": { "name": "Race simulator" },
+    "learn": { "name": "Learn" },
+    "collections": { "name": "Collections" },
+    "strength": { "name": "Strength" },
+    "hidden": {
+      "title": "{{module}} is hidden",
+      "description": "You hid this part of the app in your settings. The link still works — you can bring it back right now.",
+      "cta": "Bring it back"
+    }
   }
 }

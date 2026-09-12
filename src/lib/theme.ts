@@ -88,9 +88,11 @@ let applied: ResolvedTheme | null = null;
  * Writes the resolved theme to `<html>`. Four things, and all four count:
  *
  * 1. The `.dark` class — what the CSS reads. Always via `classList.toggle`,
- *    never `className =`: the same element also carries `palette-deuteranopia`
- *    / `palette-tritanopia`, which `palettes-a11y.css` combines as
- *    `.palette-*.dark`.
+ *    never `className =`: the root element carries other classes, and
+ *    assigning `className` would drop them. (It used to carry
+ *    `palette-deuteranopia` / `palette-tritanopia`; the colour-blind palettes
+ *    went with the redesign — the ink ramp is legible in greyscale by
+ *    construction — and the setting that wrote them went with them.)
  * 2. `style.colorScheme` — tells the browser to render *native* controls
  *    (scrollbars, `<input type="date">`, autofill, `<select>`) in the right
  *    shade. Its absence is why a dark Zoned still had white scrollbars.
