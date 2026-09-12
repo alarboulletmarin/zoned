@@ -7,7 +7,7 @@ import { PrebuiltPlanCard } from "@/components/domain/PrebuiltPlanCard";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 
 /**
- * The nine ready-made plans, as a catalogue.
+ * Les plans tout prêts, en catalogue.
  *
  * Same shape as the library: a mono line counting what is on offer, the
  * display title, one sentence, then outlined cards in a grid. The count is
