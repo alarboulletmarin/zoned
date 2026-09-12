@@ -15,7 +15,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "A progressive path from zero to regular runner, safely and sustainably",
     icon: "Footprints",
-    gradient: "from-green-500 to-emerald-600",
     difficulty: "beginner",
     isProgression: true,
     workoutIds: [
@@ -49,7 +48,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "Gentle, restorative sessions to decompress and find balance",
     icon: "Leaf",
-    gradient: "from-teal-400 to-cyan-500",
     isProgression: false,
     workoutIds: [
       "REC-004", // Récupération nature
@@ -80,7 +78,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "A careful, progressive protocol to resume running after an injury",
     icon: "Shield",
-    gradient: "from-amber-400 to-orange-500",
     difficulty: "beginner",
     isProgression: true,
     workoutIds: [
@@ -113,7 +110,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "The idéal protocol to recover after a race and restart training",
     icon: "RefreshCw",
-    gradient: "from-sky-400 to-blue-500",
     isProgression: true,
     workoutIds: [
       "REC-003", // Decrassage post-course
@@ -141,7 +137,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "Tapering and activation to arrive at peak form on race day, from D-14 to the eve",
     icon: "Flag",
-    gradient: "from-violet-500 to-purple-600",
     isProgression: true,
     workoutIds: [
       "END-001",  // Endurance fondamentale (volume réduction)
@@ -176,7 +171,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "The benchmark sessions used by the world's best runners",
     icon: "Star",
-    gradient: "from-yellow-400 to-amber-500",
     isProgression: false,
     workoutIds: [
       "VMA-021",  // Billat 30/30
@@ -214,7 +208,7 @@ export const collections: Collection[] = [
     descriptionEn:
       "Develop your VO2max speed and pace to smash your 5K personal best",
     icon: "Target",
-    gradient: "from-red-500 to-rose-600",
+    practice: "road",
     difficulty: "intermediate",
     isProgression: true,
     workoutIds: [
@@ -239,7 +233,7 @@ export const collections: Collection[] = [
     descriptionEn:
       "Work on threshold and tempo to sustain your pace over 10 kilometers",
     icon: "Target",
-    gradient: "from-orange-500 to-red-500",
+    practice: "road",
     difficulty: "intermediate",
     isProgression: true,
     workoutIds: [
@@ -264,7 +258,7 @@ export const collections: Collection[] = [
     descriptionEn:
       "Combine endurance, threshold and race pace to nail your half-marathon",
     icon: "Target",
-    gradient: "from-blue-500 to-indigo-600",
+    practice: "road",
     difficulty: "advanced",
     isProgression: true,
     workoutIds: [
@@ -299,7 +293,7 @@ export const collections: Collection[] = [
     descriptionEn:
       "Prepare to run 42K with long runs, tempo work and race-specific pace",
     icon: "Route",
-    gradient: "from-indigo-500 to-purple-600",
+    practice: "road",
     difficulty: "advanced",
     isProgression: true,
     workoutIds: [
@@ -333,7 +327,7 @@ export const collections: Collection[] = [
     descriptionEn:
       "Build the extreme endurance and résilience needed for ultra-distance",
     icon: "Mountain",
-    gradient: "from-emerald-600 to-teal-700",
+    practice: "ultra",
     difficulty: "elite",
     isProgression: true,
     workoutIds: [
@@ -370,7 +364,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "A progressive program to develop your maximal aerobic speed",
     icon: "Sprint",
-    gradient: "from-pink-500 to-rose-600",
     difficulty: "intermediate",
     isProgression: true,
     workoutIds: [
@@ -407,7 +400,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "Progressive strength training program specific to running. From anatomical adaptation to maximal strength, following science-validated protocols (Beattie 2017, Rønnestad 2014).",
     icon: "Dumbbell",
-    gradient: "from-amber-500/20 to-orange-500/20",
     difficulty: "intermediate",
     isProgression: true,
     workoutIds: [
@@ -429,7 +421,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "Core stability and trunk control for better running posture. Anti-extension, anti-rotation, anti-lateral flexion: the three pillars of runner's core.",
     icon: "Shield",
-    gradient: "from-purple-500/20 to-violet-500/20",
     difficulty: "beginner",
     isProgression: true,
     workoutIds: [
@@ -449,7 +440,6 @@ export const collections: Collection[] = [
     descriptionEn:
       "Targeted strengthening of runner's vulnerable areas: knees, ankles, hips. Based on Lauersen (2014) meta-analysis showing 50% injury risk reduction through strength training.",
     icon: "HeartPulse",
-    gradient: "from-emerald-500/20 to-teal-500/20",
     isProgression: false,
     workoutIds: [
       "STR-017",  // Prehab coureur

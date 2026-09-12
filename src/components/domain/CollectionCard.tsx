@@ -15,6 +15,7 @@ import {
 import type { IconProps } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import type { Collection } from "@/data/collections/types";
+import { PRACTICE_META } from "@/types/practice";
 import { usePickLang } from "@/lib/i18n-utils";
 
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
@@ -64,6 +65,17 @@ export function CollectionCard({ collection, className }: CollectionCardProps) {
         <span className="zn-ecard__fact">
           {t("collections.workoutCount", { count: collection.workoutIds.length })}
         </span>
+        {/* La pratique, quand la collection en sert une. Dix des quinze sont
+            transversales et n'affichent donc rien — un « toutes pratiques »
+            sur dix cartes sur quinze serait du bruit, pas une information.
+            Le libellé vient de PRACTICE_META, qui porte ses deux langues en
+            ligne comme le reste des tables de domaine : ce n'est pas une clé
+            i18n, et le nom d'une pratique ne se traduit pas par écran. */}
+        {collection.practice && (
+          <span className="zn-ecard__fact">
+            {pick(PRACTICE_META[collection.practice], "label")}
+          </span>
+        )}
       </div>
     </Link>
   );
