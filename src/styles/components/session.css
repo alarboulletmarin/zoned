@@ -442,44 +442,6 @@
   border-block-start: var(--bw-hair) solid var(--line-axis);
 }
 
-/* ── l'annotation du profil ───────────────────────────────────────────── */
-
-/* La figure que la foulée occupait, remise là où elle travaille : au départ du
-   trait, dans l'annotation qui explique le profil. C'est le registre que
-   docs/doodles.md réserve à « un endroit du bloc, pas le bloc entier », et la
-   variante `figure` d'Annotation.tsx n'avait jusqu'ici aucun appelant.
-
-   Le sol est le bord haut de .zn-zonebar — var(--border-rule) sur ses quatre
-   côtés (zone.css), et l'annotation est son frère immédiat sans marge. La
-   figure descend de l'épaisseur RENDUE du filet (--rule-bite, pas --bw-rule :
-   Chrome ramène 1,5 px au pixel entier) pour le mordre, et passe devant dans
-   l'ordre de peinture — la frise vient après dans le DOM et son fond opaque
-   couvrirait la semelle sinon. Même calage que .zn-slot--ground.
-
-   200 px : le cadre coupé fait 174 × 306,8, donc 113 px de large et un trait
-   de 2 unités rendu à 1,30 px — la valeur retenue pour l'échauffement après
-   que 0,95 px a été refusé, le croisement main/cheville se brouillant en
-   dessous (guides.css). Les 84 px du défaut n'ont jamais visé cette figure :
-   ils rendent 0,55 px, sous le demi-pixel, et 84 px de haut est sous le
-   plancher de 120 px que la doctrine fixe pour un cadre portrait.
-
-   Sous 640 px la figure s'efface (annotation.css) : le téléphone garde le
-   texte et la flèche. C'est voulu — c'est là que la foulée coûtait 176 px. */
-.zn-session__note .zn-note__figure {
-  position: relative;
-  z-index: 1;
-  block-size: 200px;
-  margin-block-end: calc(-1 * var(--rule-bite));
-}
-
-/* La flèche revient sur la ligne du filet. Son défaut la descend de --sp-8
-   pour mordre dans sa cible ; avec une semelle posée sur ce même filet, elle
-   pendrait quinze pixels sous la figure. Les deux marques partagent maintenant
-   une seule ligne d'appui, qui est le bord du profil qu'elles désignent. */
-.zn-session__note .zn-note__arrow {
-  margin-block-end: 0;
-}
-
 /* ── phases ───────────────────────────────────────────────────────────── */
 
 /* WorkoutStructure stacks its phases; on this screen they run three across,

@@ -179,7 +179,6 @@
     "exportFormats": ".fit · .ics · .pdf · .png",
     "notFoundTitle": "This session left the catalogue",
     "notFoundBody": "The link points to an id the catalogue no longer knows. Your favourites, plans and saved sessions are untouched.",
-    "profileNote": "height reads intensity, width reads the time spent in it",
     "zonesNote": "minutes, not kilometres: adaptation follows the time spent there"
   },
   "illustration": {

@@ -680,36 +680,12 @@ export function WorkoutDetailPage() {
             </div>
 
             <div>
-              {/* Le profil est la seule chose de la page qui se lit sur deux
-                  axes à la fois. Sans un mot, on le prend pour une frise
-                  décorative — d'où l'annotation, qui dit quoi regarder et le
-                  montre.
-
-                  Avec la figure, depuis que la foulée par zone dominante est
-                  partie. Elle était la figure de l'écran et bloquait celle-ci,
-                  alors qu'elle disait ce que le badge, le FactStrip, la teinte
-                  de la frise et la table de répartition disent déjà ; et sur
-                  téléphone elle s'insérait entre la frise et l'axe qui la
-                  légende — 185 px mesurés, une légende orpheline, et une
-                  semelle calée sur une abscisse de temps, qui se lit comme un
-                  curseur quoi qu'en dise un commentaire. La figure ne s'ajoute
-                  pas ici : elle remplace celle qui est partie, une pour une,
-                  sur la même page.
-
-                  Son sol est le bord haut du profil : .zn-zonebar porte
-                  var(--border-rule) sur ses quatre côtés et cette annotation
-                  est son frère immédiat, sans marge — le filet est déjà tracé
-                  pour une autre raison, la figure s'y invite. Sous 640 px elle
-                  s'efface d'elle-même (annotation.css) : le téléphone garde le
-                  texte et la flèche et ne paie pas un pixel, ce qui est
-                  exactement là où la foulée coûtait cher. */}
-              <Annotation
-                className="zn-session__note"
-                figure
-                text={t("session:screen.profileNote")}
-                arrow="down-right"
-                align="start"
-              />
+              {/* Le profil, seul. Il portait une annotation — « la hauteur dit
+                  l'intensité, la largeur dit le temps passé dedans », sa
+                  flèche et sa figure ; le propriétaire n'en veut plus. L'axe
+                  sous la frise nomme déjà le temps, la teinte des blocs nomme
+                  déjà la zone, et la table de répartition dit les deux en
+                  chiffres. */}
               <ZoneBar
                 blocks={profileBlocks}
                 height={112}
