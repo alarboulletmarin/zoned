@@ -5,7 +5,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight, Check } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
@@ -36,8 +36,10 @@ import {
   parsePaceToSeconds,
   suggestLevel,
 } from "./plan-create/helpers";
-import { STEPS, stepsFor } from "./plan-create/steps/registry";
+import { STEPS } from "./plan-create/steps/registry";
+import { indexOfStep, stepsFor } from "./plan-create/steps/flows";
 import type { FormState, StepContext, WizardDerived } from "./plan-create/types";
+import { PRACTICES, type Practice } from "@/types/practice";
 
 /**
  * La coquille du parcours de plan.
@@ -59,14 +61,30 @@ export function PlanCreatePage() {
   const pick = usePickLang();
   const navigate = useNavigate();
   const uid = useId();
+  const [searchParams] = useSearchParams();
   const { createPlan, isGenerating, error } = useCreatePlan();
 
-  const [stepIndex, setStepIndex] = useState(0);
+  /* `/plan/new` envoie la pratique choisie : on démarre alors à l'étape
+     suivante plutôt que de reposer la même question. Une valeur inconnue est
+     ignorée — le parcours repart de sa première question. */
+  const presetPractice = useMemo<Practice | null>(() => {
+    const raw = searchParams.get("practice");
+    return raw && (PRACTICES as readonly string[]).includes(raw)
+      ? (raw as Practice)
+      : null;
+  }, [searchParams]);
+
+  const [stepIndex, setStepIndex] = useState(() => (presetPractice ? 1 : 0));
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const todayDate = useMemo(() => getTodayDateInputValue(), []);
-  const [form, setForm] = useState<FormState>(() => {
+
+  /* L'état de départ est mémorisé, pas seulement utilisé : un brouillon écrit
+     avant l'ajout d'un champ n'en a pas la clé, et le poser tel quel donnerait
+     un objet incomplet TYPÉ complet. `revive` fusionne sur celui-ci. */
+  const initialForm = useMemo<FormState>(() => {
     const rp = loadRunnerProfile();
     return {
+      practice: presetPractice,
       planPurpose: "race",
       trainingGoal: "time",
       raceDistance: null,
@@ -85,8 +103,23 @@ export function PlanCreatePage() {
       includeStrength: false,
       strengthFrequency: 2,
       intermediateGoals: [],
+      terrain: "trail_runnable",
+      ultraNight: false,
+      ultraFuelling: false,
+      ultraPoles: false,
+      ultraBackToBack: false,
     };
-  });
+  }, [todayDate, presetPractice]);
+
+  const [form, setForm] = useState<FormState>(initialForm);
+
+  const steps = useMemo(() => stepsFor(form), [form]);
+  /* Borner l'index au parcours courant. Il peut le dépasser de deux façons :
+     un préréglage `?practice=` qui démarre à l'étape 2 d'un parcours qui n'en
+     a qu'une (le triathlon annoncé), ou une réponse qui raccourcit la liste en
+     cours de route. Sans ça l'écran annonçait « Étape 2 sur 1 ». */
+  const safeIndex = Math.min(stepIndex, steps.length - 1);
+  const currentStepId = steps[safeIndex] ?? "practice";
 
   // Auto-save the wizard so a closed tab / hard reload doesn't lose progress.
   // Persistence stops when the plan is finalized; the banner appears on mount
@@ -96,6 +129,11 @@ export function PlanCreatePage() {
     setForm,
     stepIndex,
     setStepIndex,
+    {
+      stepId: currentStepId,
+      revive: (stored) => ({ ...initialForm, ...stored }),
+      resolveStepIndex: indexOfStep,
+    },
   );
 
   // Load user zone preferences for VMA suggestion
@@ -107,8 +145,6 @@ export function PlanCreatePage() {
   // ── Dynamic step flow ────────────────────────────────────────────
 
   const isRacePlan = form.planPurpose === "race";
-  const steps = useMemo(() => stepsFor(form), [form]);
-  const currentStepId = steps[stepIndex] ?? "purpose";
   const step = STEPS[currentStepId];
   const totalSteps = steps.length;
 
@@ -237,6 +273,10 @@ export function PlanCreatePage() {
         : undefined,
       createdAt: new Date().toISOString(),
       ...buildRacePlanDateRange(form.startDate, effectiveRaceDate),
+      /* La pratique n'est stockée QUE pour un plan sans course visée : dans
+         tous les autres cas elle se déduit de `raceDistance`, ce qui est ce
+         qui évite toute migration de `zoned-plans`. */
+      practice: isRacePlan ? undefined : (form.practice ?? undefined),
       planPurpose: form.planPurpose,
       trainingGoal: form.trainingGoal,
       totalWeeksOverride: !isRacePlan ? form.totalWeeksOverride : undefined,
@@ -339,7 +379,7 @@ export function PlanCreatePage() {
 
       <div className="zn-wiz">
         <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
-          {stepIndex === 0 && (
+          {safeIndex === 0 && (
             <Button variant="ghost" size="sm" asChild className="zn-wiz__lone">
               <Link to="/plan/new">
                 <ArrowLeft />
@@ -357,7 +397,7 @@ export function PlanCreatePage() {
 
           {/* The promise and its limits are stated once, on the first step —
               past that the question on screen is what matters. */}
-          {stepIndex === 0 && (
+          {safeIndex === 0 && (
             <div
               className="zn-split"
               style={{ "--split": "1fr 340px", "--gap": "var(--sp-14)" } as CSSProperties}
@@ -382,7 +422,7 @@ export function PlanCreatePage() {
         </div>
 
         <section className="zn-wiz__band">
-          {hasDraft && stepIndex === 0 && (
+          {hasDraft && safeIndex === 0 && (
             <Alert
               kind="info"
               title={t("draft.found")}
@@ -407,8 +447,8 @@ export function PlanCreatePage() {
           <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
             <ol className="zn-stepper zn-wiz__steps">
               {steps.map((id, index) => {
-                const done = index < stepIndex;
-                const current = index === stepIndex;
+                const done = index < safeIndex;
+                const current = index === safeIndex;
                 return (
                   <li key={id} className="zn-stepper__item">
                     <button
@@ -432,7 +472,7 @@ export function PlanCreatePage() {
               })}
             </ol>
             <p className="zn-mono zn-wiz__where">
-              {t("wizard.where", { current: stepIndex + 1, total: totalSteps })}
+              {t("wizard.where", { current: safeIndex + 1, total: totalSteps })}
             </p>
           </div>
 
@@ -463,7 +503,7 @@ export function PlanCreatePage() {
                   <step.Body {...ctx} />
                 </CardContent>
                 <CardFooter className="zn-wiz__nav">
-                  <Button variant="outline" onClick={goBack} disabled={stepIndex === 0}>
+                  <Button variant="outline" onClick={goBack} disabled={safeIndex === 0}>
                     <ArrowLeft />
                     {t("nav.back")}
                   </Button>

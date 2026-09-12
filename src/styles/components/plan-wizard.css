@@ -347,3 +347,38 @@
 .zn-btn[data-variant="ghost"].zn-wiz-race__remove {
   color: var(--state-danger);
 }
+
+/* ── L'annonce d'une pratique pas encore livrée ──────────────────────────
+ *
+ * Le triathlon se choisit, et l'écran dit alors ce qui existe VRAIMENT :
+ * ses séances sont consultables, ses plans n'existent pas. Pas un teaser, pas
+ * un plan factice. Une bande d'encre sur filet, pas une carte : ce n'est pas
+ * une chose à choisir, c'est une réponse.
+ */
+.zn-wiz__announce {
+  padding-block-start: var(--sp-8);
+  border-block-start: var(--border-rule);
+}
+
+/* Les deux autres façons d'avoir un plan : une ligne de liens sous les
+   pratiques. La question « comment » se pose après « quoi ». */
+.zn-wiz__modes {
+  padding-block-start: var(--sp-8);
+  border-block-start: var(--border-rule);
+}
+
+.zn-wiz__modes a {
+  color: var(--text-body);
+  text-underline-offset: 3px;
+}
+
+.zn-wiz__modes a:hover {
+  color: var(--accent);
+}
+
+@media (pointer: coarse) {
+  .zn-wiz__modes a {
+    display: inline-block;
+    padding-block: var(--sp-4);
+  }
+}

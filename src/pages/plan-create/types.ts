@@ -7,7 +7,8 @@ import type {
   RaceDistance,
   TrainingGoal,
 } from "@/types/plan";
-import type { Difficulty, UserZonePreferences } from "@/types";
+import type { Difficulty, TerrainType, UserZonePreferences } from "@/types";
+import type { Practice } from "@/types/practice";
 import type { ValidationResult } from "@/lib/intermediateGoalValidation";
 
 /**
@@ -22,6 +23,16 @@ import type { ValidationResult } from "@/lib/intermediateGoalValidation";
  */
 
 export interface FormState {
+  /**
+   * La pratique visée — la première question, et celle qui gouverne les
+   * suivantes.
+   *
+   * Elle manquait : le parcours affichait les sept distances à plat dans une
+   * seule grille, et tout le traitement du trail tenait dans un booléen qui ne
+   * changeait qu'une phrase d'aide. On pouvait donc choisir « ultra » et se
+   * faire demander une allure au kilomètre, jamais un dénivelé.
+   */
+  practice: Practice | null;
   planPurpose: PlanPurpose;
   trainingGoal: TrainingGoal;
   raceDistance: RaceDistance | null;
@@ -40,6 +51,13 @@ export interface FormState {
   includeStrength: boolean;
   strengthFrequency: 1 | 2 | 3;
   intermediateGoals: IntermediateGoal[];
+  /** Le terrain visé — trail et ultra. Oriente la sélection des séances. */
+  terrain: TerrainType;
+  /** La logistique d'un ultra. Des préférences, pas des paramètres moteur. */
+  ultraNight: boolean;
+  ultraFuelling: boolean;
+  ultraPoles: boolean;
+  ultraBackToBack: boolean;
 }
 
 /**
@@ -109,6 +127,7 @@ export interface StepContext {
 }
 
 export type StepId =
+  | "practice"
   | "purpose"
   | "distance"
   | "date"
@@ -118,6 +137,8 @@ export type StepId =
   | "level"
   | "goal"
   | "fitness"
+  | "terrain"
+  | "ultra_logistics"
   | "schedule"
   | "pace"
   | "summary";
@@ -154,4 +175,4 @@ export interface StepDef {
   ownsNav?: boolean;
 }
 
-export type { PlanPurpose, RaceDistance, TrainingGoal, IntermediateGoal };
+export type { PlanPurpose, RaceDistance, TrainingGoal, IntermediateGoal, Practice };

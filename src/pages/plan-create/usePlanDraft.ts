@@ -24,6 +24,17 @@ interface DraftPayload<F> {
   version: number;
   ts: number;
   stepIndex: number;
+  /**
+   * L'identifiant de l'étape, en plus de son index.
+   *
+   * L'index seul ne désigne plus la même question dès que la liste d'étapes
+   * dépend des réponses : un brouillon arrêté à « Niveau » (index 5 d'un
+   * parcours course) revenait sur « Allure » si le parcours restauré était
+   * plus court. On résout par id, et l'index ne sert que de repli.
+   *
+   * Absent des brouillons écrits avant son existence — d'où l'optionnel.
+   */
+  stepId?: string;
   form: F;
 }
 
@@ -43,6 +54,23 @@ export function usePlanDraft<F>(
   setForm: (next: F) => void,
   stepIndex: number,
   setStepIndex: (idx: number) => void,
+  options?: {
+    /**
+     * L'id de l'étape courante, persisté à côté de l'index.
+     */
+    stepId?: string;
+    /**
+     * Remet un brouillon relu en état.
+     *
+     * Sans lui, `setForm(draft.form)` posait un objet auquel il MANQUE les
+     * champs ajoutés depuis, **typé comme s'il les avait** : `form.practice`
+     * valait `undefined` là où le code attend une valeur. L'appelant passe
+     * `stored => ({ ...initialForm, ...stored })`.
+     */
+    revive?: (stored: F) => F;
+    /** Retrouve l'index d'une étape par son id, dans le parcours restauré. */
+    resolveStepIndex?: (stepId: string, form: F) => number | null;
+  },
 ): UsePlanDraftResult {
   // Capture initial draft presence synchronously so the banner shows on first
   // paint (no flash of "no draft" while we read storage in an effect).
@@ -56,6 +84,10 @@ export function usePlanDraft<F>(
   // where the effect fires twice on mount.
   const initialFormRef = useRef(form);
   const initialStepRef = useRef(stepIndex);
+  // Les options changent à chaque rendu (l'id d'étape en fait partie) : une
+  // ref les garde à jour sans relancer l'effet de persistance.
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
 
   // Persist every meaningful change. localStorage writes are ~µs on modern
   // hardware so we don't bother debouncing — and the synchronous write means
@@ -74,6 +106,7 @@ export function usePlanDraft<F>(
       version: DRAFT_VERSION,
       ts: Date.now(),
       stepIndex,
+      stepId: optionsRef.current?.stepId,
       form,
     };
     try {
@@ -89,8 +122,28 @@ export function usePlanDraft<F>(
       setHasDraft(false);
       return;
     }
-    setForm(draft.form);
-    setStepIndex(draft.stepIndex);
+    const opts = optionsRef.current;
+    // Fusionner, pas remplacer : un brouillon d'avant l'ajout d'un champ n'en
+    // a pas la clé, et le poser tel quel donne un état incomplet typé complet.
+    const revived = opts?.revive ? opts.revive(draft.form) : draft.form;
+    setForm(revived);
+
+    /* L'étape se retrouve par son ID, jamais par son index.
+     *
+     * Un index n'a de sens que dans le parcours où il a été écrit. Quand une
+     * étape s'ajoute en tête — la pratique — l'index 5 qui désignait « Niveau »
+     * désigne maintenant « Courses de prépa » : on reprendrait à la mauvaise
+     * question, en silence, ce qui est pire que de reprendre au début.
+     *
+     * Donc : l'id s'il est là et qu'il existe encore dans le parcours
+     * restauré ; sinon on repart de la première étape. Ce n'est pas une perte
+     * — toutes les réponses sont restaurées, on ne fait que les retraverser —
+     * et ça ne concerne que les brouillons écrits avant que `stepId` existe. */
+    const byId =
+      draft.stepId && opts?.resolveStepIndex
+        ? opts.resolveStepIndex(draft.stepId, revived)
+        : null;
+    setStepIndex(byId ?? 0);
     setHasDraft(false);
   }, [setForm, setStepIndex]);
 

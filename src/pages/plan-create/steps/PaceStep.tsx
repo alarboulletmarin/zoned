@@ -27,10 +27,12 @@ function PaceBody({ form, setForm, uid, t, derived, goForward }: StepContext) {
     ? RACE_DISTANCE_META[form.raceDistance].distanceKm
     : 0;
   const finishSeconds = parseFinishTimeToSeconds(targetFinishTime);
-  const isTrail =
-    form.raceDistance === "trail_short" ||
-    form.raceDistance === "trail" ||
-    form.raceDistance === "ultra";
+  // `isTrail` ne gouvernait qu'une phrase d'aide, et le champ dénivelé qui
+  // vivait ici rendait SANS CONDITION — un coureur de 5 km sur route se
+  // faisait demander un D+. Le dénivelé est parti dans l'étape terrain, qui
+  // n'apparaît qu'en trail et en ultra ; et la pratique est maintenant la
+  // source, au lieu d'une devinette sur la distance.
+  const isTrail = form.practice === "trail" || form.practice === "ultra";
 
   return (
     <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
@@ -130,24 +132,6 @@ function PaceBody({ form, setForm, uid, t, derived, goForward }: StepContext) {
                     )}
                   </div>
                 )}
-
-                <div className="zn-contrib-field">
-                  <label className="zn-contrib-field__label" htmlFor={`${uid}-elevation`}>
-                    {t("pace.elevation")}
-                  </label>
-                  <input
-                    id={`${uid}-elevation`}
-                    type="number"
-                    inputMode="numeric"
-                    min={0}
-                    max={10000}
-                    data-mono="true"
-                    className="zn-contrib-input"
-                    placeholder={t("pace.elevationPlaceholder")}
-                    value={form.elevationGain}
-                    onChange={(e) => setForm((f) => ({ ...f, elevationGain: e.target.value }))}
-                  />
-                </div>
               </div>
   );
 }

@@ -1,4 +1,5 @@
-import type { FormState, StepDef, StepId } from "../types";
+import type { StepDef, StepId } from "../types";
+import { practiceStep } from "./PracticeStep";
 import { purposeStep } from "./PurposeStep";
 import { distanceStep } from "./DistanceStep";
 import { dateStep } from "./DateStep";
@@ -10,6 +11,8 @@ import { goalStep } from "./GoalStep";
 import { fitnessStep } from "./FitnessStep";
 import { scheduleStep } from "./ScheduleStep";
 import { paceStep } from "./PaceStep";
+import { terrainStep } from "./TerrainStep";
+import { ultraLogisticsStep } from "./UltraLogisticsStep";
 import { summaryStep } from "./SummaryStep";
 
 /**
@@ -20,6 +23,7 @@ import { summaryStep } from "./SummaryStep";
  * rendus : elle lit le registre.
  */
 export const STEPS: Record<StepId, StepDef> = {
+  practice: practiceStep,
   purpose: purposeStep,
   distance: distanceStep,
   date: dateStep,
@@ -31,41 +35,9 @@ export const STEPS: Record<StepId, StepDef> = {
   fitness: fitnessStep,
   schedule: scheduleStep,
   pace: paceStep,
+  terrain: terrainStep,
+  ultra_logistics: ultraLogisticsStep,
   summary: summaryStep,
 };
 
-/**
- * L'enchaînement, tel qu'il était : une course, ou pas.
- *
- * Il vit ici et non dans `PRACTICE_META` : la méta est de la donnée de domaine
- * lue par `lib/` et `data/`, le séquencement est de l'UI. Les mélanger
- * traînerait des types de composants React dans `src/types/`.
- */
-const RACE_STEPS: StepId[] = [
-  "purpose",
-  "distance",
-  "date",
-  "race_name",
-  "intermediate_goals",
-  "level",
-  "goal",
-  "fitness",
-  "schedule",
-  "pace",
-  "summary",
-];
-
-const NON_RACE_STEPS: StepId[] = [
-  "purpose",
-  "duration",
-  "level",
-  "goal",
-  "fitness",
-  "schedule",
-  "summary",
-];
-
-/** Les étapes qui s'appliquent à ce brouillon. */
-export function stepsFor(form: FormState): StepId[] {
-  return form.planPurpose === "race" ? RACE_STEPS : NON_RACE_STEPS;
-}
+export { indexOfStep, stepsFor } from "./flows";

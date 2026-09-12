@@ -139,7 +139,7 @@
     "longRunDay": "Long run day"
   },
   "pace": {
-    "title": "Pace & Elevation",
+    "title": "Your target pace",
     "subtitle": "Optional - you can skip this step",
     "trailHint": "Elevation data is important for trail-specific training",
     "targetPace": "Target pace",
@@ -154,8 +154,6 @@
     "requiredPace": "Required pace: ",
     "paceFormatError": "Format: MM:SS (e.g. 5:30)",
     "timeFormatHint": "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)",
-    "elevation": "Elevation gain (m)",
-    "elevationPlaceholder": "e.g. 350",
     "skip": "Skip this step"
   },
   "summary": {
@@ -248,11 +246,11 @@
     "substituteMatchDeviation": "±{{deviation}}%",
     "substituteLongRunWarningTitle": "Long run: degraded substitution",
     "substituteLongRunWarningBody": "Cycling and swimming do not reproduce the orthopedic adaptations of a long run. Keep this swap for the weeks when running is impossible.",
-      "sessionSubstituted": "Session swapped",
-      "findRoute": "Find a matching route",
-      "findWeekRoute": "Route for this week",
-      "removeSession": "Remove session",
-      "noSessionsThisWeek": "No sessions this week",
+    "sessionSubstituted": "Session swapped",
+    "findRoute": "Find a matching route",
+    "findWeekRoute": "Route for this week",
+    "removeSession": "Remove session",
+    "noSessionsThisWeek": "No sessions this week",
     "schedule": "Schedule",
     "statistics": "Statistics",
     "trainingVolume": "Training volume relative to plan peak",
@@ -637,11 +635,11 @@
     "qualityPeak2": "Add a 2nd quality session (tempo, VO2max)",
     "qualityTaper": "Add a short race-pace reminder",
     "recoveryWeekNote": "Easy week: focus on easy runs, skip intensity",
-    "phaseBase": "Base phase \u2014 Build your aerobic foundation with easy volume.",
-    "phaseBuild": "Build phase \u2014 Gradually increase intensity with quality sessions.",
-    "phasePeak": "Peak phase \u2014 Sharpen your race-specific paces, approaching top form.",
-    "phaseTaper": "Taper phase \u2014 Reduce volume, keep a touch of intensity to stay fresh.",
-    "phaseRecovery": "Recovery week \u2014 Let your body absorb the training adaptations."
+    "phaseBase": "Base phase — Build your aerobic foundation with easy volume.",
+    "phaseBuild": "Build phase — Gradually increase intensity with quality sessions.",
+    "phasePeak": "Peak phase — Sharpen your race-specific paces, approaching top form.",
+    "phaseTaper": "Taper phase — Reduce volume, keep a touch of intensity to stay fresh.",
+    "phaseRecovery": "Recovery week — Let your body absorb the training adaptations."
   },
   "intermediateGoals": {
     "title": "Intermediate races",
@@ -744,7 +742,63 @@
       "fitness": "Fitness",
       "schedule": "Typical week",
       "pace": "Pace",
-      "summary": "Summary"
+      "summary": "Summary",
+      "practice": "Discipline",
+      "terrain": "Terrain",
+      "ultra_logistics": "Logistics"
     }
+  },
+  "practice": {
+    "title": "What are you training for?",
+    "subtitle": "This decides everything else: the distances offered, and the questions asked.",
+    "soon": "soon",
+    "distanceCount_one": "{{count}} distance",
+    "distanceCount_other": "{{count}} distances",
+    "road": {
+      "label": "Road",
+      "body": "From 5K to the marathon, on the road."
+    },
+    "trail": {
+      "label": "Trail",
+      "body": "From short trail to 60K: elevation, terrain, descent."
+    },
+    "ultra": {
+      "label": "Ultra",
+      "body": "Beyond trail: time on feet, night running, fuelling."
+    },
+    "triathlon": {
+      "label": "Triathlon",
+      "body": "Swim, bike, run. The sessions are here, the plans are coming."
+    },
+    "announceKicker": "What already works",
+    "announceBody": "Triathlon plans need per-discipline slots and brick sessions: that's a separate project, and it hasn't started. Nothing is blocked in the meantime — the bike and swim sessions are in the library, and the FTP and CSS tests work out your zones.",
+    "announceLibrary": "See the sessions",
+    "announceNumbers": "Open the calculators"
+  },
+  "terrain": {
+    "title": "What are you running on?",
+    "subtitle": "Terrain and elevation steer which sessions get picked.",
+    "kind": "Type of terrain",
+    "kindDesc": "From runnable to steep. When in doubt, leave it on \\u201crunnable trail\\u201d.",
+    "kinds": {
+      "trail_runnable": "Runnable trail",
+      "trail_technical": "Technical",
+      "mountain": "Mountain"
+    },
+    "elevation": "Race elevation gain (m)",
+    "elevationPlaceholder": "e.g. 1200",
+    "elevationDesc": "The total climb the organiser advertises. Optional."
+  },
+  "ultra": {
+    "title": "What needs rehearsing",
+    "subtitle": "What will happen on race day and can be learnt in training. Tick what applies.",
+    "night": "Running at night",
+    "nightDesc": "A headtorch run, so race night isn't the first one.",
+    "fuelling": "Rehearsing fuelling",
+    "fuellingDesc": "Eating and drinking on the move: the stomach trains like the legs.",
+    "poles": "Using poles",
+    "polesDesc": "Power-hiking with poles is a skill of its own.",
+    "backToBack": "Two days in a row",
+    "backToBackDesc": "A long run on Saturday, another on Sunday on tired legs."
   }
 }

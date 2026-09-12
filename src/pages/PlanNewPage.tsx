@@ -1,21 +1,42 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { CSSProperties } from "react";
 import { ArrowLeft } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { DoorCard } from "@/components/domain/DoorCard";
+import { Option, OptionStack } from "./plan-create/Option";
 import { SEOHead } from "@/components/seo";
 import { useAppStats } from "@/hooks/useAppStats";
+import {
+  PRACTICES,
+  distancesOfPractice,
+  isPracticeLive,
+  type Practice,
+} from "@/types/practice";
 
 /**
- * The mode chooser: three doors, one per way of getting a plan.
+ * L'entrée du parcours : la pratique, et rien d'autre.
  *
- * Nothing is generated here — the screen's whole job is to name the three
- * routes honestly and get out of the way, which is what DoorCard is for.
+ * Cette page faisait choisir un MÉCANISME DE GÉNÉRATION — assisté, libre,
+ * prêt-à-l'emploi — **avant la première question**. C'était la question la
+ * plus coûteuse de l'app posée en premier : « veux-tu un plan assisté ? » ne
+ * se répond pas quand on n'a pas encore dit ce qu'on prépare. Et pour le trail
+ * et l'ultra l'étagère des plans prêts est vide, donc un tiers du temps
+ * l'embranchement annonçait une impasse.
+ *
+ * Le choix du mode se pose maintenant APRÈS, en secondaire, et seulement pour
+ * qui le cherche. `/plan/new/assisted`, `/free` et `/prebuilt` restent des
+ * routes vivantes — la première et la troisième sont au sitemap.
  */
 export function PlanNewPage() {
   const { t } = useTranslation(["plan", "common"]);
+  const navigate = useNavigate();
   const stats = useAppStats();
+
+  /* Choisir une pratique entre directement dans le parcours, à son étape 1.
+     Le paramètre est lu par PlanCreatePage, qui préremplit le brouillon. */
+  const choose = (practice: Practice) => {
+    navigate(`/plan/new/assisted?practice=${practice}`);
+  };
 
   return (
     <>
@@ -35,46 +56,56 @@ export function PlanNewPage() {
           </Button>
 
           <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-            <span className="zn-kicker">{t("newPlan.kicker")}</span>
+            <span className="zn-kicker">{t("plan:newPlan.kicker")}</span>
             <h1 className="zn-display" data-level="2">
-              {t("newPlan.title")}
+              {t("plan:practice.title")}
             </h1>
             <p
               className="zn-body zn-body--lead zn-measure"
               style={{ "--measure": "54ch" } as CSSProperties}
             >
-              {t("newPlan.lede")}
+              {t("plan:practice.subtitle")}
             </p>
           </div>
         </div>
 
-        <section className="zn-wiz__band" aria-labelledby="plan-new-doors">
-          <h2 id="plan-new-doors" className="sr-only">
-            {t("newPlan.doorsTitle")}
+        <section className="zn-wiz__band" aria-labelledby="plan-new-practices">
+          <h2 id="plan-new-practices" className="sr-only">
+            {t("plan:practice.title")}
           </h2>
-          <div className="zn-grid">
-            <DoorCard
-              to="/plan/new/assisted"
-              kicker={t("newPlan.assistedKicker")}
-              title={t("newPlan.assistedTitle")}
-              body={t("newPlan.assistedBody")}
-              cta={t("newPlan.assistedCta")}
-            />
-            <DoorCard
-              to="/plan/new/free"
-              kicker={t("newPlan.freeKicker")}
-              title={t("newPlan.freeTitle")}
-              body={t("newPlan.freeBody")}
-              cta={t("newPlan.freeCta")}
-            />
-            <DoorCard
-              to="/plan/new/prebuilt"
-              kicker={t("newPlan.prebuiltKicker", { n: stats.plans })}
-              title={t("newPlan.prebuiltTitle")}
-              body={t("newPlan.prebuiltBody")}
-              cta={t("newPlan.prebuiltCta", { n: stats.plans })}
-            />
-          </div>
+
+          <OptionStack questionId="plan-new-practices">
+            {PRACTICES.map((practice) => {
+              const live = isPracticeLive(practice);
+              const count = distancesOfPractice(practice).length;
+              return (
+                <Option
+                  key={practice}
+                  name="plan-new-practice"
+                  checked={false}
+                  title={t(`plan:practice.${practice}.label`)}
+                  body={t(`plan:practice.${practice}.body`)}
+                  data={
+                    live
+                      ? t("plan:practice.distanceCount", { count })
+                      : t("plan:practice.soon")
+                  }
+                  onSelect={() => choose(practice)}
+                />
+              );
+            })}
+          </OptionStack>
+
+          {/* Les deux autres façons d'avoir un plan, en secondaire : la
+              question « comment » se pose après « quoi », et seulement pour
+              qui la cherche. */}
+          <p className="zn-body zn-body--sm zn-muted zn-wiz__modes">
+            <Link to="/plan/new/prebuilt">
+              {t("plan:newPlan.prebuiltCta", { n: stats.plans })}
+            </Link>
+            <span aria-hidden="true"> · </span>
+            <Link to="/plan/new/free">{t("plan:newPlan.freeCta")}</Link>
+          </p>
         </section>
       </div>
     </>
