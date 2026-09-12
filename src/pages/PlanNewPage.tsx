@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Option, OptionStack } from "./plan-create/Option";
 import { SEOHead } from "@/components/seo";
 import { useAppStats } from "@/hooks/useAppStats";
-import { PRACTICES, type Practice } from "@/types/practice";
+import { PRACTICES, isPracticeLive, type Practice } from "@/types/practice";
 import { practiceData } from "@/components/domain/practice-data";
 
 /**
@@ -79,6 +79,10 @@ export function PlanNewPage() {
                 title={t(`plan:practice.${practice}.label`)}
                 body={t(`plan:practice.${practice}.body`)}
                 data={practiceData(practice, stats.byPractice[practice], t)}
+                /* Deux écrans montrent ces mêmes quatre cartes ; une pratique
+                   annoncée doit se lire comme telle sur les deux, sinon celle
+                   d'ici promet ce que celle d'après retire. */
+                soon={!isPracticeLive(practice)}
                 onSelect={() => choose(practice)}
               />
             ))}

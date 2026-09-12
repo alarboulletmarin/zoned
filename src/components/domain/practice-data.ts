@@ -18,8 +18,10 @@ import { isPracticeLive, type Practice } from "@/types/practice";
  *     rien ne s'affiche. Écrire « 0 séance » pendant 300 ms est un mensonge
  *     court mais c'en est un, et il fait aussi sauter la mise en page ;
  *   · zéro plan tout prêt → on le DIT (« aucun plan prêt ») au lieu de
- *     masquer la moitié de la ligne. C'est l'ultra aujourd'hui, et c'est une
- *     information utile : le générateur, lui, sait le construire.
+ *     masquer la moitié de la ligne. C'était l'ultra jusqu'au 12 septembre
+ *     2026, où il est passé annoncé : il tombe donc dans le premier cas
+ *     maintenant, et aucune pratique ouverte n'est dans celui-ci. Le cas
+ *     reste, parce que c'est celui d'une étagère qui se vide.
  *
  * Partagé par l'entrée du parcours (`PlanNewPage`) et son étape 1
  * (`PracticeStep`) : deux écrans qui montrent les mêmes quatre cartes et qui,

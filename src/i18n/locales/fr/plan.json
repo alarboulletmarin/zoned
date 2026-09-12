@@ -762,14 +762,15 @@
     },
     "ultra": {
       "label": "Ultra",
-      "body": "Au-delà du trail : temps sur les pieds, nuit, ravitaillement."
+      "body": "Au-delà du trail : temps sur les pieds, nuit, ravitaillement.",
+      "announce": "Un plan ultra se bâtit sur seize à cinquante-deux semaines, avec du temps sur les pieds, de la nuit et une stratégie de ravitaillement. Ce que le générateur en sort n'est pas encore assez fiable pour qu'on te le propose — alors on ne le propose pas. En attendant, rien n'est bloqué : les séances ultra sont dans la bibliothèque, et les calculateurs donnent tes allures."
     },
     "triathlon": {
       "label": "Triathlon",
-      "body": "Nage, vélo, course. Les séances sont là, les plans arrivent."
+      "body": "Nage, vélo, course. Les séances sont là, les plans arrivent.",
+      "announce": "Les plans triathlon demandent des créneaux par discipline et des enchaînements : c'est un chantier à part, et il n'est pas commencé. En attendant, rien n'est bloqué — les séances vélo et natation sont dans la bibliothèque, et les tests FTP et CSS calculent tes zones."
     },
     "announceKicker": "Ce qui existe déjà",
-    "announceBody": "Les plans triathlon demandent des créneaux par discipline et des enchaînements : c'est un chantier à part, et il n'est pas commencé. En attendant, rien n'est bloqué — les séances vélo et natation sont dans la bibliothèque, et les tests FTP et CSS calculent tes zones.",
     "announceLibrary": "Voir les séances",
     "announceNumbers": "Ouvrir les calculateurs"
   },

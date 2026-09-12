@@ -30,13 +30,15 @@ export function PrebuiltPlansPage() {
 
   /* Les pratiques VIVANTES dont l'étagère est vide.
      Un rayon vide ne rend jamais une grille vide en silence : il le dit, et il
-     dit ce qui marche à la place. Aujourd'hui c'est l'ultra — seize à
-     cinquante-deux semaines de structure à écrire à la main, là où le
-     générateur a déjà les tables. Une pratique ANNONCÉE (le triathlon) n'entre
-     pas dans cette liste : elle porte son annonce ailleurs, et compter zéro
-     plan pour une pratique qui n'est pas ouverte serait du bruit.
-     Rien n'est en dur : le jour où un plan ultra est écrit, le bloc disparaît
-     tout seul. */
+     dit ce qui marche à la place. Une pratique ANNONCÉE n'entre pas dans cette
+     liste : elle porte son annonce ailleurs, et compter zéro plan pour une
+     pratique qui n'est pas ouverte serait du bruit — surtout que le bloc
+     renvoie vers le générateur, ce qui serait exactement le contraire de ce
+     que dit l'annonce.
+     C'était l'ultra jusqu'au 12 septembre 2026 ; il est passé annoncé et le
+     bloc a disparu tout seul, sans qu'une ligne change ici. La liste est vide
+     aujourd'hui, et elle se remplira d'elle-même le jour où une pratique
+     ouverte se retrouvera sans plan tout prêt. */
   const served = new Set(
     plans.filter((p) => p.raceDistance).map((p) => practiceFromRaceDistance(p.raceDistance!)),
   );

@@ -762,14 +762,15 @@
     },
     "ultra": {
       "label": "Ultra",
-      "body": "Beyond trail: time on feet, night running, fuelling."
+      "body": "Beyond trail: time on feet, night running, fuelling.",
+      "announce": "An ultra plan is built over sixteen to fifty-two weeks, on time on feet, night running and a fuelling strategy. What the generator produces at that distance is not dependable enough to offer yet — so we don't offer it. Nothing is blocked in the meantime: the ultra sessions are in the library, and the calculators work out your paces."
     },
     "triathlon": {
       "label": "Triathlon",
-      "body": "Swim, bike, run. The sessions are here, the plans are coming."
+      "body": "Swim, bike, run. The sessions are here, the plans are coming.",
+      "announce": "Triathlon plans need per-discipline slots and brick sessions: that's a separate project, and it hasn't started. Nothing is blocked in the meantime — the bike and swim sessions are in the library, and the FTP and CSS tests work out your zones."
     },
     "announceKicker": "What already works",
-    "announceBody": "Triathlon plans need per-discipline slots and brick sessions: that's a separate project, and it hasn't started. Nothing is blocked in the meantime — the bike and swim sessions are in the library, and the FTP and CSS tests work out your zones.",
     "announceLibrary": "See the sessions",
     "announceNumbers": "Open the calculators"
   },

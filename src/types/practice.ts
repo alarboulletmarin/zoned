@@ -9,6 +9,11 @@ import type { RaceDistance } from "@/types/plan";
  * du trail, je prépare un ultra. C'est cet axe qui porte la nav, la
  * bibliothèque et la première question du parcours de plan.
  *
+ * Une pratique peut être NOMMÉE sans que ses plans existent — voir
+ * `PracticeStatus`. Ses séances restent alors consultables : l'ultra en a
+ * quarante-neuf dans la bibliothèque, le triathlon les siennes en vélo et en
+ * natation. C'est la génération de plan qui est fermée, pas le contenu.
+ *
  * La pratique ne se stocke pas : elle se **déduit** de `RaceDistance`, qui est
  * déjà persistée dans `zoned-plans` et porte déjà `trail_short`, `trail` et
  * `ultra` en première classe. Donc aucune migration, et un plan enregistré
@@ -33,8 +38,15 @@ export const PRACTICES: readonly Practice[] = [
  *
  * C'est LE drapeau que toute l'UI lit — carte de pratique, bibliothèque,
  * `/plans`, étape 1 du parcours. Aucun écran ne re-décide dans son coin, et
- * basculer le triathlon en `live` le jour où ses plans existent est un
+ * basculer une pratique en `live` le jour où ses plans existent est un
  * changement d'une ligne.
+ *
+ * Deux pratiques le portent : le triathlon, dont les plans n'ont jamais été
+ * écrits, et l'ULTRA depuis le 12 septembre 2026 — décision du propriétaire,
+ * qui juge ce que le générateur produit à cette distance pas assez fiable pour
+ * être proposé. Le moteur garde ses tables d'ultra : un plan déjà enregistré
+ * continue de s'ouvrir et de se dérouler, c'est la PORTE qui se ferme, pas la
+ * machine.
  */
 export type PracticeStatus = "live" | "announced";
 
@@ -76,12 +88,14 @@ export const PRACTICE_META: Record<Practice, PracticeMeta> = {
   },
   ultra: {
     id: "ultra",
-    status: "live",
+    status: "announced",
     label: "Ultra",
     labelEn: "Ultra",
-    blurb: "Au-delà du trail : temps sur les pieds, nuit, ravitaillement.",
-    blurbEn: "Beyond trail: time on feet, night running, fuelling.",
-    raceDistances: ["ultra"],
+    blurb: "Au-delà du trail : temps sur les pieds, nuit, ravitaillement. Les séances sont là, les plans arrivent.",
+    blurbEn: "Beyond trail: time on feet, night running, fuelling. The sessions are here, the plans are coming.",
+    /* Vide, comme toute pratique annoncée : c'est ce que lit l'étape distance,
+       et le parcours s'arrête de toute façon à la première question. */
+    raceDistances: [],
     disciplines: ["running"],
   },
   triathlon: {

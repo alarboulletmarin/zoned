@@ -254,6 +254,64 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+/* ── une réponse nommée mais pas encore servie ────────────────────────────
+ *
+ * Une pratique annoncée — le triathlon, et l'ultra depuis le 12 septembre
+ * 2026. Elle se choisissait comme n'importe quelle autre, et on n'apprenait
+ * qu'APRÈS, sur l'écran suivant, que ses plans n'existaient pas : la réponse
+ * se dérobait une fois donnée. Le propriétaire a demandé que ça se voie avant,
+ * et il a raison — c'est la seule façon de ne pas faire perdre un geste.
+ *
+ * Elle reste CHOISISSABLE : la choisir est ce qui déroule ce qui existe déjà
+ * pour elle (les séances, les calculateurs), et un bouton mort ne dirait rien
+ * de tout ça. Ce qui change, c'est ce qu'elle promet à l'œil :
+ *
+ *   · le filet passe en pointillé — le registre que ce dépôt réserve déjà à
+ *     « ceci n'est pas tout à fait posé » (.zn-wiz-race, une course de prépa) ;
+ *   · l'encre baisse d'un cran, titre compris ;
+ *   · « bientôt » quitte le pied de carte et devient une MARQUE en capitales,
+ *     contre un filet, à la place qu'occupent les chiffres des autres cartes.
+ *
+ * Trois canaux, aucun n'est une couleur : la carte reste reconnaissable en
+ * niveaux de gris (WCAG 1.4.1). */
+.zn-wiz-opt[data-soon] {
+  border: var(--border-dashed);
+}
+
+.zn-wiz-opt[data-soon] .zn-wiz-opt__title {
+  color: var(--text-muted);
+}
+
+.zn-wiz-opt[data-soon] .zn-wiz-opt__body,
+.zn-wiz-opt[data-soon] .zn-wiz-opt__glyph {
+  color: var(--text-faint);
+}
+
+/* La marque, là où les autres cartes portent leurs chiffres.
+
+   `flex: none` la ramène à sa propre largeur : sous 560 px la donnée d'une
+   option prend toute la ligne (`flex-basis: 100%`, plus haut) parce qu'une
+   ligne de chiffres se lit d'un bord à l'autre — une pastille de sept lettres
+   étirée sur 280 px, elle, ne se lit plus comme une marque. Elle se replie
+   toujours sous le texte, mais elle s'y arrête où elle finit. */
+.zn-wiz-opt[data-soon] .zn-wiz-opt__data {
+  flex: none;
+  padding: var(--sp-2) var(--sp-6);
+  border: var(--border-hair);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Choisie, elle garde le filet d'encre de la maison : le pointillé dit « pas
+   encore servie », pas « pas sélectionnable », et les deux doivent pouvoir se
+   lire en même temps. */
+.zn-wiz-opt[data-soon]:has(input:checked) .zn-wiz-opt__title {
+  color: var(--text-body);
+}
+
 /* The glyph that names an option's family. It follows the words: same weight,
    never a decoration that outgrows them. */
 .zn-wiz-opt__glyph {

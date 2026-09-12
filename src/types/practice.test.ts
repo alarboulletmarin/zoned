@@ -20,19 +20,30 @@ describe("practiceFromRaceDistance", () => {
     }
   });
 
-  test("aller-retour : la pratique d'une distance la propose en retour", () => {
+  /* L'aller-retour ne vaut que pour une pratique OUVERTE : une pratique
+     annoncée ne propose aucune distance, c'est sa définition même, et c'est
+     précisément ce qui ferme son parcours. La projection inverse, elle, reste
+     totale — un plan ultra déjà enregistré doit garder sa pratique, sinon il
+     s'ouvrirait comme un plan sur route. */
+  test("aller-retour : une pratique ouverte propose en retour ses distances", () => {
     for (const distance of ALL_DISTANCES) {
       const practice = practiceFromRaceDistance(distance);
+      if (!isPracticeLive(practice)) continue;
       expect(distancesOfPractice(practice)).toContain(distance);
     }
   });
 
-  test("chaque distance est revendiquée par exactement une pratique", () => {
+  test("aucune distance n'est revendiquée par deux pratiques", () => {
     for (const distance of ALL_DISTANCES) {
       const claimants = PRACTICES.filter((p) =>
         distancesOfPractice(p).includes(distance),
       );
-      expect(claimants).toHaveLength(1);
+      expect(claimants.length).toBeLessThanOrEqual(1);
+      /* Une distance sans revendiquant est une distance dont la pratique est
+         fermée — jamais un trou dans la table. */
+      if (claimants.length === 0) {
+        expect(isPracticeLive(practiceFromRaceDistance(distance))).toBe(false);
+      }
     }
   });
 });
@@ -70,13 +81,31 @@ describe("PRACTICE_META", () => {
     }
   });
 
-  // Ce test échoue le jour où quelqu'un bascule le triathlon en "live" sans
-  // avoir écrit ses plans. C'est voulu : l'annonce est une promesse, pas un
-  // réglage qu'on retourne en passant.
+  // Ces tests échouent le jour où quelqu'un rouvre une pratique annoncée sans
+  // avoir écrit — ou fiabilisé — ses plans. C'est voulu : l'annonce est une
+  // promesse, pas un réglage qu'on retourne en passant.
   test("le triathlon est annoncé, pas livré", () => {
     expect(PRACTICE_META.triathlon.status).toBe("announced");
     expect(distancesOfPractice("triathlon")).toHaveLength(0);
     expect(isPracticeLive("triathlon")).toBe(false);
+  });
+
+  // Fermé le 12 septembre 2026 : le générateur a ses tables d'ultra, mais ce
+  // qu'il en sort n'a pas été jugé assez fiable pour être proposé. Le jour où
+  // il l'est, c'est ici que le verrou saute.
+  test("l'ultra est annoncé, pas livré", () => {
+    expect(PRACTICE_META.ultra.status).toBe("announced");
+    expect(distancesOfPractice("ultra")).toHaveLength(0);
+    expect(isPracticeLive("ultra")).toBe(false);
+  });
+
+  // Une pratique annoncée ne propose AUCUNE distance : c'est ce qui ferme
+  // l'étape distance et, par elle, toute la suite du parcours.
+  test("une pratique annoncée ne propose aucune distance", () => {
+    for (const practice of PRACTICES) {
+      if (isPracticeLive(practice)) continue;
+      expect(distancesOfPractice(practice)).toHaveLength(0);
+    }
   });
 
   test("chaque pratique a ses libellés dans les deux langues", () => {

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import { indexOfStep, stepsFor } from "./flows";
 import type { FormState, StepId } from "../types";
-import { PRACTICES } from "@/types/practice";
+import { PRACTICES, isPracticeLive } from "@/types/practice";
 
 /** Un brouillon minimal : seuls les champs que `stepsFor` regarde comptent. */
 function draft(over: Partial<FormState> = {}): FormState {
@@ -66,20 +66,27 @@ describe("stepsFor", () => {
     expect(steps).not.toContain("ultra_logistics");
   });
 
-  test("l'ultra demande les deux", () => {
-    const steps = stepsFor(draft({ practice: "ultra" }));
-    expect(steps).toContain("terrain");
-    expect(steps).toContain("ultra_logistics");
+  // L'ultra a rejoint le triathlon le 12 septembre 2026 : son parcours ne
+  // s'ouvre plus. Les deux étapes qu'il demandait — terrain, logistique —
+  // restent déclarées ; c'est la porte qui est fermée, pas la machine, et
+  // « toutes les étapes déclarées sont atteignables » plus bas nomme la seule
+  // qui reste garée derrière.
+  test("une pratique annoncée s'arrête à la première question", () => {
+    for (const practice of PRACTICES) {
+      if (isPracticeLive(practice)) continue;
+      expect(stepsFor(draft({ practice }))).toEqual(["practice"]);
+    }
   });
 
-  test("le terrain vient avant la semaine type, la logistique juste après", () => {
-    const steps = stepsFor(draft({ practice: "ultra" }));
-    expect(steps.indexOf("terrain")).toBeLessThan(steps.indexOf("ultra_logistics"));
-    expect(steps.indexOf("ultra_logistics")).toBeLessThan(steps.indexOf("schedule"));
+  test("le terrain vient avant la semaine type", () => {
+    const steps = stepsFor(draft({ practice: "trail" }));
+    expect(steps.indexOf("terrain")).toBeGreaterThanOrEqual(0);
+    expect(steps.indexOf("terrain")).toBeLessThan(steps.indexOf("schedule"));
   });
 
   test("chaque parcours finit par le récapitulatif", () => {
-    for (const practice of ["road", "trail", "ultra"] as const) {
+    for (const practice of PRACTICES) {
+      if (!isPracticeLive(practice)) continue;
       const steps = stepsFor(draft({ practice }));
       expect(steps[steps.length - 1]).toBe("summary");
     }
@@ -103,11 +110,17 @@ describe("stepsFor", () => {
     }
   });
 
-  // Les douze StepId déclarés doivent tous être atteignables : une étape que
-  // personne ne peut voir est du code mort qui se lit comme une intention.
+  // Les StepId déclarés doivent tous être atteignables : une étape que personne
+  // ne peut voir est du code mort qui se lit comme une intention.
   // (Le registre lui-même n'est pas importé ici : il tire les composants,
   // donc react-i18next, dont `import.meta.glob` n'existe pas hors de Vite.
   // Le lien registre ↔ StepId est garanti par `Record<StepId, StepDef>`.)
+  //
+  // UNE exception, et elle est nommée : `ultra_logistics` n'appartient qu'au
+  // parcours ultra, fermé depuis que l'ultra est annoncé. La liste est EXACTE
+  // dans les deux sens — rouvrir l'ultra sans la vider fait échouer ce test
+  // autant qu'oublier d'y inscrire une étape devenue morte. C'est ce qui
+  // l'empêche de devenir le tapis sous lequel on pousse.
   test("toutes les étapes déclarées sont atteignables", () => {
     const reachable = new Set<StepId>();
     for (const practice of PRACTICES) {
@@ -120,7 +133,8 @@ describe("stepsFor", () => {
       "intermediate_goals", "level", "goal", "fitness", "terrain",
       "ultra_logistics", "schedule", "pace", "summary",
     ];
-    expect(declared.filter((id) => !reachable.has(id))).toEqual([]);
+    const parked: StepId[] = ["ultra_logistics"];
+    expect(declared.filter((id) => !reachable.has(id))).toEqual(parked);
   });
 });
 

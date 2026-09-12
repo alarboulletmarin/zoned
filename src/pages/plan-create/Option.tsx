@@ -19,6 +19,7 @@ export function Option({
   data,
   glyph: Glyph,
   shape,
+  soon,
 }: {
   name: string;
   checked: boolean;
@@ -39,11 +40,24 @@ export function Option({
   data?: string;
   glyph?: ComponentType<IconProps>;
   shape?: "tile";
+  /**
+   * La réponse est nommée mais pas encore servie — une pratique annoncée.
+   *
+   * Elle reste CHOISISSABLE : la choisir est ce qui déroule ce qui existe déjà
+   * pour elle, et un bouton mort ne dit rien de ce qu'on peut faire à la
+   * place. Mais elle ne se déguise plus en réponse comme les autres : filet
+   * pointillé, encre sourde, et sa mention « bientôt » devient une marque au
+   * lieu d'une donnée en pied de carte. Le pointillé et le ton sourd survivent
+   * tous deux au niveau de gris (WCAG 1.4.1), et `aria-disabled` n'est PAS
+   * posé — le contrôle marche vraiment.
+   */
+  soon?: boolean;
 }) {
   return (
     <label
       className="zn-wiz-opt"
       data-shape={shape}
+      data-soon={soon || undefined}
       onClick={(event) => {
         if (event.detail > 0) onCommit?.();
       }}
