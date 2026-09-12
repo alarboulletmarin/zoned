@@ -11,10 +11,23 @@
  * unique, cibles à 44 px.
  */
 
+/* La colonne est étroite et CENTRÉE.
+ *
+ * Le reste de l'app est aligné à gauche dans une colonne large, ce qui est
+ * juste pour une page qu'on lit. Ici la page tenait dans 1072 px de conteneur
+ * mais tout se collait à gauche : ~700 px de vide à droite, et un dessin seul
+ * au milieu de rien. Un écran qu'on consulte dix secondes debout n'a pas de
+ * colonne à remplir — il a un centre de gravité à avoir.
+ *
+ * Le TEXTE reste aligné à gauche à l'intérieur : c'est le bloc qui se centre,
+ * pas les lignes. Un titre centré et un corps centré se lisent moins bien. */
 .zn-cockpit {
   display: flex;
   flex-direction: column;
   gap: var(--sp-11);
+  inline-size: 100%;
+  max-inline-size: 620px;
+  margin-inline: auto;
   padding-inline: var(--pad-screen-x);
   padding-block: var(--sp-14) var(--sp-16);
 }
@@ -60,11 +73,12 @@
      que pour les doodles. */
   padding-block-end: var(--sp-6);
   border-block-end: var(--border-rule);
-  /* Elle ne s'étire pas sur un écran de bureau : au-delà, les barres
-     deviennent des pavés et la figure cesse d'en être une. */
-  max-inline-size: 420px;
 }
 
+/* Chaque jour qui porte une séance est un LIEN vers elle : c'est ce qui fait
+   tomber la séance de n'importe quel jour à un seul tap. Un jour de repos est
+   un `span` — il n'y a rien à ouvrir, et un lien qui ne mène nulle part est un
+   faux affordance. */
 .zn-cockpit__day {
   display: flex;
   flex-direction: column-reverse;
@@ -72,6 +86,23 @@
   gap: var(--sp-4);
   min-block-size: 52px;
   justify-content: flex-start;
+  border-radius: var(--r-xs);
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Au survol, c'est la barre qui répond — pas un fond de cellule, qui
+   transformerait la bande en rangée de boutons. */
+a.zn-cockpit__day:hover .zn-cockpit__day-bar {
+  background: var(--ink-2);
+}
+
+a.zn-cockpit__day:hover .zn-cockpit__day-letter {
+  color: var(--text-body);
+}
+
+a.zn-cockpit__day:active {
+  transform: translateY(var(--press-shift));
 }
 
 .zn-cockpit__day-letter {
@@ -101,6 +132,23 @@
 
 .zn-cockpit__day[data-today] .zn-cockpit__day-bar {
   background: var(--ink-1);
+}
+
+/* ── L'aperçu de la séance ──────────────────────────────────────────────── */
+
+/* Le profil parle de lui-même : pas de cadre, pas de fond, il s'assoit dans
+   la colonne comme une ligne de plus. */
+.zn-cockpit__profile {
+  inline-size: 100%;
+}
+
+.zn-cockpit__plan-link {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+.zn-cockpit__plan-link:hover {
+  color: var(--accent);
 }
 
 /* Un jour de repos est un filet, pas une barre écrasée : l'absence de séance

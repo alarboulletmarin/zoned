@@ -146,8 +146,32 @@ export function pickTodayFocus(
   return NOTHING;
 }
 
-/** Le chemin vers ce qu'on reprend : une semaine seule vit sous /weeks. */
-export function focusHref(focus: TodayFocus): string | null {
+/** Le plan (ou la semaine) dont vient la séance du jour. */
+export function focusPlanHref(focus: TodayFocus): string | null {
   if (!focus.plan) return null;
   return focus.isWeek ? `/weeks/${focus.plan.id}` : `/plan/${focus.plan.id}`;
+}
+
+/**
+ * Le chemin vers LA SÉANCE, pas vers le plan.
+ *
+ * Le bouton du cockpit pointait le plan, ce qui coûtait trois taps et une
+ * recherche pour arriver à la séance du jour : ouvrir le plan, repérer
+ * aujourd'hui dans le calendrier, toucher la séance. Sur un écran dont toute
+ * la raison d'être est « qu'est-ce que je cours aujourd'hui », c'était deux
+ * taps de trop.
+ *
+ * Quand la journée porte plusieurs séances il n'y a pas de destination unique :
+ * on ouvre alors le plan à la bonne semaine, qui les montre toutes.
+ */
+export function focusSessionHref(focus: TodayFocus): string | null {
+  if (focus.sessions.length === 1) return sessionHref(focus.sessions[0]);
+  const plan = focusPlanHref(focus);
+  if (!plan) return null;
+  return focus.weekNumber > 0 ? `${plan}?week=${focus.weekNumber}` : plan;
+}
+
+/** Le chemin d'une séance de plan. */
+export function sessionHref(session: PlanSession): string {
+  return `/workout/${session.workoutId}`;
 }

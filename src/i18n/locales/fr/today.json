@@ -63,9 +63,11 @@
   },
   "week": {
     "letters": "L,M,M,J,V,S,D",
-    "summary": "Semaine {{week}} : {{count}} séances, repos {{rest}}.",
-    "noRest": "aucun jour",
-    "dayNames": "lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche"
+    "dayNames": "lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche",
+    "label": "La semaine {{week}}",
+    "rest": "{{day}} : repos",
+    "day_one": "{{day}} : une séance, {{minutes}} min",
+    "day_other": "{{day}} : {{count}} séances, {{minutes}} min"
   },
   "facts": {
     "week": "semaine {{n}}",

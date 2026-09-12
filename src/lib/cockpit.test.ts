@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 
-import { focusHref, pickTodayFocus } from "./cockpit";
+import {
+  focusPlanHref,
+  focusSessionHref,
+  pickTodayFocus,
+  sessionHref,
+} from "./cockpit";
 import type { PlanSession, PlanWeek, TrainingPlan } from "@/types/plan";
 
 function session(dayOfWeek: number, workoutId = "W-1"): PlanSession {
@@ -54,7 +59,8 @@ describe("pickTodayFocus", () => {
     const focus = pickTodayFocus([], MONDAY);
     expect(focus.state).toBe("none");
     expect(focus.plan).toBeNull();
-    expect(focusHref(focus)).toBeNull();
+    expect(focusSessionHref(focus)).toBeNull();
+    expect(focusPlanHref(focus)).toBeNull();
   });
 
   test("rend la séance du jour", () => {
@@ -232,6 +238,60 @@ describe("la semaine, sept cases", () => {
   });
 });
 
+describe("un seul tap jusqu'à la séance", () => {
+  test("une séance unique mène à la séance, pas au plan", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      weeks: [week(1, [session(0, "TRL-003")])],
+    });
+    const focus = pickTodayFocus([p], MONDAY);
+    // C'est le correctif : le bouton pointait /plan/p1, donc trois taps et
+    // une recherche dans le calendrier pour arriver à la séance du jour.
+    expect(focusSessionHref(focus)).toBe("/workout/TRL-003");
+  });
+
+  test("plusieurs séances mènent au plan, à la bonne semaine", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      totalWeeks: 3,
+      weeks: [week(1, []), week(2, [session(0, "A"), session(0, "B")])],
+    });
+    const focus = pickTodayFocus([p], new Date(2026, 8, 14));
+    // Pas de destination unique quand il y en a deux : le plan les montre.
+    expect(focusSessionHref(focus)).toBe("/plan/p1?week=2");
+  });
+
+  test("un jour de repos mène au plan", () => {
+    const p = plan({ id: "p1", startDate: "2026-09-07", weeks: [week(1, [session(2)])] });
+    const focus = pickTodayFocus([p], MONDAY);
+    expect(focus.state).toBe("rest");
+    expect(focusSessionHref(focus)).toBe("/plan/p1?week=1");
+  });
+
+  test("une semaine seule garde son propre chemin", () => {
+    const w = plan({
+      id: "w1",
+      startDate: "2026-09-07",
+      totalWeeks: 1,
+      isSingleWeek: true,
+      weeks: [week(1, [session(0, "A"), session(0, "B")])],
+    });
+    expect(focusSessionHref(pickTodayFocus([w], MONDAY))).toBe("/weeks/w1?week=1");
+  });
+
+  test("chaque jour de la bande a son chemin", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      weeks: [week(1, [session(3, "MERCREDI")])],
+    });
+    const focus = pickTodayFocus([p], MONDAY);
+    expect(sessionHref(focus.week[3][0])).toBe("/workout/MERCREDI");
+  });
+});
+
 describe("une semaine seule", () => {
   test("se reprend comme une semaine, et pointe /weeks", () => {
     const w = plan({
@@ -242,13 +302,13 @@ describe("une semaine seule", () => {
     });
     const focus = pickTodayFocus([w], MONDAY);
     expect(focus.isWeek).toBe(true);
-    expect(focusHref(focus)).toBe("/weeks/w1");
+    expect(focusPlanHref(focus)).toBe("/weeks/w1");
   });
 
   test("un plan pointe /plan", () => {
     const p = plan({ id: "p1", startDate: "2026-09-07" });
     const focus = pickTodayFocus([p], MONDAY);
     expect(focus.isWeek).toBe(false);
-    expect(focusHref(focus)).toBe("/plan/p1");
+    expect(focusPlanHref(focus)).toBe("/plan/p1");
   });
 });

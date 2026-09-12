@@ -63,9 +63,11 @@
   },
   "week": {
     "letters": "M,T,W,T,F,S,S",
-    "summary": "Week {{week}}: {{count}} sessions, rest on {{rest}}.",
-    "noRest": "no day",
-    "dayNames": "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"
+    "dayNames": "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+    "label": "Week {{week}}",
+    "rest": "{{day}}: rest",
+    "day_one": "{{day}}: one session, {{minutes}} min",
+    "day_other": "{{day}}: {{count}} sessions, {{minutes}} min"
   },
   "facts": {
     "week": "week {{n}}",

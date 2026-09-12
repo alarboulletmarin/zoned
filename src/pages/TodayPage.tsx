@@ -8,8 +8,16 @@ import { SEOHead } from "@/components/seo";
 import { usePlans } from "@/hooks/usePlans";
 import { useWorkout } from "@/hooks/useWorkouts";
 import { useSettings } from "@/hooks/useSettings";
-import { focusHref, pickTodayFocus, type TodayFocus } from "@/lib/cockpit";
+import {
+  focusPlanHref,
+  focusSessionHref,
+  pickTodayFocus,
+  sessionHref,
+  type TodayFocus,
+} from "@/lib/cockpit";
+import { ZoneBar, toZoneBarBlocks } from "@/components/visualization";
 import { useIsEnglish } from "@/lib/i18n-utils";
+import { isStrengthWorkout } from "@/types";
 import DoorToday from "@/assets/doodles/door-today.svg?react";
 
 /**
@@ -44,7 +52,8 @@ export function TodayPage() {
   // `new Date()` une seule fois par montage : un rendu qui recalcule « quel
   // jour on est » peut changer d'avis en cours de session.
   const focus = useMemo(() => pickTodayFocus(plans, new Date()), [plans]);
-  const href = focusHref(focus);
+  const sessionUrl = focusSessionHref(focus);
+  const planUrl = focusPlanHref(focus);
 
   const dateLine = new Date().toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
     weekday: "long",
@@ -74,6 +83,13 @@ export function TodayPage() {
       week: focus.weekNumber,
     });
   }, [focus, isEn, t, workout]);
+
+  /* Le profil de la séance du jour. Mémoïsé : il traverse toute la structure
+     de la séance. */
+  const profile = useMemo(
+    () => (workout && !isStrengthWorkout(workout) ? toZoneBarBlocks(workout) : null),
+    [workout],
+  );
 
   /** Les chiffres de la séance, en une ligne mono. Pas un tableau. */
   const facts = useMemo(() => {
@@ -105,20 +121,35 @@ export function TodayPage() {
             {headline}
           </h1>
 
+          {/* L'aperçu de la séance : un bloc par phase, la largeur dit le
+              temps et l'intensité est codée deux fois — densité d'encre ET
+              hauteur. C'est beaucoup d'information sans un mot de plus, et
+              c'est le composant que les cartes de la bibliothèque utilisent
+              déjà (`toZoneBarBlocks`), pas un second dessin de profil. */}
+          {profile && profile.length > 0 && (
+            <ZoneBar blocks={profile} condense height={36} className="zn-cockpit__profile" />
+          )}
+
           {facts && <p className="zn-mono zn-cockpit__facts">{facts}</p>}
 
+          {/* Le nom du plan était un texte mort. C'est maintenant le chemin
+              vers le plan, à un tap, sans ajouter un bouton à l'écran. */}
           <p className="zn-body zn-muted zn-measure">
-            {focus.plan && focus.state !== "none"
-              ? t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan", {
+            {focus.plan && focus.state !== "none" && planUrl ? (
+              <Link to={planUrl} className="zn-cockpit__plan-link">
+                {t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan", {
                   name: isEn ? focus.plan.nameEn : focus.plan.name,
-                })
-              : t("today:resume.none.body")}
+                })}
+              </Link>
+            ) : (
+              t("today:resume.none.body")
+            )}
           </p>
 
           <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
             <Button asChild size="lg">
-              <Link to={href ?? "/plan/new"}>
-                {href
+              <Link to={sessionUrl ?? "/plan/new"}>
+                {sessionUrl
                   ? t(
                       focus.state === "rest"
                         ? focus.isWeek
@@ -165,76 +196,96 @@ export function TodayPage() {
 }
 
 /**
- * La bande des sept jours — une figure, pas un contrôle.
+ * La bande des sept jours — la semaine en aperçu, et sept raccourcis.
  *
- * Trois décisions qui tiennent ensemble :
+ * Elle a d'abord été écrite comme une figure non cliquable (`role="img"`, un
+ * seul nom accessible) pour ne pas devoir un contrat clavier. Le propriétaire
+ * a demandé moins de clics : un jour qui mène à sa séance vaut mieux qu'un jour
+ * qu'on regarde. Et l'objection tombe d'elle-même — ce sont des **liens**, donc
+ * le focus, les flèches du navigateur, le clic-milieu et « ouvrir dans un
+ * nouvel onglet » viennent gratuitement. Il n'y a pas de `role` à doter.
  *
- * 1. **Le jour courant est en encre, jamais en vermillon.** Le bouton est le
- *    seul aplat d'accent de l'écran ; un second le neutraliserait.
- * 2. **La hauteur de barre est un canal redondant** à l'encre, comme
- *    `--zone-h-N` le fait dans `zones.css` : la bande reste lisible en niveaux
- *    de gris, ce qui est l'argument même du système.
- * 3. **Rien ne prétend être cliquable** — pas de cadre, pas de fond, pas de
- *    survol. Un jour cliquable serait de la navigation, donc un `role` et son
- *    contrat clavier, et ce dépôt a déjà livré deux fois un `role` sans son
- *    clavier. Taper un jour se fait sur `/plan/:id`, où le calendrier le fait.
+ * Ce qui reste des décisions d'origine :
  *
- * Un seul nom accessible, qui énonce la semaine EN MOTS : sept éléments de
- * liste à traverser pour une information qui tient en une phrase serait pire
- * que le silence.
+ * - **Le jour courant est marqué à l'encre, jamais au vermillon.** Le bouton
+ *   est le seul aplat d'accent de l'écran ; un second le neutraliserait.
+ * - **La hauteur de barre est un canal redondant** à l'encre, comme
+ *   `--zone-h-N` dans `zones.css` : la bande reste lisible en niveaux de gris.
+ *   Elle porte les MINUTES du jour, pas le nombre de séances — presque toutes
+ *   les journées en portent une, donc compter les séances faisait une
+ *   constante qui ne disait rien.
+ *
+ * Un jour de repos n'est pas un lien : il n'y a rien à ouvrir, et un lien qui
+ * mène au même endroit que rien est un faux affordance.
  */
 function WeekStrip({ focus }: { focus: TodayFocus }) {
   const { t } = useTranslation("today");
 
-  // Les initiales sont pour l'œil ; le nom accessible a besoin des noms
-  // entiers — « repos L, J » n'est pas une phrase.
+  // Les initiales sont pour l'œil ; les noms accessibles ont besoin des noms
+  // entiers — « samedi » et pas « S ».
   const letters = t("week.letters").split(",");
   const dayNames = t("week.dayNames").split(",");
 
-  /* La hauteur porte les MINUTES du jour, pas le nombre de séances : presque
-     toutes les journées en portent une, donc compter les séances faisait une
-     constante et le canal ne disait rien. Les minutes, elles, dessinent la
-     forme de la semaine — les jours faciles et la sortie longue. */
   const minutes = focus.week.map((day) =>
     day.reduce((n, session) => n + (session.estimatedDurationMin ?? 0), 0),
   );
   const longest = Math.max(1, ...minutes);
-  const training = focus.week.filter((day) => day.length > 0).length;
-  const restDays = focus.week
-    .map((day, i) => (day.length === 0 ? dayNames[i] : null))
-    .filter((x): x is string => x !== null);
 
-  /* En pixels, pas en pourcentage : un `block-size` en % sur un enfant flex
-     en colonne n'a pas de hauteur de référence définie et retombait au
-     minimum — les sept barres rendaient identiques. Une donnée se convertit
-     en géométrie ici, une fois. */
+  /* En pixels, pas en pourcentage : un `block-size` en % sur un enfant flex en
+     colonne n'a pas de hauteur de référence et retombait au minimum — les sept
+     barres rendaient identiques. La donnée devient géométrie ici, une fois. */
   const BAR_MIN = 6;
   const BAR_MAX = 40;
   const barHeight = (m: number) =>
     m === 0 ? BAR_MIN : BAR_MIN + Math.round((m / longest) * (BAR_MAX - BAR_MIN));
 
   return (
-    <div
-      className="zn-cockpit__week"
-      role="img"
-      aria-label={t("week.summary", {
-        week: focus.weekNumber,
-        count: training,
-        rest: restDays.length > 0 ? restDays.join(", ") : t("week.noRest"),
+    <nav className="zn-cockpit__week" aria-label={t("week.label", { week: focus.weekNumber })}>
+      {focus.week.map((day, index) => {
+        const isToday = index === focus.dayOfWeek;
+        const bar = (
+          <>
+            <span className="zn-cockpit__day-letter">{letters[index]}</span>
+            <span
+              className="zn-cockpit__day-bar"
+              data-rest={day.length === 0 || undefined}
+              /* Un style inline est le bon outil : la valeur est une donnée du
+                 plan, pas un réglage de design. */
+              style={{ "--bar-h": `${barHeight(minutes[index])}px` } as CSSProperties}
+            />
+          </>
+        );
+
+        if (day.length === 0) {
+          return (
+            <span
+              key={index}
+              className="zn-cockpit__day"
+              data-today={isToday || undefined}
+              aria-label={t("week.rest", { day: dayNames[index] })}
+            >
+              {bar}
+            </span>
+          );
+        }
+
+        return (
+          <Link
+            key={index}
+            to={day.length === 1 ? sessionHref(day[0]) : `${focusPlanHref(focus)}?week=${focus.weekNumber}`}
+            className="zn-cockpit__day"
+            data-today={isToday || undefined}
+            aria-current={isToday ? "date" : undefined}
+            aria-label={t("week.day", {
+              day: dayNames[index],
+              count: day.length,
+              minutes: minutes[index],
+            })}
+          >
+            {bar}
+          </Link>
+        );
       })}
-    >
-      {focus.week.map((day, index) => (
-        <span key={index} className="zn-cockpit__day" data-today={index === focus.dayOfWeek || undefined}>
-          <span className="zn-cockpit__day-letter">{letters[index]}</span>
-          <span
-            className="zn-cockpit__day-bar"
-            data-rest={day.length === 0 || undefined}
-            /* Un style inline est le bon outil : la valeur est une donnée du
-               plan, pas un réglage de design. */
-            style={{ "--bar-h": `${barHeight(minutes[index])}px` } as CSSProperties}
-          />
-        </span>
-      ))}
-    </div>
+    </nav>
   );
 }
