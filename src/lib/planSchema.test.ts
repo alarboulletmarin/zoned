@@ -91,6 +91,35 @@ describe("normalizeStoredPlan", () => {
     expect(roundTripped?.weeks[0].sessions[0].discipline).toBe("cycling");
   });
 
+  test("preserves config.practice through round-trip", () => {
+    const plan = makeLegacyPlan();
+    // Le cas que la déduction ne couvre pas : un plan sans course visée.
+    plan.config = { ...plan.config, raceDistance: undefined, practice: "trail" };
+
+    const normalized = normalizeStoredPlan(plan);
+    expect(normalized?.config.practice).toBe("trail");
+
+    const roundTripped = normalizeStoredPlan(JSON.parse(JSON.stringify(normalized)));
+    expect(roundTripped?.config.practice).toBe("trail");
+  });
+
+  test("ignores invalid practice values", () => {
+    const plan = makeLegacyPlan();
+    // @ts-expect-error: testing runtime guard
+    plan.config = { ...plan.config, practice: "skiing" };
+    expect(normalizeStoredPlan(plan)?.config.practice).toBeUndefined();
+  });
+
+  test("a plan stored before practices existed still normalizes", () => {
+    // Le test qui prouve « aucune migration » : la charge utile d'origine,
+    // sans le champ, traverse sans perdre quoi que ce soit.
+    const plan = makeLegacyPlan();
+    const normalized = normalizeStoredPlan(JSON.parse(JSON.stringify(plan)));
+    expect(normalized).not.toBeNull();
+    expect(normalized?.config.practice).toBeUndefined();
+    expect(normalized?.config.raceDistance).toBe("10K");
+  });
+
   test("ignores invalid discipline values", () => {
     const plan = makeLegacyPlan();
     plan.weeks[0].sessions[0] = {

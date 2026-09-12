@@ -1,4 +1,5 @@
 import type { Difficulty, TrainingPhase, SessionType, Discipline } from "@/types";
+import type { Practice } from "@/types/practice";
 
 // ── Race distance type ──────────────────────────────────────────────
 
@@ -59,6 +60,18 @@ export interface PlanConfig {
   /** Category of a standalone week — inherited from a prebuilt week or set by the user. */
   weekCategory?: WeekCategory;
   planName?: string; // user-given name for free plans
+  /**
+   * La pratique visée — route, trail, ultra.
+   *
+   * Normalement **déduite** de `raceDistance` par `practiceFromRaceDistance`
+   * (`src/types/practice.ts`), ce qui évite toute migration : un plan
+   * enregistré avant l'existence des pratiques en a quand même une.
+   *
+   * Ce champ ne sert donc qu'au seul cas que la déduction ne couvre pas : un
+   * plan sans course visée (`base_building`, `return_from_injury`,
+   * `beginner_start`), où il n'y a pas de distance d'où déduire.
+   */
+  practice?: Practice;
   raceDistance?: RaceDistance;
   raceDate?: string; // ISO date
   raceName?: string;

@@ -121,6 +121,14 @@ function normalizeConfig(raw: unknown, fallbackId: string, fallbackCreatedAt: st
       ? raw.weekCategory as WeekCategory
       : undefined,
     planName: typeof raw.planName === "string" ? raw.planName : undefined,
+    // Liste blanche littérale, comme `discipline` dans normalizeSession : une
+    // valeur inconnue redevient undefined, et la pratique se déduit alors de
+    // raceDistance. Rien à migrer, aucune version à monter.
+    practice:
+      raw.practice === "road" || raw.practice === "trail" ||
+      raw.practice === "ultra" || raw.practice === "triathlon"
+        ? raw.practice
+        : undefined,
     raceDistance: typeof raw.raceDistance === "string" ? raw.raceDistance as PlanConfig["raceDistance"] : undefined,
     raceDate: typeof raw.raceDate === "string" ? raw.raceDate : undefined,
     raceName: typeof raw.raceName === "string" ? raw.raceName : undefined,
