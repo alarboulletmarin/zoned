@@ -18,8 +18,12 @@
 
 .zn-footer__body {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
-  gap: var(--sp-12);
+  /* La marque, puis les quatre colonnes de liens. Une colonne a été ajoutée
+     quand les familles sorties des portes sont descendues ici : sans ce
+     cinquième tiers, la dernière passait à la ligne et le pied de page
+     doublait de hauteur. */
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: var(--sp-10);
   max-inline-size: var(--page-max);
   margin-inline: auto;
   /* 40 px, le même pas que --pad-screen-x : le tableau s'assoit dans une marge

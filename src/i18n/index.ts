@@ -27,6 +27,7 @@ export const NAMESPACES = [
   "profile",
   "routes",
   "nutrition",
+  "today",
 ] as const;
 
 // One lazy chunk per locale file (32 total), fetched on demand.
@@ -53,7 +54,7 @@ i18n
     fallbackLng: "fr",
     defaultNS: "common",
     fallbackNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes", "nutrition"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes", "nutrition", "today"],
 
     // Detection options
     detection: {

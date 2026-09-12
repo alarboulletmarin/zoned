@@ -14,6 +14,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Wordmark } from "./Wordmark";
+import { FOOTER_GROUPS, GITHUB_URL } from "./navigation";
 
 // Package version is injected at build time by Vite via __APP_VERSION__.
 // Falls back to "dev" when the constant is missing (eg. unit tests).
@@ -22,8 +23,6 @@ const APP_VERSION =
   typeof __APP_VERSION__ === "string" && __APP_VERSION__.length > 0
     ? __APP_VERSION__
     : "dev";
-
-const GITHUB_URL = "https://github.com/alarboulletmarin/zoned";
 
 export function Footer() {
   const { t } = useTranslation(["homepage", "common"]);
@@ -48,36 +47,18 @@ export function Footer() {
           </p>
         </div>
 
-        <FooterColumn
-          stacked={stacked}
-          title={t("homepage:home.footer.groups.product")}
-          links={[
-            { label: t("homepage:home.footer.product.library"), to: "/library" },
-            { label: t("homepage:home.footer.product.plans"), to: "/plans" },
-            { label: t("homepage:home.footer.product.calculators"), to: "/calculators" },
-            { label: t("homepage:home.footer.product.routes"), to: "/routes" },
-          ]}
-        />
-        <FooterColumn
-          stacked={stacked}
-          title={t("homepage:home.footer.groups.science")}
-          links={[
-            { label: t("homepage:home.footer.science.methodology"), to: "/methodology" },
-            { label: t("homepage:home.footer.science.glossary"), to: "/glossary" },
-            { label: t("homepage:home.footer.science.guides"), to: "/guides" },
-          ]}
-        />
-        <FooterColumn
-          stacked={stacked}
-          title={t("homepage:home.footer.groups.project")}
-          links={[
-            { label: t("homepage:home.footer.project.about"), to: "/about" },
-            { label: t("common:compare.title"), to: "/compare" },
-            { label: t("common:nav.contribute"), to: "/contribute" },
-            { label: t("homepage:home.footer.project.changelog"), to: "/changelog" },
-            { label: t("homepage:home.footer.project.github"), href: GITHUB_URL },
-          ]}
-        />
+        {FOOTER_GROUPS.map((group) => (
+          <FooterColumn
+            key={group.titleKey}
+            stacked={stacked}
+            title={t(group.titleKey)}
+            links={group.links.map((link) => ({
+              label: t(link.labelKey),
+              to: link.to,
+              href: link.href,
+            }))}
+          />
+        ))}
       </div>
 
       <div className="zn-footer__bar">

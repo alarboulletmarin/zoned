@@ -31,7 +31,6 @@ import type { FunctionComponent, SVGProps } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import DoorLearn from "@/assets/doodles/door-learn.svg?react";
 import DoorNumbers from "@/assets/doodles/door-numbers.svg?react";
 import DoorPlan from "@/assets/doodles/door-plan.svg?react";
 import DoorSessions from "@/assets/doodles/door-sessions.svg?react";
@@ -52,16 +51,22 @@ const DOOR_FIGURES: Record<string, FunctionComponent<SVGProps<SVGElement>>> = {
   today: DoorToday,
   sessions: DoorSessions,
   plan: DoorPlan,
-  learn: DoorLearn,
   numbers: DoorNumbers,
 };
 
-/** The account pages, as their own group at the foot of the doors.
+/** Le reste, en un groupe au pied des portes.
  *
- *  Only the ones no door already holds: profile, my zones, favorites and the
- *  builder are children of "Mes chiffres" and "Séances", and printing them in
- *  two places is what made the old flat list unreadable. */
-const ACCOUNT_LINKS: { to: string; labelKey: string }[] = (() => {
+ *  Seulement ce qu'aucune porte ne tient déjà : le profil, les zones, les
+ *  favoris et l'éditeur sont des enfants de « Mes chiffres » et « Séances », et
+ *  les imprimer à deux endroits est ce qui rendait l'ancienne liste plate
+ *  illisible. Le filtre est automatique, donc retirer une entrée d'une porte la
+ *  fait apparaître ici sans qu'on y pense.
+ *
+ *  C'est ici qu'ont atterri les destinations que les quatre portes ne portent
+ *  plus — comprendre, méthodologie, guides, nutrition, lexique, parcours,
+ *  simulateur, comparatifs. Elles gardent leurs routes ; elles ne sont plus
+ *  dans le chemin de quelqu'un qui vient s'entraîner. */
+const MORE_LINKS: { to: string; labelKey: string }[] = (() => {
   const underADoor = new Set<string>();
   for (const section of PRIMARY_NAV) {
     underADoor.add(section.to);
@@ -73,6 +78,16 @@ const ACCOUNT_LINKS: { to: string; labelKey: string }[] = (() => {
     { to: "/my-zones", labelKey: "nav.myZones" },
     { to: "/favorites", labelKey: "nav.favorites" },
     { to: "/workout/builder", labelKey: "nav.builder" },
+    { to: "/weeks/new/prebuilt", labelKey: "topnav.weeksPrebuilt" },
+    { to: "/learn", labelKey: "topnav.learnArticles" },
+    { to: "/methodology", labelKey: "topnav.methodScience" },
+    { to: "/plans/methodology", labelKey: "topnav.methodPlans" },
+    { to: "/guides", labelKey: "topnav.learnGuides" },
+    { to: "/nutrition", labelKey: "topnav.learnNutrition" },
+    { to: "/glossary", labelKey: "topnav.learnGlossary" },
+    { to: "/race-simulator", labelKey: "topnav.raceSim" },
+    { to: "/routes", labelKey: "topnav.routes" },
+    { to: "/compare", labelKey: "compare.title" },
     { to: "/contribute", labelKey: "nav.contribute" },
     { to: "/changelog", labelKey: "nav.changelog" },
     { to: "/about", labelKey: "nav.about" },
@@ -254,11 +269,11 @@ export function MobileMenu() {
               <li>
                 <details className="zn-menu__group" name="door">
                   <summary className="zn-display zn-menu__door" data-level="2">
-                    {t("topnav.account")}
+                    {t("mobileMenu.more")}
                     <ChevronDown className="zn-menu__chevron" aria-hidden="true" />
                   </summary>
                   <ul className="zn-menu__sub">
-                    {ACCOUNT_LINKS.map((item) => (
+                    {MORE_LINKS.map((item) => (
                       <li key={item.to}>
                         <Link
                           to={item.to}

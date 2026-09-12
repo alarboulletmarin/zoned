@@ -422,10 +422,18 @@ export function HomePage() {
               calculators: CALCULATORS.length,
             })}
           </p>
-          {/* The screen's single vermillon fill lives here and nowhere else. */}
+          {/* The screen's single vermillon fill lives here and nowhere else.
+
+              Un seul CTA conditionnel, et c'est tout le pont entre les deux
+              pages : quelqu'un qui a déjà une donnée locale revient pour
+              s'entraîner, pas pour relire l'argumentaire, donc le bouton
+              principal l'emmène au cockpit. Pas de bandeau, pas
+              d'interstitiel, pas de rejet à mémoriser, et surtout pas de
+              redirection — "/" reste la page publique que les robots
+              indexent et que les gens partagent. */}
           <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
             <Button asChild size="lg">
-              <Link to={hasPlans ? "/plans" : "/plan/new"}>
+              <Link to={hasPlans ? "/today" : "/plan/new"}>
                 {t(
                   hasPlans
                     ? "homepage:home.hero.ctaPrimaryHasPlans"

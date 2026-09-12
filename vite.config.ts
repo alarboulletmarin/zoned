@@ -33,8 +33,20 @@ export default defineConfig({
         theme_color: "#F6F5F2",
         background_color: "#F6F5F2",
         display: "standalone",
-        start_url: "/",
+        // L'app installée ouvre sur le cockpit, pas sur la landing. C'est le
+        // sens même d'avoir séparé les deux : "/" est la page publique qu'on
+        // partage et qu'un robot indexe, /today est l'écran de quelqu'un qui
+        // s'entraîne. Aucune redirection depuis "/" en revanche — ce serait
+        // une plaie SEO, et ça rendrait la page marketing inatteignable.
+        start_url: "/today",
         scope: "/",
+        // Appui long sur l'icône installée. Les trois destinations qu'on
+        // ouvre vraiment, sans passer par un écran.
+        shortcuts: [
+          { name: "Library", short_name: "Library", url: "/library" },
+          { name: "New plan", short_name: "New plan", url: "/plan/new" },
+          { name: "Calculators", short_name: "Calculators", url: "/calculators" },
+        ],
         icons: [
           {
             src: "pwa-64x64.png",

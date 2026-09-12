@@ -298,7 +298,11 @@
     "learnGlossaryDesc": "50+ technical terms",
     "favoritesDesc": "The sessions you kept",
     "myZonesDesc": "Your six zones, computed from your VMA",
-    "profileDesc": "Your level, your constraints, your records"
+    "profileDesc": "Your level, your constraints, your records",
+    "plansPrebuilt": "Ready-made plans",
+    "plansPrebuiltDesc": "Plans already written, take one as is",
+    "weeksPrebuilt": "Ready-made weeks",
+    "tracks": "Find a track"
   },
   "errors": {
     "workoutNotFound": "Workout not found",

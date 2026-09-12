@@ -298,7 +298,11 @@
     "learnGlossaryDesc": "50+ termes techniques",
     "favoritesDesc": "Les séances que tu as gardées",
     "myZonesDesc": "Tes six zones, calculées sur ta VMA",
-    "profileDesc": "Ton niveau, tes contraintes, tes records"
+    "profileDesc": "Ton niveau, tes contraintes, tes records",
+    "plansPrebuilt": "Plans prêts à l'emploi",
+    "plansPrebuiltDesc": "Des plans déjà écrits, à prendre tel quel",
+    "weeksPrebuilt": "Semaines prêtes à l'emploi",
+    "tracks": "Trouver une piste"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

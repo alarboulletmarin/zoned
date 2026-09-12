@@ -1,0 +1,63 @@
+{
+  "seoTitle": "Today",
+  "seoDescription": "Today's session, and the two shortcuts for when you don't know what to do.",
+  "title": "Today",
+  "resume": {
+    "session": {
+      "kicker": "On today",
+      "line_one": "One session is waiting, week {{week}}.",
+      "line_other": "{{count}} sessions are waiting, week {{week}}."
+    },
+    "rest": {
+      "kicker": "Today",
+      "line": "Rest. It's planned, and it counts."
+    },
+    "upcoming": {
+      "kicker": "Coming up",
+      "line_one": "Your plan starts tomorrow.",
+      "line_other": "Your plan starts in {{count}} days."
+    },
+    "none": {
+      "kicker": "To get going",
+      "line": "Nothing under way.",
+      "body": "Build a plan, or just put together a week if you'd rather not commit further.",
+      "cta": "Create a plan"
+    },
+    "inPlan": "In “{{name}}”",
+    "inWeek": "In your week “{{name}}”",
+    "openPlan": "Open my plan",
+    "openWeek": "Open my week"
+  },
+  "quick": {
+    "title": "When you don't know what to do",
+    "draw": "Draw me a session",
+    "drawHint": "Chance picks, you decide nothing",
+    "week": "Build my week",
+    "weekHint": "Seven days, no plan to commit to"
+  },
+  "doors": {
+    "title": "The three doors",
+    "sessions": {
+      "kicker": "The library",
+      "title": "Sessions",
+      "body": "Every session, sorted by discipline: road, trail, ultra.",
+      "cta": "Browse"
+    },
+    "plans": {
+      "kicker": "Training over time",
+      "title": "Plans",
+      "body": "A plan built for your race, or one week at a time.",
+      "cta": "See my plans"
+    },
+    "numbers": {
+      "kicker": "Your references",
+      "title": "Numbers",
+      "body": "Your zones, your paces, your tests. What makes the rest accurate.",
+      "cta": "Open the calculators"
+    }
+  },
+  "art": {
+    "brief": "A figure standing on the rule, at rest before heading out.",
+    "label": "Drawing: a runner standing, ready to set off"
+  }
+}

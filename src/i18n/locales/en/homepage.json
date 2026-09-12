@@ -51,7 +51,7 @@
       ],
       "lead": "Know exactly what to run tomorrow. {{plans}} training plans from 5K to marathon, {{sessions}} workouts grounded in the science (Seiler, Daniels, Billat, Coggan) and {{calculators}} calculators. Free, no account, everything stays in your browser.",
       "ctaPrimary": "Generate my plan",
-      "ctaPrimaryHasPlans": "View my plans",
+      "ctaPrimaryHasPlans": "Pick training back up",
       "ctaSecondary": "Explore the workouts",
       "scrollHint": "Scroll to discover",
       "title": "What am I running today?",
@@ -278,7 +278,8 @@
       "groups": {
         "product": "Product",
         "science": "Science",
-        "project": "Project"
+        "project": "Project",
+        "tools": "Tools"
       },
       "product": {
         "library": "Library",

@@ -40,6 +40,7 @@ function lazyPage<T extends ComponentType<unknown>>(
 
 // All pages lazy loaded for optimal code-splitting
 const HomePage = lazyPage(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
+const TodayPage = lazyPage(() => import("@/pages/TodayPage").then(m => ({ default: m.TodayPage })));
 const LibraryPage = lazyPage(() => import("@/pages/LibraryPage").then(m => ({ default: m.LibraryPage })));
 const DrawSessionPage = lazyPage(() => import("@/pages/DrawSessionPage").then(m => ({ default: m.DrawSessionPage })));
 const WeeksListPage = lazyPage(() => import("@/pages/WeeksListPage").then(m => ({ default: m.WeeksListPage })));
@@ -129,6 +130,7 @@ function DeferredCommandPalette() {
 // Preload sidebar pages after initial render to eliminate navigation latency
 function preloadSidebarPages() {
   const pages = [
+    () => import("@/pages/TodayPage"),
     () => import("@/pages/HomePage"),
     () => import("@/pages/LibraryPage"),
     () => import("@/pages/PlansPage"),
@@ -261,6 +263,11 @@ function App() {
                     <ErrorBoundary>
                         <Routes>
                           <Route path="/" element={<HomePage />} />
+                          {/* Le cockpit. `/` reste la landing publique et
+                              indexée ; celle-ci est l'écran privé, donc hors
+                              sitemap et hors prérendu — comme /plans et
+                              /weeks, exclus pour la même raison. */}
+                          <Route path="/today" element={<TodayPage />} />
                           <Route path="/library" element={<LibraryPage />} />
                           <Route path="/library/draw" element={<DrawSessionPage />} />
                           <Route path="/weeks" element={<WeeksListPage />} />

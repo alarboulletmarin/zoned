@@ -51,7 +51,7 @@
       ],
       "lead": "Sache exactement quoi courir demain. {{plans}} plans d'entraînement du 5K au marathon, {{sessions}} séances expliquées par la science (Seiler, Daniels, Billat, Coggan) et {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans ton navigateur.",
       "ctaPrimary": "Générer mon plan",
-      "ctaPrimaryHasPlans": "Voir mes plans",
+      "ctaPrimaryHasPlans": "Reprendre l'entraînement",
       "ctaSecondary": "Explorer les séances",
       "scrollHint": "Découvrir l'app",
       "title": "Qu'est-ce que je cours aujourd'hui ?",
@@ -278,7 +278,8 @@
       "groups": {
         "product": "Produit",
         "science": "Science",
-        "project": "Projet"
+        "project": "Projet",
+        "tools": "Outils"
       },
       "product": {
         "library": "Bibliothèque",
