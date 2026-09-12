@@ -10,8 +10,7 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ShareFooter, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ShareFooter, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -102,17 +101,7 @@ export function BibCard({ workout, transparent }: ShareTemplateProps) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <Logo style={{ width: 80, height: 40 }} />
-              <div
-                style={{
-                  fontSize: 36,
-                  fontWeight: 800,
-                  letterSpacing: "-0.02em",
-                  color: "#0f172a",
-                }}
-              >
-                ZONED
-              </div>
+              <BrandMark height={38} color="#0f172a" />
             </div>
             <div
               style={{

@@ -8,8 +8,7 @@
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 480;
@@ -102,7 +101,7 @@ export function HolographicCard({ workout, transparent }: ShareTemplateProps) {
             alignItems: "center",
           }}
         >
-          <Logo style={{ width: 60, height: 30 }} />
+          <BrandMark height={26} color="rgba(255,255,255,0.95)" dot="#ffffff" />
           <span
             style={{
               fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
@@ -113,7 +112,7 @@ export function HolographicCard({ workout, transparent }: ShareTemplateProps) {
               textShadow: "0 1px 2px rgba(15,23,42,0.35)",
             }}
           >
-            ZONED · {workout.id}
+            {workout.id}
           </span>
         </div>
 

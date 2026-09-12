@@ -7,9 +7,8 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX, workoutShareUrl } from "./_shared";
+import { BrandMark, BgLayer, ZONE_HEX, workoutShareUrl } from "./_shared";
 import { QRSvg } from "./QRSvg";
-import Logo from "@/assets/logo.svg?react";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -75,9 +74,9 @@ export function BoardingPass({ workout, transparent }: ShareTemplateProps) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <Logo style={{ width: 72, height: 36 }} />
+              <BrandMark height={32} />
               <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-0.02em" }}>
-                ZONED AIRLINES
+                AIRLINES
               </span>
             </div>
             <span

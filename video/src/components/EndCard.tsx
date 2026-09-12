@@ -12,8 +12,10 @@ import { Reveal } from "./Type";
  * slab reads as a slide, two anchored blocks read as a poster, and the vertical
  * cut needs the address clear of the platform's action bar anyway.
  *
- * The mark keeps beating after it has drawn, so the last frame of every film is
- * still alive rather than a freeze.
+ * La marque s'écrit de gauche à droite puis s'arrête. Elle battait, du temps où
+ * elle était une ligne de pouls : une forme d'onde qui s'immobilise à plat est
+ * une forme d'onde morte, donc elle respirait. Le mot n'a pas ce problème — il
+ * n'a jamais l'air en panne — et un mot qui respire serait de l'ornement.
  */
 export const EndCard: React.FC<{
   at?: number;

@@ -7,8 +7,7 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -115,7 +114,7 @@ export function Postcard({ workout, transparent }: ShareTemplateProps) {
               background: "#fefae0",
             }}
           >
-            <Logo style={{ width: 80, height: 40 }} />
+            <BrandMark height={32} />
             <div
               style={{
                 fontSize: 76,
@@ -136,7 +135,7 @@ export function Postcard({ workout, transparent }: ShareTemplateProps) {
                 color: "#9c6f3b",
               }}
             >
-              ZONED · {workout.id}
+              {workout.id}
             </div>
           </div>
 

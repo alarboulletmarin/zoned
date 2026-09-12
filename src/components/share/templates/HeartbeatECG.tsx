@@ -1,7 +1,9 @@
 /**
  * HeartbeatECG — 1080×1920. An electrocardiogram-style horizontal trace
  * whose amplitude + frequency varies per zone, drawn from the actual
- * session segments. Resonates with the Zoned logo (a pulse line) and
+ * session segments. Le logo était lui-même une ligne de pouls quand ce
+ * gabarit a été écrit ; il est devenu le mot « zoned. », et le tracé reste ici
+ * parce qu'il dit la SÉANCE — les segments, leur intensité — et non la marque.
  * conveys the workout's intensity profile at a glance.
  */
 

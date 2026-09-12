@@ -1,100 +1,63 @@
 import type { CSSProperties } from "react";
 import { AbsoluteFill } from "remotion";
 import { COLORS, ZONES } from "../theme";
-import { CURVE, useBreath, useRamp } from "../motion";
-
-/** Measured length of the pulse path below, for the draw-on animation. */
-const PATH_LENGTH = 168;
-
-const PULSE_D =
-  "M 4 32 L 12 32 L 15 38 L 20 20 L 25 44 L 30 12 L 35 40 L 40 16 L 45 32 L 52 32";
+import { CURVE, useRamp } from "../motion";
 
 /**
- * The Zoned mark: one pulse traced through the six zone colours.
+ * La marque : le mot « zoned. ».
  *
- * Same path as `public/favicon.svg`. It draws left to right, then keeps a slow
- * amplitude beat — the waveform never flatlines, which is both on-brand and one
- * more thing in frame that refuses to sit still.
+ * Elle était une ligne de pouls en zigzag, traversée par les six couleurs de
+ * zone — le même tracé que l'ancien `public/favicon.svg`. Ce logo a été retiré
+ * du projet (docs/doodles.md, « Le logo est le mot, pas une figure ») : le
+ * garder ici aurait laissé le film signer avec un signe que l'app n'a plus.
+ *
+ * À faire un jour, et qui n'est PAS ce changement-ci : ce sous-projet a sa
+ * propre palette, d'avant la refonte — `COLORS.fg` est un bleu ardoise et
+ * `COLORS.accent` un orange, là où l'app est encre sur papier avec un
+ * vermillon. Le mot suit donc les couleurs DU FILM pour rester cohérent avec
+ * les trente autres plans, et non celles de l'app. Aligner la palette du film
+ * sur le système est un chantier à part.
  */
-export const PulseMark: React.FC<{
-  size: number;
-  draw?: number;
-  strokeWidth?: number;
-  /** Amplitude of the idle beat, 0 to switch it off. */
-  beat?: number;
-  style?: CSSProperties;
-}> = ({ size, draw = 1, strokeWidth = 4, beat = 0.09, style }) => {
-  const pulse = useBreath(1.7, beat);
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ display: "block", overflow: "visible", ...style }}
-    >
-      <defs>
-        <linearGradient id="zonedPulse" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#94a3b8" />
-          <stop offset="20%" stopColor="#22c55e" />
-          <stop offset="40%" stopColor="#eab308" />
-          <stop offset="60%" stopColor="#f97316" />
-          <stop offset="80%" stopColor="#ef4444" />
-          <stop offset="100%" stopColor="#7c3aed" />
-        </linearGradient>
-      </defs>
-      <path
-        d={PULSE_D}
-        stroke="url(#zonedPulse)"
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-        strokeDasharray={PATH_LENGTH}
-        strokeDashoffset={PATH_LENGTH * (1 - draw)}
-        style={{
-          transformOrigin: "32px 32px",
-          transform: `scaleY(${1 + pulse})`,
-        }}
-      />
-    </svg>
-  );
-};
-
 export const Wordmark: React.FC<{ size: number; style?: CSSProperties }> = ({ size, style }) => (
   <span
     style={{
       fontSize: size,
-      fontWeight: 700,
-      letterSpacing: "-0.02em",
+      fontWeight: 800,
+      letterSpacing: "-0.04em",
       lineHeight: 1,
       color: COLORS.fg,
+      whiteSpace: "nowrap",
       ...style,
     }}
   >
-    Zoned
+    zoned<span style={{ color: COLORS.accent }}>.</span>
   </span>
 );
 
+/**
+ * Le mot qui s'écrit, de gauche à droite.
+ *
+ * `draw` allait à un `strokeDashoffset` : un trait se trace, un mot en contours
+ * pleins ne se trace pas. Il découvre donc le mot par la gauche, ce qui dit la
+ * même chose — l'écriture avance — sans faire semblant d'être un trait.
+ *
+ * Et il ne bat plus : le pouls avait une amplitude qui respirait après s'être
+ * tracée, parce qu'une forme d'onde qui s'arrête à plat est une forme d'onde
+ * morte. Un mot qui respire n'est pas ça, c'est de l'ornement.
+ */
 export const BrandBar: React.FC<{
   size?: number;
   draw?: number;
   style?: CSSProperties;
 }> = ({ size = 62, draw = 1, style }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: size * 0.29, ...style }}>
-    <PulseMark size={size} draw={draw} />
-    <Wordmark size={size * 0.65} />
+  <div style={{ display: "flex", alignItems: "center", overflow: "hidden", ...style }}>
+    <Wordmark
+      size={size * 0.72}
+      style={{ clipPath: `inset(-20% ${(1 - draw) * 100}% -20% 0)` }}
+    />
   </div>
 );
 
-/**
- * The house transition: a band of the six zone colours wipes across the frame.
- *
- * Uses the product's own palette as the cut, so the film's punctuation is
- * branded rather than generic. Sparingly — twice in a film at most.
- */
 export const ZoneSweep: React.FC<{
   at: number;
   dur?: number;

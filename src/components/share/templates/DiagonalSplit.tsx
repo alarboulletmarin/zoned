@@ -10,8 +10,7 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ShareFooter, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ShareFooter, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -77,18 +76,7 @@ export function DiagonalSplit({ workout, transparent }: ShareTemplateProps) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <Logo style={{ width: 72, height: 36 }} />
-            <span
-              style={{
-                fontSize: 36,
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                color: "#ffffff",
-                lineHeight: 1,
-              }}
-            >
-              Zoned
-            </span>
+            <BrandMark height={38} color="#ffffff" />
           </div>
           <span
             style={{

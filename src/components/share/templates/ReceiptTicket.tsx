@@ -10,9 +10,8 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX, workoutShareUrl } from "./_shared";
+import { BrandMark, BgLayer, ZONE_HEX, workoutShareUrl } from "./_shared";
 import { QRSvg } from "./QRSvg";
-import Logo from "@/assets/logo.svg?react";
 import type { ShareTemplateProps } from "../shareTemplates";
 import type { WorkoutBlock } from "@/types";
 import { getZoneNumber } from "@/types";
@@ -130,16 +129,7 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
               marginBottom: 4,
             }}
           >
-            <Logo style={{ width: 64, height: 32 }} />
-            <span
-              style={{
-                fontSize: 40,
-                fontWeight: 800,
-                letterSpacing: "-0.025em",
-              }}
-            >
-              ZONED
-            </span>
+            <BrandMark height={42} />
           </div>
           <div
             style={{

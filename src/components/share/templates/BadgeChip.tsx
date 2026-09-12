@@ -6,8 +6,7 @@
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 480;
@@ -68,7 +67,7 @@ export function BadgeChip({ workout, transparent }: ShareTemplateProps) {
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Logo style={{ width: 60, height: 30 }} />
+          <BrandMark height={26} color="rgba(255,255,255,0.92)" dot="#ffffff" />
           <span
             style={{
               fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
@@ -78,7 +77,7 @@ export function BadgeChip({ workout, transparent }: ShareTemplateProps) {
               color: "rgba(255,255,255,0.85)",
             }}
           >
-            ZONED · {workout.id}
+            {workout.id}
           </span>
         </div>
 

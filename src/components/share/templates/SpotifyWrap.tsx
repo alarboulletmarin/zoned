@@ -7,8 +7,7 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -58,17 +57,7 @@ export function SpotifyWrap({ workout }: ShareTemplateProps) {
       >
         {/* Eyebrow + brand */}
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <Logo style={{ width: 80, height: 40 }} />
-          <span
-            style={{
-              fontSize: 36,
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-              color: "#ffffff",
-            }}
-          >
-            ZONED
-          </span>
+          <BrandMark height={38} color="#ffffff" />
         </div>
 
         {/* Big tagline */}
