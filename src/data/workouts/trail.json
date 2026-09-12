@@ -1487,6 +1487,1116 @@
       },
       "weeklyFrequencyMax": 1,
       "minimumRecoveryDays": 1
+    },
+    {
+      "id": "TRL-013",
+      "name": "Enchaînement, jour 2",
+      "nameEn": "Back-to-Back, Day 2",
+      "description": "Sortie longue courue le lendemain d'une autre sortie longue, sur des jambes déjà entamées. C'est la séance la plus spécifique de l'ultra : au-delà de six heures de course, personne ne part frais — on apprend ici à avancer proprement quand la fraîcheur n'est plus là. Le jour 1 est n'importe quelle sortie longue de 2 h ou plus ; celle-ci est le jour 2.",
+      "descriptionEn": "A long run done the day after another long run, on legs that are already tired. This is the most ultra-specific session there is: past six hours of racing nobody is fresh, and this is where you learn to keep moving cleanly once the freshness is gone. Day 1 is any long run of 2h or more; this is day 2.",
+      "category": "trail",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 150,
+        "max": 180
+      },
+      "estimatedDistanceKm": {
+        "min": 22,
+        "max": 30
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false,
+        "prefersSoft": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "20min très souple sur terrain facile : les premières minutes sont raides, c'est normal et ça passe",
+          "descriptionEn": "20min very easy on kind ground: the first minutes feel stiff, which is normal and passes",
+          "durationMin": 20,
+          "zone": "Z1"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "20min très souple sur terrain facile : les premières minutes sont raides, c'est normal et ça passe",
+          "descriptionEn": "20min very easy on kind ground: the first minutes feel stiff, which is normal and passes",
+          "durationSec": 1200,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "2 h à 2 h 30 en endurance basse, relief modéré. Marchez les raidillons sans hésiter et surveillez la foulée plutôt que le chrono",
+          "descriptionEn": "2h to 2h30 in low endurance on moderate terrain. Hike the steep pitches without hesitating and watch your stride rather than the clock",
+          "durationMin": 135,
+          "zone": "Z1-Z2",
+          "terrainType": "trail_runnable",
+          "elevationGainM": 600
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "2 h à 2 h 30 en endurance basse, relief modéré. Marchez les raidillons sans hésiter et surveillez la foulée plutôt que le chrono",
+          "descriptionEn": "2h to 2h30 in low endurance on moderate terrain. Hike the steep pitches without hesitating and watch your stride rather than the clock",
+          "durationSec": 8100,
+          "zone": "Z1-Z2",
+          "terrainType": "trail_runnable",
+          "elevationGainM": 600,
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "10min de marche, puis étirements doux des quadriceps et des mollets",
+          "descriptionEn": "10min walking, then gentle quad and calf stretching",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "10min de marche, puis étirements doux des quadriceps et des mollets",
+          "descriptionEn": "10min walking, then gentle quad and calf stretching",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Le jour 2 se court 20 à 30 s/km plus lentement que le jour 1 : c'est la fatigue accumulée qui est le stimulus, pas l'allure",
+        "Mangez dans l'heure qui suit le jour 1 — c'est ce repas-là qui décide de la qualité du jour 2",
+        "Deux enchaînements par cycle de quatre semaines suffisent, jamais deux week-ends de suite",
+        "Si la foulée se dégrade franchement, marchez : avancer dégradé n'entraîne rien et coûte dix jours"
+      ],
+      "coachingTipsEn": [
+        "Run day 2 twenty to thirty seconds per km slower than day 1: the accumulated fatigue is the stimulus, not the pace",
+        "Eat within the hour after day 1 — that meal is what decides the quality of day 2",
+        "Two back-to-backs per four-week cycle is plenty, and never on consecutive weekends",
+        "If your stride clearly falls apart, walk: moving badly trains nothing and costs ten days"
+      ],
+      "commonMistakes": [
+        "Vouloir tenir l'allure du jour 1 et transformer un stimulus d'endurance en séance de démolition",
+        "Enchaîner trois jours d'affilée parce que deux se sont bien passés",
+        "Placer l'enchaînement à moins de trois semaines de la course, où il ne se récupère plus"
+      ],
+      "commonMistakesEn": [
+        "Trying to hold day 1's pace, turning an endurance stimulus into a demolition session",
+        "Stacking a third day because the first two went well",
+        "Putting a back-to-back inside the last three weeks, where it no longer gets absorbed"
+      ],
+      "variationIds": [
+        "TRL-014",
+        "TRL-020",
+        "LR-016"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "late"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "trail",
+          "ultra",
+          "back_to_back",
+          "cumulative-fatigue",
+          "long-trail",
+          "time-on-feet",
+          "durability"
+        ],
+        "priorityScore": 92
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
+    },
+    {
+      "id": "TRL-014",
+      "name": "Temps sur les pieds",
+      "nameEn": "Time on Feet",
+      "description": "Quatre heures dehors en endurance basse, course et marche mêlées, sans objectif de distance ni de dénivelé — et jusqu'à cinq à mesure que la préparation avance. L'ultra ne se mesure pas en kilomètres mais en heures debout : c'est cette durée-là qu'il faut avoir déjà vécue, avec son sac, ses chaussures et son ravitaillement.",
+      "descriptionEn": "Four hours outdoors in low endurance, running and hiking mixed, with no distance or elevation target — stretching towards five as the build goes on. An ultra is measured in hours on your feet rather than kilometres: this is the duration you need to have already lived through, with your pack, your shoes and your food.",
+      "category": "trail",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 215,
+        "max": 265
+      },
+      "estimatedDistanceKm": {
+        "min": 30,
+        "max": 42
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false,
+        "prefersSoft": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "30min de mise en route sur terrain roulant, sans regarder la montre",
+          "descriptionEn": "30min easing in on rolling ground without looking at your watch",
+          "durationMin": 30,
+          "zone": "Z1"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "30min de mise en route sur terrain roulant, sans regarder la montre",
+          "descriptionEn": "30min easing in on rolling ground without looking at your watch",
+          "durationSec": 1800,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3 h à 3 h 30 en Z1-Z2, course sur le roulant et marche dès que ça monte. Un ravitaillement toutes les 40 minutes, bu et mangé même sans faim",
+          "descriptionEn": "3h to 3h30 in Z1-Z2, running the rolling ground and hiking as soon as it climbs. Fuel every 40 minutes, eaten and drunk even without hunger",
+          "durationMin": 195,
+          "zone": "Z1-Z2",
+          "terrainType": "trail_runnable",
+          "elevationGainM": 900
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "3 h à 3 h 30 en Z1-Z2, course sur le roulant et marche dès que ça monte. Un ravitaillement toutes les 40 minutes, bu et mangé même sans faim",
+          "descriptionEn": "3h to 3h30 in Z1-Z2, running the rolling ground and hiking as soon as it climbs. Fuel every 40 minutes, eaten and drunk even without hunger",
+          "durationSec": 11700,
+          "zone": "Z1-Z2",
+          "terrainType": "trail_runnable",
+          "elevationGainM": 900,
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "15min de marche franche pour rentrer, puis changez de chaussures avant de vous asseoir",
+          "descriptionEn": "15min brisk walk home, then change out of your shoes before you sit down",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "15min de marche franche pour rentrer, puis changez de chaussures avant de vous asseoir",
+          "descriptionEn": "15min brisk walk home, then change out of your shoes before you sit down",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "La durée est l'objectif : si le terrain est dur, raccourcissez la boucle, pas le temps",
+        "Sortez avec le sac et les chaussures de la course — une ampoule se découvre à l'entraînement, pas au 60ᵉ kilomètre",
+        "Un ravitaillement toutes les 40 minutes, 60 à 90 g de glucides par heure : l'estomac s'entraîne comme le reste",
+        "Une sortie de cette longueur demande dix jours pour être digérée : elle ne se répète pas chaque semaine"
+      ],
+      "coachingTipsEn": [
+        "Duration is the goal: if the ground is hard, shorten the loop, not the time",
+        "Go out with your race pack and race shoes — a blister is discovered in training, not at kilometre 60",
+        "Fuel every 40 minutes, 60 to 90g of carbohydrate an hour: the gut trains like everything else",
+        "An outing this long needs ten days to be absorbed: it is not a weekly session"
+      ],
+      "commonMistakes": [
+        "Courir les montées pour « ne pas perdre de temps » et rentrer vidé en trois heures",
+        "Partir sans nourriture parce que l'appétit ne vient jamais les deux premières heures",
+        "Tester un sac, des chaussures ou une boisson neufs le jour de la course au lieu d'ici"
+      ],
+      "commonMistakesEn": [
+        "Running the climbs so as not to lose time, and coming home empty after three hours",
+        "Setting off without food because appetite never shows up in the first two hours",
+        "Testing a new pack, new shoes or a new drink on race day instead of here"
+      ],
+      "variationIds": [
+        "TRL-013",
+        "TRL-015",
+        "TRL-018"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "late"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "trail",
+          "ultra",
+          "time-on-feet",
+          "long-trail",
+          "hike-run",
+          "durability"
+        ],
+        "priorityScore": 94
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 3
+    },
+    {
+      "id": "TRL-015",
+      "name": "Marche rapide en montée longue",
+      "nameEn": "Power Hiking Long Climbs",
+      "description": "Trois montées longues gravies en marche rapide, mains sur les cuisses ou bâtons, redescendues en trottinant. Sur un ultra de montagne la marche représente souvent la moitié du temps de course : c'est une technique, elle s'entraîne, et elle est presque toujours négligée.",
+      "descriptionEn": "Three long climbs taken at a fast hike, hands on thighs or poles, jogged back down. On a mountain ultra hiking is often half the race time: it is a technique, it trains, and it is almost always neglected.",
+      "category": "trail",
+      "sessionType": "hills",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 95,
+        "max": 115
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "15min trottées jusqu'au pied de la montée",
+          "descriptionEn": "15min jog to the foot of the climb",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "15min trottées jusqu'au pied de la montée",
+          "descriptionEn": "15min jog to the foot of the climb",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3×20min de marche rapide en montée raide (12-20 %), mains sur les cuisses ou bâtons, redescente trottée",
+          "descriptionEn": "3×20min fast hiking on a steep climb (12-20%), hands on thighs or poles, jog back down",
+          "durationMin": 20,
+          "zone": "Z2-Z3",
+          "repetitions": 3,
+          "recovery": "10min de redescente trottée, souple",
+          "recoveryEn": "10min jogged descent, relaxed",
+          "gradientPercent": 15,
+          "elevationGainM": 250,
+          "terrainType": "mountain"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "20min de marche rapide en montée raide (12-20 %), mains sur les cuisses ou bâtons, redescente trottée",
+              "descriptionEn": "20min fast hiking on a steep climb (12-20%), hands on thighs or poles, jog back down",
+              "durationSec": 1200,
+              "zone": "Z2-Z3",
+              "gradientPercent": 15,
+              "elevationGainM": 250,
+              "terrainType": "mountain",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "10min de redescente trottée, souple",
+              "descriptionEn": "10min jogged descent, relaxed",
+              "durationSec": 600,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "10min trottées sur le plat, foulée courte",
+          "descriptionEn": "10min jog on the flat with a short stride",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "10min trottées sur le plat, foulée courte",
+          "descriptionEn": "10min jog on the flat with a short stride",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Mains sur les cuisses, buste penché, petits pas rapides : la marche d'ultra est une poussée, pas une promenade",
+        "Visez la cadence, pas la longueur de pas — 50 à 60 pas par minute et par jambe en pente raide",
+        "Avec des bâtons, plantez-les devant le pied et poussez en fin de geste : ils portent 10 à 15 % de l'effort",
+        "Comparez vos temps de montée en marchant et en courant sur le même segment : au-dessus de 15 % de pente, la marche gagne presque toujours"
+      ],
+      "coachingTipsEn": [
+        "Hands on thighs, torso forward, short fast steps: ultra hiking is a push, not a stroll",
+        "Chase cadence, not stride length — 50 to 60 steps per minute per leg on a steep gradient",
+        "With poles, plant them ahead of the foot and push through the end of the stroke: they carry 10 to 15% of the effort",
+        "Time the same segment hiked and run: above 15% gradient, hiking almost always wins"
+      ],
+      "commonMistakes": [
+        "Marcher les bras ballants, ce qui laisse tout le travail aux jambes",
+        "Courir la montée par principe et arriver au sommet avec dix battements de trop pour la suite",
+        "Découvrir les bâtons le jour de la course, où ils gênent plus qu'ils n'aident"
+      ],
+      "commonMistakesEn": [
+        "Hiking with arms dangling, which leaves every bit of the work to the legs",
+        "Running the climb out of principle and cresting ten beats too high for what follows",
+        "Discovering poles on race day, where they get in the way more than they help"
+      ],
+      "variationIds": [
+        "TRL-019",
+        "TRL-014",
+        "TRL-012"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "trail",
+          "ultra",
+          "power-hike",
+          "hike-run",
+          "vertical",
+          "mountain"
+        ],
+        "priorityScore": 86
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "TRL-016",
+      "name": "Descente longue technique",
+      "nameEn": "Long Technical Descent",
+      "description": "Deux descentes de 20 minutes sur sentier technique, pierreux et racineux, remontées en marchant. La descente est ce qui détruit les jambes sur un ultra et ce qui s'entraîne le moins : le travail excentrique se prépare des semaines à l'avance, il ne se rattrape pas.",
+      "descriptionEn": "Two 20-minute descents on technical trail, rocky and rooted, hiked back up. Descending is what wrecks legs in an ultra and what gets trained least: eccentric work has to be built weeks ahead, it cannot be crammed.",
+      "category": "trail",
+      "sessionType": "hills",
+      "targetSystem": "neuromuscular",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 80,
+        "max": 95
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "20min trottées, dont la montée jusqu'au haut de la descente",
+          "descriptionEn": "20min jogging, including the climb to the top of the descent",
+          "durationMin": 20,
+          "zone": "Z1",
+          "terrainType": "trail_runnable"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "20min trottées, dont la montée jusqu'au haut de la descente",
+          "descriptionEn": "20min jogging, including the climb to the top of the descent",
+          "durationSec": 1200,
+          "zone": "Z1",
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "2×20min de descente technique, regard trois mètres devant, remontée en marche rapide",
+          "descriptionEn": "2×20min technical descent, eyes three metres ahead, hike back up",
+          "durationMin": 20,
+          "zone": "Z2-Z3",
+          "repetitions": 2,
+          "recovery": "18min de remontée en marche rapide",
+          "recoveryEn": "18min hiking back up briskly",
+          "gradientPercent": -12,
+          "terrainType": "trail_technical"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "20min de descente technique, regard trois mètres devant, remontée en marche rapide",
+              "descriptionEn": "20min technical descent, eyes three metres ahead, hike back up",
+              "durationSec": 1200,
+              "zone": "Z2-Z3",
+              "gradientPercent": -12,
+              "terrainType": "trail_technical",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "18min de remontée en marche rapide",
+              "descriptionEn": "18min hiking back up briskly",
+              "durationSec": 1080,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "10min sur chemin roulant, puis rien d'excentrique pendant 48 h",
+          "descriptionEn": "10min on rolling path, then nothing eccentric for 48 hours",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "10min sur chemin roulant, puis rien d'excentrique pendant 48 h",
+          "descriptionEn": "10min on rolling path, then nothing eccentric for 48 hours",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Le regard va trois mètres devant le pied, jamais sur le pied : c'est lui qui choisit la ligne",
+        "Bras écartés pour l'équilibre, buste dans la pente, pas courts et fréquents — freiner coûte plus cher que descendre",
+        "Les courbatures arrivent le surlendemain : cette séance se place dix jours avant la course au plus tard",
+        "Commencez par deux descentes et n'en ajoutez une que lorsque vous êtes indolore le surlendemain"
+      ],
+      "coachingTipsEn": [
+        "Look three metres ahead of your foot, never at the foot: your eyes pick the line",
+        "Arms wide for balance, chest into the slope, short frequent steps — braking costs more than descending",
+        "Soreness arrives two days later: place this session no later than ten days before the race",
+        "Start with two descents and only add a third once you are pain-free two days after"
+      ],
+      "commonMistakes": [
+        "Se pencher en arrière par peur, ce qui met tout le freinage sur les quadriceps",
+        "Enchaîner quatre descentes le premier jour et perdre la semaine suivante",
+        "Ne travailler la descente qu'en compétition, où elle coûte les vingt derniers kilomètres"
+      ],
+      "commonMistakesEn": [
+        "Leaning back out of fear, which puts every bit of the braking on the quads",
+        "Doing four descents on day one and losing the following week",
+        "Only ever descending in races, where it costs you the final twenty kilometres"
+      ],
+      "variationIds": [
+        "TRL-005",
+        "TRL-015",
+        "TRL-013"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "trail",
+          "ultra",
+          "downhill",
+          "eccentric",
+          "technical",
+          "durability"
+        ],
+        "priorityScore": 88
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
+    },
+    {
+      "id": "TRL-017",
+      "name": "Sortie de nuit",
+      "nameEn": "Night Run",
+      "description": "Une heure et demie de sentier à la frontale, à l'allure d'endurance. Tout ultra long se court une partie de la nuit, et la nuit change tout : l'allure tombe, la technicité double, le sommeil arrive. Ça se répète à l'entraînement, jamais le jour J.",
+      "descriptionEn": "Ninety minutes of trail by headlamp at endurance pace. Every long ultra is partly run at night, and night changes everything: pace drops, technicality doubles, sleepiness arrives. You rehearse that in training, never on race day.",
+      "category": "trail",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 80,
+        "max": 100
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "15min sur chemin large, le temps que l'œil se fasse au faisceau",
+          "descriptionEn": "15min on a wide path while your eye settles into the beam",
+          "durationMin": 15,
+          "zone": "Z1",
+          "terrainType": "trail_runnable"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "15min sur chemin large, le temps que l'œil se fasse au faisceau",
+          "descriptionEn": "15min on a wide path while your eye settles into the beam",
+          "durationSec": 900,
+          "zone": "Z1",
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "60min de sentier à la frontale en endurance : allure 30 à 60 s/km plus lente que de jour, et c'est normal",
+          "descriptionEn": "60min of trail by headlamp in endurance: pace 30 to 60s/km slower than in daylight, which is normal",
+          "durationMin": 60,
+          "zone": "Z2",
+          "terrainType": "trail_technical"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "60min de sentier à la frontale en endurance : allure 30 à 60 s/km plus lente que de jour, et c'est normal",
+          "descriptionEn": "60min of trail by headlamp in endurance: pace 30 to 60s/km slower than in daylight, which is normal",
+          "durationSec": 3600,
+          "zone": "Z2",
+          "terrainType": "trail_technical",
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "15min sur terrain facile, frontale en mode économique",
+          "descriptionEn": "15min on easy ground with the lamp on its low setting",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "15min sur terrain facile, frontale en mode économique",
+          "descriptionEn": "15min on easy ground with the lamp on its low setting",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Deux sources de lumière, toujours : une frontale et une lampe de secours, et des piles neuves vérifiées avant de partir",
+        "Une frontale bas sur le front écrase les reliefs ; une lampe de ceinture en plus dessine les pierres par leur ombre",
+        "Dites où vous allez et à quelle heure vous rentrez. C'est la seule règle de cette séance qui n'est pas négociable",
+        "Prévoyez une couche de plus qu'en journée : l'allure baisse et la température avec elle"
+      ],
+      "coachingTipsEn": [
+        "Two light sources, always: a headlamp and a backup, with fresh batteries checked before you leave",
+        "A headlamp worn low flattens the terrain; adding a waist lamp draws the rocks out by their shadows",
+        "Tell someone where you are going and when you will be back. That is the one non-negotiable rule of this session",
+        "Take one more layer than in daytime: your pace drops and your temperature follows"
+      ],
+      "commonMistakes": [
+        "Découvrir sa frontale la nuit de la course et s'apercevoir qu'elle éclaire mal en descente",
+        "Courir de jour l'allure prévue de nuit et bâtir un plan de course impossible",
+        "Partir seul sur un sentier technique jamais reconnu de jour"
+      ],
+      "commonMistakesEn": [
+        "Discovering your headlamp on race night and finding it lights descents badly",
+        "Using daytime pace for your night splits and building an impossible race plan",
+        "Heading out alone on a technical trail you have never seen in daylight"
+      ],
+      "variationIds": [
+        "TRL-014",
+        "TRL-018",
+        "TRL-012"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "trail",
+          "ultra",
+          "night",
+          "logistics",
+          "race-rehearsal"
+        ],
+        "priorityScore": 80
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "TRL-018",
+      "name": "Répétition ravitaillement",
+      "nameEn": "Fuelling Rehearsal",
+      "description": "Deux heures et demie en endurance où l'objectif n'est pas l'allure mais l'estomac : la nourriture de la course, aux quantités de la course, aux intervalles de la course. La première cause d'abandon sur ultra n'est pas les jambes, c'est le ventre — et le ventre s'entraîne.",
+      "descriptionEn": "Two and a half hours in endurance where the target is not pace but the gut: race food, in race quantities, at race intervals. The leading cause of an ultra DNF is not the legs, it is the stomach — and the stomach trains.",
+      "category": "trail",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 140,
+        "max": 170
+      },
+      "estimatedDistanceKm": {
+        "min": 20,
+        "max": 27
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "20min souples, premier ravitaillement à la 20ᵉ minute",
+          "descriptionEn": "20min easy, first feed at minute 20",
+          "durationMin": 20,
+          "zone": "Z1"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "20min souples, premier ravitaillement à la 20ᵉ minute",
+          "descriptionEn": "20min easy, first feed at minute 20",
+          "durationSec": 1200,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "2 h en endurance, un ravitaillement toutes les 30 minutes : 60 à 90 g de glucides par heure et 500 ml de liquide, exactement ce qui sera pris en course",
+          "descriptionEn": "2h in endurance with a feed every 30 minutes: 60 to 90g of carbohydrate an hour and 500ml of fluid, exactly what you will take in the race",
+          "durationMin": 120,
+          "zone": "Z2",
+          "terrainType": "trail_runnable"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "2 h en endurance, un ravitaillement toutes les 30 minutes : 60 à 90 g de glucides par heure et 500 ml de liquide, exactement ce qui sera pris en course",
+          "descriptionEn": "2h in endurance with a feed every 30 minutes: 60 to 90g of carbohydrate an hour and 500ml of fluid, exactly what you will take in the race",
+          "durationSec": 7200,
+          "zone": "Z2",
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "15min souples, dernier ravitaillement pris en marchant",
+          "descriptionEn": "15min easy, last feed taken while walking",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "15min souples, dernier ravitaillement pris en marchant",
+          "descriptionEn": "15min easy, last feed taken while walking",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Notez tout : ce qui est passé, à quelle heure, et ce qui est remonté. C'est le seul moyen d'avoir un plan de ravitaillement plutôt qu'une intention",
+        "Montez progressivement : 60 g de glucides par heure d'abord, 90 g seulement quand 60 passent sans un mot",
+        "Buvez ce que la course servira — une boisson d'organisateur inconnue au 40ᵉ kilomètre est un pari",
+        "Solide et liquide alternés : trois heures de gels seuls finissent rarement bien"
+      ],
+      "coachingTipsEn": [
+        "Write everything down: what went in, at what time, and what came back up. It is the only way to own a fuelling plan rather than an intention",
+        "Build up gradually: 60g of carbohydrate an hour first, 90g only once 60 passes without complaint",
+        "Drink what the race will serve — an unknown organiser's drink at kilometre 40 is a gamble",
+        "Alternate solid and liquid: three hours of gels alone rarely ends well"
+      ],
+      "commonMistakes": [
+        "Ne rien manger à l'entraînement et tout manger en course, en espérant que ça tienne",
+        "Tester les quantités hautes dès la première sortie et passer l'après-midi plié en deux",
+        "Ne mesurer que les glucides et oublier le sodium, qui décide de ce qui est absorbé"
+      ],
+      "commonMistakesEn": [
+        "Eating nothing in training and everything in the race, hoping it holds",
+        "Trying the top quantities on the first outing and spending the afternoon doubled over",
+        "Counting only carbohydrate and forgetting sodium, which decides what actually gets absorbed"
+      ],
+      "variationIds": [
+        "TRL-014",
+        "TRL-017",
+        "TRL-013"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "trail",
+          "ultra",
+          "fuelling",
+          "race-rehearsal",
+          "long-trail",
+          "time-on-feet"
+        ],
+        "priorityScore": 84
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "TRL-019",
+      "name": "Côtes longues en tempo",
+      "nameEn": "Long Climbs at Tempo",
+      "description": "Quatre montées de dix minutes courues en tempo, sur pente régulière et roulante. C'est l'intensité de l'ultra : pas de la VMA, pas du footing, mais l'allure qu'on peut tenir en montée pendant des heures sans jamais basculer.",
+      "descriptionEn": "Four ten-minute climbs run at tempo on a steady, runnable gradient. This is ultra intensity: not VO2max work, not jogging, but the uphill effort you can hold for hours without ever tipping over.",
+      "category": "trail",
+      "sessionType": "hills",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 80,
+        "max": 100
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "20min trottées avec trois montées de 30s en accélération progressive",
+          "descriptionEn": "20min jog with three 30s progressive uphill accelerations",
+          "durationMin": 20,
+          "zone": "Z1-Z2",
+          "terrainType": "trail_runnable"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "20min trottées avec trois montées de 30s en accélération progressive",
+          "descriptionEn": "20min jog with three 30s progressive uphill accelerations",
+          "durationSec": 1200,
+          "zone": "Z1-Z2",
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "4×10min en montée régulière (6-10 %) en tempo, redescente trottée",
+          "descriptionEn": "4×10min on a steady climb (6-10%) at tempo, jog back down",
+          "durationMin": 10,
+          "zone": "Z3",
+          "repetitions": 4,
+          "recovery": "6min de redescente trottée souple",
+          "recoveryEn": "6min relaxed jog back down",
+          "gradientPercent": 8,
+          "elevationGainM": 130,
+          "terrainType": "trail_runnable"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 4,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "10min en montée régulière (6-10 %) en tempo, redescente trottée",
+              "descriptionEn": "10min on a steady climb (6-10%) at tempo, jog back down",
+              "durationSec": 600,
+              "zone": "Z3",
+              "gradientPercent": 8,
+              "elevationGainM": 130,
+              "terrainType": "trail_runnable",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "6min de redescente trottée souple",
+              "descriptionEn": "6min relaxed jog back down",
+              "durationSec": 360,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "12min trottées sur le plat",
+          "descriptionEn": "12min jog on the flat",
+          "durationMin": 12,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "12min trottées sur le plat",
+          "descriptionEn": "12min jog on the flat",
+          "durationSec": 720,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Le repère n'est pas le chrono mais la respiration : on doit pouvoir dire une phrase courte, pas tenir une conversation",
+        "La même pente pour les quatre répétitions : changer de pente change la séance et rend la comparaison inutile",
+        "La redescente est de la récupération, pas une descente technique : trottez, ne travaillez pas l'excentrique ici",
+        "Deux fois par semaine au maximum en phase de développement, et jamais la veille d'une sortie longue"
+      ],
+      "coachingTipsEn": [
+        "The cue is not the clock but your breathing: you should manage a short sentence, not a conversation",
+        "Same gradient for all four reps: a different gradient makes it a different session and the comparison worthless",
+        "The descent is recovery, not technical work: jog it, do not train eccentric load here",
+        "Twice a week at most during a build, and never the day before a long run"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur la première montée et finir la quatrième en Z5",
+        "Choisir une pente trop raide, ce qui transforme la séance en marche rapide déguisée",
+        "Écourter les redescentes et cumuler la fatigue au lieu de répéter la qualité"
+      ],
+      "commonMistakesEn": [
+        "Going too hard on the first climb and finishing the fourth in Z5",
+        "Picking too steep a gradient, which turns the session into disguised power hiking",
+        "Cutting the descents short and stacking fatigue instead of repeating quality"
+      ],
+      "variationIds": [
+        "TRL-015",
+        "TRL-003",
+        "HIL-009"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "trail",
+          "ultra",
+          "vertical",
+          "long-climbs",
+          "tempo"
+        ],
+        "priorityScore": 87
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "TRL-020",
+      "name": "Double sortie sur la journée",
+      "nameEn": "Double Day",
+      "description": "Deux sorties le même jour, une le matin, une en fin d'après-midi, séparées par six à huit heures. Le volume monte sans qu'une seule sortie devienne écrasante, et la seconde se court sur des jambes déjà servies — un enchaînement en miniature, qui se digère en deux jours au lieu de dix.",
+      "descriptionEn": "Two outings on the same day, one in the morning and one in the late afternoon, six to eight hours apart. Volume goes up without any single run becoming crushing, and the second one is run on legs that have already worked — a back-to-back in miniature, absorbed in two days instead of ten.",
+      "category": "trail",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 125,
+        "max": 155
+      },
+      "estimatedDistanceKm": {
+        "min": 20,
+        "max": 28
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false,
+        "prefersSoft": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "10min de mise en route, à refaire avant chacune des deux sorties",
+          "descriptionEn": "10min easing in, repeated before each of the two outings",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "10min de mise en route, à refaire avant chacune des deux sorties",
+          "descriptionEn": "10min easing in, repeated before each of the two outings",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Matin : 60min en endurance sur sentier roulant, relief modéré",
+          "descriptionEn": "Morning: 60min in endurance on runnable trail with moderate relief",
+          "durationMin": 60,
+          "zone": "Z2",
+          "terrainType": "trail_runnable",
+          "elevationGainM": 250
+        },
+        {
+          "description": "Fin d'après-midi, 6 à 8 h plus tard : 60min en endurance basse, plus lente que le matin",
+          "descriptionEn": "Late afternoon, 6 to 8h later: 60min in low endurance, slower than the morning",
+          "durationMin": 60,
+          "zone": "Z1-Z2",
+          "terrainType": "trail_runnable",
+          "elevationGainM": 200
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Matin : 60min en endurance sur sentier roulant, relief modéré",
+          "descriptionEn": "Morning: 60min in endurance on runnable trail with moderate relief",
+          "durationSec": 3600,
+          "zone": "Z2",
+          "terrainType": "trail_runnable",
+          "elevationGainM": 250,
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Fin d'après-midi, 6 à 8 h plus tard : 60min en endurance basse, plus lente que le matin",
+          "descriptionEn": "Late afternoon, 6 to 8h later: 60min in low endurance, slower than the morning",
+          "durationSec": 3600,
+          "zone": "Z1-Z2",
+          "terrainType": "trail_runnable",
+          "elevationGainM": 200,
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "10min de marche après la seconde sortie, puis un vrai repas",
+          "descriptionEn": "10min walking after the second outing, then a proper meal",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "10min de marche après la seconde sortie, puis un vrai repas",
+          "descriptionEn": "10min walking after the second outing, then a proper meal",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Mangez entre les deux, vraiment : la seconde sortie se joue à table, pas dans les jambes",
+        "La seconde est plus lente que la première, toujours. Si elle est plus rapide, la première était trop facile",
+        "Six heures d'écart au minimum — deux sorties à trois heures d'intervalle sont une seule longue sortie coupée en deux",
+        "C'est la façon la plus sûre de monter le volume hebdomadaire quand une sortie de 3 h ne rentre pas dans la journée"
+      ],
+      "coachingTipsEn": [
+        "Eat between the two, properly: the second outing is decided at the table, not in the legs",
+        "The second is slower than the first, always. If it is faster, the first was too easy",
+        "Six hours apart minimum — two runs three hours apart are one long run cut in half",
+        "This is the safest way to raise weekly volume when a 3h outing does not fit in the day"
+      ],
+      "commonMistakes": [
+        "Courir la seconde sortie plus vite « parce que ça va bien » et perdre le bénéfice du cumul",
+        "Ne rien manger entre les deux et transformer la seconde en séance à jeun involontaire",
+        "Doubler tous les jours de la semaine : c'est un outil ponctuel, pas un régime"
+      ],
+      "commonMistakesEn": [
+        "Running the second outing faster because it feels fine, losing the point of the accumulation",
+        "Eating nothing in between and turning the second run into an accidental fasted session",
+        "Doubling every day of the week: it is an occasional tool, not a diet"
+      ],
+      "variationIds": [
+        "TRL-013",
+        "TRL-014",
+        "END-016"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "trail",
+          "ultra",
+          "double-day",
+          "cumulative-fatigue",
+          "time-on-feet"
+        ],
+        "priorityScore": 82
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     }
   ]
 }

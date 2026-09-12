@@ -17,9 +17,13 @@ import type { Practice } from "@/types/practice";
  * séance est traversée une fois par session, jamais à chaque rendu ni à chaque
  * frappe au clavier dans les filtres.
  *
- * Ce que dit la donnée réelle, mesuré sur le catalogue : route 197, trail 28,
- * ultra 44 (dont 11 spécifiques). Aucune séance n'a été écrite pour ça — le
- * terrain et les tags étaient déjà renseignés.
+ * Ce que dit la donnée réelle, mesuré sur le catalogue : route 197, trail 36,
+ * ultra 52 (dont 19 spécifiques). Les 28 séances trail et 44 ultra du premier
+ * relevé ne devaient RIEN à ce chantier — le terrain et les tags étaient déjà
+ * renseignés, c'est le critère qui manquait. Les huit qui les complètent
+ * (TRL-013…TRL-020) sont, elles, écrites pour l'ultra : enchaînement,
+ * temps sur les pieds, marche en montée, descente technique, nuit,
+ * ravitaillement, côtes longues, double sortie.
  */
 
 /** Un terrain qui n'est pas de la route. `road` ne qualifie pas le trail. */
