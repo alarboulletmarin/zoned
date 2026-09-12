@@ -124,8 +124,6 @@
 .zn-lib__practices {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: var(--sp-6);
   margin-block-start: var(--sp-13);
   padding-block-end: var(--sp-8);
   border-block-end: var(--border-rule);
@@ -207,16 +205,18 @@
   }
 }
 
-/* Sur 390 px, le rail prend sa ligne et le tirage la suivante, pleine
-   largeur : deux pastilles et un bouton sur une ligne donneraient des cibles
-   de 90 px qui cassent leur libellé. */
-@media (max-width: 640px) {
-  .zn-lib__practices {
-    gap: var(--sp-6);
-  }
+/* Sur 390 px le rail défile horizontalement : cinq pastilles repliées en deux
+   rangées coûtaient une rangée de plus, et une pastille de pratique tronquée
+   n'est pas lisible.
 
+   Le tirage avait ici une règle `flex: 1 1 100%` qui lui donnait toute la
+   largeur : il partageait cette rangée avec le rail, et deux pastilles plus un
+   bouton sur une ligne auraient donné des cibles de 90 px. Il a déménagé dans
+   la rangée de commandes, où il partage la ligne avec « Filtres » et n'a plus
+   besoin de s'étirer — la règle est partie avec lui, sinon elle poussait
+   « Filtres » à la ligne suivante. */
+@media (max-width: 640px) {
   .zn-lib__practice-rail {
-    flex: 1 1 100%;
     overflow-x: auto;
     flex-wrap: nowrap;
     scrollbar-width: none;
@@ -229,151 +229,77 @@
   .zn-lib__practice {
     white-space: nowrap;
   }
-
-  .zn-lib__draw {
-    flex: 1 1 100%;
-    justify-content: center;
-  }
 }
 
-.zn-lib__strip {
-  margin-block-start: var(--sp-13);
-}
+/* ── la rangée de commandes ───────────────────────────────────────────── */
 
-/* Composed onto .zn-tabs__list — same rule, same triggers, plus the wrap and
-   the meta string the library needs on the right. Both classes are named in
-   the selector on purpose: tabs.css is imported after this file, and a single
-   class would lose the tie to the list's own alignment and gap. */
-.zn-tabs__list.zn-lib__tabs {
-  flex-wrap: wrap;
-  gap: var(--sp-2) var(--sp-6);
-}
+/* Une seule rangée, et elle tient sur une ligne jusqu'en bas de la gamme.
 
-/* The disciplines own their own radiogroup, so the view-mode control next to
-   them is not read as one more discipline.
-
-   Ce rail est une SÉLECTION (role=radiogroup, aria-checked), pas une
-   navigation, et il emprunte .zn-tabs__trigger pour sa seule géométrie. Ça
-   n'est plus une contradiction depuis que l'onglet ouvert porte lui aussi la
-   pilule d'encre : les deux états se peignent pareil parce que c'est la même
-   marque, et le sélecteur de vue à cent pixels d'ici (un Segmented) dit
-   désormais « celui-ci » exactement de la même façon.
-
-   Elles ne s'étirent plus à la hauteur du list : c'était pour que le marqueur
-   de 2.5px atteigne le filet. La pilule, elle, se centre — sinon un rail
-   étiré de 54px donnerait un ovale de 54px de haut. */
-.zn-lib__disciplines {
+   Ce qui était là avant : `.zn-lib__strip` avec le rail des disciplines qui
+   passait en scroll horizontal sous 640, sa ligne méta, le bouton de filtres
+   et le sélecteur de vue — quatre objets qui se repliaient en deux ou trois
+   rangées. Les deux qui restent sont des boutons de largeur fixe, donc la
+   rangée ne se replie plus : la méta prend la place qui reste et se tronque
+   avant de pousser quoi que ce soit à la ligne. */
+.zn-lib__bar {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
-  gap: var(--sp-2);
-}
-
-/* ── le rail des disciplines, sous 640 ────────────────────────────────── */
-
-/* Le libellé long au-dessus de 640, le court en dessous. `display: none`
-   sort la variante inactive de l'arbre d'accessibilité : le nom accessible
-   du bouton est TOUJOURS ce qu'on lit à l'écran (WCAG 2.5.3 Label in Name).
-   Un aria-label long posé par-dessus un texte court serait la violation. */
-.zn-lib__disc-short {
-  display: none;
-}
-
-/* Cinq disciplines pèsent 528,8px de composition ; la colonne d'un téléphone
-   de 375 en fait 335. Le retour à la ligne coûtait 46,5px de premier écran —
-   mais surtout il DÉCROCHAIT LA RANGÉE de son filet : les onglets tenaient la
-   première ligne du .zn-tabs__list pendant que le filet du list (tabs.css)
-   restait sous la ligne méta, deux lignes plus bas.
-
-   Sous 640 la rangée tient sur une ligne : l'icône saute (92px), les flancs
-   passent de 16 à 8 (80px), « Renforcement » prend sa forme courte (57px).
-   310,1px mesurés — pour 312 de colonne à 360px de viewport et 327 à 375 :
-   cinq mots entiers, aucun geste, sur les deux. En deçà le rail défile et
-   laisse un onglet coupé au bord — l'affordance de la maison
-   (.zn-route-chips, routes.css), jamais un dégradé.
-
-   C'est cette mesure qui a écarté le <Segmented> pour ce rail : sa grille de
-   colonnes égales donne 59,4px par discipline à 360px, soit 44,4px de
-   libellé — « Course » (47px) et « Natation » (58px) y passeraient à
-   l'ellipse, et un Segmented ne défile pas et ne connaît pas la paire
-   long/court. Le rail garde donc sa forme et prend le bon vocabulaire
-   d'état par tabs.css.
-
-   Le filet descend du .zn-tabs__list au rail : c'est lui qui porte désormais
-   la règle sous la rangée, et la ligne méta devient la légende qui pend
-   dessous. Le padding qui écarte la pilule du filet descend avec lui.
-
-   overflow-x vit DANS la media query, pas via .zn-scroll-x : cette classe
-   étant statique dans le JSX, elle laisserait overflow-x actif au-dessus de
-   640, où le scrollport rognerait l'anneau de focus sur ordinateur. */
-@media (max-width: 639px) {
-  .zn-tabs__list.zn-lib__tabs {
-    border-bottom: none;
-    padding-block-end: 0;
-  }
-
-  .zn-lib__disciplines {
-    flex: 1 1 100%;
-    min-inline-size: 0;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    padding-block-end: var(--sp-2);
-    border-bottom: var(--border-rule);
-    scrollbar-width: none;
-  }
-
-  .zn-lib__disciplines::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* 8px de flanc et non 10 : la bordure complète de la pilule ajoute 1px de
-     chaque côté, soit 10px sur les cinq, et le rail dépassait alors de 4px à
-     375 (331 mesurés pour 327). À 8 le retrait optique reste de 9px, la
-     rangée retombe à 310,1px et les cinq mots tiennent à 360 comme à 375 —
-     mieux qu'avant, où 360 imposait déjà un geste de 8px. */
-  .zn-lib__disciplines .zn-tabs__trigger {
-    padding-inline: var(--sp-4);
-    /* un onglet atteint au clavier se pose en deçà du bord coupé */
-    scroll-margin-inline: var(--sp-3);
-  }
-
-  /* L'anneau de focus est posé à 2px du bord de la boîte, soit 4,5px dehors :
-     le scrollport le rogne en haut ET en bas, il n'en reste que deux barres
-     verticales (mesuré : 4px rognés au-dessus, 3px en dessous). Rentré de
-     2px il est entier, et il reste vermillon (--focus-ring = --accent).
-
-     Le !important n'est pas un raccourci : base.css dessine cet anneau HORS
-     COUCHE, et il le dit lui-même à propos du slider — « the component layer
-     cannot reach past it ». Une déclaration importante d'une couche passe,
-     une déclaration normale non. Seule cette ligne en a besoin. */
-  .zn-lib__disciplines .zn-tabs__trigger:focus-visible {
-    outline-offset: calc(-1 * var(--sp-1)) !important;
-  }
-
-  .zn-lib__disciplines .zn-tabs__trigger > svg {
-    display: none;
-  }
-
-  .zn-lib__disc-full {
-    display: none;
-  }
-
-  .zn-lib__disc-short {
-    display: inline;
-  }
+  align-items: center;
+  gap: var(--sp-5) var(--sp-6);
+  margin-block-start: var(--sp-11);
+  padding-block-end: var(--sp-8);
+  border-block-end: var(--border-rule);
 }
 
 .zn-lib__meta {
-  margin-inline-start: auto;
-  align-self: center;
-  padding-block-end: var(--sp-4);
+  flex: 1 1 auto;
+  min-inline-size: 0;
   color: var(--text-faint);
 }
 
-.zn-lib__viewmode {
-  align-self: center;
-  margin-block-end: var(--sp-4);
+/* Sous 640, la méta passe SOUS les deux boutons.
+   Mesurée à 390 px sur la même ligne qu'eux : il restait 34 px, et
+   « 267 séances · 2 filtres actifs » se tronquait en « 267… », c'est-à-dire en
+   rien. C'est une légende, pas une commande — l'ancienne bande la décrivait
+   déjà comme « la légende qui pend dessous ». Elle reprend cette place, et les
+   deux boutons gardent leur ligne entière. */
+@media (max-width: 639px) {
+  .zn-lib__meta {
+    order: 2;
+    flex: 1 1 100%;
+  }
+}
+
+/* ── ce qui rétrécit la liste ─────────────────────────────────────────── */
+
+/* La puce ne rend que lorsqu'une modalité est posée : par défaut cette rangée
+   n'existe pas dans l'arbre, donc elle ne coûte rien à l'état par défaut. */
+.zn-lib__narrowed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-7);
+}
+
+/* Une puce de retrait, pas une puce de choix : elle est toujours « cochée »
+   — elle ne s'affiche que si le filtre est posé — et le tap la retire. La
+   croix le dit à l'œil, le texte masqué le dit au lecteur d'écran. */
+.zn-lib__narrow-chip {
+  gap: var(--sp-4);
+}
+
+.zn-lib__narrow-chip > svg:last-of-type {
+  color: var(--text-inverse);
+  opacity: 0.7;
+}
+
+/* La rangée du mode d'affichage : pas d'étiquette mono à 88 px devant, le
+   <Segmented> porte déjà la sienne. Le filet la sépare des filtres de valeur
+   qui suivent — au-dessus on choisit CE QU'ON regarde et comment, en dessous
+   on rétrécit. */
+.zn-lib__row--view {
+  padding-block-end: var(--sp-9);
+  border-block-end: var(--border-divider);
 }
 
 /* ── filters ──────────────────────────────────────────────────────────── */

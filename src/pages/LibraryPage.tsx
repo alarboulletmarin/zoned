@@ -7,7 +7,6 @@ import {
   useCallback,
   type ComponentType,
 } from "react";
-import { usePageHint } from "@/hooks/usePageHint";
 import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -217,7 +216,6 @@ function parseActivityType(searchParams: URLSearchParams): ActivityType {
 }
 
 export function LibraryPage() {
-  usePageHint("library", "hints.library.title", "hints.library.description");
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -766,80 +764,81 @@ export function LibraryPage() {
               );
             })}
           </div>
+        </div>
+
+        {/* 3 — UNE seule rangée de commandes.
+
+            Il y en avait trois de plus. Mesuré à 390 px avant : cinq rangées
+            et ~290 px de commandes avant la première séance, dont TROIS
+            pastilles pleines d'encre — « Toutes », « Tout », « Compact ». Au
+            test du flou, c'étaient les trois marques les plus lourdes de
+            l'écran, et aucune n'était une séance.
+
+            Ce qui est parti dans le panneau : la modalité (course / vélo /
+            natation / renfo) et le mode d'affichage. La décision sur la
+            modalité était prise depuis le lot 4 — « elle descend dans le
+            panneau de filtres » — et n'avait jamais été appliquée. Le mode
+            d'affichage, lui, est un réglage qu'on pose une fois et que le
+            navigateur mémorise : il coûtait une rangée à chaque visite de
+            chaque personne.
+
+            Ce qui reste ici : ce qu'il y a à l'écran, le tirage (le geste que
+            le propriétaire a nommé), et la porte des filtres avec son
+            compteur. */}
+        <div className="zn-lib__bar">
+          <span className="zn-mono zn-lib__meta">{metaLine}</span>
 
           {/* Le geste le moins coûteux de l'app : zéro décision, une réponse.
-              Il était au fond d'un menu déroulant, à trois clics. Sans filtre
-              posé, il tire dans tout le catalogue. */}
+              Sans filtre posé, il tire dans tout le catalogue. */}
           <Link to="/library/draw" className="zn-lib__draw">
             <Dices size={15} />
             {t("practice.draw")}
           </Link>
+
+          <button
+            type="button"
+            className="zn-lib__filters-btn"
+            aria-haspopup="dialog"
+            aria-expanded={filtersOpen}
+            data-on={activeFiltersCount > 0 || undefined}
+            onClick={() => setFiltersOpen(true)}
+          >
+            <SlidersHorizontal size={15} />
+            {t("filters.title")}
+            {activeFiltersCount > 0 && (
+              <span className="zn-lib__filters-count">{activeFiltersCount}</span>
+            )}
+          </button>
         </div>
 
-        {/* 3 — the discipline strip, on the rule */}
-        <div className="zn-lib__strip">
-          <div className="zn-tabs__list zn-lib__tabs">
-            <div
-              ref={disciplineRailRef}
-              className="zn-lib__disciplines"
-              role="radiogroup"
-              aria-label={t("draw.filters.discipline")}
-              onKeyDown={disciplineRail.onKeyDown}
-            >
-              {ACTIVITY_TYPES.map((type) => {
-                const Icon = ACTIVITY_ICONS[type];
-                const active = activityType === type;
-                return (
-                  <button
-                    key={type}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    tabIndex={active ? 0 : -1}
-                    data-discipline={type}
-                    data-state={active ? "active" : "inactive"}
-                    className="zn-tabs__trigger"
-                    onClick={() => handleActivityTypeChange(type)}
-                  >
-                    {Icon && <Icon size={15} />}
-                    {/* Le libellé long au-dessus de 640, le court en dessous :
-                        la variante masquée sort de l'arbre d'accessibilité, le
-                        nom accessible reste ce qui est à l'écran. */}
-                    <span className="zn-lib__disc-full">
-                      {t(`activityToggle.${type}`)}
-                    </span>
-                    <span className="zn-lib__disc-short">
-                      {t(`activityToggleShort.${type}`)}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+        {/* 4 — ce qui rétrécit la liste et ne se voit nulle part ailleurs.
 
-            <span className="zn-mono zn-lib__meta">{metaLine}</span>
-
+            La modalité est le seul filtre SILENCIEUX une fois dans le panneau :
+            `activeFiltersCount` ne la compte pas, donc le bouton « Filtres »
+            n'aurait porté aucun badge et la grille se serait réduite au vélo
+            sans dire pourquoi. C'est exactement le « filtre invisible » que ce
+            chantier s'interdit. Elle revient donc sur la page dès qu'elle
+            rétrécit, comme une puce qu'on retire d'un tap — et elle n'occupe
+            rien quand elle est sur « Tout », c'est-à-dire par défaut. */}
+        {activityType !== "all" && (
+          <div className="zn-lib__narrowed">
             <button
               type="button"
-              className="zn-lib__filters-btn"
-              aria-haspopup="dialog"
-              aria-expanded={filtersOpen}
-              data-on={activeFiltersCount > 0 || undefined}
-              onClick={() => setFiltersOpen(true)}
+              className="zn-chip zn-lib__narrow-chip"
+              aria-checked="true"
+              role="checkbox"
+              onClick={() => handleActivityTypeChange("all")}
             >
-              <SlidersHorizontal size={15} />
-              {t("filters.title")}
-              {activeFiltersCount > 0 && (
-                <span className="zn-lib__filters-count">{activeFiltersCount}</span>
-              )}
+              {(() => {
+                const Icon = ACTIVITY_ICONS[activityType];
+                return Icon ? <Icon size={14} /> : null;
+              })()}
+              {t(`activityToggle.${activityType}`)}
+              <X size={13} aria-hidden="true" />
+              <span className="sr-only">{t("common:actions.clear")}</span>
             </button>
-
-            <ViewModeSelector
-              value={viewMode}
-              onChange={setViewMode}
-              className="zn-lib__viewmode"
-            />
           </div>
-        </div>
+        )}
 
         {/* 3 — the filters, behind the strip's button. Same component, same
             state: only where it is rendered changed. */}
@@ -850,11 +849,82 @@ export function LibraryPage() {
             </SheetHeader>
 
             <div className="zn-lib__filters-body">
+              {/* La modalité EN PREMIER : c'est elle qui décide quels autres
+                  filtres ont un sens — `WorkoutFilters` la reçoit et change ses
+                  rangées avec elle (une séance de renfo n'a pas de zone). La
+                  poser après aurait fait bouger le panneau sous le doigt.
+
+                  Même idiome que les rangées de `WorkoutFilters` — étiquette
+                  mono, puis des puces — mais des RADIOS et non des cases : on
+                  regarde une modalité à la fois. `useRadioRail` porte le
+                  contrat clavier que `role="radiogroup"` oblige à fournir. */}
+              <div
+                ref={disciplineRailRef}
+                className="zn-lib__row"
+                role="radiogroup"
+                aria-label={t("draw.filters.discipline")}
+                onKeyDown={disciplineRail.onKeyDown}
+              >
+                <span
+                  className="zn-kicker zn-kicker--inline zn-lib__rowlabel"
+                  aria-hidden="true"
+                >
+                  {t("draw.filters.discipline")}
+                </span>
+                {ACTIVITY_TYPES.map((type) => {
+                  const Icon = ACTIVITY_ICONS[type];
+                  const active = activityType === type;
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      tabIndex={active ? 0 : -1}
+                      data-discipline={type}
+                      className="zn-chip"
+                      onClick={() => handleActivityTypeChange(type)}
+                    >
+                      {Icon && <Icon size={14} />}
+                      {t(`activityToggle.${type}`)}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Le mode d'affichage, juste sous la modalité : les deux
+                  disent « ce que je regarde et comment », avant les filtres de
+                  valeur. Mesuré : posé en BAS du panneau il tombait derrière le
+                  pied de page collant du tiroir, donc à l'endroit le moins
+                  atteignable de l'écran pour un réglage qu'on pose une fois.
+
+                  Il garde ses MOTS. Trois pictogrammes de grille se
+                  distinguent par deux pixels de côté de carré : ça a déjà été
+                  essayé et rejeté (voir l'en-tête de ViewModeSelector). Et
+                  `useViewMode` le mémorise, donc il ne se règle pas à chaque
+                  visite — c'est ce qui lui a fait quitter la page. */}
+              <div className="zn-lib__row zn-lib__row--view">
+                {/* L'étiquette visible, comme toutes les rangées du panneau.
+                    Sans elle, le <Segmented> se lisait comme un troisième
+                    groupe de disciplines — trois pastilles de plus sous les
+                    cinq précédentes, sans rien pour dire de quoi il parle. Elle
+                    est `aria-hidden` : le contrôle porte déjà son nom
+                    accessible, et l'annoncer deux fois est du bruit. */}
+                <span
+                  className="zn-kicker zn-kicker--inline zn-lib__rowlabel"
+                  aria-hidden="true"
+                >
+                  {t("viewMode.label")}
+                </span>
+                <ViewModeSelector value={viewMode} onChange={setViewMode} />
+              </div>
+
               <WorkoutFilters
                 filters={filters}
                 onFiltersChange={setFilters}
                 activityType={activityType}
               />
+
             </div>
 
             <SheetFooter>

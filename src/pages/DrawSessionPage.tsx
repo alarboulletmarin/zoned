@@ -28,7 +28,6 @@ import { StatBlock } from "@/components/domain/StatBlock";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { formatDurationMinutes, ZoneScale } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
-import { usePageHint } from "@/hooks/usePageHint";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
@@ -149,7 +148,6 @@ function writeDrawSnapshot(snap: DrawSnapshot): void {
 // ────────────────────────────────────────────────────────────────────────────
 
 export function DrawSessionPage() {
-  usePageHint("draw", "hints.draw.title", "hints.draw.description");
   const { t, i18n } = useTranslation(["library", "common"]);
   const { t: tStrength } = useTranslation("strength");
   const pick = usePickLang();

@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, useLocation, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -121,7 +120,6 @@ const POSES: Record<TrainingPhase | "before" | "after", Pose> = {
 
 
 export function PlanViewPage() {
-  usePageHint("plan-calendar", "hints.planCalendar.title", "hints.planCalendar.description");
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();

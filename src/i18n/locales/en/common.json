@@ -552,28 +552,6 @@
     "emptyDescription": "The catalogue returned no path. Reload the page, or open the library and its {{workouts}} sessions.",
     "emptyAction": "Open the library"
   },
-  "hints": {
-    "draw": {
-      "title": "Let chance decide",
-      "description": "Filter by discipline, zone, duration and level, then draw a session from the catalogue."
-    },
-    "weekly": {
-      "title": "Compose your week",
-      "description": "Set the number of sessions, the volume and the quality session: the generator composes a balanced 80/20 week."
-    },
-    "planCalendar": {
-      "title": "Organize your plan",
-      "description": "Drag a session to another day. Long press or right-click to view, delete or reorder."
-    },
-    "workoutBuilder": {
-      "title": "Build block by block",
-      "description": "Add warmup, main set, and cooldown. Reorder blocks with the arrows."
-    },
-    "library": {
-      "title": "Filter to find",
-      "description": "Use category, duration, and difficulty filters to find the perfect workout."
-    }
-  },
   "library": {
     "track": "Track",
     "hills": "Hills"
