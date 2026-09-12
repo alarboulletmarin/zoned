@@ -144,10 +144,16 @@ describe("mémoïsation", () => {
 //
 // Premier relevé, avant toute écriture : 197 route, 28 trail, 44 ultra dont 11
 // spécifiques — le terrain et les tags étaient déjà là, c'est le critère qui
-// manquait. Les huit séances TRL-013…TRL-020 écrites pour l'ultra portent le
-// trail à 36 et l'ultra à 52, dont 19 spécifiques. Une séance ultra ajoutée
-// sans terrain ni tag ne bougerait aucun de ces nombres, et c'est justement ce
-// que ce test attrape.
+// manquait. Les cinq séances écrites pour l'ultra (TRL-015, TRL-017…TRL-020)
+// portent le trail à 33 et l'ultra à 49, dont 16 spécifiques. Une séance ultra
+// ajoutée sans terrain ni tag ne bougerait aucun de ces nombres, et c'est
+// justement ce que ce test attrape.
+//
+// Trois autres avaient été écrites puis RETIRÉES le même jour : elles
+// doublaient des archétypes déjà au catalogue (LR-016 « Ultra time-on-feet »,
+// TRL-009/TRL-010 « Back-to-back jour 1/2 », TRL-005 « Descente technique
+// contrôlée »). Les ids TRL-013, TRL-014 et TRL-016 restent donc brûlés — un
+// identifiant ne se réemploie pas.
 describe("le catalogue réel", () => {
   test("les compteurs par pratique sont ceux mesurés", async () => {
     __resetPracticeIndexCache();
@@ -159,10 +165,10 @@ describe("le catalogue réel", () => {
     ]);
     const counts = countByPractice([...run, ...bike, ...swim, ...strength]);
 
-    expect(run).toHaveLength(233);
+    expect(run).toHaveLength(230);
     expect(counts.road).toBe(197);
-    expect(counts.trail).toBe(36);
-    expect(counts.ultra).toBe(52);
+    expect(counts.trail).toBe(33);
+    expect(counts.ultra).toBe(49);
     expect(counts.triathlon).toBe(bike.length + swim.length);
 
     // Route + trail partitionnent la course : une séance est sur l'un ou
@@ -171,7 +177,7 @@ describe("le catalogue réel", () => {
 
     // L'ultra est un sur-ensemble du trail.
     expect(counts.ultra).toBeGreaterThan(counts.trail);
-    expect(run.filter(isUltraSpecific)).toHaveLength(19);
+    expect(run.filter(isUltraSpecific)).toHaveLength(16);
 
     // Le renforcement ne gonfle aucun compteur.
     expect(strength.length).toBeGreaterThan(0);
