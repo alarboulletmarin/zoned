@@ -3,7 +3,7 @@ import { PURPOSE_OPTIONS } from "../constants";
 import type { StepContext, StepDef, TrainingGoal } from "../types";
 
 /** Pourquoi un plan : une course, une base, une reprise, un début. */
-function PurposeBody({ form, setForm, uid, t, questionId }: StepContext) {
+function PurposeBody({ form, setForm, uid, t, questionId, commit }: StepContext) {
   return (
     <OptionStack questionId={questionId}>
       {PURPOSE_OPTIONS.map((opt) => (
@@ -24,6 +24,7 @@ function PurposeBody({ form, setForm, uid, t, questionId }: StepContext) {
               ...(opt.value === "base_building" ? { totalWeeksOverride: 12, trainingGoal: "time" as TrainingGoal } : {}),
             }))
           }
+          onCommit={commit}
         />
       ))}
     </OptionStack>

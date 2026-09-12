@@ -103,6 +103,21 @@ export interface StepContext {
   pick: ReturnType<typeof usePickLang>;
   /** Avancer — certaines étapes valident à la touche Entrée. */
   goForward: () => void;
+  /**
+   * « Cette réponse suffit, passe à la suite. »
+   *
+   * Une question à choix unique demandait DEUX gestes : cocher, puis viser
+   * « Suivant » en bas de l'écran — soit, sur un téléphone, un aller-retour du
+   * pouce par étape sur treize étapes. Une étape à choix unique appelle donc
+   * `commit()` quand un choix est fait, et la coquille avance d'elle-même
+   * après un battement (le temps que l'option se peigne cochée).
+   *
+   * À n'appeler QUE depuis un geste de pointeur : au clavier, les flèches
+   * déplacent la sélection dans un groupe de radios, et avancer à chaque
+   * flèche rendrait le parcours intraversable. `Option` porte ce filtre, la
+   * barre « Suivant » reste là pour le clavier.
+   */
+  commit: () => void;
   /** Reculer. Le récapitulatif rend sa propre navigation. */
   goBack: () => void;
   /** Le sens du dernier déplacement, pour l'animation du volet. */

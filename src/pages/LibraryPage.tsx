@@ -267,6 +267,17 @@ export function LibraryPage() {
     setVisibleCount(PAGE_SIZE);
   }, []);
 
+  /* La pastille retenue revient sous les yeux. Sous 640 px le rail défile et
+     n'en montre que deux ou trois : une pratique restaurée depuis
+     `?practice=ultra` était cochée hors champ, et le rail avait l'air de
+     n'avoir aucune sélection. Même geste que le rail des disciplines juste
+     en dessous, et pour la même raison. */
+  useEffect(() => {
+    practiceRailRef.current
+      ?.querySelector<HTMLElement>(`[data-practice="${practice ?? "all"}"]`)
+      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [practice]);
+
   const practiceRail = useRadioRail<Practice | null>({
     items: practiceOptions,
     value: practice,
@@ -456,10 +467,49 @@ export function LibraryPage() {
     setSearchParams,
   ]);
 
+  /* Remonter en haut de la liste quand ce qu'elle contient change.
+
+     Les commandes tiennent maintenant le haut de l'écran pendant tout le
+     défilement (`.zn-lib__controls`), donc un filtre se pose depuis
+     n'importe où dans la page — et sans ça, on le posait au six-centième
+     pixel et la liste se réécrivait entièrement AU-DESSUS du doigt : on
+     regardait le milieu d'une liste qu'on venait de remplacer.
+
+     Deux garde-fous :
+     — on ne descend jamais. `top < 0` veut dire « l'ancre est déjà sortie
+       par le haut » ; tant qu'elle est visible, on ne bouge rien, ce qui
+       laisse la recherche tranquille pendant qu'on tape.
+     — rien tant que le tiroir de filtres est ouvert : il verrouille le
+       défilement du document, et un `scrollTo` sous un panneau modal est au
+       mieux perdu, au pire rejoué à la fermeture. Le geste est mis en
+       attente et joué quand le tiroir se referme. */
+  const listAnchorRef = useRef<HTMLDivElement>(null);
+  const pendingScroll = useRef(false);
+  const listMounted = useRef(false);
+
   // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [filters, activityType]);
+    if (!listMounted.current) {
+      listMounted.current = true;
+      return;
+    }
+    pendingScroll.current = true;
+  }, [filters, activityType, practice]);
+
+  useEffect(() => {
+    if (!pendingScroll.current || filtersOpen) return;
+    pendingScroll.current = false;
+    const anchor = listAnchorRef.current;
+    /* `scroll-padding-block-start` vaut la hauteur de la barre du haut
+       (topbar.css), donc « début de l'ancre » tombe juste sous elle — et la
+       bande de commandes, qui la suit, s'y colle dans la foulée. L'ancre est
+       hors du bloc collant : un élément déjà collé est toujours « en vue »,
+       et `scrollIntoView` sur lui ne ferait rien. */
+    if (anchor && anchor.getBoundingClientRect().top < 0) {
+      anchor.scrollIntoView({ block: "start" });
+    }
+  });
 
   // Shared filter logic
   const applyFiltersToWorkout = useCallback(
@@ -721,17 +771,31 @@ export function LibraryPage() {
           </div>
         </section>
 
-        {/* 2 — la bande des pratiques, au-dessus de tout le reste.
+        {/* L'ancre du retour en haut de liste. Elle précède la bande de
+            commandes et ne colle pas elle-même — c'est toute son utilité :
+            un élément déjà collé est en permanence « en vue », et le viser
+            ne déplacerait rien. */}
+        <div ref={listAnchorRef} className="zn-lib__anchor" aria-hidden="true" />
 
-            C'est l'axe qui manquait : le catalogue était rangé par modalité
-            (course, vélo, natation, renfo) alors que quelqu'un qui s'entraîne
-            pense en pratique — je fais du trail, je prépare un ultra. La
-            modalité reste en dessous, elle n'est pas remplacée.
+        {/* 2 — la bande des pratiques et la porte des filtres, sur une rangée
+            qui TIENT LE HAUT DE L'ÉCRAN pendant tout le défilement.
+
+            La pratique est l'axe qui manquait : le catalogue était rangé par
+            modalité (course, vélo, natation, renfo) alors que quelqu'un qui
+            s'entraîne pense en pratique — je fais du trail, je prépare un
+            ultra. La modalité reste en dessous, elle n'est pas remplacée.
+
+            Elle défilait avec la page, et poser un filtre depuis le milieu de
+            la liste demandait de remonter puis de redescendre. Elle colle
+            maintenant sous la barre du haut, et ce qui change la liste reste
+            sous le pouce (library.css). Le compte et le tirage, eux, ne
+            rétrécissent rien : ils descendent d'une rangée.
 
             `role="radiogroup"` est déclaré, donc son contrat clavier est dû :
             un seul arrêt de tabulation, les flèches déplacent et cochent. Ce
             dépôt a déjà livré deux fois un `role` sans son clavier. */}
-        <div className="zn-lib__practices">
+
+        <div className="zn-lib__controls">
           <div
             ref={practiceRailRef}
             className="zn-lib__practice-rail"
@@ -764,37 +828,17 @@ export function LibraryPage() {
               );
             })}
           </div>
-        </div>
 
-        {/* 3 — UNE seule rangée de commandes.
+          {/* 3 — la porte des filtres, sur la MÊME rangée que les pratiques.
 
-            Il y en avait trois de plus. Mesuré à 390 px avant : cinq rangées
-            et ~290 px de commandes avant la première séance, dont TROIS
-            pastilles pleines d'encre — « Toutes », « Tout », « Compact ». Au
-            test du flou, c'étaient les trois marques les plus lourdes de
-            l'écran, et aucune n'était une séance.
-
-            Ce qui est parti dans le panneau : la modalité (course / vélo /
-            natation / renfo) et le mode d'affichage. La décision sur la
-            modalité était prise depuis le lot 4 — « elle descend dans le
-            panneau de filtres » — et n'avait jamais été appliquée. Le mode
-            d'affichage, lui, est un réglage qu'on pose une fois et que le
-            navigateur mémorise : il coûtait une rangée à chaque visite de
-            chaque personne.
-
-            Ce qui reste ici : ce qu'il y a à l'écran, le tirage (le geste que
-            le propriétaire a nommé), et la porte des filtres avec son
-            compteur. */}
-        <div className="zn-lib__bar">
-          <span className="zn-mono zn-lib__meta">{metaLine}</span>
-
-          {/* Le geste le moins coûteux de l'app : zéro décision, une réponse.
-              Sans filtre posé, il tire dans tout le catalogue. */}
-          <Link to="/library/draw" className="zn-lib__draw">
-            <Dices size={15} />
-            {t("practice.draw")}
-          </Link>
-
+              Elle vivait une rangée plus bas, avec la ligne de compte et le
+              tirage. Les trois ensemble faisaient une bande collante de cent
+              pixels sur téléphone — sous une barre du haut qui en prend déjà
+              soixante. Ce qui doit rester sous le pouce pendant qu'on
+              descend, c'est ce qui RÉTRÉCIT la liste : l'axe des pratiques et
+              la porte du panneau, son compteur avec. Le reste — combien de
+              séances, et le tirage — est une légende et un geste de côté :
+              ils descendent d'un cran et défilent avec la page. */}
           <button
             type="button"
             className="zn-lib__filters-btn"
@@ -809,6 +853,17 @@ export function LibraryPage() {
               <span className="zn-lib__filters-count">{activeFiltersCount}</span>
             )}
           </button>
+        </div>
+
+        <div className="zn-lib__bar">
+          <span className="zn-mono zn-lib__meta">{metaLine}</span>
+
+          {/* Le geste le moins coûteux de l'app : zéro décision, une réponse.
+              Sans filtre posé, il tire dans tout le catalogue. */}
+          <Link to="/library/draw" className="zn-lib__draw">
+            <Dices size={15} />
+            {t("practice.draw")}
+          </Link>
         </div>
 
         {/* 4 — ce qui rétrécit la liste et ne se voit nulle part ailleurs.

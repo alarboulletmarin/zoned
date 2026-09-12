@@ -24,7 +24,7 @@ import type { StepContext, StepDef } from "../types";
  * mais le parcours s'arrête ici et propose ce qui marche déjà. Ni plan
  * factice, ni champ en trompe-l'œil.
  */
-function PracticeBody({ form, setForm, uid, t, questionId }: StepContext) {
+function PracticeBody({ form, setForm, uid, t, questionId, commit }: StepContext) {
   const announced = form.practice && !isPracticeLive(form.practice);
   const stats = useAppStats();
 
@@ -40,6 +40,9 @@ function PracticeBody({ form, setForm, uid, t, questionId }: StepContext) {
             body={t(`practice.${practice}.body`)}
             data={practiceData(practice, stats.byPractice[practice], t)}
             onSelect={() => setForm((f) => ({ ...f, practice }))}
+            /* Une pratique annoncée n'avance pas : il n'y a pas de suite, et
+               l'écran déroule à la place ce qui existe déjà pour elle. */
+            onCommit={isPracticeLive(practice) ? commit : undefined}
           />
         ))}
       </OptionStack>

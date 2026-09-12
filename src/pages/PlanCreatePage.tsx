@@ -1,7 +1,9 @@
 import {
   useCallback,
+  useEffect,
   useId,
   useMemo,
+  useRef,
   useState,
   type CSSProperties,
 } from "react";
@@ -150,21 +152,64 @@ export function PlanCreatePage() {
 
   // ── Navigation ───────────────────────────────────────────────────
 
+  /* Le parcours courant, lu au moment où on avance et non au moment où le
+     geste a été fait. Les deux diffèrent : répondre « pratique » fait passer
+     la liste d'UNE étape à treize, et `goForward` fermé sur l'ancienne liste
+     calculait `Math.min(1, 0)` — il ne bougeait pas. */
+  const stepsRef = useRef(steps);
+  stepsRef.current = steps;
+
+  const advanceTimer = useRef<number | null>(null);
+
+  const cancelAdvance = useCallback(() => {
+    if (advanceTimer.current !== null) {
+      window.clearTimeout(advanceTimer.current);
+      advanceTimer.current = null;
+    }
+  }, []);
+
+  useEffect(() => cancelAdvance, [cancelAdvance]);
+
   const goForward = useCallback(() => {
+    cancelAdvance();
     setDirection("forward");
-    setStepIndex((s) => Math.min(s + 1, steps.length - 1));
-  }, [steps.length]);
+    setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
+  }, [cancelAdvance]);
 
   const goBack = useCallback(() => {
+    cancelAdvance();
     setDirection("backward");
     setStepIndex((s) => Math.max(s - 1, 0));
-  }, []);
+  }, [cancelAdvance]);
 
   /** The stepper only walks backwards: a step ahead has not been answered. */
-  const goBackTo = useCallback((index: number) => {
-    setDirection("backward");
-    setStepIndex(index);
-  }, []);
+  const goBackTo = useCallback(
+    (index: number) => {
+      cancelAdvance();
+      setDirection("backward");
+      setStepIndex(index);
+    },
+    [cancelAdvance],
+  );
+
+  /**
+   * Une réponse à choix unique avance d'elle-même.
+   *
+   * Le battement n'est pas un effet de style : le clic du label arrive AVANT
+   * que la radio ne change d'état, donc avancer dans la foulée lirait l'ancien
+   * brouillon — et l'ancien parcours, qui n'a pas encore la longueur que la
+   * réponse vient de lui donner. 160 ms laissent aussi voir l'option se
+   * cocher, ce qui est ce qui fait que l'écran suivant n'a pas l'air d'un
+   * accident.
+   */
+  const commit = useCallback(() => {
+    cancelAdvance();
+    advanceTimer.current = window.setTimeout(() => {
+      advanceTimer.current = null;
+      setDirection("forward");
+      setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
+    }, 160);
+  }, [cancelAdvance]);
 
   // ── Derived values ───────────────────────────────────────────────
 
@@ -358,6 +403,7 @@ export function PlanCreatePage() {
     pick,
     goForward,
     goBack,
+    commit,
     direction,
     submit: { generate: handleGenerate, isGenerating, error },
     goals: {
@@ -369,6 +415,27 @@ export function PlanCreatePage() {
 
   const canProceed = step.isComplete(form, derived);
 
+  /**
+   * Chaque étape s'ouvre sur sa question.
+   *
+   * Sans ça, l'écran suivant héritait de la position où le doigt avait laissé
+   * le précédent : on descendait chercher « Suivant », et l'étape d'après
+   * s'ouvrait à mi-hauteur, question déjà hors champ. Sur treize étapes, c'est
+   * le sentiment de « il manque toujours quelque chose en haut ».
+   *
+   * Sans animation : le volet joue déjà son glissement, et deux mouvements
+   * simultanés se lisent comme un saut. Le premier rendu est exclu — une page
+   * ouverte par un lien ancré n'a pas à être ramenée en haut.
+   */
+  const firstPaint = useRef(true);
+  useEffect(() => {
+    if (firstPaint.current) {
+      firstPaint.current = false;
+      return;
+    }
+    window.scrollTo({ top: 0 });
+  }, [safeIndex]);
+
   return (
     <>
       <SEOHead
@@ -378,7 +445,10 @@ export function PlanCreatePage() {
       />
 
       <div className="zn-wiz">
-        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+        {/* La pile du titre. Son écart vit dans la feuille et non en style en
+            ligne : un style en ligne bat toute règle, et le bloc téléphone de
+            plan-wizard.css a précisément à le resserrer. */}
+        <div className="zn-stack zn-wiz__head">
           {safeIndex === 0 && (
             <Button variant="ghost" size="sm" asChild className="zn-wiz__lone">
               <Link to="/plan/new">
@@ -411,10 +481,20 @@ export function PlanCreatePage() {
               </p>
             ) : null}
           </div>
+        </div>
 
-          {/* The promise and its limits are stated once, on the first step —
-              past that the question on screen is what matters. */}
-          {safeIndex === 0 && (
+        {/* The promise and its limits are stated once, on the first step —
+            past that the question on screen is what matters.
+
+            Elles ont QUITTÉ la pile du titre : sur un téléphone, ce bloc
+            posait un paragraphe, une source et une carte entre la première
+            question et ses réponses — les sept pratiques commençaient sous la
+            ligne de flottaison, à l'écran même où l'on ne sait pas encore de
+            quoi il s'agit. C'est maintenant un frère du titre et de la bande,
+            et `.zn-wiz__promise` le fait passer SOUS les réponses en dessous
+            de 900 px (plan-wizard.css). Sur grand écran, rien ne bouge. */}
+        {safeIndex === 0 && (
+          <div className="zn-wiz__promise">
             <div
               className="zn-split"
               style={{ "--split": "1fr 340px", "--gap": "var(--sp-14)" } as CSSProperties}
@@ -435,8 +515,8 @@ export function PlanCreatePage() {
                 </CardContent>
               </Card>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <section className="zn-wiz__band">
           {hasDraft && safeIndex === 0 && (

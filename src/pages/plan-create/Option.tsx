@@ -13,6 +13,7 @@ export function Option({
   name,
   checked,
   onSelect,
+  onCommit,
   title,
   body,
   data,
@@ -22,6 +23,17 @@ export function Option({
   name: string;
   checked: boolean;
   onSelect: () => void;
+  /**
+   * Ce qu'il y a à faire une fois la réponse donnée — passer à la suite.
+   *
+   * Il n'est appelé que sur un geste de POINTEUR. Au clavier, les flèches
+   * déplacent la sélection à l'intérieur d'un groupe de radios : avancer à
+   * chaque flèche empêcherait de lire les réponses. Le filtre est
+   * `event.detail` — un clic synthétisé par le clavier (flèche, espace) le
+   * porte à 0, un clic de doigt ou de souris à 1. Il écarte du même coup le
+   * second clic, celui que le label renvoie sur la radio qu'il enveloppe.
+   */
+  onCommit?: () => void;
   title: string;
   body?: string;
   data?: string;
@@ -29,7 +41,13 @@ export function Option({
   shape?: "tile";
 }) {
   return (
-    <label className="zn-wiz-opt" data-shape={shape}>
+    <label
+      className="zn-wiz-opt"
+      data-shape={shape}
+      onClick={(event) => {
+        if (event.detail > 0) onCommit?.();
+      }}
+    >
       <input
         type="radio"
         className="sr-only"

@@ -45,8 +45,30 @@
 
 /* The calendar brings its own padding and sizes itself, so the popover shell
    only holds it. Selected with the data-slot too, so it still wins once the
-   popover gets its own port. */
+   popover gets its own port.
+
+   Le plafond est celui que Radix mesure — la place qui reste entre l'ancre et
+   le bord de la fenêtre — parce que le panneau n'est PAS plafonné autrement :
+   Radix décale un panneau trop large, il ne le rétrécit pas. Sur un téléphone
+   de 360px la grille du calendrier sortait donc de l'écran et se faisait
+   rogner sur la droite. Le calendrier, lui, sait maintenant tenir dans ce
+   qu'on lui donne (calendar.css). */
 [data-slot="popover-content"].zn-date-input__popover {
   inline-size: auto;
+  max-inline-size: min(
+    var(--radix-popover-content-available-width, 100vw),
+    calc(100vw - var(--sp-12))
+  );
+
+  /* Et le même plafond en hauteur, pour la même raison : un champ de date au
+     milieu d'un formulaire n'a ni six cents pixels au-dessus ni en dessous, et
+     un panneau qui dépasse laisse la dernière semaine du mois hors d'atteinte.
+     Le défilement interne n'entre en jeu que quand la place manque vraiment —
+     sur téléphone la grille est plafonnée à 320 px de côté (calendar.css), ce
+     qui la fait tenir dans la plupart des cas. */
+  max-block-size: var(--radix-popover-content-available-height, none);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
   padding: 0;
 }

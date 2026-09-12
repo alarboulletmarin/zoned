@@ -177,6 +177,39 @@
   block-size: 18px;
 }
 
+/* ── le téléphone ─────────────────────────────────────────────────────── */
+
+/* Le libellé descend à 14 px, la boîte ne descend pas.
+ *
+ * La distinction est toute la règle. Un bouton de maison à 16 px semi-gras
+ * dans 13/22 px de rembourrage fait 48 px de haut et, à deux par rangée sur
+ * 350 px de colonne, ne laisse la place à rien d'autre : c'est ce que « les
+ * boutons sont tous gros » décrit. Mais la CIBLE, elle, doit rester à 44 px —
+ * c'est un doigt, pas un curseur. On reprend donc les pixels sur le TEXTE et
+ * le rembourrage, et le plancher de 44 px (plus bas) tient la surface
+ * tactile : le bouton s'allège sans devenir plus difficile à viser.
+ *
+ * 14 px est le pas des libellés de bouton de Material ; iOS reste plus haut,
+ * mais iOS ne pose pas non plus deux boutons contour côte à côte dans une
+ * carte. */
+@media (max-width: 640px) {
+  .zn-btn {
+    padding: 11px 18px;
+    font-size: var(--fs-body-sm);
+  }
+
+  .zn-btn > svg {
+    inline-size: 16px;
+    block-size: 16px;
+  }
+
+  .zn-btn[data-size="lg"] {
+    padding: 13px 22px;
+    min-block-size: 48px;
+    font-size: var(--fs-body);
+  }
+}
+
 /* WCAG 2.5.8: 44px minimum on a coarse pointer, whatever the size variant says.
    Tailwind carried this as [@media(pointer:coarse)]:min-h-11 on every size and
    it would have disappeared silently with the framework. */

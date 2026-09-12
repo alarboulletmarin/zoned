@@ -22,14 +22,12 @@ function SummaryBody({
   form,
   t,
   pick,
-  uid,
   derived,
   direction,
   goBack,
   submit,
 }: StepContext) {
   const { isRacePlan, weeksCount, paceSeconds } = derived;
-  const questionId = `${uid}-question`;
 
     const distMeta = form.raceDistance ? RACE_DISTANCE_META[form.raceDistance] : null;
     const levelMeta = form.runnerLevel ? DIFFICULTY_META[form.runnerLevel] : null;
@@ -67,18 +65,25 @@ function SummaryBody({
   return (
     <>
         <CardContent className="zn-wiz__pane" data-direction={direction}>
-          <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
-            <h2 id={questionId} className="zn-title" data-level="3">
-              {t("summary.title")}
-            </h2>
-            <p className="zn-body zn-body--sm zn-muted">{t("summary.subtitle")}</p>
-          </div>
+          {/* Le titre et la phrase du récapitulatif vivaient ICI, en plus de
+              ceux que la coquille pose déjà au-dessus de la carte : l'écran
+              affichait « Récapitulatif » deux fois, à quatre-vingts pixels
+              d'intervalle — et les deux portaient le MÊME `id`, ce qui est un
+              doublon d'identifiant dans le document. La question et sa phrase
+              appartiennent à la coquille, comme pour les onze autres étapes ;
+              la phrase est passée en `subtitleKey` dans la déclaration. */}
 
           {/* The plan in numbers, before the line-by-line recap. Only the ones
               the athlete actually answered: a stat block reading "—" is a
-              hole, and a hole is not a measure. */}
+              hole, and a hole is not a measure.
+
+              Deux colonnes sur téléphone : `.zn-grid` se replie en UNE seule
+              sous 640px, ce qui est juste pour une carte de séance et faux
+              pour trois nombres de deux chiffres — ça faisait trois pavés
+              pleine largeur, 280px, avant la première ligne du
+              récapitulatif. */}
           <div
-            className="zn-grid"
+            className="zn-grid zn-wiz-sum__stats"
             style={{ "--cols": stats.length, "--gap": "var(--sp-6)" } as CSSProperties}
           >
             {stats.map((stat) => (
@@ -230,6 +235,7 @@ function SummaryBody({
 export const summaryStep: StepDef = {
   id: "summary",
   titleKey: "summary.title",
+  subtitleKey: "summary.subtitle",
   Body: SummaryBody,
   isComplete: () => true,
   ownsNav: true,

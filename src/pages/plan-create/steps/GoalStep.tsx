@@ -3,7 +3,7 @@ import { GOAL_OPTION_KEYS } from "../constants";
 import type { StepContext, StepDef } from "../types";
 
 /** La mentalité : finir, viser un chrono, ou performer. */
-function GoalBody({ form, setForm, uid, t, questionId }: StepContext) {
+function GoalBody({ form, setForm, uid, t, questionId, commit }: StepContext) {
   return (
     <OptionStack questionId={questionId}>
       {GOAL_OPTION_KEYS.map((opt) => (
@@ -15,6 +15,7 @@ function GoalBody({ form, setForm, uid, t, questionId }: StepContext) {
           title={t(opt.labelKey)}
           body={t(opt.descKey)}
           onSelect={() => setForm((f) => ({ ...f, trainingGoal: opt.value }))}
+          onCommit={commit}
         />
       ))}
     </OptionStack>

@@ -13,7 +13,7 @@ import type { StepContext, StepDef } from "../types";
  * trail, une pour l'ultra. La réduction vient d'une DONNÉE
  * (`distancesOfPractice`), pas d'un branchement.
  */
-function DistanceBody({ form, setForm, uid, pick, questionId }: StepContext) {
+function DistanceBody({ form, setForm, uid, pick, questionId, commit }: StepContext) {
   // Sans pratique — cas qui ne devrait pas arriver, l'étape venant après —
   // on montre tout plutôt que rien.
   const distances = form.practice
@@ -33,6 +33,7 @@ function DistanceBody({ form, setForm, uid, pick, questionId }: StepContext) {
             title={pick(meta, "label")}
             data={`${meta.distanceKm} km`}
             onSelect={() => setForm((f) => ({ ...f, raceDistance: dist }))}
+            onCommit={commit}
           />
         );
       })}
