@@ -116,7 +116,15 @@
   }
 
   /* Au bas d'un document de 7 000 px la phrase de marque n'est lue par personne
-     et coûte une rangée pleine. La signature, elle, reste. */
+     et coûte une rangée pleine. La signature, elle, reste.
+
+     Le logotype part avec elle : sa colonne est alors un lien vers l'accueil
+     seul, sur sa propre rangée de 38 px, à quinze pixels d'une barre d'encre
+     qui signe déjà ZONED — et l'accueil se rejoint par le logotype de la barre
+     du haut, qui est collante, et par le menu. Le prérendu tourne à 1280 px
+     (scripts/prerender.ts) : le HTML statique que lit le robot garde les
+     deux. */
+  .zn-footer__brand,
   .zn-footer__tagline {
     display: none;
   }
@@ -186,6 +194,9 @@
      colonnes écartées. */
   gap: var(--sp-2) var(--sp-8);
   padding: var(--sp-6) var(--pad-screen-x);
+  /* L'encre touche le sol du document : l'encoche du téléphone se paie ici ou
+     la dernière rangée passe sous la barre d'accueil. */
+  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom, 0px));
 
   background: var(--surface-inverse);
   color: var(--text-inverse);
@@ -227,21 +238,34 @@
    itself rather than the shell paying it: the ink has to reach the floor of the
    document, and a reserve above it would show as a band of page colour.
 
-   `--fab-clear` alone only protects a bar that fits on ONE row. Measured on the
-   cockpit at 390px, where the bar wraps to three: the pill landed across the
-   FIRST row and ate "logiciel libre, licence MIT" mid-word. The end padding is
-   what fixes that — it keeps every row clear of the pill's column, whatever the
-   row count, and `--fab-w` is exactly the pill measured across. The version
-   loses its `margin-inline-start: auto` under 640px anyway, so nothing is
-   pushed into the gap. */
+   Une SEULE réserve, et c'est la latérale. Elle tient chaque rangée hors de la
+   colonne de la pastille — quel que soit le nombre de rangées, et à toute
+   position de défilement, la pastille étant fixée au bas de la fenêtre ;
+   `--fab-w` est exactement la pastille mesurée en travers. La réserve BASSE
+   qui l'accompagnait, elle, ne protégeait plus rien : elle posait 82 px
+   d'encre vide sous la dernière ligne d'une barre qui en fait 129, soit près
+   du tiers du pied de page pour un espace que la réserve latérale garde déjà
+   libre. Vérifié au navigateur sur trois pages, à trente positions de
+   défilement chacune : zéro recouvrement entre la pastille, le bouton de
+   remontée et un mot de la barre. La version perd son
+   `margin-inline-start: auto` sous 640 px de toute façon, donc rien n'est
+   poussé dans l'écart. */
 @media (max-width: 1023px) {
   .zn-footer__bar {
-    padding-block-end: var(--fab-clear);
     padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
   }
 }
 
+/* Sur téléphone, l'interlettrage de micro-étiquette retombe à celui des
+   données. Ces cinq lignes sont des PHRASES en capitales, pas des étiquettes :
+   à 0,16 em dans la colonne de 230 px que laisse la réserve de la pastille,
+   l'écart ajoutait à lui seul une rangée et demie — vingt pixels d'encre pour
+   une convention typographique qui vise un mot, pas une licence. */
 @media (max-width: 640px) {
+  .zn-footer__bar {
+    letter-spacing: var(--ls-mono);
+  }
+
   .zn-footer__version {
     margin-inline-start: 0;
   }
