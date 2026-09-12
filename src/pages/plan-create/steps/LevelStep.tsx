@@ -6,7 +6,7 @@ import type { StepContext, StepDef } from "../types";
 const LEVELS: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
 
 /** Le niveau. Pré-suggéré depuis la VMA mesurée, quand elle existe. */
-function LevelBody({ form, setForm, uid, t, pick, questionId, derived }: StepContext) {
+function LevelBody({ form, setForm, uid, t, pick, questionId, derived, commit }: StepContext) {
   const { userPrefs, suggestedLevel } = derived;
 
   return (
@@ -32,6 +32,7 @@ function LevelBody({ form, setForm, uid, t, pick, questionId, derived }: StepCon
               body={pick(meta, "desc")}
               data={level === suggestedLevel ? t("level.suggested") : undefined}
               onSelect={() => setForm((f) => ({ ...f, runnerLevel: level }))}
+              onCommit={commit}
             />
           );
         })}

@@ -124,11 +124,61 @@
  * primaire, et une rangée d'onglets n'est pas une action.
  */
 
-.zn-lib__practices {
+/* La bande de commandes, et elle TIENT LE HAUT DE L'ÉCRAN.
+ *
+ * Elle défilait avec la page : poser un filtre depuis le six-centième pixel
+ * de la liste demandait de remonter la chercher, de la poser, puis de
+ * redescendre. Sur un catalogue de deux cent soixante séances c'est le geste
+ * le plus fréquent de la page, et c'était le plus cher.
+ *
+ * Ce qui colle, et RIEN d'autre : l'axe des pratiques et la porte du panneau
+ * de filtres — ce qui rétrécit la liste. Le compte et le tirage sont
+ * descendus d'une rangée (`.zn-lib__bar`) et défilent avec le reste : une
+ * bande collante de cent pixels sous une barre du haut qui en prend soixante
+ * aurait repris d'une main ce que le collant donne de l'autre.
+ *
+ * `--topbar-h` est le décalage, parce que la barre du haut est collante elle
+ * aussi : la bande doit s'arrêter SOUS elle, pas se glisser dessous. z-index
+ * 30 est la couche « ancré » de la page (les barres d'action l'utilisent) :
+ * sous la barre du haut (40) et sous la pastille de menu (45), donc un
+ * panneau ouvert la couvre.
+ *
+ * Le fond est opaque et le filet ferme la bande : sans eux les cartes
+ * passeraient au travers, et une carte à moitié effacée derrière du vide ne
+ * se lit pas comme un dessous, elle se lit comme un bug de rendu. */
+.zn-lib__controls {
+  position: sticky;
+  /* Moins l'épaisseur du filet : `--topbar-h` est un calcul, pas une mesure,
+     et il dépasse la hauteur rendue d'un demi-pixel. Un demi-pixel de retard,
+     c'est une carte qui clignote entre la barre et la bande à chaque coup de
+     pouce. En avance, la bande passe simplement SOUS la barre (z-index 40
+     contre 30) et le défaut n'existe dans aucun sens. */
+  inset-block-start: calc(var(--topbar-h) - var(--bw-rule));
+  z-index: 30;
+
   display: flex;
   align-items: center;
+  gap: var(--sp-5) var(--sp-6);
+
   margin-block-start: var(--sp-13);
-  padding-block-end: calc(var(--gap-section) / 2);
+  padding-block: var(--sp-6);
+
+  background: var(--surface-page);
+  border-block-end: var(--border-divider);
+}
+
+/* Ce qui suit la bande garde son air : le padding collant a remplacé
+   l'ancienne demi-section, il ne s'y ajoute pas. */
+.zn-lib__controls + .zn-lib__bar {
+  margin-block-start: var(--sp-10);
+}
+
+/* L'ancre du retour en haut de liste : sans hauteur, sans encre. Elle est le
+   repère que `scrollIntoView` vise, et elle est HORS de la bande collante —
+   un élément collé est en permanence « déjà en vue », et le viser ne
+   déplacerait rien. */
+.zn-lib__anchor {
+  block-size: 0;
 }
 
 .zn-lib__practice-rail {
@@ -137,6 +187,7 @@
   flex-wrap: wrap;
   gap: var(--sp-2);
   flex: 1 1 auto;
+  min-inline-size: 0;
 }
 
 .zn-lib__practice {
@@ -214,9 +265,11 @@
    Le tirage avait ici une règle `flex: 1 1 100%` qui lui donnait toute la
    largeur : il partageait cette rangée avec le rail, et deux pastilles plus un
    bouton sur une ligne auraient donné des cibles de 90 px. Il a déménagé dans
-   la rangée de commandes, où il partage la ligne avec « Filtres » et n'a plus
-   besoin de s'étirer — la règle est partie avec lui, sinon elle poussait
-   « Filtres » à la ligne suivante. */
+   la rangée de légende, sous la bande collante.
+
+   Le bouton « Filtres » partage maintenant cette rangée avec le rail, et c'est
+   ce qui tient la bande collante sur UNE ligne : le rail prend ce qui reste et
+   défile sous le doigt, le bouton ne se replie jamais. */
 @media (max-width: 640px) {
   .zn-lib__practice-rail {
     overflow-x: auto;
@@ -231,24 +284,28 @@
   .zn-lib__practice {
     white-space: nowrap;
   }
+
+  .zn-lib__controls {
+    flex-wrap: nowrap;
+  }
+
+  .zn-lib__controls .zn-lib__filters-btn {
+    flex: none;
+  }
 }
 
-/* ── la rangée de commandes ───────────────────────────────────────────── */
+/* ── la légende, sous la bande ────────────────────────────────────────── */
 
-/* Une seule rangée, et elle tient sur une ligne jusqu'en bas de la gamme.
-
-   Ce qui était là avant : `.zn-lib__strip` avec le rail des disciplines qui
-   passait en scroll horizontal sous 640, sa ligne méta, le bouton de filtres
-   et le sélecteur de vue — quatre objets qui se repliaient en deux ou trois
-   rangées. Les deux qui restent sont des boutons de largeur fixe, donc la
-   rangée ne se replie plus : la méta prend la place qui reste et se tronque
-   avant de pousser quoi que ce soit à la ligne. */
+/* Ce qu'il y a à l'écran, et le tirage. Ni l'un ni l'autre ne rétrécit la
+   liste : ils ont donc quitté la bande collante et défilent avec la page.
+   Le compte se relit d'un coup d'œil en haut, et « combien de filtres sont
+   posés » reste visible en permanence — c'est le compteur porté par le
+   bouton « Filtres », qui, lui, colle. */
 .zn-lib__bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--sp-5) var(--sp-6);
-  margin-block-start: var(--sp-11);
   padding-block-end: calc(var(--gap-section) / 2);
 }
 
@@ -256,19 +313,6 @@
   flex: 1 1 auto;
   min-inline-size: 0;
   color: var(--text-faint);
-}
-
-/* Sous 640, la méta passe SOUS les deux boutons.
-   Mesurée à 390 px sur la même ligne qu'eux : il restait 34 px, et
-   « 267 séances · 2 filtres actifs » se tronquait en « 267… », c'est-à-dire en
-   rien. C'est une légende, pas une commande — l'ancienne bande la décrivait
-   déjà comme « la légende qui pend dessous ». Elle reprend cette place, et les
-   deux boutons gardent leur ligne entière. */
-@media (max-width: 639px) {
-  .zn-lib__meta {
-    order: 2;
-    flex: 1 1 100%;
-  }
 }
 
 /* ── ce qui rétrécit la liste ─────────────────────────────────────────── */
@@ -307,20 +351,24 @@
 
 /* The strip's one button. Outlined rather than bare, unlike the header tools:
    this is an action inside a band of controls, not a fixture of the shell, and
-   it has to read as pressable next to the discipline triggers. */
+   it has to read as pressable next to the discipline triggers.
+
+   Pastille, et non plus coin de 10 px : il partage désormais sa ligne avec les
+   pastilles de pratique, et deux rayons voisins sur une même rangée se lisent
+   comme deux familles de contrôles. La marge basse de 8 px est partie avec
+   l'ancienne rangée — dans une bande centrée, elle le décalait vers le haut. */
 .zn-lib__filters-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-5);
   align-self: center;
-  margin-block-end: var(--sp-4);
   min-block-size: var(--hit-min);
   padding-inline: var(--sp-8);
 
   background: transparent;
   color: var(--ink-1);
   border: var(--border-rule);
-  border-radius: var(--r-lg);
+  border-radius: var(--r-pill);
   cursor: pointer;
 
   font: var(--type-body-sm);

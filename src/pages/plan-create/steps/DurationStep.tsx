@@ -4,7 +4,7 @@ import { DURATION_OPTIONS } from "../constants";
 import type { StepContext, StepDef } from "../types";
 
 /** Combien de semaines, pour un plan sans course visée. */
-function DurationBody({ form, setForm, uid, t, questionId }: StepContext) {
+function DurationBody({ form, setForm, uid, t, questionId, commit }: StepContext) {
   return (
     <fieldset
       className="zn-contrib-group zn-grid zn-wiz__tiles"
@@ -20,6 +20,7 @@ function DurationBody({ form, setForm, uid, t, questionId }: StepContext) {
           title={String(opt.weeks)}
           body={t("duration.weeks")}
           onSelect={() => setForm((f) => ({ ...f, totalWeeksOverride: opt.weeks }))}
+          onCommit={commit}
         />
       ))}
     </fieldset>

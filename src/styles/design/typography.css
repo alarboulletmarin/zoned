@@ -43,16 +43,28 @@
 
 /* Mobile: the display sizes are set for a 1440px page and do not survive a
    390px one. Only the display steps shrink — body, mono and the spacing grid
-   stay put, so line lengths and hit targets are unaffected. */
+   stay put, so line lengths and hit targets are unaffected.
+
+   Le barreau a encore baissé d'un cran le 12 septembre 2026, sur une remarque
+   qui visait toute l'app : « les textes et les boutons sont tous gros ». Elle
+   est juste, et elle ne vise QUE les pas d'affiche : une bannière de 44 px sur
+   une colonne de 350 fait quatre à cinq mots par ligne, donc trois lignes pour
+   un titre de dix mots, donc cent trente pixels d'écran — un cinquième de ce
+   qu'on voit — pour une phrase qu'on lit une fois.
+
+   Ce qui NE bouge pas, et c'est le point : le corps de texte reste à 16 px
+   (iOS pose 17 pt, Material 16 sp ; en dessous de 16 un champ de saisie fait
+   zoomer Safari), le mono reste à 12, et la grille d'espacement ne change pas.
+   On rend de la place au contenu, on ne rétrécit pas ce qui se lit. */
 @media (max-width: 640px) {
   :root {
-    --fs-display-1: 44px;
-    --fs-display-2: 38px;
-    --fs-display-3: 30px;
-    --fs-h1: 28px;
-    --fs-h2: 24px;
-    --fs-h3: 21px;
-    --fs-h4: 18px;
+    --fs-display-1: 40px;
+    --fs-display-2: 33px;
+    --fs-display-3: 27px;
+    --fs-h1: 26px;
+    --fs-h2: 22px;
+    --fs-h3: 19px;
+    --fs-h4: 17px;
     --fs-body-lg: 17px;
   }
 }

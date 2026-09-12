@@ -47,6 +47,11 @@
   margin-block-start: var(--gap-section);
 }
 
+/* La pile du titre : le retour, le sur-titre, la question, sa phrase. */
+.zn-wiz__head {
+  --gap: var(--sp-11);
+}
+
 /* A control that must not stretch to the column it sits in — the back link,
    a disclosure toggle. A stack stretches its children by default, and a ghost
    button spanning 640px stops reading as a button. */
@@ -317,6 +322,22 @@
   border-block-start: var(--border-divider);
 }
 
+/* Le plan en chiffres, en tête du récapitulatif. `.zn-grid` se replie en UNE
+   colonne sous 640px — juste pour une carte de séance, faux pour trois nombres
+   de deux chiffres : trois pavés pleine largeur, deux cent quatre-vingts
+   pixels, avant la première ligne. Deux colonnes, et la même chose tient en
+   deux rangées. */
+@media (max-width: 640px) {
+  .zn-grid.zn-wiz-sum__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .zn-wiz-sum__stats .zn-stat[data-tone="card"],
+  .zn-wiz-sum__stats .zn-stat[data-tone="ink"] {
+    padding: var(--sp-8);
+  }
+}
+
 /* Numbers print as numbers wherever the recap shows one. */
 .zn-wiz-sum__value[data-mono="true"] {
   font-family: var(--font-mono);
@@ -400,5 +421,123 @@
   .zn-wiz__modes a {
     display: inline-block;
     padding-block: var(--sp-4);
+  }
+}
+
+/* ── le parcours sur un téléphone ─────────────────────────────────────────
+ *
+ * La plainte, mot pour mot : « sur toutes les étapes je n'ai pas toutes les
+ * informations sans devoir scroller ». Mesuré à 390 × 640 (la page sous la
+ * barre du haut) sur l'étape « niveau », qui n'a QUE quatre réponses :
+ *
+ *     32   la marge haute du parcours
+ *    133   le sur-titre, la question en display-2 (38px, deux lignes) et
+ *          sa phrase
+ *     40   l'écart de section avant la bande
+ *     62   les treize rails, leurs numéros, et la ligne « Étape n sur 13 »
+ *     26   le haut de la carte
+ *    ───
+ *    293   avant la première réponse — 46 % de l'écran, et pas une réponse
+ *    382   les quatre réponses
+ *     96   « Retour / Suivant »
+ *    ───
+ *    771   pour un écran qui en fait 640
+ *
+ * Rien ici n'est une réponse ; tout est du décor autour d'une question. Le
+ * bloc reprend 190 px sur ces 293 sans retirer un seul mot : la question passe
+ * au pas d'un titre de section (elle reste le `h1`), les rails perdent leurs
+ * numéros — la ligne en toutes lettres juste dessous dit déjà « Étape 3 sur
+ * 13 » —, et les marges descendent d'un cran. Les quatre réponses tiennent
+ * alors dans le même écran que leur question.
+ */
+
+@media (max-width: 640px) {
+  .zn-wiz {
+    padding-block: var(--sp-6) var(--sp-14);
+  }
+
+  /* La pile du titre : le sur-titre, la question, sa phrase. */
+  .zn-wiz__head {
+    --gap: var(--sp-8);
+  }
+
+  /* La question garde son rang de `h1` — elle perd le corps d'affiche.
+     « Dans quel état d'esprit es-tu ? » au pas display-2 tenait sur deux
+     lignes de 38 px, soit 70 px ; au pas h2 (22 px depuis le même lot) elle
+     tient sur une ligne de 22. C'est la même phrase, au même rang. */
+  .zn-wiz .zn-display[data-level="2"] {
+    font-size: var(--fs-h2);
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
+  }
+
+  .zn-wiz__band {
+    gap: var(--sp-10);
+    margin-block-start: var(--sp-11);
+  }
+
+  /* Les rails seuls. Le numéro et le nom de l'étape étaient déjà masqués pour
+     douze des treize ; le dernier chiffre visible tenait sur 23 px de colonne
+     et se lisait comme une poussière. La ligne « Étape 3 sur 13 » le dit en
+     toutes lettres douze pixels plus bas.
+     La surface tactile, elle, reste entière : le bouton garde 24 px de haut
+     (le plancher AA du critère 2.5.8) autour d'un rail de 4 px. */
+  .zn-wiz__steps .zn-stepper__num,
+  .zn-wiz__steps .zn-stepper__label {
+    display: none;
+  }
+
+  .zn-wiz__steps .zn-stepper__step {
+    justify-content: center;
+    min-block-size: 24px;
+  }
+
+  .zn-wiz__steps .zn-stepper__rail {
+    block-size: 4px;
+  }
+
+  /* La carte d'étape rend 16 px de haut et 16 px de côté. */
+  .zn-wiz__col.zn-card {
+    padding-block: var(--sp-9);
+  }
+
+  .zn-wiz__col .zn-card__content,
+  .zn-wiz__col .zn-card__footer {
+    padding-inline: var(--sp-9);
+  }
+
+  .zn-wiz__pane {
+    gap: var(--sp-9);
+  }
+
+  .zn-card__footer.zn-wiz__nav {
+    padding-block-start: var(--sp-9);
+  }
+
+  /* Une réponse : 12/14 au lieu de 16/18. Quatre réponses, 32 px repris. */
+  .zn-wiz-opt {
+    gap: var(--sp-5);
+    padding: var(--sp-6) var(--sp-7);
+  }
+}
+
+/* ── la promesse, et sa place ─────────────────────────────────────────────
+ *
+ * « Le volume monte de 10 % par semaine au maximum… », la source, et la carte
+ * « sans compte, sans rappel ». Elles ne se disent qu'une fois, à la première
+ * question — mais elles se disaient ENTRE la question et ses réponses, et sur
+ * un téléphone les sept pratiques commençaient donc sous la ligne de
+ * flottaison. Elles passent après : on choisit d'abord, on lit ensuite ce que
+ * l'outil promet. Au-dessus de 900 px la colonne est assez large pour que la
+ * carte tienne à côté du texte, et l'ordre d'origine tient.
+ */
+.zn-wiz__promise {
+  padding-block-start: var(--sp-11);
+}
+
+@media (max-width: 900px) {
+  .zn-wiz__promise {
+    order: 1;
+    padding-block-start: var(--gap-section);
   }
 }

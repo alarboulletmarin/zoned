@@ -51,6 +51,86 @@
   text-transform: capitalize;
 }
 
+/* ── le mois et l'année, en listes ────────────────────────────────────── */
+
+/* Avec `captionLayout="dropdown"`, rdp remplace l'étiquette du mois par deux
+   `<select>` — un pour le mois, un pour l'année — chacun posé en transparence
+   PAR-DESSUS l'étiquette qu'on lit. Le contrôle est donc le select natif, et
+   sur un téléphone c'est le sélecteur du système qui s'ouvre : atteindre un
+   mois lointain coûte un geste au lieu d'un appui par mois sur le chevron.
+
+   Le chevron d'un des deux doit tenir dans la même ligne que les deux boutons
+   de navigation : l'étiquette prend le pas du corps, pas celui du titre. */
+.zn-cal__dropdowns {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+.zn-cal__dd {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+/* Le vrai contrôle, invisible mais entier : il garde sa surface tactile, son
+   clavier et son sélecteur natif. `opacity: 0` et non `display: none` — un
+   select retiré du rendu ne s'ouvre pas. */
+.zn-cal__dd-select {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.zn-cal__dd .zn-cal__caption-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+
+  padding: var(--sp-3) var(--sp-5);
+  min-block-size: 34px;
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  letter-spacing: normal;
+  color: var(--ink-1);
+
+  border: var(--border-hair);
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+
+.zn-cal__dd .zn-cal__caption-label > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-cal__dd:hover .zn-cal__caption-label {
+  background: var(--surface-band);
+  border-color: var(--line-strong);
+}
+
+/* L'anneau encadre l'étiquette dessinée, pas le select transparent dedans. */
+.zn-cal__dd:has(.zn-cal__dd-select:focus-visible) .zn-cal__caption-label {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-cal__dd[data-disabled="true"] .zn-cal__caption-label {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+}
+
 /* ── navigation ───────────────────────────────────────────────────────── */
 
 .zn-cal__nav {
@@ -244,5 +324,39 @@
   .zn-cal__day-btn {
     min-inline-size: var(--hit-min);
     min-block-size: var(--hit-min);
+  }
+}
+
+/* ── l'écran étroit ───────────────────────────────────────────────────── */
+
+/* Mesuré : sur un pointeur grossier, sept cases de 44px plus 8×4px d'écart
+   plus 2×12px de marge font 364px de grille. Sur un téléphone de 360px, avec
+   les 12px que le panneau garde du bord, il en reste 336 : le calendrier
+   débordait, et Radix le collait au bord en le laissant rogné.
+
+   Le bloc est le DERNIER du fichier pour l'emporter sur la règle
+   `pointer: coarse` au-dessus, qui pose le plancher de 44px. Le carré tombe à
+   40px — au-dessus des 24px du critère AA 2.5.8 — et ce sont l'écart et la
+   marge qui paient le reste. Sept cases de 40 plus 8×3 plus 2×8 font 320px :
+   la grille tient, à 360px comme à 390px. */
+@media (max-width: 560px) {
+  .zn-cal {
+    padding: var(--sp-4);
+    /* Le plafond sert aussi la HAUTEUR : une case est carrée
+       (`aspect-ratio: 1`), donc chaque pixel de largeur gagné est un pixel de
+       hauteur sur six rangées. Sans lui, sur un écran de 430 px, la grille
+       faisait 400 px de large et 440 de haut, et les deux dernières semaines
+       tombaient sous le bord. */
+    max-inline-size: 320px;
+    margin-inline: auto;
+  }
+
+  .zn-cal__grid {
+    border-spacing: 3px;
+  }
+
+  .zn-cal__day-btn {
+    min-inline-size: 40px;
+    min-block-size: 40px;
   }
 }
