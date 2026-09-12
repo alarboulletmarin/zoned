@@ -673,11 +673,14 @@ comme un curseur quoi qu'en dise le commentaire du code. Le sol, lui, était
 juste : l'axe d'une frise reste un sol légitime, ce n'est pas ce qui a été
 retiré.
 
-La figure de l'écran est maintenant **la figure qui montre, au départ du trait
-de l'annotation du profil**, à 200 px de haut sur le bord haut de la ZoneBar —
-le seul filet que cette bande trace déjà. Elle s'efface sous 640 px avec toutes
-les figures d'annotation : le téléphone garde le texte et la flèche. C'est le
-premier appelant de la variante `figure`, restée sans emploi depuis sa création.
+*L'annotation du profil est retirée à son tour le 12 septembre 2026 — décision
+du propriétaire.* « La hauteur dit l'intensité, la largeur dit le temps passé
+dedans », sa flèche et la figure qui montre posée au départ du trait : tout
+part ensemble, parce que la figure n'était là que pour cette phrase. **La
+séance n'a donc plus de figure du tout**, et ce n'est pas un oubli : l'axe sous
+la frise nomme le temps, la teinte des blocs nomme la zone, et la table de
+répartition dit les deux en chiffres. La variante `figure` d'`Annotation.tsx`
+redevient sans appelant, comme avant le 6 septembre.
 
 **Le gainage reste au renforcement**, sur le filet du héros. **Vélo et natation
 n'ont pas de figure** : le gréement ne dessine pas de cycliste, et un coureur
