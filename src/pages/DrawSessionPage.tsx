@@ -60,6 +60,7 @@ import {
 import { usePickLang } from "@/lib/i18n-utils";
 import { buildScanSchedule } from "@/lib/scanSchedule";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Constants & helpers
@@ -182,6 +183,10 @@ export function DrawSessionPage() {
   );
   const [scanWorkout, setScanWorkout] = useState<AnyWorkoutTemplate | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
+
+  /* La borne CSS de motion.css ne voit pas le JS : il faut lire la
+     préférence ici pour que le balayage la respecte. */
+  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [history, setHistory] = useState<AnyWorkoutTemplate[]>(
     restored.history ?? [],
   );
@@ -224,6 +229,15 @@ export function DrawSessionPage() {
   /**
    * Run the "archive drawer" scan: flash through random candidate cards while
    * decelerating (ease-out) over ~1.5s, then settle on the final pick.
+   *
+   * Le balayage INFORME — il dit « je pioche au hasard dans un lot », ce qui
+   * est le sujet même de la page — donc il reste par défaut. Mais il est
+   * piloté par des `setTimeout` en JS, et la borne `prefers-reduced-motion` de
+   * `styles/design/motion.css` ne peut pas atteindre du JS : quelqu'un qui a
+   * demandé moins de mouvement à son système se prenait les 1,5 s quand même.
+   * Sous cette préférence, le résultat arrive donc directement. Le seul
+   * contournement légitime d'une préférence d'accessibilité est la même
+   * personne qui le demande, ce qui n'est pas le cas ici.
    */
   const runDraw = useCallback(
     (pool: AnyWorkoutTemplate[]) => {
@@ -231,6 +245,17 @@ export function DrawSessionPage() {
       clearTimeouts();
 
       const final = pickFinal(pool);
+
+      if (prefersReducedMotion) {
+        setScanWorkout(null);
+        setResult(final);
+        setIsDrawing(false);
+        setHistory((prev) =>
+          [final, ...prev.filter((w) => w.id !== final.id)].slice(0, HISTORY_LIMIT),
+        );
+        return;
+      }
+
       setIsDrawing(true);
       setResult(null);
 
@@ -258,7 +283,7 @@ export function DrawSessionPage() {
         );
       });
     },
-    [isDrawing, clearTimeouts, pickFinal],
+    [isDrawing, clearTimeouts, pickFinal, prefersReducedMotion],
   );
 
   const handleDraw = useCallback(() => runDraw(filtered), [runDraw, filtered]);

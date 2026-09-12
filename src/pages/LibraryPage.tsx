@@ -8,7 +8,7 @@ import {
   type ComponentType,
 } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Search,
@@ -72,6 +72,13 @@ import type {
   MuscleGroup,
 } from "@/types/strength";
 import { normalizeSearch } from "@/lib/search-utils";
+import { Dices } from "@/components/icons";
+import { useRadioRail } from "@/hooks/useRadioRail";
+import { useSettings } from "@/hooks/useSettings";
+import { workoutMatchesPractice } from "@/lib/practiceIndex";
+import { resolvePractice, saveLastPractice } from "@/lib/practicePrefs";
+import { visiblePractices } from "@/lib/settingsSchema";
+import { PRACTICE_META, type Practice } from "@/types/practice";
 
 // Duration constants (same as in WorkoutFilters)
 const DURATION_MIN = 0;
@@ -184,6 +191,17 @@ function parseFiltersFromParams(
 /**
  * Parse activity type from URL params
  */
+/**
+ * La pratique lue dans l'URL, bornée aux pratiques que la personne garde.
+ * `null` veut dire « toutes » — jamais une pratique devinée.
+ */
+function parsePractice(
+  searchParams: URLSearchParams,
+  allowed: readonly Practice[],
+): Practice | null {
+  return resolvePractice(searchParams.get("practice"), allowed);
+}
+
 function parseActivityType(searchParams: URLSearchParams): ActivityType {
   const type = searchParams.get("type");
   if (
@@ -203,6 +221,7 @@ export function LibraryPage() {
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchParams, setSearchParams] = useSearchParams();
   const { favorites } = useFavorites();
+  const { settings } = useSettings();
   const stats = useAppStats();
   const { workouts: runningWorkouts, isLoading: isLoadingRunning } =
     useWorkouts();
@@ -223,6 +242,38 @@ export function LibraryPage() {
   const [activityType, setActivityType] = useState<ActivityType>(() =>
     parseActivityType(searchParams),
   );
+
+  /* La pratique — la bande primaire. Elle surplombe la modalité, elle ne la
+     remplace pas : remplacer orphelinerait les 10 séances vélo, les 10
+     natation et les 17 renfo, et les deux calculateurs qui les servent.
+     `null` = toutes. */
+  const allowedPractices = visiblePractices(settings);
+  const [practice, setPractice] = useState<Practice | null>(() =>
+    parsePractice(searchParams, allowedPractices),
+  );
+  const practiceRailRef = useRef<HTMLDivElement>(null);
+
+  /* La bande montre « Toutes » puis les pratiques gardées. `null` porte
+     l'option « Toutes », d'où le type du rail. */
+  const practiceOptions = useMemo<(Practice | null)[]>(
+    () => [null, ...allowedPractices],
+    [allowedPractices],
+  );
+
+  const handlePracticeChange = useCallback((next: Practice | null) => {
+    setPractice(next);
+    // On mémorise pour ne pas reposer la question au retour. L'URL reste la
+    // source de vérité ; ceci n'est qu'un écho.
+    saveLastPractice(next);
+    setVisibleCount(PAGE_SIZE);
+  }, []);
+
+  const practiceRail = useRadioRail<Practice | null>({
+    items: practiceOptions,
+    value: practice,
+    onChange: handlePracticeChange,
+    railRef: practiceRailRef,
+  });
 
   useKeyboardShortcuts({ searchRef: searchInputRef });
 
@@ -345,51 +396,16 @@ export function LibraryPage() {
       ?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }, [activityType]);
 
-  // APG « Radio Group » : un seul arrêt de tabulation pour le groupe, les
-  // flèches déplacent le focus ET cochent, avec bouclage. Cassé jusqu'ici —
-  // cinq boutons tabulables, aucun onKeyDown — et bloquant dès que le rail
-  // défile. Mécanique reprise telle quelle de ui/segmented.tsx.
-  const moveDiscipline = useCallback(
-    (index: number) => {
-      const next = ACTIVITY_TYPES[index];
-      if (!next) return;
-      handleActivityTypeChange(next);
-      disciplineRailRef.current
-        ?.querySelectorAll<HTMLButtonElement>('[role="radio"]')
-        [index]?.focus();
-    },
-    [handleActivityTypeChange],
-  );
-
-  const handleDisciplineKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      const count = ACTIVITY_TYPES.length;
-      const current = ACTIVITY_TYPES.indexOf(activityType);
-      // Rien de coché : la première option porte l'arrêt de tabulation.
-      const tabStop = current === -1 ? 0 : current;
-
-      switch (event.key) {
-        case "ArrowLeft":
-        case "ArrowUp":
-          moveDiscipline((tabStop - 1 + count) % count);
-          break;
-        case "ArrowRight":
-        case "ArrowDown":
-          moveDiscipline((tabStop + 1) % count);
-          break;
-        case "Home":
-          moveDiscipline(0);
-          break;
-        case "End":
-          moveDiscipline(count - 1);
-          break;
-        default:
-          return;
-      }
-      event.preventDefault();
-    },
-    [activityType, moveDiscipline],
-  );
+  /* APG « Radio Group » : un seul arrêt de tabulation pour le groupe, les
+     flèches déplacent le focus ET cochent, avec bouclage. La mécanique est
+     sortie dans `useRadioRail` quand la bande des pratiques est arrivée —
+     deux rails, un seul contrat clavier, plutôt qu'une copie. */
+  const disciplineRail = useRadioRail<ActivityType>({
+    items: ACTIVITY_TYPES,
+    value: activityType,
+    onChange: handleActivityTypeChange,
+    railRef: disciplineRailRef,
+  });
 
   // Update URL when filters or activity type change
   useEffect(() => {
@@ -397,6 +413,12 @@ export function LibraryPage() {
 
     if (activityType !== "all") {
       params.set("type", activityType);
+    }
+
+    /* La pratique entre dans l'URL : le même lien rejoue la même
+       bibliothèque, ce qui est ce qui la rend partageable et marque-page. */
+    if (practice !== null) {
+      params.set("practice", practice);
     }
 
     if (filters.category.length > 0) {
@@ -431,6 +453,7 @@ export function LibraryPage() {
     filters.strengthCategory,
     filters.equipment,
     filters.muscleGroup,
+    practice,
     setSearchParams,
   ]);
 
@@ -463,6 +486,23 @@ export function LibraryPage() {
       if (
         duration < f.durationRange[0] ||
         (capped && duration > f.durationRange[1])
+      ) {
+        return false;
+      }
+
+      /* La pratique, quand une est choisie.
+
+         Elle ne s'applique QUE si la modalité est « toutes » ou « course » :
+         choisir explicitement vélo, natation ou renfo est une demande plus
+         précise que la pratique, et la pratique ne doit pas l'annuler. C'est
+         ce qui laisse un coureur sur route atteindre son cross-training. Le
+         classement lui-même vit dans `lib/practiceIndex.ts` — une seule
+         définition de « ce qui est trail », sinon la carte annonce 28 séances
+         et la bibliothèque en montre 12. */
+      if (
+        practice !== null &&
+        (activityType === "all" || activityType === "running") &&
+        !workoutMatchesPractice(workout, practice)
       ) {
         return false;
       }
@@ -561,7 +601,7 @@ export function LibraryPage() {
 
       return true;
     },
-    [favorites],
+    [favorites, activityType, practice],
   );
 
   // Defer the filter object so a fast typist doesn't block paint while
@@ -682,7 +722,60 @@ export function LibraryPage() {
           </div>
         </section>
 
-        {/* 2 — the discipline strip, on the rule */}
+        {/* 2 — la bande des pratiques, au-dessus de tout le reste.
+
+            C'est l'axe qui manquait : le catalogue était rangé par modalité
+            (course, vélo, natation, renfo) alors que quelqu'un qui s'entraîne
+            pense en pratique — je fais du trail, je prépare un ultra. La
+            modalité reste en dessous, elle n'est pas remplacée.
+
+            `role="radiogroup"` est déclaré, donc son contrat clavier est dû :
+            un seul arrêt de tabulation, les flèches déplacent et cochent. Ce
+            dépôt a déjà livré deux fois un `role` sans son clavier. */}
+        <div className="zn-lib__practices">
+          <div
+            ref={practiceRailRef}
+            className="zn-lib__practice-rail"
+            role="radiogroup"
+            aria-label={t("practice.label")}
+            onKeyDown={practiceRail.onKeyDown}
+          >
+            {practiceOptions.map((option) => {
+              const active = practice === option;
+              const meta = option ? PRACTICE_META[option] : null;
+              return (
+                <button
+                  key={option ?? "all"}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  tabIndex={active ? 0 : -1}
+                  data-practice={option ?? "all"}
+                  data-state={active ? "active" : "inactive"}
+                  className="zn-lib__practice"
+                  onClick={() => handlePracticeChange(option)}
+                >
+                  {meta ? (isEn ? meta.labelEn : meta.label) : t("practice.all")}
+                  {/* Une pratique annoncée le dit sur la pastille : ses
+                      séances existent, ses plans non. */}
+                  {meta?.status === "announced" && (
+                    <span className="zn-lib__practice-soon">{t("practice.soon")}</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Le geste le moins coûteux de l'app : zéro décision, une réponse.
+              Il était au fond d'un menu déroulant, à trois clics. Sans filtre
+              posé, il tire dans tout le catalogue. */}
+          <Link to="/library/draw" className="zn-lib__draw">
+            <Dices size={15} />
+            {t("practice.draw")}
+          </Link>
+        </div>
+
+        {/* 3 — the discipline strip, on the rule */}
         <div className="zn-lib__strip">
           <div className="zn-tabs__list zn-lib__tabs">
             <div
@@ -690,7 +783,7 @@ export function LibraryPage() {
               className="zn-lib__disciplines"
               role="radiogroup"
               aria-label={t("draw.filters.discipline")}
-              onKeyDown={handleDisciplineKeyDown}
+              onKeyDown={disciplineRail.onKeyDown}
             >
               {ACTIVITY_TYPES.map((type) => {
                 const Icon = ACTIVITY_ICONS[type];

@@ -114,6 +114,128 @@
 
 /* ── discipline strip ─────────────────────────────────────────────────── */
 
+/* ── la bande des pratiques ──────────────────────────────────────────────
+ *
+ * La bande primaire, au-dessus de la modalité. Les pastilles portent l'encre,
+ * pas l'accent : l'écran garde son unique aplat vermillon pour son action
+ * primaire, et une rangée d'onglets n'est pas une action.
+ */
+
+.zn-lib__practices {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+  margin-block-start: var(--sp-13);
+  padding-block-end: var(--sp-8);
+  border-block-end: var(--border-rule);
+}
+
+.zn-lib__practice-rail {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  flex: 1 1 auto;
+}
+
+.zn-lib__practice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-8);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font: var(--type-label);
+  cursor: pointer;
+}
+
+.zn-lib__practice:hover {
+  color: var(--text-body);
+  border-color: var(--line-strong);
+}
+
+.zn-lib__practice:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* La pastille retenue prend l'encre pleine, jamais le vermillon. */
+.zn-lib__practice[data-state="active"] {
+  background: var(--surface-inverse);
+  border-color: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+/* « bientôt » : une pratique nommée dont les plans n'existent pas encore. En
+   mono minuscule, comme une cote, pas comme un badge qui réclame le regard. */
+.zn-lib__practice-soon {
+  font: var(--type-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* Le tirage : une sortie, pas une action primaire. Contour, à droite. */
+.zn-lib__draw {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-8);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--text-body);
+  font: var(--type-label);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.zn-lib__draw:hover {
+  border-color: var(--line-strong);
+}
+
+.zn-lib__draw:active {
+  transform: translateY(var(--press-shift));
+}
+
+@media (pointer: coarse) {
+  .zn-lib__practice,
+  .zn-lib__draw {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* Sur 390 px, le rail prend sa ligne et le tirage la suivante, pleine
+   largeur : deux pastilles et un bouton sur une ligne donneraient des cibles
+   de 90 px qui cassent leur libellé. */
+@media (max-width: 640px) {
+  .zn-lib__practices {
+    gap: var(--sp-6);
+  }
+
+  .zn-lib__practice-rail {
+    flex: 1 1 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .zn-lib__practice-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .zn-lib__practice {
+    white-space: nowrap;
+  }
+
+  .zn-lib__draw {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
 .zn-lib__strip {
   margin-block-start: var(--sp-13);
 }

@@ -406,5 +406,11 @@
       "zone": "Zone {{zone}}"
     },
     "keySession": "Key session"
+  },
+  "practice": {
+    "label": "Discipline",
+    "all": "All",
+    "soon": "soon",
+    "draw": "Draw me a session"
   }
 }

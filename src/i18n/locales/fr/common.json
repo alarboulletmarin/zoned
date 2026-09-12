@@ -563,15 +563,15 @@
     },
     "planCalendar": {
       "title": "Organise ton plan",
-      "description": "Glissez une séance vers un autre jour. Appui long ou clic droit pour voir, supprimer ou réordonner."
+      "description": "Glisse une séance vers un autre jour. Appui long ou clic droit pour voir, supprimer ou réordonner."
     },
     "workoutBuilder": {
-      "title": "Construisez bloc par bloc",
-      "description": "Ajoutez échauffement, corps de séance et retour au calme. Réordonnez les blocs avec les flèches."
+      "title": "Construis bloc par bloc",
+      "description": "Ajoute échauffement, corps de séance et retour au calme. Réordonne les blocs avec les flèches."
     },
     "library": {
-      "title": "Filtrez pour trouver",
-      "description": "Utilisez les filtres par catégorie, durée et difficulté pour trouver la séance parfaite."
+      "title": "Filtre pour trouver",
+      "description": "Filtre par pratique, catégorie, durée et difficulté — ou laisse le hasard tirer pour toi."
     }
   },
   "library": {

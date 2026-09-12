@@ -406,5 +406,11 @@
       "zone": "Zone {{zone}}"
     },
     "keySession": "Séance clé"
+  },
+  "practice": {
+    "label": "Pratique",
+    "all": "Toutes",
+    "soon": "bientôt",
+    "draw": "Tire-moi une séance"
   }
 }
