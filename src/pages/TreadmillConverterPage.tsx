@@ -138,7 +138,7 @@ export function TreadmillConverterPage() {
           </p>
         </section>
 
-        <section className="zn-num__panel zn-tool__band zn-stack zn-tool">
+        <section className="zn-num__panel zn-stack zn-tool">
           {/* What you set on the machine. */}
           <Card>
             <CardHeader>

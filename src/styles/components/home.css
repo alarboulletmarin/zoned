@@ -90,14 +90,18 @@
 
 /* ── doors ────────────────────────────────────────────────────────────── */
 
-/* The four doors sit directly under the rule that closes the hero: they are
-   the hero's own choices, not the next section, so they get the band's
-   tighter top padding rather than a section's. */
+/* Les quatre portes suivent le héros de près : elles sont ses propres choix,
+   pas la section suivante, donc elles gardent le haut plus serré d'une bande
+   plutôt que celui d'une section. Le filet qui fermait le héros est parti le
+   12 septembre 2026 — c'est l'espace qui les rattache à lui désormais.
+
+   Le bas paie la moitié de --gap-section, pas --sp-17 : la section d'après paie
+   déjà sa moitié, et deux pleines valeurs faisaient 72 px de frontière. */
 .zn-home__doors {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--gap-grid);
-  padding: var(--sp-14) var(--pad-screen-x) var(--sp-17);
+  padding: var(--sp-14) var(--pad-screen-x) calc(var(--gap-section) / 2);
 }
 
 @media (max-width: 1100px) {

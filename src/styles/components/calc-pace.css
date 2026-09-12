@@ -40,15 +40,15 @@
 
 /* ── the frame ────────────────────────────────────────────────────────── */
 
-/* La bande de travail d'un outil, sous la tête. Deux bandes se séparent par
-   l'espace seul.
+/* La bande de travail d'un outil n'a plus de règle propre ici : sa frontière
+   avec la tête est payée par les deux voisines (26 px sous la tête, la moitié
+   de --gap-section sur le panneau), et c'est tout l'écart. Ce sélecteur portait
+   un --gap-section ENTIER par-dessus ces 58 px — mesuré à 106 px au rendu, soit
+   plus du double de l'écart que le token promet.
 
    Le reset d'adjacence qui suivait est parti avec le filet : il n'existait que
    pour éviter que la bande de légende et celle-ci n'impriment deux filets de
    1,5 px côte à côte, soit un trait de 3 px. Sans filet, rien à annuler. */
-.zn-num__panel.zn-tool__band {
-  margin-block-start: var(--gap-section);
-}
 
 /* Form first, result under it, in the 672px reading column these screens have
    always used. The band itself stays the full width of the page so the ink

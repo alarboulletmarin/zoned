@@ -204,7 +204,7 @@ export function AgeGradedPage() {
           </p>
         </section>
 
-        <section className="zn-num__panel zn-tool__band zn-stack zn-tool">
+        <section className="zn-num__panel zn-stack zn-tool">
           {/* Who you are and what you ran. */}
           <Card>
             <CardContent

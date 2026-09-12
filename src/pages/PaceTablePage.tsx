@@ -211,7 +211,7 @@ export function PaceTablePage() {
         )}
 
         <section
-          className="zn-num__panel zn-tool__band zn-stack"
+          className="zn-num__panel zn-stack"
           style={{ "--gap": "var(--sp-10)" } as CSSProperties}
         >
           <ResponsiveTable

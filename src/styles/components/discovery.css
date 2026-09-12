@@ -404,8 +404,10 @@
   transform: translateY(var(--press-shift));
 }
 
+/* La moitié de l'écart : la scène au-dessus paie déjà ses 26 px, et un
+   --gap-section entier ici portait la frontière à 74 px. */
 .zn-draw__recent {
-  padding-block-start: var(--gap-section);
+  padding-block-start: calc(var(--gap-section) / 2);
 }
 
 /* A recent draw's name must not push the chip past the column. */

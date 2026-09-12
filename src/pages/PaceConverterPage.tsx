@@ -251,7 +251,7 @@ export function PaceConverterPage() {
         {/* The three units are one value written three ways, so they are three
             equal fields rather than a form and a result. */}
         <section
-          className="zn-num__panel zn-tool__band zn-stack"
+          className="zn-num__panel zn-stack"
           style={{ "--gap": "var(--sp-14)" } as CSSProperties}
         >
           <div className="zn-grid">

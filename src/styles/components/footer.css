@@ -12,8 +12,10 @@
    (--surface-card contre --surface-page) le sépare déjà de la page, et c'était
    le seul endroit du dépôt où un changement de surface ET un filet disaient la
    même frontière. */
+/* La moitié de l'écart : <main> paie déjà 16 px sous son contenu, et le
+   changement de papier fait le reste du travail de frontière. */
 .zn-footer {
-  margin-block-start: var(--gap-section);
+  margin-block-start: calc(var(--gap-section) / 2);
   background: var(--surface-card);
 }
 

@@ -71,9 +71,11 @@
   gap: var(--sp-2) var(--sp-6);
 }
 
-/* A tab panel's own band, under the strip's rule. */
+/* La bande propre d'un panneau d'onglet. Elle paie la moitié de --gap-section
+   en haut, comme toute bande : la tête au-dessus paie ses 26 px, et la
+   frontière fait un écart. */
 .zn-num__panel {
-  padding-block: var(--sp-14) var(--sp-17);
+  padding-block: calc(var(--gap-section) / 2) var(--sp-17);
 }
 
 /* ── form ─────────────────────────────────────────────────────────────── */
