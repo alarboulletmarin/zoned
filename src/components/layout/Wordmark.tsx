@@ -1,13 +1,19 @@
 /**
- * The brand signature.
+ * La signature de la marque, et le logo tout court.
  *
- * The redesign has no drawn logo and does not invent one: the mark is the name
- * set in Bricolage Grotesque 800 at -0.04em, followed by a vermillon full stop.
- * The pulse line in `src/assets/logo.svg` is kept for the share cards, where a
- * picture has to survive being rendered to PNG with `skipFonts`, and as the
- * favicon — but the app's own chrome wears the wordmark.
+ * Le logo de Zoned est le nom : Bricolage Grotesque 800, approche -0,04 em,
+ * suivi d'un point vermillon. Un signe dessiné a été construit puis écarté —
+ * le gréement des doodles ne sait dessiner que la famille debout, donc une
+ * figure unique lit toujours « un coureur » et jamais « du sport », et à 16 px
+ * elle devient un pâté (le raisonnement complet est dans l'en-tête de
+ * scripts/generate-wordmark.mjs).
  *
- * The name is not translated and is not an i18n key: it is a proper noun.
+ * Ici, dans une page, le mot reste du TEXTE : il se sélectionne, il suit le
+ * thème, il ne coûte rien. `src/assets/logo.svg` est le même mot vectorisé, et
+ * il ne sert que là où le CSS n'arrive pas — le favicon, les cartes de partage
+ * rendues avec `skipFonts`, l'OG, la bannière du README, la vidéo.
+ *
+ * Le nom n'est pas traduit et n'est pas une clé i18n : c'est un nom propre.
  */
 export function Wordmark({
   size,

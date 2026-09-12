@@ -1,12 +1,11 @@
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Ink on cream: the same paper the app is printed on. A favicon has no
-       page to inherit from, so the two tokens are written out — #171614 ink,
-       #F6F5F2 page. -->
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- L'initiale sur le papier de l'app. Un favicon n'a pas de page dont
+       hériter : l'encre #171614 et le papier #F6F5F2 sont écrits en dur, et le
+       point garde le vermillon #E8452A.
+       Généré par scripts/generate-wordmark.mjs — ne pas éditer à la main. -->
   <rect width="64" height="64" rx="14" fill="#F6F5F2"/>
-  <path d="M 4 32 L 12 32 L 15 38 L 20 20 L 25 44 L 30 12 L 35 40 L 40 16 L 45 32 L 52 32"
-        stroke="#171614"
-        stroke-width="4"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        fill="none"/>
+  <g transform="translate(6.69 48.82) scale(0.065)">
+    <path d="M20 0L20 -136L271 -392L271 -398L25 -398L25 -528L460 -528L460 -391L209 -134L209 -130L463 -130L463 0Z" fill="#171614"/>
+    <path d="M651 13Q600 13 574.5 -9Q549 -31 549 -77Q549 -124 574.5 -146Q600 -168 651 -168Q703 -168 729 -146Q755 -124 755 -77Q755 13 651 13Z" fill="#E8452A"/>
+  </g>
 </svg>

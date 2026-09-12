@@ -706,6 +706,64 @@ pas un trou. La figure se tient à gauche sur une règle qui court sur toute la
 largeur du conteneur ; les mots sous la règle sur téléphone, à côté sur un
 écran large, où le bouton pose sa base sur la même règle.
 
+## Le logo est le mot, pas une figure (12 septembre 2026)
+
+Le plan de refonte prévoyait un signe dessiné sorti du gréement : « la foulée
+ramenée à sa boucle qui se croise, appui en vermillon ». Il a été construit,
+regardé neuf fois, puis écarté par le propriétaire. Ce qui est consigné ici,
+c'est **pourquoi**, pour que le chantier suivant ne le rejoue pas.
+
+Trois constats, dans l'ordre où ils sont tombés :
+
+1. **Le gréement ne dessine qu'un coureur.** Le brief final demandait « un
+   sportif qui combine coureur / vélo / natation, le sport de façon globale ».
+   La section « ce que le gréement ne fait pas » le disait déjà : la famille
+   debout marche, les poses pliées au-delà d'environ 90° font un nœud. Pas de
+   cycliste assis, pas de nageur. Les poses explorées — bras arrière levé en
+   recouvrement de crawl, torse penché, bras croisés en transition — donnent
+   toutes une personne debout qui court. Trois disciplines dans une silhouette
+   n'était pas un réglage à trouver, c'était **hors de portée du trait**.
+   *(Mesure au passage, pour qui reviendrait sur le sujet : le bras ARRIÈRE est
+   le seul qui monte au-dessus de l'épaule, vers +80° ; au-delà de +120° il
+   traverse le crâne. Le bras avant, lui, n'a pas de solution haute — à -140°
+   la main se pose sur la tête.)*
+2. **À 16 et 32 px, la figure est un pâté.** Les boucles de main se ferment les
+   premières. La variante épaissie les retirait, et ça se voyait tout de suite :
+   une personne sans bras. Le propriétaire l'a nommé avant la relecture.
+3. **Le logo entrait en concurrence avec les doodles.** Vingt-trois dessins de
+   la même main portent déjà l'identité — la coquille, le hero, le menu, l'OG,
+   les cartes. Un vingt-quatrième dessin promu en logo ne rejoint pas cette
+   famille, il la double. Le mot ne double rien : il la nomme.
+
+Le logo est donc **« zoned. »**, et il l'était déjà dans l'en-tête. Ce que le
+chantier a changé, c'est que `src/assets/logo.svg` et `public/favicon.svg`
+cessent d'être une ligne de pouls en zigzag — des segments droits, exactement
+ce que ce document interdit — pour devenir le mot lui-même, vectorisé depuis
+`public/fonts/bricolage-grotesque-latin.woff2`, la police que l'app charge, à
+la graisse 800 et à l'approche de `wordmark.css`. Logo et en-tête sont le même
+dessin, pas deux réglages qui dérivent.
+
+`scripts/generate-wordmark.mjs` les produit, avec `--check` comme portail. Dans
+une page, le mot reste du **texte** (`Wordmark.tsx`) : le SVG ne sert que là où
+le CSS n'arrive pas — le favicon, qui n'a pas de page dont hériter la police,
+les cartes de partage rendues avec `skipFonts`, l'OG, la bannière du README et
+la vidéo.
+
+Deux chiffres trouvés en regardant, et qui ne se devinent pas :
+
+- **le favicon est le « z. », pas le mot entier** : six lettres dans 16 px font
+  deux pixels chacune. L'initiale et son point tiennent, et le point garde le
+  vermillon — deux pixels sur seize, encore visibles ;
+- **le monogramme prend l'approche inverse du mot**, +0,04 em au lieu de
+  -0,04 : dans le mot, le point suit un « d » à fût droit et le blanc est net ;
+  le « z » finit par une barre qui déborde à droite, et à -0,04 le point mord
+  dedans — à 16 px les deux fondent en un seul pâté avec une écharde rouge.
+
+Ce que ça ne change pas : **le vermillon reste l'appui.** Sur les figures, il
+marque le contact avec le sol ; sur le logo, c'est un point final, pas une
+action — la seule occurrence de l'accent qui ne soit ni un contact ni un bouton,
+et elle est aussi vieille que `wordmark.css`.
+
 ## Ce qui a été essayé et écarté
 
 **Les jeux d'illustrations sous licence.** OpenMoji est géométriquement le
