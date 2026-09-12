@@ -732,6 +732,42 @@
   font: var(--fw-medium) var(--fs-body) / 1.25 var(--font-text);
 }
 
+/* Ce que la semaine porte : ses marques et ses chiffres. Un seul bloc, pour
+   qu'il tienne ou qu'il passe à la ligne d'un seul tenant — avant, les quatre
+   étaient des frères de rang égal, tous insécables, et c'est le TITRE qui
+   payait leur largeur. */
+.zn-planlist__aside {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-8);
+  flex: none;
+}
+
+/* Sur téléphone, le bloc descend sous le titre.
+   Mesuré à 390 px : la carte fait 350, la rangée en demandait 388. La
+   pastille « semaine en cours » à elle seule prend 162 px, les chiffres 146,
+   et aucun des deux ne se coupe — il ne restait rien pour « S1 — Base », qui
+   se retrouvait à zéro pixel de large, à déborder sous la pastille. Le
+   chevron, lui, tombait vingt-trois pixels après le bord de la carte.
+
+   Le titre garde donc la première ligne avec le chevron, et ce qui décrit la
+   semaine prend la deuxième. `order` et non un changement d'ordre dans le
+   DOM : le chevron reste le dernier élément atteint au clavier, là où il
+   l'était. */
+@media (max-width: 640px) {
+  .zn-planlist__toggle {
+    flex-wrap: wrap;
+    gap: var(--sp-5) var(--sp-6);
+  }
+
+  .zn-planlist__aside {
+    order: 1;
+    flex: 1 0 100%;
+    column-gap: var(--sp-6);
+  }
+}
+
 .zn-planlist__body {
   display: flex;
   flex-direction: column;

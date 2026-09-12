@@ -1430,25 +1430,38 @@ export function PlanViewPage() {
                     )}
                   </span>
 
-                  {isCurrent && (
-                    <Badge className="zn-fixed">{t("view.currentWeek")}</Badge>
-                  )}
-                  {week.isRecoveryWeek && (
-                    <Badge variant="secondary" className="zn-fixed">
-                      {t("calendar.recoveryWeek")}
-                    </Badge>
-                  )}
-                  {week.intermediateRace && (
-                    <Badge variant="outline" className="zn-fixed">
-                      {t("intermediateGoals.weekLabel")}
-                    </Badge>
-                  )}
+                  {/* Les marques et les chiffres de la semaine, en UN bloc.
+                      Ils étaient quatre enfants de rang égal à côté du titre,
+                      tous insécables : mesuré à 390 px, la pastille (162),
+                      les chiffres (146), le chevron (16) et leurs écarts
+                      demandaient 372 px pour 316 disponibles. Le titre, seul
+                      élément élastique, était donc écrasé à ZÉRO — son texte
+                      débordait sous la pastille, et le chevron tombait hors
+                      de la carte, que `overflow: hidden` découpait.
+                      Groupés, ils descendent d'une ligne sous le titre sur
+                      téléphone (plan-view.css) au lieu de lui prendre sa
+                      place. Sur grand écran, la rangée ne bouge pas. */}
+                  <span className="zn-planlist__aside">
+                    {isCurrent && (
+                      <Badge className="zn-fixed">{t("view.currentWeek")}</Badge>
+                    )}
+                    {week.isRecoveryWeek && (
+                      <Badge variant="secondary" className="zn-fixed">
+                        {t("calendar.recoveryWeek")}
+                      </Badge>
+                    )}
+                    {week.intermediateRace && (
+                      <Badge variant="outline" className="zn-fixed">
+                        {t("intermediateGoals.weekLabel")}
+                      </Badge>
+                    )}
 
-                  <span
-                    className="zn-mono zn-faint zn-fixed zn-nowrap"
-                    title={t("view.trainingVolume")}
-                  >
-                    {weekFacts}
+                    <span
+                      className="zn-mono zn-faint zn-fixed zn-nowrap"
+                      title={t("view.trainingVolume")}
+                    >
+                      {weekFacts}
+                    </span>
                   </span>
                   {isExpanded ? (
                     <ChevronUp size={16} className="zn-fixed" />
