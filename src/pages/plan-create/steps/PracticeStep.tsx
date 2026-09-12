@@ -3,12 +3,9 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Option, OptionStack } from "../Option";
-import {
-  PRACTICES,
-  distancesOfPractice,
-  isPracticeLive,
-  type Practice,
-} from "@/types/practice";
+import { PRACTICES, isPracticeLive, type Practice } from "@/types/practice";
+import { practiceData } from "@/components/domain/practice-data";
+import { useAppStats } from "@/hooks/useAppStats";
 import type { StepContext, StepDef } from "../types";
 
 /**
@@ -29,29 +26,22 @@ import type { StepContext, StepDef } from "../types";
  */
 function PracticeBody({ form, setForm, uid, t, questionId }: StepContext) {
   const announced = form.practice && !isPracticeLive(form.practice);
+  const stats = useAppStats();
 
   return (
     <div className="zn-stack" style={{ "--gap": "var(--sp-10)" } as CSSProperties}>
       <OptionStack questionId={questionId}>
-        {PRACTICES.map((practice) => {
-          const live = isPracticeLive(practice);
-          const distances = distancesOfPractice(practice);
-          return (
-            <Option
-              key={practice}
-              name={`${uid}-practice`}
-              checked={form.practice === practice}
-              title={t(`practice.${practice}.label`)}
-              body={t(`practice.${practice}.body`)}
-              data={
-                live
-                  ? t("practice.distanceCount", { count: distances.length })
-                  : t("practice.soon")
-              }
-              onSelect={() => setForm((f) => ({ ...f, practice }))}
-            />
-          );
-        })}
+        {PRACTICES.map((practice) => (
+          <Option
+            key={practice}
+            name={`${uid}-practice`}
+            checked={form.practice === practice}
+            title={t(`practice.${practice}.label`)}
+            body={t(`practice.${practice}.body`)}
+            data={practiceData(practice, stats.byPractice[practice], t)}
+            onSelect={() => setForm((f) => ({ ...f, practice }))}
+          />
+        ))}
       </OptionStack>
 
       {/* Le triathlon : ce qui existe déjà, dit en toutes lettres. Les séances

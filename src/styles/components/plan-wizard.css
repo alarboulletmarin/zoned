@@ -194,6 +194,27 @@
   color: var(--text-faint);
 }
 
+/* Sur un téléphone, la donnée passe SOUS le texte.
+   Mesuré à 390 px, une fois que les cartes de pratique ont porté leurs vrais
+   chiffres : « 52 séances · aucun plan prêt » prend la moitié de la largeur et
+   écrase la réponse dans une colonne de quatorze caractères — « Au-delà du
+   trail : temps sur les pieds, nuit, ravitaillement » sur cinq lignes. La
+   donnée est une précision ; elle ne prend pas la place de la réponse.
+   Les tuiles sont exclues : elles sont déjà en colonne, c'est leur forme. */
+@media (max-width: 560px) {
+  .zn-wiz-opt:not([data-shape="tile"]) {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .zn-wiz-opt:not([data-shape="tile"]) .zn-wiz-opt__text {
+    flex: 1;
+  }
+  .zn-wiz-opt:not([data-shape="tile"]) .zn-wiz-opt__data {
+    flex-basis: 100%;
+    margin-inline-start: 0;
+  }
+}
+
 /* The compact form: a single number under a single word, six to a row. */
 .zn-wiz-opt[data-shape="tile"] {
   flex-direction: column;

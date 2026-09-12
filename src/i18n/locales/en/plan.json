@@ -497,7 +497,10 @@
     "subtitle": "Structured plans, ready to use immediately",
     "back": "Back",
     "available_one": "{{count}} plan available",
-    "available_other": "{{count}} plans available"
+    "available_other": "{{count}} plans available",
+    "missingKicker": "Not on the shelf yet",
+    "missingBody": "{{practice}}: no ready-made plan yet. That means dozens of weeks of structure written by hand, and a rushed plan would be worse than none. The generator does know how to build one — it has this practice's volume, phase and taper tables.",
+    "missingCta": "Build a {{practice}} plan"
   },
   "activity": {
     "strength": "Strength",
@@ -692,7 +695,7 @@
     "freeCta": "Open an empty calendar",
     "prebuiltKicker": "{{n}} plans ready",
     "prebuiltTitle": "Ready-made plans",
-    "prebuiltBody": "Plans already built, from 5K to marathon. Take one as it is, then adjust.",
+    "prebuiltBody": "Plans already built, from 5K to marathon plus a short trail. Take one as it is, then adjust.",
     "prebuiltCta": "See the {{n}} plans"
   },
   "freePlan": {
@@ -754,6 +757,11 @@
     "soon": "soon",
     "distanceCount_one": "{{count}} distance",
     "distanceCount_other": "{{count}} distances",
+    "workoutCount_one": "{{count}} session",
+    "workoutCount_other": "{{count}} sessions",
+    "planCount_one": "{{count}} ready-made plan",
+    "planCount_other": "{{count}} ready-made plans",
+    "noPlanYet": "no ready-made plan yet",
     "road": {
       "label": "Road",
       "body": "From 5K to the marathon, on the road."

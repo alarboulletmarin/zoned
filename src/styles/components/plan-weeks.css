@@ -68,6 +68,15 @@
   max-inline-size: 62ch;
 }
 
+/* Le bouton d'un rayon vide. Dans un `zn-stack`, `align-items` vaut son défaut
+   `stretch` : sans cette ligne le bouton fait toute la largeur de la page pour
+   trois mots. `.zn-btn` ne déclare pas `align-self`, donc une seule classe
+   suffit ici — contrairement à `.zn-pw__call` plus bas, qui doit doubler son
+   sélecteur parce qu'elle redéclare `display`. */
+.zn-pw__missing-cta {
+  align-self: flex-start;
+}
+
 /* The screen's one call, in the header. Below 900px the dock carries the same
    call in the thumb zone, so exactly one of the two is ever on screen. */
 @media (max-width: 900px) {

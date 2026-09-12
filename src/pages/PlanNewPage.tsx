@@ -6,12 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Option, OptionStack } from "./plan-create/Option";
 import { SEOHead } from "@/components/seo";
 import { useAppStats } from "@/hooks/useAppStats";
-import {
-  PRACTICES,
-  distancesOfPractice,
-  isPracticeLive,
-  type Practice,
-} from "@/types/practice";
+import { PRACTICES, type Practice } from "@/types/practice";
+import { practiceData } from "@/components/domain/practice-data";
 
 /**
  * L'entrée du parcours : la pratique, et rien d'autre.
@@ -75,25 +71,17 @@ export function PlanNewPage() {
           </h2>
 
           <OptionStack questionId="plan-new-practices">
-            {PRACTICES.map((practice) => {
-              const live = isPracticeLive(practice);
-              const count = distancesOfPractice(practice).length;
-              return (
-                <Option
-                  key={practice}
-                  name="plan-new-practice"
-                  checked={false}
-                  title={t(`plan:practice.${practice}.label`)}
-                  body={t(`plan:practice.${practice}.body`)}
-                  data={
-                    live
-                      ? t("plan:practice.distanceCount", { count })
-                      : t("plan:practice.soon")
-                  }
-                  onSelect={() => choose(practice)}
-                />
-              );
-            })}
+            {PRACTICES.map((practice) => (
+              <Option
+                key={practice}
+                name="plan-new-practice"
+                checked={false}
+                title={t(`plan:practice.${practice}.label`)}
+                body={t(`plan:practice.${practice}.body`)}
+                data={practiceData(practice, stats.byPractice[practice], t)}
+                onSelect={() => choose(practice)}
+              />
+            ))}
           </OptionStack>
 
           {/* Les deux autres façons d'avoir un plan, en secondaire : la

@@ -497,7 +497,10 @@
     "subtitle": "Des plans structurés, prêts à utiliser immédiatement",
     "back": "Retour",
     "available_one": "{{count}} plan disponible",
-    "available_other": "{{count}} plans disponibles"
+    "available_other": "{{count}} plans disponibles",
+    "missingKicker": "Pas encore sur l'étagère",
+    "missingBody": "{{practice}} : pas encore de plan tout prêt. C'est des dizaines de semaines de structure à écrire à la main, et un plan bâclé serait pire que pas de plan. Le générateur, lui, sait le construire — il a les tables de volume, de phases et d'affûtage de cette pratique.",
+    "missingCta": "Construire un plan {{practice}}"
   },
   "activity": {
     "strength": "Renforcement",
@@ -692,7 +695,7 @@
     "freeCta": "Ouvrir un calendrier vide",
     "prebuiltKicker": "{{n}} plans prêts",
     "prebuiltTitle": "Plans prêt-à-l'emploi",
-    "prebuiltBody": "Des plans déjà construits, du 5 km au marathon. À prendre tel quel, puis à ajuster.",
+    "prebuiltBody": "Des plans déjà construits, du 5 km au marathon et un trail court. À prendre tel quel, puis à ajuster.",
     "prebuiltCta": "Voir les {{n}} plans"
   },
   "freePlan": {
@@ -754,6 +757,11 @@
     "soon": "bientôt",
     "distanceCount_one": "{{count}} distance",
     "distanceCount_other": "{{count}} distances",
+    "workoutCount_one": "{{count}} séance",
+    "workoutCount_other": "{{count}} séances",
+    "planCount_one": "{{count}} plan prêt",
+    "planCount_other": "{{count}} plans prêts",
+    "noPlanYet": "aucun plan prêt",
     "road": {
       "label": "Route",
       "body": "Du 5 km au marathon, sur le bitume."
