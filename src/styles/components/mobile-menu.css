@@ -367,8 +367,12 @@
 }
 
 /* What the pill costs the rest of the app is paid in the files that own the
-   surfaces, not here: --fab-clear in shell.css, footer.css, scroll-to-top.css
-   and shell-misc.css, and --fab-w in the four sheets that dock an action bar
-   to the viewport floor (session, plan-view, plan-weeks, calc-tests). A
-   grouped rule in this file would lose the cascade to three of them, which are
-   imported later and re-state the whole `padding` shorthand. */
+   surfaces, not here: --fab-clear in shell.css, scroll-to-top.css and
+   shell-misc.css, and --fab-w dans footer.css plus les quatre feuilles qui
+   ancrent une barre d'action au sol de la fenêtre (session, plan-view,
+   plan-weeks, calc-tests). La barre d'encre du pied de page ne paie QUE la
+   réserve latérale : hors de la colonne de la pastille, une rangée est à
+   l'abri quelle que soit la position de défilement, et la réserve basse n'y
+   ajoutait que de l'encre vide. A grouped rule in this file would lose the
+   cascade to three of them, which are imported later and re-state the whole
+   `padding` shorthand. */
