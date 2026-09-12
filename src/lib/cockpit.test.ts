@@ -165,6 +165,73 @@ describe("pickTodayFocus", () => {
   });
 });
 
+describe("la semaine, sept cases", () => {
+  test("range les séances par jour, lundi d'abord", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      weeks: [week(1, [session(0, "LUN"), session(2, "MER"), session(6, "DIM")])],
+    });
+    const { week: byDay } = pickTodayFocus([p], MONDAY);
+    expect(byDay).toHaveLength(7);
+    expect(byDay[0].map((s) => s.workoutId)).toEqual(["LUN"]);
+    expect(byDay[2].map((s) => s.workoutId)).toEqual(["MER"]);
+    expect(byDay[6].map((s) => s.workoutId)).toEqual(["DIM"]);
+  });
+
+  test("un jour de repos est une case vide, pas une absence", () => {
+    const p = plan({ id: "p1", startDate: "2026-09-07", weeks: [week(1, [session(2)])] });
+    const { week: byDay } = pickTodayFocus([p], MONDAY);
+    // Toujours sept cases : la bande dessine sept jours quoi qu'il arrive.
+    expect(byDay).toHaveLength(7);
+    expect(byDay[0]).toEqual([]);
+    expect(byDay[1]).toEqual([]);
+  });
+
+  test("deux séances le même jour tiennent dans la même case", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      weeks: [week(1, [session(3, "MATIN"), session(3, "SOIR")])],
+    });
+    expect(pickTodayFocus([p], MONDAY).week[3]).toHaveLength(2);
+  });
+
+  test("la case du jour est exactement `sessions`", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      weeks: [week(1, [session(0, "LUN"), session(2, "MER")])],
+    });
+    const focus = pickTodayFocus([p], WEDNESDAY);
+    expect(focus.week[focus.dayOfWeek]).toEqual(focus.sessions);
+  });
+
+  test("c'est la semaine EN COURS, pas la première", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      totalWeeks: 3,
+      weeks: [week(1, [session(0, "S1")]), week(2, [session(0, "S2")])],
+    });
+    const focus = pickTodayFocus([p], new Date(2026, 8, 14));
+    expect(focus.week[0].map((s) => s.workoutId)).toEqual(["S2"]);
+  });
+
+  // La bande ne s'affiche que s'il y a une semaine à montrer. Une bande vide
+  // vaudrait mieux ne pas exister qu'annoncer une semaine inventée.
+  test("aucune semaine à montrer pour un plan qui n'a pas commencé", () => {
+    const p = plan({ id: "futur", startDate: "2026-09-14" });
+    const focus = pickTodayFocus([p], MONDAY);
+    expect(focus.state).toBe("upcoming");
+    expect(focus.week).toEqual([]);
+  });
+
+  test("aucune semaine à montrer sans aucun plan", () => {
+    expect(pickTodayFocus([], MONDAY).week).toEqual([]);
+  });
+});
+
 describe("une semaine seule", () => {
   test("se reprend comme une semaine, et pointe /weeks", () => {
     const w = plan({

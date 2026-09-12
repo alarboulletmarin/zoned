@@ -153,10 +153,18 @@ function preloadSidebarPages() {
  *  fold to satisfy a footer below the map. */
 const FULLSCREEN_ROUTES = ["/routes"];
 
+/** Routes qui ne gardent que la barre d'encre du pied de page.
+ *
+ *  Les quatre colonnes de liens existent pour qu'un robot atteigne les hubs.
+ *  Sur un écran applicatif en `noindex`, elles ne font donc aucun travail — et
+ *  sur le cockpit elles mesuraient 439 px pour 388 px de contenu. La barre,
+ *  elle, reste : c'est la signature du projet libre. */
+const BARE_FOOTER_ROUTES = ["/today"];
+
 function ConditionalFooter() {
   const { pathname } = useLocation();
   if (FULLSCREEN_ROUTES.includes(pathname)) return null;
-  return <Footer />;
+  return <Footer bare={BARE_FOOTER_ROUTES.includes(pathname)} />;
 }
 
 function ScrollToTopOnNavigate() {

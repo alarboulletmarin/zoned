@@ -33,6 +33,16 @@ export interface TodayFocus {
   dayOfWeek: number;
   /** Les séances du jour. Vide sur un jour de repos. */
   sessions: PlanSession[];
+  /**
+   * La semaine en cours, sept cases, lundi d'abord — ce que la bande des sept
+   * jours consomme. Toujours de longueur 7 ; une case vide est un jour de
+   * repos, pas une absence de donnée.
+   *
+   * Vide (longueur 0) quand il n'y a pas de semaine en cours à montrer : un
+   * plan qui n'a pas commencé, ou pas de plan du tout. La bande ne s'affiche
+   * alors pas — elle ne prétend pas connaître une semaine qui n'existe pas.
+   */
+  week: PlanSession[][];
   /** Jours restants avant le début, pour l'état `upcoming`. */
   daysUntilStart: number;
 }
@@ -44,6 +54,7 @@ const NOTHING: TodayFocus = {
   weekNumber: 0,
   dayOfWeek: 0,
   sessions: [],
+  week: [],
   daysUntilStart: 0,
 };
 
@@ -97,7 +108,13 @@ export function pickTodayFocus(
     inProgress.sort((a, b) => byNewest(a.plan, b.plan));
     const { plan, weekNumber, dayOfWeek } = inProgress[0];
     const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
-    const sessions = (week?.sessions ?? []).filter((s) => s.dayOfWeek === dayOfWeek);
+    // Une seule traversée pour les sept jours : la journée courante n'est
+    // qu'une case de la semaine, et la bande a besoin des six autres.
+    const byDay: PlanSession[][] = [[], [], [], [], [], [], []];
+    for (const session of week?.sessions ?? []) {
+      byDay[session.dayOfWeek]?.push(session);
+    }
+    const sessions = byDay[dayOfWeek] ?? [];
     return {
       state: sessions.length > 0 ? "session" : "rest",
       plan,
@@ -105,6 +122,7 @@ export function pickTodayFocus(
       weekNumber,
       dayOfWeek,
       sessions,
+      week: byDay,
       daysUntilStart: 0,
     };
   }
@@ -120,6 +138,7 @@ export function pickTodayFocus(
       weekNumber: 0,
       dayOfWeek: 0,
       sessions: [],
+      week: [],
       daysUntilStart: days,
     };
   }

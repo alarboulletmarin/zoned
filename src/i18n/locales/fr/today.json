@@ -26,13 +26,14 @@
     "inPlan": "Dans « {{name}} »",
     "inWeek": "Dans ta semaine « {{name}} »",
     "openPlan": "Ouvrir mon plan",
-    "openWeek": "Ouvrir ma semaine"
+    "openWeek": "Ouvrir ma semaine",
+    "openSession": "Ouvrir la séance"
   },
   "quick": {
     "title": "Quand tu ne sais pas quoi faire",
     "draw": "Tire-moi une séance",
     "drawHint": "Le hasard choisit, tu n'as rien à décider",
-    "week": "Composer ma semaine",
+    "week": "Ma semaine",
     "weekHint": "Sept jours, sans t'engager sur un plan"
   },
   "doors": {
@@ -59,5 +60,17 @@
   "art": {
     "brief": "Une figure debout sur le filet, au repos avant la sortie.",
     "label": "Dessin : une coureuse debout, prête à partir"
+  },
+  "week": {
+    "letters": "L,M,M,J,V,S,D",
+    "summary": "Semaine {{week}} : {{count}} séances, repos {{rest}}.",
+    "noRest": "aucun jour",
+    "dayNames": "lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche"
+  },
+  "facts": {
+    "week": "semaine {{n}}",
+    "minutes": "{{n}} min",
+    "sessions_one": "{{count}} séance",
+    "sessions_other": "{{count}} séances"
   }
 }

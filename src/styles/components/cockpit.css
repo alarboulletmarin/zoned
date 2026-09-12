@@ -1,155 +1,167 @@
 /* Le cockpit — /today.
  *
- * Un seul primaire à l'écran, et c'est « reprendre ». Les gestes courts et les
- * portes sont en contour : si tout appelle, plus rien n'a de priorité.
+ * Un seul primaire, et c'est « ouvrir ». Tout le reste est en encre ou en
+ * contour : si tout appelle, plus rien n'a de priorité.
  *
- * Le contexte est un téléphone tenu à une main avant de sortir courir, donc
- * la colonne est unique jusqu'à 900 px et les cibles descendent à 44 px.
+ * La première version empilait cinq boîtes de la même forme sur 1838 px de
+ * téléphone, dont trois portes qui répétaient la pastille MENU. Il n'y a plus
+ * une seule boîte ici : des filets, du texte, et une figure.
+ *
+ * Contexte : un téléphone tenu à une main avant de sortir courir. Colonne
+ * unique, cibles à 44 px.
  */
 
 .zn-cockpit {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-14);
+  gap: var(--sp-11);
   padding-inline: var(--pad-screen-x);
   padding-block: var(--sp-14) var(--sp-16);
 }
 
-/* ── Reprendre ──────────────────────────────────────────────────────────── */
+/* ── La réponse ─────────────────────────────────────────────────────────── */
 
 .zn-cockpit__resume {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-6);
-  padding-block-end: var(--sp-12);
-  border-block-end: var(--border-rule);
+  gap: var(--sp-7);
 }
 
-/* La ligne se lit d'un coup d'œil : c'est la seule phrase de l'écran qui
-   compte, donc elle prend la taille d'un titre et pas celle d'un corps. */
+/* La réponse est le titre de l'écran, donc elle prend la taille d'un titre.
+   La mesure la garde lisible : un nom de séance long ne doit pas courir sur
+   toute la largeur d'un écran de bureau. */
 .zn-cockpit__headline {
-  max-inline-size: 34ch;
+  max-inline-size: 24ch;
 }
 
-/* La lecture de localStorage est synchrone : l'attente est d'une frame. On
-   réserve quand même sa hauteur, parce que le budget Lighthouse bloque à CLS
-   exactement 0 et qu'un bloc qui apparaît sans place réservée décale la page. */
-.zn-cockpit__hold {
-  min-block-size: 168px;
-}
-
-/* ── Les deux gestes courts ─────────────────────────────────────────────── */
-
-.zn-cockpit__quick {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--gap-grid);
-}
-
-.zn-cockpit__shortcut {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas:
-    "icon label"
-    "icon hint";
-  align-items: center;
-  column-gap: var(--sp-8);
-  row-gap: var(--sp-2);
-  padding: var(--pad-card);
-  border: var(--border-rule);
-  border-radius: var(--r-lg);
-  background: var(--surface-card);
-  color: var(--text-body);
-  text-decoration: none;
-}
-
-.zn-cockpit__shortcut:hover {
-  border-color: var(--line-strong);
-}
-
-.zn-cockpit__shortcut:active {
-  transform: translateY(var(--press-shift));
-}
-
-@media (pointer: coarse) {
-  .zn-cockpit__shortcut {
-    min-block-size: var(--hit-min);
-  }
-}
-
-.zn-cockpit__shortcut-icon {
-  grid-area: icon;
+.zn-cockpit__facts {
   color: var(--text-muted);
 }
 
-.zn-cockpit__shortcut-label {
-  grid-area: label;
-  font: var(--fw-semibold) var(--fs-h4) / var(--lh-h4) var(--font-display);
+/* La lecture de localStorage est synchrone : l'attente est d'une frame. On
+   réserve quand même la place, le budget Lighthouse bloquant à CLS 0. */
+.zn-cockpit__hold {
+  min-block-size: 292px;
 }
 
-.zn-cockpit__shortcut-hint {
-  grid-area: hint;
-  font: var(--type-caption);
+/* ── La bande des sept jours ────────────────────────────────────────────────
+ *
+ * Une figure, pas un contrôle : aucun cadre, aucun fond, aucun survol. Ce qui
+ * se lit comme cliquable doit l'être, et un jour cliquable serait de la
+ * navigation — donc un `role` et son contrat clavier.
+ */
+
+.zn-cockpit__week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--sp-3);
+  align-items: end;
+  /* La bande s'assoit sur un filet : c'est le sol de la page, la même règle
+     que pour les doodles. */
+  padding-block-end: var(--sp-6);
+  border-block-end: var(--border-rule);
+  /* Elle ne s'étire pas sur un écran de bureau : au-delà, les barres
+     deviennent des pavés et la figure cesse d'en être une. */
+  max-inline-size: 420px;
+}
+
+.zn-cockpit__day {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: 52px;
+  justify-content: flex-start;
+}
+
+.zn-cockpit__day-letter {
+  font: var(--type-mono);
   color: var(--text-faint);
 }
 
-/* ── Les trois portes ───────────────────────────────────────────────────── */
+/* Le jour courant se marque à l'ENCRE, jamais au vermillon : le bouton est le
+   seul aplat d'accent de l'écran, et un second le neutraliserait. */
+.zn-cockpit__day[data-today] .zn-cockpit__day-letter {
+  color: var(--text-body);
+  font-weight: var(--fw-bold);
+}
 
-.zn-cockpit__doors {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gap-grid);
-  padding-block-end: var(--sp-12);
-  border-block-end: var(--border-rule);
+/* La barre porte deux canaux à la fois — l'opacité d'encre ET la hauteur —
+   exactement comme --zone-h-N dans zones.css. C'est ce qui garde la bande
+   lisible en niveaux de gris, qui est l'argument du système. */
+.zn-cockpit__day-bar {
+  inline-size: 100%;
+  /* La hauteur arrive en pixels depuis la durée du jour (voir WeekStrip) : un
+     pourcentage n'a pas de hauteur de référence sur un enfant flex en colonne
+     et retombait au minimum, rendant les sept barres identiques. */
+  block-size: var(--bar-h, 6px);
+  background: var(--zone-2);
+  border-radius: 2px;
+}
+
+.zn-cockpit__day[data-today] .zn-cockpit__day-bar {
+  background: var(--ink-1);
+}
+
+/* Un jour de repos est un filet, pas une barre écrasée : l'absence de séance
+   est une information, et elle se lit comme un vide dessiné. */
+.zn-cockpit__day-bar[data-rest] {
+  block-size: 3px;
+  background: var(--line-divider);
+}
+
+/* ── Les deux sorties ───────────────────────────────────────────────────── */
+
+/* Des liens, pas des cartes : ce sont des sorties, pas des actions primaires.
+   Deux cartes ici coûtaient 300 px et deux boîtes de plus à balayer. */
+.zn-cockpit__exits {
+  font: var(--type-body);
+  color: var(--text-muted);
+  padding-block-start: var(--sp-8);
+  border-block-start: var(--border-rule);
+}
+
+.zn-cockpit__exits a {
+  color: var(--text-body);
+  text-underline-offset: 3px;
+}
+
+.zn-cockpit__exits a:hover {
+  color: var(--accent);
+}
+
+/* Le lien doit rester atteignable au doigt même en ligne de texte. */
+@media (pointer: coarse) {
+  .zn-cockpit__exits a {
+    display: inline-block;
+    padding-block: var(--sp-4);
+  }
 }
 
 /* ── La figure ──────────────────────────────────────────────────────────── */
 
-/* Le slot fixe la LARGEUR et le viewBox donne le ratio : une hauteur en
-   pixels ferait centrer le dessin et flotter la semelle au-dessus du filet.
-   D'où --slot-w en CSS plutôt qu'une prop inline, qu'une media query ne
-   pourrait pas surcharger. */
-/* 170 px, pas 260. La figure de la porte est un PORTRAIT : dimensionnée par
-   la largeur — la seule façon correcte, le viewBox donnant le ratio —, 260 px
-   de large en faisaient 450 de haut, soit un écran de téléphone entier pour
-   un dessin de clôture. */
+/* La figure de la porte est un PORTRAIT : dimensionnée par la largeur — la
+   seule façon correcte, le viewBox donnant le ratio — 260 px de large en
+   faisaient 450 de haut, soit un écran de téléphone pour un dessin de
+   clôture. */
 .zn-cockpit__art {
   --slot-w: 170px;
   align-self: flex-start;
-}
-
-/* ── 900 px et moins : une colonne ──────────────────────────────────────── */
-
-@media (max-width: 900px) {
-  .zn-cockpit__doors {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ── Téléphone ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
   .zn-cockpit {
-    gap: var(--sp-12);
+    gap: var(--sp-10);
     padding-block-start: var(--sp-11);
   }
 
-  /* Deux raccourcis côte à côte sur 390 px donneraient deux colonnes de
-     170 px, où le libellé casse en trois lignes. Ils s'empilent. */
-  .zn-cockpit__quick {
-    grid-template-columns: 1fr;
-  }
-
-  .zn-cockpit__shortcut {
-    padding: var(--sp-9);
-  }
-
-  /* Sous la pastille MENU flottante, un dessin large se ferait recouvrir. */
   .zn-cockpit__art {
     --slot-w: 130px;
   }
 
   .zn-cockpit__hold {
-    min-block-size: 208px;
+    min-block-size: 320px;
   }
 }

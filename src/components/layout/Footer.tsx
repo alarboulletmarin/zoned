@@ -24,7 +24,19 @@ const APP_VERSION =
     ? __APP_VERSION__
     : "dev";
 
-export function Footer() {
+/**
+ * @param bare  Ne rend que la barre d'encre, sans les quatre colonnes.
+ *
+ *   Pour les écrans applicatifs en `noindex` — le cockpit. La table de liens
+ *   est là pour qu'un robot atteigne les hubs ; sur une page qu'aucun robot
+ *   n'indexe elle ne fait donc AUCUN travail, et elle mesurait 439 px pour
+ *   388 px de contenu : le pied de page était plus grand que la page, et
+ *   pesait 48 % du défilement.
+ *
+ *   La barre reste : licence, « 100 % local », version. C'est la signature du
+ *   projet libre, et elle tient en deux lignes.
+ */
+export function Footer({ bare = false }: { bare?: boolean }) {
   const { t } = useTranslation(["homepage", "common"]);
   const year = new Date().getFullYear();
 
@@ -37,6 +49,7 @@ export function Footer() {
 
   return (
     <footer className="zn-footer">
+      {!bare && (
       <div className="zn-footer__body">
         <div className="zn-footer__col">
           <Link to="/" className="zn-footer__brand" aria-label={t("common:app.name")}>
@@ -60,6 +73,7 @@ export function Footer() {
           />
         ))}
       </div>
+      )}
 
       <div className="zn-footer__bar">
         <span>{t("homepage:home.footer.license", { year })}</span>

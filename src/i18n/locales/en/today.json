@@ -26,13 +26,14 @@
     "inPlan": "In “{{name}}”",
     "inWeek": "In your week “{{name}}”",
     "openPlan": "Open my plan",
-    "openWeek": "Open my week"
+    "openWeek": "Open my week",
+    "openSession": "Open the session"
   },
   "quick": {
     "title": "When you don't know what to do",
     "draw": "Draw me a session",
     "drawHint": "Chance picks, you decide nothing",
-    "week": "Build my week",
+    "week": "My week",
     "weekHint": "Seven days, no plan to commit to"
   },
   "doors": {
@@ -59,5 +60,17 @@
   "art": {
     "brief": "A figure standing on the rule, at rest before heading out.",
     "label": "Drawing: a runner standing, ready to set off"
+  },
+  "week": {
+    "letters": "M,T,W,T,F,S,S",
+    "summary": "Week {{week}}: {{count}} sessions, rest on {{rest}}.",
+    "noRest": "no day",
+    "dayNames": "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"
+  },
+  "facts": {
+    "week": "week {{n}}",
+    "minutes": "{{n}} min",
+    "sessions_one": "{{count}} session",
+    "sessions_other": "{{count}} sessions"
   }
 }
