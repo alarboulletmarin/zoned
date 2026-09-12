@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ArrowRight } from "@/components/icons";
+import { ArrowLeft, ArrowRight, Mountain } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
 import { PrebuiltPlanCard } from "@/components/domain/PrebuiltPlanCard";
+import { PRACTICE_ART } from "@/components/domain/practice-art";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import {
   PRACTICES,
@@ -89,33 +91,33 @@ export function PrebuiltPlansPage() {
           </div>
         </section>
 
+        {/* Le rayon vide est un état vide, donc il en prend le composant plutôt
+            qu'une section écrite à la main : la variante « not-started » porte
+            déjà la mise en page (la figure sur le filet, les mots à côté sur un
+            écran large, dessous sur un téléphone) et le ton d'un appel positif.
+            `art` la remplace par la figure de la pratique — un rayon ultra vide
+            montre la figure qui s'éloigne, pas la figure générique. */}
         {unserved.map((practice) => {
           const label = isEn
             ? PRACTICE_META[practice].labelEn
             : PRACTICE_META[practice].label;
           return (
-            <section
-              key={practice}
-              className="zn-pw__band"
-              aria-labelledby={`missing-${practice}`}
-            >
-              <div
-                className="zn-stack"
-                style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
-              >
-                <span className="zn-kicker" id={`missing-${practice}`}>
-                  {t("prebuiltList.missingKicker")}
-                </span>
-                <p className="zn-body zn-pw__lede">
-                  {t("prebuiltList.missingBody", { practice: label })}
-                </p>
-                <Button asChild variant="outline" size="sm" className="zn-pw__missing-cta">
-                  <Link to={`/plan/new/assisted?practice=${practice}`}>
-                    {t("prebuiltList.missingCta", { practice: label.toLowerCase() })}
-                    <ArrowRight size={16} />
-                  </Link>
-                </Button>
-              </div>
+            <section key={practice} className="zn-pw__band">
+              <EmptyState
+                variant="not-started"
+                icon={Mountain}
+                art={PRACTICE_ART[practice]}
+                title={t("prebuiltList.missingKicker")}
+                description={t("prebuiltList.missingBody", { practice: label })}
+                action={
+                  <Button asChild variant="outline" size="sm">
+                    <Link to={`/plan/new/assisted?practice=${practice}`}>
+                      {t("prebuiltList.missingCta", { practice: label.toLowerCase() })}
+                      <ArrowRight size={16} />
+                    </Link>
+                  </Button>
+                }
+              />
             </section>
           );
         })}

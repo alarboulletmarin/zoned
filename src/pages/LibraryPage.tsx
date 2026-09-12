@@ -79,6 +79,7 @@ import { workoutMatchesPractice } from "@/lib/practiceIndex";
 import { resolvePractice, saveLastPractice } from "@/lib/practicePrefs";
 import { visiblePractices } from "@/lib/settingsSchema";
 import { PRACTICE_META, type Practice } from "@/types/practice";
+import { PRACTICE_ART } from "@/components/domain/practice-art";
 
 // Duration constants (same as in WorkoutFilters)
 const DURATION_MIN = 0;
@@ -947,6 +948,12 @@ export function LibraryPage() {
             <EmptyState
               variant="no-results"
               icon={Search}
+              /* La figure de la pratique regardée, quand il y en a une. Un
+                 rayon trail vide montre la montée, pas la figure générique —
+                 c'est le seul vrai manque que la revue des états vides avait
+                 laissé (les dix-neuf appels passent tous une variante, et la
+                 variante porte déjà son dessin). */
+              art={practice ? PRACTICE_ART[practice] : undefined}
               title={
                 filters.favoritesOnly
                   ? t("emptyState.noFavorites")
