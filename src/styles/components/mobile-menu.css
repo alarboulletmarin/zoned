@@ -45,12 +45,17 @@
  *   La fermeture était le seul aplat de couleur, donc le premier objet trouvé,
  *   pour l'action qu'on veut le moins.
  *
- * Il est maintenant : figure, libellé, portes, filet, pied. La scène a pris la
- * place libre, quelle qu'elle soit, donc le vide EST la figure ; les portes
- * sont tombées sous le pouce, juste au-dessus du sol ; le filet a quitté la
- * figure pour le pied, où il sépare enfin ce qu'il doit séparer, la navigation
- * des réglages ; et le vermillon a quitté la fermeture pour le point de la
- * porte où l'on se trouve.
+ * Il est maintenant : vide, libellé, portes, filet, pied. La scène a pris la
+ * place libre, quelle qu'elle soit ; les portes sont tombées sous le pouce,
+ * juste au-dessus du sol ; le filet a quitté la figure pour le pied, où il
+ * sépare enfin ce qu'il doit séparer, la navigation des réglages ; et le
+ * vermillon a quitté la fermeture pour le point de la porte où l'on se trouve.
+ *
+ * La figure, elle, a fini par quitter la scène tout entière, plus tard le même
+ * soir, avec le glissé qui refermait le panneau (MobileMenu.tsx dit les deux
+ * retraits). Le vide qu'elle occupait reste et garde son seul métier, tenir
+ * les portes en bas : c'est pour ça que `.zn-menu__scene` survit à ce qu'elle
+ * montrait.
  */
 
 /* Le panneau s'appelle .zn-mobile-menu et pas .zn-menu : dropdown-menu.css
@@ -100,9 +105,10 @@
    point de la porte où l'on se trouve (`.zn-menu__door[data-current]`), qui
    est, elle, une information.
 
-   Elle n'est plus la seule sortie non plus : MobileMenu.tsx ajoute le glissé
-   vers le bas et l'appui dans la scène, qui sont les deux gestes qu'on essaie
-   sur une feuille plein écran avant de chercher un bouton.
+   Elle n'est plus la seule sortie non plus : MobileMenu.tsx ajoute l'appui
+   dans la scène, le geste qu'on essaie sur une feuille plein écran avant de
+   chercher un bouton. Le glissé vers le bas l'accompagnait ; il est parti le
+   soir même, il se lisait comme un blocage plutôt que comme une sortie.
 
    Le `env(safe-area-inset-top)` en plus n'est pas une incohérence : le panneau
    est plein écran et passe sous l'encoche, la barre non. index.html ne demande
@@ -163,12 +169,6 @@
   background: var(--panel-ink);
   color: var(--panel-ink-text);
   overflow: hidden;
-
-  /* Le retour du glissé qui n'aboutit pas. Pendant le geste, MobileMenu.tsx
-     écrit `transition: none` en style en ligne pour que le panneau colle au
-     doigt, puis efface les deux propriétés au relâchement : celle-ci reprend
-     la main et ramène le panneau. */
-  transition: transform var(--dur-base) var(--ease-out);
 }
 
 /* Only the open state gets a display value: the UA rule that hides a closed
@@ -226,62 +226,25 @@
 
 /* ── la scène, au-dessus des portes ───────────────────────────────────── */
 
-/* Elle est la place libre du panneau, et elle est maintenant EN HAUT.
+/* Elle est la place libre du panneau, et elle est EN HAUT.
 
-   `flex: 1` la fait prendre tout ce qui reste, donc le vide entre la
-   fermeture et les portes n'est plus du vide : c'est le dessin. Et
-   `container-type: size` fait que son contenu ne pèse rien dans le calcul
-   flex, donc la figure ne peut jamais repousser les portes ni le pied, quelle
-   que soit sa taille.
+   `flex: 1` la fait prendre tout ce qui reste : c'est ce qui pose les portes
+   en bas, sous le pouce, sur un écran de n'importe quelle hauteur. C'est
+   maintenant sa seule déclaration. Elle a porté un dessin jusqu'au 13
+   septembre 2026 au soir, d'où le `container-type: size` qui empêchait la
+   figure de peser dans le calcul flex, le centrage et le débord jusqu'aux
+   bords de l'écran : trois réglages qui n'avaient de sens que pour un enfant,
+   et elle n'en a plus.
 
-   Le filet qui la soulignait est parti au pied : il servait de sol à la
-   figure, il sert maintenant à séparer la navigation des réglages, ce qui est
-   le seul endroit du panneau où une frontière se justifie.
+   Le filet qui la soulignait était parti au pied avant elle : il servait de
+   sol à la figure, il sert maintenant à séparer la navigation des réglages,
+   ce qui est le seul endroit du panneau où une frontière se justifie.
 
    Un appui dedans referme (MobileMenu.tsx). C'est le hors panneau d'une
-   feuille qui n'en a pas. */
+   feuille qui n'en a pas, et c'est la seconde raison qu'elle a d'exister. */
 .zn-menu__scene {
   flex: 1;
-  container-type: size;
-  display: flex;
-  align-items: center;
-  margin-inline: calc(-1 * var(--pad-screen-x));
   margin-block-end: var(--sp-10);
-  padding-inline: var(--pad-screen-x);
-}
-
-/* The figure. The bottom of its viewBox IS its sole (the drawn ground left the
-   files on 6 September 2026). Height, not width, is what it is sized by: the
-   five doors are portrait frames cut at the stroke, of different heights (159
-   to 182 units), so one height gives them scales up to 15% apart, which never
-   shows, since only one door is open at a time and no two of them share a
-   screen; the duo (landscape) simply comes wider. 200px is the size the
-   workshop settled on; below that it takes whatever the scene has, down to
-   120px, the floor under which a stroke stops explaining and starts competing
-   with the glyphs. `100cqb` is the scene's content height: an svgr import
-   without a size collapses, and this is its size.
-
-   EN RETRAIT depuis le 13 septembre au soir : elle est passée devant les
-   portes dans l'ordre de l'écran, donc elle doit passer derrière elles dans
-   l'ordre du regard. L'opacité est le seul outil qui fasse ça sans toucher au
-   dessin, et il est sans risque ici, la figure est décorative et
-   `aria-hidden`, donc aucun rapport de contraste ne la concerne. */
-.zn-menu__figure {
-  block-size: min(200px, 100cqb);
-  inline-size: auto;
-  max-inline-size: 100%;
-  flex: none;
-  opacity: 0.42;
-}
-
-/* Under 120px of room the figure goes rather than shrinks into a pictogram,
-   an open door's list of pages, a landscape phone, anything shorter than an
-   iPhone SE. Queried on the scene, not the viewport: it is the room that
-   decides, whatever ate it. */
-@container (max-block-size: 119.9px) {
-  .zn-menu__figure {
-    display: none;
-  }
 }
 
 /* ── les portes, sous le pouce ────────────────────────────────────────── */
