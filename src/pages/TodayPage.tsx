@@ -101,7 +101,7 @@ const KIND_ICONS: Record<SessionKind, FunctionComponent<IconProps>> = {
  *
  * La bande était faite de LIENS : toucher jeudi ouvrait la séance de jeudi,
  * donc regarder sa semaine, c'était quitter l'écran, puis revenir. Deux
- * gestes très proches — un doigt sur une barre, un doigt sur le bouton —
+ * gestes très proches, un doigt sur une barre, un doigt sur le bouton,
  * emmenaient au même endroit, et un seul des deux le disait.
  *
  * La bande est maintenant un CHOIX, `role="radiogroup"` et sept boutons : le
@@ -111,24 +111,24 @@ const KIND_ICONS: Record<SessionKind, FunctionComponent<IconProps>> = {
  * le seul objet de l'écran à ressembler à une sortie.
  *
  * Deux marques, donc, et elles ne se confondent pas : le jour CHOISI porte
- * l'encre — lettre grasse, filet plein, et la seule durée chiffrée de la
+ * l'encre, lettre grasse, filet plein, et la seule durée chiffrée de la
  * bande ; AUJOURD'HUI porte un point rond sous sa lettre, qui n'est là que
  * lorsqu'on est parti voir un autre jour. À l'arrivée les deux coïncident, et
  * l'écran est exactement celui d'avant.
  *
  * **Les journées à deux séances ont enfin un écran.** Elles n'en avaient
  * aucun : le titre disait 2 séances t'attendent, il n'y avait ni profil, ni
- * allure, ni clôture possible — la seule journée que le cockpit ne savait pas
- * clore — et le bouton renvoyait au plan. Les séances du jour sont
+ * allure, ni clôture possible, la seule journée que le cockpit ne savait pas
+ * clore, et le bouton renvoyait au plan. Les séances du jour sont
  * maintenant EMPILÉES, chacune complète et close-able pour elle-même,
  * séparées par un filet et numérotées séance 1 / 2. Le cas à une séance ne
  * change pas : une pile d'un élément est l'écran d'avant, au pixel près.
  *
  * **Et RIEN NE BOUGE quand on change de jour.** C'est la condition pour que
  * la bande soit un instrument : un écran qui se réorganise à chaque choix se
- * relit à chaque choix. Tout ce qui peut manquer est donc réservé — le
+ * relit à chaque choix. Tout ce qui peut manquer est donc réservé : le
  * micro-label, le titre sur deux lignes, la durée, la ligne d'exécution, le
- * créneau du profil, et la valeur de la bande — si bien que le dimanche à
+ * créneau du profil, et la valeur de la bande, si bien que le dimanche à
  * 1h35, le mardi de repos et le mercredi à trois séances posent leur titre,
  * leur durée et leur bouton au même pixel. Ce qui change, ce sont les mots,
  * et la hauteur de la pile quand il y a plusieurs séances, qui est
@@ -165,7 +165,7 @@ export function TodayPage() {
 
   /* On peut changer de jour : il y a donc des hauteurs à RÉSERVER, pour que
      passer du dimanche au mardi ne fasse pas remonter l'écran. Sans semaine à
-     parcourir — pas de plan, ou un plan qui n'a pas commencé — la bande ne
+     parcourir (pas de plan, ou un plan qui n'a pas commencé), la bande ne
      s'affiche pas, rien ne peut changer, et réserver ne ferait que du vide. */
   const reserve = focus.week.length > 0;
 
@@ -349,7 +349,7 @@ export function TodayPage() {
                   Une journée de repos porte le MÊME squelette qu'une journée
                   de séance, réserves comprises : c'est ce qui fait que passer
                   du dimanche au mardi ne déplace pas une ligne. Le prix est
-                  du blanc un jour de repos, et il est payé volontiers — un
+                  du blanc un jour de repos, et il est payé volontiers : un
                   bouton qui saute de cent pixels sous le pouce coûte plus. */}
               <div className="zn-cockpit__answer">
                 <span className="zn-kicker zn-kicker--xs">
@@ -462,8 +462,8 @@ export function TodayPage() {
  *
  * Tout ce que la page savait dire d'UNE séance vit ici : son nom, sa taille,
  * ce qu'elle demande, son profil, sa sortie et sa clôture. C'est ce qui rend
- * les journées doubles possibles — deux séances sont deux blocs, pas un titre
- * qui les compte — et c'est aussi ce qui les rend closables, ce qu'elles
+ * les journées doubles possibles, deux séances sont deux blocs, pas un titre
+ * qui les compte, et c'est aussi ce qui les rend closables, ce qu'elles
  * n'étaient pas : un seul bouton ne savait pas laquelle des deux clore.
  *
  * Le catalogue est en chunks chargés à la demande, donc `useWorkout` est
@@ -503,7 +503,7 @@ function CockpitSession({
      catalogue : `sessionKind` est synchrone, donc le glyphe est là dès le
      premier rendu, avant le nom. C'est la première chose que l'écran peut
      dire d'une séance, et il se trouve que c'est aussi celle qu'on cherche en
-     premier — on ne prépare pas le même sac pour un footing et pour une
+     premier : on ne prépare pas le même sac pour un footing et pour une
      séance de natation. */
   const kind = sessionKind(session);
   const KindIcon = KIND_ICONS[kind];
@@ -793,7 +793,7 @@ function paceRangeOf(session: PlanSession, isEn: boolean, unit: UnitSystem): str
  *   devait trancher.
  * - **la rangée de glyphes** porte les FAMILLES présentes, une fois chacune :
  *   course, vélo, natation, renforcement. C'est le seul canal qui ne se
- *   déduit d'aucun autre — trois barres ne disent pas de quel sport elles
+ *   déduit d'aucun autre : trois barres ne disent pas de quel sport elles
  *   sont, et c'est pourtant ce qu'on regarde en premier le matin, on ne
  *   prépare pas le même sac. À 13 px un glyphe ne se lit pas, il se
  *   reconnaît, et c'est tout ce qu'on lui demande : le nom entier est dans le

@@ -6,7 +6,7 @@
  * script emporte l'état focus-visible de l'élément qu'il remplace : à la
  * fermeture, celui-ci est `.zn-menu__inner`, dont l'anneau est masqué et non
  * éteint, et le déclencheur, lui, n'a pas de reset. Une porte tapée n'a donc
- * pas à rendre le focus au déclencheur — elle emmène ailleurs — et c'est le
+ * pas à rendre le focus au déclencheur, elle emmène ailleurs, et c'est le
  * drapeau `handoff` qui le dit, celui-là même que la recherche lève déjà.
  *
  * L'ouverture. Le correctif tient en deux moitiés qui ne servent à

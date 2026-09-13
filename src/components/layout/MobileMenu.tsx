@@ -260,8 +260,8 @@ export function MobileMenu() {
   // la page qui arrive : le déclencheur ne reprend pas le focus, sinon il
   // s'afficherait cerclé de vermillon sur la page d'après (voir `handoff`).
   //
-  // La garde `open` porte tout le poids. Sans elle, la passe de montage — et
-  // toute navigation faite hors du panneau — lèverait un drapeau qu'aucun
+  // La garde `open` porte tout le poids. Sans elle, la passe de montage, comme
+  // toute navigation faite hors du panneau, lèverait un drapeau qu'aucun
   // `close` ne viendrait abaisser, et c'est la fermeture SUIVANTE, au clavier,
   // qui perdrait son retour de focus. `close()` sur un dialogue déjà fermé est
   // un no-op qui n'émet rien, donc le drapeau ne doit se lever que quand il y a
