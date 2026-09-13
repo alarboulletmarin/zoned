@@ -55,13 +55,19 @@ export default defineConfig({
         // masque rond ne garde que le disque inscrit à 80 % du côté, donc le
         // z. y est plus petit, et le générateur refuse de sortir un maskable
         // dont la diagonale déborde de cette zone.
+        //
+        // Que du PNG ici, volontairement. `app-icon.svg` a figuré en tête de
+        // cette liste, et c'est ce qui a fait disparaître l'icône sur iOS.
+        // Depuis iOS 16.4, quand un manifeste déclare des `icons`, Safari les
+        // préfère à <link rel="apple-touch-icon"> au lieu de s'y replier — et
+        // un écran d'accueil iOS ne pose pas un vecteur. `sizes: "any"`
+        // répondant à toutes les tailles demandées, Safari élisait donc le
+        // SVG, ne le rasterisait pas, et l'app atterrissait en pastille grise
+        // frappée de l'initiale du <title>, sans jamais regarder les PNG plus
+        // bas. Le SVG reste généré et vérifié par la CI, il est seulement
+        // hors du manifeste : c'est le dessin de référence dont les PNG
+        // sortent, pas une icône qu'une plateforme sait servir.
         icons: [
-          {
-            src: "app-icon.svg",
-            sizes: "any",
-            type: "image/svg+xml",
-            purpose: "any",
-          },
           {
             src: "pwa-64x64.png",
             sizes: "64x64",
