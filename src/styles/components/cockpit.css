@@ -86,9 +86,17 @@
 
 /* La réponse est le titre de l'écran, donc elle prend la taille d'un titre.
    La mesure la garde lisible : un nom de séance long ne doit pas courir sur
-   toute la largeur d'un écran de bureau. */
+   toute la largeur d'un écran de bureau.
+
+   RÉSERVÉE SUR DEUX LIGNES, et c'est la plus chère des réserves de cet écran.
+   Les noms de séance vont de Côtes courtes à Sortie longue progressive : le
+   titre passait donc d'une ligne à deux selon le jour choisi, et cinquante
+   pixels sautaient sous le pouce à chaque fois qu'on interrogeait sa semaine.
+   Deux lignes couvrent tout le catalogue à cette mesure, et le blanc d'un nom
+   court est le prix d'une bande qui ne fait plus bouger l'écran. */
 .zn-cockpit__headline {
   max-inline-size: 24ch;
+  min-block-size: calc(2 * var(--lh-display-3) * var(--fs-display-3));
 }
 
 /* Le COMBIEN, sur sa propre ligne et avant le numéro de semaine.
@@ -131,18 +139,23 @@
 /* La lecture de localStorage est synchrone : l'attente est d'une frame. On
    réserve quand même la place, le budget Lighthouse bloquant à CLS 0.
 
-   Remesuré : la réponse a gagné le micro-label, la durée et la ligne
-   d'exécution, la bande a gagné la valeur du jour, et les deux sorties sont
-   remontées DANS la réponse. 292 px ne couvraient plus rien.
+   Remesuré deux fois. La réponse a d'abord gagné le micro-label, la durée et
+   la ligne d'exécution, la bande la valeur du jour, et les deux sorties sont
+   remontées DANS la réponse : 292 px ne couvraient plus rien, la valeur est
+   passée à 544. Puis les réserves du choix de jour sont arrivées — titre sur
+   deux lignes, durée et micro-label toujours écrits — et elle passe à 589.
 
    La valeur est celle d'un jour de séance, l'état pour lequel cet écran est
-   fait. Mesurée au navigateur, pas calculée : 544 px au-dessus de 640, et 516
-   à 606 en dessous selon la largeur, les plus étroits repliant une ligne de
-   plus sur la position dans le plan. Toute retouche aux écarts de
-   `.zn-cockpit__answer`, au plancher de `.zn-cockpit__day` ou à la réserve de
-   `.zn-cockpit__how` invalide ces deux nombres. */
+   fait. Mesurée au navigateur, pas calculée, sur la même semaine à neuf
+   largeurs : 589 px à partir de 768, 542 de 430 à 640, 617 à 390 et 633 à
+   360, les plus étroits repliant une ligne de plus sur la position dans le
+   plan. On garde la valeur des larges, comme avant, et le résidu des étroits
+   a diminué au passage, de 73 px à 28. Toute retouche aux écarts de
+   `.zn-cockpit__answer`, à la réserve du titre, au créneau de
+   `.zn-cockpit__day-bar` ou à celle de `.zn-cockpit__how` invalide ces
+   nombres. */
 .zn-cockpit__hold {
-  min-block-size: 544px;
+  min-block-size: 589px;
 }
 
 /* ── La bande des sept jours ────────────────────────────────────────────────
@@ -201,12 +214,12 @@
    transformerait la bande en rangée de boutons. Et elle répond DANS SA FORME :
    repeindre un contour ou une hachure en aplat ferait dire au survol qu'une
    séance prévue est faite. */
-.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="planned"] {
+.zn-cockpit__day:hover .zn-cockpit__day-block[data-shape="planned"] {
   border-color: var(--ink-2);
 }
 
-.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="completed"],
-.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="modified"] {
+.zn-cockpit__day:hover .zn-cockpit__day-block[data-shape="completed"],
+.zn-cockpit__day:hover .zn-cockpit__day-block[data-shape="modified"] {
   background: var(--ink-2);
 }
 
@@ -265,10 +278,14 @@
   color: var(--text-muted);
 }
 
-/* La barre porte deux canaux à la fois, la FORME et la hauteur, comme
-   --zone-h-N dans zones.css code l'intensité deux fois. C'est ce qui garde la
-   bande lisible en niveaux de gris, qui est l'argument du système : plein
-   contre creux contre hachuré ne doit rien à la teinte. */
+/* LE CRÉNEAU de la barre, et il est de hauteur FIXE.
+   Il ne l'était pas : la barre faisait la hauteur de sa journée, donc choisir
+   un jour de repos après un dimanche de 1h35 retirait trente-sept pixels à la
+   bande et faisait remonter tout l'écran. Une bande qui bouge quand on
+   l'interroge n'est pas un instrument. Les blocs poussent depuis le SOL du
+   créneau (`column-reverse` + `justify-content: flex-start`), donc la ligne
+   du bas est commune aux sept jours, ce qui est la condition pour que sept
+   hauteurs se comparent. */
 .zn-cockpit__day-bar {
   inline-size: 100%;
   /* Une barre, pas une case. Sur bureau la colonne fait 72 px : un contour
@@ -276,43 +293,69 @@
      c'est-à-dire exactement ce que cette page n'a plus nulle part. Bridée à
      18 px, la forme se lit comme une barre et le creux comme un creux. */
   max-inline-size: 18px;
-  /* La hauteur arrive en pixels depuis la durée du jour (voir WeekStrip) : un
-     pourcentage n'a pas de hauteur de référence sur un enfant flex en colonne
-     et retombait au minimum, rendant les sept barres identiques. */
-  block-size: var(--bar-h, 8px);
+  /* `BAR_MAX` de lib/cockpit.ts, et `dayBarBlocks` garantit qu'aucune colonne
+     ne le dépasse (un test le tient). Les deux vont ensemble : le créneau doit
+     pouvoir contenir la plus haute journée possible, et rien de plus. */
+  block-size: 40px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  /* `BAR_GAP` de lib/cockpit.ts, qui le retire du budget des blocs. C'est ce
+     filet qui fait que deux séances se comptent au lieu de se confondre en une
+     barre. */
+  gap: 2px;
+}
+
+/* UN BLOC PAR SÉANCE, et c'est le changement du 13 septembre 2026.
+   La barre était unique et ne portait que le total du jour : une heure de
+   natation puis deux heures de vélo faisaient une barre de trois heures, et
+   rien ne disait qu'il y avait deux sorties. Le nombre de séances était la
+   seule chose que la bande taisait, alors que c'est la première à changer une
+   journée.
+
+   Un bloc porte donc deux canaux à la fois, la FORME et la hauteur, comme
+   --zone-h-N dans zones.css code l'intensité deux fois. C'est ce qui garde la
+   bande lisible en niveaux de gris, qui est l'argument du système : plein
+   contre creux contre hachuré ne doit rien à la teinte. */
+.zn-cockpit__day-block {
+  inline-size: 100%;
+  /* La hauteur arrive en pixels depuis la durée de la SÉANCE (voir
+     WeekStrip) : un pourcentage n'a pas de hauteur de référence sur un enfant
+     flex en colonne et retombait au minimum, rendant les blocs identiques. */
+  block-size: var(--block-h, 8px);
+  flex: none;
   box-sizing: border-box;
   border: var(--bw-rule) solid transparent;
   border-radius: 2px;
 }
 
 /* Prévu : un contour. Le volume est dessiné, il n'est pas encore rempli. */
-.zn-cockpit__day-bar[data-shape="planned"] {
+.zn-cockpit__day-block[data-shape="planned"] {
   border-color: var(--line-strong);
 }
 
 /* Fait : un plein. C'est arrivé, donc c'est plein. `modified` est une autre
-   façon d'avoir couru, donc pleine aussi, d'un cran plus clair. */
-.zn-cockpit__day-bar[data-shape="completed"] {
+   façon d'avoir couru, donc pleine aussi, d'un cran plus clair. Et c'est pris
+   séance par séance : la première sortie peut être faite quand la seconde ne
+   l'est pas, ce qu'une barre unique devait trancher. */
+.zn-cockpit__day-block[data-shape="completed"] {
   background: var(--ink-1);
 }
 
-.zn-cockpit__day-bar[data-shape="modified"] {
+.zn-cockpit__day-block[data-shape="modified"] {
   background: var(--ink-2);
 }
 
 /* Sautée : la hachure maison à 45 degrés, celle que zones.css pose sur tout
    bloc non mesuré. Rien de nouveau à apprendre. */
-.zn-cockpit__day-bar[data-shape="skipped"] {
+.zn-cockpit__day-block[data-shape="skipped"] {
   border-color: var(--line-divider);
   background-image: var(--zone-recovery);
 }
 
 /* Repos : un filet, pas une barre écrasée. L'absence de séance est une
-   information, et elle se lit comme un vide dessiné. Il l'emporte sur
-   `--bar-h` par spécificité (0,2,0 contre 0,1,0), pas par ordre de source :
-   il est donc juste ici, avec les trois autres formes, où on les lit
-   ensemble. */
-.zn-cockpit__day-bar[data-shape="rest"] {
+   information, et elle se lit comme un vide dessiné. */
+.zn-cockpit__day-block[data-shape="rest"] {
   block-size: 3px;
   border-color: transparent;
   background: var(--line-divider);
