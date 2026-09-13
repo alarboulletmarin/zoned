@@ -1,6 +1,12 @@
 /* Top bar, the wordmark, the five doors and the tool cluster. Below 1024px
    the doors leave the bar entirely: they become the full-screen menu behind
-   the floating pill (mobile-menu.css).
+   the one glyph the bar gains at its start (mobile-menu.css).
+
+   Cette barre est donc, sous 1024px, la SEULE chrome de l'application : rien
+   ne flotte plus au-dessus des pages depuis que la pastille MENU y est
+   remontée, le 13 septembre 2026. Toute proposition d'y ajouter un objet fixe
+   passe d'abord par l'en-tête de mobile-menu.css, qui tient le compte de ce
+   que le précédent coûtait.
 
    The bar is opaque cream sitting on a full-width ink rule. No translucency,
    no backdrop blur: the system has neither, and the rule is what separates the
@@ -14,8 +20,10 @@
    destination in mind, and so is the wordmark that takes you home. Sticky,
    not fixed, so the page still pays for its height rather than sliding
    under it. z-index 40 is the app's docked layer, the same as ScrollToTop,
-   under the menu pill (45), so an open panel covers the bar. The door panels
-   keep their own 50 inside the bar's stacking context.
+   above the page's own floating things. Le panneau du menu n'a plus besoin
+   d'être au-dessus par un z-index : c'est un <dialog> ouvert par showModal(),
+   donc il est dans la top layer, qu'aucun contexte d'empilement n'atteint.
+   The door panels keep their own 50 inside the bar's stacking context.
 
    Its height is stated as a token so the document can clear it: an anchor,
    a focused control or a scrollIntoView() lands under the bar otherwise. */
@@ -40,12 +48,16 @@ html {
   border-block-end: var(--border-rule);
 }
 
-/* Below 1024px the doors are gone and the bar holds only the wordmark and
-   three bare glyphs. The 20px of air above and below them was measured for a
-   band of pills; around a 44px tool cluster it made an 85px header on a phone,
-   a tenth of the first screen spent on chrome. 8px keeps the 44px targets and
-   the rule, and gives 24px back to the page, on a tablet as well, which
-   shares the breakpoint. */
+/* Below 1024px the doors are gone and the bar holds the menu glyph, the
+   wordmark and three more bare glyphs. The 20px of air above and below them was
+   measured for a band of pills; around a 44px tool cluster it made an 85px
+   header on a phone, a tenth of the first screen spent on chrome. 8px keeps the
+   44px targets and the rule, and gives 24px back to the page, on a tablet as
+   well, which shares the breakpoint.
+
+   Ces 8px sont aussi ce que lit `.zn-menu__close` pour se poser aux
+   coordonnées du déclencheur (mobile-menu.css) : les changer déplace les
+   deux. */
 @media (max-width: 1023px) {
   :root {
     --topbar-h: calc(var(--hit-min) + 2 * var(--sp-4) + var(--bw-rule));
@@ -54,6 +66,23 @@ html {
   .zn-topbar {
     gap: var(--sp-6);
     padding-block: var(--sp-4);
+  }
+}
+
+/* Le garde-fou des très petits écrans, et il est MESURÉ, pas estimé : avec le
+   déclencheur du menu en tête de barre, la rangée demande 328,3px (Chromium,
+   polices réelles : 50px de glyphe, 12 + 65,3 de nom, 12 + 149 de grappe, 2×20
+   de marge). Elle tient donc dès 360px, avec 31,7px de reste, et débordait de
+   8,3px sur un écran de 320.
+
+   Ce qui rend les 32px, c'est le rembourrage des outils, pas leur cible : à
+   10px de part et d'autre, un glyphe de 18px fait 38px, donc `min-inline-size`
+   reprend la main et la boîte reste à 44px pleins. La rangée retombe à 305,3px
+   et les cibles WCAG 2.5.8 sont intactes. Aucun autre écran n'est touché : le
+   seuil est sous le plus petit téléphone courant. */
+@media (max-width: 359px) {
+  .zn-topbar__tool {
+    padding-inline: var(--sp-5);
   }
 }
 

@@ -34,20 +34,10 @@
   min-inline-size: 0;
 }
 
-/* Below 1024px the menu pill floats over the bottom-right corner for the whole
-   session, and the last row of the page has to clear it.
-
-   The reserve is NOT paid by .zn-app__body: its padding would sit below the
-   footer, and the footer ends on an inverted ink bar, the page colour would
-   show as a band under it on every phone. So the surface that actually ends
-   the document pays. Here that is the page itself, on the routes that hide
-   the footer (`:last-child` is exactly that condition); the footer pays for
-   itself in footer.css. */
-@media (max-width: 1023px) {
-  .zn-main:last-child {
-    padding-block-end: var(--fab-clear);
-  }
-}
+/* La dernière rangée d'une page payait ici la réserve basse de la pastille
+   MENU, sur les routes qui masquent le pied de page. La pastille est en tête
+   de barre depuis le 13 septembre 2026 et ne recouvre plus le bas de l'écran :
+   la règle est partie, et le bas d'une page est de nouveau le bas d'une page. */
 
 .zn-main {
   flex: 1;

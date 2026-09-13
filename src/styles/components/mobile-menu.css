@@ -1,8 +1,20 @@
-/* Mobile menu, one floating pill, and the full-screen ink panel behind it.
+/* Mobile menu, one glyph at the head of the bar, and the full-screen ink panel
+ * it opens.
  *
- * Below 1024px the five doors no longer fit in the header, so they move down
- * here: a single pill in the bottom-right corner, where the thumb already is,
- * and nothing else floating.
+ * Below 1024px the five doors no longer fit in the header, so they move behind
+ * a single hamburger placed BEFORE the wordmark, and nothing floats anywhere.
+ *
+ * Le déclencheur a été une pastille flottante au coin bas-droit jusqu'au
+ * 13 septembre 2026. Ce qu'il en coûtait n'était pas visible sur lui, mais
+ * partout ailleurs : un objet fixe traverse toute l'application, et HUIT
+ * feuilles lui réservaient de la place, `--fab-clear` en bas et `--fab-w` sur
+ * le côté. Le pied de page cédait une colonne, les quatre barres d'action
+ * ancrées au sol s'arrêtaient avant lui, le bouton de remontée se décalait, la
+ * planche des zones changeait d'ordre au premier écran et le duo dessiné de
+ * l'accueil rétrécissait. Rien de tout cela n'existe plus : les deux jetons
+ * sont sortis de spacing.css et les huit exceptions avec eux. Si un jour
+ * quelque chose doit à nouveau flotter au-dessus des pages, relire cette liste
+ * AVANT, elle est le vrai prix du geste.
  *
  * The panel is a NATIVE <dialog> opened with showModal(). The top layer, the
  * focus trap, Escape and the focus returning to the trigger are the platform's
@@ -27,20 +39,51 @@
    à CHAQUE menu déroulant de l'app : encre sur encre, et 176 px hors du
    viewport. Deux revues l'ont mesuré indépendamment. Ne réutilise pas ce nom.
 
-── the two pills, one on top of the other's place ───────────────────── */
+── le déclencheur, en tête de barre ──────────────────────────────────── */
 
-/* Closed and open, the button lives at the same coordinates: the panel opens
-   under the thumb and closes under it too. */
-.zn-menu-fab,
+/* Il n'a plus de coordonnées : c'est le premier enfant flex de `.zn-topbar`
+   (TopBar.tsx le monte là), donc la barre lui donne sa marge d'écran et son
+   écart, et `.zn-topbar__tool` lui donne tout le reste, la boîte de 44px, le
+   rayon, l'aplat de papier au survol, l'appui, la taille du glyphe. C'est le
+   fond de l'affaire : le menu n'est plus un objet à part, c'est un outil de la
+   barre, simplement posé à l'autre bout de la grappe.
+
+   Une seule ligne, et elle est défensive : la barre est une rangée flex, et un
+   outil qui se laisserait comprimer passerait sous les 44px de WCAG 2.5.8.
+   `min-inline-size` l'en empêche déjà ; ceci le dit là où on le lit.
+
+   ATTENTION à la cascade avant d'ajouter ici : index.css importe topbar.css
+   APRÈS cette feuille (l'ordre est alphabétique), dans la même couche et à la
+   même spécificité, donc toute propriété que `.zn-topbar__tool` déclare aussi
+   gagnerait contre celle qu'on écrirait ici. Ce qui doit battre l'outil
+   s'écrit dans topbar.css. */
+.zn-menu-trigger {
+  flex: none;
+}
+
+/* ── la fermeture, aux coordonnées exactes du déclencheur ─────────────── */
+
+/* On referme là où on a ouvert. Le déclencheur est à `--sp-4` du haut, le
+   padding vertical de la barre sous 1024px (topbar.css), et à
+   `--pad-screen-x` du bord d'attaque ; cette pilule est posée aux deux mêmes
+   valeurs et fait les mêmes 44px de haut. Ouverture et fermeture occupent donc
+   la même boîte, et le doigt ne se déplace pas entre les deux.
+
+   Le `env(safe-area-inset-top)` en plus n'est pas une incohérence : le panneau
+   est plein écran et passe sous l'encoche, la barre non. index.html ne demande
+   pas `viewport-fit=cover`, donc aujourd'hui la valeur vaut 0 et les deux
+   boîtes coïncident au pixel ; si elle est demandée un jour, la fermeture
+   descendra sous l'encoche au lieu de se cacher dessous, et l'écart qui
+   apparaîtra alors est le prix juste de rester atteignable.
+
+   Pas de z-index : elle monte dans la top layer avec son dialogue. Elle garde
+   l'aplat vermillon, la seule action d'un menu ouvert qui ne soit pas une
+   destination, et son mot écrit : contrairement au déclencheur, elle n'a pas
+   de barre pour la cadrer, seulement l'encre du panneau. */
 .zn-menu__close {
   position: fixed;
-  /* Above the page's own floating things, the docked action bars (30) and
-     ScrollToTop (40), and below every modal layer (50), so an open dialog,
-     sheet or command palette covers the pill instead of being pierced by it.
-     The close pill is in the top layer with its dialog, where this is moot. */
-  z-index: 45;
-  inset-block-end: calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
-  inset-inline-end: var(--sp-13);
+  inset-block-start: calc(var(--sp-4) + env(safe-area-inset-top, 0px));
+  inset-inline-start: var(--pad-screen-x);
 
   display: inline-flex;
   align-items: center;
@@ -48,6 +91,9 @@
   min-block-size: var(--hit-min);
   padding-inline: var(--sp-11);
 
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: var(--bw-rule) solid var(--accent);
   border-radius: var(--r-pill);
   cursor: pointer;
 
@@ -61,35 +107,8 @@
   transition: transform var(--dur-fast) var(--ease-out);
 }
 
-.zn-menu-fab:active,
 .zn-menu__close:active {
   transform: translateY(var(--press-shift));
-}
-
-/* Closed: solid ink, cream type, the same inversion the selected door in the
-   header wears, so the button reads as "the app's own control".
-   The ring is cream in both themes: invisible against paper, and the only
-   thing separating the pill from the footer's ink bar when the page is
-   scrolled to the floor. */
-.zn-menu-fab {
-  background: var(--ink-1);
-  color: var(--ink-on-dark);
-  border: var(--bw-rule) solid var(--panel-ink-text);
-  box-shadow: var(--shadow-block);
-}
-
-.zn-menu-fab > svg {
-  inline-size: 18px;
-  block-size: 18px;
-  flex: none;
-}
-
-/* Open: the screen's one accent fill. There is exactly one action on an open
-   menu that is not a destination, and this is it. */
-.zn-menu__close {
-  background: var(--accent);
-  color: var(--accent-fg);
-  border: var(--bw-rule) solid var(--accent);
 }
 
 /* ── the panel ────────────────────────────────────────────────────────── */
@@ -154,7 +173,16 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 
-  padding-block: calc(var(--sp-15) + env(safe-area-inset-top, 0px)) var(--fab-clear);
+  /* En haut, la place de la pilule de fermeture : ses 8px de retrait, ses 44px
+     et 20px d'air sous elle. En bas, la marge d'écran et rien d'autre, la
+     réserve de 82px qu'imposait la pastille (`--fab-clear`) est partie avec
+     elle. Le panneau y gagne 32px nets de hauteur utile, et c'est la figure
+     qui les prend : sur un iPhone SE (375×667) la scène passe de 122,7px à
+     ~155px, donc bien au-dessus du plancher de 120 sous lequel un trait cesse
+     d'expliquer. */
+  padding-block:
+    calc(var(--sp-4) + var(--hit-min) + var(--sp-10) + env(safe-area-inset-top, 0px))
+    calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
   padding-inline: var(--pad-screen-x);
 }
 
@@ -373,13 +401,16 @@
   color: var(--panel-ink-text);
 }
 
-/* What the pill costs the rest of the app is paid in the files that own the
-   surfaces, not here: --fab-clear in shell.css, scroll-to-top.css and
-   shell-misc.css, and --fab-w dans footer.css plus les quatre feuilles qui
-   ancrent une barre d'action au sol de la fenêtre (session, plan-view,
-   plan-weeks, calc-tests). La barre d'encre du pied de page ne paie QUE la
-   réserve latérale : hors de la colonne de la pastille, une rangée est à
-   l'abri quelle que soit la position de défilement, et la réserve basse n'y
-   ajoutait que de l'encre vide. A grouped rule in this file would lose the
-   cascade to three of them, which are imported later and re-state the whole
-   `padding` shorthand. */
+/* Et cette feuille ne coûte plus rien aux autres. C'est ici que se tenait
+   l'inventaire de ce que la pastille faisait payer ailleurs, --fab-clear dans
+   shell.css, scroll-to-top.css et shell-misc.css, --fab-w dans footer.css et
+   les quatre feuilles qui ancrent une barre d'action au sol de la fenêtre
+   (session, plan-view, plan-weeks, calc-tests), plus le duo de home.css et
+   l'ordre de zone-figures.css. Les huit règles ont été retirées le
+   13 septembre 2026 en même temps que le geste qui les justifiait, et les deux
+   jetons ont quitté spacing.css : plus aucune feuille n'a à connaître ce
+   fichier.
+
+   La règle générale qu'on en retire, et qui vaut pour le prochain objet
+   flottant : un élément fixe ne coûte pas sa propre surface, il coûte une
+   exception par surface qu'il croise. Ici c'était huit, pour un bouton. */
