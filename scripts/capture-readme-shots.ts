@@ -1,126 +1,103 @@
 /**
  * USAGE:
- *   bun run scripts/capture-readme-shots.ts              # English, from zoned.run
- *   ZONED_LOCALE=fr bun run scripts/capture-readme-shots.ts
- *   ZONED_BASE_URL=http://localhost:4173 bun run scripts/capture-readme-shots.ts
+ *   bun run capture:readme                                   # anglais, depuis le serveur local
+ *   ZONED_LOCALE=fr bun run capture:readme
+ *   ZONED_BASE_URL=https://zoned.run bun run capture:readme
  *
- * Refreshes the screenshots in assets/ referenced by README.md. Captures clean
- * desktop renderings in light or dark mode as needed.
+ * Refait les captures de `assets/` que le README montre : des rendus bureau
+ * propres, en clair ou en sombre selon la vue.
  *
- * English by default: README.md is written in English, so French screenshots
- * made the two disagree. File names carry the locale, so switching it produces
- * a distinct set rather than silently overwriting the other language.
+ * Anglais par défaut : le README est écrit en anglais, des captures françaises
+ * faisaient dire deux choses à la même page. Le nom de fichier porte la langue,
+ * donc changer de langue produit un jeu distinct au lieu d'écraser l'autre.
  *
- * Output (overwrites), with <l> = locale:
- *   assets/home_<l>_light.png            (landing viewport)
- *   assets/home_<l>_dark.png             (landing viewport, dark)
- *   assets/library_<l>_light.png         (library viewport)
- *   assets/workout_<l>_light.png         (one canonical workout detail)
- *   assets/plan_with_stats_<l>_light.png (plan view)
+ * La cible par défaut est le serveur local (`bun run dev`), pas la production :
+ * une capture doit montrer le dépôt tel qu'il est, pas ce qui est déployé.
+ *
+ * Sortie (écrase), avec <l> = langue :
+ *   assets/home_<l>_light.png            (page d'accueil)
+ *   assets/home_<l>_dark.png             (page d'accueil, sombre)
+ *   assets/library_<l>_light.png         (bibliothèque)
+ *   assets/workout_<l>_light.png         (une séance canonique)
+ *   assets/plan_with_stats_<l>_light.png (plans prêts à l'emploi)
  */
 
 import { mkdirSync } from "fs";
 import { join } from "path";
 import puppeteer from "puppeteer";
+import { dismissOverlays, seedApp, waitForApp, withLang, type Lang, type Theme } from "./lib/capture-prep";
 
 const ROOT = join(import.meta.dirname, "..");
 const OUT = join(ROOT, "assets");
-const BASE = process.env.ZONED_BASE_URL ?? "https://zoned.run";
+const BASE = process.env.ZONED_BASE_URL ?? "http://localhost:5173";
 
 type Shot = {
   file: string;
   url: string;
-  theme: "light" | "dark";
-  fullPage: boolean;
+  theme: Theme;
 };
 
-const LOCALE = process.env.ZONED_LOCALE === "fr" ? "fr" : "en";
-const ACCEPT_LANGUAGE = LOCALE === "fr" ? "fr-FR,fr;q=0.9" : "en-US,en;q=0.9";
+const LOCALE: Lang = process.env.ZONED_LOCALE === "fr" ? "fr" : "en";
 
 const SHOTS: Shot[] = [
-  { file: `home_${LOCALE}_light.png`,           url: "/",                  theme: "light", fullPage: false },
-  { file: `home_${LOCALE}_dark.png`,            url: "/",                  theme: "dark",  fullPage: false },
-  { file: `library_${LOCALE}_light.png`,        url: "/library",           theme: "light", fullPage: false },
-  { file: `workout_${LOCALE}_light.png`,        url: "/workout/VMA-001",   theme: "light", fullPage: false },
-  { file: `plan_with_stats_${LOCALE}_light.png`, url: "/plan/new/prebuilt", theme: "light", fullPage: false },
+  { file: `home_${LOCALE}_light.png`, url: "/", theme: "light" },
+  { file: `home_${LOCALE}_dark.png`, url: "/", theme: "dark" },
+  { file: `library_${LOCALE}_light.png`, url: "/library", theme: "light" },
+  { file: `workout_${LOCALE}_light.png`, url: "/workout/VMA-001", theme: "light" },
+  { file: `plan_with_stats_${LOCALE}_light.png`, url: "/plan/new/prebuilt", theme: "light" },
 ];
 
 const VIEWPORT_W = 1440;
 const VIEWPORT_H = 900;
-
-async function dismissBanners(page: import("puppeteer").Page) {
-  await page.evaluate(() => {
-    const all = Array.from(document.querySelectorAll("div, section, aside"));
-    for (const el of all) {
-      const txt = (el as HTMLElement).innerText || "";
-      if (/Install Zoned|Installer Zoned/.test(txt) && txt.length < 400) {
-        (el as HTMLElement).remove();
-      }
-    }
-  }).catch(() => {});
-}
 
 async function main() {
   mkdirSync(OUT, { recursive: true });
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
   });
+
+  let failed = 0;
 
   for (const shot of SHOTS) {
     const page = await browser.newPage();
-    await page.setExtraHTTPHeaders({ "Accept-Language": ACCEPT_LANGUAGE });
     await page.setViewport({
       width: VIEWPORT_W,
       height: VIEWPORT_H,
       deviceScaleFactor: 2,
     });
+    await seedApp(page, { lang: LOCALE, theme: shot.theme });
 
-    // Force the chosen language + theme before page scripts run.
-    await page.evaluateOnNewDocument(
-      (theme: string, locale: string) => {
-        try {
-          localStorage.setItem("zoned-language", locale);
-          localStorage.setItem("i18nextLng", locale);
-          // Theme is stored under `zoned-theme` by the ThemeProvider.
-          localStorage.setItem("zoned-theme", theme);
-        } catch {}
-      },
-      shot.theme,
-      LOCALE
-    );
+    const target = withLang(BASE, shot.url, LOCALE);
+    process.stdout.write(`→ ${shot.url}  (${shot.theme}) `);
+    try {
+      await page.goto(target, { waitUntil: "networkidle0", timeout: 60_000 });
+      await waitForApp(page);
+      await dismissOverlays(page);
 
-    const target = BASE + shot.url;
-    console.log(`→ ${target}  (${shot.theme})`);
-    await page.goto(target, { waitUntil: "networkidle0", timeout: 45000 });
-    await page.waitForSelector("main", { timeout: 15000 }).catch(() => {});
-    /* La coquille de chargement tient au moins une foulée (src/main.tsx,
-       SHELL_HOLD_MS) puis s'efface en fondu : sans cette attente, une capture
-       calée sur un délai fixe photographie le splash au lieu de l'app. */
-    await page.waitForFunction(() => {
-      const s = document.getElementById("loading-shell");
-      return !s || getComputedStyle(s).visibility === "hidden";
-    }, { timeout: 10_000 }).catch(() => {});
-    await page.evaluateHandle("document.fonts.ready");
-    await dismissBanners(page);
-    await new Promise((r) => setTimeout(r, 800));
-
-    const out = join(OUT, shot.file);
-    await page.screenshot({
-      path: out,
-      type: "png",
-      fullPage: shot.fullPage,
-      clip: shot.fullPage
-        ? undefined
-        : { x: 0, y: 0, width: VIEWPORT_W, height: VIEWPORT_H },
-      omitBackground: false,
-    });
-    console.log(`  ✓ ${shot.file}`);
+      await page.screenshot({
+        path: join(OUT, shot.file),
+        type: "png",
+        clip: { x: 0, y: 0, width: VIEWPORT_W, height: VIEWPORT_H },
+      });
+      console.log(`✓ ${shot.file}`);
+    } catch (err) {
+      failed++;
+      console.log(`✗ ${shot.file}: ${(err as Error).message}`);
+    }
     await page.close();
   }
 
   await browser.close();
+
+  // Une capture manquée laisse en place le fichier de la passe précédente, donc
+  // une passe partiellement ratée mettrait une vieille image dans le README.
+  if (failed) {
+    console.error(`${failed} capture(s) en échec.`);
+    process.exit(1);
+  }
 }
 
 main().catch((err) => {
