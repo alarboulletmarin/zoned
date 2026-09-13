@@ -208,6 +208,12 @@ function App() {
   // mobile (Copier / Partager / Télécharger). On small viewports we surface
   // the toast at the top instead so it never overlaps a button the user just
   // tapped, and dismiss it slightly faster.
+  //
+  // Ou il se pose exactement, c'est `toast.css` qui le dit : il doit franchir
+  // la barre du haut, sauf quand une feuille modale occupe deja l'ecran, et
+  // cette nuance ne se passe pas en props. Le `offset` qui vivait ici ne
+  // servait d'ailleurs a rien : sonner tient DEUX decalages et bascule sur
+  // `mobileOffset` sous 600px, donc sur un telephone il n'etait jamais lu.
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   // Preload main pages in background once the window has loaded and the
@@ -380,7 +386,7 @@ function App() {
               closeButton
               position={isMobile ? "top-center" : "bottom-right"}
               duration={isMobile ? 2500 : 4000}
-              offset={isMobile ? "calc(env(safe-area-inset-top, 0px) + 12px)" : undefined}
+
             />
           </div>
           </BrowserRouter>

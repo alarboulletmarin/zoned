@@ -36,6 +36,23 @@
 .zn-toast-layer {
   position: fixed;
   inset: 0 auto auto 0;
+
+  /* Le z-index est ICI, et pas sur la liste de sonner.
+   *
+   * Une position fixe ouvre un contexte d'empilement, que son z-index soit
+   * nomme ou non : c'est la regle. Le 999999999 que sonner pose sur sa liste
+   * est donc enferme DEDANS, ou il n'a personne a battre ; ce qui se compare
+   * au reste du document, c'est cette couche-ci, et sans z-index elle valait
+   * `auto`, c'est a dire sous tout ce qui en porte un. Sur telephone, ou le
+   * toast s'affiche en haut, il passait derriere la barre du haut (40) :
+   * `elementFromPoint` au centre du toast rendait `HEADER.zn-topbar`.
+   *
+   * 1300 la met au-dessus de tout ce que ce document empile : la couche
+   * ancree (40), les panneaux de porte (50), le lien d'evitement (100) et les
+   * deux surfaces qui doublent les panes de Leaflet (1100, 1200). Rien
+   * au-dessus, sauf la top layer, ou cette couche monte d'elle-meme des qu'un
+   * <dialog> modal s'ouvre, ce qui est tout l'objet du popover ci-dessus. */
+  z-index: 1300;
   inline-size: 0;
   block-size: 0;
   max-inline-size: none;
@@ -46,6 +63,42 @@
   background: none;
   color: inherit;
   overflow: visible;
+}
+
+/* ── ou le toast se pose ──────────────────────────────────────────────── */
+
+/* La regle vit ICI et pas en props, pour deux raisons.
+ *
+ * sonner tient DEUX decalages, `offset` et `mobileOffset`, et bascule sur le
+ * second sous 600px de large, son seuil a lui. Seul le premier etait
+ * renseigne : sur un telephone il n'etait jamais lu, le toast retombait sur
+ * les 16px par defaut, et ni la barre du haut ni l'encoche n'etaient
+ * franchies. Et ce qu'il faut franchir depend de ce qui est a l'ecran, que
+ * des props ne savent pas.
+ *
+ * `!important` est le prix d'entree : sonner ecrit ses decalages en style
+ * INLINE sur sa liste, defaults compris, et une feuille de style ne les
+ * atteint pas autrement.
+ *
+ * En haut, il y a l'encoche PUIS la barre : elle est collante, donc elle tient
+ * ce haut-la pendant tout le defilement, et un toast a 16px du bord passait
+ * dessous. `--topbar-h` est la mesure que le document utilise deja pour qu'une
+ * ancre ou un focus n'atterrissent pas sous elle. */
+@media (max-width: 767px) {
+  [data-sonner-toaster] {
+    --offset-top: calc(env(safe-area-inset-top, 0px) + var(--topbar-h) + 12px) !important;
+    --mobile-offset-top: calc(env(safe-area-inset-top, 0px) + var(--topbar-h) + 12px) !important;
+  }
+}
+
+/* Sauf quand une feuille modale occupe l'ecran : la barre n'y est plus, c'est
+   la feuille qui tient le haut, et lui prendre `--topbar-h` de marge revenait
+   a poser le toast sur son titre et son bouton Fermer. La couche n'est promue
+   en popover QUE par une modale (`native-dialog.tsx`), donc `:popover-open`
+   est exactement la question a poser. */
+.zn-toast-layer:popover-open [data-sonner-toaster] {
+  --offset-top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
+  --mobile-offset-top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
 }
 
 [data-sonner-toaster] {
