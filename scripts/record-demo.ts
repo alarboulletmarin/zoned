@@ -244,8 +244,8 @@ const CARD_LINK = 'a[href^="/workout/"]:not([href*="builder"]):visible';
  */
 const inMain = (selector: string) => `main ${selector}`;
 
-// The library's filters are one right-hand sheet, on desktop as on the phone —
-// the old two-rendering split (hidden drawer + sidebar) is gone with the
+// The library's filters are one right-hand sheet, on desktop as on the phone.
+// The old two-rendering split (hidden drawer + sidebar) is gone with the
 // refonte, and so is the "Appliquer" button: the footer's primary button
 // carries the result count and closes the panel.
 const FILTERS_BUTTON = "button.zn-lib__filters-btn";
