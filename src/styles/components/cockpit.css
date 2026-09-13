@@ -40,6 +40,16 @@
   gap: var(--sp-7);
 }
 
+/* Le micro-label, le titre, la taille et ce qu'elle demande ne font qu'UNE
+   phrase : ils se serrent à `--sp-4` pendant que la section respire à
+   `--sp-7`. C'est cet écart-là qui fait la hiérarchie, pas les corps de texte
+   pris isolément. */
+.zn-cockpit__answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
 /* La réponse est le titre de l'écran, donc elle prend la taille d'un titre.
    La mesure la garde lisible : un nom de séance long ne doit pas courir sur
    toute la largeur d'un écran de bureau. */
@@ -47,14 +57,58 @@
   max-inline-size: 24ch;
 }
 
-.zn-cockpit__facts {
+/* Le COMBIEN, sur sa propre ligne et avant le numéro de semaine.
+   `semaine 1` passait devant `93 min` : la durée est l'information qui décide
+   de sortir ou pas, le numéro de semaine est un repère qu'on vérifie du coin
+   de l'oeil. L'ordre disait l'inverse.
+
+   Un cran au-dessus du corps, en chiffres tabulaires : c'est un nombre qu'on
+   lit d'un coup, pas une phrase. */
+.zn-cockpit__size {
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* Le COMMENT, ce que la séance demande avant qu'on l'ouvre.
+   Deux moitiés qui n'arrivent pas ensemble : l'allure est déjà sur la séance
+   du plan, le corps de séance attend le chunk du catalogue. La boîte est donc
+   RÉSERVÉE sur deux lignes, pleine ou vide. Une semaine seule (`weekToPlan`)
+   ne porte aucune allure, la ligne y reste vide jusqu'au chargement : ordonner
+   le synchrone en premier ne suffirait pas, seule la réserve empêche le bouton
+   de sauter sous le doigt. */
+.zn-cockpit__how {
+  font: var(--type-body-sm);
   color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+/* La réserve ne vaut que tant que quelque chose peut encore arriver dans la
+   ligne. Une fois la séance close, ou un jour de repos, rien n'est plus
+   asynchrone et deux lignes de vide ne seraient qu'un trou. */
+.zn-cockpit__how[data-hold] {
+  min-block-size: calc(2 * var(--lh-body-sm) * var(--fs-body-sm));
 }
 
 /* La lecture de localStorage est synchrone : l'attente est d'une frame. On
-   réserve quand même la place, le budget Lighthouse bloquant à CLS 0. */
+   réserve quand même la place, le budget Lighthouse bloquant à CLS 0.
+
+   Remesuré : la réponse a gagné le micro-label, la durée et la ligne
+   d'exécution, la bande a gagné la valeur du jour, et les deux sorties sont
+   remontées DANS la réponse. 292 px ne couvraient plus rien.
+
+   La valeur est celle d'un jour de séance, l'état pour lequel cet écran est
+   fait. Mesurée au navigateur, pas calculée : 544 px au-dessus de 640, et 516
+   à 606 en dessous selon la largeur, les plus étroits repliant une ligne de
+   plus sur la position dans le plan. Toute retouche aux écarts de
+   `.zn-cockpit__answer`, au plancher de `.zn-cockpit__day` ou à la réserve de
+   `.zn-cockpit__how` invalide ces deux nombres. */
 .zn-cockpit__hold {
-  min-block-size: 292px;
+  min-block-size: 544px;
 }
 
 /* ── La bande des sept jours ────────────────────────────────────────────────
@@ -80,12 +134,15 @@
    tomber la séance de n'importe quel jour à un seul tap. Un jour de repos est
    un `span`, il n'y a rien à ouvrir, et un lien qui ne mène nulle part est un
    faux affordance. */
+/* 52 px couvraient la lettre et la barre. Le jour courant porte en plus sa
+   valeur : sans plancher, la bande changeait de hauteur selon que le jour le
+   plus long est aujourd'hui ou non. */
 .zn-cockpit__day {
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
   gap: var(--sp-4);
-  min-block-size: 52px;
+  min-block-size: var(--sp-19);
   justify-content: flex-start;
   border-radius: var(--r-xs);
   text-decoration: none;
@@ -93,8 +150,15 @@
 }
 
 /* Au survol, c'est la barre qui répond, pas un fond de cellule, qui
-   transformerait la bande en rangée de boutons. */
-a.zn-cockpit__day:hover .zn-cockpit__day-bar {
+   transformerait la bande en rangée de boutons. Et elle répond DANS SA FORME :
+   repeindre un contour ou une hachure en aplat ferait dire au survol qu'une
+   séance prévue est faite. */
+a.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="planned"] {
+  border-color: var(--ink-2);
+}
+
+a.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="completed"],
+a.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="modified"] {
   background: var(--ink-2);
 }
 
@@ -106,41 +170,132 @@ a.zn-cockpit__day:active {
   transform: translateY(var(--press-shift));
 }
 
+/* Le filet sous la lettre est posé sur les SEPT jours, transparent par
+   défaut : seule sa couleur change pour le jour courant. Le poser sur le seul
+   jour courant l'aurait fait plus haut que ses six voisins, et `align-items:
+   end` aurait décalé sa lettre d'une ligne. */
 .zn-cockpit__day-letter {
   font: var(--type-mono);
   color: var(--text-faint);
+  padding-block-end: var(--sp-2);
+  border-block-end: 2px solid transparent;
 }
 
 /* Le jour courant se marque à l'ENCRE, jamais au vermillon : le bouton est le
-   seul aplat d'accent de l'écran, et un second le neutraliserait. */
+   seul aplat d'accent de l'écran, et un second le neutraliserait.
+
+   Il se marque sur la LETTRE, plus jamais sur la barre : la barre porte
+   désormais le statut, et un plein d'encre pour aujourd'hui s'y confondrait
+   avec le plein d'encre pour fait. Deux choses, deux canaux. */
 .zn-cockpit__day[data-today] .zn-cockpit__day-letter {
   color: var(--text-body);
   font-weight: var(--fw-bold);
+  border-block-end-color: var(--ink-1);
 }
 
-/* La barre porte deux canaux à la fois, l'opacité d'encre ET la hauteur,
-   exactement comme --zone-h-N dans zones.css. C'est ce qui garde la bande
-   lisible en niveaux de gris, qui est l'argument du système. */
+/* La valeur du jour courant, et d'elle seule : une échelle de hauteurs sans
+   une seule graduation ne se lit pas. Au corps mono le plus petit, c'est un
+   repère d'axe, pas une seconde annonce. */
+.zn-cockpit__day-value {
+  color: var(--text-muted);
+}
+
+/* La barre porte deux canaux à la fois, la FORME et la hauteur, comme
+   --zone-h-N dans zones.css code l'intensité deux fois. C'est ce qui garde la
+   bande lisible en niveaux de gris, qui est l'argument du système : plein
+   contre creux contre hachuré ne doit rien à la teinte. */
 .zn-cockpit__day-bar {
   inline-size: 100%;
+  /* Une barre, pas une case. Sur bureau la colonne fait 72 px : un contour
+     tiré sur toute sa largeur pour 25 px de haut redevient une boîte vide,
+     c'est-à-dire exactement ce que cette page n'a plus nulle part. Bridée à
+     18 px, la forme se lit comme une barre et le creux comme un creux. */
+  max-inline-size: 18px;
   /* La hauteur arrive en pixels depuis la durée du jour (voir WeekStrip) : un
      pourcentage n'a pas de hauteur de référence sur un enfant flex en colonne
      et retombait au minimum, rendant les sept barres identiques. */
-  block-size: var(--bar-h, 6px);
-  background: var(--zone-2);
+  block-size: var(--bar-h, 8px);
+  box-sizing: border-box;
+  border: var(--bw-rule) solid transparent;
   border-radius: 2px;
 }
 
-.zn-cockpit__day[data-today] .zn-cockpit__day-bar {
+/* Prévu : un contour. Le volume est dessiné, il n'est pas encore rempli. */
+.zn-cockpit__day-bar[data-shape="planned"] {
+  border-color: var(--line-strong);
+}
+
+/* Fait : un plein. C'est arrivé, donc c'est plein. `modified` est une autre
+   façon d'avoir couru, donc pleine aussi, d'un cran plus clair. */
+.zn-cockpit__day-bar[data-shape="completed"] {
   background: var(--ink-1);
+}
+
+.zn-cockpit__day-bar[data-shape="modified"] {
+  background: var(--ink-2);
+}
+
+/* Sautée : la hachure maison à 45 degrés, celle que zones.css pose sur tout
+   bloc non mesuré. Rien de nouveau à apprendre. */
+.zn-cockpit__day-bar[data-shape="skipped"] {
+  border-color: var(--line-divider);
+  background-image: var(--zone-recovery);
+}
+
+/* Repos : un filet, pas une barre écrasée. L'absence de séance est une
+   information, et elle se lit comme un vide dessiné. Il l'emporte sur
+   `--bar-h` par spécificité (0,2,0 contre 0,1,0), pas par ordre de source :
+   il est donc juste ici, avec les trois autres formes, où on les lit
+   ensemble. */
+.zn-cockpit__day-bar[data-shape="rest"] {
+  block-size: 3px;
+  border-color: transparent;
+  background: var(--line-divider);
 }
 
 /* ── L'aperçu de la séance ──────────────────────────────────────────────── */
 
-/* Le profil parle de lui-même : pas de cadre, pas de fond, il s'assoit dans
-   la colonne comme une ligne de plus. */
+/* Le créneau garde sa hauteur, plein ou vide : la barre n'arrive qu'avec le
+   chunk du catalogue, et sans réserve elle poussait de trente-six pixels tout
+   ce qui la suit, bouton compris. */
+.zn-cockpit__profile-slot {
+  min-block-size: 36px;
+}
+
 .zn-cockpit__profile {
   inline-size: 100%;
+}
+
+/* Le profil parle de lui-même : ici, pas de cadre et pas de fond. Il s'assoit
+   dans la colonne comme une ligne de plus, sur un filet, comme tout le reste
+   de cette page qui n'a plus une seule boîte.
+
+   C'est ce qui règle le vide du haut. Un bloc Z2 fait 44 % de la hauteur
+   (`--zone-h-2`), donc seize pixels dans une boîte de trente-six : encadré, on
+   lit une barre vide à 70 %. Sans cadre, on lit des marques posées sur une
+   ligne, et la partie non employée de l'échelle redevient ce qu'elle est, le
+   haut d'un axe. On ne touche PAS aux hauteurs de bloc : c'est l'encodage que
+   les cartes de la bibliothèque et la page de séance partagent, et tout son
+   intérêt est d'être appris une seule fois.
+
+   La bordure reste, seule sa couleur tombe : `box-sizing: border-box` fait que
+   la retirer rendrait trois pixels à la boîte de contenu, et les blocs, qui
+   sont en POURCENTAGE de cette boîte, ne mesureraient plus la même chose ici
+   que sur une carte.
+
+   Le parent est dans le sélecteur, donc 0,2,0 : `zone.css` est importé en 109
+   et `cockpit.css` en 48, à égale spécificité c'est lui qui tranche. Pas de
+   `!important`, pas de réordonnancement d'imports. */
+.zn-cockpit .zn-cockpit__profile {
+  background: none;
+  border-color: transparent;
+  /* Le bas reste, et il reste à l'ENCRE : les blocs sont ouverts en bas
+     (`zone.css` leur retire cette arête-là), ils ont donc besoin d'un sol sur
+     quoi se poser. Un filet pâle les laissait flotter, ce qui était pire que
+     le cadre. C'est un axe, et l'espace au-dessus redevient ce qu'il est, le
+     haut d'une échelle. */
+  border-block-end-color: var(--line-strong);
+  border-radius: 0;
 }
 
 /* Le plan auquel la séance appartient. UN LIBELLÉ, pas une phrase.
@@ -172,10 +327,15 @@ a.zn-cockpit__day:active {
   flex: none;
 }
 
+/* La valeur est passée du corps de texte au mono : elle ne dit plus une
+   phrase mais une POSITION, semaine 3 / 12 · J-64 · Marathon de Nice, et des
+   chiffres tabulaires se comparent d'un coup d'oeil. Elle descend aussi d'un
+   ton : elle vient après la durée, plus avant. */
 .zn-cockpit__plan-name {
   min-inline-size: 0;
-  font: var(--fw-medium) var(--fs-body-sm) / 1.4 var(--font-text);
-  color: var(--text-body);
+  font: var(--type-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
   /* Souligné à l'encre de filet : il faut qu'on voie que c'est un chemin sans
      que le trait pèse autant que le mot. */
   text-decoration: underline;
@@ -199,38 +359,85 @@ a.zn-cockpit__day:active {
   }
 }
 
-/* Un jour de repos est un filet, pas une barre écrasée : l'absence de séance
-   est une information, et elle se lit comme un vide dessiné. */
-.zn-cockpit__day-bar[data-rest] {
-  block-size: 3px;
-  background: var(--line-divider);
-}
 
 /* ── Les deux sorties ───────────────────────────────────────────────────── */
 
 /* Des liens, pas des cartes : ce sont des sorties, pas des actions primaires.
-   Deux cartes ici coûtaient 300 px et deux boîtes de plus à balayer. */
+   Deux cartes ici coûtaient 300 px et deux boîtes de plus à balayer.
+
+   Elles sont remontées sous le bouton : elles arrivaient après la figure, donc
+   après un grand vide, alors que ce sont les deux secondes réponses de
+   l'écran. Empilées et non séparées par un point médian : deux lignes, deux
+   registres, et 44 px de cible gratuits sans une règle de plus. */
 .zn-cockpit__exits {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
   font: var(--type-body);
   color: var(--text-muted);
-  padding-block-start: calc(var(--gap-section) / 2);
+  padding-block-start: var(--sp-4);
 }
 
-.zn-cockpit__exits a {
+/* Les deux registres se distinguent par la MARQUE, pas par le poids. Le
+   tirage porte une flèche et pas de souligné : c'est un geste, il emmène
+   ailleurs. Ma semaine porte un souligné et pas de flèche : c'est un lieu.
+   Au même poids typographique, on ne savait pas lequel des deux allait faire
+   quelque chose au plan en cours. Aucun des deux ne le fait, et c'est
+   justement ce que la forme doit dire.
+
+   Le tirage n'écrit RIEN : /library/draw ne touche ni le plan ni
+   localStorage, il tire dans la bibliothèque et navigue. Il n'y a donc pas
+   d'annulation à prévoir, seulement une affordance à rendre lisible. */
+.zn-cockpit__exit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
   color: var(--text-body);
   text-underline-offset: 3px;
+  padding-block: var(--sp-3);
 }
 
-.zn-cockpit__exits a:hover {
+.zn-cockpit__exit {
+  text-decoration: underline;
+  text-decoration-color: var(--line-divider);
+}
+
+.zn-cockpit__exit[data-role="move"] {
+  text-decoration: none;
+}
+
+.zn-cockpit__exit > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  /* La flèche suit le texte au survol, sans se déplacer : rien ne bouge sur
+     cette page, la couleur suffit à dire que c'est vivant. */
+  color: var(--text-faint);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cockpit__exit:hover {
   color: var(--accent);
+}
+
+.zn-cockpit__exit:hover > svg {
+  color: currentColor;
 }
 
 /* Le lien doit rester atteignable au doigt même en ligne de texte. */
 @media (pointer: coarse) {
-  .zn-cockpit__exits a {
-    display: inline-block;
+  .zn-cockpit__exit {
     padding-block: var(--sp-4);
   }
+}
+
+/* Le bouton est déjà à la largeur de son libellé, `inline-flex` le veut ainsi :
+   ce qui le rendait massif était sa hauteur, et il descend de `lg` (52 px) à
+   la taille normale (44 px), ce qui le met au niveau de la clôture à côté de
+   lui. Le plafond n'est qu'une sécurité pour un libellé long en anglais. */
+.zn-cockpit__cta {
+  max-inline-size: 280px;
 }
 
 /* ── La figure ──────────────────────────────────────────────────────────── */
@@ -238,9 +445,14 @@ a.zn-cockpit__day:active {
 /* La figure de la porte est un PORTRAIT : dimensionnée par la largeur, la
    seule façon correcte, le viewBox donnant le ratio, 260 px de large en
    faisaient 450 de haut, soit un écran de téléphone pour un dessin de
-   clôture. */
+   clôture.
+
+   Elle a encore maigri d'un quart, 170 px à 128 et 130 à 98 : à sa taille
+   d'avant elle occupait le tiers bas de l'écran, c'est-à-dire la zone du pouce
+   la plus atteignable, dépensée en décoration juste sous l'appel primaire, et
+   la place lui venait de ce qui manquait au-dessus. */
 .zn-cockpit__art {
-  --slot-w: 170px;
+  --slot-w: 128px;
   align-self: flex-start;
 }
 
@@ -253,10 +465,10 @@ a.zn-cockpit__day:active {
   }
 
   .zn-cockpit__art {
-    --slot-w: 130px;
+    --slot-w: 98px;
   }
 
   .zn-cockpit__hold {
-    min-block-size: 320px;
+    min-block-size: 560px;
   }
 }
