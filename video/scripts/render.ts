@@ -23,44 +23,67 @@ const LANGS = ["fr", "en"] as const;
 type Lang = (typeof LANGS)[number];
 
 /**
- * Screens the compositions reference, per language. A missing one fails the
- * render late and cryptically.
+ * The screens each film puts on the wall, per composition. A missing one fails
+ * the render late and cryptically.
  *
- * This list is the `shot` ids in src/compositions/FeatureDemo.tsx plus the
- * library shot the Overview uses. It had drifted twice: `about` was referenced
- * by Feature-Liberte and missing here, while `compare` was still listed after
- * the competitor act was cut. Both directions are bad — one lets a render fail
- * halfway, the other blocks a render on a file nothing reads.
+ * The ids are the `shot` values in src/compositions/FeatureDemo.tsx, plus the
+ * library shot the Overview uses. The list had drifted twice while it was one
+ * flat array: `about` was referenced by Feature-Liberte and missing here, while
+ * `compare` was still listed after the competitor act was cut. Both directions
+ * are bad — one lets a render fail halfway, the other blocks a render on a file
+ * nothing reads.
+ *
+ * Keyed by film, it also stops a subset render from demanding the whole set:
+ * rendering the three films the README carries no longer waits on a capture of
+ * the route generator, which needs a live routing service to say anything.
+ *
+ * `routes` has no phone entry on purpose: the page renders blank in the phone
+ * viewport, so its film uses the browser frame in both cuts.
  */
-const REQUIRED_SHOTS = [
-  "about-desktop.png",
-  "about-mobile.png",
-  "adjust-desktop.png",
-  "adjust-mobile.png",
-  "library-desktop.png",
-  "library-mobile.png",
-  "methodology-desktop.png",
-  "methodology-mobile.png",
-  "plans-desktop.png",
-  "plans-mobile.png",
-  "racesim-desktop.png",
-  "racesim-mobile.png",
-  // Routes renders blank in the phone viewport, so its film uses the browser
-  // frame in both cuts and there is no mobile capture to require.
-  "routes-desktop.png",
-  "science-desktop.png",
-  "science-mobile.png",
-  "zones-desktop.png",
-  "zones-mobile.png",
-];
+const FILM_SHOTS: Record<string, string[]> = {
+  Teaser: [],
+  Spot: [],
+  Overview: ["library"],
+  "Feature-Liberte": ["about"],
+  "Feature-Adapt": ["adjust"],
+  "Feature-Library": ["library"],
+  "Feature-Polarise": ["methodology"],
+  "Feature-Plans": ["plans"],
+  "Feature-Racesim": ["racesim"],
+  "Feature-Routes": ["routes"],
+  "Feature-Science": ["science"],
+  "Feature-Zones": ["zones"],
+};
 
-/** Only the languages actually being rendered need their captures on disk. */
-function assertShots(langs: Lang[]) {
-  const missing = langs.flatMap((lang) =>
-    REQUIRED_SHOTS.map((f) => `${lang}/${f}`).filter((f) => !existsSync(join(SHOTS, f))),
-  );
-  if (!missing.length) return;
-  console.error("Missing screenshots:\n  " + missing.join("\n  "));
+const DEVICES: Record<string, string[]> = { routes: ["desktop"] };
+
+/** `Feature-Science-Story-EN` → `Feature-Science`. */
+const filmOf = (id: string) => id.replace(/-(Wide|Story)-(FR|EN)$/, "");
+
+/**
+ * Only the captures the selected films actually read, in the languages they
+ * are being rendered in.
+ */
+function assertShots(targets: string[]) {
+  const missing = targets.flatMap((id) => {
+    const film = filmOf(id);
+    const shots = FILM_SHOTS[film];
+    if (!shots) {
+      console.error(`Unknown film "${film}" — add it to FILM_SHOTS in this script.`);
+      process.exit(1);
+    }
+    return shots.flatMap((shot) =>
+      (DEVICES[shot] ?? ["desktop", "mobile"])
+        .map((device) => `${langOf(id)}/${shot}-${device}.png`)
+        .filter((f) => !existsSync(join(SHOTS, f))),
+    );
+  });
+
+  const unique = [...new Set(missing)];
+  if (!unique.length) return;
+
+  const langs = [...new Set(targets.map(langOf))];
+  console.error("Missing screenshots:\n  " + unique.join("\n  "));
   console.error(
     `\nRun \`bun run shots --lang ${langs.length > 1 ? "all" : langs[0]}\` first (captures from zoned.run).`,
   );
@@ -135,9 +158,9 @@ function main() {
     process.exit(1);
   }
 
-  // Checked after the selection, so rendering only the French films does not
-  // require the English captures to exist.
-  assertShots([...new Set(targets.map(langOf))]);
+  // Checked after the selection, so a render asks only for the captures the
+  // films it is about to make actually read — in the languages it makes them.
+  assertShots(targets);
 
   console.log(`Rendering ${targets.length} composition(s)\n`);
 

@@ -97,6 +97,28 @@ async function clickByText(page: Page, pattern: RegExp, settleMs = 2500) {
 }
 
 /**
+ * Clicks the menu entry whose label matches, with the mouse.
+ *
+ * Menu items sit in a portal and answer to pointer events like their trigger,
+ * so this reads the item's box and clicks its middle rather than calling
+ * `.click()` on the node.
+ */
+async function clickMenuItem(page: Page, pattern: RegExp) {
+  const box = await page.evaluate((source: string) => {
+    const re = new RegExp(source);
+    const item = Array.from(document.querySelectorAll('[role="menuitem"]')).find((n) =>
+      re.test((n as HTMLElement).innerText?.trim() ?? ""),
+    );
+    if (!item) return null;
+    const r = item.getBoundingClientRect();
+    return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+  }, pattern.source);
+
+  if (!box) throw new Error(`no menu item matching ${pattern}`);
+  await page.mouse.click(box.x, box.y);
+}
+
+/**
  * Every label a surface is driven by, in both languages.
  *
  * These are the app's own strings, not guesses — `library.categories`,
@@ -107,6 +129,7 @@ async function clickByText(page: Page, pattern: RegExp, settleMs = 2500) {
  * one, which is the good failure mode, but it still costs a run.
  */
 const VMA_FILTER = /^(VMA|VO2max)$/;
+const FILTERS = /^(Filtres|Filters)$/;
 const WHY_IT_WORKS = /^(Pourquoi ça marche|Why it works)$/i;
 const ADJUST = /^(Ajuster|Adjust)$/;
 const GENERATE_RACE_PLAN = /Générer mon plan|Generate my race plan/;
@@ -124,7 +147,17 @@ const SURFACES: Surface[] = [
     id: "library",
     url: "/library",
     prepare: async (page) => {
-      await clickByText(page, VMA_FILTER, 1400);
+      // The category chips left the page for a right-hand sheet, so the filter
+      // is now three gestures: open the panel, pick the category, close it on
+      // the footer button that carries the new count.
+      await clickByText(page, FILTERS, 900);
+      await clickByText(page, VMA_FILTER, 900);
+      await page.evaluate(() => {
+        const footer = document.querySelector('[data-slot="sheet-footer"]');
+        const buttons = footer?.querySelectorAll("button");
+        (buttons?.[buttons.length - 1] as HTMLButtonElement | undefined)?.click();
+      });
+      await new Promise((r) => setTimeout(r, 900));
       await page.evaluate(() => window.scrollTo({ top: 430 }));
       await new Promise((r) => setTimeout(r, 700));
     },
@@ -200,14 +233,47 @@ const SURFACES: Surface[] = [
   { id: "methodology", url: "/methodology" },
   { id: "about", url: "/about" },
   {
+    // "Ajuster" no longer opens a panel in place: it left the page's action row
+    // for the overflow menu, and it now NAVIGATES to the builder with the
+    // catalogue session loaded. So the shot is of the builder, which is also
+    // the honest frame — it is where the adjusting actually happens.
     id: "adjust",
     url: "/workout/VMA-001",
-    prepare: (page) => clickByText(page, ADJUST, 2000),
+    prepare: async (page) => {
+      // A REAL click, not `element.click()`. The menu is a Radix dropdown and
+      // it opens on `pointerdown`; a synthetic click event dispatches no
+      // pointer sequence and the menu never opens — silently, which is how this
+      // read as "Adjust is not in the menu".
+      // Scoped to `main`: the header carries an account menu with the same slot
+      // and it comes first in the document.
+      await page.click('main [data-slot="dropdown-menu-trigger"][aria-label]');
+      await new Promise((r) => setTimeout(r, 700));
+      await clickMenuItem(page, ADJUST);
+      await page.waitForFunction(() => location.pathname.startsWith("/workout/builder"), {
+        timeout: 15_000,
+      });
+      await new Promise((r) => setTimeout(r, 2000));
+    },
   },
 ];
 
-/** Page hints are sonner toasts gated on localStorage — pre-seed them as seen. */
-const HINT_KEYS = ["library", "draw", "workout-builder", "plan-calendar"];
+/**
+ * The surfaces a first visit opens and a capture has no business showing. They
+ * are all gated on one localStorage key, so seeding them is the same as
+ * photographing the app of a regular rather than of a first day.
+ *
+ * The page-hint toasts these replace (`zoned-hint-*-seen`) no longer exist:
+ * the refonte removed them, and seeding keys nothing reads is how a capture
+ * script quietly stops protecting anything.
+ *
+ * `zoned-pwa-install-dismissed` holds a timestamp read against a 30-day window
+ * (src/hooks/usePWA.ts), so it is filled at capture time, not with "true".
+ */
+const dismissalSeed = (): Record<string, string> => ({
+  "zoned-pwa-install-dismissed": String(Date.now()),
+  "zoned-storage-warning-seen": "true",
+  "zoned-zone-cta-dismissed": "true",
+});
 
 const VIEWPORTS = {
   desktop: { width: 1440, height: 900, deviceScaleFactor: 2, mobile: false },
@@ -295,18 +361,20 @@ async function captureLang(
         await page.setGeolocation(surface.geolocation);
       }
       await page.evaluateOnNewDocument(
-        (locale: string, hints: string[]) => {
+        (locale: string, dismissals: Record<string, string>) => {
           try {
             localStorage.setItem("zoned-language", locale);
             localStorage.setItem("i18nextLng", locale);
             localStorage.setItem("zoned-theme", "light");
-            for (const hint of hints) localStorage.setItem(`zoned-hint-${hint}-seen`, "true");
+            for (const [key, value] of Object.entries(dismissals)) {
+              localStorage.setItem(key, value);
+            }
           } catch {
             /* private mode — the app falls back to its defaults */
           }
         },
         lang,
-        HINT_KEYS,
+        dismissalSeed(),
       );
 
       const file = `${surface.id}-${kind}.png`;

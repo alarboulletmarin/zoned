@@ -7,10 +7,14 @@ import { useBreath, useTriangle } from "../motion";
 /**
  * The paper every shot is printed on.
  *
- * Flat light ground, Space Grotesk, and three orange washes that drift on
- * different periods so the background is never twice the same frame. That
- * ambient movement is doing real work: a static ground under moving content is
- * what made the first cut read as a slide deck.
+ * Paper, Space Grotesk, and three washes that drift on different periods so
+ * the background is never twice the same frame. That ambient movement is doing
+ * real work: a static ground under moving content is what made the first cut
+ * read as a slide deck.
+ *
+ * The washes are vermillon and ink now, not orange and violet, and they sit at
+ * alphas low enough that no frame is ever anything but paper. A wash you can
+ * name a colour for is already too strong for this ground.
  *
  * It is also where the language enters the tree. Every film wraps itself in a
  * Stage, so publishing `lang` here means no other component has to be handed it
@@ -49,9 +53,9 @@ export const Stage: React.FC<{ children: ReactNode; lang: Lang; style?: CSSPrope
         <AbsoluteFill
           style={{
             backgroundImage: [
-              `radial-gradient(circle at ${18 + ax}% ${12 + ay}%, rgba(249,115,22,${0.1 + pulse}), transparent 46%)`,
-              `radial-gradient(circle at ${84 + bx}% ${88 + by}%, rgba(249,115,22,0.07), transparent 52%)`,
-              `radial-gradient(circle at ${52 + cx}% ${46 - ay}%, rgba(124,58,237,0.045), transparent 44%)`,
+              `radial-gradient(circle at ${18 + ax}% ${12 + ay}%, rgba(${COLORS.washAccent},${0.06 + pulse}), transparent 46%)`,
+              `radial-gradient(circle at ${84 + bx}% ${88 + by}%, rgba(${COLORS.washAccent},0.04), transparent 52%)`,
+              `radial-gradient(circle at ${52 + cx}% ${46 - ay}%, rgba(${COLORS.washInk},0.05), transparent 44%)`,
             ].join(","),
           }}
         />

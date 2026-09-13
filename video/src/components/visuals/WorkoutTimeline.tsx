@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { COLORS, useLayout, zoneHex, zoneNumberOf } from "../../theme";
+import { COLORS, RADIUS, STROKE, useLayout, zoneHex, zoneNumberOf } from "../../theme";
 import { useCopy } from "../../copy";
 import { CURVE, useBreath, useRamp, useTriangle } from "../../motion";
 import { WORKOUT } from "../../data/facts";
@@ -45,6 +45,10 @@ const heightPercent = (zone: number | null) => (zone === null ? 40 : 30 + (zone 
  * ribbon breathes and drifts instead, which reads as a document rather than a
  * transport control.
  */
+/** `--zone-recovery` in the app: a faint 45° rule, never a zone tint. */
+const RECOVERY_HATCH =
+  `repeating-linear-gradient(45deg, ${COLORS.muted} 0 1.5px, transparent 1.5px 6px)`;
+
 export const WorkoutTimeline: React.FC<{
   at?: number;
   dur?: number;
@@ -83,9 +87,14 @@ export const WorkoutTimeline: React.FC<{
       <div
         style={{
           position: "relative",
-          borderRadius: 14,
+          borderRadius: RADIUS.xl,
           overflow: "hidden",
-          background: `color-mix(in srgb, ${COLORS.border} 55%, transparent)`,
+          // The track is a card, not a tint. On the old six-hue ramp any block
+          // stood out against a grey wash; on the ink ramp a Z1 block IS a grey
+          // wash, and the first two seconds of the sweep came out invisible —
+          // `qa:motion` read them as a frozen shot, which they were, to the eye.
+          background: COLORS.panel,
+          border: `${STROKE.rule}px solid ${COLORS.line}`,
           // A session reads as a ribbon, so the block stays wider than it is
           // tall — given free rein on a 9:16 canvas it turns into a barcode.
           ...(fill
@@ -122,8 +131,15 @@ export const WorkoutTimeline: React.FC<{
                   height: `${heightPercent(zone)}%`,
                   marginLeft: i > 0 ? 2 : undefined,
                   borderRadius: "4px 4px 0 0",
-                  background: zone === null ? COLORS.muted : zoneHex(seg.zone),
-                  opacity: seg.role === "recovery" ? 0.7 : 1,
+                  // Recovery is hatched rather than faded, the app's own
+                  // encoding (`--zone-recovery`): a recovery block is not a
+                  // weaker effort on the ramp, it is off the ramp.
+                  background:
+                    seg.role === "recovery"
+                      ? RECOVERY_HATCH
+                      : zone === null
+                        ? COLORS.muted
+                        : zoneHex(seg.zone),
                 }}
               />
             );

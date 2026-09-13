@@ -19,7 +19,7 @@
  * missing twin here is a French string on an English screen.
  */
 
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
+import { copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { readSiteStats } from "../../scripts/site-stats.ts";
 import { generatePlan } from "../../src/lib/planGenerator/index.ts";
@@ -36,6 +36,8 @@ import type { AssistedPlanConfig } from "../../src/types/plan.ts";
 const ROOT = join(import.meta.dirname, "..", "..");
 const OUT_DIR = join(import.meta.dirname, "..", "src", "data");
 const OUT_FILE = join(OUT_DIR, "facts.json");
+const FONTS_SRC = join(ROOT, "public", "fonts");
+const FONTS_OUT = join(import.meta.dirname, "..", "public", "fonts");
 
 /* -- Catalogue counters --------------------------------------------------- */
 
@@ -459,6 +461,18 @@ const facts = {
 mkdirSync(OUT_DIR, { recursive: true });
 writeFileSync(OUT_FILE, `${JSON.stringify(facts, null, 2)}\n`, "utf-8");
 
+/**
+ * Les trois fontes de l'app, recopiées pour que `src/fonts.ts` les serve depuis
+ * le paquet. Elles ne sont pas versionnées ici (voir .gitignore) : une police
+ * dupliquée dans deux paquets est une police qui finit par diverger, donc elle
+ * se resynchronise comme les chiffres, à chaque `bun run sync`.
+ */
+const FONT_FILES = readdirSync(FONTS_SRC).filter((f) => f.endsWith(".woff2"));
+mkdirSync(FONTS_OUT, { recursive: true });
+for (const file of FONT_FILES) {
+  copyFileSync(join(FONTS_SRC, file), join(FONTS_OUT, file));
+}
+
 console.log(
   [
     `facts.json`,
@@ -473,5 +487,6 @@ console.log(
     `  ajuster   : ${adjust.defaultReps} reps ${adjust.defaultMin} min → ${adjust.adjustedReps} reps ${adjust.adjustedMin} min`,
     `  science   : ${science.authors} auteurs · ${science.references} références (${science.withLink} avec lien) · ${science.systems} systèmes`,
     `  course    : ${race.distanceLabel} / ${race.distanceLabelEn} en ${race.targetTime}, ${race.splits.length} splits`,
+    `  fontes    : ${FONT_FILES.length} familles copiées dans public/fonts/`,
   ].join("\n"),
 );

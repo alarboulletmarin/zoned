@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { COLORS, ZONES, useLayout } from "../../theme";
+import { COLORS, RADIUS, STROKE, ZONES, useLayout, zoneInk } from "../../theme";
 import { modelBounds, useCopy } from "../../copy";
 import { useFacts } from "../../data/facts";
 import { useLang } from "../../lang";
@@ -78,15 +78,15 @@ export const PolarModel: React.FC<{
       >
         <Band
           share={easyBand}
-          color={ZONES[1].hex}
+          zone={2}
           label={copy.easy}
           detail={copy.easyRange}
           swell={pulseEasy}
         />
-        <Band share={middleBand} color={ZONES[2].hex} label="" detail="" swell={0} faded />
+        <Band share={middleBand} zone={3} label="" detail="" swell={0} faded />
         <Band
           share={hardBand}
-          color={ZONES[4].hex}
+          zone={5}
           label={copy.hard}
           detail={copy.hardRange}
           swell={pulseHard}
@@ -120,26 +120,31 @@ export const PolarModel: React.FC<{
 
 const Band: React.FC<{
   share: number;
-  color: string;
+  /** Zone number, which picks both the fill and the ink that survives on it. */
+  zone: number;
   label: string;
   detail: string;
   swell: number;
   faded?: boolean;
-}> = ({ share, color, label, detail, swell, faded = false }) => {
+}> = ({ share, zone, label, detail, swell, faded = false }) => {
   const l = useLayout();
+  const fill = ZONES.find((z) => z.n === zone)?.hex ?? COLORS.faint;
   return (
     <div
       style={{
         width: `${share}%`,
-        borderRadius: 12,
-        background: color,
+        borderRadius: RADIUS.lg,
+        background: fill,
+        // The outline is not decoration here: the easy band is a pale grey and
+        // would dissolve into the paper without it.
+        border: `${STROKE.rule}px solid ${COLORS.line}`,
         opacity: faded ? 0.18 : 1,
         transform: `scaleY(${1 + swell})`,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         padding: `0 ${l.story ? 22 : 20}px`,
-        color: "#ffffff",
+        color: zoneInk(zone),
         overflow: "hidden",
       }}
     >
@@ -180,7 +185,10 @@ const Figure: React.FC<{
         flex: 1,
         opacity: Math.min(1, k * 2),
         transform: `translateY(${(1 - k) * 20}px)`,
-        borderTop: `2px solid ${color}`,
+        // The rule carries the zone, the number does not: a figure printed in
+        // a pale grey is a figure nobody reads. Same division as the app, where
+        // fills are the ramp and type is ink.
+        borderTop: `${STROKE.heavy}px solid ${color}`,
         paddingTop: l.story ? 18 : 16,
       }}
     >
@@ -189,7 +197,7 @@ const Figure: React.FC<{
           fontSize: l.story ? 72 : 64,
           fontWeight: 700,
           letterSpacing: "-0.045em",
-          color,
+          color: COLORS.fg,
           lineHeight: 1,
           fontVariantNumeric: "tabular-nums",
         }}

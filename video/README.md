@@ -16,13 +16,18 @@ Vercel de l'application.
 ```bash
 cd video
 bun install
-bun run sync              # chiffres réels depuis les données de l'app → src/data/facts.json
-bun run shots --lang all  # captures FR et EN depuis zoned.run         → public/shots/<lang>/
+bun run sync              # chiffres et fontes de l'app  → src/data/facts.json, public/fonts/
+bun run shots --lang all  # captures FR et EN            → public/shots/<lang>/
 bun run studio            # aperçu interactif avec timeline
 ```
 
 `sync` et `shots` produisent des fichiers **gitignorés** : ils se régénèrent, ils ne se
 versionnent pas. `studio` lance `sync` automatiquement.
+
+`sync` recopie aussi les trois fontes de `../public/fonts`. Les films les servent depuis
+le paquet plutôt que depuis Google : un rendu ne dépend plus du réseau, et surtout, un
+réseau qui coupe ne fait pas échouer le rendu — il le sort dans la police de repli, ce qui
+est le mauvais mode d'échec.
 
 ## Les films
 
@@ -140,8 +145,33 @@ Une langue ou un format seul restreint ; nommer les deux restreint deux fois, do
 le paysage.
 
 Sortie dans `out/<id>.mp4` — H.264, CRF 18, yuv420p. Le script vérifie d'abord que les
-captures nécessaires **de la ou des langues demandées** existent, puis affiche ce que
-`ffprobe` a réellement obtenu.
+captures existent — celles que **les films demandés** lisent, dans **leurs** langues — puis
+affiche ce que `ffprobe` a réellement obtenu. La table `FILM_SHOTS` fait cette
+correspondance ; un film qui n'y figure pas fait échouer le contrôle plutôt que le rendu.
+
+`REMOTION_BROWSER_EXECUTABLE` vise un Chrome déjà présent (image de CI, conteneur) au lieu
+d'en télécharger un second. Non défini, rien ne change.
+
+## Les vignettes du README
+
+```bash
+bun run render Feature-Polarise-Story-EN Feature-Zones-Story-EN Feature-Library-Story-EN
+bun run gifs
+```
+
+Les trois cases « In motion » de `../README.md` sont ces trois films, coupe 9:16, sans leur
+carte de fin, en GIF. En anglais, comme le README.
+
+Elles n'avaient pas de générateur avant, et c'est exactement pour ça qu'elles ont pourri :
+une refonte plus tard, elles montraient encore l'ancien logotype, l'accent orange et les
+six couleurs de zones, sous des titres tirés d'une version de `copy.tsx` qui n'existait
+plus. Rien ne pouvait le signaler, puisque rien ne savait d'où elles venaient.
+
+Le poids est la contrainte, et le fond des films est ce qui coûte : il dérive en
+permanence — voulu, un sol immobile sous du contenu qui bouge se lit comme un diaporama —
+et un dégradé qui dérive est ce qu'un GIF compresse le plus mal. D'où 6 images par seconde,
+300 px, 64 couleurs, et aucun tramage. Le tramage est le piège : il fabrique du bruit là où
+le film est plat, et le bruit ne se compresse pas.
 
 ## D'où viennent les chiffres
 
@@ -150,7 +180,7 @@ en interrogeant les sources de vérité de l'application :
 
 | Donnée à l'écran | Source |
 |---|---|
-| 256 séances · 9 plans · 12 calculateurs | `scripts/site-stats.ts` |
+| Le compte du catalogue (séances, plans, calculateurs) | `scripts/site-stats.ts` |
 | Barres de volume hebdomadaire | `src/lib/planGenerator` — un vrai plan marathon 15 semaines |
 | Chronologie de la séance « 30/30 classique » | `src/data/workouts/vma.json`, arbre `WorkoutStep` aplati |
 | Splits du semi en 1 h 45 | `src/lib/raceSimulator` + `src/lib/splits` |
@@ -161,9 +191,15 @@ en interrogeant les sources de vérité de l'application :
 | Le constat d'audit affiché sur les plans | `auditPlan()` de `src/lib/planGenerator/audit.ts`, lancé sur le plan généré |
 | Bandeau des noms de séances | échantillon à pas fixe sur tous les fichiers de `src/data/workouts` |
 
-Quand le catalogue ou le générateur bougent, `bun run sync` met les films à jour. Les
-couleurs de zone dans `src/theme.ts` recopient `src/styles/themes.css` — le garde-fou
-côté application reste `scripts/qa-zone-colors.ts`.
+Quand le catalogue ou le générateur bougent, `bun run sync` met les films à jour.
+
+`src/theme.ts` recopie la couche de design de l'app, `src/styles/design/` : le papier,
+l'encre et le vermillon de `colors.css`, la rampe d'effort de `zones.css`, les trois
+familles de `fonts.css`, l'encadré et l'ombre dure de `borders.css`. La rampe est de
+l'encre en alpha dans l'app et de l'hexadécimal plat ici, parce qu'un film n'a qu'une
+surface : chaque échelon est composité une fois sur `--paper-page` et écrit en clair, la
+formule est dans l'en-tête du fichier. Le garde-fou côté application reste
+`scripts/qa-zone-colors.ts`.
 
 **Tout ce qui contient des mots est émis deux fois**, le français dans le champ de base et
 l'anglais dans un jumeau `…En`, comme le fait l'app elle-même (`nameEn`, `descriptionEn`,
@@ -185,7 +221,7 @@ retombe sur la clé brute et afficherait `aerobic_base` à l'écran plutôt que 
 
 ## Les captures
 
-`scripts/capture-shots.ts` photographie zoned.run, thème clair, en deux gabarits :
+`scripts/capture-shots.ts` photographie l'app, thème clair, en deux gabarits :
 bureau 1440×900 @2x et téléphone 390×844 @3x. Le film choisit tout seul — cadre navigateur
 en 16:9, cadre téléphone en 9:16 — et lit toujours `public/shots/<lang>/`.
 
@@ -194,8 +230,13 @@ bun run shots                          # français
 bun run shots --lang en                # anglais
 bun run shots --lang all               # les deux, une passe chacune
 bun run shots --lang en library racesim  # seulement ces surfaces
-ZONED_BASE_URL=http://localhost:4173 bun run shots   # depuis un build local
+ZONED_BASE_URL=http://localhost:5173 bun run shots   # depuis le serveur de dev
 ```
+
+Une surface est hors d'atteinte sans réseau sortant : `routes` fait appel à un service de
+calcul d'itinéraire réel, et sa capture expire faute de réponse. Les onze autres se
+photographient contre un serveur local. Comme le contrôle des captures ne demande que ce
+que les films visés lisent, seul `Feature-Routes` s'en trouve bloqué.
 
 **Le dossier par langue n'est pas cosmétique.** Les deux coupes lisent `shots/<lang>/…` :
 sans lui, une passe anglaise écrase les images françaises et les films français reviennent

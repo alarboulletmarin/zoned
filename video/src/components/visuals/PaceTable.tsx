@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { interpolate, useCurrentFrame } from "remotion";
-import { COLORS, useLayout } from "../../theme";
+import { card, COLORS, RADIUS, STROKE, useLayout } from "../../theme";
 import { useCopy } from "../../copy";
 import { decimal, useLang } from "../../lang";
 import { CURVE, useBreath, useSpring } from "../../motion";
@@ -44,10 +44,12 @@ export const PaceTable: React.FC<{
           alignItems: "center",
           gap: l.story ? 24 : 20,
           padding: l.story ? "22px 28px" : "18px 24px",
-          borderRadius: 18,
-          background: COLORS.panel,
-          border: `1px solid ${COLORS.accent}33`,
-          boxShadow: `0 0 ${20 + glow * 26}px ${COLORS.accent}22`,
+          ...card(RADIUS.xl),
+          // The retained frame: 2.5px of accent is the app's own mark for
+          // "this is the one you kept", and it replaces a glow the system has
+          // no room for.
+          border: `${STROKE.heavy}px solid ${COLORS.accent}`,
+          boxShadow: `${6 + glow * 4}px ${6 + glow * 4}px 0 ${COLORS.accent}1f`,
           marginBottom: l.story ? 40 : 32,
           alignSelf: "flex-start",
         }}

@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { interpolate } from "remotion";
-import { COLORS, useLayout } from "../../theme";
+import { card, COLORS, RADIUS, useLayout } from "../../theme";
 import { useCopy } from "../../copy";
 import { CURVE, useBreath, useRamp, useSpring, useTriangle } from "../../motion";
 import { Reveal } from "../Type";
@@ -58,10 +58,7 @@ export const AdjustDial: React.FC<{
           opacity: Math.min(1, enter * 2),
           transform: `translate(${floatX}px, ${(1 - enter) * 26 + floatY}px)`,
           padding: l.story ? "30px 32px" : "26px 30px",
-          borderRadius: 20,
-          background: COLORS.panel,
-          border: `1px solid ${COLORS.border}`,
-          boxShadow: "0 30px 60px -34px rgba(15,23,42,0.28)",
+          ...card(RADIUS.xxl),
         }}
       >
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>

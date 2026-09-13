@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { COLORS, useLayout } from "../../theme";
+import { card, COLORS, RADIUS, useLayout } from "../../theme";
 import { useCopy } from "../../copy";
 import { beat, useBreath, useEnter, useSpring } from "../../motion";
 import { Reveal } from "../Type";
@@ -72,10 +72,7 @@ const Row: React.FC<{ title: string; detail: string; at: number; index: number }
         alignItems: "center",
         gap: l.story ? 22 : 20,
         padding: l.story ? "20px 24px" : "18px 22px",
-        borderRadius: 16,
-        background: COLORS.panel,
-        border: `1px solid ${COLORS.border}`,
-        boxShadow: "0 16px 30px -24px rgba(15,23,42,0.2)",
+        ...card(RADIUS.xl),
       }}
     >
       <div

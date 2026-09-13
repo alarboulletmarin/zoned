@@ -31,12 +31,12 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 
 | | |
 |---|---|
-| **225** running workouts | 12 categories from recovery to VMA |
+| **230** running workouts | 12 categories from recovery to VMA |
 | **17** strength sessions | full body, legs, core, plyometrics, mobility |
 | **10** cycling + **10** swimming sessions | Coggan FTP / CSS zones |
-| **9** training plans | 5K → marathon, with strength periodization |
+| **10** training plans | 5K → marathon, with strength periodization |
 | **12** calculators | zones, paces, VMA, FTP, CSS, age-graded, what-if, race-day |
-| **15** collections · **12** articles · **50+** glossary terms | bilingual FR / EN |
+| **16** collections · **12** articles · **116** glossary terms | bilingual FR / EN |
 
 ---
 
@@ -79,16 +79,16 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 <table>
   <tr>
     <td align="center" width="33%">
-      <img src="assets/polarise.gif" alt="Polarised week distribution" width="240" /><br/>
-      <sub><b>The 80/20 model</b><br/>What a well-dosed week looks like</sub>
+      <img src="assets/polarise.gif" alt="The polarised model — 80 % easy, 20 % hard, almost nothing in the grey middle" width="240" /><br/>
+      <sub><b>80 % easy, 20 % hard</b><br/>The rule Seiler formalised</sub>
     </td>
     <td align="center" width="33%">
-      <img src="assets/zones.gif" alt="Six training zones" width="240" /><br/>
-      <sub><b>Six zones, six adaptations</b><br/>Z1 recovery → Z6 sprint</sub>
+      <img src="assets/zones.gif" alt="One VMA turned into the pace range of each of the six zones" width="240" /><br/>
+      <sub><b>One VMA, six paces</b><br/>Z1 recovery → Z6 sprint</sub>
     </td>
     <td align="center" width="33%">
-      <img src="assets/workouts.gif" alt="Three weekly workouts" width="240" /><br/>
-      <sub><b>Three workouts a week</b><br/>Recovery · VMA · long run</sub>
+      <img src="assets/workouts.gif" alt="A session read block by block: warm-up, main set, cool-down" width="240" /><br/>
+      <sub><b>Written block by block</b><br/>Warm-up · main set · cool-down</sub>
     </td>
   </tr>
 </table>
@@ -98,7 +98,7 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 ## Features
 
 ### Workouts
-- **225 running sessions** across 12 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, trail, assessment
+- **230 running sessions** across 12 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, trail, assessment
 - **10 cycling + 10 swimming sessions** with discipline-aware zones (Coggan FTP, CSS) and cross-discipline substitution in plans
 - **17 strength sessions** for runners: full body, legs, core, plyometrics, mobility, prehab, based on Beattie 2017, Rønnestad 2014, Lauersen 2014
 - **46 exercises** with A/B position images, muscle maps, form cues, and progression/regression chains
@@ -166,7 +166,7 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **12 bilingual articles** on training principles (Seiler, polarized, threshold…)
 - **Nutrition hub**: 14 sections covering the 1:0.8 carb ratio, 1.8 g/kg protein target, AIS-classified supplements, caffeine timing, cramps science, heat acclimation, gut training, female-specific needs, debunked myths. Sources: Witard 2025, Rowlands 2020, Schwellnus, Aragon, Margolis, Paulsen, Trommelen
 - **3 practical guides**: nutrition (with fueling calculator), race prep, warm-up
-- **Methodology** page and **50+ term glossary** across 9 categories
+- **Methodology** page and **116-term glossary** across 9 categories
 - **Comparisons** (`/compare`): criterion-by-criterion against Runna, Kiprun Pacer and Campus Coach: price, account requirement, offline use, data ownership
 - **69 contextual tips** throughout the app
 - **Changelog** page (`/changelog`) with an in-app "what's new" notification after updates
