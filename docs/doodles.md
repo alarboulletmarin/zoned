@@ -631,8 +631,10 @@ partage. Chaque emplacement pose sa figure sur une règle de la page.
 
 **Le héros de l'accueil.** Le duo se tient sur le filet pleine largeur qui
 ferme le héros ; à gauche, la rangée des boutons finit sur la même règle. 460 px
-de large sur bureau, 240 sur téléphone, sous les boutons, pour que la pastille
-MENU ne le recouvre pas au premier écran.
+de large sur bureau, 240 sur téléphone, sous les boutons. Il a été rétréci sous
+240 px un temps, pour passer à côté de la pastille MENU qui flottait au coin
+bas-droit ; celle-ci est en tête de barre depuis le 13 septembre 2026 et ne
+croise plus rien, donc le duo a repris sa taille sur tous les téléphones.
 
 **Les portes sont nues.** Décision du 6 septembre, qui remplace « un dessin par
 porte » : à 64-88 px dans un coin de carte, le trait devenait un pictogramme.

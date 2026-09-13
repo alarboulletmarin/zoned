@@ -2,8 +2,32 @@
  * Mobile menu, the five doors as a full-screen ink panel.
  *
  * Below 1024px the header has no room for the doors, so navigation becomes one
- * floating pill in the bottom-right corner ("where the thumb already is") and a
- * panel that takes the whole screen.
+ * glyph at the START of the header bar, before the wordmark, and a panel that
+ * takes the whole screen.
+ *
+ * Le déclencheur a vécu jusqu'au 13 septembre 2026 en pastille flottante au
+ * coin bas-droit, là où le pouce est déjà. Il en est parti, et la raison
+ * n'est pas le pouce : un objet FIXE traverse toute l'application. Huit
+ * feuilles payaient son encombrement en réserves d'espace, `--fab-clear` en
+ * bas et `--fab-w` sur le côté, et chacune était une exception à écrire, à
+ * mesurer et à maintenir : le pied de page cédait une colonne, les quatre
+ * barres d'action ancrées au sol s'arrêtaient avant lui, le bouton de remontée
+ * se décalait, la planche des zones changeait d'ordre et le duo de l'accueil
+ * rétrécissait. En haut de la barre, il ne recouvre rien, donc plus personne
+ * ne lui doit de place : les huit réserves sont parties avec lui.
+ *
+ * Ce n'est plus un objet à part, c'est un OUTIL DE LA BARRE : il porte
+ * `.zn-topbar__tool`, la même boîte de 44px, le même aplat de papier au
+ * survol et le même appui que la recherche, la langue et le thème. La seule
+ * chose que ce fichier ajoute est sa PLACE, en tête de la barre plutôt que
+ * dans la grappe de droite, parce que c'est la seule convention que tout le
+ * monde connaît déjà sur téléphone.
+ *
+ * Le composant est donc rendu DANS `<TopBar>` et non plus à côté (App.tsx) :
+ * le déclencheur doit être un enfant de la barre pour en être un élément
+ * flex. Le `<dialog>` qui le suit, lui, monte dans la top layer dès
+ * showModal() et ignore le contexte d'empilement de l'en-tête, donc rien
+ * n'est perdu à le descendre là.
  *
  * It is a native <dialog> driven by showModal(), not a Radix Sheet: the top
  * layer, the focus trap, Escape and the focus returning to the trigger all come
@@ -12,7 +36,7 @@
  *
  * The trigger and the panel live in the same component on purpose, the browser
  * hands focus back to whatever was focused before showModal(), and keeping the
- * two together is what makes that "whatever" be the pill.
+ * two together is what makes that "whatever" be the trigger.
  *
  * Nothing is lost against the old drawer: the five doors are the screen, and
  * every child page and account page hangs under the door it belongs to, in a
@@ -42,7 +66,10 @@ import { useScrollLock } from "@/components/ui/native-dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
-import { PRIMARY_NAV, isNavActive } from "./TopBar";
+// Directement depuis la donnée, et pas via TopBar qui les réexporte : c'est
+// TopBar qui monte ce composant maintenant, et passer par lui refermerait
+// le cycle d'import.
+import { PRIMARY_NAV, isNavActive } from "./navigation";
 
 /** One figure per door, keyed by the PRIMARY_NAV id. A page no door owns,
  *  settings, about, contribute, gets the duo instead, so the panel always
@@ -115,12 +142,12 @@ export function MobileMenu() {
   // Raised for the one close that hands the user on rather than dismisses
   // them: the search button closes the panel to open the command palette, and
   // the `close` event fires as a task, after the palette has taken focus.
-  // Pulling focus back to the pill there would rip it out of the palette.
+  // Pulling focus back to the trigger there would rip it out of the palette.
   const handoff = useRef(false);
 
   // Escape, the close pill and a navigation all end up firing `close` on the
   // element, so this is the single place the mirror is updated and the focus
-  // handed back to the pill that opened the panel.
+  // handed back to the glyph that opened the panel.
   useEffect(() => {
     const dialog = dialogRef.current;
     // Above 1024px nothing is rendered, so no `close` event will ever come.
@@ -172,10 +199,21 @@ export function MobileMenu() {
 
   return (
     <>
+      {/* Un outil de la barre, pas un objet à part : `.zn-topbar__tool` porte
+          la boîte de 44px, l'aplat de papier au survol et l'appui, exactement
+          comme la recherche à l'autre bout. `.zn-menu-trigger` ne fait plus
+          que le placer en tête de barre (mobile-menu.css).
+
+          Glyphe NU, sans le mot MENU qu'il portait en pastille : dans la
+          grappe d'outils, un libellé écrit serait le seul de la barre, et le
+          hamburger en tête de barre est la convention que personne n'a besoin
+          qu'on lui explique. Le nom passe donc en aria-label, qui est de toute
+          façon ce que la pastille annonçait aux lecteurs d'écran. */}
       <button
         ref={triggerRef}
         type="button"
-        className="zn-menu-fab"
+        className="zn-topbar__tool zn-menu-trigger"
+        aria-label={t("actions.menu")}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls="mobile-menu"
@@ -198,7 +236,6 @@ export function MobileMenu() {
         }}
       >
         <Menu />
-        {t("actions.menu")}
       </button>
 
       <dialog
@@ -207,8 +244,8 @@ export function MobileMenu() {
         className="zn-mobile-menu"
         aria-label={t("actions.menu")}
       >
-        {/* tabIndex -1 : cible du focus d'ouverture (voir la pastille), sans
-            arrêt de tabulation supplémentaire. */}
+        {/* tabIndex -1 : cible du focus d'ouverture (voir le déclencheur),
+            sans arrêt de tabulation supplémentaire. */}
         <div className="zn-menu__inner" ref={innerRef} tabIndex={-1}>
           <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.goTo")}</p>
 
@@ -355,6 +392,12 @@ export function MobileMenu() {
           </div>
         </div>
 
+        {/* On referme là où on a ouvert : la pilule de fermeture est posée
+            aux coordonnées exactes du déclencheur, en tête de barre, plutôt
+            qu'au coin bas-droit qu'il a quitté. Elle garde son mot et son
+            aplat vermillon : elle est la seule action d'un menu ouvert qui ne
+            soit pas une destination, et rien ne la sépare de la page en
+            dessous, alors que le déclencheur, lui, a la barre pour cadre. */}
         <button type="button" className="zn-menu__close" onClick={close}>
           {t("actions.close")}
         </button>

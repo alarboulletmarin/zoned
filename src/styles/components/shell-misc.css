@@ -52,13 +52,9 @@
   animation: zoned-slide-in var(--dur-slow) var(--ease-out);
 }
 
-/* Below 1024px the floating menu pill owns the bottom-right corner: the stack
-   starts above it rather than under it. */
-@media (max-width: 1023px) {
-  .zn-prompts {
-    inset-block-end: var(--fab-clear);
-  }
-}
+/* La pile démarrait 82px plus haut sous 1024px, le temps que la pastille MENU
+   occupe ce coin. Elle n'y est plus (mobile-menu.css), donc la pile repart du
+   sol comme sur un écran large. */
 
 @media (min-width: 768px) {
   .zn-prompts {

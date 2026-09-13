@@ -1269,15 +1269,9 @@
   border-block-start: var(--border-rule);
 }
 
-/* Below 1024px the floating menu pill sits over the end of this bar. The bar
-   is pinned to the viewport floor, so the page's --fab-clear reserve cannot
-   move it: it gives up the end of its own gutter instead, and its call stops
-   where the pill starts rather than running behind it. */
-@media (max-width: 1023px) {
-  .zn-planshared__cta {
-    padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
-  }
-}
+/* Cette barre a cédé 120px de son bord de fin sous 1024px, le temps que la
+   pastille MENU soit fixée au coin bas-droit. Elle est en tête de barre : la
+   gouttière est de nouveau symétrique. */
 
 
 .zn-planshared__cta .zn-btn {

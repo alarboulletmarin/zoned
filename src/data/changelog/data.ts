@@ -87,6 +87,12 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       changed: [
         {
+          text: "Le bouton du menu quitte le coin bas-droit pour la tête de la barre du haut, sur téléphone et tablette. Il y flottait au-dessus de chaque page, et ce sont les pages qui le payaient : huit surfaces lui réservaient de la place, le pied de page cédait une colonne, les barres d'action des séances, des plans, des semaines et des tests s'arrêtaient avant lui, le bouton de remontée se décalait, la planche des zones changeait d'ordre et le duo de l'accueil rétrécissait. Tout cela est parti avec lui : plus rien ne recouvre le bas de l'écran, et le menu ouvert gagne 32 px pour sa figure",
+          textEn: "The menu button leaves the bottom-right corner for the head of the top bar, on phone and tablet. It used to float over every page, and the pages were what paid for it: eight surfaces kept room clear for it, the footer gave up a column, the action bars on sessions, plans, weeks and tests stopped short of it, the back-to-top button shifted up, the zone plate changed order and the home duo shrank. All of that went with it: nothing covers the bottom of the screen any more, and the open menu gains 32px for its figure",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
           text: "L'architecture passe de cinq portes à quatre : le cockpit, les séances, les plans, les chiffres. La navigation demandait 28 décisions avant la première séance. Les 35 destinations sorties GARDENT toutes leur route, restent indexées, prérendues et partageables, et se retrouvent au pied de page, dans la palette et dans la liste du menu mobile",
           textEn: "The architecture goes from five doors to four: the cockpit, sessions, plans, figures. Navigation asked for 28 decisions before the first session. The 35 destinations that left KEEP every route, stay indexed, prerendered and shareable, and land in the footer, the palette and the mobile menu list",
           category: "Navigation",

@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCommandPalette } from "@/components/search";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
+import { MobileMenu } from "./MobileMenu";
 import { Wordmark } from "./Wordmark";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
@@ -49,7 +50,8 @@ export function TopBar() {
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
   // Below lg (1024px) the five doors plus the tool cluster no longer fit, so
-  // the doors move to the full-screen MobileMenu and its floating pill.
+  // the doors move to the full-screen MobileMenu, opened by the one glyph the
+  // bar gains at its start.
   const isCompact = useMediaQuery("(max-width: 1023px)");
   // Reading the resolved theme from context is what keeps this icon honest
   // when the OS flips under a `system` preference. The button is a two-state
@@ -63,6 +65,17 @@ export function TopBar() {
 
   return (
     <header className="zn-topbar">
+      {/* Below 1024px, the menu glyph and the full-screen panel it opens. It
+          renders NOTHING above that width, so the bar opens on the wordmark on
+          a desktop exactly as it always has.
+
+          It is mounted here rather than beside the header (where it lived
+          until 13 September 2026) because the trigger is now a flex item of
+          this bar: it has to be a child. Its <dialog> is not a problem here,
+          showModal() lifts it into the top layer, which no ancestor stacking
+          context, z-index or overflow can reach. */}
+      <MobileMenu />
+
       <Link to="/" viewTransition className="zn-topbar__brand" aria-label={t("app.name")}>
         <Wordmark />
       </Link>

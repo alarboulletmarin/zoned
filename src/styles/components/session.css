@@ -190,15 +190,15 @@
  * transparency is enough to see that the page is moving, not enough to read
  * what is moving.
  *
- * The pills take the menu pill's language, it is the older object and it
- * floats over every screen, so it sets the terms. Same 44px height, same
- * radius, same cream ring, same single shadow, same baseline. Three fills tell
- * them apart: vermillon for the call, paper for the toggle and the menu, ink
- * for the pill at the end, which now belongs to the row instead of being parked
- * beside it.
+ * Les pilules parlaient la langue de la pastille MENU : même hauteur de 44px,
+ * même rayon, même cerne crème, même ombre unique, même ligne de base. La
+ * pastille est remontée en tête de barre le 13 septembre 2026 et ne partage
+ * plus cette rangée, mais la langue reste, elle est devenue celle de la maison.
+ * Trois aplats les distinguent : vermillon pour l'appel, papier pour la bascule
+ * et le menu, encre pour la pilule de fin.
  *
- * z-index 44 puts the band directly under that pill (45) and above the page's
- * own floating things (30, 40), so the pill lands ON the band. */
+ * z-index 44 : au-dessus de ce que la page fait flotter (30, 40), et sous la
+ * couche modale (50). Plus rien ne se pose dessus. */
 .zn-session__dock {
   position: fixed;
   z-index: 44;
@@ -208,8 +208,6 @@
   padding-block: var(--sp-8);
   padding-block-end: calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
   padding-inline: var(--sp-13);
-  /* Stops where the menu pill starts, rather than running behind it. */
-  padding-inline-end: calc(var(--sp-13) + var(--fab-w));
 
   /* Opaque, like every other dock in the system. The 96% it used to carry was
      enough for the page to read through the band, the section title and the
@@ -235,8 +233,9 @@
 
    The height is stated rather than floored: the call is a size="lg" button and
    would stand 52px tall beside two 44px pills, the sort of eight pixels
-   nobody can name and everybody sees. Its padding comes down with it, so
-   "Exporter" still fits the width the menu pill leaves. */
+   nobody can name and everybody sees. Its padding comes down with it, et
+   Exporter dispose désormais de toute la rangée, la pastille ne lui prend
+   plus 120px de bord. */
 .zn-session__dock .zn-btn {
   block-size: var(--hit-min);
   min-block-size: var(--hit-min);
@@ -670,15 +669,9 @@
   border-block-start: var(--border-rule);
 }
 
-/* Below 1024px the floating menu pill sits over the end of this bar. The bar
-   is pinned to the viewport floor, so the page's --fab-clear reserve cannot
-   move it: it gives up the end of its own gutter instead, and its call stops
-   where the pill starts rather than running behind it. */
-@media (max-width: 1023px) {
-  .zn-shared__dock {
-    padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
-  }
-}
+/* Cette barre a cédé 120px de son bord de fin sous 1024px, le temps que la
+   pastille MENU soit fixée au coin bas-droit. Elle est en tête de barre : la
+   gouttière est de nouveau symétrique. */
 
 
 .zn-shared__dock .zn-btn {

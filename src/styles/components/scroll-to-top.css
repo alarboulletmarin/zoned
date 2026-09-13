@@ -23,12 +23,9 @@
     border-color var(--dur-fast) var(--ease-out);
 }
 
-/* Below 1024px the menu pill owns that corner, so this one sits above it. */
-@media (max-width: 1023px) {
-  .zn-btn.zn-scroll-top {
-    bottom: var(--fab-clear);
-  }
-}
+/* Ce bouton a partagé ce coin avec la pastille MENU, et se relevait de 82px
+   sous 1024px pour ne pas s'asseoir dessus. La pastille est remontée en tête
+   de barre : le coin est à lui seul, à toutes les largeurs. */
 
 /* An outlined button floating over scrolling content still needs paper
    behind it, otherwise the list reads straight through the glyph. */

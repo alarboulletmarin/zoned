@@ -112,15 +112,12 @@
     row-gap: var(--sp-10);
   }
 
-  /* Sur téléphone la seconde rangée tombait sous la pastille MENU au premier
-     écran (Z6 : 102 × 44 px à 375×667, 102 × 17 px à 375×812 avec la plage,
-     graduation Z6 Sprint 19 à 43 px). La planche passe sous l'outil :
-     seule position où ni figure ni graduation ne rencontre la pastille à
-     scrollY=0, quelle que soit la hauteur d'écran. .zn-num est une colonne
-     flex (numbers.css), l'ordre suffit. */
-  .zn-num > .zn-zfig {
-    order: 1;
-  }
+  /* La planche descendait sous l'outil (`order: 1`) pour une seule raison : sa
+     seconde rangée tombait sous la pastille MENU au premier écran (Z6 :
+     102 × 44 px à 375×667). La pastille est en tête de barre depuis le
+     13 septembre 2026 et ne recouvre plus rien, donc la planche revient à sa
+     place dans le flux, au-dessus de l'outil, qui est l'ordre de lecture
+     voulu : on regarde les six zones, puis on calcule les siennes. */
 
   .zn-zfig__cell:nth-child(-n + 3) .zn-zfig__stage {
     border-block-end: var(--border-divider);

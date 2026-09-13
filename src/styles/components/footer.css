@@ -235,28 +235,12 @@
   margin-inline-start: auto;
 }
 
-/* Below 1024px the floating menu pill sits over this corner, over the version,
-   which is pinned to the far end of the bar. The bar pays the pill's clearance
-   itself rather than the shell paying it: the ink has to reach the floor of the
-   document, and a reserve above it would show as a band of page colour.
-
-   Une SEULE réserve, et c'est la latérale. Elle tient chaque rangée hors de la
-   colonne de la pastille, quel que soit le nombre de rangées, et à toute
-   position de défilement, la pastille étant fixée au bas de la fenêtre ;
-   `--fab-w` est exactement la pastille mesurée en travers. La réserve BASSE
-   qui l'accompagnait, elle, ne protégeait plus rien : elle posait 82 px
-   d'encre vide sous la dernière ligne d'une barre qui en fait 129, soit près
-   du tiers du pied de page pour un espace que la réserve latérale garde déjà
-   libre. Vérifié au navigateur sur trois pages, à trente positions de
-   défilement chacune : zéro recouvrement entre la pastille, le bouton de
-   remontée et un mot de la barre. La version perd son
-   `margin-inline-start: auto` sous 640 px de toute façon, donc rien n'est
-   poussé dans l'écart. */
-@media (max-width: 1023px) {
-  .zn-footer__bar {
-    padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
-  }
-}
+/* La barre cédait ici 120px de son bord de fin sous 1024px : la pastille MENU
+   était fixée au bas de la fenêtre, donc elle passait sur ce coin à toute
+   position de défilement, et sur la version qui y est ancrée. Elle est en tête
+   de barre depuis le 13 septembre 2026, le pied de page récupère sa largeur
+   entière, et les cinq lignes de licence retrouvent la colonne de 230px qu'on
+   leur avait prise. */
 
 /* Sur téléphone, l'interlettrage de micro-étiquette retombe à celui des
    données. Ces cinq lignes sont des PHRASES en capitales, pas des étiquettes :

@@ -10,7 +10,7 @@ import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from 
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
-import { MobileMenu, TopBar, Footer } from "@/components/layout";
+import { TopBar, Footer } from "@/components/layout";
 import { ModuleGate } from "@/components/layout/ModuleGate";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
@@ -240,12 +240,10 @@ function App() {
             </a>
             <ScrollToTopOnNavigate />
             <div className="zn-app">
+              {/* Below 1024px navigation is a full-screen menu opened by a
+                  glyph at the start of the bar; the bar mounts both itself
+                  (TopBar.tsx). Desktop keeps the five doors in the header. */}
               <TopBar />
-
-              {/* Below 1024px navigation is a full-screen menu behind one
-                  floating pill; it owns its own open state (a native <dialog>).
-                  Desktop keeps the five doors in the header. */}
-              <MobileMenu />
 
               <div className="zn-app__body">
                 <ErrorBoundary>

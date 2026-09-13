@@ -56,25 +56,18 @@
   }
 }
 
-/* Phone. The floating MENU pill is fixed to the bottom-right corner, so it
-   climbs with a short viewport: on a 375px phone it sits at x 239-349,
-   y 742-786 when the screen is 812 tall but y 597-641 when it is 667, and a
-   drawing never passes under a fixed element on the first screen. No
-   vertical escape exists on the short phone (even at 180px wide the hero's
-   rule would still land below the top of the pill), so the duo gives way
-   sideways: 240px where the column leaves that much clear of the pill's
-   reserve (--fab-w, the room the docked action bars keep free for it), the
-   column minus that reserve otherwise, 215px on a 375, 200px on a 360.
-   Its box then ends left of the pill at every height, and the figure stays
-   ≥150px tall, well above the ~120px floor under which a figure decorates
-   instead of explaining. 32px of air above the hero instead of 56 is the
-   phone band rhythm anyway. */
+/* Phone. Le duo était rétréci ici, de 240px à la colonne moins 120, pour que
+   sa boîte s'arrête avant la pastille MENU : celle-ci était fixée au coin
+   bas-droit, donc elle remontait avec un écran court et venait croiser le
+   dessin dès le premier écran d'un 375×667. Elle est en tête de barre depuis
+   le 13 septembre 2026, plus rien ne flotte au-dessus du premier écran, et le
+   duo reprend ses 240px sur tous les téléphones : c'est 40px de dessin rendus
+   sur un 375, et 25 sur un 360. Restent les 32px d'air au-dessus du héros au
+   lieu de 56, qui sont le rythme de bande du téléphone et n'ont jamais rien eu
+   à voir avec la pastille. */
 @media (max-width: 640px) {
   .zn-home__hero {
     padding-block-start: var(--sp-14);
-  }
-  .zn-home__duo {
-    --slot-w: min(240px, 100% - var(--fab-w));
   }
 }
 
