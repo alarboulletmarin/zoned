@@ -10,14 +10,15 @@
  * GIF exceeds the size budget, it falls back to a lower fps / width.
  *
  * Scenarios (output in assets/):
- *   library      demo.gif              home → library → "Seuil" filter →
- *                                      workout → blocks → Export → Garmin FIT
+ *   library      demo.gif              home → library → "Seuil" filter in the
+ *                                      filters sheet → workout → blocks →
+ *                                      Export → Garmin FIT
  *   plans        demo-plans.gif        new plan → prebuilt → semi-marathon →
  *                                      stats → "Utiliser ce plan" → calendar
  *   calculators  demo-calculators.gif  calculators → VMA from race time →
  *                                      zones preview → save VMA
- *   mobile       demo-mobile.gif       390×844: menu → library → filter
- *                                      drawer → workout structure
+ *   mobile       demo-mobile.gif       390×844: menu → library → filters
+ *                                      sheet → workout structure
  *
  * Requirements:
  *   - dev server running on http://localhost:5173 (`bun run dev`)
@@ -88,9 +89,11 @@ const CURSOR_INIT_SCRIPT = `
       "height: 26px",
       "margin: -13px 0 0 -13px",
       "border-radius: 50%",
-      "background: rgba(15, 23, 42, 0.45)",
-      "border: 2px solid rgba(255, 255, 255, 0.85)",
-      "box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35)",
+      // Ink, not the old slate: the cursor is the one thing on screen the app
+      // does not draw, and a blue-black dot on warm paper reads as a foreign body.
+      "background: rgba(23, 22, 20, 0.45)",
+      "border: 2px solid rgba(246, 245, 242, 0.9)",
+      "box-shadow: 0 2px 8px rgba(23, 22, 20, 0.35)",
       "pointer-events: none",
       "z-index: 2147483647",
       "transform: translate(-200px, -200px) scale(1)",
@@ -233,6 +236,35 @@ const settleSkeletons = (page: Page) =>
 // lives under /workout/.
 const CARD_LINK = 'a[href^="/workout/"]:not([href*="builder"]):visible';
 
+/**
+ * The header's dropdown panels hold a link to nearly every route, and they sit
+ * in the DOM with a real bounding box even when closed, so `:visible` does not
+ * tell them apart from the page's own buttons. Every navigation below is
+ * therefore scoped to `main`, which the header is outside of.
+ */
+const inMain = (selector: string) => `main ${selector}`;
+
+// The library's filters are one right-hand sheet, on desktop as on the phone —
+// the old two-rendering split (hidden drawer + sidebar) is gone with the
+// refonte, and so is the "Appliquer" button: the footer's primary button
+// carries the result count and closes the panel.
+const FILTERS_BUTTON = "button.zn-lib__filters-btn";
+const FILTERS_SHEET = '[data-slot="sheet-content"]';
+const FILTERS_DONE = '[data-slot="sheet-footer"] button:last-of-type';
+
+// The race distance on the VMA calculator is a listbox (Radix), no longer the
+// `select#distance` the old recording drove with `selectOption`.
+const DISTANCE_SELECT = '[data-slot="select-trigger"]';
+
+// The phone menu is a full-screen <dialog id="mobile-menu">, not a side sheet.
+const MENU = "#mobile-menu";
+
+// A door is a row of two targets, not one: the name navigates, the chevron
+// beside it discloses the pages underneath. They used to be a single native
+// <summary>, which could only do one of the two.
+const menuDoor = (href: string) => `${MENU} .zn-menu__door-row:has(.zn-menu__door[href="${href}"])`;
+const MENU_OPEN_SUB = `${MENU} .zn-menu__sub:not([hidden])`;
+
 // ---------------------------------------------------------------------------
 // Scenarios
 // ---------------------------------------------------------------------------
@@ -262,19 +294,25 @@ const SCENARIOS: Scenario[] = [
     gif: { fps: 12, width: 960 },
     gifFallback: { fps: 10, width: 800 },
     async run(page) {
-      // Home → library via the hero CTA (the header nav item opens a
-      // dropdown on hover that would sit over the page after navigating).
-      await moveToAndClick(page, 'a[data-slot="button"][href="/library"]:visible');
+      // Home → library via the hero CTA ("Explorer les séances").
+      await moveToAndClick(page, inMain('a[href="/library"]'));
       await page.waitForURL("**/library**");
       await page.waitForSelector(CARD_LINK, { timeout: 10_000 });
       await settleSkeletons(page);
       await pause(page, 1000);
 
-      // Filter on the "Seuil" (threshold) category. The filter panel is
-      // rendered twice (hidden mobile drawer + desktop sidebar), :visible
-      // disambiguates.
-      await moveToAndClick(page, 'button:text-is("Seuil"):visible');
+      // Filter on the "Seuil" (threshold) category, inside the filters sheet.
+      await moveToAndClick(page, FILTERS_BUTTON);
+      await page.waitForSelector(`${FILTERS_SHEET} button:text-is("Seuil")`, { timeout: 5_000 });
+      await pause(page, 700); // sheet slide-in
+      await moveToAndClick(page, `${FILTERS_SHEET} button:text-is("Seuil")`, { durationMs: 500 });
       await page.waitForURL("**category=threshold**");
+      await pause(page, 700);
+
+      // The footer button carries the new result count: closing the panel on it
+      // shows the filter and its effect in the same gesture.
+      await moveToAndClick(page, FILTERS_DONE, { durationMs: 500 });
+      await page.waitForSelector(FILTERS_SHEET, { state: "detached", timeout: 5_000 }).catch(() => {});
       await pause(page, 1000);
 
       // Open the first threshold workout
@@ -313,13 +351,13 @@ const SCENARIOS: Scenario[] = [
     gifFallback: { fps: 10, width: 800 },
     async run(page) {
       // Plan type choice → prebuilt plans
-      await moveToAndClick(page, 'a[href="/plan/new/prebuilt"]:visible');
+      await moveToAndClick(page, inMain('a[href="/plan/new/prebuilt"]'));
       await page.waitForURL("**/plan/new/prebuilt**");
       await settleSkeletons(page);
       await pause(page, 1000);
 
       // Open the semi-marathon plan
-      await moveToAndClick(page, '[href="/plan/prebuilt/semi-marathon"]:visible');
+      await moveToAndClick(page, inMain('a[href="/plan/prebuilt/semi-marathon"]'));
       await page.waitForURL("**/plan/prebuilt/semi-marathon**");
       await page.waitForSelector('h1:has-text("Semi-marathon")', { timeout: 10_000 });
       await pause(page, 1000);
@@ -345,15 +383,22 @@ const SCENARIOS: Scenario[] = [
     gifFallback: { fps: 10, width: 800 },
     async run(page) {
       // Calculators hub → VMA from a race time
-      await moveToAndClick(page, 'main a[href="/calculators/vma"]:visible');
+      await moveToAndClick(page, inMain('a[href="/calculators/vma"]'));
       await page.waitForURL("**/calculators/vma**");
-      await page.waitForSelector("select#distance", { timeout: 10_000 });
+      await page.waitForSelector(DISTANCE_SELECT, { timeout: 10_000 });
       await pause(page, 900);
 
-      // 10 km in 45:30, zones table appears live while typing
-      await moveToAndClick(page, "select#distance", { durationMs: 500 });
-      await page.selectOption("select#distance", { label: "10 km" });
-      await pause(page, 400);
+      // 10 km in 45:30, zones table appears live while typing. The distance is
+      // a listbox, not a native <select>: it opens, then an option is clicked,
+      // which is also what reads best on film.
+      await moveToAndClick(page, DISTANCE_SELECT, { durationMs: 500 });
+      await page.waitForSelector('[role="option"]', { timeout: 5_000 });
+      await pause(page, 500);
+      // `:has-text`, not `:text-is`: the option carries a check indicator
+      // beside its label, so its own text is never exactly "10 km". No other
+      // distance contains that string, so the substring match stays unique.
+      await moveToAndClick(page, '[role="option"]:has-text("10 km")', { durationMs: 500 });
+      await pause(page, 600);
       await typeInto(page, 'input[aria-label="Minutes"]', "45");
       await typeInto(page, 'input[aria-label="Secondes"]', "30");
       await pause(page, 800);
@@ -381,24 +426,31 @@ const SCENARIOS: Scenario[] = [
     gif: { fps: 12, width: 390 },
     gifFallback: { fps: 10, width: 320 },
     async run(page) {
-      // Hamburger menu → library
+      // The menu is a full-screen <dialog> of doors, sitting low so they fall
+      // under the thumb: the chevron discloses a section in place, then the
+      // destination is tapped. The button that opens it heads the bar instead of
+      // floating bottom-right.
       await moveToAndClick(page, 'button[aria-label="Menu"]');
-      await page.waitForSelector('[data-slot="sheet-content"]', { timeout: 5_000 });
-      await pause(page, 700); // sheet slide-in animation
-      await moveToAndClick(page, '[data-slot="sheet-content"] a[href="/library"]');
+      await page.waitForSelector(MENU, { timeout: 5_000 });
+      await pause(page, 700); // menu open animation
+      await moveToAndClick(page, `${menuDoor("/library")} .zn-menu__disclose`, { durationMs: 500 });
+      await page.waitForSelector(MENU_OPEN_SUB, { timeout: 5_000 });
+      await pause(page, 700); // the door swings open
+      await moveToAndClick(page, `${MENU_OPEN_SUB} a[href="/library"]`, { durationMs: 500 });
       await page.waitForURL("**/library**");
       await page.waitForSelector(CARD_LINK, { timeout: 10_000 });
       await settleSkeletons(page);
       await pause(page, 1000);
 
-      // Mobile filter drawer → "Seuil" → apply
-      await moveToAndClick(page, 'button[aria-label="Filtres"]');
-      await page.waitForSelector('[role="dialog"] button:text-is("Seuil")', { timeout: 5_000 });
+      // Filters sheet → "Seuil" → the count button closes it
+      await moveToAndClick(page, FILTERS_BUTTON);
+      await page.waitForSelector(`${FILTERS_SHEET} button:text-is("Seuil")`, { timeout: 5_000 });
       await pause(page, 600);
-      await moveToAndClick(page, '[role="dialog"] button:text-is("Seuil")', { durationMs: 500 });
-      await pause(page, 500);
-      await moveToAndClick(page, '[role="dialog"] button:has-text("Appliquer")', { durationMs: 500 });
+      await moveToAndClick(page, `${FILTERS_SHEET} button:text-is("Seuil")`, { durationMs: 500 });
       await page.waitForURL("**category=threshold**");
+      await pause(page, 600);
+      await moveToAndClick(page, FILTERS_DONE, { durationMs: 500 });
+      await page.waitForSelector(FILTERS_SHEET, { state: "detached", timeout: 5_000 }).catch(() => {});
       await pause(page, 1000);
 
       // Open the first threshold workout and walk to the block structure
@@ -455,10 +507,11 @@ async function recordScenario(scenario: Scenario, videoDir: string): Promise<Rec
       localStorage.setItem("zoned-theme", "light");
       // "Your data is stored locally" dialog on the first plan page.
       localStorage.setItem("zoned-storage-warning-seen", "true");
-      // Page-level hint toasts (usePageHint) would pop over the recording.
-      for (const hint of ["library", "plan-calendar", "draw", "workout-builder", "weekly"]) {
-        localStorage.setItem(`zoned-hint-${hint}-seen`, "true");
-      }
+      // The install banner and the zones call-out would both date the footage.
+      // The install key holds a timestamp read against a 30-day window
+      // (src/hooks/usePWA.ts), so "true" there would read as the Unix epoch.
+      localStorage.setItem("zoned-pwa-install-dismissed", String(Date.now()));
+      localStorage.setItem("zoned-zone-cta-dismissed", "true");
     } catch {}
   });
   await context.addInitScript(CURSOR_INIT_SCRIPT);
