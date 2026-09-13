@@ -38,20 +38,53 @@
  * hands focus back to whatever was focused before showModal(), and keeping the
  * two together is what makes that "whatever" be the trigger.
  *
- * Nothing is lost against the old drawer: the five doors are the screen, and
- * every child page and account page hangs under the door it belongs to, in a
- * native <details> that is closed until you ask for it. That replaces the flat
- * run of twenty-five mono links that used to sit at the floor of the panel,
- * the routes were all there, but in no order anyone could read.
+ * ── LA RELECTURE DU 13 SEPTEMBRE 2026, AU SOIR ────────────────────────────
  *
- * Under the six lines, the figure of the door you are standing in stands on a
- * rule that crosses the panel. It replaces the vermillon disc that used to mark
- * the active line: the doors of the home page and the guides are bare, and
- * this is where their figures live now, at a size where the stroke reads as a
- * drawing, not as one more pictogram.
+ * Le panneau tenait debout, mais il donnait sa zone de pouce et son seul aplat
+ * de couleur à la SORTIE plutôt qu'à la navigation. Cinq points en sont
+ * sortis, et chacun a changé quelque chose ici ou dans mobile-menu.css :
+ *
+ * 1. LES PORTES DESCENDENT. Elles étaient ancrées en haut, la figure occupait
+ *    la zone du pouce et ~300px de vide les séparaient. La scène est
+ *    maintenant AU-DESSUS des portes : elle prend le vide, qui n'est donc plus
+ *    du vide, et les cinq destinations tombent sous le pouce, juste au-dessus
+ *    du pied. L'écran se lit fermer, figure, navigation, outils.
+ *
+ * 2. LA FERMETURE N'EST PLUS UN APLAT VERMILLON. Elle était le seul objet
+ *    coloré de l'écran, donc le premier balayé, pour l'action qu'on veut le
+ *    moins. Elle passe en contour avec une croix ; le vermillon est réservé au
+ *    point de la porte où l'on se trouve. Elle gagne deux sorties de plus, le
+ *    glissé vers le bas et l'appui dans la scène, voir plus bas.
+ *
+ * 3. LA PORTE OÙ L'ON EST SE VOIT. Rien ne la marquait : à chaque ouverture il
+ *    fallait reconstruire où l'on est au lieu de le lire. Un point vermillon
+ *    la suit, et il est doublé d'`aria-current`, donc l'état n'est pas porté
+ *    par la seule couleur.
+ *
+ * 4. UNE LIGNE, DEUX GESTES, DEUX BOÎTES. Le `<details name="door">` faisait
+ *    de la ligne entière un dépliant : la même liste mélangeait des lignes qui
+ *    naviguent (Aujourd'hui, sans chevron) et des lignes qui déplient, sans
+ *    qu'on sache avant d'appuyer. Le libellé est maintenant un LIEN vers la
+ *    page d'accueil de la porte, et le chevron un BOUTON de 44px qui déplie,
+ *    à côté. C'est ce qui coûte le contrat natif de `<details>` : l'ouverture
+ *    est tenue ici, dans `openDoor`, avec `aria-expanded` et `aria-controls`
+ *    écrits à la main. Le marché est explicite, une balise ne sait pas
+ *    séparer ses deux zones tactiles, et deux zones valaient mieux que la
+ *    gratuité du contrat. L'exclusivité, elle, survit : un seul id tenu, donc
+ *    ouvrir une porte referme celle d'avant, comme le faisait le `name`.
+ *
+ * 5. LE RESTE est le seul libellé qui ne mène nulle part, donc sa ligne reste
+ *    un bouton entier. C'est la seule ligne de la liste qui déplie sans
+ *    naviguer, et c'est parce qu'elle n'a pas de page.
+ *
+ * Nothing is lost against the old drawer: the five doors are the screen, and
+ * every child page and account page hangs under the door it belongs to, closed
+ * until you ask for it. That replaces the flat run of twenty-five mono links
+ * that used to sit at the floor of the panel, the routes were all there, but in
+ * no order anyone could read.
  */
 
-import type { FunctionComponent, SVGProps } from "react";
+import type { FunctionComponent, PointerEvent as ReactPointerEvent, SVGProps } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -60,7 +93,7 @@ import DoorPlan from "@/assets/doodles/door-plan.svg?react";
 import DoorSessions from "@/assets/doodles/door-sessions.svg?react";
 import DoorToday from "@/assets/doodles/door-today.svg?react";
 import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
-import { ChevronDown, Menu, Search } from "@/components/icons";
+import { ChevronDown, Menu, Search, X } from "@/components/icons";
 import { useCommandPalette } from "@/components/search";
 import { useScrollLock } from "@/components/ui/native-dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -80,6 +113,26 @@ const DOOR_FIGURES: Record<string, FunctionComponent<SVGProps<SVGElement>>> = {
   plan: DoorPlan,
   numbers: DoorNumbers,
 };
+
+/** L'id du groupe qui n'est pas une porte. Il n'a pas de page, donc pas de
+ *  section dans PRIMARY_NAV, mais il partage l'exclusivité des autres. */
+const MORE_ID = "more";
+
+/** Le glissé qui referme, en pixels de doigt.
+ *
+ *  120px est à peu près un tiers d'écran de téléphone : assez pour qu'un
+ *  glissé de lecture ne referme jamais par accident, assez peu pour que le
+ *  geste aboutisse sans traverser l'écran. Le panneau suit le doigt à moitié
+ *  vitesse (mobile-menu.css ne s'en mêle pas, c'est écrit ici), ce qui est la
+ *  résistance habituelle d'une feuille qu'on repousse. */
+const CLOSE_DRAG = 120;
+
+/** Au-delà, le geste est un glissé et non un appui. Deux choses en dépendent :
+ *  le panneau ne commence à suivre le doigt qu'ici, donc un appui ne le fait
+ *  pas frémir, et le clic qui suit est avalé, sinon un doigt posé sur une
+ *  porte y navigue en repoussant le panneau. 16px, c'est au-dessus du
+ *  tremblement d'un appui et très en dessous des 120 du geste. */
+const DRAG_SLOP = 16;
 
 /** Le reste, en un groupe au pied des portes.
  *
@@ -136,6 +189,11 @@ export function MobileMenu() {
   // A mirror of the dialog's own state, kept only so aria-expanded can be
   // honest. The dialog element remains the source of truth.
   const [open, setOpen] = useState(false);
+  // La porte ouverte, et il n'y en a qu'une : c'est ce qui remplace le
+  // `name="door"` du temps où les portes étaient des <details>. Remise à null
+  // à la fermeture, sinon la prochaine ouverture montrerait la liste que la
+  // visite précédente avait laissée dépliée au lieu des six lignes.
+  const [openDoor, setOpenDoor] = useState<string | null>(null);
 
   const close = useCallback(() => dialogRef.current?.close(), []);
 
@@ -145,9 +203,14 @@ export function MobileMenu() {
   // Pulling focus back to the trigger there would rip it out of the palette.
   const handoff = useRef(false);
 
-  // Escape, the close pill and a navigation all end up firing `close` on the
-  // element, so this is the single place the mirror is updated and the focus
-  // handed back to the glyph that opened the panel.
+  // Le glissé qui referme : l'ordonnée de départ du doigt, et le drapeau qui
+  // dit que le geste a dépassé l'appui.
+  const dragFrom = useRef<number | null>(null);
+  const dragged = useRef(false);
+
+  // Escape, the close pill, a navigation and the swipe all end up firing
+  // `close` on the element, so this is the single place the mirror is updated
+  // and the focus handed back to the glyph that opened the panel.
   useEffect(() => {
     const dialog = dialogRef.current;
     // Above 1024px nothing is rendered, so no `close` event will ever come.
@@ -160,12 +223,14 @@ export function MobileMenu() {
     }
     const onClose = () => {
       setOpen(false);
-      // Every door shuts with the panel. The element outlives its dialog, so
-      // without this the next opening would show the list of pages the last
-      // visit left open, instead of the six lines.
-      dialog.querySelectorAll("details").forEach((door) => {
-        door.open = false;
-      });
+      // Toutes les portes se referment avec le panneau.
+      setOpenDoor(null);
+      // Et le panneau retrouve sa place : un glissé qui aboutit ferme le
+      // dialogue en le laissant décalé, et la translation survivrait à la
+      // prochaine ouverture.
+      dialog.style.transform = "";
+      dialog.style.transition = "";
+      dragFrom.current = null;
       if (handoff.current) {
         handoff.current = false;
         return;
@@ -189,6 +254,49 @@ export function MobileMenu() {
   useEffect(() => {
     close();
   }, [pathname, close]);
+
+  // ── le glissé vers le bas ───────────────────────────────────────────────
+  //
+  // Une sortie de plus, et la plus attendue sur une feuille plein écran. Elle
+  // n'est jamais la seule : Escape, la pilule et l'appui dans la scène font le
+  // même travail, donc rien ne dépend d'un geste que personne n'annonce.
+  //
+  // La garde qui compte est `scrollTop`. Le panneau défile dès qu'une porte
+  // est ouverte, et un doigt qui remonte la liste tire aussi vers le bas ; on
+  // n'arme donc le geste qu'en HAUT de la course, là où le panneau n'a plus
+  // rien à défiler et où la seule chose que le doigt peut vouloir est le
+  // repousser. La souris est exclue, elle a la pilule.
+  const onPointerDown = (event: ReactPointerEvent<HTMLDialogElement>) => {
+    dragged.current = false;
+    if (event.pointerType === "mouse") return;
+    if ((innerRef.current?.scrollTop ?? 0) > 0) return;
+    dragFrom.current = event.clientY;
+  };
+
+  const onPointerMove = (event: ReactPointerEvent<HTMLDialogElement>) => {
+    const from = dragFrom.current;
+    const dialog = dialogRef.current;
+    if (from === null || !dialog) return;
+    const dy = event.clientY - from;
+    if (Math.abs(dy) > DRAG_SLOP) dragged.current = true;
+    // Rien ne bouge tant que le geste est un appui.
+    if (!dragged.current) return;
+    // Pas de transition pendant que le doigt est posé : le panneau est
+    // exactement où on le tient, à moitié vitesse.
+    dialog.style.transition = "none";
+    dialog.style.transform = dy > 0 ? `translateY(${dy * 0.5}px)` : "";
+  };
+
+  const onPointerEnd = (event: ReactPointerEvent<HTMLDialogElement>) => {
+    const from = dragFrom.current;
+    const dialog = dialogRef.current;
+    dragFrom.current = null;
+    if (from === null || !dialog) return;
+    const dy = event.clientY - from;
+    dialog.style.transition = "";
+    dialog.style.transform = "";
+    if (dy > CLOSE_DRAG) close();
+  };
 
   if (!isCompact) return null;
 
@@ -243,73 +351,130 @@ export function MobileMenu() {
         ref={dialogRef}
         className="zn-mobile-menu"
         aria-label={t("actions.menu")}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerEnd}
+        onPointerCancel={onPointerEnd}
+        // Le clic qui suit un glissé est avalé avant d'atteindre la porte sous
+        // le doigt : on repousse le panneau, on ne navigue pas.
+        onClickCapture={(event) => {
+          if (!dragged.current) return;
+          dragged.current = false;
+          event.preventDefault();
+          event.stopPropagation();
+        }}
       >
         {/* tabIndex -1 : cible du focus d'ouverture (voir le déclencheur),
             sans arrêt de tabulation supplémentaire. */}
         <div className="zn-menu__inner" ref={innerRef} tabIndex={-1}>
-          <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.goTo")}</p>
+          {/* La scène, et elle est passée AU-DESSUS des portes.
+              Elle tenait le bas du panneau, donc la figure occupait la zone du
+              pouce pendant que les cinq destinations restaient hors d'atteinte
+              en haut, avec le vide entre les deux. Le vide et la figure sont
+              maintenant le même objet : la scène prend toute la place libre,
+              quelle qu'elle soit, et les portes tombent sous le pouce.
 
-          {/* One door per line. A door with children is a native <details>,
-              always closed when the panel opens, the figure under the lines
-              says which door you are standing in, without unfolding it, so
-              the panel is six lines on opening, and the twenty-five routes are
-              one tap away under the door that owns them. <details> also means
-              the disclosure contract
-              (Enter, Space, the open state) is the platform's, not ours, and
-              one `name` shared by every door makes them an exclusive accordion:
-              opening a door closes the one that was open, so the panel never
-              holds two lists of pages at once. */}
-          <nav aria-label={t("nav.primary")}>
-            <ul className="zn-menu__doors">
-              {PRIMARY_NAV.map((section) => {
-                if (!section.children?.length) {
+              Muette pour un lecteur d'écran, l'aria-current des portes dit
+              déjà où l'on est, et un appui dedans referme : c'est le hors
+              panneau d'une feuille qui, elle, n'en a pas, puisqu'elle EST
+              l'écran. Rien ne dépend de ce raccourci, la pilule et Escape
+              sont toujours là. */}
+          <div className="zn-menu__scene" aria-hidden="true" onClick={close}>
+            <Figure className="zn-menu__figure" focusable="false" />
+          </div>
+
+          <div className="zn-menu__nav">
+            {/* Le libellé de la liste, collé à la liste : il flottait 32px
+                au-dessus, assez loin pour se lire comme un titre d'écran
+                plutôt que comme l'étiquette de ce qui suit. */}
+            <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.goTo")}</p>
+
+            {/* Une ligne, deux boîtes. Le libellé est un lien vers la page
+                d'accueil de la porte, le chevron un bouton de 44px qui
+                déplie : on sait ce que fait un appui avant de le faire, et
+                Aujourd'hui, qui n'a rien à déplier, est la même ligne en
+                moins le chevron. L'ouverture est tenue en React
+                (`openDoor`), une seule à la fois. */}
+            <nav aria-label={t("nav.primary")}>
+              <ul className="zn-menu__doors">
+                {PRIMARY_NAV.map((section) => {
+                  const label = t(section.labelKey);
+                  const here = isNavActive(pathname, section);
+                  const children = section.children ?? [];
+                  const panelId = `zn-menu-${section.id}`;
+                  const expanded = openDoor === section.id;
                   return (
                     <li key={section.id}>
-                      <Link
-                        to={section.to}
-                        viewTransition
-                        className="zn-display zn-menu__door"
-                        data-level="2"
-                        aria-current={pathname === section.to ? "page" : undefined}
-                      >
-                        {t(section.labelKey)}
-                      </Link>
+                      <div className="zn-menu__door-row">
+                        <Link
+                          to={section.to}
+                          viewTransition
+                          className="zn-display zn-menu__door"
+                          data-level="2"
+                          data-current={here || undefined}
+                          aria-current={
+                            pathname === section.to ? "page" : here ? "true" : undefined
+                          }
+                        >
+                          {label}
+                        </Link>
+                        {children.length > 0 && (
+                          <button
+                            type="button"
+                            className="zn-menu__disclose"
+                            aria-expanded={expanded}
+                            aria-controls={panelId}
+                            aria-label={t("mobileMenu.disclose", { door: label })}
+                            onClick={() =>
+                              setOpenDoor((current) =>
+                                current === section.id ? null : section.id,
+                              )
+                            }
+                          >
+                            <ChevronDown className="zn-menu__door-chevron" />
+                          </button>
+                        )}
+                      </div>
+                      {children.length > 0 && (
+                        <ul className="zn-menu__sub" id={panelId} hidden={!expanded}>
+                          {children.map((child) => (
+                            <li key={child.to}>
+                              <Link
+                                to={child.to}
+                                viewTransition
+                                className="zn-menu__sub-link"
+                                aria-current={pathname === child.to ? "page" : undefined}
+                              >
+                                {t(child.labelKey)}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </li>
                   );
-                }
-                return (
-                  <li key={section.id}>
-                    <details className="zn-menu__group" name="door">
-                      <summary className="zn-display zn-menu__door" data-level="2">
-                        {t(section.labelKey)}
-                        <ChevronDown className="zn-menu__chevron" aria-hidden="true" />
-                      </summary>
-                      <ul className="zn-menu__sub">
-                        {section.children.map((child) => (
-                          <li key={child.to}>
-                            <Link
-                              to={child.to}
-                              viewTransition
-                              className="zn-menu__sub-link"
-                              aria-current={pathname === child.to ? "page" : undefined}
-                            >
-                              {t(child.labelKey)}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  </li>
-                );
-              })}
+                })}
 
-              <li>
-                <details className="zn-menu__group" name="door">
-                  <summary className="zn-display zn-menu__door" data-level="2">
-                    {t("mobileMenu.more")}
-                    <ChevronDown className="zn-menu__chevron" aria-hidden="true" />
-                  </summary>
-                  <ul className="zn-menu__sub">
+                {/* La seule ligne qui déplie sans naviguer, parce qu'elle est
+                    la seule qui n'a pas de page. Sa boîte entière est donc le
+                    dépliant, chevron compris. */}
+                <li>
+                  <div className="zn-menu__door-row">
+                    <button
+                      type="button"
+                      className="zn-display zn-menu__door zn-menu__door--toggle"
+                      data-level="2"
+                      aria-expanded={openDoor === MORE_ID}
+                      aria-controls="zn-menu-more"
+                      onClick={() =>
+                        setOpenDoor((current) => (current === MORE_ID ? null : MORE_ID))
+                      }
+                    >
+                      {t("mobileMenu.more")}
+                      <ChevronDown className="zn-menu__door-chevron" />
+                    </button>
+                  </div>
+                  <ul className="zn-menu__sub" id="zn-menu-more" hidden={openDoor !== MORE_ID}>
                     {MORE_LINKS.map((item) => (
                       <li key={item.to}>
                         <Link
@@ -333,23 +498,14 @@ export function MobileMenu() {
                       </a>
                     </li>
                   </ul>
-                </details>
-              </li>
-            </ul>
-          </nav>
-
-          {/* The ground. A rule across the whole panel, and the figure of the
-              door you are in standing on it, sole on the line, the bottom of
-              the SVG's viewBox is its sole, so the box is aligned on the rule
-              and nothing is placed by eye. Muet for a screen reader: the
-              aria-current on the links already says where you are, and the
-              disc it replaces was aria-hidden too. It takes the room left
-              between the doors and the foot and never more (mobile-menu.css),
-              so it can shrink, then go, but never overlap a line. */}
-          <div className="zn-menu__scene" aria-hidden="true">
-            <Figure className="zn-menu__figure" focusable="false" />
+                </li>
+              </ul>
+            </nav>
           </div>
 
+          {/* Le sol : la recherche et les deux réglages, sous le filet qui
+              traverse le panneau. C'est le filet qui dit que ce qui suit
+              n'est plus de la navigation. */}
           <div className="zn-menu__foot">
             {/* Search is the command palette, opened from here rather than
                 re-implemented. The panel closes first: the palette is a modal
@@ -384,21 +540,27 @@ export function MobileMenu() {
                 </span>
               </button>
 
+              {/* Ce que le bouton FAIT, pas l'état où l'on est. Il disait
+                  Thème sombre, ce qui se lit aussi bien comme le thème en
+                  cours que comme celui qu'on va prendre. */}
               <button type="button" className="zn-menu__pill" onClick={toggleTheme}>
-                {theme === "light" ? t("mobileMenu.themeDark") : t("mobileMenu.themeLight")}
+                {theme === "light" ? t("mobileMenu.themeToDark") : t("mobileMenu.themeToLight")}
               </button>
             </div>
-
           </div>
         </div>
 
         {/* On referme là où on a ouvert : la pilule de fermeture est posée
-            aux coordonnées exactes du déclencheur, en tête de barre, plutôt
-            qu'au coin bas-droit qu'il a quitté. Elle garde son mot et son
-            aplat vermillon : elle est la seule action d'un menu ouvert qui ne
-            soit pas une destination, et rien ne la sépare de la page en
-            dessous, alors que le déclencheur, lui, a la barre pour cadre. */}
+            aux coordonnées exactes du déclencheur, en tête de barre.
+
+            EN CONTOUR, et c'est le point de la relecture : en aplat vermillon,
+            elle était le seul objet coloré du panneau, donc le premier que
+            l'oeil trouve, pour l'action qu'on veut le moins. Le vermillon est
+            descendu sur le point de la porte où l'on se trouve, qui est
+            l'information, et la fermeture garde sa boîte, son mot et gagne la
+            croix. */}
         <button type="button" className="zn-menu__close" onClick={close}>
+          <X size={16} />
           {t("actions.close")}
         </button>
       </dialog>
