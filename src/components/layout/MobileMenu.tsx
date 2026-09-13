@@ -214,10 +214,13 @@ export function MobileMenu() {
 
   const close = useCallback(() => dialogRef.current?.close(), []);
 
-  // Raised for the one close that hands the user on rather than dismisses
-  // them: the search button closes the panel to open the command palette, and
-  // the `close` event fires as a task, after the palette has taken focus.
-  // Pulling focus back to the trigger there would rip it out of the palette.
+  // Levé pour les fermetures qui PASSENT LA MAIN plutôt qu'elles ne congédient,
+  // et il y en a deux. La recherche ferme le panneau pour ouvrir la palette, et
+  // l'évènement `close` arrive en tâche, après que la palette a pris le focus :
+  // y ramener le focus sur le déclencheur l'arracherait à la palette. Une porte
+  // tapée, elle, emmène sur une autre page : le déclencheur n'a plus rien à
+  // dire, et le lui rendre par script rallume l'anneau vermillon de base.css
+  // (voir l'effet de fermeture plus bas).
   const handoff = useRef(false);
 
   // Le glissé qui referme : l'ordonnée de départ du doigt, et le drapeau qui
@@ -252,6 +255,15 @@ export function MobileMenu() {
         handoff.current = false;
         return;
       }
+      // Escape, la pilule et le glissé RENDENT la main : le focus repart d'où
+      // il venait. Ce `focus()` est écrit parce que la restitution de la
+      // plate-forme ne suffit pas ici : WebKit ne donne pas le focus à un
+      // bouton qu'on TAPE, donc il n'y a souvent rien à restituer. Il porte en
+      // revanche l'état focus-visible de l'élément qu'il remplace, et cet
+      // élément est `.zn-menu__inner`, focusé par script à l'ouverture : son
+      // anneau est masqué (base.css, hors couche), pas éteint. Le rendre au
+      // déclencheur, qui n'a pas ce reset, c'est le rallumer sur le hamburger.
+      // D'où la sortie ci-dessus pour les fermetures qui passent la main.
       triggerRef.current?.focus();
     };
     dialog.addEventListener("close", onClose);
@@ -266,9 +278,19 @@ export function MobileMenu() {
   // it, and the last one out would have restored `hidden` for good.
   useScrollLock(open);
 
-  // Close on navigation. `close()` on an already-closed dialog is a no-op and
-  // fires nothing, so the run on mount costs nothing.
+  // Close on navigation. Le drapeau dit que cette fermeture-là passe la main à
+  // la page qui arrive : le déclencheur ne reprend pas le focus, sinon il
+  // s'afficherait cerclé de vermillon sur la page d'après (voir `handoff`).
+  //
+  // La garde `open` porte tout le poids. Sans elle, la passe de montage — et
+  // toute navigation faite hors du panneau — lèverait un drapeau qu'aucun
+  // `close` ne viendrait abaisser, et c'est la fermeture SUIVANTE, au clavier,
+  // qui perdrait son retour de focus. `close()` sur un dialogue déjà fermé est
+  // un no-op qui n'émet rien, donc le drapeau ne doit se lever que quand il y a
+  // vraiment quelque chose à fermer.
   useEffect(() => {
+    if (!dialogRef.current?.open) return;
+    handoff.current = true;
     close();
   }, [pathname, close]);
 

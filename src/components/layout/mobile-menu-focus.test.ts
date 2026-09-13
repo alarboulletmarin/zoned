@@ -1,6 +1,15 @@
 /**
- * Le menu mobile ne doit pas s'ouvrir avec l'anneau vermillon autour de la
- * porte Aujourd'hui. Le correctif tient en deux moitiés qui ne servent à
+ * Le menu mobile ne doit porter l'anneau vermillon NI à l'ouverture, autour de
+ * la porte Aujourd'hui, NI à la sortie, autour du hamburger.
+ *
+ * Le second cas est le même anneau que le premier, déplacé. Un `focus()` de
+ * script emporte l'état focus-visible de l'élément qu'il remplace : à la
+ * fermeture, celui-ci est `.zn-menu__inner`, dont l'anneau est masqué et non
+ * éteint, et le déclencheur, lui, n'a pas de reset. Une porte tapée n'a donc
+ * pas à rendre le focus au déclencheur — elle emmène ailleurs — et c'est le
+ * drapeau `handoff` qui le dit, celui-là même que la recherche lève déjà.
+ *
+ * L'ouverture. Le correctif tient en deux moitiés qui ne servent à
  * rien l'une sans l'autre : le focus d'ouverture déplacé sur `.zn-menu__inner`
  * (MobileMenu.tsx) et le reset de son anneau écrit HORS COUCHE (base.css).
  * Séparer les deux fait revenir le cadre, et, si le reset descend dans
@@ -52,5 +61,29 @@ describe("le menu mobile ne s'ouvre pas sur une porte focusée", () => {
     expect(depth, "le reset doit être au premier niveau, hors @layer").toBe(0);
 
     expect(css.slice(at)).toMatch(/^\.zn-menu__inner:focus-visible\s*\{\s*outline:\s*none;/);
+  });
+});
+
+describe("le menu mobile ne se referme pas sur un hamburger focusé", () => {
+  const src = read("src/components/layout/MobileMenu.tsx");
+
+  test("la fermeture par navigation passe la main au lieu de rendre le focus", () => {
+    // L'effet qui suit `pathname`. La garde sur `open` compte autant que le
+    // drapeau : un drapeau levé par la passe de montage, ou par une navigation
+    // faite hors du panneau, resterait levé et mangerait le retour de focus de
+    // la fermeture suivante, celle du clavier.
+    const effect = src.match(/useEffect\(\(\) => \{([^}]*?)close\(\);\s*\}, \[pathname, close\]\);/)![1];
+    expect(effect).toContain("if (!dialogRef.current?.open) return;");
+    expect(effect).toContain("handoff.current = true;");
+    expect(effect.indexOf("open) return")).toBeLessThan(effect.indexOf("handoff.current = true"));
+  });
+
+  test("le drapeau coupe le retour de focus, et se rabaisse tout seul", () => {
+    expect(src).toMatch(
+      /if \(handoff\.current\) \{\s*handoff\.current = false;\s*return;\s*\}[\s\S]*?triggerRef\.current\?\.focus\(\);/,
+    );
+    // Le retour de focus reste écrit une seule fois : Escape, la pilule et le
+    // glissé le veulent toujours.
+    expect(src.match(/triggerRef\.current\?\.focus\(\)/g)).toHaveLength(1);
   });
 });
