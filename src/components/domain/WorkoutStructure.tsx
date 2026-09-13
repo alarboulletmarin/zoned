@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { exportToPNG } from "@/lib/export/png";
+import type { ShareMethod } from "@/lib/export/share";
 import { ZoneBadge } from "./ZoneBadge";
 import { PhaseCard } from "./PhaseCard";
 import { cn } from "@/lib/utils";
@@ -108,15 +109,36 @@ export function WorkoutStructure({ workout, userZones, className, exportable }: 
     },
   ].filter((phase) => phase.steps.length > 0);
 
+  /**
+   * Ce que l'image est devenue. Sur un telephone elle part dans la feuille de
+   * partage, d'ou l'utilisateur l'enregistre ou l'envoie ; le mot du succes
+   * n'est donc pas le meme que pour un fichier pose dans un dossier.
+   */
+  const reportExport = (method: ShareMethod, toastId: string | number) => {
+    toast.success(
+      tCommon(method === "native" ? "export.success.imageShared" : "export.success.image"),
+      { id: toastId },
+    );
+  };
+
+  /** Une feuille de partage refermee sans rien choisir n'est pas un echec. */
+  const reportExportFailure = (error: unknown, toastId: string | number) => {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      toast.dismiss(toastId);
+      return;
+    }
+    toast.error(tCommon("export.error.image"), { id: toastId });
+  };
+
   /** Le bloc entier, tel qu'il est a l'ecran, ses trois cartes cote a cote. */
   const handleExportAll = async () => {
     setIsExporting(true);
     const toastId = toast.loading(tCommon("export.loading.image", tCommon("export.title")));
     try {
-      await exportToPNG(sheetRef, `${workout.id}-structure`, { padding: 24 });
-      toast.success(tCommon("export.success.image"), { id: toastId });
-    } catch {
-      toast.error(tCommon("export.error.image"), { id: toastId });
+      const { method } = await exportToPNG(sheetRef, `${workout.id}-structure`, { padding: 24 });
+      reportExport(method, toastId);
+    } catch (error) {
+      reportExportFailure(error, toastId);
     } finally {
       setIsExporting(false);
     }
@@ -145,10 +167,12 @@ export function WorkoutStructure({ workout, userZones, className, exportable }: 
 
     try {
       if (!phaseCardRef.current) throw new Error("Phase card not rendered");
-      await exportToPNG(phaseCardRef.current, `${workout.id}-structure-${key}`, { padding: 24 });
-      toast.success(tCommon("export.success.image"), { id: toastId });
-    } catch {
-      toast.error(tCommon("export.error.image"), { id: toastId });
+      const { method } = await exportToPNG(phaseCardRef.current, `${workout.id}-structure-${key}`, {
+        padding: 24,
+      });
+      reportExport(method, toastId);
+    } catch (error) {
+      reportExportFailure(error, toastId);
     } finally {
       setPhaseToExport(null);
       setIsExporting(false);

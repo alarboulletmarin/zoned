@@ -109,12 +109,22 @@ export async function copyImage(
 
 export type ShareMethod = "native" | "download";
 
-export async function shareImage(
-  target: Target,
-  filename: string,
-  transparent: boolean,
-): Promise<ShareMethod> {
-  const blob = await nodeToBlob(target, transparent);
+/**
+ * Remet une image deja produite a l'utilisateur, par le chemin que son
+ * appareil sait suivre.
+ *
+ * Sur un telephone, un fichier telecharge ne va PAS dans les photos : il
+ * atterrit au mieux dans les fichiers, et sur iOS en navigation autonome il
+ * n'atterrit nulle part du tout. La feuille de partage native est la seule
+ * porte vers la pellicule, c'est son "Enregistrer l'image" qui l'y met. Sur
+ * un ordinateur, l'inverse : un fichier dans le dossier de telechargements
+ * est ce qu'on attend, et ouvrir une feuille de partage serait une surprise.
+ *
+ * Le partage natif exige une activation recente : l'appel doit rester dans
+ * les quelques secondes qui suivent le geste. C'est pour cela que la capture
+ * qui precede doit rester courte, et qu'aucune confirmation ne s'intercale.
+ */
+export async function deliverImage(blob: Blob, filename: string): Promise<ShareMethod> {
   const file = new File([blob], filename, { type: "image/png" });
 
   // Web Share Level 2, only on HTTPS/mobile most of the time.
@@ -145,4 +155,12 @@ export async function shareImage(
 
   triggerDownload(blob, filename);
   return "download";
+}
+
+export async function shareImage(
+  target: Target,
+  filename: string,
+  transparent: boolean,
+): Promise<ShareMethod> {
+  return deliverImage(await nodeToBlob(target, transparent), filename);
 }

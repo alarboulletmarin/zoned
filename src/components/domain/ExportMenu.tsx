@@ -72,13 +72,21 @@ export function ExportMenu({ workout, className, size = "sm", variant = "default
 
     try {
       if (exportCardRef.current) {
-        await exportToPNG(exportCardRef.current, `${workout.id}-workout`);
-        toast.success(t("export.success.image"), { id: toastId });
+        const { method } = await exportToPNG(exportCardRef.current, `${workout.id}-workout`);
+        toast.success(
+          t(method === "native" ? "export.success.imageShared" : "export.success.image"),
+          { id: toastId },
+        );
       } else {
         throw new Error("Export card not rendered");
       }
     } catch (error) {
-      toast.error(t("export.error.image"), { id: toastId });
+      // La feuille de partage refermee sans rien choisir n'est pas un echec.
+      if (error instanceof DOMException && error.name === "AbortError") {
+        toast.dismiss(toastId);
+      } else {
+        toast.error(t("export.error.image"), { id: toastId });
+      }
     } finally {
       setRenderForExport(false);
       setIsExporting(false);

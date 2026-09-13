@@ -91,6 +91,7 @@
     "success": {
       "calendar": "Événement calendrier exporté",
       "image": "Image exportée",
+      "imageShared": "Image prête à enregistrer",
       "pdf": "Document PDF exporté",
       "garmin": "Fichier Garmin exporté"
     },
