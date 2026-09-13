@@ -279,22 +279,43 @@ export function focusPlanHref(focus: TodayFocus): string | null {
 }
 
 /**
- * Le chemin vers LA SÉANCE, pas vers le plan.
+ * La semaine EN COURS, pas l'atelier qui en compose une.
  *
- * Le bouton du cockpit pointait le plan, ce qui coûtait trois taps et une
- * recherche pour arriver à la séance du jour : ouvrir le plan, repérer
- * aujourd'hui dans le calendrier, toucher la séance. Sur un écran dont toute
- * la raison d'être est qu'est-ce que je cours aujourd'hui, c'était deux
- * taps de trop.
+ * Le raccourci du cockpit s'appelait Ma semaine et menait à `/weeks/new`,
+ * c'est-à-dire à l'écran qui CRÉE une semaine. Le mot promettait un lieu que
+ * l'on possède, le lien ouvrait un formulaire vide : c'est le libellé qui
+ * mentait, et il a menti dans le seul sens qui coûte, on croit retrouver son
+ * plan et on tombe sur une page blanche.
  *
- * Quand la journée porte plusieurs séances il n'y a pas de destination unique :
- * on ouvre alors le plan à la bonne semaine, qui les montre toutes.
+ * Il mène donc à la semaine où l'on se trouve quand il y en a une, et il ne
+ * garde son atelier que lorsqu'il n'y a rien à retrouver. `mine` dit lequel
+ * des deux, pour que le libellé suive la destination au lieu de la précéder.
+ *
+ * `weekNumber > 0` et pas `plan != null` : un plan qui n'a pas encore commencé
+ * n'a pas de semaine en cours, et l'ouvrir à la semaine 0 ne veut rien dire.
  */
-export function focusSessionHref(focus: TodayFocus): string | null {
-  if (focus.sessions.length === 1) return sessionHref(focus.sessions[0]);
+export function weekShortcut(focus: TodayFocus): { href: string; mine: boolean } {
   const plan = focusPlanHref(focus);
-  if (!plan) return null;
-  return focus.weekNumber > 0 ? `${plan}?week=${focus.weekNumber}` : plan;
+  if (plan && focus.weekNumber > 0) {
+    return { href: `${plan}?week=${focus.weekNumber}`, mine: true };
+  }
+  return { href: "/weeks/new", mine: false };
+}
+
+/**
+ * La date d'un jour de la bande, à partir de celle d'aujourd'hui.
+ *
+ * La bande choisit un jour, et la ligne de date en haut de l'écran doit le
+ * suivre : sans elle, jeudi s'afficherait sous mardi 16 septembre. Le calcul
+ * passe par `setDate`, qui est calendaire : il traverse les fins de mois et
+ * les changements d'heure sans arithmétique de millisecondes.
+ *
+ * L'heure du jour est conservée : cette date ne sert qu'à être formatée.
+ */
+export function focusDayDate(focus: TodayFocus, day: number, today: Date): Date {
+  const date = new Date(today);
+  date.setDate(date.getDate() + (day - focus.dayOfWeek));
+  return date;
 }
 
 /** Le chemin d'une séance de plan. */

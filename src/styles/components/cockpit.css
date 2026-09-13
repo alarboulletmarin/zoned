@@ -1,7 +1,10 @@
 /* Le cockpit, /today.
  *
- * Un seul primaire, et c'est ouvrir. Tout le reste est en encre ou en
- * contour : si tout appelle, plus rien n'a de priorité.
+ * Un seul primaire par séance, et c'est voir le détail. Tout le reste est en
+ * encre ou en contour : si tout appelle, plus rien n'a de priorité. Une
+ * journée à deux séances porte donc deux boutons, un par bloc de la pile ;
+ * c'est le seul cas, et le filet entre les deux dit que ce sont deux
+ * réponses, pas deux appels pour la même.
  *
  * La première version empilait cinq boîtes de la même forme sur 1838 px de
  * téléphone, dont trois portes qui répétaient la pastille MENU. Il n'y a plus
@@ -48,6 +51,37 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
+}
+
+/* ── La pile des séances du jour ────────────────────────────────────────── */
+
+/* Un jour porte une séance, parfois deux. Les deux cas sont le MÊME bloc
+   empilé, et non un écran pour une séance plus un écran pour deux : le jour
+   double n'avait, lui, aucun écran — le titre disait 2 séances t'attendent,
+   rien ne montrait ce qu'elles demandaient, et aucune des deux ne pouvait
+   être close.
+
+   L'écart entre deux séances est celui d'une SECTION, pas celui d'une phrase
+   (`--sp-7` dans la réponse) : deux séances ne se lisent pas d'affilée, on
+   lit celle qu'on va courir. */
+.zn-cockpit__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.zn-cockpit__session {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+/* Un filet entre les séances, et rien autour d'elles : cette page n'a pas une
+   seule boîte, et deux cartes posées l'une sur l'autre en auraient fait deux.
+   Le filet dit la séparation, la boîte dirait l'objet. */
+.zn-cockpit__session + .zn-cockpit__session {
+  padding-block-start: var(--sp-10);
+  border-block-start: var(--bw-rule) solid var(--line-divider);
 }
 
 /* La réponse est le titre de l'écran, donc elle prend la taille d'un titre.
@@ -113,9 +147,14 @@
 
 /* ── La bande des sept jours ────────────────────────────────────────────────
  *
- * Une figure, pas un contrôle : aucun cadre, aucun fond, aucun survol. Ce qui
- * se lit comme cliquable doit l'être, et un jour cliquable serait de la
- * navigation, donc un `role` et son contrat clavier.
+ * Elle a été une figure, puis sept liens, elle est maintenant un CHOIX :
+ * `role="radiogroup"` et sept boutons, dont le seul effet est de recharger ce
+ * qui est en dessous. Le contrat clavier va avec, il vient de `useRadioRail`.
+ *
+ * Ce qu'elle garde de la figure : aucun cadre, aucun fond de cellule. Sept
+ * boutons dessinés comme sept boutons feraient une barre d'outils là où il
+ * faut une semaine qui se lit d'un coup d'œil. Ce sont les MARQUES qui disent
+ * qu'on peut choisir, pas des boîtes.
  */
 
 .zn-cockpit__week {
@@ -130,13 +169,14 @@
   padding-block-end: calc(var(--gap-section) / 2);
 }
 
-/* Chaque jour qui porte une séance est un LIEN vers elle : c'est ce qui fait
-   tomber la séance de n'importe quel jour à un seul tap. Un jour de repos est
-   un `span`, il n'y a rien à ouvrir, et un lien qui ne mène nulle part est un
-   faux affordance. */
-/* 52 px couvraient la lettre et la barre. Le jour courant porte en plus sa
-   valeur : sans plancher, la bande changeait de hauteur selon que le jour le
-   plus long est aujourd'hui ou non. */
+/* Chaque jour est un bouton radio, repos compris : il n'y a rien à OUVRIR un
+   jour de repos, mais il y a quelque chose à y LIRE, repos et la date de la
+   prochaine sortie. C'est toute la différence entre choisir un jour et y
+   aller, et c'est pour ça que les sept sont du même métal.
+
+   52 px couvraient la lettre et la barre. Le jour choisi porte en plus sa
+   valeur : sans plancher, la bande changerait de hauteur selon que le jour le
+   plus long est choisi ou non. */
 .zn-cockpit__day {
   display: flex;
   flex-direction: column-reverse;
@@ -147,26 +187,34 @@
   border-radius: var(--r-xs);
   text-decoration: none;
   color: inherit;
+  /* Le dépouillement du bouton natif. Il était un lien jusqu'au 13 septembre
+     2026, donc rien de tout ça n'avait à être dit. */
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
 }
 
 /* Au survol, c'est la barre qui répond, pas un fond de cellule, qui
    transformerait la bande en rangée de boutons. Et elle répond DANS SA FORME :
    repeindre un contour ou une hachure en aplat ferait dire au survol qu'une
    séance prévue est faite. */
-a.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="planned"] {
+.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="planned"] {
   border-color: var(--ink-2);
 }
 
-a.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="completed"],
-a.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="modified"] {
+.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="completed"],
+.zn-cockpit__day:hover .zn-cockpit__day-bar[data-shape="modified"] {
   background: var(--ink-2);
 }
 
-a.zn-cockpit__day:hover .zn-cockpit__day-letter {
+.zn-cockpit__day:hover .zn-cockpit__day-letter {
   color: var(--text-body);
 }
 
-a.zn-cockpit__day:active {
+.zn-cockpit__day:active {
   transform: translateY(var(--press-shift));
 }
 
@@ -181,19 +229,36 @@ a.zn-cockpit__day:active {
   border-block-end: 2px solid transparent;
 }
 
-/* Le jour courant se marque à l'ENCRE, jamais au vermillon : le bouton est le
+/* AUJOURD'HUI : un pointillé sous la lettre, et rien de plus. Il portait
+   l'encre du temps où la bande n'avait qu'un état à dire ; elle en a deux
+   depuis qu'on peut choisir un jour, et l'encre est allée au CHOIX, qui est
+   le seul des deux à changer l'écran. Le pointillé ne se voit donc que
+   lorsqu'on est parti regarder un autre jour, ce qui est exactement le moment
+   où l'on a besoin de savoir où l'on habite. */
+.zn-cockpit__day[data-today] .zn-cockpit__day-letter {
+  color: var(--text-muted);
+  border-block-end-style: dotted;
+  border-block-end-color: var(--line-strong);
+}
+
+/* LE JOUR CHOISI se marque à l'ENCRE, jamais au vermillon : le bouton est le
    seul aplat d'accent de l'écran, et un second le neutraliserait.
 
-   Il se marque sur la LETTRE, plus jamais sur la barre : la barre porte
-   désormais le statut, et un plein d'encre pour aujourd'hui s'y confondrait
-   avec le plein d'encre pour fait. Deux choses, deux canaux. */
-.zn-cockpit__day[data-today] .zn-cockpit__day-letter {
+   Il se marque sur la LETTRE, jamais sur la barre : la barre porte le statut,
+   et un plein d'encre pour choisi s'y confondrait avec le plein d'encre pour
+   fait. Deux choses, deux canaux.
+
+   Après `[data-today]`, à égale spécificité : le jour choisi qui est aussi
+   aujourd'hui — le cas de l'arrivée sur l'écran — porte l'encre et non le
+   pointillé. */
+.zn-cockpit__day[data-selected] .zn-cockpit__day-letter {
   color: var(--text-body);
   font-weight: var(--fw-bold);
+  border-block-end-style: solid;
   border-block-end-color: var(--ink-1);
 }
 
-/* La valeur du jour courant, et d'elle seule : une échelle de hauteurs sans
+/* La valeur du jour choisi, et d'elle seule : une échelle de hauteurs sans
    une seule graduation ne se lit pas. Au corps mono le plus petit, c'est un
    repère d'axe, pas une seconde annonce. */
 .zn-cockpit__day-value {

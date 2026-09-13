@@ -28,11 +28,13 @@
     "openWeek": "Ouvrir ma semaine",
     "openDetail": "Voir le détail",
     "next": "Prochaine séance : {{day}}, {{duration}}",
+    "rank": "séance {{n}} / {{total}}",
     "reclose": "Modifier la clôture"
   },
   "quick": {
     "draw": "Tire-moi une séance",
-    "week": "Ma semaine"
+    "week": "Ma semaine",
+    "weekNew": "Composer une semaine"
   },
   "art": {
     "brief": "Une figure debout sur le filet, au repos avant la sortie.",
@@ -52,8 +54,6 @@
   },
   "facts": {
     "distance": "~{{km}} {{unit}}",
-    "rpe": "RPE {{n}}",
-    "sessions_one": "{{count}} séance",
-    "sessions_other": "{{count}} séances"
+    "rpe": "RPE {{n}}"
   }
 }
