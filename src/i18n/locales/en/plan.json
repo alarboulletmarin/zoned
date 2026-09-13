@@ -674,21 +674,18 @@
   },
   "newPlan": {
     "kicker": "New plan",
+    "backToStart": "Back to the practice",
     "title": "How do you want to build it?",
     "lede": "The generator answers for you, or you place the sessions yourself. Either way, everything stays editable.",
     "doorsTitle": "The three ways to create a plan",
     "assistedKicker": "The generator",
     "assistedTitle": "Assisted plan",
     "assistedBody": "You answer about your race, your level and your week. The plan comes out session by session.",
-    "assistedCta": "Answer the questions",
     "freeKicker": "4 to 52 weeks",
     "freeTitle": "Free plan",
     "freeBody": "An empty calendar, as long as you choose. You place every session by hand.",
-    "freeCta": "Open an empty calendar",
-    "prebuiltKicker": "{{n}} plans ready",
     "prebuiltTitle": "Ready-made plans",
-    "prebuiltBody": "Plans already built, from 5K to marathon plus a short trail. Take one as it is, then adjust.",
-    "prebuiltCta": "See the {{n}} plans"
+    "prebuiltBody": "Plans already built, from 5K to marathon plus a short trail. Take one as it is, then adjust."
   },
   "freePlan": {
     "back": "Back",

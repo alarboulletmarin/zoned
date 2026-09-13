@@ -19,19 +19,28 @@ import { practiceData } from "@/components/domain/practice-data";
  * et l'ultra l'étagère des plans prêts est vide, donc un tiers du temps
  * l'embranchement annonçait une impasse.
  *
- * Le choix du mode se pose maintenant APRÈS, en secondaire, et seulement pour
- * qui le cherche. `/plan/new/assisted`, `/free` et `/prebuilt` restent des
- * routes vivantes, la première et la troisième sont au sitemap.
+ * Le choix du mode se pose donc APRÈS, une fois la pratique dite, et il a
+ * retrouvé un écran à lui : `/plan/new/mode` (`PlanModePage`). Il avait fini
+ * en deux liens gris au pied de cette page, ce qui était trop peu : un plan
+ * libre n'est pas une note de bas de page du générateur, c'est une manière
+ * d'entraîner. La ligne du bas ne porte donc plus les deux modes, elle porte
+ * l'entrée du choix lui-même, pour qui préfère décider du comment avant le
+ * quoi.
+ *
+ * `/plan/new/assisted`, `/free` et `/prebuilt` restent des routes vivantes,
+ * la première et la troisième sont au sitemap.
  */
 export function PlanNewPage() {
   const { t } = useTranslation(["plan", "common"]);
   const navigate = useNavigate();
   const stats = useAppStats();
 
-  /* Choisir une pratique entre directement dans le parcours, à son étape 1.
-     Le paramètre est lu par PlanCreatePage, qui préremplit le brouillon. */
+  /* Choisir une pratique mène au choix du mode, qui la fait suivre. Le
+     paramètre traverse les deux écrans : `PlanCreatePage` le lit pour
+     préremplir le brouillon et démarrer à l'étape 2, et la page des modes s'en
+     sert pour compter les plans prêts de CETTE pratique. */
   const choose = (practice: Practice) => {
-    navigate(`/plan/new/assisted?practice=${practice}`);
+    navigate(`/plan/new/mode?practice=${practice}`);
   };
 
   return (
@@ -88,15 +97,14 @@ export function PlanNewPage() {
             ))}
           </OptionStack>
 
-          {/* Les deux autres façons d'avoir un plan, en secondaire : la
-              question comment se pose après quoi, et seulement pour
-              qui la cherche. */}
+          {/* La sortie de secours, pour qui veut décider du COMMENT avant le
+              quoi : elle mène au même écran de modes que la réponse
+              ci-dessus, sans pratique. Un seul lien et non les deux modes en
+              raccourci : les trois façons de créer un plan ont maintenant un
+              seul domicile, et deux écrans de suite qui proposent les mêmes
+              portes se liraient comme une question posée deux fois. */}
           <p className="zn-body zn-body--sm zn-muted zn-wiz__modes">
-            <Link to="/plan/new/prebuilt">
-              {t("plan:newPlan.prebuiltCta", { n: stats.plans })}
-            </Link>
-            <span aria-hidden="true"> · </span>
-            <Link to="/plan/new/free">{t("plan:newPlan.freeCta")}</Link>
+            <Link to="/plan/new/mode">{t("plan:newPlan.doorsTitle")}</Link>
           </p>
         </section>
       </div>
