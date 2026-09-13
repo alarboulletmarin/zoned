@@ -1,5 +1,6 @@
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { normalizeWorkoutStructureSource } from "@/lib/workoutStructure";
+import { triggerDownload } from "@/lib/export/download";
 
 const STORAGE_KEY = "zoned-custom-workouts";
 const MAX_WORKOUTS = 20;
@@ -100,17 +101,12 @@ export function createEmptyWorkout(): WorkoutTemplate {
 export function exportWorkoutsToJSON(workouts: WorkoutTemplate[]): void {
   const json = JSON.stringify(workouts, null, 2);
   const blob = new Blob([json], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download =
+  triggerDownload(
+    blob,
     workouts.length === 1
       ? `zoned-workout-${workouts[0].id}.json`
-      : `zoned-workouts-${Date.now()}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+      : `zoned-workouts-${Date.now()}.json`,
+  );
 }
 
 /** Import workouts from a JSON file, returns count of imported workouts. Throws on invalid data or limit reached. */

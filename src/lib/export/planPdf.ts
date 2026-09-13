@@ -20,6 +20,9 @@ import { calculatePaceZones, formatPace } from "@/lib/zones";
 import { getExerciseById } from "@/data/strength";
 import i18n from "@/i18n";
 import { formatDateMedium, pickLang } from "@/lib/i18n-utils";
+import { triggerDownload } from "./download";
+import { planFilename } from "./planFilename";
+import { pdfSafeDocument } from "./pdfText";
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -965,10 +968,12 @@ export async function exportPlanToPDF(
         const isKey = session.isKeySession;
         const isStr = template ? isStrengthWorkout(template) : session.workoutId.startsWith("STR-");
 
-        // Name with key star + ref superscript
+        // Name with key marker + ref superscript. The marker is a filled
+        // disc rather than a star: Roboto has no star glyph, and pdfmake
+        // draws a missing glyph as an empty box (see pdfText.ts).
         const nameText: Content = {
           text: [
-            ...(isKey ? [{ text: "\u2605 ", color: "#854d0e", bold: true, fontSize: 8 }] : []),
+            ...(isKey ? [{ text: "\u25cf ", color: "#854d0e", bold: true, fontSize: 8 }] : []),
             { text: wName },
             ...(refNum ? [{ text: ` ${toSuperscript(refNum)}`, fontSize: 6, color: "#3b82f6", decoration: "underline" as const, linkToDestination: `ref-${refNum}` }] : []),
           ],
@@ -1150,18 +1155,10 @@ export async function exportPlanToPDF(
     };
 
     // pdfmake types are outdated - getBlob() returns Promise<Blob> in recent versions
-    const pdf = pdfMake.createPdf(docDefinition) as unknown as { getBlob: () => Promise<Blob> };
+    const pdf = pdfMake.createPdf(pdfSafeDocument(docDefinition)) as unknown as { getBlob: () => Promise<Blob> };
     const blob = await pdf.getBlob();
 
-    // Trigger download
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `plan-${plan.config.raceDistance ?? "free"}-${plan.name}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    triggerDownload(blob, planFilename(plan, "pdf"));
   } catch (error) {
     console.error("Export failed:", error);
     throw error;

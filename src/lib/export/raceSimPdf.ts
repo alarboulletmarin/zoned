@@ -11,6 +11,8 @@ import { getDistanceLabelEn } from "@/lib/raceSimulator";
 import { formatSplitTime, formatPaceDisplay } from "@/lib/splits";
 import i18n from "@/i18n";
 import { pickLang, formatDate } from "@/lib/i18n-utils";
+import { triggerDownload } from "./download";
+import { pdfSafeDocument } from "./pdfText";
 
 /**
  * Export a race simulation plan as a PDF document.
@@ -363,20 +365,11 @@ export async function exportRaceSimToPDF(
   };
 
   // pdfmake types are outdated - getBlob() returns Promise<Blob> in recent versions
-  const pdf = pdfMake.createPdf(docDefinition) as unknown as {
+  const pdf = pdfMake.createPdf(pdfSafeDocument(docDefinition)) as unknown as {
     getBlob: () => Promise<Blob>;
   };
   const blob = await pdf.getBlob();
 
-  // Trigger download
   const slug = distanceLabel.toLowerCase().replace(/\s+/g, "-");
-  const filename = t("filename", { slug });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  triggerDownload(blob, t("filename", { slug }));
 }

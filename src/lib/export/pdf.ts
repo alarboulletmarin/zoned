@@ -11,6 +11,8 @@ import { getZoneHex } from "@/lib/zoneColors";
 import { getWorkoutDuration } from "@/components/visualization";
 import i18n from "@/i18n";
 import { pickLang, pickLangArray, formatDate } from "@/lib/i18n-utils";
+import { triggerDownload } from "./download";
+import { pdfSafeDocument } from "./pdfText";
 
 /**
  * Zone colours for PDF. PDFs are always rendered on white, so the light ramp
@@ -111,7 +113,18 @@ export async function exportToPDF(
     const tips = pickLangArray<string>(workout, "coachingTips");
     const mistakes = pickLangArray<string>(workout, "commonMistakes");
 
-    const tableHeader: TableCell[] = [
+    /**
+     * Une ligne d'en-tete NEUVE par tableau, et c'est le point du lot.
+     *
+     * Les trois tableaux de phases partageaient un seul tableau de cellules,
+     * construit une fois et passe trois fois. pdfmake ecrit son calcul de mise
+     * en page DANS les objets qu'on lui donne (`_inlines`, `_minWidth`, et le
+     * reste) : le premier tableau consommait les cellules, les deux suivants
+     * recevaient des objets deja mesures et dessinaient leur en-tete en barre
+     * noire vide. Autrement dit, corps de seance et retour au calme sortaient
+     * sans titres de colonnes dans TOUS les PDF de seance.
+     */
+    const tableHeader = (): TableCell[] => [
       { text: t("description"), style: "tableHeader" },
       { text: t("durationCol"), style: "tableHeader" },
       { text: t("zone"), style: "tableHeader" },
@@ -140,7 +153,7 @@ export async function exportToPDF(
         table: {
           headerRows: 1,
           widths: PHASE_TABLE_WIDTHS,
-          body: [tableHeader, ...formatBlocksTable(workout.warmupTemplate)],
+          body: [tableHeader(), ...formatBlocksTable(workout.warmupTemplate)],
         },
         layout: "lightHorizontalLines",
         margin: [0, 0, 0, 15],
@@ -152,7 +165,7 @@ export async function exportToPDF(
         table: {
           headerRows: 1,
           widths: PHASE_TABLE_WIDTHS,
-          body: [tableHeader, ...formatBlocksTable(workout.mainSetTemplate)],
+          body: [tableHeader(), ...formatBlocksTable(workout.mainSetTemplate)],
         },
         layout: "lightHorizontalLines",
         margin: [0, 0, 0, 15],
@@ -164,7 +177,7 @@ export async function exportToPDF(
         table: {
           headerRows: 1,
           widths: PHASE_TABLE_WIDTHS,
-          body: [tableHeader, ...formatBlocksTable(workout.cooldownTemplate)],
+          body: [tableHeader(), ...formatBlocksTable(workout.cooldownTemplate)],
         },
         layout: "lightHorizontalLines",
         margin: [0, 0, 0, 20],
@@ -235,18 +248,11 @@ export async function exportToPDF(
     };
 
     // pdfmake types are outdated - getBlob() returns Promise<Blob> in recent versions
-    const pdf = pdfMake.createPdf(docDefinition) as unknown as { getBlob: () => Promise<Blob> };
+    const pdf = pdfMake.createPdf(pdfSafeDocument(docDefinition)) as unknown as { getBlob: () => Promise<Blob> };
     const blob = await pdf.getBlob();
 
     // Trigger download manually (same pattern as ICS/FIT)
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${workout.id}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    triggerDownload(blob, `${workout.id}.pdf`);
   } catch (error) {
     console.error("Export failed:", error);
     throw error;

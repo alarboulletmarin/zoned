@@ -9,6 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
+import { triggerDownload } from "@/lib/export/download";
+import { planFilename } from "@/lib/export/planFilename";
 import { getWorkoutById } from "@/data/workouts";
 import { preparePlanForStorage } from "@/lib/planSchema";
 import { toast } from "sonner";
@@ -103,12 +105,7 @@ export function PlanExportMenu({
   const handleExportJSON = useCallback(() => {
     const json = JSON.stringify(preparePlanForStorage(plan), null, 2);
     const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `plan-${plan.name || plan.id}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    triggerDownload(blob, planFilename(plan, "json"));
     toast.success(t("plans.planExported"));
   }, [plan, t]);
 

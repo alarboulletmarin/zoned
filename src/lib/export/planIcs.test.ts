@@ -196,7 +196,9 @@ describe("exportPlanToICS: one event per session", () => {
     const { ics, filename } = await runExport(plan, { [RUNNING_ID]: "Endurance fondamentale" }, templates);
 
     expect(events(ics)).toHaveLength(4);
-    expect(filename).toBe("plan-10K-plan-ics-test.ics");
+    // Le nom du plan, pas son identifiant : le calendrier se rangeait sous un
+    // UUID que rien ne rattache au plan qu'on vient d'exporter.
+    expect(filename).toBe("plan-10K-Plan test ICS.ics");
   });
 
   test("places each session on its own day, counted from the plan Monday", async () => {

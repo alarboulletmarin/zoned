@@ -31,10 +31,20 @@ export const THEME_STORAGE_KEY = "zoned-theme";
  * Duplicated in the inline boot script in `index.html`, which cannot import
  * from here. Change one, change the other.
  */
-const THEME_COLOR: Record<ResolvedTheme, string> = {
+export const THEME_COLOR: Record<ResolvedTheme, string> = {
   light: "#F6F5F2",
   dark: "#171614",
 };
+
+/**
+ * Le theme actuellement peint, lu sur le document plutot que sur la
+ * preference : c'est celui que verra une capture d'image, qui photographie ce
+ * qui est a l'ecran et pas ce qui est enregistre.
+ */
+export function documentTheme(): ResolvedTheme {
+  if (typeof document === "undefined") return "light";
+  return document.documentElement.classList.contains("dark") ? "dark" : "light";
+}
 
 export function isThemePreference(value: unknown): value is ThemePreference {
   return value === "light" || value === "dark" || value === "system";

@@ -9,6 +9,7 @@ import type { WorkoutTemplate } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import i18n from "@/i18n";
 import { isEnglish, pickLang } from "@/lib/i18n-utils";
+import { triggerDownload } from "./download";
 
 /**
  * Formats workout blocks into a readable, multi-line description.
@@ -97,16 +98,10 @@ export async function exportToICS(
         return;
       }
 
-      // Trigger download
-      const blob = new Blob([value], { type: "text/calendar;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${workout.id}.ics`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      triggerDownload(
+        new Blob([value], { type: "text/calendar;charset=utf-8" }),
+        `${workout.id}.ics`,
+      );
 
       resolve();
     });
