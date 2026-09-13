@@ -242,16 +242,51 @@
   border-block-end: 2px solid transparent;
 }
 
-/* AUJOURD'HUI : un pointillé sous la lettre, et rien de plus. Il portait
-   l'encre du temps où la bande n'avait qu'un état à dire ; elle en a deux
-   depuis qu'on peut choisir un jour, et l'encre est allée au CHOIX, qui est
-   le seul des deux à changer l'écran. Le pointillé ne se voit donc que
-   lorsqu'on est parti regarder un autre jour, ce qui est exactement le moment
-   où l'on a besoin de savoir où l'on habite. */
+/* AUJOURD'HUI : UN point, rond, sous la lettre. Il portait l'encre du temps où
+   la bande n'avait qu'un état à dire ; elle en a deux depuis qu'on peut
+   choisir un jour, et l'encre est allée au CHOIX, qui est le seul des deux à
+   changer l'écran. La marque du jour courant ne se voit donc que lorsqu'on est
+   parti regarder ailleurs, ce qui est exactement le moment où l'on a besoin de
+   savoir où l'on habite.
+
+   Elle a d'abord été un `border-style: dotted`, et c'était une faute : sur une
+   lettre de dix pixels, un pointillé de 2 px rend DEUX CARRÉS, c'est-à-dire la
+   forme même des blocs de séance qui sont juste au-dessus. On lisait deux
+   séances là où il n'y avait qu'un jour. Un point, et il est ROND, donc il
+   n'appartient à aucun des canaux de la colonne : rien de ce que la bande
+   dessine par ailleurs n'a d'angle arrondi à ce point.
+
+   En `::after` plutôt qu'en bordure, parce que la bordure de la lettre est
+   déjà prise par le filet du jour choisi, et surtout parce qu'elle est
+   RÉSERVÉE transparente sur les sept jours : deux marques dans la même
+   propriété, l'une devrait effacer l'autre au lieu de simplement ne pas être
+   là. */
 .zn-cockpit__day[data-today] .zn-cockpit__day-letter {
   color: var(--text-muted);
-  border-block-end-style: dotted;
-  border-block-end-color: var(--line-strong);
+  position: relative;
+}
+
+.zn-cockpit__day[data-today] .zn-cockpit__day-letter::after {
+  content: "";
+  position: absolute;
+  /* Dans la bande des 2 px que la bordure réserve sous la lettre : le point
+     prend la place du filet, il ne s'y ajoute pas, donc la lettre ne bouge
+     pas d'un jour à l'autre. */
+  inset-block-end: -3px;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  inline-size: 3px;
+  block-size: 3px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+/* Le jour courant qui est AUSSI le jour choisi n'a pas besoin des deux : le
+   filet plein et la lettre grasse disent déjà la colonne, le micro-label
+   au-dessus du titre dit déjà aujourd'hui, et deux marques empilées sous une
+   lettre de dix pixels seraient le défaut qu'on vient de corriger. */
+.zn-cockpit__day[data-selected] .zn-cockpit__day-letter::after {
+  content: none;
 }
 
 /* LE JOUR CHOISI se marque à l'ENCRE, jamais au vermillon : le bouton est le
@@ -262,12 +297,11 @@
    fait. Deux choses, deux canaux.
 
    Après `[data-today]`, à égale spécificité : le jour choisi qui est aussi
-   aujourd'hui — le cas de l'arrivée sur l'écran — porte l'encre et non le
-   pointillé. */
+   aujourd'hui — le cas de l'arrivée sur l'écran — prend l'encre par-dessus le
+   gris du jour courant. */
 .zn-cockpit__day[data-selected] .zn-cockpit__day-letter {
   color: var(--text-body);
   font-weight: var(--fw-bold);
-  border-block-end-style: solid;
   border-block-end-color: var(--ink-1);
 }
 
