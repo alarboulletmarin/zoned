@@ -8,8 +8,8 @@
  * elles, la fenêtre retombe sur le couple icône + nom.
  *
  * Deux facteurs de forme sont exigés pour la fenêtre riche :
- *   - « wide »   → bureau,  1280×800
- *   - « narrow » → mobile,   540×960
+ *   - wide   -> bureau,  1280×800
+ *   - narrow -> mobile,   540×960
  *
  * En anglais, comme les chaînes du manifeste. Viser une autre cible avec
  * ZONED_BASE_URL.

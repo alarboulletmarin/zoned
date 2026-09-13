@@ -251,6 +251,12 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       fixed: [
         {
+          text: "La fenêtre d'installation de Chrome montrait encore l'app d'avant la refonte : ses captures dataient de juillet, et un carton d'astuce était resté planté dans l'une d'elles. Elles étaient aussi censées être en anglais, comme le manifeste, mais la langue était semée sous une clé que l'app ne lit pas",
+          textEn: "Chrome's install prompt still showed the app from before the redesign: its screenshots dated from July, and one of them had a hint toast stuck in the frame. They were also meant to be in English, like the manifest, but the language was seeded under a key the app does not read",
+          category: "PWA",
+          categoryEn: "PWA",
+        },
+        {
           text: "La vue liste d'un plan faisait tenir 388 px de contenu dans une carte de 350. Le nom de la séance était écrasé à 3 px et se peignait par-dessus la pastille voisine : deux séances sur cinq étaient illisibles sur un téléphone de 390 px",
           textEn: "The plan's list view fitted 388px of content into a 350px card. The session's name was crushed to 3px and painted over the badge beside it: two of five sessions were unreadable on a 390px phone",
           category: "Plans",

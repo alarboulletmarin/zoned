@@ -1,11 +1,11 @@
 /**
  * Ce que tout script de capture doit faire avant d'appuyer sur le déclencheur.
  *
- * Trois scripts photographient l'app — les captures du README, celles du
- * manifeste PWA, les stills des films — et chacun portait sa propre copie de la
+ * Trois scripts photographient l'app, les captures du README, celles du
+ * manifeste PWA, les stills des films, et chacun portait sa propre copie de la
  * même préparation. Les copies avaient divergé : celle du manifeste semait la
  * langue sous `i18nextLng`, qui n'est pas la clé que l'app lit, et aucune ne
- * fermait les toasts, d'où le carton « Filter to find » planté en bas des
+ * fermait les toasts, d'où le carton Filter to find planté en bas des
  * captures du store. La préparation vit ici, une fois.
  *
  * Le paquet `video/` reste volontairement isolé (son propre package.json, son
@@ -31,7 +31,7 @@ export const ACCEPT_LANGUAGE: Record<Lang, string> = {
  *
  * `zoned-pwa-install-dismissed` porte un horodatage relu contre une fenêtre de
  * trente jours (src/hooks/usePWA.ts) : `Date.now()` au moment de la capture est
- * la seule valeur qui vaille, « true » y serait lu comme l'époque Unix.
+ * la seule valeur qui vaille, "true" y serait lu comme l'époque Unix.
  */
 function dismissalSeed(): Record<string, string> {
   return {
@@ -46,7 +46,7 @@ function dismissalSeed(): Record<string, string> {
  *
  * LA LANGUE SE LIT DANS L'URL. `detection.order` (src/i18n/index.ts) est
  * `querystring, localStorage, htmlTag` avec `lookupQuerystring: "lang"` et
- * `lookupLocalStorage: "zoned-language"` — `navigator` est hors de la chaîne,
+ * `lookupLocalStorage: "zoned-language"`, et `navigator` est hors de la chaîne,
  * donc l'en-tête Accept-Language ne décide de rien. `withLang()` ci-dessous
  * pose le paramètre ; le localStorage n'est qu'une seconde source, et
  * `i18nextLng` (le cache d'i18next) est semé avec pour que rien ne le
@@ -69,7 +69,7 @@ export async function seedApp(
     try {
       for (const [key, value] of Object.entries(entries)) localStorage.setItem(key, value);
     } catch {
-      /* navigation privée — l'app retombe sur ses valeurs par défaut */
+      /* navigation privée, l'app retombe sur ses valeurs par défaut */
     }
   }, seed);
 }
