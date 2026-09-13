@@ -66,6 +66,13 @@ jobs:
       - name: Typographie
         run: bun run check:typography
 
+      # The gate existed and nothing ran it, so the two SVG drifted from their
+      # generator at the typography pass and nobody saw it. It also re-checks
+      # that the maskable icon's mark still fits the safe zone, which is the
+      # one icon defect that cannot be seen in a diff.
+      - name: Logo and icons match their generator
+        run: bun run scripts/generate-wordmark.mjs --check
+
       - name: Zone colours match design/zones.css
         run: bun run scripts/qa-zone-colors.ts
 

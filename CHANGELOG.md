@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- The home-screen icon. Installed as a PWA, Zoned landed on the home screen as a near-blank white tile: the PWA asset generator took `favicon.svg`, a paper `#F6F5F2` plate meant for a browser tab, padded it by 30% and set it on pure white. Measured on the apple-touch-icon: 52% of the tile was `#FFFFFF` and the mark spanned 52% by 38%. The app icon is now its own drawing, `public/app-icon.svg`, produced by the same script as the wordmark: the same `z.`, in paper on an ink square, full bleed, no inner rounding since the system applies its own mask
+- Icons carry no transparency any more. The old `pwa-*.png` were 13% transparent in the corners left free by the rounded plate, and iOS paints transparency black
+- The maskable icon stays inside its safe zone, and the generator now proves it rather than assuming it: the mark is a lying rectangle, so it is its DIAGONAL that has to fit the circle inscribed at 80% of the side, and the check runs from the real outlines on every run, `--check` included
+- `favicon.svg` and `logo.svg` were stale against their generator since the typography pass. Only a comment differed, but `--check` was failing on main
+
 ## [1.0.0] - 2026-09-13
 
 Fifty-four commits, thirty-six of them a redesign. The app keeps every feature

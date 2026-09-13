@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- L'initiale sur l'encre de l'app, à fond perdu : le carré va jusqu'au
+       bord, le masque de l'écran d'accueil est celui du système.
+       Généré par scripts/generate-wordmark.mjs, ne pas éditer à la main. -->
+  <rect width="512" height="512" fill="#171614"/>
+  <g transform="translate(88.64 367.21) scale(0.432)">
+    <path d="M20 0L20 -136L271 -392L271 -398L25 -398L25 -528L460 -528L460 -391L209 -134L209 -130L463 -130L463 0Z" fill="#F6F5F2"/>
+    <path d="M651 13Q600 13 574.5 -9Q549 -31 549 -77Q549 -124 574.5 -146Q600 -168 651 -168Q703 -168 729 -146Q755 -124 755 -77Q755 13 651 13Z" fill="#E8452A"/>
+  </g>
+</svg>

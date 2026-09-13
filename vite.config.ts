@@ -47,21 +47,38 @@ export default defineConfig({
           { name: "New plan", short_name: "New plan", url: "/plan/new" },
           { name: "Calculators", short_name: "Calculators", url: "/calculators" },
         ],
+        // Toutes dessinées par scripts/generate-wordmark.mjs depuis
+        // public/app-icon.svg, et toutes à fond perdu : le carré d'encre va
+        // jusqu'au bord, c'est le système qui pose son masque. Le favicon,
+        // lui, garde sa plaque de papier arrondie et ne sert QUE l'onglet.
+        // any et maskable sont deux dessins, pas deux usages du même : un
+        // masque rond ne garde que le disque inscrit à 80 % du côté, donc le
+        // z. y est plus petit, et le générateur refuse de sortir un maskable
+        // dont la diagonale déborde de cette zone.
         icons: [
+          {
+            src: "app-icon.svg",
+            sizes: "any",
+            type: "image/svg+xml",
+            purpose: "any",
+          },
           {
             src: "pwa-64x64.png",
             sizes: "64x64",
             type: "image/png",
+            purpose: "any",
           },
           {
             src: "pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
+            purpose: "any",
           },
           {
             src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
+            purpose: "any",
           },
           {
             src: "maskable-icon-512x512.png",
