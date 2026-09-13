@@ -854,11 +854,10 @@
   },
   "mobileMenu": {
     "goTo": "Aller à",
-    "searchPlaceholder": "Rechercher une séance…",
-    "language": "Changer de langue",
+    "search": "Chercher partout",
+    "language": "Langue",
+    "theme": "Thème",
     "disclose": "Afficher les pages de {{door}}",
-    "themeToDark": "Passer en sombre",
-    "themeToLight": "Passer en clair",
     "more": "Le reste"
   },
   "modules": {

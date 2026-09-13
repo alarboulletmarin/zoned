@@ -854,11 +854,10 @@
   },
   "mobileMenu": {
     "goTo": "Go to",
-    "searchPlaceholder": "Search for a workout…",
-    "language": "Change language",
+    "search": "Search everything",
+    "language": "Language",
+    "theme": "Theme",
     "disclose": "Show the pages under {{door}}",
-    "themeToDark": "Switch to dark",
-    "themeToLight": "Switch to light",
     "more": "Everything else"
   },
   "modules": {
