@@ -1,9 +1,9 @@
-/* Footer — two parts.
+/* Footer, two parts.
 
    The link table on card paper, kept because the crawler reads it: four
    columns divided by ink rules, each headed by a mono uppercase micro-label.
 
-   Then the ink bar the design ends the page on — a full-bleed inversion in
+   Then the ink bar the design ends the page on, a full-bleed inversion in
    mono capitals carrying the licence, the "100 % local" line and the version.
    It flips with the theme on its own: --surface-inverse and --text-inverse are
    defined either way round, so the bar is always the opposite of the page. */
@@ -72,7 +72,7 @@
 /* Le <li> imposait sinon la ligne du corps (16 px × 1,55 = 24,8) à un lien de
    14 px : 3,1 px perdus par rangée, 15 px par colonne, pour rien. Un lien en
    bloc porte sa propre ligne. La règle (pointer: coarse) plus bas redéclare
-   `display` et garde donc le plancher de 44 px — elle vient après dans le
+   `display` et garde donc le plancher de 44 px, elle vient après dans le
    fichier, elle gagne. */
 .zn-footer__link {
   display: block;
@@ -88,12 +88,12 @@
   text-underline-offset: 3px;
 }
 
-/* Empilé, le filet vertical devient horizontal — le même filet, tourné avec la
+/* Empilé, le filet vertical devient horizontal, le même filet, tourné avec la
    mise en page.
 
    Et les trois groupes de liens se replient. Douze liens au plancher tactile de
    44 px font 564 px de pied sur un téléphone : une page d'accueil bis pour un
-   plan du site que personne n'est venu chercher. Le plancher ne bouge pas —
+   plan du site que personne n'est venu chercher. Le plancher ne bouge pas,
    c'est la règle de la maison et c'est du AAA ; c'est le NOMBRE de rangées qui
    bouge : trois têtes de groupe au lieu de douze liens. La tête était déjà là,
    en étiquette morte ; elle devient la commande qui ouvre le groupe et paie ses
@@ -122,7 +122,7 @@
 
      Le logotype part avec elle : sa colonne est alors un lien vers l'accueil
      seul, sur sa propre rangée de 38 px, à quinze pixels d'une barre d'encre
-     qui signe déjà ZONED — et l'accueil se rejoint par le logotype de la barre
+     qui signe déjà ZONED, et l'accueil se rejoint par le logotype de la barre
      du haut, qui est collante, et par le menu. Le prérendu tourne à 1280 px
      (scripts/prerender.ts) : le HTML statique que lit le robot garde les
      deux. */
@@ -168,7 +168,7 @@
   }
 
   /* Deux colonnes jusqu'en bas de la gamme : dans un groupe ouvert, un
-     « Générateur de parcours » sur deux lignes coûte 1,7 px, une colonne unique
+     Générateur de parcours sur deux lignes coûte 1,7 px, une colonne unique
      en coûte 88. */
   .zn-footer__list {
     display: grid;
@@ -235,13 +235,13 @@
   margin-inline-start: auto;
 }
 
-/* Below 1024px the floating menu pill sits over this corner — over the version,
+/* Below 1024px the floating menu pill sits over this corner, over the version,
    which is pinned to the far end of the bar. The bar pays the pill's clearance
    itself rather than the shell paying it: the ink has to reach the floor of the
    document, and a reserve above it would show as a band of page colour.
 
    Une SEULE réserve, et c'est la latérale. Elle tient chaque rangée hors de la
-   colonne de la pastille — quel que soit le nombre de rangées, et à toute
+   colonne de la pastille, quel que soit le nombre de rangées, et à toute
    position de défilement, la pastille étant fixée au bas de la fenêtre ;
    `--fab-w` est exactement la pastille mesurée en travers. La réserve BASSE
    qui l'accompagnait, elle, ne protégeait plus rien : elle posait 82 px
@@ -261,7 +261,7 @@
 /* Sur téléphone, l'interlettrage de micro-étiquette retombe à celui des
    données. Ces cinq lignes sont des PHRASES en capitales, pas des étiquettes :
    à 0,16 em dans la colonne de 230 px que laisse la réserve de la pastille,
-   l'écart ajoutait à lui seul une rangée et demie — vingt pixels d'encre pour
+   l'écart ajoutait à lui seul une rangée et demie, vingt pixels d'encre pour
    une convention typographique qui vise un mot, pas une licence. */
 @media (max-width: 640px) {
   .zn-footer__bar {

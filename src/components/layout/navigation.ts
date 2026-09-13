@@ -20,7 +20,7 @@ export interface NavChild {
 }
 
 export interface NavSection {
-  /** Stable id — the door's name in the design kit. */
+  /** Stable id, the door's name in the design kit. */
   id: string;
   to: string;
   labelKey: string;
@@ -41,11 +41,11 @@ export interface NavSection {
  * Les ~35 destinations retirées **gardent toutes leur route** : elles restent
  * indexées, prérendues, partageables, et joignables par Cmd+K
  * (`src/data/command-surfaces.ts`), le pied de page et des liens contextuels.
- * Reléguer n'est pas supprimer — et `nav-coverage.test.ts` échoue si l'une
+ * Reléguer n'est pas supprimer, et `nav-coverage.test.ts` échoue si l'une
  * d'elles devient joignable de nulle part.
  *
  * Deux entrées sont là parce qu'elles répondent aux deux seuls moments où
- * l'on ne veut pas décider : « tire-moi une séance » et « ma semaine ». Elles
+ * l'on ne veut pas décider : tire-moi une séance et ma semaine. Elles
  * étaient au fond d'un menu déroulant.
  */
 export const PRIMARY_NAV: NavSection[] = [
@@ -104,7 +104,7 @@ export function isNavActive(pathname: string, section: NavSection): boolean {
 /**
  * Le pied de page, en donnée pure, pour la même raison.
  *
- * C'est lui qui rattrape les familles sorties des portes — et un robot n'a que
+ * C'est lui qui rattrape les familles sorties des portes, et un robot n'a que
  * ça et le sitemap pour atteindre les hubs. Quatre colonnes : ce qu'on
  * utilise, les outils, ce qui explique, le projet.
  */

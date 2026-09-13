@@ -40,7 +40,7 @@ const DIFFICULTY_LEVELS: Record<Difficulty, number> = {
 interface WorkoutSelection {
   workoutId: string;
   estimatedDurationMin: number;
-  /** The session type that actually matched — may be a fallback, not slot.sessionTypes[0] */
+  /** The session type that actually matched, may be a fallback, not slot.sessionTypes[0] */
   sessionType: SessionType;
 }
 
@@ -144,7 +144,7 @@ function findBestWorkout(
 
   if (isTrailRace) {
     // Trail workouts are volume/elevation sessions. They stand in for aerobic
-    // and race-specific work, never for recovery or track-style intervals —
+    // and race-specific work, never for recovery or track-style intervals,
     // injecting them everywhere turned every slot into a 2h mountain outing.
     const TRAIL_FRIENDLY_TYPES = new Set<SessionType>([
       "endurance", "long_run", "hills", "fartlek", "race_specific",
@@ -171,7 +171,7 @@ function findBestWorkout(
   }
 
   // Step 2: Filter by phase
-  // For easy/recovery slots, relax the phase filter — low-intensity
+  // For easy/recovery slots, relax the phase filter, low-intensity
   // workouts are appropriate regardless of training phase
   if (slotType !== "easy" && slotType !== "recovery") {
     candidates = candidates.filter((w) =>
@@ -272,7 +272,7 @@ function findBestWorkout(
   }
 
   // Step 6: Drop workouts already placed this week. Giving up here lets the
-  // caller try the slot's next session type, which usually has a fresh pool —
+  // caller try the slot's next session type, which usually has a fresh pool,
   // keeping the duplicate instead is what put the same run on three days.
   if (excludeWorkoutIds.length > 0) {
     const excluded = new Set(excludeWorkoutIds);
@@ -371,7 +371,7 @@ export function selectWorkout(
     if (result) return result;
   }
 
-  // Nothing fresh left for any of the slot's types — retry without the
+  // Nothing fresh left for any of the slot's types, retry without the
   // same-week exclusion rather than leaving the day empty.
   if (excludeWorkoutIds.length > 0) {
     for (const sessionType of slot.sessionTypes) {

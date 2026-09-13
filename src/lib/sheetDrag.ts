@@ -2,7 +2,7 @@
  * Le glisser-pour-fermer d'une bottom sheet, réduit à sa décision.
  *
  * Ici plutôt que dans le composant parce que `bun test` n'a pas de DOM et que
- * PlanWorkoutPanel.tsx tire toute la chaîne i18n — dont `import.meta.glob`, que
+ * PlanWorkoutPanel.tsx tire toute la chaîne i18n, dont `import.meta.glob`, que
  * Vite résout et que bun ne connaît pas. La règle est la seule partie du geste
  * qui se teste sans navigateur ; le reste (la prise sur l'en-tête, la
  * transition coupée tant que le doigt est posé) se mesure au navigateur.

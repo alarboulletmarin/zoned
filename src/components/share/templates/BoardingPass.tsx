@@ -1,5 +1,5 @@
 /**
- * BoardingPass — 1080×1920. Airline boarding pass with the workout's zone
+ * BoardingPass, 1080×1920. Airline boarding pass with the workout's zone
  * as the destination, duration as flight time, RPE as the gate.
  */
 

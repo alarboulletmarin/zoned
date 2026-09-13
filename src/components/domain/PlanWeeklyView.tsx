@@ -37,7 +37,7 @@ export interface WorkoutCardMeta {
 interface PlanWeeklyViewProps {
   plan: TrainingPlan;
   workoutNames: Record<string, string>;
-  /** Optional zone/TSS per workout id — adds a meta line to each card. */
+  /** Optional zone/TSS per workout id, adds a meta line to each card. */
   workoutMeta?: Record<string, WorkoutCardMeta>;
   currentWeek: number;
   initialWeek?: number;
@@ -124,7 +124,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   } | null>(null);
   const [dropTarget, setDropTarget] = useState<{ weekNumber: number; day: number } | null>(null);
 
-  // Trash drop zone — surfaced only while a session is being dragged, so
+  // Trash drop zone, surfaced only while a session is being dragged, so
   // "remove a session" is discoverable without a right-click.
   const [overTrash, setOverTrash] = useState(false);
   const overTrashRef = useRef(false);
@@ -157,7 +157,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     target: HTMLElement | null;
   } | null>(null);
 
-  /* La fermeture — clic à côté et Échap — appartient désormais à
+  /* La fermeture, clic à côté et Échap, appartient désormais à
      SessionActionMenu : son voile couvre la fenêtre, donc il ne peut pas rater
      un pointerdown qu'un autre gestionnaire aurait arrêté en chemin, là où
      l'écouteur posé sur `document` qui vivait ici le pouvait. */
@@ -717,7 +717,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           </div>
         )}
 
-        {/* The board paints zone ink, so it carries the ramp's legend once —
+        {/* The board paints zone ink, so it carries the ramp's legend once,
             repliée, parce qu'on l'apprend une fois et qu'elle coûtait 131px
             au-dessus du pli chaque jour. */}
         {weekData && (
@@ -766,7 +766,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
           Il était écrit ici, en JSX inline, et n'existait donc que pour cette
           vue : la vue liste du même plan n'avait rien à ouvrir. Il vit
-          maintenant dans SessionActionMenu, que les deux vues rendent — mêmes
+          maintenant dans SessionActionMenu, que les deux vues rendent, mêmes
           entrées, même forme, même placement. Ce qui reste ici est la seule
           chose que cette vue soit seule à savoir : ce qu'on peut faire à une
           séance d'un tableau de semaine. */}
@@ -922,7 +922,7 @@ const DayCell = memo(function DayCell({
   const pickLang = usePickLang();
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
   // While the draw animation runs, this day shows the spinning card instead of
-  // its own content — same cell, same position, so nothing can drift.
+  // its own content, same cell, same position, so nothing can drift.
   const scanContent = renderScanCell?.(dayIndex) ?? null;
   const isDropHere = dropTarget?.weekNumber === selectedWeek && dropTarget?.day === dayIndex;
 
@@ -1184,7 +1184,7 @@ const DayCell = memo(function DayCell({
                         }
                       />
                     )}
-                    {/* The zone label is the dot's legend — the ink ramp orders
+                    {/* The zone label is the dot's legend, the ink ramp orders
                         the zones, it does not name them. */}
                     {meta?.zone != null && (
                       <span

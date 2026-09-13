@@ -25,7 +25,7 @@ const catalog = [
 // the real 239-workout catalogue, so they are slow by nature: ~4.8s locally and
 // 7.5s on a GitHub runner, against bun's 5s default. They get an explicit
 // timeout rather than fewer iterations, which would weaken what they assert.
-describe("generateWeek — locked slots", () => {
+describe("generateWeek, locked slots", () => {
   test("keeps a locked slot verbatim across regenerations", () => {
     const first = generateWeek(DEFAULT_WEEK_SETTINGS, catalog);
     const pinned = first.slots.find((s) => s.workout);

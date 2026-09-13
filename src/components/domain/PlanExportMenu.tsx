@@ -18,9 +18,9 @@ import { pickLang } from "@/lib/i18n-utils";
 
 interface PlanExportMenuProps {
   plan: TrainingPlan;
-  /** Pre-loaded workout names (optional — loaded on demand if absent) */
+  /** Pre-loaded workout names (optional, loaded on demand if absent) */
   workoutNames?: Record<string, string>;
-  /** Pre-loaded workout templates (optional — loaded on demand if absent) */
+  /** Pre-loaded workout templates (optional, loaded on demand if absent) */
   workoutTemplates?: Record<string, AnyWorkoutTemplate>;
   size?: "sm" | "default";
   /** Visual weight. Use "outline" where another filled CTA already leads. */

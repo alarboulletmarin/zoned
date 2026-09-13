@@ -10,7 +10,7 @@
  * Templates that support transparent export expose an internal `.bg-layer`
  * background that is hidden when their wrapper carries `data-transparent="true"`.
  * Passing `transparent: true` here just tells html-to-image to skip the white
- * canvas fill — alpha is preserved.
+ * canvas fill, alpha is preserved.
  */
 
 import type { RefObject } from "react";
@@ -45,7 +45,7 @@ async function nodeToBlob(
     opts.backgroundColor = "#f8fafc";
   }
   // When backgroundColor is omitted, html-to-image keeps the PNG alpha
-  // channel — exactly what we want for overlays.
+  // channel, exactly what we want for overlays.
   const dataUrl = await toPng(element, opts);
   const res = await fetch(dataUrl);
   return res.blob();
@@ -122,7 +122,7 @@ export async function shareImage(
   const blob = await nodeToBlob(target, transparent);
   const file = new File([blob], filename, { type: "image/png" });
 
-  // Web Share Level 2 — only on HTTPS/mobile most of the time.
+  // Web Share Level 2, only on HTTPS/mobile most of the time.
   if (
     typeof navigator !== "undefined" &&
     typeof navigator.canShare === "function" &&
@@ -133,8 +133,8 @@ export async function shareImage(
       // "Copy" option pastes the *whole* ShareData (title + image), so a
       // title here ends up in the user's clipboard alongside the picture.
       // Instagram Stories goes further and prefers text over the file
-      // entirely. Stripping both fields forces every receiving app —
-      // copy, Stories, Mail, Messages — to treat the image as the only
+      // entirely. Stripping both fields forces every receiving app,
+      // copy, Stories, Mail, Messages, to treat the image as the only
       // asset. The filename on the File object (e.g. "zoned-REC-001.png")
       // already gives apps a sensible label.
       await navigator.share({ files: [file] });

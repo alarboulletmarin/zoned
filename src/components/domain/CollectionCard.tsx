@@ -66,7 +66,7 @@ export function CollectionCard({ collection, className }: CollectionCardProps) {
           {t("collections.workoutCount", { count: collection.workoutIds.length })}
         </span>
         {/* La pratique, quand la collection en sert une. Dix des quinze sont
-            transversales et n'affichent donc rien — un « toutes pratiques »
+            transversales et n'affichent donc rien, un toutes pratiques
             sur dix cartes sur quinze serait du bruit, pas une information.
             Le libellé vient de PRACTICE_META, qui porte ses deux langues en
             ligne comme le reste des tables de domaine : ce n'est pas une clé

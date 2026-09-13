@@ -1,4 +1,4 @@
-/* Button — the house action: ink outline, pill radius, hard press.
+/* Button, the house action: ink outline, pill radius, hard press.
    Variants and sizes are selected off the data-variant / data-size attributes
    the component already emits, so the JSX did not have to change shape. */
 
@@ -35,7 +35,7 @@
   pointer-events: none;
 }
 
-/* Press is a 1px push down — the stamp meeting the paper. Nothing scales. */
+/* Press is a 1px push down, the stamp meeting the paper. Nothing scales. */
 .zn-btn:active:not(:disabled) {
   transform: translateY(var(--press-shift));
 }
@@ -64,7 +64,7 @@
   background: var(--accent-press);
 }
 
-/* Danger wears the same vermillon — in this system danger and the primary
+/* Danger wears the same vermillon, in this system danger and the primary
    action are the same colour, told apart by their words and their placement. */
 .zn-btn[data-variant="destructive"] {
   background: var(--state-danger);
@@ -84,7 +84,7 @@
   background: var(--surface-band);
 }
 
-/* An outlined button that admits it is the accent one — used where a screen
+/* An outlined button that admits it is the accent one, used where a screen
    already spends its single vermillon fill elsewhere. */
 .zn-btn[data-variant="outline-primary"] {
   background: transparent;
@@ -183,8 +183,8 @@
  *
  * La distinction est toute la règle. Un bouton de maison à 16 px semi-gras
  * dans 13/22 px de rembourrage fait 48 px de haut et, à deux par rangée sur
- * 350 px de colonne, ne laisse la place à rien d'autre : c'est ce que « les
- * boutons sont tous gros » décrit. Mais la CIBLE, elle, doit rester à 44 px —
+ * 350 px de colonne, ne laisse la place à rien d'autre : c'est ce que les
+ * boutons sont tous gros décrit. Mais la CIBLE, elle, doit rester à 44 px,
  * c'est un doigt, pas un curseur. On reprend donc les pixels sur le TEXTE et
  * le rembourrage, et le plancher de 44 px (plus bas) tient la surface
  * tactile : le bouton s'allège sans devenir plus difficile à viser.

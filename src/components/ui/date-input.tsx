@@ -61,8 +61,8 @@ function shiftYears(date: Date, years: number): Date {
  * s'ouvre.
  *
  * Il s'ouvrait sur le mois COURANT, toujours : `defaultMonth` recevait la date
- * choisie, donc `undefined` tant qu'il n'y en avait pas. Sur l'étape « quand a
- * lieu la course ? », `min` vaut aujourd'hui plus douze à seize semaines — le
+ * choisie, donc `undefined` tant qu'il n'y en avait pas. Sur l'étape quand a
+ * lieu la course ?, `min` vaut aujourd'hui plus douze à seize semaines, le
  * calendrier s'ouvrait donc sur une grille entièrement grisée, sans un seul
  * jour cliquable et sans rien dire pourquoi. Il fallait deviner qu'il fallait
  * appuyer trois ou quatre fois sur le chevron.
@@ -112,7 +112,7 @@ function DateInput({
   const { t } = useTranslation("common");
 
   /* Sur téléphone, le calendrier N'EST PAS un panneau ancré.
-     Mesuré à 390 × 560 — un Safari iOS avec ses deux barres : la grille fait
+     Mesuré à 390 × 560, un Safari iOS avec ses deux barres : la grille fait
      356 px et il n'en restait que 293 entre le champ et le bord de l'écran.
      Le panneau se plafonnait donc et défilait DANS lui-même, avec sa propre
      barre de défilement et la dernière semaine du mois hors de vue. Un mois

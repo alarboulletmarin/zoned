@@ -7,7 +7,7 @@
  *
  * Bras avant tendu à l'horizontale (coude à +90) : au-dessous il propose, au-
  * dessus il salue. Le cadre est serré sur le trait, donc la main tendue
- * affleure le bord droit — la flèche prend le relais juste après.
+ * affleure le bord droit, la flèche prend le relais juste après.
  *
  *   bun scripts/doodles/pointing.mjs
  */
@@ -26,7 +26,7 @@ f.plantLead({ knee: -5 });
 const gy = f.groundY();
 
 /* L'accent se déduit du contact. Dans cette pose la jambe avant n'atteint pas
-   le sol — elle plafonne une dizaine de pixels au-dessus — et peindre
+   le sol, elle plafonne une dizaine de pixels au-dessus, et peindre
    Figure.LEAD_SOLE y posait du vermillon sur un membre EN L'AIR, la faute que
    docs/doodles.md interdit. On ne peint que les ancres réellement au contact ;
    ici, la seule semelle qui touche. */

@@ -83,7 +83,7 @@ export function CollectionsPage() {
       />
 
       <div className="zn-disc">
-        {/* 1 — the shelf, named and counted */}
+        {/* 1, the shelf, named and counted */}
         <section
           className="zn-disc__head zn-stack"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -102,7 +102,7 @@ export function CollectionsPage() {
           </p>
         </section>
 
-        {/* 2 — one theme per band, each on its own ink rule */}
+        {/* 2, one theme per band, each on its own ink rule */}
         {collections.length === 0 ? (
           <section className="zn-disc__results">
             <EmptyState

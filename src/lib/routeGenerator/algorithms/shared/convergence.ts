@@ -43,7 +43,7 @@ export function dampedRatioCorrection(
 }
 
 export interface ConvergeArgs<State> {
-  /** Initial state — typically the first guess of waypoints / radius. */
+  /** Initial state, typically the first guess of waypoints / radius. */
   initial: State;
   /** Route Brouter once for the given state and return the trace. */
   routeOnce: (state: State) => Promise<BrouterTraceResult>;
@@ -63,7 +63,7 @@ export interface ConvergeArgs<State> {
 }
 
 export interface ConvergeResult<State> {
-  /** The trace from the final pass — never null when `routeOnce` resolved. */
+  /** The trace from the final pass, never null when `routeOnce` resolved. */
   trace: BrouterTraceResult;
   /** Final state after refinements. */
   finalState: State;
@@ -79,7 +79,7 @@ export interface ConvergeResult<State> {
  * loop short-circuits as soon as the ratio is within tolerance.
  *
  * If `routeOnce` throws (network error, AbortSignal), the rejection
- * propagates — the caller is responsible for fallback strategies.
+ * propagates, the caller is responsible for fallback strategies.
  */
 export async function convergeWithCorrection<State>(
   args: ConvergeArgs<State>,

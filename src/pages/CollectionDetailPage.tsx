@@ -52,7 +52,7 @@ export function CollectionDetailPage() {
   const { collection, workouts, isLoading } = useCollection(slug);
   const allCollections = useCollections();
 
-  // 404 state — the address matches nothing, so say how many parcours exist
+  // 404 state, the address matches nothing, so say how many parcours exist
   // and hand back the index that lists them.
   if (!collection) {
     return (
@@ -119,7 +119,7 @@ export function CollectionDetailPage() {
       />
 
       <div className="zn-disc">
-        {/* 1 — the parcours, named and counted, with the way back */}
+        {/* 1, the parcours, named and counted, with the way back */}
         <section
           className="zn-disc__head zn-stack"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -139,7 +139,7 @@ export function CollectionDetailPage() {
           </h1>
         </section>
 
-        {/* 2 — what the parcours is for */}
+        {/* 2, what the parcours is for */}
         <section className="zn-disc__group">
           <div className="zn-coll__hero">
             <div className="zn-coll__glyph" aria-hidden="true">
@@ -154,14 +154,14 @@ export function CollectionDetailPage() {
           </div>
         </section>
 
-        {/* 3 — the ink ramp orders the zones, it does not name them */}
+        {/* 3, the ink ramp orders the zones, it does not name them */}
         {workouts.length > 0 && (
           <div className="zn-disc__legend">
             <ZoneScale />
           </div>
         )}
 
-        {/* 4 — the sessions, in the order the parcours states */}
+        {/* 4, the sessions, in the order the parcours states */}
         <section className="zn-disc__results" aria-busy={isLoading}>
           {isLoading ? (
             <div className="zn-disc__wait">

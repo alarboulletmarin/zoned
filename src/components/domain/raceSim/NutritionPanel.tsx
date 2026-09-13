@@ -5,10 +5,10 @@ import { usePickLang } from "@/lib/i18n-utils";
 import { Stat } from "./RaceSimSection";
 
 /**
- * Fuelling figures — but only the ones that carry a number.
+ * Fuelling figures, but only the ones that carry a number.
  *
  * Under an hour the correct plan is "eat nothing", and rendering that as
- * `0 g`, `0` gels and `—` reads like a failed calculation rather than advice.
+ * `0 g`, `0` gels and `, ` reads like a failed calculation rather than advice.
  * The zero case gets a sentence instead, and the hydration figure stays
  * because it is the one thing that still matters.
  */

@@ -1,5 +1,5 @@
 /**
- * Brand logos — hand-maintained, NOT generated.
+ * Brand logos, hand-maintained, NOT generated.
  *
  * Material Symbols does not publish third-party brand logos, so these two
  * glyphs stay on their original geometry (viewBox 24) and are re-exported

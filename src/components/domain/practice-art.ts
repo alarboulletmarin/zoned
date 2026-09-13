@@ -10,8 +10,8 @@ import type { Practice } from "@/types/practice";
  * qui en montrent une ne divergent pas.
  *
  * **Les quatre sont des réemplois**, et la quatrième l'est devenue en revue.
- * Une figure avait été dessinée pour le trail — `climbing`, huit tours de
- * relecture — et elle a été jetée : rastérisée à côté de `door-today`, c'était
+ * Une figure avait été dessinée pour le trail, `climbing`, huit tours de
+ * relecture, et elle a été jetée : rastérisée à côté de `door-today`, c'était
  * LA MÊME POSE à quelques degrés d'inclinaison près. Le tour 6 l'avait comparée
  * à `easy-run` et au duo, c'est-à-dire à tout sauf au dessin dont elle était le
  * jumeau. Deux dessins pour une pose, c'est exactement la masse que ce chantier
@@ -19,21 +19,21 @@ import type { Practice } from "@/types/practice";
  *
  * Donc quatre réemplois, et c'est un choix, pas une économie :
  *
- *   route     `runners-duo` — le dessin approuvé du projet. Il ne se retouche
+ *   route     `runners-duo`, le dessin approuvé du projet. Il ne se retouche
  *             pas et il n'avait pas à être remplacé.
- *   ultra     `walking-away` — la figure qui s'éloigne. C'est exactement ce
+ *   ultra     `walking-away`, la figure qui s'éloigne. C'est exactement ce
  *             que l'ultra est : du temps sur les pieds, et on avance.
- *   triathlon `standing` — debout, bras qui pendent. Elle sert déjà l'état
- *             « rien de commencé », et c'est précisément le statut du
+ *   triathlon `standing`, debout, bras qui pendent. Elle sert déjà l'état
+ *             rien de commencé, et c'est précisément le statut du
  *             triathlon : annoncé, pas livré. La même figure pour le même
  *             sens, ce qui est de la cohésion et non un raccourci.
- *   trail     `door-today` — la foulée penchée, genou haut, appui planté. Elle
- *             sert déjà la porte « aujourd'hui » et la clôture du cockpit ;
+ *   trail     `door-today`, la foulée penchée, genou haut, appui planté. Elle
+ *             sert déjà la porte aujourd'hui et la clôture du cockpit ;
  *             aucun écran n'en montre deux à la fois, et la répétition est ce
  *             qui fait lire une famille (docs/doodles.md).
  *
- * « Une figure de plus ne se juge pas sur la place disponible mais sur ce
- * qu'elle retire » (docs/doodles.md). Zéro dessin ajouté.
+ * Une figure de plus ne se juge pas sur la place disponible mais sur ce
+ * qu'elle retire (docs/doodles.md). Zéro dessin ajouté.
  *
  * Le type est celui qu'`EmptyState.art` attend : un SVG importé avec `?react`.
  */

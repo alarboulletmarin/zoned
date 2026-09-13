@@ -41,7 +41,7 @@ afterEach(() => {
 
 describe("generateRouteCandidates", () => {
   test("falls back to best-effort candidates when none match the strict tolerance", async () => {
-    // Brouter returns a constant 5 km regardless of input — way off a 10 km
+    // Brouter returns a constant 5 km regardless of input, way off a 10 km
     // request. We still want to return the closest attempts instead of a blank
     // UI, because the caller can explain that the distance is approximate.
     globalThis.fetch = (async (input: string | URL | Request) => {

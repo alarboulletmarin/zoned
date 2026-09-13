@@ -1,8 +1,8 @@
-/* Segmented — two to four exclusive views of one thing (list vs calendar,
+/* Segmented, two to four exclusive views of one thing (list vs calendar,
    km vs miles). An outlined pill track on the sunken paper; the chosen
    segment inverts to solid ink. Nothing lifts, nothing scales.
 
-   State comes off the aria-checked the radios already emit — no parallel
+   State comes off the aria-checked the radios already emit, no parallel
    modifier class. */
 
 .zn-segmented {
@@ -70,7 +70,7 @@
   color: var(--ink-1);
 }
 
-/* Press is a 1px push down — the stamp meeting the paper. */
+/* Press is a 1px push down, the stamp meeting the paper. */
 .zn-segmented__item:active {
   transform: translateY(var(--press-shift));
 }

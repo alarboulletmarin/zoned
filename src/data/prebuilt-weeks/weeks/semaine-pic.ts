@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Semaine pic — 6 sessions, two quality days (Tue/Thu), the heaviest week of a
+ * Semaine pic, 6 sessions, two quality days (Tue/Thu), the heaviest week of a
  * block, placed right before the taper. Long run Saturday, one full rest day.
  */
 export const semainePic: PrebuiltWeek = {
@@ -16,8 +16,8 @@ export const semainePic: PrebuiltWeek = {
   icon: "TrendingUp",
   difficulty: "intermediate",
   category: "peak",
-  provenance: "Surcharge progressive puis affûtage — Pfitzinger & Douglas",
-  provenanceEn: "Progressive overload then taper — Pfitzinger & Douglas",
+  provenance: "Surcharge progressive puis affûtage, Pfitzinger & Douglas",
+  provenanceEn: "Progressive overload then taper, Pfitzinger & Douglas",
   whyItWorks:
     "Le pic concentre la charge la plus élevée du bloc pendant que la fraîcheur est encore suffisante pour l'absorber. Deux séances de qualité espacées de deux jours entretiennent le seuil et l'allure spécifique, et la sortie longue la plus ample verrouille l'endurance. C'est la dernière semaine où l'on accumule : ensuite le volume chute et seule l'intensité reste.",
   whyItWorksEn:

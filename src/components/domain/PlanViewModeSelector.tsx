@@ -10,7 +10,7 @@ interface PlanViewModeSelectorProps {
 }
 
 /* Pas d'icône : CalendarRange, Calendar et CalendarDays partagent le même cadre
-   extérieur au path près — seul l'intérieur change, soit deux pixels de
+   extérieur au path près, seul l'intérieur change, soit deux pixels de
    différence à la taille où le segmented les rend. Le libellé masqué était ce
    qui réduisait chaque segment à un rond ; rendu, la pilule redevient une
    pilule sans qu'on touche à son rayon.

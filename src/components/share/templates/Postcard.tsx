@@ -1,5 +1,5 @@
 /**
- * Postcard — 1080×1920. Vintage postcard with stamp, postmark and a
+ * Postcard, 1080×1920. Vintage postcard with stamp, postmark and a
  * handwritten-feel "from" address. The workout becomes the destination.
  */
 
@@ -194,7 +194,7 @@ export function Postcard({ workout, transparent }: ShareTemplateProps) {
                   color: "#3a322a",
                 }}
               >
-                « {name} »
+                {name}
               </div>
               <div
                 style={{

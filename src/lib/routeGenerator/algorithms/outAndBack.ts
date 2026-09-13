@@ -8,7 +8,7 @@
  *
  *   2. Blind. Project a single waypoint at half the target distance in
  *      the requested bearing. Convergence is identical to the loop
- *      algorithm — single iterative correction loop.
+ *      algorithm, single iterative correction loop.
  *
  * As with loops, both strategies share the same correction loop and only
  * differ in how they choose the turn point.
@@ -115,7 +115,7 @@ interface BlindArgs {
 /**
  * POI-aware leg: route start → POI → start. Same iterative correction loop,
  * but on each pass the turn point is *projected from the start in the same
- * bearing as the POI* — so the routed length is corrected without abandoning
+ * bearing as the POI*, so the routed length is corrected without abandoning
  * the POI's general neighbourhood.
  */
 async function iteratePoiOutAndBack(

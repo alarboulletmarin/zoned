@@ -1,4 +1,4 @@
-/* Sheet — the same paper and outline as a dialog, attached to one edge of the
+/* Sheet, the same paper and outline as a dialog, attached to one edge of the
    viewport. Only the radius changes: the attached edge stays square. A sheet
    floats, so --shadow-block is allowed here too.
 
@@ -40,7 +40,7 @@
   gap: var(--gap-stack);
 }
 
-/* Flat ink wash, no backdrop-filter — the system forbids blur. */
+/* Flat ink wash, no backdrop-filter, the system forbids blur. */
 .zn-sheet::backdrop {
   background: var(--scrim);
   animation: zn-sheet-scene-in var(--dur-base) var(--ease-out);
@@ -60,7 +60,7 @@
 
    The free edge is released to `auto` on purpose, on BOTH axes: the UA pins
    `inset-inline: 0` on every dialog and `inset-block: 0` on a modal one, and a
-   box with both edges of an axis and a size on it is over-constrained — the
+   box with both edges of an axis and a size on it is over-constrained, the
    browser drops the far edge (`bottom`, and `right` in LTR). A sheet asked to
    hang off the floor was drawn against the ceiling; one hinged on the right
    was drawn against the left. */
@@ -84,7 +84,7 @@
 
 /* La prise du geste, sur le bord bas seulement. `touch-action: none` la rend au
    composant : sans elle, le panneau défile sous le doigt qui voulait le tirer.
-   La poignée est un ::before, qu'aucun événement ne peut viser — c'est la bande
+   La poignée est un ::before, qu'aucun événement ne peut viser, c'est la bande
    de tête, dans useSheetDrag.ts, qui la couvre. */
 .zn-sheet[data-side="bottom"] > [data-slot="sheet-header"] {
   touch-action: none;
@@ -113,7 +113,7 @@
   border-radius: var(--r-4xl) 0 0 var(--r-4xl);
 }
 
-/* The grab handle a vertical sheet is dragged by — decoration, so it is a
+/* The grab handle a vertical sheet is dragged by, decoration, so it is a
    pseudo-element and never reaches the accessibility tree. */
 .zn-sheet[data-side="bottom"]::before,
 .zn-sheet[data-side="top"]::before {
@@ -243,7 +243,7 @@
   pointer-events: none;
 }
 
-/* WCAG 2.5.8 — 44px on a coarse pointer, whatever the drawn size says. */
+/* WCAG 2.5.8, 44px on a coarse pointer, whatever the drawn size says. */
 @media (pointer: coarse) {
   .zn-sheet__close {
     min-inline-size: var(--hit-min);

@@ -9,7 +9,7 @@ const VALID_MODES: PlanViewMode[] = ["calendar", "weekly", "monthly", "list"];
 
 /* Le tableau du mois et le calendrier complet demandent une grille large et un
    pointeur. Le point de rupture n'est plus écrit ici : useIsMobile le porte
-   (768px), et c'est désormais son unique propriétaire — le CSS ne masque plus
+   (768px), et c'est désormais son unique propriétaire, le CSS ne masque plus
    rien de son côté. */
 const DESKTOP_ONLY_MODES: PlanViewMode[] = ["calendar", "monthly"];
 

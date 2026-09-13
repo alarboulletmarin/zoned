@@ -1,5 +1,5 @@
 /* ==========================================================================
-   OVERRIDES — base styles, scrollbar, reduced-motion, zone utilities,
+   OVERRIDES, base styles, scrollbar, reduced-motion, zone utilities,
    third-party fixes (Leaflet), iOS form-zoom mitigation.
    ========================================================================== */
 
@@ -62,7 +62,7 @@
    Tailwind gone there is no utility to outrank, and no call site left. */
 
 /* ==========================================================================
-   ZONE SYSTEM — Utility classes & components
+   ZONE SYSTEM, Utility classes & components
    ========================================================================== */
 
 .zone-1 {
@@ -99,7 +99,7 @@
 /* `.zone-stripe` (bande verticale de 4px à gauche d'une carte) a été retiré :
    zéro appelant, et le changelog du projet enregistre déjà son remplacement
    par des bordures hautes. C'était l'archétype même de la bande latérale que
-   ce chantier démonte — elle n'attend plus qu'on la réutilise. */
+   ce chantier démonte, elle n'attend plus qu'on la réutilise. */
 
 .zone-badge {
   display: inline-flex;
@@ -130,7 +130,7 @@
 }
 
 /* `.intensity-bar` a été retiré : zéro appelant, et son dégradé était déjà
-   faux — depuis que la rampe de zones est passée à l'encre, il résolvait en
+   faux, depuis que la rampe de zones est passée à l'encre, il résolvait en
    gris sur gris et ne disait plus rien. */
 
 .zone-fill {
@@ -152,7 +152,7 @@
 }
 
 /* ==========================================================================
-   LEAFLET — restore tile/marker max-width that the reset in base.css clamps
+   LEAFLET, restore tile/marker max-width that the reset in base.css clamps
    ========================================================================== */
 .leaflet-pane img,
 .leaflet-tile,

@@ -6,18 +6,18 @@ import { isPracticeLive, type Practice } from "@/types/practice";
  * La ligne de données d'une carte de pratique : ce qu'il y a réellement
  * derrière, en chiffres.
  *
- * Elle disait « 4 distances » — une propriété de la table `PRACTICE_META`, pas
+ * Elle disait 4 distances, une propriété de la table `PRACTICE_META`, pas
  * du contenu. Quelqu'un qui hésite entre trail et ultra veut savoir combien de
  * séances et de plans l'attendent, pas combien de cases le modèle compte.
  *
  * Trois cas, et le troisième est celui qui coûte le plus cher à rater :
  *
- *   · pratique annoncée → « bientôt », et rien d'autre. Pas de compteur, pas
+ *   · pratique annoncée → bientôt, et rien d'autre. Pas de compteur, pas
  *     de promesse chiffrée sur une étagère qui n'existe pas ;
  *   · catalogue pas encore chargé (il arrive en chunks) → chaîne vide, donc
- *     rien ne s'affiche. Écrire « 0 séance » pendant 300 ms est un mensonge
+ *     rien ne s'affiche. Écrire 0 séance pendant 300 ms est un mensonge
  *     court mais c'en est un, et il fait aussi sauter la mise en page ;
- *   · zéro plan tout prêt → on le DIT (« aucun plan prêt ») au lieu de
+ *   · zéro plan tout prêt → on le DIT (aucun plan prêt) au lieu de
  *     masquer la moitié de la ligne. C'était l'ultra jusqu'au 12 septembre
  *     2026, où il est passé annoncé : il tombe donc dans le premier cas
  *     maintenant, et aucune pratique ouverte n'est dans celui-ci. Le cas

@@ -38,7 +38,7 @@ export function exerciseSeconds(ex: Exercise): number | null {
   return ex.durationSeconds * (ex.sets ?? ex.repetitions ?? 1);
 }
 
-/** "10 min" / "45 s" / "2 min 30" — compact enough for a chip. */
+/** "10 min" / "45 s" / "2 min 30", compact enough for a chip. */
 export function formatShortDuration(seconds: number): string {
   if (seconds < 60) return `${seconds} s`;
   const min = Math.floor(seconds / 60);

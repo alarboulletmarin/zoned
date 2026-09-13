@@ -1,4 +1,4 @@
-/* Select — a field that opens a floating list.
+/* Select, a field that opens a floating list.
 
    Two surfaces, two treatments. The trigger is a FIELD: raised paper, full ink
    outline, 10px radius, 44px touch floor, chevron on the right. The content is
@@ -83,7 +83,7 @@
   pointer-events: none;
 }
 
-/* The disclosure chevron — Radix renders it as the trigger's last child. */
+/* The disclosure chevron, Radix renders it as the trigger's last child. */
 .zn-select-trigger > svg:last-child {
   color: var(--ink-3);
 }

@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 /**
- * Le menu d'une séance — ce qu'on peut lui faire sans quitter le plan.
+ * Le menu d'une séance, ce qu'on peut lui faire sans quitter le plan.
  *
  * Il a d'abord vécu dans `PlanWeeklyView`, en JSX inline, où seul le tableau
  * de la semaine pouvait l'ouvrir. La vue liste, elle, n'avait rien : un appui
@@ -11,9 +11,9 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
  * ouvrent LE MÊME objet.
  *
  * Le composant ne décide de rien : il reçoit une liste d'entrées et un point
- * d'ancrage. Chaque vue sait ce qu'elle sait faire — le tableau propose de
+ * d'ancrage. Chaque vue sait ce qu'elle sait faire, le tableau propose de
  * retirer et de verrouiller une séance tirée au sort, la liste propose de
- * l'échanger et de lui substituer une variante — et compose sa liste.
+ * l'échanger et de lui substituer une variante, et compose sa liste.
  *
  * Ce qu'il ajoute à ce que faisait la version inline : il RESTE À L'ÉCRAN. La
  * version d'origine posait `left: x; top: y` puis se recentrait par un
@@ -52,7 +52,7 @@ export function SessionActionMenu({ x, y, items, onClose }: SessionActionMenuPro
   const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
 
   /* Avant la peinture : on mesure le menu rendu, puis on le range dans la
-     fenêtre. `useLayoutEffect` et non `useEffect` — ce dernier s'exécute APRÈS
+     fenêtre. `useLayoutEffect` et non `useEffect`, ce dernier s'exécute APRÈS
      la peinture, donc le menu apparaîtrait une frame à la mauvaise place.
      Le ResizeObserver rattrape les mesures PÉRIMÉES : la police de l'interface
      finit de charger après le premier rendu, les libellés s'élargissent, et un
@@ -62,13 +62,13 @@ export function SessionActionMenu({ x, y, items, onClose }: SessionActionMenuPro
      ────────────────────────────────────────────────────────────────────────
      Parce qu'une boîte `fixed` posée par son seul `left` se fait DIMENSIONNER
      par lui : sa largeur disponible vaut `largeur de fenêtre − left`. Le menu
-     se rétrécissait donc à mesure qu'on le poussait à droite — et le rangement
+     se rétrécissait donc à mesure qu'on le poussait à droite, et le rangement
      ci-dessous est un calcul qui DÉPEND de la largeur.
 
      Les deux se sont mordu la queue. Ouvert près du bord droit, le menu
      naissait à 143px (sa largeur minimale, faute de place), l'observateur le
      décalait de 8px vers la gauche, ces 8px lui rendaient 8px de largeur
-     disponible, il s'élargissait, l'observateur repartait — dix-neuf fois,
+     disponible, il s'élargissait, l'observateur repartait, dix-neuf fois,
      exactement 8px par image, jusqu'à sa largeur naturelle de 274. Vu de
      l'écran : un bandeau étroit qui se déroule de la droite vers la gauche.
 
@@ -89,7 +89,7 @@ export function SessionActionMenu({ x, y, items, onClose }: SessionActionMenuPro
       const left = Math.min(Math.max(x - width / 2, EDGE), Math.max(EDGE, vw - width - EDGE));
 
       /* Sous le doigt par défaut : c'est là que le regard va. S'il n'y a pas
-         la place, au-dessus — et si l'écran est trop court pour les deux,
+         la place, au-dessus, et si l'écran est trop court pour les deux,
          collé en haut, où il reste au moins entièrement lisible. */
       let top = y + OFFSET;
       if (top + height > vh - EDGE) {
@@ -118,7 +118,7 @@ export function SessionActionMenu({ x, y, items, onClose }: SessionActionMenuPro
 
   return (
     /* Le voile prend la fenêtre entière : c'est lui qui ferme le menu quand on
-       touche à côté, plutôt qu'un écouteur posé sur le document — un voile ne
+       touche à côté, plutôt qu'un écouteur posé sur le document, un voile ne
        peut pas rater un événement qu'un autre gestionnaire a arrêté en route. */
     <div className="zn-plan-menu__scrim" onPointerDown={onClose}>
       <div

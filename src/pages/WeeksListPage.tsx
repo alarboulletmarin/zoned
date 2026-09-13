@@ -185,7 +185,7 @@ export function WeeksListPage() {
     [plans],
   );
 
-  // Category filter — chips only appear once at least one week is categorized.
+  // Category filter, chips only appear once at least one week is categorized.
   const presentCategories = useMemo(
     () =>
       WEEK_CATEGORIES.filter((c) =>
@@ -218,7 +218,7 @@ export function WeeksListPage() {
       try {
         await navigator.share({ title: name, url });
       } catch {
-        // Share sheet dismissed — nothing to do.
+        // Share sheet dismissed, nothing to do.
       }
       return;
     }

@@ -133,7 +133,7 @@ const FAQ_IDS = [
   "data",
 ] as const;
 
-// Canonical Seiler-style polarised reference — these are *teaching values*,
+// Canonical Seiler-style polarised reference, these are *teaching values*,
 // not measurements of the user's library. They illustrate what a well-dosed
 // training week looks like under the 80/20 model.
 
@@ -142,21 +142,21 @@ const FAQ_IDS = [
 // physiology and don't depend on the user; the bpm and pace columns are
 // computed from their measured FCmax / VMA when available (see
 // calculateAllZones), and this dash appears when nothing has been measured.
-const NOT_MEASURED = "—";
+const NOT_MEASURED = "-";
 const ZONE_FC_PERCENT: Record<ZoneNumber, string> = {
-  1: "50–60 % FCmax",
-  2: "60–70 % FCmax",
-  3: "70–80 % FCmax",
-  4: "80–90 % FCmax",
-  5: "90–100 % FCmax",
+  1: "50-60 % FCmax",
+  2: "60-70 % FCmax",
+  3: "70-80 % FCmax",
+  4: "80-90 % FCmax",
+  5: "90-100 % FCmax",
   6: "> 100 % FCmax",
 };
 const ZONE_RPE: Record<ZoneNumber, string> = {
-  1: "1–2 / 10",
-  2: "3–4 / 10",
-  3: "5–6 / 10",
+  1: "1-2 / 10",
+  2: "3-4 / 10",
+  3: "5-6 / 10",
   4: "7 / 10",
-  5: "8–9 / 10",
+  5: "8-9 / 10",
   6: "10 / 10",
 };
 
@@ -170,7 +170,7 @@ export function HomePage() {
   const isEn = useIsEnglish();
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
 
-  // User's measured references (VMA, FCmax) — read once at mount. Updates from
+  // User's measured references (VMA, FCmax), read once at mount. Updates from
   // Read once at mount, and only read: the form that used to write them from
   // this page is gone, so /my-zones and the runner profile are the only
   // writers left. Nothing on this screen can change them under the table.
@@ -196,7 +196,7 @@ export function HomePage() {
   const prebuiltPlans = useMemo(() => getAllPrebuiltPlans(), []);
 
   // The three weekly picks need the workout chunks. None of it is
-  // LCP-critical — the hero renders without them — so wait for load+idle
+  // LCP-critical, the hero renders without them, so wait for load+idle
   // before fetching to keep the bandwidth free for the hero on slow mobile.
   const libraryFetchReady = useIdleAfterLoad();
   const { workouts: runWorkouts } = useWorkouts({ enabled: libraryFetchReady });
@@ -208,7 +208,7 @@ export function HomePage() {
   });
 
   // ── Three weekly suggestions. Pick one run, one bike, one swim from the
-  // library — the deterministic week-keyed picker keeps the trio stable for
+  // library, the deterministic week-keyed picker keeps the trio stable for
   // the entire ISO week, which matches the editorial "issue" framing.
   const suggested = useMemo(() => {
     const tempo = pickWeeklyWorkouts(
@@ -243,7 +243,7 @@ export function HomePage() {
 
   // Rich JSON-LD for the homepage. SEOHead already injects WebSite + Organization
   // site-wide, so we only add the homepage-specific layers here:
-  // - WebApplication descriptor (we're a free running app — closest type)
+  // - WebApplication descriptor (we're a free running app, closest type)
   // - FAQPage so questions qualify for "People also ask" snippets
   const homepageJsonLd: Record<string, unknown>[] = [
     {
@@ -316,7 +316,7 @@ export function HomePage() {
     },
   ];
 
-  // The zone atlas, as table rows. One markup for both viewports —
+  // The zone atlas, as table rows. One markup for both viewports,
   // ResponsiveTable turns it into a card per zone below its own breakpoint.
   const zoneColumns: ResponsiveTableColumn<ZoneNumber>[] = [
     {
@@ -354,7 +354,7 @@ export function HomePage() {
               className={cn("zn-mono", range ? "zn-home__measured" : "zn-faint")}
             >
               {range?.hrMin && range?.hrMax
-                ? `${range.hrMin}–${range.hrMax} bpm`
+                ? `${range.hrMin}-${range.hrMax} bpm`
                 : NOT_MEASURED}
             </span>
             <span className="zn-mono zn-faint">{ZONE_FC_PERCENT[z]}</span>
@@ -384,7 +384,7 @@ export function HomePage() {
         return (
           <span className={cn("zn-mono", range ? "zn-home__measured" : "zn-faint")}>
             {range?.paceMinPerKm && range?.paceMaxPerKm
-              ? `${formatPace(range.paceMinPerKm)}–${formatPace(range.paceMaxPerKm)}/km`
+              ? `${formatPace(range.paceMinPerKm)}-${formatPace(range.paceMaxPerKm)}/km`
               : NOT_MEASURED}
           </span>
         );
@@ -402,7 +402,7 @@ export function HomePage() {
       />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          HERO — the question the reader is asking, and the two ways out
+          HERO, the question the reader is asking, and the two ways out
           ═══════════════════════════════════════════════════════════════════ */}
       {/* The hero closes on a full-width ink rule, and the duo stands on it:
           its files carry no ground line, the bottom of its box is its ground,
@@ -429,7 +429,7 @@ export function HomePage() {
               s'entraîner, pas pour relire l'argumentaire, donc le bouton
               principal l'emmène au cockpit. Pas de bandeau, pas
               d'interstitiel, pas de rejet à mémoriser, et surtout pas de
-              redirection — "/" reste la page publique que les robots
+              redirection, "/" reste la page publique que les robots
               indexent et que les gens partagent. */}
           <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
             <Button asChild size="lg">
@@ -449,7 +449,7 @@ export function HomePage() {
         </div>
 
         {/* The width lives in home.css (.zn-home__duo): 460px, the column the
-            duo is drawn for, and at most 240px on a phone — less where the
+            duo is drawn for, and at most 240px on a phone, less where the
             floating MENU pill would otherwise cover it. The height follows
             the viewBox. */}
         {/* Plus de `ground="rule"` : le filet du héros était son sol, et il est
@@ -457,7 +457,7 @@ export function HomePage() {
             du propriétaire). La prop tirait la figure d'un pixel vers le bas
             pour mordre un trait qui n'existe plus ; la garder raconterait un
             contrat que la page ne tient pas. Le duo garde son appui vermillon,
-            qui ne touche donc plus rien — c'est le coût assumé de la
+            qui ne touche donc plus rien, c'est le coût assumé de la
             décision, écrit dans docs/doodles.md. */}
         <IllustrationSlot
           className="zn-home__duo"
@@ -468,9 +468,9 @@ export function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §01 — the four doors, directly under the hero
+          §01, the four doors, directly under the hero
           ═══════════════════════════════════════════════════════════════════ */}
-      {/* Bare doors: kicker, title, promise. The 64px vignettes went — under
+      {/* Bare doors: kicker, title, promise. The 64px vignettes went, under
           84px a crossing line reads as a pictogram, and the one figure this
           screen gets is the duo above. The five doors keep their drawings at
           200px in the menu, where they have a ground to stand on. */}
@@ -511,7 +511,7 @@ export function HomePage() {
         />
       </section>
 
-      {/* Fig. 01 — the polarised week — and the four-number strip both lived
+      {/* Fig. 01, the polarised week, and the four-number strip both lived
           here. The figure restated in six bars what the zone atlas below says
           with six drawings, and the strip printed "256 séances · 9 plans · 12
           calculateurs · 0 compte" one screen under a lede that already says
@@ -519,7 +519,7 @@ export function HomePage() {
           each other. Both are gone; /methodology keeps the 80/20 argument and
           its sources. */}
 
-      {/* §05 — the plans section lived here. It re-sold what the "Suivre un
+      {/* §05, the plans section lived here. It re-sold what the "Suivre un
           plan structuré" door already offers three screens higher up, so it
           folded into that door. /plans stays in the nav, the footer and the
           palette. */}
@@ -547,7 +547,7 @@ export function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §03 — the zone atlas
+          §03, the zone atlas
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="zn-section" aria-labelledby="home-zones-title">
         <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
@@ -569,8 +569,8 @@ export function HomePage() {
           {/* The "calcule tes zones personnalisées" form stood here: two inputs
               and a submit, above the table it filled in. It was the only thing
               on the landing page asking the reader for something. The table
-              still shows their bpm and pace ranges whenever the values exist —
-              read from the same localStorage — and /my-zones is where they are
+              still shows their bpm and pace ranges whenever the values exist,
+              read from the same localStorage, and /my-zones is where they are
               set, which is a page whose whole job that is. */}
 
           <ResponsiveTable<ZoneNumber>
@@ -606,16 +606,16 @@ export function HomePage() {
         onOpenChange={(open) => !open && setSelectedZone(null)}
       />
 
-      {/* §04 — the researchers, their citations and the quote of the day were
+      {/* §04, the researchers, their citations and the quote of the day were
           here. A landing page makes the claim; /methodology is where it is
           argued and sourced, and that page carries the same list in full. */}
 
-      {/* §06 — the twelve calculator cards lived here. They are a door now:
+      {/* §06, the twelve calculator cards lived here. They are a door now:
           the hub lists them, and a landing page does not need to name all
           twelve to say they exist. */}
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §08 — ethos, the one inverted band. Kept on the owner's call: the
+          §08, ethos, the one inverted band. Kept on the owner's call: the
           lede and the footer say "local" in words, this says it in figures,
           and it is the claim the project is built on.
           ═══════════════════════════════════════════════════════════════════ */}
@@ -668,7 +668,7 @@ export function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §09 — questions answered in place
+          §09, questions answered in place
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="zn-section" aria-labelledby="home-faq-title">
         <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
@@ -729,7 +729,7 @@ export function HomePage() {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Sub-components — local to the landing. The global footer lives in
+// Sub-components, local to the landing. The global footer lives in
 // src/components/layout/Footer.tsx and is rendered by App.tsx.
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -747,7 +747,7 @@ function SectionHead({
   kicker: string;
   title: ReactNode;
   body?: string;
-  /** One extra line under the body — a practical aside, not a second body. */
+  /** One extra line under the body, a practical aside, not a second body. */
   note?: string;
 }) {
   return (

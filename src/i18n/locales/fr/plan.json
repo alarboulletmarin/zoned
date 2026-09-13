@@ -78,7 +78,7 @@
     "subtitle": "Combien de séances par semaine ?",
     "sessionsPerWeek": "Séances par semaine",
     "longRunDay": "Jour de la sortie longue",
-    "longRunDayDesc": "Ta sortie longue hebdomadaire — la séance clé d'endurance",
+    "longRunDayDesc": "Ta sortie longue hebdomadaire, la séance clé d'endurance",
     "includeStrength": "Inclure le renforcement",
     "includeStrengthDesc": "Ajouter des séances adaptées à chaque phase",
     "strengthFrequency": "Fréquence renforcement",
@@ -94,7 +94,7 @@
     "weeks": "{{count}} semaines de préparation",
     "tooSoon": "Trop proche ! Il faut au moins {{min}} semaines.",
     "tooLong": "{{weeks}} semaines, c'est un cycle long",
-    "tooLongDetail": "Pour cette distance, {{min}}–{{max}} semaines est idéal. Au-delà, tu risques la fatigue mentale et le surentraînement. Envisage un bloc de base building avant ta préparation spécifique.",
+    "tooLongDetail": "Pour cette distance, {{min}}-{{max}} semaines est idéal. Au-delà, tu risques la fatigue mentale et le surentraînement. Envisage un bloc de base building avant ta préparation spécifique.",
     "raceDate": "Date de la course",
     "startLabel": "Début du plan",
     "startNow": "Commencer maintenant",
@@ -116,9 +116,9 @@
     "beginner": "Débutant",
     "beginnerDesc": "1 à 2 sorties/semaine · moins de 15 km/semaine",
     "intermediate": "Intermédiaire",
-    "intermediateDesc": "3 à 4 sorties/semaine · 20–40 km/semaine",
+    "intermediateDesc": "3 à 4 sorties/semaine · 20-40 km/semaine",
     "advanced": "Avancé",
-    "advancedDesc": "4 à 5 sorties/semaine · 40–70 km/semaine",
+    "advancedDesc": "4 à 5 sorties/semaine · 40-70 km/semaine",
     "elite": "Élite",
     "eliteDesc": "5 à 7 sorties/semaine · 70+ km/semaine",
     "suggested": "Suggéré"
@@ -294,7 +294,7 @@
     "actualDistance": "Distance réelle (km)",
     "rpeLabel": "Ressenti (RPE)",
     "noteLabel": "Note",
-    "notePlaceholder": "Facultatif — fatigue, météo, sensations…",
+    "notePlaceholder": "Facultatif, fatigue, météo, sensations…",
     "save": "Enregistrer"
   },
   "rpe": {
@@ -491,7 +491,7 @@
     "available_one": "{{count}} plan disponible",
     "available_other": "{{count}} plans disponibles",
     "missingKicker": "Pas encore sur l'étagère",
-    "missingBody": "{{practice}} : pas encore de plan tout prêt. C'est des dizaines de semaines de structure à écrire à la main, et un plan bâclé serait pire que pas de plan. Le générateur, lui, sait le construire — il a les tables de volume, de phases et d'affûtage de cette pratique.",
+    "missingBody": "{{practice}} : pas encore de plan tout prêt. C'est des dizaines de semaines de structure à écrire à la main, et un plan bâclé serait pire que pas de plan. Le générateur, lui, sait le construire, il a les tables de volume, de phases et d'affûtage de cette pratique.",
     "missingCta": "Construire un plan {{practice}}"
   },
   "activity": {
@@ -630,11 +630,11 @@
     "qualityPeak2": "Ajouter une 2e séance qualité (tempo, VO2max)",
     "qualityTaper": "Ajouter un rappel d'allure spécifique (court)",
     "recoveryWeekNote": "Semaine allégée : privilégie les séances faciles, pas d'intensité",
-    "phaseBase": "Phase de base — Construis ton endurance fondamentale avec du volume facile.",
-    "phaseBuild": "Phase de construction — Augmente progressivement l'intensité avec des séances qualité.",
-    "phasePeak": "Phase de pic — Affûte tes allures spécifiques, tu approches de la forme maximale.",
-    "phaseTaper": "Phase d'affûtage — Réduis le volume, garde un peu d'intensité pour rester frais.",
-    "phaseRecovery": "Semaine de récupération — Laisse ton corps absorber les adaptations."
+    "phaseBase": "Phase de base, Construis ton endurance fondamentale avec du volume facile.",
+    "phaseBuild": "Phase de construction, Augmente progressivement l'intensité avec des séances qualité.",
+    "phasePeak": "Phase de pic, Affûte tes allures spécifiques, tu approches de la forme maximale.",
+    "phaseTaper": "Phase d'affûtage, Réduis le volume, garde un peu d'intensité pour rester frais.",
+    "phaseRecovery": "Semaine de récupération, Laisse ton corps absorber les adaptations."
   },
   "intermediateGoals": {
     "title": "Courses intermédiaires",
@@ -764,12 +764,12 @@
     "ultra": {
       "label": "Ultra",
       "body": "Au-delà du trail : temps sur les pieds, nuit, ravitaillement.",
-      "announce": "Un plan ultra se bâtit sur seize à cinquante-deux semaines, avec du temps sur les pieds, de la nuit et une stratégie de ravitaillement. Ce que le générateur en sort n'est pas encore assez fiable pour qu'on te le propose — alors on ne le propose pas. En attendant, rien n'est bloqué : les séances ultra sont dans la bibliothèque, et les calculateurs donnent tes allures."
+      "announce": "Un plan ultra se bâtit sur seize à cinquante-deux semaines, avec du temps sur les pieds, de la nuit et une stratégie de ravitaillement. Ce que le générateur en sort n'est pas encore assez fiable pour qu'on te le propose, alors on ne le propose pas. En attendant, rien n'est bloqué : les séances ultra sont dans la bibliothèque, et les calculateurs donnent tes allures."
     },
     "triathlon": {
       "label": "Triathlon",
       "body": "Nage, vélo, course. Les séances sont là, les plans arrivent.",
-      "announce": "Les plans triathlon demandent des créneaux par discipline et des enchaînements : c'est un chantier à part, et il n'est pas commencé. En attendant, rien n'est bloqué — les séances vélo et natation sont dans la bibliothèque, et les tests FTP et CSS calculent tes zones."
+      "announce": "Les plans triathlon demandent des créneaux par discipline et des enchaînements : c'est un chantier à part, et il n'est pas commencé. En attendant, rien n'est bloqué, les séances vélo et natation sont dans la bibliothèque, et les tests FTP et CSS calculent tes zones."
     },
     "announceKicker": "Ce qui existe déjà",
     "announceLibrary": "Voir les séances",
@@ -779,7 +779,7 @@
     "title": "Sur quoi tu cours ?",
     "subtitle": "Le terrain et le dénivelé orientent le choix des séances.",
     "kind": "Type de terrain",
-    "kindDesc": "Du plus roulant au plus raide. En cas de doute, laisse « sentier roulant ».",
+    "kindDesc": "Du plus roulant au plus raide. En cas de doute, reste sur sentier roulant.",
     "kinds": {
       "trail_runnable": "Sentier roulant",
       "trail_technical": "Technique",

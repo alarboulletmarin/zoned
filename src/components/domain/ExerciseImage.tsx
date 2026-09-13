@@ -106,12 +106,12 @@ function ZoomModal({
         <div className="zn-exzoom__pair">
           <img
             src={srcA}
-            alt={`${exerciseName} — ${t("strength:detail.positionStart")}`}
+            alt={`${exerciseName} · ${t("strength:detail.positionStart")}`}
           />
           <ArrowRight size={22} />
           <img
             src={srcB}
-            alt={`${exerciseName} — ${t("strength:detail.positionEnd")}`}
+            alt={`${exerciseName} · ${t("strength:detail.positionEnd")}`}
           />
         </div>
       </div>
@@ -169,11 +169,11 @@ export function ExerciseImage({
       >
         {/* Position A (start) */}
         {errorA ? (
-          <Placeholder name={`${exerciseName} — ${startLabel}`} />
+          <Placeholder name={`${exerciseName} · ${startLabel}`} />
         ) : (
           <img
             src={srcA}
-            alt={`${exerciseName} — ${startLabel}`}
+            alt={`${exerciseName} · ${startLabel}`}
             loading="lazy"
             onError={handleErrorA}
             className="zn-eximg__frame"
@@ -185,11 +185,11 @@ export function ExerciseImage({
 
         {/* Position B (end) */}
         {errorB ? (
-          <Placeholder name={`${exerciseName} — ${endLabel}`} />
+          <Placeholder name={`${exerciseName} · ${endLabel}`} />
         ) : (
           <img
             src={srcB}
-            alt={`${exerciseName} — ${endLabel}`}
+            alt={`${exerciseName} · ${endLabel}`}
             loading="lazy"
             onError={handleErrorB}
             className="zn-eximg__frame"

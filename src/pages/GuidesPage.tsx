@@ -12,13 +12,13 @@ import { warmupRoutines } from "@/data/guides/warmup";
  * A hub is three doors and nothing else, so it is built out of the same
  * DoorCard the calculators hub uses: the whole card is the link, the mono
  * kicker says what is behind it, and the vermillon line at the foot is the
- * promise. The icon medallions the page used to carry are gone — three tinted
+ * promise. The icon medallions the page used to carry are gone, three tinted
  * chips are three accents on a screen allowed one.
  */
 interface GuideEntry {
   id: string;
   kickerKey: string;
-  /** What the kicker counts — read from the guide's own data, never typed. */
+  /** What the kicker counts, read from the guide's own data, never typed. */
   count: number;
   titleKey: string;
   descriptionKey: string;

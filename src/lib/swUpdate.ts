@@ -2,7 +2,7 @@
  * Update detection when the app comes back to the foreground.
  *
  * The browser only re-downloads and re-compares `sw.js` when a page loads. An
- * installed PWA that the user *resumes* — it was backgrounded, not closed —
+ * installed PWA that the user *resumes*, it was backgrounded, not closed,
  * loads no page: no comparison, no waiting worker, no banner, until the
  * browser's own periodic check (~24 h) or a real restart. On a phone that is
  * most sessions.

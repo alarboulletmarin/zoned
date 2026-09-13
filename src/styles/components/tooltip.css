@@ -1,4 +1,4 @@
-/* Tooltip — an ink capsule naming a control. The one place the paper/ink
+/* Tooltip, an ink capsule naming a control. The one place the paper/ink
    relation flips: cream type on solid ink, so it reads as a label pinned onto
    the page rather than another panel of it.
 
@@ -35,14 +35,14 @@
 .zn-tooltip[data-side="left"] { --zn-tooltip-x: var(--sp-4); }
 
 /* Radix keeps the node mounted until the animation ends, so the closing frame
-   has to hold — hence forwards. */
+   has to hold, hence forwards. */
 .zn-tooltip[data-state="closed"] {
   animation: zn-tooltip-out var(--dur-fast) var(--ease-out) forwards;
 }
 
 /* The arrow is the same ink, rotated 45deg and pulled half its own height into
    the capsule so only the corner shows. `fill` covers the polygon Radix draws,
-   `background` covers the rotated box — both are the capsule's fill. */
+   `background` covers the rotated box, both are the capsule's fill. */
 .zn-tooltip__arrow {
   z-index: 50;
   inline-size: var(--sp-5);

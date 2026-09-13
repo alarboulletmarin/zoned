@@ -1,11 +1,11 @@
-/* PageLoader — a route-level wait, with the wait named.
+/* PageLoader, a route-level wait, with the wait named.
 
    The figure runs immediately; the words arrive after a second, because a
    label that flashes for 200ms is noise. Reserved height so the layout does
    not jump when the page lands.
 
    The 28px ring that used to turn here is gone: a drawing replaces an
-   ornament, it never joins one (docs/doodles.md, « La coquille court »). */
+   ornament, it never joins one (docs/doodles.md, La coquille court). */
 
 .zn-page-loader {
   display: grid;
@@ -16,9 +16,9 @@
 }
 
 /* The figure's ground. It carries no ground line of its own: a rule of the
-   page gives it one, and the sole bites that rule by --rule-bite — computed
-   from the box, never eyeballed (docs/doodles.md, « Poser une figure sur une
-   règle »). Same build as .zn-empty__scene: the rule spans the full width, the
+   page gives it one, and the sole bites that rule by --rule-bite, computed
+   from the box, never eyeballed (docs/doodles.md, Poser une figure sur une
+   règle). Same build as .zn-empty__scene: the rule spans the full width, the
    figure stands on it, centred.
 
    140px wide is 193px tall, above the 120px floor under which a figure is

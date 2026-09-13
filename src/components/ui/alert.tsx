@@ -8,12 +8,12 @@ import { cn } from "@/lib/utils";
  *
  * The app had no such component: errors were either a `sonner` toast that
  * vanishes or nothing at all. A toast is the wrong shape for a message the
- * person has to act on — it leaves before they can read it, and it cannot hold
+ * person has to act on, it leaves before they can read it, and it cannot hold
  * the recovery button.
  *
  * The system's rule for the copy: say what happened, say what is intact, say
  * what to do next. No error code, no "oops", and never the person's fault.
- * An error with no way forward is a dead end — pass an `action`.
+ * An error with no way forward is a dead end, pass an `action`.
  */
 type AlertKind = "error" | "success" | "warning" | "info";
 
@@ -38,7 +38,7 @@ export function Alert({
   title?: ReactNode;
   /** What happened, what survived, and what to do about it. */
   children?: ReactNode;
-  /** A Button — the way forward. */
+  /** A Button, the way forward. */
   action?: ReactNode;
   /** Only for messages the person can safely never read again. */
   onDismiss?: () => void;

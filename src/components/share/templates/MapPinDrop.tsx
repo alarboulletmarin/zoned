@@ -1,6 +1,6 @@
 /**
- * MapPinDrop — 480×480. Google-Maps style location pin. Tear-drop silhouette
- * with white inner disc, soft ground shadow. The pin IS the visual —
+ * MapPinDrop, 480×480. Google-Maps style location pin. Tear-drop silhouette
+ * with white inner disc, soft ground shadow. The pin IS the visual,
  * survives transparent toggle.
  */
 
@@ -48,7 +48,7 @@ export function MapPinDrop({ workout, transparent }: ShareTemplateProps) {
         }}
       />
 
-      {/* Pin SVG — tear drop with embedded disc */}
+      {/* Pin SVG, tear drop with embedded disc */}
       <svg
         width={W}
         height={H}
@@ -62,7 +62,7 @@ export function MapPinDrop({ workout, transparent }: ShareTemplateProps) {
             <stop offset="100%" stopColor="#0f172a" stopOpacity="0.32" />
           </radialGradient>
         </defs>
-        {/* Tear drop body — circle on top + triangle below */}
+        {/* Tear drop body, circle on top + triangle below */}
         <path
           d="M240 60 C 350 60 414 144 414 232 C 414 320 320 384 240 440 C 160 384 66 320 66 232 C 66 144 130 60 240 60 Z"
           fill={zoneHex}

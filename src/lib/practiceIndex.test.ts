@@ -143,16 +143,16 @@ describe("mémoïsation", () => {
 // classement, ces chiffres bougent et le test le dit.
 //
 // Premier relevé, avant toute écriture : 197 route, 28 trail, 44 ultra dont 11
-// spécifiques — le terrain et les tags étaient déjà là, c'est le critère qui
+// spécifiques, le terrain et les tags étaient déjà là, c'est le critère qui
 // manquait. Les cinq séances écrites pour l'ultra (TRL-015, TRL-017…TRL-020)
 // portent le trail à 33 et l'ultra à 49, dont 16 spécifiques. Une séance ultra
 // ajoutée sans terrain ni tag ne bougerait aucun de ces nombres, et c'est
 // justement ce que ce test attrape.
 //
 // Trois autres avaient été écrites puis RETIRÉES le même jour : elles
-// doublaient des archétypes déjà au catalogue (LR-016 « Ultra time-on-feet »,
-// TRL-009/TRL-010 « Back-to-back jour 1/2 », TRL-005 « Descente technique
-// contrôlée »). Les ids TRL-013, TRL-014 et TRL-016 restent donc brûlés — un
+// doublaient des archétypes déjà au catalogue (LR-016 Ultra time-on-feet,
+// TRL-009/TRL-010 Back-to-back jour 1/2, TRL-005 Descente technique
+// contrôlée). Les ids TRL-013, TRL-014 et TRL-016 restent donc brûlés, un
 // identifiant ne se réemploie pas.
 describe("le catalogue réel", () => {
   test("les compteurs par pratique sont ceux mesurés", async () => {

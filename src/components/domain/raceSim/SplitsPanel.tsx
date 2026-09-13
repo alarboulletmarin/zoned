@@ -54,7 +54,7 @@ export function SplitsPanel({
   // can no longer sit on top of the first rows.
   const scrolls = plan.splits.length > 12;
 
-  // Distance marker at the end of each split — what you actually read off the
+  // Distance marker at the end of each split, what you actually read off the
   // course signage, rather than "1 km" repeated on every row.
   let running = 0;
   const markers = plan.splits.map((s) => {

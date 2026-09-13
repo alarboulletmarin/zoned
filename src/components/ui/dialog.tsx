@@ -8,17 +8,17 @@ import { Slot } from "@/components/ui/slot";
 import { NativeDialog } from "@/components/ui/native-dialog";
 
 /**
- * Dialog — a centred paper panel over an ink wash.
+ * Dialog, a centred paper panel over an ink wash.
  *
  * The panel is a native <dialog> opened with showModal(): the top layer, the
  * focus trap, Escape and the focus returning to the opener are the platform's.
- * `native-dialog.tsx` adds the three the platform withholds — the scroll lock,
+ * `native-dialog.tsx` adds the three the platform withholds, the scroll lock,
  * the cleanup on unmount, and dismissal by clicking the scene.
  *
  * The public API is the one the twenty-odd call sites already use: `open` and
  * `onOpenChange` on the root, `className` on the content, and the header /
  * title / description / footer / close parts. There is no overlay element any
- * more — `.zn-dialog::backdrop` is the scene — and no portal, because the top
+ * more, `.zn-dialog::backdrop` is the scene, and no portal, because the top
  * layer is not somewhere you can be stacked under.
  */
 
@@ -50,7 +50,7 @@ function Dialog({
 }) {
   // The title and description ids are minted here rather than in the parts, so
   // the content can point aria-labelledby / aria-describedby at them whether or
-  // not the call site renders either one — which is what Radix did.
+  // not the call site renders either one, which is what Radix did.
   const id = React.useId();
   const value = React.useMemo<DialogContextValue>(
     () => ({

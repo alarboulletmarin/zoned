@@ -15,7 +15,7 @@ export interface TipCardProps {
 /**
  * A contextual tip, at three densities: a line inside a paragraph
  * (`inline`), a compact aside beside a session (`card`), a full-width strip
- * (`banner`). Same anatomy throughout — ink lamp, the tip, the way out.
+ * (`banner`). Same anatomy throughout, ink lamp, the tip, the way out.
  */
 export function TipCard({
   tip,

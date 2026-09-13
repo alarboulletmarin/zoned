@@ -63,7 +63,7 @@ interface AboutRow {
 }
 
 /**
- * Settings — the local profile, and the facts about the app itself.
+ * Settings, the local profile, and the facts about the app itself.
  *
  * The discipline palettes and the colour-blind palettes used to be set here.
  * The redesign made both meaningless: there is one ink ramp for all three
@@ -88,7 +88,7 @@ export function SettingsPage() {
   const stats = useAppStats();
   const [confirmWipe, setConfirmWipe] = useState(false);
 
-  /* Vide veut dire « toutes » côté stockage, mais l'interrupteur doit montrer
+  /* Vide veut dire toutes côté stockage, mais l'interrupteur doit montrer
      l'état réel : tout allumé. Décocher écrit donc le complément, et remettre
      la dernière manquante revient au tableau vide plutôt que de figer une
      liste qui ne suivrait plus l'arrivée d'une pratique. */
@@ -107,7 +107,7 @@ export function SettingsPage() {
   const language = i18n.language?.startsWith("en") ? "en" : "fr";
 
   // What the app actually occupies in this browser, read from the same keys
-  // the backup writes — a number, not an adjective.
+  // the backup writes, a number, not an adjective.
   const storageKb = useMemo(() => {
     let chars = 0;
     for (const key of BACKUP_STORAGE_KEYS) {
@@ -161,7 +161,7 @@ export function SettingsPage() {
     {
       key: "workouts",
       label: t("settingsPage.rowWorkouts"),
-      value: stats.workouts > 0 ? String(stats.workouts) : "—",
+      value: stats.workouts > 0 ? String(stats.workouts) : "-",
     },
     {
       key: "offline",
@@ -186,7 +186,7 @@ export function SettingsPage() {
       <SEOHead noindex={true} title={t("seo.settings")} canonical="/settings" />
 
       <div className="zn-set">
-        {/* 1 — what this screen is, and the two numbers it is about */}
+        {/* 1, what this screen is, and the two numbers it is about */}
         <section
           className="zn-section zn-split zn-set__head"
           style={
@@ -228,7 +228,7 @@ export function SettingsPage() {
           </div>
         </section>
 
-        {/* 2 — the two columns: what you see, and what you own */}
+        {/* 2, the two columns: what you see, and what you own */}
         <section
           className="zn-section zn-grid"
           style={
@@ -421,7 +421,7 @@ export function SettingsPage() {
                 affichées : le défaut est le tableau vide, personne n'a de
                 question à répondre au premier lancement, et décocher écrit le
                 complément explicite. Masquer un module le retire de la
-                navigation — la route, elle, reste valide (voir ModuleGate). */}
+                navigation, la route, elle, reste valide (voir ModuleGate). */}
             <Card className="zn-set__band">
               <CardHeader>
                 <CardTitle>{t("settingsPage.tailored")}</CardTitle>

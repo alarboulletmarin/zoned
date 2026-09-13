@@ -1,4 +1,4 @@
-/* The command palette (Cmd+K) — one sheet of paper dropped over the page.
+/* The command palette (Cmd+K), one sheet of paper dropped over the page.
  *
  * It is a dialog, so it is one of the few surfaces allowed --shadow-block, and
  * it borrows the dialog's arrival (a fade and an 8px rise, nothing scales).
@@ -12,7 +12,7 @@
  *      and a page shortcut are the same piece of paper (.zn-cmdk__item); only
  *      what sits inside them differs. That is why SearchResultItem reuses this
  *      class instead of growing a twin that drifts.
- *   2. The active row — the one the arrows are on — is marked by a 2.5px
+ *   2. The active row, the one the arrows are on, is marked by a 2.5px
  *      vermillon frame, the system's "this one is retained" mark, never by an
  *      accent fill. A fill would swallow the zone badge sitting inside the row,
  *      and the frame reads in greyscale because it is a thickness.
@@ -32,8 +32,8 @@
   /* Chrome's `dialog:modal` pins both block edges; the palette hangs from the
      top only, so the floor is released. */
   bottom: auto;
-  /* Centred the way the UA centres a modal <dialog> — `margin: auto` between
-     the two inline edges — rather than by a translate. A transform would make
+  /* Centred the way the UA centres a modal <dialog>, `margin: auto` between
+     the two inline edges, rather than by a translate. A transform would make
      the panel the containing block of any `position: fixed` descendant, and
      the UA's own `margin: auto` would have fought a `left: 50%` for the
      remaining space. */
@@ -85,14 +85,14 @@
   }
 }
 
-/* The scene, flat ink — the system forbids blur. */
+/* The scene, flat ink, the system forbids blur. */
 .zn-cmdk::backdrop {
   background: var(--scrim);
   animation: zn-cmdk-scene-in var(--dur-base) var(--ease-out);
 }
 
 /* The dialog's arrival, minus its centring: an 8px rise and a fade, nothing
-   scales. There is no exit — the node is unmounted the moment it closes. */
+   scales. There is no exit, the node is unmounted the moment it closes. */
 @keyframes zn-cmdk-in {
   from { opacity: 0; transform: translateY(var(--sp-4)); }
   to   { opacity: 1; transform: none; }
@@ -131,7 +131,7 @@
   background: transparent;
   border: none;
   /* No outline rule here on purpose. base.css states "focus is vermillon,
-     2.5px, offset 2px — and never removed", and it is imported UNLAYERED, so
+     2.5px, offset 2px, and never removed", and it is imported UNLAYERED, so
      nothing written in @layer components could suppress it anyway: an
      `outline: none` at this spot is a dead declaration that reads like a
      decision. The field wears the ring like every other control. */
@@ -237,7 +237,7 @@
   animation: zoned-spin 700ms linear infinite;
 }
 
-/* A section head — "Séances", "Calculateurs". A mono micro-label, so it
+/* A section head, "Séances", "Calculateurs". A mono micro-label, so it
    composes with .zn-kicker and only states its own box here. */
 .zn-cmdk__group {
   display: flex;
@@ -283,7 +283,7 @@
 }
 
 /* The row the arrow keys are on. A frame, drawn inside the row's own radius so
-   it never enlarges the row, and never a fill — a fill would put an accent
+   it never enlarges the row, and never a fill, a fill would put an accent
    ground behind the zone badge and the rail, which are themselves ink.
 
    The frame is INK at the house 1.5px, not vermillon at 2.5px, and that is the
@@ -320,8 +320,8 @@
 
 /* ── a session row's own organs ───────────────────────────────────────── */
 
-/* The intensity rail. Filled with the zone ink for a running session; hollow —
-   sunken paper inside a hairline — for a strength session, which has no
+/* The intensity rail. Filled with the zone ink for a running session; hollow,
+   sunken paper inside a hairline, for a strength session, which has no
    aerobic zone. That is the same "filled = measurable, hollow = none" rule the
    plan calendar follows, and it is why no hue is invented here. The hairline
    is 1px rather than the house 1.5px purely because the rail is 4px wide and
@@ -334,7 +334,7 @@
   block-size: var(--sp-15);
   flex: none;
   /* 6 + 4 + 6 = the 16px a leading type icon takes, so a session title and a
-     collection title start on the same vertical — a ragged left edge is the
+     collection title start on the same vertical, a ragged left edge is the
      first thing that stops a list reading as one sheet of paper. */
   margin-inline: var(--sp-3);
   border-radius: var(--r-pill);

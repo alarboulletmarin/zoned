@@ -1,5 +1,5 @@
 /**
- * VinylDieCut — 480×480. Die-cut laptop sticker vibe. Rounded white card
+ * VinylDieCut, 480×480. Die-cut laptop sticker vibe. Rounded white card
  * with a thick black outline, hard offset shadow and an off-square
  * rotation. Reads as a sticker mock-up.
  */

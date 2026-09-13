@@ -1,12 +1,12 @@
 /* Element-level defaults for the paper/ink system.
 
-   The first block is the reset. It used to arrive with Tailwind — every app
+   The first block is the reset. It used to arrive with Tailwind, every app
    built on Tailwind is built on top of its preflight, and pulling the framework
    out takes the reset with it. An app that loses its reset does not break, it
    drifts: margins reappear on every heading and paragraph, `<h1>` goes back to
    2em bold, images become inline and sit on the text baseline, form controls
    stop inheriting the font, lists grow bullets. So preflight is kept, verbatim,
-   in the layer it already occupied — the only substitutions are the two font
+   in the layer it already occupied, the only substitutions are the two font
    stacks, which pointed at the app's own tokens through Tailwind's theme.
 
    The second block is the app's own, and stays unlayered: it has to win over
@@ -235,7 +235,7 @@
 }
 
 /* The one utility the app still calls by name, at 23 call sites. It was
-   declared twice — by Tailwind and by components/_layout.css — and Tailwind's
+   declared twice, by Tailwind and by components/_layout.css, and Tailwind's
    copy is the one that applied, because it sat in the utilities layer. Kept
    here in that same layer, above the components, so a later component rule of
    equal specificity cannot bring a visually-hidden label back on screen. Its
@@ -275,7 +275,7 @@ p {
   text-wrap: pretty;
 }
 
-/* Focus is vermillon, 2.5px, offset 2px — and never removed. */
+/* Focus is vermillon, 2.5px, offset 2px, and never removed. */
 :where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: var(--bw-heavy) solid var(--focus-ring);
   outline-offset: 2px;
@@ -296,7 +296,7 @@ p {
    une commande, et un conteneur ne se signale pas. Son `tabindex="-1"` le fait
    entrer dans la règle ci-dessus : le reset doit donc être écrit ici, hors
    couche, car `components/mobile-menu.css` est en @layer components et
-   perdrait — l'anneau ne disparaîtrait pas, il ferait le tour de l'écran. */
+   perdrait, l'anneau ne disparaîtrait pas, il ferait le tour de l'écran. */
 .zn-menu__inner:focus-visible {
   outline: none;
 }

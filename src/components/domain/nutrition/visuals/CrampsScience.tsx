@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-/** old belief, current evidence, what to do — in that reading order. */
+/** old belief, current evidence, what to do, in that reading order. */
 const CLAIMS = [
   { key: "old", emphasis: undefined },
   { key: "new", emphasis: "ink" },
@@ -11,7 +11,7 @@ const CLAIMS = [
  * Why cramps happen: the century-old story, the current one, the fix.
  *
  * The correct claim is marked by a full ink inversion rather than by a green
- * card next to a red one — a state that rests on colour alone is not a state
+ * card next to a red one, a state that rests on colour alone is not a state
  * this system can print.
  */
 export function CrampsScience() {

@@ -1,9 +1,9 @@
-/* Visualization — les figures d'une séance : la frise, les distributions et
+/* Visualization, les figures d'une séance : la frise, les distributions et
    les profils altimétriques.
  *
  * Une seule idée traverse le fichier : une figure est une feuille de papier
  * cernée d'encre, et la donnée est peinte DEDANS. Pas de fond translucide qui
- * flotte, pas d'ombre — une figure ne flotte pas, elle est imprimée.
+ * flotte, pas d'ombre, une figure ne flotte pas, elle est imprimée.
  *
  * Ce que ce fichier ne fait PAS :
  *
@@ -42,7 +42,7 @@
 /* ── la frise de séance ───────────────────────────────────────────────── */
 
 /* Course et renforcement partagent ces classes : ce sont deux lectures de la
-   même figure — un bloc par phase, la largeur vaut le temps, la hauteur vaut
+   même figure, un bloc par phase, la largeur vaut le temps, la hauteur vaut
    l'intensité. Seule la teinte du bloc diffère (rampe d'encre d'un côté,
    groupe musculaire de l'autre) et elle arrive par --fill. */
 
@@ -68,7 +68,7 @@
   color: var(--text-body);
 }
 
-/* Le cadre. 160px sur téléphone, 224px au-delà — la frise est le contenu
+/* Le cadre. 160px sur téléphone, 224px au-delà, la frise est le contenu
    principal de la page séance, elle mérite sa demi-hauteur d'écran, mais pas
    au point de pousser le reste sous la ligne de flottaison à 390px. */
 .zn-timeline__plot {
@@ -104,12 +104,12 @@
 /* Un bloc. Largeur = temps, hauteur = intensité, remplissage = teinte reçue.
    Le contour à 1px empêche deux blocs de même zone de fusionner en une seule
    masse ; c'est le même cerne que .zn-zonebar__block, et c'est LUI qui sépare
-   deux blocs voisins — pas une gouttière.
+   deux blocs voisins, pas une gouttière.
 
    Le cadre n'a donc ni gap ni largeur minimale de 2px, contrairement à
    .zn-zonebar : celle-ci porte dix blocs, la frise en porte jusqu'à
-   quatre-vingt-douze (VMA-012). À 296px de large — la mesure réelle du cadre
-   à 390px — quatre-vingt-douze planchers de 2px plus quatre-vingt-onze
+   quatre-vingt-douze (VMA-012). À 296px de large, la mesure réelle du cadre
+   à 390px, quatre-vingt-douze planchers de 2px plus quatre-vingt-onze
    gouttières de 2px font 366px : tous les blocs se figeaient sur leur
    plancher, l'échauffement de 15 minutes rendait la même largeur qu'une rép
    de 20 secondes, et les vingt-six derniers blocs tombaient sous l'overflow.
@@ -176,7 +176,7 @@
 }
 
 /* Superset : deux exercices enchaînés. Un trait plein sur l'arête haute du
-   bloc — un lien, donc une ligne, pas un dégradé. */
+   bloc, un lien, donc une ligne, pas un dégradé. */
 .zn-timeline__superset {
   position: absolute;
   inset-block-start: 0;
@@ -273,7 +273,7 @@
 /* ── ce que dit l'infobulle d'un bloc ─────────────────────────────────── */
 
 /* .zn-tooltip retourne la relation papier/encre : tout ce qui est écrit
-   dedans est crème sur encre. Le gris de texte secondaire y était illisible —
+   dedans est crème sur encre. Le gris de texte secondaire y était illisible,
    ici la hiérarchie se fait par la graisse et la casse, pas par la teinte. */
 .zn-timeline__tip {
   display: flex;
@@ -324,7 +324,7 @@
 
 /* Une liste de barres pleine largeur : libellé et valeur sur une ligne, la
    barre en dessous. Le format empilé, plutôt que la grille en quatre colonnes
-   de .zn-zone-row, parce qu'à 390px un libellé de zone et « 35 % · 12min » ne
+   de .zn-zone-row, parce qu'à 390px un libellé de zone et 35 % · 12min ne
    tiennent pas côte à côte avec une piste lisible. */
 .zn-viz-bars {
   display: flex;
@@ -387,7 +387,7 @@
 }
 
 /* La piste est cernée : une zone à 0 % dessine quand même sa boîte au lieu de
-   disparaître. Même recette que .zn-zone-row__track, en plus fin — c'est une
+   disparaître. Même recette que .zn-zone-row__track, en plus fin, c'est une
    liste de proportions, pas le tableau des zones. */
 .zn-viz-bar__track {
   display: block;
@@ -399,7 +399,7 @@
   border-radius: var(--r-xs);
 }
 
-/* Un muscle secondaire garde sa teinte mais perd le trait plein — c'est
+/* Un muscle secondaire garde sa teinte mais perd le trait plein, c'est
    exactement ce que .zn-muscle fait de son côté, et l'implication se lit donc
    pareil qu'on regarde la pastille ou la barre. */
 .zn-viz-bar[data-involvement="secondary"] .zn-viz-bar__track {
@@ -415,8 +415,8 @@
 }
 
 /* La version carte : la même répartition en un seul filet de 4px, sans
-   libellé. Trop fine pour porter un cadre — un contour de 1,5px sur 4px de
-   haut ne laisserait rien de la donnée — donc elle se contente du papier
+   libellé. Trop fine pour porter un cadre, un contour de 1,5px sur 4px de
+   haut ne laisserait rien de la donnée, donc elle se contente du papier
    creux dessous, qui la borne. */
 .zn-viz-strip {
   display: flex;
@@ -540,7 +540,7 @@
 
 /* Le profil d'un parcours, lui, est LA figure de sa page : il a droit à
    l'accent. La teinte arrive par --elev-ink, parce qu'un attribut de
-   présentation SVG (`stroke="…"`) ne résout pas var() — seule la propriété
+   présentation SVG (`stroke="…"`) ne résout pas var(), seule la propriété
    CSS le fait. */
 .zn-elev {
   position: relative;
@@ -556,7 +556,7 @@
 }
 
 /* Un lavis plat, pas un dégradé : le système n'en a aucun. C'est aussi ce qui
-   permet de supprimer le <defs> — deux graphiques sur une même page
+   permet de supprimer le <defs>, deux graphiques sur une même page
    partageaient le même id de dégradé.
 
    Le lavis est le premier cran de la rampe d'encre, pas un accent dilué : la
@@ -625,8 +625,8 @@
 
 /* La pente. Elle portait deux teintes catégorielles et une branche `dark:`
    par teinte ; toutes deux tombaient sous 4,5:1 sur la capsule d'encre, dans
-   un sens ou dans l'autre. Le signe « + » ou « - » dit déjà la direction et
-   il la dit en toutes lettres — la teinte était redondante, la graisse suffit
+   un sens ou dans l'autre. Le signe + ou - dit déjà la direction et
+   il la dit en toutes lettres, la teinte était redondante, la graisse suffit
    à la sortir de la ligne. */
 .zn-elev__slope {
   font-weight: var(--fw-bold);
@@ -703,7 +703,7 @@
 }
 
 /* Aucun dégradé, aucun biseau, aucun halo : la version d'origine en avait
-   trois, et le système n'en autorise aucun. Ce qui reste dit la même chose —
+   trois, et le système n'en autorise aucun. Ce qui reste dit la même chose,
    l'encre et la hauteur. */
 .zn-minitl__seg {
   flex: var(--flex, 1) 1 0;

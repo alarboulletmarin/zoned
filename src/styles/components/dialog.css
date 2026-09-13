@@ -1,14 +1,14 @@
-/* Dialog — a paper panel raised off an ink wash. A dialog is a floating
+/* Dialog, a paper panel raised off an ink wash. A dialog is a floating
    surface, so it is one of the few places --shadow-block is allowed.
 
    The panel IS a native <dialog> opened with showModal(), so the scene is its
-   own ::backdrop and there is no overlay element left to paint — nor a z-index
+   own ::backdrop and there is no overlay element left to paint, nor a z-index
    to arbitrate, because the top layer is above everything the page can stack.
    dialog.tsx keeps the rest: the scroll lock, the cleanup on unmount, and the
    dismissal by clicking the scene.
 
    The parts are reusable by anything rendering its own <dialog>:
-   .zn-dialog, .zn-dialog__close — the share sheet borrows the second. */
+   .zn-dialog, .zn-dialog__close, the share sheet borrows the second. */
 
 /* ── panel ────────────────────────────────────────────────────────────── */
 
@@ -17,7 +17,7 @@
      a `fit-content` size, so the panel keeps that instead of the translate it
      used to carry. That is not tidiness: a transform makes the panel the
      containing block of every `position: fixed` descendant, and the date
-     pickers and selects that open inside these dialogs are fixed — they would
+     pickers and selects that open inside these dialogs are fixed, they would
      have been positioned against the panel and clipped by it. */
   position: fixed;
   inset: 0;
@@ -53,7 +53,7 @@
   animation: zn-dialog-in var(--dur-base) var(--ease-out);
 }
 
-/* Radix modal layers — a select, a menu — park `pointer-events: none` on the
+/* Radix modal layers, a select, a menu, park `pointer-events: none` on the
    body while they are open and re-enable it on their own content. The panel
    has to opt back in the same way, or opening a select inside a dialog would
    go on to deaden the dialog around it. Inherited, so it covers the parts. */
@@ -165,7 +165,7 @@
   pointer-events: none;
 }
 
-/* WCAG 2.5.8 — 44px on a coarse pointer, whatever the drawn size says. */
+/* WCAG 2.5.8, 44px on a coarse pointer, whatever the drawn size says. */
 @media (pointer: coarse) {
   .zn-dialog__close {
     min-inline-size: var(--hit-min);

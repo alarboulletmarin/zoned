@@ -1,5 +1,5 @@
 /**
- * MinimalTypo — 1080×1080 editorial typographic card.
+ * MinimalTypo, 1080×1080 editorial typographic card.
  *
  * No viz. Big italic accent on the workout name, two muted stats, brand
  * top-left, footer bottom. The most "Instagram-ready" of the bunch when

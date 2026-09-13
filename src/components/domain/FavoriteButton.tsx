@@ -19,7 +19,7 @@ interface FavoriteButtonProps {
  * The favourite toggle.
  *
  * A saved session wears a FILLED heart. The colour alone was the state, on the
- * claim that the icon set had no filled variant — it does: `Heart` takes a
+ * claim that the icon set had no filled variant, it does: `Heart` takes a
  * `filled` prop, and so do a dozen of its neighbours. An outline that changes
  * hue asks the reader to remember which hue means saved; a solid shape does
  * not, and it survives being looked at quickly, which is the only way anyone

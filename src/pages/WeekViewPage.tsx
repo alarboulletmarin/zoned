@@ -154,7 +154,7 @@ export function WeekViewPage() {
   const [scanCells, setScanCells] = useState<Record<number, AnyWorkoutTemplate>>(
     {},
   );
-  // Days the overlay covers. Every other day stays sharp and untouched — that
+  // Days the overlay covers. Every other day stays sharp and untouched, that
   // is how a locked session, or a single re-roll, reads on screen.
   const [scanTargets, setScanTargets] = useState<Set<number>>(new Set());
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -177,7 +177,7 @@ export function WeekViewPage() {
       /** Days that flash random workouts (a subset of `veiled`). */
       cycling: number[];
       durationMs: number;
-      /** Applies the result — called once, on the final tick. */
+      /** Applies the result, called once, on the final tick. */
       onReveal: () => void;
     }) => {
       clearTimeouts();
@@ -212,8 +212,8 @@ export function WeekViewPage() {
 
   /**
    * Draw animation, rendered by the board inside its own day cells. A separate
-   * overlay grid could never stay aligned — the board is 7 columns on desktop
-   * but 4 + 3 on mobile — so the scan lives where the content lives.
+   * overlay grid could never stay aligned, the board is 7 columns on desktop
+   * but 4 + 3 on mobile, so the scan lives where the content lives.
    * Days outside `scanTargets` return null and keep their real card on screen.
    */
   const renderScanCell = useCallback(
@@ -368,7 +368,7 @@ export function WeekViewPage() {
     reload();
   }, [plan, reload]);
 
-  /** Draw another workout for a single session — the rest of the week is kept. */
+  /** Draw another workout for a single session, the rest of the week is kept. */
   const handleRedraw = useCallback(
     (_weekNumber: number, sessionIndex: number) => {
       if (!plan || scanning) return;
@@ -411,9 +411,9 @@ export function WeekViewPage() {
   );
 
   // Arriving from the "Générer une semaine" creation mode: surface the settings
-  // so the user picks their parameters first — we never generate blindly.
+  // so the user picks their parameters first, we never generate blindly.
   const didOpenSettingsRef = useRef(false);
-  // The same 900px at which the generator rail folds away — below it the
+  // The same 900px at which the generator rail folds away, below it the
   // settings live in the bottom sheet, so the query has to be the one the
   // stylesheet uses, not a different breakpoint that leaves a dead band.
   const railIsHidden = useMediaQuery("(max-width: 900px)");
@@ -468,7 +468,7 @@ export function WeekViewPage() {
       try {
         await navigator.share({ title: displayName, url });
       } catch {
-        // Share sheet dismissed — nothing to do.
+        // Share sheet dismissed, nothing to do.
       }
       return;
     }
@@ -658,7 +658,7 @@ export function WeekViewPage() {
       <div className="zn-pw__dock">
         {/* The short verb, not the rail's full call: the bar has 233px between
             the screen edge and the menu pill, and "Générer ma semaine" needs
-            215 of them on its own — it clipped mid-word. */}
+            215 of them on its own, it clipped mid-word. */}
         <Button
           disabled={scanning}
           onClick={() => handleGenerate(settings)}

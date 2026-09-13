@@ -99,7 +99,7 @@ export function TrackFinderPage() {
           return;
         }
       } catch {
-        // Permissions API may not support 'geolocation' on some browsers — skip silently.
+        // Permissions API may not support 'geolocation' on some browsers, skip silently.
       }
     }
     setIsLocating(true);
@@ -243,7 +243,7 @@ export function TrackFinderPage() {
       />
 
       <div className="zn-rt">
-        {/* 1 — what this screen looks for, and how far it looks */}
+        {/* 1, what this screen looks for, and how far it looks */}
         <section className="zn-rt__band">
           <div className="zn-rt__head">
             <div
@@ -268,7 +268,7 @@ export function TrackFinderPage() {
           </div>
         </section>
 
-        {/* 2 — the search on the left, the cartography on the right */}
+        {/* 2, the search on the left, the cartography on the right */}
         <section className="zn-rt__band zn-rt__split">
           <div
             className="zn-stack"

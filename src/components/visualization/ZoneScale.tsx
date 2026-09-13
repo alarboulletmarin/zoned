@@ -9,7 +9,7 @@ interface ZoneScaleProps {
   /** Row on a band, column in a sidebar. */
   layout?: "row" | "column";
   /** Restrict the legend to the zones actually painted nearby. Defaults to all
-   *  six — a catalogue or a plan can hold any of them. A single session cannot:
+   *  six, a catalogue or a plan can hold any of them. A single session cannot:
    *  naming Z4, Z5 and Z6 under a session that never leaves Z3 is three rows of
    *  legend for colours that are not on the screen. */
   zones?: ZoneNumber[];
@@ -21,12 +21,12 @@ interface ZoneScaleProps {
 /**
  * The legend for the ink ramp.
  *
- * The ramp orders the zones — darker is harder — but it does not name them, so
+ * The ramp orders the zones, darker is harder, but it does not name them, so
  * every screen that paints zone fills shows this once.
  *
  * Each entry is the ZoneBadge itself with its name beside the code: the very
  * chip the reader meets in the steps and on the calendar, printed once and
- * named. It used to be three objects — a grey swatch, a code, a name — that
+ * named. It used to be three objects, a grey swatch, a code, a name, that
  * matched nothing else on the page and wrapped ragged on a phone. Names come
  * from ZONE_META through the badge, so the legend can never disagree with the
  * marks it explains.

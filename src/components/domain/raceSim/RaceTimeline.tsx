@@ -11,7 +11,7 @@ import { useNowMinutes } from "./useNowMinutes";
  * Ink on paper: a ruled spine, a dot per event, every clock in mono. The list
  * is chronological, so position already carries the grouping a five-colour
  * palette was trying (and failing) to convey. Emphasis is spent on two things
- * only — the gun, and where you are right now, which is the one vermillon mark
+ * only, the gun, and where you are right now, which is the one vermillon mark
  * on the graphic.
  */
 export function RaceTimeline({
@@ -31,7 +31,7 @@ export function RaceTimeline({
   const first = minutes[0];
   const last = minutes[minutes.length - 1];
   // Only claim to know "now" when the clock actually sits inside the plan's
-  // window — i.e. the race is today.
+  // window, i.e. the race is today.
   const isLive = now >= first - 30 && now <= last + 30;
   const nextIndex = isLive ? minutes.findIndex((m) => m > now) : -1;
   const markerAt = isLive ? (nextIndex === -1 ? timeline.length : nextIndex) : -1;

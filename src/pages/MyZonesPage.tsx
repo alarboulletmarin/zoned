@@ -7,7 +7,7 @@ import { SEOHead } from "@/components/seo";
 import type { ZoneRange } from "@/types";
 
 /**
- * Mes zones — the two calculators that turn one measured value into six
+ * Mes zones, the two calculators that turn one measured value into six
  * zones and a table of race paces. The zone plate appears once, above both:
  * six figures on one rule, and once the reader's numbers are known each
  * figure carries its own range under its code.
@@ -46,7 +46,7 @@ export function MyZonesPage() {
           <ZoneCalculator onZonesChange={setZones} />
           <PaceCalculator />
 
-          {/* A computed pace is a target, not a contract — and the source that
+          {/* A computed pace is a target, not a contract, and the source that
               says so, printed in mono under the block it backs. */}
           <div className="zn-num__caveat">
             <p className="zn-body zn-body--sm zn-muted">{t("myZones.caveat")}</p>

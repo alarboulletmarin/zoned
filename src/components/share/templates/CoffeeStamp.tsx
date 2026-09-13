@@ -1,5 +1,5 @@
 /**
- * CoffeeStamp — 480×480. Loyalty card vibe. Five circular slots with the
+ * CoffeeStamp, 480×480. Loyalty card vibe. Five circular slots with the
  * last one stamped using the zone colour. Plays the "1 session closer to
  * your goal" metaphor.
  */
@@ -35,7 +35,7 @@ export function CoffeeStamp({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* Loyalty card — kraft paper feel */}
+      {/* Loyalty card, kraft paper feel */}
       <div
         style={{
           position: "absolute",

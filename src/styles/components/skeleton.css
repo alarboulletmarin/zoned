@@ -1,14 +1,14 @@
-/* Skeleton — the shape of what is coming, drawn in paper and ink.
+/* Skeleton, the shape of what is coming, drawn in paper and ink.
 
    No shimmer sweep: the sweep was a moving gradient and the system has none.
    What is left is a faint fill inside a divider outline, pulsing once every
-   1.4s — the same treatment the design bundle's Skeleton uses.
+   1.4s, the same treatment the design bundle's Skeleton uses.
 
    The primitive deliberately declares no border-radius, no width and no
    height: six pages still hand it Tailwind sizes (`h-4 w-3/4`, `rounded-full`,
    `aspect-square`) through className, and a size on `.zn-skeleton` would be one
    more thing to unpick when those pages are ported. The sizes live with the
-   silhouette that needs them — the composites at the bottom of this file. */
+   silhouette that needs them, the composites at the bottom of this file. */
 
 .zn-skeleton {
   display: block;
@@ -17,8 +17,8 @@
   animation: zoned-pulse 1.4s var(--ease-in-out) infinite;
 }
 
-/* The hero placeholder: one step up the zone ink ramp — the only tinted
-   transparency the system allows — so a large block reads heavier than a
+/* The hero placeholder: one step up the zone ink ramp, the only tinted
+   transparency the system allows, so a large block reads heavier than a
    text line without a second animation. */
 .zn-skeleton[data-variant="zone-shimmer"] {
   background: var(--zn-skeleton-fill, var(--zone-1));
@@ -37,21 +37,21 @@
    The one rule they all obey: a skeleton is measured against the component it
    stands in for, not eyeballed. Every height here is either a token the real
    sheet uses (`--r-3xl`, `--sp-12`) or that sheet's own type expressed as a
-   line box — `calc(font-size x line-height)` — so the two cannot drift apart
+   line box, `calc(font-size x line-height)`, so the two cannot drift apart
    when a type step moves. Where the real component states a raw pixel
    (workout-card.css's 66px description well, plan-calendar.css's 80px day,
    badge.css's 7px capsule padding), the same raw pixel is repeated here and
    the source is named: re-deriving it would be inventing a second truth.
 
    Bar WIDTHS are the exception and are percentages throughout. A placeholder
-   line is a drawing of text, not a measurement of it — three quarters of a
+   line is a drawing of text, not a measurement of it, three quarters of a
    line is a proportion, and a proportion is not a design value looking for a
    token. */
 
 /* ── the session card ──────────────────────────────────────────────────────
    Mirrors .zn-wcard (workout-card.css) block for block: same paper, same
    22px frame, same 24px padding, same 16px rhythm. `block-size: 100%` matters
-   as much as the rest — the real cards stretch to their grid row, so a
+   as much as the rest, the real cards stretch to their grid row, so a
    skeleton that only wraps its content would shrink the row and shift the
    whole grid when the data lands. */
 .zn-wcard-skel {
@@ -76,7 +76,7 @@
 }
 
 /* A compact card is not a small full card. WorkoutCardCompact renders a title
-   row and the facts and nothing else — no profile, no badges — and
+   row and the facts and nothing else, no profile, no badges, and
    .zn-wcard[data-size="compact"] sets that title in --type-label on one line
    instead of h3. Drawing the profile and the badges anyway reserved ~90px per
    card that never arrive, which is the layout shift this file exists to
@@ -106,7 +106,7 @@
   border-radius: var(--r-pill);
 }
 
-/* Not a hit target — the whole skeleton is aria-hidden and nothing in it is
+/* Not a hit target, the whole skeleton is aria-hidden and nothing in it is
    clickable. It follows the button's coarse-pointer floor because the button
    does: on a phone that header row is 44px tall, and a skeleton that is 32px
    there hands the reader a 12px jump for free. */
@@ -124,7 +124,7 @@
   border-radius: var(--r-md);
 }
 
-/* The facts line sits over a divider with 4px of air, like .zn-wcard__meta —
+/* The facts line sits over a divider with 4px of air, like .zn-wcard__meta,
    including the auto top margin that pins it to the floor of the card. Without
    it the slack of a tall grid row pools under the block instead of inside it,
    and a skeleton beside a real card in the same row ends higher than it. */
@@ -144,7 +144,7 @@
 .zn-wcard-skel__fact--short { inline-size: 24%; }
 .zn-wcard-skel__fact--long { inline-size: 28%; }
 
-/* A badge capsule: 12px mono between 7px of padding inside a 1.5px outline —
+/* A badge capsule: 12px mono between 7px of padding inside a 1.5px outline,
    badge.css states all three, and they add up to the 33px pill that a badge
    row reserves. */
 .zn-wcard-skel__badge {
@@ -177,7 +177,7 @@
 
 /* Une ligne par jour sous 640px, quatre puis trois jusqu'à 768, la semaine
    entière au-delà : les trois formes que .zn-planweek__row dessine vraiment.
-   Un squelette qui ne tient pas la même mise en page que son contenu se voit —
+   Un squelette qui ne tient pas la même mise en page que son contenu se voit,
    la page saute au moment où les données arrivent. */
 .zn-planweek-skel__board {
   display: grid;
@@ -271,7 +271,7 @@
 
 /* ── the article ───────────────────────────────────────────────────────────
    Mirrors ArticlePage: crumbs, the display-2 title, a mono meta line, then
-   .zn-prose — 19px on 1.7 with 18px between paragraphs, inside the reading
+   .zn-prose, 19px on 1.7 with 18px between paragraphs, inside the reading
    measure. The title line box follows --fs-display-2, so it shrinks from 63px
    to 35px at 640px exactly when the real title does.
 
@@ -279,7 +279,7 @@
    this adds is the centring the component already had, and the font size that
    makes the measure resolve. --measure is 62ch and a ch is font-relative, so
    the same class on a 16px box and on .zn-prose's 19px box are two different
-   columns — measured, 636px against 755px. Stating the prose size here is what
+   columns, measured, 636px against 755px. Stating the prose size here is what
    makes the two agree; nothing inside reads it, every block is sized from its
    own token. */
 .zn-article-skel {
@@ -309,14 +309,14 @@
 
 /* The one block with no counterpart on the page: ArticlePage renders no hero
    today. It keeps the 176px the component already reserved rather than
-   inventing a height for something that is not there — see the note in
+   inventing a height for something that is not there, see the note in
    ArticleSkeleton.tsx. */
 .zn-article-skel__hero {
   block-size: 176px;
   border-radius: var(--r-xl);
 }
 
-/* .zn-prose__h2 is set solid — line-height 1 — so its line box is the font
+/* .zn-prose__h2 is set solid, line-height 1, so its line box is the font
    size and nothing more, and it opens its section with 16px of extra air on
    top of the prose gap. */
 .zn-article-skel__h2 {

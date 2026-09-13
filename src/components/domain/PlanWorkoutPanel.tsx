@@ -74,7 +74,7 @@ const CROSS_TRAINING_ITEMS: CrossTrainingItem[] = [
 interface PlanWorkoutPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  /** Render as inline content (no fixed positioning) — used on desktop/tablet */
+  /** Render as inline content (no fixed positioning), used on desktop/tablet */
   inline?: boolean;
   /** Mobile: tap a workout to select it, then tap a calendar cell to place it */
   onSelectWorkout?: (workoutId: string) => void;
@@ -178,7 +178,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
 
   const panelContent = (
     <div className="zn-planpanel__body">
-      {/* Header — et, sur la sheet, la vraie prise du glisser-pour-fermer. */}
+      {/* Header, et, sur la sheet, la vraie prise du glisser-pour-fermer. */}
       <div className="zn-planpanel__bar" data-sheet-handle={!inline || undefined}>
         <h3 className="zn-planpanel__title">{t("workoutPanel.title")}</h3>
         <button
@@ -193,7 +193,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
 
       {/* La consigne reste au desktop, où le geste (glisser) ne va pas de soi.
           Sur la sheet elle coûtait 37px des 251 de liste pour redire ce que
-          l'utilisateur vient de faire en appuyant sur « + ». */}
+          l'utilisateur vient de faire en appuyant sur +. */}
       {inline && (
         <p className="zn-planpanel__hint">
           {onSelectWorkout

@@ -1,11 +1,11 @@
-/* run-cycle.mjs — la figure qui court sur place, image par image.
+/* run-cycle.mjs, la figure qui court sur place, image par image.
  *
  * Six poses, jouées à 110 ms chacune : 660 ms le cycle, soit 182 pas par
- * minute — une allure facile — à 9 images par seconde. Le saccadé est voulu.
+ * minute, une allure facile, à 9 images par seconde. Le saccadé est voulu.
  * C'est un dessin animé image par image, pas une interpolation ; à 24 images
  * par seconde on obtiendrait un rendu 3D pauvre, à 9 on obtient un dessin.
  *
- * LE SOL NE DÉFILE PAS. Les ancres 3 et 53 — le bassin — ne figurent dans
+ * LE SOL NE DÉFILE PAS. Les ancres 3 et 53, le bassin, ne figurent dans
  * aucun `idx` de JOINTS : aucune pose ne les déplace, elles restent à x=112.
  * La figure court donc sur place par construction, et c'est le PIED qui
  * recule de 148 à 98 sous un bassin fixe. C'est ça, le tapis roulant.
@@ -13,7 +13,7 @@
  * Un cycle de course est symétrique ; ce gréement ne l'est pas. Le bras
  * arrière a 126 unités de portée, le bras avant 90 ; le pied avant est une
  * palette de neuf ancres sans arc de semelle, le pied d'appui en a sept plus
- * les sept de SOLE. Les six poses sont donc écrites une par une — aucun flip,
+ * les sept de SOLE. Les six poses sont donc écrites une par une, aucun flip,
  * aucun demi-cycle retourné.
  *
  *   bun scripts/doodles/run-cycle.mjs
@@ -38,7 +38,7 @@ const LEAD_KNEE = [-56, 30];
 const STAND_KNEE = [-98, 0];
 
 /* Le tronçon qui passe sous le pied avant, et l'ancre la plus basse de chaque
-   pied — celle qu'on amène au sol. */
+   pied, celle qu'on amène au sol. */
 const LEAD_SOLE = Figure.LEAD_SOLE;      // [63, 65]
 const LEAD_TIP = 64;
 const STAND_TIP = -5;                    // S[4], le point bas de l'arc de semelle
@@ -57,14 +57,14 @@ const flexion = (a, b, c) => {
 const pelvisY = (f) => (f.P[3][1] + f.P[53][1]) / 2;
 /* L'écart entre les deux pieds : c'est LA foulée telle qu'elle se lit. Deux
    images d'appui qui ne l'ont pas égale se lisent comme une claudication, et
-   aucun contrôle de hauteur ne l'attrape — les deux hanches peuvent être à la
+   aucun contrôle de hauteur ne l'attrape, les deux hanches peuvent être à la
    même altitude avec un pas deux fois plus long d'un côté. */
 const ecart = (f) => Math.abs(f.at(LEAD_TIP)[0] - f.at(STAND_TIP)[0]);
 const headTop = (f) => Math.min(...Array.from({ length: 17 }, (_, k) => f.P[20 + k][1]));
 
 /* Pose un pied au sol À UN X DONNÉ. Deux passes : viser, mettre la semelle à
    plat (ce qui déplace le pied), viser à nouveau. Sans la seconde passe
-   l'accent se dresse — mesuré à 27 unités de haut sur le premier jet, un
+   l'accent se dresse, mesuré à 27 unités de haut sur le premier jet, un
    vermillon debout au lieu d'un vermillon posé. */
 function plant(f, leg, x, y) {
   const lead = leg === "lead";
@@ -84,7 +84,7 @@ function plant(f, leg, x, y) {
  * La hauteur finale du corps vaut 240 + GROUND − (bas de l'accent AVANT
  * translation) : le bassin est fixe à 240, et la translation ramène l'accent
  * sur la règle. Deux images d'appui n'ont donc la même hauteur que si leur
- * accent tombe au même y LOCAL — c'est-à-dire si les deux jambes descendent
+ * accent tombe au même y LOCAL, c'est-à-dire si les deux jambes descendent
  * d'autant sous le bassin.
  *
  * Elles ne le peuvent pas également. Mesuré, portée verticale maximale du bas
@@ -97,7 +97,7 @@ function plant(f, leg, x, y) {
  * avant y pend naturellement vers l'AVANT et se retrouve en bout de course dès
  * qu'on la tire derrière. Viser une hauteur fixe donnait donc deux demi-foulées
  * qui rebondissaient en sens contraire (240,0 / 246,8 d'un côté, 241,5 / 235,8
- * de l'autre) — une claudication, et le premier défaut que la planche montre.
+ * de l'autre), une claudication, et le premier défaut que la planche montre.
  *
  * L'assise commune n'est donc pas un nombre écrit : c'est le MINIMUM des
  * quatre portées, mesuré à chaque exécution. Toute jambe peut descendre moins
@@ -105,7 +105,7 @@ function plant(f, leg, x, y) {
  * Une pose retouchée déplace l'assise toute seule, sans constante à corriger.
  *
  * Ce qui laisse le rebond aux seules images en vol. Le gréement ne peut pas
- * le donner autrement : le bassin est fixe, et la cheville ne rattrape rien —
+ * le donner autrement : le bassin est fixe, et la cheville ne rattrape rien,
  * le pied AVANT plie (leadFoot +30 descend la pointe de 6,8) mais le pied
  * d'appui ne plie pas, son pivot [0, 71] est dans l'arc de semelle et +30 ne
  * déplace la pointe que de 2,3. Un rebond par la cheville ne marcherait que
@@ -134,7 +134,7 @@ function seat(f, s, target) {
      pas de 0,1°, `f1` arrondit au dixième d'unité, et le trait est mesuré sur
      des cubiques échantillonnées. En dessous de ~0,1 unité l'itération
      oscille dans ce bruit au lieu de converger. Sur une figure de 300 unités,
-     c'est 0,03 % — invisible, et bien en deçà du dixième de pixel à l'écran. */
+     c'est 0,03 %, invisible, et bien en deçà du dixième de pixel à l'écran. */
   let y = GY, err = Infinity;
   for (let k = 0; k < 20 && Math.abs(err) >= 0.1; k++) {
     plant(f, s.contact, s.x, y);
@@ -142,7 +142,7 @@ function seat(f, s, target) {
     y += err;
   }
   if (Math.abs(err) >= 0.2)
-    throw new Error(`${s.n} : l'assise ne converge pas (reste ${err.toFixed(2)}) — ` +
+    throw new Error(`${s.n} : l'assise ne converge pas (reste ${err.toFixed(2)}), ` +
       `la jambe est en bout de course, augmente la marge de SEAT ou rapproche x du bassin`);
   return f;
 }
@@ -151,8 +151,8 @@ function seat(f, s, target) {
 
 /* `head` et `torso` sont CONSTANTS sur les six images. `torso.idx` vaut
    range(4, 52), qui contient la tête et les deux épaules : les figer supprime
-   la première cause de tremblement inter-images, et rend le contrôle « pas de
-   bobine de tête » vrai par construction. */
+   la première cause de tremblement inter-images, et rend le contrôle pas de
+   bobine de tête vrai par construction. */
 const HOLD = { head: 3, torso: 5 };
 
 /* `contact` dit quel pied est au sol et `x` où il se pose ; `free` est la
@@ -162,7 +162,7 @@ const HOLD = { head: 3, torso: 5 };
 
    Les angles sont en degrés, horaire positif. Sens utiles, mesurés : une
    HANCHE positive recule le pied, des deux côtés ; `leadFoot` positif descend
-   la pointe ; un coude replié (130-156) tient le poing près du corps — à 60-84
+   la pointe ; un coude replié (130-156) tient le poing près du corps, à 60-84
    le bras sort en perche horizontale, ce qui a coûté un tour de planche. */
 const CYCLE = [
   { n: "1-appui-pres", contact: "lead", x: 148,
@@ -194,8 +194,8 @@ const CYCLE = [
 
 /* L'assise commune : la plus courte des quatre portées, moins trois unités.
    La marge n'est pas cosmétique. Au bout de sa course, la relation entre la
-   cible visée et le contact obtenu s'aplatit — la jambe ne descend plus, quoi
-   qu'on demande — et le calage ci-dessous, qui corrige en 1:1, n'y converge
+   cible visée et le contact obtenu s'aplatit, la jambe ne descend plus, quoi
+   qu'on demande, et le calage ci-dessous, qui corrige en 1:1, n'y converge
    pas : à une demi-unité de marge il restait 1,3 d'écart entre les appuis, ce
    qui est une claudication de plus. Trois unités laissent chaque jambe dans la
    plage où elle répond. Et une jambe verrouillée en extension se dessinerait
@@ -213,7 +213,7 @@ const frames = CYCLE.map((s) => {
    aucune itération n'est nécessaire.
 
    On épingle sur le bas de l'ACCENT, pas sur le bas de la figure. C'est le
-   vermillon qui doit toucher la règle — s'il flotte, la règle 3 est enfreinte,
+   vermillon qui doit toucher la règle, s'il flotte, la règle 3 est enfreinte,
    et se caler sur le point le plus bas laisserait justement le vermillon en
    l'air quand la jambe libre descend plus bas que la semelle plantée. Ce qui
    est arrivé au premier jet : sur l'image 4 l'accent était 2,8 au-dessus. Le
@@ -256,7 +256,7 @@ for (const fr of contacts) {
 // et les images en vol sont vraiment en l'air.
 for (const fr of frames.filter((f) => !f.s.contact)) {
   const clair = GROUND - strokeBottom(fr.paths.map((p) => p.d));
-  if (clair < 8) fail.push(`${fr.s.n} : ne décolle que de ${clair.toFixed(1)} — ça ne se lit pas comme un vol`);
+  if (clair < 8) fail.push(`${fr.s.n} : ne décolle que de ${clair.toFixed(1)}, ça ne se lit pas comme un vol`);
   if (fr.paths.some((p) => p.accent)) fail.push(`${fr.s.n} : un accent en l'air`);
 }
 
@@ -277,12 +277,12 @@ for (const fr of frames) {
 
 /* 5. Opposition. Elle ne se lit PAS dans une image isolée : sous un coude
       replié comme celui du dessin approuvé (frontElbow 140-156), le poing
-      avant est devant le bassin à tous les angles — de 142 à 242 selon la
+      avant est devant le bassin à tous les angles, de 142 à 242 selon la
       pose, jamais derrière. Comparer un poing au bassin ne dit donc rien.
 
       L'opposition est un fait ENTRE les images : quand le pied avance, le
       poing du même côté recule. On la mesure par la corrélation, sur le cycle
-      entier, entre l'abscisse du pied et celle du poing de son côté — le bras
+      entier, entre l'abscisse du pied et celle du poing de son côté, le bras
       avant appartient à la jambe avant, tous deux sont les membres proches. */
 {
   const corr = (u, v) => {
@@ -319,8 +319,8 @@ for (let k = 0; k < 3; k++) {
 
 /* 8. La jambe libre avance dans le temps. Elle quitte le sol en arrière puis
       revient vers l'avant, image après image ; elle ne recule jamais. Le
-      premier jet violait ça sur les images 1 et 4 — la jambe repartait en
-      arrière après avoir déjà commencé à revenir — et ça se voyait comme un
+      premier jet violait ça sur les images 1 et 4, la jambe repartait en
+      arrière après avoir déjà commencé à revenir, et ça se voyait comme un
       pas qui bégaie, sans qu'aucun contrôle de hauteur ne l'attrape. */
 for (const [tip, nom] of [[LEAD_TIP, "avant"], [STAND_TIP, "arrière"]]) {
   const x = frames.map((fr) => fr.f.at(tip)[0]);
@@ -333,18 +333,18 @@ for (const [tip, nom] of [[LEAD_TIP, "avant"], [STAND_TIP, "arrière"]]) {
     if (planted[k] !== planted[j]) continue;     // décollage ou pose : saut normal
     if (x[j] < x[k] - 1)
       fail.push(`pied ${nom} : il recule en l'air entre les images ${k + 1} et ${j + 1} ` +
-        `(${x[k].toFixed(0)} → ${x[j].toFixed(0)}) — le pas bégaie`);
+        `(${x[k].toFixed(0)} → ${x[j].toFixed(0)}), le pas bégaie`);
   }
 }
 
-/* 9. La figure n'a pas commencé à voyager. C'est gratuit aujourd'hui — aucune
-      articulation ne touche aux ancres 3 et 53 — mais ça ne se voit nulle
+/* 9. La figure n'a pas commencé à voyager. C'est gratuit aujourd'hui, aucune
+      articulation ne touche aux ancres 3 et 53, mais ça ne se voit nulle
       part : un `translate(dx, …)` ajouté un jour ferait glisser l'animation
       hors du cadre commun, lentement, sans que rien d'autre ne proteste. */
 for (const fr of frames) {
   const x = (fr.f.P[3][0] + fr.f.P[53][0]) / 2;
   if (!near(x, PELVIS_X, 1e-9))
-    fail.push(`${fr.s.n} : le bassin est en x=${x.toFixed(2)} au lieu de ${PELVIS_X} — la figure voyage`);
+    fail.push(`${fr.s.n} : le bassin est en x=${x.toFixed(2)} au lieu de ${PELVIS_X}, la figure voyage`);
 }
 
 /* ── le cadre commun ─────────────────────────────────────────────────────── */
@@ -369,7 +369,7 @@ frames.forEach((fr, i) => {
     `${i + 1}  ${fr.s.n.padEnd(15)} ` +
     `${pelvisY(fr.f).toFixed(1).padStart(6)} ${headTop(fr.f).toFixed(1).padStart(6)} ` +
     `${(headTop(fr.f) - pelvisY(fr.f)).toFixed(1).padStart(7)} ${b.toFixed(1).padStart(7)} ` +
-    `${(tip === null ? "—" : fr.f.at(tip)[0].toFixed(1)).padStart(7)} ${ecart(fr.f).toFixed(0).padStart(6)} ` +
+    `${(tip === null ? "-" : fr.f.at(tip)[0].toFixed(1)).padStart(7)} ${ecart(fr.f).toFixed(0).padStart(6)} ` +
     `${flexion(fr.f.P[53], fr.f.P[54], fr.f.P[55]).toFixed(0).padStart(3)}°/${flexion(fr.f.P[2], fr.f.P[1], fr.f.P[0]).toFixed(0).padStart(3)}°  ` +
     `${acc.length ? strokeBottom(acc.map((p) => p.d)).toFixed(1) : "aucun (en l'air)"}`);
 });

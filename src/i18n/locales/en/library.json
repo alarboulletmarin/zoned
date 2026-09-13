@@ -215,7 +215,7 @@
       "add": "Add to my weeks",
       "unknownCount_one": "{{count}} session is missing from your catalog and will be skipped.",
       "unknownCount_other": "{{count}} sessions are missing from your catalog and will be skipped.",
-      "invalidHelp": "The link is truncated or out of date. Your saved weeks are intact — ask for a new one.",
+      "invalidHelp": "The link is truncated or out of date. Your saved weeks are intact, ask for a new one.",
       "unknownHelp": "The other {{count}} sessions will be added as they are."
     },
     "new": {
@@ -273,7 +273,7 @@
       "action": "Generate my week",
       "actionShort": "Generate",
       "busy": "Generating…",
-      "hint": "Automatically composes 3–6 balanced 80/20 sessions from your settings.",
+      "hint": "Automatically composes 3-6 balanced 80/20 sessions from your settings.",
       "hintRegen": "Recomposes a fresh week from your current settings.",
       "create": "Create week",
       "namePlaceholder": "Week name",
@@ -336,8 +336,8 @@
       "balanced": "80/20 balance",
       "tooEasy": "Not enough intensity",
       "tooHard": "Too much intensity",
-      "tooEasyHint": "Very little quality this week — add a tempo/threshold session to reach ~20 % intensity.",
-      "tooHardHint": "A lot of intensity — add easy volume or ease one hard session.",
+      "tooEasyHint": "Very little quality this week, add a tempo/threshold session to reach ~20 % intensity.",
+      "tooHardHint": "A lot of intensity, add easy volume or ease one hard session.",
       "tolerance": "Balanced between {{min}} and {{max}} % intensity"
     },
     "rhythm": {

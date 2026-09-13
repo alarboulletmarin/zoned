@@ -1,5 +1,5 @@
 /**
- * Mobile menu — the five doors as a full-screen ink panel.
+ * Mobile menu, the five doors as a full-screen ink panel.
  *
  * Below 1024px the header has no room for the doors, so navigation becomes one
  * floating pill in the bottom-right corner ("where the thumb already is") and a
@@ -10,20 +10,20 @@
  * from the platform. The one thing the platform does not give is the scroll
  * lock, so this file writes it.
  *
- * The trigger and the panel live in the same component on purpose — the browser
+ * The trigger and the panel live in the same component on purpose, the browser
  * hands focus back to whatever was focused before showModal(), and keeping the
  * two together is what makes that "whatever" be the pill.
  *
  * Nothing is lost against the old drawer: the five doors are the screen, and
  * every child page and account page hangs under the door it belongs to, in a
  * native <details> that is closed until you ask for it. That replaces the flat
- * run of twenty-five mono links that used to sit at the floor of the panel —
+ * run of twenty-five mono links that used to sit at the floor of the panel,
  * the routes were all there, but in no order anyone could read.
  *
  * Under the six lines, the figure of the door you are standing in stands on a
  * rule that crosses the panel. It replaces the vermillon disc that used to mark
  * the active line: the doors of the home page and the guides are bare, and
- * this is where their figures live now — at a size where the stroke reads as a
+ * this is where their figures live now, at a size where the stroke reads as a
  * drawing, not as one more pictogram.
  */
 
@@ -44,8 +44,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import { PRIMARY_NAV, isNavActive } from "./TopBar";
 
-/** One figure per door, keyed by the PRIMARY_NAV id. A page no door owns —
- *  settings, about, contribute — gets the duo instead, so the panel always
+/** One figure per door, keyed by the PRIMARY_NAV id. A page no door owns,
+ *  settings, about, contribute, gets the duo instead, so the panel always
  *  has exactly one figure and never two. */
 const DOOR_FIGURES: Record<string, FunctionComponent<SVGProps<SVGElement>>> = {
   today: DoorToday,
@@ -57,13 +57,13 @@ const DOOR_FIGURES: Record<string, FunctionComponent<SVGProps<SVGElement>>> = {
 /** Le reste, en un groupe au pied des portes.
  *
  *  Seulement ce qu'aucune porte ne tient déjà : le profil, les zones, les
- *  favoris et l'éditeur sont des enfants de « Mes chiffres » et « Séances », et
+ *  favoris et l'éditeur sont des enfants de Mes chiffres et Séances, et
  *  les imprimer à deux endroits est ce qui rendait l'ancienne liste plate
  *  illisible. Le filtre est automatique, donc retirer une entrée d'une porte la
  *  fait apparaître ici sans qu'on y pense.
  *
  *  C'est ici qu'ont atterri les destinations que les quatre portes ne portent
- *  plus — comprendre, méthodologie, guides, nutrition, lexique, parcours,
+ *  plus, comprendre, méthodologie, guides, nutrition, lexique, parcours,
  *  simulateur, comparatifs. Elles gardent leurs routes ; elles ne sont plus
  *  dans le chemin de quelqu'un qui vient s'entraîner. */
 const MORE_LINKS: { to: string; labelKey: string }[] = (() => {
@@ -114,7 +114,7 @@ export function MobileMenu() {
 
   // Raised for the one close that hands the user on rather than dismisses
   // them: the search button closes the panel to open the command palette, and
-  // the `close` event fires as a task — after the palette has taken focus.
+  // the `close` event fires as a task, after the palette has taken focus.
   // Pulling focus back to the pill there would rip it out of the palette.
   const handoff = useRef(false);
 
@@ -125,7 +125,7 @@ export function MobileMenu() {
     const dialog = dialogRef.current;
     // Above 1024px nothing is rendered, so no `close` event will ever come.
     // The mirror has to be reset by hand or it stays true: aria-expanded would
-    // lie, and the scroll lock below would never run its cleanup — leaving the
+    // lie, and the scroll lock below would never run its cleanup, leaving the
     // desktop page permanently unscrollable after a resize with the panel open.
     if (!dialog) {
       setOpen(false);
@@ -183,14 +183,14 @@ export function MobileMenu() {
           dialogRef.current?.showModal();
           // showModal() ne pose pas le focus sur le dialogue : il le pose sur
           // le premier descendant tabbable, c'est-à-dire la porte
-          // « Aujourd'hui ». Le navigateur y peint alors l'anneau vermillon de
+          // Aujourd'hui. Le navigateur y peint alors l'anneau vermillon de
           // base.css dès que la dernière interaction comptabilisée était au
-          // clavier — la frappe dans la palette de recherche suffit — alors que
+          // clavier, la frappe dans la palette de recherche suffit, alors que
           // l'ouverture vient d'un doigt. On vise donc le panneau qui défile :
           // un conteneur ne porte pas d'anneau (le reset est dans base.css,
           // hors couche, parce que son tabindex le fait entrer dans la règle de
           // focus globale), et PageDown et les flèches continuent de faire
-          // défiler — ce que le <dialog>, lui, ne saurait pas faire : c'est son
+          // défiler, ce que le <dialog>, lui, ne saurait pas faire : c'est son
           // enfant qui a l'overflow. Le premier Tab rend l'anneau à la première
           // porte.
           innerRef.current?.focus();
@@ -213,12 +213,12 @@ export function MobileMenu() {
           <p className="zn-kicker zn-menu__eyebrow">{t("mobileMenu.goTo")}</p>
 
           {/* One door per line. A door with children is a native <details>,
-              always closed when the panel opens — the figure under the lines
-              says which door you are standing in, without unfolding it — so
+              always closed when the panel opens, the figure under the lines
+              says which door you are standing in, without unfolding it, so
               the panel is six lines on opening, and the twenty-five routes are
               one tap away under the door that owns them. <details> also means
               the disclosure contract
-              (Enter, Space, the open state) is the platform's, not ours — and
+              (Enter, Space, the open state) is the platform's, not ours, and
               one `name` shared by every door makes them an exclusive accordion:
               opening a door closes the one that was open, so the panel never
               holds two lists of pages at once. */}
@@ -302,7 +302,7 @@ export function MobileMenu() {
           </nav>
 
           {/* The ground. A rule across the whole panel, and the figure of the
-              door you are in standing on it, sole on the line — the bottom of
+              door you are in standing on it, sole on the line, the bottom of
               the SVG's viewBox is its sole, so the box is aligned on the rule
               and nothing is placed by eye. Muet for a screen reader: the
               aria-current on the links already says where you are, and the

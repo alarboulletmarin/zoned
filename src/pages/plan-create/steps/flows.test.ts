@@ -67,9 +67,9 @@ describe("stepsFor", () => {
   });
 
   // L'ultra a rejoint le triathlon le 12 septembre 2026 : son parcours ne
-  // s'ouvre plus. Les deux étapes qu'il demandait — terrain, logistique —
+  // s'ouvre plus. Les deux étapes qu'il demandait, terrain, logistique,
   // restent déclarées ; c'est la porte qui est fermée, pas la machine, et
-  // « toutes les étapes déclarées sont atteignables » plus bas nomme la seule
+  // toutes les étapes déclarées sont atteignables plus bas nomme la seule
   // qui reste garée derrière.
   test("une pratique annoncée s'arrête à la première question", () => {
     for (const practice of PRACTICES) {
@@ -118,7 +118,7 @@ describe("stepsFor", () => {
   //
   // UNE exception, et elle est nommée : `ultra_logistics` n'appartient qu'au
   // parcours ultra, fermé depuis que l'ultra est annoncé. La liste est EXACTE
-  // dans les deux sens — rouvrir l'ultra sans la vider fait échouer ce test
+  // dans les deux sens, rouvrir l'ultra sans la vider fait échouer ce test
   // autant qu'oublier d'y inscrire une étape devenue morte. C'est ce qui
   // l'empêche de devenir le tapis sous lequel on pousse.
   test("toutes les étapes déclarées sont atteignables", () => {
@@ -142,7 +142,7 @@ describe("stepsFor", () => {
  * Le garde-fou de la reprise d'un brouillon.
  *
  * Un index n'a de sens que dans le parcours où il a été écrit : l'ajout de
- * l'étape « pratique » en tête a décalé tous les autres d'un cran. Reprendre
+ * l'étape pratique en tête a décalé tous les autres d'un cran. Reprendre
  * par l'index ferait donc revenir sur la mauvaise question, en silence.
  */
 describe("indexOfStep", () => {
@@ -154,7 +154,7 @@ describe("indexOfStep", () => {
   });
 
   test("rend null pour une étape absente de CE parcours", () => {
-    // « terrain » existe, mais pas pour la route.
+    // terrain existe, mais pas pour la route.
     expect(indexOfStep("terrain", draft({ practice: "road" }))).toBeNull();
     expect(indexOfStep("terrain", draft({ practice: "trail" }))).not.toBeNull();
   });
@@ -164,7 +164,7 @@ describe("indexOfStep", () => {
   });
 
   // Le décalage exact que l'ajout de la pratique a créé : l'index 5 désignait
-  // « Niveau » dans l'ancien parcours, et désigne « Courses de prépa » dans le
+  // Niveau dans l'ancien parcours, et désigne Courses de prépa dans le
   // nouveau. C'est pour ça que l'id gagne toujours.
   test("l'id désigne la même question que l'index ne désigne plus", () => {
     const steps = stepsFor(draft({ practice: "road" }));

@@ -88,7 +88,7 @@ export function ZoneCalculator({ onZonesChange }: ZoneCalculatorProps = {}) {
   const unit = settings.unitSystem;
   const isMobile = useIsMobile();
 
-  // A shared link carries the sender's values — they win over whatever the
+  // A shared link carries the sender's values, they win over whatever the
   // recipient has stored locally, otherwise the link would show their zones.
   const [searchParams] = useSearchParams();
   const sharedFcMax = searchParams.get("fcmax") ?? "";
@@ -120,7 +120,7 @@ export function ZoneCalculator({ onZonesChange }: ZoneCalculatorProps = {}) {
       parsedVma < 8 ||
       parsedVma > 30);
 
-  // Load stored preferences on mount — skipped when the URL already supplies values.
+  // Load stored preferences on mount, skipped when the URL already supplies values.
   useEffect(() => {
     if (sharedFcMax || sharedVma) return;
     const prefs = loadUserZonePrefs();
@@ -147,7 +147,7 @@ export function ZoneCalculator({ onZonesChange }: ZoneCalculatorProps = {}) {
   const hasErrors = fcMaxError || vmaError;
 
   // The one boundary worth a sentence: entering Z4. Recomputed from the
-  // reader's numbers — Z4's lower pace bound (the slowest), and its lower
+  // reader's numbers, Z4's lower pace bound (the slowest), and its lower
   // heart-rate bound. One line per known quantity.
   const z4 = zones.find((z) => z.zone === 4);
   const thresholdNote = [
@@ -285,7 +285,7 @@ export function ZoneCalculator({ onZonesChange }: ZoneCalculatorProps = {}) {
                   {/* Between Z3 and Z4, the one boundary worth a sentence: an
                       annotation row in its place in the table, the arrow
                       towards the Z4 row. Arrow only, no figure: the page
-                      already has one — the ZoneFigures plate — and one figure
+                      already has one, the ZoneFigures plate, and one figure
                       per screen is the rule (docs/doodles.md). */}
                   {zoneNum === 4 && thresholdNote && (
                     <Annotation

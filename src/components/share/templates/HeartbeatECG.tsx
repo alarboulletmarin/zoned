@@ -1,9 +1,9 @@
 /**
- * HeartbeatECG — 1080×1920. An electrocardiogram-style horizontal trace
+ * HeartbeatECG, 1080×1920. An electrocardiogram-style horizontal trace
  * whose amplitude + frequency varies per zone, drawn from the actual
  * session segments. Le logo était lui-même une ligne de pouls quand ce
- * gabarit a été écrit ; il est devenu le mot « zoned. », et le tracé reste ici
- * parce qu'il dit la SÉANCE — les segments, leur intensité — et non la marque.
+ * gabarit a été écrit ; il est devenu le mot zoned., et le tracé reste ici
+ * parce qu'il dit la SÉANCE, les segments, leur intensité, et non la marque.
  * conveys the workout's intensity profile at a glance.
  */
 
@@ -24,7 +24,7 @@ const TRACE_VIEW_W = 1080;
 const TRACE_VIEW_H = 360;
 
 /**
- * Per-zone "ECG signature" — controls how busy and tall each segment's
+ * Per-zone "ECG signature", controls how busy and tall each segment's
  * trace looks. Index = ZoneNumber.
  */
 const ZONE_SIGNATURE: Record<number, { cyclesPerMin: number; amp: number }> = {

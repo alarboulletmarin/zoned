@@ -7,7 +7,7 @@ import type { FormState, StepId } from "../types";
  * Séparé du registre pour une raison concrète : `registry.ts` importe les
  * douze composants, donc `@/components/ui/*`, donc `react-i18next`, dont le
  * `import.meta.glob` n'existe pas hors de Vite. La logique d'enchaînement est
- * pure et c'est elle qu'il faut verrouiller par des tests — voir
+ * pure et c'est elle qu'il faut verrouiller par des tests, voir
  * `flows.test.ts`.
  */
 
@@ -18,15 +18,15 @@ import type { FormState, StepId } from "../types";
  * lue par `lib/` et `data/`, le séquencement est de l'UI. Les mélanger
  * traînerait des types de composants React dans `src/types/`.
  *
- * Deux étapes seulement changent avec la pratique — et elles changent par
+ * Deux étapes seulement changent avec la pratique, et elles changent par
  * DONNÉE (`distancesOfPractice`), pas par branchement :
  *
  * - le **terrain et le dénivelé** n'apparaissent qu'en trail et en ultra. Le
  *   champ dénivelé existait déjà, mais il était posé sur l'écran d'allure et
  *   rendait pour TOUT LE MONDE : un coureur de 5 km sur route se faisait
  *   demander un D+ ;
- * - la **logistique ultra** — nuit, ravitaillement, bâtons, week-end
- *   disponible — n'a de sens qu'au-delà du trail.
+ * - la **logistique ultra**, nuit, ravitaillement, bâtons, week-end
+ *   disponible, n'a de sens qu'au-delà du trail.
  */
 const AFTER_DISTANCE: StepId[] = [
   "date",

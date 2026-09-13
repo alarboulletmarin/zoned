@@ -21,7 +21,7 @@ export interface PoiCandidate {
   /** OSM element id, used as a stable cache key. */
   id: number;
   type: PoiType;
-  /** Centroid (`out center` from Overpass) — directly usable as a Brouter waypoint. */
+  /** Centroid (`out center` from Overpass), directly usable as a Brouter waypoint. */
   point: RouteCoordinate;
   /** Display name, when OSM tagged one. */
   name?: string;

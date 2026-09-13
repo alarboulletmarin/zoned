@@ -1,5 +1,5 @@
 /**
- * HolographicCard — 480×480. Iridescent chrome card (Pokémon holo / iPhone
+ * HolographicCard, 480×480. Iridescent chrome card (Pokémon holo / iPhone
  * foil vibe). Chromatic gradient base + diagonal foil bands + radial
  * highlight. Zone colour appears only as accent so the holo signature stays
  * dominant.
@@ -42,7 +42,7 @@ export function HolographicCard({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* The holographic card IS the visual — not tagged `data-bg-layer` so
+      {/* The holographic card IS the visual, not tagged `data-bg-layer` so
           it survives the transparent toggle (only the editorial bg drops
           out, leaving the card alone on the user's photo). */}
       <div

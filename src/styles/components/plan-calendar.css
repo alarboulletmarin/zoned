@@ -1,4 +1,4 @@
-/* The plan surfaces — a training plan drawn as paper.
+/* The plan surfaces, a training plan drawn as paper.
  *
  * One family, five screens of the same object: the whole-plan grid
  * (.zn-plancal), one week blown up (.zn-planweek), the month chrome around the
@@ -10,13 +10,13 @@
  * Three things carry all the meaning here:
  *
  *   1. The grid is paper. Weeks are rows, days are columns, and the lines
- *      between days are ink hairlines — not gaps, not tints. A plan phase gets
+ *      between days are ink hairlines, not gaps, not tints. A plan phase gets
  *      no colour of its own: the system has one accent, and it is spent on the
  *      primary action.
  *   2. A session's intensity is the zone ink, read straight off
  *      lib/sessionColors.ts (which already resolves to --zone-N). A session
- *      type with no aerobic zone — strength, yoga, cycling, swimming, rest,
- *      cross-training — is not given an invented hue: its mark goes HOLLOW,
+ *      type with no aerobic zone, strength, yoga, cycling, swimming, rest,
+ *      cross-training, is not given an invented hue: its mark goes HOLLOW,
  *      sunken paper inside an ink hairline. Filled = measurable intensity,
  *      hollow = none. That reads in greyscale and it never collides with the
  *      ramp.
@@ -24,8 +24,8 @@
  *      tint. Locked and completed borrow the same idea at other colours:
  *      a frame, not a wash.
  *
- * Blocked days and rest days both use the system's "unmeasured" mark — the
- * 45 degree hatch of --zone-recovery — so nothing on this screen has to invent
+ * Blocked days and rest days both use the system's "unmeasured" mark, the
+ * 45 degree hatch of --zone-recovery, so nothing on this screen has to invent
  * a texture.
  */
 
@@ -45,21 +45,21 @@
   border: var(--border-rule);
   border-radius: var(--r-2xl);
   /* A collapsed table paints its own cell borders over a rounded corner, so
-     the radius has to be clipped rather than merely declared — but `overflow:
+     the radius has to be clipped rather than merely declared, but `overflow:
      hidden` would make the table a scroll container, and `position: sticky`
      resolves against the nearest one. That killed the sticky week gutter.
      `clip-path` clips the same corners without creating a scrollport. */
   clip-path: inset(0 round var(--r-2xl));
 }
 
-/* 104px for the week gutter — the width the design bundle states for it. */
+/* 104px for the week gutter, the width the design bundle states for it. */
 .zn-plancal__col-week {
   inline-size: 104px;
 }
 
 /* 767, pas 768 : le point de rupture appartient à useIsMobile (< 768px) et le
    reste du fichier l'écrit déjà ainsi. À 768px pile, la page se déclare
-   desktop — la gouttière doit suivre. */
+   desktop, la gouttière doit suivre. */
 @media (max-width: 767px) {
   .zn-plancal__col-week {
     inline-size: 90px;
@@ -107,7 +107,7 @@
   border-block-start: var(--border-rule);
 }
 
-/* Down weeks read as sunken paper — less ink on the page, which is what a
+/* Down weeks read as sunken paper, less ink on the page, which is what a
    recovery week is. */
 .zn-plancal__week[data-recovery="true"] .zn-plancal__gutter,
 .zn-plancal__week[data-recovery="true"] .zn-plancal__day {
@@ -140,7 +140,7 @@
 
 /* The current week is framed, not filled: the vermillon ring closes around the
    gutter and the row reads as the one you are in. The week number goes bold
-   with it — the colour is never the only carrier (WCAG 1.4.1). */
+   with it, the colour is never the only carrier (WCAG 1.4.1). */
 .zn-plancal__week[data-current="true"] .zn-plancal__gutter {
   box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
 }
@@ -172,7 +172,7 @@
   color: var(--text-faint);
 }
 
-/* "ACTUEL" — vermillon type, the accent as an identifier rather than a fill. */
+/* "ACTUEL", vermillon type, the accent as an identifier rather than a fill. */
 .zn-plancal__now {
   font-family: var(--font-mono);
   font-size: var(--fs-mono-xs);
@@ -276,13 +276,13 @@
   background-image: var(--zone-recovery);
 }
 
-/* Cible de dépôt vivante — anneau d'ENCRE 1.5px + papier creusé.
-   Elle portait jusqu'ici exactement la même déclaration qu'« aujourd'hui »
+/* Cible de dépôt vivante, anneau d'ENCRE 1.5px + papier creusé.
+   Elle portait jusqu'ici exactement la même déclaration qu'aujourd'hui
    (même 2.5px, même vermillon, sélecteurs frères) : en glissant une séance sur
    la semaine courante, plus rien ne disait laquelle des deux cellules était
-   la cible. Le vermillon est désormais réservé à « maintenant » ; la cible
-   emprunte la marque « retenu » du système (anneau d'encre + surface creusée),
-   ce qui est exactement ce qu'elle est — la case qui va recevoir.
+   la cible. Le vermillon est désormais réservé à maintenant ; la cible
+   emprunte la marque retenu du système (anneau d'encre + surface creusée),
+   ce qui est exactement ce qu'elle est, la case qui va recevoir.
    background-color et non background : une journée indisponible garde sa
    hachure à 45° (background-image) même quand on la survole en glissant.
    L'anneau reste inset, donc la grille ne bouge pas d'un pixel au dragover. */
@@ -305,7 +305,7 @@
 }
 
 /* On glisse une séance SUR aujourd'hui : les deux marques tombent sur la même
-   case. Elles s'empilent au lieu de s'écraser — le vermillon du jour en
+   case. Elles s'empilent au lieu de s'écraser, le vermillon du jour en
    premier (0 à 2.5px), l'anneau d'encre de la cible derrière lui (2.5 à 4px).
    Deux anneaux concentriques, aucun décalage : les deux sont des insets. */
 .zn-plancal__day[data-today="true"][data-drop="true"] {
@@ -345,7 +345,7 @@
   color: var(--text-body);
 }
 
-/* A rest day is blank on purpose — the blank is the rest. The em dash is the
+/* A rest day is blank on purpose, the blank is the rest. The em dash is the
    faintest mark the page has. */
 .zn-plancal__empty {
   color: var(--state-disabled-text);
@@ -376,7 +376,7 @@
 /* ══ the session mark ══════════════════════════════════════════════════ */
 
 /* One object, two densities: a cell inside the whole-plan grid, a card on the
-   one-week board. Everything else about it is identical, which is the point —
+   one-week board. Everything else about it is identical, which is the point,
    the same session should not look like two components. */
 
 .zn-sess {
@@ -424,9 +424,9 @@
 }
 
 /* Retenue à travers une régénération. Le vermillon a cessé de dire
-   « verrouillé » : il ne dit plus que « maintenant ». L'information est portée
+   verrouillé : il ne dit plus que maintenant. L'information est portée
    par le cadenas, qui a toujours été là, et par un anneau d'encre posé EN
-   INSET — donc sans toucher la bordure, qui reste libre de porter le statut
+   INSET, donc sans toucher la bordure, qui reste libre de porter le statut
    (fait / modifié / sauté) sans que les deux marques se disputent le même
    pixel. Bénéfice de bord : la case ne grandissait plus de 2px de chaque côté
    en devenant verrouillée, elle ne bouge plus du tout. */
@@ -435,8 +435,8 @@
   padding-inline-end: var(--sp-10);
 }
 
-/* Jour de course. Ce n'est pas « maintenant », c'est une destination : le
-   cadre reste entier et garde ses 2.5px — donc aucun décalage — mais il passe
+/* Jour de course. Ce n'est pas maintenant, c'est une destination : le
+   cadre reste entier et garde ses 2.5px, donc aucun décalage, mais il passe
    à l'encre. Ce qui le distingue d'une course intermédiaire (1.5px d'encre)
    est l'épaisseur, et ce qui le nomme est le drapeau plus le mot COURSE en
    mono capitales, déjà rendus par le composant. */
@@ -470,10 +470,10 @@
 }
 
 /* Le drapeau et le mot COURSE restent à l'encre du corps de texte : le
-   vermillon ne dit plus que « maintenant », et ces deux-là disent « où ».
-   Ils ne perdent rien — le mot est déjà en mono capitales et en gras. */
+   vermillon ne dit plus que maintenant, et ces deux-là disent où.
+   Ils ne perdent rien, le mot est déjà en mono capitales et en gras. */
 
-/* A / B / C priority: the ramp again — A is the accent, B is ink, C recedes. */
+/* A / B / C priority: the ramp again, A is the accent, B is ink, C recedes. */
 .zn-sess__priority {
   display: block;
   font-family: var(--font-mono);
@@ -659,7 +659,7 @@
   color: var(--ok-fg);
 }
 
-/* Modified is a full ink inversion — the system's own "on" state. */
+/* Modified is a full ink inversion, the system's own "on" state. */
 .zn-sess__check[data-status="modified"] {
   background: var(--surface-inverse);
   border-color: var(--line-strong);
@@ -846,7 +846,7 @@
   flex: none;
 }
 
-/* An outlined action pill in vermillon type — the accent as a line, not a
+/* An outlined action pill in vermillon type, the accent as a line, not a
    fill, because the screen's fill belongs to the primary action above. */
 .zn-planweek__pill {
   display: inline-flex;
@@ -950,7 +950,7 @@
 }
 
 /* Même départage que sur la grille du plan : la cible de dépôt prend l'anneau
-   d'encre et le papier creusé, le vermillon reste à « aujourd'hui » seul.
+   d'encre et le papier creusé, le vermillon reste à aujourd'hui seul.
    background-color, pour ne pas effacer la hachure d'une journée bloquée. */
 .zn-planweek__day[data-drop="true"] {
   background-color: var(--surface-band);
@@ -1049,7 +1049,7 @@
   color: var(--state-disabled-text);
 }
 
-/* "Add something here" — a dashed outline is the system's mark for an empty
+/* "Add something here", a dashed outline is the system's mark for an empty
    slot, the same one the illustration placeholder uses. */
 .zn-planweek__add {
   display: flex;
@@ -1095,10 +1095,10 @@
 
 /* ── sous 640px : une ligne par jour ──────────────────────────────────── */
 
-/* Quatre colonnes sur un écran de 390px, c'est une carte de 87px : « Endur
-   ance… », « Core runni… », « 23m… ». Sous 640px les sept jours passent donc
-   l'un sous l'autre — le jour à gauche, ses séances à droite — et la carte
-   remonte à 190px, assez pour lire « Sortie longue vallonnée » en entier.
+/* Quatre colonnes sur un écran de 390px, c'est une carte de 87px : Endur
+   ance…, Core runni…, 23m…. Sous 640px les sept jours passent donc
+   l'un sous l'autre, le jour à gauche, ses séances à droite, et la carte
+   remonte à 190px, assez pour lire Sortie longue vallonnée en entier.
    639/640 n'a qu'un propriétaire, cette feuille : le composant ne pose plus
    le nombre de colonnes en style inline (il écrit data-cols), donc aucun JS
    n'a à connaître ce seuil ni à rester d'accord avec lui. */
@@ -1120,7 +1120,7 @@
 
   /* La journée cesse d'être une BOÎTE.
    *
-   * Elle en était une — papier creusé, contour de filet, rayon de 10px — posée
+   * Elle en était une, papier creusé, contour de filet, rayon de 10px, posée
    * dans la boîte du tableau, et qui contenait elle-même la boîte de la
    * séance. Trois cadres emboîtés par jour, sept jours : dix-neuf rectangles
    * dessinés sur un écran de téléphone pour cinq séances. Chaque contour
@@ -1133,7 +1133,7 @@
    * Ce que la boîte portait reste porté, et par des règles plus spécifiques
    * que celle-ci, donc elles gagnent sans avoir à être répétées :
    * [data-blocked] garde sa hachure, [data-drop] son papier creusé, et
-   * [data-today] son anneau vermillon — un anneau inset dessine toujours son
+   * [data-today] son anneau vermillon, un anneau inset dessine toujours son
    * rectangle, et c'est même mieux ainsi : le seul jour encadré de l'écran
    * est celui qu'on cherche. */
   .zn-planweek__day {
@@ -1145,7 +1145,7 @@
 
   /* Les sept jours sont répartis sur deux `__row` (quatre puis trois) : le
      filet se pose donc sur chaque jour et se retire du dernier, plutôt que de
-     s'écrire entre frères — ce qui l'aurait oublié entre le jeudi et le
+     s'écrire entre frères, ce qui l'aurait oublié entre le jeudi et le
      vendredi. Les écarts tombent à zéro : c'est le filet qui sépare. */
   .zn-planweek__board {
     gap: 0;
@@ -1169,8 +1169,8 @@
     min-block-size: 0;
   }
 
-  /* La gouttière du jour : « LUN 12 ». Largeur fixe pour que les sept lignes
-     s'alignent, et 64px tient aussi « 1 Jan », le libellé du premier du mois.
+  /* La gouttière du jour : LUN 12. Largeur fixe pour que les sept lignes
+     s'alignent, et 64px tient aussi 1 Jan, le libellé du premier du mois.
      order:-1 la ramène en tête devant le bandeau INDISPONIBLE, qui la précède
      dans le DOM parce qu'il la surmonte en mode colonne. */
   .zn-planweek__dayhead {
@@ -1187,10 +1187,10 @@
     text-align: start;
   }
 
-  /* Tout ce qui n'est pas la gouttière ni le « + » de fin occupe la largeur
+  /* Tout ce qui n'est pas la gouttière ni le + de fin occupe la largeur
      qui reste une fois les deux réservés. Largeur figée et non extensible :
-     les sept jours dessinent alors trois colonnes franches — le jour, la
-     séance, le « + » — et une deuxième séance ne peut jamais venir partager
+     les sept jours dessinent alors trois colonnes franches, le jour, la
+     séance, le +, et une deuxième séance ne peut jamais venir partager
      la ligne de la première. */
   .zn-planweek__day > :not(.zn-planweek__dayhead):not(.zn-planweek__add[data-slot="tail"]) {
     flex: 0 1 calc(100% - var(--sp-19) - var(--hit-min) - 2 * var(--sp-3));
@@ -1205,11 +1205,11 @@
     margin-inline-start: calc(var(--sp-19) + var(--sp-3));
   }
 
-  /* Le « + » d'une journée déjà remplie revient au bout de la ligne, carré :
+  /* Le + d'une journée déjà remplie revient au bout de la ligne, carré :
      sous la carte, il coûtait une deuxième ligne à chacun des sept jours.
 
      Il perd son cadre pointillé. Le pointillé est la marque d'un EMPLACEMENT
-     VIDE — c'est ce qu'il dit sur un vendredi sans séance, où il est la seule
+     VIDE, c'est ce qu'il dit sur un vendredi sans séance, où il est la seule
      chose à voir et donc la seule affordance. Sur une journée déjà remplie, il
      n'annonce aucun vide : il ajoutait un cadre de plus à côté de la carte,
      cinq fois sur sept, pour une action secondaire. Le glyphe seul suffit, et
@@ -1226,9 +1226,9 @@
   /* La carte d'une séance sans statut passe au filet discret. Son contour
      d'encre pleine se justifiait quand elle était posée dans le papier creusé
      d'une journée ; sur une ligne sans boîte, c'est le trait le plus fort de
-     l'écran après le vermillon d'« aujourd'hui ».
-     `:not([data-status])` : les arêtes qui DISENT quelque chose — faite,
-     modifiée, sautée — gardent leur ton et leur épaisseur. */
+     l'écran après le vermillon d'aujourd'hui.
+     `:not([data-status])` : les arêtes qui DISENT quelque chose, faite,
+     modifiée, sautée, gardent leur ton et leur épaisseur. */
   .zn-planweek__day .zn-sess[data-density="card"]:not([data-status]) {
     border-color: var(--line-divider);
   }
@@ -1247,7 +1247,7 @@
 /* ══ drag-to-delete ════════════════════════════════════════════════════ */
 
 /* Only on screen while a session is in the air. It floats, so it is one of the
-   few places allowed the hard offset. Armed, it inverts to solid ink — the
+   few places allowed the hard offset. Armed, it inverts to solid ink, the
    system's "on", rather than a second vermillon fill. */
 .zn-plan-trash {
   position: fixed;
@@ -1296,7 +1296,7 @@
 
 /* ══ the long-press / right-click menu ═════════════════════════════════ */
 
-/* The surface and the rows are dropdown-menu.css — this is the same object,
+/* The surface and the rows are dropdown-menu.css, this is the same object,
    opened by a different gesture. Only the positioning and the hover state
    (these are plain buttons, so there is no data-highlighted to read) live
    here. */
@@ -1310,12 +1310,12 @@
 /* Le menu se place ENTIÈREMENT en JS (SessionActionMenu) : il se mesure avant
    la peinture, se centre sur le doigt, puis se range dans la fenêtre et se
    replie au-dessus si le bas manque. Le `translate(-50%, 4px)` qui tenait ce
-   rôle ici recentrait sans jamais consulter les bords — sur un téléphone de
+   rôle ici recentrait sans jamais consulter les bords, sur un téléphone de
    390px, une séance touchée à droite ouvrait un menu à moitié hors écran.
 
    L'ancrage à 0,0 n'est pas un détail : une boîte `fixed` posée par son seul
-   `left` se fait DIMENSIONNER par lui — sa largeur disponible vaut
-   « largeur de fenêtre − left ». Comme le rangement se calcule à partir de la
+   `left` se fait DIMENSIONNER par lui, sa largeur disponible vaut
+   largeur de fenêtre − left. Comme le rangement se calcule à partir de la
    largeur, les deux se mordaient la queue et le menu se dépliait de la droite
    vers la gauche, huit pixels par image (voir SessionActionMenu). Ancré ici et
    déplacé par `transform`, il garde toujours la fenêtre entière comme place
@@ -1386,7 +1386,7 @@
    z-index 50 is the modal layer mobile-menu.css names: above the floating MENU
    pill (45), which used to be painted straight through the list. 85dvh rather
    than 60vh, and dvh rather than vh, because the mobile URL bar owns the
-   difference — at 60vh the list came to 251px of the 487, three cards out of
+   difference, at 60vh the list came to 251px of the 487, three cards out of
    twenty. */
 .zn-planpanel[data-mode="sheet"] {
   position: fixed;
@@ -1437,7 +1437,7 @@
 
 /* La prise du glisser-pour-fermer : la poignée ET la barre de titre, soit 67px
    au lieu des 14,5 de la poignée seule. `touch-action: none` rend le geste au
-   composant — sans elle le navigateur peut lire le même mouvement comme un
+   composant, sans elle le navigateur peut lire le même mouvement comme un
    défilement et voler le doigt en cours de route. */
 .zn-planpanel[data-mode="sheet"] [data-sheet-handle] {
   touch-action: none;
@@ -1615,7 +1615,7 @@
 /* Une colonne flex qui défile écrase ses enfants avant de leur donner une barre
    de défilement : sans `flex`, une carte est `flex: 0 1 auto` et se comprime dès
    que la pile dépasse la fenêtre. Chrome la retient à sa taille min-content,
-   WebKit non — sur iPhone les cartes perdaient une quinzaine de pixels chacune
+   WebKit non, sur iPhone les cartes perdaient une quinzaine de pixels chacune
    et leur ligne de faits sortait sous la bordure. Mesuré sur la preview, pas
    reproductible sous Chrome : c'est pour ça que la règle est ici plutôt que
    sur .zn-planpanel__item, elle couvre aussi les états vides et le chargement. */
@@ -1689,7 +1689,7 @@
 }
 
 /* Two lines, not one with an ellipsis: this is the name you are choosing by,
-   and « Footing régénération longue en nature » does not survive 375px on one
+   and Footing régénération longue en nature does not survive 375px on one
    line. */
 .zn-planpanel__item-name {
   font: var(--fw-medium) var(--fs-body-sm) / 1.25 var(--font-text);
@@ -1701,7 +1701,7 @@
 }
 
 /* The facts line, at the size the rest of the app states them: --fs-mono, like
-   .zn-wcard__meta. It sat at --fs-mono-xs — 10px — which is the kicker size,
+   .zn-wcard__meta. It sat at --fs-mono-xs, 10px, which is the kicker size,
    for two things you actually read to pick a session. */
 .zn-planpanel__item-meta {
   display: flex;
@@ -1818,7 +1818,7 @@
   /* The completion box and the card actions cannot simply grow: seven of them
      sit in a four-column phone grid. They keep their drawn size and gain the
      44px target as an invisible extension, which is what the guideline asks
-     for — a target that big, not a mark that big. */
+     for, a target that big, not a mark that big. */
   .zn-sess__check::after,
   .zn-sess__action::after {
     content: "";

@@ -47,7 +47,7 @@ export function MyRoutesPage() {
       <SEOHead title={t("myRoutes")} description={t("subtitle")} canonical="/routes/mine" noindex />
 
       <div className="zn-rt">
-        {/* 1 — what is stored, counted, and the way to store one more */}
+        {/* 1, what is stored, counted, and the way to store one more */}
         <section className="zn-rt__band">
           <div className="zn-rt__head">
             <div
@@ -75,7 +75,7 @@ export function MyRoutesPage() {
           </div>
         </section>
 
-        {/* 2 — the index, or the reason there is none */}
+        {/* 2, the index, or the reason there is none */}
         <section className="zn-rt__band">
           {reachedSoftLimit && (
             <Alert

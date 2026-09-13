@@ -23,8 +23,8 @@ import DoorToday from "@/assets/doodles/door-today.svg?react";
 /**
  * Le cockpit.
  *
- * Tâche et fin : « j'arrive pour savoir quoi faire aujourd'hui ; j'ai fini
- * quand je sais quoi courir. » La fin est atteinte SUR CET ÉCRAN.
+ * Tâche et fin : j'arrive pour savoir quoi faire aujourd'hui ; j'ai fini
+ * quand je sais quoi courir. La fin est atteinte SUR CET ÉCRAN.
  *
  * Contexte : quotidien, debout, dix secondes, souvent avant de sortir. Donc
  * vitesse et constance, pas pédagogie. Zéro question posée à l'arrivée.
@@ -34,10 +34,10 @@ import DoorToday from "@/assets/doodles/door-today.svg?react";
  * trois portes ne faisaient que répéter ce que la pastille MENU contient déjà
  * (et la barre du haut sur bureau). Elles sont parties. Ce qui les remplace
  * n'est pas de la navigation mais de l'information : **la bande des sept
- * jours**, qui répond à « et demain ? » sans un tap de plus.
+ * jours**, qui répond à et demain ? sans un tap de plus.
  *
  * Un seul primaire, donc un seul aplat vermillon : le bouton. Le jour courant
- * de la bande est marqué à l'ENCRE — deux accents sur un écran se
+ * de la bande est marqué à l'ENCRE, deux accents sur un écran se
  * neutraliseraient.
  *
  * `/` reste la landing publique et indexée ; celle-ci est l'écran privé, donc
@@ -49,8 +49,8 @@ export function TodayPage() {
   const { plans, isLoading } = usePlans();
   const { settings } = useSettings();
 
-  // `new Date()` une seule fois par montage : un rendu qui recalcule « quel
-  // jour on est » peut changer d'avis en cours de session.
+  // `new Date()` une seule fois par montage : un rendu qui recalcule quel
+  // jour on est peut changer d'avis en cours de session.
   const focus = useMemo(() => pickTodayFocus(plans, new Date()), [plans]);
   const sessionUrl = focusSessionHref(focus);
   const planUrl = focusPlanHref(focus);
@@ -63,15 +63,15 @@ export function TodayPage() {
 
   /* Le nom de la séance du jour, quand il n'y en a qu'une : c'est lui qui fait
      le titre. Le catalogue est en chunks chargés à la demande, donc c'est
-     asynchrone — d'où le repli sur « une séance t'attend » le temps du
+     asynchrone, d'où le repli sur une séance t'attend le temps du
      chargement, qui est aussi ce qu'on affiche quand il y en a plusieurs. */
   const soleSession = focus.sessions.length === 1 ? focus.sessions[0] : undefined;
   const { workout } = useWorkout(soleSession?.workoutId);
 
-  /* Le titre EST la réponse. Un `<h1>` qui dirait « Aujourd'hui » au-dessus
-     d'un chapô « à faire aujourd'hui » et d'une ligne « une séance t'attend »
-     ferait dire trois fois la même chose avant le contenu — et la porte de la
-     nav dit déjà « Aujourd'hui ». */
+  /* Le titre EST la réponse. Un `<h1>` qui dirait Aujourd'hui au-dessus
+     d'un chapô à faire aujourd'hui et d'une ligne une séance t'attend
+     ferait dire trois fois la même chose avant le contenu, et la porte de la
+     nav dit déjà Aujourd'hui. */
   const headline = useMemo(() => {
     if (focus.state === "none") return t("today:resume.none.line");
     if (focus.state === "rest") return t("today:resume.rest.line");
@@ -108,7 +108,7 @@ export function TodayPage() {
 
       {isLoading ? (
         /* La lecture de localStorage est synchrone : l'attente est d'une frame.
-           Pas de squelette qui clignote, mais une place réservée — le budget
+           Pas de squelette qui clignote, mais une place réservée, le budget
            Lighthouse bloque à CLS exactement 0. */
         <div className="zn-cockpit__hold" aria-hidden="true" />
       ) : (
@@ -122,7 +122,7 @@ export function TodayPage() {
           </h1>
 
           {/* L'aperçu de la séance : un bloc par phase, la largeur dit le
-              temps et l'intensité est codée deux fois — densité d'encre ET
+              temps et l'intensité est codée deux fois, densité d'encre ET
               hauteur. C'est beaucoup d'information sans un mot de plus, et
               c'est le composant que les cartes de la bibliothèque utilisent
               déjà (`toZoneBarBlocks`), pas un second dessin de profil. */}
@@ -135,10 +135,10 @@ export function TodayPage() {
           {/* Le nom du plan était un texte mort. C'est maintenant le chemin
               vers le plan, à un tap, sans ajouter un bouton à l'écran.
 
-              Il s'écrivait « Dans « Reprise après longue pause » » : une
+              Il s'écrivait Dans Reprise après longue pause : une
               PHRASE en corps de texte, donc du même poids que le titre de la
               séance, et des guillemets français que l'app n'emploie nulle part
-              ailleurs pour nommer un objet — le fil d'Ariane de la séance
+              ailleurs pour nommer un objet, le fil d'Ariane de la séance
               (WorkoutDetailPage) pose le nom du plan nu, sans guillemets ni
               préposition. C'est ce vocabulaire-là qui est repris : le rôle en
               micro-label mono, la valeur à côté. Un libellé, pas une phrase. */}
@@ -176,8 +176,8 @@ export function TodayPage() {
 
       {/* Les deux gestes courts, en ligne de liens et non en cartes : ce sont
           des sorties, pas des actions primaires. Ils répondent aux deux seuls
-          moments où l'on ne veut pas décider — « je ne sais pas quoi faire » et
-          « je ne veux pas m'engager sur seize semaines ». */}
+          moments où l'on ne veut pas décider, je ne sais pas quoi faire et
+          je ne veux pas m'engager sur seize semaines. */}
       {settings.cockpit.shortcuts && (
         <p className="zn-cockpit__exits">
           <Link to="/library/draw">{t("today:quick.draw")}</Link>
@@ -187,8 +187,8 @@ export function TodayPage() {
       )}
 
       {/* La figure ferme l'écran, en dernier dans l'ordre de lecture : elle ne
-          retarde jamais la réponse. C'est la figure de la porte « Aujourd'hui »
-          du menu — cockpit et navigation se lisent comme un même système, sans
+          retarde jamais la réponse. C'est la figure de la porte Aujourd'hui
+          du menu, cockpit et navigation se lisent comme un même système, sans
           un dessin de plus. Le slot dimensionne par la LARGEUR, le viewBox
           donne le ratio : une hauteur en pixels ferait flotter la semelle. */}
       {/* Pas de `ground="rule"` : `.zn-cockpit` n'a jamais eu de bordure basse
@@ -207,14 +207,14 @@ export function TodayPage() {
 }
 
 /**
- * La bande des sept jours — la semaine en aperçu, et sept raccourcis.
+ * La bande des sept jours, la semaine en aperçu, et sept raccourcis.
  *
  * Elle a d'abord été écrite comme une figure non cliquable (`role="img"`, un
  * seul nom accessible) pour ne pas devoir un contrat clavier. Le propriétaire
  * a demandé moins de clics : un jour qui mène à sa séance vaut mieux qu'un jour
- * qu'on regarde. Et l'objection tombe d'elle-même — ce sont des **liens**, donc
- * le focus, les flèches du navigateur, le clic-milieu et « ouvrir dans un
- * nouvel onglet » viennent gratuitement. Il n'y a pas de `role` à doter.
+ * qu'on regarde. Et l'objection tombe d'elle-même, ce sont des **liens**, donc
+ * le focus, les flèches du navigateur, le clic-milieu et ouvrir dans un
+ * nouvel onglet viennent gratuitement. Il n'y a pas de `role` à doter.
  *
  * Ce qui reste des décisions d'origine :
  *
@@ -222,7 +222,7 @@ export function TodayPage() {
  *   est le seul aplat d'accent de l'écran ; un second le neutraliserait.
  * - **La hauteur de barre est un canal redondant** à l'encre, comme
  *   `--zone-h-N` dans `zones.css` : la bande reste lisible en niveaux de gris.
- *   Elle porte les MINUTES du jour, pas le nombre de séances — presque toutes
+ *   Elle porte les MINUTES du jour, pas le nombre de séances, presque toutes
  *   les journées en portent une, donc compter les séances faisait une
  *   constante qui ne disait rien.
  *
@@ -233,7 +233,7 @@ function WeekStrip({ focus }: { focus: TodayFocus }) {
   const { t } = useTranslation("today");
 
   // Les initiales sont pour l'œil ; les noms accessibles ont besoin des noms
-  // entiers — « samedi » et pas « S ».
+  // entiers, samedi et pas S.
   const letters = t("week.letters").split(",");
   const dayNames = t("week.dayNames").split(",");
 
@@ -243,7 +243,7 @@ function WeekStrip({ focus }: { focus: TodayFocus }) {
   const longest = Math.max(1, ...minutes);
 
   /* En pixels, pas en pourcentage : un `block-size` en % sur un enfant flex en
-     colonne n'a pas de hauteur de référence et retombait au minimum — les sept
+     colonne n'a pas de hauteur de référence et retombait au minimum, les sept
      barres rendaient identiques. La donnée devient géométrie ici, une fois. */
   const BAR_MIN = 6;
   const BAR_MAX = 40;

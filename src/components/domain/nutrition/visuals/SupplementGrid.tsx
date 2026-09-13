@@ -11,7 +11,7 @@ interface Props {
  * The AIS supplement ladder, seventeen entries.
  *
  * A to D is an ordered scale of evidence, so it is painted on the zone ink
- * ramp: A is solid ink, C is faint, and D — "no evidence" — takes the 45
+ * ramp: A is solid ink, C is faint, and D, "no evidence", takes the 45
  * degree hatch the system reserves for the unmeasured. The verdict keeps its
  * words and loses its coloured dot, which said nothing the words did not.
  */

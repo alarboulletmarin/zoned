@@ -9,8 +9,8 @@ import { watchForegroundUpdates } from "@/lib/swUpdate";
 /**
  * The service worker is registered in `prompt` mode: a new version installs in
  * the background, waits, and never replaces the running app without being
- * asked. Zoned keeps everything in the browser — plans, custom workouts,
- * simulations — so a reload in the middle of an edit would cost real work.
+ * asked. Zoned keeps everything in the browser, plans, custom workouts,
+ * simulations, so a reload in the middle of an edit would cost real work.
  *
  * The button below is the only code path in the app that reloads. Everything
  * else, including the check on returning to the foreground, only ever moves the

@@ -29,7 +29,7 @@ import type {
 export const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
 
 /**
- * Recommended week ranges per distance — warnings, not hard blocks.
+ * Recommended week ranges per distance, warnings, not hard blocks.
  * Single source of truth: this page used to keep its own, looser copy
  * (marathon min 12 against 14), so the wizard let through plans the generator
  * itself considers too short.

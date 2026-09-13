@@ -1,5 +1,5 @@
 /**
- * BibCard — 1080×1080 race-bib (dossard) style.
+ * BibCard, 1080×1080 race-bib (dossard) style.
  *
  * Big numeral centre-stage like a real pinned bib, with the workout
  * name as the "event", colour stripe per dominant zone and faux pin
@@ -52,7 +52,7 @@ export function BibCard({ workout, transparent }: ShareTemplateProps) {
           padding: 64,
         }}
       >
-        {/* Bib card — proper white paper with a colored stripe on top */}
+        {/* Bib card, proper white paper with a colored stripe on top */}
         <div
           style={{
             position: "relative",
@@ -117,7 +117,7 @@ export function BibCard({ workout, transparent }: ShareTemplateProps) {
             </div>
           </div>
 
-          {/* Hero — workout name centered, font-size adapts to length */}
+          {/* Hero, workout name centered, font-size adapts to length */}
           <div
             style={{
               flex: 1,

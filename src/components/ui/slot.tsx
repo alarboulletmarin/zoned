@@ -13,7 +13,7 @@ function setRef(ref: unknown, node: unknown): unknown {
 }
 
 /** Both refs get the node. If either answered with a React 19 cleanup, we owe
- *  React one cleanup that runs theirs and detaches the other the old way —
+ *  React one cleanup that runs theirs and detaches the other the old way,
  *  otherwise React never calls us with `null` and a cleanup ref is left open. */
 function composeRefs(ours: unknown, theirs: unknown) {
   return (node: unknown) => {
@@ -31,13 +31,13 @@ function composeRefs(ours: unknown, theirs: unknown) {
 
 /**
  * `asChild`: render the caller's own element instead of ours, wearing our props.
- * That is what lets `<Button asChild><Link/></Button>` be a real anchor — middle
- * click, "open in a new tab", keyboard focus — with the button's paint on it.
+ * That is what lets `<Button asChild><Link/></Button>` be a real anchor, middle
+ * click, "open in a new tab", keyboard focus, with the button's paint on it.
  *
  * Merge rules: the child wins on every plain prop, `style` and `className`;
  * event handlers run ours first, then the child's unless ours called
  * `preventDefault()`; refs compose. React 19 passes `ref` as an ordinary prop,
- * so it arrives in `slotProps` and reads back off `child.props` — no
+ * so it arrives in `slotProps` and reads back off `child.props`, no
  * `forwardRef`, no `element.ref` (deprecated in 19).
  */
 function Slot({ children, ...slotProps }: { children?: React.ReactNode } & AnyProps) {

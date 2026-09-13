@@ -69,7 +69,7 @@
   },
   "disclaimer": {
     "title": "Model limitations",
-    "text": "This simulator compares plan structures, not performance. The differences shown are based on input parameters and plan generator rules. They do not predict race results or time gains. Every runner is unique — this data is a decision-making tool, not a guarantee.",
+    "text": "This simulator compares plan structures, not performance. The differences shown are based on input parameters and plan generator rules. They do not predict race results or time gains. Every runner is unique, this data is a decision-making tool, not a guarantee.",
     "variability": "Specific workouts are selected with some randomness for variety. Values may vary slightly between comparisons, but trends remain the same."
   },
   "levels": {
@@ -85,7 +85,7 @@
   "errors": {
     "generic": "An error occurred",
     "title": "The comparison did not finish",
-    "intact": "Your settings are kept — run the comparison again."
+    "intact": "Your settings are kept, run the comparison again."
   },
   "toast": {
     "saved": "Scenario saved",

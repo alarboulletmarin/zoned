@@ -20,7 +20,7 @@ export function MythBuster() {
           <summary className="zn-nut-myth__summary">
             <span className="zn-nut-myth__head">
               <span className="zn-kicker">{t("hub.myths.mythLabel")}</span>
-              <span className="zn-nut-myth__claim">« {t(m.mythKey)} »</span>
+              <span className="zn-nut-myth__claim">{t(m.mythKey)}</span>
             </span>
             <span className="zn-nut-myth__chevron" aria-hidden="true">
               ▾

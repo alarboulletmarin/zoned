@@ -393,13 +393,13 @@
       ],
       "coachingTips": [
         "Cadence maintenue (>170 ppm), pas de marche",
-        "Effort soutenable mais inconfortable — typiquement 85-90 % FCmax",
+        "Effort soutenable mais inconfortable, typiquement 85-90 % FCmax",
         "Posture droite, regard porté loin devant, foulées courtes et fréquentes",
         "La descente trottée doit être contrôlée pour économiser les quadriceps"
       ],
       "coachingTipsEn": [
         "Keep cadence high (>170 spm), no walking",
-        "Sustained but uncomfortable — typically 85-90% HRmax",
+        "Sustained but uncomfortable, typically 85-90% HRmax",
         "Upright posture, eyes far ahead, short quick strides",
         "Control the jog-down to save the quads"
       ],
@@ -521,13 +521,13 @@
         }
       ],
       "coachingTips": [
-        "Allure tenable 25-30 min en continu si demandé — ne pars pas trop fort",
+        "Allure tenable 25-30 min en continu si demandé, ne pars pas trop fort",
         "Sur les sentiers techniques, anticipe les appuis, pas la vitesse",
         "Bois entre les répétitions, ces blocs créent une charge thermique élevée",
         "VAM cible 800-1100 m/h selon ton niveau"
       ],
       "coachingTipsEn": [
-        "Pace sustainable for 25-30 min continuous — don't go out too hard",
+        "Pace sustainable for 25-30 min continuous, don't go out too hard",
         "On technical singletrack, focus on foot placement, not speed",
         "Drink between reps, the heat load is high",
         "Target VAM 800-1100 m/h depending on level"
@@ -652,13 +652,13 @@
         }
       ],
       "coachingTips": [
-        "Cadence élevée (>180 ppm), pas de freinage — laisse la jambe absorber",
+        "Cadence élevée (>180 ppm), pas de freinage, laisse la jambe absorber",
         "Buste légèrement en avant, pas en arrière (économise les quadriceps)",
         "Espacer cette séance d'au moins 14 jours pour profiter de l'effet RBE",
         "Si DOMS > 48 h après, réduire à 3 répétitions la prochaine fois"
       ],
       "coachingTipsEn": [
-        "High cadence (>180 spm), no braking — let the legs absorb",
+        "High cadence (>180 spm), no braking, let the legs absorb",
         "Slight forward lean, not backward (saves the quads)",
         "Space this session at least 14 days apart to harness the repeated bout effect",
         "If DOMS lasts >48h, cut to 3 reps next time"
@@ -874,13 +874,13 @@
         }
       ],
       "coachingTips": [
-        "Garde Z2 même en montée — ralentis, ne force pas le rythme cardiaque",
+        "Garde Z2 même en montée, ralentis, ne force pas le rythme cardiaque",
         "Travaille la transition fluide course → marche → course",
         "Densité D+/km cible : 15-25 m. Si parcours plus pentu, raccourcis la durée",
         "Pratique le ravitaillement comme en course (gel ou barre toutes les 30 min)"
       ],
       "coachingTipsEn": [
-        "Stay in Z2 even on climbs — slow down, don't push the HR",
+        "Stay in Z2 even on climbs, slow down, don't push the HR",
         "Practice smooth transitions run → power-hike → run",
         "Target vertical density: 15-25 m/km. Shorten the session if the route is steeper",
         "Practice race fueling (gel or bar every 30 min)"
@@ -984,15 +984,15 @@
       ],
       "coachingTips": [
         "Ravitaillement complet : 60-80 g glucides/h, 500 ml liquide/h, sel après 90 min",
-        "Test ta tenue, ton sac, tes chaussures de course — c'est la séance pour ça",
+        "Test ta tenue, ton sac, tes chaussures de course, c'est la séance pour ça",
         "Sur les descentes du dernier tiers, focus technique, pas vitesse",
-        "Si DOMS sévère 48 h après, c'est un signal de surcharge — recule la prochaine longue"
+        "Si DOMS sévère 48 h après, c'est un signal de surcharge, recule la prochaine longue"
       ],
       "coachingTipsEn": [
         "Full fueling: 60-80 g carbs/h, 500 ml fluid/h, sodium after 90 min",
-        "Test your kit, pack, race shoes — this is the rehearsal session",
+        "Test your kit, pack, race shoes, this is the rehearsal session",
         "On last-third descents, focus on technique, not speed",
-        "Severe DOMS at 48h is an overload signal — back off the next long run"
+        "Severe DOMS at 48h is an overload signal, back off the next long run"
       ],
       "commonMistakes": [
         "Sous-estimer les glucides, finir à plat les 30 dernières minutes",
@@ -1095,13 +1095,13 @@
         "Termine en restant capable de tenir la même allure encore 20 min",
         "Recharge glucides + protéines dans les 30 min post-séance",
         "Hydratation forcée le soir : urines claires avant TRL-010",
-        "Sommeil 8 h minimum — c'est le facteur clé de la récupération"
+        "Sommeil 8 h minimum, c'est le facteur clé de la récupération"
       ],
       "coachingTipsEn": [
         "Finish able to maintain the same pace for another 20 min",
         "Carbs + protein within 30 min post-session",
         "Force fluids in the evening: clear urine before TRL-010",
-        "Sleep 8h minimum — the key recovery factor"
+        "Sleep 8h minimum, the key recovery factor"
       ],
       "commonMistakes": [
         "Vider les jambes à 100 % et compromettre TRL-010",
@@ -1589,13 +1589,13 @@
       ],
       "coachingTips": [
         "Mains sur les cuisses, buste penché, petits pas rapides : la marche d'ultra est une poussée, pas une promenade",
-        "Visez la cadence, pas la longueur de pas — 50 à 60 pas par minute et par jambe en pente raide",
+        "Visez la cadence, pas la longueur de pas, 50 à 60 pas par minute et par jambe en pente raide",
         "Avec des bâtons, plantez-les devant le pied et poussez en fin de geste : ils portent 10 à 15 % de l'effort",
         "Comparez vos temps de montée en marchant et en courant sur le même segment : au-dessus de 15 % de pente, la marche gagne presque toujours"
       ],
       "coachingTipsEn": [
         "Hands on thighs, torso forward, short fast steps: ultra hiking is a push, not a stroll",
-        "Chase cadence, not stride length — 50 to 60 steps per minute per leg on a steep gradient",
+        "Chase cadence, not stride length, 50 to 60 steps per minute per leg on a steep gradient",
         "With poles, plant them ahead of the foot and push through the end of the stroke: they carry 10 to 15% of the effort",
         "Time the same segment hiked and run: above 15% gradient, hiking almost always wins"
       ],
@@ -1765,8 +1765,8 @@
       "id": "TRL-018",
       "name": "Répétition ravitaillement",
       "nameEn": "Fuelling Rehearsal",
-      "description": "Deux heures et demie en endurance où l'objectif n'est pas l'allure mais l'estomac : la nourriture de la course, aux quantités de la course, aux intervalles de la course. La première cause d'abandon sur ultra n'est pas les jambes, c'est le ventre — et le ventre s'entraîne.",
-      "descriptionEn": "Two and a half hours in endurance where the target is not pace but the gut: race food, in race quantities, at race intervals. The leading cause of an ultra DNF is not the legs, it is the stomach — and the stomach trains.",
+      "description": "Deux heures et demie en endurance où l'objectif n'est pas l'allure mais l'estomac : la nourriture de la course, aux quantités de la course, aux intervalles de la course. La première cause d'abandon sur ultra n'est pas les jambes, c'est le ventre, et le ventre s'entraîne.",
+      "descriptionEn": "Two and a half hours in endurance where the target is not pace but the gut: race food, in race quantities, at race intervals. The leading cause of an ultra DNF is not the legs, it is the stomach, and the stomach trains.",
       "category": "trail",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -1843,13 +1843,13 @@
       "coachingTips": [
         "Notez tout : ce qui est passé, à quelle heure, et ce qui est remonté. C'est le seul moyen d'avoir un plan de ravitaillement plutôt qu'une intention",
         "Montez progressivement : 60 g de glucides par heure d'abord, 90 g seulement quand 60 passent sans un mot",
-        "Buvez ce que la course servira — une boisson d'organisateur inconnue au 40ᵉ kilomètre est un pari",
+        "Buvez ce que la course servira, une boisson d'organisateur inconnue au 40ᵉ kilomètre est un pari",
         "Solide et liquide alternés : trois heures de gels seuls finissent rarement bien"
       ],
       "coachingTipsEn": [
         "Write everything down: what went in, at what time, and what came back up. It is the only way to own a fuelling plan rather than an intention",
         "Build up gradually: 60g of carbohydrate an hour first, 90g only once 60 passes without complaint",
-        "Drink what the race will serve — an unknown organiser's drink at kilometre 40 is a gamble",
+        "Drink what the race will serve, an unknown organiser's drink at kilometre 40 is a gamble",
         "Alternate solid and liquid: three hours of gels alone rarely ends well"
       ],
       "commonMistakes": [
@@ -2043,8 +2043,8 @@
       "id": "TRL-020",
       "name": "Double sortie sur la journée",
       "nameEn": "Double Day",
-      "description": "Deux sorties le même jour, une le matin, une en fin d'après-midi, séparées par six à huit heures. Le volume monte sans qu'une seule sortie devienne écrasante, et la seconde se court sur des jambes déjà servies — un enchaînement en miniature, qui se digère en deux jours au lieu de dix.",
-      "descriptionEn": "Two outings on the same day, one in the morning and one in the late afternoon, six to eight hours apart. Volume goes up without any single run becoming crushing, and the second one is run on legs that have already worked — a back-to-back in miniature, absorbed in two days instead of ten.",
+      "description": "Deux sorties le même jour, une le matin, une en fin d'après-midi, séparées par six à huit heures. Le volume monte sans qu'une seule sortie devienne écrasante, et la seconde se court sur des jambes déjà servies, un enchaînement en miniature, qui se digère en deux jours au lieu de dix.",
+      "descriptionEn": "Two outings on the same day, one in the morning and one in the late afternoon, six to eight hours apart. Volume goes up without any single run becoming crushing, and the second one is run on legs that have already worked, a back-to-back in miniature, absorbed in two days instead of ten.",
       "category": "trail",
       "sessionType": "endurance",
       "targetSystem": "aerobic_base",
@@ -2142,17 +2142,17 @@
       "coachingTips": [
         "Mangez entre les deux, vraiment : la seconde sortie se joue à table, pas dans les jambes",
         "La seconde est plus lente que la première, toujours. Si elle est plus rapide, la première était trop facile",
-        "Six heures d'écart au minimum — deux sorties à trois heures d'intervalle sont une seule longue sortie coupée en deux",
+        "Six heures d'écart au minimum, deux sorties à trois heures d'intervalle sont une seule longue sortie coupée en deux",
         "C'est la façon la plus sûre de monter le volume hebdomadaire quand une sortie de 3 h ne rentre pas dans la journée"
       ],
       "coachingTipsEn": [
         "Eat between the two, properly: the second outing is decided at the table, not in the legs",
         "The second is slower than the first, always. If it is faster, the first was too easy",
-        "Six hours apart minimum — two runs three hours apart are one long run cut in half",
+        "Six hours apart minimum, two runs three hours apart are one long run cut in half",
         "This is the safest way to raise weekly volume when a 3h outing does not fit in the day"
       ],
       "commonMistakes": [
-        "Courir la seconde sortie plus vite « parce que ça va bien » et perdre le bénéfice du cumul",
+        "Courir la seconde sortie plus vite parce que ça va bien et perdre le bénéfice du cumul",
         "Ne rien manger entre les deux et transformer la seconde en séance à jeun involontaire",
         "Doubler tous les jours de la semaine : c'est un outil ponctuel, pas un régime"
       ],

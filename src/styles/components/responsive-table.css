@@ -1,7 +1,7 @@
-/* ResponsiveTable — a paper grid. Ink hairlines rule the rows, a 1.5px outline
+/* ResponsiveTable, a paper grid. Ink hairlines rule the rows, a 1.5px outline
    frames the whole thing and the 16px radius clips the grid at the corners.
    Below 768px the same data is one outlined card per row, each cell keeping its
-   column label as a mono kicker — the breakpoint is the component's own, not a
+   column label as a mono kicker, the breakpoint is the component's own, not a
    container query, because that is what the ported component already did. */
 
 .zn-table {
@@ -78,7 +78,7 @@
   transition: background var(--dur-fast) var(--ease-out);
 }
 
-/* One hairline between rows, none above the first and none below the last —
+/* One hairline between rows, none above the first and none below the last,
    the frame already closes the grid. */
 .zn-table__row + .zn-table__row > .zn-table__td {
   border-block-start: var(--border-divider);

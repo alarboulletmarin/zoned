@@ -37,7 +37,7 @@ export const MODULE_IDS: readonly ModuleId[] = [
  *
  * `system` follows prefers-reduced-motion: the shell is held either way, but
  * the runner freezes on its contact pose when the OS asks for less motion.
- * `always` plays it regardless — the ONLY legitimate way to override an
+ * `always` plays it regardless, the ONLY legitimate way to override an
  * accessibility preference is the same person asking for it, here, on purpose.
  * `never` skips the hold entirely and hands over as soon as the app mounts.
  */
@@ -45,7 +45,7 @@ export type OpeningAnimation = "system" | "always" | "never";
 
 /** Ce que le cockpit montre. Tout à `true` par défaut. */
 export interface CockpitSettings {
-  /** La ligne « reprendre » : le plan ou la semaine en cours. */
+  /** La ligne reprendre : le plan ou la semaine en cours. */
   resume: boolean;
   /** Les deux gestes courts : tirer une séance, composer ma semaine. */
   shortcuts: boolean;

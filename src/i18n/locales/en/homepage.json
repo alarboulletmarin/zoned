@@ -60,7 +60,7 @@
       "illustrationBrief": "Two runners, continuous 2 px line, no fill, ink currentColor, ground contact in vermillon",
       "illustrationLabel": "Two runners drawn in one line",
       "fig": {
-        "kicker": "Fig. 01 — polarised model",
+        "kicker": "Fig. 01, polarised model",
         "source": "Seiler, Scand J Med Sci Sports, 2006",
         "title": "What a well-dosed week looks like",
         "body": "Time distributed by effort zone. The rule: 80 % easy, 20 % hard, almost nothing in between.",
@@ -72,9 +72,9 @@
           "z5": "VO₂max",
           "z6": "Anaerobic"
         },
-        "lowRange": "Easy (Z1–Z2)",
+        "lowRange": "Easy (Z1-Z2)",
         "lowCaption": "aerobic volume",
-        "highRange": "Above threshold (Z4–Z6)",
+        "highRange": "Above threshold (Z4-Z6)",
         "highCaption": "intense quality"
       }
     },
@@ -118,7 +118,7 @@
       "rpe": "RPE",
       "adaptation": "Targeted adaptation",
       "refPace": "Pace",
-      "fig": "Fig. 02 — 6-zone model, calibrated on HRmax / FTP / threshold pace",
+      "fig": "Fig. 02, 6-zone model, calibrated on HRmax / FTP / threshold pace",
       "figuresLabel": "The same runner at six intensities, from a walk to a sprint: the higher the zone, the more the torso leans and the darker the line."
     },
     "s04": {
@@ -136,7 +136,7 @@
           "citation": "\"Interval training at VO₂max: effects on aerobic performance\", Med Sci Sports Exerc, 1999."
         },
         "daniels": {
-          "contribution": "VDOT system and training zones (1933–2025).",
+          "contribution": "VDOT system and training zones (1933-2025).",
           "citation": "Daniels' Running Formula (Human Kinetics, 3rd ed., 2014)."
         },
         "lydiard": {
@@ -176,7 +176,7 @@
         "peak": "Specific",
         "taper": "Taper"
       },
-      "fig": "Fig. 03 — Standard macrocycle phases: base · build · specific · taper",
+      "fig": "Fig. 03, Standard macrocycle phases: base · build · specific · taper",
       "distance": {
         "5K": "5K",
         "10K": "10K",
@@ -237,7 +237,7 @@
       "q": {
         "hrm": {
           "q": "Do I need a heart rate strap?",
-          "a": "No. Zones calibrate from pace or power. A heart-rate strap mainly helps validate Z1–Z2."
+          "a": "No. Zones calibrate from pace or power. A heart-rate strap mainly helps validate Z1-Z2."
         },
         "export": {
           "q": "How do I send a session to my watch?",

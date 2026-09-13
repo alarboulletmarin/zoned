@@ -17,7 +17,7 @@ describe("sanitizeSettings", () => {
   });
 
   test("un objet écrit avant les nouveaux champs gagne leurs défauts", () => {
-    // La charge utile exacte d'avant ce lot — c'est le test « aucune migration ».
+    // La charge utile exacte d'avant ce lot, c'est le test aucune migration.
     const legacy = {
       colorPalette: "standard",
       unitSystem: "imperial",
@@ -101,7 +101,7 @@ describe("parseStoredSettings", () => {
 });
 
 describe("visiblePractices", () => {
-  test("vide veut dire toutes — on ne montre jamais une app sans pratique", () => {
+  test("vide veut dire toutes, on ne montre jamais une app sans pratique", () => {
     expect(visiblePractices(sanitizeSettings(null))).toEqual(PRACTICES);
   });
 

@@ -36,7 +36,7 @@ const DISCIPLINE_ICONS: Record<
 > = { running: Run, cycling: Bike, swimming: Pool, strength: Dumbbell };
 
 /**
- * Generator settings for "Ma semaine" (Epic #83) — always expanded (no
+ * Generator settings for "Ma semaine" (Epic #83), always expanded (no
  * collapse). Controlled: `settings` + `onSettingsChange` are owned by the page
  * so both the sticky "Générer" button (mobile) and this panel share one state.
  * The Generate button carries an explicit label + helper sub-text.
@@ -62,7 +62,7 @@ export function WeekGeneratorPanel({
   busy?: boolean;
   onGenerate: (settings: WeekSettings) => void;
   weekIsPopulated: boolean;
-  /** Sessions locked in the current week — kept as-is on the next generation. */
+  /** Sessions locked in the current week, kept as-is on the next generation. */
   lockedCount?: number;
   onUnlockAll?: () => void;
   /** Compact, surface-less variant for the mobile "Régler" sheet (no border,
@@ -96,7 +96,7 @@ export function WeekGeneratorPanel({
 
       <div className="zn-wk-gen__body">
         {/* Presets fill in every setting below in one click. They are shortcuts,
-            not a selectable state — hence the label and the flat, unselected
+            not a selectable state, hence the label and the flat, unselected
             styling, so they never read as "the current phase of the week". */}
         <Field label={t("weekly.presets.label")}>
           <div className="zn-wk-gen__presets">
@@ -138,7 +138,7 @@ export function WeekGeneratorPanel({
         <Field label={t("weekly.settings.quality")}>
           {/* No column class: .zn-segmented already lays one equal track per
               option, which is exactly what the `grid-cols-2` here used to
-              resolve to — four 1fr cells on one row. */}
+              resolve to, four 1fr cells on one row. */}
           <Segmented
             value={settings.quality}
             onChange={(v) => set({ quality: v as QualityType })}
@@ -166,7 +166,7 @@ export function WeekGeneratorPanel({
         </Field>
 
         {/* Disciplines and levels are both multi-select filters where "none
-            picked" means "all" — so they share one chip treatment, with an
+            picked" means "all", so they share one chip treatment, with an
             explicit "All" state instead of a silently empty selection. */}
         <Field label={t("weekly.settings.disciplines")}>
           <div className="zn-wk-gen__chips">

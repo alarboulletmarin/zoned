@@ -126,7 +126,7 @@ export function RaceSimulatorPage() {
   const { settings: userSettings } = useSettings();
   const unit = userSettings.unitSystem;
   // The settings panel lives in the left column on desktop and in a sheet
-  // below it — "Ajuster" has to reach the one that is actually on screen.
+  // below it, "Ajuster" has to reach the one that is actually on screen.
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const [settings, setSettings] = useState<RaceSimSettings>(DEFAULT_SETTINGS);
@@ -177,7 +177,7 @@ export function RaceSimulatorPage() {
     [applyPlan],
   );
 
-  // `/race-simulator/shared?d=…` — the inputs fully describe the plan, so a shared
+  // `/race-simulator/shared?d=…`, the inputs fully describe the plan, so a shared
   // link just replays them through the same path a saved simulation takes.
   const sharedParam = searchParams.get("d");
   useEffect(() => {
@@ -215,7 +215,7 @@ export function RaceSimulatorPage() {
       try {
         await navigator.share({ title: plan.distanceLabel, url });
       } catch {
-        // Share sheet dismissed — nothing to do.
+        // Share sheet dismissed, nothing to do.
       }
       return;
     }
@@ -535,7 +535,7 @@ export function RaceSimulatorPage() {
         )}
 
         <div className="zn-rsp__layout">
-          {/* Left rail — settings before generation, navigation after. The app
+          {/* Left rail, settings before generation, navigation after. The app
               header is in flow in this design, so the rail sticks to the top of
               the viewport rather than under a bar that is no longer there. */}
           <aside className="zn-rsp__rail">
@@ -561,7 +561,7 @@ export function RaceSimulatorPage() {
                 className="zn-stack"
                 style={{ "--gap": "var(--sp-13)" } as React.CSSProperties}
               >
-                {/* The anchors only exist in "Préparer" — the race-day sheet
+                {/* The anchors only exist in "Préparer", the race-day sheet
                     renders one continuous run sheet, with nothing to jump to. */}
                 {view === "prepare" && (
                   <RaceSimNav
@@ -583,7 +583,7 @@ export function RaceSimulatorPage() {
 
           {/* Plan */}
           <div className="zn-rsp__panel">
-            {/* Mobile settings — inline until a plan exists, then behind "Ajuster". */}
+            {/* Mobile settings, inline until a plan exists, then behind "Ajuster". */}
             {!plan && (
               <Card size="flush" className="zn-rsp__settings zn-rsp__mobileform">
                 <h2 className="zn-kicker zn-rsp__settingstitle">
@@ -714,7 +714,7 @@ export function RaceSimulatorPage() {
         </div>
       </PageContainer>
 
-      {/* Mobile action bar — the PDF is what ends up on a phone race morning.
+      {/* Mobile action bar, the PDF is what ends up on a phone race morning.
           Opaque cream on an ink rule: no blur, no translucency. One call and
           nothing else: below 1024px the menu pill takes 120px of this bar's
           end, and what is left measures the export button exactly. */}

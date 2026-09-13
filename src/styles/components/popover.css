@@ -1,4 +1,4 @@
-/* Popover — a paper panel that floats over the page, anchored to the control
+/* Popover, a paper panel that floats over the page, anchored to the control
    that opened it. One of the five surfaces allowed to carry --shadow-block.
 
    Layout is deliberately left alone: the reference panel stacks its own
@@ -41,7 +41,7 @@
 }
 
 /* Radix keeps the node mounted until the animation ends, so the closing frame
-   has to hold — hence forwards. */
+   has to hold, hence forwards. */
 .zn-popover[data-state="closed"] {
   animation: zn-popover-out var(--dur-base) var(--ease-out) forwards;
 }

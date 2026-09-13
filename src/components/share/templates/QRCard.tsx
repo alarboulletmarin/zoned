@@ -1,5 +1,5 @@
 /**
- * QRCard — 1080×1080 minimal QR code share.
+ * QRCard, 1080×1080 minimal QR code share.
  *
  * Just the QR, the workout name and the brand. Designed to be dropped
  * as-is into an Insta story / post so anyone can scan and open the
@@ -77,7 +77,7 @@ export function QRCard({ workout, transparent }: ShareTemplateProps) {
           </span>
         </div>
 
-        {/* QR — centred and big */}
+        {/* QR, centred and big */}
         <div
           style={{
             marginTop: 56,

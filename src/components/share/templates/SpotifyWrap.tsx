@@ -1,5 +1,5 @@
 /**
- * SpotifyWrap — 1080×1920. Bold flashy gradient + outsized typography,
+ * SpotifyWrap, 1080×1920. Bold flashy gradient + outsized typography,
  * playful angled wordmarks. Inspired by Spotify Wrapped recap cards.
  */
 

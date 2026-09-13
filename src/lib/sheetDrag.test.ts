@@ -1,6 +1,6 @@
 /**
  * La règle a deux moitiés qui ne servent à rien l'une sans l'autre : la course
- * (100px), pour le glissement franc, et l'élan, pour le flick — le geste
+ * (100px), pour le glissement franc, et l'élan, pour le flick, le geste
  * réflexe sur mobile, qui part vite et s'arrête au bout de trois centimètres.
  * La seconde a un plancher de course, sans quoi un tremblement rapide du pouce
  * sur la barre de titre fermerait la sheet que l'utilisateur vient d'ouvrir.
@@ -11,7 +11,7 @@ import { shouldCloseSheet } from "./sheetDrag";
 
 /** Immobile au lâcher : seule la course peut décider. */
 const ARRET = 0;
-/** Un flick ordinaire — ~600px/s, au-dessus du seuil de 0,5px/ms. */
+/** Un flick ordinaire, ~600px/s, au-dessus du seuil de 0,5px/ms. */
 const FLICK = 0.6;
 
 describe("shouldCloseSheet", () => {
@@ -20,7 +20,7 @@ describe("shouldCloseSheet", () => {
     expect(shouldCloseSheet(101, ARRET)).toBe(true);
   });
 
-  test("la course courte et lente ne ferme pas — la sheet revient", () => {
+  test("la course courte et lente ne ferme pas, la sheet revient", () => {
     expect(shouldCloseSheet(80, ARRET)).toBe(false);
     expect(shouldCloseSheet(100, ARRET)).toBe(false);
   });

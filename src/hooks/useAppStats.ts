@@ -28,14 +28,14 @@ export type AppStats = {
    * Le détail par pratique.
    *
    * Il manquait : ce hook ne rendait qu'un TOTAL, et les cartes de pratique
-   * affichaient donc le nombre de distances de course — « 4 distances » —
+   * affichaient donc le nombre de distances de course, 4 distances,
    * c'est-à-dire une propriété du modèle, pas du contenu. Quelqu'un qui
-   * choisit « trail » veut savoir ce qu'il y a derrière, pas combien de cases
+   * choisit trail veut savoir ce qu'il y a derrière, pas combien de cases
    * la table contient.
    *
    * Les séances arrivent en asynchrone (le catalogue est découpé en chunks) :
    * avant le premier chargement, tout est à zéro, et l'appelant doit donc
-   * savoir ne rien afficher plutôt qu'afficher « 0 séance ».
+   * savoir ne rien afficher plutôt qu'afficher 0 séance.
    */
   byPractice: Record<Practice, PracticeContent>;
 };
@@ -49,7 +49,7 @@ const emptyByPractice = (): Record<Practice, PracticeContent> =>
 /**
  * Les plans tout prêts, rangés par pratique.
  *
- * La pratique se DÉDUIT de `raceDistance` — c'est toute l'idée de
+ * La pratique se DÉDUIT de `raceDistance`, c'est toute l'idée de
  * `practiceFromRaceDistance`, et c'est ce qui évite d'ajouter un champ à onze
  * fichiers de plan générés. Un plan sans distance de course (construction de
  * base, retour de blessure) n'appartient à aucune pratique : il ne compte pour

@@ -359,7 +359,7 @@ describe("exportPlanToPDF: running sessions", () => {
     expect(joined).toContain("40min");
     expect(strings).toContain("Z2");
     // Non-repeated blocks show an em dash in the Reps column.
-    expect(strings).toContain("—");
+    expect(strings).toContain("-");
   });
 
   test("no strength rendering leaks into a running-only document", async () => {
@@ -391,7 +391,7 @@ describe("exportPlanToPDF: strength sessions", () => {
     expect([day, type, zone, duration, summary]).toEqual([
       "Mer",
       "Core", // from the strength category, not the session type
-      "—", // strength rows carry no zone
+      "-", // strength rows carry no zone
       "30min",
       `7 ${EXERCISES_LABEL} · Bird-dog, Dead bug, Planche frontale...`,
     ]);
@@ -429,7 +429,7 @@ describe("exportPlanToPDF: strength sessions", () => {
     // zone cell is an em dash and the appendix has no zone column.
     // ("Zone" itself is a weekly-table column header and is always present.)
     expect(joined).not.toMatch(/\bZ[1-6]\b/);
-    expect(strings).toContain("—"); // the em-dash zone cell
+    expect(strings).toContain("-"); // the em-dash zone cell
     // The strength appendix has its own header vocabulary.
     expect(strings).toContain("common:export.planPdf.exercise");
     expect(strings).not.toContain("Reps"); // the running appendix's own column
@@ -554,7 +554,7 @@ describe("exportPlanToPDF: unresolvable workoutId", () => {
       // appendix reference "¹" even though the appendix skips unresolvable
       // ids, so that link lands nowhere; pinned here as current behaviour.
       `${MISSING_ID} ¹`,
-      "—", // no template, so no zone
+      "-", // no template, so no zone
       "50min",
       "", // and no summary to build
     ]);
@@ -580,7 +580,7 @@ describe("exportPlanToPDF: unresolvable workoutId", () => {
     // dash, so the text proves nothing: it is the slate fill that marks the
     // strength branch.
     const zoneCell = sessionCell(captured().content, 0, 3);
-    expect(zoneCell.text).toBe("—");
+    expect(zoneCell.text).toBe("-");
     expect(zoneCell.fillColor).toBe("#94a3b8");
     expect(zoneCell.bold).toBe(true);
     // No template to read a zone from, and the STR- prefix keeps it off the

@@ -1,4 +1,4 @@
-/* ZoneRow — code, name, bar, value.
+/* ZoneRow, code, name, bar, value.
 
    The bar is outlined like everything else: a 1.5px ink frame with the ramp
    fill inside it, so an empty zone still draws a box rather than disappearing.

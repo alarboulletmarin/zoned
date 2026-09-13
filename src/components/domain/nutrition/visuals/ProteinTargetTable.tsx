@@ -7,7 +7,7 @@ import { proteinTargets } from "@/data/nutrition";
 import type { ProteinDose } from "@/data/nutrition/types";
 
 /**
- * Daily protein target by training volume — a real table, so the ported
+ * Daily protein target by training volume, a real table, so the ported
  * ResponsiveTable. The mobile duplicate of the volume column disappears with
  * it: the card view already prints every column under its own label.
  */

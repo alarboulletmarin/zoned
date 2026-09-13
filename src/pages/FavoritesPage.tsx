@@ -39,7 +39,7 @@ export function FavoritesPage() {
       />
 
       <div className="zn-disc">
-        {/* 1 — what is kept, counted against the catalogue */}
+        {/* 1, what is kept, counted against the catalogue */}
         <section
           className="zn-disc__head zn-stack"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -62,14 +62,14 @@ export function FavoritesPage() {
           </p>
         </section>
 
-        {/* 2 — the ink ramp orders the zones, it does not name them */}
+        {/* 2, the ink ramp orders the zones, it does not name them */}
         {favoriteWorkouts.length > 0 && (
           <div className="zn-disc__legend">
             <ZoneScale />
           </div>
         )}
 
-        {/* 3 — the sessions */}
+        {/* 3, the sessions */}
         <section className="zn-disc__results" aria-busy={isLoading}>
           {isLoading ? (
             <div className="zn-disc__wait">

@@ -18,8 +18,8 @@
 
 /* ── the index card ───────────────────────────────────────────────────── */
 
-/* One anatomy, five call sites. The whole card is the link — outline as
-   target — and it reads in the system's order: what kind of thing this is,
+/* One anatomy, five call sites. The whole card is the link, outline as
+   target, and it reads in the system's order: what kind of thing this is,
    its name, why you would open it, then the facts on a ruled mono line.
    block-size:100% because every one of them sits in a grid the page owns. */
 .zn-ecard {
@@ -50,7 +50,7 @@
   transform: translateY(var(--press-shift));
 }
 
-/* A dense card — the glossary grid runs three across and its cards are one
+/* A dense card, the glossary grid runs three across and its cards are one
    term plus one line of definition. The name drops to interface type there,
    because it is a label you scan rather than a heading you read. */
 .zn-ecard[data-size="compact"] {
@@ -88,7 +88,7 @@
 }
 
 /* An acronym is the term's code, so it takes the code's treatment: mono,
-   bold, vermillon type — never a vermillon fill. */
+   bold, vermillon type, never a vermillon fill. */
 .zn-ecard__acronym {
   font-family: var(--font-mono);
   font-size: var(--fs-mono);
@@ -134,7 +134,7 @@
   white-space: nowrap;
 }
 
-/* The identifier at the end of the line — a race distance, a reading time.
+/* The identifier at the end of the line, a race distance, a reading time.
    Vermillon type, the one accent mark a list card is allowed. */
 .zn-ecard__code {
   margin-inline-start: auto;
@@ -143,7 +143,7 @@
   color: var(--text-link);
 }
 
-/* WCAG 2.5.8 — a card that navigates answers to the touch floor. */
+/* WCAG 2.5.8, a card that navigates answers to the touch floor. */
 @media (pointer: coarse) {
   .zn-ecard {
     min-block-size: var(--hit-min);
@@ -183,7 +183,7 @@
 
 /* Three densities of the same object: a line inside a paragraph, a compact
    card beside a session, a full-width banner. The lamp is drawn in ink, not
-   in amber — the palette has one accent and this is not it. */
+   in amber, the palette has one accent and this is not it. */
 .zn-tip {
   display: flex;
   align-items: flex-start;
@@ -238,7 +238,7 @@
 /* Sixteen surfaces run their prose through this, and a paragraph can carry
    half a dozen matches. A dotted ink underline is present enough to read as a
    link and quiet enough to leave the paragraph a paragraph; the colour only
-   arrives on hover. Deliberately identical for a term and for an article —
+   arrives on hover. Deliberately identical for a term and for an article,
    two underline colours in one sentence is the noise this avoids. */
 .zn-glink {
   color: inherit;
@@ -412,7 +412,7 @@
 }
 
 /* Tailwind's preflight strips list markers from every ul, and this list is a
-   list — the discs come back explicitly. */
+   list, the discs come back explicitly. */
 .zn-science__list {
   margin: 0;
   padding-inline-start: var(--sp-9);
@@ -495,15 +495,15 @@
   color: var(--text-body);
 }
 
-/* L'exemple travaillé était une demi-carte : un fond, un padding, un rayon —
+/* L'exemple travaillé était une demi-carte : un fond, un padding, un rayon,
    mais un filet vermillon sur la seule arête gauche et des coins coupés à
    gauche. Le contour entier ou rien : c'est une carte, elle prend le cadre
    d'encre complet de sa voisine.
 
    Le vermillon n'y perd rien, parce qu'il n'y disait rien : le bloc porte déjà
-   son nom en capitales mono (« EXEMPLE » / « FORMULE », GlossaryDetail.tsx:60
+   son nom en capitales mono (EXEMPLE / FORMULE, GlossaryDetail.tsx:60
    et :68). C'est le kicker qui distingue les deux blocs, pas la couleur d'un
-   filet — et une fois le cadre identique, deux blocs frères se lisent enfin
+   filet, et une fois le cadre identique, deux blocs frères se lisent enfin
    comme deux blocs frères. La règle est donc mutualisée avec la formule.
 
    Ce que la conversion déplace, et c'est voulu : le retrait gauche redescend
@@ -558,8 +558,8 @@
 }
 
 /* Un titre de la liste. La bande vermillon de 2.5px sur l'arête gauche est
-   partie : c'était un rail de navigation, pas une carte, et le même état — « la
-   section que je lis » — se disait déjà en aplat d'encre ailleurs dans l'app
+   partie : c'était un rail de navigation, pas une carte, et le même état, la
+   section que je lis, se disait déjà en aplat d'encre ailleurs dans l'app
    (.zn-nut-toc__link du hub nutrition). Trois formes pour une information, il
    n'en reste qu'une : la pilule d'encre pleine inversée.
 
@@ -567,7 +567,7 @@
    repasser en padding : un fond se peint jusqu'au bord extérieur de la bordure
    (background-clip vaut border-box par défaut), donc la pilule couvre
    exactement la boîte d'aujourd'hui sans qu'un seul pixel de texte bouge. La
-   convertir en padding aurait coûté un demi-pixel — Chrome ramène 2.5px à 2 —
+   convertir en padding aurait coûté un demi-pixel, Chrome ramène 2.5px à 2,
    et un nombre magique dans un système qui n'en veut pas. Mesuré à DSF 1 et 2 :
    Δ = 0. */
 .zn-toc__item {
@@ -596,13 +596,13 @@
   background: var(--surface-band);
 }
 
-/* Là où l'on est. L'inversion d'encre — exactement .zn-nut-toc__link[aria-current],
+/* Là où l'on est. L'inversion d'encre, exactement .zn-nut-toc__link[aria-current],
    copiée pour que le sommaire d'un article et celui du hub nutrition cessent
    d'être deux dialectes. Le porteur non chromatique est l'inversion elle-même :
    en niveaux de gris la pilule reste noire et le texte blanc, l'état survit à
    la désaturation (WCAG 1.4.1). Le gras reste à --fw-medium, la valeur d'avant :
    un scroll-spy repeint en continu, et passer à semibold ferait respirer la
-   ligne au changement de section — la seule chose qu'on s'interdit ici. */
+   ligne au changement de section, la seule chose qu'on s'interdit ici. */
 .zn-toc__item[aria-current] {
   background: var(--surface-inverse);
   color: var(--text-inverse);
@@ -678,7 +678,7 @@
 
 /* The header is in flow in this shell, so the bar belongs at the very top of
    the viewport once the header has scrolled away. Ink on a divider rule, 2px,
-   no gradient — it says how far in you are, nothing more. */
+   no gradient, it says how far in you are, nothing more. */
 .zn-readprog {
   position: fixed;
   inset-inline: 0;

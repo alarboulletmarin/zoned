@@ -4,7 +4,7 @@ import { usePickLang } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 
 /**
- * One cue per segment. The range lives in the badge only — the cue text used
+ * One cue per segment. The range lives in the badge only, the cue text used
  * to restate it ("Km 1-2 : …") right next to a badge saying the same thing,
  * and the two didn't even agree.
  */
@@ -30,7 +30,7 @@ export function MentalCuesPanel({
           style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
         >
           <span className="zn-rs-cues__range">
-            {formatKm(cue.fromKm)}–{formatKm(cue.toKm)}&nbsp;{t("labels.km")}
+            {formatKm(cue.fromKm)}-{formatKm(cue.toKm)}&nbsp;{t("labels.km")}
           </span>
           <p className="zn-rs-cues__text">{pick(cue, "text")}</p>
         </li>

@@ -27,7 +27,7 @@ export function SharedPlanPage() {
     [encoded],
   );
 
-  // The link carries the config, not the plan — rebuild it here. Seeded
+  // The link carries the config, not the plan, rebuild it here. Seeded
   // generation guarantees this matches what the sender sees.
   const [plan, setPlan] = useState<TrainingPlan | null>(null);
   const [failed, setFailed] = useState(false);
@@ -116,7 +116,7 @@ export function SharedPlanPage() {
     <>
       <SEOHead noindex title={planName} canonical="/plan/shared" />
       <div className="zn-planshared">
-        {/* 1 — what was shared, counted, and the one call */}
+        {/* 1, what was shared, counted, and the one call */}
         <section className="zn-planshared__head">
           <span className="zn-kicker">{shape}</span>
           <h1 className="zn-display" data-level="2">
@@ -132,7 +132,7 @@ export function SharedPlanPage() {
           </div>
         </section>
 
-        {/* 2 — week by week, as a printed table */}
+        {/* 2, week by week, as a printed table */}
         <section className="zn-planshared__weeks">
           {plan.weeks.map((week) => (
             <div key={week.weekNumber} className="zn-planshared__week">

@@ -35,7 +35,7 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
       onClick={onClick}
       className={cn("zn-cmdk__item", isSelected && "zn-cmdk__item--active")}
     >
-      {/* Intensity rail — zone ink when there is a zone, hollow when there is not */}
+      {/* Intensity rail, zone ink when there is a zone, hollow when there is not */}
       <div className="zn-cmdk__rail" data-zone={dominantZone ?? undefined} />
 
       {/* Content */}

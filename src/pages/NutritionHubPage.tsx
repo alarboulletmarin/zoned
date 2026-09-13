@@ -99,9 +99,9 @@ export function NutritionHubPage() {
           <NutritionThemeGrid themes={themes} />
 
           {/* L'allure qu'on tient des heures. Le dessin a été fait pour cette
-              surface et pour aucune autre — scripts/doodles/effort.mjs : « Elle
+              surface et pour aucune autre, scripts/doodles/effort.mjs : Elle
               sert les surfaces de nutrition : c'est la TENUE dans la durée qui
-              parle, pas un objet (la règle 2 interdit la gourde et l'assiette). »
+              parle, pas un objet (la règle 2 interdit la gourde et l'assiette).
               Une page de nutrition attrape mécaniquement une gourde ou une
               assiette ; un objet dessiné perd contre les glyphes Material. Cette
               figure dit le POURQUOI au lieu du QUOI, avec un corps.
@@ -110,7 +110,7 @@ export function NutritionHubPage() {
               /guides/warmup : son fichier n'a plus de sol, le bas de sa boîte est
               sa ligne d'appui, et .zn-guide__art la descend de --rule-bite pour
               que ses deux semelles le mordent. C'est le seul hub qui en porte
-              une, comme l'échauffement est le seul guide — l'interdiction porte
+              une, comme l'échauffement est le seul guide, l'interdiction porte
               sur la répétition, pas sur la classe CSS. */}
           <EasyRun
             className="zn-guide__art"
@@ -122,7 +122,7 @@ export function NutritionHubPage() {
         {/* The reading band: the themed sections, with the table of contents
             sticky beside them. The rail is hidden below the split's breakpoint
             because the theme grid above is already that same index in card
-            form — repeating it would be a second table of contents. */}
+            form, repeating it would be a second table of contents. */}
         <div
           className="zn-split zn-guide__band"
           style={

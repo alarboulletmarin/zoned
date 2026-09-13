@@ -60,6 +60,12 @@ jobs:
       - name: i18n FR/EN parity
         run: bun run check:i18n
 
+      # Ni chevrons, ni cadratin, ni demi-cadratin. Regle de la maison du
+      # 13 septembre 2026. Elle a besoin d'une porte : ce depot documente en
+      # prose francaise, qui appelle le cadratin toute seule.
+      - name: Typographie
+        run: bun run check:typography
+
       - name: Zone colours match design/zones.css
         run: bun run scripts/qa-zone-colors.ts
 

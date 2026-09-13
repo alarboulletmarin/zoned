@@ -72,8 +72,9 @@ scripts/qa-*.ts
 !scripts/qa-sync-typical-duration.ts
 !scripts/qa-workout-schema.ts
 !scripts/qa-workout-schema.test.ts
+!scripts/qa-typography.ts
 
-# Design handoff bundle — reference material, not project source.
+# Design handoff bundle, reference material, not project source.
 # Source of truth: the Claude Design project.
 design_handoff/
 

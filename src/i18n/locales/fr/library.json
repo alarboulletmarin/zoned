@@ -44,7 +44,7 @@
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favoris uniquement",
     "search": "Rechercher...",
-    "searchPlaceholder": "Rechercher : « 30/30 », « seuil », « côtes »…",
+    "searchPlaceholder": "Rechercher : 30/30, seuil, côtes…",
     "searchLabel": "Rechercher des séances",
     "apply": "Appliquer",
     "activeFilters": "filtres actifs"
@@ -56,7 +56,7 @@
     "noFavoritesDescription": "Ajoute des séances à tes favoris pour les retrouver facilement ici.",
     "filteredOut_one": "{{count}} filtre actif ne laisse passer aucune des {{total}} séances. L'effacer les rouvre toutes.",
     "filteredOut_other": "{{count}} filtres actifs ne laissent passer aucune des {{total}} séances. Les effacer les rouvre toutes.",
-    "noMatchForQuery": "« {{query}} » ne correspond à aucune des {{total}} séances du catalogue."
+    "noMatchForQuery": "{{query}} ne correspond à aucune des {{total}} séances du catalogue."
   },
   "terrain": {
     "flat": "Plat préféré",
@@ -336,8 +336,8 @@
       "balanced": "Équilibre 80/20",
       "tooEasy": "Pas assez d'intensité",
       "tooHard": "Trop d'intensité",
-      "tooEasyHint": "Très peu de qualité cette semaine — ajoute une séance tempo/seuil pour viser ~20 % d'intensité.",
-      "tooHardHint": "Beaucoup d'intensité — ajoute du volume facile ou allège une séance dure.",
+      "tooEasyHint": "Très peu de qualité cette semaine, ajoute une séance tempo/seuil pour viser ~20 % d'intensité.",
+      "tooHardHint": "Beaucoup d'intensité, ajoute du volume facile ou allège une séance dure.",
       "tolerance": "Équilibre atteint entre {{min}} et {{max}} % d'intensité"
     },
     "rhythm": {

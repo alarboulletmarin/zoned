@@ -32,7 +32,7 @@ let allExercisesCache: StrengthExercise[] | null = null;
 // The `as unknown as` casts below are load-bearing: TypeScript widens JSON
 // imports to plain string/number literals, so the union members (MuscleGroup,
 // StrengthEquipment…) never line up. They cross a data boundary, not the
-// workout union — nothing here bypasses AnyWorkoutTemplate.
+// workout union, nothing here bypasses AnyWorkoutTemplate.
 const exerciseLoaders: Record<string, () => Promise<StrengthCategoryFile>> = {
   lower_body: () =>
     import("./exercises/lower_body.json").then((m) => m.default as unknown as StrengthCategoryFile),

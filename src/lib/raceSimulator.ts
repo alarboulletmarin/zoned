@@ -138,7 +138,7 @@ function generateMentalCues(distanceKm: number): MentalCue[] {
     { fromKm: 0, toKm: 10, text: "Le marathon n'a pas encore commencé. Pars LENTEMENT. Chaque seconde grattée ici te coûtera des minutes plus tard.", textEn: "The marathon hasn't started yet. Start SLOWLY. Every second saved here will cost you minutes later." },
     { fromKm: 10, toKm: 20, text: "Rythme de croisière. Tu dois te sentir confortable. Si c'est dur, tu es trop vite.", textEn: "Cruising pace. You should feel comfortable. If it's hard, you're going too fast." },
     { fromKm: 20, toKm: 30, text: "Reste fort et régulier. Fragmente : un kilomètre à la fois, un ravitaillement à la fois.", textEn: "Stay strong and steady. Break it down: one kilometre at a time, one aid station at a time." },
-    { fromKm: 30, toKm: 38, text: "Le « mur ». Concentre-toi sur ta technique, raccourcis la foulée si besoin. Pense à pourquoi tu es là.", textEn: "The 'wall'. Focus on your form, shorten your stride if needed. Think about why you're here." },
+    { fromKm: 30, toKm: 38, text: "Le mur. Concentre-toi sur ta technique, raccourcis la foulée si besoin. Pense à pourquoi tu es là.", textEn: "The 'wall'. Focus on your form, shorten your stride if needed. Think about why you're here." },
     { fromKm: 38, toKm: distanceKm, text: "Derniers kilomètres. Donne tout. Chaque pas te rapproche de la ligne. Tu es un marathonien.", textEn: "Final kilometres. Give everything. Every step brings you closer to the finish. You are a marathoner." },
   ];
 }
@@ -214,9 +214,9 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
   const carbsMax = Math.round(weight * 3);
   const breakfast: MealRecommendation = {
     time: breakfastTime,
-    carbsG: `${carbsMin}–${carbsMax}`,
-    description: `${carbsMin}–${carbsMax}g de glucides : riz, pâtes, pain blanc, confiture, miel, banane. Faible en gras et fibres. Boisson : eau ou thé léger.`,
-    descriptionEn: `${carbsMin}–${carbsMax}g carbs: rice, pasta, white bread, jam, honey, banana. Low fat and fiber. Drink: water or light tea.`,
+    carbsG: `${carbsMin}-${carbsMax}`,
+    description: `${carbsMin}-${carbsMax}g de glucides : riz, pâtes, pain blanc, confiture, miel, banane. Faible en gras et fibres. Boisson : eau ou thé léger.`,
+    descriptionEn: `${carbsMin}-${carbsMax}g carbs: rice, pasta, white bread, jam, honey, banana. Low fat and fiber. Drink: water or light tea.`,
   };
 
   // --- Checklists ---
@@ -239,8 +239,8 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
   timeline.push({
     time: breakfastTime,
     relativeMin: -180,
-    label: `Petit-déjeuner (${carbsMin}–${carbsMax}g glucides)`,
-    labelEn: `Breakfast (${carbsMin}–${carbsMax}g carbs)`,
+    label: `Petit-déjeuner (${carbsMin}-${carbsMax}g glucides)`,
+    labelEn: `Breakfast (${carbsMin}-${carbsMax}g carbs)`,
     type: "meal",
   });
 

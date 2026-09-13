@@ -31,7 +31,7 @@ export function CompareHubPage() {
       />
 
       <div className="zn-ref">
-        {/* 1 — what this is, counted */}
+        {/* 1, what this is, counted */}
         <section className="zn-ref__head zn-stack" style={HEAD_GAP}>
           <span className="zn-kicker">
             {t("compare.hub.kicker", { count: competitors.length })}
@@ -42,7 +42,7 @@ export function CompareHubPage() {
           <p className="zn-body zn-body--lead zn-ref__lede">{description}</p>
         </section>
 
-        {/* 2 — one door per comparison. The price is the mono fact above the
+        {/* 2, one door per comparison. The price is the mono fact above the
             name: it is the difference the page exists to state. */}
         <section
           className="zn-ref__section"
@@ -65,7 +65,7 @@ export function CompareHubPage() {
           </div>
         </section>
 
-        {/* 3 — why the page exists, as a footnote to it */}
+        {/* 3, why the page exists, as a footnote to it */}
         <section className="zn-ref__section">
           <div className="zn-ref__note zn-ref__column">
             <span className="zn-kicker zn-kicker--inline">

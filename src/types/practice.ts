@@ -2,14 +2,14 @@ import type { Discipline } from "@/types";
 import type { RaceDistance } from "@/types/plan";
 
 /**
- * La pratique — l'axe produit qui manquait.
+ * La pratique, l'axe produit qui manquait.
  *
  * L'app segmentait son catalogue par *modalité* (course, vélo, natation,
  * renforcement). Quelqu'un qui s'entraîne, lui, pense en *pratique* : je fais
  * du trail, je prépare un ultra. C'est cet axe qui porte la nav, la
  * bibliothèque et la première question du parcours de plan.
  *
- * Une pratique peut être NOMMÉE sans que ses plans existent — voir
+ * Une pratique peut être NOMMÉE sans que ses plans existent, voir
  * `PracticeStatus`. Ses séances restent alors consultables : l'ultra en a
  * quarante-neuf dans la bibliothèque, le triathlon les siennes en vélo et en
  * natation. C'est la génération de plan qui est fermée, pas le contenu.
@@ -36,13 +36,13 @@ export const PRACTICES: readonly Practice[] = [
 /**
  * `announced` = la pratique est nommée dans l'app mais ne génère pas de plan.
  *
- * C'est LE drapeau que toute l'UI lit — carte de pratique, bibliothèque,
+ * C'est LE drapeau que toute l'UI lit, carte de pratique, bibliothèque,
  * `/plans`, étape 1 du parcours. Aucun écran ne re-décide dans son coin, et
  * basculer une pratique en `live` le jour où ses plans existent est un
  * changement d'une ligne.
  *
  * Deux pratiques le portent : le triathlon, dont les plans n'ont jamais été
- * écrits, et l'ULTRA depuis le 12 septembre 2026 — décision du propriétaire,
+ * écrits, et l'ULTRA depuis le 12 septembre 2026, décision du propriétaire,
  * qui juge ce que le générateur produit à cette distance pas assez fiable pour
  * être proposé. Le moteur garde ses tables d'ultra : un plan déjà enregistré
  * continue de s'ouvrir et de se dérouler, c'est la PORTE qui se ferme, pas la
@@ -115,7 +115,7 @@ export const PRACTICE_META: Record<Practice, PracticeMeta> = {
  *
  * `switch` exhaustif, **sans `default`** : le jour où `RaceDistance` gagne une
  * valeur (les distances de triathlon, par exemple), `tsc` échoue ici au lieu de
- * la faire tomber silencieusement dans « route ».
+ * la faire tomber silencieusement dans route.
  */
 export function practiceFromRaceDistance(distance: RaceDistance): Practice {
   switch (distance) {

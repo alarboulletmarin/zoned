@@ -81,7 +81,7 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
   return (
     <div className={cn("zn-structure", className)}>
       {/* The ramp orders the zones but does not name them, so the surface that
-          paints them shows the legend once, above the phases — and only for the
+          paints them shows the legend once, above the phases, and only for the
           zones this session actually touches. */}
       <ZoneScale className="zn-structure__legend" zones={paintedZones} />
 
@@ -249,7 +249,7 @@ function CompactNestedRepeatItem({
   return (
     <div className="zn-repeat" data-depth={depth > 0 ? "nested" : undefined}>
       {/* "2 séries · 12 répétitions" used to be printed here. The phase already
-          carries its summary — "2 × (12 × 30\"/30\") + 3' récup" — whenever a
+          carries its summary, "2 × (12 × 30\"/30\") + 3' récup", whenever a
           nested repeat exists, which is exactly when this component renders,
           and the group below is led by its own "12 ×". Three spellings of one
           structure, stacked. The summary is the one that survives: it is the
@@ -346,7 +346,7 @@ function buildMetaParts(step: WorkoutStepSegment): string[] {
  * One step of a phase.
  *
  * Priority is deliberately inverted compared to the previous layout: the
- * numbers you read mid-session — heart rate and pace — are the dominant
+ * numbers you read mid-session, heart rate and pace, are the dominant
  * line, and the exercise name drops to a caption underneath. When the runner
  * has not set their zones there is nothing to promote, so the name keeps the
  * lead line instead of leaving it empty.
@@ -378,7 +378,7 @@ function StepRow({
 
   return (
     // A ruled row, the shape the kit's session screen states: zone mark,
-    // label, mono meta. Recovery is not a zone — its rule is the 45 degree
+    // label, mono meta. Recovery is not a zone, its rule is the 45 degree
     // hatch the profile gives an unmeasured block.
     <div
       className="zn-step"
@@ -433,7 +433,7 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
           <ul className="zn-coaching__list">
             {tips.map((tip, index) => (
               <li key={index} className="zn-coaching__item">
-                <span className="zn-coaching__mark" aria-hidden="true">—</span>
+                <span className="zn-coaching__mark" aria-hidden="true">-</span>
                 <GlossaryLinkedText text={tip} />
               </li>
             ))}

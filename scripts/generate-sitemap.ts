@@ -23,7 +23,7 @@
  *     component and the i18n bundles, both of which move with every release.
  *
  * `lastmod` is omitted entirely when git history is unavailable (shallow CI
- * clone). File mtimes are useless here — on Vercel every file is checked out
+ * clone). File mtimes are useless here, on Vercel every file is checked out
  * at build time, so mtime would stamp today's date on all 440 URLs. Google
  * discards a `lastmod` it catches being wrong, so no date beats a fake one.
  *
@@ -66,7 +66,7 @@ const GIT_DATES_AVAILABLE = (() => {
 })();
 
 if (!GIT_DATES_AVAILABLE) {
-  console.warn("! No usable git history — emitting the sitemap without <lastmod>.");
+  console.warn("! No usable git history, emitting the sitemap without <lastmod>.");
 }
 
 const dateCache = new Map<string, string | undefined>();
@@ -214,7 +214,7 @@ async function generateSitemap(): Promise<string> {
   const calculatorPaths = getCalculatorPaths();
 
   // Static pages: their copy lives in the page component and the i18n bundles,
-  // so they genuinely move with each release — HEAD is the honest date.
+  // so they genuinely move with each release, HEAD is the honest date.
   const shell = HEAD_DATE;
 
   const urls: UrlEntry[] = [
@@ -240,7 +240,7 @@ async function generateSitemap(): Promise<string> {
     { loc: "/guides/warmup", lastmod: shell },
     // Race simulator
     { loc: "/race-simulator", lastmod: shell },
-    // Curated weeks hub — the standalone-week counterpart of /plan/new/prebuilt.
+    // Curated weeks hub, the standalone-week counterpart of /plan/new/prebuilt.
     // /weeks itself stays out: it is the user's saved-week list, like /plans.
     { loc: "/weeks/new/prebuilt", lastmod: shell },
     // Public tools with no per-user state
@@ -269,7 +269,7 @@ async function generateSitemap(): Promise<string> {
     urls.push({ loc: `/weeks/prebuilt/${w.slug}`, lastmod: w.lastmod });
   }
 
-  // Articles — per-article publishedAt/updatedAt
+  // Articles, per-article publishedAt/updatedAt
   for (const a of articles) {
     urls.push({ loc: `/learn/${a.slug}`, lastmod: a.updatedAt || a.publishedAt });
   }

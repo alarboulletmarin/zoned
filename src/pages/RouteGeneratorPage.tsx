@@ -179,7 +179,7 @@ export function RouteGeneratorPage() {
     return isSelectedReversed ? [...displayedRoute.points].reverse() : displayedRoute.points;
   }, [displayedRoute, isSelectedReversed, isEditing]);
   // Mirror displayPoints into the ref the editor reads via getDisplayPoints
-  // — refs don't trigger renders, so this assignment during the render
+  //, refs don't trigger renders, so this assignment during the render
   // pass is safe (and avoids the useEffect tick lag).
   editorDisplayPointsRef.current = displayPoints;
 
@@ -212,7 +212,7 @@ export function RouteGeneratorPage() {
     isEditing && displayedRoute
       ? displayedRoute.estimatedDurationSec
       : selectedRecommendation?.predictedDurationSec ?? route?.estimatedDurationSec ?? 0;
-  // Single source of truth for the distance-vs-target descriptor —
+  // Single source of truth for the distance-vs-target descriptor,
   // returns one of three mutually exclusive labels (very_close / close
   // / approximate) so the UI never shows two contradictory chips.
   const distanceMatchLabel: DistanceMatchLabel | null = displayedRoute
@@ -648,7 +648,7 @@ export function RouteGeneratorPage() {
   ) : null;
 
   // The verdicts: how close the trace landed, and why the algorithm ranked it
-  // first. Outlined tags, never fills — a row of filled tags would spend the
+  // first. Outlined tags, never fills, a row of filled tags would spend the
   // screen's one accent six times over.
   const verdicts = (
     <div className="zn-cluster" style={{ "--gap": "var(--sp-3)" } as CSSProperties}>
@@ -772,7 +772,7 @@ export function RouteGeneratorPage() {
 
   // ─── One arrangement: rail then stage ─────────────────────────────────
   // Side by side on a desktop, stacked on a phone. /routes is the app's one
-  // fullscreen route — App.tsx hides the footer for it — so the screen claims
+  // fullscreen route, App.tsx hides the footer for it, so the screen claims
   // exactly one viewport and each column scrolls inside itself.
   return (
     <>

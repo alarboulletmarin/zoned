@@ -4,7 +4,7 @@
  * Deux surfaces s'en servent : la primitive `<SheetContent side="bottom">`, qui
  * le donne d'un coup aux quatre sheets du bas, et PlanWorkoutPanel, qui est une
  * sheet faite main. Elles ne partagent ni leur DOM ni leur CSS, seulement le
- * geste — d'où un hook plutôt qu'un composant.
+ * geste, d'où un hook plutôt qu'un composant.
  *
  * Le panneau est lu dans `e.currentTarget` et jamais par une ref : dans un
  * gestionnaire tactile, c'est exactement l'élément qui porte le geste, ce qui
@@ -21,7 +21,7 @@ import { shouldCloseSheet } from "@/lib/sheetDrag";
 
 /**
  * Hauteur de la bande de tête qui vaut prise, poignée comprise. Elle existe
- * pour les sheets sans en-tête — SessionCompletionPanel est la seule — et pour
+ * pour les sheets sans en-tête, SessionCompletionPanel est la seule, et pour
  * la poignée elle-même, qui est un ::before et qu'aucun sélecteur ne peut
  * atteindre depuis un événement.
  */

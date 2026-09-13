@@ -1,9 +1,9 @@
-/* The session card — the piece the whole app reuses: library grid, favourites,
+/* The session card, the piece the whole app reuses: library grid, favourites,
    collections, the draw result, the home page rail.
 
    Reading order is the system's: name, why, profile, facts. The profile is a
    ZoneBar (see zone.css); the facts are a mono row over a divider, ending on
-   the catalogue code in vermillon — the one accent mark a card is allowed,
+   the catalogue code in vermillon, the one accent mark a card is allowed,
    because it is an identifier, not a fill.
 
    No shadow. A hard offset is for a floating surface; a card in a list is
@@ -28,7 +28,7 @@
     transform var(--dur-fast) var(--ease-out);
 }
 
-/* The dense variant — a related session, a sidebar rail. Same paper, less of
+/* The dense variant, a related session, a sidebar rail. Same paper, less of
    it, and the name drops to interface type because it is a label there rather
    than a heading you read. */
 .zn-wcard[data-size="compact"] {
@@ -95,7 +95,7 @@
   overflow-wrap: anywhere;
   /* A flex item's floor is its content, not zero. Without this the title
      pushed the favourite button five pixels past the card's inner edge on a
-     390px screen — measured, not guessed. */
+     390px screen, measured, not guessed. */
   min-inline-size: 0;
 }
 
@@ -127,7 +127,7 @@
   white-space: nowrap;
 }
 
-/* The catalogue id. Vermillon type, not a vermillon fill — the screen's one
+/* The catalogue id. Vermillon type, not a vermillon fill, the screen's one
    fill is still the primary action. */
 .zn-wcard__code {
   margin-inline-start: auto;
@@ -148,7 +148,7 @@
   white-space: nowrap;
 }
 
-/* WCAG 2.5.8 — a clickable card answers to the touch floor. */
+/* WCAG 2.5.8, a clickable card answers to the touch floor. */
 @media (pointer: coarse) {
   .zn-wcard[data-interactive="true"],
   .zn-wcard-link {

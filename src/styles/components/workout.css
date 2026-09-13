@@ -3,17 +3,17 @@
    dialog, the zone CTA and the scan placeholder.
 
    One file, because these are the same screen's parts. Everything zone-shaped
-   defers to zone.css — the badge, the bar and the legend are drawn there once,
+   defers to zone.css, the badge, the bar and the legend are drawn there once,
    and the only thing declared here is which ramp token an edge mark reads.
 
    Class names in this file are ours and hand-written, so interpolating one
    (`zn-badge--${variant}` style) is safe: the Tailwind source-scanning trap
    that killed `border-zone-3` does not apply. Even so, only ONE place needs
-   it — everything else rides a `data-zone` attribute. */
+   it, everything else rides a `data-zone` attribute. */
 
 /* ── category glyph ──────────────────────────────────────────────────────
    The size travels on the icon's own `size` prop, which writes width/height
-   attributes — any CSS a call site hands in still wins over them, which is
+   attributes, any CSS a call site hands in still wins over them, which is
    exactly the override behaviour the Tailwind `size-*` classes had. All this
    class owns is the promise that the glyph is never squeezed by its row. */
 
@@ -36,7 +36,7 @@
   border-block-end: var(--border-divider);
 }
 
-/* One card per phase — the shape the kit's SessionScreen states. */
+/* One card per phase, the shape the kit's SessionScreen states. */
 .zn-phase {
   padding: var(--pad-card);
   background: var(--surface-card);
@@ -60,7 +60,7 @@
 /* ── the structure, on a phone ────────────────────────────────────────── */
 
 /* The section reads as a table on a wide screen: a zone mark, a name, a
-   duration on the right. On 390px each of those three became its own line —
+   duration on the right. On 390px each of those three became its own line,
    a zone badge that spelled out "Z1-Z2 Récupération → Endurance" took the
    width on its own, pushing the name below it and leaving the duration
    stranded across an empty gutter. A two-step phase cost 250px.
@@ -107,7 +107,7 @@
 /* ── a step ──────────────────────────────────────────────────────────── */
 
 /* Ruled rows, not a stack of boxes: a divider above each one, 11px of air
-   either side. The kit prints the same row — mark, label, mono meta. */
+   either side. The kit prints the same row, mark, label, mono meta. */
 .zn-step {
   display: flex;
   align-items: flex-start;
@@ -313,7 +313,7 @@
 }
 
 /* The kit's marks: an em rule for advice, a cross for a mistake. Vermillon
-   type on two characters — not a second accent fill. */
+   type on two characters, not a second accent fill. */
 .zn-coaching__mark {
   flex: none;
   color: var(--text-link);
@@ -323,7 +323,7 @@
 /* ══ WorkoutListItem ═════════════════════════════════════════════════════ */
 
 /* A list row is paper lying flat: an outline, no shadow, no lift on hover.
-   The zone is the badge at the end — it carries the code, so the row needs
+   The zone is the badge at the end, it carries the code, so the row needs
    no tint behind it. */
 .zn-wrow {
   display: flex;
@@ -453,7 +453,7 @@
       laptop. Every rule below is unconditional, and --fs-h3 is pinned to its
       desktop step for the same reason.
    2. Custom properties resolve (the clone carries computed styles) but the
-      self-hosted webfonts do not — png.ts passes skipFonts. What renders is
+      self-hosted webfonts do not, png.ts passes skipFonts. What renders is
       each family's metrics-matched local fallback, so the mono column still
       separates from the prose while display and text both land on Arial. */
 
@@ -573,7 +573,7 @@
   color: var(--text-faint);
 }
 
-/* The catalogue id, the one accent a card is allowed — an identifier in
+/* The catalogue id, the one accent a card is allowed, an identifier in
    vermillon type, never a second fill. */
 .zn-export__code {
   color: var(--text-link);
@@ -720,7 +720,7 @@
 }
 
 /* Out of the recommended range is a warning, and the system's warning is the
-   accent — as type, next to the range it names. */
+   accent, as type, next to the range it names. */
 .zn-params__warning {
   margin: 0;
   font: var(--type-caption);
@@ -837,8 +837,8 @@
 
 /* The threshold note, between Z3 and Z4: an annotation set in the table like
    a row of its own, between two dividers. Its bottom divider is the ground
-   the pointing figure stands on — the sole bites it by the rule's thickness,
-   computed, not eyeballed — and the arrow heads for the Z4 row but stops
+   the pointing figure stands on, the sole bites it by the rule's thickness,
+   computed, not eyeballed, and the arrow heads for the Z4 row but stops
    8px short of its edge: beside a button, never across it. The text is two
    sentences, one per known measure, on two lines each at most. */
 .zn-ztable__note {
@@ -986,7 +986,7 @@
   display: none;
 }
 
-/* The disclosure animates its own height — a grid row from 0fr to 1fr, which
+/* The disclosure animates its own height, a grid row from 0fr to 1fr, which
    is the only way to transition to `auto` without measuring in JS. */
 .zn-ztable__panel {
   display: grid;
@@ -1315,7 +1315,7 @@
 }
 
 /* On a phone the banner was a full card with a full-width button under two
-   lines of text — 133px spent on an aside, above the session it interrupts.
+   lines of text, 133px spent on an aside, above the session it interrupts.
    The button goes back to its own width and the padding to a note's. */
 @media (max-width: 639px) {
   .zn-zone-cta {

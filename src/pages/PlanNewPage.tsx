@@ -12,16 +12,16 @@ import { practiceData } from "@/components/domain/practice-data";
 /**
  * L'entrée du parcours : la pratique, et rien d'autre.
  *
- * Cette page faisait choisir un MÉCANISME DE GÉNÉRATION — assisté, libre,
- * prêt-à-l'emploi — **avant la première question**. C'était la question la
- * plus coûteuse de l'app posée en premier : « veux-tu un plan assisté ? » ne
+ * Cette page faisait choisir un MÉCANISME DE GÉNÉRATION, assisté, libre,
+ * prêt-à-l'emploi, **avant la première question**. C'était la question la
+ * plus coûteuse de l'app posée en premier : veux-tu un plan assisté ? ne
  * se répond pas quand on n'a pas encore dit ce qu'on prépare. Et pour le trail
  * et l'ultra l'étagère des plans prêts est vide, donc un tiers du temps
  * l'embranchement annonçait une impasse.
  *
  * Le choix du mode se pose maintenant APRÈS, en secondaire, et seulement pour
  * qui le cherche. `/plan/new/assisted`, `/free` et `/prebuilt` restent des
- * routes vivantes — la première et la troisième sont au sitemap.
+ * routes vivantes, la première et la troisième sont au sitemap.
  */
 export function PlanNewPage() {
   const { t } = useTranslation(["plan", "common"]);
@@ -89,7 +89,7 @@ export function PlanNewPage() {
           </OptionStack>
 
           {/* Les deux autres façons d'avoir un plan, en secondaire : la
-              question « comment » se pose après « quoi », et seulement pour
+              question comment se pose après quoi, et seulement pour
               qui la cherche. */}
           <p className="zn-body zn-body--sm zn-muted zn-wiz__modes">
             <Link to="/plan/new/prebuilt">

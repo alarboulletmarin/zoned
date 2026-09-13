@@ -83,7 +83,7 @@ export function TopBar() {
           the paper, told apart by hairlines. Their 44px target is kept, just
           not drawn.
 
-          Search, language and theme stay on every viewport — they are the
+          Search, language and theme stay on every viewport, they are the
           three things reached without a destination in mind, and burying them
           in the menu cost a tap for each. Only the account door is desktop-
           only: below 1024px its pages are a group of the full-screen menu. */}
@@ -127,7 +127,7 @@ export function TopBar() {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// NavDoor — one of the five. A door with children is a disclosure, not a
+// NavDoor, one of the five. A door with children is a disclosure, not a
 // link: activating it reveals its pages instead of navigating away, and the
 // door's own page is the first item of the panel. Hover opens it for pointers;
 // click/Enter opens it for everyone else.
@@ -212,7 +212,7 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
   );
 }
 
-/** The account door — everything personal, plus settings, behind one glyph.
+/** The account door, everything personal, plus settings, behind one glyph.
  *  Click-only (no hover) so it does not fight the nav panels. */
 function AccountMenu() {
   const { t } = useTranslation("common");

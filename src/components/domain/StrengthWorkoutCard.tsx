@@ -3,13 +3,13 @@
  * list row.
  *
  * The grid and dense cards are .zn-wcard (workout-card.css), the same piece of
- * paper the running card uses — a library grid mixing the two disciplines has
+ * paper the running card uses, a library grid mixing the two disciplines has
  * to read as one catalogue, and the strength-only organs are small enough to
  * bolt on: the intensity meter, and the muscle pills.
  *
  * Intensity replaces the zone: it is ordinal on the same ink ramp (themes.css
- * binds --intensity-* to --zone-1/2/3/4/6), so the meter codes it twice — ink
- * density and step height — exactly the way a ZoneBar codes a zone.
+ * binds --intensity-* to --zone-1/2/3/4/6), so the meter codes it twice, ink
+ * density and step height, exactly the way a ZoneBar codes a zone.
  */
 
 import { Link } from "react-router-dom";
@@ -42,7 +42,7 @@ const HEAD_ROW = { "--gap": "var(--sp-6)" } as CSSProperties;
 /**
  * The five steps of the intensity ramp. Steps up to the session's level carry
  * their ink; every step carries its height, so the silhouette reads the level
- * a second time. Decorative — the level is named in words by IntensityBadge.
+ * a second time. Decorative, the level is named in words by IntensityBadge.
  */
 function IntensityMeter({ intensity }: { intensity: StrengthIntensity }) {
   const level = INTENSITY_LEVEL[intensity];
@@ -95,7 +95,7 @@ export function StrengthWorkoutCard({ workout, className }: StrengthWorkoutCardP
           <FavoriteButton workoutId={workout.id} size="sm" />
         </div>
 
-        {/* No prose here either — see the note in WorkoutCard.tsx. */}
+        {/* No prose here either, see the note in WorkoutCard.tsx. */}
 
         <IntensityMeter intensity={workout.intensity} />
 

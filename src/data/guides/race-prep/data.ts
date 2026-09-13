@@ -18,8 +18,8 @@ export const racePrepSections: RacePrepSection[] = [
         textEn: "Gear",
         items: [
           {
-            text: "Chaussures de course (rodées, pas neuves — au moins 50 km avec)",
-            textEn: "Running shoes (broken in, not new — at least 50 km in them)",
+            text: "Chaussures de course (rodées, pas neuves, au moins 50 km avec)",
+            textEn: "Running shoes (broken in, not new, at least 50 km in them)",
             checked: false,
           },
           {
@@ -158,8 +158,8 @@ export const racePrepSections: RacePrepSection[] = [
             textEn: "Volume reduction: 40-60% of peak volume, maintaining intensity with a few short pickups",
           },
           {
-            text: "Aucun exercice nouveau ni aliment inconnu — ce n'est pas le moment d'expérimenter",
-            textEn: "No new exercises or unfamiliar foods — this is not the time to experiment",
+            text: "Aucun exercice nouveau ni aliment inconnu, ce n'est pas le moment d'expérimenter",
+            textEn: "No new exercises or unfamiliar foods, this is not the time to experiment",
           },
           {
             text: "Dernière séance dure : 5-7 jours avant pour un marathon, 3-4 jours pour un 5 km",
@@ -181,7 +181,7 @@ export const racePrepSections: RacePrepSection[] = [
       },
       {
         type: "tip",
-        text: "Il est normal de se sentir « lourd » ou « lent » pendant l'affûtage. C'est le corps qui stocke de l'énergie. Le jour J, vous serez un ressort comprimé prêt à se libérer.",
+        text: "Il est normal de se sentir lourd ou lent pendant l'affûtage. C'est le corps qui stocke de l'énergie. Le jour J, vous serez un ressort comprimé prêt à se libérer.",
         textEn: "It's normal to feel 'heavy' or 'sluggish' during the taper. Your body is storing energy. On race day, you'll be a compressed spring ready to release.",
       },
       {
@@ -228,8 +228,8 @@ export const racePrepSections: RacePrepSection[] = [
           {
             label: "Marathon",
             labelEn: "Marathon",
-            value: "5-10 min de marche rapide ou footing très léger + 2 lignes droites courtes seulement. Échauffement minimal pour préserver le glycogène — les premiers kilomètres servent d'échauffement.",
-            valueEn: "5-10 min brisk walk or very light jog + 2 short strides only. Minimal warm-up to preserve glycogen — the first kilometers serve as warm-up.",
+            value: "5-10 min de marche rapide ou footing très léger + 2 lignes droites courtes seulement. Échauffement minimal pour préserver le glycogène, les premiers kilomètres servent d'échauffement.",
+            valueEn: "5-10 min brisk walk or very light jog + 2 short strides only. Minimal warm-up to preserve glycogen, the first kilometers serve as warm-up.",
           },
         ],
       },
@@ -265,26 +265,26 @@ export const racePrepSections: RacePrepSection[] = [
             textEn: "Negative splits: start 5-10 s/km slower than target, finish strong. Optimal in theory but mentally demanding.",
           },
           {
-            text: "Premier kilomètre : TOUJOURS plus lent que l'allure cible. L'adrénaline du départ est un piège — résistez.",
-            textEn: "First kilometer: ALWAYS slower than target pace. The adrenaline at the start is a trap — resist it.",
+            text: "Premier kilomètre : TOUJOURS plus lent que l'allure cible. L'adrénaline du départ est un piège, résistez.",
+            textEn: "First kilometer: ALWAYS slower than target pace. The adrenaline at the start is a trap, resist it.",
           },
           {
             text: "Stratégie de terrain : lever le pied dans les côtes (effort constant, pas allure constante), récupérer en descente sans freiner.",
             textEn: "Terrain strategy: ease up on hills (constant effort, not constant pace), recover on downhills without braking.",
           },
           {
-            text: "Points de repère mentaux : diviser la course en trois tiers — s'installer, travailler, pousser.",
-            textEn: "Mental checkpoints: break the race into thirds — settle in, work, push.",
+            text: "Points de repère mentaux : diviser la course en trois tiers, s'installer, travailler, pousser.",
+            textEn: "Mental checkpoints: break the race into thirds, settle in, work, push.",
           },
           {
-            text: "Préparer un mantra pour les moments difficiles (ex. « léger et fort », « un pas à la fois »).",
+            text: "Préparer un mantra pour les moments difficiles (ex. léger et fort, un pas à la fois).",
             textEn: "Have a mantra ready for tough moments (e.g., 'light and strong', 'one step at a time').",
           },
         ],
       },
       {
         type: "warning",
-        text: "Le « mur du marathon » (km 30-35) est souvent causé par un départ trop rapide et un épuisement du glycogène. Un départ contrôlé et une nutrition régulière sont votre meilleure protection.",
+        text: "Le mur du marathon (km 30-35) est souvent causé par un départ trop rapide et un épuisement du glycogène. Un départ contrôlé et une nutrition régulière sont votre meilleure protection.",
         textEn: "The marathon 'wall' (km 30-35) is often caused by starting too fast and glycogen depletion. A controlled start and regular nutrition are your best protection.",
       },
       {
@@ -302,8 +302,8 @@ export const racePrepSections: RacePrepSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "La récupération commence dès la ligne d'arrivée. Les premières heures sont critiques pour minimiser les dommages musculaires et accélérer la réparation. Ne négligez pas cette phase — elle conditionne votre retour à l'entraînement.",
-        textEn: "Recovery starts at the finish line. The first hours are critical to minimize muscle damage and accelerate repair. Don't neglect this phase — it determines how quickly you return to training.",
+        text: "La récupération commence dès la ligne d'arrivée. Les premières heures sont critiques pour minimiser les dommages musculaires et accélérer la réparation. Ne négligez pas cette phase, elle conditionne votre retour à l'entraînement.",
+        textEn: "Recovery starts at the finish line. The first hours are critical to minimize muscle damage and accelerate repair. Don't neglect this phase, it determines how quickly you return to training.",
       },
       {
         type: "list",
@@ -334,8 +334,8 @@ export const racePrepSections: RacePrepSection[] = [
         textEn: "First 24 hours",
         items: [
           {
-            text: "Bain d'eau froide optionnel (10-15 min à 10-15°C) — les études sont mitigées mais beaucoup de coureurs rapportent un bénéfice subjectif",
-            textEn: "Cold water immersion optional (10-15 min at 10-15°C) — studies are mixed but many runners report subjective benefit",
+            text: "Bain d'eau froide optionnel (10-15 min à 10-15°C), les études sont mitigées mais beaucoup de coureurs rapportent un bénéfice subjectif",
+            textEn: "Cold water immersion optional (10-15 min at 10-15°C), studies are mixed but many runners report subjective benefit",
           },
           {
             text: "Vêtements de compression : peuvent réduire les courbatures et l'inflammation",
@@ -346,8 +346,8 @@ export const racePrepSections: RacePrepSection[] = [
             textEn: "Gentle 15-20 min walk to promote blood circulation",
           },
           {
-            text: "Dormir suffisamment — le sommeil est le meilleur outil de récupération",
-            textEn: "Get enough sleep — sleep is the best recovery tool",
+            text: "Dormir suffisamment, le sommeil est le meilleur outil de récupération",
+            textEn: "Get enough sleep, sleep is the best recovery tool",
           },
         ],
       },

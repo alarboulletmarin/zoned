@@ -1,4 +1,4 @@
-/* IllustrationSlot — the reserved hole for a hand-drawn doodle.
+/* IllustrationSlot, the reserved hole for a hand-drawn doodle.
 
    One of the system's two textures: a dashed ink outline over the cream 45°
    hatch (--fill-slot). The brief stays printed in the hole until a drawing
@@ -35,7 +35,7 @@
    No height, ever. The drawing's viewBox is cut at the sole, so the bottom of
    its box is the line it stands on; the slot fixes the width (--slot-w, else
    the column it is in) and the viewBox ratio gives the height. A fixed height
-   would letterbox the drawing — preserveAspectRatio="xMidYMid meet" — and
+   would letterbox the drawing, preserveAspectRatio="xMidYMid meet", and
    float the sole inside the box, off the rule.
 
    The width is always explicit. These files carry a viewBox and no width or

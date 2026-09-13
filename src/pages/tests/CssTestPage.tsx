@@ -35,7 +35,7 @@ interface TimeInputProps {
 
 /**
  * A duration typed as mm:ss. Two number fields on one baseline, each in its
- * own frame with its unit printed under it — and each unit is the field's
+ * own frame with its unit printed under it, and each unit is the field's
  * real `<label htmlFor>`, not a caption sitting next to an unlabelled box.
  */
 function TimeInput({

@@ -43,13 +43,13 @@
     },
 
     "carbs": {
-      "title": "The 1:0.8 ratio — the new carb rule",
+      "title": "The 1:0.8 ratio, the new carb rule",
       "lede": "For long efforts, your body absorbs two types of sugar better together than one alone. That's how pros eat up to 120 g of sugar per hour without stomach trouble. The right mix: a bit more glucose than fructose, in a 1 to 0.8 ratio. Maurten, Precision Fuel, SiS Beta Fuel all use this principle.",
       "ratios": {
         "recommended": "Best",
-        "glucose":  { "label": "Glucose alone", "capacity": "60 g/h max — you hit the ceiling fast" },
-        "classic":  { "label": "Mix 2:1",       "capacity": "90 g/h — the old reference" },
-        "modern":   { "label": "Mix 1:0.8",     "capacity": "120 g/h — top range for pros" },
+        "glucose":  { "label": "Glucose alone", "capacity": "60 g/h max, you hit the ceiling fast" },
+        "classic":  { "label": "Mix 2:1",       "capacity": "90 g/h, the old reference" },
+        "modern":   { "label": "Mix 1:0.8",     "capacity": "120 g/h, top range for pros" },
         "footnote": "Homemade recipe: 50 g maltodextrin + 40 g fructose + a pinch of salt in 500 ml water. The salt isn't trivial: it actually helps your body absorb sugar faster."
       }
     },
@@ -69,7 +69,7 @@
         "ultra":   { "profile": "After an ultra",  "hours": "Recovery",  "target": "Up to 2.5 g/kg","helper": "For 5 to 7 days after a 50 km+ race" }
       },
       "timeline": {
-        "morning":  { "label": "Breakfast",  "value": "30 g",         "helper": "Eggs, cottage cheese, skyr — not just bread and jam" },
+        "morning":  { "label": "Breakfast",  "value": "30 g",         "helper": "Eggs, cottage cheese, skyr, not just bread and jam" },
         "lunch":    { "label": "Lunch",      "value": "30-40 g",      "helper": "Meat, fish or legumes + a starch" },
         "snack":    { "label": "Snack",      "value": "20-25 g",      "helper": "Greek yogurt, or protein shake if you trained" },
         "dinner":   { "label": "Dinner",     "value": "30-40 g",      "helper": "Protein source + vegetables" },
@@ -80,11 +80,11 @@
 
     "caffeine": {
       "title": "Coffee before a race",
-      "lede": "Coffee (or caffeine) is one of the few products that really works to run better. Count 3 to 6 mg per kilo of your weight, taken 60 minutes before the start. For 70 kg, that's 210 to 420 mg, or 2 to 4 cups. In capsule form, the dosing is more precise. One thing to know: some people metabolize coffee slowly (genetics). They feel the opposite — palpitations, stomach aches. If that's you, drop to 1-2 mg/kg or skip it.",
+      "lede": "Coffee (or caffeine) is one of the few products that really works to run better. Count 3 to 6 mg per kilo of your weight, taken 60 minutes before the start. For 70 kg, that's 210 to 420 mg, or 2 to 4 cups. In capsule form, the dosing is more precise. One thing to know: some people metabolize coffee slowly (genetics). They feel the opposite, palpitations, stomach aches. If that's you, drop to 1-2 mg/kg or skip it.",
       "steps": {
         "t90": { "label": "T-90 min", "action": "Coffee or capsule. If you don't drink it daily: 3 mg/kg. If you do: 6 mg/kg." },
         "t60": { "label": "T-60 min", "action": "Caffeine peaks in your blood now. Use this time to finish hydrating and hit the bathroom." },
-        "t30": { "label": "T-30 min", "action": "You start warming up. No more coffee now — it would kick in too late." },
+        "t30": { "label": "T-30 min", "action": "You start warming up. No more coffee now, it would kick in too late." },
         "t0":  { "label": "Race start", "action": "Full effect for 3-4 hours. On an ultra, you can take a small dose again mid-race." }
       },
       "contraindications": {
@@ -147,7 +147,7 @@
         "total":        "Typical total"
       },
       "rows": {
-        "short":    { "distance": "5 km (under 30 min)",   "ratio": "—",     "total": "Plain water is enough" },
+        "short":    { "distance": "5 km (under 30 min)",   "ratio": "-",     "total": "Plain water is enough" },
         "tenK":     { "distance": "10 km (40-60 min)",     "ratio": "1:0",   "total": "1 to 2 gels or 500 ml of drink" },
         "semi":     { "distance": "Half (~1 h 30)",        "ratio": "2:1",   "total": "2 to 3 gels + drink" },
         "marathon": { "distance": "Marathon (3-4 h)",      "ratio": "1:0.8", "total": "5 to 7 gels + sports drink" },
@@ -155,7 +155,7 @@
         "ultra":    { "distance": "Ultra (over 4 h)",      "ratio": "1:0.8", "total": "Mix of solids + gels + drink + salty soup" }
       },
       "gut": {
-        "heading": "Train your stomach — 6 to 12 week protocol",
+        "heading": "Train your stomach, 6 to 12 week protocol",
         "phase1": { "weeks": "Wk 1-2", "detail": "Start gentle, on runs over 1 h 30." },
         "phase2": { "weeks": "Wk 3-4", "detail": "The stomach gradually adapts." },
         "phase3": { "weeks": "Wk 5-6", "detail": "You hit the standard target." },
@@ -174,14 +174,14 @@
     },
 
     "supplements": {
-      "title": "Supplements — what actually works",
+      "title": "Supplements, what actually works",
       "lede": "The Australian Institute of Sport classified all popular supplements in 4 levels based on scientific evidence. Out of 28 common products with runners, only 5 have solid proof. Others range from \"interesting in some cases\" to \"pure marketing claim.\" Here are the 17 you should know.",
       "aisFootnote": "Class A: multiple solid proofs. B: decent proofs but in specific cases. C: limited proofs, case by case. D: little or no proof.",
       "aisLabel": {
-        "A": "Level A — Solid proof",
-        "B": "Level B — Decent proof",
-        "C": "Level C — Limited proof",
-        "D": "Level D — No proof"
+        "A": "Level A, Solid proof",
+        "B": "Level B, Decent proof",
+        "C": "Level C, Limited proof",
+        "D": "Level D, No proof"
       },
       "doseLabel": "Dose",
       "whenLabel": "When",
@@ -203,15 +203,15 @@
       "vitD":        { "name": "Vitamin D",        "dose": "2000-4000 IU",     "when": "Winter",                "rationale": "1 in 2 athletes is deficient in winter in northern Europe. Get a blood test. Target: 30 ng/mL minimum, ideally 40-50." },
       "iron":        { "name": "Iron",             "dose": "60-120 mg ×3/wk",  "when": "If ferritin < 35",      "rationale": "1 in 3 female runners lacks iron. Never supplement without a blood test. Morning, with vitamin C, away from coffee." },
       "magnesium":   { "name": "Magnesium",        "dose": "200-400 mg",       "when": "Evening",               "rationale": "Bisglycinate form (better absorbed, gentle on stomach). Helps sleep and recovery. Useless against cramps (Cochrane 2020 study)." },
-      "bcaa":        { "name": "BCAA (branched-chain amino acids)", "dose": "—", "when": "Avoid",               "rationale": "Useless if you eat enough protein. A Greek yogurt has as much, in better form. Marketing for 99% of runners." },
-      "lcarnitine":  { "name": "L-carnitine",      "dose": "—",                "when": "Avoid",                 "rationale": "Not properly absorbed orally. Studies conclude no effect on running. Save your money for supplements that actually work." },
-      "ketones":     { "name": "Ketones",          "dose": "—",                "when": "Avoid",                 "rationale": "Very fashionable from 2018 to 2022, but no proof of running improvement (2024 review). Expensive, rough taste, possible stomach issues." },
-      "antioxidants":{ "name": "High-dose antioxidants","dose": "—",           "when": "Avoid",                 "rationale": "Vitamin C 1,000 mg + high-dose vitamin E daily BLOCKS training progress (2014 study). Eat fruit and vegetables instead." }
+      "bcaa":        { "name": "BCAA (branched-chain amino acids)", "dose": "-", "when": "Avoid",               "rationale": "Useless if you eat enough protein. A Greek yogurt has as much, in better form. Marketing for 99% of runners." },
+      "lcarnitine":  { "name": "L-carnitine",      "dose": "-",                "when": "Avoid",                 "rationale": "Not properly absorbed orally. Studies conclude no effect on running. Save your money for supplements that actually work." },
+      "ketones":     { "name": "Ketones",          "dose": "-",                "when": "Avoid",                 "rationale": "Very fashionable from 2018 to 2022, but no proof of running improvement (2024 review). Expensive, rough taste, possible stomach issues." },
+      "antioxidants":{ "name": "High-dose antioxidants","dose": "-",           "when": "Avoid",                 "rationale": "Vitamin C 1,000 mg + high-dose vitamin E daily BLOCKS training progress (2014 study). Eat fruit and vegetables instead." }
     },
 
     "cramps": {
       "title": "Cramps: the real cause (it's not water)",
-      "lede": "For a century, we believed cramps came from dehydration and lack of minerals. That's wrong. Modern studies have shown the cause is nervous: your muscles get tired, the system controlling them gets disrupted, and the cramp hits. The most striking proof: a sip of pickle juice stops a cramp in under 90 seconds — way too fast to change your blood composition. It's a nerve reflex triggered by the sour taste in the mouth.",
+      "lede": "For a century, we believed cramps came from dehydration and lack of minerals. That's wrong. Modern studies have shown the cause is nervous: your muscles get tired, the system controlling them gets disrupted, and the cramp hits. The most striking proof: a sip of pickle juice stops a cramp in under 90 seconds, way too fast to change your blood composition. It's a nerve reflex triggered by the sour taste in the mouth.",
       "old": {
         "label": "Old theory",
         "title": "Lack of water and minerals",
@@ -244,7 +244,7 @@
       "iron":     { "title": "Iron and ferritin",       "detail": "Get iron tested once a year. Target: ferritin above 50 ng/mL (not 30, as often read). If deficient: 60-100 mg of iron every other day, in the morning, with vitamin C, no coffee or tea nearby." },
       "protein":  { "title": "Protein in the second half of the cycle", "detail": "Increase by 0.1 to 0.2 g/kg in the 2 weeks before your period. Prefer meat, eggs, fish (rich in lysine). No intermittent fasting in this phase." },
       "calcium":  { "title": "Calcium and vitamin D",    "detail": "1300-1500 mg of calcium per day if menstrual issues. 800-2000 IU of vitamin D. Critical for bone health: stress fractures are 4.5 times more frequent when periods stop." },
-      "reds":     { "title": "Chronic energy deficit — warning signs", "detail": "If you eat less than 30 calories per kilo of lean mass per day, you enter a risk zone. Signals: periods stopping, chronic fatigue, repeat injuries, low immunity, poor sleep. See a doctor." }
+      "reds":     { "title": "Chronic energy deficit, warning signs", "detail": "If you eat less than 30 calories per kilo of lean mass per day, you enter a risk zone. Signals: periods stopping, chronic fatigue, repeat injuries, low immunity, poor sleep. See a doctor." }
     },
 
     "myths": {
@@ -315,13 +315,13 @@
     "faq": {
       "q1": { "question": "How much protein do you really need when running?",
               "answer": "Old recommendations (1.2 to 1.6 g per kilo of weight) are outdated. Today, the advice is 1.8 g per kilo, with 2 g and more on rest days. For 70 kg, that's 126 g per day. Even more important than the total: spread across 4 meals (25 to 30 g per meal). A chicken serving, Greek yogurt or piece of cottage cheese will do. 40 g of cottage cheese or casein before sleep feeds muscles all night." },
-      "q2": { "question": "The famous 1:0.8 ratio — what does it actually change?",
+      "q2": { "question": "The famous 1:0.8 ratio, what does it actually change?",
               "answer": "For long efforts (over 90 g of sugar per hour), mixing glucose and fructose in a 1 to 0.8 ratio lets you absorb 45% more sugar without stomach trouble. Why does it work? Your body uses two different entry doors for these two sugars, in parallel. Maurten, Precision Fuel, SiS Beta Fuel and Styrkr all use this principle. Below 90 g/h, the classic 2:1 ratio works just as well." },
       "q3": { "question": "Does creatine bulk up a runner?",
               "answer": "Yes a bit (0.5 to 1.5 kg) but it's water held in muscles, not fat. For a marathoner aiming for under 3 hours, that extra weight doesn't help. For an ultra-runner, a trail runner, a runner over 40 or someone doing multiple sessions, the benefits (recovery, surges, prevention of muscle loss with age) more than offset it. Dose: 3 to 5 g per day, ongoing, no need for a loading phase." },
       "q4": { "question": "How many gels for a marathon?",
               "answer": "Aim for 60 to 90 g of sugar per hour, so 5 to 7 gels over the full distance. Better: start early (km 8-10), space every 25 to 30 minutes, alternate with sports drink. To reach 120 g/h (pro level), you need 8 to 12 weeks of digestive training and a mandatory 1:0.8 mix. Maurten hydrogel gels: useful mainly above 150 g/h, not magic below." },
-      "q5": { "question": "Coffee before a race — does it help or tire you?",
+      "q5": { "question": "Coffee before a race, does it help or tire you?",
               "answer": "At 3 mg/kg in capsule form, taken 60 minutes before the start, coffee improves performance by 2 to 7% on long efforts. Capsules are more precise than regular coffee (dosing varies from 50 to 300 mg depending on machines). Watch out: some people metabolize coffee slowly due to genetics. At high dose, their performance can actually drop. If coffee makes you nervous, drop to 1-2 mg/kg or skip. No coffee after 2 PM if you race early next day." },
       "q6": { "question": "How do I avoid hitting the marathon wall?",
               "answer": "Three levers: load up on carbs for 36 to 48 hours before the race (not 3 days), eat regularly during the race (60-90 g/h from the start with 1:0.8 mix), pace yourself early. The wall isn't in your head: it's your liver running out of reserves. Training your stomach to eat while running over the 6 to 12 weeks before the race is essential." },

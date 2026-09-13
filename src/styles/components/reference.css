@@ -2,8 +2,8 @@
  * competitor-comparison screens, and the 404.
  *
  * The design kit does not mock any of these. None of them is redrawn here:
- * each keeps the arrangement it already had — a header band, then the screen's
- * own content — and only changes paint. What that paint adds is the system's
+ * each keeps the arrangement it already had, a header band, then the screen's
+ * own content, and only changes paint. What that paint adds is the system's
  * furniture: a mono kicker over a display title, a full-width ink rule between
  * bands instead of blank space, ink outlines on everything, and one vermillon
  * fill per screen reserved for the primary action.
@@ -13,15 +13,15 @@
  * alert.css, empty-state.css, door-card.css, select.css and
  * responsive-table.css. The glossary term's own blocks (.zn-gterm__formula,
  * __example, __code, __link) live in content.css next to GlossaryDetail and
- * are not restated here — this file only lays out the page around them.
+ * are not restated here, this file only lays out the page around them.
  *
  * These screens sit inside the shell's centred column, which already pays the
  * 40px (20px mobile) side margin, so "full width" means the width of that
  * column and every rule runs from one of its edges to the other. Nothing
  * bleeds out; the page never scrolls sideways.
  *
- * No screen in this family paints a zone ramp — the only zone marks it shows
- * are ZoneBadges, which print their own Z-code — so none of them carries the
+ * No screen in this family paints a zone ramp, the only zone marks it shows
+ * are ZoneBadges, which print their own Z-code, so none of them carries the
  * ZoneScale legend.
  */
 
@@ -85,8 +85,7 @@
 
 /* The way out, on the line above everything else. Ink, not vermillon: the
    accent belongs to the screen's forward action. Written to fit both an <a>
-   and a <button> — the glossary term offers history-back as well as the index
-   — so the button's own chrome is cleared here. */
+   and a <button>, the glossary term offers history-back as well as the index, so the button's own chrome is cleared here. */
 .zn-ref__back {
   display: inline-flex;
   align-items: center;
@@ -222,7 +221,7 @@
   inset: -11px;
 }
 
-/* Composed onto .zn-select-trigger, which deliberately declares no width —
+/* Composed onto .zn-select-trigger, which deliberately declares no width,
    both classes are named so the width holds whatever order the two files are
    imported in. */
 .zn-select-trigger.zn-ref__filter {
@@ -273,7 +272,7 @@
   overflow: visible;
 }
 
-/* A 44px target without a 44px box — the badge around it is a <span>, so the
+/* A 44px target without a 44px box, the badge around it is a <span>, so the
    coarse-pointer floor of badge.css never reaches this button. */
 .zn-ref__unfilter::after {
   content: "";
@@ -290,7 +289,7 @@
 /* The letter that opens an alphabetical group. It sticks to the TOP of the
    viewport, not 56px down it: the app header is in flow (see shell.css), so
    there is nothing above the page to clear. Opaque page paper and a full rule
-   underneath — no blur, no translucent pane. */
+   underneath, no blur, no translucent pane. */
 .zn-ref__letter {
   position: sticky;
   inset-block-start: 0;
@@ -310,7 +309,7 @@
 
 /* ── compare: the table ───────────────────────────────────────────────── */
 
-/* The column that is us, inverted end to end — head and cells — so the answer
+/* The column that is us, inverted end to end, head and cells, so the answer
    to "which one is Zoned" survives greyscale and needs no colour at all.
    The hover rule in responsive-table.css is more specific than a lone class,
    so the inversion restates itself against it. */
@@ -326,7 +325,7 @@
   color: var(--text-muted);
 }
 
-/* One answer: a glyph and the word for it. Never colour alone — "yes" on the
+/* One answer: a glyph and the word for it. Never colour alone, "yes" on the
    competitor column and "yes" on ours can mean opposite things, so the mark
    states the value and nothing more. */
 .zn-ref__val {
@@ -342,7 +341,7 @@
   flex: none;
 }
 
-/* An absence, drawn faint — the value is there, it is just a no. */
+/* An absence, drawn faint, the value is there, it is just a no. */
 .zn-ref__val[data-value="no"] {
   color: var(--text-faint);
 }
@@ -351,7 +350,7 @@
   color: var(--text-muted);
 }
 
-/* Figures — prices, counts — are mono and tabular so the two columns line up
+/* Figures, prices, counts, are mono and tabular so the two columns line up
    on the decimal. */
 .zn-ref__val[data-value="text"] {
   font-family: var(--font-mono);
@@ -370,7 +369,7 @@
 /* ── compare: advantages ──────────────────────────────────────────────── */
 
 /* Four outlined blocks, no shadow: they sit in a grid, and a card in a list
-   never floats. The glyph is ink in a drawn circle — the four used to be four
+   never floats. The glyph is ink in a drawn circle, the four used to be four
    different gradients, which spent four accents on one screen. */
 .zn-ref__adv {
   display: flex;
@@ -436,7 +435,7 @@
    and the code is a mono dimension printed where the ground ran out. Then the
    title, the sentence and the button, left-aligned like the rest of the
    column: the screen reads as one sentence from top to bottom. No alert, no
-   glyph — the drawing is the sentence.
+   glyph, the drawing is the sentence.
 
    The only surface of this family that bleeds out of the column: the rule has
    to start at the screen edge for its end to read as an end. The bleed is to
@@ -475,7 +474,7 @@
 
 /* Flipped in CSS to walk to the right, towards the void: a scene direction,
    not a correction of an approved drawing. The height is fixed and the width
-   follows the viewBox ratio — a ?react SVG with both dimensions free
+   follows the viewBox ratio, a ?react SVG with both dimensions free
    collapses. */
 .zn-void__art {
   display: block;

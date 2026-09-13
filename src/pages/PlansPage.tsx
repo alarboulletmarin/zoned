@@ -224,7 +224,7 @@ export function PlansPage() {
         canonical="/plans"
       />
       <div className="zn-plans">
-        {/* 1 — the shelf, counted, with the two ways onto it */}
+        {/* 1, the shelf, counted, with the two ways onto it */}
         <section className="zn-plans__head">
           <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}>
             <span className="zn-kicker">
@@ -257,7 +257,7 @@ export function PlansPage() {
               <Upload />
               {t("plansPage.import")}
             </Button>
-            {/* The one vermillon fill — unless the shelf is empty, in which
+            {/* The one vermillon fill, unless the shelf is empty, in which
                 case the empty state carries it instead. */}
             <Button variant={planCount > 0 ? "default" : "outline"} asChild>
               <Link to="/plan/new">
@@ -268,7 +268,7 @@ export function PlansPage() {
           </div>
         </section>
 
-        {/* 2 — the plans */}
+        {/* 2, the plans */}
         {isLoading ? (
           <div className="zn-plans__band zn-plans__wait">
             <Spinner size={22} />

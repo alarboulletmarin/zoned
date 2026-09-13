@@ -12,7 +12,7 @@ import { createEmptyWeekPlan } from "@/lib/weekToPlan";
  * Week creation: two doors, no wizard.
  *
  * "Composer" creates the empty single-week plan and hands the editor
- * `state.openSettings`, so the generator's parameters are picked first — the
+ * `state.openSettings`, so the generator's parameters are picked first, the
  * app never generates blindly. "Catalogue" opens the ready-made weeks.
  *
  * The first door creates before it navigates, so it has to be a <button>; the

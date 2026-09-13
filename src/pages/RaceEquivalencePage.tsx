@@ -364,7 +364,7 @@ export function RaceEquivalencePage() {
                               p.zone ? (
                                 <ZoneBadge zone={p.zone} size="sm" />
                               ) : (
-                                <span className="zn-faint">—</span>
+                                <span className="zn-faint">-</span>
                               ),
                           },
                         ]

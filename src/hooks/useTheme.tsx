@@ -47,8 +47,8 @@ const getServerSnapshot = (): boolean => false;
  *
  * Note the perf property the previous ref-based implementation was written for
  * is preserved. `children` is an element created by the parent, so a preference
- * change re-renders only actual `useTheme` consumers — the TopBar button and
- * the settings card — never the page tree.
+ * change re-renders only actual `useTheme` consumers, the TopBar button and
+ * the settings card, never the page tree.
  */
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [preference, setPreference] = useState<ThemePreference>(readStoredPreference);
@@ -65,7 +65,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [preference]);
 
   // Toggling out of `system` has to land on an explicit value, and the one the
-  // user expects is the opposite of what they are looking at — not the opposite
+  // user expects is the opposite of what they are looking at, not the opposite
   // of the preference, which is not a colour.
   const toggle = useCallback(() => {
     setPreference(resolved === "dark" ? "light" : "dark");

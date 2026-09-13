@@ -228,8 +228,8 @@ export function DrawSessionPage() {
    * Run the "archive drawer" scan: flash through random candidate cards while
    * decelerating (ease-out) over ~1.5s, then settle on the final pick.
    *
-   * Le balayage INFORME — il dit « je pioche au hasard dans un lot », ce qui
-   * est le sujet même de la page — donc il reste par défaut. Mais il est
+   * Le balayage INFORME, il dit je pioche au hasard dans un lot, ce qui
+   * est le sujet même de la page, donc il reste par défaut. Mais il est
    * piloté par des `setTimeout` en JS, et la borne `prefers-reduced-motion` de
    * `styles/design/motion.css` ne peut pas atteindre du JS : quelqu'un qui a
    * demandé moins de mouvement à son système se prenait les 1,5 s quand même.
@@ -350,7 +350,7 @@ export function DrawSessionPage() {
       />
 
       <div className="zn-disc">
-        {/* 1 — the catalogue, named and counted */}
+        {/* 1, the catalogue, named and counted */}
         <section
           className="zn-disc__head zn-stack"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -380,7 +380,7 @@ export function DrawSessionPage() {
           </div>
         </section>
 
-        {/* 2 — filters on the left, the draw on the right */}
+        {/* 2, filters on the left, the draw on the right */}
         <div className="zn-split zn-draw__layout">
           <aside>
             {/* The drawer toggle is a phone affordance; CSS drops it at
@@ -458,7 +458,7 @@ export function DrawSessionPage() {
                 </div>
               </FilterGroup>
 
-              {/* Zones — the ink ramp, each rung paired with its Z-code */}
+              {/* Zones, the ink ramp, each rung paired with its Z-code */}
               <FilterGroup label={t("draw.filters.zone")}>
                 <div className="zn-cluster">
                   {ZONE_NUMBERS.map((z) => (
@@ -668,7 +668,7 @@ export function DrawSessionPage() {
 // ────────────────────────────────────────────────────────────────────────────
 
 /**
- * A filter value the athlete switches on or off — the library's chip, same
+ * A filter value the athlete switches on or off, the library's chip, same
  * markup and same paint: `role="checkbox"` with `aria-checked`, and a full ink
  * inversion when it is on.
  */
@@ -773,13 +773,13 @@ function ResultCard({
         size="sm"
         className="zn-draw__metric"
         label={t("draw.metrics.tss")}
-        value={tss != null ? String(tss) : "—"}
+        value={tss != null ? String(tss) : "-"}
       />
       <StatBlock
         size="sm"
         className="zn-draw__metric"
         label={t("draw.metrics.zone")}
-        value={zones.length > 0 ? `Z${dominantZone}` : "—"}
+        value={zones.length > 0 ? `Z${dominantZone}` : "-"}
       />
       <StatBlock
         size="sm"

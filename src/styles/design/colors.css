@@ -1,8 +1,8 @@
 /* Paper, ink, one accent. Everything else is a tint of those three.
-   Values come from design_handoff/design/tokens/colors.css — do not recompute
+   Values come from design_handoff/design/tokens/colors.css, do not recompute
    or re-round them. */
 :root {
-  /* paper — from the desk surface up to the raised card */
+  /* paper, from the desk surface up to the raised card */
   --paper-desk: #EAE8E3;
   --paper-page: #F6F5F2;
   --paper-raised: #FFFFFF;
@@ -14,7 +14,7 @@
   --ink-3: #6C6A65;
   --ink-on-dark: #F6F5F2;
 
-  /* accent — vermillon. One accent: the primary action, and danger. */
+  /* accent, vermillon. One accent: the primary action, and danger. */
   --accent: #E8452A;
   --accent-press: #A32B12;
   --accent-soft: #FBE3DA;
@@ -31,7 +31,7 @@
   --line-divider: rgba(23, 22, 20, 0.18);
   --line-axis: rgba(23, 22, 20, 0.28);
 
-  /* semantic aliases — prefer these in components */
+  /* semantic aliases, prefer these in components */
   --surface-page: var(--paper-page);
   --surface-card: var(--paper-raised);
   --surface-band: var(--paper-sunken);
@@ -55,14 +55,14 @@
   --state-disabled-border: rgba(23, 22, 20, 0.3);
   --state-disabled-fill: rgba(23, 22, 20, 0.06);
 
-  /* The wash behind a modal surface. Flat ink — the system forbids blur, so
+  /* The wash behind a modal surface. Flat ink, the system forbids blur, so
      depth comes from the outline and the hard shadow, not from a frosted pane. */
   --scrim: rgba(23, 22, 20, 0.42);
 
-  /* The inverted panel — a surface that is ink in BOTH themes, because it is a
+  /* The inverted panel, a surface that is ink in BOTH themes, because it is a
      printed black card and not a piece of the page. The .dark block below
      deliberately does NOT re-declare these three: that is the whole point.
-     The values are not new, they are the ones the two themes already state —
+     The values are not new, they are the ones the two themes already state,
      the light theme's ink for the ground, and the dark theme's ink-1 and
      ink-3 for the type, which sit a hair below pure cream because a pure
      cream at 1.5px reads as glare. */
@@ -72,7 +72,7 @@
 }
 
 /* ==========================================================================
-   DARK — not in the design bundle, derived from it.
+   DARK, not in the design bundle, derived from it.
 
    The bundle is light-only. Zoned ships a dark theme with a settings toggle,
    so the paper/ink relation is inverted rather than dropped: the ink colour
@@ -97,7 +97,7 @@
   --ink-3: #918E88;
   --ink-on-dark: #171614;
 
-  /* The accent keeps its hue — it is the brand, and it reaches 4.8:1 on the
+  /* The accent keeps its hue, it is the brand, and it reaches 4.8:1 on the
      dark page (better than the 4.0:1 it manages on cream).
      Press moves toward the page's depth, which is lighter here, not darker. */
   --accent: #E8452A;

@@ -1,5 +1,5 @@
 /**
- * PolaroidSquare — 1080×1080. Off-axis polaroid photo with hand-written
+ * PolaroidSquare, 1080×1080. Off-axis polaroid photo with hand-written
  * caption in the bottom margin. Masking tape at top sells the diary feel.
  */
 
@@ -29,7 +29,7 @@ export function PolaroidSquare({ workout, transparent }: ShareTemplateProps) {
   const zoneTop = ZONE_HEX[hero.dominantZone];
   const zoneBot = ZONE_DEEP[hero.dominantZone];
 
-  // Photo title — the workout name is the hero, sized to fill the photo
+  // Photo title, the workout name is the hero, sized to fill the photo
   // block without clipping.
   const photoNameSize =
     name.length <= 10 ? 200 : name.length <= 16 ? 150 : name.length <= 24 ? 110 : 84;
@@ -87,7 +87,7 @@ export function PolaroidSquare({ workout, transparent }: ShareTemplateProps) {
                 "radial-gradient(circle at 35% 25%, rgba(255,255,255,0.22), transparent 60%), radial-gradient(circle at 80% 90%, rgba(0,0,0,0.3), transparent 55%)",
             }}
           />
-          {/* Hero — workout name fills the photo */}
+          {/* Hero, workout name fills the photo */}
           <div
             style={{
               position: "relative",

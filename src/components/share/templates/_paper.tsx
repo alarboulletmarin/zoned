@@ -23,7 +23,7 @@ export const INK_2 = "#4A4845";
 export const SUNKEN = "#EFEEEA";
 /** `--accent`, the vermillon. One flat per sheet. */
 export const ACCENT = "#E8452A";
-/** Ink at the zone-2 step of the ramp — the paled state of a drawing. */
+/** Ink at the zone-2 step of the ramp, the paled state of a drawing. */
 export const INK_PALE = ZONE_HEX_LIGHT[2];
 
 /** Everything is ruled at 1.5px. */
@@ -55,7 +55,7 @@ export function AccentPatch() {
 
 /**
  * Session TSS, summed block by block off the zone breakdown rather than from
- * the dominant zone alone — a 10 min Z5 set inside an hour of Z2 is not an
+ * the dominant zone alone, a 10 min Z5 set inside an hour of Z2 is not an
  * hour of Z5. Time carrying no zone (drills, strides) scores nothing.
  */
 export function sessionTss(breakdown: ZoneBreakdown[]): number {
@@ -87,7 +87,7 @@ interface ZoneFriezeProps {
 
 /**
  * The session profile, same reading as `<ZoneBar>` in the app: one block per
- * phase, width = time, intensity coded twice — by ink density and by height.
+ * phase, width = time, intensity coded twice, by ink density and by height.
  *
  * A recovery block is drawn as sunken paper rather than the app's 45 degree
  * hatch: `zoneColors.ts` states that fallback for the flat-fill renderers.

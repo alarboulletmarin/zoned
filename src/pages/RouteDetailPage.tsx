@@ -115,7 +115,7 @@ export function RouteDetailPage() {
       <SEOHead title={route.name} description={t("subtitle")} canonical={`/routes/${route.id}`} noindex />
 
       <div className="zn-rt">
-        {/* 1 — which route this is, in figures */}
+        {/* 1, which route this is, in figures */}
         <section
           className="zn-rt__band zn-stack"
           style={{ "--gap": "var(--sp-11)" } as CSSProperties}
@@ -137,7 +137,7 @@ export function RouteDetailPage() {
           </div>
         </section>
 
-        {/* 2 — the trace, and the profile under it */}
+        {/* 2, the trace, and the profile under it */}
         <section
           className="zn-rt__band zn-stack"
           style={{ "--gap": "var(--sp-11)" } as CSSProperties}
@@ -179,7 +179,7 @@ export function RouteDetailPage() {
           )}
         </section>
 
-        {/* 3 — what you can do with it */}
+        {/* 3, what you can do with it */}
         <section className="zn-rt__band zn-cluster">
           <Button onClick={onExport}>
             <Download size={17} />

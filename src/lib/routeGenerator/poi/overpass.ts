@@ -1,5 +1,5 @@
 /**
- * Overpass API wrapper — fetches running-friendly POIs (parks, promenades,
+ * Overpass API wrapper, fetches running-friendly POIs (parks, promenades,
  * greenways, trails, beaches) around a given centre to seed the routing
  * algorithms with real-world waypoints instead of blind triangulation.
  *
@@ -14,7 +14,7 @@ import type { PoiCandidate, PoiType } from "./poiTypes";
 import { OVERPASS_BASE_URL, OVERPASS_TIMEOUT_S } from "../constants";
 import { haversineDistanceM } from "../elevation";
 
-/** Soft cap on in-memory POI cache entries — beyond this we evict the
+/** Soft cap on in-memory POI cache entries, beyond this we evict the
  *  oldest entry on each new write. Map iteration order is insertion
  *  order, so the first key is always the least-recently-written one. */
 const POI_MEMORY_CACHE_LIMIT = 50;
@@ -37,7 +37,7 @@ const HAS_IDB = typeof indexedDB !== "undefined";
 
 /**
  * Overpass tag fragments per POI type. Keep them as Overpass-QL substrings
- * (no `(around:...)` clause yet — that's appended at query time so the same
+ * (no `(around:...)` clause yet, that's appended at query time so the same
  * fragments can be reused across calls without string-template gymnastics).
  */
 const POI_QUERIES: Record<PoiType, string> = {
@@ -46,7 +46,7 @@ const POI_QUERIES: Record<PoiType, string> = {
   park: 'way[leisure=park]',
   greenway: 'way[route=bicycle][name~"voie verte",i]',
   trail: 'way[route=hiking]',
-  // Athletics tracks only — soccer/cricket stadiums are filtered out via the
+  // Athletics tracks only, soccer/cricket stadiums are filtered out via the
   // sport regex so Allianz Riviera doesn't get suggested for a running loop.
   track: 'way[leisure=track][sport~"running|athletics"]',
 };
@@ -55,7 +55,7 @@ const POI_QUERIES: Record<PoiType, string> = {
  * Empirical running-friendliness weight per type. Tuned for urban Europe:
  * promenades and beaches dominate seafronts, parks fill suburban grids,
  * trails cover rural areas. Tracks are useful as targets but not as the
- * dominant waypoint of a loop — most runners don't want to circle one.
+ * dominant waypoint of a loop, most runners don't want to circle one.
  */
 const POI_WEIGHTS: Record<PoiType, number> = {
   promenade: 1.0,
@@ -66,7 +66,7 @@ const POI_WEIGHTS: Record<PoiType, number> = {
   track: 0.6,
 };
 
-/** Inputs that uniquely identify a fetch — used as the cache key. */
+/** Inputs that uniquely identify a fetch, used as the cache key. */
 interface FetchKey {
   lat: number;
   lon: number;
@@ -119,7 +119,7 @@ function writePersistentPoi(key: string, data: PoiCandidate[]): void {
   try {
     void idbSet(POI_PERSISTENT_PREFIX + key, { ts: Date.now(), data } satisfies PersistedPoi).catch(
       () => {
-        // IndexedDB might be disabled (private browsing, quota full) —
+        // IndexedDB might be disabled (private browsing, quota full),
         // we silently fall back to the in-memory layer.
       },
     );
@@ -159,7 +159,7 @@ interface OverpassResponse {
 
 /**
  * Map a tagged element to its canonical POI type. Returns `null` for
- * elements that didn't match any expected pattern (defensive — Overpass
+ * elements that didn't match any expected pattern (defensive, Overpass
  * occasionally yields broader results than the query asks for).
  */
 function inferType(tags: NonNullable<OverpassElement["tags"]>): PoiType | null {
@@ -203,7 +203,7 @@ export interface FetchPoiArgs {
  * doesn't re-hit Overpass.
  *
  * Errors from Overpass (network, 429, malformed JSON) are surfaced as
- * thrown errors — the caller is expected to gracefully fall back to the
+ * thrown errors, the caller is expected to gracefully fall back to the
  * blind triangulation path.
  */
 export async function fetchPoiCandidates(
@@ -214,7 +214,7 @@ export async function fetchPoiCandidates(
 
   const key = cacheKey({ lat, lon, radiusM: args.radiusM, types });
 
-  // Layer 1: synchronous in-memory hit — most common when the user
+  // Layer 1: synchronous in-memory hit, most common when the user
   // regenerates or moves a candidate's waypoint without changing area.
   const memHit = memoryCache.get(key);
   if (memHit) return memHit;
@@ -294,7 +294,7 @@ export function parseOverpassElements(
       id: el.id,
       type,
       point: [lon, lat],
-      // Strip control chars and angle brackets — defensive for OSM edits
+      // Strip control chars and angle brackets, defensive for OSM edits
       // we don't trust as plain text downstream.
       name: typeof tags.name === "string"
         ? tags.name.replace(/[\u0000-\u001f<>]/g, "").slice(0, 120) || undefined
@@ -305,7 +305,7 @@ export function parseOverpassElements(
   return out;
 }
 
-/** Test/debug helper — clear the in-memory cache. The persistent layer
+/** Test/debug helper, clear the in-memory cache. The persistent layer
  *  is left untouched: tests should mock idb-keyval if they need a
  *  pristine state across the IndexedDB layer. */
 export function __clearPoiCacheForTests(): void {
@@ -315,7 +315,7 @@ export function __clearPoiCacheForTests(): void {
 
 /**
  * Athletics track found near a starting point. Distance is straight-line
- * (haversine) — the routed distance is computed downstream by the caller
+ * (haversine), the routed distance is computed downstream by the caller
  * when the user picks a track to commit a route to.
  */
 export interface NearbyTrack {

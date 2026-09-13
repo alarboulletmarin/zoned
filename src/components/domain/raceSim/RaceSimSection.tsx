@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
  * Anchored, collapsible block of the race plan.
  *
  * The header carries a `meta` slot so a collapsed section still says something
- * useful ("28 min", "9 étapes") — a chevron alone gives the reader no reason to
+ * useful ("28 min", "9 étapes"), a chevron alone gives the reader no reason to
  * open it, which is why collapsing every section by default used to be
  * pointless here.
  */

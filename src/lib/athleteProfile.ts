@@ -11,7 +11,7 @@ import { loadRunnerProfile } from "@/lib/runnerProfile";
 /**
  * Multi-discipline athlete profile storage.
  *
- * The existing running profile (zoned-runner-profile) is kept untouched —
+ * The existing running profile (zoned-runner-profile) is kept untouched,
  * this module only adds cycling/swimming/commute storage on the side. Users
  * with a pure running profile see zero change in behaviour.
  */
@@ -351,7 +351,7 @@ export function clearCommutePattern(): void {
 
 /**
  * Assemble the multi-discipline athlete profile from the three independent
- * storage keys. Any missing section is returned as `null` — callers opt in
+ * storage keys. Any missing section is returned as `null`, callers opt in
  * to cross-training features per discipline.
  */
 export function loadAthleteProfile(): AthleteProfile {

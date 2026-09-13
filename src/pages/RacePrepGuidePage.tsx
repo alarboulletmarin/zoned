@@ -61,7 +61,7 @@ export function RacePrepGuidePage() {
   }, []);
 
   /**
-   * A block of a section, in the article's own reading treatment — .zn-prose
+   * A block of a section, in the article's own reading treatment, .zn-prose
    * and its parts, written once in learn.css. Tips and warnings are the same
    * pulled-out callout the articles use.
    */
@@ -164,7 +164,7 @@ export function RacePrepGuidePage() {
 
   /**
    * How long a distance takes to come back from. The bar is an ordered scale,
-   * so it is painted with the ink ramp — density says "first, then, then" —
+   * so it is painted with the ink ramp, density says "first, then, then",
    * and every step is named under it, so the bar never asks the reader to
    * decode a shade on its own.
    */
@@ -303,7 +303,7 @@ export function RacePrepGuidePage() {
       />
 
       <div className="zn-guide">
-        {/* 1 — the way back, then what this page is */}
+        {/* 1, the way back, then what this page is */}
         <section
           className="zn-stack zn-guide__head"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -327,7 +327,7 @@ export function RacePrepGuidePage() {
           </p>
         </section>
 
-        {/* 2 — the reading: one moment of the preparation per tab */}
+        {/* 2, the reading: one moment of the preparation per tab */}
         <section className="zn-guide__band">
           <Tabs defaultValue={racePrepSections[0].id}>
             <TabsList className="zn-guide__tabs">
@@ -357,7 +357,7 @@ export function RacePrepGuidePage() {
           </Tabs>
         </section>
 
-        {/* 3 — and afterwards: how many days each distance costs */}
+        {/* 3, and afterwards: how many days each distance costs */}
         <section className="zn-guide__band" aria-labelledby="raceprep-recovery">
           <div
             className="zn-stack zn-guide__bandhead"

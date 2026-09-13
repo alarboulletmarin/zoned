@@ -1,4 +1,4 @@
-/* Date field — the trigger that opens the calendar. It is built on the button
+/* Date field, the trigger that opens the calendar. It is built on the button
    primitive, so the paint here turns that action pill back into a field: card
    surface, 10px field radius, the value left and the icon right.
 
@@ -49,7 +49,7 @@
 
    Le panneau ancré ne sert plus QUE le bureau : sous 640 px le calendrier
    s'ouvre dans un tiroir du bas (date-input.tsx). Les deux plafonds restent
-   pour la fenêtre courte d'un ordinateur portable — Radix décale un panneau
+   pour la fenêtre courte d'un ordinateur portable, Radix décale un panneau
    trop grand, il ne le rétrécit jamais, et sans plafond la dernière semaine du
    mois se retrouverait hors de la fenêtre, inatteignable. */
 [data-slot="popover-content"].zn-date-input__popover {
@@ -70,7 +70,7 @@
 
 /* Le calendrier prend la largeur du tiroir et garde son plafond de 320 px
    (calendar.css) : centré, il tombe sous le pouce plutôt que contre un bord.
-   L'élargir aurait coûté en HAUTEUR — une case est carrée —, et c'est la
+   L'élargir aurait coûté en HAUTEUR, une case est carrée , , et c'est la
    hauteur qui est rare ici.
 
    Le calendrier rend tout son rembourrage : le tiroir paie déjà le sien, et

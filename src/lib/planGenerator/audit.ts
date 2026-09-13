@@ -144,7 +144,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
     const week = plan.weeks[i];
     const prevWeek = i > 0 ? plan.weeks[i - 1] : null;
 
-    // Exclude race-day markers from key session checks — races are "key" events
+    // Exclude race-day markers from key session checks, races are "key" events
     // but should not trigger training-specific warnings (spacing, recovery, etc.)
     const keySessions = week.sessions.filter(
       (s) => s.isKeySession && s.workoutId !== "__race_day__" && s.workoutId !== "__intermediate_race__",
@@ -182,8 +182,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
             severity: "warning",
             code: "KEY_SESSION_ADJACENT_LONG_RUN",
             weekNumber: week.weekNumber,
-            message: `Semaine ${week.weekNumber} : séance clé (${DAY_NAMES_FR[key.dayOfWeek]}) collée à la sortie longue (${DAY_NAMES_FR[lr.dayOfWeek]}). Risque de fatigue accumulée — espacer d'au moins 1 jour.`,
-            messageEn: `Week ${week.weekNumber}: key session (${DAY_NAMES_EN[key.dayOfWeek]}) adjacent to long run (${DAY_NAMES_EN[lr.dayOfWeek]}). Risk of accumulated fatigue — space them at least 1 day apart.`,
+            message: `Semaine ${week.weekNumber} : séance clé (${DAY_NAMES_FR[key.dayOfWeek]}) collée à la sortie longue (${DAY_NAMES_FR[lr.dayOfWeek]}). Risque de fatigue accumulée, espacer d'au moins 1 jour.`,
+            messageEn: `Week ${week.weekNumber}: key session (${DAY_NAMES_EN[key.dayOfWeek]}) adjacent to long run (${DAY_NAMES_EN[lr.dayOfWeek]}). Risk of accumulated fatigue, space them at least 1 day apart.`,
             suggestion: `Déplacer la séance clé ou la sortie longue pour les séparer d'au moins 1 jour.`,
             suggestionEn: `Move the key session or long run to separate them by at least 1 day.`,
             fixable: true,
@@ -231,7 +231,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
 
     // ── Check 7: VOLUME_JUMP_TOO_LARGE ───────────────────────────────
     // Skip when previous week is recovery or has an intermediate race (expected volume dip).
-    // Skip when both weeks are at low volume — at such low absolute volumes
+    // Skip when both weeks are at low volume, at such low absolute volumes
     // (e.g., return-from-injury plans), relative jumps of 25% represent tiny absolute
     // km increases and pose negligible injury risk.
     // Threshold: 21% to absorb rounding artifacts.

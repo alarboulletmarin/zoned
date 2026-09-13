@@ -4,15 +4,15 @@
  *
  * The kit does not mock any of these screens, so NOTHING is rearranged here:
  * the columns, the cards and the order of the blocks are the ones that were
- * already on the page. This file only repaints them — it swaps Tailwind for
+ * already on the page. This file only repaints them, it swaps Tailwind for
  * tokens, drops the gradients, the translucency and the backdrop blur the
  * system forbids, and puts every figure on the mono face with tabular
  * numerals so a column of watts, paces and minutes lines up.
  *
  * Two blocks live here because they are two page frames, not two systems:
  *
- *   .zn-ct   the tests and the comparison — a form, a figure, a table
- *   .zn-rsp  the race simulator's frame — the rail, the anchor strip, the
+ *   .zn-ct   the tests and the comparison, a form, a figure, a table
+ *   .zn-rsp  the race simulator's frame, the rail, the anchor strip, the
  *            mobile action bar. The plan blocks inside it are already painted
  *            by race-sim.css and are only composed with, never redeclared.
  *
@@ -24,7 +24,7 @@
  *
  * Zone fills: the comparison paints them (the six zone codes of the
  * distribution) and therefore carries the ZoneScale legend once. The two field
- * tests do NOT — Coggan power runs to seven zones and the swim ramp to six
+ * tests do NOT, Coggan power runs to seven zones and the swim ramp to six
  * differently-named ones, so the ink ramp would order them under the wrong
  * names. Those tables name every zone in words in their first column instead,
  * which is the legend the reader actually needs.
@@ -39,7 +39,7 @@
 
 /* ── head ─────────────────────────────────────────────────────────────── */
 
-/* Mono kicker, display title, one-sentence lede — the reading order of every
+/* Mono kicker, display title, one-sentence lede, the reading order of every
    screen in the system. */
 .zn-ct__head {
   padding-block: var(--sp-10) var(--sp-13);
@@ -69,7 +69,7 @@
   min-inline-size: 0;
 }
 
-/* What is wrong with the value above, in the accent — which carries danger as
+/* What is wrong with the value above, in the accent, which carries danger as
    type, never as a second fill. The outline on the field says the same thing
    a second time. */
 .zn-ct__error {
@@ -86,7 +86,7 @@
   max-inline-size: 64ch;
 }
 
-/* A free-text field — the name of a saved comparison. Numbers use the shared
+/* A free-text field, the name of a saved comparison. Numbers use the shared
    .zn-numfield, which already frames a mono value and its unit. */
 .zn-ct__input {
   inline-size: 100%;
@@ -147,7 +147,7 @@
   --field-w: 56px;
 }
 
-/* A control that fills the column it sits in — a select trigger, the primary
+/* A control that fills the column it sits in, a select trigger, the primary
    call at the foot of the form. */
 .zn-ct__wide {
   inline-size: 100%;
@@ -164,7 +164,7 @@
   flex-wrap: wrap;
 }
 
-/* The two scenarios: side by side from 768px, one tabbed panel below it —
+/* The two scenarios: side by side from 768px, one tabbed panel below it,
    two 3-slider forms do not fit on a phone side by side. */
 .zn-ct__scenarios {
   display: none;
@@ -213,7 +213,7 @@
 /* ── table ────────────────────────────────────────────────────────────── */
 
 /* A numeric column of the ResponsiveTable. The class lands on both the <th>
-   and the <td>, so the alignment is shared — but only the cell takes the mono
+   and the <td>, so the alignment is shared, but only the cell takes the mono
    face: a column head is a kicker and keeps the kicker's own tracking. */
 .zn-ct__num {
   text-align: end;
@@ -226,7 +226,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* The zone's name — "Z4 · Seuil". The code is data, the name is prose; both
+/* The zone's name, "Z4 · Seuil". The code is data, the name is prose; both
    are read as one label, so the whole cell stays on the text face and only the
    code is emphasised. */
 .zn-ct__zonename {
@@ -256,7 +256,7 @@
 
 /* ── two series, no second colour ─────────────────────────────────────── */
 
-/* A is hollow — paper inside an ink hairline. B is solid ink. That is the
+/* A is hollow, paper inside an ink hairline. B is solid ink. That is the
    printer's way of telling two series apart, and it survives greyscale, a
    photocopy and colour blindness alike. */
 .zn-ct__chart {
@@ -412,7 +412,7 @@
   list-style: none;
 }
 
-/* La nature d'une remarque — neutre, stimulus, avertissement — se disait par
+/* La nature d'une remarque, neutre, stimulus, avertissement, se disait par
    la couleur ET l'épaisseur d'une bande latérale, et par rien d'autre : le JSX
    ne rend aucun texte de catégorie (WhatIfPage.tsx:1079, seul data-type
    existe). C'était donc déjà une infraction à WCAG 1.4.1, pas seulement une
@@ -420,21 +420,21 @@
 
    La maison a un composant qui dit ça mieux : .zn-alert, un disque qui porte
    la teinte et un mot en capitales mono qui porte le sens. On reprend son
-   vocabulaire — le disque, en CSS pur. Les trois niveaux se distinguent
+   vocabulaire, le disque, en CSS pur. Les trois niveaux se distinguent
    d'abord par le REMPLISSAGE du disque, pas par sa teinte : anneau creux,
-   disque d'encre, disque plein vermillon. Désaturé, les trois restent trois —
+   disque d'encre, disque plein vermillon. Désaturé, les trois restent trois,
    l'anneau par sa forme, l'encre et le vermillon par leur clarté, ce que la
    palette garantit par construction (voir colors.css : les hues sont choisies
-   « so the two stay separable in greyscale »).
+   so the two stay separable in greyscale).
 
    Ce que ce fichier ne peut pas faire seul : le mot. Il demande trois lignes
    dans WhatIfPage.tsx et deux clés i18n (insights.kind.stimulus / .warning),
-   hors du périmètre de ce lot — signalé, pas fait. Il viendra se poser à côté
+   hors du périmètre de ce lot, signalé, pas fait. Il viendra se poser à côté
    du disque le jour où il sera rendu ; le disque, lui, tient déjà seul.
 
    Ce que la conversion déplace, mesuré : le texte passe de 17px à 22px de
    retrait (le disque de 10px plus l'écart de 12px, contre 16px de padding plus
-   un filet). Cinq pixels, une fois, à la fabrication du bloc — pas au
+   un filet). Cinq pixels, une fois, à la fabrication du bloc, pas au
    changement d'état. Et les trois types s'alignent enfin entre eux : l'ancien
    filet d'avertissement était 1px plus épais que les deux autres, donc son
    texte était déjà décalé de ses voisins. */
@@ -502,7 +502,7 @@
 }
 
 /* Blockified: the name is composed with .zn-truncate, and an inline box
-   cannot be clipped — it would run over the buttons beside it. */
+   cannot be clipped, it would run over the buttons beside it. */
 .zn-ct__savedname {
   display: block;
   font: var(--fw-medium) var(--fs-body-sm) / 1.3 var(--font-text);
@@ -525,7 +525,7 @@
   animation: zoned-spin 700ms linear infinite;
 }
 
-/* ══ race simulator — the page frame ════════════════════════════════════ */
+/* ══ race simulator, the page frame ════════════════════════════════════ */
 
 /* The plan blocks, the pacing table, the two graphics and the run sheet are
    painted by race-sim.css. What is left here is the frame around them. */
@@ -570,7 +570,7 @@
 }
 
 /* Settings before the plan exists, the anchor rail after it. The header is in
-   flow in this design — it scrolls away — so the rail sticks to the top of the
+   flow in this design, it scrolls away, so the rail sticks to the top of the
    viewport with only the page's own breathing room above it. */
 .zn-rsp__rail {
   display: none;
@@ -630,7 +630,7 @@
 
 /* The mobile anchor strip. It used to pin 56px down, under a header that was
    fixed; that header is in flow now, so the strip pins to the top of the
-   viewport instead — 56px lower left a band of page scrolling above it. Opaque
+   viewport instead, 56px lower left a band of page scrolling above it. Opaque
    cream on an ink rule: the system has no translucency and no backdrop blur.
 
    The chips pay their own bleed for a 16px gutter; here the strip pays the
@@ -752,7 +752,7 @@
 /* ── mobile action bar ────────────────────────────────────────────────── */
 
 /* The PDF is what ends up on a phone on race morning, so its button is
-   reachable at all times below the fold. Opaque cream on an ink rule — no
+   reachable at all times below the fold. Opaque cream on an ink rule, no
    blur, no translucency. */
 .zn-rsp__bar {
   position: fixed;

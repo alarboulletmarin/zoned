@@ -1,4 +1,4 @@
-/* Nutrition — the hub and its fifteen editorial visuals.
+/* Nutrition, the hub and its fifteen editorial visuals.
  *
  * This was the app's densest use of decorative colour: nine hues of gradient
  * card, tinted icon boxes, coloured verdict dots. It is now ink on paper like
@@ -17,7 +17,7 @@
  * Emphasis follows the system's two allowed marks and nothing else: a full ink
  * inversion (the current section in the table of contents, the corrected claim
  * in CrampsScience) or a 2.5px vermillon frame (the recommended carb ratio,
- * race day). No gradient, no blur, no shadow — every card here lies flat on
+ * race day). No gradient, no blur, no shadow, every card here lies flat on
  * the page and its 1.5px outline is what makes it a thing.
  *
  * Layout comes from _layout.css (.zn-grid, .zn-row, .zn-stack, .zn-cluster)
@@ -45,7 +45,7 @@
 }
 
 /* The recommended option, the race day: a 2.5px vermillon frame. A frame, not
-   a fill — the screen's one vermillon fill is the hero's calculator button. */
+   a fill, the screen's one vermillon fill is the hero's calculator button. */
 .zn-nut-card[data-emphasis="accent"] {
   border: var(--border-heavy);
 }
@@ -123,7 +123,7 @@
 }
 
 /* A short fact in a box: a duration, a dose, a verdict. Mono, uppercase,
-   outlined — the badge shape without pulling <Badge> into a data cell. */
+   outlined, the badge shape without pulling <Badge> into a data cell. */
 .zn-nut-tag {
   display: inline-flex;
   align-items: center;
@@ -209,7 +209,7 @@
 /* ── the ordinal ramp ─────────────────────────────────────────────────── */
 
 /* Position on an ordered scale, painted with the zone ink ramp: darker is
-   further along. Six steps, written out rather than interpolated — the same
+   further along. Six steps, written out rather than interpolated, the same
    reason zone.css writes its six out. Nothing here claims to be a training
    zone, so the page shows no ZoneScale legend; these are steps of a caffeine
    protocol, a countdown and an evidence ladder. */
@@ -360,7 +360,7 @@
   color: var(--text-body);
 }
 
-/* The section you are reading: a full ink inversion. Never a faint tint —
+/* The section you are reading: a full ink inversion. Never a faint tint,
    a tint is what the design brief calls unfinished. */
 .zn-nut-toc__link[aria-current="true"] {
   background: var(--surface-inverse);
@@ -689,7 +689,7 @@
 /* ── supplements ──────────────────────────────────────────────────────── */
 
 /* The AIS evidence ladder, A to D, on the ramp: A is solid ink, D is the
-   45 degree hatch the system reserves for the unmeasured — which is exactly
+   45 degree hatch the system reserves for the unmeasured, which is exactly
    what category D means. */
 .zn-nut-ais {
   inline-size: 26px;

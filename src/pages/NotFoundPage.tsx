@@ -8,15 +8,15 @@ import WalkingAway from "@/assets/doodles/walking-away.svg?react";
  * The one screen the design kit deliberately leaves unmocked: it says a 404
  * is an `Alert kind="error"` on an otherwise empty page, and nothing more.
  *
- * The copy follows the system's rule for an error — what happened, what is
- * still intact, and the way out — because an error with no way forward is a
+ * The copy follows the system's rule for an error, what happened, what is
+ * still intact, and the way out, because an error with no way forward is a
  * dead end.
  *
  * The drawing is the sentence. The ground rule starts at the left edge of the
  * screen and stops; a figure walks toward the void past its end, and the
  * status code is a mono dimension printed where the ground ran out. That is
- * what the alert and its pictogram used to say — with a figure competing
- * against a glyph in a pink fill — so both are gone. The figure is the
+ * what the alert and its pictogram used to say, with a figure competing
+ * against a glyph in a pink fill, so both are gone. The figure is the
  * existing walking-away drawing turned round by CSS: a stage direction, not a
  * correction of an approved drawing.
  */

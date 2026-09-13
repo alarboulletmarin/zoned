@@ -1,6 +1,6 @@
-/* Le cockpit — /today.
+/* Le cockpit, /today.
  *
- * Un seul primaire, et c'est « ouvrir ». Tout le reste est en encre ou en
+ * Un seul primaire, et c'est ouvrir. Tout le reste est en encre ou en
  * contour : si tout appelle, plus rien n'a de priorité.
  *
  * La première version empilait cinq boîtes de la même forme sur 1838 px de
@@ -17,7 +17,7 @@
  * juste pour une page qu'on lit. Ici la page tenait dans 1072 px de conteneur
  * mais tout se collait à gauche : ~700 px de vide à droite, et un dessin seul
  * au milieu de rien. Un écran qu'on consulte dix secondes debout n'a pas de
- * colonne à remplir — il a un centre de gravité à avoir.
+ * colonne à remplir, il a un centre de gravité à avoir.
  *
  * Le TEXTE reste aligné à gauche à l'intérieur : c'est le bloc qui se centre,
  * pas les lignes. Un titre centré et un corps centré se lisent moins bien. */
@@ -61,7 +61,7 @@
  *
  * Une figure, pas un contrôle : aucun cadre, aucun fond, aucun survol. Ce qui
  * se lit comme cliquable doit l'être, et un jour cliquable serait de la
- * navigation — donc un `role` et son contrat clavier.
+ * navigation, donc un `role` et son contrat clavier.
  */
 
 .zn-cockpit__week {
@@ -69,8 +69,8 @@
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: var(--sp-3);
   align-items: end;
-  /* Elle s'asseyait sur un filet — « le sol de la page, la même règle que pour
-     les doodles ». Sans filet, l'écart la sépare de ce qui suit, et il est
+  /* Elle s'asseyait sur un filet, le sol de la page, la même règle que pour
+     les doodles. Sans filet, l'écart la sépare de ce qui suit, et il est
      plus large que les 12 px qu'elle payait : c'est lui, seul, qui doit dire
      que la semaine se termine là. */
   padding-block-end: calc(var(--gap-section) / 2);
@@ -78,7 +78,7 @@
 
 /* Chaque jour qui porte une séance est un LIEN vers elle : c'est ce qui fait
    tomber la séance de n'importe quel jour à un seul tap. Un jour de repos est
-   un `span` — il n'y a rien à ouvrir, et un lien qui ne mène nulle part est un
+   un `span`, il n'y a rien à ouvrir, et un lien qui ne mène nulle part est un
    faux affordance. */
 .zn-cockpit__day {
   display: flex;
@@ -92,7 +92,7 @@
   color: inherit;
 }
 
-/* Au survol, c'est la barre qui répond — pas un fond de cellule, qui
+/* Au survol, c'est la barre qui répond, pas un fond de cellule, qui
    transformerait la bande en rangée de boutons. */
 a.zn-cockpit__day:hover .zn-cockpit__day-bar {
   background: var(--ink-2);
@@ -118,7 +118,7 @@ a.zn-cockpit__day:active {
   font-weight: var(--fw-bold);
 }
 
-/* La barre porte deux canaux à la fois — l'opacité d'encre ET la hauteur —
+/* La barre porte deux canaux à la fois, l'opacité d'encre ET la hauteur,
    exactement comme --zone-h-N dans zones.css. C'est ce qui garde la bande
    lisible en niveaux de gris, qui est l'argument du système. */
 .zn-cockpit__day-bar {
@@ -145,15 +145,15 @@ a.zn-cockpit__day:active {
 
 /* Le plan auquel la séance appartient. UN LIBELLÉ, pas une phrase.
  *
- * Il disait « Dans « Reprise après longue pause » » en corps de texte : seize
+ * Il disait Dans Reprise après longue pause en corps de texte : seize
  * pixels, soit le poids d'une ligne qu'on lit, pour une information qu'on
- * vérifie du coin de l'œil — et des guillemets français qui n'apparaissent
+ * vérifie du coin de l'œil, et des guillemets français qui n'apparaissent
  * nulle part ailleurs dans l'interface pour citer le nom d'un objet. Le fil
  * d'Ariane de la séance pose déjà ce même nom nu.
  *
- * Donc la forme que l'app emploie partout pour « rôle : valeur » : le rôle en
+ * Donc la forme que l'app emploie partout pour rôle : valeur : le rôle en
  * mono capitales (.zn-kicker), la valeur à côté. Les guillemets partent avec
- * la préposition — le libellé dit ce que le nom est, la ponctuation n'a plus
+ * la préposition, le libellé dit ce que le nom est, la ponctuation n'a plus
  * rien à porter. */
 .zn-cockpit__plan {
   display: inline-flex;
@@ -191,7 +191,7 @@ a.zn-cockpit__day:active {
   text-decoration-color: currentColor;
 }
 
-/* Au doigt, la ligne doit rester atteignable — même règle que les deux
+/* Au doigt, la ligne doit rester atteignable, même règle que les deux
    sorties plus bas. */
 @media (pointer: coarse) {
   .zn-cockpit__plan {
@@ -235,8 +235,8 @@ a.zn-cockpit__day:active {
 
 /* ── La figure ──────────────────────────────────────────────────────────── */
 
-/* La figure de la porte est un PORTRAIT : dimensionnée par la largeur — la
-   seule façon correcte, le viewBox donnant le ratio — 260 px de large en
+/* La figure de la porte est un PORTRAIT : dimensionnée par la largeur, la
+   seule façon correcte, le viewBox donnant le ratio, 260 px de large en
    faisaient 450 de haut, soit un écran de téléphone pour un dessin de
    clôture. */
 .zn-cockpit__art {

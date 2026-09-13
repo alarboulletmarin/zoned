@@ -84,7 +84,7 @@ const DURATION_MAX = 300;
 
 /* ── Chip ──
    A filter value the athlete switches on or off. Selected is a full ink
-   inversion, never a tint — the paint lives in `library.css`. */
+   inversion, never a tint, the paint lives in `library.css`. */
 function Chip({
   label,
   selected,
@@ -131,7 +131,7 @@ function FilterRow({
   );
 }
 
-/* ── Expandable chip group — progressive disclosure ──
+/* ── Expandable chip group, progressive disclosure ──
    Renders straight into the row rather than into a box of its own, so a long
    list still reads as one line of chips. */
 function ExpandableChipGroup({
@@ -171,7 +171,7 @@ function ExpandableChipGroup({
  * The filter band: rows of chips under the discipline strip, then the duration
  * range, the favourites switch and the clear button.
  *
- * It is one band on every viewport — the drawer it used to hide behind on
+ * It is one band on every viewport, the drawer it used to hide behind on
  * mobile is gone, so the same filters are visible whatever the screen.
  */
 export function WorkoutFilters({

@@ -1,5 +1,5 @@
 /**
- * Cycling Pace Engine — Evidence-based training zone calculations (power + HR).
+ * Cycling Pace Engine, Evidence-based training zone calculations (power + HR).
  *
  * Implements the Coggan 7-zone system derived from Functional Threshold Power
  * (FTP). When FTP is unavailable, the engine falls back to Friel's 7-zone HR
@@ -8,7 +8,7 @@
  * References:
  * - Allen, H. & Coggan, A. (2019). Training and Racing with a Power Meter, 3rd ed.
  * - Friel, J. (2018). The Cyclist's Training Bible, 5th ed. (HR zones).
- * - Seiler, S. (2010). Intensity distribution — applies cross-discipline.
+ * - Seiler, S. (2010). Intensity distribution, applies cross-discipline.
  */
 
 import type { Difficulty } from "@/types";
@@ -67,13 +67,13 @@ export interface CyclingZones {
 // Higher upper bounds (Z5+) are practical training caps; Z7 is open-ended.
 
 const COGGAN_FTP_PCT: Record<CogganZone, [number, number | undefined]> = {
-  Z1: [0, 55],    // Active recovery    — <55% FTP
-  Z2: [56, 75],   // Endurance          — 56–75% FTP
-  Z3: [76, 90],   // Tempo              — 76–90% FTP
-  Z4: [91, 105],  // Lactate Threshold  — 91–105% FTP
-  Z5: [106, 120], // VO2max             — 106–120% FTP
-  Z6: [121, 150], // Anaerobic capacity — 121–150% FTP
-  Z7: [151, undefined], // Neuromuscular — >150% FTP, short bursts
+  Z1: [0, 55],    // Active recovery, <55% FTP
+  Z2: [56, 75],   // Endurance, 56-75% FTP
+  Z3: [76, 90],   // Tempo, 76-90% FTP
+  Z4: [91, 105],  // Lactate Threshold, 91-105% FTP
+  Z5: [106, 120], // VO2max, 106-120% FTP
+  Z6: [121, 150], // Anaerobic capacity, 121-150% FTP
+  Z7: [151, undefined], // Neuromuscular, >150% FTP, short bursts
 };
 
 // Friel 7-zone HR bounds expressed as % of threshold HR (LTHR).
@@ -102,7 +102,7 @@ const FALLBACK_FTP_WATTS: Record<Difficulty, number> = {
 // ── Intensity factor mapping per zone ──────────────────────────────
 // Used for TSS calculation and cross-discipline load equivalence.
 // IF is the power output normalized by FTP (NP/FTP); these are zone midpoints
-// chosen to align with the running and swimming scales at Z1–Z4 so that
+// chosen to align with the running and swimming scales at Z1-Z4 so that
 // cross-discipline substitution at aerobic zones has a meaningful match.
 
 export const COGGAN_ZONE_INTENSITY_FACTORS: Record<CogganZone, number> = {
@@ -247,11 +247,11 @@ export function cyclingSessionTypeToZone(sessionType: string): CogganZone {
 /** Format a power range as a compact "min-max W" string. */
 export function formatPowerRange(zone: PowerZone): string {
   if (zone.maxWatts === undefined) return `${zone.minWatts}+ W`;
-  return `${zone.minWatts}–${zone.maxWatts} W`;
+  return `${zone.minWatts}-${zone.maxWatts} W`;
 }
 
 /** Format an HR range as a compact "min-max bpm" string. */
 export function formatHrRange(zone: HrZone): string {
   if (zone.maxBpm === undefined) return `${zone.minBpm}+ bpm`;
-  return `${zone.minBpm}–${zone.maxBpm} bpm`;
+  return `${zone.minBpm}-${zone.maxBpm} bpm`;
 }

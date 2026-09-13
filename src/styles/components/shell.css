@@ -1,4 +1,4 @@
-/* App shell — the page frame every route is drawn inside: the skip link, the
+/* App shell, the page frame every route is drawn inside: the skip link, the
    flex column that pins the footer to the bottom, and the centred content
    column that `PageContainer` also emits.
 
@@ -38,7 +38,7 @@
    session, and the last row of the page has to clear it.
 
    The reserve is NOT paid by .zn-app__body: its padding would sit below the
-   footer, and the footer ends on an inverted ink bar — the page colour would
+   footer, and the footer ends on an inverted ink bar, the page colour would
    show as a band under it on every phone. So the surface that actually ends
    the document pays. Here that is the page itself, on the routes that hide
    the footer (`:last-child` is exactly that condition); the footer pays for
@@ -65,7 +65,7 @@
 
 /* ── content column ───────────────────────────────────────────────────── */
 
-/* The screen's centred measure plus its side margins — 40px, 20px on mobile,
+/* The screen's centred measure plus its side margins, 40px, 20px on mobile,
    straight off --pad-screen-x. Width is chosen with data-width so the
    component keeps its four-value prop API. */
 .zn-page {
@@ -87,7 +87,7 @@
   max-inline-size: none;
 }
 
-/* A page that draws its own edges — a map, a canvas. */
+/* A page that draws its own edges, a map, a canvas. */
 .zn-page[data-flush="true"] {
   padding-inline: 0;
 }
@@ -100,7 +100,7 @@
 
 /* The reserve a lazy route holds while it loads. It is a viewport tall for one
    reason: the footer sits under it, and a short page resolving into a shorter
-   hold would drag the footer up into view — appearing is free, moving is a
+   hold would drag the footer up into view, appearing is free, moving is a
    layout shift, and the Lighthouse budget on this project is CLS exactly 0. */
 .zn-page__hold {
   min-block-size: 100vh;

@@ -11,7 +11,7 @@ const MOMENTS: Array<{
   { key: "evening", Icon: Moon },
 ];
 
-/** Morning, day, evening — ordered by the clock, so the glyphs walk the ramp. */
+/** Morning, day, evening, ordered by the clock, so the glyphs walk the ramp. */
 export function WaterMeter() {
   const { t } = useTranslation("nutrition");
 

@@ -1,4 +1,4 @@
-/* Race simulator — the km-by-km plan: the settings form, the anchor rail, the
+/* Race simulator, the km-by-km plan: the settings form, the anchor rail, the
    collapsible plan blocks, the pacing table, two data graphics and the
    race-morning run sheet.
 
@@ -9,7 +9,7 @@
        and distances lines up whatever the digits are;
      - the two graphics (pace curve, timeline) are ink on paper. 1px hairlines
        are allowed inside dense data, axis lines are --line-axis, and the only
-       vermillon is the "now" marker — a stroke and a word, not a fill.
+       vermillon is the "now" marker, a stroke and a word, not a fill.
 
    No zone fills are painted anywhere in this family, so no ZoneScale legend is
    owed: the plan is chronological, not zoned. The screen's single accent fill
@@ -31,7 +31,7 @@
   color: var(--text-body);
 }
 
-/* The unit trailing a figure — "/km", "kg". It is not the figure. */
+/* The unit trailing a figure, "/km", "kg". It is not the figure. */
 .zn-rs-stat__unit {
   font-family: var(--font-text);
   font-size: var(--fs-body-sm);
@@ -110,7 +110,7 @@
   letter-spacing: var(--ls-h4);
 }
 
-/* What a folded section still tells you — "28 min", "9 points". */
+/* What a folded section still tells you, "28 min", "9 points". */
 .zn-rs-section__meta {
   flex: none;
   font-family: var(--font-mono);
@@ -179,14 +179,14 @@
    même chose de deux façons opposées selon la largeur de l'écran : bande
    vermillon sur l'arête gauche au-dessus de 1024px, inversion d'encre pleine
    sur les puces en dessous (.zn-rs-chip[aria-current], soixante lignes plus
-   bas) — la page changeait de vocabulaire au redimensionnement. C'est la puce
+   bas), la page changeait de vocabulaire au redimensionnement. C'est la puce
    qui avait raison ; le rail adopte sa forme. Et une pilule ne se pose pas sur
    un filet, donc le filet s'en va avec.
 
    ZÉRO DÉCALAGE, et le calc de padding est mesuré et non déduit : le filet du
    rail, la marge négative et la bordure réservée valaient ENSEMBLE 1.5px de
    retrait une fois rendus, pas 2.5px comme l'arithmétique nominale le laisse
-   croire — Chrome ramène une bordure de 2.5px à 2 et une de 1.5px à 1. Le
+   croire, Chrome ramène une bordure de 2.5px à 2 et une de 1.5px à 1. Le
    texte était à listeBorderBox + 13.5px, il y reste. La hauteur ne bouge pas
    non plus : aucune bordure verticale n'est ajoutée, le padding-block reste à
    sp-5. */
@@ -268,7 +268,7 @@
   transform: translateY(var(--press-shift));
 }
 
-/* The section you are in is a FULL INK INVERSION — the system's one way of
+/* The section you are in is a FULL INK INVERSION, the system's one way of
    saying "selected". */
 .zn-rs-chip[aria-current="true"] {
   background: var(--ink-1);
@@ -337,7 +337,7 @@
 
 /* ── the form ─────────────────────────────────────────────────────────── */
 
-/* A field: raised paper, full ink outline, 10px radius, 44px touch floor —
+/* A field: raised paper, full ink outline, 10px radius, 44px touch floor,
    the same field the select trigger and the date input already are. */
 .zn-rs-field {
   box-sizing: border-box;
@@ -804,7 +804,7 @@
   stroke-width: var(--bw-rule);
 }
 
-/* The two axis lines are the fastest and the slowest split — the pair the
+/* The two axis lines are the fastest and the slowest split, the pair the
    caption prints. 1px, which is what dense data is allowed. */
 .zn-rs-curve__axis {
   stroke: var(--line-axis);
@@ -905,11 +905,11 @@
 /* Maintenant. Le filet gauche n'est PAS une bande décorative : c'est le tronc
    de la frise, le même que .zn-rs-timeline__row porte ligne après ligne, à la
    même épaisseur et au même retrait. Le supprimer trouerait la colonne
-   verticale sur 40px et décalerait la ligne de 17.5px vers la gauche — c'est
+   verticale sur 40px et décalerait la ligne de 17.5px vers la gauche, c'est
    pour ça qu'on ne le retire pas : on le repeint.
 
    Il redevient donc le gris du tronc. Ce qu'on perd est le quatrième canal de
-   trop : la ligne dit déjà « maintenant » par la pastille vermillon, par
+   trop : la ligne dit déjà maintenant par la pastille vermillon, par
    l'heure en mono gras vermillon, par le mot en capitales vermillon et par le
    filet horizontal qui le prolonge (RaceTimeline.tsx:69-75). Le vermillon
    vertical ne disait rien que les trois autres ne disent.
@@ -997,7 +997,7 @@
 }
 
 /* What happens next: the one live thing on the page, so it wears the 2.5px
-   vermillon frame. A frame, not a fill — the screen's fill is the PDF button. */
+   vermillon frame. A frame, not a fill, the screen's fill is the PDF button. */
 .zn-card.zn-rs-next {
   border: var(--border-heavy);
 }

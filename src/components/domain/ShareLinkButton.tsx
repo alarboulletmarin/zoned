@@ -35,7 +35,7 @@ export function ShareLinkButton({
       try {
         await navigator.share(title ? { title, url } : { url });
       } catch {
-        // Share sheet dismissed — nothing to do.
+        // Share sheet dismissed, nothing to do.
       }
       return;
     }

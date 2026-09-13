@@ -33,7 +33,7 @@ interface MuscleMapProps {
 }
 
 /**
- * Heatmap intensity ramp for the body model — yellow → orange → red.
+ * Heatmap intensity ramp for the body model, yellow → orange → red.
  * Centralised here because react-body-highlighter renders raw SVG fill
  * attributes that don't resolve CSS custom properties; if the design
  * system needs to reskin these via a token, this list is the single

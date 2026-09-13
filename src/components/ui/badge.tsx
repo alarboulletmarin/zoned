@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 type BadgeVariant = "default" | "secondary" | "destructive" | "outline";
 
 /**
- * Class names for a badge rendered by something that is not this component —
+ * Class names for a badge rendered by something that is not this component,
  * a dropdown trigger, a bare `<a>`. Prefer `<Badge asChild>`.
  *
  * The paint lives in `src/styles/components/badge.css`. `<Badge>` itself is

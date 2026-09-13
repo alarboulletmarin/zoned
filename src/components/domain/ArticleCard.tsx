@@ -14,8 +14,8 @@ interface ArticleCardProps {
 /**
  * One article in the "Comprendre" index.
  *
- * The category is the only badge, the reading time is always shown — it is
- * the promise the card makes — and the whole card is the target, so there is
+ * The category is the only badge, the reading time is always shown, it is
+ * the promise the card makes, and the whole card is the target, so there is
  * no "Lire" button to add.
  */
 export function ArticleCard({ article, className }: ArticleCardProps) {

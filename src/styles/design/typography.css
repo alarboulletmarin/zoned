@@ -1,9 +1,9 @@
 /* Three families, three jobs. Bricolage Grotesque displays, Space Grotesk
    speaks, JetBrains Mono counts. Floors: 24px on a presentation screen,
-   14px for interface body text, 10px for a mono micro-label — and a
+   14px for interface body text, 10px for a mono micro-label, and a
    micro-label is only ever uppercase, never a sentence. */
 :root {
-  /* display — Bricolage Grotesque, tight and negative-tracked */
+  /* display, Bricolage Grotesque, tight and negative-tracked */
   --fs-display-1: 88px;   --lh-display-1: 0.9;   --ls-display-1: -0.035em;
   --fs-display-2: 68px;   --lh-display-2: 0.92;  --ls-display-2: -0.035em;
   --fs-display-3: 46px;   --lh-display-3: 0.98;  --ls-display-3: -0.025em;
@@ -12,13 +12,13 @@
   --fs-h3: 26px;          --lh-h3: 1.05;         --ls-h3: -0.02em;
   --fs-h4: 21px;          --lh-h4: 1.05;         --ls-h4: -0.02em;
 
-  /* text — Space Grotesk */
+  /* text, Space Grotesk */
   --fs-body-lg: 19px;     --lh-body-lg: 1.55;
   --fs-body: 16px;        --lh-body: 1.55;
   --fs-body-sm: 14px;     --lh-body-sm: 1.55;
   --fs-caption: 13px;     --lh-caption: 1.5;
 
-  /* mono — data, codes, micro-labels. Uppercase + wide tracking. */
+  /* mono, data, codes, micro-labels. Uppercase + wide tracking. */
   --fs-mono: 12px;        --ls-mono: 0.04em;
   --fs-mono-sm: 11px;     --ls-mono-label: 0.14em;
   --fs-mono-xs: 10px;     --ls-mono-kicker: 0.16em;
@@ -42,15 +42,15 @@
 }
 
 /* Mobile: the display sizes are set for a 1440px page and do not survive a
-   390px one. Only the display steps shrink — body, mono and the spacing grid
+   390px one. Only the display steps shrink, body, mono and the spacing grid
    stay put, so line lengths and hit targets are unaffected.
 
    Le barreau a encore baissé d'un cran le 12 septembre 2026, sur une remarque
-   qui visait toute l'app : « les textes et les boutons sont tous gros ». Elle
+   qui visait toute l'app : les textes et les boutons sont tous gros. Elle
    est juste, et elle ne vise QUE les pas d'affiche : une bannière de 44 px sur
    une colonne de 350 fait quatre à cinq mots par ligne, donc trois lignes pour
-   un titre de dix mots, donc cent trente pixels d'écran — un cinquième de ce
-   qu'on voit — pour une phrase qu'on lit une fois.
+   un titre de dix mots, donc cent trente pixels d'écran, un cinquième de ce
+   qu'on voit, pour une phrase qu'on lit une fois.
 
    Ce qui NE bouge pas, et c'est le point : le corps de texte reste à 16 px
    (iOS pose 17 pt, Material 16 sp ; en dessous de 16 un champ de saisie fait

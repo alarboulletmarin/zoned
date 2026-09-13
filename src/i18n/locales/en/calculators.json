@@ -13,7 +13,7 @@
       "race": "Race & planning"
     },
     "hub": {
-      "seoTitle": "Calculators — Running Tools",
+      "seoTitle": "Calculators, Running Tools",
       "seoDescription": "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation.",
       "seoCollectionName": "Running Calculators"
     },
@@ -178,7 +178,7 @@
       "customDistanceLabel": "Custom distance in km"
     },
     "equivalence": {
-      "seoTitle": "Race Equivalence — Riegel Formula",
+      "seoTitle": "Race Equivalence, Riegel Formula",
       "seoDescription": "Race time equivalence calculator using the Riegel formula. Predict your finish times across 5K, 10K, half marathon, and marathon from one race result.",
       "seoAppName": "Race Equivalence Calculator",
       "seoAppDescription": "Predict your race times across all distances from a recent result",
@@ -201,7 +201,7 @@
       "kicker": "5K → marathon"
     },
     "ageGraded": {
-      "seoTitle": "Age-Graded Performance — Level Score",
+      "seoTitle": "Age-Graded Performance, Level Score",
       "seoDescription": "Age-graded performance calculator for runners. Compare your race time to the age and gender adjusted world record and discover your performance level.",
       "seoAppName": "Age-Graded Performance Calculator",
       "seoAppDescription": "Compare your performance to the age and gender adjusted world record",
@@ -296,7 +296,7 @@
     "exportAll": "Export all",
     "noWorkoutsYet": "No custom workouts yet",
     "createFirst": "Create your first workout above",
-    "noWorkoutsDescription": "No custom workout in this browser. You can keep 20 — start with the first one.",
+    "noWorkoutsDescription": "No custom workout in this browser. You can keep 20, start with the first one.",
     "listKicker_one": "{{count}} workout saved",
     "listKicker_other": "{{count}} workouts saved",
     "editorKicker": "Local draft",

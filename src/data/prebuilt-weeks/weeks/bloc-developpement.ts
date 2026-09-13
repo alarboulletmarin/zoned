@@ -1,14 +1,14 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Bloc développement (seuil) — 6 sessions, two threshold days spaced (Tue/Thu),
+ * Bloc développement (seuil), 6 sessions, two threshold days spaced (Tue/Thu),
  * easy days between, long run Saturday. Higher load, still ~80/20.
  */
 export const blocDeveloppement: PrebuiltWeek = {
   id: "bloc-developpement-seuil",
   slug: "bloc-developpement-seuil",
-  name: "Bloc développement — seuil",
-  nameEn: "Build Block — Threshold",
+  name: "Bloc développement, seuil",
+  nameEn: "Build Block, Threshold",
   description:
     "Deux séances de seuil espacées, encadrées de facile, avec sortie longue. La semaine qui élève le plafond aérobie quand la base est posée.",
   descriptionEn:
@@ -16,12 +16,12 @@ export const blocDeveloppement: PrebuiltWeek = {
   icon: "TrendingUp",
   difficulty: "intermediate",
   category: "build",
-  provenance: "Travail au seuil — Jack Daniels (Running Formula)",
-  provenanceEn: "Threshold work — Jack Daniels (Running Formula)",
+  provenance: "Travail au seuil, Jack Daniels (Running Formula)",
+  provenanceEn: "Threshold work, Jack Daniels (Running Formula)",
   whyItWorks:
-    "Deux séances au seuil dans la semaine, séparées par au moins 48 h de facile, augmentent la vitesse à laquelle le lactate commence à s'accumuler — un déterminant majeur de la performance en endurance. L'alternance dur / facile respecte la supercompensation : chaque stimulus est suivi d'une récupération réelle avant le suivant.",
+    "Deux séances au seuil dans la semaine, séparées par au moins 48 h de facile, augmentent la vitesse à laquelle le lactate commence à s'accumuler, un déterminant majeur de la performance en endurance. L'alternance dur / facile respecte la supercompensation : chaque stimulus est suivi d'une récupération réelle avant le suivant.",
   whyItWorksEn:
-    "Two threshold sessions a week, separated by at least 48 h of easy running, raise the speed at which lactate starts to accumulate — a key endurance determinant. The hard/easy alternation respects supercompensation: each stimulus is followed by real recovery before the next.",
+    "Two threshold sessions a week, separated by at least 48 h of easy running, raise the speed at which lactate starts to accumulate, a key endurance determinant. The hard/easy alternation respects supercompensation: each stimulus is followed by real recovery before the next.",
   settings: {
     sessions: 6,
     targetVolumeH: 6,

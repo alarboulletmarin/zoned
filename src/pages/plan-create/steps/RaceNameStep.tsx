@@ -1,6 +1,6 @@
 import type { StepContext, StepDef } from "../types";
 
-/** Le nom de la course. Facultatif — d'où le « passer ». */
+/** Le nom de la course. Facultatif, d'où le passer. */
 function RaceNameBody({ form, setForm, uid, t, goForward }: StepContext) {
   return (
     <div className="zn-contrib-field">

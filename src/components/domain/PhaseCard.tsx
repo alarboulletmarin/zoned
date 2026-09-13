@@ -1,11 +1,11 @@
 /**
- * PhaseCard — one phase of a session (warmup, main set, cooldown).
+ * PhaseCard, one phase of a session (warmup, main set, cooldown).
  *
  * Running and strength sessions used to render this header independently,
  * down to the same duplicated class string. They share it now.
  *
  * Heading level: the page owns the h1, the enclosing Section owns the h2,
- * so a phase label is an h3. It is deliberately *not* mono-uppercase — that
+ * so a phase label is an h3. It is deliberately *not* mono-uppercase, that
  * treatment belongs to Section eyebrows, and reusing it here was one of the
  * three competing header styles on the session page.
  */

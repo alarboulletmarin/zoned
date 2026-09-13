@@ -28,11 +28,11 @@ interface DraftPayload<F> {
    * L'identifiant de l'étape, en plus de son index.
    *
    * L'index seul ne désigne plus la même question dès que la liste d'étapes
-   * dépend des réponses : un brouillon arrêté à « Niveau » (index 5 d'un
-   * parcours course) revenait sur « Allure » si le parcours restauré était
+   * dépend des réponses : un brouillon arrêté à Niveau (index 5 d'un
+   * parcours course) revenait sur Allure si le parcours restauré était
    * plus court. On résout par id, et l'index ne sert que de repli.
    *
-   * Absent des brouillons écrits avant son existence — d'où l'optionnel.
+   * Absent des brouillons écrits avant son existence, d'où l'optionnel.
    */
   stepId?: string;
   form: F;
@@ -79,7 +79,7 @@ export function usePlanDraft<F>(
   // Snapshot the initial inputs so we can detect whether the effect is firing
   // for the *initial* state (no real user change yet) or after a setter has
   // produced a fresh reference. Persisting the initial state would overwrite
-  // a saved draft before the user has had a chance to click "Reprendre" —
+  // a saved draft before the user has had a chance to click "Reprendre",
   // a silent data-loss bug that surfaced under React Strict Mode in dev,
   // where the effect fires twice on mount.
   const initialFormRef = useRef(form);
@@ -90,11 +90,11 @@ export function usePlanDraft<F>(
   optionsRef.current = options;
 
   // Persist every meaningful change. localStorage writes are ~µs on modern
-  // hardware so we don't bother debouncing — and the synchronous write means
+  // hardware so we don't bother debouncing, and the synchronous write means
   // beforeunload / pagehide always sees the latest snapshot.
   useEffect(() => {
     if (finalizedRef.current) return;
-    // Skip while the inputs are still the *initial* references — that
+    // Skip while the inputs are still the *initial* references, that
     // covers both first effect run and Strict Mode's second pass.
     if (
       form === initialFormRef.current &&
@@ -131,13 +131,13 @@ export function usePlanDraft<F>(
     /* L'étape se retrouve par son ID, jamais par son index.
      *
      * Un index n'a de sens que dans le parcours où il a été écrit. Quand une
-     * étape s'ajoute en tête — la pratique — l'index 5 qui désignait « Niveau »
-     * désigne maintenant « Courses de prépa » : on reprendrait à la mauvaise
+     * étape s'ajoute en tête, la pratique, l'index 5 qui désignait Niveau
+     * désigne maintenant Courses de prépa : on reprendrait à la mauvaise
      * question, en silence, ce qui est pire que de reprendre au début.
      *
      * Donc : l'id s'il est là et qu'il existe encore dans le parcours
      * restauré ; sinon on repart de la première étape. Ce n'est pas une perte
-     * — toutes les réponses sont restaurées, on ne fait que les retraverser —
+     *, toutes les réponses sont restaurées, on ne fait que les retraverser,
      * et ça ne concerne que les brouillons écrits avant que `stepId` existe. */
     const byId =
       draft.stepId && opts?.resolveStepIndex

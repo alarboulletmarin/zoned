@@ -5,7 +5,7 @@ import "./styles/index.css";
 import "./i18n";
 
 /* The shell holds for two full strides before it hands over: --rc-start
-   (0ms — the figure runs from the first frame) plus twice --rc-dur (660ms, the
+   (0ms, the figure runs from the first frame) plus twice --rc-dur (660ms, the
    six-frame cycle), both declared in index.html. 1.56s on screen with the fade.
 
    It is the one number to move if the opening feels long or short, and it must
@@ -13,7 +13,7 @@ import "./i18n";
 
    The hold is not a preference, it fixes a defect. The shell used to be
    dismissed on the first frame after the bundle ran, and a warm
-   service-worker load executes that bundle in under 200ms — the figure never
+   service-worker load executes that bundle in under 200ms, the figure never
    took a single step. Nobody ever saw the animation, not "barely".
 
    src/assets/doodles/frames.test.ts asserts this is --rc-start plus a WHOLE
@@ -41,7 +41,7 @@ createRoot(document.getElementById("root")!).render(
 /* Hide the shell once the app has mounted AND the strides are over.
    How much is left is measured against the RUN CYCLE'S OWN CLOCK, not against
    navigation. A CSS animation starts when its element is first rendered, and
-   that is a long way after navigationStart — measured at 250ms on a cold
+   that is a long way after navigationStart, measured at 250ms on a cold
    production preview, not the "few milliseconds" this comment used to claim.
    Holding `SHELL_HOLD_MS` from navigation therefore cut a quarter of a stride
    off the end, which is exactly what the whole-stride arithmetic exists to
@@ -59,7 +59,7 @@ createRoot(document.getElementById("root")!).render(
    there when the tab came back.
 
    Reduced motion no longer skips the hold. Losing the launch screen entirely
-   is not what that setting asks for — it asks for no vestibular motion, and a
+   is not what that setting asks for, it asks for no vestibular motion, and a
    held still image is not motion. The shell is shown and held either way; CSS
    alone decides whether the figure moves (index.html, run-cycle.css). Only an
    explicit "never" from Settings hands over immediately.
@@ -82,6 +82,6 @@ else window.setTimeout(hideLoadingShell, remaining);
 
 // The service worker is registered by <UpdatePrompt> (src/components/domain),
 // which owns the update banner. It used to be registered here, with a rule that
-// silently reloaded the page when an update arrived within 10s of load — a
+// silently reloaded the page when an update arrived within 10s of load, a
 // reload nobody asked for, on an app whose data is entirely local. Nothing
 // reloads now but the button in that banner.

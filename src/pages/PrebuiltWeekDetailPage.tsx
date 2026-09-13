@@ -33,7 +33,7 @@ const DIFFICULTY_KEYS: Record<string, string> = {
  * One ready-made week, read before it is taken.
  *
  * The sheet reads: what this week is (mono facts), its name, one paragraph,
- * the one call — then the preview, why the week works, and why each session is
+ * the one call, then the preview, why the week works, and why each session is
  * where it is. Its provenance is printed in mono under the block that claims
  * it, never invoked as "des études montrent".
  */
@@ -59,7 +59,7 @@ export function PrebuiltWeekDetailPage() {
     return m;
   }, [running, cycling, swimming, strength]);
 
-  // Build a temp single-week plan, then resolve its slots for the preview —
+  // Build a temp single-week plan, then resolve its slots for the preview,
   // reusing the same path the live editor uses (planWeekToSlots + stats).
   const slots = useMemo(() => {
     if (!week) return [];

@@ -11,7 +11,7 @@ interface Props {
  *
  * A countdown is an ordered scale, so the day chips climb the zone ink ramp:
  * faint a week out, solid ink on race day. J0 also takes the 2.5px vermillon
- * frame — the system's mark for the one thing that matters here, and a frame
+ * frame, the system's mark for the one thing that matters here, and a frame
  * rather than a fill, because the page's one vermillon fill is the hero.
  */
 const RAMP_STEP: Record<RaceWeekDayId, number> = {

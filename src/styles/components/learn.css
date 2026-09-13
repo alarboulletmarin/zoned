@@ -1,4 +1,4 @@
-/* « Comprendre » — the article index and the reading view.
+/* Comprendre, the article index and the reading view.
  *
  * Two screens, one door. The index reads mono kicker -> display title -> lede
  * -> a category filter on a rule -> the card grid, with the first card given
@@ -12,8 +12,8 @@
  * re-applies it: the rule spans the paper, the type stays on the margin.
  *
  * The half of this file that is NOT about these two screens is the prose
- * treatment at the bottom. It is written as a reusable block — .zn-prose and
- * its parts — because every article, guide and glossary page reads the same
+ * treatment at the bottom. It is written as a reusable block, .zn-prose and
+ * its parts, because every article, guide and glossary page reads the same
  * way, and none of them should re-invent a reading measure.
  */
 
@@ -33,7 +33,7 @@
 }
 
 /* La bande de filtres, entre le titre et l'index, avec le compte de ce qui est
-   à l'écran au bout. Elle « s'asseyait sur le filet » qui séparait les deux ;
+   à l'écran au bout. Elle s'asseyait sur le filet qui séparait les deux ;
    c'est maintenant l'écart au-dessus d'elle qui fait ce travail. */
 .zn-learn__strip {
   margin-block-start: calc(var(--gap-section) / 2);
@@ -49,7 +49,7 @@
 }
 
 /* The lead article takes two of the three columns. The index says which piece
-   to read first by giving it the room — not by tinting it, and not by adding a
+   to read first by giving it the room, not by tinting it, and not by adding a
    second outline weight. The card itself is unchanged: this is the grid
    speaking, plus the one type step the extra width pays for. */
 .zn-learn__feature {
@@ -126,7 +126,7 @@
 /* The body band: the reading column and its rail. Composed onto .zn-split, so
    only the band's own padding, its rule and the column assignment live here.
    The rail comes FIRST in the DOM and is placed into the second track on
-   desktop — which is what lets the same single table of contents be the
+   desktop, which is what lets the same single table of contents be the
    dropdown above the article on a phone and the sticky list beside it here. */
 .zn-article__body {
   padding: var(--gap-section) var(--pad-screen-x) var(--sp-17);
@@ -243,7 +243,7 @@
    The long-form reading treatment.
 
    Written here once, on purpose: the article body, the practical guides and
-   the glossary term pages are the same object — a column of text at one
+   the glossary term pages are the same object, a column of text at one
    measure, headings that step down rather than shout, and figures pulled out
    between two ink rules. The measure itself is NOT redeclared: a caller
    composes .zn-measure, which already states 62ch.
@@ -268,7 +268,7 @@
 }
 
 /* A section of the article. The extra top margin is what tells the eye a new
-   movement started — the rhythm, not a rule, because the page's rules already
+   movement started, the rhythm, not a rule, because the page's rules already
    belong to its bands. --sp-19 of scroll margin keeps a heading clear of the
    header when it is reached from the table of contents or a URL hash. */
 .zn-prose__h2 {
@@ -287,7 +287,7 @@
 }
 
 /* Tailwind's preflight strips every marker; a list is a list, so they come
-   back explicitly — discs for a set, figures for a sequence. */
+   back explicitly, discs for a set, figures for a sequence. */
 .zn-prose__list {
   margin: 0;
   padding-inline-start: var(--sp-11);
@@ -325,7 +325,7 @@
 }
 
 /* A quotation the author did not pull out as a figure: a leading ink rule and
-   the muted ink. No italic — Space Grotesk's oblique at 19px is harder to read
+   the muted ink. No italic, Space Grotesk's oblique at 19px is harder to read
    than the thing it is meant to set apart. */
 .zn-prose__quote {
   margin: 0;
@@ -334,7 +334,7 @@
   color: var(--text-muted);
 }
 
-/* The pulled-out block — a principle, a caution, a figure. One treatment for
+/* The pulled-out block, a principle, a caution, a figure. One treatment for
    all four kinds, between two ink rules, with a mono label saying which kind
    it is. No tint, no coloured glyph, no second outline: the label is the only
    thing that differs and the only thing the reader needs. A caution is the one

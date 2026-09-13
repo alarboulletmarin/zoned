@@ -24,7 +24,7 @@ export const SESSION_ZONE: Partial<Record<SessionType, number>> = {
   speed: 6,
 };
 
-/** Accent colour per session type — zone token, discipline hue, or neutral. */
+/** Accent colour per session type, zone token, discipline hue, or neutral. */
 export const SESSION_COLORS: Record<string, string> = {
   recovery: "var(--zone-1)",
   endurance: "var(--zone-2)",

@@ -72,7 +72,7 @@ function estimateSessionKm(session: PlanSession): number {
   if (session.workoutId === "__intermediate_race__") return session.targetDistanceKm ?? 0;
   // Non-running sessions (strength, cycling, etc.) don't contribute running km
   if (isNonRunningSession(session)) return 0;
-  // Explicitly skipped sessions didn't happen — don't count them
+  // Explicitly skipped sessions didn't happen, don't count them
   if (session.status === "skipped") return 0;
   if (session.actualDistanceKm && session.actualDistanceKm > 0) return session.actualDistanceKm;
   if (session.targetDistanceKm && session.targetDistanceKm > 0) return session.targetDistanceKm;
@@ -275,7 +275,7 @@ export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<E
       for (const block of workout.mainSetTemplate) {
         const blockMin = estimateBlockMinutes(block) * scale;
         if (!block.zone) {
-          // No zone specified — default to Z2
+          // No zone specified, default to Z2
           zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + blockMin;
         } else if (block.zone.includes("-")) {
           // Range like "Z1-Z2": split evenly

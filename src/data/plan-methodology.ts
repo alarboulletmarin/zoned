@@ -1,5 +1,5 @@
 /**
- * Plan Methodology — The 7 principles behind Zoned's plan generation
+ * Plan Methodology, The 7 principles behind Zoned's plan generation
  *
  * Each principle maps directly to real values from the plan generator.
  * Content is bilingual (French-first, English second).
@@ -75,7 +75,7 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     summaryEn:
       "At least 75% of your sessions are at easy pace (Z1-Z2). Hard work never exceeds 25%. Run slow to get fast.",
     details:
-      "Les recherches de Seiler montrent que les athlètes d'endurance d'élite passent 75 à 80% de leur temps en zones basses. Zoned applique ce principe avec un seuil minimum de 75% de séances faciles et un maximum de 25% de séances intenses. La distribution des slots varie selon le nombre de jours : avec 3 jours, tu as 1 séance clé + 1 sortie longue + 1 easy. Avec 5 jours, 2 séances clés + 1 sortie longue + 2 easy. L'objectif « finir » pousse vers un split 85/15 encore plus conservateur, tandis que « performer » autorise un 75/25 pyramidal.",
+      "Les recherches de Seiler montrent que les athlètes d'endurance d'élite passent 75 à 80% de leur temps en zones basses. Zoned applique ce principe avec un seuil minimum de 75% de séances faciles et un maximum de 25% de séances intenses. La distribution des slots varie selon le nombre de jours : avec 3 jours, tu as 1 séance clé + 1 sortie longue + 1 easy. Avec 5 jours, 2 séances clés + 1 sortie longue + 2 easy. L'objectif finir pousse vers un split 85/15 encore plus conservateur, tandis que performer autorise un 75/25 pyramidal.",
     detailsEn:
       "Seiler's research shows that elite endurance athletes spend 75-80% of their time in low zones. Zoned applies this principle with a minimum threshold of 75% easy sessions and a maximum of 25% hard sessions. Slot distribution varies by number of days: with 3 days you get 1 key session + 1 long run + 1 easy. With 5 days, 2 key sessions + 1 long run + 2 easy. The \"finish\" goal pushes toward an even more conservative 85/15 split, while \"compete\" allows a pyramidal 75/25.",
     rules: [
@@ -114,11 +114,11 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     title: "Semaines de récupération intelligentes",
     titleEn: "Smart Recovery Weeks",
     summary:
-      "Pas de rythme fixe « 1 semaine sur 4 ». La récupération arrive après 3 semaines de charge consécutives, quand ton corps en a vraiment besoin.",
+      "Pas de rythme fixe 1 semaine sur 4. La récupération arrive après 3 semaines de charge consécutives, quand ton corps en a vraiment besoin.",
     summaryEn:
       "No fixed \"every 4th week\" pattern. Recovery comes after 3 consecutive load weeks, when your body actually needs it.",
     details:
-      "Beaucoup de plans imposent une semaine de récupération toutes les 4 semaines, même quand la charge était faible. Zoned utilise un système basé sur la charge réelle : la récupération se déclenche après 3 semaines de charge consécutives (MAX_CONSECUTIVE_LOAD_WEEKS = 3). Le volume tombe à 65% de la semaine précédente. Une récupération de transition est aussi insérée automatiquement avant la phase peak pour arriver frais au travail spécifique. L'objectif « finir » abaisse la fréquence à toutes les 3 semaines pour plus de prudence.",
+      "Beaucoup de plans imposent une semaine de récupération toutes les 4 semaines, même quand la charge était faible. Zoned utilise un système basé sur la charge réelle : la récupération se déclenche après 3 semaines de charge consécutives (MAX_CONSECUTIVE_LOAD_WEEKS = 3). Le volume tombe à 65% de la semaine précédente. Une récupération de transition est aussi insérée automatiquement avant la phase peak pour arriver frais au travail spécifique. L'objectif finir abaisse la fréquence à toutes les 3 semaines pour plus de prudence.",
     detailsEn:
       "Many plans force a recovery week every 4 weeks, even when the load was low. Zoned uses a load-based system: recovery triggers after 3 consecutive load weeks (MAX_CONSECUTIVE_LOAD_WEEKS = 3). Volume drops to 65% of the previous week. A transition recovery is also automatically inserted before the peak phase to arrive fresh for specific work. The \"finish\" goal lowers the frequency to every 3 weeks for extra caution.",
     rules: [
@@ -156,7 +156,7 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     summaryEn:
       "Never more than +10% volume per week. The golden rule for progressing without injury.",
     details:
-      "Le générateur calcule des cibles en km réels basées sur ta distance et ton niveau (par ex. un marathonien intermédiaire passe de 55 km/sem. à un pic de 90 km/sem.). La progression respecte strictement la limite de +10% par semaine. Quand le volume atteint 95% du pic, le plan entre en mode « ondulation » : il alterne entre 100% et 93% pour éviter la monotonie et la fatigue cumulée. Le volume de départ est adapté à la durée du plan : 85% pour les plans courts (8-11 sem.), 70% pour les moyens (12-17 sem.), 60% pour les longs (18+ sem.).",
+      "Le générateur calcule des cibles en km réels basées sur ta distance et ton niveau (par ex. un marathonien intermédiaire passe de 55 km/sem. à un pic de 90 km/sem.). La progression respecte strictement la limite de +10% par semaine. Quand le volume atteint 95% du pic, le plan entre en mode ondulation : il alterne entre 100% et 93% pour éviter la monotonie et la fatigue cumulée. Le volume de départ est adapté à la durée du plan : 85% pour les plans courts (8-11 sem.), 70% pour les moyens (12-17 sem.), 60% pour les longs (18+ sem.).",
     detailsEn:
       "The generator calculates real km targets based on your distance and level (e.g., an intermediate marathoner goes from 55 km/wk to a peak of 90 km/wk). Progression strictly respects the +10% per week limit. When volume reaches 95% of peak, the plan enters \"undulation\" mode: it alternates between 100% and 93% to avoid monotony and accumulated fatigue. Starting volume adapts to plan duration: 85% for short plans (8-11 wks), 70% for medium (12-17 wks), 60% for long (18+ wks).",
     rules: [
@@ -169,7 +169,7 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
         textEn: "Plateau undulation: alternating 100% / 93% when volume >= 95% of peak",
       },
       {
-        text: "Objectif « finir » : volume réduit de 15% | « performer » : +12%",
+        text: "Objectif finir : volume réduit de 15% | performer : +12%",
         textEn: "Goal \"finish\": volume reduced by 15% | \"compete\": +12%",
       },
       {

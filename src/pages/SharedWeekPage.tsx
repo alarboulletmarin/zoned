@@ -25,7 +25,7 @@ import type { PlanWeek } from "@/types/plan";
 
 /**
  * A week that arrived as a link. Everything on this screen is decoded from the
- * URL — nothing is read from storage until the week is actually added.
+ * URL, nothing is read from storage until the week is actually added.
  */
 export function SharedWeekPage() {
   const [searchParams] = useSearchParams();

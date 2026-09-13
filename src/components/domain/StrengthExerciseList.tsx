@@ -171,7 +171,7 @@ function ExerciseItem({ block, exercise, t }: ExerciseItemProps) {
     <div className="zn-exercise">
       {/* Main layout: images beside details on sm+, stacked on mobile */}
       <div className="zn-row zn-row--start">
-        {/* Exercise images (A -> B) — hidden on mobile, shown sm+ */}
+        {/* Exercise images (A -> B), hidden on mobile, shown sm+ */}
         <div className="zn-fixed zn-exercise__wide">
           <ExerciseImage
             imageSlug={exercise?.imageSlug}

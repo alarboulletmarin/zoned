@@ -1,4 +1,4 @@
-/* ScrollToTop — the one floating control on a long list.
+/* ScrollToTop, the one floating control on a long list.
 
    It is a Button, so the pill, the outline, the press and the coarse-pointer
    floor all come from button.css. This file only places it, gives it the one
@@ -40,7 +40,7 @@
   background: var(--surface-band);
 }
 
-/* Below the threshold it fades out and stops taking clicks — same states the
+/* Below the threshold it fades out and stops taking clicks, same states the
    Tailwind version expressed with opacity-0 / translate-y-4 / pointer-events-none. */
 .zn-btn.zn-scroll-top[data-visible="false"] {
   opacity: 0;

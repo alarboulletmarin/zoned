@@ -4,7 +4,7 @@
     "main": "Main Set",
     "cooldown": "Cool-down",
     "recovery": "Recovery",
-    "interSeries": "{{count}} sets — ~3 min jog between sets",
+    "interSeries": "{{count}} sets, ~3 min jog between sets",
     "loopTemplate": "One iteration shown below",
     "noZone": "No zone",
     "repeatUnits": {
@@ -178,8 +178,7 @@
     "total": "Total {{duration}}",
     "exportFormats": ".fit · .ics · .pdf · .png",
     "notFoundTitle": "This session left the catalogue",
-    "notFoundBody": "The link points to an id the catalogue no longer knows. Your favourites, plans and saved sessions are untouched.",
-    "zonesNote": "minutes, not kilometres: adaptation follows the time spent there"
+    "notFoundBody": "The link points to an id the catalogue no longer knows. Your favourites, plans and saved sessions are untouched."
   },
   "illustration": {
     "strengthBrief": "Plank seen from the side, 2 px line, contact points in accent",

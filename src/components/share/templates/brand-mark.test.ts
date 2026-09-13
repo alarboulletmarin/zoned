@@ -3,7 +3,7 @@
  * le code parce qu'un SVG importé en `?react` est un composant et que son
  * `viewBox` n'est pas lisible à l'exécution. Le logo est de la sortie générée
  * (`scripts/generate-wordmark.mjs`) : le jour où le mot, la graisse ou
- * l'approche changent, le cadre change, et la constante doit suivre — sinon le
+ * l'approche changent, le cadre change, et la constante doit suivre, sinon le
  * mot flotte au milieu de sa boîte sur les vingt-sept cartes de partage.
  *
  * Même motif que `src/assets/doodles/frames.test.ts` pour les cadres des

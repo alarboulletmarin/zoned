@@ -18,7 +18,7 @@ interface MuscleGroupBadgeProps {
  * Muscle groups are categorical and there are twelve of them, which is more
  * categories than a paper-and-one-accent system can name. The twelve hues
  * therefore survive the redesign, demoted from a tinted fill to the badge's
- * 1.5px stroke — see the header of `src/styles/components/strength.css`.
+ * 1.5px stroke, see the header of `src/styles/components/strength.css`.
  */
 const MUSCLE_COLORS: Record<MuscleGroup, string> = {
   // Legs - Blue shades

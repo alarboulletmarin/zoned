@@ -13,7 +13,7 @@ export interface RaceSimSettings {
   /** A RACE_OPTIONS value, or "custom". */
   distance: string;
   customDistance: string;
-  /** Raw text — "45:00", "3:30:00", "45". */
+  /** Raw text, "45:00", "3:30:00", "45". */
   targetTime: string;
   startTime: string;
   strategy: SplitStrategy;
@@ -71,7 +71,7 @@ const GROUP = { "--gap": "var(--sp-4)" } as React.CSSProperties;
 
 /**
  * Race parameters. Lives in the sticky left column on desktop and inside a
- * sheet on mobile, so the CTA sits at the foot of the panel — same pattern as
+ * sheet on mobile, so the CTA sits at the foot of the panel, same pattern as
  * the "Ma semaine" generator rather than a button buried in a settings card.
  */
 export function RaceSimForm({

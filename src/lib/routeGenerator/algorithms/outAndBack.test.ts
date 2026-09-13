@@ -133,7 +133,7 @@ describe("generateOutAndBack", () => {
   });
 
   test("uses POI-aware strategy when an aligned POI is available", async () => {
-    // POI roughly East of the start at ~5 km — matches a 10 km out-and-back
+    // POI roughly East of the start at ~5 km, matches a 10 km out-and-back
     // with bearing 90°.
     const overpassPayload = {
       elements: [

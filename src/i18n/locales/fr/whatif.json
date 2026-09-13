@@ -69,7 +69,7 @@
   },
   "disclaimer": {
     "title": "Limites du modèle",
-    "text": "Ce simulateur compare les structures de plan, pas les performances. Les différences montrées sont basées sur les paramètres d'entrée et les règles du générateur de plans. Elles ne prédisent pas de résultat de course ni de gain de temps. Chaque coureur est unique — ces données sont un outil d'aide à la décision, pas une garantie.",
+    "text": "Ce simulateur compare les structures de plan, pas les performances. Les différences montrées sont basées sur les paramètres d'entrée et les règles du générateur de plans. Elles ne prédisent pas de résultat de course ni de gain de temps. Chaque coureur est unique, ces données sont un outil d'aide à la décision, pas une garantie.",
     "variability": "Les séances spécifiques sont choisies avec une part d'aléatoire pour la variété. Les valeurs peuvent légèrement varier entre deux comparaisons, mais les tendances restent les mêmes."
   },
   "levels": {

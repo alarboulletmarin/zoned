@@ -10,7 +10,7 @@ import type { ZoneNumber } from "./types";
  * One phase of a session, as the bar reads it.
  *
  * `zone: 0` is not a zone. It is recovery, or an unmeasured block (drills,
- * strides) — the system draws those as a 45 degree hatch, never as a tint on
+ * strides), the system draws those as a 45 degree hatch, never as a tint on
  * the ink ramp.
  */
 export interface ZoneBarBlock {
@@ -32,7 +32,7 @@ interface ZoneBarProps {
 
 /**
  * The session profile: one block per phase, width = time, intensity coded
- * twice — by ink density and by block height.
+ * twice, by ink density and by block height.
  *
  * The bar is `role="img"`: it is a picture of the session, and its
  * `aria-label` says in words what the ink says in shape.
@@ -90,7 +90,7 @@ export function toZoneBarBlocks(workout: WorkoutStructureSource): ZoneBarBlock[]
  * Card-size profile: one strip per phase or set instead of one per repetition.
  *
  * Consecutive hard blocks merge, and a short recovery (<= 2 min) inside a work
- * run is absorbed into its set — a 30/30 reads as two blocks rather than
+ * run is absorbed into its set, a 30/30 reads as two blocks rather than
  * fifty-one hairlines. Between-series and cool-down recoveries are longer, so
  * they survive as their own strip.
  */

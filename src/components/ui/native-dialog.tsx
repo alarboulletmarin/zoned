@@ -10,7 +10,7 @@
  *
  * Four things the platform does NOT give, so they are written here:
  *
- *   1. The scroll lock. Refcounted, because two panels can overlap — the
+ *   1. The scroll lock. Refcounted, because two panels can overlap, the
  *      mobile menu hands off to the command palette while its own `close`
  *      event is still queued. Two independent locks would each save the body's
  *      overflow at a moment the other had already changed it, and the loser
@@ -63,7 +63,7 @@ function unlockScroll() {
 
 /**
  * Hold the page still while `active`. The count is shared with every other
- * panel, so the body is only handed back once the last one has gone — and the
+ * panel, so the body is only handed back once the last one has gone, and the
  * cleanup runs on unmount, which is the case no `close` event ever covers.
  */
 export function useScrollLock(active: boolean) {
@@ -80,14 +80,14 @@ export function useScrollLock(active: boolean) {
  * Lift the toast layer back above the panel that just opened.
  *
  * The top layer is not a z-index, it is a different plane: an open modal
- * paints over the whole document, so `sonner`'s toaster — z-index 999999999
- * and all — ends up behind the backdrop. The share sheet reports every one of
+ * paints over the whole document, so `sonner`'s toaster, z-index 999999999
+ * and all, ends up behind the backdrop. The share sheet reports every one of
  * its four actions with a toast, so that feedback simply disappeared.
  *
  * A `popover` is the one other way into the top layer, and the top layer is
  * ordered by promotion, so the layer is re-promoted after every showModal():
  * the panel goes up, then the toasts go up again on top of it. The attribute
- * is only set the first time a modal opens — before that the wrapper is an
+ * is only set the first time a modal opens, before that the wrapper is an
  * ordinary zero-size div and the toaster behaves exactly as it always has.
  *
  * The toasts are inert while a modal is open, so they are read and not
@@ -115,8 +115,8 @@ const DialogContainerContext = createContext<HTMLElement | null>(null);
  * The open <dialog> a component is rendered inside, or null at the page level.
  *
  * A modal dialog sits in the top layer, above everything the document can
- * paint, so a popover portalled to `document.body` — a date picker, a select,
- * a tooltip — would open *behind* the panel that asked for it. Radix's
+ * paint, so a popover portalled to `document.body`, a date picker, a select,
+ * a tooltip, would open *behind* the panel that asked for it. Radix's
  * `Portal` takes a `container`, and this is the answer to hand it.
  */
 export function useDialogContainer() {
@@ -149,7 +149,7 @@ export function NativeDialog({
     if (!dialog) return;
 
     const handleClose = () => {
-      // `close()` does not fire its event synchronously — it queues it. So the
+      // `close()` does not fire its event synchronously, it queues it. So the
       // cleanup below can close the element, a remount can reopen it, and OUR
       // close event is only then delivered, to the listener the remount just
       // attached. A close event on an element that is open again is that echo,
@@ -167,8 +167,8 @@ export function NativeDialog({
     return () => {
       // The listener goes first: closing here is us tidying up, not the user
       // dismissing, and calling back into a parent that is already unmounting
-      // would be a loop. Then the lock is released — the cleanup that no
-      // `close` event would ever have triggered — and the element is closed by
+      // would be a loop. Then the lock is released, the cleanup that no
+      // `close` event would ever have triggered, and the element is closed by
       // hand, which is what releases the top layer and hands the focus back.
       dialog.removeEventListener("close", handleClose);
       unlockScroll();

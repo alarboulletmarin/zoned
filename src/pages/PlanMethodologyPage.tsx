@@ -79,7 +79,7 @@ export function PlanMethodologyPage() {
       />
 
       <div className="zn-guide">
-        {/* 1 — what the generator does, in one sentence */}
+        {/* 1, what the generator does, in one sentence */}
         <section
           className="zn-stack zn-guide__head"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -97,7 +97,7 @@ export function PlanMethodologyPage() {
           </p>
         </section>
 
-        {/* 2 — how the pieces fit, as prose, with the caveat pulled out */}
+        {/* 2, how the pieces fit, as prose, with the caveat pulled out */}
         <section className="zn-guide__band">
           <div className="zn-prose zn-measure">
             <GlossaryLinkedText
@@ -118,7 +118,7 @@ export function PlanMethodologyPage() {
           </div>
         </section>
 
-        {/* 3 — the seven principles, each a disclosure on its own rule. It was
+        {/* 3, the seven principles, each a disclosure on its own rule. It was
             a div with an onClick and no aria-expanded; <details> gives the
             keyboard path and the state for nothing. */}
         <section className="zn-guide__band">
@@ -193,7 +193,7 @@ export function PlanMethodologyPage() {
           ))}
         </section>
 
-        {/* 4 — the papers the seven principles are built on */}
+        {/* 4, the papers the seven principles are built on */}
         <section className="zn-guide__band" aria-labelledby="plan-meth-refs">
           <h2
             id="plan-meth-refs"
@@ -224,7 +224,7 @@ export function PlanMethodologyPage() {
                   <p className="zn-guide__reftitle">{ref.title}</p>
                   <p className="zn-source">
                     {ref.author}
-                    {ref.journal && <> &mdash; {ref.journal}</>}
+                    {ref.journal && <> &middot; {ref.journal}</>}
                   </p>
                   {ref.link && (
                     <a

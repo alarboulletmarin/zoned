@@ -97,7 +97,7 @@ export function ScienceSection({ workout }: ScienceSectionProps) {
         </ul>
       </div>
 
-      {/* References — folded away by default. Full APA citations in 11px
+      {/* References, folded away by default. Full APA citations in 11px
           grey are a wall of text; the count plus author and year is what
           a reader scans, and the full record is one tap away. */}
       {science.references.length > 0 && (

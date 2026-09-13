@@ -1,5 +1,5 @@
 /**
- * Volume Progression — km-based weekly volume with exponential taper
+ * Volume Progression, km-based weekly volume with exponential taper
  *
  * Replaces abstract volumePercent (0-100) with actual weekly km targets.
  * Implements load-based recovery weeks and Mujika exponential taper.
@@ -29,7 +29,7 @@ import {
 
 export interface WeekVolume {
   weekNumber: number;
-  /** Legacy volumePercent (0-100) — kept for backward compat */
+  /** Legacy volumePercent (0-100), kept for backward compat */
   volumePercent: number;
   /** Target weekly km (new) */
   targetKm: number;
@@ -186,7 +186,7 @@ export function calculateVolumeProgression(
         isRecoveryWeek: true,
       });
       consecutiveLoadWeeks = 0;
-      // Don't update currentKm — resume from pre-recovery level next week
+      // Don't update currentKm, resume from pre-recovery level next week
       continue;
     }
 
@@ -204,7 +204,7 @@ export function calculateVolumeProgression(
     // This simulates natural training periodization (harder/easier weeks)
     let weekKm = Math.round(currentKm);
     if (currentKm >= adjustedPeakKm * 0.95) {
-      // At plateau — undulate between 95% and 100%
+      // At plateau, undulate between 95% and 100%
       const isHighWeek = consecutiveLoadWeeks % 2 === 0;
       weekKm = Math.round(adjustedPeakKm * (isHighWeek ? 1.0 : 0.93));
     }

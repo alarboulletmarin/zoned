@@ -1,11 +1,11 @@
 /**
- * Editorial atoms — the shared heading, rhythm and reveal helpers used across
+ * Editorial atoms, the shared heading, rhythm and reveal helpers used across
  * the app (56 files import from here).
  *
  * These used to be the landing page's motion kit: the title faded up as you
  * scrolled to it, grids cascaded their children in, single blocks rose into
  * place and counters ticked from zero. The redesign's rule is that motion
- * reports where something came from or that a wait is real — nothing moves to
+ * reports where something came from or that a wait is real, nothing moves to
  * decorate, and a heading sliding in as you reach it is decoration.
  *
  * So the components stay, with their signatures untouched, and render plain
@@ -32,9 +32,9 @@ export { InteractiveCard } from "./InteractiveCard";
  *
  * `size` picks a step of the display scale rather than a pixel size, so the
  * mobile reduction comes from the token layer instead of a breakpoint here:
- *   xl — the screen title, 46px (30px on a phone)
- *   lg — a section title, 38px
- *   md — a sub-section, 26px
+ *   xl, the screen title, 46px (30px on a phone)
+ *   lg, a section title, 38px
+ *   md, a sub-section, 26px
  */
 export function EditorialTitle({
   children,
@@ -89,7 +89,7 @@ export function StaggerItem({ children }: { children: React.ReactNode }) {
 // ────────────────────────────────────────────────────────────────────────────
 
 /**
- * Was a scroll-triggered fade. Now a plain element of the requested tag —
+ * Was a scroll-triggered fade. Now a plain element of the requested tag,
  * `delay` is accepted and ignored so no call site has to change.
  */
 export function FadeUp({
@@ -142,7 +142,7 @@ export function useCountUp(target: number, durationMs = 900): number {
  *
  * It used to lift the card and drop a soft shadow under it. The system allows
  * neither: nothing changes size or elevation on hover, and a list card never
- * carries a shadow — the one shadow in the system is a hard offset reserved for
+ * carries a shadow, the one shadow in the system is a hard offset reserved for
  * surfaces that genuinely float. A hovered card changes colour, and that is all.
  */
 export const editorialCardHover = "zn-card-hover";

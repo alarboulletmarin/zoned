@@ -13,7 +13,7 @@ export interface RaceSimNavItem {
  *
  * `rail` sits in the sticky left column on desktop; `chips` is the horizontal
  * strip that sticks under the top bar on mobile. Jumping also opens the target
- * section — landing on a collapsed header would be a dead end.
+ * section, landing on a collapsed header would be a dead end.
  *
  * Where you are is stated once, off `aria-current`: a vermillon edge in the
  * rail, a full ink inversion on the chip.
@@ -63,7 +63,7 @@ export function RaceSimNav({
 
   const current = activeIdOverride ?? activeId;
 
-  // Keep the active chip in view on mobile — an off-screen highlight is no
+  // Keep the active chip in view on mobile, an off-screen highlight is no
   // better than no highlight.
   useEffect(() => {
     if (variant !== "chips" || !current) return;

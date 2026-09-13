@@ -72,7 +72,7 @@ export function AboutPage() {
       />
 
       <div className="zn-about">
-        {/* 1 — what this is */}
+        {/* 1, what this is */}
         <section className="zn-section">
           <div
             className="zn-stack"
@@ -88,7 +88,7 @@ export function AboutPage() {
           </div>
         </section>
 
-        {/* 2 — the catalogue, counted */}
+        {/* 2, the catalogue, counted */}
         <section
           className="zn-section zn-about__strip"
           aria-label={t("content:aboutPage.countsLabel")}
@@ -96,14 +96,14 @@ export function AboutPage() {
           {cells.map((cell) => (
             <div key={cell.key} className="zn-about__cell">
               <StatBlock
-                value={cell.value > 0 ? String(cell.value) : "—"}
+                value={cell.value > 0 ? String(cell.value) : "-"}
                 label={cell.label}
               />
             </div>
           ))}
         </section>
 
-        {/* 3 — the person behind it, and where the code lives */}
+        {/* 3, the person behind it, and where the code lives */}
         <section
           className="zn-section zn-split"
           style={{ "--split": "1fr 320px", "--gap": "var(--sp-17)" } as CSSProperties}
@@ -138,7 +138,7 @@ export function AboutPage() {
           </div>
         </section>
 
-        {/* 4 — the four claims, each with its one line */}
+        {/* 4, the four claims, each with its one line */}
         <section className="zn-section" aria-labelledby="about-claims-title">
           <div
             className="zn-stack"
@@ -158,7 +158,7 @@ export function AboutPage() {
           </div>
         </section>
 
-        {/* 5 — the one call: pay for it if it serves you */}
+        {/* 5, the one call: pay for it if it serves you */}
         <section className="zn-section" aria-labelledby="about-support-title">
           <div
             className="zn-stack"

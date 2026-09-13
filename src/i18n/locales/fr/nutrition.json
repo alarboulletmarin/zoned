@@ -43,13 +43,13 @@
     },
 
     "carbs": {
-      "title": "Le ratio 1:0.8 — la nouvelle règle des sucres",
+      "title": "Le ratio 1:0.8 : la nouvelle règle des sucres",
       "lede": "Pour les efforts longs, ton corps absorbe mieux deux types de sucres ensemble qu'un seul. C'est ce qui permet aux pros de manger jusqu'à 120 g de sucre par heure sans avoir mal au ventre. Le bon mélange : un peu plus de glucose que de fructose, dans un rapport 1 pour 0,8. Maurten, Precision Fuel et SiS Beta Fuel utilisent tous ce principe.",
       "ratios": {
         "recommended": "Idéal",
-        "glucose":  { "label": "Glucose seul",  "capacity": "60 g/h max — tu plafonnes vite" },
-        "classic":  { "label": "Mélange 2:1",   "capacity": "90 g/h — l'ancienne référence" },
-        "modern":   { "label": "Mélange 1:0.8", "capacity": "120 g/h — la limite haute pour les pros" },
+        "glucose":  { "label": "Glucose seul",  "capacity": "60 g/h max, tu plafonnes vite" },
+        "classic":  { "label": "Mélange 2:1",   "capacity": "90 g/h, l'ancienne référence" },
+        "modern":   { "label": "Mélange 1:0.8", "capacity": "120 g/h, la limite haute pour les pros" },
         "footnote": "Recette maison : 50 g de maltodextrine + 40 g de fructose + une pincée de sel dans 500 ml d'eau. Le sel n'est pas anodin : il aide ton corps à absorber le sucre plus vite."
       }
     },
@@ -69,7 +69,7 @@
         "ultra":   { "profile": "Après un ultra", "hours": "Récupération", "target": "Jusqu'à 2,5 g/kg", "helper": "Pendant 5 à 7 jours après une course de 50 km et plus" }
       },
       "timeline": {
-        "morning":  { "label": "Petit-déjeuner", "value": "30 g",         "helper": "Œufs, fromage blanc, skyr — pas juste du pain-confiture" },
+        "morning":  { "label": "Petit-déjeuner", "value": "30 g",         "helper": "Œufs, fromage blanc, skyr, pas juste du pain-confiture" },
         "lunch":    { "label": "Déjeuner",       "value": "30-40 g",      "helper": "Viande, poisson ou légumineuses + un féculent" },
         "snack":    { "label": "Goûter",         "value": "20-25 g",      "helper": "Yaourt grec, ou boisson protéinée si tu t'es entraîné" },
         "dinner":   { "label": "Dîner",          "value": "30-40 g",      "helper": "Source de protéines + des légumes" },
@@ -80,7 +80,7 @@
 
     "caffeine": {
       "title": "Le café avant la course",
-      "lede": "Le café (ou la caféine) est l'un des rares produits qui marchent vraiment pour mieux courir. Compte 3 à 6 mg par kilo de ton poids, à prendre 60 minutes avant le départ. Pour 70 kg, ça fait 210 à 420 mg, soit 2 à 4 cafés. En capsules, le dosage est plus précis. À noter : certaines personnes métabolisent le café lentement (génétique). Elles ressentent l'inverse — palpitations, mal au ventre. Si c'est ton cas, descends à 1-2 mg/kg ou abstiens-toi.",
+      "lede": "Le café (ou la caféine) est l'un des rares produits qui marchent vraiment pour mieux courir. Compte 3 à 6 mg par kilo de ton poids, à prendre 60 minutes avant le départ. Pour 70 kg, ça fait 210 à 420 mg, soit 2 à 4 cafés. En capsules, le dosage est plus précis. À noter : certaines personnes métabolisent le café lentement (génétique). Elles ressentent l'inverse, palpitations, mal au ventre. Si c'est ton cas, descends à 1-2 mg/kg ou abstiens-toi.",
       "steps": {
         "t90": { "label": "T-90 min", "action": "Café ou capsule. Si tu n'as pas l'habitude : 3 mg/kg. Si tu en bois tous les jours : 6 mg/kg." },
         "t60": { "label": "T-60 min", "action": "C'est ici que la caféine atteint son maximum dans ton sang. Profite-en pour finir d'hydrater et passer aux toilettes." },
@@ -147,7 +147,7 @@
         "total":        "Total typique"
       },
       "rows": {
-        "short":    { "distance": "5 km (moins de 30 min)", "ratio": "—",     "total": "Eau seule, c'est suffisant" },
+        "short":    { "distance": "5 km (moins de 30 min)", "ratio": "-",     "total": "Eau seule, c'est suffisant" },
         "tenK":     { "distance": "10 km (40-60 min)",      "ratio": "1:0",   "total": "1 à 2 gels ou 500 ml de boisson" },
         "semi":     { "distance": "Semi (~1 h 30)",         "ratio": "2:1",   "total": "2 à 3 gels + boisson" },
         "marathon": { "distance": "Marathon (3-4 h)",       "ratio": "1:0.8", "total": "5 à 7 gels + boisson énergétique" },
@@ -155,7 +155,7 @@
         "ultra":    { "distance": "Ultra (plus de 4 h)",    "ratio": "1:0.8", "total": "Mélange solides + gels + boisson + soupe salée" }
       },
       "gut": {
-        "heading": "Habituer son estomac — protocole sur 6 à 12 semaines",
+        "heading": "Habituer son estomac : protocole sur 6 à 12 semaines",
         "phase1": { "weeks": "Sem. 1-2", "detail": "On démarre tranquille, sur des sorties de plus d'1 h 30." },
         "phase2": { "weeks": "Sem. 3-4", "detail": "L'estomac s'adapte progressivement." },
         "phase3": { "weeks": "Sem. 5-6", "detail": "Tu atteins la cible standard." },
@@ -174,14 +174,14 @@
     },
 
     "supplements": {
-      "title": "Compléments alimentaires — ce qui marche vraiment",
+      "title": "Compléments alimentaires : ce qui marche vraiment",
       "lede": "L'Institut Australien du Sport a classé tous les compléments populaires en 4 niveaux selon les preuves scientifiques. Sur 28 produits courants chez les coureurs, seuls 5 ont des preuves solides. Les autres vont de \"intéressant dans certains cas\" à \"argument commercial pur\". Voici les 17 que tu dois connaître.",
       "aisFootnote": "Classification A : preuves multiples et solides. B : preuves correctes mais dans des cas précis. C : preuves limitées, à voir au cas par cas. D : pas ou peu de preuves.",
       "aisLabel": {
-        "A": "Niveau A — Preuves solides",
-        "B": "Niveau B — Preuves correctes",
-        "C": "Niveau C — Preuves limitées",
-        "D": "Niveau D — Pas de preuves"
+        "A": "Niveau A · Preuves solides",
+        "B": "Niveau B · Preuves correctes",
+        "C": "Niveau C · Preuves limitées",
+        "D": "Niveau D · Pas de preuves"
       },
       "doseLabel": "Dose",
       "whenLabel": "Quand",
@@ -203,15 +203,15 @@
       "vitD":        { "name": "Vitamine D",      "dose": "2000-4000 UI",    "when": "Hiver",            "rationale": "1 sportif sur 2 est en manque l'hiver dans le nord de l'Europe. Faire un dosage sanguin. Cible : 30 ng/mL minimum, idéalement 40-50." },
       "iron":        { "name": "Fer",             "dose": "60-120 mg ×3/sem", "when": "Si ferritine < 35", "rationale": "1 coureuse sur 3 manque de fer. Jamais de supplémentation sans dosage sanguin. Le matin avec de la vitamine C, loin du café." },
       "magnesium":   { "name": "Magnésium",       "dose": "200-400 mg",      "when": "Le soir",          "rationale": "Forme bisglycinate (mieux absorbée, douce pour le ventre). Aide le sommeil et la récupération. Inefficace contre les crampes (étude Cochrane 2020)." },
-      "bcaa":        { "name": "BCAA (acides aminés ramifiés)", "dose": "—",  "when": "À éviter",        "rationale": "Inutiles si tu manges assez de protéines. Un yaourt grec en contient autant, en mieux. Argument commercial pour 99 % des coureurs." },
-      "lcarnitine":  { "name": "L-carnitine",     "dose": "—",               "when": "À éviter",         "rationale": "Pas absorbée correctement par voie orale. Les études concluent à un effet nul en course. Garde ton argent pour des compléments qui marchent vraiment." },
-      "ketones":     { "name": "Cétones",         "dose": "—",               "when": "À éviter",         "rationale": "Très à la mode entre 2018 et 2022, mais aucune preuve d'amélioration en course (revue 2024). Cher, goût difficile, troubles digestifs possibles." },
-      "antioxidants":{ "name": "Antioxydants haute dose", "dose": "—",       "when": "À éviter",         "rationale": "Vitamine C 1 000 mg + vitamine E à haute dose au quotidien : ça BLOQUE les progrès à l'entraînement (étude 2014). Mange des fruits et des légumes." }
+      "bcaa":        { "name": "BCAA (acides aminés ramifiés)", "dose": "-",  "when": "À éviter",        "rationale": "Inutiles si tu manges assez de protéines. Un yaourt grec en contient autant, en mieux. Argument commercial pour 99 % des coureurs." },
+      "lcarnitine":  { "name": "L-carnitine",     "dose": "-",               "when": "À éviter",         "rationale": "Pas absorbée correctement par voie orale. Les études concluent à un effet nul en course. Garde ton argent pour des compléments qui marchent vraiment." },
+      "ketones":     { "name": "Cétones",         "dose": "-",               "when": "À éviter",         "rationale": "Très à la mode entre 2018 et 2022, mais aucune preuve d'amélioration en course (revue 2024). Cher, goût difficile, troubles digestifs possibles." },
+      "antioxidants":{ "name": "Antioxydants haute dose", "dose": "-",       "when": "À éviter",         "rationale": "Vitamine C 1 000 mg + vitamine E à haute dose au quotidien : ça BLOQUE les progrès à l'entraînement (étude 2014). Mange des fruits et des légumes." }
     },
 
     "cramps": {
       "title": "Crampes : la vraie cause (ce n'est pas l'eau)",
-      "lede": "Depuis un siècle, on a cru que les crampes venaient de la déshydratation et du manque de sels minéraux. C'est faux. Les études modernes ont démontré que la cause est nerveuse : tes muscles fatiguent, le système qui les contrôle se dérègle, et la crampe survient. La preuve la plus parlante : une gorgée de jus de cornichon stoppe une crampe en moins de 90 secondes — bien trop rapide pour modifier ta composition sanguine. C'est un réflexe nerveux déclenché par le goût acide dans la bouche.",
+      "lede": "Depuis un siècle, on a cru que les crampes venaient de la déshydratation et du manque de sels minéraux. C'est faux. Les études modernes ont démontré que la cause est nerveuse : tes muscles fatiguent, le système qui les contrôle se dérègle, et la crampe survient. La preuve la plus parlante : une gorgée de jus de cornichon stoppe une crampe en moins de 90 secondes, bien trop rapide pour modifier ta composition sanguine. C'est un réflexe nerveux déclenché par le goût acide dans la bouche.",
       "old": {
         "label": "Théorie ancienne",
         "title": "Manque d'eau et de sels",
@@ -244,7 +244,7 @@
       "iron":     { "title": "Fer et ferritine",            "detail": "Faire doser le fer une fois par an. Cible : ferritine au-dessus de 50 ng/mL (pas 30, comme on lit souvent). Si carence : 60-100 mg de fer un jour sur deux, le matin, avec de la vitamine C, sans café ni thé à proximité." },
       "protein":  { "title": "Protéines en deuxième moitié de cycle", "detail": "Augmenter de 0,1 à 0,2 g/kg dans les 2 semaines avant les règles. Privilégier viandes, œufs, poissons (riches en lysine). Pas de jeûne intermittent à cette période." },
       "calcium":  { "title": "Calcium et vitamine D",       "detail": "1300-1500 mg de calcium par jour si troubles des règles. 800-2000 UI de vitamine D. Critiques pour la santé des os : les fractures de fatigue sont 4,5 fois plus fréquentes en cas d'absence de règles." },
-      "reds":     { "title": "Manque d'énergie chronique — les signaux", "detail": "Si tu manges moins de 30 calories par kilo de masse maigre par jour, tu rentres dans une zone à risque. Signaux : règles qui s'arrêtent, fatigue chronique, blessures à répétition, immunité basse, mauvais sommeil. Voir un médecin." }
+      "reds":     { "title": "Manque d'énergie chronique : les signaux", "detail": "Si tu manges moins de 30 calories par kilo de masse maigre par jour, tu rentres dans une zone à risque. Signaux : règles qui s'arrêtent, fatigue chronique, blessures à répétition, immunité basse, mauvais sommeil. Voir un médecin." }
     },
 
     "myths": {

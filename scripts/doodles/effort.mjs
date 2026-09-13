@@ -1,16 +1,16 @@
 /* Les deux figures de l'effort tenu : pendant, et juste après.
  *
- * `easy-run` — l'allure facile, celle qu'on tient des heures. Foulée longue et
+ * `easy-run`, l'allure facile, celle qu'on tient des heures. Foulée longue et
  * basse, deux appuis au sol, bras qui pendent, buste presque droit. Elle sert
  * les surfaces de nutrition : c'est la TENUE dans la durée qui parle, pas un
  * objet (la règle 2 interdit la gourde et l'assiette).
  *
  * `catching-breath` a été REJETÉ en revue et retiré : huit croisements tenaient
- * dans une boîte de 23 x 65 px, soit 11 x 30 px à la taille de service — un
+ * dans une boîte de 23 x 65 px, soit 11 x 30 px à la taille de service, un
  * nœud, pas un chevauchement. C'est la limite du gréement sur les poses
  * penchées, documentée dans docs/doodles.md. L'ancienne version disait :
  * la tête basse. C'est une pose penchée, donc à la limite de ce que le gréement
- * sait faire ; voir la note « Ce que ce fichier a appris » en bas.
+ * sait faire ; voir la note Ce que ce fichier a appris en bas.
  *
  *   bun scripts/doodles/effort.mjs
  */
@@ -31,14 +31,14 @@ const OUT = new URL("../../src/assets/doodles/", import.meta.url).pathname;
  *  Deux choses que `Figure.plantLead` ne fait pas, et qui coûtent chacune un
  *  dessin si on les oublie :
  *
- *  1. Le sol est atteint par deux angles de hanche — jambe pendante sous le
+ *  1. Le sol est atteint par deux angles de hanche, jambe pendante sous le
  *     bassin, ou jambe tendue devant. Une minimisation naïve prend la première
  *     et écrase la foulée : les deux pieds finissent au même endroit et il n'y
  *     a plus de pas. On garde donc la racine la plus avancée.
  *  2. `bite` fait mordre la semelle avant SOUS la ligne de sol. La semelle
  *     d'appui déborde d'elle-même de ~4 px (le duo approuvé mord de 3,07) ;
  *     sans ce décalage le pied avant se retrouve peint en vermillon un pixel
- *     au-dessus du sol — un accent sur un membre qui flotte, la faute que la
+ *     au-dessus du sol, un accent sur un membre qui flotte, la faute que la
  *     règle 3 interdit. */
 function plantForward(f, { knee = -34, bite = 3 } = {}) {
   f.pose({ leadKnee: knee });
@@ -76,7 +76,7 @@ function write(name, f) {
 /* `standHip` 34 recule la jambe d'appui : c'est lui qui fait la foulée, pas le
    genou avant. `torso` 5 suffit à faire courir la figure plutôt que flâner ;
    à 10 elle se penche dans le vent. `frontArm` -10 décolle le poing avant du
-   bord du torse — à 0 les deux se fondent en un bulbe dès 120 px. */
+   bord du torse, à 0 les deux se fondent en un bulbe dès 120 px. */
 {
   const f = new Figure().pose({
     head: 3, torso: 5, standHip: 34,
@@ -92,7 +92,7 @@ function write(name, f) {
 
 /* Le gréement fait pivoter le buste sur des hanches fixes : à 58° les épaules
    sont déjà 75 px DEVANT les genoux, et tout bras tiré vers son propre genou
-   traverse le tronc en diagonale — c'est l'écheveau qui a coûté la version
+   traverse le tronc en diagonale, c'est l'écheveau qui a coûté la version
    précédente. Deux décisions le désamorcent :
      · les DEUX mains vont sur le genou avant, pas une par genou. En profil
        c'est ce qu'on voit de toute façon, et le bras arrière (portée 131) y
@@ -106,7 +106,7 @@ function write(name, f) {
  * · La foulée ne vient pas du genou avant. `plantLead` décroche dès que la
  *   jambe est tendue vers l'avant (bissection non encadrée) et repose le pied
  *   sous le bassin ; c'est `standHip` qui écarte les appuis.
- * · Le bras avant du gréement est court — 93 px de portée contre 131 pour le
+ * · Le bras avant du gréement est court, 93 px de portée contre 131 pour le
  *   bras arrière, parce qu'en `BASE` il est dessiné plié et raccourci. Toute
  *   cible posée au-delà le fait se contorsionner. Mesurer avant de viser.
  * · `head` au-delà de 30° avale l'encoche du cou : la tête cesse d'être une
@@ -114,6 +114,6 @@ function write(name, f) {
  * · Le défaut qui reste sur `catching-breath` : le dos est une règle. Le
  *   rachis de `BASE` est presque droit, ce qui passe inaperçu à la verticale
  *   et se voit dès qu'on le couche à 58°. Aucun réglage du gréement ne le
- *   courbe — il faudrait une traversée écrite pour cette pose, comme le
+ *   courbe, il faudrait une traversée écrite pour cette pose, comme le
  *   gainage. À 130 px, la taille d'affichage, ça ne se voit pas.
  */

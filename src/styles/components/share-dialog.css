@@ -1,4 +1,4 @@
-/* Share dialog — the sheet that offers the 37 share templates.
+/* Share dialog, the sheet that offers the 37 share templates.
  *
  * A phone gets a sheet hinged on the bottom edge; a wide screen gets a
  * centred panel. Both are floating surfaces, so --shadow-block is allowed.
@@ -8,7 +8,7 @@
  *
  * The block is named for the component and nothing else: `.zn-dialog` and
  * `.zn-sheet` already exist and mean the generic primitives, and this panel
- * is neither — it renders its own <dialog>. The one part it *does* borrow is
+ * is neither, it renders its own <dialog>. The one part it *does* borrow is
  * `.zn-dialog__close`, which dialog.css states outright is reusable by
  * anything rendering its own panel.
  *
@@ -24,12 +24,12 @@
   position: fixed;
   inset-inline: 0;
   /* `top: auto` is load-bearing: Chrome's `dialog:modal` pins both block edges,
-     and a box with top, bottom and a height all set is over-constrained — the
+     and a box with top, bottom and a height all set is over-constrained, the
      browser drops `bottom` and the sheet is drawn against the ceiling. */
   top: auto;
   bottom: 0;
   /* The UA centres a modal <dialog> with `margin: auto` and sizes it
-     `fit-content` on both axes, and gives it 1em of padding — undone, because
+     `fit-content` on both axes, and gives it 1em of padding, undone, because
      this panel states its own box. */
   margin: 0;
   padding: 0;
@@ -56,7 +56,7 @@
   animation: zn-share-dialog-in var(--dur-base) var(--ease-out);
 }
 
-/* The scene, flat ink — the system forbids blur. */
+/* The scene, flat ink, the system forbids blur. */
 .zn-share-dialog::backdrop {
   background: var(--scrim);
   animation: zn-share-dialog-scene-in var(--dur-base) var(--ease-out);
@@ -103,7 +103,7 @@
   }
 }
 
-/* The grab handle. Decoration — it is aria-hidden in the markup, and it is
+/* The grab handle. Decoration, it is aria-hidden in the markup, and it is
    the same 44x4 bar a sheet draws. */
 .zn-share-dialog__grip {
   flex: none;
@@ -197,7 +197,7 @@
 /* ── carousel ─────────────────────────────────────────────────────────── */
 
 /* On a 390px phone the sheet is capped at 92dvh and the carousel, the caption
-   and the toggle together ask for more than that — so this column scrolls
+   and the toggle together ask for more than that, so this column scrolls
    rather than clipping its last child. The track inside keeps its own
    horizontal scroll; the page itself never moves sideways. */
 .zn-share-dialog__body {
@@ -291,8 +291,8 @@
   }
 }
 
-/* The scroll track. It scrolls inside itself — the page never moves
-   sideways — and the side padding is what leaves a peek of the neighbours. */
+/* The scroll track. It scrolls inside itself, the page never moves
+   sideways, and the side padding is what leaves a peek of the neighbours. */
 .zn-share-dialog__track {
   display: flex;
   gap: var(--sp-6);
@@ -362,7 +362,7 @@
 
 /* The frame around one template. 1.5px is the house outline; l'aperçu retenu
    double ce filet d'ENCRE vers l'intérieur (card.css) au lieu de prendre le
-   cadre vermillon, désormais réservé à « maintenant » et au focus.
+   cadre vermillon, désormais réservé à maintenant et au focus.
    No shadow: this is a card in a row, not a floating surface. */
 .zn-share-dialog__frame {
   position: relative;
@@ -374,8 +374,8 @@
 
   /* The two tones under the artwork, pinned to the light ramp on purpose.
      The 37 templates render on their own light background whatever the app
-     theme is — templates/_shared.tsx says so and html-to-image captures them
-     that way — so their ink is dark and never inverts. A mat and a
+     theme is, templates/_shared.tsx says so and html-to-image captures them
+     that way, so their ink is dark and never inverts. A mat and a
      checkerboard that *did* invert put dark ink on a near-black ground: in
      dark mode a transparent preview became unreadable, which is the one thing
      the checkerboard exists to prevent. These are --paper-sunken and
@@ -394,11 +394,11 @@
    remplit le cadre, et son illustration est épinglée à la rampe CLAIRE quel
    que soit le thème (voir le bloc --frame-mat ci-dessus). Un anneau d'encre
    posé à l'intérieur serait recouvert par l'illustration ; et en thème sombre
-   l'encre du système est crème — crème sur une illustration claire, on ne
+   l'encre du système est crème, crème sur une illustration claire, on ne
    voit rien. Posé à l'extérieur, l'anneau tombe sur le papier de la feuille,
    qui lui suit le thème : il contraste dans les deux cas.
    L'outline ne participe pas à la mise en page et ne fuit pas dans le PNG
-   exporté — html-to-image capture .zn-share-dialog__mount, un descendant.
+   exporté, html-to-image capture .zn-share-dialog__mount, un descendant.
    Deuxième canal, non chromatique, déjà en place plus haut : la diapositive
    retenue passe de opacity .8 / scale(.94) à opacity 1 / scale 1. */
 .zn-share-dialog__slide[aria-pressed="true"] .zn-share-dialog__frame {

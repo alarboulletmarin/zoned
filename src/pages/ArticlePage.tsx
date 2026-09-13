@@ -26,7 +26,7 @@ type CalloutLabels = Record<CalloutKind, string>;
  * Handles the markdown-ish subset the article files actually use: headings,
  * bold, links, wiki-links, bullet and numbered lists, tables, rules, plain
  * blockquotes and the four marker-prefixed callouts. Everything it emits
- * carries a `.zn-prose__*` class — the reading treatment lives in
+ * carries a `.zn-prose__*` class, the reading treatment lives in
  * `src/styles/components/learn.css` and is shared with the guides.
  *
  * `labels` is passed in rather than translated here: this is a plain function,
@@ -102,7 +102,7 @@ function renderMarkdown(
 
   const parseInline = (raw: string): React.ReactNode => {
     // A wiki-link names a glossary entry by its id. The id is not prose, so
-    // the brackets come off and the hyphens become spaces — the auto-linker
+    // the brackets come off and the hyphens become spaces, the auto-linker
     // then matches the phrase exactly as it does everywhere else, instead of
     // the reader being shown "[[seuil-lactique]]" mid-sentence.
     const text = raw.replace(/\[\[([^\]]+)\]\]/g, (_, id: string) =>
@@ -155,8 +155,8 @@ function renderMarkdown(
   };
 
   /**
-   * A pulled-out block. One treatment for the four kinds — two ink rules and a
-   * mono label — because the label is the only thing that differs, and a
+   * A pulled-out block. One treatment for the four kinds, two ink rules and a
+   * mono label, because the label is the only thing that differs, and a
    * coloured panel per kind would spend four accents on a page allowed one.
    */
   const renderCallout = (
@@ -303,7 +303,7 @@ function renderMarkdown(
       continue;
     }
 
-    // Empty line. A blank line between two items does NOT end the list — the
+    // Empty line. A blank line between two items does NOT end the list, the
     // article files space their numbered steps out, and closing the list on
     // every gap turned one sequence of four steps into four one-item lists.
     if (line.trim() === "") {
@@ -354,7 +354,7 @@ export function ArticlePage() {
   }
 
   // The text did not arrive. Say so, say what is still reachable, and give the
-  // way back — a redirect here would look like the article never existed.
+  // way back, a redirect here would look like the article never existed.
   if (error) {
     return (
       <div className="zn-article">
@@ -555,7 +555,7 @@ export function ArticlePage() {
       <ReadingProgress />
 
       <div className="zn-article">
-        {/* 1 — where you are, what this is, and what it is called */}
+        {/* 1, where you are, what this is, and what it is called */}
         <section
           className="zn-stack zn-article__head"
           style={{ "--gap": "var(--sp-10)" } as CSSProperties}
@@ -606,7 +606,7 @@ export function ArticlePage() {
           </p>
         </section>
 
-        {/* 2 — the reading column, and the rail that says how long and where.
+        {/* 2, the reading column, and the rail that says how long and where.
             The rail is first in the DOM so it lands above the article on a
             phone and beside it on a desktop. */}
         <div
@@ -636,7 +636,7 @@ export function ArticlePage() {
           </article>
         </div>
 
-        {/* 3 — the zones article ends on the scale it explained, and on the one
+        {/* 3, the zones article ends on the scale it explained, and on the one
             filled action this screen spends */}
         {article.slug === "zones" && (
           <section
@@ -653,8 +653,8 @@ export function ArticlePage() {
           </section>
         )}
 
-        {/* 4 — what to read next. Related content, the two neighbours, the way
-            back — one band, so an article with no neighbours never leaves a
+        {/* 4, what to read next. Related content, the two neighbours, the way
+            back, one band, so an article with no neighbours never leaves a
             rule with nothing under it. */}
         <section
           className="zn-section zn-stack"

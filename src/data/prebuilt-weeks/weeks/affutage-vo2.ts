@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Affûtage / taper (VO₂·VMA) — 5 sessions, low volume, two intensity touches.
+ * Affûtage / taper (VO₂·VMA), 5 sessions, low volume, two intensity touches.
  * Long run shortened. Keeps intensity, slashes volume.
  *
  * Bosquet & Mujika's point is that a taper works by cutting volume *while
@@ -21,12 +21,12 @@ export const affutageVo2: PrebuiltWeek = {
   icon: "Zap",
   difficulty: "intermediate",
   category: "sharpening",
-  provenance: "Principes d'affûtage — Bosquet & Mujika (méta-analyse)",
-  provenanceEn: "Tapering principles — Bosquet & Mujika (meta-analysis)",
+  provenance: "Principes d'affûtage, Bosquet & Mujika (méta-analyse)",
+  provenanceEn: "Tapering principles, Bosquet & Mujika (meta-analysis)",
   whyItWorks:
-    "L'affûtage coupe le volume de 40–60 % tout en gardant un peu d'intensité : la fatigue chute plus vite que la condition, et la fraîcheur grimpe. Les répétitions VMA courtes entretiennent l'économie de course et le système neuromusculaire sans créer de dommages durables.",
+    "L'affûtage coupe le volume de 40-60 % tout en gardant un peu d'intensité : la fatigue chute plus vite que la condition, et la fraîcheur grimpe. Les répétitions VMA courtes entretiennent l'économie de course et le système neuromusculaire sans créer de dommages durables.",
   whyItWorksEn:
-    "Tapering cuts volume by 40–60% while keeping a little intensity: fatigue drops faster than fitness, and freshness climbs. Short VO₂ reps maintain running economy and the neuromuscular system without lasting damage.",
+    "Tapering cuts volume by 40-60% while keeping a little intensity: fatigue drops faster than fitness, and freshness climbs. Short VO₂ reps maintain running economy and the neuromuscular system without lasting damage.",
   settings: {
     sessions: 5,
     targetVolumeH: 3,
@@ -51,8 +51,8 @@ export const affutageVo2: PrebuiltWeek = {
       sessionType: "vo2max",
       isKeySession: true,
       estimatedDurationMin: 30,
-      why: "VMA pré-course : quelques répétitions vives pour rester affûté sans fatiguer — la séance signature de l'affûtage.",
-      whyEn: "Pre-race VO₂: a few sharp reps to stay crisp without fatigue — the signature taper session.",
+      why: "VMA pré-course : quelques répétitions vives pour rester affûté sans fatiguer, la séance signature de l'affûtage.",
+      whyEn: "Pre-race VO₂: a few sharp reps to stay crisp without fatigue, the signature taper session.",
     },
     {
       dayOfWeek: 3,

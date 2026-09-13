@@ -5,11 +5,11 @@ import { useCallback, type KeyboardEvent, type RefObject } from "react";
  *
  * Ce dépôt a livré deux fois un `role` sans son clavier, et c'est bloquant dès
  * que le rail défile : cinq boutons tabulables et aucune flèche. Le motif APG
- * « Radio Group » veut **un seul arrêt de tabulation** pour le groupe, et des
+ * Radio Group veut **un seul arrêt de tabulation** pour le groupe, et des
  * flèches qui déplacent le focus ET cochent, avec bouclage.
  *
  * Le rail des disciplines de la bibliothèque le portait déjà, écrit à la main.
- * L'arrivée d'un second rail — les pratiques — en aurait fait une copie : donc
+ * L'arrivée d'un second rail, les pratiques, en aurait fait une copie : donc
  * il est sorti ici. Mécanique reprise de `ui/segmented.tsx`.
  */
 export function useRadioRail<T>({

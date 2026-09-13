@@ -2,7 +2,7 @@
  * USAGE: bun run scripts/generate-readme-banner.ts
  *
  * The README banner: the site share card of scripts/generate-og-image.ts,
- * recomposed in 1280×400 and rendered at 2× in both themes —
+ * recomposed in 1280×400 and rendered at 2× in both themes,
  *   assets/readme-banner-light.png
  *   assets/readme-banner-dark.png
  * README.md shows them in a <picture> keyed on prefers-color-scheme, so the

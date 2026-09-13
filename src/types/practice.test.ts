@@ -23,7 +23,7 @@ describe("practiceFromRaceDistance", () => {
   /* L'aller-retour ne vaut que pour une pratique OUVERTE : une pratique
      annoncée ne propose aucune distance, c'est sa définition même, et c'est
      précisément ce qui ferme son parcours. La projection inverse, elle, reste
-     totale — un plan ultra déjà enregistré doit garder sa pratique, sinon il
+     totale, un plan ultra déjà enregistré doit garder sa pratique, sinon il
      s'ouvrirait comme un plan sur route. */
   test("aller-retour : une pratique ouverte propose en retour ses distances", () => {
     for (const distance of ALL_DISTANCES) {
@@ -40,7 +40,7 @@ describe("practiceFromRaceDistance", () => {
       );
       expect(claimants.length).toBeLessThanOrEqual(1);
       /* Une distance sans revendiquant est une distance dont la pratique est
-         fermée — jamais un trou dans la table. */
+         fermée, jamais un trou dans la table. */
       if (claimants.length === 0) {
         expect(isPracticeLive(practiceFromRaceDistance(distance))).toBe(false);
       }
@@ -56,7 +56,7 @@ describe("PRACTICE_META", () => {
   });
 
   // L'axe produit (Practice) et l'axe moteur (DistanceProfile) ont le droit
-  // d'être de granularités différentes — « route » contient du "short" ET du
+  // d'être de granularités différentes, route contient du "short" ET du
   // "long". Ce qui ne doit PAS dériver, c'est que trail et ultra restent du
   // côté trail du moteur : c'est ce qui leur donne leurs tables de volume,
   // de phases et d'affûtage.
@@ -82,7 +82,7 @@ describe("PRACTICE_META", () => {
   });
 
   // Ces tests échouent le jour où quelqu'un rouvre une pratique annoncée sans
-  // avoir écrit — ou fiabilisé — ses plans. C'est voulu : l'annonce est une
+  // avoir écrit, ou fiabilisé, ses plans. C'est voulu : l'annonce est une
   // promesse, pas un réglage qu'on retourne en passant.
   test("le triathlon est annoncé, pas livré", () => {
     expect(PRACTICE_META.triathlon.status).toBe("announced");

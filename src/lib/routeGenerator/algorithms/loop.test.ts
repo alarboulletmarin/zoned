@@ -22,7 +22,7 @@ function makeBrouterPayload(distanceM: number) {
         },
         geometry: {
           type: "LineString",
-          // Two arbitrary points are enough — the algorithm never inspects
+          // Two arbitrary points are enough, the algorithm never inspects
           // the actual coordinates, only the trace metadata.
           coordinates: [
             [2.349, 48.8567, 35],

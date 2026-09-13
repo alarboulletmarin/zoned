@@ -41,7 +41,7 @@ const zonedValues: Record<string, ComparisonValue> = {
   price: { type: "text", valueFr: "Gratuit", valueEn: "Free" },
   account: { type: "no" },
   // Not "no": src/App.tsx mounts Vercel Web Analytics unconditionally, so each
-  // page view is measured — anonymously, without a cookie or an account.
+  // page view is measured, anonymously, without a cookie or an account.
   dataCollection: {
     type: "partial",
     labelFr: "Analytique de pages, anonyme",

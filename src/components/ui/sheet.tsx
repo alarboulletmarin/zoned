@@ -9,7 +9,7 @@ import { NativeDialog } from "@/components/ui/native-dialog";
 import { useSheetDrag } from "@/hooks/useSheetDrag";
 
 /**
- * Sheet — the same paper and outline as a dialog, hinged on one edge.
+ * Sheet, the same paper and outline as a dialog, hinged on one edge.
  *
  * Same engine as `dialog.tsx`: a native <dialog> opened with showModal(). The
  * only thing that differs is `side`, which still lands on the element as

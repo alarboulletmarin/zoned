@@ -131,12 +131,12 @@
         }
       ],
       "coachingTips": [
-        "Restez bas dans la zone — ne pas déborder en Z3",
+        "Restez bas dans la zone, ne pas déborder en Z3",
         "Cadence stable, allure régulière, vous pouvez tenir une conversation",
         "Hydratation dès 45 minutes, ravitaillement après 90 minutes"
       ],
       "coachingTipsEn": [
-        "Stay low in the zone — do not drift into Z3",
+        "Stay low in the zone, do not drift into Z3",
         "Steady cadence, steady effort, you can hold a conversation",
         "Hydrate from 45 min, fuel after 90 min"
       ],
@@ -259,11 +259,11 @@
       ],
       "commonMistakes": [
         "Partir trop fort sur le premier bloc",
-        "Confondre sweet-spot avec seuil — rester sous FTP"
+        "Confondre sweet-spot avec seuil, rester sous FTP"
       ],
       "commonMistakesEn": [
         "Going too hard on the first block",
-        "Confusing sweet spot with threshold — stay below FTP"
+        "Confusing sweet spot with threshold, stay below FTP"
       ],
       "variationIds": ["CYC-004"],
       "selectionCriteria": {
@@ -371,7 +371,7 @@
       "coachingTipsEn": [
         "First minute at lower threshold, last minute at upper threshold",
         "If the last rep drops more than 5 % power, the load was too high",
-        "Spin smooth — avoid mashing at the end of intervals"
+        "Spin smooth, avoid mashing at the end of intervals"
       ],
       "commonMistakes": [
         "Ouvrir au-dessus du seuil et exploser au troisième intervalle",
@@ -482,12 +482,12 @@
       "coachingTips": [
         "Montée en puissance progressive sur les 45 premières secondes",
         "Cadence haute (95-105 rpm) pour réduire la charge musculaire",
-        "Respiration maximale atteinte vers la 2e minute — c'est normal"
+        "Respiration maximale atteinte vers la 2e minute, c'est normal"
       ],
       "coachingTipsEn": [
         "Build power progressively over the first 45 seconds",
         "High cadence (95-105 rpm) to reduce muscular load",
-        "Maximal breathing peaks around minute 2 — that's expected"
+        "Maximal breathing peaks around minute 2, that's expected"
       ],
       "commonMistakes": [
         "Exploser sur le 1er intervalle et saboter les 4 suivants",
@@ -703,11 +703,11 @@
         "Eat something between blocks if the session goes past 75 minutes"
       ],
       "commonMistakes": [
-        "Confondre sweet-spot avec seuil — tendance à monter trop haut",
+        "Confondre sweet-spot avec seuil, tendance à monter trop haut",
         "Raccourcir la récupération pour finir plus vite"
       ],
       "commonMistakesEn": [
-        "Mistaking sweet spot for threshold — tendency to push too high",
+        "Mistaking sweet spot for threshold, tendency to push too high",
         "Cutting recovery short to finish earlier"
       ],
       "variationIds": ["CYC-003", "CYC-004"],
@@ -809,22 +809,22 @@
         }
       ],
       "coachingTips": [
-        "Récupération COMPLÈTE entre les efforts — c'est de la qualité, pas du volume",
+        "Récupération COMPLÈTE entre les efforts, c'est de la qualité, pas du volume",
         "Démarrage en danseuse pour le couple maximal",
         "Si la puissance pic chute de plus de 10 % entre la 1re et la 8e, arrêtez à 6 reps"
       ],
       "coachingTipsEn": [
-        "FULL recovery between efforts — this is quality, not volume",
+        "FULL recovery between efforts, this is quality, not volume",
         "Start out of the saddle for maximum torque",
         "If peak power drops more than 10 % between rep 1 and 8, stop at 6 reps"
       ],
       "commonMistakes": [
-        "Réduire la récupération pour gagner du temps — annule les bénéfices",
-        "Faire la séance fatigué — aucune adaptation neurale possible"
+        "Réduire la récupération pour gagner du temps, annule les bénéfices",
+        "Faire la séance fatigué, aucune adaptation neurale possible"
       ],
       "commonMistakesEn": [
-        "Cutting recovery to save time — kills the gains",
-        "Doing the session pre-fatigued — no neural adaptation possible"
+        "Cutting recovery to save time, kills the gains",
+        "Doing the session pre-fatigued, no neural adaptation possible"
       ],
       "variationIds": [],
       "selectionCriteria": {
@@ -945,22 +945,22 @@
         }
       ],
       "coachingTips": [
-        "Z5 = 110-120 % FTP, Z2 = 65-75 % FTP — pas trop bas, pas trop haut",
-        "Le rythme cardiaque ne descend pas entre les efforts — c'est volontaire",
+        "Z5 = 110-120 % FTP, Z2 = 65-75 % FTP, pas trop bas, pas trop haut",
+        "Le rythme cardiaque ne descend pas entre les efforts, c'est volontaire",
         "Cadence haute (95-105 rpm) pour réduire la sollicitation musculaire"
       ],
       "coachingTipsEn": [
-        "Z5 = 110-120 % FTP, Z2 = 65-75 % FTP — neither too low nor too high",
-        "Heart rate stays high between efforts — that's intentional",
+        "Z5 = 110-120 % FTP, Z2 = 65-75 % FTP, neither too low nor too high",
+        "Heart rate stays high between efforts, that's intentional",
         "High cadence (95-105 rpm) to reduce muscular stress"
       ],
       "commonMistakes": [
-        "Récupérer trop bas (Z1) entre les efforts — change le stimulus",
-        "Confondre Z5 avec Z6 — pas de sprint, juste du soutenu"
+        "Récupérer trop bas (Z1) entre les efforts, change le stimulus",
+        "Confondre Z5 avec Z6, pas de sprint, juste du soutenu"
       ],
       "commonMistakesEn": [
-        "Recovering too low (Z1) between efforts — changes the stimulus",
-        "Confusing Z5 with Z6 — no sprint, just sustained intensity"
+        "Recovering too low (Z1) between efforts, changes the stimulus",
+        "Confusing Z5 with Z6, no sprint, just sustained intensity"
       ],
       "variationIds": ["CYC-005"],
       "selectionCriteria": {
@@ -1061,22 +1061,22 @@
         }
       ],
       "coachingTips": [
-        "Cadence basse stricte — c'est l'objectif force",
+        "Cadence basse stricte, c'est l'objectif force",
         "Buste droit, pas de tirage en danseuse sauf relance",
         "Si la cadence remonte au-dessus de 80 rpm, montez de braquet"
       ],
       "coachingTipsEn": [
-        "Strict low cadence — strength is the focus",
+        "Strict low cadence, strength is the focus",
         "Stay seated, no out-of-saddle pulling unless surging",
         "If cadence rises above 80 rpm, shift up"
       ],
       "commonMistakes": [
         "Choisir une côte trop courte qui force à rouler en plat",
-        "Pédaler en danseuse permanente — n'est pas l'objectif"
+        "Pédaler en danseuse permanente, n'est pas l'objectif"
       ],
       "commonMistakesEn": [
         "Picking a hill too short that forces flat-road riding",
-        "Out-of-saddle the entire time — not the goal"
+        "Out-of-saddle the entire time, not the goal"
       ],
       "variationIds": ["CYC-004"],
       "selectionCriteria": {

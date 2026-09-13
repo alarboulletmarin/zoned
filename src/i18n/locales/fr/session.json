@@ -4,7 +4,7 @@
     "main": "Corps de séance",
     "cooldown": "Retour au calme",
     "recovery": "Récupération",
-    "interSeries": "{{count}} séries — ~3 min footing entre les séries",
+    "interSeries": "{{count}} séries, ~3 min footing entre les séries",
     "loopTemplate": "Une itération est montrée ci-dessous",
     "noZone": "Sans zone",
     "repeatUnits": {
@@ -178,8 +178,7 @@
     "total": "Total {{duration}}",
     "exportFormats": ".fit · .ics · .pdf · .png",
     "notFoundTitle": "Cette séance n'est plus au catalogue",
-    "notFoundBody": "Le lien pointe vers un identifiant que le catalogue ne connaît pas. Tes favoris, tes plans et tes séances enregistrées sont intacts.",
-    "zonesNote": "des minutes, pas des kilomètres : c'est le temps passé qui fait l'adaptation"
+    "notFoundBody": "Le lien pointe vers un identifiant que le catalogue ne connaît pas. Tes favoris, tes plans et tes séances enregistrées sont intacts."
   },
   "illustration": {
     "strengthBrief": "Gainage vu de profil, trait 2 px, appuis en accent",

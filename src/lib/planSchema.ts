@@ -1,7 +1,7 @@
 import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, RaceDistance, TrainingPlan, UnavailabilityReason, WeekCategory } from "@/types/plan";
 import { WEEK_CATEGORIES } from "@/types/plan";
 
-// Domain bounds — defensive guards against pathological imports.
+// Domain bounds, defensive guards against pathological imports.
 const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
 const MAX_VOLUME_PERCENT = 200;
 

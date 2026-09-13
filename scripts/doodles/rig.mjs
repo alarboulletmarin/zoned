@@ -1,4 +1,4 @@
-/* rig.mjs — le gréement du trait Zoned.
+/* rig.mjs, le gréement du trait Zoned.
  *
  * Le doodle approuvé (runners-duo, figure de gauche) est une traversée continue
  * de 78 ancres, lissée en Catmull-Rom. Ce module la découpe en articulations et
@@ -84,7 +84,7 @@ export class Figure {
   set(i, v) { if (i < 0) this.S[-i - 1] = v; else this.P[i] = v; }
   all() { return [...this.P, ...this.S]; }
 
-  /** pose({ leadKnee: 24, frontArm: -10, ... }) — degrés, horaire positif. */
+  /** pose({ leadKnee: 24, frontArm: -10, ... }), degrés, horaire positif. */
   pose(spec) {
     for (const [name, deg] of Object.entries(spec)) {
       if (!deg) continue;
@@ -115,7 +115,7 @@ export class Figure {
   }
   /** Ordonnée du sol : le dessous du pied d'appui, pas celui de la semelle.
       Dans le dessin approuvé, la ligne de sol traverse l'arc de semelle, qui
-      déborde de quatre pixels sous elle — c'est ce débord qui fait le contact
+      déborde de quatre pixels sous elle, c'est ce débord qui fait le contact
       plutôt qu'un pied posé sur un rail. */
   groundY() { return Math.max(...[0, 71, 72, 73, 74, 75, 76, 77].map((i) => this.P[i][1])); }
 
@@ -124,12 +124,12 @@ export class Figure {
      approuvé le fait pour sa semelle. Les tangentes sont calculées sur la
      traversée entière, donc la coupe ne se voit pas.
 
-     accents : liste de [a, b] — les tronçons tracés en vermillon. Le contact
+     accents : liste de [a, b], les tronçons tracés en vermillon. Le contact
      au sol, jamais autre chose.
 
      sole : la semelle sort en vermillon par défaut, parce que dans toutes les
-     poses debout elle EST le contact. Une figure EN L'AIR n'en a aucun — deux
-     images sur six du cycle de foulée — et un accent sur une semelle qui ne
+     poses debout elle EST le contact. Une figure EN L'AIR n'en a aucun, deux
+     images sur six du cycle de foulée, et un accent sur une semelle qui ne
      touche rien est la faute que la règle 3 interdit, pas une licence. Ces
      poses-là passent { sole: false } et sortent entièrement en encre. */
   paths(accents = [], { sole = true } = {}) {
@@ -151,8 +151,8 @@ export class Figure {
      main.
 
      La bissection ne s'applique que si la racine est encadrée. La jambe avant
-     n'atteint le sol que sur une plage étroite — au-delà elle repart vers le
-     haut — et une bissection non encadrée converge alors vers une borne et
+     n'atteint le sol que sur une plage étroite, au-delà elle repart vers le
+     haut, et une bissection non encadrée converge alors vers une borne et
      projette le pied en l'air. C'est arrivé, ça se voyait tout de suite. */
   plantLead({ knee = -4, y = this.groundY() } = {}) {
     this.pose({ leadKnee: knee });
@@ -170,7 +170,7 @@ export class Figure {
     };
     const sole = (f) => Math.max(...FOOT.map((i) => f.P[i][1]));
     bisect("leadHip", (f) => sole(f) - y, -50, 46);
-    // 63 et 65 sont les deux bouts du tronçon qui passe sous le pied — celui
+    // 63 et 65 sont les deux bouts du tronçon qui passe sous le pied, celui
     // que le vermillon peint. C'est lui qui doit être horizontal : mettre à
     // niveau la pointe (60) et le talon laisse le pied sur la demi-pointe.
     bisect("leadFoot", (f) => f.P[63][1] - f.P[65][1], -40, 40);
@@ -184,16 +184,16 @@ export class Figure {
 }
 
 /** Assemble le SVG final. Aucun sol n'est dessiné : depuis le 6 septembre
-    2026 (docs/doodles.md, « Le sol est la règle de la page »), c'est une règle
+    2026 (docs/doodles.md, Le sol est la règle de la page), c'est une règle
     droite de la page qui sert de sol, et le bas du cadre EST la ligne d'appui.
 
-    Le cadre est serré sur le trait à 6 unités près — sur les nombres émis,
+    Le cadre est serré sur le trait à 6 unités près, sur les nombres émis,
     points de contrôle compris, ce qui est le calcul des fichiers coupés par
-    3ce7617 — et son bas est posé 1,2 sous le point le plus bas du TRAIT RENDU
+    3ce7617, et son bas est posé 1,2 sous le point le plus bas du TRAIT RENDU
     (strokeBottom : les cubiques sont échantillonnées, pas leurs points de
     contrôle), demi-épaisseur comprise : la semelle est entière, et c'est elle
     qui touche la règle de la page. Deux coupes précédentes ont raté ce point :
-    à 0,2 sous `groundY` l'arc de semelle était tronqué (« le pied coupé »),
+    à 0,2 sous `groundY` l'arc de semelle était tronqué (le pied coupé),
     sur les points de contrôle le cadre descendait 3 à 5 unités sous la semelle
     et la figure flottait au-dessus du filet. Le cadre se calcule depuis les
     chemins seuls ; `groundY()` reste l'affaire de la pose (plantLead).
@@ -219,7 +219,7 @@ export function strokeBottom(ds) {
     while (i < tk.length) {
       if (/[A-Za-z]/.test(tk[i])) {
         cmd = tk[i++];
-        if (/[a-z]/.test(cmd)) throw new Error(`commande relative « ${cmd} » : cadre non calculable`);
+        if (/[a-z]/.test(cmd)) throw new Error(`commande relative ${cmd} : cadre non calculable`);
         if (cmd === "Z") { cur = start; prevC2 = null; continue; }
       }
       switch (cmd) {
@@ -229,7 +229,7 @@ export function strokeBottom(ds) {
         case "V": cur = [cur[0], num()]; see(cur[1]); prevC2 = null; break;
         case "C": { const p1 = [num(), num()], p2 = [num(), num()], p3 = [num(), num()]; cubic(cur, p1, p2, p3); prevC2 = p2; cur = p3; break; }
         case "S": { const p1 = prevC2 ? [2 * cur[0] - prevC2[0], 2 * cur[1] - prevC2[1]] : cur; const p2 = [num(), num()], p3 = [num(), num()]; cubic(cur, p1, p2, p3); prevC2 = p2; cur = p3; break; }
-        default: throw new Error(`commande « ${cmd} » non gérée`);
+        default: throw new Error(`commande ${cmd} non gérée`);
       }
     }
   }

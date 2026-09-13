@@ -3,7 +3,7 @@
  * geometry seeds inside the route algorithms. We use mulberry32, a
  * lightweight 32-bit hash function with good statistical properties:
  *
- *   - Uniformly distributed output in [0, 1) — unlike `Math.sin(seed)`
+ *   - Uniformly distributed output in [0, 1), unlike `Math.sin(seed)`
  *     which folds badly when the input grows large (the previous
  *     implementation lost precision for `Date.now()`-style seeds).
  *   - 5 lines, no dependency, suitable for tests where reproducibility
@@ -16,7 +16,7 @@
 /**
  * Build a [0, 1) PRNG from a 32-bit integer seed. The seed is coerced
  * via `>>> 0` so floating-point or negative inputs land on a valid
- * integer state. Returns a stateful function — successive calls
+ * integer state. Returns a stateful function, successive calls
  * produce successive values from the stream.
  */
 export function mulberry32(seed: number): () => number {
@@ -32,7 +32,7 @@ export function mulberry32(seed: number): () => number {
 
 /**
  * Deterministic bearing in [0, 360) for a given seed. Same seed always
- * produces the same bearing — a property the algorithms rely on so a
+ * produces the same bearing, a property the algorithms rely on so a
  * regenerate-with-same-seed yields the exact same trace.
  */
 export function seededBearing(seed: number): number {

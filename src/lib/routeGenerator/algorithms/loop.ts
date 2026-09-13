@@ -9,7 +9,7 @@
  *
  *   2. Blind triangulation. Fallback when Overpass times out or returns
  *      too few POI (rural areas, sparsely tagged regions). Same code as
- *      the original MVP — three waypoints in a triangle pattern, iterative
+ *      the original MVP, three waypoints in a triangle pattern, iterative
  *      radius correction. Kept as a safety net so the feature degrades
  *      gracefully instead of failing.
  *
@@ -98,7 +98,7 @@ export async function generateLoop(args: {
         poiBoost,
       });
       if (result) return result;
-      // result === null means we couldn't converge on a POI loop —
+      // result === null means we couldn't converge on a POI loop,
       // drop through to triangulation.
     }
   } catch {
@@ -127,7 +127,7 @@ interface LoopAttemptArgs {
 /**
  * Iterative POI-aware loop. Each pass selects three diverse POI, routes
  * through them, and adjusts the *target distance window* used for selection
- * — not the POI list — so we stay in the same neighbourhoods while
+ *, not the POI list, so we stay in the same neighbourhoods while
  * re-tightening on the requested length.
  */
 async function iteratePoiLoop(
@@ -192,7 +192,7 @@ async function iteratePoiLoop(
     };
   } catch (err) {
     if (err instanceof EmptySelectionError) {
-      // No diverse POI trio could be selected — caller falls back.
+      // No diverse POI trio could be selected, caller falls back.
       return lastChosen.length === 0 ? null : null;
     }
     throw err;

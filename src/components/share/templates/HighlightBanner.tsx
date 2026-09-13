@@ -1,5 +1,5 @@
 /**
- * HighlightBanner — 1080×360. Wide horizontal sticker designed to sit
+ * HighlightBanner, 1080×360. Wide horizontal sticker designed to sit
  * across the bottom of a user's own landscape photo.
  *
  * Compact: workout name + zone pill on the left, 3 stats on the right.
@@ -41,7 +41,7 @@ export function HighlightBanner({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* Card with soft shadow — stays visible in transparent mode so the
+      {/* Card with soft shadow, stays visible in transparent mode so the
           banner reads cleanly when overlaid on a photo (only the
           editorial canvas around it drops out). */}
       <div

@@ -1,12 +1,12 @@
-/* pose-tools.mjs — les solveurs de pose, partagés par les générateurs.
+/* pose-tools.mjs, les solveurs de pose, partagés par les générateurs.
  *
  * Ces trois fonctions vivaient dans effort.mjs, qui les gardait pour lui. Le
  * cycle de foulée (run-cycle.mjs) a besoin des mêmes : plutôt que de les
- * recopier — et de laisser deux copies diverger — elles sont ici.
+ * recopier, et de laisser deux copies diverger, elles sont ici.
  *
  * Elles ne posent rien toutes seules : elles CHERCHENT un angle. Le gréement
  * (rig.mjs) dit ce qu'une articulation peut faire ; celles-ci disent quel
- * angle atteint un but — un pied au sol, une semelle à plat, une main sur un
+ * angle atteint un but, un pied au sol, une semelle à plat, une main sur un
  * genou. Toute recherche se fait sur des copies (`new Figure(f.P, f.S)`) et
  * n'applique au sujet que l'angle retenu.
  *
@@ -70,7 +70,7 @@ export const levelStand = (f) =>
   sweep(f, "standFoot", (g) => Math.abs(g.P[74][1] - g.P[0][1]), [-70, 70]);
 
 /** Met la semelle AVANT à plat : c'est le tronçon [63, 65] qui doit être
- *  horizontal, pas la pointe. Sans ça l'accent se dresse — mesuré à 27 unités
+ *  horizontal, pas la pointe. Sans ça l'accent se dresse, mesuré à 27 unités
  *  de haut sur un premier jet du cycle, soit un vermillon debout au lieu d'un
  *  vermillon posé. */
 export const levelLead = (f) =>

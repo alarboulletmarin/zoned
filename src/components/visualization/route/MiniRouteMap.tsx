@@ -15,7 +15,7 @@ interface MiniRouteMapProps {
 
 /**
  * SVG mini-map preview of a route trace. Pure projection of the polyline
- * into a normalised box — no tiles, no map library — so it renders fast
+ * into a normalised box, no tiles, no map library, so it renders fast
  * inside list cards (Strava-style candidate thumbnails).
  *
  * The latitude axis is inverted (smaller pixel-y for larger lat) so the

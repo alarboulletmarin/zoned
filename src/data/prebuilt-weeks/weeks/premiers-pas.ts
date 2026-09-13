@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Premiers pas — 3 sessions, no quality, four full rest days. The entry point
+ * Premiers pas, 3 sessions, no quality, four full rest days. The entry point
  * for someone who does not run yet: everything easy, volume kept deliberately
  * low so the week can be repeated before adding anything.
  */
@@ -17,8 +17,8 @@ export const premiersPas: PrebuiltWeek = {
   icon: "Footprints",
   difficulty: "beginner",
   category: "base",
-  provenance: "Progression prudente du débutant — règle des 10 %",
-  provenanceEn: "Cautious beginner progression — the 10% rule",
+  provenance: "Progression prudente du débutant, règle des 10 %",
+  provenanceEn: "Cautious beginner progression, the 10% rule",
   whyItWorks:
     "Chez un coureur qui débute, ce sont les tendons et les os qui limitent, pas le souffle : ils s'adaptent plus lentement que le système cardiovasculaire. Trois sorties très faciles séparées par des jours de repos laissent le temps à ces tissus de suivre, et la semaine est faite pour être répétée telle quelle avant d'ajouter quoi que ce soit. Alterner marche et course sur la première séance n'est pas une facilité, c'est la façon la plus sûre de construire du volume.",
   whyItWorksEn:

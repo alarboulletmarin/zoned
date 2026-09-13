@@ -13,12 +13,12 @@ import { PRACTICES } from "@/types/practice";
  * Assainir l'objet `zoned-settings` relu du stockage.
  *
  * Le provider faisait `{ ...DEFAULT_SETTINGS, ...JSON.parse(stored) }`, ce qui
- * suffit à faire traverser des champs additifs — mais fait aussi entrer le
+ * suffit à faire traverser des champs additifs, mais fait aussi entrer le
  * contenu du stockage **tel quel**, typé comme s'il était valide. Tant que les
  * réglages n'étaient que trois chaînes, le pire cas était un thème inconnu.
  * Avec des tableaux, un `disabledModules: "routes"` (une chaîne, écrite à la
  * main, restaurée d'une sauvegarde bricolée, ou corrompue) fait lever chaque
- * `.includes()` en plein rendu — donc un écran blanc, et pas seulement un
+ * `.includes()` en plein rendu, donc un écran blanc, et pas seulement un
  * réglage ignoré.
  *
  * Même style que `planSchema.ts` : listes blanches littérales, on jette ce
@@ -97,7 +97,7 @@ export function isModuleHidden(settings: UserSettings, module: ModuleId): boolea
 }
 
 /**
- * Les pratiques à mettre en avant. **Vide veut dire toutes** — on ne montre
+ * Les pratiques à mettre en avant. **Vide veut dire toutes**, on ne montre
  * jamais une app sans pratique parce que personne n'a encore répondu.
  */
 export function visiblePractices(settings: UserSettings): readonly Practice[] {

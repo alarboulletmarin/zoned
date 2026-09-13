@@ -1,4 +1,4 @@
-/* Annotation — la légende qui montre.
+/* Annotation, la légende qui montre.
 
    Une ligne : la figure éventuelle, le texte, la flèche. L'alignement se fait
    sur la ligne de base du texte, pas au centre : c'est le texte qui est lu, la
@@ -49,7 +49,7 @@
 }
 
 /* Sous 640 px la colonne fait 340 px : figure + texte + flèche ne tiennent pas
-   sur une ligne. La figure part la première — c'est le texte qui informe. */
+   sur une ligne. La figure part la première, c'est le texte qui informe. */
 @media (max-width: 640px) {
   .zn-note__figure {
     display: none;

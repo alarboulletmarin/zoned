@@ -1,11 +1,11 @@
-/* Three families, never four — the design system's rule.
+/* Three families, never four, the design system's rule.
    Bricolage Grotesque: display. Space Grotesk: interface text.
    JetBrains Mono: data, codes, micro-labels.
 
    The design bundle loads these from Google Fonts. We self-host instead:
    Zoned is an offline-first PWA under a Lighthouse budget, so a
    render-blocking third-party stylesheet is not an option. Same three
-   families, same weights — only the transport differs.
+   families, same weights, only the transport differs.
    All three are variable, latin subset, and licensed OFL 1.1. */
 
 @font-face {
@@ -62,7 +62,7 @@
 }
 
 /* Bricolage Grotesque: upm 1000, ascent 930, descent 270, xAvg 498.
-   This is the LCP face — it draws the display title on every screen. */
+   This is the LCP face, it draws the display title on every screen. */
 @font-face {
   font-family: "Bricolage Grotesque Fallback";
   src: local("Arial");
@@ -72,7 +72,7 @@
   line-gap-override: 0%;
 }
 
-/* JetBrains Mono: upm 1000, ascent 1020, descent 300, xAvg 600 — within 0.02%
+/* JetBrains Mono: upm 1000, ascent 1020, descent 300, xAvg 600, within 0.02%
    of Courier New's advance width, so the swap is essentially free. */
 @font-face {
   font-family: "JetBrains Mono Fallback";

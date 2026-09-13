@@ -1,7 +1,7 @@
 /* The catalogue's secondary surfaces: favourites, collections, the workout
  * finder and the custom-workout builder.
  *
- * These five screens are the library's siblings and read as such — a mono
+ * These five screens are the library's siblings and read as such, a mono
  * kicker counting the catalogue, one display title, then the same outlined
  * chips and the same card grid. `library.css` is the sheet they follow; this
  * file only adds what those screens have and the library does not.
@@ -24,7 +24,7 @@
 
 /* ── the head band ────────────────────────────────────────────────────── */
 
-/* Kicker, title, lede — the same band the library and the calculators hub
+/* Kicker, title, lede, the same band the library and the calculators hub
    open on, so a reader arriving from either recognises the paper. */
 .zn-disc__head {
   padding-block: var(--sp-10) var(--sp-13);
@@ -43,7 +43,7 @@
 /* ── bands ────────────────────────────────────────────────────────────── */
 
 /* Une bande de la page, séparée de la précédente par l'espace seul. Ce
-   commentaire disait « blank space alone would make the page read as a feed » :
+   commentaire disait blank space alone would make the page read as a feed :
    c'est la doctrine renversée le 12 septembre 2026, voir .zn-section. */
 .zn-disc__group {
   padding-block: calc(var(--gap-section) / 2);
@@ -64,8 +64,8 @@
    The band draws only its opening rule: the band below it draws its own, and
    two adjacent 1.5px rules would print as a 3px one. */
 /* Le fond sombre suffit à la détacher, comme pour .zn-lib__legend. Le
-   commentaire au-dessus prévenait que « deux filets de 1,5 px voisins
-   s'impriment en 3 px » : le problème disparaît avec les filets. */
+   commentaire au-dessus prévenait que deux filets de 1,5 px voisins
+   s'impriment en 3 px : le problème disparaît avec les filets. */
 .zn-disc__legend {
   padding-block: var(--sp-10);
   background: var(--surface-band);
@@ -82,8 +82,8 @@
 /* ── the chip, in its toggle-button spelling ──────────────────────────── */
 
 /* library.css paints .zn-chip for the `role="checkbox"` groups. A row where
-   only one value can be on at a time — the duration presets, the recent draw
-   being shown — is a plain toggle button and says so with `aria-pressed`.
+   only one value can be on at a time, the duration presets, the recent draw
+   being shown, is a plain toggle button and says so with `aria-pressed`.
    Same paint, same full ink inversion: selected is never a tint. */
 .zn-chip[aria-pressed="true"] {
   background: var(--ink-1);
@@ -150,7 +150,7 @@
   max-inline-size: 62ch;
 }
 
-/* The collection's glyph in its own drawn square — the one box inside the
+/* The collection's glyph in its own drawn square, the one box inside the
    hero, because the hero is a sheet and not a card in a grid. */
 .zn-coll__glyph {
   display: grid;
@@ -201,7 +201,7 @@
 
 /* ══ draw a session ════════════════════════════════════════════════════ */
 
-/* Filters on the left, the draw on the right — the arrangement the screen
+/* Filters on the left, the draw on the right, the arrangement the screen
    already had. It collapses to one column at 900px like every other split. */
 .zn-draw__layout {
   --split: 300px minmax(0, 1fr);
@@ -265,7 +265,7 @@
 }
 
 /* The proportion, drawn: an outlined track with an ink fill. Ink, not
-   vermillon — the accent fill on this screen belongs to the draw button. */
+   vermillon, the accent fill on this screen belongs to the draw button. */
 .zn-draw__ratio {
   block-size: 10px;
   overflow: hidden;
@@ -288,7 +288,7 @@
   gap: var(--sp-6);
 }
 
-/* The levels read as a column rather than a wrapped row — four values, each
+/* The levels read as a column rather than a wrapped row, four values, each
    with its gauge glyph on the far side. Still the chip, squared off. */
 .zn-chip.zn-draw__level {
   inline-size: 100%;
@@ -374,14 +374,14 @@
 
 /* A metric inside the result: the outlined frame belongs to the tile, the
    number and its mono label come from StatBlock. Four of them share a row, so
-   the value drops a step — the selector carries the size attribute because
+   the value drops a step, the selector carries the size attribute because
    stat-block.css is imported after this file and states its own step. */
 .zn-stat[data-size="sm"].zn-draw__metric .zn-stat__value {
   font-size: var(--fs-h4);
   letter-spacing: var(--ls-h4);
 }
 
-/* The strength fallback — a session with no aerobic profile still gets the
+/* The strength fallback, a session with no aerobic profile still gets the
    card's outline, so the two results read as one component. */
 .zn-draw__plaincard {
   display: flex;
@@ -488,7 +488,7 @@
   border-block-end-width: var(--bw-heavy);
 }
 
-/* Save, undo, share, export, delete — one row, wrapping. */
+/* Save, undo, share, export, delete, one row, wrapping. */
 .zn-build__actions {
   display: flex;
   flex-wrap: wrap;

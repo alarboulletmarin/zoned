@@ -1,11 +1,11 @@
-/* Calendar — a paper month grid. The weekday header is a mono micro-label, each
+/* Calendar, a paper month grid. The weekday header is a mono micro-label, each
    day is its own outlined square, the selected day inverts to ink and today
    keeps a vermillon underline.
 
    react-day-picker v9 stamps every day modifier on the <td> as a data-*
    attribute (data-selected, data-today, data-outside, data-disabled,
    data-hidden), so the states are selected off those instead of a parallel set
-   of modifier classes — which is why the classNames map only names structure. */
+   of modifier classes, which is why the classNames map only names structure. */
 
 .zn-cal {
   /* the width the two nav buttons take out of the caption row */
@@ -54,7 +54,7 @@
 /* ── le mois et l'année, en listes ────────────────────────────────────── */
 
 /* Avec `captionLayout="dropdown"`, rdp remplace l'étiquette du mois par deux
-   `<select>` — un pour le mois, un pour l'année — chacun posé en transparence
+   `<select>`, un pour le mois, un pour l'année, chacun posé en transparence
    PAR-DESSUS l'étiquette qu'on lit. Le contrôle est donc le select natif, et
    sur un téléphone c'est le sélecteur du système qui s'ouvre : atteindre un
    mois lointain coûte un geste au lieu d'un appui par mois sur le chevron.
@@ -76,7 +76,7 @@
 }
 
 /* Le vrai contrôle, invisible mais entier : il garde sa surface tactile, son
-   clavier et son sélecteur natif. `opacity: 0` et non `display: none` — un
+   clavier et son sélecteur natif. `opacity: 0` et non `display: none`, un
    select retiré du rendu ne s'ouvre pas. */
 .zn-cal__dd-select {
   position: absolute;
@@ -211,7 +211,7 @@
   text-align: center;
 }
 
-/* the focus ring is 2.5px with a 2px offset — it has to sit above its neighbours */
+/* the focus ring is 2.5px with a 2px offset, it has to sit above its neighbours */
 .zn-cal__day:focus-within {
   position: relative;
   z-index: 1;
@@ -261,11 +261,11 @@
 
 /* Aujourd'hui : l'anneau vermillon sur les quatre côtés, plus le chiffre en
    gras. C'était le seul tiret de 16×2px de l'app, et la seule autre façon de
-   dire « aujourd'hui » que l'anneau du calendrier du plan — deux formes pour
+   dire aujourd'hui que l'anneau du calendrier du plan, deux formes pour
    un seul état. C'est désormais la même marque partout.
    Le ton reste au jour courant et non au jour choisi : depuis que la sélection
    est une pure inversion d'encre (plus bas), les deux ne sont plus
-   confusables — une case crème cerclée de vermillon contre une pastille
+   confusables, une case crème cerclée de vermillon contre une pastille
    d'encre pleine. L'anneau est un inset : la grille ne bouge pas d'un pixel,
    et il suit le rayon des coins, ce que le tiret ne faisait pas. */
 .zn-cal__day[data-today] .zn-cal__day-btn {
@@ -275,17 +275,17 @@
 
 /* ── day states ───────────────────────────────────────────────────────────
    Order is the cascade here: outside is the faintest, selected overrides it,
-   and disabled overrides everything — a day you cannot pick never reads picked. */
+   and disabled overrides everything, a day you cannot pick never reads picked. */
 
 .zn-cal__day[data-outside] .zn-cal__day-btn {
   color: var(--state-disabled-text);
   border-color: var(--state-disabled-border);
 }
 
-/* Choisi : la seule inversion d'encre, la marque « sélectionné » de tout le
-   système. Elle portait EN PLUS un cadre vermillon de 2.5px — un double
+/* Choisi : la seule inversion d'encre, la marque sélectionné de tout le
+   système. Elle portait EN PLUS un cadre vermillon de 2.5px, un double
    marquage qui ne hiérarchisait plus rien et qui volait au jour courant le
-   seul ton que la maison réserve à « maintenant ». La bordure retombe sur le
+   seul ton que la maison réserve à maintenant. La bordure retombe sur le
    filet de base : le bouton est en border-box avec un aspect-ratio de 1, sa
    boîte ne change pas de taille. */
 .zn-cal__day[data-selected] .zn-cal__day-btn,
@@ -301,7 +301,7 @@
   color: var(--state-disabled-text);
   border: var(--bw-hair) solid var(--state-disabled-border);
   cursor: not-allowed;
-  /* Un jour qu'on ne peut pas choisir ne crie pas « maintenant » : l'anneau
+  /* Un jour qu'on ne peut pas choisir ne crie pas maintenant : l'anneau
      d'aujourd'hui tombe avec le reste. La règle est la dernière du bloc, donc
      elle l'emporte, exactement comme le commentaire ci-dessus l'annonce. */
   box-shadow: none;
@@ -336,7 +336,7 @@
 
    Le bloc est le DERNIER du fichier pour l'emporter sur la règle
    `pointer: coarse` au-dessus, qui pose le plancher de 44px. Le carré tombe à
-   40px — au-dessus des 24px du critère AA 2.5.8 — et ce sont l'écart et la
+   40px, au-dessus des 24px du critère AA 2.5.8, et ce sont l'écart et la
    marge qui paient le reste. Sept cases de 40 plus 8×3 plus 2×8 font 320px :
    la grille tient, à 360px comme à 390px. */
 @media (max-width: 560px) {

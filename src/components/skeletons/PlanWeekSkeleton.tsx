@@ -10,8 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
  * The strip follows the real board (`.zn-planweek__board`,
  * `src/styles/components/plan-calendar.css`): four days then three on a
  * phone, the whole week on one line from 768px, and a day that reserves 80px
- * there and 120px here. Seven equal columns at 390px — what this used to
- * draw — is 45px per day, a shape the plan view never takes.
+ * there and 120px here. Seven equal columns at 390px, what this used to
+ * draw, is 45px per day, a shape the plan view never takes.
  */
 export function PlanWeekSkeleton() {
   return (

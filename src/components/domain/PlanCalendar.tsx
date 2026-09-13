@@ -462,7 +462,7 @@ export const PlanCalendar = memo(function PlanCalendar({
               const isPhaseStart = phaseStartWeeks.has(week.weekNumber);
               const dayMap = sessionsByWeekDay.get(week.weekNumber);
 
-              // No separator rows — month labels appear inline in cells (on the 1st of each month)
+              // No separator rows, month labels appear inline in cells (on the 1st of each month)
 
               // Short label for calendar column (avoid overflow)
               let weekLabel: string;
@@ -598,7 +598,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                           </span>
                         )}
                         {sessions.length === 0 ? (
-                          !dayOfMonth && !isBlockedDay && <span className="zn-plancal__empty">—</span>
+                          !dayOfMonth && !isBlockedDay && <span className="zn-plancal__empty">-</span>
                         ) : (
                           <div className="zn-plancal__sessions">
                             {sessions.map((session, sIdx) => {
@@ -884,7 +884,7 @@ const SessionCell = memo(function SessionCell({
       </div>
 
       <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-2)" } as React.CSSProperties}>
-        {/* Completion checkbox — outside the clickable area */}
+        {/* Completion checkbox, outside the clickable area */}
         {onToggleComplete && (
           <button
             type="button"
@@ -930,7 +930,7 @@ const SessionCell = memo(function SessionCell({
           </button>
         )}
 
-        {/* Session content — clickable */}
+        {/* Session content, clickable */}
         <div
           role="button"
           tabIndex={onClick ? 0 : undefined}

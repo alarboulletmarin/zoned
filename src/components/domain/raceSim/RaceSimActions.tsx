@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 /**
  * Plan actions, ranked.
  *
- * Exporting the PDF is what the plan is for — it is the thing that ends up on
- * a phone on race morning — so it is the primary button, and the screen's one
+ * Exporting the PDF is what the plan is for, it is the thing that ends up on
+ * a phone on race morning, so it is the primary button, and the screen's one
  * vermillon fill. Save and share stay outlined.
  */
 export function RaceSimActions({

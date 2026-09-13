@@ -1,8 +1,8 @@
-/* Tabs — typographic slices of one collection, sitting on a full-width ink
+/* Tabs, typographic slices of one collection, sitting on a full-width ink
    rule. L'onglet ouvert porte la pilule d'encre pleine de la porte de la
-   barre du haut (topbar.css:115) : « l'endroit où vous êtes » se dit d'une
+   barre du haut (topbar.css:115) : l'endroit où vous êtes se dit d'une
    seule façon dans toute l'app, jamais par une bande de couleur sur un seul
-   côté. Le vermillon quitte ce fichier — il est réservé à « maintenant » et
+   côté. Le vermillon quitte ce fichier, il est réservé à maintenant et
    à l'anneau de focus.
 
    La rangée GARDE son filet d'encre pleine largeur : c'est lui, et rien
@@ -75,7 +75,7 @@
   background: var(--surface-band);
 }
 
-/* L'onglet ouvert : encre pleine, texte crème — l'inversion, pas un lavis.
+/* L'onglet ouvert : encre pleine, texte crème, l'inversion, pas un lavis.
    Le gras double la couleur (WCAG 1.4.1) : en niveaux de gris, la pilule
    reste un aplat noir et son libellé reste plus lourd que ses frères, donc
    l'état survit à la désaturation comme au daltonisme. */

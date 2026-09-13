@@ -1,16 +1,16 @@
-/* RunCycle — the figure that runs in place, six poses of 110ms each.
+/* RunCycle, the figure that runs in place, six poses of 110ms each.
 
-   660ms per cycle, i.e. 182 steps per minute — an easy pace — at 9 frames per
+   660ms per cycle, i.e. 182 steps per minute, an easy pace, at 9 frames per
    second. The hard cut is deliberate: this is frame-by-frame animation, not
    interpolation. At 24 frames per second it would read as poor 3D; at 9, as a
    drawing.
 
-   The RESTING state — the one that holds when nothing moves — is pose 1, the
+   The RESTING state, the one that holds when nothing moves, is pose 1, the
    front-foot strike. It is also the only state under prefers-reduced-motion,
    and that is why the animation has NO fill-mode: motion.css clamps it to 1ms
    and one iteration, every group then reverts to its base declaration, and
    pose 1 holds. A `forwards` here would leave all six groups on their last
-   keyframe — opacity 0 — and THE FIGURE WOULD VANISH. It is the one thing in
+   keyframe, opacity 0, and THE FIGURE WOULD VANISH. It is the one thing in
    this file that would fail silently.
 
    The fallback is a CONTACT pose, never an airborne one: an airborne frame has
@@ -24,8 +24,8 @@
 .zn-run-cycle {
   display: block;
   /* Width only: the viewBox gives the ratio. A fixed height letterboxes the
-     drawing and floats the sole off the rule (docs/doodles.md, « Poser une
-     figure sur une règle »). */
+     drawing and floats the sole off the rule (docs/doodles.md, Poser une
+     figure sur une règle). */
   inline-size: var(--rc-w, 176px);
   /* The sole bites the rule the parent draws, like every other figure: the box
      comes down by the rule's RENDERED thickness (--rule-bite) and paints above
@@ -77,11 +77,11 @@
 
 /* Says outright what motion.css's global clamp achieves through the missing
    fill-mode: the shell in index.html carries the same rule, and it never sees
-   motion.css — the bundle has not arrived yet.
+   motion.css, the bundle has not arrived yet.
 
    `data-opening="always"` is the opt-in from Settings, mirrored onto the root
    element before first paint. It is the only way motion plays against the OS
-   preference, and it is the person's own call — see motion.css for the trap
+   preference, and it is the person's own call, see motion.css for the trap
    this pairs with. */
 @media (prefers-reduced-motion: reduce) {
   html:not([data-opening="always"]) .rc-f { animation: none; }

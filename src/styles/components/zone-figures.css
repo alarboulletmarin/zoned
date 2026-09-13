@@ -1,4 +1,4 @@
-/* ZoneFigures — la planche des six zones.
+/* ZoneFigures, la planche des six zones.
 
    Six cases d'égale largeur, sans gouttière : c'est l'égalité des cadres qui
    fait lire la progression, et c'est l'absence de gouttière qui fait que le
@@ -11,7 +11,7 @@
 
 .zn-zfig {
   /* px par unité de viewBox : les six figures sont le même corps, donc la
-     même échelle. Z1 (154.9 u) fait 108 px de large, Z6 (187.2 u) 131 px —
+     même échelle. Z1 (154.9 u) fait 108 px de large, Z6 (187.2 u) 131 px,
      entre 120 et 240 px de haut, la taille à laquelle une figure explique. */
   --zfig-scale: 0.7;
   /* Plancher d'encre. La rampe est faite pour des aplats ; sur un trait de
@@ -102,7 +102,7 @@
 
 /* Sous 640 px, six cases côte à côte donnent des figures de 40 px : illisible.
    Deux rangées de trois gardent la lecture de gauche à droite, ligne à ligne,
-   sur deux règles : Z1-Z3 sur un filet, Z4-Z6 sur la règle encre — c'est la
+   sur deux règles : Z1-Z3 sur un filet, Z4-Z6 sur la règle encre, c'est la
    seconde qui tient lieu de filet de section. Z1 fait 87 px de large, Z6
    105 px, aucune ne passe sous les 84 px où un trait devient un pictogramme. */
 @media (max-width: 640px) {
@@ -114,7 +114,7 @@
 
   /* Sur téléphone la seconde rangée tombait sous la pastille MENU au premier
      écran (Z6 : 102 × 44 px à 375×667, 102 × 17 px à 375×812 avec la plage,
-     graduation « Z6 Sprint » 19 à 43 px). La planche passe sous l'outil :
+     graduation Z6 Sprint 19 à 43 px). La planche passe sous l'outil :
      seule position où ni figure ni graduation ne rencontre la pastille à
      scrollY=0, quelle que soit la hauteur d'écran. .zn-num est une colonne
      flex (numbers.css), l'ordre suffit. */

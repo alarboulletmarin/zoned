@@ -1,5 +1,5 @@
 /**
- * CornerStamp — 480×480. Small square sticker designed to sit in the
+ * CornerStamp, 480×480. Small square sticker designed to sit in the
  * corner of a user's photo. Minimal info: zone, duration, ID. Outer ring
  * mimics a vintage hand-stamp.
  */
@@ -34,7 +34,7 @@ export function CornerStamp({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* The white disc IS the visual identity — keep it visible in
+      {/* The white disc IS the visual identity, keep it visible in
           transparent mode (only the editorial bg drops out). */}
       <div
         style={{

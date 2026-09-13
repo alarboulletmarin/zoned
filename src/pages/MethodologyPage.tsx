@@ -118,8 +118,8 @@ const researchers: Researcher[] = [
   },
   {
     name: "Jack Daniels",
-    contributionFr: "Système VDOT et zones d'entraînement (1933–2025)",
-    contributionEn: "VDOT system and training zones (1933–2025)",
+    contributionFr: "Système VDOT et zones d'entraînement (1933-2025)",
+    contributionEn: "VDOT system and training zones (1933-2025)",
     publicationFr: "Livre : \"Daniels' Running Formula\"",
     publicationEn: "Book: \"Daniels' Running Formula\"",
   },
@@ -301,7 +301,7 @@ export function MethodologyPage() {
       />
 
       <div className="zn-guide">
-        {/* 1 — what this page is, and how much of it is cited */}
+        {/* 1, what this page is, and how much of it is cited */}
         <section
           className="zn-stack zn-guide__head"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -317,7 +317,7 @@ export function MethodologyPage() {
           </p>
         </section>
 
-        {/* 2 — the approach, as prose. The reading treatment is the article
+        {/* 2, the approach, as prose. The reading treatment is the article
             block: same measure, same rhythm, same pulled-out caution. */}
         <section className="zn-guide__band" aria-labelledby="meth-approach">
           <h2
@@ -352,7 +352,7 @@ export function MethodologyPage() {
           </div>
         </section>
 
-        {/* 3 — the six zones. The scale names the ink ramp once, then each
+        {/* 3, the six zones. The scale names the ink ramp once, then each
             zone is read on its own card in the ramp's own order. */}
         <section className="zn-guide__band" aria-labelledby="meth-zones">
           <h2
@@ -364,10 +364,10 @@ export function MethodologyPage() {
           </h2>
 
           {/* La planche ouvre la bande, dans le flux et pas dans une carte
-              grise — un dessin dans une boîte se lit comme une vignette. Les
+              grise, un dessin dans une boîte se lit comme une vignette. Les
               six postures disent la montée en effort, et les graduations sous
               la règle les nomment : la planche est la légende. Une seule
-              figure par champ de vision — les cartes n'en portent pas. */}
+              figure par champ de vision, les cartes n'en portent pas. */}
           <ZoneFigures
             label={t("content:methodology.figuresLabel")}
             className="zn-guide__figures"
@@ -410,7 +410,7 @@ export function MethodologyPage() {
           </div>
         </section>
 
-        {/* 4 — who did the work. The publication is printed in the source
+        {/* 4, who did the work. The publication is printed in the source
             face under the contribution it backs, not asserted as prose. */}
         <section className="zn-guide__band" aria-labelledby="meth-researchers">
           <h2
@@ -452,7 +452,7 @@ export function MethodologyPage() {
           </div>
         </section>
 
-        {/* 5 — the papers themselves, oldest marker first: year, title,
+        {/* 5, the papers themselves, oldest marker first: year, title,
             journal. */}
         <section className="zn-guide__band" aria-labelledby="meth-studies">
           <h2
@@ -476,7 +476,7 @@ export function MethodologyPage() {
                 >
                   <p className="zn-guide__reftitle">{pickLang(s, "title")}</p>
                   <p className="zn-source">
-                    {s.authors} &mdash; {s.journal}
+                    {s.authors} &middot; {s.journal}
                   </p>
                   {s.link && (
                     <a
@@ -495,7 +495,7 @@ export function MethodologyPage() {
           </ul>
         </section>
 
-        {/* 6 — where to read further, by kind. */}
+        {/* 6, where to read further, by kind. */}
         <section className="zn-guide__band" aria-labelledby="meth-resources">
           <h2
             id="meth-resources"

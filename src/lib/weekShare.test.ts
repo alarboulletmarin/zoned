@@ -5,7 +5,7 @@
  * already sent must keep decoding forever, so any change here is a breaking
  * change, not a refactor. The golden below is derived from the format spec
  * (`{v, n, c?, s}` with fixed-position session tuples), not from the
- * implementation — if the two disagree, the implementation is what moved.
+ * implementation, if the two disagree, the implementation is what moved.
  */
 
 import { describe, expect, mock, test } from "bun:test";
@@ -14,7 +14,7 @@ import type { TrainingPlan } from "@/types/plan";
 import { SESSION_TYPE_CODES } from "@/lib/share/codes";
 
 // `weekShare` pulls `createEmptyWeekPlan` from weekToPlan, which reaches the
-// `@/components/visualization` barrel and evaluates `src/i18n` — that module
+// `@/components/visualization` barrel and evaluates `src/i18n`, that module
 // uses `import.meta.glob`, a Vite-only API, so the import throws under
 // `bun test`. Stubbing the one import keeps the wire-format tests runnable.
 // Nothing asserted below goes through it (`sharedWeekToPlan` is its only user).
@@ -37,7 +37,7 @@ const {
   sharedWeekUrl,
 } = await import("./weekShare");
 
-/** Minimal plan shaped like a saved week — only the fields the encoder reads. */
+/** Minimal plan shaped like a saved week, only the fields the encoder reads. */
 function buildWeek(): TrainingPlan {
   return {
     id: "week-1",
@@ -128,7 +128,7 @@ describe("round-trip", () => {
   });
 
   test("survives accented week names (UTF-8, not latin1)", () => {
-    const name = "Ma semaine spécifique — côtes";
+    const name = "Ma semaine spécifique, côtes";
     expect(decodeSharedWeek(encodeSharedWeek(buildWeek(), name))!.n).toBe(name);
   });
 });
@@ -160,7 +160,7 @@ describe("decodeSharedWeek rejects bad input", () => {
 });
 
 describe("session-type codes", () => {
-  test("match the shared table — the indexes are baked into live links", () => {
+  test("match the shared table, the indexes are baked into live links", () => {
     // weekShare must agree with share/codes.ts entry for entry, or the same
     // link decodes differently depending on which table is consulted.
     expect(SESSION_TYPE_CODES[0]).toBe("recovery");

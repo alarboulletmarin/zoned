@@ -13,7 +13,7 @@ import { ZONE_HEX_LIGHT } from "@/lib/zoneColors";
  *
  * Il est recopié parce qu'un SVG importé en `?react` est un composant : on ne
  * peut pas lire son cadre à l'exécution. `brand-mark.test.ts` lit le fichier
- * et garde ce nombre — même motif que `src/assets/doodles/frames.test.ts`
+ * et garde ce nombre, même motif que `src/assets/doodles/frames.test.ts`
  * pour les cadres des dessins.
  */
 export const LOGO_RATIO = 3.807;
@@ -30,11 +30,11 @@ interface BrandMarkProps {
 }
 
 /**
- * Le logo : le mot « zoned. », vectorisé.
+ * Le logo : le mot zoned., vectorisé.
  *
  * Ces gabarits rendent en PNG via `html-to-image` avec `skipFonts: true`
  * (src/lib/shareImage.ts) : un texte stylé y tombe dans la police système du
- * navigateur — c'est pourquoi ils affichaient tous « ZONED » en Arial gras à
+ * navigateur, c'est pourquoi ils affichaient tous ZONED en Arial gras à
  * côté d'un zigzag. Un SVG inliné, lui, passe intact. Le nom est donc DANS le
  * dessin, et plus à côté.
  *
@@ -74,11 +74,11 @@ interface BrandStripProps {
  * Elle portait le zigzag ET le mot en texte. Le zigzag est parti avec le logo,
  * et le mot en texte était le doublon du mot dessiné. 34 px de dessin par unité
  * d'échelle donnent la même hauteur d'œil que les 32 px de texte qu'elle
- * portait — la hampe du « d » compte pour le reste du cadre.
+ * portait, la hampe du d compte pour le reste du cadre.
  *
  * En renversé, **le point passe au papier lui aussi**. Vu sur le rendu : les
  * cartes qui demandent `inverted` sont posées sur la couleur de zone, et pour
- * la Z5 c'est un rouge sombre — le point vermillon y disparaissait. La règle de
+ * la Z5 c'est un rouge sombre, le point vermillon y disparaissait. La règle de
  * la maison (un seul aplat d'accent) est de toute façon déjà dépensée par le
  * fond de ces cartes ; le mot entier en papier est le verrou renversé normal.
  */

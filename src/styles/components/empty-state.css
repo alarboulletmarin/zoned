@@ -1,4 +1,4 @@
-/* EmptyState — the starting line.
+/* EmptyState, the starting line.
 
    No dashed card any more: that outline is the texture of the hole reserved
    for a drawing, and an empty shelf is not a hole. In its place, a straight
@@ -33,7 +33,7 @@
    height is what is left of that.
 
    `inline-size: auto` on an SVG imported with ?react is the trap the project
-   has already paid for once — but only when the height is free as well. Here
+   has already paid for once, but only when the height is free as well. Here
    it is fixed, and the width follows the viewBox ratio. */
 .zn-empty__art {
   display: block;
@@ -44,7 +44,7 @@
   color: var(--text-body);
 
   /* The sole on the rule: the frame comes down by the rule's rendered
-     thickness (--rule-bite, borders.css) and paints above it — the vermillon
+     thickness (--rule-bite, borders.css) and paints above it, the vermillon
      of the contact sits on the ink. */
   position: relative;
   z-index: 1;
@@ -158,7 +158,7 @@
 }
 
 /* Danger and connectivity wear the same vermillon the rest of the system
-   uses for a problem — told apart by the words, not by a second hue. */
+   uses for a problem, told apart by the words, not by a second hue. */
 .zn-empty[data-variant="error"] .zn-empty__icon,
 .zn-empty[data-variant="offline"] .zn-empty__icon {
   color: var(--state-danger);

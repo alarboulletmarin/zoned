@@ -1,8 +1,8 @@
 /* The standalone-week instruments: the summary strip, the 80/20 gauge, the
  * seven-day rhythm chart and the generator rail.
  *
- * These four are the *contents* of the /weeks screens, whose paper — bands,
- * session list, rail geometry, mobile dock — is already drawn by
+ * These four are the *contents* of the /weeks screens, whose paper, bands,
+ * session list, rail geometry, mobile dock, is already drawn by
  * plan-weeks.css. Nothing here redraws a band or a card frame that file
  * already owns; the summary strip is the one exception, because it is a
  * self-contained instrument panel that also renders inside a shared-week page
@@ -11,8 +11,8 @@
  * Two system rules shape almost every decision below:
  *
  *   THE RAMP ORDERS, IT DOES NOT NAME. Zone fills stay inline styles reading
- *   `var(--zone-N)` — the escape hatch _layout.css blesses and 635 call sites
- *   already use — and every screen printing them prints the ZoneScale legend
+ *   `var(--zone-N)`, the escape hatch _layout.css blesses and 635 call sites
+ *   already use, and every screen printing them prints the ZoneScale legend
  *   once (all four /weeks screens do).
  *
  *   NO STATE RESTS ON COLOUR ALONE. The polarisation verdict, the over-budget
@@ -29,7 +29,7 @@
 
 /* Metrics + gauge on one side, the rhythm chart on the other. They stack on a
    phone and only sit side by side once the viewport can pay for a 288px
-   second column — below that the chart would be too narrow to read. */
+   second column, below that the chart would be too narrow to read. */
 .zn-wk-summary {
   display: grid;
   gap: var(--sp-8);
@@ -69,7 +69,7 @@
   gap: var(--sp-4) var(--sp-10);
 }
 
-/* The over-budget line. The accent is on the glyph only — a fully vermillon
+/* The over-budget line. The accent is on the glyph only, a fully vermillon
    sentence would spend the screen's one accent on a caption. */
 .zn-wk-summary__warn {
   display: flex;
@@ -181,7 +181,7 @@
   color: var(--state-success);
 }
 
-/* The 80 % caption rides above the bar on its own line — printed over a
+/* The 80 % caption rides above the bar on its own line, printed over a
    segment it would be unreadable against half the ink ramp. */
 .zn-wk-gauge__scale {
   position: relative;
@@ -215,7 +215,7 @@
   border-inline-start: var(--bw-hair) solid var(--line-strong);
 }
 
-/* The target itself is a hole in the bar, so it is dashed — the same mark
+/* The target itself is a hole in the bar, so it is dashed, the same mark
    this system uses for anything not yet filled. */
 .zn-wk-gauge__mark {
   position: absolute;
@@ -329,7 +329,7 @@
 /* A column capped to the viewport, split into a scrolling body and a pinned
    footer: the rail is sticky, so a panel taller than the screen would put its
    own Generate button permanently out of reach. 11rem is the page header
-   above the rail plus a bottom margin — the cap has to hold at the rail's
+   above the rail plus a bottom margin, the cap has to hold at the rail's
    initial position, not only once it sticks. */
 .zn-wk-gen {
   display: flex;
@@ -348,7 +348,7 @@
 }
 
 /* Inside the mobile "Régler" sheet the surface, the cap and the title are all
-   redundant — the sheet already is the surface and carries the title — so the
+   redundant, the sheet already is the surface and carries the title, so the
    panel becomes a plain stack and the whole thing fits without scrolling. */
 .zn-wk-gen--bare {
   gap: var(--sp-6);
@@ -409,7 +409,7 @@
 }
 
 /* The panel's one call, and the escape hatch under it, both run the width of
-   the rail — a centred pill in a 340px column reads as an afterthought. */
+   the rail, a centred pill in a 340px column reads as an afterthought. */
 .zn-wk-gen__actions > .zn-btn {
   inline-size: 100%;
 }
@@ -435,7 +435,7 @@
 }
 
 /* Presets fill in every setting below in one click. They are shortcuts, not a
-   selectable state — hence the dashed outline this system gives to a hole
+   selectable state, hence the dashed outline this system gives to a hole
    waiting to be filled, and never the ink inversion of a chosen chip. */
 .zn-wk-gen__presets {
   display: flex;

@@ -11,9 +11,9 @@ import type { RunnerProfile, BenchmarkEntry, PersonalRecord } from "@/types/runn
  *
  * Storage layout is intentionally split across three localStorage keys so the
  * running profile continues to load untouched when it is all a user has:
- *   - "zoned-runner-profile"   — legacy running profile (unchanged)
- *   - "zoned-cycling-profile"  — cycling metrics (FTP, CP, weekly hours…)
- *   - "zoned-swimming-profile" — swimming metrics (CSS, pool preference…)
+ *   - "zoned-runner-profile", legacy running profile (unchanged)
+ *   - "zoned-cycling-profile", cycling metrics (FTP, CP, weekly hours…)
+ *   - "zoned-swimming-profile", swimming metrics (CSS, pool preference…)
  *
  * Read {@link loadAthleteProfile} to assemble the composite view.
  */
@@ -65,7 +65,7 @@ export interface CyclingProfile {
   thresholdHr?: number;
   /** Max heart rate (cycling-specific; typically 5-10 bpm below running FCmax). */
   fcMax?: number;
-  /** Critical Power from a 3–12min test. */
+  /** Critical Power from a 3-12min test. */
   criticalPowerWatts?: number;
   /** Current weekly training time in hours. */
   currentWeeklyHours?: number;
@@ -95,7 +95,7 @@ export interface SwimmingProfile {
   updatedAt: string;
 }
 
-/** Commute (vélotaf) — recurring cross-training impact on the plan. */
+/** Commute (vélotaf), recurring cross-training impact on the plan. */
 export interface CommutePattern {
   version: 1;
   discipline: Extract<Discipline, "cycling" | "running">;
@@ -110,7 +110,7 @@ export interface CommutePattern {
 
 export interface AthleteProfile {
   version: 1;
-  /** The running side of the athlete — always present, authoritative for running plans. */
+  /** The running side of the athlete, always present, authoritative for running plans. */
   running: RunnerProfile | null;
   /** Optional cycling metrics (FTP, CP, volume). */
   cycling: CyclingProfile | null;

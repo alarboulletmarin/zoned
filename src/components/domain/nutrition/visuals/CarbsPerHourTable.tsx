@@ -11,7 +11,7 @@ import type { CarbsRow } from "@/data/nutrition/types";
  *
  * A real table, so it is the ported ResponsiveTable: a framed paper grid at
  * md+, one outlined card per distance below it. The hand-rolled `hidden
- * sm:table-cell` columns are gone — the card view carries every column with
+ * sm:table-cell` columns are gone, the card view carries every column with
  * its own label, which is what those classes were working around.
  */
 export function CarbsPerHourTable() {

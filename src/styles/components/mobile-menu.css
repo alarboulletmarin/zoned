@@ -1,4 +1,4 @@
-/* Mobile menu — one floating pill, and the full-screen ink panel behind it.
+/* Mobile menu, one floating pill, and the full-screen ink panel behind it.
  *
  * Below 1024px the five doors no longer fit in the header, so they move down
  * here: a single pill in the bottom-right corner, where the thumb already is,
@@ -6,12 +6,12 @@
  *
  * The panel is a NATIVE <dialog> opened with showModal(). The top layer, the
  * focus trap, Escape and the focus returning to the trigger are the platform's
- * — that is why this surface stopped being a Radix Sheet. The one thing the
+ *, that is why this surface stopped being a Radix Sheet. The one thing the
  * platform does not hand over is the scroll lock; MobileMenu.tsx writes it.
  *
  * The open panel is INK IN BOTH THEMES. It is a printed black card, not a piece
- * of paper that follows the theme, so it reads --panel-ink-* — the three fixed
- * tokens colors.css deliberately leaves out of its .dark block — instead of the
+ * of paper that follows the theme, so it reads --panel-ink-*, the three fixed
+ * tokens colors.css deliberately leaves out of its .dark block, instead of the
  * semantic aliases. No rule in this file is theme-aware, and none needs to be.
  *
  * The 44px touch floor is unconditional here rather than behind
@@ -23,7 +23,7 @@
    possède déjà .zn-menu pour tous les DropdownMenuContent de Radix. Les deux
    ont vécu ensemble le temps d'un commit, dans la même couche et à la même
    spécificité, et comme cette feuille est importée après, ses règles de
-   dialogue plein écran — position fixed, inset 0, fond encre — s'appliquaient
+   dialogue plein écran, position fixed, inset 0, fond encre, s'appliquaient
    à CHAQUE menu déroulant de l'app : encre sur encre, et 176 px hors du
    viewport. Deux revues l'ont mesuré indépendamment. Ne réutilise pas ce nom.
 
@@ -34,8 +34,8 @@
 .zn-menu-fab,
 .zn-menu__close {
   position: fixed;
-  /* Above the page's own floating things — the docked action bars (30) and
-     ScrollToTop (40) — and below every modal layer (50), so an open dialog,
+  /* Above the page's own floating things, the docked action bars (30) and
+     ScrollToTop (40), and below every modal layer (50), so an open dialog,
      sheet or command palette covers the pill instead of being pierced by it.
      The close pill is in the top layer with its dialog, where this is moot. */
   z-index: 45;
@@ -66,7 +66,7 @@
   transform: translateY(var(--press-shift));
 }
 
-/* Closed: solid ink, cream type — the same inversion the selected door in the
+/* Closed: solid ink, cream type, the same inversion the selected door in the
    header wears, so the button reads as "the app's own control".
    The ring is cream in both themes: invisible against paper, and the only
    thing separating the pill from the footer's ink bar when the page is
@@ -95,7 +95,7 @@
 /* ── the panel ────────────────────────────────────────────────────────── */
 
 /* A dialog ships with a border, padding, auto margins and a size capped below
-   the viewport — all four are undone here so it can be the whole screen. */
+   the viewport, all four are undone here so it can be the whole screen. */
 .zn-mobile-menu {
   position: fixed;
   inset: 0;
@@ -133,7 +133,7 @@
 }
 
 /* No `gap` here: the room between the blocks is paid by each block itself,
-   because it is not the same everywhere — 32px under the kicker, none between
+   because it is not the same everywhere, 32px under the kicker, none between
    the doors and the ground (the ground's own slack is that room), 16px between
    the rule and the foot. A uniform gap cost 64px, and on an iPhone SE those
    are exactly the pixels the figure needs to exist. */
@@ -173,7 +173,7 @@
   padding: 0;
 }
 
-/* Display type, left-aligned, stacked tight — the doors are the screen.
+/* Display type, left-aligned, stacked tight, the doors are the screen.
    The same rule dresses a <summary>, so a door that discloses and a door that
    navigates are the same object on screen. */
 .zn-menu__door {
@@ -210,7 +210,7 @@
   transform: rotate(180deg);
 }
 
-/* The children hang off a rule, indented under their door — the indent is what
+/* The children hang off a rule, indented under their door, the indent is what
    says "these belong to the line above". */
 .zn-menu__sub {
   list-style: none;
@@ -232,8 +232,8 @@
 
 /* La page où l'on est. Le gras et l'encre claire ne suffisaient pas : sur ce
    fond noir, --panel-ink-faint → --panel-ink-text est un écart porté par la
-   seule couleur, et il fond dès qu'on désature. La pilule inverse le rapport —
-   sur un panneau d'encre, l'inversion est du papier — donc l'état se lit aussi
+   seule couleur, et il fond dès qu'on désature. La pilule inverse le rapport,
+   sur un panneau d'encre, l'inversion est du papier, donc l'état se lit aussi
    en niveaux de gris. Rien ne bouge : la boîte a déjà ses 44px de min-block-size
    et son retrait, on ne fait que peindre dedans. */
 .zn-menu__sub-link[aria-current="page"] {
@@ -248,7 +248,7 @@
 /* The scene is the room left between the last door and the foot, and never
    more: `container-type: size` makes its own content weigh nothing in the
    flex algorithm, so the figure can never push the foot down or the doors up.
-   Its bottom border is the rule — bled to the screen edges through the
+   Its bottom border is the rule, bled to the screen edges through the
    panel's padding, the only rule of the panel that crosses it whole. */
 .zn-menu__scene {
   flex: 1;
@@ -268,10 +268,10 @@
    sit on the line instead of a hair above it. Height, not width, is what it
    is sized by: the five doors are portrait frames cut at the stroke, of
    different heights (159 to 182 units), so one height gives them scales up to
-   15% apart — which never shows, since only one door is open at a time and no
+   15% apart, which never shows, since only one door is open at a time and no
    two of them share a screen; the duo (landscape) simply comes wider. 200px
    is the size the workshop settled on; below that it takes whatever the scene
-   has, down to 120px — the floor under which a stroke stops explaining and
+   has, down to 120px, the floor under which a stroke stops explaining and
    starts competing with the glyphs. `100cqb` is the scene's content height:
    an svgr import without a size collapses, and this is its size. */
 .zn-menu__figure {
@@ -282,7 +282,7 @@
   margin-block-end: calc(-1 * var(--rule-bite));
 }
 
-/* Under 120px of room the figure goes rather than shrinks into a pictogram —
+/* Under 120px of room the figure goes rather than shrinks into a pictogram,
    an open door's list of pages, a landscape phone, anything shorter than an
    iPhone SE. The rule stays, so the panel keeps its structure. Queried on the
    scene, not the viewport: it is the room that decides, whatever ate it. */
@@ -296,7 +296,7 @@
 
 /* 8px between the field and the pills, down from 20: the twelve pixels
    returned are what lets the figure keep its 120px floor on an iPhone SE
-   (375×667) — measured, not guessed: 122.7px left for the scene. */
+   (375×667), measured, not guessed: 122.7px left for the scene. */
 .zn-menu__foot {
   margin-block-start: auto;
   display: flex;

@@ -248,7 +248,7 @@ export function VmaCalculatorPage() {
                   {t("calculators:calculateurs.vma.paceZonesPreview")}
                 </h2>
                 {/* The table below paints a whole zone column, so the ramp is
-                    named where it is painted — a legend above the form would
+                    named where it is painted, a legend above the form would
                     appear as the chrono becomes valid and push the field the
                     runner is typing in down the page. */}
                 <ZoneScale />

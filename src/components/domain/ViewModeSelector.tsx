@@ -9,7 +9,7 @@ interface ViewModeSelectorProps {
 }
 
 /* Le mot plutôt que le glyphe. Trois pictogrammes de grille se distinguent par
-   la taille de leurs carrés — deux pixels d'écart à 18 px — et c'est le libellé
+   la taille de leurs carrés, deux pixels d'écart à 18 px, et c'est le libellé
    masqué qui réduisait chaque segment à un rond : un rayon de pilule sur une
    boîte carrée fait un cercle. Rendu, la pilule redevient une pilule sans qu'on
    touche à son rayon.

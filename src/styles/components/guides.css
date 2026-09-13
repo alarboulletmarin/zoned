@@ -1,4 +1,4 @@
-/* The long-form family — methodology, the three practical guides, the two hubs.
+/* The long-form family, methodology, the three practical guides, the two hubs.
  *
  * Seven screens that are mostly words: /methodology, /plans/methodology,
  * /guides, /guides/nutrition, /guides/race-prep, /guides/warmup and
@@ -10,8 +10,8 @@
  * learn.css; every paragraph, list, table, quotation and pulled-out callout on
  * these seven screens is that same object. Nothing here restyles a <p>. The
  * one thing added below is .zn-prose__figure, a slot for a piece of content
- * that is a drawing rather than a sentence — an exercise list, a checklist, a
- * proportion bar — so it can sit in the reading column at the reading rhythm
+ * that is a drawing rather than a sentence, an exercise list, a checklist, a
+ * proportion bar, so it can sit in the reading column at the reading rhythm
  * without being wrapped in a second card.
  *
  * Also not here: layout (.zn-row / .zn-stack / .zn-grid / .zn-cluster of
@@ -21,7 +21,7 @@
  *
  * The screens live inside the shell's .zn-page, which already pays the 40px
  * (20px mobile) side margin once. A band therefore draws its rule from one
- * edge of that column to the other and never bleeds outside it — a negative
+ * edge of that column to the other and never bleeds outside it, a negative
  * inline margin here would scroll the page sideways at every width between
  * --page-max and --page-max plus twice the margin.
  */
@@ -34,7 +34,7 @@
 /* ── head ─────────────────────────────────────────────────────────────── */
 
 /* Every screen in the family opens the same way: mono kicker, display title,
-   one sentence of lede. No centred medallion, no tinted glyph — five hues of
+   one sentence of lede. No centred medallion, no tinted glyph, five hues of
    icon chip is what the ink-on-paper system replaces. */
 .zn-guide__head {
   padding-block: var(--sp-10) var(--sp-13);
@@ -110,7 +110,7 @@
 
 /* The legend for the ink ramp is the zone plate itself: six figures on one
    rule, code and name under each as graduations. The six cards under it are
-   the ramp read one zone at a time. It sits in the flow, on its own rule — no
+   the ramp read one zone at a time. It sits in the flow, on its own rule, no
    sunken card around a drawing, which reads as a vignette rather than as the
    legend it is. Shown once per screen, as the system requires of any surface
    that paints zone fills. */
@@ -119,7 +119,7 @@
 }
 
 /* One zone: its badge, its name, and the two facts that define it. Outlined
-   paper, no tint — the badge already carries the ramp. */
+   paper, no tint, the badge already carries the ramp. */
 .zn-guide__zone {
   display: flex;
   flex-direction: column;
@@ -143,7 +143,7 @@
 
 /* A study, a book, a reference. The year is the index and stays mono; the
    title is prose; the journal is printed under it in the source face. An
-   outlined row, never a shadow — it is in a list. */
+   outlined row, never a shadow, it is in a list. */
 .zn-guide__ref {
   display: flex;
   align-items: flex-start;
@@ -192,7 +192,7 @@
 /* ── figures inside the reading column ────────────────────────────────── */
 
 /* The extension to the prose block this family needed: a piece of content
-   that is drawn rather than written — an exercise list, a checklist, a
+   that is drawn rather than written, an exercise list, a checklist, a
    proportion bar. It keeps the column's rhythm and adds no frame, because the
    thing inside it draws its own. */
 .zn-prose__figure {
@@ -207,8 +207,8 @@
   color: var(--text-body);
 }
 
-/* The guides' tables are two-column fact sheets with no header row — "à J-3",
-   "3 h avant" — so the left cell is the label rather than a data point. The
+/* The guides' tables are two-column fact sheets with no header row, "à J-3",
+   "3 h avant", so the left cell is the label rather than a data point. The
    articles' tables do have a header row, which is why this is scoped here
    instead of being pushed into .zn-prose__table itself. */
 .zn-guide .zn-prose__table td:first-child {
@@ -243,9 +243,9 @@
 /* ── routines ─────────────────────────────────────────────────────────── */
 
 /* Four toggles, one per session type. La routine choisie double son filet
-   d'encre vers l'intérieur — la marque « choisi » du système (card.css) —
-   et laisse le vermillon à « maintenant » et au focus. Sur cette page, les
-   onglets au-dessus disaient déjà « ici » en vermillon : deux vermillons pour
+   d'encre vers l'intérieur, la marque choisi du système (card.css),
+   et laisse le vermillon à maintenant et au focus. Sur cette page, les
+   onglets au-dessus disaient déjà ici en vermillon : deux vermillons pour
    deux sens différents à 200px l'un de l'autre, il n'en reste plus qu'un. */
 .zn-guide__routine {
   display: flex;
@@ -290,7 +290,7 @@
 }
 
 /* Le second canal, non chromatique : le glyphe passe de l'encre pâle à
-   l'encre du texte. Une VALEUR, pas une teinte — visible en niveaux de gris,
+   l'encre du texte. Une VALEUR, pas une teinte, visible en niveaux de gris,
    là où l'ancien vermillon disparaissait. */
 .zn-guide__routine[aria-pressed="true"] > svg {
   color: currentColor;
@@ -356,7 +356,7 @@
 
 /* ── the ordinal ramp ─────────────────────────────────────────────────── */
 
-/* A recovery timeline is an ordered scale — day 1 to day 21, easiest to
+/* A recovery timeline is an ordered scale, day 1 to day 21, easiest to
    hardest to easiest again is not what it says; it says "first, then, then".
    Order is painted with the zone ink ramp, which is the one ordinal encoding
    this system has, and the phase list under the bar names every step, so the
@@ -473,7 +473,7 @@
 
 /* The table of contents beside the fourteen themed bands. Below the split's
    breakpoint there is nothing to sit beside, and the theme grid at the top of
-   the page is already the same index in card form — so the rail goes away
+   the page is already the same index in card form, so the rail goes away
    rather than repeating it. */
 .zn-guide__rail {
   display: none;
@@ -493,8 +493,8 @@
    l'axe que le retour, le sur-titre, le titre et le chapô tiennent.
 
    Il se tient sur le filet de la bande qui suit : le fichier n'a plus de sol,
-   le bas de sa boîte est sa ligne d'appui (docs/doodles.md, « Le sol est la
-   règle de la page »). L'en-tête qui le porte perd donc sa marge basse, et le
+   le bas de sa boîte est sa ligne d'appui (docs/doodles.md, Le sol est la
+   règle de la page). L'en-tête qui le porte perd donc sa marge basse, et le
    dessin descend de l'épaisseur rendue du filet (--rule-bite, borders.css)
    pour que sa semelle le morde. Même calage que .zn-slot--ground. Il passe
    devant dans l'ordre de peinture, sinon la bande suivante tracerait sa
@@ -502,7 +502,7 @@
 
    200 px de haut (160 sur téléphone). Le cadre coupé fait 118 × 305 : à 148 px
    la figure faisait 56 px de large et son trait de 2 unités rendait à 0,95 px,
-   sous le pixel — le croisement main/cheville se brouillait, un fil seul à
+   sous le pixel, le croisement main/cheville se brouillait, un fil seul à
    gauche d'un en-tête de 1 072 px. À 200 px elle fait 76 px de large et le
    trait 1,3 px ; elle est seule sur sa ligne, l'en-tête a la place. */
 .zn-guide__head--figure {

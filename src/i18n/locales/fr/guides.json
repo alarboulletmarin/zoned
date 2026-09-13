@@ -45,7 +45,7 @@
       "preRaceMeal": "Que dois-je manger avant une course ?",
       "preRaceMealAnswer": "Manger 3-4 heures avant le départ : 1-4g de glucides/kg, protéines modérées (15-25g), faibles lipides (<15g), faibles fibres (<10g). Options : toast pain blanc avec confiture et banane, porridge au miel, ou riz blanc avec poulet maigre. S'hydrater avec 5-7ml/kg 4 heures avant. Éviter les produits laitiers lourds, les aliments épicés, l'excès de caféine et les aliments non testés.",
       "recovery": "Que dois-je manger après une course pour récupérer ?",
-      "recoveryAnswer": "La fameuse « fenêtre de 30 minutes » est un mythe : la vraie fenêtre est de 4-6 h pour le glycogène et 24-48 h pour les protéines (Aragon & Schoenfeld 2013, Margolis 2021). Le repas suivant suffit dans 9 cas sur 10. Si tu enchaînes une autre séance dans les 4 h : 1 à 1,2 g de glucides/kg + 0,3 g de protéines/kg (lait chocolaté validé). Sinon, repas complet dans les 2 h. Caséine 40 g avant le coucher (Trommelen 2023). Réhydrater à 1,5x le poids perdu, avec sodium. Éviter l'alcool 4-6 h après (-24 % de réparation musculaire)."
+      "recoveryAnswer": "La fameuse fenêtre de 30 minutes est un mythe : la vraie fenêtre est de 4-6 h pour le glycogène et 24-48 h pour les protéines (Aragon & Schoenfeld 2013, Margolis 2021). Le repas suivant suffit dans 9 cas sur 10. Si tu enchaînes une autre séance dans les 4 h : 1 à 1,2 g de glucides/kg + 0,3 g de protéines/kg (lait chocolaté validé). Sinon, repas complet dans les 2 h. Caséine 40 g avant le coucher (Trommelen 2023). Réhydrater à 1,5x le poids perdu, avec sodium. Éviter l'alcool 4-6 h après (-24 % de réparation musculaire)."
     },
     "kicker": "{{n}} thèmes",
     "presetsLabel": "Distance de course"

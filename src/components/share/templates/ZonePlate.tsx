@@ -1,5 +1,5 @@
 /**
- * ZonePlate — 1080×1080 built around the six-zone plate.
+ * ZonePlate, 1080×1080 built around the six-zone plate.
  *
  * The same body six times, from a walking step to a sprint. The session's
  * dominant zone stands in full ink with the vermillon ground contact; the five
@@ -7,7 +7,7 @@
  * that reads outside the app: someone who has never opened Zoned understands
  * "this session lives here on the scale" without a legend.
  *
- * Inline styles with literal hex — html-to-image captures with `skipFonts` and
+ * Inline styles with literal hex, html-to-image captures with `skipFonts` and
  * no CSS custom property survives. See `AccentPatch` for the one exception.
  */
 
@@ -134,7 +134,7 @@ export function ZonePlate({ workout, transparent }: ShareTemplateProps) {
             {isEn ? "dominant" : "dominante"} Z{hero.dominantZone}
           </div>
 
-          {/* What the dominant zone feels like — the plate says where, this
+          {/* What the dominant zone feels like, the plate says where, this
               says what. */}
           <p
             style={{
@@ -150,14 +150,14 @@ export function ZonePlate({ workout, transparent }: ShareTemplateProps) {
             {pickLang(hero.zoneMeta, "sensation")}
           </p>
 
-          {/* The plate — no gap between the cells so the six ground lines read
+          {/* The plate, no gap between the cells so the six ground lines read
               as one, and no box around the dominant figure for the same
               reason: it is picked out by ink weight and a sunken ground. */}
           <div
             style={{
               // Pulled into the sheet's own padding, and each figure drawn a
               // little wider than its column: the drawings carry generous
-              // empty margins, so they overlap on paper, not on ink — and the
+              // empty margins, so they overlap on paper, not on ink, and the
               // six ground lines meet into one line.
               marginInline: -30,
               display: "flex",

@@ -1,20 +1,20 @@
-/* run-sheet.mjs — regarder le cycle de foulée, ce que les nombres ne font pas.
+/* run-sheet.mjs, regarder le cycle de foulée, ce que les nombres ne font pas.
  *
  * render.mjs lit des FICHIERS et pose les figures côte à côte ; les six images
  * du cycle sont des groupes dans un seul fichier, et ce qu'il faut vérifier
  * n'est pas chaque pose isolée mais leur SUITE. D'où ce script frère.
  *
  * Trois planches, dans l'ordre où elles servent :
- *   1. la bande — les six images côte à côte, dans le cadre partagé, donc sur
+ *   1. la bande, les six images côte à côte, dans le cadre partagé, donc sur
  *      une ligne de sol commune. À la taille de service et à 120 px, sur
- *      papier et sur encre (docs/doodles.md, « rastériser à la taille réelle
- *      ET à 120 px »).
- *   2. la pelure d'oignon — les six superposées, plus trois repères : le sol,
+ *      papier et sur encre (docs/doodles.md, rastériser à la taille réelle
+ *      ET à 120 px).
+ *   2. la pelure d'oignon, les six superposées, plus trois repères : le sol,
  *      le bassin d'appui, le sommet du crâne d'appui. On y lit d'un coup si le
  *      bassin décrit un arc, si le crâne décrit le MÊME (sinon la tête
  *      bobine), et si les quatre appuis tombent à quatre x distincts (sinon le
  *      pied patine).
- *   3. le flip — l'animation réelle à la cadence réelle, capturée à six
+ *   3. le flip, l'animation réelle à la cadence réelle, capturée à six
  *      décalages. Le stroboscope et le pop ne se voient que là.
  *
  *   bun scripts/doodles/run-sheet.mjs [--dark]
@@ -74,8 +74,8 @@ for (const W of [176, 120]) {
 {
   const W = 300, H = Math.round(W / (vw / vh));
   // Les repères sont en fraction de la hauteur du cadre : le sol est le bas du
-  // viewBox par construction (docs/doodles.md, « le bas du cadre EST la ligne
-  // d'appui »), le reste se mesure sur le dessin lui-même.
+  // viewBox par construction (docs/doodles.md, le bas du cadre EST la ligne
+  // d'appui), le reste se mesure sur le dessin lui-même.
   const stack = groups.map((_, i) =>
     `<div style="position:absolute;inset:0;opacity:.34">${one(i)}</div>`).join("");
   await shoot("pelure", W + 48, H + 68,
@@ -91,7 +91,7 @@ for (const W of [176, 120]) {
   const inner = src.match(/<svg[^>]*>([\s\S]*)<\/svg>/)[1];
   /* Chaque cellule joue l'animation ENTIÈRE, décalée d'une image de plus que
      la précédente. Une capture unique montre donc les six instants du cycle
-     tels que le navigateur les peint — ce qui est le seul moyen de voir un
+     tels que le navigateur les peint, ce qui est le seul moyen de voir un
      stroboscope ou un pop, que les nombres ne disent pas.
 
      Le décalage doit porter sur les groupes animés, pas sur le conteneur : un

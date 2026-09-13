@@ -1,4 +1,4 @@
-/* Slider — an ink rail, the retained span filled solid, an outlined circle for
+/* Slider, an ink rail, the retained span filled solid, an outlined circle for
    the handle.
 
    One `<input type="range">` per handle, laid over a decorative rail. The
@@ -81,7 +81,7 @@
 
 /* Two stacked inputs would let the upper one swallow every press across the
    whole width. Only the thumbs answer, so the handle under the finger is the
-   one that moves. A lone input keeps its whole row clickable — that is the
+   one that moves. A lone input keeps its whole row clickable, that is the
    native jump-to-value, and there is no second handle to confuse it with. */
 .zn-slider[data-range] .zn-slider__input {
   pointer-events: none;
@@ -145,7 +145,7 @@
 }
 
 /* No engine matches `:hover` on the thumb itself, so this is the row being
-   hovered — which is the truth for a lone handle, since the whole row is its
+   hovered, which is the truth for a lone handle, since the whole row is its
    click target. In range mode the input takes no pointer at all, so it simply
    never fires there. */
 .zn-slider__input:hover::-webkit-slider-thumb {
@@ -189,7 +189,7 @@
 /* ── touch ────────────────────────────────────────────────────────────── */
 
 /* The row answers a thumb. In range mode only the handles take the press, so
-   the handle itself grows too — it is the target then, not the row. */
+   the handle itself grows too, it is the target then, not the row. */
 @media (pointer: coarse) {
   .zn-slider {
     --zn-slider-thumb: 24px;

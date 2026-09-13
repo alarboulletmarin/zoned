@@ -50,7 +50,7 @@ function buildTimeTicks(totalMin: number): number[] {
   for (let minute = 0; minute < totalMin; minute += step) {
     ticks.push(minute);
   }
-  // Drop a trailing tick sitting within 12% of the end — the total label owns
+  // Drop a trailing tick sitting within 12% of the end, the total label owns
   // that space.
   const last = ticks[ticks.length - 1];
   if (last != null && last > 0 && (totalMin - last) / totalMin < 0.12) ticks.pop();
@@ -187,7 +187,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
           })}
         </div>
 
-        {/* Time axis — a real scale. The total duration sits at the right
+        {/* Time axis, a real scale. The total duration sits at the right
             edge, where the session actually ends; centring it read as
             "56min at the halfway point". */}
         <div className="zn-timeline__axis" aria-hidden="true">
@@ -212,7 +212,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
           </div>
         </div>
         <span className="sr-only">
-          {t("visualization.start")} — {formatDurationMinutes(totalDurationMin)} — {t("visualization.end")}
+          {t("visualization.start")} · {formatDurationMinutes(totalDurationMin)} · {t("visualization.end")}
         </span>
       </div>
     </TooltipProvider>

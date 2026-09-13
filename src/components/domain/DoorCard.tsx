@@ -1,5 +1,5 @@
 /**
- * DoorCard — one of the few big choices a screen offers.
+ * DoorCard, one of the few big choices a screen offers.
  *
  * The whole card is the link: the outline is the target, and the vermillon
  * line at the foot is the promise. It is a real <Link>, not a card with a
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 /* A door is type only. It carried a doodle for a while; at the 64-88px a card
    corner allows, the stroke read as one more pictogram, so the figures moved
    to the mobile menu, where the door you are in stands at 200px on a rule.
-   Every door of the app is bare, on purpose — do not bring the prop back. */
+   Every door of the app is bare, on purpose, do not bring the prop back. */
 interface DoorCardProps {
   /** Mono uppercase micro-label above the title. Four words maximum. */
   kicker: string;

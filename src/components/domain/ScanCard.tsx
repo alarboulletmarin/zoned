@@ -27,7 +27,7 @@ export function ScanCard({
       {/* Accent band sweeping across the card */}
       <span className="zn-scan__sweep" />
       <p className="zn-scan__name">{pick(workout, "name")}</p>
-      {/* The description never fits a day cell — the name alone carries the flicker. */}
+      {/* The description never fits a day cell, the name alone carries the flicker. */}
       {!compact && <p className="zn-scan__desc">{pick(workout, "description")}</p>}
     </div>
   );

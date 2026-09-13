@@ -1,15 +1,15 @@
 /**
- * PaperSheet — 1080×1350 in the redesign's own language.
+ * PaperSheet, 1080×1350 in the redesign's own language.
  *
  * Paper #F6F5F2, ink #171614, every edge ruled at 1.5px, and exactly one
  * vermillon mark on the whole sheet: the doodle's ground contact. The 38 other
  * templates are pastiches (record sleeve, boarding pass, casino chip) and that
- * variety is the feature — this one is the house style, deliberately quiet.
+ * variety is the feature, this one is the house style, deliberately quiet.
  *
  * Inline styles with literal hex like every template here: html-to-image
  * rasterises the node with `skipFonts: true`, so neither Tailwind nor a CSS
  * custom property survives the capture. The doodle's accent path is the one
- * exception — see `AccentPatch`.
+ * exception, see `AccentPatch`.
  */
 
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
@@ -112,7 +112,7 @@ export function PaperSheet({ workout, transparent }: ShareTemplateProps) {
             {name}
           </h1>
 
-          {/* Frieze — the session profile on the ink ramp */}
+          {/* Frieze, the session profile on the ink ramp */}
           <div style={{ marginTop: 44 }}>
             <ZoneFrieze blocks={toZoneBarBlocks(workout)} height={104} />
           </div>
@@ -138,7 +138,7 @@ export function PaperSheet({ workout, transparent }: ShareTemplateProps) {
             <Fact label="TSS" value={String(tss)} divided />
           </div>
 
-          {/* The doodle — the subject, not the decoration */}
+          {/* The doodle, the subject, not the decoration */}
           <div
             data-doodle="accent"
             style={{

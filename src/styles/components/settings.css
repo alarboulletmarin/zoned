@@ -1,4 +1,4 @@
-/* Settings and the project pages — /settings, /about, /changelog, /contribute.
+/* Settings and the project pages, /settings, /about, /changelog, /contribute.
  *
  * Four screens, one family: they are the app talking about itself. None of
  * them shows a zone fill, so none of them carries the ZoneScale legend; what
@@ -8,7 +8,7 @@
  * The shell wraps every route in .zn-page, which pays the 40px (20px mobile)
  * screen margin once. These screens draw full-width ink rules between their
  * bands, so each root cancels that inset and every band re-applies it through
- * .zn-section — the rule spans the paper, the type stays on the margin. The
+ * .zn-section, the rule spans the paper, the type stays on the margin. The
  * same move HomePage makes, for the same reason.
  *
  * Almost all of the layout here is the shared vocabulary (.zn-section,
@@ -66,7 +66,7 @@
 }
 
 /* Erasing everything is the one irreversible action in the app, so its card
-   wears the 2.5px vermillon frame — the same frame a selected card wears,
+   wears the 2.5px vermillon frame, the same frame a selected card wears,
    here spent on the only thing that cannot be undone. */
 .zn-card.zn-set__danger {
   border: var(--border-heavy);
@@ -148,7 +148,7 @@
 /* One release, one band: the version and its date hang in a mono column on the
    left, the entries run down the right, and the section rule separates a
    release from the next. The version code is data, and the biggest piece of
-   data on the row — so it is mono, not display. */
+   data on the row, so it is mono, not display. */
 .zn-log__version {
   margin: 0;
   font-family: var(--font-mono);

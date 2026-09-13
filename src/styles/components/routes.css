@@ -1,14 +1,14 @@
 /* The real-world route generator: its form, its address box, its compass and
-   its candidate cards — plus the commute panel, which is the same set of
+   its candidate cards, plus the commute panel, which is the same set of
    controls wearing the profile screen's card.
 
    The one rule that shapes the whole family: a field is a drawn box. Full
-   1.5px ink outline, 10px field radius, 44px floor — the same geometry the
+   1.5px ink outline, 10px field radius, 44px floor, the same geometry the
    date field states, so a text input, a number input and a date trigger read
    as one control family instead of three.
 
    The screen's single vermillon fill is the Generate button. Everything else
-   that is "on" — a chosen preset, an open chip, the picked candidate —
+   that is "on", a chosen preset, an open chip, the picked candidate,
    inverts to ink or wears the 2.5px vermillon frame. No second fill. */
 
 /* ── the field ────────────────────────────────────────────────────────── */
@@ -65,7 +65,7 @@
 /* ── the form panel ───────────────────────────────────────────────────── */
 
 /* Desktop: one sheet of paper holding every fieldset, with the action pinned
-   to its foot. No shadow — the panel sits in the page, it does not float. */
+   to its foot. No shadow, the panel sits in the page, it does not float. */
 .zn-route-form {
   box-sizing: border-box;
   display: flex;
@@ -133,7 +133,7 @@
 
 /* The action stays in sight however far the aside has scrolled. It bleeds to
    the panel's edges and pays the padding back itself, so the paper below it is
-   fully covered — the system has no blur and no translucency to hide behind. */
+   fully covered, the system has no blur and no translucency to hide behind. */
 .zn-route-form__foot {
   position: sticky;
   inset-block-end: 0;
@@ -206,7 +206,7 @@
 /* ── the compact bar ──────────────────────────────────────────────────── */
 
 /* Mobile: the form collapses onto the map as a search bar plus a scrolling
-   row of chips. No panel, no outline of its own — the map is the page. */
+   row of chips. No panel, no outline of its own, the map is the page. */
 .zn-route-bar {
   display: flex;
   flex-direction: column;
@@ -582,7 +582,7 @@
 /* ── the sketch ───────────────────────────────────────────────────────── */
 
 /* MiniRouteMap: a projected polyline, no tiles. It is a drawn box like every
-   other object in this family — 1.5px ink outline, field radius — and it never
+   other object in this family, 1.5px ink outline, field radius, and it never
    shrinks in the row that holds it.
 
    The size here is the component's own default, the one its Tailwind base
@@ -601,9 +601,9 @@
 /* ── candidate card ───────────────────────────────────────────────────── */
 
 /* Three proposals in a column. Le tracé retenu double son filet d'encre vers
-   l'intérieur — la marque « choisi » du système (card.css) — plutôt qu'un
+   l'intérieur, la marque choisi du système (card.css), plutôt qu'un
    aplat, pour que le croquis reste lisible. Le vermillon lui est retiré : il
-   ne dit plus que « maintenant » et le focus. */
+   ne dit plus que maintenant et le focus. */
 .zn-route-cand {
   display: flex;
   align-items: center;
@@ -662,7 +662,7 @@
 
 /* The current pick, said in words as well as by the frame. C'est le porteur
    non chromatique de l'état : le mot n'est rendu que sur la carte retenue
-   (RouteCandidateCard.tsx:51). En encre de texte, plus en vermillon — le mot
+   (RouteCandidateCard.tsx:51). En encre de texte, plus en vermillon, le mot
    suffit, et il reste lisible en niveaux de gris. */
 .zn-route-cand__flag {
   flex: none;
@@ -706,7 +706,7 @@
   color: var(--text-body);
 }
 
-/* One box per weekday. Chosen inverts to ink — same rule as the presets. */
+/* One box per weekday. Chosen inverts to ink, same rule as the presets. */
 .zn-commute__day {
   min-inline-size: 52px;
   min-block-size: var(--hit-min);
@@ -751,7 +751,7 @@
 }
 
 /* A deferred choice is a checkbox, not a switch: nothing here applies until
-   the athlete saves. The native control already draws a box — it only needs
+   the athlete saves. The native control already draws a box, it only needs
    the accent and the size. */
 .zn-commute__check {
   flex: none;
@@ -771,7 +771,7 @@
   cursor: pointer;
 }
 
-/* WCAG 2.5.8 — a preset is a control, so it clears 44px on a coarse pointer
+/* WCAG 2.5.8, a preset is a control, so it clears 44px on a coarse pointer
    whatever its drawn height says. */
 @media (pointer: coarse) {
   .zn-route-preset {

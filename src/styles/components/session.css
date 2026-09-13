@@ -1,4 +1,4 @@
-/* The session screen — one workout, read as a printed page.
+/* The session screen, one workout, read as a printed page.
  *
  * Top to bottom: the catalogue code in mono, the name in display, one line of
  * lede, then the data. Bands are separated by a full-width ink rule and never
@@ -6,7 +6,7 @@
  *
  * The shell wraps every route in .zn-page and pays the 40px screen margin
  * once. This page draws rules that must reach the edge of that column, so the
- * root cancels the inset and each band re-applies it — the rule spans the
+ * root cancels the inset and each band re-applies it, the rule spans the
  * paper, the type stays on the margin. Same trick as home.css, same reason it
  * is a negative margin on the column rather than a viewport-wide bleed: the
  * page must never scroll sideways.
@@ -71,7 +71,7 @@
 }
 
 /* Only the deepest step of the trail is worth the width on a phone. The step
-   that becomes the first one drops its separator with it — a trail opening on
+   that becomes the first one drops its separator with it, a trail opening on
    a slash reads as a missing link. */
 @media (max-width: 640px) {
   .zn-session__crumb:not(:nth-last-child(-n + 2)) {
@@ -93,7 +93,7 @@
    Le héros ne réserve cette colonne que s'il a quelque chose à y mettre.
    Depuis que la foulée par zone dominante est partie, seule la séance de
    renforcement porte encore une figure ; sans le :has, les 225 séances de
-   course gardaient une colonne fantôme de 400 px à droite du chapô — 230 px
+   course gardaient une colonne fantôme de 400 px à droite du chapô, 230 px
    de vide mesurés à 1280. */
 .zn-session__hero {
   --hero-pad-end: var(--sp-16);
@@ -110,8 +110,8 @@
 
 /* The figure stands on the rule that closes the hero.
 
-   The drawings stop at the sole — the bottom of the viewBox IS the ground line
-   (docs/doodles.md, 6 September) — so putting a figure on a rule is putting the
+   The drawings stop at the sole, the bottom of the viewBox IS the ground line
+   (docs/doodles.md, 6 September), so putting a figure on a rule is putting the
    bottom of its box on that rule. The rule here is the next band's top border.
    The slot is pulled to the end of its row, then down through the hero's own
    bottom padding and the rule's thickness: its box ends flush with the rule's
@@ -131,7 +131,7 @@
 }
 
 /* The plank is wider than tall: it takes its column, height from the viewBox.
-   Capped at the column's desktop width — under 1100px the hero is one column
+   Capped at the column's desktop width, under 1100px the hero is one column
    and a 728px plank on a tablet is a drawing that stopped explaining. */
 .zn-session__hero > .zn-session__plank .zn-slot__art {
   inline-size: min(100%, 400px);
@@ -179,18 +179,18 @@
  * between the session's name and its profile.
  *
  * They were pills alone over the page for one revision. They floated correctly
- * and were unreadable — the profile, the phase cards and the runner all scroll
+ * and were unreadable, the profile, the phase cards and the runner all scroll
  * between them, and a vermillon call over a chart is a call you have to look at
  * twice. The second thing a floating control needs, after a shape, is a ground.
  *
  * So: paper at 96%, on the same rule that separates every other band of this
- * app. 92% was the first value and it was four points too generous — a phase
+ * app. 92% was the first value and it was four points too generous, a phase
  * step scrolling under the band stayed readable through it, which is exactly
  * the confusion the ground is there to prevent. What is left of the
  * transparency is enough to see that the page is moving, not enough to read
  * what is moving.
  *
- * The pills take the menu pill's language — it is the older object and it
+ * The pills take the menu pill's language, it is the older object and it
  * floats over every screen, so it sets the terms. Same 44px height, same
  * radius, same cream ring, same single shadow, same baseline. Three fills tell
  * them apart: vermillon for the call, paper for the toggle and the menu, ink
@@ -212,7 +212,7 @@
   padding-inline-end: calc(var(--sp-13) + var(--fab-w));
 
   /* Opaque, like every other dock in the system. The 96% it used to carry was
-     enough for the page to read through the band — the section title and the
+     enough for the page to read through the band, the section title and the
      fact figures showed as ghosts between the pills. */
   background: var(--surface-page);
   border-block-start: var(--border-rule);
@@ -234,7 +234,7 @@
 /* The pill's geometry, applied to whatever button lands here.
 
    The height is stated rather than floored: the call is a size="lg" button and
-   would stand 52px tall beside two 44px pills — the sort of eight pixels
+   would stand 52px tall beside two 44px pills, the sort of eight pixels
    nobody can name and everybody sees. Its padding comes down with it, so
    "Exporter" still fits the width the menu pill leaves. */
 .zn-session__dock .zn-btn {
@@ -278,7 +278,7 @@
 }
 
 /* The hero's text column. 40px between every block is the page's rhythm on a
-   1440px screen; on a phone the same seven blocks spend 240px on air alone —
+   1440px screen; on a phone the same seven blocks spend 240px on air alone,
    more than the drawing beside them. The rhythm halves rather than the blocks
    shrinking, which is what keeps the type scale intact. */
 .zn-session__head {
@@ -305,7 +305,7 @@
 /* ── facts ────────────────────────────────────────────────────────────── */
 
 /* Three across, in one outlined block: the numbers that decide whether this is
-   today's session — duration, level, target system. Rows past the third cell
+   today's session, duration, level, target system. Rows past the third cell
    wrap and pick up their own rule, so a session that also states a distance or
    a climb still reads as one printed table.
 
@@ -351,7 +351,7 @@
 }
 
 /* And a cell left ALONE on its row takes the row. A trail session states four
-   facts — duration, level, target, climb — so the fourth sat by itself with
+   facts, duration, level, target, climb, so the fourth sat by itself with
    two thirds of the block empty beside it. Same rule as the phone's two-column
    version further down, one column count higher. */
 .zn-session__fact:last-child:nth-child(3n + 1) {
@@ -417,22 +417,21 @@
    The kit gives this profile 5px of inset and the larger radius, and a rule
    here stated both for months. It never applied once: the element is also
    .zn-zonebar, zone.css is imported after this sheet, and at equal specificity
-   the later file wins — measured, 3px and 6px, not 5px and 10px.
+   the later file wins, measured, 3px and 6px, not 5px and 10px.
 
    Removed rather than raised. Two pixels of inset are worth less than raising
    them would cost: the whole redesign has been reviewed at the rendering the
-   bar really has. A rule that does not apply is worse than the value it wanted
-   — it reads as intent and ships as nothing.
+   bar really has. A rule that does not apply is worse than the value it wanted, it reads as intent and ships as nothing.
 
    .zn-session__profile therefore carries NO rule in this sheet. The class stays
-   on the element as its name — it is what the profile is called when something
-   needs to find it — and everything it looks like comes from .zn-zonebar. If
+   on the element as its name, it is what the profile is called when something
+   needs to find it, and everything it looks like comes from .zn-zonebar. If
    you ever need it to differ from a card's bar, the selector has to beat
    zone.css: .zn-session__profile.zn-zonebar. */
 
 /* The axis: a hairline, then its two ends in mono. The line is what makes it an
    axis rather than two captions. Il touche de nouveau sa frise à 10px : le
-   voisin qui annulait cette marge — la foulée du téléphone — est parti. */
+   voisin qui annulait cette marge, la foulée du téléphone, est parti. */
 .zn-session__axis {
   display: flex;
   justify-content: space-between;
@@ -474,8 +473,8 @@
 
 /* ── the split: zones against advice ──────────────────────────────────── */
 
-/* Les deux moitiés gardent leur filet VERTICAL — il sépare deux colonnes de
-   contenu, pas deux sections — mais la bande ne s'ouvre plus sur un filet
+/* Les deux moitiés gardent leur filet VERTICAL, il sépare deux colonnes de
+   contenu, pas deux sections, mais la bande ne s'ouvre plus sur un filet
    horizontal. Ses moitiés paient déjà 44 px de padding, donc rien à ajouter. */
 .zn-session__split {
   display: grid;
@@ -535,7 +534,7 @@
 /* ── secondary content ────────────────────────────────────────────────── */
 
 /* Folded by default: nutrition, the science, the equipment list. The content
-   stays in the DOM — a crawler reads it, and so does anyone who opens it.
+   stays in the DOM, a crawler reads it, and so does anyone who opens it.
    The disclosure itself is `Section collapsible`, drawn once for the whole
    app; all this owns is the rule above the first one. */
 .zn-session__folds {
@@ -614,7 +613,7 @@
 
    A session that arrived by link: decoded from the URL, owned by nobody yet.
    Narrower than the catalogue screen because there is nothing to compare it
-   against — one column, and one call to keep it. */
+   against, one column, and one call to keep it. */
 
 .zn-shared {
   display: flex;
@@ -705,7 +704,7 @@
    above: .zn-session__trail and .zn-session__fact are both declared further
    down this file, and a rule at the same specificity that comes first loses.
 
-   What this buys is the reason for the whole block — someone opening a workout
+   What this buys is the reason for the whole block, someone opening a workout
    sees its name, what it costs and what it is for without scrolling, and the
    profile starts within the first screen instead of 200px below it. */
 @media (max-width: 640px) {

@@ -4,9 +4,9 @@ import { dateToWeekAndDay, getPlanMonday } from "@/lib/planDates";
 /**
  * Ce que le cockpit reprend.
  *
- * La ligne « reprendre » est le seul primaire de l'écran, donc elle doit
+ * La ligne reprendre est le seul primaire de l'écran, donc elle doit
  * répondre sans poser de question : pas de sélecteur de plan, pas de liste.
- * La règle tient en une phrase, et c'est volontaire — quelqu'un doit pouvoir
+ * La règle tient en une phrase, et c'est volontaire, quelqu'un doit pouvoir
  * prédire ce qu'il va voir :
  *
  *   **le plan dans lequel on est aujourd'hui ; si on est dans plusieurs, le
@@ -25,7 +25,7 @@ export type TodayState = "session" | "rest" | "upcoming" | "none";
 export interface TodayFocus {
   state: TodayState;
   plan: TrainingPlan | null;
-  /** Vrai pour une semaine seule. L'écran n'annonce alors pas « ton plan ». */
+  /** Vrai pour une semaine seule. L'écran n'annonce alors pas ton plan. */
   isWeek: boolean;
   /** 1-indexé, et 0 quand le plan n'a pas commencé. */
   weekNumber: number;
@@ -34,13 +34,13 @@ export interface TodayFocus {
   /** Les séances du jour. Vide sur un jour de repos. */
   sessions: PlanSession[];
   /**
-   * La semaine en cours, sept cases, lundi d'abord — ce que la bande des sept
+   * La semaine en cours, sept cases, lundi d'abord, ce que la bande des sept
    * jours consomme. Toujours de longueur 7 ; une case vide est un jour de
    * repos, pas une absence de donnée.
    *
    * Vide (longueur 0) quand il n'y a pas de semaine en cours à montrer : un
    * plan qui n'a pas commencé, ou pas de plan du tout. La bande ne s'affiche
-   * alors pas — elle ne prétend pas connaître une semaine qui n'existe pas.
+   * alors pas, elle ne prétend pas connaître une semaine qui n'existe pas.
    */
   week: PlanSession[][];
   /** Jours restants avant le début, pour l'état `upcoming`. */
@@ -65,7 +65,7 @@ function createdAtMs(plan: TrainingPlan): number {
   return Number.isNaN(parsed) ? 0 : parsed;
 }
 
-/** Le plus récemment créé d'abord — « ce sur quoi je travaille en ce moment ». */
+/** Le plus récemment créé d'abord, ce sur quoi je travaille en ce moment. */
 function byNewest(a: TrainingPlan, b: TrainingPlan): number {
   return createdAtMs(b) - createdAtMs(a);
 }
@@ -92,14 +92,14 @@ export function pickTodayFocus(
 
     if (!position) {
       // Le plan commence plus tard : `dateToWeekAndDay` rend null avant la
-      // semaine 1, ce qui est exactement l'information « pas encore commencé ».
+      // semaine 1, ce qui est exactement l'information pas encore commencé.
       upcoming.push({
         plan,
         days: Math.ceil((monday.getTime() - midnight.getTime()) / DAY_MS),
       });
       continue;
     }
-    // Un plan terminé ne se « reprend » pas : on ne le propose plus.
+    // Un plan terminé ne se reprend pas : on ne le propose plus.
     if (position.weekNumber > plan.totalWeeks) continue;
     inProgress.push({ plan, ...position });
   }
@@ -158,7 +158,7 @@ export function focusPlanHref(focus: TodayFocus): string | null {
  * Le bouton du cockpit pointait le plan, ce qui coûtait trois taps et une
  * recherche pour arriver à la séance du jour : ouvrir le plan, repérer
  * aujourd'hui dans le calendrier, toucher la séance. Sur un écran dont toute
- * la raison d'être est « qu'est-ce que je cours aujourd'hui », c'était deux
+ * la raison d'être est qu'est-ce que je cours aujourd'hui, c'était deux
  * taps de trop.
  *
  * Quand la journée porte plusieurs séances il n'y a pas de destination unique :

@@ -463,7 +463,7 @@ export function FullWorkoutWizard() {
         </div>
       </div>
 
-      {/* Duration Range — a fieldset, so "Min" is heard as part of the range */}
+      {/* Duration Range, a fieldset, so "Min" is heard as part of the range */}
       <fieldset className="zn-contrib-group">
         <legend className="zn-contrib-group__legend">
           {t("fullWorkout.durationLabel")}

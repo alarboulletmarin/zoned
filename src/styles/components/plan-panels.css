@@ -1,10 +1,10 @@
-/* Plan panels — the statistics, the week guidance, and the four confirm
+/* Plan panels, the statistics, the week guidance, and the four confirm
    dialogs that sit around a training plan.
 
    One file, one family. Everything here is paper and ink: an outlined block on
    the page, a mono figure, an uppercase micro-label. The screen's single
    vermillon fill belongs to the primary action inside the dialog footer, so
-   nothing in this file paints an accent surface — the accent only ever appears
+   nothing in this file paints an accent surface, the accent only ever appears
    here as a 2.5px frame (the selected RPE step, the current week's tick) or as
    type.
 
@@ -88,7 +88,7 @@ textarea.zn-pfield {
 /* ── shared: vertical bar chart ───────────────────────────────────────── */
 
 /* Width is the week, height is the figure, ink density is the phase. The
-   current week is marked by a vermillon rule under its column — a stroke, not
+   current week is marked by a vermillon rule under its column, a stroke, not
    a fill, and not a dot floating in the margin. */
 .zn-pchart {
   display: flex;
@@ -119,18 +119,18 @@ textarea.zn-pfield {
   border-block-end: var(--bw-heavy) solid transparent;
 }
 
-/* LA SEMAINE EN COURS — le filet vermillon qui courait sous la colonne est
+/* LA SEMAINE EN COURS, le filet vermillon qui courait sous la colonne est
    remplacé par un repère d'encre posé au PLAFOND de la colonne.
 
    Trois formes ont été essayées et mesurées avant celle-là :
 
-   1. L'anneau autour de la colonne — sans objet : la colonne est une piste
+   1. L'anneau autour de la colonne, sans objet : la colonne est une piste
       vide de toute la hauteur du graphe, l'entourer cadrerait du vide.
-   2. La voie de papier creusé derrière la colonne — rejetée : en thème
+   2. La voie de papier creusé derrière la colonne, rejetée : en thème
       sombre --surface-band est plus NOIR que le papier de la carte, la voie
       se lit comme une barre pleine montant au plafond. Une annotation ne
       doit jamais pouvoir se lire comme une donnée.
-   3. Le filet d'encre sous la colonne, ou l'anneau d'encre sur la barre —
+   3. Le filet d'encre sous la colonne, ou l'anneau d'encre sur la barre,
       rejetés tous deux pour la même raison : la barre est peinte dans la
       rampe d'ENCRE des zones, de 14 % (affûtage) à 80 % (pic). Une marque
       d'encre posée contre elle disparaît sur la moitié des phases. Une
@@ -146,7 +146,7 @@ textarea.zn-pfield {
 
    RESTE À FAIRE HORS PÉRIMÈTRE : le libellé de la semaine en gras sous la
    colonne (data-current à passer sur .zn-pchart__tick,
-   PlanStatsSection.tsx:83) — le second canal idéal, mais c'est un .tsx. */
+   PlanStatsSection.tsx:83), le second canal idéal, mais c'est un .tsx. */
 .zn-pchart__col[data-current="true"]::before {
   content: "";
   position: absolute;
@@ -845,7 +845,7 @@ textarea.zn-pfield {
 /* ── the RPE ramp, shared by both completion surfaces ─────────────────── */
 
 /* Perceived effort rides the zone ink ramp through rpeColor(), and the fill
-   height says the same thing a second time — the encoding the session profile
+   height says the same thing a second time, the encoding the session profile
    uses. The numeral sits under the bar rather than on it: a numeral on the
    Z6 end would need cream, on the Z1 end ink, and one of the two always loses. */
 .zn-prpe {
@@ -920,7 +920,7 @@ textarea.zn-pfield {
 
    POURQUOI outline et pas box-shadow inset comme sur les cartes : la jauge
    contient un enfant peint, .zn-prpe__fill, tiré dans la rampe d'encre des
-   zones. Une ombre INTERNE se dessine sous les enfants — elle serait mangée
+   zones. Une ombre INTERNE se dessine sous les enfants, elle serait mangée
    par le remplissage ; et posée par-dessus, elle disparaîtrait quand même sur
    un palier à 80 % d'encre. L'outline se pose à l'EXTÉRIEUR de la piste, sur
    le papier du panneau : il contraste toujours, dans les deux thèmes.
@@ -1047,7 +1047,7 @@ textarea.zn-pfield {
   transform: translateY(var(--press-shift));
 }
 
-/* Chosen is a full ink inversion — the system's other way of saying selected,
+/* Chosen is a full ink inversion, the system's other way of saying selected,
    and the right one here because the vermillon belongs to the save button. */
 .zn-pcomplete__choice[aria-checked="true"] {
   background: var(--surface-inverse);

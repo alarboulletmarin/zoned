@@ -28,11 +28,11 @@ export interface Collection {
    * Absente = transversale, et c'est le cas de dix des quinze : débuter,
    * anti-stress, retour de blessure, renforcement, VMA servent les quatre
    * pratiques. Même sémantique que `practiceIndex` pour les séances, où une
-   * liste vide passe sous n'importe quelle pratique — le renforcement d'un
-   * coureur sur route ne disparaît pas parce qu'il a choisi « route ».
+   * liste vide passe sous n'importe quelle pratique, le renforcement d'un
+   * coureur sur route ne disparaît pas parce qu'il a choisi route.
    *
    * Sans ce champ, la curation existante était invisible dans le nouvel axe :
-   * « Objectif ultra » était rangé par thème éditorial et par rien d'autre.
+   * Objectif ultra était rangé par thème éditorial et par rien d'autre.
    */
   practice?: Practice;
   /** Target difficulty level (optional for mixed-difficulty collections) */

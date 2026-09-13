@@ -1,27 +1,27 @@
-/* The plan wizard — the three screens that decide what the generator builds:
+/* The plan wizard, the three screens that decide what the generator builds:
    /plan/new (the three doors), /plan/new/assisted (the questions) and
    /plan/new/free (the blank plan).
 
    All three read as one sheet: mono kicker, the QUESTION as the display title,
    one sentence, then the form. Header and form are separated by blank space
-   alone (--gap-section) since 12 September 2026 — .zn-wiz__band drew a
+   alone (--gap-section) since 12 September 2026, .zn-wiz__band drew a
    full-width ink rule until then. The screens live inside the shell's .zn-page
    column, which already pays the 40px (20px mobile) side margin.
 
    Everything a form needs is already written elsewhere and is composed rather
    than restated:
 
-     .zn-stepper*     contribute.css — named steps, a 6px rail each. The file
+     .zn-stepper*     contribute.css, named steps, a 6px rail each. The file
                       says outright that this wizard should reuse it instead of
                       growing a second one. The only thing added here is
                       .zn-wiz__steps, the variant for a flow of ELEVEN steps
                       rather than four: the labels give up earlier and the gap
                       tightens. The rails, numbers and states are untouched.
-     .zn-contrib-*    contribute.css — the label / control / reason triplet and
+     .zn-contrib-*    contribute.css, the label / control / reason triplet and
                       the input paint. Also documented there as generic.
-     .zn-chip         library.css — a value you switch on or off.
+     .zn-chip         library.css, a value you switch on or off.
      .zn-segmented    the exclusive strip: sessions per week, the long-run day.
-     zn-stack / zn-row / zn-cluster / zn-grid / zn-split / zn-measure — every
+     zn-stack / zn-row / zn-cluster / zn-grid / zn-split / zn-measure, every
                       flow rule on these screens.
 
    What is left is what the wizard alone needs: the band rule, the option a
@@ -37,7 +37,7 @@
 
 /* Une bande de l'écran. Elle payait une marge ET un padding de 32 px autour
    de son filet, soit 64 px : c'était le seul endroit du dépôt qui payait déjà
-   « espace plus filet », et c'est ce qui en a fait le modèle du token. Sans le
+   espace plus filet, et c'est ce qui en a fait le modèle du token. Sans le
    filet, un seul écart suffit. */
 .zn-wiz__band {
   display: flex;
@@ -52,7 +52,7 @@
   --gap: var(--sp-11);
 }
 
-/* A control that must not stretch to the column it sits in — the back link,
+/* A control that must not stretch to the column it sits in, the back link,
    a disclosure toggle. A stack stretches its children by default, and a ghost
    button spanning 640px stops reading as a button. */
 .zn-wiz__lone {
@@ -123,8 +123,8 @@
   border-block-start: var(--border-divider);
 }
 
-/* Ce qui va vers l'avant, en un seul bloc poussé à droite : « passer » et
-   « continuer » sont deux façons de faire le même pas, et la barre ne compte
+/* Ce qui va vers l'avant, en un seul bloc poussé à droite : passer et
+   continuer sont deux façons de faire le même pas, et la barre ne compte
    plus que deux enfants, donc un seul écart entre eux. */
 .zn-wiz__nav-end {
   display: flex;
@@ -137,8 +137,8 @@
 
 /* One option in a question: a real radio, drawn.
 
-   The input is the control — it keeps the group's arrow keys, its name, and
-   its checked state — and the label is the paper around it. Choisi double le
+   The input is the control, it keeps the group's arrow keys, its name, and
+   its checked state, and the label is the paper around it. Choisi double le
    filet d'ENCRE vers l'intérieur (card.css), jamais un aplat : une option
    teintée et une option non choisie sont la même forme en niveaux de gris. */
 .zn-wiz-opt {
@@ -202,7 +202,7 @@
   color: var(--text-muted);
 }
 
-/* The number an option carries — a distance, a week count. Mono, tabular, and
+/* The number an option carries, a distance, a week count. Mono, tabular, and
    pushed to the far edge so a column of options lines up. */
 .zn-wiz-opt__data {
   margin-inline-start: auto;
@@ -212,9 +212,9 @@
 
 /* Sur un téléphone, la donnée passe SOUS le texte.
    Mesuré à 390 px, une fois que les cartes de pratique ont porté leurs vrais
-   chiffres : « 52 séances · aucun plan prêt » prend la moitié de la largeur et
-   écrase la réponse dans une colonne de quatorze caractères — « Au-delà du
-   trail : temps sur les pieds, nuit, ravitaillement » sur cinq lignes. La
+   chiffres : 52 séances · aucun plan prêt prend la moitié de la largeur et
+   écrase la réponse dans une colonne de quatorze caractères, Au-delà du
+   trail : temps sur les pieds, nuit, ravitaillement sur cinq lignes. La
    donnée est une précision ; elle ne prend pas la place de la réponse.
    Les tuiles sont exclues : elles sont déjà en colonne, c'est leur forme. */
 @media (max-width: 560px) {
@@ -256,20 +256,20 @@
 
 /* ── une réponse nommée mais pas encore servie ────────────────────────────
  *
- * Une pratique annoncée — le triathlon, et l'ultra depuis le 12 septembre
+ * Une pratique annoncée, le triathlon, et l'ultra depuis le 12 septembre
  * 2026. Elle se choisissait comme n'importe quelle autre, et on n'apprenait
  * qu'APRÈS, sur l'écran suivant, que ses plans n'existaient pas : la réponse
  * se dérobait une fois donnée. Le propriétaire a demandé que ça se voie avant,
- * et il a raison — c'est la seule façon de ne pas faire perdre un geste.
+ * et il a raison, c'est la seule façon de ne pas faire perdre un geste.
  *
  * Elle reste CHOISISSABLE : la choisir est ce qui déroule ce qui existe déjà
  * pour elle (les séances, les calculateurs), et un bouton mort ne dirait rien
  * de tout ça. Ce qui change, c'est ce qu'elle promet à l'œil :
  *
- *   · le filet passe en pointillé — le registre que ce dépôt réserve déjà à
- *     « ceci n'est pas tout à fait posé » (.zn-wiz-race, une course de prépa) ;
+ *   · le filet passe en pointillé, le registre que ce dépôt réserve déjà à
+ *     ceci n'est pas tout à fait posé (.zn-wiz-race, une course de prépa) ;
  *   · l'encre baisse d'un cran, titre compris ;
- *   · « bientôt » quitte le pied de carte et devient une MARQUE en capitales,
+ *   · bientôt quitte le pied de carte et devient une MARQUE en capitales,
  *     contre un filet, à la place qu'occupent les chiffres des autres cartes.
  *
  * Trois canaux, aucun n'est une couleur : la carte reste reconnaissable en
@@ -291,7 +291,7 @@
 
    `flex: none` la ramène à sa propre largeur : sous 560 px la donnée d'une
    option prend toute la ligne (`flex-basis: 100%`, plus haut) parce qu'une
-   ligne de chiffres se lit d'un bord à l'autre — une pastille de sept lettres
+   ligne de chiffres se lit d'un bord à l'autre, une pastille de sept lettres
    étirée sur 280 px, elle, ne se lit plus comme une marque. Elle se replie
    toujours sous le texte, mais elle s'y arrête où elle finit. */
 .zn-wiz-opt[data-soon] .zn-wiz-opt__data {
@@ -305,8 +305,8 @@
   color: var(--text-muted);
 }
 
-/* Choisie, elle garde le filet d'encre de la maison : le pointillé dit « pas
-   encore servie », pas « pas sélectionnable », et les deux doivent pouvoir se
+/* Choisie, elle garde le filet d'encre de la maison : le pointillé dit pas
+   encore servie, pas pas sélectionnable, et les deux doivent pouvoir se
    lire en même temps. */
 .zn-wiz-opt[data-soon]:has(input:checked) .zn-wiz-opt__title {
   color: var(--text-body);
@@ -347,7 +347,7 @@
 /* The disclosure that opens the options most people never need.
 
    `hidden` is the state, but the UA's display:none loses to any class that
-   sets a display — .zn-stack does — so the attribute is re-asserted here. The
+   sets a display, .zn-stack does, so the attribute is re-asserted here. The
    panel stays in the DOM: aria-controls has to point at something. */
 .zn-wiz [hidden] {
   display: none;
@@ -391,7 +391,7 @@
 }
 
 /* Le plan en chiffres, en tête du récapitulatif. `.zn-grid` se replie en UNE
-   colonne sous 640px — juste pour une carte de séance, faux pour trois nombres
+   colonne sous 640px, juste pour une carte de séance, faux pour trois nombres
    de deux chiffres : trois pavés pleine largeur, deux cent quatre-vingts
    pixels, avant la première ligne. Deux colonnes, et la même chose tient en
    deux rangées. */
@@ -453,7 +453,7 @@
   border: var(--border-dashed);
 }
 
-/* Removing a row is danger as vermillon TYPE — the screen's one fill is still
+/* Removing a row is danger as vermillon TYPE, the screen's one fill is still
    the primary action at the foot of the card. */
 .zn-btn[data-variant="ghost"].zn-wiz-race__remove {
   color: var(--state-danger);
@@ -471,7 +471,7 @@
 }
 
 /* Les deux autres façons d'avoir un plan : une ligne de liens sous les
-   pratiques. La question « comment » se pose après « quoi ». */
+   pratiques. La question comment se pose après quoi. */
 .zn-wiz__modes {
   padding-block-start: calc(var(--gap-section) / 2);
 }
@@ -494,28 +494,28 @@
 
 /* ── le parcours sur un téléphone ─────────────────────────────────────────
  *
- * La plainte, mot pour mot : « sur toutes les étapes je n'ai pas toutes les
- * informations sans devoir scroller ». Mesuré à 390 × 640 (la page sous la
- * barre du haut) sur l'étape « niveau », qui n'a QUE quatre réponses :
+ * La plainte, mot pour mot : sur toutes les étapes je n'ai pas toutes les
+ * informations sans devoir scroller. Mesuré à 390 × 640 (la page sous la
+ * barre du haut) sur l'étape niveau, qui n'a QUE quatre réponses :
  *
  *     32   la marge haute du parcours
  *    133   le sur-titre, la question en display-2 (38px, deux lignes) et
  *          sa phrase
  *     40   l'écart de section avant la bande
- *     62   les treize rails, leurs numéros, et la ligne « Étape n sur 13 »
+ *     62   les treize rails, leurs numéros, et la ligne Étape n sur 13
  *     26   le haut de la carte
  *    ───
- *    293   avant la première réponse — 46 % de l'écran, et pas une réponse
+ *    293   avant la première réponse, 46 % de l'écran, et pas une réponse
  *    382   les quatre réponses
- *     96   « Retour / Suivant »
+ *     96   Retour / Suivant
  *    ───
  *    771   pour un écran qui en fait 640
  *
  * Rien ici n'est une réponse ; tout est du décor autour d'une question. Le
  * bloc reprend 190 px sur ces 293 sans retirer un seul mot : la question passe
  * au pas d'un titre de section (elle reste le `h1`), les rails perdent leurs
- * numéros — la ligne en toutes lettres juste dessous dit déjà « Étape 3 sur
- * 13 » —, et les marges descendent d'un cran. Les quatre réponses tiennent
+ * numéros, la ligne en toutes lettres juste dessous dit déjà Étape 3 sur
+ * 13 , , et les marges descendent d'un cran. Les quatre réponses tiennent
  * alors dans le même écran que leur question.
  */
 
@@ -529,8 +529,8 @@
     --gap: var(--sp-8);
   }
 
-  /* La question garde son rang de `h1` — elle perd le corps d'affiche.
-     « Dans quel état d'esprit es-tu ? » au pas display-2 tenait sur deux
+  /* La question garde son rang de `h1`, elle perd le corps d'affiche.
+     Dans quel état d'esprit es-tu ? au pas display-2 tenait sur deux
      lignes de 38 px, soit 70 px ; au pas h2 (22 px depuis le même lot) elle
      tient sur une ligne de 22. C'est la même phrase, au même rang. */
   .zn-wiz .zn-display[data-level="2"] {
@@ -546,7 +546,7 @@
 
   /* Les rails seuls. Le numéro et le nom de l'étape étaient déjà masqués pour
      douze des treize ; le dernier chiffre visible tenait sur 23 px de colonne
-     et se lisait comme une poussière. La ligne « Étape 3 sur 13 » le dit en
+     et se lisait comme une poussière. La ligne Étape 3 sur 13 le dit en
      toutes lettres douze pixels plus bas.
      La surface tactile, elle, reste entière : le bouton garde 24 px de haut
      (le plancher AA du critère 2.5.8) autour d'un rail de 4 px. */
@@ -588,21 +588,21 @@
     padding: var(--sp-6) var(--sp-7);
   }
 
-  /* « Passer » rend sa boîte, pas sa cible.
-     Mesuré : Retour 108, Passer 83, Continuer 129, plus les écarts — 356 px
+  /* Passer rend sa boîte, pas sa cible.
+     Mesuré : Retour 108, Passer 83, Continuer 129, plus les écarts, 356 px
      pour 348 disponibles à 390, et les trois tombaient sur deux lignes.
-     « Passer » est une sortie, pas une action de même poids que les deux
+     Passer est une sortie, pas une action de même poids que les deux
      autres : il perd son rembourrage latéral et se lit comme le mot qu'il est.
      36 px repris, et la rangée tient sur une ligne de 360 px jusqu'en haut de
-     la gamme. Le plancher de 44 px, lui, ne bouge pas — c'est la hauteur qui
+     la gamme. Le plancher de 44 px, lui, ne bouge pas, c'est la hauteur qui
      fait la cible, pas la largeur d'un rembourrage. */
   .zn-wiz__nav .zn-btn[data-variant="ghost"] {
     padding-inline: 0;
   }
 
   /* Et les deux flèches de direction rendent leurs 24 px chacune (le glyphe et
-     son écart). Elles répètent ce que le mot dit déjà — « Retour »,
-     « Continuer » ne se lisent pas dans l'autre sens —, et sans elles la
+     son écart). Elles répètent ce que le mot dit déjà, Retour,
+     Continuer ne se lisent pas dans l'autre sens , , et sans elles la
      rangée passe de 307 px à 260 pour 282 disponibles à 360. Seules les
      flèches partent : la coche du récapitulatif et le rouet de génération
      portent, eux, une information que le libellé n'a pas. */
@@ -613,9 +613,9 @@
 
 /* ── la promesse, et sa place ─────────────────────────────────────────────
  *
- * « Le volume monte de 10 % par semaine au maximum… », la source, et la carte
- * « sans compte, sans rappel ». Elles ne se disent qu'une fois, à la première
- * question — mais elles se disaient ENTRE la question et ses réponses, et sur
+ * Le volume monte de 10 % par semaine au maximum…, la source, et la carte
+ * sans compte, sans rappel. Elles ne se disent qu'une fois, à la première
+ * question, mais elles se disaient ENTRE la question et ses réponses, et sur
  * un téléphone les sept pratiques commençaient donc sous la ligne de
  * flottaison. Elles passent après : on choisit d'abord, on lit ensuite ce que
  * l'outil promet. Au-dessus de 900 px la colonne est assez large pour que la

@@ -42,7 +42,7 @@ export function WorkoutCard({ workout, className }: WorkoutCardProps) {
  * swimming), and the piece the rest of the app reuses.
  *
  * It reads in the system's order: the session name, why you would run it, the
- * zone profile, then the facts — zone, duration, level, and the catalogue code
+ * zone profile, then the facts, zone, duration, level, and the catalogue code
  * in vermillon at the end of the line. Slots keep the same card serving both
  * the library grid (wrapped in a Link, with favourite + peek) and the "draw a
  * session" result (no link, with an eyebrow, zone badges and a metrics grid).
@@ -87,7 +87,7 @@ export function WorkoutCardChrome({
   // height. Memoised because it walks the whole workout structure.
   const blocks = useMemo(() => toZoneBarBlocks(workout), [workout]);
 
-  // First main-set block description — the one-line summary under the profile.
+  // First main-set block description, the one-line summary under the profile.
   const summary = useMemo(() => {
     const firstMain = workout.mainSetTemplate[0];
     return firstMain ? pick(firstMain, "description") : null;
@@ -117,7 +117,7 @@ export function WorkoutCardChrome({
       {/* The template's prose description used to sit here. A card is a
           preview: the name says which session it is, the profile says what it
           costs, and the fact line says the zone, the duration and the level.
-          The paragraph is what the detail page is for — and on a phone it was
+          The paragraph is what the detail page is for, and on a phone it was
           two clamped lines that broke mid-word. `description` is untouched in
           the data and still rendered on /workout/:id. */}
 

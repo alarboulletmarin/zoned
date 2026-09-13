@@ -1,5 +1,5 @@
 /**
- * ReceiptTicket — 1080×1920. A paper-receipt / race-bib style card.
+ * ReceiptTicket, 1080×1920. A paper-receipt / race-bib style card.
  *
  * Each workout block becomes a receipt line item; total duration sits at
  * the bottom. Monospace, dashed separators, perforated edges, barcode at
@@ -213,13 +213,13 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
                 }}
               >
                 <span style={{ width: 80, color: it.zone ? ZONE_HEX[it.zone as 1] : "#64748b", fontWeight: 700 }}>
-                  {it.zone ? `Z${it.zone}` : "—"}
+                  {it.zone ? `Z${it.zone}` : "-"}
                 </span>
                 <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>
                   {it.desc}
                 </span>
                 <span style={{ fontWeight: 700, minWidth: 80, textAlign: "right" }}>
-                  {it.dur > 0 ? `${Math.round(it.dur)}'` : "—"}
+                  {it.dur > 0 ? `${Math.round(it.dur)}'` : "-"}
                 </span>
               </div>
             ))}
@@ -245,7 +245,7 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
             </span>
           </div>
 
-          {/* QR code — scans to https://zoned.run/workout/<id> */}
+          {/* QR code, scans to https://zoned.run/workout/<id> */}
           <div
             style={{
               marginTop: 28,

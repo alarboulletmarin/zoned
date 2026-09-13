@@ -32,8 +32,8 @@ const PHASES: { key: WorkoutPhaseKey; labelKey: string }[] = [
 /**
  * A session that arrived by link.
  *
- * Everything on this screen is decoded from the URL — there is no storage
- * lookup and no id to resolve — so a truncated link is the one failure mode,
+ * Everything on this screen is decoded from the URL, there is no storage
+ * lookup and no id to resolve, so a truncated link is the one failure mode,
  * and it gets an Alert with the way out rather than a bare sentence.
  */
 export function SharedWorkoutPage() {

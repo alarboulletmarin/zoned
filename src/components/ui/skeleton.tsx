@@ -6,7 +6,7 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Skeleton primitive — placeholder in the shape of the content that is loading.
+ * Skeleton primitive, placeholder in the shape of the content that is loading.
  *
  * The paint lives in `src/styles/components/skeleton.css` and selects on the
  * `data-variant` attribute. Call sites are unchanged (`<Skeleton className="h-4
@@ -15,7 +15,7 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
  *
  * `react-loading-skeleton` is gone. Its shimmer is a `linear-gradient` swept
  * across the block and the design system has no gradients, so the library could
- * not be re-coloured into the redesign — only replaced by the flat pulse the
+ * not be re-coloured into the redesign, only replaced by the flat pulse the
  * design bundle's Skeleton uses. `zone-shimmer` survives as a variant name and
  * now means "the heavier block", one step up the zone ink ramp.
  */
@@ -41,12 +41,12 @@ interface SkeletonGroupProps {
 }
 
 /**
- * SkeletonGroup — gives descendant skeletons a shared fill, for a section that
+ * SkeletonGroup, gives descendant skeletons a shared fill, for a section that
  * needs a different tone than the page (skeletons on a tinted card need a
  * softer base to stay visible).
  *
  * Renders `display: contents`, so it adds no box to the layout: the colour
- * travels down as a custom property. `highlightColor` is accepted and ignored —
+ * travels down as a custom property. `highlightColor` is accepted and ignored,
  * there is no sweep left to highlight.
  */
 export function SkeletonGroup({

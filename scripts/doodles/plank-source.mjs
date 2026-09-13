@@ -1,8 +1,8 @@
-/* g-plank.mjs — gainage sur les avant-bras.
+/* g-plank.mjs, gainage sur les avant-bras.
  *
  * Le gréement ne sait pas produire cette pose (docs/doodles.md le dit) : sa
  * famille est debout, son bras part vers l'arrière. La traversée est donc
- * écrite ici à la main, mais les BOUCLES de BASE — tête, poing, pied — sont
+ * écrite ici à la main, mais les BOUCLES de BASE, tête, poing, pied, sont
  * reposées telles quelles, par rotation rigide et translation, jamais d'échelle.
  * C'est elles qui portent l'écriture du dessin approuvé.
  *
@@ -17,7 +17,7 @@ const OUT = new URL("../../src/assets/doodles/plank.svg", import.meta.url).pathn
 const G = 300;                 // ligne de sol
 const D = Math.PI / 180;
 
-// ——— réglages ————————————————————————————————————————————————
+// , , ,  réglages , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
 const K = {
   tilt: 8.0,        // inclinaison du corps : épaules plus hautes que les chevilles
   hip: -96,         // épaule → hanche, le long de l'axe
@@ -43,7 +43,7 @@ const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
 const maxY = (pts) => Math.max(...pts.map((p) => p[1]));
 
 /* Repose une tranche de BASE telle quelle : rotation rigide autour de piv, puis
-   translation de piv vers `to`. Aucune échelle — le tremblement reste intact. */
+   translation de piv vers `to`. Aucune échelle, le tremblement reste intact. */
 const place = (a, b, piv, deg, to) =>
   rot(BASE.slice(a, b + 1), piv, deg).map(([x, y]) => [x - piv[0] + to[0], y - piv[1] + to[1]]);
 
@@ -79,7 +79,7 @@ const HEADC = (() => {
   return [x / 17, y / 17];
 })();
 /* 19..38 : l'attache de nuque, la tête, l'attache de gorge et le devant du cou.
-   On reprend la jonction de BASE en bloc — c'est elle qui fait que la tête
+   On reprend la jonction de BASE en bloc, c'est elle qui fait que la tête
    touche le cou au lieu d'être posée à côté. */
 const head = (to, deg) => place(19, 38, HEADC, deg - ang(sub(HEADC, mid(19, 37))), to);
 
@@ -90,12 +90,12 @@ const back = (a, b, d) => {
   return [a[0] + (v[0] / L) * d, a[1] + (v[1] / L) * d];
 };
 
-// ——— la traversée ————————————————————————————————————————————
+// , , ,  la traversée , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
 const P = [];
 const at = () => P.length;          // index de la prochaine ancre
 const add = (...pts) => { P.push(...pts); };
 
-// 1. jambe proche, arête supérieure (mollet, ischio) — couture à mi-cuisse
+// 1. jambe proche, arête supérieure (mollet, ischio), couture à mi-cuisse
 add(T(-128, 8));
 add(T(-104, 9.5), T(K.hip, 12));
 // 2. le dos, de la hanche à l'épaule
@@ -143,12 +143,12 @@ const iNfoot = at(); add(...footN);
 add(T(-196, 8.5), T(-160, 8));
 add(P[0]);
 
-// ——— accents : uniquement ce qui touche le sol ————————————————
+// , , ,  accents : uniquement ce qui touche le sol , , , , , , , , , , , , , , , , 
 // l'avant-bras proche posé à plat, et les orteils du pied proche.
 const iToeA = iNfoot + 2, iToeB = iNfoot + 7;   // 57..62 de BASE : la pointe, à plat
 const ACCENTS = [[iN49, iN50], [iToeA, iToeB]];
 
-// ——— assemblage ——————————————————————————————————————————————
+// , , ,  assemblage , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
 function slice(a, b) {
   let d = `M ${P[a][0].toFixed(1)} ${P[a][1].toFixed(1)}`;
   const t = 1 / 6;
@@ -175,7 +175,7 @@ paths.push({ d: slice(i, P.length - 1) });
 const out = process.argv[2] || OUT;
 writeFileSync(out, svg(paths));
 
-// ——— contrôle chiffré ————————————————————————————————————————
+// , , ,  contrôle chiffré , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , 
 const yy = (a, b) => P.slice(a, b + 1)
   .map((p) => `x=${p[0].toFixed(0)} y=${p[1].toFixed(1)} (${(p[1] - G).toFixed(1)} sous le sol)`)
   .join("\n                        ");

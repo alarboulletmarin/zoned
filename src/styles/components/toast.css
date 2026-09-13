@@ -1,4 +1,4 @@
-/* Toast — the house rendering over `sonner`'s transport.
+/* Toast, the house rendering over `sonner`'s transport.
  *
  * The handoff allows keeping sonner as the mechanism as long as the rendering
  * is ours, and that is by far the cheaper trade: `toast.success(...)` is called
@@ -8,7 +8,7 @@
  *
  * So this file repaints it. sonner exposes its palette as custom properties on
  * `[data-sonner-toaster]` and its states as data attributes on each toast, so
- * every rule below is a plain override — no call site changes, no wrapper.
+ * every rule below is a plain override, no call site changes, no wrapper.
  *
  * A toast is a floating surface, which makes it one of the few places
  * --shadow-block belongs.
@@ -19,20 +19,20 @@
 /* App.tsx wraps the toaster in this, and native-dialog.tsx promotes it into
    the top layer as a manual popover after every showModal().
  *
- * A modal <dialog> paints over everything the document can stack — z-index
- * 999999999 included — so a toast fired from an open panel (the share sheet
+ * A modal <dialog> paints over everything the document can stack, z-index
+ * 999999999 included, so a toast fired from an open panel (the share sheet
  * reports all four of its actions this way) landed behind that panel's own
  * backdrop. A shown popover is the one other way into the top layer, and the
  * top layer is ordered by promotion, so the toasts go up again after the panel.
  *
  * It is a zero-size box with visible overflow: sonner's list is
  * `position: fixed` and places itself against the viewport, so the wrapper
- * only has to exist — and to hold none of the UA's `[popover]` box, which is a
+ * only has to exist, and to hold none of the UA's `[popover]` box, which is a
  * centred fit-content card with a border, a padding and a background.
  *
  * The attribute is only added the first time a modal opens. Until then this is
- * an ordinary div, and `[popover]:not(:popover-open)` — the rule that would
- * hide it — never applies. */
+ * an ordinary div, and `[popover]:not(:popover-open)`, the rule that would
+ * hide it, never applies. */
 .zn-toast-layer {
   position: fixed;
   inset: 0 auto auto 0;
@@ -154,7 +154,7 @@
   background: var(--surface-band);
 }
 
-/* A toast enters in 240ms and slows as it arrives — the system's slow step.
+/* A toast enters in 240ms and slows as it arrives, the system's slow step.
    sonner drives the transform itself; only the timing is ours. */
 [data-sonner-toast] {
   transition-duration: var(--dur-slow) !important;

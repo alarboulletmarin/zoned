@@ -205,7 +205,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
   return (
     <Card size="flush">
-      {/* Accordion header — absent sous un onglet déjà nommé « Statistiques » :
+      {/* Accordion header, absent sous un onglet déjà nommé Statistiques :
           une section ne porte qu'un titre. */}
       {collapsible && (
       <button

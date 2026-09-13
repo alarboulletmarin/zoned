@@ -60,7 +60,7 @@
       "illustrationBrief": "Duo de coureurs, trait continu 2 px, sans remplissage, encre currentColor, appui au sol en vermillon",
       "illustrationLabel": "Deux coureurs dessinés d'un trait",
       "fig": {
-        "kicker": "Fig. 01 — modèle polarisé",
+        "kicker": "Fig. 01 · modèle polarisé",
         "source": "Seiler, Scand J Med Sci Sports, 2006",
         "title": "À quoi ressemble une semaine bien dosée",
         "body": "Répartition du temps par zone d'effort. La règle : 80 % facile, 20 % difficile, presque rien au milieu.",
@@ -72,9 +72,9 @@
           "z5": "VO₂max",
           "z6": "Anaérobie"
         },
-        "lowRange": "Facile (Z1–Z2)",
+        "lowRange": "Facile (Z1-Z2)",
         "lowCaption": "volume aérobie",
-        "highRange": "Au-dessus du seuil (Z4–Z6)",
+        "highRange": "Au-dessus du seuil (Z4-Z6)",
         "highCaption": "qualité intense"
       }
     },
@@ -118,7 +118,7 @@
       "rpe": "RPE",
       "adaptation": "Adaptation visée",
       "refPace": "Allure",
-      "fig": "Fig. 02 — Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil",
+      "fig": "Fig. 02 · Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil",
       "figuresLabel": "Le même coureur à six intensités, du pas de marche au sprint : plus la zone monte, plus le buste s'engage et plus le trait est sombre."
     },
     "s04": {
@@ -129,14 +129,14 @@
       "researchers": {
         "seiler": {
           "contribution": "Modèle d'entraînement polarisé (80/20).",
-          "citation": "« Quantifying training intensity distribution in elite endurance athletes », Scand J Med Sci Sports, 2006."
+          "citation": "Quantifying training intensity distribution in elite endurance athletes, Scand J Med Sci Sports, 2006."
         },
         "billat": {
           "contribution": "Chercheuse française. vVO₂max et protocole 30/30.",
-          "citation": "« Interval training at VO₂max: effects on aerobic performance », Med Sci Sports Exerc, 1999."
+          "citation": "Interval training at VO₂max: effects on aerobic performance, Med Sci Sports Exerc, 1999."
         },
         "daniels": {
-          "contribution": "Système VDOT et zones d'entraînement (1933–2025).",
+          "contribution": "Système VDOT et zones d'entraînement (1933-2025).",
           "citation": "Daniels' Running Formula (Human Kinetics, 3ᵉ éd., 2014)."
         },
         "lydiard": {
@@ -153,7 +153,7 @@
         },
         "faude": {
           "contribution": "Revue définitive des concepts de seuil lactique.",
-          "citation": "« Lactate Threshold Concepts: How Valid Are They? », Sports Med, 2009."
+          "citation": "Lactate Threshold Concepts: How Valid Are They?, Sports Med, 2009."
         },
         "sanMillan": {
           "contribution": "Entraînement en Zone 2 et santé métabolique.",
@@ -176,7 +176,7 @@
         "peak": "Spécifique",
         "taper": "Affûtage"
       },
-      "fig": "Fig. 03 — Phases-types d'un macrocycle : base · construction · spécifique · affûtage",
+      "fig": "Fig. 03 · Phases-types d'un macrocycle : base · construction · spécifique · affûtage",
       "distance": {
         "5K": "5K",
         "10K": "10K",
@@ -237,7 +237,7 @@
       "q": {
         "hrm": {
           "q": "Faut-il un capteur cardiaque ?",
-          "a": "Non. Les zones se calibrent à l'allure ou à la puissance. Le cardio sert surtout à valider Z1–Z2."
+          "a": "Non. Les zones se calibrent à l'allure ou à la puissance. Le cardio sert surtout à valider Z1-Z2."
         },
         "export": {
           "q": "Comment exporter une séance vers ma montre ?",

@@ -16,7 +16,7 @@ import type { StepContext, StepDef } from "../types";
 
 /**
  * Le récapitulatif, qui rend sa propre navigation : son bouton ne fait pas
- * « suivant », il génère le plan. D'où `ownsNav` dans sa déclaration.
+ * suivant, il génère le plan. D'où `ownsNav` dans sa déclaration.
  */
 function SummaryBody({
   form,
@@ -67,19 +67,19 @@ function SummaryBody({
         <CardContent className="zn-wiz__pane" data-direction={direction}>
           {/* Le titre et la phrase du récapitulatif vivaient ICI, en plus de
               ceux que la coquille pose déjà au-dessus de la carte : l'écran
-              affichait « Récapitulatif » deux fois, à quatre-vingts pixels
-              d'intervalle — et les deux portaient le MÊME `id`, ce qui est un
+              affichait Récapitulatif deux fois, à quatre-vingts pixels
+              d'intervalle, et les deux portaient le MÊME `id`, ce qui est un
               doublon d'identifiant dans le document. La question et sa phrase
               appartiennent à la coquille, comme pour les onze autres étapes ;
               la phrase est passée en `subtitleKey` dans la déclaration. */}
 
           {/* The plan in numbers, before the line-by-line recap. Only the ones
-              the athlete actually answered: a stat block reading "—" is a
+              the athlete actually answered: a stat block reading "-" is a
               hole, and a hole is not a measure.
 
               Deux colonnes sur téléphone : `.zn-grid` se replie en UNE seule
               sous 640px, ce qui est juste pour une carte de séance et faux
-              pour trois nombres de deux chiffres — ça faisait trois pavés
+              pour trois nombres de deux chiffres, ça faisait trois pavés
               pleine largeur, 280px, avant la première ligne du
               récapitulatif. */}
           <div
@@ -129,7 +129,7 @@ function SummaryBody({
                           {goal.raceName ? ` · ${goal.raceName}` : ""}
                         </span>
                         <span className="zn-mono zn-faint zn-fixed">
-                          {goal.raceDate ? formatDate(goal.raceDate, { month: "short", day: "numeric" }) : "—"}
+                          {goal.raceDate ? formatDate(goal.raceDate, { month: "short", day: "numeric" }) : "-"}
                         </span>
                       </div>
                     ))}

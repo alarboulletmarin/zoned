@@ -1,5 +1,5 @@
 /**
- * Cross-discipline substitution — swap a planned running session for an
+ * Cross-discipline substitution, swap a planned running session for an
  * equivalent cycling or swimming workout.
  *
  * Philosophy: substitution is allowed only for aerobic/recovery sessions
@@ -49,7 +49,7 @@ export interface SubstitutionCandidate {
   candidateTss: number;
   /** Ratio candidate / target (1.0 = perfect match). */
   matchRatio: number;
-  /** Distance from 1.0 — smaller is better. */
+  /** Distance from 1.0, smaller is better. */
   matchDistance: number;
   /** Duration used for the candidate TSS estimate. */
   estimatedDurationMin: number;
@@ -57,7 +57,7 @@ export interface SubstitutionCandidate {
 
 export interface SubstitutionOptions {
   /**
-   * Hard cutoff ratio — candidates whose match ratio falls outside
+   * Hard cutoff ratio, candidates whose match ratio falls outside
    * [1 - maxDeviation, 1 + maxDeviation] are discarded. Default 0.20.
    */
   maxDeviation?: number;
@@ -80,7 +80,7 @@ function resolveCandidateZone(
 ): number | CogganZone | SwimZone {
   if (discipline === "cycling") return cyclingSessionTypeToZone(sessionType);
   if (discipline === "swimming") return swimmingSessionTypeToZone(sessionType);
-  // running fallback — map to a zone index
+  // running fallback, map to a zone index
   switch (sessionType) {
     case "recovery":
       return 1;
@@ -110,7 +110,7 @@ export function estimatePlannedSessionTss(session: PlanSession): number {
     // loadScore ≈ duration × zone factor (TRIMP). Convert to TSS-equivalent
     // by dividing by 1.3 (Z4 factor → IF 1.0) and multiplying hours × IF² × 100.
     // For practical purposes we use loadScore directly as the target magnitude
-    // — TSS and TRIMP are close-enough for matching within ±20 %.
+    //, TSS and TRIMP are close-enough for matching within ±20 %.
     return Math.round(session.loadScore);
   }
 

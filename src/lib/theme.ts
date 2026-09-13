@@ -1,5 +1,5 @@
 /**
- * Theme — the one place a preference becomes a painted theme.
+ * Theme, the one place a preference becomes a painted theme.
  *
  * Three preferences, not two: `light`, `dark` and `system`. The distinction
  * matters because `system` has to keep following the OS *after* the choice is
@@ -10,7 +10,7 @@
  * The preference lives in `localStorage["zoned-theme"]` as a bare string, and
  * that shape is load-bearing: the inline script in `index.html` reads it before
  * the first paint to avoid a flash of the wrong theme, and it can only afford
- * one `getItem` — no JSON, no async, no imports. Anything unrecognised (an
+ * one `getItem`, no JSON, no async, no imports. Anything unrecognised (an
  * older build, a hand-edited backup, a corrupted value) resolves to `system`.
  *
  * The resolved theme is written to the DOM as Tailwind's `.dark` class, which
@@ -24,7 +24,7 @@ export type ResolvedTheme = "light" | "dark";
 export const THEME_STORAGE_KEY = "zoned-theme";
 
 /**
- * Browser-chrome colour per resolved theme — mirrors `--paper-page` in
+ * Browser-chrome colour per resolved theme, mirrors `--paper-page` in
  * `src/styles/design/colors.css` (`:root` for light, `.dark` for dark), which
  * is what `--background` resolves to.
  *
@@ -50,7 +50,7 @@ export function prefersDark(): boolean {
 
 /**
  * `systemDark` is a parameter rather than a call to `prefersDark()` so this
- * stays pure — `bun test` runs without a DOM, and this is the branch worth
+ * stays pure, `bun test` runs without a DOM, and this is the branch worth
  * testing.
  */
 export function resolveTheme(
@@ -87,16 +87,16 @@ let applied: ResolvedTheme | null = null;
 /**
  * Writes the resolved theme to `<html>`. Four things, and all four count:
  *
- * 1. The `.dark` class — what the CSS reads. Always via `classList.toggle`,
+ * 1. The `.dark` class, what the CSS reads. Always via `classList.toggle`,
  *    never `className =`: the root element carries other classes, and
  *    assigning `className` would drop them. (It used to carry
  *    `palette-deuteranopia` / `palette-tritanopia`; the colour-blind palettes
- *    went with the redesign — the ink ramp is legible in greyscale by
- *    construction — and the setting that wrote them went with them.)
- * 2. `style.colorScheme` — tells the browser to render *native* controls
+ *    went with the redesign, the ink ramp is legible in greyscale by
+ *    construction, and the setting that wrote them went with them.)
+ * 2. `style.colorScheme`, tells the browser to render *native* controls
  *    (scrollbars, `<input type="date">`, autofill, `<select>`) in the right
  *    shade. Its absence is why a dark Zoned still had white scrollbars.
- * 3. The `theme-color` meta without a `media` attribute — the system bar colour
+ * 3. The `theme-color` meta without a `media` attribute, the system bar colour
  *    on mobile. See the comment in `index.html`: a `media`-scoped meta follows
  *    the OS and would contradict an explicit choice.
  * 4. `data-switching-theme`, which `themes.css` uses to zero every transition

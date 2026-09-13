@@ -8,7 +8,7 @@ import type { ZoneRange } from "@/types";
 /**
  * The zones calculator, in the frame the "mes chiffres" door uses: mono
  * kicker, display title, lede, the zone plate, then the tool. The plate is
- * the legend — six figures on one rule, and once the reader's VMA or FCmax
+ * the legend, six figures on one rule, and once the reader's VMA or FCmax
  * is in, each figure carries its own range under its code. The calculator
  * itself was ported in its own lot and is not restyled here.
  */

@@ -91,9 +91,9 @@ describe("cyclingSessionTypeToZone", () => {
 describe("formatPowerRange / formatHrRange", () => {
   test("renders closed ranges", () => {
     expect(formatPowerRange({ minWatts: 100, maxWatts: 150, minPctFtp: 56, maxPctFtp: 75 }))
-      .toBe("100–150 W");
+      .toBe("100-150 W");
     expect(formatHrRange({ minBpm: 140, maxBpm: 160, minPctThrHr: 82, maxPctThrHr: 94 }))
-      .toBe("140–160 bpm");
+      .toBe("140-160 bpm");
   });
 
   test("renders open-ended Z7 ranges", () => {

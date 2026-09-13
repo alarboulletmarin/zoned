@@ -3,7 +3,7 @@
  * Une flèche tracée à la main n'est pas un objet dessiné au sens de la règle 2
  * de docs/doodles.md : c'est une marque d'annotation, du même ordre que la ligne
  * de sol. Elle ne concurrence aucun glyphe Material, parce qu'aucun glyphe ne
- * fait ce travail-là — montrer un endroit précis d'une page.
+ * fait ce travail-là, montrer un endroit précis d'une page.
  *
  * Elle est en encre, jamais en vermillon : l'accent reste réservé au contact
  * avec le sol, et une flèche rouge ferait un second point focal sur chaque
@@ -12,7 +12,7 @@
  * Le tremblement est délibéré. Une courbe régulière se lit comme un connecteur
  * de diagramme ; ce sont les points de contrôle légèrement inégaux qui font la
  * main. Chaque flèche est asymétrique par construction, pas par bruit aléatoire
- * — le rendu doit être identique d'une génération à l'autre.
+ *, le rendu doit être identique d'une génération à l'autre.
  *
  *   bun scripts/doodles/arrows.mjs
  */

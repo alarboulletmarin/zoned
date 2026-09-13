@@ -19,7 +19,7 @@ import {
  *
  * Same shape as the library: a mono line counting what is on offer, the
  * display title, one sentence, then outlined cards in a grid. The count is
- * the kicker rather than a footnote under the grid — a number belongs above
+ * the kicker rather than a footnote under the grid, a number belongs above
  * the thing it measures, not after it.
  */
 export function PrebuiltPlansPage() {
@@ -32,7 +32,7 @@ export function PrebuiltPlansPage() {
      Un rayon vide ne rend jamais une grille vide en silence : il le dit, et il
      dit ce qui marche à la place. Une pratique ANNONCÉE n'entre pas dans cette
      liste : elle porte son annonce ailleurs, et compter zéro plan pour une
-     pratique qui n'est pas ouverte serait du bruit — surtout que le bloc
+     pratique qui n'est pas ouverte serait du bruit, surtout que le bloc
      renvoie vers le générateur, ce qui serait exactement le contraire de ce
      que dit l'annonce.
      C'était l'ultra jusqu'au 12 septembre 2026 ; il est passé annoncé et le
@@ -94,10 +94,10 @@ export function PrebuiltPlansPage() {
         </section>
 
         {/* Le rayon vide est un état vide, donc il en prend le composant plutôt
-            qu'une section écrite à la main : la variante « not-started » porte
+            qu'une section écrite à la main : la variante not-started porte
             déjà la mise en page (la figure sur le filet, les mots à côté sur un
             écran large, dessous sur un téléphone) et le ton d'un appel positif.
-            `art` la remplace par la figure de la pratique — un rayon ultra vide
+            `art` la remplace par la figure de la pratique, un rayon ultra vide
             montre la figure qui s'éloigne, pas la figure générique. */}
         {unserved.map((practice) => {
           const label = isEn

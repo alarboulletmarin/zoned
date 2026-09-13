@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ANIMATIONS — keyframes + utility classes
+   ANIMATIONS, keyframes + utility classes
    prefers-reduced-motion handled in overrides.css globally.
    ========================================================================== */
 
@@ -96,7 +96,7 @@
    SKELETON LOADING
    ==========================================================================
    The `zone-shimmer` sweep lived here: a linear-gradient across the six old
-   zone colours, slid with translateX. Both halves of that are gone — the system
+   zone colours, slid with translateX. Both halves of that are gone, the system
    has no gradients, and the ramp it swept is now a single ink scale. The
    skeleton is a flat pulse, in src/styles/components/skeleton.css, and the
    `zone-shimmer` variant name survives there meaning "the heavier block". */

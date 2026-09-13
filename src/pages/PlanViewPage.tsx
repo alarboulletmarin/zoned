@@ -100,12 +100,12 @@ import Stretching from "@/assets/doodles/stretching.svg?react";
 import Standing from "@/assets/doodles/standing.svg?react";
 import WalkingAway from "@/assets/doodles/walking-away.svg?react";
 
-/* Who stands on the phase ribbon. The pose is the phase under the feet — the
-   same body that walks in Z2 and sprints in Z5 on the zone plate — and the
+/* Who stands on the phase ribbon. The pose is the phase under the feet, the
+   same body that walks in Z2 and sprints in Z5 on the zone plate, and the
    ribbon's top edge is the ground: each SVG's viewBox stops at the sole, so the
    box bottom is the contact line. `foot` is where along the box the vermillon
    sole touches (measured on the accent path, not guessed), `aspect` is the
-   viewBox ratio — both feed the CSS so the sole lands on the "now" marker and
+   viewBox ratio, both feed the CSS so the sole lands on the "now" marker and
    the box gets a real size (an svgr import with no width collapses). A recovery
    week stretches; a plan not started stands at the start line; an ended one
    walks off the end. Taper deliberately differs from the swatch ramp in
@@ -176,7 +176,7 @@ export function PlanViewPage() {
     sessionIndex: number;
   } | null>(null);
 
-  /* Le menu d'une séance de la vue liste — ce que le tableau de la semaine
+  /* Le menu d'une séance de la vue liste, ce que le tableau de la semaine
      ouvre depuis toujours au doigt, et que la liste n'avait pas : un appui sur
      une rangée n'y faisait rien du tout. Même composant, mêmes entrées. */
   const [listMenu, setListMenu] = useState<{
@@ -191,9 +191,9 @@ export function PlanViewPage() {
   const [showDateDialog, setShowDateDialog] = useState(false);
   const [editStartDate, setEditStartDate] = useState("");
   const [completionTarget, setCompletionTarget] = useState<{ weekNumber: number; sessionIndex: number } | null>(null);
-  // Deux cases portent désormais la même clé de clôture — celle de la bande
-  // « cette semaine » et celle de la grille. On retient celle qui a été
-  // cliquée plutôt que de deviner « la première visible du document ».
+  // Deux cases portent désormais la même clé de clôture, celle de la bande
+  // cette semaine et celle de la grille. On retient celle qui a été
+  // cliquée plutôt que de deviner la première visible du document.
   const completionAnchor = useRef<HTMLElement | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState("");
@@ -749,7 +749,7 @@ export function PlanViewPage() {
     );
   }
 
-  // 404 state — say what happened and offer the way back, never a dead end.
+  // 404 state, say what happened and offer the way back, never a dead end.
   if (!plan) {
     return (
       <div className="zn-planview">
@@ -800,7 +800,7 @@ export function PlanViewPage() {
       ? [
           t("view.standingWeek", { week: currentWeek }),
           standingPhase ? pick(PHASE_META[standingPhase.phase], "label") : null,
-          standingPhase ? `${standingPhase.startWeek}–${standingPhase.endWeek}` : null,
+          standingPhase ? `${standingPhase.startWeek}-${standingPhase.endWeek}` : null,
         ]
           .filter(Boolean)
           .join(" · ")
@@ -890,14 +890,14 @@ export function PlanViewPage() {
       ) ?? null
     : null;
 
-  // La plage de la semaine, par Intl — pas de table de mois écrite à la main.
+  // La plage de la semaine, par Intl, pas de table de mois écrite à la main.
   const focusWeekRange = (() => {
     if (!parsedPlanStart) return null;
     const start = new Date(parsedPlanStart);
     start.setDate(start.getDate() + (focusWeekNumber - 1) * 7);
     const end = new Date(start);
     end.setDate(end.getDate() + 6);
-    return `${formatDateShort(start)} – ${formatDateShort(end)}`;
+    return `${formatDateShort(start)} - ${formatDateShort(end)}`;
   })();
 
   return (
@@ -918,7 +918,7 @@ export function PlanViewPage() {
           </Button>
         </div>
 
-        {/* 1 — the plan, named and dated, with its four numbers */}
+        {/* 1, the plan, named and dated, with its four numbers */}
         <section className="zn-planview__head">
           <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
             <span className="zn-kicker">{headKicker}</span>
@@ -999,7 +999,7 @@ export function PlanViewPage() {
                 workoutNames={workoutNames}
                 workoutTemplates={workoutTemplates}
               />
-              {/* Only assisted plans replay from their config — see planShare.ts.
+              {/* Only assisted plans replay from their config, see planShare.ts.
                   Partager reste dans la barre : ShareLinkButton ne relaie ni ref
                   ni gestionnaires, il ne survivrait pas au Slot d'un item de menu. */}
               {isShareablePlan(plan.config) && (
@@ -1039,7 +1039,7 @@ export function PlanViewPage() {
           </div>
 
           {/* Ce qu'il reste à courir avant dimanche. Colonne de droite sur
-              écran large, premier bloc sous le titre sur téléphone — la
+              écran large, premier bloc sous le titre sur téléphone, la
               grille de .zn-planview__head s'en charge seule. */}
           {focusWeek && (
             <section className="zn-weeknow" aria-labelledby="zn-weeknow-title">
@@ -1081,7 +1081,7 @@ export function PlanViewPage() {
                           : todaySession.status === "skipped"
                             ? t("completion.skipped")
                             : t("completion.markDone")
-                    } — ${sessionLabel(todaySession)}`}
+                    } · ${sessionLabel(todaySession)}`}
                     onClick={(e) =>
                       handleToggleComplete(focusWeekNumber, todaySessionIndex, e.currentTarget)
                     }
@@ -1148,7 +1148,7 @@ export function PlanViewPage() {
               )}
 
               {/* Deux nombres, pas quatre : ce qui reste, et le temps déjà
-                  posé. L'emphase passe par l'inversion à l'encre — l'aplat
+                  posé. L'emphase passe par l'inversion à l'encre, l'aplat
                   vermillon de l'écran appartient à Exporter. */}
               <div className="zn-weeknow__facts-grid">
                 <StatBlock
@@ -1159,7 +1159,7 @@ export function PlanViewPage() {
                   footnote={t("view.sessionsLeft", { count: weekResolution.unresolved })}
                 />
                 {/* Rien de posé, c'est zéro minute, pas zéro seconde :
-                    formatDurationMinutes rend « 0s » sous la minute, ce qui est
+                    formatDurationMinutes rend 0s sous la minute, ce qui est
                     juste pour un bloc de séance et absurde pour le compteur
                     d'une semaine qui n'a pas commencé. */}
                 <StatBlock
@@ -1177,7 +1177,7 @@ export function PlanViewPage() {
                 <p className="zn-weeknow__next">
                   <Star filled size={14} className="zn-weeknow__star" />
                   <span className="zn-body zn-body--sm">
-                    {t("view.nextKey")} : {t(`daysShort.${nextKeySession.dayOfWeek}`)} —{" "}
+                    {t("view.nextKey")} : {t(`daysShort.${nextKeySession.dayOfWeek}`)} ·{" "}
                     {sessionLabel(nextKeySession)} ·{" "}
                     {formatDurationMinutes(nextKeySession.estimatedDurationMin)}
                   </span>
@@ -1188,7 +1188,7 @@ export function PlanViewPage() {
         </section>
 
 
-        {/* 2 — the programme itself */}
+        {/* 2, the programme itself */}
         <Tabs defaultValue="programme" className="zn-planview__band">
           <TabsList>
             <TabsTrigger value="programme">{t("view.schedule")}</TabsTrigger>
@@ -1426,7 +1426,7 @@ export function PlanViewPage() {
                 data-week={week.weekNumber}
                 data-current={isCurrent ? "true" : undefined}
               >
-                {/* Week header — opens and closes the week */}
+                {/* Week header, opens and closes the week */}
                 <button
                   type="button"
                   className="zn-planlist__toggle"
@@ -1439,7 +1439,7 @@ export function PlanViewPage() {
                     style={{ "--gap": "var(--sp-1)" } as React.CSSProperties}
                   >
                     <span className="zn-planlist__label">
-                      {weekLabel} — {pick(phaseMeta, "label")}
+                      {weekLabel} · {pick(phaseMeta, "label")}
                     </span>
                     {weekDateRange && (
                       <span className="zn-mono zn-faint">{weekDateRange}</span>
@@ -1451,14 +1451,14 @@ export function PlanViewPage() {
                       tous insécables : mesuré à 390 px, la pastille (162),
                       les chiffres (146), le chevron (16) et leurs écarts
                       demandaient 372 px pour 316 disponibles. Le titre, seul
-                      élément élastique, était donc écrasé à ZÉRO — son texte
+                      élément élastique, était donc écrasé à ZÉRO, son texte
                       débordait sous la pastille, et le chevron tombait hors
                       de la carte, que `overflow: hidden` découpait.
                       Groupés, ils descendent d'une ligne sous le titre sur
                       téléphone (plan-view.css) au lieu de lui prendre sa
                       place. Sur grand écran, la rangée ne bouge pas. */}
                   {/* Les pastilles de l'en-tête passent au petit calibre.
-                      « SEMAINE EN COURS » au calibre normal mesurait 162 px
+                      SEMAINE EN COURS au calibre normal mesurait 162 px
                       sur 32 de haut pour trois mots de métadonnée, à côté d'un
                       titre de semaine qui en fait 16 : la marque criait plus
                       fort que ce qu'elle marquait. */}
@@ -1531,7 +1531,7 @@ export function PlanViewPage() {
                           /* Ouvrir le menu de la séance sur la rangée elle-même,
                              comme le tableau de la semaine le fait sur sa carte :
                              un appui court (ou un clic droit) n'importe où sur la
-                             ligne, SAUF sur ce qui a déjà un geste à soi — le nom,
+                             ligne, SAUF sur ce qui a déjà un geste à soi, le nom,
                              qui mène à la séance, et les boutons. */
                           const openMenu = (
                             e: React.MouseEvent<HTMLDivElement>,
@@ -1569,7 +1569,7 @@ export function PlanViewPage() {
                                 !isSpecialSession && isBlocked ? "true" : undefined
                               }
                             >
-                              {/* Completion box — the same mark the calendar uses */}
+                              {/* Completion box, the same mark the calendar uses */}
                               {!isSpecialSession && (
                                 <button
                                   type="button"
@@ -1671,10 +1671,10 @@ export function PlanViewPage() {
                                     {/* Les notes sont écrites en PARTIES jointes
                                         par un `\n` (sessionBuilder). En HTML un
                                         retour à la ligne se réduit à une espace,
-                                        et elles se lisaient collées : « Allure
+                                        et elles se lisaient collées : Allure
                                         endurance : 7:37 - 8:47/km Sortie longue :
-                                        4 km (~33 min) ». Le point médian les
-                                        sépare — c'est déjà le séparateur de toutes
+                                        4 km (~33 min). Le point médian les
+                                        sépare, c'est déjà le séparateur de toutes
                                         les lignes de faits de l'app. */}
                                     {pick(session, "notes") && (
                                       <p className="zn-caption zn-muted zn-clamp zn-planlist__note">
@@ -1694,14 +1694,14 @@ export function PlanViewPage() {
                                     titre : une pastille pleine pour le type,
                                     une horloge et ses chiffres, et la rangée
                                     d'actions. La pastille pesait autant que le
-                                    nom qu'elle qualifiait — même hauteur, même
-                                    contour de 1.5px, et cinq par semaine — et
+                                    nom qu'elle qualifiait, même hauteur, même
+                                    contour de 1.5px, et cinq par semaine, et
                                     l'ensemble était insécable, ce qui écrasait
                                     le titre (voir plan-view.css). En mono
                                     discret, séparés par des points, ils
                                     redeviennent ce qu'ils sont : une légende.
 
-                                    L'horloge part avec la pastille : « 1h03 »
+                                    L'horloge part avec la pastille : 1h03
                                     n'a jamais eu besoin d'un pictogramme pour
                                     se lire comme une durée. */}
                                 {(!isSpecialSession || session.isKeySession) && (
@@ -1747,7 +1747,7 @@ export function PlanViewPage() {
                                     fait quoi. Un seul bouton les nomme.
                                     Sur bureau, où la place et le survol
                                     existent, ce sont les glyphes qui restent
-                                    et le bouton qui s'efface (plan-view.css) —
+                                    et le bouton qui s'efface (plan-view.css),
                                     le clic droit ouvre le même menu. */}
                                 {!isSpecialSession && (
                                   <button
@@ -1846,7 +1846,7 @@ export function PlanViewPage() {
                       })()
                     )}
 
-                    {/* Close the week out — offered only once something is done */}
+                    {/* Close the week out, offered only once something is done */}
                     {(() => {
                       const resolved = week.sessions.filter(s => s.status === "completed" || s.status === "skipped").length;
                       const total = week.sessions.length;
@@ -1919,8 +1919,8 @@ export function PlanViewPage() {
           {/* Le menu d'une séance. Les entrées sont celles que la liste sait
               faire ; le tableau de la semaine compose les siennes et rend le
               même composant. Les libellés sont ceux des boutons qu'il
-              remplace — « Trouver un parcours adapté », « Clôturer la
-              séance » — donc rien de nouveau à apprendre. */}
+              remplace, Trouver un parcours adapté, Clôturer la
+              séance, donc rien de nouveau à apprendre. */}
           {listMenu && (() => {
             const menuWeek = plan.weeks.find((w) => w.weekNumber === listMenu.weekNumber);
             const menuSession = menuWeek?.sessions[listMenu.sessionIndex];
@@ -2010,7 +2010,7 @@ export function PlanViewPage() {
           </TabsContent>
         </Tabs>
 
-        {/* 3 — ce qui a changé, ce qu'il faut regarder : un avertissement
+        {/* 3, ce qui a changé, ce qu'il faut regarder : un avertissement
             d'audit n'est pas plus urgent que la séance du soir */}
         {(ended || plan._lastUndoableChange || auditFindings.length > 0) && (
           <section className="zn-planview__band">
@@ -2054,9 +2054,9 @@ export function PlanViewPage() {
           </section>
         )}
 
-        {/* 4 — l'arc du plan : la largeur est la part, l'encre est l'intensité.
-            Il répond à « et sur toute la durée ? », une question qu'on se pose
-            après avoir regardé sa semaine — d'où sa place ici, replié. */}
+        {/* 4, l'arc du plan : la largeur est la part, l'encre est l'intensité.
+            Il répond à et sur toute la durée ?, une question qu'on se pose
+            après avoir regardé sa semaine, d'où sa place ici, replié. */}
         {plan.phases.length > 0 && (
           <Section
             collapsible
@@ -2094,7 +2094,7 @@ export function PlanViewPage() {
                         data-phase={phaseRange.phase}
                         data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
                         style={{ "--zn-span": `${widthPercent}%` } as React.CSSProperties}
-                        title={`${pick(meta, "label")} · ${phaseRange.startWeek}–${phaseRange.endWeek}`}
+                        title={`${pick(meta, "label")} · ${phaseRange.startWeek}-${phaseRange.endWeek}`}
                       />
                     );
                   })}
@@ -2121,7 +2121,7 @@ export function PlanViewPage() {
                     <span className="zn-mono">
                       {pick(PHASE_META[phaseRange.phase], "label")}
                       {" · "}
-                      {phaseRange.startWeek}–{phaseRange.endWeek}
+                      {phaseRange.startWeek}-{phaseRange.endWeek}
                     </span>
                   </span>
                 ))}
@@ -2206,7 +2206,7 @@ export function PlanViewPage() {
                   return (
                     <li key={i}>
                       <span className="zn-body zn-body--sm zn-truncate">
-                        {t(`daysShort.${s.dayOfWeek}`)} — {label ? pickLocale(label) : s.sessionType}
+                        {t(`daysShort.${s.dayOfWeek}`)} · {label ? pickLocale(label) : s.sessionType}
                       </span>
                       <span className="zn-mono zn-faint zn-fixed">
                         {s.estimatedDurationMin} min
@@ -2368,7 +2368,7 @@ export function PlanViewPage() {
         />
       </div>
 
-      {/* Session completion panel — popover on desktop, sheet on mobile */}
+      {/* Session completion panel, popover on desktop, sheet on mobile */}
       {(() => {
         if (!completionTarget) {
           return (
@@ -2386,9 +2386,9 @@ export function PlanViewPage() {
         const targetSession = targetWeek?.sessions[completionTarget.sessionIndex] ?? null;
         const targetName = targetSession ? (workoutNames[targetSession.workoutId] || targetSession.workoutId) : "";
         // Find the visible checkbox (mobile layout duplicates elements with display:none).
-        // La case cliquée l'emporte : la bande « cette semaine » et la grille
-        // affichent la même clé en même temps, et le repli sur « la première
-        // visible » ancrerait le popover 700px au-dessus du doigt.
+        // La case cliquée l'emporte : la bande cette semaine et la grille
+        // affichent la même clé en même temps, et le repli sur la première
+        // visible ancrerait le popover 700px au-dessus du doigt.
         const anchorEl =
           completionAnchor.current && completionAnchor.current.offsetWidth > 0
             ? completionAnchor.current

@@ -1,10 +1,10 @@
-/* Zones — ONE encoding, an ink ramp on paper: darker is harder, and the
+/* Zones, ONE encoding, an ink ramp on paper: darker is harder, and the
    height of a block says the same thing a second time. Three pieces of paint
    live here, because they are the same idea at three sizes:
 
      .zn-zone-badge   names a zone in words ("Z4 · Seuil")
      .zn-zonebar      profiles a session, one block per phase, width = time
-     .zn-zonescale    the legend — the ramp orders the zones, it does not name
+     .zn-zonescale    the legend, the ramp orders the zones, it does not name
                       them, so any screen showing zone fills shows this once
 
    Every zone value is read off an attribute rather than an interpolated class:
@@ -58,8 +58,8 @@
 
 /* ── the session profile ──────────────────────────────────────────────── */
 
-/* One block per phase. Width is time, intensity is coded twice — by ink
-   density and by height — so the profile survives greyscale and colour
+/* One block per phase. Width is time, intensity is coded twice, by ink
+   density and by height, so the profile survives greyscale and colour
    blindness alike. 36px tall, 2px gaps and a 3px inset: stated by the
    design bundle's ZoneBar, not rounded to the spacing scale. */
 .zn-zonebar {
@@ -88,7 +88,7 @@
   block-size: var(--zn-block-h, 26%);
 }
 
-/* A recovery block is not a zone. It is a 45 degree hatch at 26% — the same
+/* A recovery block is not a zone. It is a 45 degree hatch at 26%, the same
    mark the system uses for anything unmeasured. */
 .zn-zonebar__block[data-zone="0"] {
   background-image: var(--zone-recovery);
@@ -103,7 +103,7 @@
 
 /* ── the legend ───────────────────────────────────────────────────────── */
 
-/* The title, then the chips — two flex items under one wrap. On a wide screen
+/* The title, then the chips, two flex items under one wrap. On a wide screen
    the chips sit on the title's line; on a phone the run of chips drops under
    the title as one block and wraps inside itself, the same gap between every
    chip. The title is never stranded mid-row between two entries, and no entry
@@ -130,7 +130,7 @@
 
 /* On a phone the six chips of a full legend wrapped 2 / 3 / 1, the last one
    alone on its row. A grid instead of a wrap: the columns line up and the ramp
-   reads down as well as across. Only from five chips up — a session's three
+   reads down as well as across. Only from five chips up, a session's three
    or four sit on one row and need nothing. 140px is the widest chip, "Z1
    Récupération", so no column ever clips a name. The full width is stated:
    as a flex item the box would shrink to one column and stack the six chips
@@ -143,7 +143,7 @@
   }
 }
 
-/* 38x20 swatch — one of the raw sizes the design system states outright. The
+/* 38x20 swatch, one of the raw sizes the design system states outright. The
    legend itself no longer prints one (its entries are ZoneBadge chips); the
    zones table in ZoneCalculator still does, one per row. */
 .zn-zonescale__swatch {

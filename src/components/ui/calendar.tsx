@@ -33,8 +33,8 @@ function Calendar({ className, ...props }: CalendarProps) {
         month_caption: "zn-cal__caption",
         caption_label: "zn-cal__caption-label",
         /* Le mois et l'année en listes déroulantes, quand l'appelant demande
-           `captionLayout="dropdown"`. Le `<select>` est le vrai contrôle — il
-           ouvre le sélecteur natif du téléphone — et l'étiquette dessous est
+           `captionLayout="dropdown"`. Le `<select>` est le vrai contrôle, il
+           ouvre le sélecteur natif du téléphone, et l'étiquette dessous est
            ce que l'œil lit. */
         dropdowns: "zn-cal__dropdowns",
         dropdown_root: "zn-cal__dd",

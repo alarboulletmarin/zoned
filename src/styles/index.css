@@ -1,17 +1,17 @@
-/* Zoned design system — entry point.
+/* Zoned design system, entry point.
 
    Order matters: the design tokens define the values, then the aliases layer
    republishes a handful of them under the older names a few inline styles and
    hooks still read, then the reset, then the components.
 
    Tailwind used to be imported on the first line and it declared these layers
-   itself. It is gone, so the order is declared here — and it has to be, because
+   itself. It is gone, so the order is declared here, and it has to be, because
    without this line the layers would be ordered by first appearance, the
    component sheets would come first, and every base rule would outrank them.
    `utilities` holds exactly one class, `.sr-only`; see base.css. */
 @layer base, components, utilities;
 
-/* The redesign's source of truth — paper, ink, one accent. */
+/* The redesign's source of truth, paper, ink, one accent. */
 @import "./design/fonts.css";
 @import "./design/colors.css";
 @import "./design/zones.css";
@@ -27,7 +27,7 @@
 
 @import "./base.css";
 
-/* Hand-written component layer — see components/README.md.
+/* Hand-written component layer, see components/README.md.
    _layout and _type are the shared vocabulary; the rest is one file per
    primitive, in the order they are named in src/components/ui/.
 

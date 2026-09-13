@@ -15,7 +15,7 @@ type ButtonVariant =
 type ButtonSize = "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg";
 
 /**
- * Class names for a button rendered by something that is not this component —
+ * Class names for a button rendered by something that is not this component,
  * a bare `<a>`, a third-party trigger. Prefer `<Button asChild>`.
  *
  * The paint lives in `src/styles/components/button.css` and selects on the

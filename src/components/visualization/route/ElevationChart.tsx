@@ -111,7 +111,7 @@ export function ElevationChart({
 
   /**
    * Map a pointer X in CSS pixels (relative to wrapperRef) onto the
-   * nearest profile sample. Uses binary search on cumulative distance —
+   * nearest profile sample. Uses binary search on cumulative distance,
    * accurate across non-uniform sampling and O(log n).
    */
   const pickIndex = (clientX: number): number | null => {

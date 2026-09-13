@@ -1,4 +1,4 @@
-/* Top bar — the wordmark, the five doors and the tool cluster. Below 1024px
+/* Top bar, the wordmark, the five doors and the tool cluster. Below 1024px
    the doors leave the bar entirely: they become the full-screen menu behind
    the floating pill (mobile-menu.css).
 
@@ -6,14 +6,14 @@
    no backdrop blur: the system has neither, and the rule is what separates the
    header from the page.
 
-   A door is a pill. The door you are standing in is a FULL INK INVERSION —
-   never a tint — which is the system's one way of saying "selected". */
+   A door is a pill. The door you are standing in is a FULL INK INVERSION,
+   never a tint, which is the system's one way of saying "selected". */
 
 /* The bar stays at the top of the screen for the whole scroll, on every
    width: the search, the language and the theme are reached without a
    destination in mind, and so is the wordmark that takes you home. Sticky,
    not fixed, so the page still pays for its height rather than sliding
-   under it. z-index 40 is the app's docked layer — the same as ScrollToTop,
+   under it. z-index 40 is the app's docked layer, the same as ScrollToTop,
    under the menu pill (45), so an open panel covers the bar. The door panels
    keep their own 50 inside the bar's stacking context.
 
@@ -44,7 +44,7 @@ html {
    three bare glyphs. The 20px of air above and below them was measured for a
    band of pills; around a 44px tool cluster it made an 85px header on a phone,
    a tenth of the first screen spent on chrome. 8px keeps the 44px targets and
-   the rule, and gives 24px back to the page — on a tablet as well, which
+   the rule, and gives 24px back to the page, on a tablet as well, which
    shares the breakpoint. */
 @media (max-width: 1023px) {
   :root {
@@ -111,7 +111,7 @@ html {
   transform: translateY(var(--press-shift));
 }
 
-/* The door you are in. Solid ink, cream type — the inversion, not a wash. */
+/* The door you are in. Solid ink, cream type, the inversion, not a wash. */
 .zn-topbar__door[aria-current="page"],
 .zn-topbar__door[data-active="true"] {
   background: var(--ink-1);
@@ -160,7 +160,7 @@ html {
   opacity: 1;
 }
 
-/* Hover opens it too — but only when a click has not already taken control,
+/* Hover opens it too, but only when a click has not already taken control,
    otherwise tap-to-close would be a no-op under the pointer. */
 .zn-topbar__section:hover .zn-topbar__panel[data-open="false"] {
   visibility: visible;
@@ -202,8 +202,8 @@ html {
 
 /* La page où l'on est. Elle partageait sa déclaration avec son propre survol,
    donc pointer n'importe quel autre lien du panneau le faisait passer pour la
-   page courante. C'est l'inversion d'encre qui dit « ici », comme la porte
-   quatre-vingts lignes plus haut — le rayon ne change pas (r-lg), la boîte non
+   page courante. C'est l'inversion d'encre qui dit ici, comme la porte
+   quatre-vingts lignes plus haut, le rayon ne change pas (r-lg), la boîte non
    plus : seul le fond est peint. Le libellé prend le gras, second canal exigé
    par WCAG 1.4.1, et la description hérite de la couleur inversée plutôt que de
    rester en --text-muted, illisible sur l'encre. */
@@ -234,11 +234,11 @@ html {
 /* ── the tool cluster ─────────────────────────────────────────────────── */
 
 /* Bare controls, no frames and no circles. What separates them is a hairline,
-   the same one the header sits on — so the cluster reads as one strip of the
+   the same one the header sits on, so the cluster reads as one strip of the
    page rather than three floating objects.
 
    The 44px target is kept and simply not drawn: the padding carries it, and
-   the pill of paper is the only thing that appears on hover — the same one the
+   the pill of paper is the only thing that appears on hover, the same one the
    door already uses, twelve lines above. */
 
 .zn-topbar__tools {
@@ -284,10 +284,10 @@ html {
 
 /* Le trait vermillon de 2px sous le libellé est parti. Il servait deux choses
    à la fois : le survol, qui n'est pas une information (aucun critère ne le
-   demande), et l'ouverture du panneau, qui l'est — mais elle est déjà dite
+   demande), et l'ouverture du panneau, qui l'est, mais elle est déjà dite
    deux fois, par aria-expanded et par le chevron qui pivote de 180°. C'était
    un troisième canal redondant, et le seul vermillon permanent de la barre :
-   le vermillon ne dit plus que « maintenant » et le focus.
+   le vermillon ne dit plus que maintenant et le focus.
 
    Ce qui le remplace n'est pas une invention : c'est l'aplat de pilule que
    .zn-topbar__door:hover utilise déjà. La porte et l'outil se comportent enfin
@@ -309,7 +309,7 @@ html {
   flex: none;
 }
 
-/* The search reads as a field on a wide screen — the label and the shortcut
+/* The search reads as a field on a wide screen, the label and the shortcut
    are what tell you the palette exists at all. */
 .zn-topbar__tool--search > svg {
   inline-size: 16px;
@@ -351,7 +351,7 @@ html {
 /* Everything personal plus settings, behind one glyph. A stated
    width rather than the menu's 128px floor: the entries are two words and a
    glyph, and a menu that resizes per label reads as an accident. Only mounted
-   above 1024px — below that the same routes live in the full-screen menu.
+   above 1024px, below that the same routes live in the full-screen menu.
 
    Its rows are .zn-menu__item already (dropdown-menu.css), which is what
    carries the icon size, the gap and the ink inversion. Nothing repeats here. */
@@ -359,7 +359,7 @@ html {
   inline-size: 224px;
 }
 
-/* WCAG 2.5.8 — the 44px floor on a coarse pointer, which Tailwind used to
+/* WCAG 2.5.8, the 44px floor on a coarse pointer, which Tailwind used to
    carry per-utility and which would vanish silently with it. */
 @media (pointer: coarse) {
   .zn-topbar__door,

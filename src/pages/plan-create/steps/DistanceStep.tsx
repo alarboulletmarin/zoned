@@ -5,7 +5,7 @@ import { PRACTICES, distancesOfPractice } from "@/types/practice";
 import type { StepContext, StepDef } from "../types";
 
 /**
- * Quelle course — mais seulement parmi celles de la pratique choisie.
+ * Quelle course, mais seulement parmi celles de la pratique choisie.
  *
  * Cette étape affichait les SEPT distances à plat dans une seule grille :
  * 5 km, 10 km, semi, marathon, trail court, trail, ultra côte à côte, sans
@@ -14,7 +14,7 @@ import type { StepContext, StepDef } from "../types";
  * (`distancesOfPractice`), pas d'un branchement.
  */
 function DistanceBody({ form, setForm, uid, pick, questionId, commit }: StepContext) {
-  // Sans pratique — cas qui ne devrait pas arriver, l'étape venant après —
+  // Sans pratique, cas qui ne devrait pas arriver, l'étape venant après,
   // on montre tout plutôt que rien.
   const distances = form.practice
     ? distancesOfPractice(form.practice)

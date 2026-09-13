@@ -29,7 +29,7 @@ function distributeDays(daysPerWeek: number, longRunDay: number): number[] {
 
   // Offsets from the long run day. Even spacing looks right but leaves no pair
   // of days that is both 2+ days from the long run and 2+ days from each other
-  // — on 5 days it produced Mon/Wed/Thu/Sat/Sun, where the only candidates for
+  //, on 5 days it produced Mon/Wed/Thu/Sat/Sun, where the only candidates for
   // the two key sessions were Wed and Thu, back to back. These patterns always
   // keep two such slots free.
   const OFFSETS: Record<number, number[]> = {
@@ -64,7 +64,7 @@ function pickBestDay(
   const totalDays = 7;
   const usedDays = new Set(existingSlots.map(s => s.dayOfWeek));
 
-  // Collect days that are "heavy" — long run + existing key sessions
+  // Collect days that are "heavy", long run + existing key sessions
   const heavyDays = [longRunDay];
   for (const slot of existingSlots) {
     if (slot.slotType === "key_quality" || slot.slotType === "long_run") {
@@ -134,7 +134,7 @@ export function buildWeekTemplate(
   weekNumber: number = 0,
 ): WeekSlot[] {
   // Determine slot distribution by days per week
-  // Format: { key count, easy count, recovery count } — long_run is always 1
+  // Format: { key count, easy count, recovery count }, long_run is always 1
   // Designed to respect ~80/20 polarized distribution:
   //   3j: 1 key + 1 SL + 1 easy     = 33% hard (acceptable for low volume)
   //   4j: 2 key + 1 SL + 1 easy     = Daniels' Q1/Q2 pair, ~15% hard *time*
@@ -191,7 +191,7 @@ export function buildWeekTemplate(
   const slots: WeekSlot[] = [];
 
   // 1. Long run slot (always first).
-  // Recovery weeks keep the long run — it is shortened by the caller
+  // Recovery weeks keep the long run, it is shortened by the caller
   // (RECOVERY_LONG_RUN_PCT), not removed. Dropping it entirely cost marathon
   // plans 4 to 5 long runs per cycle.
   slots.push({
@@ -214,7 +214,7 @@ export function buildWeekTemplate(
     });
   }
 
-  // 3. Easy sessions — pick from remaining unused days
+  // 3. Easy sessions, pick from remaining unused days
   for (let i = 0; i < easyCount; i++) {
     const usedDays = new Set(slots.map(s => s.dayOfWeek));
     const available = otherDays.filter(d => !usedDays.has(d));
@@ -228,7 +228,7 @@ export function buildWeekTemplate(
     });
   }
 
-  // 4. Recovery sessions — fill remaining unused days
+  // 4. Recovery sessions, fill remaining unused days
   for (let i = 0; i < recoveryCount; i++) {
     const usedDays = new Set(slots.map(s => s.dayOfWeek));
     const available = otherDays.filter(d => !usedDays.has(d));

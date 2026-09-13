@@ -1,4 +1,4 @@
-/* The seven pace and conversion calculators — splits, age-graded, race
+/* The seven pace and conversion calculators, splits, age-graded, race
  * equivalence, VMA from a chrono, treadmill, pace converter, pace table.
  *
  * The kit does not mock these screens, so the arrangement is unchanged: this
@@ -6,15 +6,15 @@
  *
  * THE FRAME. Every one of these tools is the same sentence: what you fill in,
  * and what prints under it. `.zn-tool` is that sentence, composed onto
- * `.zn-stack` — one 672px column, centred, exactly the arrangement these
+ * `.zn-stack`, one 672px column, centred, exactly the arrangement these
  * screens had before the repaint. The remaining calculators
  * (/calculators/ftp, /calculators/css, /calculators/what-if) can adopt it
- * as-is — nothing in here knows about pace.
+ * as-is, nothing in here knows about pace.
  *
  * WHAT THIS FILE DOES NOT REDECLARE. The head band, the lede, the panel, the
  * legend band, the h:m:s row and the numeric table column already exist in
  * numbers.css as `.zn-num__head`, `.zn-num__lede`, `.zn-num__panel`,
- * `.zn-num__legend`, `.zn-num__time` and `.zn-num__num` — these seven screens
+ * `.zn-num__legend`, `.zn-num__time` and `.zn-num__num`, these seven screens
  * are more rooms of the same "mes chiffres" door as /calculators/zones and
  * /calculators/allures, and they use those classes verbatim. The field
  * vocabulary is workout.css's `.zn-calc__field` / `.zn-calc__label` /
@@ -23,7 +23,7 @@
  * are ZoneBadge, and the layout verbs come from _layout.css.
  *
  * ZONE FILLS. Five of the seven paint a zone. The two whose zone column is
- * there from the first paint — the pace table, the equivalence prediction —
+ * there from the first paint, the pace table, the equivalence prediction,
  * carry the ZoneScale legend once, on the `.zn-num__legend` band (the two
  * zone pages, /calculators/zones and /my-zones, no longer use that band: the
  * ZoneFigures plate is their legend, zone-figures.css); the VMA preview
@@ -43,7 +43,7 @@
 /* La bande de travail d'un outil n'a plus de règle propre ici : sa frontière
    avec la tête est payée par les deux voisines (26 px sous la tête, la moitié
    de --gap-section sur le panneau), et c'est tout l'écart. Ce sélecteur portait
-   un --gap-section ENTIER par-dessus ces 58 px — mesuré à 106 px au rendu, soit
+   un --gap-section ENTIER par-dessus ces 58 px, mesuré à 106 px au rendu, soit
    plus du double de l'écart que le token promet.
 
    Le reset d'adjacence qui suivait est parti avec le filet : il n'existait que
@@ -70,7 +70,7 @@
   inline-size: 100%;
 }
 
-/* A row of figures — one, two or three StatBlocks on the same baseline. */
+/* A row of figures, one, two or three StatBlocks on the same baseline. */
 .zn-tool__figures {
   display: flex;
   flex-wrap: wrap;
@@ -143,7 +143,7 @@
 
 /* A short definition list under a result: what it is on the left, the figure
    on the right, one hairline between each pair. The term stays sentence case
-   in text type — several of them run past four words, and a five-word
+   in text type, several of them run past four words, and a five-word
    UPPERCASE mono label stops being a label. The figure is always mono. */
 .zn-tool__facts {
   display: grid;
@@ -181,7 +181,7 @@
 
 /* ── table markers ────────────────────────────────────────────────────── */
 
-/* One row of a long reference table singled out — the pace closest to your
+/* One row of a long reference table singled out, the pace closest to your
    VMA. The 2.5px vermillon frame, the system's "this one" marker, drawn on the
    cells because a collapsed table cannot own a border on the row. The
    selectors name the tags as well as the classes: responsive-table.css already
@@ -206,7 +206,7 @@ tr.zn-table__row.zn-tool__mark > td.zn-table__td:last-child {
 }
 
 /* The last line of the split table: the total. A rule above it, heavier type,
-   no fill — it is a sum, not a selection. */
+   no fill, it is a sum, not a selection. */
 tr.zn-table__row.zn-tool__total > td.zn-table__td {
   border-block-start: var(--border-rule);
   font-weight: var(--fw-semibold);
@@ -234,7 +234,7 @@ tr.zn-table__row.zn-tool__total > td.zn-table__td {
 
 /* ── notes ────────────────────────────────────────────────────────────── */
 
-/* The sentence under a result that says what the number is worth — a formula,
+/* The sentence under a result that says what the number is worth, a formula,
    a citation, the reason a prediction drifts over distance. Prose stops being
    readable past ~70 characters. */
 .zn-tool__note {

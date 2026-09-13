@@ -143,7 +143,7 @@ export function GlossaryPage() {
       />
 
       <div className="zn-ref">
-        {/* 1 — the glossary, named and counted */}
+        {/* 1, the glossary, named and counted */}
         <section className="zn-ref__head zn-stack" style={HEAD_GAP}>
           <span className="zn-kicker">
             {totalCount > 0
@@ -164,7 +164,7 @@ export function GlossaryPage() {
             <Spinner size={22} label={t("status.loading", { ns: "common" })} />
           ) : (
             <>
-              {/* 2 — search and category, on one line */}
+              {/* 2, search and category, on one line */}
               <div className="zn-row zn-ref__controls">
                 <div className="zn-ref__search" role="search">
                   <Search size={16} className="zn-ref__search-glyph" />
@@ -208,7 +208,7 @@ export function GlossaryPage() {
                 </Select>
               </div>
 
-              {/* 3 — what is on screen, and what is narrowing it */}
+              {/* 3, what is on screen, and what is narrowing it */}
               <div className="zn-cluster zn-ref__meta">
                 <span className="zn-mono zn-faint">
                   {t("resultCount", { count: filteredTerms.length })}
@@ -241,7 +241,7 @@ export function GlossaryPage() {
                 )}
               </div>
 
-              {/* 4 — the terms, grouped by first letter */}
+              {/* 4, the terms, grouped by first letter */}
               {filteredTerms.length > 0 ? (
                 <div className="zn-ref__groups">
                   {Object.keys(groupedTerms)

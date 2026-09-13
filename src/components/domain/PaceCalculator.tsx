@@ -26,7 +26,7 @@ export function PaceCalculator() {
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
-  // A shared link carries the sender's VMA — it wins over the stored one.
+  // A shared link carries the sender's VMA, it wins over the stored one.
   const [searchParams] = useSearchParams();
   const sharedVma = searchParams.get("vma") ?? "";
 

@@ -82,7 +82,7 @@ export function LearnPage() {
       />
 
       <div className="zn-learn">
-        {/* 1 — what this door holds, counted, then named */}
+        {/* 1, what this door holds, counted, then named */}
         <section
           className="zn-stack zn-learn__head"
           style={{ "--gap": "var(--sp-8)" } as CSSProperties}
@@ -101,7 +101,7 @@ export function LearnPage() {
           </p>
         </section>
 
-        {/* 2 — the category filter, on the rule, with what it left on screen */}
+        {/* 2, the category filter, on the rule, with what it left on screen */}
         <div
           className="zn-cluster zn-learn__strip"
           style={{ "--gap": "var(--sp-8)" } as CSSProperties}
@@ -117,7 +117,7 @@ export function LearnPage() {
           </span>
         </div>
 
-        {/* 3 — the index. The lead article takes two columns. */}
+        {/* 3, the index. The lead article takes two columns. */}
         {shown.length > 0 ? (
           <div className="zn-grid zn-learn__grid">
             {shown.map((article, index) => (

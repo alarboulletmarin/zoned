@@ -1,8 +1,8 @@
 /**
- * AlbumCover — 1080×1080. Duotone vinyl cover homage. Joy Division
- * `Unknown Pleasures`–style waveform built from the workout's zone
+ * AlbumCover, 1080×1080. Duotone vinyl cover homage. Joy Division
+ * `Unknown Pleasures`-style waveform built from the workout's zone
  * breakdown. Side-A tracklist replaces the songs. Background is the
- * visual — transparent disabled.
+ * visual, transparent disabled.
  */
 
 import { usePickLang } from "@/lib/i18n-utils";
@@ -32,7 +32,7 @@ export function AlbumCover({ workout }: ShareTemplateProps) {
   const bg = ZONE_DEEP[zone];
 
   // Build 26 ridge lines like Unknown Pleasures. Amplitude grows then
-  // falls — mimics a session shape (warmup → main → cooldown).
+  // falls, mimics a session shape (warmup → main → cooldown).
   const lines = 26;
   const ridges = Array.from({ length: lines }, (_, i) => i);
 

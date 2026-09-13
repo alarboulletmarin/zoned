@@ -1,9 +1,9 @@
 /**
- * Zone colours — the one place a zone becomes a colour.
+ * Zone colours, the one place a zone becomes a colour.
  *
  * The redesign replaced the six-hue system (grey/green/yellow/orange/red/violet)
  * with a single ink ramp: Z1 is 14% ink on paper, Z6 is solid ink. Darker means
- * harder, the scale is learned once, and it survives greyscale — which is what
+ * harder, the scale is learned once, and it survives greyscale, which is what
  * frees the vermillon accent for the primary action. Intensity is always coded
  * twice, by ink density and by block height; this file owns the first channel
  * only. Thresholds, zone numbers and every calculation are unchanged.
@@ -12,7 +12,7 @@
  * (`var(--zone-N)`), because only CSS can composite an rgba ink over whatever
  * paper it lands on and follow the theme. But exports have no DOM: pdfmake and
  * the share-image renderers need literal hex, and each of them used to carry
- * its own copy. Those copies drifted — the PDF ramp was off by one zone,
+ * its own copy. Those copies drifted, the PDF ramp was off by one zone,
  * colouring recovery green and endurance blue.
  *
  * The tables below are that ramp already composited over the card surface.
@@ -30,7 +30,7 @@ export type ThemeMode = "light" | "dark";
 
 type ZoneHexMap = Record<ZoneNumber, string>;
 
-/** The ink ramp, light theme — `--zone-1..6` composited over `--paper-raised`. */
+/** The ink ramp, light theme, `--zone-1..6` composited over `--paper-raised`. */
 export const ZONE_HEX_LIGHT: ZoneHexMap = {
   1: "#dfdede",
   2: "#b9b9b9",
@@ -40,7 +40,7 @@ export const ZONE_HEX_LIGHT: ZoneHexMap = {
   6: "#171614",
 };
 
-/** The ink ramp, dark theme — the same alphas, cream over the dark card. */
+/** The ink ramp, dark theme, the same alphas, cream over the dark card. */
 export const ZONE_HEX_DARK: ZoneHexMap = {
   1: "#3e3c39",
   2: "#5e5c5a",
@@ -79,7 +79,7 @@ export function getZoneHexMap(
 /**
  * Used wherever a step carries no zone (drills, rest, cross-training).
  * A recovery block is not a zone, so it never takes a ramp value: on screen it
- * is a 45 degree hatch, and where only a flat fill is possible — PDF, PNG — it
+ * is a 45 degree hatch, and where only a flat fill is possible, PDF, PNG, it
  * falls back to the sunken paper it would be cut out of.
  */
 export const UNZONED_HEX = "#efeeea";
@@ -90,7 +90,7 @@ export const UNZONED_HEX = "#efeeea";
  * `ZONE_META[n].color` holds the string "zone-3", and call sites interpolated
  * it: `bg-${meta.color}`, `border-${meta.color}`. Tailwind only generates the
  * classes it can find as literal text, so those never made it into the
- * stylesheet reliably — `border-zone-3` was missing from the production CSS
+ * stylesheet reliably, `border-zone-3` was missing from the production CSS
  * entirely, silently dropping the border it was meant to draw.
  */
 const ZONE_CLASS_TABLE = {

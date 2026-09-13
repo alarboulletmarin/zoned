@@ -11,7 +11,7 @@ interface ZoneBadgeProps {
 }
 
 /**
- * Renders a zone spec as written in the data. A range stays a range —
+ * Renders a zone spec as written in the data. A range stays a range,
  * `Z1-Z2` is a progressive jog, not a recovery jog, and flattening it here
  * is what made the phase badge contradict the zone breakdown.
  * Colour follows the dominant (hardest) zone.

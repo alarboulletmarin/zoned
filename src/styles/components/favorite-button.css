@@ -1,7 +1,7 @@
 /* The favourite toggle.
 
    The pressed state is the accent, and it is announced by aria-pressed as well:
-   no state in this system rests on colour alone. There is no filled glyph —
+   no state in this system rests on colour alone. There is no filled glyph,
    the icon set has one weight, and a solid heart would be the only filled mark
    in the app. */
 
@@ -24,7 +24,7 @@
    the Tailwind base stated, carried over unrounded.
 
    Both selectors match .zn-btn[data-size]'s weight exactly, so this sheet has
-   to be imported after button.css — it is. */
+   to be imported after button.css, it is. */
 .zn-favorite[data-size] > svg {
   inline-size: 20px;
   block-size: 20px;

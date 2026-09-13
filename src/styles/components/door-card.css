@@ -1,7 +1,7 @@
-/* DoorCard — a whole card that navigates.
+/* DoorCard, a whole card that navigates.
 
    Same paper as .zn-card: cream fill, 1.5px ink outline, 22px radius, and no
-   shadow — a door sits on the page, it does not float above it. Hover is
+   shadow, a door sits on the page, it does not float above it. Hover is
    colour only, press is the 1px push the button and the card both use. */
 
 .zn-door {
@@ -42,7 +42,7 @@
   color: var(--text-muted);
 }
 
-/* The promise, in vermillon type — 14px semibold, which is the floor the
+/* The promise, in vermillon type, 14px semibold, which is the floor the
    system allows for the accent on cream. It is type, not a second accent fill. */
 .zn-door__cta {
   margin-block-start: auto;
@@ -66,7 +66,7 @@
    The sentence used to go here: the drawing carried the recognition, and the
    sentence wrapped to five lines. Now that every door is bare, a door without
    it is a kicker, a title and a link in a 130px card, and nothing says what
-   is behind it — so the sentence stays, and the pair is measured against the
+   is behind it, so the sentence stays, and the pair is measured against the
    stack it replaced rather than against the drawn pair it was. */
 @media (max-width: 640px) {
   .zn-door {

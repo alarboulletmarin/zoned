@@ -1,6 +1,6 @@
 /* Type roles.
  *
- * Three families, three jobs — Bricolage Grotesque displays, Space Grotesk
+ * Three families, three jobs, Bricolage Grotesque displays, Space Grotesk
  * speaks, JetBrains Mono counts. A screen reads top to bottom as
  * kicker -> display title -> body -> data, and these are the four classes that
  * spell that out.
@@ -106,7 +106,7 @@
 }
 
 /* The uppercase micro-label above a title, or over a column of numbers.
-   Four words maximum — past that it stops being a label and starts being a
+   Four words maximum, past that it stops being a label and starts being a
    sentence in the wrong case. */
 .zn-kicker {
   font-family: var(--font-mono);

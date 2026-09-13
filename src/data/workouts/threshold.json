@@ -3126,15 +3126,15 @@
         }
       ],
       "coachingTips": [
-        "L'allure CV se situe entre le seuil et la VMA — approximativement votre allure de course sur 30 minutes",
+        "L'allure CV se situe entre le seuil et la VMA, approximativement votre allure de course sur 30 minutes",
         "La récupération courte (60-90s) est volontairement insuffisante pour accumuler la déplétion de D'",
-        "Toutes les répétitions doivent être au même rythme — pas de progression d'allure",
+        "Toutes les répétitions doivent être au même rythme, pas de progression d'allure",
         "Si vous ne connaissez pas votre CV, utilisez votre allure 8-10 km comme approximation"
       ],
       "coachingTipsEn": [
-        "CV pace sits between threshold and VO2max — approximately your 30-minute race pace",
+        "CV pace sits between threshold and VO2max, approximately your 30-minute race pace",
         "Short recovery (60-90s) is deliberately insufficient to accumulate D' depletion",
-        "All repetitions should be at the same pace — no pace progression",
+        "All repetitions should be at the same pace, no pace progression",
         "If you don't know your CV, use your 8-10K pace as an approximation"
       ],
       "commonMistakes": [
@@ -3284,21 +3284,21 @@
         }
       ],
       "coachingTips": [
-        "Les phases « sous » à 95% du seuil ne sont PAS de la récupération — vous restez en charge",
-        "Les phases « sur » à 105% du seuil doivent inonder le système de lactate que les phases « sous » résorberont",
+        "Les phases sous à 95% du seuil ne sont PAS de la récupération, vous restez en charge",
+        "Les phases sur à 105% du seuil doivent inonder le système de lactate que les phases sous résorberont",
         "Utilisez un GPS ou une montre pour contrôler précisément les allures ±5%",
-        "La difficulté augmente bloc après bloc — c'est normal et voulu"
+        "La difficulté augmente bloc après bloc, c'est normal et voulu"
       ],
       "coachingTipsEn": [
-        "The 'under' phases at 95% threshold are NOT recovery — you stay under load",
+        "The 'under' phases at 95% threshold are NOT recovery, you stay under load",
         "The 'over' phases at 105% threshold should flood the system with lactate that 'under' phases will clear",
         "Use GPS or a watch to precisely control paces ±5%",
-        "Difficulty increases block after block — this is normal and intentional"
+        "Difficulty increases block after block, this is normal and intentional"
       ],
       "commonMistakes": [
-        "Ralentir trop pendant les phases « sous » en les traitant comme de la récupération",
-        "Dépasser 110% du seuil pendant les phases « sur », transformant la séance en VMA",
-        "Ne pas respecter les transitions rapides entre phases « sur » et « sous »"
+        "Ralentir trop pendant les phases sous en les traitant comme de la récupération",
+        "Dépasser 110% du seuil pendant les phases sur, transformant la séance en VMA",
+        "Ne pas respecter les transitions rapides entre phases sur et sous"
       ],
       "commonMistakesEn": [
         "Slowing too much during 'under' phases by treating them as recovery",

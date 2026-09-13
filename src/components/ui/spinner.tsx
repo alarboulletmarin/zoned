@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
  *
  * Where the shape IS known, use a Skeleton instead: a spinner says "something
  * is happening", a skeleton says "this is what is coming". The system asks that
- * a wait longer than a second be named in words, which is what `label` is for —
+ * a wait longer than a second be named in words, which is what `label` is for,
  * a ring spinning on its own tells the person nothing.
  */
 export function Spinner({

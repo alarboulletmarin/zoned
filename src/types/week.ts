@@ -1,5 +1,5 @@
 /**
- * Types for the "Ma semaine" (weekly planner) feature — a polarised 80/20
+ * Types for the "Ma semaine" (weekly planner) feature, a polarised 80/20
  * training week generated from the workout catalog. See Epic #83.
  */
 
@@ -23,7 +23,7 @@ export interface WeekSlot {
   day: DayIndex;
   kind: SlotKind;
   workout: AnyWorkoutTemplate | null;
-  /** User lock — locked slots survive partial regeneration. */
+  /** User lock, locked slots survive partial regeneration. */
   locked: boolean;
 }
 

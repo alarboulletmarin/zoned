@@ -1,10 +1,10 @@
-/* Badge — a mono, uppercase capsule for a code or a short fact:
+/* Badge, a mono, uppercase capsule for a code or a short fact:
    "Z5 · VO2MAX", "56 MIN". Never a sentence; anything that reads as one
    belongs in body text.
 
    The four app variants map onto the design's tones:
-     default     -> ink      (ink fill, cream text — the loud fact)
-     secondary   -> quiet    (ink-3 text on a divider outline — metadata)
+     default     -> ink      (ink fill, cream text, the loud fact)
+     secondary   -> quiet    (ink-3 text on a divider outline, metadata)
      destructive -> accent   (the one vermillon fill)
      outline     -> neutral  (transparent, full ink outline) */
 
@@ -48,14 +48,14 @@
 
 /* Le petit calibre. La capsule de base fait 32px de haut pour du mono de 12 :
    c'est juste quand elle est seule à porter un fait, et c'est trop dès qu'elle
-   accompagne un titre — dans l'en-tête d'une semaine de plan, « SEMAINE EN
-   COURS » mesurait 162 × 32 px à côté d'un intitulé de 16px, donc la
+   accompagne un titre, dans l'en-tête d'une semaine de plan, SEMAINE EN
+   COURS mesurait 162 × 32 px à côté d'un intitulé de 16px, donc la
    métadonnée pesait plus lourd que ce qu'elle qualifiait.
 
    Ce qui baisse : le pas de mono (12 → 10, le plancher du système, et
    uniquement en capitales, ce que la capsule est déjà), le rembourrage, et le
    contour, qui passe au filet. Ce qui NE baisse pas : la graisse, le
-   crénage et les tons — c'est le même objet, pas un objet plus discret. */
+   crénage et les tons, c'est le même objet, pas un objet plus discret. */
 .zn-badge[data-size="sm"],
 .zn-badge--sm {
   padding: 3px 9px;
@@ -76,8 +76,8 @@
 /* ── tones ────────────────────────────────────────────────────────────── */
 
 /* Each tone answers to two selectors. `<Badge>` sets data-variant, but
-   `badgeVariants()` hands class names to something it does not render — a
-   Radix trigger — which never gets the attribute. The modifier class covers
+   `badgeVariants()` hands class names to something it does not render, a
+   Radix trigger, which never gets the attribute. The modifier class covers
    that case. These names are ours, in a hand-written file, so interpolating
    one is safe: the Tailwind source-scanning trap does not apply here. */
 
@@ -95,7 +95,7 @@
   border-color: var(--line-divider);
 }
 
-/* Danger wears the same vermillon as the primary action — told apart by its
+/* Danger wears the same vermillon as the primary action, told apart by its
    words and its placement, as everywhere else in this system. */
 .zn-badge[data-variant="destructive"],
 .zn-badge--destructive {
@@ -141,7 +141,7 @@ button.zn-badge:active {
   transform: translateY(var(--press-shift));
 }
 
-/* WCAG 2.5.8 — the touch floor applies to the clickable badges only. A badge
+/* WCAG 2.5.8, the touch floor applies to the clickable badges only. A badge
    is usually a static capsule inside dense data, and a 44px minimum on every
    one of them would blow the layout apart. */
 @media (pointer: coarse) {

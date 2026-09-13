@@ -16,7 +16,7 @@ interface Props {
  * One themed band of the hub: glyph, title, lede, then the visual.
  *
  * `accent` stays in the API and is emitted as `data-accent` so the section
- * still declares which family it belongs to, but nothing reads it for paint —
+ * still declares which family it belongs to, but nothing reads it for paint,
  * the system has one accent and it is spent on the hero's action.
  */
 export function NutritionThemeSection({

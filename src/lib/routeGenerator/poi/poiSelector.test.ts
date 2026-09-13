@@ -60,7 +60,7 @@ describe("selectDiverseWaypoints", () => {
   test("picks angularly spread waypoints when available", () => {
     const candidates = [
       placePoi(1, 0, 2_000), // north
-      placePoi(2, 5, 2_000), // also north — should NOT be picked alongside #1
+      placePoi(2, 5, 2_000), // also north, should NOT be picked alongside #1
       placePoi(3, 120, 2_000), // SE
       placePoi(4, 240, 2_000), // SW
     ];
@@ -72,7 +72,7 @@ describe("selectDiverseWaypoints", () => {
     // The angular diversity rule should pick one of {1,2}, then 3, then 4.
     expect(ids.includes(3)).toBe(true);
     expect(ids.includes(4)).toBe(true);
-    // Both #1 and #2 cannot be picked together — they're <60° apart.
+    // Both #1 and #2 cannot be picked together, they're <60° apart.
     expect(ids.includes(1) && ids.includes(2)).toBe(false);
   });
 
@@ -115,7 +115,7 @@ describe("selectDiverseWaypoints", () => {
   test("different seeds produce different selections when several candidates exist", () => {
     // Eight POI of identical weight, spread around the start. Without a
     // seed-driven jitter the greedy algorithm always picks the same 3 by
-    // bearing — that's the bug we're fixing. We test across many seeds and
+    // bearing, that's the bug we're fixing. We test across many seeds and
     // require at least 3 distinct sets to come out, which is statistically
     // robust against unlucky jitter collisions.
     const candidates = Array.from({ length: 8 }, (_, i) =>
@@ -150,9 +150,9 @@ describe("selectDiverseWaypoints", () => {
 describe("pickFurthestPoiInBearing", () => {
   test("returns the POI inside the bearing slice", () => {
     const candidates = [
-      placePoi(1, 90, 5_000), // east — in slice
-      placePoi(2, 0, 5_000), // north — out of slice
-      placePoi(3, 180, 5_000), // south — out of slice
+      placePoi(1, 90, 5_000), // east, in slice
+      placePoi(2, 0, 5_000), // north, out of slice
+      placePoi(3, 180, 5_000), // south, out of slice
     ];
 
     const picked = pickFurthestPoiInBearing(

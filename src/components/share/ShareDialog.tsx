@@ -1,5 +1,5 @@
 /**
- * ShareDialog — Strava-style activity share sheet.
+ * ShareDialog, Strava-style activity share sheet.
  *
  * Mobile : bottom sheet pinned to the bottom of the viewport.
  * Desktop : centered modal capped at sm:max-w-2xl.
@@ -15,7 +15,7 @@
  *
  * Each template is mounted at its native dimensions inside a CSS-scaled
  * wrapper (`transform: scale(s)`). html-to-image ignores ancestor transforms
- * when capturing — the output PNG is always rendered at native resolution.
+ * when capturing, the output PNG is always rendered at native resolution.
  *
  * The panel is a native <dialog> opened with showModal() (see
  * `ui/native-dialog.tsx`), not a Radix content: the top layer, the focus trap,
@@ -147,7 +147,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
     };
   }, [open]);
 
-  // Mouse drag-to-scroll — trackpad horizontal swipe + click-drag with a
+  // Mouse drag-to-scroll, trackpad horizontal swipe + click-drag with a
   // mouse. Touch is already handled by the browser's native overflow-x
   // scroll. The dragMovedRef flag suppresses the click that would otherwise
   // fire on mouseup at the end of a drag.
@@ -338,7 +338,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
         {t("share.subtitle")}
       </p>
 
-      {/* Drag-handle (mobile only) — visual cue this is a sheet. */}
+      {/* Drag-handle (mobile only), visual cue this is a sheet. */}
       <div aria-hidden className="zn-share-dialog__grip" />
 
       {/* Header */}
@@ -361,7 +361,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
       {/* Carousel */}
       <div className="zn-share-dialog__body">
         <div className="zn-share-dialog__carousel">
-          {/* Desktop chevrons — hidden on touch / mobile */}
+          {/* Desktop chevrons, hidden on touch / mobile */}
           <button
             type="button"
             onClick={handlePrev}
@@ -403,7 +403,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
           </div>
         </div>
 
-        {/* Caption — label, format, counter */}
+        {/* Caption, label, format, counter */}
         <div className="zn-share-dialog__caption">
           <p className="zn-share-dialog__caption-label">
             {t(`share.template.${selected.labelKey}.label`)}
@@ -413,7 +413,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
           </p>
         </div>
 
-        {/* Transparent toggle — only when supported */}
+        {/* Transparent toggle, only when supported */}
         {selected.supportsTransparent && (
           <div className="zn-share-dialog__toggle">
             <label
@@ -482,7 +482,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
         </div>
       </footer>
 
-      {/* Top-right close button (desktop convention — alongside the
+      {/* Top-right close button (desktop convention, alongside the
           left-aligned "Fermer" text button) */}
       <button
         type="button"
@@ -570,17 +570,17 @@ function CarouselSlide({
         ref={cellRef}
         className={cn(
           "zn-share-dialog__frame",
-          // Checkerboard behind a transparent preview — makes the alpha
+          // Checkerboard behind a transparent preview, makes the alpha
           // obvious. Both tones are paper tokens, so it inverts with the theme.
           transparent && "zn-share-dialog__frame--alpha",
         )}
         style={{
           // Cap height so portrait templates (9:16) don't overflow the
-          // dialog vertically on small screens — the cap itself is in CSS.
+          // dialog vertically on small screens, the cap itself is in CSS.
           aspectRatio: `${descriptor.width} / ${descriptor.height}`,
         }}
       >
-        {/* Scaled native-resolution mount — captured by html-to-image */}
+        {/* Scaled native-resolution mount, captured by html-to-image */}
         <div
           className="zn-share-dialog__mount"
           style={{ width: scaledW, height: scaledH }}

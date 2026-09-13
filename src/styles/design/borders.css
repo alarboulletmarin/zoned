@@ -1,5 +1,5 @@
 /* Everything is drawn: an ink outline is the default, not the exception.
-   1.5px is the house rule — 1px reads as a hairline inside dense data, 2.5px
+   1.5px is the house rule, 1px reads as a hairline inside dense data, 2.5px
    marks a selected or retained frame. Shadows are hard offsets, never blurred,
    never stacked, and never on a list card. */
 :root {
@@ -41,7 +41,7 @@
 }
 
 /* Dark: a hard ink offset is invisible on an ink page, so the shadow deepens
-   to true black instead of lightening — depth still reads as "further from
+   to true black instead of lightening, depth still reads as "further from
    the lamp", which is the same rule the light theme follows. */
 .dark {
   --border-dashed: var(--bw-rule) dashed rgba(237, 235, 231, 0.4);

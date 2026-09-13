@@ -1,9 +1,9 @@
 /* Layout vocabulary.
  *
  * NOT a utility framework and not a Tailwind reimplementation: these are the
- * layout facts the design system itself states — a 20px gutter, a 22px stack,
+ * layout facts the design system itself states, a 20px gutter, a 22px stack,
  * 40px screen margins (20px on mobile), and sections separated by blank space
- * alone (--gap-section) since 12 September 2026 — they were separated by a
+ * alone (--gap-section) since 12 September 2026, they were separated by a
  * full-width ink rule until then; see .zn-section below.
  *
  * Variation goes through custom properties rather than a class per value, so
@@ -14,7 +14,7 @@
  *
  * Anything genuinely one-off stays an inline style, which is what 635 places in
  * this app already do for zone colours. That is the escape hatch, and it is
- * fine — it is plain CSS.
+ * fine, it is plain CSS.
  */
 
 /* ── flow ─────────────────────────────────────────────────────────────── */
@@ -36,7 +36,7 @@
   min-inline-size: 0;
 }
 
-/* A row that wraps — filter chips, tag lists, button groups. */
+/* A row that wraps, filter chips, tag lists, button groups. */
 .zn-cluster {
   display: flex;
   flex-wrap: wrap;
@@ -50,7 +50,7 @@
   justify-content: space-between;
 }
 
-/* Aligns a row to the top instead of the middle — used when one column is a
+/* Aligns a row to the top instead of the middle, used when one column is a
    paragraph and the other a single control. */
 .zn-row--start {
   align-items: flex-start;
@@ -66,7 +66,7 @@
   min-inline-size: 0;
 }
 
-/* The element that must not be squeezed — an icon, a badge, a fixed control. */
+/* The element that must not be squeezed, an icon, a badge, a fixed control. */
 .zn-fixed {
   flex: none;
 }
@@ -100,8 +100,8 @@
    item's MIN-CONTENT: a track written `1fr` refuses to be narrower than the
    widest unbreakable thing inside it, and the grid then overflows its own
    container rather than compress. It is silent wherever the min-content
-   happens to be small — the session cards measure 223px min-content in
-   Chrome, which fits a 390px phone — and it overflows the moment an engine
+   happens to be small, the session cards measure 223px min-content in
+   Chrome, which fits a 390px phone, and it overflows the moment an engine
    computes that intrinsic size differently, which is what put a sideways
    scrollbar on the home page in Firefox and not in Chrome.
 
@@ -125,7 +125,7 @@
 
 /* ── page ─────────────────────────────────────────────────────────────── */
 
-/* The screen's side margins. 40px, 20px on mobile — the value comes from
+/* The screen's side margins. 40px, 20px on mobile, the value comes from
    --pad-screen-x, which already switches at the breakpoint. */
 .zn-screen {
   padding-inline: var(--pad-screen-x);
@@ -134,21 +134,21 @@
 /* Une bande de la page, séparée de la suivante par L'ESPACE SEUL.
    (12 septembre 2026, décision du propriétaire.)
 
-   Ce commentaire disait exactement le contraire — « separated by a full-width
+   Ce commentaire disait exactement le contraire, separated by a full-width
    ink rule, never by blank space: that is what makes the page read as paper
-   rather than as a feed » — et il est réécrit ici plutôt que corrigé, parce
+   rather than as a feed, et il est réécrit ici plutôt que corrigé, parce
    qu'il était formulé comme une doctrine et non comme un réglage : le prochain
    lecteur remettrait le filet en croyant réparer un oubli.
 
    La bande paie la MOITIÉ de --gap-section de chaque côté, jamais l'écart
    entier. Deux bandes voisines en laissent alors exactement un entre leurs
    contenus. Garder le padding entier aurait donné 96 px entre deux bandes sur
-   bureau, c'est-à-dire les « 672 px d'air sur la seule page d'accueil » que ce
+   bureau, c'est-à-dire les 672 px d'air sur la seule page d'accueil que ce
    fichier avait déjà mesurés et rejetés du temps où le filet travaillait.
 
    Le repli est ce qui bouge, pas la propriété : un appelant qui pose son propre
    --pad-block le garde (WeeksListPage.tsx passe var(--sp-11)). Et il n'y a plus
-   de media query ici — c'est --gap-section qui descend d'un cran sous 640 px,
+   de media query ici, c'est --gap-section qui descend d'un cran sous 640 px,
    dans design/spacing.css, donc la valeur vit à un seul endroit. */
 .zn-section {
   padding-block: var(--pad-block, calc(var(--gap-section) / 2));
@@ -168,7 +168,7 @@
   max-inline-size: var(--measure, 62ch);
 }
 
-/* Wide content — a table, a chart, a code block — scrolls inside itself.
+/* Wide content, a table, a chart, a code block, scrolls inside itself.
    The page must never scroll sideways. */
 .zn-scroll-x {
   overflow-x: auto;
@@ -177,8 +177,7 @@
 
 /* ── visibility ───────────────────────────────────────────────────────── */
 
-/* `.sr-only` moved to base.css, into `@layer utilities`. It was declared twice
-   — here and by Tailwind — and Tailwind's copy, sitting in the utilities layer,
+/* `.sr-only` moved to base.css, into `@layer utilities`. It was declared twice, here and by Tailwind, and Tailwind's copy, sitting in the utilities layer,
    was the one that actually applied. Leaving only this one behind would have
    dropped a visually-hidden label into the middle of the component layer, where
    any later rule of equal specificity can put it back on screen. One
@@ -188,7 +187,7 @@
    Used by the shared helpers in src/components/editorial/. */
 
 /* A card that is itself a link or a button. It answers the pointer by
-   changing colour — never by lifting, never by gaining a shadow. The one
+   changing colour, never by lifting, never by gaining a shadow. The one
    shadow in this system is a hard offset for surfaces that really float. */
 .zn-card-hover {
   transition:

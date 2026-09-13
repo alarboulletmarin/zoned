@@ -138,21 +138,21 @@ const PREBUILT_CONFIGS: PrebuiltConfig[] = [
     },
   },
   {
-    /* Le premier plan tout prêt de trail — l'étagère était vide, et l'étape
-       « prêt-à-l'emploi » du parcours annonçait donc une impasse à un tiers
+    /* Le premier plan tout prêt de trail, l'étagère était vide, et l'étape
+       prêt-à-l'emploi du parcours annonçait donc une impasse à un tiers
        des pratiques.
 
-       Trail COURT, et pas « 40 km » comme le plan de refonte l'écrivait :
+       Trail COURT, et pas 40 km comme le plan de refonte l'écrivait :
        RACE_DISTANCE_META modélise `trail_short` à 30 km et `trail` à 60 km.
-       Une étiquette « 40 km » ne correspondrait à aucune table de volume, de
-       phases ou d'affûtage du moteur — ce serait un nombre écrit sur la carte
+       Une étiquette 40 km ne correspondrait à aucune table de volume, de
+       phases ou d'affûtage du moteur, ce serait un nombre écrit sur la carte
        et démenti par le contenu. 30 km est aussi la première course de trail
        la plus courante.
 
        Pas de plan ULTRA tout prêt, et c'est délibéré : 16 à 52 semaines de
        structure écrite à la main là où le générateur assisté couvre déjà
-       l'ultra correctement. Une UI honnête qui dit « le générateur sait le
-       construire » vaut mieux qu'un plan bâclé. */
+       l'ultra correctement. Une UI honnête qui dit le générateur sait le
+       construire vaut mieux qu'un plan bâclé. */
     slug: "trail-court-intermediaire",
     name: "Trail court intermédiaire",
     nameEn: "Short Trail Intermediate",
@@ -290,7 +290,7 @@ function planToTypeScript(plan: PrebuiltPlan, varName: string): string {
  * Ce filtre n'est pas un confort : `raceDate` et `createdAt` sont calculés
  * depuis AUJOURD'HUI, et `planSeedFromConfig` les fait entrer dans le choix
  * des séances. Relancer le script en entier pour ajouter un plan réécrit donc
- * les dix autres fichiers avec les dates du jour et un tirage différent — un
+ * les dix autres fichiers avec les dates du jour et un tirage différent, un
  * diff de dix mille lignes sans rapport avec ce qu'on voulait changer.
  *
  *   bun run scripts/regenerate-prebuilt-plans.ts trail-court-intermediaire

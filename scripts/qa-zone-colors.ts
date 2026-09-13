@@ -3,14 +3,14 @@
  * src/styles/design/zones.css.
  *
  * The DOM reads `var(--zone-N)`; exports (PDF, share images) cannot, so they
- * read the TS table. Two sources exist by necessity — this check makes sure
+ * read the TS table. Two sources exist by necessity, this check makes sure
  * they never say different things, which is how the PDF ramp ended up off by
  * one zone.
  *
  * The redesign made the CSS side an rgba ink rather than a literal hex, so the
  * check no longer compares strings: it composites the ramp over the same paper
  * the browser would, and compares the result. That is a stricter invariant than
- * the old one — the alpha ladder, the ink and the paper all have to agree, not
+ * the old one, the alpha ladder, the ink and the paper all have to agree, not
  * just twelve copied hexes.
  *
  * Usage: bun run scripts/qa-zone-colors.ts   (exits 1 on mismatch)
@@ -75,7 +75,7 @@ for (const theme of ["light", "dark"] as ThemeMode[]) {
   const zones = block(zonesCss, SELECTOR[theme], "design/zones.css");
   const colors = block(colorsCss, SELECTOR[theme], "design/colors.css");
 
-  // Zone fills land on the card surface — that is what ZoneBar and every chip
+  // Zone fills land on the card surface, that is what ZoneBar and every chip
   // paint themselves on, so that is the paper the ramp has to be composited
   // against for an export to look like the screen.
   const paperValue = declaration(colors, "--paper-raised");

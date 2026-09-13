@@ -131,7 +131,7 @@ export function DataExportImport() {
             localStorage.setItem(key, prev);
           }
         } catch {
-          // best-effort rollback — keep going even if a single key fails
+          // best-effort rollback, keep going even if a single key fails
         }
       }
       toast.error(t("settings.data.importError"));

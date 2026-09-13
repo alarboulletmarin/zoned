@@ -3,7 +3,7 @@
    Always pair a zone fill with its Z-code in text: the ramp orders, it does
    not name. Every surface carrying zone fills shows the ZoneScale legend once.
 
-   The thresholds, the zone numbers and every calculation are unchanged —
+   The thresholds, the zone numbers and every calculation are unchanged,
    only the rendering moved. */
 :root {
   --zone-1: rgba(23, 22, 20, 0.14);

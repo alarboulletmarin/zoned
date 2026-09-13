@@ -159,7 +159,7 @@ function Block({
 /**
  * The single most useful line on race morning: what happens next, and in how
  * long. Falls back to the plan's start time when the clock isn't inside the
- * plan's window — i.e. the race isn't today.
+ * plan's window, i.e. the race isn't today.
  */
 function NextUp({ plan }: { plan: RacePlan }) {
   const { t } = useTranslation("simulator");

@@ -1624,12 +1624,12 @@
         }
       ],
       "coachingTips": [
-        "L'effort est basé sur les sensations, pas sur l'allure GPS — courez à l'instinct comme les Kényans",
+        "L'effort est basé sur les sensations, pas sur l'allure GPS, courez à l'instinct comme les Kényans",
         "La récupération est un footing soutenu (float), pas de la marche ni du jogging très lent",
         "Variante : utilisez 2/1 ou 3/1 pour varier le stimulus"
       ],
       "coachingTipsEn": [
-        "Effort is based on feel, not GPS pace — run by instinct like the Kenyans",
+        "Effort is based on feel, not GPS pace, run by instinct like the Kenyans",
         "Recovery is a sustained float jog, not walking or very slow jogging",
         "Variation: use 2/1 or 3/1 ratios to vary the stimulus"
       ],
@@ -1891,12 +1891,12 @@
         }
       ],
       "coachingTips": [
-        "L'effort doit augmenter de façon progressive — ne sprintez pas dès le départ",
+        "L'effort doit augmenter de façon progressive, ne sprintez pas dès le départ",
         "Le dernier effort d'1 minute doit être le plus rapide de toute la séance",
         "90 secondes de récupération suffisent pour maintenir l'enchaînement sans récupérer totalement"
       ],
       "coachingTipsEn": [
-        "Effort should increase progressively — don't sprint from the start",
+        "Effort should increase progressively, don't sprint from the start",
         "The last 1-minute effort should be the fastest of the entire session",
         "90 seconds of recovery is enough to maintain flow without fully recovering"
       ],
@@ -2283,24 +2283,24 @@
         }
       ],
       "coachingTips": [
-        "L'effort doit rester constant malgré la durée croissante — ne ralentissez pas sur le 5min",
+        "L'effort doit rester constant malgré la durée croissante, ne ralentissez pas sur le 5min",
         "La récupération courte (moitié du temps d'effort) maintient le stress métabolique",
         "Pensez à votre respiration : contrôlée sur les efforts longs"
       ],
       "coachingTipsEn": [
-        "Effort should remain constant despite increasing duration — don't slow down on the 5min",
+        "Effort should remain constant despite increasing duration, don't slow down on the 5min",
         "Short recovery (half the effort time) maintains metabolic stress",
         "Focus on your breathing: controlled during long efforts"
       ],
       "commonMistakes": [
         "Partir trop vite sur le 1min et ne pas pouvoir maintenir les efforts suivants",
         "Allonger les récupérations quand l'effort grandit",
-        "Abandonner mentalement sur le 4 ou 5 minutes — c'est le cœur de la séance"
+        "Abandonner mentalement sur le 4 ou 5 minutes, c'est le cœur de la séance"
       ],
       "commonMistakesEn": [
         "Starting too fast on the 1min and being unable to maintain subsequent efforts",
         "Extending recoveries as efforts get longer",
-        "Mentally giving up on the 4 or 5 minutes — that's the core of the session"
+        "Mentally giving up on the 4 or 5 minutes, that's the core of the session"
       ],
       "variationIds": [
         "FAR-003",
@@ -2417,12 +2417,12 @@
       ],
       "commonMistakes": [
         "Rendre les intervalles prévisibles en utilisant un pattern régulier",
-        "Ne pas réagir au signal assez rapidement — la transition doit être immédiate",
+        "Ne pas réagir au signal assez rapidement, la transition doit être immédiate",
         "Faire uniquement des efforts courts au détriment des efforts de 2-3 minutes"
       ],
       "commonMistakesEn": [
         "Making intervals predictable by using a regular pattern",
-        "Not reacting to the signal quickly enough — the transition must be immediate",
+        "Not reacting to the signal quickly enough, the transition must be immediate",
         "Only doing short efforts at the expense of 2-3 minute efforts"
       ],
       "variationIds": [
@@ -2491,8 +2491,8 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "Série 1 — 1min allure 5K / 1min trot",
-          "descriptionEn": "Set 1 — 1min at 5K pace / 1min jog",
+          "description": "Série 1, 1min allure 5K / 1min trot",
+          "descriptionEn": "Set 1, 1min at 5K pace / 1min jog",
           "durationMin": 2,
           "zone": "Z5",
           "intensityType": "I"
@@ -2533,8 +2533,8 @@
           "intensityType": "E"
         },
         {
-          "description": "Série 2 — 1min allure 5K / 1min trot",
-          "descriptionEn": "Set 2 — 1min at 5K pace / 1min jog",
+          "description": "Série 2, 1min allure 5K / 1min trot",
+          "descriptionEn": "Set 2, 1min at 5K pace / 1min jog",
           "durationMin": 2,
           "zone": "Z5",
           "intensityType": "I"
@@ -2571,8 +2571,8 @@
       "mainSetStructure": [
         {
           "kind": "segment",
-          "description": "Série 1 — 1min allure 5K / 1min trot",
-          "descriptionEn": "Set 1 — 1min at 5K pace / 1min jog",
+          "description": "Série 1, 1min allure 5K / 1min trot",
+          "descriptionEn": "Set 1, 1min at 5K pace / 1min jog",
           "durationSec": 120,
           "zone": "Z5",
           "intensityType": "I",
@@ -2625,8 +2625,8 @@
         },
         {
           "kind": "segment",
-          "description": "Série 2 — 1min allure 5K / 1min trot",
-          "descriptionEn": "Set 2 — 1min at 5K pace / 1min jog",
+          "description": "Série 2, 1min allure 5K / 1min trot",
+          "descriptionEn": "Set 2, 1min at 5K pace / 1min jog",
           "durationSec": 120,
           "zone": "Z5",
           "intensityType": "I",
@@ -2690,19 +2690,19 @@
         }
       ],
       "coachingTips": [
-        "Chaque palier doit être couru à une allure de course SPÉCIFIQUE, pas simplement « rapide » ou « modéré »",
-        "Le passage d'une allure à l'autre entraîne le système nerveux à changer de « vitesse » rapidement",
-        "Restez relâché sur les portions 5K — la vitesse vient de la fluidité, pas de la crispation",
+        "Chaque palier doit être couru à une allure de course SPÉCIFIQUE, pas simplement rapide ou modéré",
+        "Le passage d'une allure à l'autre entraîne le système nerveux à changer de vitesse rapidement",
+        "Restez relâché sur les portions 5K, la vitesse vient de la fluidité, pas de la crispation",
         "Utilisez les portions à allure semi comme récupération active relative"
       ],
       "coachingTipsEn": [
         "Each level must be run at a SPECIFIC race pace, not simply 'fast' or 'moderate'",
         "Switching between paces trains the nervous system to change 'gears' quickly",
-        "Stay relaxed on the 5K portions — speed comes from fluidity, not tension",
+        "Stay relaxed on the 5K portions, speed comes from fluidity, not tension",
         "Use the half-marathon pace portions as relative active recovery"
       ],
       "commonMistakes": [
-        "Courir toutes les portions « vite » au lieu de différencier les allures 5K, 10K et semi",
+        "Courir toutes les portions vite au lieu de différencier les allures 5K, 10K et semi",
         "Sprinter sur les portions 5K au lieu de respecter l'allure spécifique",
         "Trotter trop lentement entre les portions au lieu de maintenir un trot actif"
       ],

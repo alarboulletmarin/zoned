@@ -1,7 +1,7 @@
 /**
- * PageContainer — the standard outer shell for top-level routes.
+ * PageContainer, the standard outer shell for top-level routes.
  *
- * Centralises the screen margin (40px, 20px on mobile — the design's
+ * Centralises the screen margin (40px, 20px on mobile, the design's
  * --pad-screen-x) and the max-width cap so individual pages don't drift
  * apart. The shell itself stays content-agnostic: pages compose their own
  * headers, hero blocks and grids inside.
@@ -11,7 +11,7 @@
  * dashboards/calendars that need the full 1360px content column.
  *
  * The prop API is unchanged; only the paint moved. Widths are selected off a
- * data attribute, which is the house rule for variants — see
+ * data attribute, which is the house rule for variants, see
  * src/styles/components/shell.css for the caps.
  */
 
@@ -28,7 +28,7 @@ interface PageContainerProps {
   width?: Width;
   /** Append additional classes; merged via cn. */
   className?: string;
-  /** Strip horizontal padding (rare — full-bleed map/canvas pages). */
+  /** Strip horizontal padding (rare, full-bleed map/canvas pages). */
   flush?: boolean;
 }
 

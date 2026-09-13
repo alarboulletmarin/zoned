@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-/* Tabs — the WAI-ARIA tab pattern, hand-written.
+/* Tabs, the WAI-ARIA tab pattern, hand-written.
    There is no native element for this, so the whole contract is here:
    role, aria wiring, one tab stop, arrows with wrap-around, Home/End, and
    automatic activation (the selection follows the focus, which is what the
@@ -85,7 +85,7 @@ function TabsList({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-/* The four keys the list owns. Everything else — Tab, Space, Enter — is left
+/* The four keys the list owns. Everything else, Tab, Space, Enter, is left
    to the browser, because each trigger is a real <button>. */
 const NAV_KEYS = ["ArrowLeft", "ArrowRight", "Home", "End"];
 
@@ -158,7 +158,7 @@ function TabsTrigger({
   );
 }
 
-/* An unselected panel is not rendered — same as the Radix default this
+/* An unselected panel is not rendered, same as the Radix default this
    replaces, so screen readers and tests see exactly one panel. */
 function TabsContent({
   className,

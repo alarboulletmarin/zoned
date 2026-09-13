@@ -12,7 +12,7 @@ function boundLabel(name: string | undefined, edge: "minimum" | "maximum") {
 }
 
 type SliderProps = {
-  /** Always an array, even for a single handle — the shape all 13 call sites pass. */
+  /** Always an array, even for a single handle, the shape all 13 call sites pass. */
   value: number[];
   min?: number;
   max?: number;
@@ -20,11 +20,11 @@ type SliderProps = {
   disabled?: boolean;
   className?: string;
   onValueChange?: (value: number[]) => void;
-  /** Fired when the value is committed — a released drag, an arrow key — not on every step. */
+  /** Fired when the value is committed, a released drag, an arrow key, not on every step. */
   onValueCommit?: (value: number[]) => void;
   /** Accessible name for the handle. */
   thumbLabel?: string;
-  /** Human reading of the current value — "15 min" rather than "900". */
+  /** Human reading of the current value, "15 min" rather than "900". */
   thumbValueText?: string;
   "aria-label"?: string;
   id?: string;
@@ -33,12 +33,12 @@ type SliderProps = {
 /**
  * One `<input type="range">` per handle. The native control already answers
  * arrows, Home, End and PageUp/PageDown, exposes `role="slider"` and takes
- * focus — none of that is reimplemented here. The rail and the retained span
+ * focus, none of that is reimplemented here. The rail and the retained span
  * are a decorative layer underneath; the inputs paint only their thumbs.
  *
  * Two handles are two stacked inputs rather than one control with two grips,
  * so each handle keeps that native keyboard contract for itself. Crossing is
- * prevented by clamping in the `onChange` handler, never by swallowing the event —
+ * prevented by clamping in the `onChange` handler, never by swallowing the event,
  * a swallowed key is a key that appears broken.
  */
 function Slider({
@@ -72,7 +72,7 @@ function Slider({
    * `change` is the platform's own end-of-gesture signal for a range input:
    * once when a drag is released, once per arrow key, and never for a Tab that
    * only moved the focus in. It has to be bound by hand, because React's
-   * `onChange` is the `input` event — and it has to be `change` rather than
+   * `onChange` is the `input` event, and it has to be `change` rather than
    * `pointerup`, because a touch drag ends in `pointercancel`: Chrome hands
    * the slide to the compositor and no `pointerup` is ever delivered. Missing
    * it left a phone-dragged value applied but never committed.

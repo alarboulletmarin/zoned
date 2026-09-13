@@ -8,7 +8,7 @@ import type { WeekSlot } from "@/types/week";
 /**
  * Compact, full-width summary strip shown above the week board (Epic #83).
  * Mobile-first: a flex-wrap metric row (Séances · Volume/budget · TSS · dures)
- * with the 80/20 PolarizationGauge — the live proof the week is balanced — and
+ * with the 80/20 PolarizationGauge, the live proof the week is balanced, and
  * the WeekRhythmChart (shape of the week at a glance). Metrics + gauge stack
  * above the rhythm on mobile and sit side-by-side on desktop to stay compact.
  */
@@ -20,7 +20,7 @@ export function WeekSummaryBar({
 }: {
   stats: WeekStats;
   slots: WeekSlot[];
-  /** Volume budget in hours — omit to show the raw volume without a budget. */
+  /** Volume budget in hours, omit to show the raw volume without a budget. */
   targetVolumeH?: number;
   className?: string;
 }) {
@@ -41,7 +41,7 @@ export function WeekSummaryBar({
             }
             alert={overBudget}
             // Volume vs budget is an achieved-vs-target reading, like the
-            // polarisation bar — so it gets a bar too, not just a number.
+            // polarisation bar, so it gets a bar too, not just a number.
             progress={
               targetVolumeH != null
                 ? stats.totalHours / targetVolumeH
@@ -78,7 +78,7 @@ function Metric({
   label: string;
   value: string;
   alert?: boolean;
-  /** Achieved / target ratio — renders a thin fill under the value. */
+  /** Achieved / target ratio, renders a thin fill under the value. */
   progress?: number;
 }) {
   return (

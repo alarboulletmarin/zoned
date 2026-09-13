@@ -432,7 +432,7 @@ export const metricsTerms: GlossaryTerm[] = [
     shortDefinitionEn:
       "Maximum sustainable speed without continuous fatigue accumulation, boundary between heavy and severe exercise domains.",
     fullDefinition:
-      "La vitesse critique (CV) représente la frontière entre le domaine d'exercice « lourd » et « sévère ». C'est l'allure maximale à laquelle la consommation d'oxygène et le lactate sanguin se stabilisent. Au-dessus de la CV, les réserves anaérobies (D') sont progressivement épuisées et l'arrêt devient inévitable. En pratique, la CV correspond approximativement à l'allure de course sur 30-40 minutes. Elle est un prédicteur de performance en endurance plus précis que la VO2max seule.",
+      "La vitesse critique (CV) représente la frontière entre le domaine d'exercice lourd et sévère. C'est l'allure maximale à laquelle la consommation d'oxygène et le lactate sanguin se stabilisent. Au-dessus de la CV, les réserves anaérobies (D') sont progressivement épuisées et l'arrêt devient inévitable. En pratique, la CV correspond approximativement à l'allure de course sur 30-40 minutes. Elle est un prédicteur de performance en endurance plus précis que la VO2max seule.",
     fullDefinitionEn:
       "Critical velocity (CV) represents the boundary between the 'heavy' and 'severe' exercise domains. It is the maximum pace at which oxygen consumption and blood lactate stabilize. Above CV, anaerobic reserves (D') are progressively depleted and cessation becomes inevitable. In practice, CV roughly corresponds to 30-40 minute race pace. It is a more precise endurance performance predictor than VO2max alone.",
     example:

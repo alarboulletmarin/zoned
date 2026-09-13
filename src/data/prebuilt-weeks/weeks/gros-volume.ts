@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Gros volume polarisé — 6 sessions, lots of easy aerobic volume, a single
+ * Gros volume polarisé, 6 sessions, lots of easy aerobic volume, a single
  * quality day. High weekly load, 5 easy sessions out of 6.
  *
  * Sessions run at the top of their template range and the long run is a
@@ -21,12 +21,12 @@ export const grosVolume: PrebuiltWeek = {
   icon: "Activity",
   difficulty: "advanced",
   category: "build",
-  provenance: "Distribution polarisée des athlètes d'élite — Seiler & Tønnessen",
-  provenanceEn: "Elite polarized distribution — Seiler & Tønnessen",
+  provenance: "Distribution polarisée des athlètes d'élite, Seiler & Tønnessen",
+  provenanceEn: "Elite polarized distribution, Seiler & Tønnessen",
   whyItWorks:
-    "Les athlètes d'endurance d'élite accumulent l'essentiel de leur volume très en dessous du seuil et concentrent l'intensité sur de rares séances. Ce gros volume facile maximise les adaptations aérobies périphériques tandis qu'une seule séance dure entretient le haut du spectre — un volume élevé qui ne déborde pas la capacité de récupération.",
+    "Les athlètes d'endurance d'élite accumulent l'essentiel de leur volume très en dessous du seuil et concentrent l'intensité sur de rares séances. Ce gros volume facile maximise les adaptations aérobies périphériques tandis qu'une seule séance dure entretient le haut du spectre, un volume élevé qui ne déborde pas la capacité de récupération.",
   whyItWorksEn:
-    "Elite endurance athletes accumulate most of their volume well below threshold and concentrate intensity in a few sessions. This high easy volume maximizes peripheral aerobic adaptations while a single hard session maintains the top end — high volume that doesn't outrun recovery capacity.",
+    "Elite endurance athletes accumulate most of their volume well below threshold and concentrate intensity in a few sessions. This high easy volume maximizes peripheral aerobic adaptations while a single hard session maintains the top end, high volume that doesn't outrun recovery capacity.",
   settings: {
     sessions: 6,
     targetVolumeH: 7,
@@ -70,7 +70,7 @@ export const grosVolume: PrebuiltWeek = {
       isKeySession: false,
       estimatedDurationMin: 60,
       why: "Footing régénération long lendemain de qualité : facile mais conséquent, c'est du volume.",
-      whyEn: "Long regeneration jog after quality: easy but substantial — it's still volume.",
+      whyEn: "Long regeneration jog after quality: easy but substantial, it's still volume.",
     },
     {
       dayOfWeek: 5,

@@ -15,7 +15,7 @@ import { haversineDistanceM } from "../elevation";
 /**
  * Compass bearing (0 = North, 90 = East, …) from `from` to `to`.
  *
- * Standard formula on a sphere — the small approximation error vs WGS-84
+ * Standard formula on a sphere, the small approximation error vs WGS-84
  * doesn't matter at the scale we use it (for POI within a few km).
  */
 export function computeBearing(from: RouteCoordinate, to: RouteCoordinate): number {
@@ -58,14 +58,14 @@ function seededRandom(seed: number, salt: number): number {
  * bearing if we ran out of diverse candidates.
  *
  * The bearing diversity is what gives the routed loop its triangular shape
- * — without it, all 3 waypoints can collapse onto the same nearest park.
+ *, without it, all 3 waypoints can collapse onto the same nearest park.
  */
 const MIN_ANGULAR_GAP_DEG = 60;
 
 /**
  * Optional bias applied during waypoint selection. When set, candidates of
  * the matching POI type get their score multiplied so they outrank generic
- * picks — used to nudge interval sessions onto an athletics track or hill
+ * picks, used to nudge interval sessions onto an athletics track or hill
  * sessions onto promenades, for example.
  */
 export interface PoiBoost {
@@ -143,7 +143,7 @@ export function selectDiverseWaypoints(
  * out-and-back generation: routes a leg in the requested direction towards
  * an actual destination instead of a coordinate in the void.
  *
- * Returns `null` when no POI falls in the angular slice — the caller is
+ * Returns `null` when no POI falls in the angular slice, the caller is
  * expected to fall back to the blind algorithm.
  */
 export function pickFurthestPoiInBearing(

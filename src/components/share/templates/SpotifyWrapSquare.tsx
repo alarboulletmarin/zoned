@@ -1,5 +1,5 @@
 /**
- * SpotifyWrapSquare — 1080×1080. Square variant of the SpotifyWrap recap
+ * SpotifyWrapSquare, 1080×1080. Square variant of the SpotifyWrap recap
  * style, sized for Insta Feed posts.
  */
 

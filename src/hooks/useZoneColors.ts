@@ -48,7 +48,7 @@ const ZONE_COLORS_BY_DISCIPLINE: Record<Discipline, ZoneColorMap> = {
 };
 
 /**
- * Discipline accent — single hue for plan-level visual cues (calendar dots,
+ * Discipline accent, single hue for plan-level visual cues (calendar dots,
  * sparklines, badges) where the full zone ramp would be visual noise.
  */
 const DISCIPLINE_ACCENT: Record<Discipline, string> = {
@@ -68,7 +68,7 @@ export function getDisciplineAccent(discipline: Discipline = "running"): string 
 }
 
 /**
- * React hook variant — memoized so consumers can pass the result to dependency
+ * React hook variant, memoized so consumers can pass the result to dependency
  * arrays without re-rendering on every parent update. Discipline defaults to
  * "running" so legacy call sites keep working.
  */

@@ -1,5 +1,5 @@
 /**
- * SneakerDrop — 1080×1920. Nike-SNKRS-style product release card.
+ * SneakerDrop, 1080×1920. Nike-SNKRS-style product release card.
  *
  * The workout is the "drop": model name big, colourway = zone, release
  * date today, SKU = workout id. Sharp typography, mono accent.
@@ -58,7 +58,7 @@ export function SneakerDrop({ workout, transparent }: ShareTemplateProps) {
           flexDirection: "column",
         }}
       >
-        {/* Top — brand + drop tag */}
+        {/* Top, brand + drop tag */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <BrandMark height={34} />
@@ -111,7 +111,7 @@ export function SneakerDrop({ workout, transparent }: ShareTemplateProps) {
           {name}
         </h1>
 
-        {/* Colorway block — uses dominant zone */}
+        {/* Colorway block, uses dominant zone */}
         <div
           style={{
             marginTop: 36,
@@ -176,7 +176,7 @@ export function SneakerDrop({ workout, transparent }: ShareTemplateProps) {
           <Spec label="Blocks" value={String(hero.blockCount)} right top />
         </div>
 
-        {/* Bottom — CTA + SKU */}
+        {/* Bottom, CTA + SKU */}
         <div
           style={{
             marginTop: "auto",

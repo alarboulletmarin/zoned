@@ -3,7 +3,7 @@
 
    What is left of the shadcn compatibility layer. The whole app is hand-written
    CSS now and reads `src/styles/design/*.css` directly, so most of the contract
-   went out with Tailwind — every name below has a reader, and only those do:
+   went out with Tailwind, every name below has a reader, and only those do:
 
      --background, --muted          inline styles (Skeleton, MiniRouteMap)
      --muted-foreground             the scrollbar, sessionColors.ts, a timeline
@@ -36,14 +36,14 @@
   --muted-foreground: var(--text-muted);
 
   /* Lines. --border is the subtle separator, so it maps to the divider, not to
-     the 1.5px ink rule — that rule is drawn deliberately by the redesigned
+     the 1.5px ink rule, that rule is drawn deliberately by the redesigned
      components, not inherited by every box in the app. */
   --border: var(--line-divider);
   --ring: var(--focus-ring);
 }
 
 /* ==========================================================================
-   DISCIPLINE ZONE RAMPS — transitional
+   DISCIPLINE ZONE RAMPS, transitional
 
    Running, cycling and swimming had three separate hue scales. The redesign
    has one ink ramp for all three: intensity is intensity, whatever the sport,
@@ -71,7 +71,7 @@
 }
 
 /* ==========================================================================
-   STRENGTH — transitional
+   STRENGTH, transitional
 
    Intensity is ordinal, so it rides the same ink ramp as the effort zones.
    Muscle groups are categorical and the system has no vocabulary for twelve

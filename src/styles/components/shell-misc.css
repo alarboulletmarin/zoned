@@ -1,7 +1,7 @@
 /* Shell prompts, export menus, and the settings data panel.
  *
  * Three jobs that share no markup but do share a voice: they are the moments
- * the app speaks about itself — the browser has an update, the phone can hold
+ * the app speaks about itself, the browser has an update, the phone can hold
  * an icon, a file is not a backup. The system's rule for that voice is: say
  * what happened, say what is intact, say what to do next.
  *
@@ -15,8 +15,8 @@
    stack, not a coordinate: the update banner sits on top of the install card
    when both are eligible.
 
-   It used to be a constant — the update banner lifted itself by a guessed
-   112px — and the guess was wrong the moment the card below it wrapped onto a
+   It used to be a constant, the update banner lifted itself by a guessed
+   112px, and the guess was wrong the moment the card below it wrapped onto a
    second line, which is its normal state on a phone. The two banners covered
    each other. A flex column cannot be wrong about a height it measures. */
 .zn-prompts {
@@ -200,7 +200,7 @@
 
 /* ── a tile you pick ──────────────────────────────────────────────────── */
 
-/* A training day, a restore mode. Chosen is a full ink inversion — never a
+/* A training day, a restore mode. Chosen is a full ink inversion, never a
    tinted fill, which in this system reads as "disabled" rather than "on". */
 .zn-choice {
   display: flex;
@@ -221,7 +221,7 @@
     transform var(--dur-fast) var(--ease-out);
 }
 
-/* One line instead of two — a checkbox tile rather than a titled option. */
+/* One line instead of two, a checkbox tile rather than a titled option. */
 .zn-choice[data-layout="row"] {
   flex-direction: row;
   align-items: center;
@@ -230,7 +230,7 @@
 }
 
 /* `:not(:disabled)` carries its argument's specificity, so this rule sits at
-   (0,3,0) and would otherwise repaint a chosen tile over its ink inversion —
+   (0,3,0) and would otherwise repaint a chosen tile over its ink inversion,
    cream text on cream paper. Excluding the pressed state here is what keeps
    the two separable. */
 .zn-choice:hover:not(:disabled):not([aria-pressed="true"]) {
@@ -307,7 +307,7 @@
   list-style: none;
 }
 
-/* The step number, in mono on an ink disc — a count, not a bullet. */
+/* The step number, in mono on an ink disc, a count, not a bullet. */
 .zn-steps__num {
   inline-size: var(--sp-12);
   block-size: var(--sp-12);

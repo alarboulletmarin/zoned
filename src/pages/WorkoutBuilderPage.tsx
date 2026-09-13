@@ -106,7 +106,7 @@ function WorkoutListView() {
       />
 
       <div className="zn-disc">
-        {/* 1 — what is stored here, counted */}
+        {/* 1, what is stored here, counted */}
         <section
           className="zn-disc__head zn-stack"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -127,7 +127,7 @@ function WorkoutListView() {
               <Plus size={17} />
               {t("calculators:workoutBuilder.create")}
             </Button>
-            {/* Driven by the button next to it — kept out of the tab order,
+            {/* Driven by the button next to it, kept out of the tab order,
                 exactly as the `hidden` class it replaces did. */}
             <input
               ref={fileInputRef}
@@ -153,7 +153,7 @@ function WorkoutListView() {
           </div>
         </section>
 
-        {/* 2 — the drafts */}
+        {/* 2, the drafts */}
         <section className="zn-disc__results">
           {workouts.length === 0 ? (
             <EmptyState
@@ -368,7 +368,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
       try {
         await navigator.share({ title: workout.name, url });
       } catch {
-        // Share sheet dismissed — nothing to do.
+        // Share sheet dismissed, nothing to do.
       }
       return;
     }
@@ -404,7 +404,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
   );
 
   // A drag renders every frame but lands in history once, on release, built
-  // from where the gesture started — otherwise one slider sweep evicts the
+  // from where the gesture started, otherwise one slider sweep evicts the
   // whole undo stack.
   const preDragRef = useRef<WorkoutTemplate | null>(null);
 
@@ -454,7 +454,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
       />
 
       <div className="zn-disc">
-        {/* 1 — the draft, named in place */}
+        {/* 1, the draft, named in place */}
         <section
           className="zn-disc__head zn-stack"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -479,7 +479,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
               // The builder is single-language (#67), so it mirrors the name
               // into its English twin. A workout adapted from the catalogue
               // arrives with a real translation, though, and mirroring would
-              // destroy it on the first keystroke — so mirror only while the
+              // destroy it on the first keystroke, so mirror only while the
               // two are already the same, i.e. a workout built from scratch.
               nameEn: prev.nameEn === prev.name ? e.target.value : prev.nameEn,
             }))}
@@ -552,7 +552,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
           </div>
         </section>
 
-        {/* 2 — the profile the numbers below produce */}
+        {/* 2, the profile the numbers below produce */}
         <section className="zn-disc__group">
           <div className="zn-build__preview">
             <span className="zn-kicker zn-kicker--inline">
@@ -568,7 +568,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
           />
         </section>
 
-        {/* 3 — one phase per band */}
+        {/* 3, one phase per band */}
         <section className="zn-disc__group">
           {sections.map(({ key, label }) => {
             const steps = getSteps(key);

@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Base aérobie 80/20 (Seiler) — 5 sessions, one quality day, the rest easy.
+ * Base aérobie 80/20 (Seiler), 5 sessions, one quality day, the rest easy.
  * Long run Saturday (day 5). Hard day Wednesday (day 2), nothing adjacent.
  * 80/20 is counted in sessions (4 easy out of 5); the share of *time* in
  * Z1-Z2 sits higher still, around 95%.
@@ -18,12 +18,12 @@ export const baseAerobie: PrebuiltWeek = {
   icon: "Mountain",
   difficulty: "intermediate",
   category: "base",
-  provenance: "Modèle polarisé 80/20 — Stephen Seiler",
-  provenanceEn: "80/20 polarized model — Stephen Seiler",
+  provenance: "Modèle polarisé 80/20, Stephen Seiler",
+  provenanceEn: "80/20 polarized model, Stephen Seiler",
   whyItWorks:
-    "La majorité des minutes en Z1–Z2 stimule les adaptations aérobies centrales (densité mitochondriale, capillarisation) sans coût neuromusculaire élevé. Une seule séance dure suffit à entretenir la VO₂max, ce qui laisse récupérer pleinement et rend la charge soutenable semaine après semaine.",
+    "La majorité des minutes en Z1-Z2 stimule les adaptations aérobies centrales (densité mitochondriale, capillarisation) sans coût neuromusculaire élevé. Une seule séance dure suffit à entretenir la VO₂max, ce qui laisse récupérer pleinement et rend la charge soutenable semaine après semaine.",
   whyItWorksEn:
-    "Most minutes in Z1–Z2 drive central aerobic adaptations (mitochondrial density, capillarization) at a low neuromuscular cost. A single hard session is enough to maintain VO₂max while leaving room for full recovery, which keeps the load sustainable week after week.",
+    "Most minutes in Z1-Z2 drive central aerobic adaptations (mitochondrial density, capillarization) at a low neuromuscular cost. A single hard session is enough to maintain VO₂max while leaving room for full recovery, which keeps the load sustainable week after week.",
   settings: {
     sessions: 5,
     targetVolumeH: 4,
@@ -66,8 +66,8 @@ export const baseAerobie: PrebuiltWeek = {
       sessionType: "long_run",
       isKeySession: false,
       estimatedDurationMin: 90,
-      why: "Sortie longue en Z1–Z2 le samedi : la pierre angulaire de l'endurance, entièrement en facile.",
-      whyEn: "Saturday long run in Z1–Z2: the cornerstone of endurance, entirely easy.",
+      why: "Sortie longue en Z1-Z2 le samedi : la pierre angulaire de l'endurance, entièrement en facile.",
+      whyEn: "Saturday long run in Z1-Z2: the cornerstone of endurance, entirely easy.",
     },
     {
       dayOfWeek: 6,

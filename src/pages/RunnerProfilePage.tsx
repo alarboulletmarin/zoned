@@ -78,9 +78,9 @@ import { RACE_DISTANCE_META } from "@/types/plan";
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Nothing measured yet. A dash, not a sentence — the label already says what
+/** Nothing measured yet. A dash, not a sentence, the label already says what
  *  the missing number would have been. */
-const NOT_SET = "—";
+const NOT_SET = "-";
 
 function formatTime(totalSeconds: number): string {
   const h = Math.floor(totalSeconds / 3600);
@@ -125,7 +125,7 @@ type PersonalRecordEntry = RunnerProfile["personalRecords"][number];
 // TimeInputs (reusable sub-component)
 // ---------------------------------------------------------------------------
 
-/** Hours, minutes, seconds — three outlined number fields, each carrying its
+/** Hours, minutes, seconds, three outlined number fields, each carrying its
  *  own unit inside the frame, so the row reads as one duration. */
 function TimeInputs({
   hours,
@@ -193,7 +193,7 @@ function TimeInputs({
 /**
  * The head of a tab panel: what the panel holds, what it is for, how many
  * there are, and the one action that adds to it. A panel that is already a
- * list of outlined blocks does not get wrapped in a card as well — a frame
+ * list of outlined blocks does not get wrapped in a card as well, a frame
  * inside a frame reads as a mistake on paper.
  */
 function PanelHead({
@@ -498,7 +498,7 @@ function BaseDataSection({
 
       <div className="zn-num__aside">
         {/* An empty VMA is not an error, but it is the reason five other
-            screens stay blank — so it says so, and offers the six-minute way
+            screens stay blank, so it says so, and offers the six-minute way
             out. */}
         {!profile?.vma && (
           <Alert

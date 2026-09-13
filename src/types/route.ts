@@ -1,5 +1,5 @@
 /**
- * Route Generator types — generated parcours stored locally.
+ * Route Generator types, generated parcours stored locally.
  *
  * A {@link Route} represents a single generated path the user can save,
  * export to GPX, or attach to a planned session. Coordinates are kept in
@@ -56,7 +56,7 @@ export interface RouteConstraints {
 }
 
 /**
- * A generated route saved by the user. Stored as-is in localStorage —
+ * A generated route saved by the user. Stored as-is in localStorage,
  * any future migration must keep this schema backward compatible.
  */
 export interface Route {

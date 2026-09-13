@@ -193,7 +193,7 @@ function parseFiltersFromParams(
  */
 /**
  * La pratique lue dans l'URL, bornée aux pratiques que la personne garde.
- * `null` veut dire « toutes » — jamais une pratique devinée.
+ * `null` veut dire toutes, jamais une pratique devinée.
  */
 function parsePractice(
   searchParams: URLSearchParams,
@@ -242,7 +242,7 @@ export function LibraryPage() {
     parseActivityType(searchParams),
   );
 
-  /* La pratique — la bande primaire. Elle surplombe la modalité, elle ne la
+  /* La pratique, la bande primaire. Elle surplombe la modalité, elle ne la
      remplace pas : remplacer orphelinerait les 10 séances vélo, les 10
      natation et les 17 renfo, et les deux calculateurs qui les servent.
      `null` = toutes. */
@@ -252,8 +252,8 @@ export function LibraryPage() {
   );
   const practiceRailRef = useRef<HTMLDivElement>(null);
 
-  /* La bande montre « Toutes » puis les pratiques gardées. `null` porte
-     l'option « Toutes », d'où le type du rail. */
+  /* La bande montre Toutes puis les pratiques gardées. `null` porte
+     l'option Toutes, d'où le type du rail. */
   const practiceOptions = useMemo<(Practice | null)[]>(
     () => [null, ...allowedPractices],
     [allowedPractices],
@@ -348,7 +348,7 @@ export function LibraryPage() {
   };
 
   // The filter panel. Nine rows of chips, a slider and a switch used to sit
-  // permanently between the title and the first card — on a phone that was a
+  // permanently between the title and the first card, on a phone that was a
   // full screen of controls before a single session was visible. They are the
   // same controls, moved behind one button that says how many are on.
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -385,7 +385,7 @@ export function LibraryPage() {
             muscleGroup: [] as MuscleGroup[],
           }
         : {}),
-      // Terrain and targetSystem only make sense for running — drop them
+      // Terrain and targetSystem only make sense for running, drop them
       // when the athlete picks cycling or swimming.
       ...(newType === "cycling" || newType === "swimming"
         ? {
@@ -397,8 +397,8 @@ export function LibraryPage() {
   }, []);
 
   // Sous 640 le rail des disciplines défile, jamais la page. Un onglet
-  // restauré depuis ?type= doit revenir sous les yeux — même geste que
-  // RaceSimNav, mais en « nearest » : au-dessus de 360px le rail ne défile
+  // restauré depuis ?type= doit revenir sous les yeux, même geste que
+  // RaceSimNav, mais en nearest : au-dessus de 360px le rail ne défile
   // pas et l'appel ne bouge rien, donc aucune secousse au montage.
   useEffect(() => {
     disciplineRailRef.current
@@ -406,9 +406,9 @@ export function LibraryPage() {
       ?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }, [activityType]);
 
-  /* APG « Radio Group » : un seul arrêt de tabulation pour le groupe, les
+  /* APG Radio Group : un seul arrêt de tabulation pour le groupe, les
      flèches déplacent le focus ET cochent, avec bouclage. La mécanique est
-     sortie dans `useRadioRail` quand la bande des pratiques est arrivée —
+     sortie dans `useRadioRail` quand la bande des pratiques est arrivée,
      deux rails, un seul contrat clavier, plutôt qu'une copie. */
   const disciplineRail = useRadioRail<ActivityType>({
     items: ACTIVITY_TYPES,
@@ -471,15 +471,13 @@ export function LibraryPage() {
 
      Les commandes tiennent maintenant le haut de l'écran pendant tout le
      défilement (`.zn-lib__controls`), donc un filtre se pose depuis
-     n'importe où dans la page — et sans ça, on le posait au six-centième
+     n'importe où dans la page, et sans ça, on le posait au six-centième
      pixel et la liste se réécrivait entièrement AU-DESSUS du doigt : on
      regardait le milieu d'une liste qu'on venait de remplacer.
 
-     Deux garde-fous :
-     — on ne descend jamais. `top < 0` veut dire « l'ancre est déjà sortie
-       par le haut » ; tant qu'elle est visible, on ne bouge rien, ce qui
-       laisse la recherche tranquille pendant qu'on tape.
-     — rien tant que le tiroir de filtres est ouvert : il verrouille le
+     Deux garde-fous : on ne descend jamais. `top < 0` veut dire l'ancre est déjà sortie
+       par le haut ; tant qu'elle est visible, on ne bouge rien, ce qui
+       laisse la recherche tranquille pendant qu'on tape., rien tant que le tiroir de filtres est ouvert : il verrouille le
        défilement du document, et un `scrollTo` sous un panneau modal est au
        mieux perdu, au pire rejoué à la fermeture. Le geste est mis en
        attente et joué quand le tiroir se referme. */
@@ -502,9 +500,9 @@ export function LibraryPage() {
     pendingScroll.current = false;
     const anchor = listAnchorRef.current;
     /* `scroll-padding-block-start` vaut la hauteur de la barre du haut
-       (topbar.css), donc « début de l'ancre » tombe juste sous elle — et la
+       (topbar.css), donc début de l'ancre tombe juste sous elle, et la
        bande de commandes, qui la suit, s'y colle dans la foulée. L'ancre est
-       hors du bloc collant : un élément déjà collé est toujours « en vue »,
+       hors du bloc collant : un élément déjà collé est toujours en vue,
        et `scrollIntoView` sur lui ne ferait rien. */
     if (anchor && anchor.getBoundingClientRect().top < 0) {
       anchor.scrollIntoView({ block: "start" });
@@ -541,12 +539,12 @@ export function LibraryPage() {
 
       /* La pratique, quand une est choisie.
 
-         Elle ne s'applique QUE si la modalité est « toutes » ou « course » :
+         Elle ne s'applique QUE si la modalité est toutes ou course :
          choisir explicitement vélo, natation ou renfo est une demande plus
          précise que la pratique, et la pratique ne doit pas l'annuler. C'est
          ce qui laisse un coureur sur route atteindre son cross-training. Le
-         classement lui-même vit dans `lib/practiceIndex.ts` — une seule
-         définition de « ce qui est trail », sinon la carte annonce 28 séances
+         classement lui-même vit dans `lib/practiceIndex.ts`, une seule
+         définition de ce qui est trail, sinon la carte annonce 28 séances
          et la bibliothèque en montre 12. */
       if (
         practice !== null &&
@@ -725,7 +723,7 @@ export function LibraryPage() {
       />
 
       <div className="zn-lib">
-        {/* 1 — the catalogue, named and counted, with the way into it */}
+        {/* 1, the catalogue, named and counted, with the way into it */}
         <section className="zn-split zn-lib__head">
           <div
             className="zn-stack"
@@ -772,17 +770,17 @@ export function LibraryPage() {
         </section>
 
         {/* L'ancre du retour en haut de liste. Elle précède la bande de
-            commandes et ne colle pas elle-même — c'est toute son utilité :
-            un élément déjà collé est en permanence « en vue », et le viser
+            commandes et ne colle pas elle-même, c'est toute son utilité :
+            un élément déjà collé est en permanence en vue, et le viser
             ne déplacerait rien. */}
         <div ref={listAnchorRef} className="zn-lib__anchor" aria-hidden="true" />
 
-        {/* 2 — la bande des pratiques et la porte des filtres, sur une rangée
+        {/* 2, la bande des pratiques et la porte des filtres, sur une rangée
             qui TIENT LE HAUT DE L'ÉCRAN pendant tout le défilement.
 
             La pratique est l'axe qui manquait : le catalogue était rangé par
             modalité (course, vélo, natation, renfo) alors que quelqu'un qui
-            s'entraîne pense en pratique — je fais du trail, je prépare un
+            s'entraîne pense en pratique, je fais du trail, je prépare un
             ultra. La modalité reste en dessous, elle n'est pas remplacée.
 
             Elle défilait avec la page, et poser un filtre depuis le milieu de
@@ -829,15 +827,15 @@ export function LibraryPage() {
             })}
           </div>
 
-          {/* 3 — la porte des filtres, sur la MÊME rangée que les pratiques.
+          {/* 3, la porte des filtres, sur la MÊME rangée que les pratiques.
 
               Elle vivait une rangée plus bas, avec la ligne de compte et le
               tirage. Les trois ensemble faisaient une bande collante de cent
-              pixels sur téléphone — sous une barre du haut qui en prend déjà
+              pixels sur téléphone, sous une barre du haut qui en prend déjà
               soixante. Ce qui doit rester sous le pouce pendant qu'on
               descend, c'est ce qui RÉTRÉCIT la liste : l'axe des pratiques et
-              la porte du panneau, son compteur avec. Le reste — combien de
-              séances, et le tirage — est une légende et un geste de côté :
+              la porte du panneau, son compteur avec. Le reste, combien de
+              séances, et le tirage, est une légende et un geste de côté :
               ils descendent d'un cran et défilent avec la page. */}
           <button
             type="button"
@@ -866,15 +864,15 @@ export function LibraryPage() {
           </Link>
         </div>
 
-        {/* 4 — ce qui rétrécit la liste et ne se voit nulle part ailleurs.
+        {/* 4, ce qui rétrécit la liste et ne se voit nulle part ailleurs.
 
             La modalité est le seul filtre SILENCIEUX une fois dans le panneau :
-            `activeFiltersCount` ne la compte pas, donc le bouton « Filtres »
+            `activeFiltersCount` ne la compte pas, donc le bouton Filtres
             n'aurait porté aucun badge et la grille se serait réduite au vélo
-            sans dire pourquoi. C'est exactement le « filtre invisible » que ce
+            sans dire pourquoi. C'est exactement le filtre invisible que ce
             chantier s'interdit. Elle revient donc sur la page dès qu'elle
-            rétrécit, comme une puce qu'on retire d'un tap — et elle n'occupe
-            rien quand elle est sur « Tout », c'est-à-dire par défaut. */}
+            rétrécit, comme une puce qu'on retire d'un tap, et elle n'occupe
+            rien quand elle est sur Tout, c'est-à-dire par défaut. */}
         {activityType !== "all" && (
           <div className="zn-lib__narrowed">
             <button
@@ -895,7 +893,7 @@ export function LibraryPage() {
           </div>
         )}
 
-        {/* 3 — the filters, behind the strip's button. Same component, same
+        {/* 3, the filters, behind the strip's button. Same component, same
             state: only where it is rendered changed. */}
         <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
           <SheetContent side="right" className="zn-lib__filters-panel">
@@ -905,12 +903,12 @@ export function LibraryPage() {
 
             <div className="zn-lib__filters-body">
               {/* La modalité EN PREMIER : c'est elle qui décide quels autres
-                  filtres ont un sens — `WorkoutFilters` la reçoit et change ses
+                  filtres ont un sens, `WorkoutFilters` la reçoit et change ses
                   rangées avec elle (une séance de renfo n'a pas de zone). La
                   poser après aurait fait bouger le panneau sous le doigt.
 
-                  Même idiome que les rangées de `WorkoutFilters` — étiquette
-                  mono, puis des puces — mais des RADIOS et non des cases : on
+                  Même idiome que les rangées de `WorkoutFilters`, étiquette
+                  mono, puis des puces, mais des RADIOS et non des cases : on
                   regarde une modalité à la fois. `useRadioRail` porte le
                   contrat clavier que `role="radiogroup"` oblige à fournir. */}
               <div
@@ -948,7 +946,7 @@ export function LibraryPage() {
               </div>
 
               {/* Le mode d'affichage, juste sous la modalité : les deux
-                  disent « ce que je regarde et comment », avant les filtres de
+                  disent ce que je regarde et comment, avant les filtres de
                   valeur. Mesuré : posé en BAS du panneau il tombait derrière le
                   pied de page collant du tiroir, donc à l'endroit le moins
                   atteignable de l'écran pour un réglage qu'on pose une fois.
@@ -957,11 +955,11 @@ export function LibraryPage() {
                   distinguent par deux pixels de côté de carré : ça a déjà été
                   essayé et rejeté (voir l'en-tête de ViewModeSelector). Et
                   `useViewMode` le mémorise, donc il ne se règle pas à chaque
-                  visite — c'est ce qui lui a fait quitter la page. */}
+                  visite, c'est ce qui lui a fait quitter la page. */}
               <div className="zn-lib__row zn-lib__row--view">
                 {/* L'étiquette visible, comme toutes les rangées du panneau.
                     Sans elle, le <Segmented> se lisait comme un troisième
-                    groupe de disciplines — trois pastilles de plus sous les
+                    groupe de disciplines, trois pastilles de plus sous les
                     cinq précédentes, sans rien pour dire de quoi il parle. Elle
                     est `aria-hidden` : le contrôle porte déjà son nom
                     accessible, et l'annoncer deux fois est du bruit. */}
@@ -998,12 +996,12 @@ export function LibraryPage() {
           </SheetContent>
         </Sheet>
 
-        {/* 4 — the ink ramp orders the zones, it does not name them */}
+        {/* 4, the ink ramp orders the zones, it does not name them */}
         <div className="zn-lib__legend">
           <ZoneScale />
         </div>
 
-        {/* 5 — the results */}
+        {/* 5, the results */}
         <section className="zn-lib__results" aria-busy={isLoading}>
           {isLoading ? (
             <div className="zn-grid zn-lib__grid">
@@ -1074,7 +1072,7 @@ export function LibraryPage() {
               variant="no-results"
               icon={Search}
               /* La figure de la pratique regardée, quand il y en a une. Un
-                 rayon trail vide montre la montée, pas la figure générique —
+                 rayon trail vide montre la montée, pas la figure générique,
                  c'est le seul vrai manque que la revue des états vides avait
                  laissé (les dix-neuf appels passent tous une variante, et la
                  variante porte déjà son dessin). */

@@ -4,8 +4,8 @@ import { gutTraining } from "@/data/nutrition";
 /**
  * Train your gut: four phases, 30 g/h to 90 g/h.
  *
- * A progression, so it rides the zone ink ramp and says the same thing twice —
- * ink density and bar height — exactly as a session profile does.
+ * A progression, so it rides the zone ink ramp and says the same thing twice,
+ * ink density and bar height, exactly as a session profile does.
  */
 export function GutTrainingTimeline() {
   const { t } = useTranslation("nutrition");

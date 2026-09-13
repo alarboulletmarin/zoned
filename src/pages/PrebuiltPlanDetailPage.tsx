@@ -38,7 +38,7 @@ import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
  * One ready-made plan, read before it is taken.
  *
  * The sheet reads top to bottom: the mono facts, the plan's name, one
- * paragraph, the single call — then the macrocycle as one ink ramp, the plan's
+ * paragraph, the single call, then the macrocycle as one ink ramp, the plan's
  * own numbers, and the week-by-week programme in either the calendar or the
  * list. The phase ramp is not a colour table of its own: it composes
  * .zn-pswatch[data-phase], the app's single phase → zone-ink mapping.
@@ -338,7 +338,7 @@ export function PrebuiltPlanDetailPage() {
               </h2>
               {/* Retiré en entier sur téléphone, pas filtré à une option :
                   Segmented rendrait un radiogroup à un seul radio, toujours
-                  coché, toujours un tab stop — un contrôle qui ne contrôle
+                  coché, toujours un tab stop, un contrôle qui ne contrôle
                   rien. */}
               {!isMobile && (
                 <Segmented
@@ -398,7 +398,7 @@ export function PrebuiltPlanDetailPage() {
                           aria-hidden="true"
                         />
                         <span className="zn-pw__wk-name">
-                          {weekLabel} — {pick(PHASE_META[week.phase], "label")}
+                          {weekLabel} · {pick(PHASE_META[week.phase], "label")}
                         </span>
                         {week.isRecoveryWeek && (
                           <Badge variant="secondary">

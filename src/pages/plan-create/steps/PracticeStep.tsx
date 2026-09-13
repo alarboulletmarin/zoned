@@ -12,8 +12,8 @@ import type { StepContext, StepDef } from "../types";
  * La première question : qu'est-ce que tu prépares ?
  *
  * C'est celle qui manquait. Sans elle le parcours montrait les sept distances
- * à plat — 5 km, 10 km, semi, marathon, trail court, trail, ultra côte à côte,
- * sans cadrage — et tout le traitement du trail tenait dans un booléen qui ne
+ * à plat, 5 km, 10 km, semi, marathon, trail court, trail, ultra côte à côte,
+ * sans cadrage, et tout le traitement du trail tenait dans un booléen qui ne
  * gouvernait qu'une phrase d'aide.
  *
  * Une fois la pratique connue, l'étape distance en propose QUATRE au lieu de
@@ -25,8 +25,8 @@ import type { StepContext, StepDef } from "../types";
  * Ni plan factice, ni champ en trompe-l'œil.
  *
  * Et ça se voit AVANT le choix, depuis le 12 septembre 2026 : leur carte porte
- * un filet pointillé, une encre sourde et la marque « bientôt ». Le propriétaire
- * l'a demandé en toutes lettres — l'annonce ne doit pas se découvrir après
+ * un filet pointillé, une encre sourde et la marque bientôt. Le propriétaire
+ * l'a demandé en toutes lettres, l'annonce ne doit pas se découvrir après
  * coup, au moment où l'on croyait avoir répondu. */
 function PracticeBody({ form, setForm, uid, t, questionId, commit }: StepContext) {
   const announced = form.practice && !isPracticeLive(form.practice);
@@ -55,8 +55,8 @@ function PracticeBody({ form, setForm, uid, t, questionId, commit }: StepContext
       {/* Ce qui existe déjà pour la pratique choisie, dit en toutes lettres.
           Le texte est PAR PRATIQUE (`practice.<id>.announce`) : il l'était en
           une seule clé tant que le triathlon était seul annoncé, et celle-ci
-          parlait de créneaux par discipline et d'enchaînements — elle aurait
-          répondu ça à quelqu'un qui vient de choisir « ultra ».
+          parlait de créneaux par discipline et d'enchaînements, elle aurait
+          répondu ça à quelqu'un qui vient de choisir ultra.
           Le lien suit la pratique lui aussi : `/library?practice=triathlon`
           était en dur. */}
       {announced && (

@@ -48,7 +48,7 @@ import { PRACTICES, type Practice } from "@/types/practice";
  *
  * Elle faisait 1 609 lignes : douze formulaires, PLUS un `switch canProceed`,
  * PLUS un `renderSummary` géant, tous refermés sur le même état. N'en extraire
- * que les formulaires aurait donné un monolithe avec des fichiers en plus —
+ * que les formulaires aurait donné un monolithe avec des fichiers en plus,
  * ce qui compte, c'est que chaque étape déclare maintenant sa question, ce qui
  * y répond et sa condition d'avancement (`plan-create/steps/`). Il ne reste
  * ici que ce qui est vraiment commun : l'état du brouillon, les valeurs
@@ -68,7 +68,7 @@ export function PlanCreatePage() {
 
   /* `/plan/new` envoie la pratique choisie : on démarre alors à l'étape
      suivante plutôt que de reposer la même question. Une valeur inconnue est
-     ignorée — le parcours repart de sa première question. */
+     ignorée, le parcours repart de sa première question. */
   const presetPractice = useMemo<Practice | null>(() => {
     const raw = searchParams.get("practice");
     return raw && (PRACTICES as readonly string[]).includes(raw)
@@ -119,7 +119,7 @@ export function PlanCreatePage() {
   /* Borner l'index au parcours courant. Il peut le dépasser de deux façons :
      un préréglage `?practice=` qui démarre à l'étape 2 d'un parcours qui n'en
      a qu'une (le triathlon annoncé), ou une réponse qui raccourcit la liste en
-     cours de route. Sans ça l'écran annonçait « Étape 2 sur 1 ». */
+     cours de route. Sans ça l'écran annonçait Étape 2 sur 1. */
   const safeIndex = Math.min(stepIndex, steps.length - 1);
   const currentStepId = steps[safeIndex] ?? "practice";
 
@@ -153,9 +153,9 @@ export function PlanCreatePage() {
   // ── Navigation ───────────────────────────────────────────────────
 
   /* Le parcours courant, lu au moment où on avance et non au moment où le
-     geste a été fait. Les deux diffèrent : répondre « pratique » fait passer
+     geste a été fait. Les deux diffèrent : répondre pratique fait passer
      la liste d'UNE étape à treize, et `goForward` fermé sur l'ancienne liste
-     calculait `Math.min(1, 0)` — il ne bougeait pas. */
+     calculait `Math.min(1, 0)`, il ne bougeait pas. */
   const stepsRef = useRef(steps);
   stepsRef.current = steps;
 
@@ -197,7 +197,7 @@ export function PlanCreatePage() {
    *
    * Le battement n'est pas un effet de style : le clic du label arrive AVANT
    * que la radio ne change d'état, donc avancer dans la foulée lirait l'ancien
-   * brouillon — et l'ancien parcours, qui n'a pas encore la longueur que la
+   * brouillon, et l'ancien parcours, qui n'a pas encore la longueur que la
    * réponse vient de lui donner. 160 ms laissent aussi voir l'option se
    * cocher, ce qui est ce qui fait que l'écran suivant n'a pas l'air d'un
    * accident.
@@ -419,12 +419,12 @@ export function PlanCreatePage() {
    * Chaque étape s'ouvre sur sa question.
    *
    * Sans ça, l'écran suivant héritait de la position où le doigt avait laissé
-   * le précédent : on descendait chercher « Suivant », et l'étape d'après
+   * le précédent : on descendait chercher Suivant, et l'étape d'après
    * s'ouvrait à mi-hauteur, question déjà hors champ. Sur treize étapes, c'est
-   * le sentiment de « il manque toujours quelque chose en haut ».
+   * le sentiment de il manque toujours quelque chose en haut.
    *
    * Sans animation : le volet joue déjà son glissement, et deux mouvements
-   * simultanés se lisent comme un saut. Le premier rendu est exclu — une page
+   * simultanés se lisent comme un saut. Le premier rendu est exclu, une page
    * ouverte par un lien ancré n'a pas à être ramenée en haut.
    */
   const firstPaint = useRef(true);
@@ -460,11 +460,11 @@ export function PlanCreatePage() {
 
           {/* LA QUESTION est le titre de l'écran, et c'est le seul.
               Elle était un `h2` de niveau 3 DANS la carte, sous un `h1` en
-              display qui disait « Réponds, le plan se construit » — la même
+              display qui disait Réponds, le plan se construit, la même
               phrase aux treize étapes. Relu en niveaux de gris et flouté à
               390 px : la masse la plus lourde de l'écran était la phrase
-              générique, pas ce qu'on demande. Le parcours veut « la question,
-              puis les réponses, puis continuer, rien d'autre » ; la phrase est
+              générique, pas ce qu'on demande. Le parcours veut la question,
+              puis les réponses, puis continuer, rien d'autre ; la phrase est
               donc partie et la question a pris sa place.
 
               Le titre vit ici, HORS de la branche `ownsNav` : le récapitulatif
@@ -483,12 +483,12 @@ export function PlanCreatePage() {
           </div>
         </div>
 
-        {/* The promise and its limits are stated once, on the first step —
+        {/* The promise and its limits are stated once, on the first step,
             past that the question on screen is what matters.
 
             Elles ont QUITTÉ la pile du titre : sur un téléphone, ce bloc
             posait un paragraphe, une source et une carte entre la première
-            question et ses réponses — les sept pratiques commençaient sous la
+            question et ses réponses, les sept pratiques commençaient sous la
             ligne de flottaison, à l'écran même où l'on ne sait pas encore de
             quoi il s'agit. C'est maintenant un frère du titre et de la bande,
             et `.zn-wiz__promise` le fait passer SOUS les réponses en dessous
@@ -577,7 +577,7 @@ export function PlanCreatePage() {
               que ce qui répond. C'est ce qui a fait disparaître
               `renderQuestion` et `renderNav` des douze corps. Le
               récapitulatif est la seule exception : son bouton ne fait pas
-              « suivant », il génère le plan. */}
+              suivant, il génère le plan. */}
           <Card className="zn-wiz__col">
             {step.ownsNav ? (
               <step.Body {...ctx} />
@@ -586,12 +586,12 @@ export function PlanCreatePage() {
                 <CardContent className="zn-wiz__pane" data-direction={direction}>
                   <step.Body {...ctx} />
                 </CardContent>
-                {/* Une étape qui avance d'elle-même n'a pas de « Suivant » :
+                {/* Une étape qui avance d'elle-même n'a pas de Suivant :
                     la réponse EST le geste d'avancer, et un bouton primaire
                     qui double le tap qu'on vient de faire n'est pas une
                     sortie de secours, c'est une décision de plus. Il n'y
-                    reste que « Retour » — et sur la première question, où
-                    « Retour » serait désactivé, la barre entière disparaît.
+                    reste que Retour, et sur la première question, où
+                    Retour serait désactivé, la barre entière disparaît.
                     Le clavier garde sa sortie : Entrée sur la réponse
                     (Option.tsx). */}
                 {(!step.autoAdvance || safeIndex > 0) && (
@@ -600,7 +600,7 @@ export function PlanCreatePage() {
                       <ArrowLeft className="zn-wiz__nav-arrow" />
                       {t("nav.back")}
                     </Button>
-                    {/* « Passer » et « Continuer » dans UN groupe poussé à
+                    {/* Passer et Continuer dans UN groupe poussé à
                         droite, au lieu de trois enfants séparés par une cale.
                         La cale comptait comme un enfant de plus, donc un
                         écart de plus : les trois boutons demandaient 356 px

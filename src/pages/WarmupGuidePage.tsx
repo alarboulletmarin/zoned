@@ -97,7 +97,7 @@ export function WarmupGuidePage() {
   const activeRoutine = warmupRoutines.find((r) => r.id === selectedRoutine) ?? null;
 
   /**
-   * A block of a section, rendered with the article's own reading treatment —
+   * A block of a section, rendered with the article's own reading treatment,
    * .zn-prose and its parts, written once in learn.css. A tip and a warning
    * are the same pulled-out callout the articles use: two ink rules and a mono
    * label saying which kind it is.
@@ -173,7 +173,7 @@ export function WarmupGuidePage() {
   /**
    * One of the four routines. A toggle, not a link: pressing it opens the
    * detail below and pressing it again closes it, which is what `aria-pressed`
-   * says. Chosen is the 2.5px vermillon frame — never a tint.
+   * says. Chosen is the 2.5px vermillon frame, never a tint.
    */
   function renderRoutineCard(routine: WarmupRoutine) {
     const name = pickLang(routine, "name");
@@ -255,7 +255,7 @@ export function WarmupGuidePage() {
       />
 
       <div className="zn-guide">
-        {/* 1 — the way back, then what this page is */}
+        {/* 1, the way back, then what this page is */}
         <section
           className="zn-stack zn-guide__head zn-guide__head--figure"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -279,7 +279,7 @@ export function WarmupGuidePage() {
           </p>
           {/* Le seul guide dont le sujet est une posture : le dessin y dit en
               un coup d'œil ce que le titre met une phrase à dire. Les autres
-              guides n'en portent pas — un dessin par en-tête ferait une
+              guides n'en portent pas, un dessin par en-tête ferait une
               collection, pas une identité. La figure se tient sur le filet
               de la bande qui suit (zn-guide__head--figure) : son fichier
               n'a plus de sol, le bas de sa boîte est sa ligne d'appui. */}
@@ -290,7 +290,7 @@ export function WarmupGuidePage() {
           />
         </section>
 
-        {/* 2 — pick a routine, read its drills */}
+        {/* 2, pick a routine, read its drills */}
         <section className="zn-guide__band" aria-labelledby="warmup-routines">
           <div className="zn-row zn-row--split zn-guide__bandhead">
             <h2 id="warmup-routines" className="zn-title" data-level="2">
@@ -338,7 +338,7 @@ export function WarmupGuidePage() {
           )}
         </section>
 
-        {/* 3 — the reading: one section per tab, in the article's own column */}
+        {/* 3, the reading: one section per tab, in the article's own column */}
         <section className="zn-guide__band">
           <Tabs defaultValue={warmupSections[0].id}>
             <TabsList className="zn-guide__tabs">

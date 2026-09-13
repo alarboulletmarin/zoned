@@ -207,7 +207,7 @@ export function UnavailabilityManager({
                   onChange={(e) => setNewReason(e.target.value as UnavailabilityReason | "")}
                   className="zn-pfield"
                 >
-                  <option value="">—</option>
+                  <option value="">-</option>
                   {REASONS.map((r) => (
                     <option key={r} value={r}>
                       {reasonLabel(r, t)}

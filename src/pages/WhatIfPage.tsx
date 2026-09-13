@@ -609,7 +609,7 @@ export function WhatIfPage() {
       />
 
       <PageContainer className="zn-ct">
-        {/* Mono kicker, display title, one sentence — and the two records
+        {/* Mono kicker, display title, one sentence, and the two records
             actions, which are outlines: the screen's one fill is "Comparer". */}
         <header className="zn-ct__head">
           <div
@@ -797,7 +797,7 @@ export function WhatIfPage() {
             </div>
           </div>
 
-          {/* Scenario inputs — side by side on desktop, tabbed on a phone */}
+          {/* Scenario inputs, side by side on desktop, tabbed on a phone */}
           <div className="zn-ct__scenarios">
             <div className="zn-grid" style={{ "--cols": 2, "--cols-md": 2 } as CSSProperties}>
               <ScenarioCard
@@ -945,7 +945,7 @@ export function WhatIfPage() {
               </CardContent>
             </Card>
 
-            {/* Volume progression — A hollow, B solid ink */}
+            {/* Volume progression, A hollow, B solid ink */}
             {volumeData && (
               <Card>
                 <CardHeader>
@@ -1005,7 +1005,7 @@ export function WhatIfPage() {
               </Card>
             )}
 
-            {/* Zone distribution — the only place zone fills are painted */}
+            {/* Zone distribution, the only place zone fills are painted */}
             {zoneData && (
               <Card>
                 <CardHeader>

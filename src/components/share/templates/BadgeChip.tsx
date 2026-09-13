@@ -1,5 +1,5 @@
 /**
- * BadgeChip — 480×480. Bold solid-colour chip with zone tag + duration,
+ * BadgeChip, 480×480. Bold solid-colour chip with zone tag + duration,
  * borders like a luggage tag. Reads instantly as a sticker.
  */
 
@@ -18,7 +18,7 @@ export function BadgeChip({ workout, transparent }: ShareTemplateProps) {
   const zoneLabel = pickLang(hero.zoneMeta, "label");
   const zoneHex = ZONE_HEX[hero.dominantZone];
 
-  // Adaptive size — at 88px the wider zone labels ("Récupération",
+  // Adaptive size, at 88px the wider zone labels ("Récupération",
   // "Endurance", "Threshold") overflow the 392px content area. Tier by
   // character count so the chip stays bold without clipping.
   const labelLen = zoneLabel.length;
@@ -39,7 +39,7 @@ export function BadgeChip({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* The coloured block IS the visual — not tagged `data-bg-layer` so
+      {/* The coloured block IS the visual, not tagged `data-bg-layer` so
           the transparent toggle does NOT hide it (only the editorial bg
           drops out, leaving the chip alone over the user's photo). */}
       <div

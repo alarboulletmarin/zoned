@@ -1,10 +1,10 @@
-/* ErrorBoundary — the screen of last resort.
+/* ErrorBoundary, the screen of last resort.
 
    It stands in for a subtree that threw, so it cannot assume where it lands:
    App.tsx mounts one boundary inside the page column and one in place of the
    whole body, footer included. It therefore pays its own screen margin and its
    own measure rather than inheriting them, and gives the inner one back when a
-   .zn-page is already paying it — the same trade .zn-page .zn-page makes.
+   .zn-page is already paying it, the same trade .zn-page .zn-page makes.
 
    Nothing here composes a page stylesheet or a feature component. Stripped of
    this file the markup is still a heading, a paragraph and two native buttons,

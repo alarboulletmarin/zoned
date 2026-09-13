@@ -1,7 +1,7 @@
 /**
  * Les cadres des dessins sont recopiés en dur à quatre endroits du code. Ce
  * test dit la vérité sur chacun : si un SVG est recoupé (scripts/doodles/
- * recut.mjs), la constante doit suivre — c'est arrivé trois fois le 6 sept.
+ * recut.mjs), la constante doit suivre, c'est arrivé trois fois le 6 sept.
  */
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
@@ -48,7 +48,7 @@ describe("les cadres recopiés suivent les fichiers SVG", () => {
   /* Le duo était inliné ici lui aussi, et ce test le gardait. Il a quitté la
      coquille le 9 septembre 2026 : une figure par écran, et un dessin remplace
      au lieu de s'ajouter. Il reste dans le hero, le menu mobile, la feuille de
-     partage et l'image Open Graph — mais plus dans index.html, donc plus rien
+     partage et l'image Open Graph, mais plus dans index.html, donc plus rien
      à garder ici. */
 
   /* Le cycle de foulée est inliné dans la coquille comme le duo, et il porte
@@ -87,7 +87,7 @@ describe("les cadres recopiés suivent les fichiers SVG", () => {
     /* Et la retenue de la coquille couvre un nombre ENTIER de foulées, à partir
        du moment où la figure part (--rc-start). C'est la propriété qui compte :
        une retenue arrondie à la seconde couperait la figure en plein pas, et
-       rien d'autre ne s'en apercevrait. Le nombre de foulées, lui, est libre —
+       rien d'autre ne s'en apercevrait. Le nombre de foulées, lui, est libre,
        c'est le réglage du propriétaire. */
     const start = num(html, "start");
     const hold = Number(read("src/main.tsx").match(/SHELL_HOLD_MS = (\d+)/)![1]);
@@ -97,7 +97,7 @@ describe("les cadres recopiés suivent les fichiers SVG", () => {
 
   /* La règle 3 de docs/doodles.md, vérifiée sur les nombres plutôt que de
      confiance : le vermillon marque un contact RÉEL. Une figure qui court le
-     perd un tiers du temps — elle est en l'air — et un accent peint sur une
+     perd un tiers du temps, elle est en l'air, et un accent peint sur une
      semelle qui ne touche rien est la faute, pas une licence. */
   test("run-cycle : une seule ligne de sol, et aucun accent en l'air", () => {
     const svg = read("src/assets/doodles/run-cycle.svg");
@@ -112,12 +112,12 @@ describe("les cadres recopiés suivent les fichiers SVG", () => {
 
     const sol = Math.max(...posees.map((g) => strokeBottom(accents(g))));
     for (const g of posees) {
-      // même ligne de sol, et c'est l'accent qui la touche — rien ne passe dessous
+      // même ligne de sol, et c'est l'accent qui la touche, rien ne passe dessous
       expect(Math.abs(strokeBottom(accents(g)) - sol)).toBeLessThan(0.25);
       expect(strokeBottom(ds(g)) - sol).toBeLessThan(0.25);
     }
     for (const g of enVol) {
-      // vraiment en l'air : pas « un accent oublié », un décollage qui se voit
+      // vraiment en l'air : pas un accent oublié, un décollage qui se voit
       expect(sol - strokeBottom(ds(g))).toBeGreaterThan(8);
     }
   });

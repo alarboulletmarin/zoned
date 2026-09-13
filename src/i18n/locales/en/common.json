@@ -26,7 +26,7 @@
       "hint": "To paste the visual over a photo (Insta Story, etc.)",
       "notForZoneHero": "Not available on this template"
     },
-    "privacy": "The image is generated in your browser — no data sent.",
+    "privacy": "The image is generated in your browser, no data sent.",
     "template": {
       "storyHero": { "label": "Story", "format": "Insta · 1080 × 1920" },
       "squareStats": { "label": "Square stats", "format": "Insta Feed · 1080 × 1080" },
@@ -426,7 +426,7 @@
     },
     "openingAnimation": {
       "title": "Opening animation",
-      "description": "A running figure while the app starts. “Follow the system” respects your accessibility setting: if you asked for less motion, the screen still shows but the figure stays still. “Always” plays it anyway — that call is yours.",
+      "description": "A running figure while the app starts. “Follow the system” respects your accessibility setting: if you asked for less motion, the screen still shows but the figure stays still. “Always” plays it anyway, that call is yours.",
       "system": "Follow the system",
       "always": "Always",
       "never": "Never"
@@ -606,7 +606,7 @@
     "step2OsPath": "Your watch appears as a USB drive: {{path}}",
     "step3": "Open the watch folder and navigate to: GARMIN → NewFiles",
     "step4": "Copy the file {{filename}} into this folder",
-    "step5": "Safely eject your watch — the workout will appear in Training → My Workouts",
+    "step5": "Safely eject your watch, the workout will appear in Training → My Workouts",
     "compatible": "Compatible with: Forerunner, Fenix, Enduro, Venu, Epix, Instinct, Vivoactive",
     "noGarmin": "Don't have a Garmin watch?",
     "fitGarminOnly": "FIT export is compatible with Garmin watches only. For other brands, recreate this workout manually in your watch's companion app.",
@@ -663,7 +663,7 @@
   },
   "comparePage": {
     "whyComparisons": "Why these comparisons?",
-    "whyComparisonsDesc": "Zoned is free, open source, requires no account and collects no data. We think those differences matter — these pages are here to help you decide.",
+    "whyComparisonsDesc": "Zoned is free, open source, requires no account and collects no data. We think those differences matter, these pages are here to help you decide.",
     "featureComparison": "Feature comparison",
     "badgeFree": "Free forever",
     "badgeNoAccount": "No account"
@@ -868,7 +868,7 @@
     "strength": { "name": "Strength" },
     "hidden": {
       "title": "{{module}} is hidden",
-      "description": "You hid this part of the app in your settings. The link still works — you can bring it back right now.",
+      "description": "You hid this part of the app in your settings. The link still works, you can bring it back right now.",
       "cta": "Bring it back"
     }
   }

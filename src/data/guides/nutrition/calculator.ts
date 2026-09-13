@@ -147,7 +147,7 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
 
   // --- Gel calculation ---
   // Realistic: gels provide ~60% of carbs, the rest comes from sports drink.
-  // Without this, a 3h30 marathon at 80 g/h would compute as 14 gels — unrealistic.
+  // Without this, a 3h30 marathon at 80 g/h would compute as 14 gels, unrealistic.
   const gelFrequencyMin =
     carbsPerHourG > 0 ? strategy.gelFrequencyMin : 0;
   const carbsFromGelsG = totalCarbsG * CARBS_FROM_GELS_RATIO;
@@ -165,8 +165,8 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   // Pre-race: T-3h meal
   timeline.push({
     timeMin: -180,
-    action: `Repas pré-course : ${Math.round(weight * 2)}–${Math.round(weight * 3)}g de glucides (${Math.round(weight * 2 / 50)}-${Math.round(weight * 3 / 50)} portions de féculents), faible en gras et fibres.`,
-    actionEn: `Pre-race meal: ${Math.round(weight * 2)}–${Math.round(weight * 3)}g carbs (${Math.round(weight * 2 / 50)}-${Math.round(weight * 3 / 50)} starchy servings), low fat and fiber.`,
+    action: `Repas pré-course : ${Math.round(weight * 2)}-${Math.round(weight * 3)}g de glucides (${Math.round(weight * 2 / 50)}-${Math.round(weight * 3 / 50)} portions de féculents), faible en gras et fibres.`,
+    actionEn: `Pre-race meal: ${Math.round(weight * 2)}-${Math.round(weight * 3)}g carbs (${Math.round(weight * 2 / 50)}-${Math.round(weight * 3 / 50)} starchy servings), low fat and fiber.`,
   });
 
   // T-60min: top-up
@@ -253,8 +253,8 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   // another session is planned within 4h. Otherwise, the next regular meal is fine.
   timeline.push({
     timeMin: durationMin,
-    action: `Arrivée ! Dans les 2 h : ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g glucides + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protéines. Réhydrater : ${roundTo(totalFluidMl * 0.5, 50)}ml minimum. La fenêtre 30 min n'est cruciale que si tu enchaînes une autre séance sous 4 h.`,
-    actionEn: `Finish! Within 2h: ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g carbs + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protein. Rehydrate: ${roundTo(totalFluidMl * 0.5, 50)}ml minimum. The 30-min window matters mainly if another session is within 4h.`,
+    action: `Arrivée ! Dans les 2 h : ${Math.round(weight * 1)}-${Math.round(weight * 1.2)}g glucides + ${Math.round(weight * 0.3)}-${Math.round(weight * 0.4)}g protéines. Réhydrater : ${roundTo(totalFluidMl * 0.5, 50)}ml minimum. La fenêtre 30 min n'est cruciale que si tu enchaînes une autre séance sous 4 h.`,
+    actionEn: `Finish! Within 2h: ${Math.round(weight * 1)}-${Math.round(weight * 1.2)}g carbs + ${Math.round(weight * 0.3)}-${Math.round(weight * 0.4)}g protein. Rehydrate: ${roundTo(totalFluidMl * 0.5, 50)}ml minimum. The 30-min window matters mainly if another session is within 4h.`,
   });
 
   // Sort timeline by time

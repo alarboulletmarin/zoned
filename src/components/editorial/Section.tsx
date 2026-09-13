@@ -1,5 +1,5 @@
 /**
- * Section — the single way to introduce a block of page content.
+ * Section, the single way to introduce a block of page content.
  *
  * Before this existed, every page hand-rolled its own header and three
  * conventions coexisted on one page: eyebrow alone, eyebrow + title, title
@@ -8,7 +8,7 @@
  *
  * The rule this component enforces: a section owns exactly one heading.
  * Whatever it wraps must not repeat that heading. The optional eyebrow is a
- * category label, not a second title — use it when the section belongs to a
+ * category label, not a second title, use it when the section belongs to a
  * group, and leave it out otherwise.
  */
 
@@ -29,7 +29,7 @@ export interface SectionProps {
   defaultOpen?: boolean;
   /** Trailing content in the header row, e.g. a "see all" link. */
   actions?: React.ReactNode;
-  /** Heading level. Defaults to h2 — the page owns the single h1. */
+  /** Heading level. Defaults to h2, the page owns the single h1. */
   as?: "h2" | "h3";
   id?: string;
   className?: string;

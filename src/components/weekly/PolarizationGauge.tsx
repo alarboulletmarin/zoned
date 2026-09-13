@@ -3,7 +3,7 @@ import { Check, AlertTriangle } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import type { PolarisedSplit } from "@/lib/weekStats";
 
-/** Target easy share — the 80 in 80/20. */
+/** Target easy share, the 80 in 80/20. */
 const TARGET_LOW = 0.8;
 /** "Balanced" band on the hard share (Tempo + Intense): roughly 20 ± 8. */
 const HARD_MIN = 0.12;
@@ -16,7 +16,7 @@ interface PolarizationGaugeProps {
 
 /**
  * Stacked Easy / Tempo / Intense bar computed on real time-in-zone, with a
- * dotted marker at the 80 % easy target and a "✓ balanced" badge — the visual
+ * dotted marker at the 80 % easy target and a "✓ balanced" badge, the visual
  * proof that the week respects the 80/20 polarisation (Epic #83, issue #87).
  */
 export function PolarizationGauge({
@@ -70,7 +70,7 @@ export function PolarizationGauge({
         </span>
       </div>
 
-      {/* Target caption sits above the bar — never on top of a segment. */}
+      {/* Target caption sits above the bar, never on top of a segment. */}
       <div className="zn-wk-gauge__scale">
         <span
           className="zn-kicker zn-kicker--xs zn-wk-gauge__target"
@@ -109,7 +109,7 @@ export function PolarizationGauge({
         <p className="zn-wk-gauge__hint">{t(`weekly.gauge.${status}Hint`)}</p>
       )}
 
-      {/* Legend — only the bands actually present in the bar. */}
+      {/* Legend, only the bands actually present in the bar. */}
       <div className="zn-wk-gauge__legend">
         {segments
           .filter((s) => s.share > 0)

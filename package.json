@@ -25,6 +25,7 @@
     "generate:icons": "bun run scripts/generate-icons.ts",
     "check:icons": "bun run scripts/generate-icons.ts --check",
     "check:workouts": "bun run scripts/qa-workout-schema.ts",
+    "check:typography": "bun run scripts/qa-typography.ts",
     "demo:gif": "bun run scripts/record-demo.ts",
     "preview": "vite preview",
     "prerender": "bun run scripts/prerender.ts",

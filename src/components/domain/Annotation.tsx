@@ -1,19 +1,19 @@
 /**
- * Annotation — une légende manuscrite qui montre un endroit de la page.
+ * Annotation, une légende manuscrite qui montre un endroit de la page.
  *
  * Le registre vient des notices annotées à la main : une phrase courte, une
  * flèche tracée, et parfois quelqu'un qui montre. Il sert là où une légende
- * posée sous un bloc ne suffit pas — quand ce qu'il faut comprendre est *un
+ * posée sous un bloc ne suffit pas, quand ce qu'il faut comprendre est *un
  * endroit* du bloc, pas le bloc entier.
  *
- * Trois raisons pour lesquelles ça ne contredit pas la règle « des personnages,
- * jamais d'objets » de docs/doodles.md : une flèche n'est pas un objet
+ * Trois raisons pour lesquelles ça ne contredit pas la règle des personnages,
+ * jamais d'objets de docs/doodles.md : une flèche n'est pas un objet
  * représenté mais une marque d'annotation, du même ordre que la ligne de sol ;
  * aucun glyphe Material ne fait ce travail, donc elle n'entre en concurrence
  * avec rien ; et la variante `figure` remet un personnage au départ du trait.
  *
  * La flèche est en encre, jamais en vermillon. L'accent reste réservé au
- * contact avec le sol — une flèche rouge ferait un second point focal sur
+ * contact avec le sol, une flèche rouge ferait un second point focal sur
  * chaque écran qui en porte une.
  *
  * Placement : le composant se pose dans le flux, juste avant ou juste après le

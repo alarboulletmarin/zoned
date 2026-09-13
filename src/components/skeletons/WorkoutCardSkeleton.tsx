@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 /**
- * Composite skeleton mirroring the layout of `<WorkoutCard>` — rounded
+ * Composite skeleton mirroring the layout of `<WorkoutCard>`, rounded
  * outline, title, optional badges, intensity bar, footer meta. Renders the
  * same vertical rhythm as the real card so swap-in feels stable.
  *

@@ -1,5 +1,5 @@
 /**
- * Weekly Volume Fit — align the sessions actually built with the volume model
+ * Weekly Volume Fit, align the sessions actually built with the volume model
  *
  * The volume model (volume.ts) plans a weekly km progression, but sessions come
  * from a fixed workout catalogue whose durations have nothing to do with it.
@@ -20,7 +20,7 @@ const MIN_MAX_EASY_KM = 18;
 /**
  * How far a session may be stretched past its own reference duration.
  * Without it, absorbing a 70km week into three easy runs turned a 20-minute
- * "Double récup (matin)" into a 142-minute outing — the volume matched the
+ * "Double récup (matin)" into a 142-minute outing, the volume matched the
  * model, but the session no longer resembled the one that was prescribed.
  */
 const MAX_STRETCH = 1.3;
@@ -129,7 +129,7 @@ export function fitWeeklyVolume(
 
   // Third pass: the easy runs alone cannot always close the gap once their own
   // duration windows bind. Nudge the key sessions within a narrow band so the
-  // week still lands near target — a week that overshoots by 30% reads as a
+  // week still lands near target, a week that overshoots by 30% reads as a
   // volume spike to the runner and to the audit.
   const fittedKm = sessions.reduce((sum, s) => sum + (s.targetDistanceKm ?? 0), 0);
   const finalResidual = targetKm - fittedKm;
@@ -138,7 +138,7 @@ export function fitWeeklyVolume(
   }
 }
 
-/** Widest deviation allowed on a key session — beyond this the workout changes nature */
+/** Widest deviation allowed on a key session, beyond this the workout changes nature */
 const KEY_SESSION_BAND = 0.2;
 
 /**

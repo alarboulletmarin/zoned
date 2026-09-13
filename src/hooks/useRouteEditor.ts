@@ -7,7 +7,7 @@
  *   - lastValidWaypoints: the last list that Brouter accepted, so we
  *     can revert when a drag lands the waypoint in the sea.
  *   - editPreview: the routed Route returned by Brouter for the
- *     current waypoints — what the map actually shows during editing.
+ *     current waypoints, what the map actually shows during editing.
  *   - isReRouting: gates the loading hint on the map.
  *
  * The re-route call is debounced (300 ms) and cancellable via
@@ -26,8 +26,8 @@ const REROUTE_DEBOUNCE_MS = 300;
 
 /**
  * Build a sparse list of editable handles from a routed trace. We keep
- * the start, the end, and ~1 mid-handle per km — clamped between 2 and
- * 8 — so a 3 km loop stays grabbable and a 60 km cycling route doesn't
+ * the start, the end, and ~1 mid-handle per km, clamped between 2 and
+ * 8, so a 3 km loop stays grabbable and a 60 km cycling route doesn't
  * get cluttered with a hundred markers.
  */
 export function deriveInitialWaypoints(
@@ -60,13 +60,13 @@ export interface UseRouteEditorArgs {
    * Lazy getter for the points currently rendered on the map (could
    * be reversed). Lazy because the hook gates editing on this list,
    * but the list itself is typically derived *from* the hook's own
-   * state (`editPreview`) — passing it directly would create a
+   * state (`editPreview`), passing it directly would create a
    * read-before-declaration cycle in the caller.
    */
   getDisplayPoints: () => RouteCoordinate[];
   /**
    * Called when the user applies the edit. The hook only knows the new
-   * Route — the parent decides where to commit it (which candidate
+   * Route, the parent decides where to commit it (which candidate
    * slot, whether to clear reversal, etc.).
    */
   onApply: (next: Route) => void;
@@ -189,7 +189,7 @@ export function useRouteEditor({
       const next = editWaypoints.map((wp, i) => {
         if (i === index) return point;
         // Closed loops keep first and last in lockstep so the routing
-        // request still closes — otherwise dragging the start would
+        // request still closes, otherwise dragging the start would
         // leave the end stranded at the original location.
         if (isLoop && (index === 0 || index === lastIdx)) {
           if (i === 0 || i === lastIdx) return point;

@@ -115,7 +115,7 @@
     "articleCount_one": "{{count}} article",
     "articleCount_other": "{{count}} articles",
     "empty": "Aucun article dans cette catégorie",
-    "emptyDescription": "Cette catégorie est vide pour l'instant. Les {{total}} articles publiés restent visibles sous « Tous ».",
+    "emptyDescription": "Cette catégorie est vide pour l'instant. Les {{total}} articles publiés restent visibles sous l'onglet Tous.",
     "showAll": "Voir les {{total}} articles"
   },
   "privacy": {

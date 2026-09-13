@@ -1,5 +1,5 @@
 /**
- * DiagonalSplit — 1080×1080. A bold diagonal split with the dominant zone
+ * DiagonalSplit, 1080×1080. A bold diagonal split with the dominant zone
  * colour filling the upper-left triangle and an off-white lower-right.
  *
  * Workout name lives in the white triangle on the right; brand + zone tag
@@ -45,7 +45,7 @@ export function DiagonalSplit({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* The coloured triangle — drawn with a sharp linear-gradient stop.
+      {/* The coloured triangle, drawn with a sharp linear-gradient stop.
           Sits above BgLayer (when transparent, BgLayer is hidden and the
           triangle is the only painted shape: still works as overlay). */}
       <div

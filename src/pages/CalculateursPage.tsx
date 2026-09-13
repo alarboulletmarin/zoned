@@ -6,7 +6,7 @@ import { usePickLang } from "@/lib/i18n-utils";
 
 /**
  * One tool of the hub. `kicker` is the mono micro-label printed above the
- * name — it states what the tool eats, in figures, rather than restating the
+ * name, it states what the tool eats, in figures, rather than restating the
  * title in smaller type.
  */
 interface CalculateurEntry {

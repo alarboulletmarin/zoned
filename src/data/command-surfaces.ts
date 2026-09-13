@@ -1,6 +1,6 @@
 // src/data/command-surfaces.ts
 // Static registry of navigable product surfaces (tools, guides, pages) surfaced
-// in the Command Palette. Each entry is a directly-navigable destination — no
+// in the Command Palette. Each entry is a directly-navigable destination, no
 // heuristics. Titles/subtitles are stored inline FR/EN (same pattern as
 // CALCULATEURS and collections data) so this module stays light and free of
 // page-component imports.
@@ -353,7 +353,7 @@ export const COMMAND_SURFACES: CommandSurface[] = [
   // ── Les destinations que les quatre portes ne tiennent plus ──────────
   // Mesuré avant d'écrire ces entrées : le registre couvrait 32 destinations
   // sur ~64 routes, et ces treize-là n'y étaient pas. Reléguer une page hors
-  // de la navigation sans l'inscrire ici, c'est la rendre introuvable — donc
+  // de la navigation sans l'inscrire ici, c'est la rendre introuvable, donc
   // la supprimer sans le dire. `nav-coverage.test.ts` échoue si ça se
   // reproduit.
   {

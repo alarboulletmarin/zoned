@@ -41,7 +41,7 @@
     "gpsActive": "Position active",
     "addressPlaceholder": "Adresse (ex : 12 rue de la Paix, Paris)",
     "addressSearching": "Recherche…",
-    "addressNoResults": "Aucune adresse trouvée — précise la ville ou le code postal.",
+    "addressNoResults": "Aucune adresse trouvée, précise la ville ou le code postal.",
     "distanceEdit": "Modifier la distance",
     "distanceUnit": "km",
     "distanceMin": "1 km",
@@ -174,7 +174,7 @@
     "geolocationTimeout": "Pas de réponse du GPS après 10 s. Essaie à nouveau ou saisis une adresse.",
     "geolocationUnavailable": "Géolocalisation indisponible sur cet appareil.",
     "routingFailed": "Le service de routage est temporairement indisponible. Réessaie dans un instant.",
-    "unreachableWaypoint": "Un point n'est pas routable (mer, voie privée, hors réseau). Le tracé revient à sa position précédente — déplace le point sur une route ou supprime-le.",
+    "unreachableWaypoint": "Un point n'est pas routable (mer, voie privée, hors réseau). Le tracé revient à sa position précédente, déplace le point sur une route ou supprime-le.",
     "noConvergence": "Impossible de trouver un parcours proche de la distance demandée. Essaie une distance différente ou un autre point de départ.",
     "noTrace": "Aucun tracé routable trouvé pour ces points.",
     "disciplineUnsupported": "La natation n'est pas prise en charge par le générateur de parcours."

@@ -7,7 +7,7 @@ import type { StepContext, StepDef } from "../types";
 const TERRAINS: TerrainType[] = ["trail_runnable", "trail_technical", "mountain"];
 
 /**
- * Le terrain et le dénivelé — trail et ultra seulement.
+ * Le terrain et le dénivelé, trail et ultra seulement.
  *
  * Le champ dénivelé existait déjà, mais il était posé sur l'écran d'allure et
  * rendait SANS CONDITION : quelqu'un qui préparait un 5 km sur route se
@@ -17,7 +17,7 @@ const TERRAINS: TerrainType[] = ["trail_runnable", "trail_technical", "mountain"
  *
  * Le terrain, lui, est nouveau, et il n'écrit qu'une préférence : il oriente
  * la sélection des séances via leur `terrainType`. **Aucune formule du moteur
- * ne bouge** — c'est la ligne de périmètre de tout ce chantier.
+ * ne bouge**, c'est la ligne de périmètre de tout ce chantier.
  */
 function TerrainBody({ form, setForm, uid, t }: StepContext) {
   return (

@@ -7,19 +7,19 @@ import Wondering from "@/assets/doodles/wondering.svg?react";
 /**
  * Visual variant. Each variant is selected in CSS off the `data-variant`
  * attribute (`src/styles/components/empty-state.css`):
- *   - default       — faint ink glyph (legacy callers, unchanged)
- *   - no-results    — full-ink description carrying the count
- *   - not-started   — accent tint on the glyph, to read as a positive call
- *   - error         — danger tint for transient failures
- *   - offline       — danger tint for connectivity issues
+ *   - default, faint ink glyph (legacy callers, unchanged)
+ *   - no-results, full-ink description carrying the count
+ *   - not-started, accent tint on the glyph, to read as a positive call
+ *   - error, danger tint for transient failures
+ *   - offline, danger tint for connectivity issues
  *
  * Variants are visual only: they do *not* set ARIA roles or alter focus.
  * Callers needing live-region updates should wrap the component with
  * `role="status"` themselves.
  *
  * They also pick the drawing. The nineteen call sites collapse into three
- * situations — a filter that found nothing, something never started, and a
- * failure — so the doodle belongs to the variant rather than to each page:
+ * situations, a filter that found nothing, something never started, and a
+ * failure, so the doodle belongs to the variant rather than to each page:
  * one decision instead of nineteen, and the same page state always wears the
  * same figure. `art` overrides it where a page has a better one; `default`
  * keeps the glyph, since it is what the legacy call sites already expect.
@@ -39,7 +39,7 @@ interface EmptyStateProps {
   icon: ComponentType<IconProps>;
   /**
    * A hand-drawn doodle, imported with `?react`. When one is given it takes
-   * the place of the glyph — a 22px pictogram says "no data", a drawn figure
+   * the place of the glyph, a 22px pictogram says "no data", a drawn figure
    * says whose page this is. `icon` stays required and stays the fallback:
    * nineteen call sites pass one, and a slot without a drawing must keep
    * looking finished rather than empty.
@@ -49,13 +49,13 @@ interface EmptyStateProps {
   description?: string;
   action?: ReactNode;
   variant?: Variant;
-  /** Optional secondary text rendered below the action — context, hints. */
+  /** Optional secondary text rendered below the action, context, hints. */
   hint?: ReactNode;
   className?: string;
 }
 
 /**
- * The starting line. No dashed card any more — that texture belongs to the
+ * The starting line. No dashed card any more, that texture belongs to the
  * reserved hole, and an empty shelf is not a hole. The figure stands on a
  * straight rule that runs the width of the container (the scene's bottom
  * border), and the words sit under the rule on a phone, beside the figure on

@@ -2,7 +2,7 @@ import { type CSSProperties } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 /**
- * Long-form article placeholder — title, byline meta, hero block,
+ * Long-form article placeholder, title, byline meta, hero block,
  * intro paragraph, two body paragraphs. Tight enough to fit the
  * narrow reading width but tall enough to occupy the fold while the
  * Markdown renderer hydrates.
@@ -12,13 +12,13 @@ import { Skeleton } from "@/components/ui/skeleton";
  * mono byline and `.zn-prose`'s 19px-on-1.7 lines, 18px apart.
  *
  * The lines inside one block are flush, because they are the wrapped lines of
- * a single paragraph — or of a single title — and wrapped lines sit a
+ * a single paragraph, or of a single title, and wrapped lines sit a
  * line-height apart, not a stack step apart. Spacing them like separate
  * paragraphs, which the Tailwind version did, over-reserved 16px per
  * paragraph.
  *
- * The hero is the one block with no counterpart on the page today —
- * ArticlePage renders no image — so it keeps the height it already reserved
+ * The hero is the one block with no counterpart on the page today,
+ * ArticlePage renders no image, so it keeps the height it already reserved
  * rather than inventing one.
  */
 export function ArticleSkeleton() {

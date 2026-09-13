@@ -155,7 +155,7 @@ export function PaceTablePage() {
           r.zone != null ? (
             <ZoneBadge zone={r.zone} size="sm" />
           ) : (
-            <span className="zn-faint">—</span>
+            <span className="zn-faint">-</span>
           ),
       });
     }

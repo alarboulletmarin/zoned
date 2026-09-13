@@ -2,14 +2,14 @@
  * The tunable numbers of a workout adapted from the catalogue (issue #130).
  *
  * The step editor below it can change anything; this panel is the short path
- * for the handful of numbers a runner actually wants to move — how many
+ * for the handful of numbers a runner actually wants to move, how many
  * repetitions, how long the effort lasts, how long the recovery lasts.
  *
  * Two controls per parameter, on purpose. The slider spans what the template
  * *recommends* (its `WorkoutScaling` range, or half to one and a half times
  * what it prescribes) and is the fast, coarse gesture. The field beside it
  * takes any value the kind of parameter admits, so the recommendation stays a
- * guide rather than a wall — asking for twenty repetitions is not a mistake,
+ * guide rather than a wall, asking for twenty repetitions is not a mistake,
  * and having to leave for the step editor to get there would defeat the point.
  * A value outside the recommendation widens the slider to reach it and says so.
  *
@@ -26,9 +26,9 @@ import type { WorkoutPhaseKey } from "@/types";
 
 interface WorkoutParameterPanelProps {
   params: AdjustableParam[];
-  /** Every frame of a drag — renders, but must not land in undo history. */
+  /** Every frame of a drag, renders, but must not land in undo history. */
   onPreview: (paramId: string, value: number) => void;
-  /** A released or typed value — one history entry per gesture. */
+  /** A released or typed value, one history entry per gesture. */
   onCommit: (paramId: string, value: number) => void;
 }
 
@@ -100,7 +100,7 @@ function ParameterRow({
   const context = (isEnglish ? param.labelEn ?? param.label : param.label).trim();
   const kindLabel = t(`calculators:workoutBuilder.parameters.kinds.${param.kind}`);
   const printedValue = formatParamValue(param, isEnglish);
-  // Several rows share a kind, so the prose is what tells them apart — without
+  // Several rows share a kind, so the prose is what tells them apart, without
   // it, a screen reader hears "Effort" four times over.
   const fullLabel = context ? `${kindLabel} · ${context}` : kindLabel;
   const offRecommendation =
@@ -144,7 +144,7 @@ function ParameterRow({
 
 /**
  * The typed side of a parameter. Durations get the minutes/seconds pair the
- * step editor below already uses, rather than a raw count of seconds — nobody
+ * step editor below already uses, rather than a raw count of seconds, nobody
  * types 1500 to mean twenty-five minutes.
  */
 function ParameterFields({
@@ -168,7 +168,7 @@ function ParameterFields({
           min={0}
           max={Math.floor(limits.max / 60)}
           unit="min"
-          label={`${label} — min`}
+          label={`${label} · min`}
           onCommit={(next) => onCommit(param.id, next * 60 + seconds)}
         />
         <NumberField
@@ -176,7 +176,7 @@ function ParameterFields({
           min={0}
           max={59}
           unit="s"
-          label={`${label} — s`}
+          label={`${label} · s`}
           onCommit={(next) => onCommit(param.id, minutes * 60 + next)}
         />
       </div>
@@ -280,7 +280,7 @@ function formatParamValue(param: AdjustableParam, isEnglish: boolean): string {
 }
 
 function formatRecommendedRange(param: AdjustableParam, isEnglish: boolean): string {
-  return `${formatValue(param.kind, param.recommendedMin, isEnglish)} – ${formatValue(param.kind, param.recommendedMax, isEnglish)}`;
+  return `${formatValue(param.kind, param.recommendedMin, isEnglish)} - ${formatValue(param.kind, param.recommendedMax, isEnglish)}`;
 }
 
 function formatValue(kind: AdjustableParamKind, value: number, isEnglish: boolean): string {

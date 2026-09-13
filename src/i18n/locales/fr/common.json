@@ -26,7 +26,7 @@
       "hint": "Pour coller le visuel par-dessus une photo (story Insta, etc.)",
       "notForZoneHero": "Indisponible sur ce template"
     },
-    "privacy": "L'image est générée dans ton navigateur — aucune donnée envoyée.",
+    "privacy": "L'image est générée dans ton navigateur, aucune donnée envoyée.",
     "template": {
       "storyHero": { "label": "Story", "format": "Insta · 1080 × 1920" },
       "squareStats": { "label": "Carré stats", "format": "Insta Feed · 1080 × 1080" },
@@ -426,7 +426,7 @@
     },
     "openingAnimation": {
       "title": "Animation d'ouverture",
-      "description": "Une figure qui court, le temps que l'app démarre. « Selon le système » suit ton réglage d'accessibilité : si tu as demandé moins d'animations, l'écran s'affiche mais la figure reste immobile. « Toujours » la joue quand même — ce choix t'appartient.",
+      "description": "Une figure qui court, le temps que l'app démarre. Le réglage Selon le système suit ta préférence d'accessibilité : si tu as demandé moins d'animations, l'écran s'affiche mais la figure reste immobile. Toujours la joue malgré tout, ce choix t'appartient.",
       "system": "Selon le système",
       "always": "Toujours",
       "never": "Jamais"
@@ -606,7 +606,7 @@
     "step2OsPath": "Ta montre apparaît comme un disque USB : {{path}}",
     "step3": "Ouvre le dossier de la montre et va dans : GARMIN → NewFiles",
     "step4": "Copie le fichier {{filename}} dans ce dossier",
-    "step5": "Débranche ta montre — la séance apparaît dans Entraînement → Mes séances",
+    "step5": "Débranche ta montre, la séance apparaît dans Entraînement → Mes séances",
     "compatible": "Compatible avec : Forerunner, Fenix, Enduro, Venu, Epix, Instinct, Vivoactive",
     "noGarmin": "Tu n'as pas de montre Garmin ?",
     "fitGarminOnly": "Le FIT ne marche que sur Garmin. Ailleurs, recrée la séance à la main dans l'app de ta montre.",
@@ -663,7 +663,7 @@
   },
   "comparePage": {
     "whyComparisons": "Pourquoi ces comparaisons ?",
-    "whyComparisonsDesc": "Zoned est gratuit, open source, ne nécessite aucun compte et ne collecte aucune donnée. Ces différences comptent — ces pages sont là pour t'aider à choisir.",
+    "whyComparisonsDesc": "Zoned est gratuit, open source, ne nécessite aucun compte et ne collecte aucune donnée. Ces différences comptent, ces pages sont là pour t'aider à choisir.",
     "featureComparison": "Comparaison des fonctionnalités",
     "badgeFree": "Gratuit",
     "badgeNoAccount": "Sans compte"
@@ -868,7 +868,7 @@
     "strength": { "name": "Renforcement" },
     "hidden": {
       "title": "{{module}} est masqué",
-      "description": "Tu as masqué cette partie de l'app dans tes réglages. Le lien reste valide — tu peux la réafficher tout de suite.",
+      "description": "Tu as masqué cette partie de l'app dans tes réglages. Le lien reste valide, tu peux la réafficher tout de suite.",
       "cta": "Réafficher"
     }
   }

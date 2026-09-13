@@ -3,7 +3,7 @@ import { getWorkoutDiscipline, isStrengthWorkout } from "@/types";
 import type { Practice } from "@/types/practice";
 
 /**
- * Classer une séance par pratique — la seule définition de « ce qui est trail ».
+ * Classer une séance par pratique, la seule définition de ce qui est trail.
  *
  * La bande de la bibliothèque, les compteurs des cartes de pratique et les
  * états vides lisent tous ce module. S'ils se mettaient à recalculer chacun
@@ -12,14 +12,14 @@ import type { Practice } from "@/types/practice";
  *
  * Pourquoi pas une `Map` construite au chargement du module : le catalogue est
  * découpé en chunks chargés à la demande (`src/data/workouts/index.ts`), donc
- * il n'existe aucun instant où « toutes les séances » sont là. La
+ * il n'existe aucun instant où toutes les séances sont là. La
  * classification est donc une fonction pure, **mémoïsée par id** : chaque
  * séance est traversée une fois par session, jamais à chaque rendu ni à chaque
  * frappe au clavier dans les filtres.
  *
  * Ce que dit la donnée réelle, mesuré sur le catalogue : route 197, trail 33,
  * ultra 49 (dont 16 spécifiques). Les 28 séances trail et 44 ultra du premier
- * relevé ne devaient RIEN à ce chantier — le terrain et les tags étaient déjà
+ * relevé ne devaient RIEN à ce chantier, le terrain et les tags étaient déjà
  * renseignés, c'est le critère qui manquait. Les cinq qui les complètent
  * (TRL-015, TRL-017…TRL-020) sont, elles, écrites pour l'ultra : marche rapide
  * en montée, nuit, ravitaillement, montées de dix minutes, double sortie.
@@ -33,7 +33,7 @@ const TRAIL_TERRAIN: ReadonlySet<TerrainType> = new Set<TerrainType>([
 ]);
 
 /**
- * Les tags qui disent « ultra » quand le reste ne le dit pas.
+ * Les tags qui disent ultra quand le reste ne le dit pas.
  *
  * `estimatedDistanceKm` serait le signal évident, mais il n'est renseigné que
  * sur 4 séances du catalogue (toutes vélo ou natation) : inutilisable. Les tags
@@ -54,10 +54,10 @@ const ULTRA_TAGS: ReadonlySet<string> = new Set([
 ]);
 
 /**
- * Une séance transversale ne revendique aucune pratique — liste vide — et
+ * Une séance transversale ne revendique aucune pratique, liste vide, et
  * `workoutMatchesPractice` la laisse alors passer sous n'importe laquelle.
  * C'est le cas du renforcement : un coureur sur route ne doit pas perdre son
- * gainage parce qu'il a choisi « route ».
+ * gainage parce qu'il a choisi route.
  */
 const AGNOSTIC: readonly Practice[] = [];
 
@@ -86,10 +86,10 @@ function classify(workout: AnyWorkoutTemplate): readonly Practice[] {
   // Vélo et natation sont les disciplines du triathlon (PRACTICE_META le
   // déclare), et c'est tout ce qui existe de tri aujourd'hui. Un coureur sur
   // route qui veut du cross-training passe par le filtre de modalité, qui
-  // court-circuite alors la pratique — voir workoutFilters.
+  // court-circuite alors la pratique, voir workoutFilters.
   if (getWorkoutDiscipline(workout) !== "running") return ["triathlon"];
 
-  // Surcharge explicite : une séance peut se ranger elle-même. Ajout sûr —
+  // Surcharge explicite : une séance peut se ranger elle-même. Ajout sûr,
   // `scripts/qa-workout-schema.ts` ne rejette pas les clés racine inconnues.
   const declared = (workout as { practices?: Practice[] }).practices;
   if (declared && declared.length > 0) return declared;
@@ -105,7 +105,7 @@ function classify(workout: AnyWorkoutTemplate): readonly Practice[] {
     hasTrailTerrain(workout.cooldownTemplate);
 
   // L'ultra puise dans le trail et dans le volume : une sortie longue et une
-  // descente technique servent un 100 km autant qu'une séance tagguée « ultra ».
+  // descente technique servent un 100 km autant qu'une séance tagguée ultra.
   // On ne montre pas 11 séances à quelqu'un pour qui 44 sont utiles.
   const isUltra =
     isTrail || workout.category === "long_run" || tags.some((t) => ULTRA_TAGS.has(t));

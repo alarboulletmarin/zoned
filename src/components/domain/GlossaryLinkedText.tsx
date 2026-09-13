@@ -23,7 +23,7 @@ interface GlossaryLinkedTextProps {
 // Link styles
 // ---------------------------------------------------------------------------
 
-// One treatment for both kinds — a dotted ink underline (see content.css).
+// One treatment for both kinds, a dotted ink underline (see content.css).
 // A paragraph can carry six of these; two underline colours inside one
 // sentence is noise, not information.
 

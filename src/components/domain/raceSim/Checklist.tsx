@@ -17,7 +17,7 @@ export interface ChecklistEntry {
  * this right, so every actionable block now uses it.
  *
  * Ticked/unticked is read off the checkbox in CSS rather than re-derived into
- * class names — the input is the state.
+ * class names, the input is the state.
  */
 export function Checklist({
   entries,

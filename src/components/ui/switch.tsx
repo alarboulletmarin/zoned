@@ -10,8 +10,8 @@ type SwitchProps = Omit<
 };
 
 /* A native checkbox with role="switch": the platform already gives us the
-   space, the focus ring, Space to toggle, the screen-reader announcement and —
-   the reason Radix rendered a hidden mirror input — the value at submission.
+   space, the focus ring, Space to toggle, the screen-reader announcement and,
+   the reason Radix rendered a hidden mirror input, the value at submission.
    aria-checked is implicit from :checked; declaring it here would duplicate it. */
 function Switch({ className, checked, onCheckedChange, ...props }: SwitchProps) {
   return (

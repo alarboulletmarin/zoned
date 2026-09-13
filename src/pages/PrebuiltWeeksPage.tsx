@@ -7,7 +7,7 @@ import { PrebuiltWeekCard } from "@/components/domain/PrebuiltWeekCard";
 import { getAllPrebuiltWeeks } from "@/data/prebuilt-weeks";
 
 /**
- * The ten ready-made weeks, as a catalogue — the same shape as the prebuilt
+ * The ten ready-made weeks, as a catalogue, the same shape as the prebuilt
  * plans index and as the library: count, title, one sentence, card grid.
  */
 export function PrebuiltWeeksPage() {

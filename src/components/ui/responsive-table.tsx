@@ -1,5 +1,5 @@
 /**
- * ResponsiveTable — table on tablet+, key/value cards on mobile.
+ * ResponsiveTable, table on tablet+, key/value cards on mobile.
  *
  * The same data renders as a true HTML <table> at md+ and as stacked
  * cards below md, so dense reference views (race splits, pace tables)
@@ -34,7 +34,7 @@ export interface ResponsiveTableColumn<T> {
 interface ResponsiveTableProps<T> {
   data: T[];
   columns: ResponsiveTableColumn<T>[];
-  /** Stable row key — string field or function. */
+  /** Stable row key, string field or function. */
   rowKey: keyof T | ((row: T, index: number) => string | number);
   /** Optional caption rendered above the table for screen readers. */
   caption?: ReactNode;

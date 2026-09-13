@@ -9,10 +9,10 @@ import { cn } from "@/lib/utils";
  * Shape of the pacing plan, split by split. Faster sits higher.
  *
  * Ink on paper: a band of sunken paper under the line, the line itself in ink,
- * and two hairline axes at the fastest and the slowest split — the pair the
+ * and two hairline axes at the fastest and the slowest split, the pair the
  * caption prints, so the reader can put a number on both edges of the shape.
  *
- * Only worth drawing when the pace actually moves — on an even plan the curve
+ * Only worth drawing when the pace actually moves, on an even plan the curve
  * is a flat line that says nothing the summary sentence doesn't.
  */
 export function PaceCurve({
@@ -49,7 +49,7 @@ export function PaceCurve({
       <figcaption className="zn-rs-curve__caption">
         <span className="zn-kicker">{t("splits.curve")}</span>
         <span className="zn-rs-curve__range">
-          {formatPaceDisplay(fastest)} – {formatPaceDisplay(slowest)}
+          {formatPaceDisplay(fastest)} - {formatPaceDisplay(slowest)}
           {paceUnit}
         </span>
       </figcaption>

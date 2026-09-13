@@ -1,5 +1,5 @@
 /**
- * Material Symbols icons — GENERATED FILE, DO NOT EDIT BY HAND.
+ * Material Symbols icons, GENERATED FILE, DO NOT EDIT BY HAND.
  *
  * Regenerate with: bun run generate:icons
  * Generator:       scripts/generate-icons.ts
@@ -8,7 +8,7 @@
  * Source:  Material Symbols, Sharp style, weight 600
  *          https://github.com/google/material-design-icons
  *          via the @material-symbols/svg-600 npm package (v0.45.9)
- * Licence: Apache License 2.0, © Google — see licenses/APACHE-2.0.txt
+ * Licence: Apache License 2.0, © Google, see licenses/APACHE-2.0.txt
  *          The upstream package ships no NOTICE file, so none is propagated.
  *
  * Modifications applied to the original SVGs:
@@ -21,7 +21,7 @@
  *   - the path data itself is copied verbatim, unaltered
  *
  * Brand logos (GithubIcon, StravaIcon) have no Material equivalent and are
- * re-exported from ./brand — that file is hand-maintained.
+ * re-exported from ./brand, that file is hand-maintained.
  */
 
 import type { ReactNode } from "react";

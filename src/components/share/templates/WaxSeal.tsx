@@ -1,7 +1,7 @@
 /**
- * WaxSeal — 480×480. Embossed crimson wax seal with ribbon. Hot-stamped
+ * WaxSeal, 480×480. Embossed crimson wax seal with ribbon. Hot-stamped
  * Z{n} at the center. Letterpress depth via inner shadows. The seal IS
- * the visual — survives transparent toggle.
+ * the visual, survives transparent toggle.
  */
 
 import { usePickLang } from "@/lib/i18n-utils";
@@ -43,7 +43,7 @@ export function WaxSeal({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* Ribbon — sits behind the seal, two-tone fold below. */}
+      {/* Ribbon, sits behind the seal, two-tone fold below. */}
       <div
         style={{
           position: "absolute",
@@ -69,7 +69,7 @@ export function WaxSeal({ workout, transparent }: ShareTemplateProps) {
         }}
       />
 
-      {/* Seal disc — raised wax. */}
+      {/* Seal disc, raised wax. */}
       <div
         style={{
           position: "absolute",
@@ -84,7 +84,7 @@ export function WaxSeal({ workout, transparent }: ShareTemplateProps) {
         }}
       />
 
-      {/* Festooned inner ring — embossed border. */}
+      {/* Festooned inner ring, embossed border. */}
       <div
         style={{
           position: "absolute",

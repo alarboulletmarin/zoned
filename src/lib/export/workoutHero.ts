@@ -27,22 +27,22 @@ export interface WorkoutHero {
   blockCount: number;
   /** Primary discipline (running by default). */
   discipline: Discipline;
-  /** Dominant zone — highest zone present in the main set. */
+  /** Dominant zone, highest zone present in the main set. */
   dominantZone: ZoneNumber;
   /** Full zone metadata for the dominant zone. */
   zoneMeta: ZoneMeta;
   /** Zone distribution by time (only zones present, sorted by zone number asc). */
   zoneBreakdown: ZoneBreakdown[];
-  /** Total elevation gain (m) from all blocks — 0 when no trail data. */
+  /** Total elevation gain (m) from all blocks, 0 when no trail data. */
   elevationGainM: number;
   /** True when the workout has meaningful elevation data (>= 50m). */
   hasElevation: boolean;
-  /** RPE estimate from dominant zone (1–10 scale). */
+  /** RPE estimate from dominant zone (1-10 scale). */
   rpe: number;
 }
 
 /**
- * RPE estimate per zone (Borg CR10 mapping). Conservative — used only
+ * RPE estimate per zone (Borg CR10 mapping). Conservative, used only
  * for the share visuals' "intensity" stat.
  */
 const ZONE_RPE: Record<ZoneNumber, number> = {

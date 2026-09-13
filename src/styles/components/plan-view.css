@@ -1,4 +1,4 @@
-/* The plan family — the dashboard (/plans), the plan screen (/plan/:id) and
+/* The plan family, the dashboard (/plans), the plan screen (/plan/:id) and
    the shared-link preview (/plan/shared).
  *
  * The calendar, the weekly board, the monthly grid, the workout picker and the
@@ -10,7 +10,7 @@
  * body, then data. Bands are separated by a full-width ink rule, never by
  * blank space. The shell wraps every route in .zn-page, which already pays the
  * 40px (20px mobile) screen margin, so nothing here re-pays it and nothing
- * bleeds out of the column — the page must never scroll sideways.
+ * bleeds out of the column, the page must never scroll sideways.
  *
  * One vermillon fill per screen:
  *   /plans      -> "Créer un plan"
@@ -28,8 +28,8 @@
   flex-direction: column;
 }
 
-/* Une bande de l'écran. Même forme que .zn-section — la moitié de
-   --gap-section de chaque côté, et plus de filet — moins le padding en ligne
+/* Une bande de l'écran. Même forme que .zn-section, la moitié de
+   --gap-section de chaque côté, et plus de filet, moins le padding en ligne
    que la colonne de la coquille paie déjà. */
 .zn-plans__band,
 .zn-planview__band {
@@ -82,7 +82,7 @@
 
 /* ── a saved plan ─────────────────────────────────────────────────────── */
 
-/* Composed onto .zn-card: cream, 1.5px ink, 22px radius, and NO shadow —
+/* Composed onto .zn-card: cream, 1.5px ink, 22px radius, and NO shadow,
    a hard offset belongs to floating surfaces, never to a card in a list. */
 .zn-plancard {
   gap: var(--sp-8);
@@ -95,7 +95,7 @@
   background: var(--surface-band);
 }
 
-/* The whole upper block is the link to the plan — a real anchor, so the
+/* The whole upper block is the link to the plan, a real anchor, so the
    keyboard reaches it and a middle click still opens a tab. It carries no box
    of its own: the card is already the drawn object. */
 .zn-plancard__open {
@@ -113,7 +113,7 @@
   overflow-wrap: anywhere;
 }
 
-/* Dates, phase, sessions — mono, tabular, one line each. */
+/* Dates, phase, sessions, mono, tabular, one line each. */
 .zn-plancard__facts {
   display: flex;
   flex-direction: column;
@@ -152,7 +152,7 @@
   flex: 1;
 }
 
-/* Deleting is destructive, so it is vermillon — but as type on hover, not as a
+/* Deleting is destructive, so it is vermillon, but as type on hover, not as a
    second fill competing with the screen's one call. */
 .zn-plancard__del:hover:not(:disabled) {
   color: var(--state-danger);
@@ -235,7 +235,7 @@
   }
 }
 
-/* Editing is the same type on the same line — only the ink rule under it says
+/* Editing is the same type on the same line, only the ink rule under it says
    the field is live. */
 .zn-planview__rename {
   inline-size: 100%;
@@ -248,8 +248,8 @@
   color: var(--text-body);
   background: transparent;
   border: none;
-  /* Le filet garde ses 2.5px — donc le titre ne remonte pas d'un pixel quand
-     on le renomme — mais il passe à l'encre. C'était la plus large bande
+  /* Le filet garde ses 2.5px, donc le titre ne remonte pas d'un pixel quand
+     on le renomme, mais il passe à l'encre. C'était la plus large bande
      vermillon de l'app, et elle ne disait aucun état : c'est le soulignement
      d'un champ éditable. Le vermillon revient tout seul au focus, par l'anneau
      de base.css, et redevient donc un signal de focus exclusif. */
@@ -262,10 +262,10 @@
 
 /* ── cette semaine ────────────────────────────────────────────────────── */
 
-/* La réponse à « qu'est-ce que je cours cette semaine », au-dessus du pli.
+/* La réponse à qu'est-ce que je cours cette semaine, au-dessus du pli.
    Elle n'invente rien : .zn-stat porte les nombres, .zn-sess__check porte la
-   case — la même marque que la grille, pour qu'il n'y ait pas un second
-   vocabulaire à apprendre — et les états d'arête sont ceux de .zn-sess. Seule
+   case, la même marque que la grille, pour qu'il n'y ait pas un second
+   vocabulaire à apprendre, et les états d'arête sont ceux de .zn-sess. Seule
    la mise en page est neuve. Sur écran large elle occupe la colonne de 380px
    que .zn-planview__head déclare déjà ; sous 1000px cette grille s'effondre et
    la bande passe pleine largeur juste sous le titre, c'est-à-dire à sa place. */
@@ -283,7 +283,7 @@
   gap: var(--sp-2) var(--sp-8);
 }
 
-/* Un vrai h2 — la page n'en avait qu'un, enterré dans un onglet. Il garde
+/* Un vrai h2, la page n'en avait qu'un, enterré dans un onglet. Il garde
    l'échelle du kicker : c'est un libellé de bande, pas un titre d'écran. */
 .zn-weeknow__title {
   margin: 0;
@@ -427,7 +427,7 @@
   border-block-end: 0;
 }
 
-/* Width is the phase's share of the plan, ink density is its intensity — the
+/* Width is the phase's share of the plan, ink density is its intensity, the
    same ramp .zn-pchart__bar uses, so the ribbon and the statistics chart can
    never disagree. The swatches themselves are .zn-pswatch, borrowed whole.
 
@@ -445,7 +445,7 @@
   --zn-fig-w: calc(var(--zn-fig-h) * var(--zn-fig-aspect, 0.6));
   --zn-foot-x: calc(var(--zn-fig-w) * var(--zn-fig-foot, 0.5));
   /* The box's inline start: sole on the week, but never closer than 4px to
-     the screen edge — at the first and last weeks the figure gives up a few
+     the screen edge, at the first and last weeks the figure gives up a few
      pixels (the rule follows it, still inside the week) rather than the page
      a horizontal scroll or a hand cut by the edge. */
   --zn-gutter: calc(var(--pad-screen-x) - var(--sp-2));
@@ -485,7 +485,7 @@
 
 /* The figure. Its viewBox ends at the sole, so the box bottom is the contact
    line: one hairline down from the reserved band, it lands on the underside of
-   the swatch border and the sole sits on the rule. Ink, not the phase tint —
+   the swatch border and the sole sits on the rule. Ink, not the phase tint,
    the swatch below already carries the phase, and a tinted figure on a tinted
    band would lose its edge in the dark theme. */
 .zn-planview__figure {
@@ -501,7 +501,7 @@
   transform: scaleX(-1);
 }
 
-/* Where you are, as a stroke. A vermillon rule, never a dot in the margin —
+/* Where you are, as a stroke. A vermillon rule, never a dot in the margin,
    and it stays under the foot: the owner's call, the sole comes to stand on
    it. Two pixels over the track on both sides, so it meets the sole. */
 .zn-planview__now {
@@ -513,9 +513,9 @@
   background: var(--accent);
 }
 
-/* The caption under the sole: "S6 · CONSTRUCTION · 4–6", centred on the foot.
-   Its width is known before layout because the font is monospace — one
-   advance plus one letter-spacing per character — which is what lets it be
+/* The caption under the sole: "S6 · CONSTRUCTION · 4-6", centred on the foot.
+   Its width is known before layout because the font is monospace, one
+   advance plus one letter-spacing per character, which is what lets it be
    clamped inside the ribbon instead of spilling off a phone at week 1. */
 .zn-planview__where {
   --zn-where-w: calc(var(--zn-where-chars, 0) * (1ch + var(--ls-mono)));
@@ -595,7 +595,7 @@
 }
 
 /* Sous 768px la barre d'outils n'a plus que le sélecteur de vue : il prend la
-   ligne plutôt que d'en laisser 80 % vide — deux cibles pleine largeur au lieu
+   ligne plutôt que d'en laisser 80 % vide, deux cibles pleine largeur au lieu
    de deux pastilles de 29px. */
 @media (max-width: 767px) {
   .zn-planview__toolbar > .zn-segmented {
@@ -657,7 +657,7 @@
 }
 
 /* Docked beside the board. It disappears at exactly the width where the picker
-   becomes a bottom sheet (768px, set in plan-calendar.css) — a different
+   becomes a bottom sheet (768px, set in plan-calendar.css), a different
    breakpoint here would leave a band with neither. */
 .zn-planview__side {
   flex: none;
@@ -692,8 +692,8 @@
   overflow: hidden;
 }
 
-/* La semaine en cours porte le cadre vermillon entier — c'est « maintenant »,
-   le seul sens qui garde ce ton — doublé par le badge « Semaine en cours »
+/* La semaine en cours porte le cadre vermillon entier, c'est maintenant,
+   le seul sens qui garde ce ton, doublé par le badge Semaine en cours
    que l'en-tête rend déjà (WCAG 1.4.1).
    En outline et non en bordure : la carte gardait une bordure de 1px et
    passait à 2px en devenant courante, donc elle grandissait de 2px en largeur
@@ -733,7 +733,7 @@
 }
 
 /* Ce que la semaine porte : ses marques et ses chiffres. Un seul bloc, pour
-   qu'il tienne ou qu'il passe à la ligne d'un seul tenant — avant, les quatre
+   qu'il tienne ou qu'il passe à la ligne d'un seul tenant, avant, les quatre
    étaient des frères de rang égal, tous insécables, et c'est le TITRE qui
    payait leur largeur. */
 .zn-planlist__aside {
@@ -746,8 +746,8 @@
 
 /* Sur téléphone, le bloc descend sous le titre.
    Mesuré à 390 px : la carte fait 350, la rangée en demandait 388. La
-   pastille « semaine en cours » à elle seule prend 162 px, les chiffres 146,
-   et aucun des deux ne se coupe — il ne restait rien pour « S1 — Base », qui
+   pastille semaine en cours à elle seule prend 162 px, les chiffres 146,
+   et aucun des deux ne se coupe, il ne restait rien pour S1, Base, qui
    se retrouvait à zéro pixel de large, à déborder sous la pastille. Le
    chevron, lui, tombait vingt-trois pixels après le bord de la carte.
 
@@ -778,7 +778,7 @@
 /* ── une séance, une ligne ────────────────────────────────────────────────
  *
  * Elle était une CARTE : fond de papier, contour, rayon de 6px, douze pixels
- * de rembourrage — posée dans le corps d'une carte de semaine, elle-même posée
+ * de rembourrage, posée dans le corps d'une carte de semaine, elle-même posée
  * dans la colonne. Trois cadres emboîtés pour lire un nom de séance et sa
  * durée, cinq fois par semaine, dix semaines de suite. C'est cet emboîtement
  * qui rend la vue lourde : chaque contour demande à l'œil de décider où
@@ -790,7 +790,7 @@
  * Ce que le cadre portait, l'app le porte déjà ailleurs :
  *
  * - le STATUT (faite / modifiée / sautée) était une couleur de bordure ; il
- *   est sur la case à cocher, qui le dit par un glyphe ET par un ton — deux
+ *   est sur la case à cocher, qui le dit par un glyphe ET par un ton, deux
  *   canaux, donc WCAG 1.4.1 tenu sans la bordure. La séance sautée garde en
  *   plus son texte barré, restitué plus bas pour cette vue.
  * - l'INDISPONIBILITÉ garde sa hachure à 45°, en bande pleine largeur.
@@ -800,7 +800,7 @@
 .zn-sess.zn-planlist__sess {
   /* Une grille, plus une rangée flex.
    *
-   * En flex, la colonne du titre était `flex: 1` — donc une base de 0 — à côté
+   * En flex, la colonne du titre était `flex: 1`, donc une base de 0, à côté
    * d'un bloc de méta en `flex: none`. Quand la méta tenait sur la ligne, elle
    * prenait sa largeur de contenu ENTIÈRE et le titre héritait de ce qui
    * restait : mesuré à 390px, 3 PIXELS. Le nom débordait alors de sa boîte et
@@ -848,7 +848,7 @@
   grid-template-areas: "main meta";
 }
 
-/* Une séance sautée : le texte barré, qui était porté par .zn-sess__name — le
+/* Une séance sautée : le texte barré, qui était porté par .zn-sess__name, le
    nom de la case de calendrier. La liste nomme sa séance avec un lien. */
 .zn-sess.zn-planlist__sess[data-status="skipped"] .zn-planlist__link {
   color: var(--text-faint);
@@ -857,7 +857,7 @@
 
 /* Unavailable that day: the 45 degree hatch the system gives anything
    unmeasured, exactly as the calendar draws it on the cell. Pleine largeur
-   maintenant que la ligne n'a plus de boîte — la bande DIT l'empêchement. */
+   maintenant que la ligne n'a plus de boîte, la bande DIT l'empêchement. */
 .zn-sess.zn-planlist__sess[data-blocked="true"] {
   background-color: var(--surface-band);
   background-image: var(--zone-recovery);
@@ -876,7 +876,7 @@
   color: var(--text-body);
   text-decoration: none;
   /* Un nom d'un seul mot plus long que sa colonne se coupe au lieu de sortir
-     de la grille — la même règle que .zn-sess__name applique déjà en case. */
+     de la grille, la même règle que .zn-sess__name applique déjà en case. */
   overflow-wrap: anywhere;
   transition: color var(--dur-fast) var(--ease-out);
 }
@@ -891,7 +891,7 @@
 }
 
 /* Ce que la séance coûte : son type, sa durée, sa distance. Une ligne de mono
-   discret sous le nom, séparée par des points — plus une pastille pleine, une
+   discret sous le nom, séparée par des points, plus une pastille pleine, une
    horloge et deux blocs insécables posés à droite du titre.
    La pastille faisait 32px de haut et 1.5px de contour pour qualifier un nom
    de 14 : elle pesait plus que lui, et il y en avait une par séance. */
@@ -943,7 +943,7 @@
    Sur bureau, la ligne mesure 1038px pour un nom qui en occupe 300 : lui payer
    une ligne à elle coûtait seize pixels de hauteur par séance, cinquante
    séances par plan, pour de la place horizontale qui était déjà là. Le
-   commentaire de la séance, lui, garde sa ligne entière — c'est de la prose,
+   commentaire de la séance, lui, garde sa ligne entière, c'est de la prose,
    elle a besoin de sa mesure.
 
    Le seuil est celui du rang lui-même (641px), pas celui du panneau
@@ -959,7 +959,7 @@
     align-items: baseline;
   }
 
-  /* Le nom, quelle que soit la forme qu'il prend — un lien de séance, le
+  /* Le nom, quelle que soit la forme qu'il prend, un lien de séance, le
      drapeau d'un jour de course, le libellé d'une activité. */
   .zn-planlist__sess-main > :not(.zn-planlist__note):not(.zn-planlist__facts) {
     grid-area: name;
@@ -1003,7 +1003,7 @@
 
   /* À l'encre sourde et non au filet : c'est la seule porte vers les gestes
      de la séance sur téléphone, et la remarque qui l'a fait naître était
-     « je ne vois pas la possibilité de… ». Un affordance qu'on cherche n'en
+     je ne vois pas la possibilité de…. Un affordance qu'on cherche n'en
      est pas un. */
   color: var(--text-muted);
   background: none;
@@ -1109,7 +1109,7 @@
   transform: translateY(var(--press-shift));
 }
 
-/* An absence is dashed — the same hole the "+5 more" chip draws. */
+/* An absence is dashed, the same hole the "+5 more" chip draws. */
 .zn-planlist__add {
   display: flex;
   align-items: center;
@@ -1317,7 +1317,7 @@
      séance, et la clôturer.
 
      C'est aussi ce qui permet à la rangée de garder ses trois colonnes ici.
-     Ce qui l'écrasait était la LARGEUR du bloc de méta — pastille, chiffres et
+     Ce qui l'écrasait était la LARGEUR du bloc de méta, pastille, chiffres et
      quatre boutons insécables. Réduit à un bouton de 32px, il ne peut plus
      rien prendre au nom : la piste `auto` ne dépasse pas son contenu, et
      `minmax(0, 1fr)` garde tout le reste. */

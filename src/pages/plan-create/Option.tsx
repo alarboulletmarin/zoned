@@ -5,8 +5,8 @@ import type { IconProps } from "@/components/icons";
 // ── One answer, drawn ────────────────────────────────────────────────
 
 /**
- * A radio wearing paper. The input stays a real radio — same name, same
- * arrow keys, same checked state — and the label around it is what the eye
+ * A radio wearing paper. The input stays a real radio, same name, same
+ * arrow keys, same checked state, and the label around it is what the eye
  * reads. Chosen is the 2.5px vermillon frame, never a tint.
  */
 export function Option({
@@ -25,12 +25,12 @@ export function Option({
   checked: boolean;
   onSelect: () => void;
   /**
-   * Ce qu'il y a à faire une fois la réponse donnée — passer à la suite.
+   * Ce qu'il y a à faire une fois la réponse donnée, passer à la suite.
    *
    * Il n'est appelé que sur un geste de POINTEUR. Au clavier, les flèches
    * déplacent la sélection à l'intérieur d'un groupe de radios : avancer à
    * chaque flèche empêcherait de lire les réponses. Le filtre est
-   * `event.detail` — un clic synthétisé par le clavier (flèche, espace) le
+   * `event.detail`, un clic synthétisé par le clavier (flèche, espace) le
    * porte à 0, un clic de doigt ou de souris à 1. Il écarte du même coup le
    * second clic, celui que le label renvoie sur la radio qu'il enveloppe.
    */
@@ -41,15 +41,15 @@ export function Option({
   glyph?: ComponentType<IconProps>;
   shape?: "tile";
   /**
-   * La réponse est nommée mais pas encore servie — une pratique annoncée.
+   * La réponse est nommée mais pas encore servie, une pratique annoncée.
    *
    * Elle reste CHOISISSABLE : la choisir est ce qui déroule ce qui existe déjà
    * pour elle, et un bouton mort ne dit rien de ce qu'on peut faire à la
    * place. Mais elle ne se déguise plus en réponse comme les autres : filet
-   * pointillé, encre sourde, et sa mention « bientôt » devient une marque au
+   * pointillé, encre sourde, et sa mention bientôt devient une marque au
    * lieu d'une donnée en pied de carte. Le pointillé et le ton sourd survivent
    * tous deux au niveau de gris (WCAG 1.4.1), et `aria-disabled` n'est PAS
-   * posé — le contrôle marche vraiment.
+   * posé, le contrôle marche vraiment.
    */
   soon?: boolean;
 }) {
@@ -69,10 +69,10 @@ export function Option({
         checked={checked}
         onChange={onSelect}
         /* La sortie clavier de l'auto-avance. Les flèches déplacent la
-           sélection dans le groupe sans valider — sinon on ne pourrait pas
-           lire les réponses —, donc il faut un geste qui dise « celle-là, et
-           on continue ». C'est Entrée, et c'est aussi ce qui remplace le
-           bouton « Suivant » retiré de ces étapes. */
+           sélection dans le groupe sans valider, sinon on ne pourrait pas
+           lire les réponses , , donc il faut un geste qui dise celle-là, et
+           on continue. C'est Entrée, et c'est aussi ce qui remplace le
+           bouton Suivant retiré de ces étapes. */
         onKeyDown={(event) => {
           if (event.key !== "Enter" || !onCommit) return;
           event.preventDefault();

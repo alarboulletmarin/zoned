@@ -42,14 +42,14 @@ function todayIso(): string {
 /**
  * The blank plan: a name, a length, a rhythm, and nothing generated.
  *
- * Every control here is a ported primitive — a slider for the length, a
+ * Every control here is a ported primitive, a slider for the length, a
  * segmented strip for the exclusive choices, chips for the two optional tags.
  * The one vermillon fill on the screen is the create button at the foot.
  */
 /**
  * A `radiogroup` promises a keyboard contract that plain buttons do not keep:
  * ONE tab stop for the whole group, with the arrows moving the selection inside
- * it. Declaring the role without that is worse than declaring nothing — a
+ * it. Declaring the role without that is worse than declaring nothing, a
  * screen-reader user is told to press an arrow and nothing happens.
  */
 function useRadioGroup<T>(values: readonly T[], current: T | undefined, onPick: (v: T) => void) {
@@ -170,7 +170,7 @@ export function FreePlanCreatePage() {
               className="zn-stack"
               style={{ "--gap": "var(--sp-11)" } as CSSProperties}
             >
-              {/* Name — the only required answer on the screen. */}
+              {/* Name, the only required answer on the screen. */}
               <div className="zn-contrib-field">
                 <label className="zn-contrib-field__label" htmlFor={`${uid}-name`}>
                   {t("freePlan.planName")}

@@ -27,7 +27,7 @@ import type { ModuleId } from "@/types/settings";
  *    l'élément de route, ce qui garde `generate-route-meta`,
  *    `generate-sitemap` et la liste de prérendu au byte près. Et
  *    `scripts/prerender.ts` tourne sur un localStorage neuf, donc
- *    `DEFAULT_SETTINGS` s'applique et aucun module n'est masqué dans `dist` —
+ *    `DEFAULT_SETTINGS` s'applique et aucun module n'est masqué dans `dist`,
  *    remonter cette porte dans le routeur viderait silencieusement une
  *    douzaine de pages prérendues.
  *

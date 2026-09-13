@@ -1,11 +1,11 @@
-/* Strength — the session card, its list rows, and the exercise sheet.
+/* Strength, the session card, its list rows, and the exercise sheet.
  *
  * Two encodings live here and they are deliberately NOT the same one:
  *
  *   INTENSITY is ordinal. mobility -> endurance -> hypertrophy -> strength ->
  *   power is a ramp, and themes.css already binds it to the zone ink ramp
  *   (--intensity-* == --zone-1/2/3/4/6). So intensity is painted exactly the
- *   way a zone is: ink density, plus a second redundant channel — the height
+ *   way a zone is: ink density, plus a second redundant channel, the height
  *   of the step in .zn-str-meter, read straight off --zone-h-*. Nothing is
  *   re-derived here; every value is one of those two token families.
  *
@@ -15,8 +15,8 @@
  *   design system. The twelve --muscle-* hues from themes.css therefore stay,
  *   but demoted from a tinted fill to a 1.5px stroke: the badge is paper with
  *   an ink label, and the hue only draws its outline. What the system CAN say
- *   is said in ink — involvement is the stroke style and the label's ink
- *   density (solid + body ink = primary, dashed + muted = secondary) — and
+ *   is said in ink, involvement is the stroke style and the label's ink
+ *   density (solid + body ink = primary, dashed + muted = secondary), and
  *   the ordinal/categorical split is said in the corner radius: intensity is
  *   a squared chip like a zone badge, a muscle is a pill.
  *
@@ -52,7 +52,7 @@
 
 /* The five steps of the ramp, and the ink that stays legible on each. The
    fill comes from --intensity-*, the text colour from the zone step that
-   token is bound to — the same Z1-Z3 dark / Z4+ cream rule as .zn-zone-badge. */
+   token is bound to, the same Z1-Z3 dark / Z4+ cream rule as .zn-zone-badge. */
 .zn-intensity[data-intensity="mobility"]    { --zn-int-fill: var(--intensity-mobility);    --zn-int-ink: var(--zone-1-text); }
 .zn-intensity[data-intensity="endurance"]   { --zn-int-fill: var(--intensity-endurance);   --zn-int-ink: var(--zone-2-text); }
 .zn-intensity[data-intensity="hypertrophy"] { --zn-int-fill: var(--intensity-hypertrophy); --zn-int-ink: var(--zone-3-text); }
@@ -112,7 +112,7 @@
 
 /* ── muscle: the categorical pill ─────────────────────────────────────── */
 
-/* Paper fill, ink label, and the muscle's own hue as the stroke — see the file
+/* Paper fill, ink label, and the muscle's own hue as the stroke, see the file
    header. --zn-muscle is handed in inline by the component, which is the same
    escape hatch the app already uses for every zone colour. */
 .zn-muscle {
@@ -145,7 +145,7 @@
   font-weight: var(--fw-regular);
 }
 
-/* The "+3 more" tail carries no hue at all — it names no muscle. */
+/* The "+3 more" tail carries no hue at all, it names no muscle. */
 .zn-muscle[data-involvement="more"] {
   color: var(--text-faint);
   font-weight: var(--fw-regular);
@@ -165,7 +165,7 @@
 
 /* A strength session in the library's list view. Paper on paper: an outline,
    a colour-only hover, and the 1px press. Nothing lifts and nothing grows a
-   shadow — that is reserved for floating surfaces. */
+   shadow, that is reserved for floating surfaces. */
 .zn-str-row {
   display: flex;
   align-items: center;
@@ -275,7 +275,7 @@
   font: var(--type-label);
 }
 
-/* "(par côté)" — a qualifier on the name, not a fact of its own. */
+/* "(par côté)", a qualifier on the name, not a fact of its own. */
 .zn-exercise__aside {
   font: var(--type-caption);
   font-size: var(--fs-mono-xs);
@@ -366,7 +366,7 @@
   color: var(--text-muted);
 }
 
-/* An ink tick rather than a bullet dot — the same 1.5px rule everything else
+/* An ink tick rather than a bullet dot, the same 1.5px rule everything else
    on the page is drawn with. */
 .zn-exercise__cues > li {
   position: relative;

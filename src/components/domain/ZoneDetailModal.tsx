@@ -49,7 +49,7 @@ export function ZoneDetailModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="zn-zonedetail">
         <DialogHeader>
-          {/* The zone mark is the badge itself — zone.css draws the ramp fill
+          {/* The zone mark is the badge itself, zone.css draws the ramp fill
               and the Z-code together, so the dialog needs no second tint. */}
           <DialogTitle className="zn-zonedetail__title">
             <span className="zn-zone-badge" data-zone={zone ?? 1} data-size="lg">

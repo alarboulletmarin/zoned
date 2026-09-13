@@ -22,7 +22,7 @@ export interface WeekPreset {
 
 export const WEEK_PRESETS: WeekPreset[] = [
   {
-    // Light week — few short easy sessions, gentle quality.
+    // Light week, few short easy sessions, gentle quality.
     id: "recovery",
     settings: {
       sessions: 3,
@@ -34,7 +34,7 @@ export const WEEK_PRESETS: WeekPreset[] = [
     },
   },
   {
-    // Aerobic base — moderate volume, tempo quality.
+    // Aerobic base, moderate volume, tempo quality.
     id: "base",
     settings: {
       sessions: 4,
@@ -46,7 +46,7 @@ export const WEEK_PRESETS: WeekPreset[] = [
     },
   },
   {
-    // Build block — more sessions and load, threshold quality.
+    // Build block, more sessions and load, threshold quality.
     id: "build",
     settings: {
       sessions: 5,
@@ -58,7 +58,7 @@ export const WEEK_PRESETS: WeekPreset[] = [
     },
   },
   {
-    // High volume — six sessions, big aerobic load.
+    // High volume, six sessions, big aerobic load.
     id: "volume",
     settings: {
       sessions: 6,
@@ -70,7 +70,7 @@ export const WEEK_PRESETS: WeekPreset[] = [
     },
   },
   {
-    // Sharpening / taper — lower volume, sharp VO₂·VMA quality.
+    // Sharpening / taper, lower volume, sharp VO₂·VMA quality.
     id: "sharpening",
     settings: {
       sessions: 4,

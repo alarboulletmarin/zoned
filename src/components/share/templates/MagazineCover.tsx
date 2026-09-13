@@ -1,5 +1,5 @@
 /**
- * MagazineCover — 1080×1920. Editorial sport-magazine cover.
+ * MagazineCover, 1080×1920. Editorial sport-magazine cover.
  *
  * Tight masthead, "issue/zone" tag, huge italic feature title, three
  * cover lines + a faux barcode at the bottom.
@@ -166,11 +166,11 @@ export function MagazineCover({ workout, transparent }: ShareTemplateProps) {
           <CoverLine
             kicker="03"
             title="Méthode"
-            detail={`Z${hero.dominantZone} ${zoneLabel} — protocole ciblé`}
+            detail={`Z${hero.dominantZone} ${zoneLabel} · protocole ciblé`}
           />
         </div>
 
-        {/* Bottom strip — QR linking to the workout + price tag */}
+        {/* Bottom strip, QR linking to the workout + price tag */}
         <div
           style={{
             marginTop: 40,
@@ -223,7 +223,7 @@ export function MagazineCover({ workout, transparent }: ShareTemplateProps) {
           </div>
         </div>
       </div>
-      {/* Hide the default ShareFooter — we composed our own bottom strip. */}
+      {/* Hide the default ShareFooter, we composed our own bottom strip. */}
       <div style={{ display: "none" }}>
         <ShareFooter workout={workout} />
       </div>

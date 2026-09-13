@@ -15,7 +15,7 @@ import type { StepContext, StepDef } from "../types";
  *
  * Le mode de saisie et le chrono tapé sont de l'état LOCAL : ils ne sortaient
  * jamais de cette étape, et les garder dans la page en faisait deux `useState`
- * de plus au sommet du parcours. Le brouillon ne les persiste pas non plus —
+ * de plus au sommet du parcours. Le brouillon ne les persiste pas non plus,
  * ce qui compte est l'allure, et elle vit dans `form.targetPace`.
  */
 function PaceBody({ form, setForm, uid, t, derived, goForward }: StepContext) {
@@ -28,7 +28,7 @@ function PaceBody({ form, setForm, uid, t, derived, goForward }: StepContext) {
     : 0;
   const finishSeconds = parseFinishTimeToSeconds(targetFinishTime);
   // `isTrail` ne gouvernait qu'une phrase d'aide, et le champ dénivelé qui
-  // vivait ici rendait SANS CONDITION — un coureur de 5 km sur route se
+  // vivait ici rendait SANS CONDITION, un coureur de 5 km sur route se
   // faisait demander un D+. Le dénivelé est parti dans l'étape terrain, qui
   // n'apparaît qu'en trail et en ultra ; et la pratique est maintenant la
   // source, au lieu d'une devinette sur la distance.

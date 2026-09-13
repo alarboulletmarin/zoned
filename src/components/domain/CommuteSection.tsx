@@ -37,7 +37,7 @@ const DAY_KEYS = [
 ] as const;
 
 /**
- * Commute (vélotaf) settings — a recurring pattern (weekdays + duration) that
+ * Commute (vélotaf) settings, a recurring pattern (weekdays + duration) that
  * the athlete does independently of their plan. When "include in plan" is on
  * the generator will later reduce easy volume to account for the load; when
  * off it simply shows as context next to weekly stats.

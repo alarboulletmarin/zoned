@@ -54,7 +54,7 @@ describe("Slot", () => {
     expect(typeof merged.onFocus).toBe("function");
   });
 
-  test("refs compose — ours and the one the child already had", () => {
+  test("refs compose, ours and the one the child already had", () => {
     const ours: { current: unknown } = { current: null };
     const theirs: unknown[] = [];
     const merged = slot({

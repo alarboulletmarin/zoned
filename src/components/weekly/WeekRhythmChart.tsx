@@ -10,7 +10,7 @@ interface WeekRhythmChartProps {
   className?: string;
 }
 
-/** Accent zone for a slot — strength/rest have no aerobic zone. */
+/** Accent zone for a slot, strength/rest have no aerobic zone. */
 function slotZone(w: AnyWorkoutTemplate | null): number | null {
   if (!w || isStrengthWorkout(w)) return null;
   return getDominantZone(w);
@@ -25,7 +25,7 @@ function slotZone(w: AnyWorkoutTemplate | null): number | null {
 export function WeekRhythmChart({ slots, className }: WeekRhythmChartProps) {
   const { t } = useTranslation("library");
 
-  // Group per day — planWeekToSlots may emit several slots for the same day.
+  // Group per day, planWeekToSlots may emit several slots for the same day.
   const days = [0, 1, 2, 3, 4, 5, 6].map((day) => {
     const sessions = slots
       .filter((s) => s.day === day && s.workout)
@@ -64,7 +64,7 @@ export function WeekRhythmChart({ slots, className }: WeekRhythmChartProps) {
                         className="zn-wk-rhythm__seg"
                         style={{
                           height: `${(session.duration / total) * 100}%`,
-                          // A session with no aerobic zone — strength — is
+                          // A session with no aerobic zone, strength, is
                           // unmeasured work, and this system draws anything
                           // unmeasured as a 45° hatch, never as a fake zone.
                           background: session.zone

@@ -7,12 +7,12 @@
  * every number.
  *
  * What this file does NOT redeclare, because it already exists:
- *   routes.css   — the parameters form, the address box, the compass, the
+ *   routes.css, the parameters form, the address box, the compass, the
  *                  presets, the chips and .zn-route-cand (the candidate card).
  *                  Everything a control does is over there; this file only
  *                  builds the frame those controls sit in.
- *   _layout.css  — zn-row / zn-stack / zn-cluster / zn-grid / zn-scroll-x.
- *   _type.css    — zn-kicker / zn-display / zn-title / zn-body / zn-mono.
+ *   _layout.css, zn-row / zn-stack / zn-cluster / zn-grid / zn-scroll-x.
+ *   _type.css, zn-kicker / zn-display / zn-title / zn-body / zn-mono.
  *   button.css, alert.css, empty-state.css, stat-block.css, skeleton.css.
  *
  * Three screens sit inside the shell's .zn-page column, which already pays the
@@ -22,7 +22,7 @@
  *
  * The map itself is Leaflet's. Its markers are HTML strings handed to
  * L.DivIcon and its traces are Polyline options, neither of which can read a
- * CSS custom property — so those colours stay literals in RouteMap.tsx and
+ * CSS custom property, so those colours stay literals in RouteMap.tsx and
  * nothing here tries to reach them.
  */
 
@@ -33,7 +33,7 @@
   flex-direction: column;
 }
 
-/* Une bande de la page. Même séparation que .zn-section — l'espace seul —
+/* Une bande de la page. Même séparation que .zn-section, l'espace seul,
    moins le padding en ligne que la colonne paie déjà. La variante `--first`
    part avec le filet : elle n'existait que pour ne pas le payer. */
 .zn-rt__band {
@@ -65,7 +65,7 @@
 }
 
 /* A ruled row of numbers under a title or at the foot of a card. Numbers, not
-   adjectives — which is why it is mono and never wraps into prose. */
+   adjectives, which is why it is mono and never wraps into prose. */
 .zn-rt__facts {
   display: flex;
   flex-wrap: wrap;
@@ -86,7 +86,7 @@
 
    The wrapper also states how tall the map is, once, in --map-h: the Leaflet
    canvas and the skeleton standing in for it both read that one number, so the
-   wait and the thing waited for can never be different heights — which is the
+   wait and the thing waited for can never be different heights, which is the
    only way this screen keeps CLS at zero. The three steps are the ones the
    component's Tailwind base stated, unrounded. */
 .zn-rt__map {
@@ -134,7 +134,7 @@
   border-radius: 0;
 }
 
-/* A sentence printed over the map — what to do next, or what is happening.
+/* A sentence printed over the map, what to do next, or what is happening.
    Opaque paper on an ink outline: the system has no blur and no translucency
    to float on. The z-index clears Leaflet's own panes. */
 .zn-rt__maphint {
@@ -210,7 +210,7 @@
 }
 
 /* The one that commits the edit. It is the only vermillon fill on this screen
-   while edit mode is on — the generate button is off-screen behind the map. */
+   while edit mode is on, the generate button is off-screen behind the map. */
 .zn-rt__mapbtn[data-tone="accent"] {
   background: var(--accent);
   color: var(--accent-fg);
@@ -275,15 +275,15 @@
 /* /routes is the app's one fullscreen route: App.tsx hides the footer for it,
    and the whole interactive zone is meant to fit in a single viewport.
  *
- * The old markup measured that viewport by hand — `fixed inset-x-0 top-12` on
- * a phone, `calc(100svh - 5rem)` on a desktop — and both numbers described a
+ * The old markup measured that viewport by hand, `fixed inset-x-0 top-12` on
+ * a phone, `calc(100svh - 5rem)` on a desktop, and both numbers described a
  * header that used to float. The header is IN FLOW now (see shell.css), so
  * neither is true any more, and neither can be recomputed here: this file has
  * no way to know how tall the header is.
  *
  * It does not need to. The shell is already a flex column pinned to the
- * viewport — .zn-app is min 100vh, .zn-app__body and .zn-main are both
- * flex: 1 — so <main> has exactly the height left under the header. Asking
+ * viewport, .zn-app is min 100vh, .zn-app__body and .zn-main are both
+ * flex: 1, so <main> has exactly the height left under the header. Asking
  * for 100% of it is the same answer with nothing hard-coded, and it survives
  * the header changing height. The block margins pay .zn-main's own padding
  * back, which is what makes "fullscreen" mean the whole thing. */
@@ -304,7 +304,7 @@
 /* On a phone the map IS the page, so the screen bleeds past the column's side
    margin and the rail pays it back for itself. Guarded to widths below
    --page-max, where the column is exactly the viewport and the cancellation is
-   exact — above it the page is centred and a bleed would scroll sideways. */
+   exact, above it the page is centred and a bleed would scroll sideways. */
 @media (max-width: 900px) {
   .zn-rt__screen {
     margin-inline: calc(var(--pad-screen-x) * -1);
@@ -360,7 +360,7 @@
 }
 
 /* Map, stats, actions and the rationale are one object, so they share one
-   outline and are divided by hairlines — four separately outlined blocks would
+   outline and are divided by hairlines, four separately outlined blocks would
    read as four unrelated things. */
 .zn-rt__stage {
   display: flex;
@@ -374,7 +374,7 @@
   border-radius: var(--r-2xl);
 }
 
-/* Inside the stage the map has no frame of its own — the stage is the frame —
+/* Inside the stage the map has no frame of its own, the stage is the frame,
    and no height of its own either: it takes the cell it is given. */
 .zn-rt__stage .zn-rt__map {
   --map-h: 100%;
@@ -473,7 +473,7 @@
   color: var(--text-faint);
 }
 
-/* Proposal 2 of 3. A drawn box with an arrow at each end — the count is the
+/* Proposal 2 of 3. A drawn box with an arrow at each end, the count is the
    thing, the arrows are how you change it. */
 .zn-rt__pager {
   display: flex;
@@ -512,7 +512,7 @@
   border-color: transparent;
 }
 
-/* The rule above outranks button.css's floor, so the floor is restated here —
+/* The rule above outranks button.css's floor, so the floor is restated here,
    the strip is on screen from 768px up, tablets included. */
 @media (pointer: coarse) {
   .zn-btn.zn-rt__pager-step {
@@ -524,7 +524,7 @@
 /* ── the generator's action strip ─────────────────────────────────────── */
 
 /* Two groups on one rule: what you do to the trace on the left, what you do
-   with it on the right. Opaque paper — the strip sits on the stage, it does
+   with it on the right. Opaque paper, the strip sits on the stage, it does
    not float over it. */
 .zn-rt__strip {
   flex: none;
@@ -551,7 +551,7 @@
 
 /* ── the generator's rationale ────────────────────────────────────────── */
 
-/* Why this route — folded away by default so the map keeps the height. */
+/* Why this route, folded away by default so the map keeps the height. */
 .zn-rt__details {
   flex: none;
   border-block-start: var(--border-rule);
@@ -636,7 +636,7 @@
 }
 
 /* How close the trace landed to the distance you asked for. Exactly one of the
-   three shows at a time — the label comes from getDistanceMatchLabel, which is
+   three shows at a time, the label comes from getDistanceMatchLabel, which is
    the single source of truth for it. Success is the one added hue; the caution
    is the accent as stroke and type, never as a second fill. */
 .zn-rt__tag[data-match="very_close"] {
@@ -712,7 +712,7 @@
 
 /* ── the track finder ─────────────────────────────────────────────────── */
 
-/* Controls on the left, cartography on the right — the generator's shape at
+/* Controls on the left, cartography on the right, the generator's shape at
    rest, without the fullscreen claim. */
 .zn-rt__split {
   display: grid;
@@ -752,7 +752,7 @@
 }
 
 /* A fieldset carries browser chrome and a legend that is not a flex item, so
-   the stack is margin-based rather than a gap — same shape as the parameters
+   the stack is margin-based rather than a gap, same shape as the parameters
    form's own fieldset. */
 .zn-rt__field {
   min-inline-size: 0;
@@ -832,9 +832,9 @@
   transform: translateY(var(--press-shift));
 }
 
-/* La piste retenue porte l'anneau d'ENCRE sur les quatre côtés — la marque
-   « choisi » du système (card.css) — et non plus le vermillon, désormais
-   réservé à « maintenant » et au focus.
+/* La piste retenue porte l'anneau d'ENCRE sur les quatre côtés, la marque
+   choisi du système (card.css), et non plus le vermillon, désormais
+   réservé à maintenant et au focus.
 
    Ici l'anneau reste à --bw-heavy et non --bw-rule : la ligne de liste n'a
    AUCUNE bordure propre (border: none, ce sont les filets de séparation du
@@ -842,7 +842,7 @@
    ce que pèsent ailleurs 1.5px de bordure + 1.5px d'anneau.
 
    Deuxième canal, non chromatique : le papier creusé, déjà là. Il double
-   aussi le survol — c'est l'anneau, une épaisseur, qui les départage. */
+   aussi le survol, c'est l'anneau, une épaisseur, qui les départage. */
 .zn-rt__track[aria-pressed="true"] {
   box-shadow: inset 0 0 0 var(--bw-heavy) var(--line-strong);
   background: var(--surface-band);
@@ -1005,7 +1005,7 @@
 }
 
 /* The plan session this route was saved for. The sunken band plus the
-   vermillon frame on all four edges — the block sits alone in the column, so
+   vermillon frame on all four edges, the block sits alone in the column, so
    the extra 1px per side shifts nothing beside it. */
 .zn-rt__linked {
   display: flex;

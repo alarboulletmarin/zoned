@@ -13,7 +13,7 @@
       "race": "Course & planification"
     },
     "hub": {
-      "seoTitle": "Calculateurs — Outils de Course",
+      "seoTitle": "Calculateurs · Outils de Course",
       "seoDescription": "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA.",
       "seoCollectionName": "Calculateurs Course à Pied"
     },
@@ -178,7 +178,7 @@
       "customDistanceLabel": "Distance personnalisée en km"
     },
     "equivalence": {
-      "seoTitle": "Équivalence entre distances — Formule de Riegel",
+      "seoTitle": "Équivalence entre distances · Formule de Riegel",
       "seoDescription": "Équivalence temps de course entre distances avec la formule de Riegel. Prédiction de chronos du 5K au marathon à partir d'un résultat récent. Gratuit.",
       "seoAppName": "Calculateur d'équivalence de course",
       "seoAppDescription": "Prédis tes temps de course sur toutes les distances",
@@ -201,7 +201,7 @@
       "kicker": "5 km → marathon"
     },
     "ageGraded": {
-      "seoTitle": "Performance Age-Graded — Score de niveau",
+      "seoTitle": "Performance Age-Graded · Score de niveau",
       "seoDescription": "Calcule ta performance ajustée à l'âge en course à pied (age grading). Compare ton chrono au record mondial de ta catégorie d'âge et de sexe.",
       "seoAppName": "Calculateur Performance Age-Graded",
       "seoAppDescription": "Compare ta performance au record mondial ajusté pour ton âge et ton sexe",
@@ -296,7 +296,7 @@
     "exportAll": "Tout exporter",
     "noWorkoutsYet": "Aucune séance personnalisée",
     "createFirst": "Crée ta première séance ci-dessus",
-    "noWorkoutsDescription": "Aucune séance personnalisée dans ce navigateur. Tu peux en garder 20 — commence par la première.",
+    "noWorkoutsDescription": "Aucune séance personnalisée dans ce navigateur. Tu peux en garder 20, commence par la première.",
     "listKicker_one": "{{count}} séance enregistrée",
     "listKicker_other": "{{count}} séances enregistrées",
     "editorKicker": "Brouillon local",

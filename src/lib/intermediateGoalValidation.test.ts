@@ -224,7 +224,7 @@ describe("validateIntermediateGoals", () => {
   });
 
   test("goal after main race with invalid date still catches errors", () => {
-    // "2025-07-01" is after main race — both AFTER_MAIN_RACE and TOO_CLOSE_TO_MAIN fire
+    // "2025-07-01" is after main race, both AFTER_MAIN_RACE and TOO_CLOSE_TO_MAIN fire
     const result = validateIntermediateGoals(
       [makeGoal({ raceDate: "2025-07-01" })],
       mainRaceDate,

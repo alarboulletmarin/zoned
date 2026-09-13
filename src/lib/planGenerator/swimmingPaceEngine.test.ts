@@ -79,7 +79,7 @@ describe("pace formatting", () => {
   test("formats range with dash", () => {
     expect(
       formatSwimPaceRange({ minSecPer100m: 98, maxSecPer100m: 102 }),
-    ).toBe("1:38–1:42");
+    ).toBe("1:38-1:42");
   });
 });
 

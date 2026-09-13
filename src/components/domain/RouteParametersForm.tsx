@@ -172,7 +172,7 @@ export function RouteParametersForm({
           return;
         }
       } catch {
-        // Permissions API may not support `geolocation` in some browsers — skip gracefully.
+        // Permissions API may not support `geolocation` in some browsers, skip gracefully.
       }
     }
 
@@ -232,7 +232,7 @@ export function RouteParametersForm({
   const cardinalLabel = t(`form.${CARDINAL_KEYS[cardinalIndex]}`);
   const bearingDisplay = t("form.bearingValue", { cardinal: cardinalLabel, deg: bearingDeg });
 
-  // Selected option metadata for the compact chip popovers — chips show
+  // Selected option metadata for the compact chip popovers, chips show
   // the active label + icon so the user knows the current value at a
   // glance (Strava/Komoot 2025 pattern).
   const selectedDiscipline = disciplineOptions.find((o) => o.value === discipline);
@@ -242,7 +242,7 @@ export function RouteParametersForm({
     // Strava Routes 2025 mobile pattern:
     //   • Row 1: sport pill (icon-only with chevron) + address field
     //     + GPS + submit, all aligned in a single search-bar height.
-    //   • Row 2: 3 filter chips (shape, distance, elevation) — text
+    //   • Row 2: 3 filter chips (shape, distance, elevation), text
     //     labels, no icons, in an explicit horizontal scroll. Letting
     //     the right edge be cut signals "more on the right" rather
     //     than wrapping into orphan rows.
@@ -264,7 +264,7 @@ export function RouteParametersForm({
           submit();
         }}
       >
-        {/* Row 1 — Strava-style search bar: sport picker on the left,
+        {/* Row 1, Strava-style search bar: sport picker on the left,
             address in the middle (flex-1), GPS + submit icons on the
             right. Single line, tap targets ≥44px (Apple HIG). */}
         <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
@@ -327,7 +327,7 @@ export function RouteParametersForm({
           </Button>
         </div>
 
-        {/* Row 2 — filter chips, labelled text only, horizontal scroll
+        {/* Row 2, filter chips, labelled text only, horizontal scroll
             assumed when chips don't fit (cf. Strava Routes filter row).
             Hidden scrollbars; if the row overflows the right edge,
             iOS rubber-banding makes the affordance discoverable. */}
@@ -436,7 +436,7 @@ export function RouteParametersForm({
               >
                 {/* No on/off toggle on mobile: zero is "libre" (auto),
                     any positive value is the explicit target. The
-                    slider is always visible — moving it past 0 turns
+                    slider is always visible, moving it past 0 turns
                     the chip into a hard target without an extra tap. */}
                 <div className="zn-row zn-row--split zn-row--baseline">
                   <span className="zn-kicker zn-kicker--inline">
@@ -490,7 +490,7 @@ export function RouteParametersForm({
     );
   }
 
-  // Desktop / tablet — full vertical form with all fieldsets visible.
+  // Desktop / tablet, full vertical form with all fieldsets visible.
   return (
     <form
       data-slot="route-form"
@@ -549,7 +549,7 @@ export function RouteParametersForm({
           step={0.5}
           aria-label={t("form.distance")}
         />
-        {/* Presets — discipline-aware ceiling filters out anything beyond
+        {/* Presets, discipline-aware ceiling filters out anything beyond
             the slider's max (e.g. Marathon on a 30 km running cap, all
             three presets on a sub-21 km cycling cap). */}
         <div className="zn-cluster">
@@ -649,7 +649,7 @@ export function RouteParametersForm({
         </fieldset>
       )}
 
-      {/* Bearing — only for out-and-back. */}
+      {/* Bearing, only for out-and-back. */}
       {shape === "out_and_back" && (
         <fieldset className="zn-route-form__field" style={{ "--field-gap": "var(--sp-6)" } as CSSProperties}>
           <div className="zn-row zn-row--split zn-row--baseline" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
@@ -695,7 +695,7 @@ export function RouteParametersForm({
         </div>
       </fieldset>
 
-      {/* Sticky CTA — pinned to the bottom of the scrollable aside so
+      {/* Sticky CTA, pinned to the bottom of the scrollable aside so
           the user always sees "Générer" regardless of scroll position
           (long forms with elevation target + bearing can outgrow short
           viewports). Negative margins extend the bar across the full

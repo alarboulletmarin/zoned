@@ -1,4 +1,4 @@
-/* The contribution surface — a quick idea, or the four-step workout wizard.
+/* The contribution surface, a quick idea, or the four-step workout wizard.
 
    A form is the one place the system's "everything is outlined" rule pays for
    itself twice: a field is a drawn box on paper, and an invalid field is the
@@ -7,7 +7,7 @@
 
    Two blocks in this file are deliberately generic:
 
-     .zn-stepper       the design bundle's Stepper — named steps, a 6px rail
+     .zn-stepper       the design bundle's Stepper, named steps, a 6px rail
                        each, the current one in vermillon. The plan generator's
                        five-question wizard is the same component; it should
                        reuse this rather than grow a second one.
@@ -31,7 +31,7 @@
   text-align: center;
 }
 
-/* A wizard step. Motion says where the step came from and nothing else — the
+/* A wizard step. Motion says where the step came from and nothing else, the
    keyframes are the app's existing ones, retimed onto the system's step. */
 .zn-contrib__pane {
   animation: slide-in-right var(--dur-base) var(--ease-out) both;
@@ -163,7 +163,7 @@
    are; only the step being answered keeps its name.
 
    The label is the button's ONLY text, though, and an answered step is
-   clickable — so it is hidden visually rather than removed from the
+   clickable, so it is hidden visually rather than removed from the
    accessibility tree. `display: none` here left every back-navigation button
    nameless under 640px. */
 @media (max-width: 640px) {
@@ -232,7 +232,7 @@
   flex: none;
 }
 
-/* A group of fields answering one question — the duration range, the terrain
+/* A group of fields answering one question, the duration range, the terrain
    toggles. A fieldset, so the legend is part of every control's name. */
 .zn-contrib-group {
   min-inline-size: 0;
@@ -298,7 +298,7 @@ textarea.zn-contrib-input {
 }
 
 /* Invalid: the outline thickens to the 2.5px the system reserves for a marked
-   frame and turns vermillon — and the reason is printed underneath. Sized with
+   frame and turns vermillon, and the reason is printed underneath. Sized with
    border-box so nothing on the row moves. */
 .zn-contrib-input[aria-invalid="true"] {
   border-color: var(--state-danger);
@@ -375,7 +375,7 @@ textarea.zn-contrib-input {
 }
 
 /* The control that deletes a row. Danger is vermillon type here, never a
-   second vermillon fill — the screen's fill is still the primary action. */
+   second vermillon fill, the screen's fill is still the primary action. */
 .zn-btn[data-variant="ghost"].zn-contrib-remove {
   color: var(--state-danger);
 }

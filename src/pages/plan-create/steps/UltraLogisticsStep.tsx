@@ -4,13 +4,13 @@ import type { StepContext, StepDef } from "../types";
 
 /**
  * La logistique d'un ultra : ce qui se répète à l'entraînement parce que ça
- * arrivera en course — la nuit, l'estomac, les bâtons, et deux jours de suite.
+ * arrivera en course, la nuit, l'estomac, les bâtons, et deux jours de suite.
  *
  * Cette étape n'écrit QUE des préférences. Elle oriente la sélection des
  * séances par leurs tags (`time-on-feet`, `back_to_back`, `hike-run`,
  * `nutrition-practice`), et elle le dit. **Aucune formule du moteur ne
  * bouge** : `planGenerator/**` ne reçoit aucune édition de ce chantier, parce
- * que ses tables d'ultra — volume, phases, affûtage — sont déjà complètes.
+ * que ses tables d'ultra, volume, phases, affûtage, sont déjà complètes.
  */
 const TOGGLES = [
   { key: "ultraNight", labelKey: "ultra.night", descKey: "ultra.nightDesc" },

@@ -28,7 +28,7 @@ import { i18nReady } from "@/i18n";
 
 /** React.lazy that also waits for the active language's translation bundles
  *  (loaded in parallel with the page chunk). The page renders only once both
- *  are ready, behind the same Suspense fallback — no flash of raw i18n keys.
+ *  are ready, behind the same Suspense fallback, no flash of raw i18n keys.
  *  After the first page, i18nReady is resolved and this is free. */
 function lazyPage<T extends ComponentType<unknown>>(
   loader: () => Promise<{ default: T }>
@@ -156,7 +156,7 @@ const FULLSCREEN_ROUTES = ["/routes"];
 /** Routes qui ne gardent que la barre d'encre du pied de page.
  *
  *  Les quatre colonnes de liens existent pour qu'un robot atteigne les hubs.
- *  Sur un écran applicatif en `noindex`, elles ne font donc aucun travail — et
+ *  Sur un écran applicatif en `noindex`, elles ne font donc aucun travail, et
  *  sur le cockpit elles mesuraient 439 px pour 388 px de contenu. La barre,
  *  elle, reste : c'est la signature du projet libre. */
 const BARE_FOOTER_ROUTES = ["/today"];
@@ -205,7 +205,7 @@ function App() {
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   // Preload main pages in background once the window has loaded and the
-  // main thread is idle — a fixed 1s timer used to fire while the LCP page
+  // main thread is idle, a fixed 1s timer used to fire while the LCP page
   // chunk and fonts were still downloading on slow connections.
   const preloadReady = useIdleAfterLoad();
   useEffect(() => {
@@ -253,7 +253,7 @@ function App() {
                     with the footer outside, it sat just below the
                     viewport-tall fallback during the initial load, then
                     jumped up into the viewport when a shorter page (e.g. a
-                    calculator) resolved — a real CLS hit. Inside, footer and
+                    calculator) resolved, a real CLS hit. Inside, footer and
                     page appear together (appearance is not a shift), and
                     later navigations never show this fallback because
                     react-router wraps them in startTransition. */}
@@ -273,7 +273,7 @@ function App() {
                           <Route path="/" element={<HomePage />} />
                           {/* Le cockpit. `/` reste la landing publique et
                               indexée ; celle-ci est l'écran privé, donc hors
-                              sitemap et hors prérendu — comme /plans et
+                              sitemap et hors prérendu, comme /plans et
                               /weeks, exclus pour la même raison. */}
                           <Route path="/today" element={<TodayPage />} />
                           <Route path="/library" element={<LibraryPage />} />
@@ -364,7 +364,7 @@ function App() {
             {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
           </div>
           {/* The wrapper is what gets promoted into the top layer while a
-              <dialog> is open — see native-dialog.tsx. A modal dialog paints
+              <dialog> is open, see native-dialog.tsx. A modal dialog paints
               over everything the document can stack, z-index 999999999
               included, so without it the "Lien copié" of an open share sheet
               would land behind its own backdrop. It is a zero-size box: sonner

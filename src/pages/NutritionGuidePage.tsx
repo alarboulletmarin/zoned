@@ -66,7 +66,7 @@ const PRESET_OPTIONS: SegmentedOption<string>[] = PRESETS.map((p) => ({
 // ---------------------------------------------------------------------------
 // Content block renderer
 //
-// The reading treatment is the articles' own — .zn-prose and its parts, from
+// The reading treatment is the articles' own, .zn-prose and its parts, from
 // learn.css. Nothing here restyles a paragraph; a tip and a warning are the
 // same pulled-out callout an article uses, told apart by a mono label.
 // ---------------------------------------------------------------------------
@@ -477,7 +477,7 @@ export function NutritionGuidePage() {
       />
 
       <div className="zn-guide">
-        {/* 1 — the way back, then what this page is */}
+        {/* 1, the way back, then what this page is */}
         <section
           className="zn-stack zn-guide__head"
           style={{ "--gap": "var(--sp-6)" } as CSSProperties}
@@ -501,12 +501,12 @@ export function NutritionGuidePage() {
           </p>
         </section>
 
-        {/* 2 — your own numbers first: the plan this page exists to produce */}
+        {/* 2, your own numbers first: the plan this page exists to produce */}
         <section className="zn-guide__band">
           <FuelingCalculator />
         </section>
 
-        {/* 3 — the reading: one theme per tab */}
+        {/* 3, the reading: one theme per tab */}
         <section className="zn-guide__band">
           <Tabs defaultValue={nutritionSections[0].id}>
             <TabsList className="zn-guide__tabs">

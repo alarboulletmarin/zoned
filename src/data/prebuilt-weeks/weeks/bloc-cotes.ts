@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Bloc côtes — 5 sessions, two hill days spaced (Tue/Fri), hilly long run.
+ * Bloc côtes, 5 sessions, two hill days spaced (Tue/Fri), hilly long run.
  * Two full rest days: hill work is eccentric-heavy and needs them.
  */
 export const blocCotes: PrebuiltWeek = {
@@ -16,8 +16,8 @@ export const blocCotes: PrebuiltWeek = {
   icon: "Mountain",
   difficulty: "intermediate",
   category: "build",
-  provenance: "Côtes comme entraînement en résistance spécifique — Daniels (Running Formula)",
-  provenanceEn: "Hills as specific resistance training — Daniels (Running Formula)",
+  provenance: "Côtes comme entraînement en résistance spécifique, Daniels (Running Formula)",
+  provenanceEn: "Hills as specific resistance training, Daniels (Running Formula)",
   whyItWorks:
     "Monter recrute davantage de fibres à chaque foulée qu'un même effort sur le plat, avec un impact au sol plus faible : on gagne en puissance et en économie de course sans le coût articulaire de la vitesse sur le plat. Daniels place ce travail avant les intervalles sur piste, comme une passerelle entre le volume de base et l'intensité. Les descentes sollicitent le travail excentrique, d'où les deux jours de repos complets.",
   whyItWorksEn:

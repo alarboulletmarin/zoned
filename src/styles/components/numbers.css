@@ -1,8 +1,8 @@
-/* « Mes chiffres » — the numbers door: profile, zones, calculators.
+/* Mes chiffres, the numbers door: profile, zones, calculators.
  *
  * Five screens share one sheet of paper: /profile, /my-zones, /calculators,
  * /calculators/zones and /calculators/allures. Each reads top to bottom as a
- * mono kicker, a display title, a lede, then data — and each band is separated
+ * mono kicker, a display title, a lede, then data, and each band is separated
  * from the next by blank space alone (--gap-section) since 12 September 2026.
  * It was a full-width ink rule until then.
  *
@@ -101,7 +101,7 @@
   min-inline-size: 0;
 }
 
-/* What is wrong with the value above, in the accent — which carries danger as
+/* What is wrong with the value above, in the accent, which carries danger as
    type, never as a second fill. */
 .zn-num__error {
   margin: 0;
@@ -109,7 +109,7 @@
   color: var(--state-danger);
 }
 
-/* A free-text field — a race name, a custom distance. The number fields reuse
+/* A free-text field, a race name, a custom distance. The number fields reuse
    the shared .zn-numfield instead, which already draws this frame around a
    mono value and its unit. */
 .zn-num__input {
@@ -134,7 +134,7 @@
   }
 }
 
-/* Hours, minutes, seconds — three number fields on one baseline, each with its
+/* Hours, minutes, seconds, three number fields on one baseline, each with its
    unit inside its own frame. */
 .zn-num__time {
   display: flex;
@@ -193,7 +193,7 @@
   gap: var(--sp-8);
 }
 
-/* One editable record — a reference time and the race it came from. An
+/* One editable record, a reference time and the race it came from. An
    outlined block, no shadow: it is in a list, and a list card never floats. */
 .zn-num__row {
   display: flex;
@@ -207,9 +207,9 @@
 }
 
 /* Une ligne qui porte déjà un temps enregistré double son filet d'ENCRE vers
-   l'intérieur (card.css). Le vermillon lui est retiré : « déjà rempli » n'est
-   ni « maintenant » ni même un choix de l'utilisateur, c'est un constat.
-   Le porteur non chromatique est le contenu lui-même — la ligne affiche le
+   l'intérieur (card.css). Le vermillon lui est retiré : déjà rempli n'est
+   ni maintenant ni même un choix de l'utilisateur, c'est un constat.
+   Le porteur non chromatique est le contenu lui-même, la ligne affiche le
    temps qu'elle détient, une ligne vide n'affiche rien.
    Inset : mesuré, la ligne grandissait de 2px (66 → 68px) dès qu'on y saisissait
    un temps, et poussait toutes les distances suivantes. */
@@ -220,7 +220,7 @@
 /* ── table ────────────────────────────────────────────────────────────── */
 
 /* A numeric column of the ResponsiveTable. The class lands on both the <th>
-   and the <td>, so the alignment is shared — but only the cell takes the mono
+   and the <td>, so the alignment is shared, but only the cell takes the mono
    face: a column head is a kicker, and it keeps the kicker's own tracking.
    (The mobile card view is a definition list and carries neither class.) */
 .zn-num__num {
@@ -253,7 +253,7 @@
 }
 
 /* The compact door the hub prints twelve of: same paper, same vermillon
-   promise, less air — a door to a calculator is a smaller decision than a door
+   promise, less air, a door to a calculator is a smaller decision than a door
    to the catalogue. */
 .zn-door.zn-num__door {
   min-block-size: 164px;
@@ -280,7 +280,7 @@
 /* ── control ──────────────────────────────────────────────────────────── */
 
 /* A select that fills the column it is given. select.css deliberately declares
-   no width on the trigger, so the width belongs to the screen that places it —
+   no width on the trigger, so the width belongs to the screen that places it,
    here, the two dialogs on /profile. */
 .zn-select-trigger.zn-num__control {
   inline-size: 100%;

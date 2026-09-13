@@ -32,7 +32,7 @@ const HEAD_GAP = { "--gap": "var(--sp-6)" } as CSSProperties;
 /**
  * One answer in the comparison grid.
  *
- * The four shapes used to be four hues — green, red, amber, plain — which read
+ * The four shapes used to be four hues, green, red, amber, plain, which read
  * as a verdict rather than as a value: "no account required" is a yes on our
  * column and a no on theirs, and colour cannot say that. Here the glyph and
  * the word carry the value, the ink weight carries nothing else, and a figure
@@ -100,7 +100,7 @@ export function CompareDetailPage() {
   const description = pickLang(competitor, "description");
   const title = `Zoned vs ${name}`;
 
-  // The middle column is us, and it is inverted end to end — the answer to
+  // The middle column is us, and it is inverted end to end, the answer to
   // "which one is Zoned" then survives greyscale with no colour spent on it.
   const columns: ResponsiveTableColumn<ComparisonCriterion>[] = [
     {
@@ -150,7 +150,7 @@ export function CompareDetailPage() {
       />
 
       <div className="zn-ref">
-        {/* 1 — the way out, then what this page compares */}
+        {/* 1, the way out, then what this page compares */}
         <section className="zn-ref__head zn-stack" style={HEAD_GAP}>
           <Link to="/compare" className="zn-ref__back">
             <ArrowLeft />
@@ -172,7 +172,7 @@ export function CompareDetailPage() {
           </div>
         </section>
 
-        {/* 2 — the grid, criterion by criterion */}
+        {/* 2, the grid, criterion by criterion */}
         <section className="zn-ref__section" aria-labelledby="compare-table">
           <div className="zn-row zn-row--split zn-ref__sectionhead">
             <h2 id="compare-table" className="zn-title" data-level="3">
@@ -191,7 +191,7 @@ export function CompareDetailPage() {
           />
         </section>
 
-        {/* 3 — the four reasons */}
+        {/* 3, the four reasons */}
         <section className="zn-ref__section" aria-labelledby="compare-advantages">
           <div className="zn-ref__sectionhead">
             <h2 id="compare-advantages" className="zn-title" data-level="3">
@@ -215,7 +215,7 @@ export function CompareDetailPage() {
           </div>
         </section>
 
-        {/* 4 — the screen's one primary action */}
+        {/* 4, the screen's one primary action */}
         <section className="zn-ref__section">
           <div className="zn-ref__cta">
             <h2 className="zn-title" data-level="3">

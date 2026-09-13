@@ -36,7 +36,7 @@ const PHASE_COLORS: Record<string, { bg: string; text: string }> = {
  * Reads the shared table rather than a local copy, which had drifted a full
  * zone out of step with the app.
  *
- * `zoneSpec` may be a range (`Z1-Z2`) and resolves to the dominant zone —
+ * `zoneSpec` may be a range (`Z1-Z2`) and resolves to the dominant zone,
  * previously this file split on "-" and took the first part, disagreeing with
  * every other surface.
  */
@@ -335,7 +335,7 @@ function renderRunningAppendixEntry(
       const blockZoneColor = blockZone ? zoneColorFor(blockZone) : "";
 
       // Reps column
-      let repsStr = "\u2014";
+      let repsStr = "-";
       if (block.sets && block.sets > 1 && block.repetitions && block.repetitions > 1) {
         repsStr = `${block.sets}\u00d7${block.repetitions}\u00d7`;
       } else if (block.repetitions && block.repetitions > 1) {
@@ -356,7 +356,7 @@ function renderRunningAppendixEntry(
               alignment: "center" as const,
               margin: [2, 1, 2, 1],
             }
-          : { text: "\u2014", fontSize: 7, color: "#aaa", alignment: "center" as const, margin: [2, 1, 2, 1] },
+          : { text: "-", fontSize: 7, color: "#aaa", alignment: "center" as const, margin: [2, 1, 2, 1] },
         { text: repsStr, fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
       ] as TableCell[]);
     }
@@ -457,7 +457,7 @@ function renderStrengthAppendixEntry(
         { text: phase, fontSize: 7, color: "#888", margin: [2, 1, 2, 1] },
         { text: exName, fontSize: 7, margin: [2, 1, 2, 1] },
         { text: setsReps, fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
-        { text: block.restBetweenSets || "\u2014", fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
+        { text: block.restBetweenSets || "-", fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
         { text: block.intensity, fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
       ] as TableCell[]);
     }
@@ -824,7 +824,7 @@ export async function exportPlanToPDF(
             table: {
               widths: ["*"],
               body: [[{
-                text: `${(isEn() ? pMeta.labelEn : pMeta.label).toUpperCase()} \u2014 ${isEn() ? pMeta.descriptionEn : pMeta.description}`,
+                text: `${(isEn() ? pMeta.labelEn : pMeta.label).toUpperCase()} \u00b7 ${isEn() ? pMeta.descriptionEn : pMeta.description}`,
                 bold: true,
                 fontSize: 10,
                 color: pColors.text,
@@ -865,7 +865,7 @@ export async function exportPlanToPDF(
           widths: ["*", "auto"],
           body: [[
             {
-              text: `${weekLabel} \u2014 ${isEn() ? phaseMeta.labelEn : phaseMeta.label} \u00b7 ${weekDurationStr} \u00b7 ~${actualKm}km${longRunInfo}`,
+              text: `${weekLabel} \u00b7 ${isEn() ? phaseMeta.labelEn : phaseMeta.label} \u00b7 ${weekDurationStr} \u00b7 ~${actualKm}km${longRunInfo}`,
               fontSize: 8,
               bold: true,
               color: phaseColors.text,
@@ -946,7 +946,7 @@ export async function exportPlanToPDF(
           rows.push([
             { text: dayLabel(session.dayOfWeek), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
             {
-              text: `${i18n.t("plan:intermediateGoals.raceDayLabel")} — ${raceName}${priorityLabel}`,
+              text: `${i18n.t("plan:intermediateGoals.raceDayLabel")} · ${raceName}${priorityLabel}`,
               bold: true,
               fontSize: 7,
               color: "#c2410c",
@@ -982,7 +982,7 @@ export async function exportPlanToPDF(
         let zoneCell: TableCell;
         if (isStr) {
           zoneCell = {
-            text: "\u2014",
+            text: "-",
             fontSize: 7,
             color: "#fff",
             fillColor: "#94a3b8",
@@ -1004,7 +1004,7 @@ export async function exportPlanToPDF(
           };
         } else {
           zoneCell = {
-            text: "\u2014",
+            text: "-",
             fontSize: 7,
             color: "#aaa",
             alignment: "center" as const,

@@ -6,9 +6,9 @@ import { PRACTICES } from "@/types/practice";
  *
  * Deux questions différentes, qui n'ont pas le même logement :
  *
- * - « quelles pratiques l'app me montre ? » est de la config, et vit dans
+ * - quelles pratiques l'app me montre ? est de la config, et vit dans
  *   `UserSettings.enabledPractices` ;
- * - « quelle pratique je regarde là ? » est de l'état de contenu. Il vit dans
+ * - quelle pratique je regarde là ? est de l'état de contenu. Il vit dans
  *   **l'URL d'abord** (`?practice=`), pour qu'un lien de bibliothèque reste
  *   partageable et marque-page, et ce module ne garde que l'écho du dernier
  *   choix pour ne pas reposer la question au retour.
@@ -26,7 +26,7 @@ function isPractice(value: unknown): value is Practice {
   return typeof value === "string" && (PRACTICES as readonly string[]).includes(value);
 }
 
-/** Le dernier choix, ou null — jamais une valeur inventée. */
+/** Le dernier choix, ou null, jamais une valeur inventée. */
 export function loadLastPractice(): Practice | null {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -48,7 +48,7 @@ export function saveLastPractice(practice: Practice | null): void {
 
 /**
  * La pratique à afficher au montage, par ordre de priorité : ce que dit
- * l'URL, puis le dernier choix, puis rien — « toutes ». On ne devine jamais
+ * l'URL, puis le dernier choix, puis rien, toutes. On ne devine jamais
  * une pratique que la personne n'a pas choisie.
  */
 export function resolvePractice(

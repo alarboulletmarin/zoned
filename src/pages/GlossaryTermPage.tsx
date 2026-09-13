@@ -84,7 +84,7 @@ export function GlossaryTermPage() {
         ]}
       />
       <div className="zn-ref">
-        {/* 1 — the way out. GlossaryDetail prints the term's own title, so
+        {/* 1, the way out. GlossaryDetail prints the term's own title, so
             this band carries nothing else. */}
         <div className="zn-ref__head zn-cluster">
           {canGoBack && (
@@ -103,12 +103,12 @@ export function GlossaryTermPage() {
           </Link>
         </div>
 
-        {/* 2 — the term itself, in a reading column */}
+        {/* 2, the term itself, in a reading column */}
         <div className="zn-ref__column">
           <GlossaryDetail term={term} />
         </div>
 
-        {/* 3 — where to go next, on its own rule */}
+        {/* 3, where to go next, on its own rule */}
         <section className="zn-ref__section">
           <div className="zn-ref__column">
             <RelatedContent source={{ type: "glossary", id: term.id }} />

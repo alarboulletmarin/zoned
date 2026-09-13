@@ -1,13 +1,13 @@
-/* Home — the page that answers "what am I running today?".
+/* Home, the page that answers "what am I running today?".
  *
  * The screen reads top to bottom as one sheet of paper: mono kicker, display
  * title, body, then data. Bands are separated by blank space alone
- * (--gap-section, half of it per side) since 12 September 2026 — they were
+ * (--gap-section, half of it per side) since 12 September 2026, they were
  * separated by the full-width ink rule .zn-section used to draw.
  *
  * The shell wraps every route in .zn-page, which pays the 40px screen margin
  * once. This page draws rules that must reach the edge of that column, so the
- * root cancels the inset and each band re-applies it — the rule spans the
+ * root cancels the inset and each band re-applies it, the rule spans the
  * paper, the type stays on the margin.
  */
 
@@ -26,7 +26,7 @@
    parce que le filet était le bas.
 
    Le filet est parti avec les séparateurs de sections (12 septembre 2026). Les
-   deux colonnes s'alignent toujours sur la fin — le bouton et les semelles
+   deux colonnes s'alignent toujours sur la fin, le bouton et les semelles
    partagent donc encore une ligne, simplement elle n'est plus tracée. La bande
    paie maintenant son demi-écart en bas, comme les autres. */
 .zn-home__hero {
@@ -35,7 +35,7 @@
   gap: var(--sp-18);
   align-items: end;
   /* Le padding bas était à ZÉRO parce que le filet était le bas. Sans filet,
-     la bande paie la moitié d'un écart comme les autres — sinon la semelle du
+     la bande paie la moitié d'un écart comme les autres, sinon la semelle du
      duo s'écrase sur le contenu de la bande suivante. */
   padding: var(--sp-18) var(--pad-screen-x) calc(var(--gap-section) / 2);
 }
@@ -48,7 +48,7 @@
 
 /* One column: kicker, title, lede, buttons, then the duo on the rule. 16px
    of gap plus the 6 viewBox units of air above the drawing's head (≈3.5px
-   at 240px wide) puts the runners' ink 19–20px under the buttons. */
+   at 240px wide) puts the runners' ink 19-20px under the buttons. */
 @media (max-width: 1100px) {
   .zn-home__hero {
     grid-template-columns: minmax(0, 1fr);
@@ -57,14 +57,14 @@
 }
 
 /* Phone. The floating MENU pill is fixed to the bottom-right corner, so it
-   climbs with a short viewport: on a 375px phone it sits at x 239–349,
-   y 742–786 when the screen is 812 tall but y 597–641 when it is 667 — and a
+   climbs with a short viewport: on a 375px phone it sits at x 239-349,
+   y 742-786 when the screen is 812 tall but y 597-641 when it is 667, and a
    drawing never passes under a fixed element on the first screen. No
    vertical escape exists on the short phone (even at 180px wide the hero's
    rule would still land below the top of the pill), so the duo gives way
    sideways: 240px where the column leaves that much clear of the pill's
    reserve (--fab-w, the room the docked action bars keep free for it), the
-   column minus that reserve otherwise — 215px on a 375, 200px on a 360.
+   column minus that reserve otherwise, 215px on a 375, 200px on a 360.
    Its box then ends left of the pill at every height, and the figure stays
    ≥150px tall, well above the ~120px floor under which a figure decorates
    instead of explaining. 32px of air above the hero instead of 56 is the
@@ -78,7 +78,7 @@
   }
 }
 
-/* 16ch keeps the 88px display title to three or four words a line — past that
+/* 16ch keeps the 88px display title to three or four words a line, past that
    it stops being a title and becomes a paragraph in the wrong size. */
 .zn-home__headline {
   max-inline-size: 16ch;
@@ -93,7 +93,7 @@
 /* Les quatre portes suivent le héros de près : elles sont ses propres choix,
    pas la section suivante, donc elles gardent le haut plus serré d'une bande
    plutôt que celui d'une section. Le filet qui fermait le héros est parti le
-   12 septembre 2026 — c'est l'espace qui les rattache à lui désormais.
+   12 septembre 2026, c'est l'espace qui les rattache à lui désormais.
 
    Le bas paie la moitié de --gap-section, pas --sp-17 : la section d'après paie
    déjà sa moitié, et deux pleines valeurs faisaient 72 px de frontière. */
@@ -110,7 +110,7 @@
   }
 }
 
-/* Two columns all the way down. Stacked, the four doors were 1290px — three
+/* Two columns all the way down. Stacked, the four doors were 1290px, three
    phone screens of the same card repeated, and the reader had to scroll past
    all of it to reach the week. Paired, they are one screen: the kicker and
    the title are what a door needs to be recognised, and the sentence under
@@ -123,7 +123,7 @@
 
 /* ── shared band furniture ────────────────────────────────────────────── */
 
-/* Two blocks side by side — the pair of summary stats under the zone bars. */
+/* Two blocks side by side, the pair of summary stats under the zone bars. */
 .zn-home__pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -288,7 +288,7 @@
 .zn-home__zcode[data-zone="6"] { background: var(--zone-6-bg); color: var(--zone-6-text); }
 
 /* The zone's name is the row's control: it opens the zone detail. A button,
-   not a clickable row — a row cannot be reached from the keyboard. */
+   not a clickable row, a row cannot be reached from the keyboard. */
 .zn-home__zname {
   display: block;
   padding: 0;
@@ -440,7 +440,7 @@
 /* ── ethos ────────────────────────────────────────────────────────────── */
 
 /* The one inverted band on the page: ink paper, cream ink. It is not a second
-   accent — the inversion is the system's way of saying "this is the ground
+   accent, the inversion is the system's way of saying "this is the ground
    the rest of the page stands on". */
 .zn-home__ethos {
   background: var(--surface-inverse);
@@ -547,7 +547,7 @@
 /* ── cited sources ────────────────────────────────────────────────────────
    One line per source: the name, the citation in mono, and the link out.
    The system asks that science be cited rather than invoked, and a citation
-   is a line of mono under the block — not a card with a biography. */
+   is a line of mono under the block, not a card with a biography. */
 
 .zn-home__sources {
   list-style: none;
@@ -594,7 +594,7 @@
 /* .zn-split stacks at 900px, which is the right line for a two-column band of
    prose. It is the wrong one here: this split puts a 340px title column and a
    72px gap in front of a THREE-card grid, so between 901 and 1200 the cards
-   are 142px wide — a name, a profile and a fact line crushed into a strip.
+   are 142px wide, a name, a profile and a fact line crushed into a strip.
    The band stacks until the grid can hold three readable columns. */
 @media (max-width: 1200px) {
   .zn-home__week {

@@ -12,11 +12,11 @@ import { COMMAND_SURFACES } from "@/data/command-surfaces";
  * 14, et les ~35 destinations sorties gardent toutes leur route : elles restent
  * indexées, prérendues et partageables. Mais une page qui n'est plus dans la
  * nav ET pas dans le pied de page ET pas dans la palette est **supprimée sans
- * que personne ne l'ait décidé** — et rien, ni `tsc`, ni le build, ni le
+ * que personne ne l'ait décidé**, et rien, ni `tsc`, ni le build, ni le
  * sitemap, ne le dirait.
  *
- * Ce test lit les routes directement dans `App.tsx` par regex — la même
- * astuce que `scripts/generate-route-meta.ts` — et exige que chacune soit
+ * Ce test lit les routes directement dans `App.tsx` par regex, la même
+ * astuce que `scripts/generate-route-meta.ts`, et exige que chacune soit
  * joignable depuis au moins une des trois surfaces, ou nommée explicitement
  * dans la liste ci-dessous avec sa raison.
  */
@@ -33,7 +33,7 @@ const STATIC_ROUTES = [...APP.matchAll(/path="(\/[^"]*)"/g)]
  * Toute nouvelle entrée ici doit porter sa justification.
  */
 const NOT_A_DESTINATION: Record<string, string> = {
-  "/": "la landing publique — on y arrive par le logo et par le web, pas par la nav",
+  "/": "la landing publique, on y arrive par le logo et par le web, pas par la nav",
   "/workout/shared": "atterrissage d'un lien partagé",
   "/weeks/shared": "atterrissage d'un lien partagé",
   "/plan/shared": "atterrissage d'un lien partagé",
@@ -138,7 +138,7 @@ describe("la navigation elle-même", () => {
     for (const section of PRIMARY_NAV) {
       for (const child of section.children ?? []) {
         const previous = seen.get(child.to);
-        expect(previous, `${child.to} est déjà sous « ${previous} »`).toBeUndefined();
+        expect(previous, `${child.to} est déjà sous ${previous}`).toBeUndefined();
         seen.set(child.to, section.id);
       }
     }

@@ -3,11 +3,11 @@
  * Nine prebuilt plans, ten prebuilt weeks, the saved-week index, the week
  * editor and the two shared/preview screens. Two shapes cover all eight:
  *
- *   a CATALOGUE — mono kicker counting the offer, display title, a lead, then
+ *   a CATALOGUE, mono kicker counting the offer, display title, a lead, then
  *   an outlined card grid. Exactly the library's shape, and the cards are the
  *   ported PrebuiltPlanCard / PrebuiltWeekCard, so nothing is re-drawn here.
  *
- *   a SHEET — back link, header with the one primary call, then bands
+ *   a SHEET, back link, header with the one primary call, then bands
  *   separated by a full-width ink rule: the phase ramp, the preview, the
  *   session list.
  *
@@ -30,7 +30,7 @@
   flex-direction: column;
 }
 
-/* Une bande. Même séparation que .zn-section — l'espace seul — moins le
+/* Une bande. Même séparation que .zn-section, l'espace seul, moins le
    padding en ligne que la colonne paie déjà.
 
    `--first` gardait un padding réduit parce qu'elle n'avait pas de filet à
@@ -92,8 +92,8 @@
 /* ── the phase ramp ───────────────────────────────────────────────────── */
 
 /* Base to taper read as one bar, each phase's width its share of the plan.
-   The fill comes from .zn-pswatch[data-phase] in plan-panels.css — the app's
-   one phase table — so this only restates the geometry. */
+   The fill comes from .zn-pswatch[data-phase] in plan-panels.css, the app's
+   one phase table, so this only restates the geometry. */
 .zn-pw__phasebar {
   display: flex;
   block-size: var(--sp-6);
@@ -145,9 +145,9 @@
 }
 
 /* Jour de course : le contour entier, comme .zn-sess[data-kind] sur le
-   calendrier — et à l'ENCRE depuis que le vermillon ne dit plus que
-   « maintenant ». Un jour de course est une destination, pas l'instant
-   présent ; le drapeau et le mot « Jour de course » que la ligne rend déjà
+   calendrier, et à l'ENCRE depuis que le vermillon ne dit plus que
+   maintenant. Un jour de course est une destination, pas l'instant
+   présent ; le drapeau et le mot Jour de course que la ligne rend déjà
    portent l'information sans recourir au ton. L'anneau reste inset : la ligne
    vit dans .zn-pw__list, une vraie bordure ajouterait 2.5px de hauteur et
    pousserait toutes les lignes du dessous. */
@@ -284,9 +284,9 @@
 
 /* Sur téléphone, la liste est la SEULE vue du programme : le nom de la semaine
    ne peut plus être le seul élément élastique d'une rangée trop pleine. Le
-   badge, le compteur et le chevron ne cèdent rien, donc « Semaine de
-   récupération — Base » tombait à 46px pour 252px de texte et l'en-tête
-   n'affichait plus que « S… ». On lui donne une base incompressible et on
+   badge, le compteur et le chevron ne cèdent rien, donc Semaine de
+   récupération, Base tombait à 46px pour 252px de texte et l'en-tête
+   n'affichait plus que S…. On lui donne une base incompressible et on
    laisse la rangée passer à la ligne : les semaines ordinaires gardent leur
    rangée unique de 60,8px, seules les longues en prennent une seconde. */
 @media (max-width: 767px) {
@@ -394,7 +394,7 @@
   cursor: pointer;
 }
 
-/* The board's editing legend — a gesture, printed over the thing it explains. */
+/* The board's editing legend, a gesture, printed over the thing it explains. */
 .zn-pw__hint {
   margin-block-end: var(--sp-4);
   text-align: end;
@@ -422,7 +422,7 @@
 
 /* The screen's primary call, kept in the thumb zone once the rail is gone.
    It is the SAME call as the one in the header, which is hidden at the same
-   width — one primary action on screen, never two. */
+   width, one primary action on screen, never two. */
 .zn-pw__dock {
   display: none;
   position: fixed;
@@ -491,7 +491,7 @@
 /* ── the two creation doors ───────────────────────────────────────────── */
 
 /* One door navigates and is a <Link>; the other creates the week first, so it
-   has to be a <button>. Same paper, same target — only the reset differs. */
+   has to be a <button>. Same paper, same target, only the reset differs. */
 button.zn-door {
   inline-size: 100%;
   font: inherit;

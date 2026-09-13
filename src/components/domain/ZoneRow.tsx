@@ -1,10 +1,10 @@
 /**
- * ZoneRow — one zone's share of a week, a plan or a session.
+ * ZoneRow, one zone's share of a week, a plan or a session.
  *
  * Four columns: the Z-code, the zone's name, the bar, the value. The bar is
  * the ink ramp (Z1 = 14 % ink, Z6 = solid), so the encoding is ordered rather
  * than categorical; the Z-code next to it is what names the zone, since the
- * ramp orders but does not label. The bar itself is aria-hidden — the value
+ * ramp orders but does not label. The bar itself is aria-hidden, the value
  * sits in text at the end of the row.
  */
 
@@ -28,7 +28,7 @@ interface ZoneRowProps {
   name: string;
   /** The value printed at the end of the row, already formatted. */
   value: string;
-  /** Share of the row's width, 0–100. */
+  /** Share of the row's width, 0-100. */
   percent: number;
   /** Width of the name column in pixels. */
   labelWidth?: number;

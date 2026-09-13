@@ -43,7 +43,6 @@ import {
 } from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
-import { Annotation } from "@/components/domain/Annotation";
 import Plank from "@/assets/doodles/plank.svg?react";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
@@ -99,7 +98,7 @@ type BreadcrumbItem = {
 interface Fact {
   label: string;
   value: string;
-  /** The value this one replaced — printed struck through beside it. */
+  /** The value this one replaced, printed struck through beside it. */
   was?: string;
 }
 
@@ -236,7 +235,7 @@ export function WorkoutDetailPage() {
   });
   const baseDuration = Math.round(sessionData.totalDurationMin);
 
-  // Always use plan duration when coming from a plan — it's the authoritative value
+  // Always use plan duration when coming from a plan, it's the authoritative value
   // that matches what the calendar shows.
   const planDuration =
     planEstimatedDuration != null ? Math.round(planEstimatedDuration) : null;
@@ -303,7 +302,7 @@ export function WorkoutDetailPage() {
     trailMetrics.totalElevationLossM > 0 ||
     trailMetrics.dominantTerrain != null;
 
-  // Where the session has to be run. A LIST — it stays one.
+  // Where the session has to be run. A LIST, it stays one.
   //
   // These used to be joined with " · " and pushed into `facts`, where the
   // strip printed them in 20px display type like a measurement. "Nécessite une
@@ -315,8 +314,8 @@ export function WorkoutDetailPage() {
   // Chips, under the block, with the marks the session card already uses.
   //
   // The labels are library:terrain.*, not session:environment.*. Both exist and
-  // both are correct; the library's are the short ones — "Piste requise" rather
-  // than "Nécessite une piste" — and they keep the required/preferred
+  // both are correct; the library's are the short ones, "Piste requise" rather
+  // than "Nécessite une piste", and they keep the required/preferred
   // distinction that a bare "Piste" would lose. Measured at 390px: the long
   // pair wrapped to two lines and cost 81px, the short pair sits on one at 40.
   // It also means the session page and the library filter now name the same
@@ -383,8 +382,8 @@ export function WorkoutDetailPage() {
   // someone not yet seeing the session.
   //
   // Three pills, and only three: send this to my watch, keep it, everything
-  // else. The bar is sized for exactly that. A fourth control — the "see my
-  // paces" call that focused the VMA field — landed here for a few hours and
+  // else. The bar is sized for exactly that. A fourth control, the "see my
+  // paces" call that focused the VMA field, landed here for a few hours and
   // ran off the left edge of a real iPhone; the owner had it removed. The VMA
   // field under the steps is the page's one entry point for the paces.
   const actionCluster = (
@@ -555,7 +554,7 @@ export function WorkoutDetailPage() {
                   workout.warmupTemplate
                     .map((b) => pick(b, "description"))
                     .filter(Boolean)
-                    .join(" — ") || "Échauffement progressif",
+                    .join(" · ") || "Échauffement progressif",
               },
               {
                 "@type": "HowToStep",
@@ -565,7 +564,7 @@ export function WorkoutDetailPage() {
                   workout.mainSetTemplate
                     .map((b) => pick(b, "description"))
                     .filter(Boolean)
-                    .join(" — ") || seoDescription,
+                    .join(" · ") || seoDescription,
               },
               {
                 "@type": "HowToStep",
@@ -575,7 +574,7 @@ export function WorkoutDetailPage() {
                   workout.cooldownTemplate
                     .map((b) => pick(b, "description"))
                     .filter(Boolean)
-                    .join(" — ") || "Retour au calme",
+                    .join(" · ") || "Retour au calme",
               },
             ],
           },
@@ -603,7 +602,7 @@ export function WorkoutDetailPage() {
       <div className="zn-session">
         <SessionTrail breadcrumbs={breadcrumbs} onBack={() => navigate(-1)} />
 
-        {/* 1 — what the session is, and the one thing to do with it */}
+        {/* 1, what the session is, and the one thing to do with it */}
         <section className="zn-session__hero">
           <div className="zn-stack zn-session__head">
             <div
@@ -658,7 +657,7 @@ export function WorkoutDetailPage() {
           </div>
         </section>
 
-        {/* 2 — the session itself: the whole profile, then phase by phase */}
+        {/* 2, the session itself: the whole profile, then phase by phase */}
         <section className="zn-section" aria-labelledby="session-structure">
           <div
             className="zn-stack"
@@ -680,8 +679,8 @@ export function WorkoutDetailPage() {
             </div>
 
             <div>
-              {/* Le profil, seul. Il portait une annotation — « la hauteur dit
-                  l'intensité, la largeur dit le temps passé dedans », sa
+              {/* Le profil, seul. Il portait une annotation, la hauteur dit
+                  l'intensité, la largeur dit le temps passé dedans, sa
                   flèche et sa figure ; le propriétaire n'en veut plus. L'axe
                   sous la frise nomme déjà le temps, la teinte des blocs nomme
                   déjà la zone, et la table de répartition dit les deux en
@@ -711,7 +710,7 @@ export function WorkoutDetailPage() {
           />
 
           {/* The offer to set your zones sits AFTER the session now. It was in
-              the hero, between the facts and the drawing — 123px of aside
+              the hero, between the facts and the drawing, 123px of aside
               standing between someone arriving and the workout they came for.
               Here it lands where it makes sense: right under the steps whose
               paces it would fill in. */}
@@ -720,7 +719,7 @@ export function WorkoutDetailPage() {
           )}
         </section>
 
-        {/* 3 — where the time goes, against how to spend it */}
+        {/* 3, where the time goes, against how to spend it */}
         <section className="zn-session__split">
           <div
             className="zn-session__half zn-stack"
@@ -730,10 +729,6 @@ export function WorkoutDetailPage() {
             <h2 id="session-zones" className="zn-title">
               {t("session:titles.zoneDistribution")}
             </h2>
-            {/* Deuxième annotation de la page, et sans figure : le personnage
-                n'apparaît qu'une fois par écran, les flèches peuvent se
-                répéter. Sinon deux narrateurs se disputent la même page. */}
-            <Annotation text={t("session:screen.zonesNote")} arrow="down-right" />
             <div className="zn-session__zones">
               {zonedRows.map((row) => (
                 <ZoneRow
@@ -763,7 +758,7 @@ export function WorkoutDetailPage() {
           </div>
         </section>
 
-        {/* 4 — the ground, when the session has one */}
+        {/* 4, the ground, when the session has one */}
         {hasTrail && (
           <section
             className="zn-section zn-stack"
@@ -800,7 +795,7 @@ export function WorkoutDetailPage() {
           </section>
         )}
 
-        {/* 5 — the rest, folded: it stays in the DOM, it just waits its turn */}
+        {/* 5, the rest, folded: it stays in the DOM, it just waits its turn */}
         <section className="zn-section">
           <div className="zn-session__folds">
             <Section collapsible title={t("session:titles.nutritionRecovery")}>
@@ -818,7 +813,7 @@ export function WorkoutDetailPage() {
           onOpenChange={setShareOpen}
         />
 
-        {/* 6 — the next tap */}
+        {/* 6, the next tap */}
         <section
           className="zn-section zn-stack"
           style={{ "--gap": "var(--sp-13)" } as CSSProperties}
@@ -1020,7 +1015,7 @@ function StrengthWorkoutDetail({
   const facts: Fact[] = [
     {
       label: tSession("stats.duration"),
-      value: `${formatDurationMinutes(workout.typicalDuration.min)}–${formatDurationMinutes(workout.typicalDuration.max)}`,
+      value: `${formatDurationMinutes(workout.typicalDuration.min)}-${formatDurationMinutes(workout.typicalDuration.max)}`,
     },
     {
       label: tSession("stats.difficulty"),
@@ -1141,20 +1136,20 @@ function StrengthWorkoutDetail({
             <FactStrip facts={facts} />
           </div>
 
-          {/* Le gainage, à la quatrième tentative. Les deux contacts au sol —
-              avant-bras et orteils — sont en vermillon comme docs/doodles.md
+          {/* Le gainage, à la quatrième tentative. Les deux contacts au sol,
+              avant-bras et orteils, sont en vermillon comme docs/doodles.md
               les nomme, et cette fois ils mordent vraiment la ligne : de 0,2 à
               3,9 px sous elle, le duo approuvé étant à 3,07.
 
               Il garde un défaut nommé : les jambes s'arrêtent au sol sans pied
               dessiné. Le corriger a été tenté sur vingt tours et le résultat
-              était pire — un nœud de chevilles qui perdait l'effilement des
+              était pire, un nœud de chevilles qui perdait l'effilement des
               jambes. À 260 px, la taille de ce bloc, le manque ne se voit pas.
               Voir docs/doodles.md.
 
               Il se tient sur le filet qui ferme le héros, comme la foulée de la
               séance de course : le sol EST la règle de la page. Il prend la
-              largeur de sa colonne, et sa hauteur suit le viewBox — pas de
+              largeur de sa colonne, et sa hauteur suit le viewBox, pas de
               hauteur fixée, elle mentirait sur un dessin en paysage. */}
           <IllustrationSlot
             art={Plank}
@@ -1308,7 +1303,7 @@ function StrengthCoachingTips({
   const { t } = useTranslation("session");
 
   const groups: { title: string; mark: ReactNode; items: string[] }[] = [
-    { title: t("coaching.tips"), mark: "—", items: tips },
+    { title: t("coaching.tips"), mark: "-", items: tips },
     { title: t("coaching.mistakes"), mark: "×", items: mistakes },
   ];
 

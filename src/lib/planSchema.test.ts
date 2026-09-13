@@ -111,7 +111,7 @@ describe("normalizeStoredPlan", () => {
   });
 
   test("a plan stored before practices existed still normalizes", () => {
-    // Le test qui prouve « aucune migration » : la charge utile d'origine,
+    // Le test qui prouve aucune migration : la charge utile d'origine,
     // sans le champ, traverse sans perdre quoi que ce soit.
     const plan = makeLegacyPlan();
     const normalized = normalizeStoredPlan(JSON.parse(JSON.stringify(plan)));

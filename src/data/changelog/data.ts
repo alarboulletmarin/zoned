@@ -14,7 +14,7 @@ export const changelogVersions: ChangelogVersion[] = [
         },
         {
           text: "Les bornes de réglage viennent de la séance elle-même : la plage que déclare son scaling, ou la moitié à une fois et demie ce qu'elle prescrit. Le curseur couvre cette recommandation, le champ à côté accepte n'importe quelle valeur, et seul l'aberrant est refusé",
-          textEn: "Parameter bounds read from the template itself — the range its scaling declares, or half to one and a half times what it prescribes. The slider spans that recommendation, the field beside it takes any value, and only the absurd is refused",
+          textEn: "Parameter bounds read from the template itself, the range its scaling declares, or half to one and a half times what it prescribes. The slider spans that recommendation, the field beside it takes any value, and only the absurd is refused",
           category: "Seances",
           categoryEn: "Workouts",
         },
@@ -125,7 +125,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Infrastructure",
         },
         {
-          text: "Sept séances annonçaient une fourchette de répétitions que leur propre donnée contredisait : « 6-8x » pour un 7 enregistré. La fourchette est passée dans les conseils, où elle relève du coaching",
+          text: "Sept séances annonçaient une fourchette de répétitions que leur propre donnée contredisait : 6-8x pour un 7 enregistré. La fourchette est passée dans les conseils, où elle relève du coaching",
           textEn: "Seven workouts announced a repetition range their own data contradicted: \"6-8x\" against a stored 7. The range moved to the coaching tips, where it belongs",
           category: "Seances",
           categoryEn: "Workouts",
@@ -305,7 +305,7 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       fixed: [
         {
-          text: "Les séances de VMA étaient annotées et calculées à l'allure endurance : les zones écrites « Z5+ » retombaient silencieusement en Z2",
+          text: "Les séances de VMA étaient annotées et calculées à l'allure endurance : les zones écrites Z5+ retombaient silencieusement en Z2",
           textEn: "VO2max sessions were annotated and costed at easy pace: zone strings such as \"Z5+\" silently fell back to Z2",
           category: "Seances",
           categoryEn: "Workouts",
@@ -355,7 +355,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Feature",
         },
         {
-          text: "Vue « Jour J » du simulateur : déroulé chronologique, prochaine étape avec compte à rebours et marqueur « maintenant » dans la timeline",
+          text: "Vue Jour J du simulateur : déroulé chronologique, prochaine étape avec compte à rebours et marqueur maintenant dans la timeline",
           textEn: "\"Race day\" view on the race simulator: chronological run sheet, next-up card with countdown, and a \"now\" marker in the timeline",
           category: "Fonctionnalite",
           categoryEn: "Feature",
@@ -373,7 +373,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Calculators",
         },
         {
-          text: "Checklist « Sac et logistique » sur le simulateur, jusque-là générée pour le PDF seulement",
+          text: "Checklist Sac et logistique sur le simulateur, jusque-là générée pour le PDF seulement",
           textEn: "Kit bag checklist on the race simulator, until now generated for the PDF only",
           category: "Contenu",
           categoryEn: "Content",
@@ -405,7 +405,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Nutrition : l'absence d'apport glucidique s'affiche comme un conseil et non comme « 0 g / 0 gels » ; hydratation arrondie à 50 ml",
+          text: "Nutrition : l'absence d'apport glucidique s'affiche comme un conseil et non comme 0 g / 0 gels ; hydratation arrondie à 50 ml",
           textEn: "Nutrition states the no-carb case as advice instead of \"0 g / 0 gels\"; hydration rounded to 50 ml",
           category: "Contenu",
           categoryEn: "Content",
@@ -481,7 +481,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Feature",
         },
         {
-          text: "Partage d'une semaine par lien encode compact, avec page d'apercu et « Ajouter a mes semaines »",
+          text: "Partage d'une semaine par lien encode compact, avec page d'apercu et Ajouter a mes semaines",
           textEn: "Share a week as a compact encoded link, with a preview page and \"Add to my weeks\"",
           category: "Fonctionnalite",
           categoryEn: "Feature",
@@ -523,7 +523,7 @@ export const changelogVersions: ChangelogVersion[] = [
     changes: {
       added: [
         {
-          text: "Bouton « Partager sur Strava » (copie en un clic) sur les pages seance",
+          text: "Bouton Partager sur Strava (copie en un clic) sur les pages seance",
           textEn: "\"Share on Strava\" copy-to-clipboard button on session pages",
           category: "Seances",
           categoryEn: "Workouts",
@@ -537,7 +537,7 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       changed: [
         {
-          text: "Page d'accueil reorganisee autour de la generation de plans : accroche orientee benefice, « Generer mon plan » en action principale, section Plans remontee juste apres les points d'entree",
+          text: "Page d'accueil reorganisee autour de la generation de plans : accroche orientee benefice, Generer mon plan en action principale, section Plans remontee juste apres les points d'entree",
           textEn: "Homepage reordered around plan generation: benefit-led hero copy, \"Generate my plan\" as primary CTA, Plans section moved right after the entry points",
           category: "UX",
           categoryEn: "UX",
@@ -621,20 +621,20 @@ export const changelogVersions: ChangelogVersion[] = [
     changes: {
       added: [
         {
-          text: "Mode « Ma semaine » : generateur de semaine polarisee 80/20 qui compose 3 a 6 seances complementaires, avec un editeur de semaine (board 7 jours, jauge d'equilibre 80/20, rythme de la semaine) et une generation automatique animee",
-          textEn: "« My week » mode: a polarised 80/20 week generator composing 3-6 complementary sessions, with a week editor (7-day board, 80/20 balance gauge, week rhythm) and an animated automatic generation",
+          text: "Mode Ma semaine : generateur de semaine polarisee 80/20 qui compose 3 a 6 seances complementaires, avec un editeur de semaine (board 7 jours, jauge d'equilibre 80/20, rythme de la semaine) et une generation automatique animee",
+          textEn: "My week mode: a polarised 80/20 week generator composing 3-6 complementary sessions, with a week editor (7-day board, 80/20 balance gauge, week rhythm) and an animated automatic generation",
           category: "Fonctionnalite",
           categoryEn: "Feature",
         },
         {
-          text: "Semaines pre-construites : semaines types sourcees (base aerobie 80/20, bloc seuil, affutage VO2, recuperation, gros volume, reprise douce) avec un contenu pedagogique « pourquoi cette semaine » et « pourquoi cette seance »",
-          textEn: "Pre-built weeks: sourced template weeks (aerobic base 80/20, threshold block, VO2 sharpening, recovery, high volume, easy return) with pedagogical « why this week » and « why this session » notes",
+          text: "Semaines pre-construites : semaines types sourcees (base aerobie 80/20, bloc seuil, affutage VO2, recuperation, gros volume, reprise douce) avec un contenu pedagogique pourquoi cette semaine et pourquoi cette seance",
+          textEn: "Pre-built weeks: sourced template weeks (aerobic base 80/20, threshold block, VO2 sharpening, recovery, high volume, easy return) with pedagogical why this week and why this session notes",
           category: "Plans",
           categoryEn: "Plans",
         },
         {
-          text: "Page « Tirer une seance » : tirage aleatoire d'une seance selon des filtres (discipline, zones, duree, niveau) avec une animation de recherche",
-          textEn: "« Draw a session » page: random session draw from filters (discipline, zones, duration, level) with a searching animation",
+          text: "Page Tirer une seance : tirage aleatoire d'une seance selon des filtres (discipline, zones, duree, niveau) avec une animation de recherche",
+          textEn: "Draw a session page: random session draw from filters (discipline, zones, duration, level) with a searching animation",
           category: "Fonctionnalite",
           categoryEn: "Feature",
         },
@@ -1195,20 +1195,20 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       changed: [
         {
-          text: "Recommandations proteines mises a jour : 1,4-2,2 g/kg/jour selon le volume d'entrainement (Witard 2025, Sports Medicine) — anciennement 1,2-1,8",
-          textEn: "Protein recommendations updated: 1.4-2.2 g/kg/day based on training volume (Witard 2025, Sports Medicine) — previously 1.2-1.8",
+          text: "Recommandations proteines mises a jour : 1,4-2,2 g/kg/jour selon le volume d'entrainement (Witard 2025, Sports Medicine), anciennement 1,2-1,8",
+          textEn: "Protein recommendations updated: 1.4-2.2 g/kg/day based on training volume (Witard 2025, Sports Medicine), previously 1.2-1.8",
           category: "Contenu",
           categoryEn: "Content",
         },
         {
-          text: "Ratio glucose:fructose modernise : 1:0.8 au-dela de 60 g/h (Rowlands 2020) — anciennement 2:1",
-          textEn: "Glucose:fructose ratio modernized: 1:0.8 above 60 g/h (Rowlands 2020) — previously 2:1",
+          text: "Ratio glucose:fructose modernise : 1:0.8 au-dela de 60 g/h (Rowlands 2020), anciennement 2:1",
+          textEn: "Glucose:fructose ratio modernized: 1:0.8 above 60 g/h (Rowlands 2020), previously 2:1",
           category: "Contenu",
           categoryEn: "Content",
         },
         {
-          text: "Charge glucidique : 36-48 h a 10-12 g/kg (protocole moderne) — la methode 3 jours est obsolete",
-          textEn: "Carb loading: 36-48 h at 10-12 g/kg (modern protocol) — 3-day method obsolete",
+          text: "Charge glucidique : 36-48 h a 10-12 g/kg (protocole moderne), la methode 3 jours est obsolete",
+          textEn: "Carb loading: 36-48 h at 10-12 g/kg (modern protocol), 3-day method obsolete",
           category: "Contenu",
           categoryEn: "Content",
         },
@@ -1291,8 +1291,8 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       changed: [
         {
-          text: "Layout desktop one-page premium pour les parcours (strip Strava-style, details repliables, CTA sticky, toolbar dense) — sans scroll, footer masque",
-          textEn: "Premium desktop one-page layout for routes (Strava-style strip, collapsible details, sticky CTA, dense top toolbar) — no scroll, footer hidden",
+          text: "Layout desktop one-page premium pour les parcours (strip Strava-style, details repliables, CTA sticky, toolbar dense), sans scroll, footer masque",
+          textEn: "Premium desktop one-page layout for routes (Strava-style strip, collapsible details, sticky CTA, dense top toolbar), no scroll, footer hidden",
           category: "UX",
           categoryEn: "UX",
         },
@@ -1469,8 +1469,8 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       fixed: [
         {
-          text: "Propositions de parcours qui tombaient toutes sur les memes waypoints — diversification par seed pour garantir des tracés distincts",
-          textEn: "Route candidates were falling on the same waypoints — seed-driven diversification now ensures distinct proposals",
+          text: "Propositions de parcours qui tombaient toutes sur les memes waypoints, diversification par seed pour garantir des tracés distincts",
+          textEn: "Route candidates were falling on the same waypoints, seed-driven diversification now ensures distinct proposals",
           category: "Fonctionnalite",
           categoryEn: "Feature",
         },
@@ -1941,7 +1941,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Plan prébuilt « Reprise après longue pause » : 10 semaines de reconstruction progressive après plusieurs mois d'arrêt",
+          text: "Plan prébuilt Reprise après longue pause : 10 semaines de reconstruction progressive après plusieurs mois d'arrêt",
           textEn: "Prebuilt plan \"Return After Long Break\": 10-week progressive plan for returning after months off",
           category: "Plans",
           categoryEn: "Plans",
@@ -2075,7 +2075,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Section stats renommée : « Kilométrage hebdomadaire » et « Temps d'entraînement hebdomadaire » avec sous-titres descriptifs (#30)",
+          text: "Section stats renommée : Kilométrage hebdomadaire et Temps d'entraînement hebdomadaire avec sous-titres descriptifs (#30)",
           textEn: "Stats section renamed with descriptive subtitles (#30)",
           category: "UX",
           categoryEn: "UX",
@@ -2103,7 +2103,7 @@ export const changelogVersions: ChangelogVersion[] = [
     changes: {
       added: [
         {
-          text: "Section « Pourquoi ça marche » sur chaque fiche séance : explication physiologique, rôle de chaque zone, adaptations attendues et références scientifiques (Billat, Seiler, Daniels...)",
+          text: "Section Pourquoi ça marche sur chaque fiche séance : explication physiologique, rôle de chaque zone, adaptations attendues et références scientifiques (Billat, Seiler, Daniels...)",
           textEn: "\"Why it works\" science section on each workout detail page: physiological rationale, zone explanations, expected adaptations and scientific references (Billat, Seiler, Daniels...)",
           category: "Séances",
           categoryEn: "Workouts",
@@ -2299,7 +2299,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Appui long (mobile) et clic droit (desktop) sur les séances du calendrier de plan : menu contextuel « Voir la séance » et « Supprimer » avec vibration haptique",
+          text: "Appui long (mobile) et clic droit (desktop) sur les séances du calendrier de plan : menu contextuel Voir la séance et Supprimer avec vibration haptique",
           textEn: "Long press (mobile) and right-click (desktop) context menu on plan calendar sessions with 'View session' and 'Delete' actions, haptic vibration on mobile",
           category: "UX",
           categoryEn: "UX",
@@ -2317,7 +2317,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Import/export de séances personnalisées en JSON, bouton « Créer » renommé pour plus de clarté",
+          text: "Import/export de séances personnalisées en JSON, bouton Créer renommé pour plus de clarté",
           textEn: "Import/export custom workouts as JSON files, 'Create' button renamed for clarity",
           category: "Fonctionnalité",
           categoryEn: "Feature",
@@ -2395,8 +2395,8 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "SEO",
         },
         {
-          text: "SEO : 53 nouvelles routes dans le sitemap (collections, plans pré-construits, calculateurs) — 318 → 371 URLs",
-          textEn: "SEO: 53 new routes in sitemap — collections, prebuilt plans, calculators (318 → 371 URLs)",
+          text: "SEO : 53 nouvelles routes dans le sitemap (collections, plans pré-construits, calculateurs), 318 → 371 URLs",
+          textEn: "SEO: 53 new routes in sitemap, collections, prebuilt plans, calculators (318 → 371 URLs)",
           category: "SEO",
           categoryEn: "SEO",
         },
@@ -2419,7 +2419,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "SEO",
         },
         {
-          text: "SEO : image OG par défaut mise à jour (200 séances, 9 calculateurs, « No Account Needed »)",
+          text: "SEO : image OG par défaut mise à jour (200 séances, 9 calculateurs, No Account Needed)",
           textEn: "SEO: updated default OG image with current stats (200 workouts, 9 calculators, 'No Account Needed')",
           category: "SEO",
           categoryEn: "SEO",
@@ -2483,7 +2483,7 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       fixed: [
         {
-          text: "Champs de date sur mobile : cibles tactiles de 44px, police text-base pour éviter le zoom iOS, option « Commencer maintenant »",
+          text: "Champs de date sur mobile : cibles tactiles de 44px, police text-base pour éviter le zoom iOS, option Commencer maintenant",
           textEn: "Date inputs on mobile: adequate touch targets (44px), text-base font to prevent iOS zoom, 'Start now' option for plan dates",
           category: "Bug",
           categoryEn: "Bug",
@@ -2723,14 +2723,14 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Content",
         },
         {
-          text: "Collection « Séances mythiques » manquante sur la page d'accueil (accent manquant dans le slug)",
+          text: "Collection Séances mythiques manquante sur la page d'accueil (accent manquant dans le slug)",
           textEn: "Missing 'Mythic Workouts' collection on homepage (missing accent in slug)",
           category: "Bug",
           categoryEn: "Bug",
         },
         {
-          text: "Segments sans zone (gammes, transitions) invisibles dans la timeline — couleur de fallback corrigée",
-          textEn: "Segments without zone (drills, transitions) invisible in timeline — fallback color fixed",
+          text: "Segments sans zone (gammes, transitions) invisibles dans la timeline, couleur de fallback corrigée",
+          textEn: "Segments without zone (drills, transitions) invisible in timeline, fallback color fixed",
           category: "Bug",
           categoryEn: "Bug",
         },
@@ -3182,8 +3182,8 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Navigation",
         },
         {
-          text: "Correction du label \"Base — Base\" dupliqué dans les en-têtes de semaine",
-          textEn: "Fixed \"Base — Base\" duplicate label in week headers (phase shown twice)",
+          text: "Correction du label \"Base, Base\" dupliqué dans les en-têtes de semaine",
+          textEn: "Fixed \"Base, Base\" duplicate label in week headers (phase shown twice)",
           category: "Plans d'entraînement",
           categoryEn: "Training Plans",
         },

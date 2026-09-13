@@ -1,5 +1,5 @@
 /**
- * MoviePoster — 1080×1920. A24-minimalist movie-poster.
+ * MoviePoster, 1080×1920. A24-minimalist movie-poster.
  *
  * A huge colour block "image" area with the workout name as the dramatic
  * title at the bottom, plus pseudo-credits and a release line.
@@ -67,7 +67,7 @@ export function MoviePoster({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer background="#0f172a" />
 
-      {/* Hero image area — gradient block with abstract noise */}
+      {/* Hero image area, gradient block with abstract noise */}
       <div
         style={{
           position: "absolute",

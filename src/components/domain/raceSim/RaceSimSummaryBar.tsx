@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 /**
  * The generated plan's inputs, folded into one line.
  *
- * Once a plan exists the form has done its job — keeping it expanded costs a
+ * Once a plan exists the form has done its job, keeping it expanded costs a
  * full column for values the reader already chose. This states them back and
  * hands the column to the plan.
  */

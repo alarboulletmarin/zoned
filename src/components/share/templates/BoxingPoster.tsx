@@ -1,5 +1,5 @@
 /**
- * BoxingPoster — 1080×1080. Tonight-only fight poster. Massive condensed
+ * BoxingPoster, 1080×1080. Tonight-only fight poster. Massive condensed
  * type, deep crimson burst, two ranked contestants (YOU vs Z{n}).
  * Background IS the visual.
  */
@@ -107,7 +107,7 @@ export function BoxingPoster({ workout }: ShareTemplateProps) {
         </div>
       </div>
 
-      {/* Fight title — workout name as the headline */}
+      {/* Fight title, workout name as the headline */}
       <div
         style={{
           position: "absolute",
@@ -133,7 +133,7 @@ export function BoxingPoster({ workout }: ShareTemplateProps) {
         </div>
       </div>
 
-      {/* Versus block — supporting matchup */}
+      {/* Versus block, supporting matchup */}
       <div
         style={{
           position: "absolute",
@@ -231,7 +231,7 @@ export function BoxingPoster({ workout }: ShareTemplateProps) {
         ))}
       </div>
 
-      {/* Subtitle — opponent identity */}
+      {/* Subtitle, opponent identity */}
       <div
         style={{
           position: "absolute",

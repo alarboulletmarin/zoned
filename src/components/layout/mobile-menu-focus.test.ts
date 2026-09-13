@@ -1,17 +1,17 @@
 /**
  * Le menu mobile ne doit pas s'ouvrir avec l'anneau vermillon autour de la
- * porte « Aujourd'hui ». Le correctif tient en deux moitiés qui ne servent à
+ * porte Aujourd'hui. Le correctif tient en deux moitiés qui ne servent à
  * rien l'une sans l'autre : le focus d'ouverture déplacé sur `.zn-menu__inner`
  * (MobileMenu.tsx) et le reset de son anneau écrit HORS COUCHE (base.css).
- * Séparer les deux fait revenir le cadre — et, si le reset descend dans
+ * Séparer les deux fait revenir le cadre, et, si le reset descend dans
  * `components/mobile-menu.css`, il revient en faisant le tour de l'écran,
  * puisque le `tabindex="-1"` fait entrer le panneau dans la règle de focus
  * globale de base.css, que la couche des composants ne peut pas battre.
  *
  * Le test lit les sources, il ne monte rien : `bun test` n'a pas de DOM (ni
  * jsdom ni happy-dom dans ce dépôt, cf. `lib/theme.test.ts`), et un DOM simulé
- * n'implémente de toute façon pas les « dialog focusing steps » ni
- * `:focus-visible` — il rendrait le test vert quoi qu'on écrive. C'est le même
+ * n'implémente de toute façon pas les dialog focusing steps ni
+ * `:focus-visible`, il rendrait le test vert quoi qu'on écrive. C'est le même
  * geste que `assets/doodles/frames.test.ts` : garder deux fichiers d'accord.
  */
 import { describe, expect, test } from "bun:test";
