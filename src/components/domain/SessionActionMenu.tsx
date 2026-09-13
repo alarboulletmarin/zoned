@@ -54,19 +54,37 @@ export function SessionActionMenu({ x, y, items, onClose }: SessionActionMenuPro
   /* Avant la peinture : on mesure le menu rendu, puis on le range dans la
      fenêtre. `useLayoutEffect` et non `useEffect` — ce dernier s'exécute APRÈS
      la peinture, donc le menu apparaîtrait une frame à la mauvaise place.
-     Et un ResizeObserver par-dessus, parce qu'une mesure prise une fois peut
-     être PÉRIMÉE : mesuré au premier rendu d'une page froide, le menu faisait
-     135px de large ; la police de l'interface a fini de charger, ses libellés
-     se sont élargis à 143, et le rangement calculé pour 135 le laissait pile
-     sur le bord droit. L'observateur refait le calcul quand la boîte bouge. */
+     Le ResizeObserver rattrape les mesures PÉRIMÉES : la police de l'interface
+     finit de charger après le premier rendu, les libellés s'élargissent, et un
+     rangement calculé sur l'ancienne largeur laisse le menu sur le bord.
+
+     ── Pourquoi le placement passe par `transform` et non par `left` / `top`
+     ────────────────────────────────────────────────────────────────────────
+     Parce qu'une boîte `fixed` posée par son seul `left` se fait DIMENSIONNER
+     par lui : sa largeur disponible vaut `largeur de fenêtre − left`. Le menu
+     se rétrécissait donc à mesure qu'on le poussait à droite — et le rangement
+     ci-dessous est un calcul qui DÉPEND de la largeur.
+
+     Les deux se sont mordu la queue. Ouvert près du bord droit, le menu
+     naissait à 143px (sa largeur minimale, faute de place), l'observateur le
+     décalait de 8px vers la gauche, ces 8px lui rendaient 8px de largeur
+     disponible, il s'élargissait, l'observateur repartait — dix-neuf fois,
+     exactement 8px par image, jusqu'à sa largeur naturelle de 274. Vu de
+     l'écran : un bandeau étroit qui se déroule de la droite vers la gauche.
+
+     Ancré à `0, 0`, le menu prend toujours toute la fenêtre comme place
+     disponible, donc sa largeur ne dépend plus d'où on le met. Le `transform`
+     le déplace sans toucher à la mise en page : la boucle n'a plus de prise. */
   useLayoutEffect(() => {
     const el = menuRef.current;
     if (!el) return;
 
     const place = () => {
       const { width, height } = el.getBoundingClientRect();
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+      /* clientWidth et non innerWidth : sur un bureau, innerWidth compte la
+         barre de défilement, et le menu se rangerait quinze pixels trop loin. */
+      const vw = document.documentElement.clientWidth;
+      const vh = document.documentElement.clientHeight;
 
       const left = Math.min(Math.max(x - width / 2, EDGE), Math.max(EDGE, vw - width - EDGE));
 
@@ -107,7 +125,15 @@ export function SessionActionMenu({ x, y, items, onClose }: SessionActionMenuPro
         ref={menuRef}
         className="zn-menu zn-plan-menu"
         role="menu"
-        style={pos ?? { left: x, top: y, visibility: "hidden" }}
+        /* Tant qu'on n'a pas mesuré, le menu est rendu mais invisible : il faut
+           qu'il occupe sa vraie boîte pour qu'on puisse la lire, et il ne faut
+           pas qu'on le voie à l'ancre 0,0. La mesure a lieu avant la peinture,
+           donc cet état ne se voit jamais. */
+        style={
+          pos
+            ? { transform: `translate3d(${pos.left}px, ${pos.top}px, 0)` }
+            : { visibility: "hidden" }
+        }
         onPointerDown={(e) => e.stopPropagation()}
       >
         {items.map((item) => (

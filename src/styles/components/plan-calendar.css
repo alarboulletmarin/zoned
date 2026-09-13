@@ -1311,10 +1311,27 @@
    la peinture, se centre sur le doigt, puis se range dans la fenêtre et se
    replie au-dessus si le bas manque. Le `translate(-50%, 4px)` qui tenait ce
    rôle ici recentrait sans jamais consulter les bords — sur un téléphone de
-   390px, une séance touchée à droite ouvrait un menu à moitié hors écran. */
+   390px, une séance touchée à droite ouvrait un menu à moitié hors écran.
+
+   L'ancrage à 0,0 n'est pas un détail : une boîte `fixed` posée par son seul
+   `left` se fait DIMENSIONNER par lui — sa largeur disponible vaut
+   « largeur de fenêtre − left ». Comme le rangement se calcule à partir de la
+   largeur, les deux se mordaient la queue et le menu se dépliait de la droite
+   vers la gauche, huit pixels par image (voir SessionActionMenu). Ancré ici et
+   déplacé par `transform`, il garde toujours la fenêtre entière comme place
+   disponible : sa largeur ne dépend plus d'où on le pose.
+
+   `transform` est physique, donc l'ancre l'est aussi : `left`/`top` et non
+   `inset-inline-start`/`inset-block-start`. */
 .zn-plan-menu {
   position: fixed;
   z-index: 50;
+  left: 0;
+  top: 0;
+  /* Le plafond de dernier recours : un menu plus large que l'écran ne peut
+     être rangé nulle part. Le calcul JS ne l'atteint jamais aux libellés
+     actuels ; il est là pour qu'une traduction longue ne puisse pas déborder. */
+  max-inline-size: calc(100vw - 2 * 8px);
 }
 
 .zn-plan-menu .zn-menu__item:hover {
