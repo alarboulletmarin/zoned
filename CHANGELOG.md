@@ -4,6 +4,42 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-09-13
+
+Fifty-four commits, thirty-six of them a redesign. The app keeps every feature
+it had and changes almost everything about how it looks and how it is reached.
+
+### Added
+- Practices as a real axis: every session, collection, plan and route declares whether it is road, trail or ultra, and the whole app filters on it. The axis is derived from the catalogue rather than stored, so it cannot drift out of sync with what is actually there
+- Eight sessions written for ultra distance (TRL-013 to TRL-020) and a ready-made trail plan. An announced practice is now visible before it can be chosen, instead of a silently empty shelf
+- A drawn identity: the wordmark is the word itself, vectorised, and one figure per practice, reused across the library, the plan and the empty states
+- The shell runs while the app boots, three strides at six frames each, and holds for one stride so nothing flashes
+- Settings that hide a section instead of deleting it, over a storage layer that no longer takes the app down when it fails
+- The session menu in the plan's list view: view, find a route, close out, replace, substitute, remove. It is the menu the week board has always opened, now shared by both views instead of written twice
+- A typography gate in CI, next to the FR/EN parity check
+
+### Changed
+- The cockpit at `/today` is the answer rather than a menu: five boxes of the same shape became the shape of the week, the day's session is one tap from the strip, and its profile is previewed in place
+- Vermillon means one thing now, and only one: "now". A chosen card takes an ink ring, an open tab takes an ink pill, and a plan phase gets no colour of its own
+- Bands are separated by space alone. The rules between them are gone, and four boundaries stopped paying the gap twice
+- The footer folds into groups: 1.65 screens down to 0.59, and the ink bar loses 90px on a phone
+- One gesture per step on mobile: sheets drag to close, the calendar opens as a drawer, filters stick
+- A session in the plan's list view is a line, not a card inside a card inside a card. The type badge becomes a quiet mono caption, and on a phone the four action glyphs become one button that names them
+- A day on the week board is a line too. Nineteen drawn rectangles for five sessions became nine, and the only framed row left on the screen is today
+- The display steps drop one step on mobile. Body text, mono and the spacing grid do not move, so line lengths and hit targets are unchanged
+- Typography throughout: no guillemets, no em dash, no en dash, in visible text and in the source alike
+
+### Fixed
+- The plan's list view fitted 388px of content into a 350px card. The session's name was crushed to 3px and painted over the badge beside it; two of five sessions were unreadable on a 390px phone
+- The session menu unfurled 8px per frame from the right edge instead of appearing, and opened half off-screen when tapped near the right of a phone
+- Nine scrolling columns crushed what they carried
+- Cards inside a sheet were squashed and escaped their frame
+- The floating MENU pill covered the thumb bar
+- The two PWA banners stacked instead of overlapping
+- Opening the menu moved focus to the first door rather than to the panel
+- The vendor-radix chunk named packages that are not installed
+- Three ultra sessions that duplicated the catalogue were removed
+
 ## [0.8.0] - 2026-07-29
 
 ### Added

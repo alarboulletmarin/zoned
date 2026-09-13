@@ -2,6 +2,162 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "1.0.0",
+    date: "2026-09-13",
+    changes: {
+      added: [
+        {
+          text: "Les pratiques deviennent un axe à part entière : chaque séance, collection, plan et parcours dit s'il est route, trail ou ultra, et toute l'app filtre dessus. L'axe est déduit du catalogue au lieu d'être stocké, donc il ne peut pas diverger de ce qui existe vraiment",
+          textEn: "Practices become a real axis: every session, collection, plan and route declares whether it is road, trail or ultra, and the whole app filters on it. The axis is derived from the catalogue rather than stored, so it cannot drift out of sync with what is actually there",
+          category: "Pratiques",
+          categoryEn: "Practices",
+        },
+        {
+          text: "Huit séances écrites pour l'ultra (TRL-013 à TRL-020) et un plan trail tout prêt. Une pratique annoncée se voit maintenant avant d'être choisie, au lieu d'un rayon vide sans le dire",
+          textEn: "Eight sessions written for ultra distance (TRL-013 to TRL-020) and a ready-made trail plan. An announced practice is now visible before it can be chosen, instead of a silently empty shelf",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Une identité dessinée : le logo est le mot lui-même, vectorisé, et une figure par pratique, réemployée dans la bibliothèque, le plan et les écrans vides",
+          textEn: "A drawn identity: the wordmark is the word itself, vectorised, and one figure per practice, reused across the library, the plan and the empty states",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "La coquille court pendant que l'app démarre, trois foulées à six images, et elle est retenue le temps d'une foulée pour que rien ne clignote",
+          textEn: "The shell runs while the app boots, three strides at six frames each, held for one stride so nothing flashes",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Des réglages qui masquent une partie de l'app au lieu de la supprimer, sur un stockage qui ne fait plus tomber l'app quand il échoue",
+          textEn: "Settings that hide a section instead of deleting it, over a storage layer that no longer takes the app down when it fails",
+          category: "Paramètres",
+          categoryEn: "Settings",
+        },
+        {
+          text: "Le menu d'une séance dans la vue liste du plan : voir, trouver un parcours, clôturer, remplacer, substituer, retirer. C'est celui que le tableau de la semaine ouvrait déjà, désormais partagé par les deux vues au lieu d'être écrit deux fois",
+          textEn: "The session menu in the plan's list view: view, find a route, close out, replace, substitute, remove. It is the menu the week board already opened, now shared by both views instead of written twice",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      changed: [
+        {
+          text: "Le cockpit d'Aujourd'hui est la réponse et non un menu : cinq boîtes de la même forme sont devenues la forme de la semaine, la séance du jour est à un tap de la bande, et son profil s'aperçoit sur place",
+          textEn: "The cockpit at Today is the answer rather than a menu: five boxes of the same shape became the shape of the week, the day's session is one tap from the strip, and its profile is previewed in place",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Le vermillon ne dit plus qu'une chose, et une seule : maintenant. Une carte choisie prend un anneau d'encre, un onglet ouvert prend une pilule d'encre, et une phase de plan n'a plus de couleur à elle",
+          textEn: "Vermillon says one thing now, and only one: now. A chosen card takes an ink ring, an open tab takes an ink pill, and a plan phase gets no colour of its own",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Les bandes de page se séparent par l'espace seul. Les filets entre elles sont partis, et quatre frontières ont cessé de payer l'écart deux fois",
+          textEn: "Bands are separated by space alone. The rules between them are gone, and four boundaries stopped paying the gap twice",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Le pied de page se replie en groupes : de 1,65 écran à 0,59, et la barre d'encre perd 90 px sur téléphone",
+          textEn: "The footer folds into groups: 1.65 screens down to 0.59, and the ink bar loses 90px on a phone",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Un geste par étape sur mobile : les tiroirs se ferment au doigt, le calendrier s'ouvre en tiroir, les filtres collent",
+          textEn: "One gesture per step on mobile: sheets drag to close, the calendar opens as a drawer, filters stick",
+          category: "Expérience mobile",
+          categoryEn: "Mobile",
+        },
+        {
+          text: "Une séance de la vue liste est une ligne, plus une carte dans une carte dans une carte. La pastille de type devient une légende mono discrète, et sur téléphone les quatre glyphes d'action deviennent un bouton qui les nomme",
+          textEn: "A session in the list view is a line, not a card inside a card inside a card. The type badge becomes a quiet mono caption, and on a phone the four action glyphs become one button that names them",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Une journée du tableau de la semaine est une ligne aussi. Dix-neuf rectangles dessinés pour cinq séances sont devenus neuf, et le seul rang encadré de l'écran est aujourd'hui",
+          textEn: "A day on the week board is a line too. Nineteen drawn rectangles for five sessions became nine, and the only framed row left on the screen is today",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Les pas d'affiche descendent d'un cran sur téléphone. Le corps de texte, le mono et la grille d'espacement ne bougent pas, donc les longueurs de ligne et les cibles au doigt sont intactes",
+          textEn: "The display steps drop one step on mobile. Body text, mono and the spacing grid do not move, so line lengths and hit targets are unchanged",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Typographie : ni chevrons, ni cadratin, ni demi-cadratin, dans le texte visible comme dans le code",
+          textEn: "Typography: no guillemets, no em dash, no en dash, in visible text and in the source alike",
+          category: "Design",
+          categoryEn: "Design",
+        },
+      ],
+      fixed: [
+        {
+          text: "La vue liste d'un plan faisait tenir 388 px de contenu dans une carte de 350. Le nom de la séance était écrasé à 3 px et se peignait par-dessus la pastille voisine : deux séances sur cinq étaient illisibles sur un téléphone de 390 px",
+          textEn: "The plan's list view fitted 388px of content into a 350px card. The session's name was crushed to 3px and painted over the badge beside it: two of five sessions were unreadable on a 390px phone",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le menu d'une séance se dépliait de huit pixels par image depuis le bord droit au lieu d'apparaître, et s'ouvrait à moitié hors écran près du bord d'un téléphone",
+          textEn: "The session menu unfurled 8px per frame from the right edge instead of appearing, and opened half off-screen when tapped near the right of a phone",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Neuf colonnes défilantes écrasaient ce qu'elles portaient",
+          textEn: "Nine scrolling columns crushed what they carried",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les cartes d'un tiroir étaient écrasées et sortaient de leur cadre",
+          textEn: "Cards inside a sheet were squashed and escaped their frame",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "La pilule MENU flottante recouvrait la barre du pouce",
+          textEn: "The floating MENU pill covered the thumb bar",
+          category: "Expérience mobile",
+          categoryEn: "Mobile",
+        },
+        {
+          text: "Les deux bandeaux PWA s'empilaient au lieu de se recouvrir",
+          textEn: "The two PWA banners stacked instead of overlapping",
+          category: "PWA",
+          categoryEn: "PWA",
+        },
+        {
+          text: "L'ouverture du menu envoyait le focus sur la première porte plutôt que sur le panneau",
+          textEn: "Opening the menu moved focus to the first door rather than to the panel",
+          category: "Accessibilité",
+          categoryEn: "Accessibility",
+        },
+        {
+          text: "Le chunk vendor-radix nommait des paquets qui ne sont pas installés",
+          textEn: "The vendor-radix chunk named packages that are not installed",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Trois séances ultra qui doublaient le catalogue ont été retirées",
+          textEn: "Three ultra sessions that duplicated the catalogue were removed",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+    },
+  },
+  {
     version: "0.8.0",
     date: "2026-07-29",
     changes: {
