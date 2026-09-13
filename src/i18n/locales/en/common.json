@@ -856,8 +856,9 @@
     "goTo": "Go to",
     "searchPlaceholder": "Search for a workout…",
     "language": "Change language",
-    "themeDark": "Dark theme",
-    "themeLight": "Light theme",
+    "disclose": "Show the pages under {{door}}",
+    "themeToDark": "Switch to dark",
+    "themeToLight": "Switch to light",
     "more": "Everything else"
   },
   "modules": {

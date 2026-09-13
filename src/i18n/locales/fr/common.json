@@ -856,8 +856,9 @@
     "goTo": "Aller à",
     "searchPlaceholder": "Rechercher une séance…",
     "language": "Changer de langue",
-    "themeDark": "Thème sombre",
-    "themeLight": "Thème clair",
+    "disclose": "Afficher les pages de {{door}}",
+    "themeToDark": "Passer en sombre",
+    "themeToLight": "Passer en clair",
     "more": "Le reste"
   },
   "modules": {
