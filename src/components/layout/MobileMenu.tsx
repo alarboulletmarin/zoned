@@ -96,6 +96,7 @@ import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import { ChevronDown, Menu, Search, X } from "@/components/icons";
 import { useCommandPalette } from "@/components/search";
 import { useScrollLock } from "@/components/ui/native-dialog";
+import { Segmented } from "@/components/ui/segmented";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
@@ -178,7 +179,9 @@ export function MobileMenu() {
   const { t } = useTranslation("common");
   const { pathname } = useLocation();
   const { openPalette } = useCommandPalette();
-  const { resolved: theme, toggle: toggleTheme } = useTheme();
+  // La PRÉFÉRENCE et non la couleur résolue : le segment doit pouvoir
+  // afficher `système`, qui n'est pas une couleur.
+  const { preference, setPreference } = useTheme();
   // The same 1024px line the header uses to decide it cannot show the doors.
   const isCompact = useMediaQuery("(max-width: 1023px)");
   const currentLang = getCurrentLanguage();
@@ -194,6 +197,20 @@ export function MobileMenu() {
   // à la fermeture, sinon la prochaine ouverture montrerait la liste que la
   // visite précédente avait laissée dépliée au lieu des six lignes.
   const [openDoor, setOpenDoor] = useState<string | null>(null);
+
+  /* La porte où l'on se trouve. Les préfixes des quatre portes sont
+     disjoints, donc il y en a au plus une.
+
+     Le reste ne porte le point que si AUCUNE ne le porte, et c'est
+     exactement ce que son nom veut dire. Deux de ses quatorze routes tombent
+     aussi sous une porte (`/plans/methodology` sous Mon plan,
+     `/weeks/new/prebuilt` de même) : sans cette condition, l'écran afficherait
+     deux points vermillon et ne dirait plus où l'on est, il dirait où l'on
+     pourrait être. */
+  const hasCurrentDoor = PRIMARY_NAV.some((section) => isNavActive(pathname, section));
+  const inMore =
+    !hasCurrentDoor &&
+    MORE_LINKS.some((link) => pathname === link.to || pathname.startsWith(link.to + "/"));
 
   const close = useCallback(() => dialogRef.current?.close(), []);
 
@@ -464,6 +481,9 @@ export function MobileMenu() {
                       type="button"
                       className="zn-display zn-menu__door zn-menu__door--toggle"
                       data-level="2"
+                      data-current={inMore || undefined}
+                      /* Jamais "page" : cette ligne n'a pas de page à elle. */
+                      aria-current={inMore ? "true" : undefined}
                       aria-expanded={openDoor === MORE_ID}
                       aria-controls="zn-menu-more"
                       onClick={() =>
@@ -521,31 +541,55 @@ export function MobileMenu() {
               }}
             >
               <Search />
-              {t("mobileMenu.searchPlaceholder")}
+              {/* Rechercher une séance vendait le quart de ce que la palette
+                  cherche : elle rend aussi les guides, les articles, le
+                  glossaire, les collections, les calculateurs et les pages.
+                  Son propre placeholder les énumère, ce qui est juste dans un
+                  champ large et déborde sur deux lignes ici, 43 caractères
+                  pour 33 de place. Ce libellé dit la même chose, la PORTÉE, et
+                  n'aura pas à suivre la palette quand elle gagnera un type. */}
+              {t("mobileMenu.search")}
             </button>
 
-            <div className="zn-menu__pills">
-              <button
-                type="button"
-                className="zn-menu__pill"
-                aria-label={t("mobileMenu.language")}
-                onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
-              >
-                <span className="zn-menu__lang" data-on={currentLang === "fr" || undefined}>
-                  FR
-                </span>
-                /
-                <span className="zn-menu__lang" data-on={currentLang === "en" || undefined}>
-                  EN
-                </span>
-              </button>
+            {/* Deux réglages, UNE grammaire, et les deux disent l'ÉTAT.
+                La langue montrait déjà ses deux valeurs avec l'active
+                remplie ; le thème ne montrait que l'action. Côte à côte, on
+                lisait la pastille pleine de FR comme la seule cliquable, et
+                surtout : le panneau est à l'ENCRE dans les deux thèmes
+                (`--panel-ink`, posé une fois à `:root`), donc PASSER EN
+                SOMBRE s'affichait sur fond noir. Un contrôle dont on ne peut
+                pas déduire l'état courant devient un pari, et on cesse de
+                s'en servir.
 
-              {/* Ce que le bouton FAIT, pas l'état où l'on est. Il disait
-                  Thème sombre, ce qui se lit aussi bien comme le thème en
-                  cours que comme celui qu'on va prendre. */}
-              <button type="button" className="zn-menu__pill" onClick={toggleTheme}>
-                {theme === "light" ? t("mobileMenu.themeToDark") : t("mobileMenu.themeToLight")}
-              </button>
+                Le segment rend au passage le TROISIÈME mode : `toggle` ne
+                faisait que basculer clair/sombre, donc ouvrir le menu en
+                `système` épinglait silencieusement une valeur explicite, et
+                `système` n'était plus récupérable que depuis les réglages.
+                Le `Segmented` maison porte déjà le radiogroup, les flèches et
+                le plancher tactile ; il ne manquait que l'encre, qui est dans
+                mobile-menu.css. */}
+            <div className="zn-menu__settings">
+              <Segmented
+                value={currentLang}
+                onChange={changeLanguage}
+                label={t("mobileMenu.language")}
+                options={[
+                  // Les initiales sont pour l'oeil, `title` porte le nom entier
+                  // pour le nom accessible.
+                  { value: "fr", label: "FR", title: t("language.fr") },
+                  { value: "en", label: "EN", title: t("language.en") },
+                ]}
+              />
+              <Segmented
+                value={preference}
+                onChange={setPreference}
+                label={t("mobileMenu.theme")}
+                options={[
+                  { value: "light", label: t("theme.light") },
+                  { value: "dark", label: t("theme.dark") },
+                  { value: "system", label: t("theme.system") },
+                ]}
+              />
             </div>
           </div>
         </div>
