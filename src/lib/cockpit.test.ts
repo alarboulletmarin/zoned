@@ -2,10 +2,12 @@ import { describe, expect, test } from "bun:test";
 
 import {
   BAR_GAP,
+  dayKinds,
   BAR_MAX,
   BLOCK_MIN,
   dayBarBlocks,
   dayStatus,
+  sessionKind,
   focusDayDate,
   focusPlanHref,
   pickTodayFocus,
@@ -347,6 +349,44 @@ describe("un bloc par séance dans la bande", () => {
     // C'est le CSS qui dessine son filet : l'absence de séance n'est pas une
     // séance de hauteur nulle.
     expect(dayBarBlocks([], 90)).toEqual([]);
+  });
+});
+
+describe("la famille d'une séance", () => {
+  test("la discipline de la séance, et la course par défaut", () => {
+    // L'absence du champ vaut course à pied : aucun plan écrit avant qu'il
+    // existe ne le porte, et ils courent tous.
+    expect(sessionKind(session(0))).toBe("running");
+    expect(sessionKind({ ...session(0), discipline: "cycling" })).toBe("cycling");
+    expect(sessionKind({ ...session(0), discipline: "swimming" })).toBe("swimming");
+  });
+
+  test("le renforcement se lit sur le type, ou sur le préfixe", () => {
+    // Deux sources parce que le modèle en a deux : le renforcement n'est pas
+    // une `Discipline`, c'est un `sessionType`, et les séances du catalogue
+    // le portent en préfixe sans toujours porter le type.
+    expect(sessionKind({ ...session(0), sessionType: "strength" })).toBe("strength");
+    expect(sessionKind(session(0, "STR-014"))).toBe("strength");
+  });
+
+  test("le renforcement l'emporte sur une discipline écrite à côté", () => {
+    // Une séance de renforcement à vélo n'existe pas ; si le plan en écrit
+    // une, c'est le renforcement qu'il faut annoncer, c'est lui qui décide du
+    // sac.
+    expect(sessionKind({ ...session(0, "STR-002"), discipline: "cycling" })).toBe("strength");
+  });
+
+  test("les familles d'une journée, une fois chacune, dans l'ordre", () => {
+    const day = [
+      { ...session(2, "SWM-1"), discipline: "swimming" as const },
+      { ...session(2, "CYC-1"), discipline: "cycling" as const },
+      session(2, "SL-1"),
+      session(2, "END-1"),
+    ];
+    // Deux courses ne font qu'une icône : la rangée répond à quoi, les blocs
+    // au-dessus répondent déjà à combien.
+    expect(dayKinds(day)).toEqual(["swimming", "cycling", "running"]);
+    expect(dayKinds([])).toEqual([]);
   });
 });
 

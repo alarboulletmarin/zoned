@@ -412,6 +412,54 @@ export function dayBarBlocks(
   }));
 }
 
+/**
+ * LA FAMILLE d'une séance : course, vélo, natation, renforcement.
+ *
+ * Le cockpit nommait la séance sans jamais dire de quel SPORT elle est. Sur un
+ * plan qui ne court pas, c'est l'information qu'on cherche en premier le matin
+ * — on ne prépare pas le même sac — et elle était la seule à ne se lire nulle
+ * part, ni dans la bande, ni sur la pile.
+ *
+ * Deux sources, parce que le modèle en a deux, et c'est assumé :
+ *
+ * - `discipline` est un champ de la séance, `running | cycling | swimming`, et
+ *   son absence vaut course à pied (c'est le défaut historique, aucun plan
+ *   écrit avant ce champ ne le porte) ;
+ * - le RENFORCEMENT n'est pas une discipline au sens du modèle, c'est un
+ *   `sessionType`. Le préfixe `STR-` le double, parce que les séances du
+ *   catalogue de renforcement le portent sans toujours porter le type.
+ *   `PlanCalendar` fait déjà ce test, mot pour mot ; le jour où il voudra
+ *   cette fonction, elle est ici.
+ *
+ * Pour l'œil, les quatre sont au même rang : ce sont quatre sacs différents.
+ */
+export type SessionKind = "running" | "cycling" | "swimming" | "strength";
+
+export function sessionKind(session: PlanSession): SessionKind {
+  if (session.sessionType === "strength" || session.workoutId?.startsWith("STR-")) {
+    return "strength";
+  }
+  return session.discipline ?? "running";
+}
+
+/**
+ * Les familles PRÉSENTES dans une journée, une seule fois chacune et dans
+ * l'ordre où elles arrivent.
+ *
+ * Une fois chacune, parce que la bande dit déjà COMBIEN de séances il y a, par
+ * ses blocs : répéter l'icône de course pour deux footings dirait deux fois la
+ * même chose et laisserait croire que le nombre se compte là. Cette ligne-là
+ * répond à quoi, pas à combien.
+ */
+export function dayKinds(day: readonly PlanSession[]): SessionKind[] {
+  const kinds: SessionKind[] = [];
+  for (const session of day) {
+    const kind = sessionKind(session);
+    if (!kinds.includes(kind)) kinds.push(kind);
+  }
+  return kinds;
+}
+
 /** Le chemin d'une séance de plan. */
 export function sessionHref(session: PlanSession): string {
   return `/workout/${session.workoutId}`;
