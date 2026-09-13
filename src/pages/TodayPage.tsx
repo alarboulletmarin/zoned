@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -9,14 +9,16 @@ import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPan
 import { SEOHead } from "@/components/seo";
 import { usePlans } from "@/hooks/usePlans";
 import { useWorkout } from "@/hooks/useWorkouts";
+import { useRadioRail } from "@/hooks/useRadioRail";
 import { useSettings } from "@/hooks/useSettings";
 import {
   dayStatus,
+  focusDayDate,
   focusPlanHref,
-  focusSessionHref,
   pickTodayFocus,
   planPosition,
   sessionHref,
+  weekShortcut,
   type TodayFocus,
 } from "@/lib/cockpit";
 import { updateSessionCompletion, type SessionCompletionData } from "@/lib/planStorage";
@@ -64,9 +66,38 @@ import DoorToday from "@/assets/doodles/door-today.svg?react";
  *   pas un second formulaire, et c'est elle qui fait enfin dire quelque chose
  *   aux sept barres : prévu est creux, fait est plein, sauté est hachuré.
  *
- * Un seul primaire, donc un seul aplat vermillon : le bouton. Le jour courant
- * de la bande est marqué à l'ENCRE, deux accents sur un écran se
- * neutraliseraient, et la clôture est en contour pour la même raison.
+ * Un seul primaire par SÉANCE, donc un seul aplat vermillon par bloc : le
+ * bouton. Une journée double en montre deux, et ils ne se disputent pas, ils
+ * appartiennent à deux blocs séparés par un filet. Le jour choisi de la bande
+ * est marqué à l'ENCRE, un accent y ferait un troisième rouge à l'écran, et
+ * la clôture est en contour pour la même raison.
+ *
+ * ── LA TROISIÈME VERSION : ON CHOISIT UN JOUR, ON N'Y VA PAS ──────────────
+ *
+ * La bande était faite de LIENS : toucher jeudi ouvrait la séance de jeudi,
+ * donc regarder sa semaine, c'était quitter l'écran, puis revenir. Deux
+ * gestes très proches — un doigt sur une barre, un doigt sur le bouton —
+ * emmenaient au même endroit, et un seul des deux le disait.
+ *
+ * La bande est maintenant un CHOIX, `role="radiogroup"` et sept boutons : le
+ * jour choisi recharge tout ce qui est en dessous, titre, taille, ligne
+ * d'exécution, profil, bouton, clôture. Elle ne navigue plus nulle part. La
+ * seule sortie vers une séance est le bouton voir le détail, qui est aussi
+ * le seul objet de l'écran à ressembler à une sortie.
+ *
+ * Deux marques, donc, et elles ne se confondent pas : le jour CHOISI porte
+ * l'encre — lettre grasse, filet plein, et la seule durée chiffrée de la
+ * bande ; AUJOURD'HUI porte un pointillé sous sa lettre, qui n'est là que
+ * lorsqu'on est parti voir un autre jour. À l'arrivée les deux coïncident, et
+ * l'écran est exactement celui d'avant.
+ *
+ * **Les journées à deux séances ont enfin un écran.** Elles n'en avaient
+ * aucun : le titre disait 2 séances t'attendent, il n'y avait ni profil, ni
+ * allure, ni clôture possible — la seule journée que le cockpit ne savait pas
+ * clore — et le bouton renvoyait au plan. Les séances du jour sont
+ * maintenant EMPILÉES, chacune complète et close-able pour elle-même,
+ * séparées par un filet et numérotées séance 1 / 2. Le cas à une séance ne
+ * change pas : une pile d'un élément est l'écran d'avant, au pixel près.
  *
  * `/` reste la landing publique et indexée ; celle-ci est l'écran privé, donc
  * `noindex`, hors sitemap et hors prérendu.
@@ -83,170 +114,70 @@ export function TodayPage() {
   // seconde avant minuit ; elle lit le même instant que tout le reste.
   const now = useMemo(() => new Date(), []);
   const focus = useMemo(() => pickTodayFocus(plans, now), [plans, now]);
-  const sessionUrl = focusSessionHref(focus);
   const planUrl = focusPlanHref(focus);
 
-  const dateLine = now.toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
+  /* Le jour choisi dans la bande, et il vaut `null` tant que personne n'a
+     choisi. Pas `focus.dayOfWeek` en valeur initiale : les plans arrivent de
+     localStorage APRÈS le premier rendu, où le focus est encore vide et son
+     jour vaut 0 ; l'écran se serait ouvert sur lundi. Le repli se fait donc
+     à la lecture, où `focus` est celui du rendu courant. */
+  const [picked, setPicked] = useState<number | null>(null);
+  const day = picked ?? focus.dayOfWeek;
+  const isToday = day === focus.dayOfWeek;
 
-  /* Le nom de la séance du jour, quand il n'y en a qu'une : c'est lui qui fait
-     le titre. Le catalogue est en chunks chargés à la demande, donc c'est
-     asynchrone, d'où le repli sur une séance t'attend le temps du
-     chargement, qui est aussi ce qu'on affiche quand il y en a plusieurs. */
-  const soleSession = focus.sessions.length === 1 ? focus.sessions[0] : undefined;
-  const { workout } = useWorkout(soleSession?.workoutId);
+  const sessions = focus.week[day] ?? [];
+  const indexes = focus.weekIndexes[day] ?? [];
+
+  /* L'état du JOUR CHOISI, qui n'est celui d'aujourd'hui que tant qu'on n'a
+     rien choisi d'autre. `upcoming` et `none` ne dépendent, eux, d'aucun
+     jour : ils disent qu'il n'y a pas de semaine à parcourir, et la bande ne
+     s'affiche même pas. */
+  const dayState =
+    focus.state === "session" || focus.state === "rest"
+      ? sessions.length > 0
+        ? "session"
+        : "rest"
+      : focus.state;
+
+  /* La ligne de date suit le choix : sans elle, jeudi s'afficherait sous
+     mardi 16 septembre, et l'écran dirait deux jours à la fois. */
+  const dateLine = focusDayDate(focus, day, now).toLocaleDateString(
+    isEn ? "en-GB" : "fr-FR",
+    { weekday: "long", day: "numeric", month: "long" },
+  );
 
   /* Le titre EST la réponse. Un `<h1>` qui dirait Aujourd'hui au-dessus
      d'un chapô à faire aujourd'hui et d'une ligne une séance t'attend
      ferait dire trois fois la même chose avant le contenu, et la porte de la
-     nav dit déjà Aujourd'hui. */
+     nav dit déjà Aujourd'hui.
+
+     Il n'est écrit ici que pour les journées SANS séance : dès qu'il y en a
+     une, c'est la pile qui porte les titres, un par séance, parce qu'une
+     séance est nommée par son nom et non par le nombre qu'elles sont. */
   const headline = useMemo(() => {
-    if (focus.state === "none") return t("today:resume.none.line");
-    if (focus.state === "rest") return t("today:resume.rest.line");
-    if (focus.state === "upcoming")
+    if (dayState === "none") return t("today:resume.none.line");
+    if (dayState === "upcoming")
       return t("today:resume.upcoming.line", { count: focus.daysUntilStart });
-    if (workout) return isEn ? workout.nameEn : workout.name;
-    return t("today:resume.session.line", {
-      count: focus.sessions.length,
-      week: focus.weekNumber,
-    });
-  }, [focus, isEn, t, workout]);
-
-
-  /**
-   * Le combien : la durée, puis la distance quand le plan en vise une.
-   *
-   * Elle prend sa propre ligne, et elle passe AVANT semaine 1. La durée est
-   * l'information qui décide de sortir ou pas ; le numéro de semaine est un
-   * repère qu'on vérifie du coin de l'oeil. L'ordre disait l'inverse.
-   *
-   * `formatDurationMinutes` et pas `{{n}} min` : la page de séance écrivait
-   * 1h03 pendant que celle-ci écrivait 93 min. Un seul formateur, celui que
-   * les cartes de la bibliothèque emploient déjà.
-   */
-  const sizeLine = useMemo(() => {
-    const total = focus.sessions.reduce((n, s) => n + (s.estimatedDurationMin ?? 0), 0);
-    if (total <= 0) return null;
-    const parts = [formatDurationMinutes(total)];
-    /* Au kilomètre entier, et précédée d'un tilde : c'est une cible, pas une
-       mesure. 14,2 km donnerait une précision que le plan n'a pas, et poserait
-       en passant la question du séparateur décimal. */
-    const km = focus.sessions.reduce((n, s) => n + (s.targetDistanceKm ?? 0), 0);
-    if (km > 0) {
-      parts.push(t("today:facts.distance", {
-        km: Math.round(convertDistance(km, settings.unitSystem)),
-        unit: getDistanceUnit(settings.unitSystem),
-      }));
-    }
-    if (focus.sessions.length > 1) {
-      parts.push(t("today:facts.sessions", { count: focus.sessions.length }));
-    }
-    return parts.join(" · ");
-  }, [focus, settings.unitSystem, t]);
-
-  /**
-   * Le comment : ce que la séance demande, AVANT de l'ouvrir.
-   *
-   * Deux moitiés qui n'arrivent pas en même temps, et c'est ce qui dicte la
-   * forme :
-   *
-   * - l'allure est **synchrone**, elle est déjà sur la séance du plan
-   *   (`paceNotes`, écrit par le générateur et par les plans du catalogue) ;
-   * - le corps de séance est **asynchrone**, il faut le chunk du catalogue.
-   *
-   * Donc la ligne est réservée en CSS sur deux lignes : une semaine seule
-   * (`weekToPlan`) ne porte AUCUN `paceNotes`, la ligne y est vide jusqu'au
-   * chargement, et ordonner le synchrone en premier ne suffirait pas. Réserver
-   * est la seule réponse qui ne pousse pas le bouton sous le doigt.
-   */
-  const mainSummary = useMemo(() => {
-    // Une séance de renforcement n'a pas de corps zoné à résumer : son
-    // vocabulaire est celui des exercices, pas celui des phases.
-    if (!workout || isStrengthWorkout(workout)) return null;
-    const steps = getWorkoutPhaseSteps(workout, "main");
-    if (steps.length === 0) return null;
-    /* Un corps de séance d'un seul segment continu n'a pas de structure à
-       résumer : il rendrait sa propre durée de MODÈLE, 35', juste sous la
-       durée du PLAN, 1h33, qui l'a mise à l'échelle. Deux nombres qui se
-       contredisent valent moins que pas de nombre du tout ; l'allure en
-       dessous suffit à dire comment courir une sortie continue. */
-    if (steps.length === 1 && steps[0].kind === "segment") return null;
-    const summary = summarizeWorkoutSteps(steps, isEn).trim();
-    return summary.length > 0 ? summary : null;
-  }, [workout, isEn]);
-
-  const pace = useMemo(
-    () => (soleSession ? paceRangeOf(soleSession, isEn, settings.unitSystem) : null),
-    [soleSession, isEn, settings.unitSystem],
-  );
-
-  const status = soleSession?.status;
-  const isResolved = status === "completed" || status === "modified" || status === "skipped";
-
-  /** Ce qui s'est passé, une fois la séance close. Le point d'arrêt.
-   *
-   * Elle ne redit PAS fait ou passé : le micro-label au-dessus du titre le dit
-   * déjà, et la barre du jour aussi. Elle porte les chiffres réels, qui sont
-   * la seule chose que ni l'un ni l'autre ne peut montrer. Une séance sautée
-   * n'en a aucun, elle ne laisse donc rien ici. */
-  const doneLine = useMemo(() => {
-    if (!soleSession || !isResolved || status === "skipped") return null;
-    const parts: string[] = [];
-    const min = soleSession.actualDurationMin ?? soleSession.estimatedDurationMin;
-    if (min > 0) parts.push(formatDurationMinutes(min));
-    if (soleSession.actualDistanceKm != null && soleSession.actualDistanceKm > 0) {
-      parts.push(formatDistanceWithUnit(soleSession.actualDistanceKm, settings.unitSystem));
-    }
-    if (soleSession.rpe != null) parts.push(t("today:facts.rpe", { n: soleSession.rpe }));
-    return parts.join(" · ") || null;
-  }, [soleSession, isResolved, status, settings.unitSystem, t]);
+    return t("today:resume.rest.line");
+  }, [dayState, focus.daysUntilStart, t]);
 
   /** Un jour de repos n'est pas un trou : il dit quand on ressort. */
   const nextLine = useMemo(() => {
-    if (focus.state !== "rest" || focus.week.length === 0) return null;
+    if (dayState !== "rest" || focus.week.length === 0) return null;
     const names = t("today:week.dayNames").split(",");
     for (let step = 1; step <= 6; step++) {
-      const index = focus.dayOfWeek + step;
+      const index = day + step;
       if (index > 6) break;
-      const day = focus.week[index];
-      if (!day || day.length === 0) continue;
-      const min = day.reduce((n, s) => n + (s.estimatedDurationMin ?? 0), 0);
+      const next = focus.week[index];
+      if (!next || next.length === 0) continue;
+      const min = next.reduce((n, s) => n + (s.estimatedDurationMin ?? 0), 0);
       return t("today:resume.next", {
         day: names[index],
         duration: formatDurationMinutes(min),
       });
     }
     return null;
-  }, [focus, t]);
-
-  const execLine = useMemo(() => {
-    if (focus.state === "rest") return nextLine;
-    if (focus.state !== "session") return null;
-    if (isResolved) return doneLine;
-    return [mainSummary, pace].filter(Boolean).join(" · ") || null;
-  }, [focus.state, nextLine, doneLine, isResolved, mainSummary, pace]);
-
-  /* La ligne est RÉSERVÉE tant que quelque chose peut encore y arriver, donc
-     sur une séance en attente de son catalogue. Une fois la séance close, ou
-     un jour de repos, plus rien n'est asynchrone : réserver deux lignes de
-     vide n'y ferait qu'un trou. */
-  const holdsExec = focus.state === "session" && soleSession != null && !isResolved;
-
-  /* Le créneau du profil est réservé, plein ou vide : la barre n'arrivait
-     qu'avec le catalogue et poussait de cinquante pixels tout ce qui la suit,
-     bouton compris. Et une séance de renforcement n'a pas de zones : plutôt
-     que d'effondrer le créneau, elle porte la marque maison du non mesuré, la
-     hachure à 45 degrés que `zone.css` dessine déjà pour `data-zone="0"`. */
-  const profile = useMemo(() => {
-    if (!workout) return null;
-    if (isStrengthWorkout(workout)) {
-      return [{ seconds: Math.max(1, (soleSession?.estimatedDurationMin ?? 0) * 60), zone: 0 as const }];
-    }
-    return toZoneBarBlocks(workout);
-  }, [workout, soleSession]);
+  }, [dayState, day, focus.week, t]);
 
   /** Où l'on en est du plan : le dénominateur, l'échéance, ce qu'on vise. */
   const position = useMemo(() => planPosition(focus, now), [focus, now]);
@@ -287,21 +218,16 @@ export function TodayPage() {
     [focus.plan, focus.weekNumber, isEn, planWeek],
   );
 
-  /* La clôture. Elle réutilise le panneau du plan, pas un second formulaire :
-     les deux ne peuvent donc pas diverger. Une journée à plusieurs séances n'a
-     pas de cible unique, un seul bouton ne saurait pas laquelle clore, et le
-     bouton principal mène déjà au plan qui les montre toutes. */
-  const soleIndex = focus.sessionIndexes.length === 1 ? focus.sessionIndexes[0] : undefined;
-  const canClose =
-    focus.state === "session" && soleSession != null && soleIndex != null && focus.plan != null;
-
-  const [closeOpen, setCloseOpen] = useState(false);
-  const [closeAnchor, setCloseAnchor] = useState<HTMLElement | null>(null);
-
+  /* La clôture, une par séance de la pile. Elle réutilise le panneau du plan,
+     pas un second formulaire : les deux ne peuvent donc pas diverger.
+     L'INDEX vient de `weekIndexes`, la seule adresse qu'ait une séance
+     (`updateSessionCompletion` adresse par plan, semaine, index) : c'est lui
+     qui permet enfin de clore la seconde séance d'une journée double, et une
+     séance d'un autre jour que celui-ci. */
   const handleClose = useCallback(
-    (data: SessionCompletionData) => {
-      if (!focus.plan || soleIndex == null) return;
-      const ok = updateSessionCompletion(focus.plan.id, focus.weekNumber, soleIndex, data);
+    (index: number, data: SessionCompletionData) => {
+      if (!focus.plan) return;
+      const ok = updateSessionCompletion(focus.plan.id, focus.weekNumber, index, data);
       if (!ok) {
         toast.error(t("common:errors.planSaveFailed"));
         return;
@@ -309,16 +235,29 @@ export function TodayPage() {
       // `reload` remplace le tableau des plans, donc `focus` se recalcule et la
       // bande comme la ligne de clôture suivent sans rien de plus.
       reload();
-      setCloseOpen(false);
       toast.success(t("plan:completion.saved"));
     },
-    [focus.plan, focus.weekNumber, soleIndex, reload, t],
+    [focus.plan, focus.weekNumber, reload, t],
   );
 
-  /** Le micro-label au-dessus du titre. Il dit l'état, pas seulement le jour. */
-  const stateLabel = isResolved
-    ? t(`plan:completion.${status}`)
-    : t("today:resume.todayLabel");
+  /* Le primaire des journées sans séance. Il mène au plan, sauf quand il n'y
+     a pas de plan du tout, où il mène à sa création. Les journées à séances,
+     elles, ont un bouton PAR séance, dans la pile. */
+  const emptyCta = useMemo(() => {
+    if (!planUrl || dayState === "none") {
+      return { to: "/plan/new", label: t("today:resume.none.cta") };
+    }
+    return {
+      to: focus.weekNumber > 0 ? `${planUrl}?week=${focus.weekNumber}` : planUrl,
+      label: t(focus.isWeek ? "today:resume.openWeek" : "today:resume.openPlan"),
+    };
+  }, [planUrl, dayState, focus.weekNumber, focus.isWeek, t]);
+
+  /* Le raccourci du bas mène à la semaine où l'on EST, et il ne retombe sur
+     l'atelier de composition que lorsqu'il n'y a pas de semaine à retrouver.
+     Le libellé suit la destination, il ne la précède pas : c'est tout le
+     défaut qu'avait Ma semaine en menant à une page blanche. */
+  const week = weekShortcut(focus);
 
   return (
     <div className="zn-cockpit">
@@ -333,31 +272,60 @@ export function TodayPage() {
         <section className="zn-cockpit__resume">
           <span className="zn-kicker">{dateLine}</span>
 
-          {focus.week.length > 0 && <WeekStrip focus={focus} sessionState={sessionState} />}
+          {focus.week.length > 0 && (
+            <WeekStrip focus={focus} selected={day} onSelect={setPicked} />
+          )}
 
-          {/* Le titre, sa taille et ce qu'elle demande ne font qu'UNE phrase :
-              ils sont serrés à `--sp-4` pendant que la section respire à
-              `--sp-7`. C'est cet écart-là qui fait la hiérarchie, pas les
-              corps de texte pris isolément. */}
-          <div className="zn-cockpit__answer">
-            <span className="zn-kicker zn-kicker--xs">{stateLabel}</span>
+          {sessions.length > 0 ? (
+            /* La pile. Un élément le plus souvent, deux les jours doubles, et
+               c'est le même bloc dans les deux cas : rien n'est écrit pour le
+               cas rare qui ne serve pas au cas courant. */
+            <div className="zn-cockpit__stack">
+              {sessions.map((session, rank) => (
+                <CockpitSession
+                  key={indexes[rank] ?? rank}
+                  session={session}
+                  index={indexes[rank]}
+                  rank={rank}
+                  count={sessions.length}
+                  isToday={isToday}
+                  weekNumber={focus.weekNumber}
+                  canClose={focus.plan != null && indexes[rank] != null}
+                  linkState={sessionState(session)}
+                  unit={settings.unitSystem}
+                  isEn={isEn}
+                  onClose={handleClose}
+                />
+              ))}
+            </div>
+          ) : (
+            <>
+              {/* Le titre, sa taille et ce qu'elle demande ne font qu'UNE
+                  phrase : ils sont serrés à `--sp-4` pendant que la section
+                  respire à `--sp-7`. C'est cet écart-là qui fait la
+                  hiérarchie, pas les corps de texte pris isolément. */}
+              <div className="zn-cockpit__answer">
+                {isToday && (
+                  <span className="zn-kicker zn-kicker--xs">{t("today:resume.todayLabel")}</span>
+                )}
 
-            {/* Le titre EST la réponse. Un `<h1>` qui dirait Aujourd'hui
-                au-dessus d'un chapô à faire aujourd'hui et d'une ligne une
-                séance t'attend ferait dire trois fois la même chose avant le
-                contenu, et la porte de la nav dit déjà Aujourd'hui. */}
-            <h1 className="zn-display zn-cockpit__headline" data-level="3">
-              {headline}
-            </h1>
+                <h1 className="zn-display zn-cockpit__headline" data-level="3">
+                  {headline}
+                </h1>
 
-            {sizeLine && <p className="zn-cockpit__size">{sizeLine}</p>}
+                {nextLine && <p className="zn-cockpit__how">{nextLine}</p>}
+              </div>
 
-            {(holdsExec || execLine) && (
-              <p className="zn-cockpit__how" data-hold={holdsExec || undefined}>
-                {execLine}
-              </p>
-            )}
-          </div>
+              <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                <Button asChild className="zn-cockpit__cta">
+                  <Link to={emptyCta.to}>
+                    {emptyCta.label}
+                    <ArrowRight />
+                  </Link>
+                </Button>
+              </div>
+            </>
+          )}
 
           {/* Le nom du plan était un texte mort. C'est le chemin vers le plan,
               à un tap, sans ajouter un bouton à l'écran.
@@ -366,8 +334,14 @@ export function TodayPage() {
               EST : un plan ne tient que par sa fin, et `semaine 1` sans
               dénominateur ni échéance laissait la sortie du jour flotter. Le
               rôle en micro-label mono, la valeur à côté ; un libellé, pas une
-              phrase. */}
-          {focus.plan && focus.state !== "none" && planUrl ? (
+              phrase.
+
+              Il est passé SOUS la pile le jour où les séances y sont
+              montées : au-dessus, il séparait le titre de son bouton, et
+              entre deux séances empilées il aurait fallu choisir laquelle des
+              deux il commente. Il n'en commente aucune, il commente la
+              semaine. */}
+          {focus.plan && dayState !== "none" && planUrl ? (
             <Link to={planUrl} className="zn-cockpit__plan">
               <span className="zn-kicker zn-kicker--xs">
                 {t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan")}
@@ -377,69 +351,10 @@ export function TodayPage() {
               </span>
             </Link>
           ) : (
-            <p className="zn-body zn-muted zn-measure">{t("today:resume.none.body")}</p>
+            dayState === "none" && (
+              <p className="zn-body zn-muted zn-measure">{t("today:resume.none.body")}</p>
+            )
           )}
-
-          {/* L'aperçu de la séance : un bloc par phase, la largeur dit le
-              temps et l'intensité est codée deux fois, densité d'encre ET
-              hauteur. C'est beaucoup d'information sans un mot de plus, et
-              c'est le composant que les cartes de la bibliothèque utilisent
-              déjà (`toZoneBarBlocks`), pas un second dessin de profil.
-
-              Le créneau garde sa hauteur même vide : la barre n'arrive qu'avec
-              le chunk du catalogue, et sans réserve elle poussait le bouton. */}
-          {focus.state === "session" && soleSession && (
-            <div className="zn-cockpit__profile-slot">
-              {profile && profile.length > 0 && (
-                <ZoneBar blocks={profile} condense height={36} className="zn-cockpit__profile" />
-              )}
-            </div>
-          )}
-
-          <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-            {/* Le bouton n'est plus le seul accès à l'information, puisque la
-                ligne du dessus dit déjà ce que la séance demande : il ne dit
-                donc plus ouvrir mais voir le détail. Et il descend de `lg` à
-                la taille normale, ce qui le met à la même hauteur que la
-                clôture à côté de lui : deux boutons, un cluster, pas une grosse
-                chose et une petite. */}
-            <Button asChild className="zn-cockpit__cta">
-              <Link
-                to={sessionUrl ?? "/plan/new"}
-                state={soleSession ? sessionState(soleSession) : undefined}
-              >
-                {/* Le libellé suit la DESTINATION, pas l'état : voir le détail
-                    quand il mène à une séance, ouvrir mon plan quand il mène
-                    au plan, ce qui est le cas un jour de repos, avant le
-                    début, et une journée à plusieurs séances. Il disait voir
-                    le détail en menant au calendrier. */}
-                {sessionUrl
-                  ? t(
-                      focus.sessions.length === 1
-                        ? "today:resume.openDetail"
-                        : focus.isWeek
-                          ? "today:resume.openWeek"
-                          : "today:resume.openPlan",
-                    )
-                  : t("today:resume.none.cta")}
-                <ArrowRight />
-              </Link>
-            </Button>
-
-            {canClose && (
-              <Button
-                variant="outline"
-                onClick={(event) => {
-                  // L'ancre du popover est le bouton lui-même. `currentTarget`
-                  // l'a déjà, pas besoin d'une ref à tenir à jour.
-                  setCloseAnchor(event.currentTarget);
-                  setCloseOpen(true);
-                }}
-              >
-                {isResolved ? t("today:resume.reclose") : t("plan:completion.markDone")}
-              </Button>
-            )}
-          </div>
 
           {/* Les deux gestes courts, en ligne de liens et non en cartes : ce
               sont des sorties, pas des actions primaires. Ils répondent aux
@@ -450,7 +365,7 @@ export function TodayPage() {
               donc après un grand vide, alors que ce sont les deux secondes
               réponses de l'écran. Et les deux registres se distinguent par la
               MARQUE, pas par le poids : le tirage porte une flèche et pas de
-              souligné, c'est un geste ; Ma semaine porte un souligné et pas de
+              souligné, c'est un geste ; la semaine porte un souligné et pas de
               flèche, c'est un lieu. */}
           {settings.cockpit.shortcuts && (
             <p className="zn-cockpit__exits">
@@ -458,8 +373,8 @@ export function TodayPage() {
                 {t("today:quick.draw")}
                 <ArrowRight />
               </Link>
-              <Link to="/weeks/new" className="zn-cockpit__exit">
-                {t("today:quick.week")}
+              <Link to={week.href} className="zn-cockpit__exit">
+                {t(week.mine ? "today:quick.week" : "today:quick.weekNew")}
               </Link>
             </p>
           )}
@@ -483,6 +398,248 @@ export function TodayPage() {
           label={t("today:art.label")}
         />
       )}
+    </div>
+  );
+}
+
+/**
+ * Une séance du jour choisi, entière.
+ *
+ * Tout ce que la page savait dire d'UNE séance vit ici : son nom, sa taille,
+ * ce qu'elle demande, son profil, sa sortie et sa clôture. C'est ce qui rend
+ * les journées doubles possibles — deux séances sont deux blocs, pas un titre
+ * qui les compte — et c'est aussi ce qui les rend closables, ce qu'elles
+ * n'étaient pas : un seul bouton ne savait pas laquelle des deux clore.
+ *
+ * Le catalogue est en chunks chargés à la demande, donc `useWorkout` est
+ * asynchrone, et c'est un HOOK : il doit être appelé par séance, donc par
+ * composant. C'est la vraie raison de ce découpage, la lisibilité n'est que
+ * la prime.
+ */
+function CockpitSession({
+  session,
+  index,
+  rank,
+  count,
+  isToday,
+  weekNumber,
+  canClose,
+  linkState,
+  unit,
+  isEn,
+  onClose,
+}: {
+  session: PlanSession;
+  index: number | undefined;
+  rank: number;
+  count: number;
+  isToday: boolean;
+  weekNumber: number;
+  canClose: boolean;
+  linkState: object;
+  unit: UnitSystem;
+  isEn: boolean;
+  onClose: (index: number, data: SessionCompletionData) => void;
+}) {
+  const { t } = useTranslation(["today", "plan"]);
+  const { workout } = useWorkout(session.workoutId);
+
+  const [closeOpen, setCloseOpen] = useState(false);
+  const [closeAnchor, setCloseAnchor] = useState<HTMLElement | null>(null);
+
+  /* Le nom de la séance fait le titre. Le repli le temps du chargement est
+     une séance t'attend, au singulier : ici on en décrit UNE, même quand la
+     journée en porte deux, et c'est la pile qui dit qu'elles sont deux. */
+  const title = workout
+    ? isEn
+      ? workout.nameEn
+      : workout.name
+    : t("today:resume.session.line", { count: 1, week: weekNumber });
+
+  const status = session.status;
+  const isResolved = status === "completed" || status === "modified" || status === "skipped";
+
+  /**
+   * Le combien : la durée, puis la distance quand le plan en vise une.
+   *
+   * Elle prend sa propre ligne, et elle passe AVANT semaine 1. La durée est
+   * l'information qui décide de sortir ou pas ; le numéro de semaine est un
+   * repère qu'on vérifie du coin de l'oeil. L'ordre disait l'inverse.
+   *
+   * `formatDurationMinutes` et pas `{{n}} min` : la page de séance écrivait
+   * 1h03 pendant que celle-ci écrivait 93 min. Un seul formateur, celui que
+   * les cartes de la bibliothèque emploient déjà.
+   */
+  const sizeLine = useMemo(() => {
+    const parts: string[] = [];
+    const min = session.estimatedDurationMin ?? 0;
+    if (min > 0) parts.push(formatDurationMinutes(min));
+    /* Au kilomètre entier, et précédée d'un tilde : c'est une cible, pas une
+       mesure. 14,2 km donnerait une précision que le plan n'a pas, et poserait
+       en passant la question du séparateur décimal. */
+    const km = session.targetDistanceKm ?? 0;
+    if (km > 0) {
+      parts.push(t("today:facts.distance", {
+        km: Math.round(convertDistance(km, unit)),
+        unit: getDistanceUnit(unit),
+      }));
+    }
+    return parts.join(" · ") || null;
+  }, [session.estimatedDurationMin, session.targetDistanceKm, unit, t]);
+
+  /**
+   * Le comment : ce que la séance demande, AVANT de l'ouvrir.
+   *
+   * Deux moitiés qui n'arrivent pas en même temps, et c'est ce qui dicte la
+   * forme :
+   *
+   * - l'allure est **synchrone**, elle est déjà sur la séance du plan
+   *   (`paceNotes`, écrit par le générateur et par les plans du catalogue) ;
+   * - le corps de séance est **asynchrone**, il faut le chunk du catalogue.
+   *
+   * Donc la ligne est réservée en CSS sur deux lignes : une semaine seule
+   * (`weekToPlan`) ne porte AUCUN `paceNotes`, la ligne y est vide jusqu'au
+   * chargement, et ordonner le synchrone en premier ne suffirait pas. Réserver
+   * est la seule réponse qui ne pousse pas le bouton sous le doigt.
+   */
+  const mainSummary = useMemo(() => {
+    // Une séance de renforcement n'a pas de corps zoné à résumer : son
+    // vocabulaire est celui des exercices, pas celui des phases.
+    if (!workout || isStrengthWorkout(workout)) return null;
+    const steps = getWorkoutPhaseSteps(workout, "main");
+    if (steps.length === 0) return null;
+    /* Un corps de séance d'un seul segment continu n'a pas de structure à
+       résumer : il rendrait sa propre durée de MODÈLE, 35', juste sous la
+       durée du PLAN, 1h33, qui l'a mise à l'échelle. Deux nombres qui se
+       contredisent valent moins que pas de nombre du tout ; l'allure en
+       dessous suffit à dire comment courir une sortie continue. */
+    if (steps.length === 1 && steps[0].kind === "segment") return null;
+    const summary = summarizeWorkoutSteps(steps, isEn).trim();
+    return summary.length > 0 ? summary : null;
+  }, [workout, isEn]);
+
+  const pace = useMemo(() => paceRangeOf(session, isEn, unit), [session, isEn, unit]);
+
+  /** Ce qui s'est passé, une fois la séance close. Le point d'arrêt.
+   *
+   * Elle ne redit PAS fait ou passé : le micro-label au-dessus du titre le dit
+   * déjà, et la barre du jour aussi. Elle porte les chiffres réels, qui sont
+   * la seule chose que ni l'un ni l'autre ne peut montrer. Une séance sautée
+   * n'en a aucun, elle ne laisse donc rien ici. */
+  const doneLine = useMemo(() => {
+    if (!isResolved || status === "skipped") return null;
+    const parts: string[] = [];
+    const min = session.actualDurationMin ?? session.estimatedDurationMin;
+    if (min > 0) parts.push(formatDurationMinutes(min));
+    if (session.actualDistanceKm != null && session.actualDistanceKm > 0) {
+      parts.push(formatDistanceWithUnit(session.actualDistanceKm, unit));
+    }
+    if (session.rpe != null) parts.push(t("today:facts.rpe", { n: session.rpe }));
+    return parts.join(" · ") || null;
+  }, [session, isResolved, status, unit, t]);
+
+  const execLine = isResolved ? doneLine : [mainSummary, pace].filter(Boolean).join(" · ") || null;
+
+  /* La ligne est RÉSERVÉE tant que quelque chose peut encore y arriver, donc
+     sur une séance en attente de son catalogue. Une fois la séance close,
+     plus rien n'est asynchrone : réserver deux lignes de vide n'y ferait
+     qu'un trou. */
+  const holdsExec = !isResolved;
+
+  /* Le créneau du profil est réservé, plein ou vide : la barre n'arrivait
+     qu'avec le catalogue et poussait de cinquante pixels tout ce qui la suit,
+     bouton compris. Et une séance de renforcement n'a pas de zones : plutôt
+     que d'effondrer le créneau, elle porte la marque maison du non mesuré, la
+     hachure à 45 degrés que `zone.css` dessine déjà pour `data-zone="0"`. */
+  const profile = useMemo(() => {
+    if (!workout) return null;
+    if (isStrengthWorkout(workout)) {
+      return [{ seconds: Math.max(1, (session.estimatedDurationMin ?? 0) * 60), zone: 0 as const }];
+    }
+    return toZoneBarBlocks(workout);
+  }, [workout, session.estimatedDurationMin]);
+
+  /* Le micro-label au-dessus du titre. Il dit l'état, et, les jours doubles,
+     LE RANG : séance 1 / 2 est la seule chose qui distingue deux blocs de
+     même forme avant que leurs noms n'arrivent du catalogue.
+
+     Aujourd'hui n'y est que si c'est aujourd'hui : la ligne de date, en haut,
+     dit déjà quel jour on regarde, et le répéter sur chaque bloc ferait dire
+     deux fois la même chose à deux endroits qui ne peuvent pas diverger. */
+  const label = [
+    count > 1 ? t("today:resume.rank", { n: rank + 1, total: count }) : null,
+    isResolved ? t(`plan:completion.${status}`) : isToday ? t("today:resume.todayLabel") : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  // Un seul `<h1>` par écran : le premier bloc le porte, les suivants sont des
+  // `<h2>`. Même style, deux niveaux, ce qui est exactement la relation entre
+  // la première séance du jour et celles qui la suivent.
+  const Heading = rank === 0 ? "h1" : "h2";
+
+  return (
+    <article className="zn-cockpit__session">
+      <div className="zn-cockpit__answer">
+        {label && <span className="zn-kicker zn-kicker--xs">{label}</span>}
+
+        <Heading className="zn-display zn-cockpit__headline" data-level="3">
+          {title}
+        </Heading>
+
+        {sizeLine && <p className="zn-cockpit__size">{sizeLine}</p>}
+
+        {(holdsExec || execLine) && (
+          <p className="zn-cockpit__how" data-hold={holdsExec || undefined}>
+            {execLine}
+          </p>
+        )}
+      </div>
+
+      {/* L'aperçu de la séance : un bloc par phase, la largeur dit le temps et
+          l'intensité est codée deux fois, densité d'encre ET hauteur. C'est
+          beaucoup d'information sans un mot de plus, et c'est le composant que
+          les cartes de la bibliothèque utilisent déjà (`toZoneBarBlocks`), pas
+          un second dessin de profil.
+
+          Le créneau garde sa hauteur même vide : la barre n'arrive qu'avec le
+          chunk du catalogue, et sans réserve elle poussait le bouton. */}
+      <div className="zn-cockpit__profile-slot">
+        {profile && profile.length > 0 && (
+          <ZoneBar blocks={profile} condense height={36} className="zn-cockpit__profile" />
+        )}
+      </div>
+
+      <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+        {/* Le bouton n'est plus le seul accès à l'information, puisque la
+            ligne du dessus dit déjà ce que la séance demande : il ne dit donc
+            plus ouvrir mais voir le détail. Et il descend de `lg` à la taille
+            normale, ce qui le met à la même hauteur que la clôture à côté de
+            lui : deux boutons, un cluster, pas une grosse chose et une petite.
+
+            C'est aussi, depuis que la bande ne navigue plus, la SEULE sortie
+            de l'écran vers une séance. */}
+        <Button asChild className="zn-cockpit__cta">
+          <Link to={sessionHref(session)} state={linkState}>
+            {t("today:resume.openDetail")}
+            <ArrowRight />
+          </Link>
+        </Button>
+
+        {canClose && index != null && (
+          <Button
+            variant="outline"
+            onClick={(event) => {
+              // L'ancre du popover est le bouton lui-même. `currentTarget`
+              // l'a déjà, pas besoin d'une ref à tenir à jour.
+              setCloseAnchor(event.currentTarget);
+              setCloseOpen(true);
+            }}
+          >
+            {isResolved ? t("today:resume.reclose") : t("plan:completion.markDone")}
+          </Button>
+        )}
+      </div>
 
       {/* Le panneau de clôture du plan, tel quel : une feuille au doigt, un
           popover ancré au bouton au pointeur fin. Un second formulaire ici
@@ -490,13 +647,17 @@ export function TodayPage() {
       <SessionCompletionPanel
         open={closeOpen}
         onOpenChange={setCloseOpen}
-        session={closeOpen ? (soleSession ?? null) : null}
-        weekNumber={focus.weekNumber}
-        sessionName={headline}
-        onSave={handleClose}
+        session={closeOpen ? session : null}
+        weekNumber={weekNumber}
+        sessionName={title}
+        onSave={(data) => {
+          if (index == null) return;
+          onClose(index, data);
+          setCloseOpen(false);
+        }}
         anchorElement={closeAnchor}
       />
-    </div>
+    </article>
   );
 }
 
@@ -522,14 +683,18 @@ function paceRangeOf(session: PlanSession, isEn: boolean, unit: UnitSystem): str
 }
 
 /**
- * La bande des sept jours, la semaine en aperçu, et sept raccourcis.
+ * La bande des sept jours : la semaine en aperçu, et le choix du jour.
  *
- * Elle a d'abord été écrite comme une figure non cliquable (`role="img"`, un
- * seul nom accessible) pour ne pas devoir un contrat clavier. Le propriétaire
- * a demandé moins de clics : un jour qui mène à sa séance vaut mieux qu'un jour
- * qu'on regarde. Et l'objection tombe d'elle-même, ce sont des **liens**, donc
- * le focus, les flèches du navigateur, le clic-milieu et ouvrir dans un
- * nouvel onglet viennent gratuitement. Il n'y a pas de `role` à doter.
+ * Elle a d'abord été une figure non cliquable, puis sept LIENS vers les
+ * séances. Les liens coûtaient trop cher pour ce qu'ils rendaient : regarder
+ * jeudi, c'était quitter l'écran. Elle est maintenant un `role="radiogroup"`
+ * de sept boutons, et ce qu'elle change est TOUT CE QUI EST EN DESSOUS, pas
+ * la page où l'on se trouve.
+ *
+ * Le contrat clavier vient de `useRadioRail`, écrit pour les deux rails de la
+ * bibliothèque : un seul arrêt de tabulation pour le groupe, les flèches qui
+ * déplacent et cochent, avec bouclage. Il n'y a donc pas de `role` livré sans
+ * son clavier, ce que ce dépôt a déjà fait deux fois.
  *
  * **Trois canaux, trois choses.** Tant que l'encre disait à la fois c'est
  * aujourd'hui et c'est la plus grosse séance, on ne savait pas si dimanche
@@ -543,25 +708,36 @@ function paceRangeOf(session: PlanSession, isEn: boolean, unit: UnitSystem): str
  *   sauté est hachuré, repos est un filet. Une distinction de FORME, pas de
  *   teinte : la bande reste lisible en niveaux de gris, ce qui est l'argument
  *   du système, comme `--zone-h-N` dans `zones.css`.
- * - **la lettre** porte le jour courant, à l'ENCRE et jamais au vermillon : le
+ * - **la lettre** porte le jour CHOISI, à l'ENCRE et jamais au vermillon : le
  *   bouton est le seul aplat d'accent de l'écran, un second le neutraliserait.
- *   Elle le portait sur la barre, où il se confondait désormais avec fait.
+ *   Aujourd'hui, lui, se marque d'un pointillé sous la lettre, qui ne se voit
+ *   que lorsqu'on est parti regarder un autre jour.
  *
- * Et le jour courant est le seul à porter sa valeur : une échelle de hauteurs
+ * Et le jour choisi est le seul à porter sa valeur : une échelle de hauteurs
  * sans une seule graduation ne se lit pas. Au corps mono le plus petit, c'est
  * un repère d'axe, pas une seconde annonce.
  *
- * Un jour de repos n'est pas un lien : il n'y a rien à ouvrir, et un lien qui
- * mène au même endroit que rien est un faux affordance.
+ * Un jour de repos est un bouton comme les six autres : il n'y a rien à y
+ * ouvrir, mais il y a quelque chose à y LIRE, repos et la prochaine sortie.
+ * C'est toute la différence entre choisir un jour et y aller.
  */
 function WeekStrip({
   focus,
-  sessionState,
+  selected,
+  onSelect,
 }: {
   focus: TodayFocus;
-  sessionState: (session: PlanSession) => object;
+  selected: number;
+  onSelect: (day: number) => void;
 }) {
   const { t } = useTranslation("today");
+  const railRef = useRef<HTMLDivElement>(null);
+
+  // Les sept jours, en indices : c'est la valeur que le rail déplace, et elle
+  // est stable d'un rendu à l'autre, ce dont `useRadioRail` a besoin pour
+  // retrouver la position courante.
+  const days = useMemo(() => [0, 1, 2, 3, 4, 5, 6], []);
+  const rail = useRadioRail<number>({ items: days, value: selected, onChange: onSelect, railRef });
 
   // Les initiales sont pour l'œil ; les noms accessibles ont besoin des noms
   // entiers, samedi et pas S.
@@ -587,15 +763,23 @@ function WeekStrip({
     m === 0 ? BAR_MIN : BAR_MIN + Math.round((m / longest) * (BAR_MAX - BAR_MIN));
 
   return (
-    <nav className="zn-cockpit__week" aria-label={t("week.label", { week: focus.weekNumber })}>
+    <div
+      className="zn-cockpit__week"
+      role="radiogroup"
+      aria-label={t("week.label", { week: focus.weekNumber })}
+      ref={railRef}
+      onKeyDown={rail.onKeyDown}
+    >
       {focus.week.map((day, index) => {
         const isToday = index === focus.dayOfWeek;
+        const isSelected = index === selected;
         const shape = dayStatus(day);
         const duration = minutes[index] > 0 ? formatDurationMinutes(minutes[index]) : null;
 
         /* Le nom accessible est composé de fragments plutôt qu'écrit en sept
            phrases : une seule clé par idée, et les combinaisons ne se paient
-           pas en traductions. */
+           pas en traductions. Coché ou non n'y est pas : `aria-checked` le
+           dit déjà, et le répéter le ferait dire deux fois. */
         const name = [
           dayNames[index],
           isToday ? t("week.today") : null,
@@ -609,8 +793,20 @@ function WeekStrip({
           .filter(Boolean)
           .join(", ");
 
-        const bar = (
-          <>
+        return (
+          <button
+            key={index}
+            type="button"
+            role="radio"
+            aria-checked={isSelected}
+            tabIndex={isSelected ? 0 : -1}
+            className="zn-cockpit__day"
+            data-today={isToday || undefined}
+            data-selected={isSelected || undefined}
+            aria-current={isToday ? "date" : undefined}
+            aria-label={name}
+            onClick={() => onSelect(index)}
+          >
             <span className="zn-cockpit__day-letter">{letters[index]}</span>
             <span
               className="zn-cockpit__day-bar"
@@ -619,39 +815,12 @@ function WeekStrip({
                  plan, pas un réglage de design. */
               style={{ "--bar-h": `${barHeight(minutes[index])}px` } as CSSProperties}
             />
-            {isToday && duration && (
+            {isSelected && duration && (
               <span className="zn-kicker zn-kicker--xs zn-cockpit__day-value">{duration}</span>
             )}
-          </>
-        );
-
-        if (day.length === 0) {
-          return (
-            <span
-              key={index}
-              className="zn-cockpit__day"
-              data-today={isToday || undefined}
-              aria-label={name}
-            >
-              {bar}
-            </span>
-          );
-        }
-
-        return (
-          <Link
-            key={index}
-            to={day.length === 1 ? sessionHref(day[0]) : `${focusPlanHref(focus)}?week=${focus.weekNumber}`}
-            state={day.length === 1 ? sessionState(day[0]) : undefined}
-            className="zn-cockpit__day"
-            data-today={isToday || undefined}
-            aria-current={isToday ? "date" : undefined}
-            aria-label={name}
-          >
-            {bar}
-          </Link>
+          </button>
         );
       })}
-    </nav>
+    </div>
   );
 }

@@ -28,11 +28,13 @@
     "openWeek": "Open my week",
     "openDetail": "See the details",
     "next": "Next session: {{day}}, {{duration}}",
+    "rank": "session {{n}} / {{total}}",
     "reclose": "Change the outcome"
   },
   "quick": {
     "draw": "Draw me a session",
-    "week": "My week"
+    "week": "My week",
+    "weekNew": "Build a week"
   },
   "art": {
     "brief": "A figure standing on the rule, at rest before the run.",
@@ -52,8 +54,6 @@
   },
   "facts": {
     "distance": "~{{km}} {{unit}}",
-    "rpe": "RPE {{n}}",
-    "sessions_one": "{{count}} session",
-    "sessions_other": "{{count}} sessions"
+    "rpe": "RPE {{n}}"
   }
 }
