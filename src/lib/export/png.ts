@@ -1,22 +1,37 @@
 /**
  * PNG Export - Image format
  *
- * Captures workout visualization as high-resolution PNG
+ * Captures a DOM element as a high-resolution PNG.
  */
 
 import type { RefObject } from "react";
+import { THEME_COLOR, documentTheme } from "@/lib/theme";
+import { triggerDownload } from "./download";
 
 /**
- * Export an HTML element as PNG image
+ * Le fond de la capture suit le theme peint.
+ *
+ * Il etait fixe a `#ffffff`, ce qui allait tant que l'app n'avait qu'un
+ * theme. En theme sombre, la capture posait une carte sombre sur une page
+ * blanche : le titre gris clair de la carte et le texte de ses puces se
+ * retrouvaient blanc sur blanc, et l'image exportee etait illisible la ou elle
+ * l'etait parfaitement a l'ecran. On rend donc ce que l'utilisateur voit.
+ */
+function exportBackground(): string {
+  return THEME_COLOR[documentTheme()];
+}
+
+/**
+ * Export an HTML element as a PNG image.
  *
  * @param elementOrRef - HTML element or React ref to capture
- * @param workoutId - Used for the filename
- * @returns Promise that resolves when download is triggered
+ * @param basename - Filename without its extension
+ * @returns The filename handed to the browser
  */
 export async function exportToPNG(
   elementOrRef: HTMLElement | RefObject<HTMLElement | null>,
-  workoutId: string
-): Promise<void> {
+  basename: string
+): Promise<string> {
   // Handle both direct element and ref
   const element =
     "current" in elementOrRef ? elementOrRef.current : elementOrRef;
@@ -29,7 +44,7 @@ export async function exportToPNG(
 
   const dataUrl = await toPng(element, {
     pixelRatio: 2, // 2x resolution for retina quality
-    backgroundColor: "#ffffff", // Ensure white background
+    backgroundColor: exportBackground(),
     cacheBust: true,
     skipFonts: true, // Skip font embedding to avoid errors with undefined fonts
     style: {
@@ -38,11 +53,5 @@ export async function exportToPNG(
     },
   });
 
-  // Trigger download
-  const link = document.createElement("a");
-  link.href = dataUrl;
-  link.download = `${workoutId}-workout.png`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  return triggerDownload(dataUrl, `${basename}.png`);
 }

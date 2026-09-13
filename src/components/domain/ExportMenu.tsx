@@ -72,7 +72,7 @@ export function ExportMenu({ workout, className, size = "sm", variant = "default
 
     try {
       if (exportCardRef.current) {
-        await exportToPNG(exportCardRef.current, workout.id);
+        await exportToPNG(exportCardRef.current, `${workout.id}-workout`);
         toast.success(t("export.success.image"), { id: toastId });
       } else {
         throw new Error("Export card not rendered");

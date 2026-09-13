@@ -19,6 +19,7 @@ import { buildParamsUrl } from "@/lib/share/urlParams";
 import { SEOHead } from "@/components/seo";
 import { useSettings } from "@/hooks/useSettings";
 import { exportToPNG } from "@/lib/export/png";
+import { toast } from "sonner";
 import { convertPace, convertDistance, getPaceUnit, getDistanceUnit } from "@/lib/units";
 import { generateSplits, formatSplitTime as formatTime, formatPaceDisplay } from "@/lib/splits";
 import type { SplitStrategy as Strategy } from "@/lib/splits";
@@ -132,10 +133,24 @@ export function SplitGeneratorPage() {
     return rows;
   }, [splits, unit, distanceUnitLabel, paceUnitLabel, distanceKm, totalTimeSeconds, t]);
 
+  /**
+   * Le tableau de splits en image. Deux choses manquaient : le fichier
+   * sortait sous "splits-10-workout.png", `exportToPNG` collant un suffixe
+   * pense pour les seances au nom que l'appelant donne ; et l'export etait
+   * le seul de l'app a ne rien dire, ni succes ni echec, alors que la
+   * capture peut echouer (police, memoire) et laissait alors l'utilisateur
+   * devant un bouton qui n'a rien fait.
+   */
   const handleExport = async () => {
     if (!tableRef.current) return;
     const distLabel = isCustom ? `${distanceKm}km` : `${selectedRace}`;
-    await exportToPNG(tableRef, `splits-${distLabel}`);
+    const toastId = toast.loading(t("export.loading.image", t("export.title")));
+    try {
+      await exportToPNG(tableRef, `splits-${distLabel}`);
+      toast.success(t("export.success.image"), { id: toastId });
+    } catch {
+      toast.error(t("export.error.image"), { id: toastId });
+    }
   };
 
   return (

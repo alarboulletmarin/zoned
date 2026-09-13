@@ -5,6 +5,7 @@ import { Download, Upload } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { triggerDownload } from "@/lib/export/download";
 import {
   Card,
   CardContent,
@@ -46,13 +47,8 @@ export function DataExportImport() {
     const blob = new Blob([JSON.stringify(backup, null, 2)], {
       type: "application/json",
     });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
     const date = new Date().toISOString().split("T")[0];
-    a.href = url;
-    a.download = `zoned-backup-${date}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    triggerDownload(blob, `zoned-backup-${date}.json`);
     toast.success(t("settings.data.exportSuccess"));
   }
 

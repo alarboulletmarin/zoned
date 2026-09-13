@@ -9,6 +9,7 @@
  */
 
 import type { Route, RouteCoordinate } from "@/types/route";
+import { triggerDownload } from "./download";
 
 function escapeXml(value: string): string {
   return value
@@ -58,22 +59,8 @@ ${points}
  * @returns the suggested filename used for the download.
  */
 export function downloadRouteGpx(route: Route): string {
-  const xml = routeToGpx(route);
-  const blob = new Blob([xml], { type: "application/gpx+xml" });
-  const url = URL.createObjectURL(blob);
-
+  const blob = new Blob([routeToGpx(route)], { type: "application/gpx+xml" });
   const safeName = route.name.replace(/[^a-zA-Z0-9_-]+/g, "_").slice(0, 60) || "route";
-  const filename = `${safeName}.gpx`;
 
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  // Defer revoke so the browser has time to use the blob URL
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-  return filename;
+  return triggerDownload(blob, `${safeName}.gpx`);
 }

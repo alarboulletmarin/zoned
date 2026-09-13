@@ -13,6 +13,8 @@ import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
 import i18n from "@/i18n";
 import { isEnglish, pickLang, pickLangArray } from "@/lib/i18n-utils";
+import { triggerDownload } from "./download";
+import { planFilename } from "./planFilename";
 
 /**
  * Get the Monday of the week that contains the given date.
@@ -245,16 +247,10 @@ export function exportPlanToICS(
       throw new Error(error?.message || "Failed to create ICS events");
     }
 
-    // Trigger download
-    const blob = new Blob([value], { type: "text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `plan-${plan.config.raceDistance ?? "free"}-${plan.id}.ics`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    triggerDownload(
+      new Blob([value], { type: "text/calendar;charset=utf-8" }),
+      planFilename(plan, "ics"),
+    );
   } catch (error) {
     console.error("Export failed:", error);
     throw error;

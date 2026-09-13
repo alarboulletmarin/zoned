@@ -14,6 +14,8 @@
  */
 
 import type { RefObject } from "react";
+import { THEME_COLOR, documentTheme } from "@/lib/theme";
+import { triggerDownload } from "./download";
 
 interface ToPngOptions {
   pixelRatio?: number;
@@ -42,7 +44,9 @@ async function nodeToBlob(
     skipFonts: true,
   };
   if (!transparent) {
-    opts.backgroundColor = "#f8fafc";
+    // Le fond suit le theme peint. Il etait fixe a une valeur claire, ce qui
+    // posait une carte sombre sur une page claire en theme sombre.
+    opts.backgroundColor = THEME_COLOR[documentTheme()];
   }
   // When backgroundColor is omitted, html-to-image keeps the PNG alpha
   // channel, exactly what we want for overlays.
@@ -56,18 +60,7 @@ export async function downloadImage(
   filename: string,
   transparent: boolean,
 ): Promise<void> {
-  const blob = await nodeToBlob(target, transparent);
-  const url = URL.createObjectURL(blob);
-  try {
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } finally {
-    URL.revokeObjectURL(url);
-  }
+  triggerDownload(await nodeToBlob(target, transparent), filename);
 }
 
 /** Returns true when the browser exposes the Clipboard image-write API. */
@@ -148,16 +141,6 @@ export async function shareImage(
     }
   }
 
-  const url = URL.createObjectURL(blob);
-  try {
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } finally {
-    URL.revokeObjectURL(url);
-  }
+  triggerDownload(blob, filename);
   return "download";
 }
