@@ -146,10 +146,17 @@ export function SplitGeneratorPage() {
     const distLabel = isCustom ? `${distanceKm}km` : `${selectedRace}`;
     const toastId = toast.loading(t("export.loading.image", t("export.title")));
     try {
-      await exportToPNG(tableRef, `splits-${distLabel}`);
-      toast.success(t("export.success.image"), { id: toastId });
-    } catch {
-      toast.error(t("export.error.image"), { id: toastId });
+      const { method } = await exportToPNG(tableRef, `splits-${distLabel}`);
+      toast.success(
+        t(method === "native" ? "export.success.imageShared" : "export.success.image"),
+        { id: toastId },
+      );
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        toast.dismiss(toastId);
+      } else {
+        toast.error(t("export.error.image"), { id: toastId });
+      }
     }
   };
 

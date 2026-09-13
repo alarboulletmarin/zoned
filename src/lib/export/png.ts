@@ -7,6 +7,7 @@
 import type { RefObject } from "react";
 import { THEME_COLOR, documentTheme } from "@/lib/theme";
 import { triggerDownload } from "./download";
+import { deliverImage, type ShareMethod } from "./share";
 
 /**
  * Le fond de la capture suit le theme peint.
@@ -34,17 +35,31 @@ interface ExportToPNGOptions {
 }
 
 /**
+ * Vrai quand l'appareil se pilote au doigt : telephone, tablette.
+ *
+ * Ce n'est pas la taille de l'ecran qui decide, c'est la nature de
+ * l'appareil : un telephone tenu en paysage reste un telephone, et une
+ * fenetre de navigateur retrecie sur un ordinateur reste un ordinateur, ou
+ * l'on veut un fichier.
+ */
+function isHandheld(): boolean {
+  if (typeof navigator === "undefined" || typeof window === "undefined") return false;
+  if (navigator.maxTouchPoints === 0) return false;
+  return window.matchMedia?.("(pointer: coarse)").matches ?? false;
+}
+
+/**
  * Export an HTML element as a PNG image.
  *
  * @param elementOrRef - HTML element or React ref to capture
  * @param basename - Filename without its extension
- * @returns The filename handed to the browser
+ * @returns How the image reached the user, and under which name
  */
 export async function exportToPNG(
   elementOrRef: HTMLElement | RefObject<HTMLElement | null>,
   basename: string,
   options: ExportToPNGOptions = {},
-): Promise<string> {
+): Promise<{ filename: string; method: ShareMethod }> {
   // Handle both direct element and ref
   const element =
     "current" in elementOrRef ? elementOrRef.current : elementOrRef;
@@ -94,5 +109,23 @@ export async function exportToPNG(
     },
   });
 
-  return triggerDownload(dataUrl, `${basename}.png`);
+  const filename = `${basename}.png`;
+
+  // Une data URL, et la capture ne sortait pas d'un telephone.
+  //
+  // `toPng` rend une data URL, et c'etait elle qu'on posait sur l'ancre. Un
+  // ordinateur l'accepte ; un telephone, non : Safari comme Chrome refusent
+  // de telecharger une data URL de plusieurs centaines de kilo-octets depuis
+  // un clic de page, sans erreur ni message. Le bouton disait "Image
+  // exportee" et il ne se passait rien du tout. La capture devient donc un
+  // blob, comme les huit autres exports de l'app.
+  const blob = await (await fetch(dataUrl)).blob();
+
+  // Et sur un telephone, un fichier telecharge ne va pas dans les photos.
+  // La feuille de partage, elle, y va.
+  if (isHandheld()) {
+    return { filename, method: await deliverImage(blob, filename) };
+  }
+
+  return { filename: triggerDownload(blob, filename), method: "download" };
 }
