@@ -365,6 +365,14 @@
    fois, par une forme qui apparaît, par une couleur, et par l'attribut que
    lisent les lecteurs d'écran. Le vermillon sur l'encre est mesuré à 4,58:1,
    au-dessus des 3:1 qu'un objet graphique doit tenir (WCAG 1.4.11). */
+/* Sur la ligne qui déplie sans naviguer, le chevron est DANS le bouton et
+   non à côté : sans cet ordre, le point se poserait après lui, tout au bord,
+   au lieu de suivre le libellé comme sur les quatre autres portes. La marge
+   automatique du chevron continue de le pousser à droite. */
+.zn-menu__door--toggle .zn-menu__door-chevron {
+  order: 1;
+}
+
 .zn-menu__door[data-current]::after {
   content: "";
   flex: none;
@@ -472,6 +480,45 @@
 
    8px entre le champ et les pilules, contre 20 : les douze pixels rendus sont
    ce qui laisse à la figure son plancher de 120px sur un iPhone SE. */
+/* Les deux réglages, empilés et à la largeur de la recherche.
+
+   Ils tenaient sur une rangée à deux colonnes, chacun sur une demi-largeur.
+   Le thème y gagne un troisième segment, et `Système` ne tient pas dans les
+   54px qu'une demi-largeur laisse à chacun de trois. Empilés, les trois
+   contrôles du pied font la même largeur et se lisent comme une même famille,
+   ce qui est aussi le but. La scène, qui est en `flex: 1`, paie la trentaine
+   de pixels que ça coûte, et elle en avait de reste. */
+.zn-menu__settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* Le `Segmented` maison est peint pour le papier : piste sur fond enfoncé,
+   segment choisi inversé à l'encre. Sur un panneau qui EST l'encre, il faut
+   l'inverse, et seuls les tokens changent, jamais la forme.
+
+   Le parent est dans le sélecteur parce que segmented.css est importé en 84 et
+   cette feuille en 67 : à égale spécificité c'est lui qui tranche. */
+.zn-mobile-menu .zn-segmented {
+  background: transparent;
+  border-color: var(--panel-ink-text);
+}
+
+.zn-mobile-menu .zn-segmented__item {
+  color: var(--panel-ink-faint);
+}
+
+.zn-mobile-menu .zn-segmented__item:hover:not([aria-checked="true"]) {
+  color: var(--panel-ink-text);
+}
+
+.zn-mobile-menu .zn-segmented__item[aria-checked="true"] {
+  background: var(--panel-ink-text);
+  color: var(--panel-ink);
+  border-color: var(--panel-ink-text);
+}
+
 .zn-menu__foot {
   display: flex;
   flex-direction: column;
@@ -522,11 +569,6 @@
    flex : `1fr 1fr` donne la moitie a chacun QUEL QUE SOIT le mot dedans,
    donc FR/EN et le theme gardent la meme boite quand on passe en anglais,
    ou le jour ou l'un des deux libelles change. */
-.zn-menu__pills {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-6);
-}
 
 /* `justify-content: center` et non le debut : dans une colonne plus large
    que son mot, un libelle cale a gauche laisse un trou a droite de
@@ -536,27 +578,6 @@
    quatre libelles (FR et EN, clair et sombre) et il doit tenir dans la
    moitie d'un iPhone SE sans se couper. Mesure sous Chromium, polices
    reelles. */
-.zn-menu__pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--sp-4);
-  min-inline-size: 0;
-  min-block-size: var(--hit-min);
-  padding-inline: var(--sp-6);
-
-  background: transparent;
-  color: var(--panel-ink-text);
-  border: var(--bw-rule) solid var(--panel-ink-text);
-  border-radius: var(--r-pill);
-
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  letter-spacing: var(--ls-mono-label);
-  line-height: 1;
-  text-transform: uppercase;
-  cursor: pointer;
-}
 
 /* Les deux codes sont imprimés ; celui qui a cours porte une pastille de
    papier.
@@ -566,17 +587,7 @@
    dans la liste des pages. L'inversion se lit aussi en niveaux de gris, et
    c'est la même que celle-là : sur un panneau d'encre, l'inversion est du
    papier. */
-.zn-menu__lang {
-  padding: var(--sp-2) var(--sp-4);
-  border-radius: var(--r-pill);
-  color: var(--panel-ink-faint);
-}
 
-.zn-menu__lang[data-on] {
-  background: var(--panel-ink-text);
-  color: var(--panel-ink);
-  font-weight: var(--fw-bold);
-}
 
 /* Et cette feuille ne coûte plus rien aux autres. C'est ici que se tenait
    l'inventaire de ce que la pastille faisait payer ailleurs, --fab-clear dans
