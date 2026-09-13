@@ -44,17 +44,16 @@
  * de couleur à la SORTIE plutôt qu'à la navigation. Cinq points en sont
  * sortis, et chacun a changé quelque chose ici ou dans mobile-menu.css :
  *
- * 1. LES PORTES DESCENDENT. Elles étaient ancrées en haut, la figure occupait
- *    la zone du pouce et ~300px de vide les séparaient. La scène est
- *    maintenant AU-DESSUS des portes : elle prend le vide, qui n'est donc plus
- *    du vide, et les cinq destinations tombent sous le pouce, juste au-dessus
- *    du pied. L'écran se lit fermer, figure, navigation, outils.
+ * 1. LES PORTES DESCENDENT. Elles étaient ancrées en haut, le dessin occupait
+ *    la zone du pouce et ~300px de vide les séparaient. La place libre est
+ *    passée AU-DESSUS d'elles, et les cinq destinations tombent sous le pouce,
+ *    juste au-dessus du pied. L'écran se lit fermer, vide, navigation, outils.
  *
  * 2. LA FERMETURE N'EST PLUS UN APLAT VERMILLON. Elle était le seul objet
  *    coloré de l'écran, donc le premier balayé, pour l'action qu'on veut le
  *    moins. Elle passe en contour avec une croix ; le vermillon est réservé au
- *    point de la porte où l'on se trouve. Elle gagne deux sorties de plus, le
- *    glissé vers le bas et l'appui dans la scène, voir plus bas.
+ *    point de la porte où l'on se trouve. Elle gagne une sortie de plus,
+ *    l'appui dans le vide au-dessus des portes.
  *
  * 3. LA PORTE OÙ L'ON EST SE VOIT. Rien ne la marquait : à chaque ouverture il
  *    fallait reconstruire où l'on est au lieu de le lire. Un point vermillon
@@ -77,6 +76,29 @@
  *    un bouton entier. C'est la seule ligne de la liste qui déplie sans
  *    naviguer, et c'est parce qu'elle n'a pas de page.
  *
+ * ── DEUX RETRAITS, PLUS TARD LE MÊME SOIR ─────────────────────────────────
+ *
+ * LE DESSIN EST PARTI, la scène est restée. C'est elle qui prend la place
+ * libre et pousse les portes sous le pouce, et un appui dedans referme
+ * toujours : le panneau n'a donc rien perdu de sa forme ni de ses sorties, il
+ * a perdu son image. S'en vont avec elle la carte des cinq dessins, le duo de
+ * repli, et les deux règles qui les dimensionnaient (mobile-menu.css). La
+ * scène ne porte plus rien, donc elle n'a plus à se déclarer conteneur ni à
+ * centrer quoi que ce soit : il ne lui reste que son `flex: 1`, qui était sa
+ * seule raison d'être.
+ *
+ * LE GLISSÉ VERS LE BAS AUSSI. Tant qu'aucune porte n'est ouverte, le panneau
+ * tient dans l'écran et ne défile pas ; un doigt qui balaie vers le bas par
+ * habitude ne trouvait donc pas du défilement, mais un panneau qui suit à
+ * demi-vitesse, saute de 8px en franchissant son seuil de 16, puis revient
+ * quand on lâche avant 120. Cet aller-retour se lit comme un BLOCAGE, pas
+ * comme une sortie, et la sortie, personne ne l'annonçait. Le geste part en
+ * entier : ses deux seuils, ses deux refs, ses quatre écouteurs de pointeur,
+ * le clic qu'il fallait avaler derrière lui et la transition que
+ * mobile-menu.css tenait pour son retour. Les trois sorties qui restent sont
+ * celles qui se voient ou qui se savent : la pilule, Escape, l'appui dans le
+ * vide.
+ *
  * Nothing is lost against the old drawer: the five doors are the screen, and
  * every child page and account page hangs under the door it belongs to, closed
  * until you ask for it. That replaces the flat run of twenty-five mono links
@@ -84,15 +106,9 @@
  * no order anyone could read.
  */
 
-import type { FunctionComponent, PointerEvent as ReactPointerEvent, SVGProps } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import DoorNumbers from "@/assets/doodles/door-numbers.svg?react";
-import DoorPlan from "@/assets/doodles/door-plan.svg?react";
-import DoorSessions from "@/assets/doodles/door-sessions.svg?react";
-import DoorToday from "@/assets/doodles/door-today.svg?react";
-import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import { ChevronDown, Menu, Search, X } from "@/components/icons";
 import { useCommandPalette } from "@/components/search";
 import { useScrollLock } from "@/components/ui/native-dialog";
@@ -105,35 +121,9 @@ import { changeLanguage, getCurrentLanguage } from "@/i18n";
 // le cycle d'import.
 import { PRIMARY_NAV, isNavActive } from "./navigation";
 
-/** One figure per door, keyed by the PRIMARY_NAV id. A page no door owns,
- *  settings, about, contribute, gets the duo instead, so the panel always
- *  has exactly one figure and never two. */
-const DOOR_FIGURES: Record<string, FunctionComponent<SVGProps<SVGElement>>> = {
-  today: DoorToday,
-  sessions: DoorSessions,
-  plan: DoorPlan,
-  numbers: DoorNumbers,
-};
-
 /** L'id du groupe qui n'est pas une porte. Il n'a pas de page, donc pas de
  *  section dans PRIMARY_NAV, mais il partage l'exclusivité des autres. */
 const MORE_ID = "more";
-
-/** Le glissé qui referme, en pixels de doigt.
- *
- *  120px est à peu près un tiers d'écran de téléphone : assez pour qu'un
- *  glissé de lecture ne referme jamais par accident, assez peu pour que le
- *  geste aboutisse sans traverser l'écran. Le panneau suit le doigt à moitié
- *  vitesse (mobile-menu.css ne s'en mêle pas, c'est écrit ici), ce qui est la
- *  résistance habituelle d'une feuille qu'on repousse. */
-const CLOSE_DRAG = 120;
-
-/** Au-delà, le geste est un glissé et non un appui. Deux choses en dépendent :
- *  le panneau ne commence à suivre le doigt qu'ici, donc un appui ne le fait
- *  pas frémir, et le clic qui suit est avalé, sinon un doigt posé sur une
- *  porte y navigue en repoussant le panneau. 16px, c'est au-dessus du
- *  tremblement d'un appui et très en dessous des 120 du geste. */
-const DRAG_SLOP = 16;
 
 /** Le reste, en un groupe au pied des portes.
  *
@@ -223,14 +213,9 @@ export function MobileMenu() {
   // (voir l'effet de fermeture plus bas).
   const handoff = useRef(false);
 
-  // Le glissé qui referme : l'ordonnée de départ du doigt, et le drapeau qui
-  // dit que le geste a dépassé l'appui.
-  const dragFrom = useRef<number | null>(null);
-  const dragged = useRef(false);
-
-  // Escape, the close pill, a navigation and the swipe all end up firing
-  // `close` on the element, so this is the single place the mirror is updated
-  // and the focus handed back to the glyph that opened the panel.
+  // Escape, the close pill and a navigation all end up firing `close` on the
+  // element, so this is the single place the mirror is updated and the focus
+  // handed back to the glyph that opened the panel.
   useEffect(() => {
     const dialog = dialogRef.current;
     // Above 1024px nothing is rendered, so no `close` event will ever come.
@@ -245,18 +230,11 @@ export function MobileMenu() {
       setOpen(false);
       // Toutes les portes se referment avec le panneau.
       setOpenDoor(null);
-      // Et le panneau retrouve sa place : un glissé qui aboutit ferme le
-      // dialogue en le laissant décalé, et la translation survivrait à la
-      // prochaine ouverture.
-      dialog.style.transform = "";
-      dialog.style.transition = "";
-      dragFrom.current = null;
       if (handoff.current) {
         handoff.current = false;
         return;
       }
-      // Escape, la pilule et le glissé RENDENT la main : le focus repart d'où
-      // il venait. Ce `focus()` est écrit parce que la restitution de la
+      // Escape et la pilule RENDENT la main : le focus repart d'où il venait. Ce `focus()` est écrit parce que la restitution de la
       // plate-forme ne suffit pas ici : WebKit ne donne pas le focus à un
       // bouton qu'on TAPE, donc il n'y a souvent rien à restituer. Il porte en
       // revanche l'état focus-visible de l'élément qu'il remplace, et cet
@@ -294,55 +272,7 @@ export function MobileMenu() {
     close();
   }, [pathname, close]);
 
-  // ── le glissé vers le bas ───────────────────────────────────────────────
-  //
-  // Une sortie de plus, et la plus attendue sur une feuille plein écran. Elle
-  // n'est jamais la seule : Escape, la pilule et l'appui dans la scène font le
-  // même travail, donc rien ne dépend d'un geste que personne n'annonce.
-  //
-  // La garde qui compte est `scrollTop`. Le panneau défile dès qu'une porte
-  // est ouverte, et un doigt qui remonte la liste tire aussi vers le bas ; on
-  // n'arme donc le geste qu'en HAUT de la course, là où le panneau n'a plus
-  // rien à défiler et où la seule chose que le doigt peut vouloir est le
-  // repousser. La souris est exclue, elle a la pilule.
-  const onPointerDown = (event: ReactPointerEvent<HTMLDialogElement>) => {
-    dragged.current = false;
-    if (event.pointerType === "mouse") return;
-    if ((innerRef.current?.scrollTop ?? 0) > 0) return;
-    dragFrom.current = event.clientY;
-  };
-
-  const onPointerMove = (event: ReactPointerEvent<HTMLDialogElement>) => {
-    const from = dragFrom.current;
-    const dialog = dialogRef.current;
-    if (from === null || !dialog) return;
-    const dy = event.clientY - from;
-    if (Math.abs(dy) > DRAG_SLOP) dragged.current = true;
-    // Rien ne bouge tant que le geste est un appui.
-    if (!dragged.current) return;
-    // Pas de transition pendant que le doigt est posé : le panneau est
-    // exactement où on le tient, à moitié vitesse.
-    dialog.style.transition = "none";
-    dialog.style.transform = dy > 0 ? `translateY(${dy * 0.5}px)` : "";
-  };
-
-  const onPointerEnd = (event: ReactPointerEvent<HTMLDialogElement>) => {
-    const from = dragFrom.current;
-    const dialog = dialogRef.current;
-    dragFrom.current = null;
-    if (from === null || !dialog) return;
-    const dy = event.clientY - from;
-    dialog.style.transition = "";
-    dialog.style.transform = "";
-    if (dy > CLOSE_DRAG) close();
-  };
-
   if (!isCompact) return null;
-
-  // The door you are standing in, read once for the whole panel: the figure
-  // changes with the door, not with the page under it.
-  const door = PRIMARY_NAV.find((section) => isNavActive(pathname, section));
-  const Figure = (door && DOOR_FIGURES[door.id]) || RunnersDuo;
 
   return (
     <>
@@ -390,37 +320,22 @@ export function MobileMenu() {
         ref={dialogRef}
         className="zn-mobile-menu"
         aria-label={t("actions.menu")}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerEnd}
-        onPointerCancel={onPointerEnd}
-        // Le clic qui suit un glissé est avalé avant d'atteindre la porte sous
-        // le doigt : on repousse le panneau, on ne navigue pas.
-        onClickCapture={(event) => {
-          if (!dragged.current) return;
-          dragged.current = false;
-          event.preventDefault();
-          event.stopPropagation();
-        }}
       >
         {/* tabIndex -1 : cible du focus d'ouverture (voir le déclencheur),
             sans arrêt de tabulation supplémentaire. */}
         <div className="zn-menu__inner" ref={innerRef} tabIndex={-1}>
-          {/* La scène, et elle est passée AU-DESSUS des portes.
-              Elle tenait le bas du panneau, donc la figure occupait la zone du
-              pouce pendant que les cinq destinations restaient hors d'atteinte
-              en haut, avec le vide entre les deux. Le vide et la figure sont
-              maintenant le même objet : la scène prend toute la place libre,
-              quelle qu'elle soit, et les portes tombent sous le pouce.
+          {/* La scène : la place libre du panneau, et RIEN D'AUTRE depuis que
+              le dessin en est parti. Elle reste parce qu'elle fait deux choses
+              qu'aucun vide ne ferait tout seul. Elle prend tout ce qui reste
+              (`flex: 1`), donc elle tient les portes en bas, sous le pouce,
+              quelle que soit la hauteur de l'écran. Et un appui dedans
+              referme : c'est le hors panneau d'une feuille qui, elle, n'en a
+              pas, puisqu'elle EST l'écran. Rien ne dépend de ce raccourci, la
+              pilule et Escape sont toujours là.
 
-              Muette pour un lecteur d'écran, l'aria-current des portes dit
-              déjà où l'on est, et un appui dedans referme : c'est le hors
-              panneau d'une feuille qui, elle, n'en a pas, puisqu'elle EST
-              l'écran. Rien ne dépend de ce raccourci, la pilule et Escape
-              sont toujours là. */}
-          <div className="zn-menu__scene" aria-hidden="true" onClick={close}>
-            <Figure className="zn-menu__figure" focusable="false" />
-          </div>
+              Muette pour un lecteur d'écran : elle n'a jamais rien dit, et
+              l'aria-current des portes dit déjà où l'on est. */}
+          <div className="zn-menu__scene" aria-hidden="true" onClick={close} />
 
           <div className="zn-menu__nav">
             {/* Le libellé de la liste, collé à la liste : il flottait 32px
