@@ -511,18 +511,39 @@
   color: var(--panel-ink-text);
 }
 
+/* Les deux reglages font, ensemble, la largeur du champ au-dessus.
+
+   Ils etaient deux boites a leur largeur naturelle, donc la rangee
+   s'arretait ou le mot du theme s'arretait, quelque part avant le bord
+   droit, et cet arret n'etait a rien : ni a une colonne, ni au champ, ni a
+   la marge d'ecran. Le pied avait donc deux bords de fin au lieu d'un.
+
+   Deux colonnes egales, et la grille est ici le bon outil plutot que le
+   flex : `1fr 1fr` donne la moitie a chacun QUEL QUE SOIT le mot dedans,
+   donc FR/EN et le theme gardent la meme boite quand on passe en anglais,
+   ou le jour ou l'un des deux libelles change. */
 .zn-menu__pills {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--sp-6);
 }
 
+/* `justify-content: center` et non le debut : dans une colonne plus large
+   que son mot, un libelle cale a gauche laisse un trou a droite de
+   lui-meme, et on aurait echange un bord flottant contre deux.
+
+   Le padding descend de 20px a 12px : PASSER EN SOMBRE est le plus long des
+   quatre libelles (FR et EN, clair et sombre) et il doit tenir dans la
+   moitie d'un iPhone SE sans se couper. Mesure sous Chromium, polices
+   reelles. */
 .zn-menu__pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--sp-4);
+  min-inline-size: 0;
   min-block-size: var(--hit-min);
-  padding-inline: var(--sp-10);
+  padding-inline: var(--sp-6);
 
   background: transparent;
   color: var(--panel-ink-text);
