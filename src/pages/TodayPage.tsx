@@ -1,8 +1,15 @@
-import { useCallback, useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FunctionComponent,
+} from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowRight } from "@/components/icons";
+import { ArrowRight, Bike, Dumbbell, Pool, Run, type IconProps } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
@@ -13,13 +20,16 @@ import { useRadioRail } from "@/hooks/useRadioRail";
 import { useSettings } from "@/hooks/useSettings";
 import {
   dayBarBlocks,
+  dayKinds,
   dayStatus,
   focusDayDate,
   focusPlanHref,
   pickTodayFocus,
   planPosition,
   sessionHref,
+  sessionKind,
   weekShortcut,
+  type SessionKind,
   type TodayFocus,
 } from "@/lib/cockpit";
 import { updateSessionCompletion, type SessionCompletionData } from "@/lib/planStorage";
@@ -38,6 +48,20 @@ import { isStrengthWorkout } from "@/types";
 import type { PlanSession } from "@/types/plan";
 import type { UnitSystem } from "@/types/settings";
 import DoorToday from "@/assets/doodles/door-today.svg?react";
+
+/**
+ * Un glyphe par famille de séance, et ce sont ceux de la bibliothèque : le
+ * rail des disciplines y montre déjà ces quatre-là, donc rien de neuf à
+ * apprendre en passant d'un écran à l'autre. Les libellés viennent du même
+ * endroit (`library:activityToggle`), pour que la course ne s'appelle pas
+ * Course ici et Course à pied là.
+ */
+const KIND_ICONS: Record<SessionKind, FunctionComponent<IconProps>> = {
+  running: Run,
+  cycling: Bike,
+  swimming: Pool,
+  strength: Dumbbell,
+};
 
 /**
  * Le cockpit.
@@ -88,7 +112,7 @@ import DoorToday from "@/assets/doodles/door-today.svg?react";
  *
  * Deux marques, donc, et elles ne se confondent pas : le jour CHOISI porte
  * l'encre — lettre grasse, filet plein, et la seule durée chiffrée de la
- * bande ; AUJOURD'HUI porte un pointillé sous sa lettre, qui n'est là que
+ * bande ; AUJOURD'HUI porte un point rond sous sa lettre, qui n'est là que
  * lorsqu'on est parti voir un autre jour. À l'arrivée les deux coïncident, et
  * l'écran est exactement celui d'avant.
  *
@@ -472,8 +496,17 @@ function CockpitSession({
   isEn: boolean;
   onClose: (index: number, data: SessionCompletionData) => void;
 }) {
-  const { t } = useTranslation(["today", "plan"]);
+  const { t } = useTranslation(["today", "plan", "library"]);
   const { workout } = useWorkout(session.workoutId);
+
+  /* La FAMILLE de la séance, et elle est lue sur le plan, pas sur le
+     catalogue : `sessionKind` est synchrone, donc le glyphe est là dès le
+     premier rendu, avant le nom. C'est la première chose que l'écran peut
+     dire d'une séance, et il se trouve que c'est aussi celle qu'on cherche en
+     premier — on ne prépare pas le même sac pour un footing et pour une
+     séance de natation. */
+  const kind = sessionKind(session);
+  const KindIcon = KIND_ICONS[kind];
 
   const [closeOpen, setCloseOpen] = useState(false);
   const [closeAnchor, setCloseAnchor] = useState<HTMLElement | null>(null);
@@ -612,9 +645,20 @@ function CockpitSession({
       <div className="zn-cockpit__answer">
         <span className="zn-kicker zn-kicker--xs">{label || "\u00A0"}</span>
 
-        <Heading className="zn-display zn-cockpit__headline" data-level="3">
-          {title}
-        </Heading>
+        {/* Le glyphe DEVANT le titre, et pas dedans : le titre garde sa
+            réserve de deux lignes et son `text-wrap: balance`, qu'une image
+            posée dans le flux du texte dérèglerait. Il est muet pour un
+            lecteur d'écran (tous les `Svg` de ce dépôt sont `aria-hidden`),
+            donc le nom de la famille est écrit à côté, invisible : une
+            information portée par la seule forme n'est pas portée. */}
+        <div className="zn-cockpit__title-row">
+          <KindIcon className="zn-cockpit__kind" size={22} />
+          <span className="sr-only">{t(`library:activityToggle.${kind}`)}</span>
+
+          <Heading className="zn-display zn-cockpit__headline" data-level="3">
+            {title}
+          </Heading>
+        </div>
 
         <p className="zn-cockpit__size">{sizeLine || "\u00A0"}</p>
 
@@ -726,7 +770,7 @@ function paceRangeOf(session: PlanSession, isEn: boolean, unit: UnitSystem): str
  * déplacent et cochent, avec bouclage. Il n'y a donc pas de `role` livré sans
  * son clavier, ce que ce dépôt a déjà fait deux fois.
  *
- * **Quatre canaux, quatre choses.** Tant que l'encre disait à la fois c'est
+ * **Cinq canaux, cinq choses.** Tant que l'encre disait à la fois c'est
  * aujourd'hui et c'est la plus grosse séance, on ne savait pas si dimanche
  * ressortait parce qu'on y était ou parce qu'il était long, et sept barres
  * n'informaient sur rien :
@@ -747,9 +791,16 @@ function paceRangeOf(session: PlanSession, isEn: boolean, unit: UnitSystem): str
  *   `--zone-h-N` dans `zones.css`. Une première sortie faite et une seconde
  *   qui ne l'est pas se voient enfin toutes les deux, là où une barre unique
  *   devait trancher.
+ * - **la rangée de glyphes** porte les FAMILLES présentes, une fois chacune :
+ *   course, vélo, natation, renforcement. C'est le seul canal qui ne se
+ *   déduit d'aucun autre — trois barres ne disent pas de quel sport elles
+ *   sont, et c'est pourtant ce qu'on regarde en premier le matin, on ne
+ *   prépare pas le même sac. À 13 px un glyphe ne se lit pas, il se
+ *   reconnaît, et c'est tout ce qu'on lui demande : le nom entier est dans le
+ *   nom accessible du jour, et la pile le redit en clair pour le jour choisi.
  * - **la lettre** porte le jour CHOISI, à l'ENCRE et jamais au vermillon : le
  *   bouton est le seul aplat d'accent de l'écran, un second le neutraliserait.
- *   Aujourd'hui, lui, se marque d'un pointillé sous la lettre, qui ne se voit
+ *   Aujourd'hui, lui, se marque d'un point rond sous la lettre, qui ne se voit
  *   que lorsqu'on est parti regarder un autre jour.
  *
  * Et le jour choisi est le seul à porter sa valeur : une échelle de hauteurs
@@ -772,7 +823,7 @@ function WeekStrip({
   selected: number;
   onSelect: (day: number) => void;
 }) {
-  const { t } = useTranslation("today");
+  const { t } = useTranslation(["today", "library"]);
   const railRef = useRef<HTMLDivElement>(null);
 
   // Les sept jours, en indices : c'est la valeur que le rail déplace, et elle
@@ -804,6 +855,11 @@ function WeekStrip({
         const isSelected = index === selected;
         const shape = dayStatus(day);
         const duration = minutes[index] > 0 ? formatDurationMinutes(minutes[index]) : null;
+        /* Les familles du jour, une fois chacune : la rangée répond à QUOI,
+           pendant que les blocs au-dessus répondent à combien et à combien de
+           temps. Répéter l'icône de course pour deux footings mélangerait les
+           deux questions. */
+        const kinds = dayKinds(day);
 
         /* Le nom accessible est composé de fragments plutôt qu'écrit en sept
            phrases : une seule clé par idée, et les combinaisons ne se paient
@@ -815,6 +871,9 @@ function WeekStrip({
           day.length === 0
             ? t("week.rest")
             : t("week.day", { count: day.length, minutes: duration }),
+          // Ce que les glyphes disent à l'œil, le nom accessible le dit en
+          // toutes lettres : la rangée est muette, elle n'est pas absente.
+          ...kinds.map((k) => t(`library:activityToggle.${k}`)),
           shape === "completed" ? t("week.done") : null,
           shape === "modified" ? t("week.modified") : null,
           shape === "skipped" ? t("week.skipped") : null,
@@ -837,6 +896,17 @@ function WeekStrip({
             onClick={() => onSelect(index)}
           >
             <span className="zn-cockpit__day-letter">{letters[index]}</span>
+
+            {/* Les familles du jour, entre la lettre et les blocs. La rangée
+                est TOUJOURS là, vide les jours de repos : c'est la même règle
+                que la valeur chiffrée plus haut, une bande qui change de
+                hauteur selon la journée regardée n'est pas un instrument. */}
+            <span className="zn-cockpit__day-kinds">
+              {kinds.map((k) => {
+                const Glyph = KIND_ICONS[k];
+                return <Glyph key={k} className="zn-cockpit__day-kind" size={13} />;
+              })}
+            </span>
 
             {/* Le créneau de la barre est de hauteur FIXE et les blocs y
                 poussent depuis le sol : la bande garde la même hauteur quel

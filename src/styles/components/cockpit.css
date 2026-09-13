@@ -84,6 +84,26 @@
   border-block-start: var(--bw-rule) solid var(--line-divider);
 }
 
+/* Le glyphe de famille, puis le titre. Une rangée et non un flux : le titre
+   garde sa réserve de deux lignes et son équilibrage de lignes, qu'une image
+   posée dans le texte dérèglerait, et le glyphe garde une boîte à lui.
+
+   `align-items: flex-start` et une marge haute de 6 px : le glyphe s'aligne
+   sur la hauteur de capitale de la PREMIÈRE ligne du titre, pas sur le milieu
+   d'un titre qui peut en faire deux. Centré, il flotterait entre les deux
+   lignes d'un nom long et se poserait ailleurs pour un nom court. */
+.zn-cockpit__title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+}
+
+.zn-cockpit__kind {
+  flex: none;
+  margin-block-start: 6px;
+  color: var(--text-muted);
+}
+
 /* La réponse est le titre de l'écran, donc elle prend la taille d'un titre.
    La mesure la garde lisible : un nom de séance long ne doit pas courir sur
    toute la largeur d'un écran de bureau.
@@ -139,23 +159,24 @@
 /* La lecture de localStorage est synchrone : l'attente est d'une frame. On
    réserve quand même la place, le budget Lighthouse bloquant à CLS 0.
 
-   Remesuré deux fois. La réponse a d'abord gagné le micro-label, la durée et
+   Remesuré trois fois. La réponse a d'abord gagné le micro-label, la durée et
    la ligne d'exécution, la bande la valeur du jour, et les deux sorties sont
    remontées DANS la réponse : 292 px ne couvraient plus rien, la valeur est
    passée à 544. Puis les réserves du choix de jour sont arrivées — titre sur
-   deux lignes, durée et micro-label toujours écrits — et elle passe à 589.
+   deux lignes, durée et micro-label toujours écrits — et elle est passée à
+   589. Puis la rangée des familles sous les blocs, 15 px de bande en plus, et
+   elle passe à 604.
 
    La valeur est celle d'un jour de séance, l'état pour lequel cet écran est
    fait. Mesurée au navigateur, pas calculée, sur la même semaine à neuf
-   largeurs : 589 px à partir de 768, 542 de 430 à 640, 617 à 390 et 633 à
+   largeurs : 604 px à partir de 768, 557 de 430 à 640, 632 à 390 et 648 à
    360, les plus étroits repliant une ligne de plus sur la position dans le
-   plan. On garde la valeur des larges, comme avant, et le résidu des étroits
-   a diminué au passage, de 73 px à 28. Toute retouche aux écarts de
-   `.zn-cockpit__answer`, à la réserve du titre, au créneau de
-   `.zn-cockpit__day-bar` ou à celle de `.zn-cockpit__how` invalide ces
-   nombres. */
+   plan. On garde la valeur des larges, comme depuis toujours. Toute retouche
+   aux écarts de `.zn-cockpit__answer`, à la réserve du titre, au créneau de
+   `.zn-cockpit__day-bar`, à la rangée de `.zn-cockpit__day-kinds` ou à la
+   réserve de `.zn-cockpit__how` invalide ces nombres. */
 .zn-cockpit__hold {
-  min-block-size: 589px;
+  min-block-size: 604px;
 }
 
 /* ── La bande des sept jours ────────────────────────────────────────────────
@@ -303,6 +324,44 @@
   color: var(--text-body);
   font-weight: var(--fw-bold);
   border-block-end-color: var(--ink-1);
+}
+
+/* ── Les familles du jour, sous les blocs ──────────────────────────────── */
+
+/* Une rangée de glyphes par jour, un par FAMILLE présente : course, vélo,
+   natation, renforcement. C'est le quatrième canal de la bande, et le seul
+   qui ne se déduit d'aucun autre — la hauteur dit les minutes, le découpage
+   le nombre, la forme le statut, et aucun des trois ne dit de quel sport il
+   s'agit.
+
+   Ils sont à 13 px, ce qui est petit et assumé : à cette taille un glyphe ne
+   se lit pas, il se RECONNAÎT, et c'est tout ce qu'on lui demande ici. Le nom
+   entier est dans le nom accessible du jour, et la pile, juste en dessous, le
+   redit en clair pour le jour choisi.
+
+   La rangée est réservée, vide les jours de repos, comme la valeur chiffrée :
+   la bande garde la même hauteur quel que soit le jour regardé. */
+.zn-cockpit__day-kinds {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  block-size: 13px;
+  color: var(--text-faint);
+  /* La rangée se rapproche des blocs : l'écart de la colonne est fait pour
+     séparer la lettre de la barre, il est trop large pour une ligne de
+     glyphes qui appartient à la barre. */
+  margin-block: calc(-1 * var(--sp-3)) 0;
+}
+
+.zn-cockpit__day-kind {
+  flex: none;
+}
+
+/* Le jour choisi passe ses glyphes à l'encre du texte, comme sa lettre : une
+   seule marque, tenue sur tous les canaux de la colonne. */
+.zn-cockpit__day[data-selected] .zn-cockpit__day-kinds {
+  color: var(--text-body);
 }
 
 /* La valeur du jour choisi, et d'elle seule : une échelle de hauteurs sans
