@@ -173,6 +173,7 @@
   "screen": {
     "structureTitle": "Structure de la séance",
     "structureKicker": "{{duration}} · {{phases}} phases",
+    "structureDownload": "Télécharger la structure",
     "axisStart": "0 min · début",
     "axisEnd": "{{duration}} · fin",
     "total": "Total {{duration}}",

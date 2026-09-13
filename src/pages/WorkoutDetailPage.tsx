@@ -707,6 +707,7 @@ export function WorkoutDetailPage() {
             workout={workout}
             userZones={hasUserZones ? userZones : undefined}
             className="zn-session__phases"
+            exportable
           />
 
           {/* The offer to set your zones sits AFTER the session now. It was in

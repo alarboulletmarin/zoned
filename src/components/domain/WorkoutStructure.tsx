@@ -1,4 +1,9 @@
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+import { Download, Loader2 } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { exportToPNG } from "@/lib/export/png";
 import { ZoneBadge } from "./ZoneBadge";
 import { PhaseCard } from "./PhaseCard";
 import { cn } from "@/lib/utils";
@@ -17,6 +22,17 @@ interface WorkoutStructureProps {
   workout: WorkoutTemplate;
   userZones?: ZoneRange[];
   className?: string;
+  /**
+   * Affiche l'action qui enregistre les cartes de phases en image.
+   *
+   * C'est le bloc que les gens photographient a l'ecran pour l'emporter a
+   * l'entrainement ou l'envoyer a quelqu'un : le PNG de seance existant rend
+   * la carte entiere, titre, frise et repartition comprises, et non ce
+   * decoupage pas a pas. La capture prend le bloc VIVANT, celui qui est sous
+   * les yeux, donc l'image montre exactement ce que la page montre, allures
+   * personnalisees comprises.
+   */
+  exportable?: boolean;
 }
 
 interface StepItemProps {
@@ -27,9 +43,12 @@ interface StepItemProps {
   isEnglish: boolean;
 }
 
-export function WorkoutStructure({ workout, userZones, className }: WorkoutStructureProps) {
+export function WorkoutStructure({ workout, userZones, className, exportable }: WorkoutStructureProps) {
   const { t } = useTranslation("session");
+  const { t: tCommon } = useTranslation("common");
   const isEnglish = useIsEnglish();
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Personalized paces (min/km) only make sense for running. Strip them for
   // cycling and swimming so the personalised footer falls back to HR alone
@@ -78,41 +97,67 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
     },
   ].filter((phase) => phase.steps.length > 0);
 
+  const handleExport = async () => {
+    setIsExporting(true);
+    const toastId = toast.loading(tCommon("export.loading.image", tCommon("export.title")));
+    try {
+      await exportToPNG(sheetRef, `${workout.id}-structure`, { padding: 24 });
+      toast.success(tCommon("export.success.image"), { id: toastId });
+    } catch {
+      toast.error(tCommon("export.error.image"), { id: toastId });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
-    <div className={cn("zn-structure", className)}>
-      {/* The ramp orders the zones but does not name them, so the surface that
-          paints them shows the legend once, above the phases, and only for the
-          zones this session actually touches. */}
-      <ZoneScale className="zn-structure__legend" zones={paintedZones} />
+    <>
+      <div ref={sheetRef} className={cn("zn-structure", className)}>
+        {/* The ramp orders the zones but does not name them, so the surface that
+            paints them shows the legend once, above the phases, and only for the
+            zones this session actually touches. */}
+        <ZoneScale className="zn-structure__legend" zones={paintedZones} />
 
-      {phases.map((phase) => {
-        const profile = phaseProfile(segments, phase.key);
-        const minutes = segments
-          .filter((segment) => segment.type === phase.key)
-          .reduce((sum, segment) => sum + segment.durationMin, 0);
+        {phases.map((phase) => {
+          const profile = phaseProfile(segments, phase.key);
+          const minutes = segments
+            .filter((segment) => segment.type === phase.key)
+            .reduce((sum, segment) => sum + segment.durationMin, 0);
 
-        return (
-          <PhaseCard
-            key={phase.key}
-            className="zn-phase"
-            label={phase.label}
-            summary={shouldShowPhaseSummary(phase.steps) ? phase.summary : null}
-            meta={
-              profile.length > 0 ? (
-                <span className="zn-phase__profile">
-                  <ZoneBar blocks={profile} condense height={18} className="zn-phase__bar" />
-                  {formatDurationMinutes(minutes)}
-                </span>
-              ) : null
-            }
-          >
-            {phase.steps.map((step, index) => (
-              <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
-            ))}
-          </PhaseCard>
-        );
-      })}
-    </div>
+          return (
+            <PhaseCard
+              key={phase.key}
+              className="zn-phase"
+              label={phase.label}
+              summary={shouldShowPhaseSummary(phase.steps) ? phase.summary : null}
+              meta={
+                profile.length > 0 ? (
+                  <span className="zn-phase__profile">
+                    <ZoneBar blocks={profile} condense height={18} className="zn-phase__bar" />
+                    {formatDurationMinutes(minutes)}
+                  </span>
+                ) : null
+              }
+            >
+              {phase.steps.map((step, index) => (
+                <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
+              ))}
+            </PhaseCard>
+          );
+        })}
+      </div>
+
+      {/* Sous le bloc, comme le tableau de splits pose la sienne sous la
+          table : l'action suit ce qu'elle enregistre. */}
+      {exportable && (
+        <div className="zn-structure__actions">
+          <Button variant="outline" size="sm" onClick={handleExport} disabled={isExporting}>
+            {isExporting ? <Loader2 className="zn-spin" /> : <Download />}
+            {t("screen.structureDownload")}
+          </Button>
+        </div>
+      )}
+    </>
   );
 }
 

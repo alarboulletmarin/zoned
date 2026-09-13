@@ -173,6 +173,7 @@
   "screen": {
     "structureTitle": "Session structure",
     "structureKicker": "{{duration}} · {{phases}} phases",
+    "structureDownload": "Download the structure",
     "axisStart": "0 min · start",
     "axisEnd": "{{duration}} · end",
     "total": "Total {{duration}}",
