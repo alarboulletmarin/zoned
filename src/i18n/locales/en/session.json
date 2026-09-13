@@ -174,6 +174,7 @@
     "structureTitle": "Session structure",
     "structureKicker": "{{duration}} · {{phases}} phases",
     "structureDownload": "Download the structure",
+    "structureDownloadAll": "The whole block",
     "axisStart": "0 min · start",
     "axisEnd": "{{duration}} · end",
     "total": "Total {{duration}}",
