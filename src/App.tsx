@@ -67,6 +67,7 @@ const CollectionDetailPage = lazyPage(() => import("@/pages/CollectionDetailPage
 const ChangelogPage = lazyPage(() => import("@/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
 const PlansPage = lazyPage(() => import("@/pages/PlansPage").then(m => ({ default: m.PlansPage })));
 const PlanNewPage = lazyPage(() => import("@/pages/PlanNewPage").then(m => ({ default: m.PlanNewPage })));
+const PlanModePage = lazyPage(() => import("@/pages/PlanModePage").then(m => ({ default: m.PlanModePage })));
 const PlanCreatePage = lazyPage(() => import("@/pages/PlanCreatePage").then(m => ({ default: m.PlanCreatePage })));
 const FreePlanCreatePage = lazyPage(() => import("@/pages/FreePlanCreatePage").then(m => ({ default: m.FreePlanCreatePage })));
 const PlanViewPage = lazyPage(() => import("@/pages/PlanViewPage").then(m => ({ default: m.PlanViewPage })));
@@ -328,6 +329,7 @@ function App() {
                           <Route path="/plans" element={<PlansPage />} />
                           <Route path="/plans/methodology" element={<PlanMethodologyPage />} />
                           <Route path="/plan/new" element={<PlanNewPage />} />
+                          <Route path="/plan/new/mode" element={<PlanModePage />} />
                           <Route path="/plan/new/assisted" element={<PlanCreatePage />} />
                           <Route path="/plan/new/free" element={<FreePlanCreatePage />} />
                           <Route path="/plan/new/prebuilt" element={<PrebuiltPlansPage />} />

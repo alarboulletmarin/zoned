@@ -674,21 +674,18 @@
   },
   "newPlan": {
     "kicker": "Nouveau plan",
+    "backToStart": "Retour au choix de la pratique",
     "title": "Comment veux-tu bâtir ton plan ?",
     "lede": "Le générateur répond à ta place, ou tu poses les séances toi-même. Dans les deux cas, tout reste modifiable.",
     "doorsTitle": "Les trois façons de créer un plan",
     "assistedKicker": "Le générateur",
     "assistedTitle": "Plan assisté",
     "assistedBody": "Tu réponds sur ta course, ton niveau et ta semaine. Le plan sort structuré, séance par séance.",
-    "assistedCta": "Répondre aux questions",
     "freeKicker": "4 à 52 semaines",
     "freeTitle": "Plan libre",
     "freeBody": "Un calendrier vide, à la durée que tu choisis. Tu poses chaque séance à la main.",
-    "freeCta": "Ouvrir un calendrier vide",
-    "prebuiltKicker": "{{n}} plans prêts",
     "prebuiltTitle": "Plans prêt-à-l'emploi",
-    "prebuiltBody": "Des plans déjà construits, du 5 km au marathon et un trail court. À prendre tel quel, puis à ajuster.",
-    "prebuiltCta": "Voir les {{n}} plans"
+    "prebuiltBody": "Des plans déjà construits, du 5 km au marathon et un trail court. À prendre tel quel, puis à ajuster."
   },
   "freePlan": {
     "back": "Retour",
