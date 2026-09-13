@@ -41,7 +41,9 @@ async function nodeToBlob(
   const opts: ToPngOptions = {
     pixelRatio: 2,
     cacheBust: true,
-    skipFonts: true,
+    // Embarquees, comme pour `exportToPNG` : les 37 visuels de partage sont
+    // du texte compose, ils ne valent rien dans la fonte de repli.
+    skipFonts: false,
   };
   if (!transparent) {
     // Le fond suit le theme peint. Il etait fixe a une valeur claire, ce qui

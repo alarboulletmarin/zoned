@@ -36,6 +36,13 @@
   border-block-end: var(--border-divider);
 }
 
+/* L'action qui enregistre le bloc en image. Elle est SOUS lui, et hors de
+   lui : ce qui est capture est le bloc seul, un bouton dans l'image serait
+   un bouton qu'on ne peut pas cliquer. */
+.zn-structure__actions {
+  margin-block-start: var(--sp-12);
+}
+
 /* One card per phase, the shape the kit's SessionScreen states. */
 .zn-phase {
   padding: var(--pad-card);
