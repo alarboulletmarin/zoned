@@ -771,46 +771,113 @@
 .zn-planlist__body {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
-  padding: var(--sp-8) var(--pad-card-sm) var(--sp-11);
+  padding: var(--sp-2) var(--pad-card-sm) var(--sp-8);
   border-block-start: var(--border-divider);
 }
 
-/* One session, on one line. .zn-sess carries the surface, the outline and
-   every status state; this only lays its parts out along the row and opens it
-   up — a reading list has room the four-column grid does not.
-
-   The selectors are doubled on purpose. .zn-sess[data-kind="race"] centres its
-   text for a calendar cell, and a single class would lose that race to it
-   whichever order the two files end up imported in. */
+/* ── une séance, une ligne ────────────────────────────────────────────────
+ *
+ * Elle était une CARTE : fond de papier, contour, rayon de 6px, douze pixels
+ * de rembourrage — posée dans le corps d'une carte de semaine, elle-même posée
+ * dans la colonne. Trois cadres emboîtés pour lire un nom de séance et sa
+ * durée, cinq fois par semaine, dix semaines de suite. C'est cet emboîtement
+ * qui rend la vue lourde : chaque contour demande à l'œil de décider où
+ * commence et où finit un objet, et il y en avait trois pour un seul.
+ *
+ * Ici, la séance redevient une LIGNE, séparée de la suivante par un filet. Le
+ * cadre de la semaine suffit à dire où le groupe commence.
+ *
+ * Ce que le cadre portait, l'app le porte déjà ailleurs :
+ *
+ * - le STATUT (faite / modifiée / sautée) était une couleur de bordure ; il
+ *   est sur la case à cocher, qui le dit par un glyphe ET par un ton — deux
+ *   canaux, donc WCAG 1.4.1 tenu sans la bordure. La séance sautée garde en
+ *   plus son texte barré, restitué plus bas pour cette vue.
+ * - l'INDISPONIBILITÉ garde sa hachure à 45°, en bande pleine largeur.
+ *
+ * Les sélecteurs restent doublés : .zn-sess[data-kind="race"] centre son texte
+ * pour une case de calendrier, et une seule classe perdrait contre lui. */
 .zn-sess.zn-planlist__sess {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-6);
-  padding: var(--sp-6) var(--sp-8);
-  border-radius: var(--r-md);
+  /* Une grille, plus une rangée flex.
+   *
+   * En flex, la colonne du titre était `flex: 1` — donc une base de 0 — à côté
+   * d'un bloc de méta en `flex: none`. Quand la méta tenait sur la ligne, elle
+   * prenait sa largeur de contenu ENTIÈRE et le titre héritait de ce qui
+   * restait : mesuré à 390px, 3 PIXELS. Le nom débordait alors de sa boîte et
+   * se peignait par-dessus la pastille. Deux séances de renforcement sur cinq
+   * étaient illisibles, et les trois autres passaient seulement parce que leur
+   * méta était assez large pour tomber à la ligne.
+   *
+   * `minmax(0, 1fr)` donne au titre la place restante sans jamais descendre
+   * sous zéro ni déborder, et les pistes `auto` des deux bords se réduisent au
+   * plus à leur contenu minimal. La collision ne peut plus se produire. */
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "check main meta";
+  align-items: start;
+  column-gap: var(--sp-7);
+  row-gap: var(--sp-5);
+  padding: var(--sp-7) var(--sp-4);
+
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+.zn-sess.zn-planlist__sess + .zn-sess.zn-planlist__sess {
+  border-block-start: var(--border-divider);
 }
 
 .zn-sess.zn-planlist__sess[data-kind] {
   text-align: start;
 }
 
+.zn-planlist__sess > .zn-sess__check {
+  grid-area: check;
+  /* La case s'aligne sur la première ligne du nom, pas sur le haut de la
+     boîte : deux objets de hauteurs différentes posés en `start` se lisent
+     décalés. */
+  margin-block-start: 1px;
+}
+
+/* Un jour de course n'a pas de case à cocher. Sans elle, la piste `check`
+   tombait à zéro mais gardait son écart, et la ligne s'ouvrait sur 14px de
+   vide que rien ne justifiait. */
+.zn-sess.zn-planlist__sess:not(:has(> .zn-sess__check)) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "main meta";
+}
+
+/* Une séance sautée : le texte barré, qui était porté par .zn-sess__name — le
+   nom de la case de calendrier. La liste nomme sa séance avec un lien. */
+.zn-sess.zn-planlist__sess[data-status="skipped"] .zn-planlist__link {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
 /* Unavailable that day: the 45 degree hatch the system gives anything
-   unmeasured, exactly as the calendar draws it on the cell. */
+   unmeasured, exactly as the calendar draws it on the cell. Pleine largeur
+   maintenant que la ligne n'a plus de boîte — la bande DIT l'empêchement. */
 .zn-sess.zn-planlist__sess[data-blocked="true"] {
   background-color: var(--surface-band);
   background-image: var(--zone-recovery);
+  padding-inline: var(--sp-6);
+  border-radius: var(--r-sm);
 }
 
 .zn-planlist__sess-main {
-  flex: 1;
+  grid-area: main;
   min-inline-size: 0;
 }
 
 .zn-planlist__link {
-  font: var(--fw-medium) var(--fs-body-sm) / 1.3 var(--font-text);
+  display: block;
+  font: var(--fw-medium) var(--fs-body-sm) / 1.35 var(--font-text);
   color: var(--text-body);
   text-decoration: none;
+  /* Un nom d'un seul mot plus long que sa colonne se coupe au lieu de sortir
+     de la grille — la même règle que .zn-sess__name applique déjà en case. */
+  overflow-wrap: anywhere;
   transition: color var(--dur-fast) var(--ease-out);
 }
 
@@ -823,13 +890,99 @@
   color: var(--text-faint);
 }
 
+/* Ce que la séance coûte : son type, sa durée, sa distance. Une ligne de mono
+   discret sous le nom, séparée par des points — plus une pastille pleine, une
+   horloge et deux blocs insécables posés à droite du titre.
+   La pastille faisait 32px de haut et 1.5px de contour pour qualifier un nom
+   de 14 : elle pesait plus que lui, et il y en avait une par séance. */
+.zn-planlist__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-5);
+  margin-block-start: var(--sp-3);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.4;
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* Les points ne sont pas dans le texte : ils sont dessinés entre les éléments
+   qui restent, donc une séance sans distance ne finit pas sur un séparateur
+   orphelin. */
+.zn-planlist__facts > * + *::before {
+  content: "·";
+  margin-inline-end: var(--sp-5);
+  color: var(--line-divider);
+}
+
+/* L'étoile est une marque, pas un mot : ce qui la suit n'a pas à s'en séparer
+   par un point. */
+.zn-planlist__facts > .zn-sess__key + *::before {
+  content: none;
+}
+
+.zn-planlist__facts > .zn-sess__key {
+  align-self: center;
+}
+
+/* Le type de séance. Capitales et crénage large : c'est un code, pas un mot. */
+.zn-planlist__type {
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+}
+
+.zn-planlist__cost {
+  white-space: nowrap;
+}
+
+/* Dès qu'il y a de la largeur, la légende remonte au BOUT de la ligne du nom.
+   Sur bureau, la ligne mesure 1038px pour un nom qui en occupe 300 : lui payer
+   une ligne à elle coûtait seize pixels de hauteur par séance, cinquante
+   séances par plan, pour de la place horizontale qui était déjà là. Le
+   commentaire de la séance, lui, garde sa ligne entière — c'est de la prose,
+   elle a besoin de sa mesure.
+
+   Le seuil est celui du rang lui-même (641px), pas celui du panneau
+   d'ajout : ce sont deux questions différentes. */
+@media (min-width: 641px) {
+  .zn-planlist__sess-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name facts"
+      "note note";
+    column-gap: var(--sp-11);
+    align-items: baseline;
+  }
+
+  /* Le nom, quelle que soit la forme qu'il prend — un lien de séance, le
+     drapeau d'un jour de course, le libellé d'une activité. */
+  .zn-planlist__sess-main > :not(.zn-planlist__note):not(.zn-planlist__facts) {
+    grid-area: name;
+  }
+
+  .zn-planlist__sess-main > .zn-planlist__note {
+    grid-area: note;
+  }
+
+  .zn-planlist__sess-main > .zn-planlist__facts {
+    grid-area: facts;
+    margin-block-start: 0;
+    flex-wrap: nowrap;
+  }
+}
+
 .zn-planlist__meta {
+  grid-area: meta;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
   gap: var(--sp-4);
-  flex: none;
 }
 
 /* In a reading list the actions stay out: hiding them behind hover would put
@@ -845,7 +998,25 @@
 .zn-planlist__sess .zn-planlist__acts .zn-sess__action {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
+}
+
+/* Au doigt, ces quatre glyphes font 14px de côté : sous le plancher de 24 de
+   la WCAG 2.5.8, et impossibles à viser en marchant. Maintenant qu'ils ont
+   leur propre ligne sous le nom, ils peuvent prendre la taille qu'il leur
+   faut. Le tirage négatif rend au rang la moitié de ce que le rembourrage lui
+   prend, pour que la ligne ne grandisse pas d'autant. */
+@media (pointer: coarse) {
+  .zn-planlist__sess .zn-planlist__acts .zn-sess__action {
+    min-inline-size: 32px;
+    min-block-size: 32px;
+  }
+
+  .zn-planlist__acts {
+    margin-block: calc(var(--sp-4) * -1);
+    margin-inline-start: calc(var(--sp-5) * -1);
+  }
 }
 
 .zn-planlist__sess .zn-planlist__acts .zn-sess__action:hover {
@@ -856,8 +1027,13 @@
   color: var(--state-danger);
 }
 
+/* Le jour est bloqué. Dans la ligne de légende comme le reste, mais à l'encre
+   du corps de texte : c'est le seul fait de cette ligne qui contredit le
+   plan. La bande hachurée derrière le dit déjà ; le mot le nomme. */
 .zn-planlist__blocked {
-  flex: none;
+  color: var(--text-body);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
 }
 
 /* A week whose sessions are all closed out. The single added hue, as type. */
@@ -1104,11 +1280,30 @@
     gap: var(--sp-4);
   }
 
-  .zn-planlist__meta {
-    justify-content: flex-start;
+  /* Sur téléphone, la rangée d'actions passe SOUS le nom, dans la colonne du
+     nom — elle ne se dispute plus la ligne avec lui.
+
+     `flex-wrap: wrap` tenait ce rôle et ne le tenait qu'à moitié : le repli ne
+     se déclenchait que si le bloc de méta était trop large pour la ligne. Dès
+     qu'il tenait — une séance de renforcement, qui n'affiche pas de distance —
+     il restait à droite et laissait trois pixels au titre. Une grille décide,
+     elle ne négocie pas. */
+  .zn-sess.zn-planlist__sess,
+  .zn-sess.zn-planlist__sess:not(:has(> .zn-sess__check)) {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "check main"
+      "check meta";
   }
 
-  .zn-planlist__sess {
-    flex-wrap: wrap;
+  .zn-sess.zn-planlist__sess:not(:has(> .zn-sess__check)) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "main"
+      "meta";
+  }
+
+  .zn-planlist__meta {
+    justify-content: flex-start;
   }
 }

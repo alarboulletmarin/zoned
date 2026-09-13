@@ -23,8 +23,8 @@
       "body": "Construis un plan, ou compose juste une semaine si tu ne veux pas t'engager plus loin.",
       "cta": "Créer un plan"
     },
-    "inPlan": "Dans « {{name}} »",
-    "inWeek": "Dans ta semaine « {{name}} »",
+    "inPlan": "Plan",
+    "inWeek": "Ma semaine",
     "openPlan": "Ouvrir mon plan",
     "openWeek": "Ouvrir ma semaine",
     "openSession": "Ouvrir la séance"

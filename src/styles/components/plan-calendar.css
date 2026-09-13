@@ -1115,7 +1115,50 @@
     flex-flow: row wrap;
     align-items: center;
     gap: var(--sp-3);
-    padding: var(--sp-3) var(--sp-4);
+    padding: var(--sp-6) var(--sp-3);
+  }
+
+  /* La journée cesse d'être une BOÎTE.
+   *
+   * Elle en était une — papier creusé, contour de filet, rayon de 10px — posée
+   * dans la boîte du tableau, et qui contenait elle-même la boîte de la
+   * séance. Trois cadres emboîtés par jour, sept jours : dix-neuf rectangles
+   * dessinés sur un écran de téléphone pour cinq séances. Chaque contour
+   * demande à l'œil de décider où un objet commence et où il finit, et il y en
+   * avait trois pour une information qui tient en une ligne.
+   *
+   * Ce qui sépare deux jours est maintenant un filet, comme dans la vue liste.
+   * Le cadre du tableau suffit à dire où la semaine commence et finit.
+   *
+   * Ce que la boîte portait reste porté, et par des règles plus spécifiques
+   * que celle-ci, donc elles gagnent sans avoir à être répétées :
+   * [data-blocked] garde sa hachure, [data-drop] son papier creusé, et
+   * [data-today] son anneau vermillon — un anneau inset dessine toujours son
+   * rectangle, et c'est même mieux ainsi : le seul jour encadré de l'écran
+   * est celui qu'on cherche. */
+  .zn-planweek__day {
+    background: none;
+    border: none;
+    border-radius: var(--r-sm);
+    border-block-end: var(--border-divider);
+  }
+
+  /* Les sept jours sont répartis sur deux `__row` (quatre puis trois) : le
+     filet se pose donc sur chaque jour et se retire du dernier, plutôt que de
+     s'écrire entre frères — ce qui l'aurait oublié entre le jeudi et le
+     vendredi. Les écarts tombent à zéro : c'est le filet qui sépare. */
+  .zn-planweek__board {
+    gap: 0;
+    padding: var(--sp-2) var(--sp-5);
+  }
+
+  .zn-planweek__row,
+  .zn-planweek__row[data-cols="3"] {
+    gap: 0;
+  }
+
+  .zn-planweek__row:last-of-type > .zn-planweek__day:last-child {
+    border-block-end: none;
   }
 
   /* 80px la cellule (120px en semaine seule) ferait 560 à 840px de haut pour
@@ -1163,12 +1206,31 @@
   }
 
   /* Le « + » d'une journée déjà remplie revient au bout de la ligne, carré :
-     sous la carte, il coûtait une deuxième ligne à chacun des sept jours. */
+     sous la carte, il coûtait une deuxième ligne à chacun des sept jours.
+
+     Il perd son cadre pointillé. Le pointillé est la marque d'un EMPLACEMENT
+     VIDE — c'est ce qu'il dit sur un vendredi sans séance, où il est la seule
+     chose à voir et donc la seule affordance. Sur une journée déjà remplie, il
+     n'annonce aucun vide : il ajoutait un cadre de plus à côté de la carte,
+     cinq fois sur sept, pour une action secondaire. Le glyphe seul suffit, et
+     il garde ses 44px de cible. */
   .zn-planweek__add[data-slot="tail"] {
     flex: none;
     inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
     margin-block-start: 0;
     padding: var(--sp-3);
+    border-color: transparent;
+  }
+
+  /* La carte d'une séance sans statut passe au filet discret. Son contour
+     d'encre pleine se justifiait quand elle était posée dans le papier creusé
+     d'une journée ; sur une ligne sans boîte, c'est le trait le plus fort de
+     l'écran après le vermillon d'« aujourd'hui ».
+     `:not([data-status])` : les arêtes qui DISENT quelque chose — faite,
+     modifiée, sautée — gardent leur ton et leur épaisseur. */
+  .zn-planweek__day .zn-sess[data-density="card"]:not([data-status]) {
+    border-color: var(--line-divider);
   }
 
   /* L'écart entre deux séances est désormais le gap de la ligne. */

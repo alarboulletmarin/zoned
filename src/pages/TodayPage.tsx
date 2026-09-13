@@ -133,18 +133,27 @@ export function TodayPage() {
           {facts && <p className="zn-mono zn-cockpit__facts">{facts}</p>}
 
           {/* Le nom du plan était un texte mort. C'est maintenant le chemin
-              vers le plan, à un tap, sans ajouter un bouton à l'écran. */}
-          <p className="zn-body zn-muted zn-measure">
-            {focus.plan && focus.state !== "none" && planUrl ? (
-              <Link to={planUrl} className="zn-cockpit__plan-link">
-                {t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan", {
-                  name: isEn ? focus.plan.nameEn : focus.plan.name,
-                })}
-              </Link>
-            ) : (
-              t("today:resume.none.body")
-            )}
-          </p>
+              vers le plan, à un tap, sans ajouter un bouton à l'écran.
+
+              Il s'écrivait « Dans « Reprise après longue pause » » : une
+              PHRASE en corps de texte, donc du même poids que le titre de la
+              séance, et des guillemets français que l'app n'emploie nulle part
+              ailleurs pour nommer un objet — le fil d'Ariane de la séance
+              (WorkoutDetailPage) pose le nom du plan nu, sans guillemets ni
+              préposition. C'est ce vocabulaire-là qui est repris : le rôle en
+              micro-label mono, la valeur à côté. Un libellé, pas une phrase. */}
+          {focus.plan && focus.state !== "none" && planUrl ? (
+            <Link to={planUrl} className="zn-cockpit__plan">
+              <span className="zn-kicker zn-kicker--xs">
+                {t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan")}
+              </span>
+              <span className="zn-cockpit__plan-name">
+                {isEn ? focus.plan.nameEn : focus.plan.name}
+              </span>
+            </Link>
+          ) : (
+            <p className="zn-body zn-muted zn-measure">{t("today:resume.none.body")}</p>
+          )}
 
           <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
             <Button asChild size="lg">

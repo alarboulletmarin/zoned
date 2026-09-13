@@ -44,6 +44,31 @@
   pointer-events: none;
 }
 
+/* ── calibres ─────────────────────────────────────────────────────────── */
+
+/* Le petit calibre. La capsule de base fait 32px de haut pour du mono de 12 :
+   c'est juste quand elle est seule à porter un fait, et c'est trop dès qu'elle
+   accompagne un titre — dans l'en-tête d'une semaine de plan, « SEMAINE EN
+   COURS » mesurait 162 × 32 px à côté d'un intitulé de 16px, donc la
+   métadonnée pesait plus lourd que ce qu'elle qualifiait.
+
+   Ce qui baisse : le pas de mono (12 → 10, le plancher du système, et
+   uniquement en capitales, ce que la capsule est déjà), le rembourrage, et le
+   contour, qui passe au filet. Ce qui NE baisse pas : la graisse, le
+   crénage et les tons — c'est le même objet, pas un objet plus discret. */
+.zn-badge[data-size="sm"],
+.zn-badge--sm {
+  padding: 3px 9px;
+  font-size: var(--fs-mono-xs);
+  border-width: var(--bw-hair);
+}
+
+.zn-badge[data-size="sm"] > svg,
+.zn-badge--sm > svg {
+  inline-size: 10px;
+  block-size: 10px;
+}
+
 .zn-badge[aria-invalid="true"] {
   border-color: var(--state-danger);
 }

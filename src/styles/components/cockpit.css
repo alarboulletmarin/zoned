@@ -143,13 +143,60 @@ a.zn-cockpit__day:active {
   inline-size: 100%;
 }
 
-.zn-cockpit__plan-link {
+/* Le plan auquel la séance appartient. UN LIBELLÉ, pas une phrase.
+ *
+ * Il disait « Dans « Reprise après longue pause » » en corps de texte : seize
+ * pixels, soit le poids d'une ligne qu'on lit, pour une information qu'on
+ * vérifie du coin de l'œil — et des guillemets français qui n'apparaissent
+ * nulle part ailleurs dans l'interface pour citer le nom d'un objet. Le fil
+ * d'Ariane de la séance pose déjà ce même nom nu.
+ *
+ * Donc la forme que l'app emploie partout pour « rôle : valeur » : le rôle en
+ * mono capitales (.zn-kicker), la valeur à côté. Les guillemets partent avec
+ * la préposition — le libellé dit ce que le nom est, la ponctuation n'a plus
+ * rien à porter. */
+.zn-cockpit__plan {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-6);
+  /* Un enfant de colonne flex s'étire sur toute la largeur par défaut : la
+     cible de clic ferait alors 620 px pour un nom qui en occupe 200. */
+  align-self: flex-start;
+  max-inline-size: 100%;
+  text-decoration: none;
   color: inherit;
-  text-underline-offset: 3px;
 }
 
-.zn-cockpit__plan-link:hover {
+.zn-cockpit__plan > .zn-kicker {
+  flex: none;
+}
+
+.zn-cockpit__plan-name {
+  min-inline-size: 0;
+  font: var(--fw-medium) var(--fs-body-sm) / 1.4 var(--font-text);
+  color: var(--text-body);
+  /* Souligné à l'encre de filet : il faut qu'on voie que c'est un chemin sans
+     que le trait pèse autant que le mot. */
+  text-decoration: underline;
+  text-decoration-color: var(--line-divider);
+  text-underline-offset: 3px;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cockpit__plan:hover .zn-cockpit__plan-name {
   color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+/* Au doigt, la ligne doit rester atteignable — même règle que les deux
+   sorties plus bas. */
+@media (pointer: coarse) {
+  .zn-cockpit__plan {
+    padding-block: var(--sp-3);
+  }
 }
 
 /* Un jour de repos est un filet, pas une barre écrasée : l'absence de séance

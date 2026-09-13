@@ -23,8 +23,8 @@
       "body": "Build a plan, or just put together a week if you'd rather not commit further.",
       "cta": "Create a plan"
     },
-    "inPlan": "In “{{name}}”",
-    "inWeek": "In your week “{{name}}”",
+    "inPlan": "Plan",
+    "inWeek": "My week",
     "openPlan": "Open my plan",
     "openWeek": "Open my week",
     "openSession": "Open the session"

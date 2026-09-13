@@ -1441,17 +1441,22 @@ export function PlanViewPage() {
                       Groupés, ils descendent d'une ligne sous le titre sur
                       téléphone (plan-view.css) au lieu de lui prendre sa
                       place. Sur grand écran, la rangée ne bouge pas. */}
+                  {/* Les pastilles de l'en-tête passent au petit calibre.
+                      « SEMAINE EN COURS » au calibre normal mesurait 162 px
+                      sur 32 de haut pour trois mots de métadonnée, à côté d'un
+                      titre de semaine qui en fait 16 : la marque criait plus
+                      fort que ce qu'elle marquait. */}
                   <span className="zn-planlist__aside">
                     {isCurrent && (
-                      <Badge className="zn-fixed">{t("view.currentWeek")}</Badge>
+                      <Badge data-size="sm" className="zn-fixed">{t("view.currentWeek")}</Badge>
                     )}
                     {week.isRecoveryWeek && (
-                      <Badge variant="secondary" className="zn-fixed">
+                      <Badge data-size="sm" variant="secondary" className="zn-fixed">
                         {t("calendar.recoveryWeek")}
                       </Badge>
                     )}
                     {week.intermediateRace && (
-                      <Badge variant="outline" className="zn-fixed">
+                      <Badge data-size="sm" variant="outline" className="zn-fixed">
                         {t("intermediateGoals.weekLabel")}
                       </Badge>
                     )}
@@ -1626,42 +1631,78 @@ export function PlanViewPage() {
                                       {workoutNames[session.workoutId] ||
                                         session.workoutId}
                                     </Link>
+                                    {/* Les notes sont écrites en PARTIES jointes
+                                        par un `\n` (sessionBuilder). En HTML un
+                                        retour à la ligne se réduit à une espace,
+                                        et elles se lisaient collées : « Allure
+                                        endurance : 7:37 - 8:47/km Sortie longue :
+                                        4 km (~33 min) ». Le point médian les
+                                        sépare — c'est déjà le séparateur de toutes
+                                        les lignes de faits de l'app. */}
                                     {pick(session, "notes") && (
                                       <p className="zn-caption zn-muted zn-clamp zn-planlist__note">
-                                        {pick(session, "notes")}
+                                        {pick(session, "notes")
+                                          .split("\n")
+                                          .filter(Boolean)
+                                          .join(" · ")}
                                       </p>
                                     )}
                                   </>
                                 )}
+
+                                {/* Ce que la séance COÛTE, sur une seule ligne
+                                    mono sous son nom.
+
+                                    C'étaient trois objets posés à droite du
+                                    titre : une pastille pleine pour le type,
+                                    une horloge et ses chiffres, et la rangée
+                                    d'actions. La pastille pesait autant que le
+                                    nom qu'elle qualifiait — même hauteur, même
+                                    contour de 1.5px, et cinq par semaine — et
+                                    l'ensemble était insécable, ce qui écrasait
+                                    le titre (voir plan-view.css). En mono
+                                    discret, séparés par des points, ils
+                                    redeviennent ce qu'ils sont : une légende.
+
+                                    L'horloge part avec la pastille : « 1h03 »
+                                    n'a jamais eu besoin d'un pictogramme pour
+                                    se lire comme une durée. */}
+                                {(!isSpecialSession || session.isKeySession) && (
+                                  <p className="zn-planlist__facts">
+                                    {/* L'étoile est un ÉTAT, pas une action.
+                                        Elle était rangée avec les quatre
+                                        boutons de la rangée d'actions, où elle
+                                        se lisait comme un cinquième bouton
+                                        qu'on ne peut pas presser. Sa place est
+                                        ici, avec ce qui décrit la séance. */}
+                                    {session.isKeySession && (
+                                      <span className="zn-sess__key" title={t("view.keySession")}>
+                                        <Star filled />
+                                      </span>
+                                    )}
+                                    {!isSpecialSession && isBlocked && (
+                                      <span className="zn-planlist__blocked">
+                                        {t("unavailability.blocked")}
+                                      </span>
+                                    )}
+                                    {!isSpecialSession && sessionLabel && (
+                                      <span className="zn-planlist__type">
+                                        {pickLocale(sessionLabel)}
+                                      </span>
+                                    )}
+                                    {!isSpecialSession && !isActivity && (
+                                      <span className="zn-planlist__cost">
+                                        {formatDurationMinutes(session.estimatedDurationMin)}
+                                        {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
+                                          <> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm} km</>
+                                        )}
+                                      </span>
+                                    )}
+                                  </p>
+                                )}
                               </div>
 
                               <div className="zn-planlist__meta">
-                                {!isSpecialSession && isBlocked && (
-                                  <span className="zn-kicker zn-kicker--xs zn-planlist__blocked">
-                                    {t("unavailability.blocked")}
-                                  </span>
-                                )}
-                                {session.isKeySession && (
-                                  <span className="zn-sess__key" title={t("view.keySession")}>
-                                    <Star filled />
-                                  </span>
-                                )}
-                                {!isSpecialSession && sessionLabel && (
-                                  <Badge variant="secondary">
-                                    {pickLocale(sessionLabel)}
-                                  </Badge>
-                                )}
-                                {!isSpecialSession && !isActivity && (
-                                  <span className="zn-sess__facts">
-                                    <Clock />
-                                    <span className="zn-sess__facts-text">
-                                      {formatDurationMinutes(session.estimatedDurationMin)}
-                                      {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
-                                        <> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm} km</>
-                                      )}
-                                    </span>
-                                  </span>
-                                )}
                                 {!isSpecialSession && (
                                   <div className="zn-planlist__acts">
                                     <button
