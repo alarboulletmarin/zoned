@@ -1,5 +1,5 @@
 import type { PlanSession, TrainingPlan } from "@/types/plan";
-import { dateToWeekAndDay, getPlanMonday } from "@/lib/planDates";
+import { dateToWeekAndDay, getPlanMonday, getSessionCalendarDate } from "@/lib/planDates";
 
 /**
  * Ce que le cockpit reprend.
@@ -22,6 +22,14 @@ import { dateToWeekAndDay, getPlanMonday } from "@/lib/planDates";
 
 export type TodayState = "session" | "rest" | "upcoming" | "none";
 
+/**
+ * Le statut d'une JOURNÉE, pas d'une séance.
+ *
+ * `"rest"` n'est pas un statut de séance : c'est l'absence de séance, et la
+ * bande le dessine comme un filet, pas comme une barre écrasée.
+ */
+export type DayStatus = "rest" | "planned" | "completed" | "modified" | "skipped";
+
 export interface TodayFocus {
   state: TodayState;
   plan: TrainingPlan | null;
@@ -34,6 +42,15 @@ export interface TodayFocus {
   /** Les séances du jour. Vide sur un jour de repos. */
   sessions: PlanSession[];
   /**
+   * Les index de `sessions` dans `plan.weeks[n].sessions`, alignés un pour un.
+   *
+   * `updateSessionCompletion` adresse une séance par (planId, weekNumber,
+   * INDEX) : il n'y a pas d'identifiant de séance dans le modèle. Le
+   * regroupement par jour ci-dessous perdait cet index, ce qui rendait la
+   * clôture impossible depuis le cockpit. On le garde, dans la même passe.
+   */
+  sessionIndexes: number[];
+  /**
    * La semaine en cours, sept cases, lundi d'abord, ce que la bande des sept
    * jours consomme. Toujours de longueur 7 ; une case vide est un jour de
    * repos, pas une absence de donnée.
@@ -43,6 +60,8 @@ export interface TodayFocus {
    * alors pas, elle ne prétend pas connaître une semaine qui n'existe pas.
    */
   week: PlanSession[][];
+  /** Les index de `week`, case par case. Même contrat que `sessionIndexes`. */
+  weekIndexes: number[][];
   /** Jours restants avant le début, pour l'état `upcoming`. */
   daysUntilStart: number;
 }
@@ -54,7 +73,9 @@ const NOTHING: TodayFocus = {
   weekNumber: 0,
   dayOfWeek: 0,
   sessions: [],
+  sessionIndexes: [],
   week: [],
+  weekIndexes: [],
   daysUntilStart: 0,
 };
 
@@ -109,10 +130,18 @@ export function pickTodayFocus(
     const { plan, weekNumber, dayOfWeek } = inProgress[0];
     const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
     // Une seule traversée pour les sept jours : la journée courante n'est
-    // qu'une case de la semaine, et la bande a besoin des six autres.
+    // qu'une case de la semaine, et la bande a besoin des six autres. On range
+    // l'INDEX en parallèle de la séance, il est la seule adresse qu'ait une
+    // séance et la clôture en a besoin.
     const byDay: PlanSession[][] = [[], [], [], [], [], [], []];
-    for (const session of week?.sessions ?? []) {
-      byDay[session.dayOfWeek]?.push(session);
+    const byDayIndex: number[][] = [[], [], [], [], [], [], []];
+    const weekSessions = week?.sessions ?? [];
+    for (let i = 0; i < weekSessions.length; i++) {
+      const session = weekSessions[i];
+      const slot = byDay[session.dayOfWeek];
+      if (!slot) continue;
+      slot.push(session);
+      byDayIndex[session.dayOfWeek].push(i);
     }
     const sessions = byDay[dayOfWeek] ?? [];
     return {
@@ -122,7 +151,9 @@ export function pickTodayFocus(
       weekNumber,
       dayOfWeek,
       sessions,
+      sessionIndexes: byDayIndex[dayOfWeek] ?? [],
       week: byDay,
+      weekIndexes: byDayIndex,
       daysUntilStart: 0,
     };
   }
@@ -138,12 +169,107 @@ export function pickTodayFocus(
       weekNumber: 0,
       dayOfWeek: 0,
       sessions: [],
+      sessionIndexes: [],
       week: [],
+      weekIndexes: [],
       daysUntilStart: days,
     };
   }
 
   return NOTHING;
+}
+
+/**
+ * Le statut d'une journée, pour la bande des sept jours.
+ *
+ * **Non résolu l'emporte.** Une journée qui porte deux séances dont une seule
+ * est faite n'est pas une journée faite : la barre reste creuse. Dire fait
+ * trop tôt est le seul mensonge que cette bande puisse commettre, et une bande
+ * qui ment ne sert plus à rien.
+ *
+ * Trois statuts résolus, et ils ne se confondent pas : `completed` et
+ * `modified` sont deux façons d'avoir couru, `skipped` est la façon de ne pas
+ * l'avoir fait. À plusieurs séances résolues de statuts différents, le plus
+ * fort est celui qui a demandé le plus de travail.
+ */
+export function dayStatus(sessions: readonly PlanSession[]): DayStatus {
+  if (sessions.length === 0) return "rest";
+
+  let seenCompleted = false;
+  let seenModified = false;
+  let seenSkipped = false;
+
+  for (const session of sessions) {
+    const status = session.status;
+    // `undefined` est le défaut historique : une séance écrite avant le suivi
+    // de complétion est une séance prévue, pas une séance sans statut.
+    if (status === undefined || status === "planned") return "planned";
+    if (status === "completed") seenCompleted = true;
+    else if (status === "modified") seenModified = true;
+    else if (status === "skipped") seenSkipped = true;
+  }
+
+  if (seenCompleted) return "completed";
+  if (seenModified) return "modified";
+  if (seenSkipped) return "skipped";
+  return "planned";
+}
+
+/** Où l'on en est du plan : le dénominateur, l'échéance, et ce qu'on vise. */
+export interface PlanPosition {
+  /** 1-indexé, la semaine courante. */
+  weekNumber: number;
+  /** Le dénominateur. `0` pour une semaine seule : 1 / 1 ne dit rien. */
+  totalWeeks: number;
+  /** Jours jusqu'à l'échéance, `null` si elle est passée ou qu'il n'y en a pas. */
+  daysToGoal: number | null;
+  /** Le nom de la course, quand le plan en connaît une. */
+  goalName: string | null;
+}
+
+/**
+ * Un plan ne tient que par sa fin.
+ *
+ * `semaine 1` sans dénominateur et un nom de plan sans échéance laissent la
+ * sortie du jour flotter : on ne sait pas si 93 min est une grosse semaine ou
+ * une reprise. Le dénominateur et le compte à rebours le disent en six
+ * caractères.
+ *
+ * L'échéance vient de `config.raceDate` quand il existe. Sinon on retombe sur
+ * le DERNIER JOUR DU PLAN, qui existe toujours : `prebuiltPlanConverter` jette
+ * `raceDate` et `raceName`, donc un plan repris du catalogue n'a jamais que ce
+ * repli, et c'est le cas le plus fréquent.
+ */
+export function planPosition(focus: TodayFocus, today: Date = new Date()): PlanPosition | null {
+  const plan = focus.plan;
+  if (!plan || focus.weekNumber <= 0) return null;
+
+  const midnight = startOfDay(today);
+  const raceDate = plan.config.raceDate;
+  let goal: Date | null = null;
+
+  if (raceDate) {
+    const [y, m, d] = raceDate.split("T")[0].split("-").map(Number);
+    if (Number.isFinite(y) && Number.isFinite(m) && Number.isFinite(d)) {
+      goal = new Date(y, m - 1, d);
+    }
+  }
+  if (!goal) {
+    // Le dimanche de la dernière semaine, la fin du plan lui-même.
+    goal = getSessionCalendarDate(getPlanMonday(plan), plan.totalWeeks, 6);
+  }
+
+  const days = Math.round((startOfDay(goal).getTime() - midnight.getTime()) / DAY_MS);
+
+  return {
+    weekNumber: focus.weekNumber,
+    // Une semaine seule n'a pas de dénominateur : 1 / 1 est du bruit.
+    totalWeeks: focus.isWeek ? 0 : plan.totalWeeks,
+    // Le jour J compte : `J-0` est une information, pas une absence. Seule une
+    // échéance PASSÉE disparaît, elle n'a plus rien à annoncer.
+    daysToGoal: days >= 0 ? days : null,
+    goalName: plan.config.raceName?.trim() || null,
+  };
 }
 
 /** Le plan (ou la semaine) dont vient la séance du jour. */
