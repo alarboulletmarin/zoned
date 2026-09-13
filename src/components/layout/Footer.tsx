@@ -24,19 +24,30 @@ const APP_VERSION =
     ? __APP_VERSION__
     : "dev";
 
+/** Deux pieds de page, et non un pied à options. */
+export type FooterVariant = "full" | "minimal";
+
 /**
- * @param bare  Ne rend que la barre d'encre, sans les quatre colonnes.
+ * @param variant  `minimal` ne garde qu'une ligne de licence, en encre claire.
  *
  *   Pour les écrans applicatifs en `noindex`, le cockpit. La table de liens
  *   est là pour qu'un robot atteigne les hubs ; sur une page qu'aucun robot
  *   n'indexe elle ne fait donc AUCUN travail, et elle mesurait 439 px pour
  *   388 px de contenu : le pied de page était plus grand que la page, et
- *   pesait 48 % du défilement.
+ *   pesait 48 % du défilement. Elle est partie la première.
  *
- *   La barre reste : licence, 100 % local, version. C'est la signature du
- *   projet libre, et elle tient en deux lignes.
+ *   Restait la barre d'encre : licence, licences tierces, 100 % local,
+ *   construit en public, version. Cinq éléments sur un aplat inversé pleine
+ *   largeur, au bas d'un écran dont la réponse tient en six lignes. C'est la
+ *   signature du projet libre, et elle a sa place partout où quelqu'un
+ *   découvre le projet, donc sur `/` et sur `/about`, qui gardent le pied
+ *   complet. Sur l'écran privé qu'on consulte dix secondes avant de sortir
+ *   courir, elle criait plus fort que la séance.
+ *
+ *   Rien n'est perdu : ces cinq éléments restent au bas de toutes les autres
+ *   pages, `/about` comprise.
  */
-export function Footer({ bare = false }: { bare?: boolean }) {
+export function Footer({ variant = "full" }: { variant?: FooterVariant }) {
   const { t } = useTranslation(["homepage", "common"]);
   const year = new Date().getFullYear();
 
@@ -49,7 +60,7 @@ export function Footer({ bare = false }: { bare?: boolean }) {
 
   return (
     <footer className="zn-footer">
-      {!bare && (
+      {variant === "full" && (
       <div className="zn-footer__body">
         <div className="zn-footer__col">
           <Link to="/" className="zn-footer__brand" aria-label={t("common:app.name")}>
@@ -75,7 +86,11 @@ export function Footer({ bare = false }: { bare?: boolean }) {
       </div>
       )}
 
-      <div className="zn-footer__bar">
+      <div className="zn-footer__bar" data-variant={variant}>
+        {variant === "minimal" ? (
+          <span>{t("homepage:home.footer.licenseShort", { year })}</span>
+        ) : (
+          <>
         <span>{t("homepage:home.footer.license", { year })}</span>
         {/* Static file emitted by scripts/generate-licenses.ts, not a route:
             plain <a>, so it escapes the SPA instead of hitting the router. */}
@@ -90,6 +105,8 @@ export function Footer({ bare = false }: { bare?: boolean }) {
         <span className="zn-footer__version">
           {t("homepage:home.footer.version", { version: APP_VERSION })}
         </span>
+          </>
+        )}
       </div>
     </footer>
   );

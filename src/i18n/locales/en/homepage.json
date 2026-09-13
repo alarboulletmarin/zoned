@@ -298,6 +298,7 @@
         "changelog": "Changelog"
       },
       "license": "© {{year}} · ZONED · Free software, MIT licence",
+      "licenseShort": "© {{year}} · ZONED · MIT",
       "licenses": "Third-party licences",
       "version": "v.{{version}}",
       "builtInPublic": "Built in public",

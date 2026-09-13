@@ -231,6 +231,19 @@
 }
 
 /* The version is data, and it sits at the far edge of the bar. */
+/* Le pied du cockpit : une seule ligne, et SANS l'inversion.
+   La barre d'encre est la signature du projet, elle reste entière partout où
+   quelqu'un le découvre. Ici elle portait cinq éléments sur un aplat noir
+   pleine largeur au bas d'un écran privé dont toute la réponse tient en six
+   lignes : elle criait plus fort que la séance. Réduite à la licence et posée
+   en encre claire, elle est là sans rien réclamer. */
+.zn-footer__bar[data-variant="minimal"] {
+  justify-content: center;
+  background: none;
+  color: var(--text-faint);
+  border-block-start: none;
+}
+
 .zn-footer__version {
   margin-inline-start: auto;
 }
