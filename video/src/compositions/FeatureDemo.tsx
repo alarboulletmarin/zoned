@@ -56,7 +56,9 @@ export const FEATURES: Record<FeatureId, FeatureShots> = {
   adapt: {
     visual: ({ at }) => <AdjustDial at={at} style={{ flex: 1, minHeight: 0 }} />,
     shot: "adjust",
-    path: "/workout/VMA-001",
+    // The shot is of the builder now, so the chrome says so: "Adjust" left the
+    // session page for the overflow menu and navigates there.
+    path: "/workout/builder",
   },
 
   liberte: {

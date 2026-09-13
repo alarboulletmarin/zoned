@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { COLORS, ZONES, useLayout, zoneText } from "../theme";
+import { COLORS, RADIUS, STROKE, ZONE_CHIP_BG, ZONES, useLayout, zoneInk, zoneText } from "../theme";
 import { useLang } from "../lang";
 import { CURVE, beat, useBreath, useRamp, useSpring } from "../motion";
 import { Reveal } from "./Type";
@@ -40,11 +40,19 @@ const ZoneRow: React.FC<{
         display: "flex",
         alignItems: "center",
         gap: l.story ? 24 : 20,
-        borderTop: `1px solid ${COLORS.border}`,
-        ...(index === ZONES.length - 1 ? { borderBottom: `1px solid ${COLORS.border}` } : {}),
+        borderTop: `${STROKE.rule}px solid ${COLORS.border}`,
+        ...(index === ZONES.length - 1
+          ? { borderBottom: `${STROKE.rule}px solid ${COLORS.border}` }
+          : {}),
       }}
     >
-      {/* Tinted wash behind the text, anchored left so it reads as a level. */}
+      {/* The level behind the text, anchored left.
+          ONE surface for all six rows, not the zone's own fill: the row prints
+          ink over it, and from Z4 up the fill is dark enough to swallow a name
+          whole — the ramp's own rule is that anything printed on it above the
+          threshold turns to cream, which a row of body text cannot do halfway
+          across its width. What orders the rows here is the LENGTH, which is
+          the zone's share of VMA; the ramp itself is carried by the chip. */}
       <div
         style={{
           position: "absolute",
@@ -52,8 +60,8 @@ const ZoneRow: React.FC<{
           top: 8,
           bottom: 8,
           width: `${barWidth}%`,
-          borderRadius: 10,
-          background: `color-mix(in srgb, ${z.hex} 12%, transparent)`,
+          borderRadius: RADIUS.lg,
+          background: COLORS.band,
           transformOrigin: "left center",
           transform: `scaleX(${grow * (1 + idle)})`,
         }}
@@ -70,9 +78,12 @@ const ZoneRow: React.FC<{
           letterSpacing: "-0.01em",
           padding: "8px 0",
           textAlign: "center",
-          borderRadius: 9,
-          color: z.hex,
-          background: `color-mix(in srgb, ${z.hex} 15%, transparent)`,
+          borderRadius: RADIUS.lg,
+          // The chip is the ramp's own rule: its tint from the scale, and the
+          // ink that survives on it. Printing the Z-code IN the zone colour was
+          // the six-hue idiom; on an ink ramp it prints pale grey on pale grey.
+          color: zoneInk(z.n),
+          background: ZONE_CHIP_BG[z.n],
           opacity: Math.min(1, chip * 2),
           transform: `scale(${0.7 + chip * 0.3})`,
         }}
@@ -133,8 +144,12 @@ const ZoneRow: React.FC<{
  * method, not a list of workouts". Rows share the height left over by the
  * parent, so the block fills whatever space it is given in either format.
  *
- * A soft sheen crosses the block on a slow loop. It carries no meaning; it is
- * there so a panel that has finished animating still has light moving over it.
+ * A white sheen used to cross the block on a slow loop, so a panel that had
+ * finished animating still had light moving over it. It is gone: a moving gloss
+ * is exactly the effect the design system refuses — depth comes from an outline
+ * and a hard offset, never from a highlight. The argument it was answering
+ * still holds and is still answered, by each bar's own phase-shifted breath,
+ * which is what keeps the block out of `qa:motion`'s freeze report.
  */
 export const ZoneList: React.FC<{
   at?: number;
@@ -142,8 +157,6 @@ export const ZoneList: React.FC<{
   showPace?: boolean;
   style?: CSSProperties;
 }> = ({ at = 0, each = 5, showPace = false, style }) => {
-  const sheen = useBreath(7, 0.5, -1.2) + 0.5;
-
   return (
     <div
       style={{
@@ -159,18 +172,6 @@ export const ZoneList: React.FC<{
         <ZoneRow key={z.n} index={i} at={at} each={each} showPace={showPace} />
       ))}
 
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          backgroundImage:
-            "linear-gradient(105deg, transparent 42%, rgba(255,255,255,0.55) 50%, transparent 58%)",
-          backgroundSize: "260% 100%",
-          backgroundPosition: `${sheen * 160 - 30}% 0`,
-          mixBlendMode: "overlay",
-        }}
-      />
     </div>
   );
 };

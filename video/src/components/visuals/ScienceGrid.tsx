@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { COLORS, useLayout } from "../../theme";
+import { card, COLORS, RADIUS, useLayout } from "../../theme";
 import { useCopy } from "../../copy";
 import { beat, useBreath, useEnter, useSpring } from "../../motion";
 import { Reveal } from "../Type";
@@ -62,10 +62,7 @@ const Card: React.FC<{
         opacity: Math.min(1, land * 2),
         transform: `translate(${floatX}px, ${(1 - land) * 26 + floatY}px) scale(${0.94 + land * 0.06})`,
         padding: l.story ? "20px 22px" : "18px 20px",
-        borderRadius: 16,
-        background: COLORS.panel,
-        border: `1px solid ${COLORS.border}`,
-        boxShadow: "0 18px 34px -22px rgba(15,23,42,0.22)",
+        ...card(RADIUS.xl),
       }}
     >
       <div

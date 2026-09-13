@@ -6,7 +6,6 @@
       "name": "zoned-video",
       "dependencies": {
         "@remotion/cli": "^4.0.501",
-        "@remotion/google-fonts": "^4.0.501",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
         "remotion": "^4.0.501",
@@ -168,8 +167,6 @@
     "@remotion/compositor-win32-x64-msvc": ["@remotion/compositor-win32-x64-msvc@4.0.501", "", { "os": "win32", "cpu": "x64" }, "sha512-3+M4+6mOSNntZpNoyQBMPgKT6QSr/YmCfxQdojII/FOXh+CV9HMfaC6yhuOm9XXnzG9vuzzJeBfd+MPKyjKMfA=="],
 
     "@remotion/drag-and-drop": ["@remotion/drag-and-drop@4.0.501", "", {}, "sha512-vJcUwNbowfU/fC2ubj/TSrNZgga+BFubxzX+K4SDAsi4PqQm5vBtwOgvG3xZDEjL1Nu1SiBSJ3C1UqvoLOqwQw=="],
-
-    "@remotion/google-fonts": ["@remotion/google-fonts@4.0.501", "", { "dependencies": { "remotion": "4.0.501" } }, "sha512-VYF69RClNTn2Df6azEtA0ETaBRy68LIiZvyehF6gwj6t4BL2kJESV2PYjDI0S+RbuLDKpO2YjDzdC3ybL9FzqQ=="],
 
     "@remotion/licensing": ["@remotion/licensing@4.0.501", "", {}, "sha512-GnY5j52hWDNCVCaBkhqleLpZ642wcU0h0rUcZTC02qUIMIuJpvzBC/1g9o35ZKqWN2td9ehXzUDiZ2Up4xoo9Q=="],
 

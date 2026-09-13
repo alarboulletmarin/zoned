@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { AbsoluteFill } from "remotion";
-import { COLORS, ZONES } from "../theme";
+import { COLORS, displayFamily, ZONES } from "../theme";
 import { CURVE, useRamp } from "../motion";
 
 /**
@@ -11,16 +11,16 @@ import { CURVE, useRamp } from "../motion";
  * du projet (docs/doodles.md, « Le logo est le mot, pas une figure ») : le
  * garder ici aurait laissé le film signer avec un signe que l'app n'a plus.
  *
- * À faire un jour, et qui n'est PAS ce changement-ci : ce sous-projet a sa
- * propre palette, d'avant la refonte — `COLORS.fg` est un bleu ardoise et
- * `COLORS.accent` un orange, là où l'app est encre sur papier avec un
- * vermillon. Le mot suit donc les couleurs DU FILM pour rester cohérent avec
- * les trente autres plans, et non celles de l'app. Aligner la palette du film
- * sur le système est un chantier à part.
+ * Le chantier annoncé ici — aligner la palette du film sur le système — est
+ * fait : `theme.ts` porte le papier, l'encre et le vermillon, et le mot est
+ * maintenant écrit comme dans l'app, Bricolage Grotesque 800, approche
+ * -0,04 em, point vermillon (src/components/layout/Wordmark.tsx). Les couleurs
+ * DU FILM et celles de l'app sont désormais les mêmes couleurs.
  */
 export const Wordmark: React.FC<{ size: number; style?: CSSProperties }> = ({ size, style }) => (
   <span
     style={{
+      fontFamily: displayFamily,
       fontSize: size,
       fontWeight: 800,
       letterSpacing: "-0.04em",
@@ -73,8 +73,10 @@ export const ZoneSweep: React.FC<{
   // Travels from fully off one edge to fully off the other.
   const offset = -band + p * (1 + band * 2);
   const axis = vertical ? "180deg" : "90deg";
-  // Blended, not banded: the same six stops as the mark's own gradient, so the
-  // wipe reads as the logo passing through rather than a colour test card.
+  // Blended, not banded, and the six stops are the effort ramp itself: the wipe
+  // reads as the whole scale passing through the frame rather than a colour
+  // test card. On the ink ramp it is a sweep of light to dark, which is also
+  // exactly what the ramp means.
   const stops = ZONES.map((z, i) => `${z.hex} ${(i / (ZONES.length - 1)) * 100}%`).join(",");
   const fade = `linear-gradient(${axis}, transparent, black 14%, black 86%, transparent)`;
 

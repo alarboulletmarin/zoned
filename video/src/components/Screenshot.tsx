@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { Img, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { COLORS, URL_LABEL, useLayout } from "../theme";
+import { COLORS, RADIUS, SHADOW, STROKE, URL_LABEL, useLayout } from "../theme";
 import { useLang } from "../lang";
 import { CURVE, useBreath, useRamp, useSpring } from "../motion";
 
@@ -45,19 +45,19 @@ const BrowserChrome: React.FC<{ path: string; scale: number }> = ({ path, scale 
       alignItems: "center",
       gap: 9 * scale,
       padding: `0 ${18 * scale}px`,
-      background: "#f1f5f9",
+      background: COLORS.band,
       borderBottom: `1px solid ${COLORS.border}`,
     }}
   >
-    <Dot color="#e2e8f0" />
-    <Dot color="#e2e8f0" />
-    <Dot color="#e2e8f0" />
+    <Dot color={COLORS.border} />
+    <Dot color={COLORS.border} />
+    <Dot color={COLORS.border} />
     <div
       style={{
         marginLeft: 14 * scale,
         padding: `${5 * scale}px ${16 * scale}px`,
         borderRadius: 999,
-        background: "#ffffff",
+        background: COLORS.panel,
         border: `1px solid ${COLORS.border}`,
         fontSize: 17 * scale,
         fontWeight: 500,
@@ -161,8 +161,9 @@ export const Screenshot: React.FC<{
             width: "auto",
             aspectRatio: `${SHOT_SIZE.mobile.w} / ${SHOT_SIZE.mobile.h}`,
             maxWidth: "100%",
-            borderRadius: 54,
-            border: `13px solid ${COLORS.fg}`,
+            borderRadius: RADIUS.phone + 18,
+            border: `13px solid ${COLORS.line}`,
+            boxShadow: SHADOW.blockLg,
           }}
         >
           {image}
@@ -175,10 +176,10 @@ export const Screenshot: React.FC<{
             width: "100%",
             maxHeight: "100%",
             padding: 12,
-            borderRadius: 30,
-            background: "rgba(255,255,255,0.55)",
-            border: `1px solid ${COLORS.border}`,
-            boxShadow: "0 60px 110px -40px rgba(15,23,42,0.28)",
+            borderRadius: RADIUS.card + 4,
+            background: COLORS.band,
+            border: `${STROKE.rule}px solid ${COLORS.line}`,
+            boxShadow: SHADOW.blockLg,
           }}
         >
           <div
@@ -186,8 +187,8 @@ export const Screenshot: React.FC<{
               ...shell,
               display: "flex",
               flexDirection: "column",
-              borderRadius: 18,
-              border: `1px solid ${COLORS.border}`,
+              borderRadius: RADIUS.xxl,
+              border: `${STROKE.rule}px solid ${COLORS.line}`,
             }}
           >
             <BrowserChrome path={path} scale={chromeScale} />

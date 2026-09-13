@@ -5,6 +5,10 @@ out/
 # Regenerable, heavy, and locale/version dependent — not worth tracking.
 public/shots/
 
+# The app's three fonts, copied by `bun run sync`. One source of truth lives in
+# ../public/fonts; a second copy under version control would drift from it.
+public/fonts/
+
 # Generated from the app's data and engines by `bun run sync`.
 src/data/facts.json
 

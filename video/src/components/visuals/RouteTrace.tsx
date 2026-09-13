@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { interpolate, useCurrentFrame } from "remotion";
-import { COLORS, useLayout } from "../../theme";
+import { COLORS, RADIUS, STROKE, useLayout } from "../../theme";
 import { useCopy } from "../../copy";
 import { decimal, useLang } from "../../lang";
 import { CURVE, useBreath, useRamp, useSpring } from "../../motion";
@@ -81,10 +81,10 @@ export const RouteTrace: React.FC<{
           position: "relative",
           flex: 1,
           minHeight: 0,
-          borderRadius: 20,
+          borderRadius: RADIUS.xxl,
           overflow: "hidden",
           background: COLORS.panel,
-          border: `1px solid ${COLORS.border}`,
+          border: `${STROKE.rule}px solid ${COLORS.line}`,
           backgroundImage: [
             `linear-gradient(${COLORS.border} 2px, transparent 2px)`,
             `linear-gradient(90deg, ${COLORS.border} 2px, transparent 2px)`,
@@ -128,7 +128,7 @@ export const RouteTrace: React.FC<{
             d={LOOP}
             pathLength={1}
             fill="none"
-            stroke="#ffffff"
+            stroke={COLORS.panel}
             strokeWidth={11}
             strokeLinecap="round"
             strokeDasharray="0.012 0.988"

@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { COLORS, useLayout } from "../theme";
+import { COLORS, displayFamily, monoFamily, useLayout } from "../theme";
 import { beat, useBreath, useEnter, useMask } from "../motion";
 
 /**
@@ -57,6 +57,7 @@ export const Headline: React.FC<{
   return (
     <div
       style={{
+        fontFamily: displayFamily,
         fontSize: size ?? l.head,
         fontWeight: 700,
         lineHeight: 1.0,
@@ -131,8 +132,9 @@ export const Eyebrow: React.FC<{
         borderRadius: 999,
         border: `1px solid ${color}2e`,
         background: `${color}12`,
+        fontFamily: monoFamily,
         fontSize: l.eyebrow,
-        fontWeight: 600,
+        fontWeight: 500,
         letterSpacing: "0.22em",
         textTransform: "uppercase",
         color,
