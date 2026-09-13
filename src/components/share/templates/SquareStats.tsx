@@ -1,5 +1,5 @@
 /**
- * SquareStats — 1080×1080 Insta Feed / Strava-style stats card.
+ * SquareStats, 1080×1080 Insta Feed / Strava-style stats card.
  *
  * 4 big stats in a 2×2 grid, with a mini SessionTimeline below for context.
  */

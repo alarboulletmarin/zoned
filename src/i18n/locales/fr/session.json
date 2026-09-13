@@ -4,7 +4,7 @@
     "main": "Corps de séance",
     "cooldown": "Retour au calme",
     "recovery": "Récupération",
-    "interSeries": "{{count}} séries — ~3 min footing entre les séries",
+    "interSeries": "{{count}} séries, ~3 min footing entre les séries",
     "loopTemplate": "Une itération est montrée ci-dessous",
     "noZone": "Sans zone",
     "repeatUnits": {
@@ -87,7 +87,8 @@
     "target": "Objectif",
     "environment": "Terrain",
     "frequency": "Fréquence",
-    "recovery": "Récupération"
+    "recovery": "Récupération",
+    "elevation": "Dénivelé"
   },
   "targetSystems": {
     "aerobic_base": "Base aérobie",
@@ -146,7 +147,7 @@
   "planContext": {
     "banner": "Semaine {{week}} · Séance adaptée au volume ({{volume}}%) : ~{{duration}} min",
     "fullSession": "(version complète : {{duration}} min)",
-    "longRunBanner": "Semaine {{week}} · Objectif sortie longue : {{distance}} km (~{{duration}} min à votre allure)",
+    "longRunBanner": "Semaine {{week}} · Objectif sortie longue : {{distance}} km (~{{duration}} min à ton allure)",
     "longRunStructure": "La structure ci-dessous est le guide de base ({{duration}} min)"
   },
   "science": {
@@ -162,5 +163,25 @@
   },
   "provenance": {
     "adaptedFrom": "Adapté de"
+  },
+  "export": {
+    "blockCount_one": "{{count}} bloc",
+    "blockCount_other": "{{count}} blocs",
+    "andMore_one": "+{{count}} autre",
+    "andMore_other": "+{{count}} autres"
+  },
+  "screen": {
+    "structureTitle": "Structure de la séance",
+    "structureKicker": "{{duration}} · {{phases}} phases",
+    "axisStart": "0 min · début",
+    "axisEnd": "{{duration}} · fin",
+    "total": "Total {{duration}}",
+    "exportFormats": ".fit · .ics · .pdf · .png",
+    "notFoundTitle": "Cette séance n'est plus au catalogue",
+    "notFoundBody": "Le lien pointe vers un identifiant que le catalogue ne connaît pas. Tes favoris, tes plans et tes séances enregistrées sont intacts."
+  },
+  "illustration": {
+    "strengthBrief": "Gainage vu de profil, trait 2 px, appuis en accent",
+    "strengthLabel": "Le gainage de la séance, dessiné d'un trait, les appuis en accent"
   }
 }

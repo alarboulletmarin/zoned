@@ -3,9 +3,9 @@
  *
  * Polarisation is computed **per session** (not raw time-in-zone): each aerobic
  * session is classified by its characteristic peak zone and its whole duration
- * counts toward Easy (Z1–Z2) / Tempo (Z3) / Intense (Z4+). This matches how the
- * 80/20 rule is understood in practice — a VO₂ session counts as intensity even
- * though most of its minutes are warm-up/recovery — instead of the misleading
+ * counts toward Easy (Z1-Z2) / Tempo (Z3) / Intense (Z4+). This matches how the
+ * 80/20 rule is understood in practice, a VO₂ session counts as intensity even
+ * though most of its minutes are warm-up/recovery, instead of the misleading
  * time-in-zone view where almost every week looks ~95 % easy. Strength has no
  * aerobic zone and is excluded from the split (but still counts as a session).
  */
@@ -20,7 +20,7 @@ import type { WeekSlot } from "@/types/week";
 
 /** Seiler-style three-bucket split, expressed in minutes and shares. */
 export interface PolarisedSplit {
-  /** Easy (Z1–Z2) session minutes. */
+  /** Easy (Z1-Z2) session minutes. */
   lowMinutes: number;
   /** Tempo (Z3) session minutes. */
   midMinutes: number;
@@ -28,7 +28,7 @@ export interface PolarisedSplit {
   highMinutes: number;
   /** Total aerobic session minutes (low + mid + high). */
   zonedMinutes: number;
-  /** Shares of aerobic minutes (0–1). NaN-safe: 0 when no aerobic time. */
+  /** Shares of aerobic minutes (0-1). NaN-safe: 0 when no aerobic time. */
   lowShare: number;
   midShare: number;
   highShare: number;
@@ -45,7 +45,7 @@ export interface WeekStats {
   totalTss: number;
   /** Polarised distribution computed per session. */
   polarised: PolarisedSplit;
-  /** Number of hard (quality) sessions — peak zone Z4+. */
+  /** Number of hard (quality) sessions, peak zone Z4+. */
   hardSessions: number;
 }
 

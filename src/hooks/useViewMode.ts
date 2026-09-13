@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 
-export type ViewMode = "grid" | "list" | "compact" | "focus";
+export type ViewMode = "grid" | "list" | "compact";
 
 const STORAGE_KEY = "zoned-viewMode";
-const VALID_MODES: ViewMode[] = ["grid", "list", "compact", "focus"];
+// Un "focus" mémorisé ne passe plus le test et retombe sur le mode par
+// défaut : la migration ne coûte pas une ligne de plus.
+const VALID_MODES: ViewMode[] = ["grid", "list", "compact"];
 
 function getDefaultViewMode(): ViewMode {
   // sm breakpoint = 640px

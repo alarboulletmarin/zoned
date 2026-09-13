@@ -18,14 +18,14 @@ export interface PrebuiltWeekSession {
   sessionType: SessionType;
   isKeySession: boolean;
   estimatedDurationMin: number;
-  /** « Pourquoi cette séance » — one short line, FR. */
+  /** Pourquoi cette séance, one short line, FR. */
   why: string;
-  /** « Why this session » — one short line, EN. */
+  /** Why this session, one short line, EN. */
   whyEn: string;
 }
 
 /**
- * A curated, science-sourced single training week — the week-level mirror of
+ * A curated, science-sourced single training week, the week-level mirror of
  * {@link PrebuiltPlan}. Authored in `weeks/*.ts`, surfaced in the gallery and
  * detail pages, and turned into an editable single-week plan via
  * `prebuiltWeekToPlan`.
@@ -41,12 +41,12 @@ export interface PrebuiltWeek {
   icon: string;
   difficulty: Difficulty;
   category: PrebuiltWeekCategory;
-  /** Short sourced attribution, e.g. "Polarisé 80/20 — Stephen Seiler". */
+  /** Short sourced attribution, e.g. "Polarisé 80/20, Stephen Seiler". */
   provenance?: string;
   provenanceEn?: string;
-  /** « Pourquoi cette semaine » — 1–3 sentences of pedagogy, FR. */
+  /** Pourquoi cette semaine, 1-3 sentences of pedagogy, FR. */
   whyItWorks: string;
-  /** « Why this week works » — 1–3 sentences of pedagogy, EN. */
+  /** Why this week works, 1-3 sentences of pedagogy, EN. */
   whyItWorksEn: string;
   /** Generator settings this week was authored around. */
   settings: WeekSettings;

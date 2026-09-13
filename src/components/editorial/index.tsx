@@ -1,15 +1,25 @@
 /**
- * Editorial atoms — shared building blocks for the landing-page redesign,
- * propagated to other pages so the typography, motion and density read
- * consistently across the whole app.
+ * Editorial atoms, the shared heading, rhythm and reveal helpers used across
+ * the app (56 files import from here).
  *
- * Everything here respects `prefers-reduced-motion` via framer-motion's
- * `useReducedMotion()` hook — if the user opts out, the components render
- * as plain DOM without animation.
+ * These used to be the landing page's motion kit: the title faded up as you
+ * scrolled to it, grids cascaded their children in, single blocks rose into
+ * place and counters ticked from zero. The redesign's rule is that motion
+ * reports where something came from or that a wait is real, nothing moves to
+ * decorate, and a heading sliding in as you reach it is decoration.
+ *
+ * So the components stay, with their signatures untouched, and render plain
+ * DOM. Keeping the API is what lets 56 call sites go unedited; removing the
+ * animation is what removed `framer-motion` from the app entirely.
+ *
+ * The type also changed families: `EditorialTitle` was Space Grotesk semibold
+ * ITALIC, which was the app's old display face. The redesign's display is
+ * Bricolage Grotesque, upright, and it is set through the `.zn-display` /
+ * `.zn-title` roles in `src/styles/components/_type.css`.
  */
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export { InteractiveCard } from "./InteractiveCard";
 
@@ -17,9 +27,15 @@ export { InteractiveCard } from "./InteractiveCard";
 // EditorialTitle
 // ────────────────────────────────────────────────────────────────────────────
 
-/** Italic, sans-serif, semibold heading used at the top of every section.
- *  Fades up once when scrolled into view (or renders flat under
- *  prefers-reduced-motion). */
+/**
+ * The heading at the top of a section.
+ *
+ * `size` picks a step of the display scale rather than a pixel size, so the
+ * mobile reduction comes from the token layer instead of a breakpoint here:
+ *   xl, the screen title, 46px (30px on a phone)
+ *   lg, a section title, 38px
+ *   md, a sub-section, 26px
+ */
 export function EditorialTitle({
   children,
   size = "lg",
@@ -31,44 +47,17 @@ export function EditorialTitle({
   className?: string;
   as?: "h1" | "h2" | "h3";
 }) {
-  const reduced = useReducedMotion();
-  // Mobile-first: smaller heads on phones so the hero doesn't eat the first
-  // screen (#106). Tablet/desktop (md:) sizes are unchanged.
-  const sizeCls =
+  const cls =
     size === "xl"
-      ? "text-[40px] md:text-6xl"
-      : size === "md"
-        ? "text-xl sm:text-2xl md:text-3xl"
-        : "text-[26px] sm:text-3xl md:text-4xl";
-  const baseCls = `font-sans font-semibold italic leading-[1.05] tracking-tight ${sizeCls} ${className}`;
+      ? cn("zn-display", className)
+      : cn("zn-title", className);
+  const level = size === "xl" ? "3" : size === "md" ? "3" : "1";
+  const Tag = as;
 
-  const motionProps = reduced
-    ? {}
-    : {
-        initial: { opacity: 0, y: 14 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.5, ease: [0, 0, 0.2, 1] as const },
-      };
-
-  if (as === "h1") {
-    return (
-      <motion.h1 className={baseCls} {...motionProps}>
-        {children}
-      </motion.h1>
-    );
-  }
-  if (as === "h3") {
-    return (
-      <motion.h3 className={baseCls} {...motionProps}>
-        {children}
-      </motion.h3>
-    );
-  }
   return (
-    <motion.h2 className={baseCls} {...motionProps}>
+    <Tag className={cls} data-level={level}>
       {children}
-    </motion.h2>
+    </Tag>
   );
 }
 
@@ -76,8 +65,10 @@ export function EditorialTitle({
 // Stagger reveal (grid)
 // ────────────────────────────────────────────────────────────────────────────
 
-/** Wrap a grid/list whose children should fade-up in cascade as the block
- *  scrolls into view. Direct children must be `<StaggerItem>`. */
+/**
+ * Wraps a grid or list. The cascade it used to run is gone; the wrapper stays
+ * so its 20-odd call sites keep their layout class and their DOM shape.
+ */
 export function StaggerGrid({
   children,
   className,
@@ -85,55 +76,26 @@ export function StaggerGrid({
   children: React.ReactNode;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
-  if (reduced) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      variants={{
-        hidden: {},
-        show: { transition: { staggerChildren: 0.06 } },
-      }}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }
 
-/** Single fade-up child of a `StaggerGrid`. Renders flat under
- *  prefers-reduced-motion so layout never depends on the animation. */
+/** A child of `StaggerGrid`. Renders its children directly. */
 export function StaggerItem({ children }: { children: React.ReactNode }) {
-  const reduced = useReducedMotion();
-  if (reduced) return <>{children}</>;
-  return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 14 },
-        show: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.45, ease: [0, 0, 0.2, 1] },
-        },
-      }}
-    >
-      {children}
-    </motion.div>
-  );
+  return <>{children}</>;
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// FadeUp — single-element scroll reveal helper
+// FadeUp
 // ────────────────────────────────────────────────────────────────────────────
 
-/** Drop-in replacement for a `<div>` that fades up once it enters the
- *  viewport. Used for paragraphs, ledes, single cards. */
+/**
+ * Was a scroll-triggered fade. Now a plain element of the requested tag,
+ * `delay` is accepted and ignored so no call site has to change.
+ */
 export function FadeUp({
   children,
   className,
-  delay = 0,
+  delay,
   as = "div",
 }: {
   children: React.ReactNode;
@@ -141,77 +103,46 @@ export function FadeUp({
   delay?: number;
   as?: "div" | "p" | "section";
 }) {
-  const reduced = useReducedMotion();
-  const props = reduced
-    ? {}
-    : {
-        initial: { opacity: 0, y: 12 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.45, ease: [0, 0, 0.2, 1] as const, delay },
-      };
-  const Comp =
-    as === "p" ? motion.p : as === "section" ? motion.section : motion.div;
-  return (
-    <Comp className={className} {...props}>
-      {children}
-    </Comp>
-  );
+  void delay;
+  const Comp = as;
+  return <Comp className={className}>{children}</Comp>;
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// useCountUp — animate an integer from 0 to `target`
+// useCountUp
 // ────────────────────────────────────────────────────────────────────────────
 
-/** Animate an integer counter up to `target` on mount. Skips the
- *  animation entirely when the user prefers reduced motion. */
+/**
+ * Returns `target`.
+ *
+ * It used to animate an integer up from zero over 900ms. A number counting
+ * itself up is the clearest case of movement that decorates: it delays the one
+ * thing the reader came for. The hook stays so its call sites keep working,
+ * and `durationMs` is accepted and ignored.
+ *
+ * The `useState`/`useEffect` pair is kept rather than returning the argument
+ * directly, because `target` arrives asynchronously on several of these
+ * screens and a plain return would not re-render on the value it settles on.
+ */
 export function useCountUp(target: number, durationMs = 900): number {
-  const reduced = useReducedMotion();
-  const [value, setValue] = useState(reduced ? target : 0);
+  void durationMs;
+  const [value, setValue] = useState(target);
   useEffect(() => {
-    if (reduced) {
-      setValue(target);
-      return;
-    }
-    if (target <= 0) {
-      setValue(0);
-      return;
-    }
-    let raf = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / durationMs);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setValue(Math.round(target * eased));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, durationMs, reduced]);
+    setValue(target);
+  }, [target]);
   return value;
 }
-
-// ────────────────────────────────────────────────────────────────────────────
-// Divider
-// ────────────────────────────────────────────────────────────────────────────
-
-/** Thin horizontal rule used to separate landing-style sections. */
-export function Divider({ className = "" }: { className?: string }) {
-  return (
-    <hr className={`border-0 border-t border-foreground/15 ${className}`} />
-  );
-}
-
-// Progressive-disclosure sections now live in ./Section.tsx (`collapsible`),
-// which also covers the non-collapsible case so a page has one way to open a
-// block instead of three.
 
 // ────────────────────────────────────────────────────────────────────────────
 // Shared class strings
 // ────────────────────────────────────────────────────────────────────────────
 
-/** Apply to a card/Link element to give it the standard editorial hover
- *  treatment: subtle lift + soft shadow + border darken. Pair with the
- *  card's own background and border classes. */
-export const editorialCardHover =
-  "transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm hover:border-foreground/40";
+/**
+ * The hover treatment for a card that is itself a link or a button.
+ *
+ * It used to lift the card and drop a soft shadow under it. The system allows
+ * neither: nothing changes size or elevation on hover, and a list card never
+ * carries a shadow, the one shadow in the system is a hard offset reserved for
+ * surfaces that genuinely float. A hovered card changes colour, and that is all.
+ */
+export const editorialCardHover = "zn-card-hover";

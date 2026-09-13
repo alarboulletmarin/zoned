@@ -1,13 +1,13 @@
 /**
  * The theme preference is read from `localStorage` by two independent readers:
  * this module, and the inline boot script in `index.html`. Both have to agree
- * that anything they do not recognise means "follow the system" — a backup
+ * that anything they do not recognise means "follow the system", a backup
  * written by an older build, a hand-edited JSON, a half-cleared storage. What
  * they must never do is leave the app unpainted or stuck on the wrong theme.
  *
  * `applyResolvedTheme` and `watchSystemTheme` are not covered here: they are
  * DOM writes, and `bun test` has no DOM. They are kept deliberately thin for
- * that reason — the branching lives in `resolveTheme`, which is pure.
+ * that reason, the branching lives in `resolveTheme`, which is pure.
  */
 
 import { beforeEach, describe, expect, test } from "bun:test";
@@ -105,7 +105,7 @@ describe("readStoredPreference", () => {
     }
   });
 
-  test("stores a bare string, not JSON — the boot script cannot parse", () => {
+  test("stores a bare string, not JSON, the boot script cannot parse", () => {
     storePreference("dark");
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe("dark");
   });

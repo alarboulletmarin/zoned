@@ -11,6 +11,11 @@ interface IntensityBadgeProps {
 /**
  * Color mapping for strength intensity levels.
  * Uses CSS variables for theme support.
+ *
+ * These are the zone ink ramp: themes.css binds --intensity-* to
+ * --zone-1/2/3/4/6, because intensity is ordinal exactly the way a zone is.
+ * The paint lives in `src/styles/components/strength.css` and selects on
+ * `data-intensity`; this table stays because other modules import it.
  */
 const INTENSITY_COLORS: Record<StrengthIntensity, string> = {
   mobility: "var(--intensity-mobility)",
@@ -20,24 +25,15 @@ const INTENSITY_COLORS: Record<StrengthIntensity, string> = {
   power: "var(--intensity-power)",
 };
 
-const SIZE_CLASSES = {
-  sm: "text-[10px] px-1.5 py-0.5",
-  md: "text-xs px-2 py-0.5",
-  lg: "text-sm px-3 py-1",
-} as const;
-
 export function IntensityBadge({ intensity, size = "md", className }: IntensityBadgeProps) {
   const { t } = useTranslation("strength");
-  const color = INTENSITY_COLORS[intensity];
   const label = t(`intensity.${intensity}`);
 
   return (
     <span
-      className={cn("intensity-badge", SIZE_CLASSES[size], className)}
-      style={{
-        backgroundColor: `color-mix(in srgb, ${color} 15%, transparent)`,
-        color,
-      }}
+      className={cn("zn-intensity", className)}
+      data-intensity={intensity}
+      data-size={size}
       title={label}
     >
       {label}

@@ -1,121 +1,92 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Sparkles, BookOpen } from "@/components/icons";
+import { ArrowLeft, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import {
-  EditorialTitle,
-  FadeUp,
-  StaggerGrid,
-  StaggerItem,
-} from "@/components/editorial";
+import { DoorCard } from "@/components/domain/DoorCard";
+import { getAllPrebuiltWeeks } from "@/data/prebuilt-weeks";
 import { savePlan } from "@/lib/planStorage";
 import { createEmptyWeekPlan } from "@/lib/weekToPlan";
 
 /**
- * Week creation mode picker — mirrors PlanNewPage (3 gradient mode cards),
- * mobile-first (cards stack to one column under sm:). The "Generate" and
- * "Scratch" modes both create an empty single-week plan; "Generate" passes
- * `state.openSettings` so WeekViewPage surfaces the generator settings on
- * arrival (the user picks their parameters, then generates — never blindly).
- * "Pre-built" links to the gallery.
+ * Week creation: two doors, no wizard.
+ *
+ * "Composer" creates the empty single-week plan and hands the editor
+ * `state.openSettings`, so the generator's parameters are picked first, the
+ * app never generates blindly. "Catalogue" opens the ready-made weeks.
+ *
+ * The first door creates before it navigates, so it has to be a <button>; the
+ * second is a real <Link>. Both wear the same paper (.zn-door), so the pair
+ * reads as one choice rather than as a control next to a card.
  */
 export function WeekNewPage() {
   const { t } = useTranslation("library");
   const navigate = useNavigate();
+  const prebuiltCount = getAllPrebuiltWeeks().length;
 
-  function createWeek(openSettings: boolean) {
+  function createWeek() {
     const plan = createEmptyWeekPlan(t("weekly.generate.defaultName"));
     savePlan(plan);
-    navigate(
-      `/weeks/${plan.id}`,
-      openSettings ? { state: { openSettings: true } } : undefined,
-    );
+    navigate(`/weeks/${plan.id}`, { state: { openSettings: true } });
   }
 
   return (
     <>
-      <SEOHead
-        noindex
-        title={t("weekly.new.title")}
-        canonical="/weeks/new"
-      />
-      <div className="py-8">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Back */}
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/weeks">
-              <ArrowLeft className="mr-2 size-4" />
-              {t("weekly.new.back")}
-            </Link>
-          </Button>
+      <SEOHead noindex title={t("weekly.new.title")} canonical="/weeks/new" />
 
-          {/* Title */}
-          <div className="text-center space-y-2">
-            <EditorialTitle as="h1" size="md">
+      <div className="zn-pw">
+        <Button variant="ghost" size="sm" asChild className="zn-pw__back">
+          <Link to="/weeks">
+            <ArrowLeft size={16} />
+            {t("weekly.new.back")}
+          </Link>
+        </Button>
+
+        <section className="zn-pw__band">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+          >
+            <span className="zn-kicker">{t("weekly.new.kicker")}</span>
+            <h1 className="zn-display" data-level="2">
               {t("weekly.new.title")}
-            </EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground">
+            </h1>
+            <p className="zn-body zn-body--lead zn-pw__lede">
               {t("weekly.new.subtitle")}
-            </FadeUp>
+            </p>
           </div>
+        </section>
 
-          {/* Cards — two modes: create (generate or build), or pre-built. */}
-          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {/* Create a week (generate 80/20 or build by hand) */}
-            <StaggerItem>
-              <button
-                type="button"
-                onClick={() => createWeek(true)}
-                className="block h-full w-full text-left"
-              >
-                <Card
-                  interactive
-                  className="h-full bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent border-border/50 hover:shadow-md hover:-translate-y-1 hover:border-foreground/40 transition-all duration-200"
-                >
-                  <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
-                    <div className="size-10 sm:size-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <Sparkles className="size-5 sm:size-8 text-primary" />
-                    </div>
-                    <div className="space-y-1 sm:space-y-2 min-w-0">
-                      <h2 className="text-base sm:text-lg font-semibold">
-                        {t("weekly.new.modes.create.title")}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {t("weekly.new.modes.create.desc")}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </button>
-            </StaggerItem>
+        <section className="zn-pw__band">
+          <div
+            className="zn-grid"
+            style={{ "--cols": 2, "--cols-md": 2 } as React.CSSProperties}
+          >
+            <button type="button" onClick={createWeek} className="zn-door">
+              <span className="zn-kicker">
+                {t("weekly.new.modes.create.kicker")}
+              </span>
+              <span className="zn-door__title">
+                {t("weekly.new.modes.create.title")}
+              </span>
+              <span className="zn-door__body">
+                {t("weekly.new.modes.create.desc")}
+              </span>
+              <span className="zn-door__cta">
+                {t("weekly.new.modes.create.cta")}
+                <ArrowRight />
+              </span>
+            </button>
 
-            {/* Pre-built week */}
-            <StaggerItem>
-              <Link to="/weeks/new/prebuilt" className="block h-full">
-                <Card
-                  interactive
-                  className="h-full bg-gradient-to-br from-zone-5/10 dark:from-zone-5/20 to-transparent border-border/50 hover:shadow-md hover:-translate-y-1 hover:border-foreground/40 transition-all duration-200"
-                >
-                  <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
-                    <div className="size-10 sm:size-16 rounded-full bg-zone-5/10 flex items-center justify-center shrink-0">
-                      <BookOpen className="size-5 sm:size-8 text-zone-5" />
-                    </div>
-                    <div className="space-y-1 sm:space-y-2 min-w-0">
-                      <h2 className="text-base sm:text-lg font-semibold">
-                        {t("weekly.new.modes.prebuilt.title")}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {t("weekly.new.modes.prebuilt.desc")}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </StaggerItem>
-          </StaggerGrid>
-        </div>
+            <DoorCard
+              to="/weeks/new/prebuilt"
+              kicker={t("weekly.new.modes.prebuilt.kicker")}
+              title={t("weekly.new.modes.prebuilt.title")}
+              body={t("weekly.new.modes.prebuilt.desc")}
+              cta={t("weekly.new.modes.prebuilt.cta", { count: prebuiltCount })}
+            />
+          </div>
+        </section>
       </div>
     </>
   );

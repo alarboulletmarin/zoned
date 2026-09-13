@@ -1,0 +1,805 @@
+/* The editorial furniture.
+ *
+ * Everything that indexes or frames written content: the article, collection,
+ * prebuilt-plan, prebuilt-week and glossary-term cards, the tip, the science
+ * block under a session, the table of contents, the auto-linked glossary term
+ * inside prose, the content preview inside a popover, and the reading bar.
+ *
+ * All of the cards here are cards in a LIST, so not one of them carries a
+ * shadow: the 1.5px ink outline is what makes a card a thing, and hover moves
+ * colour only. The single --shadow-block in this file belongs to the mobile
+ * table-of-contents dropdown, which is a floating surface and is allowed one.
+ *
+ * Zone marks come from zone.css (.zn-zone-badge) and are never re-derived
+ * here. No file in this family paints a raw zone ramp, so none of them needs
+ * to carry the ZoneScale legend: every zone mark it shows is a badge that
+ * already prints its own Z-code.
+ */
+
+/* ── the index card ───────────────────────────────────────────────────── */
+
+/* One anatomy, five call sites. The whole card is the link, outline as
+   target, and it reads in the system's order: what kind of thing this is,
+   its name, why you would open it, then the facts on a ruled mono line.
+   block-size:100% because every one of them sits in a grid the page owns. */
+.zn-ecard {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  block-size: 100%;
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+  text-decoration: none;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-ecard:hover {
+  background: var(--surface-band);
+}
+
+.zn-ecard:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* A dense card, the glossary grid runs three across and its cards are one
+   term plus one line of definition. The name drops to interface type there,
+   because it is a label you scan rather than a heading you read. */
+.zn-ecard[data-size="compact"] {
+  gap: var(--sp-4);
+  padding: var(--pad-card-sm);
+}
+
+.zn-ecard[data-size="compact"] .zn-ecard__title {
+  font: var(--fw-semibold) var(--fs-body) / 1.3 var(--font-text);
+  letter-spacing: normal;
+}
+
+/* Two columns on a phone means 26px of padding is most of the card. */
+@media (max-width: 640px) {
+  .zn-ecard {
+    gap: var(--sp-4);
+    padding: var(--pad-card-sm);
+  }
+}
+
+/* An inline ink glyph next to the kind label. No tinted tile behind it: the
+   card is already outlined, and a second box inside it is noise. */
+.zn-ecard__icon {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  color: var(--text-body);
+}
+
+.zn-ecard__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+  overflow-wrap: anywhere;
+}
+
+/* An acronym is the term's code, so it takes the code's treatment: mono,
+   bold, vermillon type, never a vermillon fill. */
+.zn-ecard__acronym {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-link);
+}
+
+/* Two lines, and the room for two whether or not the text fills them: a grid
+   of cards whose meta rows do not line up reads as a dozen components. */
+.zn-ecard__desc {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 2);
+  line-clamp: var(--lines, 2);
+  overflow: hidden;
+}
+
+/* ── the facts line ───────────────────────────────────────────────────── */
+
+.zn-ecard__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-7);
+  margin-block-start: auto;
+  padding-block-start: var(--sp-5);
+  border-block-start: var(--border-divider);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-ecard__fact {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The identifier at the end of the line, a race distance, a reading time.
+   Vermillon type, the one accent mark a list card is allowed. */
+.zn-ecard__code {
+  margin-inline-start: auto;
+  flex: none;
+  font-weight: var(--fw-bold);
+  color: var(--text-link);
+}
+
+/* WCAG 2.5.8, a card that navigates answers to the touch floor. */
+@media (pointer: coarse) {
+  .zn-ecard {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── the "read more" link ─────────────────────────────────────────────── */
+
+/* The editorial family's outbound link: 14px semibold vermillon, which is the
+   floor the system allows for the accent on cream. Type, not a fill. */
+.zn-clink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.3 var(--font-text);
+  color: var(--text-link);
+  text-decoration: none;
+}
+
+.zn-clink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-clink > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+.zn-clink[data-size="sm"] {
+  font-size: var(--fs-caption);
+}
+
+/* ── the tip ──────────────────────────────────────────────────────────── */
+
+/* Three densities of the same object: a line inside a paragraph, a compact
+   card beside a session, a full-width banner. The lamp is drawn in ink, not
+   in amber, the palette has one accent and this is not it. */
+.zn-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-5);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+.zn-tip[data-variant="banner"] {
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+/* Inline: no paper of its own. It belongs to the paragraph it sits under. */
+.zn-tip[data-variant="inline"] {
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  gap: var(--sp-4);
+}
+
+.zn-tip__icon {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  margin-block-start: 2px;
+  color: var(--text-body);
+}
+
+.zn-tip__body {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  align-items: flex-start;
+}
+
+.zn-tip__text {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* ── the auto-linked glossary term ────────────────────────────────────── */
+
+/* Sixteen surfaces run their prose through this, and a paragraph can carry
+   half a dozen matches. A dotted ink underline is present enough to read as a
+   link and quiet enough to leave the paragraph a paragraph; the colour only
+   arrives on hover. Deliberately identical for a term and for an article,
+   two underline colours in one sentence is the noise this avoids. */
+.zn-glink {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--line-axis);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-glink:hover {
+  color: var(--text-link);
+  text-decoration-color: var(--accent);
+}
+
+/* ── the content preview ──────────────────────────────────────────────── */
+
+/* Lives inside .zn-popover, which already paints the paper, the outline and
+   the one hard shadow. Only the arrangement belongs here. */
+.zn-preview {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  padding-inline-end: var(--sp-10);
+}
+
+.zn-preview__title {
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.3 var(--font-text);
+  color: var(--text-body);
+}
+
+.zn-preview__aside {
+  font-weight: var(--fw-regular);
+  color: var(--text-muted);
+}
+
+.zn-preview__text {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 3);
+  line-clamp: var(--lines, 3);
+  overflow: hidden;
+}
+
+.zn-preview__close {
+  position: absolute;
+  inset-block-start: calc(var(--sp-3) * -1);
+  inset-inline-end: calc(var(--sp-3) * -1);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sp-14);
+  block-size: var(--sp-14);
+  padding: 0;
+
+  background: none;
+  border: none;
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  cursor: pointer;
+
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.zn-preview__close:hover {
+  color: var(--text-body);
+  background: var(--surface-band);
+}
+
+/* On touch the close target grows to the floor, and the panel gives it the
+   room so nothing sits underneath it. */
+@media (pointer: coarse) {
+  .zn-preview {
+    padding-inline-end: var(--sp-15);
+  }
+  .zn-preview__close {
+    inline-size: var(--hit-min);
+    block-size: var(--hit-min);
+  }
+}
+
+/* ── related content ──────────────────────────────────────────────────── */
+
+/* One related article: a ruled row, not a card. It sits inside a card
+   already, and a card in a card is two outlines saying one thing. */
+.zn-related__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-5);
+  padding: var(--sp-6);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  text-decoration: none;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-related__row:hover {
+  background: var(--surface-band);
+}
+
+.zn-related__row:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-related__icon {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  margin-block-start: 2px;
+  color: var(--text-faint);
+}
+
+.zn-related__name {
+  margin: 0;
+  font: var(--type-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (pointer: coarse) {
+  .zn-related__row {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── the science block ────────────────────────────────────────────────── */
+
+/* The note printed when a cycling or swimming session borrows running
+   physiology. An outlined aside, not a coloured one: the palette keeps its
+   accent for the primary action. */
+.zn-science__note {
+  padding: var(--sp-6);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  background: var(--surface-band);
+}
+
+.zn-science__glyph {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-science__zone-name {
+  font: var(--type-label);
+  color: var(--text-body);
+}
+
+/* Tailwind's preflight strips list markers from every ul, and this list is a
+   list, the discs come back explicitly. */
+.zn-science__list {
+  margin: 0;
+  padding-inline-start: var(--sp-9);
+  list-style: disc;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-science__list > li + li {
+  margin-block-start: var(--sp-3);
+}
+
+/* The references, folded away. Full APA records in mono grey are a wall; the
+   count is what a reader scans and the record is one tap behind it. */
+.zn-science__refs {
+  padding-block-start: var(--sp-6);
+  border-block-start: var(--border-divider);
+}
+
+.zn-science__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: var(--hit-min);
+
+  font: var(--type-label);
+  color: var(--text-body);
+  cursor: pointer;
+  list-style: none;
+  border-radius: var(--r-sm);
+}
+
+.zn-science__summary::-webkit-details-marker {
+  display: none;
+}
+
+.zn-science__chevron {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-science__refs[open] .zn-science__chevron {
+  transform: rotate(180deg);
+}
+
+.zn-science__reflist {
+  margin: var(--sp-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-science__ref {
+  font: var(--type-body-sm);
+}
+
+.zn-science__ref-authors {
+  font-weight: var(--fw-medium);
+}
+
+.zn-science__ref-year {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-science__ref-title {
+  display: block;
+  font: var(--type-caption);
+  font-style: italic;
+  color: var(--text-faint);
+}
+
+/* ── the glossary term page ───────────────────────────────────────────── */
+
+.zn-gterm__code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  color: var(--text-body);
+}
+
+/* L'exemple travaillé était une demi-carte : un fond, un padding, un rayon,
+   mais un filet vermillon sur la seule arête gauche et des coins coupés à
+   gauche. Le contour entier ou rien : c'est une carte, elle prend le cadre
+   d'encre complet de sa voisine.
+
+   Le vermillon n'y perd rien, parce qu'il n'y disait rien : le bloc porte déjà
+   son nom en capitales mono (EXEMPLE / FORMULE, GlossaryDetail.tsx:60
+   et :68). C'est le kicker qui distingue les deux blocs, pas la couleur d'un
+   filet, et une fois le cadre identique, deux blocs frères se lisent enfin
+   comme deux blocs frères. La règle est donc mutualisée avec la formule.
+
+   Ce que la conversion déplace, et c'est voulu : le retrait gauche redescend
+   de 22px à 16px et le bloc redevient symétrique, parce que les 22px
+   n'existaient que pour dégager le rail. */
+.zn-gterm__formula,
+.zn-gterm__example {
+  padding: var(--sp-8);
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-gterm__link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: var(--sp-16);
+  font: var(--type-body-sm);
+  color: var(--text-link);
+  text-decoration: none;
+}
+
+.zn-gterm__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-gterm__link > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+/* ── the table of contents ────────────────────────────────────────────── */
+
+.zn-toc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.zn-toc > .zn-kicker {
+  margin: 0 0 var(--sp-5);
+  padding-inline-start: var(--sp-5);
+}
+
+/* The phone version is a disclosure, not a list, and it owns the space
+   between itself and the article it sits above. */
+.zn-toc-mobile {
+  margin-block-end: var(--sp-11);
+}
+
+/* Un titre de la liste. La bande vermillon de 2.5px sur l'arête gauche est
+   partie : c'était un rail de navigation, pas une carte, et le même état, la
+   section que je lis, se disait déjà en aplat d'encre ailleurs dans l'app
+   (.zn-nut-toc__link du hub nutrition). Trois formes pour une information, il
+   n'en reste qu'une : la pilule d'encre pleine inversée.
+
+   ZÉRO DÉCALAGE, et c'est pour ça que la bordure transparente RESTE au lieu de
+   repasser en padding : un fond se peint jusqu'au bord extérieur de la bordure
+   (background-clip vaut border-box par défaut), donc la pilule couvre
+   exactement la boîte d'aujourd'hui sans qu'un seul pixel de texte bouge. La
+   convertir en padding aurait coûté un demi-pixel, Chrome ramène 2.5px à 2,
+   et un nombre magique dans un système qui n'en veut pas. Mesuré à DSF 1 et 2 :
+   Δ = 0. */
+.zn-toc__item {
+  display: block;
+  inline-size: 100%;
+  padding: var(--sp-3) var(--sp-5);
+
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  text-align: start;
+
+  background: none;
+  border: none;
+  border-inline-start: var(--bw-heavy) solid transparent;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+/* Survol : papier creusé, la forme unique du survol dans toute l'app. */
+.zn-toc__item:hover {
+  color: var(--text-body);
+  background: var(--surface-band);
+}
+
+/* Là où l'on est. L'inversion d'encre, exactement .zn-nut-toc__link[aria-current],
+   copiée pour que le sommaire d'un article et celui du hub nutrition cessent
+   d'être deux dialectes. Le porteur non chromatique est l'inversion elle-même :
+   en niveaux de gris la pilule reste noire et le texte blanc, l'état survit à
+   la désaturation (WCAG 1.4.1). Le gras reste à --fw-medium, la valeur d'avant :
+   un scroll-spy repeint en continu, et passer à semibold ferait respirer la
+   ligne au changement de section, la seule chose qu'on s'interdit ici. */
+.zn-toc__item[aria-current] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  font-weight: var(--fw-medium);
+}
+
+/* The phone version: a summary button that names where you are, and a panel
+   under it. The panel floats over the article, so it is one of the surfaces
+   allowed the hard offset. */
+.zn-toc__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-5) var(--sp-6);
+
+  font: var(--type-label);
+  color: var(--text-body);
+  text-align: start;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-toc__trigger:hover {
+  background: var(--surface-band);
+}
+
+.zn-toc__trigger:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-toc__glyph {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-toc__chevron {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-toc__trigger[aria-expanded="true"] .zn-toc__chevron {
+  transform: rotate(180deg);
+}
+
+.zn-toc__panel {
+  margin-block-start: var(--sp-2);
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-block);
+}
+
+.zn-toc__panel .zn-toc__item {
+  min-block-size: var(--hit-min);
+  padding: var(--sp-5) var(--sp-8);
+}
+
+/* ── the reading bar ──────────────────────────────────────────────────── */
+
+/* The header is in flow in this shell, so the bar belongs at the very top of
+   the viewport once the header has scrolled away. Ink on a divider rule, 2px,
+   no gradient, it says how far in you are, nothing more. */
+.zn-readprog {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-start: 0;
+  z-index: 40;
+  block-size: var(--sp-1);
+  background: var(--line-divider);
+}
+
+.zn-readprog__fill {
+  inline-size: 100%;
+  block-size: 100%;
+  background: var(--ink-1);
+
+  /* scaleX, not width: the smoothing stays on the compositor. */
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+/* ── the news spotlight ───────────────────────────────────────────────── */
+
+.zn-spotlight__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+}
+
+.zn-spotlight__viewport:active {
+  cursor: grabbing;
+}
+
+.zn-spotlight__track {
+  display: flex;
+  will-change: transform;
+}
+
+.zn-spotlight__slot {
+  inline-size: 100%;
+  flex: 0 0 100%;
+}
+
+.zn-spotlight__slide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+  text-decoration: none;
+
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-spotlight__slide:hover {
+  background: var(--surface-band);
+}
+
+.zn-spotlight__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h2) / 1 var(--font-display);
+  letter-spacing: var(--ls-h2);
+}
+
+.zn-spotlight__desc {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-muted);
+  max-inline-size: 62ch;
+}
+
+.zn-spotlight__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  color: var(--text-link);
+  white-space: nowrap;
+}
+
+.zn-spotlight__cta > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+}
+
+.zn-spotlight__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-6);
+}
+
+/* Outline for a slide you are not on, ink fill for the one you are: the
+   system's selected state, at the smallest size it comes in. */
+.zn-spotlight__dot {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-3);
+  padding: 0;
+
+  background: none;
+  border: var(--border-hair);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    inline-size var(--dur-base) var(--ease-out),
+    background var(--dur-base) var(--ease-out);
+}
+
+.zn-spotlight__dot[aria-current="true"] {
+  inline-size: var(--sp-14);
+  background: var(--ink-1);
+}
+
+@media (pointer: coarse) {
+  .zn-spotlight__dot {
+    block-size: var(--sp-6);
+  }
+}

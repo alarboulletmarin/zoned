@@ -7,17 +7,17 @@ export function ContributeForm() {
   const { t } = useTranslation("contribute");
 
   return (
-    <Tabs defaultValue="quick" className="w-full">
-      <TabsList className="w-full">
+    <Tabs defaultValue="quick" className="zn-contrib__tabs">
+      <TabsList>
         <TabsTrigger value="quick">{t("quickIdea.title")}</TabsTrigger>
         <TabsTrigger value="full">{t("fullWorkout.title")}</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="quick" className="mt-6">
+      <TabsContent value="quick">
         <QuickIdeaForm />
       </TabsContent>
 
-      <TabsContent value="full" className="mt-6">
+      <TabsContent value="full">
         <FullWorkoutWizard />
       </TabsContent>
     </Tabs>

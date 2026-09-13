@@ -122,7 +122,7 @@ describe("URL length", () => {
 /**
  * The link handed to somebody else has to open for *them*. A custom workout
  * lives only in its author's localStorage, so `/workout/CUSTOM-x` is a dead end
- * for every other visitor — and a dead one that looks perfectly healthy to
+ * for every other visitor, and a dead one that looks perfectly healthy to
  * whoever copied it.
  */
 describe("publicWorkoutUrl", () => {

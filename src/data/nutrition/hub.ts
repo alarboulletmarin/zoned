@@ -63,26 +63,26 @@ export const raceWeek: RaceWeekDay[] = [
 
 /** Suppléments classés selon le framework AIS (Australian Institute of Sport). */
 export const supplements: SupplementEntry[] = [
-  // Group A — preuves solides
+  // Group A, preuves solides
   { id: "caffeine",    iconName: "Coffee", aisCategory: "A", verdict: "proven", nameKey: "hub.supplements.caffeine.name",    doseKey: "hub.supplements.caffeine.dose",    whenKey: "hub.supplements.caffeine.when",    rationaleKey: "hub.supplements.caffeine.rationale",    glossaryTermId: "cafeine" },
   { id: "creatine",    iconName: "Pill",   aisCategory: "A", verdict: "proven", nameKey: "hub.supplements.creatine.name",    doseKey: "hub.supplements.creatine.dose",    whenKey: "hub.supplements.creatine.when",    rationaleKey: "hub.supplements.creatine.rationale" },
   { id: "bicarbonate", iconName: "Pill",   aisCategory: "A", verdict: "proven", nameKey: "hub.supplements.bicarbonate.name", doseKey: "hub.supplements.bicarbonate.dose", whenKey: "hub.supplements.bicarbonate.when", rationaleKey: "hub.supplements.bicarbonate.rationale" },
   { id: "betaalanine", iconName: "Pill",   aisCategory: "A", verdict: "proven", nameKey: "hub.supplements.betaalanine.name", doseKey: "hub.supplements.betaalanine.dose", whenKey: "hub.supplements.betaalanine.when", rationaleKey: "hub.supplements.betaalanine.rationale" },
   { id: "beetroot",    iconName: "Leaf",   aisCategory: "A", verdict: "proven", nameKey: "hub.supplements.beetroot.name",    doseKey: "hub.supplements.beetroot.dose",    whenKey: "hub.supplements.beetroot.when",    rationaleKey: "hub.supplements.beetroot.rationale" },
 
-  // Group B — preuves modérées
+  // Group B, preuves modérées
   { id: "collagen",    iconName: "Shield", aisCategory: "B", verdict: "conditional", nameKey: "hub.supplements.collagen.name",    doseKey: "hub.supplements.collagen.dose",    whenKey: "hub.supplements.collagen.when",    rationaleKey: "hub.supplements.collagen.rationale" },
   { id: "tartcherry",  iconName: "Leaf",   aisCategory: "B", verdict: "conditional", nameKey: "hub.supplements.tartcherry.name",  doseKey: "hub.supplements.tartcherry.dose",  whenKey: "hub.supplements.tartcherry.when",  rationaleKey: "hub.supplements.tartcherry.rationale" },
   { id: "curcumin",    iconName: "Sparkles", aisCategory: "B", verdict: "conditional", nameKey: "hub.supplements.curcumin.name",  doseKey: "hub.supplements.curcumin.dose",    whenKey: "hub.supplements.curcumin.when",    rationaleKey: "hub.supplements.curcumin.rationale" },
   { id: "probiotics",  iconName: "Shield", aisCategory: "B", verdict: "conditional", nameKey: "hub.supplements.probiotics.name",  doseKey: "hub.supplements.probiotics.dose",  whenKey: "hub.supplements.probiotics.when",  rationaleKey: "hub.supplements.probiotics.rationale" },
   { id: "omega3",      iconName: "Leaf",   aisCategory: "B", verdict: "conditional", nameKey: "hub.supplements.omega3.name",      doseKey: "hub.supplements.omega3.dose",      whenKey: "hub.supplements.omega3.when",      rationaleKey: "hub.supplements.omega3.rationale" },
 
-  // Micronutriments — utiles si carence
+  // Micronutriments, utiles si carence
   { id: "vitD",        iconName: "Sun",    aisCategory: "B", verdict: "conditional", nameKey: "hub.supplements.vitD.name",        doseKey: "hub.supplements.vitD.dose",        whenKey: "hub.supplements.vitD.when",        rationaleKey: "hub.supplements.vitD.rationale", glossaryTermId: "vitamine-d" },
   { id: "iron",        iconName: "Pill",   aisCategory: "B", verdict: "conditional", nameKey: "hub.supplements.iron.name",        doseKey: "hub.supplements.iron.dose",        whenKey: "hub.supplements.iron.when",        rationaleKey: "hub.supplements.iron.rationale", glossaryTermId: "fer-coureur" },
   { id: "magnesium",   iconName: "Pill",   aisCategory: "C", verdict: "conditional", nameKey: "hub.supplements.magnesium.name",   doseKey: "hub.supplements.magnesium.dose",   whenKey: "hub.supplements.magnesium.when",   rationaleKey: "hub.supplements.magnesium.rationale" },
 
-  // Group D — marketing / preuves faibles
+  // Group D, marketing / preuves faibles
   { id: "bcaa",        iconName: "Pill",   aisCategory: "D", verdict: "marketing", nameKey: "hub.supplements.bcaa.name",        doseKey: "hub.supplements.bcaa.dose",        whenKey: "hub.supplements.bcaa.when",        rationaleKey: "hub.supplements.bcaa.rationale", glossaryTermId: "bcaa" },
   { id: "lcarnitine",  iconName: "Pill",   aisCategory: "D", verdict: "marketing", nameKey: "hub.supplements.lcarnitine.name",  doseKey: "hub.supplements.lcarnitine.dose",  whenKey: "hub.supplements.lcarnitine.when",  rationaleKey: "hub.supplements.lcarnitine.rationale" },
   { id: "ketones",     iconName: "Pill",   aisCategory: "D", verdict: "marketing", nameKey: "hub.supplements.ketones.name",     doseKey: "hub.supplements.ketones.dose",     whenKey: "hub.supplements.ketones.when",     rationaleKey: "hub.supplements.ketones.rationale" },
@@ -123,7 +123,7 @@ export const proteinTimeline: DosageChip[] = [
   { labelKey: "hub.protein.timeline.bedtime.label",  valueKey: "hub.protein.timeline.bedtime.value",  helperKey: "hub.protein.timeline.bedtime.helper" },
 ];
 
-/** Train your gut — protocole de 6 à 12 semaines. */
+/** Train your gut, protocole de 6 à 12 semaines. */
 export const gutTraining: GutTrainingPhase[] = [
   { weekRangeKey: "hub.during.gut.phase1.weeks", carbsPerHour: "30",  detailKey: "hub.during.gut.phase1.detail" },
   { weekRangeKey: "hub.during.gut.phase2.weeks", carbsPerHour: "60",  detailKey: "hub.during.gut.phase2.detail" },
@@ -145,7 +145,7 @@ export const myths: MythCard[] = [
   { id: "antiox",     mythKey: "hub.myths.antiox.myth",     truthKey: "hub.myths.antiox.truth",     sourceKey: "hub.myths.antiox.source" },
 ];
 
-/** Coureuse — besoins spécifiques (RED-S, Sims 2024, IOC 2023). */
+/** Coureuse, besoins spécifiques (RED-S, Sims 2024, IOC 2023). */
 export const womenInsights: WomenInsight[] = [
   { iconName: "Pill",      titleKey: "hub.women.iron.title",     detailKey: "hub.women.iron.detail" },
   { iconName: "Activity",  titleKey: "hub.women.protein.title",  detailKey: "hub.women.protein.detail" },
@@ -153,7 +153,7 @@ export const womenInsights: WomenInsight[] = [
   { iconName: "AlertTriangle", titleKey: "hub.women.reds.title", detailKey: "hub.women.reds.detail" },
 ];
 
-/** Acclimatation chaleur — protocoles validés 2024. */
+/** Acclimatation chaleur, protocoles validés 2024. */
 export const heatProtocols: HeatProtocol[] = [
   { iconName: "Flame",      titleKey: "hub.heat.sauna.title",      durationKey: "hub.heat.sauna.duration",      detailKey: "hub.heat.sauna.detail" },
   { iconName: "Droplets",   titleKey: "hub.heat.bath.title",       durationKey: "hub.heat.bath.duration",       detailKey: "hub.heat.bath.detail" },

@@ -1,0 +1,261 @@
+/* Layout vocabulary.
+ *
+ * NOT a utility framework and not a Tailwind reimplementation: these are the
+ * layout facts the design system itself states, a 20px gutter, a 22px stack,
+ * 40px screen margins (20px on mobile), and sections separated by blank space
+ * alone (--gap-section) since 12 September 2026, they were separated by a
+ * full-width ink rule until then; see .zn-section below.
+ *
+ * Variation goes through custom properties rather than a class per value, so
+ * the set stays small enough to remember:
+ *
+ *   <div className="zn-row" style={{ "--gap": "var(--sp-4)" }}>
+ *   <div className="zn-grid" style={{ "--cols": 3 }}>
+ *
+ * Anything genuinely one-off stays an inline style, which is what 635 places in
+ * this app already do for zone colours. That is the escape hatch, and it is
+ * fine, it is plain CSS.
+ */
+
+/* ── flow ─────────────────────────────────────────────────────────────── */
+
+/* A horizontal run of things on one baseline. The default gap is the gutter. */
+.zn-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap, var(--sp-6));
+  min-inline-size: 0;
+}
+
+/* A vertical stack. The default gap is the system's 14px stack step; a stack of
+   cards or sections passes a bigger one. */
+.zn-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, var(--gap-stack));
+  min-inline-size: 0;
+}
+
+/* A row that wraps, filter chips, tag lists, button groups. */
+.zn-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap, var(--sp-4));
+}
+
+/* Pushes the last child to the far edge without a spacer element. */
+.zn-row--split,
+.zn-cluster--split {
+  justify-content: space-between;
+}
+
+/* Aligns a row to the top instead of the middle, used when one column is a
+   paragraph and the other a single control. */
+.zn-row--start {
+  align-items: flex-start;
+}
+
+.zn-row--baseline {
+  align-items: baseline;
+}
+
+/* The element that takes the leftover width in a row. */
+.zn-fill {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The element that must not be squeezed, an icon, a badge, a fixed control. */
+.zn-fixed {
+  flex: none;
+}
+
+/* Pushes everything after it to the end of the line. */
+.zn-push {
+  margin-inline-start: auto;
+}
+
+/* ── grid ─────────────────────────────────────────────────────────────── */
+
+/* The card grid: 3 columns on desktop, 20px gutters. Pass --cols to change it;
+   it collapses to one column on mobile on its own. */
+.zn-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  gap: var(--gap, var(--gap-grid));
+}
+
+/* An asymmetric two-column panel: content and a sidebar of a stated width. */
+.zn-split {
+  display: grid;
+  grid-template-columns: var(--split, 1fr 420px);
+  gap: var(--gap, var(--sp-17));
+  align-items: start;
+}
+
+/* Every stacked track is minmax(0, 1fr), never a bare `1fr`.
+
+   `1fr` is shorthand for `minmax(auto, 1fr)`, and that `auto` minimum is the
+   item's MIN-CONTENT: a track written `1fr` refuses to be narrower than the
+   widest unbreakable thing inside it, and the grid then overflows its own
+   container rather than compress. It is silent wherever the min-content
+   happens to be small, the session cards measure 223px min-content in
+   Chrome, which fits a 390px phone, and it overflows the moment an engine
+   computes that intrinsic size differently, which is what put a sideways
+   scrollbar on the home page in Firefox and not in Chrome.
+
+   minmax(0, 1fr) is the same track with the floor removed. Twenty-seven
+   collapse rules across the sheets carried the bare form; they all say
+   minmax(0, 1fr) now. */
+@media (max-width: 900px) {
+  .zn-grid {
+    grid-template-columns: repeat(var(--cols-md, 2), minmax(0, 1fr));
+  }
+  .zn-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .zn-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── page ─────────────────────────────────────────────────────────────── */
+
+/* The screen's side margins. 40px, 20px on mobile, the value comes from
+   --pad-screen-x, which already switches at the breakpoint. */
+.zn-screen {
+  padding-inline: var(--pad-screen-x);
+}
+
+/* Une bande de la page, séparée de la suivante par L'ESPACE SEUL.
+   (12 septembre 2026, décision du propriétaire.)
+
+   Ce commentaire disait exactement le contraire, separated by a full-width
+   ink rule, never by blank space: that is what makes the page read as paper
+   rather than as a feed, et il est réécrit ici plutôt que corrigé, parce
+   qu'il était formulé comme une doctrine et non comme un réglage : le prochain
+   lecteur remettrait le filet en croyant réparer un oubli.
+
+   La bande paie la MOITIÉ de --gap-section de chaque côté, jamais l'écart
+   entier. Deux bandes voisines en laissent alors exactement un entre leurs
+   contenus. Garder le padding entier aurait donné 96 px entre deux bandes sur
+   bureau, c'est-à-dire les 672 px d'air sur la seule page d'accueil que ce
+   fichier avait déjà mesurés et rejetés du temps où le filet travaillait.
+
+   Le repli est ce qui bouge, pas la propriété : un appelant qui pose son propre
+   --pad-block le garde (WeeksListPage.tsx passe var(--sp-11)). Et il n'y a plus
+   de media query ici, c'est --gap-section qui descend d'un cran sous 640 px,
+   dans design/spacing.css, donc la valeur vit à un seul endroit. */
+.zn-section {
+  padding-block: var(--pad-block, calc(var(--gap-section) / 2));
+  padding-inline: var(--pad-screen-x);
+}
+
+/* .zn-section--first n'existait que pour annuler le filet de la première bande.
+   Sans filet, elle n'a plus rien à annuler : elle est retirée, et ses quatre
+   appels avec elle (SettingsPage, ChangelogPage, AboutPage, ContributePage). */
+
+.zn-section--band {
+  background: var(--surface-band);
+}
+
+/* Reading measure. Prose is unreadable past ~70 characters. */
+.zn-measure {
+  max-inline-size: var(--measure, 62ch);
+}
+
+/* Wide content, a table, a chart, a code block, scrolls inside itself.
+   The page must never scroll sideways. */
+.zn-scroll-x {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+/* ── visibility ───────────────────────────────────────────────────────── */
+
+/* `.sr-only` moved to base.css, into `@layer utilities`. It was declared twice, here and by Tailwind, and Tailwind's copy, sitting in the utilities layer,
+   was the one that actually applied. Leaving only this one behind would have
+   dropped a visually-hidden label into the middle of the component layer, where
+   any later rule of equal specificity can put it back on screen. One
+   definition, in the layer it always won from. */
+
+/* ── editorial atoms ──────────────────────────────────────────────────────
+   Used by the shared helpers in src/components/editorial/. */
+
+/* A card that is itself a link or a button. It answers the pointer by
+   changing colour, never by lifting, never by gaining a shadow. The one
+   shadow in this system is a hard offset for surfaces that really float. */
+.zn-card-hover {
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-card-hover:hover {
+  background: var(--surface-band);
+  border-color: var(--line-strong);
+}
+
+.zn-card-hover:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* A section's heading row: the heading on one side, its actions on the other. */
+.zn-section__head {
+  margin-block-end: var(--sp-8);
+  align-items: flex-end;
+  gap: var(--sp-12) var(--sp-4);
+}
+
+/* ── disclosure ───────────────────────────────────────────────────────────
+   A <details> block on an ink rule. The chevron turns; nothing else moves. */
+
+.zn-disclosure {
+  border-block-end: var(--border-divider);
+}
+
+.zn-disclosure__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  min-block-size: var(--hit-min);
+  padding-block: var(--sp-9);
+  padding-inline: var(--sp-6);
+  margin-inline: calc(var(--sp-6) * -1);
+
+  border-radius: var(--r-md);
+  cursor: pointer;
+  list-style: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+/* Safari draws its own marker unless this is said explicitly. */
+.zn-disclosure__summary::-webkit-details-marker {
+  display: none;
+}
+
+.zn-disclosure__summary:hover {
+  background: var(--surface-band);
+}
+
+.zn-disclosure__chevron {
+  inline-size: 20px;
+  block-size: 20px;
+  flex: none;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-disclosure[open] .zn-disclosure__chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.zn-disclosure__panel {
+  padding-block: var(--sp-4) var(--sp-13);
+  padding-inline: var(--sp-2);
+}

@@ -32,7 +32,7 @@ export const PHASE_DISTRIBUTION: Record<RaceDistance, PhaseDistribution> = {
 // For short plans (<12 weeks), compress base and favor build/peak.
 // For long plans (>18 weeks), extend base for deeper aerobic foundation.
 export const SHORT_PLAN_BASE_ADJUSTMENT = -0.08; // reduce base by 8%
-// LONG_PLAN_BASE_ADJUSTMENT removed (unused — long plans use absolute cap logic)
+// LONG_PLAN_BASE_ADJUSTMENT removed (unused, long plans use absolute cap logic)
 export const SHORT_PLAN_THRESHOLD = 12;
 export const LONG_PLAN_THRESHOLD = 18;
 
@@ -62,7 +62,7 @@ export const MIN_PLAN_WEEKS = 4;
 export const MAX_PLAN_WEEKS = 52;
 export const MIN_PHASE_WEEKS = 1;
 
-/** Recommended ranges per distance — used for UI warnings, not hard blocks */
+/** Recommended ranges per distance, used for UI warnings, not hard blocks */
 export const RECOMMENDED_PLAN_WEEKS: Record<RaceDistance, { min: number; max: number }> = {
   "5K":         { min: 6,  max: 16 },
   "10K":        { min: 8,  max: 20 },
@@ -76,7 +76,7 @@ export const RECOMMENDED_PLAN_WEEKS: Record<RaceDistance, { min: number; max: nu
 // ── Volume progression ─────────────────────────────────────────────
 
 export const MAX_WEEKLY_VOLUME_INCREASE = 0.10; // 10% max (classic rule)
-export const RECOVERY_WEEK_VOLUME_PCT = 0.65; // 65% — less aggressive than 60% (Mujika)
+export const RECOVERY_WEEK_VOLUME_PCT = 0.65; // 65%, less aggressive than 60% (Mujika)
 export const MAX_CONSECUTIVE_LOAD_WEEKS = 3; // Recovery after 3 consecutive load weeks
 /** Long run is shortened on recovery weeks, never removed (Pfitzinger) */
 export const RECOVERY_LONG_RUN_PCT = 0.7;
@@ -104,7 +104,7 @@ export const STARTING_VOLUME_PCT = {
 };
 
 // ── Weekly km targets by level and distance ────────────────────────
-// [startKm, peakKm] — Based on Pfitzinger & Daniels recommendations.
+// [startKm, peakKm], Based on Pfitzinger & Daniels recommendations.
 // Start = week 1 of plan, Peak = highest volume week.
 
 export const WEEKLY_KM_TARGETS: Record<RaceDistance, Record<Difficulty, [number, number]>> = {
@@ -166,7 +166,7 @@ export const PHASE_SESSION_TYPES: Record<TrainingPhase, SessionType[]> = {
 // ── Key session types per phase (quality sessions) ─────────────────
 // Aligned with Daniels' phases:
 //   Base: Volume + strides/fartlek (aerobic foundation)
-//   Build: I-pace focus — VO2max intervals, hills (Daniels Phase III)
+//   Build: I-pace focus, VO2max intervals, hills (Daniels Phase III)
 //   Peak: T-pace + race-specific (Daniels Phase IV)
 //   Taper: Race-specific only
 //
@@ -189,7 +189,7 @@ export const KEY_SESSION_TYPES: Record<TrainingPhase, SessionType[]> = {
 //   long (semi/mara):  lactate threshold and race-pace work dominate
 //   trail:             hill strength and sustained climbing
 //
-// Ordering matters — the selector takes the first type that yields a match.
+// Ordering matters, the selector takes the first type that yields a match.
 
 export type DistanceProfile = "short" | "long" | "trail";
 
@@ -218,7 +218,7 @@ const KEY_SESSION_TYPES_BY_PROFILE: Record<
     base: ["tempo", "fartlek", "hills"],
     build: ["threshold", "tempo", "race_specific"],
     // A marathon block still needs some VO2max work to lift the ceiling the
-    // threshold sits under (Pfitzinger keeps it in race preparation) — it is
+    // threshold sits under (Pfitzinger keeps it in race preparation), it is
     // last because race-pace and threshold come first, not absent.
     peak: ["race_specific", "threshold", "tempo", "vo2max"],
     taper: ["race_specific", "tempo"],
@@ -434,9 +434,9 @@ export const DAY_LABELS = {
 
 // ── Intermediate race volume adjustments ─────────────────────────
 // Priority-dependent volume reduction for intermediate race events.
-//   A: Real race event — mini-taper, recovery week after
-//   B: Preparation race — moderate lightening, no break in progression
-//   C: Tune-up — minimal disruption, race replaces a quality session
+//   A: Real race event, mini-taper, recovery week after
+//   B: Preparation race, moderate lightening, no break in progression
+//   C: Tune-up, minimal disruption, race replaces a quality session
 
 export const INTERMEDIATE_RACE_VOLUME: Record<RacePriority, {
   raceWeekPct: number;

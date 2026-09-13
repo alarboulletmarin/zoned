@@ -1,0 +1,176 @@
+/* Settings and the project pages, /settings, /about, /changelog, /contribute.
+ *
+ * Four screens, one family: they are the app talking about itself. None of
+ * them shows a zone fill, so none of them carries the ZoneScale legend; what
+ * they carry instead is a lot of key/value data, which is what the mono roles
+ * and the ResponsiveTable are for.
+ *
+ * The shell wraps every route in .zn-page, which pays the 40px (20px mobile)
+ * screen margin once. These screens draw full-width ink rules between their
+ * bands, so each root cancels that inset and every band re-applies it through
+ * .zn-section, the rule spans the paper, the type stays on the margin. The
+ * same move HomePage makes, for the same reason.
+ *
+ * Almost all of the layout here is the shared vocabulary (.zn-section,
+ * .zn-split, .zn-grid, .zn-stack, .zn-row, .zn-cluster) driven by custom
+ * properties from the call site. What is left in this file is the handful of
+ * things the vocabulary does not state: a band-toned card, a danger frame, a
+ * divided stat strip, and the release list's hanging mono column.
+ */
+
+/* ══ shared ═══════════════════════════════════════════════════════════════ */
+
+.zn-set,
+.zn-about,
+.zn-log,
+.zn-contrib-page {
+  margin-inline: calc(var(--pad-screen-x) * -1);
+}
+
+/* ══ /settings ════════════════════════════════════════════════════════════ */
+
+/* Title left, the two measured numbers right, both sitting on the same
+   baseline block. */
+.zn-set__head {
+  align-items: end;
+}
+
+.zn-set__stats {
+  justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+  .zn-set__stats {
+    justify-content: flex-start;
+  }
+}
+
+/* A control fills the column it is given: a half-width select next to a
+   full-width segmented control reads as a mistake, not as a hierarchy. */
+.zn-set__control {
+  inline-size: 100%;
+}
+
+/* The switch and its caveat, under the rule that closes the choices above.
+   --border-divider, not --border-rule: this separates two parts of one card,
+   it does not separate two sections of the page. */
+.zn-set__toggle {
+  padding-block-start: var(--sp-11);
+  border-block-start: var(--border-divider);
+}
+
+/* The card that states what the app is. Sunken paper, so the facts read as
+   printed on the page rather than raised off it. */
+.zn-card.zn-set__band {
+  background: var(--surface-band);
+}
+
+/* Erasing everything is the one irreversible action in the app, so its card
+   wears the 2.5px vermillon frame, the same frame a selected card wears,
+   here spent on the only thing that cannot be undone. */
+.zn-card.zn-set__danger {
+  border: var(--border-heavy);
+}
+
+/* ══ /about ═══════════════════════════════════════════════════════════════ */
+
+/* The catalogue, counted. A strip of cells divided by a hairline, each paying
+   the screen margin itself so the dividers reach the full block height. */
+.zn-section.zn-about__strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  padding: 0;
+}
+
+.zn-about__cell {
+  padding: var(--sp-13) var(--pad-screen-x);
+  border-inline-end: var(--border-divider);
+}
+
+.zn-about__cell:last-child {
+  border-inline-end: none;
+}
+
+@media (max-width: 900px) {
+  .zn-section.zn-about__strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .zn-about__cell:nth-child(3n) {
+    border-inline-end: none;
+  }
+  .zn-about__cell:nth-child(-n + 3) {
+    border-block-end: var(--border-divider);
+  }
+}
+
+@media (max-width: 520px) {
+  .zn-section.zn-about__strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .zn-about__cell:nth-child(2n) {
+    border-inline-end: none;
+  }
+  .zn-about__cell:nth-child(-n + 4) {
+    border-block-end: var(--border-divider);
+  }
+}
+
+/* Four claims about the project, each a term and one line. A definition list
+   because that is what it is; the rules between them are the section rule at
+   a smaller scale. */
+.zn-about__claims {
+  margin: 0;
+  border-block-start: var(--border-divider);
+}
+
+.zn-about__claim {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--sp-10);
+  align-items: baseline;
+  padding-block: var(--sp-11);
+  border-block-end: var(--border-divider);
+}
+
+.zn-about__claim dd {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .zn-about__claim {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-3);
+  }
+}
+
+/* ══ /changelog ═══════════════════════════════════════════════════════════ */
+
+/* One release, one band: the version and its date hang in a mono column on the
+   left, the entries run down the right, and the section rule separates a
+   release from the next. The version code is data, and the biggest piece of
+   data on the row, so it is mono, not display. */
+.zn-log__version {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-h4);
+  letter-spacing: var(--ls-h4);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-log__group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-log__entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-block: var(--sp-6);
+  border-block-start: var(--border-divider);
+}
+
+.zn-log__entry:first-child {
+  border-block-start: none;
+}

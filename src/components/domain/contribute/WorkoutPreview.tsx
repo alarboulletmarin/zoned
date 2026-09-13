@@ -1,9 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkoutStructure } from "@/components/domain/WorkoutStructure";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
 import { ZoneDistribution } from "@/components/visualization/ZoneDistribution";
+import { ZoneScale } from "@/components/visualization/ZoneScale";
 import { Eye } from "@/components/icons";
 import type { WorkoutTemplate } from "@/types";
 
@@ -61,20 +62,22 @@ export function WorkoutPreview({ data }: WorkoutPreviewProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base">
-          <Eye className="size-4" />
+        <CardTitle className="zn-row zn-contrib-preview__title" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+          <Eye />
           {t("preview.title")}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent>
         {!hasBlocks ? (
-          <div className="rounded-lg border border-dashed border-muted-foreground/30 p-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              {t("preview.emptyState")}
-            </p>
+          <div className="zn-contrib-slot">
+            <p className="zn-body zn-body--sm zn-muted">{t("preview.emptyState")}</p>
           </div>
         ) : (
-          <>
+          <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+            {/* The ramp orders the zones but does not name them: the legend the
+                timeline and the distribution below both read from. */}
+            <ZoneScale className="zn-contrib-preview__legend" />
+
             {/* Timeline visualization */}
             <SessionTimeline workout={template} />
 
@@ -83,7 +86,7 @@ export function WorkoutPreview({ data }: WorkoutPreviewProps) {
 
             {/* Zone distribution */}
             <ZoneDistribution workout={template} />
-          </>
+          </div>
         )}
       </CardContent>
     </Card>

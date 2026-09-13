@@ -1,5 +1,5 @@
 /**
- * MagazineCover — 1080×1920. Editorial sport-magazine cover.
+ * MagazineCover, 1080×1920. Editorial sport-magazine cover.
  *
  * Tight masthead, "issue/zone" tag, huge italic feature title, three
  * cover lines + a faux barcode at the bottom.
@@ -9,9 +9,8 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ShareFooter, ZONE_HEX, ZONE_BG_TINT, workoutShareUrl } from "./_shared";
+import { BrandMark, BgLayer, ShareFooter, ZONE_HEX, ZONE_BG_TINT, workoutShareUrl } from "./_shared";
 import { QRSvg } from "./QRSvg";
-import Logo from "@/assets/logo.svg?react";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -66,18 +65,7 @@ export function MagazineCover({ workout, transparent }: ShareTemplateProps) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Logo style={{ width: 96, height: 48 }} />
-            <span
-              style={{
-                fontSize: 80,
-                fontWeight: 800,
-                letterSpacing: "-0.04em",
-                lineHeight: 1,
-                color: "#0f172a",
-              }}
-            >
-              ZONED
-            </span>
+            <BrandMark height={82} color="#0f172a" />
           </div>
           <div
             style={{
@@ -178,11 +166,11 @@ export function MagazineCover({ workout, transparent }: ShareTemplateProps) {
           <CoverLine
             kicker="03"
             title="Méthode"
-            detail={`Z${hero.dominantZone} ${zoneLabel} — protocole ciblé`}
+            detail={`Z${hero.dominantZone} ${zoneLabel} · protocole ciblé`}
           />
         </div>
 
-        {/* Bottom strip — QR linking to the workout + price tag */}
+        {/* Bottom strip, QR linking to the workout + price tag */}
         <div
           style={{
             marginTop: 40,
@@ -235,7 +223,7 @@ export function MagazineCover({ workout, transparent }: ShareTemplateProps) {
           </div>
         </div>
       </div>
-      {/* Hide the default ShareFooter — we composed our own bottom strip. */}
+      {/* Hide the default ShareFooter, we composed our own bottom strip. */}
       <div style={{ display: "none" }}>
         <ShareFooter workout={workout} />
       </div>

@@ -3,7 +3,7 @@ import { Check, AlertTriangle } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import type { PolarisedSplit } from "@/lib/weekStats";
 
-/** Target easy share — the 80 in 80/20. */
+/** Target easy share, the 80 in 80/20. */
 const TARGET_LOW = 0.8;
 /** "Balanced" band on the hard share (Tempo + Intense): roughly 20 ± 8. */
 const HARD_MIN = 0.12;
@@ -16,7 +16,7 @@ interface PolarizationGaugeProps {
 
 /**
  * Stacked Easy / Tempo / Intense bar computed on real time-in-zone, with a
- * dotted marker at the 80 % easy target and a "✓ balanced" badge — the visual
+ * dotted marker at the 80 % easy target and a "✓ balanced" badge, the visual
  * proof that the week respects the 80/20 polarisation (Epic #83, issue #87).
  */
 export function PolarizationGauge({
@@ -46,38 +46,34 @@ export function PolarizationGauge({
   ] as const;
 
   return (
-    <div className={cn("space-y-2", className)}>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-medium">{t("weekly.gauge.title")}</span>
+    <div className={cn("zn-wk-gauge", className)}>
+      <div className="zn-wk-gauge__head">
+        <span className="zn-label">{t("weekly.gauge.title")}</span>
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
-            balanced
-              ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-              : "bg-amber-500/15 text-amber-600 dark:text-amber-400",
+            "zn-wk-gauge__verdict",
+            balanced && "zn-wk-gauge__verdict--ok",
           )}
           title={t("weekly.gauge.tolerance", {
             min: Math.round(HARD_MIN * 100),
             max: Math.round(HARD_MAX * 100),
           })}
         >
-          {balanced ? (
-            <Check className="size-3.5 shrink-0" />
-          ) : (
-            <AlertTriangle className="size-3.5 shrink-0" />
-          )}
-          {/* Say the verdict, not just two numbers the reader must interpret. */}
-          <span className="hidden sm:inline">{t(`weekly.gauge.${status}`)}</span>
-          <span className="tabular-nums">
+          {balanced ? <Check /> : <AlertTriangle />}
+          {/* Say the verdict, not just two numbers the reader must interpret.
+              Printed at every width: the glyph is aria-hidden, so on a phone
+              this word is the only thing naming the state. */}
+          <span>{t(`weekly.gauge.${status}`)}</span>
+          <span className="zn-mono">
             {pct(lowShare)} / {pct(hardShare)}
           </span>
         </span>
       </div>
 
-      {/* Target caption sits above the bar — never on top of a segment. */}
-      <div className="relative h-4">
+      {/* Target caption sits above the bar, never on top of a segment. */}
+      <div className="zn-wk-gauge__scale">
         <span
-          className="absolute top-0 -translate-x-1/2 whitespace-nowrap text-[10px] font-medium text-muted-foreground"
+          className="zn-kicker zn-kicker--xs zn-wk-gauge__target"
           style={{ left: `${TARGET_LOW * 100}%` }}
         >
           {t("weekly.gauge.target")}
@@ -85,12 +81,13 @@ export function PolarizationGauge({
       </div>
 
       {/* Stacked bar + 80 % marker */}
-      <div className="relative">
-        <div className="flex h-4 w-full overflow-hidden rounded-full bg-muted">
+      <div className="zn-wk-gauge__bar">
+        <div className="zn-wk-gauge__track">
           {segments.map((s) =>
             s.share > 0 ? (
               <div
                 key={s.key}
+                className="zn-wk-gauge__seg"
                 style={{
                   flex: s.share,
                   backgroundColor: `var(--zone-${s.zone})`,
@@ -101,7 +98,7 @@ export function PolarizationGauge({
           )}
         </div>
         <div
-          className="pointer-events-none absolute -inset-y-1 border-l-2 border-dashed border-foreground/60"
+          className="zn-wk-gauge__mark"
           style={{ left: `${TARGET_LOW * 100}%` }}
           aria-hidden
         />
@@ -109,24 +106,17 @@ export function PolarizationGauge({
 
       {/* Verdict caption */}
       {!balanced && (
-        <p
-          className={cn(
-            "text-xs",
-            "text-amber-600 dark:text-amber-400",
-          )}
-        >
-          {t(`weekly.gauge.${status}Hint`)}
-        </p>
+        <p className="zn-wk-gauge__hint">{t(`weekly.gauge.${status}Hint`)}</p>
       )}
 
-      {/* Legend — only the bands actually present in the bar. */}
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+      {/* Legend, only the bands actually present in the bar. */}
+      <div className="zn-wk-gauge__legend">
         {segments
           .filter((s) => s.share > 0)
           .map((s) => (
-            <span key={s.key} className="inline-flex items-center gap-1.5">
+            <span key={s.key} className="zn-wk-gauge__key">
               <span
-                className="size-2.5 rounded-full"
+                className="zn-wk-gauge__dot"
                 style={{ backgroundColor: `var(--zone-${s.zone})` }}
               />
               {t(`weekly.gauge.${s.key}`)} {pct(s.share)} %

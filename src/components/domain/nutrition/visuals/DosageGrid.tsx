@@ -1,28 +1,26 @@
 import { useTranslation } from "react-i18next";
 import type { DosageChip } from "@/data/nutrition/types";
 
-interface Props {
-  chips: DosageChip[];
-}
-
-export function DosageGrid({ chips }: Props) {
+/**
+ * A row of dosages: label, figure, footnote.
+ *
+ * That is exactly StatBlock's shape, so the paint is StatBlock's too
+ * (.zn-stat, tone "card") rather than a fourth card that looks almost like it.
+ */
+export function DosageGrid({ chips }: { chips: DosageChip[] }) {
   const { t } = useTranslation("nutrition");
 
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+    <div
+      className="zn-grid"
+      style={{ "--cols": 4, "--cols-md": 2 } as React.CSSProperties}
+    >
       {chips.map((chip) => (
-        <div
-          key={chip.labelKey}
-          className="flex flex-col gap-1 rounded-xl border border-border/50 bg-muted/30 p-4"
-        >
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            {t(chip.labelKey)}
-          </p>
-          <p className="text-xl md:text-2xl font-bold tracking-tight">
-            {t(chip.valueKey)}
-          </p>
+        <div key={chip.labelKey} className="zn-stat" data-tone="card" data-size="sm">
+          <span className="zn-stat__label">{t(chip.labelKey)}</span>
+          <span className="zn-stat__value">{t(chip.valueKey)}</span>
           {chip.helperKey && (
-            <p className="text-xs text-muted-foreground">{t(chip.helperKey)}</p>
+            <span className="zn-stat__foot">{t(chip.helperKey)}</span>
           )}
         </div>
       ))}

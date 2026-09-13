@@ -25,14 +25,20 @@ function DomainBlock({
   if (items.length === 0) return null;
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-2 font-medium text-sm">
-        <Icon className="size-4 text-muted-foreground" />
-        <span>{label}</span>
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+    >
+      <div
+        className="zn-row zn-nut-rec__label"
+        style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+      >
+        <Icon />
+        <span className="zn-label">{label}</span>
       </div>
-      <ul className="space-y-1.5 ml-6">
+      <ul className="zn-nut-rec__list">
         {items.map((item, i) => (
-          <li key={i} className="text-sm text-muted-foreground list-disc">
+          <li key={i}>
             <GlossaryLinkedText text={pickLang(item, "text")} />
           </li>
         ))}
@@ -57,7 +63,10 @@ function PhaseContent({
   }
 
   return (
-    <div className="space-y-4">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
+    >
       {hasNutrition && (
         <DomainBlock
           icon={Utensils}
@@ -106,14 +115,19 @@ export function NutritionRecoverySection({ workout }: NutritionRecoverySectionPr
   // already say before/during/after, so an eyebrow saying the same was the
   // third copy of the same words.
   return (
-    <div className="space-y-3">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+    >
         {getWorkoutDiscipline(workout) !== "running" && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
-            {t("recommendations.crossDisciplineNote")}
+          <div className="zn-nut-note">
+            <p className="zn-nut-note__title">
+              {t("recommendations.crossDisciplineNote")}
+            </p>
           </div>
         )}
         <Tabs defaultValue="before">
-          <TabsList className="w-full">
+          <TabsList>
             {phases.map((phase) => (
               <TabsTrigger key={phase.key} value={phase.key}>
                 {phase.label}
@@ -121,7 +135,7 @@ export function NutritionRecoverySection({ workout }: NutritionRecoverySectionPr
             ))}
           </TabsList>
           {phases.map((phase) => (
-            <TabsContent key={phase.key} value={phase.key} className="pt-4">
+            <TabsContent key={phase.key} value={phase.key} className="zn-nut-rec__panel">
               <PhaseContent
                 phase={phase.data}
                 domainLabels={domainLabels}

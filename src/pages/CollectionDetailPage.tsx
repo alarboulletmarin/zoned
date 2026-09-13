@@ -1,8 +1,8 @@
+import type { CSSProperties } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
-  Loader2,
   Footprints,
   Leaf,
   Shield,
@@ -15,17 +15,18 @@ import {
   Rocket,
   Dumbbell,
   HeartPulse,
+  Library,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Spinner } from "@/components/ui/spinner";
 import { SEOHead } from "@/components/seo";
 import { WorkoutCard } from "@/components/domain";
-import { useCollection } from "@/hooks/useCollections";
-import { cn } from "@/lib/utils";
+import { ZoneScale } from "@/components/visualization";
+import { useCollection, useCollections } from "@/hooks/useCollections";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { usePickLang } from "@/lib/i18n-utils";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 
 /** Map collection icon strings to actual icon components (same as CollectionCard) */
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
@@ -43,54 +44,37 @@ const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   HeartPulse,
 };
 
-const ZONE_MAP: Record<string, number> = {
-  "debuter-le-running": 1,
-  "anti-stress": 1,
-  "retour-de-blessure": 1,
-  "post-course": 1,
-  "pre-course": 3,
-  "seances-mythiques": 5,
-  "objectif-5k": 5,
-  "objectif-10k": 4,
-  "objectif-semi": 4,
-  "objectif-marathon": 4,
-  "objectif-ultra": 3,
-  "progresser-vma": 5,
-};
-
-function getCollectionZone(slug: string): number {
-  return ZONE_MAP[slug] ?? 3;
-}
-
 export function CollectionDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation("common");
   const pickLang = usePickLang();
 
   const { collection, workouts, isLoading } = useCollection(slug);
+  const allCollections = useCollections();
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="py-12 flex items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
-
-  // 404 state
+  // 404 state, the address matches nothing, so say how many parcours exist
+  // and hand back the index that lists them.
   if (!collection) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-muted-foreground">
-          {t("collectionsDetail.collectionNotFound")}
-        </p>
-        <Button variant="link" asChild className="mt-4">
-          <Link to="/collections">
-            <ArrowLeft className="mr-2 size-4" />
-            {t("collections.backToCollections")}
-          </Link>
-        </Button>
+      <div className="zn-disc">
+        <section className="zn-disc__head">
+          <EmptyState
+            variant="no-results"
+            icon={Library}
+            title={t("collectionsDetail.collectionNotFound")}
+            description={t("collectionsDetail.notFoundDescription", {
+              count: allCollections.length,
+            })}
+            action={
+              <Button variant="outline" asChild>
+                <Link to="/collections">
+                  <ArrowLeft size={16} />
+                  {t("collections.backToCollections")}
+                </Link>
+              </Button>
+            }
+          />
+        </section>
       </div>
     );
   }
@@ -99,6 +83,9 @@ export function CollectionDetailPage() {
   const name = pickLang(collection, "name");
   const description = pickLang(collection, "description");
   const workoutCount = collection.workoutIds.length;
+  const kind = collection.isProgression
+    ? t("collections.progression")
+    : t("collections.freeSelection");
 
   return (
     <>
@@ -130,78 +117,94 @@ export function CollectionDetailPage() {
           },
         ]}
       />
-      <div className="py-8 space-y-6">
-        {/* Back Link */}
-        <Button variant="ghost" size="sm" asChild>
-          <Link to="/collections">
-            <ArrowLeft className="mr-2 size-4" />
-            {t("collections.backToCollections")}
-          </Link>
-        </Button>
 
-        {/* Hero Section */}
-        <div
-          className={cn(
-            "rounded-xl border border-border/50 shadow-sm",
-            `zone-${getCollectionZone(collection.slug)}`,
-            `bg-gradient-to-br from-zone-${getCollectionZone(collection.slug)}/10 dark:from-zone-${getCollectionZone(collection.slug)}/20 to-transparent`,
-            "p-8 md:p-10"
-          )}
+      <div className="zn-disc">
+        {/* 1, the parcours, named and counted, with the way back */}
+        <section
+          className="zn-disc__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
         >
-          {/* Content */}
-          <div className="space-y-4 max-w-2xl">
-            {/* Icon */}
-            <div className="inline-flex items-center justify-center rounded-xl bg-secondary p-3">
-              <Icon className="size-8" />
+          <Button variant="link" asChild>
+            <Link to="/collections">
+              <ArrowLeft size={16} />
+              {t("collections.backToCollections")}
+            </Link>
+          </Button>
+
+          <span className="zn-kicker">
+            {t("collectionsDetail.kicker", { count: workoutCount, kind })}
+          </span>
+          <h1 className="zn-display" data-level="2">
+            {name}
+          </h1>
+        </section>
+
+        {/* 2, what the parcours is for */}
+        <section className="zn-disc__group">
+          <div className="zn-coll__hero">
+            <div className="zn-coll__glyph" aria-hidden="true">
+              <Icon />
             </div>
-
-            {/* Name */}
-            <EditorialTitle as="h1" size="lg">
-              {name}
-            </EditorialTitle>
-
-            {/* Description */}
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg leading-relaxed">
+            <p className="zn-body zn-body--lead zn-coll__heroinner">
               <GlossaryLinkedText text={description} />
-            </FadeUp>
-
-            {/* Badges */}
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              <Badge variant="secondary">
-                {t("collections.workoutCount", { count: workoutCount })}
-              </Badge>
-              <Badge variant="outline">
-                {collection.isProgression
-                  ? t("collections.progression")
-                  : t("collections.freeSelection")}
-              </Badge>
-            </div>
-          </div>
-        </div>
-
-        {/* Workouts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {workouts.map((workout, index) => (
-            <div key={workout.id} className="relative">
-              {/* Step number for progression collections */}
-              {collection.isProgression && (
-                <div className="absolute -top-2 -left-2 z-10 size-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shadow-sm">
-                  {index + 1}
-                </div>
-              )}
-              <WorkoutCard workout={workout} />
-            </div>
-          ))}
-        </div>
-
-        {/* Empty state if workouts failed to resolve */}
-        {workouts.length === 0 && !isLoading && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              {t("collectionsDetail.noWorkoutsFound")}
+            </p>
+            <p className="zn-mono zn-faint">
+              {t("collections.workoutCount", { count: workoutCount })} · {kind}
             </p>
           </div>
+        </section>
+
+        {/* 3, the ink ramp orders the zones, it does not name them */}
+        {workouts.length > 0 && (
+          <div className="zn-disc__legend">
+            <ZoneScale />
+          </div>
         )}
+
+        {/* 4, the sessions, in the order the parcours states */}
+        <section className="zn-disc__results" aria-busy={isLoading}>
+          {isLoading ? (
+            <div className="zn-disc__wait">
+              <Spinner size={22} label={t("status.loading")} />
+            </div>
+          ) : workouts.length > 0 ? (
+            <div
+              className="zn-grid"
+              style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+            >
+              {workouts.map((workout, index) => (
+                <div key={workout.id} className="zn-coll__item">
+                  {collection.isProgression && (
+                    <span
+                      className="zn-coll__step"
+                      aria-label={t("collections.step", { number: index + 1 })}
+                    >
+                      {index + 1}
+                    </span>
+                  )}
+                  <WorkoutCard workout={workout} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              variant="no-results"
+              icon={Library}
+              title={t("collectionsDetail.noWorkoutsTitle")}
+              description={t("collectionsDetail.noWorkoutsDescription", {
+                count: workoutCount,
+              })}
+              action={
+                <Button variant="outline" asChild>
+                  <Link to="/collections">
+                    <ArrowLeft size={16} />
+                    {t("collections.backToCollections")}
+                  </Link>
+                </Button>
+              }
+            />
+          )}
+        </section>
       </div>
     </>
   );

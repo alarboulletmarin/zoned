@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import {
@@ -29,6 +29,7 @@ import { GutTrainingTimeline } from "@/components/domain/nutrition/visuals/GutTr
 import { WomenInsightGrid } from "@/components/domain/nutrition/visuals/WomenInsightGrid";
 import { HeatGrid } from "@/components/domain/nutrition/visuals/HeatGrid";
 import { CrampsScience } from "@/components/domain/nutrition/visuals/CrampsScience";
+import EasyRun from "@/assets/doodles/easy-run.svg?react";
 
 const CAFFEINE_CONTRAINDICATION_KEYS = [
   "hub.caffeine.contraindications.items.evening",
@@ -88,18 +89,57 @@ export function NutritionHubPage() {
         jsonLd={jsonLd}
       />
 
-      <div className="py-6 md:py-8 space-y-12 md:space-y-16 min-w-0">
-        <NutritionHero />
-        <NutritionThemeGrid themes={themes} />
+      <div className="zn-guide">
+        {/* The hero and the fourteen doors: one band, above the first rule. */}
+        <section
+          className="zn-stack zn-guide__head zn-guide__head--figure"
+          style={{ "--gap": "var(--sp-14)" } as CSSProperties}
+        >
+          <NutritionHero />
+          <NutritionThemeGrid themes={themes} />
 
-        <div className="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-12 xl:gap-16 min-w-0">
-          <aside className="hidden lg:block">
-            <div className="sticky top-20">
-              <NutritionTOC items={tocItems} />
-            </div>
+          {/* L'allure qu'on tient des heures. Le dessin a été fait pour cette
+              surface et pour aucune autre, scripts/doodles/effort.mjs : Elle
+              sert les surfaces de nutrition : c'est la TENUE dans la durée qui
+              parle, pas un objet (la règle 2 interdit la gourde et l'assiette).
+              Une page de nutrition attrape mécaniquement une gourde ou une
+              assiette ; un objet dessiné perd contre les glyphes Material. Cette
+              figure dit le POURQUOI au lieu du QUOI, avec un corps.
+
+              Elle se pose sur le filet qui ferme l'en-tête, comme l'étirement de
+              /guides/warmup : son fichier n'a plus de sol, le bas de sa boîte est
+              sa ligne d'appui, et .zn-guide__art la descend de --rule-bite pour
+              que ses deux semelles le mordent. C'est le seul hub qui en porte
+              une, comme l'échauffement est le seul guide, l'interdiction porte
+              sur la répétition, pas sur la classe CSS. */}
+          <EasyRun
+            className="zn-guide__art"
+            aria-hidden="true"
+            focusable="false"
+          />
+        </section>
+
+        {/* The reading band: the themed sections, with the table of contents
+            sticky beside them. The rail is hidden below the split's breakpoint
+            because the theme grid above is already that same index in card
+            form, repeating it would be a second table of contents. */}
+        <div
+          className="zn-split zn-guide__band"
+          style={
+            {
+              "--split": "200px minmax(0, 1fr)",
+              "--gap": "var(--sp-17)",
+            } as CSSProperties
+          }
+        >
+          <aside className="zn-guide__rail">
+            <NutritionTOC items={tocItems} />
           </aside>
 
-          <div className="space-y-12 md:space-y-16 min-w-0">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-18)" } as CSSProperties}
+          >
             <NutritionThemeSection
               id="daily"
               iconName="Utensils"
@@ -127,7 +167,10 @@ export function NutritionHubPage() {
               titleKey="hub.protein.title"
               ledeKey="hub.protein.lede"
             >
-              <div className="space-y-6">
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+              >
                 <ProteinTargetTable />
                 <ProteinTimingChart />
               </div>
@@ -183,7 +226,10 @@ export function NutritionHubPage() {
               titleKey="hub.during.title"
               ledeKey="hub.during.lede"
             >
-              <div className="space-y-6">
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+              >
                 <CarbsPerHourTable />
                 <GutTrainingTimeline />
               </div>
@@ -206,9 +252,12 @@ export function NutritionHubPage() {
               titleKey="hub.supplements.title"
               ledeKey="hub.supplements.lede"
             >
-              <div className="space-y-3">
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+              >
                 <SupplementGrid items={supplements} />
-                <p className="text-xs text-muted-foreground">{t("hub.supplements.aisFootnote")}</p>
+                <p className="zn-source">{t("hub.supplements.aisFootnote")}</p>
               </div>
             </NutritionThemeSection>
 
@@ -254,7 +303,9 @@ export function NutritionHubPage() {
           </div>
         </div>
 
-        <NutritionCTAStrip />
+        <section className="zn-guide__band">
+          <NutritionCTAStrip />
+        </section>
       </div>
     </>
   );

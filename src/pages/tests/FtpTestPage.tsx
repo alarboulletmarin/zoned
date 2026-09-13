@@ -1,12 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Zap, Save } from "@/components/icons";
+import { Save } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ResponsiveTable } from "@/components/ui/responsive-table";
+import { Segmented } from "@/components/ui/segmented";
+import { PageContainer } from "@/components/layout/PageContainer";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
 import {
   calculateCyclingZones,
   estimateFtpFrom20Min,
@@ -20,15 +21,7 @@ type Protocol = "20min" | "ramp";
 
 const ZONE_ORDER: CogganZone[] = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6", "Z7"];
 
-const ZONE_COLOR: Record<CogganZone, string> = {
-  Z1: "bg-zone-1",
-  Z2: "bg-zone-2",
-  Z3: "bg-zone-3",
-  Z4: "bg-zone-4",
-  Z5: "bg-zone-5",
-  Z6: "bg-zone-6",
-  Z7: "bg-zone-6",
-};
+const MAX_WATTS = 1500;
 
 export function FtpTestPage() {
   const { t } = useTranslation("calculators");
@@ -37,6 +30,9 @@ export function FtpTestPage() {
 
   const parsedPower = powerInput === "" ? 0 : parseInt(powerInput, 10);
   const validPower = Number.isFinite(parsedPower) && parsedPower > 0;
+  // Empty is not wrong, it is unanswered. A typed zero is wrong, and until now
+  // it produced silence: the field says so out loud.
+  const powerError = powerInput !== "" && !validPower;
 
   const estimatedFtp = useMemo(() => {
     if (!validPower) return 0;
@@ -63,8 +59,8 @@ export function FtpTestPage() {
     }
     const num = parseInt(value, 10);
     if (Number.isNaN(num) || num < 0) return;
-    if (num > 1500) {
-      setPowerInput("1500");
+    if (num > MAX_WATTS) {
+      setPowerInput(String(MAX_WATTS));
       return;
     }
     setPowerInput(String(num));
@@ -94,147 +90,150 @@ export function FtpTestPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Zap className="size-8 text-primary shrink-0" />
+
+      <PageContainer width="narrow" className="zn-ct">
+        {/* Mono kicker, display title, one sentence. */}
+        <header
+          className="zn-ct__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">{t("calculateurs.ftp.kicker")}</span>
+          <h1 className="zn-display" data-level="2">
             {t("calculateurs.ftp.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-ct__lede">
             {t("calculateurs.ftp.description")}
-          </FadeUp>
-        </div>
+          </p>
+        </header>
 
-        {/* Input card */}
-        <Card className="mb-6">
-          <CardContent className="pt-6 space-y-6">
-            {/* Protocol toggle */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {t("calculateurs.ftp.protocol")}
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setProtocol("20min")}
-                  className={cn(
-                    "rounded-md border px-3 py-2 text-sm font-medium transition-colors",
-                    protocol === "20min"
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-input bg-background hover:bg-muted",
-                  )}
-                >
-                  {t("calculateurs.ftp.protocol20min")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setProtocol("ramp")}
-                  className={cn(
-                    "rounded-md border px-3 py-2 text-sm font-medium transition-colors",
-                    protocol === "ramp"
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-input bg-background hover:bg-muted",
-                  )}
-                >
-                  {t("calculateurs.ftp.protocolRamp")}
-                </button>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {protocol === "20min"
-                  ? t("calculateurs.ftp.protocol20minHelp")
-                  : t("calculateurs.ftp.protocolRampHelp")}
-              </p>
-            </div>
-
-            {/* Power input */}
-            <div className="space-y-2">
-              <label htmlFor="power" className="text-sm font-medium">
-                {t("calculateurs.ftp.avgPowerWatts")}
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  id="power"
-                  type="number"
-                  min={0}
-                  max={1500}
-                  placeholder="250"
-                  value={powerInput}
-                  onChange={(e) => handlePowerInput(e.target.value)}
-                  className="flex h-12 w-32 rounded-md border border-input bg-transparent px-3 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  aria-label={t("calculateurs.ftp.avgPowerWatts")}
+        {/* The test you did, and what it measured. */}
+        <section className="zn-ct__band">
+          <Card>
+            <CardContent
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+            >
+              <div
+                className="zn-ct__field"
+                style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+              >
+                <span className="zn-kicker zn-kicker--inline">
+                  {t("calculateurs.ftp.protocol")}
+                </span>
+                <Segmented
+                  label={t("calculateurs.ftp.protocol")}
+                  value={protocol}
+                  onChange={setProtocol}
+                  options={[
+                    { value: "20min", label: t("calculateurs.ftp.protocol20min") },
+                    { value: "ramp", label: t("calculateurs.ftp.protocolRamp") },
+                  ]}
                 />
-                <span className="text-sm text-muted-foreground">
+                <p className="zn-ct__hint">
+                  {protocol === "20min"
+                    ? t("calculateurs.ftp.protocol20minHelp")
+                    : t("calculateurs.ftp.protocolRampHelp")}
+                </p>
+              </div>
+
+              <div className="zn-ct__field">
+                <label htmlFor="power" className="zn-label">
+                  {t("calculateurs.ftp.avgPowerWatts")}
+                </label>
+                <span
+                  className="zn-numfield zn-ct__numfield"
+                  data-invalid={powerError ? "true" : undefined}
+                >
+                  <input
+                    id="power"
+                    type="number"
+                    min={0}
+                    max={MAX_WATTS}
+                    placeholder="250"
+                    value={powerInput}
+                    onChange={(e) => handlePowerInput(e.target.value)}
+                    aria-invalid={powerError || undefined}
+                    aria-describedby={powerError ? "power-error" : undefined}
+                    className="zn-numfield__input"
+                  />
+                  <span className="zn-numfield__unit">
+                    {t("calculateurs.ftp.watts")}
+                  </span>
+                </span>
+                {powerError && (
+                  <p id="power-error" className="zn-ct__error">
+                    {t("calculateurs.ftp.invalidPower", { max: MAX_WATTS })}
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {estimatedFtp > 0 && zones?.power && (
+          <>
+            {/* The answer, then what it implies, then the way to keep it. */}
+            <section className="zn-ct__band">
+              <div className="zn-ct__figure">
+                <span className="zn-kicker">
+                  {t("calculateurs.ftp.estimatedFtp")}
+                </span>
+                <p className="zn-ct__figure-value">{estimatedFtp}</p>
+                <span className="zn-ct__figure-unit">
                   {t("calculateurs.ftp.watts")}
                 </span>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </section>
 
-        {/* Results */}
-        {estimatedFtp > 0 && zones?.power && (
-          <div className="space-y-6">
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="py-8 flex flex-col items-center text-center">
-                <p className="text-sm font-medium text-muted-foreground mb-2">
-                  {t("calculateurs.ftp.estimatedFtp")}
-                </p>
-                <p className="text-5xl font-bold text-primary tabular-nums">
-                  {estimatedFtp}
-                </p>
-                <p className="text-lg text-muted-foreground mt-1">
-                  {t("calculateurs.ftp.watts")}
-                </p>
-              </CardContent>
-            </Card>
+            <section
+              className="zn-ct__band zn-stack"
+              style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+              aria-labelledby="ftp-zones"
+            >
+              <h2 id="ftp-zones" className="zn-title" data-level="3">
+                {t("calculateurs.ftp.zonesPreview")}
+              </h2>
 
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="pt-6">
-                <h2 className="text-lg font-semibold mb-4">
-                  {t("calculateurs.ftp.zonesPreview")}
-                </h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b">
-                        <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {t("calculateurs.ftp.zone")}
-                        </th>
-                        <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {t("calculateurs.ftp.power")}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {ZONE_ORDER.map((z) => (
-                        <tr key={z} className="border-b last:border-b-0">
-                          <td className="py-2 px-3">
-                            <span className="inline-flex items-center gap-2 font-medium">
-                              <span className={cn("size-3 rounded-full", ZONE_COLOR[z])} />
-                              {t(`calculateurs.ftp.zoneLabel${z}`)}
-                            </span>
-                          </td>
-                          <td className="py-2 px-3 tabular-nums">
-                            {formatPowerRange(zones.power![z])}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
+              {/* Every zone is named in words in the first column, so this
+                  table is its own legend: no ink ramp is painted here, and the
+                  seven Coggan zones would not fit the six-step ramp anyway. */}
+              <ResponsiveTable
+                data={ZONE_ORDER}
+                rowKey={(zone) => zone}
+                columns={[
+                  {
+                    key: "zone",
+                    header: t("calculateurs.ftp.zone"),
+                    // The mobile card already prints this as its title.
+                    hideOnMobile: true,
+                    cell: (zone) => (
+                      <span className="zn-ct__zonename">
+                        {t(`calculateurs.ftp.zoneLabel${zone}`)}
+                      </span>
+                    ),
+                  },
+                  {
+                    key: "power",
+                    header: t("calculateurs.ftp.power"),
+                    className: "zn-ct__num",
+                    cell: (zone) => formatPowerRange(zones.power![zone]),
+                  },
+                ]}
+                mobileCardTitle={(zone) =>
+                  t(`calculateurs.ftp.zoneLabel${zone}`)
+                }
+              />
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button onClick={handleSave} className="flex-1">
-                <Save className="size-4" />
-                {t("calculateurs.ftp.useThisFtp")}
-              </Button>
-            </div>
-          </div>
+              <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                <Button onClick={handleSave}>
+                  <Save size={15} />
+                  {t("calculateurs.ftp.useThisFtp")}
+                </Button>
+              </div>
+            </section>
+          </>
         )}
-      </div>
+      </PageContainer>
     </>
   );
 }

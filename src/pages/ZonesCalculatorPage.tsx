@@ -1,11 +1,20 @@
+import { useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { Activity } from "@/components/icons";
 import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
+import { ZoneFigures } from "@/components/domain/ZoneFigures";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import type { ZoneRange } from "@/types";
 
+/**
+ * The zones calculator, in the frame the "mes chiffres" door uses: mono
+ * kicker, display title, lede, the zone plate, then the tool. The plate is
+ * the legend, six figures on one rule, and once the reader's VMA or FCmax
+ * is in, each figure carries its own range under its code. The calculator
+ * itself was ported in its own lot and is not restyled here.
+ */
 export function ZonesCalculatorPage() {
   const { t } = useTranslation("common");
+  const [zones, setZones] = useState<ZoneRange[]>([]);
 
   return (
     <>
@@ -31,18 +40,33 @@ export function ZonesCalculatorPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Activity className="size-8 text-primary shrink-0" />
-            {t("calculators:calculateurs.zones.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.zones.description")}
-          </FadeUp>
-        </div>
 
-        <ZoneCalculator />
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.zones.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
+            {t("calculators:calculateurs.zones.title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
+            {t("calculators:calculateurs.zones.description")}
+          </p>
+        </section>
+
+        {/* The plate replaces the pill legend: its rule is the band rule
+            between the head and the tool, and the figures stand on it. */}
+        <ZoneFigures
+          label={t("calculators:calculateurs.zones.figuresLabel")}
+          zones={zones}
+        />
+
+        <section className="zn-num__panel">
+          <ZoneCalculator onZonesChange={setZones} />
+        </section>
       </div>
     </>
   );

@@ -1,0 +1,173 @@
+/* Zones, ONE encoding, an ink ramp on paper: darker is harder, and the
+   height of a block says the same thing a second time. Three pieces of paint
+   live here, because they are the same idea at three sizes:
+
+     .zn-zone-badge   names a zone in words ("Z4 · Seuil")
+     .zn-zonebar      profiles a session, one block per phase, width = time
+     .zn-zonescale    the legend, the ramp orders the zones, it does not name
+                      them, so any screen showing zone fills shows this once
+
+   Every zone value is read off an attribute rather than an interpolated class:
+   `bg-zone-${n}` is exactly the Tailwind trap that made border-zone-3 vanish,
+   and here the six cases are simply written out. */
+
+/* ── badge ────────────────────────────────────────────────────────────── */
+
+.zn-zone-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  inline-size: fit-content;
+  flex: none;
+  white-space: nowrap;
+
+  padding: 4px 9px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+  background: var(--zn-zone-fill);
+  color: var(--zn-zone-ink);
+}
+
+/* Z1-Z3 are light enough to take dark type; Z4-Z6 need the cream. */
+.zn-zone-badge[data-zone="1"] { --zn-zone-fill: var(--zone-1-bg); --zn-zone-ink: var(--zone-1-text); }
+.zn-zone-badge[data-zone="2"] { --zn-zone-fill: var(--zone-2-bg); --zn-zone-ink: var(--zone-2-text); }
+.zn-zone-badge[data-zone="3"] { --zn-zone-fill: var(--zone-3-bg); --zn-zone-ink: var(--zone-3-text); }
+.zn-zone-badge[data-zone="4"] { --zn-zone-fill: var(--zone-4-bg); --zn-zone-ink: var(--zone-4-text); }
+.zn-zone-badge[data-zone="5"] { --zn-zone-fill: var(--zone-5-bg); --zn-zone-ink: var(--zone-5-text); }
+.zn-zone-badge[data-zone="6"] { --zn-zone-fill: var(--zone-6-bg); --zn-zone-ink: var(--zone-6-text); }
+
+.zn-zone-badge[data-size="lg"] {
+  padding: 6px 12px;
+  font-size: var(--fs-mono);
+}
+
+/* The zone's name is prose, not data: it leaves the mono face behind. */
+.zn-zone-badge__label {
+  font-family: var(--font-text);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: normal;
+}
+
+/* ── the session profile ──────────────────────────────────────────────── */
+
+/* One block per phase. Width is time, intensity is coded twice, by ink
+   density and by height, so the profile survives greyscale and colour
+   blindness alike. 36px tall, 2px gaps and a 3px inset: stated by the
+   design bundle's ZoneBar, not rounded to the spacing scale. */
+.zn-zonebar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-1);
+
+  block-size: var(--zn-zonebar-h, 36px);
+  padding-inline: 3px;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.zn-zonebar__block {
+  flex: var(--flex, 1) 1 0;
+  min-inline-size: var(--sp-1);
+
+  border: var(--border-hair);
+  border-block-end: none;
+  border-radius: 2px 2px 0 0;
+  background: var(--zn-block-fill, transparent);
+  block-size: var(--zn-block-h, 26%);
+}
+
+/* A recovery block is not a zone. It is a 45 degree hatch at 26%, the same
+   mark the system uses for anything unmeasured. */
+.zn-zonebar__block[data-zone="0"] {
+  background-image: var(--zone-recovery);
+}
+
+.zn-zonebar__block[data-zone="1"] { --zn-block-fill: var(--zone-1); --zn-block-h: var(--zone-h-1); }
+.zn-zonebar__block[data-zone="2"] { --zn-block-fill: var(--zone-2); --zn-block-h: var(--zone-h-2); }
+.zn-zonebar__block[data-zone="3"] { --zn-block-fill: var(--zone-3); --zn-block-h: var(--zone-h-3); }
+.zn-zonebar__block[data-zone="4"] { --zn-block-fill: var(--zone-4); --zn-block-h: var(--zone-h-4); }
+.zn-zonebar__block[data-zone="5"] { --zn-block-fill: var(--zone-5); --zn-block-h: var(--zone-h-5); }
+.zn-zonebar__block[data-zone="6"] { --zn-block-fill: var(--zone-6); --zn-block-h: var(--zone-h-6); }
+
+/* ── the legend ───────────────────────────────────────────────────────── */
+
+/* The title, then the chips, two flex items under one wrap. On a wide screen
+   the chips sit on the title's line; on a phone the run of chips drops under
+   the title as one block and wraps inside itself, the same gap between every
+   chip. The title is never stranded mid-row between two entries, and no entry
+   is ever cut from its name: each one is a single ZoneBadge. */
+.zn-zonescale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-5) var(--sp-8);
+}
+
+.zn-zonescale__items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.zn-zonescale[data-layout="column"],
+.zn-zonescale[data-layout="column"] .zn-zonescale__items {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* On a phone the six chips of a full legend wrapped 2 / 3 / 1, the last one
+   alone on its row. A grid instead of a wrap: the columns line up and the ramp
+   reads down as well as across. Only from five chips up, a session's three
+   or four sit on one row and need nothing. 140px is the widest chip, "Z1
+   Récupération", so no column ever clips a name. The full width is stated:
+   as a flex item the box would shrink to one column and stack the six chips
+   beside the title. */
+@media (max-width: 640px) {
+  .zn-zonescale[data-layout="row"] .zn-zonescale__items:has(> :nth-child(5)) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    inline-size: 100%;
+  }
+}
+
+/* 38x20 swatch, one of the raw sizes the design system states outright. The
+   legend itself no longer prints one (its entries are ZoneBadge chips); the
+   zones table in ZoneCalculator still does, one per row. */
+.zn-zonescale__swatch {
+  display: block;
+  inline-size: 38px;
+  block-size: 20px;
+  flex: none;
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xs);
+}
+
+.zn-zonescale__fill {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  background: var(--zn-block-fill, transparent);
+}
+
+.zn-zonescale__fill[data-zone="1"] { --zn-block-fill: var(--zone-1); }
+.zn-zonescale__fill[data-zone="2"] { --zn-block-fill: var(--zone-2); }
+.zn-zonescale__fill[data-zone="3"] { --zn-block-fill: var(--zone-3); }
+.zn-zonescale__fill[data-zone="4"] { --zn-block-fill: var(--zone-4); }
+.zn-zonescale__fill[data-zone="5"] { --zn-block-fill: var(--zone-5); }
+.zn-zonescale__fill[data-zone="6"] { --zn-block-fill: var(--zone-6); }

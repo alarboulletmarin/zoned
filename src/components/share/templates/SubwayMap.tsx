@@ -1,7 +1,7 @@
 /**
- * SubwayMap — 1080×1080. NYC subway / Paris métro fragment. One line in
+ * SubwayMap, 1080×1080. NYC subway / Paris métro fragment. One line in
  * zone colour traverses the canvas; stations = warmup, main, cooldown
- * blocks. Background grid IS the visual — transparent disabled.
+ * blocks. Background grid IS the visual, transparent disabled.
  */
 
 import { usePickLang } from "@/lib/i18n-utils";
@@ -129,7 +129,7 @@ export function SubwayMap({ workout }: ShareTemplateProps) {
             textTransform: "uppercase",
           }}
         >
-          Direction — {zoneLabel}
+          Direction · {zoneLabel}
         </div>
         <div
           style={{

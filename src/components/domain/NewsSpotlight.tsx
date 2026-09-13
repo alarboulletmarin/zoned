@@ -2,12 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import {
-  ArrowRight,
-  Bike,
-  Mountain,
-  Pool,
-} from "@/components/icons";
+import { ArrowRight } from "@/components/icons";
+import { Badge } from "@/components/ui/badge";
 
 /**
  * Auto-rotating spotlight that surfaces the headline new features. Lives at
@@ -26,12 +22,6 @@ import {
 interface SpotlightSlide {
   key: "routes" | "cycling" | "swimming";
   to: string;
-  /** Background gradient applied to the card. */
-  gradient: string;
-  /** Accent colour applied to the CTA arrow and decorative icon. */
-  iconColor: string;
-  /** Large decorative icon, low-opacity, anchored bottom-right. */
-  DecorIcon: React.ComponentType<{ className?: string; size?: number }>;
   /** i18n keys (homepage namespace). */
   i18n: {
     eyebrow: string;
@@ -45,10 +35,6 @@ const SLIDES: SpotlightSlide[] = [
   {
     key: "routes",
     to: "/routes",
-    gradient:
-      "from-primary/15 via-primary/5 to-zone-4/10 dark:from-primary/25 dark:via-primary/10 dark:to-zone-4/15 border-primary/30",
-    iconColor: "text-primary",
-    DecorIcon: Mountain,
     i18n: {
       eyebrow: "home.routesEyebrow",
       title: "home.routesTitle",
@@ -59,10 +45,6 @@ const SLIDES: SpotlightSlide[] = [
   {
     key: "cycling",
     to: "/library?type=cycling",
-    gradient:
-      "from-zone-4/15 via-zone-4/5 to-zone-3/10 dark:from-zone-4/25 dark:via-zone-4/10 dark:to-zone-3/15 border-zone-4/30",
-    iconColor: "text-zone-4",
-    DecorIcon: Bike,
     i18n: {
       eyebrow: "home.cyclingEyebrow",
       title: "home.cyclingTitle",
@@ -73,10 +55,6 @@ const SLIDES: SpotlightSlide[] = [
   {
     key: "swimming",
     to: "/library?type=swimming",
-    gradient:
-      "from-zone-2/15 via-zone-2/5 to-zone-1/10 dark:from-zone-2/25 dark:via-zone-2/10 dark:to-zone-1/15 border-zone-2/30",
-    iconColor: "text-zone-2",
-    DecorIcon: Pool,
     i18n: {
       eyebrow: "home.swimmingEyebrow",
       title: "home.swimmingTitle",
@@ -211,7 +189,6 @@ export function NewsSpotlight() {
 
   return (
     <section
-      className="relative"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}
@@ -226,64 +203,44 @@ export function NewsSpotlight() {
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
         onClickCapture={handleClickCapture}
-        className="overflow-hidden touch-pan-y select-none cursor-grab active:cursor-grabbing"
+        className="zn-spotlight__viewport"
       >
         <div
-          className="flex"
+          className="zn-spotlight__track"
           style={{
             transform: trackTransform,
-            transition: isDragging ? "none" : "transform 400ms cubic-bezier(0.22, 1, 0.36, 1)",
-            willChange: "transform",
+            transition: isDragging
+              ? "none"
+              : "transform var(--dur-slow) var(--ease-out)",
           }}
         >
           {SLIDES.map((s, i) => {
-            const DecorIcon = s.DecorIcon;
             const isActive = i === activeIndex;
             return (
               <div
                 key={s.key}
-                className="w-full shrink-0 grow-0 basis-full"
+                className="zn-spotlight__slot"
                 aria-hidden={!isActive}
                 aria-roledescription="slide"
               >
                 <Link
                   to={s.to}
-                  className="group block"
+                  className="zn-spotlight__slide"
                   draggable={false}
                   tabIndex={isActive ? 0 : -1}
                 >
-                  <div
-                    className={`relative overflow-hidden rounded-2xl border bg-gradient-to-br ${s.gradient} p-6 md:p-8 transition-shadow duration-300 group-hover:shadow-xl`}
-                  >
-                    <DecorIcon
-                      className={`pointer-events-none absolute -right-6 -bottom-6 size-32 md:size-48 ${s.iconColor} opacity-10 dark:opacity-15`}
-                      size={192}
-                    />
-                    <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
-                      <div className="flex-1 space-y-2 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] md:text-xs font-bold uppercase tracking-wider text-white bg-primary">
-                            {t("home.newBadge")}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {t(s.i18n.eyebrow)}
-                          </span>
-                        </div>
-                        <h2 className="text-xl md:text-3xl font-bold leading-tight">
-                          {t(s.i18n.title)}
-                        </h2>
-                        <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
-                          {t(s.i18n.desc)}
-                        </p>
-                      </div>
-                      <div
-                        className={`flex items-center gap-2 ${s.iconColor} font-semibold text-sm md:text-base whitespace-nowrap`}
-                      >
-                        {t(s.i18n.cta)}
-                        <ArrowRight className="size-4 md:size-5 transition-transform group-hover:translate-x-1" />
-                      </div>
-                    </div>
+                  <div className="zn-cluster">
+                    <Badge>{t("home.newBadge")}</Badge>
+                    <span className="zn-kicker zn-kicker--inline">
+                      {t(s.i18n.eyebrow)}
+                    </span>
                   </div>
+                  <h2 className="zn-spotlight__title">{t(s.i18n.title)}</h2>
+                  <p className="zn-spotlight__desc">{t(s.i18n.desc)}</p>
+                  <span className="zn-spotlight__cta">
+                    {t(s.i18n.cta)}
+                    <ArrowRight />
+                  </span>
                 </Link>
               </div>
             );
@@ -292,24 +249,17 @@ export function NewsSpotlight() {
       </div>
 
       {/* Slide indicators */}
-      <div className="mt-3 flex items-center justify-center gap-2">
-        {SLIDES.map((s, i) => {
-          const isActive = i === activeIndex;
-          return (
-            <button
-              key={s.key}
-              type="button"
-              onClick={() => setActiveIndex(i)}
-              aria-label={t("home.spotlightGoto", { index: i + 1 })}
-              aria-current={isActive ? "true" : undefined}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                isActive
-                  ? "w-8 bg-foreground"
-                  : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60"
-              }`}
-            />
-          );
-        })}
+      <div className="zn-spotlight__dots">
+        {SLIDES.map((s, i) => (
+          <button
+            key={s.key}
+            type="button"
+            onClick={() => setActiveIndex(i)}
+            aria-label={t("home.spotlightGoto", { index: i + 1 })}
+            aria-current={i === activeIndex ? "true" : undefined}
+            className="zn-spotlight__dot"
+          />
+        ))}
       </div>
     </section>
   );

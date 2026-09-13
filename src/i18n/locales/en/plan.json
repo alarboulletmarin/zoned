@@ -35,15 +35,6 @@
     "description": "Create your first personalized training plan",
     "cta": "Create my first plan"
   },
-  "step": {
-    "distance": "Distance",
-    "date": "Race date",
-    "name": "Race name",
-    "level": "Level",
-    "config": "Configuration",
-    "pace": "Pace & Elevation",
-    "summary": "Summary"
-  },
   "purpose": {
     "title": "What's your goal?",
     "subtitle": "We'll adapt the plan to your situation",
@@ -87,7 +78,7 @@
     "subtitle": "How many sessions per week?",
     "sessionsPerWeek": "Sessions per week",
     "longRunDay": "Long run day",
-    "longRunDayDesc": "Your weekly long run — the key endurance session",
+    "longRunDayDesc": "Your weekly long run, the key endurance session",
     "includeStrength": "Include Strength Training",
     "includeStrengthDesc": "Add strength sessions adapted to each phase",
     "strengthFrequency": "Strength Frequency",
@@ -103,7 +94,7 @@
     "weeks": "{{count}} weeks of preparation",
     "tooSoon": "Too close! You need at least {{min}} weeks.",
     "tooLong": "{{weeks}} weeks is a long cycle",
-    "tooLongDetail": "For this distance, {{min}}–{{max}} weeks is ideal. Beyond that, you risk mental fatigue and overtraining. Consider a base building block before your specific preparation.",
+    "tooLongDetail": "For this distance, {{min}}-{{max}} weeks is ideal. Beyond that, you risk mental fatigue and overtraining. Consider a base building block before your specific preparation.",
     "raceDate": "Race date",
     "startLabel": "Plan start",
     "startNow": "Start now",
@@ -120,16 +111,16 @@
   "level": {
     "title": "Your running level",
     "subtitle": "This determines workout intensity",
-    "vmaSuggestion": "Based on your VMA of {{vma}} km/h, we suggest the ",
-    "vmaSuggestionSuffix": " level",
+    "vmaSuggestion": "VMA {{vma}} km/h · suggested level: ",
+    "vmaSuggestionSuffix": ".",
     "beginner": "Beginner",
-    "beginnerDesc": "1–2 runs/week · less than 15 km/week",
+    "beginnerDesc": "1-2 runs/week · less than 15 km/week",
     "intermediate": "Intermediate",
-    "intermediateDesc": "3–4 runs/week · 20–40 km/week",
+    "intermediateDesc": "3-4 runs/week · 20-40 km/week",
     "advanced": "Advanced",
-    "advancedDesc": "4–5 runs/week · 40–70 km/week",
+    "advancedDesc": "4-5 runs/week · 40-70 km/week",
     "elite": "Elite",
-    "eliteDesc": "5–7 runs/week · 70+ km/week",
+    "eliteDesc": "5-7 runs/week · 70+ km/week",
     "suggested": "Suggested"
   },
   "config": {
@@ -139,9 +130,9 @@
     "longRunDay": "Long run day"
   },
   "pace": {
-    "title": "Pace & Elevation",
+    "title": "Your target pace",
     "subtitle": "Optional - you can skip this step",
-    "trailHint": "Elevation data is important for trail-specific training",
+    "trailHint": "On trail, pace does not mean much: effort and time are what count. You can skip this step.",
     "targetPace": "Target pace",
     "targetTime": "Finish time",
     "targetPaceTab": "Target pace",
@@ -154,8 +145,6 @@
     "requiredPace": "Required pace: ",
     "paceFormatError": "Format: MM:SS (e.g. 5:30)",
     "timeFormatHint": "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)",
-    "elevation": "Elevation gain (m)",
-    "elevationPlaceholder": "e.g. 350",
     "skip": "Skip this step"
   },
   "summary": {
@@ -195,7 +184,16 @@
   "view": {
     "title": "My plan",
     "currentWeek": "Current week",
+    "today": "Today",
+    "restToday": "Rest day",
+    "notStartedYet": "The plan hasn't started yet",
+    "sessionsLeft_one": "{{count}} left",
+    "sessionsLeft_other": "{{count}} left",
+    "timeLogged": "Time logged",
+    "nextKey": "Next key session",
+    "moreActions": "More actions",
     "phases": "Training phases",
+    "standingWeek": "W{{week}}",
     "sessions": "sessions",
     "duration": "{{min}} min",
     "keySession": "Key session",
@@ -229,7 +227,7 @@
     "replaceSession": "Replace session",
     "substituteSession": "Replace with cycling or swimming",
     "substituteTitle": "Swap to another discipline",
-    "substituteDescription": "Target load: ~{{tss}} TSS. Candidates are matched within ±20 %.",
+    "substituteDescription": "Target load ~{{tss}} TSS, within ±20 %.",
     "substituteDescriptionNoTss": "Pick an equivalent session in cycling or swimming.",
     "substituteCycling": "Cycling",
     "substituteSwimming": "Swimming",
@@ -238,12 +236,13 @@
     "substituteMatchExact": "exact match",
     "substituteMatchDeviation": "±{{deviation}}%",
     "substituteLongRunWarningTitle": "Long run: degraded substitution",
-    "substituteLongRunWarningBody": "The long run develops orthopedic adaptations (tendon capillarization, running economy, impact tolerance) that cycling or swimming cannot reproduce. Use this when running is impossible (injury, weather, travel), not as a regular alternative.",
-      "sessionSubstituted": "Session swapped",
-      "findRoute": "Find a matching route",
-      "findWeekRoute": "Route for this week",
-      "removeSession": "Remove session",
-      "noSessionsThisWeek": "No sessions this week",
+    "substituteLongRunWarningBody": "Cycling and swimming do not reproduce the orthopedic adaptations of a long run. Keep this swap for the weeks when running is impossible.",
+    "sessionSubstituted": "Session swapped",
+    "findRoute": "Find a matching route",
+    "findWeekRoute": "Route for this week",
+    "removeSession": "Remove session",
+    "sessionActions": "Session actions",
+    "noSessionsThisWeek": "No sessions this week",
     "schedule": "Schedule",
     "statistics": "Statistics",
     "trainingVolume": "Training volume relative to plan peak",
@@ -271,6 +270,7 @@
     "validate": "Validate week ({{done}}/{{total}} done)",
     "validated": "Week validated",
     "weekValidated": "Week {{week}} validated!",
+    "legendTitle": "Marks and gestures",
     "markDone": "Complete session",
     "toggleDone": "Complete session",
     "completedCount": "{{done}}/{{total}} completed",
@@ -294,7 +294,7 @@
     "actualDistance": "Actual distance (km)",
     "rpeLabel": "Rate of Perceived Effort",
     "noteLabel": "Note",
-    "notePlaceholder": "Optional — fatigue, weather, sensations…",
+    "notePlaceholder": "Optional, fatigue, weather, sensations…",
     "save": "Save"
   },
   "rpe": {
@@ -343,7 +343,9 @@
     "peakLongRun": "Peak long run",
     "longRun": "Long run",
     "wk": "wk",
-    "sessionsLower": "sessions"
+    "sessionsLower": "sessions",
+    "analysisFailed": "Detailed analysis unavailable",
+    "analysisFailedBody": "The zone breakdown could not be computed. The plan and its sessions are intact. Reload the page to run the analysis again."
   },
   "calendar": {
     "now": "NOW",
@@ -412,7 +414,6 @@
     "close": "Close",
     "hintClick": "Click a workout to add it to your plan",
     "hintDrag": "Drag a workout onto the calendar to add it",
-    "hintTap": "Tap a workout to add it",
     "searchPlaceholder": "Search workouts...",
     "favoritesOnly": "Favorites only",
     "noFavoriteStrength": "No favorite strength sessions",
@@ -435,7 +436,7 @@
     "view": "View",
     "buildArc": "Build your training arc",
     "buildArcDesc": "Set a goal, pick your race, and we'll structure the path.",
-    "createFirst": "Create your first plan",
+    "createFirst": "Create a plan",
     "deleteTitle": "Delete this plan?",
     "deleteConfirm": "\"{{name}}\" will be permanently deleted. This action cannot be undone.",
     "deleteButton": "Delete",
@@ -488,7 +489,10 @@
     "subtitle": "Structured plans, ready to use immediately",
     "back": "Back",
     "available_one": "{{count}} plan available",
-    "available_other": "{{count}} plans available"
+    "available_other": "{{count}} plans available",
+    "missingKicker": "Not on the shelf yet",
+    "missingBody": "{{practice}}: no ready-made plan yet. That means dozens of weeks of structure written by hand, and a rushed plan would be worse than none. The generator does know how to build one, it has this practice's volume, phase and taper tables.",
+    "missingCta": "Build a {{practice}} plan"
   },
   "activity": {
     "strength": "Strength",
@@ -560,7 +564,8 @@
     "applied": "Rescheduling applied",
     "undo": "Undo",
     "undone": "Rescheduling undone",
-    "blockedDrop": "This day is unavailable"
+    "blockedDrop": "This day is unavailable",
+    "skippedIntact": "The rest of the plan stays as it is, and you can undo right after."
   },
   "crossTraining": {
     "cycling": "Cycling",
@@ -586,7 +591,10 @@
     "goToWeek": "Go to week {{week}}",
     "fix": "Fix",
     "fixApplied": "Fix applied",
-    "fixFailed": "Unable to apply automatic fix"
+    "fixFailed": "Unable to apply automatic fix",
+    "intact": "The plan still works.",
+    "showList": "Show details",
+    "hideList": "Hide details"
   },
   "adaptation": {
     "title": "Plan adaptation",
@@ -622,11 +630,11 @@
     "qualityPeak2": "Add a 2nd quality session (tempo, VO2max)",
     "qualityTaper": "Add a short race-pace reminder",
     "recoveryWeekNote": "Easy week: focus on easy runs, skip intensity",
-    "phaseBase": "Base phase \u2014 Build your aerobic foundation with easy volume.",
-    "phaseBuild": "Build phase \u2014 Gradually increase intensity with quality sessions.",
-    "phasePeak": "Peak phase \u2014 Sharpen your race-specific paces, approaching top form.",
-    "phaseTaper": "Taper phase \u2014 Reduce volume, keep a touch of intensity to stay fresh.",
-    "phaseRecovery": "Recovery week \u2014 Let your body absorb the training adaptations."
+    "phaseBase": "Base phase, Build your aerobic foundation with easy volume.",
+    "phaseBuild": "Build phase, Gradually increase intensity with quality sessions.",
+    "phasePeak": "Peak phase, Sharpen your race-specific paces, approaching top form.",
+    "phaseTaper": "Taper phase, Reduce volume, keep a touch of intensity to stay fresh.",
+    "phaseRecovery": "Recovery week, Let your body absorb the training adaptations."
   },
   "intermediateGoals": {
     "title": "Intermediate races",
@@ -663,5 +671,134 @@
       "B": "Prep B",
       "C": "Test C"
     }
+  },
+  "newPlan": {
+    "kicker": "New plan",
+    "title": "How do you want to build it?",
+    "lede": "The generator answers for you, or you place the sessions yourself. Either way, everything stays editable.",
+    "doorsTitle": "The three ways to create a plan",
+    "assistedKicker": "The generator",
+    "assistedTitle": "Assisted plan",
+    "assistedBody": "You answer about your race, your level and your week. The plan comes out session by session.",
+    "assistedCta": "Answer the questions",
+    "freeKicker": "4 to 52 weeks",
+    "freeTitle": "Free plan",
+    "freeBody": "An empty calendar, as long as you choose. You place every session by hand.",
+    "freeCta": "Open an empty calendar",
+    "prebuiltKicker": "{{n}} plans ready",
+    "prebuiltTitle": "Ready-made plans",
+    "prebuiltBody": "Plans already built, from 5K to marathon plus a short trail. Take one as it is, then adjust.",
+    "prebuiltCta": "See the {{n}} plans"
+  },
+  "freePlan": {
+    "back": "Back",
+    "kicker": "{{min}} to {{max}} weeks",
+    "title": "Free plan",
+    "heading": "An empty calendar to fill",
+    "seoDescription": "Create a blank training plan and place your sessions by hand.",
+    "subtitle": "You pick the length and the rhythm; the sessions you place yourself, whenever you want.",
+    "planName": "Plan name",
+    "namePlaceholder": "e.g. Spring marathon prep",
+    "nameRequired": "Give the plan a name so you can find it again.",
+    "numberOfWeeks": "Plan length",
+    "weeksValue": "{{n}} wks",
+    "weeksHint": "Between {{min}} and {{max}} weeks.",
+    "daysPerWeek": "Sessions per week",
+    "daysPerWeekHint": "The number of days you plan to run.",
+    "startDate": "Start date",
+    "startNow": "Start now",
+    "chooseDate": "Choose a date",
+    "endsOn": "Ends {{date}}",
+    "advancedOptions": "Advanced options",
+    "noneSelected": "None",
+    "create": "Create the plan",
+    "createNote": "{{n}} empty weeks to fill, session by session"
+  },
+  "wizard": {
+    "kicker": "Assisted plan",
+    "lede": "Volume rises by at most 10% a week, with an easier week every three.",
+    "source": "Mujika & Padilla 2003 · Pfitzinger & Douglas 2009",
+    "limitsKicker": "No account, no reminders",
+    "limitsBody": "The plan sends you nothing and counts no streaks. You edit it or delete it whenever you want.",
+    "where": "Step {{current}} of {{total}} · nothing is sent",
+    "draftBody": "Your answers from last time are here. Pick up where you stopped, or start over.",
+    "errorTitle": "The plan was not generated",
+    "errorHint": "Your answers are intact: try again, or step back to change one.",
+    "step": {
+      "purpose": "Purpose",
+      "distance": "Distance",
+      "date": "Race date",
+      "duration": "Length",
+      "race_name": "Name",
+      "intermediate_goals": "Prep races",
+      "level": "Level",
+      "goal": "Mindset",
+      "fitness": "Fitness",
+      "schedule": "Typical week",
+      "pace": "Pace",
+      "summary": "Summary",
+      "practice": "Discipline",
+      "terrain": "Terrain",
+      "ultra_logistics": "Logistics"
+    }
+  },
+  "practice": {
+    "title": "What are you training for?",
+    "subtitle": "This decides everything else: the distances offered, and the questions asked.",
+    "soon": "soon",
+    "distanceCount_one": "{{count}} distance",
+    "distanceCount_other": "{{count}} distances",
+    "workoutCount_one": "{{count}} session",
+    "workoutCount_other": "{{count}} sessions",
+    "planCount_one": "{{count}} ready-made plan",
+    "planCount_other": "{{count}} ready-made plans",
+    "noPlanYet": "no ready-made plan yet",
+    "road": {
+      "label": "Road",
+      "body": "From 5K to the marathon, on the road."
+    },
+    "trail": {
+      "label": "Trail",
+      "body": "From short trail to 60K: elevation, terrain, descent."
+    },
+    "ultra": {
+      "label": "Ultra",
+      "body": "Beyond trail: time on feet, night running, fuelling.",
+      "announce": "An ultra plan is built over sixteen to fifty-two weeks, on time on feet, night running and a fuelling strategy. What the generator produces at that distance is not dependable enough to offer yet, so we don't offer it. Nothing is blocked in the meantime: the ultra sessions are in the library, and the calculators work out your paces."
+    },
+    "triathlon": {
+      "label": "Triathlon",
+      "body": "Swim, bike, run. The sessions are here, the plans are coming.",
+      "announce": "Triathlon plans need per-discipline slots and brick sessions: that's a separate project, and it hasn't started. Nothing is blocked in the meantime, the bike and swim sessions are in the library, and the FTP and CSS tests work out your zones."
+    },
+    "announceKicker": "What already works",
+    "announceLibrary": "See the sessions",
+    "announceNumbers": "Open the calculators"
+  },
+  "terrain": {
+    "title": "What are you running on?",
+    "subtitle": "Terrain and elevation steer which sessions get picked.",
+    "kind": "Type of terrain",
+    "kindDesc": "From runnable to steep. When in doubt, leave it on \\u201crunnable trail\\u201d.",
+    "kinds": {
+      "trail_runnable": "Runnable trail",
+      "trail_technical": "Technical",
+      "mountain": "Mountain"
+    },
+    "elevation": "Race elevation gain (m)",
+    "elevationPlaceholder": "e.g. 1200",
+    "elevationDesc": "The total climb the organiser advertises. Optional."
+  },
+  "ultra": {
+    "title": "What needs rehearsing",
+    "subtitle": "What will happen on race day and can be learnt in training. Tick what applies.",
+    "night": "Running at night",
+    "nightDesc": "A headtorch run, so race night isn't the first one.",
+    "fuelling": "Rehearsing fuelling",
+    "fuellingDesc": "Eating and drinking on the move: the stomach trains like the legs.",
+    "poles": "Using poles",
+    "polesDesc": "Power-hiking with poles is a skill of its own.",
+    "backToBack": "Two days in a row",
+    "backToBackDesc": "A long run on Saturday, another on Sunday on tired legs."
   }
 }

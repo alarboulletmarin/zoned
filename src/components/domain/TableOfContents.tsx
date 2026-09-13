@@ -84,34 +84,28 @@ export function TableOfContents({
 
   if (isMobile) {
     return (
-      <div className={cn("mb-6", className)}>
+      <div className={cn("zn-toc-mobile", className)}>
         <button
+          type="button"
           onClick={() => setMobileOpen((prev) => !prev)}
-          className="flex w-full items-center gap-2 rounded-lg border bg-muted/50 px-3 py-2.5 text-sm transition-colors hover:bg-muted"
+          className="zn-toc__trigger"
+          aria-expanded={mobileOpen}
         >
-          <List className="size-4 text-muted-foreground shrink-0" />
-          <span className="font-medium truncate flex-1 text-left">
+          <List className="zn-toc__glyph" />
+          <span className="zn-fill zn-truncate">
             {activeHeading ? activeHeading.text : tocLabel}
           </span>
-          <ChevronDown
-            className={cn(
-              "size-4 text-muted-foreground shrink-0 transition-transform",
-              mobileOpen && "rotate-180",
-            )}
-          />
+          <ChevronDown className="zn-toc__chevron" />
         </button>
         {mobileOpen && (
-          <div className="mt-1 rounded-lg border bg-background shadow-md overflow-hidden">
+          <div className="zn-toc__panel">
             {headings.map(({ id, text }) => (
               <button
                 key={id}
+                type="button"
                 onClick={() => handleClick(id)}
-                className={cn(
-                  "block w-full text-left px-4 py-2.5 text-sm transition-colors border-l-2",
-                  activeId === id
-                    ? "border-primary bg-primary/5 text-primary font-medium"
-                    : "border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground",
-                )}
+                className="zn-toc__item"
+                aria-current={activeId === id ? "location" : undefined}
               >
                 {text}
               </button>
@@ -123,20 +117,15 @@ export function TableOfContents({
   }
 
   return (
-    <nav className={cn("space-y-1", className)}>
-      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-        {tocLabel}
-      </p>
+    <nav className={cn("zn-toc", className)}>
+      <p className="zn-kicker">{tocLabel}</p>
       {headings.map(({ id, text }) => (
         <button
           key={id}
+          type="button"
           onClick={() => handleClick(id)}
-          className={cn(
-            "block w-full text-left text-sm py-1.5 pl-3 border-l-2 transition-colors",
-            activeId === id
-              ? "border-primary text-primary font-medium"
-              : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/30",
-          )}
+          className="zn-toc__item"
+          aria-current={activeId === id ? "location" : undefined}
         >
           {text}
         </button>

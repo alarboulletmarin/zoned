@@ -1,9 +1,9 @@
 /**
- * Bridge "Ma semaine" → the training-plan model (Epic #83 — architecture pass).
+ * Bridge "Ma semaine" → the training-plan model (Epic #83, architecture pass).
  *
  * A standalone week is stored and edited as a 1-week "free" plan (config flag
- * `isSingleWeek`). This lets the weekly planner reuse the whole plan editor —
- * drag-and-drop reschedule, the workout picker, move/swap/delete — instead of
+ * `isSingleWeek`). This lets the weekly planner reuse the whole plan editor,
+ * drag-and-drop reschedule, the workout picker, move/swap/delete, instead of
  * reinventing it. The 80/20 generator simply fills that single week's sessions.
  */
 
@@ -80,10 +80,10 @@ export function generatedWeekToSessions(week: GeneratedWeek): PlanSession[] {
 /**
  * Resolve a plan week's sessions back to WeekSlot[] (Mon→Sun) using a workout
  * lookup, so the existing computeWeekStats / gauge / rhythm work directly on a
- * stored week — whether it was generated or built by hand.
+ * stored week, whether it was generated or built by hand.
  *
- * Emits one slot **per session** — a day with several sessions yields several
- * slots (so stats count every session) — plus a rest slot for empty days.
+ * Emits one slot **per session**, a day with several sessions yields several
+ * slots (so stats count every session), plus a rest slot for empty days.
  */
 export function planWeekToSlots(
   planWeek: PlanWeek | undefined,
@@ -133,7 +133,7 @@ export function createWeekPlanFromGenerated(
 /**
  * A single-week plan pre-filled from a curated {@link PrebuiltWeek}. Reuses the
  * empty-week scaffolding (id, config flag, single week) and fills the sessions
- * straight from the authored data — the `why` lines are editorial only and not
+ * straight from the authored data, the `why` lines are editorial only and not
  * carried into the editable plan.
  */
 export function prebuiltWeekToPlan(week: PrebuiltWeek, name?: string): TrainingPlan {

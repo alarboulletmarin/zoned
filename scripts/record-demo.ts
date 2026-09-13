@@ -45,7 +45,7 @@ const ROOT = join(import.meta.dirname, "..");
 const SIZE_BUDGET_BYTES = 8 * 1024 * 1024;
 
 // ---------------------------------------------------------------------------
-// Preflight checks — fail fast with actionable messages.
+// Preflight checks, fail fast with actionable messages.
 // ---------------------------------------------------------------------------
 
 async function assertDevServerUp(): Promise<void> {
@@ -63,13 +63,13 @@ function assertFfmpeg(): void {
   try {
     execFileSync("ffmpeg", ["-version"], { stdio: "ignore" });
   } catch {
-    console.error("✗ ffmpeg not found on PATH — install it (e.g. apt install ffmpeg / brew install ffmpeg).");
+    console.error("✗ ffmpeg not found on PATH, install it (e.g. apt install ffmpeg / brew install ffmpeg).");
     process.exit(1);
   }
 }
 
 // ---------------------------------------------------------------------------
-// Fake cursor — a dark semi-transparent dot that follows the real mouse,
+// Fake cursor, a dark semi-transparent dot that follows the real mouse,
 // with a press "pulse" on mousedown. Injected before every document loads
 // so it survives full navigations.
 // ---------------------------------------------------------------------------
@@ -186,7 +186,7 @@ async function moveToAndClick(
     if (onTarget) break;
     if (attempt === 2) throw new Error(`Click point for "${selector}" stays covered by another element`);
     // Dismiss whatever overlays the target (header dropdowns only close on
-    // an outside click — the dismissing click is swallowed by the overlay).
+    // an outside click, the dismissing click is swallowed by the overlay).
     const vp = page.viewportSize() ?? { width: 1280, height: 800 };
     await moveTo(page, vp.width / 2, vp.height - 30, 350);
     await page.mouse.down();
@@ -229,7 +229,7 @@ const settleSkeletons = (page: Page) =>
     .waitForSelector(".react-loading-skeleton", { state: "detached", timeout: 5_000 })
     .catch(() => {});
 
-// Workout cards — excludes the "create your own workout" CTA which also
+// Workout cards, excludes the "create your own workout" CTA which also
 // lives under /workout/.
 const CARD_LINK = 'a[href^="/workout/"]:not([href*="builder"]):visible';
 
@@ -271,7 +271,7 @@ const SCENARIOS: Scenario[] = [
       await pause(page, 1000);
 
       // Filter on the "Seuil" (threshold) category. The filter panel is
-      // rendered twice (hidden mobile drawer + desktop sidebar) — :visible
+      // rendered twice (hidden mobile drawer + desktop sidebar), :visible
       // disambiguates.
       await moveToAndClick(page, 'button:text-is("Seuil"):visible');
       await page.waitForURL("**category=threshold**");
@@ -298,7 +298,7 @@ const SCENARIOS: Scenario[] = [
       await page.waitForSelector('[role="menuitem"]', { timeout: 5_000 });
       await pause(page, 500);
 
-      // Garmin FIT — hold on the transfer dialog, the closing shot.
+      // Garmin FIT, hold on the transfer dialog, the closing shot.
       await moveToAndClick(page, '[role="menuitem"]:has-text("Garmin")', { durationMs: 500 });
       await page.waitForSelector('[role="dialog"]', { timeout: 5_000 }).catch(() => {});
       await pause(page, 1500);
@@ -350,7 +350,7 @@ const SCENARIOS: Scenario[] = [
       await page.waitForSelector("select#distance", { timeout: 10_000 });
       await pause(page, 900);
 
-      // 10 km in 45:30 — zones table appears live while typing
+      // 10 km in 45:30, zones table appears live while typing
       await moveToAndClick(page, "select#distance", { durationMs: 500 });
       await page.selectOption("select#distance", { label: "10 km" });
       await pause(page, 400);
@@ -368,7 +368,7 @@ const SCENARIOS: Scenario[] = [
       await smoothScroll(page, scrollPx, 1100);
       await pause(page, 1400);
 
-      // Save it — closing shot on the confirmation toast
+      // Save it, closing shot on the confirmation toast
       await moveToAndClick(page, 'button:has-text("Utiliser cette VMA")');
       await pause(page, 1600);
     },
@@ -471,6 +471,15 @@ async function recordScenario(scenario: Scenario, videoDir: string): Promise<Rec
 
   // Scenario entry point, fonts ready, cursor parked.
   await page.goto(BASE_URL + (scenario.startPath ?? "/"), { waitUntil: "networkidle" });
+  /* La coquille de chargement tient au moins une foulée (src/main.tsx,
+     SHELL_HOLD_MS) puis s'efface en fondu. On l'attend AVANT de figer
+     trimStartSec, sans quoi le splash se retrouverait au début du GIF. */
+  await page
+    .waitForFunction(() => {
+      const s = document.getElementById("loading-shell");
+      return !s || getComputedStyle(s).visibility === "hidden";
+    }, { timeout: 10_000 })
+    .catch(() => {});
   await page.evaluate(() => document.fonts.ready);
   const park = { x: scenario.viewport.width / 2, y: scenario.viewport.height * 0.6 };
   await page.mouse.move(park.x, park.y);
@@ -482,7 +491,7 @@ async function recordScenario(scenario: Scenario, videoDir: string): Promise<Rec
   await scenario.run(page);
 
   // Recording stops at context.close(), so the video ends on the scenario's
-  // closing shot — only the page-load lead-in needs trimming.
+  // closing shot, only the page-load lead-in needs trimming.
   const wallTotalSec = (Date.now() - recordingStart) / 1000;
   await context.close();
   const webm = await page.video()!.path();
@@ -582,7 +591,7 @@ async function main() {
       if (size > SIZE_BUDGET_BYTES) {
         const fb = scenario.gifFallback;
         console.log(
-          `    ${(size / 1024 / 1024).toFixed(1)} MB > 8 MB budget — retrying at fps=${fb.fps}, width=${fb.width}`,
+          `    ${(size / 1024 / 1024).toFixed(1)} MB > 8 MB budget, retrying at fps=${fb.fps}, width=${fb.width}`,
         );
         convertToGif(webm, outGif, scaledTrim, videoScale, fb);
         size = statSync(outGif).size;

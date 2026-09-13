@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Allure spécifique — 5 sessions, two race-pace days (Tue/Thu), progressive
+ * Allure spécifique, 5 sessions, two race-pace days (Tue/Thu), progressive
  * long run Saturday. Two full rest days. For the last weeks before a goal.
  */
 export const allureSpecifique: PrebuiltWeek = {
@@ -16,8 +16,8 @@ export const allureSpecifique: PrebuiltWeek = {
   icon: "Target",
   difficulty: "intermediate",
   category: "peak",
-  provenance: "Spécificité de l'entraînement — Daniels (Running Formula)",
-  provenanceEn: "Training specificity — Daniels (Running Formula)",
+  provenance: "Spécificité de l'entraînement, Daniels (Running Formula)",
+  provenanceEn: "Training specificity, Daniels (Running Formula)",
   whyItWorks:
     "Plus la course approche, plus l'entraînement doit ressembler à la course. Répéter l'allure visée sur des blocs longs installe le geste, la respiration et la gestion de l'effort à ce rythme précis, et la sortie longue progressive apprend à finir vite sur des jambes déjà entamées. C'est la spécificité qui prime ici, pas le volume ni l'intensité maximale.",
   whyItWorksEn:

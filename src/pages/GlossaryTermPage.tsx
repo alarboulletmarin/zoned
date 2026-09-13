@@ -3,9 +3,10 @@
 
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Book, Search, Loader2, ArrowLeft } from "@/components/icons";
+import { Book, Search, ArrowLeft } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Spinner } from "@/components/ui/spinner";
 import { SEOHead } from "@/components/seo";
 import { GlossaryDetail } from "@/components/domain/GlossaryDetail";
 import { useGlossaryTerm } from "@/hooks/useGlossary";
@@ -25,23 +26,22 @@ export function GlossaryTermPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="py-8">
-        <div className="flex items-center justify-center py-24">
-          <Loader2 className="size-8 animate-spin text-muted-foreground" />
-        </div>
+      <div className="zn-ref__head">
+        <Spinner size={22} label={t("status.loading", { ns: "common" })} />
       </div>
     );
   }
 
   if (!term) {
     return (
-      <div className="py-8">
+      <div className="zn-ref__head zn-ref__column">
         <EmptyState
+          variant="no-results"
           icon={Search}
           title={t("termNotFound")}
           description={t("termNotFoundDescription")}
           action={
-            <Button variant="link" asChild>
+            <Button variant="outline" asChild>
               <Link to="/glossary">{t("backToGlossary")}</Link>
             </Button>
           }
@@ -83,38 +83,38 @@ export function GlossaryTermPage() {
           },
         ]}
       />
-      <div className="py-8">
-        {/* Back navigation */}
-      <div className="mb-6 flex items-center gap-2">
-        {canGoBack && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate(-1)}
-            className="gap-1 -ml-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {t("back")}
-          </Button>
-        )}
-        <Button variant="ghost" size="sm" asChild className="gap-1">
-          <Link to="/glossary">
-            <Book className="h-4 w-4 mr-1" />
+      <div className="zn-ref">
+        {/* 1, the way out. GlossaryDetail prints the term's own title, so
+            this band carries nothing else. */}
+        <div className="zn-ref__head zn-cluster">
+          {canGoBack && (
+            <button
+              type="button"
+              className="zn-ref__back"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft />
+              {t("back")}
+            </button>
+          )}
+          <Link to="/glossary" className="zn-ref__back">
+            <Book />
             {t("backToGlossary")}
           </Link>
-        </Button>
-      </div>
+        </div>
 
-      {/* Term Detail */}
-      <div className="max-w-3xl">
-        <GlossaryDetail term={term} />
-      </div>
+        {/* 2, the term itself, in a reading column */}
+        <div className="zn-ref__column">
+          <GlossaryDetail term={term} />
+        </div>
 
-      {/* Related Content */}
-      <div className="max-w-3xl mt-8">
-        <RelatedContent source={{ type: "glossary", id: term.id }} />
+        {/* 3, where to go next, on its own rule */}
+        <section className="zn-ref__section">
+          <div className="zn-ref__column">
+            <RelatedContent source={{ type: "glossary", id: term.id }} />
+          </div>
+        </section>
       </div>
-    </div>
     </>
   );
 }

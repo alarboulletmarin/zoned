@@ -1,5 +1,5 @@
 /**
- * Swimming Pace Engine — Evidence-based training pace calculations.
+ * Swimming Pace Engine, Evidence-based training pace calculations.
  *
  * Implements the Critical Swim Speed (CSS) 6-zone model used in most
  * triathlon and open-water curricula. Paces are expressed as seconds per 100m.
@@ -40,11 +40,11 @@ export interface SwimmingZones {
 // Calibrated against common tri / masters protocols (Sheila Taormina, Swim Smooth).
 
 const CSS_DELTAS: Record<SwimZone, [number, number]> = {
-  Z1: [+10, +20], // Recovery — easy aerobic, technique focus
+  Z1: [+10, +20], // Recovery, easy aerobic, technique focus
   Z2: [+5, +10],  // Aerobic endurance
   Z3: [+2, +5],   // Tempo / aerobic threshold
   Z4: [-2, +2],   // Threshold (CSS itself)
-  Z5: [-5, -2],   // VO2max intervals (25s–1min reps)
+  Z5: [-5, -2],   // VO2max intervals (25s-1min reps)
   Z6: [-10, -5],  // Sprint / neuromuscular (short reps with full recovery)
 };
 
@@ -60,7 +60,7 @@ const FALLBACK_CSS_SEC_PER_100M: Record<Difficulty, number> = {
 
 // ── Intensity factors per swim zone (for sTSS) ──────────────────────
 // Zone midpoints relative to CSS. Calibrated to align with the running and
-// cycling scales at Z2–Z4 so cross-discipline substitution produces
+// cycling scales at Z2-Z4 so cross-discipline substitution produces
 // meaningful TSS matches. Z1 stays slightly higher than other disciplines
 // because swimming has an inherent buoyancy floor.
 
@@ -165,9 +165,9 @@ export function formatSwimPace(secPer100m: number): string {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-/** Format a swim pace range as "mm:ss–mm:ss / 100m" (faster first). */
+/** Format a swim pace range as "mm:ss-mm:ss / 100m" (faster first). */
 export function formatSwimPaceRange(range: SwimPaceRange): string {
-  return `${formatSwimPace(range.minSecPer100m)}–${formatSwimPace(range.maxSecPer100m)}`;
+  return `${formatSwimPace(range.minSecPer100m)}-${formatSwimPace(range.maxSecPer100m)}`;
 }
 
 /**

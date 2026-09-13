@@ -8,8 +8,8 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle } from "@/components/icons";
 import type { AutoChange } from "@/types/plan";
 
 interface ReschedulePreviewDialogProps {
@@ -32,32 +32,25 @@ export function ReschedulePreviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] overflow-y-auto">
+      <DialogContent className="zn-pdialog">
         <DialogHeader>
           <DialogTitle>{t("reschedule.title")}</DialogTitle>
           <DialogDescription>{t("reschedule.description")}</DialogDescription>
         </DialogHeader>
 
         {noChanges ? (
-          <p className="text-sm text-muted-foreground py-4 text-center">
-            {t("reschedule.noChanges")}
-          </p>
+          <p className="zn-ppreview__empty">{t("reschedule.noChanges")}</p>
         ) : (
-          <div className="space-y-3 py-2">
-            <p className="text-sm font-medium text-amber-700 dark:text-amber-300 flex items-center gap-2">
-              <AlertTriangle className="size-4 shrink-0" />
-              {t("reschedule.skippedCount", { count: changes.length })}
-            </p>
-            <ul className="space-y-1.5 max-h-[40vh] overflow-y-auto">
+          <div className="zn-ppreview">
+            <Alert kind="warning" title={t("reschedule.skippedCount", { count: changes.length })}>
+              {t("reschedule.skippedIntact")}
+            </Alert>
+
+            <ul className="zn-ppreview__list">
               {changes.map((change, i) => (
-                <li
-                  key={`skip-${i}`}
-                  className="flex items-center gap-2 rounded-md border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/20 px-3 py-2 text-sm"
-                >
-                  <span className="text-xs font-medium text-muted-foreground tabular-nums shrink-0">
-                    S{change.weekNumber}
-                  </span>
-                  <span className="truncate min-w-0">
+                <li key={`skip-${i}`} className="zn-ppreview__item">
+                  <span className="zn-ppreview__week">S{change.weekNumber}</span>
+                  <span className="zn-ppreview__label zn-truncate">
                     {workoutNames[change.workoutId ?? ""] || change.workoutId}
                   </span>
                 </li>

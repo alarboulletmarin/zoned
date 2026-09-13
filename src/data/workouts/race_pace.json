@@ -3496,7 +3496,7 @@
       "id": "RP-022",
       "name": "Intervalles spécifiques extensifs (Canova)",
       "nameEn": "Extensive Specific Intervals (Canova)",
-      "description": "4 répétitions de 5 km à allure marathon (100-103%) avec 1 km de « récupération » à 85-90% de l'allure marathon entre chaque. Volume total de qualité : environ 24 km. Développe la résistance à la fatigue à allure spécifique marathon avec récupération insuffisante.",
+      "description": "4 répétitions de 5 km à allure marathon (100-103%) avec 1 km de récupération à 85-90% de l'allure marathon entre chaque. Volume total de qualité : environ 24 km. Développe la résistance à la fatigue à allure spécifique marathon avec récupération insuffisante.",
       "descriptionEn": "4 repetitions of 5km at marathon pace (100-103%) with 1km 'recovery' at 85-90% of marathon pace between each. Total quality volume: approximately 24km. Develops fatigue resistance at marathon-specific pace with insufficient recovery.",
       "category": "race_pace",
       "sessionType": "race_specific",
@@ -3533,7 +3533,7 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "4 × 5 km à 100-103% allure marathon (Z3), avec 1 km « récup » à 85-90% allure marathon entre chaque (jamais en dessous de Z2 haut)",
+          "description": "4 × 5 km à 100-103% allure marathon (Z3), avec 1 km récup à 85-90% allure marathon entre chaque (jamais en dessous de Z2 haut)",
           "descriptionEn": "4 × 5km at 100-103% marathon pace (Z3), with 1km 'recovery' at 85-90% marathon pace between each (never below upper Z2)",
           "zone": "Z3",
           "repetitions": 4,
@@ -3594,13 +3594,13 @@
         }
       ],
       "coachingTips": [
-        "Les kilomètres de « récupération » restent à 85-90% allure marathon — ce n'est pas du footing facile",
+        "Les kilomètres de récupération restent à 85-90% allure marathon, ce n'est pas du footing facile",
         "Le volume total (~30 km avec échauffement et retour au calme) en fait une séance clé de la préparation marathon",
         "Programmez cette séance 6-10 semaines avant le marathon, suivie de 5-7 jours faciles",
         "Si vous ne pouvez pas maintenir l'allure sur le 4e bloc, la séance est trop ambitieuse : réduisez à 3 × 5 km"
       ],
       "coachingTipsEn": [
-        "Recovery kilometers stay at 85-90% marathon pace — this is not easy jogging",
+        "Recovery kilometers stay at 85-90% marathon pace, this is not easy jogging",
         "Total volume (~30km including warm-up and cool-down) makes this a key marathon preparation session",
         "Schedule this session 6-10 weeks before the marathon, followed by 5-7 easy days",
         "If you cannot maintain pace on the 4th block, the session is too ambitious: reduce to 3 × 5km"

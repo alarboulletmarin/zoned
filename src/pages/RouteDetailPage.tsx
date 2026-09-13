@@ -1,12 +1,13 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState, type CSSProperties } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { ArrowLeft, Download, Trash2 } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle } from "@/components/editorial";
 import { downloadRouteGpx } from "@/lib/export/gpx";
 import { useRoutes } from "@/hooks/useRoutes";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -25,9 +26,7 @@ const ElevationChart = lazy(() =>
 );
 
 function MapFallback() {
-  return (
-    <div className="h-72 w-full animate-pulse rounded-xl border border-border/60 bg-muted/40 sm:h-96" />
-  );
+  return <Skeleton className="zn-rt__mapskel" />;
 }
 
 export function RouteDetailPage() {
@@ -36,27 +35,65 @@ export function RouteDetailPage() {
   const navigate = useNavigate();
   const { deleteRoute } = useRoutes();
   const [route, setRoute] = useState<Route | null>(null);
+  // The lookup is async, so a null route means "still reading" until it
+  // resolves. Telling the two apart is what lets the missing-route case say
+  // what happened instead of showing the empty-library sentence.
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
+    setIsLoading(true);
     void getRoute(id).then((found) => {
-      if (!cancelled) setRoute(found);
+      if (cancelled) return;
+      setRoute(found);
+      setIsLoading(false);
     });
     return () => {
       cancelled = true;
     };
   }, [id]);
 
+  const backLink = (
+    <Button asChild variant="ghost" size="sm" className="zn-rt__back">
+      <Link to="/routes/mine">
+        <ArrowLeft size={16} />
+        {t("myRoutes")}
+      </Link>
+    </Button>
+  );
+
   if (!route) {
     return (
-      <div className="space-y-4 py-10">
-        <Button asChild variant="ghost" className="gap-2">
-          <Link to="/routes/mine">
-            <ArrowLeft className="size-4" /> {t("myRoutes")}
-          </Link>
-        </Button>
-        <p className="text-sm text-muted-foreground">{t("list.empty")}</p>
+      <div className="zn-rt">
+        <section
+          className="zn-rt__band zn-stack"
+          style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+        >
+          {backLink}
+          {isLoading ? (
+            <div
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+            >
+              <Skeleton style={{ blockSize: "var(--sp-14)", inlineSize: "22ch" }} />
+              <MapFallback />
+            </div>
+          ) : (
+            <Alert
+              kind="error"
+              title={t("detail.missingTitle")}
+              className="zn-rt__notice"
+              action={
+                <Button variant="outline-primary" asChild>
+                  <Link to="/routes/mine">{t("myRoutes")}</Link>
+                </Button>
+              }
+            >
+              {t("detail.missingBody")}
+            </Alert>
+          )}
+        </section>
       </div>
     );
   }
@@ -76,64 +113,83 @@ export function RouteDetailPage() {
   return (
     <>
       <SEOHead title={route.name} description={t("subtitle")} canonical={`/routes/${route.id}`} noindex />
-      <div className="space-y-6 py-6">
-        <Button asChild variant="ghost" size="sm" className="gap-2">
-          <Link to="/routes/mine">
-            <ArrowLeft className="size-4" /> {t("myRoutes")}
-          </Link>
-        </Button>
 
-        <header className="space-y-1">
-          <EditorialTitle as="h1" size="md">{route.name}</EditorialTitle>
-          <p className="text-sm text-muted-foreground">
-            {(route.distanceM / 1000).toFixed(2)} km · D+ {route.elevationGainM} m · ~
-            {formatDurationMinutes(route.estimatedDurationSec / 60)}
-          </p>
-        </header>
-
-        <Suspense fallback={<MapFallback />}>
-          <RouteMap points={route.points} pois={route.pois} />
-        </Suspense>
-
-        {route.elevation.length > 1 && (
-          <div className="rounded-xl border border-border/60 bg-background p-3 sm:p-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              {t("result.elevationProfile")}
+      <div className="zn-rt">
+        {/* 1, which route this is, in figures */}
+        <section
+          className="zn-rt__band zn-stack"
+          style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+        >
+          {backLink}
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+          >
+            <span className="zn-kicker">{t("detail.kicker")}</span>
+            <h1 className="zn-display" data-level="2">
+              {route.name}
+            </h1>
+            <p className="zn-mono zn-rt__facts">
+              <strong>{(route.distanceM / 1000).toFixed(2)} km</strong>
+              <span>↑ {route.elevationGainM} m</span>
+              <span>~{formatDurationMinutes(route.estimatedDurationSec / 60)}</span>
             </p>
-            <Suspense fallback={null}>
-              <ElevationChart profile={route.elevation} />
+          </div>
+        </section>
+
+        {/* 2, the trace, and the profile under it */}
+        <section
+          className="zn-rt__band zn-stack"
+          style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+        >
+          <div className="zn-rt__map">
+            <Suspense fallback={<MapFallback />}>
+              <RouteMap points={route.points} pois={route.pois} />
             </Suspense>
           </div>
-        )}
 
-        {route.planSessionRef && (
-          <div className="flex flex-col gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
-                {t("result.linkedToPlan")}
-              </p>
-              <p className="mt-1 text-sm text-foreground">
-                {t("result.linkedToPlanBody", { week: route.planSessionRef.weekNumber })}
-              </p>
+          {route.elevation.length > 1 && (
+            <div className="zn-rt__figure">
+              <span className="zn-kicker">{t("result.elevationProfile")}</span>
+              <Suspense fallback={null}>
+                <ElevationChart profile={route.elevation} />
+              </Suspense>
             </div>
-            <Button asChild variant="outline" size="sm">
-              <Link to={`/plan/${route.planSessionRef.planId}?week=${route.planSessionRef.weekNumber}`}>
-                {t("result.backToPlan")}
-              </Link>
-            </Button>
-          </div>
-        )}
+          )}
 
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={onExport} className="gap-2">
-            <Download className="size-4" />
+          {route.planSessionRef && (
+            <div className="zn-rt__linked">
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+              >
+                <span className="zn-kicker">{t("result.linkedToPlan")}</span>
+                <p className="zn-body zn-body--sm">
+                  {t("result.linkedToPlanBody", { week: route.planSessionRef.weekNumber })}
+                </p>
+              </div>
+              <Button asChild variant="outline" size="sm">
+                <Link
+                  to={`/plan/${route.planSessionRef.planId}?week=${route.planSessionRef.weekNumber}`}
+                >
+                  {t("result.backToPlan")}
+                </Link>
+              </Button>
+            </div>
+          )}
+        </section>
+
+        {/* 3, what you can do with it */}
+        <section className="zn-rt__band zn-cluster">
+          <Button onClick={onExport}>
+            <Download size={17} />
             {t("result.exportGpx")}
           </Button>
-          <Button variant="ghost" onClick={onDelete} className="gap-2 text-destructive hover:text-destructive">
-            <Trash2 className="size-4" />
+          <Button variant="outline" className="zn-rt__danger" onClick={onDelete}>
+            <Trash2 size={17} />
             {t("result.delete")}
           </Button>
-        </div>
+        </section>
       </div>
     </>
   );

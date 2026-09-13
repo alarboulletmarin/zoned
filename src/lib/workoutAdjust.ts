@@ -27,7 +27,7 @@ import { createCustomWorkoutId } from "@/lib/customWorkoutStorage";
 
 /**
  * What a parameter moves. The first three are counts, the next two are
- * seconds, the last one is metres — the kind is the unit.
+ * seconds, the last one is metres, the kind is the unit.
  */
 export type AdjustableParamKind =
   | "sets"
@@ -38,7 +38,7 @@ export type AdjustableParamKind =
   | "distance";
 
 export interface AdjustableParam {
-  /** Address of the value inside the phase tree — see `buildParamId`. */
+  /** Address of the value inside the phase tree, see `buildParamId`. */
   id: string;
   phase: WorkoutPhaseKey;
   kind: AdjustableParamKind;
@@ -51,7 +51,7 @@ export interface AdjustableParam {
   max: number;
   step: number;
   /**
-   * What the template itself suggests — its `scaling` range, or half to one and
+   * What the template itself suggests, its `scaling` range, or half to one and
    * a half times what it prescribes. Kept separately from `min`/`max` so the UI
    * can still say what the recommendation was once the slider has widened past
    * it.
@@ -63,11 +63,11 @@ export interface AdjustableParam {
 /** Suffix distinguishing the three fields a single step can expose. */
 type ParamField = "count" | "dur" | "dist";
 
-/** A parameter before its recommendation is pinned — see `getAdjustableParams`. */
+/** A parameter before its recommendation is pinned, see `getAdjustableParams`. */
 type UnboundedParam = Omit<AdjustableParam, "recommendedMin" | "recommendedMax">;
 
 /**
- * `main/0/0/b0#dur` — phase, then one token per level down the tree (`b` marks
+ * `main/0/0/b0#dur`, phase, then one token per level down the tree (`b` marks
  * a step living in a repeat's `between`), then the field. Stable as long as the
  * tree shape is: a parameter keeps its identity across value changes, and loses
  * it when the user adds or removes a step, which is the correct outcome.
@@ -119,7 +119,7 @@ export function hasAdjustableParams(workout: WorkoutTemplate): boolean {
 /**
  * How far a value may go when it is typed rather than dragged.
  *
- * The bounds a parameter carries are a *recommendation* — what the template
+ * The bounds a parameter carries are a *recommendation*, what the template
  * declares, or half to one and a half times what it prescribes. They belong on
  * a slider, which is a coarse gesture. They must not be a ceiling: a runner
  * who wants twenty repetitions is not making a mistake, and having to leave the
@@ -206,7 +206,7 @@ function collectParams(
     }
 
     // A segment carrying both a duration and a distance is driven by its
-    // duration — that is the field `flattenWorkoutSegments` reads too, so
+    // duration, that is the field `flattenWorkoutSegments` reads too, so
     // exposing the distance as well would offer a knob that moves nothing.
     if (step.durationSec != null) {
       sink.push({
@@ -249,7 +249,7 @@ function segmentDistanceMeters(segment: WorkoutStepSegment): number | null {
 
 /**
  * The prose a parameter is named after. A repeat has none of its own, so it
- * borrows the first segment it contains — `2 × (12 × 30s VMA)` reads as
+ * borrows the first segment it contains, `2 × (12 × 30s VMA)` reads as
  * "sets of 30s VMA" rather than as an anonymous counter.
  */
 function describeStep(step: WorkoutStep): { label: string; labelEn?: string } {
@@ -309,7 +309,7 @@ function distanceBounds(meters: number): { min: number; max: number; step: numbe
 }
 
 /**
- * `WorkoutScaling` describes exactly one parameter of the main set — the one
+ * `WorkoutScaling` describes exactly one parameter of the main set, the one
  * the plan generator moves as a phase progresses. When we can identify it, its
  * declared range replaces the derived one.
  *
@@ -382,8 +382,8 @@ function clamp(value: number, param: AdjustableParam): number {
  * does not expose are ignored.
  *
  * `params` defaults to this workout's own parameters. Callers holding bounds
- * captured earlier — a UI keeps them fixed while the user drags, so the scale
- * under the cursor does not move — pass theirs instead.
+ * captured earlier, a UI keeps them fixed while the user drags, so the scale
+ * under the cursor does not move, pass theirs instead.
  */
 export function applyAdjustments(
   workout: WorkoutTemplate,
@@ -479,7 +479,7 @@ function resolveValue(
 /**
  * `30s VMA` must not survive being retimed to 45 seconds: the description is
  * what the timeline, the FIT export and the PDF print. The first duration in
- * the sentence is the one the segment states, so that is the one we rewrite —
+ * the sentence is the one the segment states, so that is the one we rewrite,
  * in the unit the author used, so `3min` stays minutes and `30s` stays seconds.
  *
  * The optional trailing digits catch the compound form (`1min30`). They must
@@ -518,8 +518,8 @@ function redistanceSegment(segment: WorkoutStepSegment, meters: number): Workout
  * A trail segment states both a climb (`elevationGainM`) and the slope it is
  * climbed at (`gradientPercent`). Stretching a 60s hill effort to 120s means
  * running further up the same hill, so the gain doubles and the gradient holds.
- * Leaving the gain fixed would have said the opposite — same climb, half the
- * slope — while still printing 7 %, and `computeTrailMetrics`, the elevation
+ * Leaving the gain fixed would have said the opposite, same climb, half the
+ * slope, while still printing 7 %, and `computeTrailMetrics`, the elevation
  * profile and the hero export all read that number.
  */
 function scaleElevation(segment: WorkoutStepSegment, factor: number): Partial<WorkoutStepSegment> {
@@ -527,7 +527,7 @@ function scaleElevation(segment: WorkoutStepSegment, factor: number): Partial<Wo
   return { elevationGainM: Math.round(segment.elevationGainM * factor) };
 }
 
-/** A description with no number in it — `Footing progressif` — is left alone. */
+/** A description with no number in it, `Footing progressif`, is left alone. */
 function retimeText(text: string, seconds: number): string {
   const match = text.match(DURATION_TOKEN);
   if (!match) return text;
@@ -583,7 +583,7 @@ function formatMinuteForm(seconds: number, unit: string): string {
  * The custom-namespace copy an adjustment saves into. The catalogue template is
  * only read: everything below builds a new object.
  *
- * Both languages are carried over — a copy that lost its English half would
+ * Both languages are carried over, a copy that lost its English half would
  * regress the bilingual contract the catalogue holds.
  *
  * `scaling` is kept: it describes how this session is meant to progress, which

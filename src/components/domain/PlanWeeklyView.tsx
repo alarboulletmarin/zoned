@@ -1,30 +1,29 @@
-import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
+import { useState, useRef, useMemo, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { ZoneScale } from "@/components/visualization";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
-import { sessionColor } from "@/lib/sessionColors";
-
-// ── Color maps ──────────────────────────────────────────────────────
-
-const PHASE_BG: Record<string, string> = {
-  base: "bg-blue-50/50 dark:bg-blue-950/20",
-  build: "bg-orange-50/50 dark:bg-orange-950/20",
-  peak: "bg-red-50/50 dark:bg-red-950/20",
-  taper: "bg-green-50/50 dark:bg-green-950/20",
-  recovery: "bg-slate-50/50 dark:bg-slate-950/20",
-};
+import {
+  SessionActionMenu,
+  type SessionActionMenuItem,
+} from "@/components/domain/SessionActionMenu";
+import { SESSION_ZONE, sessionColor } from "@/lib/sessionColors";
 
 /** Placeholder sessions (race day, cross-training activities) have no catalog
  *  workout behind them, so there is nothing to draw a replacement from. */
 function isRedrawable(workoutId: string): boolean {
   return !workoutId.startsWith("__");
+}
+
+/** A session type with no aerobic zone gets the hollow mark, never a hue. */
+function isZoned(sessionType: string): boolean {
+  return SESSION_ZONE[sessionType as keyof typeof SESSION_ZONE] != null;
 }
 
 // ── Props ───────────────────────────────────────────────────────────
@@ -38,7 +37,7 @@ export interface WorkoutCardMeta {
 interface PlanWeeklyViewProps {
   plan: TrainingPlan;
   workoutNames: Record<string, string>;
-  /** Optional zone/TSS per workout id — adds a meta line to each card. */
+  /** Optional zone/TSS per workout id, adds a meta line to each card. */
   workoutMeta?: Record<string, WorkoutCardMeta>;
   currentWeek: number;
   initialWeek?: number;
@@ -96,7 +95,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   blockedDays,
   singleWeek = false,
 }: PlanWeeklyViewProps) {
-  const { t } = useTranslation(["plan", "library"]);
+  const { t } = useTranslation(["plan", "library", "common"]);
   const pickLang = usePickLang();
   // ── Week navigation state ──────────────────────────────────────
   const [selectedWeek, setSelectedWeek] = useState(Math.max(1, initialWeek ?? currentWeek));
@@ -125,7 +124,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   } | null>(null);
   const [dropTarget, setDropTarget] = useState<{ weekNumber: number; day: number } | null>(null);
 
-  // Trash drop zone — surfaced only while a session is being dragged, so
+  // Trash drop zone, surfaced only while a session is being dragged, so
   // "remove a session" is discoverable without a right-click.
   const [overTrash, setOverTrash] = useState(false);
   const overTrashRef = useRef(false);
@@ -158,20 +157,10 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     target: HTMLElement | null;
   } | null>(null);
 
-  // Close context menu on outside click or Escape
-  useEffect(() => {
-    if (!contextMenu) return;
-    const handleClick = () => setContextMenu(null);
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setContextMenu(null);
-    };
-    document.addEventListener("pointerdown", handleClick);
-    document.addEventListener("keydown", handleKey);
-    return () => {
-      document.removeEventListener("pointerdown", handleClick);
-      document.removeEventListener("keydown", handleKey);
-    };
-  }, [contextMenu]);
+  /* La fermeture, clic à côté et Échap, appartient désormais à
+     SessionActionMenu : son voile couvre la fenêtre, donc il ne peut pas rater
+     un pointerdown qu'un autre gestionnaire aurait arrêté en chemin, là où
+     l'écouteur posé sur `document` qui vivait ici le pouvait. */
 
   // Lock state of the session the context menu targets (drives lock/unlock label).
   const contextSessionLocked =
@@ -462,10 +451,10 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
   return (
     <>
-      <div className="space-y-4">
+      <div className="zn-planweek">
         {/* ── Week navigation ── */}
         {!singleWeek && (
-        <div className="flex items-center justify-between gap-2">
+        <div className="zn-planweek__nav">
           <button
             type="button"
             onClick={() => {
@@ -474,25 +463,23 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               onWeekChange?.(newWeek);
             }}
             disabled={selectedWeek <= 1}
-            className="px-3 py-1.5 rounded-lg bg-muted text-sm font-medium disabled:opacity-30 transition-colors hover:bg-muted/80"
+            className="zn-planweek__nav-btn"
           >
-            <ChevronLeft className="size-4" />
+            <ChevronLeft />
           </button>
 
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-2">
-              <span className="font-semibold text-sm md:text-base">
+          <div className="zn-planweek__heading">
+            <div className="zn-planweek__title-row">
+              <span className="zn-planweek__title">
                 {t("weeklyView.weekTitle", { week: selectedWeek })}
               </span>
               {isCurrent && (
-                <span className="text-[10px] md:text-xs font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">
-                  {t("calendar.now")}
-                </span>
+                <span className="zn-planweek__now">{t("calendar.now")}</span>
               )}
             </div>
             {weekData && phaseMeta && (
               <>
-                <span className="text-xs text-muted-foreground">
+                <span className="zn-planweek__sub">
                   {pickLang(phaseMeta, "label")}
                 </span>
                 {parsedStartDate && (() => {
@@ -506,10 +493,10 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                   const label = weekStart.getMonth() === weekEnd.getMonth()
                     ? `${weekStart.getDate()} - ${weekEnd.getDate()} ${shortMonths[weekStart.getMonth()]}`
                     : `${weekStart.getDate()} ${shortMonths[weekStart.getMonth()]} - ${weekEnd.getDate()} ${shortMonths[weekEnd.getMonth()]}`;
-                  return <span className="block text-[10px] text-muted-foreground/70">{label}</span>;
+                  return <span className="zn-planweek__sub">{label}</span>;
                 })()}
                 {weekData.sessions.length > 0 && (
-                  <span className="block text-[10px] text-muted-foreground/70 tabular-nums">
+                  <span className="zn-planweek__sub">
                     ~{Math.round(computeWeekKm(weekData))}km ·{" "}
                     {formatDurationMinutes(computeWeekDuration(weekData))}
                   </span>
@@ -526,9 +513,9 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               onWeekChange?.(newWeek);
             }}
             disabled={selectedWeek >= plan.totalWeeks}
-            className="px-3 py-1.5 rounded-lg bg-muted text-sm font-medium disabled:opacity-30 transition-colors hover:bg-muted/80"
+            className="zn-planweek__nav-btn"
           >
-            <ChevronRight className="size-4" />
+            <ChevronRight />
           </button>
         </div>
         )}
@@ -544,14 +531,8 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
           if (allResolved && resolved > 0) {
             return (
-              <div className="flex items-center justify-center gap-1.5 text-xs text-green-600 dark:text-green-400 font-medium">
-                <svg
-                  viewBox="0 0 12 12"
-                  className="size-3"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
+              <div className="zn-planweek__banner">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M2 6l3 3 5-5" />
                 </svg>
                 {done}/{total} {t("weeklyView.completed")}
@@ -561,19 +542,17 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
           if (resolved > 0 && !allResolved && onValidateWeek) {
             return (
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onValidateWeek(selectedWeek);
-                  }}
-                  className="text-xs px-2 py-1 rounded bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
-                  title={t("calendar.validateWeek")}
-                >
-                  {t("calendar.validateCount", { done, total })}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onValidateWeek(selectedWeek);
+                }}
+                className="zn-planweek__pill"
+                title={t("calendar.validateWeek")}
+              >
+                {t("calendar.validateCount", { done, total })}
+              </button>
             );
           }
 
@@ -581,16 +560,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         })()}
 
         {weekData && onFindWeekRoute && (
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={() => onFindWeekRoute(selectedWeek)}
-              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
-            >
-              <RouteIcon className="size-3.5" />
-              {t("view.findWeekRoute")}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => onFindWeekRoute(selectedWeek)}
+            className="zn-planweek__pill"
+          >
+            <RouteIcon />
+            {t("view.findWeekRoute")}
+          </button>
         )}
 
         {/* ── Week guidance (free plans only) ── */}
@@ -604,25 +581,21 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         {/* ── Day grid ── */}
         {weekData && (
           <div
-            className={cn(
-              "rounded-lg p-2 transition-colors",
-              singleWeek && "lg:flex-1 lg:min-h-0",
-              weekData.isRecoveryWeek && "bg-muted/40",
-              !weekData.isRecoveryWeek && PHASE_BG[weekData.phase as string],
-            )}
+            className="zn-planweek__board"
+            data-recovery={weekData.isRecoveryWeek || undefined}
           >
             {/* Mobile: 4+3 grid layout */}
-            <div className="md:hidden space-y-1.5">
-              {[
+            {[
                 [0, 1, 2, 3],
                 [4, 5, 6],
               ].map((row, rowIdx) => (
                 <div
                   key={rowIdx}
-                  className={cn(
-                    "grid gap-1.5",
-                    row.length === 4 ? "grid-cols-4" : "grid-cols-3",
-                  )}
+                  className="zn-planweek__row"
+                  /* Le nombre de colonnes est une donnée, pas un style : un
+                     style inline bat toute feuille de style, et la CSS doit
+                     pouvoir retomber à une colonne sous 640px. */
+                  data-cols={row.length}
                 >
                   {row.map((dayIndex) => {
                     let dayOfMonth: number | null = null;
@@ -681,10 +654,9 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                   })}
                 </div>
               ))}
-            </div>
 
             {/* Desktop: single 7-column row */}
-            <div className="hidden md:grid md:grid-cols-7 md:gap-2 md:items-start">
+            <div className="zn-planweek__week-row">
               {Array.from({ length: 7 }, (_, dayIndex) => {
                 let dayOfMonth: number | null = null;
                 let monthLabel = "";
@@ -744,6 +716,21 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
             </div>
           </div>
         )}
+
+        {/* The board paints zone ink, so it carries the ramp's legend once,
+            repliée, parce qu'on l'apprend une fois et qu'elle coûtait 131px
+            au-dessus du pli chaque jour. */}
+        {weekData && (
+          <details className="zn-disclosure">
+            <summary className="zn-disclosure__summary">
+              <span className="zn-kicker zn-kicker--xs zn-fill">{t("common:zones.scaleTitle")}</span>
+              <ChevronDown className="zn-disclosure__chevron" />
+            </summary>
+            <div className="zn-disclosure__panel">
+              <ZoneScale showTitle={false} />
+            </div>
+          </details>
+        )}
       </div>
 
       {/* ── Trash drop zone (appears while dragging a session) ── */}
@@ -766,128 +753,83 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               setDropTarget(null);
             }
           }}
-          className={cn(
-            "fixed inset-x-0 bottom-24 z-50 mx-auto flex w-fit items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-lg transition-colors md:bottom-8",
-            overTrash
-              ? "border-destructive bg-destructive text-destructive-foreground"
-              : "border-destructive/40 bg-card text-destructive",
-          )}
+          className="zn-plan-trash"
+          data-armed={overTrash || undefined}
         >
-          <Trash2 className="size-4 shrink-0" />
+          <Trash2 />
           {t("calendar.dropToDelete")}
         </div>
       )}
 
-      {/* ── Context menu (long press mobile / right-click desktop) ── */}
+      {/* ── Le menu d'une séance (appui long ou court sur téléphone, clic
+              droit sur bureau) ──
+
+          Il était écrit ici, en JSX inline, et n'existait donc que pour cette
+          vue : la vue liste du même plan n'avait rien à ouvrir. Il vit
+          maintenant dans SessionActionMenu, que les deux vues rendent, mêmes
+          entrées, même forme, même placement. Ce qui reste ici est la seule
+          chose que cette vue soit seule à savoir : ce qu'on peut faire à une
+          séance d'un tableau de semaine. */}
       {contextMenu && (
-        <div className="fixed inset-0 z-50" onPointerDown={() => setContextMenu(null)}>
-          <div
-            className="fixed bg-card border rounded-lg shadow-lg py-1 min-w-[160px] z-50"
-            style={{
-              left: contextMenu.x,
-              top: contextMenu.y,
-              transform: "translate(-50%, 4px)",
-            }}
-            onPointerDown={(e) => e.stopPropagation()}
-          >
-            {onSessionClick && (
-              <button
-                type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
-                onClick={() => {
-                  onSessionClick(
-                    contextMenu.weekNumber,
-                    contextMenu.sessionIndex,
-                    contextMenu.workoutId,
-                  );
-                  setContextMenu(null);
-                }}
-              >
-                <Eye className="size-4 text-muted-foreground shrink-0" />
-                {t("calendar.viewSession")}
-              </button>
-            )}
-            {onFindRoute && (
-              <button
-                type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
-                onClick={() => {
-                  onFindRoute(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                <RouteIcon className="size-4 text-muted-foreground shrink-0" />
-                {t("view.findRoute")}
-              </button>
-            )}
-            {onToggleComplete && (
-              <button
-                type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
-                onClick={() => {
-                  onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="size-4 text-green-500 shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
+        <SessionActionMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onClose={() => setContextMenu(null)}
+          items={([
+            onSessionClick && {
+              key: "view",
+              icon: <Eye />,
+              label: t("calendar.viewSession"),
+              onSelect: () =>
+                onSessionClick(
+                  contextMenu.weekNumber,
+                  contextMenu.sessionIndex,
+                  contextMenu.workoutId,
+                ),
+            },
+            onFindRoute && {
+              key: "route",
+              icon: <RouteIcon />,
+              label: t("view.findRoute"),
+              onSelect: () => onFindRoute(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
+            onToggleComplete && {
+              key: "done",
+              icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12l5 5 9-9" />
                 </svg>
-                {t("completion.toggleDone")}
-              </button>
-            )}
-            {onRedraw && isRedrawable(contextMenu.workoutId) && !contextSessionLocked && (
-              <button
-                type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
-                onClick={() => {
-                  onRedraw(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                <Dices className="size-4 text-muted-foreground shrink-0" />
-                {t("library:weekly.slot.reroll")}
-              </button>
-            )}
-            {onToggleLock && (
-              <button
-                type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
-                onClick={() => {
-                  onToggleLock(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                {contextSessionLocked ? (
-                  <LockOpen className="size-4 text-muted-foreground shrink-0" />
-                ) : (
-                  <Lock className="size-4 text-muted-foreground shrink-0" />
-                )}
-                {contextSessionLocked
-                  ? t("library:weekly.slot.unlock")
-                  : t("library:weekly.slot.lock")}
-              </button>
-            )}
-            {onSessionDelete && (
-              <button
-                type="button"
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors text-left"
-                onClick={() => {
-                  onSessionDelete(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                <Trash2 className="size-4 shrink-0" />
-                {t("calendar.deleteSession")}
-              </button>
-            )}
-          </div>
-        </div>
+              ),
+              label: t("completion.toggleDone"),
+              onSelect: () => onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
+            onRedraw &&
+              isRedrawable(contextMenu.workoutId) &&
+              !contextSessionLocked && {
+                key: "redraw",
+                icon: <Dices />,
+                label: t("library:weekly.slot.reroll"),
+                onSelect: () => onRedraw(contextMenu.weekNumber, contextMenu.sessionIndex),
+              },
+            onToggleLock && {
+              key: "lock",
+              icon: contextSessionLocked ? <LockOpen /> : <Lock />,
+              label: contextSessionLocked
+                ? t("library:weekly.slot.unlock")
+                : t("library:weekly.slot.lock"),
+              onSelect: () => onToggleLock(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
+            onSessionDelete && {
+              key: "delete",
+              icon: <Trash2 />,
+              label: t("calendar.deleteSession"),
+              variant: "destructive" as const,
+              onSelect: () => onSessionDelete(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
+          ] as (SessionActionMenuItem | false | undefined)[]).filter(
+            (item): item is SessionActionMenuItem => Boolean(item),
+          )}
+        />
       )}
     </>
   );
@@ -980,7 +922,7 @@ const DayCell = memo(function DayCell({
   const pickLang = usePickLang();
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
   // While the draw animation runs, this day shows the spinning card instead of
-  // its own content — same cell, same position, so nothing can drift.
+  // its own content, same cell, same position, so nothing can drift.
   const scanContent = renderScanCell?.(dayIndex) ?? null;
   const isDropHere = dropTarget?.weekNumber === selectedWeek && dropTarget?.day === dayIndex;
 
@@ -990,45 +932,38 @@ const DayCell = memo(function DayCell({
       onDragOver={(e) => onDragOver(e, selectedWeek, dayIndex)}
       onDragLeave={onDragLeave}
       onDrop={(e) => onDrop(e, selectedWeek, dayIndex)}
-      className={cn(
-        "rounded-lg bg-secondary/30 p-1.5 transition-colors",
-        isDesktop ? "min-h-[120px]" : (singleWeek ? "min-h-[120px]" : "min-h-[80px]"),
-        isDropHere && "ring-2 ring-primary/50 bg-primary/5",
-        isBlockedDay && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
-      )}
+      className="zn-planweek__day"
+      data-today={isToday || undefined}
+      aria-current={isToday ? "date" : undefined}
+      data-desktop={isDesktop || undefined}
+      data-single-week={singleWeek || undefined}
+      data-drop={isDropHere || undefined}
+      data-blocked={isBlockedDay || undefined}
     >
       {isBlockedDay && (
-        <span className="text-[8px] font-medium text-muted-foreground/70 block text-center leading-none mb-0.5">
+        <span className="zn-planweek__blocked-label">
           {t("unavailability.blocked")}
         </span>
       )}
-      <span
-        className={cn(
-          "font-semibold text-muted-foreground block",
-          isDesktop ? "text-xs" : "text-[10px]",
-          dayOfMonth != null ? "mb-0" : "mb-1",
+      {/* Le jour et son quantième forment une seule colonne quand la journée
+          devient une ligne (sous 640px) ; au-dessus, `display: contents`
+          rend ce div transparent et les deux spans restent empilés comme
+          avant. */}
+      <div className="zn-planweek__dayhead">
+        <span className="zn-planweek__daylabel">{dayLabel}</span>
+        {dayOfMonth != null && (
+          <span
+            className="zn-planweek__date"
+            data-today={isToday || undefined}
+            data-month-label={monthLabel ? "true" : undefined}
+          >
+            {monthLabel ? `${dayOfMonth} ${monthLabel}` : dayOfMonth}
+          </span>
         )}
-      >
-        {dayLabel}
-      </span>
-      {dayOfMonth != null && (
-        <span className={cn(
-          "text-[10px] tabular-nums block text-center mb-1",
-          isToday
-            ? "font-bold text-primary"
-            : monthLabel
-              ? "font-semibold text-primary/70"
-              : "text-muted-foreground/60",
-        )}>
-          {monthLabel ? `${dayOfMonth} ${monthLabel}` : dayOfMonth}
-        </span>
-      )}
+      </div>
 
       {scanContent && (
-        <div
-          className="overflow-hidden rounded-lg bg-background/85 backdrop-blur-sm"
-          aria-hidden="true"
-        >
+        <div className="zn-planweek__scan" aria-hidden="true">
           {scanContent}
         </div>
       )}
@@ -1038,22 +973,17 @@ const DayCell = memo(function DayCell({
           <button
             type="button"
             onClick={() => onAddToDay(selectedWeek, dayIndex)}
-            className={cn(
-              "group/rest w-full rounded bg-card/50 border border-dashed border-muted-foreground/30 flex flex-col items-center justify-center gap-0.5 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
-              isDesktop ? "p-4" : "p-3",
-            )}
+            className="zn-planweek__add"
           >
             {singleWeek && (
-              <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground/50 transition-colors group-hover/rest:text-primary">
+              <span className="zn-planweek__add-kind">
                 {t("library:weekly.kinds.rest")}
               </span>
             )}
-            <span className="text-sm font-medium">+</span>
+            <span className="zn-planweek__add-plus">+</span>
           </button>
         ) : (
-          <span className="text-[10px] text-muted-foreground/30 block text-center mt-4">
-            ---
-          </span>
+          <span className="zn-planweek__empty">---</span>
         )
       ) : null}
 
@@ -1099,56 +1029,45 @@ const DayCell = memo(function DayCell({
                   }
             }
             style={isSpecialSession ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
-            className={cn(
-              !isSpecialSession && "cursor-grab active:cursor-grabbing",
-              isDragging && "opacity-40",
-            )}
+            className={isSpecialSession ? undefined : "zn-plan-drag"}
+            data-dragging={isDragging || undefined}
           >
             <div
-                    className={cn(
-                      "rounded mb-1 relative group",
-                      isDesktop ? "p-2" : "p-1.5",
-                isIntermediateRace
-                  ? "bg-orange-50 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700"
-                  : isStrength
-                    ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700"
-                    : "bg-card border border-border/50",
-                // Reserve room for the always-visible padlock.
-                session.locked && "ring-1 ring-primary/50 border-primary/50 pr-5",
-              )}
+              className="zn-sess"
+              data-density="card"
+              data-kind={isRaceDay ? "race" : isIntermediateRace ? "intermediate" : undefined}
+              data-status={isSpecialSession ? undefined : session.status}
+              data-unzoned={isSpecialSession || isZoned(session.sessionType) ? undefined : "true"}
+              data-locked={session.locked || undefined}
             >
               {isRaceDay ? (
-                <div className="text-center py-1">
-                  <Flag className="size-3.5 text-primary mx-auto" />
-                  <span className="text-[10px] font-bold text-primary block">
-                    {t("calendar.race")}
-                  </span>
-                </div>
+                <>
+                  <Flag className="zn-sess__flag" />
+                  <span className="zn-sess__race-label">{t("calendar.race")}</span>
+                </>
               ) : isIntermediateRace ? (
-                <div className="text-center py-1">
-                  <Flag className="size-3.5 text-orange-500 mx-auto" />
-                  <span className="text-[10px] font-bold text-orange-700 dark:text-orange-300 block">
+                <>
+                  <Flag className="zn-sess__flag" />
+                  <span className="zn-sess__race-label">
                     {weekData?.intermediateRace?.raceDistance
                       ? pickLang(RACE_DISTANCE_META[weekData.intermediateRace.raceDistance], "label")
                       : t("intermediateGoals.raceDayLabel")}
                   </span>
                   {weekData?.intermediateRace?.priority && (
-                    <span className={cn(
-                      "text-[8px] font-bold leading-tight block",
-                      weekData.intermediateRace.priority === "A" && "text-red-600 dark:text-red-400",
-                      weekData.intermediateRace.priority === "B" && "text-orange-600 dark:text-orange-400",
-                      weekData.intermediateRace.priority === "C" && "text-yellow-600 dark:text-yellow-400",
-                    )}>
+                    <span
+                      className="zn-sess__priority"
+                      data-priority={weekData.intermediateRace.priority}
+                    >
                       {t(`intermediateGoals.badge.${weekData.intermediateRace.priority}`)}
                     </span>
                   )}
-                </div>
+                </>
               ) : (
                 <>
                   {/* Card actions, top-right. Hover-only on desktop; the lock
                       stays visible once set. Touch users reach them through the
                       long-press context menu. */}
-                  <div className="absolute right-1.5 top-1.5 z-10 flex items-center gap-1">
+                  <div className="zn-sess__actions">
                     {onFindRoute && (
                       <button
                         type="button"
@@ -1156,10 +1075,10 @@ const DayCell = memo(function DayCell({
                           e.stopPropagation();
                           onFindRoute(selectedWeek, originalIndex);
                         }}
-                        className="hidden rounded text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
+                        className="zn-sess__action"
                         title={t("view.findRoute")}
                       >
-                        <RouteIcon className="size-3.5" />
+                        <RouteIcon />
                       </button>
                     )}
                     {onRedraw && isRedrawable(session.workoutId) && !session.locked && (
@@ -1169,11 +1088,11 @@ const DayCell = memo(function DayCell({
                           e.stopPropagation();
                           onRedraw(selectedWeek, originalIndex);
                         }}
-                        className="hidden rounded text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
+                        className="zn-sess__action"
                         title={t("library:weekly.slot.reroll")}
                         aria-label={t("library:weekly.slot.reroll")}
                       >
-                        <Dices className="size-3.5" />
+                        <Dices />
                       </button>
                     )}
                     {onSessionDelete && (
@@ -1183,11 +1102,12 @@ const DayCell = memo(function DayCell({
                           e.stopPropagation();
                           onSessionDelete(selectedWeek, originalIndex);
                         }}
-                        className="hidden rounded text-muted-foreground transition-colors hover:text-destructive md:group-hover:block"
+                        className="zn-sess__action"
+                        data-variant="destructive"
                         title={t("calendar.deleteSession")}
                         aria-label={t("calendar.deleteSession")}
                       >
-                        <Trash2 className="size-3.5" />
+                        <Trash2 />
                       </button>
                     )}
                     {onToggleLock && (
@@ -1198,12 +1118,7 @@ const DayCell = memo(function DayCell({
                           onToggleLock(selectedWeek, originalIndex);
                         }}
                         aria-pressed={session.locked === true}
-                        className={cn(
-                          "rounded transition-colors hover:text-primary",
-                          session.locked
-                            ? "block text-primary"
-                            : "hidden text-muted-foreground md:group-hover:block",
-                        )}
+                        className="zn-sess__action"
                         title={
                           session.locked
                             ? t("library:weekly.slot.lockedHint")
@@ -1215,15 +1130,11 @@ const DayCell = memo(function DayCell({
                             : t("library:weekly.slot.lock")
                         }
                       >
-                        {session.locked ? (
-                          <Lock className="size-3.5" />
-                        ) : (
-                          <LockOpen className="size-3.5" />
-                        )}
+                        {session.locked ? <Lock /> : <LockOpen />}
                       </button>
                     )}
                   </div>
-                  <div className="flex items-center gap-1 mb-0.5">
+                  <div className="zn-sess__head">
                     {onToggleComplete && (
                       <button
                         type="button"
@@ -1232,16 +1143,8 @@ const DayCell = memo(function DayCell({
                           e.stopPropagation();
                           onToggleComplete(selectedWeek, originalIndex);
                         }}
-                        className={cn(
-                          "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors",
-                          session.status === "completed"
-                            ? "bg-green-500 border-green-500 text-white"
-                            : session.status === "modified"
-                              ? "bg-blue-500 border-blue-500 text-white"
-                              : session.status === "skipped"
-                                ? "bg-muted border-muted-foreground/30"
-                                : "border-muted-foreground/40 hover:border-primary",
-                        )}
+                        className="zn-sess__check"
+                        data-status={session.status}
                         title={
                           session.status === "completed"
                             ? t("completion.completed")
@@ -1253,64 +1156,47 @@ const DayCell = memo(function DayCell({
                         }
                       >
                         {session.status === "completed" && (
-                          <svg
-                            viewBox="0 0 12 12"
-                            className="size-2.5"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
+                          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M2 6l3 3 5-5" />
                           </svg>
                         )}
                         {session.status === "modified" && (
-                          <svg
-                            viewBox="0 0 12 12"
-                            className="size-2.5"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
+                          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
                           </svg>
                         )}
                         {session.status === "skipped" && (
-                          <svg
-                            viewBox="0 0 12 12"
-                            className="size-2"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
+                          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M3 3l6 6M9 3l-6 6" />
                           </svg>
                         )}
                       </button>
                     )}
                     {isStrength ? (
-                      <Dumbbell className="size-3 text-amber-600 dark:text-amber-400 shrink-0" />
+                      <Dumbbell className="zn-sess__icon" />
                     ) : (
                       <span
-                        className="size-2 rounded-full shrink-0"
-                        style={{
-                          backgroundColor: sessionColor(session.sessionType),
-                        }}
+                        className="zn-sess__dot"
+                        style={
+                          isZoned(session.sessionType)
+                            ? ({ "--zn-dot": sessionColor(session.sessionType) } as React.CSSProperties)
+                            : undefined
+                        }
                       />
                     )}
-                    {/* The zone label is the dot's legend — colour alone carries
-                        no meaning for a first-time reader. */}
+                    {/* The zone label is the dot's legend, the ink ramp orders
+                        the zones, it does not name them. */}
                     {meta?.zone != null && (
                       <span
-                        className="text-[9px] font-semibold leading-none tabular-nums shrink-0"
-                        style={{ color: `var(--zone-${meta.zone}-text)` }}
+                        className="zn-sess__zone"
                         title={t("library:weekly.card.zone", { zone: meta.zone })}
                       >
                         Z{meta.zone}
                       </span>
                     )}
                     {session.isKeySession && (
-                      <span className="shrink-0" title={t("view.keySession")}>
-                        <Star filled className="size-2.5 text-yellow-500" />
+                      <span className="zn-sess__key" title={t("view.keySession")}>
+                        <Star filled />
                       </span>
                     )}
                   </div>
@@ -1330,37 +1216,30 @@ const DayCell = memo(function DayCell({
                           }
                         : undefined
                     }
-                    className={cn(
-                      // No `block` here: it would override the line-clamp's own
-                      // display and let long names run past their clamp. The
-                      // single-week board has room for a third line.
-                      "text-[10px] leading-tight font-medium",
-                      singleWeek ? "line-clamp-3" : "line-clamp-2",
-                      isDesktop && "text-[11px]",
-                      session.status === "skipped" && "line-through text-muted-foreground",
-                      isStrength && session.status !== "skipped" && "text-amber-900 dark:text-amber-100",
-                      onSessionClick && "cursor-pointer hover:text-primary transition-colors",
-                    )}
+                    className="zn-sess__name"
+                    data-clickable={onSessionClick ? "true" : undefined}
+                    /* The single-week board has room for a third line. */
+                    style={{ "--lines": singleWeek ? 3 : 2 } as React.CSSProperties}
                     title={sessionName}
                   >
                     {sessionName}
                   </span>
                   {session.estimatedDurationMin > 0 &&
                     !session.workoutId.startsWith("__activity_") && (
-                      <span className="text-[9px] text-muted-foreground flex items-center gap-0.5 mt-0.5 overflow-hidden">
-                        <Clock className="size-2.5 shrink-0" />
-                        <span className="truncate">
+                      <span className="zn-sess__facts">
+                        <Clock />
+                        <span className="zn-sess__facts-text">
                           {formatDurationMinutes(session.estimatedDurationMin)}
                           {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
-                            <span className="hidden md:inline"> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
+                            <span className="zn-sess__fact-wide"> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
                           )}
                           {meta?.tss != null && meta.tss > 0 && (
-                            <span className="hidden md:inline"> · {meta.tss} TSS</span>
+                            <span className="zn-sess__fact-wide"> · {meta.tss} TSS</span>
+                          )}
+                          {session.rpe && (
+                            <span className="zn-sess__fact-wide"> · RPE {session.rpe}</span>
                           )}
                         </span>
-                        {session.rpe && (
-                          <span className="ml-0.5 text-[9px] font-medium text-amber-600 shrink-0 hidden md:inline">RPE {session.rpe}</span>
-                        )}
                       </span>
                     )}
                 </>
@@ -1374,11 +1253,10 @@ const DayCell = memo(function DayCell({
         <button
           type="button"
           onClick={() => onAddToDay(selectedWeek, dayIndex)}
-          className={cn(
-            "w-full mt-1 rounded bg-card/50 border border-dashed border-muted-foreground/30 p-1.5 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
-          )}
+          className="zn-planweek__add"
+          data-slot="tail"
         >
-          <span className="text-sm font-medium">+</span>
+          <span className="zn-planweek__add-plus">+</span>
         </button>
       )}
     </div>

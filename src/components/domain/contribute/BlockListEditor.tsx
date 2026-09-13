@@ -1,3 +1,4 @@
+import { type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Plus } from "@/components/icons";
@@ -51,19 +52,15 @@ export function BlockListEditor({ blocks, onChange, label }: BlockListEditorProp
   };
 
   return (
-    <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-        {label}
-      </h3>
+    <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+      <h3 className="zn-kicker zn-kicker--inline">{label}</h3>
 
       {blocks.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-muted-foreground/30 p-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            {t("blocks.emptyState")}
-          </p>
+        <div className="zn-contrib-slot">
+          <p className="zn-body zn-body--sm zn-muted">{t("blocks.emptyState")}</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
           {blocks.map((block, index) => (
             <BlockEditor
               key={index}
@@ -85,9 +82,9 @@ export function BlockListEditor({ blocks, onChange, label }: BlockListEditorProp
         variant="outline"
         size="sm"
         onClick={handleAdd}
-        className="w-full"
+        className="zn-contrib-add-full"
       >
-        <Plus className="size-4" />
+        <Plus />
         {t("blocks.addBlock")}
       </Button>
     </div>

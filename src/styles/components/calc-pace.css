@@ -1,0 +1,257 @@
+/* The seven pace and conversion calculators, splits, age-graded, race
+ * equivalence, VMA from a chrono, treadmill, pace converter, pace table.
+ *
+ * The kit does not mock these screens, so the arrangement is unchanged: this
+ * file only repaints it, and adds the one frame all seven share.
+ *
+ * THE FRAME. Every one of these tools is the same sentence: what you fill in,
+ * and what prints under it. `.zn-tool` is that sentence, composed onto
+ * `.zn-stack`, one 672px column, centred, exactly the arrangement these
+ * screens had before the repaint. The remaining calculators
+ * (/calculators/ftp, /calculators/css, /calculators/what-if) can adopt it
+ * as-is, nothing in here knows about pace.
+ *
+ * WHAT THIS FILE DOES NOT REDECLARE. The head band, the lede, the panel, the
+ * legend band, the h:m:s row and the numeric table column already exist in
+ * numbers.css as `.zn-num__head`, `.zn-num__lede`, `.zn-num__panel`,
+ * `.zn-num__legend`, `.zn-num__time` and `.zn-num__num`, these seven screens
+ * are more rooms of the same "mes chiffres" door as /calculators/zones and
+ * /calculators/allures, and they use those classes verbatim. The field
+ * vocabulary is workout.css's `.zn-calc__field` / `.zn-calc__label` /
+ * `.zn-calc__error`, and the small number entry is `.zn-numfield`. The tables
+ * are the ported ResponsiveTable, the figures are StatBlock, the zone chips
+ * are ZoneBadge, and the layout verbs come from _layout.css.
+ *
+ * ZONE FILLS. Five of the seven paint a zone. The two whose zone column is
+ * there from the first paint, the pace table, the equivalence prediction,
+ * carry the ZoneScale legend once, on the `.zn-num__legend` band (the two
+ * zone pages, /calculators/zones and /my-zones, no longer use that band: the
+ * ZoneFigures plate is their legend, zone-figures.css); the VMA preview
+ * carries it inside its result instead, since a band appearing above the
+ * form as the chrono becomes valid would push the field being typed in down
+ * the page. The two that show a
+ * single chip (converter, treadmill) pass `showLabel` to ZoneBadge instead, so
+ * the one zone on screen is named where it is painted rather than through a
+ * six-item legend nothing else on the page needs.
+ *
+ * No class name is ever interpolated here: a zone is a `data-zone` attribute on
+ * ZoneBadge, which is what the ported component already emits.
+ */
+
+/* ── the frame ────────────────────────────────────────────────────────── */
+
+/* La bande de travail d'un outil n'a plus de règle propre ici : sa frontière
+   avec la tête est payée par les deux voisines (26 px sous la tête, la moitié
+   de --gap-section sur le panneau), et c'est tout l'écart. Ce sélecteur portait
+   un --gap-section ENTIER par-dessus ces 58 px, mesuré à 106 px au rendu, soit
+   plus du double de l'écart que le token promet.
+
+   Le reset d'adjacence qui suivait est parti avec le filet : il n'existait que
+   pour éviter que la bande de légende et celle-ci n'impriment deux filets de
+   1,5 px côte à côte, soit un trait de 3 px. Sans filet, rien à annuler. */
+
+/* Form first, result under it, in the 672px reading column these screens have
+   always used. The band itself stays the full width of the page so the ink
+   rule above it still runs from one edge to the other. */
+.zn-stack.zn-tool {
+  --gap: var(--sp-17);
+}
+
+.zn-stack.zn-tool > * {
+  inline-size: 100%;
+  max-inline-size: 672px;
+  margin-inline: auto;
+}
+
+/* A control that fills its field. `.zn-calc__field` starts its children at the
+   inline edge and select.css deliberately declares no width on the trigger, so
+   a select that must not shrink to its longest option says so here. */
+.zn-tool__wide {
+  inline-size: 100%;
+}
+
+/* A row of figures, one, two or three StatBlocks on the same baseline. */
+.zn-tool__figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8) var(--sp-15);
+}
+
+/* ── entry ────────────────────────────────────────────────────────────── */
+
+/* The converter's full-width entry: one big mono figure in its own frame with
+   its unit printed inside it. `.zn-numfield` is the compact version of the
+   same idea and stays in use wherever the number is a parameter rather than
+   the screen's subject. */
+.zn-tool__entry {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-4);
+  padding: var(--sp-6) var(--sp-8);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-tool__entry:focus-within {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-tool__entry-input {
+  flex: 1;
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: end;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The frame above already draws the focus ring for the whole field. */
+.zn-tool__entry-input:focus-visible {
+  outline: none;
+}
+
+.zn-tool__entry-input::placeholder {
+  color: var(--text-faint);
+}
+
+.zn-tool__entry-unit {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+@media (pointer: coarse) {
+  .zn-tool__entry {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── facts ────────────────────────────────────────────────────────────── */
+
+/* A short definition list under a result: what it is on the left, the figure
+   on the right, one hairline between each pair. The term stays sentence case
+   in text type, several of them run past four words, and a five-word
+   UPPERCASE mono label stops being a label. The figure is always mono. */
+.zn-tool__facts {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  column-gap: var(--sp-8);
+  margin: 0;
+}
+
+.zn-tool__facts > dt,
+.zn-tool__facts > dd {
+  padding-block: var(--sp-6);
+  border-block-start: var(--border-divider);
+}
+
+.zn-tool__facts > dt:first-of-type,
+.zn-tool__facts > dd:first-of-type {
+  border-block-start: 0;
+}
+
+.zn-tool__facts > dt {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-tool__facts > dd {
+  margin: 0;
+  text-align: end;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* ── table markers ────────────────────────────────────────────────────── */
+
+/* One row of a long reference table singled out, the pace closest to your
+   VMA. The 2.5px vermillon frame, the system's "this one" marker, drawn on the
+   cells because a collapsed table cannot own a border on the row. The
+   selectors name the tags as well as the classes: responsive-table.css already
+   rules `.zn-table__row + .zn-table__row > .zn-table__td`, and the marker has
+   to outrank it whatever order the two files are imported in. */
+tr.zn-table__row.zn-tool__mark > td.zn-table__td {
+  border-block: var(--border-heavy);
+  font-weight: var(--fw-semibold);
+}
+
+tr.zn-table__row.zn-tool__mark > td.zn-table__td:first-child {
+  border-inline-start: var(--border-heavy);
+}
+
+tr.zn-table__row.zn-tool__mark > td.zn-table__td:last-child {
+  border-inline-end: var(--border-heavy);
+}
+
+/* The same row in the mobile card view. */
+.zn-table__card.zn-tool__mark {
+  border: var(--border-heavy);
+}
+
+/* The last line of the split table: the total. A rule above it, heavier type,
+   no fill, it is a sum, not a selection. */
+tr.zn-table__row.zn-tool__total > td.zn-table__td {
+  border-block-start: var(--border-rule);
+  font-weight: var(--fw-semibold);
+}
+
+.zn-table__card.zn-tool__total {
+  background: var(--surface-band);
+}
+
+/* ── export sheet ─────────────────────────────────────────────────────── */
+
+/* The split table as it leaves for the PNG: an opaque card, since the export
+   flattens whatever is behind it. Padding rather than the Card component's
+   own, because the table inside draws its own edges. */
+.zn-tool__sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* ── notes ────────────────────────────────────────────────────────────── */
+
+/* The sentence under a result that says what the number is worth, a formula,
+   a citation, the reason a prediction drifts over distance. Prose stops being
+   readable past ~70 characters. */
+.zn-tool__note {
+  display: flex;
+  gap: var(--sp-6);
+  max-inline-size: 68ch;
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+.zn-tool__note svg {
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+  margin-block-start: var(--sp-2);
+  color: var(--text-faint);
+}

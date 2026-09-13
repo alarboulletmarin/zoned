@@ -3,7 +3,7 @@
 
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { BookOpen, Dumbbell, Book, Clock } from "@/components/icons";
+import { BookOpen, Dumbbell, Book } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { WorkoutCardCompact } from "@/components/domain/WorkoutCard";
@@ -22,24 +22,17 @@ interface RelatedContentProps {
 }
 
 function ArticleCardCompact({ article }: { article: ArticleMeta }) {
+  const { t } = useTranslation("common");
   const pick = usePickLang();
 
   return (
-    <Link
-      to={`/learn/${article.slug}`}
-      className="group flex items-start gap-3 rounded-lg border p-3 hover:bg-accent/50 transition-colors"
-    >
-      <BookOpen className="size-4 text-muted-foreground mt-0.5 shrink-0" />
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium group-hover:text-primary transition-colors line-clamp-1">
-          {pick(article, "title")}
-        </p>
-        <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-xs text-muted-foreground">
-            <Clock className="size-3 inline mr-1" />
-            {article.readTime} min
-          </span>
-        </div>
+    <Link to={`/learn/${article.slug}`} className="zn-related__row">
+      <BookOpen className="zn-related__icon" />
+      <div className="zn-fill">
+        <p className="zn-related__name">{pick(article, "title")}</p>
+        <span className="zn-kicker">
+          {article.readTime} {t("units.minutes")}
+        </span>
       </div>
     </Link>
   );
@@ -51,12 +44,7 @@ function GlossaryChip({ term }: { term: GlossaryTerm }) {
 
   return (
     <Link to={`/glossary/${term.id}`}>
-      <Badge
-        variant="outline"
-        className="hover:bg-accent transition-colors cursor-pointer"
-      >
-        {label}
-      </Badge>
+      <Badge variant="outline">{label}</Badge>
     </Link>
   );
 }
@@ -75,12 +63,12 @@ export function RelatedContent({ source, className, showTitle = true }: RelatedC
       <>
         {/* Articles */}
         {articles.length > 0 && (
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
-              <BookOpen className="size-3.5" />
+          <div className="zn-stack">
+            <h3 className="zn-row zn-kicker" style={{ "--gap": "var(--sp-3)" } as React.CSSProperties}>
+              <BookOpen className="zn-related__icon" />
               {t("relatedContent.articles")}
             </h3>
-            <div className="space-y-2">
+            <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
               {articles.map((article) => (
                 <ArticleCardCompact key={article.id} article={article} />
               ))}
@@ -90,12 +78,12 @@ export function RelatedContent({ source, className, showTitle = true }: RelatedC
 
         {/* Workouts */}
         {workouts.length > 0 && (
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
-              <Dumbbell className="size-3.5" />
+          <div className="zn-stack">
+            <h3 className="zn-row zn-kicker" style={{ "--gap": "var(--sp-3)" } as React.CSSProperties}>
+              <Dumbbell className="zn-related__icon" />
               {t("relatedContent.workouts")}
             </h3>
-            <div className="space-y-2">
+            <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
               {workouts.map((workout) => (
                 <WorkoutCardCompact key={workout.id} workout={workout} />
               ))}
@@ -105,12 +93,12 @@ export function RelatedContent({ source, className, showTitle = true }: RelatedC
 
         {/* Glossary */}
         {glossaryTerms.length > 0 && (
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
-              <Book className="size-3.5" />
+          <div className="zn-stack">
+            <h3 className="zn-row zn-kicker" style={{ "--gap": "var(--sp-3)" } as React.CSSProperties}>
+              <Book className="zn-related__icon" />
               {t("relatedContent.glossary")}
             </h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="zn-cluster">
               {glossaryTerms.map((term) => (
                 <GlossaryChip key={term.id} term={term} />
               ))}
@@ -124,17 +112,27 @@ export function RelatedContent({ source, className, showTitle = true }: RelatedC
   // Inside a titled Section the card and its heading are pure repetition, so
   // the caller turns them off and the groups render bare.
   if (!showTitle) {
-    return <div className={cn("space-y-6", className)}>{renderGroups()}</div>;
+    return (
+      <div
+        className={cn("zn-stack", className)}
+        style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
+      >
+        {renderGroups()}
+      </div>
+    );
   }
 
   return (
-    <Card className={cn("rounded-xl", className)}>
+    <Card className={className}>
       <CardHeader>
-        <CardTitle className="text-lg flex items-center gap-2">
-          {t("relatedContent.title")}
-        </CardTitle>
+        <CardTitle>{t("relatedContent.title")}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">{renderGroups()}</CardContent>
+      <CardContent
+        className="zn-stack"
+        style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
+      >
+        {renderGroups()}
+      </CardContent>
     </Card>
   );
 }

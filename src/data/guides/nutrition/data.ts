@@ -443,7 +443,7 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "Le mythe de la « fenêtre de 30 minutes » a été largement démonté (Aragon & Schoenfeld 2013, méta-analyse Margolis 2021). La vraie fenêtre est de 4-6 heures pour reconstituer le glycogène et 24-48 heures pour la réparation musculaire. La recharge rapide ne compte vraiment que si tu enchaînes une autre séance dans les 4 heures.",
+        text: "Le mythe de la fenêtre de 30 minutes a été largement démonté (Aragon & Schoenfeld 2013, méta-analyse Margolis 2021). La vraie fenêtre est de 4-6 heures pour reconstituer le glycogène et 24-48 heures pour la réparation musculaire. La recharge rapide ne compte vraiment que si tu enchaînes une autre séance dans les 4 heures.",
         textEn: "The 30-minute window myth has been largely debunked (Aragon & Schoenfeld 2013, Margolis 2021 meta-analysis). The real window is 4-6 hours for glycogen and 24-48 hours for muscle repair. Quick refill matters mainly if you have another session within 4 hours.",
       },
       {
@@ -485,8 +485,8 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Option rapide : lait chocolaté (validé scientifiquement, Pritchett 2012). 500 ml = ~50 g glucides + 16 g protéines. Note : le ratio « magique » 3:1 ou 4:1 est un mythe — l'effet vient des calories totales, pas du ratio (Margolis 2021).",
-            textEn: "Quick option: chocolate milk (scientifically validated, Pritchett 2012). 500 ml = ~50 g carbs + 16 g protein. Note: the 'magic' 3:1 or 4:1 ratio is a myth — the effect comes from total calories, not the ratio (Margolis 2021).",
+            text: "Option rapide : lait chocolaté (validé scientifiquement, Pritchett 2012). 500 ml = ~50 g glucides + 16 g protéines. Note : le ratio magique 3:1 ou 4:1 est un mythe, l'effet vient des calories totales, pas du ratio (Margolis 2021).",
+            textEn: "Quick option: chocolate milk (scientifically validated, Pritchett 2012). 500 ml = ~50 g carbs + 16 g protein. Note: the 'magic' 3:1 or 4:1 ratio is a myth, the effect comes from total calories, not the ratio (Margolis 2021).",
           },
           {
             text: "Option complète : banane + shaker protéine (30g whey) + poignée de bretzels salés.",

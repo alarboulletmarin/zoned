@@ -1,10 +1,10 @@
 /**
- * Adaptive Replanning — Adjust future weeks based on completion data
+ * Adaptive Replanning, Adjust future weeks based on completion data
  *
  * When users mark sessions as completed/skipped with RPE feedback,
  * this module adjusts future weeks to keep the plan on track.
  *
- * v2 — Multi-week sliding-window analysis with preview support.
+ * v2, Multi-week sliding-window analysis with preview support.
  *
  * Rules (evidence-based, mutually exclusive for the main rule):
  * 1. Acute fatigue: avgRpe > 8.5 current OR avgRpe > 8 on 2+ consecutive weeks
@@ -184,7 +184,7 @@ function buildSummary(changes: AutoChange[]): { summary: string; summaryEn: stri
 
   if (missedChanges.length > 0) {
     parts.push(`${missedChanges.length} séance(s) clé(s) manquée(s) à reprogrammer`);
-    partsEn.push(`${missedChanges.length} key session(s) missed — consider rescheduling`);
+    partsEn.push(`${missedChanges.length} key session(s) missed, consider rescheduling`);
   }
 
   return {

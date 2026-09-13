@@ -1,5 +1,5 @@
 /**
- * MoviePoster — 1080×1920. A24-minimalist movie-poster.
+ * MoviePoster, 1080×1920. A24-minimalist movie-poster.
  *
  * A huge colour block "image" area with the workout name as the dramatic
  * title at the bottom, plus pseudo-credits and a release line.
@@ -9,8 +9,7 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -68,7 +67,7 @@ export function MoviePoster({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer background="#0f172a" />
 
-      {/* Hero image area — gradient block with abstract noise */}
+      {/* Hero image area, gradient block with abstract noise */}
       <div
         style={{
           position: "absolute",
@@ -120,16 +119,7 @@ export function MoviePoster({ workout, transparent }: ShareTemplateProps) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <Logo style={{ width: 72, height: 36 }} />
-          <span
-            style={{
-              fontSize: 28,
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            ZONED
-          </span>
+          <BrandMark height={30} />
         </div>
         <span
           style={{

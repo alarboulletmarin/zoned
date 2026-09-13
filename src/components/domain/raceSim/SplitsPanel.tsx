@@ -11,7 +11,6 @@ import {
 } from "@/lib/units";
 import type { UnitSystem } from "@/types/settings";
 import type { SplitStrategy } from "@/lib/splits";
-import { cn } from "@/lib/utils";
 import { Stat } from "./RaceSimSection";
 import { PaceCurve } from "./PaceCurve";
 
@@ -55,7 +54,7 @@ export function SplitsPanel({
   // can no longer sit on top of the first rows.
   const scrolls = plan.splits.length > 12;
 
-  // Distance marker at the end of each split — what you actually read off the
+  // Distance marker at the end of each split, what you actually read off the
   // course signage, rather than "1 km" repeated on every row.
   let running = 0;
   const markers = plan.splits.map((s) => {
@@ -64,16 +63,17 @@ export function SplitsPanel({
   });
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-end gap-x-8 gap-y-3">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}
+    >
+      <div className="zn-rs-stats">
         <Stat
           label={t("labels.targetPace")}
           value={
             <>
               {formatPaceDisplay(avgPace)}
-              <span className="text-sm font-normal text-muted-foreground">
-                {paceUnit}
-              </span>
+              <span className="zn-rs-stat__unit">{paceUnit}</span>
             </>
           }
         />
@@ -83,7 +83,7 @@ export function SplitsPanel({
         />
       </div>
 
-      <p className="text-sm text-muted-foreground">
+      <p className="zn-rs-note zn-rs-note--muted">
         {isEven
           ? t("splits.evenSummary", {
               pace: `${formatPaceDisplay(avgPace)}${paceUnit}`,
@@ -100,41 +100,32 @@ export function SplitsPanel({
         type="button"
         onClick={() => setShowTable((v) => !v)}
         aria-expanded={showTable}
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="zn-rs-splits__toggle"
       >
-        <ChevronDown
-          className={cn("size-4 transition-transform", showTable && "rotate-180")}
-        />
+        <ChevronDown size={15} />
         {showTable ? t("splits.hideTable") : t("splits.showTable")}
       </button>
 
       {showTable && (
-        <div
-          className={cn(
-            "overflow-x-auto rounded-lg border",
-            scrolls && "max-h-[26rem] overflow-y-auto",
-          )}
-        >
-          <table className="w-full text-sm">
+        <div className="zn-rs-splits__frame" data-scrolls={scrolls || undefined}>
+          <table className="zn-rs-splits__table">
             <thead
-              className={cn(
-                "bg-card text-left",
-                scrolls && "sticky top-0 z-10 shadow-[0_1px_0_var(--border)]",
-              )}
+              className="zn-rs-splits__head"
+              data-sticky={scrolls || undefined}
             >
-              <tr className="border-b">
-                <th scope="col" className="px-3 py-2 font-medium">
+              <tr>
+                <th scope="col" className="zn-rs-splits__th">
                   {distUnit}
                 </th>
-                <th scope="col" className="px-3 py-2 text-right font-medium">
+                <th scope="col" className="zn-rs-splits__th" data-align="end">
                   {t("labels.split")}
                 </th>
                 {showPaceColumn && (
-                  <th scope="col" className="px-3 py-2 text-right font-medium">
+                  <th scope="col" className="zn-rs-splits__th" data-align="end">
                     {t("labels.pace")}
                   </th>
                 )}
-                <th scope="col" className="px-3 py-2 text-right font-medium">
+                <th scope="col" className="zn-rs-splits__th" data-align="end">
                   {t("labels.cumulative")}
                 </th>
               </tr>
@@ -143,22 +134,22 @@ export function SplitsPanel({
               {plan.splits.map((split, i) => {
                 const marker = markers[i];
                 return (
-                  <tr
-                    key={split.index}
-                    className="border-b last:border-b-0 hover:bg-muted/40"
-                  >
-                    <td className="px-3 py-2 tabular-nums text-muted-foreground">
+                  <tr key={split.index} className="zn-rs-splits__row">
+                    <td className="zn-rs-splits__td zn-rs-splits__td--marker">
                       {marker.toFixed(Number.isInteger(marker) ? 0 : 1)}
                     </td>
-                    <td className="px-3 py-2 text-right tabular-nums">
+                    <td className="zn-rs-splits__td" data-align="end">
                       {formatSplitTime(split.splitTimeSeconds)}
                     </td>
                     {showPaceColumn && (
-                      <td className="px-3 py-2 text-right tabular-nums">
+                      <td className="zn-rs-splits__td" data-align="end">
                         {formatPaceDisplay(convertPace(split.paceMinPerKm, unit))}
                       </td>
                     )}
-                    <td className="px-3 py-2 text-right font-medium tabular-nums">
+                    <td
+                      className="zn-rs-splits__td zn-rs-splits__td--total"
+                      data-align="end"
+                    >
                       {formatSplitTime(split.cumulativeTimeSeconds)}
                     </td>
                   </tr>

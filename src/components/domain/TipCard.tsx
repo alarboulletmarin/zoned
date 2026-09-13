@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Lightbulb, ChevronRight } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { Tip } from "@/data/tips";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
@@ -14,6 +12,11 @@ export interface TipCardProps {
   className?: string;
 }
 
+/**
+ * A contextual tip, at three densities: a line inside a paragraph
+ * (`inline`), a compact aside beside a session (`card`), a full-width strip
+ * (`banner`). Same anatomy throughout, ink lamp, the tip, the way out.
+ */
 export function TipCard({
   tip,
   variant = "card",
@@ -32,74 +35,27 @@ export function TipCard({
       ? `/glossary#${tip.relatedTermId}`
       : null;
 
-  if (variant === "inline") {
-    return (
-      <div className={cn("flex items-start gap-2 text-sm", className)}>
-        <Lightbulb className="size-4 text-amber-500 shrink-0 mt-0.5" />
-        <div className="flex-1">
-          <span className="text-muted-foreground"><GlossaryLinkedText text={text} /></span>
-          {hasLink && linkTo && (
-            <Link
-              to={linkTo}
-              className="ml-1 text-primary hover:underline inline-flex items-center"
-            >
-              {t("tips.learnMore")}
-              <ChevronRight className="size-3" />
-            </Link>
-          )}
-        </div>
-      </div>
-    );
-  }
+  const more = hasLink && linkTo && (
+    <Link to={linkTo} className="zn-clink" data-size="sm">
+      {t("tips.learnMore")}
+      <ChevronRight />
+    </Link>
+  );
 
-  if (variant === "banner") {
-    return (
-      <Card className={cn("bg-gradient-to-r from-amber-500/10 to-amber-400/5 border-amber-500/20", className)}>
-        <CardContent className="flex items-center gap-3 py-3 sm:py-4">
-          <div className="rounded-full bg-amber-500/10 p-1.5 sm:p-2 shrink-0">
-            <Lightbulb className="size-4 sm:size-5 text-amber-500" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm text-muted-foreground"><GlossaryLinkedText text={text} /></p>
-          </div>
-          {hasLink && linkTo && (
-            <Button variant="outline" size="sm" asChild className="shrink-0">
-              <Link to={linkTo}>
-                <span className="hidden sm:inline">{t("tips.learnMore")}</span>
-                <ChevronRight className="size-4 sm:ml-1" />
-              </Link>
-            </Button>
-          )}
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Default: card variant (used in workout detail)
   return (
-    <Card size="compact" className={cn("overflow-hidden", className)}>
-      <CardContent className="py-2.5">
-        <div className="flex items-start gap-2.5">
-          <div className="size-7 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
-            <Lightbulb className="size-3.5 text-amber-500" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-amber-600 dark:text-amber-400 mb-0.5">
-              {t("tips.title")}
-            </p>
-            <p className="text-sm text-muted-foreground"><GlossaryLinkedText text={text} /></p>
-            {hasLink && linkTo && (
-              <Link
-                to={linkTo}
-                className="text-xs text-primary hover:underline inline-flex items-center mt-1.5"
-              >
-                {t("tips.learnMore")}
-                <ChevronRight className="size-3" />
-              </Link>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className={cn("zn-tip", className)} data-variant={variant}>
+      <Lightbulb className="zn-tip__icon" />
+      <div className="zn-tip__body">
+        {variant === "card" && (
+          <span className="zn-kicker zn-kicker--inline">{t("tips.title")}</span>
+        )}
+        <p className="zn-tip__text">
+          <GlossaryLinkedText text={text} />
+          {/* Inline tips keep the way out on the same line as the sentence. */}
+          {variant === "inline" && more && <> {more}</>}
+        </p>
+        {variant !== "inline" && more}
+      </div>
+    </div>
   );
 }

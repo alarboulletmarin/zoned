@@ -21,7 +21,7 @@ export function useIdleAfterLoad(timeout = 2000): boolean {
       if (typeof requestIdleCallback === "function") {
         requestIdleCallback(onIdle, { timeout });
       } else {
-        // Safari: no requestIdleCallback — small fixed delay past `load`.
+        // Safari: no requestIdleCallback, small fixed delay past `load`.
         setTimeout(onIdle, 300);
       }
     };

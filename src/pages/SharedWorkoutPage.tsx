@@ -1,16 +1,19 @@
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowLeft, Clock, Share } from "@/components/icons";
+import { ArrowLeft } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { SessionTimeline } from "@/components/visualization/SessionTimeline";
+import { ZoneBar, toZoneBarBlocks } from "@/components/visualization/ZoneBar";
+import { ZoneScale } from "@/components/visualization/ZoneScale";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { decodeSharedWorkout, sharedWorkoutToTemplate } from "@/lib/share/workoutShare";
+import {
+  decodeSharedWorkout,
+  sharedWorkoutToTemplate,
+} from "@/lib/share/workoutShare";
 import {
   getStructuredWorkoutDurationMinutes,
   getWorkoutPhaseSteps,
@@ -20,16 +23,23 @@ import { saveCustomWorkout } from "@/lib/customWorkoutStorage";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import type { WorkoutPhaseKey } from "@/types";
 
-const PHASES: { key: WorkoutPhaseKey; labelKey: string; color: string }[] = [
-  { key: "warmup", labelKey: "calculators:workoutBuilder.warmup", color: "text-zone-2" },
-  { key: "main", labelKey: "calculators:workoutBuilder.mainSet", color: "text-zone-5" },
-  { key: "cooldown", labelKey: "calculators:workoutBuilder.cooldown", color: "text-zone-1" },
+const PHASES: { key: WorkoutPhaseKey; labelKey: string }[] = [
+  { key: "warmup", labelKey: "workoutBuilder.warmup" },
+  { key: "main", labelKey: "workoutBuilder.mainSet" },
+  { key: "cooldown", labelKey: "workoutBuilder.cooldown" },
 ];
 
+/**
+ * A session that arrived by link.
+ *
+ * Everything on this screen is decoded from the URL, there is no storage
+ * lookup and no id to resolve, so a truncated link is the one failure mode,
+ * and it gets an Alert with the way out rather than a bare sentence.
+ */
 export function SharedWorkoutPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { t } = useTranslation("calculators");
+  const { t } = useTranslation(["calculators", "session", "common"]);
   const isEnglish = useIsEnglish();
 
   const encoded = searchParams.get("d");
@@ -43,104 +53,138 @@ export function SharedWorkoutPage() {
       <>
         <SEOHead
           noindex
-          title={t("workoutBuilder.shared.title")}
+          title={t("calculators:workoutBuilder.shared.title")}
           canonical="/workout/shared"
         />
-        <div className="py-12 text-center">
-          <p className="text-muted-foreground">{t("workoutBuilder.shared.invalid")}</p>
-          <Button variant="link" asChild className="mt-4">
-            <Link to="/workout/builder">
-              <ArrowLeft className="mr-2 size-4" />
-              {t("workoutBuilder.myWorkouts")}
-            </Link>
-          </Button>
+        <div className="zn-session__missing">
+          <Alert
+            kind="error"
+            title={t("calculators:workoutBuilder.shared.invalidTitle")}
+            action={
+              <Button variant="outline" asChild>
+                <Link to="/workout/builder">
+                  <ArrowLeft />
+                  {t("calculators:workoutBuilder.myWorkouts")}
+                </Link>
+              </Button>
+            }
+          >
+            {t("calculators:workoutBuilder.shared.invalid")}
+          </Alert>
         </div>
       </>
     );
   }
 
   const totalMin = getStructuredWorkoutDurationMinutes(workout);
-  const blockCount = PHASES.reduce(
-    (sum, { key }) => sum + getWorkoutPhaseSteps(workout, key).length,
-    0,
-  );
+  const phases = PHASES.map(({ key, labelKey }) => ({
+    key,
+    label: t(`calculators:${labelKey}`),
+    steps: getWorkoutPhaseSteps(workout, key),
+  })).filter((phase) => phase.steps.length > 0);
+  const blockCount = phases.reduce((sum, phase) => sum + phase.steps.length, 0);
 
   const handleAdd = () => {
     try {
       saveCustomWorkout(workout);
     } catch {
-      toast.error(t("workoutBuilder.maxReached"));
+      toast.error(t("calculators:workoutBuilder.maxReached"));
       return;
     }
-    toast.success(t("workoutBuilder.workoutSaved"));
+    toast.success(t("calculators:workoutBuilder.workoutSaved"));
     navigate(`/workout/builder/${workout.id}`);
   };
 
   return (
     <>
       <SEOHead noindex title={workout.name} canonical="/workout/shared" />
-      <div className="py-8 max-w-3xl mx-auto space-y-6 pb-28 lg:pb-8">
-        {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="size-11 rounded-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent flex items-center justify-center shrink-0">
-                <Share className="size-5 text-foreground/80" />
-              </div>
-              <EditorialTitle as="h1">{workout.name}</EditorialTitle>
-            </div>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
-              {t("workoutBuilder.shared.subtitle")}
-            </FadeUp>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className="gap-1">
-                <Clock className="size-3" />
-                {formatDurationMinutes(totalMin)}
-              </Badge>
-              <Badge variant="secondary">
-                {blockCount} {t("workoutBuilder.blocks")}
-              </Badge>
-            </div>
+
+      <div className="zn-shared">
+        <header className="zn-shared__head">
+          <div
+            className="zn-cluster"
+            style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+          >
+            <Badge variant="outline">{formatDurationMinutes(totalMin)}</Badge>
+            <Badge variant="secondary">
+              {blockCount} {t("calculators:workoutBuilder.blocks")}
+            </Badge>
           </div>
 
-          {/* CTA top (desktop) */}
-          <Button size="lg" onClick={handleAdd} className="shrink-0 hidden lg:inline-flex">
-            {t("workoutBuilder.shared.add")}
-          </Button>
-        </div>
+          <h1 className="zn-display" data-level="2">
+            {workout.name}
+          </h1>
 
-        {/* Preview — same timeline the builder shows while editing. */}
-        <div className="rounded-lg border p-4 bg-card">
-          <p className="text-xs text-muted-foreground mb-2">
-            {t("workoutBuilder.preview")}
+          <p className="zn-body zn-body--lead zn-session__lede">
+            {t("calculators:workoutBuilder.shared.subtitle")}
           </p>
-          <SessionTimeline workout={workout} />
-        </div>
 
-        {/* Phase breakdown */}
-        <div className="space-y-3">
-          {PHASES.map(({ key, labelKey, color }) => {
-            const steps = getWorkoutPhaseSteps(workout, key);
-            if (steps.length === 0) return null;
+          <div
+            className="zn-cluster zn-shared__call"
+            style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+          >
+            <Button size="lg" onClick={handleAdd}>
+              {t("calculators:workoutBuilder.shared.add")}
+            </Button>
+          </div>
+        </header>
 
-            return (
-              <Card key={key} size="flush" className="border-border/50">
-                <CardContent className="p-3 sm:p-4 space-y-1">
-                  <h2 className={`text-sm font-semibold ${color}`}>{t(labelKey)}</h2>
-                  <p className="text-sm text-muted-foreground">
-                    {summarizeWorkoutSteps(steps, isEnglish)}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+        {/* The profile, then the legend that names the ramp it is drawn in. */}
+        <section
+          className="zn-stack"
+          style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+          aria-labelledby="shared-profile"
+        >
+          <h2 id="shared-profile" className="zn-title" data-level="3">
+            {t("calculators:workoutBuilder.preview")}
+          </h2>
+          <div>
+            <ZoneBar
+              blocks={toZoneBarBlocks(workout)}
+              height={112}
+              className="zn-session__profile"
+            />
+            <div className="zn-session__axis">
+              <span className="zn-kicker zn-kicker--inline">
+                {t("session:screen.axisStart")}
+              </span>
+              <span className="zn-kicker zn-kicker--inline">
+                {t("session:screen.axisEnd", {
+                  duration: formatDurationMinutes(totalMin),
+                })}
+              </span>
+            </div>
+          </div>
+          <ZoneScale />
+        </section>
+
+        <section
+          className="zn-stack"
+          style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+          aria-labelledby="shared-phases"
+        >
+          <h2 id="shared-phases" className="zn-title" data-level="3">
+            {t("session:screen.structureTitle")}
+          </h2>
+          <div>
+            {phases.map((phase) => (
+              <div key={phase.key} className="zn-shared__phase">
+                <span className="zn-kicker zn-kicker--inline">
+                  {phase.label}
+                </span>
+                <p className="zn-body zn-body--sm">
+                  {summarizeWorkoutSteps(phase.steps, isEnglish)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
 
-      {/* Mobile sticky CTA (thumb zone). */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-        <Button className="w-full" size="lg" onClick={handleAdd}>
-          {t("workoutBuilder.shared.add")}
+      {/* Thumb-zone call on a phone. */}
+      <div className="zn-shared__dock">
+        <Button size="lg" onClick={handleAdd}>
+          {t("calculators:workoutBuilder.shared.add")}
         </Button>
       </div>
     </>

@@ -1,5 +1,5 @@
 /**
- * DiagonalSplit — 1080×1080. A bold diagonal split with the dominant zone
+ * DiagonalSplit, 1080×1080. A bold diagonal split with the dominant zone
  * colour filling the upper-left triangle and an off-white lower-right.
  *
  * Workout name lives in the white triangle on the right; brand + zone tag
@@ -10,8 +10,7 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ShareFooter, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ShareFooter, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -46,7 +45,7 @@ export function DiagonalSplit({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* The coloured triangle — drawn with a sharp linear-gradient stop.
+      {/* The coloured triangle, drawn with a sharp linear-gradient stop.
           Sits above BgLayer (when transparent, BgLayer is hidden and the
           triangle is the only painted shape: still works as overlay). */}
       <div
@@ -77,18 +76,7 @@ export function DiagonalSplit({ workout, transparent }: ShareTemplateProps) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <Logo style={{ width: 72, height: 36 }} />
-            <span
-              style={{
-                fontSize: 36,
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                color: "#ffffff",
-                lineHeight: 1,
-              }}
-            >
-              Zoned
-            </span>
+            <BrandMark height={38} color="#ffffff" />
           </div>
           <span
             style={{

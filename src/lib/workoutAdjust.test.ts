@@ -5,8 +5,8 @@
  * values are clamped to their bounds, the source template is never written to,
  * and the session's duration follows the numbers the user moved.
  *
- * The fixture is VMA-001 as it ships — a two-level repeat with a `scaling`
- * declaration — because it is the shape every rule has something to say about.
+ * The fixture is VMA-001 as it ships, a two-level repeat with a `scaling`
+ * declaration, because it is the shape every rule has something to say about.
  */
 
 import { describe, expect, test } from "bun:test";
@@ -122,7 +122,7 @@ function vma001(): WorkoutTemplate {
   };
 }
 
-/** A `1000m` track set — the distance-driven shape, no duration anywhere. */
+/** A `1000m` track set, the distance-driven shape, no duration anywhere. */
 function distanceWorkout(): WorkoutTemplate {
   return {
     ...vma001(),
@@ -415,7 +415,7 @@ describe("applyAdjustments · immutability", () => {
 describe("applyAdjustments · duration", () => {
   test("recomputes the session duration after a repetition change", () => {
     const source = vma001();
-    // A set is 12×30s of effort and 11 recoveries of 30s — the recovery falls
+    // A set is 12×30s of effort and 11 recoveries of 30s, the recovery falls
     // between repetitions, so it plays one time fewer. 15 + 2×11.5 + 3 + 10.
     expect(getStructuredWorkoutDurationMinutes(source)).toBeCloseTo(51, 5);
 

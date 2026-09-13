@@ -10,8 +10,8 @@
  *   - async access that never blocks the main thread.
  *
  * Layout:
- *   - `zoned-routes:index` — ordered array of route IDs (most recent first).
- *   - `zoned-route:<id>` — the full {@link Route} payload.
+ *   - `zoned-routes:index`, ordered array of route IDs (most recent first).
+ *   - `zoned-route:<id>`, the full {@link Route} payload.
  *
  * Migration: at first read we look for the legacy localStorage payload
  * (`zoned-routes`) and copy it into IndexedDB before clearing it.
@@ -27,7 +27,7 @@ import {
 import type { Route } from "@/types/route";
 import { ROUTE_STORAGE_SOFT_LIMIT } from "./routeGenerator/constants";
 
-/** Legacy localStorage key — kept for one-shot migration only. */
+/** Legacy localStorage key, kept for one-shot migration only. */
 export const ROUTE_STORAGE_KEY = "zoned-routes";
 const INDEX_KEY = "zoned-routes:index";
 const ROUTE_PREFIX = "zoned-route:";
@@ -179,7 +179,7 @@ export async function hasReachedRouteSoftLimit(): Promise<boolean> {
   return ids.length >= ROUTE_STORAGE_SOFT_LIMIT;
 }
 
-/** Test/debug helper — reset the in-process migration latch. */
+/** Test/debug helper, reset the in-process migration latch. */
 export function __resetMigrationLatchForTests(): void {
   migrationPromise = null;
 }

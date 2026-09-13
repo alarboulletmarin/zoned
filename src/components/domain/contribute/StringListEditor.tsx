@@ -1,3 +1,4 @@
+import { type CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "@/components/icons";
 
@@ -33,21 +34,24 @@ export function StringListEditor({
   };
 
   return (
-    <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-        {label}
-      </h3>
+    <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+      <h3 className="zn-kicker zn-kicker--inline">{label}</h3>
 
       {items.length > 0 && (
-        <div className="space-y-2">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
           {items.map((item, index) => (
-            <div key={index} className="flex gap-2">
+            <div
+              key={index}
+              className="zn-row"
+              style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+            >
               <textarea
                 value={item}
                 onChange={(e) => handleChange(index, e.target.value)}
                 placeholder={placeholder}
                 rows={1}
-                className="flex flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none"
+                aria-label={`${label} ${index + 1}`}
+                className="zn-contrib-input zn-fill"
               />
               <Button
                 type="button"
@@ -55,22 +59,17 @@ export function StringListEditor({
                 size="icon-sm"
                 onClick={() => handleRemove(index)}
                 aria-label={removeLabel}
-                className="shrink-0 text-destructive hover:text-destructive"
+                className="zn-contrib-remove zn-fixed"
               >
-                <Trash2 className="size-4" />
+                <Trash2 />
               </Button>
             </div>
           ))}
         </div>
       )}
 
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={handleAdd}
-      >
-        <Plus className="size-4" />
+      <Button type="button" variant="outline" size="sm" onClick={handleAdd}>
+        <Plus />
         {addLabel}
       </Button>
     </div>

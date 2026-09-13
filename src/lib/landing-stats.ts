@@ -1,5 +1,5 @@
 /**
- * Landing-page statistics — everything shown on the home page is
+ * Landing-page statistics, everything shown on the home page is
  * derived from the actual content shipped with the app, not hardcoded.
  *
  * Used by HomePage.tsx for the editorial "training journal" layout:
@@ -19,13 +19,13 @@ import type {
 import { getZoneNumber, getWorkoutDiscipline } from "@/types";
 
 /** Coach/school identifiers we surface on the landing. Order matches the
- *  PDF mockup (§04 — quatre écoles). */
+ *  PDF mockup (§04, quatre écoles). */
 export const SCHOOLS = ["seiler", "daniels", "billat", "coggan"] as const;
 export type School = (typeof SCHOOLS)[number];
 
 /** Detection patterns for each school. Matched (case-insensitive) against
  *  the workout name, description and coaching tips. A workout can match
- *  several schools — we count it once per school it matches. */
+ *  several schools, we count it once per school it matches. */
 const SCHOOL_PATTERNS: Record<School, RegExp> = {
   seiler: /\b(seiler|polaris|polariz|80\s*\/\s*20)\b/i,
   daniels: /\b(daniels|vdot|t-?pace|tempo pace|easy pace|m-?pace)\b/i,
@@ -33,7 +33,7 @@ const SCHOOL_PATTERNS: Record<School, RegExp> = {
   coggan: /\b(coggan|ftp|tss|if\b|normalized power)\b/i,
 };
 
-/** Native export formats supported by the app — kept here so the éthos
+/** Native export formats supported by the app, kept here so the éthos
  *  block ("06 Exports locaux") stays in sync with src/lib/export/. */
 export const EXPORT_FORMATS = [
   "fit",
@@ -47,7 +47,7 @@ export const EXPORT_FORMATS = [
 export interface ZoneDistribution {
   zone: ZoneNumber;
   minutes: number;
-  /** Share of total minutes (0–1). */
+  /** Share of total minutes (0-1). */
   share: number;
 }
 
@@ -59,7 +59,7 @@ export interface LandingStats {
   totalMinutes: number;
   /** Distribution across the 6 Zoned zones (sorted Z1 → Z6). */
   zones: ZoneDistribution[];
-  /** Crude Seiler-style split — "low" = Z1+Z2, "mid" = Z3, "high" = Z4+Z5+Z6.
+  /** Crude Seiler-style split, "low" = Z1+Z2, "mid" = Z3, "high" = Z4+Z5+Z6.
    *  Used as a one-liner under the chart ("80 % à basse intensité…"). */
   polarised: { low: number; mid: number; high: number };
 }
@@ -83,7 +83,7 @@ function collectFromSteps(
       }
       continue;
     }
-    // Repeat step — multiply by count and recurse on inner steps + between
+    // Repeat step, multiply by count and recurse on inner steps + between
     const inner: Array<{ zone: ZoneNumber; minutes: number }> = [];
     collectFromSteps(step.steps, inner);
     if (step.between) collectFromSteps(step.between, inner);
@@ -120,7 +120,7 @@ function detectSchools(workout: WorkoutTemplate): School[] {
   return SCHOOLS.filter((s) => SCHOOL_PATTERNS[s].test(haystack));
 }
 
-/** Single-pass aggregator. Pure — safe to memoise. */
+/** Single-pass aggregator. Pure, safe to memoise. */
 export function computeLandingStats(
   workouts: WorkoutTemplate[],
 ): LandingStats {
@@ -187,7 +187,7 @@ export function computeLandingStats(
   };
 }
 
-/** ISO week number — used by deriveWeekIndex to pick a deterministic slot
+/** ISO week number, used by deriveWeekIndex to pick a deterministic slot
  *  for the "session of the week" and the "three suggested" workouts. */
 export function getISOWeek(d: Date = new Date()): number {
   const target = new Date(d.valueOf());
@@ -220,7 +220,7 @@ export function pickWeeklyWorkouts(
   return out;
 }
 
-/** Estimate TSS for a workout — rough but consistent across the library.
+/** Estimate TSS for a workout, rough but consistent across the library.
  *  Uses Coggan-style IF² × duration_h × 100, with a zone→IF mapping. */
 const ZONE_IF: Record<ZoneNumber, number> = {
   1: 0.55,
@@ -249,7 +249,7 @@ export function estimateTSS(workout: WorkoutTemplate): number {
   return Math.round(weightedHours * 100);
 }
 
-/** Time-in-zone (minutes) across a workout's full session — warm-up, main set
+/** Time-in-zone (minutes) across a workout's full session, warm-up, main set
  *  and cool-down. Reuses the same block/step aggregation as estimateTSS so the
  *  week planner can sum real time-in-zone to compute a polarised distribution. */
 export function getWorkoutZoneMinutes(

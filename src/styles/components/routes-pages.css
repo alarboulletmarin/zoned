@@ -1,0 +1,1021 @@
+/* The four real-world route screens: the generator, the track finder, the
+ * saved index and one saved route.
+ *
+ * The design kit does not mock these up, so this file re-dresses the layout
+ * that is already there rather than proposing a new one. What changes is the
+ * paint: outlines instead of tints, ink instead of translucency, mono for
+ * every number.
+ *
+ * What this file does NOT redeclare, because it already exists:
+ *   routes.css, the parameters form, the address box, the compass, the
+ *                  presets, the chips and .zn-route-cand (the candidate card).
+ *                  Everything a control does is over there; this file only
+ *                  builds the frame those controls sit in.
+ *   _layout.css, zn-row / zn-stack / zn-cluster / zn-grid / zn-scroll-x.
+ *   _type.css, zn-kicker / zn-display / zn-title / zn-body / zn-mono.
+ *   button.css, alert.css, empty-state.css, stat-block.css, skeleton.css.
+ *
+ * Three screens sit inside the shell's .zn-page column, which already pays the
+ * 40px (20px mobile) side margin: their bands carry block padding and a rule
+ * and NO inline padding. The generator is the exception and is documented at
+ * its own section.
+ *
+ * The map itself is Leaflet's. Its markers are HTML strings handed to
+ * L.DivIcon and its traces are Polyline options, neither of which can read a
+ * CSS custom property, so those colours stay literals in RouteMap.tsx and
+ * nothing here tries to reach them.
+ */
+
+/* ── the shared screen ────────────────────────────────────────────────── */
+
+.zn-rt {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Une bande de la page. Même séparation que .zn-section, l'espace seul,
+   moins le padding en ligne que la colonne paie déjà. La variante `--first`
+   part avec le filet : elle n'existait que pour ne pas le payer. */
+.zn-rt__band {
+  padding-block: var(--pad-block, calc(var(--gap-section) / 2));
+}
+
+/* The title block: the words on the left, the screen's one primary call on the
+   right, both dropping to one column when the line runs out. */
+.zn-rt__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-13);
+}
+
+.zn-rt__headtext {
+  flex: 1;
+  min-inline-size: min(100%, 34ch);
+}
+
+.zn-rt__lede {
+  max-inline-size: 62ch;
+}
+
+/* Chrome above the title, not a band: no rule of its own. */
+.zn-rt__back {
+  align-self: flex-start;
+}
+
+/* A ruled row of numbers under a title or at the foot of a card. Numbers, not
+   adjectives, which is why it is mono and never wraps into prose. */
+.zn-rt__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-7);
+  color: var(--text-faint);
+}
+
+.zn-rt__facts > strong {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+/* ── the map ──────────────────────────────────────────────────────────── */
+
+/* Every screen here shows the same object, so it wears the same frame: an
+   outlined sheet with the cartography bled to its edges.
+
+   The wrapper also states how tall the map is, once, in --map-h: the Leaflet
+   canvas and the skeleton standing in for it both read that one number, so the
+   wait and the thing waited for can never be different heights, which is the
+   only way this screen keeps CLS at zero. The three steps are the ones the
+   component's Tailwind base stated, unrounded. */
+.zn-rt__map {
+  --map-h: 288px;
+
+  position: relative;
+  overflow: hidden;
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+@media (min-width: 640px) {
+  .zn-rt__map {
+    --map-h: 384px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .zn-rt__map {
+    --map-h: 448px;
+  }
+}
+
+/* The map itself. Leaflet paints into this box and nothing else sizes it, so
+   the height has to be stated here rather than left to the content. No frame:
+   the wrapper above is the frame, and all three screens were already cancelling
+   this one with `rounded-none border-0`. */
+.zn-route-map {
+  inline-size: 100%;
+  block-size: var(--map-h, 288px);
+  overflow: hidden;
+  background: var(--surface-band);
+}
+
+/* The wait, in the shape of what is coming. */
+.zn-rt__mapskel {
+  block-size: var(--map-h, 288px);
+  border-radius: var(--r-2xl);
+}
+
+/* Inside the generator's stage the map has no height of its own: it takes the
+   cell, and so does the block standing in for it. */
+.zn-rt__mapskel.zn-rt__mapskel--fill {
+  block-size: 100%;
+  border-radius: 0;
+}
+
+/* A sentence printed over the map, what to do next, or what is happening.
+   Opaque paper on an ink outline: the system has no blur and no translucency
+   to float on. The z-index clears Leaflet's own panes. */
+.zn-rt__maphint {
+  position: absolute;
+  inset-block-start: var(--sp-6);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  z-index: 600;
+  pointer-events: none;
+
+  max-inline-size: calc(100% - var(--sp-14));
+  padding: var(--sp-3) var(--sp-7);
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1.3 var(--font-text);
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+/* The trace is being redrawn: the same pill, said in the accent as type. */
+.zn-rt__maphint[data-kind="edit"] {
+  color: var(--text-link);
+  font-weight: var(--fw-semibold);
+}
+
+/* A control riding on the cartography. Same paper, same outline; it earns its
+   z-index because Leaflet's controls sit at 1000. */
+.zn-rt__mapbtn {
+  position: absolute;
+  z-index: 1100;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: 34px;
+  padding-inline: var(--sp-6);
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-rt__mapbtn > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-rt__mapbtn:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-rt__mapbtn:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-rt__mapbtn:disabled {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* The one that commits the edit. It is the only vermillon fill on this screen
+   while edit mode is on, the generate button is off-screen behind the map. */
+.zn-rt__mapbtn[data-tone="accent"] {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.zn-rt__mapbtn[data-tone="accent"]:hover:not(:disabled) {
+  background: var(--accent-press);
+}
+
+.zn-rt__mapbtn--corner {
+  inset-block-start: var(--sp-6);
+  inset-inline-end: var(--sp-6);
+}
+
+/* Mobile keeps its editing affordances on the map; desktop has a strip. */
+.zn-rt__mapdock {
+  position: absolute;
+  inset-block-end: var(--sp-6);
+  inset-inline-end: var(--sp-6);
+  z-index: 1100;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-rt__mapdock .zn-rt__mapbtn {
+  position: static;
+}
+
+/* The live distance, read straight off the map. */
+.zn-rt__readout {
+  position: absolute;
+  inset-block-start: var(--sp-6);
+  inset-inline-end: var(--sp-6);
+  z-index: 600;
+  pointer-events: none;
+
+  padding: var(--sp-3) var(--sp-6);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+@media (pointer: coarse) {
+  .zn-rt__mapbtn {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── the generator screen ─────────────────────────────────────────────── */
+
+/* /routes is the app's one fullscreen route: App.tsx hides the footer for it,
+   and the whole interactive zone is meant to fit in a single viewport.
+ *
+ * The old markup measured that viewport by hand, `fixed inset-x-0 top-12` on
+ * a phone, `calc(100svh - 5rem)` on a desktop, and both numbers described a
+ * header that used to float. The header is IN FLOW now (see shell.css), so
+ * neither is true any more, and neither can be recomputed here: this file has
+ * no way to know how tall the header is.
+ *
+ * It does not need to. The shell is already a flex column pinned to the
+ * viewport, .zn-app is min 100vh, .zn-app__body and .zn-main are both
+ * flex: 1, so <main> has exactly the height left under the header. Asking
+ * for 100% of it is the same answer with nothing hard-coded, and it survives
+ * the header changing height. The block margins pay .zn-main's own padding
+ * back, which is what makes "fullscreen" mean the whole thing. */
+.zn-page:has(> .zn-rt__screen) {
+  block-size: 100%;
+}
+
+.zn-rt__screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+
+  block-size: calc(100% + var(--sp-12) + var(--sp-8));
+  margin-block: calc(var(--sp-12) * -1) calc(var(--sp-8) * -1);
+  padding-block: var(--sp-8);
+}
+
+/* On a phone the map IS the page, so the screen bleeds past the column's side
+   margin and the rail pays it back for itself. Guarded to widths below
+   --page-max, where the column is exactly the viewport and the cancellation is
+   exact, above it the page is centred and a bleed would scroll sideways. */
+@media (max-width: 900px) {
+  .zn-rt__screen {
+    margin-inline: calc(var(--pad-screen-x) * -1);
+  }
+}
+
+/* One h1, small: the screen's subject is the map, not its name. */
+.zn-rt__topline {
+  flex: none;
+}
+
+.zn-rt__grid {
+  display: grid;
+  grid-template-columns: var(--rail, 360px) 1fr;
+  gap: var(--sp-8);
+  flex: 1;
+  min-block-size: 0;
+}
+
+/* The map claims the whole frame once the form is folded away. */
+.zn-rt__grid[data-expanded="true"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1280px) {
+  .zn-rt__grid {
+    --rail: 380px;
+  }
+}
+
+/* The rail scrolls inside itself rather than scrolling the page: the page has
+   nowhere to go. */
+.zn-rt__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline-end: var(--sp-2);
+}
+
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-rt__rail > * {
+  flex: none;
+}
+
+.zn-rt__grid[data-expanded="true"] .zn-rt__rail {
+  display: none;
+}
+
+/* Map, stats, actions and the rationale are one object, so they share one
+   outline and are divided by hairlines, four separately outlined blocks would
+   read as four unrelated things. */
+.zn-rt__stage {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+/* Inside the stage the map has no frame of its own, the stage is the frame,
+   and no height of its own either: it takes the cell it is given. */
+.zn-rt__stage .zn-rt__map {
+  --map-h: 100%;
+
+  flex: 1;
+  min-block-size: 0;
+  border: none;
+  border-radius: 0;
+}
+
+/* The map is not a scroll target on a phone: it is the whole screen. */
+@media (max-width: 900px) {
+  .zn-rt__screen {
+    gap: var(--sp-6);
+  }
+
+  .zn-rt__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  /* The screen bled past the column's side margin; the two blocks that are
+     not the map pay it back for themselves. */
+  .zn-rt__topline,
+  .zn-rt__rail {
+    padding-inline: var(--pad-screen-x);
+  }
+
+  /* Never `overflow: auto` here: a scrolling parent clips the address box's
+     own suggestion list, which is what made the Nominatim results disappear
+     behind the map. The rail sizes to its content instead. */
+  .zn-rt__rail {
+    overflow: visible;
+  }
+
+  .zn-rt__stage {
+    /* Le contour de carte du bureau dégradait en filet de bande nu sur
+       téléphone. Il n'y a plus de filet de bande : l'écart le remplace. */
+    border: none;
+    border-radius: 0;
+    margin-block-start: calc(var(--gap-section) / 2);
+  }
+}
+
+/* ── the generator's numbers ──────────────────────────────────────────── */
+
+/* The headline of a generated route, on the rule under the map: three figures
+   in mono, and the pager that says which of the three proposals they belong
+   to. */
+.zn-rt__stats {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4) var(--sp-8);
+  padding: var(--sp-6) var(--sp-8);
+  border-block-start: var(--border-rule);
+}
+
+.zn-rt__statline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-4) var(--sp-11);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.zn-rt__stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-rt__stat > svg {
+  align-self: center;
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-rt__stat-unit {
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Proposal 2 of 3. A drawn box with an arrow at each end, the count is the
+   thing, the arrows are how you change it. */
+.zn-rt__pager {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+.zn-rt__pager-label {
+  min-inline-size: 7rem;
+  padding-inline: var(--sp-3);
+  text-align: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-rt__pager-total {
+  font-weight: var(--fw-regular);
+  color: var(--text-faint);
+}
+
+/* The arrows are chrome inside a drawn box, so they drop the button outline
+   rather than stacking a second one inside the first. */
+.zn-btn.zn-rt__pager-step {
+  min-block-size: 30px;
+  inline-size: 30px;
+  padding: 0;
+  border-color: transparent;
+}
+
+/* The rule above outranks button.css's floor, so the floor is restated here,
+   the strip is on screen from 768px up, tablets included. */
+@media (pointer: coarse) {
+  .zn-btn.zn-rt__pager-step {
+    min-block-size: var(--hit-min);
+    inline-size: var(--hit-min);
+  }
+}
+
+/* ── the generator's action strip ─────────────────────────────────────── */
+
+/* Two groups on one rule: what you do to the trace on the left, what you do
+   with it on the right. Opaque paper, the strip sits on the stage, it does
+   not float over it. */
+.zn-rt__strip {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+  border-block-start: var(--border-rule);
+}
+
+.zn-rt__strip-rule {
+  flex: none;
+  inline-size: var(--bw-rule);
+  block-size: var(--sp-12);
+  background: var(--line-divider);
+}
+
+@media (max-width: 640px) {
+  .zn-rt__strip-rule {
+    display: none;
+  }
+}
+
+/* ── the generator's rationale ────────────────────────────────────────── */
+
+/* Why this route, folded away by default so the map keeps the height. */
+.zn-rt__details {
+  flex: none;
+  border-block-start: var(--border-rule);
+}
+
+.zn-rt__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  min-block-size: 38px;
+  padding: var(--sp-4) var(--sp-8);
+
+  text-align: start;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-rt__summary:hover {
+  color: var(--text-body);
+}
+
+.zn-rt__summary-chevron {
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-rt__summary[aria-expanded="true"] .zn-rt__summary-chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.zn-rt__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  max-block-size: 40svh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--sp-8);
+  border-block-start: var(--border-rule);
+}
+
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-rt__panel > * {
+  flex: none;
+}
+
+@media (pointer: coarse) {
+  .zn-rt__summary {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── verdicts ─────────────────────────────────────────────────────────── */
+
+/* One outlined tag per reason the algorithm gives. Type, not fill: a row of
+   filled tags would spend the accent six times over. */
+.zn-rt__tag {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 24px;
+  padding-inline: var(--sp-6);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-muted);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+/* How close the trace landed to the distance you asked for. Exactly one of the
+   three shows at a time, the label comes from getDistanceMatchLabel, which is
+   the single source of truth for it. Success is the one added hue; the caution
+   is the accent as stroke and type, never as a second fill. */
+.zn-rt__tag[data-match="very_close"] {
+  color: var(--state-success);
+  border-color: var(--state-success);
+  font-weight: var(--fw-bold);
+}
+
+.zn-rt__tag[data-match="approximate"] {
+  color: var(--text-link);
+  border-color: var(--accent);
+  font-weight: var(--fw-bold);
+}
+
+/* ── the training preset ──────────────────────────────────────────────── */
+
+/* The session this route is being built for. It is a quotation from the plan,
+   so it wears the sunken band rather than a raised card: it is context for the
+   form below it, not a second form. */
+.zn-rt__preset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+.zn-rt__preset-title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.35 var(--font-text);
+  color: var(--text-body);
+}
+
+.zn-rt__preset-note {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+  max-inline-size: 56ch;
+}
+
+/* ── the generator's result strip (mobile) ────────────────────────────── */
+
+.zn-rt__result {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom));
+  border-block-start: var(--border-rule);
+}
+
+/* Three proposals, swept sideways rather than stacked: the map must keep the
+   height. The cards are the ported .zn-route-cand, so only the width the
+   scroller gives them is stated here. */
+.zn-rt__cands {
+  display: flex;
+  gap: var(--sp-5);
+  scrollbar-width: none;
+}
+
+.zn-rt__cands::-webkit-scrollbar {
+  display: none;
+}
+
+.zn-rt__cands > .zn-route-cand {
+  flex: none;
+  inline-size: 244px;
+}
+
+/* ── the track finder ─────────────────────────────────────────────────── */
+
+/* Controls on the left, cartography on the right, the generator's shape at
+   rest, without the fullscreen claim. */
+.zn-rt__split {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) 1fr;
+  gap: var(--sp-13);
+  align-items: start;
+}
+
+@media (max-width: 1023px) {
+  .zn-rt__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The map keeps pace with the list while the list is scrolled. */
+.zn-rt__sticky {
+  position: sticky;
+  inset-block-start: var(--sp-10);
+}
+
+@media (max-width: 1023px) {
+  .zn-rt__sticky {
+    position: static;
+  }
+}
+
+/* One sheet of paper holding the search. No shadow: it sits in the page. */
+.zn-rt__panelcard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+/* A fieldset carries browser chrome and a legend that is not a flex item, so
+   the stack is margin-based rather than a gap, same shape as the parameters
+   form's own fieldset. */
+.zn-rt__field {
+  min-inline-size: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.zn-rt__field > * + * {
+  margin-block-start: var(--sp-5);
+}
+
+.zn-rt__legend {
+  padding: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--text-body);
+}
+
+.zn-btn.zn-rt__submit {
+  inline-size: 100%;
+}
+
+.zn-rt__hint {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* Whatever the found tracks are, the list is one object: one outline, hairline
+   between the rows. */
+.zn-rt__tracks {
+  overflow: hidden;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+.zn-rt__tracks-head {
+  padding: var(--sp-6) var(--sp-8);
+  border-block-end: var(--border-rule);
+}
+
+.zn-rt__tracklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-rt__tracklist > li + li {
+  border-block-start: var(--border-divider);
+}
+
+.zn-rt__track {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-8);
+
+  text-align: start;
+  color: var(--text-body);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-rt__track:hover {
+  background: var(--surface-band);
+}
+
+.zn-rt__track:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* La piste retenue porte l'anneau d'ENCRE sur les quatre côtés, la marque
+   choisi du système (card.css), et non plus le vermillon, désormais
+   réservé à maintenant et au focus.
+
+   Ici l'anneau reste à --bw-heavy et non --bw-rule : la ligne de liste n'a
+   AUCUNE bordure propre (border: none, ce sont les filets de séparation du
+   <li> qui la cadrent), donc l'anneau est tout le contour. 2.5px seul pèse
+   ce que pèsent ailleurs 1.5px de bordure + 1.5px d'anneau.
+
+   Deuxième canal, non chromatique : le papier creusé, déjà là. Il double
+   aussi le survol, c'est l'anneau, une épaisseur, qui les départage. */
+.zn-rt__track[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--line-strong);
+  background: var(--surface-band);
+}
+
+.zn-rt__track-name {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.3 var(--font-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-rt__track-dist {
+  display: block;
+  margin-block-start: var(--sp-2);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-rt__track-wait {
+  flex: none;
+  color: var(--text-link);
+  animation: zoned-spin 700ms linear infinite;
+}
+
+/* The three numbers a finished route carries. Two by two on a narrow column so
+   a long label wraps inside its own cell. */
+.zn-rt__figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-8);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+@media (max-width: 480px) {
+  .zn-rt__figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* A message standing above the block it is about: a warning about the store,
+   an error about the route that would not load. Prose measure, and the block
+   below it starts on a stack step rather than touching it. */
+.zn-rt__notice {
+  max-inline-size: 62ch;
+  margin-block-end: var(--sp-11);
+}
+
+/* ── the saved index ──────────────────────────────────────────────────── */
+
+/* One outline around the whole index, hairlines between the routes: a column
+   of separately outlined cards reads as a column of unrelated objects. And a
+   list card never floats, so there is no shadow anywhere in here. */
+.zn-rt__list {
+  overflow: hidden;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-rt__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-8) var(--pad-card-sm);
+
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-rt__item + .zn-rt__item {
+  border-block-start: var(--border-divider);
+}
+
+.zn-rt__item:hover {
+  background: var(--surface-band);
+}
+
+/* The name is a real link, which is also the row's keyboard path. */
+.zn-rt__item-link {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  color: inherit;
+  text-decoration: none;
+}
+
+.zn-rt__item-name {
+  font: var(--fw-semibold) var(--fs-body) / 1.25 var(--font-text);
+  color: var(--text-body);
+  text-underline-offset: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-rt__item-link:hover .zn-rt__item-name {
+  color: var(--text-link);
+  text-decoration: underline;
+}
+
+.zn-rt__item-actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* Deleting is the one destructive act on this screen; it says so in the accent
+   as type, on an outlined button, never as a second vermillon fill. */
+.zn-btn.zn-rt__danger {
+  color: var(--state-danger);
+}
+
+.zn-btn.zn-rt__danger:hover:not(:disabled) {
+  color: var(--accent-press);
+  border-color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .zn-rt__item {
+    flex-wrap: wrap;
+  }
+
+  .zn-rt__item-link {
+    flex-basis: 100%;
+  }
+
+  .zn-rt__item-actions {
+    margin-inline-start: auto;
+  }
+}
+
+/* ── one saved route ──────────────────────────────────────────────────── */
+
+/* The elevation profile, framed and titled. The chart itself is the shared
+   ElevationChart and is not re-drawn here. */
+.zn-rt__figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+/* The plan session this route was saved for. The sunken band plus the
+   vermillon frame on all four edges, the block sits alone in the column, so
+   the extra 1px per side shifts nothing beside it. */
+.zn-rt__linked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-band);
+  border: var(--border-heavy);
+  border-radius: var(--r-2xl);
+}

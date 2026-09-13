@@ -4,7 +4,7 @@
     "main": "Main Set",
     "cooldown": "Cool-down",
     "recovery": "Recovery",
-    "interSeries": "{{count}} sets — ~3 min jog between sets",
+    "interSeries": "{{count}} sets, ~3 min jog between sets",
     "loopTemplate": "One iteration shown below",
     "noZone": "No zone",
     "repeatUnits": {
@@ -87,7 +87,8 @@
     "target": "Target",
     "environment": "Environment",
     "frequency": "Frequency",
-    "recovery": "Recovery"
+    "recovery": "Recovery",
+    "elevation": "Elevation"
   },
   "targetSystems": {
     "aerobic_base": "Aerobic Base",
@@ -162,5 +163,25 @@
   },
   "provenance": {
     "adaptedFrom": "Adapted from"
+  },
+  "export": {
+    "blockCount_one": "{{count}} block",
+    "blockCount_other": "{{count}} blocks",
+    "andMore_one": "+{{count}} more",
+    "andMore_other": "+{{count}} more"
+  },
+  "screen": {
+    "structureTitle": "Session structure",
+    "structureKicker": "{{duration}} · {{phases}} phases",
+    "axisStart": "0 min · start",
+    "axisEnd": "{{duration}} · end",
+    "total": "Total {{duration}}",
+    "exportFormats": ".fit · .ics · .pdf · .png",
+    "notFoundTitle": "This session left the catalogue",
+    "notFoundBody": "The link points to an id the catalogue no longer knows. Your favourites, plans and saved sessions are untouched."
+  },
+  "illustration": {
+    "strengthBrief": "Plank seen from the side, 2 px line, contact points in accent",
+    "strengthLabel": "The session's plank, drawn in one line, contact points in accent"
   }
 }

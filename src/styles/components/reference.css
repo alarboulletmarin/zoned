@@ -1,0 +1,515 @@
+/* The reference surfaces: the glossary index, a glossary term, the two
+ * competitor-comparison screens, and the 404.
+ *
+ * The design kit does not mock any of these. None of them is redrawn here:
+ * each keeps the arrangement it already had, a header band, then the screen's
+ * own content, and only changes paint. What that paint adds is the system's
+ * furniture: a mono kicker over a display title, a full-width ink rule between
+ * bands instead of blank space, ink outlines on everything, and one vermillon
+ * fill per screen reserved for the primary action.
+ *
+ * Composed with, never copied: the flow vocabulary of _layout.css, the type
+ * roles of _type.css, and the paint of card.css, badge.css, button.css,
+ * alert.css, empty-state.css, door-card.css, select.css and
+ * responsive-table.css. The glossary term's own blocks (.zn-gterm__formula,
+ * __example, __code, __link) live in content.css next to GlossaryDetail and
+ * are not restated here, this file only lays out the page around them.
+ *
+ * These screens sit inside the shell's centred column, which already pays the
+ * 40px (20px mobile) side margin, so "full width" means the width of that
+ * column and every rule runs from one of its edges to the other. Nothing
+ * bleeds out; the page never scrolls sideways.
+ *
+ * No screen in this family paints a zone ramp, the only zone marks it shows
+ * are ZoneBadges, which print their own Z-code, so none of them carries the
+ * ZoneScale legend.
+ */
+
+.zn-ref {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── bands ────────────────────────────────────────────────────────────── */
+
+/* The band above the first rule: kicker, title, lede. */
+.zn-ref__head {
+  padding-block: var(--sp-10) var(--sp-13);
+}
+
+.zn-ref__lede {
+  max-inline-size: 56ch;
+}
+
+/* Chaque bande après la tête se sépare de la précédente par l'espace seul. */
+.zn-ref__section {
+  padding-block: calc(var(--gap-section) / 2);
+}
+
+.zn-ref__section:last-child {
+  padding-block-end: var(--sp-17);
+}
+
+/* A rule promises a section. RelatedContent renders nothing at all for the 70
+   glossary terms it has no neighbour for, and an empty reading column must not
+   leave that promise on the paper. */
+.zn-ref__section:has(> .zn-ref__column:empty) {
+  display: none;
+}
+
+.zn-ref__sectionhead {
+  margin-block-end: var(--sp-11);
+}
+
+/* A reading column. The two term/comparison screens are prose plus one table,
+   and neither survives the full 1152px measure. */
+.zn-ref__column {
+  inline-size: 100%;
+  max-inline-size: var(--page-max-narrow);
+}
+
+/* A footnote to the band above it: sunken paper rather than a raised card, so
+   it does not read as one more thing to open. */
+.zn-ref__note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--pad-card);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* ── back link ────────────────────────────────────────────────────────── */
+
+/* The way out, on the line above everything else. Ink, not vermillon: the
+   accent belongs to the screen's forward action. Written to fit both an <a>
+   and a <button>, the glossary term offers history-back as well as the index, so the button's own chrome is cleared here. */
+.zn-ref__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: var(--hit-min);
+
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-ref__back:hover {
+  color: var(--ink-1);
+}
+
+.zn-ref__back:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-ref__back > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+}
+
+/* ── glossary: search and filter ──────────────────────────────────────── */
+
+/* The search pill and the category select share one line on desktop and stack
+   on a phone; the select never shrinks below a readable width. */
+.zn-ref__controls {
+  gap: var(--sp-8);
+}
+
+@media (max-width: 640px) {
+  .zn-ref__controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* The drawn pill IS the control: 12/16 and a 44px floor, the geometry the
+   design's Input states. */
+.zn-ref__search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  flex: 1;
+  min-inline-size: 0;
+
+  padding: 12px 16px;
+  min-block-size: var(--hit-min);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--text-body);
+}
+
+/* The ring is moved, not removed: it frames the pill rather than the bare text
+   box inside it. */
+.zn-ref__search:has(.zn-ref__search-input:focus-visible) {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-ref__search-glyph {
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-ref__search-input {
+  flex: 1;
+  min-inline-size: 0;
+  border: none;
+  background: transparent;
+  font: var(--type-body);
+  color: inherit;
+}
+
+/* Le champ mesurait 25 px de haut : c'est le seul contrôle de saisie de l'app
+   qui passait sous le plancher tactile, parce que sa capsule le portait et pas
+   lui. Sur un doigt, la cible est le champ, pas la capsule. */
+@media (pointer: coarse) {
+  .zn-ref__search-input {
+    min-block-size: var(--hit-min);
+  }
+}
+
+.zn-ref__search-input:focus-visible {
+  outline: none;
+}
+
+.zn-ref__search-input::placeholder {
+  color: var(--text-faint);
+}
+
+/* Safari draws its own cancel button inside a type=search field. */
+.zn-ref__search-input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.zn-ref__search-clear {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 22px;
+  block-size: 22px;
+  flex: none;
+
+  padding: 0;
+  border: none;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-ref__search-clear:hover {
+  color: var(--ink-1);
+}
+
+/* A 44px target without a 44px box. */
+.zn-ref__search-clear::after {
+  content: "";
+  position: absolute;
+  inset: -11px;
+}
+
+/* Composed onto .zn-select-trigger, which deliberately declares no width,
+   both classes are named so the width holds whatever order the two files are
+   imported in. */
+.zn-select-trigger.zn-ref__filter {
+  inline-size: 224px;
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .zn-select-trigger.zn-ref__filter {
+    inline-size: 100%;
+  }
+}
+
+/* ── glossary: results ────────────────────────────────────────────────── */
+
+/* What is on screen, and what is narrowing it. */
+.zn-ref__meta {
+  margin-block: var(--sp-11) var(--sp-13);
+  gap: var(--sp-5);
+}
+
+/* The x inside an active-filter badge. It inherits the badge's colour so it
+   reads as part of the capsule, never as a second mark. */
+.zn-ref__unfilter {
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+  inline-size: 14px;
+  block-size: 14px;
+  padding: 0;
+  margin-inline-start: var(--sp-1);
+
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.zn-ref__unfilter:hover {
+  opacity: 1;
+}
+
+/* badge.css clips its pill, and the extended target below would be clipped
+   with it. Only the capsules that carry the x open up. */
+.zn-badge:has(> .zn-ref__unfilter) {
+  overflow: visible;
+}
+
+/* A 44px target without a 44px box, the badge around it is a <span>, so the
+   coarse-pointer floor of badge.css never reaches this button. */
+.zn-ref__unfilter::after {
+  content: "";
+  position: absolute;
+  inset: -15px;
+}
+
+.zn-ref__groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-14);
+}
+
+/* The letter that opens an alphabetical group. It sticks to the TOP of the
+   viewport, not 56px down it: the app header is in flow (see shell.css), so
+   there is nothing above the page to clear. Opaque page paper and a full rule
+   underneath, no blur, no translucent pane. */
+.zn-ref__letter {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+
+  margin: 0 0 var(--sp-10);
+  padding-block: var(--sp-5);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono-label);
+  color: var(--text-faint);
+
+  background: var(--surface-page);
+  border-block-end: var(--border-rule);
+}
+
+/* ── compare: the table ───────────────────────────────────────────────── */
+
+/* The column that is us, inverted end to end, head and cells, so the answer
+   to "which one is Zoned" survives greyscale and needs no colour at all.
+   The hover rule in responsive-table.css is more specific than a lone class,
+   so the inversion restates itself against it. */
+.zn-table__th.zn-ref__us,
+.zn-table__td.zn-ref__us,
+.zn-table__row:hover > .zn-table__td.zn-ref__us {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+/* A criterion label is prose; the two answers next to it are data. */
+.zn-table__td.zn-ref__crit {
+  color: var(--text-muted);
+}
+
+/* One answer: a glyph and the word for it. Never colour alone, "yes" on the
+   competitor column and "yes" on ours can mean opposite things, so the mark
+   states the value and nothing more. */
+.zn-ref__val {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font: var(--type-body-sm);
+}
+
+.zn-ref__val > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+/* An absence, drawn faint, the value is there, it is just a no. */
+.zn-ref__val[data-value="no"] {
+  color: var(--text-faint);
+}
+
+.zn-ref__val[data-value="partial"] {
+  color: var(--text-muted);
+}
+
+/* Figures, prices, counts, are mono and tabular so the two columns line up
+   on the decimal. */
+.zn-ref__val[data-value="text"] {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Inverted paper takes the ink text with it. */
+.zn-ref__us .zn-ref__val,
+.zn-ref__us .zn-ref__val[data-value="no"],
+.zn-ref__us .zn-ref__val[data-value="partial"] {
+  color: var(--ink-on-dark);
+}
+
+/* ── compare: advantages ──────────────────────────────────────────────── */
+
+/* Four outlined blocks, no shadow: they sit in a grid, and a card in a list
+   never floats. The glyph is ink in a drawn circle, the four used to be four
+   different gradients, which spent four accents on one screen. */
+.zn-ref__adv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+.zn-ref__adv-glyph {
+  display: grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  margin-block-end: var(--sp-2);
+
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+.zn-ref__adv-glyph > svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+.zn-ref__adv-title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.3 var(--font-text);
+  color: var(--text-body);
+}
+
+/* ── compare: the call ────────────────────────────────────────────────── */
+
+/* The screen's one primary action, on sunken paper. The vermillon is inside
+   the button and nowhere else on the page. */
+.zn-ref__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-8);
+  padding: var(--sp-17) var(--sp-14);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-4xl);
+}
+
+@media (max-width: 640px) {
+  .zn-ref__cta {
+    padding: var(--sp-14) var(--sp-10);
+  }
+}
+
+/* ── 404 ──────────────────────────────────────────────────────────────── */
+
+/* The ground stops here. The rule starts at the left edge of the screen and
+   ends around 60% of its width; a figure walks towards the void at its end,
+   and the code is a mono dimension printed where the ground ran out. Then the
+   title, the sentence and the button, left-aligned like the rest of the
+   column: the screen reads as one sentence from top to bottom. No alert, no
+   glyph, the drawing is the sentence.
+
+   The only surface of this family that bleeds out of the column: the rule has
+   to start at the screen edge for its end to read as an end. The bleed is to
+   the left only (calc(50% - 50vw) from a centred column), which never
+   creates horizontal scroll. */
+.zn-void {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-10);
+  padding-block: var(--sp-20);
+}
+
+.zn-void__scene {
+  display: flex;
+  align-items: flex-end;
+  align-self: stretch;
+  margin-inline-start: calc(50% - 50vw);
+  margin-block-end: var(--sp-6);
+}
+
+/* The ground: 60% of the screen, the rule as its bottom border, the figure
+   set at its end. The bottom of the SVG frame is the ground line
+   (docs/doodles.md, "Le sol est la règle de la page"): the frame comes down
+   by the rule's rendered thickness and paints above it, so the vermillon
+   sole touches it. */
+.zn-void__ground {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex: none;
+  inline-size: 60vw;
+  padding-inline-end: var(--sp-4);
+  border-block-end: var(--border-rule);
+}
+
+/* Flipped in CSS to walk to the right, towards the void: a scene direction,
+   not a correction of an approved drawing. The height is fixed and the width
+   follows the viewBox ratio, a ?react SVG with both dimensions free
+   collapses. */
+.zn-void__art {
+  display: block;
+  block-size: 180px;
+  inline-size: auto;
+  flex: none;
+  color: var(--text-body);
+  transform: scaleX(-1);
+  position: relative;
+  z-index: 1;
+  margin-block-end: calc(-1 * var(--rule-bite));
+}
+
+/* The code, as a datum: mono, bold, in faint ink, its baseline resting on the
+   rule. At line-height 1 the JetBrains Mono box extends 0.14em below the
+   baseline (0.30em descent minus a negative half-leading of 0.16em); the
+   negative margin gives that descent back, and the rule's rendered thickness
+   (--rule-bite) lifts the digits just above the line. */
+.zn-void__code {
+  margin-inline-start: var(--sp-7);
+  margin-block-end: calc(-0.14em + var(--rule-bite));
+  font-family: var(--font-mono);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-label);
+  line-height: 1;
+  color: var(--text-faint);
+}
+
+.zn-void__body {
+  max-inline-size: 46ch;
+}
+
+@media (max-width: 640px) {
+  .zn-void__art {
+    block-size: 160px;
+  }
+}

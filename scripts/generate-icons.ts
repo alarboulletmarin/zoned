@@ -6,7 +6,7 @@
  *
  * Why a generator instead of a runtime dependency:
  *   The output is committed, so the app keeps zero icon dependencies at
- *   runtime and Vite can tree-shake per named export — same contract as the
+ *   runtime and Vite can tree-shake per named export, same contract as the
  *   hand-inlined set it replaces.
  *
  * Inputs:
@@ -158,7 +158,7 @@ function renderComponent(glyph: Glyph): string {
 
 function renderFile(glyphs: Glyph[], brandExports: string[], version: string): string {
   const header = `/**
- * Material Symbols icons — GENERATED FILE, DO NOT EDIT BY HAND.
+ * Material Symbols icons, GENERATED FILE, DO NOT EDIT BY HAND.
  *
  * Regenerate with: bun run generate:icons
  * Generator:       scripts/generate-icons.ts
@@ -167,7 +167,7 @@ function renderFile(glyphs: Glyph[], brandExports: string[], version: string): s
  * Source:  Material Symbols, Sharp style, weight 600
  *          https://github.com/google/material-design-icons
  *          via the @material-symbols/svg-600 npm package (v${version})
- * Licence: Apache License 2.0, © Google — see licenses/APACHE-2.0.txt
+ * Licence: Apache License 2.0, © Google, see licenses/APACHE-2.0.txt
  *          The upstream package ships no NOTICE file, so none is propagated.
  *
  * Modifications applied to the original SVGs:
@@ -180,7 +180,7 @@ function renderFile(glyphs: Glyph[], brandExports: string[], version: string): s
  *   - the path data itself is copied verbatim, unaltered
  *
  * Brand logos (GithubIcon, StravaIcon) have no Material equivalent and are
- * re-exported from ./brand — that file is hand-maintained.
+ * re-exported from ./brand, that file is hand-maintained.
  */
 
 import type { ReactNode } from "react";
@@ -237,7 +237,7 @@ function main() {
   if (check) {
     const current = existsSync(OUTPUT_PATH) ? readFileSync(OUTPUT_PATH, "utf-8") : "";
     if (current !== output) {
-      console.error("✗ src/components/icons/index.tsx is out of date — run: bun run generate:icons");
+      console.error("✗ src/components/icons/index.tsx is out of date, run: bun run generate:icons");
       process.exit(1);
     }
     console.log(`✓ ${glyphs.length} icons up to date`);

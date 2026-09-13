@@ -33,28 +33,19 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
     <button
       type="button"
       onClick={onClick}
-      className={cn(
-        "w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-md transition-colors",
-        "hover:bg-accent focus:outline-none focus:bg-accent",
-        isSelected && "bg-accent"
-      )}
+      className={cn("zn-cmdk__item", isSelected && "zn-cmdk__item--active")}
     >
-      {/* Color bar */}
-      <div
-        className={cn(
-          "w-1 h-10 rounded-full flex-shrink-0",
-          isStrength ? "bg-amber-500" : `bg-zone-${dominantZone}`
-        )}
-      />
+      {/* Intensity rail, zone ink when there is a zone, hollow when there is not */}
+      <div className="zn-cmdk__rail" data-zone={dominantZone ?? undefined} />
 
       {/* Content */}
-      <div className="flex-1 min-w-0">
-        <div className="font-medium text-sm truncate">{name}</div>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+      <div className="zn-fill">
+        <div className="zn-cmdk__item-title zn-truncate">{name}</div>
+        <div className="zn-cmdk__meta">
           <span>{categoryLabel}</span>
-          <span className="text-muted-foreground/50">·</span>
-          <span className="inline-flex items-center gap-1">
-            <Clock className="size-3" />
+          <span className="zn-cmdk__dot">·</span>
+          <span className="zn-cmdk__dur">
+            <Clock />
             {duration}
           </span>
         </div>
@@ -62,7 +53,7 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
 
       {/* Badge */}
       {isStrength ? (
-        <Dumbbell className="size-4 text-amber-500" />
+        <Dumbbell />
       ) : (
         <ZoneBadge zone={dominantZone!} size="sm" />
       )}

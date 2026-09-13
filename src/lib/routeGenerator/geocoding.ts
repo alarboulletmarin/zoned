@@ -43,7 +43,7 @@ const MAX_LABEL_LENGTH = 200;
  * spellings of the same query don't fragment the cache.
  */
 function normalizeCacheKey(query: string): string {
-  // Strip combining diacritical marks (U+0300–U+036F) so "café" and "cafe"
+  // Strip combining diacritical marks (U+0300-U+036F) so "café" and "cafe"
   // share the same cache entry.
   return query.normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
@@ -93,7 +93,7 @@ function writeCache(query: string, results: GeocodeResult[]): void {
       JSON.stringify(results),
     );
   } catch {
-    // sessionStorage might be full or disabled — silently ignore
+    // sessionStorage might be full or disabled, silently ignore
   }
 }
 

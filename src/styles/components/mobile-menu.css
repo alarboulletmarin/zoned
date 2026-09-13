@@ -1,0 +1,378 @@
+/* Mobile menu, one floating pill, and the full-screen ink panel behind it.
+ *
+ * Below 1024px the five doors no longer fit in the header, so they move down
+ * here: a single pill in the bottom-right corner, where the thumb already is,
+ * and nothing else floating.
+ *
+ * The panel is a NATIVE <dialog> opened with showModal(). The top layer, the
+ * focus trap, Escape and the focus returning to the trigger are the platform's
+ *, that is why this surface stopped being a Radix Sheet. The one thing the
+ * platform does not hand over is the scroll lock; MobileMenu.tsx writes it.
+ *
+ * The open panel is INK IN BOTH THEMES. It is a printed black card, not a piece
+ * of paper that follows the theme, so it reads --panel-ink-*, the three fixed
+ * tokens colors.css deliberately leaves out of its .dark block, instead of the
+ * semantic aliases. No rule in this file is theme-aware, and none needs to be.
+ *
+ * The 44px touch floor is unconditional here rather than behind
+ * `@media (pointer: coarse)`: this whole surface only exists below 1024px, so
+ * the floor applies to every pointer that can reach it.
+ */
+
+/* Le panneau s'appelle .zn-mobile-menu et pas .zn-menu : dropdown-menu.css
+   possède déjà .zn-menu pour tous les DropdownMenuContent de Radix. Les deux
+   ont vécu ensemble le temps d'un commit, dans la même couche et à la même
+   spécificité, et comme cette feuille est importée après, ses règles de
+   dialogue plein écran, position fixed, inset 0, fond encre, s'appliquaient
+   à CHAQUE menu déroulant de l'app : encre sur encre, et 176 px hors du
+   viewport. Deux revues l'ont mesuré indépendamment. Ne réutilise pas ce nom.
+
+── the two pills, one on top of the other's place ───────────────────── */
+
+/* Closed and open, the button lives at the same coordinates: the panel opens
+   under the thumb and closes under it too. */
+.zn-menu-fab,
+.zn-menu__close {
+  position: fixed;
+  /* Above the page's own floating things, the docked action bars (30) and
+     ScrollToTop (40), and below every modal layer (50), so an open dialog,
+     sheet or command palette covers the pill instead of being pierced by it.
+     The close pill is in the top layer with its dialog, where this is moot. */
+  z-index: 45;
+  inset-block-end: calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
+  inset-inline-end: var(--sp-13);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-11);
+
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-label);
+  line-height: 1;
+  text-transform: uppercase;
+
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-menu-fab:active,
+.zn-menu__close:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* Closed: solid ink, cream type, the same inversion the selected door in the
+   header wears, so the button reads as "the app's own control".
+   The ring is cream in both themes: invisible against paper, and the only
+   thing separating the pill from the footer's ink bar when the page is
+   scrolled to the floor. */
+.zn-menu-fab {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+  border: var(--bw-rule) solid var(--panel-ink-text);
+  box-shadow: var(--shadow-block);
+}
+
+.zn-menu-fab > svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+}
+
+/* Open: the screen's one accent fill. There is exactly one action on an open
+   menu that is not a destination, and this is it. */
+.zn-menu__close {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: var(--bw-rule) solid var(--accent);
+}
+
+/* ── the panel ────────────────────────────────────────────────────────── */
+
+/* A dialog ships with a border, padding, auto margins and a size capped below
+   the viewport, all four are undone here so it can be the whole screen. */
+.zn-mobile-menu {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  inline-size: 100%;
+  max-inline-size: none;
+  block-size: 100vh;
+  block-size: 100dvh;
+  max-block-size: none;
+
+  background: var(--panel-ink);
+  color: var(--panel-ink-text);
+  overflow: hidden;
+}
+
+/* Only the open state gets a display value: the UA rule that hides a closed
+   dialog is `dialog:not([open])`, and an unconditional display here would
+   defeat it. */
+.zn-mobile-menu[open] {
+  display: flex;
+  flex-direction: column;
+  animation: zn-menu-in var(--dur-base) var(--ease-out);
+}
+
+@keyframes zn-menu-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.zn-mobile-menu::backdrop {
+  background: var(--panel-ink);
+}
+
+/* No `gap` here: the room between the blocks is paid by each block itself,
+   because it is not the same everywhere, 32px under the kicker, none between
+   the doors and the ground (the ground's own slack is that room), 16px between
+   the rule and the foot. A uniform gap cost 64px, and on an iPhone SE those
+   are exactly the pixels the figure needs to exist. */
+.zn-menu__inner {
+  flex: 1;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  padding-block: calc(var(--sp-15) + env(safe-area-inset-top, 0px)) var(--fab-clear);
+  padding-inline: var(--pad-screen-x);
+
+  animation: zoned-slide-in var(--dur-slow) var(--ease-out);
+}
+
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-menu__inner > * {
+  flex: none;
+}
+
+/* The kicker's own colour is the page's faint ink, which is unreadable on this
+   ground. Same role, the panel's grey. */
+.zn-menu__eyebrow {
+  margin-block-end: var(--sp-14);
+  color: var(--panel-ink-faint);
+}
+
+/* ── the five doors ───────────────────────────────────────────────────── */
+
+.zn-menu__doors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Display type, left-aligned, stacked tight, the doors are the screen.
+   The same rule dresses a <summary>, so a door that discloses and a door that
+   navigates are the same object on screen. */
+.zn-menu__door {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  min-block-size: var(--hit-min);
+  padding-block: var(--sp-1);
+  color: var(--panel-ink-text);
+  text-decoration: none;
+
+  /* <summary> ships a disclosure triangle in two flavours. Both go: the
+     chevron on the right is the mark, and it turns with the state. */
+  list-style: none;
+  cursor: pointer;
+}
+
+.zn-menu__door::-webkit-details-marker {
+  display: none;
+}
+
+/* ── a door's pages ───────────────────────────────────────────────────── */
+
+.zn-menu__chevron {
+  inline-size: 20px;
+  block-size: 20px;
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--panel-ink-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-menu__group[open] > .zn-menu__door .zn-menu__chevron {
+  transform: rotate(180deg);
+}
+
+/* The children hang off a rule, indented under their door, the indent is what
+   says "these belong to the line above". */
+.zn-menu__sub {
+  list-style: none;
+  margin: 0 0 var(--sp-8);
+  padding: 0 0 0 var(--sp-8);
+  border-inline-start: var(--bw-rule) solid var(--panel-ink-faint);
+}
+
+.zn-menu__sub-link {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--hit-min);
+  padding-inline-start: var(--sp-8);
+
+  color: var(--panel-ink-faint);
+  font: var(--type-body-sm);
+  text-decoration: none;
+}
+
+/* La page où l'on est. Le gras et l'encre claire ne suffisaient pas : sur ce
+   fond noir, --panel-ink-faint → --panel-ink-text est un écart porté par la
+   seule couleur, et il fond dès qu'on désature. La pilule inverse le rapport,
+   sur un panneau d'encre, l'inversion est du papier, donc l'état se lit aussi
+   en niveaux de gris. Rien ne bouge : la boîte a déjà ses 44px de min-block-size
+   et son retrait, on ne fait que peindre dedans. */
+.zn-menu__sub-link[aria-current="page"] {
+  background: var(--panel-ink-text);
+  color: var(--panel-ink);
+  border-radius: var(--r-pill);
+  font-weight: var(--fw-semibold);
+}
+
+/* ── the ground: a rule across the panel, and the figure standing on it ── */
+
+/* The scene is the room left between the last door and the foot, and never
+   more: `container-type: size` makes its own content weigh nothing in the
+   flex algorithm, so the figure can never push the foot down or the doors up.
+   Its bottom border is the rule, bled to the screen edges through the
+   panel's padding, the only rule of the panel that crosses it whole. */
+.zn-menu__scene {
+  flex: 1;
+  container-type: size;
+  display: flex;
+  align-items: flex-end;
+  margin-inline: calc(-1 * var(--pad-screen-x));
+  margin-block-end: var(--sp-8);
+  padding-inline: var(--pad-screen-x);
+  border-block-end: var(--bw-rule) solid var(--panel-ink-text);
+}
+
+/* The figure. The bottom of its viewBox IS its sole (the drawn ground left the
+   files on 6 September 2026), so aligning the box on the rule is the whole
+   calage: flex-end puts the box on the rule's top edge, and the negative margin
+   of the rule's rendered thickness (--rule-bite, borders.css) lets the sole
+   sit on the line instead of a hair above it. Height, not width, is what it
+   is sized by: the five doors are portrait frames cut at the stroke, of
+   different heights (159 to 182 units), so one height gives them scales up to
+   15% apart, which never shows, since only one door is open at a time and no
+   two of them share a screen; the duo (landscape) simply comes wider. 200px
+   is the size the workshop settled on; below that it takes whatever the scene
+   has, down to 120px, the floor under which a stroke stops explaining and
+   starts competing with the glyphs. `100cqb` is the scene's content height:
+   an svgr import without a size collapses, and this is its size. */
+.zn-menu__figure {
+  block-size: min(200px, 100cqb);
+  inline-size: auto;
+  max-inline-size: 100%;
+  flex: none;
+  margin-block-end: calc(-1 * var(--rule-bite));
+}
+
+/* Under 120px of room the figure goes rather than shrinks into a pictogram,
+   an open door's list of pages, a landscape phone, anything shorter than an
+   iPhone SE. The rule stays, so the panel keeps its structure. Queried on the
+   scene, not the viewport: it is the room that decides, whatever ate it. */
+@container (max-block-size: 119.9px) {
+  .zn-menu__figure {
+    display: none;
+  }
+}
+
+/* ── the floor: search, the two switches, everything else ─────────────── */
+
+/* 8px between the field and the pills, down from 20: the twelve pixels
+   returned are what lets the figure keep its 120px floor on an iPhone SE
+   (375×667), measured, not guessed: 122.7px left for the scene. */
+.zn-menu__foot {
+  margin-block-start: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* Shaped like a field, but it is a button: it opens the command palette, which
+   is the app's one search. */
+.zn-menu__search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-10);
+
+  background: transparent;
+  color: var(--panel-ink-faint);
+  border: var(--bw-rule) solid var(--panel-ink-text);
+  border-radius: var(--r-pill);
+
+  font: var(--type-body-sm);
+  text-align: start;
+  cursor: pointer;
+}
+
+.zn-menu__search > svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  color: var(--panel-ink-text);
+}
+
+.zn-menu__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+}
+
+.zn-menu__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-10);
+
+  background: transparent;
+  color: var(--panel-ink-text);
+  border: var(--bw-rule) solid var(--panel-ink-text);
+  border-radius: var(--r-pill);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* Both codes are printed; the one in force is the one in full ink. */
+.zn-menu__lang {
+  color: var(--panel-ink-faint);
+}
+
+.zn-menu__lang[data-on] {
+  color: var(--panel-ink-text);
+}
+
+/* What the pill costs the rest of the app is paid in the files that own the
+   surfaces, not here: --fab-clear in shell.css, scroll-to-top.css and
+   shell-misc.css, and --fab-w dans footer.css plus les quatre feuilles qui
+   ancrent une barre d'action au sol de la fenêtre (session, plan-view,
+   plan-weeks, calc-tests). La barre d'encre du pied de page ne paie QUE la
+   réserve latérale : hors de la colonne de la pastille, une rangée est à
+   l'abri quelle que soit la position de défilement, et la réserve basse n'y
+   ajoutait que de l'encre vide. A grouped rule in this file would lose the
+   cascade to three of them, which are imported later and re-state the whole
+   `padding` shorthand. */

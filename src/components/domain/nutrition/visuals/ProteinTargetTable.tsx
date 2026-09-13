@@ -1,58 +1,49 @@
 import { useTranslation } from "react-i18next";
+import {
+  ResponsiveTable,
+  type ResponsiveTableColumn,
+} from "@/components/ui/responsive-table";
 import { proteinTargets } from "@/data/nutrition";
+import type { ProteinDose } from "@/data/nutrition/types";
 
+/**
+ * Daily protein target by training volume, a real table, so the ported
+ * ResponsiveTable. The mobile duplicate of the volume column disappears with
+ * it: the card view already prints every column under its own label.
+ */
 export function ProteinTargetTable() {
   const { t } = useTranslation("nutrition");
 
+  const columns: ResponsiveTableColumn<ProteinDose>[] = [
+    {
+      key: "profile",
+      header: t("hub.protein.targets.headers.profile"),
+      cell: (row) => t(row.profileKey),
+      hideOnMobile: true,
+    },
+    {
+      key: "volume",
+      header: t("hub.protein.targets.headers.volume"),
+      cell: (row) => <span className="zn-mono">{t(row.hoursPerWeekKey)}</span>,
+    },
+    {
+      key: "target",
+      header: t("hub.protein.targets.headers.target"),
+      cell: (row) => (
+        <>
+          <span className="zn-nut-tag">{t(row.targetKey)}</span>
+          <p className="zn-caption zn-faint">{t(row.helperKey)}</p>
+        </>
+      ),
+    },
+  ];
+
   return (
-    <div className="overflow-x-auto rounded-xl border border-border/50 bg-muted/30">
-      <table className="w-full text-sm border-collapse">
-        <thead className="bg-muted/50">
-          <tr>
-            <th className="text-left px-4 py-3 font-semibold">
-              {t("hub.protein.targets.headers.profile")}
-            </th>
-            <th className="text-left px-4 py-3 font-semibold hidden sm:table-cell">
-              {t("hub.protein.targets.headers.volume")}
-            </th>
-            <th className="text-left px-4 py-3 font-semibold">
-              {t("hub.protein.targets.headers.target")}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {proteinTargets.map((row, idx) => (
-            <tr
-              key={row.profileKey}
-              className={
-                idx !== proteinTargets.length - 1
-                  ? "border-b border-border/40"
-                  : undefined
-              }
-            >
-              <td className="px-4 py-3">
-                <div className="space-y-0.5">
-                  <p className="font-medium">{t(row.profileKey)}</p>
-                  <p className="text-xs text-muted-foreground sm:hidden">
-                    {t(row.hoursPerWeekKey)}
-                  </p>
-                </div>
-              </td>
-              <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell">
-                {t(row.hoursPerWeekKey)}
-              </td>
-              <td className="px-4 py-3">
-                <div className="space-y-0.5">
-                  <span className="rounded-full bg-rose-100 dark:bg-rose-950/40 px-2.5 py-0.5 text-xs font-bold text-rose-800 dark:text-rose-300">
-                    {t(row.targetKey)}
-                  </span>
-                  <p className="text-xs text-muted-foreground">{t(row.helperKey)}</p>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <ResponsiveTable
+      data={proteinTargets}
+      columns={columns}
+      rowKey="profileKey"
+      mobileCardTitle={(row) => t(row.profileKey)}
+    />
   );
 }

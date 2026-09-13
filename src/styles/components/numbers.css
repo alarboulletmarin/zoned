@@ -1,0 +1,287 @@
+/* Mes chiffres, the numbers door: profile, zones, calculators.
+ *
+ * Five screens share one sheet of paper: /profile, /my-zones, /calculators,
+ * /calculators/zones and /calculators/allures. Each reads top to bottom as a
+ * mono kicker, a display title, a lede, then data, and each band is separated
+ * from the next by blank space alone (--gap-section) since 12 September 2026.
+ * It was a full-width ink rule until then.
+ *
+ * The shell already wraps every route in .zn-page, which pays the 40px (20px
+ * mobile) screen margin once. "Full width" here therefore means the width of
+ * that column: the rules run from one of its edges to the other, and nothing
+ * bleeds outside it, so the page never scrolls sideways.
+ *
+ * What this file does NOT redeclare: the flex/stack/grid vocabulary of
+ * _layout.css, the type roles of _type.css, and the paint of card.css,
+ * tabs.css, door-card.css, responsive-table.css, segmented.css, alert.css and
+ * the shared .zn-numfield of workout.css. Those are composed with, never
+ * copied.
+ */
+
+.zn-num {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── head ─────────────────────────────────────────────────────────────── */
+
+/* The band above the rule: on every screen a stack of kicker, title and lede;
+   on the profile a two-column split with the four numbers on the right. */
+.zn-num__head {
+  padding-block: var(--sp-10) var(--sp-13);
+}
+
+/* Bottom-aligned, so the stat blocks sit on the title's baseline block rather
+   than floating above it. */
+.zn-split.zn-num__head {
+  align-items: end;
+}
+
+@media (max-width: 900px) {
+  .zn-num__head {
+    gap: var(--sp-13);
+  }
+}
+
+.zn-num__lede {
+  max-inline-size: 52ch;
+}
+
+/* The four numbers: two by two, so a long label wraps inside its own cell
+   instead of squeezing the one next to it. */
+.zn-num__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+}
+
+@media (max-width: 480px) {
+  .zn-num__stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── tabs ─────────────────────────────────────────────────────────────── */
+
+/* Composed onto .zn-tabs__list: same rule, same triggers, plus the wrap the
+   five profile tabs need at narrow widths. Both classes are named because
+   tabs.css is imported after this file. */
+.zn-tabs__list.zn-num__tabs {
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-6);
+}
+
+/* La bande propre d'un panneau d'onglet. Elle paie la moitié de --gap-section
+   en haut, comme toute bande : la tête au-dessus paie ses 26 px, et la
+   frontière fait un écart. */
+.zn-num__panel {
+  padding-block: calc(var(--gap-section) / 2) var(--sp-17);
+}
+
+/* ── form ─────────────────────────────────────────────────────────────── */
+
+.zn-num__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-10);
+}
+
+@media (max-width: 640px) {
+  .zn-num__fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* A label, its control, and the line that says what is wrong with it. */
+.zn-num__field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+/* What is wrong with the value above, in the accent, which carries danger as
+   type, never as a second fill. */
+.zn-num__error {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--state-danger);
+}
+
+/* A free-text field, a race name, a custom distance. The number fields reuse
+   the shared .zn-numfield instead, which already draws this frame around a
+   mono value and its unit. */
+.zn-num__input {
+  inline-size: 100%;
+  min-block-size: 36px;
+  padding: var(--sp-4) var(--sp-6);
+
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+}
+
+.zn-num__input::placeholder {
+  color: var(--text-faint);
+}
+
+@media (pointer: coarse) {
+  .zn-num__input {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* Hours, minutes, seconds, three number fields on one baseline, each with its
+   unit inside its own frame. */
+.zn-num__time {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+/* The actions of a card, under a divider: the block above is what you typed,
+   the block below is what happens to it. */
+.zn-num__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-6);
+  padding-block-start: var(--sp-8);
+  border-block-start: var(--border-divider);
+}
+
+/* ── aside ────────────────────────────────────────────────────────────── */
+
+.zn-num__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+/* Where the numbers come from. A sunken band rather than a raised card: it is
+   a footnote to the form next to it, not a second form. */
+.zn-num__source {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--pad-card);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* ── zone legend ──────────────────────────────────────────────────────── */
+
+/* The ink ramp orders the zones but does not name them, so each screen that
+   paints zone fills carries the legend once, on the sunken band. */
+.zn-num__legend {
+  padding-block: var(--sp-10);
+  background: var(--surface-band);
+  border-block: var(--border-rule);
+}
+
+/* ── rows ─────────────────────────────────────────────────────────────── */
+
+.zn-num__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+/* One editable record, a reference time and the race it came from. An
+   outlined block, no shadow: it is in a list, and a list card never floats. */
+.zn-num__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+/* Une ligne qui porte déjà un temps enregistré double son filet d'ENCRE vers
+   l'intérieur (card.css). Le vermillon lui est retiré : déjà rempli n'est
+   ni maintenant ni même un choix de l'utilisateur, c'est un constat.
+   Le porteur non chromatique est le contenu lui-même, la ligne affiche le
+   temps qu'elle détient, une ligne vide n'affiche rien.
+   Inset : mesuré, la ligne grandissait de 2px (66 → 68px) dès qu'on y saisissait
+   un temps, et poussait toutes les distances suivantes. */
+.zn-num__row[data-filled="true"] {
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
+}
+
+/* ── table ────────────────────────────────────────────────────────────── */
+
+/* A numeric column of the ResponsiveTable. The class lands on both the <th>
+   and the <td>, so the alignment is shared, but only the cell takes the mono
+   face: a column head is a kicker, and it keeps the kicker's own tracking.
+   (The mobile card view is a definition list and carries neither class.) */
+.zn-num__num {
+  text-align: end;
+}
+
+.zn-table__td.zn-num__num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The action column carries an icon button and no header. */
+.zn-num__rowaction {
+  inline-size: 1%;
+  text-align: end;
+  white-space: nowrap;
+}
+
+/* ── calculators hub ──────────────────────────────────────────────────── */
+
+/* Une famille d'outils par bande, séparées par l'espace seul. */
+.zn-num__group {
+  padding-block: calc(var(--gap-section) / 2);
+}
+
+.zn-num__grouphead {
+  margin-block-end: var(--sp-11);
+}
+
+/* The compact door the hub prints twelve of: same paper, same vermillon
+   promise, less air, a door to a calculator is a smaller decision than a door
+   to the catalogue. */
+.zn-door.zn-num__door {
+  min-block-size: 164px;
+  gap: var(--sp-5);
+  padding: var(--sp-11);
+}
+
+.zn-door.zn-num__door .zn-door__title {
+  font-size: var(--fs-h4);
+  letter-spacing: var(--ls-h4);
+}
+
+/* ── caveat ───────────────────────────────────────────────────────────── */
+
+/* The sentence that says a computed pace is a target and not a contract, and
+   the citation under it. Prose stops being readable past ~70 characters. */
+.zn-num__caveat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-inline-size: 68ch;
+}
+
+/* ── control ──────────────────────────────────────────────────────────── */
+
+/* A select that fills the column it is given. select.css deliberately declares
+   no width on the trigger, so the width belongs to the screen that places it,
+   here, the two dialogs on /profile. */
+.zn-select-trigger.zn-num__control {
+  inline-size: 100%;
+}

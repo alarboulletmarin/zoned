@@ -46,7 +46,7 @@ function walkKeys(value: JsonValue, prefix = ""): Map<string, JsonValue> {
     return out;
   }
   if (Array.isArray(value)) {
-    // Arrays are treated as leaves — the parity check verifies the *shape*, not every element.
+    // Arrays are treated as leaves, the parity check verifies the *shape*, not every element.
     out.set(prefix, value);
     return out;
   }
@@ -129,7 +129,7 @@ function main(): void {
   const warnings = allIssues.filter((i) => i.kind === "empty-string");
 
   if (errors.length === 0 && warnings.length === 0) {
-    console.log(`OK — FR/EN parity across ${namespaces.length} namespaces (${namespaces.join(", ")})`);
+    console.log(`OK, FR/EN parity across ${namespaces.length} namespaces (${namespaces.join(", ")})`);
     process.exit(0);
   }
 
@@ -143,7 +143,7 @@ function main(): void {
   };
 
   if (warnings.length > 0) {
-    console.warn(`WARN — ${warnings.length} empty-string warning(s) (non-blocking)\n`);
+    console.warn(`WARN, ${warnings.length} empty-string warning(s) (non-blocking)\n`);
     for (const [ns, issues] of groupByNs(warnings)) {
       console.warn(`  [${ns}] ${issues.length} warning(s)`);
       for (const issue of issues) {
@@ -155,11 +155,11 @@ function main(): void {
   }
 
   if (errors.length === 0) {
-    console.log(`OK — FR/EN key parity across ${namespaces.length} namespaces (warnings above)`);
+    console.log(`OK, FR/EN key parity across ${namespaces.length} namespaces (warnings above)`);
     process.exit(0);
   }
 
-  console.error(`FAIL — ${errors.length} error(s) across ${groupByNs(errors).size} namespace(s)\n`);
+  console.error(`FAIL, ${errors.length} error(s) across ${groupByNs(errors).size} namespace(s)\n`);
   for (const [ns, issues] of groupByNs(errors)) {
     console.error(`  [${ns}] ${issues.length} error(s)`);
     for (const issue of issues) {

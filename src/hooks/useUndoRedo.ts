@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * Lightweight history stack for editor screens — keeps `present` state behind
+ * Lightweight history stack for editor screens, keeps `present` state behind
  * a Reactish setter (`set`) and exposes `undo` / `redo` callbacks plus the
  * `canUndo` / `canRedo` flags consumers need to disable buttons.
  *
  * The hook is intentionally generic and pure-state: it doesn't read the DOM,
  * spawn timers or care about the shape of `T`. Callers control batching by
  * deciding when to invoke `set` (one call per snapshot to keep undo coarse,
- * one per keystroke for fine-grained typing — usually too noisy).
+ * one per keystroke for fine-grained typing, usually too noisy).
  *
  * Capacity defaults to 20 entries which empirically covers an editing session
  * without bloating localStorage drafts that may persist the whole structure
  * in flight. When the cap is hit the oldest snapshot is dropped, so the
- * earliest undo simply stops working — preferable to unbounded memory growth.
+ * earliest undo simply stops working, preferable to unbounded memory growth.
  *
  * Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z (or Ctrl+Y on Windows) shortcuts are wired
  * automatically while the hook is mounted; pass `enableShortcuts={false}` to
@@ -23,8 +23,8 @@ export interface UseUndoRedoResult<T> {
   present: T;
   set: (next: T | ((prev: T) => T)) => void;
   /**
-   * Move `present` without recording a snapshot. For continuous input — a
-   * slider being dragged — where every intermediate frame must render but only
+   * Move `present` without recording a snapshot. For continuous input, a
+   * slider being dragged, where every intermediate frame must render but only
    * the released value belongs in history. Pair it with one `set` on release,
    * built from the value captured before the gesture began.
    */

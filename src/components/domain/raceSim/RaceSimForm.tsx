@@ -13,7 +13,7 @@ export interface RaceSimSettings {
   /** A RACE_OPTIONS value, or "custom". */
   distance: string;
   customDistance: string;
-  /** Raw text — "45:00", "3:30:00", "45". */
+  /** Raw text, "45:00", "3:30:00", "45". */
   targetTime: string;
   startTime: string;
   strategy: SplitStrategy;
@@ -66,17 +66,12 @@ export function resolveSettings(s: RaceSimSettings): ResolvedSettings {
   };
 }
 
-const FIELD =
-  "h-10 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-sm " +
-  "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
-
-// Native steppers are tiny targets and look dated; the value is typed, not nudged.
-const NO_SPINNER =
-  "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none";
+/** Every field group is a small stack: label, control, hint. */
+const GROUP = { "--gap": "var(--sp-4)" } as React.CSSProperties;
 
 /**
  * Race parameters. Lives in the sticky left column on desktop and inside a
- * sheet on mobile, so the CTA sits at the foot of the panel — same pattern as
+ * sheet on mobile, so the CTA sits at the foot of the panel, same pattern as
  * the "Ma semaine" generator rather than a button buried in a settings card.
  */
 export function RaceSimForm({
@@ -108,29 +103,24 @@ export function RaceSimForm({
 
   return (
     <form
-      className={cn("space-y-5", className)}
+      className={cn("zn-stack", className)}
+      style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}
       onSubmit={(e) => {
         e.preventDefault();
         if (resolved.valid) onGenerate();
       }}
     >
       {/* Distance */}
-      <div>
+      <div className="zn-stack" style={GROUP}>
         <FieldLabel>{t("inputs.distance")}</FieldLabel>
-        <div className="mt-2 grid grid-cols-2 gap-1.5">
+        <div className="zn-rs-form__choices">
           {RACE_OPTIONS.map((opt) => (
             <button
               key={opt.value}
               type="button"
               onClick={() => set("distance", opt.value)}
               aria-pressed={settings.distance === opt.value}
-              className={cn(
-                "rounded-md border px-3 py-2 text-sm font-medium transition-all active:scale-[0.98]",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                settings.distance === opt.value
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-input hover:bg-muted",
-              )}
+              className="zn-rs-choice"
             >
               {pick(opt, "label")}
             </button>
@@ -139,19 +129,13 @@ export function RaceSimForm({
             type="button"
             onClick={() => set("distance", "custom")}
             aria-pressed={settings.distance === "custom"}
-            className={cn(
-              "col-span-2 rounded-md border px-3 py-2 text-sm font-medium transition-all active:scale-[0.98]",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              settings.distance === "custom"
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-input hover:bg-muted",
-            )}
+            className="zn-rs-choice zn-rs-choice--wide"
           >
             {t("inputs.custom")}
           </button>
         </div>
         {settings.distance === "custom" && (
-          <div className="mt-2 flex items-center gap-2">
+          <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
             <input
               type="number"
               min={0.5}
@@ -162,15 +146,15 @@ export function RaceSimForm({
               aria-label={t("inputs.custom")}
               value={settings.customDistance}
               onChange={(e) => set("customDistance", e.target.value)}
-              className={cn(FIELD, NO_SPINNER, "max-w-[8rem] tabular-nums")}
+              className="zn-rs-field zn-rs-field--mono zn-rs-field--short"
             />
-            <span className="text-sm text-muted-foreground">km</span>
+            <span className="zn-rs-form__suffix">km</span>
           </div>
         )}
       </div>
 
       {/* Target time */}
-      <div>
+      <div className="zn-stack" style={GROUP}>
         <label htmlFor={`${uid}-time`}>
           <FieldLabel>{t("inputs.targetTime")}</FieldLabel>
         </label>
@@ -184,25 +168,19 @@ export function RaceSimForm({
           aria-describedby={`${uid}-time-hint`}
           value={settings.targetTime}
           onChange={(e) => set("targetTime", e.target.value)}
-          className={cn(
-            FIELD,
-            "mt-2 font-mono text-lg tabular-nums tracking-tight",
-            resolved.timeError && "border-destructive",
-          )}
+          className="zn-rs-field zn-rs-field--time"
         />
         <p
           id={`${uid}-time-hint`}
-          className={cn(
-            "mt-1 text-xs",
-            resolved.timeError ? "text-destructive" : "text-muted-foreground",
-          )}
+          className="zn-rs-form__hint"
+          data-error={resolved.timeError || undefined}
         >
           {resolved.timeError ? t("inputs.timeInvalid") : t("inputs.timeHint")}
         </p>
       </div>
 
       {/* Start time */}
-      <div>
+      <div className="zn-stack" style={GROUP}>
         <label htmlFor={`${uid}-start`}>
           <FieldLabel>{t("inputs.startTime")}</FieldLabel>
         </label>
@@ -211,31 +189,28 @@ export function RaceSimForm({
           type="time"
           value={settings.startTime}
           onChange={(e) => set("startTime", e.target.value)}
-          className={cn(FIELD, "mt-2 font-mono tabular-nums")}
+          className="zn-rs-field zn-rs-field--mono"
         />
       </div>
 
       {/* Strategy */}
-      <div>
+      <div className="zn-stack" style={GROUP}>
         <FieldLabel>{t("inputs.strategy")}</FieldLabel>
         <Segmented
-          className="mt-2"
           label={t("inputs.strategy")}
           value={settings.strategy}
           onChange={(value) => set("strategy", value)}
           options={strategyOptions}
         />
-        <p className="mt-1 text-xs text-muted-foreground">
-          {t(`inputs.${settings.strategy}Desc`)}
-        </p>
+        <p className="zn-rs-form__hint">{t(`inputs.${settings.strategy}Desc`)}</p>
       </div>
 
       {/* Weight */}
-      <div>
+      <div className="zn-stack" style={GROUP}>
         <label htmlFor={`${uid}-weight`}>
           <FieldLabel>{t("inputs.weight")}</FieldLabel>
         </label>
-        <div className="mt-2 flex items-center gap-2">
+        <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
           <input
             id={`${uid}-weight`}
             type="number"
@@ -245,19 +220,15 @@ export function RaceSimForm({
             placeholder="70"
             value={settings.weight}
             onChange={(e) => set("weight", e.target.value)}
-            className={cn(FIELD, NO_SPINNER, "max-w-[8rem] tabular-nums")}
+            className="zn-rs-field zn-rs-field--mono zn-rs-field--short"
           />
-          <span className="text-sm text-muted-foreground">
-            {t("inputs.weightUnit")}
-          </span>
+          <span className="zn-rs-form__suffix">{t("inputs.weightUnit")}</span>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">
-          {t("inputs.weightHint")}
-        </p>
+        <p className="zn-rs-form__hint">{t("inputs.weightHint")}</p>
       </div>
 
-      <Button type="submit" disabled={!resolved.valid} className="w-full">
-        <Flag className="size-4" />
+      <Button type="submit" disabled={!resolved.valid} className="zn-rs-form__submit">
+        <Flag />
         {submitLabel}
       </Button>
     </form>

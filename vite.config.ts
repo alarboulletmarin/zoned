@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
 import svgr from "vite-plugin-svgr";
 import { VitePWA } from "vite-plugin-pwa";
 import { readFileSync } from "node:fs";
@@ -14,7 +13,6 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
-    tailwindcss(),
     VitePWA({
       // "prompt", not "autoUpdate": a new service worker installs, precaches,
       // then sits in `waiting` until <UpdatePrompt> is told to activate it.
@@ -32,11 +30,23 @@ export default defineConfig({
           "Science-based endurance training: structured workouts, training plans and calculators built on a 6-zone system. No account, no tracking.",
         lang: "en",
         categories: ["health", "fitness", "sports", "lifestyle"],
-        theme_color: "#0f172a",
-        background_color: "#0f172a",
+        theme_color: "#F6F5F2",
+        background_color: "#F6F5F2",
         display: "standalone",
-        start_url: "/",
+        // L'app installée ouvre sur le cockpit, pas sur la landing. C'est le
+        // sens même d'avoir séparé les deux : "/" est la page publique qu'on
+        // partage et qu'un robot indexe, /today est l'écran de quelqu'un qui
+        // s'entraîne. Aucune redirection depuis "/" en revanche — ce serait
+        // une plaie SEO, et ça rendrait la page marketing inatteignable.
+        start_url: "/today",
         scope: "/",
+        // Appui long sur l'icône installée. Les trois destinations qu'on
+        // ouvre vraiment, sans passer par un écran.
+        shortcuts: [
+          { name: "Library", short_name: "Library", url: "/library" },
+          { name: "New plan", short_name: "New plan", url: "/plan/new" },
+          { name: "Calculators", short_name: "Calculators", url: "/calculators" },
+        ],
         icons: [
           {
             src: "pwa-64x64.png",
@@ -136,14 +146,23 @@ export default defineConfig({
           // 540KB renderer lives) is a separate entry from "react-dom".
           // Without it the renderer lands in the app entry chunk.
           "vendor-react": ["react", "react-dom", "react-dom/client", "react-router-dom"],
+          // Rien qui ne soit déclaré dans package.json, ni plus ni moins. Un nom de trop ici est une entrée rollup introuvable, donc
+          // un build mort : dialog, slider, switch et tabs étaient restés dans
+          // la liste après que le projet leur a substitué ses propres
+          // primitives (<dialog> natif, ui/slot.tsx), et n'étaient plus dans le
+          // lockfile. La CI, qui installe propre, échouait sur le premier ;
+          // un node_modules local qui les gardait masquait les trois autres.
+          // react-slot est parti aussi : il n'est là qu'en dépendance
+          // transitive de dropdown-menu, et il atterrit de toute façon dans ce
+          // chunk-ci avec l'importateur qui le tire.
+          //
+          // react-popover n'entre PAS : il est bien déclaré et utilisé, mais il
+          // n'a jamais été listé ici, et l'ajouter ferait entrer son poids dans
+          // le chemin de démarrage que le budget Lighthouse borne à 850KB pour
+          // ~740 observés. Réparer ce chunk n'est pas l'occasion de le changer.
           "vendor-radix": [
-            "@radix-ui/react-dialog",
             "@radix-ui/react-dropdown-menu",
             "@radix-ui/react-select",
-            "@radix-ui/react-slider",
-            "@radix-ui/react-slot",
-            "@radix-ui/react-switch",
-            "@radix-ui/react-tabs",
             "@radix-ui/react-tooltip",
           ],
           "vendor-i18n": ["i18next", "i18next-browser-languagedetector", "react-i18next"],

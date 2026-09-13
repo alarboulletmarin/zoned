@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -9,17 +9,12 @@ import {
   Heart,
   RotateCcw,
   ArrowLeft,
-  AlertTriangle,
-  Info,
   CheckIcon,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { racePrepSections, recoveryTimelines } from "@/data/guides/race-prep";
 import type { ContentBlock, RecoveryTimeline } from "@/data/guides/race-prep";
@@ -36,12 +31,11 @@ const SECTION_ICONS: Record<string, React.ComponentType<IconProps>> = {
 
 const STORAGE_KEY = "zoned-racechecklist";
 
-const PHASE_COLORS = [
-  "bg-red-500",
-  "bg-amber-500",
-  "bg-emerald-500",
-  "bg-blue-500",
-];
+/** The ink ramp has six steps; a timeline never has more than four phases,
+ *  but the clamp keeps the paint honest if one ever does. */
+function rampStep(index: number): number {
+  return Math.min(index + 1, 6);
+}
 
 export function RacePrepGuidePage() {
   const { t } = useTranslation("guides");
@@ -66,119 +60,101 @@ export function RacePrepGuidePage() {
     });
   }, []);
 
+  /**
+   * A block of a section, in the article's own reading treatment, .zn-prose
+   * and its parts, written once in learn.css. Tips and warnings are the same
+   * pulled-out callout the articles use.
+   */
   function renderBlock(block: ContentBlock, blockIdx: number) {
     const text = pick(block, "text");
 
     switch (block.type) {
       case "paragraph":
         return (
-          <p key={blockIdx} className="text-muted-foreground leading-relaxed">
-            <GlossaryLinkedText text={text ?? ""} />
-          </p>
+          <GlossaryLinkedText
+            key={blockIdx}
+            as="p"
+            className="zn-prose__p"
+            text={text ?? ""}
+          />
         );
 
       case "list":
         return (
-          <div key={blockIdx} className="space-y-2">
-            {text && <h4 className="font-medium text-sm">{text}</h4>}
-            <ul className="space-y-1.5 ml-1">
+          <figure key={blockIdx} className="zn-prose__figure">
+            {text && <figcaption>{text}</figcaption>}
+            <ul className="zn-prose__list">
               {block.items?.map((item, i) => (
-                <li key={i} className="flex gap-2 text-sm text-muted-foreground">
-                  <span className="text-primary mt-1 shrink-0">&#8226;</span>
-                  <span>{pick(item, "text")}</span>
-                </li>
+                <li key={i}>{pick(item, "text")}</li>
               ))}
             </ul>
-          </div>
+          </figure>
         );
 
       case "checklist":
         return (
-          <div key={blockIdx} className="space-y-2">
-            {text && <h4 className="font-medium text-sm">{text}</h4>}
-            <div className="space-y-1.5">
+          <figure key={blockIdx} className="zn-prose__figure">
+            {text && <figcaption>{text}</figcaption>}
+            <div
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-2)" } as CSSProperties}
+            >
               {block.items?.map((item, i) => {
                 const key = `${blockIdx}-${i}`;
                 const isChecked = !!checked[key];
                 return (
-                  <label
-                    key={i}
-                    className="flex items-start gap-3 cursor-pointer group"
-                  >
+                  <label key={i} className="zn-guide__checkrow">
                     <button
                       type="button"
                       role="checkbox"
                       aria-checked={isChecked}
                       onClick={() => toggleCheck(key)}
-                      className={cn(
-                        "mt-0.5 shrink-0 size-5 rounded border-2 flex items-center justify-center transition-colors",
-                        isChecked
-                          ? "bg-primary border-primary text-primary-foreground"
-                          : "border-muted-foreground/30 group-hover:border-primary/50"
-                      )}
+                      className="zn-guide__check"
                     >
-                      {isChecked && <CheckIcon className="size-3" />}
+                      <CheckIcon aria-hidden="true" />
                     </button>
-                    <span
-                      className={cn(
-                        "text-sm transition-colors",
-                        isChecked
-                          ? "line-through text-muted-foreground/50"
-                          : "text-muted-foreground"
-                      )}
-                    >
+                    <span className="zn-guide__checktext">
                       {pick(item, "text")}
                     </span>
                   </label>
                 );
               })}
             </div>
-          </div>
+          </figure>
         );
 
       case "table":
         return (
-          <div key={blockIdx} className="space-y-2">
-            {text && <h4 className="font-medium text-sm">{text}</h4>}
-            <div className="overflow-x-auto rounded-xl border">
-              <table className="w-full text-sm">
+          <figure key={blockIdx} className="zn-prose__figure">
+            {text && <figcaption>{text}</figcaption>}
+            <div className="zn-scroll-x">
+              <table className="zn-prose__table">
                 <tbody>
                   {block.rows?.map((row, i) => (
-                    <tr key={i} className={cn(i % 2 === 0 ? "bg-muted/30" : "")}>
-                      <td className="px-4 py-3 font-medium whitespace-nowrap">
-                        {pick(row, "label")}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {pick(row, "value")}
-                      </td>
+                    <tr key={i}>
+                      <td>{pick(row, "label")}</td>
+                      <td>{pick(row, "value")}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          </div>
+          </figure>
         );
 
       case "tip":
-        return (
-          <div
-            key={blockIdx}
-            className="flex gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4"
-          >
-            <Info className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-            <p className="text-sm text-emerald-800 dark:text-emerald-200"><GlossaryLinkedText text={text ?? ""} /></p>
-          </div>
-        );
-
       case "warning":
         return (
-          <div
-            key={blockIdx}
-            className="flex gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4"
-          >
-            <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-            <p className="text-sm text-amber-800 dark:text-amber-200"><GlossaryLinkedText text={text ?? ""} /></p>
-          </div>
+          <aside key={blockIdx} className="zn-prose__callout" data-kind={block.type}>
+            <span className="zn-kicker zn-prose__callout-label">
+              {t(`content:article.callout.${block.type}`)}
+            </span>
+            <GlossaryLinkedText
+              as="p"
+              className="zn-prose__callout-text"
+              text={text ?? ""}
+            />
+          </aside>
         );
 
       default:
@@ -186,21 +162,29 @@ export function RacePrepGuidePage() {
     }
   }
 
+  /**
+   * How long a distance takes to come back from. The bar is an ordered scale,
+   * so it is painted with the ink ramp, density says "first, then, then",
+   * and every step is named under it, so the bar never asks the reader to
+   * decode a shade on its own.
+   */
   function renderRecoveryTimeline(timeline: RecoveryTimeline) {
     const distance = pick(timeline, "distance");
     return (
-      <Card key={timeline.distance} size="compact" className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
+      <Card key={timeline.distance} size="compact">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+          <CardTitle className="zn-row zn-row--split">
             <span>{distance}</span>
-            <Badge variant="secondary">
+            <span className="zn-mono zn-faint">
               {timeline.totalDays} {t("racePrep.days")}
-            </Badge>
+            </span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          {/* Horizontal bar */}
-          <div className="flex h-3 rounded-full overflow-hidden">
+        <CardContent
+          className="zn-stack"
+          style={{ "--gap": "var(--sp-9)" } as CSSProperties}
+        >
+          <div className="zn-guide__bar" aria-hidden="true">
             {timeline.phases.map((phase, i) => {
               const match = phase.dayRange.match(/\d+/g);
               const start = match ? parseInt(match[0]) : 1;
@@ -208,29 +192,50 @@ export function RacePrepGuidePage() {
               const days = end - start + 1;
               const pct = (days / timeline.totalDays) * 100;
               return (
-                <div
+                <span
                   key={i}
-                  className={cn(PHASE_COLORS[i % PHASE_COLORS.length], "transition-all")}
+                  className="zn-guide__step"
+                  data-step={rampStep(i)}
                   style={{ width: `${pct}%` }}
-                  title={`${phase.dayRange}: ${pick(phase, "activity")}`}
                 />
               );
             })}
           </div>
-          {/* Phase list */}
-          <div className="space-y-2">
+
+          <ul
+            className="zn-stack"
+            style={
+              {
+                "--gap": "var(--sp-6)",
+                listStyle: "none",
+                margin: 0,
+                padding: 0,
+              } as CSSProperties
+            }
+          >
             {timeline.phases.map((phase, i) => (
-              <div key={i} className="flex gap-3 items-start">
-                <div className={cn("size-3 rounded-full mt-1 shrink-0", PHASE_COLORS[i % PHASE_COLORS.length])} />
-                <div className="min-w-0">
-                  <span className="text-xs font-medium">{phase.dayRange}</span>
-                  <p className="text-xs text-muted-foreground">
+              <li
+                key={i}
+                className="zn-row zn-row--start"
+                style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+              >
+                <span
+                  className="zn-guide__swatch zn-guide__step"
+                  data-step={rampStep(i)}
+                  aria-hidden="true"
+                />
+                <div
+                  className="zn-stack zn-fill"
+                  style={{ "--gap": "var(--sp-2)" } as CSSProperties}
+                >
+                  <span className="zn-mono">{phase.dayRange}</span>
+                  <span className="zn-body zn-body--sm zn-muted">
                     {pick(phase, "activity")}
-                  </p>
+                  </span>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </CardContent>
       </Card>
     );
@@ -296,66 +301,83 @@ export function RacePrepGuidePage() {
           },
         ]}
       />
-      <div className="py-8">
-        {/* Back link */}
-        <Link
-          to="/guides"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+
+      <div className="zn-guide">
+        {/* 1, the way back, then what this page is */}
+        <section
+          className="zn-stack zn-guide__head"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
         >
-          <ArrowLeft className="size-4" />
-          {t("backToGuides")}
-        </Link>
-
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
+          <Link
+            to="/guides"
+            className="zn-row zn-mono zn-guide__back"
+            style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+          >
+            <ArrowLeft />
+            {t("backToGuides")}
+          </Link>
+          <span className="zn-kicker">
+            {t("racePrep.kicker", { n: racePrepSections.length })}
+          </span>
+          <h1 className="zn-display" data-level="2">
             {t("racePrep.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-guide__lede">
             {t("racePrep.subtitle")}
-          </FadeUp>
-        </div>
-
-        {/* Tabs */}
-        <Tabs defaultValue={racePrepSections[0].id}>
-          <TabsList className="flex-wrap h-auto gap-1 mb-6">
-            {racePrepSections.map((section) => {
-              const Icon = SECTION_ICONS[section.icon];
-              return (
-                <TabsTrigger key={section.id} value={section.id} className="gap-1.5">
-                  {Icon && <Icon className="size-3.5" />}
-                  <span className="hidden sm:inline">
-                    {pick(section, "title")}
-                  </span>
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
-
-          {racePrepSections.map((section) => (
-            <TabsContent key={section.id} value={section.id}>
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold">
-                  {pick(section, "title")}
-                </h2>
-                {section.content.map((block, i) => renderBlock(block, i))}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
-
-        {/* Recovery Timelines */}
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold mb-2">
-            {t("racePrep.recoveryTimelines")}
-          </h2>
-          <p className="text-muted-foreground text-sm mb-6">
-            {t("racePrep.recoveryTimelinesDescription")}
           </p>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+        </section>
+
+        {/* 2, the reading: one moment of the preparation per tab */}
+        <section className="zn-guide__band">
+          <Tabs defaultValue={racePrepSections[0].id}>
+            <TabsList className="zn-guide__tabs">
+              {racePrepSections.map((section) => {
+                const Icon = SECTION_ICONS[section.icon];
+                return (
+                  <TabsTrigger key={section.id} value={section.id}>
+                    {Icon && <Icon aria-hidden="true" />}
+                    {pick(section, "title")}
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
+
+            {racePrepSections.map((section) => (
+              <TabsContent key={section.id} value={section.id}>
+                <div className="zn-guide__panel">
+                  <h2 className="zn-title zn-guide__bandhead" data-level="2">
+                    {pick(section, "title")}
+                  </h2>
+                  <div className="zn-prose zn-measure">
+                    {section.content.map((block, i) => renderBlock(block, i))}
+                  </div>
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </section>
+
+        {/* 3, and afterwards: how many days each distance costs */}
+        <section className="zn-guide__band" aria-labelledby="raceprep-recovery">
+          <div
+            className="zn-stack zn-guide__bandhead"
+            style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+          >
+            <h2 id="raceprep-recovery" className="zn-title" data-level="2">
+              {t("racePrep.recoveryTimelines")}
+            </h2>
+            <p className="zn-body zn-body--sm zn-muted zn-measure">
+              {t("racePrep.recoveryTimelinesDescription")}
+            </p>
+          </div>
+
+          <div
+            className="zn-grid"
+            style={{ "--cols": 2, "--cols-md": 2 } as CSSProperties}
+          >
             {recoveryTimelines.map((tl) => renderRecoveryTimeline(tl))}
           </div>
-        </div>
+        </section>
       </div>
     </>
   );

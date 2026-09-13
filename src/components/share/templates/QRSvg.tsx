@@ -1,5 +1,5 @@
 /**
- * QRSvg — render a QR code as inline SVG.
+ * QRSvg, render a QR code as inline SVG.
  *
  * Synchronous and pure: html-to-image captures it as plain SVG with no
  * font/image dependency. We use `qrcode`'s `create()` (sync API, returns a

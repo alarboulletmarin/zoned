@@ -1,17 +1,24 @@
-import { useState, useMemo } from "react";
-import { zoneClass } from "@/lib/zoneColors";
+import { useState, useMemo, type CSSProperties } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Timer, Save, ArrowRight } from "@/components/icons";
+import { Save, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { StatBlock } from "@/components/domain/StatBlock";
+import { ZoneBadge } from "@/components/domain/ZoneBadge";
+import { ZoneScale } from "@/components/visualization";
 import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
 import { ZONE_META, type ZoneNumber } from "@/types";
 import { calculatePaceZones, saveUserZonePrefs, formatPace } from "@/lib/zones";
 import { updateBaseData } from "@/lib/runnerProfile";
@@ -128,119 +135,123 @@ export function VmaCalculatorPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Timer className="size-8 text-primary shrink-0" />
+
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.vma.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
             {t("calculators:calculateurs.vma.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
             {t("calculators:calculateurs.vma.description")}
-          </FadeUp>
-        </div>
+          </p>
+        </section>
 
-        {/* Input Card */}
-        <Card className="mb-6">
-          <CardContent className="pt-6 space-y-6">
-            {/* Distance Select */}
-            <div className="space-y-2">
-              <label htmlFor="distance" className="text-sm font-medium">
-                {t("calculators:calculateurs.vma.raceDistance")}
-              </label>
-              <select
-                id="distance"
-                value={distanceId}
-                onChange={(e) => setDistanceId(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {DISTANCES.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.label}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs text-muted-foreground">
-                {t("calculators:calculateurs.vma.vmaPercentUsed", { percent: selectedDistance.vmaPercentage })}
-              </p>
-            </div>
+        <section className="zn-num__panel zn-stack zn-tool">
+          {/* The race you ran. */}
+          <Card>
+            <CardContent
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+            >
+              <div className="zn-calc__field">
+                <label htmlFor="distance" className="zn-calc__label">
+                  {t("calculators:calculateurs.vma.raceDistance")}
+                </label>
+                <Select value={distanceId} onValueChange={setDistanceId}>
+                  <SelectTrigger id="distance" className="zn-tool__wide">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DISTANCES.map((d) => (
+                      <SelectItem key={d.id} value={d.id}>
+                        {d.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="zn-caption zn-faint">
+                  {t("calculators:calculateurs.vma.vmaPercentUsed", {
+                    percent: selectedDistance.vmaPercentage,
+                  })}
+                </p>
+              </div>
 
-            {/* Time Inputs */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {t("calculators:calculateurs.vma.raceTime")}
-              </label>
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={9}
-                    placeholder="0"
-                    value={hours}
-                    onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.vma.hours")}
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">
-                    {t("calculators:calculateurs.vma.hoursShort")}
+              <div className="zn-calc__field">
+                <span className="zn-calc__label">
+                  {t("calculators:calculateurs.vma.raceTime")}
+                </span>
+                <div className="zn-num__time">
+                  <span className="zn-numfield">
+                    <input
+                      type="number"
+                      min={0}
+                      max={9}
+                      placeholder="0"
+                      value={hours}
+                      onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
+                      className="zn-numfield__input"
+                      aria-label={t("calculators:calculateurs.vma.hours")}
+                    />
+                    <span className="zn-numfield__unit">
+                      {t("calculators:calculateurs.vma.hoursShort")}
+                    </span>
+                  </span>
+                  <span className="zn-numfield">
+                    <input
+                      type="number"
+                      min={0}
+                      max={59}
+                      placeholder="00"
+                      value={minutes}
+                      onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
+                      className="zn-numfield__input"
+                      aria-label={t("calculators:calculateurs.vma.minutes")}
+                    />
+                    <span className="zn-numfield__unit">min</span>
+                  </span>
+                  <span className="zn-numfield">
+                    <input
+                      type="number"
+                      min={0}
+                      max={59}
+                      placeholder="00"
+                      value={seconds}
+                      onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
+                      className="zn-numfield__input"
+                      aria-label={t("calculators:calculateurs.vma.seconds")}
+                    />
+                    <span className="zn-numfield__unit">sec</span>
                   </span>
                 </div>
-                <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    placeholder="00"
-                    value={minutes}
-                    onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.vma.minutes")}
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">min</span>
-                </div>
-                <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    placeholder="00"
-                    value={seconds}
-                    onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.vma.seconds")}
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">sec</span>
-                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* Results */}
-        {calculatedVma && paceZones && (
-          <div className="space-y-6">
-            {/* VMA Display */}
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="py-8 flex flex-col items-center text-center">
-                <p className="text-sm font-medium text-muted-foreground mb-2">
-                  {t("calculators:calculateurs.vma.estimatedVma")}
-                </p>
-                <p className="text-5xl font-bold text-primary tabular-nums">
-                  {calculatedVma.toFixed(1)}
-                </p>
-                <p className="text-lg text-muted-foreground mt-1">km/h</p>
-              </CardContent>
-            </Card>
+          {/* The speed it implies, and the zones that follow from it. */}
+          {calculatedVma && paceZones && (
+            <div className="zn-stack" style={{ "--gap": "var(--sp-13)" } as CSSProperties}>
+              <StatBlock
+                tone="ink"
+                size="lg"
+                value={`${calculatedVma.toFixed(1)} km/h`}
+                label={t("calculators:calculateurs.vma.estimatedVma")}
+              />
 
-            {/* Zones Preview Table */}
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="pt-6">
-                <h2 className="text-lg font-semibold mb-4">
+              <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+                <h2 className="zn-title" data-level="4">
                   {t("calculators:calculateurs.vma.paceZonesPreview")}
                 </h2>
+                {/* The table below paints a whole zone column, so the ramp is
+                    named where it is painted, a legend above the form would
+                    appear as the chrono becomes valid and push the field the
+                    runner is typing in down the page. */}
+                <ZoneScale />
                 <ResponsiveTable
                   data={paceZones}
                   rowKey="zone"
@@ -249,59 +260,50 @@ export function VmaCalculatorPage() {
                     {
                       key: "zone",
                       header: t("calculators:calculateurs.vma.zone"),
-                      cell: (z) => {
-                        const meta = ZONE_META[z.zone as ZoneNumber];
-                        return (
-                          <span
-                            className={cn(
-                              "inline-flex items-center gap-2 font-medium",
-                              zoneClass(z.zone as ZoneNumber, "text"),
-                            )}
-                          >
-                            <span
-                              className={cn("size-3 rounded-full", zoneClass(z.zone as ZoneNumber, "bg"))}
-                            />
-                            Z{z.zone} - {pickLang(meta, "label")}
+                      cell: (z) => (
+                        <span className="zn-row" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+                          <ZoneBadge zone={z.zone as ZoneNumber} size="sm" />
+                          <span className="zn-body zn-body--sm">
+                            {pickLang(ZONE_META[z.zone as ZoneNumber], "label")}
                           </span>
-                        );
-                      },
+                        </span>
+                      ),
                     },
                     {
                       key: "pace",
                       header: t("calculators:calculateurs.vma.pace"),
-                      className: "tabular-nums",
+                      className: "zn-num__num",
                       cell: (z) =>
                         `${formatPace(convertPace(z.paceMinPerKm!, unit))}-${formatPace(convertPace(z.paceMaxPerKm!, unit))} ${getPaceUnit(unit)}`,
                     },
                   ]}
                 />
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button onClick={handleUseVma} className="flex-1">
-                <Save className="size-4" />
-                {t("calculators:calculateurs.vma.useThisVma")}
-              </Button>
-              <Button onClick={handleCreatePlan} variant="outline" className="flex-1">
-                <ArrowRight className="size-4" />
-                {t("calculators:calculateurs.vma.createPlan")}
-              </Button>
-              <ShareLinkButton
-                buildUrl={() =>
-                  buildParamsUrl("/calculators/vma", {
-                    d: distanceId,
-                    h: hours,
-                    m: minutes,
-                    s: seconds,
-                  })
-                }
-                title={t("calculators:calculateurs.vma.title")}
-              />
+              <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                <Button onClick={handleUseVma}>
+                  <Save />
+                  {t("calculators:calculateurs.vma.useThisVma")}
+                </Button>
+                <Button onClick={handleCreatePlan} variant="outline">
+                  <ArrowRight />
+                  {t("calculators:calculateurs.vma.createPlan")}
+                </Button>
+                <ShareLinkButton
+                  buildUrl={() =>
+                    buildParamsUrl("/calculators/vma", {
+                      d: distanceId,
+                      h: hours,
+                      m: minutes,
+                      s: seconds,
+                    })
+                  }
+                  title={t("calculators:calculateurs.vma.title")}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </section>
       </div>
     </>
   );

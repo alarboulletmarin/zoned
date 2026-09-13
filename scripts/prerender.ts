@@ -76,7 +76,7 @@ function startServer(): Promise<ReturnType<typeof createServer>> {
       const filePath = url === "/" ? "/index.html" : url;
       const fullPath = join(DIST_DIR, filePath);
 
-      // Try exact file first — but only if it's actually a file. A bare
+      // Try exact file first, but only if it's actually a file. A bare
       // route like /workout/REC-001 matches an existing directory left over
       // from a previous prerender pass; reading it as a file throws EISDIR.
       // For "/" we always serve the cached shell; otherwise the FR pass's
@@ -199,7 +199,7 @@ async function prerenderRoute(
 
     // Wait for SEOHead's JSON-LD scripts to land in <head>. Base SEOHead
     // emits 2 site-wide schemas (WebSite + Organization), so >=2 means at
-    // least one render commit has happened. We don't fail on timeout —
+    // least one render commit has happened. We don't fail on timeout,
     // some Vercel boxes are slow to mount React but eventually do; we'd
     // rather snapshot late content than skip it.
     await page
@@ -216,6 +216,34 @@ async function prerenderRoute(
         // Fallback: trust the HTML check below.
       });
 
+    /* La coquille de chargement est le premier rendu AVANT hydratation. Une
+       page prérendue a déjà son contenu : la coquille n'y sert plus à rien, et
+       elle y pèse, les six images du cycle de foulée font 17 ko de balisage
+       mort, recopiés dans chaque fichier généré (deux langues × toutes les
+       routes du sitemap), et `bun run deploy` fait `git add -f dist`. On la
+       retire DANS la page plutôt qu'à la regex : les <div> imbriqués de la
+       scène rendent tout découpage textuel fragile.
+
+       LA RACINE EST L'EXCEPTION, et elle a failli coûter l'animation entière.
+       / est dans le sitemap, donc prérendue comme les autres, et son
+       fichier de sortie EST `dist/index.html`, c'est-à-dire la coquille SPA
+       elle-même, celle que Vercel sert à toutes les routes inconnues (voir le
+       calcul de `outputPath` plus bas). La retirer là revient à supprimer
+       l'ouverture du site. Une version de ce commentaire affirmait le
+       contraire, index.html à la racine … n'est pas concerné, c'était
+       faux ; ça ne mordait pas seulement parce que Vercel lance `bun run
+       build`, qui ne prérend pas.
+
+       Sur la racine, on ôte donc la classe `hidden` au lieu de l'élément :
+       React l'a déjà posée au moment de la capture, et sans ce nettoyage la
+       coquille repartirait invisible, le même défaut, par un autre chemin. */
+    await page.evaluate((estRacine) => {
+      const shell = document.getElementById("loading-shell");
+      if (!shell) return;
+      if (estRacine) shell.classList.remove("hidden");
+      else shell.remove();
+    }, route === "/");
+
     const html = await page.content();
     // Truth source for "did SEOHead render?": inspect the captured HTML
     // directly. Avoids spurious retries when waitForFunction's polling
@@ -223,7 +251,7 @@ async function prerenderRoute(
     const ldMatches = html.match(/<script\s+type="application\/ld\+json"/gi) || [];
     const rendered = ldMatches.length >= 2;
 
-    // FR: dist/<route>/index.html — EN: dist/<route>/index.en.html
+    // FR: dist/<route>/index.html, EN: dist/<route>/index.en.html
     const fileName = lang === "fr" ? "index.html" : "index.en.html";
     const outputPath = route === "/"
       ? join(DIST_DIR, fileName)

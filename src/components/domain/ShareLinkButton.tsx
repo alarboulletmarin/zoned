@@ -35,7 +35,7 @@ export function ShareLinkButton({
       try {
         await navigator.share(title ? { title, url } : { url });
       } catch {
-        // Share sheet dismissed — nothing to do.
+        // Share sheet dismissed, nothing to do.
       }
       return;
     }
@@ -43,7 +43,7 @@ export function ShareLinkButton({
       await navigator.clipboard.writeText(url);
       toast.success(t("share.toast.linkCopied"));
     } catch {
-      toast.error(t("share.toast.error"));
+      toast.error(t("share.toast.linkCopyFailed"));
     }
   }, [buildUrl, title, t]);
 
@@ -54,7 +54,7 @@ export function ShareLinkButton({
       disabled={disabled}
       className={className}
     >
-      <Share className="size-4" />
+      <Share />
       {label ?? t("share.link")}
     </Button>
   );

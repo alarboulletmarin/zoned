@@ -1,5 +1,5 @@
 /**
- * Y2KChrome — 1080×1080. Frutiger-Aero / WordArt nostalgia. Liquid
+ * Y2KChrome, 1080×1080. Frutiger-Aero / WordArt nostalgia. Liquid
  * cyan-to-magenta sky, glassy bubbles, chromed `Z{n}` mega-title. Bold
  * and unapologetic. Background IS the visual.
  */
@@ -100,7 +100,7 @@ export function Y2KChrome({ workout }: ShareTemplateProps) {
         </span>
       </div>
 
-      {/* Title slab — workout name is the hero */}
+      {/* Title slab, workout name is the hero */}
       <div
         style={{
           position: "absolute",
@@ -143,7 +143,7 @@ export function Y2KChrome({ workout }: ShareTemplateProps) {
         </div>
       </div>
 
-      {/* Chromed Z accent — sits below the title, smaller, signature flourish */}
+      {/* Chromed Z accent, sits below the title, smaller, signature flourish */}
       <svg
         width={W}
         height={360}

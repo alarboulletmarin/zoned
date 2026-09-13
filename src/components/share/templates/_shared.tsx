@@ -1,37 +1,94 @@
 /**
- * Shared chrome bits for share templates: logo + wordmark, footer
+ * Shared chrome bits for share templates: the mark, the footer
  * (zoned.run · workout id) and the transparent-aware background layer.
  */
 
+import type { CSSProperties } from "react";
 import Logo from "@/assets/logo.svg?react";
 import type { WorkoutTemplate } from "@/types";
 import { ZONE_HEX_LIGHT } from "@/lib/zoneColors";
 
+/**
+ * Le rapport du `viewBox` de `src/assets/logo.svg`, recopié.
+ *
+ * Il est recopié parce qu'un SVG importé en `?react` est un composant : on ne
+ * peut pas lire son cadre à l'exécution. `brand-mark.test.ts` lit le fichier
+ * et garde ce nombre, même motif que `src/assets/doodles/frames.test.ts`
+ * pour les cadres des dessins.
+ */
+export const LOGO_RATIO = 3.807;
+
+interface BrandMarkProps {
+  /** Hauteur du DESSIN en px. La largeur suit le rapport naturel du mot. */
+  height: number;
+  /** Encre des lettres. Le SVG suit `currentColor`. */
+  color?: string;
+  /** Couleur du point. Vermillon par défaut. */
+  dot?: string;
+  opacity?: number;
+  style?: CSSProperties;
+}
+
+/**
+ * Le logo : le mot zoned., vectorisé.
+ *
+ * Ces gabarits rendent en PNG via `html-to-image` avec `skipFonts: true`
+ * (src/lib/shareImage.ts) : un texte stylé y tombe dans la police système du
+ * navigateur, c'est pourquoi ils affichaient tous ZONED en Arial gras à
+ * côté d'un zigzag. Un SVG inliné, lui, passe intact. Le nom est donc DANS le
+ * dessin, et plus à côté.
+ *
+ * On dimensionne par la hauteur seule : donner une largeur ET une hauteur qui
+ * ne sont pas au rapport du mot le fait flotter au milieu de sa boîte
+ * (`preserveAspectRatio`). Les dix-sept appels d'origine passaient une boîte
+ * 2:1 pour un mot qui en fait 3,8.
+ */
+export function BrandMark({ height, color, dot, opacity, style }: BrandMarkProps) {
+  return (
+    <Logo
+      style={
+        {
+          width: height * LOGO_RATIO,
+          height,
+          display: "block",
+          flex: "none",
+          ...(color ? { color } : null),
+          ...(dot ? { "--accent": dot } : null),
+          ...(opacity !== undefined ? { opacity } : null),
+          ...style,
+        } as CSSProperties
+      }
+    />
+  );
+}
+
 interface BrandStripProps {
   scale?: number;
-  /** White wordmark for use over a dark/coloured background. */
+  /** Mark in paper white, for use over a dark/coloured background. */
   inverted?: boolean;
 }
 
-/** Brand bar with the gradient pulse logo + "Zoned" wordmark. */
+/**
+ * La bande de marque : le mot, et rien d'autre.
+ *
+ * Elle portait le zigzag ET le mot en texte. Le zigzag est parti avec le logo,
+ * et le mot en texte était le doublon du mot dessiné. 34 px de dessin par unité
+ * d'échelle donnent la même hauteur d'œil que les 32 px de texte qu'elle
+ * portait, la hampe du d compte pour le reste du cadre.
+ *
+ * En renversé, **le point passe au papier lui aussi**. Vu sur le rendu : les
+ * cartes qui demandent `inverted` sont posées sur la couleur de zone, et pour
+ * la Z5 c'est un rouge sombre, le point vermillon y disparaissait. La règle de
+ * la maison (un seul aplat d'accent) est de toute façon déjà dépensée par le
+ * fond de ces cartes ; le mot entier en papier est le verrou renversé normal.
+ */
 export function BrandStrip({ scale = 1, inverted = false }: BrandStripProps) {
-  const logoSize = 36 * scale;
-  const wordmarkSize = 32 * scale;
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12 * scale }}>
-      <Logo style={{ width: logoSize * 2, height: logoSize, display: "block" }} />
-      <span
-        style={{
-          fontSize: wordmarkSize,
-          fontWeight: 700,
-          letterSpacing: "-0.02em",
-          color: inverted ? "#ffffff" : "#0f172a",
-          lineHeight: 1,
-        }}
-      >
-        Zoned
-      </span>
-    </div>
+    <BrandMark
+      height={34 * scale}
+      color={inverted ? "#ffffff" : "#0f172a"}
+      dot={inverted ? "#ffffff" : undefined}
+    />
   );
 }
 

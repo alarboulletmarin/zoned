@@ -1,8 +1,17 @@
 {
-  "title": "My Runner Profile",
+  "title": "My runner profile",
   "description": "Centralize your physiological data, reference times and personal records.",
+  "kicker": "Computed on this device",
+  "stats": {
+    "vma": "vVO2max · km/h",
+    "vmaFoot_one": "from {{count}} test",
+    "vmaFoot_other": "from {{count}} tests",
+    "fcMax": "Max HR · bpm",
+    "weekly": "Weekly volume · km",
+    "longRun": "Long run · km"
+  },
   "seo": {
-    "title": "Runner Profile — Zoned",
+    "title": "Runner Profile, Zoned",
     "description": "Your runner profile: physiological data, reference times, benchmark history and personal records."
   },
   "tabs": {
@@ -14,7 +23,7 @@
   },
   "commute": {
     "title": "Commute",
-    "description": "If you bike (or jog) to work, enter the commute here so the generator can account for the recurring load.",
+    "description": "Enter your commute so the generator counts that recurring load.",
     "discipline": "Discipline",
     "disciplineCycling": "Cycling",
     "disciplineRunning": "Running",
@@ -37,7 +46,7 @@
     "invalid": "Pick at least one day and a valid duration"
   },
   "base": {
-    "title": "Base Data",
+    "title": "Base data",
     "description": "Your physiological data and current training volume.",
     "fcMax": "Max HR",
     "fcMaxUnit": "bpm",
@@ -62,11 +71,20 @@
     "updateZones": "Update my zones",
     "zonesUpdated": "Zones updated",
     "createPlan": "Create a plan",
-    "migrated": "Existing data recovered"
+    "migrated": "Existing data recovered",
+    "errorHint": "fix the value to save",
+    "noVmaTitle": "Your vVO2max is not set",
+    "noVmaBody": "Without it your six zones and your paces stay empty. The rest of your profile is intact: a 6-minute test fills the gap.",
+    "noVmaAction": "Estimate my vVO2max",
+    "sourceTitle": "Where these numbers come from",
+    "sourceBody": "Zones as a percentage of vVO2max, target heart rates by the Karvonen method, predictions by Riegel's formula calibrated on your own races.",
+    "sourceCitation": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957 · Riegel, Runner's World, 1977"
   },
   "references": {
-    "title": "Reference Times",
-    "description": "Your recent times by distance, used to calibrate predictions and paces.",
+    "title": "Reference times",
+    "description": "Your recent times by distance: they calibrate the predictions and the paces.",
+    "count_one": "{{count}} time over {{total}} distances",
+    "count_other": "{{count}} times over {{total}} distances",
     "time": "Time",
     "date": "Date",
     "label": "Race name",
@@ -81,7 +99,7 @@
     "cleared": "Reference time cleared"
   },
   "benchmarks": {
-    "title": "Test History",
+    "title": "Test history",
     "description": "Track the evolution of your vVO2max tests and other assessments.",
     "add": "Add a test",
     "type": "Test type",
@@ -97,7 +115,10 @@
     "deleteConfirm": "Delete this test?",
     "deleted": "Test deleted",
     "added": "Test added",
-    "empty": "No tests recorded.",
+    "empty": "Zero tests on file: add one and you will see your vVO2max move from one date to the next.",
+    "emptyTitle": "No test recorded",
+    "count_one": "{{count}} test recorded",
+    "count_other": "{{count}} tests recorded",
     "cancel": "Cancel",
     "types": {
       "half_cooper": "Half-Cooper (6 min)",
@@ -125,7 +146,7 @@
     }
   },
   "records": {
-    "title": "Personal Records",
+    "title": "Personal records",
     "description": "Your best times by distance.",
     "add": "Add a record",
     "distance": "Distance",
@@ -147,7 +168,10 @@
     "deleteConfirm": "Delete this record?",
     "deleted": "Record deleted",
     "added": "Record added",
-    "empty": "No records yet.",
+    "empty": "Zero records on file, across {{distances}} reference distances. Add a time to start filling them.",
+    "emptyTitle": "No record recorded",
+    "count_one": "{{count}} record recorded",
+    "count_other": "{{count}} records recorded",
     "cancel": "Cancel",
     "newPr": "New personal record!",
     "hours": "h",

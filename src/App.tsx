@@ -1,9 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigationType,
+} from "react-router-dom";
 import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
-import { MobileSidebar, TopBar, Footer } from "@/components/layout";
+import { MobileMenu, TopBar, Footer } from "@/components/layout";
+import { ModuleGate } from "@/components/layout/ModuleGate";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
@@ -20,7 +28,7 @@ import { i18nReady } from "@/i18n";
 
 /** React.lazy that also waits for the active language's translation bundles
  *  (loaded in parallel with the page chunk). The page renders only once both
- *  are ready, behind the same Suspense fallback — no flash of raw i18n keys.
+ *  are ready, behind the same Suspense fallback, no flash of raw i18n keys.
  *  After the first page, i18nReady is resolved and this is free. */
 function lazyPage<T extends ComponentType<unknown>>(
   loader: () => Promise<{ default: T }>
@@ -32,6 +40,7 @@ function lazyPage<T extends ComponentType<unknown>>(
 
 // All pages lazy loaded for optimal code-splitting
 const HomePage = lazyPage(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
+const TodayPage = lazyPage(() => import("@/pages/TodayPage").then(m => ({ default: m.TodayPage })));
 const LibraryPage = lazyPage(() => import("@/pages/LibraryPage").then(m => ({ default: m.LibraryPage })));
 const DrawSessionPage = lazyPage(() => import("@/pages/DrawSessionPage").then(m => ({ default: m.DrawSessionPage })));
 const WeeksListPage = lazyPage(() => import("@/pages/WeeksListPage").then(m => ({ default: m.WeeksListPage })));
@@ -121,6 +130,7 @@ function DeferredCommandPalette() {
 // Preload sidebar pages after initial render to eliminate navigation latency
 function preloadSidebarPages() {
   const pages = [
+    () => import("@/pages/TodayPage"),
     () => import("@/pages/HomePage"),
     () => import("@/pages/LibraryPage"),
     () => import("@/pages/PlansPage"),
@@ -143,23 +153,34 @@ function preloadSidebarPages() {
  *  fold to satisfy a footer below the map. */
 const FULLSCREEN_ROUTES = ["/routes"];
 
+/** Routes qui ne gardent que la barre d'encre du pied de page.
+ *
+ *  Les quatre colonnes de liens existent pour qu'un robot atteigne les hubs.
+ *  Sur un écran applicatif en `noindex`, elles ne font donc aucun travail, et
+ *  sur le cockpit elles mesuraient 439 px pour 388 px de contenu. La barre,
+ *  elle, reste : c'est la signature du projet libre. */
+const BARE_FOOTER_ROUTES = ["/today"];
+
 function ConditionalFooter() {
   const { pathname } = useLocation();
   if (FULLSCREEN_ROUTES.includes(pathname)) return null;
-  return <Footer />;
+  return <Footer bare={BARE_FOOTER_ROUTES.includes(pathname)} />;
 }
 
 function ScrollToTopOnNavigate() {
   const location = useLocation();
+  const navigationType = useNavigationType();
   const [announcement, setAnnouncement] = useState("");
 
   useEffect(() => {
-    // Skip scroll-to-top when returning to a plan with a specific week
-    if (location.pathname.startsWith("/plan/") && location.search.includes("week=")) return;
+    // Un REPLACE, c'est une page qui réécrit son propre état dans l'URL
+    // (les filtres de la bibliothèque, la semaine d'un plan), pas un
+    // changement de page : la position de lecture reste.
+    if (navigationType === "REPLACE") return;
     const state = location.state as { returnScrollY?: number } | null;
     if (state?.returnScrollY != null) return;
     window.scrollTo(0, 0);
-  }, [location.pathname, location.search, location.state]);
+  }, [location.pathname, location.search, location.state, navigationType]);
 
   // Announce page change for screen readers
   useEffect(() => {
@@ -184,7 +205,7 @@ function App() {
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   // Preload main pages in background once the window has loaded and the
-  // main thread is idle — a fixed 1s timer used to fire while the LCP page
+  // main thread is idle, a fixed 1s timer used to fire while the LCP page
   // chunk and fonts were still downloading on slow connections.
   const preloadReady = useIdleAfterLoad();
   useEffect(() => {
@@ -207,8 +228,6 @@ function App() {
     prevOnline.current = isOnline;
   }, [isOnline]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
   return (
     <SettingsProvider>
       <ThemeProvider>
@@ -216,50 +235,47 @@ function App() {
           <BrowserRouter>
           <GlossaryMatcherProvider>
           <CommandPaletteProvider>
-            <a
-              href="#main-content"
-              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none"
-            >
-              {t("accessibility.skipToContent", "Aller au contenu")}
+            <a href="#main-content" className="zn-skip">
+              {t("accessibility.skipToContent")}
             </a>
             <ScrollToTopOnNavigate />
-            <div className="min-h-screen bg-background text-foreground flex flex-col">
-              <TopBar onMobileMenuOpen={() => setMobileSidebarOpen(true)} />
+            <div className="zn-app">
+              <TopBar />
 
-              {/* Mobile slide-over nav (hamburger). Desktop uses the
-                  horizontal nav inside TopBar, no sidebar. */}
-              <MobileSidebar
-                open={mobileSidebarOpen}
-                onOpenChange={setMobileSidebarOpen}
-              />
+              {/* Below 1024px navigation is a full-screen menu behind one
+                  floating pill; it owns its own open state (a native <dialog>).
+                  Desktop keeps the five doors in the header. */}
+              <MobileMenu />
 
-              <div className="flex flex-1 min-w-0 flex-col">
+              <div className="zn-app__body">
                 <ErrorBoundary>
                 {/* The Suspense boundary wraps BOTH the page and the footer:
                     with the footer outside, it sat just below the
-                    min-h-screen fallback during the initial load, then
+                    viewport-tall fallback during the initial load, then
                     jumped up into the viewport when a shorter page (e.g. a
-                    calculator) resolved — a real CLS hit. Inside, footer and
+                    calculator) resolved, a real CLS hit. Inside, footer and
                     page appear together (appearance is not a shift), and
                     later navigations never show this fallback because
                     react-router wraps them in startTransition. */}
                 <Suspense
                   fallback={
-                    <main
-                      id="main-content"
-                      className="flex-1 px-4 md:px-6 lg:px-8 pt-20 pb-4"
-                    >
-                      <div className="mx-auto max-w-6xl">
-                        <div className="min-h-screen" />
+                    <main id="main-content" className="zn-main">
+                      <div className="zn-page">
+                        <div className="zn-page__hold" />
                       </div>
                     </main>
                   }
                 >
-                <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 pt-20 pb-4">
-                  <div className="mx-auto max-w-6xl">
+                <main id="main-content" className="zn-main">
+                  <div className="zn-page">
                     <ErrorBoundary>
                         <Routes>
                           <Route path="/" element={<HomePage />} />
+                          {/* Le cockpit. `/` reste la landing publique et
+                              indexée ; celle-ci est l'écran privé, donc hors
+                              sitemap et hors prérendu, comme /plans et
+                              /weeks, exclus pour la même raison. */}
+                          <Route path="/today" element={<TodayPage />} />
                           <Route path="/library" element={<LibraryPage />} />
                           <Route path="/library/draw" element={<DrawSessionPage />} />
                           <Route path="/weeks" element={<WeeksListPage />} />
@@ -293,11 +309,11 @@ function App() {
                           <Route path="/quiz" element={<Navigate to="/library/draw" replace />} />
                           <Route path="/contribute" element={<ContributePage />} />
                           <Route path="/about" element={<AboutPage />} />
-                          <Route path="/learn" element={<LearnPage />} />
+                          <Route path="/learn" element={<ModuleGate module="learn" canonical="/learn"><LearnPage /></ModuleGate>} />
                           <Route path="/methodology" element={<MethodologyPage />} />
-                          <Route path="/learn/:slug" element={<ArticlePage />} />
-                          <Route path="/collections" element={<CollectionsPage />} />
-                          <Route path="/collections/:slug" element={<CollectionDetailPage />} />
+                          <Route path="/learn/:slug" element={<ModuleGate module="learn"><ArticlePage /></ModuleGate>} />
+                          <Route path="/collections" element={<ModuleGate module="collections" canonical="/collections"><CollectionsPage /></ModuleGate>} />
+                          <Route path="/collections/:slug" element={<ModuleGate module="collections"><CollectionDetailPage /></ModuleGate>} />
                           <Route path="/glossary" element={<GlossaryPage />} />
                           <Route path="/glossary/:id" element={<GlossaryTermPage />} />
                           <Route path="/changelog" element={<ChangelogPage />} />
@@ -315,12 +331,12 @@ function App() {
                           <Route path="/plan/prebuilt/:slug" element={<PrebuiltPlanDetailPage />} />
                           <Route path="/plan/shared" element={<SharedPlanPage />} />
                           <Route path="/plan/:id" element={<PlanViewPage />} />
-                          <Route path="/race-simulator" element={<RaceSimulatorPage />} />
+                          <Route path="/race-simulator" element={<ModuleGate module="raceSimulator" canonical="/race-simulator"><RaceSimulatorPage /></ModuleGate>} />
                           <Route path="/race-simulator/shared" element={<RaceSimulatorPage />} />
-                          <Route path="/routes" element={<RouteGeneratorPage />} />
-                          <Route path="/routes/tracks" element={<TrackFinderPage />} />
-                          <Route path="/routes/mine" element={<MyRoutesPage />} />
-                          <Route path="/routes/:id" element={<RouteDetailPage />} />
+                          <Route path="/routes" element={<ModuleGate module="routes" canonical="/routes"><RouteGeneratorPage /></ModuleGate>} />
+                          <Route path="/routes/tracks" element={<ModuleGate module="routes" canonical="/routes/tracks"><TrackFinderPage /></ModuleGate>} />
+                          <Route path="/routes/mine" element={<ModuleGate module="routes"><MyRoutesPage /></ModuleGate>} />
+                          <Route path="/routes/:id" element={<ModuleGate module="routes"><RouteDetailPage /></ModuleGate>} />
                           <Route path="/compare" element={<CompareHubPage />} />
                           <Route path="/compare/:slug" element={<CompareDetailPage />} />
                           <Route path="*" element={<NotFoundPage />} />
@@ -339,17 +355,29 @@ function App() {
           </GlossaryMatcherProvider>
           <Analytics />
           <StorageWarning />
-          {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
-          {/* Mounted once, outside <Routes>, so the banner survives navigation.
-              Stacked above the install card when both are eligible. */}
-          <UpdatePrompt stacked={canInstall} />
-          <Toaster
-            richColors
-            closeButton
-            position={isMobile ? "top-center" : "bottom-right"}
-            duration={isMobile ? 2500 : 4000}
-            offset={isMobile ? "calc(env(safe-area-inset-top, 0px) + 12px)" : undefined}
-          />
+          {/* Mounted once, outside <Routes>, so the banners survive navigation.
+              The update comes first in the DOM because it comes first in
+              importance: offering to install a version we already know is
+              stale is the wrong order. The stack puts it on top by itself. */}
+          <div className="zn-prompts">
+            <UpdatePrompt />
+            {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
+          </div>
+          {/* The wrapper is what gets promoted into the top layer while a
+              <dialog> is open, see native-dialog.tsx. A modal dialog paints
+              over everything the document can stack, z-index 999999999
+              included, so without it the "Lien copié" of an open share sheet
+              would land behind its own backdrop. It is a zero-size box: sonner
+              keeps placing and sizing its own list. */}
+          <div className="zn-toast-layer">
+            <Toaster
+              richColors
+              closeButton
+              position={isMobile ? "top-center" : "bottom-right"}
+              duration={isMobile ? 2500 : 4000}
+              offset={isMobile ? "calc(env(safe-area-inset-top, 0px) + 12px)" : undefined}
+            />
+          </div>
           </BrowserRouter>
         </FavoritesProvider>
       </ThemeProvider>

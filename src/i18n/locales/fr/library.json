@@ -1,5 +1,6 @@
 {
   "title": "Bibliothèque de séances",
+  "catalogue": "{{workouts}} séances · {{categories}} catégories · {{disciplines}} disciplines",
   "subtitle": "{{count}} séances d'entraînement scientifiques",
   "subtitleStrength": "{{count}} séances de renforcement",
   "subtitleAll": "{{count}} séances au total",
@@ -10,11 +11,23 @@
     "swimming": "Natation",
     "strength": "Renforcement"
   },
+  "activityToggleShort": {
+    "all": "Tout",
+    "running": "Course",
+    "cycling": "Vélo",
+    "swimming": "Natation",
+    "strength": "Renfo"
+  },
+  "meta": {
+    "results_one": "{{count}} séance",
+    "results_other": "{{count}} séances",
+    "filters_one": "{{count}} filtre actif",
+    "filters_other": "{{count}} filtres actifs"
+  },
   "viewMode": {
     "label": "Affichage",
     "grid": "Grille",
     "compact": "Compact",
-    "focus": "Focus",
     "list": "Liste"
   },
   "filters": {
@@ -31,15 +44,19 @@
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favoris uniquement",
     "search": "Rechercher...",
+    "searchPlaceholder": "Rechercher : 30/30, seuil, côtes…",
     "searchLabel": "Rechercher des séances",
     "apply": "Appliquer",
     "activeFilters": "filtres actifs"
   },
   "emptyState": {
     "noResults": "Aucune séance trouvée",
-    "noResultsDescription": "Essayez de modifier vos filtres pour trouver des séances.",
+    "noResultsDescription": "Essaie de modifier tes filtres pour trouver des séances.",
     "noFavorites": "Aucun favori",
-    "noFavoritesDescription": "Ajoutez des séances à vos favoris pour les retrouver facilement ici."
+    "noFavoritesDescription": "Ajoute des séances à tes favoris pour les retrouver facilement ici.",
+    "filteredOut_one": "{{count}} filtre actif ne laisse passer aucune des {{total}} séances. L'effacer les rouvre toutes.",
+    "filteredOut_other": "{{count}} filtres actifs ne laissent passer aucune des {{total}} séances. Les effacer les rouvre toutes.",
+    "noMatchForQuery": "{{query}} ne correspond à aucune des {{total}} séances du catalogue."
   },
   "terrain": {
     "flat": "Plat préféré",
@@ -80,6 +97,9 @@
       "mountain": "Montagne"
     }
   },
+  "zoneBar": {
+    "of": "Profil de {{name}}"
+  },
   "difficulty": {
     "beginner": "Débutant",
     "intermediate": "Intermédiaire",
@@ -92,7 +112,7 @@
     "difficulty": "Difficulté",
     "duration": "Durée"
   },
-  "noResults": "Aucune séance ne correspond à vos critères",
+  "noResults": "Aucune séance ne correspond à tes critères",
   "clearFilters": "Effacer les filtres",
   "showMore": "Voir plus",
   "showingCount": "{{visible}} sur {{total}} séances",
@@ -168,14 +188,18 @@
       "title": "Mes semaines",
       "subtitle": "Tes semaines d'entraînement, générées ou composées à la main.",
       "create": "Créer une semaine",
-      "empty": "Aucune semaine pour l'instant. Génère-en une ou compose-la de zéro.",
+      "empty": "Génère ta première semaine, ou compose-la séance par séance.",
       "sessionsCount_one": "{{count}} séance",
       "sessionsCount_other": "{{count}} séances",
       "view": "Voir",
       "delete": "Supprimer",
       "filterAll": "Toutes",
       "import": "Importer",
-      "actions": "Plus d'actions"
+      "actions": "Plus d'actions",
+      "saved_one": "{{count}} semaine enregistrée",
+      "saved_other": "{{count}} semaines enregistrées",
+      "emptyTitle": "Aucune semaine pour l'instant",
+      "filteredOut": "Aucune de tes {{total}} semaines n'est dans cette catégorie."
     },
     "category": {
       "label": "Catégorie",
@@ -186,11 +210,13 @@
     },
     "shared": {
       "title": "Semaine partagée",
-      "subtitle": "Quelqu'un t'a partagé cette semaine d'entraînement. Ajoute-la à tes semaines pour la personnaliser.",
+      "subtitle": "Quelqu'un t'a partagé cette semaine : ajoute-la pour la modifier.",
       "invalid": "Ce lien de partage est invalide ou incomplet.",
       "add": "Ajouter à mes semaines",
       "unknownCount_one": "{{count}} séance n'existe pas dans ton catalogue et sera ignorée.",
-      "unknownCount_other": "{{count}} séances n'existent pas dans ton catalogue et seront ignorées."
+      "unknownCount_other": "{{count}} séances n'existent pas dans ton catalogue et seront ignorées.",
+      "invalidHelp": "Le lien est tronqué ou périmé. Tes semaines enregistrées sont intactes : redemande un lien.",
+      "unknownHelp": "Les {{count}} autres séances seront ajoutées telles quelles."
     },
     "new": {
       "title": "Créer une semaine",
@@ -199,11 +225,15 @@
       "modes": {
         "create": {
           "title": "Créer une semaine",
-          "desc": "Génère une semaine 80/20 automatiquement, ou compose-la séance par séance."
+          "desc": "Génère une semaine 80/20 automatiquement, ou compose-la séance par séance.",
+          "kicker": "Générateur 80/20",
+          "cta": "Composer ma semaine"
         },
         "prebuilt": {
           "title": "Semaine pré-construite",
-          "desc": "Choisis une semaine type sourcée et commence immédiatement."
+          "desc": "Choisis une semaine type sourcée et commence immédiatement.",
+          "kicker": "Catalogue",
+          "cta": "{{count}} semaines prêtes"
         }
       },
       "generate": "Générer (80/20)",
@@ -211,11 +241,12 @@
       "scratch": "Partir de zéro",
       "scratchDesc": "Une semaine vide que tu remplis à la main, séance par séance.",
       "namePlaceholder": "Nom de la semaine",
-      "scratchCreate": "Créer la semaine vide"
+      "scratchCreate": "Créer la semaine vide",
+      "kicker": "2 façons de commencer"
     },
     "prebuilt": {
       "title": "Semaines pré-construites",
-      "subtitle": "Des semaines types sourcées, prêtes à l'emploi. Choisis-en une, comprends pourquoi elle marche, puis personnalise-la.",
+      "subtitle": "Des semaines types sourcées : choisis-en une, comprends pourquoi elle marche.",
       "back": "Retour à la création",
       "backToList": "Toutes les semaines pré-construites",
       "available": "{{count}} semaines disponibles",
@@ -233,15 +264,17 @@
         "peak": "Pic de forme",
         "recovery": "Récupération",
         "sharpening": "Affûtage"
-      }
+      },
+      "notFoundHelp": "Le lien pointe vers une semaine qui n'existe plus. Tes semaines enregistrées sont intactes."
     },
     "generate": {
       "title": "Générer ma semaine",
       "subtitle": "Règle les paramètres, génère, puis crée la semaine pour l'éditer.",
       "action": "Générer ma semaine",
+      "actionShort": "Générer",
       "busy": "Génération…",
-      "hint": "Compose automatiquement 3 à 6 séances équilibrées 80/20 selon vos réglages.",
-      "hintRegen": "Recompose une nouvelle semaine à partir de vos réglages actuels.",
+      "hint": "Compose automatiquement 3 à 6 séances équilibrées 80/20 selon tes réglages.",
+      "hintRegen": "Recompose une nouvelle semaine à partir de tes réglages actuels.",
       "create": "Créer la semaine",
       "namePlaceholder": "Nom de la semaine",
       "defaultName": "Ma semaine",
@@ -303,8 +336,8 @@
       "balanced": "Équilibre 80/20",
       "tooEasy": "Pas assez d'intensité",
       "tooHard": "Trop d'intensité",
-      "tooEasyHint": "Très peu de qualité cette semaine — ajoute une séance tempo/seuil pour viser ~20 % d'intensité.",
-      "tooHardHint": "Beaucoup d'intensité — ajoute du volume facile ou allège une séance dure.",
+      "tooEasyHint": "Très peu de qualité cette semaine, ajoute une séance tempo/seuil pour viser ~20 % d'intensité.",
+      "tooHardHint": "Beaucoup d'intensité, ajoute du volume facile ou allège une séance dure.",
       "tolerance": "Équilibre atteint entre {{min}} et {{max}} % d'intensité"
     },
     "rhythm": {
@@ -371,6 +404,13 @@
     "boardHintTouch": "Touchez une séance pour la modifier · maintenez pour la déplacer",
     "card": {
       "zone": "Zone {{zone}}"
-    }
+    },
+    "keySession": "Séance clé"
+  },
+  "practice": {
+    "label": "Pratique",
+    "all": "Toutes",
+    "soon": "bientôt",
+    "draw": "Tire-moi une séance"
   }
 }

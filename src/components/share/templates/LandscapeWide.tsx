@@ -1,5 +1,5 @@
 /**
- * LandscapeWide — 1200×675 (16:9) for Twitter/LinkedIn.
+ * LandscapeWide, 1200×675 (16:9) for Twitter/LinkedIn.
  *
  * Left column: title + 3 stats. Right column: SessionTimeline +
  * ZoneDistribution stacked. Brand strip across the top.

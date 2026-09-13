@@ -1,0 +1,54 @@
+/* Motion says where something came from, or that a wait is real. Nothing else
+   moves, nothing blinks to catch the eye. Press is a 1px push down, the
+   stamp pressing into the paper.
+
+   The one thing that LOOPS is the run cycle (src/styles/components/
+   run-cycle.css, and its copy inlined in index.html's shell): six frames at
+   110ms, shown only while something is actually loading. It is the "a wait is
+   real" half of the rule, not an exception to it, see docs/doodles.md,
+   La coquille court. Anywhere else it would be an ornament.
+
+   Note that the reduced-motion clamp below is what makes it safe: the cycle
+   deliberately runs with NO fill-mode, so clamping it to 1ms and one iteration
+   drops every frame back to its base style, one static contact pose. An
+   animation here that used `forwards` would be left holding its last keyframe
+   instead. Do not add fill-mode to the clamp. */
+:root {
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 240ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --press-shift: 1px;
+}
+
+@keyframes zoned-spin { to { transform: rotate(360deg); } }
+@keyframes zoned-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+@keyframes zoned-slide-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 1ms; --dur-base: 1ms; --dur-slow: 1ms; --press-shift: 0px; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  /* The single exemption, and it needs the trap spelt out: the launch shell
+     lives ~1.5s while this stylesheet arrives with the bundle at ~180ms. Under
+     reduced motion the clamp above would therefore catch the run cycle
+     mid-flight and freeze it on frame 1, the opening would start, then die,
+     for the one person who explicitly asked to see it.
+
+     `data-opening="always"` is set before first paint by the inline script in
+     index.html, from a preference chosen in Settings. Nothing else is exempt,
+     and the code never decides this on someone's behalf. */
+  html[data-opening="always"] .rc-f {
+    animation-duration: var(--rc-dur) !important;
+    animation-iteration-count: infinite !important;
+  }
+  /* And its exit, so the opening someone asked for does not end on a cut. */
+  html[data-opening="always"] #loading-shell {
+    transition-duration: var(--shell-fade) !important;
+  }
+}

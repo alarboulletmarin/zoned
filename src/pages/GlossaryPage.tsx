@@ -1,11 +1,13 @@
 // src/pages/GlossaryPage.tsx
 // Full glossary page with search and category filtering
 
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, Book, Filter, Loader2 } from "@/components/icons";
+import { Search, Filter, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
   SelectContent,
@@ -15,13 +17,14 @@ import {
 } from "@/components/ui/select";
 import { SEOHead } from "@/components/seo";
 import { GlossaryCard } from "@/components/domain/GlossaryCard";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import {
   useGlossary,
   useGlossaryCategories,
   useGlossaryCount,
 } from "@/hooks/useGlossary";
 import type { GlossaryCategory, GlossaryTerm } from "@/data/glossary/types";
+
+const HEAD_GAP = { "--gap": "var(--sp-6)" } as CSSProperties;
 
 export function GlossaryPage() {
   const { t, i18n } = useTranslation("glossary");
@@ -105,6 +108,17 @@ export function GlossaryPage() {
     return t(`categories.${categoryId}`, { defaultValue: categoryId });
   };
 
+  // An empty result names its cause with a number, then offers the undo.
+  const emptyDescription = [
+    t("noneOfTotal", { total: totalCount }),
+    searchQuery ? t("noResultsForQuery", { query: searchQuery }) : null,
+    selectedCategory !== "all"
+      ? t("noResultsInCategory", { category: getCategoryLabel(selectedCategory) })
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <>
       <SEOHead
@@ -127,124 +141,142 @@ export function GlossaryPage() {
           },
         ]}
       />
-      <div className="py-8">
-      {/* Page Header */}
-      <div className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Book className="h-6 w-6 text-primary" />
-          <EditorialTitle as="h1" size="md">{t("title")}</EditorialTitle>
-        </div>
-        <FadeUp as="p" delay={0.1} className="text-muted-foreground">
-          {t("subtitle", { count: totalCount })}
-        </FadeUp>
-      </div>
 
-      {/* Loading State */}
-      {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="size-8 animate-spin text-muted-foreground" />
-        </div>
-      ) : (
-        <>
-          {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder={t("searchPlaceholder")}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              />
-            </div>
-            <Select
-              value={selectedCategory}
-              onValueChange={(v) =>
-                setSelectedCategory(v as typeof selectedCategory)
-              }
-            >
-              <SelectTrigger className="w-full sm:w-56">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder={t("categoryPlaceholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t("allCategories")}</SelectItem>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {getCategoryLabel(cat.id)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+      <div className="zn-ref">
+        {/* 1, the glossary, named and counted */}
+        <section className="zn-ref__head zn-stack" style={HEAD_GAP}>
+          <span className="zn-kicker">
+            {totalCount > 0
+              ? t("catalogue", {
+                  terms: totalCount,
+                  categories: categories.length,
+                })
+              : " "}
+          </span>
+          <h1 className="zn-display" data-level="2">
+            {t("title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-ref__lede">{t("lede")}</p>
+        </section>
 
-          {/* Results count and active filters */}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-            <span>
-              {t("resultCount", { count: filteredTerms.length })}
-            </span>
-            {selectedCategory !== "all" && (
-              <Badge variant="secondary" className="ml-2">
-                {getCategoryLabel(selectedCategory)}
-                <button
-                  onClick={() => setSelectedCategory("all")}
-                  className="ml-1 hover:text-foreground"
-                  aria-label={t("removeCategoryFilter")}
-                >
-                  x
-                </button>
-              </Badge>
-            )}
-            {searchQuery && (
-              <Badge variant="secondary" className="ml-1">
-                "{searchQuery}"
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="ml-1 hover:text-foreground"
-                  aria-label={t("clearSearch")}
-                >
-                  x
-                </button>
-              </Badge>
-            )}
-          </div>
-
-          {/* Terms List - Grouped alphabetically */}
-          {filteredTerms.length > 0 ? (
-            <div className="space-y-8">
-              {Object.keys(groupedTerms)
-                .sort()
-                .map((letter) => (
-                  <div key={letter}>
-                    <h2 className="text-lg font-semibold text-primary mb-4 sticky top-14 bg-background/95 backdrop-blur-sm py-2 z-10 border-b shadow-sm">
-                      {letter}
-                    </h2>
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      {groupedTerms[letter].map((term) => (
-                        <GlossaryCard key={`${term.id}-${i18n.language}`} term={term} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-            </div>
+        <section className="zn-ref__section" aria-busy={isLoading}>
+          {isLoading ? (
+            <Spinner size={22} label={t("status.loading", { ns: "common" })} />
           ) : (
-            /* Empty state */
-            <div className="text-center py-12">
-              <p className="text-muted-foreground mb-4">
-                {t("noResults")}
-                {searchQuery && ` ${t("noResultsForQuery", { query: searchQuery })}`}
-                {selectedCategory !== "all" &&
-                  ` ${t("noResultsInCategory", { category: getCategoryLabel(selectedCategory) })}`}
-              </p>
-              <Button variant="outline" onClick={handleClearFilters}>
-                {t("resetFilters")}
-              </Button>
-            </div>
+            <>
+              {/* 2, search and category, on one line */}
+              <div className="zn-row zn-ref__controls">
+                <div className="zn-ref__search" role="search">
+                  <Search size={16} className="zn-ref__search-glyph" />
+                  <input
+                    type="search"
+                    className="zn-ref__search-input"
+                    aria-label={t("searchPlaceholder")}
+                    placeholder={t("searchPlaceholder")}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      className="zn-ref__search-clear"
+                      aria-label={t("clearSearch")}
+                      onClick={() => setSearchQuery("")}
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+                <Select
+                  value={selectedCategory}
+                  onValueChange={(v) =>
+                    setSelectedCategory(v as typeof selectedCategory)
+                  }
+                >
+                  <SelectTrigger className="zn-ref__filter">
+                    <Filter size={15} />
+                    <SelectValue placeholder={t("categoryPlaceholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t("allCategories")}</SelectItem>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {getCategoryLabel(cat.id)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* 3, what is on screen, and what is narrowing it */}
+              <div className="zn-cluster zn-ref__meta">
+                <span className="zn-mono zn-faint">
+                  {t("resultCount", { count: filteredTerms.length })}
+                </span>
+                {selectedCategory !== "all" && (
+                  <Badge variant="secondary">
+                    {getCategoryLabel(selectedCategory)}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategory("all")}
+                      className="zn-ref__unfilter"
+                      aria-label={t("removeCategoryFilter")}
+                    >
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                )}
+                {searchQuery && (
+                  <Badge variant="secondary">
+                    {searchQuery}
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery("")}
+                      className="zn-ref__unfilter"
+                      aria-label={t("clearSearch")}
+                    >
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                )}
+              </div>
+
+              {/* 4, the terms, grouped by first letter */}
+              {filteredTerms.length > 0 ? (
+                <div className="zn-ref__groups">
+                  {Object.keys(groupedTerms)
+                    .sort()
+                    .map((letter) => (
+                      <section key={letter} aria-label={letter}>
+                        <h2 className="zn-ref__letter">{letter}</h2>
+                        <div className="zn-grid">
+                          {groupedTerms[letter].map((term) => (
+                            <GlossaryCard
+                              key={`${term.id}-${i18n.language}`}
+                              term={term}
+                            />
+                          ))}
+                        </div>
+                      </section>
+                    ))}
+                </div>
+              ) : (
+                <EmptyState
+                  variant="no-results"
+                  icon={Search}
+                  title={t("noResults")}
+                  description={emptyDescription}
+                  action={
+                    <Button variant="outline" onClick={handleClearFilters}>
+                      {t("resetFilters")}
+                    </Button>
+                  }
+                />
+              )}
+            </>
           )}
-        </>
-      )}
-    </div>
+        </section>
+      </div>
     </>
   );
 }

@@ -33,15 +33,49 @@ The upstream package ships **no `NOTICE` file**, so there is no attribution noti
 - **Licence:** SIL Open Font License 1.1, full text in [licenses/space-grotesk-OFL.txt](licenses/space-grotesk-OFL.txt)
 - **Upstream:** https://github.com/floriankarsten/space-grotesk
 - **Obtained via:** Google Fonts, latin subset of the variable font (weights 300–700)
-- **Where it lives:** `public/fonts/space-grotesk-latin.woff2`, declared in `src/styles/fonts.css` and preloaded from `index.html`
+- **Where it lives:** `public/fonts/space-grotesk-latin.woff2`, declared in `src/styles/design/fonts.css` and preloaded from `index.html`
 
 The font file is committed to this repository and copied into the built site, so every clone and every deploy redistributes it. **OFL clause 2 makes reproducing the copyright notice and the licence a condition of that redistribution**. That is what this entry and `licenses/space-grotesk-OFL.txt` provide. It was self-hosted in commit `da2fc8e` to drop the render-blocking Google Fonts chain; the notice was owed from that commit onward.
 
-**The redistributed form is modified**: it is a subset, restricted to the latin `unicode-range` listed in `src/styles/fonts.css`, which makes it a *Modified Version* under the licence. **No outline data is altered.**
+**The redistributed form is modified**: it is a subset, restricted to the latin `unicode-range` listed in `src/styles/design/fonts.css`, which makes it a *Modified Version* under the licence. **No outline data is altered.**
 
 The upstream copyright line carries **no Reserved Font Name**, so clause 3 imposes no renaming on the subset and the family keeps its original name. Should the upstream notice ever gain one, the subset would have to be renamed.
 
 The metrics-matched `Space Grotesk Fallback` face in the same stylesheet contains no Space Grotesk data: it is a set of override percentages applied to the user's local Arial, and is not covered by the OFL.
+
+---
+
+## Bricolage Grotesque — typeface
+
+- **Copyright:** © 2022 The Bricolage Grotesque Project Authors
+- **Licence:** SIL Open Font License 1.1, full text in [licenses/bricolage-grotesque-OFL.txt](licenses/bricolage-grotesque-OFL.txt)
+- **Upstream:** https://github.com/ateliertriay/bricolage
+- **Obtained via:** Google Fonts, latin subset of the variable font (optical size 12–96, weights 400/600/800)
+- **Where it lives:** `public/fonts/bricolage-grotesque-latin.woff2`, declared in `src/styles/design/fonts.css`
+- **Role:** display type — screen titles and section headings
+
+The font file is committed to this repository and copied into the built site, so every clone and every deploy redistributes it. **OFL clause 2 makes reproducing the copyright notice and the licence a condition of that redistribution**. That is what this entry and `licenses/bricolage-grotesque-OFL.txt` provide. It was self-hosted with the « minimal doodles » redesign rather than loaded from Google Fonts, because the app has to render offline and under a Lighthouse budget; the notice is owed from that commit onward.
+
+**The redistributed form is modified**: it is a subset, restricted to the latin `unicode-range` listed in `src/styles/design/fonts.css`, which makes it a *Modified Version* under the licence. **No outline data is altered.**
+
+The upstream copyright line carries **no Reserved Font Name**, so clause 3 imposes no renaming on the subset and the family keeps its original name.
+
+---
+
+## JetBrains Mono — typeface
+
+- **Copyright:** © 2020 The JetBrains Mono Project Authors
+- **Licence:** SIL Open Font License 1.1, full text in [licenses/jetbrains-mono-OFL.txt](licenses/jetbrains-mono-OFL.txt)
+- **Upstream:** https://github.com/JetBrains/JetBrainsMono
+- **Obtained via:** Google Fonts, latin subset of the variable font (weights 400–700)
+- **Where it lives:** `public/fonts/jetbrains-mono-latin.woff2`, declared in `src/styles/design/fonts.css`
+- **Role:** data type — zone codes, durations, catalogue ids and uppercase micro-labels
+
+The font file is committed to this repository and copied into the built site, so every clone and every deploy redistributes it. **OFL clause 2 makes reproducing the copyright notice and the licence a condition of that redistribution**. That is what this entry and `licenses/jetbrains-mono-OFL.txt` provide. It was self-hosted with the « minimal doodles » redesign rather than loaded from Google Fonts, because the app has to render offline and under a Lighthouse budget; the notice is owed from that commit onward.
+
+**The redistributed form is modified**: it is a subset, restricted to the latin `unicode-range` listed in `src/styles/design/fonts.css`, which makes it a *Modified Version* under the licence. **No outline data is altered.**
+
+The upstream copyright line carries **no Reserved Font Name**, so clause 3 imposes no renaming on the subset and the family keeps its original name.
 
 ---
 

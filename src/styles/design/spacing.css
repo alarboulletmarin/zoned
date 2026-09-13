@@ -1,0 +1,77 @@
+/* The grid is 2px-based, not 4px-snapped: the paper look needs 26px card
+   padding and 22px stacks. Use the named steps; do not invent in-between
+   values and do not round them to a 4px grid. */
+:root {
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-7: 14px;
+  --sp-8: 16px;
+  --sp-9: 18px;
+  --sp-10: 20px;
+  --sp-11: 22px;
+  --sp-12: 24px;
+  --sp-13: 26px;
+  --sp-14: 32px;
+  --sp-15: 40px;
+  --sp-16: 44px;
+  --sp-17: 48px;
+  --sp-18: 56px;
+  --sp-19: 64px;
+  --sp-20: 72px;
+
+  /* recurring roles */
+  --pad-card: var(--sp-13);
+  --pad-card-sm: var(--sp-8);
+  --pad-screen-x: var(--sp-15);
+  --gap-grid: var(--sp-10);
+  --gap-stack: var(--sp-7);
+  --hit-min: 44px;
+
+  /* L'écart ENTRE deux bandes de page, et le remplaçant du filet d'encre qui
+     les séparait jusqu'au 12 septembre 2026.
+
+     Une bande en paie la MOITIÉ de chaque côté. C'est le seul calcul de ce
+     jeton, et il vaut d'être dit : deux bandes voisines laissent alors
+     exactement UN écart entre leurs contenus, et la première en garde une
+     demie sous le filet de l'en-tête. Garder le padding entier des deux côtés
+     aurait donné 96 px entre deux bandes sur bureau, précisément les 672 px
+     d'air sur la seule page d'accueil que _layout.css a déjà mesurés et
+     rejetés du temps où le filet faisait le travail.
+
+     Il remplace sept rythmes différents (26, 32, 40, 48 px selon la feuille)
+     qui disaient tous la même intention. */
+  --gap-section: var(--sp-17);
+
+  /* The floating menu button's footprint below 1024px: its 44px pill, the 26px
+     it keeps off the screen edge, the phone's safe area, and a 12px gap above
+     it. Anything that would otherwise sit under it, another floating control,
+     the page's own bottom reserve, clears it with this. */
+  --fab-clear: calc(
+    var(--hit-min) + var(--sp-13) + var(--sp-6) + env(safe-area-inset-bottom, 0px)
+  );
+
+  /* The same pill measured across: its icon, its gap, MENU in mono and 22px of
+     padding either side, rounded up to the next step of the grid. The docked
+     action bars, which are pinned to the viewport floor and so cannot be
+     pushed by --fab-clear, keep this much of their end margin free. A longer
+     label than MENU would have to raise this with it. */
+  --fab-w: 120px;
+}
+
+/* Mobile screen margin is 20px, not 40px. Declared as an override of the same
+   role so no component needs to know which viewport it is on. */
+@media (max-width: 768px) {
+  :root { --pad-screen-x: var(--sp-10); }
+}
+
+/* Sur téléphone, l'écart de section descend d'un cran. Valeur à juger au
+   rendu, pas sur le papier : sans filet, c'est elle seule qui dit nouvelle
+   section, et elle se paie en longueur de page sur les écrans qui tiennent
+   sept bandes. */
+@media (max-width: 640px) {
+  :root { --gap-section: var(--sp-15); }
+}

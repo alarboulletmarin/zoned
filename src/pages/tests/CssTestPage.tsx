@@ -1,12 +1,12 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Pool, Save } from "@/components/icons";
+import { Save } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ResponsiveTable } from "@/components/ui/responsive-table";
+import { PageContainer } from "@/components/layout/PageContainer";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
 import {
   calculateSwimmingZones,
   estimateCssFrom400And200,
@@ -18,16 +18,9 @@ import { updateSwimmingBaseData } from "@/lib/athleteProfile";
 
 const ZONE_ORDER: SwimZone[] = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6"];
 
-const ZONE_COLOR: Record<SwimZone, string> = {
-  Z1: "bg-zone-1",
-  Z2: "bg-zone-2",
-  Z3: "bg-zone-3",
-  Z4: "bg-zone-4",
-  Z5: "bg-zone-5",
-  Z6: "bg-zone-6",
-};
-
 interface TimeInputProps {
+  /** Prefix for the two field ids the labels point at. */
+  id: string;
   label: string;
   minutes: string;
   seconds: string;
@@ -35,9 +28,18 @@ interface TimeInputProps {
   onSecondsChange: (v: string) => void;
   minutesLabel: string;
   secondsLabel: string;
+  /** Outlines both boxes; the written reason is printed by the caller. */
+  invalid?: boolean;
+  describedBy?: string;
 }
 
+/**
+ * A duration typed as mm:ss. Two number fields on one baseline, each in its
+ * own frame with its unit printed under it, and each unit is the field's
+ * real `<label htmlFor>`, not a caption sitting next to an unlabelled box.
+ */
 function TimeInput({
+  id,
   label,
   minutes,
   seconds,
@@ -45,6 +47,8 @@ function TimeInput({
   onSecondsChange,
   minutesLabel,
   secondsLabel,
+  invalid,
+  describedBy,
 }: TimeInputProps) {
   const handle = (value: string, setter: (v: string) => void, max: number) => {
     if (value === "") {
@@ -59,40 +63,66 @@ function TimeInput({
     }
     setter(String(num));
   };
+
   return (
-    <div className="space-y-2">
-      <label className="text-sm font-medium">{label}</label>
-      <div className="flex items-center gap-2">
-        <div className="flex flex-col items-center">
-          <input
-            type="number"
-            min={0}
-            max={59}
-            placeholder="0"
-            value={minutes}
-            onChange={(e) => handle(e.target.value, onMinutesChange, 59)}
-            className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label={minutesLabel}
-          />
-          <span className="text-xs text-muted-foreground mt-1">
+    <div
+      className="zn-ct__field"
+      role="group"
+      aria-labelledby={`${id}-label`}
+      aria-describedby={describedBy}
+    >
+      <span id={`${id}-label`} className="zn-label">
+        {label}
+      </span>
+      <div className="zn-ct__time">
+        <div className="zn-ct__timepart">
+          <span
+            className="zn-numfield zn-ct__numfield"
+            data-invalid={invalid ? "true" : undefined}
+          >
+            <input
+              id={`${id}-min`}
+              type="number"
+              min={0}
+              max={59}
+              placeholder="0"
+              value={minutes}
+              onChange={(e) => handle(e.target.value, onMinutesChange, 59)}
+              aria-label={minutesLabel}
+              aria-invalid={invalid || undefined}
+              className="zn-numfield__input"
+            />
+          </span>
+          <label htmlFor={`${id}-min`} className="zn-ct__timeunit">
             {minutesLabel}
-          </span>
+          </label>
         </div>
-        <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-        <div className="flex flex-col items-center">
-          <input
-            type="number"
-            min={0}
-            max={59}
-            placeholder="00"
-            value={seconds}
-            onChange={(e) => handle(e.target.value, onSecondsChange, 59)}
-            className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label={secondsLabel}
-          />
-          <span className="text-xs text-muted-foreground mt-1">
-            {secondsLabel}
+
+        <span className="zn-ct__timesep" aria-hidden="true">
+          :
+        </span>
+
+        <div className="zn-ct__timepart">
+          <span
+            className="zn-numfield zn-ct__numfield"
+            data-invalid={invalid ? "true" : undefined}
+          >
+            <input
+              id={`${id}-sec`}
+              type="number"
+              min={0}
+              max={59}
+              placeholder="00"
+              value={seconds}
+              onChange={(e) => handle(e.target.value, onSecondsChange, 59)}
+              aria-label={secondsLabel}
+              aria-invalid={invalid || undefined}
+              className="zn-numfield__input"
+            />
           </span>
+          <label htmlFor={`${id}-sec`} className="zn-ct__timeunit">
+            {secondsLabel}
+          </label>
         </div>
       </div>
     </div>
@@ -121,6 +151,10 @@ export function CssTestPage() {
     if (time400 <= 0 || time200 <= 0) return 0;
     return estimateCssFrom400And200(time400, time200);
   }, [time400, time200]);
+
+  // Both times typed and the formula still returns nothing: the 400 was not
+  // slower than the 200. Said out loud rather than left as an empty screen.
+  const orderError = time400 > 0 && time200 > 0 && cssSecPer100m <= 0;
 
   const zones = useMemo(() => {
     if (cssSecPer100m <= 0) return null;
@@ -159,107 +193,131 @@ export function CssTestPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Pool className="size-8 text-primary shrink-0" />
+
+      <PageContainer width="narrow" className="zn-ct">
+        <header
+          className="zn-ct__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">{t("calculateurs.css.kicker")}</span>
+          <h1 className="zn-display" data-level="2">
             {t("calculateurs.css.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-ct__lede">
             {t("calculateurs.css.description")}
-          </FadeUp>
-        </div>
+          </p>
+        </header>
 
-        <Card className="mb-6">
-          <CardContent className="pt-6 space-y-6">
-            <p className="text-xs text-muted-foreground">
-              {t("calculateurs.css.protocolHelp")}
-            </p>
+        <section className="zn-ct__band">
+          <Card>
+            <CardContent
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+            >
+              <p className="zn-ct__hint">
+                {t("calculateurs.css.protocolHelp")}
+              </p>
 
-            <TimeInput
-              label={t("calculateurs.css.time400")}
-              minutes={m400}
-              seconds={s400}
-              onMinutesChange={setM400}
-              onSecondsChange={setS400}
-              minutesLabel={t("calculateurs.css.minutes")}
-              secondsLabel={t("calculateurs.css.seconds")}
-            />
+              <TimeInput
+                id="time400"
+                label={t("calculateurs.css.time400")}
+                minutes={m400}
+                seconds={s400}
+                onMinutesChange={setM400}
+                onSecondsChange={setS400}
+                minutesLabel={t("calculateurs.css.minutes")}
+                secondsLabel={t("calculateurs.css.seconds")}
+                invalid={orderError}
+                describedBy={orderError ? "css-order-error" : undefined}
+              />
 
-            <TimeInput
-              label={t("calculateurs.css.time200")}
-              minutes={m200}
-              seconds={s200}
-              onMinutesChange={setM200}
-              onSecondsChange={setS200}
-              minutesLabel={t("calculateurs.css.minutes")}
-              secondsLabel={t("calculateurs.css.seconds")}
-            />
-          </CardContent>
-        </Card>
+              <TimeInput
+                id="time200"
+                label={t("calculateurs.css.time200")}
+                minutes={m200}
+                seconds={s200}
+                onMinutesChange={setM200}
+                onSecondsChange={setS200}
+                minutesLabel={t("calculateurs.css.minutes")}
+                secondsLabel={t("calculateurs.css.seconds")}
+                invalid={orderError}
+                describedBy={orderError ? "css-order-error" : undefined}
+              />
+
+              {orderError && (
+                <p id="css-order-error" className="zn-ct__error">
+                  {t("calculateurs.css.invalidOrder")}
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </section>
 
         {cssSecPer100m > 0 && zones && (
-          <div className="space-y-6">
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="py-8 flex flex-col items-center text-center">
-                <p className="text-sm font-medium text-muted-foreground mb-2">
+          <>
+            <section className="zn-ct__band">
+              <div className="zn-ct__figure">
+                <span className="zn-kicker">
                   {t("calculateurs.css.estimatedCss")}
-                </p>
-                <p className="text-5xl font-bold text-primary tabular-nums">
+                </span>
+                <p className="zn-ct__figure-value">
                   {formatSwimPace(cssSecPer100m)}
                 </p>
-                <p className="text-lg text-muted-foreground mt-1">
+                <span className="zn-ct__figure-unit">
                   {t("calculateurs.css.per100m")}
-                </p>
-              </CardContent>
-            </Card>
+                </span>
+              </div>
+            </section>
 
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="pt-6">
-                <h2 className="text-lg font-semibold mb-4">
-                  {t("calculateurs.css.zonesPreview")}
-                </h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b">
-                        <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {t("calculateurs.css.zone")}
-                        </th>
-                        <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {t("calculateurs.css.pace")}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {ZONE_ORDER.map((z) => (
-                        <tr key={z} className="border-b last:border-b-0">
-                          <td className="py-2 px-3">
-                            <span className="inline-flex items-center gap-2 font-medium">
-                              <span className={cn("size-3 rounded-full", ZONE_COLOR[z])} />
-                              {t(`calculateurs.css.zoneLabel${z}`)}
-                            </span>
-                          </td>
-                          <td className="py-2 px-3 tabular-nums">
-                            {formatSwimPaceRange(zones.zones[z])}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
+            <section
+              className="zn-ct__band zn-stack"
+              style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+              aria-labelledby="css-zones"
+            >
+              <h2 id="css-zones" className="zn-title" data-level="3">
+                {t("calculateurs.css.zonesPreview")}
+              </h2>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button onClick={handleSave} className="flex-1">
-                <Save className="size-4" />
-                {t("calculateurs.css.useThisCss")}
-              </Button>
-            </div>
-          </div>
+              {/* The swim ramp names its zones differently from the running
+                  one, so the first column is this table's legend and no ink
+                  ramp is painted here. */}
+              <ResponsiveTable
+                data={ZONE_ORDER}
+                rowKey={(zone) => zone}
+                columns={[
+                  {
+                    key: "zone",
+                    header: t("calculateurs.css.zone"),
+                    // The mobile card already prints this as its title.
+                    hideOnMobile: true,
+                    cell: (zone) => (
+                      <span className="zn-ct__zonename">
+                        {t(`calculateurs.css.zoneLabel${zone}`)}
+                      </span>
+                    ),
+                  },
+                  {
+                    key: "pace",
+                    header: t("calculateurs.css.pace"),
+                    className: "zn-ct__num",
+                    cell: (zone) => formatSwimPaceRange(zones.zones[zone]),
+                  },
+                ]}
+                mobileCardTitle={(zone) =>
+                  t(`calculateurs.css.zoneLabel${zone}`)
+                }
+              />
+
+              <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                <Button onClick={handleSave}>
+                  <Save size={15} />
+                  {t("calculateurs.css.useThisCss")}
+                </Button>
+              </div>
+            </section>
+          </>
         )}
-      </div>
+      </PageContainer>
     </>
   );
 }

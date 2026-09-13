@@ -5,12 +5,14 @@ import {
   Brain,
   ClipboardCheck,
   Clock,
+  Download,
   Flag,
   Flame,
   Heart,
   Info,
+  Loader2,
   Route,
-  Settings,
+  Save,
   Share,
   Trash2,
   Utensils,
@@ -35,7 +37,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { Alert } from "@/components/ui/alert";
 import { PageContainer } from "@/components/layout/PageContainer";
 import {
   Checklist,
@@ -124,7 +126,7 @@ export function RaceSimulatorPage() {
   const { settings: userSettings } = useSettings();
   const unit = userSettings.unitSystem;
   // The settings panel lives in the left column on desktop and in a sheet
-  // below it — "Ajuster" has to reach the one that is actually on screen.
+  // below it, "Ajuster" has to reach the one that is actually on screen.
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const [settings, setSettings] = useState<RaceSimSettings>(DEFAULT_SETTINGS);
@@ -175,7 +177,7 @@ export function RaceSimulatorPage() {
     [applyPlan],
   );
 
-  // `/race-simulator/shared?d=…` — the inputs fully describe the plan, so a shared
+  // `/race-simulator/shared?d=…`, the inputs fully describe the plan, so a shared
   // link just replays them through the same path a saved simulation takes.
   const sharedParam = searchParams.get("d");
   useEffect(() => {
@@ -213,7 +215,7 @@ export function RaceSimulatorPage() {
       try {
         await navigator.share({ title: plan.distanceLabel, url });
       } catch {
-        // Share sheet dismissed — nothing to do.
+        // Share sheet dismissed, nothing to do.
       }
       return;
     }
@@ -287,7 +289,7 @@ export function RaceSimulatorPage() {
         id: "timeline",
         label: t("sections.timeline"),
         navLabel: t("nav.timeline"),
-        icon: <Clock className="size-4" />,
+        icon: <Clock />,
         meta: `${plan.wakeUpTime} → ${plan.estimatedFinishTime}`,
         body: <RaceTimeline timeline={plan.timeline} />,
       },
@@ -298,7 +300,7 @@ export function RaceSimulatorPage() {
         id: "dayBefore",
         label: t("sections.dayBefore"),
         navLabel: t("nav.dayBefore"),
-        icon: <Flag className="size-4" />,
+        icon: <Flag />,
         meta: t("meta.items", { count: plan.dayBeforeChecklist.length }),
         body: (
           <Checklist
@@ -318,7 +320,7 @@ export function RaceSimulatorPage() {
         id: "packing",
         label: t("sections.packing"),
         navLabel: t("nav.packing"),
-        icon: <ClipboardCheck className="size-4" />,
+        icon: <ClipboardCheck />,
         meta: t("meta.items", { count: plan.raceDayChecklist.length }),
         body: (
           <Checklist
@@ -337,11 +339,11 @@ export function RaceSimulatorPage() {
       id: "morning",
       label: t("sections.morning"),
       navLabel: t("nav.morning"),
-      icon: <Utensils className="size-4" />,
+      icon: <Utensils />,
       meta: plan.wakeUpTime,
       body: (
-        <div className="space-y-4">
-          <div className="flex flex-wrap gap-x-8 gap-y-3">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}>
+          <div className="zn-rs-stats">
             <Stat label={t("labels.wakeUp")} value={plan.wakeUpTime} />
             <Stat
               label={t("labels.breakfast")}
@@ -349,7 +351,7 @@ export function RaceSimulatorPage() {
               hint={t("meta.carbs", { amount: plan.breakfast.carbsG })}
             />
           </div>
-          <p className="text-sm leading-relaxed text-muted-foreground">
+          <p className="zn-rs-note zn-rs-note--muted">
             {pick(plan.breakfast, "description")}
           </p>
         </div>
@@ -361,7 +363,7 @@ export function RaceSimulatorPage() {
         id: "warmup",
         label: t("sections.warmup"),
         navLabel: t("nav.warmup"),
-        icon: <Flame className="size-4" />,
+        icon: <Flame />,
         meta: `${plan.warmupStartTime} · ${plan.warmupDurationMin} min`,
         body: (
           <WarmupChecklist
@@ -379,7 +381,7 @@ export function RaceSimulatorPage() {
       id: "race",
       label: t("sections.race"),
       navLabel: t("nav.race"),
-      icon: <Route className="size-4" />,
+      icon: <Route />,
       wide: true,
       meta: `${formatPaceDisplay(convertPace(plan.targetTimeSeconds / 60 / plan.distanceKm, unit))}${paceUnit}`,
       body: (
@@ -395,7 +397,7 @@ export function RaceSimulatorPage() {
       id: "nutrition",
       label: t("sections.nutrition"),
       navLabel: t("nav.nutrition"),
-      icon: <Utensils className="size-4" />,
+      icon: <Utensils />,
       meta:
         plan.fuelingPlan.carbsPerHourG > 0
           ? `${plan.fuelingPlan.carbsPerHourG} g/h`
@@ -412,7 +414,7 @@ export function RaceSimulatorPage() {
       id: "mental",
       label: t("sections.mental"),
       navLabel: t("nav.mental"),
-      icon: <Brain className="size-4" />,
+      icon: <Brain />,
       meta: t("meta.segments", { count: plan.mentalCues.length }),
       body: <MentalCuesPanel cues={plan.mentalCues} />,
     });
@@ -422,12 +424,12 @@ export function RaceSimulatorPage() {
         id: "recovery",
         label: t("sections.recovery"),
         navLabel: t("nav.recovery"),
-        icon: <Heart className="size-4" />,
+        icon: <Heart />,
         body: (
-          <ul className="space-y-2">
+          <ul className="zn-rs-cp">
             {recovery.map((cp, i) => (
-              <li key={i} className="text-sm leading-relaxed">
-                {pick(cp, "action")}
+              <li key={i} className="zn-rs-cp__item">
+                <span className="zn-rs-cp__text">{pick(cp, "action")}</span>
               </li>
             ))}
           </ul>
@@ -494,26 +496,28 @@ export function RaceSimulatorPage() {
           },
         ]}
       />
-      <PageContainer width="wide" className="py-8 pb-28 lg:pb-8">
-        <header className="mb-6 max-w-3xl">
-          <EditorialTitle as="h1" className="mb-2">
+      <PageContainer width="wide" className="zn-rsp">
+        {/* Mono kicker, display title, one sentence. */}
+        <header
+          className="zn-rsp__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+        >
+          <span className="zn-kicker">{t("kicker")}</span>
+          <h1 className="zn-display" data-level="2">
             {t("title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground">
-            {t("description")}
-          </FadeUp>
+          </h1>
+          <p className="zn-body zn-body--lead zn-measure">{t("description")}</p>
         </header>
 
         {isShared && (
-          <div className="mb-4 flex items-center gap-2 rounded-lg border border-zone-2/30 bg-zone-2/5 px-3 py-2 text-sm">
-            <Share className="size-4 shrink-0 text-foreground/70" />
+          <Alert kind="info" className="zn-rsp__banner">
             {t("shared.banner")}
-          </div>
+          </Alert>
         )}
 
         {plan && (
           <RaceSimSummaryBar
-            className="mb-4"
+            className="zn-rsp__summary"
             distanceLabel={distanceLabel}
             timeLabel={formatSplitTime(plan.targetTimeSeconds)}
             paceLabel={`${formatPaceDisplay(convertPace(plan.targetTimeSeconds / 60 / plan.distanceKm, unit))}${paceUnit}`}
@@ -530,12 +534,14 @@ export function RaceSimulatorPage() {
           />
         )}
 
-        <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
-          {/* Left rail — settings before generation, navigation after. */}
-          <aside className="hidden lg:block lg:sticky lg:top-20 lg:self-start">
+        <div className="zn-rsp__layout">
+          {/* Left rail, settings before generation, navigation after. The app
+              header is in flow in this design, so the rail sticks to the top of
+              the viewport rather than under a bar that is no longer there. */}
+          <aside className="zn-rsp__rail">
             {formOpen || !plan ? (
-              <Card size="flush" className="p-5">
-                <h2 className="mb-4 text-sm font-semibold tracking-tight">
+              <Card size="flush" className="zn-rsp__settings">
+                <h2 className="zn-kicker zn-rsp__settingstitle">
                   {t("inputs.title")}
                 </h2>
                 {formNode}
@@ -543,7 +549,7 @@ export function RaceSimulatorPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="mt-2 w-full"
+                    className="zn-rsp__closeform"
                     onClick={() => setFormOpen(false)}
                   >
                     {t("inputs.close")}
@@ -551,8 +557,11 @@ export function RaceSimulatorPage() {
                 )}
               </Card>
             ) : (
-              <div className="space-y-6">
-                {/* The anchors only exist in "Préparer" — the race-day sheet
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-13)" } as React.CSSProperties}
+              >
+                {/* The anchors only exist in "Préparer", the race-day sheet
                     renders one continuous run sheet, with nothing to jump to. */}
                 {view === "prepare" && (
                   <RaceSimNav
@@ -573,11 +582,11 @@ export function RaceSimulatorPage() {
           </aside>
 
           {/* Plan */}
-          <div className="min-w-0">
-            {/* Mobile settings — inline until a plan exists, then behind "Ajuster". */}
+          <div className="zn-rsp__panel">
+            {/* Mobile settings, inline until a plan exists, then behind "Ajuster". */}
             {!plan && (
-              <Card size="flush" className="mb-4 p-5 lg:hidden">
-                <h2 className="mb-4 text-sm font-semibold tracking-tight">
+              <Card size="flush" className="zn-rsp__settings zn-rsp__mobileform">
+                <h2 className="zn-kicker zn-rsp__settingstitle">
                   {t("inputs.title")}
                 </h2>
                 {formNode}
@@ -585,12 +594,15 @@ export function RaceSimulatorPage() {
             )}
 
             {!plan ? (
-              <EmptyState />
+              <EmptyPlan />
             ) : (
               <>
-                <div className="mb-4 flex flex-wrap items-center gap-3">
+                <div
+                  className="zn-cluster zn-rsp__viewbar"
+                  style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}
+                >
                   <Segmented
-                    className="w-full sm:w-auto sm:min-w-[16rem]"
+                    className="zn-rsp__switch"
                     label={t("view.label")}
                     value={view}
                     onChange={setView}
@@ -599,18 +611,18 @@ export function RaceSimulatorPage() {
                       { value: "raceDay", label: t("view.raceDay") },
                     ]}
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="zn-caption zn-muted">
                     {view === "prepare" ? t("view.prepareHint") : t("view.raceDayHint")}
                   </p>
                 </div>
 
                 {view === "prepare" ? (
                   <>
-                    <div className="sticky top-14 z-20 -mx-4 mb-3 bg-background/95 px-4 py-2 backdrop-blur lg:hidden">
+                    <div className="zn-rsp__strip">
                       <RaceSimNav items={navItems} onJump={handleJump} variant="chips" />
                     </div>
 
-                    <div className="grid items-start gap-4 xl:grid-cols-2">
+                    <div className="zn-rsp__sections">
                       {sections.map((section) => (
                         <RaceSimSection
                           key={section.id}
@@ -621,8 +633,8 @@ export function RaceSimulatorPage() {
                           open={openSections[section.id] ?? DEFAULT_OPEN[section.id]}
                           onToggle={toggleSection}
                           className={cn(
-                            "scroll-mt-32 lg:scroll-mt-24",
-                            section.wide && "xl:col-span-2",
+                            "zn-rsp__section",
+                            section.wide && "zn-rsp__section--wide",
                           )}
                         >
                           {section.body}
@@ -638,28 +650,45 @@ export function RaceSimulatorPage() {
                     onToggle={toggleChecked}
                   />
                 )}
+
+                {/* Keeping the plan is secondary, so it stays in the page.
+                    The thumb dock below has room for the call and nothing
+                    else once the menu pill has taken its end of the gutter,
+                    and "Ajuster" is already on the summary line above. */}
+                <div className="zn-rsp__keep">
+                  <Button variant="outline" onClick={handleSave}>
+                    <Save />
+                    {t("actions.save")}
+                  </Button>
+                  <Button variant="outline" onClick={handleShare}>
+                    <Share />
+                    {t("actions.share")}
+                  </Button>
+                </div>
               </>
             )}
 
             {/* Saved simulations */}
             {savedSimulations.length > 0 && (
-              <section className="mt-8">
-                <h2 className="mb-3 text-sm font-semibold tracking-tight">
+              <section className="zn-rsp__saved" aria-labelledby="rs-saved">
+                <h2 id="rs-saved" className="zn-kicker zn-rsp__savedtitle">
                   {t("saved.title")}
                 </h2>
-                <ul className="grid gap-2 sm:grid-cols-2">
+                <ul className="zn-rsp__savedlist">
                   {savedSimulations.map((sim) => (
-                    <li
-                      key={sim.id}
-                      className="flex items-center justify-between gap-2 rounded-lg border bg-card p-3"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium">{sim.label}</p>
-                        <p className="text-xs tabular-nums text-muted-foreground">
+                    <li key={sim.id} className="zn-ct__saveditem">
+                      <div className="zn-fill">
+                        <span className="zn-ct__savedname zn-truncate">
+                          {sim.label}
+                        </span>
+                        <span className="zn-ct__saveddate">
                           {formatDate(new Date(sim.createdAt))}
-                        </p>
+                        </span>
                       </div>
-                      <div className="flex shrink-0 items-center gap-1">
+                      <div
+                        className="zn-cluster zn-fixed"
+                        style={{ "--gap": "var(--sp-2)" } as React.CSSProperties}
+                      >
                         <Button
                           variant="ghost"
                           size="sm"
@@ -673,7 +702,7 @@ export function RaceSimulatorPage() {
                           aria-label={t("actions.delete")}
                           onClick={() => setDeleteTarget(sim.id)}
                         >
-                          <Trash2 className="size-4" />
+                          <Trash2 size={15} />
                         </Button>
                       </div>
                     </li>
@@ -685,37 +714,30 @@ export function RaceSimulatorPage() {
         </div>
       </PageContainer>
 
-      {/* Mobile action bar — the PDF is what ends up on a phone race morning. */}
+      {/* Mobile action bar, the PDF is what ends up on a phone race morning.
+          Opaque cream on an ink rule: no blur, no translucency. One call and
+          nothing else: below 1024px the menu pill takes 120px of this bar's
+          end, and what is left measures the export button exactly. */}
       {plan && (
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
-          <div className="flex gap-2">
-            <RaceSimActions
-              className="flex-1"
-              variant="bar"
-              onExportPdf={handleExportPdf}
-              onSave={handleSave}
-              onShare={handleShare}
-              exporting={exporting}
-            />
-            <Button
-              variant="outline"
-              size="icon"
-              aria-label={t("inputs.adjust")}
-              onClick={() => setSheetOpen(true)}
-            >
-              <Settings className="size-4" />
-            </Button>
-          </div>
+        <div className="zn-rsp__bar">
+          <Button
+            className="zn-rsp__barcall"
+            onClick={handleExportPdf}
+            disabled={exporting}
+          >
+            {exporting ? <Loader2 className="zn-rsp__barspin" /> : <Download />}
+            {t("actions.exportPdf")}
+          </Button>
         </div>
       )}
 
       {/* Mobile settings sheet */}
       <Sheet open={sheetOpen && !!plan && !isDesktop} onOpenChange={setSheetOpen}>
-        <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
+        <SheetContent side="bottom" className="zn-rsp__sheet">
           <SheetHeader>
             <SheetTitle>{t("inputs.title")}</SheetTitle>
           </SheetHeader>
-          <div className="px-4 pb-6">{formNode}</div>
+          <div className="zn-rsp__sheetbody">{formNode}</div>
         </SheetContent>
       </Sheet>
 
@@ -739,7 +761,7 @@ export function RaceSimulatorPage() {
               </Button>
             </DialogClose>
             <Button variant="destructive" onClick={confirmDelete}>
-              <Trash2 className="size-4" />
+              <Trash2 size={15} />
               {t("actions.delete")}
             </Button>
           </DialogFooter>
@@ -749,24 +771,36 @@ export function RaceSimulatorPage() {
   );
 }
 
-function EmptyState() {
+/**
+ * No plan yet. The form that undoes this state sits in the rail on desktop and
+ * directly above on a phone, so the block names what is missing and prints the
+ * four things the form will produce rather than repeating the button.
+ */
+function EmptyPlan() {
   const { t } = useTranslation("simulator");
   const steps = [
-    { icon: <Clock className="size-4" />, text: t("emptyState.timeline") },
-    { icon: <Route className="size-4" />, text: t("emptyState.splits") },
-    { icon: <Utensils className="size-4" />, text: t("emptyState.nutrition") },
-    { icon: <Brain className="size-4" />, text: t("emptyState.mental") },
+    { icon: <Clock size={15} />, text: t("emptyState.timeline") },
+    { icon: <Route size={15} />, text: t("emptyState.splits") },
+    { icon: <Utensils size={15} />, text: t("emptyState.nutrition") },
+    { icon: <Brain size={15} />, text: t("emptyState.mental") },
   ];
   return (
-    <Card size="flush" className="border-dashed p-8">
-      <div className="flex items-start gap-2 text-sm text-muted-foreground">
-        <Info className="mt-0.5 size-4 shrink-0" />
-        <p>{t("empty")}</p>
+    <Card
+      size="flush"
+      className="zn-rsp__empty zn-stack"
+      style={{ "--gap": "var(--sp-13)" } as React.CSSProperties}
+    >
+      <div
+        className="zn-row zn-row--start"
+        style={{ "--gap": "var(--sp-5)" } as React.CSSProperties}
+      >
+        <Info size={15} className="zn-fixed zn-faint" />
+        <p className="zn-body zn-body--sm zn-muted">{t("empty")}</p>
       </div>
-      <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+      <ul className="zn-rsp__steps">
         {steps.map((step, i) => (
-          <li key={i} className="flex items-center gap-3 text-sm">
-            <span className="text-muted-foreground">{step.icon}</span>
+          <li key={i} className="zn-rsp__step">
+            {step.icon}
             {step.text}
           </li>
         ))}

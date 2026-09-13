@@ -1,5 +1,5 @@
 /**
- * Pace Engine — Evidence-based training pace calculations
+ * Pace Engine, Evidence-based training pace calculations
  *
  * Implements Daniels' 5 training intensities (E/M/T/I/R) derived from VMA.
  * When VMA is unavailable, falls back to difficulty-based estimates.
@@ -18,15 +18,15 @@ import type { RaceDistance } from "@/types/plan";
 export type DanielsIntensity = "E" | "M" | "T" | "I" | "R";
 
 export interface TrainingPaces {
-  /** Easy pace range (min/km) — Z1-Z2, 65-75% VMA */
+  /** Easy pace range (min/km), Z1-Z2, 65-75% VMA */
   E: { min: number; max: number };
-  /** Marathon pace (min/km) — Z3, 78-80% VMA */
+  /** Marathon pace (min/km), Z3, 78-80% VMA */
   M: { min: number; max: number };
-  /** Threshold pace (min/km) — Z4, 85-88% VMA */
+  /** Threshold pace (min/km), Z4, 85-88% VMA */
   T: { min: number; max: number };
-  /** Interval/VO2max pace (min/km) — Z5, 95-100% VMA */
+  /** Interval/VO2max pace (min/km), Z5, 95-100% VMA */
   I: { min: number; max: number };
-  /** Repetition pace (min/km) — Z6, 105-110% VMA */
+  /** Repetition pace (min/km), Z6, 105-110% VMA */
   R: { min: number; max: number };
   /** Source VMA used for calculation */
   vma: number;

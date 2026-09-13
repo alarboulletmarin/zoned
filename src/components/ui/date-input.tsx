@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Calendar as CalendarIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -6,8 +7,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Calendar } from "@/components/ui/calendar";
 import { useIsEnglish } from "@/lib/i18n-utils";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import type { Matcher } from "react-day-picker";
 
@@ -40,6 +48,54 @@ function formatDisplayDate(isoDate: string, isEn: boolean): string {
   return isEn ? isoDate : `${d}/${m}/${y}`;
 }
 
+function startOfMonth(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+function shiftYears(date: Date, years: number): Date {
+  return new Date(date.getFullYear() + years, date.getMonth(), 1);
+}
+
+/**
+ * La fenêtre de mois que le calendrier peut atteindre, et celui sur lequel il
+ * s'ouvre.
+ *
+ * Il s'ouvrait sur le mois COURANT, toujours : `defaultMonth` recevait la date
+ * choisie, donc `undefined` tant qu'il n'y en avait pas. Sur l'étape quand a
+ * lieu la course ?, `min` vaut aujourd'hui plus douze à seize semaines, le
+ * calendrier s'ouvrait donc sur une grille entièrement grisée, sans un seul
+ * jour cliquable et sans rien dire pourquoi. Il fallait deviner qu'il fallait
+ * appuyer trois ou quatre fois sur le chevron.
+ *
+ * Il s'ouvre maintenant sur le premier mois qui contient un jour choisissable,
+ * et les deux listes déroulantes (mois, année) rendent n'importe quel mois
+ * atteignable en un geste plutôt qu'en N.
+ */
+function monthWindow(
+  selected: Date | undefined,
+  min: Date | undefined,
+  max: Date | undefined,
+) {
+  const today = startOfMonth(new Date());
+  // Sans borne : dix ans en arrière (un record personnel a une date), cinq ans
+  // en avant (une course se prépare longtemps à l'avance).
+  let start = startOfMonth(min ?? shiftYears(today, -10));
+  let end = startOfMonth(max ?? shiftYears(today, 5));
+  if (end < start) end = start;
+
+  /* Une valeur déjà posée hors de la fenêtre doit rester atteignable : un
+     brouillon repris peut porter une date que les bornes d'aujourd'hui
+     n'autorisent plus, et l'enfermer rendrait le champ impossible à corriger. */
+  const chosen = selected ? startOfMonth(selected) : null;
+  if (chosen && chosen < start) start = chosen;
+  if (chosen && chosen > end) end = chosen;
+
+  const preferred = chosen ?? today;
+  const open = preferred < start ? start : preferred > end ? end : preferred;
+
+  return { startMonth: start, endMonth: end, defaultMonth: open };
+}
+
 function DateInput({
   value,
   onChange,
@@ -53,6 +109,19 @@ function DateInput({
 }: DateInputProps) {
   const [open, setOpen] = useState(false);
   const isEn = useIsEnglish();
+  const { t } = useTranslation("common");
+
+  /* Sur téléphone, le calendrier N'EST PAS un panneau ancré.
+     Mesuré à 390 × 560, un Safari iOS avec ses deux barres : la grille fait
+     356 px et il n'en restait que 293 entre le champ et le bord de l'écran.
+     Le panneau se plafonnait donc et défilait DANS lui-même, avec sa propre
+     barre de défilement et la dernière semaine du mois hors de vue. Un mois
+     ne se lit pas par une fenêtre de six lignes sur sept.
+     Le tiroir du bas, lui, se dimensionne sur son contenu (82 % de l'écran au
+     plafond, sheet.css), part du bord où le pouce se repose, et se referme
+     d'un glissement. C'est la place que le calendrier demande, prise là où
+     elle existe. */
+  const compact = useMediaQuery("(max-width: 640px)");
 
   const selected = value ? isoToDate(value) : undefined;
   const defaultPlaceholder = isEn ? "YYYY-MM-DD" : "JJ/MM/AAAA";
@@ -61,10 +130,74 @@ function DateInput({
   if (min) disabledMatcher.push({ before: isoToDate(min) });
   if (max) disabledMatcher.push({ after: isoToDate(max) });
 
+  const months = useMemo(
+    () =>
+      monthWindow(
+        value ? isoToDate(value) : undefined,
+        min ? isoToDate(min) : undefined,
+        max ? isoToDate(max) : undefined,
+      ),
+    [value, min, max],
+  );
+
   function handleSelect(date: Date | undefined) {
     if (!date) return;
     onChange?.({ target: { value: dateToIso(date) } });
     setOpen(false);
+  }
+
+  const label = ariaLabel ?? t("actions.pickDate");
+
+  const face = (
+    <>
+      <span className="zn-date-input__value">
+        {value ? formatDisplayDate(value, isEn) : placeholder ?? defaultPlaceholder}
+      </span>
+      <CalendarIcon className="zn-date-input__icon" />
+    </>
+  );
+
+  const calendar = (
+    <Calendar
+      mode="single"
+      captionLayout="dropdown"
+      selected={selected}
+      onSelect={handleSelect}
+      defaultMonth={months.defaultMonth}
+      startMonth={months.startMonth}
+      endMonth={months.endMonth}
+      disabled={disabledMatcher.length > 0 ? disabledMatcher : undefined}
+      autoFocus
+    />
+  );
+
+  if (compact) {
+    return (
+      <>
+        <Button
+          id={id}
+          type="button"
+          variant="outline"
+          disabled={disabled}
+          aria-label={ariaLabel}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          data-placeholder={value ? undefined : ""}
+          className={cn("zn-date-input", className)}
+          onClick={() => setOpen(true)}
+        >
+          {face}
+        </Button>
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetContent side="bottom" className="zn-date-input__sheet">
+            <SheetHeader>
+              <SheetTitle>{label}</SheetTitle>
+            </SheetHeader>
+            {calendar}
+          </SheetContent>
+        </Sheet>
+      </>
+    );
   }
 
   return (
@@ -75,29 +208,21 @@ function DateInput({
           variant="outline"
           disabled={disabled}
           aria-label={ariaLabel}
-          className={cn(
-            "w-full justify-between font-normal",
-            !value && "text-muted-foreground",
-            className,
-          )}
+          data-placeholder={value ? undefined : ""}
+          className={cn("zn-date-input", className)}
         >
-          <span>
-            {value
-              ? formatDisplayDate(value, isEn)
-              : placeholder ?? defaultPlaceholder}
-          </span>
-          <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
+          {face}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={selected}
-          onSelect={handleSelect}
-          defaultMonth={selected}
-          disabled={disabledMatcher.length > 0 ? disabledMatcher : undefined}
-          autoFocus
-        />
+      {/* `collisionPadding` : la grille fait ~320px et le champ prend toute la
+          colonne, donc le panneau touchait le bord de la fenêtre sur une
+          fenêtre étroite. */}
+      <PopoverContent
+        className="zn-date-input__popover"
+        align="start"
+        collisionPadding={12}
+      >
+        {calendar}
       </PopoverContent>
     </Popover>
   );

@@ -7,7 +7,7 @@ interface MiniRouteMapProps {
   points: RouteCoordinate[];
   /** Stroke colour for the trace. Defaults to Zoned primary. */
   color?: string;
-  /** Tailwind class for sizing/aspect-ratio override. */
+  /** Extra class, for a call site that sizes the box itself. */
   className?: string;
   /** Background fill. Defaults to a faint muted tone. */
   background?: string;
@@ -15,7 +15,7 @@ interface MiniRouteMapProps {
 
 /**
  * SVG mini-map preview of a route trace. Pure projection of the polyline
- * into a normalised box — no tiles, no map library — so it renders fast
+ * into a normalised box, no tiles, no map library, so it renders fast
  * inside list cards (Strava-style candidate thumbnails).
  *
  * The latitude axis is inverted (smaller pixel-y for larger lat) so the
@@ -25,7 +25,7 @@ interface MiniRouteMapProps {
 export function MiniRouteMap({
   points,
   color = "#ea580c",
-  className = "h-16 w-24",
+  className = "",
   background = "rgb(var(--muted) / 0.4)",
 }: MiniRouteMapProps) {
   const path = useMemo(() => {
@@ -69,7 +69,7 @@ export function MiniRouteMap({
   if (!path) {
     return (
       <div
-        className={`flex items-center justify-center rounded-md border border-border/60 ${className}`}
+        className={`zn-mini-route ${className}`}
         style={{ background }}
         aria-hidden
       />
@@ -78,7 +78,7 @@ export function MiniRouteMap({
 
   return (
     <svg
-      className={`shrink-0 rounded-md border border-border/60 ${className}`}
+      className={`zn-mini-route ${className}`}
       viewBox={path.viewBox}
       preserveAspectRatio="xMidYMid meet"
       style={{ background }}

@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { ZoneBadge } from "@/components/domain/ZoneBadge";
+import { ZoneScale } from "@/components/visualization";
 import {
   ResponsiveTable,
   type ResponsiveTableColumn,
@@ -126,7 +127,8 @@ export function PaceTablePage() {
     return Math.max(180, Math.min(600, rounded));
   }, [vmaPaceMinPerKm]);
 
-  const numericCell = "font-mono tabular-nums whitespace-nowrap";
+  // Every figure is a mono column, right-aligned on its digits.
+  const numericCell = "zn-num__num";
 
   // ResponsiveTable: real <table> at md+, stacked key/value cards on phones so
   // every column (incl. semi/marathon) is readable without horizontal scroll (#104).
@@ -149,16 +151,11 @@ export function PaceTablePage() {
       base.push({
         key: "zone",
         header: t("calculators:calculateurs.paceTable.yourZone"),
-        className: "whitespace-nowrap",
         cell: (r) =>
           r.zone != null ? (
-            <span
-              className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-zone-${r.zone}/10 text-zone-${r.zone}`}
-            >
-              Z{r.zone}
-            </span>
+            <ZoneBadge zone={r.zone} size="sm" />
           ) : (
-            <span className="text-muted-foreground">-</span>
+            <span className="zn-faint">-</span>
           ),
       });
     }
@@ -189,44 +186,58 @@ export function PaceTablePage() {
           },
         ]}
       />
-      <div className="py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
+
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.paceTable.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
             {t("calculators:calculateurs.paceTable.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
             {t("calculators:calculateurs.paceTable.subtitle")}
-          </FadeUp>
-        </div>
-
-        {/* Table — responsive: scrollable table on tablet/desktop, stacked
-            cards on mobile. */}
-        <ResponsiveTable
-          data={rows}
-          columns={columns}
-          rowKey="totalSeconds"
-          stickyHeader
-          className="md:rounded-lg md:border"
-          mobileCardTitle={(row) => (
-            <span className="font-mono tabular-nums">
-              {formatPace(row.paceMinPerKm)}
-              <span className="text-muted-foreground font-sans font-normal"> /km</span>
-            </span>
-          )}
-          rowClassName={(row) =>
-            highlightSeconds != null && row.totalSeconds === highlightSeconds
-              ? "bg-primary/10 font-medium ring-1 ring-primary/30"
-              : undefined
-          }
-        />
-
-        {/* Footer notes */}
-        {highlightSeconds != null && (
-          <p className="mt-4 text-sm text-muted-foreground">
-            {t("calculators:calculateurs.paceTable.highlightNote")}
           </p>
+        </section>
+
+        {/* The table paints a whole zone column, so the ramp is named once. */}
+        {hasZones && (
+          <div className="zn-num__legend">
+            <ZoneScale />
+          </div>
         )}
+
+        <section
+          className="zn-num__panel zn-stack"
+          style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+        >
+          <ResponsiveTable
+            data={rows}
+            columns={columns}
+            rowKey="totalSeconds"
+            stickyHeader
+            mobileCardTitle={(row) => (
+              <span className="zn-mono">
+                {formatPace(row.paceMinPerKm)}
+                <span className="zn-faint"> /km</span>
+              </span>
+            )}
+            rowClassName={(row) =>
+              highlightSeconds != null && row.totalSeconds === highlightSeconds
+                ? "zn-tool__mark"
+                : undefined
+            }
+          />
+
+          {highlightSeconds != null && (
+            <p className="zn-caption zn-muted">
+              {t("calculators:calculateurs.paceTable.highlightNote")}
+            </p>
+          )}
+        </section>
       </div>
     </>
   );

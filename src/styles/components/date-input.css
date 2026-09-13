@@ -1,0 +1,88 @@
+/* Date field, the trigger that opens the calendar. It is built on the button
+   primitive, so the paint here turns that action pill back into a field: card
+   surface, 10px field radius, the value left and the icon right.
+
+   Every rule carries .zn-btn as well, so it wins over button.css whatever order
+   the two files are imported in. */
+
+.zn-btn.zn-date-input {
+  inline-size: 100%;
+  justify-content: space-between;
+  gap: var(--sp-5);
+
+  padding: var(--sp-6) var(--sp-8);
+  min-block-size: var(--hit-min);
+
+  border-radius: var(--r-lg);
+  font: var(--type-body-sm);
+  text-align: start;
+}
+
+.zn-btn.zn-date-input[data-variant="outline"] {
+  background: var(--surface-card);
+  color: var(--ink-1);
+}
+
+.zn-btn.zn-date-input[data-variant="outline"]:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+/* No date yet: the format hint reads as placeholder, not as a value. */
+.zn-btn.zn-date-input[data-placeholder] {
+  color: var(--text-faint);
+}
+
+.zn-date-input__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-date-input__icon {
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* The calendar brings its own padding and sizes itself, so the popover shell
+   only holds it. Selected with the data-slot too, so it still wins once the
+   popover gets its own port.
+
+   Le panneau ancré ne sert plus QUE le bureau : sous 640 px le calendrier
+   s'ouvre dans un tiroir du bas (date-input.tsx). Les deux plafonds restent
+   pour la fenêtre courte d'un ordinateur portable, Radix décale un panneau
+   trop grand, il ne le rétrécit jamais, et sans plafond la dernière semaine du
+   mois se retrouverait hors de la fenêtre, inatteignable. */
+[data-slot="popover-content"].zn-date-input__popover {
+  inline-size: auto;
+  max-inline-size: min(
+    var(--radix-popover-content-available-width, 100vw),
+    calc(100vw - var(--sp-12))
+  );
+
+  max-block-size: var(--radix-popover-content-available-height, none);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  padding: 0;
+}
+
+/* ── le tiroir du téléphone ───────────────────────────────────────────── */
+
+/* Le calendrier prend la largeur du tiroir et garde son plafond de 320 px
+   (calendar.css) : centré, il tombe sous le pouce plutôt que contre un bord.
+   L'élargir aurait coûté en HAUTEUR, une case est carrée , , et c'est la
+   hauteur qui est rare ici.
+
+   Le calendrier rend tout son rembourrage : le tiroir paie déjà le sien, et
+   les 26 px du bas deviennent 16 parce que l'écart de la grille inscrit déjà
+   3 px sous la dernière semaine. Mesuré à 390 × 560, le plus court des écrans
+   réalistes : 17 px de trop, donc une barre de défilement pour rien. */
+.zn-sheet.zn-date-input__sheet {
+  gap: var(--sp-8);
+  padding-block-end: var(--sp-8);
+}
+
+.zn-date-input__sheet .zn-cal {
+  inline-size: 100%;
+  padding: 0;
+}

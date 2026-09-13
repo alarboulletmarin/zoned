@@ -1,5 +1,5 @@
 /**
- * Brouter HTTP wrapper — converts a list of waypoints into a routed trace,
+ * Brouter HTTP wrapper, converts a list of waypoints into a routed trace,
  * with elevation already included in the GeoJSON coordinates.
  */
 
@@ -53,7 +53,7 @@ function formatLonLats(waypoints: RouteCoordinate[]): string {
   return waypoints.map(([lon, lat]) => `${lon},${lat}`).join("|");
 }
 
-/** Soft cap on cached Brouter answers — beyond this we evict the oldest
+/** Soft cap on cached Brouter answers, beyond this we evict the oldest
  *  entry on each new write. 100 cached traces is enough for a session of
  *  drag-edits + multiple regenerates without runaway memory growth. */
 const BROUTER_CACHE_LIMIT = 100;
@@ -108,8 +108,8 @@ async function fetchWithRetry(url: string, externalSignal?: AbortSignal): Promis
     try {
       const response = await fetch(url, { signal: timeout.signal });
       if (response.ok) return response;
-      // 4xx (except 429) is the user/request — never retry. 5xx/429 might
-      // be a hiccup on Brouter's side — retry with backoff.
+      // 4xx (except 429) is the user/request, never retry. 5xx/429 might
+      // be a hiccup on Brouter's side, retry with backoff.
       if (response.status !== 429 && response.status < 500) {
         throw new BrouterError(response.status, `Brouter request failed: ${response.statusText}`);
       }
@@ -196,7 +196,7 @@ export async function routeViaBrouter(args: {
     setBrouterCache(cacheKey, cached);
     return cached;
   }
-  // Coalesce concurrent identical requests — the parallel candidate
+  // Coalesce concurrent identical requests, the parallel candidate
   // generation might issue the same exact route twice in a single tick.
   const inFlight = brouterInFlight.get(cacheKey);
   if (inFlight) return inFlight;

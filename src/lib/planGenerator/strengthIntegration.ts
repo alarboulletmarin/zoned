@@ -1,5 +1,5 @@
 /**
- * Strength Integration — Post-processing step for training plans
+ * Strength Integration, Post-processing step for training plans
  *
  * Adds periodized strength training suggestions to an already-generated
  * running plan. Strength sessions are placed on rest days or paired with

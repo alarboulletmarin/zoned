@@ -1,4 +1,7 @@
 {
+  "accessibility": {
+    "skipToContent": "Skip to content"
+  },
   "app": {
     "name": "Zoned",
     "tagline": "219 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans, route generator and 12 calculators. Free, no account.",
@@ -23,7 +26,7 @@
       "hint": "To paste the visual over a photo (Insta Story, etc.)",
       "notForZoneHero": "Not available on this template"
     },
-    "privacy": "The image is generated in your browser — no data sent.",
+    "privacy": "The image is generated in your browser, no data sent.",
     "template": {
       "storyHero": { "label": "Story", "format": "Insta · 1080 × 1920" },
       "squareStats": { "label": "Square stats", "format": "Insta Feed · 1080 × 1080" },
@@ -59,13 +62,16 @@
       "subwayMap": { "label": "Subway", "format": "Stylized subway line · 1080 × 1080" },
       "cassetteTape": { "label": "Tape", "format": "Retro audio cassette · 1080 × 1080" },
       "y2kChrome": { "label": "Y2K", "format": "Frutiger Aero chrome · 1080 × 1080" },
-      "boxingPoster": { "label": "Fight", "format": "Boxing fight poster · 1080 × 1080" }
+      "boxingPoster": { "label": "Fight", "format": "Boxing fight poster · 1080 × 1080" },
+      "paperSheet": { "label": "Paper", "format": "Paper, ink, one drawing · 1080 × 1350" },
+      "zonePlate": { "label": "Zone plate", "format": "The six zones, drawn · 1080 × 1080" }
     },
     "toast": {
       "shared": "Shared via device menu",
       "downloaded": "Image saved",
       "copied": "Image copied to clipboard",
       "linkCopied": "Link copied to clipboard",
+      "linkCopyFailed": "Copy blocked by your browser. Try again.",
       "copyUnsupported": "Image copy requires HTTPS (use Save or Share)",
       "loading": "Generating image…",
       "error": "Generation failed"
@@ -80,17 +86,19 @@
     "garmin": "Garmin (FIT)",
     "selectDateTime": "Select date and time",
     "download": "Download",
+    "dateLabel": "Date",
+    "timeLabel": "Time",
     "success": {
       "calendar": "Calendar event exported",
-      "image": "Image exported successfully",
+      "image": "Image exported",
       "pdf": "PDF document exported",
       "garmin": "Garmin file exported"
     },
     "error": {
-      "calendar": "Failed to export calendar event",
-      "image": "Failed to export image",
-      "pdf": "Failed to export PDF",
-      "garmin": "Failed to export Garmin file"
+      "calendar": "Calendar export failed. Try again.",
+      "image": "Image export failed. Try again.",
+      "pdf": "PDF export failed. Try again.",
+      "garmin": "Garmin export failed. Try again."
     },
     "loading": {
       "calendar": "Generating calendar…",
@@ -243,7 +251,11 @@
     "profile": "My Profile",
     "nutrition": "Nutrition",
     "calculators": "Calculators",
-    "primary": "Primary navigation"
+    "primary": "Primary navigation",
+    "today": "Today",
+    "myPlan": "My plan",
+    "understand": "Understand",
+    "myNumbers": "My numbers"
   },
   "topnav": {
     "account": "Account",
@@ -283,15 +295,24 @@
     "learnGuides": "Practical guides",
     "learnGuidesDesc": "Warm-up, race prep, nutrition",
     "learnGlossary": "Glossary",
-    "learnGlossaryDesc": "50+ technical terms"
+    "learnGlossaryDesc": "50+ technical terms",
+    "favoritesDesc": "The sessions you kept",
+    "myZonesDesc": "Your six zones, computed from your VMA",
+    "profileDesc": "Your level, your constraints, your records",
+    "plansPrebuilt": "Ready-made plans",
+    "plansPrebuiltDesc": "Plans already written, take one as is",
+    "weeksPrebuilt": "Ready-made weeks",
+    "tracks": "Find a track"
   },
   "errors": {
     "workoutNotFound": "Workout not found",
+    "generic": "That didn't go through. Try again in a moment.",
     "planSaveFailed": "Couldn't save the plan (not enough storage space).",
     "notFound": {
       "title": "Page not found",
       "description": "The page you are looking for does not exist or has been moved.",
-      "backHome": "Back to home"
+      "backHome": "Back to home",
+      "body": "This address leads to no page. Your saved plans, sessions and settings are intact."
     },
     "boundary": {
       "title": "Something went wrong",
@@ -304,6 +325,7 @@
     "search": "Search",
     "filter": "Filter",
     "clear": "Clear",
+    "pickDate": "Pick a date",
     "viewDetails": "View details",
     "backToLibrary": "Back to library",
     "cancel": "Cancel",
@@ -336,13 +358,16 @@
     "en": "English"
   },
   "zonePersonalization": {
-    "ctaMessage": "Personalize your zones to see your paces",
-    "ctaButton": "Configure my zones",
-    "dismiss": "Dismiss"
+    "ctaMessage": "Enter your VMA to see your paces on every step",
+    "noVma": "I don't know my VMA",
+    "submit": "Show my paces"
   },
   "myZones": {
-    "title": "My Zones",
-    "description": "Customize your training zones",
+    "title": "My zones",
+    "description": "One value drives the rest: your vVO2max. The six zones and the training paces follow from it.",
+    "kicker": "Computed on this device",
+    "caveat": "Paces are targets, not contracts: uphill, in wind or above 15 °C, heart rate leads and pace follows.",
+    "source": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957",
     "zoneCalculator": {
       "title": "Zone Calculator",
       "description": "Enter your max HR and/or VMA to display your personalized zones",
@@ -399,6 +424,13 @@
       "title": "Theme",
       "description": "Light, dark, or follow your system"
     },
+    "openingAnimation": {
+      "title": "Opening animation",
+      "description": "A running figure while the app starts. “Follow the system” respects your accessibility setting: if you asked for less motion, the screen still shows but the figure stays still. “Always” plays it anyway, that call is yours.",
+      "system": "Follow the system",
+      "always": "Always",
+      "never": "Never"
+    },
     "colorPalette": {
       "title": "Color Palette",
       "description": "Adapted for visual accessibility",
@@ -430,15 +462,18 @@
     },
     "data": {
       "title": "Your data",
-      "description": "Export or restore your data (favorites, plans, zones, settings)",
+      "description": "Everything lives in this browser: profile, favorites, plans, zones. Clearing the cache erases it.",
       "exportButton": "Export my data",
       "importButton": "Restore my data",
-      "exportSuccess": "Data exported successfully",
-      "importSuccess": "Data restored successfully. The page will reload.",
-      "importError": "Couldn't restore your data (not enough storage or corrupted backup). No changes were kept.",
-      "invalidFile": "Invalid file. Use a file exported by Zoned.",
+      "exportSuccess": "Backup exported",
+      "importSuccess": "Data restored. The page is reloading.",
+      "importError": "Restore failed. Your data is untouched, nothing changed.",
+      "invalidFile": "Nothing changed, your profile and plan are intact. Pick a .json exported from Zoned.",
+      "invalidFileTitle": "This file is not a Zoned backup",
+      "chooseAnotherFile": "Choose another file",
+      "reading": "Reading the file",
       "confirmTitle": "Restore data?",
-      "confirmDescription": "Choose how to apply the backup before restoring your Zoned data.",
+      "confirmDescription": "Choose how to apply the backup.",
       "confirmButton": "Restore",
       "restoreModeLabel": "Restore mode",
       "replaceModeTitle": "Replace",
@@ -481,9 +516,9 @@
     "footerLink": "Support"
   },
   "storageWarning": {
-    "title": "Your data is stored locally",
-    "description": "Zoned uses no server. Your favorites, plans and settings are saved only in your browser.",
-    "warning": "If you clear your browser cache, all your data will be lost.",
+    "title": "Your data stays on this device",
+    "description": "Zoned has no server. Favorites, plans and settings live in your browser.",
+    "warning": "Clearing the browser cache erases them. Export a backup first.",
     "exportButton": "Export my data",
     "understand": "I understand"
   },
@@ -508,29 +543,15 @@
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
-    }
-  },
-  "hints": {
-    "draw": {
-      "title": "Let chance decide",
-      "description": "Filter by discipline, zone, duration and level, then draw a session from the catalogue."
     },
-    "weekly": {
-      "title": "Compose your week",
-      "description": "Set the number of sessions, the volume and the quality session: the generator composes a balanced 80/20 week."
-    },
-    "planCalendar": {
-      "title": "Organize your plan",
-      "description": "Drag a session to another day. Long press or right-click to view, delete or reorder."
-    },
-    "workoutBuilder": {
-      "title": "Build block by block",
-      "description": "Add warmup, main set, and cooldown. Reorder blocks with the arrows."
-    },
-    "library": {
-      "title": "Filter to find",
-      "description": "Use category, duration, and difficulty filters to find the perfect workout."
-    }
+    "kicker": "{{collections}} collections · {{groups}} themes",
+    "groupCount_one": "{{count}} collection",
+    "groupCount_other": "{{count}} collections",
+    "workoutCount_one": "{{count}} workout",
+    "workoutCount_other": "{{count}} workouts",
+    "emptyTitle": "No collection loaded",
+    "emptyDescription": "The catalogue returned no path. Reload the page, or open the library and its {{workouts}} sessions.",
+    "emptyAction": "Open the library"
   },
   "library": {
     "track": "Track",
@@ -558,6 +579,10 @@
     "weeksEn": "wk"
   },
   "zones": {
+    "scaleTitle": "Intensity scale",
+    "profile": "Session profile: {{parts}}.",
+    "profileSegment": "{{zone}} {{minutes}} min",
+    "profileRecovery": "recovery {{minutes}} min",
     "physiology": "Physiology",
     "howItFeels": "How it feels",
     "benefits": "Benefits",
@@ -581,7 +606,7 @@
     "step2OsPath": "Your watch appears as a USB drive: {{path}}",
     "step3": "Open the watch folder and navigate to: GARMIN → NewFiles",
     "step4": "Copy the file {{filename}} into this folder",
-    "step5": "Safely eject your watch — the workout will appear in Training → My Workouts",
+    "step5": "Safely eject your watch, the workout will appear in Training → My Workouts",
     "compatible": "Compatible with: Forerunner, Fenix, Enduro, Venu, Epix, Instinct, Vivoactive",
     "noGarmin": "Don't have a Garmin watch?",
     "fitGarminOnly": "FIT export is compatible with Garmin watches only. For other brands, recreate this workout manually in your watch's companion app.",
@@ -618,18 +643,27 @@
   },
   "collectionsDetail": {
     "collectionNotFound": "Collection not found",
-    "noWorkoutsFound": "No workouts found for this collection."
+    "noWorkoutsFound": "No workouts found for this collection.",
+    "notFoundDescription": "This address matches none of the {{count}} paths. The index lists them all.",
+    "noWorkoutsTitle": "No session loaded",
+    "noWorkoutsDescription": "The {{count}} sessions of this path could not be read. Reload the page to try again.",
+    "kicker": "{{count}} sessions · {{kind}}"
   },
   "favorites": {
-    "title": "My Favorites",
+    "title": "My favorites",
     "savedWorkouts": "{{count}} saved workout",
     "savedWorkouts_plural": "{{count}} saved workouts",
     "noFavoritesYet": "No favorites yet",
-    "noFavoritesDesc": "Browse the library and tap the heart icon to save your favorite workouts here."
+    "noFavoritesDesc": "Browse the library and tap the heart icon to save your favorite workouts here.",
+    "subtitle": "The sessions you starred, ready to run again.",
+    "kicker_one": "{{count}} favourite · {{total}} in the catalogue",
+    "kicker_other": "{{count}} favourites · {{total}} in the catalogue",
+    "emptyDescription": "No favourite yet. The library holds {{total}}: tap a session's heart to keep it here.",
+    "emptyAction": "Open the library"
   },
   "comparePage": {
     "whyComparisons": "Why these comparisons?",
-    "whyComparisonsDesc": "Zoned is free, open source, requires no account and collects no data. We think those differences matter — these pages are here to help you decide.",
+    "whyComparisonsDesc": "Zoned is free, open source, requires no account and collects no data. We think those differences matter, these pages are here to help you decide.",
     "featureComparison": "Feature comparison",
     "badgeFree": "Free forever",
     "badgeNoAccount": "No account"
@@ -656,6 +690,8 @@
     "title": "Comparisons",
     "subtitle": "Zoned vs alternatives",
     "backToCompare": "Back to comparisons",
+    "criteriaCount_one": "{{count}} criterion",
+    "criteriaCount_other": "{{count}} criteria",
     "tableHeader": {
       "criterion": "Criterion",
       "zoned": "Zoned",
@@ -677,8 +713,8 @@
         "description": "No form, no password. Open the app and start running."
       },
       "noData": {
-        "title": "Zero data collected",
-        "description": "Everything stays in your browser. No server, no tracking."
+        "title": "No personal data",
+        "description": "No account, no training data sent. Only anonymous page views are measured."
       },
       "openSource": {
         "title": "Open Source",
@@ -693,7 +729,11 @@
     "hub": {
       "title": "Alternatives to Runna, Kiprun Pacer & Campus Coach",
       "description": "Compare Zoned with the main running apps. Pricing, privacy, features.",
-      "compareWith": "Compare with {{name}}"
+      "compareWith": "Compare with {{name}}",
+      "kicker_one": "{{count}} app compared",
+      "kicker_other": "{{count}} apps compared",
+      "readComparison": "Read the comparison",
+      "noteKicker": "Where we stand"
     }
   },
   "pages": {
@@ -744,11 +784,11 @@
   },
   "pwa": {
     "installTitle": "Install Zoned",
-    "installDesc": "Access Zoned directly from your home screen, even offline.",
+    "installDesc": "Zoned on your home screen, and available offline.",
     "install": "Install",
     "dismiss": "Later",
     "updateTitle": "Update available",
-    "updateAvailable": "A new version of Zoned is available.",
+    "updateAvailable": "A new version is ready. Your work in progress is kept.",
     "update": "Update",
     "offline": "You are offline. Your data remains accessible.",
     "backOnline": "Back online."
@@ -759,6 +799,77 @@
       "suuntoPath": "Training → Create",
       "corosPath": "Create",
       "applePath": "Workout → Create (watchOS 9+)"
+    }
+  },
+  "alert": {
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info"
+  },
+  "status": {
+    "loading": "Loading"
+  },
+  "settingsPage": {
+    "kicker": "Local profile · no account",
+    "display": "Display",
+    "displayHint": "Language, theme and units. All of it stays in this browser.",
+    "language": "Interface language",
+    "languageHint": "The catalogue exists in French and English.",
+    "unitsHint": "Changes paces, distances and elevation.",
+    "unitsMetric": "km · min/km",
+    "unitsImperial": "mi · min/mi",
+    "routesCaveat": "Your position goes to a public routing service for one request. Nothing is stored.",
+    "about": "About",
+    "tableItem": "Item",
+    "tableValue": "Value",
+    "rowVersion": "Version",
+    "rowLicence": "Licence",
+    "rowWorkouts": "Workouts in the catalogue",
+    "rowOffline": "Offline",
+    "offlineInstalled": "installed",
+    "offlineTab": "browser tab",
+    "sourceCode": "Source code",
+    "contribute": "Suggest a workout",
+    "privacyTitle": "What stays on your device",
+    "privacyBody": "No account, no server. Your data stays in this browser. Vercel Analytics counts page views, with no cookie and no identification.",
+    "statStorage": "local data",
+    "statFavorites": "favourites",
+    "storageValue": "{{n}} kB",
+    "storageFoot": "of {{n}} MB available",
+    "wipeTitle": "Erase everything",
+    "wipeBadge": "irreversible",
+    "wipeBody": "Deletes the profile, {{favorites}} favourites, {{plans}} plans and the test history. Export a backup first: without one, nothing comes back.",
+    "wipeButton": "Erase my data",
+    "wipeConfirmTitle": "Erase all your data?",
+    "wipeConfirmBody": "Profile, {{favorites}} favourites, {{plans}} plans and test history. This cannot be undone.",
+    "wipeConfirmButton": "Erase permanently",
+    "wipeDone": "Data erased. Nothing to undo.",
+    "tailored": "Tailored",
+    "tailoredDesc": "What Zoned puts up front, and what it leaves aside.",
+    "practices": "The disciplines you train for",
+    "practicesHint": "Everything is shown by default. Uncheck what you don't do: the library and plans get lighter.",
+    "modules": "What the app shows",
+    "modulesHint": "Hiding removes it from navigation without deleting anything: the links and pages still work."
+  },
+  "mobileMenu": {
+    "goTo": "Go to",
+    "searchPlaceholder": "Search for a workout…",
+    "language": "Change language",
+    "themeDark": "Dark theme",
+    "themeLight": "Light theme",
+    "more": "Everything else"
+  },
+  "modules": {
+    "routes": { "name": "Routes" },
+    "raceSimulator": { "name": "Race simulator" },
+    "learn": { "name": "Learn" },
+    "collections": { "name": "Collections" },
+    "strength": { "name": "Strength" },
+    "hidden": {
+      "title": "{{module}} is hidden",
+      "description": "You hid this part of the app in your settings. The link still works, you can bring it back right now.",
+      "cta": "Bring it back"
     }
   }
 }

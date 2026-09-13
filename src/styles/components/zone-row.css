@@ -1,0 +1,75 @@
+/* ZoneRow, code, name, bar, value.
+
+   The bar is outlined like everything else: a 1.5px ink frame with the ramp
+   fill inside it, so an empty zone still draws a box rather than disappearing.
+   Below 640px the bar drops to a second line and keeps its full width instead
+   of being squeezed to a stub. */
+
+.zn-zone-row {
+  display: grid;
+  grid-template-columns: 34px var(--label-w, 120px) 1fr 76px;
+  align-items: center;
+  gap: var(--sp-7);
+}
+
+.zn-zone-row__code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+}
+
+.zn-zone-row__name {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-zone-row__track {
+  display: block;
+  block-size: 18px;
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xs);
+}
+
+.zn-zone-row__fill {
+  display: block;
+  block-size: 100%;
+  inline-size: var(--pct, 0%);
+  background: var(--fill, var(--zone-1));
+}
+
+.zn-zone-row__value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+@media (max-width: 640px) {
+  .zn-zone-row {
+    grid-template-columns: 32px 1fr auto;
+    gap: var(--sp-3) var(--sp-4);
+  }
+  .zn-zone-row__code {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .zn-zone-row__name {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .zn-zone-row__value {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .zn-zone-row__track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}

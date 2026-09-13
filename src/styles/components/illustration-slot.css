@@ -1,0 +1,82 @@
+/* IllustrationSlot, the reserved hole for a hand-drawn doodle.
+
+   One of the system's two textures: a dashed ink outline over the cream 45°
+   hatch (--fill-slot). The brief stays printed in the hole until a drawing
+   lands there, which is why the slot has type inside it and not a placeholder
+   glyph. */
+
+.zn-slot {
+  block-size: var(--slot-h, 340px);
+  display: grid;
+  place-items: center;
+  padding: var(--pad-card);
+
+  background: var(--fill-slot);
+  border: var(--border-dashed);
+  border-radius: var(--r-3xl);
+}
+
+.zn-slot__brief {
+  max-inline-size: 24ch;
+  text-align: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  line-height: 1.7;
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* A drawing landed. It carries its own frame, so the dashed outline and the
+   hatch go: the art is the texture now. Ink follows currentColor, the ground
+   contacts keep their var(--accent).
+
+   No height, ever. The drawing's viewBox is cut at the sole, so the bottom of
+   its box is the line it stands on; the slot fixes the width (--slot-w, else
+   the column it is in) and the viewBox ratio gives the height. A fixed height
+   would letterbox the drawing, preserveAspectRatio="xMidYMid meet", and
+   float the sole inside the box, off the rule.
+
+   The width is always explicit. These files carry a viewBox and no width or
+   height attribute, and `inline-size: auto` on one of those is the trap the
+   project has already paid for once: Firefox then takes the viewBox as the
+   intrinsic size and the slot's parent widens to hold it. */
+.zn-slot--art {
+  display: block;
+  block-size: auto;
+  inline-size: var(--slot-w, 100%);
+  max-inline-size: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+.zn-slot__art {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* Ground = rule. The parent draws the rule as its border-block-end and lays
+   the slot out on the cross end; the slot pulls itself down by the rule's
+   rendered thickness (--rule-bite, borders.css) so the bottom of the
+   drawing's box sits on the bottom of the rule. The sole's arc, cut by the
+   viewBox, then ends inside the line: the figure bites the rule rather than
+   hovering a hairline above it, and the accent paints over the ink because a
+   child paints above its parent's border. */
+.zn-slot--ground {
+  position: relative;
+  margin-block-end: calc(-1 * var(--rule-bite));
+}
+
+/* An empty slot is sized in px by its caller, which is right on a 1440px page
+   and wrong on a phone: 400px of an 844px screen is half the viewport. Cap the
+   height on small screens and keep only enough body to print the brief in. */
+@media (max-width: 640px) {
+  .zn-slot:not(.zn-slot--art) {
+    block-size: auto;
+    max-block-size: var(--slot-h, 340px);
+    min-block-size: 200px;
+  }
+}

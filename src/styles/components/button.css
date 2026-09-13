@@ -1,0 +1,225 @@
+/* Button, the house action: ink outline, pill radius, hard press.
+   Variants and sizes are selected off the data-variant / data-size attributes
+   the component already emits, so the JSX did not have to change shape. */
+
+.zn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  padding: 13px 22px;
+  min-block-size: var(--hit-min);
+
+  font: var(--fw-semibold) var(--fs-body) / 1.1 var(--font-text);
+  border-radius: var(--r-pill);
+  border: var(--border-rule);
+  background: var(--accent);
+  color: var(--accent-fg);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* The icon follows the text: one size per context, currentColor, no fill. */
+.zn-btn > svg {
+  inline-size: 17px;
+  block-size: 17px;
+  flex: none;
+  pointer-events: none;
+}
+
+/* Press is a 1px push down, the stamp meeting the paper. Nothing scales. */
+.zn-btn:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-btn:disabled,
+.zn-btn[data-disabled] {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.zn-btn[aria-invalid="true"] {
+  border-color: var(--state-danger);
+}
+
+/* ── variants ─────────────────────────────────────────────────────────── */
+
+/* The one vermillon fill. One per screen: the second cancels the first. */
+.zn-btn[data-variant="default"] {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+.zn-btn[data-variant="default"]:hover:not(:disabled) {
+  background: var(--accent-press);
+}
+
+/* Danger wears the same vermillon, in this system danger and the primary
+   action are the same colour, told apart by their words and their placement. */
+.zn-btn[data-variant="destructive"] {
+  background: var(--state-danger);
+  color: var(--accent-fg);
+}
+.zn-btn[data-variant="destructive"]:hover:not(:disabled) {
+  background: var(--accent-press);
+}
+
+.zn-btn[data-variant="outline"],
+.zn-btn[data-variant="secondary"] {
+  background: transparent;
+  color: var(--ink-1);
+}
+.zn-btn[data-variant="outline"]:hover:not(:disabled),
+.zn-btn[data-variant="secondary"]:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+/* An outlined button that admits it is the accent one, used where a screen
+   already spends its single vermillon fill elsewhere. */
+.zn-btn[data-variant="outline-primary"] {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.zn-btn[data-variant="outline-primary"]:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.zn-btn[data-variant="ghost"] {
+  background: transparent;
+  color: var(--ink-1);
+  border-color: transparent;
+}
+.zn-btn[data-variant="ghost"]:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+/* A link is type, not a control: no box, no outline, no minimum height. */
+.zn-btn[data-variant="link"] {
+  background: transparent;
+  color: var(--text-link);
+  border-color: transparent;
+  padding: 0;
+  min-block-size: 0;
+  border-radius: 0;
+  text-underline-offset: 3px;
+}
+.zn-btn[data-variant="link"]:hover:not(:disabled) {
+  color: var(--ink-1);
+  text-decoration: underline;
+}
+.zn-btn[data-variant="link"]:disabled {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* ── sizes ────────────────────────────────────────────────────────────── */
+
+.zn-btn[data-size="sm"] {
+  gap: var(--sp-3);
+  padding: 10px 16px;
+  min-block-size: 36px;
+  font-size: var(--fs-body-sm);
+}
+.zn-btn[data-size="sm"] > svg {
+  inline-size: 15px;
+  block-size: 15px;
+}
+
+.zn-btn[data-size="lg"] {
+  padding: 16px 28px;
+  min-block-size: 52px;
+}
+.zn-btn[data-size="lg"] > svg {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+/* Icon-only: a circle holding one glyph. The label lives in aria-label. */
+.zn-btn[data-size="icon"],
+.zn-btn[data-size="icon-sm"],
+.zn-btn[data-size="icon-lg"] {
+  padding: 0;
+  gap: 0;
+}
+.zn-btn[data-size="icon"] {
+  inline-size: 40px;
+  block-size: 40px;
+  min-block-size: 40px;
+}
+.zn-btn[data-size="icon-sm"] {
+  inline-size: 32px;
+  block-size: 32px;
+  min-block-size: 32px;
+}
+.zn-btn[data-size="icon-sm"] > svg {
+  inline-size: 14px;
+  block-size: 14px;
+}
+.zn-btn[data-size="icon-lg"] {
+  inline-size: var(--hit-min);
+  block-size: var(--hit-min);
+  min-block-size: var(--hit-min);
+}
+.zn-btn[data-size="icon-lg"] > svg {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+/* ── le téléphone ─────────────────────────────────────────────────────── */
+
+/* Le libellé descend à 14 px, la boîte ne descend pas.
+ *
+ * La distinction est toute la règle. Un bouton de maison à 16 px semi-gras
+ * dans 13/22 px de rembourrage fait 48 px de haut et, à deux par rangée sur
+ * 350 px de colonne, ne laisse la place à rien d'autre : c'est ce que les
+ * boutons sont tous gros décrit. Mais la CIBLE, elle, doit rester à 44 px,
+ * c'est un doigt, pas un curseur. On reprend donc les pixels sur le TEXTE et
+ * le rembourrage, et le plancher de 44 px (plus bas) tient la surface
+ * tactile : le bouton s'allège sans devenir plus difficile à viser.
+ *
+ * 14 px est le pas des libellés de bouton de Material ; iOS reste plus haut,
+ * mais iOS ne pose pas non plus deux boutons contour côte à côte dans une
+ * carte. */
+@media (max-width: 640px) {
+  .zn-btn {
+    padding: 11px 18px;
+    font-size: var(--fs-body-sm);
+  }
+
+  .zn-btn > svg {
+    inline-size: 16px;
+    block-size: 16px;
+  }
+
+  .zn-btn[data-size="lg"] {
+    padding: 13px 22px;
+    min-block-size: 48px;
+    font-size: var(--fs-body);
+  }
+}
+
+/* WCAG 2.5.8: 44px minimum on a coarse pointer, whatever the size variant says.
+   Tailwind carried this as [@media(pointer:coarse)]:min-h-11 on every size and
+   it would have disappeared silently with the framework. */
+@media (pointer: coarse) {
+  .zn-btn:not([data-variant="link"]) {
+    min-block-size: var(--hit-min);
+  }
+  .zn-btn[data-size="icon"],
+  .zn-btn[data-size="icon-sm"],
+  .zn-btn[data-size="icon-lg"] {
+    min-inline-size: var(--hit-min);
+  }
+}

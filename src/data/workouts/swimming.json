@@ -36,8 +36,8 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "6×100m éducatif (rattrapage / poings fermés / 6-3) — repos 20\" entre",
-          "descriptionEn": "6×100m drills (catch-up / fists / 6-3) — 20\" rest between",
+          "description": "6×100m éducatif (rattrapage / poings fermés / 6-3), repos 20\" entre",
+          "descriptionEn": "6×100m drills (catch-up / fists / 6-3), 20\" rest between",
           "durationMin": 3,
           "repetitions": 6,
           "distanceM": 100,
@@ -131,12 +131,12 @@
         }
       ],
       "coachingTips": [
-        "Comptez vos coups de bras par longueur — cherchez à diminuer progressivement",
+        "Comptez vos coups de bras par longueur, cherchez à diminuer progressivement",
         "Respiration bilatérale si possible pour équilibrer la nage",
         "Priorité à la sensation, pas au chronomètre"
       ],
       "coachingTipsEn": [
-        "Count strokes per length — aim to reduce them over the set",
+        "Count strokes per length, aim to reduce them over the set",
         "Breathe bilaterally if possible to balance the stroke",
         "Sensation first, stopwatch never"
       ],
@@ -253,12 +253,12 @@
         }
       ],
       "coachingTips": [
-        "Allure régulière — même temps au 100m sur les 3 blocs",
+        "Allure régulière, même temps au 100m sur les 3 blocs",
         "Ne démarrez pas trop vite : la régularité prime",
         "Respiration 3 temps si confortable"
       ],
       "coachingTipsEn": [
-        "Steady pace — same 100m split across all three blocks",
+        "Steady pace, same 100m split across all three blocks",
         "Don't start too fast: consistency wins",
         "Breathe every 3 strokes if comfortable"
       ],
@@ -499,20 +499,20 @@
       ],
       "coachingTips": [
         "Privilégier la propulsion : longueur de coup, pas la fréquence",
-        "Virages propres — ils font la différence sur du 50",
+        "Virages propres, ils font la différence sur du 50",
         "Si la technique craque, couper plus tôt plutôt qu'insister"
       ],
       "coachingTipsEn": [
         "Focus on propulsion: stroke length, not rate",
-        "Clean turns — they matter on 50s",
+        "Clean turns, they matter on 50s",
         "If technique breaks down, stop early rather than push on"
       ],
       "commonMistakes": [
-        "Surfréquencer pour accélérer — perte d'efficacité",
+        "Surfréquencer pour accélérer, perte d'efficacité",
         "Sauter le retour au calme"
       ],
       "commonMistakesEn": [
-        "Over-striding the stroke to go faster — efficiency loss",
+        "Over-striding the stroke to go faster, efficiency loss",
         "Skipping the cool-down"
       ],
       "variationIds": [],
@@ -630,11 +630,11 @@
         "Count strokes every 50m"
       ],
       "commonMistakes": [
-        "Battre des jambes avec le pull-buoy — défait l'objectif",
+        "Battre des jambes avec le pull-buoy, défait l'objectif",
         "Surfréquencer pour masquer le manque de traction"
       ],
       "commonMistakesEn": [
-        "Kicking even with the pull-buoy — defeats the purpose",
+        "Kicking even with the pull-buoy, defeats the purpose",
         "Over-stroking to mask weak pull"
       ],
       "variationIds": ["SWM-002"],
@@ -752,12 +752,12 @@
         "Alternate front / back if possible to balance"
       ],
       "commonMistakes": [
-        "Plier les genoux trop fort — pédalage inefficace",
-        "Sortir la tête sur la planche — casse l'alignement"
+        "Plier les genoux trop fort, pédalage inefficace",
+        "Sortir la tête sur la planche, casse l'alignement"
       ],
       "commonMistakesEn": [
-        "Bending knees too much — inefficient pedalling",
-        "Head out of the water on the board — breaks alignment"
+        "Bending knees too much, inefficient pedalling",
+        "Head out of the water on the board, breaks alignment"
       ],
       "variationIds": [],
       "selectionCriteria": {
@@ -864,12 +864,12 @@
         }
       ],
       "coachingTips": [
-        "Régularité maximale — même temps au 100m sur les 4 blocs",
+        "Régularité maximale, même temps au 100m sur les 4 blocs",
         "Respiration 3 temps si confortable, sinon 2 temps stable",
         "Boire entre les blocs si la séance dépasse 60 minutes"
       ],
       "coachingTipsEn": [
-        "Maximum consistency — same 100m split across all 4 blocks",
+        "Maximum consistency, same 100m split across all 4 blocks",
         "Breathe every 3 strokes if comfortable, else steady every 2",
         "Drink between blocks if the session exceeds 60 minutes"
       ],
@@ -988,20 +988,20 @@
       ],
       "coachingTips": [
         "Si une nage n'est pas maîtrisée, utilisez un éducatif (battements dos, brasse coulée)",
-        "Respiration adaptée à chaque nage — pas de panique en papillon",
+        "Respiration adaptée à chaque nage, pas de panique en papillon",
         "Le rythme prime sur la vitesse"
       ],
       "coachingTipsEn": [
         "If a stroke is shaky, use a drill (back kick, breaststroke pull)",
-        "Adapt breathing to each stroke — no panic in butterfly",
+        "Adapt breathing to each stroke, no panic in butterfly",
         "Cadence over speed"
       ],
       "commonMistakes": [
-        "Sauter les nages mal maîtrisées — perte du bénéfice variétal",
+        "Sauter les nages mal maîtrisées, perte du bénéfice variétal",
         "Tenter du papillon en force au début et exploser"
       ],
       "commonMistakesEn": [
-        "Skipping weaker strokes — kills the variety benefit",
+        "Skipping weaker strokes, kills the variety benefit",
         "Forcing butterfly early and burning out"
       ],
       "variationIds": [],
@@ -1109,22 +1109,22 @@
         }
       ],
       "coachingTips": [
-        "Récupération COMPLÈTE — pas de sprint à moitié",
+        "Récupération COMPLÈTE, pas de sprint à moitié",
         "Plongeon ou départ poussé : utiliser le moment initial",
         "Si le temps dérive de plus de 1s entre la 1re et la 12e, arrêtez plus tôt"
       ],
       "coachingTipsEn": [
-        "FULL recovery — no half-sprints",
+        "FULL recovery, no half-sprints",
         "Use a dive or push start: leverage the initial momentum",
         "If split drifts more than 1s between rep 1 and 12, stop early"
       ],
       "commonMistakes": [
-        "Réduire la récup pour gagner du temps — annule l'objectif vitesse",
-        "Tenter des sets continus sans repos — c'est une autre séance"
+        "Réduire la récup pour gagner du temps, annule l'objectif vitesse",
+        "Tenter des sets continus sans repos, c'est une autre séance"
       ],
       "commonMistakesEn": [
-        "Cutting rest to save time — kills the speed focus",
-        "Doing continuous sets without rest — that's another session"
+        "Cutting rest to save time, kills the speed focus",
+        "Doing continuous sets without rest, that's another session"
       ],
       "variationIds": [],
       "selectionCriteria": {
@@ -1212,12 +1212,12 @@
       ],
       "coachingTips": [
         "Garder le même temps au 100m sur tous les blocs (jusqu'à ±2s)",
-        "Le 400m est le plus dur mentalement — restez sur l'allure",
+        "Le 400m est le plus dur mentalement, restez sur l'allure",
         "Respiration stable, ne pas accélérer la fréquence des coups"
       ],
       "coachingTipsEn": [
         "Hold the same 100m split across all blocks (within ±2s)",
-        "The 400m is the mentally hardest — keep the pace",
+        "The 400m is the mentally hardest, keep the pace",
         "Steady breathing, do not crank the stroke rate"
       ],
       "commonMistakes": [

@@ -3,7 +3,7 @@ import type { Difficulty, WorkoutTemplate } from "@/types";
 import { RACE_WEEK_VOLUME_PCT, OPENER_DAYS_BEFORE_RACE } from "./constants";
 import { computeBlockLoad } from "./paceEngine";
 
-/** Floor for race-week jogs — shorter than this is not a run, it's a warm-up */
+/** Floor for race-week jogs, shorter than this is not a run, it's a warm-up */
 const RACE_WEEK_MIN_SESSION_MIN = 25;
 
 function getRaceLabel(raceDistance: RaceDistance): { fr: string; en: string } {
@@ -26,7 +26,7 @@ export function generateRaceWeek(
   longRunDay: number, // This becomes race day (0=Mon...6=Sun)
   difficulty: Difficulty,
   allWorkouts: WorkoutTemplate[],
-  /** Average easy pace (min/km) — states the jogs in km like every other week */
+  /** Average easy pace (min/km), states the jogs in km like every other week */
   easyPaceMinKm?: number,
 ): PlanWeek {
   const sessions: PlanSession[] = [];
@@ -153,4 +153,4 @@ function getDifficultyLevel(d: Difficulty): number {
   return levels[d];
 }
 
-// getAvailableDays removed — race week uses inline day selection logic
+// getAvailableDays removed, race week uses inline day selection logic

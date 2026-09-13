@@ -1,4 +1,5 @@
 import type { Difficulty, TrainingPhase, SessionType, Discipline } from "@/types";
+import type { Practice } from "@/types/practice";
 
 // ── Race distance type ──────────────────────────────────────────────
 
@@ -26,9 +27,9 @@ export type RacePriority = "A" | "B" | "C";
 
 // ── Intermediate race goal ────────────────────────────────────────
 // Represents a race during plan preparation (before the main race).
-//   - A: Important goal — mini-taper + real recovery
-//   - B: Preparation race — moderate lightening
-//   - C: Tune-up — treated as structured session
+//   - A: Important goal, mini-taper + real recovery
+//   - B: Preparation race, moderate lightening
+//   - C: Tune-up, treated as structured session
 
 export interface IntermediateGoal {
   raceDistance: RaceDistance;
@@ -56,9 +57,21 @@ export interface PlanConfig {
   planMode?: "assisted" | "free" | "prebuilt"; // undefined = "assisted" for backward compat
   /** Marks a standalone "Ma semaine" (a 1-week free plan surfaced under /weeks). */
   isSingleWeek?: boolean;
-  /** Category of a standalone week — inherited from a prebuilt week or set by the user. */
+  /** Category of a standalone week, inherited from a prebuilt week or set by the user. */
   weekCategory?: WeekCategory;
   planName?: string; // user-given name for free plans
+  /**
+   * La pratique visée, route, trail, ultra.
+   *
+   * Normalement **déduite** de `raceDistance` par `practiceFromRaceDistance`
+   * (`src/types/practice.ts`), ce qui évite toute migration : un plan
+   * enregistré avant l'existence des pratiques en a quand même une.
+   *
+   * Ce champ ne sert donc qu'au seul cas que la déduction ne couvre pas : un
+   * plan sans course visée (`base_building`, `return_from_injury`,
+   * `beginner_start`), où il n'y a pas de distance d'où déduire.
+   */
+  practice?: Practice;
   raceDistance?: RaceDistance;
   raceDate?: string; // ISO date
   raceName?: string;
@@ -127,7 +140,7 @@ export interface PlanSession {
   rpe?: number;                  // 1-10 Rate of Perceived Effort
   userNote?: string;             // Free-form note captured at completion (does not overwrite generated `notes`)
   isSuggestion?: boolean;          // v2: true if auto-suggested (user can dismiss)
-  /** "Ma semaine" lock — a locked session survives week (re)generation. */
+  /** "Ma semaine" lock, a locked session survives week (re)generation. */
   locked?: boolean;
 }
 

@@ -1,5 +1,5 @@
 /**
- * Share a custom workout as a URL — no backend involved.
+ * Share a custom workout as a URL, no backend involved.
  *
  * The builder only edits a name and a tree of `WorkoutStep`s, so that is all
  * we encode: everything else on a `WorkoutTemplate` (category, difficulty,
@@ -36,7 +36,7 @@ type StepTuple = unknown[];
 
 export interface SharedWorkoutPayload {
   v: 1;
-  /** Workout name, as shared (single string — custom workouts are single-language). */
+  /** Workout name, as shared (single string, custom workouts are single-language). */
   n: string;
   /** Warmup / main set / cooldown step trees. */
   w: StepTuple[];
@@ -46,7 +46,7 @@ export interface SharedWorkoutPayload {
 
 // ── Encoding ───────────────────────────────────────────────────────
 
-/** Drop trailing empty slots — most segments only use the first few. */
+/** Drop trailing empty slots, most segments only use the first few. */
 function trimTuple(tuple: StepTuple): StepTuple {
   let end = tuple.length;
   while (end > 2 && !tuple[end - 1]) end--;
@@ -97,13 +97,13 @@ export function sharedWorkoutUrl(workout: WorkoutTemplate): string {
 }
 
 /**
- * The URL to hand to somebody else — the single answer to "what is the link to
+ * The URL to hand to somebody else, the single answer to "what is the link to
  * this workout", whatever surface is asking.
  *
  * A catalogue workout has a public id, so its own page is the link. A custom
  * workout lives only in its author's localStorage: `/workout/CUSTOM-x` renders
  * "séance non trouvée" for every other visitor, so its link has to carry the
- * workout itself. Getting this wrong is silent — the link copies fine, opens
+ * workout itself. Getting this wrong is silent, the link copies fine, opens
  * fine for the person who made it, and is dead for everyone else.
  */
 export function publicWorkoutUrl(workout: WorkoutTemplate): string {
@@ -112,7 +112,7 @@ export function publicWorkoutUrl(workout: WorkoutTemplate): string {
     : `${shareOrigin()}/workout/${workout.id}`;
 }
 
-/** Same question for a workout we only have the id of — a catalogue id by construction. */
+/** Same question for a workout we only have the id of, a catalogue id by construction. */
 export function catalogueWorkoutUrl(workoutId: string): string {
   return `${shareOrigin()}/workout/${workoutId}`;
 }
@@ -184,7 +184,7 @@ export function decodeSharedWorkout(encoded: string): SharedWorkoutPayload | nul
   if (obj.v !== 1) return null;
   if (typeof obj.n !== "string" || obj.n.trim().length === 0) return null;
 
-  // Validate every phase up front — a half-decodable workout is not importable.
+  // Validate every phase up front, a half-decodable workout is not importable.
   for (const phase of ["w", "m", "cd"] as const) {
     if (!decodeSteps(obj[phase] ?? [], 0)) return null;
   }
@@ -207,7 +207,7 @@ export function sharedWorkoutSteps(
   return decodeSteps(payload[phase], 0) ?? [];
 }
 
-/** Build an importable custom workout — defaults come from the builder. */
+/** Build an importable custom workout, defaults come from the builder. */
 export function sharedWorkoutToTemplate(payload: SharedWorkoutPayload): WorkoutTemplate {
   let workout = createEmptyWorkout();
   workout = { ...workout, name: payload.n, nameEn: payload.n };

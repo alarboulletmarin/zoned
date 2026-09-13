@@ -1,0 +1,362 @@
+/* Calendar, a paper month grid. The weekday header is a mono micro-label, each
+   day is its own outlined square, the selected day inverts to ink and today
+   keeps a vermillon underline.
+
+   react-day-picker v9 stamps every day modifier on the <td> as a data-*
+   attribute (data-selected, data-today, data-outside, data-disabled,
+   data-hidden), so the states are selected off those instead of a parallel set
+   of modifier classes, which is why the classNames map only names structure. */
+
+.zn-cal {
+  /* the width the two nav buttons take out of the caption row */
+  --zn-cal-nav: calc(34px * 2 + var(--sp-2));
+
+  padding: var(--sp-6);
+  color: var(--ink-1);
+  font: var(--type-body-sm);
+}
+
+/* Nav is a sibling of the months, not of the caption: the months box is what
+   the buttons are positioned against. */
+.zn-cal__months {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 640px) {
+  .zn-cal__months {
+    flex-direction: row;
+    gap: var(--sp-10);
+  }
+}
+
+.zn-cal__month {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+.zn-cal__caption {
+  display: flex;
+  align-items: center;
+  min-block-size: 34px;
+  padding-inline-end: calc(var(--zn-cal-nav) + var(--sp-5));
+}
+
+.zn-cal__caption-label {
+  font: var(--fw-semibold) var(--fs-h4) / 1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+  text-transform: capitalize;
+}
+
+/* ── le mois et l'année, en listes ────────────────────────────────────── */
+
+/* Avec `captionLayout="dropdown"`, rdp remplace l'étiquette du mois par deux
+   `<select>`, un pour le mois, un pour l'année, chacun posé en transparence
+   PAR-DESSUS l'étiquette qu'on lit. Le contrôle est donc le select natif, et
+   sur un téléphone c'est le sélecteur du système qui s'ouvre : atteindre un
+   mois lointain coûte un geste au lieu d'un appui par mois sur le chevron.
+
+   Le chevron d'un des deux doit tenir dans la même ligne que les deux boutons
+   de navigation : l'étiquette prend le pas du corps, pas celui du titre. */
+.zn-cal__dropdowns {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+.zn-cal__dd {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+/* Le vrai contrôle, invisible mais entier : il garde sa surface tactile, son
+   clavier et son sélecteur natif. `opacity: 0` et non `display: none`, un
+   select retiré du rendu ne s'ouvre pas. */
+.zn-cal__dd-select {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.zn-cal__dd .zn-cal__caption-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+
+  padding: var(--sp-3) var(--sp-5);
+  min-block-size: 34px;
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  letter-spacing: normal;
+  color: var(--ink-1);
+
+  border: var(--border-hair);
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+
+.zn-cal__dd .zn-cal__caption-label > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-cal__dd:hover .zn-cal__caption-label {
+  background: var(--surface-band);
+  border-color: var(--line-strong);
+}
+
+/* L'anneau encadre l'étiquette dessinée, pas le select transparent dedans. */
+.zn-cal__dd:has(.zn-cal__dd-select:focus-visible) .zn-cal__caption-label {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-cal__dd[data-disabled="true"] .zn-cal__caption-label {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+}
+
+/* ── navigation ───────────────────────────────────────────────────────── */
+
+.zn-cal__nav {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.zn-cal__nav-btn {
+  inline-size: 34px;
+  block-size: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+
+  background: transparent;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--ink-1);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-cal__nav-btn > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-cal__nav-btn:hover:not([aria-disabled="true"]) {
+  background: var(--surface-band);
+}
+
+.zn-cal__nav-btn:active:not([aria-disabled="true"]) {
+  transform: translateY(var(--press-shift));
+}
+
+/* rdp keeps the button in the tab order and marks it aria-disabled rather than
+   disabling it, so the dead state is painted off the aria attribute. */
+.zn-cal__nav-btn[aria-disabled="true"] {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* ── the grid ─────────────────────────────────────────────────────────── */
+
+.zn-cal__grid {
+  inline-size: 100%;
+  table-layout: fixed;
+  /* separate + border-spacing is what puts air between the outlined day cells */
+  border-collapse: separate;
+  border-spacing: var(--sp-2);
+}
+
+.zn-cal__weekday {
+  padding: 0 0 var(--sp-2);
+  font: var(--fw-regular) var(--fs-mono-sm) / 1.3 var(--font-mono);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+.zn-cal__day {
+  padding: 0;
+  text-align: center;
+}
+
+/* the focus ring is 2.5px with a 2px offset, it has to sit above its neighbours */
+.zn-cal__day:focus-within {
+  position: relative;
+  z-index: 1;
+}
+
+.zn-cal__day[data-hidden] {
+  visibility: hidden;
+}
+
+.zn-cal__day-btn {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 36px;
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  border: var(--border-hair);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  color: var(--ink-1);
+
+  font: var(--fw-regular) var(--fs-mono) / 1 var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-cal__day-btn:hover:not(:disabled) {
+  background: var(--surface-band);
+  border-color: var(--line-strong);
+}
+
+.zn-cal__day-btn:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+/* Aujourd'hui : l'anneau vermillon sur les quatre côtés, plus le chiffre en
+   gras. C'était le seul tiret de 16×2px de l'app, et la seule autre façon de
+   dire aujourd'hui que l'anneau du calendrier du plan, deux formes pour
+   un seul état. C'est désormais la même marque partout.
+   Le ton reste au jour courant et non au jour choisi : depuis que la sélection
+   est une pure inversion d'encre (plus bas), les deux ne sont plus
+   confusables, une case crème cerclée de vermillon contre une pastille
+   d'encre pleine. L'anneau est un inset : la grille ne bouge pas d'un pixel,
+   et il suit le rayon des coins, ce que le tiret ne faisait pas. */
+.zn-cal__day[data-today] .zn-cal__day-btn {
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--accent);
+  font-weight: var(--fw-bold);
+}
+
+/* ── day states ───────────────────────────────────────────────────────────
+   Order is the cascade here: outside is the faintest, selected overrides it,
+   and disabled overrides everything, a day you cannot pick never reads picked. */
+
+.zn-cal__day[data-outside] .zn-cal__day-btn {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+}
+
+/* Choisi : la seule inversion d'encre, la marque sélectionné de tout le
+   système. Elle portait EN PLUS un cadre vermillon de 2.5px, un double
+   marquage qui ne hiérarchisait plus rien et qui volait au jour courant le
+   seul ton que la maison réserve à maintenant. La bordure retombe sur le
+   filet de base : le bouton est en border-box avec un aspect-ratio de 1, sa
+   boîte ne change pas de taille. */
+.zn-cal__day[data-selected] .zn-cal__day-btn,
+.zn-cal__day[data-selected] .zn-cal__day-btn:hover:not(:disabled) {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-color: var(--ink-1);
+}
+
+.zn-cal__day[data-disabled] .zn-cal__day-btn,
+.zn-cal__day-btn:disabled {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border: var(--bw-hair) solid var(--state-disabled-border);
+  cursor: not-allowed;
+  /* Un jour qu'on ne peut pas choisir ne crie pas maintenant : l'anneau
+     d'aujourd'hui tombe avec le reste. La règle est la dernière du bloc, donc
+     elle l'emporte, exactement comme le commentaire ci-dessus l'annonce. */
+  box-shadow: none;
+  font-weight: var(--fw-regular);
+}
+
+/* WCAG 2.5.8: 44px minimum on a coarse pointer. The caption has to give the
+   grown nav buttons more room, so the reserved width grows with them. */
+@media (pointer: coarse) {
+  .zn-cal {
+    --zn-cal-nav: calc(var(--hit-min) * 2 + var(--sp-2));
+  }
+  .zn-cal__caption {
+    min-block-size: var(--hit-min);
+  }
+  .zn-cal__nav-btn {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+  .zn-cal__day-btn {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── l'écran étroit ───────────────────────────────────────────────────── */
+
+/* Mesuré : sur un pointeur grossier, sept cases de 44px plus 8×4px d'écart
+   plus 2×12px de marge font 364px de grille. Sur un téléphone de 360px, avec
+   les 12px que le panneau garde du bord, il en reste 336 : le calendrier
+   débordait, et Radix le collait au bord en le laissant rogné.
+
+   Le bloc est le DERNIER du fichier pour l'emporter sur la règle
+   `pointer: coarse` au-dessus, qui pose le plancher de 44px. Le carré tombe à
+   40px, au-dessus des 24px du critère AA 2.5.8, et ce sont l'écart et la
+   marge qui paient le reste. Sept cases de 40 plus 8×3 plus 2×8 font 320px :
+   la grille tient, à 360px comme à 390px. */
+@media (max-width: 560px) {
+  .zn-cal {
+    padding: var(--sp-4);
+    /* Le plafond sert aussi la HAUTEUR : une case est carrée
+       (`aspect-ratio: 1`), donc chaque pixel de largeur gagné est un pixel de
+       hauteur sur six rangées. Sans lui, sur un écran de 430 px, la grille
+       faisait 400 px de large et 440 de haut, et les deux dernières semaines
+       tombaient sous le bord. */
+    max-inline-size: 320px;
+    margin-inline: auto;
+  }
+
+  .zn-cal__grid {
+    border-spacing: 3px;
+  }
+
+  .zn-cal__day-btn {
+    min-inline-size: 40px;
+    min-block-size: 40px;
+  }
+}

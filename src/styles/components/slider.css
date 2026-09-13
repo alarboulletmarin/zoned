@@ -1,0 +1,199 @@
+/* Slider, an ink rail, the retained span filled solid, an outlined circle for
+   the handle.
+
+   One `<input type="range">` per handle, laid over a decorative rail. The
+   inputs are transparent everywhere except their thumbs, so what is seen is
+   the rail below and the thumbs above.
+
+   The vendor pseudo-elements are written as SEPARATE rules on purpose: one
+   selector a browser does not know throws away the whole rule, and the webkit
+   and moz names are unknown to each other. */
+
+.zn-slider {
+  --zn-slider-thumb: 18px;
+  --zn-slider-rail: 3px; /* the rail thickness stated by the design bundle */
+
+  position: relative;
+  inline-size: 100%;
+  /* Every child is absolutely positioned, so the row is given its height by
+     the handle that has to fit in it. */
+  min-block-size: var(--zn-slider-thumb);
+}
+
+.zn-slider[data-disabled] {
+  cursor: not-allowed;
+}
+
+/* ── rail ─────────────────────────────────────────────────────────────── */
+
+/* Inset by half a thumb on each side: that is exactly the span a thumb centre
+   travels, so a percentage of the rail is a percentage of the travel. */
+.zn-slider__track {
+  position: absolute;
+  inset-inline: calc(var(--zn-slider-thumb) / 2);
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  block-size: var(--zn-slider-rail);
+  border-radius: var(--r-pill);
+  background: var(--line-axis);
+  pointer-events: none;
+}
+
+.zn-slider[data-disabled] .zn-slider__track {
+  background: var(--state-disabled-fill);
+}
+
+/* ── the retained span ────────────────────────────────────────────────── */
+
+/* One handle fills from the start; two fill between them. */
+.zn-slider__range {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--zn-slider-from);
+  inline-size: calc(var(--zn-slider-to) - var(--zn-slider-from));
+  border-radius: var(--r-pill);
+  background: var(--ink-1);
+}
+
+.zn-slider[data-disabled] .zn-slider__range {
+  background: var(--state-disabled-border);
+}
+
+/* ── the controls ─────────────────────────────────────────────────────── */
+
+.zn-slider__input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.zn-slider__input:disabled {
+  cursor: not-allowed;
+}
+
+/* Two stacked inputs would let the upper one swallow every press across the
+   whole width. Only the thumbs answer, so the handle under the finger is the
+   one that moves. A lone input keeps its whole row clickable, that is the
+   native jump-to-value, and there is no second handle to confuse it with. */
+.zn-slider[data-range] .zn-slider__input {
+  pointer-events: none;
+}
+
+/* The ring belongs on the handle, not around the full-width box it slides in.
+   Taking it off the box is done in base.css: that sheet is unlayered, so this
+   layer cannot override it. */
+
+/* ── rails, per engine ────────────────────────────────────────────────── */
+
+.zn-slider__input::-webkit-slider-runnable-track {
+  block-size: var(--zn-slider-rail);
+  border: 0;
+  background: transparent;
+}
+
+.zn-slider__input::-moz-range-track {
+  block-size: var(--zn-slider-rail);
+  border: 0;
+  background: transparent;
+}
+
+/* Firefox paints the travelled part itself; ours is the layer underneath. */
+.zn-slider__input::-moz-range-progress {
+  background: transparent;
+}
+
+/* ── handles, per engine ──────────────────────────────────────────────── */
+
+.zn-slider__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  inline-size: var(--zn-slider-thumb);
+  block-size: var(--zn-slider-thumb);
+  /* webkit hangs the thumb off the top of the rail rather than centring it. */
+  margin-block-start: calc((var(--zn-slider-rail) - var(--zn-slider-thumb)) / 2);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--paper-raised);
+  cursor: grab;
+  pointer-events: auto;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-slider__input::-moz-range-thumb {
+  box-sizing: border-box;
+  inline-size: var(--zn-slider-thumb);
+  block-size: var(--zn-slider-thumb);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--paper-raised);
+  cursor: grab;
+  pointer-events: auto;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+/* No engine matches `:hover` on the thumb itself, so this is the row being
+   hovered, which is the truth for a lone handle, since the whole row is its
+   click target. In range mode the input takes no pointer at all, so it simply
+   never fires there. */
+.zn-slider__input:hover::-webkit-slider-thumb {
+  background: var(--surface-band);
+}
+
+.zn-slider__input:hover::-moz-range-thumb {
+  background: var(--surface-band);
+}
+
+.zn-slider__input:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.zn-slider__input:active::-moz-range-thumb {
+  cursor: grabbing;
+}
+
+.zn-slider__input:focus-visible::-webkit-slider-thumb {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-slider__input:focus-visible::-moz-range-thumb {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-slider__input:disabled::-webkit-slider-thumb {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+.zn-slider__input:disabled::-moz-range-thumb {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* ── touch ────────────────────────────────────────────────────────────── */
+
+/* The row answers a thumb. In range mode only the handles take the press, so
+   the handle itself grows too, it is the target then, not the row. */
+@media (pointer: coarse) {
+  .zn-slider {
+    --zn-slider-thumb: 24px;
+
+    min-block-size: var(--hit-min);
+  }
+}

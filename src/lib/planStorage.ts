@@ -99,7 +99,7 @@ export function savePlan(plan: TrainingPlan): boolean {
 
 /**
  * Duplicate a plan/week under a new id with a fresh createdAt. Completion
- * tracking is reset — the copy is a clean template, not a training log.
+ * tracking is reset, the copy is a clean template, not a training log.
  * Returns the new id, or null on failure (unknown id or storage quota).
  */
 export function duplicatePlan(id: string, newName?: string): string | null {

@@ -13,11 +13,11 @@ describe("toBase64Url", () => {
   });
 
   test("round-trips accented text (UTF-8, not latin1)", () => {
-    const name = "Séance côtes — récup 1min";
+    const name = "Séance côtes, récup 1min";
     expect(fromBase64Url(toBase64Url(name))).toBe(name);
   });
 
-  test("is stable — the wire format is part of shared links", () => {
+  test("is stable, the wire format is part of shared links", () => {
     expect(toBase64Url('{"v":1,"n":"Ma semaine"}')).toBe(
       "eyJ2IjoxLCJuIjoiTWEgc2VtYWluZSJ9",
     );

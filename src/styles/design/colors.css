@@ -1,0 +1,124 @@
+/* Paper, ink, one accent. Everything else is a tint of those three.
+   Values come from design_handoff/design/tokens/colors.css, do not recompute
+   or re-round them. */
+:root {
+  /* paper, from the desk surface up to the raised card */
+  --paper-desk: #EAE8E3;
+  --paper-page: #F6F5F2;
+  --paper-raised: #FFFFFF;
+  --paper-sunken: #EFEEEA;
+
+  /* ink */
+  --ink-1: #171614;
+  --ink-2: #4A4845;
+  --ink-3: #6C6A65;
+  --ink-on-dark: #F6F5F2;
+
+  /* accent, vermillon. One accent: the primary action, and danger. */
+  --accent: #E8452A;
+  --accent-press: #A32B12;
+  --accent-soft: #FBE3DA;
+  --accent-fg: #FFFFFF;
+
+  /* the single added hue: success. Never used for anything else.
+     Chosen darker than the accent so the two stay separable in greyscale. */
+  --ok: #2F6B4F;
+  --ok-soft: #DDE8DF;
+  --ok-fg: #FFFFFF;
+
+  /* lines */
+  --line-strong: var(--ink-1);
+  --line-divider: rgba(23, 22, 20, 0.18);
+  --line-axis: rgba(23, 22, 20, 0.28);
+
+  /* semantic aliases, prefer these in components */
+  --surface-page: var(--paper-page);
+  --surface-card: var(--paper-raised);
+  --surface-band: var(--paper-sunken);
+  --surface-inverse: var(--ink-1);
+  --text-body: var(--ink-1);
+  --text-muted: var(--ink-2);
+  --text-faint: var(--ink-3);
+  --text-inverse: var(--ink-on-dark);
+  --text-link: var(--accent);
+  --border-default: var(--line-strong);
+  --focus-ring: var(--accent);
+
+  --state-danger: var(--accent);
+  --state-danger-soft: var(--accent-soft);
+  --state-warning-soft: var(--accent-soft);
+  --state-success: var(--ok);
+  --state-success-soft: var(--ok-soft);
+  --state-info: var(--ink-1);
+  --state-info-soft: var(--paper-sunken);
+  --state-disabled-text: rgba(23, 22, 20, 0.38);
+  --state-disabled-border: rgba(23, 22, 20, 0.3);
+  --state-disabled-fill: rgba(23, 22, 20, 0.06);
+
+  /* The wash behind a modal surface. Flat ink, the system forbids blur, so
+     depth comes from the outline and the hard shadow, not from a frosted pane. */
+  --scrim: rgba(23, 22, 20, 0.42);
+
+  /* The inverted panel, a surface that is ink in BOTH themes, because it is a
+     printed black card and not a piece of the page. The .dark block below
+     deliberately does NOT re-declare these three: that is the whole point.
+     The values are not new, they are the ones the two themes already state,
+     the light theme's ink for the ground, and the dark theme's ink-1 and
+     ink-3 for the type, which sit a hair below pure cream because a pure
+     cream at 1.5px reads as glare. */
+  --panel-ink: #171614;
+  --panel-ink-text: #EDEBE7;
+  --panel-ink-faint: #918E88;
+}
+
+/* ==========================================================================
+   DARK, not in the design bundle, derived from it.
+
+   The bundle is light-only. Zoned ships a dark theme with a settings toggle,
+   so the paper/ink relation is inverted rather than dropped: the ink colour
+   becomes the page, the cream becomes the ink, and the warm hue family is
+   kept (this is a brown-black ink, not a blue-black one).
+
+   The inversion lives entirely here. No component carries a dark-mode branch:
+   every rule downstream reads the semantic aliases, so the theme switches at
+   the token layer and nowhere else.
+   ========================================================================== */
+.dark {
+  /* paper, inverted: the desk is below the page, the card is above it */
+  --paper-desk: #0B0B0A;
+  --paper-page: #171614;
+  --paper-raised: #211F1D;
+  --paper-sunken: #100F0E;
+
+  /* ink, inverted. --ink-1 sits a hair below pure cream: it is both the body
+     text and every 1.5px outline, and pure cream at that width reads as glare. */
+  --ink-1: #EDEBE7;
+  --ink-2: #C2BFB9;
+  --ink-3: #918E88;
+  --ink-on-dark: #171614;
+
+  /* The accent keeps its hue, it is the brand, and it reaches 4.8:1 on the
+     dark page (better than the 4.0:1 it manages on cream).
+     Press moves toward the page's depth, which is lighter here, not darker. */
+  --accent: #E8452A;
+  --accent-press: #F2694F;
+  --accent-soft: #3A1A12;
+  --accent-fg: #FFFFFF;
+
+  /* Success lightens so it stays legible on ink, and stays darker in hue than
+     the accent so the two remain separable in greyscale. */
+  --ok: #4E9E77;
+  --ok-soft: #17301F;
+  --ok-fg: #0B0B0A;
+
+  --line-divider: rgba(237, 235, 231, 0.18);
+  --line-axis: rgba(237, 235, 231, 0.3);
+
+  --state-disabled-text: rgba(237, 235, 231, 0.38);
+  --state-disabled-border: rgba(237, 235, 231, 0.3);
+  --state-disabled-fill: rgba(237, 235, 231, 0.07);
+
+  /* Darker on the dark theme: the page below is already ink, so a 42% ink wash
+     would not read as a separation at all. */
+  --scrim: rgba(10, 9, 7, 0.72);
+}

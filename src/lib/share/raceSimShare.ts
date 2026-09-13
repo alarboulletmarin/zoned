@@ -1,5 +1,5 @@
 /**
- * Share a race simulation as a URL — no backend involved.
+ * Share a race simulation as a URL, no backend involved.
  *
  * A simulation is fully described by its five inputs, and `generateRacePlan()`
  * is deterministic, so the link carries the inputs and the recipient's browser
@@ -17,7 +17,7 @@ import { decodePayload, encodePayload, shareUrl } from "./codec";
 type Strategy = SavedSimulation["input"]["strategy"];
 type SimulationInput = SavedSimulation["input"];
 
-/** Append only — indexes are baked into links already sent. */
+/** Append only, indexes are baked into links already sent. */
 const STRATEGY_CODES: Strategy[] = ["even", "negative", "positive"];
 
 export interface SharedSimulationPayload {

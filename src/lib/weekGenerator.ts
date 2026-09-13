@@ -37,7 +37,7 @@ const VARIANTS = 50;
 /** A session of at least this many minutes at easy intensity is a "long" run. */
 const LONG_MIN_DURATION = 70;
 
-/** Target share of easy (Z1+Z2) time — the 80 in 80/20. */
+/** Target share of easy (Z1+Z2) time, the 80 in 80/20. */
 export const POLAR_TARGET_LOW = 0.8;
 
 /** Preferred order for filling days: spreads sessions out across the week. */
@@ -66,7 +66,7 @@ function buildPlacement(settings: WeekSettings): SlotKind[] {
   let active = placement.filter((k) => k !== "rest").length;
   const target = settings.sessions;
 
-  // 3. Quality days — one for short weeks, two from five sessions up, kept off
+  // 3. Quality days, one for short weeks, two from five sessions up, kept off
   //    the long day and never back-to-back, so the week lands near 80/20.
   const qualityTarget = target >= 5 ? 2 : 1;
   for (const d of FILL_ORDER) {
@@ -113,7 +113,7 @@ function pickNearDuration(
   return sorted[Math.floor(Math.random() * k)];
 }
 
-/** Highest zone reached — strength has none, treated as 0. */
+/** Highest zone reached, strength has none, treated as 0. */
 function topZone(w: AnyWorkoutTemplate): number {
   if (isStrengthWorkout(w)) return 0;
   return getDominantZone(w);
@@ -205,7 +205,7 @@ function poolFor(kind: SlotKind, pools: Pools): AnyWorkoutTemplate[] {
   }
 }
 
-/** Score a candidate week — lower is better. */
+/** Score a candidate week, lower is better. */
 function scoreWeek(slots: WeekSlot[], settings: WeekSettings): number {
   const stats = computeWeekStats(slots);
 
@@ -219,7 +219,7 @@ function scoreWeek(slots: WeekSlot[], settings: WeekSettings): number {
   const target = Math.max(settings.targetVolumeH, 0.1);
   const volume = Math.abs(stats.totalHours - target) / target;
 
-  // 3. Adjacent hard days (defensive — templates use a single quality day).
+  // 3. Adjacent hard days (defensive, templates use a single quality day).
   let adjHard = 0;
   for (let i = 0; i < slots.length - 1; i++) {
     const a = slots[i].workout;
@@ -328,9 +328,9 @@ export function generateWeek(
 export interface RedrawOptions {
   /** Aim for a workout of roughly this many minutes (usually the current one). */
   targetMin?: number;
-  /** Workouts already placed in the week — avoided so the draw brings novelty. */
+  /** Workouts already placed in the week, avoided so the draw brings novelty. */
   excludeIds?: readonly string[];
-  /** The workout being replaced — never drawn again, even as a last resort. */
+  /** The workout being replaced, never drawn again, even as a last resort. */
   currentId?: string;
   /** Keep the draw within this discipline (a swim re-rolls into a swim). */
   discipline?: DrawDiscipline;
@@ -338,7 +338,7 @@ export interface RedrawOptions {
 
 /**
  * Draw a replacement for a single slot, keeping its role (easy / quality /
- * long) and rough duration. Used by the per-session "re-roll" — the rest of
+ * long) and rough duration. Used by the per-session "re-roll", the rest of
  * the week is left untouched. Returns null when the pool has no alternative.
  */
 export function redrawSlot(

@@ -1824,13 +1824,13 @@
       ],
       "coachingTips": [
         "6 à 8 répétitions selon la forme du jour, 8 est la référence",
-        "Chaque sprint doit être à effort maximal — si vous ralentissez, arrêtez la séance",
+        "Chaque sprint doit être à effort maximal, si vous ralentissez, arrêtez la séance",
         "La récupération complète (2-3 min) est essentielle : ce n'est pas du travail cardio mais neuromusculaire",
         "Débutez avec 4 sprints et ajoutez 1 par semaine jusqu'à 8-10"
       ],
       "coachingTipsEn": [
         "6 to 8 repetitions depending on the day, 8 is the reference",
-        "Each sprint must be maximal effort — if you slow down, stop the session",
+        "Each sprint must be maximal effort, if you slow down, stop the session",
         "Full recovery (2-3 min) is essential: this is neuromuscular work, not cardio",
         "Start with 4 sprints and add 1 per week up to 8-10"
       ],
@@ -2194,12 +2194,12 @@
       ],
       "coachingTips": [
         "L'effort perçu doit rester constant : l'allure changera avec le terrain mais la sensation reste la même",
-        "Comme le disait Lydiard : 'undulating, undulating, not hills' — cherchez les vallonnements, pas les cols",
+        "Comme le disait Lydiard : 'undulating, undulating, not hills', cherchez les vallonnements, pas les cols",
         "Le terrain herbeux et vallonné (parc, campagne) est idéal pour cette séance"
       ],
       "coachingTipsEn": [
         "Perceived effort should remain constant: pace will change with terrain but the feeling stays the same",
-        "As Lydiard said: 'undulating, undulating, not hills' — seek rolling terrain, not mountain passes",
+        "As Lydiard said: 'undulating, undulating, not hills', seek rolling terrain, not mountain passes",
         "Grassy undulating terrain (park, countryside) is ideal for this session"
       ],
       "commonMistakes": [
@@ -2437,6 +2437,1308 @@
       },
       "weeklyFrequencyMax": 1,
       "minimumRecoveryDays": 1
+    },
+    {
+      "id": "HIL-016",
+      "name": "Escaliers découverte",
+      "nameEn": "Stair Running Intro",
+      "description": "Première séance d'escaliers : 8 montées d'une trentaine de marches, marche par marche, à allure soutenue mais contrôlée. Descente en marchant. Renforce cuisses, mollets et fessiers avec moins d'impact qu'une séance de côtes.",
+      "descriptionEn": "First stair session: 8 climbs of about thirty steps, one step at a time, at a firm but controlled pace. Walk down. Strengthens quads, calves and glutes with less impact than a hill session.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "strength",
+      "difficulty": "beginner",
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Gammes puis 2 montées d'escaliers en marchant vite",
+          "descriptionEn": "Drills then 2 brisk walking climbs",
+          "durationMin": 5,
+          "zone": "Z2",
+          "elevationGainM": 5
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes puis 2 montées d'escaliers en marchant vite",
+          "descriptionEn": "Drills then 2 brisk walking climbs",
+          "durationSec": 300,
+          "zone": "Z2",
+          "elevationGainM": 5,
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8x montée de 30 marches en courant, marche par marche (≈20s)",
+          "descriptionEn": "8x 30-step climb running one step at a time (≈20s)",
+          "durationMin": 0.33,
+          "repetitions": 8,
+          "zone": "Z4",
+          "recovery": "Descente en marchant (≈1 min)",
+          "recoveryEn": "Walk down (≈1 min)",
+          "intensityType": "T",
+          "elevationGainM": 5
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "Montée de 30 marches en courant, marche par marche",
+              "descriptionEn": "30-step climb running one step at a time",
+              "durationSec": 20,
+              "zone": "Z4",
+              "intensityType": "T",
+              "elevationGainM": 5,
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Descente en marchant",
+              "descriptionEn": "Walk down",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Posez tout le pied sur la marche, regard 3-4 marches devant",
+        "Utilisez les bras : ils donnent le rythme",
+        "La descente se fait toujours en marchant, une main près de la rampe",
+        "Un escalier de 25 à 40 marches suffit : parc, stade, passerelle"
+      ],
+      "coachingTipsEn": [
+        "Land the whole foot on the step, eyes 3-4 steps ahead",
+        "Use your arms: they set the rhythm",
+        "Always walk down, one hand near the railing",
+        "A 25 to 40-step staircase is enough: park, stadium, footbridge"
+      ],
+      "commonMistakes": [
+        "Courir la descente : c'est là que le risque de chute et l'impact sont les plus élevés",
+        "Partir trop vite sur les premières montées",
+        "Enchaîner sans récupérer complètement"
+      ],
+      "commonMistakesEn": [
+        "Running down: that is where fall risk and impact are highest",
+        "Going out too fast on the first climbs",
+        "Starting the next climb before fully recovering"
+      ],
+      "variationIds": [
+        "HIL-017",
+        "HIL-018",
+        "HIL-008"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "stairs",
+          "hills",
+          "strength",
+          "beginner"
+        ],
+        "priorityScore": 65
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "HIL-017",
+      "name": "Sprints en escaliers",
+      "nameEn": "Stair Sprints",
+      "description": "3 séries de 6 sprints de 10 secondes sur 12 à 15 marches, marche par marche, à effort maximal. Récupération complète entre chaque montée. Puissance, fréquence gestuelle et temps de contact au sol.",
+      "descriptionEn": "3 sets of 6 x 10-second sprints over 12-15 steps, one step at a time, at maximum effort. Full recovery between climbs. Power, cadence and ground contact time.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "speed",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Gammes (montées de genoux, talons-fesses) puis 3 montées progressives",
+          "descriptionEn": "Drills (high knees, butt kicks) then 3 progressive climbs",
+          "durationMin": 5,
+          "zone": "Z3",
+          "elevationGainM": 3
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes (montées de genoux, talons-fesses) puis 3 montées progressives",
+          "descriptionEn": "Drills (high knees, butt kicks) then 3 progressive climbs",
+          "durationSec": 300,
+          "zone": "Z3",
+          "elevationGainM": 3,
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3x(6x sprint de 10s sur 12-15 marches, marche par marche)",
+          "descriptionEn": "3x(6x 10s sprint over 12-15 steps, one step at a time)",
+          "durationMin": 0.17,
+          "repetitions": 6,
+          "sets": 3,
+          "zone": "Z6",
+          "recovery": "1 min descente en marchant",
+          "recoveryEn": "1 min walk down",
+          "restBetweenSets": "3 min footing Z1",
+          "restBetweenSetsEn": "3 min jog Z1",
+          "intensityType": "R",
+          "elevationGainM": 3
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 6,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "Sprint de 10s sur 12-15 marches, marche par marche",
+                  "descriptionEn": "10s sprint over 12-15 steps, one step at a time",
+                  "durationSec": 10,
+                  "zone": "Z6",
+                  "intensityType": "R",
+                  "elevationGainM": 3,
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "Descente en marchant",
+                  "descriptionEn": "Walk down",
+                  "durationSec": 60,
+                  "zone": "Z1",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3 min footing Z1",
+              "descriptionEn": "3 min jog Z1",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Buste droit, pas penché en avant : la marche fait déjà la pente",
+        "Poussée explosive, genoux hauts, bras à 90°",
+        "12 à 15 marches suffisent : au-delà, la vitesse chute et l'objectif change",
+        "Récupérez au moins 1 minute : la qualité prime sur la quantité"
+      ],
+      "coachingTipsEn": [
+        "Torso upright, not leaning forward: the step already provides the incline",
+        "Explosive push-off, high knees, arms at 90°",
+        "12 to 15 steps are enough: beyond that speed drops and the goal changes",
+        "Recover at least 1 minute: quality over quantity"
+      ],
+      "commonMistakes": [
+        "Allonger la montée au détriment de la vitesse",
+        "Descendre en courant",
+        "Réduire la récupération pour en faire plus"
+      ],
+      "commonMistakesEn": [
+        "Lengthening the climb at the expense of speed",
+        "Running down",
+        "Cutting recovery short to \"do more\""
+      ],
+      "variationIds": [
+        "HIL-016",
+        "HIL-018",
+        "HIL-012"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "stairs",
+          "hills",
+          "speed",
+          "power",
+          "sprints"
+        ],
+        "priorityScore": 70
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
+    },
+    {
+      "id": "HIL-018",
+      "name": "Escaliers deux par deux",
+      "nameEn": "Double-Step Stairs",
+      "description": "Deux blocs sur un escalier de 40 marches : 6 montées marche par marche à foulée rapide, puis 6 montées deux marches par deux en poussée puissante. Contact au sol bref, descente en marchant. Force spécifique et amplitude de foulée.",
+      "descriptionEn": "Two blocks on a 40-step staircase: 6 climbs one step at a time with quick turnover, then 6 climbs two steps at a time with a powerful push-off. Short ground contact, walk down. Specific strength and stride length.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "strength",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Gammes puis 2 montées marche par marche à allure modérée",
+          "descriptionEn": "Drills then 2 single-step climbs at moderate pace",
+          "durationMin": 5,
+          "zone": "Z3",
+          "elevationGainM": 7
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes puis 2 montées marche par marche à allure modérée",
+          "descriptionEn": "Drills then 2 single-step climbs at moderate pace",
+          "durationSec": 300,
+          "zone": "Z3",
+          "elevationGainM": 7,
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6x montée de 40 marches, marche par marche, foulée rapide (≈25s)",
+          "descriptionEn": "6x 40-step climb, one step at a time, quick turnover (≈25s)",
+          "durationMin": 0.42,
+          "repetitions": 6,
+          "zone": "Z4",
+          "recovery": "1 min descente en marchant",
+          "recoveryEn": "1 min walk down",
+          "intensityType": "T",
+          "elevationGainM": 7
+        },
+        {
+          "description": "3 min footing entre les deux blocs",
+          "descriptionEn": "3 min jog between the two blocks",
+          "durationMin": 3,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "6x montée de 40 marches, deux par deux, poussée puissante (≈30s)",
+          "descriptionEn": "6x 40-step climb, two steps at a time, powerful push-off (≈30s)",
+          "durationMin": 0.5,
+          "repetitions": 6,
+          "zone": "Z5",
+          "recovery": "1min15 descente en marchant",
+          "recoveryEn": "1min15 walk down",
+          "intensityType": "I",
+          "elevationGainM": 7
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 6,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "Montée de 40 marches, marche par marche, foulée rapide",
+              "descriptionEn": "40-step climb, one step at a time, quick turnover",
+              "durationSec": 25,
+              "zone": "Z4",
+              "intensityType": "T",
+              "elevationGainM": 7,
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Descente en marchant",
+              "descriptionEn": "Walk down",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        },
+        {
+          "kind": "segment",
+          "description": "3 min footing entre les deux blocs",
+          "descriptionEn": "3 min jog between the two blocks",
+          "durationSec": 180,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "repeat",
+          "count": 6,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "Montée de 40 marches, deux par deux, poussée puissante",
+              "descriptionEn": "40-step climb, two steps at a time, powerful push-off",
+              "durationSec": 30,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 7,
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Descente en marchant",
+              "descriptionEn": "Walk down",
+              "durationSec": 75,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Marche par marche : fréquence élevée, pieds légers",
+        "Deux par deux : poussez fort sur la jambe d'appui, extension complète de la hanche",
+        "Temps de contact au sol le plus bref possible",
+        "Progressez de 10 marches par semaine, pas plus"
+      ],
+      "coachingTipsEn": [
+        "Single step: high cadence, light feet",
+        "Double step: drive hard off the support leg, full hip extension",
+        "Keep ground contact time as short as possible",
+        "Add 10 steps per week, no more"
+      ],
+      "commonMistakes": [
+        "Passer au deux par deux sans maîtriser le marche par marche",
+        "Se pencher vers l'avant et poser le talon",
+        "Descendre en courant sur des jambes fatiguées"
+      ],
+      "commonMistakesEn": [
+        "Moving to double steps before mastering single steps",
+        "Leaning forward and landing on the heel",
+        "Running down on tired legs"
+      ],
+      "variationIds": [
+        "HIL-016",
+        "HIL-017",
+        "HIL-020"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "stairs",
+          "hills",
+          "strength",
+          "power"
+        ],
+        "priorityScore": 72
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
+    },
+    {
+      "id": "HIL-019",
+      "name": "Pyramide d'escaliers",
+      "nameEn": "Stair Pyramid",
+      "description": "Deux pyramides 15-30-45-60-45-30-15 secondes de montée en courant, à intensité VMA. Récupération en descente marchée puis footing, allongée après les efforts longs. Nécessite un grand escalier (stade, tribunes) ou un enchaînement montée + palier couru.",
+      "descriptionEn": "Two 15-30-45-60-45-30-15 second pyramids of running climbs at VO2max intensity. Recovery is a walk down then a jog, longer after the long efforts. Needs a big staircase (stadium, bleachers) or a climb followed by a run along the landing.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 55,
+        "max": 65
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Gammes et 4 accélérations progressives sur le plat",
+          "descriptionEn": "Drills and 4 progressive strides on the flat",
+          "durationMin": 5,
+          "zone": "Z3"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes et 4 accélérations progressives sur le plat",
+          "descriptionEn": "Drills and 4 progressive strides on the flat",
+          "durationSec": 300,
+          "zone": "Z3",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "2x pyramide 15s-30s-45s-60s-45s-30s-15s de montée en courant, marche par marche",
+          "descriptionEn": "2x 15s-30s-45s-60s-45s-30s-15s pyramid of running climbs, one step at a time",
+          "durationMin": 4,
+          "sets": 2,
+          "zone": "Z5",
+          "recovery": "1 à 2 min descente en marchant puis footing (plus long après les efforts longs)",
+          "recoveryEn": "1 to 2 min walk down then jog (longer after the long efforts)",
+          "restBetweenSets": "4 min footing Z1",
+          "restBetweenSetsEn": "4 min jog Z1",
+          "intensityType": "I",
+          "elevationGainM": 64
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "15s montée en courant",
+              "descriptionEn": "15s running climb",
+              "durationSec": 15,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 4,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant puis footing",
+              "descriptionEn": "Walk down then jog",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "30s montée en courant",
+              "descriptionEn": "30s running climb",
+              "durationSec": 30,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 8,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant puis footing",
+              "descriptionEn": "Walk down then jog",
+              "durationSec": 90,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "45s montée en courant",
+              "descriptionEn": "45s running climb",
+              "durationSec": 45,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 12,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant puis footing",
+              "descriptionEn": "Walk down then jog",
+              "durationSec": 120,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "60s montée en courant",
+              "descriptionEn": "60s running climb",
+              "durationSec": 60,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 16,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant puis footing",
+              "descriptionEn": "Walk down then jog",
+              "durationSec": 120,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "45s montée en courant",
+              "descriptionEn": "45s running climb",
+              "durationSec": 45,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 12,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant puis footing",
+              "descriptionEn": "Walk down then jog",
+              "durationSec": 90,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "30s montée en courant",
+              "descriptionEn": "30s running climb",
+              "durationSec": 30,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 8,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant puis footing",
+              "descriptionEn": "Walk down then jog",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "15s montée en courant",
+              "descriptionEn": "15s running climb",
+              "durationSec": 15,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 4,
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "4 min footing Z1",
+              "descriptionEn": "4 min jog Z1",
+              "durationSec": 240,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Le 60s demande environ 150 marches : sur un escalier court, enchaînez montée, palier couru et deuxième volée",
+        "Même intensité du 15s au 60s : réglez l'allure sur le 60s, pas sur le 15s",
+        "Descente marchée systématique, le footing de récupération ne commence qu'en bas",
+        "Bras actifs, regard vers le haut de l'escalier"
+      ],
+      "coachingTipsEn": [
+        "The 60s effort needs about 150 steps: on a short staircase, chain climb, run along the landing and next flight",
+        "Same intensity from 15s to 60s: set the pace on the 60s, not on the 15s",
+        "Always walk down, the recovery jog only starts at the bottom",
+        "Active arms, eyes towards the top of the stairs"
+      ],
+      "commonMistakes": [
+        "Sprinter les 15s et exploser sur le 60s",
+        "Rogner la récupération sur la deuxième pyramide",
+        "Placer cette séance à moins de 48h d'une autre séance intense"
+      ],
+      "commonMistakesEn": [
+        "Sprinting the 15s efforts and blowing up on the 60s",
+        "Cutting recovery short on the second pyramid",
+        "Scheduling this session within 48h of another hard session"
+      ],
+      "variationIds": [
+        "HIL-017",
+        "HIL-021",
+        "HIL-005"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "stairs",
+          "hills",
+          "vo2max",
+          "pyramid",
+          "intervals"
+        ],
+        "priorityScore": 72
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
+    },
+    {
+      "id": "HIL-020",
+      "name": "Escaliers bondissants",
+      "nameEn": "Stair Bounding Circuit",
+      "description": "Circuit pliométrique répété 3 fois : pieds joints marche par marche puis deux par deux, cloche-pied sur chaque jambe, et deux montées courues à foulée rapide. Puissance, réactivité du pied et stabilité de cheville. Volume volontairement réduit.",
+      "descriptionEn": "Plyometric circuit repeated 3 times: two-footed hops one step then two steps at a time, single-leg hops on each leg, and two fast running climbs. Power, foot reactivity and ankle stability. Deliberately low volume.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "neuromuscular",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Gammes, mobilité de cheville et 2 montées d'escaliers en courant",
+          "descriptionEn": "Drills, ankle mobility and 2 running stair climbs",
+          "durationMin": 5,
+          "zone": "Z3",
+          "elevationGainM": 7
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes, mobilité de cheville et 2 montées d'escaliers en courant",
+          "descriptionEn": "Drills, ankle mobility and 2 running stair climbs",
+          "durationSec": 300,
+          "zone": "Z3",
+          "elevationGainM": 7,
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3x(15 marches pieds joints une par une + 15 marches pieds joints deux par deux)",
+          "descriptionEn": "3x(15 steps two-footed hops one at a time + 15 steps two-footed hops two at a time)",
+          "durationMin": 0.33,
+          "repetitions": 2,
+          "sets": 3,
+          "zone": "Z4",
+          "recovery": "45s descente en marchant",
+          "recoveryEn": "45s walk down",
+          "elevationGainM": 3
+        },
+        {
+          "description": "3x(12 marches à cloche-pied jambe droite + 12 marches jambe gauche)",
+          "descriptionEn": "3x(12 steps single-leg hops right leg + 12 steps left leg)",
+          "durationMin": 0.25,
+          "repetitions": 2,
+          "sets": 3,
+          "zone": "Z4",
+          "recovery": "30 à 45s descente en marchant",
+          "recoveryEn": "30 to 45s walk down",
+          "elevationGainM": 2
+        },
+        {
+          "description": "3x(2 montées de 40 marches en courant, foulée rapide)",
+          "descriptionEn": "3x(2 running 40-step climbs, quick turnover)",
+          "durationMin": 0.42,
+          "repetitions": 2,
+          "sets": 3,
+          "zone": "Z5",
+          "recovery": "1 min descente en marchant",
+          "recoveryEn": "1 min walk down",
+          "restBetweenSets": "3 min footing Z1 entre les circuits",
+          "restBetweenSetsEn": "3 min jog Z1 between circuits",
+          "intensityType": "I",
+          "elevationGainM": 7
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "15 marches pieds joints, une par une",
+              "descriptionEn": "15 steps two-footed hops, one at a time",
+              "durationSec": 20,
+              "zone": "Z4",
+              "elevationGainM": 3,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant",
+              "descriptionEn": "Walk down",
+              "durationSec": 45,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "15 marches pieds joints, deux par deux",
+              "descriptionEn": "15 steps two-footed hops, two at a time",
+              "durationSec": 20,
+              "zone": "Z4",
+              "elevationGainM": 3,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant",
+              "descriptionEn": "Walk down",
+              "durationSec": 45,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "12 marches à cloche-pied, jambe droite",
+              "descriptionEn": "12 steps single-leg hops, right leg",
+              "durationSec": 15,
+              "zone": "Z4",
+              "elevationGainM": 2,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant",
+              "descriptionEn": "Walk down",
+              "durationSec": 30,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "12 marches à cloche-pied, jambe gauche",
+              "descriptionEn": "12 steps single-leg hops, left leg",
+              "durationSec": 15,
+              "zone": "Z4",
+              "elevationGainM": 2,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant",
+              "descriptionEn": "Walk down",
+              "durationSec": 45,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "Montée de 40 marches en courant, foulée rapide",
+              "descriptionEn": "Running 40-step climb, quick turnover",
+              "durationSec": 25,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 7,
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "Descente en marchant",
+              "descriptionEn": "Walk down",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            },
+            {
+              "kind": "segment",
+              "description": "Montée de 40 marches en courant, foulée rapide",
+              "descriptionEn": "Running 40-step climb, quick turnover",
+              "durationSec": 25,
+              "zone": "Z5",
+              "intensityType": "I",
+              "elevationGainM": 7,
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3 min footing Z1",
+              "descriptionEn": "3 min jog Z1",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Réception souple sur l'avant-pied, genoux dans l'axe",
+        "Cloche-pied : 12 marches maximum, arrêtez la série si la réception se dégrade",
+        "Marche par marche avant deux par deux : la qualité du saut prime sur la hauteur",
+        "Une seule fois par semaine, jamais la veille d'une séance de qualité"
+      ],
+      "coachingTipsEn": [
+        "Soft landing on the forefoot, knees tracking straight",
+        "Single-leg hops: 12 steps maximum, stop the set if landings get sloppy",
+        "Single step before double step: hop quality matters more than height",
+        "Once a week at most, never the day before a quality session"
+      ],
+      "commonMistakes": [
+        "Trop de volume : la pliométrie se dose en dizaines de sauts, pas en centaines",
+        "Sauter sur des marches mouillées ou irrégulières",
+        "Réception sur le talon, jambe raide"
+      ],
+      "commonMistakesEn": [
+        "Too much volume: plyometrics are counted in dozens of jumps, not hundreds",
+        "Hopping on wet or uneven steps",
+        "Landing on the heel with a stiff leg"
+      ],
+      "variationIds": [
+        "HIL-004",
+        "HIL-018",
+        "HIL-016"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "stairs",
+          "hills",
+          "plyometrics",
+          "power",
+          "neuromuscular"
+        ],
+        "priorityScore": 68
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
+    },
+    {
+      "id": "HIL-021",
+      "name": "Escaliers en continu",
+      "nameEn": "Continuous Stair Climbs",
+      "description": "3 blocs de 9 minutes d'enchaînement montée courue / descente trottinée sans arrêt, à intensité seuil sur les montées. Endurance de force pour le trail et les courses vallonnées : les jambes apprennent à repartir malgré un dénivelé cumulé important.",
+      "descriptionEn": "3 x 9-minute blocks alternating running climbs and jogged descents without stopping, at threshold intensity on the climbs. Strength endurance for trail and hilly races: the legs learn to keep going under a large cumulative elevation gain.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 60,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "2 montées en marchant vite puis 2 montées trottinées",
+          "descriptionEn": "2 brisk walking climbs then 2 jogged climbs",
+          "durationMin": 5,
+          "zone": "Z2",
+          "elevationGainM": 12
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "2 montées en marchant vite puis 2 montées trottinées",
+          "descriptionEn": "2 brisk walking climbs then 2 jogged climbs",
+          "durationSec": 300,
+          "zone": "Z2",
+          "elevationGainM": 12,
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3x(6x 45s montée courue allure seuil / 45s descente trottinée)",
+          "descriptionEn": "3x(6x 45s running climb at threshold / 45s jogged descent)",
+          "durationMin": 0.75,
+          "repetitions": 6,
+          "sets": 3,
+          "zone": "Z4",
+          "recovery": "45s descente trottinée",
+          "recoveryEn": "45s jog down",
+          "restBetweenSets": "3 min footing Z1",
+          "restBetweenSetsEn": "3 min jog Z1",
+          "intensityType": "T",
+          "elevationGainM": 12
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 6,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "45s montée courue, marche par marche, allure seuil",
+                  "descriptionEn": "45s running climb, one step at a time, threshold pace",
+                  "durationSec": 45,
+                  "zone": "Z4",
+                  "intensityType": "T",
+                  "elevationGainM": 12,
+                  "role": "effort"
+                },
+                {
+                  "kind": "segment",
+                  "description": "45s descente trottinée, prudente",
+                  "descriptionEn": "45s careful jogged descent",
+                  "durationSec": 45,
+                  "zone": "Z2",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3 min footing Z1",
+              "descriptionEn": "3 min jog Z1",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Un escalier long (80 à 120 marches) ou une passerelle avec paliers",
+        "Allure seuil en montée : vous devez pouvoir dire quelques mots",
+        "La descente trottinée fait partie du travail : pieds légers, regard sur les marches",
+        "Comptez le dénivelé total : 200 m en 30 min, c'est déjà une vraie séance de trail"
+      ],
+      "coachingTipsEn": [
+        "A long staircase (80 to 120 steps) or a footbridge with landings",
+        "Threshold pace on the climbs: you should be able to say a few words",
+        "The jogged descent is part of the work: light feet, eyes on the steps",
+        "Track the total elevation gain: 200 m in 30 min is already a real trail session"
+      ],
+      "commonMistakes": [
+        "Monter trop vite sur le premier bloc et marcher le troisième",
+        "Descendre trop vite : c'est le premier facteur de chute",
+        "Transformer la séance en sprints : ce n'est pas l'objectif"
+      ],
+      "commonMistakesEn": [
+        "Climbing too fast on the first block and walking the third",
+        "Descending too fast: the number one cause of falls",
+        "Turning the session into sprints: that is not the goal"
+      ],
+      "variationIds": [
+        "HIL-019",
+        "HIL-003",
+        "HIL-010"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "stairs",
+          "hills",
+          "strength_endurance",
+          "threshold",
+          "trail_prep"
+        ],
+        "priorityScore": 70
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     }
   ]
 }

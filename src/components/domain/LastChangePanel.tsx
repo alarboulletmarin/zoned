@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
-import { cn } from "@/lib/utils";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
 interface LastChangePanelProps {
@@ -27,21 +27,17 @@ export function LastChangePanel({ label, labelEn, at, onUndo }: LastChangePanelP
   const displayLabel = pick({ field: label, fieldEn: labelEn }, "field");
 
   return (
-    <div className={cn(
-      "flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 px-3 py-2 text-sm",
-    )}>
-      <span className="flex-1 truncate text-amber-900 dark:text-amber-100">
-        {displayLabel}
-        <span className="ml-2 text-xs text-amber-600 dark:text-amber-400">{timeAgo}</span>
-      </span>
-      <Button
-        variant="outline"
-        size="sm"
-        className="shrink-0 text-xs h-7 border-amber-300 dark:border-amber-700"
-        onClick={onUndo}
-      >
-        {t("lastChange.undo")}
-      </Button>
-    </div>
+    <Alert
+      kind="info"
+      title={displayLabel}
+      className="zn-plast"
+      action={
+        <Button variant="outline" size="sm" onClick={onUndo}>
+          {t("lastChange.undo")}
+        </Button>
+      }
+    >
+      {timeAgo}
+    </Alert>
   );
 }

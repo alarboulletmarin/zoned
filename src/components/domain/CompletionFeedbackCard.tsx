@@ -1,7 +1,8 @@
+import type { CSSProperties } from "react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { rpeColor } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import type { SessionType } from "@/types";
 
 interface CompletionFeedbackCardProps {
@@ -127,84 +128,80 @@ export function CompletionFeedbackCard({
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "bg-card border rounded-xl p-4 shadow-lg",
-        "animate-in fade-in slide-in-from-bottom-2 duration-300",
-        isFadingOut && "animate-out fade-out slide-out-to-bottom-2 duration-300"
-      )}
+      className="zn-pfeedback"
+      data-leaving={isFadingOut || undefined}
       onMouseEnter={resetTimer}
       onTouchStart={resetTimer}
     >
       {/* Celebration line */}
-      <div className="text-center mb-3">
-        <p className="text-base font-semibold">{celebration}</p>
-        <p className="text-xs text-muted-foreground mt-0.5 truncate">
-          <span className="font-normal">S{weekNumber}</span>
-          {" \u00b7 "}
+      <div className="zn-pfeedback__head">
+        <p className="zn-pfeedback__title">{celebration}</p>
+        <p className="zn-pfeedback__sub">
+          S{weekNumber}
+          {" · "}
           {sessionName}
         </p>
       </div>
 
-      {/* RPE label */}
-      <p className="text-xs text-muted-foreground text-center mb-2">
-        {t("feedback.howDidItFeel")}
-      </p>
+      {/* RPE ramp */}
+      <div className="zn-prpe">
+        <div className="zn-prpe__head">
+          <span className="zn-kicker zn-kicker--inline">
+            {t("feedback.howDidItFeel")}
+          </span>
+          <span className="zn-prpe__value">{selectedRpe}/10</span>
+        </div>
 
-      {/* RPE gradient bar */}
-      <div className="space-y-2 max-w-md mx-auto">
-        {/* Tappable segmented bar */}
-        <div className="relative flex h-8 rounded-lg overflow-hidden cursor-pointer" role="slider" aria-valuemin={1} aria-valuemax={10} aria-valuenow={selectedRpe} aria-label="RPE">
+        <div
+          className="zn-prpe__scale"
+          role="slider"
+          aria-valuemin={1}
+          aria-valuemax={10}
+          aria-valuenow={selectedRpe}
+          aria-label="RPE"
+        >
           {Array.from({ length: 10 }, (_, i) => {
             const value = i + 1;
-            const isSelected = selectedRpe === value;
             return (
               <button
                 key={value}
                 type="button"
                 onClick={() => handleRpeClick(value)}
-                className={cn(
-                  "flex-1 relative flex items-center justify-center text-[11px] font-bold transition-all border-r border-background/20 last:border-r-0",
-                  isSelected ? "text-white scale-y-110 z-10" : "text-white/60 hover:text-white/90"
-                )}
-                style={{
-                  backgroundColor: rpeColor(value),
-                  opacity: isSelected ? 1 : value <= selectedRpe ? 0.7 : 0.3,
-                }}
+                className="zn-prpe__step"
+                data-selected={selectedRpe === value}
               >
-                {value}
-                {isSelected && (
-                  <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white" />
-                )}
+                <span className="zn-prpe__track">
+                  <span
+                    className="zn-prpe__fill"
+                    style={{
+                      "--zn-rpe-h": `${value * 10}%`,
+                      "--zn-rpe-fill": rpeColor(value),
+                    } as CSSProperties}
+                  />
+                </span>
+                <span className="zn-prpe__num">{value}</span>
               </button>
             );
           })}
         </div>
-        {/* Label */}
-        <div className="flex justify-between items-center text-xs">
-          <span className="text-muted-foreground/60">{t("feedback.easy")}</span>
-          <span className="font-medium" style={{ color: rpeColor(selectedRpe) }}>
-            {selectedRpe}/10 — {t(getRpeLabelKey(selectedRpe))}
+
+        <div className="zn-prpe__foot">
+          <span>{t("feedback.easy")}</span>
+          <span className="zn-prpe__reading">
+            {t(getRpeLabelKey(selectedRpe))}
           </span>
-          <span className="text-muted-foreground/60">Max</span>
+          <span>{t("feedback.rpeMaximal")}</span>
         </div>
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-2 mt-3">
-        <button
-          type="button"
-          onClick={handleSkip}
-          className="flex-1 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent transition-colors"
-        >
+      <div className="zn-pfeedback__actions">
+        <Button type="button" variant="outline" size="sm" onClick={handleSkip}>
           {t("feedback.skip")}
-        </button>
-        <button
-          type="button"
-          onClick={handleSave}
-          className="flex-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-        >
+        </Button>
+        <Button type="button" size="sm" onClick={handleSave}>
           {t("feedback.save")}
-        </button>
+        </Button>
       </div>
     </div>
   );

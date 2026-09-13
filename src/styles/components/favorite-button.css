@@ -1,0 +1,56 @@
+/* The favourite toggle.
+
+   The pressed state is the accent, and it is announced by aria-pressed as well:
+   no state in this system rests on colour alone. There is no filled glyph,
+   the icon set has one weight, and a solid heart would be the only filled mark
+   in the app. */
+
+.zn-favorite {
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* A 44px target without a 44px box: the card layout needs the button to stay
+   small, so the hit area grows past the paint instead. */
+.zn-favorite::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+
+/* The heart runs a notch larger than the button family's glyph. Everywhere else
+   an icon is a mark beside a word; here it IS the control, and at the button
+   sheet's 17px it read as a speck in a 40px circle. The two sizes are the ones
+   the Tailwind base stated, carried over unrounded.
+
+   Both selectors match .zn-btn[data-size]'s weight exactly, so this sheet has
+   to be imported after button.css, it is. */
+.zn-favorite[data-size] > svg {
+  inline-size: 20px;
+  block-size: 20px;
+}
+
+/* The dense card variant: a 32px circle cannot hold a 20px heart. */
+.zn-favorite[data-size="icon-sm"] > svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+.zn-favorite[aria-pressed="true"] {
+  color: var(--accent);
+}
+
+.zn-favorite[aria-pressed="true"]:hover:not(:disabled) {
+  color: var(--accent-press);
+}
+
+.zn-favorite[data-labelled] {
+  gap: var(--sp-3);
+  padding-inline: var(--sp-6);
+  border-radius: var(--r-pill);
+  min-block-size: var(--hit-min);
+}
+
+.zn-favorite__label {
+  font-size: var(--fs-body-sm);
+}

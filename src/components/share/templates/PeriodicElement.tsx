@@ -1,5 +1,5 @@
 /**
- * PeriodicElement — 1080×1080. Single periodic-table cell. Atomic number =
+ * PeriodicElement, 1080×1080. Single periodic-table cell. Atomic number =
  * duration minutes. Symbol = Z{n}. Element name = zoneLabel. Atomic weight
  * row = RPE / blocks. Plays the scientific identity head-on.
  */
@@ -71,7 +71,7 @@ export function PeriodicElement({
         </span>
       </div>
 
-      {/* Workout name — hero */}
+      {/* Workout name, hero */}
       <div
         style={{
           position: "absolute",
@@ -93,7 +93,7 @@ export function PeriodicElement({
         </div>
       </div>
 
-      {/* Periodic cell — slightly smaller to free the title */}
+      {/* Periodic cell, slightly smaller to free the title */}
       <div
         style={{
           position: "absolute",

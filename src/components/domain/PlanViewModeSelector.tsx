@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
-import { CalendarRange, Calendar, CalendarDays, List } from "@/components/icons";
+import { Segmented } from "@/components/ui/segmented";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import type { PlanViewMode } from "@/hooks/usePlanViewMode";
 
 interface PlanViewModeSelectorProps {
@@ -9,11 +9,20 @@ interface PlanViewModeSelectorProps {
   className?: string;
 }
 
-const modes: { value: PlanViewMode; icon: typeof CalendarRange; labelKey: string; desktopOnly?: boolean }[] = [
-  { value: "calendar", icon: CalendarRange, labelKey: "viewMode.calendar", desktopOnly: true },
-  { value: "weekly", icon: Calendar, labelKey: "viewMode.weekly" },
-  { value: "monthly", icon: CalendarDays, labelKey: "viewMode.monthly", desktopOnly: true },
-  { value: "list", icon: List, labelKey: "viewMode.list" },
+/* Pas d'icône : CalendarRange, Calendar et CalendarDays partagent le même cadre
+   extérieur au path près, seul l'intérieur change, soit deux pixels de
+   différence à la taille où le segmented les rend. Le libellé masqué était ce
+   qui réduisait chaque segment à un rond ; rendu, la pilule redevient une
+   pilule sans qu'on touche à son rayon.
+
+   `desktopOnly` se filtre ici et non plus en CSS : usePlanViewMode rabat sur la
+   même bascule, donc le contrôle ne peut plus proposer une vue que la page ne
+   rendra pas. */
+const MODES: { value: PlanViewMode; labelKey: string; desktopOnly?: boolean }[] = [
+  { value: "calendar", labelKey: "viewMode.calendar", desktopOnly: true },
+  { value: "weekly", labelKey: "viewMode.weekly" },
+  { value: "monthly", labelKey: "viewMode.monthly", desktopOnly: true },
+  { value: "list", labelKey: "viewMode.list" },
 ];
 
 export function PlanViewModeSelector({
@@ -22,40 +31,18 @@ export function PlanViewModeSelector({
   className,
 }: PlanViewModeSelectorProps) {
   const { t } = useTranslation("plan");
+  const isMobile = useIsMobile();
 
   return (
-    <div
-      className={cn(
-        "inline-flex items-center gap-0.5 rounded-lg bg-muted p-1",
-        className
-      )}
-      role="radiogroup"
-      aria-label={t("viewMode.label")}
-    >
-      {modes.map(({ value: mode, icon: Icon, labelKey, desktopOnly }) => {
-        const isActive = value === mode;
-        return (
-          <button
-            key={mode}
-            type="button"
-            role="radio"
-            aria-checked={isActive}
-            aria-label={t(labelKey)}
-            onClick={() => onChange(mode)}
-            className={cn(
-              "items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              desktopOnly ? "hidden md:inline-flex" : "inline-flex",
-              isActive
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-            )}
-          >
-            <Icon size={16} />
-            <span className="hidden sm:inline">{t(labelKey)}</span>
-          </button>
-        );
-      })}
-    </div>
+    <Segmented<PlanViewMode>
+      value={value}
+      onChange={onChange}
+      label={t("viewMode.label")}
+      className={className}
+      options={MODES.filter((m) => !(isMobile && m.desktopOnly)).map((m) => ({
+        value: m.value,
+        label: t(m.labelKey),
+      }))}
+    />
   );
 }

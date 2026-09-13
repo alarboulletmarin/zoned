@@ -66,7 +66,7 @@ export function transformSessionBlocks(input: TransformInput): SessionVisualizat
 
   // A range spec (`Z1-Z2`, `Z1-Z6`) spends time in every zone it spans, so
   // it is split evenly across them rather than dumped entirely on the hardest
-  // one — a free fartlek is not 100% sprint. Segments with no zone at all
+  // one, a free fartlek is not 100% sprint. Segments with no zone at all
   // (drills, strides) get their own bar: they count toward the total, so
   // hiding them made the bars sum to less than 100%.
   const zoneTotals = new Map<ZoneNumber, number>();

@@ -49,8 +49,8 @@ export const warmupSections: WarmupSection[] = [
             textEn: "Progression: start slow, build gradually, finish with race-pace movements",
           },
           {
-            text: "Ne jamais faire d'étirements statiques sur des muscles froids — ils réduisent la force et la puissance",
-            textEn: "Never static stretch cold muscles — it reduces strength and power output",
+            text: "Ne jamais faire d'étirements statiques sur des muscles froids, ils réduisent la force et la puissance",
+            textEn: "Never static stretch cold muscles, it reduces strength and power output",
           },
           {
             text: "Adapter au contexte : par temps froid, allonger l'échauffement ; par temps chaud, le raccourcir légèrement",
@@ -105,8 +105,8 @@ export const warmupSections: WarmupSection[] = [
         textEn: "Distance-specific adjustments",
         items: [
           {
-            text: "5 km : échauffement agressif (15-20 min), nombreuses lignes droites, gammes complètes — le départ est rapide",
-            textEn: "5K: aggressive warm-up (15-20 min), many strides, full drills — the start is fast",
+            text: "5 km : échauffement agressif (15-20 min), nombreuses lignes droites, gammes complètes, le départ est rapide",
+            textEn: "5K: aggressive warm-up (15-20 min), many strides, full drills, the start is fast",
           },
           {
             text: "10 km : échauffement modéré (10-15 min), quelques lignes droites",
@@ -509,7 +509,7 @@ export const warmupRoutines: WarmupRoutine[] = [
     name: "Échauffement jour de course",
     nameEn: "Race Day Warm-up",
     targetSessionType: "race",
-    // Sum of the exercises below (elapsed time, recovery included) — the race
+    // Sum of the exercises below (elapsed time, recovery included), the race
     // simulator schedules the block backwards from the gun, so this has to be
     // the real wall-clock duration, not a headline figure.
     totalDurationMin: 28,

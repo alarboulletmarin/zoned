@@ -1,226 +1,92 @@
-import { useState, useCallback, useMemo } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import {
-  ArrowLeft,
-  ArrowRight,
-  Zap,
-  Timer,
-  Route,
-  Flag,
-  Calendar,
-  Target,
-  Mountain,
-  CheckIcon,
-  Loader2,
-  Heart,
-  Footprints,
-  TrendingUp,
-  AlertTriangle,
-  Dumbbell,
-  Plus,
-  Trash2,
-} from "@/components/icons";
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { ArrowLeft, ArrowRight, Check } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { cn } from "@/lib/utils";
 import { useCreatePlan } from "@/hooks/usePlans";
 import { loadUserZonePrefs } from "@/lib/zones";
-import {
-  RACE_DISTANCE_META,
-  type RaceDistance,
-  type AssistedPlanConfig,
-  type PlanPurpose,
-  type TrainingGoal,
-  type IntermediateGoal,
-  type RacePriority,
-} from "@/types/plan";
-import type { Difficulty, UserZonePreferences } from "@/types";
-import { DIFFICULTY_META } from "@/types";
+import type { AssistedPlanConfig, IntermediateGoal } from "@/types/plan";
+import type { UserZonePreferences } from "@/types";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
-import { usePickLang, formatDate } from "@/lib/i18n-utils";
-import { DateInput } from "@/components/ui/date-input";
-import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
-import { RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
-import { validateIntermediateGoals, sortIntermediateGoals } from "@/lib/intermediateGoalValidation";
+import { usePickLang } from "@/lib/i18n-utils";
+import {
+  addWeeksToDate,
+  buildRacePlanDateRange,
+  calculateWeeksBetweenDates,
+} from "@/lib/planDates";
+import {
+  validateIntermediateGoals,
+  sortIntermediateGoals,
+} from "@/lib/intermediateGoalValidation";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
 import { usePlanDraft } from "./plan-create/usePlanDraft";
-
-// ── Constants ────────────────────────────────────────────────────────
-
-// Steps are dynamic based on plan purpose
-type StepId = "purpose" | "distance" | "date" | "duration" | "race_name" | "intermediate_goals" | "level" | "goal" | "fitness" | "schedule" | "pace" | "summary";
-
-const RACE_STEPS: StepId[] = ["purpose", "distance", "date", "race_name", "intermediate_goals", "level", "goal", "fitness", "schedule", "pace", "summary"];
-const NON_RACE_STEPS: StepId[] = ["purpose", "duration", "level", "goal", "fitness", "schedule", "summary"];
-
-const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
+import { RECOMMENDED_WEEKS } from "./plan-create/constants";
+import {
+  generateId,
+  getTodayDateInputValue,
+  parsePaceToSeconds,
+  suggestLevel,
+} from "./plan-create/helpers";
+import { STEPS } from "./plan-create/steps/registry";
+import { indexOfStep, stepsFor } from "./plan-create/steps/flows";
+import type { FormState, StepContext, WizardDerived } from "./plan-create/types";
+import { PRACTICES, type Practice } from "@/types/practice";
 
 /**
- * Recommended week ranges per distance — warnings, not hard blocks.
- * Single source of truth: this page used to keep its own, looser copy
- * (marathon min 12 against 14), so the wizard let through plans the generator
- * itself considers too short.
+ * La coquille du parcours de plan.
+ *
+ * Elle faisait 1 609 lignes : douze formulaires, PLUS un `switch canProceed`,
+ * PLUS un `renderSummary` géant, tous refermés sur le même état. N'en extraire
+ * que les formulaires aurait donné un monolithe avec des fichiers en plus,
+ * ce qui compte, c'est que chaque étape déclare maintenant sa question, ce qui
+ * y répond et sa condition d'avancement (`plan-create/steps/`). Il ne reste
+ * ici que ce qui est vraiment commun : l'état du brouillon, les valeurs
+ * dérivées, la navigation, et la génération.
+ *
+ * Ce lot ne change AUCUN comportement : mêmes étapes, même ordre, mêmes
+ * libellés, même plan produit. Changer le parcours en même temps que le
+ * découper aurait rendu le diff impossible à relire.
  */
-const RECOMMENDED_WEEKS = RECOMMENDED_PLAN_WEEKS;
-
-const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
-  "5K": <Zap className="size-5 md:size-6 text-primary" />,
-  "10K": <Timer className="size-5 md:size-6 text-primary" />,
-  semi: <Route className="size-5 md:size-6 text-primary" />,
-  marathon: <Flag className="size-5 md:size-6 text-primary" />,
-  trail_short: <Mountain className="size-5 md:size-6 text-primary" />,
-  trail: <Mountain className="size-5 md:size-6 text-primary" />,
-  ultra: <Mountain className="size-5 md:size-6 text-primary" />,
-};
-
-const DURATION_OPTIONS = [
-  { weeks: 4 },
-  { weeks: 6 },
-  { weeks: 8 },
-  { weeks: 10 },
-  { weeks: 12 },
-  { weeks: 16 },
-];
-
-const GOAL_OPTION_KEYS: { value: TrainingGoal; icon: React.ReactNode; labelKey: string; descKey: string }[] = [
-  {
-    value: "finish",
-    icon: <Flag className="size-5 text-zone-2" />,
-    labelKey: "goal.finish",
-    descKey: "goal.finishDesc",
-  },
-  {
-    value: "time",
-    icon: <Timer className="size-5 text-primary" />,
-    labelKey: "goal.time",
-    descKey: "goal.timeDesc",
-  },
-  {
-    value: "compete",
-    icon: <TrendingUp className="size-5 text-zone-5" />,
-    labelKey: "goal.compete",
-    descKey: "goal.competeDesc",
-  },
-];
-
-// ── Helpers ──────────────────────────────────────────────────────────
-
-function getTodayDateInputValue(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function suggestLevel(vma: number): Difficulty {
-  if (vma < 12) return "beginner";
-  if (vma <= 15) return "intermediate";
-  if (vma <= 18) return "advanced";
-  return "elite";
-}
-
-function formatPace(totalSeconds: number): string {
-  const min = Math.floor(totalSeconds / 60);
-  const sec = Math.round(totalSeconds % 60);
-  return `${min}:${sec.toString().padStart(2, "0")}`;
-}
-
-function parsePaceToSeconds(paceStr: string): number | null {
-  const match = paceStr.match(/^(\d{1,2}):(\d{2})$/);
-  if (!match) return null;
-  const min = parseInt(match[1], 10);
-  const sec = parseInt(match[2], 10);
-  if (sec >= 60) return null;
-  return min * 60 + sec;
-}
-
-function estimateFinishTime(
-  paceSecondsPerKm: number,
-  distanceKm: number
-): string {
-  const totalSeconds = paceSecondsPerKm * distanceKm;
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = Math.round(totalSeconds % 60);
-  if (hours > 0) {
-    return `${hours}h${minutes.toString().padStart(2, "0")}min${seconds.toString().padStart(2, "0")}s`;
-  }
-  return `${minutes}min${seconds.toString().padStart(2, "0")}s`;
-}
-
-function parseFinishTimeToSeconds(timeStr: string): number | null {
-  // Supports H:MM:SS, H:MM, HH:MM:SS, HH:MM, MM:SS (if no hours)
-  const full = timeStr.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
-  if (full) {
-    const h = parseInt(full[1], 10);
-    const m = parseInt(full[2], 10);
-    const s = parseInt(full[3], 10);
-    if (m >= 60 || s >= 60) return null;
-    return h * 3600 + m * 60 + s;
-  }
-  const short = timeStr.match(/^(\d{1,2}):(\d{2})$/);
-  if (short) {
-    const a = parseInt(short[1], 10);
-    const b = parseInt(short[2], 10);
-    if (b >= 60) return null;
-    // If a >= 1 and context suggests hours (for marathon-type distances), treat as H:MM
-    // We always treat as H:MM if a < 60
-    return a * 3600 + b * 60;
-  }
-  return null;
-}
-
-function finishTimeToPaceSeconds(finishTimeSeconds: number, distanceKm: number): number {
-  return finishTimeSeconds / distanceKm;
-}
-
-function generateId(): string {
-  return `plan-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-}
-
-// ── Form state type ──────────────────────────────────────────────────
-
-interface FormState {
-  planPurpose: PlanPurpose;
-  trainingGoal: TrainingGoal;
-  raceDistance: RaceDistance | null;
-  raceDate: string;
-  startDate: string;
-  useCustomStartDate: boolean;
-  raceName: string;
-  runnerLevel: Difficulty | null;
-  daysPerWeek: number;
-  longRunDay: number;
-  targetPace: string;
-  elevationGain: string;
-  totalWeeksOverride: number;
-  currentWeeklyKm: string;   // User's current weekly volume
-  currentLongRunKm: string;  // User's current longest run
-  includeStrength: boolean;
-  strengthFrequency: 1 | 2 | 3;
-  intermediateGoals: IntermediateGoal[];
-}
-
-// ── Component ────────────────────────────────────────────────────────
-
 export function PlanCreatePage() {
   const { t } = useTranslation("plan");
   const pick = usePickLang();
   const navigate = useNavigate();
+  const uid = useId();
+  const [searchParams] = useSearchParams();
   const { createPlan, isGenerating, error } = useCreatePlan();
 
-  const [stepIndex, setStepIndex] = useState(0);
+  /* `/plan/new` envoie la pratique choisie : on démarre alors à l'étape
+     suivante plutôt que de reposer la même question. Une valeur inconnue est
+     ignorée, le parcours repart de sa première question. */
+  const presetPractice = useMemo<Practice | null>(() => {
+    const raw = searchParams.get("practice");
+    return raw && (PRACTICES as readonly string[]).includes(raw)
+      ? (raw as Practice)
+      : null;
+  }, [searchParams]);
+
+  const [stepIndex, setStepIndex] = useState(() => (presetPractice ? 1 : 0));
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
-  const [paceInputMode, setPaceInputMode] = useState<"pace" | "time">("pace");
-  const [targetFinishTime, setTargetFinishTime] = useState("");
   const todayDate = useMemo(() => getTodayDateInputValue(), []);
-  const [form, setForm] = useState<FormState>(() => {
+
+  /* L'état de départ est mémorisé, pas seulement utilisé : un brouillon écrit
+     avant l'ajout d'un champ n'en a pas la clé, et le poser tel quel donnerait
+     un objet incomplet TYPÉ complet. `revive` fusionne sur celui-ci. */
+  const initialForm = useMemo<FormState>(() => {
     const rp = loadRunnerProfile();
     return {
+      practice: presetPractice,
       planPurpose: "race",
       trainingGoal: "time",
       raceDistance: null,
@@ -239,8 +105,23 @@ export function PlanCreatePage() {
       includeStrength: false,
       strengthFrequency: 2,
       intermediateGoals: [],
+      terrain: "trail_runnable",
+      ultraNight: false,
+      ultraFuelling: false,
+      ultraPoles: false,
+      ultraBackToBack: false,
     };
-  });
+  }, [todayDate, presetPractice]);
+
+  const [form, setForm] = useState<FormState>(initialForm);
+
+  const steps = useMemo(() => stepsFor(form), [form]);
+  /* Borner l'index au parcours courant. Il peut le dépasser de deux façons :
+     un préréglage `?practice=` qui démarre à l'étape 2 d'un parcours qui n'en
+     a qu'une (le triathlon annoncé), ou une réponse qui raccourcit la liste en
+     cours de route. Sans ça l'écran annonçait Étape 2 sur 1. */
+  const safeIndex = Math.min(stepIndex, steps.length - 1);
+  const currentStepId = steps[safeIndex] ?? "practice";
 
   // Auto-save the wizard so a closed tab / hard reload doesn't lose progress.
   // Persistence stops when the plan is finalized; the banner appears on mount
@@ -250,43 +131,100 @@ export function PlanCreatePage() {
     setForm,
     stepIndex,
     setStepIndex,
+    {
+      stepId: currentStepId,
+      revive: (stored) => ({ ...initialForm, ...stored }),
+      resolveStepIndex: indexOfStep,
+    },
   );
 
   // Load user zone preferences for VMA suggestion
   const userPrefs: UserZonePreferences | null = useMemo(
     () => loadUserZonePrefs(),
-    []
+    [],
   );
 
   // ── Dynamic step flow ────────────────────────────────────────────
 
   const isRacePlan = form.planPurpose === "race";
-  const steps = isRacePlan ? RACE_STEPS : NON_RACE_STEPS;
-  const currentStep = steps[stepIndex] ?? "purpose";
+  const step = STEPS[currentStepId];
   const totalSteps = steps.length;
 
   // ── Navigation ───────────────────────────────────────────────────
 
+  /* Le parcours courant, lu au moment où on avance et non au moment où le
+     geste a été fait. Les deux diffèrent : répondre pratique fait passer
+     la liste d'UNE étape à treize, et `goForward` fermé sur l'ancienne liste
+     calculait `Math.min(1, 0)`, il ne bougeait pas. */
+  const stepsRef = useRef(steps);
+  stepsRef.current = steps;
+
+  const advanceTimer = useRef<number | null>(null);
+
+  const cancelAdvance = useCallback(() => {
+    if (advanceTimer.current !== null) {
+      window.clearTimeout(advanceTimer.current);
+      advanceTimer.current = null;
+    }
+  }, []);
+
+  useEffect(() => cancelAdvance, [cancelAdvance]);
+
   const goForward = useCallback(() => {
+    cancelAdvance();
     setDirection("forward");
-    setStepIndex((s) => Math.min(s + 1, steps.length - 1));
-  }, [steps.length]);
+    setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
+  }, [cancelAdvance]);
 
   const goBack = useCallback(() => {
+    cancelAdvance();
     setDirection("backward");
     setStepIndex((s) => Math.max(s - 1, 0));
-  }, []);
+  }, [cancelAdvance]);
+
+  /** The stepper only walks backwards: a step ahead has not been answered. */
+  const goBackTo = useCallback(
+    (index: number) => {
+      cancelAdvance();
+      setDirection("backward");
+      setStepIndex(index);
+    },
+    [cancelAdvance],
+  );
+
+  /**
+   * Une réponse à choix unique avance d'elle-même.
+   *
+   * Le battement n'est pas un effet de style : le clic du label arrive AVANT
+   * que la radio ne change d'état, donc avancer dans la foulée lirait l'ancien
+   * brouillon, et l'ancien parcours, qui n'a pas encore la longueur que la
+   * réponse vient de lui donner. 160 ms laissent aussi voir l'option se
+   * cocher, ce qui est ce qui fait que l'écran suivant n'a pas l'air d'un
+   * accident.
+   */
+  const commit = useCallback(() => {
+    cancelAdvance();
+    advanceTimer.current = window.setTimeout(() => {
+      advanceTimer.current = null;
+      setDirection("forward");
+      setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
+    }, 160);
+  }, [cancelAdvance]);
 
   // ── Derived values ───────────────────────────────────────────────
 
   const weeksCount = useMemo(
-    () => (form.raceDate ? calculateWeeksBetweenDates(form.startDate || todayDate, form.raceDate) : 0),
-    [form.raceDate, form.startDate, todayDate]
+    () =>
+      form.raceDate
+        ? calculateWeeksBetweenDates(form.startDate || todayDate, form.raceDate)
+        : 0,
+    [form.raceDate, form.startDate, todayDate],
   );
 
-  const recommendedWeeks = useMemo(() => {
-    return RECOMMENDED_WEEKS[form.raceDistance ?? "10K"] ?? RECOMMENDED_WEEKS["10K"];
-  }, [form.raceDistance]);
+  const recommendedWeeks = useMemo(
+    () => RECOMMENDED_WEEKS[form.raceDistance ?? "10K"] ?? RECOMMENDED_WEEKS["10K"],
+    [form.raceDistance],
+  );
 
   const minWeeksForDistance = recommendedWeeks.min;
 
@@ -294,19 +232,64 @@ export function PlanCreatePage() {
   const dateValid = weeksCount >= minWeeksForDistance;
   const dateTooLong = weeksCount > recommendedWeeks.max;
 
-  const minDate = useMemo(() => {
-    return addWeeksToDate(form.startDate || todayDate, minWeeksForDistance);
-  }, [form.startDate, minWeeksForDistance, todayDate]);
+  const minDate = useMemo(
+    () => addWeeksToDate(form.startDate || todayDate, minWeeksForDistance),
+    [form.startDate, minWeeksForDistance, todayDate],
+  );
 
   const paceSeconds = useMemo(
     () => parsePaceToSeconds(form.targetPace),
-    [form.targetPace]
+    [form.targetPace],
   );
 
   const suggestedLevel = useMemo(
     () => (userPrefs?.vma ? suggestLevel(userPrefs.vma) : null),
-    [userPrefs]
+    [userPrefs],
   );
+
+  const intermediateGoalValidation = useMemo(() => {
+    if (form.intermediateGoals.length === 0 || !form.raceDate)
+      return { valid: true, errors: [] };
+    return validateIntermediateGoals(
+      form.intermediateGoals,
+      form.raceDate,
+      form.startDate || todayDate,
+      form.raceDistance ?? "10K",
+    );
+  }, [
+    form.intermediateGoals,
+    form.raceDate,
+    form.startDate,
+    form.raceDistance,
+    todayDate,
+  ]);
+
+  const intermediateGoalMaxDate = useMemo(() => {
+    if (!form.raceDate) return undefined;
+    // 2 weeks before main race
+    const d = new Date(form.raceDate);
+    d.setDate(d.getDate() - 14);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }, [form.raceDate]);
+
+  const derived: WizardDerived = {
+    todayDate,
+    weeksCount,
+    recommendedWeeks,
+    minWeeksForDistance,
+    dateValid,
+    dateTooLong,
+    minDate,
+    paceSeconds,
+    suggestedLevel,
+    userPrefs,
+    intermediateGoalValidation,
+    intermediateGoalMaxDate,
+    isRacePlan,
+  };
 
   // ── Submit handler ───────────────────────────────────────────────
 
@@ -314,8 +297,11 @@ export function PlanCreatePage() {
     if (!form.runnerLevel) return;
     if (isRacePlan && (!form.raceDistance || !form.raceDate)) return;
 
-    const effectiveRaceDate = form.raceDate
-      || new Date(Date.now() + 86400000 * 7 * (form.totalWeeksOverride || 12)).toISOString();
+    const effectiveRaceDate =
+      form.raceDate ||
+      new Date(
+        Date.now() + 86400000 * 7 * (form.totalWeeksOverride || 12),
+      ).toISOString();
 
     const config: AssistedPlanConfig = {
       id: generateId(),
@@ -332,16 +318,25 @@ export function PlanCreatePage() {
         : undefined,
       createdAt: new Date().toISOString(),
       ...buildRacePlanDateRange(form.startDate, effectiveRaceDate),
+      /* La pratique n'est stockée QUE pour un plan sans course visée : dans
+         tous les autres cas elle se déduit de `raceDistance`, ce qui est ce
+         qui évite toute migration de `zoned-plans`. */
+      practice: isRacePlan ? undefined : (form.practice ?? undefined),
       planPurpose: form.planPurpose,
       trainingGoal: form.trainingGoal,
       totalWeeksOverride: !isRacePlan ? form.totalWeeksOverride : undefined,
-      currentWeeklyKm: form.currentWeeklyKm ? parseInt(form.currentWeeklyKm, 10) : undefined,
-      currentLongRunKm: form.currentLongRunKm ? parseInt(form.currentLongRunKm, 10) : undefined,
+      currentWeeklyKm: form.currentWeeklyKm
+        ? parseInt(form.currentWeeklyKm, 10)
+        : undefined,
+      currentLongRunKm: form.currentLongRunKm
+        ? parseInt(form.currentLongRunKm, 10)
+        : undefined,
       includeStrength: form.includeStrength || undefined,
       strengthFrequency: form.includeStrength ? form.strengthFrequency : undefined,
-      intermediateGoals: form.intermediateGoals.length > 0
-        ? sortIntermediateGoals(form.intermediateGoals)
-        : undefined,
+      intermediateGoals:
+        form.intermediateGoals.length > 0
+          ? sortIntermediateGoals(form.intermediateGoals)
+          : undefined,
     };
 
     try {
@@ -352,426 +347,9 @@ export function PlanCreatePage() {
     } catch {
       // Error is exposed via the hook's error state
     }
-  }, [form, userPrefs, paceSeconds, createPlan, navigate, finalize]);
+  }, [form, userPrefs, paceSeconds, createPlan, navigate, finalize, isRacePlan]);
 
-  // ── Step indicator (dots + step number) ────────────────────────
-
-  const renderStepIndicator = () => (
-    <div className="flex items-center justify-center gap-2 py-4">
-      {Array.from({ length: totalSteps }, (_, i) => (
-        <div
-          key={i}
-          className={cn(
-            "size-2 rounded-full transition-all duration-300",
-            i === stepIndex
-              ? "bg-primary scale-125"
-              : i < stepIndex
-                ? "bg-primary/50"
-                : "bg-muted-foreground/25"
-          )}
-        />
-      ))}
-    </div>
-  );
-
-  // ── Navigation buttons ────────────────────────────────────────
-
-  const renderNavButtons = (
-    canProceed: boolean,
-    nextLabel?: string,
-    showSkip?: boolean,
-  ) => (
-    <div className="py-4 flex justify-between gap-3">
-      <Button variant="ghost" size="sm" onClick={goBack} disabled={stepIndex === 0}>
-        <ArrowLeft className="size-4 mr-1" />
-        {t("nav.back")}
-      </Button>
-      <div className="flex gap-2">
-        {showSkip && (
-          <Button variant="ghost" size="sm" onClick={goForward}>
-            {t("nav.skip")}
-          </Button>
-        )}
-        <Button size="sm" onClick={goForward} disabled={!canProceed}>
-          {nextLabel ?? t("nav.next")}
-          <ArrowRight className="size-4 ml-1" />
-        </Button>
-      </div>
-    </div>
-  );
-
-  // ── Purpose options for Step 1 ────────────────────────────────────
-  const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; ringClass: string; bgClass: string; iconBgClass: string; labelKey: string; descKey: string }[] = [
-    {
-      value: "race",
-      icon: <Target className="size-5 sm:size-6 text-primary" />,
-      ringClass: "ring-primary bg-primary/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-primary/10",
-      labelKey: "purpose.race",
-      descKey: "purpose.raceDesc",
-    },
-    {
-      value: "base_building",
-      icon: <TrendingUp className="size-5 sm:size-6 text-zone-2" />,
-      ringClass: "ring-zone-2 bg-zone-2/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-2/10",
-      labelKey: "purpose.baseBuilding",
-      descKey: "purpose.baseBuildingDesc",
-    },
-    {
-      value: "return_from_injury",
-      icon: <Heart className="size-5 sm:size-6 text-zone-1" />,
-      ringClass: "ring-zone-1 bg-zone-1/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-1/10",
-      labelKey: "purpose.returnFromInjury",
-      descKey: "purpose.returnFromInjuryDesc",
-    },
-    {
-      value: "beginner_start",
-      icon: <Footprints className="size-5 sm:size-6 text-zone-3" />,
-      ringClass: "ring-zone-3 bg-zone-3/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-3/10",
-      labelKey: "purpose.beginnerStart",
-      descKey: "purpose.beginnerStartDesc",
-    },
-  ];
-
-  // ── Step 1: Plan Purpose ────────────────────────────────────────
-
-  const renderStep1 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Zap className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("purpose.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("purpose.subtitle")}
-        </p>
-
-        <div className="w-full max-w-md md:max-w-lg grid grid-cols-1 gap-2 mt-6">
-          {PURPOSE_OPTIONS.map((opt) => (
-            <Card
-              key={opt.value}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.planPurpose === opt.value
-                  ? `ring-2 ${opt.ringClass}`
-                  : opt.bgClass
-              )}
-              onClick={() => {
-                setForm((f) => ({
-                  ...f,
-                  planPurpose: opt.value,
-                  // Set defaults for non-race plans
-                  ...(opt.value === "beginner_start" ? { daysPerWeek: 3, totalWeeksOverride: 8, trainingGoal: "finish" as TrainingGoal } : {}),
-                  ...(opt.value === "return_from_injury" ? { daysPerWeek: 3, totalWeeksOverride: 10, trainingGoal: "finish" as TrainingGoal } : {}),
-                  ...(opt.value === "base_building" ? { totalWeeksOverride: 12, trainingGoal: "time" as TrainingGoal } : {}),
-                }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex items-center gap-3">
-                <div className={cn("size-10 rounded-full flex items-center justify-center shrink-0", opt.iconBgClass)}>
-                  {opt.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{t(opt.labelKey)}</p>
-                  <p className="text-xs text-muted-foreground">{t(opt.descKey)}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-      {renderNavButtons(!!form.planPurpose)}
-    </div>
-  );
-
-  // ── Step 2: Race Distance (or Duration for non-race) ───────────
-
-  const renderStep2 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Target className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("distance.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("distance.subtitle")}
-        </p>
-        <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl grid grid-cols-2 gap-2 mt-6">
-          {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
-            const meta = RACE_DISTANCE_META[dist];
-            return (
-              <Card
-                key={dist}
-                interactive
-                className={cn(
-                  "cursor-pointer border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
-                  form.raceDistance === dist
-                    ? "bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent ring-2 ring-primary"
-                    : "hover:bg-gradient-to-br hover:from-primary/5 dark:hover:from-primary/10 hover:to-transparent"
-                )}
-                onClick={() => {
-                  setForm((f) => ({ ...f, raceDistance: dist }));
-                  goForward();
-                }}
-              >
-                <CardContent className="p-3 md:p-4 flex items-center gap-3">
-                  <div className="size-9 md:size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    {RACE_DISTANCE_ICONS[dist]}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-medium text-sm md:text-base leading-tight">
-                      {pick(meta, "label")}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {meta.distanceKm} km
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
-      {renderNavButtons(!!form.raceDistance)}
-    </div>
-  );
-
-  // ── Step Duration: Choose plan length (non-race plans) ──────────
-
-  const renderStepDuration = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-zone-2/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-zone-2" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("duration.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("duration.subtitle")}
-        </p>
-        <div className="w-full max-w-xs grid grid-cols-3 gap-2 mt-6">
-          {DURATION_OPTIONS.map((opt) => (
-            <Card
-              key={opt.weeks}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.totalWeeksOverride === opt.weeks
-                  ? "ring-2 ring-primary bg-primary/5"
-                  : "hover:bg-muted/50"
-              )}
-              onClick={() => {
-                setForm((f) => ({ ...f, totalWeeksOverride: opt.weeks }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold">{opt.weeks}</span>
-                <span className="text-xs text-muted-foreground">
-                  {t("duration.weeks")}
-                </span>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-      {renderNavButtons(form.totalWeeksOverride > 0)}
-    </div>
-  );
-
-  // ── Step 3: Race Date (or Duration for non-race) ────────────────
-
-  const renderStep3 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("date.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("date.subtitle", { min: minWeeksForDistance })}
-        </p>
-
-        <div className="w-full max-w-sm mt-6 space-y-3">
-          <DateInput
-            min={minDate}
-            value={form.raceDate}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, raceDate: e.target.value }))
-            }
-            aria-label={t("date.raceDate")}
-            className="px-4 py-3 min-h-[44px] text-base"
-          />
-
-          <div className="space-y-2 pt-2">
-            <p className="text-sm font-medium text-center">{t("date.startLabel")}</p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, useCustomStartDate: false, startDate: todayDate }))}
-                className={cn(
-                  "flex-1 rounded-lg border p-3 text-sm transition-colors",
-                  !form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
-                )}
-              >
-                {t("date.startNow")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, useCustomStartDate: true, startDate: f.startDate || todayDate }))}
-                className={cn(
-                  "flex-1 rounded-lg border p-3 text-sm transition-colors",
-                  form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
-                )}
-              >
-                {t("date.chooseStartDate")}
-              </button>
-            </div>
-            {form.useCustomStartDate && (
-              <DateInput
-                value={form.startDate}
-                max={form.raceDate || undefined}
-                onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
-                className="px-4 py-3 min-h-[44px] text-base"
-              />
-            )}
-          </div>
-
-          {form.raceDate && dateValid && (
-            <p className="text-sm text-muted-foreground text-center">
-              {t("date.weeks", { count: weeksCount })}
-            </p>
-          )}
-
-          {form.raceDate && !dateValid && (
-            <p className="text-sm text-destructive text-center">
-              {t("date.tooSoon", { min: minWeeksForDistance })}
-            </p>
-          )}
-
-          {form.raceDate && form.useCustomStartDate && (
-            <p className="text-xs text-muted-foreground text-center">
-              {t("date.startHint", {
-                date: formatDate(form.startDate, { year: "numeric", month: "short", day: "numeric" }),
-              })}
-            </p>
-          )}
-
-          {form.raceDate && dateTooLong && (
-            <div className="rounded-lg border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm text-amber-800 dark:text-amber-300 text-center space-y-1">
-              <p className="font-semibold flex items-center justify-center gap-1.5">
-                <AlertTriangle className="size-4 shrink-0" />
-                {t("date.tooLong", { weeks: weeksCount })}
-              </p>
-              <p className="text-xs">
-                {t("date.tooLongDetail", { min: recommendedWeeks.min, max: recommendedWeeks.max })}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-      {renderNavButtons(dateValid, t("nav.continue"))}
-    </div>
-  );
-
-  // ── Step 4: Race Name (optional) ─────────────────────────────────
-
-  const renderStep4 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Flag className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("raceName.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("raceName.subtitle")}
-        </p>
-
-        <div className="w-full max-w-sm mt-6">
-          <input
-            type="text"
-            value={form.raceName}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, raceName: e.target.value }))
-            }
-            onKeyDown={(e) => {
-              if (e.key === "Enter") goForward();
-            }}
-            placeholder={t("raceName.placeholder")}
-            aria-label={t("raceName.label")}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            maxLength={100}
-          />
-        </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"), true)}
-    </div>
-  );
-
-  // ── Step Intermediate Goals: Optional prep races ──────────────────
-
-  const intermediateGoalValidation = useMemo(() => {
-    if (form.intermediateGoals.length === 0 || !form.raceDate) return { valid: true, errors: [] };
-    return validateIntermediateGoals(
-      form.intermediateGoals,
-      form.raceDate,
-      form.startDate || todayDate,
-      form.raceDistance ?? "10K",
-    );
-  }, [form.intermediateGoals, form.raceDate, form.startDate, form.raceDistance, todayDate]);
+  // ── Intermediate goals ───────────────────────────────────────────
 
   const addIntermediateGoal = useCallback(() => {
     setForm((f) => {
@@ -805,918 +383,58 @@ export function PlanCreatePage() {
     [],
   );
 
-  const PRIORITY_OPTIONS: { value: RacePriority; labelKey: string; descKey: string; color: string }[] = [
-    { value: "A", labelKey: "intermediateGoals.priorityA", descKey: "intermediateGoals.priorityADesc", color: "text-zone-5" },
-    { value: "B", labelKey: "intermediateGoals.priorityB", descKey: "intermediateGoals.priorityBDesc", color: "text-primary" },
-    { value: "C", labelKey: "intermediateGoals.priorityC", descKey: "intermediateGoals.priorityCDesc", color: "text-zone-2" },
-  ];
+  // ── Furniture ────────────────────────────────────────────────────
 
-  const intermediateGoalMaxDate = useMemo(() => {
-    if (!form.raceDate) return undefined;
-    // 2 weeks before main race
-    const d = new Date(form.raceDate);
-    d.setDate(d.getDate() - 14);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
-  }, [form.raceDate]);
+  const questionId = `${uid}-question`;
 
-  const renderStepIntermediateGoals = () => {
-    const errorsForGoal = (idx: number) =>
-      intermediateGoalValidation.errors.filter((e) => e.goalIndex === idx);
-
-    return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-        )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Flag className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("intermediateGoals.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
-            {t("intermediateGoals.subtitle")}
-          </p>
-
-          <div className="w-full max-w-lg mt-6 space-y-3">
-            {form.intermediateGoals.map((goal, idx) => {
-              const goalErrors = errorsForGoal(idx);
-              return (
-                <Card key={idx} className="border-border/50">
-                  <CardContent className="p-3 space-y-3">
-                    {/* Header with remove button */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-muted-foreground">
-                        #{idx + 1}
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 px-2 text-xs text-destructive hover:text-destructive"
-                        onClick={() => removeIntermediateGoal(idx)}
-                      >
-                        <Trash2 className="size-3.5 mr-1" />
-                        {t("intermediateGoals.remove")}
-                      </Button>
-                    </div>
-
-                    {/* Distance selector (compact grid) */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.distance")}
-                      </label>
-                      <div className="grid grid-cols-4 sm:grid-cols-7 gap-1">
-                        {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
-                          const meta = RACE_DISTANCE_META[dist];
-                          return (
-                            <button
-                              key={dist}
-                              type="button"
-                              onClick={() => updateIntermediateGoal(idx, { raceDistance: dist })}
-                              className={cn(
-                                "rounded-md border px-1.5 py-1.5 text-xs text-center transition-colors",
-                                goal.raceDistance === dist
-                                  ? "border-primary bg-primary/10 font-medium"
-                                  : "hover:bg-accent/50"
-                              )}
-                            >
-                              {pick(meta, "label")}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Date picker */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.date")}
-                      </label>
-                      <DateInput
-                        min={form.startDate || todayDate}
-                        max={intermediateGoalMaxDate}
-                        value={goal.raceDate}
-                        onChange={(e) => updateIntermediateGoal(idx, { raceDate: e.target.value })}
-                        className="px-3 py-2 min-h-[40px] text-sm"
-                      />
-                    </div>
-
-                    {/* Race name (optional) */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.name")}
-                      </label>
-                      <input
-                        type="text"
-                        value={goal.raceName ?? ""}
-                        onChange={(e) => updateIntermediateGoal(idx, { raceName: e.target.value })}
-                        placeholder={t("intermediateGoals.namePlaceholder")}
-                        className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                        maxLength={100}
-                      />
-                    </div>
-
-                    {/* Priority selector */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.priority")}
-                      </label>
-                      <div className="grid grid-cols-3 gap-1.5">
-                        {PRIORITY_OPTIONS.map((opt) => (
-                          <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => updateIntermediateGoal(idx, { priority: opt.value })}
-                            className={cn(
-                              "rounded-md border px-2 py-2 text-left transition-colors",
-                              goal.priority === opt.value
-                                ? "border-primary bg-primary/10"
-                                : "hover:bg-accent/50"
-                            )}
-                          >
-                            <span className={cn("text-xs font-semibold", opt.color)}>
-                              {t(opt.labelKey)}
-                            </span>
-                            <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">
-                              {t(opt.descKey)}
-                            </p>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Inline validation errors */}
-                    {goalErrors.length > 0 && (
-                      <div className="space-y-1">
-                        {goalErrors.map((err, eIdx) => {
-                          const i18nMap: Record<string, string> = {
-                            BEFORE_START: "intermediateGoals.validation.beforeStart",
-                            AFTER_MAIN_RACE: "intermediateGoals.validation.afterMain",
-                            TOO_CLOSE_TO_MAIN: "intermediateGoals.validation.tooCloseToMain",
-                            TOO_CLOSE_TO_EACH_OTHER: "intermediateGoals.validation.tooCloseToOther",
-                            PRIORITY_A_IN_TAPER_ZONE: "intermediateGoals.validation.priorityAInTaper",
-                            INVALID_DATE: "intermediateGoals.validation.invalidDate",
-                            DISTANCE_TOO_LONG_FOR_PRIORITY: "intermediateGoals.validation.distanceTooLongForPriority",
-                            DISTANCE_LONGER_THAN_MAIN: "intermediateGoals.validation.distanceLongerThanMain",
-                          };
-                          const key = i18nMap[err.code];
-                          const isWarning = err.code === "DISTANCE_TOO_LONG_FOR_PRIORITY" || err.code === "DISTANCE_LONGER_THAN_MAIN";
-                          return (
-                            <p key={eIdx} className={`text-xs flex items-center gap-1 ${isWarning ? "text-amber-600 dark:text-amber-400" : "text-destructive"}`}>
-                              <AlertTriangle className="size-3 shrink-0" />
-                              {key ? t(key) : err.message}
-                            </p>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
-
-            {/* Add button or max reached */}
-            {form.intermediateGoals.length < 5 ? (
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={addIntermediateGoal}
-              >
-                <Plus className="size-4 mr-1.5" />
-                {t("intermediateGoals.add")}
-              </Button>
-            ) : (
-              <p className="text-xs text-muted-foreground text-center">
-                {t("intermediateGoals.maxReached")}
-              </p>
-            )}
-          </div>
-        </div>
-        {renderNavButtons(
-          form.intermediateGoals.length === 0 || intermediateGoalValidation.valid,
-          t("nav.continue"),
-          true,
-        )}
-      </div>
-    );
-  };
-
-  // ── Step 5: Runner Level ─────────────────────────────────────────
-
-  const renderStep5 = () => {
-    const levels: Difficulty[] = [
-      "beginner",
-      "intermediate",
-      "advanced",
-      "elite",
-    ];
-
-    return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Target className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("level.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center">
-            {t("level.subtitle")}
-          </p>
-
-          {userPrefs?.vma && suggestedLevel && (
-            <div className="rounded-lg border bg-primary/5 p-2 text-xs text-center mt-3 max-w-sm w-full">
-              {t("level.vmaSuggestion", { vma: userPrefs.vma })}
-              <span className="font-semibold">
-                {pick(DIFFICULTY_META[suggestedLevel], "label")}
-              </span>
-              {t("level.vmaSuggestionSuffix")}
-            </div>
-          )}
-
-          <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl grid grid-cols-2 gap-2 mt-6">
-            {levels.map((level) => {
-              const meta = DIFFICULTY_META[level];
-              const isSuggested = level === suggestedLevel;
-              return (
-                <Card
-                  key={level}
-                  interactive
-                  className={cn(
-                    "cursor-pointer border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
-                    form.runnerLevel === level
-                      ? "bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent ring-2 ring-primary"
-                      : "hover:bg-gradient-to-br hover:from-primary/5 dark:hover:from-primary/10 hover:to-transparent",
-                    isSuggested &&
-                      form.runnerLevel !== level &&
-                      "border-primary/40"
-                  )}
-                  onClick={() => {
-                    setForm((f) => ({ ...f, runnerLevel: level }));
-                    goForward();
-                  }}
-                >
-                  <CardContent className="p-3 md:p-4 flex items-center gap-3">
-                    <div className="size-9 md:size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <span className="text-base md:text-lg font-bold text-primary">
-                        {meta.level}
-                      </span>
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-medium text-sm md:text-base leading-tight">
-                        {pick(meta, "label")}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                        {pick(meta, "desc")}
-                      </div>
-                      {isSuggested && (
-                        <div className="text-xs text-primary">
-                          {t("level.suggested")}
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-        <div className="py-4 flex justify-center">
-          <Button variant="ghost" size="sm" onClick={goBack}>
-            <ArrowLeft className="size-4 mr-1" />
-            {t("nav.back")}
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  // ── Step Goal: Training mindset (finish/time/compete) ────────────
-
-  const renderStepGoal = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("goal.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("goal.subtitle")}
-        </p>
-        <div className="w-full max-w-sm grid grid-cols-1 gap-2 mt-6">
-          {GOAL_OPTION_KEYS.map((opt) => (
-            <Card
-              key={opt.value}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.trainingGoal === opt.value
-                  ? "ring-2 ring-primary bg-primary/5"
-                  : "hover:bg-muted/50"
-              )}
-              onClick={() => {
-                setForm((f) => ({ ...f, trainingGoal: opt.value }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex items-center gap-3">
-                <div className="size-9 rounded-full bg-secondary/80 flex items-center justify-center shrink-0">
-                  {opt.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{t(opt.labelKey)}</p>
-                  <p className="text-xs text-muted-foreground">{t(opt.descKey)}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-      {renderNavButtons(!!form.trainingGoal)}
-    </div>
+  const patch = useCallback(
+    (next: Partial<FormState>) => setForm((f) => ({ ...f, ...next })),
+    [],
   );
 
-  // ── Step Fitness: Current fitness evaluation ───────────────────────
-
-  const renderStepFitness = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("fitness.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
-          {t("fitness.subtitle")}
-        </p>
-        <div className="w-full max-w-sm space-y-4 mt-6">
-          {/* Current weekly km */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium" htmlFor="weeklyKm">
-              {t("fitness.weeklyKm")}
-            </label>
-            <p className="text-xs text-muted-foreground">
-              {t("fitness.weeklyKmDesc")}
-            </p>
-            <input
-              id="weeklyKm"
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={300}
-              placeholder={t("fitness.weeklyKmPlaceholder")}
-              value={form.currentWeeklyKm}
-              onChange={(e) => setForm((f) => ({ ...f, currentWeeklyKm: e.target.value }))}
-              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-            />
-          </div>
-
-          {/* Current long run */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium" htmlFor="longRunKm">
-              {t("fitness.longRunKm")}
-            </label>
-            <p className="text-xs text-muted-foreground">
-              {t("fitness.longRunKmDesc")}
-            </p>
-            <input
-              id="longRunKm"
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={100}
-              placeholder={t("fitness.longRunKmPlaceholder")}
-              value={form.currentLongRunKm}
-              onChange={(e) => setForm((f) => ({ ...f, currentLongRunKm: e.target.value }))}
-              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-            />
-          </div>
-        </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"), true)}
-    </div>
-  );
-
-  // ── Step 6: Training Configuration ───────────────────────────────
-
-  const renderStep6 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("schedule.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("schedule.subtitle")}
-        </p>
-
-        <div className="w-full max-w-sm mt-6 space-y-6">
-          <div>
-            <label className="text-sm font-medium mb-3 block text-center">
-              {t("schedule.sessionsPerWeek")}
-            </label>
-            <div className="flex gap-2">
-              {DAYS_PER_WEEK_OPTIONS.filter((n) =>
-                form.planPurpose === "return_from_injury" ? n <= 4
-                  : form.planPurpose === "beginner_start" ? n <= 5
-                    : true
-              ).map((n) => (
-                <Button
-                  key={n}
-                  variant={form.daysPerWeek === n ? "default" : "outline"}
-                  className="flex-1"
-                  onClick={() => setForm((f) => ({ ...f, daysPerWeek: n }))}
-                >
-                  {n}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Long run day picker */}
-          <div>
-            <label className="text-sm font-medium mb-2 block text-center">
-              {t("schedule.longRunDay")}
-            </label>
-            <p className="text-xs text-muted-foreground text-center mb-3">
-              {t("schedule.longRunDayDesc")}
-            </p>
-            <div className="grid grid-cols-7 gap-1">
-              {Array.from({ length: 7 }, (_, idx) => (
-                <Button
-                  key={idx}
-                  variant={form.longRunDay === idx ? "default" : "outline"}
-                  size="sm"
-                  className="text-xs px-0"
-                  onClick={() => setForm((f) => ({ ...f, longRunDay: idx }))}
-                >
-                  {t(`daysShort.${idx}`)}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Strength training toggle */}
-          <div className="border-t pt-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="size-8 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
-                  <Dumbbell className="size-4 text-orange-500" />
-                </div>
-                <div className="min-w-0">
-                  <label htmlFor="includeStrength" className="text-sm font-medium cursor-pointer">
-                    {t("schedule.includeStrength")}
-                  </label>
-                  <p className="text-xs text-muted-foreground leading-tight">
-                    {t("schedule.includeStrengthDesc")}
-                  </p>
-                </div>
-              </div>
-              <Switch
-                id="includeStrength"
-                checked={form.includeStrength}
-                onCheckedChange={(checked) =>
-                  setForm((f) => ({ ...f, includeStrength: !!checked }))
-                }
-              />
-            </div>
-
-            {form.includeStrength && (
-              <div className="mt-3 ml-10">
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">
-                  {t("schedule.strengthFrequency")}
-                </label>
-                <div className="flex gap-2">
-                  {([1, 2, 3] as const).map((n) => (
-                    <Button
-                      key={n}
-                      variant={form.strengthFrequency === n ? "default" : "outline"}
-                      size="sm"
-                      className="flex-1 text-xs"
-                      onClick={() => setForm((f) => ({ ...f, strengthFrequency: n }))}
-                    >
-                      {t("schedule.strengthPerWeek", { n })}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"))}
-    </div>
-  );
-
-  // ── Step 7: Pace & Elevation (optional) ──────────────────────────
-
-  const renderStep7 = () => {
-    const distanceKm = form.raceDistance
-      ? RACE_DISTANCE_META[form.raceDistance].distanceKm
-      : 0;
-
-    return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Mountain className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("pace.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center">
-            {t("pace.subtitle")}
-          </p>
-          {(form.raceDistance === "trail_short" || form.raceDistance === "trail" || form.raceDistance === "ultra") && (
-            <p className="text-xs text-primary text-center mt-1">
-              {t("pace.trailHint")}
-            </p>
-          )}
-
-          <div className="w-full max-w-sm mt-6 space-y-4">
-            {/* Pace input mode toggle */}
-            <div className="flex rounded-lg border overflow-hidden">
-              <button
-                type="button"
-                className={cn(
-                  "flex-1 px-3 py-1.5 text-xs font-medium transition-colors",
-                  paceInputMode === "pace" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                )}
-                onClick={() => setPaceInputMode("pace")}
-              >
-                {t("pace.targetPaceTab")}
-              </button>
-              <button
-                type="button"
-                className={cn(
-                  "flex-1 px-3 py-1.5 text-xs font-medium transition-colors",
-                  paceInputMode === "time" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                )}
-                onClick={() => setPaceInputMode("time")}
-              >
-                {t("pace.targetTimeTab")}
-              </button>
-            </div>
-
-            {/* Target pace or finish time */}
-            {paceInputMode === "pace" ? (
-              <div>
-                <label className="text-sm font-medium mb-2 block">
-                  {t("pace.targetPaceLabel")}
-                </label>
-                <input
-                  type="text"
-                  value={form.targetPace}
-                  onChange={(e) => {
-                    setForm((f) => ({ ...f, targetPace: e.target.value }));
-                    setTargetFinishTime("");
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && (paceSeconds || !form.targetPace)) goForward();
-                  }}
-                  placeholder="5:30"
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                {paceSeconds && distanceKm > 0 && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t("pace.estimatedFinish")}
-                    <span className="font-medium">
-                      {estimateFinishTime(paceSeconds, distanceKm)}
-                    </span>
-                  </p>
-                )}
-                {form.targetPace && !paceSeconds && (
-                  <p className="text-xs text-destructive mt-1">
-                    {t("pace.paceFormatError")}
-                  </p>
-                )}
-              </div>
-            ) : (
-              <div>
-                <label className="text-sm font-medium mb-2 block">
-                  {t("pace.targetFinishTimeLabel")}
-                </label>
-                <input
-                  type="text"
-                  value={targetFinishTime}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setTargetFinishTime(val);
-                    const totalSec = parseFinishTimeToSeconds(val);
-                    if (totalSec && distanceKm > 0) {
-                      const paceSec = finishTimeToPaceSeconds(totalSec, distanceKm);
-                      setForm((f) => ({ ...f, targetPace: formatPace(paceSec) }));
-                    } else {
-                      setForm((f) => ({ ...f, targetPace: "" }));
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      const totalSec = parseFinishTimeToSeconds(targetFinishTime);
-                      if (totalSec || !targetFinishTime) goForward();
-                    }
-                  }}
-                  placeholder={t("pace.timePlaceholder")}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                {(() => {
-                  const totalSec = parseFinishTimeToSeconds(targetFinishTime);
-                  if (totalSec && distanceKm > 0) {
-                    const paceSec = finishTimeToPaceSeconds(totalSec, distanceKm);
-                    return (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {t("pace.requiredPace")}
-                        <span className="font-medium">{formatPace(paceSec)} min/km</span>
-                      </p>
-                    );
-                  }
-                  if (targetFinishTime && !totalSec) {
-                    return (
-                      <p className="text-xs text-destructive mt-1">
-                        {t("pace.timeFormatHint")}
-                      </p>
-                    );
-                  }
-                  return null;
-                })()}
-              </div>
-            )}
-
-            {/* Elevation gain */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                {t("pace.elevation")}
-              </label>
-              <input
-                type="number"
-                value={form.elevationGain}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, elevationGain: e.target.value }))
-                }
-                placeholder={t("pace.elevationPlaceholder")}
-                min={0}
-                max={10000}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-            </div>
-          </div>
-        </div>
-        {renderNavButtons(
-          form.targetPace === "" || !!paceSeconds,
-          t("nav.continue"),
-          true
-        )}
-      </div>
-    );
+  const ctx: StepContext = {
+    form,
+    setForm,
+    patch,
+    derived,
+    uid,
+    questionId,
+    t,
+    pick,
+    goForward,
+    goBack,
+    commit,
+    direction,
+    submit: { generate: handleGenerate, isGenerating, error },
+    goals: {
+      add: addIntermediateGoal,
+      remove: removeIntermediateGoal,
+      update: updateIntermediateGoal,
+    },
   };
 
-  // ── Step 8: Summary & Generate ───────────────────────────────────
+  const canProceed = step.isComplete(form, derived);
 
-  const renderStep8 = () => {
-    const distMeta = form.raceDistance
-      ? RACE_DISTANCE_META[form.raceDistance]
-      : null;
-    const levelMeta = form.runnerLevel
-      ? DIFFICULTY_META[form.runnerLevel]
-      : null;
-    const distanceKm = distMeta?.distanceKm ?? 0;
-
-    return (
-      <div
-        className={cn(
-          "space-y-4",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        )}
-      >
-        <div className="text-center mb-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-            <CheckIcon className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold">
-            {t("summary.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            {t("summary.subtitle")}
-          </p>
-        </div>
-
-        <Card>
-          <CardContent className="p-4 md:p-6 space-y-2">
-            {/* Distance */}
-            <SummaryRow
-              label={t("summary.distance")}
-              value={
-                distMeta
-                  ? `${pick(distMeta, "label")} (${distMeta.distanceKm} km)`
-                  : "-"
-              }
-            />
-            {/* Race date */}
-            <SummaryRow
-              label={t("summary.date")}
-              value={
-                form.raceDate
-                  ? `${formatDate(form.raceDate)} (${weeksCount} ${t("summary.weeksShort")})`
-                  : "-"
-              }
-            />
-            <SummaryRow
-              label={t("summary.startDate")}
-              value={
-                form.startDate
-                  ? formatDate(form.startDate)
-                  : "-"
-              }
-            />
-            {/* Race name */}
-            {form.raceName && (
-              <SummaryRow
-                label={t("summary.name")}
-                value={form.raceName}
-              />
-            )}
-            {/* Intermediate goals */}
-            {form.intermediateGoals.length > 0 && (
-              <div className="py-1.5 border-b space-y-1.5">
-                <span className="text-sm text-muted-foreground">
-                  {t("intermediateGoals.title")}
-                </span>
-                {sortIntermediateGoals(form.intermediateGoals).map((goal, idx) => {
-                  const distMeta2 = RACE_DISTANCE_META[goal.raceDistance];
-                  return (
-                    <div key={idx} className="flex items-center gap-2 pl-2 text-sm">
-                      <span className={cn(
-                        "inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-none",
-                        goal.priority === "A" ? "bg-zone-5/10 text-zone-5"
-                          : goal.priority === "B" ? "bg-primary/10 text-primary"
-                            : "bg-zone-2/10 text-zone-2"
-                      )}>
-                        {t(`intermediateGoals.badge.${goal.priority}`)}
-                      </span>
-                      <span className="font-medium">
-                        {pick(distMeta2, "label")}
-                      </span>
-                      {goal.raceName && (
-                        <span className="text-muted-foreground truncate">
-                          — {goal.raceName}
-                        </span>
-                      )}
-                      <span className="text-muted-foreground ml-auto shrink-0">
-                        {goal.raceDate ? formatDate(goal.raceDate) : "-"}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            {/* Level */}
-            <SummaryRow
-              label={t("summary.level")}
-              value={
-                levelMeta ? pick(levelMeta, "label") : "-"
-              }
-            />
-            {/* Days */}
-            <SummaryRow
-              label={t("summary.days")}
-              value={`${form.daysPerWeek}`}
-            />
-            {/* Pace */}
-            {paceSeconds && (
-              <SummaryRow
-                label={t("summary.pace")}
-                value={`${formatPace(paceSeconds)}/km → ${estimateFinishTime(paceSeconds, distanceKm)}`}
-              />
-            )}
-            {/* Elevation */}
-            {form.elevationGain && (
-              <SummaryRow
-                label={t("summary.elevation")}
-                value={`${form.elevationGain} m D+`}
-              />
-            )}
-            {/* v2: Goal */}
-            <SummaryRow
-              label={t("summary.goal")}
-              value={
-                form.trainingGoal === "finish" ? t("goal.finish")
-                  : form.trainingGoal === "compete" ? t("goal.compete")
-                    : t("goal.time")
-              }
-            />
-            {/* v2: Purpose (non-race only) */}
-            {form.planPurpose !== "race" && (
-              <SummaryRow
-                label={t("summary.purpose")}
-                value={
-                  form.planPurpose === "base_building" ? t("summary.purposeBaseBuilding")
-                    : form.planPurpose === "return_from_injury" ? t("summary.purposeReturnFromInjury")
-                      : t("summary.purposeBeginnerStart")
-                }
-              />
-            )}
-            {/* v2: Duration (non-race) */}
-            {form.planPurpose !== "race" && form.totalWeeksOverride > 0 && (
-              <SummaryRow
-                label={t("summary.duration")}
-                value={t("summary.durationValue", { weeks: form.totalWeeksOverride })}
-              />
-            )}
-            {/* v2: Fitness */}
-            {form.currentWeeklyKm && (
-              <SummaryRow
-                label={t("summary.weeklyKm")}
-                value={t("summary.currentVolume", { km: form.currentWeeklyKm })}
-              />
-            )}
-            {/* v2: Long run day */}
-            <SummaryRow
-              label={t("summary.longRun")}
-              value={t(`days.${form.longRunDay}`)}
-            />
-            {/* v2: Strength training */}
-            {form.includeStrength && (
-              <SummaryRow
-                label={t("summary.strengthTraining")}
-                value={t("schedule.strengthPerWeek", { n: form.strengthFrequency })}
-              />
-            )}
-          </CardContent>
-        </Card>
-
-        {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
-            {error}
-          </div>
-        )}
-
-        <div className="flex justify-between gap-3">
-          <Button variant="ghost" size="sm" onClick={goBack}>
-            <ArrowLeft className="size-4 mr-1" />
-            {t("nav.back")}
-          </Button>
-          <Button
-            onClick={handleGenerate}
-            disabled={isGenerating}
-          >
-            {isGenerating ? (
-              <>
-                <Loader2 className="size-4 animate-spin mr-2" />
-                {t("summary.generating")}
-              </>
-            ) : (
-              <>
-                {t("summary.generate")}
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  // ── Render ───────────────────────────────────────────────────────
-
-  // Summary step can scroll; other steps use full viewport layout
-  const isFullViewportStep = currentStep !== "summary";
+  /**
+   * Chaque étape s'ouvre sur sa question.
+   *
+   * Sans ça, l'écran suivant héritait de la position où le doigt avait laissé
+   * le précédent : on descendait chercher Suivant, et l'étape d'après
+   * s'ouvrait à mi-hauteur, question déjà hors champ. Sur treize étapes, c'est
+   * le sentiment de il manque toujours quelque chose en haut.
+   *
+   * Sans animation : le volet joue déjà son glissement, et deux mouvements
+   * simultanés se lisent comme un saut. Le premier rendu est exclu, une page
+   * ouverte par un lien ancré n'a pas à être ramenée en haut.
+   */
+  const firstPaint = useRef(true);
+  useEffect(() => {
+    if (firstPaint.current) {
+      firstPaint.current = false;
+      return;
+    }
+    window.scrollTo({ top: 0 });
+  }, [safeIndex]);
 
   return (
     <>
@@ -1725,63 +443,189 @@ export function PlanCreatePage() {
         description={t("seo.createDescription")}
         canonical="/plan/create"
       />
-      <div className={cn(
-        "max-w-2xl mx-auto",
-        isFullViewportStep
-          ? "flex flex-col min-h-[calc(100dvh-8rem)] md:min-h-0 md:py-8"
-          : "py-8"
-      )}>
-        {/* Back to plan selection */}
-        {stepIndex === 0 && (
-          <div className="pt-1 pb-2">
-            <Button variant="ghost" size="sm" asChild>
+
+      <div className="zn-wiz">
+        {/* La pile du titre. Son écart vit dans la feuille et non en style en
+            ligne : un style en ligne bat toute règle, et le bloc téléphone de
+            plan-wizard.css a précisément à le resserrer. */}
+        <div className="zn-stack zn-wiz__head">
+          {safeIndex === 0 && (
+            <Button variant="ghost" size="sm" asChild className="zn-wiz__lone">
               <Link to="/plan/new">
-                <ArrowLeft className="mr-1 size-4" />
+                <ArrowLeft />
                 {t("nav.back")}
               </Link>
             </Button>
+          )}
+
+          {/* LA QUESTION est le titre de l'écran, et c'est le seul.
+              Elle était un `h2` de niveau 3 DANS la carte, sous un `h1` en
+              display qui disait Réponds, le plan se construit, la même
+              phrase aux treize étapes. Relu en niveaux de gris et flouté à
+              390 px : la masse la plus lourde de l'écran était la phrase
+              générique, pas ce qu'on demande. Le parcours veut la question,
+              puis les réponses, puis continuer, rien d'autre ; la phrase est
+              donc partie et la question a pris sa place.
+
+              Le titre vit ici, HORS de la branche `ownsNav` : le récapitulatif
+              n'a pas de carte de question, et laisser le titre dedans lui
+              aurait retiré son `h1`. */}
+          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+            <span className="zn-kicker">{t("wizard.kicker")}</span>
+            <h1 id={questionId} className="zn-display" data-level="2">
+              {t(step.titleKey)}
+            </h1>
+            {step.subtitleKey ? (
+              <p className="zn-body zn-body--sm zn-muted zn-measure">
+                {t(step.subtitleKey, step.subtitleParams?.(form, derived))}
+              </p>
+            ) : null}
           </div>
-        )}
-        {hasDraft && stepIndex === 0 && (
-          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
-            <span className="flex-1 min-w-0 text-foreground">
-              {t("draft.found", "Un brouillon de plan a été retrouvé.")}
-            </span>
-            <div className="flex items-center gap-2">
-              <Button size="sm" variant="default" onClick={restoreDraft}>
-                {t("draft.restore", "Reprendre")}
-              </Button>
-              <Button size="sm" variant="ghost" onClick={clearDraft}>
-                {t("draft.discard", "Repartir de zéro")}
-              </Button>
+        </div>
+
+        {/* The promise and its limits are stated once, on the first step,
+            past that the question on screen is what matters.
+
+            Elles ont QUITTÉ la pile du titre : sur un téléphone, ce bloc
+            posait un paragraphe, une source et une carte entre la première
+            question et ses réponses, les sept pratiques commençaient sous la
+            ligne de flottaison, à l'écran même où l'on ne sait pas encore de
+            quoi il s'agit. C'est maintenant un frère du titre et de la bande,
+            et `.zn-wiz__promise` le fait passer SOUS les réponses en dessous
+            de 900 px (plan-wizard.css). Sur grand écran, rien ne bouge. */}
+        {safeIndex === 0 && (
+          <div className="zn-wiz__promise">
+            <div
+              className="zn-split"
+              style={{ "--split": "1fr 340px", "--gap": "var(--sp-14)" } as CSSProperties}
+            >
+              <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                <p className="zn-body zn-body--lead">{t("wizard.lede")}</p>
+                <p className="zn-source">{t("wizard.source")}</p>
+              </div>
+              <Card size="compact">
+                <CardContent
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+                >
+                  <span className="zn-kicker zn-kicker--inline">
+                    {t("wizard.limitsKicker")}
+                  </span>
+                  <p className="zn-body zn-body--sm zn-muted">{t("wizard.limitsBody")}</p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         )}
-        {renderStepIndicator()}
-        {currentStep === "purpose" && renderStep1()}
-        {currentStep === "distance" && renderStep2()}
-        {currentStep === "date" && renderStep3()}
-        {currentStep === "duration" && renderStepDuration()}
-        {currentStep === "race_name" && renderStep4()}
-        {currentStep === "intermediate_goals" && renderStepIntermediateGoals()}
-        {currentStep === "level" && renderStep5()}
-        {currentStep === "goal" && renderStepGoal()}
-        {currentStep === "fitness" && renderStepFitness()}
-        {currentStep === "schedule" && renderStep6()}
-        {currentStep === "pace" && renderStep7()}
-        {currentStep === "summary" && renderStep8()}
+
+        <section className="zn-wiz__band">
+          {hasDraft && safeIndex === 0 && (
+            <Alert
+              kind="info"
+              title={t("draft.found")}
+              action={
+                <span
+                  className="zn-cluster"
+                  style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+                >
+                  <Button size="sm" variant="outline" onClick={restoreDraft}>
+                    {t("draft.restore")}
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={clearDraft}>
+                    {t("draft.discard")}
+                  </Button>
+                </span>
+              }
+            >
+              {t("wizard.draftBody")}
+            </Alert>
+          )}
+
+          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+            <ol className="zn-stepper zn-wiz__steps">
+              {steps.map((id, index) => {
+                const done = index < safeIndex;
+                const current = index === safeIndex;
+                return (
+                  <li key={id} className="zn-stepper__item">
+                    <button
+                      type="button"
+                      className="zn-stepper__step"
+                      data-state={done ? "done" : current ? "current" : "todo"}
+                      aria-current={current ? "step" : undefined}
+                      disabled={!done}
+                      onClick={() => goBackTo(index)}
+                    >
+                      <span className="zn-stepper__rail" aria-hidden="true" />
+                      <span className="zn-stepper__name">
+                        <span className="zn-stepper__num">
+                          {done ? <Check size={12} /> : String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="zn-stepper__label">{t(`wizard.step.${id}`)}</span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+            <p className="zn-mono zn-wiz__where">
+              {t("wizard.where", { current: safeIndex + 1, total: totalSteps })}
+            </p>
+          </div>
+
+          {/* La coquille rend la question et la navigation ; l'étape ne rend
+              que ce qui répond. C'est ce qui a fait disparaître
+              `renderQuestion` et `renderNav` des douze corps. Le
+              récapitulatif est la seule exception : son bouton ne fait pas
+              suivant, il génère le plan. */}
+          <Card className="zn-wiz__col">
+            {step.ownsNav ? (
+              <step.Body {...ctx} />
+            ) : (
+              <>
+                <CardContent className="zn-wiz__pane" data-direction={direction}>
+                  <step.Body {...ctx} />
+                </CardContent>
+                {/* Une étape qui avance d'elle-même n'a pas de Suivant :
+                    la réponse EST le geste d'avancer, et un bouton primaire
+                    qui double le tap qu'on vient de faire n'est pas une
+                    sortie de secours, c'est une décision de plus. Il n'y
+                    reste que Retour, et sur la première question, où
+                    Retour serait désactivé, la barre entière disparaît.
+                    Le clavier garde sa sortie : Entrée sur la réponse
+                    (Option.tsx). */}
+                {(!step.autoAdvance || safeIndex > 0) && (
+                  <CardFooter className="zn-wiz__nav">
+                    <Button variant="outline" onClick={goBack} disabled={safeIndex === 0}>
+                      <ArrowLeft className="zn-wiz__nav-arrow" />
+                      {t("nav.back")}
+                    </Button>
+                    {/* Passer et Continuer dans UN groupe poussé à
+                        droite, au lieu de trois enfants séparés par une cale.
+                        La cale comptait comme un enfant de plus, donc un
+                        écart de plus : les trois boutons demandaient 356 px
+                        pour 348 disponibles à 390 px, et passaient à la
+                        ligne pour huit pixels. */}
+                    {!step.autoAdvance && (
+                      <span className="zn-wiz__nav-end">
+                        {step.showSkip && (
+                          <Button variant="ghost" onClick={goForward}>
+                            {t("nav.skip")}
+                          </Button>
+                        )}
+                        <Button onClick={goForward} disabled={!canProceed}>
+                          {step.nextLabelKey ? t(step.nextLabelKey) : t("nav.next")}
+                          <ArrowRight className="zn-wiz__nav-arrow" />
+                        </Button>
+                      </span>
+                    )}
+                  </CardFooter>
+                )}
+              </>
+            )}
+          </Card>
+        </section>
       </div>
     </>
-  );
-}
-
-// ── Helper component ─────────────────────────────────────────────────
-
-function SummaryRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex justify-between items-center py-1.5 border-b last:border-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium">{value}</span>
-    </div>
   );
 }

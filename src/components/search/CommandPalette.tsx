@@ -14,8 +14,7 @@ import {
   Compass,
   Sparkles,
 } from "@/components/icons";
-import { Dialog, DialogPortal, DialogOverlay, DialogTitle } from "@/components/ui/dialog";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { NativeDialog } from "@/components/ui/native-dialog";
 import { useCommandPalette } from "./CommandPaletteProvider";
 import { SearchResultItem } from "./SearchResultItem";
 import {
@@ -52,6 +51,10 @@ const SURFACE_TYPE: Record<SurfaceSection, SearchResultType> = {
 
 const DEBOUNCE_MS = 150;
 const MAX_PER_TYPE = 5;
+
+/** The panel's accessible name. One palette exists at a time, so a fixed id is
+ *  honest and saves threading a generated one through the sr-only title. */
+const TITLE_ID = "cmdk-title";
 
 type FlatItem =
   | { kind: "header"; label: string; icon: React.ComponentType<{ className?: string }> }
@@ -215,13 +218,12 @@ export function CommandPalette() {
             }
           }
           break;
-        case "Escape":
-          e.preventDefault();
-          closePalette();
-          break;
+        // Escape is deliberately absent: the panel is a native <dialog>, so
+        // the close request is the platform's to answer. Catching the key here
+        // would only be doing the same job a second time, less well.
       }
     },
-    [selectableItems, selectedIndex, handleNavigate, closePalette]
+    [selectableItems, selectedIndex, handleNavigate]
   );
 
   const shortcutKey = isMac ? "⌘K" : "Ctrl+K";
@@ -229,151 +231,128 @@ export function CommandPalette() {
   // Track which selectable index each item maps to
   let selectableIdx = -1;
 
+  // Mounted only while open: showModal() puts the panel in the top layer, and
+  // a closed one has nothing to be under.
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && closePalette()}>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogPrimitive.Content
-          aria-describedby={undefined}
-          className={cn(
-            "fixed left-1/2 top-[15%] z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2",
-            "rounded-lg border bg-background shadow-lg",
-            "sm:top-[20%] sm:w-full",
-            "max-h-[80vh] flex flex-col",
-            "data-[state=open]:animate-in data-[state=closed]:animate-out",
-            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-            "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-            "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
-            "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
-            "duration-200"
-          )}
-          onKeyDown={handleKeyDown}
-        >
-          {/* Accessible title (visually hidden) */}
-          <DialogTitle className="sr-only">{t("actions.search")}</DialogTitle>
+    <NativeDialog
+      aria-labelledby={TITLE_ID}
+      className="zn-cmdk"
+      data-state="open"
+      onKeyDown={handleKeyDown}
+      onDismiss={closePalette}
+    >
+      {/* Accessible title (visually hidden) */}
+      <h2 id={TITLE_ID} className="sr-only">
+        {t("actions.search")}
+      </h2>
 
-          {/* Search input */}
-          <div className="flex items-center gap-3 px-4 py-3 border-b">
-            <Search className="size-5 text-muted-foreground flex-shrink-0" />
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={t("search.placeholder")}
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-            />
-            {isLoading ? (
-              <Loader2 className="size-4 text-muted-foreground animate-spin" />
-            ) : query ? (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                className="p-1 rounded hover:bg-accent"
-                aria-label="Effacer la recherche"
-              >
-                <X className="size-4 text-muted-foreground" />
-              </button>
-            ) : (
-              <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                {shortcutKey}
-              </kbd>
-            )}
+      {/* Search input */}
+      <div className="zn-cmdk__field">
+        <Search className="zn-cmdk__search" />
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={t("search.placeholder")}
+          className="zn-cmdk__input"
+        />
+        {isLoading ? (
+          <Loader2 className="zn-cmdk__spin" />
+        ) : query ? (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="zn-cmdk__clear"
+            aria-label="Effacer la recherche"
+          >
+            <X />
+          </button>
+        ) : (
+          <kbd className="zn-cmdk__kbd">{shortcutKey}</kbd>
+        )}
+      </div>
+
+      {/* Results */}
+      <div className="zn-cmdk__results" ref={resultsRef} aria-live="polite" aria-atomic="false">
+        {/* Loading state */}
+        {query.trim() && isLoading && (
+          <div className="zn-cmdk__state">
+            <Loader2 className="zn-cmdk__spin" />
           </div>
+        )}
 
-          {/* Results */}
-          <div className="flex-1 overflow-y-auto p-2" ref={resultsRef} aria-live="polite" aria-atomic="false">
-            {/* Loading state */}
-            {query.trim() && isLoading && (
-              <div className="px-3 py-8 text-center">
-                <Loader2 className="size-5 mx-auto text-muted-foreground animate-spin" />
-              </div>
-            )}
+        {/* No results */}
+        {query.trim() && !isLoading && searchResults && searchResults.total === 0 && (
+          <div className="zn-cmdk__state" role="status">
+            {t("search.noResults")}
+          </div>
+        )}
 
-            {/* No results */}
-            {query.trim() && !isLoading && searchResults && searchResults.total === 0 && (
-              <div className="px-3 py-8 text-center text-sm text-muted-foreground" role="status">
-                {t("search.noResults")}
-              </div>
-            )}
+        {/* Results list with section headers */}
+        {!isLoading &&
+          flatItems.map((item, i) => {
+            if (item.kind === "header") {
+              const Icon = item.icon;
+              return (
+                <div key={`header-${i}`} className="zn-cmdk__group zn-kicker">
+                  <Icon />
+                  {item.label}
+                </div>
+              );
+            }
 
-            {/* Results list with section headers */}
-            {!isLoading &&
-              flatItems.map((item, i) => {
-                if (item.kind === "header") {
-                  const Icon = item.icon;
-                  return (
-                    <div
-                      key={`header-${i}`}
-                      className="px-3 pt-3 pb-1 text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"
-                    >
-                      <Icon className="size-3" />
-                      {item.label}
-                    </div>
-                  );
-                }
+            selectableIdx++;
+            const currentIdx = selectableIdx;
 
-                selectableIdx++;
-                const currentIdx = selectableIdx;
-
-                if (item.kind === "workout") {
-                  return (
-                    <div key={item.result.id} data-selectable>
-                      <SearchResultItem
-                        workout={item.workout}
-                        isSelected={currentIdx === selectedIndex}
-                        onClick={() => handleNavigate(item.result.url)}
-                      />
-                    </div>
-                  );
-                }
-
-                // Generic result (collection, calculator, guide, article, glossary, page)
-                const Icon = TYPE_ICON[item.result.type];
-                return (
-                  <button
-                    key={item.result.id}
-                    type="button"
-                    data-selectable
+            if (item.kind === "workout") {
+              return (
+                <div key={item.result.id} data-selectable>
+                  <SearchResultItem
+                    workout={item.workout}
+                    isSelected={currentIdx === selectedIndex}
                     onClick={() => handleNavigate(item.result.url)}
-                    className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-md transition-colors",
-                      "hover:bg-accent focus:outline-none focus:bg-accent",
-                      currentIdx === selectedIndex && "bg-accent"
-                    )}
-                  >
-                    <Icon className="size-4 text-muted-foreground flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm truncate">{item.result.title}</div>
-                      {item.result.subtitle && (
-                        <div className="text-xs text-muted-foreground truncate mt-0.5">
-                          {item.result.subtitle}
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-          </div>
+                  />
+                </div>
+              );
+            }
 
-          {/* Footer with "View all" link */}
-          {searchResults && searchResults.workouts.length > 0 && !isLoading && (
-            <div className="border-t p-2">
+            // Generic result (collection, calculator, guide, article, glossary, page)
+            const Icon = TYPE_ICON[item.result.type];
+            return (
               <button
+                key={item.result.id}
                 type="button"
-                onClick={handleViewAll}
+                data-selectable
+                onClick={() => handleNavigate(item.result.url)}
                 className={cn(
-                  "w-full flex items-center justify-between px-3 py-2 text-sm",
-                  "text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
+                  "zn-cmdk__item",
+                  currentIdx === selectedIndex && "zn-cmdk__item--active"
                 )}
               >
-                <span>{t("search.viewAll")}</span>
-                <ArrowRight className="size-4" />
+                <Icon />
+                <div className="zn-fill">
+                  <div className="zn-cmdk__item-title zn-truncate">{item.result.title}</div>
+                  {item.result.subtitle && (
+                    <div className="zn-cmdk__item-sub zn-truncate">{item.result.subtitle}</div>
+                  )}
+                </div>
               </button>
-            </div>
-          )}
-        </DialogPrimitive.Content>
-      </DialogPortal>
-    </Dialog>
+            );
+          })}
+      </div>
+
+      {/* Footer with "View all" link */}
+      {searchResults && searchResults.workouts.length > 0 && !isLoading && (
+        <div className="zn-cmdk__foot">
+          <button type="button" onClick={handleViewAll} className="zn-cmdk__viewall">
+            <span>{t("search.viewAll")}</span>
+            <ArrowRight />
+          </button>
+        </div>
+      )}
+    </NativeDialog>
   );
 }

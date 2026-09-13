@@ -1,5 +1,5 @@
 /**
- * CoffeeStamp — 480×480. Loyalty card vibe. Five circular slots with the
+ * CoffeeStamp, 480×480. Loyalty card vibe. Five circular slots with the
  * last one stamped using the zone colour. Plays the "1 session closer to
  * your goal" metaphor.
  */
@@ -7,8 +7,7 @@
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 480;
@@ -36,7 +35,7 @@ export function CoffeeStamp({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* Loyalty card — kraft paper feel */}
+      {/* Loyalty card, kraft paper feel */}
       <div
         style={{
           position: "absolute",
@@ -62,7 +61,7 @@ export function CoffeeStamp({ workout, transparent }: ShareTemplateProps) {
               alignItems: "center",
             }}
           >
-            <Logo style={{ width: 50, height: 25, opacity: 0.85 }} />
+            <BrandMark height={22} opacity={0.85} />
             <span
               style={{
                 fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",

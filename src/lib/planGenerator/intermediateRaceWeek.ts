@@ -1,5 +1,5 @@
 /**
- * Intermediate Race Week — Overlay module for intermediate race goals
+ * Intermediate Race Week, Overlay module for intermediate race goals
  *
  * Applies volume adjustments, session modifications, and metadata
  * to weeks that contain intermediate race events.
@@ -8,9 +8,9 @@
  * similar to how strengthIntegration.ts works.
  *
  * Priority levels:
- *   A: Real race — mini-taper (pre-race week), race week, recovery (post-race)
- *   B: Preparation race — moderate lightening, no break in progression
- *   C: Tune-up — minimal disruption, race replaces a quality session
+ *   A: Real race, mini-taper (pre-race week), race week, recovery (post-race)
+ *   B: Preparation race, moderate lightening, no break in progression
+ *   C: Tune-up, minimal disruption, race replaces a quality session
  *
  * Post-race coaching (P6-P10):
  *   After long races (>= semi / 21.1km), the overlay enforces:
@@ -185,13 +185,13 @@ function applyIntermediateRaceToWeek(
     isKeySession: true,
     estimatedDurationMin: estimatedDuration,
     targetDistanceKm: goalDistanceKm,
-    notes: `Course interm\u00e9diaire \u2014 ${goal.raceName || goal.raceDistance}`,
-    notesEn: `Intermediate race \u2014 ${goal.raceName || goal.raceDistance}`,
+    notes: `Course interm\u00e9diaire \u00b7 ${goal.raceName || goal.raceDistance}`,
+    notesEn: `Intermediate race \u00b7 ${goal.raceName || goal.raceDistance}`,
   };
 
   // 3. Remove conflicting sessions
   if (effectivePriority === "A" || isLongRace) {
-    // Aggressive removal: long race or A-priority — remove long run, race-day session, all key sessions
+    // Aggressive removal: long race or A-priority, remove long run, race-day session, all key sessions
     week.sessions = week.sessions.filter(s => {
       if (s.sessionType === "long_run") return false;
       if (s.dayOfWeek === raceDay) return false;
@@ -229,7 +229,7 @@ function applyIntermediateRaceToWeek(
     if (onRaceDay >= 0) {
       week.sessions.splice(onRaceDay, 1);
     } else {
-      // No session on raceDay — remove one key session
+      // No session on raceDay, remove one key session
       const keyIdx = week.sessions.findIndex(s => s.isKeySession);
       if (keyIdx >= 0) {
         week.sessions.splice(keyIdx, 1);
@@ -268,7 +268,7 @@ function applyIntermediateRaceToWeek(
   }
 
   // 6. Apply volume adjustments (using effective priority for volume config)
-  // targetKm covers training sessions only — race distance is added on top
+  // targetKm covers training sessions only, race distance is added on top
   const volumeConfig = INTERMEDIATE_RACE_VOLUME[effectivePriority];
   week.volumePercent = Math.round(week.volumePercent * volumeConfig.raceWeekPct);
   if (week.targetKm) {
@@ -278,8 +278,8 @@ function applyIntermediateRaceToWeek(
   // 7. Set metadata (preserve user's declared priority, not effective)
   week.intermediateRace = goal;
   const label = goal.raceName || goal.raceDistance;
-  week.weekLabel = `Course interm\u00e9diaire \u2014 ${label}`;
-  week.weekLabelEn = `Intermediate race \u2014 ${label}`;
+  week.weekLabel = `Course interm\u00e9diaire \u00b7 ${label}`;
+  week.weekLabelEn = `Intermediate race \u00b7 ${label}`;
 
   // 8. Sort sessions by dayOfWeek
   week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);

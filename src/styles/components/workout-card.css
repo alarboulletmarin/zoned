@@ -1,0 +1,157 @@
+/* The session card, the piece the whole app reuses: library grid, favourites,
+   collections, the draw result, the home page rail.
+
+   Reading order is the system's: name, why, profile, facts. The profile is a
+   ZoneBar (see zone.css); the facts are a mono row over a divider, ending on
+   the catalogue code in vermillon, the one accent mark a card is allowed,
+   because it is an identifier, not a fill.
+
+   No shadow. A hard offset is for a floating surface; a card in a list is
+   paper lying flat on paper, and its outline is what makes it a thing. */
+
+.zn-wcard {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  block-size: 100%;
+  padding: var(--sp-12);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* The dense variant, a related session, a sidebar rail. Same paper, less of
+   it, and the name drops to interface type because it is a label there rather
+   than a heading you read. */
+.zn-wcard[data-size="compact"] {
+  gap: var(--sp-5);
+  padding: var(--pad-card-sm);
+}
+
+.zn-wcard[data-size="compact"] .zn-wcard__title {
+  font: var(--type-label);
+  letter-spacing: normal;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+}
+
+/* Hover is colour only; press is the 1px push into the paper. Nothing lifts,
+   nothing grows a shadow, nothing scales. */
+.zn-wcard[data-interactive="true"]:hover {
+  background: var(--surface-band);
+}
+
+.zn-wcard[data-interactive="true"]:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* ── the link wrapper ─────────────────────────────────────────────────── */
+
+/* Call sites wrap the card in a <Link>. The anchor is a bare box: it carries
+   the focus ring (from base.css) and nothing else, so the card keeps drawing
+   its own frame. */
+.zn-wcard-link {
+  display: block;
+  block-size: 100%;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--r-3xl);
+}
+
+.zn-wcard-link:hover .zn-wcard {
+  background: var(--surface-band);
+}
+
+.zn-wcard-link:active .zn-wcard {
+  transform: translateY(var(--press-shift));
+}
+
+/* ── head ─────────────────────────────────────────────────────────────── */
+
+.zn-wcard__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-wcard__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h3) / 1.05 var(--font-display);
+  letter-spacing: var(--ls-h3);
+  overflow-wrap: anywhere;
+  /* A flex item's floor is its content, not zero. Without this the title
+     pushed the favourite button five pixels past the card's inner edge on a
+     390px screen, measured, not guessed. */
+  min-inline-size: 0;
+}
+
+/* ── facts ────────────────────────────────────────────────────────────── */
+
+.zn-wcard__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-7);
+  margin-block-start: auto;
+  padding-block-start: var(--sp-2);
+  border-block-start: var(--border-divider);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-wcard__zone {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+.zn-wcard__fact {
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The catalogue id. Vermillon type, not a vermillon fill, the screen's one
+   fill is still the primary action. */
+.zn-wcard__code {
+  margin-inline-start: auto;
+  flex: none;
+  font-weight: var(--fw-bold);
+  color: var(--text-link);
+}
+
+/* ── extras ───────────────────────────────────────────────────────────── */
+
+/* The first line of the main set, printed under the profile. */
+.zn-wcard__summary {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* WCAG 2.5.8, a clickable card answers to the touch floor. */
+@media (pointer: coarse) {
+  .zn-wcard[data-interactive="true"],
+  .zn-wcard-link {
+    min-block-size: var(--hit-min);
+  }
+}

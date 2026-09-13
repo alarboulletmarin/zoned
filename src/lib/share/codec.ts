@@ -1,5 +1,5 @@
 /**
- * Shared codec for URL-encoded payloads — no backend involved.
+ * Shared codec for URL-encoded payloads, no backend involved.
  *
  * Every share feature ("Ma semaine", custom workouts, race simulations,
  * training plans) serializes a compact payload to base64url and hands it to a
@@ -13,7 +13,7 @@
  *  - Fixed-position tuples, no repeated JSON keys, omit defaults.
  */
 
-/** UTF-8 safe — TextEncoder first, so accented names survive btoa. */
+/** UTF-8 safe, TextEncoder first, so accented names survive btoa. */
 export function toBase64Url(json: string): string {
   const bytes = new TextEncoder().encode(json);
   let binary = "";

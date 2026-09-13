@@ -1,4 +1,4 @@
-import { useState, useEffect, type ChangeEvent } from "react";
+import { useState, useEffect, type ChangeEvent, type CSSProperties } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Timer, Gauge, Info } from "@/components/icons";
@@ -26,7 +26,7 @@ export function PaceCalculator() {
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
-  // A shared link carries the sender's VMA — it wins over the stored one.
+  // A shared link carries the sender's VMA, it wins over the stored one.
   const [searchParams] = useSearchParams();
   const sharedVma = searchParams.get("vma") ?? "";
 
@@ -48,25 +48,22 @@ export function PaceCalculator() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Timer className="size-5" />
+        <CardTitle className="zn-calc__card-title">
+          <Timer />
           {t("myZones.paceCalculator.title")}
         </CardTitle>
         <CardDescription>
           {t("myZones.paceCalculator.description")}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="zn-stack" style={{ "--gap": "var(--sp-12)" } as CSSProperties}>
         {/* VMA Input */}
-        <div className="space-y-2">
-          <label
-            htmlFor="pace-vma"
-            className="flex items-center gap-2 text-sm font-medium"
-          >
-            <Gauge className="size-4 text-blue-500" />
+        <div className="zn-calc__field">
+          <label htmlFor="pace-vma" className="zn-calc__label">
+            <Gauge />
             {t("myZones.zoneCalculator.vma")}
           </label>
-          <div className="flex items-center gap-2">
+          <span className="zn-numfield" style={{ "--field-w": "64px" } as CSSProperties}>
             <input
               id="pace-vma"
               type="number"
@@ -78,33 +75,34 @@ export function PaceCalculator() {
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setVma(e.target.value);
               }}
-              className="flex h-9 w-full max-w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="zn-numfield__input"
             />
-            <span className="text-sm text-muted-foreground">{getSpeedUnit(unit)}</span>
-          </div>
+            <span className="zn-numfield__unit">{getSpeedUnit(unit)}</span>
+          </span>
         </div>
 
         {/* Race Times Table */}
         {hasVma ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b">
-                  <th className="py-2 px-3 text-left font-medium">
-                    {t("myZones.paceCalculator.distance")}
-                  </th>
-                  <th className="py-2 px-3 text-left font-medium">
-                    {t("myZones.paceCalculator.vmaPercent")}
-                  </th>
-                  <th className="py-2 px-3 text-left font-medium">
-                    {t("myZones.paceCalculator.pace")}
-                  </th>
-                  <th className="py-2 px-3 text-left font-medium">
-                    {t("myZones.paceCalculator.time")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+          <div className="zn-stack">
+            <div className="zn-pace zn-scroll-x">
+              <table className="zn-pace__table">
+                <thead>
+                  <tr>
+                    <th className="zn-pace__th">
+                      {t("myZones.paceCalculator.distance")}
+                    </th>
+                    <th className="zn-pace__th">
+                      {t("myZones.paceCalculator.vmaPercent")}
+                    </th>
+                    <th className="zn-pace__th">
+                      {t("myZones.paceCalculator.pace")}
+                    </th>
+                    <th className="zn-pace__th">
+                      {t("myZones.paceCalculator.time")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
                 {raceEstimates.map((estimate) => {
                   // Parse pace string "4:30" -> minutes
                   const [min, sec] = estimate.paceMinKm.split(":").map(Number);
@@ -115,28 +113,26 @@ export function PaceCalculator() {
                   const paceDisplay = `${convertedMin}:${convertedSec.toString().padStart(2, "0")}`;
 
                   return (
-                    <tr
-                      key={estimate.distance}
-                      className="border-b last:border-b-0 hover:bg-muted/50"
-                    >
-                      <td className="py-2 px-3 font-medium">
+                    <tr key={estimate.distance} className="zn-pace__row">
+                      <td className="zn-pace__td zn-pace__td--name">
                         {convertDistanceText(estimate.distance, unit)}
                       </td>
-                      <td className="py-2 px-3 tabular-nums text-muted-foreground">
+                      <td className="zn-pace__td zn-pace__td--num">
                         {estimate.vmaPercentage}%
                       </td>
-                      <td className="py-2 px-3 tabular-nums">
+                      <td className="zn-pace__td zn-pace__td--num">
                         {paceDisplay}{getPaceUnit(unit)}
                       </td>
-                      <td className="py-2 px-3 tabular-nums font-medium">
+                      <td className="zn-pace__td zn-pace__td--total">
                         {estimate.estimatedTime}
                       </td>
                     </tr>
                   );
                 })}
-              </tbody>
-            </table>
-            <div className="pt-4">
+                </tbody>
+              </table>
+            </div>
+            <div>
               <ShareLinkButton
                 buildUrl={() => buildParamsUrl("/calculators/allures", { vma })}
                 title={t("myZones.paceCalculator.title")}
@@ -144,8 +140,8 @@ export function PaceCalculator() {
             </div>
           </div>
         ) : (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
-            <Info className="size-4" />
+          <div className="zn-calc__empty">
+            <Info />
             {t("myZones.paceCalculator.noVma")}
           </div>
         )}

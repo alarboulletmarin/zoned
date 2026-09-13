@@ -4,6 +4,66 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-09-13
+
+Fifty-four commits, thirty-six of them a redesign. The app keeps every feature
+it had and changes almost everything about how it looks and how it is reached.
+
+### Added
+- Practices become a real axis: every session, collection, plan and route declares whether it is road, trail or ultra, and the whole app filters on it. The axis is DERIVED from the catalogue rather than stored, so it cannot drift out of sync with what is actually there
+- Eight sessions written for ultra distance, TRL-013 to TRL-020: time on feet, power hiking, back-to-back days, technical descent, race-day fuelling
+- A ready-made trail plan. The ready-made shelf was empty for trail and ultra, so a third of the practices opened onto a dead end. It is a 30 km short trail, the distance the engine actually models, rather than a 40 km label matching no volume, phase or taper table
+- Practice cards say what is behind them: how many sessions and plans are waiting, derived from the same index the library uses. They used to announce a property of the model rather than of the content. An empty shelf now says so instead of implying otherwise
+- The fifteen collections carry their practice, and lose a dead field. Curation like Ultra goal was invisible in the new axis. No practice means cross-cutting, so valid everywhere, which is the case for ten of the fifteen
+- One figure per practice, reused across the library, the plan and the empty states. Three of the four already existed: a drawing replaces, it does not accumulate
+- The wordmark is the word itself, vectorised. The drawn sign that was planned got built, looked at, and dropped: every pose within reach of the doodle rig produced a person running, where the brief asked for sport in general
+- The shell runs while the app boots: six frames per stride, two strides, held for one stride so nothing flashes. A setting turns the opening off
+- Settings that hide instead of deleting: two lists, the practices you follow and the surfaces you want to see. The app has 61 pages and nobody wants 61. They are opt-out lists, so a settings object written before this release picks up the new fields on read, with no migration code
+- A storage layer that no longer takes the app down when it fails
+- The session menu in the plan's list view: view, find a route, close out, replace, substitute, remove. It is the menu the week board already opened, now shared by both views instead of written twice
+- Drag-to-close moves into the primitive and now serves all five bottom sheets: simulator settings, week generator, unavailability, session close-out, add a session. It only existed on the last one
+- A typography gate in CI, next to the FR/EN parity check
+
+### Changed
+- The architecture goes from five doors to four: the cockpit, sessions, plans, figures. Navigation asked for 28 decisions before the first session. The 35 destinations that left KEEP every route, stay indexed, prerendered and shareable, and land in the footer, the palette and the mobile menu list
+- The cockpit at Today is the answer rather than a menu: five boxes of the same shape became the shape of the week, the day's session is one tap from the strip, and its profile is previewed in place. The column is centred, and the headline IS the answer
+- The library sorts by PRACTICE first, with modality below. Someone training thinks in practices, not disciplines. Modality stays, and that is a choice: dropping it would have orphaned the 10 cycling sessions, the 10 swimming ones, the 17 strength ones and the two calculators built on the FTP and CSS engines
+- The random draw comes out of the menu, the library controls go from five rows to three, and the help toasts are gone. They raised themselves on four pages, a second and a half after arrival, and landed on the page kicker
+- The filter rail fits on one line, and the formats go from four to three. Focus mode was not a mode: its attribute was styled nowhere, and on a phone it differed from the grid by 20px of gutter
+- A plan page opens on THIS WEEK rather than four counters about the whole plan: the day's session with its full name and its close-out box, sessions done out of the total, time logged against time planned, and the next key session
+- The plan wizard asks for the PRACTICE first. It used to show all seven distances flat in a single grid, with the whole trail treatment held in a boolean that governed one hint sentence: you could choose ultra and be asked for a pace per kilometre, never for elevation
+- Elevation is asked only of those who run it. The field existed, but it sat on the pace screen and rendered UNCONDITIONALLY: someone preparing a road 5K was asked for a climb
+- The plan wizard, 1,609 lines in one file, becomes a step registry. No behaviour changes: same steps, same order, same labels, same plan produced. That is what makes the next batch readable
+- The wizard's calendar opens as a drawer, and the Next button leaves the closed questions. Capped to the space measured between the field and the window edge, it came to 293px for a grid that needs 356: a month was read through a window six rows out of seven
+- A plan's calendar goes to one row per day below 640px, and the seven-column grid retires. Seven columns in 390px gave cards of 42 to 60px. Measured at 320, 375 and 390px: no truncated titles left, against 5, 4 and 3 before
+- Vermillon says one thing now, and only one: now. A chosen card takes an ink ring, an open tab takes an ink pill, and a plan phase gets no colour of its own
+- Six cards carried a coloured edge on one side, running along a rounded corner then dying against a grey rule. All move to an inset ring on four sides, which follows the corner radius without moving a pixel. The current week was marked by colour alone, so its number now goes bold
+- Bands are separated by space alone. The rules between them are gone, and four boundaries stopped paying the gap twice
+- Tables of contents lose their vermillon edge. The nutrition hub already marked the current heading with an ink pill: two vocabularies for one thing, and the second wins. The simulator was worse, it changed language when it changed width
+- The footer folds into groups below 900px: 1.65 screens down to 0.59. Twelve links at the 44px touch floor made 1,100px of footer on a phone. The floor does not move, the number of rows does
+- The footer's ink bar loses 90px on a phone, the footer 128. It measured 219px, 31% of a screen for five lines of legal notices
+- One gesture per step on a phone: date fields open on the first month that holds a selectable day rather than on the current month, filters stick, and the calendar opens where it should
+- The add-a-session panel comes in front of the MENU pill instead of being pierced by it, breathes, and closes with a finger
+- The dominant-zone stride leaves the session screen: the badge, the facts row and the distribution table already said the zone. Its sole was aligned to a point on the time axis, where a mark reads as a cursor, and that one measured nothing. The figure that points takes its place
+- A session in the list view is a line, not a card inside a card inside a card. The type badge becomes a quiet mono caption, and on a phone the four action glyphs become one button that names them
+- A day on the week board is a line too. Nineteen drawn rectangles for five sessions became nine, and the only framed row left on the screen is today
+- Ultra becomes announced: what the generator produces at that distance is not judged reliable enough to offer. An announced practice is now visible before it can be chosen, instead of a silently empty shelf
+- The display steps drop one step on mobile. Body text, mono and the spacing grid do not move, so line lengths and hit targets are unchanged
+- Final review pass: on the three screens that carry the work, the question becomes the title, and the informal voice is applied throughout
+- Typography: no guillemets, no em dash, no en dash, in visible text and in the source alike
+
+### Fixed
+- The plan's list view fitted 388px of content into a 350px card. The session's name was crushed to 3px and painted over the badge beside it: two of five sessions were unreadable on a 390px phone
+- The session menu unfurled 8px per frame from the right edge instead of appearing, and opened half off-screen when tapped near the right of a phone
+- Changing a filter sent you back to the top of the page. A navigation that rewrites its own state is not a page change: the glossary, the collections and the routes all benefit from the same fix
+- Nine scrolling columns crushed what they carried
+- Cards inside a sheet were squashed and escaped their frame
+- The floating MENU pill covered the thumb bar
+- The two PWA banners stacked instead of overlapping
+- Opening the menu moved focus to the first door rather than to the panel
+- The vendor-radix chunk named packages that are not installed
+- Three ultra sessions that duplicated the catalogue were removed
+
 ## [0.8.0] - 2026-07-29
 
 ### Added

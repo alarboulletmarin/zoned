@@ -1,10 +1,17 @@
+import { type CSSProperties } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 /**
- * Composite skeleton mirroring the layout of `<WorkoutCard>` — rounded
+ * Composite skeleton mirroring the layout of `<WorkoutCard>`, rounded
  * outline, title, optional badges, intensity bar, footer meta. Renders the
  * same vertical rhythm as the real card so swap-in feels stable.
+ *
+ * Every height is measured against `.zn-wcard` in
+ * `src/styles/components/workout-card.css`, not eyeballed: the 24px padding,
+ * the 22px frame, the 16px rhythm, the 66px description well, the 36px
+ * ZoneBar and the 33px badge capsules. A skeleton whose blocks are the wrong
+ * height is a layout shift with extra steps.
  *
  * Use this in lieu of bare `<Skeleton>` rectangles when a section is known
  * to render workout cards: the silhouette communicates *what* is loading
@@ -18,40 +25,35 @@ interface WorkoutCardSkeletonProps {
 export function WorkoutCardSkeleton({ className, compact = false }: WorkoutCardSkeletonProps) {
   return (
     <div
-      className={cn(
-        "rounded-lg border bg-card p-4 space-y-3",
-        compact && "p-3 space-y-2",
-        className,
-      )}
+      className={cn("zn-wcard-skel", compact && "zn-wcard-skel--compact", className)}
       aria-hidden
     >
       {/* Header: title + heart icon */}
-      <div className="flex items-start justify-between gap-3">
-        <Skeleton className="h-5 w-3/4" />
-        <Skeleton className="size-6 rounded-full shrink-0" />
+      <div className="zn-row zn-row--start zn-row--split">
+        <Skeleton className="zn-wcard-skel__title" />
+        <Skeleton className="zn-wcard-skel__fav" />
       </div>
 
-      {/* Optional 2-line description */}
-      {!compact && (
-        <div className="space-y-1.5">
-          <Skeleton className="h-3 w-full" />
-          <Skeleton className="h-3 w-5/6" />
-        </div>
-      )}
+      {/* The description well went with the description itself: the card is a
+          title, a profile and a fact line, and a skeleton that reserves 66px
+          for prose would hand the reader a jump when the card arrives. */}
 
       {/* Intensity bar */}
-      <Skeleton className="h-1 w-full rounded-full" />
+      <Skeleton className="zn-wcard-skel__bar" />
 
       {/* Meta row: duration + difficulty + zones */}
-      <div className="flex items-center gap-2">
-        <Skeleton className="h-3 w-14" />
-        <Skeleton className="h-3 w-16" />
+      <div
+        className="zn-row zn-wcard-skel__meta"
+        style={{ "--gap": "var(--sp-7)" } as CSSProperties}
+      >
+        <Skeleton className="zn-wcard-skel__fact zn-wcard-skel__fact--short" />
+        <Skeleton className="zn-wcard-skel__fact zn-wcard-skel__fact--long" />
       </div>
 
       {/* Badges */}
-      <div className="flex flex-wrap gap-1.5">
-        <Skeleton className="h-5 w-20 rounded-full" />
-        <Skeleton className="h-5 w-14 rounded-full" />
+      <div className="zn-cluster">
+        <Skeleton className="zn-wcard-skel__badge zn-wcard-skel__badge--long" />
+        <Skeleton className="zn-wcard-skel__badge zn-wcard-skel__badge--short" />
       </div>
     </div>
   );
@@ -60,7 +62,7 @@ export function WorkoutCardSkeleton({ className, compact = false }: WorkoutCardS
 /** Render N skeleton cards in a responsive grid matching the library layout. */
 export function WorkoutCardSkeletonGrid({ count = 6 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="zn-grid">
       {Array.from({ length: count }, (_, i) => (
         <WorkoutCardSkeleton key={i} />
       ))}

@@ -1,69 +1,74 @@
-import { useState, useEffect } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Settings, X } from "@/components/icons";
+import { Gauge } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { saveUserZonePrefs, validateZonePrefs } from "@/lib/zones";
 import { cn } from "@/lib/utils";
 
-const DISMISS_STORAGE_KEY = "zoned-zone-cta-dismissed";
+/** The VMA field's DOM id, so the hero's primary action can focus it. */
+export const ZONE_CTA_INPUT_ID = "zone-cta-vma";
 
 interface ZonePersonalizationCTAProps {
   className?: string;
+  /** Called once the VMA is stored, so the page can redraw with real paces. */
+  onSaved: () => void;
 }
 
-export function ZonePersonalizationCTA({ className }: ZonePersonalizationCTAProps) {
+export function ZonePersonalizationCTA({ className, onSaved }: ZonePersonalizationCTAProps) {
   const { t } = useTranslation("common");
-  const [isDismissed, setIsDismissed] = useState(true); // Start hidden to avoid flash
+  const [vma, setVma] = useState("");
 
-  useEffect(() => {
-    // Check if user has dismissed the CTA
-    const dismissed = localStorage.getItem(DISMISS_STORAGE_KEY);
-    setIsDismissed(dismissed === "true");
-  }, []);
+  const parsed = vma === "" ? undefined : parseFloat(vma);
+  const invalid = parsed !== undefined && validateZonePrefs({ vma: parsed }).vma === undefined;
 
-  const handleDismiss = () => {
-    localStorage.setItem(DISMISS_STORAGE_KEY, "true");
-    setIsDismissed(true);
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (parsed === undefined || invalid) return;
+    saveUserZonePrefs({ vma: parsed });
+    onSaved();
   };
 
-  if (isDismissed) {
-    return null;
-  }
-
   return (
-    <div
-      className={cn(
-        // Stacks vertically on mobile so the button never overlaps the text;
-        // reverts to the original inline row at sm+.
-        "relative flex flex-col gap-3 p-3 rounded-lg",
-        "sm:flex-row sm:items-center sm:justify-between sm:gap-4",
-        "bg-primary/5 border border-primary/20",
-        className
-      )}
-    >
-      {/* pr-10 on mobile keeps the text clear of the absolutely-placed close */}
-      <div className="flex items-start gap-3 pr-10 sm:pr-0">
-        <Settings className="size-4 text-primary shrink-0 mt-0.5 sm:mt-0" />
-        <p className="text-sm text-muted-foreground">
-          {t("zonePersonalization.ctaMessage")}
+    // Stacks vertically on mobile so the field never overlaps the text;
+    // reverts to the inline row at 640px.
+    <form className={cn("zn-zone-cta", className)} onSubmit={handleSubmit}>
+      <div className="zn-zone-cta__body">
+        <Gauge className="zn-zone-cta__icon" />
+        <p className="zn-zone-cta__text">
+          <label htmlFor={ZONE_CTA_INPUT_ID}>{t("zonePersonalization.ctaMessage")}</label>
+          <Link to="/calculators/vma" className="zn-zone-cta__help">
+            {t("zonePersonalization.noVma")}
+          </Link>
         </p>
       </div>
-      <div className="flex items-center gap-2 sm:shrink-0">
-        <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
-          <Link to="/my-zones">
-            {t("zonePersonalization.ctaButton")}
-          </Link>
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleDismiss}
-          aria-label={t("zonePersonalization.dismiss")}
-          className="absolute right-1.5 top-1.5 size-9 sm:static"
-        >
-          <X className="size-4" />
+      <div className="zn-zone-cta__actions">
+        <span className="zn-numfield" data-invalid={invalid ? "true" : undefined}>
+          <input
+            id={ZONE_CTA_INPUT_ID}
+            type="number"
+            inputMode="decimal"
+            step="0.5"
+            min={8}
+            max={30}
+            placeholder="15"
+            value={vma}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setVma(e.target.value)}
+            aria-invalid={invalid || undefined}
+            aria-describedby={invalid ? `${ZONE_CTA_INPUT_ID}-error` : undefined}
+            className="zn-numfield__input"
+          />
+          <span className="zn-numfield__unit">km/h</span>
+        </span>
+        <Button type="submit" size="sm" disabled={parsed === undefined || invalid}>
+          {t("zonePersonalization.submit")}
         </Button>
       </div>
-    </div>
+      {invalid && (
+        <p id={`${ZONE_CTA_INPUT_ID}-error`} className="zn-zone-cta__error" role="alert">
+          {t("myZones.zoneCalculator.invalidVma")}
+        </p>
+      )}
+    </form>
   );
 }

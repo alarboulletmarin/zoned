@@ -12,7 +12,7 @@
          dark system bar. The inline script below and `applyResolvedTheme` in
          src/lib/theme.ts both write this tag; the value here is the light
          default they start from. -->
-    <meta name="theme-color" content="#f8fafc" />
+    <meta name="theme-color" content="#F6F5F2" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="application-name" content="Zoned" />
     <meta name="apple-mobile-web-app-title" content="Zoned" />
@@ -31,7 +31,7 @@
     <meta
       data-default-seo
       name="description"
-      content="256 séances structurées, 9 plans d'entraînement et 12 calculateurs bâtis sur un modèle à 6 zones. Gratuit, open source, sans compte ni tracking — tout tourne dans votre navigateur."
+      content="262 séances structurées, 9 plans d'entraînement et 12 calculateurs bâtis sur un modèle à 6 zones. Gratuit, open source, sans compte ni tracking — tout tourne dans votre navigateur."
     />
     <link data-default-seo rel="canonical" href="https://zoned.run/" />
 
@@ -41,7 +41,7 @@
     <meta
       data-default-seo
       property="og:description"
-      content="256 séances structurées, 9 plans d'entraînement et 12 calculateurs bâtis sur un modèle à 6 zones. Gratuit, open source, sans compte ni tracking — tout tourne dans votre navigateur."
+      content="262 séances structurées, 9 plans d'entraînement et 12 calculateurs bâtis sur un modèle à 6 zones. Gratuit, open source, sans compte ni tracking — tout tourne dans votre navigateur."
     />
     <meta data-default-seo property="og:url" content="https://zoned.run/" />
     <meta data-default-seo property="og:image" content="https://zoned.run/og-image.png" />
@@ -61,7 +61,7 @@
     <meta
       data-default-seo
       name="twitter:description"
-      content="256 séances structurées, 9 plans d'entraînement et 12 calculateurs bâtis sur un modèle à 6 zones. Gratuit, open source, sans compte ni tracking — tout tourne dans votre navigateur."
+      content="262 séances structurées, 9 plans d'entraînement et 12 calculateurs bâtis sur un modèle à 6 zones. Gratuit, open source, sans compte ni tracking — tout tourne dans votre navigateur."
     />
     <meta data-default-seo name="twitter:image" content="https://zoned.run/og-image.png" />
     <meta
@@ -74,12 +74,22 @@
     <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
     <link rel="preconnect" href="https://vitals.vercel-insights.com" crossorigin />
 
-    <!-- Self-hosted critical font: single variable woff2 (latin, 300–700)
-         covers every weight incl. the hero h1 (LCP element). crossorigin is
-         required for font preloads even same-origin (CORS-mode fetch). -->
+    <!-- Self-hosted critical faces, latin subsets of the variable woff2s.
+         Space Grotesk carries the interface text; Bricolage Grotesque draws the
+         display title, which is the LCP element on every screen. JetBrains Mono
+         is deliberately NOT preloaded — it only sets micro-labels, and it has a
+         metrics-matched Courier New fallback, so swapping it costs no shift.
+         crossorigin is required for font preloads even same-origin. -->
     <link
       rel="preload"
       href="/fonts/space-grotesk-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/bricolage-grotesque-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -104,7 +114,7 @@
           // Native controls — scrollbars, date pickers, autofill.
           document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
           var meta = document.querySelector('meta[name="theme-color"]:not([media])');
-          if (meta) meta.setAttribute('content', isDark ? '#0b1120' : '#f8fafc');
+          if (meta) meta.setAttribute('content', isDark ? '#171614' : '#F6F5F2');
         } catch (e) {
           // Private mode can throw on localStorage. Paint light and carry on.
           document.documentElement.classList.remove('dark');
@@ -112,108 +122,244 @@
       })();
     </script>
 
+    <!-- The opening animation preference, read before the shell paints for the
+         same reason the theme is: the shell is HTML, it cannot wait for React.
+         A SECOND try/catch, not an extension of the one above — that one's
+         catch clears the dark class, so a JSON parse failure inside it would
+         wipe the theme it had just set. The two failures stay independent.
+         `zoned-settings` is JSON (src/hooks/useSettings.tsx), so this one
+         parses; on an object this size that costs microseconds, and what
+         src/lib/theme.ts calls "load-bearing" is the absence of async and
+         imports, not of parsing. -->
+    <script>
+      (function() {
+        try {
+          var s = JSON.parse(localStorage.getItem('zoned-settings') || '{}');
+          var o = s.openingAnimation;
+          document.documentElement.dataset.opening =
+            (o === 'always' || o === 'never') ? o : 'system';
+        } catch (e) {
+          document.documentElement.dataset.opening = 'system';
+        }
+      })();
+    </script>
+
     <!-- Critical CSS for instant FCP -->
     <style>
-      /* CSS Variables for theming - must match Tailwind theme */
+      /* The first paint, before any stylesheet loads. Mirrors the paper/ink
+         tokens in src/styles/design/colors.css — the shell has to be the same
+         cream the app fades into, or the load flashes. */
       :root {
-        --bg: #fafafa;
-        --fg: #0a0a0a;
-        --muted: #737373;
-        --border: #e5e5e5;
-        --primary: #2563eb;
+        --bg: #F6F5F2;
+        --fg: #171614;
+        --primary: #E8452A;
       }
       /* Dark mode via class (applied by script above) */
       .dark {
-        --bg: #0a0a0a;
-        --fg: #fafafa;
-        --muted: #a3a3a3;
-        --border: #262626;
-        --primary: #3b82f6;
+        --bg: #171614;
+        --fg: #EDEBE7;
+        --primary: #E8452A;
       }
 
       /* Initial background */
-      body { background: var(--bg); color: var(--fg); }
+      body { margin: 0; background: var(--bg); color: var(--fg); }
 
       /* Base - scoped to loading shell only */
-      #loading-shell { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
       #loading-shell * { box-sizing: border-box; margin: 0; padding: 0; }
 
-      /* Loading Shell */
+      /* The shell's own copy of the display face. src/styles/design/fonts.css
+         declares it too, but that stylesheet arrives with the bundle, after
+         this has painted. Same file as the preload above, so no extra request;
+         the metrics-matched fallback is the one from fonts.css, so the swap
+         moves nothing — the Lighthouse budget holds CLS at exactly 0. */
+      @font-face {
+        font-family: "Bricolage Grotesque";
+        font-weight: 400 800;
+        font-display: swap;
+        src: url("/fonts/bricolage-grotesque-latin.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Bricolage Grotesque Fallback";
+        src: local("Arial");
+        size-adjust: 112.82%;
+        ascent-override: 82.43%;
+        descent-override: 23.93%;
+        line-gap-override: 0%;
+      }
+
+      /* Loading shell — the first image of every launch: the wordmark, and one
+         figure running in place on a rule (docs/doodles.md, « le sol est la
+         règle de la page »). It replaced the old pulse logo and spinner rather
+         than joining them, and the approved duo that stood here for a day left
+         the same way: ONE figure per screen, and a drawing replaces, it never
+         adds. The duo is untouched everywhere else — the home hero, the mobile
+         menu, the share sheet, the Open Graph image.
+
+         The runner is what says the wait is ADVANCING; a still figure said only
+         that a wait existed. Recorded in docs/doodles.md under « La coquille
+         court » along with what it costs. */
       #loading-shell {
+        --accent: var(--primary); /* the duo's soles are stroked in var(--accent) */
+        /* --shell-fade lives here, next to --rc-step and --rc-dur below,
+           because the shell never sees motion.css: the bundle has not arrived.
+           It matches the system's --dur-slow without being able to name it. */
+        --shell-fade: 240ms;
+
+        /* An OVERLAY, not a block in the flow. #root precedes it in the DOM and
+           carries no CSS of its own, so an in-flow shell held past mount would
+           put the app on top and the shell below it. Fixed, the app renders on
+           time underneath and the shell simply covers it — which is also what
+           keeps the LCP budget intact: nothing about React's mount is delayed,
+           only the moment the cover comes off. */
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: var(--bg); /* opaque, or the app shows through */
         display: flex;
         flex-direction: column;
-        min-height: 100vh;
-      }
-
-      /* Header Shell */
-      .shell-header {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        width: 100%;
-        border-bottom: 1px solid var(--border);
-        background: var(--bg);
-        backdrop-filter: blur(8px);
-      }
-      .shell-header-inner {
-        max-width: 1280px;
-        margin: 0 auto;
-        display: flex;
-        height: 56px;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 16px;
-      }
-      .shell-logo {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .shell-logo svg {
-        width: 64px;
-        height: 32px;
-      }
-      .shell-logo span {
-        font-weight: 700;
-        font-size: 18px;
-      }
-      .shell-nav {
-        display: none;
-        gap: 24px;
-      }
-      @media (min-width: 768px) {
-        .shell-nav { display: flex; }
-      }
-      .shell-nav-item {
-        font-size: 14px;
-        color: var(--muted);
-      }
-
-      /* Loading Content */
-      .shell-content {
-        flex: 1;
-        display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 50vh;
+        gap: 40px;
+        padding: 0 20px;
+        /* `visibility` is what replaces `display: none`, which cannot be
+           transitioned: it flips in one discrete step once the fade is over,
+           and it takes the shell out of the accessibility tree with it. */
+        transition:
+          opacity var(--shell-fade) ease-out,
+          visibility 0s linear var(--shell-fade);
+      }
+      .shell-wordmark {
+        font-family: "Bricolage Grotesque", "Bricolage Grotesque Fallback", system-ui, sans-serif;
+        font-weight: 800;
+        font-size: 40px;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        white-space: nowrap;
+      }
+      .shell-wordmark span { color: var(--primary); }
+
+      /* The rule runs the full width — a horizon — and the figure stands at
+         its centre. It was briefly narrowed to hold two drawings side by side;
+         with one figure that constraint is gone. */
+      .shell-scene {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        padding-bottom: 1.5px;
+      }
+      /* The rule opens from the CENTRE, which is where the figure stands. At
+         t=0 it is a point exactly under the sole, so the contact the vermillon
+         marks is real from the first frame; it then runs out to both edges
+         while the figure is already running. Drawn from the left instead — as
+         it was while the figure waited 400ms for it — the ground would not
+         reach the sole until 200ms, and the accent would spend that time
+         marking a contact with nothing, which docs/doodles.md forbids. */
+      .shell-scene::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1.5px;
+        background: var(--fg);
+        transform-origin: center;
+        animation: shell-rule 240ms ease-out both;
+      }
+      /* The rule is the ground. The figure's viewBox stops at its soles, so the
+         bottom of its box IS the contact line: a negative margin equal to the
+         rule's thickness puts that edge on the rule's bottom edge — computed
+         from the box, never eyeballed. It paints above the ink rule, so the
+         vermillon sole sits on it and not under it.
+
+         174px wide is 240px tall through the viewBox — the top of the range
+         docs/doodles.md sanctions for a figure, which is right here: it is
+         alone, and the shell is the largest surface in the app. It still fits
+         at a 320px viewport without shrinking. */
+      .shell-run {
+        position: relative;
+        z-index: 1;
+        display: block;
+        inline-size: 174px;
+        max-inline-size: 100%;
+        block-size: auto;
+        aspect-ratio: 218.6 / 301.2; /* the viewBox — an svg with no size collapses */
+        margin-bottom: -1.5px;
+        color: var(--fg);
       }
 
-      /* Spinner */
-      .spinner {
-        width: 32px;
-        height: 32px;
-        border: 2px solid transparent;
-        border-bottom-color: var(--primary);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
+      /* The run cycle. A copy of src/styles/components/run-cycle.css, which
+         explains the missing fill-mode: with none, each frame falls back to
+         its base style, and the base style IS the reduced-motion pose. A
+         `forwards` here would leave all six on opacity 0 and the figure would
+         VANISH. This copy never sees motion.css — the bundle is not here. */
+      .rc {
+        --rc-step: 110ms;
+        --rc-dur: 660ms;
+        --rc-start: 0ms; /* the figure runs from the very first frame */
       }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
+      .rc-f {
+        opacity: 0;
+        animation: rc-frame var(--rc-dur) steps(1) infinite;
+      }
+      .rc-f--1 { opacity: 1; }
+      .rc-f--1 { animation-delay: calc(var(--rc-start) + 0 * var(--rc-step)); }
+      .rc-f--2 { animation-delay: calc(var(--rc-start) + 1 * var(--rc-step)); }
+      .rc-f--3 { animation-delay: calc(var(--rc-start) + 2 * var(--rc-step)); }
+      .rc-f--4 { animation-delay: calc(var(--rc-start) + 3 * var(--rc-step)); }
+      .rc-f--5 { animation-delay: calc(var(--rc-start) + 4 * var(--rc-step)); }
+      .rc-f--6 { animation-delay: calc(var(--rc-start) + 5 * var(--rc-step)); }
+      @keyframes rc-frame {
+        0%, 16.66% { opacity: 1; }
+        16.67%, 100% { opacity: 0; }
+      }
+      /* Two animations, and only two, and they start TOGETHER at t=0: the
+         figure runs — six frames at 110ms — while the ground opens from under
+         its sole out to both edges in 240ms. src/main.tsx holds the shell for
+         a whole number of strides (SHELL_HOLD_MS), because without a hold the
+         app mounts first and the runner never takes a single step.
+
+         Nothing waits for anything: the rule used to draw itself first over
+         400ms and the figure only started after, which spent a fifth of the
+         opening on a still image. Those two seconds are an OPENING, not a
+         report on a real wait — a departure from src/styles/design/motion.css
+         written down in docs/doodles.md « La coquille court ». Nothing else
+         moves. */
+      /* It opens from 2%, not from 0. At exactly scaleX(0) the ground has no
+         width at all, and the first painted frame would show the figure with
+         its vermillon marking a contact with nothing — one frame, but the rule
+         it breaks does not have a tolerance. 2% is ~25px at a laptop width,
+         centred under the sole, and reads as the ground starting rather than
+         as a tick. */
+      @keyframes shell-rule {
+        from { transform: scaleX(0.02); }
+        to { transform: scaleX(1); }
+      }
+      /* Under reduced motion the shell is still shown and still held — losing
+         the launch screen entirely was never what the setting asks for — but
+         the figure freezes on pose 1, its contact pose, and the fade is cut.
+         `data-opening="always"` is the one way out, and it is set from a
+         preference the person chose in Settings, never inferred by the code. */
+      @media (prefers-reduced-motion: reduce) {
+        html:not([data-opening="always"]) #loading-shell { transition: none; }
+        html:not([data-opening="always"]) .shell-scene::after { animation: none; }
+        /* No fill-mode on .rc-f, so every group reverts to its base style:
+           frame 1, the front-foot strike, holds. It is the only frozen pose
+           with a real ground contact, so its vermillon stays honest. */
+        html:not([data-opening="always"]) .rc-f { animation: none; }
       }
 
-      /* Hide shell when app loads */
+      /* The shell leaves once BOTH are true: the app has mounted, and the
+         figure has run its strides (src/main.tsx, SHELL_HOLD_MS). `display` is
+         untouched: scripts/prerender.ts drops the whole element from every
+         prerendered file EXCEPT the root one, which is dist/index.html itself
+         — the SPA shell — and there it clears this class instead, so the
+         opening survives a prerendered build. */
       #loading-shell.hidden {
-        display: none;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none; /* clicks pass through from the first frame */
       }
     </style>
   </head>
@@ -222,48 +368,43 @@
 
     <!-- Loading Shell - displayed instantly, hidden when React mounts -->
     <div id="loading-shell">
-      <header class="shell-header">
-        <div class="shell-header-inner">
-          <div class="shell-logo">
-            <svg width="200" height="100" viewBox="5 35 190 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Zoned">
-              <defs>
-                <linearGradient id="pulseGradient" x1="0%" y1="50%" x2="100%" y2="50%">
-                  <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:1" />
-                  <stop offset="20%" style="stop-color:#22c55e;stop-opacity:1" />
-                  <stop offset="40%" style="stop-color:#eab308;stop-opacity:1" />
-                  <stop offset="60%" style="stop-color:#f97316;stop-opacity:1" />
-                  <stop offset="80%" style="stop-color:#ef4444;stop-opacity:1" />
-                  <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
-                </linearGradient>
-                <filter id="pulseGlow">
-                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                  <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
-                </filter>
-              </defs>
-              <path d="M 10 100 L 30 100 L 35 110 L 45 70 L 55 130 L 65 50 L 75 120 L 85 40 L 95 100 L 115 100 L 120 110 L 130 70 L 140 130 L 150 50 L 160 120 L 170 40 L 180 100 L 190 100"
-                    stroke="url(#pulseGradient)"
-                    stroke-width="6"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    fill="none"
-                    filter="url(#pulseGlow)"/>
-            </svg>
-            <span>Zoned</span>
-          </div>
-          <nav class="shell-nav" aria-label="Navigation principale">
-            <span class="shell-nav-item">Accueil</span>
-            <span class="shell-nav-item">Bibliothèque</span>
-            <span class="shell-nav-item">Apprendre</span>
-            <span class="shell-nav-item">Glossaire</span>
-          </nav>
-        </div>
-      </header>
-      <main class="shell-content">
-        <div class="spinner" role="status" aria-label="Chargement"></div>
-      </main>
+      <span class="shell-wordmark">zoned<span>.</span></span>
+      <!-- src/assets/doodles/run-cycle.svg, six frames of one figure, inlined
+           byte for byte (the app's bundle is not here yet). Regenerate by
+           pasting the file; src/assets/doodles/frames.test.ts fails if it
+           drifts, and if its cadence stops matching run-cycle.css. -->
+      <div class="shell-scene" role="status" aria-label="Chargement">
+        <svg class="shell-run rc" aria-hidden="true" viewBox="34.0 61.6 218.6 301.2" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <g class="rc-f rc-f--1">
+            <path d="M 155.5 318.6C144.8 315.9 100.8 315.2 91.1 302.3C81.3 289.4 95.9 252.1 96.8 241.1C97.8 230 93.9 243.5 96.5 236.1C99.1 228.7 108.6 209.6 112.7 196.6C116.8 183.6 117.4 166.6 121.2 158.1C124.9 149.6 136.1 138.2 135.2 145.8C134.3 153.4 123.4 188.1 115.7 203.7C108.1 219.3 94.8 232.5 89.3 239.6C83.8 246.8 85.1 246.1 82.5 246.7C79.9 247.3 75.1 243.2 73.7 243C72.2 242.8 73.7 244.8 74 245.6C74.4 246.3 74.9 247.1 75.6 247.6C76.2 248.1 77.1 248.5 78 248.6C78.8 248.7 81.1 249.6 80.5 248.2C80 246.9 74.9 243.2 74.7 240.6C74.5 238 74.3 241.2 79.4 232.6C84.6 224.1 98.5 205.4 105.7 189.4C112.8 173.4 115.8 147.2 122.2 136.4C128.5 125.6 140.1 127.8 143.9 124.5C147.7 121.3 145.6 118.9 145 116.7C144.5 114.6 141.8 113.6 140.7 111.8C139.5 109.9 138.6 107.8 138.1 105.8C137.6 103.7 137.4 101.4 137.6 99.2C137.7 97.1 138.2 94.8 139 92.8C139.8 90.7 141 88.8 142.4 87.2C143.8 85.5 145.5 84 147.4 82.8C149.2 81.7 151.3 80.7 153.4 80.2C155.5 79.7 157.7 79.6 159.9 79.7C162.1 79.9 164.4 80.3 166.4 81.1C168.4 82 170.3 83.2 172 84.6C173.6 86 175.2 87.7 176.3 89.5C177.5 91.3 178.4 93.4 178.9 95.5C179.4 97.6 179.5 99.9 179.4 102.1C179.2 104.2 178.8 106.5 178 108.5C177.2 110.5 176 112.5 174.6 114.1C173.2 115.8 171.5 117.4 169.6 118.5C167.8 119.5 164.6 118.4 163.5 120.5C162.4 122.6 162.1 126.6 162.8 131.1C163.5 135.6 166.9 136.8 167.7 147.4C168.4 158 169.4 176.9 167.4 194.6C165.4 212.2 158.8 242 155.7 253.1C152.7 264.2 151.8 260.3 149.2 261.1C146.5 261.9 141.5 257.9 140 257.8C138.6 257.7 140.1 259.6 140.5 260.4C140.9 261.2 141.5 261.9 142.2 262.4C142.9 262.9 143.7 263.2 144.6 263.2C145.4 263.3 147.8 264 147.1 262.7C146.5 261.4 141.2 257.9 140.8 255.4C140.4 253 142.3 254.4 144.7 248.2C147 242 153.1 231.1 154.8 218.1C156.6 205 158 172 155.3 169.9C152.5 167.8 142.8 193.1 138.2 205.5C133.6 217.8 132.7 227.5 127.5 243.9C122.3 260.3 105.5 287.5 107 303.9C108.5 320.2 129.6 334.6 136.8 342.1C143.9 349.6 145.1 347.9 149.8 349.1C154.5 350.2 162.3 348.2 165.2 349.1C168.1 349.9 166.9 353.7 167.4 354.4C168 355.1 168.2 353.6 168.4 353.1C168.6 352.7 168.6 352.1 168.5 351.6C168.5 351.1 168.3 350.6 168 350.2C167.7 349.8 167 348.4 166.7 349.2C166.4 350 169 353.3 166 355"/>
+            <path stroke="var(--accent)" d="M 166 355C163 356.7 154.5 359.4 148.7 359.4C142.8 359.4 139.8 366.5 130.8 354.9"/>
+            <path d="M 130.8 354.9C121.8 343.3 97.7 308.1 94.8 289.9C91.9 271.7 109.9 253.6 113.3 245.7C116.7 237.8 115.9 232.4 115 242.3C114.1 252.2 101.1 294.3 107.9 305.1C114.7 315.9 146.8 308.4 155.6 307C164.3 305.7 156.2 300.6 160.5 296.9C164.8 293.2 177 286.4 181.4 284.7C185.8 283.1 185.9 286.9 186.7 287C187.6 287.1 186.8 285.9 186.6 285.4C186.4 285 186 284.5 185.6 284.2C185.2 283.9 184.7 283.7 184.2 283.7C183.7 283.6 182.9 283.8 182.6 283.8"/>
+            <path d="M 182.6 283.8C183.3 284 186.3 284.4 186.9 285.3C187.5 286.2 187.9 286.1 186.2 289.3C184.6 292.5 180.2 300 177.1 304.5C174 309 170.3 313.3 167.6 316.1C164.9 318.9 162.9 321 160.8 321.4C158.8 321.8 156.4 319.1 155.5 318.6"/>
+          </g>
+          <g class="rc-f rc-f--2">
+            <path d="M 198.1 312.9C186.5 310.7 145.3 311 128.9 299.8C112.4 288.6 104.8 256.3 99.4 245.7C94 235.1 94.3 244.3 96.5 236.1C98.7 227.9 108.6 209.6 112.7 196.6C116.8 183.6 117.4 166.6 121.2 158.1C124.9 149.6 139.5 139.5 135.2 145.8C130.9 152 107.6 182.7 95.1 195.5C82.6 208.3 67.6 217.2 60.4 222.6C53.2 227.9 54.6 227.7 51.9 227.5C49.2 227.3 45.7 222.1 44.4 221.5C43.1 220.9 44 223.3 44.1 224.1C44.2 224.9 44.5 225.8 45 226.4C45.5 227.1 46.2 227.8 47 228.1C47.8 228.4 49.7 229.9 49.6 228.4C49.4 227 45.5 222 46 219.5C46.6 216.9 45.4 219.9 52.8 213.1C60.2 206.3 79 191.4 90.5 178.6C102.1 165.8 113.3 145.4 122.2 136.4C131.1 127.4 140.1 127.8 143.9 124.5C147.7 121.3 145.6 118.9 145 116.7C144.5 114.6 141.8 113.6 140.7 111.8C139.5 109.9 138.6 107.8 138.1 105.8C137.6 103.7 137.4 101.4 137.6 99.2C137.7 97.1 138.2 94.8 139 92.8C139.8 90.7 141 88.8 142.4 87.2C143.8 85.5 145.5 84 147.4 82.8C149.2 81.7 151.3 80.7 153.4 80.2C155.5 79.7 157.7 79.6 159.9 79.7C162.1 79.9 164.4 80.3 166.4 81.1C168.4 82 170.3 83.2 172 84.6C173.6 86 175.2 87.7 176.3 89.5C177.5 91.3 178.4 93.4 178.9 95.5C179.4 97.6 179.5 99.9 179.4 102.1C179.2 104.2 178.8 106.5 178 108.5C177.2 110.5 176 112.5 174.6 114.1C173.2 115.8 171.5 117.4 169.6 118.5C167.8 119.5 164.6 118.4 163.5 120.5C162.4 122.6 162.1 126.6 162.8 131.1C163.5 135.6 163.7 138.4 167.7 147.4C171.6 156.4 179.2 169.8 186.4 185.1C193.6 200.5 207 228.6 211 239.4C215 250.1 212 247.5 210.3 249.7C208.7 251.9 202.3 251.7 201 252.4C199.8 253.2 202.2 253.8 202.9 254.2C203.7 254.6 204.7 254.9 205.5 254.9C206.3 254.9 207.2 254.6 207.9 254.1C208.6 253.7 211 252.9 209.7 252.2C208.4 251.6 202 251.8 200.3 250C198.5 248.3 201 248.3 199.1 241.9C197.3 235.5 196.5 223.6 189.2 211.6C181.9 199.6 163.8 170.9 155.3 169.9C146.8 168.9 142.8 193.1 138.2 205.5C133.6 217.8 130.3 227.3 127.5 243.9C124.7 260.5 127.8 287.2 121.6 305.4C115.4 323.5 94 345.1 90.3 352.7C86.5 360.2 95.1 351.6 99.1 350.8C103.1 350.1 111.2 347.9 114.3 348.3C117.3 348.7 116.7 352.6 117.4 353.2C118 353.8 118 352.3 118.1 351.8C118.2 351.3 118.2 350.7 118 350.3C117.9 349.8 117.6 349.3 117.2 348.9C116.9 348.6 116 347.3 115.8 348.2C115.6 349 118.7 351.8 116 354"/>
+            <path stroke="var(--accent)" d="M 116 354C113.3 356.2 106.3 361.4 99.7 361.2C93.1 361.1 75 364.3 76.1 353.2"/>
+            <path d="M 76.1 353.2C77.2 342.2 100.2 312.7 106.4 294.8C112.6 276.8 111.9 254.4 113.3 245.7C114.7 237 109.8 234.5 115 242.3C120.2 250.1 131.4 283.1 144.4 292.6C157.4 302.2 183.9 300 192.7 299.5C201.6 299 195.6 294.2 197.6 289.4C199.7 284.6 202.9 274 205.1 270.9C207.3 267.7 210 270.7 210.8 270.4C211.6 270.1 210.3 269.4 209.9 269.1C209.6 268.7 209 268.5 208.5 268.4C208 268.4 207.4 268.5 207 268.6C206.5 268.8 205.9 269.3 205.7 269.5"/>
+            <path d="M 205.7 269.5C206.4 269.4 209.2 268.3 210.2 268.8C211.2 269.3 211.4 269 211.4 272.6C211.5 276.2 211.2 284.9 210.5 290.3C209.9 295.7 208.7 301.3 207.6 305.1C206.5 308.8 205.7 311.6 204.1 312.9C202.5 314.2 199.1 312.9 198.1 312.9"/>
+          </g>
+          <g class="rc-f rc-f--3">
+            <path d="M 201.2 308.1C190.2 304.2 151.9 297.3 135.1 285C118.2 272.7 106.6 244.5 100.1 234.4C93.7 224.2 94.4 232.4 96.5 224.1C98.6 215.8 108.6 197.6 112.7 184.6C116.8 171.6 117.4 154.6 121.2 146.1C124.9 137.6 140.2 127.9 135.2 133.8C130.2 139.6 104.4 168.7 91.4 181C78.4 193.4 64.4 202.6 57.3 208C50.2 213.3 51.5 213.1 48.8 212.9C46.1 212.7 42.6 207.5 41.3 206.9C40 206.3 40.8 208.6 40.9 209.5C41 210.3 41.4 211.1 41.9 211.8C42.3 212.5 43.1 213.1 43.9 213.5C44.6 213.8 46.6 215.2 46.4 213.8C46.3 212.4 42.4 207.4 42.9 204.9C43.5 202.3 42.2 205.4 49.7 198.5C57.2 191.7 75.9 176.2 88 163.9C100.1 151.5 112.9 132.9 122.2 124.4C131.5 115.8 140.1 115.8 143.9 112.5C147.7 109.3 145.6 106.9 145 104.7C144.5 102.6 141.8 101.6 140.7 99.8C139.5 97.9 138.6 95.8 138.1 93.8C137.6 91.7 137.4 89.4 137.6 87.2C137.7 85.1 138.2 82.8 139 80.8C139.8 78.7 141 76.8 142.4 75.2C143.8 73.5 145.5 72 147.4 70.8C149.2 69.7 151.3 68.7 153.4 68.2C155.5 67.7 157.7 67.6 159.9 67.7C162.1 67.9 164.4 68.3 166.4 69.1C168.4 70 170.3 71.2 172 72.6C173.6 74 175.2 75.7 176.3 77.5C177.5 79.3 178.4 81.4 178.9 83.5C179.4 85.6 179.5 87.9 179.4 90.1C179.2 92.2 178.8 94.5 178 96.5C177.2 98.5 176 100.5 174.6 102.1C173.2 103.8 171.5 105.4 169.6 106.5C167.8 107.5 164.6 106.4 163.5 108.5C162.4 110.6 162.1 114.6 162.8 119.1C163.5 123.6 163.3 126.9 167.7 135.4C172.1 143.9 179.8 156.5 189.1 170.4C198.3 184.3 217.1 208.9 223 218.7C228.9 228.5 225.7 226.4 224.5 228.9C223.4 231.4 217 232.5 216 233.5C214.9 234.5 217.4 234.7 218.2 234.9C219 235.1 220.1 235.2 220.9 235C221.7 234.8 222.5 234.3 223.1 233.8C223.7 233.2 225.8 232 224.4 231.5C223 231.1 216.8 232.7 214.8 231.3C212.7 230 215.3 229.4 212 223.6C208.6 217.8 204 207.4 194.6 196.4C185.1 185.5 164.7 158.4 155.3 157.9C145.9 157.4 142.8 181.1 138.2 193.5C133.6 205.8 125.9 216.3 127.5 231.9C129.1 247.5 153.9 272.7 147.7 286.8C141.5 301 99.3 310.4 90.3 317C81.3 323.6 91.5 322.8 93.7 326.4C95.9 330 102.1 335.6 103.3 338.5C104.4 341.3 100.6 342.7 100.4 343.5C100.2 344.4 101.5 343.6 102 343.5C102.5 343.3 102.9 343 103.3 342.7C103.6 342.3 104 341.8 104.1 341.3C104.2 340.9 104.9 339.5 104 339.7C103.2 340 102.3 344 99.1 342.7C95.9 341.4 88.4 337.4 84.9 331.9C81.4 326.4 70.7 317.9 78.1 309.9C85.5 301.9 123.6 296.6 129.4 283.9C135.3 271.2 115.7 242.6 113.3 233.7C110.9 224.8 108.9 223.2 115 230.3C121.1 237.4 136.1 265.7 149.8 276.3C163.5 286.9 188.1 292.3 197.1 293.6C206.1 295 201.3 289.1 203.7 284.5C206 280 208.9 269.6 211.1 266.6C213.3 263.6 216.1 266.7 216.9 266.5C217.7 266.2 216.5 265.5 216.1 265.1C215.8 264.8 215.3 264.5 214.8 264.4C214.3 264.3 213.7 264.3 213.2 264.5C212.7 264.6 212.1 265.1 211.8 265.2"/>
+            <path d="M 211.8 265.2C212.6 265.2 215.5 264.3 216.4 264.9C217.3 265.5 217.6 265.2 217.4 268.8C217.2 272.4 216.2 281 215.2 286.4C214.2 291.7 212.6 297.2 211.3 300.9C210 304.5 208.9 307.2 207.2 308.4C205.6 309.6 202.2 308.1 201.2 308.1"/>
+          </g>
+          <g class="rc-f rc-f--4">
+            <path d="M 137.8 354.1C131.7 345.7 108.2 322.5 101.5 303.9C94.7 285.3 98.1 253.8 97.3 242.5C96.4 231.2 93.9 243.8 96.5 236.1C99.1 228.4 108.6 209.6 112.7 196.6C116.8 183.6 117.4 166.6 121.2 158.1C124.9 149.6 139.9 139.7 135.2 145.8C130.5 151.8 106 181.7 93.2 194.3C80.5 206.9 65.9 216 58.8 221.3C51.6 226.6 53 226.4 50.3 226.2C47.7 226 44.1 220.8 42.8 220.2C41.5 219.7 42.4 222 42.5 222.8C42.6 223.6 42.9 224.5 43.4 225.2C43.9 225.8 44.6 226.5 45.4 226.8C46.2 227.1 48.1 228.6 48 227.1C47.8 225.7 43.9 220.8 44.5 218.2C45 215.7 43.8 218.7 51.2 211.8C58.7 205 77.4 189.8 89.2 177.3C101.1 164.7 113.1 145.2 122.2 136.4C131.3 127.6 140.1 127.8 143.9 124.5C147.7 121.3 145.6 118.9 145 116.7C144.5 114.6 141.8 113.6 140.7 111.8C139.5 109.9 138.6 107.8 138.1 105.8C137.6 103.7 137.4 101.4 137.6 99.2C137.7 97.1 138.2 94.8 139 92.8C139.8 90.7 141 88.8 142.4 87.2C143.8 85.5 145.5 84 147.4 82.8C149.2 81.7 151.3 80.7 153.4 80.2C155.5 79.7 157.7 79.6 159.9 79.7C162.1 79.9 164.4 80.3 166.4 81.1C168.4 82 170.3 83.2 172 84.6C173.6 86 175.2 87.7 176.3 89.5C177.5 91.3 178.4 93.4 178.9 95.5C179.4 97.6 179.5 99.9 179.4 102.1C179.2 104.2 178.8 106.5 178 108.5C177.2 110.5 176 112.5 174.6 114.1C173.2 115.8 171.5 117.4 169.6 118.5C167.8 119.5 164.6 118.4 163.5 120.5C162.4 122.6 162.1 126.6 162.8 131.1C163.5 135.6 163.2 139 167.7 147.4C172.2 155.8 179.9 168.3 189.9 181.4C199.9 194.5 221 217 227.8 226.2C234.5 235.3 231.3 233.6 230.4 236.2C229.5 238.7 223.3 240.6 222.4 241.7C221.4 242.8 223.9 242.6 224.7 242.8C225.6 242.9 226.6 242.9 227.4 242.6C228.1 242.3 228.9 241.8 229.4 241.1C229.9 240.5 232 239.1 230.5 238.8C229.1 238.5 223.1 240.7 220.9 239.6C218.7 238.5 221.4 237.6 217.3 232.2C213.2 226.8 206.6 217.6 196.3 207.2C186 196.9 165 170.2 155.3 169.9C145.6 169.6 142.8 193.1 138.2 205.5C133.6 217.8 122.2 231.5 127.5 243.9C132.8 256.3 168.9 264.8 169.9 279.7C170.9 294.6 138.1 323.7 133.4 333.3C128.7 342.9 137.9 336.1 141.8 337.4C145.6 338.6 154.1 339.4 156.7 341C159.4 342.6 157.2 346 157.6 346.7C158 347.5 158.5 346.1 158.8 345.7C159.1 345.3 159.3 344.8 159.3 344.3C159.4 343.8 159.4 343.2 159.2 342.7C159 342.3 158.6 340.8 158.1 341.5C157.6 342.2 159.4 346 156 346.9C152.7 347.9 144.3 349.5 138.2 347.1C132.1 344.8 116.9 343 119.2 332.7C121.6 322.5 153.4 300.2 152.4 285.7C151.4 271.2 119.5 252.9 113.3 245.7C107.1 238.5 114.1 232.6 115 242.3C115.9 252 113.2 286.6 118.5 303.9C123.9 321.2 140.6 339.7 147.1 346.1C153.6 352.5 152.2 341.7 157.7 342.5C163.3 343.3 176.3 348.6 180.3 350.9C184.4 353.2 181.7 355.6 182.2 356.4C182.7 357.1 183 355.7 183.3 355.2C183.5 354.8 183.6 354.2 183.5 353.7C183.5 353.2 183.3 352.7 183 352.2C182.7 351.8 182 351.3 181.8 351.2"/>
+            <path stroke="var(--accent)" d="M 181.8 351.2C182.1 351.9 183.9 354.4 183.6 355.4C183.3 356.5 183.6 356.6 180.1 357.5C176.7 358.4 168.1 360.2 162.7 360.8C157.3 361.5 151.6 361.6 147.7 361.5C143.8 361.3 140.9 361.2 139.3 359.9C137.6 358.7 138.1 355 137.8 354.1"/>
+          </g>
+          <g class="rc-f rc-f--5">
+            <path d="M 88 354.4C84.4 343.8 64.8 310.2 66.3 290.7C67.8 271.2 91.8 246.4 96.9 237.3C101.9 228.3 93.9 243 96.5 236.2C99.1 229.4 108.6 209.7 112.7 196.7C116.8 183.7 117.4 166.7 121.2 158.2C124.9 149.7 136.8 138.4 135.2 145.9C133.6 153.3 120.2 187.6 111.4 202.7C102.6 217.9 88.6 230 82.5 236.7C76.5 243.5 77.9 243 75.3 243.3C72.6 243.7 68.1 239.3 66.7 239C65.3 238.7 66.6 240.8 66.9 241.6C67.1 242.4 67.7 243.2 68.3 243.7C68.9 244.3 69.8 244.8 70.6 244.9C71.4 245.1 73.6 246.1 73.2 244.7C72.7 243.3 67.9 239.3 67.9 236.7C67.9 234.1 67.4 237.2 73.2 229.1C78.9 220.9 94.2 203.2 102.3 187.8C110.5 172.3 115.2 147 122.2 136.5C129.1 126 140.1 127.9 143.9 124.6C147.7 121.4 145.6 119 145 116.8C144.5 114.7 141.8 113.7 140.7 111.9C139.5 110 138.6 107.9 138.1 105.9C137.6 103.8 137.4 101.5 137.6 99.3C137.7 97.2 138.2 94.9 139 92.9C139.8 90.8 141 88.9 142.4 87.3C143.8 85.6 145.5 84.1 147.4 82.9C149.2 81.8 151.3 80.8 153.4 80.3C155.5 79.8 157.7 79.7 159.9 79.8C162.1 80 164.4 80.4 166.4 81.2C168.4 82.1 170.3 83.3 172 84.7C173.6 86.1 175.2 87.8 176.3 89.6C177.5 91.4 178.4 93.5 178.9 95.6C179.4 97.7 179.5 100 179.4 102.2C179.2 104.3 178.8 106.6 178 108.6C177.2 110.6 176 112.6 174.6 114.2C173.2 115.9 171.5 117.5 169.6 118.6C167.8 119.6 164.6 118.5 163.5 120.6C162.4 122.7 162.1 126.7 162.8 131.2C163.5 135.7 166.3 137.1 167.7 147.5C169.1 157.9 170.3 176.3 171.1 193.8C171.8 211.4 172.7 241.5 172.2 252.9C171.6 264.3 170.1 260.8 167.8 262.2C165.4 263.6 159.5 261 158.1 261.3C156.7 261.5 158.6 263 159.2 263.6C159.7 264.3 160.5 264.9 161.3 265.2C162.1 265.5 163 265.6 163.8 265.4C164.6 265.3 167.1 265.4 166.2 264.3C165.3 263.2 159.3 261 158.3 258.8C157.3 256.5 159.8 257.5 160.3 250.8C160.8 244.1 161.9 232 161.1 218.5C160.3 205.1 159.1 172.2 155.3 170C151.5 167.8 142.8 193.2 138.2 205.6C133.6 217.9 120.4 238.6 127.5 244C134.6 249.4 168.3 228.7 180.5 237.7C192.7 246.7 195.4 287.4 200.6 298C205.9 308.6 207.7 301.2 212.1 301.2C216.6 301.3 224.2 298.1 227.3 298.5C230.3 298.8 229.8 302.8 230.4 303.4C231.1 303.9 231 302.4 231.1 301.9C231.2 301.4 231.2 300.9 231 300.4C230.9 299.9 230.6 299.4 230.2 299.1C229.9 298.7 229 297.5 228.8 298.4C228.6 299.2 231.7 302 229.1 304.2C226.4 306.4 219.1 310.8 212.9 311.6C206.7 312.4 198.8 318.7 191.9 309.1C185 299.5 184.6 264.5 171.5 253.9C158.4 243.3 122.7 247.7 113.3 245.8C103.9 243.9 120.5 233.3 115 242.4C109.5 251.5 83.3 283 80.5 300.2C77.7 317.5 93.3 338.5 98.1 346C102.9 353.5 103.9 344.6 109.3 345.3C114.7 346 126.6 348.5 130.5 350.2C134.3 351.9 132 354.9 132.5 355.6C133 356.3 133.3 354.9 133.5 354.4C133.7 354 133.8 353.4 133.7 352.9C133.7 352.4 133.4 351.9 133.1 351.4C132.8 351 132.2 350.6 132 350.4"/>
+            <path stroke="var(--accent)" d="M 132 350.4C132.3 351.1 134.1 353.5 133.8 354.6C133.6 355.7 133.9 355.8 130.4 356.8C127 357.8 118.5 359.8 113.1 360.6C107.7 361.3 102 361.6 98.1 361.6C94.2 361.5 91.3 361.4 89.7 360.2C88 359 88.3 355.4 88 354.4"/>
+          </g>
+          <g class="rc-f rc-f--6">
+            <path d="M 102.6 344.7C97.3 334.2 71.3 301.3 70.4 281.5C69.4 261.7 92.4 235.5 96.7 225.9C101.1 216.4 93.8 231 96.5 224.1C99.2 217.2 108.6 197.6 112.7 184.6C116.8 171.6 117.4 154.6 121.2 146.1C124.9 137.6 135.7 126.1 135.2 133.8C134.7 141.4 125.5 176.5 117.9 192.1C110.4 207.7 95.6 220.4 89.8 227.4C83.9 234.5 85.4 233.8 82.7 234.3C80.1 234.8 75.4 230.5 74 230.3C72.6 230.1 74 232.1 74.3 232.9C74.6 233.6 75.1 234.4 75.8 234.9C76.4 235.5 77.3 235.9 78.1 236C78.9 236.2 81.2 237.1 80.7 235.7C80.2 234.4 75.2 230.5 75.1 227.9C75 225.3 74.8 228.4 80.2 220.1C85.5 211.8 100.4 194.1 107.4 178.2C114.4 162.2 116.1 135.3 122.2 124.4C128.3 113.5 140.1 115.8 143.9 112.5C147.7 109.3 145.6 106.9 145 104.7C144.5 102.6 141.8 101.6 140.7 99.8C139.5 97.9 138.6 95.8 138.1 93.8C137.6 91.7 137.4 89.4 137.6 87.2C137.7 85.1 138.2 82.8 139 80.8C139.8 78.7 141 76.8 142.4 75.2C143.8 73.5 145.5 72 147.4 70.8C149.2 69.7 151.3 68.7 153.4 68.2C155.5 67.7 157.7 67.6 159.9 67.7C162.1 67.9 164.4 68.3 166.4 69.1C168.4 70 170.3 71.2 172 72.6C173.6 74 175.2 75.7 176.3 77.5C177.5 79.3 178.4 81.4 178.9 83.5C179.4 85.6 179.5 87.9 179.4 90.1C179.2 92.2 178.8 94.5 178 96.5C177.2 98.5 176 100.5 174.6 102.1C173.2 103.8 171.5 105.4 169.6 106.5C167.8 107.5 164.6 106.4 163.5 108.5C162.4 110.6 162.1 114.6 162.8 119.1C163.5 123.6 167.1 124.8 167.7 135.4C168.2 146 168.1 165.1 166.1 182.7C164.1 200.4 158.5 230.1 155.7 241.2C152.9 252.3 152 248.5 149.4 249.4C146.8 250.3 141.6 246.5 140.2 246.5C138.7 246.4 140.3 248.3 140.7 249C141.1 249.8 141.8 250.6 142.5 251C143.2 251.5 144.1 251.7 144.9 251.7C145.7 251.8 148.1 252.4 147.4 251.2C146.8 249.9 141.4 246.5 140.9 244.1C140.4 241.7 142.5 243.1 144.5 236.7C146.5 230.3 151 218.9 152.8 205.8C154.6 192.7 157.7 160 155.3 157.9C152.8 155.8 142.8 181.1 138.2 193.5C133.6 205.8 120.4 225.8 127.5 231.9C134.6 238 166.2 221.9 180.9 229.8C195.5 237.8 207.6 271.3 215.4 279.6C223.1 287.9 223.2 280.8 227.5 279.7C231.9 278.5 238.3 273.3 241.3 272.8C244.4 272.3 244.9 276.3 245.7 276.7C246.5 277 246 275.6 246 275.1C245.9 274.6 245.7 274.1 245.5 273.7C245.2 273.2 244.8 272.8 244.3 272.6C243.9 272.4 242.7 271.4 242.7 272.3C242.8 273.2 246.6 274.9 244.6 277.8C242.7 280.6 236.8 286.9 231.1 289.4C225.4 291.9 220.5 300.2 210.5 292.9C200.4 285.5 187 255.2 170.8 245.3C154.6 235.5 122.6 236.2 113.3 233.7C104 231.2 119.7 220.9 115 230.3C110.3 239.7 86.1 272.9 85.2 289.9C84.4 306.8 103.8 325.3 109.7 331.9C115.6 338.5 115.8 331 120.7 329.6C125.6 328.1 135.6 323.5 139.4 323.1C143.2 322.7 142.7 326.7 143.5 327.1C144.2 327.6 143.9 326.1 143.9 325.6C143.9 325.1 143.7 324.6 143.5 324.2C143.2 323.7 142.8 323.3 142.3 323.1C141.9 322.8 141.1 322.7 140.8 322.6"/>
+            <path d="M 140.8 322.6C141.4 323.1 144.1 324.6 144.3 325.7C144.5 326.7 144.8 326.7 142.1 329.1C139.4 331.4 132.5 336.8 128 339.8C123.4 342.8 118.4 345.4 114.8 347C111.3 348.6 108.6 349.7 106.6 349.3C104.5 349 103.3 345.5 102.6 344.7"/>
+          </g>
+        </svg>
+      </div>
     </div>
 
     <script type="module" src="/src/main.tsx"></script>

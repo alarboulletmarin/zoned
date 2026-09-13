@@ -1,0 +1,83 @@
+/* DoorCard, a whole card that navigates.
+
+   Same paper as .zn-card: cream fill, 1.5px ink outline, 22px radius, and no
+   shadow, a door sits on the page, it does not float above it. Hover is
+   colour only, press is the 1px push the button and the card both use. */
+
+.zn-door {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  min-block-size: 210px;
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+  text-align: start;
+  text-decoration: none;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-door:hover {
+  background: var(--surface-band);
+}
+
+.zn-door:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-door__title {
+  font: var(--fw-semibold) var(--fs-h3) / 1.05 var(--font-display);
+  letter-spacing: var(--ls-h3);
+}
+
+.zn-door__body {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* The promise, in vermillon type, 14px semibold, which is the floor the
+   system allows for the accent on cream. It is type, not a second accent fill. */
+.zn-door__cta {
+  margin-block-start: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1 var(--font-text);
+  color: var(--text-link);
+}
+
+.zn-door__cta > svg {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+}
+
+/* ── two to a row on a phone ──────────────────────────────────────────── */
+
+/* At 161px wide a door holds a kicker, a title, its sentence and its promise.
+   The sentence used to go here: the drawing carried the recognition, and the
+   sentence wrapped to five lines. Now that every door is bare, a door without
+   it is a kicker, a title and a link in a 130px card, and nothing says what
+   is behind it, so the sentence stays, and the pair is measured against the
+   stack it replaced rather than against the drawn pair it was. */
+@media (max-width: 640px) {
+  .zn-door {
+    gap: var(--sp-4);
+    min-block-size: 0;
+    padding: var(--sp-8);
+    border-radius: var(--r-2xl);
+  }
+
+  .zn-door__title {
+    font-size: var(--fs-h4);
+    letter-spacing: var(--ls-h4);
+  }
+}

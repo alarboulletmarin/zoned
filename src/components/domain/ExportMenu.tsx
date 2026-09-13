@@ -24,16 +24,17 @@ import { FitTransferGuide } from "./FitTransferGuide";
 import { exportToICS, exportToPNG, exportToPDF, exportToFIT } from "@/lib/export";
 import { toast } from "sonner";
 import type { WorkoutTemplate } from "@/types";
-import { cn } from "@/lib/utils";
 
 interface ExportMenuProps {
   workout: WorkoutTemplate;
   /** Applied to the trigger button, e.g. to stretch it as a primary CTA. */
   className?: string;
   size?: "sm" | "default" | "lg";
+  /** "outline" when another action owns the primary slot. */
+  variant?: "default" | "outline";
 }
 
-export function ExportMenu({ workout, className, size = "sm" }: ExportMenuProps) {
+export function ExportMenu({ workout, className, size = "sm", variant = "default" }: ExportMenuProps) {
   const { t } = useTranslation("common");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFitGuide, setShowFitGuide] = useState(false);
@@ -116,34 +117,30 @@ export function ExportMenu({ workout, className, size = "sm" }: ExportMenuProps)
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="default"
+            variant={variant}
             size={size}
             disabled={isExporting}
-            className={cn("rounded-full px-4", className)}
+            className={className}
           >
-            {isExporting ? (
-              <Loader2 className="size-3.5 mr-1.5 animate-spin" />
-            ) : (
-              <Download className="size-3.5 mr-1.5" />
-            )}
+            {isExporting ? <Loader2 className="zn-spin" /> : <Download />}
             {t("export.title")}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={handleICSClick}>
-            <Calendar className="size-4" />
+            <Calendar />
             {t("export.calendar")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handlePNGExport}>
-            <Image className="size-4" />
+            <Image />
             {t("export.image")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handlePDFExport}>
-            <FileText className="size-4" />
+            <FileText />
             {t("export.pdf")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleFITExport}>
-            <Watch className="size-4" />
+            <Watch />
             {t("export.garmin")}
           </DropdownMenuItem>
         </DropdownMenuContent>

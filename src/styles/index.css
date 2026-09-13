@@ -1,14 +1,111 @@
-/* Zoned design system — entry point.
-   Tokens (theme inline + breakpoints), themes (light/dark), accessible
-   palettes, animations, and overrides are split into focused modules. */
+/* Zoned design system, entry point.
 
-@import "tailwindcss";
+   Order matters: the design tokens define the values, then the aliases layer
+   republishes a handful of them under the older names a few inline styles and
+   hooks still read, then the reset, then the components.
 
-@custom-variant dark (&:is(.dark *));
+   Tailwind used to be imported on the first line and it declared these layers
+   itself. It is gone, so the order is declared here, and it has to be, because
+   without this line the layers would be ordered by first appearance, the
+   component sheets would come first, and every base rule would outrank them.
+   `utilities` holds exactly one class, `.sr-only`; see base.css. */
+@layer base, components, utilities;
 
-@import "./fonts.css";
-@import "./tokens.css";
+/* The redesign's source of truth, paper, ink, one accent. */
+@import "./design/fonts.css";
+@import "./design/colors.css";
+@import "./design/zones.css";
+@import "./design/typography.css";
+@import "./design/spacing.css";
+@import "./design/borders.css";
+@import "./design/motion.css";
+
+/* Older variable names that inline styles, hooks and index.html still read.
+   `tokens.css` sat next to it and is gone: it was a Tailwind `@theme` block,
+   i.e. a map from these names onto utility classes that no longer exist. */
 @import "./themes.css";
-@import "./palettes-a11y.css";
+
+@import "./base.css";
+
+/* Hand-written component layer, see components/README.md.
+   _layout and _type are the shared vocabulary; the rest is one file per
+   primitive, in the order they are named in src/components/ui/.
+
+   Imported INTO @layer components, below Tailwind's utilities, so a call site
+   that still hands a utility class through the `className` prop keeps winning
+   over the component's own rules. Unlayered CSS beats every layer, which would
+   have silently made those pass-through classes no-ops. When Tailwind goes the
+   layer stays: it costs nothing and it documents the intent. */
+@import "./components/_layout.css" layer(components);
+@import "./components/_type.css" layer(components);
+@import "./components/alert.css" layer(components);
+@import "./components/badge.css" layer(components);
+@import "./components/button.css" layer(components);
+@import "./components/calc-pace.css" layer(components);
+@import "./components/calc-tests.css" layer(components);
+@import "./components/calendar.css" layer(components);
+@import "./components/card.css" layer(components);
+@import "./components/cockpit.css" layer(components);
+@import "./components/content.css" layer(components);
+@import "./components/contribute.css" layer(components);
+@import "./components/date-input.css" layer(components);
+@import "./components/dialog.css" layer(components);
+@import "./components/discovery.css" layer(components);
+@import "./components/door-card.css" layer(components);
+@import "./components/dropdown-menu.css" layer(components);
+@import "./components/empty-state.css" layer(components);
+@import "./components/favorite-button.css" layer(components);
+@import "./components/error-boundary.css" layer(components);
+@import "./components/footer.css" layer(components);
+@import "./components/guides.css" layer(components);
+@import "./components/home.css" layer(components);
+@import "./components/zone-figures.css" layer(components);
+@import "./components/annotation.css" layer(components);
+@import "./components/illustration-slot.css" layer(components);
+@import "./components/learn.css" layer(components);
+@import "./components/library.css" layer(components);
+@import "./components/mobile-menu.css" layer(components);
+@import "./components/numbers.css" layer(components);
+@import "./components/nutrition.css" layer(components);
+@import "./components/page-loader.css" layer(components);
+@import "./components/plan-calendar.css" layer(components);
+@import "./components/plan-panels.css" layer(components);
+@import "./components/plan-view.css" layer(components);
+@import "./components/plan-weeks.css" layer(components);
+@import "./components/plan-wizard.css" layer(components);
+@import "./components/popover.css" layer(components);
+@import "./components/race-sim.css" layer(components);
+@import "./components/reference.css" layer(components);
+@import "./components/responsive-table.css" layer(components);
+@import "./components/routes-pages.css" layer(components);
+@import "./components/routes.css" layer(components);
+@import "./components/run-cycle.css" layer(components);
+@import "./components/scroll-to-top.css" layer(components);
+@import "./components/segmented.css" layer(components);
+@import "./components/select.css" layer(components);
+@import "./components/search.css" layer(components);
+@import "./components/session.css" layer(components);
+@import "./components/settings.css" layer(components);
+@import "./components/share-dialog.css" layer(components);
+@import "./components/sheet.css" layer(components);
+@import "./components/shell-misc.css" layer(components);
+@import "./components/shell.css" layer(components);
+@import "./components/skeleton.css" layer(components);
+@import "./components/slider.css" layer(components);
+@import "./components/spinner.css" layer(components);
+@import "./components/stat-block.css" layer(components);
+@import "./components/strength.css" layer(components);
+@import "./components/switch.css" layer(components);
+@import "./components/tabs.css" layer(components);
+@import "./components/toast.css" layer(components);
+@import "./components/tooltip.css" layer(components);
+@import "./components/topbar.css" layer(components);
+@import "./components/visualization.css" layer(components);
+@import "./components/weekly.css" layer(components);
+@import "./components/wordmark.css" layer(components);
+@import "./components/workout-card.css" layer(components);
+@import "./components/workout.css" layer(components);
+@import "./components/zone-row.css" layer(components);
+@import "./components/zone.css" layer(components);
 @import "./animations.css";
 @import "./overrides.css";

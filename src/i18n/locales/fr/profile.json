@@ -1,9 +1,18 @@
 {
-  "title": "Mon Profil Coureur",
-  "description": "Centralisez vos données physiologiques, temps de référence et records personnels.",
+  "title": "Mon profil coureur",
+  "description": "Centralise tes données physiologiques, temps de référence et records personnels.",
+  "kicker": "Calculé sur cet appareil",
+  "stats": {
+    "vma": "VMA · km/h",
+    "vmaFoot_one": "d'après {{count}} test",
+    "vmaFoot_other": "d'après {{count}} tests",
+    "fcMax": "FC max · bpm",
+    "weekly": "Volume hebdo · km",
+    "longRun": "Sortie longue · km"
+  },
   "seo": {
-    "title": "Profil Coureur — Zoned",
-    "description": "Votre fiche coureur : données physio, temps de référence, historique de tests et records personnels."
+    "title": "Profil Coureur, Zoned",
+    "description": "Ta fiche coureur : données physio, temps de référence, historique de tests et records personnels."
   },
   "tabs": {
     "base": "Profil",
@@ -14,13 +23,13 @@
   },
   "commute": {
     "title": "Vélotaf",
-    "description": "Si vous allez travailler à vélo (ou en trottinant), paramétrez le trajet ici pour que le générateur tienne compte de cette charge récurrente.",
+    "description": "Renseigne ton trajet domicile-travail : le générateur compte cette charge récurrente.",
     "discipline": "Discipline",
     "disciplineCycling": "Vélo",
     "disciplineRunning": "Footing",
     "daysOfWeek": "Jours concernés",
     "durationMin": "Durée par trajet (minutes)",
-    "durationHint": "Durée aller simple. Multipliez par 2 si vous faites l'aller-retour.",
+    "durationHint": "Durée aller simple. Double-la si tu fais l'aller-retour.",
     "includeInPlan": "Intégrer au plan",
     "includeInPlanHint": "Si activé, le plan réduit les séances faciles pour éviter la surcharge. Sinon, le vélotaf reste un extra non comptabilisé.",
     "monday": "Lun",
@@ -34,11 +43,11 @@
     "delete": "Supprimer",
     "saved": "Paramètres vélotaf enregistrés",
     "deleted": "Paramètres vélotaf supprimés",
-    "invalid": "Choisissez au moins un jour et une durée valide"
+    "invalid": "Choisis au moins un jour et une durée valide"
   },
   "base": {
     "title": "Données de base",
-    "description": "Vos données physiologiques et votre volume d'entraînement actuel.",
+    "description": "Tes données physiologiques et ton volume d'entraînement actuel.",
     "fcMax": "FC Max",
     "fcMaxUnit": "bpm",
     "fcMaxPlaceholder": "Ex : 185",
@@ -62,11 +71,20 @@
     "updateZones": "Mettre à jour mes zones",
     "zonesUpdated": "Zones mises à jour",
     "createPlan": "Créer un plan",
-    "migrated": "Données existantes récupérées"
+    "migrated": "Données existantes récupérées",
+    "errorHint": "corrige la valeur pour enregistrer",
+    "noVmaTitle": "Ta VMA n'est pas renseignée",
+    "noVmaBody": "Sans elle, tes six zones et tes allures restent vides. Le reste de ton profil est intact : un test de 6 minutes suffit à combler le trou.",
+    "noVmaAction": "Estimer ma VMA",
+    "sourceTitle": "D'où viennent ces chiffres",
+    "sourceBody": "Zones en pourcentage de VMA, fréquences cibles par la méthode Karvonen, prédictions par la formule de Riegel calibrée sur tes propres courses.",
+    "sourceCitation": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957 · Riegel, Runner's World, 1977"
   },
   "references": {
     "title": "Temps de référence",
-    "description": "Vos temps récents par distance, utilisés pour calibrer les prédictions et les allures.",
+    "description": "Tes temps récents par distance : ils calibrent les prédictions et les allures.",
+    "count_one": "{{count}} temps sur {{total}} distances",
+    "count_other": "{{count}} temps sur {{total}} distances",
     "time": "Temps",
     "date": "Date",
     "label": "Nom de course",
@@ -82,7 +100,7 @@
   },
   "benchmarks": {
     "title": "Historique des tests",
-    "description": "Suivez l'évolution de vos résultats de tests VMA et autres évaluations.",
+    "description": "Suis l'évolution de tes résultats de tests VMA et autres évaluations.",
     "add": "Ajouter un test",
     "type": "Type de test",
     "selectType": "Sélectionner un type",
@@ -97,7 +115,10 @@
     "deleteConfirm": "Supprimer ce test ?",
     "deleted": "Test supprimé",
     "added": "Test ajouté",
-    "empty": "Aucun test enregistré.",
+    "empty": "Zéro test au compteur : ajoutes-en un et tu verras ta VMA bouger d'une date à l'autre.",
+    "emptyTitle": "Aucun test enregistré",
+    "count_one": "{{count}} test enregistré",
+    "count_other": "{{count}} tests enregistrés",
     "cancel": "Annuler",
     "types": {
       "half_cooper": "Demi-Cooper (6 min)",
@@ -126,7 +147,7 @@
   },
   "records": {
     "title": "Records personnels",
-    "description": "Vos meilleurs temps par distance.",
+    "description": "Tes meilleurs temps par distance.",
     "add": "Ajouter un record",
     "distance": "Distance",
     "selectDistance": "Sélectionner une distance",
@@ -147,7 +168,10 @@
     "deleteConfirm": "Supprimer ce record ?",
     "deleted": "Record supprimé",
     "added": "Record ajouté",
-    "empty": "Aucun record enregistré.",
+    "empty": "Zéro record au compteur, sur {{distances}} distances de référence. Ajoute un temps pour les remplir.",
+    "emptyTitle": "Aucun record enregistré",
+    "count_one": "{{count}} record enregistré",
+    "count_other": "{{count}} records enregistrés",
     "cancel": "Annuler",
     "newPr": "Nouveau record personnel !",
     "hours": "h",

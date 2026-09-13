@@ -1,6 +1,6 @@
 {
   "title": "Générateur de parcours",
-  "subtitle": "Créez une boucle ou un aller-retour réel depuis votre position.",
+  "subtitle": "Crée une boucle ou un aller-retour réel depuis ta position.",
   "myRoutes": "Mes parcours",
   "newRoute": "Nouveau parcours",
   "form": {
@@ -41,7 +41,7 @@
     "gpsActive": "Position active",
     "addressPlaceholder": "Adresse (ex : 12 rue de la Paix, Paris)",
     "addressSearching": "Recherche…",
-    "addressNoResults": "Aucune adresse trouvée — précisez la ville ou le code postal.",
+    "addressNoResults": "Aucune adresse trouvée, précise la ville ou le code postal.",
     "distanceEdit": "Modifier la distance",
     "distanceUnit": "km",
     "distanceMin": "1 km",
@@ -53,38 +53,42 @@
     "regenerateHint": "Génère une variante avec un autre tracé.",
     "candidatesLabel": "Propositions",
     "candidate": "Proposition {{index}}",
-    "mapPickStartHint": "Cliquez sur la carte pour définir votre départ",
-    "mapPickedHint": "Départ posé · cliquez ailleurs pour le déplacer",
+    "mapPickStartHint": "Clique sur la carte pour poser ton départ",
+    "mapPickedHint": "Départ posé · clique ailleurs pour le déplacer",
     "mapPickedStart": "Point posé sur la carte",
     "mapExpand": "Agrandir la carte",
     "mapShrink": "Réduire la carte",
     "reverseDirection": "Inverser le sens",
-    "reversedActive": "Sens inversé"
+    "reversedActive": "Sens inversé",
+    "candidatePrev": "Proposition précédente",
+    "candidateNext": "Proposition suivante"
   },
   "edit": {
     "enter": "Modifier le tracé",
     "cancel": "Annuler",
     "apply": "Appliquer",
     "applied": "Tracé mis à jour",
-    "hint": "Glissez les points · cliquez le tracé pour ajouter · cliquez un point pour le retirer",
+    "hint": "Glisse les points · clique le tracé pour ajouter · clique un point pour le retirer",
     "rerouting": "Recalcul du tracé…"
   },
   "trackFinder": {
     "title": "Trouver une piste d'athlétisme",
-    "subtitle": "Cherchez la piste la plus proche pour vos séances de fractionné, puis générez un trajet aller-retour pour y aller.",
+    "subtitle": "Cherche la piste la plus proche de tes séances de fractionné, puis génère l'aller-retour pour y aller.",
     "entry": "Trouver une piste",
     "backToGenerator": "Revenir au générateur de parcours",
     "search": "Chercher des pistes",
-    "searchHint": "On regarde les pistes d'athlé dans un rayon de {{radius}} km autour de votre départ.",
+    "searchHint": "On regarde les pistes d'athlé dans un rayon de {{radius}} km autour de ton départ.",
     "results": "{{count}} piste(s) trouvée(s)",
-    "noResults": "Aucune piste d'athlétisme trouvée à proximité. Essayez un autre point de départ.",
-    "searchFailed": "La recherche de pistes a échoué. Réessayez dans un instant.",
+    "noResults": "Aucune piste d'athlétisme trouvée à proximité. Essaie un autre point de départ.",
+    "searchFailed": "La recherche de pistes a échoué. Réessaie dans un instant.",
     "unnamedTrack": "Piste sans nom",
     "distance": "{{km}} km à vol d'oiseau",
-    "pickHint": "Choisissez une piste dans la liste pour calculer un trajet aller-retour.",
+    "pickHint": "Choisis une piste dans la liste pour calculer un trajet aller-retour.",
     "routeName": "Aller-retour vers {{name}}",
     "routeNameUnknown": "Aller-retour vers la piste",
-    "routeUnreachable": "Cette piste n'est pas atteignable par la route depuis votre départ. Essayez-en une autre."
+    "routeUnreachable": "Cette piste n'est pas atteignable par la route depuis ton départ. Essaie-en une autre.",
+    "kicker": "Rayon {{radius}} km",
+    "noResultsTitle": "Aucune piste trouvée"
   },
   "result": {
     "summary": "{{distance}} · D+ {{ascent}} m · ~{{duration}}",
@@ -99,7 +103,7 @@
     "estimatedDuration": "Durée estimée",
     "actualDistance": "Distance réelle",
     "linkedToPlan": "Lié à une séance du plan",
-    "linkedToPlanBody": "Ce parcours a été sauvegardé pour la semaine {{week}} de votre plan d'entraînement.",
+    "linkedToPlanBody": "Ce parcours a été sauvegardé pour la semaine {{week}} de ton plan d'entraînement.",
     "backToPlan": "Retourner au plan"
   },
   "recommendation": {
@@ -110,7 +114,7 @@
     },
     "optimizedFor": "Optimisé pour {{session}}",
     "optimizedForWorkout": "Optimisé pour {{session}} · {{workout}}",
-    "genericSession": "votre séance",
+    "genericSession": "ta séance",
     "genericWorkout": "cette séance",
     "sessionSummary": "{{distance}} km cible · ~{{duration}} min planifiées",
     "backToPlan": "Revenir à la semaine du plan",
@@ -131,7 +135,7 @@
       "adds_useful_climbing": "Ajoute du dénivelé utile",
       "supports_steady_pacing": "Rythme plus facile à tenir",
       "stays_repeatable_for_repeats": "Tracé simple à répéter",
-      "respects_current_long_run": "Reste proche de votre sortie longue actuelle",
+      "respects_current_long_run": "Reste proche de ta sortie longue actuelle",
       "uses_athletics_track": "Passe par une piste d'athlétisme"
     },
     "distanceMatch": {
@@ -150,34 +154,40 @@
     }
   },
   "list": {
-    "empty": "Vous n'avez pas encore enregistré de parcours.",
-    "emptyCta": "Créer un premier parcours",
-    "softLimitReached": "Vous approchez de la limite de {{limit}} parcours sauvegardés. Supprimez les plus anciens si besoin.",
+    "empty": "Tu n'as pas encore enregistré de parcours.",
+    "emptyCta": "Créer un parcours",
+    "softLimitReached": "Tu approches de la limite de {{limit}} parcours sauvegardés. Supprime les plus anciens si besoin.",
     "loops": "Boucles",
     "outAndBacks": "Aller-retours",
     "discipline": "Discipline",
-    "savedAt": "Enregistré le {{date}}"
+    "savedAt": "Enregistré le {{date}}",
+    "kicker": "{{count}} sur {{limit}} enregistrés",
+    "lede": "Tes parcours sont enregistrés sur cet appareil, jamais sur un serveur.",
+    "emptyTitle": "Aucun parcours enregistré",
+    "softLimitTitle": "Stockage local presque plein",
+    "open": "Ouvrir {{name}}",
+    "deleteRoute": "Supprimer {{name}}"
   },
   "errors": {
-    "geolocationDenied": "Permission de géolocalisation refusée. Saisissez une adresse à la place.",
-    "geolocationBlocked": "La géolocalisation est bloquée pour ce site. Cliquez sur le cadenas dans la barre d'adresse pour autoriser, ou saisissez une adresse.",
-    "geolocationTimeout": "Pas de réponse du GPS après 10 s. Essayez à nouveau ou saisissez une adresse.",
+    "geolocationDenied": "Permission de géolocalisation refusée. Saisis une adresse à la place.",
+    "geolocationBlocked": "La géolocalisation est bloquée pour ce site. Clique sur le cadenas dans la barre d'adresse pour autoriser, ou saisis une adresse.",
+    "geolocationTimeout": "Pas de réponse du GPS après 10 s. Essaie à nouveau ou saisis une adresse.",
     "geolocationUnavailable": "Géolocalisation indisponible sur cet appareil.",
-    "routingFailed": "Le service de routage est temporairement indisponible. Réessayez dans un instant.",
-    "unreachableWaypoint": "Un point n'est pas routable (mer, voie privée, hors réseau). Le tracé revient à sa position précédente — déplacez le point sur une route ou supprimez-le.",
-    "noConvergence": "Impossible de trouver un parcours proche de la distance demandée. Essayez une distance différente ou un autre point de départ.",
+    "routingFailed": "Le service de routage est temporairement indisponible. Réessaie dans un instant.",
+    "unreachableWaypoint": "Un point n'est pas routable (mer, voie privée, hors réseau). Le tracé revient à sa position précédente, déplace le point sur une route ou supprime-le.",
+    "noConvergence": "Impossible de trouver un parcours proche de la distance demandée. Essaie une distance différente ou un autre point de départ.",
     "noTrace": "Aucun tracé routable trouvé pour ces points.",
     "disciplineUnsupported": "La natation n'est pas prise en charge par le générateur de parcours."
   },
   "privacy": {
     "title": "Vie privée",
-    "body": "Votre position est envoyée à un service de routage public (Brouter) le temps d'une requête. Aucun identifiant n'est joint et aucune donnée n'est stockée côté serveur.",
+    "body": "Ta position est envoyée à un service de routage public (Brouter) le temps d'une requête. Aucun identifiant n'est joint et aucune donnée n'est stockée côté serveur.",
     "toggle": "Activer le générateur de parcours",
-    "toggleHint": "Désactivez pour ne plus envoyer aucune coordonnée à un service tiers."
+    "toggleHint": "Désactive pour ne plus envoyer aucune coordonnée à un service tiers."
   },
   "disabled": {
     "title": "Le générateur de parcours est désactivé",
-    "body": "Pour générer un parcours, votre point de départ doit être envoyé à un service de routage public. Activez la fonctionnalité dans les Réglages si vous le souhaitez.",
+    "body": "Pour générer un parcours, ton point de départ doit être envoyé à un service de routage public. Active la fonctionnalité dans les Réglages si tu veux.",
     "cta": "Aller dans les Réglages"
   },
   "howItWorks": {
@@ -197,5 +207,10 @@
     "privacyBody": "Ta position de départ est envoyée à Brouter (routage), Nominatim (recherche d'adresses) et Overpass (POI) le temps des requêtes. Aucun identifiant n'est joint, rien n'est stocké côté serveur. Tu peux désactiver le générateur entièrement dans les Réglages.",
     "sourcesTitle": "Sources",
     "sourcesBody": "Données : © contributeurs OpenStreetMap. Routage : Brouter. Recherche d'adresses : Nominatim. POI : Overpass API."
+  },
+  "detail": {
+    "kicker": "Parcours enregistré",
+    "missingTitle": "Ce parcours est introuvable",
+    "missingBody": "Il a été supprimé, ou le lien vient d'un autre appareil. Tes autres parcours sont intacts."
   }
 }

@@ -1,5 +1,5 @@
 /**
- * ZoneHero — 1080×1920 portrait, plein-bleed dégradé coloured by the
+ * ZoneHero, 1080×1920 portrait, plein-bleed dégradé coloured by the
  * dominant zone.
  *
  * The background IS the visual: a soft 2-stop gradient from the dominant
@@ -36,7 +36,7 @@ export function ZoneHero({ workout }: ShareTemplateProps) {
   const zoneTop = ZONE_HEX[hero.dominantZone];
   const zoneBot = ZONE_DEEP[hero.dominantZone];
 
-  // Scale the giant zone label to fit on one line — content width is
+  // Scale the giant zone label to fit on one line, content width is
   // 1080 − 96 × 2 ≈ 888 px. Without this, "Récupération" (12 chars) clips.
   const labelLen = zoneLabel.length;
   const labelSize = labelLen <= 6 ? 200 : labelLen <= 9 ? 160 : 130;
@@ -44,7 +44,7 @@ export function ZoneHero({ workout }: ShareTemplateProps) {
   return (
     <div
       data-share-template
-      // Transparent toggle is disabled for this template — bg is the visual.
+      // Transparent toggle is disabled for this template, bg is the visual.
       style={{
         width: W,
         height: H,
@@ -77,7 +77,7 @@ export function ZoneHero({ workout }: ShareTemplateProps) {
           flexDirection: "column",
         }}
       >
-        {/* Brand — inverted (white over zone colour) */}
+        {/* Brand, inverted (white over zone colour) */}
         <div
           style={{
             display: "flex",

@@ -1,0 +1,146 @@
+/* App shell, the page frame every route is drawn inside: the skip link, the
+   flex column that pins the footer to the bottom, and the centred content
+   column that `PageContainer` also emits.
+
+   The header is IN FLOW here, not fixed: the redesign's bar is opaque cream on
+   a full-width ink rule, and 80px of permanently occluded page is a price the
+   design does not pay. The rule is the separation; nothing floats over it. */
+
+:root {
+  /* The content column. The design states a 1440px page with 40px margins,
+     which is the 1360px "wide" cap; "default" and "narrow" keep the caps the
+     app's 60 pages are already laid out against, so moving the frame onto this
+     vocabulary re-flows nothing. */
+  --page-max: 1152px;
+  --page-max-narrow: 768px;
+  --page-max-wide: 1360px;
+}
+
+/* ── frame ────────────────────────────────────────────────────────────── */
+
+.zn-app {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100vh;
+  background: var(--surface-page);
+  color: var(--text-body);
+}
+
+/* Everything under the header: page then footer, footer pushed to the floor. */
+.zn-app__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+/* Below 1024px the menu pill floats over the bottom-right corner for the whole
+   session, and the last row of the page has to clear it.
+
+   The reserve is NOT paid by .zn-app__body: its padding would sit below the
+   footer, and the footer ends on an inverted ink bar, the page colour would
+   show as a band under it on every phone. So the surface that actually ends
+   the document pays. Here that is the page itself, on the routes that hide
+   the footer (`:last-child` is exactly that condition); the footer pays for
+   itself in footer.css. */
+@media (max-width: 1023px) {
+  .zn-main:last-child {
+    padding-block-end: var(--fab-clear);
+  }
+}
+
+.zn-main {
+  flex: 1;
+  padding-block: var(--sp-12) var(--sp-8);
+}
+
+/* The gap between the header rule and the first thing on the page. 24px is
+   right where a page opens on a title; on a phone it is 24px of the ~700 a
+   reader gets before the first scroll. */
+@media (max-width: 640px) {
+  .zn-main {
+    padding-block-start: var(--sp-7);
+  }
+}
+
+/* ── content column ───────────────────────────────────────────────────── */
+
+/* The screen's centred measure plus its side margins, 40px, 20px on mobile,
+   straight off --pad-screen-x. Width is chosen with data-width so the
+   component keeps its four-value prop API. */
+.zn-page {
+  inline-size: 100%;
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--pad-screen-x);
+}
+
+.zn-page[data-width="narrow"] {
+  max-inline-size: var(--page-max-narrow);
+}
+
+.zn-page[data-width="wide"] {
+  max-inline-size: var(--page-max-wide);
+}
+
+.zn-page[data-width="full"] {
+  max-inline-size: none;
+}
+
+/* A page that draws its own edges, a map, a canvas. */
+.zn-page[data-flush="true"] {
+  padding-inline: 0;
+}
+
+/* A route that wraps its own body in a PageContainer sits inside the shell's
+   column already: the margin is the outer one's, not paid for twice. */
+.zn-page .zn-page {
+  padding-inline: 0;
+}
+
+/* The reserve a lazy route holds while it loads. It is a viewport tall for one
+   reason: the footer sits under it, and a short page resolving into a shorter
+   hold would drag the footer up into view, appearing is free, moving is a
+   layout shift, and the Lighthouse budget on this project is CLS exactly 0. */
+.zn-page__hold {
+  min-block-size: 100vh;
+}
+
+/* ── skip link ────────────────────────────────────────────────────────── */
+
+/* Off-screen until focused, then a full ink inversion in the top corner. It
+   wears the ink, not the vermillon: the screen's one accent fill belongs to
+   its primary action, and the vermillon focus ring already frames this. */
+.zn-skip {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.zn-skip:focus {
+  position: fixed;
+  inset-block-start: var(--sp-8);
+  inset-inline-start: var(--sp-8);
+  z-index: 100;
+  inline-size: auto;
+  block-size: auto;
+  min-block-size: var(--hit-min);
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: var(--sp-5) var(--sp-10);
+  overflow: visible;
+  clip-path: none;
+
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  text-decoration: none;
+}

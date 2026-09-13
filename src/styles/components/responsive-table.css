@@ -1,0 +1,145 @@
+/* ResponsiveTable, a paper grid. Ink hairlines rule the rows, a 1.5px outline
+   frames the whole thing and the 16px radius clips the grid at the corners.
+   Below 768px the same data is one outlined card per row, each cell keeping its
+   column label as a mono kicker, the breakpoint is the component's own, not a
+   container query, because that is what the ported component already did. */
+
+.zn-table {
+  display: block;
+}
+
+/* ── desktop: the framed grid ─────────────────────────────────────────────
+   The frame lives here rather than on the <table> so border-collapse keeps
+   working: a collapsed table cannot own a radius, a wrapper can.
+   Wide content scrolls inside this box; the page never moves sideways. */
+.zn-table__scroll {
+  display: none;
+  overflow-x: auto;
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  background: var(--surface-card);
+}
+
+/* With a sticky header the wrapper must NOT be a scroll container: the nearest
+   scrolling ancestor becomes the sticky containing block and would pin the
+   thead inside the card instead of to the page. `clip` contains stray overflow
+   without scrolling, so the table has to fit its container at md+. */
+.zn-table__scroll[data-sticky="true"] {
+  overflow-x: clip;
+}
+
+.zn-table__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font: var(--type-body-sm);
+  color: var(--ink-1);
+}
+
+/* Screen-reader-only caption. Written out here rather than borrowed from
+   Tailwind's .sr-only, which leaves with the framework. */
+.zn-table__caption {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The header parks at the top of the viewport: the redesign's TopBar is in
+   flow, not fixed, so there is nothing above to clear. */
+.zn-table__head[data-sticky="true"] {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+}
+
+/* Column heads are mono kickers, not sentences: uppercase, tracked, faint. */
+.zn-table__th {
+  padding: var(--sp-6) var(--sp-8);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: var(--surface-band);
+  border-block-end: var(--border-rule);
+}
+
+.zn-table__td {
+  padding: var(--sp-6) var(--sp-8);
+  vertical-align: middle;
+  color: var(--ink-1);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+/* One hairline between rows, none above the first and none below the last,
+   the frame already closes the grid. */
+.zn-table__row + .zn-table__row > .zn-table__td {
+  border-block-start: var(--border-divider);
+}
+
+/* Hover is the band paper, a solid tone: no tint, no transparency. */
+.zn-table__row:hover > .zn-table__td {
+  background: var(--surface-band);
+}
+
+/* ── mobile: one card per row ─────────────────────────────────────────────
+   A list card carries no shadow. The outline is the whole depth cue. */
+.zn-table__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-table__card {
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+  padding: var(--pad-card-sm);
+}
+
+.zn-table__card-title {
+  margin-block-end: var(--sp-5);
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.3 var(--font-text);
+  color: var(--ink-1);
+}
+
+.zn-table__dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--sp-6);
+  row-gap: var(--sp-3);
+  margin: 0;
+}
+
+/* The label the header cell would have carried, on every value: a headerless
+   card is unreadable. */
+.zn-table__dt {
+  align-self: center;
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.zn-table__dd {
+  align-self: center;
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--ink-1);
+}
+
+@media (min-width: 768px) {
+  .zn-table__scroll {
+    display: block;
+  }
+  .zn-table__cards {
+    display: none;
+  }
+}

@@ -28,7 +28,7 @@ export const BROUTER_RETRY_BASE_MS = 500;
  *   running profile; trekking matches its routing preferences (paths,
  *   sidewalks, parks).
  * - cycling uses `fastbike` for road-oriented rides.
- * - swimming has no surface routing — generation is disabled at the
+ * - swimming has no surface routing, generation is disabled at the
  *   algorithm layer rather than here.
  */
 export const BROUTER_PROFILE_BY_DISCIPLINE: Record<Discipline, string | null> = {
@@ -46,7 +46,7 @@ export const NOMINATIM_MIN_INTERVAL_MS = 1000;
 // ── POI lookup (Overpass) ─────────────────────────────────────────
 
 export const OVERPASS_BASE_URL = "https://overpass-api.de/api/interpreter";
-/** Embedded in the Overpass-QL `timeout:` directive — server-side cap. */
+/** Embedded in the Overpass-QL `timeout:` directive, server-side cap. */
 export const OVERPASS_TIMEOUT_S = 25;
 /** When fetching POI for a loop, look this much wider than the loop radius
  *  so candidates exist past the ideal half-radius distance. */

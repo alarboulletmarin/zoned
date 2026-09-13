@@ -1,0 +1,90 @@
+/* Three families, never four, the design system's rule.
+   Bricolage Grotesque: display. Space Grotesk: interface text.
+   JetBrains Mono: data, codes, micro-labels.
+
+   The design bundle loads these from Google Fonts. We self-host instead:
+   Zoned is an offline-first PWA under a Lighthouse budget, so a
+   render-blocking third-party stylesheet is not an option. Same three
+   families, same weights, only the transport differs.
+   All three are variable, latin subset, and licensed OFL 1.1. */
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/bricolage-grotesque-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Metrics-matched fallbacks so the swap from the local face to the webfont
+   causes zero layout shift. The Lighthouse budget blocks on CLS exactly 0, so
+   each family that renders above the fold needs one.
+
+   Each set is computed from the woff2 metrics against the fallback's own:
+     size-adjust      = (xAvg/upm)target / (xAvg/upm)fallback
+     ascent-override  = (ascent/upm)target / size-adjust
+     descent-override = (descent/upm)target / size-adjust
+   Arial is 904/2048 with 1854/-434; Courier New is 1229/2048 with 1705/-615. */
+
+/* Space Grotesk: upm 1000, ascent 984, descent 292, xAvg 559. */
+@font-face {
+  font-family: "Space Grotesk Fallback";
+  src: local("Arial");
+  size-adjust: 126.64%;
+  ascent-override: 77.7%;
+  descent-override: 23.06%;
+  line-gap-override: 0%;
+}
+
+/* Bricolage Grotesque: upm 1000, ascent 930, descent 270, xAvg 498.
+   This is the LCP face, it draws the display title on every screen. */
+@font-face {
+  font-family: "Bricolage Grotesque Fallback";
+  src: local("Arial");
+  size-adjust: 112.82%;
+  ascent-override: 82.43%;
+  descent-override: 23.93%;
+  line-gap-override: 0%;
+}
+
+/* JetBrains Mono: upm 1000, ascent 1020, descent 300, xAvg 600, within 0.02%
+   of Courier New's advance width, so the swap is essentially free. */
+@font-face {
+  font-family: "JetBrains Mono Fallback";
+  src: local("Courier New");
+  size-adjust: 99.98%;
+  ascent-override: 102.02%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+
+:root {
+  --font-display: "Bricolage Grotesque", "Bricolage Grotesque Fallback", system-ui, sans-serif;
+  --font-text: "Space Grotesk", "Space Grotesk Fallback", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, "SF Mono", monospace;
+}

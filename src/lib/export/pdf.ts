@@ -43,8 +43,8 @@ const PHASE_TABLE_COLUMNS = PHASE_TABLE_WIDTHS.length;
 function formatBlocksTable(blocks: WorkoutBlock[] | undefined): TableCell[][] {
   if (!blocks || blocks.length === 0) {
     // The placeholder has to span the whole table, not sit in a one-cell row.
-    // pdfmake 0.3 rejects a short row outright — "Malformed table row, a cell
-    // is undefined" — which broke every session with an empty phase (the
+    // pdfmake 0.3 rejects a short row outright, "Malformed table row, a cell
+    // is undefined", which broke every session with an empty phase (the
     // recovery runs, CYC-001). `colSpan` also has to be followed by the empty
     // cells it swallows, or the row is short again by pdfmake's count.
     return [

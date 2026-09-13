@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,9 +7,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertTriangle, Loader2 } from "@/components/icons";
+import { Segmented } from "@/components/ui/segmented";
+import { Spinner } from "@/components/ui/spinner";
 import { getDisciplineWorkoutsCached, loadDisciplineWorkouts } from "@/data/workouts";
 import type { Discipline, WorkoutTemplate } from "@/types";
 import type { PlanSession } from "@/types/plan";
@@ -80,7 +80,7 @@ export function SubstituteSessionDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
+      <DialogContent className="zn-pdialog--list">
         <DialogHeader>
           <DialogTitle>{t("view.substituteTitle")}</DialogTitle>
           <DialogDescription>
@@ -91,75 +91,58 @@ export function SubstituteSessionDialog({
         </DialogHeader>
 
         {plannedSession?.sessionType === "long_run" && (
-          <div className="flex gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
-            <AlertTriangle className="mt-0.5 size-4 shrink-0" />
-            <div className="space-y-1 text-xs">
-              <p className="font-semibold">{t("view.substituteLongRunWarningTitle")}</p>
-              <p className="opacity-90">{t("view.substituteLongRunWarningBody")}</p>
-            </div>
-          </div>
+          <Alert kind="warning" title={t("view.substituteLongRunWarningTitle")}>
+            {t("view.substituteLongRunWarningBody")}
+          </Alert>
         )}
 
-        {/* Discipline tabs */}
-        <div className="flex gap-2">
-          <Button
-            variant={discipline === "cycling" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setDiscipline("cycling")}
-          >
-            {t("view.substituteCycling")}
-          </Button>
-          <Button
-            variant={discipline === "swimming" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setDiscipline("swimming")}
-          >
-            {t("view.substituteSwimming")}
-          </Button>
-        </div>
+        <div className="zn-ppick">
+          <Segmented
+            label={t("view.substituteTitle")}
+            value={discipline}
+            onChange={setDiscipline}
+            options={[
+              { value: "cycling", label: t("view.substituteCycling") },
+              { value: "swimming", label: t("view.substituteSwimming") },
+            ]}
+          />
 
-        {/* Candidate list */}
-        <div className="flex-1 overflow-y-auto space-y-2 min-h-0 mt-2">
           {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="size-6 animate-spin text-muted-foreground" />
+            <div className="zn-ppick__wait">
+              <Spinner />
             </div>
           ) : ranked.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
-              {t("view.substituteNoMatches")}
-            </p>
+            <p className="zn-ppick__empty">{t("view.substituteNoMatches")}</p>
           ) : (
-            ranked.map((candidate) => {
-              const deviationPct = Math.round(candidate.matchDistance * 100);
-              return (
-                <Card
-                  key={candidate.workout.id}
-                  interactive
-                  className="cursor-pointer"
-                  onClick={() => onSelect(candidate.workout, discipline)}
-                >
-                  <CardContent className="p-3 flex items-center justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium truncate">
-                        {pickLang(candidate.workout, "name")}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {candidate.estimatedDurationMin} min ·{" "}
-                        {t("view.substituteTssLabel", { tss: candidate.candidateTss })}
-                      </p>
-                    </div>
-                    <Badge
-                      variant={deviationPct <= 5 ? "default" : "outline"}
-                      className="shrink-0 text-xs tabular-nums"
+            <ul className="zn-ppick__list">
+              {ranked.map((candidate) => {
+                const deviationPct = Math.round(candidate.matchDistance * 100);
+                return (
+                  <li key={candidate.workout.id}>
+                    <button
+                      type="button"
+                      className="zn-ppick__item"
+                      onClick={() => onSelect(candidate.workout, discipline)}
                     >
-                      {deviationPct === 0
-                        ? t("view.substituteMatchExact")
-                        : t("view.substituteMatchDeviation", { deviation: deviationPct })}
-                    </Badge>
-                  </CardContent>
-                </Card>
-              );
-            })
+                      <span className="zn-ppick__text">
+                        <span className="zn-ppick__name">
+                          {pickLang(candidate.workout, "name")}
+                        </span>
+                        <span className="zn-ppick__meta">
+                          {candidate.estimatedDurationMin} min ·{" "}
+                          {t("view.substituteTssLabel", { tss: candidate.candidateTss })}
+                        </span>
+                      </span>
+                      <Badge variant={deviationPct <= 5 ? "default" : "outline"}>
+                        {deviationPct === 0
+                          ? t("view.substituteMatchExact")
+                          : t("view.substituteMatchDeviation", { deviation: deviationPct })}
+                      </Badge>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </div>
       </DialogContent>

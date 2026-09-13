@@ -94,9 +94,9 @@ export function AddressSearchInput({
   };
 
   return (
-    <div ref={containerRef} className={cn("relative", className)}>
-      <div className="relative">
-        <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+    <div ref={containerRef} className={cn("zn-addr", className)}>
+      <div className="zn-addr__box">
+        <MapPin size={16} className="zn-addr__glyph" />
         <input
           type="text"
           value={query}
@@ -107,51 +107,40 @@ export function AddressSearchInput({
           onFocus={() => results.length > 0 && setOpen(true)}
           placeholder={t("form.addressPlaceholder")}
           disabled={disabled}
-          className={cn(
-            "w-full rounded-md border border-input bg-background py-2 pl-9 pr-9 text-base",
-            "placeholder:text-muted-foreground",
-            "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
-            "disabled:cursor-not-allowed disabled:opacity-50",
-          )}
+          className="zn-route-field zn-addr__input"
           aria-label={t("form.addressPlaceholder")}
           aria-autocomplete="list"
           aria-controls="address-suggestions"
           aria-expanded={open}
         />
         {isSearching ? (
-          <Loader2 className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+          <Loader2 size={16} className="zn-addr__spinner" />
         ) : query.length > 0 ? (
           <button
             type="button"
             onClick={handleClear}
-            aria-label="Clear"
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+            aria-label={t("common:actions.clear")}
+            className="zn-addr__clear"
           >
-            <X className="size-4" />
+            <X size={16} />
           </button>
         ) : null}
       </div>
 
       {open && (results.length > 0 || (query.length >= 3 && !isSearching)) && (
-        <ul
-          id="address-suggestions"
-          role="listbox"
-          className="absolute left-0 right-0 z-[1200] mt-1 max-h-64 overflow-y-auto rounded-md border border-border bg-popover shadow-lg"
-        >
+        <ul id="address-suggestions" role="listbox" className="zn-addr__list">
           {results.length === 0 ? (
-            <li className="px-3 py-2 text-xs text-muted-foreground">
-              {t("form.addressNoResults")}
-            </li>
+            <li className="zn-addr__empty">{t("form.addressNoResults")}</li>
           ) : (
             results.map((result) => (
               <li key={`${result.point[0]}-${result.point[1]}`} role="option" aria-selected={false}>
                 <button
                   type="button"
                   onClick={() => handleSelect(result)}
-                  className="flex w-full items-start gap-2 px-3 py-2 text-left text-sm hover:bg-accent"
+                  className="zn-addr__option"
                 >
-                  <MapPin className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
-                  <span className="flex-1 truncate">{result.label}</span>
+                  <MapPin size={15} />
+                  <span className="zn-addr__label zn-truncate">{result.label}</span>
                 </button>
               </li>
             ))

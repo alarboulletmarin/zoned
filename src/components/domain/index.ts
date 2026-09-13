@@ -11,7 +11,7 @@ export {
 export { CategoryIcon } from "./CategoryIcon";
 export { DifficultyIcon } from "./DifficultyIcon";
 export { FavoriteButton } from "./FavoriteButton";
-export { ZonePersonalizationCTA } from "./ZonePersonalizationCTA";
+export { ZonePersonalizationCTA, ZONE_CTA_INPUT_ID } from "./ZonePersonalizationCTA";
 export { TipCard } from "./TipCard";
 export { CollectionCard } from "./CollectionCard";
 export { ScanCard } from "./ScanCard";

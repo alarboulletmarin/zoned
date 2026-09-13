@@ -4,16 +4,18 @@
     "title": "Guides",
     "subtitle": "Resources to improve",
     "seoDescription": "Running guides: nutrition, race preparation, warm-up routines and more.",
-    "seoCollectionDescription": "Running guides: nutrition, race preparation, warm-up routines and more."
+    "seoCollectionDescription": "Running guides: nutrition, race preparation, warm-up routines and more.",
+    "kicker": "{{n}} guides",
+    "heading": "Prepare, fuel and warm up"
   },
   "nutrition": {
     "title": "Nutrition",
-    "pageTitle": "Runner's Nutrition",
+    "pageTitle": "Runner's nutrition",
     "description": "Nutrition, hydration and race fueling",
     "seoDescription": "Complete nutrition guide for runners: daily nutrition, carb loading, race fueling, hydration, recovery and interactive fueling calculator.",
     "seoArticleName": "Runner's Nutrition Guide",
     "seoArticleDescription": "Complete nutrition guide for runners with interactive fueling calculator.",
-    "subtitle": "Evidence-based nutrition strategies for training, racing and recovery. Use the calculator to build your personalized fueling plan.",
+    "subtitle": "What you eat and drink in training, on race day and after the line.",
     "calculatorTitle": "Fueling Calculator",
     "calculatorDescription": "Get a personalized fueling plan based on Jeukendrup 2014 and ACSM guidelines.",
     "distanceLabel": "Distance (km)",
@@ -44,10 +46,12 @@
       "preRaceMealAnswer": "Eat 3-4 hours before start: 1-4g carbs/kg, moderate protein (15-25g), low fat (<15g), low fiber (<10g). Good options: white toast with jam and banana, porridge with honey, or white rice with lean chicken. Hydrate with 5-7ml/kg 4 hours before. Avoid heavy dairy, spicy foods, excess caffeine, and untested foods.",
       "recovery": "What should I eat after a race for recovery?",
       "recoveryAnswer": "The famous '30-minute window' is a myth: the real window is 4-6 h for glycogen and 24-48 h for protein (Aragon & Schoenfeld 2013, Margolis 2021). The next meal is enough in 9 cases out of 10. If you have another session within 4 h: 1 to 1.2 g carbs/kg + 0.3 g protein/kg (chocolate milk validated). Otherwise, full meal within 2 h. 40 g casein before sleep (Trommelen 2023). Rehydrate at 1.5x weight lost, with sodium. Avoid alcohol 4-6 h after (-24% muscle repair)."
-    }
+    },
+    "kicker": "{{n}} topics",
+    "presetsLabel": "Race distance"
   },
   "racePrep": {
-    "title": "Race Preparation",
+    "title": "Race preparation",
     "subtitle": "Everything you need to perform on race day",
     "description": "Checklist, strategy, recovery",
     "seoDescription": "Complete race preparation guide: checklists, strategy, warm-up, pacing and recovery timelines.",
@@ -71,10 +75,11 @@
     },
     "recoveryTimelines": "Recovery Timelines",
     "recoveryTimelinesDescription": "Recommended recovery periods by race distance",
-    "days": "days"
+    "days": "days",
+    "kicker": "{{n}} stages"
   },
   "warmup": {
-    "title": "Warm-up & Cool-down",
+    "title": "Warm-up and cool-down",
     "subtitle": "Routines, stretching and activation drills",
     "description": "Warm-up routines and stretching",
     "seoDescription": "Warm-up routines, cool-down protocols, dynamic stretching and activation drills for runners.",
@@ -95,7 +100,8 @@
       "restText": "Finish warm-up 5-10 minutes before the start. Use this time to position yourself, hydrate one last time, visualize your race and connect with your pacing plan."
     },
     "routines": "Warm-up Routines",
-    "selectRoutine": "Select a routine"
+    "selectRoutine": "Select a routine",
+    "kicker": "{{n}} routines"
   },
   "explore": "Explore",
   "home": "Home",

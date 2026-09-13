@@ -1,0 +1,85 @@
+/* Switch, an outlined pill that inverts when it is on. The knob moves *and*
+   the fill flips, so the state is never carried by colour alone.
+   A switch applies immediately; a deferred choice is a checkbox.
+
+   The element is a native `input[type=checkbox][role=switch]`, so the track is
+   the input itself and the knob is its ::before. Every rule keys off `:checked`
+   rather than the mirrored `data-state`: the pseudo-class is the browser's own
+   answer, and it stays right even when the switch is left uncontrolled. */
+
+.zn-switch {
+  position: relative;
+  box-sizing: border-box;
+  appearance: none;
+  flex: none;
+  margin: 0;
+
+  /* 44x24 track with a 2px gutter, the geometry from the design bundle. */
+  inline-size: 44px;
+  block-size: 24px;
+
+  background: transparent;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* On: the track floods with ink, the knob turns to paper. */
+.zn-switch:checked {
+  background: var(--ink-1);
+}
+
+.zn-switch:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-switch:disabled {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+}
+
+/* ── the knob ─────────────────────────────────────────────────────────── */
+
+.zn-switch::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  inline-size: 18px;
+  block-size: 18px;
+  border-radius: var(--r-pill);
+  background: var(--ink-1);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    background var(--dur-base) var(--ease-out);
+}
+
+/* 44 track - 2x1.5 border - 2x2 gutter - 18 knob = 19px of travel. */
+.zn-switch:checked::before {
+  transform: translateX(19px);
+  background: var(--paper-page);
+}
+
+.zn-switch:disabled::before {
+  background: var(--state-disabled-border);
+}
+
+/* WCAG 2.5.8: the drawn track is 24px tall, the target it answers to is 44px.
+   The overlay is a pseudo-element of the input itself, so a thumb landing
+   anywhere in that band still toggles, and the pill keeps its size. */
+@media (pointer: coarse) {
+  .zn-switch::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 50%;
+    block-size: var(--hit-min);
+    transform: translateY(-50%);
+  }
+}

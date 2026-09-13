@@ -4,7 +4,7 @@
  * The one invariant these tests exist for: **every row of a phase table must
  * carry exactly as many cells as the table has columns.** pdfmake 0.3 walks
  * each row against `widths` and throws `Malformed table row, a cell is
- * undefined` on a short one — it does not pad. The empty-phase placeholder
+ * undefined` on a short one, it does not pad. The empty-phase placeholder
  * used to be a single-cell row in a five-column table, so `exportToPDF` threw
  * for every session with no warmup or no cooldown (the recovery runs, CYC-001)
  * and the UI turned that into "export failed".
@@ -22,7 +22,7 @@
  *    definition, which IS what this module produces.
  *
  * The stub means these tests assert the row shape rather than watch pdfmake
- * accept it. That is deliberate — the shape is the contract pdfmake enforces —
+ * accept it. That is deliberate, the shape is the contract pdfmake enforces,
  * but it also means a green run here is not proof the real renderer is happy.
  */
 
@@ -73,7 +73,7 @@ function block(overrides: Partial<WorkoutBlock> = {}): WorkoutBlock {
 
 /**
  * A running template with only the fields `exportToPDF` reads. `category` and
- * `difficulty` must be real keys — the renderer indexes CATEGORY_META and
+ * `difficulty` must be real keys, the renderer indexes CATEGORY_META and
  * DIFFICULTY_META with them.
  */
 function workout(overrides: Partial<WorkoutTemplate> = {}): WorkoutTemplate {
@@ -164,7 +164,7 @@ beforeEach(() => {
 describe("exportToPDF", () => {
   test("emits the three phase tables", async () => {
     await runExport(workout());
-    // Warmup, main set, cooldown — all five columns wide.
+    // Warmup, main set, cooldown, all five columns wide.
     const tables = phaseTables();
     expect(tables).toHaveLength(3);
     for (const table of tables) {

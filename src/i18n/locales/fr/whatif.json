@@ -1,6 +1,7 @@
 {
   "title": "Simulateur What-If",
-  "subtitle": "Comparez deux scénarios d'entraînement et visualisez les différences",
+  "kicker": "Deux scénarios",
+  "subtitle": "Compare deux scénarios d'entraînement et lis les différences",
   "shared": {
     "title": "Profil coureur",
     "distance": "Distance de course",
@@ -68,7 +69,7 @@
   },
   "disclaimer": {
     "title": "Limites du modèle",
-    "text": "Ce simulateur compare les structures de plan, pas les performances. Les différences montrées sont basées sur les paramètres d'entrée et les règles du générateur de plans. Elles ne prédisent pas de résultat de course ni de gain de temps. Chaque coureur est unique — ces données sont un outil d'aide à la décision, pas une garantie.",
+    "text": "Ce simulateur compare les structures de plan, pas les performances. Les différences montrées sont basées sur les paramètres d'entrée et les règles du générateur de plans. Elles ne prédisent pas de résultat de course ni de gain de temps. Chaque coureur est unique, ces données sont un outil d'aide à la décision, pas une garantie.",
     "variability": "Les séances spécifiques sont choisies avec une part d'aléatoire pour la variété. Les valeurs peuvent légèrement varier entre deux comparaisons, mais les tendances restent les mêmes."
   },
   "levels": {
@@ -78,11 +79,13 @@
     "elite": "Élite"
   },
   "seo": {
-    "description": "Comparez deux scénarios d'entraînement côte à côte. Visualisez l'impact de la fréquence, de l'objectif et de la durée sur votre plan.",
+    "description": "Compare deux scénarios d'entraînement côte à côte. Tu vois l'impact de la fréquence, de l'objectif et de la durée sur ton plan.",
     "breadcrumbCalculators": "Calculateurs"
   },
   "errors": {
-    "generic": "Une erreur est survenue"
+    "generic": "Une erreur est survenue",
+    "title": "La comparaison n'a pas abouti",
+    "intact": "Tes réglages sont conservés : relance la comparaison."
   },
   "toast": {
     "saved": "Scénario sauvegardé",

@@ -1,21 +1,5 @@
 import { useMemo } from "react";
 import type { TrainingPlan } from "@/types/plan";
-import { PHASE_META } from "@/types/plan";
-import type { TrainingPhase } from "@/types";
-
-// ── Tailwind class -> SVG hex color mapping ───────────────────────────
-const TAILWIND_COLOR_MAP: Record<string, string> = {
-  "bg-blue-500": "#3b82f6",
-  "bg-yellow-500": "#eab308",
-  "bg-orange-500": "#f97316",
-  "bg-green-500": "#22c55e",
-  "bg-slate-400": "#94a3b8",
-};
-
-function phaseToSvgColor(phase: TrainingPhase): string {
-  const twClass = PHASE_META[phase].color;
-  return TAILWIND_COLOR_MAP[twClass] ?? "#6b7280";
-}
 
 interface PlanSparklineProps {
   plan: TrainingPlan;
@@ -55,14 +39,14 @@ export function PlanSparkline({ plan, currentWeek, isEn }: PlanSparklineProps) {
       const x = i * (bw + g);
       const isPast = week.weekNumber < currentWeek;
       const isCurrent = week.weekNumber === currentWeek;
-      const isFuture = week.weekNumber > currentWeek;
 
       return {
         x,
         y,
         height: barH,
-        color: phaseToSvgColor(week.phase),
-        opacity: isFuture ? 0.4 : 1,
+        // The ink ramp is the whole legend: what is done is dark, what is
+        // still ahead is pale, and the week you are in is the one accent.
+        when: isCurrent ? "current" : isPast ? "past" : "future",
         isCurrent,
         isPast,
         weekNumber: week.weekNumber,
@@ -82,7 +66,7 @@ export function PlanSparkline({ plan, currentWeek, isEn }: PlanSparklineProps) {
 
   return (
     <div
-      className="w-full"
+      className="zn-spark"
       role="img"
       aria-label={
         isEn
@@ -95,21 +79,22 @@ export function PlanSparkline({ plan, currentWeek, isEn }: PlanSparklineProps) {
         width="100%"
         height="36"
         preserveAspectRatio="none"
-        className="block"
+        className="zn-spark__svg"
       >
         {/* Week bars */}
         {bars.map((bar) => (
           <g key={bar.weekNumber}>
             <rect
+              className="zn-spark__bar"
+              data-when={bar.when}
               x={bar.x}
               y={bar.y}
               width={barWidth}
               height={bar.height}
               rx={2}
-              fill={bar.color}
-              opacity={bar.opacity}
             />
-            {/* Current week highlight: bright top stroke */}
+            {/* Current week: an ink outline around the accent bar, and the
+                marker above it. Two channels, no third colour. */}
             {bar.isCurrent && (
               <>
                 <rect
@@ -119,15 +104,13 @@ export function PlanSparkline({ plan, currentWeek, isEn }: PlanSparklineProps) {
                   height={bar.height}
                   rx={2}
                   fill="none"
-                  stroke="white"
+                  stroke="var(--line-strong)"
                   strokeWidth={1.5}
-                  strokeOpacity={0.9}
                 />
                 {/* Triangle marker above current week */}
                 <polygon
+                  className="zn-spark__marker"
                   points={`${bar.x + barWidth / 2 - 3},${bar.y - 2} ${bar.x + barWidth / 2 + 3},${bar.y - 2} ${bar.x + barWidth / 2},${bar.y - 6}`}
-                  fill="white"
-                  opacity={0.9}
                 />
               </>
             )}

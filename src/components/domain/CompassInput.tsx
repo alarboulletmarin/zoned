@@ -77,7 +77,7 @@ export function CompassInput({
   const tickOuter = radius - 2;
 
   return (
-    <div className={cn("flex flex-col items-center gap-2 select-none", className)}>
+    <div className={cn("zn-compass", className)}>
       <div
         ref={containerRef}
         role="slider"
@@ -94,11 +94,7 @@ export function CompassInput({
           setDragging(true);
           updateFromPointer(e.clientX, e.clientY);
         }}
-        className={cn(
-          "relative touch-none rounded-full border border-border/60 bg-background shadow-sm transition-colors",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
-          dragging ? "cursor-grabbing" : "cursor-grab",
-        )}
+        className={cn("zn-compass__dial", dragging && "zn-compass__dial--dragging")}
         style={{ width: size, height: size }}
       >
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
@@ -118,9 +114,10 @@ export function CompassInput({
                 y1={y1}
                 x2={x2}
                 y2={y2}
-                stroke="currentColor"
-                strokeWidth={isCardinal ? 1.5 : 0.75}
-                className="text-muted-foreground/50"
+                className={cn(
+                  "zn-compass__tick",
+                  isCardinal && "zn-compass__tick--cardinal",
+                )}
               />
             );
           })}
@@ -135,8 +132,8 @@ export function CompassInput({
             <span
               key={label}
               className={cn(
-                "absolute -translate-x-1/2 -translate-y-1/2 text-xs font-semibold",
-                deg === 0 ? "text-primary" : "text-muted-foreground",
+                "zn-compass__cardinal",
+                deg === 0 && "zn-compass__cardinal--n",
               )}
               style={{ left: x, top: y }}
             >
@@ -146,7 +143,7 @@ export function CompassInput({
         })}
 
         <div
-          className="absolute left-1/2 top-1/2 origin-bottom"
+          className="zn-compass__needle"
           style={{
             width: 4,
             height: radius - 18,
@@ -154,16 +151,16 @@ export function CompassInput({
             transformOrigin: "50% 100%",
           }}
         >
-          <div className="h-full w-full rounded-full bg-primary shadow-[0_0_0_1px_rgba(255,255,255,0.6)]" />
-          <div className="absolute -top-1 left-1/2 size-2.5 -translate-x-1/2 rotate-45 rounded-sm bg-primary" />
+          <div className="zn-compass__needle-shaft" />
+          <div className="zn-compass__needle-point" />
         </div>
 
-        <div className="absolute left-1/2 top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-background" />
+        <div className="zn-compass__hub" />
       </div>
 
-      <div className="text-center text-sm font-semibold tabular-nums">
-        <span className="text-primary">{cardinalLabel}</span>
-        <span className="text-muted-foreground"> · {value}°</span>
+      <div className="zn-compass__value">
+        <span className="zn-compass__value-cardinal">{cardinalLabel}</span>
+        <span> · {value}°</span>
       </div>
     </div>
   );

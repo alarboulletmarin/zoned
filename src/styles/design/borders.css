@@ -1,0 +1,51 @@
+/* Everything is drawn: an ink outline is the default, not the exception.
+   1.5px is the house rule, 1px reads as a hairline inside dense data, 2.5px
+   marks a selected or retained frame. Shadows are hard offsets, never blurred,
+   never stacked, and never on a list card. */
+:root {
+  --bw-hair: 1px;
+  --bw-rule: 1.5px;
+  --bw-heavy: 2.5px;
+
+  /* The RENDERED thickness of --bw-rule, and the margin a sole takes to stand
+     on a rule: a drawing's box is cut at its sole, so pulling it down by this
+     much puts the sole on the line rather than a hair above it. Chrome floors
+     a 1.5px border to a whole CSS pixel at every device ratio (measured 1px at
+     1x, 2x and 4x); Firefox does draw 1.5px, and the box then ends half a
+     pixel inside the stroke, which is still on it. Stated once, here. */
+  --rule-bite: 1px;
+
+  --border-hair: var(--bw-hair) solid var(--line-strong);
+  --border-rule: var(--bw-rule) solid var(--line-strong);
+  --border-heavy: var(--bw-heavy) solid var(--accent);
+  --border-divider: var(--bw-rule) solid var(--line-divider);
+  --border-dashed: var(--bw-rule) dashed rgba(23, 22, 20, 0.4);
+
+  --r-xs: 3px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 10px;
+  --r-xl: 16px;
+  --r-2xl: 20px;
+  --r-3xl: 22px;
+  --r-4xl: 26px;
+  --r-phone: 36px;
+  --r-pill: 999px;
+
+  --shadow-block: 8px 8px 0 rgba(23, 22, 20, 0.09);
+  --shadow-block-lg: 10px 10px 0 rgba(23, 22, 20, 0.09);
+  --shadow-none: none;
+
+  /* the creme hatch used behind an empty illustration slot */
+  --fill-slot: repeating-linear-gradient(45deg, #EFEEEA 0 7px, #F6F5F2 7px 14px);
+}
+
+/* Dark: a hard ink offset is invisible on an ink page, so the shadow deepens
+   to true black instead of lightening, depth still reads as "further from
+   the lamp", which is the same rule the light theme follows. */
+.dark {
+  --border-dashed: var(--bw-rule) dashed rgba(237, 235, 231, 0.4);
+  --shadow-block: 8px 8px 0 rgba(0, 0, 0, 0.5);
+  --shadow-block-lg: 10px 10px 0 rgba(0, 0, 0, 0.5);
+  --fill-slot: repeating-linear-gradient(45deg, #1C1811 0 7px, #171614 7px 14px);
+}

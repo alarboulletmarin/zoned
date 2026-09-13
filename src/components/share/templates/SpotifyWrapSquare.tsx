@@ -1,5 +1,5 @@
 /**
- * SpotifyWrapSquare — 1080×1080. Square variant of the SpotifyWrap recap
+ * SpotifyWrapSquare, 1080×1080. Square variant of the SpotifyWrap recap
  * style, sized for Insta Feed posts.
  */
 
@@ -7,8 +7,7 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -62,10 +61,7 @@ export function SpotifyWrapSquare({ workout }: ShareTemplateProps) {
         {/* Brand row */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Logo style={{ width: 64, height: 32 }} />
-            <span style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.02em" }}>
-              ZONED
-            </span>
+            <BrandMark height={30} />
           </div>
           <span
             style={{

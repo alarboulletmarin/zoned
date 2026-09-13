@@ -35,7 +35,7 @@ describe("seedPlanRng", () => {
 });
 
 describe("planSeedFromConfig", () => {
-  test("ignores id and createdAt — they are unique per plan", () => {
+  test("ignores id and createdAt, they are unique per plan", () => {
     expect(planSeedFromConfig({ ...CONFIG, id: "other", createdAt: "2027-01-01" })).toBe(
       planSeedFromConfig(CONFIG),
     );

@@ -3,7 +3,7 @@ export type Zone = "Z1" | "Z2" | "Z3" | "Z4" | "Z5" | "Z6";
 export type ZoneNumber = 1 | 2 | 3 | 4 | 5 | 6;
 export type ZoneSpec = string;
 
-// Discipline — the sport a workout segment belongs to.
+// Discipline, the sport a workout segment belongs to.
 // Introduced for multi-discipline foundation (running + cycling + swimming + triathlon bricks).
 // Existing running-only content is treated as discipline = "running" by default.
 export type Discipline = "running" | "cycling" | "swimming";
@@ -378,10 +378,10 @@ export const DIFFICULTY_META: Record<
   Difficulty,
   { label: string; labelEn: string; level: number; desc: string; descEn: string }
 > = {
-  beginner: { label: "Débutant", labelEn: "Beginner", level: 1, desc: "1 à 2 sorties/semaine · moins de 15 km/semaine", descEn: "1–2 runs/week · less than 15 km/week" },
-  intermediate: { label: "Intermédiaire", labelEn: "Intermediate", level: 2, desc: "3 à 4 sorties/semaine · 20–40 km/semaine", descEn: "3–4 runs/week · 20–40 km/week" },
-  advanced: { label: "Avancé", labelEn: "Advanced", level: 3, desc: "4 à 5 sorties/semaine · 40–70 km/semaine", descEn: "4–5 runs/week · 40–70 km/week" },
-  elite: { label: "Élite", labelEn: "Elite", level: 4, desc: "5 à 7 sorties/semaine · 70+ km/semaine", descEn: "5–7 runs/week · 70+ km/week" },
+  beginner: { label: "Débutant", labelEn: "Beginner", level: 1, desc: "1 à 2 sorties/semaine · moins de 15 km/semaine", descEn: "1-2 runs/week · less than 15 km/week" },
+  intermediate: { label: "Intermédiaire", labelEn: "Intermediate", level: 2, desc: "3 à 4 sorties/semaine · 20-40 km/semaine", descEn: "3-4 runs/week · 20-40 km/week" },
+  advanced: { label: "Avancé", labelEn: "Advanced", level: 3, desc: "4 à 5 sorties/semaine · 40-70 km/semaine", descEn: "4-5 runs/week · 40-70 km/week" },
+  elite: { label: "Élite", labelEn: "Elite", level: 4, desc: "5 à 7 sorties/semaine · 70+ km/semaine", descEn: "5-7 runs/week · 70+ km/week" },
 };
 
 /** Inclusive zone span. `min === max` for a single-zone spec like `Z5`. */
@@ -401,7 +401,7 @@ function clampZone(value: number): ZoneNumber {
  *
  * Zone specs are ranges as often as they are scalars: `Z1-Z2` (progressive
  * jog), `Z4→Z5+`, `Z1-Z6` (free fartlek). Collapsing a range to one number
- * has to happen in exactly one place, otherwise callers disagree — the phase
+ * has to happen in exactly one place, otherwise callers disagree, the phase
  * badge and the zone breakdown used to answer Z1 and Z2 for the same string.
  *
  * Zones above the 6-zone Zoned model (e.g. Coggan Z7 cycling) clamp to Z6
@@ -417,7 +417,7 @@ export function parseZoneSpan(zone: Zone | string | null | undefined): ZoneSpan 
 }
 
 /**
- * Dominant zone of a spec — the hardest zone it reaches. Use for colour,
+ * Dominant zone of a spec, the hardest zone it reaches. Use for colour,
  * sorting and intensity ranking. Use `parseZoneSpan` when the range itself
  * carries meaning (badges, breakdowns).
  */

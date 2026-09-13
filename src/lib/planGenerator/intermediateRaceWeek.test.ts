@@ -113,7 +113,7 @@ function goalDateForWeek(weekNumber: number): string {
 // ── Tests ────────────────────────────────────────────────────────
 
 describe("applyIntermediateRaces", () => {
-  test("no goals — weeks unchanged", () => {
+  test("no goals, weeks unchanged", () => {
     const weeks = [makeWeek(1), makeWeek(2), makeWeek(3)];
     const original = JSON.stringify(weeks);
     const config = makeConfig({ intermediateGoals: [] });
@@ -123,7 +123,7 @@ describe("applyIntermediateRaces", () => {
     expect(JSON.stringify(weeks)).toBe(original);
   });
 
-  test("priority A — race week volume reduced to ~50%", () => {
+  test("priority A, race week volume reduced to ~50%", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "10K",
@@ -144,7 +144,7 @@ describe("applyIntermediateRaces", () => {
     expect(raceSession).toBeDefined();
   });
 
-  test("priority A — long run removed from race week", () => {
+  test("priority A, long run removed from race week", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "10K",
@@ -162,7 +162,7 @@ describe("applyIntermediateRaces", () => {
     expect(longRun).toBeUndefined();
   });
 
-  test("priority A — opener session added", () => {
+  test("priority A, opener session added", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "10K",
@@ -180,7 +180,7 @@ describe("applyIntermediateRaces", () => {
     expect(opener).toBeDefined();
   });
 
-  test("priority A — pre-race week volume reduced to ~75%", () => {
+  test("priority A, pre-race week volume reduced to ~75%", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "10K",
@@ -196,7 +196,7 @@ describe("applyIntermediateRaces", () => {
     expect(preWeek.volumePercent).toBe(Math.round(85 * 0.75));
   });
 
-  test("priority A — post-race week is recovery with ~65% volume", () => {
+  test("priority A, post-race week is recovery with ~65% volume", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "10K",
@@ -213,7 +213,7 @@ describe("applyIntermediateRaces", () => {
     expect(postWeek.volumePercent).toBe(Math.round(85 * 0.65));
   });
 
-  test("priority B — race week volume ~70%, long run removed", () => {
+  test("priority B, race week volume ~70%, long run removed", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "10K",
@@ -234,7 +234,7 @@ describe("applyIntermediateRaces", () => {
     expect(longRun).toBeUndefined();
   });
 
-  test("priority C — minimal disruption, ~85% volume", () => {
+  test("priority C, minimal disruption, ~85% volume", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "5K",
@@ -255,7 +255,7 @@ describe("applyIntermediateRaces", () => {
     expect(raceSession).toBeDefined();
   });
 
-  test("two races 2 weeks apart — overlap takes most conservative volume", () => {
+  test("two races 2 weeks apart, overlap takes most conservative volume", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal1: IntermediateGoal = {
       raceDistance: "10K",
@@ -338,7 +338,7 @@ describe("applyIntermediateRaces", () => {
 
   // ── P6: Post-race long run capping ────────────────────────────
 
-  test("P6 — post-race week caps long run at 60% for semi+ race", () => {
+  test("P6, post-race week caps long run at 60% for semi+ race", () => {
     const weeks = Array.from({ length: 15 }, (_, i) =>
       makeWeek(i + 1, { targetLongRunKm: 20 }),
     );
@@ -356,7 +356,7 @@ describe("applyIntermediateRaces", () => {
     expect(postWeek.targetLongRunKm).toBe(12);
   });
 
-  test("P6 — post-race week caps long run at 80% for 10K race", () => {
+  test("P6, post-race week caps long run at 80% for 10K race", () => {
     const weeks = Array.from({ length: 15 }, (_, i) =>
       makeWeek(i + 1, { targetLongRunKm: 20 }),
     );
@@ -374,7 +374,7 @@ describe("applyIntermediateRaces", () => {
     expect(postWeek.targetLongRunKm).toBe(16);
   });
 
-  test("P6 — pre-race week caps long run at 60% for semi+ race", () => {
+  test("P6, pre-race week caps long run at 60% for semi+ race", () => {
     const weeks = Array.from({ length: 15 }, (_, i) =>
       makeWeek(i + 1, { targetLongRunKm: 20 }),
     );
@@ -394,7 +394,7 @@ describe("applyIntermediateRaces", () => {
 
   // ── P7: Key sessions converted to endurance in post-race week ──
 
-  test("P7 — post-race key sessions converted to endurance for semi+ race", () => {
+  test("P7, post-race key sessions converted to endurance for semi+ race", () => {
     const weeks = Array.from({ length: 15 }, (_, i) =>
       makeWeek(i + 1, {
         sessions: [
@@ -436,7 +436,7 @@ describe("applyIntermediateRaces", () => {
     expect(postWeek.isRecoveryWeek).toBe(true);
   });
 
-  test("P7 — post-race key sessions NOT converted for short race", () => {
+  test("P7, post-race key sessions NOT converted for short race", () => {
     const weeks = Array.from({ length: 15 }, (_, i) =>
       makeWeek(i + 1, {
         sessions: [
@@ -468,7 +468,7 @@ describe("applyIntermediateRaces", () => {
 
   // ── P8: S+2 adjustment for long races ──────────────────────────
 
-  test("P8 — S+2 week gets 90% volume for semi+ race", () => {
+  test("P8, S+2 week gets 90% volume for semi+ race", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "semi",
@@ -485,7 +485,7 @@ describe("applyIntermediateRaces", () => {
     expect(s2Week._originalVolumePercent).toBe(85);
   });
 
-  test("P8 — S+2 long run capped at 80% for semi+ race", () => {
+  test("P8, S+2 long run capped at 80% for semi+ race", () => {
     const weeks = Array.from({ length: 15 }, (_, i) =>
       makeWeek(i + 1, { targetLongRunKm: 20 }),
     );
@@ -503,7 +503,7 @@ describe("applyIntermediateRaces", () => {
     expect(s2Week.targetLongRunKm).toBe(16);
   });
 
-  test("P8 — no S+2 adjustment for short races (spike smoother may still apply)", () => {
+  test("P8, no S+2 adjustment for short races (spike smoother may still apply)", () => {
     const weeks = Array.from({ length: 15 }, (_, i) => makeWeek(i + 1));
     const goal: IntermediateGoal = {
       raceDistance: "5K",
@@ -524,7 +524,7 @@ describe("applyIntermediateRaces", () => {
 
   // ── P9: Volume spike smoothing ─────────────────────────────────
 
-  test("P9 — volume spike capped at 15% increase after race adjustments", () => {
+  test("P9, volume spike capped at 15% increase after race adjustments", () => {
     // Create weeks with increasing volume to simulate a real plan
     const weeks = Array.from({ length: 15 }, (_, i) =>
       makeWeek(i + 1, {

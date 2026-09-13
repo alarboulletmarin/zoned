@@ -1782,7 +1782,7 @@
       "id": "LR-015",
       "name": "Sortie longue durabilité (dérive cardiaque)",
       "nameEn": "Durability Long Run (Cardiac Drift Test)",
-      "description": "90-120 minutes de course à effort constant (Z2, guidé par l'allure ou la puissance) avec monitoring de la fréquence cardiaque toutes les 30 minutes. Mesure la « durabilité » aérobie : la résistance à la dégradation des réponses physiologiques sur la durée.",
+      "description": "90-120 minutes de course à effort constant (Z2, guidé par l'allure ou la puissance) avec monitoring de la fréquence cardiaque toutes les 30 minutes. Mesure la durabilité aérobie : la résistance à la dégradation des réponses physiologiques sur la durée.",
       "descriptionEn": "90-120 minutes of running at constant effort (Z2, guided by pace or power) with heart rate monitoring every 30 minutes. Measures aerobic 'durability': resistance to degradation of physiological responses over time.",
       "category": "long_run",
       "sessionType": "long_run",
@@ -1858,13 +1858,13 @@
         }
       ],
       "coachingTips": [
-        "Courez à allure ou puissance CONSTANTE — ne vous ajustez PAS à la fréquence cardiaque",
+        "Courez à allure ou puissance CONSTANTE, ne vous ajustez PAS à la fréquence cardiaque",
         "La dérive cardiaque est normale : +5-10% sur 2 heures est un bon score de durabilité",
         "Notez les conditions (chaleur, vent, terrain) qui influencent la dérive",
         "Répétez ce test toutes les 4-6 semaines pour mesurer la progression de votre durabilité"
       ],
       "coachingTipsEn": [
-        "Run at CONSTANT pace or power — do NOT adjust to heart rate",
+        "Run at CONSTANT pace or power, do NOT adjust to heart rate",
         "Cardiac drift is normal: +5-10% over 2 hours is a good durability score",
         "Note conditions (heat, wind, terrain) that influence drift",
         "Repeat this test every 4-6 weeks to measure durability progression"
@@ -1989,15 +1989,15 @@
       ],
       "coachingTips": [
         "L'objectif est le temps sur les pieds, PAS la distance ni l'allure",
-        "La marche active (power hike) est une compétence de course en ultra — entraînez-la sérieusement",
+        "La marche active (power hike) est une compétence de course en ultra, entraînez-la sérieusement",
         "Testez votre stratégie nutritionnelle de course : trouvez ce que votre estomac tolère sur la durée",
-        "Restez strictement en Z1 — toute dérive en Z2 sur cette durée entraîne une fatigue disproportionnée"
+        "Restez strictement en Z1, toute dérive en Z2 sur cette durée entraîne une fatigue disproportionnée"
       ],
       "coachingTipsEn": [
         "The goal is time on feet, NOT distance or pace",
-        "Active walking (power hike) is an ultra racing skill — train it seriously",
+        "Active walking (power hike) is an ultra racing skill, train it seriously",
         "Test your race nutrition strategy: find what your stomach tolerates over time",
-        "Stay strictly in Z1 — any drift into Z2 over this duration causes disproportionate fatigue"
+        "Stay strictly in Z1, any drift into Z2 over this duration causes disproportionate fatigue"
       ],
       "commonMistakes": [
         "Courir en Z2 au lieu de Z1, ce qui rend la séance trop éprouvante sur 3-5 heures",

@@ -1,16 +1,12 @@
 import { useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import {
   Plus,
   Trash2,
   CalendarRange,
-  Activity,
-  Clock,
   Copy,
-  Gauge,
-  ArrowRight,
   MoreVertical,
   Share,
   Upload,
@@ -24,20 +20,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
-import {
-  EditorialTitle,
-  FadeUp,
-  StaggerGrid,
-  StaggerItem,
-} from "@/components/editorial";
+import { ZoneScale } from "@/components/visualization";
 import { WeekRhythmChart } from "@/components/weekly";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { usePlans } from "@/hooks/usePlans";
@@ -49,32 +35,17 @@ import { computeWeekStats } from "@/lib/weekStats";
 import { duplicatePlan, savePlan } from "@/lib/planStorage";
 import { parseImportedPlanJson } from "@/lib/planSchema";
 import { sharedWeekUrl } from "@/lib/weekShare";
-import { usePickLang } from "@/lib/i18n-utils";
-import { cn } from "@/lib/utils";
+import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import type { AnyWorkoutTemplate } from "@/types";
 import type { TrainingPlan, WeekCategory } from "@/types/plan";
 import { WEEK_CATEGORIES } from "@/types/plan";
 
-/** One compact stat (icon + value) shown in a week card's mini-stats row. */
-function WeekStat({
-  icon: Icon,
-  value,
-}: {
-  icon: typeof Activity;
-  value: string;
-}) {
-  return (
-    <span className="inline-flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
-      <Icon className="size-3.5 text-zone-2" />
-      {value}
-    </span>
-  );
-}
-
+/** One saved week: its name, its numbers, its shape, and what you can do to it. */
 function WeekCard({
   week,
   byId,
   workoutNames,
+  locale,
   onDelete,
   onDuplicate,
   onShare,
@@ -82,141 +53,105 @@ function WeekCard({
   week: TrainingPlan;
   byId: Map<string, AnyWorkoutTemplate>;
   workoutNames: Record<string, string>;
+  locale: string;
   onDelete: (id: string) => void;
   onDuplicate: (week: TrainingPlan) => void;
   onShare: (week: TrainingPlan) => void;
 }) {
   const { t } = useTranslation("library");
   const pick = usePickLang();
-  const navigate = useNavigate();
   const slots = useMemo(
     () => planWeekToSlots(week.weeks[0], byId),
     [week, byId],
   );
   const stats = useMemo(() => computeWeekStats(slots), [slots]);
-  const to = `/weeks/${week.id}`;
+  const name = pick(week, "name");
+
+  // Numbers, not adjectives: what is in the week, then when it was written.
+  const facts = [
+    t("weekly.list.sessionsCount", { count: stats.sessions }),
+    `${stats.totalHours.toFixed(1)} h`,
+    `${stats.totalTss} TSS`,
+    new Date(week.config.createdAt).toLocaleDateString(locale),
+  ].join(" · ");
 
   return (
-    <Card
-      interactive
-      className="h-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent border-border/50"
-    >
-      <CardHeader className="cursor-pointer" onClick={() => navigate(to)}>
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg line-clamp-1 flex-1">
-            {pick(week, "name")}
-          </CardTitle>
-          <Badge variant="secondary" className="shrink-0">
+    <Card>
+      <CardHeader>
+        <Link to={`/weeks/${week.id}`} className="zn-pw__week-title">
+          {name}
+        </Link>
+        <span
+          className="zn-row"
+          style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+        >
+          <Badge variant="secondary">
             {week.config.weekCategory
               ? t(`weekly.prebuilt.category.${week.config.weekCategory}`)
-              : t("weekly.title")}
+              : t("weekly.category.none")}
           </Badge>
-        </div>
-        <CardDescription>
-          <span className="flex items-center gap-1">
-            <CalendarRange className="size-3.5" />
-            {t("weekly.list.sessionsCount", { count: stats.sessions })}
-            {" · "}
-            {new Date(week.config.createdAt).toLocaleDateString()}
-          </span>
-        </CardDescription>
+        </span>
       </CardHeader>
 
       <CardContent
-        className="space-y-3 cursor-pointer"
-        onClick={() => navigate(to)}
+        className="zn-stack"
+        style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}
       >
-        {/* Mini-stats: sessions · volume (h) · TSS */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <WeekStat
-            icon={Activity}
-            value={t("weekly.list.sessionsCount", { count: stats.sessions })}
-          />
-          <WeekStat icon={Clock} value={`${stats.totalHours.toFixed(1)} h`} />
-          <WeekStat icon={Gauge} value={`${stats.totalTss} TSS`} />
-        </div>
+        <span className="zn-mono zn-pw__facts">{facts}</span>
 
-        {/* Graphic: the 7-day rhythm (shape of the week at a glance) */}
         <WeekRhythmChart slots={slots} />
+
+        <div className="zn-pw__week-actions">
+          <PlanExportMenu
+            plan={week}
+            workoutNames={workoutNames}
+            size="sm"
+            variant="outline"
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                aria-label={t("weekly.list.actions")}
+              >
+                <MoreVertical size={15} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => onShare(week)}>
+                <Share size={16} />
+                {t("weekly.share.action")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onDuplicate(week)}>
+                <Copy size={16} />
+                {t("weekly.saved.duplicate")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => onDelete(week.id)}
+              >
+                <Trash2 size={16} />
+                {t("weekly.list.delete")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardContent>
-
-      {/* Actions — View · Export · overflow menu (share / duplicate / delete) */}
-      <div className="px-6 pb-4 flex gap-2">
-        <Button variant="outline" size="sm" className="flex-1" asChild>
-          <Link to={to}>
-            <ArrowRight className="size-3.5" />
-            {t("weekly.list.view")}
-          </Link>
-        </Button>
-        <PlanExportMenu plan={week} workoutNames={workoutNames} size="sm" />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              aria-label={t("weekly.list.actions")}
-            >
-              <MoreVertical className="size-3.5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onShare(week)}>
-              <Share className="size-4" />
-              {t("weekly.share.action")}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDuplicate(week)}>
-              <Copy className="size-4" />
-              {t("weekly.saved.duplicate")}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={() => onDelete(week.id)}
-            >
-              <Trash2 className="size-4" />
-              {t("weekly.list.delete")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
     </Card>
-  );
-}
-
-/** Toggle chip for the category filter — mirrors WorkoutFilters' FilterChip. */
-function CategoryChip({
-  label,
-  selected,
-  onClick,
-}: {
-  label: string;
-  selected: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
-        selected
-          ? "border-primary bg-primary/10 text-primary"
-          : "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
-      )}
-    >
-      {label}
-    </button>
   );
 }
 
 export function WeeksListPage() {
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
+  const isEn = useIsEnglish();
   const { plans, remove, reload } = usePlans();
   const [categoryFilter, setCategoryFilter] = useState<WeekCategory | "all">("all");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Resolve sessions → slots for the mini-stats + rhythm. Mirrors WeekViewPage's
+  // Resolve sessions → slots for the facts + rhythm. Mirrors WeekViewPage's
   // catalog build (running + cycling + swimming + strength) into one id→workout map.
   const { workouts: running } = useWorkouts();
   const { workouts: strength } = useStrengthWorkouts();
@@ -250,7 +185,7 @@ export function WeeksListPage() {
     [plans],
   );
 
-  // Category filter — chips only appear once at least one week is categorized.
+  // Category filter, chips only appear once at least one week is categorized.
   const presentCategories = useMemo(
     () =>
       WEEK_CATEGORIES.filter((c) =>
@@ -283,7 +218,7 @@ export function WeeksListPage() {
       try {
         await navigator.share({ title: name, url });
       } catch {
-        // Share sheet dismissed — nothing to do.
+        // Share sheet dismissed, nothing to do.
       }
       return;
     }
@@ -309,97 +244,154 @@ export function WeeksListPage() {
     toast.success(t("weekly.toast.imported"));
   };
 
+  const filtering = categoryFilter !== "all";
+
   return (
     <>
       <SEOHead noindex title={t("weekly.list.title")} canonical="/weeks" />
-      <div className="py-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <EditorialTitle as="h1" size="md">
-              {t("weekly.list.title")}
-            </EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
-              {t("weekly.list.subtitle")}
-            </FadeUp>
-          </div>
-          <div className="flex items-center gap-2">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".json,application/json"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleImportFile(file);
-                e.target.value = "";
-              }}
-            />
-            <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
-              <Upload className="size-4" />
-              {t("weekly.list.import")}
-            </Button>
-            <Button asChild>
-              <Link to="/weeks/new">
-                <Plus className="size-4" />
-                {t("weekly.list.create")}
-              </Link>
-            </Button>
-          </div>
-        </div>
 
-        {presentCategories.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5">
-            <CategoryChip
-              label={t("weekly.list.filterAll")}
-              selected={categoryFilter === "all"}
-              onClick={() => setCategoryFilter("all")}
-            />
-            {presentCategories.map((c) => (
-              <CategoryChip
-                key={c}
-                label={t(`weekly.prebuilt.category.${c}`)}
-                selected={categoryFilter === c}
-                onClick={() => setCategoryFilter(c)}
+      <div className="zn-pw">
+        <section className="zn-pw__band">
+          <div className="zn-pw__head">
+            <div
+              className="zn-stack zn-pw__headtext"
+              style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+            >
+              <span className="zn-kicker">
+                {t("weekly.list.saved", { count: weeks.length })}
+              </span>
+              <h1 className="zn-display" data-level="2">
+                {t("weekly.list.title")}
+              </h1>
+              <p className="zn-body zn-body--lead zn-pw__lede">
+                {t("weekly.list.subtitle")}
+              </p>
+            </div>
+
+            <div
+              className="zn-cluster"
+              style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json,application/json"
+                className="sr-only"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImportFile(file);
+                  e.target.value = "";
+                }}
               />
-            ))}
-          </div>
-        )}
-
-        {weeks.length === 0 ? (
-          <Card className="border-dashed">
-            <CardContent className="py-12 text-center space-y-4">
-              <CalendarRange className="size-10 mx-auto text-muted-foreground/60" />
-              <p className="text-muted-foreground">{t("weekly.list.empty")}</p>
+              <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload size={17} />
+                {t("weekly.list.import")}
+              </Button>
               <Button asChild>
                 <Link to="/weeks/new">
-                  <Plus className="size-4" />
+                  <Plus size={17} />
                   {t("weekly.list.create")}
                 </Link>
               </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <StaggerGrid
-            // Remount when the list changes: a StaggerItem mounted after the
-            // grid has played its entrance would otherwise stay at opacity 0
-            // (viewport once) — duplicated/imported weeks were invisible.
-            key={visibleWeeks.map((w) => w.id).join("|")}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+            </div>
+          </div>
+        </section>
+
+        {weeks.length > 0 && (
+          <div
+            className="zn-pw__band zn-cluster zn-cluster--split"
+            style={
+              {
+                "--pad-block": "var(--sp-11)",
+                "--gap": "var(--sp-10)",
+              } as React.CSSProperties
+            }
           >
-            {visibleWeeks.map((week) => (
-              <StaggerItem key={week.id}>
+            {presentCategories.length > 0 && (
+              <div
+                className="zn-cluster"
+                role="radiogroup"
+                aria-label={t("weekly.category.label")}
+                style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+              >
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={categoryFilter === "all"}
+                  className="zn-chip"
+                  onClick={() => setCategoryFilter("all")}
+                >
+                  {t("weekly.list.filterAll")}
+                </button>
+                {presentCategories.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    role="radio"
+                    aria-checked={categoryFilter === c}
+                    className="zn-chip"
+                    onClick={() => setCategoryFilter(c)}
+                  >
+                    {t(`weekly.prebuilt.category.${c}`)}
+                  </button>
+                ))}
+              </div>
+            )}
+            <ZoneScale className="zn-push" />
+          </div>
+        )}
+
+        <section className="zn-pw__band">
+          {visibleWeeks.length > 0 ? (
+            <div className="zn-grid">
+              {visibleWeeks.map((week) => (
                 <WeekCard
+                  key={week.id}
                   week={week}
                   byId={byId}
                   workoutNames={workoutNames}
+                  locale={isEn ? "en" : "fr"}
                   onDelete={remove}
                   onDuplicate={handleDuplicate}
                   onShare={handleShare}
                 />
-              </StaggerItem>
-            ))}
-          </StaggerGrid>
-        )}
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              variant={filtering ? "no-results" : "not-started"}
+              icon={CalendarRange}
+              title={t("weekly.list.emptyTitle")}
+              description={
+                filtering
+                  ? t("weekly.list.filteredOut", { total: weeks.length })
+                  : t("weekly.list.empty")
+              }
+              action={
+                filtering ? (
+                  <Button
+                    variant="outline"
+                    onClick={() => setCategoryFilter("all")}
+                  >
+                    {t("weekly.list.filterAll")}
+                  </Button>
+                ) : (
+                  // The header already spends the screen's one vermillon fill
+                  // on this exact call, so here it is the outlined accent.
+                  <Button variant="outline-primary" asChild>
+                    <Link to="/weeks/new">
+                      <Plus size={17} />
+                      {t("weekly.list.create")}
+                    </Link>
+                  </Button>
+                )
+              }
+            />
+          )}
+        </section>
       </div>
     </>
   );

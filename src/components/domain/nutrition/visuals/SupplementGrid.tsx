@@ -1,75 +1,66 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
 import { NUTRITION_ICONS } from "../icons";
-import { VERDICT_CLASSES, AIS_CLASSES } from "../accents";
 import type { SupplementEntry } from "@/data/nutrition/types";
 
 interface Props {
   items: SupplementEntry[];
 }
 
+/**
+ * The AIS supplement ladder, seventeen entries.
+ *
+ * A to D is an ordered scale of evidence, so it is painted on the zone ink
+ * ramp: A is solid ink, C is faint, and D, "no evidence", takes the 45
+ * degree hatch the system reserves for the unmeasured. The verdict keeps its
+ * words and loses its coloured dot, which said nothing the words did not.
+ */
 export function SupplementGrid({ items }: Props) {
   const { t } = useTranslation("nutrition");
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="zn-grid" style={{ "--cols": 3 } as React.CSSProperties}>
       {items.map((item) => {
         const Icon = NUTRITION_ICONS[item.iconName];
-        const verdict = VERDICT_CLASSES[item.verdict];
-        const ais = AIS_CLASSES[item.aisCategory];
         const card = (
-          <div
-            className={cn(
-              "flex h-full flex-col gap-3 rounded-xl border border-border/50 bg-muted/30 p-4",
-              "transition-all duration-200",
-              item.glossaryTermId &&
-                "motion-safe:hover:-translate-y-0.5 hover:shadow-md"
-            )}
-          >
-            <div className="flex items-start justify-between gap-2">
-              <div className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-background">
-                <Icon className="size-4 text-foreground" aria-hidden="true" />
-              </div>
-              <div className="flex items-center gap-1.5">
+          <div className="zn-nut-card">
+            <div
+              className="zn-row zn-row--split"
+              style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+            >
+              <span className="zn-nut-glyph" data-size="sm">
+                <Icon aria-hidden="true" />
+              </span>
+              <span
+                className="zn-cluster zn-fixed"
+                style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+              >
                 <span
-                  className={cn(
-                    "inline-flex size-6 items-center justify-center rounded-md text-xs font-bold",
-                    ais.bg,
-                    ais.text
-                  )}
+                  className="zn-nut-ais"
+                  data-ais={item.aisCategory}
                   title={t(`hub.supplements.aisLabel.${item.aisCategory}`)}
                 >
-                  {ais.label}
+                  {item.aisCategory}
                 </span>
-                <span
-                  className={cn(
-                    "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
-                    verdict.bg,
-                    verdict.text
-                  )}
-                >
-                  <span className={cn("size-1.5 rounded-full", verdict.dot)} aria-hidden="true" />
+                <span className="zn-nut-tag">
                   {t(`hub.supplements.verdicts.${item.verdict}`)}
                 </span>
-              </div>
+              </span>
             </div>
-            <div className="space-y-1">
-              <p className="font-semibold leading-tight">{t(item.nameKey)}</p>
-              <p className="text-xs text-muted-foreground">{t(item.rationaleKey)}</p>
-            </div>
-            <div className="mt-auto grid grid-cols-2 gap-2 pt-2 border-t border-border/40">
-              <div className="space-y-0.5">
-                <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+            <p className="zn-nut-card__title">{t(item.nameKey)}</p>
+            <p className="zn-nut-card__text">{t(item.rationaleKey)}</p>
+            <div className="zn-nut-supp__facts">
+              <div className="zn-nut-supp__fact">
+                <span className="zn-kicker zn-kicker--xs">
                   {t("hub.supplements.doseLabel")}
-                </p>
-                <p className="text-xs font-medium">{t(item.doseKey)}</p>
+                </span>
+                <p className="zn-nut-supp__value">{t(item.doseKey)}</p>
               </div>
-              <div className="space-y-0.5">
-                <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+              <div className="zn-nut-supp__fact">
+                <span className="zn-kicker zn-kicker--xs">
                   {t("hub.supplements.whenLabel")}
-                </p>
-                <p className="text-xs font-medium">{t(item.whenKey)}</p>
+                </span>
+                <p className="zn-nut-supp__value">{t(item.whenKey)}</p>
               </div>
             </div>
           </div>
@@ -79,7 +70,7 @@ export function SupplementGrid({ items }: Props) {
           <Link
             key={item.id}
             to={`/glossary/${item.glossaryTermId}`}
-            className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl"
+            className="zn-nut-supp-link"
           >
             {card}
           </Link>

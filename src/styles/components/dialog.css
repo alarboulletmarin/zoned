@@ -1,0 +1,174 @@
+/* Dialog, a paper panel raised off an ink wash. A dialog is a floating
+   surface, so it is one of the few places --shadow-block is allowed.
+
+   The panel IS a native <dialog> opened with showModal(), so the scene is its
+   own ::backdrop and there is no overlay element left to paint, nor a z-index
+   to arbitrate, because the top layer is above everything the page can stack.
+   dialog.tsx keeps the rest: the scroll lock, the cleanup on unmount, and the
+   dismissal by clicking the scene.
+
+   The parts are reusable by anything rendering its own <dialog>:
+   .zn-dialog, .zn-dialog__close, the share sheet borrows the second. */
+
+/* ── panel ────────────────────────────────────────────────────────────── */
+
+.zn-dialog {
+  /* The UA already centres a modal <dialog> with `inset: 0; margin: auto` and
+     a `fit-content` size, so the panel keeps that instead of the translate it
+     used to carry. That is not tidiness: a transform makes the panel the
+     containing block of every `position: fixed` descendant, and the date
+     pickers and selects that open inside these dialogs are fixed, they would
+     have been positioned against the panel and clipped by it. */
+  position: fixed;
+  inset: 0;
+  margin: auto;
+
+  inline-size: calc(100% - var(--sp-10) * 2);
+  max-inline-size: 500px;
+  block-size: fit-content;
+  /* The UA caps a modal at `calc(100% - 2em - 6px)`; the panel had no cap
+     before and gains none here. Sheets that want one state it themselves
+     (.zn-pdialog, .zn-planview__dialog). */
+  max-block-size: none;
+  padding: var(--pad-card);
+
+  /* Undoes the UA's `overflow: auto`: a scroll container would clip the very
+     popovers the paragraph above went to the trouble of un-clipping. */
+  overflow: visible;
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-4xl);
+  box-shadow: var(--shadow-block);
+}
+
+/* Only the open state gets a display value: the UA rule that hides a closed
+   dialog is `dialog:not([open])`, and an unconditional `display` here would
+   defeat it. */
+.zn-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
+  animation: zn-dialog-in var(--dur-base) var(--ease-out);
+}
+
+/* Radix modal layers, a select, a menu, park `pointer-events: none` on the
+   body while they are open and re-enable it on their own content. The panel
+   has to opt back in the same way, or opening a select inside a dialog would
+   go on to deaden the dialog around it. Inherited, so it covers the parts. */
+.zn-dialog {
+  pointer-events: auto;
+}
+
+/* An ink wash, not a frosted pane: the system forbids blur, so the scene is a
+   flat rgba ink at the opacity the design bundle states outright. ::backdrop
+   inherits from the dialog, which is what lets it read the token. */
+.zn-dialog::backdrop {
+  background: var(--scrim);
+  animation: zn-dialog-scene-in var(--dur-base) var(--ease-out);
+}
+
+/* The panel arrives from 8px below, the same 8px zoned-slide-in uses.
+   Nothing scales. There is no exit: the node is unmounted the moment it
+   closes, and an animation needs an element to play on. */
+@keyframes zn-dialog-in {
+  from { opacity: 0; transform: translateY(var(--sp-4)); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes zn-dialog-scene-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── header / footer ──────────────────────────────────────────────────── */
+
+/* The end padding keeps a long title clear of the close button. */
+.zn-dialog__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-inline-end: var(--sp-15);
+}
+
+.zn-dialog__title {
+  font: var(--type-h3);
+  color: var(--text-body);
+}
+
+.zn-dialog__description {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* Stacked on a phone with the primary action last, one row on a wider screen. */
+.zn-dialog__footer {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: var(--border-divider);
+}
+
+@media (min-width: 640px) {
+  .zn-dialog__footer {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+/* ── close ────────────────────────────────────────────────────────────── */
+
+/* A circle holding one glyph. The label is the sr-only "Fermer" inside it. */
+.zn-dialog__close {
+  position: absolute;
+  top: var(--sp-8);
+  right: var(--sp-8);
+
+  display: grid;
+  place-items: center;
+  inline-size: 36px;
+  block-size: 36px;
+  padding: 0;
+
+  background: transparent;
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-dialog__close > svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-dialog__close:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-dialog__close:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-dialog__close:disabled {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* WCAG 2.5.8, 44px on a coarse pointer, whatever the drawn size says. */
+@media (pointer: coarse) {
+  .zn-dialog__close {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+}

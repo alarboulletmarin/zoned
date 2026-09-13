@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus } from "@/components/icons";
-import { cn } from "@/lib/utils";
 import { DateInput } from "@/components/ui/date-input";
 import type { Unavailability, UnavailabilityReason } from "@/types/plan";
 
@@ -125,7 +124,7 @@ export function UnavailabilityManager({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto">
+      <SheetContent side="bottom">
         <SheetHeader>
           <SheetTitle>{t("unavailability.title")}</SheetTitle>
           <SheetDescription className="sr-only">
@@ -133,54 +132,47 @@ export function UnavailabilityManager({
           </SheetDescription>
         </SheetHeader>
 
-        <div className="space-y-3 px-4 pb-4">
+        <div className="zn-punavail">
           {/* Existing items */}
           {items.length === 0 && !showForm && (
-            <p className="text-sm text-muted-foreground py-3 text-center">
-              {t("unavailability.empty")}
-            </p>
+            <p className="zn-punavail__empty">{t("unavailability.empty")}</p>
           )}
 
           {groupConsecutive(items).map((group) => (
-            <div
-              key={group.from}
-              className="flex items-center gap-2 rounded-lg border bg-muted/30 px-3 py-2"
-            >
-              <span className="text-sm font-medium tabular-nums">
+            <div key={group.from} className="zn-punavail__row">
+              <span className="zn-punavail__date">
                 {group.from === group.to ? group.from : `${group.from} → ${group.to}`}
               </span>
               {group.reason && (
-                <span className="text-xs text-muted-foreground">
+                <span className="zn-kicker zn-kicker--inline">
                   {reasonLabel(group.reason, t)}
                 </span>
               )}
               {group.note && (
-                <span className="text-xs text-muted-foreground truncate max-w-[120px]">
-                  {group.note}
-                </span>
+                <span className="zn-punavail__note zn-truncate">{group.note}</span>
               )}
-              <div className="flex-1" />
               <Button
                 variant="ghost"
-                size="sm"
-                className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
+                size="icon-sm"
+                className="zn-push"
                 onClick={() => {
                   // Remove all days in this group
                   setItems((prev) => prev.filter((i) => i.date < group.from || i.date > group.to));
                 }}
                 title={t("unavailability.delete")}
+                aria-label={t("unavailability.delete")}
               >
-                <Trash2 className="size-4" />
+                <Trash2 size={16} />
               </Button>
             </div>
           ))}
 
           {/* Add form */}
           {showForm && (
-            <div className="space-y-3 rounded-lg border bg-muted/20 p-3">
-              <div className="grid grid-cols-2 gap-3">
+            <div className="zn-punavail__form">
+              <div className="zn-punavail__pair">
                 <div>
-                  <label htmlFor="unavail-from" className="text-sm font-medium mb-1 block">
+                  <label htmlFor="unavail-from" className="zn-kicker zn-kicker--inline zn-plabel">
                     {t("unavailability.from")}
                   </label>
                   <DateInput
@@ -194,7 +186,7 @@ export function UnavailabilityManager({
                   />
                 </div>
                 <div>
-                  <label htmlFor="unavail-to" className="text-sm font-medium mb-1 block">
+                  <label htmlFor="unavail-to" className="zn-kicker zn-kicker--inline zn-plabel">
                     {t("unavailability.to")}
                   </label>
                   <DateInput
@@ -206,16 +198,16 @@ export function UnavailabilityManager({
                 </div>
               </div>
               <div>
-                <label htmlFor="unavail-reason" className="text-sm font-medium mb-1 block">
+                <label htmlFor="unavail-reason" className="zn-kicker zn-kicker--inline zn-plabel">
                   {t("unavailability.reason")}
                 </label>
                 <select
                   id="unavail-reason"
                   value={newReason}
                   onChange={(e) => setNewReason(e.target.value as UnavailabilityReason | "")}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="zn-pfield"
                 >
-                  <option value="">—</option>
+                  <option value="">-</option>
                   {REASONS.map((r) => (
                     <option key={r} value={r}>
                       {reasonLabel(r, t)}
@@ -224,7 +216,7 @@ export function UnavailabilityManager({
                 </select>
               </div>
               <div>
-                <label htmlFor="unavail-note" className="text-sm font-medium mb-1 block">
+                <label htmlFor="unavail-note" className="zn-kicker zn-kicker--inline zn-plabel">
                   {t("unavailability.note")}
                 </label>
                 <input
@@ -232,11 +224,10 @@ export function UnavailabilityManager({
                   type="text"
                   value={newNote}
                   onChange={(e) => setNewNote(e.target.value)}
-                  placeholder="..."
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="zn-pfield"
                 />
               </div>
-              <div className="flex gap-2 justify-end">
+              <div className="zn-punavail__actions">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -256,14 +247,17 @@ export function UnavailabilityManager({
           )}
 
           {/* Actions */}
-          <div className={cn("flex gap-2", showForm ? "justify-end" : "justify-between")}>
+          <div
+            className="zn-punavail__actions"
+            data-align={showForm ? undefined : "split"}
+          >
             {!showForm && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setShowForm(true)}
               >
-                <Plus className="size-4 mr-1" />
+                <Plus size={16} />
                 {t("unavailability.add")}
               </Button>
             )}

@@ -1,5 +1,5 @@
 /**
- * CassetteTape — 1080×1080. Horizontal audio cassette with a coloured
+ * CassetteTape, 1080×1080. Horizontal audio cassette with a coloured
  * label band (zone), spinning reels (two black discs), 4 corner screws
  * and a felt strip across the bottom. Side A · tracklist replaces the
  * songs.
@@ -65,7 +65,7 @@ export function CassetteTape({ workout, transparent }: ShareTemplateProps) {
           flexDirection: "column",
         }}
       >
-        {/* Screws — 4 corners */}
+        {/* Screws, 4 corners */}
         {[
           { top: 16, left: 16 },
           { top: 16, right: 16 },
@@ -223,13 +223,13 @@ export function CassetteTape({ workout, transparent }: ShareTemplateProps) {
             }}
           >
             <span>
-              01 · Warm-Up — {workout.warmupTemplate?.length ?? 0}
+              01 · Warm-Up · {workout.warmupTemplate?.length ?? 0}
             </span>
             <span>
-              02 · {zoneLabel} — {workout.mainSetTemplate.length}
+              02 · {zoneLabel} · {workout.mainSetTemplate.length}
             </span>
             <span>
-              03 · Cool-Down — {workout.cooldownTemplate?.length ?? 0}
+              03 · Cool-Down · {workout.cooldownTemplate?.length ?? 0}
             </span>
           </div>
         </div>

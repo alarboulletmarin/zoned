@@ -1,5 +1,5 @@
 /**
- * TradingCard — 1080×1080. NBA-style trading card. Double border, hero
+ * TradingCard, 1080×1080. NBA-style trading card. Double border, hero
  * portrait block in zone colour, stats panel, signature. The card IS the
  * visual.
  */
@@ -130,7 +130,7 @@ export function TradingCard({ workout, transparent }: ShareTemplateProps) {
             </div>
           </div>
 
-          {/* Body — portrait block + stats column */}
+          {/* Body, portrait block + stats column */}
           <div
             style={{
               flex: 1,
@@ -139,7 +139,7 @@ export function TradingCard({ workout, transparent }: ShareTemplateProps) {
               gap: 26,
             }}
           >
-            {/* Portrait block — duotone emblem + Z tag (smaller, hero is the name) */}
+            {/* Portrait block, duotone emblem + Z tag (smaller, hero is the name) */}
             <div
               style={{
                 flex: "0 0 320px",
@@ -197,7 +197,7 @@ export function TradingCard({ workout, transparent }: ShareTemplateProps) {
               </div>
             </div>
 
-            {/* Stats column — title hero */}
+            {/* Stats column, title hero */}
             <div
               style={{
                 flex: 1,

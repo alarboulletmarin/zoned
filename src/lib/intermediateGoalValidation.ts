@@ -90,7 +90,7 @@ export function validateIntermediateGoals(
         message: "Date invalide (format attendu : AAAA-MM-JJ)",
         messageEn: "Invalid date (expected format: YYYY-MM-DD)",
       });
-      continue; // Skip further checks for this goal — date is unusable
+      continue; // Skip further checks for this goal, date is unusable
     }
 
     // 2. Must be after planStartDate
@@ -169,7 +169,7 @@ export function validateIntermediateGoals(
     }
   }
 
-  // DISTANCE_TOO_LONG_FOR_PRIORITY is informational (engine auto-upgrades) — not blocking
+  // DISTANCE_TOO_LONG_FOR_PRIORITY is informational (engine auto-upgrades), not blocking
   const WARNING_CODES: IntermediateGoalErrorCode[] = ["DISTANCE_TOO_LONG_FOR_PRIORITY", "DISTANCE_LONGER_THAN_MAIN"];
   const blockingErrors = errors.filter(e => !WARNING_CODES.includes(e.code));
 

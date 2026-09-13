@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import { cn } from "@/lib/utils";
 
 export interface SegmentedOption<T extends string> {
@@ -17,9 +19,12 @@ interface SegmentedProps<T extends string> {
 }
 
 /**
- * iOS-style segmented control. Single-choice radiogroup with the active
- * option lifted by background + shadow. Wraps each option in a `flex-1`
- * cell so the layout fills the parent row width.
+ * Segmented control. Single-choice radiogroup with the selected option
+ * inverted to ink. The group is one tab stop: the arrow keys move the
+ * selection, as a radiogroup is required to.
+ *
+ * The paint lives in `src/styles/components/segmented.css`, selecting on the
+ * `aria-checked` the radios already carry.
  */
 export function Segmented<T extends string>({
   value,
@@ -28,20 +33,55 @@ export function Segmented<T extends string>({
   label,
   className,
 }: SegmentedProps<T>) {
-  const cols = options.length;
+  const groupRef = React.useRef<HTMLDivElement>(null);
+  const selected = options.findIndex((opt) => opt.value === value);
+  // Nothing selected yet: the first option holds the tab stop so the group
+  // never falls out of the tab order.
+  const tabStop = selected === -1 ? 0 : selected;
+
+  const move = (index: number) => {
+    const next = options[index];
+    if (!next) return;
+    onChange(next.value);
+    groupRef.current
+      ?.querySelectorAll<HTMLButtonElement>('[role="radio"]')
+      [index]?.focus();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const count = options.length;
+    if (count === 0) return;
+
+    switch (event.key) {
+      case "ArrowLeft":
+      case "ArrowUp":
+        move((tabStop - 1 + count) % count);
+        break;
+      case "ArrowRight":
+      case "ArrowDown":
+        move((tabStop + 1) % count);
+        break;
+      case "Home":
+        move(0);
+        break;
+      case "End":
+        move(count - 1);
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+  };
+
   return (
     <div
+      ref={groupRef}
       role="radiogroup"
       aria-label={label}
-      className={cn(
-        "grid gap-1 rounded-lg bg-muted p-1",
-        cols === 2 && "grid-cols-2",
-        cols === 3 && "grid-cols-3",
-        cols === 4 && "grid-cols-4",
-        className,
-      )}
+      onKeyDown={handleKeyDown}
+      className={cn("zn-segmented", className)}
     >
-      {options.map((opt) => (
+      {options.map((opt, index) => (
         <button
           key={opt.value}
           type="button"
@@ -49,19 +89,12 @@ export function Segmented<T extends string>({
           aria-checked={value === opt.value}
           aria-label={opt.title}
           title={opt.title}
+          tabIndex={index === tabStop ? 0 : -1}
           onClick={() => onChange(opt.value)}
-          className={cn(
-            // Horizontal padding stays modest so narrow columns (7-day rows)
-            // never clip their label.
-            "inline-flex min-w-0 items-center justify-center gap-1.5 rounded-md px-1.5 py-1.5 text-sm font-medium transition-all sm:px-2",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
-            value === opt.value
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground",
-          )}
+          className="zn-segmented__item"
         >
           {opt.icon}
-          <span className="truncate">{opt.label}</span>
+          <span className="zn-segmented__label">{opt.label}</span>
         </button>
       ))}
     </div>

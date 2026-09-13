@@ -2,12 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowLeft, Calendar, Clock, Share, Target } from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
+import { ArrowLeft } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { decodeSharedPlan } from "@/lib/share/planShare";
 import { generatePlan } from "@/lib/planGenerator";
 import { computePlanStats } from "@/lib/planStats";
@@ -28,7 +27,7 @@ export function SharedPlanPage() {
     [encoded],
   );
 
-  // The link carries the config, not the plan — rebuild it here. Seeded
+  // The link carries the config, not the plan, rebuild it here. Seeded
   // generation guarantees this matches what the sender sees.
   const [plan, setPlan] = useState<TrainingPlan | null>(null);
   const [failed, setFailed] = useState(false);
@@ -58,14 +57,23 @@ export function SharedPlanPage() {
     return (
       <>
         <SEOHead noindex title={t("shared.title")} canonical="/plan/shared" />
-        <div className="py-12 text-center">
-          <p className="text-muted-foreground">{t("shared.invalid")}</p>
-          <Button variant="link" asChild className="mt-4">
-            <Link to="/plans">
-              <ArrowLeft className="mr-2 size-4" />
-              {t("shared.backToPlans")}
-            </Link>
-          </Button>
+        <div className="zn-planshared">
+          <section className="zn-planshared__head">
+            <Alert
+              kind="error"
+              title={t("shared.title")}
+              action={
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/plans">
+                    <ArrowLeft />
+                    {t("shared.backToPlans")}
+                  </Link>
+                </Button>
+              }
+            >
+              {t("shared.invalid")}
+            </Alert>
+          </section>
         </div>
       </>
     );
@@ -75,8 +83,10 @@ export function SharedPlanPage() {
     return (
       <>
         <SEOHead noindex title={t("shared.title")} canonical="/plan/shared" />
-        <div className="py-12 text-center text-muted-foreground">
-          {t("shared.generating")}
+        <div className="zn-planshared">
+          <section className="zn-planshared__head">
+            <Spinner size={22} label={t("shared.generating")} />
+          </section>
         </div>
       </>
     );
@@ -84,6 +94,13 @@ export function SharedPlanPage() {
 
   const stats = computePlanStats(plan);
   const planName = pick(plan, "name");
+
+  // What the link contains, in numbers, before the person commits to saving it.
+  const shape = [
+    t("shared.weeks", { count: plan.totalWeeks }),
+    t("shared.sessions", { count: stats.totalSessions }),
+    `${Math.round(stats.totalEstimatedKm)} km`,
+  ].join(" · ");
 
   const handleAdd = () => {
     if (!savePlan(plan)) {
@@ -98,68 +115,45 @@ export function SharedPlanPage() {
   return (
     <>
       <SEOHead noindex title={planName} canonical="/plan/shared" />
-      <div className="py-8 max-w-3xl mx-auto space-y-6 pb-28 lg:pb-8">
-        {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="size-11 rounded-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent flex items-center justify-center shrink-0">
-                <Share className="size-5 text-foreground/80" />
-              </div>
-              <EditorialTitle as="h1">{planName}</EditorialTitle>
-            </div>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
-              {t("shared.subtitle")}
-            </FadeUp>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="gap-1">
-                <Calendar className="size-3" />
-                {t("shared.weeks", { count: plan.totalWeeks })}
-              </Badge>
-              <Badge variant="outline" className="gap-1">
-                <Target className="size-3" />
-                {t("shared.sessions", { count: stats.totalSessions })}
-              </Badge>
-              <Badge variant="outline" className="gap-1">
-                <Clock className="size-3" />
-                {Math.round(stats.totalEstimatedKm)} km
-              </Badge>
-            </div>
+      <div className="zn-planshared">
+        {/* 1, what was shared, counted, and the one call */}
+        <section className="zn-planshared__head">
+          <span className="zn-kicker">{shape}</span>
+          <h1 className="zn-display" data-level="2">
+            {planName}
+          </h1>
+          <p className="zn-body zn-body--lead zn-measure">
+            {t("shared.subtitle")}
+          </p>
+          <div className="zn-cluster">
+            <Button onClick={handleAdd} className="zn-planshared__add">
+              {t("shared.add")}
+            </Button>
           </div>
+        </section>
 
-          {/* CTA top (desktop) */}
-          <Button size="lg" onClick={handleAdd} className="shrink-0 hidden lg:inline-flex">
-            {t("shared.add")}
-          </Button>
-        </div>
-
-        {/* Week-by-week overview */}
-        <div className="space-y-2">
+        {/* 2, week by week, as a printed table */}
+        <section className="zn-planshared__weeks">
           {plan.weeks.map((week) => (
-            <Card key={week.weekNumber} size="flush" className="border-border/50">
-              <CardContent className="p-3 sm:p-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-medium text-muted-foreground w-14 shrink-0">
-                    {t("shared.week", { number: week.weekNumber })}
-                  </span>
-                  <Badge variant="outline" className="text-xs shrink-0">
-                    {t(`shared.phase.${week.phase}`)}
-                  </Badge>
-                  <span className="text-sm text-muted-foreground ml-auto">
-                    {t("shared.sessions", { count: week.sessions.length })}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+            <div key={week.weekNumber} className="zn-planshared__week">
+              <span className="zn-mono zn-planshared__num">
+                {t("shared.week", { number: week.weekNumber })}
+              </span>
+              <span className="zn-kicker zn-kicker--inline">
+                {t(`shared.phase.${week.phase}`)}
+              </span>
+              <span className="zn-mono zn-planshared__count">
+                {t("shared.sessions", { count: week.sessions.length })}
+              </span>
+            </div>
           ))}
-        </div>
+        </section>
       </div>
 
-      {/* Mobile sticky CTA (thumb zone). */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-        <Button className="w-full" size="lg" onClick={handleAdd}>
-          {t("shared.add")}
-        </Button>
+      {/* The same call, in the thumb zone. Only one of the two is ever on
+          screen, so the screen still spends a single vermillon fill. */}
+      <div className="zn-planshared__cta">
+        <Button onClick={handleAdd}>{t("shared.add")}</Button>
       </div>
     </>
   );

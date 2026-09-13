@@ -1,5 +1,5 @@
 /**
- * Plan Generator — Main orchestrator
+ * Plan Generator, Main orchestrator
  *
  * Generates complete evidence-based training plans from user configuration.
  * Integrates pace engine (Daniels), long run progression (Pfitzinger),
@@ -52,8 +52,8 @@ function generateNonRacePlanName(
   const purposeConfig = PURPOSE_CONFIGS[purpose as keyof typeof PURPOSE_CONFIGS];
   if (purposeConfig) {
     return {
-      name: `${purposeConfig.label} — ${totalWeeks} semaines`,
-      nameEn: `${purposeConfig.labelEn} — ${totalWeeks} weeks`,
+      name: `${purposeConfig.label} · ${totalWeeks} semaines`,
+      nameEn: `${purposeConfig.labelEn} · ${totalWeeks} weeks`,
     };
   }
   return {
@@ -274,7 +274,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
   const weeks: PlanWeek[] = [];
   const usedWorkoutIds: string[] = [];
   let peakWeeklyKm = 0;
-  /** Km actually delivered by the last load week — anchors the ramp cap */
+  /** Km actually delivered by the last load week, anchors the ramp cap */
   let lastLoadWeekKm = 0;
   let peakLongRunKm = 0;
 
@@ -311,7 +311,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       peakLongRunKm = longRunTarget.distanceKm;
     }
 
-    // Race week (last week) — only for race plans
+    // Race week (last week), only for race plans
     if (weekNum === totalWeeks && isRacePlan) {
       const raceWeek = generateRaceWeek(
         weekNum,
@@ -467,7 +467,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       sessions,
       weekLabel: labels.weekLabel,
       weekLabelEn: labels.weekLabelEn,
-      // v2 fields — targetKm reflects the sessions actually scheduled
+      // v2 fields, targetKm reflects the sessions actually scheduled
       targetKm: actualKm,
       targetLongRunKm: longRunTarget?.distanceKm,
       weeklyLoadScore: Math.round(weeklyLoadScore),
@@ -507,7 +507,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     : generateNonRacePlanName(purpose, totalWeeks);
 
   // Step 12b: Add strength training suggestions (if enabled)
-  // Evidence: Ronnestad et al. (2014) — periodized strength training alongside
+  // Evidence: Ronnestad et al. (2014), periodized strength training alongside
   // endurance improves performance more than endurance alone.
   if (config.includeStrength) {
     const { addStrengthSuggestions } = await import("./strengthIntegration");

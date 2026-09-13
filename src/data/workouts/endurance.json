@@ -1847,13 +1847,13 @@
       ],
       "coachingTips": [
         "Courez aux heures chaudes (début d'après-midi) ou ajoutez des couches si les conditions sont tempérées",
-        "La fréquence cardiaque sera naturellement plus élevée — ne forcez pas pour maintenir votre allure habituelle",
+        "La fréquence cardiaque sera naturellement plus élevée, ne forcez pas pour maintenir votre allure habituelle",
         "Hydratez-vous toutes les 15-20 minutes avec de l'eau et des électrolytes",
         "Planifiez 5-8 sessions sur 2 semaines pour une acclimatation complète avant une course en chaleur"
       ],
       "coachingTipsEn": [
         "Run during hot hours (early afternoon) or add layers if conditions are temperate",
-        "Heart rate will naturally be higher — don't force to maintain your usual pace",
+        "Heart rate will naturally be higher, don't force to maintain your usual pace",
         "Hydrate every 15-20 minutes with water and electrolytes",
         "Plan 5-8 sessions over 2 weeks for complete acclimatization before a race in heat"
       ],
@@ -1975,21 +1975,21 @@
         "La veille au soir : séance de seuil ou VMA pour dépléter le glycogène musculaire",
         "Dîner léger en protéines et lipides, sans glucides après l'entraînement du soir",
         "Le matin : eau et café sont autorisés, mais aucun apport glucidique avant la course",
-        "Limitez cette séance à 1 fois par semaine maximum — le stress métabolique est important"
+        "Limitez cette séance à 1 fois par semaine maximum, le stress métabolique est important"
       ],
       "coachingTipsEn": [
         "Previous evening: threshold or VO2max session to deplete muscle glycogen",
         "Light dinner with protein and fat, no carbs after the evening workout",
         "Morning: water and coffee are allowed, but no carbohydrate intake before the run",
-        "Limit this session to maximum once per week — the metabolic stress is significant"
+        "Limit this session to maximum once per week, the metabolic stress is significant"
       ],
       "commonMistakes": [
-        "Confondre avec un simple footing à jeun — la déplétion préalable est essentielle",
+        "Confondre avec un simple footing à jeun, la déplétion préalable est essentielle",
         "Courir en Z3 ou plus au lieu de rester strictement en Z2",
         "Ne pas se réalimenter correctement après la séance (fenêtre de 30 minutes)"
       ],
       "commonMistakesEn": [
-        "Confusing with a simple fasted jog — prior depletion is essential",
+        "Confusing with a simple fasted jog, prior depletion is essential",
         "Running in Z3 or above instead of staying strictly in Z2",
         "Not refueling properly after the session (30-minute window)"
       ],
@@ -2099,13 +2099,13 @@
       ],
       "coachingTips": [
         "Nécessite une ceinture cardio HRV compatible (Polar H10, Garmin HRM-Pro) et une application DFA alpha1 (HRV Logger, RUNALYZE)",
-        "DFA alpha1 = 0,75 correspond au seuil aérobie (LT1) — la frontière entre Z1-Z2 et Z3",
+        "DFA alpha1 = 0,75 correspond au seuil aérobie (LT1), la frontière entre Z1-Z2 et Z3",
         "Cette séance est idéale pour calibrer votre allure Z2 sans test en laboratoire",
         "Effectuez-la régulièrement (toutes les 4-6 semaines) pour suivre la progression de votre seuil aérobie"
       ],
       "coachingTipsEn": [
         "Requires an HRV-compatible chest strap (Polar H10, Garmin HRM-Pro) and a DFA alpha1 app (HRV Logger, RUNALYZE)",
-        "DFA alpha1 = 0.75 corresponds to the aerobic threshold (LT1) — the boundary between Z1-Z2 and Z3",
+        "DFA alpha1 = 0.75 corresponds to the aerobic threshold (LT1), the boundary between Z1-Z2 and Z3",
         "This session is ideal for calibrating your Z2 pace without a lab test",
         "Perform regularly (every 4-6 weeks) to track your aerobic threshold progression"
       ],

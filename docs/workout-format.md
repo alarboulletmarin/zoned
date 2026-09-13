@@ -12,11 +12,11 @@ Kept in English because it names code, and shared by both halves of [CONTRIBUTIN
 
 | Path | Root shape | Files | Templates |
 |---|---|---|---|
-| `src/data/workouts/<category>.json` | `{ "category": WorkoutCategory, "templates": WorkoutTemplate[] }` | 12 | 219 |
+| `src/data/workouts/<category>.json` | `{ "category": WorkoutCategory, "templates": WorkoutTemplate[] }` | 12 | 230 |
 | `src/data/workouts/{cycling,swimming}.json` | `{ "discipline": Discipline, "templates": WorkoutTemplate[] }` | 2 | 20 |
 | `src/data/strength/sessions/*.json` | `{ "category": StrengthCategory, "templates": StrengthWorkoutTemplate[] }` | 5 | 17 |
 
-That is 256 templates across 19 files. The validator reports reading 24 files, because it also loads the 5 exercise-library files under `src/data/strength/exercises/` (`{ "category": StrengthCategory, "exercises": StrengthExercise[] }`). Those hold no templates; strength blocks reference them by id.
+That is 267 templates across 19 files. The validator reports reading 24 files, because it also loads the 5 exercise-library files under `src/data/strength/exercises/` (`{ "category": StrengthCategory, "exercises": StrengthExercise[] }`). Those hold no templates; strength blocks reference them by id.
 
 Which schema a template is held to is decided by the file's **location**, not by the template's own `kind`. `src/data/strength/sessions/` is the strength schema, `src/data/workouts/` the running one.
 
@@ -36,12 +36,12 @@ Every template has a unique id shaped `PREFIX-NNN`. The prefix is registered per
 | `threshold` | `threshold.json` | `THR` | `THR-021` |
 | `vma_intervals` | `vma.json` | `VMA` | `VMA-033` |
 | `long_run` | `long_run.json` | `SL` and `LR` | `LR-016` |
-| `hills` | `hills.json` | `HIL` | `HIL-015` |
+| `hills` | `hills.json` | `HIL` | `HIL-021` |
 | `fartlek` | `fartlek.json` | `FAR` | `FAR-016` |
 | `race_pace` | `race_pace.json` | `RP` | `RP-022` |
 | `mixed` | `mixed.json` | `MIX` | `MIX-014` |
 | `assessment` | `assessment.json` | `ASS` | `ASS-010` |
-| `trail` | `trail.json` | `TRL` | `TRL-012` |
+| `trail` | `trail.json` | `TRL` | `TRL-020` |
 | discipline `cycling` | `cycling.json` | `CYC` | `CYC-010` |
 | discipline `swimming` | `swimming.json` | `SWM` | `SWM-010` |
 | `kind: "strength"` | `src/data/strength/sessions/*.json` | `STR` | `STR-017` |
@@ -53,6 +53,14 @@ Three details that do not guess themselves:
 - The validator's id regex is `^[A-Z]+-\d+$`. Three zero-padded digits is a catalogue convention, not something the regex enforces. Follow it anyway.
 
 **To pick the next id:** open the file, take the highest number already used by *either* prefix registered for that bucket, add one. Ids are permanent: saved plans, favourites and share links resolve through them, so an id that ships can never be renumbered.
+
+**`trail.json` has three burnt ids.** `TRL-013`, `TRL-014` and `TRL-016` were written and removed the same day: they duplicated archetypes already in the catalogue (`LR-016` *Ultra time-on-feet*, `TRL-009`/`TRL-010` *Back-to-back day 1/2*, `TRL-005` *Descente technique contrôlée*). They are not reused, and the next trail session is `TRL-021`. The lesson is wider than those three cards: **search the whole catalogue for the archetype before writing a session, not just the file for its category.** An ultra session can perfectly well live in `long_run.json` — that is exactly where the duplicate was hiding.
+
+### There is no `"ultra"` category, and there will not be one
+
+Decided, and documented so it is not reopened. Ultra-ness is a property of **duration, terrain and tag**, and `src/lib/practiceIndex.ts` already reads all three. A new member in the `WorkoutCategory` union would mean editing `ID_PREFIX_REGISTRY`, the union itself, **every** exhaustive `Record<WorkoutCategory, …>` downstream, and the `category.*` i18n keys in both languages — to express something the data already says.
+
+An ultra session is therefore a `trail` (or `long_run`) template carrying `"ultra"` in `selectionCriteria.tags`, a high `estimatedDistanceKm`, and `terrainType` on its blocks. See [`docs/pratiques.md`](pratiques.md) for the full practice model.
 
 ## The three axes
 

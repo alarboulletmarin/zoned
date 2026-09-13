@@ -1,0 +1,1331 @@
+/* The plan family, the dashboard (/plans), the plan screen (/plan/:id) and
+   the shared-link preview (/plan/shared).
+ *
+ * The calendar, the weekly board, the monthly grid, the workout picker and the
+ * statistics panels were painted in the previous lot (plan-calendar.css,
+ * plan-panels.css). This file is only the page AROUND them: the head, the
+ * phase ribbon, the toolbar, the list view, and the two dialogs.
+ *
+ * Each screen reads top to bottom as one sheet: mono kicker, display title,
+ * body, then data. Bands are separated by a full-width ink rule, never by
+ * blank space. The shell wraps every route in .zn-page, which already pays the
+ * 40px (20px mobile) screen margin, so nothing here re-pays it and nothing
+ * bleeds out of the column, the page must never scroll sideways.
+ *
+ * One vermillon fill per screen:
+ *   /plans      -> "Créer un plan"
+ *   /plan/:id   -> the export menu trigger
+ *   /plan/shared-> "Ajouter à mes plans"
+ * Everything else on those screens is outlined ink, and danger is carried as
+ * stroke or type until it reaches a dialog. */
+
+/* ══ shared band furniture ═════════════════════════════════════════════ */
+
+.zn-plans,
+.zn-planview,
+.zn-planshared {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Une bande de l'écran. Même forme que .zn-section, la moitié de
+   --gap-section de chaque côté, et plus de filet, moins le padding en ligne
+   que la colonne de la coquille paie déjà. */
+.zn-plans__band,
+.zn-planview__band {
+  padding-block: var(--pad-block, calc(var(--gap-section) / 2));
+}
+
+.zn-plans__head,
+.zn-planview__head,
+.zn-planshared__head {
+  padding-block: var(--sp-10) var(--sp-13);
+}
+
+/* ══ the dashboard ═════════════════════════════════════════════════════ */
+
+/* Title block on the left, the two calls on the right, bottom-aligned so the
+   buttons sit on the title's baseline block rather than floating above it. */
+.zn-plans__head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--sp-10) var(--sp-17);
+  align-items: end;
+}
+
+@media (max-width: 768px) {
+  .zn-plans__head {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.zn-plans__lede {
+  max-inline-size: 46ch;
+}
+
+.zn-plans__wait {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  padding-block: var(--sp-19);
+  color: var(--text-faint);
+}
+
+/* The closing count, printed under the grid like a page footer. */
+.zn-plans__total {
+  padding-block: var(--sp-10) var(--sp-17);
+  border-block-start: var(--border-divider);
+  color: var(--text-faint);
+}
+
+/* ── a saved plan ─────────────────────────────────────────────────────── */
+
+/* Composed onto .zn-card: cream, 1.5px ink, 22px radius, and NO shadow,
+   a hard offset belongs to floating surfaces, never to a card in a list. */
+.zn-plancard {
+  gap: var(--sp-8);
+  block-size: 100%;
+}
+
+/* An ended plan is history, not a live plan: it recedes to the sunken paper
+   instead of losing contrast to an opacity wash. */
+.zn-plancard[data-ended="true"] {
+  background: var(--surface-band);
+}
+
+/* The whole upper block is the link to the plan, a real anchor, so the
+   keyboard reaches it and a middle click still opens a tab. It carries no box
+   of its own: the card is already the drawn object. */
+.zn-plancard__open {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: 0 var(--pad-card);
+  color: inherit;
+  text-decoration: none;
+}
+
+.zn-plancard__name {
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+  overflow-wrap: anywhere;
+}
+
+/* Dates, phase, sessions, mono, tabular, one line each. */
+.zn-plancard__facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  color: var(--text-faint);
+}
+
+/* ── progress ─────────────────────────────────────────────────────────── */
+
+/* Weeks elapsed as an ink fill inside an outlined track: the same "drawn
+   container, ink content" rule the zone bars follow. */
+.zn-plancard__track {
+  position: relative;
+  block-size: var(--sp-4);
+  overflow: hidden;
+  background: var(--surface-band);
+  border: var(--bw-hair) solid var(--line-strong);
+  border-radius: var(--r-pill);
+}
+
+.zn-plancard__fill {
+  display: block;
+  block-size: 100%;
+  inline-size: var(--zn-progress, 0%);
+  background: var(--ink-1);
+}
+
+.zn-plancard__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-inline: var(--pad-card);
+}
+
+.zn-plancard__actions > :first-child {
+  flex: 1;
+}
+
+/* Deleting is destructive, so it is vermillon, but as type on hover, not as a
+   second fill competing with the screen's one call. */
+.zn-plancard__del:hover:not(:disabled) {
+  color: var(--state-danger);
+  border-color: var(--state-danger);
+}
+
+/* ══ the plan screen ═══════════════════════════════════════════════════ */
+
+.zn-planview__back {
+  padding-block-start: var(--sp-8);
+}
+
+/* The two states with nothing to draw yet: the wait, and the plan that is not
+   there. Both keep the screen's block rhythm so nothing jumps when data lands. */
+.zn-planview__empty {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--sp-19);
+}
+
+.zn-planview__empty > .zn-alert {
+  inline-size: 100%;
+  max-inline-size: 62ch;
+}
+
+/* Identity on the left, the four numbers on the right. 380px is the stat
+   column the reference states; it collapses under 1000px. */
+.zn-planview__head {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--sp-17);
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .zn-planview__head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-13);
+  }
+}
+
+/* The title doubles as the rename field. Both states are the same display
+   step, so nothing reflows when the input takes over.
+
+   The title is a real button, not an onClick div: renaming a plan was mouse
+   only, and the keyboard has to reach it like every other control. */
+.zn-planview__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  inline-size: 100%;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-align: start;
+  background: none;
+  border: none;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.zn-planview__pencil {
+  flex: none;
+  color: var(--text-faint);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.zn-planview__title:hover .zn-planview__pencil,
+.zn-planview__title:focus-visible .zn-planview__pencil {
+  opacity: 1;
+}
+
+/* Sans survol, le titre était un bouton invisible : le premier appui basculait
+   en champ de saisie et levait le clavier sans qu'on l'ait demandé. */
+@media (pointer: coarse) {
+  .zn-planview__pencil {
+    opacity: 1;
+  }
+}
+
+/* Editing is the same type on the same line, only the ink rule under it says
+   the field is live. */
+.zn-planview__rename {
+  inline-size: 100%;
+  padding: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-display-2);
+  line-height: var(--lh-display-2);
+  letter-spacing: var(--ls-display-2);
+  color: var(--text-body);
+  background: transparent;
+  border: none;
+  /* Le filet garde ses 2.5px, donc le titre ne remonte pas d'un pixel quand
+     on le renomme, mais il passe à l'encre. C'était la plus large bande
+     vermillon de l'app, et elle ne disait aucun état : c'est le soulignement
+     d'un champ éditable. Le vermillon revient tout seul au focus, par l'anneau
+     de base.css, et redevient donc un signal de focus exclusif. */
+  border-block-end: var(--bw-heavy) solid var(--line-strong);
+}
+
+.zn-planview__facts {
+  color: var(--text-faint);
+}
+
+/* ── cette semaine ────────────────────────────────────────────────────── */
+
+/* La réponse à qu'est-ce que je cours cette semaine, au-dessus du pli.
+   Elle n'invente rien : .zn-stat porte les nombres, .zn-sess__check porte la
+   case, la même marque que la grille, pour qu'il n'y ait pas un second
+   vocabulaire à apprendre, et les états d'arête sont ceux de .zn-sess. Seule
+   la mise en page est neuve. Sur écran large elle occupe la colonne de 380px
+   que .zn-planview__head déclare déjà ; sous 1000px cette grille s'effondre et
+   la bande passe pleine largeur juste sous le titre, c'est-à-dire à sa place. */
+.zn-weeknow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+  min-inline-size: 0;
+}
+
+.zn-weeknow__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2) var(--sp-8);
+}
+
+/* Un vrai h2, la page n'en avait qu'un, enterré dans un onglet. Il garde
+   l'échelle du kicker : c'est un libellé de bande, pas un titre d'écran. */
+.zn-weeknow__title {
+  margin: 0;
+  font-weight: var(--fw-regular);
+}
+
+.zn-weeknow__where {
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* La séance du jour, pleine largeur, parce que son nom doit tenir. */
+.zn-weeknow__today {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* Les mêmes arêtes que la grille pose, jamais une seconde grammaire. */
+.zn-weeknow__today[data-status="completed"] {
+  border-color: var(--state-success);
+}
+
+/* Modifiée après coup. La règle manquait ici alors que plan-calendar.css la
+   pose depuis toujours sur .zn-sess : la carte du jour ne disait pas qu'une
+   séance avait été retouchée. L'arête d'encre pleine, sans troisième couleur ;
+   le crayon de .zn-sess__check porte le second canal. */
+.zn-weeknow__today[data-status="modified"] {
+  border-color: var(--line-strong);
+}
+
+.zn-weeknow__today[data-status="skipped"] {
+  background: var(--state-disabled-fill);
+  border-color: var(--state-disabled-border);
+}
+
+/* Ici la case n'est plus serrée dans une colonne de 76px : elle prend sa
+   taille pour de bon. 24px au pointeur fin satisfait SC 2.5.8 sans extension ;
+   au doigt elle atteint le plancher, et l'extension invisible de
+   plan-calendar.css n'a plus de raison d'être. */
+.zn-weeknow__check {
+  inline-size: var(--sp-12);
+  block-size: var(--sp-12);
+  margin-block-start: var(--sp-1);
+}
+
+.zn-weeknow__check > svg {
+  inline-size: var(--sp-7);
+  block-size: var(--sp-7);
+}
+
+@media (pointer: coarse) {
+  .zn-weeknow__check {
+    inline-size: var(--hit-min);
+    block-size: var(--hit-min);
+  }
+
+  .zn-weeknow__check::after {
+    content: none;
+  }
+}
+
+.zn-weeknow__open {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+  min-block-size: var(--hit-min);
+
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.zn-weeknow__open[data-static="true"] {
+  cursor: default;
+}
+
+/* Le nom entier. Deux lignes de corps, pas six caractères. */
+.zn-weeknow__name {
+  font: var(--fw-semibold) var(--fs-body-lg) / 1.2 var(--font-display);
+  letter-spacing: var(--ls-h4);
+  color: var(--text-body);
+  overflow-wrap: anywhere;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-weeknow__open:not([data-static]):hover .zn-weeknow__name {
+  color: var(--text-link);
+}
+
+.zn-weeknow__today[data-status="skipped"] .zn-weeknow__name {
+  text-decoration: line-through;
+  color: var(--text-faint);
+}
+
+.zn-weeknow__facts,
+.zn-weeknow__rest {
+  margin: 0;
+  color: var(--text-faint);
+}
+
+.zn-weeknow__facts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-6);
+}
+
+/* La séance clé sous un filet : elle appartient à la bande, pas à la carte. */
+.zn-weeknow__next {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  margin: 0;
+  padding-block-start: var(--sp-8);
+  border-block-start: var(--border-divider);
+  color: var(--text-muted);
+}
+
+.zn-weeknow__star {
+  flex: none;
+  margin-block-start: var(--sp-2);
+  color: var(--accent);
+}
+
+/* ── the phase ribbon ─────────────────────────────────────────────────── */
+
+/* Le ruban ferme la page : le filet de bas que .zn-disclosure pose ferait une
+   seconde ligne juste au-dessus du pied. */
+.zn-planview__arc {
+  border-block-end: 0;
+}
+
+/* Width is the phase's share of the plan, ink density is its intensity, the
+   same ramp .zn-pchart__bar uses, so the ribbon and the statistics chart can
+   never disagree. The swatches themselves are .zn-pswatch, borrowed whole.
+
+   The ribbon is also the ground. A figure stands on its top edge at the current
+   week, the vermillon "now" rule under its sole, and a mono caption under the
+   rule at the same vertical. The page hands over the week position (--zn-at),
+   the pose's viewBox ratio (--zn-fig-aspect), where along its box the sole
+   touches (--zn-fig-foot) and the caption's length (--zn-where-chars); the
+   rest is arithmetic here, never eyeballed. The figure's height is reserved in
+   the flow as padding, so nothing above it is ever covered; only the inline
+   position is absolute, inside this same block. */
+.zn-planview__ribbon {
+  --zn-fig-h: 128px;
+  --zn-track-h: var(--sp-10);
+  --zn-fig-w: calc(var(--zn-fig-h) * var(--zn-fig-aspect, 0.6));
+  --zn-foot-x: calc(var(--zn-fig-w) * var(--zn-fig-foot, 0.5));
+  /* The box's inline start: sole on the week, but never closer than 4px to
+     the screen edge, at the first and last weeks the figure gives up a few
+     pixels (the rule follows it, still inside the week) rather than the page
+     a horizontal scroll or a hand cut by the edge. */
+  --zn-gutter: calc(var(--pad-screen-x) - var(--sp-2));
+  --zn-x: clamp(
+    calc(var(--zn-gutter) * -1),
+    calc(var(--zn-at, 0%) - var(--zn-foot-x)),
+    calc(100% + var(--zn-gutter) - var(--zn-fig-w))
+  );
+  position: relative;
+  padding-block-start: var(--zn-fig-h);
+}
+
+/* Not started: standing at the start line, facing down the ribbon. Ended:
+   walking off the end. Both are placed by the box, flush with the ribbon's
+   ends, so every foot has ground under it and nothing enters the gutter. */
+.zn-planview__ribbon[data-standing="before"] {
+  --zn-x: 0px;
+}
+
+.zn-planview__ribbon[data-standing="after"] {
+  --zn-x: calc(100% - var(--zn-fig-w));
+}
+
+.zn-planview__track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-1);
+  /* 20px, not the legend swatch's 12: under a figure, a 12px band reads as a
+     podium step. */
+  block-size: var(--zn-track-h);
+}
+
+.zn-planview__track .zn-pswatch {
+  inline-size: var(--zn-span, 0%);
+  block-size: auto;
+}
+
+/* The figure. Its viewBox ends at the sole, so the box bottom is the contact
+   line: one hairline down from the reserved band, it lands on the underside of
+   the swatch border and the sole sits on the rule. Ink, not the phase tint,
+   the swatch below already carries the phase, and a tinted figure on a tinted
+   band would lose its edge in the dark theme. */
+.zn-planview__figure {
+  position: absolute;
+  inset-block-start: var(--bw-hair);
+  inset-inline-start: var(--zn-x);
+  inline-size: var(--zn-fig-w);
+  block-size: var(--zn-fig-h);
+  color: var(--text-body);
+}
+
+.zn-planview__figure[data-flip="true"] {
+  transform: scaleX(-1);
+}
+
+/* Where you are, as a stroke. A vermillon rule, never a dot in the margin,
+   and it stays under the foot: the owner's call, the sole comes to stand on
+   it. Two pixels over the track on both sides, so it meets the sole. */
+.zn-planview__now {
+  position: absolute;
+  inset-block-start: calc(var(--zn-fig-h) - var(--sp-1));
+  block-size: calc(var(--zn-track-h) + var(--sp-1) * 2);
+  inset-inline-start: calc(var(--zn-x) + var(--zn-foot-x) - var(--bw-heavy) / 2);
+  inline-size: var(--bw-heavy);
+  background: var(--accent);
+}
+
+/* The caption under the sole: "S6 · CONSTRUCTION · 4-6", centred on the foot.
+   Its width is known before layout because the font is monospace, one
+   advance plus one letter-spacing per character, which is what lets it be
+   clamped inside the ribbon instead of spilling off a phone at week 1. */
+.zn-planview__where {
+  --zn-where-w: calc(var(--zn-where-chars, 0) * (1ch + var(--ls-mono)));
+  display: block;
+  inline-size: fit-content;
+  margin-block-start: var(--sp-4);
+  margin-inline-start: clamp(
+    0px,
+    calc(var(--zn-x) + var(--zn-foot-x) - var(--zn-where-w) / 2),
+    calc(100% - var(--zn-where-w))
+  );
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+@media (min-width: 768px) {
+  .zn-planview__ribbon {
+    --zn-fig-h: 172px;
+    --zn-track-h: var(--sp-12);
+  }
+}
+
+.zn-planview__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-10);
+}
+
+.zn-planview__legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  color: var(--text-faint);
+}
+
+/* ── notices ──────────────────────────────────────────────────────────── */
+
+.zn-planview__notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+/* ── the programme toolbar ────────────────────────────────────────────── */
+
+/* The tab list already sits on its own rule, so the panel below it is a plain
+   stack: toolbar, legend, guidance, board. */
+.zn-tabs.zn-planview__band {
+  gap: var(--sp-11);
+}
+
+.zn-planview__programme {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.zn-planview__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+/* Dropping a session onto a day needs a pointer and a grid; on a phone the
+   picker is a sheet the week's own dashed button opens instead. */
+.zn-planview__add-btn {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .zn-planview__add-btn {
+    display: inline-flex;
+  }
+}
+
+/* Sous 768px la barre d'outils n'a plus que le sélecteur de vue : il prend la
+   ligne plutôt que d'en laisser 80 % vide, deux cibles pleine largeur au lieu
+   de deux pastilles de 29px. */
+@media (max-width: 767px) {
+  .zn-planview__toolbar > .zn-segmented {
+    flex: 1;
+  }
+}
+
+/* What the marks mean, and how the board is worked. The four states are mono
+   micro-labels next to the mark itself; the two gestures are sentences, so they
+   are caption type and not mono. Le tout vit dans un <details> : la légende ne
+   se lit qu'une fois, elle n'a pas à occuper le premier écran chaque jour. */
+.zn-planview__hints-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-10);
+  color: var(--text-faint);
+}
+
+.zn-planview__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+/* The three completion marks are the calendar's own checkbox, frozen: same
+   geometry, same states, no second vocabulary to learn. */
+.zn-planview__hints .zn-sess__check {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* The gesture depends on the pointer, not on the viewport width: a small
+   window with a mouse still right-clicks. */
+.zn-planview__hint-coarse {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .zn-planview__hint-fine {
+    display: none;
+  }
+  .zn-planview__hint-coarse {
+    display: inline;
+  }
+}
+
+/* ── board + side panel ───────────────────────────────────────────────── */
+
+.zn-planview__board {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-10);
+}
+
+.zn-planview__main {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* Docked beside the board. It disappears at exactly the width where the picker
+   becomes a bottom sheet (768px, set in plan-calendar.css), a different
+   breakpoint here would leave a band with neither. */
+.zn-planview__side {
+  flex: none;
+  inline-size: 280px;
+  position: sticky;
+  inset-block-start: var(--sp-15);
+}
+
+@media (max-width: 767px) {
+  .zn-planview__side {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .zn-planview__side {
+    inline-size: 320px;
+  }
+}
+
+/* ── the list view ────────────────────────────────────────────────────── */
+
+.zn-planlist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+/* The header's hover fill and the body's top rule both run to the card's edge,
+   so the card clips them to its own 22px radius. */
+.zn-planlist__week {
+  overflow: hidden;
+}
+
+/* La semaine en cours porte le cadre vermillon entier, c'est maintenant,
+   le seul sens qui garde ce ton, doublé par le badge Semaine en cours
+   que l'en-tête rend déjà (WCAG 1.4.1).
+   En outline et non en bordure : la carte gardait une bordure de 1px et
+   passait à 2px en devenant courante, donc elle grandissait de 2px en largeur
+   comme en hauteur et se désalignait de ses voisines dans la colonne. Un
+   outline ne participe pas à la boîte. Et un outline plutôt qu'un box-shadow
+   inset, parce que .zn-planlist__toggle occupe toute la boîte de contenu :
+   son fond de survol passerait PAR-DESSUS un anneau inset, alors que
+   l'outline se peint au-dessus des descendants. Le décalage négatif le range
+   à l'intérieur, où la carte le découpe à son rayon. */
+.zn-planlist__week[data-current="true"] {
+  outline: var(--bw-heavy) solid var(--accent);
+  outline-offset: calc(-1 * var(--bw-heavy));
+}
+
+/* The whole week header opens and closes it. */
+.zn-planlist__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-8) var(--pad-card-sm);
+  text-align: start;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-planlist__toggle:hover {
+  background: var(--surface-band);
+}
+
+.zn-planlist__label {
+  font: var(--fw-medium) var(--fs-body) / 1.25 var(--font-text);
+}
+
+/* Ce que la semaine porte : ses marques et ses chiffres. Un seul bloc, pour
+   qu'il tienne ou qu'il passe à la ligne d'un seul tenant, avant, les quatre
+   étaient des frères de rang égal, tous insécables, et c'est le TITRE qui
+   payait leur largeur. */
+.zn-planlist__aside {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-8);
+  flex: none;
+}
+
+/* Sur téléphone, le bloc descend sous le titre.
+   Mesuré à 390 px : la carte fait 350, la rangée en demandait 388. La
+   pastille semaine en cours à elle seule prend 162 px, les chiffres 146,
+   et aucun des deux ne se coupe, il ne restait rien pour S1, Base, qui
+   se retrouvait à zéro pixel de large, à déborder sous la pastille. Le
+   chevron, lui, tombait vingt-trois pixels après le bord de la carte.
+
+   Le titre garde donc la première ligne avec le chevron, et ce qui décrit la
+   semaine prend la deuxième. `order` et non un changement d'ordre dans le
+   DOM : le chevron reste le dernier élément atteint au clavier, là où il
+   l'était. */
+@media (max-width: 640px) {
+  .zn-planlist__toggle {
+    flex-wrap: wrap;
+    gap: var(--sp-5) var(--sp-6);
+  }
+
+  .zn-planlist__aside {
+    order: 1;
+    flex: 1 0 100%;
+    column-gap: var(--sp-6);
+  }
+}
+
+.zn-planlist__body {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-2) var(--pad-card-sm) var(--sp-8);
+  border-block-start: var(--border-divider);
+}
+
+/* ── une séance, une ligne ────────────────────────────────────────────────
+ *
+ * Elle était une CARTE : fond de papier, contour, rayon de 6px, douze pixels
+ * de rembourrage, posée dans le corps d'une carte de semaine, elle-même posée
+ * dans la colonne. Trois cadres emboîtés pour lire un nom de séance et sa
+ * durée, cinq fois par semaine, dix semaines de suite. C'est cet emboîtement
+ * qui rend la vue lourde : chaque contour demande à l'œil de décider où
+ * commence et où finit un objet, et il y en avait trois pour un seul.
+ *
+ * Ici, la séance redevient une LIGNE, séparée de la suivante par un filet. Le
+ * cadre de la semaine suffit à dire où le groupe commence.
+ *
+ * Ce que le cadre portait, l'app le porte déjà ailleurs :
+ *
+ * - le STATUT (faite / modifiée / sautée) était une couleur de bordure ; il
+ *   est sur la case à cocher, qui le dit par un glyphe ET par un ton, deux
+ *   canaux, donc WCAG 1.4.1 tenu sans la bordure. La séance sautée garde en
+ *   plus son texte barré, restitué plus bas pour cette vue.
+ * - l'INDISPONIBILITÉ garde sa hachure à 45°, en bande pleine largeur.
+ *
+ * Les sélecteurs restent doublés : .zn-sess[data-kind="race"] centre son texte
+ * pour une case de calendrier, et une seule classe perdrait contre lui. */
+.zn-sess.zn-planlist__sess {
+  /* Une grille, plus une rangée flex.
+   *
+   * En flex, la colonne du titre était `flex: 1`, donc une base de 0, à côté
+   * d'un bloc de méta en `flex: none`. Quand la méta tenait sur la ligne, elle
+   * prenait sa largeur de contenu ENTIÈRE et le titre héritait de ce qui
+   * restait : mesuré à 390px, 3 PIXELS. Le nom débordait alors de sa boîte et
+   * se peignait par-dessus la pastille. Deux séances de renforcement sur cinq
+   * étaient illisibles, et les trois autres passaient seulement parce que leur
+   * méta était assez large pour tomber à la ligne.
+   *
+   * `minmax(0, 1fr)` donne au titre la place restante sans jamais descendre
+   * sous zéro ni déborder, et les pistes `auto` des deux bords se réduisent au
+   * plus à leur contenu minimal. La collision ne peut plus se produire. */
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "check main meta";
+  align-items: start;
+  column-gap: var(--sp-7);
+  row-gap: var(--sp-5);
+  padding: var(--sp-7) var(--sp-4);
+
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+.zn-sess.zn-planlist__sess + .zn-sess.zn-planlist__sess {
+  border-block-start: var(--border-divider);
+}
+
+.zn-sess.zn-planlist__sess[data-kind] {
+  text-align: start;
+}
+
+.zn-planlist__sess > .zn-sess__check {
+  grid-area: check;
+  /* La case s'aligne sur la première ligne du nom, pas sur le haut de la
+     boîte : deux objets de hauteurs différentes posés en `start` se lisent
+     décalés. */
+  margin-block-start: 1px;
+}
+
+/* Un jour de course n'a pas de case à cocher. Sans elle, la piste `check`
+   tombait à zéro mais gardait son écart, et la ligne s'ouvrait sur 14px de
+   vide que rien ne justifiait. */
+.zn-sess.zn-planlist__sess:not(:has(> .zn-sess__check)) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "main meta";
+}
+
+/* Une séance sautée : le texte barré, qui était porté par .zn-sess__name, le
+   nom de la case de calendrier. La liste nomme sa séance avec un lien. */
+.zn-sess.zn-planlist__sess[data-status="skipped"] .zn-planlist__link {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+/* Unavailable that day: the 45 degree hatch the system gives anything
+   unmeasured, exactly as the calendar draws it on the cell. Pleine largeur
+   maintenant que la ligne n'a plus de boîte, la bande DIT l'empêchement. */
+.zn-sess.zn-planlist__sess[data-blocked="true"] {
+  background-color: var(--surface-band);
+  background-image: var(--zone-recovery);
+  padding-inline: var(--sp-6);
+  border-radius: var(--r-sm);
+}
+
+.zn-planlist__sess-main {
+  grid-area: main;
+  min-inline-size: 0;
+}
+
+.zn-planlist__link {
+  display: block;
+  font: var(--fw-medium) var(--fs-body-sm) / 1.35 var(--font-text);
+  color: var(--text-body);
+  text-decoration: none;
+  /* Un nom d'un seul mot plus long que sa colonne se coupe au lieu de sortir
+     de la grille, la même règle que .zn-sess__name applique déjà en case. */
+  overflow-wrap: anywhere;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-planlist__link:hover {
+  color: var(--text-link);
+}
+
+.zn-planlist__note {
+  margin-block-start: var(--sp-1);
+  color: var(--text-faint);
+}
+
+/* Ce que la séance coûte : son type, sa durée, sa distance. Une ligne de mono
+   discret sous le nom, séparée par des points, plus une pastille pleine, une
+   horloge et deux blocs insécables posés à droite du titre.
+   La pastille faisait 32px de haut et 1.5px de contour pour qualifier un nom
+   de 14 : elle pesait plus que lui, et il y en avait une par séance. */
+.zn-planlist__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-5);
+  margin-block-start: var(--sp-3);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.4;
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* Les points ne sont pas dans le texte : ils sont dessinés entre les éléments
+   qui restent, donc une séance sans distance ne finit pas sur un séparateur
+   orphelin. */
+.zn-planlist__facts > * + *::before {
+  content: "·";
+  margin-inline-end: var(--sp-5);
+  color: var(--line-divider);
+}
+
+/* L'étoile est une marque, pas un mot : ce qui la suit n'a pas à s'en séparer
+   par un point. */
+.zn-planlist__facts > .zn-sess__key + *::before {
+  content: none;
+}
+
+.zn-planlist__facts > .zn-sess__key {
+  align-self: center;
+}
+
+/* Le type de séance. Capitales et crénage large : c'est un code, pas un mot. */
+.zn-planlist__type {
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+}
+
+.zn-planlist__cost {
+  white-space: nowrap;
+}
+
+/* Dès qu'il y a de la largeur, la légende remonte au BOUT de la ligne du nom.
+   Sur bureau, la ligne mesure 1038px pour un nom qui en occupe 300 : lui payer
+   une ligne à elle coûtait seize pixels de hauteur par séance, cinquante
+   séances par plan, pour de la place horizontale qui était déjà là. Le
+   commentaire de la séance, lui, garde sa ligne entière, c'est de la prose,
+   elle a besoin de sa mesure.
+
+   Le seuil est celui du rang lui-même (641px), pas celui du panneau
+   d'ajout : ce sont deux questions différentes. */
+@media (min-width: 641px) {
+  .zn-planlist__sess-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name facts"
+      "note note";
+    column-gap: var(--sp-11);
+    align-items: baseline;
+  }
+
+  /* Le nom, quelle que soit la forme qu'il prend, un lien de séance, le
+     drapeau d'un jour de course, le libellé d'une activité. */
+  .zn-planlist__sess-main > :not(.zn-planlist__note):not(.zn-planlist__facts) {
+    grid-area: name;
+  }
+
+  .zn-planlist__sess-main > .zn-planlist__note {
+    grid-area: note;
+  }
+
+  .zn-planlist__sess-main > .zn-planlist__facts {
+    grid-area: facts;
+    margin-block-start: 0;
+    flex-wrap: nowrap;
+  }
+}
+
+.zn-planlist__meta {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-4);
+}
+
+/* Le bouton qui ouvre le menu de la séance.
+ *
+ * Il n'existe QUE sur téléphone : au-dessus, les quatre glyphes tiennent au
+ * bout de la ligne, le survol les explique et le clic droit ouvre le même
+ * menu. Sous 640px, ces quatre glyphes de 14px alignés au bout d'une carte de
+ * 350 étaient quatre cibles qu'on rate, dont aucune ne dit son nom. */
+.zn-planlist__more {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  min-inline-size: 32px;
+  min-block-size: 32px;
+  padding: 0;
+
+  /* À l'encre sourde et non au filet : c'est la seule porte vers les gestes
+     de la séance sur téléphone, et la remarque qui l'a fait naître était
+     je ne vois pas la possibilité de…. Un affordance qu'on cherche n'en
+     est pas un. */
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-planlist__more > svg {
+  inline-size: var(--sp-9);
+  block-size: var(--sp-9);
+}
+
+.zn-planlist__more:hover {
+  color: var(--text-body);
+}
+
+/* In a reading list the actions stay out: hiding them behind hover would put
+   them out of reach of a touch pointer, which the dense grid solves with a
+   long-press menu the list has no room for. The three-class selector outranks
+   .zn-sess:hover .zn-sess__action whichever order the files are imported in. */
+.zn-planlist__acts {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.zn-planlist__sess .zn-planlist__acts .zn-sess__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Au doigt, ces quatre glyphes font 14px de côté : sous le plancher de 24 de
+   la WCAG 2.5.8. Sous 640px ils sont remplacés par le bouton de menu ; ce qui
+   reste couvert ici est la tablette au doigt, où la rangée est rendue et doit
+   donc être visable. */
+@media (pointer: coarse) {
+  .zn-planlist__sess .zn-planlist__acts .zn-sess__action {
+    min-inline-size: 32px;
+    min-block-size: 32px;
+  }
+}
+
+.zn-planlist__sess .zn-planlist__acts .zn-sess__action:hover {
+  color: var(--text-link);
+}
+
+.zn-planlist__sess .zn-planlist__acts .zn-sess__action[data-variant="destructive"]:hover {
+  color: var(--state-danger);
+}
+
+/* Le jour est bloqué. Dans la ligne de légende comme le reste, mais à l'encre
+   du corps de texte : c'est le seul fait de cette ligne qui contredit le
+   plan. La bande hachurée derrière le dit déjà ; le mot le nomme. */
+.zn-planlist__blocked {
+  color: var(--text-body);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+}
+
+/* A week whose sessions are all closed out. The single added hue, as type. */
+.zn-planlist__done {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding-block: var(--sp-6);
+  color: var(--state-success);
+}
+
+/* Closing the week out: an outlined vermillon call inside the card, so the
+   screen still spends its single fill on the export. */
+.zn-planlist__validate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-6);
+
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--accent);
+  background: transparent;
+  border: var(--border-heavy);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-planlist__validate:hover {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.zn-planlist__validate:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* An absence is dashed, the same hole the "+5 more" chip draws. */
+.zn-planlist__add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-6);
+
+  font: var(--type-body-sm);
+  color: var(--text-faint);
+  background: transparent;
+  border: var(--border-dashed);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-planlist__add:hover {
+  color: var(--text-body);
+  border-color: var(--line-strong);
+}
+
+@media (min-width: 768px) {
+  .zn-planlist__add {
+    display: none;
+  }
+}
+
+/* ── the date dialog ──────────────────────────────────────────────────── */
+
+.zn-planview__summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-11);
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-planview__summary-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+}
+
+.zn-planview__summary-row > svg {
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* ── the week-validation dialog ───────────────────────────────────────── */
+
+/* A long list of unresolved sessions scrolls inside the panel, never past the
+   bottom of the viewport. */
+.zn-planview__dialog {
+  max-block-size: 85vh;
+  overflow-y: auto;
+}
+
+/* Two decisions of equal weight, so they stack full width instead of sitting
+   side by side with one of them looking like the cancel. */
+.zn-dialog__footer.zn-planview__choices {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.zn-planview__choices .zn-btn {
+  inline-size: 100%;
+  block-size: auto;
+  padding-block: var(--sp-6);
+  white-space: normal;
+}
+
+.zn-planview__unresolved {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  max-block-size: 220px;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--sp-8);
+  list-style: none;
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-planview__unresolved > * {
+  flex: none;
+}
+
+.zn-planview__unresolved li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-6);
+}
+
+/* ══ the shared-link preview ═══════════════════════════════════════════ */
+
+.zn-planshared {
+  max-inline-size: var(--page-max-narrow);
+  margin-inline: auto;
+}
+
+.zn-planshared__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+/* One row per week: number, phase, session count. A table of eight to twenty
+   rows, so it is drawn as rules rather than as twenty outlined cards. */
+.zn-planshared__weeks {
+  display: flex;
+  flex-direction: column;
+  border-block-start: var(--border-rule);
+}
+
+.zn-planshared__week {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  padding-block: var(--sp-6);
+  border-block-end: var(--border-divider);
+}
+
+.zn-planshared__num {
+  inline-size: 76px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-planshared__count {
+  margin-inline-start: auto;
+  color: var(--text-muted);
+}
+
+/* The call follows the thumb on a phone: pinned to the bottom of the viewport,
+   on opaque paper over a full-width ink rule. No blur, nothing translucent. */
+.zn-planshared__cta {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 30;
+  padding: var(--sp-6) var(--pad-screen-x);
+  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom));
+  background: var(--surface-page);
+  border-block-start: var(--border-rule);
+}
+
+/* Below 1024px the floating menu pill sits over the end of this bar. The bar
+   is pinned to the viewport floor, so the page's --fab-clear reserve cannot
+   move it: it gives up the end of its own gutter instead, and its call stops
+   where the pill starts rather than running behind it. */
+@media (max-width: 1023px) {
+  .zn-planshared__cta {
+    padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
+  }
+}
+
+
+.zn-planshared__cta .zn-btn {
+  inline-size: 100%;
+}
+
+/* Room under the last row so the pinned call never covers it. */
+@media (max-width: 1023px) {
+  .zn-planshared {
+    padding-block-end: var(--sp-20);
+  }
+}
+
+@media (max-width: 1023px) {
+  .zn-planshared__add {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .zn-planshared__cta {
+    display: none;
+  }
+}
+
+/* ── responsive ───────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .zn-planview__stats {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4);
+  }
+
+  /* Sur téléphone, les quatre glyphes cèdent la place au bouton qui les
+     nomme. Le menu qu'il ouvre porte les mêmes libellés que leurs infobulles,
+     plus les deux gestes que la rangée n'a jamais offerts au doigt : voir la
+     séance, et la clôturer.
+
+     C'est aussi ce qui permet à la rangée de garder ses trois colonnes ici.
+     Ce qui l'écrasait était la LARGEUR du bloc de méta, pastille, chiffres et
+     quatre boutons insécables. Réduit à un bouton de 32px, il ne peut plus
+     rien prendre au nom : la piste `auto` ne dépasse pas son contenu, et
+     `minmax(0, 1fr)` garde tout le reste. */
+  .zn-planlist__acts {
+    display: none;
+  }
+
+  .zn-planlist__more {
+    display: inline-flex;
+  }
+}

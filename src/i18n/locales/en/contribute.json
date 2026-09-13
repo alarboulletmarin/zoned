@@ -14,11 +14,11 @@
   },
   "fullWorkout": {
     "title": "Full workout",
-    "subtitle": "Build a detailed workout with live preview",
-    "step1Title": "Basic information",
+    "subtitle": "Build a detailed workout, with a live preview",
+    "step1Title": "Basics",
     "step2Title": "Warm-up and main set",
-    "step3Title": "Cool-down and tips",
-    "step4Title": "Preview and submission",
+    "step3Title": "Cool-down",
+    "step4Title": "Preview",
     "nameLabel": "Name (FR)",
     "nameEnLabel": "Name (EN)",
     "nameEnPlaceholder": "English name (optional)",
@@ -94,13 +94,13 @@
     "title": "Preview",
     "show": "Show preview",
     "hide": "Hide preview",
-    "emptyState": "Fill in the information above to see a preview of your workout"
+    "emptyState": "Fill in the fields above to preview your workout"
   },
   "submit": {
     "generateIssue": "Submit on GitHub",
     "copyDescription": "Copy description",
     "openGithub": "Open GitHub",
-    "urlTooLong": "The description is too long for a direct link. It has been copied to your clipboard.",
+    "urlTooLong": "Description too long for a direct link. Copied to your clipboard.",
     "copied": "Copied to clipboard!",
     "success": "Thank you for your contribution!",
     "thankYou": "Your workout will be reviewed by the project maintainers.",
@@ -111,5 +111,6 @@
     "next": "Next",
     "previous": "Previous",
     "step": "Step"
-  }
+  },
+  "kicker": "Prefilled GitHub issue"
 }

@@ -1,0 +1,132 @@
+/* ZoneFigures, la planche des six zones.
+
+   Six cases d'égale largeur, sans gouttière : c'est l'égalité des cadres qui
+   fait lire la progression, et c'est l'absence de gouttière qui fait que le
+   bord bas de chaque scène se prolonge dans la suivante en UNE règle droite,
+   d'un bord à l'autre de la colonne. La figure se tient dessus : bas du viewBox
+   sur le haut de la règle, calé au calcul (marge basse négative de l'épaisseur
+   de la règle), jamais à l'œil. Une grille, pas un flex, pour que la sixième
+   figure ne soit pas plus large que la première sous prétexte qu'elle est plus
+   penchée. */
+
+.zn-zfig {
+  /* px par unité de viewBox : les six figures sont le même corps, donc la
+     même échelle. Z1 (154.9 u) fait 108 px de large, Z6 (187.2 u) 131 px,
+     entre 120 et 240 px de haut, la taille à laquelle une figure explique. */
+  --zfig-scale: 0.7;
+  /* Plancher d'encre. La rampe est faite pour des aplats ; sur un trait de
+     2 px, Z1 à 14 % disparaît. Le mélange remonte le pâle sans toucher la
+     rampe, qui reste la source de vérité pour les fonds. */
+  --zfig-floor: 18%;
+
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+/* En sombre, la semelle vermillon domine une figure à 30 % d'encre : le
+   plancher monte pour que Z1 ne descende pas sous 55 % (0.48 + 0.52 × 0.14). */
+.dark .zn-zfig {
+  --zfig-floor: 48%;
+}
+
+.zn-zfig__cell {
+  display: grid;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+/* La scène : la figure au centre, posée sur le bord bas, qui est la règle.
+   Sa hauteur est celle de la plus haute figure (Z1, 310.2 u de viewBox) et
+   non celle de sa propre figure : c'est ce qui met les six bords bas sur la
+   même ligne quelles que soient la posture et la hauteur des graduations. */
+.zn-zfig__stage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  block-size: calc(310.2 * var(--zfig-scale) * 1px);
+  border-block-end: var(--border-rule);
+  color: color-mix(in srgb, var(--ink-1) var(--zfig-floor), var(--zfig-ink));
+}
+
+.zn-zfig__art {
+  inline-size: calc(var(--zfig-vw) * var(--zfig-scale) * 1px);
+  max-inline-size: 100%;
+  block-size: auto;
+  flex: none;
+  /* La semelle mord la règle de son épaisseur rendue (--rule-bite,
+     borders.css), comme le duo approuvé mordait son sol dessiné : posée
+     dessus, pas au-dessus. */
+  margin-block-end: calc(-1 * var(--rule-bite));
+}
+
+/* Les graduations : code, nom, et la plage du lecteur quand elle est connue. */
+.zn-zfig__tick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  padding-inline: var(--sp-2);
+  text-align: center;
+}
+
+.zn-zfig__code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-mono);
+  color: var(--ink-1);
+}
+
+.zn-zfig__name {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-zfig__range {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+/* Sur une tablette les six cases font 100 à 150 px : l'échelle descend pour
+   que la plus large (Z6, 103 px) tienne dans la sienne sans être rognée, et
+   la plus étroite (Z1) reste à 85 px, au-dessus du seuil des 84. */
+@media (max-width: 960px) {
+  .zn-zfig {
+    --zfig-scale: 0.55;
+  }
+}
+
+/* Sous 640 px, six cases côte à côte donnent des figures de 40 px : illisible.
+   Deux rangées de trois gardent la lecture de gauche à droite, ligne à ligne,
+   sur deux règles : Z1-Z3 sur un filet, Z4-Z6 sur la règle encre, c'est la
+   seconde qui tient lieu de filet de section. Z1 fait 87 px de large, Z6
+   105 px, aucune ne passe sous les 84 px où un trait devient un pictogramme. */
+@media (max-width: 640px) {
+  .zn-zfig {
+    --zfig-scale: 0.56;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: var(--sp-10);
+  }
+
+  /* Sur téléphone la seconde rangée tombait sous la pastille MENU au premier
+     écran (Z6 : 102 × 44 px à 375×667, 102 × 17 px à 375×812 avec la plage,
+     graduation Z6 Sprint 19 à 43 px). La planche passe sous l'outil :
+     seule position où ni figure ni graduation ne rencontre la pastille à
+     scrollY=0, quelle que soit la hauteur d'écran. .zn-num est une colonne
+     flex (numbers.css), l'ordre suffit. */
+  .zn-num > .zn-zfig {
+    order: 1;
+  }
+
+  .zn-zfig__cell:nth-child(-n + 3) .zn-zfig__stage {
+    border-block-end: var(--border-divider);
+  }
+
+  .zn-zfig__name {
+    font-size: var(--fs-mono);
+  }
+}

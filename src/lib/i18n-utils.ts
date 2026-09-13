@@ -1,5 +1,5 @@
 /**
- * i18n data helpers — pick the right language variant from data objects.
+ * i18n data helpers, pick the right language variant from data objects.
  *
  * Data objects (workouts, metadata, articles) have bilingual fields:
  *   { name: "Footing", nameEn: "Easy run" }
@@ -18,7 +18,7 @@ export function isEnglish(): boolean {
 }
 
 /**
- * React hook version — reactive to language changes.
+ * React hook version, reactive to language changes.
  */
 export function useIsEnglish(): boolean {
   const { i18n: i18nInstance } = useTranslation();
@@ -48,7 +48,7 @@ export function pickLang<T extends object, K extends string>(
 }
 
 /**
- * React hook version — reactive to language changes.
+ * React hook version, reactive to language changes.
  * Use this inside components when you want re-renders on language switch.
  */
 export function usePickLang() {
@@ -88,7 +88,7 @@ export function pickLangArray<T = unknown>(
 }
 
 /**
- * React hook version of `pickLangArray` — reactive to language changes.
+ * React hook version of `pickLangArray`, reactive to language changes.
  */
 export function usePickLangArray() {
   const isEn = useIsEnglish();
@@ -121,7 +121,7 @@ export function pickLocale(
 }
 
 /**
- * React hook version of `pickLocale` — reactive to language changes.
+ * React hook version of `pickLocale`, reactive to language changes.
  */
 export function usePickLocale() {
   const isEn = useIsEnglish();

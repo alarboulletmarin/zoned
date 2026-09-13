@@ -88,7 +88,7 @@ export function swimTssFromZone(durationMin: number, zone: SwimZone): number {
 // ── Running ────────────────────────────────────────────────────────
 
 /**
- * Run TSS approximated from a training zone (1–6). Used for planned sessions
+ * Run TSS approximated from a training zone (1-6). Used for planned sessions
  * where normalised graded pace is not known.
  */
 export function runTssFromZone(durationMin: number, zone: number): number {
@@ -98,7 +98,7 @@ export function runTssFromZone(durationMin: number, zone: number): number {
 
 /**
  * Run TSS from normalised graded pace vs threshold pace (Skiba 2008).
- * Both paces are in min/km — faster pace = lower number.
+ * Both paces are in min/km, faster pace = lower number.
  */
 export function runTssFromPace(args: {
   durationMin: number;
@@ -118,7 +118,7 @@ export function runTssFromPace(args: {
 export interface CrossDisciplineTssInput {
   discipline: Discipline;
   durationMin: number;
-  /** Zone 1–6 for running, CogganZone for cycling, SwimZone for swimming. */
+  /** Zone 1-6 for running, CogganZone for cycling, SwimZone for swimming. */
   zone: number | CogganZone | SwimZone;
 }
 

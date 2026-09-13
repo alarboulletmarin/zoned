@@ -1,7 +1,7 @@
 /**
  * Wire codes shared by every URL share format.
  *
- * These arrays are APPEND ONLY — their indexes are baked into links people
+ * These arrays are APPEND ONLY, their indexes are baked into links people
  * have already sent. Inserting or reordering an entry silently rewrites the
  * meaning of every existing shared URL.
  */

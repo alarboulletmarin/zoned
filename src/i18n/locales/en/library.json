@@ -1,5 +1,6 @@
 {
   "title": "Workout Library",
+  "catalogue": "{{workouts}} sessions · {{categories}} categories · {{disciplines}} disciplines",
   "subtitle": "{{count}} scientific training sessions",
   "subtitleStrength": "{{count}} strength sessions",
   "subtitleAll": "{{count}} total sessions",
@@ -10,11 +11,23 @@
     "swimming": "Swimming",
     "strength": "Strength"
   },
+  "activityToggleShort": {
+    "all": "All",
+    "running": "Run",
+    "cycling": "Bike",
+    "swimming": "Swim",
+    "strength": "Strength"
+  },
+  "meta": {
+    "results_one": "{{count}} session",
+    "results_other": "{{count}} sessions",
+    "filters_one": "{{count}} active filter",
+    "filters_other": "{{count}} active filters"
+  },
   "viewMode": {
     "label": "View",
     "grid": "Grid",
     "compact": "Compact",
-    "focus": "Focus",
     "list": "List"
   },
   "filters": {
@@ -31,6 +44,7 @@
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favorites only",
     "search": "Search...",
+    "searchPlaceholder": "Search: “30/30”, “threshold”, “hills”…",
     "searchLabel": "Search workouts",
     "apply": "Apply",
     "activeFilters": "active filters"
@@ -39,7 +53,10 @@
     "noResults": "No workouts found",
     "noResultsDescription": "Try adjusting your filters to find workouts.",
     "noFavorites": "No favorites yet",
-    "noFavoritesDescription": "Add workouts to your favorites to find them easily here."
+    "noFavoritesDescription": "Add workouts to your favorites to find them easily here.",
+    "filteredOut_one": "{{count}} active filter leaves none of the {{total}} sessions. Clearing it brings them all back.",
+    "filteredOut_other": "{{count}} active filters leave none of the {{total}} sessions. Clearing them brings them all back.",
+    "noMatchForQuery": "“{{query}}” matches none of the {{total}} sessions in the catalogue."
   },
   "terrain": {
     "flat": "Flat preferred",
@@ -79,6 +96,9 @@
       "trail_technical": "Technical trail",
       "mountain": "Mountain"
     }
+  },
+  "zoneBar": {
+    "of": "{{name}} profile"
   },
   "difficulty": {
     "beginner": "Beginner",
@@ -168,14 +188,18 @@
       "title": "My weeks",
       "subtitle": "Your training weeks, generated or built by hand.",
       "create": "Create a week",
-      "empty": "No weeks yet. Generate one or build it from scratch.",
+      "empty": "Generate your first week, or build it session by session.",
       "sessionsCount_one": "{{count}} session",
       "sessionsCount_other": "{{count}} sessions",
       "view": "View",
       "delete": "Delete",
       "filterAll": "All",
       "import": "Import",
-      "actions": "More actions"
+      "actions": "More actions",
+      "saved_one": "{{count}} saved week",
+      "saved_other": "{{count}} saved weeks",
+      "emptyTitle": "No weeks yet",
+      "filteredOut": "None of your {{total}} weeks is in this category."
     },
     "category": {
       "label": "Category",
@@ -186,11 +210,13 @@
     },
     "shared": {
       "title": "Shared week",
-      "subtitle": "Someone shared this training week with you. Add it to your weeks to make it yours.",
+      "subtitle": "Someone shared this week with you: add it to make it yours.",
       "invalid": "This share link is invalid or incomplete.",
       "add": "Add to my weeks",
       "unknownCount_one": "{{count}} session is missing from your catalog and will be skipped.",
-      "unknownCount_other": "{{count}} sessions are missing from your catalog and will be skipped."
+      "unknownCount_other": "{{count}} sessions are missing from your catalog and will be skipped.",
+      "invalidHelp": "The link is truncated or out of date. Your saved weeks are intact, ask for a new one.",
+      "unknownHelp": "The other {{count}} sessions will be added as they are."
     },
     "new": {
       "title": "Create a week",
@@ -199,11 +225,15 @@
       "modes": {
         "create": {
           "title": "Create a week",
-          "desc": "Auto-generate a balanced 80/20 week, or build it session by session."
+          "desc": "Auto-generate a balanced 80/20 week, or build it session by session.",
+          "kicker": "80/20 generator",
+          "cta": "Build my week"
         },
         "prebuilt": {
           "title": "Pre-built week",
-          "desc": "Pick a sourced template week and start right away."
+          "desc": "Pick a sourced template week and start right away.",
+          "kicker": "Catalogue",
+          "cta": "{{count}} ready-made weeks"
         }
       },
       "generate": "Generate (80/20)",
@@ -211,11 +241,12 @@
       "scratch": "From scratch",
       "scratchDesc": "An empty week you fill in by hand, session by session.",
       "namePlaceholder": "Week name",
-      "scratchCreate": "Create empty week"
+      "scratchCreate": "Create empty week",
+      "kicker": "2 ways to start"
     },
     "prebuilt": {
       "title": "Pre-built weeks",
-      "subtitle": "Sourced, ready-to-use template weeks. Pick one, understand why it works, then make it yours.",
+      "subtitle": "Sourced template weeks: pick one, understand why it works, make it yours.",
       "back": "Back to creation",
       "backToList": "All pre-built weeks",
       "available": "{{count}} weeks available",
@@ -233,14 +264,16 @@
         "peak": "Peak",
         "recovery": "Recovery",
         "sharpening": "Sharpening"
-      }
+      },
+      "notFoundHelp": "This link points to a week that no longer exists. Your saved weeks are intact."
     },
     "generate": {
       "title": "Generate my week",
       "subtitle": "Tune the settings, generate, then create the week to edit it.",
       "action": "Generate my week",
+      "actionShort": "Generate",
       "busy": "Generating…",
-      "hint": "Automatically composes 3–6 balanced 80/20 sessions from your settings.",
+      "hint": "Automatically composes 3-6 balanced 80/20 sessions from your settings.",
       "hintRegen": "Recomposes a fresh week from your current settings.",
       "create": "Create week",
       "namePlaceholder": "Week name",
@@ -303,8 +336,8 @@
       "balanced": "80/20 balance",
       "tooEasy": "Not enough intensity",
       "tooHard": "Too much intensity",
-      "tooEasyHint": "Very little quality this week — add a tempo/threshold session to reach ~20 % intensity.",
-      "tooHardHint": "A lot of intensity — add easy volume or ease one hard session.",
+      "tooEasyHint": "Very little quality this week, add a tempo/threshold session to reach ~20 % intensity.",
+      "tooHardHint": "A lot of intensity, add easy volume or ease one hard session.",
       "tolerance": "Balanced between {{min}} and {{max}} % intensity"
     },
     "rhythm": {
@@ -371,6 +404,13 @@
     "boardHintTouch": "Tap a session to edit it · hold to drag it",
     "card": {
       "zone": "Zone {{zone}}"
-    }
+    },
+    "keySession": "Key session"
+  },
+  "practice": {
+    "label": "Discipline",
+    "all": "All",
+    "soon": "soon",
+    "draw": "Draw me a session"
   }
 }

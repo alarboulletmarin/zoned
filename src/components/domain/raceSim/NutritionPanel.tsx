@@ -5,10 +5,10 @@ import { usePickLang } from "@/lib/i18n-utils";
 import { Stat } from "./RaceSimSection";
 
 /**
- * Fuelling figures — but only the ones that carry a number.
+ * Fuelling figures, but only the ones that carry a number.
  *
  * Under an hour the correct plan is "eat nothing", and rendering that as
- * `0 g`, `0` gels and `—` reads like a failed calculation rather than advice.
+ * `0 g`, `0` gels and `, ` reads like a failed calculation rather than advice.
  * The zero case gets a sentence instead, and the hydration figure stays
  * because it is the one thing that still matters.
  */
@@ -26,9 +26,12 @@ export function NutritionPanel({
   const durationLabel = formatEffortDuration(durationMin, t);
 
   return (
-    <div className="space-y-5">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}
+    >
       {needsCarbs ? (
-        <div className="flex flex-wrap gap-x-8 gap-y-4">
+        <div className="zn-rs-stats">
           <Stat
             label={t("nutrition.carbsPerHour")}
             value={`${fuelingPlan.carbsPerHourG} g`}
@@ -54,8 +57,11 @@ export function NutritionPanel({
           )}
         </div>
       ) : (
-        <div className="space-y-4">
-          <p className="text-sm leading-relaxed">
+        <div
+          className="zn-stack"
+          style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}
+        >
+          <p className="zn-rs-note">
             {t("nutrition.noCarbs", { duration: durationLabel })}
           </p>
           <Stat
@@ -67,17 +73,18 @@ export function NutritionPanel({
       )}
 
       {fuelingPlan.tips.length > 0 && (
-        <div className="space-y-2 border-t pt-4">
-          <p className="text-[0.6875rem] font-medium uppercase tracking-wider text-muted-foreground">
-            {t("nutrition.tips")}
-          </p>
-          <ul className="space-y-1.5">
+        <div
+          className="zn-stack zn-rs-tips"
+          style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+        >
+          <p className="zn-kicker">{t("nutrition.tips")}</p>
+          <ul
+            className="zn-stack zn-rs-tips__list"
+            style={{ "--gap": "var(--sp-3)" } as React.CSSProperties}
+          >
             {fuelingPlan.tips.map((tip, i) => (
-              <li
-                key={i}
-                className="flex items-start gap-2 text-sm text-muted-foreground"
-              >
-                <Info className="mt-0.5 size-3.5 shrink-0" />
+              <li key={i} className="zn-rs-tips__item">
+                <Info size={14} />
                 <span>{pick(tip, "text")}</span>
               </li>
             ))}

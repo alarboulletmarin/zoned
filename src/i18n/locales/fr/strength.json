@@ -1,7 +1,7 @@
 {
   "title": "Renforcement",
   "subtitle": "Séances de renforcement musculaire pour coureurs",
-  "description": "Séances scientifiques de renforcement musculaire, conçues spécifiquement pour améliorer vos performances en course et prévenir les blessures.",
+  "description": "Séances scientifiques de renforcement musculaire, conçues spécifiquement pour améliorer tes performances en course et prévenir les blessures.",
   "activityToggle": {
     "all": "Tout",
     "running": "Course",
@@ -93,7 +93,11 @@
     "lowIntensity": "Faible",
     "mediumIntensity": "Moyen",
     "highIntensity": "Intense",
-    "secondary": "secondaire"
+    "secondary": "secondaire",
+    "imageUnavailable": "Illustration indisponible",
+    "positionStart": "position de départ",
+    "positionEnd": "position finale",
+    "zoomImages": "Agrandir les images de {{name}}"
   },
   "trainingPhases": {
     "base": "Construction",
@@ -104,7 +108,7 @@
   },
   "plan": {
     "includeStrength": "Inclure le renforcement",
-    "includeStrengthDescription": "Ajouter des séances de renforcement musculaire adaptées à chaque phase de votre plan",
+    "includeStrengthDescription": "Ajouter des séances de renforcement musculaire adaptées à chaque phase de ton plan",
     "strengthFrequency": "Fréquence renforcement",
     "strengthFrequencyDescription": "Nombre de séances de renforcement par semaine",
     "perWeek": "{{count}}x / semaine",

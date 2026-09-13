@@ -41,7 +41,7 @@
     "gpsActive": "Position active",
     "addressPlaceholder": "Address (e.g. 12 rue de la Paix, Paris)",
     "addressSearching": "Searching…",
-    "addressNoResults": "No address found — refine with city or postal code.",
+    "addressNoResults": "No address found, refine with city or postal code.",
     "distanceEdit": "Edit distance",
     "distanceUnit": "km",
     "distanceMin": "1 km",
@@ -59,7 +59,9 @@
     "mapExpand": "Expand map",
     "mapShrink": "Collapse map",
     "reverseDirection": "Reverse direction",
-    "reversedActive": "Reversed"
+    "reversedActive": "Reversed",
+    "candidatePrev": "Previous proposal",
+    "candidateNext": "Next proposal"
   },
   "edit": {
     "enter": "Edit trace",
@@ -84,7 +86,9 @@
     "pickHint": "Pick a track from the list to compute a there-and-back route.",
     "routeName": "There-and-back to {{name}}",
     "routeNameUnknown": "There-and-back to the track",
-    "routeUnreachable": "This track isn't reachable by road from your start. Try another one."
+    "routeUnreachable": "This track isn't reachable by road from your start. Try another one.",
+    "kicker": "{{radius}} km radius",
+    "noResultsTitle": "No track found"
   },
   "result": {
     "summary": "{{distance}} · {{ascent}} m gain · ~{{duration}}",
@@ -151,12 +155,18 @@
   },
   "list": {
     "empty": "You haven't saved any route yet.",
-    "emptyCta": "Create a first route",
+    "emptyCta": "Create a route",
     "softLimitReached": "You're nearing the {{limit}}-route soft cap. Delete older ones if needed.",
     "loops": "Loops",
     "outAndBacks": "Out-and-backs",
     "discipline": "Discipline",
-    "savedAt": "Saved on {{date}}"
+    "savedAt": "Saved on {{date}}",
+    "kicker": "{{count}} of {{limit}} saved",
+    "lede": "Your routes are stored on this device, never on a server.",
+    "emptyTitle": "No saved route",
+    "softLimitTitle": "Local storage almost full",
+    "open": "Open {{name}}",
+    "deleteRoute": "Delete {{name}}"
   },
   "errors": {
     "geolocationDenied": "Geolocation permission denied. Type an address instead.",
@@ -164,7 +174,7 @@
     "geolocationTimeout": "GPS did not respond within 10 s. Try again or type an address.",
     "geolocationUnavailable": "Geolocation unavailable on this device.",
     "routingFailed": "The routing service is temporarily unavailable. Try again in a moment.",
-    "unreachableWaypoint": "A waypoint isn't routable (sea, private road, off-network). The trace bounced back — move it onto a road or remove it.",
+    "unreachableWaypoint": "A waypoint isn't routable (sea, private road, off-network). The trace bounced back, move it onto a road or remove it.",
     "noConvergence": "Couldn't find a route close to the requested distance. Try a different distance or starting point.",
     "noTrace": "No routable trace found for these points.",
     "disciplineUnsupported": "Swimming is not supported by the route generator."
@@ -197,5 +207,10 @@
     "privacyBody": "Your starting position is sent to Brouter (routing), Nominatim (address search) and Overpass (POI) for the duration of the requests. No identifier is attached, nothing is stored server-side. You can disable the generator entirely in Settings.",
     "sourcesTitle": "Sources",
     "sourcesBody": "Data: © OpenStreetMap contributors. Routing: Brouter. Address search: Nominatim. POI: Overpass API."
+  },
+  "detail": {
+    "kicker": "Saved route",
+    "missingTitle": "This route cannot be found",
+    "missingBody": "It was deleted, or the link comes from another device. Your other routes are intact."
   }
 }

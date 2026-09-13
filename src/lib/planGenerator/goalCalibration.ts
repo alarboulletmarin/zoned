@@ -1,5 +1,5 @@
 /**
- * Goal Calibration — let the target race time shape the plan
+ * Goal Calibration, let the target race time shape the plan
  *
  * The wizard collects a target pace, but it only ever reached the PDF and the
  * share link: a runner aiming for a 2h30 marathon and one aiming for 4h30 got

@@ -43,6 +43,8 @@ import { SubwayMap } from "./templates/SubwayMap";
 import { CassetteTape } from "./templates/CassetteTape";
 import { Y2KChrome } from "./templates/Y2KChrome";
 import { BoxingPoster } from "./templates/BoxingPoster";
+import { PaperSheet } from "./templates/PaperSheet";
+import { ZonePlate } from "./templates/ZonePlate";
 
 export interface ShareTemplateProps {
   workout: WorkoutTemplate;
@@ -158,7 +160,7 @@ export const SHARE_TEMPLATES: ShareTemplateDescriptor[] = [
     labelKey: "spotifyWrap",
     width: 1080,
     height: 1920,
-    // Background gradient is the visual signature — transparent would gut it.
+    // Background gradient is the visual signature, transparent would gut it.
     supportsTransparent: false,
     Component: SpotifyWrap,
   },
@@ -175,7 +177,7 @@ export const SHARE_TEMPLATES: ShareTemplateDescriptor[] = [
     labelKey: "postcard",
     width: 1080,
     height: 1920,
-    // Parchment background is the look — overlay mode would feel wrong.
+    // Parchment background is the look, overlay mode would feel wrong.
     supportsTransparent: false,
     Component: Postcard,
   },
@@ -196,7 +198,7 @@ export const SHARE_TEMPLATES: ShareTemplateDescriptor[] = [
     supportsTransparent: true,
     Component: SneakerDrop,
   },
-  // Compact sticker overlays — designed to be pasted on the user's own
+  // Compact sticker overlays, designed to be pasted on the user's own
   // photo. All transparent-friendly.
   {
     id: "highlight-banner",
@@ -353,6 +355,26 @@ export const SHARE_TEMPLATES: ShareTemplateDescriptor[] = [
     // Deep crimson burst = signature.
     supportsTransparent: false,
     Component: BoxingPoster,
+  },
+  // The house style: paper, ink, one vermillon, and a doodle. The two below
+  // are the only templates that speak the app's own visual language, the
+  // other 38 are pastiches, and that variety is the point.
+  {
+    id: "paper-sheet",
+    labelKey: "paperSheet",
+    width: 1080,
+    height: 1350,
+    // The paper IS the template, an overlay would leave a floating drawing.
+    supportsTransparent: false,
+    Component: PaperSheet,
+  },
+  {
+    id: "zone-plate",
+    labelKey: "zonePlate",
+    width: 1080,
+    height: 1080,
+    supportsTransparent: false,
+    Component: ZonePlate,
   },
 ];
 

@@ -1,5 +1,8 @@
 <div align="center">
-  <img src="src/assets/logo.svg" alt="Zoned" width="120" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/readme-banner-dark.png" />
+    <img src="assets/readme-banner-light.png" alt="Zoned — endurance training, explained by the science. Two runners drawn in one line stand on the rule that carries the catalogue numbers." width="1280" />
+  </picture>
 
   # Zoned
 
@@ -9,9 +12,9 @@
 
   ### [→ zoned.run](https://zoned.run)
 
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE) [![Version](https://img.shields.io/badge/version-v0.8.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md) [![Good first issues](https://img.shields.io/github/issues/alarboulletmarin/zoned/good%20first%20issue?style=flat-square&color=7057ff&label=good%20first%20issues)](https://github.com/alarboulletmarin/zoned/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) [![Open issues](https://img.shields.io/github/issues/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/issues) [![Last commit](https://img.shields.io/github/last-commit/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/commits/main) [![Stars](https://img.shields.io/github/stars/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/stargazers)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE) [![Version](https://img.shields.io/badge/version-v1.0.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md) [![Good first issues](https://img.shields.io/github/issues/alarboulletmarin/zoned/good%20first%20issue?style=flat-square&color=7057ff&label=good%20first%20issues)](https://github.com/alarboulletmarin/zoned/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) [![Open issues](https://img.shields.io/github/issues/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/issues) [![Last commit](https://img.shields.io/github/last-commit/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/commits/main) [![Stars](https://img.shields.io/github/stars/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/stargazers)
   <br/>
-  [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev) [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com) [![Bun](https://img.shields.io/badge/Bun-runtime-fbf0df?style=flat-square&logo=bun&logoColor=black)](https://bun.sh)
+  [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev) [![Bun](https://img.shields.io/badge/Bun-runtime-fbf0df?style=flat-square&logo=bun&logoColor=black)](https://bun.sh)
 
   <br/>
 
@@ -28,7 +31,7 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 
 | | |
 |---|---|
-| **219** running workouts | 12 categories from recovery to VMA |
+| **225** running workouts | 12 categories from recovery to VMA |
 | **17** strength sessions | full body, legs, core, plyometrics, mobility |
 | **10** cycling + **10** swimming sessions | Coggan FTP / CSS zones |
 | **9** training plans | 5K → marathon, with strength periodization |
@@ -95,7 +98,7 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 ## Features
 
 ### Workouts
-- **219 running sessions** across 12 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, trail, assessment
+- **225 running sessions** across 12 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, trail, assessment
 - **10 cycling + 10 swimming sessions** with discipline-aware zones (Coggan FTP, CSS) and cross-discipline substitution in plans
 - **17 strength sessions** for runners: full body, legs, core, plyometrics, mobility, prehab, based on Beattie 2017, Rønnestad 2014, Lauersen 2014
 - **46 exercises** with A/B position images, muscle maps, form cues, and progression/regression chains
@@ -243,13 +246,21 @@ Want a high-level tour of how a workout flows from JSON to the rendered detail p
 |-------|------|
 | Framework | React 19 + Vite 7 |
 | Language | TypeScript 5 |
-| Styling | Tailwind CSS 4 + shadcn/ui (Radix UI) |
+| Styling | Hand-written CSS — 74 sheets, `zn-` prefixed, tokens in `src/styles/design/` |
+| Primitives | Radix UI (dropdown-menu, popover, select, tooltip) |
 | Animations | framer-motion (respects `prefers-reduced-motion`) |
-| Charts | Recharts |
+| Charts | None — every figure is drawn in SVG from the app's own data |
+| Illustration | 23 doodles generated from one rig (`scripts/doodles/rig.mjs`) |
 | i18n | i18next (FR / EN) |
 | PWA | Workbox |
 | Analytics | Vercel Analytics (anonymous page views only) |
 | Runtime | Bun |
+
+This table said "Tailwind CSS 4 + shadcn/ui" and "Recharts" for a while after
+none of the three was in the tree: Tailwind was removed with its 24 298
+utilities, shadcn's generated components were replaced by the `zn-` layer, and
+Recharts was never a dependency of this repo. Worth knowing if you find a blog
+post or an answer that assumes otherwise.
 
 ---
 

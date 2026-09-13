@@ -12,14 +12,14 @@
  *     meant ~420 pages declared `rel=canonical` pointing at the homepage.
  *
  * Because vercel.json sets `cleanUrls: true`, Vercel serves dist/library.html
- * for /library *before* falling through to the SPA rewrite — so crawlers get
+ * for /library *before* falling through to the SPA rewrite, so crawlers get
  * per-route metadata while the React app still boots identically for users.
  *
  * The copy is French: the canonical URL of every page is its French version
  * (the English one is the `?lang=en` alternate, which cannot be addressed by
  * a static file). <SEOHead> takes over at runtime and localises everything.
  *
- * Coverage is asserted against public/sitemap.xml — a URL in the sitemap with
+ * Coverage is asserted against public/sitemap.xml, a URL in the sitemap with
  * no shell here fails the build rather than silently regressing to the
  * homepage canonical.
  *
@@ -77,7 +77,7 @@ function breadcrumb(trail: { name: string; item?: string }[]): Record<string, un
 const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
   {
     path: "/",
-    title: "Zoned — Séances de course scientifiques par zones",
+    title: "Zoned, Séances de course scientifiques par zones",
     description: `${stats.workouts} séances structurées, ${stats.plans} plans d'entraînement et ${stats.calculators} calculateurs bâtis sur un modèle à 6 zones. Gratuit, open source, sans compte ni tracking.`,
   },
   {
@@ -109,7 +109,7 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     path: "/plan/new",
     title: "Créer un plan d'entraînement",
     description:
-      "Générez un plan personnalisé à partir de votre course, votre niveau et vos disponibilités — ou partez de zéro. Gratuit, sans compte, 100 % local.",
+      "Générez un plan personnalisé à partir de votre course, votre niveau et vos disponibilités, ou partez de zéro. Gratuit, sans compte, 100 % local.",
     image: "og-plans.png",
   },
   {
@@ -123,7 +123,7 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     path: "/weeks/new/prebuilt",
     title: "Semaines d'entraînement prêtes à l'emploi",
     description:
-      "Des semaines types autonomes — base aérobie 80/20, bloc seuil, bloc côtes, affûtage VO2, semaine de récupération — à adopter sans engager un plan complet.",
+      "Des semaines types autonomes, base aérobie 80/20, bloc seuil, bloc côtes, affûtage VO2, semaine de récupération, à adopter sans engager un plan complet.",
     image: "og-plans.png",
   },
   {
@@ -150,7 +150,7 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     path: "/guides",
     title: "Guides pratiques",
     description:
-      "Guides concrets pour l'échauffement, la préparation de course et la nutrition — dont un calculateur d'apports bâti sur la recherche en nutrition sportive.",
+      "Guides concrets pour l'échauffement, la préparation de course et la nutrition, dont un calculateur d'apports bâti sur la recherche en nutrition sportive.",
     image: "og-learn.png",
   },
   {
@@ -164,7 +164,7 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     path: "/guides/race-prep",
     title: "Guide préparation de course",
     description:
-      "Tout pour les semaines avant votre course : affûtage, checklist, routine du matin et logistique — pour ne rien laisser à l'improvisation.",
+      "Tout pour les semaines avant votre course : affûtage, checklist, routine du matin et logistique, pour ne rien laisser à l'improvisation.",
     image: "og-learn.png",
   },
   {
@@ -185,7 +185,7 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     path: "/collections",
     title: "Collections thématiques",
     description:
-      "Des ensembles de séances regroupées par objectif — débuter la course, du 5 km à l'ultra, gagner en vitesse, se renforcer. Une entrée guidée dans le catalogue.",
+      "Des ensembles de séances regroupées par objectif, débuter la course, du 5 km à l'ultra, gagner en vitesse, se renforcer. Une entrée guidée dans le catalogue.",
     image: "og-library.png",
   },
   {
@@ -216,19 +216,19 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
   {
     path: "/about",
     title: "À propos",
-    description: `Pourquoi Zoned existe : ${stats.workouts} séances fondées sur la science, ${stats.plans} plans et ${stats.calculators} calculateurs — gratuits, open source, sans compte ni tracking, pour toujours.`,
+    description: `Pourquoi Zoned existe : ${stats.workouts} séances fondées sur la science, ${stats.plans} plans et ${stats.calculators} calculateurs, gratuits, open source, sans compte ni tracking, pour toujours.`,
   },
   {
     path: "/contribute",
     title: "Contribuer",
     description:
-      "Proposez une séance, signalez un bug ou améliorez une traduction. Aucun code requis — le formulaire ouvre une issue GitHub pré-remplie.",
+      "Proposez une séance, signalez un bug ou améliorez une traduction. Aucun code requis, le formulaire ouvre une issue GitHub pré-remplie.",
   },
   {
     path: "/changelog",
     title: "Journal des versions",
     description:
-      "Chaque version de Zoned, ce qui a changé et quand — livré en continu et à ciel ouvert.",
+      "Chaque version de Zoned, ce qui a changé et quand, livré en continu et à ciel ouvert.",
   },
 ];
 
@@ -265,7 +265,7 @@ function getCalculatorRoutes(): RouteMeta[] {
   const missing = declared.filter((p) => !(p in CALCULATOR_KEYS));
   if (missing.length > 0) {
     throw new Error(
-      `Calculator routes with no CALCULATOR_KEYS entry: ${missing.join(", ")} — ` +
+      `Calculator routes with no CALCULATOR_KEYS entry: ${missing.join(", ")}, ` +
         `add them so the route keeps its own static metadata.`
     );
   }
@@ -619,7 +619,7 @@ function buildSeoBlock(route: RouteMeta): string {
   const url = route.path === "/" ? `${SITE_URL}/` : `${SITE_URL}${route.path}`;
   const fullTitle = route.path === "/" ? route.title : `${route.title} | Zoned`;
   const image = `${SITE_URL}/${route.image ?? "og-image.png"}`;
-  const alt = `Zoned — ${route.title}`;
+  const alt = `Zoned, ${route.title}`;
 
   const tags = [
     `<title data-default-seo>${text(fullTitle)}</title>`,
@@ -679,7 +679,7 @@ function applyRouteMeta(shell: string, route: RouteMeta): string {
 
   if (anchor === -1) {
     throw new Error(
-      "No [data-default-seo] tags found in dist/index.html — did index.html lose its static SEO block?"
+      "No [data-default-seo] tags found in dist/index.html, did index.html lose its static SEO block?"
     );
   }
 
@@ -722,7 +722,7 @@ async function main() {
   try {
     shell = readFileSync(shellPath, "utf-8");
   } catch {
-    throw new Error(`dist/index.html not found — run \`vite build\` before ${import.meta.file}`);
+    throw new Error(`dist/index.html not found, run \`vite build\` before ${import.meta.file}`);
   }
 
   const glossaryRoutes = await getGlossaryRoutes();

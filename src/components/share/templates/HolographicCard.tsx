@@ -1,5 +1,5 @@
 /**
- * HolographicCard — 480×480. Iridescent chrome card (Pokémon holo / iPhone
+ * HolographicCard, 480×480. Iridescent chrome card (Pokémon holo / iPhone
  * foil vibe). Chromatic gradient base + diagonal foil bands + radial
  * highlight. Zone colour appears only as accent so the holo signature stays
  * dominant.
@@ -8,8 +8,7 @@
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 480;
@@ -43,7 +42,7 @@ export function HolographicCard({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* The holographic card IS the visual — not tagged `data-bg-layer` so
+      {/* The holographic card IS the visual, not tagged `data-bg-layer` so
           it survives the transparent toggle (only the editorial bg drops
           out, leaving the card alone on the user's photo). */}
       <div
@@ -102,7 +101,7 @@ export function HolographicCard({ workout, transparent }: ShareTemplateProps) {
             alignItems: "center",
           }}
         >
-          <Logo style={{ width: 60, height: 30 }} />
+          <BrandMark height={26} color="rgba(255,255,255,0.95)" dot="#ffffff" />
           <span
             style={{
               fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
@@ -113,7 +112,7 @@ export function HolographicCard({ workout, transparent }: ShareTemplateProps) {
               textShadow: "0 1px 2px rgba(15,23,42,0.35)",
             }}
           >
-            ZONED · {workout.id}
+            {workout.id}
           </span>
         </div>
 

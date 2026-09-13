@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
 
 interface TocItem {
   id: string;
@@ -35,25 +34,18 @@ export function NutritionTOC({ items }: Props) {
   }, [items]);
 
   return (
-    <nav aria-label={t("hub.toc.heading")}>
-      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        {t("hub.toc.heading")}
-      </p>
-      <ul className="space-y-1">
+    <nav aria-label={t("hub.toc.heading")} className="zn-nut-toc">
+      <p className="zn-kicker">{t("hub.toc.heading")}</p>
+      <ul className="zn-nut-toc__list">
         {items.map((item) => {
           const active = activeId === item.id;
           return (
             <li key={item.id}>
+              {/* Where you are is a full ink inversion, not a faint tint. */}
               <a
                 href={`#${item.id}`}
                 aria-current={active ? "true" : undefined}
-                className={cn(
-                  "block rounded-md px-3 py-1.5 text-sm transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  active
-                    ? "bg-accent font-medium text-foreground"
-                    : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
-                )}
+                className="zn-nut-toc__link"
               >
                 {item.label}
               </a>

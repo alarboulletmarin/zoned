@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force"
+  },
+
+  /* Only the code Remotion bundles.
+   *
+   * `scripts/` reaches into the app's own sources (`../../src/...`) to read the
+   * catalogue and run the plan generator. Those files resolve through the app's
+   * `@/*` alias and its tsconfig, not this one — and the app itself does not
+   * typecheck `scripts/` either. They are bun-run glue, executed on every
+   * `bun run sync`, so a mistake there fails immediately and loudly rather than
+   * silently shipping into a render. */
+  "include": ["src", "remotion.config.ts"]
+}

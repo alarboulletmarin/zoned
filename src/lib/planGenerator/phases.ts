@@ -1,5 +1,5 @@
 /**
- * Phase Distribution — Evidence-based training phase calculation
+ * Phase Distribution, Evidence-based training phase calculation
  *
  * Distributes plan weeks across Base/Build/Peak/Taper phases
  * with ratios adapted to race distance and plan duration.
@@ -49,7 +49,7 @@ export function calculatePhases(
     let buildWeeks = 1;
     let peakWeeks = 1;
 
-    // Clamp total to availableWeeks — give everything to base first
+    // Clamp total to availableWeeks, give everything to base first
     const total = baseWeeks + buildWeeks + peakWeeks;
     if (total > availableWeeks) {
       // Remove phases from the end until it fits

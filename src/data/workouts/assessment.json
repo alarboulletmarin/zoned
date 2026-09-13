@@ -1035,23 +1035,23 @@
       ],
       "coachingTips": [
         "La FC MAF doit rester constante : si elle monte, ralentissez immédiatement",
-        "Le premier kilomètre est normalement le plus rapide et le dernier le plus lent — c'est normal",
+        "Le premier kilomètre est normalement le plus rapide et le dernier le plus lent, c'est normal",
         "Répétez ce test chaque mois dans les mêmes conditions pour suivre votre progression aérobie"
       ],
       "coachingTipsEn": [
         "MAF HR must stay constant: if it rises, slow down immediately",
-        "The first kilometer is normally the fastest and the last the slowest — this is normal",
+        "The first kilometer is normally the fastest and the last the slowest, this is normal",
         "Repeat this test monthly under the same conditions to track aerobic progress"
       ],
       "commonMistakes": [
         "Ne pas respecter strictement la FC MAF et courir trop vite",
         "Comparer des tests réalisés dans des conditions différentes (chaleur, vent, terrain)",
-        "Se décourager si les allures initiales sont très lentes — c'est le point de départ normal"
+        "Se décourager si les allures initiales sont très lentes, c'est le point de départ normal"
       ],
       "commonMistakesEn": [
         "Not strictly following MAF HR and running too fast",
         "Comparing tests done under different conditions (heat, wind, terrain)",
-        "Getting discouraged if initial paces are very slow — that's the normal starting point"
+        "Getting discouraged if initial paces are very slow, that's the normal starting point"
       ],
       "variationIds": [],
       "selectionCriteria": {
@@ -1162,13 +1162,13 @@
         }
       ],
       "coachingTips": [
-        "Partez vite dès le départ — l'objectif est d'épuiser la réserve anaérobie (D') dans les 150 premières secondes",
+        "Partez vite dès le départ, l'objectif est d'épuiser la réserve anaérobie (D') dans les 150 premières secondes",
         "Vitesse critique (CS) = allure moyenne des 30 dernières secondes",
         "D' = distance totale − (CS en m/s × 180 secondes)",
         "Utilisez un GPS ou des repères sur piste pour mesurer précisément"
       ],
       "coachingTipsEn": [
-        "Start fast from the beginning — the goal is to deplete the anaerobic reserve (D') within the first 150 seconds",
+        "Start fast from the beginning, the goal is to deplete the anaerobic reserve (D') within the first 150 seconds",
         "Critical speed (CS) = average pace of the last 30 seconds",
         "D' = total distance − (CS in m/s × 180 seconds)",
         "Use GPS or track markers for precise measurement"

@@ -1,10 +1,10 @@
 /**
- * Share a training plan as a URL — no backend involved.
+ * Share a training plan as a URL, no backend involved.
  *
  * A generated 12-week plan serializes to ~1700 chars; the config that produced
  * it is ~250. So the link carries the *recipe*, and the recipient's browser
  * regenerates the plan. That only works because `generatePlan()` is seeded
- * from the config (see `planGenerator/rng.ts`) — without that, the same link
+ * from the config (see `planGenerator/rng.ts`), without that, the same link
  * would produce a different plan for every recipient.
  *
  * Consequence: only assisted plans are shareable this way. Free plans are
@@ -106,7 +106,7 @@ const num = (value: unknown): number | undefined =>
 
 /**
  * Decode into a config ready for `generatePlan()`. `id`/`createdAt` are minted
- * by the caller — they are excluded from the generation seed on purpose.
+ * by the caller, they are excluded from the generation seed on purpose.
  */
 export function decodeSharedPlan(
   encoded: string,

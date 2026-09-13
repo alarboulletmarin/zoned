@@ -1,5 +1,5 @@
 /**
- * Share a standalone week ("Ma semaine") as a URL — no backend involved.
+ * Share a standalone week ("Ma semaine") as a URL, no backend involved.
  *
  * The week is serialized to a compact JSON payload and base64url-encoded. To
  * keep the link short, sessions are fixed-position tuples (no repeated JSON
@@ -16,12 +16,12 @@ import { createEmptyWeekPlan } from "@/lib/weekToPlan";
 import { decodePayload, encodePayload, shareUrl } from "@/lib/share/codec";
 import { SESSION_TYPE_CODES } from "@/lib/share/codes";
 
-/** One shared session — [day 0-6, workoutId, type code, minutes, key session?]. */
+/** One shared session, [day 0-6, workoutId, type code, minutes, key session?]. */
 type SharedSessionTuple = [number, string, number, number] | [number, string, number, number, 1];
 
 export interface SharedWeekPayload {
   v: 1;
-  /** Week name, as shared (single string — user weeks are single-language). */
+  /** Week name, as shared (single string, user weeks are single-language). */
   n: string;
   c?: WeekCategory;
   s: SharedSessionTuple[];
@@ -77,7 +77,7 @@ export function decodeSharedWeek(encoded: string): SharedWeekPayload | null {
   };
 }
 
-/** Payload sessions → plan sessions, Mon→Sun (no filtering — caller decides). */
+/** Payload sessions → plan sessions, Mon→Sun (no filtering, caller decides). */
 export function sharedWeekSessions(payload: SharedWeekPayload): PlanSession[] {
   return payload.s
     .map(

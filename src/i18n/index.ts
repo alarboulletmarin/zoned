@@ -3,9 +3,9 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 // Boot-critical namespaces, bundled statically for the default language so
-// the first paint (TopBar, Footer, MobileSidebar, toasts) never waits on a
-// network round-trip. Everything else — the other 14 namespaces and the
-// entire inactive language — is loaded through dynamic imports below, which
+// the first paint (TopBar, Footer, MobileMenu, toasts) never waits on a
+// network round-trip. Everything else, the other 14 namespaces and the
+// entire inactive language, is loaded through dynamic imports below, which
 // keeps ~120 KB gzip of locale JSON out of the entry chunk.
 import frCommon from "./locales/fr/common.json";
 import frHomepage from "./locales/fr/homepage.json";
@@ -27,6 +27,7 @@ export const NAMESPACES = [
   "profile",
   "routes",
   "nutrition",
+  "today",
 ] as const;
 
 // One lazy chunk per locale file (32 total), fetched on demand.
@@ -53,13 +54,13 @@ i18n
     fallbackLng: "fr",
     defaultNS: "common",
     fallbackNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes", "nutrition"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes", "nutrition", "today"],
 
     // Detection options
     detection: {
       // The URL is the source of truth for language, then the user's own
       // stored choice. `navigator` is deliberately absent: it made the bare
-      // FR URL render in English for anyone whose browser asked for English —
+      // FR URL render in English for anyone whose browser asked for English,
       // including Google's renderer, whose navigator.language is always
       // "en-US". Google was therefore indexing English content on every URL
       // the sitemap declares as hreflang="fr-FR"/x-default, and rejecting the
@@ -145,7 +146,7 @@ export function ensureTranslations(
 // Non-French boot: the eager shell (TopBar, Footer) renders before any lazy
 // page resolves, so its namespaces must be present before the first render.
 // Top-level await holds main.tsx until these two small bundles land (one
-// round-trip, en users only — fr is already bundled statically).
+// round-trip, en users only, fr is already bundled statically).
 if (activeLanguage() !== "fr") {
   await Promise.all([
     loadBundle(activeLanguage(), "common"),
@@ -154,7 +155,7 @@ if (activeLanguage() !== "fr") {
 }
 
 /** Every React.lazy page joins this promise so a page never renders before
- *  its translations exist — same Suspense fallback as the code-split wait,
+ *  its translations exist, same Suspense fallback as the code-split wait,
  *  hence zero flash-of-keys and zero CLS. */
 export const i18nReady = ensureTranslations();
 

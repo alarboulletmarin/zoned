@@ -1,5 +1,5 @@
 /**
- * CornerStamp — 480×480. Small square sticker designed to sit in the
+ * CornerStamp, 480×480. Small square sticker designed to sit in the
  * corner of a user's photo. Minimal info: zone, duration, ID. Outer ring
  * mimics a vintage hand-stamp.
  */
@@ -7,8 +7,7 @@
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 480;
@@ -35,7 +34,7 @@ export function CornerStamp({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* The white disc IS the visual identity — keep it visible in
+      {/* The white disc IS the visual identity, keep it visible in
           transparent mode (only the editorial bg drops out). */}
       <div
         style={{
@@ -62,7 +61,7 @@ export function CornerStamp({ workout, transparent }: ShareTemplateProps) {
           textAlign: "center",
         }}
       >
-        <Logo style={{ width: 60, height: 30 }} />
+        <BrandMark height={28} />
         <div
           style={{
             marginTop: 6,

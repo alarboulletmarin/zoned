@@ -1,5 +1,5 @@
 /**
- * CasinoChip — 480×480. Concentric poker chip. Outer dashed ring of paired
+ * CasinoChip, 480×480. Concentric poker chip. Outer dashed ring of paired
  * stripes, inner solid ring, white centre disc holding the zone tag and
  * duration. Chip-shaped visual survives transparent toggle.
  */
@@ -7,8 +7,7 @@
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 480;
@@ -20,7 +19,7 @@ export function CasinoChip({ workout, transparent }: ShareTemplateProps) {
   const zoneLabel = pickLang(hero.zoneMeta, "label");
   const zoneHex = ZONE_HEX[hero.dominantZone];
 
-  // Build 8 segment markers around the chip — repeating stripes of white
+  // Build 8 segment markers around the chip, repeating stripes of white
   // over the colour, classic casino look.
   const segments = Array.from({ length: 8 });
 
@@ -53,7 +52,7 @@ export function CasinoChip({ workout, transparent }: ShareTemplateProps) {
         }}
       />
 
-      {/* White stripes around the rim — 8 evenly spaced wedges */}
+      {/* White stripes around the rim, 8 evenly spaced wedges */}
       {segments.map((_, i) => (
         <div
           key={i}
@@ -102,7 +101,7 @@ export function CasinoChip({ workout, transparent }: ShareTemplateProps) {
           textAlign: "center",
         }}
       >
-        <Logo style={{ width: 44, height: 22, opacity: 0.9 }} />
+        <BrandMark height={22} opacity={0.9} />
         <div
           style={{
             fontSize: 88,

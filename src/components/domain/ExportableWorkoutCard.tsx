@@ -40,55 +40,53 @@ export const ExportableWorkoutCard = forwardRef<
   const mainBlocks = workout.mainSetTemplate.length;
   const cooldownBlocks = workout.cooldownTemplate?.length || 0;
 
+  const phases = [
+    { key: "warmup" as const, blocks: workout.warmupTemplate },
+    { key: "main" as const, blocks: workout.mainSetTemplate },
+    { key: "cooldown" as const, blocks: workout.cooldownTemplate },
+  ].filter((phase) => phase.blocks != null && phase.blocks.length > 0);
+
   return (
-    <div
-      ref={ref}
-      className="bg-white p-6 w-[800px]"
-      style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
-    >
+    <div ref={ref} className="zn-export">
       {/* Header */}
-      <div className={`zone-${dominantZone} mb-6`}>
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">
-              {pickLang(workout, "name")}
-            </h1>
-            <p className="text-sm text-gray-600 line-clamp-2">
-              {pickLang(workout, "description")}
-            </p>
+      <div className="zn-export__head">
+        <div className="zn-export__title-row">
+          <div className="zn-export__titles">
+            <h1 className="zn-export__title">{pickLang(workout, "name")}</h1>
+            <p className="zn-export__desc">{pickLang(workout, "description")}</p>
           </div>
           <ZoneBadge zone={dominantZone} size="lg" showLabel />
         </div>
 
         {/* Quick Info Badges */}
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary" className="gap-1.5 text-xs">
-            <Clock className="size-3" />
+        <div className="zn-export__facts">
+          <Badge variant="secondary">
+            <Clock />
             {duration} {t("common:units.minutes")}
           </Badge>
-          <Badge variant="secondary" className="gap-1.5 text-xs">
-            <DifficultyIcon difficulty={workout.difficulty} className="size-3" />
+          <Badge variant="secondary">
+            <DifficultyIcon difficulty={workout.difficulty} />
             {t(`library:difficulty.${workout.difficulty}`)}
           </Badge>
-          <Badge variant="secondary" className="gap-1.5 text-xs">
-            <Target className="size-3" />
+          <Badge variant="secondary">
+            <Target />
             {t(`targetSystems.${workout.targetSystem}`)}
           </Badge>
-          <Badge variant="outline" className="gap-1.5 text-xs">
-            <Zap className="size-3" />
-            {warmupBlocks + mainBlocks + cooldownBlocks} blocs
+          <Badge variant="outline">
+            <Zap />
+            {t("session:export.blockCount", {
+              count: warmupBlocks + mainBlocks + cooldownBlocks,
+            })}
           </Badge>
         </div>
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="zn-export__cols">
         {/* Timeline - Takes 2 columns */}
-        <Card className="col-span-2">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("titles.sessionTimeline")}
-            </CardTitle>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("titles.sessionTimeline")}</CardTitle>
           </CardHeader>
           <CardContent>
             <SessionTimeline workout={workout} />
@@ -97,10 +95,8 @@ export const ExportableWorkoutCard = forwardRef<
 
         {/* Zone Distribution */}
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("titles.zoneDistribution")}
-            </CardTitle>
+          <CardHeader>
+            <CardTitle>{t("titles.zoneDistribution")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ZoneDistribution workout={workout} />
@@ -109,62 +105,32 @@ export const ExportableWorkoutCard = forwardRef<
       </div>
 
       {/* Blocks Summary */}
-      <div className="mt-4 grid grid-cols-3 gap-4 text-xs">
-        {workout.warmupTemplate && workout.warmupTemplate.length > 0 && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <h4 className="font-medium text-gray-700 mb-1">
-              {t("session:structure.warmup")}
+      <div className="zn-export__phases">
+        {phases.map((phase) => (
+          <div key={phase.key} className="zn-export__phase">
+            <h4 className="zn-export__phase-title">
+              {t(`session:structure.${phase.key}`)}
             </h4>
-            <ul className="space-y-0.5 text-gray-600">
-              {workout.warmupTemplate.slice(0, 3).map((block, i) => (
-                <li key={i} className="truncate">
-                  • {pickLang(block, "description")}
+            <ul className="zn-export__phase-list">
+              {phase.blocks!.slice(0, 3).map((block, i) => (
+                <li key={i} className="zn-export__phase-item">
+                  {pickLang(block, "description")}
                 </li>
               ))}
-              {workout.warmupTemplate.length > 3 && (
-                <li className="text-gray-400">+{workout.warmupTemplate.length - 3} autres</li>
+              {phase.blocks!.length > 3 && (
+                <li className="zn-export__more">
+                  {t("session:export.andMore", { count: phase.blocks!.length - 3 })}
+                </li>
               )}
             </ul>
           </div>
-        )}
-        <div className="bg-gray-50 rounded-lg p-3">
-          <h4 className="font-medium text-gray-700 mb-1">
-            {t("session:structure.main")}
-          </h4>
-          <ul className="space-y-0.5 text-gray-600">
-            {workout.mainSetTemplate.slice(0, 3).map((block, i) => (
-              <li key={i} className="truncate">
-                • {pickLang(block, "description")}
-              </li>
-            ))}
-            {workout.mainSetTemplate.length > 3 && (
-              <li className="text-gray-400">+{workout.mainSetTemplate.length - 3} autres</li>
-            )}
-          </ul>
-        </div>
-        {workout.cooldownTemplate && workout.cooldownTemplate.length > 0 && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <h4 className="font-medium text-gray-700 mb-1">
-              {t("session:structure.cooldown")}
-            </h4>
-            <ul className="space-y-0.5 text-gray-600">
-              {workout.cooldownTemplate.slice(0, 3).map((block, i) => (
-                <li key={i} className="truncate">
-                  • {pickLang(block, "description")}
-                </li>
-              ))}
-              {workout.cooldownTemplate.length > 3 && (
-                <li className="text-gray-400">+{workout.cooldownTemplate.length - 3} autres</li>
-              )}
-            </ul>
-          </div>
-        )}
+        ))}
       </div>
 
       {/* Footer */}
-      <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center text-xs text-gray-400">
+      <div className="zn-export__foot">
         <span>zoned.run</span>
-        <span>{workout.id}</span>
+        <span className="zn-export__code">{workout.id}</span>
       </div>
     </div>
   );

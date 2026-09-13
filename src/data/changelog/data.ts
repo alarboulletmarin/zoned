@@ -2,6 +2,312 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "1.0.0",
+    date: "2026-09-13",
+    changes: {
+      added: [
+        {
+          text: "Les pratiques deviennent un axe à part entière : chaque séance, collection, plan et parcours dit s'il est route, trail ou ultra, et toute l'app filtre dessus. L'axe est DÉDUIT du catalogue au lieu d'être stocké, donc il ne peut pas diverger de ce qui existe vraiment",
+          textEn: "Practices become a real axis: every session, collection, plan and route declares whether it is road, trail or ultra, and the whole app filters on it. The axis is DERIVED from the catalogue rather than stored, so it cannot drift out of sync with what is actually there",
+          category: "Pratiques",
+          categoryEn: "Practices",
+        },
+        {
+          text: "Huit séances écrites pour l'ultra, TRL-013 à TRL-020 : temps sur les pieds, marche rapide en côte, back-to-back, descente technique, nutrition en course",
+          textEn: "Eight sessions written for ultra distance, TRL-013 to TRL-020: time on feet, power hiking, back-to-back days, technical descent, race-day fuelling",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Un plan trail tout prêt. L'étagère des plans prêts était vide pour le trail et l'ultra, donc un tiers des pratiques ouvrait sur une impasse. C'est un trail court de 30 km, la distance que le moteur modélise vraiment, et non un 40 km qui n'aurait correspondu à aucune table de volume ni d'affûtage",
+          textEn: "A ready-made trail plan. The ready-made shelf was empty for trail and ultra, so a third of the practices opened onto a dead end. It is a 30 km short trail, the distance the engine actually models, rather than a 40 km label matching no volume, phase or taper table",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Les cartes de pratique disent ce qu'il y a derrière : combien de séances et de plans attendent, déduits du même index que la bibliothèque. Elles annonçaient une propriété du modèle, pas du contenu. Un rayon vide le dit maintenant au lieu de laisser croire",
+          textEn: "Practice cards say what is behind them: how many sessions and plans are waiting, derived from the same index the library uses. They used to announce a property of the model rather than of the content. An empty shelf now says so instead of implying otherwise",
+          category: "Pratiques",
+          categoryEn: "Practices",
+        },
+        {
+          text: "Les quinze collections portent leur pratique, et perdent un champ mort. Une curation comme Objectif ultra était invisible dans le nouvel axe. Pas de pratique veut dire transversale, donc valable partout : c'est le cas de dix des quinze",
+          textEn: "The fifteen collections carry their practice, and lose a dead field. Curation like Ultra goal was invisible in the new axis. No practice means cross-cutting, so valid everywhere, which is the case for ten of the fifteen",
+          category: "Collections",
+          categoryEn: "Collections",
+        },
+        {
+          text: "Une figure par pratique, réemployée dans la bibliothèque, le plan et les écrans vides. Trois des quatre existaient déjà : un dessin remplace, il ne s'ajoute pas",
+          textEn: "One figure per practice, reused across the library, the plan and the empty states. Three of the four already existed: a drawing replaces, it does not accumulate",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Le logo est le mot lui-même, vectorisé. Le signe dessiné prévu a été construit, regardé, puis écarté : toutes les poses à portée du gréement des doodles donnaient une personne qui court, quand le brief demandait le sport en général",
+          textEn: "The wordmark is the word itself, vectorised. The drawn sign that was planned got built, looked at, and dropped: every pose within reach of the doodle rig produced a person running, where the brief asked for sport in general",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "La coquille court pendant que l'app démarre : six images par foulée, deux foulées, et elle est retenue le temps d'une foulée pour que rien ne clignote. Un réglage permet de couper l'ouverture",
+          textEn: "The shell runs while the app boots: six frames per stride, two strides, held for one stride so nothing flashes. A setting turns the opening off",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Des réglages qui masquent au lieu de supprimer : deux listes, les pratiques qu'on suit et les surfaces qu'on veut voir. L'app a 61 pages et personne n'en veut 61. Ce sont des listes d'opt-out, donc un réglage écrit avant ce lot gagne les nouveaux champs à la lecture, sans une ligne de migration",
+          textEn: "Settings that hide instead of deleting: two lists, the practices you follow and the surfaces you want to see. The app has 61 pages and nobody wants 61. They are opt-out lists, so a settings object written before this release picks up the new fields on read, with no migration code",
+          category: "Paramètres",
+          categoryEn: "Settings",
+        },
+        {
+          text: "Un stockage qui ne fait plus tomber l'app quand il échoue",
+          textEn: "A storage layer that no longer takes the app down when it fails",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Le menu d'une séance dans la vue liste du plan : voir, trouver un parcours, clôturer, remplacer, substituer, retirer. C'est celui que le tableau de la semaine ouvrait déjà, désormais partagé par les deux vues au lieu d'être écrit deux fois",
+          textEn: "The session menu in the plan's list view: view, find a route, close out, replace, substitute, remove. It is the menu the week board already opened, now shared by both views instead of written twice",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le glisser-pour-fermer passe dans la primitive et sert sur les cinq tiroirs du bas : réglages du simulateur, générateur de semaine, indisponibilités, fin de séance, ajout de séance. Il n'existait que sur le dernier",
+          textEn: "Drag-to-close moves into the primitive and now serves all five bottom sheets: simulator settings, week generator, unavailability, session close-out, add a session. It only existed on the last one",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Une porte typographique dans l'intégration continue, à côté de la parité FR/EN",
+          textEn: "A typography gate in CI, next to the FR/EN parity check",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      changed: [
+        {
+          text: "L'architecture passe de cinq portes à quatre : le cockpit, les séances, les plans, les chiffres. La navigation demandait 28 décisions avant la première séance. Les 35 destinations sorties GARDENT toutes leur route, restent indexées, prérendues et partageables, et se retrouvent au pied de page, dans la palette et dans la liste du menu mobile",
+          textEn: "The architecture goes from five doors to four: the cockpit, sessions, plans, figures. Navigation asked for 28 decisions before the first session. The 35 destinations that left KEEP every route, stay indexed, prerendered and shareable, and land in the footer, the palette and the mobile menu list",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Le cockpit d'Aujourd'hui est la réponse et non un menu : cinq boîtes de la même forme sont devenues la forme de la semaine, la séance du jour est à un tap de la bande, et son profil s'aperçoit sur place. La colonne est centrée, et le titre EST la réponse",
+          textEn: "The cockpit at Today is the answer rather than a menu: five boxes of the same shape became the shape of the week, the day's session is one tap from the strip, and its profile is previewed in place. The column is centred, and the headline IS the answer",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "La bibliothèque range par PRATIQUE d'abord, la modalité passe dessous. Quelqu'un qui s'entraîne pense en pratique, pas en discipline. La modalité reste, et c'est un choix : la retirer aurait orphelin les 10 séances de vélo, les 10 de natation, les 17 de renforcement et les deux calculateurs adossés aux moteurs FTP et CSS",
+          textEn: "The library sorts by PRACTICE first, with modality below. Someone training thinks in practices, not disciplines. Modality stays, and that is a choice: dropping it would have orphaned the 10 cycling sessions, the 10 swimming ones, the 17 strength ones and the two calculators built on the FTP and CSS engines",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "Le tirage au sort sort du menu, les commandes de la bibliothèque passent de cinq rangées à trois, et les toasts d'aide partent. Ils se levaient tout seuls sur quatre pages, une seconde et demie après l'arrivée, et se posaient sur le kicker de la page",
+          textEn: "The random draw comes out of the menu, the library controls go from five rows to three, and the help toasts are gone. They raised themselves on four pages, a second and a half after arrival, and landed on the page kicker",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "Le rail des filtres tient sur une ligne, et les formats passent de quatre à trois. Le mode focus n'était pas un mode : son attribut n'était stylé nulle part, et sur téléphone il ne différait de la grille que par 20 px de gouttière",
+          textEn: "The filter rail fits on one line, and the formats go from four to three. Focus mode was not a mode: its attribute was styled nowhere, and on a phone it differed from the grid by 20px of gutter",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "La page d'un plan ouvre sur CETTE SEMAINE et non sur quatre compteurs du plan entier : la séance du jour avec son nom entier et sa case de clôture, les séances faites sur le total, le temps posé sur le prévu, et la prochaine séance clé",
+          textEn: "A plan page opens on THIS WEEK rather than four counters about the whole plan: the day's session with its full name and its close-out box, sessions done out of the total, time logged against time planned, and the next key session",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le parcours de création de plan demande la PRATIQUE d'abord. Il affichait les sept distances à plat dans une seule grille, et tout le traitement du trail tenait dans un booléen qui ne gouvernait qu'une phrase d'aide : on pouvait choisir ultra et se faire demander une allure au kilomètre, jamais un dénivelé",
+          textEn: "The plan wizard asks for the PRACTICE first. It used to show all seven distances flat in a single grid, with the whole trail treatment held in a boolean that governed one hint sentence: you could choose ultra and be asked for a pace per kilometre, never for elevation",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le dénivelé n'est demandé qu'à qui court dessus. Le champ existait, mais il était posé sur l'écran d'allure et rendait SANS CONDITION : quelqu'un qui préparait un 5 km sur route se faisait demander un D+",
+          textEn: "Elevation is asked only of those who run it. The field existed, but it sat on the pace screen and rendered UNCONDITIONALLY: someone preparing a road 5K was asked for a climb",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le parcours de plan, 1 609 lignes en un fichier, devient un registre d'étapes. Aucun comportement ne change : mêmes étapes, même ordre, mêmes libellés, même plan produit. C'est ce qui rend lisible le lot qui suit",
+          textEn: "The plan wizard, 1,609 lines in one file, becomes a step registry. No behaviour changes: same steps, same order, same labels, same plan produced. That is what makes the next batch readable",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Le calendrier du parcours s'ouvre en tiroir, et le bouton Suivant part des questions fermées. Plafonné à la place mesurée entre le champ et le bord de la fenêtre, il valait 293 px pour une grille qui en fait 356 : le mois se lisait par une fenêtre de six lignes sur sept",
+          textEn: "The wizard's calendar opens as a drawer, and the Next button leaves the closed questions. Capped to the space measured between the field and the window edge, it came to 293px for a grid that needs 356: a month was read through a window six rows out of seven",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le calendrier d'un plan passe à une ligne par jour sous 640 px, la grille de sept colonnes s'efface. Sept colonnes dans 390 px donnaient des cartes de 42 à 60 px. Mesuré à 320, 375 et 390 px : plus aucun titre tronqué, contre 5, 4 et 3 avant",
+          textEn: "A plan's calendar goes to one row per day below 640px, and the seven-column grid retires. Seven columns in 390px gave cards of 42 to 60px. Measured at 320, 375 and 390px: no truncated titles left, against 5, 4 and 3 before",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le vermillon ne dit plus qu'une chose, et une seule : maintenant. Une carte choisie prend un anneau d'encre, un onglet ouvert prend une pilule d'encre, et une phase de plan n'a plus de couleur à elle",
+          textEn: "Vermillon says one thing now, and only one: now. A chosen card takes an ink ring, an open tab takes an ink pill, and a plan phase gets no colour of its own",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Six cartes portaient un liseré coloré sur une seule arête, qui longeait un coin arrondi puis mourait contre un filet gris. Toutes passent à l'anneau interne sur les quatre côtés, qui suit le rayon des coins sans déplacer un pixel. La semaine en cours n'était marquée que par sa couleur : son numéro passe en gras",
+          textEn: "Six cards carried a coloured edge on one side, running along a rounded corner then dying against a grey rule. All move to an inset ring on four sides, which follows the corner radius without moving a pixel. The current week was marked by colour alone, so its number now goes bold",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Les bandes de page se séparent par l'espace seul. Les filets entre elles sont partis, et quatre frontières ont cessé de payer l'écart deux fois",
+          textEn: "Bands are separated by space alone. The rules between them are gone, and four boundaries stopped paying the gap twice",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Les sommaires perdent leur bande vermillon à gauche. Le hub nutrition marquait déjà le titre courant par une pilule d'encre : deux vocabulaires pour la même chose, et c'est le second qui gagne. Le simulateur faisait pire, il changeait de langage en changeant de largeur",
+          textEn: "Tables of contents lose their vermillon edge. The nutrition hub already marked the current heading with an ink pill: two vocabularies for one thing, and the second wins. The simulator was worse, it changed language when it changed width",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Le pied de page se replie en groupes sous 900 px : de 1,65 écran à 0,59. Douze liens au plancher tactile de 44 px faisaient 1 100 px de pied sur un téléphone. Le plancher ne bouge pas, c'est le nombre de rangées qui bouge",
+          textEn: "The footer folds into groups below 900px: 1.65 screens down to 0.59. Twelve links at the 44px touch floor made 1,100px of footer on a phone. The floor does not move, the number of rows does",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "La barre d'encre du pied perd 90 px sur téléphone, le pied 128. Elle faisait 219 px, soit 31 % d'un écran pour cinq lignes de mentions légales",
+          textEn: "The footer's ink bar loses 90px on a phone, the footer 128. It measured 219px, 31% of a screen for five lines of legal notices",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Un geste par étape sur téléphone : les champs de date s'ouvrent sur le premier mois qui contient un jour choisissable et non sur le mois courant, les filtres collent, et le calendrier s'ouvre là où il faut",
+          textEn: "One gesture per step on a phone: date fields open on the first month that holds a selectable day rather than on the current month, filters stick, and the calendar opens where it should",
+          category: "Expérience mobile",
+          categoryEn: "Mobile",
+        },
+        {
+          text: "Le panneau d'ajout d'une séance passe devant la pilule MENU au lieu d'être traversé par elle, respire, et se ferme au doigt",
+          textEn: "The add-a-session panel comes in front of the MENU pill instead of being pierced by it, breathes, and closes with a finger",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "La foulée par zone dominante quitte l'écran d'une séance : le badge, la bande de faits et la table de répartition disaient déjà la zone. Sa semelle était calée sur une abscisse de l'axe des temps, où une marque se lit comme un curseur, et celui-là ne mesurait rien. La figure qui montre prend sa place",
+          textEn: "The dominant-zone stride leaves the session screen: the badge, the facts row and the distribution table already said the zone. Its sole was aligned to a point on the time axis, where a mark reads as a cursor, and that one measured nothing. The figure that points takes its place",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Une séance de la vue liste est une ligne, plus une carte dans une carte dans une carte. La pastille de type devient une légende mono discrète, et sur téléphone les quatre glyphes d'action deviennent un bouton qui les nomme",
+          textEn: "A session in the list view is a line, not a card inside a card inside a card. The type badge becomes a quiet mono caption, and on a phone the four action glyphs become one button that names them",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Une journée du tableau de la semaine est une ligne aussi. Dix-neuf rectangles dessinés pour cinq séances sont devenus neuf, et le seul rang encadré de l'écran est aujourd'hui",
+          textEn: "A day on the week board is a line too. Nineteen drawn rectangles for five sessions became nine, and the only framed row left on the screen is today",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "L'ultra passe annoncé : ce que le générateur produit sur cette distance n'est pas jugé assez fiable pour être proposé. Une pratique annoncée se voit maintenant avant d'être choisie, au lieu d'un rayon vide sans le dire",
+          textEn: "Ultra becomes announced: what the generator produces at that distance is not judged reliable enough to offer. An announced practice is now visible before it can be chosen, instead of a silently empty shelf",
+          category: "Pratiques",
+          categoryEn: "Practices",
+        },
+        {
+          text: "Les pas d'affiche descendent d'un cran sur téléphone. Le corps de texte, le mono et la grille d'espacement ne bougent pas, donc les longueurs de ligne et les cibles au doigt sont intactes",
+          textEn: "The display steps drop one step on mobile. Body text, mono and the spacing grid do not move, so line lengths and hit targets are unchanged",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Revue finale : sur les trois écrans du chantier, la question devient le titre, et le tutoiement est passé partout",
+          textEn: "Final review pass: on the three screens that carry the work, the question becomes the title, and the informal voice is applied throughout",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Typographie : ni chevrons, ni cadratin, ni demi-cadratin, dans le texte visible comme dans le code",
+          textEn: "Typography: no guillemets, no em dash, no en dash, in visible text and in the source alike",
+          category: "Design",
+          categoryEn: "Design",
+        },
+      ],
+      fixed: [
+        {
+          text: "La vue liste d'un plan faisait tenir 388 px de contenu dans une carte de 350. Le nom de la séance était écrasé à 3 px et se peignait par-dessus la pastille voisine : deux séances sur cinq étaient illisibles sur un téléphone de 390 px",
+          textEn: "The plan's list view fitted 388px of content into a 350px card. The session's name was crushed to 3px and painted over the badge beside it: two of five sessions were unreadable on a 390px phone",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le menu d'une séance se dépliait de huit pixels par image depuis le bord droit au lieu d'apparaître, et s'ouvrait à moitié hors écran près du bord d'un téléphone",
+          textEn: "The session menu unfurled 8px per frame from the right edge instead of appearing, and opened half off-screen when tapped near the right of a phone",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Changer un filtre renvoyait en haut de page. Une navigation qui réécrit son propre état n'est pas un changement de page : le glossaire, les collections et les parcours en profitent par le même geste",
+          textEn: "Changing a filter sent you back to the top of the page. A navigation that rewrites its own state is not a page change: the glossary, the collections and the routes all benefit from the same fix",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "Neuf colonnes défilantes écrasaient ce qu'elles portaient",
+          textEn: "Nine scrolling columns crushed what they carried",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les cartes d'un tiroir étaient écrasées et sortaient de leur cadre",
+          textEn: "Cards inside a sheet were squashed and escaped their frame",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "La pilule MENU flottante recouvrait la barre du pouce",
+          textEn: "The floating MENU pill covered the thumb bar",
+          category: "Expérience mobile",
+          categoryEn: "Mobile",
+        },
+        {
+          text: "Les deux bandeaux PWA s'empilaient au lieu de se recouvrir",
+          textEn: "The two PWA banners stacked instead of overlapping",
+          category: "PWA",
+          categoryEn: "PWA",
+        },
+        {
+          text: "L'ouverture du menu envoyait le focus sur la première porte plutôt que sur le panneau",
+          textEn: "Opening the menu moved focus to the first door rather than to the panel",
+          category: "Accessibilité",
+          categoryEn: "Accessibility",
+        },
+        {
+          text: "Le chunk vendor-radix nommait des paquets qui ne sont pas installés",
+          textEn: "The vendor-radix chunk named packages that are not installed",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Trois séances ultra qui doublaient le catalogue ont été retirées",
+          textEn: "Three ultra sessions that duplicated the catalogue were removed",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+    },
+  },
+  {
     version: "0.8.0",
     date: "2026-07-29",
     changes: {
@@ -14,7 +320,7 @@ export const changelogVersions: ChangelogVersion[] = [
         },
         {
           text: "Les bornes de réglage viennent de la séance elle-même : la plage que déclare son scaling, ou la moitié à une fois et demie ce qu'elle prescrit. Le curseur couvre cette recommandation, le champ à côté accepte n'importe quelle valeur, et seul l'aberrant est refusé",
-          textEn: "Parameter bounds read from the template itself — the range its scaling declares, or half to one and a half times what it prescribes. The slider spans that recommendation, the field beside it takes any value, and only the absurd is refused",
+          textEn: "Parameter bounds read from the template itself, the range its scaling declares, or half to one and a half times what it prescribes. The slider spans that recommendation, the field beside it takes any value, and only the absurd is refused",
           category: "Seances",
           categoryEn: "Workouts",
         },
@@ -125,7 +431,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Infrastructure",
         },
         {
-          text: "Sept séances annonçaient une fourchette de répétitions que leur propre donnée contredisait : « 6-8x » pour un 7 enregistré. La fourchette est passée dans les conseils, où elle relève du coaching",
+          text: "Sept séances annonçaient une fourchette de répétitions que leur propre donnée contredisait : 6-8x pour un 7 enregistré. La fourchette est passée dans les conseils, où elle relève du coaching",
           textEn: "Seven workouts announced a repetition range their own data contradicted: \"6-8x\" against a stored 7. The range moved to the coaching tips, where it belongs",
           category: "Seances",
           categoryEn: "Workouts",
@@ -305,7 +611,7 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       fixed: [
         {
-          text: "Les séances de VMA étaient annotées et calculées à l'allure endurance : les zones écrites « Z5+ » retombaient silencieusement en Z2",
+          text: "Les séances de VMA étaient annotées et calculées à l'allure endurance : les zones écrites Z5+ retombaient silencieusement en Z2",
           textEn: "VO2max sessions were annotated and costed at easy pace: zone strings such as \"Z5+\" silently fell back to Z2",
           category: "Seances",
           categoryEn: "Workouts",
@@ -355,7 +661,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Feature",
         },
         {
-          text: "Vue « Jour J » du simulateur : déroulé chronologique, prochaine étape avec compte à rebours et marqueur « maintenant » dans la timeline",
+          text: "Vue Jour J du simulateur : déroulé chronologique, prochaine étape avec compte à rebours et marqueur maintenant dans la timeline",
           textEn: "\"Race day\" view on the race simulator: chronological run sheet, next-up card with countdown, and a \"now\" marker in the timeline",
           category: "Fonctionnalite",
           categoryEn: "Feature",
@@ -373,7 +679,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Calculators",
         },
         {
-          text: "Checklist « Sac et logistique » sur le simulateur, jusque-là générée pour le PDF seulement",
+          text: "Checklist Sac et logistique sur le simulateur, jusque-là générée pour le PDF seulement",
           textEn: "Kit bag checklist on the race simulator, until now generated for the PDF only",
           category: "Contenu",
           categoryEn: "Content",
@@ -405,7 +711,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Nutrition : l'absence d'apport glucidique s'affiche comme un conseil et non comme « 0 g / 0 gels » ; hydratation arrondie à 50 ml",
+          text: "Nutrition : l'absence d'apport glucidique s'affiche comme un conseil et non comme 0 g / 0 gels ; hydratation arrondie à 50 ml",
           textEn: "Nutrition states the no-carb case as advice instead of \"0 g / 0 gels\"; hydration rounded to 50 ml",
           category: "Contenu",
           categoryEn: "Content",
@@ -481,7 +787,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Feature",
         },
         {
-          text: "Partage d'une semaine par lien encode compact, avec page d'apercu et « Ajouter a mes semaines »",
+          text: "Partage d'une semaine par lien encode compact, avec page d'apercu et Ajouter a mes semaines",
           textEn: "Share a week as a compact encoded link, with a preview page and \"Add to my weeks\"",
           category: "Fonctionnalite",
           categoryEn: "Feature",
@@ -523,7 +829,7 @@ export const changelogVersions: ChangelogVersion[] = [
     changes: {
       added: [
         {
-          text: "Bouton « Partager sur Strava » (copie en un clic) sur les pages seance",
+          text: "Bouton Partager sur Strava (copie en un clic) sur les pages seance",
           textEn: "\"Share on Strava\" copy-to-clipboard button on session pages",
           category: "Seances",
           categoryEn: "Workouts",
@@ -537,7 +843,7 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       changed: [
         {
-          text: "Page d'accueil reorganisee autour de la generation de plans : accroche orientee benefice, « Generer mon plan » en action principale, section Plans remontee juste apres les points d'entree",
+          text: "Page d'accueil reorganisee autour de la generation de plans : accroche orientee benefice, Generer mon plan en action principale, section Plans remontee juste apres les points d'entree",
           textEn: "Homepage reordered around plan generation: benefit-led hero copy, \"Generate my plan\" as primary CTA, Plans section moved right after the entry points",
           category: "UX",
           categoryEn: "UX",
@@ -621,20 +927,20 @@ export const changelogVersions: ChangelogVersion[] = [
     changes: {
       added: [
         {
-          text: "Mode « Ma semaine » : generateur de semaine polarisee 80/20 qui compose 3 a 6 seances complementaires, avec un editeur de semaine (board 7 jours, jauge d'equilibre 80/20, rythme de la semaine) et une generation automatique animee",
-          textEn: "« My week » mode: a polarised 80/20 week generator composing 3-6 complementary sessions, with a week editor (7-day board, 80/20 balance gauge, week rhythm) and an animated automatic generation",
+          text: "Mode Ma semaine : generateur de semaine polarisee 80/20 qui compose 3 a 6 seances complementaires, avec un editeur de semaine (board 7 jours, jauge d'equilibre 80/20, rythme de la semaine) et une generation automatique animee",
+          textEn: "My week mode: a polarised 80/20 week generator composing 3-6 complementary sessions, with a week editor (7-day board, 80/20 balance gauge, week rhythm) and an animated automatic generation",
           category: "Fonctionnalite",
           categoryEn: "Feature",
         },
         {
-          text: "Semaines pre-construites : semaines types sourcees (base aerobie 80/20, bloc seuil, affutage VO2, recuperation, gros volume, reprise douce) avec un contenu pedagogique « pourquoi cette semaine » et « pourquoi cette seance »",
-          textEn: "Pre-built weeks: sourced template weeks (aerobic base 80/20, threshold block, VO2 sharpening, recovery, high volume, easy return) with pedagogical « why this week » and « why this session » notes",
+          text: "Semaines pre-construites : semaines types sourcees (base aerobie 80/20, bloc seuil, affutage VO2, recuperation, gros volume, reprise douce) avec un contenu pedagogique pourquoi cette semaine et pourquoi cette seance",
+          textEn: "Pre-built weeks: sourced template weeks (aerobic base 80/20, threshold block, VO2 sharpening, recovery, high volume, easy return) with pedagogical why this week and why this session notes",
           category: "Plans",
           categoryEn: "Plans",
         },
         {
-          text: "Page « Tirer une seance » : tirage aleatoire d'une seance selon des filtres (discipline, zones, duree, niveau) avec une animation de recherche",
-          textEn: "« Draw a session » page: random session draw from filters (discipline, zones, duration, level) with a searching animation",
+          text: "Page Tirer une seance : tirage aleatoire d'une seance selon des filtres (discipline, zones, duree, niveau) avec une animation de recherche",
+          textEn: "Draw a session page: random session draw from filters (discipline, zones, duration, level) with a searching animation",
           category: "Fonctionnalite",
           categoryEn: "Feature",
         },
@@ -1195,20 +1501,20 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       changed: [
         {
-          text: "Recommandations proteines mises a jour : 1,4-2,2 g/kg/jour selon le volume d'entrainement (Witard 2025, Sports Medicine) — anciennement 1,2-1,8",
-          textEn: "Protein recommendations updated: 1.4-2.2 g/kg/day based on training volume (Witard 2025, Sports Medicine) — previously 1.2-1.8",
+          text: "Recommandations proteines mises a jour : 1,4-2,2 g/kg/jour selon le volume d'entrainement (Witard 2025, Sports Medicine), anciennement 1,2-1,8",
+          textEn: "Protein recommendations updated: 1.4-2.2 g/kg/day based on training volume (Witard 2025, Sports Medicine), previously 1.2-1.8",
           category: "Contenu",
           categoryEn: "Content",
         },
         {
-          text: "Ratio glucose:fructose modernise : 1:0.8 au-dela de 60 g/h (Rowlands 2020) — anciennement 2:1",
-          textEn: "Glucose:fructose ratio modernized: 1:0.8 above 60 g/h (Rowlands 2020) — previously 2:1",
+          text: "Ratio glucose:fructose modernise : 1:0.8 au-dela de 60 g/h (Rowlands 2020), anciennement 2:1",
+          textEn: "Glucose:fructose ratio modernized: 1:0.8 above 60 g/h (Rowlands 2020), previously 2:1",
           category: "Contenu",
           categoryEn: "Content",
         },
         {
-          text: "Charge glucidique : 36-48 h a 10-12 g/kg (protocole moderne) — la methode 3 jours est obsolete",
-          textEn: "Carb loading: 36-48 h at 10-12 g/kg (modern protocol) — 3-day method obsolete",
+          text: "Charge glucidique : 36-48 h a 10-12 g/kg (protocole moderne), la methode 3 jours est obsolete",
+          textEn: "Carb loading: 36-48 h at 10-12 g/kg (modern protocol), 3-day method obsolete",
           category: "Contenu",
           categoryEn: "Content",
         },
@@ -1291,8 +1597,8 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       changed: [
         {
-          text: "Layout desktop one-page premium pour les parcours (strip Strava-style, details repliables, CTA sticky, toolbar dense) — sans scroll, footer masque",
-          textEn: "Premium desktop one-page layout for routes (Strava-style strip, collapsible details, sticky CTA, dense top toolbar) — no scroll, footer hidden",
+          text: "Layout desktop one-page premium pour les parcours (strip Strava-style, details repliables, CTA sticky, toolbar dense), sans scroll, footer masque",
+          textEn: "Premium desktop one-page layout for routes (Strava-style strip, collapsible details, sticky CTA, dense top toolbar), no scroll, footer hidden",
           category: "UX",
           categoryEn: "UX",
         },
@@ -1469,8 +1775,8 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       fixed: [
         {
-          text: "Propositions de parcours qui tombaient toutes sur les memes waypoints — diversification par seed pour garantir des tracés distincts",
-          textEn: "Route candidates were falling on the same waypoints — seed-driven diversification now ensures distinct proposals",
+          text: "Propositions de parcours qui tombaient toutes sur les memes waypoints, diversification par seed pour garantir des tracés distincts",
+          textEn: "Route candidates were falling on the same waypoints, seed-driven diversification now ensures distinct proposals",
           category: "Fonctionnalite",
           categoryEn: "Feature",
         },
@@ -1941,7 +2247,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Plan prébuilt « Reprise après longue pause » : 10 semaines de reconstruction progressive après plusieurs mois d'arrêt",
+          text: "Plan prébuilt Reprise après longue pause : 10 semaines de reconstruction progressive après plusieurs mois d'arrêt",
           textEn: "Prebuilt plan \"Return After Long Break\": 10-week progressive plan for returning after months off",
           category: "Plans",
           categoryEn: "Plans",
@@ -2075,7 +2381,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Section stats renommée : « Kilométrage hebdomadaire » et « Temps d'entraînement hebdomadaire » avec sous-titres descriptifs (#30)",
+          text: "Section stats renommée : Kilométrage hebdomadaire et Temps d'entraînement hebdomadaire avec sous-titres descriptifs (#30)",
           textEn: "Stats section renamed with descriptive subtitles (#30)",
           category: "UX",
           categoryEn: "UX",
@@ -2103,7 +2409,7 @@ export const changelogVersions: ChangelogVersion[] = [
     changes: {
       added: [
         {
-          text: "Section « Pourquoi ça marche » sur chaque fiche séance : explication physiologique, rôle de chaque zone, adaptations attendues et références scientifiques (Billat, Seiler, Daniels...)",
+          text: "Section Pourquoi ça marche sur chaque fiche séance : explication physiologique, rôle de chaque zone, adaptations attendues et références scientifiques (Billat, Seiler, Daniels...)",
           textEn: "\"Why it works\" science section on each workout detail page: physiological rationale, zone explanations, expected adaptations and scientific references (Billat, Seiler, Daniels...)",
           category: "Séances",
           categoryEn: "Workouts",
@@ -2299,7 +2605,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Appui long (mobile) et clic droit (desktop) sur les séances du calendrier de plan : menu contextuel « Voir la séance » et « Supprimer » avec vibration haptique",
+          text: "Appui long (mobile) et clic droit (desktop) sur les séances du calendrier de plan : menu contextuel Voir la séance et Supprimer avec vibration haptique",
           textEn: "Long press (mobile) and right-click (desktop) context menu on plan calendar sessions with 'View session' and 'Delete' actions, haptic vibration on mobile",
           category: "UX",
           categoryEn: "UX",
@@ -2317,7 +2623,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Import/export de séances personnalisées en JSON, bouton « Créer » renommé pour plus de clarté",
+          text: "Import/export de séances personnalisées en JSON, bouton Créer renommé pour plus de clarté",
           textEn: "Import/export custom workouts as JSON files, 'Create' button renamed for clarity",
           category: "Fonctionnalité",
           categoryEn: "Feature",
@@ -2395,8 +2701,8 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "SEO",
         },
         {
-          text: "SEO : 53 nouvelles routes dans le sitemap (collections, plans pré-construits, calculateurs) — 318 → 371 URLs",
-          textEn: "SEO: 53 new routes in sitemap — collections, prebuilt plans, calculators (318 → 371 URLs)",
+          text: "SEO : 53 nouvelles routes dans le sitemap (collections, plans pré-construits, calculateurs), 318 → 371 URLs",
+          textEn: "SEO: 53 new routes in sitemap, collections, prebuilt plans, calculators (318 → 371 URLs)",
           category: "SEO",
           categoryEn: "SEO",
         },
@@ -2419,7 +2725,7 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "SEO",
         },
         {
-          text: "SEO : image OG par défaut mise à jour (200 séances, 9 calculateurs, « No Account Needed »)",
+          text: "SEO : image OG par défaut mise à jour (200 séances, 9 calculateurs, No Account Needed)",
           textEn: "SEO: updated default OG image with current stats (200 workouts, 9 calculators, 'No Account Needed')",
           category: "SEO",
           categoryEn: "SEO",
@@ -2483,7 +2789,7 @@ export const changelogVersions: ChangelogVersion[] = [
       ],
       fixed: [
         {
-          text: "Champs de date sur mobile : cibles tactiles de 44px, police text-base pour éviter le zoom iOS, option « Commencer maintenant »",
+          text: "Champs de date sur mobile : cibles tactiles de 44px, police text-base pour éviter le zoom iOS, option Commencer maintenant",
           textEn: "Date inputs on mobile: adequate touch targets (44px), text-base font to prevent iOS zoom, 'Start now' option for plan dates",
           category: "Bug",
           categoryEn: "Bug",
@@ -2723,14 +3029,14 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Content",
         },
         {
-          text: "Collection « Séances mythiques » manquante sur la page d'accueil (accent manquant dans le slug)",
+          text: "Collection Séances mythiques manquante sur la page d'accueil (accent manquant dans le slug)",
           textEn: "Missing 'Mythic Workouts' collection on homepage (missing accent in slug)",
           category: "Bug",
           categoryEn: "Bug",
         },
         {
-          text: "Segments sans zone (gammes, transitions) invisibles dans la timeline — couleur de fallback corrigée",
-          textEn: "Segments without zone (drills, transitions) invisible in timeline — fallback color fixed",
+          text: "Segments sans zone (gammes, transitions) invisibles dans la timeline, couleur de fallback corrigée",
+          textEn: "Segments without zone (drills, transitions) invisible in timeline, fallback color fixed",
           category: "Bug",
           categoryEn: "Bug",
         },
@@ -3182,8 +3488,8 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Navigation",
         },
         {
-          text: "Correction du label \"Base — Base\" dupliqué dans les en-têtes de semaine",
-          textEn: "Fixed \"Base — Base\" duplicate label in week headers (phase shown twice)",
+          text: "Correction du label \"Base, Base\" dupliqué dans les en-têtes de semaine",
+          textEn: "Fixed \"Base, Base\" duplicate label in week headers (phase shown twice)",
           category: "Plans d'entraînement",
           categoryEn: "Training Plans",
         },

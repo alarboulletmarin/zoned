@@ -2,6 +2,8 @@ import { memo, useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { usePickLang } from "@/lib/i18n-utils";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Lightbulb, ChevronDown, ChevronLeft, ChevronRight, Route as RouteIcon } from "@/components/icons";
 import { PHASE_GUIDANCE } from "@/data/guidance/phaseGuidance";
 import { tips } from "@/data/tips/data";
@@ -96,89 +98,69 @@ export const WeekGuidancePanel = memo(function WeekGuidancePanel({
   }, []);
 
   return (
-    <div
-      className={cn(
-        "rounded-lg border border-dashed border-primary/30 bg-primary/5 dark:bg-primary/10",
-        className,
-      )}
-    >
+    <div className={cn("zn-pguide", className)}>
       {/* Header - always visible */}
-      <div className="flex items-center gap-1 px-3 py-2">
+      <div className="zn-pguide__head">
         {showWeekNav && onWeekChange && (
           <button
             type="button"
             onClick={() => onWeekChange(week.weekNumber - 1)}
             disabled={week.weekNumber <= minWeek}
-            className="p-0.5 rounded hover:bg-accent disabled:opacity-30 transition-colors"
+            className="zn-pguide__nav"
           >
-            <ChevronLeft className="size-3.5" />
+            <ChevronLeft size={16} />
           </button>
         )}
         <button
           type="button"
           onClick={toggleCollapse}
-          className="flex-1 flex items-center justify-between gap-2 text-left"
+          className="zn-pguide__toggle"
           aria-expanded={!collapsed}
           aria-label={collapsed ? t("guidance.expand") : t("guidance.collapse")}
         >
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <Lightbulb className="size-4 text-primary" />
-            {t("guidance.title")}
-            {showWeekNav && (
-              <span className="text-xs text-muted-foreground font-normal">
-                S{week.weekNumber}
-              </span>
-            )}
-            <span className="text-xs text-muted-foreground font-normal">
-              {doneCount}/{items.length}
-            </span>
-          </div>
-          <ChevronDown
-            className={cn(
-              "size-4 text-muted-foreground transition-transform",
-              !collapsed && "rotate-180",
-            )}
-          />
+          <Lightbulb size={16} />
+          <span className="zn-pguide__title">{t("guidance.title")}</span>
+          {showWeekNav && (
+            <span className="zn-pguide__count">S{week.weekNumber}</span>
+          )}
+          <span className="zn-pguide__count">
+            {doneCount}/{items.length}
+          </span>
+          <ChevronDown size={16} className="zn-pguide__chev" />
         </button>
         {showWeekNav && onWeekChange && (
           <button
             type="button"
             onClick={() => onWeekChange(week.weekNumber + 1)}
             disabled={week.weekNumber >= (maxWeek ?? totalWeeks ?? Infinity)}
-            className="p-0.5 rounded hover:bg-accent disabled:opacity-30 transition-colors"
+            className="zn-pguide__nav"
           >
-            <ChevronRight className="size-3.5" />
+            <ChevronRight size={16} />
           </button>
         )}
       </div>
 
       {/* Body - collapsible */}
       {!collapsed && (
-        <div className="px-3 pb-3 space-y-3">
+        <div className="zn-pguide__body">
           {/* Phase description */}
-          <p className="text-xs text-muted-foreground">
-            {t(guidance.descriptionKey)}
-          </p>
+          <p className="zn-pguide__desc">{t(guidance.descriptionKey)}</p>
 
           {/* Recovery week banner */}
           {week.isRecoveryWeek && (
-            <div className="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 rounded px-2 py-1.5">
-              {t("guidance.recoveryWeekNote")}
-            </div>
+            <Alert kind="info">{t("guidance.recoveryWeekNote")}</Alert>
           )}
 
           {/* Checklist */}
-          <div className="space-y-1.5">
+          <ul className="zn-pguide__list">
             {checks.map((item) => (
-              <div
+              <li
                 key={item.id}
-                className="flex items-center gap-2 text-xs"
+                className="zn-pguide__item"
+                data-checked={item.checked}
               >
                 {item.checked ? (
-                  <svg
-                    viewBox="0 0 16 16"
-                    className="size-4 shrink-0 text-green-500"
-                  >
+                  <svg viewBox="0 0 16 16" className="zn-pguide__mark" aria-hidden="true">
                     <circle
                       cx="8"
                       cy="8"
@@ -196,55 +178,46 @@ export const WeekGuidancePanel = memo(function WeekGuidancePanel({
                     />
                   </svg>
                 ) : (
-                  <svg
-                    viewBox="0 0 16 16"
-                    className="size-4 shrink-0 text-muted-foreground/50"
-                  >
+                  <svg viewBox="0 0 16 16" className="zn-pguide__mark" aria-hidden="true">
                     <circle
                       cx="8"
                       cy="8"
                       r="7"
                       stroke="currentColor"
-                      strokeWidth="1"
+                      strokeWidth="1.5"
                       fill="none"
                     />
                   </svg>
                 )}
-                <span
-                  className={cn(
-                    item.checked &&
-                      "text-muted-foreground line-through",
-                  )}
-                >
+                <span className="zn-pguide__text">
                   {item.count != null
                     ? t(item.labelKey, { count: item.count })
                     : t(item.labelKey)}
                 </span>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
 
           {/* Tip */}
           {tip && (
-            <div className="text-xs bg-background/50 rounded px-2.5 py-2 border border-border/50">
-              <span className="font-medium text-primary">
+            <p className="zn-pguide__tip">
+              <span className="zn-pguide__tip-label">
                 {t("guidance.tipLabel")}
               </span>{" "}
-              <span className="text-muted-foreground">
-                {pickLang(tip, "text")}
-              </span>
-            </div>
+              {pickLang(tip, "text")}
+            </p>
           )}
 
           {onGenerateRoute && (
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              size="sm"
               onClick={onGenerateRoute}
-              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-background px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+              className="zn-pguide__cta"
             >
-              <RouteIcon className="size-3.5" />
+              <RouteIcon size={15} />
               {t("view.findWeekRoute")}
-            </button>
+            </Button>
           )}
         </div>
       )}

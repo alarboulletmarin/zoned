@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useRef, type RefObject } from "react";
 
 /**
- * Scroll listener with hysteresis — two different thresholds prevent oscillation
+ * Scroll listener with hysteresis, two different thresholds prevent oscillation
  * caused by layout shifts (sticky bar mounting) and mobile address bar resizing.
  *
  * Show: element bottom goes above viewport (bottom < 0)
  * Hide: element bottom returns well into viewport (bottom > 150px)
- * Dead zone (0–150px): no state change — absorbs layout shift (~50px) + address bar (~85px)
+ * Dead zone (0-150px): no state change, absorbs layout shift (~50px) + address bar (~85px)
  */
 export function useScrolledPast(ref: RefObject<HTMLElement | null>): boolean {
   const [scrolledPast, setScrolledPast] = useState(false);

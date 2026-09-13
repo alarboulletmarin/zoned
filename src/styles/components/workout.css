@@ -1,0 +1,1435 @@
+/* The session-detail furniture: the phase-by-phase structure, the list row,
+   the export card, the two zone calculators, the parameter panel, the zone
+   dialog, the zone CTA and the scan placeholder.
+
+   One file, because these are the same screen's parts. Everything zone-shaped
+   defers to zone.css, the badge, the bar and the legend are drawn there once,
+   and the only thing declared here is which ramp token an edge mark reads.
+
+   Class names in this file are ours and hand-written, so interpolating one
+   (`zn-badge--${variant}` style) is safe: the Tailwind source-scanning trap
+   that killed `border-zone-3` does not apply. Even so, only ONE place needs
+   it, everything else rides a `data-zone` attribute. */
+
+/* ── category glyph ──────────────────────────────────────────────────────
+   The size travels on the icon's own `size` prop, which writes width/height
+   attributes, any CSS a call site hands in still wins over them, which is
+   exactly the override behaviour the Tailwind `size-*` classes had. All this
+   class owns is the promise that the glyph is never squeezed by its row. */
+
+.zn-cat-icon {
+  flex: none;
+}
+
+/* ══ WorkoutStructure ════════════════════════════════════════════════════ */
+
+/* Phases stack; the legend leads, because everything under it is ink density
+   and the ramp orders the zones without naming them. */
+.zn-structure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-14);
+}
+
+.zn-structure__legend {
+  padding-block-end: var(--sp-8);
+  border-block-end: var(--border-divider);
+}
+
+/* One card per phase, the shape the kit's SessionScreen states. */
+.zn-phase {
+  padding: var(--pad-card);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* The phase's own profile, printed beside its duration: the same ZoneBar the
+   card grid uses, at the step-row height the kit states. */
+.zn-phase__profile {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-5);
+}
+
+.zn-phase__bar {
+  inline-size: 96px;
+  flex: none;
+}
+
+/* ── the structure, on a phone ────────────────────────────────────────── */
+
+/* The section reads as a table on a wide screen: a zone mark, a name, a
+   duration on the right. On 390px each of those three became its own line,
+   a zone badge that spelled out "Z1-Z2 Récupération → Endurance" took the
+   width on its own, pushing the name below it and leaving the duration
+   stranded across an empty gutter. A two-step phase cost 250px.
+
+   Nothing is removed from the DOM: the badge keeps its full aria-label, the
+   phase keeps its duration. What goes is the part that repeats. */
+@media (max-width: 640px) {
+  .zn-phase {
+    padding: var(--sp-9) var(--sp-10);
+    border-radius: var(--r-2xl);
+  }
+
+  /* The phase profile restates, 96px wide, the shape the full-width chart two
+     hundred pixels above already drew. The duration beside it stays.
+
+     Two classes in the selector: the element is also .zn-zonebar, zone.css is
+     imported after this sheet, and a single class would lose the tie to its
+     `display: flex`. */
+  .zn-phase__profile .zn-phase__bar {
+    display: none;
+  }
+
+  /* "Z1-Z2" is the mark; the zone's name is what the legend is for, and it is
+     printed right above. */
+  .zn-step .zn-zone-badge__label {
+    display: none;
+  }
+
+  /* A capsule that says a step has no zone is a mark for the absence of a
+     mark. The absence says it. */
+  .zn-step__nozone {
+    display: none;
+  }
+
+  /* The between-sets recovery is one row inside a dashed frame with its own
+     label above it. On a phone the frame's padding was worth more than the row
+     it held; the dashes alone say "this is the seam between two sets". */
+  .zn-repeat__between {
+    gap: 0;
+    padding: var(--sp-3) var(--sp-6);
+  }
+}
+
+/* ── a step ──────────────────────────────────────────────────────────── */
+
+/* Ruled rows, not a stack of boxes: a divider above each one, 11px of air
+   either side. The kit prints the same row, mark, label, mono meta. */
+.zn-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  padding-block: 11px;
+  border-block-start: var(--border-divider);
+}
+
+.zn-step:first-child {
+  border-block-start: none;
+}
+
+/* Recovery is not a zone: the row wears the same 45 degree hatch the profile
+   gives an unmeasured block, as a rule under the row rather than a fill. */
+.zn-step[data-recovery="true"] {
+  border-block-start: none;
+  background-image: var(--zone-recovery);
+  background-repeat: no-repeat;
+  background-size: 100% var(--bw-rule);
+  background-position: top left;
+}
+
+.zn-step[data-muted="true"] {
+  color: var(--text-muted);
+}
+
+.zn-step[data-depth="nested"] {
+  padding-inline-start: var(--sp-6);
+}
+
+.zn-step__body {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.zn-step__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+/* A step with no zone still draws a mark: an outlined mono capsule saying so
+   is honest, an empty gap reads as a bug. */
+.zn-step__nozone {
+  flex: none;
+  padding: 4px 9px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+  border: var(--border-divider);
+  border-radius: var(--r-sm);
+}
+
+.zn-step__label {
+  font: var(--type-body-sm);
+  min-inline-size: 0;
+}
+
+/* The numbers read mid-session lead the row when the runner has zones set. */
+.zn-step__targets {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-step__desc {
+  font: var(--type-caption);
+  color: var(--text-muted);
+  min-inline-size: 0;
+}
+
+.zn-step__meta {
+  flex: none;
+  margin-inline-start: auto;
+  padding-block-start: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+/* ── a repeat ────────────────────────────────────────────────────────── */
+
+.zn-repeat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding-block: var(--sp-6);
+  border-block-start: var(--border-divider);
+}
+
+.zn-repeat:first-child {
+  border-block-start: none;
+  padding-block-start: 0;
+}
+
+.zn-repeat[data-depth="nested"] {
+  padding-inline-start: var(--sp-6);
+}
+
+/* The count is a fact, printed as one. It used to be a rounded secondary
+   pill, which read as a toggle you could press. */
+.zn-repeat__count {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-repeat__count > .zn-repeat__context {
+  font-family: var(--font-text);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-regular);
+  letter-spacing: normal;
+  color: var(--text-muted);
+}
+
+/* The multiplier leads its group and a rule runs to the edge, so the
+   multiplier visibly covers everything under it rather than floating. */
+.zn-repeat__group {
+  padding-inline-start: var(--sp-6);
+  border-inline-start: var(--border-rule);
+}
+
+.zn-repeat__lead {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-block-end: var(--sp-2);
+}
+
+.zn-repeat__rule {
+  flex: 1;
+  block-size: var(--bw-hair);
+  background: var(--line-divider);
+}
+
+/* What happens between the repeats: dashed, because it is the gap rather
+   than the work. */
+.zn-repeat__between {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-6);
+  border: var(--border-dashed);
+  border-radius: var(--r-lg);
+}
+
+.zn-repeat__note {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* ── coaching ────────────────────────────────────────────────────────── */
+
+.zn-coaching {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.zn-coaching__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-coaching__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h4) / var(--lh-h4) var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-coaching__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-coaching__item {
+  display: flex;
+  gap: var(--sp-5);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* The kit's marks: an em rule for advice, a cross for a mistake. Vermillon
+   type on two characters, not a second accent fill. */
+.zn-coaching__mark {
+  flex: none;
+  color: var(--text-link);
+  font-weight: var(--fw-bold);
+}
+
+/* ══ WorkoutListItem ═════════════════════════════════════════════════════ */
+
+/* A list row is paper lying flat: an outline, no shadow, no lift on hover.
+   The zone is the badge at the end, it carries the code, so the row needs
+   no tint behind it. */
+.zn-wrow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  text-decoration: none;
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-wrow:hover {
+  background: var(--surface-band);
+}
+
+.zn-wrow:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-wrow__main {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.zn-wrow__name {
+  display: block;
+  font: var(--type-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The duration moves under the name on a phone, where the fact columns are
+   gone; it is the one fact worth the second line. */
+.zn-wrow__compact {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+}
+
+.zn-wrow__facts {
+  display: none;
+  align-items: center;
+  gap: var(--sp-8);
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-wrow__category {
+  inline-size: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-wrow__duration {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  inline-size: 64px;
+}
+
+/* min-inline-size, not inline-size: the badge sets its own `inline-size` and
+   this class must widen it to a column without racing that declaration. */
+.zn-wrow__difficulty {
+  min-inline-size: 96px;
+}
+
+.zn-wrow__terrain {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  inline-size: 80px;
+}
+
+.zn-wrow__facts svg,
+.zn-wrow__compact svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+.zn-wrow__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+}
+
+@media (min-width: 640px) {
+  .zn-wrow__facts {
+    display: flex;
+  }
+  .zn-wrow__compact {
+    display: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .zn-wrow {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ══ ExportableWorkoutCard ═══════════════════════════════════════════════
+   Captured by html-to-image at a fixed 800px, off-screen. Two consequences
+   this file has to respect:
+
+   1. NO media query may reach inside it. The queries fire on the viewport,
+      not on the element, so a phone would export a different picture from a
+      laptop. Every rule below is unconditional, and --fs-h3 is pinned to its
+      desktop step for the same reason.
+   2. Custom properties resolve (the clone carries computed styles) but the
+      self-hosted webfonts do not, png.ts passes skipFonts. What renders is
+      each family's metrics-matched local fallback, so the mono column still
+      separates from the prose while display and text both land on Arial. */
+
+.zn-export {
+  --fs-h3: 26px;
+
+  box-sizing: border-box;
+  inline-size: 800px;
+  padding: var(--sp-13);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  font: var(--type-body);
+}
+
+.zn-export__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  margin-block-end: var(--sp-12);
+}
+
+.zn-export__title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+}
+
+.zn-export__titles {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.zn-export__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h3) / 1.05 var(--font-display);
+  letter-spacing: var(--ls-h3);
+}
+
+.zn-export__desc {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-export__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+}
+
+.zn-export__cols {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--gap-grid);
+}
+
+.zn-export__phases {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-grid);
+  margin-block-start: var(--gap-grid);
+}
+
+.zn-export__phase {
+  padding: var(--pad-card-sm);
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-export__phase-title {
+  margin: 0 0 var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-export__phase-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-export__phase-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-export__more {
+  color: var(--text-faint);
+}
+
+.zn-export__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-start: var(--gap-grid);
+  padding-block-start: var(--sp-6);
+  border-block-start: var(--border-divider);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* The catalogue id, the one accent a card is allowed, an identifier in
+   vermillon type, never a second fill. */
+.zn-export__code {
+  color: var(--text-link);
+  font-weight: var(--fw-bold);
+}
+
+/* ══ number field ════════════════════════════════════════════════════════
+   Shared by the parameter panel and both calculators: one outlined box, the
+   value in bold mono, its unit in faint text inside the same frame so the
+   focus ring lights the whole control. */
+
+.zn-numfield {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: var(--sp-1);
+  block-size: 36px;
+  padding-inline: var(--sp-4);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+  touch-action: manipulation;
+}
+
+.zn-numfield:focus-within {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-numfield[data-invalid="true"] {
+  border-color: var(--state-danger);
+}
+
+.zn-numfield__input {
+  inline-size: var(--field-w, 40px);
+  background: transparent;
+  border: 0;
+  color: inherit;
+  text-align: end;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+
+  appearance: textfield;
+}
+
+.zn-numfield__input:focus-visible {
+  outline: none;
+}
+
+.zn-numfield__input::-webkit-inner-spin-button,
+.zn-numfield__input::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.zn-numfield__unit {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+}
+
+@media (pointer: coarse) {
+  .zn-numfield {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ══ WorkoutParameterPanel ═══════════════════════════════════════════════ */
+
+.zn-params {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-11);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+.zn-params__title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-params__hint {
+  margin: var(--sp-2) 0 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-params__phase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.zn-params__phase-title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-params__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-params__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+}
+
+.zn-params__label {
+  margin: 0;
+  min-inline-size: 0;
+  font: var(--type-body-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-params__context {
+  color: var(--text-muted);
+}
+
+.zn-params__fields {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+}
+
+/* Out of the recommended range is a warning, and the system's warning is the
+   accent, as type, next to the range it names. */
+.zn-params__warning {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-link);
+}
+
+.zn-params__warning:empty {
+  display: none;
+}
+
+/* ══ ZoneCalculator ══════════════════════════════════════════════════════ */
+
+/* The card title keeps its display type and only gains a leading glyph. */
+.zn-calc__card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-calc__card-title svg {
+  inline-size: 20px;
+  block-size: 20px;
+  flex: none;
+}
+
+.zn-calc__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-8);
+}
+
+@media (max-width: 640px) {
+  .zn-calc__fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.zn-calc__field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+}
+
+.zn-calc__label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font: var(--type-label);
+}
+
+.zn-calc__label svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-calc__error {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--state-danger);
+}
+
+.zn-calc__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+}
+
+.zn-calc__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-block: var(--sp-8);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-calc__empty svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+}
+
+/* ── the zone table ──────────────────────────────────────────────────── */
+
+.zn-ztable {
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: var(--surface-card);
+}
+
+.zn-ztable__head {
+  display: none;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-5) var(--sp-8);
+
+  background: var(--surface-band);
+  border-block-end: var(--border-rule);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-ztable__group + .zn-ztable__group {
+  border-block-start: var(--border-divider);
+}
+
+/* The threshold note, between Z3 and Z4: an annotation set in the table like
+   a row of its own, between two dividers. Its bottom divider is the ground
+   the pointing figure stands on, the sole bites it by the rule's thickness,
+   computed, not eyeballed, and the arrow heads for the Z4 row but stops
+   8px short of its edge: beside a button, never across it. The text is two
+   sentences, one per known measure, on two lines each at most. */
+.zn-ztable__note {
+  padding: var(--sp-6) var(--sp-8) 0;
+  gap: var(--sp-6);
+  border-block: var(--border-divider);
+}
+
+.zn-ztable__note + .zn-ztable__group {
+  border-block-start: 0;
+}
+
+/* 54ch, not 48: the mono tracks 0.04em, so a 50-character line needs the
+   extra room or the longer sentence breaks onto a third line. */
+.zn-ztable__note .zn-note__text {
+  max-inline-size: 54ch;
+  margin-block-end: var(--sp-6);
+  white-space: pre-line;
+}
+
+.zn-ztable__note .zn-note__arrow {
+  margin-block-end: var(--sp-4);
+}
+
+.zn-ztable__note .zn-note__figure {
+  block-size: 150px;
+  margin-block-end: calc(-1 * var(--rule-bite));
+}
+
+/* On a phone the column inside the card is 250px: beside the arrow the text
+   would run to eight lines. The arrow drops under the text instead, at the
+   end of the line, still heading into the Z4 row. */
+@media (max-width: 640px) {
+  .zn-ztable__note {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .zn-ztable__note .zn-note__text {
+    flex: 1 1 100%;
+    margin-block-end: var(--sp-2);
+  }
+
+  .zn-ztable__note .zn-note__arrow {
+    margin-inline-start: auto;
+  }
+}
+
+/* The whole row is the disclosure. Hover is colour only, press is the 1px
+   push, and the open row inverts to ink rather than taking a faint tint. */
+.zn-ztable__row {
+  inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-6) var(--sp-8);
+
+  background: transparent;
+  border: 0;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-ztable__row:hover {
+  background: var(--surface-band);
+}
+
+.zn-ztable__row:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-ztable__row[aria-expanded="true"] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.zn-ztable__row:focus-visible {
+  outline-offset: calc(var(--bw-heavy) * -1);
+}
+
+.zn-ztable__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  min-inline-size: 0;
+}
+
+.zn-ztable__name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+  font: var(--type-label);
+}
+
+.zn-ztable__name > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Both value cells are always rendered so the grid columns below the header
+   never shift when only one of the two inputs is filled in; the unused one is
+   empty, and only the mobile stack has to hide it. */
+.zn-ztable__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-6);
+  padding-inline-start: 54px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-ztable__value:empty {
+  display: none;
+}
+
+.zn-ztable__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.zn-ztable__chevron svg {
+  inline-size: 16px;
+  block-size: 16px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-ztable__row[aria-expanded="true"] .zn-ztable__chevron svg {
+  transform: rotate(180deg);
+}
+
+.zn-ztable__chevron--wide {
+  display: none;
+}
+
+/* The disclosure animates its own height, a grid row from 0fr to 1fr, which
+   is the only way to transition to `auto` without measuring in JS. */
+.zn-ztable__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-base) var(--ease-out);
+}
+
+.zn-ztable__panel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.zn-ztable__clip {
+  overflow: hidden;
+}
+
+.zn-ztable__detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--sp-8);
+  background: var(--surface-band);
+}
+
+.zn-ztable__term {
+  margin: 0 0 var(--sp-1);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-ztable__term svg {
+  inline-size: 12px;
+  block-size: 12px;
+  flex: none;
+}
+
+.zn-ztable__text {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-ztable__examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-ztable__example {
+  font: var(--type-body-sm);
+  color: var(--text-link);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+}
+
+.zn-ztable__example:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .zn-ztable__head,
+  .zn-ztable__chevron--wide {
+    display: flex;
+  }
+  .zn-ztable__head,
+  .zn-ztable__row {
+    display: grid;
+    grid-template-columns: 1fr var(--hr-w, 0px) var(--pace-w, 0px) 32px;
+    align-items: center;
+    gap: 0;
+  }
+  .zn-ztable__values {
+    display: contents;
+  }
+  .zn-ztable__value:empty {
+    display: block;
+  }
+  .zn-ztable__chevron--narrow {
+    display: none;
+  }
+  .zn-ztable__examples {
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+}
+
+/* ══ PaceCalculator ══════════════════════════════════════════════════════ */
+
+.zn-pace {
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: var(--surface-card);
+}
+
+.zn-pace__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font: var(--type-body-sm);
+}
+
+.zn-pace__th {
+  padding: var(--sp-5) var(--sp-8);
+  text-align: start;
+  white-space: nowrap;
+
+  background: var(--surface-band);
+  border-block-end: var(--border-rule);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-pace__td {
+  padding: var(--sp-5) var(--sp-8);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-pace__row + .zn-pace__row > .zn-pace__td {
+  border-block-start: var(--border-divider);
+}
+
+.zn-pace__row:hover > .zn-pace__td {
+  background: var(--surface-band);
+}
+
+.zn-pace__td--name {
+  font-weight: var(--fw-medium);
+}
+
+.zn-pace__td--num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.zn-pace__td--total {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* ══ ZoneDetailModal ═════════════════════════════════════════════════════ */
+
+.zn-zonedetail {
+  max-block-size: 85vh;
+  overflow-y: auto;
+}
+
+.zn-zonedetail__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.zn-zonedetail__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-11);
+  margin-block-start: var(--sp-4);
+}
+
+.zn-zonedetail__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-zonedetail__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-zonedetail__heading svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+.zn-zonedetail__text {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-zonedetail__examples {
+  display: flex;
+  flex-direction: column;
+}
+
+.zn-zonedetail__example {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  padding: var(--sp-5) var(--sp-4);
+
+  color: inherit;
+  text-decoration: none;
+  border-block-start: var(--border-divider);
+
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-zonedetail__example:first-child {
+  border-block-start: none;
+}
+
+.zn-zonedetail__example:hover {
+  background: var(--surface-band);
+}
+
+.zn-zonedetail__example:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-zonedetail__example span {
+  font: var(--type-body-sm);
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-zonedetail__example svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  color: var(--text-faint);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-zonedetail__example:hover svg {
+  color: var(--text-link);
+}
+
+.zn-zonedetail__all {
+  inline-size: 100%;
+  margin-block-start: var(--sp-4);
+}
+
+@media (pointer: coarse) {
+  .zn-zonedetail__example {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ══ ZonePersonalizationCTA ══════════════════════════════════════════════
+   A prompt, not an alert: outlined paper with the accent kept to the icon
+   and the button's own outline. The screen's one vermillon fill is elsewhere. */
+
+.zn-zone-cta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--sp-8);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+.zn-zone-cta__body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+}
+
+.zn-zone-cta__icon {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  margin-block-start: 1px;
+  color: var(--text-link);
+}
+
+.zn-zone-cta__text {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-zone-cta__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-zone-cta__help {
+  display: block;
+  margin-block-start: var(--sp-1);
+  font: var(--type-caption);
+  color: var(--text-link);
+}
+
+.zn-zone-cta__error {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--state-danger);
+}
+
+/* On a phone the banner was a full card with a full-width button under two
+   lines of text, 133px spent on an aside, above the session it interrupts.
+   The button goes back to its own width and the padding to a note's. */
+@media (max-width: 639px) {
+  .zn-zone-cta {
+    gap: var(--sp-5);
+    padding: var(--sp-6) var(--sp-7);
+  }
+}
+
+@media (min-width: 640px) {
+  .zn-zone-cta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-8);
+  }
+  .zn-zone-cta__body {
+    padding-inline-end: 0;
+  }
+  .zn-zone-cta__actions {
+    flex: none;
+  }
+  .zn-zone-cta__error {
+    flex-basis: 100%;
+  }
+}
+
+/* ══ ScanCard ════════════════════════════════════════════════════════════
+   The flicker shown while a catalogue is being drawn. Motion here says a wait
+   is real, which is the one thing the system lets motion say: a flat accent
+   band crossing the card, no gradient and no fade. It stops on its own under
+   prefers-reduced-motion, which motion.css enforces globally. */
+
+.zn-scan {
+  position: relative;
+  overflow: hidden;
+  padding: var(--sp-10);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+}
+
+.zn-scan[data-compact="true"] {
+  padding: var(--sp-3);
+  border-radius: var(--r-sm);
+}
+
+.zn-scan__sweep {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 33%;
+  background: var(--accent-soft);
+  pointer-events: none;
+  animation: zoned-scan 600ms linear infinite;
+}
+
+@keyframes zoned-scan {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(400%); }
+}
+
+.zn-scan__name {
+  position: relative;
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+}
+
+.zn-scan[data-compact="true"] .zn-scan__name {
+  font: var(--fw-semibold) var(--fs-mono-xs) / 1.2 var(--font-text);
+  letter-spacing: normal;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.zn-scan__desc {
+  position: relative;
+  margin: var(--sp-4) 0 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+/* ══ the zone edge mark ══════════════════════════════════════════════════
+   A frame in the zone's own ink, for a surface whose zone is already named in
+   text on the same row: the expanded calculator panel, the scan placeholder.
+   The ramp values stay in zones.css and are not re-derived here; this only
+   says which local property they land in.
+
+   An inset ring rather than a border: it never fights the `border` shorthand
+   of the surface it is added to (so the cascade order stops mattering), it
+   adds no height to the animated calculator panel, and it follows the radius
+   of whatever it is dropped on. */
+
+.zn-zone-edge {
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--zn-edge, var(--line-strong));
+}
+
+.zn-zone-edge[data-zone="1"] { --zn-edge: var(--zone-1); }
+.zn-zone-edge[data-zone="2"] { --zn-edge: var(--zone-2); }
+.zn-zone-edge[data-zone="3"] { --zn-edge: var(--zone-3); }
+.zn-zone-edge[data-zone="4"] { --zn-edge: var(--zone-4); }
+.zn-zone-edge[data-zone="5"] { --zn-edge: var(--zone-5); }
+.zn-zone-edge[data-zone="6"] { --zn-edge: var(--zone-6); }

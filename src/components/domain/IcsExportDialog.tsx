@@ -49,8 +49,8 @@ export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport }: I
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            <Calendar className="size-5 inline-block mr-2" />
+          <DialogTitle className="zn-row" style={{ "--gap": "var(--sp-5)" } as React.CSSProperties}>
+            <Calendar size={20} />
             {t("icsExport.chooseTrainingDays")}
           </DialogTitle>
           <DialogDescription>
@@ -58,30 +58,25 @@ export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport }: I
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
           {/* Day checkboxes */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="zn-choice-grid">
             {dayNames.map((name, idx) => {
               const isSelected = selectedDays.has(idx);
               const isDisabled = !isSelected && selectedDays.size >= daysPerWeek;
               return (
                 <button
                   key={idx}
+                  type="button"
                   onClick={() => toggleDay(idx)}
                   disabled={isDisabled}
-                  className={`flex items-center gap-2 rounded-lg border p-3 text-sm transition-colors ${
-                    isSelected
-                      ? "border-primary bg-primary/10 font-medium"
-                      : isDisabled
-                        ? "opacity-40 cursor-not-allowed"
-                        : "hover:bg-accent/50"
-                  }`}
+                  aria-pressed={isSelected}
+                  data-layout="row"
+                  className="zn-choice"
                 >
-                  <div className={`size-4 rounded border flex items-center justify-center ${
-                    isSelected ? "bg-primary border-primary" : "border-muted-foreground/40"
-                  }`}>
-                    {isSelected && <span className="text-primary-foreground text-xs">{"\u2713"}</span>}
-                  </div>
+                  <span aria-hidden="true" className="zn-choice__box">
+                    {isSelected ? "\u2713" : null}
+                  </span>
                   {name}
                 </button>
               );
@@ -90,14 +85,15 @@ export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport }: I
 
           {/* Long run day selector - only show when enough days selected */}
           {selectedDays.size === daysPerWeek && (
-            <div>
-              <label className="text-sm font-medium mb-2 block">
+            <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
+              <label htmlFor="ics-long-run-day" className="zn-label">
                 {t("icsExport.longRunDay")}
               </label>
               <select
+                id="ics-long-run-day"
                 value={longRunDay ?? ""}
                 onChange={(e) => setLongRunDay(parseInt(e.target.value, 10))}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="zn-native-field"
               >
                 <option value="" disabled>
                   {t("icsExport.select")}
@@ -117,7 +113,7 @@ export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport }: I
             {t("icsExport.cancel")}
           </Button>
           <Button onClick={() => isValid && onExport(sortedDays, longRunDay!)} disabled={!isValid}>
-            <Download className="size-4" />
+            <Download />
             {t("icsExport.export")}
           </Button>
         </DialogFooter>

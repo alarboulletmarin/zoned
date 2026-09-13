@@ -1,0 +1,26 @@
+/* Spinner, an ink ring with a gap, turning. No pulse, no dots, no bounce:
+   motion here says a wait is real, and that is all it says. */
+
+.zn-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-5);
+
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-spinner[data-inline] {
+  display: inline-flex;
+  justify-content: flex-start;
+}
+
+.zn-spinner__ring {
+  flex: none;
+  display: block;
+  border-radius: var(--r-pill);
+  border: 2px solid var(--ink-1);
+  border-top-color: transparent;
+  animation: zoned-spin 700ms linear infinite;
+}

@@ -4,6 +4,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
 } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -11,12 +12,7 @@ import {
   Dices,
   Sparkles,
   RotateCcw,
-  Star,
-  Clock,
-  Target,
-  Gauge,
   Filter,
-  X,
   Run,
   Bike,
   Pool,
@@ -26,17 +22,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { WorkoutCardChrome, ScanCard, DifficultyIcon } from "@/components/domain";
+import { StatBlock } from "@/components/domain/StatBlock";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
-import { formatDurationMinutes } from "@/components/visualization";
+import { formatDurationMinutes, ZoneScale } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { usePageHint } from "@/hooks/usePageHint";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
+import { categories } from "@/data/workouts";
 import {
   DISCIPLINES,
   DURATION_NO_LIMIT,
@@ -63,6 +59,7 @@ import {
 import { usePickLang } from "@/lib/i18n-utils";
 import { buildScanSchedule } from "@/lib/scanSchedule";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Constants & helpers
@@ -82,7 +79,7 @@ const DURATION_PRESETS: { label: string; value: number }[] = [
 
 const DISCIPLINE_ICONS: Record<
   DrawDiscipline,
-  React.ComponentType<{ className?: string }>
+  React.ComponentType<{ className?: string; size?: number }>
 > = {
   running: Run,
   cycling: Bike,
@@ -151,7 +148,6 @@ function writeDrawSnapshot(snap: DrawSnapshot): void {
 // ────────────────────────────────────────────────────────────────────────────
 
 export function DrawSessionPage() {
-  usePageHint("draw", "hints.draw.title", "hints.draw.description");
   const { t, i18n } = useTranslation(["library", "common"]);
   const { t: tStrength } = useTranslation("strength");
   const pick = usePickLang();
@@ -185,6 +181,10 @@ export function DrawSessionPage() {
   );
   const [scanWorkout, setScanWorkout] = useState<AnyWorkoutTemplate | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
+
+  /* La borne CSS de motion.css ne voit pas le JS : il faut lire la
+     préférence ici pour que le balayage la respecte. */
+  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [history, setHistory] = useState<AnyWorkoutTemplate[]>(
     restored.history ?? [],
   );
@@ -227,6 +227,15 @@ export function DrawSessionPage() {
   /**
    * Run the "archive drawer" scan: flash through random candidate cards while
    * decelerating (ease-out) over ~1.5s, then settle on the final pick.
+   *
+   * Le balayage INFORME, il dit je pioche au hasard dans un lot, ce qui
+   * est le sujet même de la page, donc il reste par défaut. Mais il est
+   * piloté par des `setTimeout` en JS, et la borne `prefers-reduced-motion` de
+   * `styles/design/motion.css` ne peut pas atteindre du JS : quelqu'un qui a
+   * demandé moins de mouvement à son système se prenait les 1,5 s quand même.
+   * Sous cette préférence, le résultat arrive donc directement. Le seul
+   * contournement légitime d'une préférence d'accessibilité est la même
+   * personne qui le demande, ce qui n'est pas le cas ici.
    */
   const runDraw = useCallback(
     (pool: AnyWorkoutTemplate[]) => {
@@ -234,6 +243,17 @@ export function DrawSessionPage() {
       clearTimeouts();
 
       const final = pickFinal(pool);
+
+      if (prefersReducedMotion) {
+        setScanWorkout(null);
+        setResult(final);
+        setIsDrawing(false);
+        setHistory((prev) =>
+          [final, ...prev.filter((w) => w.id !== final.id)].slice(0, HISTORY_LIMIT),
+        );
+        return;
+      }
+
       setIsDrawing(true);
       setResult(null);
 
@@ -261,7 +281,7 @@ export function DrawSessionPage() {
         );
       });
     },
-    [isDrawing, clearTimeouts, pickFinal],
+    [isDrawing, clearTimeouts, pickFinal, prefersReducedMotion],
   );
 
   const handleDraw = useCallback(() => runDraw(filtered), [runDraw, filtered]);
@@ -328,148 +348,131 @@ export function DrawSessionPage() {
         description={seoDescription}
         canonical="/library/draw"
       />
-      <div className="py-8 max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <EditorialTitle as="h1" size="md">
+
+      <div className="zn-disc">
+        {/* 1, the catalogue, named and counted */}
+        <section
+          className="zn-disc__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {catalog.length > 0
+              ? t("catalogue", {
+                  workouts: catalog.length,
+                  categories: categories.length,
+                  disciplines: DISCIPLINES.length,
+                })
+              : " "}
+          </span>
+          <h1 className="zn-display" data-level="2">
             {t("draw.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
+          </h1>
+          <p className="zn-body zn-body--lead zn-disc__lede">
             {t("draw.subtitle")}
-          </FadeUp>
-          <Link
-            to="/weeks"
-            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-          >
-            <CalendarRange className="size-4" />
-            {t("draw.toWeek")}
-          </Link>
-        </div>
+          </p>
+          <div className="zn-disc__headactions">
+            <Button variant="link" asChild>
+              <Link to="/weeks">
+                <CalendarRange size={16} />
+                {t("draw.toWeek")}
+              </Link>
+            </Button>
+          </div>
+        </section>
 
-        {/* Mobile filters toggle */}
-        <div className="lg:hidden mb-4">
-          <Button
-            variant="outline"
-            onClick={() => setMobileFiltersOpen((v) => !v)}
-            className="w-full justify-between"
-          >
-            <span className="flex items-center gap-2">
-              <Filter className="size-4" />
-              {t("draw.filters.title")}
-            </span>
-            <span className="text-muted-foreground text-sm">
-              {t("draw.counter.short", { count: filtered.length })}
-            </span>
-          </Button>
-        </div>
+        {/* 2, filters on the left, the draw on the right */}
+        <div className="zn-split zn-draw__layout">
+          <aside>
+            {/* The drawer toggle is a phone affordance; CSS drops it at
+                desktop width, where the panel is always open. */}
+            <Button
+              variant="outline"
+              className="zn-draw__toggle"
+              aria-expanded={mobileFiltersOpen}
+              aria-controls="draw-filters"
+              onClick={() => setMobileFiltersOpen((v) => !v)}
+            >
+              <span className="zn-row" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+                <Filter size={16} />
+                {t("draw.filters.title")}
+              </span>
+              <span className="zn-mono zn-faint">
+                {t("draw.counter.short", { count: filtered.length })}
+              </span>
+            </Button>
 
-        <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-          {/* ── Filters panel ─────────────────────────────────────────────── */}
-          <aside
-            className={cn(
-              "lg:block",
-              mobileFiltersOpen ? "block" : "hidden",
-            )}
-          >
-            <div className="lg:sticky lg:top-20 space-y-6">
-              {/* Live counter */}
-              <Card className="p-4">
-                <div className="flex items-baseline justify-between gap-2">
-                  <div>
-                    <p
-                      className="text-4xl font-bold tabular-nums leading-none"
-                      aria-live="polite"
-                    >
-                      {filtered.length}
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {t("draw.counter.match", { count: filtered.length })}
-                    </p>
-                  </div>
+            <div
+              id="draw-filters"
+              className="zn-draw__aside"
+              data-open={mobileFiltersOpen ? "true" : "false"}
+            >
+              {/* What the filters let through, out of the whole catalogue */}
+              <div className="zn-draw__counter">
+                <div className="zn-row zn-row--split">
+                  <StatBlock
+                    size="sm"
+                    value={String(filtered.length)}
+                    label={t("draw.counter.match", { count: filtered.length })}
+                  />
                   {filtersActive && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={resetFilters}
-                      className="shrink-0"
-                    >
-                      <RotateCcw className="size-3.5 mr-1" />
+                    <Button variant="ghost" size="sm" onClick={resetFilters}>
+                      <RotateCcw size={14} />
                       {t("draw.filters.reset")}
                     </Button>
                   )}
                 </div>
-                {/* Proportion bar */}
-                <div
-                  className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted"
-                  role="presentation"
-                >
-                  <div
-                    className="h-full rounded-full bg-primary transition-[width] duration-300"
-                    style={{ width: `${Math.max(proportion * 100, filtered.length > 0 ? 4 : 0)}%` }}
+
+                <div className="zn-draw__ratio">
+                  <span
+                    className="zn-draw__ratiofill"
+                    style={{
+                      inlineSize: `${Math.max(
+                        proportion * 100,
+                        filtered.length > 0 ? 4 : 0,
+                      )}%`,
+                    }}
                   />
                 </div>
-                <p className="mt-1.5 text-xs text-muted-foreground">
+                <p className="zn-mono zn-faint" aria-live="polite">
+                  {t("draw.counter.short", { count: filtered.length })} ·{" "}
                   {t("draw.counter.ofTotal", { total: catalog.length })}
                 </p>
-              </Card>
+              </div>
 
               {/* Discipline */}
               <FilterGroup label={t("draw.filters.discipline")}>
-                <div className="flex flex-wrap gap-2">
+                <div className="zn-cluster">
                   {DISCIPLINES.map((d) => {
                     const Icon = DISCIPLINE_ICONS[d];
-                    const selected = filters.disciplines.includes(d);
                     return (
-                      <button
+                      <Chip
                         key={d}
-                        type="button"
+                        selected={filters.disciplines.includes(d)}
                         onClick={() => toggleDiscipline(d)}
-                        aria-pressed={selected}
-                        className={cn(
-                          "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
-                          selected
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
-                        )}
                       >
-                        <Icon className="size-3.5" />
-                        {t(`activityToggle.${d === "strength" ? "strength" : d}`)}
-                      </button>
+                        <Icon size={15} />
+                        {t(`activityToggle.${d}`)}
+                      </Chip>
                     );
                   })}
                 </div>
               </FilterGroup>
 
-              {/* Zones */}
+              {/* Zones, the ink ramp, each rung paired with its Z-code */}
               <FilterGroup label={t("draw.filters.zone")}>
-                <div className="flex flex-wrap gap-1.5">
-                  {ZONE_NUMBERS.map((z) => {
-                    const selected = filters.zones.includes(z);
-                    return (
-                      <button
-                        key={z}
-                        type="button"
-                        onClick={() => toggleZone(z)}
-                        aria-pressed={selected}
-                        className={cn(
-                          `zone-${z}`,
-                          "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold transition-all",
-                          selected
-                            ? "ring-2 ring-offset-1 ring-offset-background"
-                            : "opacity-60 hover:opacity-100",
-                        )}
-                        style={{
-                          backgroundColor: `color-mix(in srgb, var(--zone-${z}) 18%, transparent)`,
-                          borderColor: `var(--zone-${z})`,
-                          color: `var(--zone-${z})`,
-                          // @ts-expect-error CSS custom prop for ring color
-                          "--tw-ring-color": `var(--zone-${z})`,
-                        }}
-                      >
-                        {t(`draw.zoneChips.${z}`)}
-                      </button>
-                    );
-                  })}
+                <div className="zn-cluster">
+                  {ZONE_NUMBERS.map((z) => (
+                    <Chip
+                      key={z}
+                      selected={filters.zones.includes(z)}
+                      onClick={() => toggleZone(z)}
+                    >
+                      <span className="zn-disc__swatch" aria-hidden="true">
+                        <span data-zone={z} />
+                      </span>
+                      {t(`draw.zoneChips.${z}`)}
+                    </Chip>
+                  ))}
                 </div>
               </FilterGroup>
 
@@ -485,32 +488,27 @@ export function DrawSessionPage() {
                   }
                   aria-label={t("draw.filters.maxDuration")}
                 />
-                <div className="mt-1.5 flex items-center justify-between text-xs text-muted-foreground">
+                <div className="zn-draw__ends zn-mono zn-faint">
                   <span>{DURATION_MIN} min</span>
-                  <span className="font-semibold text-foreground">
+                  <span className="zn-body zn-body--sm">
                     {filters.maxDuration > DURATION_MAX
                       ? `+${DURATION_MAX} min`
                       : `≤ ${filters.maxDuration} min`}
                   </span>
                   <span>{DURATION_MAX} min</span>
                 </div>
-                <div className="mt-2 flex flex-wrap gap-1.5">
+                <div className="zn-cluster">
                   {DURATION_PRESETS.map((p) => (
                     <button
                       key={p.label}
                       type="button"
+                      className="zn-chip"
                       onClick={() =>
                         setFilters((f) => ({ ...f, maxDuration: p.value }))
                       }
                       aria-pressed={filters.maxDuration === p.value}
-                      className={cn(
-                        "rounded-md border px-2 py-1 text-xs font-medium transition-colors",
-                        filters.maxDuration === p.value
-                          ? "border-primary bg-primary/10 text-primary"
-                          : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
-                      )}
                     >
-                      {p.label}
+                      <span className="zn-mono">{p.label}</span>
                     </button>
                   ))}
                 </div>
@@ -518,44 +516,38 @@ export function DrawSessionPage() {
 
               {/* Level */}
               <FilterGroup label={t("draw.filters.level")}>
-                <div className="flex flex-col gap-1.5">
-                  {LEVELS.map((l) => {
-                    const selected = filters.levels.includes(l);
-                    return (
-                      <button
-                        key={l}
-                        type="button"
-                        onClick={() => toggleLevel(l)}
-                        aria-pressed={selected}
-                        className={cn(
-                          "flex items-center justify-between rounded-md border px-3 py-2 text-sm font-medium transition-colors",
-                          selected
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
-                        )}
-                      >
-                        <span>{t(`difficulty.${l}`)}</span>
-                        <DifficultyIcon difficulty={l} className="size-4 shrink-0" />
-                      </button>
-                    );
-                  })}
+                <div
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+                >
+                  {LEVELS.map((l) => (
+                    <Chip
+                      key={l}
+                      className="zn-draw__level"
+                      selected={filters.levels.includes(l)}
+                      onClick={() => toggleLevel(l)}
+                    >
+                      <span>{t(`difficulty.${l}`)}</span>
+                      <DifficultyIcon difficulty={l} />
+                    </Chip>
+                  ))}
                 </div>
               </FilterGroup>
             </div>
           </aside>
 
           {/* ── Draw zone ─────────────────────────────────────────────────── */}
-          <section className="min-w-0">
-            <div className="rounded-2xl border border-border bg-gradient-to-b from-muted/40 to-transparent p-4 sm:p-6">
-              {/* Draw controls */}
-              <div className="flex flex-col items-center gap-2">
+          <section className="zn-fill">
+            <div className="zn-draw__stage">
+              {/* The screen's one vermillon fill */}
+              <div className="zn-draw__controls">
                 <Button
                   size="lg"
+                  className="zn-draw__cta"
                   onClick={handleDraw}
                   disabled={!hasMatches || isDrawing}
-                  className="h-14 px-8 text-base w-full sm:w-auto"
                 >
-                  <Dices className={cn("size-5", isDrawing && "animate-spin")} />
+                  <Dices size={18} />
                   {isDrawing
                     ? t("draw.scanning")
                     : result
@@ -563,52 +555,65 @@ export function DrawSessionPage() {
                       : t("draw.draw")}
                 </Button>
                 {!isMobile && (
-                  <p className="text-xs text-muted-foreground">
-                    {t("draw.spaceHint")}
-                  </p>
+                  <p className="zn-caption zn-faint">{t("draw.spaceHint")}</p>
                 )}
                 {filtersActive && (
                   <button
                     type="button"
+                    className="zn-chip zn-chip--more"
                     onClick={handleSurprise}
                     disabled={isDrawing}
-                    className="mt-1 inline-flex items-center gap-1.5 rounded-full border border-dashed border-border px-4 py-1.5 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors disabled:opacity-50"
                   >
-                    <Sparkles className="size-3.5" />
+                    <Sparkles size={14} />
                     {t("draw.surprise")}
                   </button>
                 )}
               </div>
 
               {/* Result / scan / placeholder / empty */}
-              <div className="mt-6">
-                {!hasMatches ? (
-                  <EmptyState onReset={resetFilters} t={t} />
-                ) : isDrawing && scanWorkout ? (
-                  <ScanCard workout={scanWorkout} pick={pick} />
-                ) : result ? (
-                  <ResultCard
-                    workout={result}
-                    pick={pick}
-                    t={t}
-                    tStrength={tStrength}
-                  />
-                ) : (
-                  <Placeholder t={t} />
-                )}
-              </div>
+              {!hasMatches ? (
+                <EmptyState
+                  variant="no-results"
+                  icon={Filter}
+                  title={t("draw.empty.title")}
+                  description={t("draw.empty.description")}
+                  action={
+                    <Button variant="outline" onClick={resetFilters}>
+                      <RotateCcw size={16} />
+                      {t("draw.empty.reset")}
+                    </Button>
+                  }
+                />
+              ) : isDrawing && scanWorkout ? (
+                <ScanCard workout={scanWorkout} pick={pick} />
+              ) : result ? (
+                <ResultCard
+                  workout={result}
+                  pick={pick}
+                  t={t}
+                  tStrength={tStrength}
+                />
+              ) : (
+                <EmptyState
+                  variant="not-started"
+                  icon={Dices}
+                  title={t("draw.placeholder.title")}
+                  description={t("draw.placeholder.description")}
+                />
+              )}
             </div>
 
             {/* Recent draws */}
             {history.length > 0 && (
-              <div className="mt-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-sm font-semibold flex items-center gap-1.5">
-                    <RotateCcw className="size-4 text-muted-foreground" />
+              <div className="zn-draw__recent">
+                <div className="zn-row zn-row--split zn-disc__grouphead">
+                  <h2 className="zn-title" data-level="4">
                     {t("draw.recent.title")}
                   </h2>
-                  <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">
-                    {t("draw.recent.avoidRepeats")}
+                  <label className="zn-row" style={{ "--gap": "var(--sp-5)" } as CSSProperties}>
+                    <span className="zn-caption zn-muted">
+                      {t("draw.recent.avoidRepeats")}
+                    </span>
                     <Switch
                       checked={avoidRepeats}
                       onCheckedChange={setAvoidRepeats}
@@ -616,35 +621,28 @@ export function DrawSessionPage() {
                     />
                   </label>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="zn-cluster">
                   {history.map((w) => {
                     const zone = isRunningWorkout(w) ? getDominantZone(w) : null;
                     return (
                       <button
                         key={w.id}
                         type="button"
+                        className="zn-chip"
+                        aria-pressed={result?.id === w.id}
                         onClick={() => {
                           clearTimeouts();
                           setIsDrawing(false);
                           setScanWorkout(null);
                           setResult(w);
                         }}
-                        className={cn(
-                          "inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors hover:bg-accent",
-                          zone ? `zone-${zone}` : "",
-                          result?.id === w.id
-                            ? "border-primary bg-primary/5"
-                            : "border-border",
-                        )}
                       >
                         {zone && (
-                          <span
-                            className="size-2 rounded-full"
-                            style={{ backgroundColor: `var(--zone-${zone})` }}
-                            aria-hidden="true"
-                          />
+                          <span className="zn-disc__swatch" aria-hidden="true">
+                            <span data-zone={zone} />
+                          </span>
                         )}
-                        <span className="max-w-[14rem] truncate">
+                        <span className="zn-truncate zn-draw__recentname">
                           {pick(w, "name")}
                         </span>
                       </button>
@@ -653,6 +651,11 @@ export function DrawSessionPage() {
                 </div>
               </div>
             )}
+
+            {/* The ramp orders the zones, it does not name them */}
+            <div className="zn-draw__recent">
+              <ZoneScale />
+            </div>
           </section>
         </div>
       </div>
@@ -664,6 +667,35 @@ export function DrawSessionPage() {
 // Sub-components
 // ────────────────────────────────────────────────────────────────────────────
 
+/**
+ * A filter value the athlete switches on or off, the library's chip, same
+ * markup and same paint: `role="checkbox"` with `aria-checked`, and a full ink
+ * inversion when it is on.
+ */
+function Chip({
+  selected,
+  onClick,
+  className,
+  children,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={selected}
+      onClick={onClick}
+      className={cn("zn-chip", className)}
+    >
+      {children}
+    </button>
+  );
+}
+
 function FilterGroup({
   label,
   children,
@@ -672,49 +704,11 @@ function FilterGroup({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-2.5">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+    <div className="zn-draw__group" role="group" aria-label={label}>
+      <span className="zn-kicker zn-kicker--inline" aria-hidden="true">
         {label}
-      </p>
+      </span>
       {children}
-    </div>
-  );
-}
-
-function Placeholder({ t }: { t: (k: string) => string }) {
-  return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-14 text-center">
-      <Dices className="size-10 text-muted-foreground/50 mb-3" />
-      <h3 className="text-base font-medium text-foreground">
-        {t("draw.placeholder.title")}
-      </h3>
-      <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-        {t("draw.placeholder.description")}
-      </p>
-    </div>
-  );
-}
-
-function EmptyState({
-  onReset,
-  t,
-}: {
-  onReset: () => void;
-  t: (k: string) => string;
-}) {
-  return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-14 text-center">
-      <X className="size-10 text-muted-foreground/50 mb-3" />
-      <h3 className="text-base font-medium text-foreground">
-        {t("draw.empty.title")}
-      </h3>
-      <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-        {t("draw.empty.description")}
-      </p>
-      <Button variant="outline" size="sm" onClick={onReset} className="mt-4">
-        <RotateCcw className="size-4 mr-1" />
-        {t("draw.empty.reset")}
-      </Button>
     </div>
   );
 }
@@ -754,48 +748,52 @@ function ResultCard({
 
   // Eyebrow: discipline · method · n°
   const eyebrow = (
-    <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-      <DisciplineIcon className="size-3.5" />
+    <div
+      className="zn-row zn-kicker zn-kicker--inline"
+      style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+    >
+      <DisciplineIcon size={14} />
       <span>{t(`activityToggle.${discipline}`)}</span>
       <span aria-hidden="true">·</span>
       <span>{methodLabel}</span>
       <span aria-hidden="true">·</span>
-      <span className="tabular-nums">n°{getWorkoutNumber(workout.id)}</span>
+      <span className="zn-mono">n°{getWorkoutNumber(workout.id)}</span>
     </div>
   );
 
   const metrics = (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      <Metric
-        icon={Clock}
+    <div className="zn-draw__metrics">
+      <StatBlock
+        size="sm"
+        className="zn-draw__metric"
         label={t("draw.metrics.duration")}
         value={formatDurationMinutes(duration)}
       />
-      <Metric
-        icon={Gauge}
+      <StatBlock
+        size="sm"
+        className="zn-draw__metric"
         label={t("draw.metrics.tss")}
         value={tss != null ? String(tss) : "-"}
       />
-      <Metric
-        icon={Target}
+      <StatBlock
+        size="sm"
+        className="zn-draw__metric"
         label={t("draw.metrics.zone")}
         value={zones.length > 0 ? `Z${dominantZone}` : "-"}
       />
-      <Metric
-        icon={Star}
+      <StatBlock
+        size="sm"
+        className="zn-draw__metric"
         label={t("draw.metrics.level")}
         value={t(`difficulty.${workout.difficulty}`)}
       />
     </div>
   );
 
-  const animateIn =
-    "motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300";
-
   // Explicit "view detail" CTA. Kept outside the card link below to avoid an
   // anchor nested inside an anchor (the whole card is already a link).
   const detailAction = (
-    <Button asChild variant="outline" className="mt-3 w-full sm:w-auto">
+    <Button asChild variant="outline">
       <Link to={`/workout/${workout.id}`}>{t("draw.viewDetail")}</Link>
     </Button>
   );
@@ -803,8 +801,8 @@ function ResultCard({
   // Running / cycling / swimming → reuse the shared library card chrome.
   if (isRunningWorkout(workout)) {
     return (
-      <div className={animateIn}>
-        <Link to={`/workout/${workout.id}`} className="block">
+      <div className="zn-draw__result">
+        <Link to={`/workout/${workout.id}`}>
           <WorkoutCardChrome
             workout={workout}
             eyebrow={eyebrow}
@@ -814,53 +812,28 @@ function ResultCard({
             showBadges={false}
           />
         </Link>
-        {detailAction}
+        <div>{detailAction}</div>
       </div>
     );
   }
 
   // Strength fallback (no zones / intensity profile).
   return (
-    <div className={animateIn}>
-      <Link
-        to={`/workout/${workout.id}`}
-        className="block rounded-xl border border-border p-5 hover:bg-accent/40 transition-colors"
-      >
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">{eyebrow}</div>
+    <div className="zn-draw__result">
+      <Link to={`/workout/${workout.id}`} className="zn-draw__plaincard">
+        <div className="zn-row zn-row--start zn-row--split">
+          {eyebrow}
           <FavoriteButton workoutId={workout.id} size="sm" />
         </div>
-        <h3 className="mt-1.5 text-xl font-bold leading-snug">
+        <h3 className="zn-title" data-level="4">
           {pick(workout, "name")}
         </h3>
-        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+        <p className="zn-body zn-body--sm zn-muted zn-clamp">
           {pick(workout, "description")}
         </p>
-        <div className="mt-4">{metrics}</div>
+        {metrics}
       </Link>
-      {detailAction}
-    </div>
-  );
-}
-
-function Metric({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="rounded-lg border border-border/60 bg-background/60 px-3 py-2">
-      <div className="flex items-center gap-1 text-[11px] uppercase tracking-wide text-muted-foreground">
-        <Icon className="size-3" />
-        {label}
-      </div>
-      <p className="mt-0.5 text-sm font-semibold tabular-nums line-clamp-1">
-        {value}
-      </p>
+      <div>{detailAction}</div>
     </div>
   );
 }

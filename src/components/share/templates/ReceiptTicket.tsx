@@ -1,5 +1,5 @@
 /**
- * ReceiptTicket — 1080×1920. A paper-receipt / race-bib style card.
+ * ReceiptTicket, 1080×1920. A paper-receipt / race-bib style card.
  *
  * Each workout block becomes a receipt line item; total duration sits at
  * the bottom. Monospace, dashed separators, perforated edges, barcode at
@@ -10,9 +10,8 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX, workoutShareUrl } from "./_shared";
+import { BrandMark, BgLayer, ZONE_HEX, workoutShareUrl } from "./_shared";
 import { QRSvg } from "./QRSvg";
-import Logo from "@/assets/logo.svg?react";
 import type { ShareTemplateProps } from "../shareTemplates";
 import type { WorkoutBlock } from "@/types";
 import { getZoneNumber } from "@/types";
@@ -130,16 +129,7 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
               marginBottom: 4,
             }}
           >
-            <Logo style={{ width: 64, height: 32 }} />
-            <span
-              style={{
-                fontSize: 40,
-                fontWeight: 800,
-                letterSpacing: "-0.025em",
-              }}
-            >
-              ZONED
-            </span>
+            <BrandMark height={42} />
           </div>
           <div
             style={{
@@ -223,13 +213,13 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
                 }}
               >
                 <span style={{ width: 80, color: it.zone ? ZONE_HEX[it.zone as 1] : "#64748b", fontWeight: 700 }}>
-                  {it.zone ? `Z${it.zone}` : "—"}
+                  {it.zone ? `Z${it.zone}` : "-"}
                 </span>
                 <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>
                   {it.desc}
                 </span>
                 <span style={{ fontWeight: 700, minWidth: 80, textAlign: "right" }}>
-                  {it.dur > 0 ? `${Math.round(it.dur)}'` : "—"}
+                  {it.dur > 0 ? `${Math.round(it.dur)}'` : "-"}
                 </span>
               </div>
             ))}
@@ -255,7 +245,7 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
             </span>
           </div>
 
-          {/* QR code — scans to https://zoned.run/workout/<id> */}
+          {/* QR code, scans to https://zoned.run/workout/<id> */}
           <div
             style={{
               marginTop: 28,

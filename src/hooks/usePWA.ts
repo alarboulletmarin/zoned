@@ -12,7 +12,7 @@ interface BeforeInstallPromptEvent extends Event {
  * Install prompt and connectivity. Service worker *updates* are not here:
  * they belong to <UpdatePrompt>, which owns the registration and the banner.
  * This hook used to carry them, through a `zoned-sw-update` CustomEvent and a
- * `window.__zonedApplyUpdate` global — a seam that only existed because the
+ * `window.__zonedApplyUpdate` global, a seam that only existed because the
  * worker was registered outside the component tree.
  */
 export function usePWA() {

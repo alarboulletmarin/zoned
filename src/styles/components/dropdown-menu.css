@@ -1,0 +1,222 @@
+/* Dropdown menu, the list of actions on one object: the "···" of a session
+   card, a plan day, an export. A floating paper surface with a hard ink
+   offset; entries are full-width and mark themselves by inverting to ink,
+   never by a faint tint. Destructive entries are vermillon and sit last.
+
+   Radix keeps every behaviour. Everything below is paint, selected off the
+   data-* attributes the primitive already emits (data-slot, data-side,
+   data-state, data-highlighted, data-disabled, data-inset, data-variant). */
+
+/* ── the floating surface ─────────────────────────────────────────────── */
+
+.zn-menu {
+  z-index: 50;
+  /* 128px is the shadcn floor carried over from the class this replaced:
+     the menus that pass no width class relied on it. */
+  min-inline-size: 128px;
+  padding: var(--sp-3);
+
+  background: var(--surface-card);
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  /* The one shadow, and only because this floats above the page. */
+  box-shadow: var(--shadow-block);
+
+  /* Radix measures the collision box and hands both of these back. Dropping
+     either breaks collision-aware positioning, so they stay verbatim. */
+  transform-origin: var(--radix-dropdown-menu-content-transform-origin);
+}
+
+.zn-menu[data-slot="dropdown-menu-content"] {
+  max-block-size: var(--radix-dropdown-menu-content-available-height);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.zn-menu[data-slot="dropdown-menu-sub-content"] {
+  overflow: hidden;
+}
+
+/* ── open / close, per side ───────────────────────────────────────────── */
+
+/* The menu says where it came from: it slides out of its trigger edge, 8px,
+   once. Nothing scales, nothing blinks. */
+@keyframes zn-menu-in-bottom {
+  from { opacity: 0; transform: translateY(calc(-1 * var(--sp-4))); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes zn-menu-in-top {
+  from { opacity: 0; transform: translateY(var(--sp-4)); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes zn-menu-in-right {
+  from { opacity: 0; transform: translateX(calc(-1 * var(--sp-4))); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes zn-menu-in-left {
+  from { opacity: 0; transform: translateX(var(--sp-4)); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes zn-menu-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.zn-menu[data-state="open"][data-side="bottom"] {
+  animation: zn-menu-in-bottom var(--dur-base) var(--ease-out);
+}
+.zn-menu[data-state="open"][data-side="top"] {
+  animation: zn-menu-in-top var(--dur-base) var(--ease-out);
+}
+.zn-menu[data-state="open"][data-side="right"] {
+  animation: zn-menu-in-right var(--dur-base) var(--ease-out);
+}
+.zn-menu[data-state="open"][data-side="left"] {
+  animation: zn-menu-in-left var(--dur-base) var(--ease-out);
+}
+.zn-menu[data-state="closed"] {
+  animation: zn-menu-out var(--dur-base) var(--ease-out);
+}
+
+/* ── entries ──────────────────────────────────────────────────────────── */
+
+.zn-menu__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  inline-size: 100%;
+
+  min-block-size: var(--sp-15);
+  padding: var(--sp-4) var(--sp-6);
+
+  font: var(--type-body-sm);
+  text-align: start;
+  color: var(--ink-1);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-lg);
+
+  cursor: pointer;
+  user-select: none;
+  /* Radix moves DOM focus with the highlight, so the ink inversion below is
+     the focus indicator. The transparent outline is what the utility class
+     this replaced did: it keeps the ring visible under forced-colors. */
+  outline: var(--bw-heavy) solid transparent;
+  outline-offset: 2px;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+/* Icons follow the text: one size, currentColor, so they invert with it. */
+.zn-menu__item svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  pointer-events: none;
+}
+
+/* Highlighted, and an open sub-trigger, invert the whole row to ink. */
+.zn-menu__item[data-highlighted],
+.zn-menu__item[data-state="open"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-menu__item[data-disabled] {
+  color: var(--state-disabled-text);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Deleting, resetting: vermillon, and it inverts into a vermillon fill. */
+.zn-menu__item[data-variant="destructive"] {
+  color: var(--state-danger);
+}
+.zn-menu__item[data-variant="destructive"][data-highlighted] {
+  background: var(--state-danger);
+  color: var(--accent-fg);
+}
+
+/* An inset entry lines up with the rows that carry an indicator gutter. */
+.zn-menu__item[data-inset] {
+  padding-inline-start: var(--sp-14);
+}
+
+/* ── indicator gutter: checkbox and radio entries ─────────────────────── */
+
+.zn-menu__item[data-slot="dropdown-menu-checkbox-item"],
+.zn-menu__item[data-slot="dropdown-menu-radio-item"] {
+  padding-inline: var(--sp-14) var(--sp-6);
+}
+
+.zn-menu__indicator {
+  position: absolute;
+  inset-inline-start: var(--sp-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 16px;
+  block-size: 16px;
+  pointer-events: none;
+}
+
+.zn-menu__indicator svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+/* The radio dot is a filled circle, smaller than a check glyph. */
+.zn-menu__item[data-slot="dropdown-menu-radio-item"] .zn-menu__indicator svg {
+  inline-size: 8px;
+  block-size: 8px;
+}
+
+/* ── sub-menu trigger ─────────────────────────────────────────────────── */
+
+.zn-menu__chevron {
+  margin-inline-start: auto;
+}
+
+/* ── label, separator, shortcut ───────────────────────────────────────── */
+
+.zn-menu__label {
+  padding: var(--sp-4) var(--sp-6);
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.zn-menu__label[data-inset] {
+  padding-inline-start: var(--sp-14);
+}
+
+/* A rule that reaches the surface edge, past the menu's own padding. */
+.zn-menu__separator {
+  block-size: 0;
+  border-top: var(--border-divider);
+  margin: var(--sp-3) calc(-1 * var(--sp-3));
+}
+
+.zn-menu__shortcut {
+  margin-inline-start: auto;
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* On an inverted row the mono hint has to come with it. */
+.zn-menu__item[data-highlighted] .zn-menu__shortcut {
+  color: var(--ink-on-dark);
+}
+
+/* WCAG 2.5.8: a menu entry is a tap target like any other. */
+@media (pointer: coarse) {
+  .zn-menu__item {
+    min-block-size: var(--hit-min);
+  }
+}

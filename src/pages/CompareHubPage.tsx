@@ -1,12 +1,13 @@
-import { Link } from "react-router-dom";
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
+import { DoorCard } from "@/components/domain/DoorCard";
 import { competitors } from "@/data/competitors";
-import { ArrowRight } from "@/components/icons";
 import { usePickLang } from "@/lib/i18n-utils";
 
 const SITE_URL = "https://zoned.run";
+
+const HEAD_GAP = { "--gap": "var(--sp-6)" } as CSSProperties;
 
 export function CompareHubPage() {
   const { t } = useTranslation("common");
@@ -29,56 +30,55 @@ export function CompareHubPage() {
         }}
       />
 
-      <div className="py-8 space-y-10 max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-widest text-primary font-semibold">
-            {t("compare.subtitle")}
-          </p>
-          <EditorialTitle as="h1">{title}</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-xl">
-            {description}
-          </FadeUp>
-        </div>
+      <div className="zn-ref">
+        {/* 1, what this is, counted */}
+        <section className="zn-ref__head zn-stack" style={HEAD_GAP}>
+          <span className="zn-kicker">
+            {t("compare.hub.kicker", { count: competitors.length })}
+          </span>
+          <h1 className="zn-display" data-level="2">
+            {title}
+          </h1>
+          <p className="zn-body zn-body--lead zn-ref__lede">{description}</p>
+        </section>
 
-        {/* Competitor cards */}
-        <StaggerGrid className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {competitors.map((competitor) => {
-            const name = pickLang(competitor, "name");
-            const tagline = pickLang(competitor, "tagline");
-            return (
-              <StaggerItem key={competitor.slug}>
-                <Link
-                  to={`/compare/${competitor.slug}`}
-                  className="group flex h-full flex-col gap-3 rounded-xl border border-border p-5 hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200"
-                >
-                  <div className="space-y-1">
-                    <p className="font-semibold text-sm">
-                      Zoned <span className="text-muted-foreground">vs</span> {name}
-                    </p>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{tagline}</p>
-                  </div>
-                  <div className="flex items-center justify-between mt-auto">
-                    <span className="text-xs rounded-full border px-2 py-0.5 text-muted-foreground">
-                      {pickLang(competitor, "price")}
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
-                  </div>
-                </Link>
-              </StaggerItem>
-            );
-          })}
-        </StaggerGrid>
+        {/* 2, one door per comparison. The price is the mono fact above the
+            name: it is the difference the page exists to state. */}
+        <section
+          className="zn-ref__section"
+          aria-labelledby="compare-competitors"
+        >
+          <h2 id="compare-competitors" className="sr-only">
+            {t("compare.title")}
+          </h2>
+          <div className="zn-grid">
+            {competitors.map((competitor) => (
+              <DoorCard
+                key={competitor.slug}
+                to={`/compare/${competitor.slug}`}
+                kicker={pickLang(competitor, "price")}
+                title={`Zoned vs ${pickLang(competitor, "name")}`}
+                body={pickLang(competitor, "tagline")}
+                cta={t("compare.hub.readComparison")}
+              />
+            ))}
+          </div>
+        </section>
 
-        {/* Zoned pitch */}
-        <div className="rounded-xl border bg-muted/30 p-6 space-y-2">
-          <p className="font-semibold">
-            {t("comparePage.whyComparisons")}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {t("comparePage.whyComparisonsDesc")}
-          </p>
-        </div>
+        {/* 3, why the page exists, as a footnote to it */}
+        <section className="zn-ref__section">
+          <div className="zn-ref__note zn-ref__column">
+            <span className="zn-kicker zn-kicker--inline">
+              {t("compare.hub.noteKicker")}
+            </span>
+            <h2 className="zn-title" data-level="4">
+              {t("comparePage.whyComparisons")}
+            </h2>
+            <p className="zn-body zn-body--sm zn-muted">
+              {t("comparePage.whyComparisonsDesc")}
+            </p>
+          </div>
+        </section>
       </div>
     </>
   );

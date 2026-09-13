@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Semaine de récupération — 3 short easy sessions, no quality, no long run.
+ * Semaine de récupération, 3 short easy sessions, no quality, no long run.
  * The deload that lets adaptation land.
  */
 export const recuperation: PrebuiltWeek = {
@@ -16,12 +16,12 @@ export const recuperation: PrebuiltWeek = {
   icon: "Leaf",
   difficulty: "beginner",
   category: "recovery",
-  provenance: "Périodisation — semaine de décharge (deload)",
-  provenanceEn: "Periodization — deload week",
+  provenance: "Périodisation, semaine de décharge (deload)",
+  provenanceEn: "Periodization, deload week",
   whyItWorks:
-    "La progression ne vient pas de l'entraînement seul mais de la récupération qui le suit. En coupant volume et intensité une semaine, on dissipe la fatigue accumulée et on laisse la supercompensation s'exprimer — on revient plus fort, pas plus fatigué.",
+    "La progression ne vient pas de l'entraînement seul mais de la récupération qui le suit. En coupant volume et intensité une semaine, on dissipe la fatigue accumulée et on laisse la supercompensation s'exprimer, on revient plus fort, pas plus fatigué.",
   whyItWorksEn:
-    "Progress doesn't come from training alone but from the recovery that follows it. Cutting volume and intensity for a week dissipates accumulated fatigue and lets supercompensation express itself — you come back stronger, not more tired.",
+    "Progress doesn't come from training alone but from the recovery that follows it. Cutting volume and intensity for a week dissipates accumulated fatigue and lets supercompensation express itself, you come back stronger, not more tired.",
   settings: {
     sessions: 3,
     targetVolumeH: 2,

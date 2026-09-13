@@ -2,7 +2,7 @@
  * The foreground check exists to make the banner appear on a resumed PWA, and
  * it has exactly one way to go wrong in production: asking too often. Requests
  * for `sw.js` bypass the HTTP cache, so a listener without a floor turns every
- * app-switch into a network round-trip — on mobile, on someone else's data.
+ * app-switch into a network round-trip, on mobile, on someone else's data.
  *
  * The other cases are the ones that would throw rather than misbehave: a
  * registration that has not arrived yet, and an `update()` that rejects because
@@ -51,7 +51,7 @@ describe("createUpdateChecker", () => {
     expect(registration.update).not.toHaveBeenCalled();
   });
 
-  test("does not ask right after subscribing — the page load already compared sw.js", () => {
+  test("does not ask right after subscribing, the page load already compared sw.js", () => {
     const clock = fakeClock();
     const registration = fakeRegistration();
     const check = createUpdateChecker(() => registration, clock.now);

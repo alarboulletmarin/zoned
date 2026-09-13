@@ -3,7 +3,7 @@
  * standard for runners and cyclists exporting tracks to Garmin, Coros,
  * Strava, Komoot, etc.
  *
- * The output stays minimal — track only, no per-point timestamps —
+ * The output stays minimal, track only, no per-point timestamps,
  * because Brouter doesn't return wall-clock data and Zoned doesn't
  * record activities.
  */

@@ -6,7 +6,6 @@ import { usePickLang } from "@/lib/i18n-utils";
 import { formatPaceDisplay, formatSplitTime } from "@/lib/splits";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import type { UnitSystem } from "@/types/settings";
-import { cn } from "@/lib/utils";
 import { FieldLabel, Stat } from "./RaceSimSection";
 import { MentalCuesPanel } from "./MentalCuesPanel";
 import { RaceTimeline } from "./RaceTimeline";
@@ -47,10 +46,13 @@ export function RaceDaySheet({
   );
 
   return (
-    <div className="space-y-4">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}
+    >
       <NextUp plan={plan} />
 
-      <Block icon={<Flame className="size-4" />} title={t("sections.warmup")}>
+      <Block icon={<Flame />} title={t("sections.warmup")}>
         <WarmupChecklist
           exercises={plan.warmupExercises}
           startTime={plan.warmupStartTime}
@@ -60,8 +62,8 @@ export function RaceDaySheet({
         />
       </Block>
 
-      <Block icon={<Route className="size-4" />} title={t("sections.race")}>
-        <div className="flex flex-wrap gap-x-8 gap-y-4">
+      <Block icon={<Route />} title={t("sections.race")}>
+        <div className="zn-rs-stats">
           <Stat
             label={t("labels.targetPace")}
             value={
@@ -69,9 +71,7 @@ export function RaceDaySheet({
                 {formatPaceDisplay(
                   convertPace(plan.targetTimeSeconds / 60 / plan.distanceKm, unit),
                 )}
-                <span className="text-sm font-normal text-muted-foreground">
-                  {paceUnit}
-                </span>
+                <span className="zn-rs-stat__unit">{paceUnit}</span>
               </>
             }
           />
@@ -87,24 +87,24 @@ export function RaceDaySheet({
         </div>
       </Block>
 
-      <Block icon={<Brain className="size-4" />} title={t("sections.mental")}>
+      <Block icon={<Brain />} title={t("sections.mental")}>
         <MentalCuesPanel cues={plan.mentalCues} />
       </Block>
 
       {inRaceFueling.length > 0 && (
-        <Block
-          icon={<Utensils className="size-4" />}
-          title={t("sections.nutrition")}
-        >
-          <ul className="space-y-2">
+        <Block icon={<Utensils />} title={t("sections.nutrition")}>
+          <ul
+            className="zn-stack zn-rs-cp"
+            style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+          >
             {inRaceFueling.map((cp, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm">
-                <span className="w-11 shrink-0 font-mono tabular-nums text-muted-foreground">
+              <li key={i} className="zn-rs-cp__item">
+                <span className="zn-rs-cp__time">
                   {minutesToTime(
                     timeToMinutes(plan.startTime) + Math.round(cp.timeMin),
                   )}
                 </span>
-                <span className="min-w-0 flex-1">{pick(cp, "action")}</span>
+                <span className="zn-rs-cp__text">{pick(cp, "action")}</span>
               </li>
             ))}
           </ul>
@@ -112,10 +112,13 @@ export function RaceDaySheet({
       )}
 
       {recovery.length > 0 && (
-        <Block icon={<Heart className="size-4" />} title={t("sections.recovery")}>
-          <ul className="space-y-2">
+        <Block icon={<Heart />} title={t("sections.recovery")}>
+          <ul
+            className="zn-stack zn-rs-cp"
+            style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+          >
             {recovery.map((cp, i) => (
-              <li key={i} className="text-sm leading-relaxed">
+              <li key={i} className="zn-rs-note">
                 {pick(cp, "action")}
               </li>
             ))}
@@ -123,7 +126,7 @@ export function RaceDaySheet({
         </Block>
       )}
 
-      <Block icon={<Clock className="size-4" />} title={t("sections.timeline")}>
+      <Block icon={<Clock />} title={t("sections.timeline")}>
         <RaceTimeline timeline={plan.timeline} />
       </Block>
     </div>
@@ -140,10 +143,13 @@ function Block({
   children: React.ReactNode;
 }) {
   return (
-    <Card size="flush" className="px-5 py-4">
-      <div className="mb-3 flex items-center gap-2">
-        {icon && <span className="text-muted-foreground">{icon}</span>}
-        <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+    <Card size="flush" className="zn-rs-block">
+      <div
+        className="zn-row zn-rs-block__head"
+        style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+      >
+        {icon && <span className="zn-rs-block__icon">{icon}</span>}
+        <h3 className="zn-rs-block__title">{title}</h3>
       </div>
       {children}
     </Card>
@@ -153,7 +159,7 @@ function Block({
 /**
  * The single most useful line on race morning: what happens next, and in how
  * long. Falls back to the plan's start time when the clock isn't inside the
- * plan's window — i.e. the race isn't today.
+ * plan's window, i.e. the race isn't today.
  */
 function NextUp({ plan }: { plan: RacePlan }) {
   const { t } = useTranslation("simulator");
@@ -169,9 +175,9 @@ function NextUp({ plan }: { plan: RacePlan }) {
 
   if (!isLive || !next) {
     return (
-      <Card size="flush" className="px-5 py-4">
+      <Card size="flush" className="zn-rs-block">
         <FieldLabel>{t("raceDay.notToday")}</FieldLabel>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="zn-rs-next__note">
           {t("raceDay.startsAt", { time: plan.timeline[0].time })}
         </p>
       </Card>
@@ -181,30 +187,19 @@ function NextUp({ plan }: { plan: RacePlan }) {
   const inMin = minutes[nextIndex] - now;
 
   return (
-    <Card
-      size="flush"
-      className={cn(
-        "border-primary/40 bg-primary/5 px-5 py-4",
-        "shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]",
-      )}
-    >
-      <div className="flex items-baseline justify-between gap-3">
-        <FieldLabel className="text-primary">{t("raceDay.nextUp")}</FieldLabel>
-        <span className="font-mono text-xs tabular-nums text-muted-foreground">
-          {minutesToTime(now)}
-        </span>
+    <Card size="flush" className="zn-rs-block zn-rs-next">
+      <div
+        className="zn-row zn-row--split zn-row--baseline"
+        style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+      >
+        <FieldLabel className="zn-accent">{t("raceDay.nextUp")}</FieldLabel>
+        <span className="zn-rs-next__clock">{minutesToTime(now)}</span>
       </div>
-      <p className="mt-2 flex items-baseline gap-3">
-        <span className="font-mono text-2xl font-semibold tabular-nums tracking-tight">
-          {next.time}
-        </span>
-        <span className="text-sm text-muted-foreground">
-          {formatCountdown(inMin, t)}
-        </span>
+      <p className="zn-rs-next__when">
+        <span className="zn-rs-next__figure">{next.time}</span>
+        <span className="zn-rs-next__in">{formatCountdown(inMin, t)}</span>
       </p>
-      <p className="mt-1 text-base font-medium leading-snug">
-        {pick(next, "label")}
-      </p>
+      <p className="zn-rs-next__label">{pick(next, "label")}</p>
     </Card>
   );
 }

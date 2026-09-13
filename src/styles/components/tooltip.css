@@ -1,0 +1,76 @@
+/* Tooltip, an ink capsule naming a control. The one place the paper/ink
+   relation flips: cream type on solid ink, so it reads as a label pinned onto
+   the page rather than another panel of it.
+
+   It names, it does not explain: no shadow, no outline (the fill already is
+   the line colour), and nothing that would tempt a sentence into it. */
+
+.zn-tooltip {
+  z-index: 50;
+  inline-size: fit-content;
+
+  padding: var(--sp-3) var(--sp-5);
+
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-radius: var(--r-lg);
+
+  font: var(--type-caption);
+  text-wrap: balance;
+
+  transform-origin: var(--radix-tooltip-content-transform-origin);
+
+  /* The 8px the capsule travels, signed by the side it opens on. */
+  --zn-tooltip-x: 0px;
+  --zn-tooltip-y: 0px;
+
+  /* Radix opens a tooltip as "delayed-open" or "instant-open", never "open",
+     so the entrance is the default state and only the exit is selected for. */
+  animation: zn-tooltip-in var(--dur-fast) var(--ease-out);
+}
+
+.zn-tooltip[data-side="bottom"] { --zn-tooltip-y: calc(var(--sp-4) * -1); }
+.zn-tooltip[data-side="top"] { --zn-tooltip-y: var(--sp-4); }
+.zn-tooltip[data-side="right"] { --zn-tooltip-x: calc(var(--sp-4) * -1); }
+.zn-tooltip[data-side="left"] { --zn-tooltip-x: var(--sp-4); }
+
+/* Radix keeps the node mounted until the animation ends, so the closing frame
+   has to hold, hence forwards. */
+.zn-tooltip[data-state="closed"] {
+  animation: zn-tooltip-out var(--dur-fast) var(--ease-out) forwards;
+}
+
+/* The arrow is the same ink, rotated 45deg and pulled half its own height into
+   the capsule so only the corner shows. `fill` covers the polygon Radix draws,
+   `background` covers the rotated box, both are the capsule's fill. */
+.zn-tooltip__arrow {
+  z-index: 50;
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  fill: var(--surface-inverse);
+  background: var(--surface-inverse);
+  border-radius: var(--r-xs);
+  transform: translateY(calc(-50% - var(--sp-1))) rotate(45deg);
+}
+
+@keyframes zn-tooltip-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--zn-tooltip-x), var(--zn-tooltip-y));
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes zn-tooltip-out {
+  from {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--zn-tooltip-x), var(--zn-tooltip-y));
+  }
+}

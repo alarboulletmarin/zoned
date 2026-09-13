@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ExternalLink, Copy } from "@/components/icons";
+import { AlertTriangle, ExternalLink, Copy } from "@/components/icons";
 import { submitQuickIdea, copyToClipboard } from "@/lib/issueBuilder";
 import type { WorkoutCategory, Difficulty } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
@@ -21,13 +21,19 @@ const DIFFICULTIES = Object.keys(DIFFICULTY_META) as Difficulty[];
 export function QuickIdeaForm() {
   const { t } = useTranslation("contribute");
   const pickLang = usePickLang();
+  const uid = useId();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<WorkoutCategory>("endurance");
   const [difficulty, setDifficulty] = useState<Difficulty>("intermediate");
+  // A field only states its reason once the writer has left it: an empty form
+  // is not a wrong form.
+  const [touched, setTouched] = useState<{ name?: boolean; description?: boolean }>({});
 
   const isValid = name.trim().length > 0 && description.trim().length > 0;
+  const nameInvalid = touched.name === true && name.trim().length === 0;
+  const descriptionInvalid = touched.description === true && description.trim().length === 0;
 
   const handleSubmit = async () => {
     if (!isValid) return;
@@ -67,53 +73,78 @@ export function QuickIdeaForm() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <p className="text-sm text-muted-foreground">
-          {t("quickIdea.subtitle")}
-        </p>
-      </div>
+    <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+      <p className="zn-body zn-body--sm zn-muted zn-contrib__lead">
+        {t("quickIdea.subtitle")}
+      </p>
 
       {/* Name */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          {t("quickIdea.nameLabel")} <span className="text-destructive">*</span>
+      <div className="zn-contrib-field">
+        <label className="zn-contrib-field__label" htmlFor={`${uid}-name`}>
+          {t("quickIdea.nameLabel")}
+          <span className="zn-contrib-field__req" aria-hidden="true">*</span>
         </label>
         <input
+          id={`${uid}-name`}
           type="text"
+          required
           value={name}
           onChange={(e) => setName(e.target.value)}
+          onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
           placeholder={t("quickIdea.namePlaceholder")}
-          className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+          aria-invalid={nameInvalid || undefined}
+          aria-describedby={nameInvalid ? `${uid}-name-error` : undefined}
+          className="zn-contrib-input"
         />
+        {nameInvalid && (
+          <p id={`${uid}-name-error`} role="alert" className="zn-contrib-field__error">
+            <AlertTriangle size={14} />
+            {t("submit.required")}
+          </p>
+        )}
       </div>
 
       {/* Description */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          {t("quickIdea.descriptionLabel")} <span className="text-destructive">*</span>
+      <div className="zn-contrib-field">
+        <label className="zn-contrib-field__label" htmlFor={`${uid}-description`}>
+          {t("quickIdea.descriptionLabel")}
+          <span className="zn-contrib-field__req" aria-hidden="true">*</span>
         </label>
         <textarea
+          id={`${uid}-description`}
+          required
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          onBlur={() => setTouched((prev) => ({ ...prev, description: true }))}
           placeholder={t("quickIdea.descriptionPlaceholder")}
           rows={4}
-          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+          aria-invalid={descriptionInvalid || undefined}
+          aria-describedby={descriptionInvalid ? `${uid}-description-error` : undefined}
+          className="zn-contrib-input"
         />
+        {descriptionInvalid && (
+          <p id={`${uid}-description-error`} role="alert" className="zn-contrib-field__error">
+            <AlertTriangle size={14} />
+            {t("submit.required")}
+          </p>
+        )}
       </div>
 
       {/* Category + Difficulty row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div
+        className="zn-grid"
+        style={{ "--cols": 2, "--gap": "var(--sp-8)" } as CSSProperties}
+      >
         {/* Category */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-category`}>
             {t("quickIdea.categoryLabel")}
           </label>
           <Select
             value={category}
             onValueChange={(v) => setCategory(v as WorkoutCategory)}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${uid}-category`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -130,15 +161,15 @@ export function QuickIdeaForm() {
         </div>
 
         {/* Difficulty */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-difficulty`}>
             {t("quickIdea.difficultyLabel")}
           </label>
           <Select
             value={difficulty}
             onValueChange={(v) => setDifficulty(v as Difficulty)}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id={`${uid}-difficulty`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -156,14 +187,12 @@ export function QuickIdeaForm() {
       </div>
 
       {/* Submit buttons */}
-      <div className="flex flex-col sm:flex-row gap-3 pt-2">
-        <Button
-          type="button"
-          onClick={handleSubmit}
-          disabled={!isValid}
-          className="flex-1"
-        >
-          <ExternalLink className="size-4" />
+      <div
+        className="zn-row zn-contrib__actions"
+        style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+      >
+        <Button type="button" onClick={handleSubmit} disabled={!isValid}>
+          <ExternalLink />
           {t("submit.generateIssue")}
         </Button>
         <Button
@@ -172,7 +201,7 @@ export function QuickIdeaForm() {
           onClick={handleCopy}
           disabled={!isValid}
         >
-          <Copy className="size-4" />
+          <Copy />
           {t("submit.copyDescription")}
         </Button>
       </div>

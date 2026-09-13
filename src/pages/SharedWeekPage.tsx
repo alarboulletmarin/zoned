@@ -1,22 +1,14 @@
 import { useMemo } from "react";
-import { sessionColorClass } from "@/lib/sessionColors";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import {
-  AlertTriangle,
-  ArrowLeft,
-  Clock,
-  Share,
-  Star,
-} from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Clock, Plus, Star } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { ZoneScale } from "@/components/visualization";
 import { WeekSummaryBar } from "@/components/weekly";
-import { cn } from "@/lib/utils";
+import { sessionColor } from "@/lib/sessionColors";
 import { decodeSharedWeek, sharedWeekSessions, sharedWeekToPlan } from "@/lib/weekShare";
 import { planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
@@ -31,6 +23,10 @@ import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import type { AnyWorkoutTemplate } from "@/types";
 import type { PlanWeek } from "@/types/plan";
 
+/**
+ * A week that arrived as a link. Everything on this screen is decoded from the
+ * URL, nothing is read from storage until the week is actually added.
+ */
 export function SharedWeekPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -84,14 +80,23 @@ export function SharedWeekPage() {
     return (
       <>
         <SEOHead noindex title={t("weekly.shared.title")} canonical="/weeks/shared" />
-        <div className="py-12 text-center">
-          <p className="text-muted-foreground">{t("weekly.shared.invalid")}</p>
-          <Button variant="link" asChild className="mt-4">
-            <Link to="/weeks">
-              <ArrowLeft className="mr-2 size-4" />
-              {t("weekly.list.title")}
-            </Link>
-          </Button>
+        <div className="zn-pw">
+          <section className="zn-pw__band">
+            <Alert
+              kind="error"
+              title={t("weekly.shared.invalid")}
+              action={
+                <Button variant="outline" asChild>
+                  <Link to="/weeks">
+                    <ArrowLeft size={16} />
+                    {t("weekly.list.title")}
+                  </Link>
+                </Button>
+              }
+            >
+              {t("weekly.shared.invalidHelp")}
+            </Alert>
+          </section>
         </div>
       </>
     );
@@ -108,99 +113,113 @@ export function SharedWeekPage() {
     navigate(`/weeks/${plan.id}`);
   };
 
+  const kicker = [
+    payload.c ? t(`weekly.prebuilt.category.${payload.c}`) : null,
+    t("weekly.prebuilt.sessions", { count: sessions.length }),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
     <>
       <SEOHead noindex title={payload.n} canonical="/weeks/shared" />
-      <div className="py-8 space-y-6 pb-28 lg:pb-8">
-        {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="size-11 rounded-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent flex items-center justify-center shrink-0">
-                <Share className="size-5 text-foreground/80" />
-              </div>
-              <EditorialTitle as="h1">{payload.n}</EditorialTitle>
+
+      <div className="zn-pw" data-dock="true">
+        <section className="zn-pw__band">
+          <div className="zn-pw__head">
+            <div
+              className="zn-stack zn-pw__headtext"
+              style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+            >
+              <span className="zn-kicker">{kicker}</span>
+              <h1 className="zn-display" data-level="2">
+                {payload.n}
+              </h1>
+              <p className="zn-body zn-body--lead zn-pw__lede">
+                {t("weekly.shared.subtitle")}
+              </p>
             </div>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
-              {t("weekly.shared.subtitle")}
-            </FadeUp>
-            <div className="flex flex-wrap items-center gap-2">
-              {payload.c && (
-                <Badge variant="secondary">
-                  {t(`weekly.prebuilt.category.${payload.c}`)}
-                </Badge>
-              )}
-              <Badge variant="outline">
-                {t("weekly.prebuilt.sessions", { count: sessions.length })}
-              </Badge>
-            </div>
+
+            <Button size="lg" onClick={handleAdd} className="zn-pw__call">
+              <Plus size={17} />
+              {t("weekly.shared.add")}
+            </Button>
           </div>
-
-          {/* CTA top (desktop) */}
-          <Button size="lg" onClick={handleAdd} className="shrink-0 hidden lg:inline-flex">
-            {t("weekly.shared.add")}
-          </Button>
-        </div>
-
-        {/* Preview: stats + 80/20 gauge + rhythm (reuses WeekSummaryBar). */}
-        <WeekSummaryBar stats={stats} slots={slots} />
+        </section>
 
         {unknownCount > 0 && (
-          <p className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
-            <AlertTriangle className="size-3.5 shrink-0" />
-            {t("weekly.shared.unknownCount", { count: unknownCount })}
-          </p>
+          <section className="zn-pw__band">
+            <Alert kind="warning" title={t("weekly.shared.unknownCount", { count: unknownCount })}>
+              {t("weekly.shared.unknownHelp", { count: knownSessions.length })}
+            </Alert>
+          </section>
         )}
 
-        {/* Session list */}
-        <div className="space-y-2">
-          {knownSessions.map((session, idx) => {
-            const workout = byId.get(session.workoutId);
-            const workoutName = workout ? pick(workout, "name") : session.workoutId;
-            const sessionLabel = SESSION_TYPE_LABELS[session.sessionType];
-            const dayLabel = t(`weekly.days.${session.dayOfWeek}`);
+        <section className="zn-pw__band" aria-labelledby="pw-preview">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
+          >
+            <div
+              className="zn-cluster zn-cluster--split"
+              style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}
+            >
+              <h2 id="pw-preview" className="zn-title" data-level="3">
+                {t("weekly.prebuilt.preview")}
+              </h2>
+              <ZoneScale className="zn-push" />
+            </div>
+            <WeekSummaryBar stats={stats} slots={slots} />
 
-            return (
-              <Card key={idx} size="flush" className="border-border/50">
-                <CardContent className="p-3 sm:p-4">
-                  <div className="flex items-start gap-3">
-                    <span className="text-xs font-medium text-muted-foreground w-10 shrink-0 pt-0.5">
-                      {dayLabel}
+            <div className="zn-pw__list">
+              {knownSessions.map((session, idx) => {
+                const workout = byId.get(session.workoutId);
+                const workoutName = workout
+                  ? pick(workout, "name")
+                  : session.workoutId;
+                const sessionLabel = SESSION_TYPE_LABELS[session.sessionType];
+
+                return (
+                  <div key={idx} className="zn-pw__sess">
+                    <span className="zn-mono zn-pw__sess-day">
+                      {t(`weekly.daysShort.${session.dayOfWeek}`)}
                     </span>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-sm font-medium">{workoutName}</span>
+
+                    <div className="zn-pw__sess-main">
+                      <span className="zn-pw__sess-name">{workoutName}</span>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
+
+                    <span className="zn-mono zn-pw__sess-marks">
                       {session.isKeySession && (
-                        <Star filled className="size-4 text-yellow-500" />
+                        <span className="zn-sess__key">
+                          <Star filled size={15} aria-hidden="true" />
+                          <span className="sr-only">{t("weekly.keySession")}</span>
+                        </span>
                       )}
-                      {sessionLabel && (
-                        <Badge variant="outline" className="text-xs">
-                          <div
-                            className={cn(
-                              "size-2 rounded-full",
-                              sessionColorClass(session.sessionType),
-                            )}
-                          />
-                          {pickLocale(sessionLabel)}
-                        </Badge>
-                      )}
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Clock className="size-3" />
-                        {formatDurationMinutes(session.estimatedDurationMin)}
-                      </span>
-                    </div>
+                      <span
+                        className="zn-sess__dot"
+                        aria-hidden="true"
+                        style={
+                          {
+                            "--zn-dot": sessionColor(session.sessionType),
+                          } as React.CSSProperties
+                        }
+                      />
+                      {sessionLabel && <span>{pickLocale(sessionLabel)}</span>}
+                      <Clock size={13} aria-hidden="true" />
+                      {formatDurationMinutes(session.estimatedDurationMin)}
+                    </span>
                   </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Mobile sticky CTA (thumb zone). */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-        <Button className="w-full" size="lg" onClick={handleAdd}>
+      <div className="zn-pw__dock">
+        <Button size="lg" onClick={handleAdd}>
+          <Plus size={17} />
           {t("weekly.shared.add")}
         </Button>
       </div>

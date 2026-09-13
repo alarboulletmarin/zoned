@@ -1,5 +1,6 @@
 {
   "title": "Simulateur jour de course",
+  "kicker": "Km par km",
   "description": "Génère ton plan complet pour le jour de la course : allures par kilomètre, nutrition, échauffement, timeline et checklist.",
   "inputs": {
     "title": "Paramètres de course",

@@ -13,7 +13,7 @@ import {
  * The warm-up, as a timed checklist rather than nine paragraphs.
  *
  * This is the block you read standing in the corral, so every line carries the
- * clock time it starts at and how long it lasts — the block header claimed a
+ * clock time it starts at and how long it lasts, the block header claimed a
  * total duration that none of the items accounted for.
  */
 export function WarmupChecklist({
@@ -51,8 +51,11 @@ export function WarmupChecklist({
   const endTime = minutesToTime(startMin + totalDurationMin);
 
   return (
-    <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+    >
+      <p className="zn-rs-note zn-rs-note--muted">
         {t("warmup.window", {
           start: startTime,
           end: endTime,

@@ -1,7 +1,7 @@
 /**
- * EnamelPin — 480×480. Varsity-style enamel pin. Shield silhouette with
+ * EnamelPin, 480×480. Varsity-style enamel pin. Shield silhouette with
  * gilded gold border, central monogram and laurels. Premium collectible
- * vibe — the pin IS the visual.
+ * vibe, the pin IS the visual.
  */
 
 import { usePickLang } from "@/lib/i18n-utils";

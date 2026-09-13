@@ -1,24 +1,24 @@
 {
   "title": "Contribuer",
-  "subtitle": "Proposez une séance à la communauté",
-  "description": "Partagez vos séances d'entraînement préférées avec la communauté Zoned",
+  "subtitle": "Propose une séance à la communauté",
+  "description": "Partage tes séances d'entraînement préférées avec la communauté Zoned",
   "quickIdea": {
     "title": "Idée rapide",
-    "subtitle": "Décrivez votre idée de séance en quelques mots",
+    "subtitle": "Décris ton idée de séance en quelques mots",
     "nameLabel": "Nom de la séance",
     "namePlaceholder": "Ex: Fartlek en nature",
     "descriptionLabel": "Description",
-    "descriptionPlaceholder": "Décrivez la séance, son objectif, et comment la réaliser...",
+    "descriptionPlaceholder": "Décris la séance, son objectif, comment la réaliser...",
     "categoryLabel": "Catégorie",
     "difficultyLabel": "Niveau"
   },
   "fullWorkout": {
     "title": "Séance complète",
-    "subtitle": "Construisez une séance détaillée avec prévisualisation",
-    "step1Title": "Informations de base",
-    "step2Title": "Échauffement et corps de séance",
-    "step3Title": "Retour au calme et conseils",
-    "step4Title": "Prévisualisation et soumission",
+    "subtitle": "Construis une séance détaillée, avec aperçu",
+    "step1Title": "Informations",
+    "step2Title": "Échauffement et corps",
+    "step3Title": "Retour au calme",
+    "step4Title": "Prévisualisation",
     "nameLabel": "Nom (FR)",
     "nameEnLabel": "Nom (EN)",
     "nameEnPlaceholder": "English name (optional)",
@@ -71,11 +71,11 @@
     },
     "recovery": "Récupération",
     "recoveryPlaceholder": "Ex: 2min footing Z1",
-    "emptyState": "Aucun bloc. Ajoutez-en un pour commencer."
+    "emptyState": "Aucun bloc. Ajoutes-en un pour commencer."
   },
   "tips": {
     "coachingLabel": "Conseils d'entraîneur",
-    "coachingPlaceholder": "Ex: Gardez une foulée relâchée et régulière",
+    "coachingPlaceholder": "Ex: Garde une foulée relâchée et régulière",
     "mistakesLabel": "Erreurs courantes",
     "mistakesPlaceholder": "Ex: Partir trop vite sur les premières répétitions",
     "coachingEnLabel": "Coaching tips (EN)",
@@ -94,22 +94,23 @@
     "title": "Prévisualisation",
     "show": "Afficher la prévisualisation",
     "hide": "Masquer la prévisualisation",
-    "emptyState": "Complétez les informations ci-dessus pour voir un aperçu de votre séance"
+    "emptyState": "Complète les champs ci-dessus pour voir l'aperçu de ta séance"
   },
   "submit": {
     "generateIssue": "Soumettre sur GitHub",
     "copyDescription": "Copier la description",
     "openGithub": "Ouvrir GitHub",
-    "urlTooLong": "La description est trop longue pour un lien direct. Elle a été copiée dans votre presse-papiers.",
+    "urlTooLong": "Description trop longue pour un lien direct. Copiée dans ton presse-papiers.",
     "copied": "Copié dans le presse-papiers !",
-    "success": "Merci pour votre contribution !",
-    "thankYou": "Votre séance sera examinée par les mainteneurs du projet.",
+    "success": "Merci pour ta contribution !",
+    "thankYou": "Ta séance sera relue par les mainteneurs du projet.",
     "required": "Ce champ est requis",
-    "atLeastOneBlock": "Ajoutez au moins un bloc dans le corps de séance"
+    "atLeastOneBlock": "Ajoute au moins un bloc dans le corps de séance"
   },
   "steps": {
     "next": "Suivant",
     "previous": "Précédent",
     "step": "Étape"
-  }
+  },
+  "kicker": "Issue GitHub préremplie"
 }

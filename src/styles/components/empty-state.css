@@ -1,0 +1,172 @@
+/* EmptyState, the starting line.
+
+   No dashed card any more: that outline is the texture of the hole reserved
+   for a drawing, and an empty shelf is not a hole. In its place, a straight
+   rule running the full width of the container, and the figure standing on
+   it, on the left. The bottom of the SVG frame is the ground line
+   (docs/doodles.md, "Le sol est la règle de la page"): the scene is a flex box
+   aligned at the end whose bottom border is the rule, and the drawing
+   overflows by the rendered thickness of that border so the vermillon sole
+   touches it. Computed, never by eye.
+
+   Everything is left-aligned. Nothing in the centre, nothing under the MENU
+   pill. */
+
+.zn-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: start;
+}
+
+/* The scene: the figure, and the rule that is its ground. */
+.zn-empty__scene {
+  display: flex;
+  align-items: flex-end;
+  align-self: stretch;
+  border-block-end: var(--border-rule);
+}
+
+/* The size is the drawing's own, now a portrait frame cut at the sole: 144px
+   tall on a phone, 208 on a wide screen. The brief said 128 to 150 then 200
+   to 260 "wide" in the old landscape frame, which carried the ground; the
+   height is what is left of that.
+
+   `inline-size: auto` on an SVG imported with ?react is the trap the project
+   has already paid for once, but only when the height is free as well. Here
+   it is fixed, and the width follows the viewBox ratio. */
+.zn-empty__art {
+  display: block;
+  block-size: 144px;
+  inline-size: auto;
+  max-inline-size: 100%;
+  flex: none;
+  color: var(--text-body);
+
+  /* The sole on the rule: the frame comes down by the rule's rendered
+     thickness (--rule-bite, borders.css) and paints above it, the vermillon
+     of the contact sits on the ink. */
+  position: relative;
+  z-index: 1;
+  margin-block-end: calc(-1 * var(--rule-bite));
+}
+
+/* The fallback without a drawing: 52px circle around a 22px glyph, standing
+   on the rule. */
+.zn-empty__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 52px;
+  block-size: 52px;
+  flex: none;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--text-faint);
+}
+
+.zn-empty__icon > svg {
+  inline-size: 22px;
+  block-size: 22px;
+}
+
+/* Under the rule: title, cause, action. */
+.zn-empty__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+  padding-block-start: var(--sp-10);
+}
+
+.zn-empty__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h3) / var(--lh-h3) var(--font-display);
+  letter-spacing: var(--ls-h3);
+  color: var(--text-body);
+  max-inline-size: 28ch;
+}
+
+.zn-empty__description {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  max-inline-size: 44ch;
+}
+
+.zn-empty__action {
+  margin-block-start: var(--sp-6);
+}
+
+.zn-empty__hint {
+  margin: 0;
+  margin-block-start: var(--sp-6);
+  font: var(--type-caption);
+  color: var(--text-faint);
+  max-inline-size: 44ch;
+}
+
+/* ── wide screen ──────────────────────────────────────────────────────────
+   The figure on the left, the words to its right, and the button resting on
+   the same rule. Each of the two boxes carries its own bottom border and they
+   are aligned at the end with no gap between them, so the two rules read as
+   one. 768 is the tablet breakpoint the rest of the app switches at. */
+@media (min-width: 768px) {
+  .zn-empty {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .zn-empty__scene {
+    align-self: auto;
+    flex: none;
+  }
+
+  .zn-empty__art {
+    block-size: 208px;
+  }
+
+  .zn-empty__body {
+    flex: 1 1 0;
+    padding-block-start: 0;
+    padding-inline-start: var(--sp-12);
+    border-block-end: var(--border-rule);
+  }
+
+  /* The button's base on the rule, like the sole: same overflow, same paint
+     order over the line. */
+  .zn-empty__action {
+    position: relative;
+    z-index: 1;
+    margin-block-end: calc(-1 * var(--rule-bite));
+  }
+
+  .zn-empty__hint {
+    flex-basis: 100%;
+  }
+}
+
+/* ── variants ─────────────────────────────────────────────────────────
+   Visual only, and only on the glyph. A drawing keeps its ink whatever the
+   reason the page is empty: the vermillon is reserved for the contact with
+   the ground, and a figure painted red would read as a rendering error. */
+
+.zn-empty[data-variant="not-started"] .zn-empty__icon {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Danger and connectivity wear the same vermillon the rest of the system
+   uses for a problem, told apart by the words, not by a second hue. */
+.zn-empty[data-variant="error"] .zn-empty__icon,
+.zn-empty[data-variant="offline"] .zn-empty__icon {
+  color: var(--state-danger);
+  border-color: var(--state-danger);
+}
+
+/* A filter recovery is not a failure: the description carries the count, so
+   it gets the full body ink rather than the muted one. */
+.zn-empty[data-variant="no-results"] .zn-empty__description {
+  color: var(--text-body);
+}

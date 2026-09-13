@@ -15,7 +15,7 @@ import type { AnyWorkoutTemplate, Difficulty, ZoneNumber } from "@/types";
 import { getWorkoutDiscipline, isStrengthWorkout } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 
-/** The four disciplines surfaced in the filters — strength sits alongside the
+/** The four disciplines surfaced in the filters, strength sits alongside the
  *  three endurance sports. */
 export const DISCIPLINES = [
   "running",

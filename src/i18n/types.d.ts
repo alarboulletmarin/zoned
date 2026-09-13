@@ -1,5 +1,5 @@
 /**
- * i18next types — exposes the resources shape for tooling and docs.
+ * i18next types, exposes the resources shape for tooling and docs.
  *
  * NOTE: strict key checking via `CustomTypeOptions.resources` is NOT enabled.
  * Enabling it would require refactoring many call sites:

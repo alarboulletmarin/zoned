@@ -1,7 +1,7 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Reprise douce / return — 4 very easy sessions, no quality, conservative.
+ * Reprise douce / return, 4 very easy sessions, no quality, conservative.
  * For coming back from a break or injury without spiking load.
  */
 export const repriseDouce: PrebuiltWeek = {
@@ -16,8 +16,8 @@ export const repriseDouce: PrebuiltWeek = {
   icon: "HeartPulse",
   difficulty: "beginner",
   category: "recovery",
-  provenance: "Retour progressif à la charge — prudence tissulaire",
-  provenanceEn: "Gradual return to load — tissue-first caution",
+  provenance: "Retour progressif à la charge, prudence tissulaire",
+  provenanceEn: "Gradual return to load, tissue-first caution",
   whyItWorks:
     "Au retour, les muscles récupèrent plus vite que les tendons, les os et le cartilage. Garder tout en facile et augmenter le volume très progressivement laisse aux tissus conjonctifs le temps de se réadapter, ce qui prévient la rechute la plus fréquente : trop, trop vite.",
   whyItWorksEn:

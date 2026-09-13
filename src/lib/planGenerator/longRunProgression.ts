@@ -1,5 +1,5 @@
 /**
- * Long Run Progression — Progressive long run distance calculator
+ * Long Run Progression, Progressive long run distance calculator
  *
  * Implements a smooth, gradual progression with gentle step-backs.
  * The long run peaks 3-4 weeks before the race, not earlier.
@@ -150,7 +150,7 @@ export function calculateLongRunProgression(
   const startKm = Math.min(peakKm * config.startFraction, comfortCap);
 
   // 2. Calculate the ideal increment to reach peak exactly on time.
-  // The taper window and the "peak N weeks before race" window overlap — they
+  // The taper window and the "peak N weeks before race" window overlap, they
   // both count back from race day. Subtracting both cut the build budget by a
   // third and inflated the required increment.
   const buildEndWeek = Math.max(
@@ -163,7 +163,7 @@ export function calculateLongRunProgression(
   const stepBackCount = Math.floor((buildWeeksWithStepBacks - 1) / config.stepBackFrequency);
   const actualBuildWeeks = buildWeeksWithStepBacks - stepBackCount;
 
-  // Calibrate increment so we reach peak on time — neither too early nor never.
+  // Calibrate increment so we reach peak on time, neither too early nor never.
   // Taking min(configured, needed) capped the progression at the comfortable
   // pace, so runners starting from a short long run never reached the peak
   // (a 16-week beginner marathon topped out at 22km instead of ~30km).
@@ -189,7 +189,7 @@ export function calculateLongRunProgression(
   let cycleWeek = 0; // 0-based position within 3-week cycle (0=build, 1=build, 2=stepback)
 
   for (let week = 1; week <= totalWeeks; week++) {
-    // Race week — only race plans have one. Non-race plans (base building,
+    // Race week, only race plans have one. Non-race plans (base building,
     // return from injury, beginner start) have no taper, and zeroing their last
     // week left the long run with no target, so it fell back to the raw
     // template duration and blew past the weekly volume.
@@ -238,11 +238,11 @@ export function calculateLongRunProgression(
         isStepBack: true,
       });
       cycleWeek = 0;
-      // currentKm is NOT modified — resume from here next build week
+      // currentKm is NOT modified, resume from here next build week
       continue;
     }
 
-    // Build week — increment progression
+    // Build week, increment progression
     if (week > 1) {
       currentKm = Math.min(currentKm + calibratedIncrement, peakKm);
     }
@@ -250,7 +250,7 @@ export function calculateLongRunProgression(
     let weekKm = roundKm(currentKm);
 
     // Cap the jump from the previous week. After a step-back the jump is
-    // expected — it resumes the pre-step-back level — so allow the step-back
+    // expected, it resumes the pre-step-back level, so allow the step-back
     // reduction on top of one increment instead of clamping it away.
     const lastTarget = targets.at(-1);
     if (lastTarget && lastTarget.distanceKm > 0) {

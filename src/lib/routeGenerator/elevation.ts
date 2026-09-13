@@ -1,5 +1,5 @@
 /**
- * Elevation utilities — sample the elevation profile from Brouter's
+ * Elevation utilities, sample the elevation profile from Brouter's
  * embedded altitudes and compute geometric measures (haversine distance).
  */
 

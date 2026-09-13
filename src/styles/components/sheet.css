@@ -1,0 +1,252 @@
+/* Sheet, the same paper and outline as a dialog, attached to one edge of the
+   viewport. Only the radius changes: the attached edge stays square. A sheet
+   floats, so --shadow-block is allowed here too.
+
+   The panel IS a native <dialog> opened with showModal(): the scene is its own
+   ::backdrop, so there is no overlay element and no z-index left to arbitrate.
+   Side is still selected off the data-side attribute sheet.tsx emits.
+   Reusable parts: .zn-sheet, .zn-sheet__close. */
+
+/* ── panel ────────────────────────────────────────────────────────────── */
+
+.zn-sheet {
+  position: fixed;
+  /* The UA centres a modal <dialog> with `margin: auto` between `left: 0` and
+     `right: 0`, and caps it at `calc(100% - 2em - 6px)`. A sheet is hinged on
+     one edge and sized by its side, so all three are undone here and each side
+     states its own box below. */
+  margin: 0;
+  max-inline-size: none;
+  max-block-size: none;
+  padding: var(--pad-card);
+  overflow: auto;
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  box-shadow: var(--shadow-block);
+
+  /* A Radix select or menu opened inside parks `pointer-events: none` on the
+     body; the panel opts back in so the sheet around it stays alive. */
+  pointer-events: auto;
+}
+
+/* Only the open state gets a display value: the UA rule that hides a closed
+   dialog is `dialog:not([open])`, and an unconditional `display` would defeat
+   it. */
+.zn-sheet[open] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
+}
+
+/* Flat ink wash, no backdrop-filter, the system forbids blur. */
+.zn-sheet::backdrop {
+  background: var(--scrim);
+  animation: zn-sheet-scene-in var(--dur-base) var(--ease-out);
+}
+
+@keyframes zn-sheet-scene-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── sides ────────────────────────────────────────────────────────────── */
+
+/* Vertical sheets span the width and stop short of the far edge, so the page
+   underneath stays visible. Horizontal ones take a fixed panel width.
+   `inline-size` / `block-size` are stated rather than left to the UA, whose
+   `fit-content` on both axes would shrink a sheet to its contents.
+
+   The free edge is released to `auto` on purpose, on BOTH axes: the UA pins
+   `inset-inline: 0` on every dialog and `inset-block: 0` on a modal one, and a
+   box with both edges of an axis and a size on it is over-constrained, the
+   browser drops the far edge (`bottom`, and `right` in LTR). A sheet asked to
+   hang off the floor was drawn against the ceiling; one hinged on the right
+   was drawn against the left. */
+.zn-sheet[data-side="bottom"],
+.zn-sheet[data-side="top"] {
+  inset-inline: 0;
+  inline-size: auto;
+  block-size: fit-content;
+  max-block-size: 82%;
+}
+.zn-sheet[data-side="bottom"] {
+  top: auto;
+  bottom: 0;
+  border-radius: var(--r-4xl) var(--r-4xl) 0 0;
+
+  /* Le retour du glisser-pour-fermer quand le geste n'aboutit pas. Le hook
+     coupe cette transition tant que le doigt est posé, puis la rend : le
+     panneau suit le toucher, et ne s'anime qu'en revenant à sa place. */
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+/* La prise du geste, sur le bord bas seulement. `touch-action: none` la rend au
+   composant : sans elle, le panneau défile sous le doigt qui voulait le tirer.
+   La poignée est un ::before, qu'aucun événement ne peut viser, c'est la bande
+   de tête, dans useSheetDrag.ts, qui la couvre. */
+.zn-sheet[data-side="bottom"] > [data-slot="sheet-header"] {
+  touch-action: none;
+}
+.zn-sheet[data-side="top"] {
+  top: 0;
+  bottom: auto;
+  border-radius: 0 0 var(--r-4xl) var(--r-4xl);
+}
+
+.zn-sheet[data-side="left"],
+.zn-sheet[data-side="right"] {
+  inset-block: 0;
+  block-size: auto;
+  inline-size: 420px;
+  max-inline-size: 88%;
+}
+.zn-sheet[data-side="left"] {
+  left: 0;
+  right: auto;
+  border-radius: 0 var(--r-4xl) var(--r-4xl) 0;
+}
+.zn-sheet[data-side="right"] {
+  left: auto;
+  right: 0;
+  border-radius: var(--r-4xl) 0 0 var(--r-4xl);
+}
+
+/* The grab handle a vertical sheet is dragged by, decoration, so it is a
+   pseudo-element and never reaches the accessibility tree. */
+.zn-sheet[data-side="bottom"]::before,
+.zn-sheet[data-side="top"]::before {
+  content: "";
+  flex: none;
+  align-self: center;
+  inline-size: 44px;
+  block-size: 4px;
+  border-radius: var(--r-pill);
+  background: var(--line-divider);
+}
+
+/* On a top sheet the handle belongs on the free edge, at the bottom. */
+.zn-sheet[data-side="top"]::before {
+  order: 1;
+}
+
+/* ── motion ───────────────────────────────────────────────────────────── */
+
+/* Each side comes in from its own edge, so the panel says where it came from.
+   There is no exit: the node is unmounted the moment it closes, and an
+   animation needs an element to play on. */
+@keyframes zn-sheet-in-bottom {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+@keyframes zn-sheet-in-top {
+  from { transform: translateY(-100%); }
+  to { transform: none; }
+}
+@keyframes zn-sheet-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+@keyframes zn-sheet-in-right {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+
+.zn-sheet[data-side="bottom"][open] {
+  animation: zn-sheet-in-bottom var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="top"][open] {
+  animation: zn-sheet-in-top var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="left"][open] {
+  animation: zn-sheet-in-left var(--dur-base) var(--ease-out);
+}
+.zn-sheet[data-side="right"][open] {
+  animation: zn-sheet-in-right var(--dur-base) var(--ease-out);
+}
+
+/* ── header / footer ──────────────────────────────────────────────────── */
+
+/* The end padding keeps a long title clear of the close button. */
+.zn-sheet__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-inline-end: var(--sp-15);
+}
+
+.zn-sheet__title {
+  font: var(--type-h3);
+  color: var(--text-body);
+}
+
+.zn-sheet__description {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* Pushed to the bottom edge: this is where the cost of the action lives. */
+.zn-sheet__footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: var(--border-divider);
+}
+
+/* ── close ────────────────────────────────────────────────────────────── */
+
+.zn-sheet__close {
+  position: absolute;
+  top: var(--sp-8);
+  right: var(--sp-8);
+
+  display: grid;
+  place-items: center;
+  inline-size: 36px;
+  block-size: 36px;
+  padding: 0;
+
+  background: transparent;
+  color: var(--ink-1);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-sheet__close > svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  flex: none;
+  pointer-events: none;
+}
+
+.zn-sheet__close:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-sheet__close:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-sheet__close:disabled {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* WCAG 2.5.8, 44px on a coarse pointer, whatever the drawn size says. */
+@media (pointer: coarse) {
+  .zn-sheet__close {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+}

@@ -1,5 +1,5 @@
 /**
- * StoryHero — 1080×1920 portrait, Insta Story format.
+ * StoryHero, 1080×1920 portrait, Insta Story format.
  *
  * Editorial hero with the SessionTimeline taking centre stage. Title
  * dominates the top, with the dominant zone in italic accent. Three stats
@@ -56,7 +56,7 @@ export function StoryHero({ workout, transparent }: ShareTemplateProps) {
         {/* Brand */}
         <BrandStrip scale={1.6} />
 
-        {/* Eyebrow — zone pill */}
+        {/* Eyebrow, zone pill */}
         <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
           <span
             style={{

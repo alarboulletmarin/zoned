@@ -65,9 +65,9 @@ export type RouteRecommendationReason =
   | "uses_athletics_track";
 
 // Distance match is now a *single* descriptor with three mutually
-// exclusive levels — replaces the previous double-display where
+// exclusive levels, replaces the previous double-display where
 // `closest_to_target_distance` (≤10%) and the orange "approximate"
-// banner (>5%) could both fire in the 5–10% window.
+// banner (>5%) could both fire in the 5-10% window.
 export type DistanceMatchLabel = "very_close" | "close" | "approximate";
 
 export function getDistanceMatchLabel(
@@ -364,7 +364,7 @@ function buildReasons(args: {
 }): RouteRecommendationReason[] {
   const reasons: RouteRecommendationReason[] = [];
 
-  // Athletics track surfaces first when the session is interval-shaped —
+  // Athletics track surfaces first when the session is interval-shaped,
   // it's the most concrete answer to "why this route" for fractionnés.
   const hasTrack = !!args.route.pois?.some((p) => p.type === "track");
   if (hasTrack && poiBoostForIntent(args.intent)?.type === "track") {
@@ -377,7 +377,7 @@ function buildReasons(args: {
   if (args.intent.continuityPriority === "high" && args.continuityScore >= 0.65) reasons.push("supports_steady_pacing");
   if (args.intent.repeatabilityPriority === "high" && args.route.shape === "out_and_back") reasons.push("stays_repeatable_for_repeats");
   if (args.intent.targetDurationMin && args.durationErrorRatio <= 0.14) reasons.push("matches_target_duration");
-  // Distance match is intentionally NOT a "reason" anymore — it's
+  // Distance match is intentionally NOT a "reason" anymore, it's
   // surfaced separately via getDistanceMatchLabel() so we can never
   // produce a contradictory pairing (e.g. "very close" + amber warning).
   if (
@@ -554,7 +554,7 @@ export function poiBoostForSession(sessionType?: SessionType): PoiBoost | undefi
   if (TRACK_FRIENDLY_SESSIONS.has(sessionType)) {
     // Track weight is 0.6 in overpass.ts (lowest of the bunch); a 4× boost
     // pushes it above promenades (1.0) and parks (0.9) without making it
-    // mandatory — if no track is in range we still fall back gracefully.
+    // mandatory, if no track is in range we still fall back gracefully.
     return { type: "track", factor: 4 };
   }
   return undefined;
@@ -581,6 +581,6 @@ function defaultElevationTargetM(
 // the preset builders.
 
 // Math helpers (bearing, angularDistance, computeTurnDensityPerKm,
-// pickExtreme, roundHalf, clamp01) live in ./recommendation/math.ts —
+// pickExtreme, roundHalf, clamp01) live in ./recommendation/math.ts,
 // imported above. Kept that way so this file focuses on the
 // recommendation domain rather than 3D geometry boilerplate.

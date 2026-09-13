@@ -113,7 +113,7 @@ export function exportPlanToICS(
             description: [
               distLabel,
               priorityLabel,
-            ].filter(Boolean).join(" — "),
+            ].filter(Boolean).join(" · "),
             categories: ["Running", "Race"],
             status: "CONFIRMED" as const,
             transp: "TRANSPARENT" as const,
@@ -187,7 +187,7 @@ export function exportPlanToICS(
                 const zone = block.zone ? ` [${block.zone}]` : "";
                 const reps = block.repetitions && block.repetitions > 1 ? `${block.repetitions}x ` : "";
                 const rest = block.rest || block.recovery;
-                const restStr = rest ? ` — ${t("rest")}: ${rest}` : "";
+                const restStr = rest ? `, ${t("rest")}: ${rest}` : "";
                 descriptionLines.push(`• ${reps}${blockDesc}${dur}${zone}${restStr}`);
               }
             }

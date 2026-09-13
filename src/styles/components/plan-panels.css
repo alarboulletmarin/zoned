@@ -1,0 +1,1414 @@
+/* Plan panels, the statistics, the week guidance, and the four confirm
+   dialogs that sit around a training plan.
+
+   One file, one family. Everything here is paper and ink: an outlined block on
+   the page, a mono figure, an uppercase micro-label. The screen's single
+   vermillon fill belongs to the primary action inside the dialog footer, so
+   nothing in this file paints an accent surface, the accent only ever appears
+   here as a 2.5px frame (the selected RPE step, the current week's tick) or as
+   type.
+
+   Zone fills are read off the tokens in design/zones.css and never recomputed;
+   a recovery block is the 45 degree hatch, not a faint zone.
+
+   Plan PHASES have no colour table in this system (PHASE_META.color is a
+   Tailwind class the redesign drops), so a phase rides the same ink ramp the
+   zones do, ordered the way training is: taper lightest, peak darkest. The
+   phase legend under each chart names them, exactly as ZoneScale names the
+   zones. */
+
+/* ── shared: fields ───────────────────────────────────────────────────── */
+
+/* A text field. The app has no Input primitive yet, and three panels in this
+   family carry raw <input>/<textarea>/<select>. Native select keeps its own
+   chevron: that is a platform affordance, not something to redraw. */
+.zn-pfield {
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding: var(--sp-5) var(--sp-6);
+  min-block-size: var(--hit-min);
+
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-pfield::placeholder {
+  color: var(--text-faint);
+}
+
+textarea.zn-pfield {
+  resize: none;
+  min-block-size: 0;
+  line-height: var(--lh-body-sm);
+}
+
+/* The uppercase micro-label over a control. Composed with .zn-kicker; this
+   only turns it into a block and pays the gap under it. */
+.zn-plabel {
+  display: block;
+  margin-block-end: var(--sp-3);
+}
+
+/* ── shared: the phase ink ramp ───────────────────────────────────────── */
+
+.zn-pchart__bar[data-phase="base"],
+.zn-pswatch[data-phase="base"] { --zn-phase-fill: var(--zone-2); }
+
+.zn-pchart__bar[data-phase="build"],
+.zn-pswatch[data-phase="build"] { --zn-phase-fill: var(--zone-3); }
+
+.zn-pchart__bar[data-phase="peak"],
+.zn-pswatch[data-phase="peak"] { --zn-phase-fill: var(--zone-5); }
+
+.zn-pchart__bar[data-phase="taper"],
+.zn-pswatch[data-phase="taper"] { --zn-phase-fill: var(--zone-1); }
+
+.zn-pchart__bar[data-phase="recovery"],
+.zn-pswatch[data-phase="recovery"] { --zn-phase-fill: var(--zone-1); }
+
+/* A legend swatch. Smaller than ZoneScale's 38x20 because these rows carry
+   many more entries; the zone legend itself stays the ZoneScale component. */
+.zn-pswatch {
+  display: block;
+  flex: none;
+  inline-size: var(--sp-11);
+  block-size: var(--sp-6);
+  background: var(--zn-swatch, var(--zn-phase-fill, transparent));
+  border: var(--border-hair);
+  border-radius: var(--r-xs);
+}
+
+.zn-pswatch[data-hatch="true"] {
+  background-image: var(--zone-recovery);
+}
+
+/* ── shared: vertical bar chart ───────────────────────────────────────── */
+
+/* Width is the week, height is the figure, ink density is the phase. The
+   current week is marked by a vermillon rule under its column, a stroke, not
+   a fill, and not a dot floating in the margin. */
+.zn-pchart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.zn-pchart__cols {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-1);
+  block-size: calc(var(--sp-19) + var(--sp-17));
+}
+
+.zn-pchart[data-h="sm"] .zn-pchart__cols { block-size: var(--sp-19); }
+.zn-pchart[data-h="md"] .zn-pchart__cols { block-size: calc(var(--sp-19) + var(--sp-14)); }
+.zn-pchart[data-h="xl"] .zn-pchart__cols { block-size: calc(var(--sp-19) * 2); }
+
+.zn-pchart__col {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  flex: 1;
+  min-inline-size: 0;
+  block-size: 100%;
+  /* Réserve d'espace, à garder même vidée de sa couleur : la supprimer
+     remonterait toutes les barres du graphe de 2px. */
+  border-block-end: var(--bw-heavy) solid transparent;
+}
+
+/* LA SEMAINE EN COURS, le filet vermillon qui courait sous la colonne est
+   remplacé par un repère d'encre posé au PLAFOND de la colonne.
+
+   Trois formes ont été essayées et mesurées avant celle-là :
+
+   1. L'anneau autour de la colonne, sans objet : la colonne est une piste
+      vide de toute la hauteur du graphe, l'entourer cadrerait du vide.
+   2. La voie de papier creusé derrière la colonne, rejetée : en thème
+      sombre --surface-band est plus NOIR que le papier de la carte, la voie
+      se lit comme une barre pleine montant au plafond. Une annotation ne
+      doit jamais pouvoir se lire comme une donnée.
+   3. Le filet d'encre sous la colonne, ou l'anneau d'encre sur la barre,
+      rejetés tous deux pour la même raison : la barre est peinte dans la
+      rampe d'ENCRE des zones, de 14 % (affûtage) à 80 % (pic). Une marque
+      d'encre posée contre elle disparaît sur la moitié des phases. Une
+      marque qui ne se voit qu'une fois sur deux, c'est exactement la
+      demi-règle qui a produit le désordre qu'on répare.
+
+   Le plafond de la colonne, lui, est du papier nu quelle que soit la phase et
+   quelle que soit la hauteur de la barre. Le repère y contraste toujours, il
+   est à hauteur constante donc il se balaye d'un coup d'œil, et il est trop
+   détaché des barres pour être pris pour l'une d'elles. Présence contre
+   absence, pas une teinte contre une autre : il survit au niveau de gris
+   (WCAG 1.4.1). Le pseudo-élément est absolu : hors flux, zéro décalage.
+
+   RESTE À FAIRE HORS PÉRIMÈTRE : le libellé de la semaine en gras sous la
+   colonne (data-current à passer sur .zn-pchart__tick,
+   PlanStatsSection.tsx:83), le second canal idéal, mais c'est un .tsx. */
+.zn-pchart__col[data-current="true"]::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: var(--bw-heavy);
+  background: var(--line-strong);
+}
+
+.zn-pchart__bar {
+  inline-size: 100%;
+  block-size: var(--zn-bar-h, 0%);
+  min-block-size: var(--sp-1);
+
+  background: var(--zn-phase-fill, var(--zone-3));
+  border: var(--border-hair);
+  border-block-end: none;
+  border-radius: 2px 2px 0 0;
+}
+
+/* A recovery week is not a lighter phase: it is the hatch the system uses for
+   anything deliberately unloaded. */
+.zn-pchart__bar[data-recovery="true"] {
+  background-color: transparent;
+  background-image: var(--zone-recovery);
+}
+
+.zn-pchart__ticks {
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.zn-pchart__tick {
+  flex: 1;
+  min-inline-size: 0;
+  text-align: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* Past ten weeks the ticks collide on a phone, so every other one steps out. */
+@media (max-width: 640px) {
+  .zn-pchart__tick[data-dense="true"] {
+    visibility: hidden;
+  }
+}
+
+/* The easy/hard column: two stacked fills, hard on top where the eye lands. */
+.zn-psplit__col {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-inline-size: 0;
+  block-size: 100%;
+
+  border: var(--border-hair);
+  border-block-end: none;
+  border-radius: 2px 2px 0 0;
+  overflow: hidden;
+}
+
+.zn-psplit__hard {
+  flex: none;
+  block-size: var(--zn-hard-h, 0%);
+  background: var(--zone-5);
+}
+
+.zn-psplit__easy {
+  flex: 1;
+  background: var(--zone-2);
+}
+
+/* ── shared: horizontal bar rows ──────────────────────────────────────── */
+
+.zn-pbars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.zn-pbars__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+}
+
+.zn-pbars__code {
+  flex: none;
+  inline-size: 3ch;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-body);
+}
+
+.zn-pbars__name {
+  flex: none;
+  inline-size: 15ch;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-pbars__track {
+  flex: 1;
+  min-inline-size: 0;
+  block-size: var(--sp-7);
+
+  background: var(--surface-band);
+  border: var(--border-hair);
+  border-radius: var(--r-xs);
+  overflow: hidden;
+}
+
+.zn-pbars__fill {
+  display: block;
+  block-size: 100%;
+  inline-size: var(--zn-fill-w, 0%);
+  background: var(--zn-fill, var(--ink-2));
+}
+
+.zn-pbars__fill[data-zone="1"] { --zn-fill: var(--zone-1); }
+.zn-pbars__fill[data-zone="2"] { --zn-fill: var(--zone-2); }
+.zn-pbars__fill[data-zone="3"] { --zn-fill: var(--zone-3); }
+.zn-pbars__fill[data-zone="4"] { --zn-fill: var(--zone-4); }
+.zn-pbars__fill[data-zone="5"] { --zn-fill: var(--zone-5); }
+.zn-pbars__fill[data-zone="6"] { --zn-fill: var(--zone-6); }
+
+.zn-pbars__value {
+  flex: none;
+  min-inline-size: 10ch;
+  text-align: end;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* ── PlanStatsSection ─────────────────────────────────────────────────── */
+
+/* The whole header is the toggle: an outlined card's top band, so it is the
+   card's own edge that frames the target. */
+.zn-pstats__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  padding: var(--sp-9) var(--pad-card);
+
+  text-align: start;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+
+  /* The card draws the corners; the hover fill has to stop short of them. */
+  border-radius: calc(var(--r-3xl) - var(--bw-rule));
+}
+
+.zn-pstats__toggle[aria-expanded="true"] {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.zn-pstats__toggle:hover {
+  background: var(--surface-band);
+}
+
+.zn-pstats__toggle:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-pstats__toggle[aria-expanded="true"] {
+  border-block-end: var(--border-rule);
+}
+
+.zn-pstats__heading {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+/* The facts printed beside the title while the section is shut. */
+.zn-pstats__summary {
+  display: none;
+  gap: var(--sp-5);
+  color: var(--text-faint);
+}
+
+@media (min-width: 640px) {
+  .zn-pstats__summary {
+    display: flex;
+  }
+}
+
+.zn-pstats__chev {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-pstats__toggle[aria-expanded="true"] .zn-pstats__chev {
+  transform: rotate(180deg);
+}
+
+.zn-pstats__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-17);
+  padding-block: var(--pad-card);
+}
+
+/* One measured thing: its mono title, its optional note, its chart. */
+.zn-pstats__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.zn-pstats__title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.zn-pstats__note {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-faint);
+}
+
+/* Eight figures. Two columns hold on a phone: one would make the section a
+   scroll of its own before the first chart. */
+.zn-grid.zn-pstats__grid {
+  --cols: 4;
+  --cols-md: 2;
+  --gap: var(--sp-6);
+}
+
+@media (max-width: 640px) {
+  .zn-grid.zn-pstats__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.zn-pstats__week {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-11);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+.zn-pstats__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-11);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.zn-pstats__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-10);
+
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-pstats__legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+/* The session-type mix, one band per type, widths summing to the plan. */
+.zn-pstats__mix {
+  display: flex;
+  block-size: var(--sp-7);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.zn-pstats__mix-part {
+  inline-size: var(--zn-part-w, 0%);
+  background: var(--zn-part-fill, var(--ink-2));
+}
+
+.zn-pstats__progress {
+  display: flex;
+  flex: 1;
+  min-inline-size: 0;
+  block-size: var(--sp-7);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+/* Success is the one added hue in this system, and completion is what it is
+   for. Skipped is the hatch: time that was planned and not measured. */
+.zn-pstats__progress-done {
+  inline-size: var(--zn-done-w, 0%);
+  background: var(--ok);
+}
+
+.zn-pstats__progress-skipped {
+  inline-size: var(--zn-skipped-w, 0%);
+  background-image: var(--zone-recovery);
+}
+
+.zn-pstats__zones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-17);
+}
+
+@media (max-width: 768px) {
+  .zn-pstats__zones {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.zn-pstats__wait {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--sp-13);
+}
+
+.zn-pstats__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-11);
+  padding-block-start: var(--sp-7);
+  border-block-start: var(--border-divider);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-pstats__meta b {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+@media (pointer: coarse) {
+  .zn-pstats__toggle {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── PlanAuditPanel ───────────────────────────────────────────────────── */
+
+.zn-paudit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.zn-paudit__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  margin: 0;
+  padding: var(--sp-11);
+  list-style: none;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+.zn-paudit__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-5);
+}
+
+.zn-paudit__item + .zn-paudit__item {
+  padding-block-start: var(--sp-5);
+  border-block-start: var(--border-divider);
+}
+
+/* Glyph and word both: the severity never rests on a colour. */
+.zn-paudit__glyph {
+  flex: none;
+  display: grid;
+  place-items: center;
+  margin-block-start: var(--sp-1);
+  color: var(--text-faint);
+}
+
+.zn-paudit__item[data-severity="error"] .zn-paudit__glyph {
+  color: var(--state-danger);
+}
+
+.zn-paudit__item[data-severity="warning"] .zn-paudit__glyph {
+  color: var(--text-body);
+}
+
+.zn-paudit__body {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.zn-paudit__msg {
+  font: var(--type-body-sm);
+  color: var(--text-body);
+}
+
+.zn-paudit__hint {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin: 0;
+
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-paudit__hint > svg {
+  flex: none;
+  margin-block-start: 2px;
+}
+
+.zn-paudit__actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* ── WeekGuidancePanel ────────────────────────────────────────────────── */
+
+/* Dashed, because a guide is a note in the margin rather than a record. */
+.zn-pguide {
+  display: flex;
+  flex-direction: column;
+
+  background: var(--surface-band);
+  border: var(--border-dashed);
+  border-radius: var(--r-xl);
+}
+
+.zn-pguide__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-5) var(--sp-8);
+}
+
+.zn-pguide__nav {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 28px;
+  block-size: 28px;
+  padding: 0;
+
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-pguide__nav:hover:not(:disabled) {
+  color: var(--ink-1);
+}
+
+.zn-pguide__nav:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-pguide__nav:disabled {
+  color: var(--state-disabled-text);
+  cursor: not-allowed;
+}
+
+.zn-pguide__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  flex: 1;
+  min-inline-size: 0;
+  padding: var(--sp-2) 0;
+
+  text-align: start;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.zn-pguide__title {
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.2 var(--font-text);
+  color: var(--text-body);
+}
+
+.zn-pguide__count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-pguide__chev {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-pguide__toggle[aria-expanded="true"] .zn-pguide__chev {
+  transform: rotate(180deg);
+}
+
+.zn-pguide__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: 0 var(--sp-8) var(--sp-8);
+}
+
+.zn-pguide__desc {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-pguide__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-pguide__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  font: var(--type-body-sm);
+  color: var(--text-body);
+}
+
+.zn-pguide__mark {
+  flex: none;
+  inline-size: 16px;
+  block-size: 16px;
+  color: var(--line-axis);
+}
+
+.zn-pguide__item[data-checked="true"] .zn-pguide__mark {
+  color: var(--ok);
+}
+
+.zn-pguide__item[data-checked="true"] .zn-pguide__text {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.zn-pguide__tip {
+  padding: var(--sp-5) var(--sp-6);
+  font: var(--type-caption);
+  color: var(--text-muted);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-pguide__tip-label {
+  font-weight: var(--fw-semibold);
+  color: var(--text-link);
+}
+
+.zn-pguide__cta {
+  align-self: flex-start;
+}
+
+@media (pointer: coarse) {
+  .zn-pguide__nav,
+  .zn-pguide__toggle {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── UnavailabilityManager ────────────────────────────────────────────── */
+
+.zn-punavail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-punavail__empty {
+  margin: 0;
+  padding-block: var(--sp-6);
+  text-align: center;
+  font: var(--type-body-sm);
+  color: var(--text-faint);
+}
+
+.zn-punavail__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: var(--sp-5) var(--sp-6);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-punavail__date {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-punavail__note {
+  min-inline-size: 0;
+  font: var(--type-caption);
+  color: var(--text-faint);
+}
+
+.zn-punavail__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--sp-11);
+
+  background: var(--surface-band);
+  border: var(--border-dashed);
+  border-radius: var(--r-xl);
+}
+
+.zn-punavail__pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+}
+
+/* DateInput renders a Button; it has to fill its column. */
+.zn-punavail__pair .zn-date-input {
+  inline-size: 100%;
+}
+
+.zn-punavail__actions {
+  display: flex;
+  gap: var(--sp-5);
+  justify-content: flex-end;
+}
+
+.zn-punavail__actions[data-align="split"] {
+  justify-content: space-between;
+}
+
+/* ── the RPE ramp, shared by both completion surfaces ─────────────────── */
+
+/* Perceived effort rides the zone ink ramp through rpeColor(), and the fill
+   height says the same thing a second time, the encoding the session profile
+   uses. The numeral sits under the bar rather than on it: a numeral on the
+   Z6 end would need cream, on the Z1 end ink, and one of the two always loses. */
+.zn-prpe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-prpe__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-5);
+}
+
+.zn-prpe__value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-prpe__scale {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-1);
+}
+
+.zn-prpe__step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  flex: 1;
+  min-inline-size: 0;
+  padding: 0;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.zn-prpe__track {
+  display: flex;
+  align-items: flex-end;
+  block-size: var(--sp-14);
+
+  background: var(--surface-card);
+  border: var(--border-hair);
+  border-radius: var(--r-xs);
+  overflow: hidden;
+}
+
+.zn-prpe__fill {
+  inline-size: 100%;
+  block-size: var(--zn-rpe-h, 10%);
+  background: var(--zn-rpe-fill, var(--zone-1));
+}
+
+.zn-prpe__num {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* Le palier choisi porte l'anneau d'ENCRE sur les quatre côtés, jamais un
+   aplat ni une mise à l'échelle. Le vermillon lui est retiré (card.css).
+
+   POURQUOI outline et pas box-shadow inset comme sur les cartes : la jauge
+   contient un enfant peint, .zn-prpe__fill, tiré dans la rampe d'encre des
+   zones. Une ombre INTERNE se dessine sous les enfants, elle serait mangée
+   par le remplissage ; et posée par-dessus, elle disparaîtrait quand même sur
+   un palier à 80 % d'encre. L'outline se pose à l'EXTÉRIEUR de la piste, sur
+   le papier du panneau : il contraste toujours, dans les deux thèmes.
+   L'outline ne participe pas à la mise en page et suit le rayon des coins.
+   Mesuré : la bordure 1 → 2.5px rognait le remplissage de 2px de large et de
+   1.2px de haut à chaque clic ; il ne bouge plus. */
+.zn-prpe__step[data-selected="true"] .zn-prpe__track {
+  outline: var(--bw-rule) solid var(--line-strong);
+  outline-offset: 0;
+}
+
+.zn-prpe__step[data-selected="true"] .zn-prpe__num {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+.zn-prpe__foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-5);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-prpe__reading {
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  text-transform: none;
+  color: var(--text-body);
+}
+
+@media (pointer: coarse) {
+  .zn-prpe__step {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── SessionCompletionPanel ───────────────────────────────────────────── */
+
+/* No padding of its own: inside the sheet the panel already pays --pad-card,
+   and the popover hands the form the whole box. */
+.zn-pcomplete {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
+}
+
+/* The popover variant is the same form in a 320px column, so it buys its own
+   padding and drops the stack to the tighter step. */
+.zn-pcomplete[data-compact="true"] {
+  gap: var(--sp-8);
+  padding: var(--pad-card-sm);
+}
+
+.zn-pcomplete__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.zn-pcomplete__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-pcomplete[data-compact="true"] .zn-pcomplete__title {
+  font-size: var(--fs-body);
+}
+
+.zn-pcomplete__sub {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-pcomplete__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-9);
+}
+
+.zn-pcomplete__choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-pcomplete__choice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  padding: var(--sp-6);
+
+  text-align: start;
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-pcomplete__choice:hover[aria-checked="false"] {
+  background: var(--surface-band);
+}
+
+.zn-pcomplete__choice:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* Chosen is a full ink inversion, the system's other way of saying selected,
+   and the right one here because the vermillon belongs to the save button. */
+.zn-pcomplete__choice[aria-checked="true"] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.zn-pcomplete__radio {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 16px;
+  block-size: 16px;
+  margin-block-start: 2px;
+
+  border: var(--border-rule);
+  border-color: currentColor;
+  border-radius: var(--r-pill);
+}
+
+.zn-pcomplete__radio::after {
+  content: "";
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: var(--r-pill);
+  background: currentColor;
+  transform: scale(0);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-pcomplete__choice[aria-checked="true"] .zn-pcomplete__radio::after {
+  transform: scale(1);
+}
+
+.zn-pcomplete__label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.zn-pcomplete__name {
+  font: var(--type-label);
+}
+
+.zn-pcomplete__hint {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-pcomplete__choice[aria-checked="true"] .zn-pcomplete__hint {
+  color: inherit;
+}
+
+.zn-pcomplete__actual {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+  padding: var(--sp-8);
+
+  background: var(--surface-band);
+  border: var(--border-dashed);
+  border-radius: var(--r-lg);
+}
+
+.zn-pcomplete__foot {
+  display: flex;
+  gap: var(--sp-5);
+  padding-block-start: var(--sp-6);
+  border-block-start: var(--border-divider);
+}
+
+.zn-pcomplete__foot > * {
+  flex: 1;
+}
+
+/* 320px is the width the anchored panel already claims next to a calendar
+   checkbox; the popover's own default is narrower than this form needs. */
+.zn-popover.zn-pcomplete-pop {
+  inline-size: 320px;
+  padding: 0;
+}
+
+/* ── CompletionFeedbackCard ───────────────────────────────────────────── */
+
+/* A card that arrives over the page and leaves on its own: a floating surface,
+   so it is one of the few places the hard offset is allowed. */
+.zn-pfeedback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-block);
+
+  animation: zoned-slide-in var(--dur-slow) var(--ease-out);
+}
+
+@keyframes zn-pfeedback-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(var(--sp-4)); }
+}
+
+.zn-pfeedback[data-leaving="true"] {
+  animation: zn-pfeedback-out var(--dur-slow) var(--ease-out) forwards;
+}
+
+.zn-pfeedback__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  text-align: center;
+}
+
+.zn-pfeedback__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-pfeedback__sub {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-pfeedback__actions {
+  display: flex;
+  gap: var(--sp-5);
+}
+
+.zn-pfeedback__actions > * {
+  flex: 1;
+}
+
+/* ── LastChangePanel ──────────────────────────────────────────────────── */
+
+/* An Alert carries it: something happened, and here is the way back. Only the
+   title has to stop wrapping into three lines. */
+.zn-plast .zn-alert__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-plast .zn-alert__action {
+  margin-block-start: 0;
+}
+
+/* ── the preview dialogs ──────────────────────────────────────────────── */
+
+.zn-ppreview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.zn-ppreview__summary {
+  margin: 0;
+  padding: var(--sp-8);
+  font: var(--type-body-sm);
+  color: var(--text-body);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-ppreview__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-block-size: 40vh;
+  overflow-y: auto;
+}
+
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-ppreview__list > * {
+  flex: none;
+}
+
+.zn-ppreview__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: var(--sp-5) var(--sp-6);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-ppreview__week {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-ppreview__label {
+  min-inline-size: 0;
+  font: var(--type-label);
+  color: var(--text-body);
+}
+
+/* The one change that is unambiguously good news gets the success hue; every
+   other kind stays ink, because the word already says which way it went. */
+.zn-ppreview__label[data-tone="up"] {
+  color: var(--ok);
+}
+
+.zn-ppreview__label[data-tone="quiet"] {
+  color: var(--text-muted);
+}
+
+.zn-ppreview__flag {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--text-faint);
+}
+
+.zn-ppreview__empty {
+  margin: 0;
+  padding-block: var(--sp-13);
+  text-align: center;
+  font: var(--type-body-sm);
+  color: var(--text-faint);
+}
+
+.zn-dialog.zn-pdialog {
+  max-block-size: 85vh;
+  overflow-y: auto;
+}
+
+/* ── the picker dialogs (substitute / swap) ───────────────────────────── */
+
+.zn-dialog.zn-pdialog--list {
+  max-block-size: 80vh;
+  overflow: hidden;
+}
+
+.zn-ppick {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  flex: 1;
+  min-block-size: 0;
+}
+
+.zn-ppick__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  max-block-size: 96px;
+  overflow-y: auto;
+}
+
+.zn-ppick__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+/* Not compressible: a scrolling flex column squeezes its children before it
+   gives them a scrollbar, and WebKit does not hold them at min-content the way
+   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
+.zn-ppick__list > * {
+  flex: none;
+}
+
+.zn-ppick__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  padding: var(--sp-6) var(--sp-8);
+
+  text-align: start;
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-ppick__item:hover {
+  background: var(--surface-band);
+}
+
+.zn-ppick__item:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-ppick__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.zn-ppick__name {
+  font: var(--type-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-ppick__meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-ppick__wait,
+.zn-ppick__empty {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--sp-15);
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-faint);
+}
+
+@media (pointer: coarse) {
+  .zn-ppick__item {
+    min-block-size: var(--hit-min);
+  }
+}

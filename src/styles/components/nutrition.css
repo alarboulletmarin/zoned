@@ -1,0 +1,846 @@
+/* Nutrition, the hub and its fifteen editorial visuals.
+ *
+ * This was the app's densest use of decorative colour: nine hues of gradient
+ * card, tinted icon boxes, coloured verdict dots. It is now ink on paper like
+ * everything else, and the information those hues carried is re-encoded in the
+ * two channels the system actually has:
+ *
+ *   ORDINAL  -> the zone ink ramp (--zone-1 .. --zone-6). A caffeine timeline,
+ *               a gut-training progression, a race week counting down to J0
+ *               and the AIS evidence ladder are all ordered scales, which is
+ *               exactly what the ramp is for. `.zn-nut-ramp[data-step]` is the
+ *               single place those six values are read; no component
+ *               re-derives an ink level.
+ *   ABSENT   -> the 45 degree hatch (--zone-recovery). AIS category D means
+ *               "no evidence": unmeasured, so it gets the unmeasured mark.
+ *
+ * Emphasis follows the system's two allowed marks and nothing else: a full ink
+ * inversion (the current section in the table of contents, the corrected claim
+ * in CrampsScience) or a 2.5px vermillon frame (the recommended carb ratio,
+ * race day). No gradient, no blur, no shadow, every card here lies flat on
+ * the page and its 1.5px outline is what makes it a thing.
+ *
+ * Layout comes from _layout.css (.zn-grid, .zn-row, .zn-stack, .zn-cluster)
+ * and type from _type.css; this file only paints what those cannot say.
+ */
+
+/* ── shared pieces ────────────────────────────────────────────────────── */
+
+/* The paper card every visual is built from: heat protocols, supplements,
+   women's insights, a race-week day, a ratio. One shape, so fourteen sections
+   read as one page rather than as fourteen widgets. */
+.zn-nut-card {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  block-size: 100%;
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* The recommended option, the race day: a 2.5px vermillon frame. A frame, not
+   a fill, the screen's one vermillon fill is the hero's calculator button. */
+.zn-nut-card[data-emphasis="accent"] {
+  border: var(--border-heavy);
+}
+
+/* The claim that is true: a full ink inversion, the system's other emphasis. */
+.zn-nut-card[data-emphasis="ink"] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.zn-nut-card[data-emphasis="ink"] .zn-nut-card__title,
+.zn-nut-card[data-emphasis="ink"] .zn-nut-card__text,
+.zn-nut-card[data-emphasis="ink"] .zn-kicker {
+  color: inherit;
+}
+
+.zn-nut-card__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h4) / 1.15 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-nut-card__text {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* The "recommended" flag, printed on the frame it belongs to. Vermillon type
+   at the mono micro-label step, on the card's own paper so the rule it sits on
+   stays readable behind it. */
+.zn-nut-card__flag {
+  position: absolute;
+  inset-block-start: calc(var(--sp-4) * -1);
+  inset-inline-end: var(--sp-6);
+  padding-inline: var(--sp-3);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-link);
+  background: var(--surface-card);
+}
+
+/* The outlined square an icon lives in. Replaces nine tinted variants with
+   one: the glyph is ink, the box is drawn, and that is the whole idea. */
+.zn-nut-glyph {
+  inline-size: 38px;
+  block-size: 38px;
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+.zn-nut-glyph > svg {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+.zn-nut-glyph[data-size="sm"] {
+  inline-size: 30px;
+  block-size: 30px;
+}
+
+.zn-nut-glyph[data-size="sm"] > svg {
+  inline-size: 15px;
+  block-size: 15px;
+}
+
+/* A short fact in a box: a duration, a dose, a verdict. Mono, uppercase,
+   outlined, the badge shape without pulling <Badge> into a data cell. */
+.zn-nut-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  inline-size: fit-content;
+  flex: none;
+  white-space: nowrap;
+
+  padding: 4px 9px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+  background: var(--surface-card);
+  color: var(--text-body);
+}
+
+/* A number you are meant to remember: mono, tabular, big. */
+.zn-nut-figure {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h2);
+  line-height: 1.05;
+  letter-spacing: var(--ls-h2);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-nut-figure[data-size="lg"] {
+  font-size: var(--fs-display-3);
+  letter-spacing: var(--ls-display-3);
+}
+
+.zn-nut-figure[data-size="sm"] {
+  font-size: var(--fs-h4);
+  letter-spacing: var(--ls-h4);
+}
+
+/* The unit rides along at body size: "90 g/h" is one number and one word, not
+   two numbers. */
+.zn-nut-figure__unit {
+  margin-inline-start: var(--sp-2);
+  font-family: var(--font-text);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-regular);
+  letter-spacing: normal;
+  color: var(--text-faint);
+}
+
+/* An ordered list used as a grid: the semantics stay, the markers go. */
+.zn-nut-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The footnote under a visual. .zn-source carries the face; this only zeroes
+   the paragraph margin, which Tailwind's preflight happens to zero today and
+   will stop zeroing the day it leaves. */
+.zn-nut-foot {
+  margin: 0;
+}
+
+/* Same reason, for a kicker rendered as a paragraph rather than a span. */
+.zn-nut-panel > .zn-kicker,
+.zn-nut-toc > .zn-kicker {
+  display: block;
+  margin: 0;
+}
+
+/* A helper line printed under a tag inside a table cell. */
+.zn-nut-tag + .zn-caption {
+  margin-block-start: var(--sp-2);
+}
+
+/* ── the ordinal ramp ─────────────────────────────────────────────────── */
+
+/* Position on an ordered scale, painted with the zone ink ramp: darker is
+   further along. Six steps, written out rather than interpolated, the same
+   reason zone.css writes its six out. Nothing here claims to be a training
+   zone, so the page shows no ZoneScale legend; these are steps of a caffeine
+   protocol, a countdown and an evidence ladder. */
+.zn-nut-ramp {
+  background: var(--zn-ramp-fill, var(--surface-band));
+  color: var(--zn-ramp-ink, var(--text-body));
+}
+
+.zn-nut-ramp[data-step="1"] { --zn-ramp-fill: var(--zone-1-bg); --zn-ramp-ink: var(--zone-1-text); }
+.zn-nut-ramp[data-step="2"] { --zn-ramp-fill: var(--zone-2-bg); --zn-ramp-ink: var(--zone-2-text); }
+.zn-nut-ramp[data-step="3"] { --zn-ramp-fill: var(--zone-3-bg); --zn-ramp-ink: var(--zone-3-text); }
+.zn-nut-ramp[data-step="4"] { --zn-ramp-fill: var(--zone-4-bg); --zn-ramp-ink: var(--zone-4-text); }
+.zn-nut-ramp[data-step="5"] { --zn-ramp-fill: var(--zone-5-bg); --zn-ramp-ink: var(--zone-5-text); }
+.zn-nut-ramp[data-step="6"] { --zn-ramp-fill: var(--zone-6-bg); --zn-ramp-ink: var(--zone-6-text); }
+
+/* The second, redundant channel: a bar whose height says what its ink density
+   says, so the progression survives greyscale exactly as a session profile
+   does. Heights are the zone block heights, not a new table. */
+.zn-nut-bar {
+  display: flex;
+  align-items: flex-end;
+  block-size: 26px;
+  padding-inline: 2px;
+
+  border: var(--border-hair);
+  border-radius: var(--r-xs);
+  background: var(--surface-band);
+  overflow: hidden;
+}
+
+.zn-nut-bar__fill {
+  display: block;
+  inline-size: 100%;
+  block-size: var(--zn-bar-h, var(--zone-h-1));
+  background: var(--zn-bar-fill, var(--zone-1));
+  border-radius: 2px 2px 0 0;
+}
+
+.zn-nut-bar__fill[data-step="1"] { --zn-bar-fill: var(--zone-1); --zn-bar-h: var(--zone-h-1); }
+.zn-nut-bar__fill[data-step="2"] { --zn-bar-fill: var(--zone-2); --zn-bar-h: var(--zone-h-2); }
+.zn-nut-bar__fill[data-step="3"] { --zn-bar-fill: var(--zone-3); --zn-bar-h: var(--zone-h-3); }
+.zn-nut-bar__fill[data-step="4"] { --zn-bar-fill: var(--zone-4); --zn-bar-h: var(--zone-h-4); }
+.zn-nut-bar__fill[data-step="5"] { --zn-bar-fill: var(--zone-5); --zn-bar-h: var(--zone-h-5); }
+.zn-nut-bar__fill[data-step="6"] { --zn-bar-fill: var(--zone-6); --zn-bar-h: var(--zone-h-6); }
+
+/* ── hero ─────────────────────────────────────────────────────────────── */
+
+/* No gradient wash, no 300px translucent fork behind the words. The hero is a
+   sheet of card paper with a kicker, a title and one action. */
+.zn-nut-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-11);
+  padding: var(--sp-17) var(--sp-15);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+@media (max-width: 640px) {
+  .zn-nut-hero {
+    padding: var(--sp-14) var(--sp-10);
+  }
+}
+
+.zn-nut-hero__actions {
+  margin-block-start: var(--sp-2);
+}
+
+/* ── theme grid ───────────────────────────────────────────────────────── */
+
+/* Fourteen doors to the fourteen sections below. Same paper as .zn-nut-card;
+   it earns its own class only because the whole tile is a link. */
+.zn-nut-theme {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  block-size: 100%;
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  text-decoration: none;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-nut-theme:hover {
+  background: var(--surface-band);
+}
+
+.zn-nut-theme:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-nut-theme__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body) / 1.2 var(--font-text);
+  letter-spacing: normal;
+}
+
+.zn-nut-theme__tagline {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+@media (pointer: coarse) {
+  .zn-nut-theme {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── table of contents ────────────────────────────────────────────────── */
+
+.zn-nut-toc__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: var(--sp-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-nut-toc__link {
+  display: block;
+  padding: var(--sp-3) var(--sp-5);
+
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+
+  border: var(--bw-rule) solid transparent;
+  border-radius: var(--r-sm);
+  transition:
+    background var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.zn-nut-toc__link:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+/* The section you are reading: a full ink inversion. Never a faint tint,
+   a tint is what the design brief calls unfinished. */
+.zn-nut-toc__link[aria-current="true"] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  font-weight: var(--fw-medium);
+}
+
+/* ── theme section ────────────────────────────────────────────────────── */
+
+/* 96px of scroll margin parks an anchored section below the fixed 56px TopBar
+   with the screen's own 40px margin to spare. */
+.zn-nut-section {
+  scroll-margin-block-start: calc(var(--sp-18) + var(--sp-15));
+}
+
+/* ── go-deeper strip ──────────────────────────────────────────────────── */
+
+.zn-nut-cta {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  block-size: 100%;
+  padding: var(--pad-card-sm);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  text-decoration: none;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-nut-cta:hover {
+  background: var(--surface-band);
+}
+
+.zn-nut-cta:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-nut-cta__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-faint);
+}
+
+.zn-nut-cta__head > svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+}
+
+/* The arrow is the promise, in vermillon, and it is the only thing that moves:
+   120ms, colour and a nudge along its own axis. Nothing scales. */
+.zn-nut-cta:hover .zn-nut-cta__arrow {
+  color: var(--text-link);
+  transform: translateX(3px);
+}
+
+.zn-nut-cta__arrow {
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-nut-cta__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.25 var(--font-text);
+}
+
+.zn-nut-cta__sub {
+  margin: var(--sp-1) 0 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+@media (pointer: coarse) {
+  .zn-nut-cta {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── stepped panels: caffeine, protein timing, gut training ───────────── */
+
+/* The framed panel a timeline sits in. */
+.zn-nut-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-11);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+@media (max-width: 640px) {
+  .zn-nut-panel {
+    padding: var(--pad-card-sm);
+  }
+}
+
+/* A vertical protocol. The connector is a hairline drawn behind the marks,
+   which is why it is a pseudo-element and not the absolutely positioned span
+   the Tailwind version carried. */
+.zn-nut-steps {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-nut-steps::before {
+  content: "";
+  position: absolute;
+  inset-block: 16px;
+  /* half of the 32px mark, minus half the rule: the line runs through the
+     centre of the discs. */
+  inset-inline-start: calc(16px - (var(--bw-rule) / 2));
+  inline-size: var(--bw-rule);
+  background: var(--line-divider);
+}
+
+.zn-nut-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+}
+
+.zn-nut-step__mark {
+  position: relative;
+  inline-size: 32px;
+  block-size: 32px;
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+.zn-nut-step__mark > svg {
+  inline-size: 15px;
+  block-size: 15px;
+}
+
+.zn-nut-step__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding-block-start: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.zn-nut-step__time {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-nut-step__text {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* One phase of a progression: an index on the ramp, the figure, the detail. */
+.zn-nut-phase {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  block-size: 100%;
+  padding: var(--sp-8);
+
+  background: var(--surface-page);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+}
+
+.zn-nut-phase__index {
+  inline-size: 24px;
+  block-size: 24px;
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+/* ── note ─────────────────────────────────────────────────────────────── */
+
+/* A caution printed under the thing it qualifies. Sunken paper and an outline,
+   never a vermillon panel: the accent belongs to the primary action. */
+.zn-nut-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  padding: var(--sp-7) var(--sp-8);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+.zn-nut-note__glyph {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  margin-block-start: 2px;
+  color: var(--text-body);
+}
+
+.zn-nut-note__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+}
+
+.zn-nut-note__title {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.3 var(--font-text);
+}
+
+.zn-nut-note__list {
+  margin: 0;
+  padding-inline-start: var(--sp-9);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-nut-note__list > li {
+  margin-block-start: var(--sp-1);
+}
+
+/* ── race week ────────────────────────────────────────────────────────── */
+
+/* Eight days scroll sideways on a phone and become a row of eight on a wide
+   screen. The page itself never moves: the scroll lives in this box. */
+.zn-nut-week {
+  padding-block-end: var(--sp-2);
+  scroll-snap-type: x mandatory;
+}
+
+.zn-nut-week__track {
+  display: flex;
+  gap: var(--sp-6);
+  inline-size: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zn-nut-week__day {
+  inline-size: 200px;
+  flex: none;
+  scroll-snap-align: start;
+}
+
+/* A 200px day card carries a label, not a heading: the display step would eat
+   the column. */
+.zn-nut-week__day .zn-nut-card__title {
+  font: var(--fw-semibold) var(--fs-body-sm) / 1.25 var(--font-text);
+  letter-spacing: normal;
+}
+
+.zn-nut-week__icon {
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* The day chip: a countdown position on the ramp, J-7 faint through J0 solid. */
+.zn-nut-week__chip {
+  padding: 3px 8px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+}
+
+/* Two classes, so this beats .zn-scroll-x whatever order the orchestrator
+   imports the two files in. */
+@media (min-width: 1024px) {
+  .zn-nut-week.zn-scroll-x {
+    overflow: visible;
+  }
+  .zn-nut-week__track {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: var(--sp-4);
+    inline-size: auto;
+  }
+  .zn-nut-week__day {
+    inline-size: auto;
+  }
+}
+
+/* ── supplements ──────────────────────────────────────────────────────── */
+
+/* The AIS evidence ladder, A to D, on the ramp: A is solid ink, D is the
+   45 degree hatch the system reserves for the unmeasured, which is exactly
+   what category D means. */
+.zn-nut-ais {
+  inline-size: 26px;
+  block-size: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+  background: var(--surface-card);
+  color: var(--text-body);
+}
+
+.zn-nut-ais[data-ais="A"] { background: var(--zone-6-bg); color: var(--zone-6-text); }
+.zn-nut-ais[data-ais="B"] { background: var(--zone-4-bg); color: var(--zone-4-text); }
+.zn-nut-ais[data-ais="C"] { background: var(--zone-2-bg); color: var(--zone-2-text); }
+.zn-nut-ais[data-ais="D"] { background-image: var(--zone-recovery); }
+
+.zn-nut-supp__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-5);
+  margin-block-start: auto;
+  padding-block-start: var(--sp-5);
+  border-block-start: var(--border-divider);
+}
+
+.zn-nut-supp__fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.zn-nut-supp__value {
+  margin: 0;
+  font: var(--fw-medium) var(--fs-caption) / 1.35 var(--font-text);
+}
+
+/* A supplement whose glossary term exists is a link. The anchor is a bare box;
+   the card inside keeps drawing its own frame. */
+.zn-nut-supp-link {
+  display: block;
+  block-size: 100%;
+  border-radius: var(--r-xl);
+  text-decoration: none;
+  color: inherit;
+}
+
+.zn-nut-supp-link:hover .zn-nut-card {
+  background: var(--surface-band);
+}
+
+.zn-nut-supp-link:active .zn-nut-card {
+  transform: translateY(var(--press-shift));
+}
+
+/* ── myths ────────────────────────────────────────────────────────────── */
+
+.zn-nut-myth {
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  block-size: 100%;
+}
+
+.zn-nut-myth[open] {
+  background: var(--surface-band);
+}
+
+.zn-nut-myth__summary {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  padding: var(--pad-card-sm);
+  cursor: pointer;
+  list-style: none;
+}
+
+.zn-nut-myth__summary::-webkit-details-marker {
+  display: none;
+}
+
+.zn-nut-myth__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The claim, quoted. Kept at interface weight: it is someone else's words,
+   not the page's. */
+.zn-nut-myth__claim {
+  font: var(--fw-medium) var(--fs-body-sm) / 1.4 var(--font-text);
+}
+
+.zn-nut-myth__chevron {
+  flex: none;
+  font-size: var(--fs-caption);
+  line-height: 1;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-nut-myth[open] .zn-nut-myth__chevron {
+  transform: rotate(180deg);
+}
+
+.zn-nut-myth__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--pad-card-sm);
+  border-block-start: var(--border-divider);
+}
+
+@media (pointer: coarse) {
+  .zn-nut-myth__summary {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── session recommendations ──────────────────────────────────────────── */
+
+/* The before / during / after block on a workout page. The tabs are already
+   the ported .zn-tabs; only the list of advice is painted here. */
+.zn-nut-rec__panel {
+  padding-block-start: var(--sp-8);
+}
+
+.zn-nut-rec__list {
+  margin: 0;
+  padding-inline-start: var(--sp-9);
+  list-style: disc;
+}
+
+.zn-nut-rec__list > li {
+  margin-block-start: var(--sp-3);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-nut-rec__label > svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  color: var(--text-faint);
+}

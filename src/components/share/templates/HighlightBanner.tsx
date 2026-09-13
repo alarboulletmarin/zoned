@@ -1,5 +1,5 @@
 /**
- * HighlightBanner — 1080×360. Wide horizontal sticker designed to sit
+ * HighlightBanner, 1080×360. Wide horizontal sticker designed to sit
  * across the bottom of a user's own landscape photo.
  *
  * Compact: workout name + zone pill on the left, 3 stats on the right.
@@ -9,8 +9,7 @@
 import { usePickLang } from "@/lib/i18n-utils";
 import { formatDurationMinutes } from "@/components/visualization";
 import { getWorkoutHero } from "@/lib/export/workoutHero";
-import { BgLayer, ZONE_HEX, ZONE_BG_TINT } from "./_shared";
-import Logo from "@/assets/logo.svg?react";
+import { BrandMark, BgLayer, ZONE_HEX, ZONE_BG_TINT } from "./_shared";
 import type { ShareTemplateProps } from "../shareTemplates";
 
 const W = 1080;
@@ -42,7 +41,7 @@ export function HighlightBanner({ workout, transparent }: ShareTemplateProps) {
     >
       <BgLayer />
 
-      {/* Card with soft shadow — stays visible in transparent mode so the
+      {/* Card with soft shadow, stays visible in transparent mode so the
           banner reads cleanly when overlaid on a photo (only the
           editorial canvas around it drops out). */}
       <div
@@ -71,10 +70,7 @@ export function HighlightBanner({ workout, transparent }: ShareTemplateProps) {
         {/* Left: brand + name */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Logo style={{ width: 56, height: 28 }} />
-            <span style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em" }}>
-              ZONED
-            </span>
+            <BrandMark height={24} />
             <span
               style={{
                 marginLeft: 8,

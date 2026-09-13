@@ -1,7 +1,7 @@
 /**
  * Deterministic randomness for plan generation.
  *
- * The generator uses randomness only to break ties — picking among equally
+ * The generator uses randomness only to break ties, picking among equally
  * fresh workouts so two plans with the same config do not look identical.
  * That is fine locally, but it makes a plan unreproducible, which breaks
  * sharing a plan by its config: the recipient would regenerate a *different*

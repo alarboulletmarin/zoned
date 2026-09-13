@@ -144,7 +144,7 @@ const MAX_CANDIDATE_ATTEMPTS_FACTOR = 2;
 /**
  * When a target ascent is provided we widen the candidate pool so the
  * scoring step has enough material to actually pick a route close to the
- * D+ goal — without it the slot would be filled by the first three
+ * D+ goal, without it the slot would be filled by the first three
  * generations regardless of elevation.
  */
 const ASCENT_AWARE_OVERSAMPLE = 2;
@@ -152,13 +152,13 @@ const ASCENT_AWARE_OVERSAMPLE = 2;
 /**
  * Generate route candidates by varying the seed (loops) or the bearing
  * (out-and-backs). Each candidate is checked against a generous distance
- * window — generations that miss the target by more than 20% are dropped
+ * window, generations that miss the target by more than 20% are dropped
  * and replaced with a fresh attempt (within a budget) so the UI never
  * proposes a 12 km route when the user asked for 8 km.
  *
  * When `elevationGainTargetM` is provided we oversample the pool and rank
  * by a combined distance + ascent error before slicing the top {@link count}
- * — distance stays the dominant criterion but ascent now actually filters.
+ *, distance stays the dominant criterion but ascent now actually filters.
  */
 export async function generateRouteCandidates(args: {
   start: RouteCoordinate;
@@ -201,7 +201,7 @@ export async function generateRouteCandidates(args: {
   // at once so the user-perceived latency drops from N×(routing latency) to
   // ~max(routing latency). If the first wave doesn't produce enough valid
   // candidates (rejected by distance slack, killed by UnreachableTurnError),
-  // we launch a follow-up wave with the next seeds — up to `maxAttempts`
+  // we launch a follow-up wave with the next seeds, up to `maxAttempts`
   // total. The wave size is capped at `generationTarget` so we never run
   // more than the public Brouter can handle in flight (≈3-6 concurrent).
   const accepted: Array<{ route: Route; deviation: number; score: number }> = [];
@@ -260,8 +260,8 @@ export async function generateRouteCandidates(args: {
 
 /**
  * Combined cost used to rank candidates. Lower is better. The distance
- * mismatch dominates by design — a beautiful 12 km loop is useless when the
- * user asked for 8 km — but ascent error adds a soft secondary penalty so
+ * mismatch dominates by design, a beautiful 12 km loop is useless when the
+ * user asked for 8 km, but ascent error adds a soft secondary penalty so
  * a target D+ stops being purely cosmetic.
  */
 function candidateError(
@@ -289,7 +289,7 @@ function deriveElevationBounds(elevationGainTargetM?: number): Pick<RouteConstra
  * Re-route an arbitrary list of waypoints through Brouter and produce a
  * fresh {@link Route}. Used by the in-app editor: when the user drags or
  * inserts a waypoint, the new waypoint list is sent here and the resulting
- * trace replaces the candidate on screen — no triangulation, no convergence
+ * trace replaces the candidate on screen, no triangulation, no convergence
  * loop, just whatever Brouter routes between the points.
  *
  * For loops, the caller is expected to pass the start as both the first and

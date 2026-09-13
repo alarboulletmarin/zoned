@@ -3,7 +3,7 @@
  * with React state so component trees re-render when routes are saved or
  * deleted from anywhere in the app.
  *
- * The underlying storage is now IndexedDB and therefore async — the hook
+ * The underlying storage is now IndexedDB and therefore async, the hook
  * still exposes a synchronous `routes` snapshot (rehydrated on mount and
  * after every mutation) plus async `saveRoute` / `deleteRoute` mutators
  * that resolve to `boolean` (success/failure) once the write has landed.
@@ -30,7 +30,7 @@ function notifyOtherTabs(): void {
     channel.postMessage({ type: "routes:changed" });
     channel.close();
   } catch {
-    // BroadcastChannel might not be available — best-effort sync only.
+    // BroadcastChannel might not be available, best-effort sync only.
   }
 }
 

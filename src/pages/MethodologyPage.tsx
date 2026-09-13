@@ -1,5 +1,6 @@
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { ExternalLink, FlaskConical, BookOpen, GraduationCap, Activity } from "@/components/icons";
+import { ExternalLink } from "@/components/icons";
 import {
   Card,
   CardContent,
@@ -9,15 +10,17 @@ import {
 } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { ZoneBadge } from "@/components/domain/ZoneBadge";
+import { ZoneFigures } from "@/components/domain/ZoneFigures";
 import { usePickLang } from "@/lib/i18n-utils";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import type { ZoneNumber } from "@/types";
 
 // ---------------------------------------------------------------------------
 // Zone data
 // ---------------------------------------------------------------------------
 
 interface ZoneInfo {
-  zone: number;
+  zone: ZoneNumber;
   nameFr: string;
   nameEn: string;
   marker: string;
@@ -115,8 +118,8 @@ const researchers: Researcher[] = [
   },
   {
     name: "Jack Daniels",
-    contributionFr: "Système VDOT et zones d'entraînement (1933–2025)",
-    contributionEn: "VDOT system and training zones (1933–2025)",
+    contributionFr: "Système VDOT et zones d'entraînement (1933-2025)",
+    contributionEn: "VDOT system and training zones (1933-2025)",
     publicationFr: "Livre : \"Daniels' Running Formula\"",
     publicationEn: "Book: \"Daniels' Running Formula\"",
   },
@@ -267,28 +270,6 @@ const resources: ResourceGroup[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Zone border color mapping (Tailwind can't generate dynamic class names)
-// ---------------------------------------------------------------------------
-
-const zoneTextClasses: Record<number, string> = {
-  1: "text-zone-1",
-  2: "text-zone-2",
-  3: "text-zone-3",
-  4: "text-zone-4",
-  5: "text-zone-5",
-  6: "text-zone-6",
-};
-
-const zoneBgClasses: Record<number, string> = {
-  1: "bg-zone-1/10",
-  2: "bg-zone-2/10",
-  3: "bg-zone-3/10",
-  4: "bg-zone-4/10",
-  5: "bg-zone-5/10",
-  6: "bg-zone-6/10",
-};
-
-// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
@@ -319,134 +300,150 @@ export function MethodologyPage() {
         ]}
       />
 
-      <div className="py-8 space-y-12 max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="p-2.5 rounded-xl bg-primary/10">
-              <FlaskConical className="size-6 text-primary" />
-            </div>
-          </div>
-          <EditorialTitle as="h1">
+      <div className="zn-guide">
+        {/* 1, what this page is, and how much of it is cited */}
+        <section
+          className="zn-stack zn-guide__head"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("content:methodology.kicker", { n: studies.length })}
+          </span>
+          <h1 className="zn-display" data-level="2">
             {t("content:methodology.heading")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          </h1>
+          <p className="zn-body zn-body--lead zn-guide__lede">
             {t("content:methodology.intro")}
-          </FadeUp>
-        </div>
+          </p>
+        </section>
 
-        {/* Section 1: Our Approach */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-500/10">
-              <Activity className="size-5 text-blue-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.ourApproach")}
-            </h2>
-          </div>
-          <div className="text-muted-foreground space-y-3 pl-12">
+        {/* 2, the approach, as prose. The reading treatment is the article
+            block: same measure, same rhythm, same pulled-out caution. */}
+        <section className="zn-guide__band" aria-labelledby="meth-approach">
+          <h2
+            id="meth-approach"
+            className="zn-title zn-guide__bandhead"
+            data-level="2"
+          >
+            {t("content:methodology.ourApproach")}
+          </h2>
+
+          <div className="zn-prose zn-measure">
             <GlossaryLinkedText
               as="p"
+              className="zn-prose__p"
               text={t("content:methodology.ourApproachText1")}
             />
             <GlossaryLinkedText
               as="p"
+              className="zn-prose__p"
               text={t("content:methodology.ourApproachText2")}
             />
-            <GlossaryLinkedText
-              as="p"
-              className="text-sm italic border-l-2 border-primary/30 pl-4"
-              text={t("content:methodology.ourApproachDisclaimer")}
-            />
+            <aside className="zn-prose__callout" data-kind="warning">
+              <span className="zn-kicker zn-prose__callout-label">
+                {t("content:article.callout.warning")}
+              </span>
+              <GlossaryLinkedText
+                as="p"
+                className="zn-prose__callout-text"
+                text={t("content:methodology.ourApproachDisclaimer")}
+              />
+            </aside>
           </div>
         </section>
 
-        {/* Section 2: The 6 Zones */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-orange-500/10">
-              <Activity className="size-5 text-orange-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.sixZones")}
-            </h2>
-          </div>
+        {/* 3, the six zones. The scale names the ink ramp once, then each
+            zone is read on its own card in the ramp's own order. */}
+        <section className="zn-guide__band" aria-labelledby="meth-zones">
+          <h2
+            id="meth-zones"
+            className="zn-title zn-guide__bandhead"
+            data-level="2"
+          >
+            {t("content:methodology.sixZones")}
+          </h2>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* La planche ouvre la bande, dans le flux et pas dans une carte
+              grise, un dessin dans une boîte se lit comme une vignette. Les
+              six postures disent la montée en effort, et les graduations sous
+              la règle les nomment : la planche est la légende. Une seule
+              figure par champ de vision, les cartes n'en portent pas. */}
+          <ZoneFigures
+            label={t("content:methodology.figuresLabel")}
+            className="zn-guide__figures"
+          />
+
+          <div className="zn-grid">
             {zones.map((z) => (
-              <div
-                key={z.zone}
-                className={`rounded-xl border border-border/50 bg-gradient-to-br from-zone-${z.zone}/10 dark:from-zone-${z.zone}/20 to-transparent p-5 space-y-3`}
-              >
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`inline-flex items-center justify-center size-8 rounded-full text-sm font-bold ${zoneBgClasses[z.zone]} ${zoneTextClasses[z.zone]}`}
-                  >
-                    Z{z.zone}
-                  </span>
-                  <h3 className="font-semibold">
+              <div key={z.zone} className="zn-guide__zone">
+                <div
+                  className="zn-row"
+                  style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+                >
+                  <ZoneBadge zone={z.zone} />
+                  <h3 className="zn-title zn-fill zn-truncate" data-level="4">
                     {pickLang(z, "name")}
                   </h3>
                 </div>
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <span className="font-medium text-foreground">
-                      {t("content:methodology.marker")}
-                    </span>{" "}
-                    <GlossaryLinkedText
-                      className="text-muted-foreground"
-                      text={pickLang(z, "marker")}
-                    />
-                  </div>
-                  <div>
-                    <span className="font-medium text-foreground">
-                      {t("content:methodology.develops")}
-                    </span>{" "}
-                    <GlossaryLinkedText
-                      className="text-muted-foreground"
-                      text={pickLang(z, "develops")}
-                    />
-                  </div>
+
+                <div className="zn-guide__fact">
+                  <span className="zn-kicker">
+                    {t("content:methodology.marker")}
+                  </span>
+                  <GlossaryLinkedText
+                    className="zn-body zn-body--sm zn-muted"
+                    text={pickLang(z, "marker")}
+                  />
+                </div>
+
+                <div className="zn-guide__fact">
+                  <span className="zn-kicker">
+                    {t("content:methodology.develops")}
+                  </span>
+                  <GlossaryLinkedText
+                    className="zn-body zn-body--sm zn-muted"
+                    text={pickLang(z, "develops")}
+                  />
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Section 3: Key Researchers & Methods */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-purple-500/10">
-              <GraduationCap className="size-5 text-purple-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.researchers")}
-            </h2>
-          </div>
+        {/* 4, who did the work. The publication is printed in the source
+            face under the contribution it backs, not asserted as prose. */}
+        <section className="zn-guide__band" aria-labelledby="meth-researchers">
+          <h2
+            id="meth-researchers"
+            className="zn-title zn-guide__bandhead"
+            data-level="2"
+          >
+            {t("content:methodology.researchers")}
+          </h2>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="zn-grid" style={{ "--cols": 2 } as CSSProperties}>
             {researchers.map((r) => (
-              <Card key={r.name} className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">{r.name}</CardTitle>
+              <Card key={r.name} size="compact">
+                <CardHeader>
+                  <CardTitle>{r.name}</CardTitle>
                   <CardDescription>
                     <GlossaryLinkedText text={pickLang(r, "contribution")} />
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {pickLang(r, "publication")}
-                  </p>
+                <CardContent
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+                >
+                  <p className="zn-source">{pickLang(r, "publication")}</p>
                   {r.link && (
                     <a
                       href={r.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2"
+                      className="zn-prose__link zn-guide__extlink"
                     >
                       {t("content:methodology.viewPublication")}
-                      <ExternalLink className="size-3" />
+                      <ExternalLink />
                     </a>
                   )}
                 </CardContent>
@@ -455,84 +452,85 @@ export function MethodologyPage() {
           </div>
         </section>
 
-        {/* Section 4: Key Studies */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-500/10">
-              <BookOpen className="size-5 text-green-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.keyStudies")}
-            </h2>
-          </div>
+        {/* 5, the papers themselves, oldest marker first: year, title,
+            journal. */}
+        <section className="zn-guide__band" aria-labelledby="meth-studies">
+          <h2
+            id="meth-studies"
+            className="zn-title zn-guide__bandhead"
+            data-level="2"
+          >
+            {t("content:methodology.keyStudies")}
+          </h2>
 
-          <div className="space-y-3">
+          <ul
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-6)", listStyle: "none", margin: 0, padding: 0 } as CSSProperties}
+          >
             {studies.map((s, i) => (
-              <div
-                key={i}
-                className="rounded-lg border border-border/50 bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent p-4 flex flex-col sm:flex-row sm:items-start gap-3"
-              >
-                <span className="shrink-0 inline-flex items-center justify-center size-8 rounded-full bg-muted text-sm font-semibold text-muted-foreground">
-                  {s.year}
-                </span>
-                <div className="flex-1 min-w-0 space-y-1">
-                  <p className="font-medium text-sm">
-                    {pickLang(s, "title")}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {s.authors} &mdash; {s.journal}
+              <li key={i} className="zn-guide__ref">
+                <span className="zn-mono zn-guide__refyear">{s.year}</span>
+                <div
+                  className="zn-stack zn-fill"
+                  style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+                >
+                  <p className="zn-guide__reftitle">{pickLang(s, "title")}</p>
+                  <p className="zn-source">
+                    {s.authors} &middot; {s.journal}
                   </p>
                   {s.link && (
                     <a
                       href={s.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                      className="zn-prose__link zn-guide__extlink"
                     >
                       {t("content:methodology.viewStudy")}
-                      <ExternalLink className="size-3" />
+                      <ExternalLink />
                     </a>
                   )}
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
 
-        {/* Section 5: Resources */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-500/10">
-              <BookOpen className="size-5 text-amber-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.resources")}
-            </h2>
-          </div>
+        {/* 6, where to read further, by kind. */}
+        <section className="zn-guide__band" aria-labelledby="meth-resources">
+          <h2
+            id="meth-resources"
+            className="zn-title zn-guide__bandhead"
+            data-level="2"
+          >
+            {t("content:methodology.resources")}
+          </h2>
 
-          <div className="grid gap-6 sm:grid-cols-3">
+          <div className="zn-grid">
             {resources.map((group) => (
-              <div key={group.labelFr} className="space-y-3">
-                <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
-                  {pickLang(group, "label")}
-                </h3>
-                <ul className="space-y-2">
+              <div
+                key={group.labelFr}
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+              >
+                <h3 className="zn-kicker">{pickLang(group, "label")}</h3>
+                <ul
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-5)", listStyle: "none", margin: 0, padding: 0 } as CSSProperties}
+                >
                   {group.items.map((item) => (
-                    <li key={item.nameFr} className="text-sm">
+                    <li key={item.nameFr} className="zn-body zn-body--sm">
                       {item.link ? (
                         <a
                           href={item.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-primary hover:underline"
+                          className="zn-prose__link zn-guide__extlink"
                         >
                           {pickLang(item, "name")}
-                          <ExternalLink className="size-3" />
+                          <ExternalLink />
                         </a>
                       ) : (
-                        <span className="text-muted-foreground">
-                          {pickLang(item, "name")}
-                        </span>
+                        <span className="zn-muted">{pickLang(item, "name")}</span>
                       )}
                     </li>
                   ))}

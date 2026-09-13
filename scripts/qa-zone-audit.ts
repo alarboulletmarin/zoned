@@ -1,9 +1,9 @@
 /**
- * QA audit — zone and duration coherence across every workout template.
+ * QA audit, zone and duration coherence across every workout template.
  *
  * Invariants checked:
  *   1. every zone spec parses (no segment silently classified as Z1);
- *   2. the zone breakdown accounts for 100% of the session — range specs are
+ *   2. the zone breakdown accounts for 100% of the session, range specs are
  *      split across the zones they span, unzoned segments get their own bar;
  *   3. the computed duration matches the declared typicalDuration.
  *

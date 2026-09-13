@@ -1,8 +1,8 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import {
-  Lightbulb,
-  AlertTriangle,
+  ArrowLeft,
   Utensils,
   Droplets,
   Clock,
@@ -20,11 +20,10 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
+import { StatBlock } from "@/components/domain/StatBlock";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import {
   nutritionSections,
@@ -50,12 +49,6 @@ const SECTION_ICONS: Record<string, React.ComponentType<IconProps>> = {
 };
 
 // ---------------------------------------------------------------------------
-// Input styling (matches ZoneCalculator pattern)
-// ---------------------------------------------------------------------------
-const inputClass =
-  "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
-
-// ---------------------------------------------------------------------------
 // Shared preset distances
 // ---------------------------------------------------------------------------
 const PRESETS = [
@@ -65,77 +58,63 @@ const PRESETS = [
   { label: "Marathon", km: 42.195, defaultMin: 210 },
 ] as const;
 
+const PRESET_OPTIONS: SegmentedOption<string>[] = PRESETS.map((p) => ({
+  value: p.label,
+  label: p.label,
+}));
+
 // ---------------------------------------------------------------------------
 // Content block renderer
+//
+// The reading treatment is the articles' own, .zn-prose and its parts, from
+// learn.css. Nothing here restyles a paragraph; a tip and a warning are the
+// same pulled-out callout an article uses, told apart by a mono label.
 // ---------------------------------------------------------------------------
-function renderBlock(block: NutritionBlock, index: number) {
+function renderBlock(
+  block: NutritionBlock,
+  index: number,
+  calloutLabel: (kind: "tip" | "warning") => string,
+) {
   switch (block.type) {
     case "paragraph":
       return (
-        <p key={index} className="text-muted-foreground leading-relaxed">
-          <GlossaryLinkedText text={pickLang(block, "text")} />
-        </p>
+        <GlossaryLinkedText
+          key={index}
+          as="p"
+          className="zn-prose__p"
+          text={pickLang(block, "text")}
+        />
       );
 
     case "list":
       return (
-        <ul key={index} className="space-y-2 ml-1">
+        <ul key={index} className="zn-prose__list">
           {block.items?.map((item, i) => (
-            <li key={i} className="flex gap-2 text-sm text-muted-foreground">
-              <span className="text-primary mt-1 shrink-0">&#8226;</span>
-              <span>{pickLang(item, "text")}</span>
-            </li>
+            <li key={i}>{pickLang(item, "text")}</li>
           ))}
         </ul>
       );
 
     case "tip":
-      return (
-        <div
-          key={index}
-          className="flex gap-3 rounded-xl border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/20"
-        >
-          <Lightbulb className="size-5 shrink-0 text-green-600 dark:text-green-400 mt-0.5" />
-          <p className="text-sm text-green-800 dark:text-green-200">
-            {pickLang(block, "text")}
-          </p>
-        </div>
-      );
-
     case "warning":
       return (
-        <div
-          key={index}
-          className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950/20"
-        >
-          <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-          <p className="text-sm text-amber-800 dark:text-amber-200">
-            {pickLang(block, "text")}
-          </p>
-        </div>
+        <aside key={index} className="zn-prose__callout" data-kind={block.type}>
+          <span className="zn-kicker zn-prose__callout-label">
+            {calloutLabel(block.type)}
+          </span>
+          <p className="zn-prose__callout-text">{pickLang(block, "text")}</p>
+        </aside>
       );
 
     case "table":
       return (
-        <div key={index} className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
+        <div key={index} className="zn-scroll-x">
+          <table className="zn-prose__table">
             <tbody>
               {block.rows?.map((row, i) => (
-                <tr
-                  key={i}
-                  className={cn(
-                    "border-b border-border last:border-0",
-                    i % 2 === 0
-                      ? "bg-muted/30"
-                      : "bg-transparent"
-                  )}
-                >
-                  <td className="px-3 py-2.5 font-medium text-foreground whitespace-nowrap">
-                    {pickLang(row, "label")}
-                  </td>
-                  <td className="px-3 py-2.5 text-muted-foreground">
-                    {pickLang(row, "value")}
-                  </td>
+                <tr key={i}>
+                  <td>{pickLang(row, "label")}</td>
+                  <td>{pickLang(row, "value")}</td>
                 </tr>
               ))}
             </tbody>
@@ -149,7 +128,7 @@ function renderBlock(block: NutritionBlock, index: number) {
 }
 
 // ---------------------------------------------------------------------------
-// Fueling Calculator Component
+// Fueling Calculator
 // ---------------------------------------------------------------------------
 function FuelingCalculator() {
   const { t } = useTranslation("guides");
@@ -160,7 +139,9 @@ function FuelingCalculator() {
   const [result, setResult] = useState<FuelingResult | null>(null);
   const [activePreset, setActivePreset] = useState<string | null>(null);
 
-  const handlePreset = useCallback((preset: typeof PRESETS[number]) => {
+  const handlePreset = useCallback((label: string) => {
+    const preset = PRESETS.find((p) => p.label === label);
+    if (!preset) return;
     setDistanceKm(String(preset.km));
     setDurationMin(String(preset.defaultMin));
     setActivePreset(preset.label);
@@ -187,129 +168,143 @@ function FuelingCalculator() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Utensils className="size-5 text-primary" />
-          {t("nutrition.calculatorTitle")}
-        </CardTitle>
+        <CardTitle>{t("nutrition.calculatorTitle")}</CardTitle>
         <CardDescription>
           {t("nutrition.calculatorDescription")}
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-6">
-        {/* Preset buttons */}
-        <div className="flex flex-wrap gap-2">
-          {PRESETS.map((p) => (
-            <Button
-              key={p.label}
-              variant={activePreset === p.label ? "default" : "outline"}
-              size="sm"
-              onClick={() => handlePreset(p)}
-            >
-              {p.label}
-            </Button>
-          ))}
-        </div>
+      <CardContent
+        className="zn-stack"
+        style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+      >
+        {/* The four usual distances. A radiogroup: one tab stop, arrow keys
+            move the choice, and the chosen segment inverts to ink so the
+            screen's single vermillon fill stays on the action below. */}
+        <Segmented
+          label={t("nutrition.presetsLabel")}
+          value={activePreset ?? ""}
+          onChange={handlePreset}
+          options={PRESET_OPTIONS}
+        />
 
-        {/* Input fields */}
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="space-y-1.5">
-            <label htmlFor="calc-distance" className="text-sm font-medium">
+        <div className="zn-guide__fields">
+          <div className="zn-guide__field">
+            <label htmlFor="calc-distance" className="zn-label">
               {t("nutrition.distanceLabel")}
             </label>
-            <input
-              id="calc-distance"
-              type="number"
-              min={0.1}
-              step={0.1}
-              placeholder="42.195"
-              value={distanceKm}
-              onChange={(e) => {
-                setDistanceKm(e.target.value);
-                setActivePreset(null);
-                setResult(null);
-              }}
-              className={inputClass}
-            />
+            <span
+              className="zn-numfield"
+              style={{ "--field-w": "76px" } as CSSProperties}
+            >
+              <input
+                id="calc-distance"
+                type="number"
+                min={0.1}
+                step={0.1}
+                placeholder="42.195"
+                value={distanceKm}
+                onChange={(e) => {
+                  setDistanceKm(e.target.value);
+                  setActivePreset(null);
+                  setResult(null);
+                }}
+                className="zn-numfield__input"
+              />
+            </span>
           </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="calc-duration" className="text-sm font-medium">
+          <div className="zn-guide__field">
+            <label htmlFor="calc-duration" className="zn-label">
               {t("nutrition.durationLabel")}
             </label>
-            <input
-              id="calc-duration"
-              type="number"
-              min={1}
-              step={1}
-              placeholder="210"
-              value={durationMin}
-              onChange={(e) => {
-                setDurationMin(e.target.value);
-                setResult(null);
-              }}
-              className={inputClass}
-            />
+            <span
+              className="zn-numfield"
+              style={{ "--field-w": "76px" } as CSSProperties}
+            >
+              <input
+                id="calc-duration"
+                type="number"
+                min={1}
+                step={1}
+                placeholder="210"
+                value={durationMin}
+                onChange={(e) => {
+                  setDurationMin(e.target.value);
+                  setResult(null);
+                }}
+                className="zn-numfield__input"
+              />
+            </span>
           </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="calc-weight" className="text-sm font-medium">
+          <div className="zn-guide__field">
+            <label htmlFor="calc-weight" className="zn-label">
               {t("nutrition.weightLabel")}
             </label>
-            <input
-              id="calc-weight"
-              type="number"
-              min={30}
-              max={150}
-              step={0.5}
-              placeholder="70"
-              value={bodyWeightKg}
-              onChange={(e) => {
-                setBodyWeightKg(e.target.value);
-                setResult(null);
-              }}
-              className={inputClass}
-            />
+            <span
+              className="zn-numfield"
+              style={{ "--field-w": "76px" } as CSSProperties}
+            >
+              <input
+                id="calc-weight"
+                type="number"
+                min={30}
+                max={150}
+                step={0.5}
+                placeholder="70"
+                value={bodyWeightKg}
+                onChange={(e) => {
+                  setBodyWeightKg(e.target.value);
+                  setResult(null);
+                }}
+                className="zn-numfield__input"
+              />
+            </span>
           </div>
         </div>
 
-        {/* Calculate button */}
-        <Button
-          onClick={handleCalculate}
-          disabled={!canCalculate}
-          className="w-full sm:w-auto"
-        >
+        {/* The screen's one vermillon fill. */}
+        <Button onClick={handleCalculate} disabled={!canCalculate}>
           {t("nutrition.calculate")}
         </Button>
 
-        {/* Results */}
         {result && (
-          <div className="space-y-6 pt-2">
-            {/* Summary cards */}
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <SummaryCard
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-14)" } as CSSProperties}
+          >
+            <div
+              className="zn-grid"
+              style={{ "--cols": 4, "--cols-md": 2 } as CSSProperties}
+            >
+              <StatBlock
+                tone="card"
+                value={`${result.carbsPerHourG} g`}
                 label={t("nutrition.carbsPerHour")}
-                value={`${result.carbsPerHourG}g`}
-                sub={t("nutrition.totalLabel", { value: result.totalCarbsG })}
+                footnote={t("nutrition.totalLabel", { value: result.totalCarbsG })}
               />
-              <SummaryCard
-                label={t("nutrition.gelsNeeded")}
+              <StatBlock
+                tone="card"
                 value={String(result.gelCount)}
-                sub={
+                label={t("nutrition.gelsNeeded")}
+                footnote={
                   result.gelFrequencyMin > 0
                     ? t("nutrition.gelFrequency", { min: result.gelFrequencyMin })
                     : t("nutrition.gelNotNeeded")
                 }
               />
-              <SummaryCard
+              <StatBlock
+                tone="card"
+                value={`${result.fluidMlPerHour} ml`}
                 label={t("nutrition.fluidPerHour")}
-                value={`${result.fluidMlPerHour}ml`}
-                sub={t("nutrition.totalFluid", { value: result.totalFluidMl })}
+                footnote={t("nutrition.totalFluid", { value: result.totalFluidMl })}
               />
-              <SummaryCard
+              <StatBlock
+                tone="card"
+                value={`${result.sodiumMgPerHour} mg`}
                 label={t("nutrition.sodiumPerHour")}
-                value={`${result.sodiumMgPerHour}mg`}
-                sub={
+                footnote={
                   result.electrolyteDrink
                     ? t("nutrition.electrolyteDrinkRecommended")
                     : t("nutrition.waterSufficient")
@@ -317,16 +312,19 @@ function FuelingCalculator() {
               />
             </div>
 
-            {/* Timeline */}
-            <div className="space-y-3">
-              <h3 className="font-semibold text-sm">
+            {/* The plan on a clock: the rule is the race, the mono badge is
+                the moment, the sentence is the instruction. */}
+            <div
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-9)" } as CSSProperties}
+            >
+              <h3 className="zn-title" data-level="4">
                 {t("nutrition.fuelingTimeline")}
               </h3>
-              <div className="relative space-y-0">
+              <ol className="zn-guide__timeline">
                 {result.timeline.map((cp, i) => {
                   const isPreRace = cp.timeMin < 0;
-                  const isPostRace =
-                    cp.timeMin >= parseFloat(durationMin);
+                  const isPostRace = cp.timeMin >= parseFloat(durationMin);
                   const phase = isPreRace
                     ? "pre"
                     : isPostRace
@@ -334,59 +332,41 @@ function FuelingCalculator() {
                       : "during";
 
                   return (
-                    <div
-                      key={i}
-                      className="flex gap-3 group"
-                    >
-                      {/* Timeline line + dot */}
-                      <div className="flex flex-col items-center">
-                        <div
-                          className={cn(
-                            "size-2.5 rounded-full shrink-0 mt-1.5",
-                            phase === "pre"
-                              ? "bg-blue-500"
-                              : phase === "post"
-                                ? "bg-green-500"
-                                : "bg-primary"
-                          )}
-                        />
-                        {i < result.timeline.length - 1 && (
-                          <div className="w-px flex-1 bg-border min-h-[16px]" />
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="pb-4 min-w-0">
-                        <Badge
-                          variant="outline"
-                          className="mb-1 text-xs font-mono"
-                        >
+                    <li key={i} className="zn-guide__tick">
+                      <span
+                        className="zn-guide__dot"
+                        data-phase={phase}
+                        aria-hidden="true"
+                      />
+                      <div
+                        className="zn-stack zn-fill"
+                        style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+                      >
+                        <span className="zn-mono zn-faint">
                           {formatTimeMin(cp.timeMin, t("nutrition.timeStart"))}
-                        </Badge>
-                        <p className="text-sm text-muted-foreground">
+                        </span>
+                        <span className="zn-body zn-body--sm zn-muted">
                           {pickLang(cp, "action")}
-                        </p>
+                        </span>
                       </div>
-                    </div>
+                    </li>
                   );
                 })}
-              </div>
+              </ol>
             </div>
 
-            {/* Tips */}
             {result.tips.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="font-semibold text-sm">
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-9)" } as CSSProperties}
+              >
+                <h3 className="zn-title" data-level="4">
                   {t("nutrition.tips")}
                 </h3>
-                <ul className="space-y-2">
+                <ul className="zn-prose__list zn-measure">
                   {result.tips.map((tip, i) => (
-                    <li
-                      key={i}
-                      className="flex gap-2 text-sm text-muted-foreground"
-                    >
-                      <Lightbulb className="size-4 shrink-0 text-green-500 mt-0.5" />
-                      <span>{pickLang(tip, "text")}</span>
+                    <li key={i} className="zn-body zn-body--sm zn-muted">
+                      {pickLang(tip, "text")}
                     </li>
                   ))}
                 </ul>
@@ -396,27 +376,6 @@ function FuelingCalculator() {
         )}
       </CardContent>
     </Card>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Small summary card for calculator results
-// ---------------------------------------------------------------------------
-function SummaryCard({
-  label,
-  value,
-  sub,
-}: {
-  label: string;
-  value: string;
-  sub: string;
-}) {
-  return (
-    <div className="rounded-xl bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent border border-border/50 p-3 space-y-1">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="text-xl font-bold text-foreground">{value}</p>
-      <p className="text-xs text-muted-foreground">{sub}</p>
-    </div>
   );
 }
 
@@ -445,13 +404,15 @@ function formatTimeMin(min: number, startLabel: string): string {
 // ---------------------------------------------------------------------------
 export function NutritionGuidePage() {
   const { t } = useTranslation("guides");
+  const calloutLabel = (kind: "tip" | "warning") =>
+    t(`content:article.callout.${kind}`);
 
   return (
     <>
       <SEOHead
         title={t("nutrition.pageTitle")}
         description={t("nutrition.seoDescription")}
-        canonical="/nutrition"
+        canonical="/guides/nutrition"
         jsonLd={[
           {
             "@type": "Article",
@@ -515,53 +476,67 @@ export function NutritionGuidePage() {
         ]}
       />
 
-      <div className="py-8 space-y-8">
-        {/* Page header */}
-        <div>
-          <EditorialTitle as="h1" className="mb-2">
+      <div className="zn-guide">
+        {/* 1, the way back, then what this page is */}
+        <section
+          className="zn-stack zn-guide__head"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <Link
+            to="/guides"
+            className="zn-row zn-mono zn-guide__back"
+            style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+          >
+            <ArrowLeft />
+            {t("backToGuides")}
+          </Link>
+          <span className="zn-kicker">
+            {t("nutrition.kicker", { n: nutritionSections.length })}
+          </span>
+          <h1 className="zn-display" data-level="2">
             {t("nutrition.pageTitle")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg max-w-2xl">
+          </h1>
+          <p className="zn-body zn-body--lead zn-guide__lede">
             {t("nutrition.subtitle")}
-          </FadeUp>
-        </div>
+          </p>
+        </section>
 
-        {/* Fueling calculator */}
-        <FuelingCalculator />
+        {/* 2, your own numbers first: the plan this page exists to produce */}
+        <section className="zn-guide__band">
+          <FuelingCalculator />
+        </section>
 
-        {/* Content sections as tabs */}
-        <Tabs defaultValue={nutritionSections[0].id}>
-          <TabsList className="flex-wrap h-auto gap-1">
-            {nutritionSections.map((section) => {
-              const Icon = SECTION_ICONS[section.icon] ?? Utensils;
-              return (
-                <TabsTrigger key={section.id} value={section.id}>
-                  <Icon className="size-4" />
-                  <span className="hidden sm:inline">
+        {/* 3, the reading: one theme per tab */}
+        <section className="zn-guide__band">
+          <Tabs defaultValue={nutritionSections[0].id}>
+            <TabsList className="zn-guide__tabs">
+              {nutritionSections.map((section) => {
+                const Icon = SECTION_ICONS[section.icon] ?? Utensils;
+                return (
+                  <TabsTrigger key={section.id} value={section.id}>
+                    <Icon aria-hidden="true" />
                     {pickLang(section, "title")}
-                  </span>
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
 
-          {nutritionSections.map((section) => (
-            <TabsContent key={section.id} value={section.id}>
-              <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-                <CardHeader>
-                  <CardTitle>
+            {nutritionSections.map((section) => (
+              <TabsContent key={section.id} value={section.id}>
+                <div className="zn-guide__panel">
+                  <h2 className="zn-title zn-guide__bandhead" data-level="2">
                     {pickLang(section, "title")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-5">
-                  {section.content.map((block, i) =>
-                    renderBlock(block, i)
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          ))}
-        </Tabs>
+                  </h2>
+                  <div className="zn-prose zn-measure">
+                    {section.content.map((block, i) =>
+                      renderBlock(block, i, calloutLabel),
+                    )}
+                  </div>
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </section>
       </div>
     </>
   );

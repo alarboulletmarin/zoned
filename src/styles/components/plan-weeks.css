@@ -1,0 +1,499 @@
+/* The ready-made plans and the standalone weeks.
+ *
+ * Nine prebuilt plans, ten prebuilt weeks, the saved-week index, the week
+ * editor and the two shared/preview screens. Two shapes cover all eight:
+ *
+ *   a CATALOGUE, mono kicker counting the offer, display title, a lead, then
+ *   an outlined card grid. Exactly the library's shape, and the cards are the
+ *   ported PrebuiltPlanCard / PrebuiltWeekCard, so nothing is re-drawn here.
+ *
+ *   a SHEET, back link, header with the one primary call, then bands
+ *   separated by a full-width ink rule: the phase ramp, the preview, the
+ *   session list.
+ *
+ * Every route sits inside .zn-page, which has already paid the 40px (20px
+ * mobile) screen margin. So the bands here carry block padding and a rule and
+ * NO inline padding: paying it twice would push every rule off the column and
+ * a negative margin would overflow the viewport between --page-max and
+ * --page-max + 2 x the margin. "Full width" means the width of the column.
+ *
+ * Zone ink appears on these screens (session dots, the rhythm chart, the phase
+ * ramp), so each of them prints the ZoneScale legend once. The phase ramp
+ * itself is not re-derived: it composes .zn-pswatch from plan-panels.css,
+ * which is the app's single phase -> zone-ramp mapping.
+ */
+
+/* ── the screen ───────────────────────────────────────────────────────── */
+
+.zn-pw {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Une bande. Même séparation que .zn-section, l'espace seul, moins le
+   padding en ligne que la colonne paie déjà.
+
+   `--first` gardait un padding réduit parce qu'elle n'avait pas de filet à
+   payer. Sans filet, toutes les bandes sont dans ce cas : la variante n'a plus
+   de raison d'être et part. */
+.zn-pw__band {
+  padding-block: var(--pad-block, calc(var(--gap-section) / 2));
+}
+
+/* The back link is chrome, not a band: it sits above the title with no rule
+   of its own. */
+.zn-pw__back {
+  align-self: flex-start;
+  margin-block-start: var(--sp-8);
+}
+
+/* A screen's title block: the words on the left, the one primary call on the
+   right, both dropping to one column when the line runs out. */
+.zn-pw__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-13);
+}
+
+.zn-pw__headtext {
+  flex: 1;
+  min-inline-size: min(100%, 34ch);
+}
+
+.zn-pw__lede {
+  max-inline-size: 62ch;
+}
+
+/* The screen's one call, in the header. Below 900px the dock carries the same
+   call in the thumb zone, so exactly one of the two is ever on screen. */
+@media (max-width: 900px) {
+  /* Both selectors on purpose: .zn-btn also sets `display`, at the same
+     specificity, so a single class would depend on the import order. */
+  .zn-pw__call,
+  .zn-btn.zn-pw__call {
+    display: none;
+  }
+}
+
+/* The mono line of facts under a title, or at the foot of a card: a ruled row
+   of numbers, never a row of adjectives. */
+.zn-pw__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-7);
+  padding-block-start: var(--sp-5);
+  border-block-start: var(--border-divider);
+  color: var(--text-faint);
+}
+
+/* ── the phase ramp ───────────────────────────────────────────────────── */
+
+/* Base to taper read as one bar, each phase's width its share of the plan.
+   The fill comes from .zn-pswatch[data-phase] in plan-panels.css, the app's
+   one phase table, so this only restates the geometry. */
+.zn-pw__phasebar {
+  display: flex;
+  block-size: var(--sp-6);
+  overflow: hidden;
+  border: var(--border-rule);
+  border-radius: var(--r-xs);
+}
+
+.zn-pswatch.zn-pw__phase {
+  inline-size: var(--w, 0%);
+  block-size: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+.zn-pswatch.zn-pw__phase + .zn-pw__phase {
+  border-inline-start: var(--bw-hair) solid var(--line-strong);
+}
+
+/* The ramp orders the phases but does not name them, so the bar always
+   travels with this line. */
+.zn-pw__phaselegend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--text-muted);
+}
+
+/* ── the session list ─────────────────────────────────────────────────── */
+
+/* One outline around the week, hairlines between the days: seven separately
+   outlined cards read as seven unrelated objects. */
+.zn-pw__list {
+  overflow: hidden;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+.zn-pw__sess {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+  padding: var(--sp-11) var(--pad-card);
+}
+
+.zn-pw__sess + .zn-pw__sess {
+  border-block-start: var(--border-divider);
+}
+
+/* Jour de course : le contour entier, comme .zn-sess[data-kind] sur le
+   calendrier, et à l'ENCRE depuis que le vermillon ne dit plus que
+   maintenant. Un jour de course est une destination, pas l'instant
+   présent ; le drapeau et le mot Jour de course que la ligne rend déjà
+   portent l'information sans recourir au ton. L'anneau reste inset : la ligne
+   vit dans .zn-pw__list, une vraie bordure ajouterait 2.5px de hauteur et
+   pousserait toutes les lignes du dessous. */
+.zn-pw__sess[data-kind="race"] {
+  box-shadow: inset 0 0 0 var(--bw-heavy) var(--line-strong);
+}
+
+.zn-pw__sess[data-kind="race"] .zn-pw__sess-name {
+  font-weight: var(--fw-semibold);
+}
+
+.zn-pw__sess-day {
+  flex: none;
+  inline-size: 62px;
+  padding-block-start: var(--sp-1);
+  color: var(--text-faint);
+}
+
+.zn-pw__sess-main {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.zn-pw__sess-name {
+  font: var(--fw-medium) var(--fs-body) / 1.35 var(--font-text);
+  overflow-wrap: anywhere;
+}
+
+.zn-pw__sess-why {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  max-inline-size: 68ch;
+}
+
+.zn-pw__sess-marks {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  color: var(--text-faint);
+}
+
+.zn-pw__sess-marks > svg {
+  inline-size: 13px;
+  block-size: 13px;
+  flex: none;
+}
+
+.zn-pw__empty {
+  padding: var(--sp-13) var(--pad-card);
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .zn-pw__sess {
+    flex-wrap: wrap;
+    gap: var(--sp-5) var(--sp-6);
+    padding: var(--sp-10) var(--pad-card-sm);
+  }
+
+  .zn-pw__sess-main {
+    flex-basis: calc(100% - 62px - var(--sp-6));
+  }
+
+  .zn-pw__sess-marks {
+    inline-size: 100%;
+    padding-inline-start: calc(62px + var(--sp-6));
+  }
+}
+
+/* ── the week-by-week accordion ───────────────────────────────────────── */
+
+.zn-pw__wk {
+  overflow: hidden;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+.zn-pw__wk-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-10) var(--pad-card);
+
+  font: var(--fw-medium) var(--fs-body) / 1.3 var(--font-text);
+  color: var(--text-body);
+  text-align: start;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-pw__wk-toggle:hover {
+  background: var(--surface-band);
+}
+
+.zn-pw__wk-toggle:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-pw__wk-name {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-pw__wk-count {
+  margin-inline-start: auto;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-pw__wk-chev {
+  flex: none;
+  inline-size: 17px;
+  block-size: 17px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-pw__wk-toggle[aria-expanded="true"] .zn-pw__wk-chev {
+  transform: rotate(180deg);
+}
+
+/* Sur téléphone, la liste est la SEULE vue du programme : le nom de la semaine
+   ne peut plus être le seul élément élastique d'une rangée trop pleine. Le
+   badge, le compteur et le chevron ne cèdent rien, donc Semaine de
+   récupération, Base tombait à 46px pour 252px de texte et l'en-tête
+   n'affichait plus que S…. On lui donne une base incompressible et on
+   laisse la rangée passer à la ligne : les semaines ordinaires gardent leur
+   rangée unique de 60,8px, seules les longues en prennent une seconde. */
+@media (max-width: 767px) {
+  .zn-pw__wk-toggle {
+    flex-wrap: wrap;
+  }
+
+  .zn-pw__wk-name {
+    flex: 1 0 10ch;
+    white-space: normal;
+  }
+}
+
+.zn-pw__wk-body {
+  border-block-start: var(--border-divider);
+}
+
+/* ── the saved-week card ──────────────────────────────────────────────── */
+
+/* A card in a list, so no shadow: the outline is what makes it a thing. Its
+   title is a real link, which is also the card's keyboard path. */
+.zn-pw__week-title {
+  display: block;
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+  color: var(--text-body);
+  text-decoration: none;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.zn-pw__week-title:hover {
+  color: var(--text-link);
+  text-decoration: underline;
+}
+
+.zn-pw__week-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-pw__week-actions > .zn-btn:first-child {
+  flex: 1;
+}
+
+/* ── the editor ───────────────────────────────────────────────────────── */
+
+/* Board on the left, the generator rail on the right. The rail is a column,
+   not an overlay: it never covers or compresses the board. */
+.zn-pw__editor {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--sp-13);
+  align-items: start;
+}
+
+.zn-pw__rail {
+  position: sticky;
+  inset-block-start: var(--sp-10);
+}
+
+@media (max-width: 1100px) {
+  .zn-pw__editor {
+    grid-template-columns: 1fr 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .zn-pw__editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .zn-pw__rail {
+    display: none;
+  }
+}
+
+/* The week's name, edited in place. A dashed underline is how this system
+   draws a hole waiting to be filled; the ring is the focus state. */
+.zn-pw__name {
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: var(--sp-2) var(--sp-4);
+  margin-inline-start: calc(var(--sp-4) * -1);
+
+  font: var(--fw-black) var(--fs-h1) / var(--lh-h1) var(--font-display);
+  letter-spacing: var(--ls-h1);
+  color: var(--text-body);
+
+  background: transparent;
+  border: none;
+  border-block-end: var(--bw-rule) dashed transparent;
+  border-radius: var(--r-sm);
+}
+
+.zn-pw__name:hover {
+  border-block-end-color: var(--line-divider);
+}
+
+/* The week's category, chosen from the badge itself. It is the badge's paint
+   on a Radix trigger, so only the pointer has to be added back. */
+.zn-pw__cat {
+  cursor: pointer;
+}
+
+/* The board's editing legend, a gesture, printed over the thing it explains. */
+.zn-pw__hint {
+  margin-block-end: var(--sp-4);
+  text-align: end;
+  color: var(--text-faint);
+}
+
+.zn-pw__hint[data-hidden="true"] {
+  visibility: hidden;
+}
+
+.zn-pw__board {
+  position: relative;
+  scroll-margin-block-start: var(--sp-19);
+}
+
+/* The cell a draw is still cycling through: a hole, so it is dashed. */
+.zn-pw__scan {
+  block-size: var(--sp-18);
+  border: var(--border-dashed);
+  border-radius: var(--r-lg);
+  background: var(--surface-band);
+}
+
+/* ── the mobile dock ──────────────────────────────────────────────────── */
+
+/* The screen's primary call, kept in the thumb zone once the rail is gone.
+   It is the SAME call as the one in the header, which is hidden at the same
+   width, one primary action on screen, never two. */
+.zn-pw__dock {
+  display: none;
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 30;
+
+  gap: var(--sp-6);
+  /* Same block rhythm as .zn-session__dock: it puts the pills on the menu
+     pill's own baseline, so the floor of the screen reads as one row of
+     controls instead of a bar with a button floating 6px above it. */
+  padding-block: var(--sp-8);
+  padding-block-end: calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
+  padding-inline: var(--pad-screen-x);
+
+  background: var(--surface-page);
+  border-block-start: var(--border-rule);
+}
+
+/* The pill's geometry, applied to whatever button lands here. 44px stated
+   rather than floored: a size="lg" call would stand 52px tall beside the 44px
+   menu pill, which is the sort of eight pixels nobody can name and everybody
+   sees. */
+.zn-pw__dock .zn-btn {
+  block-size: var(--hit-min);
+  min-block-size: var(--hit-min);
+  min-inline-size: var(--hit-min);
+  padding-inline: var(--sp-8);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-block);
+}
+
+/* Below 1024px the floating menu pill sits over the end of this bar. The bar
+   is pinned to the viewport floor, so the page's --fab-clear reserve cannot
+   move it: it gives up the end of its own gutter instead, and its call stops
+   where the pill starts rather than running behind it. */
+@media (max-width: 1023px) {
+  .zn-pw__dock {
+    padding-inline-end: calc(var(--pad-screen-x) + var(--fab-w));
+  }
+}
+
+
+/* The call takes what the rest of the row leaves. `min-inline-size: 0` is the
+   whole point: without it a flex item never shrinks below its min-content
+   width, so "Générer ma semaine" kept its full 251px, overflowed the gutter
+   the bar reserves for the menu pill, and pushed "Régler" clean under it. */
+.zn-pw__dock > .zn-btn:first-child {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .zn-pw__dock {
+    display: flex;
+  }
+
+  /* Clearance so the dock never covers the last row of the page. */
+  .zn-pw[data-dock="true"] {
+    padding-block-end: calc(var(--hit-min) + var(--sp-16));
+  }
+}
+
+/* ── the two creation doors ───────────────────────────────────────────── */
+
+/* One door navigates and is a <Link>; the other creates the week first, so it
+   has to be a <button>. Same paper, same target, only the reset differs. */
+button.zn-door {
+  inline-size: 100%;
+  font: inherit;
+  cursor: pointer;
+}

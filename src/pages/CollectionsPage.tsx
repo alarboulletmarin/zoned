@@ -1,13 +1,16 @@
+import type { CSSProperties } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Loader2 } from "@/components/icons";
+import { Library } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
 import { CollectionCard } from "@/components/domain/CollectionCard";
 import { useCollections } from "@/hooks/useCollections";
-import { cn } from "@/lib/utils";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
+import { useAppStats } from "@/hooks/useAppStats";
 
 /** Collections grouped into small editorial sections, mirroring the
- *  calculators hub: a mono caption per group + the matching cards. */
+ *  calculators hub: one band per theme, each opened by a full-width ink rule. */
 const COLLECTION_GROUPS: { id: string; titleKey: string; members: string[] }[] = [
   {
     id: "starter",
@@ -52,6 +55,7 @@ export function CollectionsPage() {
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const collections = useCollections();
+  const stats = useAppStats();
 
   return (
     <>
@@ -77,59 +81,81 @@ export function CollectionsPage() {
           },
         ]}
       />
-      <div className="py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
+
+      <div className="zn-disc">
+        {/* 1, the shelf, named and counted */}
+        <section
+          className="zn-disc__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("collections.kicker", {
+              collections: collections.length,
+              groups: COLLECTION_GROUPS.length,
+            })}
+          </span>
+          <h1 className="zn-display" data-level="2">
             {t("collections.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-disc__lede">
             {t("collections.subtitle")}
-          </FadeUp>
-        </div>
+          </p>
+        </section>
 
-        {/* Collections — grouped by theme. Each group reads as a small
-            editorial section: mono caption + matching cards. On mobile
-            cards collapse to icon + title; from sm+ they expand to the
-            full card with description + badges. */}
+        {/* 2, one theme per band, each on its own ink rule */}
         {collections.length === 0 ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="size-8 animate-spin text-muted-foreground" />
-          </div>
-        ) : (
-          <>
-            <div className="space-y-10 sm:space-y-12">
-              {COLLECTION_GROUPS.map((group) => {
-                const groupItems = group.members
-                  .map((slug) => collections.find((c) => c.slug === slug))
-                  .filter((c): c is NonNullable<typeof c> => c != null);
-                if (groupItems.length === 0) return null;
-                return (
-                  <section key={group.id} aria-labelledby={`collection-${group.id}`}>
-                    <p
-                      id={`collection-${group.id}`}
-                      className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-muted-foreground mb-3 sm:mb-4 flex items-center gap-3"
-                    >
-                      <span className="inline-block h-px w-8 bg-border" />
-                      {t(group.titleKey)}
-                    </p>
-                    <StaggerGrid className={cn("grid gap-3 sm:gap-4", "grid-cols-2 lg:grid-cols-3")}>
-                      {groupItems.map((collection) => (
-                        <StaggerItem key={collection.id}>
-                          <CollectionCard collection={collection} />
-                        </StaggerItem>
-                      ))}
-                    </StaggerGrid>
-                  </section>
-                );
+          <section className="zn-disc__results">
+            <EmptyState
+              variant="no-results"
+              icon={Library}
+              title={t("collections.emptyTitle")}
+              description={t("collections.emptyDescription", {
+                workouts: stats.workouts,
               })}
-            </div>
+              action={
+                <Button variant="outline" asChild>
+                  <Link to="/library">{t("collections.emptyAction")}</Link>
+                </Button>
+              }
+            />
+          </section>
+        ) : (
+          COLLECTION_GROUPS.map((group) => {
+            const groupItems = group.members
+              .map((slug) => collections.find((c) => c.slug === slug))
+              .filter((c): c is NonNullable<typeof c> => c != null);
+            if (groupItems.length === 0) return null;
 
-            {/* Stats */}
-            <div className="mt-10 sm:mt-12 text-center text-sm text-muted-foreground">
-              {`${collections.length} collection${collections.length !== 1 ? "s" : ""}`}
-            </div>
-          </>
+            return (
+              <section
+                key={group.id}
+                className="zn-disc__group"
+                aria-labelledby={`collection-${group.id}`}
+              >
+                <div className="zn-row zn-row--split zn-disc__grouphead">
+                  <h2
+                    id={`collection-${group.id}`}
+                    className="zn-title"
+                    data-level="3"
+                  >
+                    {t(group.titleKey)}
+                  </h2>
+                  <span className="zn-mono zn-faint">
+                    {t("collections.groupCount", { count: groupItems.length })}
+                  </span>
+                </div>
+
+                <div className="zn-grid">
+                  {groupItems.map((collection) => (
+                    <CollectionCard
+                      key={collection.id}
+                      collection={collection}
+                    />
+                  ))}
+                </div>
+              </section>
+            );
+          })
         )}
       </div>
     </>

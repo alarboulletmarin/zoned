@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
@@ -172,7 +172,7 @@ export function RouteParametersForm({
           return;
         }
       } catch {
-        // Permissions API may not support `geolocation` in some browsers — skip gracefully.
+        // Permissions API may not support `geolocation` in some browsers, skip gracefully.
       }
     }
 
@@ -212,18 +212,18 @@ export function RouteParametersForm({
 
   // ── Options pour les segmented controls ────────────────────────
   const shapeOptions: SegmentedOption<Extract<RouteShape, "loop" | "out_and_back">>[] = [
-    { value: "loop", label: t("form.shapeLoop"), icon: <RefreshCw className="size-3.5" /> },
-    { value: "out_and_back", label: t("form.shapeOutAndBack"), icon: <ArrowRight className="size-3.5" /> },
+    { value: "loop", label: t("form.shapeLoop"), icon: <RefreshCw /> },
+    { value: "out_and_back", label: t("form.shapeOutAndBack"), icon: <ArrowRight /> },
   ];
 
   const disciplineOptions: SegmentedOption<Discipline>[] = [
-    { value: "running", label: t("form.disciplineRunning"), icon: <Run className="size-3.5" /> },
-    { value: "cycling", label: t("form.disciplineCycling"), icon: <Bike className="size-3.5" /> },
+    { value: "running", label: t("form.disciplineRunning"), icon: <Run /> },
+    { value: "cycling", label: t("form.disciplineCycling"), icon: <Bike /> },
   ];
 
   const surfaceOptions: SegmentedOption<RouteSurface>[] = [
     { value: "road", label: t("form.surfaceRoad") },
-    { value: "trail", label: t("form.surfaceTrail"), icon: <Mountain className="size-3.5" /> },
+    { value: "trail", label: t("form.surfaceTrail"), icon: <Mountain /> },
     { value: "mixed", label: t("form.surfaceMixed") },
   ];
 
@@ -232,7 +232,7 @@ export function RouteParametersForm({
   const cardinalLabel = t(`form.${CARDINAL_KEYS[cardinalIndex]}`);
   const bearingDisplay = t("form.bearingValue", { cardinal: cardinalLabel, deg: bearingDeg });
 
-  // Selected option metadata for the compact chip popovers — chips show
+  // Selected option metadata for the compact chip popovers, chips show
   // the active label + icon so the user knows the current value at a
   // glance (Strava/Komoot 2025 pattern).
   const selectedDiscipline = disciplineOptions.find((o) => o.value === discipline);
@@ -242,7 +242,7 @@ export function RouteParametersForm({
     // Strava Routes 2025 mobile pattern:
     //   • Row 1: sport pill (icon-only with chevron) + address field
     //     + GPS + submit, all aligned in a single search-bar height.
-    //   • Row 2: 3 filter chips (shape, distance, elevation) — text
+    //   • Row 2: 3 filter chips (shape, distance, elevation), text
     //     labels, no icons, in an explicit horizontal scroll. Letting
     //     the right edge be cut signals "more on the right" rather
     //     than wrapping into orphan rows.
@@ -251,9 +251,6 @@ export function RouteParametersForm({
     // dropped per Nielsen Norman: those pictograms have no universal
     // convention and cost the user a guess. Shape now opens a small
     // popover list, mirroring distance/elevation.
-    const chipBase =
-      "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3.5 text-sm font-medium transition-colors active:scale-[0.97] active:bg-accent data-[state=open]:border-primary data-[state=open]:bg-primary/10";
-
     const DISTANCE_PRESETS = [5, 10, 21.1, 42.2, 80].filter(
       (d) => d <= maxDistanceKm,
     );
@@ -261,36 +258,36 @@ export function RouteParametersForm({
     return (
       <form
         data-slot="route-form"
-        className="space-y-2"
+        className="zn-route-bar"
         onSubmit={(e) => {
           e.preventDefault();
           submit();
         }}
       >
-        {/* Row 1 — Strava-style search bar: sport picker on the left,
+        {/* Row 1, Strava-style search bar: sport picker on the left,
             address in the middle (flex-1), GPS + submit icons on the
             right. Single line, tap targets ≥44px (Apple HIG). */}
-        <div className="flex items-center gap-2">
+        <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
           <Popover>
             <PopoverTrigger asChild>
               <button
                 type="button"
                 aria-label={`${t("form.discipline")} : ${selectedDiscipline?.label}`}
                 aria-haspopup="dialog"
-                className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full border border-border/60 bg-background pl-2.5 pr-2 text-foreground transition-colors active:scale-[0.97] active:bg-accent data-[state=open]:border-primary [&_svg]:size-[18px]"
+                className="zn-route-chip zn-route-chip--sport"
               >
                 {selectedDiscipline?.icon}
-                <ChevronDown className="!size-4 opacity-60" />
+                <ChevronDown size={16} className="zn-route-chip__glyph" />
               </button>
             </PopoverTrigger>
-            <PopoverContent align="start" sideOffset={8} className="w-44 p-1">
+            <PopoverContent align="start" sideOffset={8} className="zn-route-menu">
               {disciplineOptions.map((opt) => (
                 <button
                   key={opt.value}
                   type="button"
                   onClick={() => setDiscipline(opt.value)}
                   data-active={discipline === opt.value}
-                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-left transition-colors hover:bg-accent data-[active=true]:bg-primary/10 data-[active=true]:text-primary [&_svg]:size-4"
+                  className="zn-route-menu__item"
                 >
                   {opt.icon}
                   <span>{opt.label}</span>
@@ -299,7 +296,7 @@ export function RouteParametersForm({
             </PopoverContent>
           </Popover>
 
-          <div className="min-w-0 flex-1">
+          <div className="zn-fill">
             <AddressSearchInput
               onSelect={(point, label) => updateStart(point, label)}
               onClear={() => updateStart(null, null)}
@@ -311,52 +308,50 @@ export function RouteParametersForm({
           <Button
             type="button"
             variant={start ? "outline" : "secondary"}
-            size="icon"
+            size="icon-lg"
             onClick={requestGps}
             disabled={isLocating}
             aria-label={t("form.useGps")}
             title={t("form.useGps")}
-            className="h-11 w-11 shrink-0"
           >
-            {isLocating ? <Loader2 className="size-4 animate-spin" /> : <MapPin className="size-4" />}
+            {isLocating ? <Loader2 className="zn-route-spin" /> : <MapPin />}
           </Button>
           <Button
             type="submit"
-            size="icon"
+            size="icon-lg"
             disabled={isGenerating || !start}
             aria-label={t("form.generate")}
             title={t("form.generate")}
-            className="h-11 w-11 shrink-0"
           >
-            {isGenerating ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}
+            {isGenerating ? <Loader2 className="zn-route-spin" /> : <ArrowRight />}
           </Button>
         </div>
 
-        {/* Row 2 — filter chips, labelled text only, horizontal scroll
+        {/* Row 2, filter chips, labelled text only, horizontal scroll
             assumed when chips don't fit (cf. Strava Routes filter row).
             Hidden scrollbars; if the row overflows the right edge,
             iOS rubber-banding makes the affordance discoverable. */}
-        <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="zn-route-chips zn-scroll-x">
           <Popover>
             <PopoverTrigger asChild>
               <button
                 type="button"
                 aria-label={`${t("form.shape")} : ${selectedShape?.label}`}
                 aria-haspopup="dialog"
-                className={chipBase}
+                className="zn-route-chip"
               >
                 <span>{selectedShape?.label}</span>
-                <ChevronDown className="size-3.5 opacity-60" />
+                <ChevronDown size={14} className="zn-route-chip__glyph" />
               </button>
             </PopoverTrigger>
-            <PopoverContent align="start" sideOffset={8} className="w-44 p-1">
+            <PopoverContent align="start" sideOffset={8} className="zn-route-menu">
               {shapeOptions.map((opt) => (
                 <button
                   key={opt.value}
                   type="button"
                   onClick={() => setShape(opt.value)}
                   data-active={shape === opt.value}
-                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-left transition-colors hover:bg-accent data-[active=true]:bg-primary/10 data-[active=true]:text-primary [&_svg]:size-4"
+                  className="zn-route-menu__item"
                 >
                   {opt.icon}
                   <span>{opt.label}</span>
@@ -371,16 +366,21 @@ export function RouteParametersForm({
                 type="button"
                 aria-label={t("form.distance")}
                 aria-haspopup="dialog"
-                className={`${chipBase} tabular-nums`}
+                className="zn-route-chip zn-route-chip--num"
               >
                 <span>{distanceKm.toFixed(1)} {t("form.distanceUnit")}</span>
-                <ChevronDown className="size-3.5 opacity-60" />
+                <ChevronDown size={14} className="zn-route-chip__glyph" />
               </button>
             </PopoverTrigger>
-            <PopoverContent align="start" sideOffset={8} className="w-72 space-y-3 p-4">
-              <div className="flex items-baseline justify-between">
-                <span className="text-xs font-medium text-muted-foreground">{t("form.distance")}</span>
-                <span className="text-base font-semibold tabular-nums">
+            <PopoverContent
+              align="start"
+              sideOffset={8}
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+            >
+              <div className="zn-row zn-row--split zn-row--baseline">
+                <span className="zn-kicker zn-kicker--inline">{t("form.distance")}</span>
+                <span className="zn-route-readout">
                   {distanceKm.toFixed(1)} {t("form.distanceUnit")}
                 </span>
               </div>
@@ -391,9 +391,8 @@ export function RouteParametersForm({
                 max={maxDistanceKm}
                 step={0.5}
                 aria-label={t("form.distance")}
-                className="[&>span:first-child]:h-2 [&_[role=slider]]:size-5"
               />
-              <div className="flex flex-wrap gap-1.5">
+              <div className="zn-cluster">
                 {DISTANCE_PRESETS.map((d) => {
                   const active = Math.abs(distanceKm - d) < 0.05;
                   return (
@@ -402,7 +401,7 @@ export function RouteParametersForm({
                       type="button"
                       onClick={() => setDistanceKm(Math.min(d, maxDistanceKm))}
                       data-active={active}
-                      className="rounded-full border border-border/60 px-2.5 py-1 text-xs tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                      className="zn-route-preset"
                     >
                       {d} {t("form.distanceUnit")}
                     </button>
@@ -419,26 +418,31 @@ export function RouteParametersForm({
                   type="button"
                   aria-label={t("form.elevationTarget")}
                   aria-haspopup="dialog"
-                  className={`${chipBase} tabular-nums`}
+                  className="zn-route-chip zn-route-chip--num"
                 >
                   <span>
                     {useElevationTarget && elevationGainTargetM > 0
                       ? `↑ ${elevationGainTargetM} ${t("form.elevationUnit")}`
                       : `↑ ${t("form.elevationFree")}`}
                   </span>
-                  <ChevronDown className="size-3.5 opacity-60" />
+                  <ChevronDown size={14} className="zn-route-chip__glyph" />
                 </button>
               </PopoverTrigger>
-              <PopoverContent align="start" sideOffset={8} className="w-72 space-y-3 p-4">
+              <PopoverContent
+                align="start"
+                sideOffset={8}
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+              >
                 {/* No on/off toggle on mobile: zero is "libre" (auto),
                     any positive value is the explicit target. The
-                    slider is always visible — moving it past 0 turns
+                    slider is always visible, moving it past 0 turns
                     the chip into a hard target without an extra tap. */}
-                <div className="flex items-baseline justify-between">
-                  <span className="text-xs font-medium text-muted-foreground">
+                <div className="zn-row zn-row--split zn-row--baseline">
+                  <span className="zn-kicker zn-kicker--inline">
                     {t("form.elevationTarget")}
                   </span>
-                  <span className="text-base font-semibold tabular-nums">
+                  <span className="zn-route-readout">
                     {useElevationTarget && elevationGainTargetM > 0
                       ? `${elevationGainTargetM} ${t("form.elevationUnit")}`
                       : t("form.elevationFree")}
@@ -455,9 +459,8 @@ export function RouteParametersForm({
                   max={maxAscentM}
                   step={10}
                   aria-label={t("form.elevationTarget")}
-                  className="[&>span:first-child]:h-2 [&_[role=slider]]:size-5"
                 />
-                <div className="flex flex-wrap gap-1.5">
+                <div className="zn-cluster">
                   {ELEVATION_PRESETS.filter((m) => m <= maxAscentM).map((m) => {
                     const active =
                       m === 0
@@ -472,7 +475,7 @@ export function RouteParametersForm({
                           setUseElevationTarget(m > 0);
                         }}
                         data-active={active}
-                        className="rounded-full border border-border/60 px-2.5 py-1 text-xs tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                        className="zn-route-preset"
                       >
                         {m === 0 ? t("form.elevationFree") : `${m} ${t("form.elevationUnit")}`}
                       </button>
@@ -487,23 +490,23 @@ export function RouteParametersForm({
     );
   }
 
-  // Desktop / tablet — full vertical form with all fieldsets visible.
+  // Desktop / tablet, full vertical form with all fieldsets visible.
   return (
     <form
       data-slot="route-form"
-      className="space-y-5 rounded-xl border border-border/60 bg-background p-4 sm:p-5"
+      className="zn-route-form"
       onSubmit={(e) => {
         e.preventDefault();
         submit();
       }}
     >
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.shape")}</legend>
+      <fieldset className="zn-route-form__field">
+        <legend className="zn-route-form__legend">{t("form.shape")}</legend>
         <Segmented value={shape} onChange={setShape} options={shapeOptions} label={t("form.shape")} />
       </fieldset>
 
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.discipline")}</legend>
+      <fieldset className="zn-route-form__field">
+        <legend className="zn-route-form__legend">{t("form.discipline")}</legend>
         <Segmented
           value={discipline}
           onChange={setDiscipline}
@@ -512,15 +515,15 @@ export function RouteParametersForm({
         />
       </fieldset>
 
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.surface")}</legend>
+      <fieldset className="zn-route-form__field">
+        <legend className="zn-route-form__legend">{t("form.surface")}</legend>
         <Segmented value={surface} onChange={setSurface} options={surfaceOptions} label={t("form.surface")} />
       </fieldset>
 
-      <fieldset className="space-y-3">
-        <div className="flex items-center justify-between gap-2">
-          <legend className="text-sm font-semibold">{t("form.distance")}</legend>
-          <div className="flex items-center gap-1.5">
+      <fieldset className="zn-route-form__field" style={{ "--field-gap": "var(--sp-6)" } as CSSProperties}>
+        <div className="zn-row zn-row--split" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+          <legend className="zn-route-form__legend">{t("form.distance")}</legend>
+          <div className="zn-row" style={{ "--gap": "var(--sp-3)" } as CSSProperties}>
             <input
               type="number"
               min={1}
@@ -531,10 +534,11 @@ export function RouteParametersForm({
               onChange={(e) =>
                 setDistanceKm(clampDistance(Number(e.target.value) || 1, maxDistanceKm))
               }
-              className="h-9 w-20 rounded-md border border-input bg-transparent px-2 text-right text-sm font-semibold tabular-nums shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="zn-route-field zn-route-field--num"
+              style={{ "--w": "84px" } as CSSProperties}
               aria-label={t("form.distanceEdit")}
             />
-            <span className="text-xs text-muted-foreground">{t("form.distanceUnit")}</span>
+            <span className="zn-kicker zn-kicker--inline">{t("form.distanceUnit")}</span>
           </div>
         </div>
         <Slider
@@ -545,10 +549,10 @@ export function RouteParametersForm({
           step={0.5}
           aria-label={t("form.distance")}
         />
-        {/* Presets — discipline-aware ceiling filters out anything beyond
+        {/* Presets, discipline-aware ceiling filters out anything beyond
             the slider's max (e.g. Marathon on a 30 km running cap, all
             three presets on a sub-21 km cycling cap). */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="zn-cluster">
           {[
             { label: "5K", km: 5 },
             { label: "10K", km: 10 },
@@ -564,14 +568,14 @@ export function RouteParametersForm({
                   type="button"
                   onClick={() => setDistanceKm(clampDistance(p.km, maxDistanceKm))}
                   data-active={active}
-                  className="rounded-full border border-border/60 px-2.5 py-0.5 text-xs font-medium tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                  className="zn-route-preset"
                 >
                   {p.label}
                 </button>
               );
             })}
         </div>
-        <div className="flex justify-between text-[11px] tabular-nums text-muted-foreground">
+        <div className="zn-route-form__scale">
           <span>{t("form.distanceMin")}</span>
           <span>{t("form.distanceMaxValue", { max: maxDistanceKm })}</span>
         </div>
@@ -579,11 +583,11 @@ export function RouteParametersForm({
 
       {/* D+ */}
       {maxAscentM > 0 && (
-        <fieldset className="space-y-3">
-          <div className="flex items-center justify-between gap-2">
+        <fieldset className="zn-route-form__field" style={{ "--field-gap": "var(--sp-6)" } as CSSProperties}>
+          <div className="zn-row zn-row--split" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
             <div>
-              <legend className="text-sm font-semibold">{t("form.elevationTarget")}</legend>
-              <p className="text-xs text-muted-foreground">{t("form.elevationTargetHint")}</p>
+              <legend className="zn-route-form__legend">{t("form.elevationTarget")}</legend>
+              <p className="zn-route-form__hint">{t("form.elevationTargetHint")}</p>
             </div>
             <Button
               type="button"
@@ -597,8 +601,8 @@ export function RouteParametersForm({
 
           {useElevationTarget && (
             <>
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-sm text-muted-foreground">{t("form.elevationTargetValue")}</span>
+              <div className="zn-row zn-row--split zn-row--baseline" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+                <span className="zn-kicker zn-kicker--inline">{t("form.elevationTargetValue")}</span>
                 {editingElevation ? (
                   <input
                     type="number"
@@ -613,14 +617,15 @@ export function RouteParametersForm({
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === "Escape") setEditingElevation(false);
                     }}
-                    className="w-24 rounded-md border border-primary bg-background px-2 py-1 text-right text-base font-semibold tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    className="zn-route-field zn-route-field--num"
+                    style={{ "--w": "96px" } as CSSProperties}
                     aria-label={t("form.elevationTargetEdit")}
                   />
                 ) : (
                   <button
                     type="button"
                     onClick={() => setEditingElevation(true)}
-                    className="rounded-md px-2 py-0.5 text-base font-semibold tabular-nums hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                    className="zn-route-preset"
                     aria-label={t("form.elevationTargetEdit")}
                   >
                     {elevationGainTargetM} {t("form.elevationUnit")}
@@ -635,7 +640,7 @@ export function RouteParametersForm({
                 step={10}
                 aria-label={t("form.elevationTarget")}
               />
-              <div className="flex justify-between text-[11px] tabular-nums text-muted-foreground">
+              <div className="zn-route-form__scale">
                 <span>{t("form.elevationMin")}</span>
                 <span>{t("form.elevationMaxValue", { max: maxAscentM })}</span>
               </div>
@@ -644,14 +649,14 @@ export function RouteParametersForm({
         </fieldset>
       )}
 
-      {/* Bearing — only for out-and-back. */}
+      {/* Bearing, only for out-and-back. */}
       {shape === "out_and_back" && (
-        <fieldset className="space-y-3">
-          <div className="flex items-baseline justify-between gap-2">
-            <legend className="text-sm font-semibold">{t("form.bearing")}</legend>
+        <fieldset className="zn-route-form__field" style={{ "--field-gap": "var(--sp-6)" } as CSSProperties}>
+          <div className="zn-row zn-row--split zn-row--baseline" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+            <legend className="zn-route-form__legend">{t("form.bearing")}</legend>
             <span className="sr-only">{bearingDisplay}</span>
           </div>
-          <div className="flex justify-center pt-1">
+          <div className="zn-route-form__compass">
             <CompassInput
               value={bearingDeg}
               onChange={(v) => setBearingDeg(((v % 360) + 360) % 360)}
@@ -663,47 +668,46 @@ export function RouteParametersForm({
       )}
 
       {/* Point de départ */}
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.start")}</legend>
+      <fieldset className="zn-route-form__field">
+        <legend className="zn-route-form__legend">{t("form.start")}</legend>
         <AddressSearchInput
           onSelect={(point, label) => updateStart(point, label)}
           onClear={() => updateStart(null, null)}
           selectedLabel={startLabel}
           disabled={isLocating}
         />
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="zn-cluster">
           <Button
             type="button"
             variant={start ? "outline" : "secondary"}
             size="sm"
             onClick={requestGps}
             disabled={isLocating}
-            className="gap-2"
           >
-            {isLocating ? <Loader2 className="size-4 animate-spin" /> : <MapPin className="size-4" />}
+            {isLocating ? <Loader2 className="zn-route-spin" /> : <MapPin />}
             {isLocating ? t("form.gpsLocating") : t("form.useGps")}
           </Button>
           {start && (
-            <span className="text-[11px] tabular-nums text-muted-foreground">
+            <span className="zn-route-form__coords">
               {start[1].toFixed(4)}, {start[0].toFixed(4)}
             </span>
           )}
         </div>
       </fieldset>
 
-      {/* Sticky CTA — pinned to the bottom of the scrollable aside so
+      {/* Sticky CTA, pinned to the bottom of the scrollable aside so
           the user always sees "Générer" regardless of scroll position
           (long forms with elevation target + bearing can outgrow short
           viewports). Negative margins extend the bar across the full
           form padding so the bg fully covers content scrolled behind. */}
-      <div className="sticky bottom-0 -mx-4 -mb-4 mt-2 border-t border-border/60 bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:-mx-5 sm:-mb-5 sm:px-5">
+      <div className="zn-route-form__foot">
         <Button
           type="submit"
           size="lg"
-          className="h-12 w-full text-base font-semibold"
+          className="zn-route-form__submit"
           disabled={isGenerating || !start}
         >
-          {isGenerating && <Loader2 className="mr-2 size-4 animate-spin" />}
+          {isGenerating && <Loader2 className="zn-route-spin" />}
           {t("form.generate")}
         </Button>
       </div>

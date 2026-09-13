@@ -1,0 +1,78 @@
+{
+  "seoTitle": "Aujourd'hui",
+  "seoDescription": "Ta séance du jour, et les deux raccourcis quand tu ne sais pas quoi faire.",
+  "title": "Aujourd'hui",
+  "resume": {
+    "session": {
+      "kicker": "À faire aujourd'hui",
+      "line_one": "Une séance t'attend, semaine {{week}}.",
+      "line_other": "{{count}} séances t'attendent, semaine {{week}}."
+    },
+    "rest": {
+      "kicker": "Aujourd'hui",
+      "line": "Repos. C'est prévu, et ça compte."
+    },
+    "upcoming": {
+      "kicker": "Bientôt",
+      "line_one": "Ton plan commence demain.",
+      "line_other": "Ton plan commence dans {{count}} jours."
+    },
+    "none": {
+      "kicker": "Pour commencer",
+      "line": "Rien en cours.",
+      "body": "Construis un plan, ou compose juste une semaine si tu ne veux pas t'engager plus loin.",
+      "cta": "Créer un plan"
+    },
+    "inPlan": "Plan",
+    "inWeek": "Ma semaine",
+    "openPlan": "Ouvrir mon plan",
+    "openWeek": "Ouvrir ma semaine",
+    "openSession": "Ouvrir la séance"
+  },
+  "quick": {
+    "title": "Quand tu ne sais pas quoi faire",
+    "draw": "Tire-moi une séance",
+    "drawHint": "Le hasard choisit, tu n'as rien à décider",
+    "week": "Ma semaine",
+    "weekHint": "Sept jours, sans t'engager sur un plan"
+  },
+  "doors": {
+    "title": "Les trois portes",
+    "sessions": {
+      "kicker": "La bibliothèque",
+      "title": "Séances",
+      "body": "Toutes les séances, rangées par pratique : route, trail, ultra.",
+      "cta": "Parcourir"
+    },
+    "plans": {
+      "kicker": "S'entraîner dans la durée",
+      "title": "Plans",
+      "body": "Un plan bâti pour ta course, ou une semaine à la fois.",
+      "cta": "Voir mes plans"
+    },
+    "numbers": {
+      "kicker": "Tes repères",
+      "title": "Chiffres",
+      "body": "Tes zones, tes allures, tes tests. De quoi rendre le reste juste.",
+      "cta": "Ouvrir les calculateurs"
+    }
+  },
+  "art": {
+    "brief": "Une figure debout sur le filet, au repos avant la sortie.",
+    "label": "Dessin : une coureuse debout, prête à partir"
+  },
+  "week": {
+    "letters": "L,M,M,J,V,S,D",
+    "dayNames": "lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche",
+    "label": "La semaine {{week}}",
+    "rest": "{{day}} : repos",
+    "day_one": "{{day}} : une séance, {{minutes}} min",
+    "day_other": "{{day}} : {{count}} séances, {{minutes}} min"
+  },
+  "facts": {
+    "week": "semaine {{n}}",
+    "minutes": "{{n}} min",
+    "sessions_one": "{{count}} séance",
+    "sessions_other": "{{count}} séances"
+  }
+}

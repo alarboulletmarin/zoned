@@ -3,11 +3,11 @@
     "seoHeroLabel": "À propos",
     "statsWorkouts": "Séances",
     "statsCalculators": "Calculateurs",
-    "title": "Une bibliothèque d'entraînement, faite par un coureur, pour les coureurs",
-    "description": "Zoned rassemble des séances structurées par zones, des plans d'entraînement et des outils pratiques. L'objectif : rendre la science de l'entraînement accessible, sans abonnement, sans suivi, sans superflu.",
+    "title": "Une bibliothèque d'entraînement, par un coureur",
+    "description": "Des séances par zones, des plans et des calculateurs. Sans abonnement, sans suivi, sans superflu.",
     "personal": {
       "title": "Le projet",
-      "bio": "Zoned est développé par un coureur passionné, en open source. Le projet est né du besoin d'un outil simple, basé sur les zones, pour structurer l'entraînement sans dépendre d'une plateforme propriétaire."
+      "bio": "Zoned est né du besoin d'un outil simple, par zones, pour s'entraîner sans dépendre d'une plateforme propriétaire."
     },
     "openSource": {
       "title": "Open source",
@@ -19,7 +19,7 @@
     },
     "privacy": {
       "title": "Vie privée",
-      "noServer": "Aucun serveur, aucun compte, aucun tracker. Vos données restent dans votre navigateur."
+      "noServer": "Aucun serveur, aucun compte, aucun cookie. Tes données restent dans ton navigateur."
     },
     "credits": {
       "title": "Stack technique",
@@ -30,35 +30,54 @@
   "methodology": {
     "title": "Méthodologie",
     "seoDescription": "Les fondements scientifiques du système d'entraînement à 6 zones de Zoned. Basé sur la recherche en sciences du sport.",
-    "heading": "La Science derrière Zoned",
-    "intro": "Chaque séance dans Zoned repose sur des décennies de recherche en sciences du sport. Voici les principes physiologiques et les études clés qui structurent nos zones d'entraînement.",
+    "heading": "La science derrière Zoned",
+    "intro": "Chaque séance de Zoned repose sur des décennies de recherche en sciences du sport.",
     "ourApproach": "Notre approche",
     "ourApproachText1": "Toutes les séances de Zoned sont basées sur les sciences du sport établies. Les zones d'intensité ne sont pas arbitraires : elles correspondent à des seuils physiologiques réels, mesurables en laboratoire ou estimables à partir de tests de terrain.",
     "ourApproachText2": "Notre modèle à 6 zones est dérivé de marqueurs physiologiques clés : le premier seuil ventilatoire (VT1), le second seuil ventilatoire (VT2, aussi appelé seuil lactique), et la consommation maximale d'oxygène (VO2max). Ces seuils définissent des états métaboliques distincts qui nécessitent des stimuli d'entraînement spécifiques.",
-    "ourApproachDisclaimer": "Important : les zones en pourcentage présentées ici sont des approximations. La fréquence cardiaque aux seuils LT1 et LT2 varie considérablement d'un individu à l'autre. Un test en laboratoire fournit les limites les plus précises pour vos zones personnelles.",
-    "sixZones": "Les 6 Zones",
-    "marker": "Marqueur :",
-    "develops": "Développe :",
-    "researchers": "Chercheurs & Méthodes de référence",
+    "ourApproachDisclaimer": "Important : les zones en pourcentage présentées ici sont des approximations. La fréquence cardiaque aux seuils LT1 et LT2 varie considérablement d'un individu à l'autre. Un test en laboratoire fournit les limites les plus précises pour tes zones personnelles.",
+    "sixZones": "Les 6 zones",
+    "marker": "Marqueur",
+    "develops": "Développe",
+    "researchers": "Chercheurs et méthodes de référence",
     "viewPublication": "Voir la publication",
     "keyStudies": "Études fondamentales",
     "viewStudy": "Voir l'étude",
-    "resources": "Ressources"
+    "resources": "Ressources",
+    "kicker": "{{n}} études citées",
+    "figuresLabel": "Les six zones dessinées : le même corps du pas de marche au sprint, encré de plus en plus foncé à mesure que l'effort monte."
   },
   "planMethodology": {
     "title": "Guide des plans",
-    "seoDescription": "Les 7 principes scientifiques derrière la génération des plans d'entraînement Zoned. Comprenez comment votre plan est construit.",
+    "seoDescription": "Les 7 principes scientifiques derrière la génération des plans d'entraînement Zoned. Comprends comment ton plan est construit.",
     "heading": "Comment Zoned construit ton plan",
-    "intro": "Chaque plan d'entraînement dans Zoned est généré à partir de 7 principes fondés sur la recherche. Pas de boîte noire : voici exactement comment ton plan est construit, et pourquoi.",
+    "intro": "Pas de boîte noire : voici comment ton plan est construit, et pourquoi.",
     "introText": "Le générateur de plans combine les modèles de périodisation de Daniels et Lydiard, la distribution d'entraînement polarisé validée par Seiler, les règles de progression de volume issues des recherches de Gabbett sur le ratio charge aiguë/chronique, et le modèle de taper exponentiel de Mujika & Padilla. Chaque paramètre est adapté à ta distance de course, ton niveau et ton objectif.",
     "introDisclaimer": "Ce sont les mêmes principes utilisés par les entraîneurs professionnels. La différence, c'est que Zoned les applique automatiquement en fonction de ton profil.",
     "learnMore": "En savoir plus",
     "scientificReferences": "Références scientifiques",
-    "viewStudy": "Voir l'étude"
+    "viewStudy": "Voir l'étude",
+    "kicker": "{{n}} principes",
+    "sources": "Sources"
   },
   "article": {
     "home": "Accueil",
-    "learn": "Apprendre"
+    "learn": "Apprendre",
+    "breadcrumb": "Fil d'Ariane",
+    "pager": "Article précédent et suivant",
+    "loading": "Chargement de l'article",
+    "readTimeLabel": "Temps de lecture",
+    "updatedOn": "mis à jour le {{date}}",
+    "callout": {
+      "tip": "Conseil",
+      "warning": "Attention",
+      "key": "À retenir",
+      "stat": "Chiffre clé"
+    },
+    "error": {
+      "title": "Le texte de l'article n'est pas arrivé",
+      "text": "Le chargement s'est interrompu. L'index et les autres articles restent ouverts : réessaie depuis la liste."
+    }
   },
   "changelog": {
     "title": "Nouveautés",
@@ -88,13 +107,34 @@
     "prevArticle": "Article précédent",
     "nextArticle": "Article suivant",
     "backToHub": "Retour aux articles",
-    "zonesCtaText": "Prêt à personnaliser vos zones d'entraînement ?",
-    "zonesCtaButton": "Configurer mes zones"
+    "zonesCtaText": "Ces six zones deviennent les tiennes dès que tu saisis ta VMA.",
+    "zonesCtaButton": "Régler mes zones",
+    "catalogue": "{{count}} articles · {{minutes}} min de lecture",
+    "lede": "Pourquoi une séance marche, pas seulement comment la faire. Chaque affirmation porte sa source.",
+    "categoriesLabel": "Catégorie d'article",
+    "articleCount_one": "{{count}} article",
+    "articleCount_other": "{{count}} articles",
+    "empty": "Aucun article dans cette catégorie",
+    "emptyDescription": "Cette catégorie est vide pour l'instant. Les {{total}} articles publiés restent visibles sous l'onglet Tous.",
+    "showAll": "Voir les {{total}} articles"
   },
   "privacy": {
     "free": "100% gratuit",
     "noAccount": "Aucun compte requis",
-    "localData": "Vos données restent sur votre appareil",
-    "footerNote": "Pas de tracking. Pas de cookies."
+    "localData": "Tes données restent sur ton appareil",
+    "footerNote": "Pas de cookie. Pas de profil."
+  },
+  "aboutPage": {
+    "kicker": "Open source · sans compte",
+    "statsPlans": "Plans",
+    "statsCollections": "Collections",
+    "statsArticles": "Articles",
+    "statsZones": "Zones",
+    "countsLabel": "Le catalogue en chiffres",
+    "claimsTitle": "Ce que ça implique"
+  },
+  "changelogPage": {
+    "releases": "{{n}} versions publiées",
+    "showOlder": "Voir les {{n}} versions précédentes"
   }
 }

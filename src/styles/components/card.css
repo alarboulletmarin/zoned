@@ -1,0 +1,139 @@
+/* Card, the paper surface everything else sits on: cream fill, 1.5px ink
+   outline, 22px radius. No shadow: a hard offset is reserved for floating
+   panels (dialog, sheet, popover, toast), never for a card in a list.
+
+   The horizontal inset lives on the sub-parts, not on the card, so a child can
+   still bleed to the edges, that is the structure the call sites already
+   depend on. The card itself only owns the block padding and the stack gap. */
+
+.zn-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-stack);
+  padding-block: var(--pad-card);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* ── sizes ────────────────────────────────────────────────────────────── */
+
+.zn-card[data-size="compact"] {
+  gap: var(--sp-5);
+  padding-block: var(--pad-card-sm);
+}
+
+/* flush hands the whole block axis to its children, a card whose content
+   draws its own edges (a table, a calendar grid, a media strip). */
+.zn-card[data-size="flush"] {
+  gap: 0;
+  padding-block: 0;
+}
+
+/* ── interactive ──────────────────────────────────────────────────────── */
+
+/* Hover is colour only, the card never lifts and never grows a shadow.
+   Press is the same 1px push into the paper the button uses. */
+.zn-card[data-interactive="true"] {
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-card[data-interactive="true"]:hover {
+  background: var(--surface-band);
+}
+
+.zn-card[data-interactive="true"]:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* CHOISI, la déclaration de référence du système. Une carte retenue double
+   son filet d'ENCRE vers l'intérieur ; elle ne prend plus le cadre vermillon.
+
+   POURQUOI l'encre : ce même cadre vermillon 2.5px disait aussi aujourd'hui,
+   cible de dépôt, verrouillé, jour de course, irréversible, et
+   c'est le dessin de l'anneau de focus (base.css). Dix-sept sens pour une
+   forme. Le vermillon est rendu à maintenant et au focus, rien d'autre.
+
+   POURQUOI un box-shadow inset et pas une bordure : mesuré au navigateur, la
+   bordure 1.5 → 2.5px faisait grandir la carte de 2px et poussait sa voisine
+   de 2px vers le bas à chaque choix. L'ombre interne ne participe pas à la
+   mise en page et suit le rayon des coins : 3px d'encre continue sur les
+   quatre côtés, zéro pixel de déplacement.
+
+   WCAG 1.4.1 : la marque n'est pas une teinte mais une ÉPAISSEUR, elle
+   survit au niveau de gris, et aria-selected / aria-current / data-state
+   la portent déjà pour les technologies d'assistance. */
+.zn-card[aria-selected="true"],
+.zn-card[aria-current="true"],
+.zn-card[data-state="selected"] {
+  box-shadow: inset 0 0 0 var(--bw-rule) var(--line-strong);
+}
+
+/* WCAG 2.5.8, a clickable card still answers to the 44px floor on touch. */
+@media (pointer: coarse) {
+  .zn-card[data-interactive="true"] {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* ── header ───────────────────────────────────────────────────────────── */
+
+/* Two rows (title, description) by default. A card-action anywhere inside
+   opens a second column for it, the :has() the Tailwind variant was faking. */
+.zn-card__header {
+  display: grid;
+  grid-auto-rows: min-content;
+  grid-template-rows: auto auto;
+  align-items: start;
+  gap: var(--sp-4);
+  padding-inline: var(--pad-card);
+}
+
+.zn-card__header:has([data-slot="card-action"]) {
+  grid-template-columns: 1fr auto;
+}
+
+/* Caller-driven rule: a header that draws its own bottom line pays for the
+   space under it. Kept as the Tailwind class so `border-b` call sites work. */
+.zn-card__header:where(.border-b) {
+  padding-block-end: var(--pad-card);
+}
+
+.zn-card__title {
+  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-card__description {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-card__action {
+  grid-column-start: 2;
+  grid-row: 1 / span 2;
+  align-self: start;
+  justify-self: end;
+}
+
+/* ── content & footer ─────────────────────────────────────────────────── */
+
+.zn-card__content {
+  padding-inline: var(--pad-card);
+}
+
+.zn-card__footer {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--pad-card);
+}
+
+.zn-card__footer:where(.border-t) {
+  padding-block-start: var(--pad-card);
+}

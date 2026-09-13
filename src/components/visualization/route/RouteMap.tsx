@@ -31,7 +31,7 @@ interface RouteMapProps {
   className?: string;
   /** Trace stroke colour. Defaults to Zoned primary. */
   color?: string;
-  /** Disable user interaction (drag, zoom) — useful for previews. */
+  /** Disable user interaction (drag, zoom), useful for previews. */
   interactive?: boolean;
   /**
    * When provided, clicking the map calls this with `[lon, lat]`. Useful to
@@ -111,7 +111,7 @@ function waypointIcon(kind: WaypointKind, color: string): L.DivIcon {
 /**
  * Decide where to splice a new waypoint into the user-facing waypoint list
  * given the click coordinates. Picks the segment whose nearest endpoint is
- * the closest to the click — good enough for short waypoint lists where a
+ * the closest to the click, good enough for short waypoint lists where a
  * full point-to-segment projection would be overkill.
  */
 function pickInsertionIndex(
@@ -236,7 +236,7 @@ export function RouteMap({
       keyboard: interactive,
       attributionControl: true,
       // Zoom animations interact badly with React-driven invalidateSize calls
-      // (the tile-container can stay stuck mid-transform — visible bug:
+      // (the tile-container can stay stuck mid-transform, visible bug:
       // blank/scaled tiles after generation). Disabling them removes the
       // race entirely; we lose the ~150ms zoom ease but everything stays
       // crisp.
@@ -273,7 +273,7 @@ export function RouteMap({
     // Pin the map to the current container box before any geographic call
     // (fitBounds, setView). Without this, layout changes that React just
     // committed (e.g. expand/collapse toggle) wouldn't reach Leaflet until
-    // the next ResizeObserver tick — fitBounds would zoom on a stale size
+    // the next ResizeObserver tick, fitBounds would zoom on a stale size
     // and the tile layer would render blank cells until a manual pan.
     map.invalidateSize({ animate: false, pan: false });
 
@@ -341,7 +341,7 @@ export function RouteMap({
 
       if (editableWaypoints) {
         // Insertion clicks travel through the polyline so we can put the new
-        // waypoint at the right index — Leaflet routes the click to whichever
+        // waypoint at the right index, Leaflet routes the click to whichever
         // listener registered first, hence stopping propagation here so the
         // ambient `onMapClick` (used outside edit mode) doesn't fire too.
         trackLine.on("click", (e) => {
@@ -460,7 +460,7 @@ export function RouteMap({
 
   // Leaflet caches the container size at init time, so any external resize
   // (e.g. wrapper toggling between collapsed/expanded heights) leaves the
-  // tile layer painted onto stale dimensions — the visible result is a
+  // tile layer painted onto stale dimensions, the visible result is a
   // blank map until the user pans. ResizeObserver papers over that by
   // calling invalidateSize as soon as our container's box changes.
   useEffect(() => {
@@ -483,14 +483,14 @@ export function RouteMap({
     return () => cancelAnimationFrame(id);
   }, [className]);
 
+  // No crosshair when the map is waiting for a start-point click: Leaflet's own
+  // .leaflet-grab is unlayered CSS and outranks every layer we can write, so the
+  // `cursor-crosshair` this used to carry never applied either. Porting it would
+  // have shipped a rule that does nothing.
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "h-72 w-full overflow-hidden rounded-xl border border-border/60 bg-muted/30 sm:h-96 lg:h-[28rem]",
-        onMapClick ? "cursor-crosshair" : undefined,
-        className,
-      )}
+      className={cn("zn-route-map", className)}
       role="region"
       aria-label="Carte du parcours"
     />

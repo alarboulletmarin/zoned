@@ -1,5 +1,5 @@
 /**
- * Session Builder — Workout selection + scaling + pace annotation
+ * Session Builder, Workout selection + scaling + pace annotation
  *
  * Replaces the simple "select a template and estimate duration" approach
  * with a multi-step builder that:
@@ -50,7 +50,7 @@ export interface SessionBuildContext {
   raceDistance: RaceDistance;
   allWorkouts: WorkoutTemplate[];
   usedWorkoutIds: string[];
-  /** Workouts already placed in the current week — never reuse them */
+  /** Workouts already placed in the current week, never reuse them */
   excludeWorkoutIds?: string[];
   paces: TrainingPaces;
   elevationGain?: number;
@@ -71,7 +71,7 @@ export interface SessionBuildContext {
  * Highest zone referenced by a zone string.
  *
  * Zone strings are free-form in the catalogue ("Z4", "Z1-Z2", "Z5+", "Z4→Z5+"),
- * so a lookup table silently missed the extended forms and fell back to Z2 —
+ * so a lookup table silently missed the extended forms and fell back to Z2,
  * which annotated VO2max sets with easy pace and costed them at easy pace too.
  *
  * Delegates to the shared parser rather than mirroring it: this was the last
@@ -175,7 +175,7 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
   );
 
   // Assemble the session.
-  // A key_quality slot filled with an easy-run fallback is not a key session —
+  // A key_quality slot filled with an easy-run fallback is not a key session,
   // labelling it as one misrepresents the week's hard/easy balance.
   const QUALITY_TYPES = new Set([
     "vo2max", "threshold", "tempo", "hills", "fartlek", "race_specific", "speed", "intervals",
@@ -306,7 +306,7 @@ function estimatePaceAwareEffort(
     };
   }
 
-  // Fallback to typicalDuration — assume easy pace for the whole session
+  // Fallback to typicalDuration, assume easy pace for the whole session
   const avg = (workout.typicalDuration.min + workout.typicalDuration.max) / 2;
   const easyPace = (paces.E.min + paces.E.max) / 2;
   return {
@@ -364,7 +364,7 @@ function estimateSingleBlockEffort(
     return { min, km: min / getPaceForBlock(block, paces) };
   }
 
-  // Distance-based blocks (intervals) — use pace-aware estimation
+  // Distance-based blocks (intervals), use pace-aware estimation
   if (block.distanceM || block.distanceKm) {
     const distanceKm = block.distanceKm ?? ((block.distanceM ?? 0) / 1000);
     if (distanceKm <= 0) return { min: 0, km: 0 };
@@ -373,7 +373,7 @@ function estimateSingleBlockEffort(
     const paceMinKm = getPaceForBlock(block, paces);
     const runTimeMin = distanceKm * paceMinKm;
 
-    // Recovery time between reps — covered at easy pace
+    // Recovery time between reps, covered at easy pace
     let recoveryMin = 0;
     if (block.recovery || block.rest) {
       recoveryMin = estimateRecoveryTime(block, runTimeMin);
@@ -391,7 +391,7 @@ function estimateSingleBlockEffort(
     };
   }
 
-  // Rep-only blocks (no distance/duration) — parse rep duration from description
+  // Rep-only blocks (no distance/duration), parse rep duration from description
   if (reps > 1) {
     const repDurationMin = parseRepDuration(block);
     const recoveryMin = block.recovery || block.rest
@@ -574,7 +574,7 @@ function buildSessionNotes(
   const parts: string[] = [];
   const partsEn: string[] = [];
 
-  // Pace note — prefer what the blocks actually prescribe
+  // Pace note, prefer what the blocks actually prescribe
   const intensity = blockIntensity ?? sessionTypeToIntensity(sessionType);
   const range = paces[intensity];
   const label = INTENSITY_LABELS[intensity];
@@ -602,8 +602,8 @@ function buildSessionNotes(
 
   // Elevation
   if (elevationGain && elevationGain > 0 && sessionType === "long_run") {
-    parts.push(`Course avec ${elevationGain}m D+ — intégrez du dénivelé`);
-    partsEn.push(`Race has ${elevationGain}m elevation — include hills`);
+    parts.push(`Course avec ${elevationGain}m D+, intégrez du dénivelé`);
+    partsEn.push(`Race has ${elevationGain}m elevation, include hills`);
   }
 
   return {
