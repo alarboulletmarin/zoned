@@ -3,6 +3,12 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Download, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { exportToPNG } from "@/lib/export/png";
 import { ZoneBadge } from "./ZoneBadge";
 import { PhaseCard } from "./PhaseCard";
@@ -35,6 +41,9 @@ interface WorkoutStructureProps {
   exportable?: boolean;
 }
 
+/** Les trois phases d'une seance, dans l'ordre ou elles se courent. */
+type PhaseKey = "warmup" | "main" | "cooldown";
+
 interface StepItemProps {
   step: WorkoutStep;
   depth: number;
@@ -48,7 +57,9 @@ export function WorkoutStructure({ workout, userZones, className, exportable }: 
   const { t: tCommon } = useTranslation("common");
   const isEnglish = useIsEnglish();
   const sheetRef = useRef<HTMLDivElement>(null);
+  const phaseCardRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [phaseToExport, setPhaseToExport] = useState<PhaseKey | null>(null);
 
   // Personalized paces (min/km) only make sense for running. Strip them for
   // cycling and swimming so the personalised footer falls back to HR alone
@@ -97,7 +108,8 @@ export function WorkoutStructure({ workout, userZones, className, exportable }: 
     },
   ].filter((phase) => phase.steps.length > 0);
 
-  const handleExport = async () => {
+  /** Le bloc entier, tel qu'il est a l'ecran, ses trois cartes cote a cote. */
+  const handleExportAll = async () => {
     setIsExporting(true);
     const toastId = toast.loading(tCommon("export.loading.image", tCommon("export.title")));
     try {
@@ -110,6 +122,70 @@ export function WorkoutStructure({ workout, userZones, className, exportable }: 
     }
   };
 
+  /**
+   * Une phase seule, en portrait.
+   *
+   * Celle-la ne peut pas photographier la page : a l'ecran large une carte de
+   * phase est une colonne d'un tiers, et la meme carte prise depuis un
+   * telephone serait une autre image. Elle rend donc une COPIE hors ecran a
+   * largeur fixe, avec la presentation etroite (pastilles sans libelle, pas de
+   * frise de 96px), pour que l'image soit la meme quel que soit l'ecran d'ou
+   * on la demande. C'est le geste que `ExportMenu` fait deja pour la carte de
+   * seance, a ceci pres qu'ici la copie est le composant de la page lui-meme.
+   */
+  const handleExportPhase = async (key: PhaseKey) => {
+    setIsExporting(true);
+    setPhaseToExport(key);
+    const toastId = toast.loading(tCommon("export.loading.image", tCommon("export.title")));
+
+    // Un cadre pour que React pose la copie, puis de quoi laisser les polices
+    // et les SVG se peindre dedans.
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    try {
+      if (!phaseCardRef.current) throw new Error("Phase card not rendered");
+      await exportToPNG(phaseCardRef.current, `${workout.id}-structure-${key}`, { padding: 24 });
+      toast.success(tCommon("export.success.image"), { id: toastId });
+    } catch {
+      toast.error(tCommon("export.error.image"), { id: toastId });
+    } finally {
+      setPhaseToExport(null);
+      setIsExporting(false);
+    }
+  };
+
+  /** Une carte de phase. Rendue dans la grille de la page, et dans la copie. */
+  const renderPhaseCard = (phase: (typeof phases)[number]) => {
+    const profile = phaseProfile(segments, phase.key);
+    const minutes = segments
+      .filter((segment) => segment.type === phase.key)
+      .reduce((sum, segment) => sum + segment.durationMin, 0);
+
+    return (
+      <PhaseCard
+        key={phase.key}
+        className="zn-phase"
+        label={phase.label}
+        summary={shouldShowPhaseSummary(phase.steps) ? phase.summary : null}
+        meta={
+          profile.length > 0 ? (
+            <span className="zn-phase__profile">
+              <ZoneBar blocks={profile} condense height={18} className="zn-phase__bar" />
+              {formatDurationMinutes(minutes)}
+            </span>
+          ) : null
+        }
+      >
+        {phase.steps.map((step, index) => (
+          <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
+        ))}
+      </PhaseCard>
+    );
+  };
+
+  const exportedPhase = phases.find((phase) => phase.key === phaseToExport);
+
   return (
     <>
       <div ref={sheetRef} className={cn("zn-structure", className)}>
@@ -118,43 +194,43 @@ export function WorkoutStructure({ workout, userZones, className, exportable }: 
             zones this session actually touches. */}
         <ZoneScale className="zn-structure__legend" zones={paintedZones} />
 
-        {phases.map((phase) => {
-          const profile = phaseProfile(segments, phase.key);
-          const minutes = segments
-            .filter((segment) => segment.type === phase.key)
-            .reduce((sum, segment) => sum + segment.durationMin, 0);
-
-          return (
-            <PhaseCard
-              key={phase.key}
-              className="zn-phase"
-              label={phase.label}
-              summary={shouldShowPhaseSummary(phase.steps) ? phase.summary : null}
-              meta={
-                profile.length > 0 ? (
-                  <span className="zn-phase__profile">
-                    <ZoneBar blocks={profile} condense height={18} className="zn-phase__bar" />
-                    {formatDurationMinutes(minutes)}
-                  </span>
-                ) : null
-              }
-            >
-              {phase.steps.map((step, index) => (
-                <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
-              ))}
-            </PhaseCard>
-          );
-        })}
+        {phases.map(renderPhaseCard)}
       </div>
 
       {/* Sous le bloc, comme le tableau de splits pose la sienne sous la
-          table : l'action suit ce qu'elle enregistre. */}
+          table : l'action suit ce qu'elle enregistre. Elle ouvre un menu
+          parce qu'il y a deux images a vouloir, le bloc entier pour garder la
+          seance, et une phase seule, en portrait, pour l'envoyer. */}
       {exportable && (
         <div className="zn-structure__actions">
-          <Button variant="outline" size="sm" onClick={handleExport} disabled={isExporting}>
-            {isExporting ? <Loader2 className="zn-spin" /> : <Download />}
-            {t("screen.structureDownload")}
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" disabled={isExporting}>
+                {isExporting ? <Loader2 className="zn-spin" /> : <Download />}
+                {t("screen.structureDownload")}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem onClick={handleExportAll}>
+                {t("screen.structureDownloadAll")}
+              </DropdownMenuItem>
+              {phases.map((phase) => (
+                <DropdownMenuItem key={phase.key} onClick={() => handleExportPhase(phase.key)}>
+                  {phase.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
+
+      {/* La copie hors ecran d'une phase seule. Largeur fixe et presentation
+          etroite : l'image ne depend pas de l'ecran d'ou on la demande. */}
+      {exportedPhase && (
+        <div className="zn-structure__offscreen" aria-hidden>
+          <div ref={phaseCardRef} className="zn-structure zn-structure--narrow zn-structure--sheet">
+            {renderPhaseCard(exportedPhase)}
+          </div>
         </div>
       )}
     </>

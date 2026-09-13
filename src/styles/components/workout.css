@@ -43,6 +43,23 @@
   margin-block-start: var(--sp-12);
 }
 
+/* La copie qu'une phase exportee rend le temps d'une capture. Hors de l'ecran
+   et hors du calque d'affichage, mais DANS la page : html-to-image lit des
+   styles calcules, ce qu'un noeud detache n'a pas. */
+.zn-structure__offscreen {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: -9999px;
+  z-index: -1;
+}
+
+/* La largeur de l'image d'une phase seule. Celle d'un telephone, parce que
+   c'est la forme qu'on envoie et qu'on lit en courant : une carte de phase
+   large tient sur trois lignes et ne dit plus rien de sa structure. */
+.zn-structure--sheet {
+  inline-size: 420px;
+}
+
 /* One card per phase, the shape the kit's SessionScreen states. */
 .zn-phase {
   padding: var(--pad-card);
@@ -109,6 +126,43 @@
     gap: 0;
     padding: var(--sp-3) var(--sp-6);
   }
+}
+
+/* ── la meme etroitesse, demandee plutot que subie ────────────────────── */
+
+/* Les memes reglages, poses par une classe au lieu de l'ecran.
+ *
+ * L'export d'une phase en image rend une copie hors ecran a 420px, et une
+ * requete media ne connait que la fenetre : une copie etroite prise depuis un
+ * ordinateur aurait garde la presentation large, donc la frise de 96px et des
+ * pastilles qui epellent "Z1-Z2 Recuperation vers Endurance" dans une colonne
+ * qui fait la moitie de leur longueur. C'est exactement ce que le bloc
+ * ci-dessus a ete ecrit pour eviter.
+ *
+ * Les declarations sont recopiees et pas partagees, parce que CSS ne sait pas
+ * donner un meme corps de regles a une requete media et a une classe. Les deux
+ * blocs se lisent l'un sous l'autre : ce qui change dans l'un change dans
+ * l'autre. */
+.zn-structure--narrow .zn-phase {
+  padding: var(--sp-9) var(--sp-10);
+  border-radius: var(--r-2xl);
+}
+
+.zn-structure--narrow .zn-phase__profile .zn-phase__bar {
+  display: none;
+}
+
+.zn-structure--narrow .zn-step .zn-zone-badge__label {
+  display: none;
+}
+
+.zn-structure--narrow .zn-step__nozone {
+  display: none;
+}
+
+.zn-structure--narrow .zn-repeat__between {
+  gap: 0;
+  padding: var(--sp-3) var(--sp-6);
 }
 
 /* ── a step ──────────────────────────────────────────────────────────── */
