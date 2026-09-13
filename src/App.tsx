@@ -10,7 +10,7 @@ import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from 
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
-import { TopBar, Footer } from "@/components/layout";
+import { TopBar, Footer, type FooterVariant } from "@/components/layout";
 import { ModuleGate } from "@/components/layout/ModuleGate";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
@@ -153,18 +153,23 @@ function preloadSidebarPages() {
  *  fold to satisfy a footer below the map. */
 const FULLSCREEN_ROUTES = ["/routes"];
 
-/** Routes qui ne gardent que la barre d'encre du pied de page.
+/** Le pied de page, par route. Tout ce qui n'est pas listé ici l'a complet.
  *
  *  Les quatre colonnes de liens existent pour qu'un robot atteigne les hubs.
  *  Sur un écran applicatif en `noindex`, elles ne font donc aucun travail, et
- *  sur le cockpit elles mesuraient 439 px pour 388 px de contenu. La barre,
- *  elle, reste : c'est la signature du projet libre. */
-const BARE_FOOTER_ROUTES = ["/today"];
+ *  sur le cockpit elles mesuraient 439 px pour 388 px de contenu.
+ *
+ *  La barre d'encre a suivi : cinq éléments sur un aplat inversé pleine
+ *  largeur, au bas d'un écran qu'on consulte dix secondes debout avant de
+ *  sortir courir. C'est la signature du projet libre, et elle a sa place là où
+ *  quelqu'un découvre le projet : `/` et `/about` la gardent entière. Ici il
+ *  n'en reste que la licence, en encre claire, tout en bas. */
+const FOOTER_VARIANTS: Record<string, FooterVariant> = { "/today": "minimal" };
 
 function ConditionalFooter() {
   const { pathname } = useLocation();
   if (FULLSCREEN_ROUTES.includes(pathname)) return null;
-  return <Footer bare={BARE_FOOTER_ROUTES.includes(pathname)} />;
+  return <Footer variant={FOOTER_VARIANTS[pathname] ?? "full"} />;
 }
 
 function ScrollToTopOnNavigate() {
