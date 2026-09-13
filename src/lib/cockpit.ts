@@ -318,6 +318,100 @@ export function focusDayDate(focus: TodayFocus, day: number, today: Date): Date 
   return date;
 }
 
+/**
+ * La bande des sept jours : UN BLOC PAR SÉANCE, et la géométrie qui va avec.
+ *
+ * La barre d'un jour était unique et ne portait que son total : une heure de
+ * natation, deux de vélo et trois de course faisaient une barre de six heures,
+ * et rien à l'écran ne disait qu'il fallait sortir trois fois. Le nombre de
+ * séances était la seule chose que la bande taisait, alors que c'est la
+ * première à changer une journée.
+ *
+ * Trois règles, et elles se tiennent :
+ *
+ * 1. **La colonne garde la hauteur de sa journée.** Les blocs se partagent ce
+ *    budget, filets compris. Sans ça une journée découpée paraîtrait plus
+ *    longue qu'une journée d'un seul bloc de même durée, et la bande dirait le
+ *    nombre de séances à la place des minutes — l'erreur inverse de celle
+ *    qu'on corrige.
+ * 2. **Chaque bloc vaut sa séance**, au prorata des minutes, avec un plancher :
+ *    sous 3 px un bloc n'est plus un bloc, c'est l'épaisseur d'un trait.
+ * 3. **Rien ne dépasse le créneau**, qui vaut `BAR_MAX`. C'est ce qui permet
+ *    au créneau d'être de hauteur FIXE dans le CSS, donc à la bande de ne pas
+ *    bouger d'un pixel quand on choisit un autre jour. La règle tient jusqu'à
+ *    huit séances dans la même journée : au-delà, les planchers et les filets
+ *    valent à eux seuls plus que le créneau. Un plan qui en écrirait neuf le
+ *    même jour aurait un autre problème.
+ *
+ * `longest` est le total du jour le plus long de la semaine : c'est l'échelle,
+ * et elle est commune aux sept colonnes, sinon deux hauteurs ne se comparent
+ * pas.
+ */
+export const BAR_MIN = 8;
+export const BAR_MAX = 40;
+/** Le filet entre deux séances du même jour. C'est lui qui les fait deux. */
+export const BAR_GAP = 2;
+/** Sous 3 px, un bloc n'est plus un bloc, c'est l'épaisseur d'un trait. */
+export const BLOCK_MIN = 3;
+
+export function dayBarBlocks(
+  day: readonly PlanSession[],
+  longest: number,
+): { shape: DayStatus; height: number }[] {
+  if (day.length === 0) return [];
+
+  const mins = day.map((s) => s.actualDurationMin ?? s.estimatedDurationMin ?? 0);
+  const total = mins.reduce((n, m) => n + m, 0);
+  // Le `min` est la ceinture : `longest` est le total du jour le plus long, donc
+  // le rapport ne dépasse jamais 1 quand l'appelant passe la bonne échelle. Il
+  // coûte une comparaison et garantit la règle 3 même s'il se trompe.
+  const column =
+    total === 0
+      ? BAR_MIN
+      : Math.min(
+          BAR_MAX,
+          BAR_MIN + Math.round((total / Math.max(1, longest)) * (BAR_MAX - BAR_MIN)),
+        );
+  const budget = column - BAR_GAP * (day.length - 1);
+
+  /* Arrondi CUMULÉ, et c'est ce qui garde la somme exacte : arrondir chaque
+     bloc pour lui-même fait gagner un demi-pixel à chacun, et quatre séances
+     d'une heure rendaient 42 px là où la colonne en vaut 40. On arrondit donc
+     la somme courante, et chaque bloc prend ce qui lui reste. */
+  const heights: number[] = [];
+  let used = 0;
+  let cumulative = 0;
+  for (let i = 0; i < day.length; i++) {
+    cumulative += total > 0 ? mins[i] / total : 1 / day.length;
+    const upTo = Math.round(budget * cumulative);
+    // Des séances sans durée se partagent le budget à parts égales : elles
+    // existent, elles doivent se voir, et rien ne permet de les ordonner.
+    heights.push(Math.max(BLOCK_MIN, upTo - used));
+    used = upTo;
+  }
+
+  /* Les planchers, eux, ne s'arrondissent pas : une séance d'une minute à côté
+     d'une sortie longue prend ses 3 px quoi qu'il arrive, et la colonne les
+     rend. On les reprend au plus GRAND bloc, qui est celui qui les remarque le
+     moins, et jamais sous le plancher. */
+  let excess = heights.reduce((n, h) => n + h, 0) + BAR_GAP * (day.length - 1) - column;
+  while (excess > 0) {
+    let tallest = 0;
+    for (let i = 1; i < heights.length; i++) if (heights[i] > heights[tallest]) tallest = i;
+    if (heights[tallest] <= BLOCK_MIN) break;
+    heights[tallest] -= 1;
+    excess -= 1;
+  }
+
+  return day.map((session, i) => ({
+    // Le statut est pris SÉANCE PAR SÉANCE : la première sortie peut être
+    // faite quand la seconde ne l'est pas, et deux blocs savent le dire là où
+    // une barre unique devait trancher.
+    shape: dayStatus([session]),
+    height: heights[i],
+  }));
+}
+
 /** Le chemin d'une séance de plan. */
 export function sessionHref(session: PlanSession): string {
   return `/workout/${session.workoutId}`;

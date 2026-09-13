@@ -12,6 +12,7 @@ import { useWorkout } from "@/hooks/useWorkouts";
 import { useRadioRail } from "@/hooks/useRadioRail";
 import { useSettings } from "@/hooks/useSettings";
 import {
+  dayBarBlocks,
   dayStatus,
   focusDayDate,
   focusPlanHref,
@@ -99,6 +100,16 @@ import DoorToday from "@/assets/doodles/door-today.svg?react";
  * séparées par un filet et numérotées séance 1 / 2. Le cas à une séance ne
  * change pas : une pile d'un élément est l'écran d'avant, au pixel près.
  *
+ * **Et RIEN NE BOUGE quand on change de jour.** C'est la condition pour que
+ * la bande soit un instrument : un écran qui se réorganise à chaque choix se
+ * relit à chaque choix. Tout ce qui peut manquer est donc réservé — le
+ * micro-label, le titre sur deux lignes, la durée, la ligne d'exécution, le
+ * créneau du profil, et la valeur de la bande — si bien que le dimanche à
+ * 1h35, le mardi de repos et le mercredi à trois séances posent leur titre,
+ * leur durée et leur bouton au même pixel. Ce qui change, ce sont les mots,
+ * et la hauteur de la pile quand il y a plusieurs séances, qui est
+ * précisément l'information.
+ *
  * `/` reste la landing publique et indexée ; celle-ci est l'écran privé, donc
  * `noindex`, hors sitemap et hors prérendu.
  */
@@ -127,6 +138,12 @@ export function TodayPage() {
 
   const sessions = focus.week[day] ?? [];
   const indexes = focus.weekIndexes[day] ?? [];
+
+  /* On peut changer de jour : il y a donc des hauteurs à RÉSERVER, pour que
+     passer du dimanche au mardi ne fasse pas remonter l'écran. Sans semaine à
+     parcourir — pas de plan, ou un plan qui n'a pas commencé — la bande ne
+     s'affiche pas, rien ne peut changer, et réserver ne ferait que du vide. */
+  const reserve = focus.week.length > 0;
 
   /* L'état du JOUR CHOISI, qui n'est celui d'aujourd'hui que tant qu'on n'a
      rien choisi d'autre. `upcoming` et `none` ne dépendent, eux, d'aucun
@@ -303,18 +320,32 @@ export function TodayPage() {
               {/* Le titre, sa taille et ce qu'elle demande ne font qu'UNE
                   phrase : ils sont serrés à `--sp-4` pendant que la section
                   respire à `--sp-7`. C'est cet écart-là qui fait la
-                  hiérarchie, pas les corps de texte pris isolément. */}
+                  hiérarchie, pas les corps de texte pris isolément.
+
+                  Une journée de repos porte le MÊME squelette qu'une journée
+                  de séance, réserves comprises : c'est ce qui fait que passer
+                  du dimanche au mardi ne déplace pas une ligne. Le prix est
+                  du blanc un jour de repos, et il est payé volontiers — un
+                  bouton qui saute de cent pixels sous le pouce coûte plus. */}
               <div className="zn-cockpit__answer">
-                {isToday && (
-                  <span className="zn-kicker zn-kicker--xs">{t("today:resume.todayLabel")}</span>
-                )}
+                <span className="zn-kicker zn-kicker--xs">
+                  {isToday ? t("today:resume.todayLabel") : "\u00A0"}
+                </span>
 
                 <h1 className="zn-display zn-cockpit__headline" data-level="3">
                   {headline}
                 </h1>
 
-                {nextLine && <p className="zn-cockpit__how">{nextLine}</p>}
+                {reserve && <p className="zn-cockpit__size">{"\u00A0"}</p>}
+
+                {(reserve || nextLine) && (
+                  <p className="zn-cockpit__how" data-hold={reserve || undefined}>
+                    {nextLine}
+                  </p>
+                )}
               </div>
+
+              {reserve && <div className="zn-cockpit__profile-slot" />}
 
               <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
                 <Button asChild className="zn-cockpit__cta">
@@ -540,12 +571,6 @@ function CockpitSession({
 
   const execLine = isResolved ? doneLine : [mainSummary, pace].filter(Boolean).join(" · ") || null;
 
-  /* La ligne est RÉSERVÉE tant que quelque chose peut encore y arriver, donc
-     sur une séance en attente de son catalogue. Une fois la séance close,
-     plus rien n'est asynchrone : réserver deux lignes de vide n'y ferait
-     qu'un trou. */
-  const holdsExec = !isResolved;
-
   /* Le créneau du profil est réservé, plein ou vide : la barre n'arrivait
      qu'avec le catalogue et poussait de cinquante pixels tout ce qui la suit,
      bouton compris. Et une séance de renforcement n'a pas de zones : plutôt
@@ -580,20 +605,25 @@ function CockpitSession({
 
   return (
     <article className="zn-cockpit__session">
+      {/* Les quatre lignes sont TOUJOURS écrites, vides au besoin. Une ligne
+          qui apparaît et disparaît selon le jour choisi décale tout ce qui la
+          suit, et c'est le bouton qui finit par se déplacer sous le pouce :
+          l'écran doit répondre au choix, pas se réorganiser. */}
       <div className="zn-cockpit__answer">
-        {label && <span className="zn-kicker zn-kicker--xs">{label}</span>}
+        <span className="zn-kicker zn-kicker--xs">{label || "\u00A0"}</span>
 
         <Heading className="zn-display zn-cockpit__headline" data-level="3">
           {title}
         </Heading>
 
-        {sizeLine && <p className="zn-cockpit__size">{sizeLine}</p>}
+        <p className="zn-cockpit__size">{sizeLine || "\u00A0"}</p>
 
-        {(holdsExec || execLine) && (
-          <p className="zn-cockpit__how" data-hold={holdsExec || undefined}>
-            {execLine}
-          </p>
-        )}
+        {/* Réservée sur deux lignes, toujours : le corps de séance arrive avec
+            le chunk du catalogue, et une séance close n'en a pas moins besoin
+            de la réserve, sinon changer de jour ferait respirer l'écran. */}
+        <p className="zn-cockpit__how" data-hold>
+          {execLine}
+        </p>
       </div>
 
       {/* L'aperçu de la séance : un bloc par phase, la largeur dit le temps et
@@ -696,18 +726,27 @@ function paceRangeOf(session: PlanSession, isEn: boolean, unit: UnitSystem): str
  * déplacent et cochent, avec bouclage. Il n'y a donc pas de `role` livré sans
  * son clavier, ce que ce dépôt a déjà fait deux fois.
  *
- * **Trois canaux, trois choses.** Tant que l'encre disait à la fois c'est
+ * **Quatre canaux, quatre choses.** Tant que l'encre disait à la fois c'est
  * aujourd'hui et c'est la plus grosse séance, on ne savait pas si dimanche
  * ressortait parce qu'on y était ou parce qu'il était long, et sept barres
  * n'informaient sur rien :
  *
- * - **la hauteur** porte les MINUTES du jour, et rien d'autre. Pas le nombre
- *   de séances : presque toutes les journées en portent une, donc les compter
- *   faisait une constante qui ne disait rien.
- * - **la forme** porte le statut. Prévu est un contour, fait est un plein,
- *   sauté est hachuré, repos est un filet. Une distinction de FORME, pas de
- *   teinte : la bande reste lisible en niveaux de gris, ce qui est l'argument
- *   du système, comme `--zone-h-N` dans `zones.css`.
+ * - **la hauteur** porte les MINUTES, et rien d'autre. Celle d'un bloc dit sa
+ *   séance, celle de la colonne entière dit la journée : une heure de
+ *   natation, deux de vélo et trois de course font trois blocs de 1, 2 et 3,
+ *   sur une colonne qui vaut toujours six heures.
+ * - **le découpage** porte le NOMBRE de séances, et c'est le canal qui
+ *   manquait. La barre était unique : trois sorties dans la journée faisaient
+ *   une barre de six heures, et rien ne disait qu'il fallait sortir trois
+ *   fois. Un filet de 2 px sépare deux blocs, ce qui suffit à les compter
+ *   d'un coup d'œil sans que la colonne cesse d'être une colonne.
+ * - **la forme** porte le statut, séance par séance depuis qu'il y a des
+ *   blocs. Prévu est un contour, fait est un plein, sauté est hachuré, repos
+ *   est un filet. Une distinction de FORME, pas de teinte : la bande reste
+ *   lisible en niveaux de gris, ce qui est l'argument du système, comme
+ *   `--zone-h-N` dans `zones.css`. Une première sortie faite et une seconde
+ *   qui ne l'est pas se voient enfin toutes les deux, là où une barre unique
+ *   devait trancher.
  * - **la lettre** porte le jour CHOISI, à l'ENCRE et jamais au vermillon : le
  *   bouton est le seul aplat d'accent de l'écran, un second le neutraliserait.
  *   Aujourd'hui, lui, se marque d'un pointillé sous la lettre, qui ne se voit
@@ -715,7 +754,10 @@ function paceRangeOf(session: PlanSession, isEn: boolean, unit: UnitSystem): str
  *
  * Et le jour choisi est le seul à porter sa valeur : une échelle de hauteurs
  * sans une seule graduation ne se lit pas. Au corps mono le plus petit, c'est
- * un repère d'axe, pas une seconde annonce.
+ * un repère d'axe, pas une seconde annonce. La ligne est écrite VIDE les six
+ * autres jours : la bande a une hauteur fixe, du créneau de la barre à la
+ * réserve de cette ligne, et choisir un jour ne déplace pas un pixel de ce
+ * qui l'entoure.
  *
  * Un jour de repos est un bouton comme les six autres : il n'y a rien à y
  * ouvrir, mais il y a quelque chose à y LIRE, repos et la prochaine sortie.
@@ -748,19 +790,6 @@ function WeekStrip({
     day.reduce((n, session) => n + (session.actualDurationMin ?? session.estimatedDurationMin ?? 0), 0),
   );
   const longest = Math.max(1, ...minutes);
-
-  /* En pixels, pas en pourcentage : un `block-size` en % sur un enfant flex en
-     colonne n'a pas de hauteur de référence et retombait au minimum, les sept
-     barres rendaient identiques. La donnée devient géométrie ici, une fois.
-
-     Le plancher est passé de 6 à 8 px : la forme prévue est désormais un
-     CONTOUR d'1,5 px, et à 6 px de haut les deux traits se rejoignent, le
-     creux redevient un plein. 8 px laissent 5 px d'intérieur, de quoi voir le
-     vide. */
-  const BAR_MIN = 8;
-  const BAR_MAX = 40;
-  const barHeight = (m: number) =>
-    m === 0 ? BAR_MIN : BAR_MIN + Math.round((m / longest) * (BAR_MAX - BAR_MIN));
 
   return (
     <div
@@ -808,16 +837,34 @@ function WeekStrip({
             onClick={() => onSelect(index)}
           >
             <span className="zn-cockpit__day-letter">{letters[index]}</span>
-            <span
-              className="zn-cockpit__day-bar"
-              data-shape={shape}
-              /* Un style inline est le bon outil : la valeur est une donnée du
-                 plan, pas un réglage de design. */
-              style={{ "--bar-h": `${barHeight(minutes[index])}px` } as CSSProperties}
-            />
-            {isSelected && duration && (
-              <span className="zn-kicker zn-kicker--xs zn-cockpit__day-value">{duration}</span>
-            )}
+
+            {/* Le créneau de la barre est de hauteur FIXE et les blocs y
+                poussent depuis le sol : la bande garde la même hauteur quel
+                que soit le jour choisi, et rien ne bouge sous le doigt quand
+                on passe du dimanche long au mardi de repos. */}
+            <span className="zn-cockpit__day-bar">
+              {day.length === 0 ? (
+                <span className="zn-cockpit__day-block" data-shape="rest" />
+              ) : (
+                dayBarBlocks(day, longest).map((block, i) => (
+                  <span
+                    key={i}
+                    className="zn-cockpit__day-block"
+                    data-shape={block.shape}
+                    /* Un style inline est le bon outil : la valeur est une
+                       donnée du plan, pas un réglage de design. */
+                    style={{ "--block-h": `${block.height}px` } as CSSProperties}
+                  />
+                ))
+              )}
+            </span>
+
+            {/* La valeur est TOUJOURS écrite, vide sur les six autres jours :
+                sans cette réserve, choisir un jour de repos retirait une ligne
+                à la bande et faisait remonter tout l'écran de vingt pixels. */}
+            <span className="zn-kicker zn-kicker--xs zn-cockpit__day-value">
+              {(isSelected && duration) || "\u00A0"}
+            </span>
           </button>
         );
       })}

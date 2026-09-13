@@ -1,6 +1,10 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  BAR_GAP,
+  BAR_MAX,
+  BLOCK_MIN,
+  dayBarBlocks,
   dayStatus,
   focusDayDate,
   focusPlanHref,
@@ -256,6 +260,93 @@ describe("un seul tap jusqu'à la séance", () => {
     // double, qui n'avait aucune sortie du temps du bouton unique.
     expect(focus.sessions.map(sessionHref)).toEqual(["/workout/LUNDI", "/workout/LUNDI-2"]);
     expect(sessionHref(focus.week[3][0])).toBe("/workout/MERCREDI");
+  });
+});
+
+describe("un bloc par séance dans la bande", () => {
+  /** La somme d'une colonne, filets compris : c'est elle qui doit tenir dans
+   *  le créneau de hauteur fixe du CSS. */
+  const column = (blocks: { height: number }[]) =>
+    blocks.reduce((n, b) => n + b.height, 0) + BAR_GAP * Math.max(0, blocks.length - 1);
+
+  test("trois séances font trois blocs, au prorata des minutes", () => {
+    // L'exemple du propriétaire : une heure de natation, deux de vélo, trois
+    // de course. Une barre unique en faisait six heures et taisait qu'il
+    // fallait sortir trois fois.
+    const day = [
+      { ...session(2), estimatedDurationMin: 60 },
+      { ...session(2), estimatedDurationMin: 120 },
+      { ...session(2), estimatedDurationMin: 180 },
+    ];
+    const blocks = dayBarBlocks(day, 360);
+    expect(blocks.map((b) => b.height)).toEqual([6, 12, 18]);
+    // Le rapport 1 / 2 / 3 est celui des durées, et la colonne remplit son
+    // créneau sans le dépasser.
+    expect(column(blocks)).toBe(BAR_MAX);
+  });
+
+  test("la colonne garde la hauteur de sa journée, découpée ou non", () => {
+    const one = dayBarBlocks([{ ...session(0), estimatedDurationMin: 120 }], 360);
+    const two = dayBarBlocks(
+      [
+        { ...session(0), estimatedDurationMin: 60 },
+        { ...session(0), estimatedDurationMin: 60 },
+      ],
+      360,
+    );
+    // Deux heures en deux séances ne doivent pas paraître plus longues que
+    // deux heures en une : sinon la bande dirait le nombre de séances à la
+    // place des minutes.
+    expect(column(two)).toBe(column(one));
+  });
+
+  test("rien ne dépasse jamais le créneau", () => {
+    // Le créneau du CSS est fixe : une colonne plus haute que lui déborderait
+    // sur la lettre, et la bande cesserait d'avoir une hauteur constante. La
+    // journée testée est la plus longue de sa semaine, le pire cas.
+    for (const n of [1, 2, 3, 4, 5, 6, 7, 8]) {
+      const day = Array.from({ length: n }, () => ({ ...session(0), estimatedDurationMin: 60 }));
+      expect(column(dayBarBlocks(day, 60 * n)), `${n} séances`).toBeLessThanOrEqual(BAR_MAX);
+    }
+    // Et même avec une échelle fausse, où la journée dépasse le jour le plus
+    // long : la colonne est bridée plutôt que de déborder.
+    expect(column(dayBarBlocks([{ ...session(0), estimatedDurationMin: 600 }], 60)))
+      .toBeLessThanOrEqual(BAR_MAX);
+  });
+
+  test("une séance minuscule reste visible", () => {
+    const day = [
+      { ...session(0), estimatedDurationMin: 1 },
+      { ...session(0), estimatedDurationMin: 240 },
+    ];
+    expect(dayBarBlocks(day, 240)[0].height).toBe(BLOCK_MIN);
+  });
+
+  test("des séances sans durée se partagent la colonne à parts égales", () => {
+    const day = [
+      { ...session(0), estimatedDurationMin: 0 },
+      { ...session(0), estimatedDurationMin: 0 },
+    ];
+    const blocks = dayBarBlocks(day, 240);
+    expect(blocks[0].height).toBe(blocks[1].height);
+    expect(blocks[0].height).toBeGreaterThanOrEqual(BLOCK_MIN);
+  });
+
+  test("le statut est pris séance par séance", () => {
+    // Une barre unique devait trancher : la journée entière restait prévue
+    // tant qu'une séance ne l'était pas. Deux blocs disent les deux.
+    const day = [
+      { ...session(0), status: "completed" as const },
+      { ...session(0), status: "planned" as const },
+    ];
+    expect(dayBarBlocks(day, 90).map((b) => b.shape)).toEqual(["completed", "planned"]);
+    expect(dayStatus(day)).toBe("planned");
+  });
+
+  test("un jour de repos n'a aucun bloc", () => {
+    // C'est le CSS qui dessine son filet : l'absence de séance n'est pas une
+    // séance de hauteur nulle.
+    expect(dayBarBlocks([], 90)).toEqual([]);
   });
 });
 
