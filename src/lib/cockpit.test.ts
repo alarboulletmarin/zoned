@@ -1,9 +1,11 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  dayStatus,
   focusPlanHref,
   focusSessionHref,
   pickTodayFocus,
+  planPosition,
   sessionHref,
 } from "./cockpit";
 import type { PlanSession, PlanWeek, TrainingPlan } from "@/types/plan";
@@ -30,6 +32,8 @@ function plan(over: {
   weeks?: PlanWeek[];
   isSingleWeek?: boolean;
   createdAt?: string;
+  raceDate?: string;
+  raceName?: string;
 }): TrainingPlan {
   const totalWeeks = over.totalWeeks ?? 4;
   return {
@@ -40,6 +44,8 @@ function plan(over: {
       startDate: over.startDate,
       createdAt: over.createdAt ?? "2026-01-01T10:00:00.000Z",
       isSingleWeek: over.isSingleWeek,
+      raceDate: over.raceDate,
+      raceName: over.raceName,
     },
     weeks: over.weeks ?? [week(1, [session(0)])],
     totalWeeks,
@@ -310,5 +316,178 @@ describe("une semaine seule", () => {
     const focus = pickTodayFocus([p], MONDAY);
     expect(focus.isWeek).toBe(false);
     expect(focusPlanHref(focus)).toBe("/plan/p1");
+  });
+});
+
+/* ── L'adresse d'une séance ───────────────────────────────────────────────
+ *
+ * Une séance n'a pas d'identifiant : `updateSessionCompletion` l'adresse par
+ * (planId, weekNumber, INDEX dans `week.sessions`). Le regroupement par jour
+ * perdait cet index, donc le cockpit ne pouvait rien clore. Ces tests
+ * vérifient que l'index rendu pointe bien la séance rendue, ce qui est la
+ * seule chose que deux tableaux parallèles risquent de perdre.
+ */
+describe("l'index de chaque séance", () => {
+  test("sessionIndexes a la même longueur et le même ordre que sessions", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      weeks: [week(1, [session(3, "MER"), session(0, "LUN-A"), session(0, "LUN-B")])],
+    });
+    const focus = pickTodayFocus([p], MONDAY);
+    expect(focus.sessions.map((s) => s.workoutId)).toEqual(["LUN-A", "LUN-B"]);
+    expect(focus.sessionIndexes).toEqual([1, 2]);
+  });
+
+  test("l'index pointe la séance de la SEMAINE, pas celle du jour", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      weeks: [week(1, [session(0, "LUN"), session(2, "MER-A"), session(2, "MER-B")])],
+    });
+    const focus = pickTodayFocus([p], WEDNESDAY);
+    const stored = p.weeks[0].sessions;
+    focus.sessions.forEach((s, k) => {
+      expect(stored[focus.sessionIndexes[k]]).toBe(s);
+    });
+  });
+
+  test("chaque case de la bande se relit dans le plan par son index", () => {
+    const p = plan({
+      id: "p1",
+      startDate: "2026-09-07",
+      weeks: [
+        week(1, [
+          session(6, "DIM"),
+          session(0, "LUN"),
+          session(4, "VEN-A"),
+          session(4, "VEN-B"),
+          session(2, "MER"),
+        ]),
+      ],
+    });
+    const focus = pickTodayFocus([p], MONDAY);
+    const stored = p.weeks[0].sessions;
+    expect(focus.week).toHaveLength(7);
+    expect(focus.weekIndexes).toHaveLength(7);
+    for (let day = 0; day < 7; day++) {
+      expect(focus.weekIndexes[day]).toHaveLength(focus.week[day].length);
+      focus.week[day].forEach((s, k) => {
+        expect(stored[focus.weekIndexes[day][k]]).toBe(s);
+      });
+    }
+  });
+
+  test("sans rien à reprendre, les deux tableaux sont vides et non absents", () => {
+    const none = pickTodayFocus([], MONDAY);
+    expect(none.sessionIndexes).toEqual([]);
+    expect(none.weekIndexes).toEqual([]);
+
+    // Un plan qui n'a pas commencé : pas de semaine, donc pas d'index.
+    const later = pickTodayFocus([plan({ id: "p1", startDate: "2026-10-05" })], MONDAY);
+    expect(later.state).toBe("upcoming");
+    expect(later.sessionIndexes).toEqual([]);
+    expect(later.weekIndexes).toEqual([]);
+  });
+});
+
+/* ── La forme d'un jour ───────────────────────────────────────────────────
+ *
+ * C'est ce qui donne enfin un sens aux sept barres : prévu est creux, fait est
+ * plein, sauté est hachuré. La règle qui compte est que NON RÉSOLU L'EMPORTE,
+ * parce que dire fait trop tôt est le seul mensonge que cette bande puisse
+ * commettre.
+ */
+describe("la forme d'un jour", () => {
+  const at = (status: PlanSession["status"]): PlanSession => ({ ...session(0), status });
+
+  test("une journée sans séance est du repos, pas une journée prévue", () => {
+    expect(dayStatus([])).toBe("rest");
+  });
+
+  test("sans statut, une séance est prévue : le suivi est arrivé après elles", () => {
+    expect(dayStatus([session(0)])).toBe("planned");
+    expect(dayStatus([at("planned")])).toBe("planned");
+  });
+
+  test("tout résolu, le statut de la journée est celui des séances", () => {
+    expect(dayStatus([at("completed")])).toBe("completed");
+    expect(dayStatus([at("modified")])).toBe("modified");
+    expect(dayStatus([at("skipped")])).toBe("skipped");
+  });
+
+  test("une seule séance non résolue suffit à garder la journée prévue", () => {
+    expect(dayStatus([at("completed"), at("planned")])).toBe("planned");
+    expect(dayStatus([at("completed"), session(1)])).toBe("planned");
+    expect(dayStatus([at("skipped"), session(1)])).toBe("planned");
+  });
+
+  test("entre deux séances résolues, ce qui a été couru l'emporte sur ce qui a sauté", () => {
+    expect(dayStatus([at("skipped"), at("completed")])).toBe("completed");
+    expect(dayStatus([at("skipped"), at("modified")])).toBe("modified");
+  });
+});
+
+/* ── La position dans le plan ─────────────────────────────────────────────
+ *
+ * Un plan ne tient que par sa fin : semaine 1 sans dénominateur et un nom de
+ * plan sans échéance laissent la sortie du jour flotter hors contexte.
+ */
+describe("la position dans le plan", () => {
+  test("la semaine courante et son dénominateur", () => {
+    const p = plan({ id: "p1", startDate: "2026-09-07", totalWeeks: 12 });
+    const pos = planPosition(pickTodayFocus([p], MONDAY), MONDAY);
+    expect(pos?.weekNumber).toBe(1);
+    expect(pos?.totalWeeks).toBe(12);
+  });
+
+  test("le compte à rebours se lit en date LOCALE, pas en UTC", () => {
+    // `Date.parse("2026-12-31")` est minuit UTC : à Paris, c'est le 31 à 1 h,
+    // et le décompte tombe à faux d'un jour selon l'heure qu'il est.
+    const p = plan({ id: "p1", startDate: "2026-09-07", totalWeeks: 20, raceDate: "2026-09-27" });
+    const pos = planPosition(pickTodayFocus([p], MONDAY), MONDAY);
+    expect(pos?.daysToGoal).toBe(20);
+  });
+
+  test("le jour de la course compte : J-0 est une information", () => {
+    const raceDay = new Date(2026, 8, 9);
+    const p = plan({ id: "p1", startDate: "2026-09-07", totalWeeks: 20, raceDate: "2026-09-09" });
+    expect(planPosition(pickTodayFocus([p], raceDay), raceDay)?.daysToGoal).toBe(0);
+  });
+
+  test("une échéance passée n'annonce plus rien", () => {
+    const p = plan({ id: "p1", startDate: "2026-09-07", totalWeeks: 20, raceDate: "2026-09-08" });
+    expect(planPosition(pickTodayFocus([p], WEDNESDAY), WEDNESDAY)?.daysToGoal).toBeNull();
+  });
+
+  test("sans raceDate, le repli est le dernier jour du plan", () => {
+    // Tout plan repris du catalogue est dans ce cas : le convertisseur ne
+    // reporte ni la date ni le nom de la course. Quatre semaines commencées le
+    // lundi 7, donc le dimanche 4 octobre, soit 27 jours.
+    const p = plan({ id: "p1", startDate: "2026-09-07", totalWeeks: 4 });
+    const pos = planPosition(pickTodayFocus([p], MONDAY), MONDAY);
+    expect(pos?.daysToGoal).toBe(27);
+  });
+
+  test("le nom de la course quand il y en a un, null sinon", () => {
+    const named = plan({ id: "p1", startDate: "2026-09-07", raceName: "Marathon de Nice" });
+    expect(planPosition(pickTodayFocus([named], MONDAY), MONDAY)?.goalName).toBe("Marathon de Nice");
+
+    const blank = plan({ id: "p2", startDate: "2026-09-07", raceName: "   " });
+    expect(planPosition(pickTodayFocus([blank], MONDAY), MONDAY)?.goalName).toBeNull();
+
+    const bare = plan({ id: "p3", startDate: "2026-09-07" });
+    expect(planPosition(pickTodayFocus([bare], MONDAY), MONDAY)?.goalName).toBeNull();
+  });
+
+  test("une semaine seule n'a pas de dénominateur : 1 sur 1 est du bruit", () => {
+    const w = plan({ id: "w1", startDate: "2026-09-07", totalWeeks: 1, isSingleWeek: true });
+    expect(planPosition(pickTodayFocus([w], MONDAY), MONDAY)?.totalWeeks).toBe(0);
+  });
+
+  test("sans plan, il n'y a pas de position", () => {
+    expect(planPosition(pickTodayFocus([], MONDAY), MONDAY)).toBeNull();
+    const later = pickTodayFocus([plan({ id: "p1", startDate: "2026-10-05" })], MONDAY);
+    expect(planPosition(later, MONDAY)).toBeNull();
   });
 });
