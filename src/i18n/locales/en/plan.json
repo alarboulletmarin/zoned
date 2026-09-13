@@ -241,6 +241,7 @@
     "findRoute": "Find a matching route",
     "findWeekRoute": "Route for this week",
     "removeSession": "Remove session",
+    "sessionActions": "Session actions",
     "noSessionsThisWeek": "No sessions this week",
     "schedule": "Schedule",
     "statistics": "Statistics",

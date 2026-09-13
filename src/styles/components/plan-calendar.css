@@ -1307,10 +1307,14 @@
   z-index: 50;
 }
 
+/* Le menu se place ENTIÈREMENT en JS (SessionActionMenu) : il se mesure avant
+   la peinture, se centre sur le doigt, puis se range dans la fenêtre et se
+   replie au-dessus si le bas manque. Le `translate(-50%, 4px)` qui tenait ce
+   rôle ici recentrait sans jamais consulter les bords — sur un téléphone de
+   390px, une séance touchée à droite ouvrait un menu à moitié hors écran. */
 .zn-plan-menu {
   position: fixed;
   z-index: 50;
-  transform: translate(-50%, var(--sp-2));
 }
 
 .zn-plan-menu .zn-menu__item:hover {

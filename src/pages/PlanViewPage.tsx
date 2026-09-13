@@ -16,6 +16,7 @@ import {
   Pencil,
   Shuffle,
   MoreHorizontal,
+  Eye,
   Route as RouteIcon,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
@@ -64,6 +65,10 @@ import { toast } from "sonner";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { SubstituteSessionDialog } from "@/components/domain/SubstituteSessionDialog";
 import { isSessionSubstitutable } from "@/lib/planGenerator/substitute";
+import {
+  SessionActionMenu,
+  type SessionActionMenuItem,
+} from "@/components/domain/SessionActionMenu";
 import type { Discipline } from "@/types";
 import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
 import { UnavailabilityManager } from "@/components/domain/UnavailabilityManager";
@@ -170,6 +175,17 @@ export function PlanViewPage() {
     weekNumber: number;
     sessionIndex: number;
   } | null>(null);
+
+  /* Le menu d'une séance de la vue liste — ce que le tableau de la semaine
+     ouvre depuis toujours au doigt, et que la liste n'avait pas : un appui sur
+     une rangée n'y faisait rien du tout. Même composant, mêmes entrées. */
+  const [listMenu, setListMenu] = useState<{
+    x: number;
+    y: number;
+    weekNumber: number;
+    sessionIndex: number;
+  } | null>(null);
+
   const [showWorkoutPanel, setShowWorkoutPanel] = useState(false);
   const [addTarget, setAddTarget] = useState<{ weekNumber: number; day: number } | null>(null);
   const [showDateDialog, setShowDateDialog] = useState(false);
@@ -1512,10 +1528,31 @@ export function PlanViewPage() {
                             `${week.weekNumber}-${session.dayOfWeek}`,
                           );
 
+                          /* Ouvrir le menu de la séance sur la rangée elle-même,
+                             comme le tableau de la semaine le fait sur sa carte :
+                             un appui court (ou un clic droit) n'importe où sur la
+                             ligne, SAUF sur ce qui a déjà un geste à soi — le nom,
+                             qui mène à la séance, et les boutons. */
+                          const openMenu = (
+                            e: React.MouseEvent<HTMLDivElement>,
+                          ) => {
+                            if (isSpecialSession) return;
+                            if ((e.target as HTMLElement).closest("a, button")) return;
+                            e.preventDefault();
+                            setListMenu({
+                              x: e.clientX,
+                              y: e.clientY,
+                              weekNumber: week.weekNumber,
+                              sessionIndex: originalIndex,
+                            });
+                          };
+
                           return (
                             <div
                               key={originalIndex}
                               className="zn-sess zn-planlist__sess"
+                              onClick={openMenu}
+                              onContextMenu={openMenu}
                               data-kind={
                                 isRaceDay
                                   ? "race"
@@ -1703,6 +1740,35 @@ export function PlanViewPage() {
                               </div>
 
                               <div className="zn-planlist__meta">
+                                {/* Au doigt, les quatre gestes passent par le
+                                    menu : quatre glyphes de 14px alignés au
+                                    bout d'une ligne de 350 sont autant de
+                                    cibles qu'on rate, et rien ne dit lequel
+                                    fait quoi. Un seul bouton les nomme.
+                                    Sur bureau, où la place et le survol
+                                    existent, ce sont les glyphes qui restent
+                                    et le bouton qui s'efface (plan-view.css) —
+                                    le clic droit ouvre le même menu. */}
+                                {!isSpecialSession && (
+                                  <button
+                                    type="button"
+                                    className="zn-planlist__more"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const r = e.currentTarget.getBoundingClientRect();
+                                      setListMenu({
+                                        x: r.left + r.width / 2,
+                                        y: r.bottom,
+                                        weekNumber: week.weekNumber,
+                                        sessionIndex: originalIndex,
+                                      });
+                                    }}
+                                    title={t("view.sessionActions")}
+                                    aria-label={t("view.sessionActions")}
+                                  >
+                                    <MoreHorizontal />
+                                  </button>
+                                )}
                                 {!isSpecialSession && (
                                   <div className="zn-planlist__acts">
                                     <button
@@ -1849,6 +1915,95 @@ export function PlanViewPage() {
               />
             </div>
           )}
+
+          {/* Le menu d'une séance. Les entrées sont celles que la liste sait
+              faire ; le tableau de la semaine compose les siennes et rend le
+              même composant. Les libellés sont ceux des boutons qu'il
+              remplace — « Trouver un parcours adapté », « Clôturer la
+              séance » — donc rien de nouveau à apprendre. */}
+          {listMenu && (() => {
+            const menuWeek = plan.weeks.find((w) => w.weekNumber === listMenu.weekNumber);
+            const menuSession = menuWeek?.sessions[listMenu.sessionIndex];
+            if (!menuSession) return null;
+            const close = () => setListMenu(null);
+            const isActivity = menuSession.workoutId.startsWith("__activity_");
+
+            const items: SessionActionMenuItem[] = [];
+            if (!isActivity) {
+              items.push({
+                key: "view",
+                icon: <Eye />,
+                label: t("calendar.viewSession"),
+                onSelect: () =>
+                  navigate(`/workout/${menuSession.workoutId}`, {
+                    state: { from: "plan", planId: plan.id, planName },
+                  }),
+              });
+              items.push({
+                key: "route",
+                icon: <RouteIcon />,
+                label: t("view.findRoute"),
+                onSelect: () =>
+                  navigate("/routes", {
+                    state: {
+                      planRouteSession: {
+                        session: menuSession,
+                        planSessionRef: {
+                          planId: plan.id,
+                          weekNumber: listMenu.weekNumber,
+                          sessionIndex: listMenu.sessionIndex,
+                        },
+                      },
+                    },
+                  }),
+              });
+            }
+            items.push({
+              key: "done",
+              icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M5 12l5 5 9-9" />
+                </svg>
+              ),
+              label: t("completion.toggleDone"),
+              onSelect: () => handleToggleComplete(listMenu.weekNumber, listMenu.sessionIndex),
+            });
+            items.push({
+              key: "swap",
+              icon: <ArrowLeftRight />,
+              label: t("view.replaceSession"),
+              onSelect: () =>
+                setSwapTarget({
+                  weekNumber: listMenu.weekNumber,
+                  sessionIndex: listMenu.sessionIndex,
+                  workoutId: menuSession.workoutId,
+                  sessionType: menuSession.sessionType,
+                }),
+            });
+            if (isSessionSubstitutable(menuSession)) {
+              items.push({
+                key: "substitute",
+                icon: <Shuffle />,
+                label: t("view.substituteSession"),
+                onSelect: () =>
+                  setSubstituteTarget({
+                    weekNumber: listMenu.weekNumber,
+                    sessionIndex: listMenu.sessionIndex,
+                  }),
+              });
+            }
+            items.push({
+              key: "delete",
+              icon: <Trash2 />,
+              label: t("view.removeSession"),
+              variant: "destructive",
+              onSelect: () => handleSessionDelete(listMenu.weekNumber, listMenu.sessionIndex),
+            });
+
+            return (
+              <SessionActionMenu x={listMenu.x} y={listMenu.y} items={items} onClose={close} />
+            );
+          })()}
           </div>
         )}
 

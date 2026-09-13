@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
+import { useState, useRef, useMemo, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
@@ -9,6 +9,10 @@ import { ZoneScale } from "@/components/visualization";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
+import {
+  SessionActionMenu,
+  type SessionActionMenuItem,
+} from "@/components/domain/SessionActionMenu";
 import { SESSION_ZONE, sessionColor } from "@/lib/sessionColors";
 
 /** Placeholder sessions (race day, cross-training activities) have no catalog
@@ -153,20 +157,10 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     target: HTMLElement | null;
   } | null>(null);
 
-  // Close context menu on outside click or Escape
-  useEffect(() => {
-    if (!contextMenu) return;
-    const handleClick = () => setContextMenu(null);
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setContextMenu(null);
-    };
-    document.addEventListener("pointerdown", handleClick);
-    document.addEventListener("keydown", handleKey);
-    return () => {
-      document.removeEventListener("pointerdown", handleClick);
-      document.removeEventListener("keydown", handleKey);
-    };
-  }, [contextMenu]);
+  /* La fermeture — clic à côté et Échap — appartient désormais à
+     SessionActionMenu : son voile couvre la fenêtre, donc il ne peut pas rater
+     un pointerdown qu'un autre gestionnaire aurait arrêté en chemin, là où
+     l'écouteur posé sur `document` qui vivait ici le pouvait. */
 
   // Lock state of the session the context menu targets (drives lock/unlock label).
   const contextSessionLocked =
@@ -767,107 +761,75 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         </div>
       )}
 
-      {/* ── Context menu (long press mobile / right-click desktop) ── */}
+      {/* ── Le menu d'une séance (appui long ou court sur téléphone, clic
+              droit sur bureau) ──
+
+          Il était écrit ici, en JSX inline, et n'existait donc que pour cette
+          vue : la vue liste du même plan n'avait rien à ouvrir. Il vit
+          maintenant dans SessionActionMenu, que les deux vues rendent — mêmes
+          entrées, même forme, même placement. Ce qui reste ici est la seule
+          chose que cette vue soit seule à savoir : ce qu'on peut faire à une
+          séance d'un tableau de semaine. */}
       {contextMenu && (
-        <div className="zn-plan-menu__scrim" onPointerDown={() => setContextMenu(null)}>
-          <div
-            className="zn-menu zn-plan-menu"
-            style={{ left: contextMenu.x, top: contextMenu.y }}
-            onPointerDown={(e) => e.stopPropagation()}
-          >
-            {onSessionClick && (
-              <button
-                type="button"
-                className="zn-menu__item"
-                onClick={() => {
-                  onSessionClick(
-                    contextMenu.weekNumber,
-                    contextMenu.sessionIndex,
-                    contextMenu.workoutId,
-                  );
-                  setContextMenu(null);
-                }}
-              >
-                <Eye />
-                {t("calendar.viewSession")}
-              </button>
-            )}
-            {onFindRoute && (
-              <button
-                type="button"
-                className="zn-menu__item"
-                onClick={() => {
-                  onFindRoute(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                <RouteIcon />
-                {t("view.findRoute")}
-              </button>
-            )}
-            {onToggleComplete && (
-              <button
-                type="button"
-                className="zn-menu__item"
-                onClick={() => {
-                  onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
+        <SessionActionMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onClose={() => setContextMenu(null)}
+          items={([
+            onSessionClick && {
+              key: "view",
+              icon: <Eye />,
+              label: t("calendar.viewSession"),
+              onSelect: () =>
+                onSessionClick(
+                  contextMenu.weekNumber,
+                  contextMenu.sessionIndex,
+                  contextMenu.workoutId,
+                ),
+            },
+            onFindRoute && {
+              key: "route",
+              icon: <RouteIcon />,
+              label: t("view.findRoute"),
+              onSelect: () => onFindRoute(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
+            onToggleComplete && {
+              key: "done",
+              icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12l5 5 9-9" />
                 </svg>
-                {t("completion.toggleDone")}
-              </button>
-            )}
-            {onRedraw && isRedrawable(contextMenu.workoutId) && !contextSessionLocked && (
-              <button
-                type="button"
-                className="zn-menu__item"
-                onClick={() => {
-                  onRedraw(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                <Dices />
-                {t("library:weekly.slot.reroll")}
-              </button>
-            )}
-            {onToggleLock && (
-              <button
-                type="button"
-                className="zn-menu__item"
-                onClick={() => {
-                  onToggleLock(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                {contextSessionLocked ? (
-                  <LockOpen />
-                ) : (
-                  <Lock />
-                )}
-                {contextSessionLocked
-                  ? t("library:weekly.slot.unlock")
-                  : t("library:weekly.slot.lock")}
-              </button>
-            )}
-            {onSessionDelete && (
-              <button
-                type="button"
-                className="zn-menu__item"
-                data-variant="destructive"
-                onClick={() => {
-                  onSessionDelete(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                <Trash2 />
-                {t("calendar.deleteSession")}
-              </button>
-            )}
-          </div>
-        </div>
+              ),
+              label: t("completion.toggleDone"),
+              onSelect: () => onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
+            onRedraw &&
+              isRedrawable(contextMenu.workoutId) &&
+              !contextSessionLocked && {
+                key: "redraw",
+                icon: <Dices />,
+                label: t("library:weekly.slot.reroll"),
+                onSelect: () => onRedraw(contextMenu.weekNumber, contextMenu.sessionIndex),
+              },
+            onToggleLock && {
+              key: "lock",
+              icon: contextSessionLocked ? <LockOpen /> : <Lock />,
+              label: contextSessionLocked
+                ? t("library:weekly.slot.unlock")
+                : t("library:weekly.slot.lock"),
+              onSelect: () => onToggleLock(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
+            onSessionDelete && {
+              key: "delete",
+              icon: <Trash2 />,
+              label: t("calendar.deleteSession"),
+              variant: "destructive" as const,
+              onSelect: () => onSessionDelete(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
+          ] as (SessionActionMenuItem | false | undefined)[]).filter(
+            (item): item is SessionActionMenuItem => Boolean(item),
+          )}
+        />
       )}
     </>
   );

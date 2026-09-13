@@ -985,6 +985,43 @@
   gap: var(--sp-4);
 }
 
+/* Le bouton qui ouvre le menu de la séance.
+ *
+ * Il n'existe QUE sur téléphone : au-dessus, les quatre glyphes tiennent au
+ * bout de la ligne, le survol les explique et le clic droit ouvre le même
+ * menu. Sous 640px, ces quatre glyphes de 14px alignés au bout d'une carte de
+ * 350 étaient quatre cibles qu'on rate, dont aucune ne dit son nom. */
+.zn-planlist__more {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  min-inline-size: 32px;
+  min-block-size: 32px;
+  padding: 0;
+
+  /* À l'encre sourde et non au filet : c'est la seule porte vers les gestes
+     de la séance sur téléphone, et la remarque qui l'a fait naître était
+     « je ne vois pas la possibilité de… ». Un affordance qu'on cherche n'en
+     est pas un. */
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-planlist__more > svg {
+  inline-size: var(--sp-9);
+  block-size: var(--sp-9);
+}
+
+.zn-planlist__more:hover {
+  color: var(--text-body);
+}
+
 /* In a reading list the actions stay out: hiding them behind hover would put
    them out of reach of a touch pointer, which the dense grid solves with a
    long-press menu the list has no room for. The three-class selector outranks
@@ -1003,19 +1040,13 @@
 }
 
 /* Au doigt, ces quatre glyphes font 14px de côté : sous le plancher de 24 de
-   la WCAG 2.5.8, et impossibles à viser en marchant. Maintenant qu'ils ont
-   leur propre ligne sous le nom, ils peuvent prendre la taille qu'il leur
-   faut. Le tirage négatif rend au rang la moitié de ce que le rembourrage lui
-   prend, pour que la ligne ne grandisse pas d'autant. */
+   la WCAG 2.5.8. Sous 640px ils sont remplacés par le bouton de menu ; ce qui
+   reste couvert ici est la tablette au doigt, où la rangée est rendue et doit
+   donc être visable. */
 @media (pointer: coarse) {
   .zn-planlist__sess .zn-planlist__acts .zn-sess__action {
     min-inline-size: 32px;
     min-block-size: 32px;
-  }
-
-  .zn-planlist__acts {
-    margin-block: calc(var(--sp-4) * -1);
-    margin-inline-start: calc(var(--sp-5) * -1);
   }
 }
 
@@ -1280,30 +1311,21 @@
     gap: var(--sp-4);
   }
 
-  /* Sur téléphone, la rangée d'actions passe SOUS le nom, dans la colonne du
-     nom — elle ne se dispute plus la ligne avec lui.
+  /* Sur téléphone, les quatre glyphes cèdent la place au bouton qui les
+     nomme. Le menu qu'il ouvre porte les mêmes libellés que leurs infobulles,
+     plus les deux gestes que la rangée n'a jamais offerts au doigt : voir la
+     séance, et la clôturer.
 
-     `flex-wrap: wrap` tenait ce rôle et ne le tenait qu'à moitié : le repli ne
-     se déclenchait que si le bloc de méta était trop large pour la ligne. Dès
-     qu'il tenait — une séance de renforcement, qui n'affiche pas de distance —
-     il restait à droite et laissait trois pixels au titre. Une grille décide,
-     elle ne négocie pas. */
-  .zn-sess.zn-planlist__sess,
-  .zn-sess.zn-planlist__sess:not(:has(> .zn-sess__check)) {
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      "check main"
-      "check meta";
+     C'est aussi ce qui permet à la rangée de garder ses trois colonnes ici.
+     Ce qui l'écrasait était la LARGEUR du bloc de méta — pastille, chiffres et
+     quatre boutons insécables. Réduit à un bouton de 32px, il ne peut plus
+     rien prendre au nom : la piste `auto` ne dépasse pas son contenu, et
+     `minmax(0, 1fr)` garde tout le reste. */
+  .zn-planlist__acts {
+    display: none;
   }
 
-  .zn-sess.zn-planlist__sess:not(:has(> .zn-sess__check)) {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "main"
-      "meta";
-  }
-
-  .zn-planlist__meta {
-    justify-content: flex-start;
+  .zn-planlist__more {
+    display: inline-flex;
   }
 }
