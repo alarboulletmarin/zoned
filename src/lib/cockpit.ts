@@ -332,8 +332,8 @@ export function focusDayDate(focus: TodayFocus, day: number, today: Date): Date 
  * 1. **La colonne garde la hauteur de sa journée.** Les blocs se partagent ce
  *    budget, filets compris. Sans ça une journée découpée paraîtrait plus
  *    longue qu'une journée d'un seul bloc de même durée, et la bande dirait le
- *    nombre de séances à la place des minutes — l'erreur inverse de celle
- *    qu'on corrige.
+ *    nombre de séances à la place des minutes, c'est-à-dire l'erreur inverse
+ *    de celle qu'on corrige.
  * 2. **Chaque bloc vaut sa séance**, au prorata des minutes, avec un plancher :
  *    sous 3 px un bloc n'est plus un bloc, c'est l'épaisseur d'un trait.
  * 3. **Rien ne dépasse le créneau**, qui vaut `BAR_MAX`. C'est ce qui permet
@@ -416,9 +416,9 @@ export function dayBarBlocks(
  * LA FAMILLE d'une séance : course, vélo, natation, renforcement.
  *
  * Le cockpit nommait la séance sans jamais dire de quel SPORT elle est. Sur un
- * plan qui ne court pas, c'est l'information qu'on cherche en premier le matin
- * — on ne prépare pas le même sac — et elle était la seule à ne se lire nulle
- * part, ni dans la bande, ni sur la pile.
+ * plan qui ne court pas, c'est l'information qu'on cherche en premier le
+ * matin, on ne prépare pas le même sac, et elle était la seule à ne se lire
+ * nulle part, ni dans la bande, ni sur la pile.
  *
  * Deux sources, parce que le modèle en a deux, et c'est assumé :
  *

@@ -57,7 +57,7 @@
 
 /* Un jour porte une séance, parfois deux. Les deux cas sont le MÊME bloc
    empilé, et non un écran pour une séance plus un écran pour deux : le jour
-   double n'avait, lui, aucun écran — le titre disait 2 séances t'attendent,
+   double n'avait, lui, aucun écran : le titre disait 2 séances t'attendent,
    rien ne montrait ce qu'elles demandaient, et aucune des deux ne pouvait
    être close.
 
@@ -162,8 +162,8 @@
    Remesuré trois fois. La réponse a d'abord gagné le micro-label, la durée et
    la ligne d'exécution, la bande la valeur du jour, et les deux sorties sont
    remontées DANS la réponse : 292 px ne couvraient plus rien, la valeur est
-   passée à 544. Puis les réserves du choix de jour sont arrivées — titre sur
-   deux lignes, durée et micro-label toujours écrits — et elle est passée à
+   passée à 544. Puis les réserves du choix de jour sont arrivées, titre sur
+   deux lignes, durée et micro-label toujours écrits, et elle est passée à
    589. Puis la rangée des familles sous les blocs, 15 px de bande en plus, et
    elle passe à 604.
 
@@ -318,7 +318,7 @@
    fait. Deux choses, deux canaux.
 
    Après `[data-today]`, à égale spécificité : le jour choisi qui est aussi
-   aujourd'hui — le cas de l'arrivée sur l'écran — prend l'encre par-dessus le
+   aujourd'hui, le cas de l'arrivée sur l'écran, prend l'encre par-dessus le
    gris du jour courant. */
 .zn-cockpit__day[data-selected] .zn-cockpit__day-letter {
   color: var(--text-body);
@@ -330,7 +330,7 @@
 
 /* Une rangée de glyphes par jour, un par FAMILLE présente : course, vélo,
    natation, renforcement. C'est le quatrième canal de la bande, et le seul
-   qui ne se déduit d'aucun autre — la hauteur dit les minutes, le découpage
+   qui ne se déduit d'aucun autre : la hauteur dit les minutes, le découpage
    le nombre, la forme le statut, et aucun des trois ne dit de quel sport il
    s'agit.
 
