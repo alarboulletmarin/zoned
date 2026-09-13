@@ -841,6 +841,42 @@ marque le contact avec le sol ; sur le logo, c'est un point final, pas une
 action — la seule occurrence de l'accent qui ne soit ni un contact ni un bouton,
 et elle est aussi vieille que `wordmark.css`.
 
+### L'icône d'app n'est pas le favicon agrandi
+
+C'est la distinction qui a manqué au premier jet, et elle a coûté une tuile
+blanche sur les écrans d'accueil. Le favicon vit dans une barre d'onglets
+claire : il lui faut sa plaque arrondie de papier pour s'en détacher. L'icône
+d'app vit sur un écran d'accueil, où iOS et Android posent **leur** masque
+par-dessus.
+
+Le générateur d'assets PWA prenait `favicon.svg` tel quel, lui ajoutait 30 % de
+marge, et posait le tout sur du blanc pur. Résultat mesuré sur
+l'apple-touch-icon avant correction : 52 % de la tuile en `#FFFFFF`, une plaque
+de papier `#F6F5F2` invisible dessus, le signe sur 52 % de large et 38 % de
+haut, 9 % de pixels d'encre. Sur un téléphone ça ne se lisait pas comme un logo
+trop petit, ça se lisait comme une tuile vide.
+
+`public/app-icon.svg` est donc un dessin à part, produit par le même script :
+le même `z.`, en papier sur un carré **d'encre**, **à fond perdu**, sans aucun
+arrondi. Deux raisons, dans cet ordre :
+
+- **l'encre et pas le papier**, parce qu'une tuile à 96 % de blanc redevient
+  invisible sur un fond d'écran clair, ce qui est le bug qu'on répare ;
+- **le fond perdu**, parce que le système pose son propre arrondi et que deux
+  arrondis concentriques se voient.
+
+Deux tailles de signe, et la seconde est contrainte : 0,62 du côté pour les
+icônes ordinaires, 0,54 pour la maskable, dont la zone sûre est le disque
+inscrit à 80 % du côté. Le signe étant un rectangle couché, c'est sa
+**diagonale** qui doit y tenir, pas sa largeur. Le script refait ce calcul
+depuis les contours réels à chaque exécution, `--check` compris, et sort en
+erreur si ça déborde : un maskable rogné ne se voit pas dans un diff, il se
+voit sur un téléphone Android une fois publié.
+
+Le corollaire : les icônes ne portent **aucune transparence**. Les anciennes
+`pwa-*.png` en avaient 13 %, dans les coins laissés libres par la plaque
+arrondie, et iOS peint le transparent en noir.
+
 ## Ce qui a été essayé et écarté
 
 **Les jeux d'illustrations sous licence.** OpenMoji est géométriquement le

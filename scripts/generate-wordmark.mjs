@@ -2,8 +2,11 @@
  *
  *   bun scripts/generate-wordmark.mjs
  *
- * Écrit src/assets/logo.svg (le mot entier) et public/favicon.svg (le z.
- * dans un carré). Sortie générée : on édite ce fichier, jamais les SVG.
+ * Écrit src/assets/logo.svg (le mot entier), public/favicon.svg (le z. dans
+ * un carré de papier, pour un onglet) et public/app-icon.svg (le même z. sur
+ * un carré d'encre à fond perdu, pour un écran d'accueil), puis rasterise les
+ * PNG que les deux dernières familles réclament. Sortie générée : on édite ce
+ * fichier, jamais les SVG ni les PNG.
  *
  * ── Pourquoi le mot, et pas une figure ─────────────────────────────────────
  *
@@ -131,10 +134,10 @@ function faviconSvg() {
   const glyphs = setText("z.", MONO_TRACKING);
   const { x0, y0, x1, y1 } = inkBox(glyphs);
   const BOX = 64;
-  /* 8 de 64, soit 12,5 % par bord : le dessin occupe les 75 % centraux, donc
-     il tient dans la zone sûre d'une icône maskable (les 80 % centraux),
-     et pwa-assets.config.ts peut prendre ce fichier tel quel pour les deux
-     familles d'icônes. */
+  /* 8 de 64, soit 12,5 % par bord : le dessin occupe les 75 % centraux, ce
+     qui laisse la plaque respirer dans une barre d'onglets. Ce fichier ne
+     sert QUE l'onglet ; l'icône d'app se dessine plus bas, à part, et la
+     raison est écrite là-bas. */
   const MARGIN = 8;
   const k = (BOX - MARGIN * 2) / Math.max(x1 - x0, y1 - y0);
   const dx = BOX / 2 - ((x0 + x1) / 2) * k;
@@ -153,32 +156,175 @@ function faviconSvg() {
 `;
 }
 
-/* Les deux PNG que `index.html` déclare à côté du SVG, et que
-   `vite.config.ts` liste dans `includeAssets`. Le générateur d'assets PWA
-   (`bunx pwa-assets-generator`, préréglage minimal2023) ne les produit PAS,
-   il fait les pwa-*, l'apple-touch, le maskable et le .ico. Ils étaient donc
-   restés sur l'ancien logo la dernière fois. Ils se dérivent d'ici pour que
-   ça ne se reproduise pas.
+/** L'icône de l'app : le même z., sur un carré d'encre, à fond perdu.
+ *
+ *  Ce n'est PAS le favicon agrandi, et c'est tout le sujet. Un favicon vit
+ *  dans une barre d'onglets claire : il lui faut sa plaque arrondie de papier
+ *  pour s'en détacher. Une icône d'app vit sur un écran d'accueil, où iOS et
+ *  Android posent LEUR masque par-dessus. La plaque de papier y devenait
+ *  invisible, parce que le générateur d'assets la posait sur du blanc pur,
+ *  après lui avoir ajouté 30 % de marge.
+ *
+ *  Mesuré sur l'ancienne apple-touch-icon avant de la remplacer : 52 % de la
+ *  tuile en FFFFFF, le signe sur 52 % de large et 38 % de haut, 9 % de pixels
+ *  d'encre. Sur un téléphone, ça ne se lisait pas comme un logo trop petit,
+ *  ça se lisait comme une tuile blanche : le logo ne s'était pas mis. Les
+ *  icônes des trois autres apps de la maison remplissent leur carré, d'où la
+ *  comparaison qui a levé le lièvre.
+ *
+ *  Donc : l'encre, pas le papier, parce qu'une tuile à 96 % de blanc disparaît
+ *  sur un fond d'écran clair, et le fond perdu, sans aucun arrondi, parce que
+ *  le système fait le sien et que deux arrondis concentriques se voient.
+ */
+const APP_BOX = 512;
+
+/* La part du côté que prend la plus grande dimension du signe.
+
+   0,62 pour les icônes ordinaires : c'est la proportion des icônes système,
+   et elle laisse la marge dans laquelle le masque d'iOS mord.
+
+   0,54 pour la maskable, et le chiffre est CONTRAINT, pas choisi. La zone sûre
+   d'une icône maskable est le disque inscrit à 80 % du côté : tout ce qui en
+   sort peut être rogné. Le signe est un rectangle couché, c'est donc sa
+   DIAGONALE qui doit tenir dans ce disque, pas sa largeur. Le portail plus bas
+   refait le calcul depuis les contours réels, parce qu'il dépend de la fonte :
+   une montée de Bricolage Grotesque qui élargirait le z. ferait sortir de la
+   zone sûre une valeur restée juste. */
+const ICON_FILL = 0.62;
+const MASKABLE_FILL = 0.54;
+
+function appIconSvg(fill) {
+  const glyphs = setText("z.", MONO_TRACKING);
+  const { x0, y0, x1, y1 } = inkBox(glyphs);
+  const k = (APP_BOX * fill) / Math.max(x1 - x0, y1 - y0);
+  const dx = APP_BOX / 2 - ((x0 + x1) / 2) * k;
+  const dy = APP_BOX / 2 - ((y0 + y1) / 2) * k;
+  return `<svg width="${APP_BOX}" height="${APP_BOX}" viewBox="0 0 ${APP_BOX} ${APP_BOX}" xmlns="http://www.w3.org/2000/svg">
+  <!-- L'initiale sur l'encre de l'app, à fond perdu : le carré va jusqu'au
+       bord, le masque de l'écran d'accueil est celui du système.
+       Généré par scripts/generate-wordmark.mjs, ne pas éditer à la main. -->
+  <rect width="${APP_BOX}" height="${APP_BOX}" fill="${INK}"/>
+  <g transform="translate(${f2(dx)} ${f2(dy)}) scale(${f3(k)})">
+    <path d="${glyphs[0].d}" fill="${PAPER}"/>
+    <path d="${glyphs[1].d}" fill="${ACCENT}"/>
+  </g>
+</svg>
+`;
+}
+
+/** La diagonale du signe, en fraction du côté, pour un `fill` donné. */
+function markDiagonal(fill) {
+  const { x0, y0, x1, y1 } = inkBox(setText("z.", MONO_TRACKING));
+  const long = Math.max(x1 - x0, y1 - y0);
+  return Math.hypot(((x1 - x0) / long) * fill, ((y1 - y0) / long) * fill);
+}
+
+/* Les cinq PNG d'icône, le nom de fichier tel que `vite.config.ts` et
+   `index.html` les déclarent. Ils sortent de `--check` pour la raison écrite
+   au-dessus de rasterFavicons ; ce que `--check` surveille, c'est le SVG dont
+   ils dérivent. */
+const APP_ICONS = [
+  ["public/pwa-64x64.png", 64, ICON_FILL],
+  ["public/pwa-192x192.png", 192, ICON_FILL],
+  ["public/pwa-512x512.png", 512, ICON_FILL],
+  ["public/apple-touch-icon-180x180.png", 180, ICON_FILL],
+  ["public/maskable-icon-512x512.png", 512, MASKABLE_FILL],
+];
+
+/* `flatten` n'est pas une précaution de style : une icône d'app ne doit porter
+   AUCUNE transparence. Les anciens pwa-*.png en avaient 13 %, dans les coins
+   laissés libres par la plaque arrondie, et iOS peint le transparent en noir.
+   Le fond est déjà opaque dans le SVG, `flatten` retire le canal alpha que
+   rsvg ajoute quand même, et le PNG sort en RGB. */
+async function rasterAppIcons() {
+  for (const [path, size, fill] of APP_ICONS) {
+    const png = await sharp(Buffer.from(appIconSvg(fill)), {
+      // Sur-échantillonnage 4x puis réduction, comme pour les favicons : les
+      // courbes du z. tiennent mieux qu'une rasterisation directe à 64 px.
+      density: (72 * 4 * size) / APP_BOX,
+    })
+      .resize(size, size)
+      .flatten({ background: INK })
+      .png({ compressionLevel: 9 })
+      .toBuffer();
+    writeFileSync(path, png);
+  }
+}
+
+/* Les PNG d'onglet que `index.html` déclare à côté du SVG, et que
+   `vite.config.ts` liste dans `includeAssets`, plus le .ico que personne ne
+   déclare mais que les agents sondant /favicon.ico vont chercher. Le
+   générateur d'assets PWA en produisait une partie ; il est parti avec la
+   configuration qui cassait les icônes d'app, donc tout se dérive d'ici. Les
+   deux PNG étaient d'ailleurs déjà restés sur l'ancien logo la fois où il
+   était seul à les faire.
 
    Ils sortent de `--check` volontairement : ils dérivent du SVG, que `--check`
    surveille, et un octet de PNG bouge à chaque montée de sharp, un portail
    qui casse tout seul est un portail qu'on désactive. */
 async function rasterFavicons(svg) {
-  for (const size of [16, 32]) {
-    const png = await sharp(Buffer.from(svg), { density: 384 })
-      .resize(size, size)
-      .png({ compressionLevel: 9 })
-      .toBuffer();
-    writeFileSync(`public/favicon-${size}x${size}.png`, png);
+  const rendus = new Map();
+  for (const size of [16, 32, 48]) {
+    rendus.set(
+      size,
+      await sharp(Buffer.from(svg), { density: 384 })
+        .resize(size, size)
+        .png({ compressionLevel: 9 })
+        .toBuffer(),
+    );
   }
+  for (const size of [16, 32]) {
+    writeFileSync(`public/favicon-${size}x${size}.png`, rendus.get(size));
+  }
+  writeFileSync("public/favicon.ico", ico(rendus));
 }
 
-/* --check : le portail. Les deux SVG sont de la sortie générée, comme
+/* Le .ico est un conteneur, pas un format d'image : six octets d'en-tête, une
+   entrée de seize par taille, puis les images bout à bout. Depuis Vista elles
+   peuvent être des PNG, ce qui évite d'écrire un encodeur BMP avec son masque
+   de transparence pour un fichier que plus rien ne lit vraiment. */
+function ico(rendus) {
+  const tailles = [...rendus.keys()];
+  const entete = Buffer.alloc(6);
+  entete.writeUInt16LE(1, 2); // type : 1 = icône
+  entete.writeUInt16LE(tailles.length, 4);
+
+  let position = 6 + tailles.length * 16;
+  const entrees = tailles.map((size) => {
+    const png = rendus.get(size);
+    const e = Buffer.alloc(16);
+    e[0] = size; // 0 voudrait dire 256, aucune taille ici ne l'atteint
+    e[1] = size;
+    e.writeUInt16LE(1, 4); // plans
+    e.writeUInt16LE(32, 6); // bits par pixel
+    e.writeUInt32LE(png.length, 8);
+    e.writeUInt32LE(position, 12);
+    position += png.length;
+    return e;
+  });
+
+  return Buffer.concat([entete, ...entrees, ...tailles.map((s) => rendus.get(s))]);
+}
+
+/* --check : le portail. Les trois SVG sont de la sortie générée, comme
    src/components/icons/index.tsx, on édite ce fichier, jamais eux. */
 const files = [
   ["src/assets/logo.svg", logoSvg()],
   ["public/favicon.svg", faviconSvg()],
+  ["public/app-icon.svg", appIconSvg(ICON_FILL)],
 ];
+
+/* Le portail de la zone sûre. Il tourne dans les deux modes, y compris
+   --check, parce qu'un maskable qui déborde ne se voit pas dans un diff : il
+   se voit sur un téléphone Android, une fois publié. */
+const diagonale = markDiagonal(MASKABLE_FILL);
+if (diagonale > 0.8) {
+  console.error(
+    `✗ maskable hors zone sûre : diagonale ${(diagonale * 100).toFixed(1)} % du côté, ` +
+      `maximum 80 %\n  → baisser MASKABLE_FILL`,
+  );
+  process.exit(1);
+}
 
 if (process.argv.includes("--check")) {
   const stale = files.filter(([p, want]) => {
@@ -194,12 +340,14 @@ if (process.argv.includes("--check")) {
     );
     process.exit(1);
   }
-  console.log("✓ logo.svg et favicon.svg à jour");
+  console.log("✓ logo.svg, favicon.svg et app-icon.svg à jour");
 } else {
   for (const [p, content] of files) writeFileSync(p, content);
   await rasterFavicons(files[1][1]);
+  await rasterAppIcons();
   console.log(
-    `→ ${files.map(([p]) => p).join(", ")}, public/favicon-16x16.png, public/favicon-32x32.png`,
+    `→ ${files.map(([p]) => p).join(", ")}, public/favicon-16x16.png, ` +
+      `public/favicon-32x32.png, public/favicon.ico, ` +
+      `${APP_ICONS.map(([p]) => p).join(", ")}`,
   );
-  console.log("  puis : bunx pwa-assets-generator (pwa-*, apple-touch, maskable, .ico)");
 }

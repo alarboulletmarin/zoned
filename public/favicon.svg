@@ -2,7 +2,7 @@
   <!-- L'initiale sur le papier de l'app. Un favicon n'a pas de page dont
        hériter : l'encre #171614 et le papier #F6F5F2 sont écrits en dur, et le
        point garde le vermillon #E8452A.
-       Généré par scripts/generate-wordmark.mjs — ne pas éditer à la main. -->
+       Généré par scripts/generate-wordmark.mjs, ne pas éditer à la main. -->
   <rect width="64" height="64" rx="14" fill="#F6F5F2"/>
   <g transform="translate(6.69 48.82) scale(0.065)">
     <path d="M20 0L20 -136L271 -392L271 -398L25 -398L25 -528L460 -528L460 -391L209 -134L209 -130L463 -130L463 0Z" fill="#171614"/>
