@@ -217,9 +217,14 @@ export function WorkoutCardCompact({
 
 /** Internal running-only compact card */
 function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
+  const { t } = useTranslation("library");
   const pick = usePickLang();
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
+  const name = pick(workout, "name");
+  // Le profil, à la taille de la carte dense. Même bar que la grille, même
+  // condensé : ce qui change est sa hauteur (zone.css, .zn-profile-mini).
+  const blocks = useMemo(() => toZoneBarBlocks(workout), [workout]);
   const trail = computeTrailMetrics(workout);
   const climbLabel = trail.totalElevationGainM > 0
     ? `${trail.totalElevationGainM} m`
@@ -231,9 +236,17 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
     <Link to={`/workout/${workout.id}`} className="zn-wcard-link">
       <article className={cn("zn-wcard", className)} data-size="compact">
         <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
-          <h3 className="zn-wcard__title zn-fill">{pick(workout, "name")}</h3>
+          <h3 className="zn-wcard__title zn-fill">{name}</h3>
           <FavoriteButton workoutId={workout.id} size="sm" />
         </div>
+        {blocks.length > 0 && (
+          <ZoneBar
+            condense
+            blocks={blocks}
+            className="zn-profile-mini"
+            label={t("zoneBar.of", { name })}
+          />
+        )}
         <div className="zn-wcard__meta">
           <span className="zn-wcard__zone">Z{dominantZone}</span>
           <span className="zn-wcard__fact">{formatDurationMinutes(duration)}</span>

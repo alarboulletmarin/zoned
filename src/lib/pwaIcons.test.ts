@@ -14,7 +14,7 @@ import { join } from "path";
  * Safari lit. Et un écran d'accueil iOS ne pose pas un vecteur. Un SVG en
  * `sizes: "any"` répond à toutes les tailles demandées, donc Safari l'élisait,
  * ne le rasterisait pas, et l'app arrivait en pastille grise frappée de
- * l'initiale du <title> — sans jamais descendre jusqu'aux PNG.
+ * l'initiale du <title>, sans jamais descendre jusqu'aux PNG.
  *
  * Ce test lit `vite.config.ts` par regex, la même astuce que
  * `nav-coverage.test.ts`, parce que le manifeste n'existe qu'au build.

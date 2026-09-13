@@ -171,3 +171,45 @@
 .zn-zonescale__fill[data-zone="4"] { --zn-block-fill: var(--zone-4); }
 .zn-zonescale__fill[data-zone="5"] { --zn-block-fill: var(--zone-5); }
 .zn-zonescale__fill[data-zone="6"] { --zn-block-fill: var(--zone-6); }
+
+/* ── la vignette : le même profil, à la taille d'une ligne ────────────── */
+
+/* La grille montrait la FORME de la séance (une ZoneBar de 36px), la carte
+   dense et la rangée de liste ne montraient que des mots : deux séances de
+   trente minutes en Z2 y étaient identiques à l'œil, qu'elles soient un
+   footing ou un 30/30. La vignette leur rend le dessin, sans leur rendre la
+   place, elle tient sur la moitié de la hauteur d'une ZoneBar de carte.
+
+   Une seule classe pour les deux rampes, .zn-zonebar (course) et
+   .zn-str-meter (renfo) : les deux ont la même géométrie, boîte encadrée,
+   blocs alignés sur le fond, hauteur de bloc pour la marche, donc les réduire
+   demande exactement les mêmes valeurs et elles ne doivent pas diverger. Ce
+   fichier est importé en dernier, donc une classe simple suffit à passer
+   devant les hauteurs de 36px que ces deux-là posent chez elles.
+
+   Ce qui change avec la taille, et RIEN d'autre : la boîte, l'espace entre
+   les blocs (2px sur 36 devient une rainure sur 18), le rayon, et le filet
+   des blocs, qui part. Un bloc de zone 1 fait 4,5px de haut ici (30% des 15px
+   intérieurs) : un filet d'1px sur trois côtés lui en laissait 2,5, et ce
+   qu'il restait de l'aplat ne disait plus sa densité d'encre, qui est le
+   canal qui sépare Z1 de Z2 quand la hauteur, elle, ne tient plus qu'à
+   deux pixels. */
+.zn-profile-mini {
+  block-size: 18px;
+  gap: 1px;
+  padding-inline: 2px;
+  border-radius: var(--r-sm);
+}
+
+.zn-profile-mini .zn-zonebar__block,
+.zn-profile-mini .zn-str-meter__step {
+  border: none;
+  border-radius: 1px 1px 0 0;
+  min-inline-size: 1px;
+}
+
+/* Une marche non atteinte n'a plus son filet pour se dire : à cette taille
+   c'est le creux qui la dit, donc il lui faut son encre pâle. */
+.zn-profile-mini .zn-str-meter__step[data-reached="false"] {
+  background: var(--surface-band);
+}

@@ -230,9 +230,18 @@
   white-space: nowrap;
 }
 
+/* La vignette de rampe, à la colonne de la vignette de profil d'une rangée de
+   course (.zn-wrow__profile, workout.css) : les deux disciplines cohabitent
+   dans la même liste, et deux largeurs auraient fait deux colonnes. */
+.zn-str-row__profile {
+  inline-size: 56px;
+  flex: none;
+}
+
 @media (min-width: 640px) {
   .zn-str-row__facts { display: flex; }
   .zn-str-row__small { display: none; }
+  .zn-str-row__profile { inline-size: 72px; }
 }
 
 @media (pointer: coarse) {
