@@ -107,6 +107,37 @@ function raiseToastLayer() {
   }
 }
 
+/**
+ * Redescendre la couche quand plus aucune modale n'est ouverte.
+ *
+ * Sans cela elle reste promue pour la vie de la page : une fois la premiere
+ * feuille ouverte, la couche ne quitte plus la top layer. Ce n'etait pas
+ * visible tant que rien n'en dependait, mais `toast.css` lit maintenant
+ * `:popover-open` pour savoir qu'une modale occupe l'ecran, et cet etat doit
+ * donc dire la verite.
+ *
+ * A appeler APRES `dialog.close()` : le dialogue qui se ferme compte encore
+ * parmi les `dialog[open]` tant qu'il n'est pas ferme, et une feuille ouverte
+ * par une autre doit garder la couche au-dessus d'elle.
+ *
+ * L'attribut PART, il ne suffit pas de refermer le popover : la feuille de
+ * style de l'agent pose `[popover]:not(:popover-open) { display: none }`, donc
+ * une couche refermee mais toujours marquee cache tous les toasts suivants.
+ * Sans l'attribut, elle redevient le div ordinaire qu'elle etait au premier
+ * chargement, et son z-index la tient au-dessus de la page.
+ */
+function lowerToastLayer() {
+  if (document.querySelector("dialog[open]")) return;
+  const layer = document.querySelector<HTMLElement>(".zn-toast-layer");
+  if (!layer?.hasAttribute("popover")) return;
+  try {
+    if (layer.matches(":popover-open")) layer.hidePopover();
+  } catch {
+    // Comme au-dessus : pas de support popover, rien a defaire.
+  }
+  layer.removeAttribute("popover");
+}
+
 /* ── where a floating child belongs ───────────────────────────────────── */
 
 const DialogContainerContext = createContext<HTMLElement | null>(null);
@@ -173,6 +204,7 @@ export function NativeDialog({
       dialog.removeEventListener("close", handleClose);
       unlockScroll();
       dialog.close();
+      lowerToastLayer();
     };
   }, []);
 
