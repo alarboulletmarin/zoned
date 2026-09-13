@@ -271,10 +271,33 @@
    ce qui tient la bande collante sur UNE ligne : le rail prend ce qui reste et
    défile sous le doigt, le bouton ne se replie jamais. */
 @media (max-width: 640px) {
+  /* UN SEUL AXE. `overflow-x: auto` seul ne défile pas que sur x : la règle
+     CSS transforme le `visible` de l'autre axe en `auto`, donc le rail était
+     aussi un conteneur qui défile verticalement. Quarante-quatre pixels de
+     hauteur pour quarante-quatre pixels de contenu, la course était nulle ou
+     d'un pixel selon l'arrondi de la pastille pressée, mais le doigt, lui,
+     trouvait la prise : un geste vertical parti d'une pastille tirait la
+     bande au lieu de la page, et c'est ce flottement qu'on sentait sous le
+     pouce. `hidden` ferme l'axe, la course verticale disparaît et le geste
+     repart à la page, qui est ce qu'on voulait faire défiler.
+
+     Le rail garde sa hauteur de rangée : les 6px de marge intérieure sont
+     repris en marge négative, ils n'existent que pour que l'anneau de focus
+     (2.5px, décalé de 2px) tienne DANS la zone de défilement au lieu d'être
+     coupé par elle.
+
+     `overscroll-behavior-inline: contain` pour le geste horizontal : arrivé
+     au bout du rail, il ne se propage plus au navigateur, qui y lisait le
+     balayage de retour en arrière. */
   .zn-lib__practice-rail {
     overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
     flex-wrap: nowrap;
     scrollbar-width: none;
+
+    padding-block: var(--sp-3);
+    margin-block: calc(-1 * var(--sp-3));
   }
 
   .zn-lib__practice-rail::-webkit-scrollbar {

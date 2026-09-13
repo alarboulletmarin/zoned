@@ -136,7 +136,16 @@
    because it is not the same everywhere, 32px under the kicker, none between
    the doors and the ground (the ground's own slack is that room), 16px between
    the rule and the foot. A uniform gap cost 64px, and on an iPhone SE those
-   are exactly the pixels the figure needs to exist. */
+   are exactly the pixels the figure needs to exist.
+
+   ET RIEN N'Y GLISSE. Ce bloc portait `zoned-slide-in`, donc les six portes
+   montaient de 8px par dessus le fondu du dialogue : deux mouvements
+   superposés sur une surface qui prend l'écran, et celui qui se voyait était
+   le mauvais, le texte arrivait sous le pouce en étant encore en train de
+   bouger. Une feuille latérale glisse parce qu'elle entre par un bord, un
+   dialogue posé monte de 8px parce qu'il se détache de la page ; ce panneau
+   n'a ni bord d'entrée ni page derrière, il EST l'écran, donc il se pose.
+   Reste le fondu de l'encre, `zn-menu-in` sur le dialogue, et lui seul. */
 .zn-menu__inner {
   flex: 1;
   min-block-size: 0;
@@ -147,8 +156,6 @@
 
   padding-block: calc(var(--sp-15) + env(safe-area-inset-top, 0px)) var(--fab-clear);
   padding-inline: var(--pad-screen-x);
-
-  animation: zoned-slide-in var(--dur-slow) var(--ease-out);
 }
 
 /* Not compressible: a scrolling flex column squeezes its children before it

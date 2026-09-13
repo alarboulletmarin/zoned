@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Clock, Circle, Mountain } from "@/components/icons";
@@ -7,7 +8,7 @@ import { FavoriteButton } from "./FavoriteButton";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, isStrengthWorkout } from "@/types";
-import { getWorkoutDuration } from "@/components/visualization";
+import { getWorkoutDuration, ZoneBar, toZoneBarBlocks } from "@/components/visualization";
 import { StrengthWorkoutListItem } from "./StrengthWorkoutCard";
 import { usePickLang } from "@/lib/i18n-utils";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
@@ -30,8 +31,12 @@ export function WorkoutListItem({ workout, className }: WorkoutListItemProps) {
 function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
+  const name = pick(workout, "name");
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
+  // Le profil de la séance, au format d'une rangée : la même bar et le même
+  // condensé que la carte, dans une vignette de 18px posée avant le favori.
+  const blocks = useMemo(() => toZoneBarBlocks(workout), [workout]);
   const trail = computeTrailMetrics(workout);
   const hasTrail = trail.totalElevationGainM > 0 || trail.totalElevationLossM > 0 || trail.dominantTerrain != null;
   const climbLabel = trail.totalElevationGainM > 0
@@ -46,7 +51,7 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
     <Link to={`/workout/${workout.id}`} className={cn("zn-wrow", className)}>
       {/* Title and mobile duration */}
       <div className="zn-wrow__main">
-        <span className="zn-wrow__name">{pick(workout, "name")}</span>
+        <span className="zn-wrow__name">{name}</span>
         {/* Mobile: show duration below title */}
         <span className="zn-wrow__compact">
           <Clock />
@@ -81,6 +86,18 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
           )}
         </span>
       </div>
+
+      {/* Le profil, entre les faits et le favori : la rangée disait la zone
+          dominante et la durée, jamais la FORME de la séance, ce qui rendait
+          un 30/30 et un footing identiques à l'œil. */}
+      {blocks.length > 0 && (
+        <ZoneBar
+          condense
+          blocks={blocks}
+          className="zn-profile-mini zn-wrow__profile"
+          label={t("library:zoneBar.of", { name })}
+        />
+      )}
 
       {/* Actions */}
       <div className="zn-wrow__actions">

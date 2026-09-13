@@ -44,11 +44,17 @@ const HEAD_ROW = { "--gap": "var(--sp-6)" } as CSSProperties;
  * their ink; every step carries its height, so the silhouette reads the level
  * a second time. Decorative, the level is named in words by IntensityBadge.
  */
-function IntensityMeter({ intensity }: { intensity: StrengthIntensity }) {
+function IntensityMeter({
+  intensity,
+  className,
+}: {
+  intensity: StrengthIntensity;
+  className?: string;
+}) {
   const level = INTENSITY_LEVEL[intensity];
 
   return (
-    <div className="zn-str-meter" aria-hidden="true">
+    <div className={cn("zn-str-meter", className)} aria-hidden="true">
       {STEPS.map((step) => (
         <span
           key={step}
@@ -151,6 +157,10 @@ export function StrengthWorkoutCardCompact({
           <h3 className="zn-wcard__title zn-fill">{pick(workout, "name")}</h3>
           <FavoriteButton workoutId={workout.id} size="sm" />
         </div>
+        {/* La rampe, à la taille de la carte dense. Une carte de renfo et une
+            carte de course voisinent dans la même grille : si l'une porte son
+            profil et l'autre rien, la grille se lit comme deux catalogues. */}
+        <IntensityMeter intensity={workout.intensity} className="zn-profile-mini" />
         <div className="zn-wcard__meta">
           <span className="zn-wcard__zone">{formatDurationMinutes(avgDuration)}</span>
           <span className="zn-wcard__fact">
@@ -203,6 +213,13 @@ export function StrengthWorkoutListItem({ workout, className }: StrengthWorkoutL
           {equipment.label}
         </span>
       </div>
+
+      {/* La rampe, entre les faits et le favori, là où la rangée de course
+          porte son profil : la même vignette au même endroit. */}
+      <IntensityMeter
+        intensity={workout.intensity}
+        className="zn-profile-mini zn-str-row__profile"
+      />
 
       {/* Actions */}
       <div className="zn-row zn-fixed" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>

@@ -422,6 +422,17 @@
   flex: none;
 }
 
+/* La vignette de profil (zone.css, .zn-profile-mini) : une colonne fixe juste
+   avant le favori, donc alignée d'une rangée à l'autre comme les colonnes de
+   faits. Elle ne se replie ni ne s'étire, une largeur variable ferait varier
+   la durée apparente d'une séance à l'autre alors que la largeur d'un bloc
+   est du temps. 56px sur un téléphone, où la rangée n'a plus que son nom, et
+   72px dès que les colonnes de faits reviennent. */
+.zn-wrow__profile {
+  inline-size: 56px;
+  flex: none;
+}
+
 .zn-wrow__actions {
   display: flex;
   align-items: center;
@@ -435,6 +446,9 @@
   }
   .zn-wrow__compact {
     display: none;
+  }
+  .zn-wrow__profile {
+    inline-size: 72px;
   }
 }
 
