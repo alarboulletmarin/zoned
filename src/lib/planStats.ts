@@ -3,6 +3,7 @@ import {
   getWorkoutDiscipline,
   isStrengthWorkout,
   type AnyWorkoutTemplate,
+  type Discipline,
   type TrainingPhase,
   type WorkoutTemplate,
 } from "@/types";
@@ -22,6 +23,54 @@ function isNonRunningSession(session: PlanSession): boolean {
     session.workoutId.startsWith("SWM-") ||
     session.workoutId.startsWith("__activity_")
   );
+}
+
+/**
+ * Le sport d'une séance, `other` pour ce qui n'en est pas un (renforcement,
+ * yoga, repos).
+ *
+ * L'union rendue est exactement `ActivityDiscipline`, écrite ici sans importer
+ * le module des activités : ce fichier est celui des plans, et la dépendance
+ * va déjà dans l'autre sens. Les deux vocabulaires se rencontrent dans
+ * `weekReview.ts`, qui est le seul endroit à avoir besoin des deux.
+ *
+ * Les signaux sont ceux d'`isNonRunningSession`, et c'est délibéré : deux
+ * tables de détection pour le même fait auraient divergé au premier
+ * identifiant ajouté.
+ */
+export function sessionDiscipline(session: PlanSession): Discipline | "other" {
+  if (session.discipline) return session.discipline;
+  if (session.sessionType === "cycling" || session.workoutId.startsWith("CYC-")) {
+    return "cycling";
+  }
+  if (session.sessionType === "swimming" || session.workoutId.startsWith("SWM-")) {
+    return "swimming";
+  }
+  if (isNonRunningSession(session)) return "other";
+  return "running";
+}
+
+/**
+ * Les km d'une séance DANS SON PROPRE SPORT, ce que `estimateSessionKm` ne
+ * rend pas et n'a pas à rendre.
+ *
+ * `estimateSessionKm` répond au total de km de COURSE du plan, donc elle rend
+ * zéro dès que la séance n'est pas de la course, ce qui est la bonne réponse à
+ * sa question et la mauvaise à celle-ci : une sortie vélo du plan a des
+ * kilomètres, ils ne se rangent simplement pas dans le même total.
+ *
+ * Aucune estimation hors course : la table d'allures de ce fichier est une
+ * table d'allures de COURSE, l'appliquer à du vélo inventerait un chiffre. Un
+ * kilométrage non saisi vaut donc zéro, c'est-à-dire pas de kilomètre à
+ * montrer, et non un kilométrage deviné.
+ */
+export function sessionDisciplineKm(session: PlanSession): number {
+  if (session.workoutId === "__race_day__") return 0;
+  if (session.status === "skipped") return 0;
+  const discipline = sessionDiscipline(session);
+  if (discipline === "running") return estimateSessionKm(session);
+  if (discipline === "other") return 0;
+  return session.actualDistanceKm ?? session.targetDistanceKm ?? 0;
 }
 
 function isRunningWorkoutTemplate(w: AnyWorkoutTemplate): w is WorkoutTemplate {

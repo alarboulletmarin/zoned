@@ -165,3 +165,134 @@ describe("calendarWeekRange", () => {
     });
   });
 });
+
+describe("buildWeekReview, le volume par sport", () => {
+  /* La question que la carte posait mal : le temps du vélotaf s'ajoutait au
+     total alors que ses kilomètres n'apparaissaient nulle part. */
+  test("le temps s'additionne entre sports, les kilomètres restent chez eux", () => {
+    const review = buildWeekReview({
+      sessions: [session({ status: "completed", actualDurationMin: 60, actualDistanceKm: 11 })],
+      activities: [activity({ durationMin: 85, distanceKm: 26.6, elevationGainM: 270 })],
+      range: RANGE,
+    });
+
+    expect(review.totalMinutes).toBe(145);
+    // Les km de COURSE seuls : le vélo n'y entre pas, et c'est la règle.
+    expect(review.doneKm).toBe(11);
+    // Le plus de temps d'abord : 85 min de vélo passent devant 60 de course.
+    expect(review.byDiscipline).toEqual([
+      {
+        discipline: "cycling",
+        minutes: 85,
+        distanceKm: 26.6,
+        elevationGainM: 270,
+        extraMinutes: 85,
+      },
+      {
+        discipline: "running",
+        minutes: 60,
+        distanceKm: 11,
+        elevationGainM: 0,
+        extraMinutes: 0,
+      },
+    ]);
+  });
+
+  /* À sport égal, en revanche, tout s'additionne : une sortie du plan et une
+     sortie notée à la main sont deux fois de la course. */
+  test("le plan et le complément se somment dans le même sport", () => {
+    const review = buildWeekReview({
+      sessions: [session({ status: "completed", actualDurationMin: 50, actualDistanceKm: 9 })],
+      activities: [
+        activity({ discipline: "running", purpose: "training", durationMin: 30, distanceKm: 5 }),
+      ],
+      range: RANGE,
+    });
+
+    expect(review.byDiscipline).toEqual([
+      {
+        discipline: "running",
+        minutes: 80,
+        distanceKm: 14,
+        elevationGainM: 0,
+        extraMinutes: 30,
+      },
+    ]);
+  });
+
+  test("une séance de vélo du plan porte ses kilomètres dans sa propre ligne", () => {
+    const review = buildWeekReview({
+      sessions: [
+        session({
+          workoutId: "CYC-001",
+          sessionType: "cycling",
+          status: "completed",
+          actualDurationMin: 90,
+          actualDistanceKm: 40,
+        }),
+      ],
+      activities: [],
+      range: RANGE,
+    });
+
+    expect(review.doneKm).toBe(0);
+    expect(review.byDiscipline).toEqual([
+      {
+        discipline: "cycling",
+        minutes: 90,
+        distanceKm: 40,
+        elevationGainM: 0,
+        extraMinutes: 0,
+      },
+    ]);
+  });
+
+  test("le renforcement compte son temps et aucun kilomètre", () => {
+    const review = buildWeekReview({
+      sessions: [
+        session({
+          workoutId: "STR-001",
+          sessionType: "strength",
+          status: "completed",
+          actualDurationMin: 40,
+        }),
+      ],
+      activities: [],
+      range: RANGE,
+    });
+
+    expect(review.byDiscipline).toEqual([
+      { discipline: "other", minutes: 40, distanceKm: 0, elevationGainM: 0, extraMinutes: 0 },
+    ]);
+  });
+
+  test("une séance non close ne compte pas : le tableau dit où le temps est passé", () => {
+    const review = buildWeekReview({
+      sessions: [session(), session({ status: "skipped" })],
+      activities: [],
+      range: RANGE,
+    });
+    expect(review.byDiscipline).toEqual([]);
+  });
+
+  test("le sport le plus volumineux ouvre le tableau", () => {
+    const review = buildWeekReview({
+      sessions: [session({ status: "completed", actualDurationMin: 110, actualDistanceKm: 20 })],
+      activities: [
+        activity({ durationMin: 85 }),
+        activity({ discipline: "swimming", purpose: "training", durationMin: 45 }),
+      ],
+      range: RANGE,
+    });
+    expect(review.byDiscipline.map((v) => v.discipline)).toEqual([
+      "running",
+      "cycling",
+      "swimming",
+    ]);
+  });
+
+  test("un sport sans minute ne fait pas de ligne", () => {
+    const review = buildWeekReview({ sessions: [], activities: [], range: RANGE });
+    expect(review.byDiscipline).toEqual([]);
+  });
+});

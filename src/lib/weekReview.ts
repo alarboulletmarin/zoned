@@ -1,7 +1,13 @@
 import type { PlanSession, TrainingPlan } from "@/types/plan";
-import type { ComplementaryActivity } from "@/types/activity";
+import type { ActivityDiscipline, ComplementaryActivity } from "@/types/activity";
+import { ACTIVITY_DISCIPLINES } from "@/types/activity";
 import { getPlanMonday, getSessionCalendarDate, isoDateOnly } from "@/lib/planDates";
-import { estimateSessionKm, plannedSessionKm } from "@/lib/planStats";
+import {
+  estimateSessionKm,
+  plannedSessionKm,
+  sessionDiscipline,
+  sessionDisciplineKm,
+} from "@/lib/planStats";
 import {
   EMPTY_ACTIVITY_SUMMARY,
   summarizeActivities,
@@ -26,6 +32,24 @@ import {
  * 2. **L'observance se mesure sur ce qui était prévu**, pas sur ce qui a été
  *    tranché. Clore une seule séance sur cinq et l'avoir faite ne fait pas
  *    une semaine à 100 %.
+ *
+ * ── Le temps s'additionne, les kilomètres non ────────────────────────────
+ *
+ * `totalMinutes` mêle les séances du plan et les activités complémentaires,
+ * parce qu'une heure de vélo et une heure de course font deux heures
+ * d'entraînement. `doneKm` et `plannedKm` ne les mêlent PAS, et ce n'est pas
+ * un oubli : 26 km de vélo et 18 km de course ne font pas 44 km, et 44 est
+ * exactement le genre de total qui se retient et se répète. Les deux termes
+ * sont d'ailleurs des kilomètres de COURSE seuls, `plannedSessionKm` rend zéro
+ * dès qu'une séance n'en est pas ; l'écran doit donc le DIRE, sans quoi la
+ * carte affiche 0 km au-dessus d'une ligne qui en montre 26 et a l'air de se
+ * contredire.
+ *
+ * D'où `byDiscipline` : le volume de la semaine, une ligne par sport, séances
+ * du plan et complément confondus puisqu'à sport égal ils s'additionnent. La
+ * ligne existe pour porter les kilomètres là où ils veulent dire quelque
+ * chose, et il n'y a nulle part de total de kilomètres, ce qui est la règle
+ * rendue visible plutôt qu'expliquée.
  *
  * ── Ce qui n'est PAS ici ─────────────────────────────────────────────────
  *
@@ -65,6 +89,17 @@ export type WeekVerdict =
   | "solid"
   | "perfect";
 
+/** Le volume d'un sport sur la semaine, plan et complément confondus. */
+export interface WeekDisciplineVolume {
+  discipline: ActivityDiscipline;
+  minutes: number;
+  /** Kilomètres, toujours. La natation se REND en mètres, elle se stocke ici. */
+  distanceKm: number;
+  elevationGainM: number;
+  /** La part venue d'activités hors plan, sur ces minutes. */
+  extraMinutes: number;
+}
+
 export interface WeekReview {
   range: DateRange;
   /** 1-indexé, `0` quand le bilan ne porte sur aucun plan. */
@@ -88,6 +123,12 @@ export interface WeekReview {
   activities: ActivitySummary;
   /** Séances faites plus activités. C'est le temps réellement passé. */
   totalMinutes: number;
+  /**
+   * Le volume par sport, dans l'ordre d'`ACTIVITY_DISCIPLINES`, sports vides
+   * exclus. Séances faites et activités complémentaires ensemble : à sport
+   * égal, elles s'additionnent.
+   */
+  byDiscipline: WeekDisciplineVolume[];
   /** Faites sur prévues, entre 0 et 1. `null` quand rien n'était prévu. */
   adherence: number | null;
   verdict: WeekVerdict;
@@ -140,6 +181,79 @@ function verdictOf(planned: number, completed: number, resolved: number, extras:
 }
 
 /**
+ * Le volume de la semaine, un sport à la fois.
+ *
+ * Les deux sources se rejoignent ici, et la règle qui les autorise à
+ * s'additionner est la seule qui vaille : **c'est le même sport.** Une sortie
+ * vélo du plan et un trajet à vélo noté à la main sont deux fois du vélo, donc
+ * leurs minutes et leurs kilomètres se somment. Rien ne traverse la frontière
+ * d'un sport, et il n'existe aucun total de kilomètres, ici ni ailleurs.
+ *
+ * Seules les séances FAITES comptent, comme `doneMinutes` : ce tableau dit où
+ * le temps est passé, pas où il devait passer.
+ *
+ * Les sports vides sont retirés. Une ligne natation à zéro sur l'écran de
+ * quelqu'un qui ne nage pas est du bruit, et surtout elle laisse croire qu'il
+ * manque quelque chose.
+ */
+function volumeByDiscipline(
+  sessions: readonly PlanSession[],
+  summary: ActivitySummary,
+): WeekDisciplineVolume[] {
+  const buckets = new Map<ActivityDiscipline, WeekDisciplineVolume>();
+
+  const bucketFor = (discipline: ActivityDiscipline): WeekDisciplineVolume => {
+    const existing = buckets.get(discipline);
+    if (existing) return existing;
+    const fresh: WeekDisciplineVolume = {
+      discipline,
+      minutes: 0,
+      distanceKm: 0,
+      elevationGainM: 0,
+      extraMinutes: 0,
+    };
+    buckets.set(discipline, fresh);
+    return fresh;
+  };
+
+  for (const session of sessions) {
+    if (!isDone(session)) continue;
+    const bucket = bucketFor(sessionDiscipline(session));
+    bucket.minutes += session.actualDurationMin ?? session.estimatedDurationMin ?? 0;
+    bucket.distanceKm += sessionDisciplineKm(session);
+  }
+
+  for (const volume of summary.byDiscipline) {
+    const bucket = bucketFor(volume.discipline);
+    bucket.minutes += volume.minutes;
+    bucket.distanceKm += volume.distanceKm;
+    bucket.elevationGainM += volume.elevationGainM;
+    bucket.extraMinutes += volume.minutes;
+  }
+
+  /* Le plus de temps d'abord. `ACTIVITY_DISCIPLINES` est un ordre de
+     STOCKAGE, pas un ordre de lecture : il ouvre sur le vélo, ce qui mettait
+     le vélotaf avant la course sur le bilan d'un coureur. Le volume, lui, est
+     un ordre que le tableau porte déjà dans sa colonne, donc les lignes et les
+     chiffres disent la même chose. L'ordre de stockage départage les ex aequo,
+     pour que deux semaines identiques se lisent pareil. */
+  const rank = (discipline: ActivityDiscipline) => ACTIVITY_DISCIPLINES.indexOf(discipline);
+  return Array.from(buckets.values())
+    .filter((bucket) => bucket.minutes > 0)
+    .map((bucket) => ({
+      ...bucket,
+      minutes: Math.round(bucket.minutes),
+      distanceKm: Math.round(bucket.distanceKm * 10) / 10,
+      extraMinutes: Math.round(bucket.extraMinutes),
+    }))
+    .sort((a, b) =>
+      b.minutes !== a.minutes
+        ? b.minutes - a.minutes
+        : rank(a.discipline) - rank(b.discipline),
+    );
+}
+
+/**
  * Le bilan, à partir des séances d'une semaine et des activités de ses dates.
  *
  * Les activités arrivent DÉJÀ filtrées sur l'intervalle (`activitiesBetween`) :
@@ -187,6 +301,7 @@ export function buildWeekReview(params: {
   const summary = activities.length > 0 ? summarizeActivities(activities) : EMPTY_ACTIVITY_SUMMARY;
 
   return {
+    byDiscipline: volumeByDiscipline(sessions, summary),
     range,
     weekNumber: params.weekNumber ?? 0,
     planned,
