@@ -7,6 +7,7 @@
     "lede": "Bike commutes, trips and sessions your plan knows nothing about. Log them here, and your volume finally tells the truth.",
     "add": "Log an activity",
     "edit": "Edit this activity",
+    "back": "Back",
     "allTime": "All time",
     "softLimitTitle": "The log is getting long",
     "softLimit": "You are nearing {{limit}} activities. Nothing is lost, but the list is getting hard to read: consider a backup from the settings."
@@ -38,15 +39,8 @@
     "date": "Date",
     "discipline": "Discipline",
     "purpose": "Purpose",
-    "duration": "Duration",
-    "durationHours": "Hours",
-    "durationMinutes": "Minutes",
-    "unit": {
-      "hours": "h",
-      "minutes": "min",
-      "km": "km",
-      "meters": "m"
-    },
+    "duration": "Duration (h:min)",
+    "durationPlaceholder": "0:00",
     "more": "Add details",
     "moreNote": "Add a note",
     "distanceKm": "Distance (km)",

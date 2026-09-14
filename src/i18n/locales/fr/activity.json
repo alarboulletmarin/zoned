@@ -7,6 +7,7 @@
     "lede": "Le vélotaf, les déplacements et les séances que ton plan ne connaît pas. Tu les notes ici, et ton volume dit enfin la vérité.",
     "add": "Ajouter une activité",
     "edit": "Modifier cette activité",
+    "back": "Retour",
     "allTime": "Depuis le début",
     "softLimitTitle": "Le journal devient long",
     "softLimit": "Tu approches des {{limit}} activités. Rien n'est perdu, mais la liste devient difficile à relire : pense à faire une sauvegarde depuis les réglages."
@@ -38,15 +39,8 @@
     "date": "Date",
     "discipline": "Discipline",
     "purpose": "Motif",
-    "duration": "Durée",
-    "durationHours": "Heures",
-    "durationMinutes": "Minutes",
-    "unit": {
-      "hours": "h",
-      "minutes": "min",
-      "km": "km",
-      "meters": "m"
-    },
+    "duration": "Durée (h:min)",
+    "durationPlaceholder": "0:00",
     "more": "Ajouter des détails",
     "moreNote": "Ajouter une note",
     "distanceKm": "Distance (km)",

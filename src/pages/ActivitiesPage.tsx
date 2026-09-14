@@ -1,8 +1,17 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-import { Activity as ActivityIcon, Bike, Pencil, Plus, Pool, Run } from "@/components/icons";
+import {
+  Activity as ActivityIcon,
+  ArrowLeft,
+  Bike,
+  Pencil,
+  Plus,
+  Pool,
+  Run,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Alert } from "@/components/ui/alert";
@@ -57,6 +66,25 @@ export function ActivitiesPage() {
   const isEn = useIsEnglish();
   const { activities, add, update, remove } = useActivities();
   const { plans } = usePlans();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  /* Le journal se rejoint depuis quatre endroits : le menu, le cockpit, la
+     palette et les chiffres d'un plan. La sortie ne peut donc pas être un lien
+     vers une destination fixe, ce serait juste pour trois personnes sur
+     quatre ; elle rend la page PRÉCÉDENTE, quelle qu'elle soit.
+
+     Elle ne s'affiche que s'il y a un précédent DANS l'app. Ouvert en
+     marque-page, depuis un moteur de recherche ou depuis l'écran d'accueil de
+     l'app installée, un Retour ne ramènerait nulle part, ou pire, hors de
+     l'app : c'est moins qu'un Retour absent.
+
+     Le test est la clé de la position et non `history.length`, qui ment dans
+     les deux sens : il compte les entrées de l'onglet, y compris celles des
+     sites visités avant, et il vaut déjà 2 dans un onglet neuf sur plusieurs
+     moteurs. React Router marque `default` la PREMIÈRE position d'une session
+     de navigation ; toute autre valeur veut dire qu'un pas a été fait ici. */
+  const canGoBack = location.key !== "default";
 
   const [panelOpen, setPanelOpen] = useState(false);
   const [editing, setEditing] = useState<ComplementaryActivity | null>(null);
@@ -157,6 +185,19 @@ export function ActivitiesPage() {
       />
 
       <div className="zn-acts">
+        {canGoBack && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="zn-acts__back"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft size={16} />
+            {t("activity:page.back")}
+          </Button>
+        )}
+
         <section className="zn-acts__band">
           <div className="zn-acts__head">
             <div
