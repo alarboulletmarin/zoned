@@ -33,6 +33,19 @@ import {
   type TodayFocus,
 } from "@/lib/cockpit";
 import { updateSessionCompletion, type SessionCompletionData } from "@/lib/planStorage";
+import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
+import { WeekReviewPanel } from "@/components/domain/WeekReviewPanel";
+import { useActivities } from "@/hooks/useActivities";
+import { activitiesBetween, activitiesOn } from "@/lib/activityStorage";
+import { loadCommutePattern } from "@/lib/athleteProfile";
+import { isoDateOnly } from "@/lib/planDates";
+import {
+  buildWeekReview,
+  calendarWeekRange,
+  hasSomethingToReview,
+  planWeekRange,
+} from "@/lib/weekReview";
+import type { ActivityDraft } from "@/types/activity";
 import { getWorkoutPhaseSteps, summarizeWorkoutSteps } from "@/lib/workoutStructure";
 import { formatPace } from "@/lib/planGenerator/paceEngine";
 import {
@@ -138,7 +151,7 @@ const KIND_ICONS: Record<SessionKind, FunctionComponent<IconProps>> = {
  * `noindex`, hors sitemap et hors prérendu.
  */
 export function TodayPage() {
-  const { t } = useTranslation(["today", "common", "plan"]);
+  const { t } = useTranslation(["today", "common", "plan", "activity"]);
   const isEn = useIsEnglish();
   const { plans, isLoading, reload } = usePlans();
   const { settings } = useSettings();
@@ -300,6 +313,73 @@ export function TodayPage() {
      défaut qu'avait Ma semaine en menant à une page blanche. */
   const week = weekShortcut(focus);
 
+  /* ── Ce qu'on a fait EN PLUS du plan ──────────────────────────────────
+     Le cockpit est le seul écran ouvert tous les jours : c'est donc ici que
+     le vélotaf se note, pas dans un formulaire qu'il faudrait aller
+     chercher. Le geste tient en trois taps, et il vise le JOUR CHOISI de la
+     bande, pas aujourd'hui : on note souvent la veille au soir. */
+  const { activities, add: addActivity } = useActivities();
+  const [logOpen, setLogOpen] = useState(false);
+
+  const dayIso = useMemo(
+    () => isoDateOnly(focusDayDate(focus, day, now)),
+    [focus, day, now],
+  );
+
+  const dayActivities = useMemo(
+    () => activitiesOn(activities, dayIso),
+    [activities, dayIso],
+  );
+
+  /* Le motif récurrent du profil pré-remplit la saisie : il dit ce qu'on fait
+     d'habitude, ce qui est la bonne valeur par défaut d'un formulaire et n'a
+     jamais valeur de relevé. Lu une fois par montage, il ne change pas
+     pendant qu'on regarde l'écran. */
+  const suggestion = useMemo(() => {
+    const pattern = loadCommutePattern();
+    if (!pattern) return null;
+    return { discipline: pattern.discipline, durationMin: pattern.durationMin };
+  }, []);
+
+  /* ── Le bilan du dimanche ─────────────────────────────────────────────
+     Il n'a pas d'écran à lui et n'en veut pas : la bande CHOISIT déjà un
+     jour, donc choisir dimanche est le geste qui demande le bilan. Il
+     n'apparaît pas les autres jours, et jamais s'il n'a rien à dire.
+
+     Sans plan en cours, il porte sur la semaine CALENDAIRE : le vélotaf
+     n'attend pas d'avoir un plan pour compter. */
+  const review = useMemo(() => {
+    if (focus.plan && focus.weekNumber > 0) {
+      const range = planWeekRange(focus.plan, focus.weekNumber);
+      return buildWeekReview({
+        sessions: planWeek?.sessions ?? [],
+        activities: activitiesBetween(activities, range.from, range.to),
+        range,
+        weekNumber: focus.weekNumber,
+      });
+    }
+    const range = calendarWeekRange(now);
+    return buildWeekReview({
+      sessions: [],
+      activities: activitiesBetween(activities, range.from, range.to),
+      range,
+    });
+  }, [focus.plan, focus.weekNumber, planWeek, activities, now]);
+
+  const showReview = day === 6 && hasSomethingToReview(review);
+
+  const handleLog = useCallback(
+    (draft: ActivityDraft) => {
+      if (!addActivity(draft)) {
+        toast.error(t("activity:toast.saveFailed"));
+        return;
+      }
+      setLogOpen(false);
+      toast.success(t("activity:toast.added"));
+    },
+    [addActivity, t],
+  );
+
   return (
     <div className="zn-cockpit">
       <SEOHead title={t("today:seoTitle")} description={t("today:seoDescription")} noindex />
@@ -422,8 +502,57 @@ export function TodayPage() {
               MARQUE, pas par le poids : le tirage porte une flèche et pas de
               souligné, c'est un geste ; la semaine porte un souligné et pas de
               flèche, c'est un lieu. */}
+          {/* Ce que la journée a porté EN PLUS du plan. Une ligne, et
+              seulement si elle a eu lieu : c'est l'accusé de réception de la
+              saisie, et sans lui on ne sait pas si le trajet est noté. Elle
+              est sous le plan parce qu'elle ne commente pas une séance, elle
+              commente la journée. */}
+          {dayActivities.length > 0 && (
+            <ul className="zn-cockpit__extras">
+              {dayActivities.map((activity) => (
+                <li key={activity.id} className="zn-cockpit__extra">
+                  <span>{t(`activity:purpose.${activity.purpose}`)}</span>
+                  <span className="zn-mono">
+                    {[
+                      formatDurationMinutes(activity.durationMin),
+                      activity.distanceKm ? `${activity.distanceKm} km` : null,
+                      activity.elevationGainM ? `+${activity.elevationGainM} m` : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                </li>
+              ))}
+              {/* Le journal se joint depuis ici, et seulement depuis ici sur
+                  cet écran : un lien de plus dans les sorties du bas aurait
+                  coûté une ligne à tout le monde pour servir ceux qui notent
+                  déjà. Il apparaît quand il y a quelque chose à relire. */}
+              <li className="zn-cockpit__extra">
+                <Link to="/activities" className="zn-cockpit__journal">
+                  {t("activity:cockpit.journal")}
+                </Link>
+              </li>
+            </ul>
+          )}
+
+          {/* Le bilan, le dimanche, et pas un autre jour. */}
+          {showReview && <WeekReviewPanel review={review} />}
+
           {settings.cockpit.shortcuts && (
             <p className="zn-cockpit__exits">
+              {/* La saisie est un GESTE, comme le tirage : flèche, pas de
+                  souligné. Elle n'emmène nulle part, et c'est la seule chose
+                  de cet écran qui écrive quelque chose, d'où le bouton plutôt
+                  que le lien. */}
+              <button
+                type="button"
+                className="zn-cockpit__exit"
+                data-role="move"
+                onClick={() => setLogOpen(true)}
+              >
+                {t("activity:cockpit.add")}
+                <ArrowRight />
+              </button>
               <Link to="/library/draw" className="zn-cockpit__exit" data-role="move">
                 {t("today:quick.draw")}
                 <ArrowRight />
@@ -435,6 +564,14 @@ export function TodayPage() {
           )}
         </section>
       )}
+
+      <ActivityLogPanel
+        open={logOpen}
+        onOpenChange={setLogOpen}
+        defaultDate={dayIso}
+        suggestion={suggestion}
+        onSave={handleLog}
+      />
 
       {/* La figure ferme l'écran, en dernier dans l'ordre de lecture : elle ne
           retarde jamais la réponse. C'est la figure de la porte Aujourd'hui

@@ -321,6 +321,8 @@
     "weeklyVolumeDesc": "Total estimated duration per week (warmup + workout + cooldown)",
     "weeklyKm": "Weekly mileage (km)",
     "weeklyKmDesc": "Planned kilometers for each week",
+    "complementary": "Complementary activities",
+    "complementaryNote": "What you did on top of this plan, within its dates. Time adds to the volume; kilometres stay inside their discipline.",
     "sessionTypes": "Session types",
     "zoneDistribution": "Zone distribution",
     "targetSystems": "Target systems",

@@ -85,7 +85,11 @@ export const PRIMARY_NAV: NavSection[] = [
     id: "numbers",
     to: "/calculators",
     labelKey: "nav.myNumbers",
-    prefix: ["/calculators", "/profile", "/my-zones"],
+    /* `/activities` marque cette porte sans y avoir d'entrée : le journal est
+       bien un de mes chiffres, mais le budget de la nav est de 18 entrées et
+       il tient. Il se joint par le pied de page, par Cmd+K, depuis le cockpit
+       et depuis le profil, qui porte déjà le motif de vélotaf. */
+    prefix: ["/calculators", "/profile", "/my-zones", "/activities"],
     children: [
       { to: "/calculators", labelKey: "topnav.calculatorsAll", descKey: "topnav.calculatorsAllDesc" },
       { to: "/my-zones", labelKey: "nav.myZones", descKey: "topnav.myZonesDesc" },
@@ -125,6 +129,7 @@ export const FOOTER_GROUPS: { titleKey: string; links: FooterLink[] }[] = [
       { labelKey: "common:topnav.weeks", to: "/weeks" },
       { labelKey: "common:topnav.drawSession", to: "/library/draw" },
       { labelKey: "homepage:home.footer.product.calculators", to: "/calculators" },
+      { labelKey: "common:topnav.activities", to: "/activities" },
     ],
   },
   {

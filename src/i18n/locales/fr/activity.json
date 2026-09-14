@@ -1,0 +1,110 @@
+{
+  "page": {
+    "title": "Activités complémentaires",
+    "description": "Ce que tu fais en plus de ton plan : vélotaf, déplacements, séances hors plan.",
+    "kicker_one": "{{count}} activité enregistrée",
+    "kicker_other": "{{count}} activités enregistrées",
+    "lede": "Le vélotaf, les déplacements et les séances que ton plan ne connaît pas. Tu les notes ici, et ton volume dit enfin la vérité.",
+    "add": "Ajouter une activité",
+    "edit": "Modifier cette activité",
+    "allTime": "Depuis le début",
+    "softLimitTitle": "Le journal devient long",
+    "softLimit": "Tu approches des {{limit}} activités. Rien n'est perdu, mais la liste devient difficile à relire : pense à faire une sauvegarde depuis les réglages."
+  },
+  "empty": {
+    "title": "Rien en plus, pour l'instant",
+    "description": "Si tu vas au travail à vélo, si tu prends le vélo pour un déplacement, ou si tu fais une séance hors de ton plan, note-la ici. Une durée suffit."
+  },
+  "discipline": {
+    "cycling": "Vélo",
+    "running": "Course",
+    "swimming": "Natation",
+    "other": "Autre"
+  },
+  "purpose": {
+    "commute": "Vélotaf",
+    "transport": "Déplacement",
+    "training": "Entraînement"
+  },
+  "purposeHint": {
+    "commute": "Le trajet domicile-travail, celui qui revient",
+    "transport": "Un déplacement quelconque : les courses, la gare",
+    "training": "Une vraie séance, faite hors de ton plan"
+  },
+  "form": {
+    "title": "Noter une activité",
+    "editTitle": "Modifier l'activité",
+    "sub": "Seule la durée est obligatoire. Le reste précise, il n'exige rien.",
+    "date": "Date",
+    "discipline": "Discipline",
+    "purpose": "Motif",
+    "duration": "Durée (min)",
+    "optional": "Facultatif",
+    "distanceKm": "Distance (km)",
+    "distanceMeters": "Distance (m)",
+    "elevation": "Dénivelé + (m)",
+    "watts": "Watts moyens",
+    "rpe": "Effort perçu",
+    "note": "Note",
+    "notePlaceholder": "Vent de face, sac chargé...",
+    "save": "Enregistrer",
+    "delete": "Supprimer"
+  },
+  "summary": {
+    "time": "Temps",
+    "load": "Charge",
+    "loadUnit": "durée x effort",
+    "elevation": "Dénivelé +",
+    "share": "Du volume",
+    "shareFoot": "part du temps total",
+    "activities_one": "{{count}} activité",
+    "activities_other": "{{count}} activités",
+    "split": "Dont {{travel}} de déplacement et {{training}} d'entraînement."
+  },
+  "review": {
+    "kicker": "Bilan de la semaine",
+    "kickerWeek": "Bilan de la semaine {{n}}",
+    "sessions": "Séances faites",
+    "keySessions": "Séances clés",
+    "km": "Kilomètres",
+    "totalTime": "Temps total",
+    "avgRpe": "Effort moyen",
+    "complement_one": "En plus du plan · {{count}} activité",
+    "complement_other": "En plus du plan · {{count}} activités",
+    "travelShare": "Dont {{travel}} de déplacement, que ton plan ne comptait pas.",
+    "pending_one": "Une séance n'est pas close. Tranche-la pour que le bilan dise quelque chose.",
+    "pending_other": "{{count}} séances ne sont pas closes. Tranche-les pour que le bilan dise quelque chose.",
+    "verdict": {
+      "empty_one": "Rien de prévu, rien de fait. Une semaine sans bilan.",
+      "empty_other": "Rien de prévu, rien de fait. Une semaine sans bilan.",
+      "extras_one": "Pas de plan cette semaine, mais une activité enregistrée.",
+      "extras_other": "Pas de plan cette semaine, mais {{count}} activités enregistrées.",
+      "pending_one": "Une séance était prévue et rien n'est clos : le bilan attend que tu tranches.",
+      "pending_other": "{{planned}} séances étaient prévues et rien n'est clos : le bilan attend que tu tranches.",
+      "missed_one": "{{done}} séance sur {{planned}}. La semaine n'a pas eu lieu comme prévu, et tu sais pourquoi mieux que cet écran.",
+      "missed_other": "{{done}} séances sur {{planned}}. La semaine n'a pas eu lieu comme prévu, et tu sais pourquoi mieux que cet écran.",
+      "partial_one": "{{done}} séance sur {{planned}}. La semaine tient en partie.",
+      "partial_other": "{{done}} séances sur {{planned}}. La semaine tient en partie.",
+      "solid_one": "{{done}} séance sur {{planned}}. La semaine a fait son travail.",
+      "solid_other": "{{done}} séances sur {{planned}}. La semaine a fait son travail.",
+      "perfect_one": "{{done}} séance sur {{planned}}. Semaine complète.",
+      "perfect_other": "{{done}} séances sur {{planned}}. Semaine complète."
+    }
+  },
+  "cockpit": {
+    "add": "J'ai fait autre chose",
+    "journal": "Mon journal",
+    "reviewLink": "Voir le journal"
+  },
+  "toast": {
+    "added": "Activité enregistrée",
+    "updated": "Activité modifiée",
+    "deleted": "Activité supprimée",
+    "saveFailed": "Impossible d'enregistrer l'activité"
+  },
+  "plan": {
+    "title": "Activités complémentaires",
+    "note": "Ce que tu as fait en plus de ce plan, sur ses dates. Le temps s'ajoute au volume, les kilomètres restent dans leur discipline.",
+    "empty": "Aucune activité complémentaire sur les dates de ce plan."
+  }
+}

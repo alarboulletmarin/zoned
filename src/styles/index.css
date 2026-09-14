@@ -38,6 +38,7 @@
    layer stays: it costs nothing and it documents the intent. */
 @import "./components/_layout.css" layer(components);
 @import "./components/_type.css" layer(components);
+@import "./components/activity.css" layer(components);
 @import "./components/alert.css" layer(components);
 @import "./components/badge.css" layer(components);
 @import "./components/button.css" layer(components);

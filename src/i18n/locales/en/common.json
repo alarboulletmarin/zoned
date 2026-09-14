@@ -300,6 +300,8 @@
     "favoritesDesc": "The sessions you kept",
     "myZonesDesc": "Your six zones, computed from your VMA",
     "profileDesc": "Your level, your constraints, your records",
+    "activities": "Complementary activities",
+    "activitiesDesc": "Your bike commutes and off-plan sessions",
     "plansPrebuilt": "Ready-made plans",
     "plansPrebuiltDesc": "Plans already written, take one as is",
     "weeksPrebuilt": "Ready-made weeks",

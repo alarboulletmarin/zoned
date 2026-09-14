@@ -43,7 +43,9 @@
     "delete": "Clear",
     "saved": "Commute settings saved",
     "deleted": "Commute settings cleared",
-    "invalid": "Pick at least one day and a valid duration"
+    "invalid": "Pick at least one day and a valid duration",
+    "logNote": "This is your habit, not your record. What you actually did goes in your log, where it counts toward your volume and your week review.",
+    "logLink": "Open my log"
   },
   "base": {
     "title": "Base data",

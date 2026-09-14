@@ -13,6 +13,11 @@ import type { TrainingPhase } from "@/types";
 import type { TrainingPlan } from "@/types/plan";
 import type { EnhancedPlanAnalysis } from "@/lib/planStats";
 import { getPlanCompletionStats } from "@/lib/planGenerator/adapt";
+import { ComplementarySummary } from "@/components/domain/ComplementarySummary";
+import { useActivities } from "@/hooks/useActivities";
+import { activitiesBetween } from "@/lib/activityStorage";
+import { complementaryShare, summarizeActivities } from "@/lib/activityStats";
+import { getPlanMonday, getSessionCalendarDate, isoDateOnly } from "@/lib/planDates";
 import { ChevronDown } from "@/components/icons";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
@@ -202,6 +207,32 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
   const maxLongRun = Math.max(...longRunWeeks.map(w => w.km), 1);
 
   const completion = useMemo(() => getPlanCompletionStats(plan), [plan]);
+
+  /* ── Ce qui a été fait EN PLUS de ce plan ────────────────────────────
+     Les activités complémentaires ne vivent pas dans le plan (elles lui
+     survivent, et elles existent sans lui, cf. `types/activity.ts`) : le plan
+     les retrouve par leurs DATES, du lundi de la semaine 1 au dimanche de la
+     dernière. C'est tout le couplage entre les deux, et il va dans un seul
+     sens.
+
+     Sans elles, ce panneau annonçait un volume que la personne ne vivait pas :
+     quatre trajets de 25 min font 1 h 40 par semaine, soit un quart d'une
+     semaine à 5 h. Le temps s'ajoute donc au total, et les kilomètres restent
+     dans leur discipline, parce que 30 km de vélo et 10 de course ne font pas
+     40 km. */
+  const { activities } = useActivities();
+
+  const planActivities = useMemo(() => {
+    const monday = getPlanMonday(plan);
+    const from = isoDateOnly(monday);
+    const to = isoDateOnly(getSessionCalendarDate(monday, plan.totalWeeks, 6));
+    return activitiesBetween(activities, from, to);
+  }, [activities, plan]);
+
+  const activitySummary = useMemo(
+    () => summarizeActivities(planActivities),
+    [planActivities],
+  );
 
   return (
     <Card size="flush">
@@ -560,6 +591,21 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                 <span>{t("stats.rpeAvg")} {completion.avgRpe.toFixed(1)}</span>
               )}
             </div>
+          </div>
+        )}
+
+        {/* ── Activités complémentaires ─────────────────────────────
+            Le bloc ne s'affiche que s'il a quelque chose à dire : une section
+            vide sur l'écran de quelqu'un qui ne note rien laisserait croire
+            qu'il manque une donnée. */}
+        {activitySummary.count > 0 && (
+          <div className="zn-pstats__block">
+            <ComplementarySummary
+              summary={activitySummary}
+              share={complementaryShare(stats.totalDurationMin, activitySummary.minutes)}
+              title={t("stats.complementary")}
+            />
+            <p className="zn-pstats__note">{t("stats.complementaryNote")}</p>
           </div>
         )}
 

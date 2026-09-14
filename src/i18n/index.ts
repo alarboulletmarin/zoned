@@ -12,6 +12,7 @@ import frHomepage from "./locales/fr/homepage.json";
 
 export const NAMESPACES = [
   "common",
+  "activity",
   "library",
   "session",
   "glossary",
@@ -54,7 +55,7 @@ i18n
     fallbackLng: "fr",
     defaultNS: "common",
     fallbackNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes", "nutrition", "today"],
+    ns: ["common", "activity", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes", "nutrition", "today"],
 
     // Detection options
     detection: {

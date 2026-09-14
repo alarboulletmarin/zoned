@@ -1,5 +1,6 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Route, Save, Trash2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -229,6 +230,16 @@ export function CommuteSection() {
             </Button>
           )}
         </div>
+
+        {/* La distinction qui manquait, et elle vaut d'être écrite : ce
+            panneau décrit une HABITUDE, ce qui se répète. Il n'a jamais dit
+            ce qui a eu lieu mardi, et c'est pourtant ce qui fait le volume.
+            Le journal le fait, et ce motif-ci lui sert de valeur par défaut.
+            Voir `src/types/activity.ts`. */}
+        <p className="zn-commute__hint">
+          {t("commute.logNote")}{" "}
+          <Link to="/activities">{t("commute.logLink")}</Link>
+        </p>
       </CardContent>
     </Card>
   );

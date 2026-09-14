@@ -65,8 +65,22 @@ const PACE_BY_TYPE: Record<string, number> = {
   race_specific: 4.75,
 };
 
+/**
+ * Les km d'une séance TELLE QU'ELLE ÉTAIT PRÉVUE, sans regarder ce qui a été
+ * fait. C'est le terme de gauche du bilan de semaine, tu visais tant : le
+ * comparer à un réalisé qui contient déjà le réalisé ne comparerait rien.
+ */
+export function plannedSessionKm(session: PlanSession): number {
+  if (session.workoutId === "__race_day__") return 0;
+  if (session.workoutId === "__intermediate_race__") return session.targetDistanceKm ?? 0;
+  if (isNonRunningSession(session)) return 0;
+  if (session.targetDistanceKm && session.targetDistanceKm > 0) return session.targetDistanceKm;
+  const pace = PACE_BY_TYPE[session.sessionType] || 5.5;
+  return session.estimatedDurationMin / pace;
+}
+
 /** Estimate distance in km for a session based on duration and type */
-function estimateSessionKm(session: PlanSession): number {
+export function estimateSessionKm(session: PlanSession): number {
   if (session.workoutId === "__race_day__") return 0;
   // Intermediate races have explicit distance
   if (session.workoutId === "__intermediate_race__") return session.targetDistanceKm ?? 0;
