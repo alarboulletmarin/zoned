@@ -48,6 +48,37 @@ qu'un relevé exact jamais saisi.**
 
 Les watts sont derniers et jamais exigés : ils demandent un capteur.
 
+### Et l'écran le dit, il ne se contente pas de l'écrire
+
+La première version alignait les six champs au même poids sous une ligne qui
+annonçait qu'un seul comptait : l'écran démentait la phrase posée juste
+au-dessus. Trois choses le remettent d'accord avec elle.
+
+**La durée se saisit en heures et en minutes.** Le champ unique en minutes
+demandait une conversion mentale avant la première frappe, on pense 1 h 25 et
+on tapait 85. Deux champs la suppriment. Le parsing reste tolérant : 90 dans
+les minutes vaut 1 h 30, et se RANGE à l'écran au moment où le champ est
+quitté plutôt que d'être refusé (`lib/durationFields.ts`). Le stockage, lui,
+ne bouge pas : `durationMin` reste des minutes, la conversion vit à la
+frontière du formulaire.
+
+**Les précisions sont repliées** derrière un `<details>`. Le repli s'ouvre tout
+seul dans les deux cas où le fermer mentirait : quand on modifie une activité
+qui en porte déjà, et quand un rappel vient d'en poser. Rien ne s'enregistre
+que l'écran ne montre.
+
+**Le journal répond à la place de l'utilisateur.** Le vélotaf se répète, et la
+durée cherchée était déjà trois lignes plus haut. Une rangée de trois durées
+déjà enregistrées, même sport et même motif, la repose d'un appui
+(`lib/activityRecall.ts`), classées par fréquence et non par date pour que le
+trajet de tous les matins passe devant la sortie exceptionnelle de dimanche.
+C'est de la reconnaissance au lieu du rappel de mémoire.
+
+Un rappel ne PRÉ-REMPLIT rien, il se propose. La distinction n'est pas
+cosmétique : un relevé posé par la machine et enregistré sans être regardé est
+un chiffre inventé qui compte ensuite dans la charge. Le motif récurrent du
+profil, lui, pré-remplit, parce que c'est une valeur explicitement déclarée.
+
 ## Déplacement contre entraînement, et pourquoi c'est en première classe
 
 `ActivityPurpose` vaut `commute`, `transport` ou `training`. Ce n'est pas une

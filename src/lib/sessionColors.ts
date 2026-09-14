@@ -104,3 +104,25 @@ export function rpeColor(value: number): string {
   if (value === 9) return "var(--zone-5)";
   return "var(--zone-6)";
 }
+
+/**
+ * Le mot qui va avec un RPE, en clé i18n du namespace `common`.
+ *
+ * Un chiffre nu sur une échelle de dix oblige à se rappeler ce que vaut un 7,
+ * et personne ne s'en souvient : la table de Borg CR-10 est ancrée par des
+ * mots, pas par des nombres. Le mot est donc rendu À CÔTÉ du chiffre partout
+ * où l'échelle se saisit, jamais à sa place, parce que c'est le chiffre qui
+ * est enregistré.
+ *
+ * Les paliers suivent ceux de `rpeColor`, à une exception près : 9 et 10 y
+ * partagent une bande de couleur chacun, ici aussi. Deux découpages différents
+ * pour la même échelle auraient fait dire au vert ce que le mot contredit.
+ */
+export function rpeWordKey(value: number): string {
+  if (value <= 2) return "feedback.rpeVeryEasy";
+  if (value <= 4) return "feedback.rpeEasy";
+  if (value <= 6) return "feedback.rpeModerate";
+  if (value <= 8) return "feedback.rpeHard";
+  if (value === 9) return "feedback.rpeVeryHard";
+  return "feedback.rpeMaximal";
+}

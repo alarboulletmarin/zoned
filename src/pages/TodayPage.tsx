@@ -588,6 +588,7 @@ export function TodayPage() {
         onOpenChange={setLogOpen}
         defaultDate={dayIso}
         suggestion={suggestion}
+        history={activities}
         onSave={handleLog}
       />
 

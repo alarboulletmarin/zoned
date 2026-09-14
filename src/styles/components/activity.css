@@ -570,13 +570,157 @@
   min-inline-size: 0;
 }
 
-/* Les précisions sont groupées et nommées facultatives UNE fois : mettre le
-   mot sur chaque étiquette l'aurait fait lire quatre fois. */
-.zn-actlog__optional {
+/* ── La durée ─────────────────────────────────────────────────────────
+   Deux champs, heures et minutes, sous une seule étiquette. Ils sont ÉTROITS
+   et c'est l'information : un champ pleine largeur demande une phrase, un
+   champ de deux chiffres demande deux chiffres. L'unité est posée à côté du
+   champ, en gris, pour que la ligne se lise 1 h 25 et pas 1 25. */
+.zn-actlog__duration {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-5);
 }
+
+.zn-actlog__durrow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.zn-actlog__durpart {
+  display: flex;
+  flex: none;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+
+/* Deux classes, et c'est nécessaire : plan-panels.css est importé APRÈS cette
+   feuille et .zn-pfield y pose une largeur de 100 %. À poids égal, il
+   gagnerait, et le champ de deux chiffres ferait toute la ligne. */
+.zn-actlog__durrow .zn-actlog__durfield {
+  inline-size: 5rem;
+  padding-inline: var(--sp-4);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ls-mono);
+}
+
+.zn-actlog__durunit {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  color: var(--text-faint);
+}
+
+/* ── Les rappels ──────────────────────────────────────────────────────
+   Trois durées déjà enregistrées, au-dessus des champs. Ce sont des BOUTONS
+   et pas un choix : rien n'est sélectionné au départ, et taper à la main
+   reste le chemin normal. Le contour suffit donc à les dire cliquables,
+   l'aplat d'encre est réservé à celui qui vient d'être posé. */
+.zn-actlog__recalls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-block-end: var(--sp-5);
+}
+
+.zn-actlog__recall {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-3) var(--sp-7);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-actlog__recall:hover {
+  border-color: var(--line-strong);
+}
+
+/* L'aplat d'encre marque celui qui vient d'être posé, et lui seul : au
+   départ aucun n'est choisi, taper à la main reste le chemin normal. */
+.zn-actlog__recall[data-selected="true"] {
+  color: var(--text-inverse);
+  background: var(--surface-inverse);
+  border-color: var(--surface-inverse);
+}
+
+/* Le mot qui glose le chiffre du RPE, dans la même ligne que lui : il se lit
+   avec le chiffre, pas à sa place, donc il reste en gris et en bas de casse
+   quand le chiffre porte l'encre et la graisse. */
+.zn-actlog__rpeword {
+  margin-inline-end: var(--sp-5);
+  font: var(--type-caption);
+  letter-spacing: normal;
+  color: var(--text-faint);
+}
+
+/* ── Les précisions, repliées ─────────────────────────────────────────
+   Un <details> sans cadre ni filet : il vit DANS un formulaire, et une boîte
+   de plus autour de trois champs ferait un panneau dans un panneau. Le repli
+   ne se ferme jamais sur une valeur saisie, c'est l'écran qui l'ouvre
+   (ActivityLogPanel). */
+.zn-actlog__more {
+  display: flex;
+  flex-direction: column;
+}
+
+.zn-actlog__moresummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-5);
+  margin-inline: calc(var(--sp-5) * -1);
+
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  list-style: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+/* Safari dessine son propre marqueur tant qu'on ne le dit pas. */
+.zn-actlog__moresummary::-webkit-details-marker {
+  display: none;
+}
+
+.zn-actlog__moresummary:hover {
+  background: var(--surface-band);
+}
+
+.zn-actlog__morechevron {
+  flex: none;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-actlog__more[open] .zn-actlog__morechevron {
+  transform: rotate(180deg);
+}
+
+.zn-actlog__morepanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding-block-start: var(--sp-6);
+}
+
 
 .zn-actlog__row {
   display: grid;
