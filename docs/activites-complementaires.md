@@ -100,11 +100,89 @@ incomparables selon l'équipement. Ils sont rendus à part, moyennés au prorata
 du temps (une moyenne de moyennes donnerait autant de poids à un trajet de dix
 minutes qu'à une sortie de trois heures).
 
+## La bande des sept jours gagne un second canal
+
+La bande du cockpit ne dessinait que le plan, donc **une journée passée à
+pédaler jusqu'au bureau s'y lisait REPOS**, c'est-à-dire le contraire de ce qui
+s'était passé. C'est le seul mensonge qu'une bande de sept jours puisse
+commettre, et une bande qui ment ne sert plus à rien.
+
+Le complément descend **sous le sol** plutôt que de s'ajouter à la pile. Deux
+raisons, et la seconde est la vraie :
+
+1. partager le budget de la colonne ferait rétrécir les blocs du plan les jours
+   de vélotaf, et sept hauteurs qui ne mesurent plus la même chose d'un jour à
+   l'autre ne se comparent plus ;
+2. **ce n'est pas la même grandeur.** Une heure de vélotaf n'est pas une heure
+   de séance, et les empiler dirait qu'elles le sont. Au-dessus du sol, ce que
+   le plan demande ; en dessous, ce que la vie a ajouté.
+
+L'échelle du canal lui est donc **propre** (`extraBlockHeight`, `longestExtra`) :
+les compléments se comparent entre eux, et jamais à une séance.
+
+Trois réglages trouvés en regardant le rendu, et pas en l'écrivant :
+
+- **le sol est plus large que la barre.** À largeur égale il se lisait comme un
+  bloc de plus : on voyait trois barres empilées un jour de repos, le filet du
+  repos, le sol, et le complément. Débordant, et repris à l'identique sur les
+  sept colonnes, il devient une ligne que les écarts interrompent ;
+- **deux pixels entre la barre et le sol**, sinon le filet d'un jour de repos et
+  le sol font un trait unique de quatre pixels, et un jour de repos semble
+  porter quelque chose ;
+- **le canal est plus étroit que la barre**, dix pixels contre dix-huit. À
+  largeur égale le complément pesait autant qu'une séance, ce que la position
+  seule ne corrigeait pas.
+
 ## Le bilan du dimanche
 
 `weekReview.ts` rend des nombres et un verdict. **Aucune phrase** : les mots
 sont dans les traductions, le seul endroit où ils peuvent exister en deux
 langues.
+
+### Des chiffres, pas des adjectifs
+
+La première version du panneau était **un paragraphe et une liste de
+définitions** : une phrase qui jugeait la semaine (*la semaine a fait son
+travail*), puis cinq couples étiquette-valeur. De l'éditorial dans une app qui
+dessine, et redondant par-dessus le marché : la phrase ne disait rien que
+`3 / 4` ne dise déjà, en trente mots de plus.
+
+Le système a une règle pour ça, et elle est littérale. Le bilan l'applique :
+
+- **le rapport EST le titre**, au corps d'affichage, avec son micro-label
+  dessous. Aucune phrase ne le commente, parce qu'aucune n'en dit plus. Les six
+  verdicts rédigés (*ratée*, *à moitié*, *solide*…) ont disparu de l'écran ;
+- **le volume est une barre**, dans la grammaire que le reste de l'app emploie
+  déjà (`.zn-pstats__progress`) : un contour pour le créneau, un plein pour ce
+  qui a eu lieu. Trois grandeurs sur un seul axe, ce qui les rend comparables
+  d'un coup d'oeil là où trois nombres demandent une soustraction.
+
+  ```
+  |==========++++++  |
+   fait      en plus ^ prévu
+  ```
+
+  Dépasser le repère se **voit**, et c'est exactement la semaine que l'app ne
+  savait pas décrire : quatre heures annoncées, six heures vécues ;
+- **une phrase ne survit que là où il n'y a pas de chiffre à montrer** : rien
+  n'est clos, ou il n'y avait pas de plan cette semaine. Deux cas, deux lignes
+  courtes, et c'est tout ce qui reste de prose.
+
+Deux détails que seul le rendu a révélés : le repère du prévu **siège hors de la
+piste**, qui est en `overflow: hidden` (dedans, il était un filet d'encre posé
+sur un segment d'encre, donc le repère le plus important du dessin était le seul
+qu'on ne voyait pas) ; et un segment de zéro **n'a pas de légende**, sinon une
+semaine dont rien n'est clos affiche `0s fait` à côté d'une pastille verte qui
+ne peint rien.
+
+**Aucun vermillon dans ce bloc.** L'accent de l'écran est pris par son appel
+primaire, *voir le détail* sur le cockpit, *ajouter une activité* sur le
+journal. Un repère en accent en ferait un second, et deux accents ne font plus
+d'accent.
+
+**Et pas de doodle.** Le dessin de ce bloc, c'est la barre ; le cockpit porte
+déjà la figure de sa porte, et `docs/doodles.md` juge une figure sur ce qu'elle
+retire, pas sur la place disponible.
 
 Deux honnêtetés qui coûtent, et qu'on paie :
 

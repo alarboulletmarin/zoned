@@ -5,8 +5,10 @@ import {
   dayKinds,
   BAR_MAX,
   BLOCK_MIN,
+  EXTRA_MAX,
   dayBarBlocks,
   dayStatus,
+  extraBlockHeight,
   sessionKind,
   focusDayDate,
   focusPlanHref,
@@ -314,6 +316,18 @@ describe("un bloc par séance dans la bande", () => {
     // long : la colonne est bridée plutôt que de déborder.
     expect(column(dayBarBlocks([{ ...session(0), estimatedDurationMin: 600 }], 60)))
       .toBeLessThanOrEqual(BAR_MAX);
+  });
+
+  test("le canal du complément a sa propre échelle, et son plancher", () => {
+    // Rien ne se dessine quand rien n'a eu lieu.
+    expect(extraBlockHeight(0, 60)).toBe(0);
+    // Le jour le plus long du CANAL remplit son créneau, pas celui du plan.
+    expect(extraBlockHeight(60, 60)).toBe(EXTRA_MAX);
+    // Une échelle fausse est bridée plutôt que de déborder.
+    expect(extraBlockHeight(600, 60)).toBe(EXTRA_MAX);
+    // Un trajet de dix minutes à côté d'une sortie de trois heures doit se
+    // voir : c'est tout l'intérêt d'avoir ce canal.
+    expect(extraBlockHeight(10, 180)).toBe(BLOCK_MIN);
   });
 
   test("une séance minuscule reste visible", () => {

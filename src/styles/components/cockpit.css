@@ -454,6 +454,81 @@
   background: var(--line-divider);
 }
 
+/* ── LE SECOND CANAL : ce qui a eu lieu hors du plan ────────────────────── */
+
+/* La bande ne dessinait que le plan, donc une journée passée à pédaler
+   jusqu'au bureau s'y lisait REPOS, c'est-à-dire le contraire de ce qui s'est
+   passé. C'est le seul mensonge qu'une bande de sept jours puisse commettre.
+
+   Le complément descend SOUS le sol plutôt que de s'ajouter à la pile : le
+   partager le budget de la colonne ferait rétrécir les blocs du plan les jours
+   de vélotaf, et sept hauteurs qui ne mesurent plus la même chose ne se
+   comparent plus. Et ce n'est pas la même grandeur : au-dessus du sol, ce que
+   le plan demande ; en dessous, ce que la vie a ajouté. */
+.zn-cockpit__day-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  inline-size: 100%;
+}
+
+/* LE SOL, tracé sur les sept jours et pas seulement sous ceux qui portent
+   quelque chose : un axe qui n'existe que parfois n'est pas un axe, et c'est
+   lui qui rend le canal du dessous lisible sans une légende.
+
+   Il est PLUS LARGE QUE LA BARRE, et c'est ce qui en fait un sol. À la largeur
+   de la barre, le premier rendu le donnait à lire comme un bloc de plus : on
+   voyait trois barres empilées un jour de repos, le filet du repos, le sol, et
+   le complément. Débordant de la barre, et repris à l'identique sur les sept
+   colonnes, il se lit comme UNE ligne que les écarts interrompent.
+
+   Un cheveu, pas un filet : à 1,5 px sur sept colonnes la bande devenait une
+   portée. Il est à l'ENCRE quand même, parce qu'un sol pâle laisse les blocs
+   flotter, ce que .zn-cockpit__profile a déjà payé une fois. */
+.zn-cockpit__day-ground {
+  inline-size: 100%;
+  block-size: var(--bw-hair);
+  background: var(--line-strong);
+}
+
+/* Deux pixels entre la barre et le sol. Le filet d'un jour de repos vit au
+   fond du créneau : collé au sol, les deux faisaient un trait unique de
+   quatre pixels, donc un jour de repos semblait porter quelque chose. */
+.zn-cockpit__day-bar {
+  margin-block-end: 2px;
+}
+
+/* Le créneau du dessous, TOUJOURS réservé, vide la plupart du temps : même
+   règle que partout sur cet écran, rien ne doit bouger quand on change de
+   jour. `EXTRA_MAX` de lib/cockpit.ts, plus le filet du sol. */
+.zn-cockpit__day-under {
+  inline-size: 100%;
+  /* PLUS ÉTROIT que la barre du plan, dix pixels contre dix-huit. C'est le
+     second canal, il doit se lire comme tel avant même qu'on ait vu sa
+     teinte : à largeur égale le complément pesait autant qu'une séance, ce
+     qui est faux et ce que la position seule ne suffisait pas à corriger. */
+  max-inline-size: 10px;
+  block-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-block-start: 2px;
+}
+
+/* Ça a eu lieu, donc c'est PLEIN, comme une séance faite. D'un cran plus
+   clair, parce que ce n'est pas le plan, et la position sous le sol le dit
+   déjà : la teinte ne porte l'information nulle part toute seule. */
+.zn-cockpit__day-extra {
+  inline-size: 100%;
+  block-size: var(--block-h, 3px);
+  background: var(--ink-3);
+  border-radius: 1px;
+}
+
+.zn-cockpit__day:hover .zn-cockpit__day-extra {
+  background: var(--ink-2);
+}
+
 /* ── L'aperçu de la séance ──────────────────────────────────────────────── */
 
 /* Le créneau garde sa hauteur, plein ou vide : la barre n'arrive qu'avec le

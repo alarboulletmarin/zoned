@@ -460,6 +460,36 @@ export function dayKinds(day: readonly PlanSession[]): SessionKind[] {
   return kinds;
 }
 
+/**
+ * LE SECOND CANAL de la bande : ce qui a eu lieu HORS du plan, sous le sol.
+ *
+ * La bande ne dessinait que le plan, donc une journée passée à pédaler
+ * jusqu'au bureau s'y lisait repos. C'est le seul mensonge qu'une bande de sept
+ * jours puisse commettre, et une bande qui ment ne sert plus à rien.
+ *
+ * Le complément ne s'ajoute pas à la pile : il descend SOUS le filet du sol.
+ * Deux raisons, et la seconde est la vraie.
+ *
+ * 1. Le partager le budget de la colonne ferait rétrécir les blocs du plan les
+ *    jours de vélotaf, et sept hauteurs qui ne mesurent plus la même chose
+ *    d'un jour à l'autre ne se comparent plus.
+ * 2. Ce n'est pas la même grandeur. Une heure de vélotaf n'est pas une heure
+ *    de séance, et les empiler dirait qu'elles le sont. Au-dessus du sol, ce
+ *    que le plan demande ; en dessous, ce que la vie a ajouté.
+ *
+ * L'échelle est donc PROPRE au canal, `longestExtra` et non le jour le plus
+ * long : les compléments se comparent entre eux, et jamais à une séance. Le
+ * plancher de `BLOCK_MIN` vaut ici comme ailleurs, un trajet de dix minutes
+ * doit se voir.
+ */
+export const EXTRA_MAX = 12;
+
+export function extraBlockHeight(minutes: number, longestExtra: number): number {
+  if (minutes <= 0) return 0;
+  const share = Math.min(1, minutes / Math.max(1, longestExtra));
+  return Math.max(BLOCK_MIN, Math.round(share * EXTRA_MAX));
+}
+
 /** Le chemin d'une séance de plan. */
 export function sessionHref(session: PlanSession): string {
   return `/workout/${session.workoutId}`;

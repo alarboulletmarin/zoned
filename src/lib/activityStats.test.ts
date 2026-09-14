@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 
-import { activityLoad, complementaryShare, summarizeActivities } from "./activityStats";
+import {
+  activityLoad,
+  complementaryShare,
+  minutesByWeekday,
+  summarizeActivities,
+} from "./activityStats";
 import type { ComplementaryActivity } from "@/types/activity";
 
 const make = (over: Partial<ComplementaryActivity>): ComplementaryActivity => ({
@@ -85,6 +90,44 @@ describe("summarizeActivities", () => {
     ]);
     expect(summary.travelMinutes).toBe(40);
     expect(summary.trainingMinutes).toBe(90);
+  });
+});
+
+describe("minutesByWeekday", () => {
+  const monday = "2026-09-14";
+
+  test("chaque activité tombe dans sa case, du lundi au dimanche", () => {
+    const byDay = minutesByWeekday(
+      [
+        make({ date: "2026-09-14", durationMin: 25 }),
+        make({ date: "2026-09-14", durationMin: 25 }),
+        make({ date: "2026-09-20", durationMin: 50 }),
+      ],
+      monday,
+    );
+    expect(byDay).toEqual([50, 0, 0, 0, 0, 0, 50]);
+  });
+
+  test("une date hors des sept jours ne déborde pas sur une case", () => {
+    const byDay = minutesByWeekday(
+      [make({ date: "2026-09-13" }), make({ date: "2026-09-21" })],
+      monday,
+    );
+    expect(byDay).toEqual([0, 0, 0, 0, 0, 0, 0]);
+  });
+
+  test("un lundi illisible rend sept zéros plutôt qu'une exception", () => {
+    expect(minutesByWeekday([make({})], "pas-une-date")).toEqual([0, 0, 0, 0, 0, 0, 0]);
+  });
+
+  test("le passage à l'heure d'hiver ne décale pas une case", () => {
+    // Le dimanche 25 octobre 2026 est un jour de 25 heures en Europe : une
+    // arithmétique en millisecondes y perd un jour, une date seule non.
+    const byDay = minutesByWeekday(
+      [make({ date: "2026-10-26", durationMin: 30 })],
+      "2026-10-26",
+    );
+    expect(byDay[0]).toBe(30);
   });
 });
 
