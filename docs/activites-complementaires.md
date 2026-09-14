@@ -121,6 +121,31 @@ distinction entre création et correction, l'écriture, le toast, la fermeture,
 et la lecture du motif récurrent qui pré-remplit. Une quatrième copie de ce
 travail aurait fini par demander autre chose que les trois premières.
 
+### La marque de la saisie : un cadre et un plus
+
+Les deux premières portes ont porté quelque temps la marque des SORTIES du
+cockpit, un texte suivi d'une flèche. C'était une erreur de catégorie, et la
+rangée du cockpit l'enseignait elle-même : sa flèche dit deux choses à la
+fois, c'est un geste ET il emmène ailleurs. Tirer une séance tient les deux,
+elle navigue vers `/library/draw`. La saisie ne tient que la première : elle
+ouvre un panneau sur place et elle écrit. La flèche promettait donc une page
+qui ne venait jamais, et un texte fléché au milieu de deux liens se lisait
+comme une légende plutôt que comme un contrôle.
+
+Trois registres, trois marques, et la marque seule les distingue :
+
+| Marque | Ce qu'elle promet | Exemple |
+| --- | --- | --- |
+| cadre + `+` | ça agit ICI, et ça écrit | la saisie d'une activité |
+| texte + flèche | un geste, et il emmène ailleurs | tirer une séance |
+| texte souligné | un lieu | Ma semaine |
+
+Le `+` est celui du bouton du journal : un seul signe pour ajouter une
+activité, où que l'on soit. Les mots, eux, restent à la première personne
+(`J'ai fait autre chose`) là où ils répondent à la séance du jour affichée
+juste au-dessus ; c'est le cadre qui dit que c'est un contrôle, les mots n'ont
+pas à le faire.
+
 ### Une seule liste en mémoire
 
 `useActivities` tient un magasin de MODULE derrière `useSyncExternalStore`, et

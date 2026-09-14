@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowRight, Bike, Dumbbell, Pool, Run, type IconProps } from "@/components/icons";
+import { ArrowRight, Bike, Dumbbell, Plus, Pool, Run, type IconProps } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
@@ -534,19 +534,27 @@ export function TodayPage() {
 
           {settings.cockpit.shortcuts && (
             <p className="zn-cockpit__exits">
-              {/* La saisie est un GESTE, comme le tirage : flèche, pas de
-                  souligné. Elle n'emmène nulle part, et c'est la seule chose
-                  de cet écran qui écrive quelque chose, d'où le bouton plutôt
-                  que le lien. */}
-              <button
+              {/* La saisie n'est PAS une sortie, et elle portait pourtant leur
+                  marque. La flèche de cette rangée dit deux choses à la fois,
+                  c'est un geste ET il emmène ailleurs : le tirage tient les
+                  deux, la saisie seulement la première. Elle ouvre un panneau
+                  sur place et écrit. Un texte fléché promettait donc une page
+                  qui ne venait jamais, et se lisait comme une légende.
+
+                  D'où un bouton encadré, et un plus : le cadre dit qu'on
+                  agit, le plus dit qu'on ajoute, et c'est le même plus que le
+                  bouton du journal. Il se distingue à dessein des deux liens
+                  sous lui, qui eux emmènent vraiment ailleurs. */}
+              <Button
                 type="button"
-                className="zn-cockpit__exit"
-                data-role="move"
+                variant="outline"
+                size="sm"
+                className="zn-cockpit__log"
                 onClick={() => log.logOn(dayIso)}
               >
+                <Plus size={16} />
                 {t("activity:cockpit.add")}
-                <ArrowRight />
-              </button>
+              </Button>
               <Link to="/library/draw" className="zn-cockpit__exit" data-role="move">
                 {t("today:quick.draw")}
                 <ArrowRight />
