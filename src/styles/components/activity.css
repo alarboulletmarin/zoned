@@ -31,6 +31,16 @@
   padding-block: calc(var(--gap-section) / 2);
 }
 
+/* La sortie, au-dessus du titre et alignée à gauche avec lui : elle se lit
+   avant la page, comme une porte se voit avant la pièce. Le bouton fantôme
+   plutôt qu'un lien souligné, pour la même raison que dans le cockpit, elle
+   ne mène pas à une adresse, elle défait un pas. */
+.zn-acts__back {
+  align-self: flex-start;
+  margin-inline-start: calc(var(--sp-6) * -1);
+  margin-block-start: var(--sp-8);
+}
+
 .zn-acts__head {
   display: flex;
   flex-wrap: wrap;
@@ -571,46 +581,26 @@
 }
 
 /* ── La durée ─────────────────────────────────────────────────────────
-   Deux champs, heures et minutes, sous une seule étiquette. Ils sont ÉTROITS
-   et c'est l'information : un champ pleine largeur demande une phrase, un
-   champ de deux chiffres demande deux chiffres. L'unité est posée à côté du
-   champ, en gris, pour que la ligne se lise 1 h 25 et pas 1 25. */
+   Un champ, au masque h:mm. Il est ÉTROIT et c'est l'information : un champ
+   pleine largeur demande une phrase, un champ de cinq caractères demande cinq
+   caractères. Le chiffre est en mono à chasse fixe, donc le deux-points ne se
+   déplace pas d'un pixel quand l'heure passe de 9 à 10. */
 .zn-actlog__duration {
   display: flex;
   flex-direction: column;
-}
-
-.zn-actlog__durrow {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-6);
-}
-
-.zn-actlog__durpart {
-  display: flex;
-  flex: none;
-  align-items: baseline;
-  gap: var(--sp-3);
+  align-items: flex-start;
 }
 
 /* Deux classes, et c'est nécessaire : plan-panels.css est importé APRÈS cette
    feuille et .zn-pfield y pose une largeur de 100 %. À poids égal, il
-   gagnerait, et le champ de deux chiffres ferait toute la ligne. */
-.zn-actlog__durrow .zn-actlog__durfield {
-  inline-size: 5rem;
-  padding-inline: var(--sp-4);
+   gagnerait, et le champ de cinq caractères ferait toute la ligne. */
+.zn-actlog__duration .zn-actlog__durfield {
+  inline-size: 7rem;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: var(--fs-mono);
+  font-size: var(--fs-body);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--ls-mono);
-}
-
-.zn-actlog__durunit {
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  letter-spacing: var(--ls-mono-label);
-  color: var(--text-faint);
 }
 
 /* ── Les rappels ──────────────────────────────────────────────────────

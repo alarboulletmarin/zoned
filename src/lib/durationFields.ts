@@ -1,100 +1,122 @@
 /**
- * Une durée saisie en DEUX champs, des heures et des minutes.
+ * Une durée saisie dans UN champ, au masque `h:mm`.
  *
  * Le champ unique en minutes demandait une conversion mentale avant la
- * première frappe : personne ne pense son vélotaf en minutes, on pense 1 h 25
- * et on tape 85. La conversion est petite, elle est faite dix fois par
- * semaine, et elle se rate. Deux champs la suppriment, au prix de ce fichier.
+ * première frappe : personne ne pense son vélotaf en 85 minutes, on pense
+ * 1 h 25. Deux champs, heures et minutes, supprimaient la conversion mais
+ * posaient deux cases à remplir et un saut de l'une à l'autre là où il y a
+ * une seule question. Un champ, un masque.
  *
- * Trois règles tiennent tout ce qui suit :
+ * ── Les chiffres entrent par la DROITE ───────────────────────────────────
+ *
+ * C'est la règle qui tient tout le reste, et c'est celle du chronomètre : les
+ * deux derniers chiffres tapés sont TOUJOURS les minutes, ceux d'avant les
+ * heures. On tape 45 et on lit 0:45 ; on tape 125 et on lit 1:25 ; on tape
+ * 1245 et on lit 12:45.
+ *
+ * L'autre sens, remplir les heures puis les minutes, aurait rendu la saisie
+ * courte ambiguë et coûteuse à la fois : 45 voudrait dire 45 h autant que
+ * 45 min, et un trajet d'une demi-heure se serait tapé 0030. Le cas le plus
+ * fréquent de l'écran est une durée de moins d'une heure ; c'est lui qui doit
+ * coûter deux frappes, pas quatre.
+ *
+ * ── Trois règles de plus ─────────────────────────────────────────────────
  *
  * 1. **Le stockage ne change pas.** `ComplementaryActivity.durationMin` reste
- *    des minutes, une seule unité en mémoire. Les deux champs sont une forme
- *    de SAISIE, la conversion vit ici, à la frontière, et nulle part ailleurs.
- * 2. **Rien n'est refusé.** 90 dans le champ des minutes est une durée valide,
- *    pas une faute : elle vaut 1 h 30 et elle se range toute seule au moment
- *    où le champ est quitté. Refuser 90 pour exiger 1 et 30 serait apprendre à
- *    l'utilisateur une règle que la machine sait appliquer.
- * 3. **Le rangement est visible.** La normalisation réécrit les deux champs à
- *    l'écran, elle ne corrige pas en douce une valeur qu'on ne verra qu'après
- *    l'enregistrement.
+ *    des minutes, une seule unité en mémoire. Le masque est une forme de
+ *    SAISIE, la conversion vit ici, à la frontière, et nulle part ailleurs.
+ * 2. **Rien n'est refusé.** 0:90 est une durée valide, pas une faute : elle
+ *    vaut 1 h 30 et se range toute seule quand le champ est quitté. Refuser
+ *    90 pour exiger 130 serait apprendre à l'utilisateur une règle que la
+ *    machine sait appliquer.
+ * 3. **Le rangement est visible.** La normalisation réécrit le champ à
+ *    l'écran, elle ne corrige pas en douce une valeur qu'on ne verra
+ *    qu'après l'enregistrement.
  */
 
 /** La borne haute d'une durée saisissable : une activité tient dans sa date. */
 export const DURATION_MAX_MIN = 24 * 60;
 
-/** Les deux champs, tels qu'ils sont affichés. Vides, ils valent "". */
-export interface DurationFields {
-  hours: string;
-  minutes: string;
-}
+/**
+ * Au plus quatre chiffres, `hh:mm`. Le cinquième est ignoré plutôt que de
+ * chasser le premier : 24 h est le plafond, donc une frappe de plus est une
+ * frappe de trop, et faire glisser la valeur ferait disparaître un chiffre
+ * déjà saisi sans le dire.
+ */
+export const DURATION_MAX_DIGITS = 4;
 
-export const EMPTY_DURATION: DurationFields = { hours: "", minutes: "" };
-
-/** Les chiffres d'une frappe, au plus `max` d'entre eux. Le reste est jeté. */
-export function digitsOnly(raw: string, max: number): string {
-  return raw.replace(/\D/g, "").slice(0, max);
+/**
+ * Les zéros de tête retirés. C'est la forme CANONIQUE de l'état.
+ *
+ * Sans elle, le champ ne se vide jamais : le masque affiche 0:01, l'effacement
+ * rend 0:0, donc les chiffres `00`, que le masque réaffiche 0:00, que
+ * l'effacement rend 0:0... et ainsi de suite. Un zéro de tête ne porte aucune
+ * information ici, puisque les minutes sont toujours les deux derniers
+ * chiffres : le retirer rend l'effacement fini.
+ */
+function trimLeadingZeros(digits: string): string {
+  return digits.replace(/^0+/, "");
 }
 
 /**
- * Le total en minutes, ou `undefined` si les deux champs sont vides.
+ * Les chiffres d'une frappe, le masque retiré.
  *
- * Tolérant par construction : les deux champs sont simplement additionnés,
- * donc 2 h et 90 min font 3 h 30 sans que personne ait eu à le dire. Un champ
- * vide vaut zéro, jamais `undefined` : taper seulement 45 dans les minutes
- * doit donner 45 min, et taper seulement 1 dans les heures doit donner 1 h.
+ * Prend la valeur BRUTE du champ, deux-points compris : le champ affiche
+ * `1:25`, taper un 5 à la fin donne `1:255`, donc `1255`, donc 12:55. Le
+ * masque n'a jamais besoin d'être retiré à la main par l'appelant.
  */
-export function combineDuration({ hours, minutes }: DurationFields): number | undefined {
-  const h = hours.trim();
-  const m = minutes.trim();
-  if (h === "" && m === "") return undefined;
-  const hoursValue = h === "" ? 0 : Number.parseInt(h, 10);
-  const minutesValue = m === "" ? 0 : Number.parseInt(m, 10);
-  if (!Number.isFinite(hoursValue) || !Number.isFinite(minutesValue)) return undefined;
-  return hoursValue * 60 + minutesValue;
+export function durationDigits(raw: string): string {
+  return trimLeadingZeros(raw.replace(/\D/g, "")).slice(0, DURATION_MAX_DIGITS);
 }
 
-/** Des minutes stockées, remises dans les deux champs. `0` donne des champs vides. */
-export function splitDuration(totalMin: number): DurationFields {
-  if (!Number.isFinite(totalMin) || totalMin <= 0) return EMPTY_DURATION;
-  const total = Math.round(totalMin);
+/**
+ * Les chiffres, mis au masque. Chaîne vide en entrée, chaîne vide en sortie :
+ * un champ vide montre son indice, pas un 0:00 qui aurait l'air saisi.
+ */
+export function formatDurationDigits(digits: string): string {
+  if (digits === "") return "";
+  // Trois chiffres au minimum, pour que les deux derniers soient les minutes
+  // et qu'il reste toujours une heure à afficher, fût-elle zéro.
+  const padded = digits.padStart(3, "0");
+  const minutes = padded.slice(-2);
+  const hours = Number.parseInt(padded.slice(0, -2), 10);
+  return `${hours}:${minutes}`;
+}
+
+/**
+ * Le total en minutes, ou `undefined` si rien n'est saisi.
+ *
+ * Tolérant par construction : les minutes ne sont pas plafonnées à 59, donc
+ * 0:90 vaut 90 et personne n'a eu à le dire.
+ */
+export function durationToMinutes(digits: string): number | undefined {
+  if (digits === "") return undefined;
+  const padded = digits.padStart(3, "0");
+  const minutes = Number.parseInt(padded.slice(-2), 10);
+  const hours = Number.parseInt(padded.slice(0, -2), 10);
+  if (!Number.isFinite(minutes) || !Number.isFinite(hours)) return undefined;
+  return hours * 60 + minutes;
+}
+
+/** Des minutes stockées, remises dans le champ. `0` donne un champ vide. */
+export function minutesToDurationDigits(totalMin: number): string {
+  if (!Number.isFinite(totalMin) || totalMin <= 0) return "";
+  const total = Math.min(Math.round(totalMin), DURATION_MAX_MIN);
   const hours = Math.floor(total / 60);
   const minutes = total % 60;
-  return {
-    hours: hours > 0 ? String(hours) : "",
-    minutes: minutes > 0 ? String(minutes) : "",
-  };
+  return trimLeadingZeros(`${hours}${String(minutes).padStart(2, "0")}`);
 }
 
 /**
- * Les deux champs rangés : les minutes au-delà de 60 passent dans les heures,
- * et le total est plafonné à une journée.
+ * Le champ rangé : les minutes qui débordent passent dans les heures, et le
+ * total est plafonné à une journée.
  *
- * Appelé quand le champ des minutes est QUITTÉ, pas à chaque frappe : ranger
- * pendant la saisie réécrirait 9 en 0 h 09 avant que le second chiffre de 90
- * n'ait été tapé, ce qui est la façon la plus sûre de rendre un champ
- * inutilisable.
+ * Appelé quand le champ est QUITTÉ, pas à chaque frappe : ranger pendant la
+ * saisie transformerait le 9 de 90 en 0:09 avant que le second chiffre
+ * n'arrive, ce qui est la façon la plus sûre de rendre un champ inutilisable.
  */
-export function normalizeDuration(fields: DurationFields): DurationFields {
-  const total = combineDuration(fields);
-  if (total === undefined) return EMPTY_DURATION;
-  if (total <= 0) return EMPTY_DURATION;
-  return splitDuration(Math.min(total, DURATION_MAX_MIN));
-}
-
-/**
- * Faut-il passer au champ des minutes après cette frappe dans les heures ?
- *
- * Oui quand le champ ne peut plus grandir : deux chiffres sont posés, ou le
- * premier chiffre est un 3 ou plus, auquel cas un second chiffre donnerait au
- * moins 30 h et une activité tient dans sa date. Un 1 ou un 2 attendent, eux :
- * ils peuvent encore devenir 12 ou 24.
- *
- * Ce saut fait gagner une frappe sur le geste le plus fréquent de l'écran. Il
- * ne verrouille rien, la tabulation arrière revient aux heures.
- */
-export function shouldAdvanceFromHours(hours: string): boolean {
-  if (hours.length >= 2) return true;
-  if (hours.length === 0) return false;
-  return Number.parseInt(hours, 10) >= 3;
+export function normalizeDurationDigits(digits: string): string {
+  const total = durationToMinutes(digits);
+  if (total === undefined || total <= 0) return "";
+  return minutesToDurationDigits(total);
 }

@@ -54,13 +54,23 @@ La première version alignait les six champs au même poids sous une ligne qui
 annonçait qu'un seul comptait : l'écran démentait la phrase posée juste
 au-dessus. Trois choses le remettent d'accord avec elle.
 
-**La durée se saisit en heures et en minutes.** Le champ unique en minutes
+**La durée se saisit dans un champ, au masque `h:mm`.** Le champ en minutes
 demandait une conversion mentale avant la première frappe, on pense 1 h 25 et
-on tapait 85. Deux champs la suppriment. Le parsing reste tolérant : 90 dans
-les minutes vaut 1 h 30, et se RANGE à l'écran au moment où le champ est
-quitté plutôt que d'être refusé (`lib/durationFields.ts`). Le stockage, lui,
-ne bouge pas : `durationMin` reste des minutes, la conversion vit à la
-frontière du formulaire.
+on tapait 85. Le masque la supprime sans ajouter de case : un champ, un
+clavier numérique, et les chiffres qui entrent par la DROITE comme sur un
+chronomètre, les deux derniers tapés sont toujours les minutes. On tape 45 et
+on lit 0:45, on tape 125 et on lit 1:25.
+
+L'autre sens, remplir les heures puis les minutes, aurait rendu la saisie
+courte ambiguë et coûteuse à la fois : 45 voudrait dire 45 h autant que
+45 min, et un trajet d'une demi-heure se serait tapé 0030. Le cas le plus
+fréquent de l'écran est une durée de moins d'une heure, c'est lui qui doit
+coûter deux frappes.
+
+Le parsing reste tolérant : 0:90 vaut 1 h 30, et se RANGE à l'écran au moment
+où le champ est quitté plutôt que d'être refusé (`lib/durationFields.ts`). Le
+stockage, lui, ne bouge pas : `durationMin` reste des minutes, la conversion
+vit à la frontière du formulaire.
 
 **Les précisions sont repliées** derrière un `<details>`. Le repli s'ouvre tout
 seul dans les deux cas où le fermer mentirait : quand on modifie une activité

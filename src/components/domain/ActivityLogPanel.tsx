@@ -1,11 +1,9 @@
 import {
   useEffect,
-  useId,
   useMemo,
   useRef,
   useState,
   type CSSProperties,
-  type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -19,12 +17,11 @@ import { formatDurationMinutes } from "@/components/visualization";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { recallDurations, type ActivityRecall } from "@/lib/activityRecall";
 import {
-  combineDuration,
-  digitsOnly,
-  normalizeDuration,
-  shouldAdvanceFromHours,
-  splitDuration,
-  type DurationFields,
+  durationDigits,
+  durationToMinutes,
+  formatDurationDigits,
+  minutesToDurationDigits,
+  normalizeDurationDigits,
 } from "@/lib/durationFields";
 import { rpeColor, rpeWordKey } from "@/lib/sessionColors";
 import {
@@ -62,12 +59,14 @@ import {
  * on modifie une activité qui en porte déjà, et quand un rappel vient d'en
  * poser. Rien ne s'enregistre que l'écran ne montre.
  *
- * ── La durée, en heures et en minutes ────────────────────────────────────
+ * ── La durée, un champ au masque h:mm ────────────────────────────────────
  *
- * Un champ unique en minutes demandait une conversion mentale avant la
- * première frappe : on pense 1 h 25, on tapait 85. Deux champs suppriment la
- * conversion, et le parsing reste tolérant, 90 dans les minutes vaut 1 h 30 et
- * se range à l'écran plutôt que d'être refusé (`lib/durationFields.ts`).
+ * Le champ en minutes demandait une conversion mentale avant la première
+ * frappe : on pense 1 h 25, on tapait 85. Le masque la supprime sans ajouter
+ * de case : un seul champ, un clavier numérique, et les chiffres qui entrent
+ * par la DROITE comme sur un chronomètre, 45 donne 0:45 et 125 donne 1:25. Le
+ * parsing reste tolérant, 0:90 vaut 1 h 30 et se range à l'écran quand le
+ * champ est quitté plutôt que d'être refusé (`lib/durationFields.ts`).
  *
  * ── Les rappels ──────────────────────────────────────────────────────────
  *
@@ -175,7 +174,7 @@ export function ActivityLogPanel({
   const [date, setDate] = useState(defaultDate);
   const [discipline, setDiscipline] = useState<ActivityDiscipline>("cycling");
   const [purpose, setPurpose] = useState<ActivityPurpose>("commute");
-  const [duration, setDuration] = useState<DurationFields>(() => splitDuration(0));
+  const [duration, setDuration] = useState("");
   const [details, setDetails] = useState<DetailFields>(EMPTY_DETAILS);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [rpe, setRpe] = useState(defaultRpe("commute"));
@@ -197,7 +196,7 @@ export function ActivityLogPanel({
       setDate(activity.date);
       setDiscipline(activity.discipline);
       setPurpose(activity.purpose);
-      setDuration(splitDuration(activity.durationMin));
+      setDuration(minutesToDurationDigits(activity.durationMin));
       setDetails(loaded);
       /* Une précision déjà saisie ne se cache pas derrière un repli : on
          viendrait souvent la corriger, et elle serait invisible. */
@@ -209,7 +208,7 @@ export function ActivityLogPanel({
     setDate(defaultDate);
     setDiscipline(suggestion?.discipline ?? "cycling");
     setPurpose("commute");
-    setDuration(splitDuration(suggestion?.durationMin ?? 0));
+    setDuration(minutesToDurationDigits(suggestion?.durationMin ?? 0));
     setDetails(EMPTY_DETAILS);
     setDetailsOpen(false);
     setRpe(defaultRpe("commute"));
@@ -248,7 +247,7 @@ export function ActivityLogPanel({
           : "",
       watts: meta.watts && recall.avgWatts !== undefined ? String(recall.avgWatts) : "",
     };
-    setDuration(splitDuration(recall.durationMin));
+    setDuration(minutesToDurationDigits(recall.durationMin));
     setDetails(filled);
     if (hasDetails(filled)) setDetailsOpen(true);
     if (recall.rpe !== undefined) {
@@ -257,7 +256,7 @@ export function ActivityLogPanel({
     }
   };
 
-  const parsedDuration = combineDuration(duration);
+  const parsedDuration = durationToMinutes(duration);
   const canSave =
     parsedDuration !== undefined &&
     parsedDuration >= ACTIVITY_LIMITS.durationMin.min &&
@@ -338,8 +337,9 @@ interface ActivityFormProps {
   setDiscipline: (v: ActivityDiscipline) => void;
   purpose: ActivityPurpose;
   setPurpose: (v: ActivityPurpose) => void;
-  duration: DurationFields;
-  setDuration: (v: DurationFields) => void;
+  /** Les chiffres saisis, masque retiré. Voir `lib/durationFields.ts`. */
+  duration: string;
+  setDuration: (v: string) => void;
   recalls: ActivityRecall[];
   onRecall: (recall: ActivityRecall) => void;
   details: DetailFields;
@@ -379,9 +379,7 @@ function ActivityForm({
 }: ActivityFormProps) {
   const { t } = useTranslation(["activity", "plan", "common"]);
   const meta = ACTIVITY_DISCIPLINE_META[discipline];
-  const durationLabelId = useId();
-  const hoursRef = useRef<HTMLInputElement>(null);
-  const minutesRef = useRef<HTMLInputElement>(null);
+  const durationRef = useRef<HTMLInputElement>(null);
 
   /* Le clavier s'ouvre sur le SEUL champ vide de l'écran. Il partait sur la
      date, qui est déjà juste : l'anneau de focus y posait un second appel
@@ -390,8 +388,19 @@ function ActivityForm({
      corriger un champ précis, et le clavier masquerait ceux qu'on relit. */
   useEffect(() => {
     if (isEdit) return;
-    hoursRef.current?.focus({ preventScroll: true });
+    durationRef.current?.focus({ preventScroll: true });
   }, [isEdit]);
+
+  /* Le curseur revient à la FIN après chaque frappe, tant que le champ est
+     tenu. C'est ce qui rend le masque prévisible : les chiffres entrent par la
+     droite, donc l'effacement doit toujours retirer le dernier, où que le
+     doigt ait posé le curseur dans 1:25. */
+  useEffect(() => {
+    const field = durationRef.current;
+    if (!field || document.activeElement !== field) return;
+    const end = field.value.length;
+    field.setSelectionRange(end, end);
+  }, [duration]);
 
   const disciplineOptions = useMemo(
     () =>
@@ -416,36 +425,14 @@ function ActivityForm({
     [t],
   );
 
-  const changeHours = (raw: string) => {
-    const hours = digitsOnly(raw, 2);
-    setDuration({ ...duration, hours });
-    // Une frappe de gagnée sur le geste le plus fréquent de l'écran.
-    if (shouldAdvanceFromHours(hours)) minutesRef.current?.focus();
-  };
-
-  const changeMinutes = (raw: string) => {
-    setDuration({ ...duration, minutes: digitsOnly(raw, 3) });
-  };
-
   /* Le rangement se fait à la SORTIE du champ, jamais pendant la frappe : le
-     premier chiffre de 90 serait devenu 0 h 09 avant que le second n'arrive. */
+     premier chiffre de 90 serait devenu 0:09 avant que le second n'arrive. */
   const tidyDuration = () => {
-    const tidy = normalizeDuration(duration);
-    if (tidy.hours !== duration.hours || tidy.minutes !== duration.minutes) {
-      setDuration(tidy);
-    }
+    const tidy = normalizeDurationDigits(duration);
+    if (tidy !== duration) setDuration(tidy);
   };
 
-  /* Effacer un champ vide remonte au précédent, comme le fait n'importe quel
-     champ de code à usage unique. Sans ça, revenir sur les heures demande la
-     souris ou deux tabulations. */
-  const handleMinutesKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== "Backspace" || duration.minutes !== "") return;
-    event.preventDefault();
-    hoursRef.current?.focus();
-  };
-
-  const currentDuration = combineDuration(duration);
+  const currentDuration = durationToMinutes(duration);
 
   return (
     <div className="zn-actlog">
@@ -480,8 +467,8 @@ function ActivityForm({
 
         {/* La durée, seule question de l'écran qui attende une réponse. Les
             rappels la précèdent : on les lit avant de décider de taper. */}
-        <div className="zn-actlog__duration" role="group" aria-labelledby={durationLabelId}>
-          <span id={durationLabelId} className="zn-kicker zn-kicker--inline zn-plabel">
+        <label className="zn-actlog__duration">
+          <span className="zn-kicker zn-kicker--inline zn-plabel">
             {t("activity:form.duration")}
           </span>
 
@@ -505,42 +492,24 @@ function ActivityForm({
             </div>
           )}
 
-          <div className="zn-actlog__durrow">
-            <span className="zn-actlog__durpart">
-              <input
-                ref={hoursRef}
-                type="text"
-                inputMode="numeric"
-                autoComplete="off"
-                aria-label={t("activity:form.durationHours")}
-                value={duration.hours}
-                onChange={(e) => changeHours(e.target.value)}
-                onBlur={tidyDuration}
-                className="zn-pfield zn-actlog__durfield"
-              />
-              <span className="zn-actlog__durunit" aria-hidden="true">
-                {t("activity:form.unit.hours")}
-              </span>
-            </span>
-            <span className="zn-actlog__durpart">
-              <input
-                ref={minutesRef}
-                type="text"
-                inputMode="numeric"
-                autoComplete="off"
-                aria-label={t("activity:form.durationMinutes")}
-                value={duration.minutes}
-                onChange={(e) => changeMinutes(e.target.value)}
-                onKeyDown={handleMinutesKeyDown}
-                onBlur={tidyDuration}
-                className="zn-pfield zn-actlog__durfield"
-              />
-              <span className="zn-actlog__durunit" aria-hidden="true">
-                {t("activity:form.unit.minutes")}
-              </span>
-            </span>
-          </div>
-        </div>
+          {/* type text et pas number : un champ numérique natif refuse le
+              deux-points du masque, et sur un clavier logiciel il ouvre un
+              pavé qui porte aussi le point et le moins. inputMode numeric et
+              pattern donnent le pavé de CHIFFRES seuls, sur iOS comme sur
+              Android. */}
+          <input
+            ref={durationRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            autoComplete="off"
+            placeholder={t("activity:form.durationPlaceholder")}
+            value={formatDurationDigits(duration)}
+            onChange={(e) => setDuration(durationDigits(e.target.value))}
+            onBlur={tidyDuration}
+            className="zn-pfield zn-actlog__durfield"
+          />
+        </label>
 
         {/* Le même curseur que la clôture d'une séance, à dessein : c'est la
             même question, et deux échelles d'effort différentes dans la même
