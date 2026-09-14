@@ -1,0 +1,445 @@
+/* Les activités complémentaires : le journal, le panneau de saisie, le bilan
+ * de la semaine, et le bloc de chiffres que le plan réutilise.
+ *
+ * Trois surfaces, une feuille, parce qu'elles partagent leur vocabulaire : la
+ * ligne date-glyphe-motif-chiffres du journal est la même que celle du bilan,
+ * au cadre près. Les séparer aurait fait diverger deux listes qui disent la
+ * même chose.
+ *
+ * Ce que cette feuille NE redéclare pas, parce que ça existe déjà :
+ *   plan-panels.css, .zn-pfield (le champ), .zn-plabel, .zn-prpe (l'échelle
+ *                    d'effort). Le formulaire d'activité pose la MÊME question
+ *                    que la clôture d'une séance, donc il en emprunte le
+ *                    curseur plutôt que d'en dessiner un second.
+ *   _layout.css, zn-row / zn-stack / zn-cluster / zn-grid.
+ *   _type.css, zn-kicker / zn-display / zn-body / zn-mono.
+ *   stat-block.css, empty-state.css, alert.css, segmented.css.
+ *
+ * Les bandes de page portent leur padding de bloc et aucun padding en ligne :
+ * la colonne de la coquille paie déjà la marge latérale. Même contrat que
+ * .zn-rt__band.
+ */
+
+/* ── La page du journal ──────────────────────────────────────────────── */
+
+.zn-acts {
+  display: flex;
+  flex-direction: column;
+}
+
+.zn-acts__band {
+  padding-block: calc(var(--gap-section) / 2);
+}
+
+.zn-acts__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-13);
+}
+
+.zn-acts__headtext {
+  flex: 1;
+  min-inline-size: min(100%, 34ch);
+}
+
+.zn-acts__lede {
+  max-inline-size: 62ch;
+}
+
+/* ── Le mois ─────────────────────────────────────────────────────────── */
+
+/* Le mois est la seule coupe que personne n'a besoin d'apprendre. Son en-tête
+   porte le total du mois à droite : un groupe qui ne dit pas ce qu'il pèse
+   oblige à additionner de tête. */
+.zn-acts__month + .zn-acts__month {
+  margin-block-start: var(--sp-14);
+}
+
+.zn-acts__monthhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  padding-block-end: var(--sp-5);
+  border-block-end: var(--border-rule);
+}
+
+.zn-acts__monthtotal {
+  font-size: var(--fs-caption);
+  color: var(--text-muted);
+}
+
+.zn-acts__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-acts__item + .zn-acts__item {
+  border-block-start: var(--border-divider);
+}
+
+/* La ligne entière est le bouton : une ligne de journal n'a qu'une action,
+   la corriger, et un crayon de 15 px en bout de ligne serait une cible de
+   15 px. Le crayon reste, comme MARQUE que la ligne s'ouvre, pas comme cible. */
+.zn-acts__row {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto auto;
+  align-items: center;
+  gap: var(--sp-8);
+  inline-size: 100%;
+  padding-block: var(--sp-7);
+  border: none;
+  background: none;
+  text-align: start;
+  color: var(--text-body);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-acts__row:hover {
+  color: var(--accent);
+}
+
+.zn-acts__row:active {
+  transform: translateY(var(--press-shift));
+}
+
+@media (pointer: coarse) {
+  .zn-acts__row {
+    min-block-size: var(--hit-min);
+  }
+}
+
+.zn-acts__date {
+  font-size: var(--fs-caption);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-acts__icon {
+  color: var(--text-muted);
+}
+
+.zn-acts__what {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.zn-acts__kind {
+  font-size: var(--fs-body-sm);
+}
+
+.zn-acts__note {
+  font-size: var(--fs-caption);
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-acts__facts {
+  font-size: var(--fs-caption);
+  color: var(--text-muted);
+  text-align: end;
+}
+
+.zn-acts__edit {
+  color: var(--text-faint);
+}
+
+/* Sur un téléphone, les chiffres passent sous le motif : les garder en bout de
+   ligne les écraserait à trois caractères, et ce sont eux qu'on vient lire. */
+@media (max-width: 560px) {
+  .zn-acts__row {
+    grid-template-columns: auto auto 1fr auto;
+    row-gap: var(--sp-3);
+  }
+
+  .zn-acts__facts {
+    grid-column: 3 / -1;
+    text-align: start;
+  }
+
+  .zn-acts__edit {
+    display: none;
+  }
+}
+
+/* ── Le bloc de chiffres, partagé avec les statistiques d'un plan ────── */
+
+.zn-actsum {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+/* Trois ou quatre chiffres, jamais plus : le temps, la charge, le dénivelé
+   quand il y en a, la part quand elle a un dénominateur. Même réglage que la
+   grille des statistiques d'un plan, pour que les deux lisent pareil. */
+.zn-grid.zn-actsum__grid {
+  --cols: 4;
+  --cols-md: 2;
+  --gap: var(--sp-6);
+}
+
+/* Deux colonnes jusqu'en bas, jamais une. Un chiffre seul par ligne fait de
+   chaque bloc une bannière de 90 px, et trois chiffres occupent alors un
+   écran de téléphone pour dire trois nombres. */
+@media (max-width: 640px) {
+  .zn-grid.zn-actsum__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.zn-actsum__lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-actsum__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2) var(--sp-8);
+  padding-block: var(--sp-5);
+}
+
+/* Sur un téléphone, les chiffres passent SOUS le nom de la discipline plutôt
+   que de se replier en deux lignes à droite : Vélo 4 activités / 1h38 30,2 km
+   coupé en quatre morceaux ne se lit plus, alors que la même ligne empilée se
+   lit d'un coup. */
+@media (max-width: 560px) {
+  .zn-actsum__line {
+    flex-direction: column;
+  }
+
+  .zn-actsum__how {
+    text-align: start;
+  }
+}
+
+.zn-actsum__line + .zn-actsum__line {
+  border-block-start: var(--border-divider);
+}
+
+.zn-actsum__what {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-6);
+  font-size: var(--fs-body-sm);
+}
+
+.zn-actsum__count {
+  font-size: var(--fs-caption);
+  color: var(--text-faint);
+}
+
+.zn-actsum__how {
+  font-size: var(--fs-caption);
+  color: var(--text-muted);
+  text-align: end;
+}
+
+.zn-actsum__split {
+  margin: 0;
+  font-size: var(--fs-caption);
+  color: var(--text-faint);
+}
+
+/* ── Le bilan de la semaine ──────────────────────────────────────────── */
+
+/* Deux tenues pour le même bloc. `bare` sur le cockpit, qui n'a pas une seule
+   boîte et ne va pas en gagner une pour ça : un filet au-dessus suffit à dire
+   que c'est une autre section. `card` sur sa page, où il est le premier objet
+   et doit se tenir seul. */
+.zn-wreview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.zn-wreview[data-variant="bare"] {
+  padding-block-start: var(--sp-10);
+  border-block-start: var(--border-rule);
+}
+
+.zn-wreview[data-variant="card"] {
+  padding: var(--pad-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+}
+
+.zn-wreview__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-8);
+}
+
+.zn-wreview__range {
+  font-size: var(--fs-caption);
+  color: var(--text-faint);
+}
+
+/* Le verdict est la seule phrase de ce bloc, donc la seule chose en corps de
+   texte : tout le reste est étiquette et chiffre. */
+.zn-wreview__verdict {
+  margin: 0;
+  max-inline-size: 54ch;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body-sm);
+}
+
+.zn-wreview__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6) var(--sp-14);
+  margin: 0;
+}
+
+.zn-wreview__fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.zn-wreview__fact dt {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono-kicker);
+  color: var(--text-faint);
+}
+
+.zn-wreview__fact dd {
+  margin: 0;
+  font-size: var(--fs-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-wreview__extra {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding-block-start: var(--sp-8);
+  border-block-start: var(--border-divider);
+}
+
+.zn-wreview__lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-wreview__line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  padding-block: var(--sp-3);
+}
+
+.zn-wreview__what {
+  font-size: var(--fs-body-sm);
+}
+
+.zn-wreview__how {
+  font-size: var(--fs-caption);
+  color: var(--text-muted);
+  text-align: end;
+}
+
+.zn-wreview__note,
+.zn-wreview__pending {
+  margin: 0;
+  font-size: var(--fs-caption);
+  color: var(--text-faint);
+}
+
+/* ── Le panneau de saisie ────────────────────────────────────────────── */
+
+/* Même structure que .zn-pcomplete : une tête, un corps, un pied. Le panneau
+   est monté dans une feuille sur téléphone et dans un dialogue ailleurs, donc
+   il ne fixe ni largeur ni fond, ses deux hôtes les portent. */
+.zn-actlog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.zn-actlog-dialog {
+  max-inline-size: 520px;
+}
+
+.zn-actlog__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.zn-actlog__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+}
+
+.zn-actlog__sub {
+  margin: 0;
+  font-size: var(--fs-caption);
+  color: var(--text-faint);
+}
+
+.zn-actlog__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+  /* Le dialogue de bureau ne doit pas dépasser l'écran sur un portable en
+     paysage : le corps défile, la tête et le pied restent. */
+  max-block-size: min(56vh, 520px);
+  overflow-y: auto;
+}
+
+.zn-actlog__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+}
+
+/* Les précisions sont groupées et nommées facultatives UNE fois : mettre le
+   mot sur chaque étiquette l'aurait fait lire quatre fois. */
+.zn-actlog__optional {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.zn-actlog__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--sp-8);
+}
+
+.zn-actlog__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-6);
+}
+
+/* La suppression part à l'opposé des deux autres : c'est la seule action de ce
+   pied qui ne se rattrape pas, et la coller à Enregistrer est la façon la plus
+   sûre de la faire toucher par erreur. */
+.zn-actlog__delete {
+  margin-inline-end: auto;
+  color: var(--state-danger);
+}

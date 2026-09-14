@@ -43,7 +43,9 @@
     "delete": "Supprimer",
     "saved": "Paramètres vélotaf enregistrés",
     "deleted": "Paramètres vélotaf supprimés",
-    "invalid": "Choisis au moins un jour et une durée valide"
+    "invalid": "Choisis au moins un jour et une durée valide",
+    "logNote": "Ceci est ton habitude, pas ton relevé. Ce que tu as vraiment fait se note dans ton journal, où il compte dans ton volume et dans ton bilan de semaine.",
+    "logLink": "Ouvrir mon journal"
   },
   "base": {
     "title": "Données de base",

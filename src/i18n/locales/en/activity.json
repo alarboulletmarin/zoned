@@ -1,0 +1,110 @@
+{
+  "page": {
+    "title": "Complementary activities",
+    "description": "What you do on top of your plan: bike commutes, trips, sessions outside the plan.",
+    "kicker_one": "{{count}} activity logged",
+    "kicker_other": "{{count}} activities logged",
+    "lede": "Bike commutes, trips and sessions your plan knows nothing about. Log them here, and your volume finally tells the truth.",
+    "add": "Log an activity",
+    "edit": "Edit this activity",
+    "allTime": "All time",
+    "softLimitTitle": "The log is getting long",
+    "softLimit": "You are nearing {{limit}} activities. Nothing is lost, but the list is getting hard to read: consider a backup from the settings."
+  },
+  "empty": {
+    "title": "Nothing extra yet",
+    "description": "If you ride to work, take the bike for an errand, or do a session outside your plan, log it here. A duration is enough."
+  },
+  "discipline": {
+    "cycling": "Cycling",
+    "running": "Running",
+    "swimming": "Swimming",
+    "other": "Other"
+  },
+  "purpose": {
+    "commute": "Commute",
+    "transport": "Trip",
+    "training": "Training"
+  },
+  "purposeHint": {
+    "commute": "The ride to work, the one that comes back every week",
+    "transport": "Any other trip: errands, the station",
+    "training": "A real session, done outside your plan"
+  },
+  "form": {
+    "title": "Log an activity",
+    "editTitle": "Edit activity",
+    "sub": "Only the duration is required. The rest refines, it demands nothing.",
+    "date": "Date",
+    "discipline": "Discipline",
+    "purpose": "Purpose",
+    "duration": "Duration (min)",
+    "optional": "Optional",
+    "distanceKm": "Distance (km)",
+    "distanceMeters": "Distance (m)",
+    "elevation": "Elevation + (m)",
+    "watts": "Average watts",
+    "rpe": "Perceived effort",
+    "note": "Note",
+    "notePlaceholder": "Headwind, loaded bag...",
+    "save": "Save",
+    "delete": "Delete"
+  },
+  "summary": {
+    "time": "Time",
+    "load": "Load",
+    "loadUnit": "duration x effort",
+    "elevation": "Elevation +",
+    "share": "Of volume",
+    "shareFoot": "share of total time",
+    "activities_one": "{{count}} activity",
+    "activities_other": "{{count}} activities",
+    "split": "Including {{travel}} of travel and {{training}} of training."
+  },
+  "review": {
+    "kicker": "Week review",
+    "kickerWeek": "Week {{n}} review",
+    "sessions": "Sessions done",
+    "keySessions": "Key sessions",
+    "km": "Kilometres",
+    "totalTime": "Total time",
+    "avgRpe": "Average effort",
+    "complement_one": "On top of the plan · {{count}} activity",
+    "complement_other": "On top of the plan · {{count}} activities",
+    "travelShare": "Including {{travel}} of travel your plan was not counting.",
+    "pending_one": "One session is still open. Close it so the review can say something.",
+    "pending_other": "{{count}} sessions are still open. Close them so the review can say something.",
+    "verdict": {
+      "empty_one": "Nothing planned, nothing done. A week with no review to make.",
+      "empty_other": "Nothing planned, nothing done. A week with no review to make.",
+      "extras_one": "No plan this week, but one activity logged.",
+      "extras_other": "No plan this week, but {{count}} activities logged.",
+      "pending_one": "One session was planned and nothing is closed: the review is waiting on you.",
+      "pending_other": "{{planned}} sessions were planned and nothing is closed: the review is waiting on you.",
+      "missed_one": "{{done}} of {{planned}} session. The week did not go as planned, and you know why better than this screen does.",
+      "missed_other": "{{done}} of {{planned}} sessions. The week did not go as planned, and you know why better than this screen does.",
+      "partial_one": "{{done}} of {{planned}} session. The week partly holds.",
+      "partial_other": "{{done}} of {{planned}} sessions. The week partly holds.",
+      "solid_one": "{{done}} of {{planned}} session. The week did its job.",
+      "solid_other": "{{done}} of {{planned}} sessions. The week did its job.",
+      "perfect_one": "{{done}} of {{planned}} session. Complete week.",
+      "perfect_other": "{{done}} of {{planned}} sessions. Complete week."
+    }
+  },
+  "cockpit": {
+    "add": "I did something else",
+    "journal": "My log",
+    "reviewLink": "Open the log"
+  },
+  "toast": {
+    "added": "Activity logged",
+    "updated": "Activity updated",
+    "deleted": "Activity deleted",
+    "saveFailed": "Could not save the activity"
+  },
+  "plan": {
+    "title": "Complementary activities",
+    "note": "What you did on top of this plan, within its dates. Time adds to the volume, kilometres stay inside their discipline.",
+    "empty": "No complementary activity within this plan's dates."
+  }
+}

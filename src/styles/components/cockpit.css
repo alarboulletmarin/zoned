@@ -673,3 +673,64 @@
     min-block-size: 560px;
   }
 }
+
+/* ── Ce que la journée a porté en plus ─────────────────────────────────── */
+
+/* Les activités complémentaires du jour choisi : le vélotaf, un déplacement,
+   une séance hors plan. Une ligne par activité, et rien si la journée n'en a
+   pas, un bloc vide dirait qu'il manque quelque chose.
+ *
+ * Ni carte ni cadre, comme tout le reste de cet écran : un filet au-dessus,
+ * du texte, des chiffres en mono à droite. C'est un accusé de réception, pas
+ * une section, donc il se lit en une seconde et ne demande rien. */
+.zn-cockpit__extras {
+  list-style: none;
+  margin: 0;
+  padding-block-start: var(--sp-6);
+  padding-inline: 0;
+  border-block-start: var(--border-divider);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.zn-cockpit__extra {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-cockpit__extra > .zn-mono {
+  font-size: var(--fs-mono);
+  color: var(--text-faint);
+}
+
+/* La saisie est le seul geste de cet écran qui ÉCRIVE quelque chose, donc le
+   seul exit qui soit un bouton et non un lien. Il porte la même marque que le
+   tirage (flèche, pas de souligné) parce que c'est le même registre ; il ne
+   lui faut que la remise à zéro qu'un bouton traîne avec lui. */
+button.zn-cockpit__exit {
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* Le lien vers le journal, en queue de la liste des activités du jour. Un
+   lieu, donc un souligné et pas de flèche, la même grammaire que Ma semaine
+   plus bas. */
+.zn-cockpit__journal {
+  color: var(--text-faint);
+  text-decoration: underline;
+  text-decoration-color: var(--line-divider);
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cockpit__journal:hover {
+  color: var(--accent);
+}

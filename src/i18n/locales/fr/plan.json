@@ -321,6 +321,8 @@
     "weeklyVolumeDesc": "Durée totale estimée par semaine (échauffement + séance + retour au calme)",
     "weeklyKm": "Kilométrage hebdomadaire (km)",
     "weeklyKmDesc": "Kilomètres planifiés pour chaque semaine",
+    "complementary": "Activités complémentaires",
+    "complementaryNote": "Ce que tu as fait en plus de ce plan, sur ses dates. Le temps s'ajoute au volume ; les kilomètres restent dans leur discipline.",
     "sessionTypes": "Types de séance",
     "zoneDistribution": "Répartition par zone",
     "targetSystems": "Systèmes ciblés",

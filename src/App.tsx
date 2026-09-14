@@ -97,6 +97,7 @@ const RaceSimulatorPage = lazyPage(() => import("@/pages/RaceSimulatorPage").the
 const CompareHubPage = lazyPage(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
 const CompareDetailPage = lazyPage(() => import("@/pages/CompareDetailPage").then(m => ({ default: m.CompareDetailPage })));
 const RunnerProfilePage = lazyPage(() => import("@/pages/RunnerProfilePage").then(m => ({ default: m.RunnerProfilePage })));
+const ActivitiesPage = lazyPage(() => import("@/pages/ActivitiesPage").then(m => ({ default: m.ActivitiesPage })));
 const RouteGeneratorPage = lazyPage(() => import("@/pages/RouteGeneratorPage").then(m => ({ default: m.RouteGeneratorPage })));
 const MyRoutesPage = lazyPage(() => import("@/pages/MyRoutesPage").then(m => ({ default: m.MyRoutesPage })));
 const RouteDetailPage = lazyPage(() => import("@/pages/RouteDetailPage").then(m => ({ default: m.RouteDetailPage })));
@@ -315,6 +316,7 @@ function App() {
                           <Route path="/calculators/what-if" element={<WhatIfPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/profile" element={<RunnerProfilePage />} />
+                          <Route path="/activities" element={<ActivitiesPage />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
                           <Route path="/quiz" element={<Navigate to="/library/draw" replace />} />
                           <Route path="/contribute" element={<ContributePage />} />

@@ -492,6 +492,16 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     keywords: ["piste", "track", "stade", "athletisme", "400m"],
   },
   {
+    id: "activities",
+    section: "page",
+    title: "Activités complémentaires",
+    titleEn: "Complementary activities",
+    subtitle: "Ton vélotaf et tes séances hors plan",
+    subtitleEn: "Your bike commutes and off-plan sessions",
+    url: "/activities",
+    keywords: ["velotaf", "commute", "activite", "activity", "journal", "log", "deplacement", "velo"],
+  },
+  {
     id: "my-routes",
     section: "page",
     title: "Mes parcours",
