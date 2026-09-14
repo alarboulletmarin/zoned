@@ -375,6 +375,13 @@ textarea.zn-pfield {
   gap: var(--sp-5);
 }
 
+/* Un bouton dans ce bloc ne prend que sa largeur : dans une colonne flex il
+   s'étirerait sur toute la carte et se lirait comme l'appel primaire de
+   l'écran, qui appartient à Exporter. */
+.zn-pstats__block > button {
+  align-self: flex-start;
+}
+
 .zn-pstats__title {
   font-family: var(--font-mono);
   font-size: var(--fs-mono-sm);

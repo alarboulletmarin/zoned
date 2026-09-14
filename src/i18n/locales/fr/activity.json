@@ -96,6 +96,7 @@
     "add": "J'ai fait autre chose",
     "journal": "Mon journal",
     "reviewLink": "Voir le journal",
+    "weekExtra": "{{time}} en plus du plan cette semaine",
     "dayExtra": "{{minutes}} en plus du plan"
   },
   "toast": {

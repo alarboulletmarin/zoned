@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, memo } from "react";
 import { sessionColor } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
 import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { StatBlock } from "@/components/domain/StatBlock";
@@ -18,7 +19,7 @@ import { useActivities } from "@/hooks/useActivities";
 import { activitiesBetween } from "@/lib/activityStorage";
 import { complementaryShare, summarizeActivities } from "@/lib/activityStats";
 import { getPlanMonday, getSessionCalendarDate, isoDateOnly } from "@/lib/planDates";
-import { ChevronDown } from "@/components/icons";
+import { ChevronDown, Plus } from "@/components/icons";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 
@@ -104,12 +105,19 @@ interface PlanStatsSectionProps {
   currentWeek?: number;
   /** Sous un onglet, la divulgation est déjà faite : ni bascule, ni titre. */
   collapsible?: boolean;
+  /**
+   * Ouvrir la saisie d'une activité complémentaire. Absent, le bloc du
+   * complément reste en LECTURE seule et disparaît quand il est vide : c'est
+   * le cas de l'aperçu d'un plan pré-construit, où le plan n'est pas le sien
+   * et où proposer d'y noter son vélotaf n'aurait aucun sens.
+   */
+  onLogActivity?: () => void;
 }
 
 // ── Component ────────────────────────────────────────────────────────
 
-export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek, collapsible = true }: PlanStatsSectionProps) {
-  const { t } = useTranslation("plan");
+export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek, collapsible = true, onLogActivity }: PlanStatsSectionProps) {
+  const { t } = useTranslation(["plan", "activity"]);
   const pick = usePickLang();
   const pickLocale = usePickLocale();
   const stats = useMemo(() => computePlanStats(plan), [plan]);
@@ -595,17 +603,39 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         )}
 
         {/* ── Activités complémentaires ─────────────────────────────
-            Le bloc ne s'affiche que s'il a quelque chose à dire : une section
-            vide sur l'écran de quelqu'un qui ne note rien laisserait croire
+            Le bloc ne disparaissait QUE parce qu'il était vide, ce qui est la
+            bonne règle pour une donnée et la mauvaise pour une porte : cet
+            écran est celui où l'on vient constater que son volume ne colle
+            pas, et il ne disait nulle part que le vélotaf se note. Quand la
+            saisie est offerte, le bloc reste donc là, et l'invitation prend
+            la place que les chiffres n'occupent pas encore.
+
+            En lecture seule, en revanche, rien ne change : une section vide
+            sur l'aperçu d'un plan qui n'est pas le sien laisserait croire
             qu'il manque une donnée. */}
-        {activitySummary.count > 0 && (
+        {(activitySummary.count > 0 || onLogActivity) && (
           <div className="zn-pstats__block">
-            <ComplementarySummary
-              summary={activitySummary}
-              share={complementaryShare(stats.totalDurationMin, activitySummary.minutes)}
-              title={t("stats.complementary")}
-            />
-            <p className="zn-pstats__note">{t("stats.complementaryNote")}</p>
+            {activitySummary.count > 0 ? (
+              <>
+                <ComplementarySummary
+                  summary={activitySummary}
+                  share={complementaryShare(stats.totalDurationMin, activitySummary.minutes)}
+                  title={t("stats.complementary")}
+                />
+                <p className="zn-pstats__note">{t("stats.complementaryNote")}</p>
+              </>
+            ) : (
+              <>
+                <span className="zn-kicker zn-kicker--xs">{t("stats.complementary")}</span>
+                <p className="zn-pstats__note">{t("stats.complementaryEmpty")}</p>
+              </>
+            )}
+            {onLogActivity && (
+              <Button type="button" variant="outline" size="sm" onClick={onLogActivity}>
+                <Plus size={16} />
+                {t("activity:page.add")}
+              </Button>
+            )}
           </div>
         )}
 

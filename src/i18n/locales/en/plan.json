@@ -322,6 +322,7 @@
     "weeklyKm": "Weekly mileage (km)",
     "weeklyKmDesc": "Planned kilometers for each week",
     "complementary": "Complementary activities",
+    "complementaryEmpty": "Nothing logged within this plan's dates. Bike commutes, trips and sessions outside the plan count towards your volume, as soon as you log them.",
     "complementaryNote": "What you did on top of this plan, within its dates. Time adds to the volume; kilometres stay inside their discipline.",
     "sessionTypes": "Session types",
     "zoneDistribution": "Zone distribution",
