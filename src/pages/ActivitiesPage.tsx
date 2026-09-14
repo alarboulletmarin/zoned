@@ -1,7 +1,6 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import { useMemo, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 import {
   Activity as ActivityIcon,
@@ -20,20 +19,14 @@ import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
 import { ComplementarySummary } from "@/components/domain/ComplementarySummary";
 import { WeekReviewPanel } from "@/components/domain/WeekReviewPanel";
 import { formatDurationMinutes } from "@/components/visualization";
-import { useActivities } from "@/hooks/useActivities";
+import { useActivityLog } from "@/hooks/useActivityLog";
 import { usePlans } from "@/hooks/usePlans";
 import { ACTIVITY_STORAGE_SOFT_LIMIT, activitiesBetween } from "@/lib/activityStorage";
 import { summarizeActivities } from "@/lib/activityStats";
-import { loadCommutePattern } from "@/lib/athleteProfile";
-import { isoDateOnly } from "@/lib/planDates";
 import { pickTodayFocus } from "@/lib/cockpit";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { buildWeekReview, calendarWeekRange, planWeekRange } from "@/lib/weekReview";
-import {
-  ACTIVITY_DISCIPLINE_META,
-  type ActivityDraft,
-  type ComplementaryActivity,
-} from "@/types/activity";
+import { ACTIVITY_DISCIPLINE_META, type ComplementaryActivity } from "@/types/activity";
 
 /**
  * Le journal des activités complémentaires.
@@ -64,7 +57,8 @@ const DISCIPLINE_ICONS = {
 export function ActivitiesPage() {
   const { t } = useTranslation(["activity", "common"]);
   const isEn = useIsEnglish();
-  const { activities, add, update, remove } = useActivities();
+  const log = useActivityLog();
+  const activities = log.activities;
   const { plans } = usePlans();
   const navigate = useNavigate();
   const location = useLocation();
@@ -86,20 +80,7 @@ export function ActivitiesPage() {
      de navigation ; toute autre valeur veut dire qu'un pas a été fait ici. */
   const canGoBack = location.key !== "default";
 
-  const [panelOpen, setPanelOpen] = useState(false);
-  const [editing, setEditing] = useState<ComplementaryActivity | null>(null);
-
   const today = useMemo(() => new Date(), []);
-  const todayIso = useMemo(() => isoDateOnly(today), [today]);
-
-  /* Le motif récurrent du profil pré-remplit la saisie. Il dit ce qu'on fait
-     D'HABITUDE, ce qui est exactement la bonne valeur par défaut d'un
-     formulaire, et n'a jamais valeur de relevé. */
-  const suggestion = useMemo(() => {
-    const pattern = loadCommutePattern();
-    if (!pattern) return null;
-    return { discipline: pattern.discipline, durationMin: pattern.durationMin };
-  }, []);
 
   /* La semaine à bilanter : celle du plan en cours quand il y en a un, la
      semaine calendaire sinon. Le vélotaf n'attend pas d'avoir un plan. */
@@ -147,34 +128,6 @@ export function ActivitiesPage() {
     }));
   }, [activities, isEn]);
 
-  const openNew = () => {
-    setEditing(null);
-    setPanelOpen(true);
-  };
-
-  const openEdit = (activity: ComplementaryActivity) => {
-    setEditing(activity);
-    setPanelOpen(true);
-  };
-
-  const handleSave = (draft: ActivityDraft) => {
-    const saved = editing ? update(editing.id, draft) : add(draft);
-    if (!saved) {
-      toast.error(t("activity:toast.saveFailed"));
-      return;
-    }
-    setPanelOpen(false);
-    setEditing(null);
-    toast.success(t(editing ? "activity:toast.updated" : "activity:toast.added"));
-  };
-
-  const handleDelete = (id: string) => {
-    if (!remove(id)) return;
-    setPanelOpen(false);
-    setEditing(null);
-    toast.success(t("activity:toast.deleted"));
-  };
-
   return (
     <>
       <SEOHead
@@ -213,7 +166,7 @@ export function ActivitiesPage() {
               <p className="zn-body zn-body--lead zn-acts__lede">{t("activity:page.lede")}</p>
             </div>
 
-            <Button onClick={openNew}>
+            <Button onClick={() => log.logOn()}>
               <Plus size={17} />
               {t("activity:page.add")}
             </Button>
@@ -245,7 +198,7 @@ export function ActivitiesPage() {
               title={t("activity:empty.title")}
               description={t("activity:empty.description")}
               action={
-                <Button onClick={openNew}>
+                <Button onClick={() => log.logOn()}>
                   <Plus size={17} />
                   {t("activity:page.add")}
                 </Button>
@@ -280,7 +233,7 @@ export function ActivitiesPage() {
                         <button
                           type="button"
                           className="zn-acts__row"
-                          onClick={() => openEdit(activity)}
+                          onClick={() => log.edit(activity)}
                         >
                           <span className="zn-acts__date zn-mono">
                             {isEn ? `${m}/${d}` : `${d}/${m}`}
@@ -308,19 +261,7 @@ export function ActivitiesPage() {
         </section>
       </div>
 
-      <ActivityLogPanel
-        open={panelOpen}
-        onOpenChange={(open) => {
-          setPanelOpen(open);
-          if (!open) setEditing(null);
-        }}
-        defaultDate={todayIso}
-        activity={editing}
-        suggestion={suggestion}
-        history={activities}
-        onSave={handleSave}
-        onDelete={handleDelete}
-      />
+      <ActivityLogPanel {...log.panel} />
     </>
   );
 }

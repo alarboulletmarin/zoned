@@ -36,10 +36,9 @@ import {
 import { updateSessionCompletion, type SessionCompletionData } from "@/lib/planStorage";
 import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
 import { WeekReviewPanel } from "@/components/domain/WeekReviewPanel";
-import { useActivities } from "@/hooks/useActivities";
+import { useActivityLog } from "@/hooks/useActivityLog";
 import { activitiesBetween, activitiesOn } from "@/lib/activityStorage";
 import { minutesByWeekday } from "@/lib/activityStats";
-import { loadCommutePattern } from "@/lib/athleteProfile";
 import { isoDateOnly } from "@/lib/planDates";
 import {
   buildWeekReview,
@@ -47,7 +46,6 @@ import {
   hasSomethingToReview,
   planWeekRange,
 } from "@/lib/weekReview";
-import type { ActivityDraft } from "@/types/activity";
 import { getWorkoutPhaseSteps, summarizeWorkoutSteps } from "@/lib/workoutStructure";
 import { formatPace } from "@/lib/planGenerator/paceEngine";
 import {
@@ -320,8 +318,8 @@ export function TodayPage() {
      le vélotaf se note, pas dans un formulaire qu'il faudrait aller
      chercher. Le geste tient en trois taps, et il vise le JOUR CHOISI de la
      bande, pas aujourd'hui : on note souvent la veille au soir. */
-  const { activities, add: addActivity } = useActivities();
-  const [logOpen, setLogOpen] = useState(false);
+  const log = useActivityLog();
+  const activities = log.activities;
 
   const dayIso = useMemo(
     () => isoDateOnly(focusDayDate(focus, day, now)),
@@ -332,16 +330,6 @@ export function TodayPage() {
     () => activitiesOn(activities, dayIso),
     [activities, dayIso],
   );
-
-  /* Le motif récurrent du profil pré-remplit la saisie : il dit ce qu'on fait
-     d'habitude, ce qui est la bonne valeur par défaut d'un formulaire et n'a
-     jamais valeur de relevé. Lu une fois par montage, il ne change pas
-     pendant qu'on regarde l'écran. */
-  const suggestion = useMemo(() => {
-    const pattern = loadCommutePattern();
-    if (!pattern) return null;
-    return { discipline: pattern.discipline, durationMin: pattern.durationMin };
-  }, []);
 
   /* ── Le bilan du dimanche ─────────────────────────────────────────────
      Il n'a pas d'écran à lui et n'en veut pas : la bande CHOISIT déjà un
@@ -380,18 +368,6 @@ export function TodayPage() {
   }, [focus.week.length, activities, review.range.from, review.range.to]);
 
   const showReview = day === 6 && hasSomethingToReview(review);
-
-  const handleLog = useCallback(
-    (draft: ActivityDraft) => {
-      if (!addActivity(draft)) {
-        toast.error(t("activity:toast.saveFailed"));
-        return;
-      }
-      setLogOpen(false);
-      toast.success(t("activity:toast.added"));
-    },
-    [addActivity, t],
-  );
 
   return (
     <div className="zn-cockpit">
@@ -566,7 +542,7 @@ export function TodayPage() {
                 type="button"
                 className="zn-cockpit__exit"
                 data-role="move"
-                onClick={() => setLogOpen(true)}
+                onClick={() => log.logOn(dayIso)}
               >
                 {t("activity:cockpit.add")}
                 <ArrowRight />
@@ -583,14 +559,7 @@ export function TodayPage() {
         </section>
       )}
 
-      <ActivityLogPanel
-        open={logOpen}
-        onOpenChange={setLogOpen}
-        defaultDate={dayIso}
-        suggestion={suggestion}
-        history={activities}
-        onSave={handleLog}
-      />
+      <ActivityLogPanel {...log.panel} />
 
       {/* La figure ferme l'écran, en dernier dans l'ordre de lecture : elle ne
           retarde jamais la réponse. C'est la figure de la porte Aujourd'hui

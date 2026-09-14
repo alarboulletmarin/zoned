@@ -105,6 +105,40 @@ partout où un écran dit déplacement (`isTravel`). Ils sont quand même
 distingués parce que le premier se répète, donc se pré-remplit, et pas le
 second.
 
+## Par où l'on note, et pourquoi c'est une seule saisie
+
+Trois portes, et elles ne peuvent pas diverger : elles ouvrent le MÊME panneau
+(`ActivityLogPanel`), branché par le MÊME hameçon (`useActivityLog`).
+
+| Porte | Où | Le jour visé |
+| --- | --- | --- |
+| `J'ai fait autre chose` | cockpit, sous la bande des sept jours | le jour CHOISI de la bande, pas aujourd'hui : on note souvent la veille au soir |
+| `J'ai fait autre chose` | page du plan, bloc de la semaine en cours | aujourd'hui quand la semaine en vue est celle qu'on vit, son lundi sinon |
+| `Ajouter une activité` | page du plan (onglet statistiques) et journal | aujourd'hui |
+
+Le hameçon porte tout ce qui entoure la saisie : l'ouverture, le jour visé, la
+distinction entre création et correction, l'écriture, le toast, la fermeture,
+et la lecture du motif récurrent qui pré-remplit. Une quatrième copie de ce
+travail aurait fini par demander autre chose que les trois premières.
+
+### Une seule liste en mémoire
+
+`useActivities` tient un magasin de MODULE derrière `useSyncExternalStore`, et
+non un état par composant. La page d'un plan en porte deux lecteurs, le bloc de
+la semaine qui saisit et le bloc de statistiques qui affiche : avec un état par
+composant, noter un trajet depuis le premier n'aurait pas bougé le second, et
+l'écran aurait dit à la fois 1 h 25 et rien du tout.
+
+### Une porte ne disparaît pas parce qu'elle est vide
+
+Le bloc du complément, sur l'onglet statistiques, ne s'affichait que s'il avait
+des chiffres. C'est la bonne règle pour une donnée et la mauvaise pour une
+porte : c'est précisément l'écran où l'on vient constater que son volume ne
+colle pas, et il ne disait nulle part que le vélotaf se note. Quand la saisie
+est offerte, le bloc reste, et l'invitation prend la place que les chiffres
+n'occupent pas encore. En lecture seule (l'aperçu d'un plan pré-construit, qui
+n'est pas le sien), il disparaît comme avant.
+
 ## Ce qui s'additionne, et ce qui ne s'additionne pas
 
 Une règle porte tout `activityStats.ts` :

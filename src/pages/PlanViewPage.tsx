@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
   ArrowLeftRight,
+  ArrowRight,
   Calendar,
   CalendarOff,
   Clock,
@@ -48,6 +49,10 @@ import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { useIsEnglish, usePickLang, usePickLocale, formatDate, formatDateShort, formatDateMedium, formatWeekday } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
+import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
+import { useActivityLog } from "@/hooks/useActivityLog";
+import { activitiesBetween } from "@/lib/activityStorage";
+import { planWeekRange } from "@/lib/weekReview";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   DropdownMenu,
@@ -75,7 +80,7 @@ import { UnavailabilityManager } from "@/components/domain/UnavailabilityManager
 import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDialog";
 import { autoReschedule } from "@/lib/planGenerator/reschedule";
 import { updateUnavailabilities, undoLastChange, withUndoSnapshot } from "@/lib/planStorage";
-import { getPlanMonday, dateToWeekAndDay } from "@/lib/planDates";
+import { getPlanMonday, dateToWeekAndDay, isoDateOnly } from "@/lib/planDates";
 import type { AutoChange, Unavailability } from "@/types/plan";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
@@ -128,7 +133,7 @@ export function PlanViewPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation("plan");
+  const { t } = useTranslation(["plan", "activity"]);
   const isEn = useIsEnglish();
   const pick = usePickLang();
   const pickLocale = usePickLocale();
@@ -224,6 +229,14 @@ export function PlanViewPage() {
     }
     return currentWeek;
   }, [weekFromUrl, currentWeek, plan]);
+
+  /* ── Ce que la semaine porte EN PLUS du plan ───────────────────────────
+     Le vélotaf ne vit pas dans le plan (il lui survit, et il existe sans lui,
+     cf. `types/activity.ts`), mais il se NOTE là où l'on regarde sa semaine,
+     et jusqu'ici cette page ne savait que l'afficher. Le hameçon porte tout
+     ce qui entoure la saisie, pour que la page du plan et le cockpit ne
+     puissent pas diverger. */
+  const log = useActivityLog();
 
   const parsedPlanStart = useMemo(() => {
     if (!plan) return null;
@@ -890,6 +903,18 @@ export function PlanViewPage() {
       ) ?? null
     : null;
 
+  /* Les activités complémentaires tombées dans la semaine en vue. Calcul nu
+     et non mémoïsé, comme `focusWeekRange` juste dessous : les hameçons de
+     cette page sont tous posés avant ses deux sorties anticipées, et filtrer
+     quelques centaines de dates coûte moins qu'une règle enfreinte. */
+  const focusWeekActivities = focusWeek
+    ? (() => {
+        const range = planWeekRange(plan, focusWeekNumber);
+        return activitiesBetween(log.activities, range.from, range.to);
+      })()
+    : [];
+  const focusWeekExtraMin = focusWeekActivities.reduce((sum, a) => sum + a.durationMin, 0);
+
   // La plage de la semaine, par Intl, pas de table de mois écrite à la main.
   const focusWeekRange = (() => {
     if (!parsedPlanStart) return null;
@@ -1183,6 +1208,40 @@ export function PlanViewPage() {
                   </span>
                 </p>
               )}
+
+              {/* Ce que la semaine a porté en plus du plan, et la porte pour en
+                  ajouter. Les deux vont ensemble : un bouton qui écrit sans
+                  que rien ne bouge à l'écran n'a pas de fin perceptible, et le
+                  chiffre seul serait une statistique de plus.
+
+                  La saisie vise AUJOURD'HUI quand la semaine en vue est celle
+                  qu'on vit, et le lundi de la semaine sinon : on ne note pas
+                  une sortie du 14 septembre sur une carte qui parle du 5
+                  octobre, et le formulaire garde de toute façon son champ de
+                  date. */}
+              <p className="zn-weeknow__extra">
+                {focusWeekExtraMin > 0 && (
+                  <span className="zn-mono zn-weeknow__extra-time">
+                    {t("activity:cockpit.weekExtra", {
+                      time: formatDurationMinutes(focusWeekExtraMin),
+                    })}
+                  </span>
+                )}
+                <button
+                  type="button"
+                  className="zn-weeknow__log"
+                  onClick={() =>
+                    log.logOn(
+                      isFocusCurrent
+                        ? isoDateOnly(new Date())
+                        : planWeekRange(plan, focusWeekNumber).from,
+                    )
+                  }
+                >
+                  {t("activity:cockpit.add")}
+                  <ArrowRight />
+                </button>
+              </p>
             </section>
           )}
         </section>
@@ -1196,7 +1255,12 @@ export function PlanViewPage() {
           </TabsList>
 
           <TabsContent value="stats">
-            <PlanStatsSection plan={plan} currentWeek={currentWeek} collapsible={false} />
+            <PlanStatsSection
+              plan={plan}
+              currentWeek={currentWeek}
+              collapsible={false}
+              onLogActivity={() => log.logOn()}
+            />
           </TabsContent>
 
           <TabsContent value="programme" className="zn-planview__programme">
@@ -2366,6 +2430,11 @@ export function PlanViewPage() {
           plannedSession={plannedSubstituteSession}
           onSelect={handleSubstituteSession}
         />
+
+        {/* Noter une activité complémentaire. Le MÊME panneau que le cockpit
+            et que le journal : trois portes, une seule saisie, donc elles ne
+            peuvent pas se mettre à demander des choses différentes. */}
+        <ActivityLogPanel {...log.panel} />
       </div>
 
       {/* Session completion panel, popover on desktop, sheet on mobile */}

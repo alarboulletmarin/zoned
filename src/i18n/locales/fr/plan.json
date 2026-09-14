@@ -322,6 +322,7 @@
     "weeklyKm": "Kilométrage hebdomadaire (km)",
     "weeklyKmDesc": "Kilomètres planifiés pour chaque semaine",
     "complementary": "Activités complémentaires",
+    "complementaryEmpty": "Rien de noté sur les dates de ce plan. Le vélotaf, les déplacements et les séances hors plan comptent dans ton volume, dès que tu les notes.",
     "complementaryNote": "Ce que tu as fait en plus de ce plan, sur ses dates. Le temps s'ajoute au volume ; les kilomètres restent dans leur discipline.",
     "sessionTypes": "Types de séance",
     "zoneDistribution": "Répartition par zone",
