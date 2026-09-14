@@ -426,9 +426,9 @@
 .zn-weeknow__extra {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--sp-3) var(--sp-8);
+  gap: var(--sp-5) var(--sp-8);
   margin: 0;
   padding-block-start: var(--sp-8);
   border-block-start: var(--border-divider);
@@ -438,44 +438,6 @@
   font-size: var(--fs-mono-sm);
   letter-spacing: var(--ls-mono);
   color: var(--text-muted);
-}
-
-/* La même marque que la sortie du cockpit : une flèche, pas de souligné.
-   C'est un GESTE, il n'emmène nulle part, il ouvre la saisie sur place. */
-.zn-weeknow__log {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-3);
-  padding: 0;
-
-  font: var(--type-body-sm);
-  color: var(--text-body);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: color var(--dur-fast) var(--ease-out);
-}
-
-.zn-weeknow__log > svg {
-  inline-size: 15px;
-  block-size: 15px;
-  flex: none;
-  color: var(--text-faint);
-  transition: color var(--dur-fast) var(--ease-out);
-}
-
-.zn-weeknow__log:hover {
-  color: var(--accent);
-}
-
-.zn-weeknow__log:hover > svg {
-  color: currentColor;
-}
-
-@media (pointer: coarse) {
-  .zn-weeknow__log {
-    min-block-size: var(--hit-min);
-  }
 }
 
 /* ── the phase ribbon ─────────────────────────────────────────────────── */

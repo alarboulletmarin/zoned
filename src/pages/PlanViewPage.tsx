@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
   ArrowLeftRight,
-  ArrowRight,
   Calendar,
   CalendarOff,
   Clock,
@@ -1227,9 +1226,17 @@ export function PlanViewPage() {
                     })}
                   </span>
                 )}
-                <button
+                {/* Un BOUTON, encadré, et un plus. Ce contrôle portait le
+                    texte-plus-flèche des sorties du cockpit, et la flèche y
+                    promet une page : celle-ci n'emmène nulle part, elle ouvre
+                    un panneau sur place et écrit. Le cadre dit contrôle, le
+                    plus dit ajouter, et c'est le même plus que le bouton du
+                    journal. Les mots restent à la première personne, ils
+                    répondent à la séance du jour juste au-dessus. */}
+                <Button
                   type="button"
-                  className="zn-weeknow__log"
+                  variant="outline"
+                  size="sm"
                   onClick={() =>
                     log.logOn(
                       isFocusCurrent
@@ -1238,9 +1245,9 @@ export function PlanViewPage() {
                     )
                   }
                 >
+                  <Plus size={16} />
                   {t("activity:cockpit.add")}
-                  <ArrowRight />
-                </button>
+                </Button>
               </p>
             </section>
           )}

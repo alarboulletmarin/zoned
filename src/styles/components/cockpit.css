@@ -655,16 +655,17 @@
   padding-block-start: var(--sp-4);
 }
 
-/* Les deux registres se distinguent par la MARQUE, pas par le poids. Le
-   tirage porte une flèche et pas de souligné : c'est un geste, il emmène
-   ailleurs. Ma semaine porte un souligné et pas de flèche : c'est un lieu.
-   Au même poids typographique, on ne savait pas lequel des deux allait faire
-   quelque chose au plan en cours. Aucun des deux ne le fait, et c'est
-   justement ce que la forme doit dire.
+/* Trois registres, trois marques, et la marque seule les distingue : au même
+   poids typographique, on ne savait pas lequel allait faire quelque chose au
+   plan en cours.
 
-   Le tirage n'écrit RIEN : /library/draw ne touche ni le plan ni
-   localStorage, il tire dans la bibliothèque et navigue. Il n'y a donc pas
-   d'annulation à prévoir, seulement une affordance à rendre lisible. */
+   - Le tirage porte une flèche et pas de souligné : c'est un geste, et il
+     emmène ailleurs. Il n'écrit RIEN, /library/draw ne touche ni le plan ni
+     localStorage, il tire dans la bibliothèque et navigue.
+   - Ma semaine porte un souligné et pas de flèche : c'est un lieu.
+   - La saisie porte un CADRE et un plus, voir .zn-cockpit__log. Elle
+     n'emmène nulle part et elle écrit : les deux marques de texte lui
+     mentaient, l'une en promettant une page, l'autre un lieu. */
 .zn-cockpit__exit {
   display: inline-flex;
   align-items: center;
@@ -699,6 +700,15 @@
 
 .zn-cockpit__exit:hover > svg {
   color: currentColor;
+}
+
+/* La saisie, seule chose de cet écran qui écrive quelque chose. Elle sort du
+   registre du texte : un bouton encadré, et le même plus que le bouton du
+   journal. Elle garde sa place en tête de la rangée, parce qu'elle est le
+   geste du jour, et la marge sous elle la sépare des deux liens, qui eux
+   emmènent vraiment ailleurs. */
+.zn-cockpit__log {
+  margin-block-end: var(--sp-3);
 }
 
 /* Le lien doit rester atteignable au doigt même en ligne de texte. */
