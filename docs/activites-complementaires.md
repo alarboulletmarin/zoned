@@ -117,6 +117,29 @@ Une règle porte tout `activityStats.ts` :
   fonction qui en fasse un total** ;
 - **le DÉNIVELÉ s'additionne** : un mètre monté est un mètre monté.
 
+### Et la règle doit se VOIR, sinon la carte a l'air de se contredire
+
+La première version du bilan de semaine appliquait la règle sans la dire, et
+affichait donc, l'un au-dessus de l'autre, `KM 0 / 56` et une ligne
+`Vélo 1h25 · 26,6 km`. Les deux chiffres étaient justes. Le premier ne disait
+simplement pas qu'il comptait des kilomètres de COURSE seuls
+(`plannedSessionKm` rend zéro dès qu'une séance n'en est pas), et rien ne
+disait pourquoi les kilomètres de vélo n'y entraient pas. Un écran qui a l'air
+de se contredire n'est pas cru sur le reste.
+
+Deux corrections, et aucune n'est une phrase :
+
+1. **Le fait porte son sport**, `km course`.
+2. **Le détail devient un tableau du volume de la semaine**
+   (`WeekReview.byDiscipline`), séances du plan comprises : une ligne par
+   sport, une colonne par grandeur, le plus de temps d'abord. Les séances et
+   les activités d'un MÊME sport s'y additionnent, puisque c'est exactement ce
+   que la règle autorise.
+
+Le tableau **n'a pas de ligne de total**, et c'est le propos : le temps total
+est déjà dans les faits au-dessus, et les kilomètres ne se totalisent nulle
+part. La règle est dans la forme plutôt que dans une note de bas de page.
+
 ## La charge : session-RPE, et rien d'inventé
 
 `charge = durée x RPE` (session-RPE, Foster 2001). C'est la méthode que le

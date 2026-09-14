@@ -47,6 +47,23 @@ import type { WeekReview } from "@/lib/weekReview";
  * Aucun vermillon ici. L'accent de l'écran est pris par son appel primaire,
  * voir le détail sur le cockpit, ajouter une activité sur le journal ; un
  * repère en accent en ferait un second, et deux accents ne font plus d'accent.
+ *
+ * ── Le tableau des sports ────────────────────────────────────────────────
+ *
+ * La carte se contredisait : elle affichait KM 0 / 56 juste au-dessus d'une
+ * ligne portant 26,6 km de vélo. Les deux chiffres étaient vrais, le premier
+ * ne disait simplement pas qu'il comptait des kilomètres de COURSE, et rien
+ * ne disait pourquoi les kilomètres de vélo n'y entraient pas.
+ *
+ * Deux corrections, et aucune n'est une phrase. Le fait porte son sport, km
+ * course. Et le détail du complément, qui était déjà une demi-liste, devient
+ * un vrai TABLEAU du volume de la semaine, séances du plan comprises : une
+ * ligne par sport, une colonne par grandeur. Les colonnes alignent les
+ * chiffres, donc elles se comparent d'un coup d'oeil au lieu d'être lues une à
+ * une, et surtout le tableau n'a PAS de ligne de total : le temps total est
+ * déjà dans les faits au-dessus, et les kilomètres ne se totalisent nulle part
+ * parce qu'ils ne s'additionnent pas d'un sport à l'autre. La règle est dans
+ * la forme, elle n'a pas à être écrite.
  */
 
 interface WeekReviewPanelProps {
@@ -100,6 +117,28 @@ export function WeekReviewPanel({ review, variant = "bare" }: WeekReviewPanelPro
   /* La barre n'a rien à dessiner quand rien n'a eu lieu ET que rien n'était
      prévu : un contour vide est un cadre vide, et cette app n'en pose pas. */
   const showBar = review.plannedMinutes > 0 || review.doneMinutes > 0 || extra > 0;
+
+  /* Une colonne vide ne se dessine pas. Quelqu'un qui ne note jamais ses
+     kilomètres aurait eu un en-tête KM sur une colonne de blancs, c'est-à-dire
+     une case à remplir déguisée en donnée manquante. */
+  const anyDistance = review.byDiscipline.some((v) => v.distanceKm > 0);
+  const anyElevation = review.byDiscipline.some((v) => v.elevationGainM > 0);
+
+  /* Le tableau se dessine dès qu'il dit quelque chose que les faits au-dessus
+     ne disent pas déjà. Le seul cas où il ne le fait pas est celui du coureur
+     qui n'a fait que courir, à plat, avec un plan : TOTAL et KM COURSE portent
+     exactement ses deux chiffres, et une grille d'une ligne qui les répète est
+     un cadre autour d'une phrase.
+
+     Dès qu'il y a un second sport, en revanche, il devient le SEUL endroit où
+     les kilomètres de ce sport existent, puisque KM COURSE n'en compte pas et
+     n'a pas à en compter. C'est la question à laquelle cette carte répondait
+     mal. */
+  const runningOnly =
+    review.byDiscipline.length === 1 && review.byDiscipline[0].discipline === "running";
+  const showTable =
+    review.byDiscipline.length > 0 &&
+    !(runningOnly && review.plannedKm > 0 && !anyElevation);
 
   /* Un segment de zéro n'a pas de légende : une semaine dont rien n'est clos
      affichait 0s fait à côté d'une pastille verte qui ne peignait rien. On ne
@@ -211,9 +250,13 @@ export function WeekReviewPanel({ review, variant = "bare" }: WeekReviewPanelPro
             </dd>
           </div>
         )}
+        {/* Le km porte son SPORT. `plannedSessionKm` rend zéro dès qu'une
+            séance n'est pas de la course, donc ce rapport n'a jamais compté
+            que des kilomètres courus : sans le mot, il a l'air de contredire
+            la ligne vélo du tableau juste en dessous. */}
         {review.plannedKm > 0 && (
           <div className="zn-wreview__fact">
-            <dt>{t("review.km")}</dt>
+            <dt>{t("review.kmRun")}</dt>
             <dd>
               {review.doneKm}/{review.plannedKm}
             </dd>
@@ -233,32 +276,56 @@ export function WeekReviewPanel({ review, variant = "bare" }: WeekReviewPanelPro
         )}
       </dl>
 
-      {/* Le détail du complément, une ligne par discipline. Il n'apparaît que
-          s'il a eu lieu : une ligne 0 activité sur l'écran de quelqu'un qui
-          n'en fait pas est du bruit, et laisse croire qu'il manque quelque
-          chose. */}
-      {review.activities.count > 0 && (
-        <ul className="zn-wreview__lines">
-          {review.activities.byDiscipline.map((volume) => {
-            const meta = ACTIVITY_DISCIPLINE_META[volume.discipline];
-            const parts = [formatDurationMinutes(volume.minutes)];
-            if (volume.distanceKm > 0) {
-              parts.push(
-                meta.distance === "meters"
-                  ? `${Math.round(volume.distanceKm * 1000)} m`
-                  : `${volume.distanceKm} km`,
+      {/* Le volume, sport par sport. Une seule ligne ne fait pas un tableau :
+          un runner qui n'a rien fait d'autre lit mieux sa semaine dans les
+          faits au-dessus, qui portent déjà ce chiffre. */}
+      {showTable && (
+        <table className="zn-wreview__table">
+          <thead>
+            <tr>
+              <th scope="col">{t("review.sport")}</th>
+              <th scope="col">{t("review.colTime")}</th>
+              {anyDistance && <th scope="col">{t("review.colDistance")}</th>}
+              {anyElevation && <th scope="col">{t("review.colElevation")}</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {review.byDiscipline.map((volume) => {
+              const meta = ACTIVITY_DISCIPLINE_META[volume.discipline];
+              return (
+                <tr key={volume.discipline}>
+                  <th scope="row">
+                    {t(`discipline.${volume.discipline}`)}
+                    {/* Ce qui, dans cette ligne, ne venait pas du plan. La
+                        barre le dit pour la semaine entière, la colonne le dit
+                        par sport, et c'est la question que cette carte existe
+                        pour répondre. */}
+                    {volume.extraMinutes > 0 && volume.extraMinutes < volume.minutes && (
+                      <span className="zn-wreview__from">
+                        {t("review.ofWhichExtra", {
+                          time: formatDurationMinutes(volume.extraMinutes),
+                        })}
+                      </span>
+                    )}
+                  </th>
+                  <td>{formatDurationMinutes(volume.minutes)}</td>
+                  {anyDistance && (
+                    <td>
+                      {volume.distanceKm > 0
+                        ? meta.distance === "meters"
+                          ? `${Math.round(volume.distanceKm * 1000)} m`
+                          : `${volume.distanceKm} km`
+                        : null}
+                    </td>
+                  )}
+                  {anyElevation && (
+                    <td>{volume.elevationGainM > 0 ? `+${volume.elevationGainM} m` : null}</td>
+                  )}
+                </tr>
               );
-            }
-            if (volume.elevationGainM > 0) parts.push(`+${volume.elevationGainM} m`);
-            if (volume.avgWatts !== null) parts.push(`${volume.avgWatts} W`);
-            return (
-              <li key={volume.discipline} className="zn-wreview__line">
-                <span className="zn-wreview__what">{t(`discipline.${volume.discipline}`)}</span>
-                <span className="zn-wreview__how zn-mono">{parts.join(" · ")}</span>
-              </li>
-            );
-          })}
-        </ul>
+            })}
+          </tbody>
+        </table>
       )}
 
       {/* Ce qui reste à trancher. En dernier, et sans alarme : c'est la seule

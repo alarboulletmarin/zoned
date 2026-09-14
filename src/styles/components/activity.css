@@ -490,44 +490,73 @@
 
 /* ── Le detail du complement ─────────────────────────────────────────── */
 
-.zn-wreview__lines {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-block-start: var(--border-divider);
-}
+/* Le volume, sport par sport. Un vrai tableau et non deux colonnes de texte :
+   les chiffres d'une colonne s'alignent, donc ils se COMPARENT, ce qu'une
+   ligne temps points kilomètres points dénivelé ne permet pas.
 
-.zn-wreview__line {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--sp-8);
-  padding-block: var(--sp-4);
-}
-
-.zn-wreview__line + .zn-wreview__line {
-  border-block-start: var(--border-divider);
-}
-
-.zn-wreview__what {
-  font: var(--type-body-sm);
-}
-
-.zn-wreview__how {
-  font-size: var(--fs-caption);
-  color: var(--text-muted);
+   Il n'a pas de ligne de total, et c'est le propos : le temps total est dans
+   les faits au-dessus, et les kilomètres ne se totalisent nulle part parce
+   qu'ils ne s'additionnent pas d'un sport à l'autre. La règle est dans la
+   forme. */
+.zn-wreview__table {
+  inline-size: 100%;
+  border-collapse: collapse;
   text-align: end;
 }
 
-@media (max-width: 480px) {
-  .zn-wreview__line {
-    flex-direction: column;
-    gap: var(--sp-1);
-  }
+/* La colonne des sports tient la gauche, les grandeurs sont à droite : un
+   nombre se lit par ses unités, donc il s'aligne par la fin. */
+.zn-wreview__table th:first-child,
+.zn-wreview__table td:first-child {
+  text-align: start;
+}
 
-  .zn-wreview__how {
-    text-align: start;
-  }
+.zn-wreview__table thead th {
+  padding-block: var(--sp-4);
+  border-block-end: var(--border-divider);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-regular);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono-kicker);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.zn-wreview__table tbody th {
+  font: var(--type-body-sm);
+  color: var(--text-body);
+}
+
+.zn-wreview__table tbody td {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.zn-wreview__table tbody th,
+.zn-wreview__table tbody td {
+  padding-block: var(--sp-5);
+  vertical-align: baseline;
+}
+
+.zn-wreview__table tbody tr + tr th,
+.zn-wreview__table tbody tr + tr td {
+  border-block-start: var(--border-divider);
+}
+
+/* Ce qui, dans la ligne, ne venait pas du plan. Sous le nom du sport et en
+   gris : c'est une précision sur la ligne, pas une quatrième grandeur, et lui
+   donner une colonne l'aurait mise au même rang que le temps. */
+.zn-wreview__from {
+  display: block;
+  font-size: var(--fs-mono-xs);
+  font-family: var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
 }
 
 /* ── Le panneau de saisie ────────────────────────────────────────────── */
