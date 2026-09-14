@@ -22,6 +22,7 @@ import {
   dayBarBlocks,
   dayKinds,
   dayStatus,
+  extraBlockHeight,
   focusDayDate,
   focusPlanHref,
   pickTodayFocus,
@@ -37,6 +38,7 @@ import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
 import { WeekReviewPanel } from "@/components/domain/WeekReviewPanel";
 import { useActivities } from "@/hooks/useActivities";
 import { activitiesBetween, activitiesOn } from "@/lib/activityStorage";
+import { minutesByWeekday } from "@/lib/activityStats";
 import { loadCommutePattern } from "@/lib/athleteProfile";
 import { isoDateOnly } from "@/lib/planDates";
 import {
@@ -366,6 +368,17 @@ export function TodayPage() {
     });
   }, [focus.plan, focus.weekNumber, planWeek, activities, now]);
 
+  /* Les minutes complémentaires de la semaine affichée, case par case. Elles
+     nourrissent le canal du dessous de la bande : sans elles, une journée de
+     vélotaf s'y lit repos. */
+  const weekExtras = useMemo(() => {
+    if (focus.week.length === 0) return [0, 0, 0, 0, 0, 0, 0];
+    return minutesByWeekday(
+      activitiesBetween(activities, review.range.from, review.range.to),
+      review.range.from,
+    );
+  }, [focus.week.length, activities, review.range.from, review.range.to]);
+
   const showReview = day === 6 && hasSomethingToReview(review);
 
   const handleLog = useCallback(
@@ -394,7 +407,12 @@ export function TodayPage() {
           <span className="zn-kicker">{dateLine}</span>
 
           {focus.week.length > 0 && (
-            <WeekStrip focus={focus} selected={day} onSelect={setPicked} />
+            <WeekStrip
+              focus={focus}
+              selected={day}
+              onSelect={setPicked}
+              extras={weekExtras}
+            />
           )}
 
           {sessions.length > 0 ? (
@@ -955,10 +973,13 @@ function WeekStrip({
   focus,
   selected,
   onSelect,
+  extras,
 }: {
   focus: TodayFocus;
   selected: number;
   onSelect: (day: number) => void;
+  /** Les minutes complémentaires du lundi au dimanche. Toujours sept cases. */
+  extras: number[];
 }) {
   const { t } = useTranslation(["today", "library"]);
   const railRef = useRef<HTMLDivElement>(null);
@@ -978,6 +999,9 @@ function WeekStrip({
     day.reduce((n, session) => n + (session.actualDurationMin ?? session.estimatedDurationMin ?? 0), 0),
   );
   const longest = Math.max(1, ...minutes);
+  /* Le canal du complément a SON échelle : les compléments se comparent entre
+     eux et jamais à une séance, voir `extraBlockHeight`. */
+  const longestExtra = Math.max(1, ...extras);
 
   return (
     <div
@@ -1008,6 +1032,12 @@ function WeekStrip({
           day.length === 0
             ? t("week.rest")
             : t("week.day", { count: day.length, minutes: duration }),
+          // Le canal du dessous est muet pour l'oeil seul : le nom accessible
+          // le dit en toutes lettres, sinon une journée de vélotaf reste un
+          // jour de repos pour qui n'a que ce nom.
+          extras[index] > 0
+            ? t("activity:cockpit.dayExtra", { minutes: formatDurationMinutes(extras[index]) })
+            : null,
           // Ce que les glyphes disent à l'œil, le nom accessible le dit en
           // toutes lettres : la rangée est muette, elle n'est pas absente.
           ...kinds.map((k) => t(`library:activityToggle.${k}`)),
@@ -1049,21 +1079,46 @@ function WeekStrip({
                 poussent depuis le sol : la bande garde la même hauteur quel
                 que soit le jour choisi, et rien ne bouge sous le doigt quand
                 on passe du dimanche long au mardi de repos. */}
-            <span className="zn-cockpit__day-bar">
-              {day.length === 0 ? (
-                <span className="zn-cockpit__day-block" data-shape="rest" />
-              ) : (
-                dayBarBlocks(day, longest).map((block, i) => (
+            <span className="zn-cockpit__day-col">
+              <span className="zn-cockpit__day-bar">
+                {day.length === 0 ? (
+                  <span className="zn-cockpit__day-block" data-shape="rest" />
+                ) : (
+                  dayBarBlocks(day, longest).map((block, i) => (
+                    <span
+                      key={i}
+                      className="zn-cockpit__day-block"
+                      data-shape={block.shape}
+                      /* Un style inline est le bon outil : la valeur est une
+                         donnée du plan, pas un réglage de design. */
+                      style={{ "--block-h": `${block.height}px` } as CSSProperties}
+                    />
+                  ))
+                )}
+              </span>
+
+              {/* LE SOL, et il est tracé sur les sept jours, pas seulement sous
+                  ceux qui portent quelque chose : un axe qui n'existe que
+                  parfois n'est pas un axe. C'est lui qui rend le canal du
+                  dessous lisible sans une légende. */}
+              <span className="zn-cockpit__day-ground" aria-hidden="true" />
+
+              {/* Ce que la vie a ajouté : vélotaf, déplacement, séance hors
+                  plan. Le créneau est TOUJOURS réservé, vide la plupart du
+                  temps, pour la même raison que tout le reste de cet écran,
+                  rien ne doit bouger quand on change de jour. */}
+              <span className="zn-cockpit__day-under">
+                {extras[index] > 0 && (
                   <span
-                    key={i}
-                    className="zn-cockpit__day-block"
-                    data-shape={block.shape}
-                    /* Un style inline est le bon outil : la valeur est une
-                       donnée du plan, pas un réglage de design. */
-                    style={{ "--block-h": `${block.height}px` } as CSSProperties}
+                    className="zn-cockpit__day-extra"
+                    style={
+                      {
+                        "--block-h": `${extraBlockHeight(extras[index], longestExtra)}px`,
+                      } as CSSProperties
+                    }
                   />
-                ))
-              )}
+                )}
+              </span>
             </span>
 
             {/* La valeur est TOUJOURS écrite, vide sur les six autres jours :

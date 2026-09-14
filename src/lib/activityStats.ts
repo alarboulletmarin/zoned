@@ -180,3 +180,33 @@ export function complementaryShare(
   if (total <= 0) return 0;
   return activityMinutes / total;
 }
+
+/**
+ * Les minutes complémentaires, jour par jour, du lundi au dimanche.
+ *
+ * La bande des sept jours du cockpit dessine le plan et rien d'autre : une
+ * journée passée à pédaler jusqu'au bureau s'y lisait REPOS, c'est-à-dire le
+ * contraire de ce qui s'est passé. C'est le seul mensonge qu'une bande puisse
+ * commettre, et une bande qui ment ne sert plus à rien.
+ *
+ * `monday` est le lundi de la semaine regardée, en date seule. Une activité
+ * hors des sept jours est ignorée : l'appelant a déjà filtré, ce test n'est
+ * là que pour qu'une borne fausse ne déborde pas sur une case.
+ */
+export function minutesByWeekday(
+  activities: readonly ComplementaryActivity[],
+  monday: string,
+): number[] {
+  const byDay = [0, 0, 0, 0, 0, 0, 0];
+  const start = Date.parse(`${monday}T00:00:00`);
+  if (Number.isNaN(start)) return byDay;
+
+  for (const activity of activities) {
+    const at = Date.parse(`${activity.date}T00:00:00`);
+    if (Number.isNaN(at)) continue;
+    const index = Math.round((at - start) / 86_400_000);
+    if (index < 0 || index > 6) continue;
+    byDay[index] += activity.durationMin;
+  }
+  return byDay;
+}

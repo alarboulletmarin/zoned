@@ -255,10 +255,21 @@
 
 /* ── Le bilan de la semaine ──────────────────────────────────────────── */
 
-/* Deux tenues pour le même bloc. `bare` sur le cockpit, qui n'a pas une seule
-   boîte et ne va pas en gagner une pour ça : un filet au-dessus suffit à dire
-   que c'est une autre section. `card` sur sa page, où il est le premier objet
-   et doit se tenir seul. */
+/* Des chiffres, pas des adjectifs.
+ *
+ * La premiere version etait un paragraphe et une liste de definitions : une
+ * phrase qui jugeait la semaine, puis cinq couples etiquette-valeur. De
+ * l'editorial dans une app qui dessine, et redondant par-dessus le marche, la
+ * phrase ne disait rien que 3 / 4 ne dise deja.
+ *
+ * Ce qui la remplace tient en deux objets : le RAPPORT, au corps d'affichage,
+ * et la BARRE DE VOLUME, qui pose sur un seul axe ce qui a ete fait, ce qui a
+ * ete fait en plus, et ce qui etait vise. Le reste est de la graduation.
+ *
+ * Deux tenues pour le meme bloc. `bare` sur le cockpit, qui n'a pas une seule
+ * boite et ne va pas en gagner une pour ca : un filet au-dessus suffit a dire
+ * que c'est une autre section. `card` sur sa page, ou il est le premier objet
+ * et doit se tenir seul. */
 .zn-wreview {
   display: flex;
   flex-direction: column;
@@ -289,26 +300,166 @@
   color: var(--text-faint);
 }
 
-/* Le verdict est la seule phrase de ce bloc, donc la seule chose en corps de
-   texte : tout le reste est étiquette et chiffre. */
-.zn-wreview__verdict {
+/* LE RAPPORT, et il est le titre. Le chiffre au corps d'affichage, son
+   micro-label dessous, serres a `--sp-2` pendant que le bloc respire a
+   `--sp-8` : c'est cet ecart-la qui en fait une seule idee. */
+.zn-wreview__ratio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
   margin: 0;
-  max-inline-size: 54ch;
-  font-size: var(--fs-body);
-  line-height: var(--lh-body-sm);
 }
 
+/* Le corps d'affichage, tabulaire : 3/4 et 12/14 doivent occuper la meme
+   largeur, sinon le bloc se decale d'une semaine a l'autre. */
+.zn-wreview__figure {
+  font: var(--fw-semibold) var(--fs-h2) / 1 var(--font-display);
+  letter-spacing: var(--ls-h2);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* La seule prose que ce bloc s'autorise, et elle ne sort que la ou il n'y a
+   pas de chiffre a montrer : rien n'est clos, ou pas de plan cette semaine. */
+.zn-wreview__say {
+  margin: 0;
+  max-inline-size: 48ch;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* ── La barre de volume ──────────────────────────────────────────────── */
+
+/* Trois grandeurs sur UN axe, ce qui les rend comparables d'un coup d'oeil la
+   ou trois nombres demandent une soustraction. La grammaire est celle que le
+   reste de l'app emploie deja (.zn-pstats__progress) : un contour pour le
+   creneau, un plein pour ce qui a eu lieu. */
+.zn-wreview__vol {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.zn-wreview__track {
+  position: relative;
+  display: flex;
+  block-size: var(--sp-8);
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.zn-wreview__seg {
+  inline-size: var(--w, 0%);
+  flex: none;
+}
+
+/* Fait : le plein. La seule teinte ajoutee de ce systeme est celle de la
+   completion, et c'est exactement ce dont il s'agit ici, la meme que la barre
+   de completion d'un plan. */
+.zn-wreview__seg[data-kind="done"] {
+  background: var(--ok);
+}
+
+/* En plus : ca a eu lieu, donc c'est plein aussi, mais ce n'est pas le plan.
+   L'encre TERTIAIRE et non la secondaire : au premier rendu le segment etait
+   si proche du noir qu'il pesait autant que le plein de la completion, et une
+   barre ou les deux segments pesent pareil ne dit plus lequel est le plan. Il
+   reste plein, parce que ca a eu lieu, et il reste distinct en niveaux de
+   gris, ce qui est l'argument du systeme. */
+.zn-wreview__seg[data-kind="extra"] {
+  background: var(--ink-3);
+}
+
+/* Le repere du prevu. Un filet vertical a l'encre, pas un aplat : l'accent de
+   l'ecran est pris par son appel primaire, et deux accents ne font plus
+   d'accent. Depasser le repere se VOIT, et c'est la semaine que l'app ne
+   savait pas decrire. */
+.zn-wreview__tick {
+  position: absolute;
+  /* Il DÉPASSE de la piste, quatre pixels de chaque côté. Dedans, il était un
+     filet d'encre posé sur un segment d'encre : le repère le plus important du
+     dessin était le seul qu'on ne voyait pas. Dehors, il se lit sur n'importe
+     quel segment, et il se lit comme ce qu'il est, une graduation de règle. */
+  /* La piste commence a 4 px, apres le padding du bloc : le repere part donc
+     de 0 et mesure la piste plus les deux depassements. Pose a -4 px il
+     depassait de huit en haut et de rien en bas, c'est-a-dire qu'il n'etait
+     plus une graduation mais un drapeau. */
+  inset-block-start: 0;
+  block-size: calc(var(--sp-8) + 8px);
+  inset-inline-start: var(--x, 0%);
+  inline-size: var(--bw-heavy);
+  margin-inline-start: calc(var(--bw-heavy) / -2);
+  background: var(--line-strong);
+}
+
+/* La legende porte les MARQUES du dessin, pas seulement ses mots : sans elles
+   il faudrait deviner lequel des deux segments est le complement. */
+.zn-wreview__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-8);
+  margin: 0;
+  font-size: var(--fs-mono-xs);
+  color: var(--text-muted);
+}
+
+.zn-wreview__key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.zn-wreview__key::before {
+  content: "";
+  inline-size: 10px;
+  block-size: 10px;
+  border-radius: 2px;
+  flex: none;
+}
+
+.zn-wreview__key[data-kind="done"]::before {
+  background: var(--ok);
+}
+
+.zn-wreview__key[data-kind="extra"]::before {
+  background: var(--ink-3);
+}
+
+/* Le repere de la legende est la MEME marque que dans la barre : un filet
+   vertical, pas un carre, sinon la legende nommerait une forme qui n'existe
+   nulle part. */
+.zn-wreview__key[data-kind="tick"]::before {
+  inline-size: var(--bw-heavy);
+  block-size: 12px;
+  border-radius: 0;
+  background: var(--line-strong);
+}
+
+/* La piste garde son air : le repère dépasse au-dessus, donc sans ça il
+   toucherait le micro-label du dessus. */
+.zn-wreview__vol {
+  padding-block-start: 4px;
+}
+
+/* ── Les graduations ─────────────────────────────────────────────────── */
+
+/* Des reperes d'axe, pas des annonces : mono, sur une ligne, et chacun n'est
+   la que s'il existe. Une case 0 / 0 ne dit rien que son absence ne dise
+   mieux. */
 .zn-wreview__facts {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-6) var(--sp-14);
+  gap: var(--sp-4) var(--sp-12);
   margin: 0;
 }
 
 .zn-wreview__fact {
   display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
+  align-items: baseline;
+  gap: var(--sp-4);
 }
 
 .zn-wreview__fact dt {
@@ -321,22 +472,19 @@
 
 .zn-wreview__fact dd {
   margin: 0;
-  font-size: var(--fs-body-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
   font-variant-numeric: tabular-nums;
+  color: var(--text-body);
 }
 
-.zn-wreview__extra {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-5);
-  padding-block-start: var(--sp-8);
-  border-block-start: var(--border-divider);
-}
+/* ── Le detail du complement ─────────────────────────────────────────── */
 
 .zn-wreview__lines {
   list-style: none;
   margin: 0;
   padding: 0;
+  border-block-start: var(--border-divider);
 }
 
 .zn-wreview__line {
@@ -344,11 +492,15 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--sp-8);
-  padding-block: var(--sp-3);
+  padding-block: var(--sp-4);
+}
+
+.zn-wreview__line + .zn-wreview__line {
+  border-block-start: var(--border-divider);
 }
 
 .zn-wreview__what {
-  font-size: var(--fs-body-sm);
+  font: var(--type-body-sm);
 }
 
 .zn-wreview__how {
@@ -357,11 +509,15 @@
   text-align: end;
 }
 
-.zn-wreview__note,
-.zn-wreview__pending {
-  margin: 0;
-  font-size: var(--fs-caption);
-  color: var(--text-faint);
+@media (max-width: 480px) {
+  .zn-wreview__line {
+    flex-direction: column;
+    gap: var(--sp-1);
+  }
+
+  .zn-wreview__how {
+    text-align: start;
+  }
 }
 
 /* ── Le panneau de saisie ────────────────────────────────────────────── */
