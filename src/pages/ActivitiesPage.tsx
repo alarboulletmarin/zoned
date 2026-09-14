@@ -276,6 +276,7 @@ export function ActivitiesPage() {
         defaultDate={todayIso}
         activity={editing}
         suggestion={suggestion}
+        history={activities}
         onSave={handleSave}
         onDelete={handleDelete}
       />

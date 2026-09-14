@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { rpeColor } from "@/lib/sessionColors";
+import { rpeColor, rpeWordKey } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import type { SessionType } from "@/types";
@@ -55,20 +55,6 @@ function getDefaultRpe(sessionType: SessionType): number {
     default:
       return 4;
   }
-}
-
-const RPE_LABEL_KEYS: { range: [number, number]; key: string }[] = [
-  { range: [1, 2], key: "feedback.rpeVeryEasy" },
-  { range: [3, 4], key: "feedback.rpeEasy" },
-  { range: [5, 6], key: "feedback.rpeModerate" },
-  { range: [7, 8], key: "feedback.rpeHard" },
-  { range: [9, 9], key: "feedback.rpeVeryHard" },
-  { range: [10, 10], key: "feedback.rpeMaximal" },
-];
-
-function getRpeLabelKey(value: number): string {
-  const entry = RPE_LABEL_KEYS.find((l) => value >= l.range[0] && value <= l.range[1]);
-  return entry ? entry.key : "";
 }
 
 export function CompletionFeedbackCard({
@@ -188,7 +174,7 @@ export function CompletionFeedbackCard({
         <div className="zn-prpe__foot">
           <span>{t("feedback.easy")}</span>
           <span className="zn-prpe__reading">
-            {t(getRpeLabelKey(selectedRpe))}
+            {t(rpeWordKey(selectedRpe))}
           </span>
           <span>{t("feedback.rpeMaximal")}</span>
         </div>
