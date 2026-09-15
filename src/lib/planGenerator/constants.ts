@@ -12,6 +12,10 @@ import type { Difficulty, SessionType, TrainingPhase } from "@/types";
 //
 // Shorter races need more speed work (larger build/peak).
 // Longer races need more aerobic base.
+//
+// The three shares sum to 1. An earlier table summed to 0.85 and quietly
+// handed the remainder to the base, so a 30-week marathon plan spent 15 weeks
+// in base and 4 in peak while the methodology page promised 40 %.
 
 export interface PhaseDistribution {
   base: number;
@@ -20,26 +24,36 @@ export interface PhaseDistribution {
 }
 
 export const PHASE_DISTRIBUTION: Record<RaceDistance, PhaseDistribution> = {
-  "5K":         { base: 0.30, build: 0.30, peak: 0.25 },
-  "10K":        { base: 0.35, build: 0.30, peak: 0.20 },
-  semi:         { base: 0.35, build: 0.30, peak: 0.20 },
-  marathon:     { base: 0.40, build: 0.30, peak: 0.15 },
-  trail_short:  { base: 0.45, build: 0.30, peak: 0.10 },
-  trail:        { base: 0.45, build: 0.30, peak: 0.10 },
-  ultra:        { base: 0.50, build: 0.30, peak: 0.10 },
+  "5K":         { base: 0.35, build: 0.35, peak: 0.30 },
+  "10K":        { base: 0.40, build: 0.35, peak: 0.25 },
+  semi:         { base: 0.40, build: 0.35, peak: 0.25 },
+  marathon:     { base: 0.45, build: 0.33, peak: 0.22 },
+  trail_short:  { base: 0.50, build: 0.32, peak: 0.18 },
+  trail:        { base: 0.52, build: 0.32, peak: 0.16 },
+  ultra:        { base: 0.55, build: 0.30, peak: 0.15 },
 };
 
-// For short plans (<12 weeks), compress base and favor build/peak.
-// For long plans (>18 weeks), extend base for deeper aerobic foundation.
-export const SHORT_PLAN_BASE_ADJUSTMENT = -0.08; // reduce base by 8%
-// LONG_PLAN_BASE_ADJUSTMENT removed (unused, long plans use absolute cap logic)
-export const SHORT_PLAN_THRESHOLD = 12;
-export const LONG_PLAN_THRESHOLD = 18;
+/**
+ * Shortest specific block worth the name, once the plan is long enough to
+ * afford it (Pfitzinger's race-preparation mesocycle runs 5-6 weeks; a single
+ * week of marathon-pace work is not a peak phase).
+ */
+export const MIN_PEAK_WEEKS: Record<RaceDistance, number> = {
+  "5K": 2,
+  "10K": 2,
+  semi: 2,
+  marathon: 3,
+  trail_short: 2,
+  trail: 3,
+  ultra: 3,
+};
 
-// Legacy aliases for backward compatibility
-export const BASE_PHASE_PCT = 0.4;
-export const BUILD_PHASE_PCT = 0.35;
-export const PEAK_PHASE_PCT = 0.15;
+/** Absolute cap on the base phase, whatever the plan length */
+export const MAX_BASE_WEEKS = 12;
+
+// For short plans (<12 weeks), compress base and favor build/peak.
+export const SHORT_PLAN_BASE_ADJUSTMENT = -0.08; // reduce base by 8%
+export const SHORT_PLAN_THRESHOLD = 12;
 
 // ── Taper weeks by distance ────────────────────────────────────────
 // Based on Mujika & Padilla (2003): 7-21 days optimal depending on event.
@@ -75,92 +89,144 @@ export const RECOMMENDED_PLAN_WEEKS: Record<RaceDistance, { min: number; max: nu
 
 // ── Volume progression ─────────────────────────────────────────────
 
-export const MAX_WEEKLY_VOLUME_INCREASE = 0.10; // 10% max (classic rule)
-export const RECOVERY_WEEK_VOLUME_PCT = 0.65; // 65%, less aggressive than 60% (Mujika)
+/**
+ * Ceiling on the week-to-week increase. A ceiling, not a slope: the slope is
+ * computed so the peak lands a few weeks before the taper (volume.ts). The
+ * "10 % rule" itself has no experimental support (Buist 2008 found no fewer
+ * injuries with a 10 % graded programme; Nielsen 2014 only sees a signal
+ * beyond +30 %), it is kept as a conservative bound.
+ */
+export const MAX_WEEKLY_VOLUME_INCREASE = 0.10;
+/** Smallest increase worth planning, below it the week is a plateau */
+export const MIN_WEEKLY_VOLUME_INCREASE = 0.03;
+/**
+ * Recovery week as a share of the previous load week. Pfitzinger's drop-back
+ * weeks sit at 78-85 % of the week before, Higdon's at 86-92 %; the earlier
+ * 65 % created +50 % rebounds the following week.
+ */
+export const RECOVERY_WEEK_VOLUME_PCT = 0.82;
 export const MAX_CONSECUTIVE_LOAD_WEEKS = 3; // Recovery after 3 consecutive load weeks
 /** Long run is shortened on recovery weeks, never removed (Pfitzinger) */
-export const RECOVERY_LONG_RUN_PCT = 0.7;
-
-// ── Taper: exponential decay (Mujika & Padilla) ───────────────────
-// volume(week_i) = peak × e^(-rate × week_i)
-// Rate calibrated so 3-week taper gives ~75%, ~58%, ~40%
-
-export const TAPER_DECAY_RATE = 0.45;
-
-// Legacy linear reduction kept for backward compat
-export const TAPER_VOLUME_REDUCTION = [0.7, 0.5, 0.4]; // Per taper week
-
-// ── Race week ──────────────────────────────────────────────────────
-
-export const RACE_WEEK_VOLUME_PCT = 0.35;
-export const OPENER_DAYS_BEFORE_RACE = 2; // 2 days before
-
-// ── Starting volume by plan duration (weeks -> starting %) ─────────
-
-export const STARTING_VOLUME_PCT = {
-  short: 0.85, // 8-11 weeks
-  medium: 0.7, // 12-17 weeks
-  long: 0.6, // 18-24 weeks
+export const RECOVERY_LONG_RUN_PCT = 0.75;
+/**
+ * No recovery week this close to the taper: the taper is the recovery, and a
+ * drop-back week right before it left plans with three light weeks in a row
+ * and a single loaded week of peak.
+ */
+export const NO_RECOVERY_WEEKS_BEFORE_TAPER = 2;
+/** The volume peak should land this many weeks before the taper starts */
+export const PEAK_WEEKS_BEFORE_TAPER: Record<RaceDistance, number> = {
+  "5K": 2,
+  "10K": 2,
+  semi: 2,
+  marathon: 3,
+  trail_short: 2,
+  trail: 3,
+  ultra: 3,
 };
 
+// ── Taper ──────────────────────────────────────────────────────────
+// Bosquet et al. (2007): a 41-60 % total reduction over about two weeks,
+// progressive rather than stepped, intensity and frequency maintained.
+// Pfitzinger's marathon ladder is 75 / 60 / 40 % of peak, Higdon's 73 / 53 /
+// 23 %, and Smyth & Lawlor (2021) find the disciplined three-week taper the
+// most effective for recreational marathoners. The earlier exponential
+// (64 / 41 / 26 %) dropped a third of the volume in one step and sat at
+// 41 % two weeks out, below every published ladder.
+//
+// Shares of peak weekly volume for each taper week before race week.
+
+export const TAPER_VOLUME_PCT: Record<RaceDistance, number[]> = {
+  "5K": [],
+  "10K": [0.72],
+  semi: [0.72],
+  marathon: [0.78, 0.60],
+  trail_short: [0.72],
+  trail: [0.72],
+  ultra: [0.78, 0.60],
+};
+
+// ── Race week ──────────────────────────────────────────────────────
+// Training volume of race week (the race itself is not counted), as a share
+// of peak: Pfitzinger 33-40 %, Hansons 42 %, Higdon 23 %.
+
+export const RACE_WEEK_VOLUME_PCT: Record<RaceDistance, number> = {
+  "5K": 0.55,
+  "10K": 0.45,
+  semi: 0.45,
+  marathon: 0.40,
+  trail_short: 0.45,
+  trail: 0.40,
+  ultra: 0.38,
+};
+export const OPENER_DAYS_BEFORE_RACE = 2; // 2 days before
+
 // ── Weekly km targets by level and distance ────────────────────────
-// [startKm, peakKm], Based on Pfitzinger & Daniels recommendations.
-// Start = week 1 of plan, Peak = highest volume week.
+// [startKm, peakKm]. Intermediate and above follow Pfitzinger and Daniels
+// (marathon 55 → 90 km is Pfitzinger 18/55). Beginner starts follow the
+// first-timer plans: Higdon Novice 5K 7 → 13 km, Novice 10K 13 → 21 km,
+// Half Novice 1 19 → 37 km, Marathon Novice 1 24 → 64 km. A "beginner" who
+// starts at 40 km a week is not a beginner.
 
 export const WEEKLY_KM_TARGETS: Record<RaceDistance, Record<Difficulty, [number, number]>> = {
   "5K": {
-    beginner:     [20, 30],
+    beginner:     [12, 25],
     intermediate: [30, 50],
     advanced:     [50, 80],
     elite:        [80, 120],
   },
   "10K": {
-    beginner:     [25, 40],
+    beginner:     [15, 32],
     intermediate: [40, 60],
     advanced:     [60, 90],
     elite:        [90, 130],
   },
   semi: {
-    beginner:     [30, 50],
+    beginner:     [22, 45],
     intermediate: [50, 75],
     advanced:     [70, 110],
     elite:        [100, 150],
   },
   marathon: {
-    beginner:     [40, 65],
+    beginner:     [28, 64],
     intermediate: [55, 90],
     advanced:     [80, 130],
     elite:        [120, 180],
   },
   trail_short: {
-    beginner:     [30, 50],
+    beginner:     [25, 48],
     intermediate: [45, 70],
     advanced:     [65, 100],
     elite:        [90, 140],
   },
   trail: {
-    beginner:     [35, 55],
+    beginner:     [30, 55],
     intermediate: [50, 80],
     advanced:     [70, 115],
     elite:        [100, 160],
   },
   ultra: {
-    beginner:     [40, 65],
+    beginner:     [35, 65],
     intermediate: [55, 90],
     advanced:     [80, 130],
     elite:        [120, 180],
   },
 };
 
-// ── Session type distribution per phase ────────────────────────────
-// Maps phase -> array of session types in priority order
-
-export const PHASE_SESSION_TYPES: Record<TrainingPhase, SessionType[]> = {
-  base: ["endurance", "recovery", "long_run", "fartlek"],
-  build: ["vo2max", "threshold", "long_run", "endurance", "hills", "fartlek"],
-  peak: ["threshold", "race_specific", "tempo", "long_run", "vo2max"],
-  taper: ["recovery", "endurance", "race_specific"],
-  recovery: ["recovery", "endurance"],
+/**
+ * Weekly volume below which the distance becomes a survival exercise, in km.
+ * The volume model uses it as a floor on the peak (a 4-day "finish" marathon
+ * plan otherwise topped out at 43 km, below what its own audit accepts), and
+ * the audit reports it when the plan still cannot reach it.
+ */
+export const WEEKLY_VOLUME_FLOOR_KM: Record<RaceDistance, number> = {
+  "5K": 15,
+  "10K": 18,
+  semi: 35,
+  marathon: 50,
+  trail_short: 40,
+  trail: 50,
+  ultra: 60,
 };
 
 // ── Key session types per phase (quality sessions) ─────────────────
@@ -208,7 +274,10 @@ const KEY_SESSION_TYPES_BY_PROFILE: Record<
   Record<TrainingPhase, SessionType[]>
 > = {
   short: {
-    base: ["fartlek", "hills", "tempo"],
+    // Threshold, not tempo: a tempo template runs at marathon pace, which
+    // labelled 5K base sessions "Allure marathon". Pfitzinger opens 5K/10K
+    // schedules with lactate-threshold work.
+    base: ["fartlek", "hills", "threshold"],
     build: ["vo2max", "threshold", "fartlek"],
     peak: ["vo2max", "race_specific", "threshold"],
     taper: ["race_specific", "vo2max"],
@@ -225,7 +294,9 @@ const KEY_SESSION_TYPES_BY_PROFILE: Record<
     recovery: [],
   },
   trail: {
-    base: ["hills", "fartlek", "endurance"],
+    // No "endurance" here: a key slot filled with an endurance template is
+    // not a key session, it left trail plans with weeks that had none.
+    base: ["hills", "fartlek", "tempo"],
     build: ["hills", "threshold", "tempo"],
     peak: ["race_specific", "hills", "threshold"],
     taper: ["race_specific", "tempo"],
@@ -244,19 +315,6 @@ export function getKeySessionTypes(
   return KEY_SESSION_TYPES_BY_PROFILE[DISTANCE_PROFILE[raceDistance]][phase];
 }
 
-// ── VMA percentages for race time prediction ───────────────────────
-// Aligned with src/lib/paceCalculator.ts RACE_CONFIGS
-
-export const VMA_RACE_PERCENTAGES: Record<RaceDistance, number> = {
-  "5K": 97,
-  "10K": 92,
-  semi: 82,
-  marathon: 77,
-  trail_short: 72,
-  trail: 65,
-  ultra: 55,
-};
-
 // ── Distance tags for workout matching ─────────────────────────────
 
 export const DISTANCE_TAGS: Record<RaceDistance, string[]> = {
@@ -269,12 +327,17 @@ export const DISTANCE_TAGS: Record<RaceDistance, string[]> = {
   ultra: ["trail", "ultra", "nature", "ultra-trail"],
 };
 
-// ── 80/20 polarized training validation ────────────────────────────
-// Seiler (2010): 75-80% Z1-Z2, 15-20% Z4+, minimal Z3
-// We use 75% as threshold (allowing some slack)
+// ── Intensity distribution ─────────────────────────────────────────
+// Seiler's 80/20 counts *sessions* (Seiler & Kjerland 2006: 75 % of sessions
+// easy; Seiler 2010: about 80 % of sessions, 2-3 hard ones in 10-14). The
+// week template enforces it through the key-session budget: one key session
+// in base up to 5 days a week, two in build and peak, never more than two.
+// Over a plan this lands at 25-35 % hard sessions and about 80 % of running
+// time in Z1-Z2, a pyramidal distribution, which is what well-trained
+// distance runners actually do (Casado 2022, Kenneally 2021).
 
-export const POLARIZED_EASY_MIN_FRACTION = 0.75;
-export const POLARIZED_HARD_MAX_FRACTION = 0.25;
+/** Largest share of running sessions a plan may schedule as key sessions */
+export const MAX_KEY_SESSION_FRACTION = 0.40;
 
 // ── Training goal modifiers ────────────────────────────────────────
 // Adjusts plan generation based on the runner's mindset/ambition.
@@ -296,17 +359,20 @@ export interface GoalModifiers {
   basePhaseShift: number;
   /** Recovery week frequency override (0 = use default) */
   recoveryFrequency: number;
+  /** Recovery week volume override, share of the previous load week (0 = default) */
+  recoveryVolumePct: number;
   /** Long run progression increment multiplier */
   longRunIncrementMultiplier: number;
 }
 
 export const GOAL_MODIFIERS: Record<TrainingGoal, GoalModifiers> = {
   finish: {
-    volumeMultiplier: 0.85,       // 15% less volume
+    volumeMultiplier: 0.90,       // 10% less volume
     maxQualitySessions: 1,        // Only 1 quality session/week
     hardFraction: 0.15,           // 85/15 split (more conservative than 80/20)
     basePhaseShift: 0.05,         // +5% base phase (more aerobic foundation)
     recoveryFrequency: 3,         // Recovery every 3 weeks (more frequent)
+    recoveryVolumePct: 0.75,      // Deeper recovery weeks
     longRunIncrementMultiplier: 0.8, // Slower long run progression
   },
   time: {
@@ -315,6 +381,7 @@ export const GOAL_MODIFIERS: Record<TrainingGoal, GoalModifiers> = {
     hardFraction: 0.20,           // Standard 80/20
     basePhaseShift: 0,            // No adjustment
     recoveryFrequency: 0,         // Use default (load-based)
+    recoveryVolumePct: 0,
     longRunIncrementMultiplier: 1.0,
   },
   compete: {
@@ -323,6 +390,7 @@ export const GOAL_MODIFIERS: Record<TrainingGoal, GoalModifiers> = {
     hardFraction: 0.25,           // 75/25 split (pyramidal, still safe)
     basePhaseShift: -0.05,        // -5% base (more time in build/peak)
     recoveryFrequency: 0,         // Use default (load-based)
+    recoveryVolumePct: 0,
     longRunIncrementMultiplier: 1.15, // Faster long run progression
   },
 };
@@ -350,6 +418,14 @@ export interface PurposeConfig {
   startVolumeMultiplier: number;
   /** Max key sessions per week */
   maxKeySessions: number;
+  /**
+   * First week that may hold a key session. Return-to-running protocols
+   * (Warden 2014; George 2024; Daniels' layoff table) keep everything easy
+   * for the first weeks and add intensity only once volume is back.
+   */
+  firstKeySessionWeek: number;
+  /** Weeks whose easy runs prefer walk-run templates */
+  walkRunWeeks: number;
   /** Default race distance to use for workout selection (non-race plans still need one) */
   fallbackDistance: RaceDistance;
   /** Labels */
@@ -371,6 +447,8 @@ export const PURPOSE_CONFIGS: Record<Exclude<PlanPurpose, "race">, PurposeConfig
     startVolumeMultiplier: 0.70,
     volumeMultiplier: 0.95,
     maxKeySessions: 2,
+    firstKeySessionWeek: 1,
+    walkRunWeeks: 0,
     fallbackDistance: "10K",
     label: "Construction de base",
     labelEn: "Base Building",
@@ -387,6 +465,8 @@ export const PURPOSE_CONFIGS: Record<Exclude<PlanPurpose, "race">, PurposeConfig
     startVolumeMultiplier: 0.35,
     volumeMultiplier: 1.0,
     maxKeySessions: 1,
+    firstKeySessionWeek: 5,
+    walkRunWeeks: 3,
     fallbackDistance: "5K",
     label: "Retour de blessure",
     labelEn: "Return from Injury",
@@ -401,6 +481,8 @@ export const PURPOSE_CONFIGS: Record<Exclude<PlanPurpose, "race">, PurposeConfig
     startVolumeMultiplier: 0.30,
     volumeMultiplier: 0.75,
     maxKeySessions: 1,
+    firstKeySessionWeek: 4,
+    walkRunWeeks: 2,
     fallbackDistance: "5K",
     label: "Débutant",
     labelEn: "Beginner Start",

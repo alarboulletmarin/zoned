@@ -51,7 +51,11 @@ function computeStrengthLoad(
 // ── Phase-to-Strength Configuration ─────────────────────────────
 // Defines which strength categories and max frequency apply per phase.
 // Follows Ronnestad 2014 periodization: base (endurance/hypertrophy) →
-// build (hypertrophy/strength) → peak (power/strength) → taper (mobility).
+// build (strength + plyometrics) → peak (plyometrics maintained) → taper
+// (mobility). Plyometrics enter in build, not peak: Blagrove 2018 runs them
+// over 6-14 weeks, and the taper rule (Mujika, Rønnestad) is "keep the
+// intensity, cut the sets, nothing new". Introducing jumps two to five weeks
+// before the race was the one novel stimulus the sources warn against.
 
 const STRENGTH_PHASE_CONFIG: Record<
   TrainingPhase,
@@ -65,7 +69,7 @@ const STRENGTH_PHASE_CONFIG: Record<
     maxFrequency: 3,
   },
   build: {
-    categories: ["runner_lower", "runner_core", "runner_full_body"],
+    categories: ["runner_lower", "plyometrics", "runner_core", "runner_full_body"],
     maxFrequency: 2,
   },
   peak: {
@@ -96,6 +100,8 @@ function selectStrengthSessions(
   phase: TrainingPhase,
   count: number,
   usedIds: Map<string, number>,
+  /** Restrict to these categories (e.g. light work on the eve of a hard run) */
+  onlyCategories?: StrengthCategory[],
 ): StrengthWorkoutTemplate[] {
   const phaseConfig = STRENGTH_PHASE_CONFIG[phase];
 
@@ -103,7 +109,8 @@ function selectStrengthSessions(
   const candidates = allSessions.filter(
     (s) =>
       s.suitablePhases.includes(phase) &&
-      phaseConfig.categories.includes(s.category),
+      phaseConfig.categories.includes(s.category) &&
+      (!onlyCategories || onlyCategories.includes(s.category)),
   );
 
   if (candidates.length === 0) return [];
@@ -136,20 +143,30 @@ function selectStrengthSessions(
 
 // ── Day Placement ───────────────────────────────────────────────
 
+/** A strength day placed right before a hard run only gets light work */
+export interface StrengthDay {
+  dayOfWeek: number;
+  beforeHardDay: boolean;
+}
+
+/** Categories light enough for the eve of a key session or long run */
+const LIGHT_CATEGORIES: StrengthCategory[] = ["mobility", "runner_core", "prehab"];
+
 /**
  * Find suitable days for strength sessions within a week.
  *
  * Priority:
- * 1. Rest days (no running session)
- * 2. Easy-run days (recovery or endurance session type)
- * 3. Never on key session days
+ * 1. Rest days not followed by a hard run (key session or long run)
+ * 2. Easy-run days not followed by a hard run
+ * 3. Days followed by a hard run (only light work will be scheduled there)
+ * 4. Never on key session days
  *
- * Returns day indices spaced at least 1 day apart.
+ * Returns days spaced at least 1 day apart when possible.
  */
 function findStrengthDays(
   sessions: PlanSession[],
   count: number,
-): number[] {
+): StrengthDay[] {
   const allDays = [0, 1, 2, 3, 4, 5, 6];
 
   // Map running sessions by day
@@ -159,6 +176,12 @@ function findStrengthDays(
   }
 
   // Classify days
+  const hardDays = new Set<number>();
+  for (const s of sessions) {
+    if (s.isKeySession || s.sessionType === "long_run") hardDays.add(s.dayOfWeek);
+  }
+  const isBeforeHard = (day: number) => hardDays.has((day + 1) % 7);
+
   const restDays: number[] = [];
   const easyDays: number[] = [];
   const keyDays = new Set<number>();
@@ -178,8 +201,13 @@ function findStrengthDays(
     // Other non-key sessions (tempo, threshold, etc.) are not ideal for pairing
   }
 
-  // Build candidate pool: rest days first, then easy days
-  const pool = [...restDays, ...easyDays];
+  // Build candidate pool: free days first, then easy days, eves of hard days last
+  const pool = [
+    ...restDays.filter((d) => !isBeforeHard(d)),
+    ...easyDays.filter((d) => !isBeforeHard(d)),
+    ...restDays.filter(isBeforeHard),
+    ...easyDays.filter(isBeforeHard),
+  ];
 
   // Greedily select days with at least 1-day spacing
   const selected: number[] = [];
@@ -212,7 +240,9 @@ function findStrengthDays(
     }
   }
 
-  return selected.sort((a, b) => a - b);
+  return selected
+    .sort((a, b) => a - b)
+    .map((dayOfWeek) => ({ dayOfWeek, beforeHardDay: isBeforeHard(dayOfWeek) }));
 }
 
 // ── Main Integration Function ───────────────────────────────────
@@ -252,26 +282,25 @@ export async function addStrengthSuggestions(
       effectiveFrequency = Math.min(frequency, phaseConfig.maxFrequency);
     }
 
-    // Select appropriate strength sessions
-    const selectedSessions = selectStrengthSessions(
-      allSessions,
-      week.isRecoveryWeek ? "recovery" : phase,
-      effectiveFrequency,
-      usageTracker,
-    );
+    // Days first: what may be scheduled depends on what follows the day.
+    // A 45-minute leg session the evening before maximal hill repeats is
+    // not a rest-day pairing, it is a hard day. Eves of hard runs only get
+    // mobility, core or prehab.
+    const strengthPhase = week.isRecoveryWeek ? "recovery" : phase;
+    const strengthDays = findStrengthDays(week.sessions, effectiveFrequency);
+    const weekIds = new Set<string>();
 
-    if (selectedSessions.length === 0) continue;
-
-    // Find suitable days
-    const strengthDays = findStrengthDays(
-      week.sessions,
-      selectedSessions.length,
-    );
-
-    // Create PlanSession entries
-    for (let i = 0; i < selectedSessions.length && i < strengthDays.length; i++) {
-      const template = selectedSessions[i];
-      const dayOfWeek = strengthDays[i];
+    for (const { dayOfWeek, beforeHardDay } of strengthDays) {
+      const picked = selectStrengthSessions(
+        allSessions,
+        strengthPhase,
+        1 + weekIds.size,
+        usageTracker,
+        beforeHardDay ? LIGHT_CATEGORIES : undefined,
+      ).find((s) => !weekIds.has(s.id));
+      if (!picked) continue;
+      const template = picked;
+      weekIds.add(template.id);
 
       const avgDuration = Math.round(
         (template.typicalDuration.min + template.typicalDuration.max) / 2,

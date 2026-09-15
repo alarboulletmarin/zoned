@@ -1,10 +1,14 @@
 import type { RaceDistance, PlanWeek, PlanSession } from "@/types/plan";
 import type { Difficulty, WorkoutTemplate } from "@/types";
-import { RACE_WEEK_VOLUME_PCT, OPENER_DAYS_BEFORE_RACE } from "./constants";
+import { OPENER_DAYS_BEFORE_RACE } from "./constants";
 import { computeBlockLoad } from "./paceEngine";
 
 /** Floor for race-week jogs, shorter than this is not a run, it's a warm-up */
 const RACE_WEEK_MIN_SESSION_MIN = 25;
+/** Ceiling for a race-week jog, above it the week stops being a taper */
+const RACE_WEEK_MAX_SESSION_MIN = 60;
+/** The pre-race opener, easy jog plus strides */
+const OPENER_MIN = 25;
 
 function getRaceLabel(raceDistance: RaceDistance): { fr: string; en: string } {
   switch (raceDistance) {
@@ -28,6 +32,8 @@ export function generateRaceWeek(
   allWorkouts: WorkoutTemplate[],
   /** Average easy pace (min/km), states the jogs in km like every other week */
   easyPaceMinKm?: number,
+  /** Training km the volume model plans for race week (the race excluded) */
+  targetKm?: number,
 ): PlanWeek {
   const sessions: PlanSession[] = [];
 
@@ -53,7 +59,7 @@ export function generateRaceWeek(
       workoutId: openerWorkout.id,
       sessionType: "recovery",
       isKeySession: false,
-      estimatedDurationMin: 25,
+      estimatedDurationMin: OPENER_MIN,
       notes: "Activation pré-course : footing léger + quelques accélérations",
       notesEn: "Pre-race activation: easy jog + a few strides",
     });
@@ -85,7 +91,20 @@ export function generateRaceWeek(
     });
 
   const maxExtraSessions = Math.max(0, daysPerWeek - 2);
-  candidateDays.slice(0, maxExtraSessions).forEach((day, i) => {
+  const easyDays = candidateDays.slice(0, maxExtraSessions);
+
+  // Size the jogs on the volume model's race-week target. Fixed 25-minute
+  // jogs delivered 20 % of peak on a marathon plan when the published
+  // ladders keep 33-42 %; the opener is fixed, the jogs share the rest.
+  let jogMinutes = RACE_WEEK_MIN_SESSION_MIN;
+  if (targetKm && targetKm > 0 && easyPaceMinKm && easyPaceMinKm > 0 && easyDays.length > 0) {
+    const openerKm = openerWorkout ? OPENER_MIN / easyPaceMinKm : 0;
+    const perJogKm = Math.max(0, targetKm - openerKm) / easyDays.length;
+    jogMinutes = Math.round(perJogKm * easyPaceMinKm);
+  }
+  jogMinutes = Math.min(RACE_WEEK_MAX_SESSION_MIN, Math.max(RACE_WEEK_MIN_SESSION_MIN, jogMinutes));
+
+  easyDays.forEach((day, i) => {
     // Rotate through the pool so race week isn't the same jog three days running
     const workout = recoveryWorkouts[i % Math.max(1, recoveryWorkouts.length)];
     if (workout) {
@@ -94,12 +113,7 @@ export function generateRaceWeek(
         workoutId: workout.id,
         sessionType: "recovery",
         isKeySession: false,
-        // Race week is about staying sharp, not about logging volume. Scaling
-        // the template minimum by 35% produced 9-minute sessions.
-        estimatedDurationMin: Math.max(
-          RACE_WEEK_MIN_SESSION_MIN,
-          Math.round(workout.typicalDuration.min * RACE_WEEK_VOLUME_PCT),
-        ),
+        estimatedDurationMin: jogMinutes,
         notes: "Footing léger - semaine de course",
         notesEn: "Easy jog - race week",
       });
@@ -125,7 +139,7 @@ export function generateRaceWeek(
     weekNumber,
     phase: "taper",
     isRecoveryWeek: false,
-    volumePercent: Math.round(RACE_WEEK_VOLUME_PCT * 100),
+    volumePercent: 40,
     sessions,
     weekLabel: "Semaine de course",
     weekLabelEn: "Race week",

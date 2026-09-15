@@ -1,6 +1,6 @@
 import type { SessionType, TrainingPhase } from "@/types";
 import type { TrainingGoal, RaceDistance } from "@/types/plan";
-import { PHASE_SESSION_TYPES, getKeySessionTypes, getGoalModifiers } from "./constants";
+import { getKeySessionTypes, getGoalModifiers } from "./constants";
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -10,6 +10,8 @@ export interface WeekSlot {
   dayOfWeek: number; // 0=Mon ... 6=Sun
   slotType: SlotType;
   sessionTypes: SessionType[]; // Preferred types for this slot, in priority order
+  /** Template tags to prefer when they leave candidates (e.g. "walk-run") */
+  preferTags?: string[];
 }
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -135,18 +137,18 @@ export function buildWeekTemplate(
 ): WeekSlot[] {
   // Determine slot distribution by days per week
   // Format: { key count, easy count, recovery count }, long_run is always 1
-  // Designed to respect ~80/20 polarized distribution:
-  //   3j: 1 key + 1 SL + 1 easy     = 33% hard (acceptable for low volume)
-  //   4j: 2 key + 1 SL + 1 easy     = Daniels' Q1/Q2 pair, ~15% hard *time*
-  //   5j: 2 key + 1 SL + 2 easy     = 40% hard sessions but key≠all-out → ~25% hard time
+  //   3j: 1 key + 1 SL + 1 easy
+  //   4j: 2 key + 1 SL + 1 easy     = Daniels' Q1/Q2 pair
+  //   5j: 2 key + 1 SL + 2 easy
   //   6j: 2 key + 1 SL + 2 easy + 1 recovery
   //   7j: 2 key + 1 SL + 3 easy + 1 recovery
   //
-  // The 80/20 split is a share of *time*, not of sessions: a key session spends
-  // most of its minutes warming up, recovering and cooling down. Budgeting a
-  // single key session per week left 4-day plans under one quality session per
-  // week once recovery weeks were removed, too little to develop VO2max and
-  // threshold in the same cycle (Daniels prescribes a Q1/Q2 pair).
+  // Seiler's 80/20 counts sessions (about 80 % of them easy). Two key sessions
+  // a week from week 1 gave 4-day plans 36-38 % hard sessions over the whole
+  // plan and 50 % in load weeks. The base phase now budgets a single key
+  // session up to 5 days a week (Pfitzinger's endurance block has one
+  // threshold session; Daniels' phase I only strides), the pair arrives with
+  // the build phase, and it is never more than two.
   const slotDistribution: Record<number, { key: number; easy: number; recovery: number }> = {
     3: { key: 1, easy: 1, recovery: 0 },
     4: { key: 2, easy: 1, recovery: 0 },
@@ -164,10 +166,11 @@ export function buildWeekTemplate(
   const MAX_KEY_SESSIONS_BY_DAYS: Record<number, number> = { 3: 1, 4: 2, 5: 2, 6: 2, 7: 2 };
   const goalMods = getGoalModifiers(trainingGoal);
   const spacingCap = MAX_KEY_SESSIONS_BY_DAYS[daysPerWeek] ?? 2;
+  const phaseCap = phase === "base" && daysPerWeek <= 5 ? 1 : 2;
   const requestedKey = goalMods.maxQualitySessions > 0
     ? goalMods.maxQualitySessions
     : dist.key;
-  const adjustedKey = Math.min(requestedKey, spacingCap, daysPerWeek - 1);
+  const adjustedKey = Math.min(requestedKey, spacingCap, phaseCap, daysPerWeek - 1);
   const adjustedEasy = dist.easy + (dist.key - adjustedKey); // Reassign reduced key → easy
   const adjustedRecovery = dist.recovery;
 
@@ -186,7 +189,6 @@ export function buildWeekTemplate(
     phase === "taper"
       ? ["recovery", "endurance"]
       : ["endurance", "recovery"];
-  void PHASE_SESSION_TYPES[phase];
 
   const slots: WeekSlot[] = [];
 

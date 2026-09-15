@@ -1,6 +1,6 @@
 import type { TrainingPlan, RaceDistance } from "@/types/plan";
 import { RACE_DISTANCE_META } from "@/types/plan";
-import { RECOMMENDED_PLAN_WEEKS } from "./constants";
+import { RECOMMENDED_PLAN_WEEKS, WEEKLY_VOLUME_FLOOR_KM } from "./constants";
 import {
   goalDemandFactor,
   vmaRequiredForPace,
@@ -27,6 +27,8 @@ export interface PlanFinding {
 // ── Constants ────────────────────────────────────────────────────────
 
 const DAY_NAMES_FR = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+/** A taper week above this share of peak is not tapering */
+const TAPER_MAX_SHARE_PCT = 85;
 const DAY_NAMES_EN = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 // ── Volume metric ────────────────────────────────────────────────────
@@ -67,8 +69,12 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
   let findingId = 0;
   const nextId = () => `finding-${++findingId}`;
 
+  // Non-race purposes (base building, return from injury, beginner start)
+  // have no race day whatever the config carries.
+  const isRacePlan = !plan.config.planPurpose || plan.config.planPurpose === "race";
+
   // ── Check 1: RACE_DAY_MISSING ──────────────────────────────────────
-  if (plan.config.raceDate) {
+  if (plan.config.raceDate && isRacePlan) {
     const hasRaceDay = plan.weeks.some((w) =>
       w.sessions.some((s) => s.workoutId === "__race_day__"),
     );
@@ -85,7 +91,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
   }
 
   // ── Check 2: RACE_DAY_NOT_LAST_WEEK ────────────────────────────────
-  if (plan.config.raceDate) {
+  if (plan.config.raceDate && isRacePlan) {
     for (const week of plan.weeks) {
       const raceSession = week.sessions.find(
         (s) => s.workoutId === "__race_day__",
@@ -118,7 +124,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
   }
 
   // ── Check 2c: PRIORITY_A_NEAR_TAPER ──────────────────────────────
-  if (plan.config.raceDate) {
+  if (plan.config.raceDate && isRacePlan) {
     const taperPhase = plan.phases.find(p => p.phase === "taper");
     if (taperPhase) {
       for (const week of plan.weeks) {
@@ -209,22 +215,23 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
 
     // ── Check 6: TAPER_WEEK_HEAVY ────────────────────────────────────
     // Bosquet et al. (2007): a taper works when volume drops well below peak
-    // while intensity holds. Measured against the plan's real peak km when
-    // available, since volumePercent alone said nothing about delivered load.
+    // while intensity holds. The published ladders open at 75-80 % of peak
+    // (Pfitzinger, Higdon), so the first taper week is judged against 85 %;
+    // measured against the plan's real peak km when available.
     const taperShare = peakKm > 0 && week.targetKm
       ? (week.targetKm / peakKm) * 100
       : week.volumePercent;
-    if (week.phase === "taper" && taperShare > 70) {
+    if (week.phase === "taper" && taperShare > TAPER_MAX_SHARE_PCT) {
       const shown = Math.round(taperShare);
       findings.push({
         id: nextId(),
         severity: "warning",
         code: "TAPER_WEEK_HEAVY",
         weekNumber: week.weekNumber,
-        message: `Semaine ${week.weekNumber} (affûtage) : volume à ${shown}% du pic, trop élevé pour un affûtage efficace. Réduire sous 70% pour arriver frais le jour J.`,
-        messageEn: `Week ${week.weekNumber} (taper): volume at ${shown}% of peak, too high for effective tapering. Reduce below 70% to arrive fresh on race day.`,
-        suggestion: `Supprimer une séance ou réduire les durées pour passer sous 70% du pic.`,
-        suggestionEn: `Remove a session or reduce durations to get below 70% of peak.`,
+        message: `Semaine ${week.weekNumber} (affûtage) : volume à ${shown}% du pic, trop élevé pour un affûtage efficace. Réduire sous ${TAPER_MAX_SHARE_PCT}% pour arriver frais le jour J.`,
+        messageEn: `Week ${week.weekNumber} (taper): volume at ${shown}% of peak, too high for effective tapering. Reduce below ${TAPER_MAX_SHARE_PCT}% to arrive fresh on race day.`,
+        suggestion: `Supprimer une séance ou réduire les durées pour passer sous ${TAPER_MAX_SHARE_PCT}% du pic.`,
+        suggestionEn: `Remove a session or reduce durations to get below ${TAPER_MAX_SHARE_PCT}% of peak.`,
         fixable: true,
       });
     }
@@ -344,24 +351,13 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
 
 /** Long run a runner should reach to face the distance, in km */
 const LONG_RUN_TARGET_KM: Record<RaceDistance, number> = {
-  "5K": 10,
-  "10K": 14,
+  "5K": 7,
+  "10K": 9,
   semi: 18,
   marathon: 28,
   trail_short: 22,
   trail: 30,
   ultra: 35,
-};
-
-/** Weekly volume below which the distance becomes a survival exercise, in km */
-const WEEKLY_VOLUME_FLOOR_KM: Record<RaceDistance, number> = {
-  "5K": 20,
-  "10K": 25,
-  semi: 35,
-  marathon: 50,
-  trail_short: 40,
-  trail: 50,
-  ultra: 60,
 };
 
 function auditGoalFeasibility(
@@ -370,7 +366,8 @@ function auditGoalFeasibility(
 ): PlanFinding[] {
   const out: PlanFinding[] = [];
   const distance = plan.config.raceDistance;
-  if (!distance || !plan.config.raceDate) return out;
+  const isRacePlan = !plan.config.planPurpose || plan.config.planPurpose === "race";
+  if (!distance || !plan.config.raceDate || !isRacePlan) return out;
 
   const lastWeek = plan.totalWeeks;
   const peakWeeklyKm = Math.max(0, ...plan.weeks.map((w) => w.targetKm ?? 0));
@@ -431,9 +428,9 @@ function auditGoalFeasibility(
   // ── GOAL_PACE_OUT_OF_REACH ─────────────────────────────────────────
   const { targetPaceMinKm, vma } = plan.config;
   if (targetPaceMinKm && vma) {
-    const demand = goalDemandFactor(targetPaceMinKm, vma, distance);
+    const demand = goalDemandFactor(targetPaceMinKm, vma, distance, plan.config.runnerLevel);
     if (demand >= UNREALISTIC_DEMAND) {
-      const required = vmaRequiredForPace(targetPaceMinKm, distance);
+      const required = vmaRequiredForPace(targetPaceMinKm, distance, plan.config.runnerLevel);
       out.push({
         id: nextId(),
         severity: "warning",

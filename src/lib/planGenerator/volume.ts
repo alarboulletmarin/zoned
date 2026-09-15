@@ -1,14 +1,19 @@
 /**
- * Volume Progression, km-based weekly volume with exponential taper
+ * Volume Progression, km-based weekly volume with a published taper ladder
  *
- * Replaces abstract volumePercent (0-100) with actual weekly km targets.
- * Implements load-based recovery weeks and Mujika exponential taper.
+ * Plans weekly km targets: a computed ramp to a peak placed a few weeks
+ * before the taper, load-based recovery weeks, and a taper whose shares of
+ * peak follow the published ladders rather than an exponential that dropped
+ * a third of the volume in one step.
  *
  * References:
- * - Pfitzinger, P. (2009). Progressive volume with 3:1 mesocycles.
- * - Mujika, I. & Padilla, S. (2003). Exponential taper model.
- * - Gabbett, T. (2016). Acute:Chronic workload ratio for injury prevention.
- * - Seiler, S. (2010). Polarized training distribution.
+ * - Pfitzinger, P. (2009). Progressive volume, drop-back weeks at 78-85 %.
+ * - Bosquet, L. et al. (2007). Taper meta-analysis: 41-60 % total reduction,
+ *   progressive, over about two weeks, intensity and frequency kept.
+ * - Smyth, B. & Lawlor, A. (2021). Disciplined 3-week tapers in recreational
+ *   marathoners.
+ * - Buist, I. et al. (2008), Nielsen, R. et al. (2014): the 10 % rule is a
+ *   bound, not a prescription.
  */
 
 import type { Difficulty } from "@/types";
@@ -16,12 +21,15 @@ import type { RaceDistance, PhaseRange, TrainingGoal } from "@/types/plan";
 import { getPhaseForWeek } from "./phases";
 import {
   WEEKLY_KM_TARGETS,
+  WEEKLY_VOLUME_FLOOR_KM,
   MAX_WEEKLY_VOLUME_INCREASE,
+  MIN_WEEKLY_VOLUME_INCREASE,
   RECOVERY_WEEK_VOLUME_PCT,
   MAX_CONSECUTIVE_LOAD_WEEKS,
-  TAPER_DECAY_RATE,
+  NO_RECOVERY_WEEKS_BEFORE_TAPER,
+  PEAK_WEEKS_BEFORE_TAPER,
+  TAPER_VOLUME_PCT,
   RACE_WEEK_VOLUME_PCT,
-  STARTING_VOLUME_PCT,
   getGoalModifiers,
 } from "./constants";
 
@@ -41,13 +49,13 @@ export interface WeekVolume {
 /**
  * Calculate volume progression for each week of the plan.
  *
- * New algorithm:
- * 1. Compute start and peak km from distance/level tables
- * 2. Progressive increase (max +10%/week) toward peak
- * 3. Recovery week after every 3 consecutive load weeks (not fixed every 4th)
- * 4. Always insert recovery before peak phase transition
- * 5. Exponential taper (Mujika) for final weeks
- * 6. Race week at 35% volume
+ * 1. Start and peak km from the distance/level tables, the runner's declared
+ *    volume, and the distance floor
+ * 2. A weekly increase computed so the peak lands PEAK_WEEKS_BEFORE_TAPER
+ *    weeks before the taper, capped at MAX_WEEKLY_VOLUME_INCREASE
+ * 3. Recovery week after N consecutive load weeks, and before the peak
+ *    phase, never within NO_RECOVERY_WEEKS_BEFORE_TAPER of the taper
+ * 4. Taper weeks at the published shares of peak, race week at its own share
  *
  * @param totalWeeks - Total plan duration
  * @param phases - Phase ranges
@@ -68,7 +76,14 @@ export function calculateVolumeProgression(
   goalDemandFactor: number = 1,
   /** Purpose multiplier for the starting point; defaults to the peak one */
   purposeStartMultiplier?: number,
+  /**
+   * Weeks holding an intermediate race (and, for long ones, the week after).
+   * A race week is a recovery in itself: the model never schedules a
+   * drop-back on it or right after it, and the load count restarts there.
+   */
+  intermediateRaceWeeks: number[] = [],
 ): WeekVolume[] {
+  const raceWeeks = new Set(intermediateRaceWeeks);
   const goalMods = getGoalModifiers(trainingGoal);
 
   const [defaultStartKm, defaultPeakKm] = WEEKLY_KM_TARGETS[raceDistance]?.[difficulty]
@@ -79,21 +94,11 @@ export function calculateVolumeProgression(
   // goalDemandFactor raises the ceiling when the target time asks for more than
   // current fitness delivers. It never touches the starting point: you begin
   // where you are, ambition only changes where you are heading.
-  // A single purpose multiplier applied to both ends left return-to-running
-  // plans with no amplitude at all: start and peak moved together, so an 8-week
-  // plan went from 15km to 15km. The starting point is what a purpose lowers
-  // most; the peak is where the plan is allowed to arrive.
   const startScale = goalMods.volumeMultiplier * (purposeStartMultiplier ?? purposeVolumeMultiplier);
   const peakScale = goalMods.volumeMultiplier * purposeVolumeMultiplier;
-  const startKm = currentWeeklyKm ?? Math.round(defaultStartKm * startScale);
-  const peakKm = Math.round(defaultPeakKm * peakScale * goalDemandFactor);
-
-  // Scale peak km for fewer training days. The reference tables assume the 5-6
-  // day weeks the source plans are built on, so weekly volume tracks the number
-  // of sessions far more closely than the old 0.7 + days*0.06 curve suggested
-  // (it granted 4-day weeks 94% of a 6-day volume). Asking for a peak the week
-  // cannot physically hold made the generator saturate every week at its
-  // ceiling, which flattened the progression and broke its monotonicity.
+  // Scale the table for fewer training days. The reference tables assume the
+  // 5-6 day weeks the source plans are built on; the start is scaled too, a
+  // 4-day half-marathon plan opened at 50 km, 12.5 km per session.
   const DAYS_VOLUME_SHARE: Record<number, number> = {
     3: 0.70,
     4: 0.78,
@@ -102,6 +107,8 @@ export function calculateVolumeProgression(
     7: 1.05,
   };
   const daysAdjustment = DAYS_VOLUME_SHARE[daysPerWeek] ?? 0.90;
+  const startKm = currentWeeklyKm ?? Math.round(defaultStartKm * startScale * daysAdjustment);
+  const peakKm = Math.round(defaultPeakKm * peakScale * goalDemandFactor);
   const tablePeakKm = Math.round(peakKm * daysAdjustment);
 
   // A plan must ask for more than the runner already does. Anchoring the peak
@@ -116,19 +123,52 @@ export function calculateVolumeProgression(
   const MIN_KM_PER_SESSION = 3.5;
   const volumeFloor = Math.round(daysPerWeek * MIN_KM_PER_SESSION);
 
+  // The distance itself sets a floor: fewer training days and a "finish" goal
+  // lower the ceiling, but not below what the race needs (a 4-day marathon
+  // plan otherwise peaked at 43 km, which its own audit rejects). Non-race
+  // purposes scale the floor with their own multiplier.
+  const distanceFloor = Math.round(WEEKLY_VOLUME_FLOOR_KM[raceDistance] * purposeVolumeMultiplier);
+
   const adjustedPeakKm = Math.max(
     tablePeakKm,
     Math.round(startKm * growthFactor),
     volumeFloor,
+    distanceFloor,
   );
 
   const taperPhase = phases.find(p => p.phase === "taper");
-  const taperStart = taperPhase?.startWeek ?? totalWeeks;
+  const taperStart = taperPhase?.startWeek ?? totalWeeks + 1;
   const peakPhase = phases.find(p => p.phase === "peak");
   const peakStart = peakPhase?.startWeek ?? taperStart;
 
+  const maxLoadWeeks = goalMods.recoveryFrequency > 0
+    ? goalMods.recoveryFrequency
+    : MAX_CONSECUTIVE_LOAD_WEEKS;
+  const recoveryPct = goalMods.recoveryVolumePct > 0
+    ? goalMods.recoveryVolumePct
+    : RECOVERY_WEEK_VOLUME_PCT;
+
+  // ── Ramp rate: reach the peak a few weeks before the taper ──
+  // Applying the 10 % ceiling as the slope put every plan at its peak by
+  // mid-plan, then flat. The slope is what gets from start to peak in the
+  // load weeks available; the ceiling only binds when that is too steep.
+  const peakTargetWeek = taperPhase
+    ? Math.max(2, taperStart - PEAK_WEEKS_BEFORE_TAPER[raceDistance])
+    : Math.max(2, totalWeeks - 1);
+  const weeksToPeak = peakTargetWeek - 1;
+  const recoveryWeeksBeforePeak = Math.floor(weeksToPeak / (maxLoadWeeks + 1));
+  const loadWeeksToPeak = Math.max(1, weeksToPeak - recoveryWeeksBeforePeak);
+  const firstKm = Math.max(startKm, volumeFloor);
+  const neededRate = adjustedPeakKm > firstKm
+    ? Math.pow(adjustedPeakKm / firstKm, 1 / loadWeeksToPeak) - 1
+    : 0;
+  const increaseRate = Math.min(
+    MAX_WEEKLY_VOLUME_INCREASE,
+    Math.max(MIN_WEEKLY_VOLUME_INCREASE, neededRate),
+  );
+
   const weeks: WeekVolume[] = [];
-  let currentKm = Math.max(startKm, volumeFloor);
+  let currentKm = firstKm;
   let actualPeakKm = currentKm; // Track actual highest volume achieved
   let consecutiveLoadWeeks = 0;
 
@@ -137,48 +177,45 @@ export function calculateVolumeProgression(
 
     // ── Race week (last week, only for race plans with taper) ──
     if (w === totalWeeks && taperPhase) {
-      const raceKm = Math.round(actualPeakKm * RACE_WEEK_VOLUME_PCT);
+      const share = RACE_WEEK_VOLUME_PCT[raceDistance];
       weeks.push({
         weekNumber: w,
-        volumePercent: Math.round(RACE_WEEK_VOLUME_PCT * 100),
-        targetKm: raceKm,
+        volumePercent: Math.round(share * 100),
+        targetKm: Math.round(actualPeakKm * share),
         isRecoveryWeek: false,
       });
       continue;
     }
 
-    // ── Taper weeks (exponential decay, Mujika) ──
+    // ── Taper weeks: published ladder, share of the actual peak ──
     if (phase === "taper") {
-      const taperWeekIndex = w - taperStart + 1; // 1-based
-      const fraction = Math.exp(-TAPER_DECAY_RATE * taperWeekIndex);
-      const taperKm = Math.round(actualPeakKm * fraction);
-
+      const ladder = TAPER_VOLUME_PCT[raceDistance];
+      const index = w - taperStart;
+      const fraction = ladder[index] ?? ladder[ladder.length - 1] ?? RACE_WEEK_VOLUME_PCT[raceDistance];
       weeks.push({
         weekNumber: w,
         volumePercent: Math.round(fraction * 100),
-        targetKm: taperKm,
+        targetKm: Math.round(actualPeakKm * fraction),
         isRecoveryWeek: false,
       });
       continue;
     }
 
     // ── Recovery week decision ──
-    // Insert recovery after N consecutive load weeks (default 3, or goal-based)
-    // Also insert recovery before peak phase starts (transition recovery)
-    const maxLoadWeeks = goalMods.recoveryFrequency > 0
-      ? goalMods.recoveryFrequency
-      : MAX_CONSECUTIVE_LOAD_WEEKS;
+    // After N consecutive load weeks, or as a transition before the peak
+    // phase. Never right before the taper, which is itself the recovery.
+    const closeToTaper = taperPhase ? (taperStart - w) <= NO_RECOVERY_WEEKS_BEFORE_TAPER : false;
+    const nearIntermediateRace = raceWeeks.has(w) || raceWeeks.has(w - 1);
     const isTransitionRecovery = (w + 1 === peakStart) && consecutiveLoadWeeks >= 2;
     const isLoadRecovery = consecutiveLoadWeeks >= maxLoadWeeks;
-    const isRecoveryWeek = w > 1 && (isLoadRecovery || isTransitionRecovery);
+    const isRecoveryWeek = w > 1 && !closeToTaper && !nearIntermediateRace
+      && (isLoadRecovery || isTransitionRecovery);
 
     if (isRecoveryWeek) {
-      const recoveryKm = Math.round(currentKm * RECOVERY_WEEK_VOLUME_PCT);
-      // volumePercent = actual ratio to peak (not a fixed 65%)
-      // This prevents early recovery weeks from showing higher % than surrounding build weeks
+      const recoveryKm = Math.round(currentKm * recoveryPct);
       const recoveryVolPct = adjustedPeakKm > 0
         ? Math.round((recoveryKm / adjustedPeakKm) * 100)
-        : Math.round(RECOVERY_WEEK_VOLUME_PCT * 100);
+        : Math.round(recoveryPct * 100);
       weeks.push({
         weekNumber: w,
         volumePercent: recoveryVolPct,
@@ -193,18 +230,13 @@ export function calculateVolumeProgression(
     // ── Normal build week ──
     if (w > 1) {
       const prevNonRecovery = weeks.filter(wk => !wk.isRecoveryWeek).at(-1);
-      const prevKm = prevNonRecovery?.targetKm ?? Math.max(startKm, volumeFloor);
-      // For longer plans, use gentler progression to avoid peaking too early
-      const maxIncreaseRate = totalWeeks > 20 ? 0.07 : MAX_WEEKLY_VOLUME_INCREASE;
-      const maxIncrease = prevKm * maxIncreaseRate;
-      currentKm = Math.min(adjustedPeakKm, prevKm + maxIncrease);
+      const prevKm = prevNonRecovery?.targetKm ?? firstKm;
+      currentKm = Math.min(adjustedPeakKm, prevKm * (1 + increaseRate));
     }
 
-    // Micro-undulation at plateau: alternate ±5% to avoid monotony
-    // This simulates natural training periodization (harder/easier weeks)
+    // Micro-undulation at plateau: alternate 100 % / 93 % to avoid monotony
     let weekKm = Math.round(currentKm);
     if (currentKm >= adjustedPeakKm * 0.95) {
-      // At plateau, undulate between 95% and 100%
       const isHighWeek = consecutiveLoadWeeks % 2 === 0;
       weekKm = Math.round(adjustedPeakKm * (isHighWeek ? 1.0 : 0.93));
     }
@@ -219,18 +251,10 @@ export function calculateVolumeProgression(
     });
 
     actualPeakKm = Math.max(actualPeakKm, weekKm);
-    consecutiveLoadWeeks++;
+    // The overlay lightens race weeks afterwards; for the load count they
+    // are the recovery.
+    consecutiveLoadWeeks = raceWeeks.has(w) ? 0 : consecutiveLoadWeeks + 1;
   }
 
   return weeks;
-}
-
-/**
- * Legacy: get starting volume percentage based on plan length.
- * Kept for backward compatibility with old plans.
- */
-export function getStartingVolume(totalWeeks: number): number {
-  if (totalWeeks <= 11) return STARTING_VOLUME_PCT.short;
-  if (totalWeeks <= 17) return STARTING_VOLUME_PCT.medium;
-  return STARTING_VOLUME_PCT.long;
 }

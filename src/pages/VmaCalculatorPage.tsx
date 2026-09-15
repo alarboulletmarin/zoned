@@ -25,17 +25,20 @@ import { updateBaseData } from "@/lib/runnerProfile";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
+import { enduranceIndexFor, sustainableVmaFraction, vmaFromRaceTime } from "@/lib/racePerformance";
 
 /**
- * Race distance configurations with VMA percentages.
- * Matches the values from paceCalculator.ts.
+ * Race distances. The share of VMA held on each is not a constant: it comes
+ * from the race performance model and depends on the time entered.
  */
 const DISTANCES = [
-  { id: "5k", label: "5 km", distanceKm: 5, vmaPercentage: 97 },
-  { id: "10k", label: "10 km", distanceKm: 10, vmaPercentage: 92 },
-  { id: "semi", label: "Semi-marathon (21.1 km)", distanceKm: 21.1, vmaPercentage: 82 },
-  { id: "marathon", label: "Marathon (42.195 km)", distanceKm: 42.195, vmaPercentage: 77 },
+  { id: "5k", label: "5 km", distanceKm: 5, typicalMinutes: 25 },
+  { id: "10k", label: "10 km", distanceKm: 10, typicalMinutes: 52 },
+  { id: "semi", label: "Semi-marathon (21.1 km)", distanceKm: 21.1, typicalMinutes: 115 },
+  { id: "marathon", label: "Marathon (42.195 km)", distanceKm: 42.195, typicalMinutes: 240 },
 ] as const;
+
+const ENDURANCE_INDEX_DEFAULT = enduranceIndexFor("intermediate");
 
 export function VmaCalculatorPage() {
   const { t } = useTranslation("common");
@@ -62,15 +65,22 @@ export function VmaCalculatorPage() {
   const totalTimeMinutes = parsedHours * 60 + parsedMinutes + parsedSeconds / 60;
   const hasValidTime = totalTimeMinutes > 0;
 
+  // Share of VMA the entered time corresponds to (Péronnet-Thibault)
+  const vmaPercentUsed = useMemo(
+    () => Math.round(
+      sustainableVmaFraction(hasValidTime ? totalTimeMinutes : selectedDistance.typicalMinutes, ENDURANCE_INDEX_DEFAULT) * 100,
+    ),
+    [hasValidTime, totalTimeMinutes, selectedDistance.typicalMinutes],
+  );
+
   // Calculate VMA
   const calculatedVma = useMemo(() => {
     if (!hasValidTime) return null;
-    const raceSpeedKmh = selectedDistance.distanceKm / (totalTimeMinutes / 60);
-    const vma = raceSpeedKmh / (selectedDistance.vmaPercentage / 100);
+    const vma = vmaFromRaceTime(selectedDistance.distanceKm, totalTimeMinutes, ENDURANCE_INDEX_DEFAULT);
     // Sanity check: VMA should be between 8 and 30
     if (!Number.isFinite(vma) || vma < 4 || vma > 35) return null;
     return Math.round(vma * 10) / 10;
-  }, [hasValidTime, selectedDistance.distanceKm, selectedDistance.vmaPercentage, totalTimeMinutes]);
+  }, [hasValidTime, selectedDistance.distanceKm, totalTimeMinutes]);
 
   // Calculate pace zones from VMA
   const paceZones = useMemo(() => {
@@ -177,7 +187,7 @@ export function VmaCalculatorPage() {
                 </Select>
                 <p className="zn-caption zn-faint">
                   {t("calculators:calculateurs.vma.vmaPercentUsed", {
-                    percent: selectedDistance.vmaPercentage,
+                    percent: vmaPercentUsed,
                   })}
                 </p>
               </div>

@@ -43,10 +43,14 @@ interface LongRunConfig {
   peakWeeksBeforeRace: number;
 }
 
+// absoluteMaxKm is a ceiling for the km target; the duration cap below and
+// the weekly share cap bind first for most runners. It is not the peak: the
+// peak also follows the weekly volume (Daniels: 25-30 % of the week), so a
+// half-marathoner at 100 km a week is not held to a 19 km long run.
 const LONG_RUN_CONFIG: Record<RaceDistance, LongRunConfig> = {
   "5K": {
     peakFraction: 2.5,
-    absoluteMaxKm: 15,
+    absoluteMaxKm: 22,
     startFraction: 0.55,
     incrementKm: { beginner: 1.0, intermediate: 1.5, advanced: 2.0, elite: 2.0 },
     stepBackReduction: 0.85,
@@ -55,7 +59,7 @@ const LONG_RUN_CONFIG: Record<RaceDistance, LongRunConfig> = {
   },
   "10K": {
     peakFraction: 1.8,
-    absoluteMaxKm: 20,
+    absoluteMaxKm: 26,
     startFraction: 0.55,
     incrementKm: { beginner: 1.0, intermediate: 1.5, advanced: 2.0, elite: 2.5 },
     stepBackReduction: 0.85,
@@ -64,7 +68,7 @@ const LONG_RUN_CONFIG: Record<RaceDistance, LongRunConfig> = {
   },
   semi: {
     peakFraction: 0.90,
-    absoluteMaxKm: 24,
+    absoluteMaxKm: 30,
     startFraction: 0.50,
     incrementKm: { beginner: 1.5, intermediate: 2.0, advanced: 2.5, elite: 3.0 },
     stepBackReduction: 0.85,
@@ -73,7 +77,7 @@ const LONG_RUN_CONFIG: Record<RaceDistance, LongRunConfig> = {
   },
   marathon: {
     peakFraction: 0.78,
-    absoluteMaxKm: 35,
+    absoluteMaxKm: 36,
     startFraction: 0.45,
     incrementKm: { beginner: 1.5, intermediate: 2.0, advanced: 2.5, elite: 3.0 },
     stepBackReduction: 0.85,
@@ -82,7 +86,7 @@ const LONG_RUN_CONFIG: Record<RaceDistance, LongRunConfig> = {
   },
   trail_short: {
     peakFraction: 0.70,
-    absoluteMaxKm: 25,
+    absoluteMaxKm: 28,
     startFraction: 0.45,
     incrementKm: { beginner: 1.5, intermediate: 2.0, advanced: 2.5, elite: 3.0 },
     stepBackReduction: 0.85,
@@ -107,6 +111,28 @@ const LONG_RUN_CONFIG: Record<RaceDistance, LongRunConfig> = {
     stepBackFrequency: 3,
     peakWeeksBeforeRace: 4,
   },
+};
+
+/**
+ * Share of the peak weekly volume the long run should reach when that is more
+ * than the distance-based target (Daniels: 25-30 % of the week; Hansons:
+ * 25-30 %). Without it a 141 km/week 5K plan carried a 12.5 km long run.
+ */
+const LONG_RUN_VOLUME_SHARE = 0.27;
+
+/**
+ * Longest sensible long run in minutes. Daniels caps at 150 min, Hansons at
+ * 3 h; the km target was blind to pace, so a slow marathoner got a 4-hour
+ * outing.
+ */
+export const MAX_LONG_RUN_MINUTES: Record<RaceDistance, number> = {
+  "5K": 120,
+  "10K": 130,
+  semi: 150,
+  marathon: 195,
+  trail_short: 180,
+  trail: 240,
+  ultra: 300,
 };
 
 const MAX_COMFORTABLE_START: Record<Difficulty, number> = {
@@ -139,13 +165,24 @@ export function calculateLongRunProgression(
   currentLongRunKm?: number,
   trainingGoal?: TrainingGoal,
   intermediateRaceWeeks?: number[],
+  /** Peak weekly km of the volume model, lifts the long run with the volume */
+  peakWeeklyKm?: number,
 ): LongRunTarget[] {
   const config = LONG_RUN_CONFIG[raceDistance];
   const raceDistanceKm = getRaceDistanceKm(raceDistance);
   const goalMods = getGoalModifiers(trainingGoal);
 
-  // 1. Peak and start distances
-  const peakKm = Math.min(raceDistanceKm * config.peakFraction, config.absoluteMaxKm);
+  // 1. Peak and start distances: the larger of the distance-based target and
+  // the volume share, capped in km and in minutes at easy pace.
+  const easyPace = (paces.E.min + paces.E.max) / 2;
+  const distanceTarget = raceDistanceKm * config.peakFraction;
+  const volumeTarget = (peakWeeklyKm ?? 0) * LONG_RUN_VOLUME_SHARE;
+  const durationCapKm = easyPace > 0 ? MAX_LONG_RUN_MINUTES[raceDistance] / easyPace : Infinity;
+  const peakKm = roundKm(Math.min(
+    Math.max(distanceTarget, volumeTarget),
+    config.absoluteMaxKm,
+    durationCapKm,
+  ));
   const comfortCap = currentLongRunKm ?? MAX_COMFORTABLE_START[difficulty];
   const startKm = Math.min(peakKm * config.startFraction, comfortCap);
 
@@ -202,11 +239,13 @@ export function calculateLongRunProgression(
     if (week > totalWeeks - taperWeeks) {
       const taperWeekIndex = week - (totalWeeks - taperWeeks);
       const fraction = Math.exp(-0.4 * taperWeekIndex);
-      const taperKm = roundKm(currentKm * fraction);
+      // Keep a real run in the taper, but never longer than the plan's own
+      // long runs: a fixed 8 km floor exceeded the peak of short beginner plans.
+      const taperKm = Math.max(roundKm(currentKm * fraction), Math.min(8, roundKm(peakKm * 0.6)));
       targets.push({
         weekNumber: week,
-        distanceKm: Math.max(taperKm, 8),
-        durationMin: estimateDurationForDistance(Math.max(taperKm, 8), "E", paces),
+        distanceKm: taperKm,
+        durationMin: estimateDurationForDistance(taperKm, "E", paces),
         isStepBack: false,
       });
       continue;
@@ -283,19 +322,45 @@ export function calculateLongRunProgression(
  * higher share than short races, where weekly frequency matters more.
  */
 // Daniels caps easy long runs near a quarter to a third of weekly volume, and
-// Pfitzinger's marathon long runs land around 35% of their week. Allowing half
-// the week in one run left a 33km outing inside a 61km week, which recovers
-// like a race rather than like training. Trail keeps more headroom: its long
-// runs are the specific session, not a share of a road week.
-const MAX_LONG_RUN_SHARE: Record<RaceDistance, number> = {
-  "5K": 0.35,
-  "10K": 0.35,
-  semi: 0.38,
-  marathon: 0.40,
-  trail_short: 0.45,
-  trail: 0.50,
-  ultra: 0.50,
+// Pfitzinger's marathon long runs land around 35-40 % of their week. Allowing
+// half the week in one run left a 33km outing inside a 61km week, which
+// recovers like a race rather than like training. Trail keeps more headroom:
+// its long runs are the specific session, not a share of a road week.
+//
+// Low-volume weeks get more room: Higdon's first-timers run 32 km inside a
+// 64 km week (50 %), and holding a 4-day marathon plan to 40 % capped its
+// long run at 17 km. The extra share fades out between LOW_VOLUME_KM and
+// FULL_SHARE_KM.
+const MAX_LONG_RUN_SHARE: Record<RaceDistance, { base: number; lowVolumeExtra: number }> = {
+  "5K": { base: 0.35, lowVolumeExtra: 0.05 },
+  "10K": { base: 0.35, lowVolumeExtra: 0.05 },
+  semi: { base: 0.38, lowVolumeExtra: 0.08 },
+  marathon: { base: 0.40, lowVolumeExtra: 0.10 },
+  trail_short: { base: 0.45, lowVolumeExtra: 0.05 },
+  trail: { base: 0.50, lowVolumeExtra: 0 },
+  ultra: { base: 0.50, lowVolumeExtra: 0 },
 };
+const LOW_VOLUME_KM = 45;
+const FULL_SHARE_KM = 65;
+
+/**
+ * On 3 or 4 runs a week the long run is mechanically a bigger share of the
+ * week (Higdon's 3-day Novice 10K: 9 km of 21, 43 %). Holding it to the
+ * 5-6 day share starved the long run of short-week plans.
+ */
+const FEW_DAYS_EXTRA: Record<number, number> = { 3: 0.10, 4: 0.05 };
+
+/** Largest share of a week of `weeklyKm` the long run may take */
+export function maxLongRunShare(weeklyKm: number, raceDistance: RaceDistance, daysPerWeek?: number): number {
+  const { base, lowVolumeExtra } = MAX_LONG_RUN_SHARE[raceDistance];
+  const t = Math.min(1, Math.max(0, (FULL_SHARE_KM - weeklyKm) / (FULL_SHARE_KM - LOW_VOLUME_KM)));
+  const fewDays = daysPerWeek ? (FEW_DAYS_EXTRA[daysPerWeek] ?? 0) : 0;
+  // Road plans never put more than 45 % of the week in one run (Higdon's
+  // 3-day Novice 5K tops out at ~37 %); trail long runs are the specific
+  // session and may go to 60 %.
+  const ceiling = raceDistance === "trail" || raceDistance === "ultra" || raceDistance === "trail_short" ? 0.60 : 0.45;
+  return Math.min(ceiling, base + lowVolumeExtra * t + fewDays);
+}
 
 /**
  * Clamp a long run to its share of the week. Returns the input untouched when
@@ -305,9 +370,10 @@ export function capLongRunToWeeklyShare(
   longRunKm: number,
   weeklyKm: number,
   raceDistance: RaceDistance,
+  daysPerWeek?: number,
 ): number {
   if (weeklyKm <= 0 || longRunKm <= 0) return longRunKm;
-  const cap = weeklyKm * MAX_LONG_RUN_SHARE[raceDistance];
+  const cap = weeklyKm * maxLongRunShare(weeklyKm, raceDistance, daysPerWeek);
   return longRunKm <= cap ? longRunKm : roundKm(cap);
 }
 

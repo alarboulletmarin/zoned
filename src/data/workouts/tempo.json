@@ -654,6 +654,7 @@
       ],
       "selectionCriteria": {
         "phases": [
+          "base",
           "build",
           "peak"
         ],
@@ -1643,6 +1644,7 @@
       ],
       "selectionCriteria": {
         "phases": [
+          "base",
           "build",
           "peak"
         ],
