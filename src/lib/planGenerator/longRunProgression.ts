@@ -125,7 +125,7 @@ const LONG_RUN_VOLUME_SHARE = 0.27;
  * 3 h; the km target was blind to pace, so a slow marathoner got a 4-hour
  * outing.
  */
-const MAX_LONG_RUN_MINUTES: Record<RaceDistance, number> = {
+export const MAX_LONG_RUN_MINUTES: Record<RaceDistance, number> = {
   "5K": 120,
   "10K": 130,
   semi: 150,
@@ -343,11 +343,23 @@ const MAX_LONG_RUN_SHARE: Record<RaceDistance, { base: number; lowVolumeExtra: n
 const LOW_VOLUME_KM = 45;
 const FULL_SHARE_KM = 65;
 
+/**
+ * On 3 or 4 runs a week the long run is mechanically a bigger share of the
+ * week (Higdon's 3-day Novice 10K: 9 km of 21, 43 %). Holding it to the
+ * 5-6 day share starved the long run of short-week plans.
+ */
+const FEW_DAYS_EXTRA: Record<number, number> = { 3: 0.10, 4: 0.05 };
+
 /** Largest share of a week of `weeklyKm` the long run may take */
-export function maxLongRunShare(weeklyKm: number, raceDistance: RaceDistance): number {
+export function maxLongRunShare(weeklyKm: number, raceDistance: RaceDistance, daysPerWeek?: number): number {
   const { base, lowVolumeExtra } = MAX_LONG_RUN_SHARE[raceDistance];
   const t = Math.min(1, Math.max(0, (FULL_SHARE_KM - weeklyKm) / (FULL_SHARE_KM - LOW_VOLUME_KM)));
-  return base + lowVolumeExtra * t;
+  const fewDays = daysPerWeek ? (FEW_DAYS_EXTRA[daysPerWeek] ?? 0) : 0;
+  // Road plans never put more than 45 % of the week in one run (Higdon's
+  // 3-day Novice 5K tops out at ~37 %); trail long runs are the specific
+  // session and may go to 60 %.
+  const ceiling = raceDistance === "trail" || raceDistance === "ultra" || raceDistance === "trail_short" ? 0.60 : 0.45;
+  return Math.min(ceiling, base + lowVolumeExtra * t + fewDays);
 }
 
 /**
@@ -358,9 +370,10 @@ export function capLongRunToWeeklyShare(
   longRunKm: number,
   weeklyKm: number,
   raceDistance: RaceDistance,
+  daysPerWeek?: number,
 ): number {
   if (weeklyKm <= 0 || longRunKm <= 0) return longRunKm;
-  const cap = weeklyKm * maxLongRunShare(weeklyKm, raceDistance);
+  const cap = weeklyKm * maxLongRunShare(weeklyKm, raceDistance, daysPerWeek);
   return longRunKm <= cap ? longRunKm : roundKm(cap);
 }
 

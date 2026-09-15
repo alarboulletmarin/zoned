@@ -293,6 +293,33 @@ Plans prêts à l'emploi régénérés (`scripts/regenerate-prebuilt-plans.ts`).
 
 Vérifications : `tsc` propre, 876 tests verts (dont 18 nouveaux), `check:workouts`, `check:i18n`, `check:typography` OK.
 
+## 10. Tests de bout en bout (15 septembre 2026)
+
+Une batterie de session a généré **146 plans** et vérifié sur chacun une trentaine d'invariants, puis a appliqué les mêmes invariants aux dix plans prêts à l'emploi. Les invariants durables sont repris dans `generator.properties.test.ts` (32 tests : 11 propriétés sur onze configurations, 21 cas limites).
+
+**Matrice** : 7 distances × 4 niveaux × 4 fréquences (3 à 6 jours), durée et objectif typiques par distance et par niveau (112 plans).
+
+**Cas limites** (34 plans) : plan de 4 semaines (minimum) et de 52 semaines (maximum) ; marathon en 6 et 8 semaines ; 7 jours par semaine ; marathon débutant sur 3 jours ; 5 km/semaine déclarés pour un 5K ; 150 km/semaine déclarés pour un 5K ; 200 km/semaine déclarés sur 3 jours ; sortie longue déclarée de 40 km pour un 10K, de 0,5 km pour un marathon ; VMA absente, VMA 7, VMA 26 ; objectif irréaliste (sub-3 h avec VMA 13) et objectif très prudent ; trail avec 3 000 m de D+, trail sans D+, marathon avec D+ ; sortie longue le lundi et le mercredi ; renfo 3 fois par semaine sur 3 et sur 7 jours ; deux courses intermédiaires (10K B, semi A) et une course C en semaine 3 ; les trois purposes non-course à leur durée minimale et maximale.
+
+**Invariants** : structure (semaines, phases contiguës, durée d'affûtage par distance, absence d'affûtage et de jour de course hors purpose course), sessions (un seul run par jour, gabarits existants, durées et charges finies, pas de séance clé au-dessus du niveau, pas de clé en semaine de décharge, pas de gabarit marathon en spécifique 5K/10K), espacement (deux clés jamais à un jour d'écart, sortie longue le jour demandé, veille de course au repos, jour de course sur le jour de sortie longue), volume (sauts ≤ 25 %, décharge plus légère que la semaine de charge précédente, jamais de décharge dans les 2 semaines avant l'affûtage, affûtage décroissant et ouvert au-dessus de 50 % du pic, pic atteint dans la seconde moitié des semaines de charge), sortie longue (part de la semaine, durée), renfo (jamais un jour de clé, jamais deux le même jour, léger la veille d'une séance dure), part de séances dures ≤ 40 %, déterminisme (deux générations identiques), et l'audit interne sans erreur bloquante.
+
+**Résultat** : 0 erreur sur 146 plans, 897 tests verts. Six défauts trouvés par la batterie et corrigés dans la foulée :
+
+| Défaut | Correction |
+|---|---|
+| Sur 3 jours, un gabarit de récupération de 10-15 min (REC-008) était tiré pour une sortie facile de 60 min par la règle « le moins utilisé d'abord », et ne pouvait pas s'allonger : semaines de charge en dents de scie, décharge plus lourde que la charge | `selector.ts` : un gabarit doit pouvoir atteindre 60 % de la durée visée une fois allongé |
+| Base 5K : le tempo de base était une séance à allure marathon | `KEY_SESSION_TYPES_BY_PROFILE.short.base` : seuil à la place du tempo (Pfitzinger) |
+| Surcouche courses intermédiaires : une séance clé convertie en « endurance » gardait l'identifiant d'une séance de seuil | `intermediateRaceWeek.ts` : `demoteToEasy` remplace aussi le gabarit |
+| Semaine post-course suivie d'une décharge du modèle : deux semaines allégées d'affilée | `volume.ts` : le modèle connaît les semaines de course intermédiaire, jamais de décharge dessus ni juste après, le compteur de charge repart de là |
+| Trail avec gros D+ : sortie longue de 4 h 37 (plafond km + minutes de dénivelé) | `sessionBuilder.ts` : le dénivelé compte dans le plafond de durée, les km sont réduits |
+| Audit : `RACE_DAY_MISSING` et faisabilité sur les purposes non-course dès qu'une date traîne dans la config | `audit.ts` : contrôles course ignorés hors purpose course |
+
+Ajustements de calibrage issus de la même passe : part de sortie longue relevée sur 3-4 jours (+10 / +5 points, plafond 45 % route, 60 % trail), récupération et sorties faciles tirées dans tous les niveaux (les avancés n'avaient que deux gabarits de récupération, répétés jusqu'à 17 fois), planchers 10K ramenés à 18 km / 9 km de sortie longue (Higdon Novice 10K : 21 km / 9 km).
+
+**Avertissements restants, attendus** : plans très courts (4-5 semaines) signalés comme trop courts ; plans débutant sur 3 jours signalés sous le plancher de volume (le plan dit au coureur d'ajouter un jour, c'est le comportement voulu) ; répétition de gabarits faciles sur les plans de 30-36 semaines à 6 jours (le catalogue compte 2 sorties faciles avancées, 2 de récupération avancées : à étoffer) ; sorties longues de plus de 4 h 20 sur ultra sans D+ déclaré (plafond ultra 5 h, par conception).
+
+**Plans prêts à l'emploi après cette passe** : les dix passent la batterie sans erreur ni avertissement, sauf le 10K débutant qui reste 1 km sous l'ancien plancher ; le plancher a été aligné sur Higdon.
+
 ## Annexe A. Mesures des plans prêts à l'emploi
 
 Colonnes : semaine, phase, décharge (R), km livrés, saut vs semaine précédente, sortie longue (part de la semaine), nb de clés ; puis séances (jour:gabarit, `*` = clé, `[B/I/A]` = niveau du gabarit).

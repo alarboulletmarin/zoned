@@ -76,7 +76,14 @@ export function calculateVolumeProgression(
   goalDemandFactor: number = 1,
   /** Purpose multiplier for the starting point; defaults to the peak one */
   purposeStartMultiplier?: number,
+  /**
+   * Weeks holding an intermediate race (and, for long ones, the week after).
+   * A race week is a recovery in itself: the model never schedules a
+   * drop-back on it or right after it, and the load count restarts there.
+   */
+  intermediateRaceWeeks: number[] = [],
 ): WeekVolume[] {
+  const raceWeeks = new Set(intermediateRaceWeeks);
   const goalMods = getGoalModifiers(trainingGoal);
 
   const [defaultStartKm, defaultPeakKm] = WEEKLY_KM_TARGETS[raceDistance]?.[difficulty]
@@ -198,9 +205,11 @@ export function calculateVolumeProgression(
     // After N consecutive load weeks, or as a transition before the peak
     // phase. Never right before the taper, which is itself the recovery.
     const closeToTaper = taperPhase ? (taperStart - w) <= NO_RECOVERY_WEEKS_BEFORE_TAPER : false;
+    const nearIntermediateRace = raceWeeks.has(w) || raceWeeks.has(w - 1);
     const isTransitionRecovery = (w + 1 === peakStart) && consecutiveLoadWeeks >= 2;
     const isLoadRecovery = consecutiveLoadWeeks >= maxLoadWeeks;
-    const isRecoveryWeek = w > 1 && !closeToTaper && (isLoadRecovery || isTransitionRecovery);
+    const isRecoveryWeek = w > 1 && !closeToTaper && !nearIntermediateRace
+      && (isLoadRecovery || isTransitionRecovery);
 
     if (isRecoveryWeek) {
       const recoveryKm = Math.round(currentKm * recoveryPct);
@@ -242,7 +251,9 @@ export function calculateVolumeProgression(
     });
 
     actualPeakKm = Math.max(actualPeakKm, weekKm);
-    consecutiveLoadWeeks++;
+    // The overlay lightens race weeks afterwards; for the load count they
+    // are the recovery.
+    consecutiveLoadWeeks = raceWeeks.has(w) ? 0 : consecutiveLoadWeeks + 1;
   }
 
   return weeks;

@@ -221,6 +221,17 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     phases = calculatePhases(totalWeeks, effectiveDistance, trainingGoal);
   }
 
+  // Compute intermediate race week numbers for long run awareness
+  // For long races (>= semi / 21.1km), also include week+1 to force step-back
+  const intermediateRaceWeeks = isRacePlan && config.intermediateGoals?.length
+    ? config.intermediateGoals.flatMap(g => {
+        const wk = intermediateGoalToWeekNumber(g.raceDate, config.startDate ?? config.createdAt);
+        const distKm = RACE_DISTANCE_META[g.raceDistance]?.distanceKm ?? 10;
+        // For long races, also force step-back on the week after
+        return distKm >= 21.1 ? [wk, wk + 1] : [wk];
+      })
+    : undefined;
+
   // Step 6: Calculate volume progression.
   // The purpose multiplier is passed in so it scales the reference table only:
   // applying it afterwards also shrank the volume the runner reported doing.
@@ -239,6 +250,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       ? goalDemandFactor(config.targetPaceMinKm, config.vma, effectiveDistance, config.runnerLevel)
       : 1,
     purposeConfig?.startVolumeMultiplier,
+    intermediateRaceWeeks ?? [],
   );
 
   // Step 7: Calculate training paces (already done above)
@@ -246,17 +258,6 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
   const taperWeekCount = taperPhase
     ? (taperPhase.endWeek - taperPhase.startWeek + 1)
     : 0;
-
-  // Compute intermediate race week numbers for long run awareness
-  // For long races (>= semi / 21.1km), also include week+1 to force step-back
-  const intermediateRaceWeeks = isRacePlan && config.intermediateGoals?.length
-    ? config.intermediateGoals.flatMap(g => {
-        const wk = intermediateGoalToWeekNumber(g.raceDate, config.startDate ?? config.createdAt);
-        const distKm = RACE_DISTANCE_META[g.raceDistance]?.distanceKm ?? 10;
-        // For long races, also force step-back on the week after
-        return distKm >= 21.1 ? [wk, wk + 1] : [wk];
-      })
-    : undefined;
 
   const longRunTargets = calculateLongRunProgression(
     totalWeeks,
@@ -301,6 +302,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
             rawLongRunTarget.distanceKm * recoveryScale,
             targetKm,
             effectiveDistance,
+            config.daysPerWeek,
           );
           const ratio = rawLongRunTarget.distanceKm > 0
             ? capped / rawLongRunTarget.distanceKm
