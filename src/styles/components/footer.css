@@ -1,63 +1,195 @@
-/* Footer, two parts.
+/* Le pied de page, un seul et le même sur toute l'application.
 
-   The link table on card paper, kept because the crawler reads it: four
-   columns divided by ink rules, each headed by a mono uppercase micro-label.
+   Une ligne d'encre pleine largeur : licence, licences tierces, dépôt, plan du
+   site, version. Elle bascule avec le thème toute seule, --surface-inverse et
+   --text-inverse étant définis dans les deux sens : la barre est toujours le
+   contraire de la page.
 
-   Then the ink bar the design ends the page on, a full-bleed inversion in
-   mono capitals carrying the licence, the "100 % local" line and the version.
-   It flips with the theme on its own: --surface-inverse and --text-inverse are
-   defined either way round, so the bar is always the opposite of the page. */
+   Il y avait ici deux pieds de page et deux traitements, un tableau de quatre
+   colonnes sur papier de carte surmontant la barre sur les pages publiques, la
+   seule licence en encre claire sur le cockpit. Le tableau n'est pas parti, il
+   est replié derrière Plan du site et se déplie dans la même encre, sous la
+   ligne : c'est la seule surface d'où un robot atteint les hubs, donc il reste
+   dans le HTML en toutes circonstances. */
 
-/* Le pied de page n'a plus de filet d'ouverture : son papier de carte
-   (--surface-card contre --surface-page) le sépare déjà de la page, et c'était
-   le seul endroit du dépôt où un changement de surface ET un filet disaient la
-   même frontière. */
-/* La moitié de l'écart : <main> paie déjà 16 px sous son contenu, et le
-   changement de papier fait le reste du travail de frontière. */
+/* La moitié de l'écart de section : <main> paie déjà sous son contenu, et le
+   passage au papier d'encre fait le reste du travail de frontière. */
 .zn-footer {
   margin-block-start: calc(var(--gap-section) / 2);
-  background: var(--surface-card);
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-block-start: var(--border-rule);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.4;
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
 }
 
-/* ── link table ───────────────────────────────────────────────────────── */
+/* ── la ligne ─────────────────────────────────────────────────────────── */
 
-.zn-footer__body {
-  display: grid;
-  /* La marque, puis les quatre colonnes de liens. Une colonne a été ajoutée
-     quand les familles sorties des portes sont descendues ici : sans ce
-     cinquième tiers, la dernière passait à la ligne et le pied de page
-     doublait de hauteur. */
-  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
-  gap: var(--sp-10);
-  max-inline-size: var(--page-max);
-  margin-inline: auto;
-  /* 40 px, le même pas que --pad-screen-x : le tableau s'assoit dans une marge
-     carrée à l'intérieur de son filet, au lieu d'une bande de papier vide. */
-  padding-block: var(--sp-15);
-  padding-inline: var(--pad-screen-x);
+.zn-footer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* Repliée, la ligne est un ours d'imprimeur : les rangées serrées, les
+     colonnes écartées. */
+  gap: var(--sp-2) var(--sp-8);
+  padding: var(--sp-6) var(--pad-screen-x);
+  /* L'encre touche le sol du document : l'encoche du téléphone se paie ici ou
+     la dernière rangée passe sous la barre d'accueil. */
+  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom, 0px));
 }
 
-/* Columns are told apart by a rule, never by empty space. */
-.zn-footer__col + .zn-footer__col {
-  border-inline-start: var(--border-divider);
-  padding-inline-start: var(--sp-12);
+/* Rien de cette ligne ne se coupe en deux : c'est le RANG qui passe à la
+   ligne, jamais le mot. Cinq éléments courts, donc au pire deux rangées dans
+   la colonne d'un téléphone. */
+.zn-footer__legal,
+.zn-footer__item,
+.zn-footer__version {
+  white-space: nowrap;
 }
 
-.zn-footer__brand {
+.zn-footer__item {
   display: inline-flex;
   align-items: center;
-  margin-block-end: var(--sp-8);
+  gap: var(--sp-3);
+
+  /* Le bouton du plan du site est un élément de la ligne comme les liens :
+     il n'hérite ni de la police, ni de la casse, ni de la couleur d'un
+     <button>, on les lui redonne. */
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
   color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.zn-footer__tagline {
-  max-inline-size: 42ch;
+.zn-footer__item:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-footer__item svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+.zn-footer__chevron {
+  color: currentcolor;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-footer__toggle[aria-expanded="true"] .zn-footer__chevron {
+  transform: rotate(180deg);
+}
+
+/* La version est une donnée, et elle s'assoit au bord de fin de la ligne. */
+.zn-footer__version {
+  margin-inline-start: auto;
+  color: color-mix(in oklab, currentcolor 65%, transparent);
+}
+
+/* Le doigt a droit à ses 44 px, et ces mots en font 15 de haut. La cible
+   déborde donc en dehors du flux, au-dessus et au-dessous du mot, au lieu
+   d'épaissir la rangée : le pied de page garde la hauteur de son texte.
+
+   1,4em, c'est exactement la hauteur de ligne déclarée plus haut. Les deux
+   valeurs doivent rester d'accord, c'est ce qui fait tomber la cible à 44 px
+   pile.
+
+   Et l'écart entre rangées vaut ce qui reste des 44 px une fois le mot payé :
+   sans lui, deux cibles voisines se recouvriraient sur 19 px, le bas de
+   GITHUB appartiendrait au bouton de la rangée d'en dessous, et un pied de
+   page qui ouvre le plan du site quand on visait le dépôt est pire qu'une
+   cible trop petite. L'écart ne coûte rien quand la ligne ne se replie pas,
+   et rien du tout au pointeur fin, qui n'a pas de cible à loger. */
+@media (pointer: coarse) {
+  .zn-footer__bar {
+    row-gap: calc(var(--hit-min) - 1.4em);
+  }
+
+  .zn-footer__item {
+    position: relative;
+  }
+  .zn-footer__item::after {
+    content: "";
+    position: absolute;
+    inset-inline: calc(var(--sp-2) * -1);
+    inset-block: calc((var(--hit-min) - 1.4em) / -2);
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* Sous 640 px, la ligne devient deux tiers centrés : l'identité, puis les
+   liens et la version. Elle ne tient plus sur une rangée dès 480 px environ,
+   et la version cesse d'être poussée au bord de fin, où elle ne serait plus
+   que le reste d'une rangée. */
+@media (max-width: 640px) {
+  .zn-footer__bar {
+    justify-content: center;
+    /* La colonne SEULE. L'écart entre rangées est celui que la cible tactile
+       impose plus haut, et cette règle-ci vient après dans le fichier : un
+       raccourci `gap`, ou un `row-gap` écrit ici, le reprendrait au doigt. */
+    column-gap: var(--sp-6);
+  }
+
+  /* La signature prend sa rangée, les liens prennent la suivante.
+
+     Laisser le repli tomber où il veut donnait la signature et deux liens sur
+     la première rangée, le troisième et la version sur la seconde : une ligne
+     coupée au hasard de la largeur du téléphone. Deux tiers nommés, l'identité
+     puis les liens, se lisent comme une décision, et ils tombent au même
+     endroit sur tous les téléphones.
+
+     C'est aussi ce qui rend la cible tactile sûre : les trois liens sont alors
+     sur la MÊME rangée, et leurs 44 px n'ont pour voisine du dessus qu'une
+     ligne de texte inerte. */
+  .zn-footer__legal {
+    flex-basis: 100%;
+    text-align: center;
+  }
+
+  .zn-footer__version {
+    margin-inline-start: 0;
+  }
+}
+
+/* ── le plan du site, replié ──────────────────────────────────────────── */
+
+/* [hidden] porte un display:none !important dans base.css, c'est lui qui ferme
+   le panneau ; la règle ci-dessous ne peut donc pas le rouvrir par accident. */
+.zn-footer__map {
+  display: grid;
+  /* Quatre colonnes sur un bureau, deux dans la colonne d'un téléphone, sans
+     point de rupture à tenir d'accord avec le composant. */
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--sp-10) var(--sp-12);
+
+  /* Même marge d'écran que la ligne, et pas de colonne centrée : les deux
+     blocs sont le même aplat d'encre, leurs bords de début doivent tomber au
+     même endroit. */
+  padding: var(--sp-12) var(--pad-screen-x) var(--sp-15);
+
+  /* Le filet qui sépare la ligne de son plan : un trait de la couleur du
+     texte, très pâle. C'est le seul moyen de dessiner une frontière sur un
+     aplat inversé sans y poser une deuxième surface. */
+  border-block-start: var(--bw-rule) solid
+    color-mix(in oklab, var(--text-inverse) 22%, transparent);
 }
 
 .zn-footer__col-title {
   display: block;
   margin-block-end: var(--sp-5);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-kicker);
+  color: color-mix(in oklab, currentcolor 60%, transparent);
 }
 
 .zn-footer__list {
@@ -69,113 +201,23 @@
   padding: 0;
 }
 
-/* Le <li> imposait sinon la ligne du corps (16 px × 1,55 = 24,8) à un lien de
-   14 px : 3,1 px perdus par rangée, 15 px par colonne, pour rien. Un lien en
-   bloc porte sa propre ligne. La règle (pointer: coarse) plus bas redéclare
-   `display` et garde donc le plancher de 44 px, elle vient après dans le
-   fichier, elle gagne. */
+/* Les liens du plan sortent de la casse mono de la ligne : ce sont des noms de
+   pages, pas des étiquettes. La règle (pointer: coarse) plus bas redéclare
+   `display` et garde le plancher de 44 px. */
 .zn-footer__link {
   display: block;
-  color: var(--text-body);
   font: var(--type-body-sm);
+  text-transform: none;
+  letter-spacing: normal;
+  color: color-mix(in oklab, currentcolor 88%, transparent);
   text-decoration: none;
   transition: color var(--dur-fast) var(--ease-out);
 }
 
 .zn-footer__link:hover {
-  color: var(--text-link);
+  color: var(--text-inverse);
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-
-/* Empilé, le filet vertical devient horizontal, le même filet, tourné avec la
-   mise en page.
-
-   Et les trois groupes de liens se replient. Douze liens au plancher tactile de
-   44 px font 564 px de pied sur un téléphone : une page d'accueil bis pour un
-   plan du site que personne n'est venu chercher. Le plancher ne bouge pas,
-   c'est la règle de la maison et c'est du AAA ; c'est le NOMBRE de rangées qui
-   bouge : trois têtes de groupe au lieu de douze liens. La tête était déjà là,
-   en étiquette morte ; elle devient la commande qui ouvre le groupe et paie ses
-   44 px avec les rangées qu'elle cache.
-
-   Footer.tsx échange le <span> de tête contre un <details>/<summary> à ce même
-   point de rupture : au-dessus, le tableau à quatre colonnes est intact. Les
-   deux valeurs de 900 px doivent rester d'accord. */
-@media (max-width: 900px) {
-  .zn-footer__body {
-    grid-template-columns: minmax(0, 1fr);
-    /* Pas de gap : le filet sépare les groupes, et les 44 px de la tête sont
-       l'air autour d'elle. */
-    gap: 0;
-    padding-block: var(--sp-10) var(--sp-8);
-  }
-  .zn-footer__col + .zn-footer__col {
-    border-inline-start: none;
-    padding-inline-start: 0;
-    border-block-start: var(--border-divider);
-    padding-block-start: 0;
-  }
-
-  /* Au bas d'un document de 7 000 px la phrase de marque n'est lue par personne
-     et coûte une rangée pleine. La signature, elle, reste.
-
-     Le logotype part avec elle : sa colonne est alors un lien vers l'accueil
-     seul, sur sa propre rangée de 38 px, à quinze pixels d'une barre d'encre
-     qui signe déjà ZONED, et l'accueil se rejoint par le logotype de la barre
-     du haut, qui est collante, et par le menu. Le prérendu tourne à 1280 px
-     (scripts/prerender.ts) : le HTML statique que lit le robot garde les
-     deux. */
-  .zn-footer__brand,
-  .zn-footer__tagline {
-    display: none;
-  }
-
-  /* L'étiquette devient une commande : elle cesse d'être pâle et prend le
-     plancher tactile. */
-  .zn-footer__col-title {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-5);
-    min-block-size: var(--hit-min);
-    margin-block-end: 0;
-    color: var(--text-body);
-  }
-
-  /* <summary> livre un triangle d'ouverture en deux saveurs. Les deux partent :
-     le chevron à droite est la marque, et il tourne avec l'état. Même traitement
-     que les portes du menu (mobile-menu.css) et que la divulgation éditoriale
-     (_layout.css). */
-  .zn-footer__group > summary {
-    list-style: none;
-    cursor: pointer;
-  }
-  .zn-footer__group > summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .zn-footer__chevron {
-    flex: none;
-    margin-inline-start: auto;
-    inline-size: 16px;
-    block-size: 16px;
-    color: var(--text-faint);
-    transition: transform var(--dur-base) var(--ease-out);
-  }
-  .zn-footer__group[open] .zn-footer__chevron {
-    transform: rotate(180deg);
-    color: var(--accent);
-  }
-
-  /* Deux colonnes jusqu'en bas de la gamme : dans un groupe ouvert, un
-     Générateur de parcours sur deux lignes coûte 1,7 px, une colonne unique
-     en coûte 88. */
-  .zn-footer__list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 var(--sp-8);
-    padding-block-end: var(--sp-6);
-  }
 }
 
 @media (pointer: coarse) {
@@ -183,89 +225,5 @@
     display: inline-flex;
     align-items: center;
     min-block-size: var(--hit-min);
-  }
-}
-
-/* ── the ink bar ──────────────────────────────────────────────────────── */
-
-.zn-footer__bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  /* Repliée, la barre est un ours d'imprimeur : les rangées serrées, les
-     colonnes écartées. */
-  gap: var(--sp-2) var(--sp-8);
-  padding: var(--sp-6) var(--pad-screen-x);
-  /* L'encre touche le sol du document : l'encoche du téléphone se paie ici ou
-     la dernière rangée passe sous la barre d'accueil. */
-  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom, 0px));
-
-  background: var(--surface-inverse);
-  color: var(--text-inverse);
-  border-block-start: var(--border-rule);
-
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  line-height: 1.4;
-  letter-spacing: var(--ls-mono-kicker);
-  text-transform: uppercase;
-}
-
-.zn-footer__bar a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-3);
-  color: inherit;
-  text-decoration: none;
-}
-
-.zn-footer__bar a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.zn-footer__bar svg {
-  inline-size: 14px;
-  block-size: 14px;
-  flex: none;
-}
-
-/* The version is data, and it sits at the far edge of the bar. */
-/* Le pied du cockpit : une seule ligne, et SANS l'inversion.
-   La barre d'encre est la signature du projet, elle reste entière partout où
-   quelqu'un le découvre. Ici elle portait cinq éléments sur un aplat noir
-   pleine largeur au bas d'un écran privé dont toute la réponse tient en six
-   lignes : elle criait plus fort que la séance. Réduite à la licence et posée
-   en encre claire, elle est là sans rien réclamer. */
-.zn-footer__bar[data-variant="minimal"] {
-  justify-content: center;
-  background: none;
-  color: var(--text-faint);
-  border-block-start: none;
-}
-
-.zn-footer__version {
-  margin-inline-start: auto;
-}
-
-/* La barre cédait ici 120px de son bord de fin sous 1024px : la pastille MENU
-   était fixée au bas de la fenêtre, donc elle passait sur ce coin à toute
-   position de défilement, et sur la version qui y est ancrée. Elle est en tête
-   de barre depuis le 13 septembre 2026, le pied de page récupère sa largeur
-   entière, et les cinq lignes de licence retrouvent la colonne de 230px qu'on
-   leur avait prise. */
-
-/* Sur téléphone, l'interlettrage de micro-étiquette retombe à celui des
-   données. Ces cinq lignes sont des PHRASES en capitales, pas des étiquettes :
-   à 0,16 em dans la colonne de 230 px que laisse la réserve de la pastille,
-   l'écart ajoutait à lui seul une rangée et demie, vingt pixels d'encre pour
-   une convention typographique qui vise un mot, pas une licence. */
-@media (max-width: 640px) {
-  .zn-footer__bar {
-    letter-spacing: var(--ls-mono);
-  }
-
-  .zn-footer__version {
-    margin-inline-start: 0;
   }
 }

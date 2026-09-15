@@ -274,7 +274,6 @@
       "secondary": "Explorer les séances"
     },
     "footer": {
-      "tagline": "Un carnet d'entraînement local, gratuit et libre.",
       "groups": {
         "product": "Produit",
         "science": "Science",
@@ -297,12 +296,10 @@
         "github": "GitHub",
         "changelog": "Changelog"
       },
-      "license": "© {{year}} · ZONED · Logiciel libre, licence MIT",
-      "licenseShort": "© {{year}} · ZONED · MIT",
-      "licenses": "Licences tierces",
-      "version": "v.{{version}}",
-      "builtInPublic": "Construit en public",
-      "local": "100 % local · sans compte · sans cookie"
+      "license": "© {{year}} · ZONED · MIT",
+      "licenses": "Licences",
+      "sitemap": "Plan du site",
+      "version": "v.{{version}}"
     }
   }
 }
