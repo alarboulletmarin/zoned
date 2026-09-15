@@ -599,6 +599,26 @@
   /* Le dialogue de bureau ne doit pas dépasser l'écran sur un portable en
      paysage : le corps défile, la tête et le pied restent. */
   max-block-size: min(56vh, 520px);
+
+  /* UN SEUL AXE, et il est vertical. `overflow-y: auto` seul ne ferme pas
+     l'autre : la règle CSS change le `visible` de x en `auto`, et le corps
+     devenait un conteneur qui défile LATÉRALEMENT. Dix pixels de course,
+     exactement ceux que le résumé des précisions tire hors du texte pour sa
+     bande de survol (.zn-actlog__moresummary plus bas), et le doigt les
+     trouvait : sur la sheet, un geste vertical un peu oblique emportait tout
+     le formulaire de travers, étiquettes rognées à gauche, date rognée à
+     droite, le panneau posé en biais sous une tête qui, elle, ne bougeait pas.
+
+     La bande garde son débord ; il est simplement payé DANS le conteneur : la
+     marge intérieure lui fait la place, la marge négative la reprend sur le
+     panneau, et les champs restent alignés sur la tête et le pied. Elle y
+     gagne même sa symétrie, le débord de gauche tombant jusqu'ici hors de la
+     zone de défilement, donc coupé. L'axe reste fermé pour ce qui déborderait
+     après : un mot sans césure dans la note, une étiquette qui ne se coupe
+     pas. Coupé net, plutôt que traîné de travers. */
+  padding-inline: var(--sp-5);
+  margin-inline: calc(var(--sp-5) * -1);
+  overflow-x: clip;
   overflow-y: auto;
 }
 
@@ -703,6 +723,9 @@
   justify-content: space-between;
   gap: var(--sp-6);
   min-block-size: var(--hit-min);
+  /* La bande de survol déborde du texte des deux côtés, et c'est .zn-actlog__body
+     qui lui fait la place : ces dix pixels sortis d'un conteneur qui défile en
+     feraient un défilement latéral. Les deux rangées vont ensemble. */
   padding-inline: var(--sp-5);
   margin-inline: calc(var(--sp-5) * -1);
 
