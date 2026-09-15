@@ -568,13 +568,26 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-10);
+  /* Le panneau RÉTRÉCIT dans son hôte au lieu de le faire défiler. Un élément
+     flex garde par défaut la hauteur de son contenu pour minimum, donc sans
+     cette ligne le panneau dépassait la feuille et c'était la FEUILLE qui
+     défilait, en plus du corps. Voir .zn-actlog__body. */
+  min-block-size: 0;
 }
 
 .zn-actlog-dialog {
   max-inline-size: 520px;
 }
 
+/* Le dialogue de bureau n'a pas de plafond à lui (dialog.css lui retire celui
+   du navigateur), donc le corps porte le sien : sinon le panneau dépasse l'écran
+   d'un portable en paysage. La feuille, elle, en a un, et il suffit. */
+.zn-actlog-dialog .zn-actlog__body {
+  max-block-size: min(56vh, 520px);
+}
+
 .zn-actlog__head {
+  flex: none;
   display: flex;
   flex-direction: column;
   gap: var(--sp-3);
@@ -596,9 +609,25 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-10);
-  /* Le dialogue de bureau ne doit pas dépasser l'écran sur un portable en
-     paysage : le corps défile, la tête et le pied restent. */
-  max-block-size: min(56vh, 520px);
+
+  /* UNE SEULE BARRE DE DÉFILEMENT, et c'est celle-ci : le corps défile, la
+     tête et le pied restent posés de part et d'autre.
+
+     Elle portait un plafond en dur, `min(56vh, 520px)`, et sur la feuille il
+     s'ajoutait à celui de la feuille elle-même (82 % de l'écran, sheet.css),
+     qui est un conteneur qui défile aussi. Deux plafonds, donc deux barres
+     l'une contre l'autre, et le titre du formulaire sortait par le haut
+     pendant que le milieu défilait tout seul. Pire que laid : la bande de
+     prise du glisser-pour-fermer est les 64 px du haut du panneau
+     (`useSheetDrag.ts`), elle tombait donc sur les champs dès que la feuille
+     avait glissé, et le bouton de fermeture, posé en absolu, partait avec.
+
+     Le corps prend maintenant la place que son hôte lui laisse et rend le
+     reste : la feuille a déjà sa hauteur, elle n'a pas à en arbitrer une
+     seconde. Le plafond ne subsiste que là où l'hôte n'en a pas, le dialogue
+     de bureau, plus haut. */
+  flex: 1 1 auto;
+  min-block-size: 0;
 
   /* UN SEUL AXE, et il est vertical. `overflow-y: auto` seul ne ferme pas
      l'autre : la règle CSS change le `visible` de x en `auto`, et le corps
@@ -771,6 +800,7 @@
 }
 
 .zn-actlog__foot {
+  flex: none;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
