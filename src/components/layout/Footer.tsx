@@ -1,19 +1,29 @@
 /**
- * Global footer, on every page that isn't fullscreen (see App.tsx
- * FULLSCREEN_ROUTES).
+ * Le pied de page. Un seul, le même partout.
  *
- * Two parts. The link table stays: it is how a crawler reaches the hubs, and
- * it is restyled onto the system, four columns told apart by ink rules, each
- * headed by a mono uppercase micro-label. Under it, the design's closing ink
- * bar: a full-bleed inversion in mono capitals carrying the licence, the
- * "100 % local" line and the version.
+ * Une ligne d'encre pleine largeur, au bas de chaque page : la licence, les
+ * licences tierces, le dépôt, le plan du site, la version. Elle ne change pas
+ * d'une route à l'autre, et sur téléphone elle se replie en deux rangées
+ * centrées, jamais en cinq.
+ *
+ * Il y en avait deux, et ils ne disaient pas la même chose. Sur les pages
+ * publiques, un tableau de quatre colonnes de liens surmontait une barre de
+ * cinq éléments qui, dans la colonne d'un téléphone, se dépliait en cinq
+ * rangées : le pied de page fermait la page en criant plus fort qu'elle. Sur
+ * le cockpit, il ne restait que la licence, en encre claire. Deux pieds de
+ * page, deux contenus, deux traitements, pour la même signature.
+ *
+ * Le tableau de liens n'est pas perdu, et il ne pouvait pas l'être : c'est la
+ * seule surface d'où un robot atteint les ~24 hubs. Les portes du haut sont
+ * des menus déroulants, absents du HTML statique, et l'accueil ne pointe que
+ * cinq routes. Il est donc toujours dans le HTML, replié derrière Plan du
+ * site, et il se déplie dans la même encre que la ligne, sous elle.
  */
 
 import { ChevronDown, GithubIcon } from "@/components/icons";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Wordmark } from "./Wordmark";
 import { FOOTER_GROUPS, GITHUB_URL } from "./navigation";
 
 // Package version is injected at build time by Vite via __APP_VERSION__.
@@ -24,154 +34,95 @@ const APP_VERSION =
     ? __APP_VERSION__
     : "dev";
 
-/** Deux pieds de page, et non un pied à options. */
-export type FooterVariant = "full" | "minimal";
+const MAP_ID = "zn-footer-map";
 
-/**
- * @param variant  `minimal` ne garde qu'une ligne de licence, en encre claire.
- *
- *   Pour les écrans applicatifs en `noindex`, le cockpit. La table de liens
- *   est là pour qu'un robot atteigne les hubs ; sur une page qu'aucun robot
- *   n'indexe elle ne fait donc AUCUN travail, et elle mesurait 439 px pour
- *   388 px de contenu : le pied de page était plus grand que la page, et
- *   pesait 48 % du défilement. Elle est partie la première.
- *
- *   Restait la barre d'encre : licence, licences tierces, 100 % local,
- *   construit en public, version. Cinq éléments sur un aplat inversé pleine
- *   largeur, au bas d'un écran dont la réponse tient en six lignes. C'est la
- *   signature du projet libre, et elle a sa place partout où quelqu'un
- *   découvre le projet, donc sur `/` et sur `/about`, qui gardent le pied
- *   complet. Sur l'écran privé qu'on consulte dix secondes avant de sortir
- *   courir, elle criait plus fort que la séance.
- *
- *   Rien n'est perdu : ces cinq éléments restent au bas de toutes les autres
- *   pages, `/about` comprise.
- */
-export function Footer({ variant = "full" }: { variant?: FooterVariant }) {
+export function Footer() {
   const { t } = useTranslation(["homepage", "common"]);
+  const [mapOpen, setMapOpen] = useState(false);
+  const mapRef = useRef<HTMLDivElement>(null);
   const year = new Date().getFullYear();
 
-  // Sous 900 px les groupes de liens se replient derrière leur intitulé, même
-  // point de rupture que la pile de footer.css, les deux valeurs doivent rester
-  // d'accord. Au-dessus, le DOM est celui d'avant au caractère près : le
-  // prerender tourne à 1280 × 800 (scripts/prerender.ts), donc le HTML statique
-  // que lit le crawler ne change pas d'un octet.
-  const stacked = useMediaQuery("(max-width: 900px)");
+  // Le plan du site s'ouvre SOUS la ligne, donc sous le pli : au doigt, sur un
+  // téléphone, le bouton n'aurait rien fait de visible. `nearest` remonte le
+  // strict nécessaire et ne bouge pas si le panneau tient déjà à l'écran.
+  useEffect(() => {
+    if (mapOpen) mapRef.current?.scrollIntoView({ block: "nearest" });
+  }, [mapOpen]);
 
   return (
     <footer className="zn-footer">
-      {variant === "full" && (
-      <div className="zn-footer__body">
-        <div className="zn-footer__col">
-          <Link to="/" className="zn-footer__brand" aria-label={t("common:app.name")}>
-            <Wordmark size={22} />
-          </Link>
-          <p className="zn-body zn-body--sm zn-muted zn-footer__tagline">
-            {t("homepage:home.footer.tagline")}
-          </p>
-        </div>
+      <div className="zn-footer__bar">
+        <span className="zn-footer__legal">
+          {t("homepage:home.footer.license", { year })}
+        </span>
 
-        {FOOTER_GROUPS.map((group) => (
-          <FooterColumn
-            key={group.titleKey}
-            stacked={stacked}
-            title={t(group.titleKey)}
-            links={group.links.map((link) => ({
-              label: t(link.labelKey),
-              to: link.to,
-              href: link.href,
-            }))}
-          />
-        ))}
-      </div>
-      )}
-
-      <div className="zn-footer__bar" data-variant={variant}>
-        {variant === "minimal" ? (
-          <span>{t("homepage:home.footer.licenseShort", { year })}</span>
-        ) : (
-          <>
-        <span>{t("homepage:home.footer.license", { year })}</span>
         {/* Static file emitted by scripts/generate-licenses.ts, not a route:
             plain <a>, so it escapes the SPA instead of hitting the router. */}
-        <a href="/licenses.txt" target="_blank" rel="noopener noreferrer">
+        <a
+          className="zn-footer__item"
+          href="/licenses.txt"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {t("homepage:home.footer.licenses")}
         </a>
-        <span>{t("homepage:home.footer.local")}</span>
-        <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-          <GithubIcon />
-          {t("homepage:home.footer.builtInPublic")}
+
+        <a
+          className="zn-footer__item"
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <GithubIcon aria-hidden="true" />
+          {t("homepage:home.footer.project.github")}
         </a>
+
+        <button
+          type="button"
+          className="zn-footer__item zn-footer__toggle"
+          aria-expanded={mapOpen}
+          aria-controls={MAP_ID}
+          onClick={() => setMapOpen((open) => !open)}
+        >
+          {t("homepage:home.footer.sitemap")}
+          {/* La taille vient de footer.css, comme celle du logo du dépôt. */}
+          <ChevronDown className="zn-footer__chevron" aria-hidden="true" />
+        </button>
+
         <span className="zn-footer__version">
           {t("homepage:home.footer.version", { version: APP_VERSION })}
         </span>
-          </>
-        )}
+      </div>
+
+      {/* `hidden` et non un démontage : les liens restent dans le HTML
+          prérendu, qui est tout ce pour quoi ce tableau existe. */}
+      <div id={MAP_ID} ref={mapRef} className="zn-footer__map" hidden={!mapOpen}>
+        {FOOTER_GROUPS.map((group) => (
+          <div className="zn-footer__col" key={group.titleKey}>
+            <span className="zn-footer__col-title">{t(group.titleKey)}</span>
+            <ul className="zn-footer__list">
+              {group.links.map((link) => (
+                <li key={link.labelKey}>
+                  {link.to ? (
+                    <Link className="zn-footer__link" to={link.to}>
+                      {t(link.labelKey)}
+                    </Link>
+                  ) : (
+                    <a
+                      className="zn-footer__link"
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t(link.labelKey)}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </footer>
-  );
-}
-
-function FooterColumn({
-  title,
-  links,
-  stacked,
-}: {
-  title: string;
-  links: Array<{ label: string; to?: string; href?: string }>;
-  stacked: boolean;
-}) {
-  const list = (
-    <ul className="zn-footer__list">
-      {links.map((link) => (
-        <li key={link.label}>
-          {link.to ? (
-            <Link to={link.to} className="zn-footer__link">
-              {link.label}
-            </Link>
-          ) : (
-            <a
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="zn-footer__link"
-            >
-              {link.label}
-            </a>
-          )}
-        </li>
-      ))}
-    </ul>
-  );
-
-  // Au-dessus de 900 px l'intitulé est une étiquette, pas une commande : c'est
-  // le DOM d'aujourd'hui, à l'identique. Deux objets différents, deux éléments
-  // différents, plutôt qu'un seul rendu inerte par du CSS, qui laisserait un
-  // <summary> focusable mais sans effet.
-  if (!stacked) {
-    return (
-      <div className="zn-footer__col">
-        <span className="zn-kicker zn-footer__col-title">{title}</span>
-        {list}
-      </div>
-    );
-  }
-
-  // name= : accordéon exclusif natif, comme les portes du menu mobile
-  // (MobileMenu.tsx). Un seul groupe ouvert à la fois, c'est ce qui BORNE la
-  // hauteur du pied : 538 px au pire, contre 740 px (111 % de vh) si les trois
-  // pouvaient s'ouvrir ensemble.
-  // Le <details> n'est pas contrôlé (aucune prop `open`) : React ne réécrit
-  // jamais l'attribut, donc un pliage fait au doigt survit à tout re-render.
-  return (
-    <div className="zn-footer__col">
-      <details className="zn-footer__group" name="zn-footer">
-        <summary className="zn-kicker zn-footer__col-title">
-          {title}
-          <ChevronDown className="zn-footer__chevron" aria-hidden="true" />
-        </summary>
-        {list}
-      </details>
-    </div>
   );
 }

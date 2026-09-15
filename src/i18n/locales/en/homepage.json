@@ -274,7 +274,6 @@
       "secondary": "Explore the workouts"
     },
     "footer": {
-      "tagline": "A local training journal, free and open.",
       "groups": {
         "product": "Product",
         "science": "Science",
@@ -297,12 +296,10 @@
         "github": "GitHub",
         "changelog": "Changelog"
       },
-      "license": "© {{year}} · ZONED · Free software, MIT licence",
-      "licenseShort": "© {{year}} · ZONED · MIT",
-      "licenses": "Third-party licences",
-      "version": "v.{{version}}",
-      "builtInPublic": "Built in public",
-      "local": "100% local · no account · no cookie"
+      "license": "© {{year}} · ZONED · MIT",
+      "licenses": "Licences",
+      "sitemap": "Site map",
+      "version": "v.{{version}}"
     }
   }
 }

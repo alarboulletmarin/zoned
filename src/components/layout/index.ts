@@ -3,6 +3,6 @@
 // élément flex de la barre. Le monter une seconde fois depuis ce baril
 // poserait deux déclencheurs et deux dialogues sur la même page.
 export { TopBar } from "./TopBar";
-export { Footer, type FooterVariant } from "./Footer";
+export { Footer } from "./Footer";
 export { PageContainer } from "./PageContainer";
 export { Wordmark } from "./Wordmark";
