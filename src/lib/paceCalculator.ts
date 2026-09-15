@@ -1,22 +1,34 @@
 /**
  * Pace Calculator - Convert VMA to estimated race times
+ *
+ * Times come from the race performance model (Péronnet-Thibault): the share
+ * of VMA held over a race depends on how long the race lasts and on the
+ * runner's endurance, so a beginner and an elite do not get the same
+ * percentage for the same distance.
  */
+
+import type { Difficulty } from "@/types";
+import {
+  ROAD_DISTANCE_KM,
+  enduranceIndexFor,
+  formatRaceMinutes,
+  predictRaceMinutes,
+  sustainableVmaFraction,
+} from "@/lib/racePerformance";
 
 export interface RaceEstimate {
   distance: string; // "5K", "10K", "Semi", "Marathon"
   distanceKm: number; // 5, 10, 21.1, 42.195
   paceMinKm: string; // "4:30" format min:sec/km
   estimatedTime: string; // "22:30" ou "1:45:00" format
-  vmaPercentage: number; // 97, 92, 82, 77
+  vmaPercentage: number; // share of VMA held, rounded
 }
 
-// Race distances and their typical VMA percentages
-// Based on scientific estimates for trained runners
 const RACE_CONFIGS = [
-  { distance: "5K", distanceKm: 5, vmaPercentage: 97 },
-  { distance: "10K", distanceKm: 10, vmaPercentage: 92 },
-  { distance: "Semi", distanceKm: 21.1, vmaPercentage: 82 },
-  { distance: "Marathon", distanceKm: 42.195, vmaPercentage: 77 },
+  { distance: "5K", distanceKm: ROAD_DISTANCE_KM["5K"] },
+  { distance: "10K", distanceKm: ROAD_DISTANCE_KM["10K"] },
+  { distance: "Semi", distanceKm: ROAD_DISTANCE_KM.semi },
+  { distance: "Marathon", distanceKm: ROAD_DISTANCE_KM.marathon },
 ] as const;
 
 /**
@@ -29,46 +41,29 @@ function formatPace(paceMinPerKm: number): string {
 }
 
 /**
- * Format time as HH:MM:SS or MM:SS depending on duration
- */
-function formatTime(totalMinutes: number): string {
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = Math.floor(totalMinutes % 60);
-  const seconds = Math.round((totalMinutes - Math.floor(totalMinutes)) * 60);
-
-  if (hours > 0) {
-    return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  }
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-}
-
-/**
  * Calculate race times from VMA
  *
  * @param vma - Maximal Aerobic Speed in km/h
+ * @param level - Runner level, sets the endurance index (default intermediate)
  * @returns Array of race estimates for common distances
  */
-export function calculateRaceTimes(vma: number): RaceEstimate[] {
+export function calculateRaceTimes(vma: number, level?: Difficulty): RaceEstimate[] {
   if (!Number.isFinite(vma) || vma <= 0) {
     return [];
   }
+  const e = enduranceIndexFor(level);
 
-  return RACE_CONFIGS.map(({ distance, distanceKm, vmaPercentage }) => {
-    // Calculate race speed (km/h)
-    const raceSpeedKmh = vma * (vmaPercentage / 100);
-
-    // Calculate pace (min/km)
-    const paceMinPerKm = 60 / raceSpeedKmh;
-
-    // Calculate total time (minutes)
-    const totalTimeMinutes = (distanceKm / raceSpeedKmh) * 60;
+  return RACE_CONFIGS.map(({ distance, distanceKm }) => {
+    const totalTimeMinutes = predictRaceMinutes(vma, distanceKm, e);
+    const fraction = sustainableVmaFraction(totalTimeMinutes, e);
+    const paceMinPerKm = totalTimeMinutes / distanceKm;
 
     return {
       distance,
       distanceKm,
       paceMinKm: formatPace(paceMinPerKm),
-      estimatedTime: formatTime(totalTimeMinutes),
-      vmaPercentage,
+      estimatedTime: formatRaceMinutes(totalTimeMinutes),
+      vmaPercentage: Math.round(fraction * 100),
     };
   });
 }

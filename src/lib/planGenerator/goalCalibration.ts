@@ -6,10 +6,15 @@
  * the exact same plan. Chasing a time the current fitness does not support
  * requires more volume, not just more hope, so the target pace now feeds the
  * volume model.
+ *
+ * The VMA a target requires is read from the race performance model
+ * (Péronnet-Thibault), so it depends on the time the runner would spend on
+ * the course and on their endurance, not on a fixed share per distance.
  */
 
+import type { Difficulty } from "@/types";
 import type { RaceDistance } from "@/types/plan";
-import { VMA_RACE_PERCENTAGES } from "./constants";
+import { enduranceIndexFor, vmaFromRaceTime } from "@/lib/racePerformance";
 
 /** How far the goal may push weekly volume, up or down */
 const MIN_DEMAND = 0.95;
@@ -17,6 +22,17 @@ const MAX_DEMAND = 1.25;
 
 /** Beyond this gap the goal is out of reach in one cycle, not just ambitious */
 export const UNREALISTIC_DEMAND = 1.15;
+
+/**
+ * Trail courses are slower than the road for the same effort. The model works
+ * on time, so a trail target pace is first brought back to a road-equivalent
+ * speed before asking what VMA it needs.
+ */
+const TRAIL_TERRAIN_FACTOR: Partial<Record<RaceDistance, number>> = {
+  trail_short: 0.85,
+  trail: 0.80,
+  ultra: 0.75,
+};
 
 function raceDistanceKm(raceDistance: RaceDistance): number {
   const distances: Record<RaceDistance, number> = {
@@ -27,14 +43,18 @@ function raceDistanceKm(raceDistance: RaceDistance): number {
 }
 
 /**
- * VMA a runner needs to hold `paceMinKm` over `raceDistance`, derived from the
- * same VMA percentages the race-time prediction uses.
+ * VMA a runner needs to hold `paceMinKm` over `raceDistance`.
  */
-export function vmaRequiredForPace(paceMinKm: number, raceDistance: RaceDistance): number {
+export function vmaRequiredForPace(
+  paceMinKm: number,
+  raceDistance: RaceDistance,
+  level?: Difficulty,
+): number {
   if (paceMinKm <= 0) return 0;
-  const speedKmh = 60 / paceMinKm;
-  const pct = VMA_RACE_PERCENTAGES[raceDistance] / 100;
-  return pct > 0 ? speedKmh / pct : 0;
+  const distanceKm = raceDistanceKm(raceDistance);
+  const minutes = paceMinKm * distanceKm;
+  const terrain = TRAIL_TERRAIN_FACTOR[raceDistance] ?? 1;
+  return vmaFromRaceTime(distanceKm, minutes, enduranceIndexFor(level)) / terrain;
 }
 
 /**
@@ -49,9 +69,10 @@ export function goalDemandFactor(
   targetPaceMinKm: number | undefined,
   vma: number | undefined,
   raceDistance: RaceDistance,
+  level?: Difficulty,
 ): number {
   if (!targetPaceMinKm || !vma || vma <= 0) return 1;
-  const required = vmaRequiredForPace(targetPaceMinKm, raceDistance);
+  const required = vmaRequiredForPace(targetPaceMinKm, raceDistance, level);
   if (required <= 0) return 1;
   return Math.min(MAX_DEMAND, Math.max(MIN_DEMAND, required / vma));
 }

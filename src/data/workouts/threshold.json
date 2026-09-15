@@ -2183,6 +2183,7 @@
       ],
       "selectionCriteria": {
         "phases": [
+          "base",
           "build",
           "peak"
         ],

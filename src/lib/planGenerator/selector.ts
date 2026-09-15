@@ -9,7 +9,7 @@ import type {
 } from "@/types";
 import type { RaceDistance } from "@/types/plan";
 import type { WeekSlot } from "./weekTemplate";
-import { DISTANCE_TAGS } from "./constants";
+import { DISTANCE_TAGS, DISTANCE_PROFILE, type DistanceProfile } from "./constants";
 import { planRandom } from "./rng";
 
 // ── Category mapping ───────────────────────────────────────────────
@@ -25,7 +25,17 @@ const SESSION_TO_CATEGORY: Partial<Record<SessionType, WorkoutCategory[]>> = {
   long_run: ["long_run", "endurance"],           // Long run can also use endurance workouts
   hills: ["hills"],
   fartlek: ["fartlek"],
-  race_specific: ["race_pace", "tempo"],         // Race specific can fall back to tempo
+  race_specific: ["race_pace"],                  // Distance-tagged first, see RACE_SPECIFIC_FALLBACK
+};
+
+// When no race-pace template matches the target distance, fall back to the
+// quality that pace corresponds to for that distance. Falling back to any
+// tempo put a Hanson marathon strength run in a 5K plan as its race-specific
+// session.
+const RACE_SPECIFIC_FALLBACK: Record<DistanceProfile, WorkoutCategory[]> = {
+  short: ["threshold", "vma_intervals"],
+  long: ["tempo", "threshold"],
+  trail: ["trail", "hills"],
 };
 
 const DIFFICULTY_LEVELS: Record<Difficulty, number> = {
@@ -47,12 +57,19 @@ interface WorkoutSelection {
 // ── Helpers ────────────────────────────────────────────────────────
 
 /**
- * Get expected relative loads for a slot type.
+ * Get expected relative loads for a slot type, at the runner's level.
+ *
+ * A key session for a beginner is a moderate session: asking for "hard" or
+ * "key" left no beginner template standing (they are almost all tagged
+ * moderate) and handed every beginner an intermediate max-effort workout in
+ * week 1. Advanced runners get the key-tagged sessions first.
  */
-function getLoadFilter(slotType: string): RelativeLoad[] {
+function getLoadFilter(slotType: string, difficulty: Difficulty): RelativeLoad[] {
   switch (slotType) {
     case "key_quality":
-      return ["hard", "key"];
+      if (difficulty === "beginner") return ["moderate", "hard"];
+      if (difficulty === "intermediate") return ["hard", "key", "moderate"];
+      return ["key", "hard"];
     case "long_run":
       return ["hard", "moderate", "key"];
     case "easy":
@@ -135,12 +152,38 @@ function findBestWorkout(
   daysPerWeek: number = 5,
   excludeWorkoutIds: string[] = [],
   targetDurationMin?: number,
+  preferTags: string[] = [],
 ): WorkoutSelection | null {
   const categories = SESSION_TO_CATEGORY[sessionType] ?? [];
   const diffLevel = DIFFICULTY_LEVELS[difficulty];
   const isTrailRace = raceDistance === "trail_short" || raceDistance === "trail" || raceDistance === "ultra";
 
   let candidates = allWorkouts.filter((w) => categories.includes(w.category));
+
+  // Race-specific work must be for this distance. The tag is a hard filter;
+  // when nothing carries it, the fallback is the quality that race pace maps
+  // to for this distance, never a race-pace template written for another one.
+  if (sessionType === "race_specific") {
+    const distTags = DISTANCE_TAGS[raceDistance];
+    const tagged = candidates.filter((w) =>
+      w.selectionCriteria.tags.some((t) => distTags.includes(t)),
+    );
+    if (tagged.length > 0) {
+      candidates = tagged;
+    } else {
+      const fallback = RACE_SPECIFIC_FALLBACK[DISTANCE_PROFILE[raceDistance]];
+      candidates = allWorkouts.filter((w) => fallback.includes(w.category));
+    }
+  }
+
+  // Caller preference (e.g. walk-run templates for a return to running):
+  // narrow to it whenever it leaves something to pick from.
+  if (preferTags.length > 0) {
+    const preferred = candidates.filter((w) =>
+      w.selectionCriteria.tags.some((t) => preferTags.includes(t)),
+    );
+    if (preferred.length > 0) candidates = preferred;
+  }
 
   if (isTrailRace) {
     // Trail workouts are volume/elevation sessions. They stand in for aerobic
@@ -188,7 +231,7 @@ function findBestWorkout(
   // Step 3: Filter by relativeLoad matching slot type.
   // Load comes before difficulty: an easy/recovery slot must never be filled
   // with a hard session just because no easy one matches the runner's level.
-  const loadFilter = getLoadFilter(slotType);
+  const loadFilter = getLoadFilter(slotType, difficulty);
   let filtered = candidates.filter((w) =>
     loadFilter.includes(w.selectionCriteria.relativeLoad),
   );
@@ -197,10 +240,26 @@ function findBestWorkout(
   // Step 4: Filter by difficulty. Keep the exact match only when it leaves a
   // pool wide enough to fill a week without repeating: an exact-level pool of
   // one or two workouts is why 6-day plans ran the same session five times.
+  //
+  // A key session never comes from a level above the runner's. The tolerance
+  // goes downward (an intermediate may run a beginner tempo in base), and a
+  // template from the level above is only acceptable when it is tagged
+  // moderate, i.e. softer than what the runner's own level would prescribe.
   const MIN_POOL_FOR_VARIETY = 4;
   const exactLevel = candidates.filter((w) => w.difficulty === difficulty);
   if (exactLevel.length >= MIN_POOL_FOR_VARIETY) {
     candidates = exactLevel;
+  } else if (slotType === "key_quality") {
+    const atOrBelow = candidates.filter((w) => DIFFICULTY_LEVELS[w.difficulty] <= diffLevel);
+    if (atOrBelow.length > 0) {
+      candidates = atOrBelow;
+    } else {
+      const softerAbove = candidates.filter(
+        (w) => DIFFICULTY_LEVELS[w.difficulty] === diffLevel + 1
+          && w.selectionCriteria.relativeLoad === "moderate",
+      );
+      if (softerAbove.length > 0) candidates = softerAbove;
+    }
   } else {
     const tolerant = candidates.filter(
       (w) => Math.abs(DIFFICULTY_LEVELS[w.difficulty] - diffLevel) <= 1,
@@ -215,15 +274,6 @@ function findBestWorkout(
       const avgDuration = (w.typicalDuration.min + w.typicalDuration.max) / 2;
       return avgDuration <= maxEasyDuration;
     });
-    if (filtered.length > 0) candidates = filtered;
-  }
-
-  // Step 5: For race_specific, filter by distance tags
-  if (sessionType === "race_specific") {
-    const distTags = DISTANCE_TAGS[raceDistance];
-    filtered = candidates.filter((w) =>
-      w.selectionCriteria.tags.some((t) => distTags.includes(t)),
-    );
     if (filtered.length > 0) candidates = filtered;
   }
 
@@ -249,6 +299,14 @@ function findBestWorkout(
     // be plausible: "Sortie longue endurance pure" prescribed for 25 minutes
     // named a session the runner was not doing.
     if (targetDurationMin && targetDurationMin > 0) {
+      // A template whose shortest version is far longer than the slot cannot
+      // be shrunk into it without becoming a different session: a 25-minute
+      // return-to-running jog was drawn as a 75-95 minute "Extended Base
+      // Endurance" cut to 53 minutes.
+      const MAX_TEMPLATE_STRETCH = 1.5;
+      const fitting = candidates.filter((w) => w.typicalDuration.min <= targetDurationMin * MAX_TEMPLATE_STRETCH);
+      if (fitting.length >= 2) candidates = fitting;
+
       const distanceTo = (w: WorkoutTemplate): number => {
         const { min, max } = w.typicalDuration;
         if (targetDurationMin < min) return min - targetDurationMin;
@@ -259,7 +317,7 @@ function findBestWorkout(
       // a tight band left low-volume plans with a single eligible template,
       // which then showed up in nine sessions out of thirty.
       const best = Math.min(...candidates.map(distanceTo));
-      const MIN_POOL = 4;
+      const MIN_POOL = 3;
       for (const tolerance of [15, 30, 45]) {
         const nearest = candidates.filter((w) => distanceTo(w) <= best + tolerance);
         if (nearest.length >= MIN_POOL) {
@@ -353,6 +411,7 @@ export function selectWorkout(
   excludeWorkoutIds: string[] = [], // IDs already placed this week
   targetDurationMin?: number, // Target duration for this slot (long runs)
 ): WorkoutSelection | null {
+  const preferTags = slot.preferTags ?? [];
   // Try each preferred session type in order
   for (const sessionType of slot.sessionTypes) {
     const result = findBestWorkout(
@@ -367,6 +426,7 @@ export function selectWorkout(
       daysPerWeek,
       excludeWorkoutIds,
       targetDurationMin,
+      preferTags,
     );
     if (result) return result;
   }
@@ -387,6 +447,7 @@ export function selectWorkout(
         daysPerWeek,
         [],
         targetDurationMin,
+        preferTags,
       );
       if (result) return result;
     }

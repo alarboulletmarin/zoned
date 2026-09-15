@@ -16,20 +16,23 @@ import {
   PHASE_DISTRIBUTION,
   SHORT_PLAN_BASE_ADJUSTMENT,
   SHORT_PLAN_THRESHOLD,
-  LONG_PLAN_THRESHOLD,
   TAPER_WEEKS,
   MIN_PHASE_WEEKS,
+  MIN_PEAK_WEEKS,
+  MAX_BASE_WEEKS,
   getGoalModifiers,
 } from "./constants";
 
 /**
  * Calculate phase distribution from total weeks and race distance.
  *
- * Improvements over previous version:
- * - Per-distance ratios instead of fixed 40/35/15
- * - Duration-aware adjustments (short plans compress base, long plans extend it)
- * - Training goal shifts phase distribution (finish=more base, compete=more peak)
- * - Ensures minimum 1 week per phase
+ * - Per-distance ratios, summing to 1
+ * - Short plans (< 12 weeks) compress the base in favour of build and peak
+ * - Training goal shifts the split (finish = more base, compete = more peak)
+ * - The peak block keeps a distance-specific minimum once the plan can afford
+ *   it, and is sized before the base: a marathon plan with one week of
+ *   race-pace work has no peak phase, whatever the base looks like
+ * - The base never exceeds MAX_BASE_WEEKS, the surplus goes to build and peak
  *
  * @returns Array of PhaseRange with 1-indexed week numbers.
  */
@@ -96,46 +99,43 @@ export function calculatePhases(
     peakPct = Math.max(0.10, peakPct - goalMods.basePhaseShift);
   }
 
-  // Adjust for plan duration
+  // Short plans: compress base, expand build/peak for more quality work
   if (totalWeeks < SHORT_PLAN_THRESHOLD) {
-    // Short plans: compress base, expand build/peak for more quality work
-    basePct = Math.max(0.15, basePct + SHORT_PLAN_BASE_ADJUSTMENT);
-    const freed = dist.base + goalMods.basePhaseShift - basePct;
-    if (freed > 0) {
-      buildPct += freed * 0.5;
-      peakPct += freed * 0.5;
-    }
-  } else if (totalWeeks > LONG_PLAN_THRESHOLD) {
-    // Long plans (>18 weeks): cap base at ~12 weeks absolute max
-    // Extra weeks go to build and peak (more quality time)
-    const maxBaseWeeks = 12;
-    const baseWeeksFromPct = Math.round(availableWeeks * basePct);
-    if (baseWeeksFromPct > maxBaseWeeks) {
-      const excessWeeks = baseWeeksFromPct - maxBaseWeeks;
-      const excessPct = excessWeeks / availableWeeks;
-      basePct -= excessPct;
-      // Distribute excess 60% to build, 40% to peak
-      buildPct += excessPct * 0.6;
-      peakPct += excessPct * 0.4;
-    }
+    const compressed = Math.max(0.15, basePct + SHORT_PLAN_BASE_ADJUSTMENT);
+    const freed = basePct - compressed;
+    basePct = compressed;
+    buildPct += freed * 0.5;
+    peakPct += freed * 0.5;
   }
 
-  // Calculate week counts
-  let baseWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * basePct));
+  // Peak first: it has a floor once the plan can afford one (a plan of 6
+  // available weeks cannot spend half of them in peak).
+  const peakFloor = availableWeeks >= 8 ? MIN_PEAK_WEEKS[raceDistance] : MIN_PHASE_WEEKS;
+  let peakWeeks = Math.max(peakFloor, Math.round(availableWeeks * peakPct));
   let buildWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * buildPct));
-  let peakWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * peakPct));
+  let baseWeeks = availableWeeks - peakWeeks - buildWeeks;
 
-  // Adjust to fit exactly (give/take from base which is the largest)
-  const assigned = baseWeeks + buildWeeks + peakWeeks;
-  baseWeeks += availableWeeks - assigned;
-
-  // Safety: ensure base is at least 1 after adjustment
+  // Base below its minimum: shrink build, then peak, down to their minimums
   if (baseWeeks < MIN_PHASE_WEEKS) {
+    const deficit = MIN_PHASE_WEEKS - baseWeeks;
+    const fromBuild = Math.min(deficit, buildWeeks - MIN_PHASE_WEEKS);
+    buildWeeks -= fromBuild;
+    peakWeeks -= deficit - fromBuild;
     baseWeeks = MIN_PHASE_WEEKS;
-    // Steal from build if needed
-    const overflow = (baseWeeks + buildWeeks + peakWeeks) - availableWeeks;
-    if (overflow > 0) buildWeeks = Math.max(MIN_PHASE_WEEKS, buildWeeks - overflow);
   }
+
+  // Long plans: the base is capped in absolute weeks, the surplus goes 60 %
+  // to build and 40 % to peak. Applied on the rounded weeks, applying it to
+  // the percentages let the rounding remainder refill the base past the cap.
+  if (baseWeeks > MAX_BASE_WEEKS) {
+    const excess = baseWeeks - MAX_BASE_WEEKS;
+    const toBuild = Math.round(excess * 0.6);
+    buildWeeks += toBuild;
+    peakWeeks += excess - toBuild;
+    baseWeeks = MAX_BASE_WEEKS;
+  }
+
+  void basePct;
 
   // Build ranges (1-indexed)
   const phases: PhaseRange[] = [];

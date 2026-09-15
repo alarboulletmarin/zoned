@@ -7,7 +7,7 @@ Date : 15 septembre 2026 · Branche : `claude/audit-plan-generator-vj9hcl` · P�
 - Lecture intégrale du moteur (phases, volume, gabarit hebdo, sélection, allures, sortie longue, semaine de course, affûtage, renfo, audit) et du script qui produit les dix plans prêts à l'emploi. Les plans **sont** des sorties brutes du générateur : auditer l'un, c'est auditer l'autre.
 - Mesures : deux scripts de session ont rejoué le générateur sur une matrice distance × niveau × durée × jours, et décomposé chaque plan prêt à l'emploi semaine par semaine (km, sortie longue, séances clés, niveau des gabarits, répétitions, part de séances dures). Les tableaux en annexe viennent de là, pas d'une lecture à l'œil.
 - Confrontation aux sources : méta-analyses, revues et essais (Bosquet 2007, Wang 2023, Mujika & Padilla 2003, Smyth & Lawlor 2021, Buist 2008, Nielsen 2014, Damsted 2018 et 2019, Impellizzeri 2020, Seiler & Kjerland 2006, Seiler 2010, Stöggl & Sperlich 2014, Casado 2022, Kenneally 2021, Burnley 2022, Billat & Koralsztein 1996, Péronnet & Thibault 1989, Nikolaidis 2020, Beattie 2017, Rønnestad & Mujika 2014, Blagrove 2018, Lauersen 2014, Warden 2014, George 2024) et manuels de référence (Daniels 3e éd., Pfitzinger *Advanced Marathoning* et *Faster Road Racing*, Hansons, Higdon, Koop). Le proxy de la session bloquait le texte intégral des revues ; les chiffres cités proviennent des résumés indexés et des barèmes publiés, recoupés sur plusieurs sources. Un point est signalé comme non vérifié quand c'est le cas.
-- Les 124 tests existants de `planGenerator` passent. Aucune modification de code n'a été faite : le livrable est le diagnostic et des recommandations chiffrées.
+- Les 124 tests existants de `planGenerator` passaient au moment de l'audit. Le diagnostic (sections 1 à 8) décrit l'état avant correction ; la section 9 donne l'état des corrections.
 
 ## 1. Synthèse
 
@@ -253,6 +253,45 @@ Les mesures complètes sont en annexe A.
 13. Nettoyer ou brancher les constantes mortes (`POLARIZED_*`, `STARTING_VOLUME_PCT`, `TAPER_VOLUME_REDUCTION`, `PHASE_SESSION_TYPES`, `weekPositions`) ; dédupliquer `VMA_RACE_PERCENTAGES`.
 14. Réécrire `plan-methodology.ts` à partir du comportement mesuré, pas des constantes ; retirer Gabbett.
 15. Tests de propriété sur le générateur : monotonie de la progression hors décharges, part de séances dures ≤ 25 %, niveau des gabarits ≤ niveau du coureur, pas de décharge à moins de 2 semaines de l'affûtage, sortie longue ≥ 25 % du volume au-delà de 70 km/sem., aucune séance dure avant S4 en retour de blessure.
+
+## 9. Statut des corrections (15 septembre 2026, même branche)
+
+Toutes les recommandations ont été appliquées dans le commit qui suit ce rapport ; les numéros de ligne cités plus haut décrivent l'état *avant* correction.
+
+| Reco | État | Où |
+|---|---|---|
+| 1. Charge par niveau, jamais au-dessus du niveau en slot clé ; catalogue | Fait | `selector.ts` (`getLoadFilter(slotType, difficulty)`, filtre de niveau descendant) ; tags `base` sur TMP-005, TMP-012, THR-014 |
+| 2. `race_specific` par distance | Fait | `selector.ts` (tag distance en filtre dur, repli `RACE_SPECIFIC_FALLBACK`) ; `paceEngine.sessionTypeToIntensity(type, distance)` |
+| 3. Purposes non-course | Fait | `PURPOSE_CONFIGS.firstKeySessionWeek` / `walkRunWeeks` ; `index.ts` (plus d'`endurance` en clé, gabarits `walk-run` les premières semaines) ; tag `walk-run` sur REC-002, END-001, END-003 |
+| 4. Affûtage | Fait | `TAPER_VOLUME_PCT` et `RACE_WEEK_VOLUME_PCT` par distance (marathon 78 / 60 / 40) ; semaine de course dimensionnée sur la cible (`raceWeek.ts`) ; `TAPER_WEEK_HEAVY` à 85 % |
+| 5. Pente de volume calculée | Fait | `volume.ts` (`PEAK_WEEKS_BEFORE_TAPER`, taux = racine n-ième de pic/départ, +10 % en plafond, +3 % en plancher) |
+| 6. Décharges et phases | Fait | `NO_RECOVERY_WEEKS_BEFORE_TAPER = 2`, décharge à 82 % (75 % finish) ancrée sur les km livrés (`index.ts`) ; `PHASE_DISTRIBUTION` normalisée, `MIN_PEAK_WEEKS`, `MAX_BASE_WEEKS` appliqué après arrondi (`phases.ts`) |
+| 7. Sortie longue | Fait | `longRunProgression.ts` : pic = max(cible distance, 27 % du volume), plafond de durée (`MAX_LONG_RUN_MINUTES`), part max relevée sous 65 km/sem. (`maxLongRunShare`), plancher d'affûtage borné |
+| 8. % VMA et allure M selon la durée | Fait | `src/lib/racePerformance.ts` (Péronnet-Thibault, indice d'endurance par niveau) branché sur `predictRaceTime`, `calculateTrainingPaces` (M), `goalCalibration`, `paceCalculator`, `VmaCalculatorPage` |
+| 9. Départs débutant | Fait | `WEEKLY_KM_TARGETS` (5K 12 → 25, 10K 15 → 32, semi 22 → 45, marathon 28 → 64) ; départ mis à l'échelle des jours ; `WEEKLY_VOLUME_FLOOR_KM` partagé avec l'audit et appliqué au pic |
+| 10. Définition unique de l'intensité | Fait | `weekTemplate.ts` : 1 clé en base (≤ 5 j), 2 en build/peak ; constantes `POLARIZED_*` retirées, `MAX_KEY_SESSION_FRACTION = 0.40` testé ; méthodologie réécrite en « pyramidal » |
+| 11. Renfo | Fait | `strengthIntegration.ts` : pliométrie en build, veille de séance dure limitée à mobilité / gainage / prehab |
+| 12. Trail | Fait | `sessionBuilder.ts` : cible de D+ (80 % du D+/km de la course) et durée ajustée (+6 min / 100 m) sur la sortie longue |
+| 13. Constantes mortes | Fait | `STARTING_VOLUME_PCT`, `TAPER_DECAY_RATE`, `TAPER_VOLUME_REDUCTION`, `PHASE_SESSION_TYPES`, `BASE/BUILD/PEAK_PHASE_PCT`, `VMA_RACE_PERCENTAGES` (3 copies) supprimés |
+| 14. Méthodologie | Fait | `plan-methodology.ts` réécrit à partir du comportement, 8 principes, Gabbett retiré ; références de la page mises à jour |
+| 15. Tests de propriété | Fait | `generator.properties.test.ts` (11 propriétés sur 11 configurations), `racePerformance.test.ts` |
+
+Plans prêts à l'emploi régénérés (`scripts/regenerate-prebuilt-plans.ts`). Après correction :
+
+| Plan | Volume | SL pic | Séances dures | Clés hors niveau |
+|---|---|---|---|---|
+| 5K débutant | 12 → 16 km | 6,5 km | 26 % | 0 (était 100 %) |
+| 10K débutant | 14 → 19 km | 7,5 km | 28 % | 0 |
+| 5K intermédiaire | 30 → 39 km | 12,5 km | 36 % | 0 |
+| 10K intermédiaire | 39 → 47 km | 18 km | 32 % | 0 |
+| Semi-marathon | 39 → 51 km, décharges à 32 et 37 km | 19 km | 33 % | 0 |
+| Marathon | 50 → 81 km, pic S15, affûtage 45 / 38 / 31 km | 29,5 km | 25 % | 0 |
+| Trail court | 41 → 49 km | 21 km | 20 % | 0 |
+| Construction de base | 28 → 42 km, 1 clé/sem. en base | 16 km | 25 % | 0 |
+| Retour de blessure | 12 → 17 km, marche-course S1-S3, aucune séance dure avant S5 | 6,5 km | 13 % | 0 |
+| Reprise après longue pause | 12 → 18 km, marche-course S1-S2, aucune séance dure avant S4 | 7 km | 17 % | 0 |
+
+Vérifications : `tsc` propre, 876 tests verts (dont 18 nouveaux), `check:workouts`, `check:i18n`, `check:typography` OK.
 
 ## Annexe A. Mesures des plans prêts à l'emploi
 
