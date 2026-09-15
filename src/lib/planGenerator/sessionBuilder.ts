@@ -33,6 +33,7 @@ import {
   type DanielsIntensity,
 } from "./paceEngine";
 import { selectWorkout } from "./selector";
+import { MAX_LONG_RUN_MINUTES } from "./longRunProgression";
 
 // ── Types ──────────────────────────────────────────────────────
 
@@ -206,8 +207,19 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
     // Trail: the long run is prescribed in time and climb, not just km. The
     // climb target follows the race's own gain per km, and the duration
     // accounts for it (about 6 min per 100 m of climb).
-    const climb = trailLongRunClimb(ctx.raceDistance, ctx.elevationGain, ctx.targetLongRunKm);
+    let climb = trailLongRunClimb(ctx.raceDistance, ctx.elevationGain, ctx.targetLongRunKm);
     if (climb) {
+      // The climb counts against the same duration cap as the km: a 40 km
+      // mountain long run with 1000 m of climb is shortened, not lengthened
+      // to five hours.
+      const cap = MAX_LONG_RUN_MINUTES[ctx.raceDistance];
+      if (longRunDurationFromTarget + climb.extraMinutes > cap) {
+        const ratio = Math.max(0.5, (cap - climb.extraMinutes) / longRunDurationFromTarget);
+        const km = Math.round(ctx.targetLongRunKm * ratio * 2) / 2;
+        session.targetDistanceKm = km;
+        longRunDurationFromTarget = Math.round(longRunDurationFromTarget * ratio);
+        climb = trailLongRunClimb(ctx.raceDistance, ctx.elevationGain, km) ?? climb;
+      }
       longRunDurationFromTarget += climb.extraMinutes;
       session.notes = `${session.notes}\nDénivelé : ~${climb.gainM} m D+ (durée ajustée ~${longRunDurationFromTarget} min)`;
       session.notesEn = `${session.notesEn}\nClimb: ~${climb.gainM} m D+ (adjusted duration ~${longRunDurationFromTarget} min)`;

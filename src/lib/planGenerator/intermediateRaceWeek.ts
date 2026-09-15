@@ -77,7 +77,7 @@ export function applyIntermediateRaces(
       weekIdx > 0 &&
       !adjustedWeeks.has(weeks[weekIdx - 1].weekNumber)
     ) {
-      applyPreRaceAdjustment(weeks, weekIdx - 1, effectivePriority, adjustedWeeks, goalDistanceKm);
+      applyPreRaceAdjustment(weeks, weekIdx - 1, effectivePriority, adjustedWeeks, goalDistanceKm, allWorkouts);
     }
 
     // Race week
@@ -101,7 +101,7 @@ export function applyIntermediateRaces(
           );
         }
       } else {
-        applyPostRaceAdjustment(weeks, weekIdx + 1, effectivePriority, adjustedWeeks, goalDistanceKm);
+        applyPostRaceAdjustment(weeks, weekIdx + 1, effectivePriority, adjustedWeeks, goalDistanceKm, allWorkouts);
       }
     }
 
@@ -293,6 +293,7 @@ function applyPreRaceAdjustment(
   priority: RacePriority,
   adjustedWeeks: Set<number>,
   goalDistanceKm: number,
+  allWorkouts: WorkoutTemplate[],
 ): void {
   const week = weeks[weekIdx];
   const volumeConfig = INTERMEDIATE_RACE_VOLUME[priority];
@@ -319,17 +320,11 @@ function applyPreRaceAdjustment(
 
   // For long races (>= semi), convert key sessions to easy endurance in pre-race week too
   if (goalDistanceKm >= 21.1) {
-    week.sessions = week.sessions.map(s => {
-      if (s.isKeySession) {
-        return {
-          ...s,
-          isKeySession: false,
-          sessionType: "endurance" as const,
-          estimatedDurationMin: Math.min(45, Math.round(s.estimatedDurationMin * 0.7)),
-        };
-      }
-      return s;
-    });
+    week.sessions = week.sessions.map(s =>
+      s.isKeySession
+        ? demoteToEasy(s, allWorkouts, Math.min(45, Math.round(s.estimatedDurationMin * 0.7)))
+        : s,
+    );
   }
 
   adjustedWeeks.add(week.weekNumber);
@@ -341,6 +336,7 @@ function applyPostRaceAdjustment(
   priority: RacePriority,
   adjustedWeeks: Set<number>,
   goalDistanceKm: number,
+  allWorkouts: WorkoutTemplate[],
 ): void {
   const week = weeks[weekIdx];
   const volumeConfig = INTERMEDIATE_RACE_VOLUME[priority];
@@ -374,18 +370,11 @@ function applyPostRaceAdjustment(
 
   // After long races (>= semi), convert key sessions to easy endurance
   if (goalDistanceKm >= 21.1) {
-    week.sessions = week.sessions.map(s => {
-      if (s.isKeySession) {
-        return {
-          ...s,
-          isKeySession: false,
-          sessionType: "endurance" as const,
-          // Reduce duration to ~70% and cap at 45min
-          estimatedDurationMin: Math.min(45, Math.round(s.estimatedDurationMin * 0.7)),
-        };
-      }
-      return s;
-    });
+    week.sessions = week.sessions.map(s =>
+      s.isKeySession
+        ? demoteToEasy(s, allWorkouts, Math.min(45, Math.round(s.estimatedDurationMin * 0.7)))
+        : s,
+    );
     // Force recovery week for long races regardless of priority
     week.isRecoveryWeek = true;
   }
@@ -424,6 +413,30 @@ function estimateRaceDurationMin(
   if (isTrail) pace *= 1.25;
 
   return Math.round(distanceKm * pace);
+}
+
+/**
+ * A key session demoted to easy running must also change template: keeping
+ * a threshold workout id under an "endurance" label showed the runner a hard
+ * interval session presented as an easy day.
+ */
+function demoteToEasy(session: PlanSession, workouts: WorkoutTemplate[], durationMin: number): PlanSession {
+  const easy = workouts.filter(
+    (w) => w.category === "recovery" && w.selectionCriteria.relativeLoad === "light",
+  );
+  const pick = easy[session.dayOfWeek % Math.max(1, easy.length)];
+  return {
+    ...session,
+    workoutId: pick?.id ?? session.workoutId,
+    isKeySession: false,
+    sessionType: "endurance",
+    estimatedDurationMin: durationMin,
+    targetDurationMin: durationMin,
+    notes: "Footing facile, semaine allégée autour de la course intermédiaire",
+    notesEn: "Easy jog, lightened week around the intermediate race",
+    paceNotes: [],
+    scaledRepetitions: undefined,
+  };
 }
 
 function findOpenerWorkout(workouts: WorkoutTemplate[]): WorkoutTemplate | undefined {

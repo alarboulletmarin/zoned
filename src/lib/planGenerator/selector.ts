@@ -261,8 +261,12 @@ function findBestWorkout(
       if (softerAbove.length > 0) candidates = softerAbove;
     }
   } else {
+    // An easy run is an easy run: a recovery jog may come from any level, an
+    // easy run from two levels away. Holding advanced runners to their own
+    // two recovery templates repeated one of them thirteen times in a plan.
+    const tolerance = slotType === "recovery" ? 3 : slotType === "easy" ? 2 : 1;
     const tolerant = candidates.filter(
-      (w) => Math.abs(DIFFICULTY_LEVELS[w.difficulty] - diffLevel) <= 1,
+      (w) => Math.abs(DIFFICULTY_LEVELS[w.difficulty] - diffLevel) <= tolerance,
     );
     if (tolerant.length > 0) candidates = tolerant;
   }
@@ -303,8 +307,15 @@ function findBestWorkout(
       // be shrunk into it without becoming a different session: a 25-minute
       // return-to-running jog was drawn as a 75-95 minute "Extended Base
       // Endurance" cut to 53 minutes.
+      // The converse holds too: a 10-15 minute recovery jog cannot be
+      // stretched into a 60-minute easy run, yet the least-used-first rule
+      // kept drawing it for load weeks of 3-day plans, which then fell short.
       const MAX_TEMPLATE_STRETCH = 1.5;
-      const fitting = candidates.filter((w) => w.typicalDuration.min <= targetDurationMin * MAX_TEMPLATE_STRETCH);
+      const MIN_TEMPLATE_REACH = 0.6;
+      const fitting = candidates.filter((w) =>
+        w.typicalDuration.min <= targetDurationMin * MAX_TEMPLATE_STRETCH
+        && w.typicalDuration.max * 1.3 >= targetDurationMin * MIN_TEMPLATE_REACH,
+      );
       if (fitting.length >= 2) candidates = fitting;
 
       const distanceTo = (w: WorkoutTemplate): number => {

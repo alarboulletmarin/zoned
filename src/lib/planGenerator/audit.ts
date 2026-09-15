@@ -69,8 +69,12 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
   let findingId = 0;
   const nextId = () => `finding-${++findingId}`;
 
+  // Non-race purposes (base building, return from injury, beginner start)
+  // have no race day whatever the config carries.
+  const isRacePlan = !plan.config.planPurpose || plan.config.planPurpose === "race";
+
   // ── Check 1: RACE_DAY_MISSING ──────────────────────────────────────
-  if (plan.config.raceDate) {
+  if (plan.config.raceDate && isRacePlan) {
     const hasRaceDay = plan.weeks.some((w) =>
       w.sessions.some((s) => s.workoutId === "__race_day__"),
     );
@@ -87,7 +91,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
   }
 
   // ── Check 2: RACE_DAY_NOT_LAST_WEEK ────────────────────────────────
-  if (plan.config.raceDate) {
+  if (plan.config.raceDate && isRacePlan) {
     for (const week of plan.weeks) {
       const raceSession = week.sessions.find(
         (s) => s.workoutId === "__race_day__",
@@ -120,7 +124,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
   }
 
   // ── Check 2c: PRIORITY_A_NEAR_TAPER ──────────────────────────────
-  if (plan.config.raceDate) {
+  if (plan.config.raceDate && isRacePlan) {
     const taperPhase = plan.phases.find(p => p.phase === "taper");
     if (taperPhase) {
       for (const week of plan.weeks) {
@@ -348,7 +352,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
 /** Long run a runner should reach to face the distance, in km */
 const LONG_RUN_TARGET_KM: Record<RaceDistance, number> = {
   "5K": 7,
-  "10K": 12,
+  "10K": 9,
   semi: 18,
   marathon: 28,
   trail_short: 22,
@@ -362,7 +366,8 @@ function auditGoalFeasibility(
 ): PlanFinding[] {
   const out: PlanFinding[] = [];
   const distance = plan.config.raceDistance;
-  if (!distance || !plan.config.raceDate) return out;
+  const isRacePlan = !plan.config.planPurpose || plan.config.planPurpose === "race";
+  if (!distance || !plan.config.raceDate || !isRacePlan) return out;
 
   const lastWeek = plan.totalWeeks;
   const peakWeeklyKm = Math.max(0, ...plan.weeks.map((w) => w.targetKm ?? 0));

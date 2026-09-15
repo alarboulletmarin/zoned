@@ -221,7 +221,7 @@ export const WEEKLY_KM_TARGETS: Record<RaceDistance, Record<Difficulty, [number,
  */
 export const WEEKLY_VOLUME_FLOOR_KM: Record<RaceDistance, number> = {
   "5K": 15,
-  "10K": 25,
+  "10K": 18,
   semi: 35,
   marathon: 50,
   trail_short: 40,
@@ -274,7 +274,10 @@ const KEY_SESSION_TYPES_BY_PROFILE: Record<
   Record<TrainingPhase, SessionType[]>
 > = {
   short: {
-    base: ["fartlek", "hills", "tempo"],
+    // Threshold, not tempo: a tempo template runs at marathon pace, which
+    // labelled 5K base sessions "Allure marathon". Pfitzinger opens 5K/10K
+    // schedules with lactate-threshold work.
+    base: ["fartlek", "hills", "threshold"],
     build: ["vo2max", "threshold", "fartlek"],
     peak: ["vo2max", "race_specific", "threshold"],
     taper: ["race_specific", "vo2max"],

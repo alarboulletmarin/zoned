@@ -148,19 +148,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-001",
+          "workoutId": "STR-008",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 35,
-          "loadScore": 18
+          "estimatedDurationMin": 28,
+          "loadScore": 14
         }
       ],
       "weekLabel": "S1",
       "weekLabelEn": "W1",
       "targetKm": 50,
       "targetLongRunKm": 13.5,
-      "weeklyLoadScore": 355
+      "weeklyLoadScore": 351
     },
     {
       "weekNumber": 2,
@@ -267,19 +267,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-008",
+          "workoutId": "STR-010",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 28,
-          "loadScore": 14
+          "estimatedDurationMin": 23,
+          "loadScore": 12
         }
       ],
       "weekLabel": "S2",
       "weekLabelEn": "W2",
       "targetKm": 54,
       "targetLongRunKm": 15,
-      "weeklyLoadScore": 346
+      "weeklyLoadScore": 344
     },
     {
       "weekNumber": 3,
@@ -401,19 +401,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-015",
+          "workoutId": "STR-014",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 25,
-          "loadScore": 8
+          "estimatedDurationMin": 23,
+          "loadScore": 7
         }
       ],
       "weekLabel": "S3",
       "weekLabelEn": "W3",
       "targetKm": 56,
       "targetLongRunKm": 13,
-      "weeklyLoadScore": 333
+      "weeklyLoadScore": 332
     },
     {
       "weekNumber": 4,
@@ -676,19 +676,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-002",
+          "workoutId": "STR-009",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 45,
-          "loadScore": 31
+          "estimatedDurationMin": 35,
+          "loadScore": 25
         }
       ],
       "weekLabel": "S5",
       "weekLabelEn": "W5",
       "targetKm": 59,
       "targetLongRunKm": 18.5,
-      "weeklyLoadScore": 359
+      "weeklyLoadScore": 353
     },
     {
       "weekNumber": 6,
@@ -803,19 +803,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-014",
+          "workoutId": "STR-001",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 23,
-          "loadScore": 7
+          "estimatedDurationMin": 35,
+          "loadScore": 18
         }
       ],
       "weekLabel": "S6",
       "weekLabelEn": "W6",
       "targetKm": 62,
       "targetLongRunKm": 16,
-      "weeklyLoadScore": 349
+      "weeklyLoadScore": 360
     },
     {
       "weekNumber": 7,
@@ -937,19 +937,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-009",
+          "workoutId": "STR-015",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 35,
-          "loadScore": 25
+          "estimatedDurationMin": 25,
+          "loadScore": 8
         }
       ],
       "weekLabel": "S7",
       "weekLabelEn": "W7",
       "targetKm": 65,
       "targetLongRunKm": 20.5,
-      "weeklyLoadScore": 405
+      "weeklyLoadScore": 388
     },
     {
       "weekNumber": 8,
@@ -1064,19 +1064,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "STR-016",
+          "workoutId": "STR-014",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 33,
-          "loadScore": 10
+          "estimatedDurationMin": 23,
+          "loadScore": 7
         }
       ],
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 53,
       "targetLongRunKm": 17,
-      "weeklyLoadScore": 305
+      "weeklyLoadScore": 302
     },
     {
       "weekNumber": 9,
@@ -1198,19 +1198,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "STR-010",
+          "workoutId": "STR-013",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 23,
-          "loadScore": 12
+          "estimatedDurationMin": 28,
+          "loadScore": 24
         }
       ],
       "weekLabel": "S9",
       "weekLabelEn": "W9",
       "targetKm": 69,
       "targetLongRunKm": 19,
-      "weeklyLoadScore": 399
+      "weeklyLoadScore": 411
     },
     {
       "weekNumber": 10,
@@ -1339,19 +1339,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "STR-005",
+          "workoutId": "STR-011",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 45,
-          "loadScore": 41
+          "estimatedDurationMin": 33,
+          "loadScore": 28
         }
       ],
       "weekLabel": "S10",
       "weekLabelEn": "W10",
       "targetKm": 72,
       "targetLongRunKm": 24,
-      "weeklyLoadScore": 414
+      "weeklyLoadScore": 401
     },
     {
       "weekNumber": 11,
@@ -1473,19 +1473,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "STR-011",
+          "workoutId": "STR-003",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 33,
-          "loadScore": 28
+          "estimatedDurationMin": 50,
+          "loadScore": 45
         }
       ],
       "weekLabel": "S11",
       "weekLabelEn": "W11",
       "targetKm": 76,
       "targetLongRunKm": 26,
-      "weeklyLoadScore": 419
+      "weeklyLoadScore": 436
     },
     {
       "weekNumber": 12,
@@ -1741,19 +1741,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "STR-012",
+          "workoutId": "STR-017",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 38,
-          "loadScore": 32
+          "estimatedDurationMin": 28,
+          "loadScore": 14
         }
       ],
       "weekLabel": "S13",
       "weekLabelEn": "W13",
       "targetKm": 78,
       "targetLongRunKm": 27.5,
-      "weeklyLoadScore": 444
+      "weeklyLoadScore": 426
     },
     {
       "weekNumber": 14,
@@ -1876,19 +1876,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "STR-017",
+          "workoutId": "STR-012",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 28,
-          "loadScore": 14
+          "estimatedDurationMin": 38,
+          "loadScore": 32
         }
       ],
       "weekLabel": "S14",
       "weekLabelEn": "W14",
       "targetKm": 75,
       "targetLongRunKm": 29.5,
-      "weeklyLoadScore": 434
+      "weeklyLoadScore": 452
     },
     {
       "weekNumber": 15,
@@ -2018,19 +2018,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "STR-013",
+          "workoutId": "STR-017",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
           "estimatedDurationMin": 28,
-          "loadScore": 24
+          "loadScore": 14
         }
       ],
       "weekLabel": "S15",
       "weekLabelEn": "W15",
       "targetKm": 81,
       "targetLongRunKm": 25,
-      "weeklyLoadScore": 471
+      "weeklyLoadScore": 461
     },
     {
       "weekNumber": 16,
@@ -2159,19 +2159,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "STR-017",
+          "workoutId": "STR-016",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 28,
-          "loadScore": 14
+          "estimatedDurationMin": 33,
+          "loadScore": 10
         }
       ],
       "weekLabel": "S16",
       "weekLabelEn": "W16",
       "targetKm": 45,
       "targetLongRunKm": 20,
-      "weeklyLoadScore": 255
+      "weeklyLoadScore": 251
     },
     {
       "weekNumber": 17,
@@ -2300,19 +2300,19 @@ export const planMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "STR-014",
+          "workoutId": "STR-015",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 23,
-          "loadScore": 7
+          "estimatedDurationMin": 25,
+          "loadScore": 8
         }
       ],
       "weekLabel": "S17",
       "weekLabelEn": "W17",
       "targetKm": 38,
       "targetLongRunKm": 13.5,
-      "weeklyLoadScore": 230
+      "weeklyLoadScore": 231
     },
     {
       "weekNumber": 18,

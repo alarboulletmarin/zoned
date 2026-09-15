@@ -134,19 +134,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 3,
-          "workoutId": "STR-001",
+          "workoutId": "STR-002",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 35,
-          "loadScore": 18
+          "estimatedDurationMin": 45,
+          "loadScore": 31
         }
       ],
       "weekLabel": "S1",
       "weekLabelEn": "W1",
       "targetKm": 39,
       "targetLongRunKm": 9.5,
-      "weeklyLoadScore": 290
+      "weeklyLoadScore": 303
     },
     {
       "weekNumber": 2,
@@ -239,19 +239,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 3,
-          "workoutId": "STR-015",
+          "workoutId": "STR-001",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 25,
-          "loadScore": 8
+          "estimatedDurationMin": 35,
+          "loadScore": 18
         }
       ],
       "weekLabel": "S2",
       "weekLabelEn": "W2",
       "targetKm": 41,
       "targetLongRunKm": 11,
-      "weeklyLoadScore": 271
+      "weeklyLoadScore": 281
     },
     {
       "weekNumber": 3,
@@ -345,19 +345,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 3,
-          "workoutId": "STR-010",
+          "workoutId": "STR-014",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
           "estimatedDurationMin": 23,
-          "loadScore": 12
+          "loadScore": 7
         }
       ],
       "weekLabel": "S3",
       "weekLabelEn": "W3",
       "targetKm": 39,
       "targetLongRunKm": 9,
-      "weeklyLoadScore": 242
+      "weeklyLoadScore": 237
     },
     {
       "weekNumber": 4,
@@ -556,19 +556,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 3,
-          "workoutId": "STR-008",
+          "workoutId": "STR-009",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 28,
-          "loadScore": 14
+          "estimatedDurationMin": 35,
+          "loadScore": 25
         }
       ],
       "weekLabel": "S5",
       "weekLabelEn": "W5",
       "targetKm": 43,
       "targetLongRunKm": 13.5,
-      "weeklyLoadScore": 270
+      "weeklyLoadScore": 281
     },
     {
       "weekNumber": 6,
@@ -670,19 +670,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-011",
+          "workoutId": "STR-013",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 33,
-          "loadScore": 28
+          "estimatedDurationMin": 28,
+          "loadScore": 24
         }
       ],
       "weekLabel": "S6",
       "weekLabelEn": "W6",
       "targetKm": 41,
       "targetLongRunKm": 11.5,
-      "weeklyLoadScore": 284
+      "weeklyLoadScore": 280
     },
     {
       "weekNumber": 7,
@@ -783,19 +783,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-005",
+          "workoutId": "STR-008",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 45,
-          "loadScore": 41
+          "estimatedDurationMin": 28,
+          "loadScore": 14
         }
       ],
       "weekLabel": "S7",
       "weekLabelEn": "W7",
       "targetKm": 45,
       "targetLongRunKm": 15,
-      "weeklyLoadScore": 322
+      "weeklyLoadScore": 295
     },
     {
       "weekNumber": 8,
@@ -889,19 +889,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 1,
-          "workoutId": "STR-014",
+          "workoutId": "STR-015",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 23,
-          "loadScore": 7
+          "estimatedDurationMin": 25,
+          "loadScore": 8
         }
       ],
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 37,
       "targetLongRunKm": 12.5,
-      "weeklyLoadScore": 208
+      "weeklyLoadScore": 209
     },
     {
       "weekNumber": 9,
@@ -1002,19 +1002,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-013",
+          "workoutId": "STR-011",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 28,
-          "loadScore": 24
+          "estimatedDurationMin": 33,
+          "loadScore": 28
         }
       ],
       "weekLabel": "S9",
       "weekLabelEn": "W9",
       "targetKm": 46,
       "targetLongRunKm": 14,
-      "weeklyLoadScore": 300
+      "weeklyLoadScore": 304
     },
     {
       "weekNumber": 10,
@@ -1230,19 +1230,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-017",
+          "workoutId": "STR-010",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 28,
-          "loadScore": 14
+          "estimatedDurationMin": 23,
+          "loadScore": 12
         }
       ],
       "weekLabel": "S11",
       "weekLabelEn": "W11",
       "targetKm": 51,
       "targetLongRunKm": 19,
-      "weeklyLoadScore": 342
+      "weeklyLoadScore": 340
     },
     {
       "weekNumber": 12,
@@ -1343,19 +1343,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-012",
+          "workoutId": "STR-017",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 38,
-          "loadScore": 32
+          "estimatedDurationMin": 28,
+          "loadScore": 14
         }
       ],
       "weekLabel": "S12",
       "weekLabelEn": "W12",
       "targetKm": 51,
       "targetLongRunKm": 16,
-      "weeklyLoadScore": 356
+      "weeklyLoadScore": 338
     },
     {
       "weekNumber": 13,
@@ -1456,19 +1456,19 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-015",
+          "workoutId": "STR-016",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 25,
-          "loadScore": 8
+          "estimatedDurationMin": 33,
+          "loadScore": 10
         }
       ],
       "weekLabel": "S13",
       "weekLabelEn": "W13",
       "targetKm": 31,
       "targetLongRunKm": 12.5,
-      "weeklyLoadScore": 189
+      "weeklyLoadScore": 191
     },
     {
       "weekNumber": 14,
@@ -1520,18 +1520,18 @@ export const planSemiMarathon: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "STR-014",
+          "workoutId": "STR-015",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 23,
-          "loadScore": 7
+          "estimatedDurationMin": 25,
+          "loadScore": 8
         }
       ],
       "weekLabel": "Semaine de course",
       "weekLabelEn": "Race week",
       "targetKm": 22,
-      "weeklyLoadScore": 109
+      "weeklyLoadScore": 110
     }
   ],
   "tags": [
