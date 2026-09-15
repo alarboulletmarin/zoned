@@ -381,15 +381,26 @@ function ActivityForm({
   const meta = ACTIVITY_DISCIPLINE_META[discipline];
   const durationRef = useRef<HTMLInputElement>(null);
 
-  /* Le clavier s'ouvre sur le SEUL champ vide de l'écran. Il partait sur la
-     date, qui est déjà juste : l'anneau de focus y posait un second appel
-     vermillon face au bouton d'enregistrement, pour désigner la chose qu'il
-     n'y a rien à faire. En modification, rien n'est focalisé : on vient
-     corriger un champ précis, et le clavier masquerait ceux qu'on relit. */
+  /* Le focus part sur le SEUL champ vide de l'écran, mais seulement là où le
+     poser ne fait pas monter un clavier : `pointer: fine`, donc une souris.
+
+     Au doigt, le clavier logiciel ouvrait par-dessus le formulaire à la
+     seconde où il s'ouvrait : il masque la moitié basse, donc la discipline,
+     le motif et le bouton d'enregistrement, et il rend la date et les deux
+     rangées de choix inatteignables sans le refermer d'abord. Un panneau qui
+     s'ouvre à moitié caché pour désigner un champ qu'on atteindrait d'un appui
+     coûte plus qu'il ne fait gagner : le premier geste devient un renvoi du
+     clavier, pas une réponse à la question.
+
+     À la souris, rien ne recouvre l'écran, et le formulaire répond à la
+     première frappe sans viser. En modification, rien n'est focalisé, quel que
+     soit le pointeur : on vient corriger un champ précis, et le clavier
+     masquerait ceux qu'on relit. */
+  const pointsWithoutKeyboard = useMediaQuery("(pointer: fine)");
   useEffect(() => {
-    if (isEdit) return;
+    if (isEdit || !pointsWithoutKeyboard) return;
     durationRef.current?.focus({ preventScroll: true });
-  }, [isEdit]);
+  }, [isEdit, pointsWithoutKeyboard]);
 
   /* Le curseur revient à la FIN après chaque frappe, tant que le champ est
      tenu. C'est ce qui rend le masque prévisible : les chiffres entrent par la
