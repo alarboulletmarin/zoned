@@ -12,6 +12,14 @@
 
 import type { Difficulty } from "@/types";
 import type { RaceDistance } from "@/types/plan";
+import {
+  ROAD_DISTANCE_KM,
+  enduranceIndexFor,
+  formatRaceMinutes,
+  predictRaceMinutes,
+  raceVmaFraction,
+  type RoadDistance,
+} from "@/lib/racePerformance";
 
 // ── Daniels intensity types ─────────────────────────────────────
 
@@ -20,7 +28,7 @@ export type DanielsIntensity = "E" | "M" | "T" | "I" | "R";
 export interface TrainingPaces {
   /** Easy pace range (min/km), Z1-Z2, 65-75% VMA */
   E: { min: number; max: number };
-  /** Marathon pace (min/km), Z3, 78-80% VMA */
+  /** Marathon pace (min/km), Z3, derived from the predicted marathon time */
   M: { min: number; max: number };
   /** Threshold pace (min/km), Z4, 85-88% VMA */
   T: { min: number; max: number };
@@ -36,13 +44,23 @@ export interface TrainingPaces {
 // Based on Daniels' VDOT system mapped to VMA equivalents.
 // Higher % = faster speed = lower pace number.
 
-const DANIELS_VMA_PERCENTAGES: Record<DanielsIntensity, [number, number]> = {
-  E: [65, 75],  // Easy / recovery
-  M: [78, 80],  // Marathon pace
-  T: [85, 88],  // Threshold (lactate turnpoint)
+// Daniels (3rd ed.) gives E 59-74 %, M 75-84 %, T 83-88 %, I 95-100 % of
+// VO2max; through his economy curve that is E 65-78 %, T 86-90 %, I 96-100 %
+// of vVO2max. R is mile pace, ~102-108 % for club runners.
+//
+// M is not a fixed share: a 3-hour marathoner holds ~80 % of VMA, a 4h30
+// runner ~72 % (Péronnet-Thibault, Nikolaidis 2020). A fixed 78-80 % gave
+// slow runners "marathon pace" sessions 7-10 % too fast, so M is derived from
+// the predicted marathon time instead (see calculateTrainingPaces).
+const DANIELS_VMA_PERCENTAGES: Record<Exclude<DanielsIntensity, "M">, [number, number]> = {
+  E: [65, 76],  // Easy / recovery
+  T: [86, 90],  // Threshold (lactate turnpoint)
   I: [95, 100], // Interval (VO2max)
-  R: [105, 110], // Repetition (neuromuscular)
+  R: [104, 108], // Repetition (neuromuscular)
 };
+
+/** Half-width of the marathon pace band around the predicted race share, in % VMA */
+const M_BAND_HALF_WIDTH = 1.5;
 
 // ── Fallback VMA by difficulty level ────────────────────────────
 // Used when the user hasn't provided their VMA.
@@ -104,21 +122,47 @@ export function calculateTrainingPaces(
     };
   }
 
+  // Marathon pace: the share of VMA this runner would hold over 42.195 km,
+  // bounded so it never overlaps the easy or threshold bands.
+  const e = enduranceIndexFor(difficulty);
+  const marathonPct = Math.min(
+    DANIELS_VMA_PERCENTAGES.T[0] - 1,
+    Math.max(DANIELS_VMA_PERCENTAGES.E[1] + 1, raceVmaFraction(effectiveVma, ROAD_DISTANCE_KM.marathon, e) * 100),
+  );
+  paces.M = {
+    min: vmaToPace(effectiveVma, marathonPct + M_BAND_HALF_WIDTH),
+    max: vmaToPace(effectiveVma, marathonPct - M_BAND_HALF_WIDTH),
+  };
+
   return { ...paces, vma: effectiveVma } as TrainingPaces;
 }
 
+/** Intensity of a race-pace session, by distance: a 5K is run at I pace, a marathon at M */
+const RACE_SPECIFIC_INTENSITY: Record<RaceDistance, DanielsIntensity> = {
+  "5K": "I",
+  "10K": "T",
+  semi: "T",
+  marathon: "M",
+  trail_short: "M",
+  trail: "M",
+  ultra: "E",
+};
+
 /**
  * Get the appropriate Daniels intensity for a session type.
+ * Race-specific work depends on the target distance; without one it is read
+ * as marathon pace, the historical default.
  */
-export function sessionTypeToIntensity(sessionType: string): DanielsIntensity {
+export function sessionTypeToIntensity(sessionType: string, raceDistance?: RaceDistance): DanielsIntensity {
   switch (sessionType) {
     case "recovery":
       return "E";
     case "endurance":
     case "long_run":
       return "E";
-    case "tempo":
     case "race_specific":
+      return raceDistance ? RACE_SPECIFIC_INTENSITY[raceDistance] : "M";
+    case "tempo":
       return "M";
     case "threshold":
       return "T";
@@ -222,49 +266,18 @@ export function computeBlockLoad(durationMin: number, zone: number): number {
 
 // ── Race time prediction ────────────────────────────────────────
 
-/** VMA percentage sustained for each race distance (road races only) */
-const VMA_RACE_PERCENTAGES: Record<string, number> = {
-  "5K": 97,
-  "10K": 92,
-  semi: 82,
-  marathon: 77,
-};
-
-/** Race distances in km */
-const RACE_DISTANCES_KM: Record<string, number> = {
-  "5K": 5,
-  "10K": 10,
-  semi: 21.1,
-  marathon: 42.195,
-};
-
 /**
- * Predict race time from VMA for a given distance.
- *
- * @param vma - VMA in km/h
- * @param raceDistance - Target race distance
- * @returns Predicted time as formatted string, or undefined for trail races
+ * Predict race time from VMA for a road distance, at the runner's level.
+ * Trail distances return undefined: terrain makes a km-based prediction
+ * meaningless.
  */
 export function predictRaceTime(
   vma: number,
   raceDistance: RaceDistance,
+  difficulty?: Difficulty,
 ): string | undefined {
   if (!vma || vma <= 0) return undefined;
-
-  const vmaPercent = VMA_RACE_PERCENTAGES[raceDistance];
-  const distanceKm = RACE_DISTANCES_KM[raceDistance];
-
-  if (!vmaPercent || !distanceKm) return undefined; // trail races
-
-  const raceSpeedKmh = vma * (vmaPercent / 100);
-  const totalMinutes = (distanceKm / raceSpeedKmh) * 60;
-
-  const hours = Math.floor(totalMinutes / 60);
-  const mins = Math.floor(totalMinutes % 60);
-  const secs = Math.round((totalMinutes - Math.floor(totalMinutes)) * 60);
-
-  if (hours > 0) {
-    return `${hours}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  }
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
+  const distanceKm = ROAD_DISTANCE_KM[raceDistance as RoadDistance];
+  if (!distanceKm) return undefined;
+  return formatRaceMinutes(predictRaceMinutes(vma, distanceKm, enduranceIndexFor(difficulty)));
 }

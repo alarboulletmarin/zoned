@@ -114,7 +114,8 @@
         "relativeLoad": "moderate",
         "tags": [
           "endurance",
-          "base"
+          "base",
+          "walk-run"
         ],
         "priorityScore": 85
       },
@@ -385,7 +386,8 @@
         "tags": [
           "endurance",
           "beginner",
-          "progression"
+          "progression",
+          "walk-run"
         ],
         "priorityScore": 80
       },

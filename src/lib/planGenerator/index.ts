@@ -23,7 +23,9 @@ import {
   MAX_PLAN_WEEKS,
   PURPOSE_CONFIGS,
   RECOVERY_LONG_RUN_PCT,
+  RECOVERY_WEEK_VOLUME_PCT,
   MAX_WEEKLY_VOLUME_INCREASE,
+  getGoalModifiers,
 } from "./constants";
 import {
   calculateTrainingPaces,
@@ -234,7 +236,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     volumeMultiplier,
     // A target race time that current fitness does not support needs volume
     isRacePlan
-      ? goalDemandFactor(config.targetPaceMinKm, config.vma, effectiveDistance)
+      ? goalDemandFactor(config.targetPaceMinKm, config.vma, effectiveDistance, config.runnerLevel)
       : 1,
     purposeConfig?.startVolumeMultiplier,
   );
@@ -265,6 +267,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     config.currentLongRunKm,
     trainingGoal,
     intermediateRaceWeeks,
+    Math.max(0, ...volumeProgression.map((v) => v.targetKm)),
   );
 
   // Step 8: Load all workouts
@@ -276,6 +279,10 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
   let peakWeeklyKm = 0;
   /** Km actually delivered by the last load week, anchors the ramp cap */
   let lastLoadWeekKm = 0;
+  /** Highest km actually delivered so far, anchors recovery and taper weeks */
+  let deliveredPeakKm = 0;
+  const goalMods = getGoalModifiers(trainingGoal);
+  const recoveryPct = goalMods.recoveryVolumePct > 0 ? goalMods.recoveryVolumePct : RECOVERY_WEEK_VOLUME_PCT;
   let peakLongRunKm = 0;
 
   for (let weekNum = 1; weekNum <= totalWeeks; weekNum++) {
@@ -321,6 +328,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
         config.runnerLevel,
         allWorkouts,
         (paces.E.min + paces.E.max) / 2,
+        targetKm,
       );
       // Report what is actually scheduled, not the model's target: race week
       // announced 30 km for two 25-minute jogs. The race itself is an event,
@@ -352,25 +360,35 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     );
 
     // Non-race plans have their own quality budget and intensity ceiling.
-    // PURPOSE_CONFIGS.maxKeySessions was defined but never read, so a
-    // return-from-injury plan could schedule VO2max intervals in week 4.
+    // Key slots stay easy until firstKeySessionWeek (a return from injury
+    // runs four easy weeks first), then hold a soft quality only. "endurance"
+    // used to sit in that list: drawn into a key slot, it fetched a hard
+    // 90-minute endurance template for week 1 of a return from injury.
     if (purposeConfig) {
       const softKeyTypes: SessionType[] = purpose === "base_building"
         ? ["fartlek", "tempo", "hills"]
-        : ["fartlek", "endurance"];
+        : ["fartlek"];
+      const keysAllowed = weekNum >= purposeConfig.firstKeySessionWeek;
+      const walkRun = weekNum <= purposeConfig.walkRunWeeks;
       let keptKeys = 0;
       for (const slot of slots) {
-        if (slot.slotType !== "key_quality") continue;
-        if (keptKeys < purposeConfig.maxKeySessions) {
-          // Rotate like the race-plan templates do: a fixed order meant the
-          // first type always won, so these plans ran fartlek every week and
-          // nothing else for their whole cycle.
-          const offset = (weekNum + keptKeys) % softKeyTypes.length;
-          slot.sessionTypes = [...softKeyTypes.slice(offset), ...softKeyTypes.slice(0, offset)];
-          keptKeys++;
-        } else {
-          slot.slotType = "easy";
-          slot.sessionTypes = ["endurance", "recovery"];
+        if (slot.slotType === "key_quality") {
+          if (keysAllowed && keptKeys < purposeConfig.maxKeySessions) {
+            // Rotate like the race-plan templates do: a fixed order meant the
+            // first type always won, so these plans ran fartlek every week and
+            // nothing else for their whole cycle.
+            const offset = (weekNum + keptKeys) % softKeyTypes.length;
+            slot.sessionTypes = [...softKeyTypes.slice(offset), ...softKeyTypes.slice(0, offset)];
+            keptKeys++;
+          } else {
+            slot.slotType = "easy";
+            slot.sessionTypes = ["endurance", "recovery"];
+          }
+        }
+        // First weeks back: walk-run templates for every non-long session
+        if (walkRun && slot.slotType !== "long_run") {
+          slot.sessionTypes = ["recovery", "endurance"];
+          slot.preferTags = ["walk-run"];
         }
       }
     }
@@ -440,10 +458,20 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     // catalogue can produce, and chasing them week by week made the delivered
     // volume swing by up to 50% between neighbouring weeks. Growing from what
     // was really run keeps the progression smooth even when the ceiling binds.
-    const rampCeiling = lastLoadWeekKm > 0 && !isRecoveryWeek && phase !== "taper"
-      ? Math.round(lastLoadWeekKm * (1 + MAX_WEEKLY_VOLUME_INCREASE))
-      : Number.POSITIVE_INFINITY;
-    const fitTargetKm = Math.min(targetKm, rampCeiling);
+    //
+    // Recovery and taper weeks are anchored on what was delivered, not on the
+    // model: when the catalogue could not reach the model's load weeks, a
+    // "recovery" week at 82 % of the model sat above the delivered load
+    // weeks, and the semi-marathon plan had drop-back weeks heavier than the
+    // weeks around them.
+    let fitTargetKm = targetKm;
+    if (isRecoveryWeek && lastLoadWeekKm > 0) {
+      fitTargetKm = Math.min(targetKm, Math.round(lastLoadWeekKm * recoveryPct));
+    } else if (phase === "taper" && deliveredPeakKm > 0) {
+      fitTargetKm = Math.min(targetKm, Math.round(deliveredPeakKm * (volumePercent / 100)));
+    } else if (lastLoadWeekKm > 0) {
+      fitTargetKm = Math.min(targetKm, Math.round(lastLoadWeekKm * (1 + MAX_WEEKLY_VOLUME_INCREASE)));
+    }
 
     const easyPace = (paces.E.min + paces.E.max) / 2;
     fitWeeklyVolume(sessions, fitTargetKm, easyPace, (id) =>
@@ -457,7 +485,10 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       return sum + (s.estimatedDurationMin / easyPace);
     }, 0);
     const actualKm = Math.round(weeklyKmFromSessions);
-    if (!isRecoveryWeek && phase !== "taper") lastLoadWeekKm = actualKm;
+    if (!isRecoveryWeek && phase !== "taper") {
+      lastLoadWeekKm = actualKm;
+      deliveredPeakKm = Math.max(deliveredPeakKm, actualKm);
+    }
 
     weeks.push({
       weekNumber: weekNum,
@@ -498,7 +529,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
 
   // Step 10: Race time prediction (only for race plans)
   const raceTimePrediction = (isRacePlan && config.vma)
-    ? predictRaceTime(config.vma, effectiveDistance)
+    ? predictRaceTime(config.vma, effectiveDistance, config.runnerLevel)
     : undefined;
 
   // Step 11: Generate plan name

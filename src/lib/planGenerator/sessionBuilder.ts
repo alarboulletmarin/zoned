@@ -23,6 +23,7 @@ import type {
   SessionType,
 } from "@/types";
 import type { RaceDistance, PlanSession, PaceNote } from "@/types/plan";
+import { RACE_DISTANCE_META } from "@/types/plan";
 import { parseZoneSpan } from "@/types";
 import type { WeekSlot } from "./weekTemplate";
 import type { TrainingPaces } from "./paceEngine";
@@ -147,7 +148,7 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
   // Step 6: Compute load score (based on full duration, not volume-scaled).
   // Use the type that actually matched, which may be a fallback of the slot.
   const sessionType = selection.sessionType;
-  const intensity = sessionTypeToIntensity(sessionType);
+  const intensity = sessionTypeToIntensity(sessionType, ctx.raceDistance);
   const zone = INTENSITY_TO_ZONE[intensity];
   const loadScore = computeBlockLoad(dur.totalMin, zone);
 
@@ -172,6 +173,7 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
     ctx.elevationGain,
     ctx.slot.slotType,
     hardestFromBlocks,
+    ctx.raceDistance,
   );
 
   // Assemble the session.
@@ -199,8 +201,17 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
   // The workout template duration is often too short for the actual target distance
   if (ctx.slot.slotType === "long_run" && ctx.targetLongRunKm && ctx.targetLongRunKm > 0) {
     session.targetDistanceKm = ctx.targetLongRunKm;
-    const longRunDurationFromTarget = ctx.targetLongRunMin
+    let longRunDurationFromTarget = ctx.targetLongRunMin
       ?? Math.round(ctx.targetLongRunKm * ((ctx.paces.E.min + ctx.paces.E.max) / 2));
+    // Trail: the long run is prescribed in time and climb, not just km. The
+    // climb target follows the race's own gain per km, and the duration
+    // accounts for it (about 6 min per 100 m of climb).
+    const climb = trailLongRunClimb(ctx.raceDistance, ctx.elevationGain, ctx.targetLongRunKm);
+    if (climb) {
+      longRunDurationFromTarget += climb.extraMinutes;
+      session.notes = `${session.notes}\nDénivelé : ~${climb.gainM} m D+ (durée ajustée ~${longRunDurationFromTarget} min)`;
+      session.notesEn = `${session.notesEn}\nClimb: ~${climb.gainM} m D+ (adjusted duration ~${longRunDurationFromTarget} min)`;
+    }
     session.targetDurationMin = longRunDurationFromTarget;
     session.estimatedDurationMin = Math.max(session.estimatedDurationMin, longRunDurationFromTarget);
     // Recompute the load on the duration actually prescribed. Keeping the
@@ -225,6 +236,27 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
   }
 
   return { session, workout };
+}
+
+// ── Trail climb ─────────────────────────────────────────────────
+
+const TRAIL_DISTANCES = new Set<RaceDistance>(["trail_short", "trail", "ultra"]);
+/** Share of the race's gain-per-km the long run should carry */
+const LONG_RUN_CLIMB_SHARE = 0.8;
+/** Extra minutes per 100 m of climb at easy effort */
+const MINUTES_PER_100M_CLIMB = 6;
+
+function trailLongRunClimb(
+  raceDistance: RaceDistance,
+  elevationGain: number | undefined,
+  longRunKm: number,
+): { gainM: number; extraMinutes: number } | null {
+  if (!TRAIL_DISTANCES.has(raceDistance) || !elevationGain || elevationGain <= 0) return null;
+  const raceKm = RACE_DISTANCE_META[raceDistance]?.distanceKm ?? 0;
+  if (raceKm <= 0) return null;
+  const gainM = Math.round((longRunKm * (elevationGain / raceKm) * LONG_RUN_CLIMB_SHARE) / 50) * 50;
+  if (gainM <= 0) return null;
+  return { gainM, extraMinutes: Math.round((gainM / 100) * MINUTES_PER_100M_CLIMB) };
 }
 
 // ── Scaling ─────────────────────────────────────────────────────
@@ -570,12 +602,13 @@ function buildSessionNotes(
   elevationGain?: number,
   slotType?: string,
   blockIntensity?: DanielsIntensity | null,
+  raceDistance?: RaceDistance,
 ): { notes: string; notesEn: string } {
   const parts: string[] = [];
   const partsEn: string[] = [];
 
   // Pace note, prefer what the blocks actually prescribe
-  const intensity = blockIntensity ?? sessionTypeToIntensity(sessionType);
+  const intensity = blockIntensity ?? sessionTypeToIntensity(sessionType, raceDistance);
   const range = paces[intensity];
   const label = INTENSITY_LABELS[intensity];
 

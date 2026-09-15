@@ -184,11 +184,11 @@ describe("auditPlan", () => {
     expect(match!.weekNumber).toBe(1);
   });
 
-  test("TAPER_WEEK_HEAVY: taper week with volume > 70%", () => {
+  test("TAPER_WEEK_HEAVY: taper week with volume > 85%", () => {
     const plan = makePlan([
       {
         phase: "taper" as TrainingPhase,
-        volumePercent: 85,
+        volumePercent: 92,
         sessions: [makeSession(1), makeSession(4)],
       },
     ]);
@@ -197,7 +197,18 @@ describe("auditPlan", () => {
     const match = findings.find((f) => f.code === "TAPER_WEEK_HEAVY");
     expect(match).toBeDefined();
     expect(match!.severity).toBe("warning");
-    expect(match!.message).toContain("85%");
+    expect(match!.message).toContain("92%");
+  });
+
+  test("TAPER_WEEK_HEAVY: a first taper week at 80% (Pfitzinger's ladder) is fine", () => {
+    const plan = makePlan([
+      {
+        phase: "taper" as TrainingPhase,
+        volumePercent: 80,
+        sessions: [makeSession(1), makeSession(4)],
+      },
+    ]);
+    expect(auditPlan(plan).find((f) => f.code === "TAPER_WEEK_HEAVY")).toBeUndefined();
   });
 
   test("VOLUME_JUMP_TOO_LARGE: >20% volume increase from non-recovery week", () => {

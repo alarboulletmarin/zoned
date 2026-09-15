@@ -48,11 +48,25 @@ const SCIENTIFIC_REFERENCES: Reference[] = [
     link: "https://pubmed.ncbi.nlm.nih.gov/20861519/",
   },
   {
-    author: "Gabbett, T.",
-    year: 2016,
-    title: "The training-injury prevention paradox: should athletes be training smarter and harder?",
-    journal: "Br J Sports Med 50(5):273-280",
-    link: "https://pubmed.ncbi.nlm.nih.gov/26758673/",
+    author: "Bosquet, L., Montpetit, J., Arvisais, D. & Mujika, I.",
+    year: 2007,
+    title: "Effects of tapering on performance: a meta-analysis",
+    journal: "Med Sci Sports Exerc 39(8):1358-1365",
+    link: "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+  },
+  {
+    author: "Péronnet, F. & Thibault, G.",
+    year: 1989,
+    title: "Mathematical analysis of running performance and world running records",
+    journal: "J Appl Physiol 67(1):453-465",
+    link: "https://pubmed.ncbi.nlm.nih.gov/2759974/",
+  },
+  {
+    author: "Buist, I. et al.",
+    year: 2008,
+    title: "No effect of a graded training program on the number of running-related injuries in novice runners",
+    journal: "Am J Sports Med 36(1):33-39",
+    link: "https://pubmed.ncbi.nlm.nih.gov/17940141/",
   },
 ];
 
