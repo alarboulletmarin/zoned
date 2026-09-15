@@ -2302,8 +2302,10 @@ export function PlanViewPage() {
         </Dialog>
 
         {/* Date Edit Dialog */}
+        {/* Le corps porte la barre de défilement, pas le dialogue : voir
+            .zn-planview__datebody (plan-view.css). */}
         <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
-          <DialogContent>
+          <DialogContent className="zn-planview__datedialog">
             <DialogHeader>
               <DialogTitle>
                 {t("view.editDatesTitle")}
@@ -2312,7 +2314,10 @@ export function PlanViewPage() {
                 {t("view.editDatesDescription")}
               </DialogDescription>
             </DialogHeader>
-            <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}>
+            <div
+              className="zn-stack zn-planview__datebody"
+              style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
+            >
               <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
                 <label htmlFor="edit-start-date" className="zn-label">
                   {t("view.startDate")}

@@ -1220,6 +1220,10 @@ textarea.zn-pfield {
   display: flex;
   flex-direction: column;
   gap: var(--sp-8);
+  /* Le bloc rétrécit dans le dialogue, pour que ce soit la LISTE qui rende la
+     place et non le dialogue qui se mette à défiler. Voir .zn-ppreview__list. */
+  flex: 1 1 auto;
+  min-block-size: 0;
 }
 
 .zn-ppreview__summary {
@@ -1240,6 +1244,20 @@ textarea.zn-pfield {
   margin: 0;
   padding: 0;
   list-style: none;
+
+  /* UNE seule barre de défilement, celle de la liste. Le plafond de 40 vh est
+     un maximum, pas un plancher : la liste rétrécit sous lui quand le
+     dialogue n'a plus la place.
+
+     Sans ces deux lignes, les deux plafonds s'engageaient ensemble sur une
+     liste longue, celui de la liste (40 vh) et celui du dialogue (85 vh,
+     .zn-dialog.zn-pdialog plus bas, qui défile) : deux barres l'une contre
+     l'autre, et le titre du dialogue sorti par le haut pendant que la liste
+     défilait toute seule. Mesuré sur l'aperçu de replanification d'un plan à
+     25 jours bloqués, à 390 x 600 comme à 1280 x 700. C'est la règle que
+     .zn-pdialog--list applique déjà à ses propres listes. */
+  flex: 1 1 auto;
+  min-block-size: 0;
   max-block-size: 40vh;
   overflow-y: auto;
 }

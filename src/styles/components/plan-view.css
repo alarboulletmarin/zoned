@@ -1185,6 +1185,42 @@
   color: var(--text-faint);
 }
 
+/* ── le dialogue de la date de début ──────────────────────────────────── */
+
+/* Le dialogue plafonne à la hauteur de l'écran, et c'est son CORPS qui
+   défile. Il n'avait ni l'un ni l'autre : mesuré à 710 px, il dépassait de
+   46 px sur un iPhone 13 et de 110 px à 390 x 600, où le titre sortait par le
+   haut ET le bouton d'enregistrement par le bas, sans rien pour y revenir :
+   la page derrière est verrouillée, et un dialogue ne défile pas avec elle.
+   Le cas est celui d'une date passée : l'avertissement qu'elle déclenche est
+   ce qui fait dépasser le panneau, donc le défaut ne se voit pas tant qu'on
+   choisit une date à venir.
+
+   Le plafond est sur le dialogue, la barre sur le corps, et jamais l'inverse :
+   le champ de date ouvre un popover que popover.tsx monte DANS le dialogue
+   (un panneau modal vit dans la couche du dessus, un popover resté sur le body
+   passerait dessous), donc un dialogue qui défile le rognerait, c'est ce que
+   dit dialog.css en posant `overflow: visible`. Le corps, lui, n'est pas le
+   parent du popover : il peut défiler sans rien rogner. */
+.zn-planview__datedialog {
+  max-block-size: 85dvh;
+}
+
+.zn-planview__datebody {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+
+  /* Un seul axe, et il est vertical : la règle CSS passe le `visible` de x en
+     `auto` dès que y défile, et l'anneau de focus des champs, qui se dessine
+     hors de leur boîte, y trouverait deux ou trois pixels de course
+     latérale. La place lui est faite DANS le conteneur et reprise sur le
+     panneau, comme au formulaire d'activité (activity.css). */
+  padding-inline: var(--sp-5);
+  margin-inline: calc(var(--sp-5) * -1);
+  overflow-x: clip;
+}
+
 /* ── the week-validation dialog ───────────────────────────────────────── */
 
 /* A long list of unresolved sessions scrolls inside the panel, never past the
