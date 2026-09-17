@@ -557,8 +557,203 @@ export function TodayPage() {
     [monthRef, isEn],
   );
 
+  /* Les trois blocs de l'écran, écrits une fois : le commutateur, la réponse
+     (la pile ou le repos, le plan, le complément du jour, les sorties) et ce
+     qui les entoure. Le mode mois les dispose en deux colonnes sur un écran
+     large, le mode semaine en une seule, et aucun des deux n'en réécrit un. */
+  {/* Semaine ou mois. Le contrôle n'apparaît que lorsqu'il y a une
+                semaine à parcourir : sans plan commencé, il n'y a ni bande ni
+                grille, et un sélecteur entre deux riens serait une question
+                posée à l'arrivée. */}
+  const switcher = focus.week.length > 0 && (
+    <Segmented<"week" | "month">
+      value={view}
+      onChange={switchView}
+      label={t("today:view.label")}
+      className="zn-cockpit__view"
+      options={[
+        { value: "week", label: t("today:view.week") },
+        { value: "month", label: t("today:view.month") },
+      ]}
+    />
+  );
+
+  const answer = (
+    <>
+      {sessions.length > 0 ? (
+        /* La pile. Un élément le plus souvent, deux les jours doubles, et
+           c'est le même bloc dans les deux cas : rien n'est écrit pour le
+           cas rare qui ne serve pas au cas courant. */
+        <div className="zn-cockpit__stack">
+          {sessions.map((session, rank) => (
+            <CockpitSession
+              key={indexes[rank] ?? rank}
+              session={session}
+              index={indexes[rank]}
+              rank={rank}
+              count={sessions.length}
+              isToday={isToday}
+              weekNumber={selected.weekNumber}
+              canClose={focus.plan != null && indexes[rank] != null}
+              linkState={sessionState(session)}
+              unit={settings.unitSystem}
+              isEn={isEn}
+              onClose={handleClose}
+            />
+          ))}
+        </div>
+      ) : (
+        <>
+          {/* Le titre, sa taille et ce qu'elle demande ne font qu'UNE
+              phrase : ils sont serrés à `--sp-4` pendant que la section
+              respire à `--sp-7`. C'est cet écart-là qui fait la
+              hiérarchie, pas les corps de texte pris isolément.
+
+              Une journée de repos porte le MÊME squelette qu'une journée
+              de séance, réserves comprises : c'est ce qui fait que passer
+              du dimanche au mardi ne déplace pas une ligne. Le prix est
+              du blanc un jour de repos, et il est payé volontiers : un
+              bouton qui saute de cent pixels sous le pouce coûte plus. */}
+          <div className="zn-cockpit__answer">
+            <span className="zn-kicker zn-kicker--xs">
+              {isToday ? t("today:resume.todayLabel") : "\u00A0"}
+            </span>
+
+            <h1 className="zn-display zn-cockpit__headline" data-level="3">
+              {headline}
+            </h1>
+
+            {reserve && <p className="zn-cockpit__size">{"\u00A0"}</p>}
+
+            {(reserve || nextLine) && (
+              <p className="zn-cockpit__how" data-hold={reserve || undefined}>
+                {nextLine}
+              </p>
+            )}
+          </div>
+
+          {reserve && <div className="zn-cockpit__profile-slot" />}
+
+          <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+            <Button asChild className="zn-cockpit__cta">
+              <Link to={emptyCta.to}>
+                {emptyCta.label}
+                <ArrowRight />
+              </Link>
+            </Button>
+          </div>
+        </>
+      )}
+
+      {/* Le nom du plan était un texte mort. C'est le chemin vers le plan,
+          à un tap, sans ajouter un bouton à l'écran.
+
+          Il ne dit plus seulement d'où vient la séance, il dit OÙ L'ON EN
+          EST : un plan ne tient que par sa fin, et `semaine 1` sans
+          dénominateur ni échéance laissait la sortie du jour flotter. Le
+          rôle en micro-label mono, la valeur à côté ; un libellé, pas une
+          phrase.
+
+          Il est passé SOUS la pile le jour où les séances y sont
+          montées : au-dessus, il séparait le titre de son bouton, et
+          entre deux séances empilées il aurait fallu choisir laquelle des
+          deux il commente. Il n'en commente aucune, il commente la
+          semaine. */}
+      {focus.plan && dayState !== "none" && planUrl ? (
+        <Link to={planUrl} className="zn-cockpit__plan">
+          <span className="zn-kicker zn-kicker--xs">
+            {t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan")}
+          </span>
+          <span className="zn-cockpit__plan-name">
+            {positionLine ?? (isEn ? focus.plan.nameEn : focus.plan.name)}
+          </span>
+        </Link>
+      ) : (
+        dayState === "none" && (
+          <p className="zn-body zn-muted zn-measure">{t("today:resume.none.body")}</p>
+        )
+      )}
+
+      {/* Les deux gestes courts, en ligne de liens et non en cartes : ce
+          sont des sorties, pas des actions primaires. Ils répondent aux
+          deux seuls moments où l'on ne veut pas décider, je ne sais pas
+          quoi faire et je ne veux pas m'engager sur seize semaines.
+
+          Ils remontent sous le bouton : ils arrivaient après la figure,
+          donc après un grand vide, alors que ce sont les deux secondes
+          réponses de l'écran. Et les deux registres se distinguent par la
+          MARQUE, pas par le poids : le tirage porte une flèche et pas de
+          souligné, c'est un geste ; la semaine porte un souligné et pas de
+          flèche, c'est un lieu. */}
+      {/* Ce que la journée a porté EN PLUS du plan. Une ligne, et
+          seulement si elle a eu lieu : c'est l'accusé de réception de la
+          saisie, et sans lui on ne sait pas si le trajet est noté. Elle
+          est sous le plan parce qu'elle ne commente pas une séance, elle
+          commente la journée. */}
+      {dayActivities.length > 0 && (
+        <ul className="zn-cockpit__extras">
+          {dayActivities.map((activity) => (
+            <li key={activity.id} className="zn-cockpit__extra">
+              <span>{t(`activity:purpose.${activity.purpose}`)}</span>
+              <span className="zn-mono">
+                {[
+                  formatDurationMinutes(activity.durationMin),
+                  activity.distanceKm ? `${activity.distanceKm} km` : null,
+                  activity.elevationGainM ? `+${activity.elevationGainM} m` : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </span>
+            </li>
+          ))}
+          {/* Le journal se joint depuis ici, et seulement depuis ici sur
+              cet écran : un lien de plus dans les sorties du bas aurait
+              coûté une ligne à tout le monde pour servir ceux qui notent
+              déjà. Il apparaît quand il y a quelque chose à relire. */}
+          <li className="zn-cockpit__extra">
+            <Link to="/activities" className="zn-cockpit__journal">
+              {t("activity:cockpit.journal")}
+            </Link>
+          </li>
+        </ul>
+      )}
+      {settings.cockpit.shortcuts && (
+        <p className="zn-cockpit__exits">
+          {/* La saisie n'est PAS une sortie, et elle portait pourtant leur
+              marque. La flèche de cette rangée dit deux choses à la fois,
+              c'est un geste ET il emmène ailleurs : le tirage tient les
+              deux, la saisie seulement la première. Elle ouvre un panneau
+              sur place et écrit. Un texte fléché promettait donc une page
+              qui ne venait jamais, et se lisait comme une légende.
+
+              D'où un bouton encadré, et un plus : le cadre dit qu'on
+              agit, le plus dit qu'on ajoute, et c'est le même plus que le
+              bouton du journal. Il se distingue à dessein des deux liens
+              sous lui, qui eux emmènent vraiment ailleurs. */}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="zn-cockpit__log"
+            onClick={() => log.logOn(dayIso)}
+          >
+            <Plus size={16} />
+            {t("activity:cockpit.add")}
+          </Button>
+          <Link to="/library/draw" className="zn-cockpit__exit" data-role="move">
+            {t("today:quick.draw")}
+            <ArrowRight />
+          </Link>
+          <Link to={week.href} className="zn-cockpit__exit">
+            {t(week.mine ? "today:quick.week" : "today:quick.weekNew")}
+          </Link>
+        </p>
+      )}
+    </>
+  );
+
   return (
-    <div className="zn-cockpit">
+    <div className="zn-cockpit" data-view={view}>
       <SEOHead title={t("today:seoTitle")} description={t("today:seoDescription")} noindex />
 
       {isLoading ? (
@@ -570,247 +765,72 @@ export function TodayPage() {
         <section className="zn-cockpit__resume">
           <span className="zn-kicker">{dateLine}</span>
 
-          {/* Semaine ou mois. Le contrôle n'apparaît que lorsqu'il y a une
-              semaine à parcourir : sans plan commencé, il n'y a ni bande ni
-              grille, et un sélecteur entre deux riens serait une question
-              posée à l'arrivée. */}
-          {focus.week.length > 0 && (
-            <Segmented<"week" | "month">
-              value={view}
-              onChange={switchView}
-              label={t("today:view.label")}
-              className="zn-cockpit__view"
-              options={[
-                { value: "week", label: t("today:view.week") },
-                { value: "month", label: t("today:view.month") },
-              ]}
-            />
-          )}
-
-          {focus.week.length > 0 && view === "week" && (
-            <WeekStrip
-              focus={focus}
-              selected={day}
-              onSelect={(index) => setPicked(weekDates[index])}
-              extras={weekExtras}
-            />
-          )}
-
-          {focus.week.length > 0 && view === "month" && (
-            <MonthGrid
-              focus={focus}
-              month={monthRef}
-              label={monthLabel}
-              canPrev={bounds != null && compareMonth(monthRef, bounds.min) > 0}
-              canNext={bounds != null && compareMonth(monthRef, bounds.max) < 0}
-              onShift={(delta) => setMonth(shiftMonth(monthRef, delta))}
-              selected={dayIso}
-              onSelect={setPicked}
-              activities={activities}
-              now={now}
-            />
-          )}
-
-          {sessions.length > 0 ? (
-            /* La pile. Un élément le plus souvent, deux les jours doubles, et
-               c'est le même bloc dans les deux cas : rien n'est écrit pour le
-               cas rare qui ne serve pas au cas courant. */
-            <div className="zn-cockpit__stack">
-              {sessions.map((session, rank) => (
-                <CockpitSession
-                  key={indexes[rank] ?? rank}
-                  session={session}
-                  index={indexes[rank]}
-                  rank={rank}
-                  count={sessions.length}
-                  isToday={isToday}
-                  weekNumber={selected.weekNumber}
-                  canClose={focus.plan != null && indexes[rank] != null}
-                  linkState={sessionState(session)}
-                  unit={settings.unitSystem}
-                  isEn={isEn}
-                  onClose={handleClose}
-                />
-              ))}
-            </div>
-          ) : (
-            <>
-              {/* Le titre, sa taille et ce qu'elle demande ne font qu'UNE
-                  phrase : ils sont serrés à `--sp-4` pendant que la section
-                  respire à `--sp-7`. C'est cet écart-là qui fait la
-                  hiérarchie, pas les corps de texte pris isolément.
-
-                  Une journée de repos porte le MÊME squelette qu'une journée
-                  de séance, réserves comprises : c'est ce qui fait que passer
-                  du dimanche au mardi ne déplace pas une ligne. Le prix est
-                  du blanc un jour de repos, et il est payé volontiers : un
-                  bouton qui saute de cent pixels sous le pouce coûte plus. */}
-              <div className="zn-cockpit__answer">
-                <span className="zn-kicker zn-kicker--xs">
-                  {isToday ? t("today:resume.todayLabel") : "\u00A0"}
-                </span>
-
-                <h1 className="zn-display zn-cockpit__headline" data-level="3">
-                  {headline}
-                </h1>
-
-                {reserve && <p className="zn-cockpit__size">{"\u00A0"}</p>}
-
-                {(reserve || nextLine) && (
-                  <p className="zn-cockpit__how" data-hold={reserve || undefined}>
-                    {nextLine}
-                  </p>
-                )}
+          {/* Le mois se dispose en DEUX COLONNES dès que l'écran le paie :
+              la grille et son bilan à gauche, la journée choisie à droite, on
+              lit le mois et la séance sans défiler. Sous 900 px, la grille
+              reste une colonne dans l'ordre de la semaine. La semaine, elle,
+              ne change pas de forme : c'est l'écran de dix secondes. */}
+          {focus.week.length > 0 && view === "month" ? (
+            <div className="zn-cockpit__split">
+              <div className="zn-cockpit__split-switch">{switcher}</div>
+              <div className="zn-cockpit__split-grid">
+                <MonthGrid
+                              focus={focus}
+                              month={monthRef}
+                              label={monthLabel}
+                              canPrev={bounds != null && compareMonth(monthRef, bounds.min) > 0}
+                              canNext={bounds != null && compareMonth(monthRef, bounds.max) < 0}
+                              onShift={(delta) => setMonth(shiftMonth(monthRef, delta))}
+                              selected={dayIso}
+                              onSelect={setPicked}
+                              activities={activities}
+                              now={now}
+                            />
               </div>
-
-              {reserve && <div className="zn-cockpit__profile-slot" />}
-
-              <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-                <Button asChild className="zn-cockpit__cta">
-                  <Link to={emptyCta.to}>
-                    {emptyCta.label}
-                    <ArrowRight />
-                  </Link>
-                </Button>
-              </div>
-            </>
-          )}
-
-          {/* Le nom du plan était un texte mort. C'est le chemin vers le plan,
-              à un tap, sans ajouter un bouton à l'écran.
-
-              Il ne dit plus seulement d'où vient la séance, il dit OÙ L'ON EN
-              EST : un plan ne tient que par sa fin, et `semaine 1` sans
-              dénominateur ni échéance laissait la sortie du jour flotter. Le
-              rôle en micro-label mono, la valeur à côté ; un libellé, pas une
-              phrase.
-
-              Il est passé SOUS la pile le jour où les séances y sont
-              montées : au-dessus, il séparait le titre de son bouton, et
-              entre deux séances empilées il aurait fallu choisir laquelle des
-              deux il commente. Il n'en commente aucune, il commente la
-              semaine. */}
-          {focus.plan && dayState !== "none" && planUrl ? (
-            <Link to={planUrl} className="zn-cockpit__plan">
-              <span className="zn-kicker zn-kicker--xs">
-                {t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan")}
-              </span>
-              <span className="zn-cockpit__plan-name">
-                {positionLine ?? (isEn ? focus.plan.nameEn : focus.plan.name)}
-              </span>
-            </Link>
-          ) : (
-            dayState === "none" && (
-              <p className="zn-body zn-muted zn-measure">{t("today:resume.none.body")}</p>
-            )
-          )}
-
-          {/* Les deux gestes courts, en ligne de liens et non en cartes : ce
-              sont des sorties, pas des actions primaires. Ils répondent aux
-              deux seuls moments où l'on ne veut pas décider, je ne sais pas
-              quoi faire et je ne veux pas m'engager sur seize semaines.
-
-              Ils remontent sous le bouton : ils arrivaient après la figure,
-              donc après un grand vide, alors que ce sont les deux secondes
-              réponses de l'écran. Et les deux registres se distinguent par la
-              MARQUE, pas par le poids : le tirage porte une flèche et pas de
-              souligné, c'est un geste ; la semaine porte un souligné et pas de
-              flèche, c'est un lieu. */}
-          {/* Ce que la journée a porté EN PLUS du plan. Une ligne, et
-              seulement si elle a eu lieu : c'est l'accusé de réception de la
-              saisie, et sans lui on ne sait pas si le trajet est noté. Elle
-              est sous le plan parce qu'elle ne commente pas une séance, elle
-              commente la journée. */}
-          {dayActivities.length > 0 && (
-            <ul className="zn-cockpit__extras">
-              {dayActivities.map((activity) => (
-                <li key={activity.id} className="zn-cockpit__extra">
-                  <span>{t(`activity:purpose.${activity.purpose}`)}</span>
-                  <span className="zn-mono">
-                    {[
-                      formatDurationMinutes(activity.durationMin),
-                      activity.distanceKm ? `${activity.distanceKm} km` : null,
-                      activity.elevationGainM ? `+${activity.elevationGainM} m` : null,
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </span>
-                </li>
-              ))}
-              {/* Le journal se joint depuis ici, et seulement depuis ici sur
-                  cet écran : un lien de plus dans les sorties du bas aurait
-                  coûté une ligne à tout le monde pour servir ceux qui notent
-                  déjà. Il apparaît quand il y a quelque chose à relire. */}
-              <li className="zn-cockpit__extra">
-                <Link to="/activities" className="zn-cockpit__journal">
-                  {t("activity:cockpit.journal")}
-                </Link>
-              </li>
-            </ul>
-          )}
-
-          {/* Le bilan, le dimanche, et pas un autre jour. */}
-          {showReview && <WeekReviewPanel review={review} />}
-
-          {/* Ce que le mois a pesé, en mode mois, et seulement s'il a quelque
-              chose à dire. C'est le bilan de la semaine, nourri d'un mois :
-              même dessin, mêmes règles, les kilomètres restent par sport. */}
-          {monthReview && hasSomethingToReview(monthReview) && (
-            <>
-              <WeekReviewPanel
-                review={monthReview}
-                kicker={t("today:month.review", { month: monthName })}
-              />
-              {/* Facile / tempo / intense sur le réalisé, dans la jauge que
-                  la semaine type emploie déjà. Sans conseil : c'est du passé,
-                  le mot du verdict suffit. Elle ne se dessine que lorsqu'il y
-                  a des minutes classées, et dit ce qui ne l'a pas été. */}
-              {monthIntensity && monthIntensity.zonedMinutes > 0 && (
-                <div className="zn-cockpit__intensity">
-                  <PolarizationGauge polarised={monthIntensity} hints={false} />
-                  {monthIntensity.unclassifiedMinutes > 0 && (
-                    <p className="zn-cockpit__intensity-note zn-mono">
-                      {t("today:month.unclassified", {
-                        time: formatDurationMinutes(monthIntensity.unclassifiedMinutes),
-                      })}
-                    </p>
+              <div className="zn-cockpit__split-answer">{answer}</div>
+              {/* Ce que le mois a pesé, en mode mois, et seulement s'il a quelque
+                  chose à dire. C'est le bilan de la semaine, nourri d'un mois :
+                  même dessin, mêmes règles, les kilomètres restent par sport. */}
+              {monthReview && hasSomethingToReview(monthReview) && (
+                <div className="zn-cockpit__split-review">
+                  <WeekReviewPanel
+                    review={monthReview}
+                    kicker={t("today:month.review", { month: monthName })}
+                  />
+                  {/* Facile / tempo / intense sur le réalisé, dans la jauge que
+                      la semaine type emploie déjà. Sans conseil : c'est du passé,
+                      le mot du verdict suffit. Elle ne se dessine que lorsqu'il y
+                      a des minutes classées, et dit ce qui ne l'a pas été. */}
+                  {monthIntensity && monthIntensity.zonedMinutes > 0 && (
+                    <div className="zn-cockpit__intensity">
+                      <PolarizationGauge polarised={monthIntensity} hints={false} />
+                      {monthIntensity.unclassifiedMinutes > 0 && (
+                        <p className="zn-cockpit__intensity-note zn-mono">
+                          {t("today:month.unclassified", {
+                            time: formatDurationMinutes(monthIntensity.unclassifiedMinutes),
+                          })}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
               )}
+            </div>
+          ) : (
+            <>
+              {switcher}
+              {focus.week.length > 0 && (
+                <WeekStrip
+                  focus={focus}
+                  selected={day}
+                  onSelect={(index) => setPicked(weekDates[index])}
+                  extras={weekExtras}
+                />
+              )}
+              {answer}
+              {/* Le bilan, le dimanche, et pas un autre jour. */}
+              {showReview && <WeekReviewPanel review={review} />}
             </>
-          )}
-
-          {settings.cockpit.shortcuts && (
-            <p className="zn-cockpit__exits">
-              {/* La saisie n'est PAS une sortie, et elle portait pourtant leur
-                  marque. La flèche de cette rangée dit deux choses à la fois,
-                  c'est un geste ET il emmène ailleurs : le tirage tient les
-                  deux, la saisie seulement la première. Elle ouvre un panneau
-                  sur place et écrit. Un texte fléché promettait donc une page
-                  qui ne venait jamais, et se lisait comme une légende.
-
-                  D'où un bouton encadré, et un plus : le cadre dit qu'on
-                  agit, le plus dit qu'on ajoute, et c'est le même plus que le
-                  bouton du journal. Il se distingue à dessein des deux liens
-                  sous lui, qui eux emmènent vraiment ailleurs. */}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="zn-cockpit__log"
-                onClick={() => log.logOn(dayIso)}
-              >
-                <Plus size={16} />
-                {t("activity:cockpit.add")}
-              </Button>
-              <Link to="/library/draw" className="zn-cockpit__exit" data-role="move">
-                {t("today:quick.draw")}
-                <ArrowRight />
-              </Link>
-              <Link to={week.href} className="zn-cockpit__exit">
-                {t(week.mine ? "today:quick.week" : "today:quick.weekNew")}
-              </Link>
-            </p>
           )}
         </section>
       )}
