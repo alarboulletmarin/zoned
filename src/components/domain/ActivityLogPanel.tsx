@@ -83,7 +83,7 @@ import {
  * la seule source, pour que les trois écrans qui montrent ces champs ne
  * divergent pas.
  *
- * Le MOTIF suit la même règle. Il proposait « vélotaf » sous course à pied et
+ * Le MOTIF suit la même règle. Il proposait vélotaf sous course à pied et
  * sous natation, c'est-à-dire un mot de vélo sur un trajet couru, et un
  * déplacement à la nage. Il ne se demande plus qu'aux disciplines avec
  * lesquelles on va quelque part (`purposesFor`), avec le mot de la
@@ -452,8 +452,8 @@ function ActivityForm({
     [t],
   );
 
-  /* Les motifs de CETTE discipline, avec ses mots : « vélotaf » à vélo,
-     « trajet boulot » en courant. */
+  /* Les motifs de CETTE discipline, avec ses mots : vélotaf à vélo,
+     trajet boulot en courant. */
   const purposeOptions = useMemo(
     () =>
       purposesFor(discipline).map((id) => {

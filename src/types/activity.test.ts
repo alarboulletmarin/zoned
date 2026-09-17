@@ -12,7 +12,7 @@ import {
 /**
  * Le motif d'une activité dépend de sa discipline : on ne va pas au travail
  * à la nage. Ces tests gardent la règle, parce que le formulaire l'affichait
- * à l'envers, « vélotaf » sous natation, sans que rien ne le dise.
+ * à l'envers, vélotaf sous natation, sans que rien ne le dise.
  */
 describe("purposesFor", () => {
   test("une discipline avec laquelle on se déplace porte les trois motifs", () => {
