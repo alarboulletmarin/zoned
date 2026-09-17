@@ -26,7 +26,11 @@ import { summarizeActivities } from "@/lib/activityStats";
 import { pickTodayFocus } from "@/lib/cockpit";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { buildWeekReview, calendarWeekRange, planWeekRange } from "@/lib/weekReview";
-import { ACTIVITY_DISCIPLINE_META, type ComplementaryActivity } from "@/types/activity";
+import {
+  ACTIVITY_DISCIPLINE_META,
+  purposeLabelKey,
+  type ComplementaryActivity,
+} from "@/types/activity";
 
 /**
  * Le journal des activités complémentaires.
@@ -241,7 +245,9 @@ export function ActivitiesPage() {
                           <Icon size={17} className="zn-acts__icon" />
                           <span className="zn-acts__what">
                             <span className="zn-acts__kind">
-                              {t(`activity:purpose.${activity.purpose}`)}
+                              {t(
+                                `activity:purpose.${purposeLabelKey(activity.discipline, activity.purpose)}`,
+                              )}
                             </span>
                             {activity.note && (
                               <span className="zn-acts__note">{activity.note}</span>

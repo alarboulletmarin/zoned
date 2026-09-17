@@ -23,12 +23,14 @@
     "other": "Autre"
   },
   "purpose": {
-    "commute": "Vélotaf",
+    "commute": "Domicile-travail",
+    "commuteCycling": "Vélotaf",
     "transport": "Déplacement",
     "training": "Entraînement"
   },
   "purposeHint": {
     "commute": "Le trajet domicile-travail, celui qui revient",
+    "commuteCycling": "Le vélotaf, le trajet domicile-travail qui revient",
     "transport": "Un déplacement quelconque : les courses, la gare",
     "training": "Une vraie séance, faite hors de ton plan"
   },

@@ -28,8 +28,10 @@ import {
   ACTIVITY_DISCIPLINE_META,
   ACTIVITY_DISCIPLINES,
   ACTIVITY_LIMITS,
-  ACTIVITY_PURPOSES,
+  coercePurpose,
   defaultRpe,
+  purposeLabelKey,
+  purposesFor,
   type ActivityDiscipline,
   type ActivityDisciplineMeta,
   type ActivityDraft,
@@ -80,6 +82,15 @@ import {
  * natation, pas de watts ailleurs qu'à vélo. `ACTIVITY_DISCIPLINE_META` en est
  * la seule source, pour que les trois écrans qui montrent ces champs ne
  * divergent pas.
+ *
+ * Le MOTIF suit la même règle. Il proposait « vélotaf » sous course à pied et
+ * sous natation, c'est-à-dire un mot de vélo sur un trajet couru, et un
+ * déplacement à la nage. Il ne se demande plus qu'aux disciplines avec
+ * lesquelles on va quelque part (`purposesFor`), avec le mot de la
+ * discipline (`purposeLabelKey`) ; en natation la rangée disparaît et le
+ * motif vaut entraînement, ce qui est la seule chose qu'une longueur peut
+ * être. Changer de discipline vers la natation ramène donc le motif, et
+ * l'effort par défaut qui en dépend, sur entraînement.
  *
  * La natation se saisit en MÈTRES, et se stocke en kilomètres comme le reste.
  * La conversion est ici, à la frontière, et nulle part ailleurs.
@@ -193,15 +204,20 @@ export function ActivityLogPanel({
         watts: activity.avgWatts === undefined ? "" : String(activity.avgWatts),
         note: activity.note ?? "",
       };
+      /* Un relevé d'avant cette règle peut porter un déplacement à la nage.
+         L'écran ne saurait pas le montrer, donc il le range en entraînement,
+         et l'enregistrement le corrigera : rien ne s'enregistre que l'écran
+         ne montre. */
+      const purpose = coercePurpose(activity.discipline, activity.purpose);
       setDate(activity.date);
       setDiscipline(activity.discipline);
-      setPurpose(activity.purpose);
+      setPurpose(purpose);
       setDuration(minutesToDurationDigits(activity.durationMin));
       setDetails(loaded);
       /* Une précision déjà saisie ne se cache pas derrière un repli : on
          viendrait souvent la corriger, et elle serait invisible. */
       setDetailsOpen(hasDetails(loaded));
-      setRpe(activity.rpe ?? defaultRpe(activity.purpose));
+      setRpe(activity.rpe ?? defaultRpe(purpose));
       setRpeTouched(activity.rpe !== undefined);
       return;
     }
@@ -222,6 +238,16 @@ export function ActivityLogPanel({
   const changePurpose = (next: ActivityPurpose) => {
     setPurpose(next);
     if (!rpeTouched) setRpe(defaultRpe(next));
+  };
+
+  /* Passer à une discipline qui ne se déplace pas ramène le motif sur
+     entraînement, par le même chemin que le curseur, pour que l'effort par
+     défaut suive. Dans l'autre sens rien ne bouge : un entraînement reste un
+     entraînement, à vélo comme à la nage. */
+  const changeDiscipline = (next: ActivityDiscipline) => {
+    setDiscipline(next);
+    const coerced = coercePurpose(next, purpose);
+    if (coerced !== purpose) changePurpose(coerced);
   };
 
   const meta = ACTIVITY_DISCIPLINE_META[discipline];
@@ -289,7 +315,7 @@ export function ActivityLogPanel({
       date={date}
       setDate={setDate}
       discipline={discipline}
-      setDiscipline={setDiscipline}
+      setDiscipline={changeDiscipline}
       purpose={purpose}
       setPurpose={changePurpose}
       duration={duration}
@@ -426,14 +452,19 @@ function ActivityForm({
     [t],
   );
 
+  /* Les motifs de CETTE discipline, avec ses mots : « vélotaf » à vélo,
+     « domicile-travail » en courant. */
   const purposeOptions = useMemo(
     () =>
-      ACTIVITY_PURPOSES.map((id) => ({
-        value: id,
-        label: t(`activity:purpose.${id}`),
-        title: t(`activity:purposeHint.${id}`),
-      })),
-    [t],
+      purposesFor(discipline).map((id) => {
+        const key = purposeLabelKey(discipline, id);
+        return {
+          value: id,
+          label: t(`activity:purpose.${key}`),
+          title: t(`activity:purposeHint.${key}`),
+        };
+      }),
+    [t, discipline],
   );
 
   /* Le rangement se fait à la SORTIE du champ, jamais pendant la frappe : le
@@ -469,12 +500,16 @@ function ActivityForm({
           label={t("activity:form.discipline")}
         />
 
-        <Segmented
-          value={purpose}
-          onChange={setPurpose}
-          options={purposeOptions}
-          label={t("activity:form.purpose")}
-        />
+        {/* Une rangée à un seul choix n'est pas une question : en natation
+            le motif ne se demande pas, il vaut entraînement. */}
+        {meta.travel && (
+          <Segmented
+            value={purpose}
+            onChange={setPurpose}
+            options={purposeOptions}
+            label={t("activity:form.purpose")}
+          />
+        )}
 
         {/* La durée, seule question de l'écran qui attende une réponse. Les
             rappels la précèdent : on les lit avant de décider de taper. */}
