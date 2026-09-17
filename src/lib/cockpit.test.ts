@@ -11,6 +11,17 @@ import {
   extraBlockHeight,
   sessionKind,
   focusDayDate,
+  MONTH_ROWS,
+  clampMonth,
+  compareMonth,
+  dateFromIso,
+  monthBounds,
+  monthCells,
+  monthOf,
+  monthRange,
+  planDay,
+  sameMonth,
+  shiftMonth,
   focusPlanHref,
   pickTodayFocus,
   planPosition,
@@ -660,5 +671,122 @@ describe("la position dans le plan", () => {
     expect(planPosition(pickTodayFocus([], MONDAY), MONDAY)).toBeNull();
     const later = pickTodayFocus([plan({ id: "p1", startDate: "2026-10-05" })], MONDAY);
     expect(planPosition(later, MONDAY)).toBeNull();
+  });
+});
+
+describe("le mois : les repères", () => {
+  test("un mois se lit et se décale sans traverser l'année de travers", () => {
+    expect(monthOf(new Date(2026, 11, 31))).toEqual({ year: 2026, month: 11 });
+    expect(shiftMonth({ year: 2026, month: 11 }, 1)).toEqual({ year: 2027, month: 0 });
+    expect(shiftMonth({ year: 2026, month: 0 }, -1)).toEqual({ year: 2025, month: 11 });
+    expect(sameMonth({ year: 2026, month: 8 }, { year: 2026, month: 8 })).toBe(true);
+    expect(compareMonth({ year: 2026, month: 8 }, { year: 2027, month: 0 })).toBeLessThan(0);
+  });
+
+  test("les bornes d'un mois sont son premier et son dernier jour", () => {
+    expect(monthRange({ year: 2026, month: 1 })).toEqual({ from: "2026-02-01", to: "2026-02-28" });
+    expect(monthRange({ year: 2028, month: 1 })).toEqual({ from: "2028-02-01", to: "2028-02-29" });
+  });
+
+  test("une date ISO se lit à minuit local", () => {
+    const d = dateFromIso("2026-09-17");
+    expect([d.getFullYear(), d.getMonth(), d.getDate(), d.getHours()]).toEqual([2026, 8, 17, 0]);
+  });
+});
+
+describe("le mois : une journée par sa date", () => {
+  const p = plan({
+    id: "p1",
+    startDate: "2026-09-07",
+    totalWeeks: 2,
+    weeks: [
+      week(1, [session(0, "LUNDI"), session(2, "MERCREDI")]),
+      week(2, [session(0, "L2-A"), session(0, "L2-B"), session(6, "DIM")]),
+    ],
+  });
+  const focus = pickTodayFocus([p], MONDAY);
+
+  test("retrouve la séance, sa semaine et son index", () => {
+    const day = planDay(focus, new Date(2026, 8, 14));
+    expect(day.inPlan).toBe(true);
+    expect(day.weekNumber).toBe(2);
+    expect(day.dayOfWeek).toBe(0);
+    expect(day.sessions.map((s) => s.workoutId)).toEqual(["L2-A", "L2-B"]);
+    // Les index sont ceux du tableau de la semaine : la clôture s'adresse par eux.
+    expect(day.indexes).toEqual([0, 1]);
+    expect(day.date).toBe("2026-09-14");
+  });
+
+  test("un jour du plan sans séance est dans le plan, et vide", () => {
+    const day = planDay(focus, new Date(2026, 8, 8));
+    expect(day.inPlan).toBe(true);
+    expect(day.sessions).toEqual([]);
+    expect(day.weekNumber).toBe(1);
+  });
+
+  test("avant le plan et après le plan, on est hors plan", () => {
+    expect(planDay(focus, new Date(2026, 8, 6)).inPlan).toBe(false);
+    expect(planDay(focus, new Date(2026, 8, 6)).weekNumber).toBe(0);
+    expect(planDay(focus, new Date(2026, 8, 21)).inPlan).toBe(false);
+    // Le dernier dimanche, lui, est dedans.
+    expect(planDay(focus, new Date(2026, 8, 20)).sessions.map((s) => s.workoutId)).toEqual(["DIM"]);
+  });
+
+  test("sans plan, rien n'est dans le plan", () => {
+    const day = planDay(pickTodayFocus([], MONDAY), MONDAY);
+    expect(day.inPlan).toBe(false);
+    expect(day.dayOfWeek).toBe(0);
+  });
+});
+
+describe("le mois : la grille", () => {
+  const p = plan({ id: "p1", startDate: "2026-09-07", totalWeeks: 4 });
+  const focus = pickTodayFocus([p], MONDAY);
+
+  test("toujours six rangées de sept, quel que soit le mois", () => {
+    const sept = monthCells(focus, { year: 2026, month: 8 }, MONDAY);
+    expect(sept).toHaveLength(MONTH_ROWS * 7);
+    // Février 2027 tient en quatre rangées : la grille en garde six.
+    expect(monthCells(focus, { year: 2027, month: 1 }, MONDAY)).toHaveLength(42);
+  });
+
+  test("commence au lundi de la première rangée, et marque le mois et le jour", () => {
+    // Septembre 2026 commence un mardi : la première case est le lundi 31 août.
+    const cells = monthCells(focus, { year: 2026, month: 8 }, MONDAY);
+    expect(cells[0].date).toBe("2026-08-31");
+    expect(cells[0].inMonth).toBe(false);
+    expect(cells[1].date).toBe("2026-09-01");
+    expect(cells[1].inMonth).toBe(true);
+    expect(cells.filter((c) => c.isToday).map((c) => c.date)).toEqual(["2026-09-07"]);
+    expect(cells.filter((c) => c.inMonth)).toHaveLength(30);
+  });
+
+  test("chaque case sait si elle est dans le plan", () => {
+    const cells = monthCells(focus, { year: 2026, month: 8 }, MONDAY);
+    const byDate = new Map(cells.map((c) => [c.date, c]));
+    expect(byDate.get("2026-09-06")?.inPlan).toBe(false);
+    expect(byDate.get("2026-09-07")?.inPlan).toBe(true);
+    expect(byDate.get("2026-09-07")?.sessions).toHaveLength(1);
+    expect(byDate.get("2026-10-04")?.inPlan).toBe(true);
+  });
+});
+
+describe("le mois : les bornes du plan", () => {
+  test("du mois du premier lundi à celui du dernier dimanche", () => {
+    const p = plan({ id: "p1", startDate: "2026-09-07", totalWeeks: 8 });
+    const bounds = monthBounds(pickTodayFocus([p], MONDAY));
+    // Huit semaines depuis le 7 septembre : le dernier dimanche est le 1er novembre.
+    expect(bounds).toEqual({ min: { year: 2026, month: 8 }, max: { year: 2026, month: 10 } });
+  });
+
+  test("sans plan, pas de bornes", () => {
+    expect(monthBounds(pickTodayFocus([], MONDAY))).toBeNull();
+  });
+
+  test("un mois hors bornes est ramené dedans", () => {
+    const bounds = { min: { year: 2026, month: 8 }, max: { year: 2026, month: 10 } };
+    expect(clampMonth({ year: 2026, month: 5 }, bounds)).toEqual(bounds.min);
+    expect(clampMonth({ year: 2027, month: 0 }, bounds)).toEqual(bounds.max);
+    expect(clampMonth({ year: 2026, month: 9 }, bounds)).toEqual({ year: 2026, month: 9 });
   });
 });

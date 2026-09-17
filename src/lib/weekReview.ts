@@ -154,6 +154,36 @@ export function planWeekRange(plan: TrainingPlan, weekNumber: number): DateRange
 }
 
 /**
+ * Les séances d'un plan dont la DATE tombe dans l'intervalle, bornes comprises.
+ *
+ * Le bilan du mois en a besoin, et il ne peut pas se contenter des semaines
+ * du plan : une semaine à cheval sur deux mois ne donne au mois que les jours
+ * qui lui appartiennent. On passe donc par la date de chaque séance, avec les
+ * mêmes fonctions que le calendrier du plan, et le bilan qui en sort est
+ * `buildWeekReview` sans numéro de semaine : la période remplace la semaine,
+ * les règles ne bougent pas.
+ */
+export function planSessionsBetween(
+  plan: TrainingPlan,
+  from: string,
+  to: string,
+): PlanSession[] {
+  const monday = getPlanMonday(plan);
+  const out: PlanSession[] = [];
+  for (const week of plan.weeks) {
+    // Une semaine entièrement hors de l'intervalle ne se parcourt pas.
+    const weekFrom = isoDateOnly(getSessionCalendarDate(monday, week.weekNumber, 0));
+    const weekTo = isoDateOnly(getSessionCalendarDate(monday, week.weekNumber, 6));
+    if (weekTo < from || weekFrom > to) continue;
+    for (const session of week.sessions) {
+      const date = isoDateOnly(getSessionCalendarDate(monday, week.weekNumber, session.dayOfWeek));
+      if (date >= from && date <= to) out.push(session);
+    }
+  }
+  return out;
+}
+
+/**
  * Les bornes de la semaine CALENDAIRE qui contient `date`, lundi au dimanche.
  *
  * C'est le repli de quelqu'un qui n'a pas de plan : il fait du vélotaf, il

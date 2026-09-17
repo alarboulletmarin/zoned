@@ -55,5 +55,18 @@
   "facts": {
     "distance": "~{{km}} {{unit}}",
     "rpe": "RPE {{n}}"
+  },
+  "view": {
+    "label": "Week or month",
+    "week": "Week",
+    "month": "Month"
+  },
+  "month": {
+    "previous": "Previous month",
+    "next": "Next month",
+    "sessions_one": "one session · {{minutes}}",
+    "sessions_other": "{{count}} sessions · {{minutes}}",
+    "empty": "nothing planned",
+    "review": "{{month}} review"
   }
 }

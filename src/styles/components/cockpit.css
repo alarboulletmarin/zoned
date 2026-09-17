@@ -819,3 +819,269 @@ button.zn-cockpit__exit {
 .zn-cockpit__journal:hover {
   color: var(--accent);
 }
+
+/* ── Semaine ou mois ────────────────────────────────────────────────────── */
+
+/* Deux instruments pour choisir un jour, dans le même créneau. Le contrôle
+   est à la largeur de ses deux mots, pas de l'écran : c'est un commutateur,
+   pas une barre d'onglets, et il ne doit pas ressembler à la navigation. */
+.zn-cockpit__view {
+  align-self: flex-start;
+  min-inline-size: 200px;
+}
+
+/* ── La grille du mois ──────────────────────────────────────────────────── */
+
+/* Le même instrument que la bande, un cran plus loin. Elle en garde tout :
+   aucun cadre, aucun fond de cellule, des MARQUES qui disent qu'on peut
+   choisir. Et elle en garde la règle : hauteur FIXE, six rangées toujours,
+   pour que feuilleter un mois ne déplace pas la pile sous le doigt. */
+.zn-cockpit__month {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-block-end: calc(var(--gap-section) / 2);
+}
+
+.zn-cockpit__month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.zn-cockpit__month-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  text-align: center;
+  min-inline-size: 0;
+}
+
+.zn-cockpit__month-name {
+  font: var(--type-label);
+  color: var(--text-body);
+  text-transform: capitalize;
+}
+
+/* Les deux flèches : un cercle cerné, comme les boutons de pagination du
+   calendrier du plan. Elles ne portent pas d'accent, ce sont des sorties de
+   lecture, pas des actions. */
+.zn-cockpit__month-btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 36px;
+  block-size: 36px;
+  padding: 0;
+  background: none;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cockpit__month-btn:hover:not(:disabled) {
+  color: var(--text-body);
+  border-color: var(--line-strong);
+}
+
+.zn-cockpit__month-btn:active:not(:disabled) {
+  transform: translateY(var(--press-shift));
+}
+
+/* Au bord du plan, la flèche reste, éteinte : une flèche qui disparaît
+   ferait sauter le titre au centre, et rien ne dirait qu'il n'y a plus rien
+   à feuilleter. */
+.zn-cockpit__month-btn:disabled {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: default;
+}
+
+@media (pointer: coarse) {
+  .zn-cockpit__month-btn {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+}
+
+.zn-cockpit__month-head,
+.zn-cockpit__month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+.zn-cockpit__month-letter {
+  font: var(--type-mono);
+  color: var(--text-faint);
+  text-align: center;
+}
+
+/* Six rangées, TOUJOURS : février tient en quatre, la grille en garde six.
+   La hauteur de case est fixée ici et nulle part ailleurs, et chaque case
+   porte le même empilement, numéro, familles, marques, complément, plein ou
+   vide : c'est ce qui fait que la grille ne bouge jamais d'un pixel. */
+.zn-cockpit__month-grid {
+  --cell-h: 56px;
+  grid-template-rows: repeat(6, var(--cell-h));
+}
+
+.zn-cockpit__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--sp-2);
+  block-size: var(--cell-h);
+  border-radius: var(--r-xs);
+  color: inherit;
+  /* Le dépouillement du bouton natif, comme le jour de la bande. */
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: var(--sp-1) 0 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Une case du mois voisin est un blanc qui tient la rangée ; une case du mois
+   hors du plan garde son numéro, en retrait, pour que le mois garde sa
+   forme. Ni l'une ni l'autre ne se choisit. */
+.zn-cockpit__cell[data-void],
+.zn-cockpit__cell[data-outside] {
+  cursor: default;
+}
+
+.zn-cockpit__cell[data-outside] .zn-cockpit__cell-num {
+  color: var(--state-disabled-text);
+}
+
+/* Le numéro tient le rôle de la lettre de la bande, avec ses deux marques :
+   le filet plein du jour CHOISI, le point rond d'AUJOURD'HUI. Le filet est
+   réservé transparent sur toutes les cases, pour la même raison que sur la
+   bande : une marque qui ajoute deux pixels décale sa rangée. */
+.zn-cockpit__cell-num {
+  position: relative;
+  font: var(--type-mono);
+  color: var(--text-faint);
+  padding-block-end: 1px;
+  border-block-end: 2px solid transparent;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cockpit__cell:hover:not([data-void]):not([data-outside]) .zn-cockpit__cell-num {
+  color: var(--text-body);
+}
+
+.zn-cockpit__cell:active:not([data-void]):not([data-outside]) {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-cockpit__cell[data-today] .zn-cockpit__cell-num {
+  color: var(--text-muted);
+}
+
+.zn-cockpit__cell[data-today] .zn-cockpit__cell-num::after {
+  content: "";
+  position: absolute;
+  inset-block-end: -3px;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  inline-size: 3px;
+  block-size: 3px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.zn-cockpit__cell[data-selected] .zn-cockpit__cell-num::after {
+  content: none;
+}
+
+.zn-cockpit__cell[data-selected] .zn-cockpit__cell-num {
+  color: var(--text-body);
+  font-weight: var(--fw-bold);
+  border-block-end-color: var(--ink-1);
+}
+
+/* Les familles du jour, réservées, à 11 px : encore plus petit que la bande,
+   et pour la même raison, un glyphe se reconnaît, il ne se lit pas. */
+.zn-cockpit__cell-kinds {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  block-size: 11px;
+  color: var(--text-faint);
+}
+
+.zn-cockpit__cell-kind {
+  flex: none;
+}
+
+.zn-cockpit__cell[data-selected] .zn-cockpit__cell-kinds {
+  color: var(--text-body);
+}
+
+/* Une marque par séance, la forme dit le statut : c'est le bloc de la bande,
+   couché. Prévu un contour, fait un plein, sauté hachuré, repos un filet. La
+   rangée est réservée à sa hauteur, vide ou pleine. */
+.zn-cockpit__cell-marks {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  block-size: 6px;
+}
+
+.zn-cockpit__cell-mark {
+  inline-size: 8px;
+  block-size: 6px;
+  box-sizing: border-box;
+  border: var(--bw-rule) solid transparent;
+  border-radius: 1px;
+}
+
+.zn-cockpit__cell-mark[data-shape="planned"] {
+  border-color: var(--line-strong);
+}
+
+.zn-cockpit__cell-mark[data-shape="completed"] {
+  background: var(--ink-1);
+}
+
+.zn-cockpit__cell-mark[data-shape="modified"] {
+  background: var(--ink-2);
+}
+
+.zn-cockpit__cell-mark[data-shape="skipped"] {
+  border-color: var(--line-divider);
+  background-image: var(--zone-recovery);
+}
+
+.zn-cockpit__cell-mark[data-shape="rest"] {
+  block-size: 2px;
+  border-color: transparent;
+  background: var(--line-divider);
+}
+
+/* Le complément, sous le sol, réservé même vide : un tiret d'un cran plus
+   clair, comme sous la bande. */
+.zn-cockpit__cell-under {
+  display: flex;
+  justify-content: center;
+  block-size: 3px;
+}
+
+.zn-cockpit__cell-extra {
+  inline-size: 8px;
+  block-size: 3px;
+  background: var(--ink-3);
+  border-radius: 1px;
+}
