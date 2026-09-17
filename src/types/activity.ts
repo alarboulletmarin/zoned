@@ -81,6 +81,46 @@ export function isTravel(purpose: ActivityPurpose): boolean {
   return purpose === "commute" || purpose === "transport";
 }
 
+/** La seule valeur qui vaut pour toute discipline : on s'entraîne à tout. */
+const TRAINING_ONLY: readonly ActivityPurpose[] = ["training"] as const;
+
+/**
+ * Les motifs qu'une discipline peut porter.
+ *
+ * Un déplacement suppose qu'on aille QUELQUE PART : à vélo, en courant, à
+ * pied ou en trottinette (`other`), oui ; à la nage, non, personne ne va au
+ * travail en nageant. Proposer « vélotaf » sous « natation » n'était pas
+ * seulement absurde, c'était une donnée fausse à portée d'appui : une longueur
+ * notée en déplacement pèse 3/10 au lieu de 5/10 dans la charge.
+ */
+export function purposesFor(discipline: ActivityDiscipline): readonly ActivityPurpose[] {
+  return ACTIVITY_DISCIPLINE_META[discipline].travel ? ACTIVITY_PURPOSES : TRAINING_ONLY;
+}
+
+/** Le motif tel quel s'il a un sens pour la discipline, sinon `training`. */
+export function coercePurpose(
+  discipline: ActivityDiscipline,
+  purpose: ActivityPurpose,
+): ActivityPurpose {
+  return purposesFor(discipline).includes(purpose) ? purpose : "training";
+}
+
+/**
+ * La clé i18n du libellé d'un motif, POUR une discipline.
+ *
+ * « Vélotaf » est un mot de vélo, et il était collé sur les trajets de course
+ * à pied. Le mot générique est « domicile-travail » ; le vélo garde le sien
+ * parce que c'est celui que tout le monde emploie. Une seule fonction pour les
+ * trois écrans qui affichent un motif, sinon le journal et le cockpit auraient
+ * fini par ne pas dire la même chose de la même ligne.
+ */
+export function purposeLabelKey(
+  discipline: ActivityDiscipline,
+  purpose: ActivityPurpose,
+): "commute" | "commuteCycling" | "transport" | "training" {
+  return purpose === "commute" && discipline === "cycling" ? "commuteCycling" : purpose;
+}
+
 /**
  * Une activité complémentaire, telle qu'elle est enregistrée.
  *
@@ -165,6 +205,12 @@ export interface ActivityDisciplineMeta {
   elevation: boolean;
   /** Les watts n'existent qu'à vélo, en pratique. */
   watts: boolean;
+  /**
+   * La discipline peut être un DÉPLACEMENT : on va quelque part avec. Fausse,
+   * le motif n'a qu'une valeur possible, `training`, et l'écran ne le demande
+   * pas. Voir `purposesFor`.
+   */
+  travel: boolean;
 }
 
 /**
@@ -185,6 +231,7 @@ export const ACTIVITY_DISCIPLINE_META: Record<ActivityDiscipline, ActivityDiscip
     distance: "km",
     elevation: true,
     watts: true,
+    travel: true,
   },
   running: {
     id: "running",
@@ -193,6 +240,7 @@ export const ACTIVITY_DISCIPLINE_META: Record<ActivityDiscipline, ActivityDiscip
     distance: "km",
     elevation: true,
     watts: false,
+    travel: true,
   },
   swimming: {
     id: "swimming",
@@ -201,6 +249,7 @@ export const ACTIVITY_DISCIPLINE_META: Record<ActivityDiscipline, ActivityDiscip
     distance: "meters",
     elevation: false,
     watts: false,
+    travel: false,
   },
   other: {
     id: "other",
@@ -209,5 +258,7 @@ export const ACTIVITY_DISCIPLINE_META: Record<ActivityDiscipline, ActivityDiscip
     distance: "none",
     elevation: false,
     watts: false,
+    /* La marche, la trottinette, les rollers : on va au travail avec. */
+    travel: true,
   },
 };

@@ -24,11 +24,13 @@
   },
   "purpose": {
     "commute": "Commute",
+    "commuteCycling": "Bike commute",
     "transport": "Trip",
     "training": "Training"
   },
   "purposeHint": {
-    "commute": "The ride to work, the one that comes back every week",
+    "commute": "The trip to work, the one that comes back every week",
+    "commuteCycling": "The ride to work, the one that comes back every week",
     "transport": "Any other trip: errands, the station",
     "training": "A real session, done outside your plan"
   },

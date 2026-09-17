@@ -86,7 +86,7 @@ import { ZoneBar, formatDurationMinutes, toZoneBarBlocks } from "@/components/vi
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { isStrengthWorkout } from "@/types";
 import type { PlanSession } from "@/types/plan";
-import type { ComplementaryActivity } from "@/types/activity";
+import { purposeLabelKey, type ComplementaryActivity } from "@/types/activity";
 import type { UnitSystem } from "@/types/settings";
 import DoorToday from "@/assets/doodles/door-today.svg?react";
 
@@ -718,7 +718,9 @@ export function TodayPage() {
         <ul className="zn-cockpit__extras">
           {dayActivities.map((activity) => (
             <li key={activity.id} className="zn-cockpit__extra">
-              <span>{t(`activity:purpose.${activity.purpose}`)}</span>
+              <span>
+                {t(`activity:purpose.${purposeLabelKey(activity.discipline, activity.purpose)}`)}
+              </span>
               <span className="zn-mono">
                 {[
                   formatDurationMinutes(activity.durationMin),

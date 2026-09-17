@@ -105,6 +105,24 @@ partout où un écran dit déplacement (`isTravel`). Ils sont quand même
 distingués parce que le premier se répète, donc se pré-remplit, et pas le
 second.
 
+### Le motif dépend de la discipline
+
+Un déplacement suppose qu'on aille quelque part : à vélo, en courant, à pied
+ou en trottinette (`other`), oui ; à la nage, non. Le formulaire proposait
+pourtant la même rangée « Vélotaf / Déplacement / Entraînement » sous les
+quatre disciplines, c'est-à-dire un mot de vélo sur un trajet couru et un
+déplacement à la nage. Ce n'était pas qu'absurde : une longueur notée en
+déplacement pesait 3/10 au lieu de 5/10 dans la charge, à portée d'appui.
+
+La règle vit dans la table des disciplines, `ACTIVITY_DISCIPLINE_META.travel`,
+à côté de « pas de dénivelé en natation » dont elle est la sœur, et deux
+fonctions la servent (`purposesFor`, `purposeLabelKey`). En natation la rangée
+disparaît et le motif vaut `training`, la seule chose qu'une longueur peut
+être ; changer de discipline vers la natation ramène le motif, et l'effort par
+défaut qui en dépend, sur entraînement. Le mot suit la discipline : « vélotaf »
+à vélo, « domicile-travail » ailleurs, et les trois écrans qui affichent un
+motif passent par la même fonction pour ne pas diverger.
+
 ## Par où l'on note, et pourquoi c'est une seule saisie
 
 Trois portes, et elles ne peuvent pas diverger : elles ouvrent le MÊME panneau
