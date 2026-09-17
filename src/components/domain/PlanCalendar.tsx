@@ -957,7 +957,7 @@ const SessionCell = memo(function SessionCell({
           <span className="zn-sess__name" title={displayName}>
             {displayName}
           </span>
-          {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
+          {session.estimatedDurationMin > 0 && (
             <span className="zn-sess__facts">
               <Clock />
               <span className="zn-sess__facts-text">

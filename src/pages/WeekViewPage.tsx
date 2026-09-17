@@ -35,6 +35,10 @@ import { SEOHead } from "@/components/seo";
 import { ZoneScale } from "@/components/visualization";
 import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
+import {
+  ActivitySessionDialog,
+  type ActivitySessionDialogTarget,
+} from "@/components/domain/ActivitySessionDialog";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { ScanCard } from "@/components/domain";
 import { WeekSummaryBar, WeekGeneratorPanel } from "@/components/weekly";
@@ -50,6 +54,15 @@ import {
   savePlan,
   getPlan,
 } from "@/lib/planStorage";
+import {
+  ACTIVITY_KINDS,
+  activityKindOf,
+  applyActivityDraft,
+  defaultActivityDraft,
+  makeActivitySession,
+  type ActivityDraft,
+} from "@/lib/activitySession";
+import { loadCommutePattern } from "@/lib/athleteProfile";
 import { generateWeek, redrawSlot } from "@/lib/weekGenerator";
 import { getAnyWorkoutTss, getDrawDiscipline } from "@/lib/workoutFilters";
 import { sharedWeekUrl } from "@/lib/weekShare";
@@ -64,7 +77,6 @@ import { buildScanSchedule } from "@/lib/scanSchedule";
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import type { AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, isStrengthWorkout } from "@/types";
-import type { SessionType } from "@/types";
 import { WEEK_CATEGORIES, type WeekCategory } from "@/types/plan";
 import {
   DEFAULT_WEEK_SETTINGS,
@@ -72,15 +84,6 @@ import {
   type WeekSettings,
   type WeekSlot,
 } from "@/types/week";
-
-const ACTIVITY_KEYS: Record<string, string> = {
-  __activity_strength__: "strength",
-  __activity_cycling__: "cycling",
-  __activity_swimming__: "swimming",
-  __activity_yoga__: "yoga",
-  __activity_rest__: "rest",
-  __activity_cross_training__: "cross_training",
-};
 
 const WEEKDAYS: DayIndex[] = [0, 1, 2, 3, 4, 5, 6];
 
@@ -130,8 +133,8 @@ export function WeekViewPage() {
   const workoutNames = useMemo(() => {
     const names: Record<string, string> = {};
     for (const w of catalog) names[w.id] = pick(w, "name");
-    for (const [aid, key] of Object.entries(ACTIVITY_KEYS)) {
-      names[aid] = t(`plan:activity.${key}`, { defaultValue: key });
+    for (const { workoutId, kind } of ACTIVITY_KINDS) {
+      names[workoutId] = t(`plan:activity.${kind}`, { defaultValue: kind });
     }
     return names;
   }, [catalog, pick, t]);
@@ -140,6 +143,15 @@ export function WeekViewPage() {
   const [addTarget, setAddTarget] = useState<{ day: number } | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  // The activity being placed or adjusted: which day, and which session when
+  // it is already on the board. The dialog asks for the two things an
+  // activity needs to weigh in the week, a duration and an effort.
+  const [activityEdit, setActivityEdit] = useState<{
+    target: ActivitySessionDialogTarget;
+    day: number;
+    sessionIndex?: number;
+  } | null>(null);
 
   // Generator settings live in the page so the sticky "Generate" button (mobile)
   // and the WeekGeneratorPanel share the same state.
@@ -261,20 +273,31 @@ export function WeekViewPage() {
   const handleWorkoutAdd = useCallback(
     async (workoutId: string, _weekNumber: number, day: number) => {
       if (!plan) return;
-      const activity = workoutId.match(/^__activity_(\w+)__$/);
+      const activity = activityKindOf(workoutId);
       if (activity) {
-        const fresh = getPlan(plan.id);
-        if (!fresh) return;
-        fresh.weeks[0].sessions.push({
-          dayOfWeek: day,
-          workoutId,
-          sessionType: activity[1] as SessionType,
-          isKeySession: false,
-          estimatedDurationMin: 0,
+        const pattern = loadCommutePattern();
+        // Active rest has no duration to ask for: it lands as is.
+        if (!activity.timed) {
+          const fresh = getPlan(plan.id);
+          if (!fresh) return;
+          fresh.weeks[0].sessions.push(
+            makeActivitySession(activity.kind, day, { durationMin: 0, intensity: "easy" }, pattern),
+          );
+          fresh.weeks[0].sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+          savePlan(fresh);
+          reload();
+          return;
+        }
+        setActivityEdit({
+          day,
+          target: {
+            kind: activity.kind,
+            editing: false,
+            aerobic: activity.aerobic,
+            initial: defaultActivityDraft(activity.kind, pattern),
+            commuteProfileMin: pattern?.durationMin ?? null,
+          },
         });
-        fresh.weeks[0].sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-        savePlan(fresh);
-        reload();
         return;
       }
       if (await addSessionToPlan(plan.id, 1, workoutId, day)) reload();
@@ -282,11 +305,60 @@ export function WeekViewPage() {
     [plan, reload],
   );
 
+  /** Saves the dialog: a new activity on its day, or new values on an existing one. */
+  const handleActivitySave = useCallback(
+    (draft: ActivityDraft) => {
+      if (!plan || !activityEdit) return;
+      const fresh = getPlan(plan.id);
+      if (!fresh) return;
+      const { target, day, sessionIndex } = activityEdit;
+      if (sessionIndex !== undefined) {
+        const session = fresh.weeks[0].sessions[sessionIndex];
+        if (!session) return;
+        fresh.weeks[0].sessions[sessionIndex] = applyActivityDraft(session, draft);
+      } else {
+        fresh.weeks[0].sessions.push(
+          makeActivitySession(target.kind, day, draft, loadCommutePattern()),
+        );
+        fresh.weeks[0].sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+      }
+      savePlan(fresh);
+      setActivityEdit(null);
+      reload();
+      if (sessionIndex === undefined) toast.success(t("plan:view.activityAdded"));
+    },
+    [plan, activityEdit, reload, t],
+  );
+
   const handleSessionClick = useCallback(
-    (_weekNumber: number, _sessionIndex: number, workoutId: string) => {
+    (_weekNumber: number, sessionIndex: number, workoutId: string) => {
+      const activity = activityKindOf(workoutId);
+      if (activity && activity.timed) {
+        // An activity has no page of its own: the gesture that opens a session
+        // opens its duration and effort instead, so a card that weighs nothing
+        // yet is one tap from counting.
+        const session = plan?.weeks[0].sessions[sessionIndex];
+        if (!session) return;
+        const pattern = loadCommutePattern();
+        setActivityEdit({
+          day: session.dayOfWeek,
+          sessionIndex,
+          target: {
+            kind: activity.kind,
+            editing: true,
+            aerobic: activity.aerobic,
+            initial: {
+              durationMin: session.estimatedDurationMin,
+              intensity: session.intensity ?? "easy",
+            },
+            commuteProfileMin: pattern?.durationMin ?? null,
+          },
+        });
+        return;
+      }
       if (!workoutId.startsWith("__")) navigate(`/workout/${workoutId}`);
     },
-    [navigate],
+    [plan, navigate],
   );
 
   // ── Animated generation ───────────────────────────────────────────────────
@@ -700,6 +772,12 @@ export function WeekViewPage() {
           />
         </SheetContent>
       </Sheet>
+
+      <ActivitySessionDialog
+        target={activityEdit?.target ?? null}
+        onCancel={() => setActivityEdit(null)}
+        onSave={handleActivitySave}
+      />
 
       {/* Mobile bottom-sheet picker (tap to place on the chosen day) */}
       <PlanWorkoutPanel

@@ -8,6 +8,11 @@
  * though most of its minutes are warm-up/recovery, instead of the misleading
  * time-in-zone view where almost every week looks ~95 % easy. Strength has no
  * aerobic zone and is excluded from the split (but still counts as a session).
+ *
+ * An activity slot (a bike commute, a swim, see `lib/activitySession.ts`) is
+ * counted the same way from what it carries: its duration, the zone its
+ * planned effort maps to, and its load. One without a duration weighs nothing
+ * and is not a session yet, it is a card waiting for its duration.
  */
 
 import {
@@ -65,6 +70,22 @@ export function computeWeekStats(slots: WeekSlot[]): WeekStats {
   let highMinutes = 0;
 
   for (const slot of slots) {
+    const activity = slot.activity;
+    if (activity) {
+      if (activity.durationMin <= 0) continue;
+      sessions++;
+      totalMinutes += activity.durationMin;
+      totalTss += activity.tss;
+      const z = activity.zone;
+      if (z !== null) {
+        if (z <= 2) lowMinutes += activity.durationMin;
+        else if (z === 3) midMinutes += activity.durationMin;
+        else highMinutes += activity.durationMin;
+        if (z >= 4) hardSessions++;
+      }
+      continue;
+    }
+
     const w = slot.workout;
     if (!w) continue;
     sessions++;

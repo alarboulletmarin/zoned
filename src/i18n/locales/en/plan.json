@@ -423,7 +423,8 @@
     "noMatchingStrength": "No matching strength sessions",
     "noFavorites": "No favorite workouts yet",
     "noMatching": "No matching workouts",
-    "favoritesHint": "Add workouts to favorites from the library first"
+    "favoritesHint": "Add workouts to favorites from the library first",
+    "commuteProfile": "{{minutes}} min per trip, from your profile"
   },
   "plansPage": {
     "title": "My Training Plans",
@@ -503,7 +504,8 @@
     "swimming": "Swimming",
     "yoga": "Yoga",
     "rest": "Active Rest",
-    "cross_training": "Other Activity"
+    "cross_training": "Other Activity",
+    "commute": "Bike commute"
   },
   "targetSystems": {
     "aerobic_base": "Aerobic base",
@@ -574,7 +576,26 @@
     "cycling": "Cycling",
     "swimming": "Swimming",
     "yoga": "Yoga / Stretching",
-    "rest": "Active Rest"
+    "rest": "Active Rest",
+    "commute": "Bike commute"
+  },
+  "activitySession": {
+    "addTitle": "Add an activity",
+    "editTitle": "Adjust the activity",
+    "sub": "A duration and an effort, that is all it takes for it to count in the week.",
+    "duration": "Duration",
+    "durationPlaceholder": "h:mm",
+    "intensity": "Planned effort",
+    "intensityEasy": "Easy",
+    "intensityModerate": "Moderate",
+    "intensityHard": "Hard",
+    "intensityHint": "Easy counts as Z2, moderate as Z3, hard as Z4. A commute is easy.",
+    "commuteHint": "From your profile: {{minutes}} min per trip. Adjust if you ride both ways.",
+    "commuteNoProfile": "Set your commute in your profile to find it pre-filled here.",
+    "noDuration": "Duration to set",
+    "menu": "Duration and effort",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "lastChange": {
     "title": "Last change",

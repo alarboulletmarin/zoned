@@ -142,6 +142,13 @@ export interface PlanSession {
   isSuggestion?: boolean;          // v2: true if auto-suggested (user can dismiss)
   /** "Ma semaine" lock, a locked session survives week (re)generation. */
   locked?: boolean;
+  /**
+   * L'effort PRÉVU d'une activité posée dans la semaine (`__activity_*`),
+   * facile quand absent. Trois mots, pas dix paliers : on prévoit un vélotaf
+   * facile, on ne le prévoit pas à 3/10. Traduit en zone par
+   * `lib/activitySession.ts`, qui en tire la polarisation et la charge.
+   */
+  intensity?: CrossTrainingIntensity;
 }
 
 // ── Unavailability (blocked days) ─────────────────────────────────

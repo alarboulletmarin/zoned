@@ -12,10 +12,13 @@ import type { Discipline } from "@/types";
  * Trois façons de ne PAS résoudre ça, et pourquoi elles sont écartées :
  *
  * 1. **Une séance de plus dans le plan.** C'est ce que l'app savait faire
- *    (`__activity_cycling__`, cf. `PlanWorkoutPanel`), et c'est une séance
+ *    (`__activity_cycling__`, cf. `PlanWorkoutPanel`), et c'était une séance
  *    VIDE, sans métrique, qu'il faut poser à la main dans la bonne semaine.
  *    Elle disparaît aussi avec le plan : le vélotaf, lui, ne s'arrête pas
- *    entre deux plans.
+ *    entre deux plans. Elle a depuis gagné une durée et un effort
+ *    (`lib/activitySession.ts`), parce qu'une SEMAINE TYPE n'a pas de dates
+ *    et que le relevé ci-dessous ne peut rien y compter ; elle reste un
+ *    gabarit, ce qu'on PRÉVOIT, jamais un relevé.
  * 2. **Le motif récurrent** (`CommutePattern`, `types/athlete-profile.ts`).
  *    Il dit ce que l'on fait D'HABITUDE, pas ce qu'on a fait mardi. C'est une
  *    hypothèse, pas un relevé, et il reste utile pour ça : il pré-remplit le

@@ -5,6 +5,7 @@
 
 import type { AnyWorkoutTemplate, Difficulty } from "@/types";
 import type { DrawDiscipline } from "@/lib/workoutFilters";
+import type { ActivitySlotInfo } from "@/lib/activitySession";
 
 /** 0 = Monday … 6 = Sunday. */
 export type DayIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -18,13 +19,21 @@ export type QualityType = "random" | "tempo" | "threshold" | "vo2vma";
 /** Allowed session counts for a week. */
 export type SessionCount = 3 | 4 | 5 | 6;
 
-/** One day of the generated week. `workout` is null on rest days. */
+/**
+ * One day of the generated week. `workout` is null on rest days, and on the
+ * days holding an activity instead of a catalog session: a bike commute, a
+ * swim, a yoga class. Those carry `activity`, what the week knows of them
+ * (duration, zone, load), so the stats and the rhythm count them like any
+ * other session rather than drawing the day as rest.
+ */
 export interface WeekSlot {
   day: DayIndex;
   kind: SlotKind;
   workout: AnyWorkoutTemplate | null;
   /** User lock, locked slots survive partial regeneration. */
   locked: boolean;
+  /** Set when the slot is an activity (`__activity_*`), never with `workout`. */
+  activity?: ActivitySlotInfo;
 }
 
 /** Settings driving the generator (the left panel). */

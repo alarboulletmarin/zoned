@@ -14,6 +14,8 @@ import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
 import { SESSION_COLORS, sessionColor } from "@/lib/sessionColors";
+import { PANEL_ACTIVITY_KINDS, activityWorkoutId } from "@/lib/activitySession";
+import { loadCommutePattern } from "@/lib/athleteProfile";
 
 // ── Category to sessionType mapping for filter dots ───────────────
 
@@ -55,20 +57,6 @@ const FILTERS: FilterDef[] = [
   { key: "cross_training", categories: [], dotColor: "#6b7280" },
 ];
 
-interface CrossTrainingItem {
-  id: string;
-  type: string;
-  translationKey: string;
-  defaultDuration: number;
-}
-
-const CROSS_TRAINING_ITEMS: CrossTrainingItem[] = [
-  { id: "ct-cycling", type: "cycling", translationKey: "cycling", defaultDuration: 0 },
-  { id: "ct-swimming", type: "swimming", translationKey: "swimming", defaultDuration: 0 },
-  { id: "ct-yoga", type: "yoga", translationKey: "yoga", defaultDuration: 0 },
-  { id: "ct-rest", type: "rest", translationKey: "rest", defaultDuration: 0 },
-];
-
 // ── Props ─────────────────────────────────────────────────────────
 
 interface PlanWorkoutPanelProps {
@@ -93,6 +81,10 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   const [activeFilter, setActiveFilter] = useState("all");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const { favorites } = useFavorites();
+
+  // Le vélotaf du profil, lu à l'ouverture : c'est une habitude déclarée, et
+  // la ligne sous l'entrée dit avec quelle durée elle se posera.
+  const commutePattern = useMemo(() => (isOpen ? loadCommutePattern() : null), [isOpen]);
 
   // Le calendrier derrière ne bouge plus sous le doigt. Compteur partagé avec
   // les autres panneaux, donc un dialogue ouvert par-dessus ne le rend pas trop tôt.
@@ -313,31 +305,41 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
           )
         ) : activeFilter === "cross_training" ? (
           <>
-            {CROSS_TRAINING_ITEMS.map((item) => (
-              <div
-                key={item.id}
-                draggable={!!inline}
-                onDragStart={inline ? (e) => {
-                  e.dataTransfer.effectAllowed = "copyMove";
-                  e.dataTransfer.setData("workout-id", `__activity_${item.type}__`);
-                } : undefined}
-                onClick={() => {
-                  if (onSelectWorkout) {
-                    onSelectWorkout(`__activity_${item.type}__`);
-                  }
-                  if (!inline) onClose();
-                }}
-                className="zn-planpanel__item"
-                data-draggable={inline ? "true" : undefined}
-              >
-                {/* No aerobic zone behind a cross-training slot: the mark stays
-                    hollow rather than borrowing a colour it has no claim to. */}
-                <span className="zn-sess__dot" />
-                <span className="zn-planpanel__item-name">
-                  {t(`crossTraining.${item.translationKey}`)}
-                </span>
-              </div>
-            ))}
+            {PANEL_ACTIVITY_KINDS.map((kind) => {
+              const workoutId = activityWorkoutId(kind);
+              return (
+                <div
+                  key={kind}
+                  draggable={!!inline}
+                  onDragStart={inline ? (e) => {
+                    e.dataTransfer.effectAllowed = "copyMove";
+                    e.dataTransfer.setData("workout-id", workoutId);
+                  } : undefined}
+                  onClick={() => {
+                    if (onSelectWorkout) {
+                      onSelectWorkout(workoutId);
+                    }
+                    if (!inline) onClose();
+                  }}
+                  className="zn-planpanel__item"
+                  data-draggable={inline ? "true" : undefined}
+                >
+                  {/* No aerobic zone behind a cross-training slot: the mark stays
+                      hollow rather than borrowing a colour it has no claim to. */}
+                  <span className="zn-sess__dot" />
+                  <div className="zn-planpanel__item-main">
+                    <span className="zn-planpanel__item-name">
+                      {t(`crossTraining.${kind}`)}
+                    </span>
+                    {kind === "commute" && commutePattern && (
+                      <span className="zn-planpanel__item-sub">
+                        {t("workoutPanel.commuteProfile", { minutes: commutePattern.durationMin })}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </>
         ) : isLoading ? (
           <div className="zn-planpanel__state">

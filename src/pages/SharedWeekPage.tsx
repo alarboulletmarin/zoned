@@ -9,7 +9,13 @@ import { SEOHead } from "@/components/seo";
 import { ZoneScale } from "@/components/visualization";
 import { WeekSummaryBar } from "@/components/weekly";
 import { sessionColor } from "@/lib/sessionColors";
-import { decodeSharedWeek, sharedWeekSessions, sharedWeekToPlan } from "@/lib/weekShare";
+import { activityKindOf } from "@/lib/activitySession";
+import {
+  decodeSharedWeek,
+  isSharedSessionKnown,
+  sharedWeekSessions,
+  sharedWeekToPlan,
+} from "@/lib/weekShare";
 import { planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
 import { savePlan } from "@/lib/planStorage";
@@ -30,7 +36,7 @@ import type { PlanWeek } from "@/types/plan";
 export function SharedWeekPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { t } = useTranslation("library");
+  const { t } = useTranslation(["library", "plan"]);
   const pick = usePickLang();
   const pickLocale = usePickLocale();
 
@@ -58,7 +64,7 @@ export function SharedWeekPage() {
     [payload],
   );
   const knownSessions = useMemo(
-    () => sessions.filter((s) => byId.has(s.workoutId)),
+    () => sessions.filter((s) => isSharedSessionKnown(s.workoutId, new Set(byId.keys()))),
     [sessions, byId],
   );
   const unknownCount = sessions.length - knownSessions.length;
@@ -174,9 +180,12 @@ export function SharedWeekPage() {
             <div className="zn-pw__list">
               {knownSessions.map((session, idx) => {
                 const workout = byId.get(session.workoutId);
+                const activity = activityKindOf(session.workoutId);
                 const workoutName = workout
                   ? pick(workout, "name")
-                  : session.workoutId;
+                  : activity
+                    ? t(`plan:activity.${activity.kind}`)
+                    : session.workoutId;
                 const sessionLabel = SESSION_TYPE_LABELS[session.sessionType];
 
                 return (

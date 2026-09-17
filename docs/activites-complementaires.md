@@ -21,7 +21,7 @@ les efforts et caetera »*.
 
 | | pourquoi non |
 |---|---|
-| une séance de plus dans le plan (`__activity_cycling__`) | C'est une séance VIDE, sans métrique, à poser à la main dans la bonne semaine. Et elle disparaît avec le plan, alors que le vélotaf, lui, ne s'arrête pas entre deux cycles. |
+| une séance de plus dans le plan (`__activity_cycling__`) | C'était une séance VIDE, sans métrique, à poser à la main dans la bonne semaine. Et elle disparaît avec le plan, alors que le vélotaf, lui, ne s'arrête pas entre deux cycles. Elle porte depuis une durée et un effort, pour la semaine type, voir plus bas. |
 | le motif récurrent (`CommutePattern`) | Il dit ce qu'on fait D'HABITUDE, pas ce qu'on a fait mardi. C'est une hypothèse, pas un relevé. Il reste utile pour ça, et pour ça seulement : il **pré-remplit** le formulaire. |
 | ne rien faire et arrondir | L'état d'avant. |
 
@@ -345,6 +345,44 @@ pour empêcher. La page se joint par le pied de page, par Cmd+K, depuis le
 cockpit quand il y a quelque chose à relire, et depuis le profil. Le préfixe
 `/activities` marque quand même la porte Mes chiffres : la page appartient à
 cette famille, elle n'y a simplement pas de ligne.
+
+## La semaine type : un gabarit, pas un relevé
+
+Le journal est daté, et c'est sa force. C'est aussi ce qui le rend muet sur la
+**semaine type** (`/weeks`, un plan d'une semaine sans dates) : on ne peut pas
+y « noter mardi », il n'y a pas de mardi. Le propriétaire a rencontré le trou
+exactement là : *« je me suis ajouté des séances de vélo qui sont en réalité
+du vélo taff mais tu le vois bien c'est pas bien représentatif »*. Trois
+`__activity_cycling__` sur le tableau, et la semaine annonçait 3 séances,
+3,1 h, un rythme à plat les trois jours de vélo et une polarisation « trop
+d'intensité 65 / 35 », parce que trois cartes sans durée pèsent zéro.
+
+La réponse n'est PAS d'apporter le journal dans la semaine type : un gabarit
+dit ce qu'on prévoit, un relevé dit ce qu'on a fait, et les mélanger
+referait la confusion que ce document passe son temps à défaire. La réponse
+est que la carte posée porte ce qu'un gabarit sait dire, et rien de plus
+(`lib/activitySession.ts`) :
+
+- **une durée**, dans `estimatedDurationMin`, le champ que toute séance a
+  déjà, et le seul obligatoire, même règle que le journal ;
+- **un effort prévu**, `intensity`, en trois mots (facile, modéré, dur) et
+  pas dix paliers. On prévoit un vélotaf facile, on ne le prévoit pas à 3/10 ;
+  l'échelle fine est celle de l'après-coup.
+
+L'effort devient une zone (Z2, Z3, Z4), et la zone fait le reste par les
+chemins qui existaient : la polarisation classe l'activité par sa zone comme
+n'importe quelle séance (`weekStats.ts`), le rythme lui donne sa hauteur et
+sa couleur, et la charge est le TSS de la zone, `runTssFromZone`, la même
+unité que les séances de course. Le renforcement, le yoga et le repos actif
+n'ont pas de zone : ils comptent en temps, jamais dans la polarisation.
+
+Le vélotaf a son entrée dans le panneau, `__activity_commute__`, en premier
+parce que c'est lui qu'on pose trois fois. Il se pré-remplit de la durée du
+profil (`CommutePattern`), reprise telle quelle : c'est une valeur déclarée,
+et doubler pour un aller-retour que personne n'a annoncé serait inventer un
+chiffre. L'écran le dit et se corrige d'un geste. Une carte sans durée reste
+possible, elle annonce « Durée à régler » et pèse zéro : elle n'est pas une
+séance, c'est une séance en attente de sa seule question.
 
 ## Le terrain préparé pour le triathlon
 
