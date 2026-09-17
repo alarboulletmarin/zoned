@@ -408,7 +408,7 @@
       "rerollEmpty": "Aucune autre séance disponible avec ces réglages"
     },
     "boardHint": "Cliquez une séance pour la modifier · glissez-la pour la déplacer ou la retirer",
-    "boardHintTouch": "Appuie sur une séance pour la régler · maintiens pour la déplacer",
+    "boardHintTouch": "Appuie sur une séance pour la régler · glisse-la pour la déplacer",
     "card": {
       "zone": "Zone {{zone}}"
     },
