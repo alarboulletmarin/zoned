@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -57,6 +58,10 @@ import {
 import { updateSessionCompletion, type SessionCompletionData } from "@/lib/planStorage";
 import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
 import { WeekReviewPanel } from "@/components/domain/WeekReviewPanel";
+import { PolarizationGauge } from "@/components/weekly";
+import { getWorkoutByIdAsync } from "@/data/workouts";
+import { intensitySplit } from "@/lib/periodIntensity";
+import type { AnyWorkoutTemplate } from "@/types";
 import { useActivityLog } from "@/hooks/useActivityLog";
 import { activitiesBetween, activitiesOn } from "@/lib/activityStorage";
 import { minutesByWeekday } from "@/lib/activityStats";
@@ -476,6 +481,63 @@ export function TodayPage() {
     });
   }, [view, monthRef, activities, focus.plan, todayIso]);
 
+  /* Ce que le mois vécu a pesé en INTENSITÉ : facile, tempo, intense. Les
+     séances faites se classent par la zone dominante de leur gabarit, qui est
+     dans un chunk du catalogue : on ne charge que ceux des séances closes du
+     mois, à la demande, et la jauge se dessine quand ils sont là. Le journal
+     se classe par effort perçu, sans rien charger. */
+  const monthSessions = useMemo(() => {
+    if (!focus.plan || !monthReview) return [];
+    return planSessionsBetween(focus.plan, monthReview.range.from, monthReview.range.to);
+  }, [focus.plan, monthReview]);
+
+  const doneIds = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          monthSessions
+            .filter((s) => s.status === "completed" || s.status === "modified")
+            .map((s) => s.workoutId)
+            .filter((id) => !id.startsWith("__")),
+        ),
+      ).sort(),
+    [monthSessions],
+  );
+
+  /* `null` pour un gabarit introuvable, et il reste dans la table : sans ça
+     l'effet le redemanderait à chaque rendu, la table changeant de référence
+     à chaque réponse. Introuvable est une réponse. */
+  const [templates, setTemplates] = useState<Map<string, AnyWorkoutTemplate | null>>(
+    () => new Map(),
+  );
+  useEffect(() => {
+    const missing = doneIds.filter((id) => !templates.has(id));
+    if (missing.length === 0) return;
+    let cancelled = false;
+    Promise.all(missing.map((id) => getWorkoutByIdAsync(id).then((w) => [id, w] as const))).then(
+      (pairs) => {
+        if (cancelled) return;
+        setTemplates((prev) => {
+          const next = new Map(prev);
+          for (const [id, w] of pairs) next.set(id, w ?? null);
+          return next;
+        });
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [doneIds, templates]);
+
+  const monthIntensity = useMemo(() => {
+    if (!monthReview) return null;
+    return intensitySplit({
+      sessions: monthSessions,
+      activities: activitiesBetween(activities, monthReview.range.from, monthReview.range.to),
+      workoutOf: (id) => templates.get(id) ?? undefined,
+    });
+  }, [monthReview, monthSessions, activities, templates]);
+
   const monthLabel = useMemo(
     () =>
       new Date(monthRef.year, monthRef.month, 1).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
@@ -694,10 +756,28 @@ export function TodayPage() {
               chose à dire. C'est le bilan de la semaine, nourri d'un mois :
               même dessin, mêmes règles, les kilomètres restent par sport. */}
           {monthReview && hasSomethingToReview(monthReview) && (
-            <WeekReviewPanel
-              review={monthReview}
-              kicker={t("today:month.review", { month: monthName })}
-            />
+            <>
+              <WeekReviewPanel
+                review={monthReview}
+                kicker={t("today:month.review", { month: monthName })}
+              />
+              {/* Facile / tempo / intense sur le réalisé, dans la jauge que
+                  la semaine type emploie déjà. Sans conseil : c'est du passé,
+                  le mot du verdict suffit. Elle ne se dessine que lorsqu'il y
+                  a des minutes classées, et dit ce qui ne l'a pas été. */}
+              {monthIntensity && monthIntensity.zonedMinutes > 0 && (
+                <div className="zn-cockpit__intensity">
+                  <PolarizationGauge polarised={monthIntensity} hints={false} />
+                  {monthIntensity.unclassifiedMinutes > 0 && (
+                    <p className="zn-cockpit__intensity-note zn-mono">
+                      {t("today:month.unclassified", {
+                        time: formatDurationMinutes(monthIntensity.unclassifiedMinutes),
+                      })}
+                    </p>
+                  )}
+                </div>
+              )}
+            </>
           )}
 
           {settings.cockpit.shortcuts && (

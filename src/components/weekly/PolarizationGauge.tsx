@@ -19,6 +19,13 @@ export function polarisationStatus(hardShare: number): PolarisationStatus {
 interface PolarizationGaugeProps {
   polarised: PolarisedSplit;
   className?: string;
+  /**
+   * Le conseil sous la jauge quand elle n'est pas équilibrée. Vrai par
+   * défaut, pour la semaine que l'on compose et peut encore corriger ; faux
+   * sur un bilan de RÉALISÉ, où le mot du verdict suffit et où la phrase
+   * parlerait d'une semaine à ajuster qui est déjà passée.
+   */
+  hints?: boolean;
 }
 
 /**
@@ -29,6 +36,7 @@ interface PolarizationGaugeProps {
 export function PolarizationGauge({
   polarised,
   className,
+  hints = true,
 }: PolarizationGaugeProps) {
   const { t } = useTranslation("library");
   const { lowShare, midShare, highShare, zonedMinutes } = polarised;
@@ -111,7 +119,7 @@ export function PolarizationGauge({
       </div>
 
       {/* Verdict caption */}
-      {!balanced && (
+      {hints && !balanced && (
         <p className="zn-wk-gauge__hint">{t(`weekly.gauge.${status}Hint`)}</p>
       )}
 

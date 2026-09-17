@@ -67,6 +67,7 @@
     "sessions_one": "une séance · {{minutes}}",
     "sessions_other": "{{count}} séances · {{minutes}}",
     "empty": "rien de prévu",
-    "review": "Bilan de {{month}}"
+    "review": "Bilan de {{month}}",
+    "unclassified": "{{time}} sans zone (renforcement, gabarit inconnu)"
   }
 }

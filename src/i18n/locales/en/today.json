@@ -67,6 +67,7 @@
     "sessions_one": "one session · {{minutes}}",
     "sessions_other": "{{count}} sessions · {{minutes}}",
     "empty": "nothing planned",
-    "review": "{{month}} review"
+    "review": "{{month}} review",
+    "unclassified": "{{time}} without a zone (strength, unknown template)"
   }
 }
