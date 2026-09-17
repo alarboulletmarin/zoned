@@ -64,10 +64,24 @@
   "month": {
     "previous": "Mois précédent",
     "next": "Mois suivant",
-    "sessions_one": "une séance · {{minutes}}",
-    "sessions_other": "{{count}} séances · {{minutes}}",
+    "sessions_one": "une séance prévue · {{minutes}}",
+    "sessions_other": "{{count}} séances prévues · {{minutes}}",
     "empty": "rien de prévu",
     "review": "Bilan de {{month}}",
-    "unclassified": "{{time}} sans zone (renforcement, gabarit inconnu)"
+    "reviewToDate": "Bilan au {{date}}",
+    "legendDone": "fait",
+    "legendPlanned": "prévu",
+    "legendSkipped": "sautée",
+    "legendRest": "repos",
+    "legendExtra": "hors plan",
+    "strength": "{{time}} de renforcement, hors zones",
+    "unknown": "{{time}} sans gabarit connu"
+  },
+  "date": {
+    "ago_one": "il y a un jour",
+    "ago_other": "il y a {{count}} jours",
+    "ahead_one": "dans un jour",
+    "ahead_other": "dans {{count}} jours",
+    "back": "Revenir à aujourd'hui"
   }
 }
