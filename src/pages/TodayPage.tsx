@@ -265,6 +265,16 @@ export function TodayPage() {
 
   /* La ligne de date suit le choix : sans elle, jeudi s'afficherait sous
      mardi 16 septembre, et l'écran dirait deux jours à la fois. */
+  /* L'écart entre le jour regardé et aujourd'hui, en jours. La page s'appelle
+     Aujourd'hui et peut montrer le 2 septembre : la ligne de date doit le
+     DIRE, et il faut une sortie. Le bouton de retour est toujours écrit,
+     invisible quand on est sur aujourd'hui, pour que la ligne ne change pas
+     de hauteur au premier choix. */
+  const dayGap = useMemo(
+    () => Math.round((dateFromIso(dayIso).getTime() - dateFromIso(todayIso).getTime()) / 86_400_000),
+    [dayIso, todayIso],
+  );
+
   const dateLine = dateFromIso(dayIso).toLocaleDateString(
     isEn ? "en-GB" : "fr-FR",
     { weekday: "long", day: "numeric", month: "long" },
@@ -547,6 +557,20 @@ export function TodayPage() {
     [monthRef, isEn],
   );
 
+  /* La borne du bilan d'un mois en cours, au 17 sept. : deux périodes sont à
+     l'écran, le mois entier prévu en tête de grille et le vécu jusqu'ici dans
+     le bilan, et rien ne le disait. Chacune se nomme. */
+  const reviewToDate = useMemo(
+    () =>
+      monthReview
+        ? dateFromIso(monthReview.range.to).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+            day: "numeric",
+            month: "short",
+          })
+        : "",
+    [monthReview, isEn],
+  );
+
   /* Le nom du mois seul, pour le micro-label du bilan : la plage de dates à
      côté porte déjà tout ce qu'il faut, et l'année faisait replier la ligne. */
   const monthName = useMemo(
@@ -763,7 +787,31 @@ export function TodayPage() {
         <div className="zn-cockpit__hold" aria-hidden="true" />
       ) : (
         <section className="zn-cockpit__resume">
-          <span className="zn-kicker">{dateLine}</span>
+          {/* La ligne de date, puis une ligne RÉSERVÉE : l'écart et le retour
+              à aujourd'hui, vides sur aujourd'hui. Sur la même ligne que la
+              date, l'écart la faisait replier à 390 px, et l'écran bougeait au
+              premier choix, ce que cette page interdit. */}
+          <div className="zn-cockpit__date">
+            <span className="zn-kicker">{dateLine}</span>
+            <p className="zn-cockpit__date-row" data-hidden={isToday || undefined}>
+              <span className="zn-cockpit__date-gap zn-mono">
+                {dayGap !== 0
+                  ? t(dayGap < 0 ? "today:date.ago" : "today:date.ahead", {
+                      count: Math.abs(dayGap),
+                    })
+                  : "\u00A0"}
+              </span>
+              <button
+                type="button"
+                className="zn-cockpit__back"
+                onClick={() => setPicked(null)}
+                tabIndex={isToday ? -1 : 0}
+                aria-hidden={isToday || undefined}
+              >
+                {t("today:date.back")}
+              </button>
+            </p>
+          </div>
 
           {/* Le mois se dispose en DEUX COLONNES dès que l'écran le paie :
               la grille et son bilan à gauche, la journée choisie à droite, on
@@ -795,7 +843,11 @@ export function TodayPage() {
                 <div className="zn-cockpit__split-review">
                   <WeekReviewPanel
                     review={monthReview}
-                    kicker={t("today:month.review", { month: monthName })}
+                    kicker={
+                      monthReview.range.to < monthRange(monthRef).to
+                        ? t("today:month.reviewToDate", { date: reviewToDate })
+                        : t("today:month.review", { month: monthName })
+                    }
                   />
                   {/* Facile / tempo / intense sur le réalisé, dans la jauge que
                       la semaine type emploie déjà. Sans conseil : c'est du passé,
@@ -803,11 +855,21 @@ export function TodayPage() {
                       a des minutes classées, et dit ce qui ne l'a pas été. */}
                   {monthIntensity && monthIntensity.zonedMinutes > 0 && (
                     <div className="zn-cockpit__intensity">
-                      <PolarizationGauge polarised={monthIntensity} hints={false} />
-                      {monthIntensity.unclassifiedMinutes > 0 && (
+                      <PolarizationGauge polarised={monthIntensity} hints={false} verdict={false} />
+                      {/* Ce qui n'entre pas dans la jauge, par CAUSE : le
+                          renforcement n'a pas de zone et n'a rien à qualifier ;
+                          un gabarit inconnu, lui, manque. Deux phrases, pas une. */}
+                      {monthIntensity.strengthMinutes > 0 && (
                         <p className="zn-cockpit__intensity-note zn-mono">
-                          {t("today:month.unclassified", {
-                            time: formatDurationMinutes(monthIntensity.unclassifiedMinutes),
+                          {t("today:month.strength", {
+                            time: formatDurationMinutes(monthIntensity.strengthMinutes),
+                          })}
+                        </p>
+                      )}
+                      {monthIntensity.unknownMinutes > 0 && (
+                        <p className="zn-cockpit__intensity-note zn-mono">
+                          {t("today:month.unknown", {
+                            time: formatDurationMinutes(monthIntensity.unknownMinutes),
                           })}
                         </p>
                       )}
@@ -1600,6 +1662,30 @@ function MonthGrid({
           );
         })}
       </div>
+
+      {/* La légende, une ligne, sous la grille : plein, creux, hachuré, filet.
+          Quatre marques de dix pixels ne se devinent pas, et le glyphe de
+          sport n'en dit rien. Les marques sont les VRAIES, pas des caractères
+          qui leur ressemblent : la légende ne peut pas diverger du dessin. */}
+      <p className="zn-cockpit__month-legend zn-mono" aria-hidden="true">
+        {(
+          [
+            ["completed", "legendDone"],
+            ["planned", "legendPlanned"],
+            ["skipped", "legendSkipped"],
+            ["rest", "legendRest"],
+          ] as const
+        ).map(([shape, key]) => (
+          <span key={shape} className="zn-cockpit__month-key">
+            <span className="zn-cockpit__cell-mark" data-shape={shape} />
+            {t(`today:month.${key}`)}
+          </span>
+        ))}
+        <span className="zn-cockpit__month-key">
+          <span className="zn-cockpit__cell-extra" />
+          {t("today:month.legendExtra")}
+        </span>
+      </p>
     </div>
   );
 }

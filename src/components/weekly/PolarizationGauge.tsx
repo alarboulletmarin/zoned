@@ -26,6 +26,14 @@ interface PolarizationGaugeProps {
    * parlerait d'une semaine à ajuster qui est déjà passée.
    */
   hints?: boolean;
+  /**
+   * Le verdict en tête, équilibre ou trop, avec son triangle. Vrai par
+   * défaut. Faux là où l'écran ne juge pas : le cockpit montre la répartition
+   * d'un mois vécu, et le 80/20 est un verdict de semaine composée, pas de
+   * dix-sept jours dont une part n'a pas de zone. Des chiffres, pas des
+   * adjectifs.
+   */
+  verdict?: boolean;
 }
 
 /**
@@ -37,6 +45,7 @@ export function PolarizationGauge({
   polarised,
   className,
   hints = true,
+  verdict = true,
 }: PolarizationGaugeProps) {
   const { t } = useTranslation("library");
   const { lowShare, midShare, highShare, zonedMinutes } = polarised;
@@ -63,6 +72,7 @@ export function PolarizationGauge({
     <div className={cn("zn-wk-gauge", className)}>
       <div className="zn-wk-gauge__head">
         <span className="zn-label">{t("weekly.gauge.title")}</span>
+        {verdict && (
         <span
           className={cn(
             "zn-wk-gauge__verdict",
@@ -82,6 +92,7 @@ export function PolarizationGauge({
             {pct(lowShare)} / {pct(hardShare)}
           </span>
         </span>
+        )}
       </div>
 
       {/* Target caption sits above the bar, never on top of a segment. */}
@@ -119,7 +130,7 @@ export function PolarizationGauge({
       </div>
 
       {/* Verdict caption */}
-      {hints && !balanced && (
+      {verdict && hints && !balanced && (
         <p className="zn-wk-gauge__hint">{t(`weekly.gauge.${status}Hint`)}</p>
       )}
 

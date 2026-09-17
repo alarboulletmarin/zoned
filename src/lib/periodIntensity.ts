@@ -41,8 +41,12 @@ export function zoneFromRpe(rpe: number): number {
 }
 
 export interface IntensitySplit extends PolarisedSplit {
-  /** Minutes faites dont la zone ne se connaît pas : gabarit absent, ou sans zone. */
+  /** Minutes faites dont la zone ne se connaît pas : renforcement et gabarit absent. */
   unclassifiedMinutes: number;
+  /** Le renforcement, qui n'a pas de zone aérobie par construction. Rien à qualifier. */
+  strengthMinutes: number;
+  /** Un gabarit qui n'est pas chargé, ou qui n'existe plus. */
+  unknownMinutes: number;
 }
 
 function isDone(session: PlanSession): boolean {
@@ -58,11 +62,12 @@ export function intensitySplit(params: {
   let lowMinutes = 0;
   let midMinutes = 0;
   let highMinutes = 0;
-  let unclassifiedMinutes = 0;
+  let strengthMinutes = 0;
+  let unknownMinutes = 0;
 
   const add = (zone: number | null, minutes: number) => {
     if (minutes <= 0) return;
-    if (zone === null) unclassifiedMinutes += minutes;
+    if (zone === null) unknownMinutes += minutes;
     else if (zone <= 2) lowMinutes += minutes;
     else if (zone === 3) midMinutes += minutes;
     else highMinutes += minutes;
@@ -77,8 +82,12 @@ export function intensitySplit(params: {
       continue;
     }
     const workout = params.workoutOf(session.workoutId);
-    if (!workout || isStrengthWorkout(workout)) {
+    if (!workout) {
       add(null, minutes);
+      continue;
+    }
+    if (isStrengthWorkout(workout)) {
+      if (minutes > 0) strengthMinutes += minutes;
       continue;
     }
     add(getDominantZone(workout), minutes);
@@ -97,6 +106,8 @@ export function intensitySplit(params: {
     lowShare: zonedMinutes > 0 ? lowMinutes / zonedMinutes : 0,
     midShare: zonedMinutes > 0 ? midMinutes / zonedMinutes : 0,
     highShare: zonedMinutes > 0 ? highMinutes / zonedMinutes : 0,
-    unclassifiedMinutes,
+    unclassifiedMinutes: strengthMinutes + unknownMinutes,
+    strengthMinutes,
+    unknownMinutes,
   };
 }

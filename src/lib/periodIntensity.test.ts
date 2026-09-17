@@ -95,6 +95,9 @@ describe("intensitySplit", () => {
     });
     expect(split.zonedMinutes).toBe(0);
     expect(split.unclassifiedMinutes).toBe(90);
+    // Et ils ne se confondent pas : l'un n'a rien à qualifier, l'autre attend son chunk.
+    expect(split.strengthMinutes).toBe(30);
+    expect(split.unknownMinutes).toBe(60);
   });
 
   test("une activité de semaine prend la zone de son effort prévu", () => {

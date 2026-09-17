@@ -64,10 +64,24 @@
   "month": {
     "previous": "Previous month",
     "next": "Next month",
-    "sessions_one": "one session · {{minutes}}",
-    "sessions_other": "{{count}} sessions · {{minutes}}",
+    "sessions_one": "one session planned · {{minutes}}",
+    "sessions_other": "{{count}} sessions planned · {{minutes}}",
     "empty": "nothing planned",
     "review": "{{month}} review",
-    "unclassified": "{{time}} without a zone (strength, unknown template)"
+    "reviewToDate": "Review to {{date}}",
+    "legendDone": "done",
+    "legendPlanned": "planned",
+    "legendSkipped": "skipped",
+    "legendRest": "rest",
+    "legendExtra": "off plan",
+    "strength": "{{time}} of strength, no zones",
+    "unknown": "{{time}} with no known template"
+  },
+  "date": {
+    "ago_one": "a day ago",
+    "ago_other": "{{count}} days ago",
+    "ahead_one": "in a day",
+    "ahead_other": "in {{count}} days",
+    "back": "Back to today"
   }
 }

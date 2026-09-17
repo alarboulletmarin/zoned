@@ -990,20 +990,24 @@ button.zn-cockpit__exit {
   color: var(--text-muted);
 }
 
+/* AUJOURD'HUI dans la grille : un CERCLE autour du numéro, à l'encre, la
+   convention de tout calendrier. Le point rond de la bande suffisait sur sept
+   colonnes ; sur quarante-deux cases, un point de trois pixels se perdait
+   derrière le filet du jour choisi, et l'on pouvait raisonner longtemps sur
+   le 2 septembre en croyant lire aujourd'hui. Le cercle reste quand le jour
+   est aussi choisi : les deux marques ne se confondent pas, un filet et un
+   anneau. */
 .zn-cockpit__cell[data-today] .zn-cockpit__cell-num::after {
   content: "";
   position: absolute;
-  inset-block-end: -3px;
+  inset-block-start: 50%;
   inset-inline-start: 50%;
-  translate: -50% 0;
-  inline-size: 3px;
-  block-size: 3px;
+  translate: -50% -50%;
+  inline-size: 24px;
+  block-size: 24px;
   border-radius: 50%;
-  background: var(--line-strong);
-}
-
-.zn-cockpit__cell[data-selected] .zn-cockpit__cell-num::after {
-  content: none;
+  border: var(--bw-rule) solid var(--ink-1);
+  margin-block-start: -1px;
 }
 
 .zn-cockpit__cell[data-selected] .zn-cockpit__cell-num {
@@ -1011,6 +1015,73 @@ button.zn-cockpit__exit {
   font-weight: var(--fw-bold);
   border-block-end-color: var(--ink-1);
 }
+
+/* La légende sous la grille. */
+.zn-cockpit__month-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-7);
+  margin: 0;
+  font-size: var(--fs-mono);
+  color: var(--text-faint);
+}
+
+.zn-cockpit__month-key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* ── La ligne de date, et le retour à aujourd'hui ───────────────────────── */
+
+/* La page s'appelle Aujourd'hui et peut montrer un autre jour : la ligne de
+   date dit l'écart, et le bouton ramène. Il est TOUJOURS écrit, invisible sur
+   aujourd'hui, pour que la ligne garde sa hauteur au premier choix. */
+.zn-cockpit__date {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* La seconde ligne est réservée, vide sur aujourd'hui : elle garde sa
+   hauteur, et rien ne bouge au premier choix. */
+.zn-cockpit__date-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  margin: 0;
+  min-block-size: 1.4em;
+}
+
+.zn-cockpit__date-row[data-hidden] .zn-cockpit__back {
+  visibility: hidden;
+}
+
+.zn-cockpit__date-gap {
+  font-size: var(--fs-mono);
+  color: var(--text-muted);
+}
+
+.zn-cockpit__back {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  text-decoration: underline;
+  text-decoration-color: var(--line-divider);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cockpit__back:hover {
+  color: var(--accent);
+}
+
+
 
 /* Les familles du jour, réservées, à 11 px : encore plus petit que la bande,
    et pour la même raison, un glyphe se reconnaît, il ne se lit pas. */
@@ -1039,12 +1110,12 @@ button.zn-cockpit__exit {
   align-items: flex-end;
   justify-content: center;
   gap: 2px;
-  block-size: 6px;
+  block-size: 8px;
 }
 
 .zn-cockpit__cell-mark {
-  inline-size: 8px;
-  block-size: 6px;
+  inline-size: 10px;
+  block-size: 8px;
   box-sizing: border-box;
   border: var(--bw-rule) solid transparent;
   border-radius: 1px;
@@ -1082,7 +1153,7 @@ button.zn-cockpit__exit {
 }
 
 .zn-cockpit__cell-extra {
-  inline-size: 8px;
+  inline-size: 10px;
   block-size: 3px;
   background: var(--ink-3);
   border-radius: 1px;
@@ -1147,10 +1218,28 @@ button.zn-cockpit__exit {
     grid-template-areas:
       "switch answer"
       "grid answer"
-      "review answer";
+      "review review";
     column-gap: var(--sp-16);
+    row-gap: var(--sp-11);
     align-items: start;
     align-content: start;
+  }
+
+  /* Le bilan en pleine largeur sous les deux colonnes : à gauche il
+     allongeait sa colonne pendant que celle de droite s'arrêtait au tiers.
+     Sous les deux, le bilan et la jauge se posent côte à côte. */
+  .zn-cockpit__split-review {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--sp-16);
+    align-items: start;
+    border-block-start: var(--border-rule);
+    padding-block-start: var(--sp-9);
+  }
+
+  .zn-cockpit__split-review > .zn-cockpit__intensity {
+    border-block-start: 0;
+    padding-block-start: 0;
   }
 
   .zn-cockpit__split-switch {
