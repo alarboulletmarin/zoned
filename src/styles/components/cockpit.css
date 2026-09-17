@@ -1106,3 +1106,69 @@ button.zn-cockpit__exit {
   font-size: var(--fs-mono);
   color: var(--text-faint);
 }
+
+/* ── Le mois, en deux colonnes sur un écran large ───────────────────────── */
+
+/* Le cockpit est une colonne de 620 px, dessinée pour le téléphone et gardée
+   telle quelle sur bureau : un écran de dix secondes n'a pas de colonne à
+   remplir. Le mois, lui, est une consultation, et il empilait une grille de
+   six rangées, un bilan et une jauge dans cette colonne : 2100 px de haut
+   pour la moitié de la largeur vide. Dès que l'écran le paie, il se dispose
+   en deux colonnes, la grille et son bilan à gauche, la journée choisie à
+   droite, et l'on lit le mois et la séance sans défiler.
+
+   Sous 900 px, le conteneur est une colonne et ses enfants gardent l'ordre
+   du DOM, qui est l'ordre validé sur téléphone : le commutateur, la grille,
+   la réponse, le bilan. Le mode semaine ne passe pas par ici. */
+.zn-cockpit__split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-7);
+}
+
+/* Les deux colonnes de contenu gardent l'écart de la section entre leurs
+   blocs : c'est le même rythme que la colonne unique. */
+.zn-cockpit__split-answer,
+.zn-cockpit__split-review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+@media (min-width: 900px) {
+  /* Deux colonnes de 620 px moins l'écart, dans le même gabarit : le mode
+     mois élargit le cockpit, le mode semaine garde sa colonne. */
+  .zn-cockpit[data-view="month"] {
+    max-inline-size: 1160px;
+  }
+
+  .zn-cockpit__split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "switch answer"
+      "grid answer"
+      "review answer";
+    column-gap: var(--sp-16);
+    align-items: start;
+    align-content: start;
+  }
+
+  .zn-cockpit__split-switch {
+    grid-area: switch;
+  }
+
+  .zn-cockpit__split-grid {
+    grid-area: grid;
+  }
+
+  /* La réponse commence à la hauteur du commutateur, pas de la grille : la
+     séance du jour choisi est ce qu'on vient chercher, elle ne s'aligne pas
+     sous un onglet qu'elle ne porte pas. */
+  .zn-cockpit__split-answer {
+    grid-area: answer;
+  }
+
+  .zn-cockpit__split-review {
+    grid-area: review;
+  }
+}
