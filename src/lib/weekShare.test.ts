@@ -33,6 +33,7 @@ mock.module("@/lib/weekToPlan", () => ({
 const {
   decodeSharedWeek,
   encodeSharedWeek,
+  isSharedSessionKnown,
   sharedWeekSessions,
   sharedWeekUrl,
 } = await import("./weekShare");
@@ -103,6 +104,53 @@ describe("wire format", () => {
     expect(sharedWeekUrl(buildWeek(), "Ma semaine")).toMatch(
       /\/weeks\/shared\?d=eyJ2Ijox/,
     );
+  });
+});
+
+describe("an activity of the week", () => {
+  const withCommute = (): TrainingPlan => {
+    const plan = buildWeek();
+    plan.weeks[0].sessions.push({
+      dayOfWeek: 4,
+      workoutId: "__activity_commute__",
+      discipline: "cycling",
+      sessionType: "cycling",
+      isKeySession: false,
+      estimatedDurationMin: 45,
+      intensity: "moderate",
+    });
+    return plan;
+  };
+
+  test("travels with its effort in a sixth slot, the key flag pinned to 0", () => {
+    const payload = decodeSharedWeek(encodeSharedWeek(withCommute(), "Ma semaine"))!;
+    expect(payload.s[2]).toEqual([4, "__activity_commute__", 11, 45, 0, 1]);
+  });
+
+  test("comes back as the same session, effort included", () => {
+    const payload = decodeSharedWeek(encodeSharedWeek(withCommute(), "Ma semaine"))!;
+    expect(sharedWeekSessions(payload)[2]).toEqual({
+      dayOfWeek: 4,
+      workoutId: "__activity_commute__",
+      sessionType: "cycling",
+      isKeySession: false,
+      estimatedDurationMin: 45,
+      intensity: "moderate",
+    });
+  });
+
+  test("an unknown effort code is dropped, the session is kept", () => {
+    const encoded = Buffer.from(
+      JSON.stringify({ v: 1, n: "x", s: [[0, "__activity_cycling__", 11, 45, 0, 9]] }),
+    ).toString("base64url");
+    const payload = decodeSharedWeek(encoded)!;
+    expect(payload.s[0]).toEqual([0, "__activity_cycling__", 11, 45]);
+  });
+
+  test("is known to any recipient, a commute is nobody's custom workout", () => {
+    expect(isSharedSessionKnown("__activity_commute__", new Set())).toBe(true);
+    expect(isSharedSessionKnown("REC-001", new Set())).toBe(false);
+    expect(isSharedSessionKnown("REC-001", new Set(["REC-001"]))).toBe(true);
   });
 });
 

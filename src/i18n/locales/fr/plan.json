@@ -423,7 +423,8 @@
     "noMatchingStrength": "Aucune séance de renfo correspondante",
     "noFavorites": "Aucune séance en favoris",
     "noMatching": "Aucune séance correspondante",
-    "favoritesHint": "Ajoute d'abord des séances en favoris depuis la bibliothèque"
+    "favoritesHint": "Ajoute d'abord des séances en favoris depuis la bibliothèque",
+    "commuteProfile": "{{minutes}} min par trajet, d’après ton profil"
   },
   "plansPage": {
     "title": "Mes Plans d'Entraînement",
@@ -503,7 +504,8 @@
     "swimming": "Natation",
     "yoga": "Yoga",
     "rest": "Repos actif",
-    "cross_training": "Autre activité"
+    "cross_training": "Autre activité",
+    "commute": "Vélotaf"
   },
   "targetSystems": {
     "aerobic_base": "Base aérobie",
@@ -574,7 +576,26 @@
     "cycling": "Vélo",
     "swimming": "Natation",
     "yoga": "Yoga / Stretching",
-    "rest": "Repos actif"
+    "rest": "Repos actif",
+    "commute": "Vélotaf"
+  },
+  "activitySession": {
+    "addTitle": "Poser une activité",
+    "editTitle": "Régler l’activité",
+    "sub": "Une durée et un effort, c’est tout ce qu’il faut pour qu’elle compte dans la semaine.",
+    "duration": "Durée",
+    "durationPlaceholder": "h:mm",
+    "intensity": "Effort prévu",
+    "intensityEasy": "Facile",
+    "intensityModerate": "Modéré",
+    "intensityHard": "Dur",
+    "intensityHint": "Facile compte en Z2, modéré en Z3, dur en Z4. Un vélotaf est facile.",
+    "commuteHint": "Repris de ton profil : {{minutes}} min par trajet. Corrige si tu fais l’aller-retour.",
+    "commuteNoProfile": "Renseigne ton vélotaf dans ton profil pour le retrouver pré-rempli ici.",
+    "noDuration": "Durée à régler",
+    "menu": "Durée et effort",
+    "save": "Enregistrer",
+    "cancel": "Annuler"
   },
   "lastChange": {
     "title": "Dernier changement",

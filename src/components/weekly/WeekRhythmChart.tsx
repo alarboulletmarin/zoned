@@ -21,6 +21,11 @@ function slotZone(w: AnyWorkoutTemplate | null): number | null {
  * zone, rest days shown as a flat muted baseline. Days holding several
  * sessions stack one segment per session. Reads the shape of the week at a
  * glance (Epic #83, issue #88).
+ *
+ * An activity (a bike commute, a swim) is a session of the week like the
+ * others: its duration is its height and its planned effort its colour. Left
+ * out, three commuting days read as three rest days, the one lie this chart
+ * must not tell.
  */
 export function WeekRhythmChart({ slots, className }: WeekRhythmChartProps) {
   const { t } = useTranslation("library");
@@ -28,11 +33,12 @@ export function WeekRhythmChart({ slots, className }: WeekRhythmChartProps) {
   // Group per day, planWeekToSlots may emit several slots for the same day.
   const days = [0, 1, 2, 3, 4, 5, 6].map((day) => {
     const sessions = slots
-      .filter((s) => s.day === day && s.workout)
-      .map((s) => ({
-        duration: getAnyWorkoutDuration(s.workout!),
-        zone: slotZone(s.workout),
-      }));
+      .filter((s) => s.day === day && (s.workout || (s.activity && s.activity.durationMin > 0)))
+      .map((s) =>
+        s.activity
+          ? { duration: s.activity.durationMin, zone: s.activity.zone }
+          : { duration: getAnyWorkoutDuration(s.workout!), zone: slotZone(s.workout) },
+      );
     return {
       day,
       sessions,

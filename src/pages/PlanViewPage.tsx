@@ -334,6 +334,7 @@ export function PlanViewPage() {
         __activity_yoga__: "yoga",
         __activity_rest__: "rest",
         __activity_cross_training__: "cross_training",
+        __activity_commute__: "commute",
       };
       for (const [aid, key] of Object.entries(activityKeys)) {
         names[aid] = t(`activity.${key}`);

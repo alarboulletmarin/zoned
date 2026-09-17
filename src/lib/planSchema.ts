@@ -68,6 +68,10 @@ function normalizeSession(raw: unknown): PlanSession | null {
     userNote: typeof raw.userNote === "string" ? raw.userNote : undefined,
     isSuggestion: typeof raw.isSuggestion === "boolean" ? raw.isSuggestion : undefined,
     locked: typeof raw.locked === "boolean" ? raw.locked : undefined,
+    intensity:
+      raw.intensity === "easy" || raw.intensity === "moderate" || raw.intensity === "hard"
+        ? raw.intensity
+        : undefined,
   };
 }
 

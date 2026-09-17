@@ -233,7 +233,7 @@ function scoreWeek(slots: WeekSlot[], settings: WeekSettings): number {
 
   // 5. Unfilled active slots (a pool ran dry).
   const unfilled = slots.filter(
-    (s) => s.kind !== "rest" && !s.workout,
+    (s) => s.kind !== "rest" && !s.workout && !s.activity,
   ).length;
 
   return 3 * polar + 1 * volume + 2 * adjHard + 1 * dup + 5 * unfilled;
@@ -260,6 +260,9 @@ function buildVariant(
     if (locked.workout) {
       lockedMin += getAnyWorkoutDuration(locked.workout);
       used.add(locked.workout.id);
+    } else if (locked.activity) {
+      // A locked commute is time already spent: the budget shares what is left.
+      lockedMin += locked.activity.durationMin;
     }
   }
   let sumWeights = 0;

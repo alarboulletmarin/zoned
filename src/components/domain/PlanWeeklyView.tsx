@@ -14,6 +14,12 @@ import {
   type SessionActionMenuItem,
 } from "@/components/domain/SessionActionMenu";
 import { SESSION_ZONE, sessionColor } from "@/lib/sessionColors";
+import {
+  activityKindOf,
+  activitySessionTss,
+  activitySessionZone,
+  isActivitySession,
+} from "@/lib/activitySession";
 
 /** Placeholder sessions (race day, cross-training activities) have no catalog
  *  workout behind them, so there is nothing to draw a replacement from. */
@@ -776,10 +782,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           y={contextMenu.y}
           onClose={() => setContextMenu(null)}
           items={([
+            /* An activity has no session page to open: the same gesture
+               opens its duration and effort instead, and says so. */
             onSessionClick && {
               key: "view",
-              icon: <Eye />,
-              label: t("calendar.viewSession"),
+              icon: isActivitySession(contextMenu.workoutId) ? <Clock /> : <Eye />,
+              label: isActivitySession(contextMenu.workoutId)
+                ? t("activitySession.menu")
+                : t("calendar.viewSession"),
               onSelect: () =>
                 onSessionClick(
                   contextMenu.weekNumber,
@@ -997,7 +1007,15 @@ const DayCell = memo(function DayCell({
           draggedSession?.sessionIndex === originalIndex;
         const sessionName = workoutNames[session.workoutId] || session.workoutId;
         const isStrength = session.sessionType === "strength" || session.workoutId?.startsWith("STR-");
-        const meta = workoutMeta?.[session.workoutId];
+        const isActivity = isActivitySession(session.workoutId);
+        // An activity carries its own zone and load, from its planned effort,
+        // so its card reads like the others: Z2 · 45 min · 33 TSS.
+        const meta: WorkoutCardMeta | undefined = isActivity
+          ? {
+              zone: activitySessionZone(session) ?? undefined,
+              tss: activitySessionTss(session) || null,
+            }
+          : workoutMeta?.[session.workoutId];
 
         return (
           <div
@@ -1224,8 +1242,21 @@ const DayCell = memo(function DayCell({
                   >
                     {sessionName}
                   </span>
-                  {session.estimatedDurationMin > 0 &&
-                    !session.workoutId.startsWith("__activity_") && (
+                  {/* An activity of the week board without a duration is a
+                      card that weighs nothing yet: say so, where the duration
+                      would be, rather than leave the line blank. */}
+                  {isActivity &&
+                    singleWeek &&
+                    activityKindOf(session.workoutId)?.timed &&
+                    session.estimatedDurationMin <= 0 && (
+                    <span className="zn-sess__facts">
+                      <Clock />
+                      <span className="zn-sess__facts-text">
+                        {t("activitySession.noDuration")}
+                      </span>
+                    </span>
+                  )}
+                  {session.estimatedDurationMin > 0 && (
                       <span className="zn-sess__facts">
                         <Clock />
                         <span className="zn-sess__facts-text">

@@ -7,6 +7,7 @@
  * reinventing it. The 80/20 generator simply fills that single week's sessions.
  */
 
+import { activitySlotInfo, isActivitySession } from "@/lib/activitySession";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { getAnyWorkoutDuration, getDrawDiscipline } from "@/lib/workoutFilters";
 import { getDominantZone, isStrengthWorkout } from "@/types";
@@ -84,6 +85,11 @@ export function generatedWeekToSessions(week: GeneratedWeek): PlanSession[] {
  *
  * Emits one slot **per session**, a day with several sessions yields several
  * slots (so stats count every session), plus a rest slot for empty days.
+ *
+ * An activity session (`__activity_*`) has no catalog template to look up,
+ * so it is resolved into `slot.activity` from what the session itself
+ * carries, its duration and its planned effort. That is what makes a bike
+ * commute weigh something in the summary instead of reading as a rest day.
  */
 export function planWeekToSlots(
   planWeek: PlanWeek | undefined,
@@ -93,11 +99,13 @@ export function planWeekToSlots(
   const daysWithSession = new Set<number>();
   for (const s of planWeek?.sessions ?? []) {
     daysWithSession.add(s.dayOfWeek);
+    const activity = isActivitySession(s.workoutId) ? activitySlotInfo(s) : undefined;
     slots.push({
       day: s.dayOfWeek as DayIndex,
       kind: kindForSessionType(s.sessionType),
-      workout: byId.get(s.workoutId) ?? null,
+      workout: activity ? null : byId.get(s.workoutId) ?? null,
       locked: s.locked === true,
+      ...(activity && { activity }),
     });
   }
   for (let day = 0 as DayIndex; day <= 6; day = (day + 1) as DayIndex) {
