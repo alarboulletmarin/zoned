@@ -2,7 +2,7 @@
  * Souple ou fixée : comment une séance de la semaine COMPTE.
  *
  * Une semaine type n'est pas une semaine actée. Dans la première, un footing
- * est « un footing », comme on le sent, 25 à 35 minutes selon les jambes ;
+ * est un footing, comme on le sent, 25 à 35 minutes selon les jambes ;
  * dans la seconde, la séance de mardi a duré 32 minutes sur 6,4 km, et c'est
  * ce chiffre-là qu'on partage. Le modèle figeait tout : chaque séance posée
  * gelait une durée, même celles que personne n'avait décidées. Deux

@@ -9,7 +9,7 @@
  * ces trois jours-là : la carte était sur le tableau, mais elle pesait zéro,
  * sans durée, sans effort, invisible au volume, à la charge et à la
  * polarisation. Trois trajets de 45 min de vélo facile, c'est du volume
- * facile, et une semaine qui ne les compte pas se dit « trop intense » alors
+ * facile, et une semaine qui ne les compte pas se dit trop intense alors
  * qu'elle ne l'est pas.
  *
  * Une activité de semaine porte donc deux choses, et deux seulement :
@@ -102,7 +102,7 @@ export const ACTIVITY_INTENSITIES: readonly CrossTrainingIntensity[] = ["easy", 
 /**
  * L'effort en zone. Facile est Z2 et pas Z1 : un vélotaf est de l'endurance
  * de base, pas de la récupération, et Z1 aurait fait de trois trajets une
- * semaine plus « facile » qu'elle n'est. Dur est Z4 : au-delà, on ne parle
+ * semaine plus facile qu'elle n'est. Dur est Z4 : au-delà, on ne parle
  * plus d'une activité posée à la louche mais d'une séance, et elle a sa place
  * dans le catalogue.
  */
@@ -171,7 +171,7 @@ export function defaultActivityDraft(
 }
 
 /**
- * Le sport d'un vélotaf, celui du profil quand il le dit. « Vélotaf » se
+ * Le sport d'un vélotaf, celui du profil quand il le dit. Vélotaf se
  * fait aussi en footing, et le profil le sait ; la séance porte alors la
  * course, pour que les stats par sport ne rangent pas un footing dans le
  * vélo.
