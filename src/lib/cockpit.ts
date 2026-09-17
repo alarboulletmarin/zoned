@@ -1,5 +1,10 @@
 import type { PlanSession, TrainingPlan } from "@/types/plan";
-import { dateToWeekAndDay, getPlanMonday, getSessionCalendarDate } from "@/lib/planDates";
+import {
+  dateToWeekAndDay,
+  getPlanMonday,
+  getSessionCalendarDate,
+  isoDateOnly,
+} from "@/lib/planDates";
 
 /**
  * Ce que le cockpit reprend.
@@ -493,4 +498,164 @@ export function extraBlockHeight(minutes: number, longestExtra: number): number 
 /** Le chemin d'une séance de plan. */
 export function sessionHref(session: PlanSession): string {
   return `/workout/${session.workoutId}`;
+}
+
+/* ── LE MOIS ──────────────────────────────────────────────────────────────
+ *
+ * La bande des sept jours répond à la question de demain. Elle ne répond pas
+ * à celle de dans trois semaines, ni à ce que ce mois a pesé. Le mois est le
+ * même instrument, un cran plus loin : une grille de dates, où
+ * chaque case porte ce que la colonne de la bande porte déjà (les familles,
+ * le statut séance par séance, le complément), et dont le choix recharge la
+ * pile en dessous, exactement comme la bande.
+ *
+ * Tout ici s'adresse par DATE, pas par index de semaine : une case de mars
+ * appartient à une autre semaine du plan que celle qu'on vit, et la clôture
+ * comme la pile ont besoin de savoir laquelle.
+ */
+
+/** Un mois du calendrier. `month` est 0-indexé, comme `Date`. */
+export interface MonthRef {
+  year: number;
+  month: number;
+}
+
+export function monthOf(date: Date): MonthRef {
+  return { year: date.getFullYear(), month: date.getMonth() };
+}
+
+export function shiftMonth(ref: MonthRef, delta: number): MonthRef {
+  const d = new Date(ref.year, ref.month + delta, 1);
+  return { year: d.getFullYear(), month: d.getMonth() };
+}
+
+export function sameMonth(a: MonthRef, b: MonthRef): boolean {
+  return a.year === b.year && a.month === b.month;
+}
+
+/** Avant, égal, après : pour borner la navigation. */
+export function compareMonth(a: MonthRef, b: MonthRef): number {
+  return a.year !== b.year ? a.year - b.year : a.month - b.month;
+}
+
+/** Une date "YYYY-MM-DD" lue à minuit LOCAL, jamais en UTC. */
+export function dateFromIso(iso: string): Date {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+/** Le premier et le dernier jour du mois, en dates seules. */
+export function monthRange(ref: MonthRef): { from: string; to: string } {
+  return {
+    from: isoDateOnly(new Date(ref.year, ref.month, 1)),
+    to: isoDateOnly(new Date(ref.year, ref.month + 1, 0)),
+  };
+}
+
+/**
+ * Une journée du plan, adressée par sa date.
+ *
+ * `weekNumber` est la semaine du plan qui contient cette date, `0` quand la
+ * date est hors du plan (avant son lundi, après sa dernière semaine, ou pas
+ * de plan du tout). `indexes` garde la seule adresse qu'ait une séance,
+ * comme `weekIndexes` : c'est ce qui permet de clore une séance de n'importe
+ * quelle semaine depuis la grille.
+ */
+export interface PlanDay {
+  /** "YYYY-MM-DD". */
+  date: string;
+  /** 1-indexé, `0` hors plan. */
+  weekNumber: number;
+  /** 0 = lundi … 6 = dimanche. */
+  dayOfWeek: number;
+  sessions: PlanSession[];
+  indexes: number[];
+  /** Vrai quand la date tombe dans une semaine du plan. */
+  inPlan: boolean;
+}
+
+export function planDay(focus: TodayFocus, date: Date): PlanDay {
+  const midnight = startOfDay(date);
+  const iso = isoDateOnly(midnight);
+  // `getDay` rend 0 le dimanche, la convention du dépôt est lundi = 0.
+  const dayOfWeek = (midnight.getDay() + 6) % 7;
+  const empty: PlanDay = { date: iso, weekNumber: 0, dayOfWeek, sessions: [], indexes: [], inPlan: false };
+
+  const plan = focus.plan;
+  if (!plan) return empty;
+  const position = dateToWeekAndDay(getPlanMonday(plan), midnight);
+  if (!position || position.weekNumber > plan.totalWeeks) return empty;
+
+  const week = plan.weeks.find((w) => w.weekNumber === position.weekNumber);
+  const sessions: PlanSession[] = [];
+  const indexes: number[] = [];
+  const all = week?.sessions ?? [];
+  for (let i = 0; i < all.length; i++) {
+    if (all[i].dayOfWeek !== position.dayOfWeek) continue;
+    sessions.push(all[i]);
+    indexes.push(i);
+  }
+  return {
+    date: iso,
+    weekNumber: position.weekNumber,
+    dayOfWeek: position.dayOfWeek,
+    sessions,
+    indexes,
+    inPlan: true,
+  };
+}
+
+/** Une case de la grille du mois. */
+export interface MonthCell extends PlanDay {
+  dayOfMonth: number;
+  /** Faux pour les cases de remplissage, qui appartiennent au mois voisin. */
+  inMonth: boolean;
+  isToday: boolean;
+}
+
+/** Six rangées de sept, toujours : la grille ne change pas de hauteur. */
+export const MONTH_ROWS = 6;
+
+/**
+ * Les 42 cases d'un mois, du lundi de la première rangée au dimanche de la
+ * sixième. Toujours 42, même pour un février qui tient en quatre rangées :
+ * une grille qui change de hauteur d'un mois à l'autre déplace la pile sous
+ * le doigt, et c'est la règle de tout cet écran.
+ */
+export function monthCells(focus: TodayFocus, ref: MonthRef, today: Date): MonthCell[] {
+  const first = new Date(ref.year, ref.month, 1);
+  const lead = (first.getDay() + 6) % 7;
+  const todayIso = planDay(focus, today).date;
+  const cells: MonthCell[] = [];
+  for (let i = 0; i < MONTH_ROWS * 7; i++) {
+    const date = new Date(ref.year, ref.month, 1 - lead + i);
+    const day = planDay(focus, date);
+    cells.push({
+      ...day,
+      dayOfMonth: date.getDate(),
+      inMonth: date.getMonth() === ref.month,
+      isToday: day.date === todayIso,
+    });
+  }
+  return cells;
+}
+
+/**
+ * Les mois que la grille peut montrer : du mois du lundi du plan à celui de
+ * son dernier dimanche. Hors du plan il n'y a rien à choisir, donc rien à
+ * feuilleter. `null` sans plan.
+ */
+export function monthBounds(focus: TodayFocus): { min: MonthRef; max: MonthRef } | null {
+  const plan = focus.plan;
+  if (!plan) return null;
+  const monday = getPlanMonday(plan);
+  const last = getSessionCalendarDate(monday, plan.totalWeeks, 6);
+  return { min: monthOf(monday), max: monthOf(last) };
+}
+
+/** La cellule ramenée dans les bornes, pour que le mois d'arrivée soit toujours feuilletable. */
+export function clampMonth(ref: MonthRef, bounds: { min: MonthRef; max: MonthRef }): MonthRef {
+  if (compareMonth(ref, bounds.min) < 0) return bounds.min;
+  if (compareMonth(ref, bounds.max) > 0) return bounds.max;
+  return ref;
 }

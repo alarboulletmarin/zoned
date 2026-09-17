@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test";
 
-import { buildWeekReview, calendarWeekRange, hasSomethingToReview } from "./weekReview";
+import {
+  buildWeekReview,
+  calendarWeekRange,
+  hasSomethingToReview,
+  planSessionsBetween,
+} from "./weekReview";
+import type { TrainingPlan } from "@/types/plan";
 import type { PlanSession } from "@/types/plan";
 import type { ComplementaryActivity } from "@/types/activity";
 
@@ -294,5 +300,37 @@ describe("buildWeekReview, le volume par sport", () => {
   test("un sport sans minute ne fait pas de ligne", () => {
     const review = buildWeekReview({ sessions: [], activities: [], range: RANGE });
     expect(review.byDiscipline).toEqual([]);
+  });
+});
+
+describe("planSessionsBetween", () => {
+  const plan: TrainingPlan = {
+    id: "p1",
+    config: { id: "c1", daysPerWeek: 3, startDate: "2026-09-28", createdAt: "2026-09-01T00:00:00.000Z" },
+    totalWeeks: 2,
+    phases: [{ phase: "base", startWeek: 1, endWeek: 2 }],
+    name: "p1",
+    nameEn: "p1",
+    weeks: [
+      // Lundi 28 septembre, mercredi 30, jeudi 1er octobre, dimanche 4.
+      { weekNumber: 1, phase: "base", isRecoveryWeek: false, volumePercent: 100,
+        sessions: [session({ dayOfWeek: 0, workoutId: "S28" }), session({ dayOfWeek: 2, workoutId: "S30" }), session({ dayOfWeek: 3, workoutId: "O1" }), session({ dayOfWeek: 6, workoutId: "O4" })] },
+      { weekNumber: 2, phase: "base", isRecoveryWeek: false, volumePercent: 100,
+        sessions: [session({ dayOfWeek: 0, workoutId: "O5" })] },
+    ],
+  };
+
+  test("une semaine à cheval ne donne au mois que ses propres jours", () => {
+    expect(planSessionsBetween(plan, "2026-09-01", "2026-09-30").map((s) => s.workoutId)).toEqual(["S28", "S30"]);
+    expect(planSessionsBetween(plan, "2026-10-01", "2026-10-31").map((s) => s.workoutId)).toEqual(["O1", "O4", "O5"]);
+  });
+
+  test("les bornes sont comprises", () => {
+    expect(planSessionsBetween(plan, "2026-09-28", "2026-09-28").map((s) => s.workoutId)).toEqual(["S28"]);
+    expect(planSessionsBetween(plan, "2026-10-05", "2026-10-05").map((s) => s.workoutId)).toEqual(["O5"]);
+  });
+
+  test("un intervalle hors du plan ne rend rien", () => {
+    expect(planSessionsBetween(plan, "2026-08-01", "2026-08-31")).toEqual([]);
   });
 });

@@ -55,5 +55,18 @@
   "facts": {
     "distance": "~{{km}} {{unit}}",
     "rpe": "RPE {{n}}"
+  },
+  "view": {
+    "label": "Semaine ou mois",
+    "week": "Semaine",
+    "month": "Mois"
+  },
+  "month": {
+    "previous": "Mois précédent",
+    "next": "Mois suivant",
+    "sessions_one": "une séance · {{minutes}}",
+    "sessions_other": "{{count}} séances · {{minutes}}",
+    "empty": "rien de prévu",
+    "review": "Bilan de {{month}}"
   }
 }

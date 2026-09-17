@@ -70,6 +70,11 @@ interface WeekReviewPanelProps {
   review: WeekReview;
   /** Le bilan se plie au contexte : `bare` sur le cockpit, sans cadre. */
   variant?: "bare" | "card";
+  /**
+   * Le micro-label de tête, quand le bilan ne porte pas sur une semaine :
+   * le cockpit y met le nom du mois. Absent, il dit la semaine.
+   */
+  kicker?: string;
 }
 
 function formatRange(from: string, to: string, isEn: boolean): string {
@@ -82,7 +87,7 @@ function formatRange(from: string, to: string, isEn: boolean): string {
   return `${parse(from).toLocaleDateString(locale, opts)} - ${parse(to).toLocaleDateString(locale, opts)}`;
 }
 
-export function WeekReviewPanel({ review, variant = "bare" }: WeekReviewPanelProps) {
+export function WeekReviewPanel({ review, variant = "bare", kicker }: WeekReviewPanelProps) {
   const { t } = useTranslation("activity");
   const isEn = useIsEnglish();
 
@@ -159,9 +164,10 @@ export function WeekReviewPanel({ review, variant = "bare" }: WeekReviewPanelPro
     <section className="zn-wreview" data-variant={variant}>
       <div className="zn-wreview__head">
         <span className="zn-kicker zn-kicker--xs">
-          {review.weekNumber > 0
-            ? t("review.kickerWeek", { n: review.weekNumber })
-            : t("review.kicker")}
+          {kicker ??
+            (review.weekNumber > 0
+              ? t("review.kickerWeek", { n: review.weekNumber })
+              : t("review.kicker"))}
         </span>
         <span className="zn-wreview__range zn-mono">{range}</span>
       </div>

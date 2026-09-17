@@ -9,8 +9,19 @@ import {
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowRight, Bike, Dumbbell, Plus, Pool, Run, type IconProps } from "@/components/icons";
+import {
+  ArrowRight,
+  Bike,
+  ChevronLeft,
+  ChevronRight,
+  Dumbbell,
+  Plus,
+  Pool,
+  Run,
+  type IconProps,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { Segmented } from "@/components/ui/segmented";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
 import { SEOHead } from "@/components/seo";
@@ -19,17 +30,27 @@ import { useWorkout } from "@/hooks/useWorkouts";
 import { useRadioRail } from "@/hooks/useRadioRail";
 import { useSettings } from "@/hooks/useSettings";
 import {
+  clampMonth,
+  compareMonth,
+  dateFromIso,
   dayBarBlocks,
   dayKinds,
   dayStatus,
   extraBlockHeight,
   focusDayDate,
   focusPlanHref,
+  monthBounds,
+  monthCells,
+  monthOf,
+  monthRange,
   pickTodayFocus,
+  planDay,
   planPosition,
   sessionHref,
   sessionKind,
+  shiftMonth,
   weekShortcut,
+  type MonthRef,
   type SessionKind,
   type TodayFocus,
 } from "@/lib/cockpit";
@@ -44,6 +65,7 @@ import {
   buildWeekReview,
   calendarWeekRange,
   hasSomethingToReview,
+  planSessionsBetween,
   planWeekRange,
 } from "@/lib/weekReview";
 import { getWorkoutPhaseSteps, summarizeWorkoutSteps } from "@/lib/workoutStructure";
@@ -59,6 +81,7 @@ import { ZoneBar, formatDurationMinutes, toZoneBarBlocks } from "@/components/vi
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { isStrengthWorkout } from "@/types";
 import type { PlanSession } from "@/types/plan";
+import type { ComplementaryActivity } from "@/types/activity";
 import type { UnitSystem } from "@/types/settings";
 import DoorToday from "@/assets/doodles/door-today.svg?react";
 
@@ -147,6 +170,21 @@ const KIND_ICONS: Record<SessionKind, FunctionComponent<IconProps>> = {
  * et la hauteur de la pile quand il y a plusieurs séances, qui est
  * précisément l'information.
  *
+ * ── LA QUATRIÈME VERSION : LE MOIS, À CÔTÉ DE LA SEMAINE ─────────────────
+ *
+ * La bande répond à demain, pas à dans trois semaines ni à ce que le mois a
+ * pesé. Un commutateur Semaine / Mois au-dessus d'elle ouvre le même
+ * instrument un cran plus loin : une grille de dates (`MonthGrid`) dont le
+ * choix recharge la pile, exactement comme la bande. Rien d'autre ne change.
+ *
+ * Ce que ça a coûté, et c'est le seul vrai refactor : le jour choisi était
+ * un INDEX de 0 à 6 dans la semaine en cours, il est devenu une DATE. Une
+ * case de mars appartient à une autre semaine du plan, et la clôture comme la
+ * pile doivent savoir laquelle (`planDay`). Sous la grille, le bilan du mois
+ * est le bilan de la semaine nourri d'un mois, borné à aujourd'hui pour le
+ * mois en cours. Le mode n'est pas mémorisé : l'écran d'arrivée est la
+ * semaine, chaque matin.
+ *
  * `/` reste la landing publique et indexée ; celle-ci est l'écran privé, donc
  * `noindex`, hors sitemap et hors prérendu.
  */
@@ -164,17 +202,44 @@ export function TodayPage() {
   const focus = useMemo(() => pickTodayFocus(plans, now), [plans, now]);
   const planUrl = focusPlanHref(focus);
 
-  /* Le jour choisi dans la bande, et il vaut `null` tant que personne n'a
-     choisi. Pas `focus.dayOfWeek` en valeur initiale : les plans arrivent de
-     localStorage APRÈS le premier rendu, où le focus est encore vide et son
-     jour vaut 0 ; l'écran se serait ouvert sur lundi. Le repli se fait donc
-     à la lecture, où `focus` est celui du rendu courant. */
-  const [picked, setPicked] = useState<number | null>(null);
-  const day = picked ?? focus.dayOfWeek;
-  const isToday = day === focus.dayOfWeek;
+  /* Le jour choisi, et c'est une DATE : il vaut `null` tant que personne n'a
+     choisi, et se replie sur aujourd'hui à la lecture. Pas une valeur initiale
+     calculée : les plans arrivent de localStorage APRÈS le premier rendu, et
+     le repli se fait donc là où `focus` est celui du rendu courant.
 
-  const sessions = focus.week[day] ?? [];
-  const indexes = focus.weekIndexes[day] ?? [];
+     Il a été un index de 0 à 6 dans la semaine en cours, ce qui suffisait à
+     la bande. Le mois choisit une case de n'importe quelle semaine du plan,
+     et la clôture comme la pile ont besoin de savoir laquelle : la date est la
+     seule adresse qui vaille pour les deux instruments. */
+  const [picked, setPicked] = useState<string | null>(null);
+  const todayIso = useMemo(() => isoDateOnly(now), [now]);
+  const dayIso = picked ?? todayIso;
+  const isToday = dayIso === todayIso;
+
+  /* Semaine ou mois : le même écran, deux instruments pour choisir un jour.
+     Le mode n'est PAS mémorisé : l'écran d'arrivée est la semaine, chaque
+     matin, parce que c'est lui qui répond en dix secondes. Le mois est une
+     consultation, à un tap. */
+  const [view, setView] = useState<"week" | "month">("week");
+  const [month, setMonth] = useState<MonthRef | null>(null);
+
+  /* Les sept dates de la semaine en cours, pour que la bande, qui parle en
+     index, et le reste de l'écran, qui parle en dates, se comprennent. */
+  const weekDates = useMemo(
+    () => [0, 1, 2, 3, 4, 5, 6].map((i) => isoDateOnly(focusDayDate(focus, i, now))),
+    [focus, now],
+  );
+  const dayIndex = weekDates.indexOf(dayIso);
+  // La bande ne montre que la semaine en cours : hors d'elle, elle marque le
+  // jour courant, ce qui n'arrive que le temps d'un mode.
+  const day = dayIndex >= 0 ? dayIndex : focus.dayOfWeek;
+
+  /* La journée choisie, par sa date : ses séances, leurs index, sa semaine.
+     Pour la semaine en cours c'est exactement `focus.week[day]`, lu au même
+     endroit ; pour une case du mois c'est la seule façon de le savoir. */
+  const selected = useMemo(() => planDay(focus, dateFromIso(dayIso)), [focus, dayIso]);
+  const sessions = selected.sessions;
+  const indexes = selected.indexes;
 
   /* On peut changer de jour : il y a donc des hauteurs à RÉSERVER, pour que
      passer du dimanche au mardi ne fasse pas remonter l'écran. Sans semaine à
@@ -195,7 +260,7 @@ export function TodayPage() {
 
   /* La ligne de date suit le choix : sans elle, jeudi s'afficherait sous
      mardi 16 septembre, et l'écran dirait deux jours à la fois. */
-  const dateLine = focusDayDate(focus, day, now).toLocaleDateString(
+  const dateLine = dateFromIso(dayIso).toLocaleDateString(
     isEn ? "en-GB" : "fr-FR",
     { weekday: "long", day: "numeric", month: "long" },
   );
@@ -215,15 +280,18 @@ export function TodayPage() {
     return t("today:resume.rest.line");
   }, [dayState, focus.daysUntilStart, t]);
 
-  /** Un jour de repos n'est pas un trou : il dit quand on ressort. */
+  /** Un jour de repos n'est pas un trou : il dit quand on ressort.
+   *
+   * Dans la semaine du jour choisi, qui n'est celle qu'on vit que tant que
+   * la grille du mois n'a pas emmené ailleurs. */
   const nextLine = useMemo(() => {
-    if (dayState !== "rest" || focus.week.length === 0) return null;
+    if (dayState !== "rest" || focus.week.length === 0 || !selected.inPlan) return null;
     const names = t("today:week.dayNames").split(",");
-    for (let step = 1; step <= 6; step++) {
-      const index = day + step;
-      if (index > 6) break;
-      const next = focus.week[index];
-      if (!next || next.length === 0) continue;
+    const weekSessions =
+      focus.plan?.weeks.find((w) => w.weekNumber === selected.weekNumber)?.sessions ?? [];
+    for (let index = selected.dayOfWeek + 1; index <= 6; index++) {
+      const next = weekSessions.filter((s) => s.dayOfWeek === index);
+      if (next.length === 0) continue;
       const min = next.reduce((n, s) => n + (s.estimatedDurationMin ?? 0), 0);
       return t("today:resume.next", {
         day: names[index],
@@ -231,7 +299,7 @@ export function TodayPage() {
       });
     }
     return null;
-  }, [dayState, day, focus.week, t]);
+  }, [dayState, focus.week.length, focus.plan, selected, t]);
 
   /** Où l'on en est du plan : le dénominateur, l'échéance, ce qu'on vise. */
   const position = useMemo(() => planPosition(focus, now), [focus, now]);
@@ -255,8 +323,8 @@ export function TodayPage() {
      formats, ce sont deux nombres. Copié de PlanViewPage, moins le `scrollY`,
      le cockpit tient sur un écran et n'a pas de position à restaurer. */
   const planWeek = useMemo(
-    () => focus.plan?.weeks.find((w) => w.weekNumber === focus.weekNumber),
-    [focus.plan, focus.weekNumber],
+    () => focus.plan?.weeks.find((w) => w.weekNumber === selected.weekNumber),
+    [focus.plan, selected.weekNumber],
   );
 
   const sessionState = useCallback(
@@ -264,12 +332,12 @@ export function TodayPage() {
       from: "plan" as const,
       planId: focus.plan?.id,
       planName: focus.plan ? (isEn ? focus.plan.nameEn : focus.plan.name) : "",
-      weekNumber: focus.weekNumber,
+      weekNumber: selected.weekNumber,
       volumePercent: planWeek?.volumePercent,
       estimatedDurationMin: session.estimatedDurationMin,
       targetDistanceKm: session.targetDistanceKm,
     }),
-    [focus.plan, focus.weekNumber, isEn, planWeek],
+    [focus.plan, selected.weekNumber, isEn, planWeek],
   );
 
   /* La clôture, une par séance de la pile. Elle réutilise le panneau du plan,
@@ -277,11 +345,13 @@ export function TodayPage() {
      L'INDEX vient de `weekIndexes`, la seule adresse qu'ait une séance
      (`updateSessionCompletion` adresse par plan, semaine, index) : c'est lui
      qui permet enfin de clore la seconde séance d'une journée double, et une
-     séance d'un autre jour que celui-ci. */
+     séance d'un autre jour que celui-ci. La SEMAINE est celle du jour choisi,
+     pas celle qu'on vit : depuis la grille du mois, ce sont deux semaines
+     différentes. */
   const handleClose = useCallback(
-    (index: number, data: SessionCompletionData) => {
+    (weekNumber: number, index: number, data: SessionCompletionData) => {
       if (!focus.plan) return;
-      const ok = updateSessionCompletion(focus.plan.id, focus.weekNumber, index, data);
+      const ok = updateSessionCompletion(focus.plan.id, weekNumber, index, data);
       if (!ok) {
         toast.error(t("common:errors.planSaveFailed"));
         return;
@@ -291,7 +361,7 @@ export function TodayPage() {
       reload();
       toast.success(t("plan:completion.saved"));
     },
-    [focus.plan, focus.weekNumber, reload, t],
+    [focus.plan, reload, t],
   );
 
   /* Le primaire des journées sans séance. Il mène au plan, sauf quand il n'y
@@ -321,11 +391,6 @@ export function TodayPage() {
   const log = useActivityLog();
   const activities = log.activities;
 
-  const dayIso = useMemo(
-    () => isoDateOnly(focusDayDate(focus, day, now)),
-    [focus, day, now],
-  );
-
   const dayActivities = useMemo(
     () => activitiesOn(activities, dayIso),
     [activities, dayIso],
@@ -339,13 +404,13 @@ export function TodayPage() {
      Sans plan en cours, il porte sur la semaine CALENDAIRE : le vélotaf
      n'attend pas d'avoir un plan pour compter. */
   const review = useMemo(() => {
-    if (focus.plan && focus.weekNumber > 0) {
-      const range = planWeekRange(focus.plan, focus.weekNumber);
+    if (focus.plan && selected.inPlan) {
+      const range = planWeekRange(focus.plan, selected.weekNumber);
       return buildWeekReview({
         sessions: planWeek?.sessions ?? [],
         activities: activitiesBetween(activities, range.from, range.to),
         range,
-        weekNumber: focus.weekNumber,
+        weekNumber: selected.weekNumber,
       });
     }
     const range = calendarWeekRange(now);
@@ -354,20 +419,81 @@ export function TodayPage() {
       activities: activitiesBetween(activities, range.from, range.to),
       range,
     });
-  }, [focus.plan, focus.weekNumber, planWeek, activities, now]);
+  }, [focus.plan, selected.inPlan, selected.weekNumber, planWeek, activities, now]);
 
-  /* Les minutes complémentaires de la semaine affichée, case par case. Elles
+  /* Les minutes complémentaires de la semaine EN COURS, case par case. Elles
      nourrissent le canal du dessous de la bande : sans elles, une journée de
-     vélotaf s'y lit repos. */
+     vélotaf s'y lit repos. La bande ne montre jamais une autre semaine, donc
+     ses bornes ne suivent pas le jour choisi. */
   const weekExtras = useMemo(() => {
     if (focus.week.length === 0) return [0, 0, 0, 0, 0, 0, 0];
-    return minutesByWeekday(
-      activitiesBetween(activities, review.range.from, review.range.to),
-      review.range.from,
-    );
-  }, [focus.week.length, activities, review.range.from, review.range.to]);
+    const range =
+      focus.plan && focus.weekNumber > 0
+        ? planWeekRange(focus.plan, focus.weekNumber)
+        : calendarWeekRange(now);
+    return minutesByWeekday(activitiesBetween(activities, range.from, range.to), range.from);
+  }, [focus.week.length, focus.plan, focus.weekNumber, activities, now]);
 
-  const showReview = day === 6 && hasSomethingToReview(review);
+  const showReview = view === "week" && day === 6 && hasSomethingToReview(review);
+
+  /* ── Le mois ──────────────────────────────────────────────────────────
+     Le même instrument que la bande, un cran plus loin : une grille de dates
+     dont le choix recharge la pile, et sous elle ce que le mois a pesé. Le
+     mois affiché est celui du jour choisi tant qu'on n'a pas feuilleté, et il
+     reste dans les bornes du plan : hors du plan il n'y a rien à choisir. */
+  const bounds = useMemo(() => monthBounds(focus), [focus]);
+  const monthRef = useMemo(() => {
+    const wanted = month ?? monthOf(dateFromIso(dayIso));
+    return bounds ? clampMonth(wanted, bounds) : wanted;
+  }, [month, dayIso, bounds]);
+
+  const switchView = useCallback((next: "week" | "month") => {
+    /* Revenir à la semaine, c'est revenir à l'écran d'arrivée : la bande ne
+       sait montrer que la semaine en cours, donc un jour choisi dans un autre
+       mois n'y aurait pas de colonne. Aller au mois garde le jour choisi et
+       ouvre sur lui. */
+    if (next === "week") setPicked(null);
+    setMonth(null);
+    setView(next);
+  }, []);
+
+  /* Le bilan s'arrête À AUJOURD'HUI. Un mois en cours porte des séances qui
+     n'ont pas encore eu lieu, et les compter comme non closes accuserait à
+     tort : douze séances pas closes le 17, dont onze sont simplement à
+     venir. Ce que le mois PRÉVOIT en entier, l'en-tête de la grille le dit
+     déjà ; le bilan, lui, dit ce qui a été vécu jusqu'ici. Un mois passé est
+     borné par sa fin, un mois à venir n'a rien à bilanter. */
+  const monthReview = useMemo(() => {
+    if (view !== "month") return null;
+    const range = monthRange(monthRef);
+    const to = range.to < todayIso ? range.to : todayIso;
+    if (to < range.from) return null;
+    const lived = { from: range.from, to };
+    return buildWeekReview({
+      sessions: focus.plan ? planSessionsBetween(focus.plan, lived.from, lived.to) : [],
+      activities: activitiesBetween(activities, lived.from, lived.to),
+      range: lived,
+    });
+  }, [view, monthRef, activities, focus.plan, todayIso]);
+
+  const monthLabel = useMemo(
+    () =>
+      new Date(monthRef.year, monthRef.month, 1).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+        month: "long",
+        year: "numeric",
+      }),
+    [monthRef, isEn],
+  );
+
+  /* Le nom du mois seul, pour le micro-label du bilan : la plage de dates à
+     côté porte déjà tout ce qu'il faut, et l'année faisait replier la ligne. */
+  const monthName = useMemo(
+    () =>
+      new Date(monthRef.year, monthRef.month, 1).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+        month: "long",
+      }),
+    [monthRef, isEn],
+  );
 
   return (
     <div className="zn-cockpit">
@@ -382,12 +508,44 @@ export function TodayPage() {
         <section className="zn-cockpit__resume">
           <span className="zn-kicker">{dateLine}</span>
 
+          {/* Semaine ou mois. Le contrôle n'apparaît que lorsqu'il y a une
+              semaine à parcourir : sans plan commencé, il n'y a ni bande ni
+              grille, et un sélecteur entre deux riens serait une question
+              posée à l'arrivée. */}
           {focus.week.length > 0 && (
+            <Segmented<"week" | "month">
+              value={view}
+              onChange={switchView}
+              label={t("today:view.label")}
+              className="zn-cockpit__view"
+              options={[
+                { value: "week", label: t("today:view.week") },
+                { value: "month", label: t("today:view.month") },
+              ]}
+            />
+          )}
+
+          {focus.week.length > 0 && view === "week" && (
             <WeekStrip
               focus={focus}
               selected={day}
-              onSelect={setPicked}
+              onSelect={(index) => setPicked(weekDates[index])}
               extras={weekExtras}
+            />
+          )}
+
+          {focus.week.length > 0 && view === "month" && (
+            <MonthGrid
+              focus={focus}
+              month={monthRef}
+              label={monthLabel}
+              canPrev={bounds != null && compareMonth(monthRef, bounds.min) > 0}
+              canNext={bounds != null && compareMonth(monthRef, bounds.max) < 0}
+              onShift={(delta) => setMonth(shiftMonth(monthRef, delta))}
+              selected={dayIso}
+              onSelect={setPicked}
+              activities={activities}
+              now={now}
             />
           )}
 
@@ -404,7 +562,7 @@ export function TodayPage() {
                   rank={rank}
                   count={sessions.length}
                   isToday={isToday}
-                  weekNumber={focus.weekNumber}
+                  weekNumber={selected.weekNumber}
                   canClose={focus.plan != null && indexes[rank] != null}
                   linkState={sessionState(session)}
                   unit={settings.unitSystem}
@@ -532,6 +690,16 @@ export function TodayPage() {
           {/* Le bilan, le dimanche, et pas un autre jour. */}
           {showReview && <WeekReviewPanel review={review} />}
 
+          {/* Ce que le mois a pesé, en mode mois, et seulement s'il a quelque
+              chose à dire. C'est le bilan de la semaine, nourri d'un mois :
+              même dessin, mêmes règles, les kilomètres restent par sport. */}
+          {monthReview && hasSomethingToReview(monthReview) && (
+            <WeekReviewPanel
+              review={monthReview}
+              kicker={t("today:month.review", { month: monthName })}
+            />
+          )}
+
           {settings.cockpit.shortcuts && (
             <p className="zn-cockpit__exits">
               {/* La saisie n'est PAS une sortie, et elle portait pourtant leur
@@ -627,7 +795,7 @@ function CockpitSession({
   linkState: object;
   unit: UnitSystem;
   isEn: boolean;
-  onClose: (index: number, data: SessionCompletionData) => void;
+  onClose: (weekNumber: number, index: number, data: SessionCompletionData) => void;
 }) {
   const { t } = useTranslation(["today", "plan", "library"]);
   const { workout } = useWorkout(session.workoutId);
@@ -859,7 +1027,7 @@ function CockpitSession({
         sessionName={title}
         onSave={(data) => {
           if (index == null) return;
-          onClose(index, data);
+          onClose(weekNumber, index, data);
           setCloseOpen(false);
         }}
         anchorElement={closeAnchor}
@@ -1108,6 +1276,230 @@ function WeekStrip({
           </button>
         );
       })}
+    </div>
+  );
+}
+
+/**
+ * La grille du mois : le même instrument que la bande, un cran plus loin.
+ *
+ * Six rangées de sept cases, toujours six, même quand le mois tient en cinq :
+ * une grille qui change de hauteur d'un mois à l'autre déplace la pile sous
+ * le doigt, et c'est la règle de tout cet écran. Chaque case porte ce que la
+ * colonne de la bande porte déjà, ramené à sa taille : le numéro pour la
+ * lettre, la rangée des familles, une marque par séance dont la FORME dit le
+ * statut, et le tiret du complément sous le sol. Rien de nouveau à apprendre
+ * en passant d'un instrument à l'autre.
+ *
+ * C'est un `role="radiogroup"`, comme la bande, et pour la même raison : on
+ * CHOISIT un jour, on n'y va pas. Le contrat clavier vient du même rail. Seuls
+ * les jours du mois qui sont dans le plan sont des boutons : une case hors du
+ * plan n'a rien à recharger, et une case du mois voisin est un blanc qui
+ * tient la rangée.
+ *
+ * Deux marques, les mêmes que la bande : le jour CHOISI porte l'encre sur son
+ * numéro, AUJOURD'HUI porte le point rond, qui ne se voit que lorsqu'on est
+ * parti regarder un autre jour.
+ */
+function MonthGrid({
+  focus,
+  month,
+  label,
+  canPrev,
+  canNext,
+  onShift,
+  selected,
+  onSelect,
+  activities,
+  now,
+}: {
+  focus: TodayFocus;
+  month: MonthRef;
+  /** Le nom du mois, déjà formaté dans la langue. */
+  label: string;
+  canPrev: boolean;
+  canNext: boolean;
+  onShift: (delta: -1 | 1) => void;
+  /** La date choisie, "YYYY-MM-DD". */
+  selected: string;
+  onSelect: (date: string) => void;
+  activities: readonly ComplementaryActivity[];
+  now: Date;
+}) {
+  const { t } = useTranslation(["today", "library", "activity"]);
+  const railRef = useRef<HTMLDivElement>(null);
+
+  const cells = useMemo(() => monthCells(focus, month, now), [focus, month, now]);
+
+  /* Les minutes complémentaires du mois, par date : le tiret sous le sol. */
+  const extras = useMemo(() => {
+    const range = monthRange(month);
+    const byDate = new Map<string, number>();
+    for (const activity of activitiesBetween(activities, range.from, range.to)) {
+      byDate.set(activity.date, (byDate.get(activity.date) ?? 0) + activity.durationMin);
+    }
+    return byDate;
+  }, [activities, month]);
+
+  /* Seules les cases qui se choisissent entrent dans le rail : les flèches
+     sautent les blancs et les jours hors plan, il n'y a rien à y cocher. */
+  const selectable = useMemo(
+    () => cells.filter((c) => c.inMonth && c.inPlan).map((c) => c.date),
+    [cells],
+  );
+  const rail = useRadioRail<string>({ items: selectable, value: selected, onChange: onSelect, railRef });
+
+  const letters = t("today:week.letters").split(",");
+  const dayNames = t("today:week.dayNames").split(",");
+
+  /* Le compte du mois, dans le plan : combien de séances, combien de temps.
+     Une ligne de kicker, pas un titre de plus. */
+  const inMonth = cells.filter((c) => c.inMonth);
+  const count = inMonth.reduce((n, c) => n + c.sessions.length, 0);
+  const minutes = inMonth.reduce(
+    (n, c) =>
+      n + c.sessions.reduce((m, s) => m + (s.actualDurationMin ?? s.estimatedDurationMin ?? 0), 0),
+    0,
+  );
+
+  return (
+    <div className="zn-cockpit__month">
+      <div className="zn-cockpit__month-nav">
+        <button
+          type="button"
+          className="zn-cockpit__month-btn"
+          onClick={() => onShift(-1)}
+          disabled={!canPrev}
+          aria-label={t("today:month.previous")}
+        >
+          <ChevronLeft />
+        </button>
+        <div className="zn-cockpit__month-title">
+          <span className="zn-cockpit__month-name">{label}</span>
+          <span className="zn-kicker zn-kicker--xs">
+            {count > 0
+              ? t("today:month.sessions", { count, minutes: formatDurationMinutes(minutes) })
+              : t("today:month.empty")}
+          </span>
+        </div>
+        <button
+          type="button"
+          className="zn-cockpit__month-btn"
+          onClick={() => onShift(1)}
+          disabled={!canNext}
+          aria-label={t("today:month.next")}
+        >
+          <ChevronRight />
+        </button>
+      </div>
+
+      {/* Les initiales des jours, pour l'œil ; les noms accessibles sont dans
+          chaque case. */}
+      <div className="zn-cockpit__month-head" aria-hidden="true">
+        {letters.map((letter, i) => (
+          <span key={i} className="zn-cockpit__month-letter">
+            {letter}
+          </span>
+        ))}
+      </div>
+
+      <div
+        className="zn-cockpit__month-grid"
+        role="radiogroup"
+        aria-label={label}
+        ref={railRef}
+        onKeyDown={rail.onKeyDown}
+      >
+        {cells.map((cell) => {
+          if (!cell.inMonth) {
+            return <span key={cell.date} className="zn-cockpit__cell" data-void aria-hidden="true" />;
+          }
+          if (!cell.inPlan) {
+            /* Dans le mois, hors du plan : le numéro, en retrait, pour que le
+               mois garde sa forme. Pas un bouton, il n'y a rien à recharger. */
+            return (
+              <span key={cell.date} className="zn-cockpit__cell" data-outside>
+                <span className="zn-cockpit__cell-num">{cell.dayOfMonth}</span>
+              </span>
+            );
+          }
+
+          const isSelected = cell.date === selected;
+          const kinds = dayKinds(cell.sessions);
+          const extra = extras.get(cell.date) ?? 0;
+          const shape = dayStatus(cell.sessions);
+          const cellMinutes = cell.sessions.reduce(
+            (n, s) => n + (s.actualDurationMin ?? s.estimatedDurationMin ?? 0),
+            0,
+          );
+
+          const name = [
+            `${dayNames[cell.dayOfWeek]} ${cell.dayOfMonth}`,
+            cell.isToday ? t("today:week.today") : null,
+            cell.sessions.length === 0
+              ? t("today:week.rest")
+              : t("today:week.day", {
+                  count: cell.sessions.length,
+                  minutes: formatDurationMinutes(cellMinutes),
+                }),
+            extra > 0
+              ? t("activity:cockpit.dayExtra", { minutes: formatDurationMinutes(extra) })
+              : null,
+            ...kinds.map((k) => t(`library:activityToggle.${k}`)),
+            shape === "completed" ? t("today:week.done") : null,
+            shape === "modified" ? t("today:week.modified") : null,
+            shape === "skipped" ? t("today:week.skipped") : null,
+          ]
+            .filter(Boolean)
+            .join(", ");
+
+          return (
+            <button
+              key={cell.date}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              tabIndex={isSelected ? 0 : -1}
+              className="zn-cockpit__cell"
+              data-today={cell.isToday || undefined}
+              data-selected={isSelected || undefined}
+              aria-current={cell.isToday ? "date" : undefined}
+              aria-label={name}
+              onClick={() => onSelect(cell.date)}
+            >
+              <span className="zn-cockpit__cell-num">{cell.dayOfMonth}</span>
+
+              <span className="zn-cockpit__cell-kinds">
+                {kinds.map((k) => {
+                  const Glyph = KIND_ICONS[k];
+                  return <Glyph key={k} className="zn-cockpit__cell-kind" size={11} />;
+                })}
+              </span>
+
+              {/* Une marque par séance, la forme dit le statut : c'est le bloc
+                  de la bande, couché. Repos : un filet. */}
+              <span className="zn-cockpit__cell-marks">
+                {cell.sessions.length === 0 ? (
+                  <span className="zn-cockpit__cell-mark" data-shape="rest" />
+                ) : (
+                  cell.sessions.map((session, i) => (
+                    <span
+                      key={i}
+                      className="zn-cockpit__cell-mark"
+                      data-shape={dayStatus([session])}
+                    />
+                  ))
+                )}
+              </span>
+
+              {/* Le complément, sous le sol, réservé même vide. */}
+              <span className="zn-cockpit__cell-under">
+                {extra > 0 && <span className="zn-cockpit__cell-extra" />}
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
