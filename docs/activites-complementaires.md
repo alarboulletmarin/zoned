@@ -120,7 +120,7 @@ fonctions la servent (`purposesFor`, `purposeLabelKey`). En natation la rangée
 disparaît et le motif vaut `training`, la seule chose qu'une longueur peut
 être ; changer de discipline vers la natation ramène le motif, et l'effort par
 défaut qui en dépend, sur entraînement. Le mot suit la discipline : « vélotaf »
-à vélo, « domicile-travail » ailleurs, et les trois écrans qui affichent un
+à vélo, « trajet boulot » ailleurs, et les trois écrans qui affichent un
 motif passent par la même fonction pour ne pas diverger.
 
 ## Par où l'on note, et pourquoi c'est une seule saisie

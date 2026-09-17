@@ -109,7 +109,7 @@ export function coercePurpose(
  * La clé i18n du libellé d'un motif, POUR une discipline.
  *
  * « Vélotaf » est un mot de vélo, et il était collé sur les trajets de course
- * à pied. Le mot générique est « domicile-travail » ; le vélo garde le sien
+ * à pied. Le mot générique est « trajet boulot » ; le vélo garde le sien
  * parce que c'est celui que tout le monde emploie. Une seule fonction pour les
  * trois écrans qui affichent un motif, sinon le journal et le cockpit auraient
  * fini par ne pas dire la même chose de la même ligne.
