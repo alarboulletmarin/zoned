@@ -453,7 +453,7 @@ function ActivityForm({
   );
 
   /* Les motifs de CETTE discipline, avec ses mots : « vélotaf » à vélo,
-     « domicile-travail » en courant. */
+     « trajet boulot » en courant. */
   const purposeOptions = useMemo(
     () =>
       purposesFor(discipline).map((id) => {
