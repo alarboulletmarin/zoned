@@ -72,6 +72,7 @@ function normalizeSession(raw: unknown): PlanSession | null {
       raw.intensity === "easy" || raw.intensity === "moderate" || raw.intensity === "hard"
         ? raw.intensity
         : undefined,
+    precision: raw.precision === "loose" || raw.precision === "fixed" ? raw.precision : undefined,
   };
 }
 

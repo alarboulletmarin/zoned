@@ -1437,36 +1437,3 @@ textarea.zn-pfield {
     min-block-size: var(--hit-min);
   }
 }
-
-/* ── the activity dialog (duration + effort of a week activity) ───────── */
-
-/* The same narrow h:mm field as the activity log, for the same reason: five
-   characters ask for five characters, a full-width field asks for a
-   sentence. Two classes because .zn-pfield above sets 100 %. */
-.zn-actsess {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-9);
-}
-
-.zn-actsess__duration,
-.zn-actsess__field {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--sp-3);
-  min-inline-size: 0;
-}
-
-.zn-actsess__duration .zn-actsess__durfield {
-  inline-size: 7rem;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: var(--fs-body);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--ls-mono);
-}
-
-.zn-actsess__hint {
-  color: var(--text-faint);
-}

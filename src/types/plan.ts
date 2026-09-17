@@ -149,7 +149,17 @@ export interface PlanSession {
    * `lib/activitySession.ts`, qui en tire la polarisation et la charge.
    */
   intensity?: CrossTrainingIntensity;
+  /**
+   * Comment la séance COMPTE : `loose`, souple, elle garde la fourchette de
+   * son gabarit et la semaine la compte au milieu ; `fixed`, fixée, la durée
+   * et les kilomètres posés sont ceux qui comptent. Absente vaut `fixed`,
+   * ce que toute séance déjà enregistrée était. Voir `lib/sessionPrecision.ts`.
+   */
+  precision?: SessionPrecision;
 }
+
+/** Souple (une fourchette, à la sensation) ou fixée (une durée, des km). */
+export type SessionPrecision = "loose" | "fixed";
 
 // ── Unavailability (blocked days) ─────────────────────────────────
 

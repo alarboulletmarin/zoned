@@ -15,10 +15,8 @@
  * and is not a session yet, it is a card waiting for its duration.
  */
 
-import {
-  getAnyWorkoutDuration,
-  getAnyWorkoutTss,
-} from "@/lib/workoutFilters";
+import { getAnyWorkoutDuration } from "@/lib/workoutFilters";
+import { sessionTssFor } from "@/lib/sessionPrecision";
 import type { AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, isStrengthWorkout } from "@/types";
 import type { WeekSlot } from "@/types/week";
@@ -89,9 +87,10 @@ export function computeWeekStats(slots: WeekSlot[]): WeekStats {
     const w = slot.workout;
     if (!w) continue;
     sessions++;
-    const duration = getAnyWorkoutDuration(w);
+    // The session's own duration when it carries one, the template's otherwise.
+    const duration = slot.durationMin ?? getAnyWorkoutDuration(w);
     totalMinutes += duration;
-    totalTss += getAnyWorkoutTss(w) ?? 0;
+    totalTss += sessionTssFor(w, duration) ?? 0;
 
     if (!isStrengthWorkout(w)) {
       // Classify the whole session by its characteristic (peak) intensity.

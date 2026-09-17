@@ -15,7 +15,7 @@ import {
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowLeft, ChevronDown, Share, Sparkles, Settings, Loader2 } from "@/components/icons";
+import { ArrowLeft, ChevronDown, Plus, Share, Sparkles, Settings, Loader2 } from "@/components/icons";
 import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,12 +36,12 @@ import { ZoneScale } from "@/components/visualization";
 import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import {
-  ActivitySessionDialog,
-  type ActivitySessionDialogTarget,
-} from "@/components/domain/ActivitySessionDialog";
+  WeekSessionSheet,
+  type WeekSessionSheetTarget,
+} from "@/components/domain/WeekSessionSheet";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { ScanCard } from "@/components/domain";
-import { WeekSummaryBar, WeekGeneratorPanel } from "@/components/weekly";
+import { WeekSummaryBar, WeekSummaryStrip, WeekGeneratorPanel } from "@/components/weekly";
 import { usePlan } from "@/hooks/usePlans";
 import { useWorkouts } from "@/hooks";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -50,26 +50,26 @@ import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import {
   moveSession,
   deleteSessionFromPlan,
-  addSessionToPlan,
   savePlan,
   getPlan,
 } from "@/lib/planStorage";
 import {
   ACTIVITY_KINDS,
   activityKindOf,
-  applyActivityDraft,
   defaultActivityDraft,
   makeActivitySession,
-  type ActivityDraft,
 } from "@/lib/activitySession";
 import { loadCommutePattern } from "@/lib/athleteProfile";
 import { generateWeek, redrawSlot } from "@/lib/weekGenerator";
+import { getCustomWorkouts } from "@/lib/customWorkoutStorage";
 import { getAnyWorkoutTss, getDrawDiscipline } from "@/lib/workoutFilters";
+import type { PlanSession } from "@/types/plan";
 import { sharedWeekUrl } from "@/lib/weekShare";
 import {
   generatedWeekToSessions,
   kindForSessionType,
   planWeekToSlots,
+  sessionFromWorkout,
   slotToSession,
 } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
@@ -107,6 +107,8 @@ export function WeekViewPage() {
   const { workouts: strength } = useStrengthWorkouts();
   const { workouts: cycling } = useCrossDisciplineWorkouts("cycling");
   const { workouts: swimming } = useCrossDisciplineWorkouts("swimming");
+  // The sessions the builder made travel with the running catalog
+  // (`useWorkouts` merges them), so a week can hold and name them.
   const catalog: AnyWorkoutTemplate[] = useMemo(
     () => [...running, ...cycling, ...swimming, ...strength],
     [running, cycling, swimming, strength],
@@ -144,14 +146,9 @@ export function WeekViewPage() {
   const [name, setName] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  // The activity being placed or adjusted: which day, and which session when
-  // it is already on the board. The dialog asks for the two things an
-  // activity needs to weigh in the week, a duration and an effort.
-  const [activityEdit, setActivityEdit] = useState<{
-    target: ActivitySessionDialogTarget;
-    day: number;
-    sessionIndex?: number;
-  } | null>(null);
+  // The session whose sheet is open, by index: the sheet reads the session
+  // off the plan at render time, so it never shows a stale copy.
+  const [sheetIndex, setSheetIndex] = useState<number | null>(null);
 
   // Generator settings live in the page so the sticky "Generate" button (mobile)
   // and the WeekGeneratorPanel share the same state.
@@ -270,95 +267,117 @@ export function WeekViewPage() {
     setShowPanel(true);
   }, []);
 
-  const handleWorkoutAdd = useCallback(
-    async (workoutId: string, _weekNumber: number, day: number) => {
-      if (!plan) return;
-      const activity = activityKindOf(workoutId);
-      if (activity) {
-        const pattern = loadCommutePattern();
-        // Active rest has no duration to ask for: it lands as is.
-        if (!activity.timed) {
-          const fresh = getPlan(plan.id);
-          if (!fresh) return;
-          fresh.weeks[0].sessions.push(
-            makeActivitySession(activity.kind, day, { durationMin: 0, intensity: "easy" }, pattern),
-          );
-          fresh.weeks[0].sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-          savePlan(fresh);
-          reload();
-          return;
-        }
-        setActivityEdit({
-          day,
-          target: {
-            kind: activity.kind,
-            editing: false,
-            aerobic: activity.aerobic,
-            initial: defaultActivityDraft(activity.kind, pattern),
-            commuteProfileMin: pattern?.durationMin ?? null,
-          },
-        });
-        return;
-      }
-      if (await addSessionToPlan(plan.id, 1, workoutId, day)) reload();
+  /** Pushes a session on its day and saves; returns its index in the week. */
+  const pushSession = useCallback(
+    (session: PlanSession): number | null => {
+      if (!plan) return null;
+      const fresh = getPlan(plan.id);
+      if (!fresh) return null;
+      fresh.weeks[0].sessions.push(session);
+      fresh.weeks[0].sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+      savePlan(fresh);
+      reload();
+      return fresh.weeks[0].sessions.indexOf(session);
     },
     [plan, reload],
   );
 
-  /** Saves the dialog: a new activity on its day, or new values on an existing one. */
-  const handleActivitySave = useCallback(
-    (draft: ActivityDraft) => {
-      if (!plan || !activityEdit) return;
-      const fresh = getPlan(plan.id);
-      if (!fresh) return;
-      const { target, day, sessionIndex } = activityEdit;
-      if (sessionIndex !== undefined) {
-        const session = fresh.weeks[0].sessions[sessionIndex];
-        if (!session) return;
-        fresh.weeks[0].sessions[sessionIndex] = applyActivityDraft(session, draft);
-      } else {
-        fresh.weeks[0].sessions.push(
-          makeActivitySession(target.kind, day, draft, loadCommutePattern()),
+  const handleWorkoutAdd = useCallback(
+    (workoutId: string, _weekNumber: number, day: number) => {
+      if (!plan) return;
+      const activity = activityKindOf(workoutId);
+      if (activity) {
+        const pattern = loadCommutePattern();
+        const session = makeActivitySession(
+          activity.kind,
+          day,
+          defaultActivityDraft(activity.kind, pattern),
+          pattern,
         );
-        fresh.weeks[0].sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+        const index = pushSession(session);
+        // A timed activity that landed without a duration is a card that
+        // weighs nothing yet: its sheet opens on it, one question away.
+        if (index !== null && activity.timed && session.estimatedDurationMin <= 0) {
+          setSheetIndex(index);
+        } else {
+          toast.success(t("plan:view.activityAdded"));
+        }
+        return;
       }
-      savePlan(fresh);
-      setActivityEdit(null);
-      reload();
-      if (sessionIndex === undefined) toast.success(t("plan:view.activityAdded"));
+      const workout = byId.get(workoutId);
+      if (!workout) return;
+      pushSession(sessionFromWorkout(day, workout));
     },
-    [plan, activityEdit, reload, t],
+    [plan, byId, pushSession, t],
+  );
+
+  // A session the builder just made, sent back with the day it was meant
+  // for: it lands, and the state is cleared so a reload does not land it twice.
+  const placeState = location.state as { placeWorkoutId?: string; day?: number } | null;
+  const placedRef = useRef(false);
+  useEffect(() => {
+    if (!plan || placedRef.current || !placeState?.placeWorkoutId) return;
+    const workout =
+      byId.get(placeState.placeWorkoutId) ??
+      getCustomWorkouts().find((w) => w.id === placeState.placeWorkoutId);
+    if (!workout) return;
+    placedRef.current = true;
+    pushSession(sessionFromWorkout(placeState.day ?? 0, workout));
+    navigate(location.pathname, { replace: true, state: null });
+  }, [plan, byId, placeState, pushSession, navigate, location.pathname]);
+
+  /** The builder, with the way back: the session it saves lands on `day`. */
+  const handleCreateWorkout = useCallback(() => {
+    if (!plan) return;
+    navigate("/workout/builder", {
+      state: { placeOn: { weekId: plan.id, day: addTarget?.day ?? 0 } },
+    });
+  }, [plan, addTarget, navigate]);
+
+  // The sheet's target, read off the live plan.
+  const sheetTarget = useMemo<WeekSessionSheetTarget | null>(() => {
+    if (sheetIndex === null || !plan) return null;
+    const session = plan.weeks[0].sessions[sheetIndex];
+    if (!session) return null;
+    return {
+      sessionIndex: sheetIndex,
+      session,
+      workout: byId.get(session.workoutId) ?? null,
+      name: workoutNames[session.workoutId] || session.workoutId,
+    };
+  }, [sheetIndex, plan, byId, workoutNames]);
+  const commuteProfileMin = useMemo(
+    () => (sheetTarget ? (loadCommutePattern()?.durationMin ?? null) : null),
+    [sheetTarget],
   );
 
   const handleSessionClick = useCallback(
-    (_weekNumber: number, sessionIndex: number, workoutId: string) => {
-      const activity = activityKindOf(workoutId);
-      if (activity && activity.timed) {
-        // An activity has no page of its own: the gesture that opens a session
-        // opens its duration and effort instead, so a card that weighs nothing
-        // yet is one tap from counting.
-        const session = plan?.weeks[0].sessions[sessionIndex];
-        if (!session) return;
-        const pattern = loadCommutePattern();
-        setActivityEdit({
-          day: session.dayOfWeek,
-          sessionIndex,
-          target: {
-            kind: activity.kind,
-            editing: true,
-            aerobic: activity.aerobic,
-            initial: {
-              durationMin: session.estimatedDurationMin,
-              intensity: session.intensity ?? "easy",
-            },
-            commuteProfileMin: pattern?.durationMin ?? null,
-          },
-        });
-        return;
-      }
-      if (!workoutId.startsWith("__")) navigate(`/workout/${workoutId}`);
+    (_weekNumber: number, sessionIndex: number) => {
+      setSheetIndex(sessionIndex);
     },
-    [plan, navigate],
+    [],
+  );
+
+  const handleSheetSave = useCallback(
+    (sessionIndex: number, next: PlanSession) => {
+      if (!plan) return;
+      const fresh = getPlan(plan.id);
+      if (!fresh || !fresh.weeks[0].sessions[sessionIndex]) return;
+      fresh.weeks[0].sessions[sessionIndex] = next;
+      savePlan(fresh);
+      setSheetIndex(null);
+      reload();
+    },
+    [plan, reload],
+  );
+
+  const handleSheetMove = useCallback(
+    (sessionIndex: number, day: number) => {
+      if (!plan) return;
+      if (moveSession(plan.id, 1, sessionIndex, 1, day)) reload();
+      else toast.error(t("plan:view.sessionMoveFailed"));
+    },
+    [plan, reload, t],
   );
 
   // ── Animated generation ───────────────────────────────────────────────────
@@ -660,14 +679,29 @@ export function WeekViewPage() {
                 </div>
               </div>
 
-              <WeekSummaryBar
-                stats={stats}
-                slots={slots}
-                targetVolumeH={settings.targetVolumeH}
-              />
+              {/* On a phone the board is the object and the summary its
+                  consequence: the summary folds to one strip and opens on
+                  demand. Beside the rail, the full bar stays. */}
+              {railIsHidden ? (
+                <WeekSummaryStrip
+                  stats={stats}
+                  slots={slots}
+                  targetVolumeH={settings.targetVolumeH}
+                />
+              ) : (
+                <WeekSummaryBar
+                  stats={stats}
+                  slots={slots}
+                  targetVolumeH={settings.targetVolumeH}
+                />
+              )}
 
-              {/* The ramp orders the zones on the board but does not name them. */}
-              <ZoneScale />
+              {/* The ramp orders the zones on the board but does not name them.
+                  Printed once on a phone, under the board (the board carries
+                  its own folded legend). */}
+              <div className="zn-pw__scale">
+                <ZoneScale />
+              </div>
 
               <div>
                 {/* The editing legend sits OUTSIDE the positioned wrapper below,
@@ -700,6 +734,7 @@ export function WeekViewPage() {
                     onAddToDay={handleAddToDay}
                     renderScanCell={renderScanCell}
                     singleWeek
+                    tapOpensSession
                   />
                 </div>
               </div>
@@ -716,6 +751,7 @@ export function WeekViewPage() {
                     setAddTarget(null);
                   }}
                   inline
+                  onCreateWorkout={handleCreateWorkout}
                 />
               ) : (
                 generatorPanel
@@ -725,29 +761,45 @@ export function WeekViewPage() {
         </section>
       </div>
 
-      {/* The two actions the rail carries, kept in the thumb zone once it is
-          gone. One vermillon fill: the draw. */}
+      {/* The dock, kept in the thumb zone once the rail is gone. It carries
+          the action of the moment: once a week is on the board, that is
+          adding or adjusting a session, so "add" takes the one vermillon
+          fill and the draw steps beside it as an icon, with the settings. */}
       <div className="zn-pw__dock">
-        {/* The short verb, not the rail's full call: the bar has 233px between
-            the screen edge and the menu pill, and "Générer ma semaine" needs
-            215 of them on its own, it clipped mid-word. */}
         <Button
           disabled={scanning}
+          onClick={() => {
+            // The first rest day, or Monday: the panel lets the day change.
+            const taken = new Set(plan.weeks[0].sessions.map((s) => s.dayOfWeek));
+            const day = WEEKDAYS.find((d) => !taken.has(d)) ?? 0;
+            setAddTarget({ day });
+            setShowPanel(true);
+          }}
+        >
+          <Plus size={17} />
+          {t("library:weekly.actions.addSession")}
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
           onClick={() => handleGenerate(settings)}
+          disabled={scanning}
+          aria-label={
+            scanning
+              ? t("library:weekly.generate.busy")
+              : t("library:weekly.generate.actionShort")
+          }
+          title={t("library:weekly.generate.actionShort")}
         >
           {scanning ? <Loader2 size={17} /> : <Sparkles size={17} />}
-          {scanning
-            ? t("library:weekly.generate.busy")
-            : t("library:weekly.generate.actionShort")}
         </Button>
-        {/* Icon only, like the two pills beside the call on a session's own
-            dock: two labels do not fit in what the menu pill leaves. */}
         <Button
           variant="outline"
           size="icon"
           onClick={() => setSettingsOpen(true)}
           disabled={scanning}
           aria-label={t("library:weekly.actions.adjust")}
+          title={t("library:weekly.actions.adjust")}
         >
           <Settings size={17} />
         </Button>
@@ -773,10 +825,17 @@ export function WeekViewPage() {
         </SheetContent>
       </Sheet>
 
-      <ActivitySessionDialog
-        target={activityEdit?.target ?? null}
-        onCancel={() => setActivityEdit(null)}
-        onSave={handleActivitySave}
+      {/* The session's own sheet: how it counts, and the gestures. */}
+      <WeekSessionSheet
+        target={sheetTarget}
+        commuteProfileMin={commuteProfileMin}
+        onClose={() => setSheetIndex(null)}
+        onSave={handleSheetSave}
+        onView={(workoutId) => navigate(`/workout/${workoutId}`)}
+        onRedraw={(index) => handleRedraw(1, index)}
+        onToggleLock={(index) => handleToggleLock(1, index)}
+        onMove={handleSheetMove}
+        onDelete={(index) => handleDelete(1, index)}
       />
 
       {/* Mobile bottom-sheet picker (tap to place on the chosen day) */}
@@ -786,6 +845,9 @@ export function WeekViewPage() {
           setShowPanel(false);
           setAddTarget(null);
         }}
+        day={addTarget?.day}
+        onDayChange={(day) => setAddTarget({ day })}
+        onCreateWorkout={handleCreateWorkout}
         onSelectWorkout={
           addTarget
             ? (workoutId) => {

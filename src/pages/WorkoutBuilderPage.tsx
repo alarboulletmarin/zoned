@@ -1,5 +1,5 @@
 import { useState, useCallback, useReducer, useRef, useEffect, useMemo, type CSSProperties } from "react";
-import { useParams, useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, ArrowLeft, Download, Upload, Undo2, Redo2, Share } from "@/components/icons";
 import { useUndoRedo } from "@/hooks/useUndoRedo";
@@ -298,8 +298,20 @@ function WorkoutEditorGate({ workoutId, sourceId }: { workoutId: string; sourceI
 
 // ── Editor view (with id param) ──────────────────────────────────────
 
+/**
+ * Where a saved session should land, when the builder was opened from a
+ * week's picker: that week, on that day. Carried in the router state, so a
+ * builder reached from the library keeps its own behaviour.
+ */
+export interface PlaceOnWeek {
+  weekId: string;
+  day: number;
+}
+
 function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const placeOn = (location.state as { placeOn?: PlaceOnWeek } | null)?.placeOn ?? null;
   const { t } = useTranslation("common");
 
   const {
@@ -355,10 +367,16 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
       isDirtyRef.current = false;
       setIsSaved(true);
       toast.success(t("calculators:workoutBuilder.workoutSaved"));
+      // Opened from a week: the session goes back to it and lands on its day.
+      if (placeOn) {
+        navigate(`/weeks/${placeOn.weekId}`, {
+          state: { placeWorkoutId: updated.id, day: placeOn.day },
+        });
+      }
     } catch {
       toast.error(t("calculators:workoutBuilder.maxReached"));
     }
-  }, [workout, canSave, t, navigate]);
+  }, [workout, canSave, t, navigate, placeOn]);
 
   // Everything the link needs lives in the URL, so an unsaved draft shares fine.
   const handleShare = useCallback(async () => {

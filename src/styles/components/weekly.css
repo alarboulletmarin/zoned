@@ -531,3 +531,20 @@
 .zn-wk-chip--wide {
   grid-column: 1 / -1;
 }
+
+/* ── the compact rhythm (the folded summary's thumbnail) ─────────────── */
+
+/* Seven bars and nothing else: no title, no day labels, 32px tall. It is a
+   thumbnail of the chart above it, not a second chart. */
+.zn-wk-rhythm--compact {
+  gap: 0;
+}
+
+.zn-wk-rhythm--compact .zn-wk-rhythm__days {
+  block-size: 32px;
+  gap: var(--sp-2);
+}
+
+.zn-wk-rhythm--compact .zn-wk-rhythm__col {
+  max-inline-size: none;
+}

@@ -492,3 +492,262 @@ button.zn-door {
   font: inherit;
   cursor: pointer;
 }
+
+/* ── the session sheet ────────────────────────────────────────────────── */
+
+/* What opens from a tap on a card: the session's one decision, how it
+   counts, and the gestures the context menu used to hold. From the bottom
+   under 900px, from the side above it. */
+.zn-wksheet__type {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  color: var(--text-muted);
+}
+
+.zn-wksheet__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+  min-block-size: 0;
+}
+
+.zn-wksheet__how,
+.zn-wksheet__fields,
+.zn-wksheet__field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+.zn-wksheet__fields {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+}
+
+/* The loose card: the range, and what the week counts of it. */
+.zn-wksheet__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  inline-size: 100%;
+  padding: var(--sp-6) var(--sp-7);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-wksheet__card-title {
+  font: var(--fw-semibold) var(--fs-body) / var(--lh-body-sm) var(--font-text);
+}
+
+.zn-wksheet__hint {
+  color: var(--text-faint);
+}
+
+/* The same narrow h:mm field as the activity log, for the same reason. */
+.zn-wksheet__field .zn-wksheet__durfield {
+  inline-size: 7rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ls-mono);
+}
+
+.zn-wksheet__unitfield {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-wksheet__unitfield .zn-wksheet__kmfield {
+  inline-size: 6rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The gestures: one rule per row, ink text, the destructive one in the
+   accent's pressed tone so it reads as danger without a second fill. */
+.zn-wksheet__actions {
+  display: flex;
+  flex-direction: column;
+  margin-inline: calc(var(--pad-card) * -1);
+  border-block: var(--border-rule);
+  background: var(--surface-card);
+}
+
+.zn-wksheet__action {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  min-block-size: var(--hit-min);
+  padding: 0 var(--pad-card);
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1 var(--font-text);
+  color: var(--text-body);
+  text-align: start;
+  background: transparent;
+  border: 0;
+  border-block-end: var(--border-divider);
+  cursor: pointer;
+}
+
+.zn-wksheet__action:last-child {
+  border-block-end: 0;
+}
+
+.zn-wksheet__action > svg {
+  inline-size: var(--sp-9);
+  block-size: var(--sp-9);
+  flex: none;
+}
+
+.zn-wksheet__action:hover {
+  background: var(--surface-band);
+}
+
+.zn-wksheet__action:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-wksheet__action[data-variant="destructive"] {
+  color: var(--accent-press);
+}
+
+/* The seven days, under "move": chips, the current one struck out. */
+.zn-wksheet__days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--pad-card) var(--sp-7);
+  border-block-end: var(--border-divider);
+}
+
+.zn-wksheet__day {
+  min-inline-size: var(--hit-min);
+  min-block-size: var(--hit-min);
+  padding: 0 var(--sp-6);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-body);
+  background: var(--surface-page);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+}
+
+.zn-wksheet__day:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-wksheet__day:disabled {
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: default;
+}
+
+/* ── the folded summary (under 900px) ─────────────────────────────────── */
+
+/* The board is the object, the summary its consequence: on a phone the
+   summary folds to one strip, the numbers, the verdict and a thumbnail of the
+   rhythm, and opens on demand. */
+.zn-pw__summary-strip {
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+  background: var(--surface-card);
+}
+
+.zn-pw__summary-strip > .zn-disclosure__summary {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-4);
+  margin-inline: 0;
+  padding: var(--sp-6) var(--sp-7);
+  border-radius: var(--r-3xl);
+}
+
+.zn-pw__summary-strip[open] > .zn-disclosure__summary {
+  border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+  border-block-end: var(--border-divider);
+}
+
+.zn-pw__summary-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+/* The figures wrap onto a second line before they get cut: a truncated load
+   is a number nobody can read. The verdict pill never wraps. */
+.zn-pw__summary-figures {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+  min-inline-size: 0;
+}
+
+.zn-pw__summary-line > .zn-wk-gauge__verdict {
+  flex: none;
+  white-space: nowrap;
+}
+
+.zn-pw__summary-figures > strong {
+  font-weight: var(--fw-semibold);
+}
+
+.zn-pw__summary-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-6);
+}
+
+.zn-pw__summary-foot > .zn-wk-rhythm {
+  flex: 1;
+  max-inline-size: 12rem;
+}
+
+.zn-pw__summary-more {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+}
+
+.zn-pw__summary-strip > .zn-disclosure__panel {
+  padding: var(--sp-6);
+}
+
+/* The full bar inside the strip: no second frame around it. */
+.zn-pw__summary-strip .zn-wk-summary {
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* The ramp legend is printed once, under the board; above 900px it also
+   sits above it, where the desktop eye reads it first. */
+@media (max-width: 900px) {
+  .zn-pw__scale {
+    display: none;
+  }
+}
+
+/* The dock's two icon pills beside the call. */
+.zn-pw__dock > .zn-btn[data-size="icon"] {
+  flex: none;
+  padding-inline: 0;
+}

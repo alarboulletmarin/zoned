@@ -8,6 +8,8 @@ import type { WeekSlot } from "@/types/week";
 interface WeekRhythmChartProps {
   slots: WeekSlot[];
   className?: string;
+  /** Bars only, no title and no day labels: the folded summary's thumbnail. */
+  compact?: boolean;
 }
 
 /** Accent zone for a slot, strength/rest have no aerobic zone. */
@@ -27,7 +29,7 @@ function slotZone(w: AnyWorkoutTemplate | null): number | null {
  * out, three commuting days read as three rest days, the one lie this chart
  * must not tell.
  */
-export function WeekRhythmChart({ slots, className }: WeekRhythmChartProps) {
+export function WeekRhythmChart({ slots, className, compact }: WeekRhythmChartProps) {
   const { t } = useTranslation("library");
 
   // Group per day, planWeekToSlots may emit several slots for the same day.
@@ -37,7 +39,10 @@ export function WeekRhythmChart({ slots, className }: WeekRhythmChartProps) {
       .map((s) =>
         s.activity
           ? { duration: s.activity.durationMin, zone: s.activity.zone }
-          : { duration: getAnyWorkoutDuration(s.workout!), zone: slotZone(s.workout) },
+          : {
+              duration: s.durationMin ?? getAnyWorkoutDuration(s.workout!),
+              zone: slotZone(s.workout),
+            },
       );
     return {
       day,
@@ -48,8 +53,11 @@ export function WeekRhythmChart({ slots, className }: WeekRhythmChartProps) {
   const maxDuration = Math.max(1, ...days.map((d) => d.total));
 
   return (
-    <div className={cn("zn-wk-rhythm", className)}>
-      <span className="zn-label">{t("weekly.rhythm.title")}</span>
+    <div
+      className={cn("zn-wk-rhythm", compact && "zn-wk-rhythm--compact", className)}
+      aria-hidden={compact || undefined}
+    >
+      {!compact && <span className="zn-label">{t("weekly.rhythm.title")}</span>}
       <div className="zn-wk-rhythm__days">
         {days.map(({ day, sessions, total }) => {
           // Reserve the bottom 12 % for the baseline / day label area.
@@ -87,9 +95,11 @@ export function WeekRhythmChart({ slots, className }: WeekRhythmChartProps) {
                   />
                 )}
               </div>
-              <span className="zn-kicker zn-kicker--xs">
-                {t(`weekly.daysShort.${day}`)}
-              </span>
+              {!compact && (
+                <span className="zn-kicker zn-kicker--xs">
+                  {t(`weekly.daysShort.${day}`)}
+                </span>
+              )}
             </div>
           );
         })}

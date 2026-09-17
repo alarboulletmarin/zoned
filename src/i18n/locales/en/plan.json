@@ -424,7 +424,23 @@
     "noFavorites": "No favorite workouts yet",
     "noMatching": "No matching workouts",
     "favoritesHint": "Add workouts to favorites from the library first",
-    "commuteProfile": "{{minutes}} min per trip, from your profile"
+    "commuteProfile": "{{minutes}} min per trip, from your profile",
+    "create": "Create a session",
+    "createHint": "Build it to the minute, it lands on {{day}}",
+    "day": "Day",
+    "noMine": "No session of yours yet. Create one, it will show up here.",
+    "groups": {
+      "all": "All",
+      "easy": "Easy run",
+      "quality": "Quality",
+      "long": "Long",
+      "strength": "Strength",
+      "cycling": "Cycling",
+      "swimming": "Swimming",
+      "activities": "Activities",
+      "mine": "Mine"
+    },
+    "groupLabel": "Catalog"
   },
   "plansPage": {
     "title": "My Training Plans",
@@ -580,11 +596,6 @@
     "commute": "Bike commute"
   },
   "activitySession": {
-    "addTitle": "Add an activity",
-    "editTitle": "Adjust the activity",
-    "sub": "A duration and an effort, that is all it takes for it to count in the week.",
-    "duration": "Duration",
-    "durationPlaceholder": "h:mm",
     "intensity": "Planned effort",
     "intensityEasy": "Easy",
     "intensityModerate": "Moderate",
@@ -593,9 +604,7 @@
     "commuteHint": "From your profile: {{minutes}} min per trip. Adjust if you ride both ways.",
     "commuteNoProfile": "Set your commute in your profile to find it pre-filled here.",
     "noDuration": "Duration to set",
-    "menu": "Duration and effort",
-    "save": "Save",
-    "cancel": "Cancel"
+    "menu": "Duration and effort"
   },
   "lastChange": {
     "title": "Last change",

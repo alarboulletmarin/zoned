@@ -308,7 +308,8 @@
       "exportIcs": "Calendar (.ics)",
       "exportPdf": "Document (.pdf)",
       "exportJson": "Data (.json)",
-      "save": "Save week"
+      "save": "Save week",
+      "addSession": "Add a session"
     },
     "table": {
       "day": "Day",
@@ -325,7 +326,10 @@
       "hard": "Hard sessions",
       "polarisation": "Easy {{low}} % · Tempo {{mid}} % · Intense {{high}} %",
       "balanced": "80/20 balance",
-      "overBudget": "Over the {{target}} h budget"
+      "overBudget": "Over the {{target}} h budget",
+      "details": "Details",
+      "strip": "{{sessions}} sessions · {{hours}} h · {{tss}} TSS",
+      "stripBudget": "{{sessions}} sessions · {{hours}}/{{target}} h · {{tss}} TSS"
     },
     "gauge": {
       "title": "Polarisation",
@@ -364,7 +368,10 @@
       "reroll": "Re-roll",
       "viewDetail": "View detail",
       "rest": "Rest day",
-      "lockedHint": "Locked: kept when regenerating"
+      "lockedHint": "Locked: kept when regenerating",
+      "adjust": "Adjust the session",
+      "loose": "loose",
+      "fixed": "fixed"
     },
     "days": {
       "0": "Monday",
@@ -401,11 +408,31 @@
       "rerollEmpty": "No other session available with these settings"
     },
     "boardHint": "Click a session to edit it · drag it to move or remove it",
-    "boardHintTouch": "Tap a session to edit it · hold to drag it",
+    "boardHintTouch": "Tap a session to adjust it · hold to move it",
     "card": {
       "zone": "Zone {{zone}}"
     },
-    "keySession": "Key session"
+    "keySession": "Key session",
+    "sheet": {
+      "how": "How it counts",
+      "loose": "Loose",
+      "fixed": "Fixed",
+      "looseTitle": "As you feel it, between {{min}} and {{max}} min",
+      "looseCounts": "The week counts {{minutes}} min, the middle of the range.",
+      "looseCountsKm": "The week counts {{minutes}} min, the middle of the range, and about {{km}} km at your pace.",
+      "looseHint": "Fixed: you set a duration and kilometres, and they are what counts. That is the shape of a week you lived, or shared.",
+      "fixedHint": "Loose: the session keeps its range and is run as you feel it. That is the shape of a template week.",
+      "duration": "Duration",
+      "distance": "Distance",
+      "distanceUnit": "km",
+      "distanceOptional": "optional",
+      "view": "View the session",
+      "move": "Move to another day",
+      "moveTo": "Move to…",
+      "remove": "Remove from the week",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
   },
   "practice": {
     "label": "Discipline",

@@ -424,7 +424,23 @@
     "noFavorites": "Aucune séance en favoris",
     "noMatching": "Aucune séance correspondante",
     "favoritesHint": "Ajoute d'abord des séances en favoris depuis la bibliothèque",
-    "commuteProfile": "{{minutes}} min par trajet, d’après ton profil"
+    "commuteProfile": "{{minutes}} min par trajet, d’après ton profil",
+    "create": "Créer une séance",
+    "createHint": "Bâtis-la au millimètre, elle se pose sur {{day}}",
+    "day": "Jour",
+    "noMine": "Aucune séance à toi pour l’instant. Crée-la, elle apparaîtra ici.",
+    "groups": {
+      "all": "Tous",
+      "easy": "Footing",
+      "quality": "Qualité",
+      "long": "Longue",
+      "strength": "Renfo",
+      "cycling": "Vélo",
+      "swimming": "Natation",
+      "activities": "Activités",
+      "mine": "Miennes"
+    },
+    "groupLabel": "Catalogue"
   },
   "plansPage": {
     "title": "Mes Plans d'Entraînement",
@@ -580,11 +596,6 @@
     "commute": "Vélotaf"
   },
   "activitySession": {
-    "addTitle": "Poser une activité",
-    "editTitle": "Régler l’activité",
-    "sub": "Une durée et un effort, c’est tout ce qu’il faut pour qu’elle compte dans la semaine.",
-    "duration": "Durée",
-    "durationPlaceholder": "h:mm",
     "intensity": "Effort prévu",
     "intensityEasy": "Facile",
     "intensityModerate": "Modéré",
@@ -593,9 +604,7 @@
     "commuteHint": "Repris de ton profil : {{minutes}} min par trajet. Corrige si tu fais l’aller-retour.",
     "commuteNoProfile": "Renseigne ton vélotaf dans ton profil pour le retrouver pré-rempli ici.",
     "noDuration": "Durée à régler",
-    "menu": "Durée et effort",
-    "save": "Enregistrer",
-    "cancel": "Annuler"
+    "menu": "Durée et effort"
   },
   "lastChange": {
     "title": "Dernier changement",
