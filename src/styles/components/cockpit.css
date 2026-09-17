@@ -1085,3 +1085,22 @@ button.zn-cockpit__exit {
   background: var(--ink-3);
   border-radius: 1px;
 }
+
+/* ── L'intensité du mois ────────────────────────────────────────────────── */
+
+/* La jauge de polarisation de la semaine type, posée sous le bilan du mois.
+   Elle vient avec sa feuille (`weekly.css`) ; ici seulement l'écart qui la
+   sépare du bilan et la note sur ce qui n'a pas de zone. */
+.zn-cockpit__intensity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-block-start: var(--sp-6);
+  border-block-start: var(--border-divider);
+}
+
+.zn-cockpit__intensity-note {
+  margin: 0;
+  font-size: var(--fs-mono);
+  color: var(--text-faint);
+}
