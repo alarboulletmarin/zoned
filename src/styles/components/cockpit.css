@@ -823,11 +823,13 @@ button.zn-cockpit__exit {
 /* ── Semaine ou mois ────────────────────────────────────────────────────── */
 
 /* Deux instruments pour choisir un jour, dans le même créneau. Le contrôle
-   est à la largeur de ses deux mots, pas de l'écran : c'est un commutateur,
-   pas une barre d'onglets, et il ne doit pas ressembler à la navigation. */
+   prend la LARGEUR de l'instrument qu'il commande : calé à gauche sur deux
+   mots, il flottait sous la ligne de date, désaxé par rapport à la bande et
+   à la grille qui, elles, vont d'un bord à l'autre, et le mois centré sous
+   lui le faisait paraître de travers. Aux mêmes bords que la bande, il se
+   lit comme son onglet, et ses deux moitiés se centrent d'elles-mêmes. */
 .zn-cockpit__view {
-  align-self: flex-start;
-  min-inline-size: 200px;
+  align-self: stretch;
 }
 
 /* ── La grille du mois ──────────────────────────────────────────────────── */
