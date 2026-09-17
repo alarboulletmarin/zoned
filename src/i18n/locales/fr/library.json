@@ -308,7 +308,8 @@
       "exportIcs": "Calendrier (.ics)",
       "exportPdf": "Document (.pdf)",
       "exportJson": "Données (.json)",
-      "save": "Enregistrer la semaine"
+      "save": "Enregistrer la semaine",
+      "addSession": "Ajouter une séance"
     },
     "table": {
       "day": "Jour",
@@ -325,7 +326,10 @@
       "hard": "Séances dures",
       "polarisation": "Facile {{low}} % · Tempo {{mid}} % · Intense {{high}} %",
       "balanced": "Équilibre 80/20",
-      "overBudget": "Au-dessus du budget de {{target}} h"
+      "overBudget": "Au-dessus du budget de {{target}} h",
+      "details": "Détails",
+      "strip": "{{sessions}} séances · {{hours}} h · {{tss}} TSS",
+      "stripBudget": "{{sessions}} séances · {{hours}}/{{target}} h · {{tss}} TSS"
     },
     "gauge": {
       "title": "Polarisation",
@@ -364,7 +368,10 @@
       "reroll": "Re-tirer",
       "viewDetail": "Voir le détail",
       "rest": "Jour de repos",
-      "lockedHint": "Verrouillée : conservée à la régénération"
+      "lockedHint": "Verrouillée : conservée à la régénération",
+      "adjust": "Régler la séance",
+      "loose": "souple",
+      "fixed": "fixée"
     },
     "days": {
       "0": "Lundi",
@@ -401,11 +408,31 @@
       "rerollEmpty": "Aucune autre séance disponible avec ces réglages"
     },
     "boardHint": "Cliquez une séance pour la modifier · glissez-la pour la déplacer ou la retirer",
-    "boardHintTouch": "Touchez une séance pour la modifier · maintenez pour la déplacer",
+    "boardHintTouch": "Appuie sur une séance pour la régler · maintiens pour la déplacer",
     "card": {
       "zone": "Zone {{zone}}"
     },
-    "keySession": "Séance clé"
+    "keySession": "Séance clé",
+    "sheet": {
+      "how": "Comment elle compte",
+      "loose": "Souple",
+      "fixed": "Fixée",
+      "looseTitle": "Comme tu le sens, entre {{min}} et {{max}} min",
+      "looseCounts": "La semaine compte {{minutes}} min, le milieu de la fourchette.",
+      "looseCountsKm": "La semaine compte {{minutes}} min, le milieu de la fourchette, et environ {{km}} km à ton allure.",
+      "looseHint": "Fixée : tu poses une durée et des kilomètres, et c’est eux qui comptent. C’est la forme d’une semaine actée, ou partagée.",
+      "fixedHint": "Souple : la séance garde sa fourchette et se court comme tu la sens. C’est la forme d’une semaine type.",
+      "duration": "Durée",
+      "distance": "Distance",
+      "distanceUnit": "km",
+      "distanceOptional": "facultatif",
+      "view": "Voir la séance",
+      "move": "Déplacer à un autre jour",
+      "moveTo": "Déplacer au…",
+      "remove": "Retirer de la semaine",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    }
   },
   "practice": {
     "label": "Pratique",

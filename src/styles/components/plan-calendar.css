@@ -1550,18 +1550,127 @@
   border-block-end: var(--border-divider);
 }
 
-.zn-planpanel__select {
+/* The catalogs, one chip each, on one row that scrolls sideways: a select
+   hid what each catalog held behind a word, and cost a tap to open. The row
+   shows them all, and the chosen one is inverted to ink. */
+.zn-planpanel__chips {
+  display: flex;
   flex: 1;
   min-inline-size: 0;
-  min-block-size: var(--hit-min);
-  padding: var(--sp-5) var(--sp-6);
+  gap: var(--sp-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-block: var(--sp-1);
+}
 
-  font: var(--type-body-sm);
+.zn-planpanel__chips::-webkit-scrollbar {
+  display: none;
+}
+
+.zn-planpanel__chip {
+  flex: none;
+  min-block-size: 36px;
+  padding: 0 var(--sp-6);
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1 var(--font-text);
   color: var(--text-body);
-  background: var(--surface-page);
+  background: var(--surface-card);
   border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-planpanel__chip:hover:not([aria-pressed="true"]) {
+  background: var(--surface-band);
+}
+
+.zn-planpanel__chip[aria-pressed="true"] {
+  color: var(--ink-on-dark);
+  background: var(--ink-1);
+  border-color: var(--ink-1);
+}
+
+/* Inline, the rail is 300px wide: the chips wrap rather than scroll. */
+.zn-planpanel[data-mode="inline"] .zn-planpanel__chips {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
+/* The seven days a tapped session can land on. */
+.zn-planpanel__days {
+  display: flex;
+  flex: none;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-8);
+  border-block-end: var(--border-divider);
+}
+
+.zn-planpanel__day {
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: 36px;
+  padding: 0;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+}
+
+.zn-planpanel__day[aria-pressed="true"] {
+  color: var(--ink-on-dark);
+  background: var(--ink-1);
+  border-color: var(--ink-1);
+}
+
+/* The door to the builder: the same card as an item, the accent as a stroke. */
+.zn-planpanel__create {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  inline-size: 100%;
+  padding: var(--sp-5);
+
+  text-align: start;
+  background: var(--surface-card);
+  border: var(--bw-rule) solid var(--accent);
   border-radius: var(--r-lg);
   cursor: pointer;
+}
+
+.zn-planpanel__create:hover {
+  background: var(--surface-band);
+}
+
+.zn-planpanel__create:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-planpanel__create-plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  inline-size: var(--sp-13);
+  block-size: var(--sp-13);
+  color: var(--accent-fg);
+  background: var(--accent);
+  border-radius: var(--r-pill);
+}
+
+.zn-planpanel__create-plus > svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
 }
 
 /* The favourites toggle: outlined off, fully inverted on. */
@@ -1828,5 +1937,31 @@
     inline-size: var(--hit-min);
     block-size: var(--hit-min);
     transform: translate(-50%, -50%);
+  }
+}
+
+/* ── the week board on a phone: the dock adds, the row only rests ─────── */
+
+/* Under 640px the standalone week has a dock carrying "add", so the small +
+   at the end of a filled day goes: it was 44px under the thumb for a gesture
+   the dock states in words, and the dock covered it on the last rows. A rest
+   day keeps its slot, drawn as one dashed line the width of the row. */
+@media (max-width: 639px) {
+  .zn-planweek__day[data-single-week="true"] > .zn-planweek__add[data-slot="tail"] {
+    display: none;
+  }
+
+  .zn-planweek__day[data-single-week="true"] > .zn-planweek__add:not([data-slot="tail"]) {
+    flex: 1 1 auto;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--sp-4);
+    min-block-size: var(--hit-min);
+    padding: var(--sp-4) var(--sp-6);
+  }
+
+  .zn-planweek__day[data-single-week="true"] > .zn-planweek__add:not([data-slot="tail"]) > .zn-planweek__add-plus {
+    order: -1;
+    font-size: var(--fs-body);
   }
 }

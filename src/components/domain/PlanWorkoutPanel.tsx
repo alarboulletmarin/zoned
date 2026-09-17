@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { X, Search, Clock, Loader2, Heart, Dumbbell } from "@/components/icons";
+import { X, Search, Clock, Loader2, Heart, Dumbbell, Plus } from "@/components/icons";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { loadAllWorkouts } from "@/data/workouts";
+import { loadAllWorkouts, loadDisciplineWorkouts } from "@/data/workouts";
 import { loadAllStrengthSessions } from "@/data/strength";
-import { getCustomWorkouts } from "@/lib/customWorkoutStorage";
+import { getCustomWorkouts, isCustomWorkoutId } from "@/lib/customWorkoutStorage";
 import { useFavorites } from "@/hooks";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import { useScrollLock } from "@/components/ui/native-dialog";
@@ -13,11 +13,11 @@ import { useSheetDrag } from "@/hooks/useSheetDrag";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
-import { SESSION_COLORS, sessionColor } from "@/lib/sessionColors";
+import { sessionColor } from "@/lib/sessionColors";
 import { PANEL_ACTIVITY_KINDS, activityWorkoutId } from "@/lib/activitySession";
 import { loadCommutePattern } from "@/lib/athleteProfile";
 
-// ── Category to sessionType mapping for filter dots ───────────────
+// ── Category to sessionType mapping for the zone dots ─────────────
 
 const CATEGORY_SESSION_TYPE: Record<string, SessionType> = {
   recovery: "recovery",
@@ -33,29 +33,60 @@ const CATEGORY_SESSION_TYPE: Record<string, SessionType> = {
   assessment: "endurance",
 };
 
-// ── Filter definitions ────────────────────────────────────────────
+/** The fine-grained name printed under a session (Seuil, VMA, Côtes…). */
+const CATEGORY_LABEL_KEY: Record<string, string> = {
+  endurance: "endurance",
+  long_run: "long_run",
+  tempo: "tempo",
+  threshold: "threshold",
+  vma_intervals: "vo2max",
+  fartlek: "fartlek",
+  hills: "hills",
+  race_pace: "race_pace",
+  recovery: "recovery",
+  mixed: "mixed",
+  assessment: "mixed",
+};
 
-interface FilterDef {
-  key: string;
-  categories: WorkoutCategory[];
-  dotColor: string;
-}
+// ── The groups: every catalog, one chip each ──────────────────────
 
-const FILTERS: FilterDef[] = [
-  { key: "all", categories: [], dotColor: "" },
-  { key: "endurance", categories: ["endurance"], dotColor: SESSION_COLORS.endurance },
-  { key: "long_run", categories: ["long_run"], dotColor: SESSION_COLORS.long_run },
-  { key: "tempo", categories: ["tempo"], dotColor: SESSION_COLORS.tempo },
-  { key: "threshold", categories: ["threshold"], dotColor: SESSION_COLORS.threshold },
-  { key: "vo2max", categories: ["vma_intervals"], dotColor: SESSION_COLORS.vo2max },
-  { key: "fartlek", categories: ["fartlek"], dotColor: SESSION_COLORS.fartlek },
-  { key: "hills", categories: ["hills"], dotColor: SESSION_COLORS.hills },
-  { key: "race_pace", categories: ["race_pace"], dotColor: SESSION_COLORS.race_specific },
-  { key: "recovery", categories: ["recovery"], dotColor: SESSION_COLORS.recovery },
-  { key: "mixed", categories: ["mixed", "assessment"], dotColor: "#9ca3af" },
-  { key: "strength", categories: [], dotColor: "#8b5cf6" },
-  { key: "cross_training", categories: [], dotColor: "#6b7280" },
+/**
+ * Coarser than the categories, on purpose: someone building a week thinks
+ * "a footing, a quality session, the long one", not "threshold or tempo".
+ * The fine name stays printed on each item. Cycling and swimming get their
+ * own chips because their catalogs could not be reached from here at all,
+ * and "mine" is the door back to what the builder produced.
+ */
+type Group =
+  | "all"
+  | "easy"
+  | "quality"
+  | "long"
+  | "strength"
+  | "cycling"
+  | "swimming"
+  | "activities"
+  | "mine";
+
+const GROUPS: Group[] = [
+  "all",
+  "easy",
+  "quality",
+  "long",
+  "strength",
+  "cycling",
+  "swimming",
+  "activities",
+  "mine",
 ];
+
+const GROUP_CATEGORIES: Partial<Record<Group, WorkoutCategory[]>> = {
+  easy: ["recovery", "endurance", "mixed", "assessment"],
+  quality: ["tempo", "threshold", "vma_intervals", "fartlek", "hills", "race_pace"],
+  long: ["long_run"],
+};
+
+const DAYS = [0, 1, 2, 3, 4, 5, 6] as const;
 
 // ── Props ─────────────────────────────────────────────────────────
 
@@ -66,19 +97,39 @@ interface PlanWorkoutPanelProps {
   inline?: boolean;
   /** Mobile: tap a workout to select it, then tap a calendar cell to place it */
   onSelectWorkout?: (workoutId: string) => void;
+  /**
+   * The day a tapped session lands on. With `onDayChange`, the panel shows
+   * the seven days so the day can be picked from the panel itself, which is
+   * what the dock's "add a session" needs: it opens without a day chosen.
+   */
+  day?: number;
+  onDayChange?: (day: number) => void;
+  /** The door to the builder: a session made to the minute, placed on `day`. */
+  onCreateWorkout?: () => void;
 }
 
 // ── Component ─────────────────────────────────────────────────────
 
-export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: PlanWorkoutPanelProps) {
+export function PlanWorkoutPanel({
+  isOpen,
+  onClose,
+  inline,
+  onSelectWorkout,
+  day,
+  onDayChange,
+  onCreateWorkout,
+}: PlanWorkoutPanelProps) {
   const { t } = useTranslation("plan");
   const { t: tStrength } = useTranslation("strength");
+  const { t: tLibrary } = useTranslation("library");
   const pick = usePickLang();
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
+  const [cyclingWorkouts, setCyclingWorkouts] = useState<WorkoutTemplate[]>([]);
+  const [swimmingWorkouts, setSwimmingWorkouts] = useState<WorkoutTemplate[]>([]);
   const [strengthSessions, setStrengthSessions] = useState<StrengthWorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [group, setGroup] = useState<Group>("all");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const { favorites } = useFavorites();
 
@@ -100,58 +151,58 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   // hooks/useSheetDrag.ts. La prise est marquée data-sheet-handle ci-dessous.
   const sheetDrag = useSheetDrag(!inline, onClose);
 
-  // Load workouts and strength sessions when panel opens
+  // Every catalog loads when the panel opens: running (with the sessions the
+  // builder made), strength, cycling and swimming.
   useEffect(() => {
     if (!isOpen) return;
     setIsLoading(true);
     Promise.all([
       loadAllWorkouts(),
       loadAllStrengthSessions(),
-    ]).then(([workouts, strength]) => {
+      loadDisciplineWorkouts("cycling"),
+      loadDisciplineWorkouts("swimming"),
+    ]).then(([workouts, strength, cycling, swimming]) => {
       setAllWorkouts([...workouts, ...getCustomWorkouts()]);
       setStrengthSessions(strength);
+      setCyclingWorkouts(cycling);
+      setSwimmingWorkouts(swimming);
       setIsLoading(false);
     });
   }, [isOpen]);
 
-  // Filter + search
-  const filteredWorkouts = useMemo(() => {
-    const filterDef = FILTERS.find(f => f.key === activeFilter);
-    return allWorkouts
-      .filter(w => {
-        if (favoritesOnly && !favorites.includes(w.id)) return false;
-        if (activeFilter === "all") return true;
-        return filterDef?.categories.includes(w.category) ?? true;
-      })
-      .filter(w => {
-        if (!search) return true;
-        const name = pick(w, "name");
-        const desc = pick(w, "description");
-        const q = search.toLowerCase();
-        return name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
-      })
-      .slice(0, 20);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allWorkouts, activeFilter, search, pick, favoritesOnly, favorites]);
+  const matchesSearch = useCallback(
+    (w: { name: string; nameEn?: string; description?: string; descriptionEn?: string }) => {
+      if (!search) return true;
+      const q = search.toLowerCase();
+      const name = pick(w as WorkoutTemplate, "name");
+      const desc = pick(w as WorkoutTemplate, "description");
+      return name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
+    },
+    [search, pick],
+  );
 
-  // Filter strength sessions by search and favorites
+  // The pool a group draws from, then search and favourites on top.
+  const filteredWorkouts = useMemo(() => {
+    let pool: WorkoutTemplate[];
+    if (group === "cycling") pool = cyclingWorkouts;
+    else if (group === "swimming") pool = swimmingWorkouts;
+    else if (group === "mine") pool = allWorkouts.filter((w) => isCustomWorkoutId(w.id));
+    else pool = allWorkouts;
+    const categories = GROUP_CATEGORIES[group];
+    return pool
+      .filter((w) => !categories || categories.includes(w.category))
+      .filter((w) => !favoritesOnly || favorites.includes(w.id))
+      .filter(matchesSearch)
+      .slice(0, 30);
+  }, [allWorkouts, cyclingWorkouts, swimmingWorkouts, group, favoritesOnly, favorites, matchesSearch]);
+
   const filteredStrength = useMemo(() => {
-    if (activeFilter !== "strength") return [];
+    if (group !== "strength") return [];
     return strengthSessions
-      .filter(s => {
-        if (favoritesOnly && !favorites.includes(s.id)) return false;
-        return true;
-      })
-      .filter(s => {
-        if (!search) return true;
-        const name = pick(s, "name");
-        const desc = pick(s, "description");
-        const q = search.toLowerCase();
-        return name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
-      })
+      .filter((s) => !favoritesOnly || favorites.includes(s.id))
+      .filter(matchesSearch)
       .slice(0, 20);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strengthSessions, activeFilter, search, pick, favoritesOnly, favorites]);
+  }, [strengthSessions, group, favoritesOnly, favorites, matchesSearch]);
 
   // ── Desktop drag handlers ────────────────────────────────────
 
@@ -163,14 +214,19 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
     [],
   );
 
+  const select = (workoutId: string) => {
+    onSelectWorkout?.(workoutId);
+    if (!inline) onClose();
+  };
 
   // ── Don't render if closed ───────────────────────────────────
-
   if (!isOpen) return null;
+
+  const dayName = day != null ? tLibrary(`weekly.days.${day}`) : "";
 
   const panelContent = (
     <div className="zn-planpanel__body">
-      {/* Header, et, sur la sheet, la vraie prise du glisser-pour-fermer. */}
+      {/* Header, the sheet's drag handle on a phone. */}
       <div className="zn-planpanel__bar" data-sheet-handle={!inline || undefined}>
         <h3 className="zn-planpanel__title">{t("workoutPanel.title")}</h3>
         <button
@@ -194,6 +250,23 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         </p>
       )}
 
+      {/* The day a tapped session lands on, when it can be chosen here. */}
+      {onSelectWorkout && day != null && onDayChange && (
+        <div className="zn-planpanel__days" role="group" aria-label={t("workoutPanel.day")}>
+          {DAYS.map((d) => (
+            <button
+              key={d}
+              type="button"
+              className="zn-planpanel__day"
+              aria-pressed={d === day}
+              onClick={() => onDayChange(d)}
+            >
+              {tLibrary(`weekly.daysShort.${d}`)}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Search */}
       <div className="zn-planpanel__search">
         <Search />
@@ -206,19 +279,21 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         />
       </div>
 
-      {/* Category filter + favorites toggle */}
+      {/* The catalogs, one chip each, and the favourites toggle. */}
       <div className="zn-planpanel__filters">
-        <select
-          value={activeFilter}
-          onChange={(e) => setActiveFilter(e.target.value)}
-          className="zn-planpanel__select"
-        >
-          {FILTERS.map((f) => (
-            <option key={f.key} value={f.key}>
-              {t(`workoutFilter.${f.key}`)}
-            </option>
+        <div className="zn-planpanel__chips" role="group" aria-label={t("workoutPanel.groupLabel")}>
+          {GROUPS.map((g) => (
+            <button
+              key={g}
+              type="button"
+              className="zn-planpanel__chip"
+              aria-pressed={g === group}
+              onClick={() => setGroup(g)}
+            >
+              {t(`workoutPanel.groups.${g}`)}
+            </button>
           ))}
-        </select>
+        </div>
         <button
           type="button"
           onClick={() => setFavoritesOnly(v => !v)}
@@ -232,7 +307,23 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
 
       {/* Results list */}
       <div className="zn-planpanel__list">
-        {activeFilter === "strength" ? (
+        {/* The door to the builder, first: a session made to the minute lands
+            on the chosen day. The accent as a stroke, never a second fill. */}
+        {onCreateWorkout && (
+          <button type="button" className="zn-planpanel__create" onClick={onCreateWorkout}>
+            <span className="zn-planpanel__create-plus"><Plus /></span>
+            <span className="zn-planpanel__item-main">
+              <span className="zn-planpanel__item-name">{t("workoutPanel.create")}</span>
+              {day != null && (
+                <span className="zn-planpanel__item-sub">
+                  {t("workoutPanel.createHint", { day: dayName })}
+                </span>
+              )}
+            </span>
+          </button>
+        )}
+
+        {group === "strength" ? (
           isLoading ? (
             <div className="zn-planpanel__state">
               <Loader2 className="zn-planpanel__loader" />
@@ -262,12 +353,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                     e.dataTransfer.effectAllowed = "copyMove";
                     e.dataTransfer.setData("workout-id", session.id);
                   } : undefined}
-                  onClick={() => {
-                    if (onSelectWorkout) {
-                      onSelectWorkout(session.id);
-                    }
-                    if (!inline) onClose();
-                  }}
+                  onClick={() => select(session.id)}
                   className="zn-planpanel__item"
                   data-draggable={inline ? "true" : undefined}
                 >
@@ -288,22 +374,12 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                       <span className="zn-planpanel__item-sub">{muscles}</span>
                     )}
                   </div>
-                  {/* Drag hint */}
-                  <span className="zn-planpanel__grab">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                      <circle cx="9" cy="5" r="2" />
-                      <circle cx="15" cy="5" r="2" />
-                      <circle cx="9" cy="12" r="2" />
-                      <circle cx="15" cy="12" r="2" />
-                      <circle cx="9" cy="19" r="2" />
-                      <circle cx="15" cy="19" r="2" />
-                    </svg>
-                  </span>
+                  <Grab />
                 </div>
               );
             })
           )
-        ) : activeFilter === "cross_training" ? (
+        ) : group === "activities" ? (
           <>
             {PANEL_ACTIVITY_KINDS.map((kind) => {
               const workoutId = activityWorkoutId(kind);
@@ -315,12 +391,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                     e.dataTransfer.effectAllowed = "copyMove";
                     e.dataTransfer.setData("workout-id", workoutId);
                   } : undefined}
-                  onClick={() => {
-                    if (onSelectWorkout) {
-                      onSelectWorkout(workoutId);
-                    }
-                    if (!inline) onClose();
-                  }}
+                  onClick={() => select(workoutId)}
                   className="zn-planpanel__item"
                   data-draggable={inline ? "true" : undefined}
                 >
@@ -348,9 +419,11 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         ) : filteredWorkouts.length === 0 ? (
           <div className="zn-planpanel__state">
             <p className="zn-body zn-body--sm zn-muted">
-              {favoritesOnly
-                ? t("workoutPanel.noFavorites")
-                : t("workoutPanel.noMatching")}
+              {group === "mine" && !favoritesOnly && !search
+                ? t("workoutPanel.noMine")
+                : favoritesOnly
+                  ? t("workoutPanel.noFavorites")
+                  : t("workoutPanel.noMatching")}
             </p>
             {favoritesOnly && (
               <p className="zn-caption zn-faint">
@@ -362,6 +435,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
           filteredWorkouts.map((workout) => {
             const sessionType = CATEGORY_SESSION_TYPE[workout.category] || "endurance";
             const name = pick(workout, "name");
+            const labelKey = CATEGORY_LABEL_KEY[workout.category];
 
             return (
               <div
@@ -369,10 +443,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                 data-workout-id={workout.id}
                 draggable={!!inline}
                 onDragStart={inline ? (e) => handleDragStart(e, workout) : undefined}
-                onClick={!inline && onSelectWorkout ? () => {
-                  onSelectWorkout(workout.id);
-                  onClose();
-                } : undefined}
+                onClick={!inline && onSelectWorkout ? () => select(workout.id) : undefined}
                 className="zn-planpanel__item"
                 data-draggable={inline ? "true" : undefined}
               >
@@ -385,26 +456,13 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                   <span className="zn-planpanel__item-name">{name}</span>
                   <span className="zn-planpanel__item-meta">
                     <span className="zn-planpanel__item-cat">
-                      {(() => {
-                        const filterKey = FILTERS.find(f => f.categories.includes(workout.category))?.key;
-                        return filterKey ? t(`workoutFilter.${filterKey}`) : workout.category;
-                      })()}
+                      {labelKey ? t(`workoutFilter.${labelKey}`) : workout.category}
                     </span>
                     <Clock />
                     {formatDurationMinutes(workout.typicalDuration.min)}-{formatDurationMinutes(workout.typicalDuration.max)}
                   </span>
                 </div>
-                {/* Drag hint */}
-                <span className="zn-planpanel__grab">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                    <circle cx="9" cy="5" r="2" />
-                    <circle cx="15" cy="5" r="2" />
-                    <circle cx="9" cy="12" r="2" />
-                    <circle cx="15" cy="12" r="2" />
-                    <circle cx="9" cy="19" r="2" />
-                    <circle cx="15" cy="19" r="2" />
-                  </svg>
-                </span>
+                <Grab />
               </div>
             );
           })
@@ -442,5 +500,21 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         </div>
       </>
     </>
+  );
+}
+
+/** The six-dot drag mark, on every draggable item. */
+function Grab() {
+  return (
+    <span className="zn-planpanel__grab">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <circle cx="9" cy="5" r="2" />
+        <circle cx="15" cy="5" r="2" />
+        <circle cx="9" cy="12" r="2" />
+        <circle cx="15" cy="12" r="2" />
+        <circle cx="9" cy="19" r="2" />
+        <circle cx="15" cy="19" r="2" />
+      </svg>
+    </span>
   );
 }

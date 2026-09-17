@@ -14,21 +14,12 @@ import type { TrainingPlan } from "@/types/plan";
 import { SESSION_TYPE_CODES } from "@/lib/share/codes";
 
 // `weekShare` pulls `createEmptyWeekPlan` from weekToPlan, which reaches the
-// `@/components/visualization` barrel and evaluates `src/i18n`, that module
-// uses `import.meta.glob`, a Vite-only API, so the import throws under
-// `bun test`. Stubbing the one import keeps the wire-format tests runnable.
-// Nothing asserted below goes through it (`sharedWeekToPlan` is its only user).
-mock.module("@/lib/weekToPlan", () => ({
-  createEmptyWeekPlan: (name: string) => ({
-    id: "stub",
-    config: { id: "stub", createdAt: "", daysPerWeek: 3, isSingleWeek: true },
-    weeks: [{ weekNumber: 1, phase: "base", isRecoveryWeek: false, volumePercent: 100, sessions: [] }],
-    totalWeeks: 1,
-    phases: [],
-    name,
-    nameEn: name,
-  }),
-}));
+// i18n entry point, and that module uses `import.meta.glob`, a Vite-only API
+// that throws under `bun test`. Stubbing i18n itself (the way every other lib
+// test does) keeps the real weekToPlan loadable, which matters because a
+// module mock is process-wide: a stub of weekToPlan here would replace it for
+// the other test files of the run too.
+mock.module("@/i18n", () => ({ default: { language: "fr" } }));
 
 const {
   decodeSharedWeek,
@@ -137,6 +128,21 @@ describe("an activity of the week", () => {
       estimatedDurationMin: 45,
       intensity: "moderate",
     });
+  });
+
+  test("a loose session and a fixed one with km take the later positions", () => {
+    const plan = buildWeek();
+    plan.weeks[0].sessions[0].precision = "loose";
+    plan.weeks[0].sessions[1].precision = "fixed";
+    plan.weeks[0].sessions[1].targetDistanceKm = 8.5;
+    const payload = decodeSharedWeek(encodeSharedWeek(plan, "Ma semaine"))!;
+    expect(payload.s[0]).toEqual([0, "REC-001", 0, 45, 0, -1, 1]);
+    expect(payload.s[1]).toEqual([2, "VMA-012", 4, 60, 1, -1, 0, 85]);
+    const back = sharedWeekSessions(payload);
+    expect(back[0].precision).toBe("loose");
+    expect(back[0].targetDistanceKm).toBeUndefined();
+    expect(back[1].precision).toBeUndefined();
+    expect(back[1].targetDistanceKm).toBe(8.5);
   });
 
   test("an unknown effort code is dropped, the session is kept", () => {

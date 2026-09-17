@@ -9,7 +9,8 @@
 
 import { activitySlotInfo, isActivitySession } from "@/lib/activitySession";
 import { createFreePlan } from "@/lib/createFreePlan";
-import { getAnyWorkoutDuration, getDrawDiscipline } from "@/lib/workoutFilters";
+import { defaultPrecisionFor, initialDurationFor } from "@/lib/sessionPrecision";
+import { getDrawDiscipline } from "@/lib/workoutFilters";
 import { getDominantZone, isStrengthWorkout } from "@/types";
 import type { Discipline, SessionType, AnyWorkoutTemplate } from "@/types";
 import type { TrainingPlan, PlanSession, PlanWeek } from "@/types/plan";
@@ -53,21 +54,41 @@ function disciplineFor(w: AnyWorkoutTemplate): Discipline | undefined {
 /**
  * One filled slot → a plan session. Used both by the full-week generation and
  * by the single-slot re-roll, so a re-drawn session carries the exact same
- * metadata (type, key flag, duration) a generated one would.
+ * metadata (type, key flag, duration, precision) a generated one would.
+ *
+ * The precision follows what is really decided: quality at the stopwatch,
+ * fixed; an easy run or a long one by feel, loose, counted at the middle of
+ * its range. See `lib/sessionPrecision.ts`.
  */
 export function slotToSession(
   day: number,
   kind: SlotKind,
   workout: AnyWorkoutTemplate,
 ): PlanSession {
+  const precision = defaultPrecisionFor(workout);
   return {
     dayOfWeek: day,
     workoutId: workout.id,
     discipline: disciplineFor(workout),
     sessionType: sessionTypeFor(kind, workout),
     isKeySession: kind !== "easy",
-    estimatedDurationMin: getAnyWorkoutDuration(workout),
+    estimatedDurationMin: initialDurationFor(workout, precision),
+    precision,
   };
+}
+
+/**
+ * A workout picked from the panel → a plan session on a day. The kind is
+ * read off the template rather than asked: a long run is long, a Z4+ session
+ * is quality, everything else is easy.
+ */
+export function sessionFromWorkout(day: number, workout: AnyWorkoutTemplate): PlanSession {
+  let kind: SlotKind = "easy";
+  if (!isStrengthWorkout(workout)) {
+    if (workout.category === "long_run") kind = "long";
+    else if (getDominantZone(workout) >= 4) kind = "quality";
+  }
+  return slotToSession(day, kind, workout);
 }
 
 /** Generated 80/20 week → plan sessions for a single week. */
@@ -106,6 +127,8 @@ export function planWeekToSlots(
       workout: activity ? null : byId.get(s.workoutId) ?? null,
       locked: s.locked === true,
       ...(activity && { activity }),
+      // The session's own duration, so a session fixed at 32 min weighs 32.
+      ...(!activity && s.estimatedDurationMin > 0 && { durationMin: s.estimatedDurationMin }),
     });
   }
   for (let day = 0 as DayIndex; day <= 6; day = (day + 1) as DayIndex) {

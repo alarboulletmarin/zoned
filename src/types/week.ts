@@ -34,6 +34,13 @@ export interface WeekSlot {
   locked: boolean;
   /** Set when the slot is an activity (`__activity_*`), never with `workout`. */
   activity?: ActivitySlotInfo;
+  /**
+   * The duration the SESSION carries, when it differs from its template's: a
+   * session fixed at 32 min, or a loose one counted at the middle of its
+   * range. Absent, the template's structured duration stands, which is what
+   * a freshly generated slot has.
+   */
+  durationMin?: number;
 }
 
 /** Settings driving the generator (the left panel). */

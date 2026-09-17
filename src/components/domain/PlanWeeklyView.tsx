@@ -20,6 +20,7 @@ import {
   activitySessionZone,
   isActivitySession,
 } from "@/lib/activitySession";
+import { isLooseSession } from "@/lib/sessionPrecision";
 
 /** Placeholder sessions (race day, cross-training activities) have no catalog
  *  workout behind them, so there is nothing to draw a replacement from. */
@@ -73,6 +74,12 @@ interface PlanWeeklyViewProps {
   blockedDays?: Set<string>;
   /** Standalone "Ma semaine": hide week nav + free-plan guide, rest cards on empty days. */
   singleWeek?: boolean;
+  /**
+   * A short tap on a card calls `onSessionClick` instead of opening the
+   * context menu at the finger: the week page opens the session's own sheet
+   * there, which is what a thumb can read and aim at.
+   */
+  tapOpensSession?: boolean;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -100,6 +107,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onFindWeekRoute,
   blockedDays,
   singleWeek = false,
+  tapOpensSession = false,
 }: PlanWeeklyViewProps) {
   const { t } = useTranslation(["plan", "library", "common"]);
   const pickLang = usePickLang();
@@ -418,6 +426,10 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           }
         }
       }
+    } else if (!wasLongPress && sessionInfo && tapOpensSession && onSessionClick) {
+      // Short tap on the week board: the session's own sheet, not a menu at
+      // the finger. The long press still opens the menu, and drags.
+      onSessionClick(sessionInfo.weekNumber, sessionInfo.sessionIndex, sessionInfo.workoutId);
     } else if (!wasLongPress && sessionInfo) {
       // Short tap: open context menu (easier than hitting the small checkbox)
       setContextMenu({
@@ -435,7 +447,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     longPressFiredRef.current = false;
     touchStartPosRef.current = null;
     touchSessionRef.current = null;
-  }, [onSessionMove, onSessionDelete, onSessionClick, plan.weeks]);
+  }, [onSessionMove, onSessionDelete, onSessionClick, tapOpensSession, plan.weeks]);
 
   // ── Derived data ──────────────────────────────────────────────
 
@@ -786,10 +798,12 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                opens its duration and effort instead, and says so. */
             onSessionClick && {
               key: "view",
-              icon: isActivitySession(contextMenu.workoutId) ? <Clock /> : <Eye />,
-              label: isActivitySession(contextMenu.workoutId)
-                ? t("activitySession.menu")
-                : t("calendar.viewSession"),
+              icon: tapOpensSession || isActivitySession(contextMenu.workoutId) ? <Clock /> : <Eye />,
+              label: tapOpensSession
+                ? t("library:weekly.slot.adjust")
+                : isActivitySession(contextMenu.workoutId)
+                  ? t("activitySession.menu")
+                  : t("calendar.viewSession"),
               onSelect: () =>
                 onSessionClick(
                   contextMenu.weekNumber,
@@ -1260,9 +1274,15 @@ const DayCell = memo(function DayCell({
                       <span className="zn-sess__facts">
                         <Clock />
                         <span className="zn-sess__facts-text">
+                          {/* A loose session is "about" its middle: the tilde
+                              says so, and the word says why. */}
+                          {isLooseSession(session) && "~"}
                           {formatDurationMinutes(session.estimatedDurationMin)}
                           {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
-                            <span className="zn-sess__fact-wide"> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
+                            <span className="zn-sess__fact-wide"> · {session.sessionType !== "long_run" && session.precision !== "fixed" && "~"}{session.targetDistanceKm}km</span>
+                          )}
+                          {singleWeek && !isActivity && session.precision && (
+                            <span className="zn-sess__fact-wide"> · {t(`library:weekly.slot.${session.precision}`)}</span>
                           )}
                           {meta?.tss != null && meta.tss > 0 && (
                             <span className="zn-sess__fact-wide"> · {meta.tss} TSS</span>

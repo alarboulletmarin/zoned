@@ -9,6 +9,13 @@ const TARGET_LOW = 0.8;
 const HARD_MIN = 0.12;
 const HARD_MAX = 0.3;
 
+export type PolarisationStatus = "tooEasy" | "tooHard" | "balanced";
+
+/** The verdict on the hard share (Tempo + Intense), the one rule for the gauge and the folded strip. */
+export function polarisationStatus(hardShare: number): PolarisationStatus {
+  return hardShare < HARD_MIN ? "tooEasy" : hardShare > HARD_MAX ? "tooHard" : "balanced";
+}
+
 interface PolarizationGaugeProps {
   polarised: PolarisedSplit;
   className?: string;
@@ -29,8 +36,7 @@ export function PolarizationGauge({
   if (zonedMinutes <= 0) return null;
 
   const hardShare = midShare + highShare;
-  const status =
-    hardShare < HARD_MIN ? "tooEasy" : hardShare > HARD_MAX ? "tooHard" : "balanced";
+  const status = polarisationStatus(hardShare);
   const balanced = status === "balanced";
   const pct = (n: number) => Math.round(n * 100);
 

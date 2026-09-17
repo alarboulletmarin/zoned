@@ -384,6 +384,73 @@ chiffre. L'écran le dit et se corrige d'un geste. Une carte sans durée reste
 possible, elle annonce « Durée à régler » et pèse zéro : elle n'est pas une
 séance, c'est une séance en attente de sa seule question.
 
+## Souple ou fixée : comment une séance de la semaine compte
+
+Le propriétaire, sur la semaine type : *« je ne sais pas si c'est pertinent
+vraiment de mettre des valeurs fixes pour les séances. Encore pour les trucs
+de VMA, ok, mais pour les footings [...] si tu fais ton footing, comment toi
+tu le sens »*. Le modèle figeait tout : chaque séance posée gelait une durée,
+même celles que personne n'avait décidées, et une semaine type portait le même
+chiffre faux qu'une semaine actée.
+
+Chaque séance porte donc une **précision** (`PlanSession.precision`,
+`lib/sessionPrecision.ts`) :
+
+| | ce qui compte | la forme |
+|---|---|---|
+| `loose`, souple | le MILIEU de la fourchette du gabarit ; les km sont une estimation à l'allure, jamais une donnée | la semaine type |
+| `fixed`, fixée | la durée et les km posés | la semaine actée, ou partagée à quelqu'un qui doit la suivre |
+
+Absente, elle vaut `fixed` : c'est ce que toute séance déjà enregistrée
+était, sans le dire. Le défaut à la pose suit ce qu'on décide vraiment : une
+séance Z4 et plus se prévoit au chrono, elle naît fixée ; un footing ou une
+sortie longue se court à la sensation, il naît souple. Le renfo reste fixé.
+
+Ce qui en découle, et qui a été corrigé au passage : la semaine comptait la
+durée du GABARIT (`getAnyWorkoutDuration`) et non celle de la séance, donc
+une séance fixée à 32 min pesait toujours ses 45 de catalogue. Le créneau
+(`WeekSlot.durationMin`) porte désormais la durée de la séance, et la charge
+est le TSS du gabarit mis à l'échelle de cette durée.
+
+Le lien de partage porte la précision et les kilomètres dans deux positions
+de plus du tuple, en fin, avec la règle habituelle : une position écrite
+entraîne l'écriture de toutes celles d'avant à leur valeur « absente », et un
+lien ancien décode sans changement.
+
+## La page de la semaine sur un téléphone
+
+Le tableau et le générateur côte à côte, ça marche sur un écran large. Les
+mêmes briques empilées sur 390px cassaient la hiérarchie : le résumé prenait
+le premier écran entier et la semaine commençait un écran et demi plus bas ;
+le dock criait « Générer » en permanence ; l'échelle d'intensité apparaissait
+deux fois ; le `+` de chaque jour était petit, calé à droite et masqué par le
+dock sur les derniers jours ; le menu contextuel à la position du doigt était
+un geste de souris. Sous 900px, donc :
+
+- le **tableau vient d'abord** et le résumé se replie en une ligne
+  (`WeekSummaryStrip`) : les chiffres, le verdict 80/20, une vignette du
+  rythme, et le résumé complet derrière « Détails » ;
+- le **dock porte l'action du moment** : Ajouter une séance en vermillon, le
+  tirage et les réglages en pastilles à côté ;
+- une **seule échelle**, sous le tableau ;
+- un appui sur une carte ouvre **sa feuille** (`WeekSessionSheet`), en bas :
+  souple ou fixée, durée et km, ou durée et effort pour une activité, puis
+  les gestes du menu, voir, re-tirer, verrouiller, déplacer, retirer. Sur un
+  écran large la même feuille vient du bord ;
+- le panneau d'ajout remplace son menu déroulant par une **rangée de puces**
+  qui expose tous les catalogues (course par famille, renfo, vélo, natation,
+  activités, les siennes), choisit le **jour** quand il s'ouvre depuis le dock,
+  et met **« Créer une séance »** en tête : le constructeur s'ouvre avec le
+  chemin du retour, et la séance enregistrée se pose sur le jour choisi.
+
+Deux pièges payés une fois. La feuille s'ouvre sur `touchend`, et le
+navigateur rejoue ensuite le même appui en `mousedown` sur ce qui est
+maintenant sous le doigt, la scène, qui la refermait avant qu'on la voie : la
+première demi-seconde de `mousedown` est cet écho, jamais un renvoi. Et un
+`mock.module` de bun vaut pour tout le processus de test : le test du partage
+remplaçait `weekToPlan` par un bouchon, et ce bouchon servait aussi aux autres
+fichiers du même run.
+
 ## Le terrain préparé pour le triathlon
 
 Le propriétaire : *« à la fin, le but, ce sera vraiment de faire du triathlon
