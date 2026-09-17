@@ -408,7 +408,7 @@
       "rerollEmpty": "No other session available with these settings"
     },
     "boardHint": "Click a session to edit it · drag it to move or remove it",
-    "boardHintTouch": "Tap a session to adjust it · hold to move it",
+    "boardHintTouch": "Tap a session to adjust it · drag it to move it",
     "card": {
       "zone": "Zone {{zone}}"
     },
