@@ -29,6 +29,22 @@
     },
     "privacy": "L'image est générée dans ton navigateur, aucune donnée envoyée.",
     "template": {
+      "sessionSheet": {
+        "label": "Feuille",
+        "format": "La séance en lignes, le profil en frise · 1080 × 1350"
+      },
+      "sessionSquare": {
+        "label": "Carré",
+        "format": "Profil, blocs et temps par zone · 1080 × 1080"
+      },
+      "sessionLandscape": {
+        "label": "Paysage",
+        "format": "Profil et blocs, format large · 1200 × 675"
+      },
+      "sessionStory": {
+        "label": "Story",
+        "format": "Le profil en grand, puis les blocs · 1080 × 1920"
+      },
       "storyHero": {
         "label": "Story",
         "format": "Insta · 1080 × 1920"
@@ -297,7 +313,8 @@
       "noTips": "Pas de conseils spécifiques",
       "commonMistakes": "Erreurs courantes",
       "noMistakes": "Pas d'erreurs spécifiques",
-      "generatedBy": "Généré par"
+      "generatedBy": "Généré par",
+      "kicker": "Séance d'entraînement"
     },
     "raceSimPdf": {
       "racePlanTitle": "Plan de course - {{distance}}",
@@ -326,7 +343,8 @@
       "dayBeforeChecklist": "Checklist J-1",
       "raceDayChecklist": "Checklist jour de course",
       "generatedBy": "Genere par",
-      "filename": "plan-course-{{slug}}.pdf"
+      "filename": "plan-course-{{slug}}.pdf",
+      "kicker": "Plan de course"
     },
     "ics": {
       "warmupSep": "=== ÉCHAUFFEMENT ===",
