@@ -261,14 +261,18 @@ export function PlansPage() {
               <Upload />
               {t("plansPage.import")}
             </Button>
-            {/* The one vermillon fill, unless the shelf is empty, in which
-                case the empty state carries it instead. */}
-            <Button variant={planCount > 0 ? "default" : "outline"} asChild>
-              <Link to="/plan/new">
-                <Plus />
-                {t("create")}
-              </Link>
-            </Button>
+            {/* Sur une étagère vide, la création est dans l'état vide, avec
+                l'explication ; la répéter ici, même en contour, faisait deux
+                boutons du même nom sur un même écran. Elle revient en tête,
+                en vermillon, dès qu'il y a un plan à côté. */}
+            {planCount > 0 && (
+              <Button asChild>
+                <Link to="/plan/new">
+                  <Plus />
+                  {t("create")}
+                </Link>
+              </Button>
+            )}
           </div>
         </section>
 
