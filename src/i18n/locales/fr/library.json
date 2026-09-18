@@ -194,6 +194,8 @@
       "view": "Voir",
       "delete": "Supprimer",
       "filterAll": "Toutes",
+      "deleteTitle": "Supprimer cette semaine ?",
+      "deleteConfirm": "\"{{name}}\" sera définitivement supprimée. Cette action est irréversible.",
       "import": "Importer",
       "actions": "Plus d'actions",
       "saved_one": "{{count}} semaine enregistrée",

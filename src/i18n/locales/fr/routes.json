@@ -166,7 +166,11 @@
     "emptyTitle": "Aucun parcours enregistré",
     "softLimitTitle": "Stockage local presque plein",
     "open": "Ouvrir {{name}}",
-    "deleteRoute": "Supprimer {{name}}"
+    "deleteRoute": "Supprimer {{name}}",
+    "view": "Voir",
+    "delete": "Supprimer",
+    "deleteTitle": "Supprimer ce parcours ?",
+    "deleteConfirm": "\"{{name}}\" sera définitivement supprimé. Cette action est irréversible."
   },
   "errors": {
     "geolocationDenied": "Permission de géolocalisation refusée. Saisis une adresse à la place.",

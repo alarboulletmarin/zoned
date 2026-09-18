@@ -194,6 +194,8 @@
       "view": "View",
       "delete": "Delete",
       "filterAll": "All",
+      "deleteTitle": "Delete this week?",
+      "deleteConfirm": "\"{{name}}\" will be permanently deleted. This action cannot be undone.",
       "import": "Import",
       "actions": "More actions",
       "saved_one": "{{count}} saved week",

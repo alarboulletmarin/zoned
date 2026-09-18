@@ -463,8 +463,10 @@
     "cancelButton": "Cancel",
     "weekProgress": "Week {{current}} / {{total}}",
     "target": "Target: ",
-    "sessionsCount": "{{count}} sessions",
-    "planCount": "{{count}} plans",
+    "sessionsCount_one": "{{count}} session",
+    "sessionsCount_other": "{{count}} sessions",
+    "planCount_one": "{{count}} plan",
+    "planCount_other": "{{count}} plans",
     "ended": "Ended",
     "endedSection": "Past plans"
   },

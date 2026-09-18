@@ -146,7 +146,7 @@ function PlanCard({
             {t("plansPage.view")}
           </Link>
         </Button>
-        <PlanExportMenu plan={plan} size="sm" />
+        <PlanExportMenu plan={plan} size="sm" variant="outline" />
         <Button
           variant="outline"
           size="icon-sm"
