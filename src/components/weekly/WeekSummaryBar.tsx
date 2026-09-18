@@ -1,13 +1,9 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AlertTriangle } from "@/components/icons";
 import { PolarizationGauge, WeekRhythmChart } from "@/components/weekly";
 import { cn } from "@/lib/utils";
 import type { WeekStats } from "@/lib/weekStats";
 import type { WeekSlot } from "@/types/week";
-
-const BUDGET_MIN = 0.5;
-const BUDGET_MAX = 30;
 
 /**
  * Compact, full-width summary strip shown above the week board (Epic #83).
@@ -18,23 +14,19 @@ const BUDGET_MAX = 30;
  *
  * The budget is the week's own, and optional: without one the volume is
  * printed alone, with no bar and no warning, since a week built by hand
- * has nothing to be measured against. With `onTargetVolumeChange` the bar
- * carries the one field that sets or clears it, so the budget is reached
- * from the summary that shows it and not from the generator's form.
+ * has nothing to be measured against. This bar only reads it; it is set
+ * where the week's category is, in the page header.
  */
 export function WeekSummaryBar({
   stats,
   slots,
   targetVolumeH,
-  onTargetVolumeChange,
   className,
 }: {
   stats: WeekStats;
   slots: WeekSlot[];
   /** Volume budget in hours, omit to show the raw volume without a budget. */
   targetVolumeH?: number;
-  /** Sets the week's budget, `undefined` clears it. Omit for a read-only bar. */
-  onTargetVolumeChange?: (hours: number | undefined) => void;
   className?: string;
 }) {
   const { t } = useTranslation("library");
@@ -63,9 +55,6 @@ export function WeekSummaryBar({
           />
           <Metric label={t("weekly.summary.load")} value={`${stats.totalTss} TSS`} />
           <Metric label={t("weekly.summary.hard")} value={String(stats.hardSessions)} />
-          {onTargetVolumeChange && (
-            <BudgetField value={targetVolumeH} onChange={onTargetVolumeChange} />
-          )}
         </div>
 
         {overBudget && (
@@ -82,67 +71,6 @@ export function WeekSummaryBar({
 
       <WeekRhythmChart slots={slots} />
     </div>
-  );
-}
-
-/**
- * The budget, in hours, as one narrow field among the metrics. Empty means
- * none: the field is cleared to drop the budget, and the change lands on
- * blur or Enter, never on every keystroke, so typing "6.5" does not save 6
- * on the way. The text is kept while editing so a half-typed value is not
- * rounded from under the finger.
- */
-function BudgetField({
-  value,
-  onChange,
-}: {
-  value: number | undefined;
-  onChange: (hours: number | undefined) => void;
-}) {
-  const { t } = useTranslation("library");
-  const [draft, setDraft] = useState<string | null>(null);
-  const shown = draft ?? (value != null ? String(value) : "");
-
-  const commit = () => {
-    if (draft === null) return;
-    const raw = draft.trim().replace(",", ".");
-    setDraft(null);
-    if (raw === "") {
-      if (value != null) onChange(undefined);
-      return;
-    }
-    const n = Number(raw);
-    if (!Number.isFinite(n)) return;
-    // Half-hour steps between the floor and the cap.
-    const next = Math.min(BUDGET_MAX, Math.max(BUDGET_MIN, Math.round(n * 2) / 2));
-    if (next !== value) onChange(next);
-  };
-
-  return (
-    <label className="zn-wk-metric zn-wk-budget">
-      <span className="zn-kicker">{t("weekly.summary.budget")}</span>
-      <span className="zn-wk-budget__field">
-        <input
-          type="text"
-          inputMode="decimal"
-          autoComplete="off"
-          placeholder={t("weekly.summary.budgetNone")}
-          value={shown}
-          onChange={(e) => setDraft(e.target.value)}
-          onBlur={commit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") (e.target as HTMLInputElement).blur();
-            if (e.key === "Escape") setDraft(null);
-          }}
-          aria-describedby="zn-wk-budget-hint"
-          className="zn-pfield zn-wk-budget__input"
-        />
-        <span className="zn-mono zn-muted">h</span>
-      </span>
-      <span id="zn-wk-budget-hint" className="zn-caption zn-wk-budget__hint">
-        {t("weekly.summary.budgetHint")}
-      </span>
-    </label>
   );
 }
 

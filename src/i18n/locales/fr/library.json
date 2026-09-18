@@ -205,6 +205,12 @@
       "label": "Catégorie",
       "none": "Sans catégorie"
     },
+    "budget": {
+      "label": "Budget",
+      "none": "Sans budget",
+      "hours": "{{hours}} h",
+      "set": "Budget {{hours}} h"
+    },
     "share": {
       "action": "Partager"
     },
@@ -329,10 +335,7 @@
       "overBudget": "Au-dessus du budget de {{target}} h",
       "details": "Détails",
       "strip": "{{sessions}} séances · {{hours}} h · {{tss}} TSS",
-      "stripBudget": "{{sessions}} séances · {{hours}}/{{target}} h · {{tss}} TSS",
-      "budget": "Budget",
-      "budgetNone": "aucun",
-      "budgetHint": "Volume visé, en heures. Vide : pas de budget."
+      "stripBudget": "{{sessions}} séances · {{hours}}/{{target}} h · {{tss}} TSS"
     },
     "gauge": {
       "title": "Polarisation",
