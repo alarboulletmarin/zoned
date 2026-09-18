@@ -142,6 +142,12 @@ function normalizeConfig(raw: unknown, fallbackId: string, fallbackCreatedAt: st
     runnerLevel: typeof raw.runnerLevel === "string" ? raw.runnerLevel as PlanConfig["runnerLevel"] : undefined,
     daysPerWeek: raw.daysPerWeek,
     longRunDay: asOptionalNumber(raw.longRunDay),
+    // The standalone week's own volume budget; absent means none, and a
+    // figure that is not a positive number is treated the same.
+    targetVolumeH: (() => {
+      const n = asOptionalNumber(raw.targetVolumeH);
+      return n !== undefined && n > 0 ? n : undefined;
+    })(),
     vma: asOptionalNumber(raw.vma),
     createdAt: asIsoString(raw.createdAt, fallbackCreatedAt),
     startDate: asOptionalIsoDate(raw.startDate),

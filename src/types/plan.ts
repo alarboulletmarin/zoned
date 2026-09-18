@@ -80,6 +80,13 @@ export interface PlanConfig {
   runnerLevel?: Difficulty;
   daysPerWeek: number; // 3-7
   longRunDay?: number; // 0=Mon ... 6=Sun
+  /**
+   * Standalone week: the volume it aims at, in hours, or none. The generator
+   * records the target it composed to; a week built by hand has no budget
+   * until one is set on it, and its summary shows the volume alone rather
+   * than measuring it against a figure nobody chose.
+   */
+  targetVolumeH?: number;
   vma?: number;
   createdAt: string;
   startDate?: string; // ISO date, optional

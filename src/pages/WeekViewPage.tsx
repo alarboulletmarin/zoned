@@ -164,7 +164,21 @@ export function WeekViewPage() {
   const [settings, setSettings] = useState<WeekSettings>({
     ...DEFAULT_WEEK_SETTINGS,
     longRunDay: (plan?.config.longRunDay ?? 5) as DayIndex,
+    targetVolumeH: plan?.config.targetVolumeH ?? DEFAULT_WEEK_SETTINGS.targetVolumeH,
   });
+  // The plan arrives after the first render, so the initial state above only
+  // holds the defaults: once, when it lands, the generator takes the week's
+  // own long-run day and budget as its starting point.
+  const seededRef = useRef(false);
+  useEffect(() => {
+    if (!plan || seededRef.current) return;
+    seededRef.current = true;
+    setSettings((s) => ({
+      ...s,
+      longRunDay: (plan.config.longRunDay ?? s.longRunDay) as DayIndex,
+      targetVolumeH: plan.config.targetVolumeH ?? s.targetVolumeH,
+    }));
+  }, [plan]);
 
   // ── Draw animation state ─────────────────────────────────────────────────
   const [scanning, setScanning] = useState(false);
@@ -450,6 +464,8 @@ export function WeekViewPage() {
               ),
             ].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
             fresh.config.longRunDay = cfg.longRunDay;
+            // The week now aims at what it was composed to.
+            fresh.config.targetVolumeH = cfg.targetVolumeH;
             savePlan(fresh);
           }
           toast.success(t("library:weekly.toast.generated"));
@@ -560,6 +576,24 @@ export function WeekViewPage() {
       fresh.name = value;
       fresh.nameEn = value;
       savePlan(fresh);
+      reload();
+    },
+    [plan, reload],
+  );
+
+  /**
+   * The week's own budget, set or cleared from the summary. The generator
+   * starts from it next time, so the one figure lives in one place.
+   */
+  const handleTargetVolumeChange = useCallback(
+    (hours: number | undefined) => {
+      if (!plan) return;
+      const fresh = getPlan(plan.id);
+      if (!fresh) return;
+      if (hours === undefined) delete fresh.config.targetVolumeH;
+      else fresh.config.targetVolumeH = hours;
+      savePlan(fresh);
+      if (hours !== undefined) setSettings((s) => ({ ...s, targetVolumeH: hours }));
       reload();
     },
     [plan, reload],
@@ -762,7 +796,8 @@ export function WeekViewPage() {
               <WeekSummaryStrip
                 stats={stats}
                 slots={slots}
-                targetVolumeH={settings.targetVolumeH}
+                targetVolumeH={plan.config.targetVolumeH}
+                onTargetVolumeChange={handleTargetVolumeChange}
               />
 
               <div>

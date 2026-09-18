@@ -329,7 +329,10 @@
       "overBudget": "Over the {{target}} h budget",
       "details": "Details",
       "strip": "{{sessions}} sessions · {{hours}} h · {{tss}} TSS",
-      "stripBudget": "{{sessions}} sessions · {{hours}}/{{target}} h · {{tss}} TSS"
+      "stripBudget": "{{sessions}} sessions · {{hours}}/{{target}} h · {{tss}} TSS",
+      "budget": "Budget",
+      "budgetNone": "none",
+      "budgetHint": "Volume aimed at, in hours. Empty: no budget."
     },
     "gauge": {
       "title": "Polarisation",
