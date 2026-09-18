@@ -41,18 +41,20 @@
  *
  * Il répond maintenant en trois blocs, lus de haut en bas.
  *
- * 1. ALLER À, les quatre portes, et chacune est UN LIEN. Plus de chevron ni
+ * 1. ALLER À, les cinq portes, et chacune est UN LIEN. Plus de chevron ni
  *    de dépliant : appuyer sur Séances emmène sur la bibliothèque, qui porte
  *    elle-même ses pages en rail (`HubNav.tsx`). Une entrée du menu est une
  *    destination ; le détail d'une porte vit chez elle. L'ordre est celui
  *    de `navigation.ts`, et il raconte le produit : aujourd'hui, mon plan,
- *    les séances, mes chiffres.
+ *    mes semaines, les séances, mes chiffres. Mes semaines est une porte et
+ *    non plus une page de Mon plan : la personne qui compose des semaines est
+ *    celle qui n'a pas de plan, donc celle qui n'ouvrait pas cette porte.
  *
- * 2. OUTILS, trois destinations directes, en corps de texte sous les portes
- *    en display : simuler sa course, se tracer un parcours, comprendre. C'est
- *    tout ce qui reste du Reste, et ce sont des instruments, pas un
- *    regroupement. Chacun est un module que les réglages peuvent masquer, et
- *    masquer le retire d'ici, comme les réglages le promettent.
+ * 2. OUTILS, deux destinations directes, en corps de texte sous les portes
+ *    en display : simuler sa course, comprendre. C'est tout ce qui reste du
+ *    Reste, et ce sont des instruments, pas un regroupement. Chacun est un
+ *    module que les réglages peuvent masquer, et masquer le retire d'ici,
+ *    comme les réglages le promettent.
  *
  * 3. LE SOL, sous le filet : la recherche, en pilule, parce qu'elle est le
  *    geste de qui ne sait pas où aller ; puis Réglages et À propos, en petit.

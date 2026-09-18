@@ -37,17 +37,25 @@ export interface NavSection {
 }
 
 /**
- * Les quatre portes.
+ * Les cinq portes.
  *
- * Il y en avait cinq, et 28 entrées derrière. Une app d'entraînement dont la
- * navigation demande 28 décisions avant la première séance a un problème
- * d'architecture, pas de design. Ce qui reste ici, c'est ce que quelqu'un qui
- * s'entraîne ouvre vraiment : le cockpit, le plan, les séances, les chiffres.
+ * Il y en a eu cinq, puis quatre avec 14 entrées derrière, puis cinq à
+ * nouveau. Une app d'entraînement dont la navigation demande 28 décisions
+ * avant la première séance a un problème d'architecture, pas de design. Ce
+ * qui est ici, c'est ce que quelqu'un qui s'entraîne ouvre vraiment : le
+ * cockpit, le plan, la semaine, les séances, les chiffres.
  *
  * L'ORDRE RACONTE LE PRODUIT, et il a été revu le 18 septembre 2026 : ce que
  * je fais aujourd'hui, ce que j'ai prévu, ce que je peux faire, ce que j'ai
  * mesuré. Le plan passait après les séances, alors qu'il est la fonction
  * centrale de Zoned et ce qui donne un sens à la séance du jour.
+ *
+ * MES SEMAINES EST UNE PORTE, décidé par le propriétaire le même soir. Elle
+ * était une page de Mon plan, parce qu'en stockage une semaine est un plan
+ * d'une seule semaine ; mais la personne qui compose des semaines est
+ * précisément celle qui n'a pas de plan, donc celle qui n'ouvre pas cette
+ * porte. Une taxonomie du système ne fait pas une navigation. La semaine est
+ * l'un des deux gestes courts de l'app, et elle se voit au premier niveau.
  *
  * Les ~35 destinations retirées **gardent toutes leur route** : elles restent
  * indexées, prérendues, partageables, et joignables par Cmd+K
@@ -76,13 +84,21 @@ export const PRIMARY_NAV: NavSection[] = [
     id: "plan",
     to: "/plans",
     labelKey: "nav.myPlan",
-    prefix: ["/plan", "/plans", "/weeks"],
+    prefix: ["/plan", "/plans"],
     children: [
       { to: "/plans", labelKey: "topnav.plansMine", descKey: "topnav.plansMineDesc" },
       { to: "/plan/new", labelKey: "topnav.plansNew", descKey: "topnav.plansNewDesc" },
       { to: "/plan/new/prebuilt", labelKey: "topnav.plansPrebuilt", descKey: "topnav.plansPrebuiltDesc" },
-      { to: "/weeks", labelKey: "topnav.weeks", descKey: "topnav.weeksDesc" },
     ],
+  },
+  {
+    id: "weeks",
+    to: "/weeks",
+    labelKey: "topnav.weeks",
+    /* Sans enfant : la planche des semaines porte elle-même la composition
+       et les semaines prêtes à l'emploi, et un menu déroulant d'une seule
+       ligne serait une porte qui fait semblant. */
+    prefix: ["/weeks"],
   },
   {
     id: "sessions",
@@ -121,19 +137,22 @@ export const PRIMARY_NAV: NavSection[] = [
  *
  * C'est ce qui remplace Le reste, un dépliant de seize lignes dont le nom ne
  * disait rien : un libellé de regroupement n'est pas une destination, et une
- * personne qui ouvre le menu cherche où aller, pas ce qui reste. Trois
+ * personne qui ouvre le menu cherche où aller, pas ce qui reste. Deux
  * instruments qu'on n'ouvre pas tous les jours mais qu'on ouvre pour de
- * vrai, chacun une destination directe : simuler sa course, se tracer un
- * parcours, lire ce qui explique l'entraînement.
+ * vrai, chacun une destination directe : simuler sa course, lire ce qui
+ * explique l'entraînement.
  *
  * Chacun est un module que les réglages peuvent masquer, d'où le champ
  * `module` : masquer retire la ligne, la route reste (`ModuleGate.tsx`).
  *
- * Ce qui n'est PAS ici, et pourquoi : les comparatifs, les nouveautés, la
- * contribution et le dépôt sont des pages du projet, pas de l'entraînement.
- * Elles vivent dans le pied de page, dans la palette et dans le menu de
- * compte du bureau ; la liste des écartées de `nav-coverage.test.ts` ne
- * change pas, parce qu'elles gardent ces trois chemins.
+ * Ce qui n'est PAS ici, et pourquoi : le générateur de parcours en est
+ * sorti le 18 septembre 2026, sur décision du propriétaire, il se joint par
+ * le pied de page, la palette et le hub des calculateurs. Les comparatifs,
+ * les nouveautés, la contribution et le dépôt sont des pages du projet, pas
+ * de l'entraînement ; elles vivent dans le pied de page, dans la palette et
+ * dans le menu de compte du bureau. La liste des écartées de
+ * `nav-coverage.test.ts` ne change pas, parce que tout cela garde ces
+ * chemins.
  *
  * Comprendre a des enfants comme une porte : la méthodologie, les guides, la
  * nutrition et le lexique sont ses pages, et le rail de `/learn` les montre.
@@ -146,14 +165,6 @@ export const TOOLS_NAV: NavSection[] = [
     labelKey: "topnav.raceSim",
     prefix: ["/race-simulator"],
     module: "raceSimulator",
-  },
-  {
-    id: "routes",
-    to: "/routes",
-    // Le nom du module, le même mot que la bascule qui le masque.
-    labelKey: "modules.routes.name",
-    prefix: ["/routes"],
-    module: "routes",
   },
   {
     id: "understand",

@@ -112,18 +112,20 @@ describe("les routes du routeur", () => {
 });
 
 describe("la navigation elle-même", () => {
-  test("quatre portes, et pas une de plus", () => {
+  test("cinq portes, et pas une de plus", () => {
     // Le but du chantier est lisible ici : cinq portes et 28 entrées, c'était
-    // 28 décisions avant la première séance.
-    expect(PRIMARY_NAV).toHaveLength(4);
+    // 28 décisions avant la première séance. Cinq portes à nouveau depuis le
+    // 18 septembre 2026, mais 18 entrées : Mes semaines est sortie de Mon
+    // plan, où la personne sans plan ne la trouvait pas.
+    expect(PRIMARY_NAV).toHaveLength(5);
     // L'ordre raconte le produit : ce que je fais aujourd'hui, ce que j'ai
     // prévu, ce que je peux faire, ce que j'ai mesuré. Le plan est passé
     // devant les séances le 18 septembre 2026.
-    expect(PRIMARY_NAV.map((s) => s.id)).toEqual(["today", "plan", "sessions", "numbers"]);
+    expect(PRIMARY_NAV.map((s) => s.id)).toEqual(["today", "plan", "weeks", "sessions", "numbers"]);
   });
 
   test("le menu mobile tient en dix lignes", () => {
-    // Quatre portes, les outils, deux liens de service : c'est ce qui
+    // Cinq portes, les outils, deux liens de service : c'est ce qui
     // remplace un panneau de trente-cinq lignes dépliables. La onzième ligne
     // est le retour du plan de site, et elle se refuse ici.
     const lines = PRIMARY_NAV.length + TOOLS_NAV.length + MENU_FOOT_LINKS.length;
