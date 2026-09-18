@@ -18,14 +18,11 @@ export function WeekSummaryStrip({
   stats,
   slots,
   targetVolumeH,
-  onTargetVolumeChange,
   className,
 }: {
   stats: WeekStats;
   slots: WeekSlot[];
   targetVolumeH?: number;
-  /** Lets the budget be set or cleared from the full bar, see WeekSummaryBar. */
-  onTargetVolumeChange?: (hours: number | undefined) => void;
   className?: string;
 }) {
   const { t } = useTranslation("library");
@@ -71,12 +68,7 @@ export function WeekSummaryStrip({
         </span>
       </summary>
       <div className="zn-disclosure__panel">
-        <WeekSummaryBar
-          stats={stats}
-          slots={slots}
-          targetVolumeH={targetVolumeH}
-          onTargetVolumeChange={onTargetVolumeChange}
-        />
+        <WeekSummaryBar stats={stats} slots={slots} targetVolumeH={targetVolumeH} />
       </div>
     </details>
   );

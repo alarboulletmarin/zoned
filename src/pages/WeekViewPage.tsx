@@ -95,6 +95,14 @@ const WEEKDAYS: DayIndex[] = [0, 1, 2, 3, 4, 5, 6];
  */
 type RailTool = "generate" | "add" | null;
 
+/** The budgets the badge offers, in hours: the generator's own range. */
+const BUDGET_HOURS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
+
+/** 2.5 prints "2,5" in French, "2.5" in English; whole hours print bare. */
+function formatHours(h: number, isEn = false): string {
+  return Number.isInteger(h) ? String(h) : isEn ? String(h) : String(h).replace(".", ",");
+}
+
 /** Pick a uniformly random element. */
 function sample<T>(arr: readonly T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -582,14 +590,15 @@ export function WeekViewPage() {
   );
 
   /**
-   * The week's own budget, set or cleared from the summary. The generator
-   * starts from it next time, so the one figure lives in one place.
+   * The week's own budget, chosen from the badge beside its category. The
+   * generator starts from it next time, so the one figure lives in one place.
    */
   const handleTargetVolumeChange = useCallback(
-    (hours: number | undefined) => {
+    (value: string) => {
       if (!plan) return;
       const fresh = getPlan(plan.id);
       if (!fresh) return;
+      const hours = value === "none" ? undefined : Number(value);
       if (hours === undefined) delete fresh.config.targetVolumeH;
       else fresh.config.targetVolumeH = hours;
       savePlan(fresh);
@@ -598,6 +607,15 @@ export function WeekViewPage() {
     },
     [plan, reload],
   );
+
+  // The budgets on offer, in hours, plus the week's own if it is not one of
+  // them (a ready-made week can carry 2.5 h): the radio has to name what is
+  // set, or the badge would show one figure and the list check another.
+  const budgetOptions = useMemo(() => {
+    const set = new Set<number>(BUDGET_HOURS);
+    if (plan?.config.targetVolumeH != null) set.add(plan.config.targetVolumeH);
+    return [...set].sort((a, b) => a - b);
+  }, [plan?.config.targetVolumeH]);
 
   const handleCategoryChange = useCallback(
     (value: string) => {
@@ -695,12 +713,17 @@ export function WeekViewPage() {
                   className="zn-pw__name"
                 />
 
-                {/* What kind of week this is (left), and what you can send it
-                    out as (right). */}
+                {/* What this week is (left): its category, and the volume it
+                    aims at, two properties of the week set from two badges of
+                    the same kind. What you can send it out as (right). */}
                 <div
                   className="zn-cluster zn-cluster--split"
                   style={{ "--gap": "var(--sp-6)" } as CSSProperties}
                 >
+                  <div
+                    className="zn-row"
+                    style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+                  >
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       className={badgeVariants({
@@ -733,6 +756,47 @@ export function WeekViewPage() {
                       </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>
+
+                  {/* The budget: none, or so many hours. Without one the
+                      summary prints the volume alone; with one it measures
+                      the week against it. The generator writes its target
+                      here when it composes the week. */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      className={badgeVariants({
+                        variant: plan.config.targetVolumeH != null ? "secondary" : "outline",
+                        className: "zn-pw__cat",
+                      })}
+                      aria-label={t("library:weekly.budget.label")}
+                    >
+                      {plan.config.targetVolumeH != null
+                        ? t("library:weekly.budget.set", {
+                            hours: formatHours(plan.config.targetVolumeH, isEn),
+                          })
+                        : t("library:weekly.budget.label")}
+                      <ChevronDown size={13} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuRadioGroup
+                        value={
+                          plan.config.targetVolumeH != null
+                            ? String(plan.config.targetVolumeH)
+                            : "none"
+                        }
+                        onValueChange={handleTargetVolumeChange}
+                      >
+                        <DropdownMenuRadioItem value="none">
+                          {t("library:weekly.budget.none")}
+                        </DropdownMenuRadioItem>
+                        {budgetOptions.map((h) => (
+                          <DropdownMenuRadioItem key={h} value={String(h)}>
+                            {t("library:weekly.budget.hours", { hours: formatHours(h, isEn) })}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  </div>
 
                   <div
                     className="zn-row"
@@ -797,7 +861,6 @@ export function WeekViewPage() {
                 stats={stats}
                 slots={slots}
                 targetVolumeH={plan.config.targetVolumeH}
-                onTargetVolumeChange={handleTargetVolumeChange}
               />
 
               <div>

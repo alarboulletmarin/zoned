@@ -135,47 +135,6 @@
   transition: inline-size var(--dur-base) var(--ease-out);
 }
 
-/* ── the budget field ─────────────────────────────────────────────────── */
-
-/* One metric that is typed rather than read: the week's target volume, in
-   hours. The same narrow mono field as the session sheet's duration, on the
-   metrics' own baseline, with its one-line hint under it. Pushed to the end
-   of the row on a wide bar, so the four figures stay a run of numbers and
-   the field reads as the control it is. */
-.zn-wk-budget {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-  cursor: text;
-}
-
-@media (min-width: 640px) {
-  .zn-wk-budget {
-    margin-inline-start: auto;
-  }
-}
-
-.zn-wk-budget__field {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-}
-
-.zn-wk-budget__field > .zn-wk-budget__input {
-  inline-size: 4.5rem;
-  min-block-size: 0;
-  padding: var(--sp-3) var(--sp-4);
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: var(--fs-body-sm);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--ls-mono);
-}
-
-.zn-wk-budget__hint {
-  color: var(--text-faint);
-}
-
 /* ── the 80/20 gauge ──────────────────────────────────────────────────── */
 
 .zn-wk-gauge {
