@@ -216,7 +216,7 @@ function tables(node: unknown, out: unknown[][][] = []): unknown[][][] {
  */
 function blockTables(content: unknown): unknown[][][] {
   return tables(content).filter(
-    (body) => body[0]?.length === 5 && collectText(body[0])[0] === "Phase",
+    (body) => body[0]?.length === 5 && collectText(body[0])[0]?.toLowerCase() === "phase",
   );
 }
 
@@ -229,7 +229,7 @@ function blockTables(content: unknown): unknown[][][] {
  */
 function sessionCells(content: unknown): unknown[][] {
   return tables(content)
-    .filter((body) => body[0]?.length === 6 && collectText(body[0])[0] === "common:export.planPdf.day")
+    .filter((body) => body[0]?.length === 6 && collectText(body[0])[0]?.toLowerCase() === "common:export.planpdf.day")
     .flatMap((body) => body.slice(1));
 }
 
@@ -279,13 +279,12 @@ describe("exportPlanToPDF: document assembly", () => {
     expect(filename).toBe("plan-10K-Plan test PDF.pdf");
 
     // The weekly table names sessions from `workoutNames`, not from the
-    // template or the raw id, and appends the appendix reference superscript.
-    // Unresolvable ids fall back to the id itself.
+    // template or the raw id. Unresolvable ids fall back to the id itself.
     expect(sessionRows(captured().content).map((row) => row[1])).toEqual([
-      "Endurance fondamentale ¹",
-      "Core stability coureur ²",
-      "Sortie récupération ³",
-      `${MISSING_ID} ⁴`,
+      "Endurance fondamentale",
+      "Core stability coureur",
+      "Sortie récupération",
+      MISSING_ID,
     ]);
   });
 
@@ -298,14 +297,16 @@ describe("exportPlanToPDF: document assembly", () => {
     ]);
 
     const { strings } = await runExport(plan, {}, templates);
-    const refs = strings.filter((s) => /^\[\d+] $/.test(s));
 
-    // Three resolvable templates get an appendix entry; the missing id gets a
-    // reference number but no entry, because there is nothing to render.
-    expect(refs).toEqual(["[1] ", "[2] ", "[3] "]);
-    expect(strings).toContain(running(RUNNING_ID).name);
-    expect(strings).toContain(strengthOf(STRENGTH_ID).name);
-    expect(strings).toContain(running(CYCLING_ID).name);
+    // Three resolvable templates get an entry, in the order they first appear;
+    // the missing id gets none, because there is nothing to render. The week
+    // rows print ids (no names were handed over), so the template names first
+    // appear in the appendix, and their order there is the order of entries.
+    expect(blockTables(captured().content)).toHaveLength(3);
+    const at = (name: string) => strings.indexOf(name);
+    expect(at(running(RUNNING_ID).name)).toBeGreaterThan(-1);
+    expect(at(running(RUNNING_ID).name)).toBeLessThan(at(strengthOf(STRENGTH_ID).name));
+    expect(at(strengthOf(STRENGTH_ID).name)).toBeLessThan(at(running(CYCLING_ID).name));
     expect(strings).not.toContain(MISSING_ID + " ");
   });
 });
@@ -321,7 +322,7 @@ describe("exportPlanToPDF: running sessions", () => {
     expect(strings).toContain("5' Z1 › 40' Z2 › 5' Z1");
     // The whole row, so the summary cannot be confused with the appendix text.
     expect([day, type, zone, duration, summary]).toEqual([
-      "Lun",
+      "LUN",
       "Endurance",
       "Z2", // dominant zone of the main set
       "50min",
@@ -389,7 +390,7 @@ describe("exportPlanToPDF: strength sessions", () => {
 
     const [day, , type, zone, duration, summary] = sessionRows(captured().content)[0];
     expect([day, type, zone, duration, summary]).toEqual([
-      "Mer",
+      "MER",
       "Core", // from the strength category, not the session type
       "-", // strength rows carry no zone
       "30min",
@@ -415,8 +416,8 @@ describe("exportPlanToPDF: strength sessions", () => {
     // Exercise ids are resolved to catalogue names, never printed raw.
     expect(strings).toContain("Planche frontale");
     expect(strings).not.toContain("EX-CO-001");
-    expect(strings).toContain("3×30s"); // sets × reps
-    expect(strings).toContain("1×6");
+    expect(strings).toContain("3 × 30s"); // sets × reps
+    expect(strings).toContain("1 × 6");
   });
 
   test("no running rendering leaks into a strength-only document", async () => {
@@ -431,7 +432,7 @@ describe("exportPlanToPDF: strength sessions", () => {
     expect(joined).not.toMatch(/\bZ[1-6]\b/);
     expect(strings).toContain("-"); // the em-dash zone cell
     // The strength appendix has its own header vocabulary.
-    expect(strings).toContain("common:export.planPdf.exercise");
+    expect(joined.toLowerCase()).toContain("common:export.planpdf.exercise");
     expect(strings).not.toContain("Reps"); // the running appendix's own column
   });
 
@@ -550,10 +551,7 @@ describe("exportPlanToPDF: unresolvable workoutId", () => {
 
     const [, name, , zone, duration, summary] = sessionRows(captured().content)[0];
     expect([name, zone, duration, summary]).toEqual([
-      // The raw id stands in for the name. It still carries the superscript
-      // appendix reference "¹" even though the appendix skips unresolvable
-      // ids, so that link lands nowhere; pinned here as current behaviour.
-      `${MISSING_ID} ¹`,
+      MISSING_ID, // the raw id stands in for the name
       "-", // no template, so no zone
       "50min",
       "", // and no summary to build
@@ -561,12 +559,13 @@ describe("exportPlanToPDF: unresolvable workoutId", () => {
     expect(joined).not.toContain(EXERCISES_LABEL);
     expect(blockTables(captured().content)).toHaveLength(0);
 
-    // The em dash alone does not say WHICH branch produced it: the unknown
-    // cell is the plain grey one, with no fill. Pinned so it cannot silently
-    // become the strength cell (see the STR- test below for the other side).
+    // The dash alone does not say WHICH branch produced it: the type column
+    // does. An unknown id keeps its session type, endurance here, where the
+    // STR- test below reads strength.
+    const [, , type] = sessionRows(captured().content)[0];
+    expect(type).toBe("Endurance");
     const zoneCell = sessionCell(captured().content, 0, 3);
     expect(zoneCell.fillColor).toBeUndefined();
-    expect(zoneCell.color).toBe("#aaa");
   });
 
   test("an unresolvable STR- id is still treated as strength, by prefix", async () => {
@@ -576,13 +575,12 @@ describe("exportPlanToPDF: unresolvable workoutId", () => {
     const { strings, joined } = await runExport(plan, {}, {});
 
     expect(strings).toContain(MISSING_STRENGTH_ID);
-    // Both the strength cell and the unknown-workout fallback read as an em
-    // dash, so the text proves nothing: it is the slate fill that marks the
-    // strength branch.
-    const zoneCell = sessionCell(captured().content, 0, 3);
-    expect(zoneCell.text).toBe("-");
-    expect(zoneCell.fillColor).toBe("#94a3b8");
-    expect(zoneCell.bold).toBe(true);
+    // Both the strength cell and the unknown-workout fallback read as a dash,
+    // so the zone text proves nothing: the type column marks the strength
+    // branch, by the STR- prefix alone since there is no template.
+    const [, , type, zone] = sessionRows(captured().content)[0];
+    expect(zone).toBe("-");
+    expect(type).toBe("Renfo");
     // No template to read a zone from, and the STR- prefix keeps it off the
     // running path, so no zone token appears anywhere.
     expect(joined).not.toMatch(/\bZ[1-6]\b/);

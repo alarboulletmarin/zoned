@@ -8,6 +8,10 @@
 import type { ComponentType } from "react";
 import type { WorkoutTemplate } from "@/types";
 
+import { SessionSheet } from "./templates/session/SessionSheet";
+import { SessionSquare } from "./templates/session/SessionSquare";
+import { SessionLandscape } from "./templates/session/SessionLandscape";
+import { SessionStory } from "./templates/session/SessionStory";
 import { StoryHero } from "./templates/StoryHero";
 import { SquareStats } from "./templates/SquareStats";
 import { LandscapeWide } from "./templates/LandscapeWide";
@@ -65,6 +69,41 @@ export interface ShareTemplateDescriptor {
 }
 
 export const SHARE_TEMPLATES: ShareTemplateDescriptor[] = [
+  // The house style first: the session the way the app and its PDF draw
+  // it, in the four sizes a session gets posted or sent at. The pastiches
+  // follow.
+  {
+    id: "session-sheet",
+    labelKey: "sessionSheet",
+    width: 1080,
+    height: 1350,
+    supportsTransparent: true,
+    Component: SessionSheet,
+  },
+  {
+    id: "session-square",
+    labelKey: "sessionSquare",
+    width: 1080,
+    height: 1080,
+    supportsTransparent: true,
+    Component: SessionSquare,
+  },
+  {
+    id: "session-landscape",
+    labelKey: "sessionLandscape",
+    width: 1200,
+    height: 675,
+    supportsTransparent: true,
+    Component: SessionLandscape,
+  },
+  {
+    id: "session-story",
+    labelKey: "sessionStory",
+    width: 1080,
+    height: 1920,
+    supportsTransparent: true,
+    Component: SessionStory,
+  },
   {
     id: "story-hero",
     labelKey: "storyHero",

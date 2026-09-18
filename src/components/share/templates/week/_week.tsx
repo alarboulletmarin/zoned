@@ -173,8 +173,11 @@ export function Sheet({
 
 // ── the chrome ───────────────────────────────────────────────────────────
 
-/** The wordmark on the left, what the sheet is on the right. */
-export function Head({ scale = 1 }: { scale?: number }) {
+/**
+ * The wordmark on the left, what the sheet is on the right: the training
+ * week by default, or the label a session sheet passes.
+ */
+export function Head({ scale = 1, label }: { scale?: number; label?: string }) {
   const isEn = useIsEnglish();
   return (
     <div
@@ -195,7 +198,7 @@ export function Head({ scale = 1 }: { scale?: number }) {
           color: INK_2,
         }}
       >
-        {isEn ? "Training week" : "Semaine d'entraînement"}
+        {label ?? (isEn ? "Training week" : "Semaine d'entraînement")}
       </span>
     </div>
   );
