@@ -39,6 +39,7 @@ import {
   type WeekSessionSheetTarget,
 } from "@/components/domain/WeekSessionSheet";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
+import { WeekShareDialog } from "@/components/share/WeekShareDialog";
 import { ScanCard } from "@/components/domain";
 import { WeekSummaryStrip, WeekGeneratorPanel } from "@/components/weekly";
 import { usePlan } from "@/hooks/usePlans";
@@ -162,6 +163,7 @@ export function WeekViewPage() {
   const [addTarget, setAddTarget] = useState<{ day: number } | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   // The session whose sheet is open, by index: the sheet reads the session
   // off the plan at render time, so it never shows a stale copy.
@@ -637,19 +639,8 @@ export function WeekViewPage() {
 
   const displayName = name ?? pick(plan, "name");
 
-  const handleShare = async () => {
-    const url = sharedWeekUrl(plan, displayName);
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: displayName, url });
-      } catch {
-        // Share sheet dismissed, nothing to do.
-      }
-      return;
-    }
-    await navigator.clipboard.writeText(url);
-    toast.success(t("common:share.toast.linkCopied"));
-  };
+  // The share button opens the image sheet; the link is one of its actions.
+  const shareUrl = sharedWeekUrl(plan, displayName);
 
   /** The picker, aimed at the first rest day, or Monday. */
   const openAdd = () => {
@@ -805,7 +796,7 @@ export function WeekViewPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={handleShare}
+                      onClick={() => setShareOpen(true)}
                       aria-label={t("library:weekly.share.action")}
                     >
                       <Share size={15} />
@@ -963,6 +954,21 @@ export function WeekViewPage() {
           />
         </SheetContent>
       </Sheet>
+
+      {/* The week as an image, in four sizes, and its link. */}
+      <WeekShareDialog
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        shareUrl={shareUrl}
+        subject={{
+          plan,
+          name: displayName,
+          slots,
+          stats,
+          workoutNames,
+          workoutMeta,
+        }}
+      />
 
       {/* The session's own sheet: how it counts, and the gestures. */}
       <WeekSessionSheet
