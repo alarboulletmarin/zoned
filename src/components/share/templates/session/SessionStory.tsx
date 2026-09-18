@@ -1,33 +1,36 @@
 /**
  * SessionStory, 1080×1920, the story format.
  *
- * The profile first and tall, the session's shape at arm's length; the
- * blocks as rows under it, large; the time in zones; the tip; and the two
- * runners, in ink, on the ground rule of the footer. A long session takes
- * its room from the rows' type, in steps, and the runners give way first.
+ * The profile first and tall, the session's shape at arm's length; then
+ * the three phases stacked full width, as the session page draws them on
+ * a phone, a dense main set flowing into two columns; the time in zones;
+ * the tip; and the two runners, in ink, on the ground rule of the footer.
+ * A long session takes its room from the cards' type, in steps, and the
+ * runners give way first.
  */
 
 import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import { toZoneBarBlocks } from "@/components/visualization";
 import { AccentPatch, ZoneFrieze } from "../_paper";
 import { Sheet, Head, Title, Foot, INK_PALE } from "../week/_week";
-import { BlockRows, SessionFacts, Tip, ZoneSplit, useSessionSheet } from "./_session";
+import { PhaseCard, SessionFacts, Tip, ZoneSplit, useSessionSheet } from "./_session";
 import type { ShareTemplateProps } from "../../shareTemplates";
 
 const W = 1080;
 const H = 1920;
 
-/** Row sizes by how many blocks the list prints. */
+/** Type scale of the cards by how many rows the phases print. */
 function fitRows(rows: number) {
-  if (rows <= 7) return { nameSize: 30, labelSize: 18, pad: 16, textLines: 2 };
-  if (rows <= 11) return { nameSize: 26, labelSize: 17, pad: 12, textLines: 2 };
-  if (rows <= 15) return { nameSize: 22, labelSize: 15, pad: 9, textLines: 1 };
-  return { nameSize: 19, labelSize: 13, pad: 6, textLines: 1 };
+  if (rows <= 4) return { s: 1.3, descLines: 3 };
+  if (rows <= 8) return { s: 1.15, descLines: 2 };
+  if (rows <= 12) return { s: 1.05, descLines: 2 };
+  return { s: 0.95, descLines: 1 };
 }
 
 export function SessionStory({ workout, transparent }: ShareTemplateProps) {
-  const { name, hero, lines, label } = useSessionSheet(workout);
-  const fit = fitRows(lines.length);
+  const { name, hero, phases, label } = useSessionSheet(workout);
+  const rows = phases.reduce((n, p) => n + p.rows, 0);
+  const scale = fitRows(rows);
   const titleSize = name.length > 22 ? 72 : 96;
   return (
     <Sheet width={W} height={H} padding="52px 56px 44px" transparent={transparent}>
@@ -35,18 +38,13 @@ export function SessionStory({ workout, transparent }: ShareTemplateProps) {
       <Head scale={1.15} label={label} />
       <Title size={titleSize} style={{ marginTop: 44 }}>{name}</Title>
       <SessionFacts workout={workout} hero={hero} size={24} style={{ marginTop: 18 }} />
-      <div style={{ marginTop: 44 }}>
-        <ZoneFrieze blocks={toZoneBarBlocks(workout)} height={180} />
+      <div style={{ marginTop: 40 }}>
+        <ZoneFrieze blocks={toZoneBarBlocks(workout)} height={150} />
       </div>
-      <div style={{ marginTop: 40, flex: "0 1 auto", minHeight: 0, overflow: "hidden" }}>
-        <BlockRows
-          lines={lines}
-          nameSize={fit.nameSize}
-          labelSize={fit.labelSize}
-          rowPadding={fit.pad}
-          textLines={fit.textLines}
-          gutter={104}
-        />
+      <div style={{ marginTop: 36, flex: "0 1 auto", minHeight: 0, overflow: "hidden", display: "flex", flexDirection: "column", gap: 18 }}>
+        {phases.map((phase) => (
+          <PhaseCard key={phase.key} phase={phase} scale={scale} columns={phase.key === "main" && phase.steps.length > 3 ? 2 : 1} />
+        ))}
       </div>
       <div style={{ marginTop: 32 }}>
         <ZoneSplit hero={hero} size={18} height={26} />

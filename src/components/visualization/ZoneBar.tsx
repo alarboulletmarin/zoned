@@ -94,7 +94,7 @@ export function toZoneBarBlocks(workout: WorkoutStructureSource): ZoneBarBlock[]
  * fifty-one hairlines. Between-series and cool-down recoveries are longer, so
  * they survive as their own strip.
  */
-function condenseBlocks(blocks: ZoneBarBlock[]): ZoneBarBlock[] {
+export function condenseBlocks(blocks: ZoneBarBlock[]): ZoneBarBlock[] {
   const out: (ZoneBarBlock & { hard: boolean })[] = [];
 
   for (const block of blocks) {

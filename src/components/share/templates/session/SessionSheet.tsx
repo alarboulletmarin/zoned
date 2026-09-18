@@ -1,35 +1,36 @@
 /**
  * SessionSheet, 1080×1350 (4:5), the portrait post, and the one to send to
  * someone who will run it: the name, the facts, the profile on the ramp,
- * every block as a row under its phase with its figure on the right, the
- * time in zones, and the first tip. The two runners take whatever room a
- * short session leaves before the footer.
+ * the three phases as the cards the session page draws them, side by
+ * side, and the time in zones above the footer.
  *
- * The rows shrink in steps as the session fills: a fourteen-block session
- * prints smaller type and tighter rows, so no block is cut off the sheet.
+ * The cards shrink in steps as the session fills, and a dense main set
+ * takes two columns of steps and twice the width, so no step is cut. The
+ * first tip and the two runners take whatever room a short session leaves
+ * before the footer, and a dense one folds them away.
  */
 
 import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import { toZoneBarBlocks } from "@/components/visualization";
 import { AccentPatch, ZoneFrieze } from "../_paper";
 import { Sheet, Head, Title, Foot, INK_PALE } from "../week/_week";
-import { BlockRows, SessionFacts, Tip, ZoneSplit, useSessionSheet } from "./_session";
+import { PhaseRow, SessionFacts, Tip, ZoneSplit, useSessionSheet } from "./_session";
 import type { ShareTemplateProps } from "../../shareTemplates";
 
 const W = 1080;
 const H = 1350;
 
-/** Row sizes by how many blocks the list prints. */
+/** Type scale of the cards by how many rows the phases print. */
 function fitRows(rows: number) {
-  if (rows <= 6) return { nameSize: 26, labelSize: 16, pad: 14, textLines: 2, tip: true };
-  if (rows <= 9) return { nameSize: 22, labelSize: 15, pad: 10, textLines: 2, tip: true };
-  if (rows <= 13) return { nameSize: 19, labelSize: 14, pad: 7, textLines: 1, tip: false };
-  return { nameSize: 16, labelSize: 12, pad: 5, textLines: 1, tip: false };
+  if (rows <= 6) return { s: 1.25, descLines: 3 };
+  if (rows <= 9) return { s: 1.1, descLines: 2 };
+  if (rows <= 12) return { s: 1, descLines: 2 };
+  return { s: 0.9, descLines: 1 };
 }
 
 export function SessionSheet({ workout, transparent }: ShareTemplateProps) {
-  const { name, hero, lines, label } = useSessionSheet(workout);
-  const fit = fitRows(lines.length);
+  const { name, hero, phases, label } = useSessionSheet(workout);
+  const rows = phases.reduce((n, p) => n + p.rows, 0);
   const titleSize = name.length > 26 ? 62 : 84;
   return (
     <Sheet width={W} height={H} transparent={transparent}>
@@ -37,25 +38,15 @@ export function SessionSheet({ workout, transparent }: ShareTemplateProps) {
       <Head label={label} />
       <Title size={titleSize} style={{ marginTop: 32 }}>{name}</Title>
       <SessionFacts workout={workout} hero={hero} style={{ marginTop: 16 }} />
-      <div style={{ marginTop: 32 }}>
-        <ZoneFrieze blocks={toZoneBarBlocks(workout)} height={110} />
+      <div style={{ marginTop: 30 }}>
+        <ZoneFrieze blocks={toZoneBarBlocks(workout)} height={96} />
       </div>
-      <div style={{ marginTop: 30, flex: "0 1 auto", minHeight: 0, overflow: "hidden" }}>
-        <BlockRows
-          lines={lines}
-          nameSize={fit.nameSize}
-          labelSize={fit.labelSize}
-          rowPadding={fit.pad}
-          textLines={fit.textLines}
-          gutter={96}
-        />
+      <div style={{ marginTop: 28, flex: "0 1 auto", minHeight: 0, overflow: "hidden" }}>
+        <PhaseRow phases={phases} scale={fitRows(rows)} width={W - 80 - 104} gap={16} />
       </div>
       <div style={{ marginTop: 26 }}>
         <ZoneSplit hero={hero} size={17} height={24} />
       </div>
-      {/* The two runners, muted, on what is left; a session that leaves no
-          room folds them away. The tip sits on the ground rule beside them,
-          and a dense session, which leaves neither any room, prints neither. */}
       <div
         style={{
           flex: "1 1 0",
@@ -68,8 +59,8 @@ export function SessionSheet({ workout, transparent }: ShareTemplateProps) {
           overflow: "hidden",
         }}
       >
-        {fit.tip && <Tip workout={workout} size={19} labelSize={15} style={{ flex: 1, minWidth: 0, paddingBottom: 6 }} />}
-        {fit.tip && (
+        {rows <= 8 && <Tip workout={workout} size={19} labelSize={15} style={{ flex: 1, minWidth: 0, paddingBottom: 6 }} />}
+        {rows <= 8 && (
           <div data-doodle="mute" style={{ height: "100%", maxHeight: 170, flex: "none", color: INK_PALE }}>
             <RunnersDuo style={{ height: "100%", width: "auto", display: "block" }} />
           </div>
