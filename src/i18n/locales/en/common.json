@@ -350,6 +350,12 @@
       "cooldownSep": "--- Cool-down ---",
       "tips": "Tips",
       "rest": "rest"
+    },
+    "weekPdf": {
+      "kicker": "Training week",
+      "key": "key",
+      "structures": "The sessions",
+      "filePrefix": "week"
     }
   },
   "randomWorkout": {
