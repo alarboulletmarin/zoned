@@ -19,7 +19,7 @@ import { beforeEach, describe, expect, test } from "bun:test";
 
 import { getWorkoutById } from "@/data/workouts";
 import type { PlanSession, TrainingPlan } from "@/types/plan";
-import { getAllPlans, getPlan } from "./planStorage";
+import { duplicateSession, getAllPlans, getPlan } from "./planStorage";
 
 // ── Minimal localStorage shim for bun test (jsdom-free) ────────────
 class MemoryStorage {
@@ -220,5 +220,41 @@ describe("a malformed plans blob never throws", () => {
 
   test("an absent key reads as an empty list", () => {
     expect(getAllPlans()).toEqual([]);
+  });
+});
+
+describe("duplicateSession copies a session onto its own day", () => {
+  test("the copy lands right after the original, planned, unlocked", () => {
+    localStorage.setItem(STORAGE_KEY, FROZEN_LEGACY_PLAN_BLOB);
+    // Week 1, index 2: the completed VMA session, with an rpe and a date.
+    const index = duplicateSession("plan-frozen-2026", 1, 2);
+    expect(index).toBe(3);
+
+    const week = getPlan("plan-frozen-2026")!.weeks[0];
+    expect(week.sessions).toHaveLength(6);
+    const original = week.sessions[2];
+    const copy = week.sessions[3];
+    expect(copy).not.toBe(original);
+    expect(copy.workoutId).toBe("VMA-001");
+    expect(copy.dayOfWeek).toBe(original.dayOfWeek);
+    expect(copy.sessionType).toBe("vo2max");
+    expect(copy.isKeySession).toBe(true);
+    expect(copy.estimatedDurationMin).toBe(55);
+    // What was lived stays on the original.
+    expect(copy.status).toBeUndefined();
+    expect(copy.completedAt).toBeUndefined();
+    expect(copy.rpe).toBeUndefined();
+    expect(copy.locked).toBeUndefined();
+    expect(original.status).toBe("completed");
+    // The rest of the week is untouched and still in day order.
+    expect(week.sessions.map((s) => s.dayOfWeek)).toEqual([0, 1, 2, 2, 4, 6]);
+  });
+
+  test("an unknown plan, week or index copies nothing", () => {
+    localStorage.setItem(STORAGE_KEY, FROZEN_LEGACY_PLAN_BLOB);
+    expect(duplicateSession("nope", 1, 0)).toBeNull();
+    expect(duplicateSession("plan-frozen-2026", 9, 0)).toBeNull();
+    expect(duplicateSession("plan-frozen-2026", 1, 42)).toBeNull();
+    expect(getPlan("plan-frozen-2026")!.weeks[0].sessions).toHaveLength(5);
   });
 });

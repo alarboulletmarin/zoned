@@ -179,6 +179,48 @@ export function moveSession(
   return savePlan(plan);
 }
 
+/**
+ * Copies a session onto its own day, right after the original, and returns
+ * the copy's index in the week (or null). The copy is a PLANNED session
+ * whatever the original had lived: what was done, felt or noted belongs to
+ * that one day and does not travel. Everything that describes the session,
+ * the workout, its duration, its precision, its effort, does. A lock does
+ * not: the copy is the one meant to be dragged to another day, and the
+ * generator must be free to take it back.
+ */
+export function duplicateSession(
+  planId: string,
+  weekNumber: number,
+  sessionIndex: number,
+): number | null {
+  const plans = getAllPlans();
+  const plan = plans.find(p => p.id === planId);
+  if (!plan) return null;
+
+  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+  const session = week?.sessions[sessionIndex];
+  if (!week || !session) return null;
+
+  const {
+    status: _status,
+    completedAt: _completedAt,
+    actualDurationMin: _actualDurationMin,
+    actualDistanceKm: _actualDistanceKm,
+    rpe: _rpe,
+    userNote: _userNote,
+    locked: _locked,
+    ...kept
+  } = session;
+  const copy: PlanSession = {
+    ...kept,
+    paceNotes: session.paceNotes?.map(n => ({ ...n })),
+  };
+  if (!copy.paceNotes) delete copy.paceNotes;
+
+  week.sessions.splice(sessionIndex + 1, 0, copy);
+  return savePlan(plan) ? sessionIndex + 1 : null;
+}
+
 export function deleteSessionFromPlan(
   planId: string,
   weekNumber: number,

@@ -366,6 +366,7 @@
       "lock": "Verrouiller",
       "unlock": "Déverrouiller",
       "reroll": "Re-tirer",
+      "duplicate": "Dupliquer",
       "viewDetail": "Voir le détail",
       "rest": "Jour de repos",
       "lockedHint": "Verrouillée : conservée à la régénération",
@@ -395,6 +396,7 @@
       "copySuffix": "(copie)"
     },
     "toast": {
+      "sessionDuplicated": "Séance dupliquée · glisse la copie où tu veux",
       "saved": "Semaine enregistrée",
       "exported": "Export généré",
       "generated": "Semaine générée",

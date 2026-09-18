@@ -41,6 +41,7 @@ import {
   useState,
   type ComponentProps,
   type MouseEvent as ReactMouseEvent,
+  type RefObject,
 } from "react";
 
 /* ── the scroll lock ──────────────────────────────────────────────────── */
@@ -159,11 +160,25 @@ export function useDialogContainer() {
 export interface NativeDialogProps extends Omit<ComponentProps<"dialog">, "open"> {
   /** Raised for Escape, the ::backdrop, and any close() from inside. */
   onDismiss?: () => void;
+  /**
+   * Where the focus lands at the opening, instead of the first control.
+   *
+   * The dialog focusing steps of showModal() pick the first focusable
+   * descendant, and when that is a text field the phone answers with its
+   * keyboard, and often a zoom: the panel opens ON a question the user did
+   * not ask. Pointed at a container (with `tabIndex={-1}`, see
+   * `MobileMenu.tsx` for the same move), the panel opens quiet and the
+   * fields wait to be tapped. The `autofocus` attribute is set on it BEFORE
+   * showModal(), so the browser's own steps land there and the field is never
+   * focused, not even for the instant it would take to summon the keyboard.
+   */
+  initialFocus?: RefObject<HTMLElement | null>;
 }
 
 export function NativeDialog({
   onDismiss,
   onMouseDown,
+  initialFocus,
   children,
   ...props
 }: NativeDialogProps) {
@@ -174,6 +189,8 @@ export function NativeDialog({
   // and only once, or showModal would fire again on every parent re-render.
   const dismiss = useRef(onDismiss);
   dismiss.current = onDismiss;
+  const focusTarget = useRef(initialFocus);
+  focusTarget.current = initialFocus;
 
   useLayoutEffect(() => {
     const dialog = ref.current;
@@ -190,7 +207,12 @@ export function NativeDialog({
       dismiss.current?.();
     };
     dialog.addEventListener("close", handleClose);
+    const target = focusTarget.current?.current ?? null;
+    if (target) target.setAttribute("autofocus", "");
     dialog.showModal();
+    // The attribute is the browser's cue; the call is the fallback for one
+    // that ignores an autofocus set by script, and it is harmless otherwise.
+    if (target) target.focus({ preventScroll: true });
     raiseToastLayer();
     lockScroll();
     setContainer(dialog);

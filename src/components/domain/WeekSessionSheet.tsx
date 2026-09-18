@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
+  Copy,
   Dices,
   Eye,
   Lock,
@@ -68,6 +69,8 @@ interface WeekSessionSheetProps {
   onRedraw?: (sessionIndex: number) => void;
   onToggleLock: (sessionIndex: number) => void;
   onMove: (sessionIndex: number, day: number) => void;
+  /** Copies the session onto its day; the copy is then dragged where it goes. */
+  onDuplicate?: (sessionIndex: number) => void;
   onDelete: (sessionIndex: number) => void;
 }
 
@@ -94,6 +97,7 @@ export function WeekSessionSheet({
   onRedraw,
   onToggleLock,
   onMove,
+  onDuplicate,
   onDelete,
 }: WeekSessionSheetProps) {
   const { t } = useTranslation(["library", "plan"]);
@@ -123,6 +127,11 @@ export function WeekSessionSheet({
   // dismisses the sheet before it is seen. The first half-second of
   // mousedown is that echo, never a dismissal.
   const openedAt = useRef(0);
+  // Where the sheet opens: on its body, not on the duration field. Left to
+  // the browser, showModal() would focus that field, and a phone answers a
+  // focused field with its keyboard and a zoom, so the sheet opened on a
+  // question nobody asked. The duration is one tap away, like the rest.
+  const bodyRef = useRef<HTMLFormElement>(null);
   useEffect(() => {
     if (!session) return;
     openedAt.current = Date.now();
@@ -200,6 +209,7 @@ export function WeekSessionSheet({
       <SheetContent
         side={fromBottom ? "bottom" : "right"}
         className="zn-wksheet"
+        initialFocus={bodyRef}
         onMouseDown={(e) => {
           if (Date.now() - openedAt.current < 500) e.preventDefault();
         }}
@@ -228,7 +238,12 @@ export function WeekSessionSheet({
           <SheetDescription className="sr-only">{t("library:weekly.slot.adjust")}</SheetDescription>
         </SheetHeader>
 
+        {/* tabIndex -1 : la cible du focus d'ouverture (voir bodyRef), sans
+            arrêt de tabulation supplémentaire ; l'anneau est éteint dans
+            base.css, comme celui du menu mobile. */}
         <form
+          ref={bodyRef}
+          tabIndex={-1}
           className="zn-wksheet__body"
           noValidate
           onSubmit={(e) => {
@@ -375,6 +390,12 @@ export function WeekSessionSheet({
                   </button>
                 ))}
               </div>
+            )}
+            {onDuplicate && (
+              <button type="button" className="zn-wksheet__action" onClick={action(target.sessionIndex, onDuplicate)}>
+                <Copy />
+                {t("library:weekly.slot.duplicate")}
+              </button>
             )}
             <button
               type="button"
