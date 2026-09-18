@@ -1,8 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { getAnyWorkoutDuration } from "@/lib/workoutFilters";
-import { getDominantZone, isStrengthWorkout } from "@/types";
-import type { AnyWorkoutTemplate } from "@/types";
+import { weekRhythm } from "@/lib/weekRhythm";
 import type { WeekSlot } from "@/types/week";
 
 interface WeekRhythmChartProps {
@@ -12,45 +10,16 @@ interface WeekRhythmChartProps {
   compact?: boolean;
 }
 
-/** Accent zone for a slot, strength/rest have no aerobic zone. */
-function slotZone(w: AnyWorkoutTemplate | null): number | null {
-  if (!w || isStrengthWorkout(w)) return null;
-  return getDominantZone(w);
-}
-
 /**
  * Seven columns Mon→Sun: height = total session duration, colour = dominant
  * zone, rest days shown as a flat muted baseline. Days holding several
  * sessions stack one segment per session. Reads the shape of the week at a
- * glance (Epic #83, issue #88).
- *
- * An activity (a bike commute, a swim) is a session of the week like the
- * others: its duration is its height and its planned effort its colour. Left
- * out, three commuting days read as three rest days, the one lie this chart
- * must not tell.
+ * glance (Epic #83, issue #88). The figures come from `weekRhythm`, which the
+ * share images read too, so both draw the same week.
  */
 export function WeekRhythmChart({ slots, className, compact }: WeekRhythmChartProps) {
   const { t } = useTranslation("library");
-
-  // Group per day, planWeekToSlots may emit several slots for the same day.
-  const days = [0, 1, 2, 3, 4, 5, 6].map((day) => {
-    const sessions = slots
-      .filter((s) => s.day === day && (s.workout || (s.activity && s.activity.durationMin > 0)))
-      .map((s) =>
-        s.activity
-          ? { duration: s.activity.durationMin, zone: s.activity.zone }
-          : {
-              duration: s.durationMin ?? getAnyWorkoutDuration(s.workout!),
-              zone: slotZone(s.workout),
-            },
-      );
-    return {
-      day,
-      sessions,
-      total: sessions.reduce((acc, s) => acc + s.duration, 0),
-    };
-  });
-  const maxDuration = Math.max(1, ...days.map((d) => d.total));
+  const { days, maxDuration } = weekRhythm(slots);
 
   return (
     <div

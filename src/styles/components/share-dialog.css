@@ -293,10 +293,15 @@
 
 /* The scroll track. It scrolls inside itself, the page never moves
    sideways, and the side padding is what leaves a peek of the neighbours. */
+/* The side padding is exactly what centres the first and the last slide:
+   half the track less half a slide. At 12% for a 72vw slide the last slide
+   stopped short of the centre, and the selection, which follows the slide
+   nearest the centre, could never reach it: with four templates on offer
+   the fourth was unselectable. */
 .zn-share-dialog__track {
   display: flex;
   gap: var(--sp-6);
-  padding-inline: 12%;
+  padding-inline: calc(50% - 36vw);
   padding-block: var(--sp-8) var(--sp-6);
 
   overflow-x: auto;
@@ -324,7 +329,7 @@
 @media (min-width: 640px) {
   .zn-share-dialog__track {
     gap: var(--sp-8);
-    padding-inline: 18%;
+    padding-inline: 21%;
   }
 }
 
