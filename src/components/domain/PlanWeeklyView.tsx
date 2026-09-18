@@ -1020,7 +1020,11 @@ const DayCell = memo(function DayCell({
             <span className="zn-planweek__add-plus">+</span>
           </button>
         ) : (
-          <span className="zn-planweek__empty">---</span>
+          /* A read-only week names its rest day, as the editor does: a shared
+             week is looked at, and three dashes say nothing about a Sunday. */
+          <span className="zn-planweek__empty">
+            {singleWeek && !isBlockedDay ? t("library:weekly.kinds.rest") : "---"}
+          </span>
         )
       ) : null}
 

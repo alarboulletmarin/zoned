@@ -685,6 +685,13 @@
   display: flex;
   align-items: center;
   gap: var(--sp-2);
+
+  /* The card's own paper behind the row, whatever tone the card wears: on a
+     narrow card the five marks reach the zone dot and the star, and printed
+     over them they were one glyph on top of another. Backed, they cover
+     cleanly for the length of the hover instead of colliding. */
+  padding-inline-start: var(--sp-3);
+  background: inherit;
 }
 
 .zn-sess__action {
@@ -947,6 +954,30 @@
 .zn-planweek__day[data-desktop="true"],
 .zn-planweek__day[data-single-week="true"] {
   min-block-size: 120px;
+}
+
+/* The standalone week on a wide screen: the board is the object, alone in
+   its column, so a day and its cards get the room of a real sheet rather
+   than a calendar cell. The name goes up a step, to the body-sm size the
+   list view already prints it at. */
+@media (min-width: 901px) {
+  .zn-planweek__day[data-single-week="true"][data-desktop="true"] {
+    min-block-size: 160px;
+    padding: var(--sp-5);
+  }
+
+  .zn-planweek__day[data-single-week="true"][data-desktop="true"] .zn-sess[data-density="card"] {
+    padding: var(--sp-5);
+  }
+
+  .zn-planweek__day[data-single-week="true"][data-desktop="true"] .zn-sess__name {
+    font-size: var(--fs-body-sm);
+    line-height: 1.3;
+  }
+
+  .zn-planweek__day[data-single-week="true"][data-desktop="true"] .zn-sess__head {
+    margin-block-end: var(--sp-2);
+  }
 }
 
 /* Même départage que sur la grille du plan : la cible de dépôt prend l'anneau
@@ -1406,7 +1437,10 @@
   transform: translateY(100%);
 }
 
-@media (min-width: 768px) {
+/* Gone once the rail can hold it. 901px, not 768: the rail folds away at
+   900px (plan-weeks.css), and a sheet hidden from 768 left a band where
+   "add a session" opened nothing at all. */
+@media (min-width: 901px) {
   .zn-planpanel[data-mode="sheet"] {
     display: none;
   }

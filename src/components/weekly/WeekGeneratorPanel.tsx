@@ -7,6 +7,7 @@ import {
   Sparkles,
   Loader2,
   LockOpen,
+  X,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -55,6 +56,7 @@ export function WeekGeneratorPanel({
   weekIsPopulated,
   lockedCount = 0,
   onUnlockAll,
+  onClose,
   bare = false,
 }: {
   settings: WeekSettings;
@@ -65,11 +67,14 @@ export function WeekGeneratorPanel({
   /** Sessions locked in the current week, kept as-is on the next generation. */
   lockedCount?: number;
   onUnlockAll?: () => void;
+  /** Puts the tool away. Rendered as a close mark in the title row: the panel
+   *  is a rail opened on demand beside the board, not a fixture of the page. */
+  onClose?: () => void;
   /** Compact, surface-less variant for the mobile "Régler" sheet (no border,
    *  no padding, no redundant title) so the whole panel fits without scroll. */
   bare?: boolean;
 }) {
-  const { t } = useTranslation("library");
+  const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
 
   const set = (patch: Partial<WeekSettings>) =>
@@ -89,9 +94,22 @@ export function WeekGeneratorPanel({
   return (
     <div className={cn("zn-wk-gen", bare && "zn-wk-gen--bare")}>
       {!bare && (
-        <span className="zn-kicker zn-wk-gen__title">
-          {t("weekly.generate.title")}
-        </span>
+        <div className="zn-wk-gen__head">
+          <span className="zn-kicker zn-wk-gen__title">
+            {t("weekly.generate.title")}
+          </span>
+          {onClose && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={onClose}
+              aria-label={t("common:actions.close")}
+              className="zn-wk-gen__close"
+            >
+              <X />
+            </Button>
+          )}
+        </div>
       )}
 
       <div className="zn-wk-gen__body">

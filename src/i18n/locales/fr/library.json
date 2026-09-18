@@ -223,11 +223,17 @@
       "subtitle": "Choisis comment composer ta semaine d'entraînement.",
       "back": "Retour aux semaines",
       "modes": {
-        "create": {
-          "title": "Créer une semaine",
-          "desc": "Génère une semaine 80/20 automatiquement, ou compose-la séance par séance.",
-          "kicker": "Générateur 80/20",
+        "scratch": {
+          "kicker": "À la main",
+          "title": "Partir de zéro",
+          "desc": "Une semaine vide que tu remplis séance par séance, sans passer par le générateur.",
           "cta": "Composer ma semaine"
+        },
+        "generate": {
+          "kicker": "Générateur 80/20",
+          "title": "Générer une semaine",
+          "desc": "Règle le volume, les séances et les disciplines : le générateur compose une semaine polarisée.",
+          "cta": "Régler et générer"
         },
         "prebuilt": {
           "title": "Semaine pré-construite",
@@ -236,13 +242,7 @@
           "cta": "{{count}} semaines prêtes"
         }
       },
-      "generate": "Générer (80/20)",
-      "generateDesc": "Le générateur compose une semaine polarisée à partir de tes réglages.",
-      "scratch": "Partir de zéro",
-      "scratchDesc": "Une semaine vide que tu remplis à la main, séance par séance.",
-      "namePlaceholder": "Nom de la semaine",
-      "scratchCreate": "Créer la semaine vide",
-      "kicker": "2 façons de commencer"
+      "kicker": "3 façons de commencer"
     },
     "prebuilt": {
       "title": "Semaines pré-construites",
