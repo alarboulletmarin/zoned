@@ -46,10 +46,15 @@
   }
 }
 
+/* Half and half from 1024px: the figures and the 80/20 gauge on one side,
+   the rhythm on the other. The chart had an 18rem column against the rest
+   of the bar for the zones, and on a wide screen the shape of the week,
+   which the phone strip already puts first, read as a footnote. */
 @media (min-width: 1024px) {
   .zn-wk-summary {
-    grid-template-columns: 1fr 18rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
+    column-gap: var(--sp-13);
   }
 }
 
@@ -315,6 +320,21 @@
 @media (min-width: 640px) {
   .zn-wk-rhythm__days {
     gap: var(--sp-4);
+  }
+}
+
+/* With half the bar to itself, the chart grows with it: taller, and the
+   columns wider than the 40px drawn for the narrow column, so seven days
+   fill their half instead of standing in the middle of it. */
+@media (min-width: 1024px) {
+  .zn-wk-summary .zn-wk-rhythm__days {
+    block-size: 160px;
+    gap: var(--sp-6);
+  }
+
+  .zn-wk-summary .zn-wk-rhythm__col,
+  .zn-wk-summary .zn-wk-rhythm__rest {
+    max-inline-size: 64px;
   }
 }
 
