@@ -130,6 +130,19 @@ describe("normalizeStoredPlan", () => {
     const normalized = normalizeStoredPlan(plan);
     expect(normalized?.weeks[0].sessions[0].discipline).toBeUndefined();
   });
+
+  test("keeps a standalone week's volume budget, and drops one that is not a positive number", () => {
+    const plan = makeLegacyPlan();
+    plan.config.isSingleWeek = true;
+    plan.config.targetVolumeH = 4.5;
+    expect(normalizeStoredPlan(plan)?.config.targetVolumeH).toBe(4.5);
+
+    plan.config.targetVolumeH = 0;
+    expect(normalizeStoredPlan(plan)?.config.targetVolumeH).toBeUndefined();
+
+    delete plan.config.targetVolumeH;
+    expect(normalizeStoredPlan(plan)?.config.targetVolumeH).toBeUndefined();
+  });
 });
 
 describe("parseImportedPlanJson", () => {

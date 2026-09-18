@@ -18,20 +18,25 @@ export function WeekSummaryStrip({
   stats,
   slots,
   targetVolumeH,
+  onTargetVolumeChange,
   className,
 }: {
   stats: WeekStats;
   slots: WeekSlot[];
   targetVolumeH?: number;
+  /** Lets the budget be set or cleared from the full bar, see WeekSummaryBar. */
+  onTargetVolumeChange?: (hours: number | undefined) => void;
   className?: string;
 }) {
   const { t } = useTranslation("library");
   const hours = stats.totalHours.toFixed(1).replace(".", ",");
+  // The budget in the same notation as the hours: "6,1/4,5 h", not "6,1/4.5 h".
+  const target = targetVolumeH != null ? String(targetVolumeH).replace(".", ",") : undefined;
   // "5,4/6 h", not "5,4 / 6 h": the strip has one line on a phone and the
   // spaces around the slash were what pushed the load onto a second.
   const figures =
-    targetVolumeH != null
-      ? t("weekly.summary.stripBudget", { sessions: stats.sessions, hours, target: targetVolumeH, tss: stats.totalTss })
+    target != null
+      ? t("weekly.summary.stripBudget", { sessions: stats.sessions, hours, target, tss: stats.totalTss })
       : t("weekly.summary.strip", { sessions: stats.sessions, hours, tss: stats.totalTss });
   const { lowShare, midShare, highShare, zonedMinutes } = stats.polarised;
   const status = zonedMinutes > 0 ? polarisationStatus(midShare + highShare) : null;
@@ -66,7 +71,12 @@ export function WeekSummaryStrip({
         </span>
       </summary>
       <div className="zn-disclosure__panel">
-        <WeekSummaryBar stats={stats} slots={slots} targetVolumeH={targetVolumeH} />
+        <WeekSummaryBar
+          stats={stats}
+          slots={slots}
+          targetVolumeH={targetVolumeH}
+          onTargetVolumeChange={onTargetVolumeChange}
+        />
       </div>
     </details>
   );

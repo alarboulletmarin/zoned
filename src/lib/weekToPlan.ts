@@ -157,6 +157,7 @@ export function createWeekPlanFromGenerated(
   });
   plan.config.isSingleWeek = true;
   plan.config.longRunDay = week.settings.longRunDay;
+  plan.config.targetVolumeH = week.settings.targetVolumeH;
   plan.weeks[0].sessions = generatedWeekToSessions(week);
   return plan;
 }
@@ -170,6 +171,7 @@ export function createWeekPlanFromGenerated(
 export function prebuiltWeekToPlan(week: PrebuiltWeek, name?: string): TrainingPlan {
   const plan = createEmptyWeekPlan(name ?? week.name);
   plan.config.longRunDay = week.settings.longRunDay;
+  plan.config.targetVolumeH = week.settings.targetVolumeH;
   plan.config.daysPerWeek = week.settings.sessions;
   plan.config.weekCategory = week.category;
   plan.weeks[0].sessions = week.sessions
