@@ -360,12 +360,33 @@
   max-inline-size: var(--page-max-wide);
 }
 
+/* The editor takes the height the viewport leaves too, down to the footer.
+   The rail's tool used to be a fixed `100vh - 160px`: on a screen where the
+   board fit, opening it made the page 130px taller than the viewport, and the
+   one screen about composing a week gained a scrollbar for a panel that
+   scrolls itself. The column now stretches from the shell's main down to the
+   band, so the rail can fill the screen without ever lengthening the page.
+   Nothing changes for the board: it still sits at the top of its column. */
+.zn-main:has(.zn-pw__editor) {
+  display: flex;
+  flex-direction: column;
+}
+
+.zn-page:has(.zn-pw__editor),
+.zn-pw:has(.zn-pw__editor),
+.zn-pw__band:has(.zn-pw__editor) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
 /* The board alone by default, the whole column wide. A tool opens a rail
    beside it, a column and not an overlay, so it never covers or compresses
    the board, and the grid folds back to one column when the tool closes.
    `data-rail` names the open tool; either value opens the column. */
 .zn-pw__editor {
   display: grid;
+  flex: 1;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-13);
   align-items: start;
@@ -375,10 +396,38 @@
   grid-template-columns: minmax(0, 1fr) 340px;
 }
 
+/* The rail is as tall as the row and never taller: the board, or the screen
+   when the board is shorter, sets the row, and `contain: size` keeps the
+   tool it holds out of that measure. Without it a grid row is as tall as
+   its tallest item, and a picker sized to the viewport pushed the footer
+   under the fold. The floor is the height under which the picker stops
+   being one (its header, search, chips and a couple of cards); only there
+   does the page grow again, on a screen too short for the tool. */
 .zn-pw__rail {
+  align-self: stretch;
+  contain: size;
+  min-inline-size: 0;
+  min-block-size: 30rem;
+}
+
+/* The tool inside sticks under the header while a tall board scrolls, and is
+   bounded twice: by the rail, so it ends where the board ends, and by the
+   viewport, so it stays whole on screen while stuck. The picker's list and
+   the generator's body scroll on their own inside that height. Two classes
+   deep on purpose: the generator caps itself at `100dvh - 11rem` in
+   weekly.css, one class strong, and a rule of the same weight lost to it on
+   source order. */
+.zn-pw__editor > .zn-pw__rail > * {
   position: sticky;
   inset-block-start: var(--sp-10);
-  min-inline-size: 0;
+  max-block-size: min(100%, calc(100dvh - 2 * var(--sp-10)));
+}
+
+/* The picker fills the rail rather than the `100vh - 160px` plan-calendar.css
+   gives it beside the plan calendar, where the column has no height of its
+   own; the generator keeps its natural height under the same cap. */
+.zn-pw__rail > .zn-planpanel[data-mode="inline"] {
+  block-size: 100%;
 }
 
 @media (max-width: 1100px) {

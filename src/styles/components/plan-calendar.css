@@ -1455,7 +1455,9 @@
   background: var(--scrim);
 }
 
-@media (min-width: 768px) {
+/* Same 901px as the sheet above: at 768 the scrim left first, and between
+   768 and 900 the sheet rose over a page that was neither dimmed nor held. */
+@media (min-width: 901px) {
   .zn-planpanel__scrim {
     display: none;
   }

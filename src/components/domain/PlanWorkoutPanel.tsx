@@ -141,10 +141,13 @@ export function PlanWorkoutPanel({
   // les autres panneaux, donc un dialogue ouvert par-dessus ne le rend pas trop tôt.
   //
   // La requête média n'est pas un raffinement : les deux modes sont montés en
-  // même temps et c'est le CSS qui cache la sheet au-dessus de 768px. Sans elle,
-  // ouvrir le panneau latéral sur desktop figeait le défilement de la page
-  // entière au nom d'une sheet que personne ne voyait.
-  const sheetIsOnScreen = useMediaQuery("(max-width: 767px)");
+  // même temps et c'est le CSS qui cache la sheet au-dessus de 900px
+  // (plan-calendar.css, le seuil où le rail se replie). Sans elle, ouvrir le
+  // panneau latéral sur desktop figeait le défilement de la page entière au
+  // nom d'une sheet que personne ne voyait. Le même seuil que le CSS, pas
+  // 767 : entre 768 et 900 la sheet était à l'écran et la page défilait
+  // dessous.
+  const sheetIsOnScreen = useMediaQuery("(max-width: 900px)");
   useScrollLock(isOpen && !inline && sheetIsOnScreen);
 
   // Le glisser-pour-fermer est le même que celui des sheets de la primitive :
