@@ -25,6 +25,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
+import { HubNav, navSection } from "@/components/layout";
 import { usePlans } from "@/hooks/usePlans";
 import { importPlan } from "@/lib/planStorage";
 import { toast } from "sonner";
@@ -233,6 +234,9 @@ export function PlansPage() {
             <h1 className="zn-display" data-level="2">
               {t("plansPage.title")}
             </h1>
+            {/* Les pages de la porte, sous 1024px : le nouveau plan a déjà
+                son bouton, à droite, et c'est le seul aplat de la page. */}
+            <HubNav section={navSection("plan")} omit={["/plan/new"]} />
             <p className="zn-body zn-body--lead zn-plans__lede">
               {t("plansPage.subtitle")}
             </p>

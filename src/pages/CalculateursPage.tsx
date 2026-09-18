@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
+import { HubNav, navSection } from "@/components/layout";
 import { DoorCard } from "@/components/domain/DoorCard";
 import { usePickLang } from "@/lib/i18n-utils";
 
@@ -212,6 +213,13 @@ export function CalculateursPage() {
           <h1 className="zn-display" data-level="2">
             {t("calculators:calculateurs.title")}
           </h1>
+          {/* Les pages de la porte, sous 1024px : les deux calculateurs du
+              menu déroulant sont des cartes de cette page, on ne les répète
+              pas. */}
+          <HubNav
+            section={navSection("numbers")}
+            omit={["/calculators/zones", "/calculators/vma"]}
+          />
           <p className="zn-body zn-body--lead zn-num__lede">
             {t("calculators:calculateurs.description")}
           </p>

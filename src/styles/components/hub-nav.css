@@ -1,0 +1,71 @@
+/* Le rail d'une porte : ses pages, en liens, sous le titre de sa page
+   d'accueil, et seulement sous 1024px (HubNav.tsx dit pourquoi).
+
+   Des liens en corps de libellé, chacun suivi d'un chevron, et pas des
+   pilules : sur la bibliothèque, les pilules du rail se lisaient comme les
+   pilules de pratique juste en dessous, qui filtrent, et sur les plans comme
+   les boutons de contour, qui agissent. Trois gestes, une forme. Le chevron
+   est ce qui reste de l'affordance : il dit une sous-navigation, à la
+   manière des chevrons d'un menu déroulant, sans emprunter la forme d'un
+   bouton. Pas d'aplat, pas de vermillon : le rail dit où l'on PEUT aller,
+   l'accent est à ce qu'on fait sur la page.
+
+   Le plancher de 44px est inconditionnel : la surface n'existe que sous
+   1024px, donc pour tout pointeur qui peut l'atteindre. Les liens n'ont pas
+   de retrait horizontal, ils commencent au bord du titre comme lui ; c'est
+   l'écart de 20px entre deux qui fait deux cibles et non une. */
+.zn-hubnav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--sp-10);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-hubnav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--hit-min);
+
+  color: var(--text-body);
+  font: var(--type-label);
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-hubnav__link:hover {
+  color: var(--ink-1);
+}
+
+.zn-hubnav__link:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* Le chevron est en gris : c'est le mot qui se lit, le chevron ne fait que
+   dire ce qu'il est. Il prend l'encre avec le mot au survol. */
+.zn-hubnav__chevron {
+  flex: none;
+  color: var(--text-faint);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-hubnav__link:hover .zn-hubnav__chevron {
+  color: var(--ink-1);
+}
+
+/* La page où l'on est, si le rail est un jour rendu sur une page d'une
+   porte plutôt que sur son accueil : en gras, et sans chevron, parce qu'il
+   n'y a plus rien à ouvrir. Le gras seul serait un état dit par le seul
+   poids ; le chevron qui disparaît est la seconde marque. */
+.zn-hubnav__link[aria-current="page"] {
+  color: var(--ink-1);
+  font-weight: var(--fw-semibold);
+}
+
+.zn-hubnav__link[aria-current="page"] .zn-hubnav__chevron {
+  display: none;
+}

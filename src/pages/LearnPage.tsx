@@ -2,6 +2,7 @@ import { useMemo, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { BookOpen } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
+import { HubNav, navSection } from "@/components/layout";
 import { ArticleCard } from "@/components/domain/ArticleCard";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -96,6 +97,10 @@ export function LearnPage() {
           <h1 className="zn-display" data-level="2">
             {t("common:nav.understand")}
           </h1>
+          {/* Les pages de Comprendre, sous 1024px : la méthodologie, les
+              guides, la nutrition et le lexique, qui étaient six lignes du
+              Reste dans le menu. */}
+          <HubNav section={navSection("understand")} />
           <p className="zn-body zn-body--lead zn-learn__lede">
             {t("content:learn.lede")}
           </p>

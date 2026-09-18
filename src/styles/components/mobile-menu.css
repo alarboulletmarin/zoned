@@ -1,8 +1,8 @@
 /* Mobile menu, one glyph at the head of the bar, and the full-screen ink panel
  * it opens.
  *
- * Below 1024px the five doors no longer fit in the header, so they move behind
- * a single hamburger placed BEFORE the wordmark, and nothing floats anywhere.
+ * Below 1024px the doors no longer fit in the header, so they move behind a
+ * single hamburger placed BEFORE the wordmark, and nothing floats anywhere.
  *
  * Le déclencheur a été une pastille flottante au coin bas-droit jusqu'au
  * 13 septembre 2026. Ce qu'il en coûtait n'était pas visible sur lui, mais
@@ -30,32 +30,28 @@
  * `@media (pointer: coarse)`: this whole surface only exists below 1024px, so
  * the floor applies to every pointer that can reach it.
  *
- * ── L'ORDRE DU PANNEAU, REVU LE 13 SEPTEMBRE 2026 AU SOIR ─────────────────
+ * ── L'ORDRE DU PANNEAU, REVU LE 18 SEPTEMBRE 2026 ─────────────────────────
  *
- * Il était : libellé, portes, vide, figure sur un filet, pied. Trois défauts
- * tenaient dans cette seule colonne, et ils étaient liés.
+ * Il était : vide, libellé, portes dépliables, Le reste, filet, recherche,
+ * langue, thème. Les portes étaient tenues en bas, sous le pouce, et la
+ * moitié de l'écran au-dessus d'elles était vide : le vide se lisait avant
+ * les portes, comme une page qui n'a pas fini de charger. Sous les portes,
+ * trois dépliants et un Reste de seize lignes faisaient du panneau un plan
+ * de site, et le sol dessinait la langue et le thème aussi gros que la
+ * navigation.
  *
- *   La zone du pouce allait à la figure. Les cinq destinations tenaient le
- *   haut de l'écran, hors d'atteinte d'une main, et ~300px de vide les
- *   séparaient du dessin.
+ * Il est maintenant : libellé, quatre portes, OUTILS, trois outils, vide,
+ * filet, recherche, deux liens de service. La liste tient le haut, sous la
+ * pilule de fermeture, et se lit d'abord ; la place libre est descendue entre
+ * les outils et le sol, donc la recherche reste sous le pouce ; et le sol ne
+ * porte plus que ce qui n'est pas une destination. Le vermillon n'a qu'un
+ * emploi, le point de la ligne où l'on se trouve, portes, outils et liens de
+ * service confondus.
  *
- *   Le vide était du vide. Rien ne l'occupait, parce que la figure était
- *   posée en bas, contre le pied.
- *
- *   La fermeture était le seul aplat de couleur, donc le premier objet trouvé,
- *   pour l'action qu'on veut le moins.
- *
- * Il est maintenant : vide, libellé, portes, filet, pied. La scène a pris la
- * place libre, quelle qu'elle soit ; les portes sont tombées sous le pouce,
- * juste au-dessus du sol ; le filet a quitté la figure pour le pied, où il
- * sépare enfin ce qu'il doit séparer, la navigation des réglages ; et le
- * vermillon a quitté la fermeture pour le point de la porte où l'on se trouve.
- *
- * La figure, elle, a fini par quitter la scène tout entière, plus tard le même
- * soir, avec le glissé qui refermait le panneau (MobileMenu.tsx dit les deux
- * retraits). Le vide qu'elle occupait reste et garde son seul métier, tenir
- * les portes en bas : c'est pour ça que `.zn-menu__scene` survit à ce qu'elle
- * montrait.
+ * Les dépliants sont partis avec leurs règles : la rangée à deux boîtes, le
+ * bouton chevron, la liste indentée sur son filet, la pilule inversée de la
+ * page courante, et l'encre des deux Segmented. Les pages d'une porte sont
+ * sur la page de la porte, en rail (hub-nav.css).
  */
 
 /* Le panneau s'appelle .zn-mobile-menu et pas .zn-menu : dropdown-menu.css
@@ -64,7 +60,9 @@
    spécificité, et comme cette feuille est importée après, ses règles de
    dialogue plein écran, position fixed, inset 0, fond encre, s'appliquaient
    à CHAQUE menu déroulant de l'app : encre sur encre, et 176 px hors du
-   viewport. Deux revues l'ont mesuré indépendamment. Ne réutilise pas ce nom.
+   viewport. Deux revues l'ont mesuré indépendamment. Ne réutilise pas ce nom,
+   et aucun nom sous `.zn-menu__` que dropdown-menu.css déclare aussi : le
+   préfixe `__door` est au panneau, et mobile-menu.test.ts garde la frontière.
 
 ── le déclencheur, en tête de barre ──────────────────────────────────── */
 
@@ -96,19 +94,16 @@
    valeurs et fait les mêmes 44px de haut. Ouverture et fermeture occupent donc
    la même boîte, et le doigt ne se déplace pas entre les deux.
 
-   EN CONTOUR depuis la relecture du 13 septembre au soir. Elle portait l'aplat
-   vermillon, et c'était le seul de l'écran : sur un panneau d'encre où tout le
-   reste est blanc ou gris, un aplat de couleur est le premier objet que l'oeil
-   trouve, et il désignait la sortie. Le contour lui garde sa boîte, son mot et
-   sa place, et lui retire la priorité qu'elle n'avait pas à avoir ; la croix
-   dit le geste sans le mot, pour qui balaie. Le vermillon est descendu sur le
-   point de la porte où l'on se trouve (`.zn-menu__door[data-current]`), qui
-   est, elle, une information.
+   EN CONTOUR : en aplat vermillon, elle était le seul objet coloré du
+   panneau, donc le premier que l'oeil trouve, pour l'action qu'on veut le
+   moins. Le contour lui garde sa boîte, son mot et sa place, et lui retire la
+   priorité qu'elle n'avait pas à avoir ; la croix dit le geste sans le mot,
+   pour qui balaie. Le vermillon est descendu sur le point de la ligne où l'on
+   se trouve (`[data-current]`), qui est, elle, une information.
 
-   Elle n'est plus la seule sortie non plus : MobileMenu.tsx ajoute l'appui
-   dans la scène, le geste qu'on essaie sur une feuille plein écran avant de
-   chercher un bouton. Le glissé vers le bas l'accompagnait ; il est parti le
-   soir même, il se lisait comme un blocage plutôt que comme une sortie.
+   Elle n'est pas la seule sortie : MobileMenu.tsx ajoute l'appui dans la
+   scène, le geste qu'on essaie sur une feuille plein écran avant de chercher
+   un bouton, et Escape est à la plate-forme.
 
    Le `env(safe-area-inset-top)` en plus n'est pas une incohérence : le panneau
    est plein écran et passe sous l'encoche, la barre non. index.html ne demande
@@ -191,14 +186,11 @@
 
 /* No `gap` here: the room between the blocks is paid by each block itself,
    because it is not the same everywhere.
-   ET RIEN N'Y GLISSE. Ce bloc portait `zoned-slide-in`, donc les six portes
-   montaient de 8px par dessus le fondu du dialogue : deux mouvements
-   superposés sur une surface qui prend l'écran, et celui qui se voyait était
-   le mauvais, le texte arrivait sous le pouce en étant encore en train de
-   bouger. Une feuille latérale glisse parce qu'elle entre par un bord, un
-   dialogue posé monte de 8px parce qu'il se détache de la page ; ce panneau
-   n'a ni bord d'entrée ni page derrière, il EST l'écran, donc il se pose.
-   Reste le fondu de l'encre, `zn-menu-in` sur le dialogue, et lui seul. */
+   ET RIEN N'Y GLISSE. Une feuille latérale glisse parce qu'elle entre par un
+   bord, un dialogue posé monte de 8px parce qu'il se détache de la page ; ce
+   panneau n'a ni bord d'entrée ni page derrière, il EST l'écran, donc il se
+   pose. Reste le fondu de l'encre, `zn-menu-in` sur le dialogue, et lui
+   seul. */
 .zn-menu__inner {
   flex: 1;
   min-block-size: 0;
@@ -208,9 +200,7 @@
   overscroll-behavior: contain;
 
   /* En haut, la place de la pilule de fermeture : ses 8px de retrait, ses 44px
-     et 20px d'air sous elle. En bas, la marge d'écran et rien d'autre, la
-     réserve de 82px qu'imposait la pastille (`--fab-clear`) est partie avec
-     elle. */
+     et 20px d'air sous elle. En bas, la marge d'écran et rien d'autre. */
   padding-block:
     calc(var(--sp-4) + var(--hit-min) + var(--sp-10) + env(safe-area-inset-top, 0px))
     calc(var(--sp-13) + env(safe-area-inset-bottom, 0px));
@@ -224,30 +214,7 @@
   flex: none;
 }
 
-/* ── la scène, au-dessus des portes ───────────────────────────────────── */
-
-/* Elle est la place libre du panneau, et elle est EN HAUT.
-
-   `flex: 1` la fait prendre tout ce qui reste : c'est ce qui pose les portes
-   en bas, sous le pouce, sur un écran de n'importe quelle hauteur. C'est
-   maintenant sa seule déclaration. Elle a porté un dessin jusqu'au 13
-   septembre 2026 au soir, d'où le `container-type: size` qui empêchait la
-   figure de peser dans le calcul flex, le centrage et le débord jusqu'aux
-   bords de l'écran : trois réglages qui n'avaient de sens que pour un enfant,
-   et elle n'en a plus.
-
-   Le filet qui la soulignait était parti au pied avant elle : il servait de
-   sol à la figure, il sert maintenant à séparer la navigation des réglages,
-   ce qui est le seul endroit du panneau où une frontière se justifie.
-
-   Un appui dedans referme (MobileMenu.tsx). C'est le hors panneau d'une
-   feuille qui n'en a pas, et c'est la seconde raison qu'elle a d'exister. */
-.zn-menu__scene {
-  flex: 1;
-  margin-block-end: var(--sp-10);
-}
-
-/* ── les portes, sous le pouce ────────────────────────────────────────── */
+/* ── la navigation, en haut ───────────────────────────────────────────── */
 
 /* Le libellé de la liste. 12px sous lui et non plus 32 : à 32 il se lisait
    comme un titre d'écran posé seul en haut, à 12 il est l'étiquette de ce qui
@@ -255,62 +222,41 @@
    #918E88 sur #171614, mesuré à 5,54:1, au-dessus du 4,5:1 exigé. Le gris de
    la page, lui, serait illisible ici, d'où la reprise. */
 .zn-menu__eyebrow {
-  margin-block-end: var(--sp-6);
+  margin: 0 0 var(--sp-6);
   color: var(--panel-ink-faint);
 }
 
-.zn-menu__doors {
+/* La seconde étiquette, sous les portes. 24px au-dessus : assez pour que les
+   outils se lisent comme une autre liste, pas assez pour qu'ils se lisent
+   comme un autre écran. */
+.zn-menu__eyebrow--tools {
+  margin-block-start: var(--sp-12);
+}
+
+.zn-menu__doors,
+.zn-menu__tools,
+.zn-menu__foot-links {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-/* Une ligne, deux boîtes. Le libellé navigue, le chevron déplie, et les deux
-   sont des cibles distinctes : c'est la rangée qui les met côte à côte.
-
-   Avant, la ligne entière était un <summary>, donc un seul geste pour deux
-   intentions, et la liste mélangeait des lignes qui naviguaient (Aujourd'hui,
-   sans chevron) avec des lignes qui dépliaient, sans qu'on sache laquelle on
-   touchait avant de l'avoir touchée.
-
-   `__door-row` et pas `__row`, `__door-chevron` et pas `__chevron` : la
-   collision annoncée en tête de feuille n'est pas théorique, elle a été
-   REJOUÉE en écrivant cette rangée. Le premier jet nommait le <li>
-   `.zn-menu__item`, qui appartient à dropdown-menu.css : les portes ont pris
-   ses `display: flex`, son `padding: 8px 12px` et son `min-block-size: 44px`,
-   donc des lignes de 72px dont le lien ne s'étirait plus, et le chevron
-   revenait se coller au mot au lieu du bord. Tout nom sous `.zn-menu__` est
-   partagé avec les menus déroulants de Radix ; le préfixe `__door` est à
-   nous, et c'est la seule garantie qui tienne. */
-.zn-menu__door-row {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-4);
-}
-
-/* Display type, left-aligned, the doors are the screen. La même règle habille
-   un lien et le bouton du Reste, donc une porte qui navigue et une porte qui
-   déplie sont le même objet à l'écran.
+/* Display type, left-aligned, the doors are the screen. Chaque porte est un
+   lien, et il prend toute la ligne : la cible est le mot ET l'espace à sa
+   droite, pas seulement les lettres.
 
    56px de haut : les 44px du plancher tactile laissaient les boîtes se
    toucher, et deux cibles qui se touchent sont une cible qu'on rate. Et
    l'interligne remonte de 0,92 à 1,15 : à 33px de corps, les hampes de deux
    lignes voisines se frôlaient. */
 .zn-menu__door {
-  flex: 1;
-  min-inline-size: 0;
   display: flex;
   align-items: center;
   gap: var(--sp-6);
   min-block-size: var(--sp-18);
-  padding: 0;
 
-  background: transparent;
-  border: 0;
   color: var(--panel-ink-text);
-  text-align: start;
   text-decoration: none;
-  cursor: pointer;
 }
 
 /* Écrite en 0,2,0 et volontairement : `.zn-display[data-level="2"]` (_type.css)
@@ -319,23 +265,33 @@
   line-height: 1.15;
 }
 
-/* La porte où l'on se trouve. Un point vermillon, posé après le mot par la
+/* Un outil : une ligne de corps, en encre claire, à 44px. Plus petit qu'une
+   porte parce qu'on l'ouvre moins souvent, mais de la même encre, parce que
+   c'est une destination au même titre. Le gris est réservé aux étiquettes
+   et aux liens de service. */
+.zn-menu__tool {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  min-block-size: var(--hit-min);
+
+  color: var(--panel-ink-text);
+  font: var(--fw-medium) var(--fs-body-lg) / 1.2 var(--font-text);
+  text-decoration: none;
+}
+
+/* La ligne où l'on se trouve. Un point vermillon, posé après le mot par la
    boîte flex, et c'est le seul aplat de couleur du panneau depuis que la
-   fermeture est passée en contour.
+   fermeture est passée en contour. Le même point sur une porte, un outil ou
+   un lien de service : un seul marqueur pour tout le panneau.
 
    Il est DOUBLÉ d'`aria-current` (MobileMenu.tsx), et c'est la règle de la
    maison : un état ne se dit jamais par la seule couleur. Ici il se dit trois
    fois, par une forme qui apparaît, par une couleur, et par l'attribut que
    lisent les lecteurs d'écran. Le vermillon sur l'encre est mesuré à 4,58:1,
    au-dessus des 3:1 qu'un objet graphique doit tenir (WCAG 1.4.11). */
-/* Sur la ligne qui déplie sans naviguer, le chevron est DANS le bouton et
-   non à côté : sans cet ordre, le point se poserait après lui, tout au bord,
-   au lieu de suivre le libellé comme sur les quatre autres portes. La marge
-   automatique du chevron continue de le pousser à droite. */
-.zn-menu__door--toggle .zn-menu__door-chevron {
-  order: 1;
-}
-
+.zn-menu__tool[data-current]::after,
+.zn-menu__foot-link[data-current]::after,
 .zn-menu__door[data-current]::after {
   content: "";
   flex: none;
@@ -345,143 +301,39 @@
   background: var(--accent);
 }
 
-/* Le dépliant, à côté du libellé et pas à sa place. 44px pleins, le plancher
-   tactile, et le chevron collé au bord d'attaque droit par le `margin-inline`
-   auto qu'il porte déjà. */
-.zn-menu__disclose {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  inline-size: var(--hit-min);
-  min-block-size: var(--hit-min);
-
-  background: transparent;
-  border: 0;
-  color: var(--panel-ink-faint);
-  cursor: pointer;
-
-  transition: transform var(--dur-fast) var(--ease-out);
+/* Les liens de service portent un point plus petit : à 8px il est à
+   l'échelle de leur corps, à 10 il pesait plus que le mot. */
+.zn-menu__foot-link[data-current]::after {
+  inline-size: 8px;
+  block-size: 8px;
 }
 
-.zn-menu__disclose:active {
-  transform: translateY(var(--press-shift));
+/* ── la scène, entre la navigation et le sol ──────────────────────────── */
+
+/* Elle est la place libre du panneau, et elle est AU MILIEU depuis le 18
+   septembre 2026 : au-dessus des portes, elle les tenait sous le pouce au
+   prix d'un demi-écran vide qui se lisait avant elles.
+
+   `flex: 1` lui fait prendre tout ce qui reste : c'est ce qui tient la liste
+   en haut et le sol en bas, sur un écran de n'importe quelle hauteur. Sur un
+   écran trop court pour tout, elle tombe à son minimum, 20px d'air entre le
+   dernier outil et le filet, et le panneau défile.
+
+   Un appui dedans referme (MobileMenu.tsx). C'est le hors panneau d'une
+   feuille qui n'en a pas, et c'est la seconde raison qu'elle a d'exister. */
+.zn-menu__scene {
+  flex: 1;
+  min-block-size: var(--sp-10);
 }
 
-/* Renommé depuis `.zn-menu__chevron`, qui était déclaré ici ET dans
-   dropdown-menu.css : cette feuille étant importée après, le gris du panneau
-   et la transition descendaient sur les chevrons de sous-menu de Radix, qui
-   ne demandaient qu'une marge automatique. Seule la taille en réchappait,
-   parce que `.zn-menu__item svg` la reprend en 0,1,1. La fuite est refermée
-   par le nom, et le test la garde (mobile-menu.test.ts). */
-.zn-menu__door-chevron {
-  inline-size: 20px;
-  block-size: 20px;
-  flex: none;
-  margin-inline-start: auto;
-  transition: transform var(--dur-base) var(--ease-out);
-}
+/* ── the floor: search, and what is not a destination ─────────────────── */
 
-/* L'état ouvert se lit sur le chevron, qu'il soit porté par le bouton
-   dépliant des quatre portes ou par la ligne entière du Reste. */
-.zn-menu__disclose[aria-expanded="true"] .zn-menu__door-chevron,
-.zn-menu__door[aria-expanded="true"] .zn-menu__door-chevron {
-  transform: rotate(180deg);
-}
-
-/* ── a door's pages ───────────────────────────────────────────────────── */
-
-/* The children hang off a rule, indented under their door, the indent is what
-   says "these belong to the line above". */
-.zn-menu__sub {
-  list-style: none;
-  margin: var(--sp-2) 0 var(--sp-8);
-  padding: 0 0 0 var(--sp-8);
-  border-inline-start: var(--bw-rule) solid var(--panel-ink-faint);
-}
-
-/* `hidden` porte display:none dans la feuille du navigateur, donc une règle
-   d'auteur qui déclarerait `display` ici le battrait sans rien dire. Aucune ne
-   le fait aujourd'hui ; ceci le garantit. */
-.zn-menu__sub[hidden] {
-  display: none;
-}
-
-.zn-menu__sub-link {
-  display: flex;
-  align-items: center;
-  min-block-size: var(--hit-min);
-  padding-inline-start: var(--sp-8);
-
-  color: var(--panel-ink-faint);
-  font: var(--type-body-sm);
-  text-decoration: none;
-}
-
-/* La page où l'on est. Le gras et l'encre claire ne suffisaient pas : sur ce
-   fond noir, --panel-ink-faint → --panel-ink-text est un écart porté par la
-   seule couleur, et il fond dès qu'on désature. La pilule inverse le rapport,
-   sur un panneau d'encre, l'inversion est du papier, donc l'état se lit aussi
-   en niveaux de gris. Rien ne bouge : la boîte a déjà ses 44px de min-block-size
-   et son retrait, on ne fait que peindre dedans. */
-.zn-menu__sub-link[aria-current="page"] {
-  background: var(--panel-ink-text);
-  color: var(--panel-ink);
-  border-radius: var(--r-pill);
-  font-weight: var(--fw-semibold);
-}
-
-/* ── the floor: search, the two switches, everything else ─────────────── */
-
-/* Le filet est ici depuis le 13 septembre au soir. Il soulignait la figure,
-   où il ne séparait rien ; il sépare maintenant la navigation des réglages,
-   ce qui est la seule frontière que ce panneau ait à tracer. Il traverse
-   l'écran entier, à travers le padding du panneau, et c'est le seul trait de
-   la surface qui le fasse.
+/* Le filet sépare la navigation de ce qui n'en est pas, la seule frontière
+   que ce panneau ait à tracer. Il traverse l'écran entier, à travers le
+   padding du panneau, et c'est le seul trait de la surface qui le fasse.
 
    Gris et non blanc : une frontière n'a pas à crier plus fort que ce qu'elle
-   sépare.
-
-   8px entre le champ et les pilules, contre 20 : les douze pixels rendus sont
-   ce qui laisse à la figure son plancher de 120px sur un iPhone SE. */
-/* Les deux réglages, empilés et à la largeur de la recherche.
-
-   Ils tenaient sur une rangée à deux colonnes, chacun sur une demi-largeur.
-   Le thème y gagne un troisième segment, et `Système` ne tient pas dans les
-   54px qu'une demi-largeur laisse à chacun de trois. Empilés, les trois
-   contrôles du pied font la même largeur et se lisent comme une même famille,
-   ce qui est aussi le but. La scène, qui est en `flex: 1`, paie la trentaine
-   de pixels que ça coûte, et elle en avait de reste. */
-.zn-menu__settings {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-4);
-}
-
-/* Le `Segmented` maison est peint pour le papier : piste sur fond enfoncé,
-   segment choisi inversé à l'encre. Sur un panneau qui EST l'encre, il faut
-   l'inverse, et seuls les tokens changent, jamais la forme.
-
-   Le parent est dans le sélecteur parce que segmented.css est importé en 84 et
-   cette feuille en 67 : à égale spécificité c'est lui qui tranche. */
-.zn-mobile-menu .zn-segmented {
-  background: transparent;
-  border-color: var(--panel-ink-text);
-}
-
-.zn-mobile-menu .zn-segmented__item {
-  color: var(--panel-ink-faint);
-}
-
-.zn-mobile-menu .zn-segmented__item:hover:not([aria-checked="true"]) {
-  color: var(--panel-ink-text);
-}
-
-.zn-mobile-menu .zn-segmented__item[aria-checked="true"] {
-  background: var(--panel-ink-text);
-  color: var(--panel-ink);
-  border-color: var(--panel-ink-text);
-}
-
+   sépare. */
 .zn-menu__foot {
   display: flex;
   flex-direction: column;
@@ -521,47 +373,30 @@
   color: var(--panel-ink-text);
 }
 
-/* Les deux reglages font, ensemble, la largeur du champ au-dessus.
+/* Réglages et À propos, sur une rangée, en petit et en gris : on doit
+   pouvoir les atteindre sans les chercher, pas les voir avant les portes.
+   Chacun garde ses 44px de haut ; l'écart de 32px entre les deux est ce qui
+   fait deux cibles et non une. Pas de retrait : ils commencent au bord du
+   panneau, comme le libellé de la liste et les portes, et comme le bord du
+   champ au-dessus. Un premier jet les retirait de 20px, et Paramètres
+   flottait alors entre le bord et le texte du champ, calé sur rien. */
+.zn-menu__foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--sp-14);
+}
 
-   Ils etaient deux boites a leur largeur naturelle, donc la rangee
-   s'arretait ou le mot du theme s'arretait, quelque part avant le bord
-   droit, et cet arret n'etait a rien : ni a une colonne, ni au champ, ni a
-   la marge d'ecran. Le pied avait donc deux bords de fin au lieu d'un.
+.zn-menu__foot-link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: var(--hit-min);
 
-   Deux colonnes egales, et la grille est ici le bon outil plutot que le
-   flex : `1fr 1fr` donne la moitie a chacun QUEL QUE SOIT le mot dedans,
-   donc FR/EN et le theme gardent la meme boite quand on passe en anglais,
-   ou le jour ou l'un des deux libelles change. */
+  color: var(--panel-ink-faint);
+  font: var(--type-body-sm);
+  text-decoration: none;
+}
 
-/* `justify-content: center` et non le debut : dans une colonne plus large
-   que son mot, un libelle cale a gauche laisse un trou a droite de
-   lui-meme, et on aurait echange un bord flottant contre deux.
-
-   Le padding descend de 20px a 12px : PASSER EN SOMBRE est le plus long des
-   quatre libelles (FR et EN, clair et sombre) et il doit tenir dans la
-   moitie d'un iPhone SE sans se couper. Mesure sous Chromium, polices
-   reelles. */
-
-/* Les deux codes sont imprimés ; celui qui a cours porte une pastille de
-   papier.
-
-   Il ne portait que l'encre pleine contre le gris, donc un état dit par la
-   seule couleur, exactement ce que la page où l'on est avait déjà corrigé
-   dans la liste des pages. L'inversion se lit aussi en niveaux de gris, et
-   c'est la même que celle-là : sur un panneau d'encre, l'inversion est du
-   papier. */
-
-
-/* Et cette feuille ne coûte plus rien aux autres. C'est ici que se tenait
-   l'inventaire de ce que la pastille faisait payer ailleurs, --fab-clear dans
-   shell.css, scroll-to-top.css et shell-misc.css, --fab-w dans footer.css et
-   les quatre feuilles qui ancrent une barre d'action au sol de la fenêtre
-   (session, plan-view, plan-weeks, calc-tests), plus le duo de home.css et
-   l'ordre de zone-figures.css. Les huit règles ont été retirées le
-   13 septembre 2026 en même temps que le geste qui les justifiait, et les deux
-   jetons ont quitté spacing.css : plus aucune feuille n'a à connaître ce
-   fichier.
-
-   La règle générale qu'on en retire, et qui vaut pour le prochain objet
-   flottant : un élément fixe ne coûte pas sa propre surface, il coûte une
-   exception par surface qu'il croise. Ici c'était huit, pour un bouton. */
+.zn-menu__foot-link:hover {
+  color: var(--panel-ink-text);
+}
