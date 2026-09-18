@@ -47,6 +47,7 @@ import type {
   TerrainFilter,
 } from "@/components/domain/WorkoutFilters";
 import { SEOHead } from "@/components/seo";
+import { HubNav, navSection } from "@/components/layout";
 import {
   useFavorites,
   useKeyboardShortcuts,
@@ -741,6 +742,9 @@ export function LibraryPage() {
             <h1 className="zn-display" data-level="2">
               {t("title")}
             </h1>
+            {/* Les pages de la porte, sous 1024px : le tirage a déjà sa
+                pilule dans la rangée de légende, plus bas. */}
+            <HubNav section={navSection("sessions")} omit={["/library/draw"]} />
           </div>
 
           <div className="zn-lib__search" role="search">

@@ -4,5 +4,7 @@
 // poserait deux déclencheurs et deux dialogues sur la même page.
 export { TopBar } from "./TopBar";
 export { Footer } from "./Footer";
+export { HubNav } from "./HubNav";
 export { PageContainer } from "./PageContainer";
 export { Wordmark } from "./Wordmark";
+export { navSection } from "./navigation";

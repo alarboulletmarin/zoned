@@ -9,8 +9,11 @@
  * reléguer est une machine à orpheliner en silence. Voir
  * `nav-coverage.test.ts`.
  *
- * Aucun import React ici, et c'est la contrainte à tenir.
+ * Aucun import React ici, et c'est la contrainte à tenir. Le seul import est
+ * un TYPE des réglages, effacé à la compilation.
  */
+
+import type { ModuleId } from "@/types/settings";
 
 export interface NavChild {
   to: string;
@@ -27,6 +30,10 @@ export interface NavSection {
   /** Pathname prefixes that should mark this door as active. */
   prefix: string[];
   children?: NavChild[];
+  /** Le module des réglages qui, masqué, retire cette entrée de la
+   *  navigation. Les réglages promettent que masquer retire de la nav sans
+   *  rien supprimer ; c'est ici que la promesse est tenue. */
+  module?: ModuleId;
 }
 
 /**
@@ -35,14 +42,23 @@ export interface NavSection {
  * Il y en avait cinq, et 28 entrées derrière. Une app d'entraînement dont la
  * navigation demande 28 décisions avant la première séance a un problème
  * d'architecture, pas de design. Ce qui reste ici, c'est ce que quelqu'un qui
- * s'entraîne ouvre vraiment : le cockpit, les séances, les plans, les
- * chiffres.
+ * s'entraîne ouvre vraiment : le cockpit, le plan, les séances, les chiffres.
+ *
+ * L'ORDRE RACONTE LE PRODUIT, et il a été revu le 18 septembre 2026 : ce que
+ * je fais aujourd'hui, ce que j'ai prévu, ce que je peux faire, ce que j'ai
+ * mesuré. Le plan passait après les séances, alors qu'il est la fonction
+ * centrale de Zoned et ce qui donne un sens à la séance du jour.
  *
  * Les ~35 destinations retirées **gardent toutes leur route** : elles restent
  * indexées, prérendues, partageables, et joignables par Cmd+K
  * (`src/data/command-surfaces.ts`), le pied de page et des liens contextuels.
  * Reléguer n'est pas supprimer, et `nav-coverage.test.ts` échoue si l'une
  * d'elles devient joignable de nulle part.
+ *
+ * Les `children` sont les pages d'une porte. Sur un écran large ils sont le
+ * menu déroulant de la barre ; sous 1024px ils ne sont PLUS dans le menu,
+ * ils sont sur la page d'accueil de la porte, en rail (`HubNav.tsx`). Une
+ * entrée du menu = une destination ; le détail d'une porte vit chez elle.
  *
  * Deux entrées sont là parce qu'elles répondent aux deux seuls moments où
  * l'on ne veut pas décider : tire-moi une séance et ma semaine. Elles
@@ -57,6 +73,18 @@ export const PRIMARY_NAV: NavSection[] = [
     prefix: [],
   },
   {
+    id: "plan",
+    to: "/plans",
+    labelKey: "nav.myPlan",
+    prefix: ["/plan", "/plans", "/weeks"],
+    children: [
+      { to: "/plans", labelKey: "topnav.plansMine", descKey: "topnav.plansMineDesc" },
+      { to: "/plan/new", labelKey: "topnav.plansNew", descKey: "topnav.plansNewDesc" },
+      { to: "/plan/new/prebuilt", labelKey: "topnav.plansPrebuilt", descKey: "topnav.plansPrebuiltDesc" },
+      { to: "/weeks", labelKey: "topnav.weeks", descKey: "topnav.weeksDesc" },
+    ],
+  },
+  {
     id: "sessions",
     to: "/library",
     labelKey: "nav.sessions",
@@ -67,18 +95,6 @@ export const PRIMARY_NAV: NavSection[] = [
       { to: "/collections", labelKey: "topnav.collections", descKey: "topnav.collectionsDesc" },
       { to: "/workout/builder", labelKey: "topnav.builder", descKey: "topnav.builderDesc" },
       { to: "/favorites", labelKey: "nav.favorites", descKey: "topnav.favoritesDesc" },
-    ],
-  },
-  {
-    id: "plan",
-    to: "/plans",
-    labelKey: "nav.myPlan",
-    prefix: ["/plan", "/plans", "/weeks"],
-    children: [
-      { to: "/plans", labelKey: "topnav.plansMine", descKey: "topnav.plansMineDesc" },
-      { to: "/plan/new", labelKey: "topnav.plansNew", descKey: "topnav.plansNewDesc" },
-      { to: "/plan/new/prebuilt", labelKey: "topnav.plansPrebuilt", descKey: "topnav.plansPrebuiltDesc" },
-      { to: "/weeks", labelKey: "topnav.weeks", descKey: "topnav.weeksDesc" },
     ],
   },
   {
@@ -98,6 +114,77 @@ export const PRIMARY_NAV: NavSection[] = [
       { to: "/calculators/vma", labelKey: "topnav.calcVma" },
     ],
   },
+];
+
+/**
+ * Les outils, sous les portes du menu plein écran.
+ *
+ * C'est ce qui remplace Le reste, un dépliant de seize lignes dont le nom ne
+ * disait rien : un libellé de regroupement n'est pas une destination, et une
+ * personne qui ouvre le menu cherche où aller, pas ce qui reste. Trois
+ * instruments qu'on n'ouvre pas tous les jours mais qu'on ouvre pour de
+ * vrai, chacun une destination directe : simuler sa course, se tracer un
+ * parcours, lire ce qui explique l'entraînement.
+ *
+ * Chacun est un module que les réglages peuvent masquer, d'où le champ
+ * `module` : masquer retire la ligne, la route reste (`ModuleGate.tsx`).
+ *
+ * Ce qui n'est PAS ici, et pourquoi : les comparatifs, les nouveautés, la
+ * contribution et le dépôt sont des pages du projet, pas de l'entraînement.
+ * Elles vivent dans le pied de page, dans la palette et dans le menu de
+ * compte du bureau ; la liste des écartées de `nav-coverage.test.ts` ne
+ * change pas, parce qu'elles gardent ces trois chemins.
+ *
+ * Comprendre a des enfants comme une porte : la méthodologie, les guides, la
+ * nutrition et le lexique sont ses pages, et le rail de `/learn` les montre.
+ * Ils étaient six lignes plates du Reste, à la même hauteur que Paramètres.
+ */
+export const TOOLS_NAV: NavSection[] = [
+  {
+    id: "raceSim",
+    to: "/race-simulator",
+    labelKey: "topnav.raceSim",
+    prefix: ["/race-simulator"],
+    module: "raceSimulator",
+  },
+  {
+    id: "routes",
+    to: "/routes",
+    // Le nom du module, le même mot que la bascule qui le masque.
+    labelKey: "modules.routes.name",
+    prefix: ["/routes"],
+    module: "routes",
+  },
+  {
+    id: "understand",
+    to: "/learn",
+    labelKey: "nav.understand",
+    /* `/plans/methodology` n'est pas ici : il tombe sous Mon plan, qui le
+       relie déjà, et deux points vermillon ne diraient plus où l'on est. */
+    prefix: ["/learn", "/methodology", "/guides", "/nutrition", "/glossary"],
+    module: "learn",
+    children: [
+      { to: "/learn", labelKey: "topnav.learnArticles", descKey: "topnav.learnArticlesDesc" },
+      { to: "/methodology", labelKey: "topnav.methodScience", descKey: "topnav.methodScienceDesc" },
+      { to: "/plans/methodology", labelKey: "topnav.methodPlans", descKey: "topnav.methodPlansDesc" },
+      { to: "/guides", labelKey: "topnav.learnGuides", descKey: "topnav.learnGuidesDesc" },
+      { to: "/nutrition", labelKey: "topnav.learnNutrition", descKey: "topnav.learnNutritionDesc" },
+      { to: "/glossary", labelKey: "topnav.learnGlossary", descKey: "topnav.learnGlossaryDesc" },
+    ],
+  },
+];
+
+/**
+ * Le sol du menu plein écran, sous le filet : ce qui n'est pas une
+ * destination d'entraînement mais qu'on doit pouvoir atteindre sans
+ * chercher. Deux lignes, discrètes. La langue et le thème n'y sont plus :
+ * la barre du haut les garde sur tous les écrans, et les réglages les
+ * portent avec leur nom entier ; les répéter ici au même poids que les
+ * portes était le bruit que la relecture du 18 septembre a nommé.
+ */
+export const MENU_FOOT_LINKS: NavChild[] = [
+  { to: "/settings", labelKey: "nav.settings" },
+  { to: "/about", labelKey: "nav.about" },
 ];
 
 export function isNavActive(pathname: string, section: NavSection): boolean {
@@ -166,3 +253,16 @@ export const FOOTER_GROUPS: { titleKey: string; links: FooterLink[] }[] = [
     ],
   },
 ];
+
+/**
+ * Une section par son id, portes et outils confondus. Pour les pages
+ * d'accueil qui montent leur rail (`HubNav.tsx`) : elles nomment la section
+ * qu'elles sont, et la donnée fait le reste. Lever plutôt que rendre
+ * `undefined` : un id qui ne résout plus est une faute d'écriture, pas un
+ * état.
+ */
+export function navSection(id: string): NavSection {
+  const section = [...PRIMARY_NAV, ...TOOLS_NAV].find((s) => s.id === id);
+  if (!section) throw new Error(`navigation: no section "${id}"`);
+  return section;
+}

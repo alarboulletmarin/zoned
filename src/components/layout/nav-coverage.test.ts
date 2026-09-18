@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-import { FOOTER_GROUPS, PRIMARY_NAV } from "./navigation";
+import { FOOTER_GROUPS, MENU_FOOT_LINKS, PRIMARY_NAV, TOOLS_NAV } from "./navigation";
 import { COMMAND_SURFACES } from "@/data/command-surfaces";
 
 /**
@@ -47,10 +47,13 @@ const NOT_A_DESTINATION: Record<string, string> = {
 
 function reachableFromNav(): Set<string> {
   const out = new Set<string>();
-  for (const section of PRIMARY_NAV) {
+  // Les portes et les outils : les deux listes du menu, et pour les portes
+  // le menu déroulant du bureau et le rail de leur page d'accueil.
+  for (const section of [...PRIMARY_NAV, ...TOOLS_NAV]) {
     out.add(section.to);
     for (const child of section.children ?? []) out.add(child.to);
   }
+  for (const link of MENU_FOOT_LINKS) out.add(link.to);
   return out;
 }
 
@@ -113,7 +116,24 @@ describe("la navigation elle-même", () => {
     // Le but du chantier est lisible ici : cinq portes et 28 entrées, c'était
     // 28 décisions avant la première séance.
     expect(PRIMARY_NAV).toHaveLength(4);
-    expect(PRIMARY_NAV.map((s) => s.id)).toEqual(["today", "sessions", "plan", "numbers"]);
+    // L'ordre raconte le produit : ce que je fais aujourd'hui, ce que j'ai
+    // prévu, ce que je peux faire, ce que j'ai mesuré. Le plan est passé
+    // devant les séances le 18 septembre 2026.
+    expect(PRIMARY_NAV.map((s) => s.id)).toEqual(["today", "plan", "sessions", "numbers"]);
+  });
+
+  test("le menu mobile tient en dix lignes", () => {
+    // Quatre portes, les outils, deux liens de service : c'est ce qui
+    // remplace un panneau de trente-cinq lignes dépliables. La onzième ligne
+    // est le retour du plan de site, et elle se refuse ici.
+    const lines = PRIMARY_NAV.length + TOOLS_NAV.length + MENU_FOOT_LINKS.length;
+    expect(lines).toBeLessThanOrEqual(10);
+  });
+
+  test("chaque outil est un module que les réglages peuvent masquer", () => {
+    // Masquer retire de la navigation, promettent les réglages : un outil
+    // sans module serait une ligne que rien ne peut retirer.
+    for (const tool of TOOLS_NAV) expect(tool.module).toBeDefined();
   });
 
   test("le nombre d'entrées reste sous le seuil qu'on s'est donné", () => {
@@ -136,7 +156,7 @@ describe("la navigation elle-même", () => {
 
   test("aucune entrée n'est répétée dans deux portes", () => {
     const seen = new Map<string, string>();
-    for (const section of PRIMARY_NAV) {
+    for (const section of [...PRIMARY_NAV, ...TOOLS_NAV]) {
       for (const child of section.children ?? []) {
         const previous = seen.get(child.to);
         expect(previous, `${child.to} est déjà sous ${previous}`).toBeUndefined();

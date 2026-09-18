@@ -1010,10 +1010,10 @@
   "mobileMenu": {
     "goTo": "Aller à",
     "search": "Chercher partout",
-    "language": "Langue",
-    "theme": "Thème",
-    "disclose": "Afficher les pages de {{door}}",
-    "more": "Le reste"
+    "tools": "Outils"
+  },
+  "hubNav": {
+    "label": "Dans cette section"
   },
   "modules": {
     "routes": {
