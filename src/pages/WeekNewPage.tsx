@@ -9,25 +9,30 @@ import { savePlan } from "@/lib/planStorage";
 import { createEmptyWeekPlan } from "@/lib/weekToPlan";
 
 /**
- * Week creation: two doors, no wizard.
+ * Week creation: three doors, no wizard.
  *
- * "Composer" creates the empty single-week plan and hands the editor
- * `state.openSettings`, so the generator's parameters are picked first, the
- * app never generates blindly. "Catalogue" opens the ready-made weeks.
+ * "À la main" creates the empty single-week plan and opens the board alone,
+ * to be filled session by session. "Générer" creates the same empty week
+ * and hands the editor `state.openSettings`, so the generator's parameters
+ * are picked first, the app never generates blindly. "Catalogue" opens the
+ * ready-made weeks. The one door used to serve both of the first two, and
+ * always opened on the generator: composing by hand meant closing a form
+ * first.
  *
- * The first door creates before it navigates, so it has to be a <button>; the
- * second is a real <Link>. Both wear the same paper (.zn-door), so the pair
- * reads as one choice rather than as a control next to a card.
+ * The first two doors create before they navigate, so they have to be
+ * <button>s; the third is a real <Link>. All three wear the same paper
+ * (.zn-door), so the trio reads as one choice rather than as controls next
+ * to a card.
  */
 export function WeekNewPage() {
   const { t } = useTranslation("library");
   const navigate = useNavigate();
   const prebuiltCount = getAllPrebuiltWeeks().length;
 
-  function createWeek() {
+  function createWeek(openSettings: boolean) {
     const plan = createEmptyWeekPlan(t("weekly.generate.defaultName"));
     savePlan(plan);
-    navigate(`/weeks/${plan.id}`, { state: { openSettings: true } });
+    navigate(`/weeks/${plan.id}`, openSettings ? { state: { openSettings: true } } : undefined);
   }
 
   return (
@@ -60,20 +65,36 @@ export function WeekNewPage() {
         <section className="zn-pw__band">
           <div
             className="zn-grid"
-            style={{ "--cols": 2, "--cols-md": 2 } as React.CSSProperties}
+            style={{ "--cols": 3, "--cols-md": 3 } as React.CSSProperties}
           >
-            <button type="button" onClick={createWeek} className="zn-door">
+            <button type="button" onClick={() => createWeek(false)} className="zn-door">
               <span className="zn-kicker">
-                {t("weekly.new.modes.create.kicker")}
+                {t("weekly.new.modes.scratch.kicker")}
               </span>
               <span className="zn-door__title">
-                {t("weekly.new.modes.create.title")}
+                {t("weekly.new.modes.scratch.title")}
               </span>
               <span className="zn-door__body">
-                {t("weekly.new.modes.create.desc")}
+                {t("weekly.new.modes.scratch.desc")}
               </span>
               <span className="zn-door__cta">
-                {t("weekly.new.modes.create.cta")}
+                {t("weekly.new.modes.scratch.cta")}
+                <ArrowRight />
+              </span>
+            </button>
+
+            <button type="button" onClick={() => createWeek(true)} className="zn-door">
+              <span className="zn-kicker">
+                {t("weekly.new.modes.generate.kicker")}
+              </span>
+              <span className="zn-door__title">
+                {t("weekly.new.modes.generate.title")}
+              </span>
+              <span className="zn-door__body">
+                {t("weekly.new.modes.generate.desc")}
+              </span>
+              <span className="zn-door__cta">
+                {t("weekly.new.modes.generate.cta")}
                 <ArrowRight />
               </span>
             </button>

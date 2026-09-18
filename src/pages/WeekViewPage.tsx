@@ -15,7 +15,7 @@ import {
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowLeft, ChevronDown, Plus, Share, Sparkles, Settings, Loader2 } from "@/components/icons";
+import { ArrowLeft, ChevronDown, Plus, Share, Sparkles } from "@/components/icons";
 import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +32,6 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { SEOHead } from "@/components/seo";
-import { ZoneScale } from "@/components/visualization";
 import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import {
@@ -41,7 +40,7 @@ import {
 } from "@/components/domain/WeekSessionSheet";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { ScanCard } from "@/components/domain";
-import { WeekSummaryBar, WeekSummaryStrip, WeekGeneratorPanel } from "@/components/weekly";
+import { WeekSummaryStrip, WeekGeneratorPanel } from "@/components/weekly";
 import { usePlan } from "@/hooks/usePlans";
 import { useWorkouts } from "@/hooks";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -87,6 +86,14 @@ import {
 } from "@/types/week";
 
 const WEEKDAYS: DayIndex[] = [0, 1, 2, 3, 4, 5, 6];
+
+/**
+ * What the rail beside the board holds, if anything. The board is the
+ * screen's object and takes the whole column by default; the generator and
+ * the workout picker are tools, opened on demand and closed when done, so a
+ * week composed by hand is never edited next to a form it does not use.
+ */
+type RailTool = "generate" | "add" | null;
 
 /** Pick a uniformly random element. */
 function sample<T>(arr: readonly T[]): T {
@@ -142,7 +149,8 @@ export function WeekViewPage() {
     return names;
   }, [catalog, pick, t]);
 
-  const [showPanel, setShowPanel] = useState(false);
+  const [railTool, setRailTool] = useState<RailTool>(null);
+  const showPanel = railTool === "add";
   const [addTarget, setAddTarget] = useState<{ day: number } | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -281,7 +289,12 @@ export function WeekViewPage() {
 
   const handleAddToDay = useCallback((_weekNumber: number, day: number) => {
     setAddTarget({ day });
-    setShowPanel(true);
+    setRailTool("add");
+  }, []);
+
+  const closePanel = useCallback(() => {
+    setRailTool(null);
+    setAddTarget(null);
   }, []);
 
   /** Pushes a session on its day and saves; returns its index in the week. */
@@ -531,8 +544,12 @@ export function WeekViewPage() {
     if (openSettingsOnMount && !didOpenSettingsRef.current && plan) {
       didOpenSettingsRef.current = true;
       if (railIsHidden) setSettingsOpen(true);
+      else setRailTool("generate");
+      // Consumed: the state survives a reload of the same history entry,
+      // and the generator reopened on every refresh of a week already built.
+      navigate(location.pathname, { replace: true, state: null });
     }
-  }, [openSettingsOnMount, plan, railIsHidden]);
+  }, [openSettingsOnMount, plan, railIsHidden, navigate, location.pathname]);
 
   const handleRename = useCallback(
     (value: string) => {
@@ -582,6 +599,14 @@ export function WeekViewPage() {
     toast.success(t("common:share.toast.linkCopied"));
   };
 
+  /** The picker, aimed at the first rest day, or Monday. */
+  const openAdd = () => {
+    const taken = new Set(plan.weeks[0].sessions.map((s) => s.dayOfWeek));
+    const day = WEEKDAYS.find((d) => !taken.has(d)) ?? 0;
+    setAddTarget({ day });
+    setRailTool("add");
+  };
+
   const generatorPanel = (
     <WeekGeneratorPanel
       settings={settings}
@@ -591,6 +616,7 @@ export function WeekViewPage() {
       weekIsPopulated={weekIsPopulated}
       lockedCount={lockedCount}
       onUnlockAll={handleUnlockAll}
+      onClose={closePanel}
     />
   );
 
@@ -607,10 +633,12 @@ export function WeekViewPage() {
         </Button>
 
         <section className="zn-pw__band">
-          {/* The board takes the column; the generator is a rail beside it, so
-              it never covers or compresses the week being edited. Below 900px
-              the rail folds away and the dock carries the same two actions. */}
-          <div className="zn-pw__editor">
+          {/* The board takes the whole column. A tool, the generator or the
+              picker, opens a rail beside it, a column rather than an overlay,
+              so it never covers the week being edited, and it closes when the
+              tool is put away. Below 900px there is no rail: the dock carries
+              the same two actions, and the tools open as sheets. */}
+          <div className="zn-pw__editor" data-rail={railTool ?? undefined}>
             <div
               className="zn-stack"
               style={{ "--gap": "var(--sp-13)" } as CSSProperties}
@@ -690,33 +718,52 @@ export function WeekViewPage() {
                       size="sm"
                       variant="outline"
                     />
+
+                    {/* The two ways to fill the board, as toggles for the rail.
+                        Adding by hand is the primary call; the draw is a tool
+                        beside it. While the generator is open its own call
+                        carries the screen's one accent, so "add" steps back
+                        to the outline. Under 900px the dock holds the same
+                        pair, in the thumb zone. */}
+                    <div className="zn-pw__tools">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        aria-pressed={railTool === "generate"}
+                        disabled={scanning}
+                        onClick={() =>
+                          railTool === "generate" ? closePanel() : setRailTool("generate")
+                        }
+                      >
+                        <Sparkles size={15} />
+                        {t("library:weekly.generate.actionShort")}
+                      </Button>
+                      <Button
+                        variant={railTool === null ? "default" : "outline"}
+                        size="sm"
+                        aria-pressed={railTool === "add"}
+                        disabled={scanning}
+                        onClick={() => (railTool === "add" ? closePanel() : openAdd())}
+                      >
+                        <Plus size={15} />
+                        {t("library:weekly.actions.addSession")}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* On a phone the board is the object and the summary its
-                  consequence: the summary folds to one strip and opens on
-                  demand. Beside the rail, the full bar stays. */}
-              {railIsHidden ? (
-                <WeekSummaryStrip
-                  stats={stats}
-                  slots={slots}
-                  targetVolumeH={settings.targetVolumeH}
-                />
-              ) : (
-                <WeekSummaryBar
-                  stats={stats}
-                  slots={slots}
-                  targetVolumeH={settings.targetVolumeH}
-                />
-              )}
-
-              {/* The ramp orders the zones on the board but does not name them.
-                  Printed once on a phone, under the board (the board carries
-                  its own folded legend). */}
-              <div className="zn-pw__scale">
-                <ZoneScale />
-              </div>
+              {/* The board is the object and the summary its consequence: it
+                  folds to one strip, the figures, the verdict and a thumbnail
+                  of the rhythm, and opens on demand. The full bar used to
+                  take the first desktop screen entire, and the week began
+                  below the fold. The ramp's legend is printed once, folded
+                  under the board, which the board itself carries. */}
+              <WeekSummaryStrip
+                stats={stats}
+                slots={slots}
+                targetVolumeH={settings.targetVolumeH}
+              />
 
               <div>
                 {/* The editing legend sits OUTSIDE the positioned wrapper below,
@@ -756,68 +803,46 @@ export function WeekViewPage() {
               </div>
             </div>
 
-            {/* The rail: the generator, or the workout picker while a session
-                is being added. */}
-            <aside className="zn-pw__rail">
-              {showPanel ? (
-                <PlanWorkoutPanel
-                  isOpen={showPanel}
-                  onClose={() => {
-                    setShowPanel(false);
-                    setAddTarget(null);
-                  }}
-                  inline
-                  onCreateWorkout={handleCreateWorkout}
-                />
-              ) : (
-                generatorPanel
-              )}
-            </aside>
+            {/* The rail, only while a tool is open: the workout picker while
+                a session is being added, or the generator. */}
+            {railTool !== null && (
+              <aside className="zn-pw__rail">
+                {showPanel ? (
+                  <PlanWorkoutPanel
+                    isOpen={showPanel}
+                    onClose={closePanel}
+                    inline
+                    onCreateWorkout={handleCreateWorkout}
+                  />
+                ) : (
+                  generatorPanel
+                )}
+              </aside>
+            )}
           </div>
         </section>
       </div>
 
-      {/* The dock, kept in the thumb zone once the rail is gone. It carries
-          the action of the moment: once a week is on the board, that is
-          adding or adjusting a session, so "add" takes the one vermillon
-          fill and the draw steps beside it as an icon, with the settings. */}
+      {/* The dock, kept in the thumb zone where there is no rail. It carries
+          the same pair as the toolbar above: adding a session takes the one
+          vermillon fill, and the draw is one icon that opens its settings,
+          whose own call generates. It used to be two icons, one that drew
+          on the spot with settings nobody had seen and one that opened
+          them, a second generator entry on a screen about composing. */}
       <div className="zn-pw__dock">
-        <Button
-          disabled={scanning}
-          onClick={() => {
-            // The first rest day, or Monday: the panel lets the day change.
-            const taken = new Set(plan.weeks[0].sessions.map((s) => s.dayOfWeek));
-            const day = WEEKDAYS.find((d) => !taken.has(d)) ?? 0;
-            setAddTarget({ day });
-            setShowPanel(true);
-          }}
-        >
+        <Button disabled={scanning} onClick={openAdd}>
           <Plus size={17} />
           {t("library:weekly.actions.addSession")}
         </Button>
         <Button
           variant="outline"
           size="icon"
-          onClick={() => handleGenerate(settings)}
-          disabled={scanning}
-          aria-label={
-            scanning
-              ? t("library:weekly.generate.busy")
-              : t("library:weekly.generate.actionShort")
-          }
-          title={t("library:weekly.generate.actionShort")}
-        >
-          {scanning ? <Loader2 size={17} /> : <Sparkles size={17} />}
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
           onClick={() => setSettingsOpen(true)}
           disabled={scanning}
-          aria-label={t("library:weekly.actions.adjust")}
-          title={t("library:weekly.actions.adjust")}
+          aria-label={t("library:weekly.generate.actionShort")}
+          title={t("library:weekly.generate.actionShort")}
         >
-          <Settings size={17} />
+          <Sparkles size={17} />
         </Button>
       </div>
 
@@ -858,10 +883,7 @@ export function WeekViewPage() {
       {/* Mobile bottom-sheet picker (tap to place on the chosen day) */}
       <PlanWorkoutPanel
         isOpen={showPanel}
-        onClose={() => {
-          setShowPanel(false);
-          setAddTarget(null);
-        }}
+        onClose={closePanel}
         day={addTarget?.day}
         onDayChange={(day) => setAddTarget({ day })}
         onCreateWorkout={handleCreateWorkout}

@@ -336,32 +336,76 @@
 
 /* ── the editor ───────────────────────────────────────────────────────── */
 
-/* Board on the left, the generator rail on the right. The rail is a column,
-   not an overlay: it never covers or compresses the board. */
+/* The editor takes the wide column. Seven days across the default 1152px,
+   beside a 340px rail, left each day 95px: three words of a name and the
+   hover actions printed over the zone mark. The outer column is the
+   shell's, so it is widened from here, off the editor it holds. */
+.zn-page:has(.zn-pw__editor) {
+  max-inline-size: var(--page-max-wide);
+}
+
+/* The board alone by default, the whole column wide. A tool opens a rail
+   beside it, a column and not an overlay, so it never covers or compresses
+   the board, and the grid folds back to one column when the tool closes.
+   `data-rail` names the open tool; either value opens the column. */
 .zn-pw__editor {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-13);
   align-items: start;
+}
+
+.zn-pw__editor[data-rail] {
+  grid-template-columns: minmax(0, 1fr) 340px;
 }
 
 .zn-pw__rail {
   position: sticky;
   inset-block-start: var(--sp-10);
+  min-inline-size: 0;
 }
 
 @media (max-width: 1100px) {
-  .zn-pw__editor {
-    grid-template-columns: 1fr 300px;
+  .zn-pw__editor[data-rail] {
+    grid-template-columns: minmax(0, 1fr) 300px;
   }
 }
 
+/* Under 900px there is no rail: the tools open as sheets, and the dock
+   carries the same two calls. */
 @media (max-width: 900px) {
-  .zn-pw__editor {
+  .zn-pw__editor,
+  .zn-pw__editor[data-rail] {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .zn-pw__rail {
+    display: none;
+  }
+}
+
+/* The two tool toggles in the header: the draw, and adding by hand. A
+   pressed toggle inverts to solid ink, the system's own "on", never a
+   second accent: the open rail's call is the one vermillon fill. Hidden
+   under 900px, where the dock holds the same pair in the thumb zone. */
+.zn-pw__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-inline-start: var(--sp-4);
+  margin-inline-start: var(--sp-2);
+  border-inline-start: var(--border-divider);
+}
+
+.zn-pw__tools > .zn-btn[aria-pressed="true"],
+.zn-pw__tools > .zn-btn[aria-pressed="true"]:hover {
+  color: var(--text-inverse);
+  background: var(--surface-inverse);
+  border-color: var(--line-strong);
+}
+
+@media (max-width: 900px) {
+  .zn-pw__tools {
     display: none;
   }
 }
@@ -738,11 +782,30 @@ button.zn-door {
   border-radius: 0;
 }
 
-/* The ramp legend is printed once, under the board; above 900px it also
-   sits above it, where the desktop eye reads it first. */
-@media (max-width: 900px) {
-  .zn-pw__scale {
-    display: none;
+/* Beside a wide board the strip is one line: the figures, the verdict, the
+   rhythm thumbnail, and the disclosure at the end. Under 900px it keeps
+   its two rows, a phone cannot pay for four things on one. */
+@media (min-width: 901px) {
+  .zn-pw__summary-strip > .zn-disclosure__summary {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-10);
+    padding-inline: var(--pad-card-sm);
+  }
+
+  .zn-pw__summary-line {
+    flex: none;
+    gap: var(--sp-8);
+  }
+
+  .zn-pw__summary-foot {
+    flex: 1;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  .zn-pw__summary-foot > .zn-wk-rhythm {
+    max-inline-size: 16rem;
   }
 }
 

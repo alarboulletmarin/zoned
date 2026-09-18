@@ -223,11 +223,17 @@
       "subtitle": "Choose how to compose your training week.",
       "back": "Back to weeks",
       "modes": {
-        "create": {
-          "title": "Create a week",
-          "desc": "Auto-generate a balanced 80/20 week, or build it session by session.",
-          "kicker": "80/20 generator",
+        "scratch": {
+          "kicker": "By hand",
+          "title": "From scratch",
+          "desc": "An empty week you fill in session by session, without the generator.",
           "cta": "Build my week"
+        },
+        "generate": {
+          "kicker": "80/20 generator",
+          "title": "Generate a week",
+          "desc": "Set the volume, sessions and disciplines: the generator composes a polarised week.",
+          "cta": "Tune and generate"
         },
         "prebuilt": {
           "title": "Pre-built week",
@@ -236,13 +242,7 @@
           "cta": "{{count}} ready-made weeks"
         }
       },
-      "generate": "Generate (80/20)",
-      "generateDesc": "The generator composes a polarised week from your settings.",
-      "scratch": "From scratch",
-      "scratchDesc": "An empty week you fill in by hand, session by session.",
-      "namePlaceholder": "Week name",
-      "scratchCreate": "Create empty week",
-      "kicker": "2 ways to start"
+      "kicker": "3 ways to start"
     },
     "prebuilt": {
       "title": "Pre-built weeks",

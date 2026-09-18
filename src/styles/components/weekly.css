@@ -362,10 +362,20 @@
   border-radius: 0;
 }
 
+/* The title row: the kicker, and the close mark when the panel is a rail
+   opened on demand. The row pays the padding the title alone used to. */
+.zn-wk-gen__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-8);
+  border-block-end: var(--border-divider);
+}
+
 .zn-wk-gen__title {
   display: block;
-  padding: var(--sp-6) var(--sp-8);
-  border-block-end: var(--border-divider);
+  min-inline-size: 0;
 }
 
 .zn-wk-gen__body {
