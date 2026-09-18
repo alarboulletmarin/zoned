@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Copy, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -58,6 +58,8 @@ interface PlanWeeklyViewProps {
     toDay: number,
   ) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
+  /** "Ma semaine": copy a session onto its day, to be dragged where it goes. */
+  onSessionDuplicate?: (weekNumber: number, sessionIndex: number) => void;
   onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
   /** "Ma semaine": lock a session so it survives week (re)generation. */
@@ -95,6 +97,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onSessionClick,
   onSessionMove,
   onSessionDelete,
+  onSessionDuplicate,
   onFindRoute,
   onToggleComplete,
   onToggleLock,
@@ -663,6 +666,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         onToggleLock={onToggleLock}
                         onRedraw={onRedraw}
                         onSessionDelete={onSessionDelete}
+                        onSessionDuplicate={onSessionDuplicate}
                         renderScanCell={renderScanCell}
                         onAddToDay={onAddToDay}
                         setContextMenu={setContextMenu}
@@ -724,6 +728,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     onToggleLock={onToggleLock}
                     onRedraw={onRedraw}
                     onSessionDelete={onSessionDelete}
+                    onSessionDuplicate={onSessionDuplicate}
                     renderScanCell={renderScanCell}
                     onAddToDay={onAddToDay}
                     setContextMenu={setContextMenu}
@@ -843,6 +848,12 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 : t("library:weekly.slot.lock"),
               onSelect: () => onToggleLock(contextMenu.weekNumber, contextMenu.sessionIndex),
             },
+            onSessionDuplicate && {
+              key: "duplicate",
+              icon: <Copy />,
+              label: t("library:weekly.slot.duplicate"),
+              onSelect: () => onSessionDuplicate(contextMenu.weekNumber, contextMenu.sessionIndex),
+            },
             onSessionDelete && {
               key: "delete",
               icon: <Trash2 />,
@@ -895,6 +906,7 @@ interface DayCellProps {
   onToggleLock?: (weekNumber: number, sessionIndex: number) => void;
   onRedraw?: (weekNumber: number, sessionIndex: number) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
+  onSessionDuplicate?: (weekNumber: number, sessionIndex: number) => void;
   renderScanCell?: (day: number) => React.ReactNode | null;
   onAddToDay?: (weekNumber: number, day: number) => void;
   setContextMenu: (
@@ -937,6 +949,7 @@ const DayCell = memo(function DayCell({
   onToggleLock,
   onRedraw,
   onSessionDelete,
+  onSessionDuplicate,
   renderScanCell,
   onAddToDay,
   setContextMenu,
@@ -1125,6 +1138,20 @@ const DayCell = memo(function DayCell({
                         aria-label={t("library:weekly.slot.reroll")}
                       >
                         <Dices />
+                      </button>
+                    )}
+                    {onSessionDuplicate && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSessionDuplicate(selectedWeek, originalIndex);
+                        }}
+                        className="zn-sess__action"
+                        title={t("library:weekly.slot.duplicate")}
+                        aria-label={t("library:weekly.slot.duplicate")}
+                      >
+                        <Copy />
                       </button>
                     )}
                     {onSessionDelete && (

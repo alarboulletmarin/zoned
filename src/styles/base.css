@@ -301,6 +301,13 @@ p {
   outline: none;
 }
 
+/* Même geste pour la feuille d'une séance de la semaine : son corps prend le
+   focus à l'ouverture (`WeekSessionSheet.tsx`) pour que le champ de durée ne
+   le prenne pas, et un téléphone avec lui son clavier et son zoom. */
+.zn-wksheet__body:focus-visible {
+  outline: none;
+}
+
 ::selection {
   background: var(--accent-soft);
   color: var(--ink-1);

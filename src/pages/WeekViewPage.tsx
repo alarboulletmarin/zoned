@@ -48,6 +48,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import {
+  duplicateSession,
   moveSession,
   deleteSessionFromPlan,
   savePlan,
@@ -262,6 +263,22 @@ export function WeekViewPage() {
     [plan, reload],
   );
 
+  /**
+   * A copy of the session, on the same day, right next to it: the week that
+   * repeats a session twice is built by duplicating it and dragging the copy
+   * to its day, rather than finding the workout in the catalog again.
+   */
+  const handleDuplicate = useCallback(
+    (_weekNumber: number, sessionIndex: number) => {
+      if (!plan) return;
+      if (duplicateSession(plan.id, 1, sessionIndex) !== null) {
+        reload();
+        toast.success(t("library:weekly.toast.sessionDuplicated"));
+      }
+    },
+    [plan, reload, t],
+  );
+
   const handleAddToDay = useCallback((_weekNumber: number, day: number) => {
     setAddTarget({ day });
     setShowPanel(true);
@@ -294,14 +311,12 @@ export function WeekViewPage() {
           defaultActivityDraft(activity.kind, pattern),
           pattern,
         );
-        const index = pushSession(session);
-        // A timed activity that landed without a duration is a card that
-        // weighs nothing yet: its sheet opens on it, one question away.
-        if (index !== null && activity.timed && session.estimatedDurationMin <= 0) {
-          setSheetIndex(index);
-        } else {
-          toast.success(t("plan:view.activityAdded"));
-        }
+        // It lands, and nothing else: a timed activity without a duration
+        // is a card that weighs nothing yet, and it used to open its sheet
+        // on the spot, on the duration field, which a phone answers with its
+        // keyboard and a zoom. The duration is optional, and one tap away.
+        pushSession(session);
+        toast.success(t("plan:view.activityAdded"));
         return;
       }
       const workout = byId.get(workoutId);
@@ -728,6 +743,7 @@ export function WeekViewPage() {
                     onSessionClick={handleSessionClick}
                     onSessionMove={handleMove}
                     onSessionDelete={handleDelete}
+                    onSessionDuplicate={handleDuplicate}
                     onToggleLock={handleToggleLock}
                     onRedraw={handleRedraw}
                     onWorkoutAdd={handleWorkoutAdd}
@@ -835,6 +851,7 @@ export function WeekViewPage() {
         onRedraw={(index) => handleRedraw(1, index)}
         onToggleLock={(index) => handleToggleLock(1, index)}
         onMove={handleSheetMove}
+        onDuplicate={(index) => handleDuplicate(1, index)}
         onDelete={(index) => handleDelete(1, index)}
       />
 

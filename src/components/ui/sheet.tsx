@@ -5,7 +5,7 @@ import { X } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
 import { Slot } from "@/components/ui/slot";
-import { NativeDialog } from "@/components/ui/native-dialog";
+import { NativeDialog, type NativeDialogProps } from "@/components/ui/native-dialog";
 import { useSheetDrag } from "@/hooks/useSheetDrag";
 
 /**
@@ -63,6 +63,8 @@ function SheetContent({
   ...props
 }: React.ComponentProps<"dialog"> & {
   side?: "top" | "bottom" | "left" | "right";
+  /** Where the focus lands at the opening, see `NativeDialog`. */
+  initialFocus?: NativeDialogProps["initialFocus"];
 }) {
   const { open, onOpenChange, titleId, descriptionId } =
     useSheetContext("SheetContent");

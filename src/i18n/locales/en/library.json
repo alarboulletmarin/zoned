@@ -366,6 +366,7 @@
       "lock": "Lock",
       "unlock": "Unlock",
       "reroll": "Re-roll",
+      "duplicate": "Duplicate",
       "viewDetail": "View detail",
       "rest": "Rest day",
       "lockedHint": "Locked: kept when regenerating",
@@ -395,6 +396,7 @@
       "copySuffix": "(copy)"
     },
     "toast": {
+      "sessionDuplicated": "Session duplicated · drag the copy where you want it",
       "saved": "Week saved",
       "exported": "Export ready",
       "generated": "Week generated",
