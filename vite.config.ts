@@ -128,7 +128,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+        // ttf: the four TrueType faces the week's PDF embeds, fetched only
+        // when a PDF is asked for, and precached so the export works offline.
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2,ttf}"],
         globIgnores: ["**/pdfmake*", "**/vfs_fonts*", "**/fitsdk*", "**/garmin*"],
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,

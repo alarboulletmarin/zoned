@@ -127,7 +127,7 @@ function dayLabel(dayOfWeek: number): string {
 }
 
 /** Get session type label (short) */
-function typeLabel(sessionType: string, template: AnyWorkoutTemplate | undefined): string {
+export function typeLabel(sessionType: string, template: AnyWorkoutTemplate | undefined): string {
   if (template && isStrengthWorkout(template)) {
     const label = STRENGTH_CAT_LABELS[template.category];
     return label ? (isEn() ? label.en : label.fr) : (isEn() ? "Strength" : "Renfo");
@@ -193,7 +193,7 @@ function buildBlockSummary(block: WorkoutBlock, scale: number): string {
 }
 
 /** Build compact one-line summary from running template blocks, scaled to actual session duration */
-function buildCompactSummary(template: WorkoutTemplate, actualDurationMin?: number): string {
+export function buildCompactSummary(template: WorkoutTemplate, actualDurationMin?: number): string {
   const baseDuration = templateTotalMin(template);
   const scale = (actualDurationMin && baseDuration > 0) ? actualDurationMin / baseDuration : 1;
 
@@ -224,7 +224,7 @@ function buildCompactSummary(template: WorkoutTemplate, actualDurationMin?: numb
 }
 
 /** Build compact summary for strength workout */
-function buildStrengthSummary(
+export function buildStrengthSummary(
   template: StrengthWorkoutTemplate,
   exerciseNames: Record<string, string>,
 ): string {
@@ -257,7 +257,7 @@ function buildWorkoutIndex(plan: TrainingPlan): Map<string, number> {
 
 // ── Exercise name resolution ────────────────────────────────────────
 
-async function resolveExerciseNames(
+export async function resolveExerciseNames(
   templates: Record<string, AnyWorkoutTemplate>,
 ): Promise<Record<string, string>> {
   const names: Record<string, string> = {};

@@ -350,6 +350,12 @@
       "cooldownSep": "--- Retour au calme ---",
       "tips": "Conseils",
       "rest": "récup"
+    },
+    "weekPdf": {
+      "kicker": "Semaine d'entraînement",
+      "key": "clé",
+      "structures": "Les séances",
+      "filePrefix": "semaine"
     }
   },
   "randomWorkout": {

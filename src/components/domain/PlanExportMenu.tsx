@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
+import { exportWeekToPDF } from "@/lib/export/weekPdf";
 import { triggerDownload } from "@/lib/export/download";
 import { planFilename } from "@/lib/export/planFilename";
 import { getWorkoutById } from "@/data/workouts";
@@ -70,7 +71,11 @@ export function PlanExportMenu({
     if (preloadedNames && preloadedTemplates && Object.keys(preloadedNames).length > 0) {
       return { names: preloadedNames, templates: preloadedTemplates };
     }
-    return resolvePlanWorkouts(plan);
+    // The names the page hands over win: they name the activities too (a
+    // bike commute, a swim), which no catalogue lookup can, and which the
+    // exports printed by their internal id without them.
+    const resolved = await resolvePlanWorkouts(plan);
+    return { names: { ...resolved.names, ...preloadedNames }, templates: resolved.templates };
   }, [plan, preloadedNames, preloadedTemplates]);
 
   const handleExportPDF = useCallback(async () => {
@@ -79,7 +84,10 @@ export function PlanExportMenu({
     const toastId = toast.loading(t("export.loading.pdf", t("export.title")));
     try {
       const { names, templates } = await getWorkoutData();
-      await exportPlanToPDF(plan, names, templates);
+      // A standalone week has its own sheet; the plan's document is drawn
+      // for a programme of many weeks.
+      if (plan.config.isSingleWeek) await exportWeekToPDF(plan, names, templates);
+      else await exportPlanToPDF(plan, names, templates);
       toast.success(t("export.success.pdf"), { id: toastId });
     } catch {
       toast.error(t("export.error.pdf"), { id: toastId });
