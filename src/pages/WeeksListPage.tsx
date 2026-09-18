@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import {
+  ArrowRight,
   Plus,
   Trash2,
   CalendarRange,
@@ -20,7 +21,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
 import { ZoneScale } from "@/components/visualization";
@@ -76,69 +86,72 @@ function WeekCard({
   ].join(" · ");
 
   return (
-    <Card>
-      <CardHeader>
-        <Link to={`/weeks/${week.id}`} className="zn-pw__week-title">
-          {name}
-        </Link>
-        <span
-          className="zn-row"
-          style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
+    <Card className="zn-pw__week">
+      {/* The whole upper block is the link to the week, a real anchor, the
+          same way a plan card opens: keyboard reaches it, middle click works. */}
+      <Link className="zn-pw__week-open" to={`/weeks/${week.id}`}>
+        <div
+          className="zn-row zn-row--start"
+          style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
         >
-          <Badge variant="secondary">
+          <span className="zn-pw__week-title zn-fill">{name}</span>
+          <Badge variant="secondary" className="zn-fixed">
             {week.config.weekCategory
               ? t(`weekly.prebuilt.category.${week.config.weekCategory}`)
               : t("weekly.category.none")}
           </Badge>
-        </span>
-      </CardHeader>
+        </div>
 
-      <CardContent
-        className="zn-stack"
-        style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}
-      >
         <span className="zn-mono zn-pw__facts">{facts}</span>
 
         <WeekRhythmChart slots={slots} />
+      </Link>
 
-        <div className="zn-pw__week-actions">
-          <PlanExportMenu
-            plan={week}
-            workoutNames={workoutNames}
-            size="sm"
-            variant="outline"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                aria-label={t("weekly.list.actions")}
-              >
-                <MoreVertical size={15} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onShare(week)}>
-                <Share size={16} />
-                {t("weekly.share.action")}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onDuplicate(week)}>
-                <Copy size={16} />
-                {t("weekly.saved.duplicate")}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => onDelete(week.id)}
-              >
-                <Trash2 size={16} />
-                {t("weekly.list.delete")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardContent>
+      {/* Same row as a plan card: open, export, then the rest. */}
+      <div className="zn-pw__week-actions">
+        <Button variant="outline" size="sm" asChild>
+          <Link to={`/weeks/${week.id}`}>
+            <ArrowRight />
+            {t("weekly.list.view")}
+          </Link>
+        </Button>
+        <PlanExportMenu
+          plan={week}
+          workoutNames={workoutNames}
+          size="sm"
+          variant="outline"
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon-sm"
+              aria-label={t("weekly.list.actions")}
+              title={t("weekly.list.actions")}
+            >
+              <MoreVertical size={15} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => onShare(week)}>
+              <Share size={16} />
+              {t("weekly.share.action")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDuplicate(week)}>
+              <Copy size={16} />
+              {t("weekly.saved.duplicate")}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => onDelete(week.id)}
+            >
+              <Trash2 size={16} />
+              {t("weekly.list.delete")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </Card>
   );
 }
@@ -149,6 +162,7 @@ export function WeeksListPage() {
   const isEn = useIsEnglish();
   const { plans, remove, reload } = usePlans();
   const [categoryFilter, setCategoryFilter] = useState<WeekCategory | "all">("all");
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Resolve sessions → slots for the facts + rhythm. Mirrors WeekViewPage's
@@ -245,6 +259,7 @@ export function WeeksListPage() {
   };
 
   const filtering = categoryFilter !== "all";
+  const deleteTargetWeek = weeks.find((w) => w.id === deleteTarget);
 
   return (
     <>
@@ -354,7 +369,7 @@ export function WeeksListPage() {
                   byId={byId}
                   workoutNames={workoutNames}
                   locale={isEn ? "en" : "fr"}
-                  onDelete={remove}
+                  onDelete={setDeleteTarget}
                   onDuplicate={handleDuplicate}
                   onShare={handleShare}
                 />
@@ -393,6 +408,42 @@ export function WeeksListPage() {
           )}
         </section>
       </div>
+
+      {/* Deleting a week cannot be undone, so, like a plan, it stays behind a dialog. */}
+      <Dialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("weekly.list.deleteTitle")}</DialogTitle>
+            <DialogDescription>
+              {deleteTargetWeek
+                ? t("weekly.list.deleteConfirm", {
+                    name: pick(deleteTargetWeek, "name"),
+                  })
+                : ""}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">{t("common:actions.cancel")}</Button>
+            </DialogClose>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deleteTarget) {
+                  remove(deleteTarget);
+                  setDeleteTarget(null);
+                }
+              }}
+            >
+              <Trash2 />
+              {t("weekly.list.delete")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

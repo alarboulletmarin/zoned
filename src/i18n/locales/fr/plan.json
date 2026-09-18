@@ -463,8 +463,10 @@
     "cancelButton": "Annuler",
     "weekProgress": "Semaine {{current}} / {{total}}",
     "target": "Objectif : ",
-    "sessionsCount": "{{count}} séances",
-    "planCount": "{{count}} plans",
+    "sessionsCount_one": "{{count}} séance",
+    "sessionsCount_other": "{{count}} séances",
+    "planCount_one": "{{count}} plan",
+    "planCount_other": "{{count}} plans",
     "ended": "Terminé",
     "endedSection": "Plans terminés"
   },

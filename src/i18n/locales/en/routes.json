@@ -166,7 +166,11 @@
     "emptyTitle": "No saved route",
     "softLimitTitle": "Local storage almost full",
     "open": "Open {{name}}",
-    "deleteRoute": "Delete {{name}}"
+    "deleteRoute": "Delete {{name}}",
+    "view": "View",
+    "delete": "Delete",
+    "deleteTitle": "Delete this route?",
+    "deleteConfirm": "\"{{name}}\" will be permanently deleted. This action cannot be undone."
   },
   "errors": {
     "geolocationDenied": "Geolocation permission denied. Type an address instead.",

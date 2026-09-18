@@ -1,10 +1,19 @@
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { ArrowRight, Plus, Route as RouteIcon, Trash2 } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
 import { useRoutes } from "@/hooks/useRoutes";
@@ -21,9 +30,11 @@ const DISCIPLINE_KEY: Partial<Record<Discipline, string>> = {
 };
 
 export function MyRoutesPage() {
-  const { t } = useTranslation("routes");
+  const { t } = useTranslation(["routes", "common"]);
   const isEnglish = useIsEnglish();
   const { routes, deleteRoute } = useRoutes();
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const deleteTargetRoute = routes.find((r) => r.id === deleteTarget);
 
   const formatDate = (iso: string): string => {
     const date = new Date(iso);
@@ -124,11 +135,12 @@ export function MyRoutesPage() {
                       <Button
                         asChild
                         variant="outline"
-                        size="icon-sm"
+                        size="sm"
                         aria-label={t("list.open", { name: route.name })}
                       >
                         <Link to={`/routes/${route.id}`}>
                           <ArrowRight size={16} />
+                          {t("list.view")}
                         </Link>
                       </Button>
                       <Button
@@ -136,7 +148,8 @@ export function MyRoutesPage() {
                         size="icon-sm"
                         className="zn-rt__danger"
                         aria-label={t("list.deleteRoute", { name: route.name })}
-                        onClick={() => onDelete(route.id)}
+                        title={t("list.deleteRoute", { name: route.name })}
+                        onClick={() => setDeleteTarget(route.id)}
                       >
                         <Trash2 size={16} />
                       </Button>
@@ -148,6 +161,40 @@ export function MyRoutesPage() {
           )}
         </section>
       </div>
+
+      {/* Deleting a route cannot be undone, so, like a plan, it stays behind a dialog. */}
+      <Dialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("list.deleteTitle")}</DialogTitle>
+            <DialogDescription>
+              {deleteTargetRoute
+                ? t("list.deleteConfirm", { name: deleteTargetRoute.name })
+                : ""}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">{t("common:actions.cancel")}</Button>
+            </DialogClose>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deleteTarget) {
+                  onDelete(deleteTarget);
+                  setDeleteTarget(null);
+                }
+              }}
+            >
+              <Trash2 />
+              {t("list.delete")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
