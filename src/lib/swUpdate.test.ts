@@ -124,3 +124,102 @@ describe("createUpdateChecker", () => {
     expect(registration.update).toHaveBeenCalledTimes(1);
   });
 });
+
+// ── Le bouton Mettre à jour ────────────────────────────────────────────────
+
+import { ACTIVATION_TIMEOUT_MS, applyWaitingUpdate } from "./swUpdate";
+
+/** Un worker en attente dont le test fait avancer l'état. */
+function fakeWaiting() {
+  const listeners: Array<() => void> = [];
+  const worker = {
+    state: "installed",
+    addEventListener: (_type: "statechange", listener: () => void) => {
+      listeners.push(listener);
+    },
+    become(state: string) {
+      worker.state = state;
+      for (const listener of listeners) listener();
+    },
+  };
+  return worker;
+}
+
+/** Les trois canaux, chacun déclenché à la main. */
+function harness(waiting: ReturnType<typeof fakeWaiting> | null) {
+  const skipWaiting = mock(() => {});
+  const reload = mock(() => {});
+  let controllerChange: (() => void) | null = null;
+  let timer: { fn: () => void; ms: number } | null = null;
+  applyWaitingUpdate(
+    waiting,
+    skipWaiting,
+    reload,
+    (listener) => {
+      controllerChange = listener;
+    },
+    (fn, ms) => {
+      timer = { fn, ms };
+    },
+  );
+  return {
+    skipWaiting,
+    reload,
+    fireControllerChange: () => controllerChange?.(),
+    fireTimeout: () => timer?.fn(),
+    timerMs: () => timer?.ms,
+  };
+}
+
+describe("applyWaitingUpdate", () => {
+  test("demande l'activation, et ne recharge pas avant qu'elle soit faite", () => {
+    const waiting = fakeWaiting();
+    const h = harness(waiting);
+    expect(h.skipWaiting).toHaveBeenCalledTimes(1);
+    expect(h.reload).toHaveBeenCalledTimes(0);
+
+    waiting.become("activating");
+    expect(h.reload).toHaveBeenCalledTimes(0);
+
+    waiting.become("activated");
+    expect(h.reload).toHaveBeenCalledTimes(1);
+  });
+
+  test("recharge sur controllerchange quand il arrive le premier", () => {
+    const waiting = fakeWaiting();
+    const h = harness(waiting);
+    h.fireControllerChange();
+    expect(h.reload).toHaveBeenCalledTimes(1);
+  });
+
+  test("une seule fois, quel que soit le nombre de signaux", () => {
+    const waiting = fakeWaiting();
+    const h = harness(waiting);
+    waiting.become("activated");
+    h.fireControllerChange();
+    h.fireTimeout();
+    waiting.become("redundant");
+    expect(h.reload).toHaveBeenCalledTimes(1);
+  });
+
+  test("le délai recharge quand aucun signal ne vient", () => {
+    const waiting = fakeWaiting();
+    const h = harness(waiting);
+    expect(h.timerMs()).toBe(ACTIVATION_TIMEOUT_MS);
+    h.fireTimeout();
+    expect(h.reload).toHaveBeenCalledTimes(1);
+  });
+
+  test("un worker devenu redondant recharge aussi", () => {
+    const waiting = fakeWaiting();
+    const h = harness(waiting);
+    waiting.become("redundant");
+    expect(h.reload).toHaveBeenCalledTimes(1);
+  });
+
+  test("sans worker en attente, rien à activer : on recharge tout de suite", () => {
+    const h = harness(null);
+    expect(h.skipWaiting).toHaveBeenCalledTimes(0);
+    expect(h.reload).toHaveBeenCalledTimes(1);
+  });
+});

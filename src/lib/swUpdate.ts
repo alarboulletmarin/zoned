@@ -91,3 +91,77 @@ export function watchForegroundUpdates(
     document.removeEventListener("visibilitychange", onVisibilityChange);
   };
 }
+
+/**
+ * Le worker en attente, vu du bouton Mettre à jour : son état et son
+ * évènement, rien d'autre.
+ */
+export interface WaitingWorker {
+  readonly state: string;
+  addEventListener(type: "statechange", listener: () => void): void;
+}
+
+/**
+ * Le délai au bout duquel on recharge sans avoir vu le worker s'activer.
+ * L'activation prend quelques dizaines de millisecondes ; quatre secondes,
+ * c'est un cas qu'on n'a pas prévu, et un rechargement vaut alors mieux
+ * qu'un bouton qui ne fait rien.
+ */
+export const ACTIVATION_TIMEOUT_MS = 4_000;
+
+/**
+ * Active le worker en attente et recharge la page une fois qu'il est en
+ * place. C'est le seul rechargement de l'app, et il est ÉCRIT ici parce que
+ * celui du plugin ne venait pas.
+ *
+ * Le plugin recharge sur l'évènement `controllerchange`, à condition que
+ * workbox-window tienne le nouveau worker pour une mise à jour de la page.
+ * Deux cas courants lui échappent. Une page qu'aucun worker ne contrôlait
+ * encore, la première visite d'une origine, un rechargement forcé, une
+ * preview Vercel ouverte pour la première fois : le nouveau worker s'active
+ * mais ne prend pas cette page, donc `controllerchange` n'arrive jamais. Et
+ * une mise à jour trouvée plus de soixante secondes après l'enregistrement,
+ * c'est-à-dire chacune de celles que `watchForegroundUpdates` demande, que
+ * workbox-window classe comme externe. Dans les deux cas, le bouton activait
+ * bien le worker, et la page restait sur l'ancienne version, bandeau compris.
+ *
+ * Ici, le signal est le worker lui-même : dès qu'il passe à `activated`, la
+ * page recharge, et la navigation qui suit est servie par lui, qu'il ait
+ * réclamé la page ou non. `controllerchange` reste écouté, il arrive parfois
+ * le premier, et un délai borne le tout. Une seule fois, quel que soit le
+ * nombre de signaux.
+ *
+ * Sans worker en attente il n'y a rien à activer : la version qui a valu le
+ * bandeau est déjà en place, ou l'a été depuis un autre onglet, et recharger
+ * est ce qui la fait apparaître.
+ */
+export function applyWaitingUpdate(
+  waiting: WaitingWorker | null | undefined,
+  skipWaiting: () => void,
+  reload: () => void,
+  onControllerChange: (listener: () => void) => void,
+  schedule: (fn: () => void, ms: number) => void = (fn, ms) => {
+    setTimeout(fn, ms);
+  },
+): void {
+  let reloaded = false;
+  const once = (): void => {
+    if (reloaded) return;
+    reloaded = true;
+    reload();
+  };
+
+  if (!waiting) {
+    once();
+    return;
+  }
+
+  waiting.addEventListener("statechange", () => {
+    // `redundant` : remplacé par un worker plus neuf, ou échoué. Dans les
+    // deux cas la page a quelque chose de nouveau à charger.
+    if (waiting.state === "activated" || waiting.state === "redundant") once();
+  });
+  onControllerChange(once);
+  schedule(once, ACTIVATION_TIMEOUT_MS);
+  skipWaiting();
+}

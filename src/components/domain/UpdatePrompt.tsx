@@ -4,7 +4,7 @@ import { useRegisterSW } from "virtual:pwa-register/react";
 
 import { RefreshCw, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { watchForegroundUpdates } from "@/lib/swUpdate";
+import { applyWaitingUpdate, watchForegroundUpdates } from "@/lib/swUpdate";
 
 /**
  * The service worker is registered in `prompt` mode: a new version installs in
@@ -15,6 +15,13 @@ import { watchForegroundUpdates } from "@/lib/swUpdate";
  * The button below is the only code path in the app that reloads. Everything
  * else, including the check on returning to the foreground, only ever moves the
  * moment this banner appears earlier.
+ *
+ * Le rechargement est le nôtre, pas celui du plugin (`applyWaitingUpdate`,
+ * lib/swUpdate.ts dit pourquoi) : le sien attend un `controllerchange` que
+ * le nouveau worker n'émet pas pour une page qu'aucun worker ne contrôlait,
+ * et il ignore les mises à jour trouvées par le retour au premier plan. Le
+ * bouton activait alors bien la nouvelle version, et la page ne bougeait
+ * pas, bandeau compris. On écoute le worker lui-même : activé, on recharge.
  */
 export function UpdatePrompt() {
   const { t } = useTranslation("common");
@@ -36,6 +43,21 @@ export function UpdatePrompt() {
 
   if (!needRefresh) return null;
 
+  const update = () => {
+    applyWaitingUpdate(
+      registration.current?.waiting,
+      () => {
+        // Poste SKIP_WAITING au worker en attente ; l'argument n'est pas lu
+        // par le plugin, le rechargement est tenu ici.
+        void updateServiceWorker(true);
+      },
+      () => window.location.reload(),
+      (listener) => {
+        navigator.serviceWorker?.addEventListener("controllerchange", listener, { once: true });
+      },
+    );
+  };
+
   const dismiss = () => {
     // Hides the banner only. The waiting worker stays waiting, the app keeps
     // running the version it started on, and the offer comes back next launch.
@@ -51,12 +73,7 @@ export function UpdatePrompt() {
         <p className="zn-prompt__title">{t("pwa.updateTitle")}</p>
         <p className="zn-prompt__text">{t("pwa.updateAvailable")}</p>
         <div className="zn-prompt__actions">
-          <Button
-            size="sm"
-            onClick={() => {
-              void updateServiceWorker(true);
-            }}
-          >
+          <Button size="sm" onClick={update}>
             {t("pwa.update")}
           </Button>
           <Button size="sm" variant="ghost" onClick={dismiss}>

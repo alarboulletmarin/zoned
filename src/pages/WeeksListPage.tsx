@@ -305,12 +305,18 @@ export function WeeksListPage() {
                 <Upload size={17} />
                 {t("weekly.list.import")}
               </Button>
-              <Button asChild>
-                <Link to="/weeks/new">
-                  <Plus size={17} />
-                  {t("weekly.list.create")}
-                </Link>
-              </Button>
+              {/* Sur une planche vide, la création est dans l'état vide,
+                  avec l'explication et la seconde voie ; la répéter ici
+                  faisait deux boutons identiques sur un même écran. Elle
+                  revient en tête dès qu'il y a une semaine à côté. */}
+              {weeks.length > 0 && (
+                <Button asChild>
+                  <Link to="/weeks/new">
+                    <Plus size={17} />
+                    {t("weekly.list.create")}
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         </section>
@@ -394,14 +400,27 @@ export function WeeksListPage() {
                     {t("weekly.list.filterAll")}
                   </Button>
                 ) : (
-                  // The header already spends the screen's one vermillon fill
-                  // on this exact call, so here it is the outlined accent.
-                  <Button variant="outline-primary" asChild>
-                    <Link to="/weeks/new">
-                      <Plus size={17} />
-                      {t("weekly.list.create")}
-                    </Link>
-                  </Button>
+                  // Le seul aplat vermillon de l'écran, ici et pas en tête :
+                  // la première semaine se crée là où on explique ce qu'elle
+                  // est. La seconde voie, en prendre une toute prête, est à
+                  // côté, en contour.
+                  <div
+                    className="zn-cluster"
+                    style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+                  >
+                    <Button asChild>
+                      <Link to="/weeks/new">
+                        <Plus size={17} />
+                        {t("weekly.list.create")}
+                      </Link>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link to="/weeks/new/prebuilt">
+                        {t("common:topnav.weeksPrebuilt")}
+                        <ArrowRight size={17} />
+                      </Link>
+                    </Button>
+                  </div>
                 )
               }
             />
