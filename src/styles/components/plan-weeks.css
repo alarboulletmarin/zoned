@@ -793,19 +793,27 @@ button.zn-door {
     padding-inline: var(--pad-card-sm);
   }
 
+  /* The figures and the rhythm split the line in two: the thumbnail is the
+     shape of the week, not an ornament next to the numbers. */
   .zn-pw__summary-line {
-    flex: none;
+    flex: 1 1 0;
     gap: var(--sp-8);
   }
 
   .zn-pw__summary-foot {
-    flex: 1;
+    flex: 1 1 0;
     align-items: center;
+    gap: var(--sp-10);
     min-inline-size: 0;
   }
 
   .zn-pw__summary-foot > .zn-wk-rhythm {
-    max-inline-size: 16rem;
+    max-inline-size: none;
+  }
+
+  .zn-pw__summary-foot > .zn-wk-rhythm .zn-wk-rhythm__days {
+    block-size: 40px;
+    gap: var(--sp-3);
   }
 }
 
