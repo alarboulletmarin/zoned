@@ -73,6 +73,28 @@ export function weekLines(
     }));
 }
 
+/**
+ * How full the week is, which decides how much room each session gets.
+ * A sheet has a fixed height: it cannot grow, so its type and its bars
+ * shrink instead, in steps, and never clip a session away.
+ */
+export interface WeekDensity {
+  /** Rows the list prints: every session, plus one per rest day. */
+  rows: number;
+  /** The fullest day's session count, 1 when every day holds one at most. */
+  maxPerDay: number;
+}
+
+export function weekDensity(lines: WeekLine[]): WeekDensity {
+  const perDay = new Map<number, number>();
+  for (const l of lines) perDay.set(l.day, (perDay.get(l.day) ?? 0) + 1);
+  const restDays = 7 - perDay.size;
+  return {
+    rows: lines.length + restDays,
+    maxPerDay: Math.max(1, ...perDay.values()),
+  };
+}
+
 /** The ink of a zone, or the paled ink for work that has none. */
 export function zoneInk(zone: number | null): string {
   return zone ? ZONE_HEX_LIGHT[zone as ZoneNumber] : INK_PALE;
@@ -445,6 +467,10 @@ interface DayColumnsProps {
   cardPadding?: string;
   /** Lines a name may take before it is cut. */
   nameLines?: number;
+  /** Space between two cards of the same day. */
+  cardGap?: number;
+  /** Type size of the duration line. */
+  factSize?: number;
 }
 
 /**
@@ -459,6 +485,8 @@ export function DayColumns({
   labelSize = 15,
   cardPadding = "12px 12px 11px",
   nameLines = 3,
+  cardGap = 8,
+  factSize,
 }: DayColumnsProps) {
   const { t } = useTranslation("library");
   return (
@@ -473,7 +501,7 @@ export function DayColumns({
               minWidth: 0,
               display: "flex",
               flexDirection: "column",
-              gap: 8,
+              gap: cardGap,
               paddingTop: 10,
               borderTop: RULE,
             }}
@@ -520,7 +548,7 @@ export function DayColumns({
                   }}
                 >
                   <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <ZoneDot zone={l.zone} size={12} />
+                    <ZoneDot zone={l.zone} size={Math.max(9, labelSize - 3)} />
                     {l.zone && (
                       <span
                         style={{
@@ -546,9 +574,12 @@ export function DayColumns({
                       WebkitBoxOrient: "vertical",
                       overflow: "hidden",
                       // Hyphenate first; break anywhere only as the last
-                      // resort a 100px column sometimes needs.
+                      // resort a 100px column sometimes needs. A one-line
+                      // name ends in an ellipsis rather than a broken word.
                       hyphens: "auto",
-                      overflowWrap: "anywhere",
+                      overflowWrap: nameLines === 1 ? "normal" : "anywhere",
+                      wordBreak: nameLines === 1 ? "normal" : undefined,
+                      textOverflow: "ellipsis",
                     }}
                   >
                     {l.name}
@@ -557,7 +588,7 @@ export function DayColumns({
                     <span
                       style={{
                         fontFamily: MONO,
-                        fontSize: labelSize - 1,
+                        fontSize: factSize ?? labelSize - 1,
                         letterSpacing: "0.04em",
                         color: INK_2,
                       }}
@@ -586,6 +617,8 @@ interface SessionRowsProps {
   rowPadding?: number;
   /** Width of the day gutter. */
   gutter?: number;
+  /** Height of the bar under a name, with `bars`. */
+  barHeight?: number;
 }
 
 /**
@@ -601,6 +634,7 @@ export function SessionRows({
   labelSize = 18,
   rowPadding = 18,
   gutter = 96,
+  barHeight = 14,
 }: SessionRowsProps) {
   const { t } = useTranslation("library");
   const isEn = useIsEnglish();
@@ -640,7 +674,7 @@ export function SessionRows({
                 minWidth: 0,
                 display: "flex",
                 flexDirection: "column",
-                gap: 14,
+                gap: Math.round(rowPadding * 0.8),
               }}
             >
               {own.length === 0 ? (
@@ -658,7 +692,7 @@ export function SessionRows({
                 </span>
               ) : (
                 own.map((l, i) => (
-                  <div key={i} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div key={i} style={{ display: "flex", flexDirection: "column", gap: Math.round(barHeight * 0.5) }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                       <ZoneDot zone={l.zone} size={Math.round(nameSize * 0.5)} />
                       <span
@@ -695,7 +729,7 @@ export function SessionRows({
                       <div
                         style={{
                           boxSizing: "border-box",
-                          height: 14,
+                          height: barHeight,
                           width: `${Math.max(4, (l.durationMin / maxMin) * 100)}%`,
                           background: zoneInk(l.zone),
                           border: RULE,
