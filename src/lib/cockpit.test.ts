@@ -572,6 +572,7 @@ describe("l'adresse de chaque séance", () => {
     expect(none.sessionRefs).toEqual([]);
     expect(none.weekRefs).toEqual([]);
     expect(none.sources).toEqual([]);
+    expect(none.active).toEqual([]);
 
     // Un plan qui n'a pas commencé : pas de semaine, donc pas d'adresse.
     const later = pickTodayFocus([plan({ id: "p1", startDate: "2026-10-05" })], MONDAY);
@@ -656,13 +657,15 @@ describe("la composition", () => {
     const nextMonday = new Date(2026, 8, 14);
     const composition = placeWeek(EMPTY_COMPOSITION, "renfo", nextMonday);
     const focus = pickTodayFocus([marathon, renfo], MONDAY, composition);
-    // Cette semaine, le plan seul.
-    expect(focus.sources.map((s) => s.plan.id)).toEqual(["marathon"]);
-    // La semaine prochaine, vue depuis ce lundi : rien à empiler encore.
-    expect(planDay(focus, nextMonday).sessions).toEqual([]);
-    // Vécue depuis la semaine prochaine : les deux.
+    // Cette semaine, le plan seul est EN COURS ; la semaine posée est suivie.
+    expect(focus.active.map((s) => s.plan.id)).toEqual(["marathon"]);
+    expect(focus.sources.map((s) => s.plan.id)).toEqual(["marathon", "renfo"]);
+    expect(focus.sessions.map((s) => s.workoutId)).toEqual(["PLAN-LUN"]);
+    // La semaine prochaine, vue depuis ce lundi dans la grille : les deux.
+    expect(planDay(focus, nextMonday).sessions.map((s) => s.workoutId)).toEqual(["STR-001"]);
+    // Vécue depuis la semaine prochaine : les deux en cours.
     const later = pickTodayFocus([marathon, renfo], nextMonday, composition);
-    expect(later.sources.map((s) => s.plan.id)).toEqual(["marathon", "renfo"]);
+    expect(later.active.map((s) => s.plan.id)).toEqual(["marathon", "renfo"]);
     expect(later.sessions.map((s) => s.workoutId)).toEqual(["STR-001"]);
     expect(later.weekNumber).toBe(3);
   });
@@ -693,13 +696,15 @@ describe("la composition", () => {
 
   test("les bornes du mois couvrent toutes les sources", () => {
     const composition = placeWeek(EMPTY_COMPOSITION, "renfo", new Date(2026, 10, 2));
-    // La semaine posée en novembre n'est pas en cours en septembre : elle
-    // n'entre pas dans les sources, donc pas dans les bornes.
+    // La semaine posée en novembre n'est pas en cours en septembre, mais elle
+    // est suivie : la grille doit pouvoir feuilleter jusqu'à elle.
     const focus = pickTodayFocus([marathon, renfo], MONDAY, composition);
-    expect(monthBounds(focus)).toEqual({ min: { year: 2026, month: 7 }, max: { year: 2026, month: 8 } });
-    // Vécue en novembre, la semaine posée est seule, et les bornes sont les siennes.
+    expect(monthBounds(focus)).toEqual({ min: { year: 2026, month: 7 }, max: { year: 2026, month: 10 } });
+    // Vécue en novembre, la semaine posée est seule EN COURS, mais le plan
+    // fini reste suivi : la grille peut encore remonter jusqu'à lui.
     const later = pickTodayFocus([marathon, renfo], new Date(2026, 10, 2), composition);
-    expect(monthBounds(later)).toEqual({ min: { year: 2026, month: 10 }, max: { year: 2026, month: 10 } });
+    expect(later.active.map((s) => s.plan.id)).toEqual(["renfo"]);
+    expect(monthBounds(later)).toEqual({ min: { year: 2026, month: 7 }, max: { year: 2026, month: 10 } });
   });
 
   test("les séances d'un intervalle viennent de toutes les sources", () => {

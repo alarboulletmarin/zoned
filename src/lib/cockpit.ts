@@ -73,10 +73,18 @@ export interface TodayFocus {
   /** Vrai quand le primaire est une semaine seule. */
   isWeek: boolean;
   /**
-   * Les sources EN COURS que l'écran empile, primaire en tête. Vide sans
-   * rien en cours ; pour `upcoming`, la seule source à venir.
+   * TOUTES les sources que la composition suit, primaire en tête, puis les
+   * autres en cours, puis celles qui ne le sont pas aujourd'hui (posées plus
+   * loin, à venir). C'est ce que la grille du mois, les bilans et le menu
+   * d'ajout parcourent : une semaine posée dans trois semaines doit se voir
+   * dans le mois, même si la bande, elle, ne montre que cette semaine.
    */
   sources: TodaySource[];
+  /**
+   * Les sources EN COURS aujourd'hui, primaire en tête : ce que la bande
+   * empile et ce que la ligne des sources nomme. Vide sans rien en cours.
+   */
+  active: TodaySource[];
   /** 1-indexé dans le primaire, et 0 quand rien n'a commencé. */
   weekNumber: number;
   /** 0 = lundi … 6 = dimanche, convention du dépôt. */
@@ -106,6 +114,7 @@ const NOTHING: TodayFocus = {
   plan: null,
   isWeek: false,
   sources: [],
+  active: [],
   weekNumber: 0,
   dayOfWeek: 0,
   sessions: [],
@@ -167,6 +176,7 @@ export function pickTodayFocus(
   if (underWay.length > 0) {
     const primary = primaryOf(underWay)!;
     const ordered = [primary, ...underWay.filter((s) => s !== primary)];
+    const rest = sources.filter((s) => !underWay.includes(s));
     const position = sourcePosition(primary, midnight)!;
 
     // Une seule traversée pour les sept jours : la journée courante n'est
@@ -191,7 +201,8 @@ export function pickTodayFocus(
       state: sessions.length > 0 ? "session" : "rest",
       plan: primary.plan,
       isWeek: primary.isWeek,
-      sources: ordered,
+      sources: [...ordered, ...rest],
+      active: ordered,
       weekNumber: position.weekNumber,
       dayOfWeek: position.dayOfWeek,
       sessions,
@@ -218,7 +229,8 @@ export function pickTodayFocus(
       state: "upcoming",
       plan: source.plan,
       isWeek: source.isWeek,
-      sources: [source],
+      sources: [source, ...sources.filter((s) => s !== source)],
+      active: [],
       weekNumber: 0,
       dayOfWeek: 0,
       sessions: [],
@@ -679,7 +691,7 @@ export function focusSessionsBetween(focus: TodayFocus, from: string, to: string
  * l'ordre de la bande. Rien à dire quand une seule source est en cours.
  */
 export function weekConflicts(focus: TodayFocus): { dayOfWeek: number; planIds: string[] }[] {
-  if (focus.sources.length < 2) return [];
+  if (focus.active.length < 2) return [];
   const out: { dayOfWeek: number; planIds: string[] }[] = [];
   for (let day = 0; day < focus.week.length; day++) {
     const keyBy = new Set<string>();
