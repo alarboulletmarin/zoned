@@ -40,6 +40,7 @@ import {
   extraBlockHeight,
   focusDayDate,
   focusPlanHref,
+  focusSessionsBetween,
   monthBounds,
   monthCells,
   monthOf,
@@ -50,11 +51,16 @@ import {
   sessionHref,
   sessionKind,
   shiftMonth,
+  sourceHref,
+  sourceName,
   weekShortcut,
   type MonthRef,
   type SessionKind,
+  type SessionRef,
   type TodayFocus,
 } from "@/lib/cockpit";
+import { useTodayComposition } from "@/hooks/useTodayComposition";
+import { TodayComposePanel } from "@/components/domain/TodayComposePanel";
 import { updateSessionCompletion, type SessionCompletionData } from "@/lib/planStorage";
 import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
 import { WeekReviewPanel } from "@/components/domain/WeekReviewPanel";
@@ -66,13 +72,7 @@ import { useActivityLog } from "@/hooks/useActivityLog";
 import { activitiesBetween, activitiesOn } from "@/lib/activityStorage";
 import { minutesByWeekday } from "@/lib/activityStats";
 import { isoDateOnly } from "@/lib/planDates";
-import {
-  buildWeekReview,
-  calendarWeekRange,
-  hasSomethingToReview,
-  planSessionsBetween,
-  planWeekRange,
-} from "@/lib/weekReview";
+import { buildWeekReview, calendarWeekRange, hasSomethingToReview } from "@/lib/weekReview";
 import { getWorkoutPhaseSteps, summarizeWorkoutSteps } from "@/lib/workoutStructure";
 import { formatPace } from "@/lib/planGenerator/paceEngine";
 import {
@@ -204,7 +204,16 @@ export function TodayPage() {
   // relisait à chaque rendu, ce qui pouvait la désaccorder de la bande une
   // seconde avant minuit ; elle lit le même instant que tout le reste.
   const now = useMemo(() => new Date(), []);
-  const focus = useMemo(() => pickTodayFocus(plans, now), [plans, now]);
+
+  /* Ce que le cockpit SUIT : les plans, et les semaines posées. C'est la
+     composition qui décide, pas le plan le plus récent, voir
+     `lib/todayComposition.ts`. La feuille Composer l'écrit, ici on la lit. */
+  const { composition, update: updateComposition } = useTodayComposition(plans, !isLoading);
+  const [composeOpen, setComposeOpen] = useState(false);
+  const focus = useMemo(
+    () => pickTodayFocus(plans, now, composition),
+    [plans, now, composition],
+  );
   const planUrl = focusPlanHref(focus);
 
   /* Le jour choisi, et c'est une DATE : il vaut `null` tant que personne n'a
@@ -244,7 +253,7 @@ export function TodayPage() {
      endroit ; pour une case du mois c'est la seule façon de le savoir. */
   const selected = useMemo(() => planDay(focus, dateFromIso(dayIso)), [focus, dayIso]);
   const sessions = selected.sessions;
-  const indexes = selected.indexes;
+  const refs = selected.refs;
 
   /* On peut changer de jour : il y a donc des hauteurs à RÉSERVER, pour que
      passer du dimanche au mardi ne fasse pas remonter l'écran. Sans semaine à
@@ -302,10 +311,12 @@ export function TodayPage() {
   const nextLine = useMemo(() => {
     if (dayState !== "rest" || focus.week.length === 0 || !selected.inPlan) return null;
     const names = t("today:week.dayNames").split(",");
-    const weekSessions =
-      focus.plan?.weeks.find((w) => w.weekNumber === selected.weekNumber)?.sessions ?? [];
+    // Jour par jour et toutes sources confondues : la prochaine sortie peut
+    // venir de la semaine posée quand le plan, lui, se repose.
     for (let index = selected.dayOfWeek + 1; index <= 6; index++) {
-      const next = weekSessions.filter((s) => s.dayOfWeek === index);
+      const date = dateFromIso(selected.date);
+      date.setDate(date.getDate() + (index - selected.dayOfWeek));
+      const next = planDay(focus, date).sessions;
       if (next.length === 0) continue;
       const min = next.reduce((n, s) => n + (s.estimatedDurationMin ?? 0), 0);
       return t("today:resume.next", {
@@ -314,7 +325,7 @@ export function TodayPage() {
       });
     }
     return null;
-  }, [dayState, focus.week.length, focus.plan, selected, t]);
+  }, [dayState, focus, selected, t]);
 
   /** Où l'on en est du plan : le dénominateur, l'échéance, ce qu'on vise. */
   const position = useMemo(() => planPosition(focus, now), [focus, now]);
@@ -337,22 +348,23 @@ export function TodayPage() {
      cockpit disait 93 min pendant qu'elle disait 1h03. Ce ne sont pas deux
      formats, ce sont deux nombres. Copié de PlanViewPage, moins le `scrollY`,
      le cockpit tient sur un écran et n'a pas de position à restaurer. */
-  const planWeek = useMemo(
-    () => focus.plan?.weeks.find((w) => w.weekNumber === selected.weekNumber),
-    [focus.plan, selected.weekNumber],
-  );
-
   const sessionState = useCallback(
-    (session: PlanSession) => ({
-      from: "plan" as const,
-      planId: focus.plan?.id,
-      planName: focus.plan ? (isEn ? focus.plan.nameEn : focus.plan.name) : "",
-      weekNumber: selected.weekNumber,
-      volumePercent: planWeek?.volumePercent,
-      estimatedDurationMin: session.estimatedDurationMin,
-      targetDistanceKm: session.targetDistanceKm,
-    }),
-    [focus.plan, selected.weekNumber, isEn, planWeek],
+    (session: PlanSession, ref: SessionRef | undefined) => {
+      // La séance dit de quelle SOURCE elle vient : c'est ce plan-là que la
+      // page de séance nomme, et sa semaine à lui, pas celle du primaire.
+      const source = focus.sources.find((s) => s.plan.id === ref?.planId);
+      const planWeek = source?.plan.weeks.find((w) => w.weekNumber === ref?.weekNumber);
+      return {
+        from: "plan" as const,
+        planId: source?.plan.id,
+        planName: source ? sourceName(source, isEn) : "",
+        weekNumber: ref?.weekNumber ?? selected.weekNumber,
+        volumePercent: planWeek?.volumePercent,
+        estimatedDurationMin: session.estimatedDurationMin,
+        targetDistanceKm: session.targetDistanceKm,
+      };
+    },
+    [focus.sources, selected.weekNumber, isEn],
   );
 
   /* La clôture, une par séance de la pile. Elle réutilise le panneau du plan,
@@ -364,9 +376,8 @@ export function TodayPage() {
      pas celle qu'on vit : depuis la grille du mois, ce sont deux semaines
      différentes. */
   const handleClose = useCallback(
-    (weekNumber: number, index: number, data: SessionCompletionData) => {
-      if (!focus.plan) return;
-      const ok = updateSessionCompletion(focus.plan.id, weekNumber, index, data);
+    (ref: SessionRef, data: SessionCompletionData) => {
+      const ok = updateSessionCompletion(ref.planId, ref.weekNumber, ref.index, data);
       if (!ok) {
         toast.error(t("common:errors.planSaveFailed"));
         return;
@@ -376,7 +387,7 @@ export function TodayPage() {
       reload();
       toast.success(t("plan:completion.saved"));
     },
-    [focus.plan, reload, t],
+    [reload, t],
   );
 
   /* Le primaire des journées sans séance. Il mène au plan, sauf quand il n'y
@@ -419,22 +430,16 @@ export function TodayPage() {
      Sans plan en cours, il porte sur la semaine CALENDAIRE : le vélotaf
      n'attend pas d'avoir un plan pour compter. */
   const review = useMemo(() => {
-    if (focus.plan && selected.inPlan) {
-      const range = planWeekRange(focus.plan, selected.weekNumber);
-      return buildWeekReview({
-        sessions: planWeek?.sessions ?? [],
-        activities: activitiesBetween(activities, range.from, range.to),
-        range,
-        weekNumber: selected.weekNumber,
-      });
-    }
-    const range = calendarWeekRange(now);
+    // Toutes les sources partagent le calendrier : la semaine du jour choisi
+    // est une semaine calendaire, et ce que chaque source y a posé compte.
+    const range = calendarWeekRange(selected.inPlan ? dateFromIso(dayIso) : now);
     return buildWeekReview({
-      sessions: [],
+      sessions: selected.inPlan ? focusSessionsBetween(focus, range.from, range.to) : [],
       activities: activitiesBetween(activities, range.from, range.to),
       range,
+      ...(selected.inPlan && selected.weekNumber > 0 && { weekNumber: selected.weekNumber }),
     });
-  }, [focus.plan, selected.inPlan, selected.weekNumber, planWeek, activities, now]);
+  }, [focus, selected.inPlan, selected.weekNumber, dayIso, activities, now]);
 
   /* Les minutes complémentaires de la semaine EN COURS, case par case. Elles
      nourrissent le canal du dessous de la bande : sans elles, une journée de
@@ -442,12 +447,9 @@ export function TodayPage() {
      ses bornes ne suivent pas le jour choisi. */
   const weekExtras = useMemo(() => {
     if (focus.week.length === 0) return [0, 0, 0, 0, 0, 0, 0];
-    const range =
-      focus.plan && focus.weekNumber > 0
-        ? planWeekRange(focus.plan, focus.weekNumber)
-        : calendarWeekRange(now);
+    const range = calendarWeekRange(now);
     return minutesByWeekday(activitiesBetween(activities, range.from, range.to), range.from);
-  }, [focus.week.length, focus.plan, focus.weekNumber, activities, now]);
+  }, [focus.week.length, activities, now]);
 
   const showReview = view === "week" && day === 6 && hasSomethingToReview(review);
 
@@ -485,11 +487,11 @@ export function TodayPage() {
     if (to < range.from) return null;
     const lived = { from: range.from, to };
     return buildWeekReview({
-      sessions: focus.plan ? planSessionsBetween(focus.plan, lived.from, lived.to) : [],
+      sessions: focusSessionsBetween(focus, lived.from, lived.to),
       activities: activitiesBetween(activities, lived.from, lived.to),
       range: lived,
     });
-  }, [view, monthRef, activities, focus.plan, todayIso]);
+  }, [view, monthRef, activities, focus, todayIso]);
 
   /* Ce que le mois vécu a pesé en INTENSITÉ : facile, tempo, intense. Les
      séances faites se classent par la zone dominante de leur gabarit, qui est
@@ -497,9 +499,9 @@ export function TodayPage() {
      mois, à la demande, et la jauge se dessine quand ils sont là. Le journal
      se classe par effort perçu, sans rien charger. */
   const monthSessions = useMemo(() => {
-    if (!focus.plan || !monthReview) return [];
-    return planSessionsBetween(focus.plan, monthReview.range.from, monthReview.range.to);
-  }, [focus.plan, monthReview]);
+    if (!monthReview) return [];
+    return focusSessionsBetween(focus, monthReview.range.from, monthReview.range.to);
+  }, [focus, monthReview]);
 
   const doneIds = useMemo(
     () =>
@@ -611,15 +613,18 @@ export function TodayPage() {
         <div className="zn-cockpit__stack">
           {sessions.map((session, rank) => (
             <CockpitSession
-              key={indexes[rank] ?? rank}
+              key={
+                refs[rank]
+                  ? `${refs[rank].planId}:${refs[rank].weekNumber}:${refs[rank].index}`
+                  : rank
+              }
               session={session}
-              index={indexes[rank]}
+              sessionRef={refs[rank]}
               rank={rank}
               count={sessions.length}
               isToday={isToday}
-              weekNumber={selected.weekNumber}
-              canClose={focus.plan != null && indexes[rank] != null}
-              linkState={sessionState(session)}
+              weekNumber={refs[rank]?.weekNumber ?? selected.weekNumber}
+              linkState={sessionState(session, refs[rank])}
               unit={settings.unitSystem}
               isEn={isEn}
               onClose={handleClose}
@@ -684,18 +689,44 @@ export function TodayPage() {
           deux il commente. Il n'en commente aucune, il commente la
           semaine. */}
       {focus.plan && dayState !== "none" && planUrl ? (
-        <Link to={planUrl} className="zn-cockpit__plan">
-          <span className="zn-kicker zn-kicker--xs">
-            {t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan")}
-          </span>
-          <span className="zn-cockpit__plan-name">
-            {positionLine ?? (isEn ? focus.plan.nameEn : focus.plan.name)}
-          </span>
-        </Link>
+        <div className="zn-cockpit__sources">
+          <Link to={planUrl} className="zn-cockpit__plan">
+            <span className="zn-kicker zn-kicker--xs">
+              {t(focus.isWeek ? "today:resume.inWeek" : "today:resume.inPlan")}
+            </span>
+            <span className="zn-cockpit__plan-name">
+              {positionLine ?? (isEn ? focus.plan.nameEn : focus.plan.name)}
+            </span>
+          </Link>
+          {/* Les AUTRES sources de la semaine, une ligne chacune, du même
+              dessin que le plan : ce sont des chemins vers ce qui a été posé
+              à côté, et ils disent d'où vient la séance de renforcement qui
+              n'est pas dans le plan marathon. */}
+          {focus.sources.slice(1).map((source) => (
+            <Link key={source.plan.id} to={sourceHref(source)} className="zn-cockpit__plan">
+              <span className="zn-kicker zn-kicker--xs">{t("today:resume.alsoLabel")}</span>
+              <span className="zn-cockpit__plan-name">{sourceName(source, isEn)}</span>
+            </Link>
+          ))}
+        </div>
       ) : (
         dayState === "none" && (
           <p className="zn-body zn-muted zn-measure">{t("today:resume.none.body")}</p>
         )
+      )}
+
+      {/* Composer : ce que le cockpit suit, et ce qu'on lui pose. Dès qu'il y
+          a quelque chose à composer, un plan ou une semaine, et aussi quand
+          rien n'est en cours : c'est précisément là qu'on veut poser une
+          semaine sur le calendrier. */}
+      {plans.length > 0 && (
+        <button
+          type="button"
+          className="zn-cockpit__compose"
+          onClick={() => setComposeOpen(true)}
+        >
+          {t("today:compose.open")}
+        </button>
       )}
 
       {/* Les deux gestes courts, en ligne de liens et non en cartes : ce
@@ -899,6 +930,16 @@ export function TodayPage() {
         </section>
       )}
 
+      <TodayComposePanel
+        open={composeOpen}
+        onOpenChange={setComposeOpen}
+        plans={plans}
+        composition={composition}
+        onChange={updateComposition}
+        lookedAt={dateFromIso(dayIso)}
+        today={now}
+      />
+
       <ActivityLogPanel {...log.panel} />
 
       {/* La figure ferme l'écran, en dernier dans l'ordre de lecture : elle ne
@@ -938,28 +979,27 @@ export function TodayPage() {
  */
 function CockpitSession({
   session,
-  index,
+  sessionRef,
   rank,
   count,
   isToday,
   weekNumber,
-  canClose,
   linkState,
   unit,
   isEn,
   onClose,
 }: {
   session: PlanSession;
-  index: number | undefined;
+  /** L'adresse de la séance dans sa source. Sans elle, pas de clôture. */
+  sessionRef: SessionRef | undefined;
   rank: number;
   count: number;
   isToday: boolean;
   weekNumber: number;
-  canClose: boolean;
   linkState: object;
   unit: UnitSystem;
   isEn: boolean;
-  onClose: (weekNumber: number, index: number, data: SessionCompletionData) => void;
+  onClose: (ref: SessionRef, data: SessionCompletionData) => void;
 }) {
   const { t } = useTranslation(["today", "plan", "library"]);
   const { workout } = useWorkout(session.workoutId);
@@ -1165,7 +1205,7 @@ function CockpitSession({
           </Link>
         </Button>
 
-        {canClose && index != null && (
+        {sessionRef != null && (
           <Button
             variant="outline"
             onClick={(event) => {
@@ -1190,8 +1230,8 @@ function CockpitSession({
         weekNumber={weekNumber}
         sessionName={title}
         onSave={(data) => {
-          if (index == null) return;
-          onClose(weekNumber, index, data);
+          if (sessionRef == null) return;
+          onClose(sessionRef, data);
           setCloseOpen(false);
         }}
         anchorElement={closeAnchor}

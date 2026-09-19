@@ -23,9 +23,10 @@ import { useActivityLog } from "@/hooks/useActivityLog";
 import { usePlans } from "@/hooks/usePlans";
 import { ACTIVITY_STORAGE_SOFT_LIMIT, activitiesBetween } from "@/lib/activityStorage";
 import { summarizeActivities } from "@/lib/activityStats";
-import { pickTodayFocus } from "@/lib/cockpit";
+import { focusSessionsBetween, pickTodayFocus } from "@/lib/cockpit";
+import { loadTodayComposition } from "@/lib/todayComposition";
 import { useIsEnglish } from "@/lib/i18n-utils";
-import { buildWeekReview, calendarWeekRange, planWeekRange } from "@/lib/weekReview";
+import { buildWeekReview, calendarWeekRange } from "@/lib/weekReview";
 import {
   ACTIVITY_DISCIPLINE_META,
   purposeLabelKey,
@@ -89,22 +90,14 @@ export function ActivitiesPage() {
   /* La semaine à bilanter : celle du plan en cours quand il y en a un, la
      semaine calendaire sinon. Le vélotaf n'attend pas d'avoir un plan. */
   const review = useMemo(() => {
-    const focus = pickTodayFocus(plans, today);
-    if (focus.plan && focus.weekNumber > 0) {
-      const range = planWeekRange(focus.plan, focus.weekNumber);
-      const week = focus.plan.weeks.find((w) => w.weekNumber === focus.weekNumber);
-      return buildWeekReview({
-        sessions: week?.sessions ?? [],
-        activities: activitiesBetween(activities, range.from, range.to),
-        range,
-        weekNumber: focus.weekNumber,
-      });
-    }
+    // La même composition que le cockpit : ce qu'il suit, le bilan le compte.
+    const focus = pickTodayFocus(plans, today, loadTodayComposition());
     const range = calendarWeekRange(today);
     return buildWeekReview({
-      sessions: [],
+      sessions: focus.week.length > 0 ? focusSessionsBetween(focus, range.from, range.to) : [],
       activities: activitiesBetween(activities, range.from, range.to),
       range,
+      ...(focus.weekNumber > 0 && { weekNumber: focus.weekNumber }),
     });
   }, [plans, activities, today]);
 

@@ -1,5 +1,6 @@
 export const BACKUP_STORAGE_KEYS = [
   "zoned-plans",
+  "zoned-today",
   "zoned-favorites",
   "zoned-settings",
   "zoned-last-seen-version",

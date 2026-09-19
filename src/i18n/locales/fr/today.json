@@ -29,7 +29,8 @@
     "openDetail": "Voir le détail",
     "next": "Prochaine séance : {{day}}, {{duration}}",
     "rank": "séance {{n}} / {{total}}",
-    "reclose": "Modifier la clôture"
+    "reclose": "Modifier la clôture",
+    "alsoLabel": "Aussi"
   },
   "quick": {
     "draw": "Tire-moi une séance",
@@ -83,5 +84,23 @@
     "ahead_one": "dans un jour",
     "ahead_other": "dans {{count}} jours",
     "back": "Revenir à aujourd'hui"
+  },
+  "compose": {
+    "open": "Composer le cockpit",
+    "title": "Ce que le cockpit suit",
+    "body": "Un plan est suivi tant que tu ne l'éteins pas. Une semaine seule se pose sur une semaine du calendrier, et se lit à côté du plan, séance par séance.",
+    "plans": "Plans",
+    "weeks": "Mes semaines",
+    "noPlans": "Aucun plan en cours ni à venir.",
+    "noWeeks": "Aucune semaine composée.",
+    "underWay": "semaine {{n}} / {{total}}",
+    "startsIn_one": "commence demain",
+    "startsIn_other": "commence dans {{count}} jours",
+    "placedOn": "posée sur la semaine du {{date}}",
+    "moveHere": "Poser sur la semaine du {{date}}",
+    "newWeek": "Composer une nouvelle semaine",
+    "newPlan": "Créer un plan",
+    "switchPlan": "Suivre {{name}}",
+    "switchWeek": "Poser {{name}}"
   }
 }
