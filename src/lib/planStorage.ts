@@ -419,6 +419,64 @@ export function updateUnavailabilities(
   return savePlan(plan);
 }
 
+// ── Fusionner une semaine seule dans un plan ───────────────────────
+
+export type MergeWeekMode = "add" | "replace";
+
+/**
+ * Copier les séances d'une semaine seule dans la semaine `weekNumber` d'un
+ * plan. La semaine seule n'est pas touchée : c'est un gabarit, on le REJOUE
+ * dans le plan, on ne le déplace pas.
+ *
+ * Deux modes, et le second est explicite parce qu'il efface :
+ * - `add`, le plan garde ses séances et reçoit celles de la semaine à côté,
+ *   c'est le renforcement posé sur une semaine de course ;
+ * - `replace`, les séances du plan cette semaine-là partent, et la semaine
+ *   seule prend leur place, c'est la décharge qu'on substitue.
+ *
+ * Ce qui traverse : tout ce qui DÉCRIT la séance (gabarit, durée, précision,
+ * discipline, effort prévu). Ce qui ne traverse pas : ce qui a été VÉCU
+ * (statut, clôture, ressenti, note) et le verrou du générateur, qui n'ont de
+ * sens que dans la semaine où ils ont été écrits. Le tout sous un instantané
+ * d'annulation : `replace` est le seul geste de ce module qui retire des
+ * séances non closes en nombre, il doit se défaire d'un tap.
+ */
+export function mergeWeekIntoPlan(
+  planId: string,
+  weekNumber: number,
+  weekId: string,
+  mode: MergeWeekMode,
+  labels: { label: string; labelEn: string },
+): boolean {
+  const week = getPlan(weekId);
+  if (!week || week.config.isSingleWeek !== true) return false;
+  const source = week.weeks[0]?.sessions ?? [];
+
+  return withUndoSnapshot(planId, "merge_week", labels.label, labels.labelEn, (plan) => {
+    const target = plan.weeks.find(w => w.weekNumber === weekNumber);
+    if (!target) throw new Error("week not in plan");
+    const copies: PlanSession[] = source.map(session => {
+      const {
+        status: _status,
+        completedAt: _completedAt,
+        actualDurationMin: _actualDurationMin,
+        actualDistanceKm: _actualDistanceKm,
+        rpe: _rpe,
+        userNote: _userNote,
+        locked: _locked,
+        ...kept
+      } = session;
+      const copy: PlanSession = { ...kept, paceNotes: session.paceNotes?.map(n => ({ ...n })) };
+      if (!copy.paceNotes) delete copy.paceNotes;
+      return copy;
+    });
+    target.sessions = (mode === "replace" ? copies : [...target.sessions, ...copies]).sort(
+      (a, b) => a.dayOfWeek - b.dayOfWeek,
+    );
+    return [];
+  });
+}
+
 // ── Undo last change ───────────────────────────────────────────────
 
 export function undoLastChange(planId: string): boolean {
@@ -457,7 +515,14 @@ export function withUndoSnapshot(
   const plan = plans[planIdx];
   const before = structuredClone(plan);
 
-  const changes = mutator(plan);
+  let changes: AutoChange[];
+  try {
+    changes = mutator(plan);
+  } catch {
+    // Le mutateur a refusé : rien n'est écrit, et le plan lu reste intact
+    // pour l'appelant puisque `getAllPlans` relit le stockage.
+    return false;
+  }
 
   plan._lastUndoableChange = {
     at: new Date().toISOString(),

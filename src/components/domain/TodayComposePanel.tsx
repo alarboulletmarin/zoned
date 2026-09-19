@@ -1,6 +1,7 @@
-import { useMemo, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { ArrowRight } from "@/components/icons";
 import {
   Sheet,
@@ -11,11 +12,13 @@ import {
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { getPlanMonday, isoDateOnly } from "@/lib/planDates";
+import { mergeWeekIntoPlan, type MergeWeekMode } from "@/lib/planStorage";
 import {
   byNewest,
   layerFor,
   mondayOf,
   placeWeek,
+  removeLayer,
   resolveTodaySources,
   setLayerEnabled,
   sourcePosition,
@@ -51,6 +54,7 @@ export function TodayComposePanel({
   plans,
   composition,
   onChange,
+  onPlansChanged,
   lookedAt,
   today,
 }: {
@@ -59,12 +63,18 @@ export function TodayComposePanel({
   plans: readonly TrainingPlan[];
   composition: TodayComposition;
   onChange: (next: TodayComposition) => void;
+  /** Un plan a été réécrit (fusion) : l'appelant relit ses plans. */
+  onPlansChanged?: () => void;
   /** Le jour regardé dans le cockpit : une semaine se pose sur SA semaine. */
   lookedAt: Date;
   today: Date;
 }) {
   const { t } = useTranslation(["today", "library"]);
   const isEn = useIsEnglish();
+
+  /* La semaine dont la fusion est en train de se décider, ajouter ou
+     remplacer : la question ne se pose qu'une fois le geste demandé. */
+  const [merging, setMerging] = useState<string | null>(null);
 
   const active = useMemo(
     () => new Set(resolveTodaySources(plans, composition, today).map((s) => s.plan.id)),
@@ -101,6 +111,40 @@ export function TodayComposePanel({
     () => [...plans].filter((p) => p.config.isSingleWeek === true).sort(byNewest),
     [plans],
   );
+
+  /* Le plan sur lequel une semaine POSÉE tombe, et sa semaine à lui : c'est
+     là qu'elle peut se fusionner. Une semaine posée hors de tout plan n'a
+     rien où se fondre, et le geste ne s'affiche pas. */
+  const mergeTarget = (anchor: string): { plan: TrainingPlan; weekNumber: number } | null => {
+    const [y, m, d] = anchor.split("-").map(Number);
+    const monday = new Date(y, m - 1, d);
+    for (const plan of planRows.map((r) => r.plan)) {
+      const source: TodaySource = { plan, isWeek: false, monday: getPlanMonday(plan), explicit: false };
+      const position = sourcePosition(source, monday);
+      if (position) return { plan, weekNumber: position.weekNumber };
+    }
+    return null;
+  };
+
+  const handleMerge = (week: TrainingPlan, mode: MergeWeekMode) => {
+    const layer = layerFor(composition, week.id);
+    const target = layer?.anchor ? mergeTarget(layer.anchor) : null;
+    if (!target) return;
+    const name = isEn ? week.nameEn : week.name;
+    const ok = mergeWeekIntoPlan(target.plan.id, target.weekNumber, week.id, mode, {
+      label: t("today:compose.mergeLabel", { week: name, n: target.weekNumber, lng: "fr" }),
+      labelEn: t("today:compose.mergeLabel", { week: name, n: target.weekNumber, lng: "en" }),
+    });
+    setMerging(null);
+    if (!ok) {
+      toast.error(t("today:compose.mergeFailed"));
+      return;
+    }
+    // Fusionnée, la semaine n'a plus à se lire à côté : elle est DANS le plan.
+    onChange(removeLayer(composition, week.id));
+    onPlansChanged?.();
+    toast.success(t("today:compose.mergeDone"));
+  };
 
   const formatMonday = (iso: string) => {
     const [y, m, d] = iso.split("-").map(Number);
@@ -188,6 +232,10 @@ export function TodayComposePanel({
                           </button>
                         )}
                       </label>
+                      {/* Fusionner : la semaine posée sur une semaine d'un
+                          plan peut y entrer pour de bon. Ajouter par défaut ;
+                          remplacer efface les séances du plan cette
+                          semaine-là, donc il se demande en toutes lettres. */}
                       <Switch
                         id={id}
                         checked={on}
@@ -200,6 +248,34 @@ export function TodayComposePanel({
                         }
                         aria-label={t("today:compose.switchWeek", { name })}
                       />
+                      {on && layer?.anchor && (() => {
+                        const target = mergeTarget(layer.anchor);
+                        if (!target) return null;
+                        return (
+                          <span className="zn-compose__merge">
+                            {merging === plan.id ? (
+                              <>
+                                <button type="button" className="zn-compose__move" onClick={() => handleMerge(plan, "add")}>
+                                  {t("today:compose.mergeAdd")}
+                                </button>
+                                <button type="button" className="zn-compose__move" onClick={() => handleMerge(plan, "replace")}>
+                                  {t("today:compose.mergeReplace")}
+                                </button>
+                                <button type="button" className="zn-compose__move" onClick={() => setMerging(null)}>
+                                  {t("today:compose.mergeCancel")}
+                                </button>
+                              </>
+                            ) : (
+                              <button type="button" className="zn-compose__move" onClick={() => setMerging(plan.id)}>
+                                {t("today:compose.merge", {
+                                  plan: isEn ? target.plan.nameEn : target.plan.name,
+                                  n: target.weekNumber,
+                                })}
+                              </button>
+                            )}
+                          </span>
+                        );
+                      })()}
                     </li>
                   );
                 })}

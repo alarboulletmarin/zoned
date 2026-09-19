@@ -37,6 +37,7 @@ import { ZoneScale } from "@/components/visualization";
 import { WeekRhythmChart } from "@/components/weekly";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { usePlans } from "@/hooks/usePlans";
+import { layerFor, loadTodayComposition, type TodayComposition } from "@/lib/todayComposition";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
@@ -56,6 +57,7 @@ function WeekCard({
   byId,
   workoutNames,
   locale,
+  composition,
   onDelete,
   onDuplicate,
   onShare,
@@ -64,6 +66,7 @@ function WeekCard({
   byId: Map<string, AnyWorkoutTemplate>;
   workoutNames: Record<string, string>;
   locale: string;
+  composition: TodayComposition;
   onDelete: (id: string) => void;
   onDuplicate: (week: TrainingPlan) => void;
   onShare: (week: TrainingPlan) => void;
@@ -85,6 +88,20 @@ function WeekCard({
     new Date(week.config.createdAt).toLocaleDateString(locale),
   ].join(" · ");
 
+  /* Posée dans le cockpit : une ligne de plus, en mono, et seulement quand
+     c'est le cas. C'est la seule chose que la liste ne savait pas dire d'une
+     semaine : où elle est en train de servir. */
+  const layer = layerFor(composition, week.id);
+  const placedOn =
+    layer?.enabled && layer.anchor
+      ? t("weekly.cockpit.listPlaced", {
+          date: (() => {
+            const [y, m, d] = layer.anchor.split("-").map(Number);
+            return new Date(y, m - 1, d).toLocaleDateString(locale, { day: "numeric", month: "short" });
+          })(),
+        })
+      : null;
+
   return (
     <Card className="zn-pw__week">
       {/* The whole upper block is the link to the week, a real anchor, the
@@ -103,6 +120,7 @@ function WeekCard({
         </div>
 
         <span className="zn-mono zn-pw__facts">{facts}</span>
+        {placedOn && <span className="zn-mono zn-pw__facts">{placedOn}</span>}
 
         <WeekRhythmChart slots={slots} />
       </Link>
@@ -161,6 +179,9 @@ export function WeeksListPage() {
   const pick = usePickLang();
   const isEn = useIsEnglish();
   const { plans, remove, reload } = usePlans();
+  // La composition du cockpit, pour dire où chaque semaine sert. Lue une
+  // fois : cette page ne la modifie pas.
+  const composition = useMemo(() => loadTodayComposition(), []);
   const [categoryFilter, setCategoryFilter] = useState<WeekCategory | "all">("all");
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -375,6 +396,7 @@ export function WeeksListPage() {
                   byId={byId}
                   workoutNames={workoutNames}
                   locale={isEn ? "en" : "fr"}
+                  composition={composition}
                   onDelete={setDeleteTarget}
                   onDuplicate={handleDuplicate}
                   onShare={handleShare}

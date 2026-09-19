@@ -101,6 +101,13 @@
     "newWeek": "Build a new week",
     "newPlan": "Create a plan",
     "switchPlan": "Follow {{name}}",
-    "switchWeek": "Place {{name}}"
+    "switchWeek": "Place {{name}}",
+    "merge": "Merge into {{plan}}, week {{n}}",
+    "mergeAdd": "Add to the plan's sessions",
+    "mergeReplace": "Replace the plan's sessions that week",
+    "mergeCancel": "Cancel",
+    "mergeDone": "Merged into the plan. Undo from the plan page.",
+    "mergeFailed": "The merge could not be saved.",
+    "mergeLabel": "{{week}} merged into week {{n}}"
   }
 }

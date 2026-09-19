@@ -74,6 +74,16 @@ import {
   slotToSession,
 } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
+import {
+  layerFor,
+  loadTodayComposition,
+  mondayOf,
+  placeWeek,
+  saveTodayComposition,
+  setLayerEnabled,
+  type TodayComposition,
+} from "@/lib/todayComposition";
+import { isoDateOnly } from "@/lib/planDates";
 import { buildScanSchedule } from "@/lib/scanSchedule";
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import type { AnyWorkoutTemplate } from "@/types";
@@ -164,6 +174,16 @@ export function WeekViewPage() {
   const [name, setName] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+
+  /* Où la semaine est posée dans le cockpit, si elle l'est. La composition
+     est une vue SUR les semaines, pas une propriété de la semaine, mais c'est
+     ici qu'on la compose : le geste doit être à côté du nom, pas dans /today.
+     Lue une fois, réécrite à chaque geste. */
+  const [composition, setComposition] = useState<TodayComposition>(() => loadTodayComposition());
+  const writeComposition = useCallback((next: TodayComposition) => {
+    setComposition(next);
+    saveTodayComposition(next);
+  }, []);
 
   // The session whose sheet is open, by index: the sheet reads the session
   // off the plan at render time, so it never shows a stale copy.
@@ -634,6 +654,33 @@ export function WeekViewPage() {
 
   if (isLoading) return null;
   if (!plan) return <Navigate to="/weeks" replace />;
+
+  /* La couche de cette semaine : posée (ancrée sur un lundi), ou rien. Une
+     semaine sans couche se montre encore dans le cockpit quand aucun plan
+     n'est en cours (la règle de repli), mais elle n'est pas POSÉE, et le
+     badge ne prétend pas qu'elle l'est. */
+  const layer = layerFor(composition, plan.id);
+  const placedOn = layer?.enabled && layer.anchor ? layer.anchor : null;
+  const formatMonday = (iso: string) => {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+      day: "numeric",
+      month: "short",
+    });
+  };
+  const thisMonday = mondayOf(new Date());
+  const nextMonday = new Date(thisMonday);
+  nextMonday.setDate(nextMonday.getDate() + 7);
+  const handlePlace = (value: string) => {
+    if (value === "none") {
+      writeComposition(setLayerEnabled(composition, plan.id, false));
+      toast.success(t("library:weekly.cockpit.toastRemoved"));
+      return;
+    }
+    const on = value === "next" ? nextMonday : thisMonday;
+    writeComposition(placeWeek(composition, plan.id, on));
+    toast.success(t("library:weekly.cockpit.toastPlaced", { date: formatMonday(isoDateOnly(on)) }));
+  };
   // A regular (multi-week) plan should use the full plan editor.
   if (!plan.config.isSingleWeek) return <Navigate to={`/plan/${plan.id}`} replace />;
 
@@ -784,6 +831,50 @@ export function WeekViewPage() {
                             {t("library:weekly.budget.hours", { hours: formatHours(h, isEn) })}
                           </DropdownMenuRadioItem>
                         ))}
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {/* Où la semaine est posée dans le cockpit : un troisième
+                      badge de la même famille, parce que c'est la troisième
+                      chose que la semaine EST. Cette semaine, la prochaine,
+                      ou nulle part ; poser ailleurs se fait depuis la grille
+                      du mois de /today, où l'on voit la semaine visée. */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      className={badgeVariants({
+                        variant: placedOn ? "secondary" : "outline",
+                        className: "zn-pw__cat",
+                      })}
+                      title={t("library:weekly.cockpit.label")}
+                    >
+                      {placedOn
+                        ? t("library:weekly.cockpit.placed", { date: formatMonday(placedOn) })
+                        : t("library:weekly.cockpit.place")}
+                      <ChevronDown size={13} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuRadioGroup
+                        value={
+                          placedOn === isoDateOnly(thisMonday)
+                            ? "this"
+                            : placedOn === isoDateOnly(nextMonday)
+                              ? "next"
+                              : placedOn
+                                ? "elsewhere"
+                                : "none"
+                        }
+                        onValueChange={handlePlace}
+                      >
+                        <DropdownMenuRadioItem value="this">
+                          {t("library:weekly.cockpit.thisWeek")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="next">
+                          {t("library:weekly.cockpit.nextWeek")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="none">
+                          {t("library:weekly.cockpit.remove")}
+                        </DropdownMenuRadioItem>
                       </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>
