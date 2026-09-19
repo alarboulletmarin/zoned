@@ -668,6 +668,29 @@ export function focusSessionsBetween(focus: TodayFocus, from: string, to: string
   return out;
 }
 
+/**
+ * Les CONFLITS de la semaine en cours : deux sources qui posent chacune une
+ * séance CLÉ le même jour. Deux séances le même jour ne sont pas un conflit,
+ * c'est le cas nominal, course le matin et renforcement le soir ; deux
+ * séances clés le sont, parce qu'une séance clé demande d'arriver frais, et
+ * qu'aucune des deux sources ne sait que l'autre existe.
+ *
+ * Rend un élément par jour en conflit, avec les sources en cause, dans
+ * l'ordre de la bande. Rien à dire quand une seule source est en cours.
+ */
+export function weekConflicts(focus: TodayFocus): { dayOfWeek: number; planIds: string[] }[] {
+  if (focus.sources.length < 2) return [];
+  const out: { dayOfWeek: number; planIds: string[] }[] = [];
+  for (let day = 0; day < focus.week.length; day++) {
+    const keyBy = new Set<string>();
+    focus.week[day].forEach((session, k) => {
+      if (session.isKeySession) keyBy.add(focus.weekRefs[day][k].planId);
+    });
+    if (keyBy.size >= 2) out.push({ dayOfWeek: day, planIds: [...keyBy] });
+  }
+  return out;
+}
+
 /** Le nom d'une source, dans la langue. Une semaine seule porte son nom donné. */
 export function sourceName(source: TodaySource, isEn: boolean): string {
   return isEn ? source.plan.nameEn : source.plan.name;

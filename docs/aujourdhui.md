@@ -124,13 +124,20 @@ toujours une semaine calendaire, et `calendarWeekRange` suffit pour les bilans.
 - **La page du plan lit la composition** : sous le kicker, une ligne mono
   liste les semaines posées sur ce plan et sur quelle semaine à lui, avec
   un lien chacune. Lecture seule.
+- **Les conflits** : `weekConflicts` (`lib/cockpit.ts`) signale les jours où
+  deux sources posent chacune une séance clé. Deux séances le même jour ne
+  sont pas un conflit, c'est le cas nominal ; deux séances clés le sont,
+  parce qu'aucune des deux sources ne sait que l'autre existe. Une ligne
+  mono à l'accent sous les sources, par jour. Le cockpit le dit, il ne
+  tranche pas. Le dépassement de charge n'est pas signalé ici : l'audit du
+  plan le voit déjà, semaines posées comprises.
 - **L'audit compte ce qui est posé à côté** : les séances des semaines posées
   sont ajoutées à une copie du plan, et seuls les constats que cette copie
   fait apparaître en plus sont gardés, sans correctif (`fixable: false`,
   pas d'index), parce qu'un correctif s'adresse par index dans le plan réel
   et que ces séances-là n'y sont pas.
 
-## Ce qui reste, dans l'ordre où ça vaut le coup
+## Ce qui reste
 
 ### 1. Répéter une semaine
 
@@ -142,15 +149,6 @@ faut d'abord soit un journal de clôture par date, soit matérialiser la
 répétition en copies. Le journal par date est la bonne voie (il sert aussi
 au point 3) ; en attendant, reposer la semaine chaque lundi est un geste
 d'un tap, depuis Composer ou depuis le badge de la semaine.
-
-### 2. Les conflits
-
-Deux sources le même jour ne sont pas un conflit, c'est le cas nominal (course
-le matin, renforcement le soir). Deux sources qui **posent la même séance
-clé** le même jour, ou dépassent un budget de charge, le sont. Rien ne
-l'annonce aujourd'hui. Le bon endroit est le bilan de la semaine
-(`weekReview`), qui compte déjà les séances clés, et la jauge de
-polarisation, qui voit déjà l'intensité.
 
 ## Ce qu'il ne faut pas refaire
 

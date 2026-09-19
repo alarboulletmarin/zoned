@@ -62,6 +62,7 @@ import {
   shiftMonth,
   sourceHref,
   sourceName,
+  weekConflicts,
   weekShortcut,
   type MonthRef,
   type SessionKind,
@@ -543,6 +544,25 @@ export function TodayPage() {
     });
   }, [focus, selected.inPlan, selected.weekNumber, dayIso, activities, now]);
 
+  /* Ce que deux sources se disputent : deux séances clés le même jour. Une
+     ligne par jour, sous les sources, et jamais quand une seule est en cours.
+     Le cockpit ne tranche pas, il le dit : c'est la personne qui compose. */
+  const conflictLines = useMemo(() => {
+    const names = t("today:week.dayNames").split(",");
+    return weekConflicts(focus).map((conflict) => {
+      const day = names[conflict.dayOfWeek] ?? "";
+      const sources = conflict.planIds
+        .map((id) => focus.sources.find((s) => s.plan.id === id))
+        .filter((s): s is NonNullable<typeof s> => s != null)
+        .map((s) => sourceName(s, isEn))
+        .join(" · ");
+      return t("today:conflicts.line", {
+        day: day.charAt(0).toUpperCase() + day.slice(1),
+        sources,
+      });
+    });
+  }, [focus, isEn, t]);
+
   /* Les minutes complémentaires de la semaine EN COURS, case par case. Elles
      nourrissent le canal du dessous de la bande : sans elles, une journée de
      vélotaf s'y lit repos. La bande ne montre jamais une autre semaine, donc
@@ -809,6 +829,11 @@ export function TodayPage() {
               <span className="zn-kicker zn-kicker--xs">{t("today:resume.alsoLabel")}</span>
               <span className="zn-cockpit__plan-name">{sourceName(source, isEn)}</span>
             </Link>
+          ))}
+          {conflictLines.map((line) => (
+            <p key={line} className="zn-cockpit__conflict zn-mono">
+              {line}
+            </p>
           ))}
         </div>
       ) : (

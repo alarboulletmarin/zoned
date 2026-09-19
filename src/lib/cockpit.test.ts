@@ -25,6 +25,7 @@ import {
   focusPlanHref,
   focusSessionsBetween,
   pickTodayFocus,
+  weekConflicts,
   planPosition,
   sessionHref,
   weekShortcut,
@@ -710,6 +711,29 @@ describe("la composition", () => {
     expect(focusSessionsBetween(focus, "2026-09-10", "2026-09-10").map((s) => s.workoutId)).toEqual([
       "PLAN-JEU",
     ]);
+  });
+
+  test("deux séances clés de deux sources le même jour font un conflit", () => {
+    const key = (day: number, id: string): PlanSession => ({ ...session(day, id), isKeySession: true });
+    const decharge = plan({
+      id: "decharge",
+      startDate: "2026-09-07",
+      totalWeeks: 1,
+      isSingleWeek: true,
+      weeks: [week(1, [key(3, "QUAL"), session(0, "EASY")])],
+    });
+    const hard = plan({
+      id: "hard",
+      startDate: "2026-08-31",
+      totalWeeks: 4,
+      weeks: [week(2, [key(3, "TEMPO"), key(0, "LONG")])],
+    });
+    const composition = placeWeek(EMPTY_COMPOSITION, "decharge", MONDAY);
+    const focus = pickTodayFocus([hard, decharge], MONDAY, composition);
+    // Jeudi : deux clés, deux sources. Lundi : une clé et un footing, rien.
+    expect(weekConflicts(focus)).toEqual([{ dayOfWeek: 3, planIds: ["hard", "decharge"] }]);
+    // Une seule source n'a rien à se reprocher.
+    expect(weekConflicts(pickTodayFocus([hard], MONDAY))).toEqual([]);
   });
 
   test("deux plans en cours s'empilent, le plus récent en primaire", () => {

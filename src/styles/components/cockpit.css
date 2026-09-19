@@ -655,6 +655,14 @@
   max-inline-size: 100%;
 }
 
+/* Un conflit entre deux sources : une ligne mono à l'accent, sous les
+   sources. Elle dit, elle ne tranche pas. */
+.zn-cockpit__conflict {
+  margin: 0;
+  font: var(--type-mono);
+  color: var(--accent);
+}
+
 /* Composer : un lien d'action, en mono, pas un bouton de plus à côté du
    primaire. Il n'emmène nulle part, il ouvre une feuille, donc pas de flèche,
    la même règle que la saisie d'activité. */
