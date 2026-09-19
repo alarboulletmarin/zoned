@@ -117,5 +117,8 @@
     "newWeekName": "Semaine du {{date}}",
     "done": "Séance ajoutée à {{source}}.",
     "failed": "La séance n'a pas pu être enregistrée."
+  },
+  "conflicts": {
+    "line": "{{day}} : deux séances clés, {{sources}}"
   }
 }

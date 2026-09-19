@@ -117,5 +117,8 @@
     "newWeekName": "Week of {{date}}",
     "done": "Session added to {{source}}.",
     "failed": "The session could not be saved."
+  },
+  "conflicts": {
+    "line": "{{day}}: two key sessions, {{sources}}"
   }
 }
