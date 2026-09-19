@@ -25,6 +25,78 @@ export interface ToPngOptions {
   width?: number;
   height?: number;
   style?: Partial<CSSStyleDeclaration>;
+  fontEmbedCSS?: string;
+}
+
+/**
+ * Le CSS des polices, embarque par nous plutot que par la lib.
+ *
+ * `html-to-image` sait le faire seul, mais son filtre lit
+ * `rule.style.fontFamily` sur une `CSSFontFaceRule`. Chrome expose ce
+ * raccourci ; Firefox rend `undefined` pour les descripteurs d'un
+ * `@font-face`, et la lib appelle `.trim()` dessus. Tout export image
+ * echouait donc sur Firefox, a chaque fois, sur
+ * "can't access property trim, t is undefined". C'est deterministe, pas
+ * intermittent, et amont n'a pas de correctif : 1.11.13 est la derniere.
+ *
+ * Fournir `fontEmbedCSS` court-circuite ce filtre : `embedWebFonts` pose la
+ * chaine telle quelle et ne lit plus aucune regle. On repart donc des memes
+ * `@font-face` que la page, lus par l'API qui, elle, marche partout, avec
+ * chaque woff2 inline en base64. Lu une fois par session, comme les polices
+ * du PDF.
+ */
+let fontCSS: Promise<string> | null = null;
+
+function embeddedFontCSS(): Promise<string> {
+  if (!fontCSS) {
+    fontCSS = buildFontCSS();
+    // Un echec reseau ne doit pas condamner les exports suivants.
+    fontCSS.catch(() => {
+      fontCSS = null;
+    });
+  }
+  return fontCSS;
+}
+
+async function buildFontCSS(): Promise<string> {
+  const faces: Array<Promise<string>> = [];
+
+  for (const sheet of Array.from(document.styleSheets)) {
+    let rules: CSSRule[];
+    try {
+      rules = Array.from(sheet.cssRules);
+    } catch {
+      // Feuille d'une autre origine, illisible. L'app n'en sert aucune.
+      continue;
+    }
+    for (const rule of rules) {
+      if (rule instanceof CSSFontFaceRule) faces.push(inlineFontFiles(rule.cssText));
+    }
+  }
+
+  return (await Promise.all(faces)).join("\n");
+}
+
+/** Une regle `@font-face`, ses `url()` remplacees par les fichiers eux-memes. */
+async function inlineFontFiles(cssText: string): Promise<string> {
+  const urls = new Set(
+    Array.from(cssText.matchAll(/url\(["']?([^"')]+)["']?\)/g), (match) => match[1]),
+  );
+  let result = cssText;
+
+  for (const url of urls) {
+    if (url.startsWith("data:")) continue;
+    const res = await fetch(new URL(url, document.baseURI));
+    // Une police absente degrade l'image ; elle ne doit pas perdre l'export.
+    if (!res.ok) continue;
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    let binary = "";
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    const type = res.headers.get("content-type") ?? "font/woff2";
+    result = result.split(url).join(`data:${type};base64,${btoa(binary)}`);
+  }
+
+  return result;
 }
 
 /** Au-dela, la capture n'est pas lente, elle est bloquee. */
@@ -36,10 +108,13 @@ const CAPTURE_TIMEOUT_MS = 15_000;
  * La capture passe par un SVG `foreignObject` serialise puis charge dans une
  * `<img>`, et cette etape echoue par intermittence hors Chromium : le README
  * de html-to-image le dit lui-meme, Chrome rend les gros arbres DOM nettement
- * mieux que Firefox et Safari. S'y ajoutent les trois polices embarquees en
- * base64, pas toujours decodees au premier passage. Le meme appel repasse
- * presque toujours au coup suivant : c'est exactement ce que le message
- * d'erreur demandait a l'utilisateur de faire a la main.
+ * mieux que Firefox et Safari. S'y ajoutent les polices embarquees en base64,
+ * pas toujours decodees au premier passage. Le meme appel repasse presque
+ * toujours au coup suivant : c'est exactement ce que le message d'erreur
+ * demandait a l'utilisateur de faire a la main.
+ *
+ * Le retry ne rattrape que l'aleatoire. La panne Firefox, elle, etait
+ * deterministe et se corrige au-dessus, dans `embeddedFontCSS()`.
  *
  * Le garde-fou de duree n'est pas decoratif. `createImage()` de la lib fait
  * `img.decode().then(...)` sans `.catch` ; quand Firefox rejette ce decode,
@@ -56,8 +131,9 @@ export async function renderPng(
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
+      const fontEmbedCSS = await embeddedFontCSS();
       return await Promise.race([
-        toPng(element, options),
+        toPng(element, { ...options, fontEmbedCSS }),
         new Promise<never>((_, reject) => {
           timer = setTimeout(
             () => reject(new Error("PNG capture timed out")),
