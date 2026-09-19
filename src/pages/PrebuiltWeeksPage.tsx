@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,12 @@ import { getAllPrebuiltWeeks } from "@/data/prebuilt-weeks";
  * plans index and as the library: count, title, one sentence, card grid.
  */
 export function PrebuiltWeeksPage() {
+  /* Venue du cockpit ou de /weeks/new, la semaine choisie se posera sur ce
+     lundi : l'état traverse la liste jusqu'au détail, qui l'enregistre. */
+  const location = useLocation();
+  const placeState = (location.state as { placeOn?: string } | null)?.placeOn
+    ? { placeOn: (location.state as { placeOn: string }).placeOn }
+    : undefined;
   const { t } = useTranslation("library");
 
   const weeks = getAllPrebuiltWeeks();
@@ -59,7 +65,7 @@ export function PrebuiltWeeksPage() {
         <section className="zn-pw__band">
           <div className="zn-grid">
             {weeks.map((week) => (
-              <PrebuiltWeekCard key={week.id} week={week} />
+              <PrebuiltWeekCard key={week.id} week={week} state={placeState} />
             ))}
           </div>
         </section>

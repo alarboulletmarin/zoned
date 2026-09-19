@@ -82,7 +82,7 @@ import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDi
 import { autoReschedule } from "@/lib/planGenerator/reschedule";
 import { updateUnavailabilities, undoLastChange, withUndoSnapshot } from "@/lib/planStorage";
 import { getPlanMonday, dateToWeekAndDay, isoDateOnly } from "@/lib/planDates";
-import type { AutoChange, Unavailability } from "@/types/plan";
+import type { AutoChange, TrainingPlan, Unavailability } from "@/types/plan";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
@@ -268,10 +268,55 @@ export function PlanViewPage() {
     return set;
   }, [plan]);
 
+  /* Les semaines seules POSÉES sur ce plan dans le cockpit, et sur quelle
+     semaine à lui. Le plan ne les contient pas, elles se lisent à côté dans
+     /today ; mais c'est ici qu'on regarde une semaine de pic, et ne pas dire
+     qu'un renforcement y est posé serait mentir par omission. Lu au montage :
+     cette page n'écrit pas la composition. Avant les retours anticipés, comme
+     tout crochet. */
+  const placedWeeks = useMemo(() => {
+    const composition = loadTodayComposition();
+    const out: { id: string; name: string; weekNumber: number; week: TrainingPlan }[] = [];
+    if (!plan) return out;
+    const monday = getPlanMonday(plan);
+    for (const layer of composition.layers) {
+      if (!layer.enabled || !layer.anchor) continue;
+      const week = getAllPlans().find((p) => p.id === layer.id && p.config.isSingleWeek === true);
+      if (!week) continue;
+      const [y, m, d] = layer.anchor.split("-").map(Number);
+      const position = sourcePosition(
+        { plan, isWeek: false, monday, explicit: false },
+        mondayOf(new Date(y, m - 1, d)),
+      );
+      if (position) out.push({ id: week.id, name: pick(week, "name"), weekNumber: position.weekNumber, week });
+    }
+    return out.sort((a, b) => a.weekNumber - b.weekNumber);
+  }, [plan, pick]);
+
+  /* L'audit lit le plan, PLUS ce qui est posé à côté dans le cockpit : une
+     semaine de renforcement posée sur la semaine de pic est précisément ce
+     qu'un audit doit voir. Les séances posées sont ajoutées à une COPIE du
+     plan, et seuls les constats que cette copie fait apparaître en plus sont
+     gardés, sans correctif : un correctif s'adresse par index dans le plan
+     réel, et ces séances-là n'y sont pas. */
   const auditFindings = useMemo(() => {
     if (!plan) return [];
-    return auditPlan(plan);
-  }, [plan]);
+    const own = auditPlan(plan);
+    if (placedWeeks.length === 0) return own;
+    const augmented = structuredClone(plan);
+    for (const placed of placedWeeks) {
+      const target = augmented.weeks.find((w) => w.weekNumber === placed.weekNumber);
+      if (!target) continue;
+      target.sessions = [...target.sessions, ...(placed.week.weeks[0]?.sessions ?? [])].sort(
+        (a, b) => a.dayOfWeek - b.dayOfWeek,
+      );
+    }
+    const known = new Set(own.map((f) => `${f.code}:${f.weekNumber}:${f.messageEn}`));
+    const extra = auditPlan(augmented)
+      .filter((f) => !known.has(`${f.code}:${f.weekNumber}:${f.messageEn}`))
+      .map((f) => ({ ...f, id: `placed-${f.id}`, sessionIndex: undefined, fixable: false }));
+    return [...own, ...extra];
+  }, [plan, placedWeeks]);
 
   const handleAuditFix = useCallback((finding: PlanFinding) => {
     if (!plan) return;
@@ -754,31 +799,6 @@ export function PlanViewPage() {
   }, [plan, reschedulePreview, currentWeek, reloadPlan, t]);
 
   // Loading state
-  /* Les semaines seules POSÉES sur ce plan dans le cockpit, et sur quelle
-     semaine à lui. Le plan ne les contient pas, elles se lisent à côté dans
-     /today ; mais c'est ici qu'on regarde une semaine de pic, et ne pas dire
-     qu'un renforcement y est posé serait mentir par omission. Lu au montage :
-     cette page n'écrit pas la composition. Avant les retours anticipés, comme
-     tout crochet. */
-  const placedWeeks = useMemo(() => {
-    const composition = loadTodayComposition();
-    const out: { id: string; name: string; weekNumber: number }[] = [];
-    if (!plan) return out;
-    const monday = getPlanMonday(plan);
-    for (const layer of composition.layers) {
-      if (!layer.enabled || !layer.anchor) continue;
-      const week = getAllPlans().find((p) => p.id === layer.id && p.config.isSingleWeek === true);
-      if (!week) continue;
-      const [y, m, d] = layer.anchor.split("-").map(Number);
-      const position = sourcePosition(
-        { plan, isWeek: false, monday, explicit: false },
-        mondayOf(new Date(y, m - 1, d)),
-      );
-      if (position) out.push({ id: week.id, name: pick(week, "name"), weekNumber: position.weekNumber });
-    }
-    return out.sort((a, b) => a.weekNumber - b.weekNumber);
-  }, [plan, pick]);
-
   if (isLoading) {
     return (
       <div className="zn-planview">

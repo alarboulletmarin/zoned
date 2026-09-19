@@ -31,11 +31,13 @@ function weekHours(week: PrebuiltWeek): string {
 
 interface PrebuiltWeekCardProps {
   week: PrebuiltWeek;
+  /** Router state carried to the detail page (the cockpit's `placeOn`). */
+  state?: unknown;
   className?: string;
 }
 
 /** One ready-made week in the index. The whole card is the target. */
-export function PrebuiltWeekCard({ week, className }: PrebuiltWeekCardProps) {
+export function PrebuiltWeekCard({ week, state, className }: PrebuiltWeekCardProps) {
   const { t } = useTranslation("library");
   const pickLang = usePickLang();
 
@@ -44,6 +46,7 @@ export function PrebuiltWeekCard({ week, className }: PrebuiltWeekCardProps) {
   return (
     <Link
       to={`/weeks/prebuilt/${week.slug}`}
+      state={state}
       className={cn("zn-ecard", className)}
     >
       <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
