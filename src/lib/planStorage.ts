@@ -376,6 +376,29 @@ export async function addSessionToPlan(
   return savePlan(plan);
 }
 
+/**
+ * Poser une séance déjà composée dans la semaine `weekNumber` d'un plan, à sa
+ * place dans l'ordre des jours. `addSessionToPlan` ne connaît qu'un id et
+ * refabrique la séance depuis le gabarit de course ; ici la séance arrive
+ * entière (discipline, précision, durée), telle que `sessionFromWorkout` ou
+ * `makeActivitySession` l'ont écrite. Rend l'index de la séance posée, ou
+ * `null`.
+ */
+export function pushSessionToPlan(
+  planId: string,
+  weekNumber: number,
+  session: PlanSession,
+): number | null {
+  const plans = getAllPlans();
+  const plan = plans.find(p => p.id === planId);
+  if (!plan) return null;
+  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+  if (!week) return null;
+  week.sessions.push(session);
+  week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+  return savePlan(plan) ? week.sessions.indexOf(session) : null;
+}
+
 // ── Cross-training ──────────────────────────────────────────────────
 
 export function addCrossTraining(

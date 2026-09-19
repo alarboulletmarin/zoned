@@ -259,7 +259,11 @@
     "cancel": "Annuler",
     "save": "Enregistrer",
     "datesUpdated": "Dates mises à jour",
-    "editDates": "Modifier les dates"
+    "editDates": "Modifier les dates",
+    "placedWeeks": {
+      "label": "Posée à côté dans le cockpit",
+      "item": "{{name}} · semaine {{n}}"
+    }
   },
   "completion": {
     "planned": "Planifié",

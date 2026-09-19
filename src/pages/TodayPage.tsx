@@ -22,7 +22,16 @@ import {
   type IconProps,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Segmented } from "@/components/ui/segmented";
+import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
 import { SEOHead } from "@/components/seo";
@@ -61,7 +70,20 @@ import {
 } from "@/lib/cockpit";
 import { useTodayComposition } from "@/hooks/useTodayComposition";
 import { TodayComposePanel } from "@/components/domain/TodayComposePanel";
-import { updateSessionCompletion, type SessionCompletionData } from "@/lib/planStorage";
+import {
+  pushSessionToPlan,
+  savePlan,
+  updateSessionCompletion,
+  type SessionCompletionData,
+} from "@/lib/planStorage";
+import { placeWeek, sourcePosition } from "@/lib/todayComposition";
+import { createEmptyWeekPlan, sessionFromWorkout } from "@/lib/weekToPlan";
+import {
+  activityKindOf,
+  defaultActivityDraft,
+  makeActivitySession,
+} from "@/lib/activitySession";
+import { loadCommutePattern } from "@/lib/athleteProfile";
 import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
 import { WeekReviewPanel } from "@/components/domain/WeekReviewPanel";
 import { PolarizationGauge } from "@/components/weekly";
@@ -390,6 +412,86 @@ export function TodayPage() {
     [reload, t],
   );
 
+  /* ── Ajouter une séance, DANS une source ──────────────────────────────
+     Le cockpit lit plusieurs sources ; écrire demande de dire laquelle, parce
+     que c'est ce choix qui décide où la séance vit : dans le plan, elle suit
+     le plan ; dans une semaine posée, elle se repose avec elle ; dans une
+     semaine neuve, posée ici, elle commence quelque chose. Le menu ne pose la
+     question que s'il y a un choix ; la semaine neuve est toujours proposée,
+     c'est le chemin le plus court pour quelqu'un qui n'a rien encore. */
+  type AddTarget = { planId: string; weekNumber: number; name: string } | { fresh: true };
+  const [addTarget, setAddTarget] = useState<AddTarget | null>(null);
+
+  const addTargets = useMemo(() => {
+    const date = dateFromIso(dayIso);
+    const out: { planId: string; weekNumber: number; name: string }[] = [];
+    for (const source of focus.sources) {
+      const position = sourcePosition(source, date);
+      if (!position) continue;
+      out.push({ planId: source.plan.id, weekNumber: position.weekNumber, name: sourceName(source, isEn) });
+    }
+    return out;
+  }, [focus.sources, dayIso, isEn]);
+
+  const handleAddWorkout = useCallback(
+    async (workoutId: string) => {
+      const target = addTarget;
+      setAddTarget(null);
+      if (!target) return;
+      const day = selected.dayOfWeek;
+
+      let session: PlanSession | null = null;
+      const activity = activityKindOf(workoutId);
+      if (activity) {
+        const pattern = loadCommutePattern();
+        session = makeActivitySession(
+          activity.kind,
+          day,
+          defaultActivityDraft(activity.kind, pattern),
+          pattern,
+        );
+      } else {
+        const workout = await getWorkoutByIdAsync(workoutId);
+        if (workout) session = sessionFromWorkout(day, workout);
+      }
+      if (!session) {
+        toast.error(t("today:add.failed"));
+        return;
+      }
+
+      let planId: string;
+      let weekNumber: number;
+      let name: string;
+      if ("fresh" in target) {
+        // Une semaine neuve, nommée par sa date et posée sur la semaine
+        // regardée : elle entre dans le cockpit au moment où elle naît.
+        const monday = dateFromIso(dayIso);
+        monday.setDate(monday.getDate() - day);
+        name = t("today:add.newWeekName", {
+          date: monday.toLocaleDateString(isEn ? "en-GB" : "fr-FR", { day: "numeric", month: "short" }),
+        });
+        const week = createEmptyWeekPlan(name);
+        if (!savePlan(week)) {
+          toast.error(t("today:add.failed"));
+          return;
+        }
+        updateComposition(placeWeek(composition, week.id, monday));
+        planId = week.id;
+        weekNumber = 1;
+      } else {
+        ({ planId, weekNumber, name } = target);
+      }
+
+      if (pushSessionToPlan(planId, weekNumber, session) === null) {
+        toast.error(t("today:add.failed"));
+        return;
+      }
+      reload();
+      toast.success(t("today:add.done", { source: name }));
+    },
+    [addTarget, selected.dayOfWeek, dayIso, isEn, composition, updateComposition, reload, t],
+  );
+
   /* Le primaire des journées sans séance. Il mène au plan, sauf quand il n'y
      a pas de plan du tout, où il mène à sa création. Les journées à séances,
      elles, ont un bouton PAR séance, dans la pile. */
@@ -715,6 +817,36 @@ export function TodayPage() {
         )
       )}
 
+      {/* Ajouter une séance au jour choisi, dans une source nommée. Un menu
+          quand il y a le choix ; sinon la semaine neuve, seule, se pose sans
+          question. Le sélecteur est celui du plan et de la semaine, pas un
+          troisième. */}
+      {!isLoading && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button type="button" variant="outline" size="sm" className="zn-cockpit__add">
+              <Plus size={16} />
+              {t("today:add.action")}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuLabel>{t("today:add.into")}</DropdownMenuLabel>
+            {addTargets.map((target) => (
+              <DropdownMenuItem
+                key={`${target.planId}:${target.weekNumber}`}
+                onSelect={() => setAddTarget(target)}
+              >
+                {target.name}
+              </DropdownMenuItem>
+            ))}
+            {addTargets.length > 0 && <DropdownMenuSeparator />}
+            <DropdownMenuItem onSelect={() => setAddTarget({ fresh: true })}>
+              {t("today:add.newWeek")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+
       {/* Composer : ce que le cockpit suit, et ce qu'on lui pose. Dès qu'il y
           a quelque chose à composer, un plan ou une semaine, et aussi quand
           rien n'est en cours : c'est précisément là qu'on veut poser une
@@ -929,6 +1061,18 @@ export function TodayPage() {
           )}
         </section>
       )}
+
+      {/* Le sélecteur de séance du plan, en feuille : la même liste, les
+          mêmes filtres, le même bouton vers l'atelier. Il se ferme de
+          lui-même au choix. */}
+      <PlanWorkoutPanel
+        isOpen={addTarget !== null}
+        onClose={() => setAddTarget(null)}
+        day={selected.dayOfWeek}
+        onSelectWorkout={(workoutId) => {
+          void handleAddWorkout(workoutId);
+        }}
+      />
 
       <TodayComposePanel
         open={composeOpen}
