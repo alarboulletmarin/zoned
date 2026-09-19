@@ -936,6 +936,7 @@ export function TodayPage() {
         plans={plans}
         composition={composition}
         onChange={updateComposition}
+        onPlansChanged={reload}
         lookedAt={dateFromIso(dayIso)}
         today={now}
       />

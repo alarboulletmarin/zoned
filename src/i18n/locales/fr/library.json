@@ -207,6 +207,17 @@
       "label": "Catégorie",
       "none": "Sans catégorie"
     },
+    "cockpit": {
+      "label": "Cockpit",
+      "place": "Poser dans le cockpit",
+      "placed": "Cockpit · semaine du {{date}}",
+      "thisWeek": "Cette semaine",
+      "nextWeek": "Semaine prochaine",
+      "remove": "Retirer du cockpit",
+      "listPlaced": "dans le cockpit · semaine du {{date}}",
+      "toastPlaced": "Posée dans le cockpit, semaine du {{date}}",
+      "toastRemoved": "Retirée du cockpit"
+    },
     "budget": {
       "label": "Budget",
       "none": "Sans budget",

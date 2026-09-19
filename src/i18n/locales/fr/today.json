@@ -101,6 +101,13 @@
     "newWeek": "Composer une nouvelle semaine",
     "newPlan": "Créer un plan",
     "switchPlan": "Suivre {{name}}",
-    "switchWeek": "Poser {{name}}"
+    "switchWeek": "Poser {{name}}",
+    "merge": "Fusionner dans {{plan}}, semaine {{n}}",
+    "mergeAdd": "Ajouter aux séances du plan",
+    "mergeReplace": "Remplacer les séances du plan cette semaine-là",
+    "mergeCancel": "Annuler",
+    "mergeDone": "Fusionnée dans le plan. Annulable depuis la page du plan.",
+    "mergeFailed": "La fusion n'a pas pu être enregistrée.",
+    "mergeLabel": "{{week}} fusionnée dans la semaine {{n}}"
   }
 }
