@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-09-19
+
+### Added
+- A shared session link shows the session. All 250 `/workout/<id>` URLs served the same card, the library one: sending a 30/30 into a conversation and sending the whole library produced exactly the same preview, with neither the session's name nor what it asks of you. Each session now has its own 1200 × 630 card, its title as the headline, its duration, its dominant zone and its level, drawn in the house style, paper, ink, the ground rule and the two runners. The cards reuse the template of the six section cards through a variant, so the house style stays in one place, and a session's name takes the ink and the room the wordmark takes elsewhere. They are painted at build time by a headless Chrome, never on demand, the app having no server: `generate-route-meta` points a route at its card only when the PNG exists and falls back to the library card otherwise, so adding a session without repainting degrades instead of serving a 404. The 250 files sit outside the service worker's precache, since only the social crawlers read them and precaching them added 16MB to every install
+
 ## [1.0.0] - 2026-09-19
 
 Thirty-six of the commits in this release are a redesign: the app keeps every

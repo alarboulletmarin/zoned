@@ -2,6 +2,20 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "1.0.1",
+    date: "2026-09-19",
+    changes: {
+      added: [
+        {
+          text: "Un lien de séance partagé montre la séance. Les 250 URLs `/workout/<id>` servaient toutes la même carte, celle de la bibliothèque : envoyer un 30/30 dans une conversation et envoyer la bibliothèque entière donnaient exactement le même aperçu, sans le nom de la séance ni ce qu'elle demande. Chaque séance a maintenant sa carte en 1200 × 630, son titre en vedette, sa durée, sa zone dominante et son niveau, dessinée dans le style de la maison, papier, encre, le filet de sol et les deux coureurs. Les cartes reprennent le gabarit des six cartes de section par une variante, pour que la charte reste à un seul endroit, et le nom d'une séance y prend l'encre et la place que le logo prend ailleurs. Elles sont peintes au build par un Chrome sans interface, jamais à la demande, l'app n'ayant pas de serveur : `generate-route-meta` ne pointe une carte que si son PNG existe et retombe sinon sur la carte de la bibliothèque, donc ajouter une séance sans repeindre dégrade au lieu de servir un 404. Les 250 fichiers sont hors du précache du service worker, puisque seuls les robots des réseaux les lisent et que les précacher ajoutait 16 Mo à chaque installation",
+          textEn: "A shared session link shows the session. All 250 `/workout/<id>` URLs served the same card, the library one: sending a 30/30 into a conversation and sending the whole library produced exactly the same preview, with neither the session's name nor what it asks of you. Each session now has its own 1200 × 630 card, its title as the headline, its duration, its dominant zone and its level, drawn in the house style, paper, ink, the ground rule and the two runners. The cards reuse the template of the six section cards through a variant, so the house style stays in one place, and a session's name takes the ink and the room the wordmark takes elsewhere. They are painted at build time by a headless Chrome, never on demand, the app having no server: `generate-route-meta` points a route at its card only when the PNG exists and falls back to the library card otherwise, so adding a session without repainting degrades instead of serving a 404. The 250 files sit outside the service worker's precache, since only the social crawlers read them and precaching them added 16MB to every install",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+    },
+  },
+  {
     version: "1.0.0",
     date: "2026-09-19",
     changes: {
