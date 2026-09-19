@@ -112,6 +112,7 @@ export function WeekNewPage() {
 
             <DoorCard
               to="/weeks/new/prebuilt"
+              state={typeof placeOn === "string" ? { placeOn } : undefined}
               kicker={t("weekly.new.modes.prebuilt.kicker")}
               title={t("weekly.new.modes.prebuilt.title")}
               body={t("weekly.new.modes.prebuilt.desc")}

@@ -99,9 +99,8 @@ toujours une semaine calendaire, et `calendarWeekRange` suffit pour les bilans.
   sur toutes les sources.
 - `/weeks/new` reçoit `state.placeOn` (un lundi) depuis la feuille : une
   semaine composée depuis le cockpit se pose d'elle-même sur la semaine
-  regardée. Seules les deux portes qui créent directement le portent ; la
-  porte du catalogue passe par deux écrans et ne le transmet pas, le badge
-  de la page de la semaine prend le relais.
+  regardée, par les trois portes, catalogue compris (l'état traverse la
+  liste jusqu'au détail, qui l'enregistre).
 - `src/pages/ActivitiesPage.tsx` : le bilan lit la même composition.
 - **Poser depuis la semaine elle-même** : `WeekViewPage` porte un troisième
   badge, Cockpit, à côté de la catégorie et du budget (cette semaine, la
@@ -125,6 +124,11 @@ toujours une semaine calendaire, et `calendarWeekRange` suffit pour les bilans.
 - **La page du plan lit la composition** : sous le kicker, une ligne mono
   liste les semaines posées sur ce plan et sur quelle semaine à lui, avec
   un lien chacune. Lecture seule.
+- **L'audit compte ce qui est posé à côté** : les séances des semaines posées
+  sont ajoutées à une copie du plan, et seuls les constats que cette copie
+  fait apparaître en plus sont gardés, sans correctif (`fixable: false`,
+  pas d'index), parce qu'un correctif s'adresse par index dans le plan réel
+  et que ces séances-là n'y sont pas.
 
 ## Ce qui reste, dans l'ordre où ça vaut le coup
 
@@ -139,15 +143,7 @@ répétition en copies. Le journal par date est la bonne voie (il sert aussi
 au point 3) ; en attendant, reposer la semaine chaque lundi est un geste
 d'un tap, depuis Composer ou depuis le badge de la semaine.
 
-### 2. L'audit du plan compte ce qui est posé à côté
-
-`PlanViewPage` nomme les semaines posées mais son audit de charge
-(`planGenerator/audit`) ne les compte pas : une semaine de renforcement posée
-sur la semaine de pic est précisément le genre de chose qu'un audit doit
-voir. Les séances posées peuvent lui être passées comme des séances de la
-semaine N, sans être écrites dans le plan.
-
-### 3. Les conflits
+### 2. Les conflits
 
 Deux sources le même jour ne sont pas un conflit, c'est le cas nominal (course
 le matin, renforcement le soir). Deux sources qui **posent la même séance
@@ -155,12 +151,6 @@ clé** le même jour, ou dépassent un budget de charge, le sont. Rien ne
 l'annonce aujourd'hui. Le bon endroit est le bilan de la semaine
 (`weekReview`), qui compte déjà les séances clés, et la jauge de
 polarisation, qui voit déjà l'intensité.
-
-### 4. Le catalogue de semaines transmet `placeOn`
-
-La porte catalogue de `/weeks/new` (liste, puis détail) ne transporte pas le
-lundi visé jusqu'à `PrebuiltWeekDetailPage`. Deux `state` à faire suivre, et
-le même `placeWeek` à l'enregistrement que dans `WeekNewPage`.
 
 ## Ce qu'il ne faut pas refaire
 

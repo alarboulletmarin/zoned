@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ArrowLeft, Clock, Sparkles, Star } from "@/components/icons";
@@ -13,6 +13,8 @@ import { getPrebuiltWeekBySlug } from "@/data/prebuilt-weeks";
 import { prebuiltWeekToPlan, planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
 import { savePlan } from "@/lib/planStorage";
+import { dateFromIso } from "@/lib/cockpit";
+import { loadTodayComposition, placeWeek, saveTodayComposition } from "@/lib/todayComposition";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -40,6 +42,8 @@ const DIFFICULTY_KEYS: Record<string, string> = {
 export function PrebuiltWeekDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const placeOn = (location.state as { placeOn?: string } | null)?.placeOn;
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
   const pickLocale = usePickLocale();
@@ -104,6 +108,10 @@ export function PrebuiltWeekDetailPage() {
       return;
     }
     triggerStorageWarning();
+    // Venue du cockpit : la semaine se pose sur le lundi qu'on regardait.
+    if (typeof placeOn === "string") {
+      saveTodayComposition(placeWeek(loadTodayComposition(), plan.id, dateFromIso(placeOn)));
+    }
     toast.success(t("weekly.prebuilt.weekAdded"));
     navigate(`/weeks/${plan.id}`);
   };
