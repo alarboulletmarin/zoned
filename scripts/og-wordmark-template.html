@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="{{THEME}}">
+<html lang="en" class="{{THEME}} {{VARIANT}}">
 <head>
   <meta charset="UTF-8" />
   <style>
@@ -136,6 +136,20 @@
       width: var(--duo-w);
       height: auto;
     }
+
+    /* Workout variant. A section card leads with the wordmark, a workout card
+       leads with the session name, so the name takes the ink and the weight of
+       a headline. Auto margins on the lede alone, with the stats giving up
+       theirs, centre the name in the space the shrunken wordmark leaves: a
+       two-word title and a forty-character one then sit on the same optical
+       line instead of hanging from the top. */
+    .workout .lede {
+      margin: auto 0;
+      color: var(--ink-1);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .workout .stats { margin-top: 0; }
 
     .footer {
       display: flex;

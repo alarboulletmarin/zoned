@@ -131,7 +131,16 @@ export default defineConfig({
         // ttf: the four TrueType faces the week's PDF embeds, fetched only
         // when a PDF is asked for, and precached so the export works offline.
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2,ttf}"],
-        globIgnores: ["**/pdfmake*", "**/vfs_fonts*", "**/fitsdk*", "**/garmin*"],
+        // og/workout: the 250 per-session share cards, 16MB that only social
+        // crawlers ever fetch. Precaching them would make every install pay
+        // for images the app never renders.
+        globIgnores: [
+          "**/pdfmake*",
+          "**/vfs_fonts*",
+          "**/fitsdk*",
+          "**/garmin*",
+          "**/og/workout/*",
+        ],
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         // Files served verbatim out of public/, not SPA routes. The navigation

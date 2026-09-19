@@ -80,6 +80,17 @@ makes Vercel serve `dist/library.html` for `/library` before the SPA rewrite.
 `scripts/prerender.ts` is the heavier variant that renders each route with Puppeteer
 (full `puppeteer` locally, `@sparticuz/chromium` + `puppeteer-core` on Vercel).
 
+Share cards are painted, not composed at request time (there is no backend to compose
+them). `scripts/generate-og-image.ts` writes the six section cards, and
+`scripts/generate-og-workouts.ts` (`bun run generate:og:workouts`, ~9 min of headless
+Chrome) writes one per catalogue session into `public/og/workout/<id>.png`, reusing the
+same template through its `workout` variant. Both are committed, both are skipped by CI,
+and `build:seo:full` runs them. `generate-route-meta.ts` points a workout route at its
+card only when the PNG exists and falls back to `og-library.png`, so adding a session
+without repainting degrades instead of serving a 404. Those 250 files are in the Workbox
+`globIgnores`: only crawlers fetch them, so precaching them would put 16MB on every
+install.
+
 Workbox is configured with `registerType: "prompt"` and *no* `skipWaiting`/`clientsClaim`:
 a new service worker never activates behind the app's back, the update banner asks. Do not
 "fix" that by enabling them.

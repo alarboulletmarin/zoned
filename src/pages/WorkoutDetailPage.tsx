@@ -480,6 +480,9 @@ export function WorkoutDetailPage() {
         title={seoTitle}
         description={seoDescription}
         canonical={`/workout/${workout.id}`}
+        // Painted per session by scripts/generate-og-workouts.ts, and kept in
+        // step with the static shell that generate-route-meta.ts writes.
+        ogImage={`/og/workout/${workout.id}.png`}
         ogType="article"
         jsonLd={[
           {

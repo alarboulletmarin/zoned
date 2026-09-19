@@ -21,6 +21,7 @@
     "generate:sitemap": "bun run scripts/generate-sitemap.ts",
     "generate:licenses": "bun run scripts/generate-licenses.ts",
     "generate:og": "bun run scripts/generate-og-image.ts",
+    "generate:og:workouts": "bun run scripts/generate-og-workouts.ts",
     "generate:readme-banner": "bun run scripts/generate-readme-banner.ts",
     "generate:icons": "bun run scripts/generate-icons.ts",
     "check:icons": "bun run scripts/generate-icons.ts --check",
@@ -31,7 +32,7 @@
     "prerender": "bun run scripts/prerender.ts",
     "check:i18n": "bun run scripts/check-i18n-parity.ts",
     "build:seo": "tsc && bun run scripts/generate-icons.ts --check && bun run scripts/generate-licenses.ts && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts",
-    "build:seo:full": "bun run scripts/generate-og-image.ts && bun run build:seo",
+    "build:seo:full": "bun run scripts/generate-og-image.ts && bun run scripts/generate-og-workouts.ts && bun run build:seo",
     "deploy": "bun run build:seo && git add -f dist public/sitemap.xml && git diff --cached --quiet || git commit -m 'chore(build): regenerate prerendered dist'",
     "generate:route-meta": "bun run scripts/generate-route-meta.ts",
     "generate:pwa-screenshots": "bun run scripts/generate-pwa-screenshots.ts"

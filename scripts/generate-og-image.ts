@@ -171,12 +171,19 @@ const FONTS = {
   FONT_MONO: fontDataUri("jetbrains-mono-latin.woff2"),
 };
 
-export function buildHtml(fmt: FormatConfig, card: Card, theme: "light" | "dark" = "light"): string {
+export function buildHtml(
+  fmt: FormatConfig,
+  card: Card,
+  theme: "light" | "dark" = "light",
+  /** Extra class on <html>, opting into a template variant such as "workout". */
+  variant = ""
+): string {
   let html = readFileSync(TEMPLATE_PATH, "utf-8");
 
   const subs: Record<string, string | number> = {
     ...FONTS,
     THEME: theme === "dark" ? "dark" : "",
+    VARIANT: variant,
     W: fmt.w,
     H: fmt.h,
     PX_X: fmt.pxX,

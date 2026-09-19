@@ -28,7 +28,7 @@
  * scripts/prerender.ts (local-only, see CLAUDE.md).
  */
 
-import { mkdirSync, readFileSync, writeFileSync, readdirSync } from "fs";
+import { mkdirSync, readFileSync, writeFileSync, readdirSync, existsSync } from "fs";
 import { dirname, join } from "path";
 import { readSiteStats } from "./site-stats";
 
@@ -302,6 +302,20 @@ interface WorkoutTemplate {
   duration?: number;
 }
 
+/**
+ * The card a shared workout link shows.
+ *
+ * scripts/generate-og-workouts.ts paints one per session. It is a separate,
+ * headless-Chrome pass that CI never runs, so the file can legitimately be
+ * missing: a session added without regenerating the cards falls back to the
+ * library card rather than pointing a crawler at a 404. Checked against
+ * public/ because that is the source vite copies into dist/.
+ */
+function workoutImage(id: string): string {
+  const card = `og/workout/${id}.png`;
+  return existsSync(join(ROOT, "public", card)) ? card : "og-library.png";
+}
+
 function getWorkoutRoutes(): RouteMeta[] {
   const dir = join(DATA_DIR, "workouts");
   const out: RouteMeta[] = [];
@@ -316,7 +330,7 @@ function getWorkoutRoutes(): RouteMeta[] {
         path: `/workout/${w.id}`,
         title: w.name,
         description,
-        image: "og-library.png",
+        image: workoutImage(w.id),
         ogType: "article",
         jsonLd: [
           {
