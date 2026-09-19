@@ -38,6 +38,8 @@ import { SEOHead } from "@/components/seo";
 import { usePlans } from "@/hooks/usePlans";
 import { useWorkout } from "@/hooks/useWorkouts";
 import { useRadioRail } from "@/hooks/useRadioRail";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useSettings } from "@/hooks/useSettings";
 import {
   clampMonth,
@@ -232,6 +234,10 @@ export function TodayPage() {
      composition qui décide, pas le plan le plus récent, voir
      `lib/todayComposition.ts`. La feuille Composer l'écrit, ici on la lit. */
   const { composition, update: updateComposition } = useTodayComposition(plans, !isLoading);
+  /* Au-delà de 900 px, le sélecteur de séance du plan n'a pas de mode feuille
+     (sa feuille est masquée, il vit dans un rail) : ici il n'y a pas de rail,
+     il s'ouvre donc en panneau latéral, en mode inline dedans. */
+  const wide = useMediaQuery("(min-width: 901px)");
   const [composeOpen, setComposeOpen] = useState(false);
   const focus = useMemo(
     () => pickTodayFocus(plans, now, composition),
@@ -824,7 +830,7 @@ export function TodayPage() {
               dessin que le plan : ce sont des chemins vers ce qui a été posé
               à côté, et ils disent d'où vient la séance de renforcement qui
               n'est pas dans le plan marathon. */}
-          {focus.sources.slice(1).map((source) => (
+          {focus.active.slice(1).map((source) => (
             <Link key={source.plan.id} to={sourceHref(source)} className="zn-cockpit__plan">
               <span className="zn-kicker zn-kicker--xs">{t("today:resume.alsoLabel")}</span>
               <span className="zn-cockpit__plan-name">{sourceName(source, isEn)}</span>
@@ -1087,17 +1093,36 @@ export function TodayPage() {
         </section>
       )}
 
-      {/* Le sélecteur de séance du plan, en feuille : la même liste, les
-          mêmes filtres, le même bouton vers l'atelier. Il se ferme de
-          lui-même au choix. */}
-      <PlanWorkoutPanel
-        isOpen={addTarget !== null}
-        onClose={() => setAddTarget(null)}
-        day={selected.dayOfWeek}
-        onSelectWorkout={(workoutId) => {
-          void handleAddWorkout(workoutId);
-        }}
-      />
+      {/* Le sélecteur de séance du plan : la même liste, les mêmes filtres,
+          le même bouton vers l'atelier. En feuille au doigt, où il se ferme
+          de lui-même au choix ; en panneau latéral sur un écran large, où sa
+          feuille est masquée par sa propre CSS, et où c'est le choix qui le
+          referme (`handleAddWorkout` vide la cible). */}
+      {wide ? (
+        <Sheet open={addTarget !== null} onOpenChange={(open) => !open && setAddTarget(null)}>
+          <SheetContent side="right" className="zn-cockpit__picker">
+            <SheetTitle className="sr-only">{t("today:add.action")}</SheetTitle>
+            <PlanWorkoutPanel
+              isOpen={addTarget !== null}
+              onClose={() => setAddTarget(null)}
+              inline
+              day={selected.dayOfWeek}
+              onSelectWorkout={(workoutId) => {
+                void handleAddWorkout(workoutId);
+              }}
+            />
+          </SheetContent>
+        </Sheet>
+      ) : (
+        <PlanWorkoutPanel
+          isOpen={addTarget !== null}
+          onClose={() => setAddTarget(null)}
+          day={selected.dayOfWeek}
+          onSelectWorkout={(workoutId) => {
+            void handleAddWorkout(workoutId);
+          }}
+        />
+      )}
 
       <TodayComposePanel
         open={composeOpen}

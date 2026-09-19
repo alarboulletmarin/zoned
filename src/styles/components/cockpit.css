@@ -1320,3 +1320,10 @@ button.zn-cockpit__exit {
     grid-area: review;
   }
 }
+
+/* Le sélecteur de séance en panneau latéral, sur un écran large : le panneau
+   porte déjà sa propre croix, celle de la feuille ferait deux fermetures au
+   même coin. */
+.zn-cockpit__picker > .zn-sheet__close {
+  display: none;
+}

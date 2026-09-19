@@ -59,8 +59,13 @@ du bug : la semaine n'écrase plus le plan, elle attend qu'on la pose.
 
 ### Ce que le cockpit rend (`pickTodayFocus`)
 
-- `sources` : les sources **en cours** aujourd'hui, plans d'abord (du plus
-  récent au plus ancien), puis les semaines posées. Vide si rien n'est en cours.
+- `sources` : **toutes** les sources suivies, primaire en tête, puis les
+  autres en cours, puis celles qui ne le sont pas aujourd'hui (posées plus
+  loin, à venir). La grille du mois, les bilans et le menu d'ajout les
+  parcourent toutes : une semaine posée dans trois semaines se voit dans le
+  mois.
+- `active` : les sources **en cours** aujourd'hui, primaire en tête. C'est ce
+  que la bande empile et ce que la ligne des sources nomme.
 - `plan` : le **primaire**, le premier de `sources`. Il donne la ligne de
   position (semaine 6 / 16 · J-70) et le chemin du lien. Une semaine posée
   n'est primaire que sans plan en cours.
