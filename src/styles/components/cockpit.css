@@ -636,6 +636,51 @@
 }
 
 
+/* ── Les sources ────────────────────────────────────────────────────────── */
+
+/* Le plan primaire, puis ce qui a été posé à côté : une ligne par source, du
+   même dessin. Elles s'empilent sans filet entre elles, ce sont les lignes
+   d'un même commentaire sur la semaine, pas des entrées d'une liste. */
+.zn-cockpit__sources {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  align-self: flex-start;
+  max-inline-size: 100%;
+}
+
+/* Composer : un lien d'action, en mono, pas un bouton de plus à côté du
+   primaire. Il n'emmène nulle part, il ouvre une feuille, donc pas de flèche,
+   la même règle que la saisie d'activité. */
+.zn-cockpit__compose {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--type-mono);
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--line-divider);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cockpit__compose:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+@media (pointer: coarse) {
+  .zn-cockpit__compose {
+    padding-block: var(--sp-3);
+  }
+}
+
+
 /* ── Les deux sorties ───────────────────────────────────────────────────── */
 
 /* Des liens, pas des cartes : ce sont des sorties, pas des actions primaires.

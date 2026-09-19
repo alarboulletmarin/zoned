@@ -23,11 +23,13 @@ import {
   sameMonth,
   shiftMonth,
   focusPlanHref,
+  focusSessionsBetween,
   pickTodayFocus,
   planPosition,
   sessionHref,
   weekShortcut,
 } from "./cockpit";
+import { EMPTY_COMPOSITION, placeWeek, setLayerEnabled } from "./todayComposition";
 import type { PlanSession, PlanWeek, TrainingPlan } from "@/types/plan";
 
 function session(dayOfWeek: number, workoutId = "W-1"): PlanSession {
@@ -509,8 +511,8 @@ describe("une semaine seule", () => {
  * vérifient que l'index rendu pointe bien la séance rendue, ce qui est la
  * seule chose que deux tableaux parallèles risquent de perdre.
  */
-describe("l'index de chaque séance", () => {
-  test("sessionIndexes a la même longueur et le même ordre que sessions", () => {
+describe("l'adresse de chaque séance", () => {
+  test("sessionRefs a la même longueur et le même ordre que sessions", () => {
     const p = plan({
       id: "p1",
       startDate: "2026-09-07",
@@ -518,7 +520,10 @@ describe("l'index de chaque séance", () => {
     });
     const focus = pickTodayFocus([p], MONDAY);
     expect(focus.sessions.map((s) => s.workoutId)).toEqual(["LUN-A", "LUN-B"]);
-    expect(focus.sessionIndexes).toEqual([1, 2]);
+    expect(focus.sessionRefs).toEqual([
+      { planId: "p1", weekNumber: 1, index: 1 },
+      { planId: "p1", weekNumber: 1, index: 2 },
+    ]);
   });
 
   test("l'index pointe la séance de la SEMAINE, pas celle du jour", () => {
@@ -530,11 +535,11 @@ describe("l'index de chaque séance", () => {
     const focus = pickTodayFocus([p], WEDNESDAY);
     const stored = p.weeks[0].sessions;
     focus.sessions.forEach((s, k) => {
-      expect(stored[focus.sessionIndexes[k]]).toBe(s);
+      expect(stored[focus.sessionRefs[k].index]).toBe(s);
     });
   });
 
-  test("chaque case de la bande se relit dans le plan par son index", () => {
+  test("chaque case de la bande se relit dans le plan par son adresse", () => {
     const p = plan({
       id: "p1",
       startDate: "2026-09-07",
@@ -551,25 +556,178 @@ describe("l'index de chaque séance", () => {
     const focus = pickTodayFocus([p], MONDAY);
     const stored = p.weeks[0].sessions;
     expect(focus.week).toHaveLength(7);
-    expect(focus.weekIndexes).toHaveLength(7);
+    expect(focus.weekRefs).toHaveLength(7);
     for (let day = 0; day < 7; day++) {
-      expect(focus.weekIndexes[day]).toHaveLength(focus.week[day].length);
+      expect(focus.weekRefs[day]).toHaveLength(focus.week[day].length);
       focus.week[day].forEach((s, k) => {
-        expect(stored[focus.weekIndexes[day][k]]).toBe(s);
+        expect(focus.weekRefs[day][k].planId).toBe("p1");
+        expect(stored[focus.weekRefs[day][k].index]).toBe(s);
       });
     }
   });
 
   test("sans rien à reprendre, les deux tableaux sont vides et non absents", () => {
     const none = pickTodayFocus([], MONDAY);
-    expect(none.sessionIndexes).toEqual([]);
-    expect(none.weekIndexes).toEqual([]);
+    expect(none.sessionRefs).toEqual([]);
+    expect(none.weekRefs).toEqual([]);
+    expect(none.sources).toEqual([]);
 
-    // Un plan qui n'a pas commencé : pas de semaine, donc pas d'index.
+    // Un plan qui n'a pas commencé : pas de semaine, donc pas d'adresse.
     const later = pickTodayFocus([plan({ id: "p1", startDate: "2026-10-05" })], MONDAY);
     expect(later.state).toBe("upcoming");
-    expect(later.sessionIndexes).toEqual([]);
-    expect(later.weekIndexes).toEqual([]);
+    expect(later.sessionRefs).toEqual([]);
+    expect(later.weekRefs).toEqual([]);
+  });
+});
+
+/* ── La composition ───────────────────────────────────────────────────────
+ *
+ * Le bug d'origine : une semaine composée pendant un plan faisait disparaître
+ * le plan de l'écran du matin, parce qu'elle était le plan d'une semaine le
+ * plus récent. Ce qui suit fixe la règle qui le remplace, voir
+ * `lib/todayComposition.ts`.
+ */
+describe("la composition", () => {
+  const marathon = plan({
+    id: "marathon",
+    startDate: "2026-08-31",
+    totalWeeks: 4,
+    createdAt: "2026-08-01T10:00:00.000Z",
+    weeks: [week(2, [session(0, "PLAN-LUN"), session(3, "PLAN-JEU")])],
+  });
+  /* Composée ce lundi : sans `startDate`, elle est datée sur sa création. */
+  const renfo = plan({
+    id: "renfo",
+    startDate: "2026-09-07",
+    totalWeeks: 1,
+    isSingleWeek: true,
+    createdAt: "2026-09-07T08:00:00.000Z",
+    weeks: [week(1, [session(0, "STR-001"), session(4, "STR-002")])],
+  });
+
+  test("une semaine composée ne cache plus le plan en cours", () => {
+    const focus = pickTodayFocus([marathon, renfo], MONDAY);
+    expect(focus.plan?.id).toBe("marathon");
+    expect(focus.isWeek).toBe(false);
+    expect(focus.sources.map((s) => s.plan.id)).toEqual(["marathon"]);
+    expect(focus.sessions.map((s) => s.workoutId)).toEqual(["PLAN-LUN"]);
+  });
+
+  test("sans plan en cours, la semaine composée se montre, comme avant", () => {
+    const focus = pickTodayFocus([renfo], MONDAY);
+    expect(focus.plan?.id).toBe("renfo");
+    expect(focus.isWeek).toBe(true);
+    expect(focus.sessions.map((s) => s.workoutId)).toEqual(["STR-001"]);
+  });
+
+  test("posée, la semaine se lit À CÔTÉ du plan, séance par séance", () => {
+    const composition = placeWeek(EMPTY_COMPOSITION, "renfo", MONDAY);
+    const focus = pickTodayFocus([marathon, renfo], MONDAY, composition);
+    expect(focus.plan?.id).toBe("marathon");
+    expect(focus.sources.map((s) => s.plan.id)).toEqual(["marathon", "renfo"]);
+    // Le primaire d'abord, puis ce qui est posé.
+    expect(focus.sessions.map((s) => s.workoutId)).toEqual(["PLAN-LUN", "STR-001"]);
+    expect(focus.sessionRefs).toEqual([
+      { planId: "marathon", weekNumber: 2, index: 0 },
+      { planId: "renfo", weekNumber: 1, index: 0 },
+    ]);
+    // Le vendredi n'appartient qu'à la semaine posée, le jeudi qu'au plan.
+    expect(focus.week[3].map((s) => s.workoutId)).toEqual(["PLAN-JEU"]);
+    expect(focus.week[4].map((s) => s.workoutId)).toEqual(["STR-002"]);
+    expect(focus.weekRefs[4]).toEqual([{ planId: "renfo", weekNumber: 1, index: 1 }]);
+  });
+
+  test("un plan éteint laisse la semaine posée devenir le primaire", () => {
+    let composition = placeWeek(EMPTY_COMPOSITION, "renfo", MONDAY);
+    composition = setLayerEnabled(composition, "marathon", false);
+    const focus = pickTodayFocus([marathon, renfo], MONDAY, composition);
+    expect(focus.plan?.id).toBe("renfo");
+    expect(focus.isWeek).toBe(true);
+    expect(focus.sessions.map((s) => s.workoutId)).toEqual(["STR-001"]);
+  });
+
+  test("une semaine éteinte ne se montre plus, même sans plan", () => {
+    const composition = setLayerEnabled(EMPTY_COMPOSITION, "renfo", false);
+    expect(pickTodayFocus([renfo], MONDAY, composition).state).toBe("none");
+  });
+
+  test("posée sur une autre semaine, elle y attend, et la grille la trouve", () => {
+    const nextMonday = new Date(2026, 8, 14);
+    const composition = placeWeek(EMPTY_COMPOSITION, "renfo", nextMonday);
+    const focus = pickTodayFocus([marathon, renfo], MONDAY, composition);
+    // Cette semaine, le plan seul.
+    expect(focus.sources.map((s) => s.plan.id)).toEqual(["marathon"]);
+    // La semaine prochaine, vue depuis ce lundi : rien à empiler encore.
+    expect(planDay(focus, nextMonday).sessions).toEqual([]);
+    // Vécue depuis la semaine prochaine : les deux.
+    const later = pickTodayFocus([marathon, renfo], nextMonday, composition);
+    expect(later.sources.map((s) => s.plan.id)).toEqual(["marathon", "renfo"]);
+    expect(later.sessions.map((s) => s.workoutId)).toEqual(["STR-001"]);
+    expect(later.weekNumber).toBe(3);
+  });
+
+  test("n'importe quel jour de la semaine visée la pose sur son lundi", () => {
+    const composition = placeWeek(EMPTY_COMPOSITION, "renfo", new Date(2026, 8, 17));
+    expect(composition.layers[0].anchor).toBe("2026-09-14");
+  });
+
+  test("une semaine posée après le plan est une journée du cockpit", () => {
+    // Le marathon finit le 27 septembre ; la semaine est posée le 5 octobre.
+    const october = new Date(2026, 9, 5);
+    const composition = placeWeek(EMPTY_COMPOSITION, "renfo", october);
+    const focus = pickTodayFocus([marathon, renfo], october, composition);
+    expect(focus.plan?.id).toBe("renfo");
+    expect(focus.isWeek).toBe(true);
+    const day = planDay(focus, october);
+    expect(day.inPlan).toBe(true);
+    expect(day.sessions.map((s) => s.workoutId)).toEqual(["STR-001"]);
+  });
+
+  test("une semaine posée plus tard s'annonce quand rien n'est en cours", () => {
+    const composition = placeWeek(EMPTY_COMPOSITION, "renfo", new Date(2026, 8, 21));
+    const focus = pickTodayFocus([renfo], MONDAY, composition);
+    expect(focus.state).toBe("upcoming");
+    expect(focus.daysUntilStart).toBe(14);
+  });
+
+  test("les bornes du mois couvrent toutes les sources", () => {
+    const composition = placeWeek(EMPTY_COMPOSITION, "renfo", new Date(2026, 10, 2));
+    // La semaine posée en novembre n'est pas en cours en septembre : elle
+    // n'entre pas dans les sources, donc pas dans les bornes.
+    const focus = pickTodayFocus([marathon, renfo], MONDAY, composition);
+    expect(monthBounds(focus)).toEqual({ min: { year: 2026, month: 7 }, max: { year: 2026, month: 8 } });
+    // Vécue en novembre, la semaine posée est seule, et les bornes sont les siennes.
+    const later = pickTodayFocus([marathon, renfo], new Date(2026, 10, 2), composition);
+    expect(monthBounds(later)).toEqual({ min: { year: 2026, month: 10 }, max: { year: 2026, month: 10 } });
+  });
+
+  test("les séances d'un intervalle viennent de toutes les sources", () => {
+    const composition = placeWeek(EMPTY_COMPOSITION, "renfo", MONDAY);
+    const focus = pickTodayFocus([marathon, renfo], MONDAY, composition);
+    const ids = focusSessionsBetween(focus, "2026-09-07", "2026-09-13").map((s) => s.workoutId);
+    expect(ids.sort()).toEqual(["PLAN-JEU", "PLAN-LUN", "STR-001", "STR-002"]);
+    // Bornes comprises, et rien d'une autre semaine.
+    expect(focusSessionsBetween(focus, "2026-09-10", "2026-09-10").map((s) => s.workoutId)).toEqual([
+      "PLAN-JEU",
+    ]);
+  });
+
+  test("deux plans en cours s'empilent, le plus récent en primaire", () => {
+    const older = plan({
+      id: "ancien",
+      startDate: "2026-09-07",
+      createdAt: "2026-01-01T10:00:00.000Z",
+      weeks: [week(1, [session(0, "OLD")])],
+    });
+    const newer = plan({
+      id: "recent",
+      startDate: "2026-09-07",
+      createdAt: "2026-06-01T10:00:00.000Z",
+      weeks: [week(1, [session(0, "NEW")])],
+    });
+    const focus = pickTodayFocus([older, newer], MONDAY);
+    expect(focus.plan?.id).toBe("recent");
+    expect(focus.sessions.map((s) => s.workoutId)).toEqual(["NEW", "OLD"]);
   });
 });
 
@@ -712,8 +870,9 @@ describe("le mois : une journée par sa date", () => {
     expect(day.weekNumber).toBe(2);
     expect(day.dayOfWeek).toBe(0);
     expect(day.sessions.map((s) => s.workoutId)).toEqual(["L2-A", "L2-B"]);
-    // Les index sont ceux du tableau de la semaine : la clôture s'adresse par eux.
-    expect(day.indexes).toEqual([0, 1]);
+    // Les adresses pointent le tableau de la semaine : la clôture s'adresse par elles.
+    expect(day.refs.map((r) => r.index)).toEqual([0, 1]);
+    expect(day.refs.every((r) => r.weekNumber === 2)).toBe(true);
     expect(day.date).toBe("2026-09-14");
   });
 

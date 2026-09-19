@@ -123,6 +123,7 @@ Some QA scripts exist only on a developer machine, so a CI step naming one would
 
 ## Docs worth reading before a related change
 
-`docs/pratiques.md` (practice axis, triathlon stance), `docs/workout-format.md` (authoring
+`docs/pratiques.md` (practice axis, triathlon stance), `docs/aujourdhui.md` (what `/today`
+follows: plans plus placed weeks, and the roadmap for writing back), `docs/workout-format.md` (authoring
 a valid workout), `docs/icon-mapping.md`, `docs/doodles.md` (23 illustrations generated
 from `scripts/doodles/rig.mjs`), `CONTRIBUTING.md` (bilingual policy, id conventions).

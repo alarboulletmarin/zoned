@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,8 @@ import { SEOHead } from "@/components/seo";
 import { DoorCard } from "@/components/domain/DoorCard";
 import { getAllPrebuiltWeeks } from "@/data/prebuilt-weeks";
 import { savePlan } from "@/lib/planStorage";
+import { dateFromIso } from "@/lib/cockpit";
+import { loadTodayComposition, placeWeek, saveTodayComposition } from "@/lib/todayComposition";
 import { createEmptyWeekPlan } from "@/lib/weekToPlan";
 
 /**
@@ -27,11 +29,20 @@ import { createEmptyWeekPlan } from "@/lib/weekToPlan";
 export function WeekNewPage() {
   const { t } = useTranslation("library");
   const navigate = useNavigate();
+  const location = useLocation();
   const prebuiltCount = getAllPrebuiltWeeks().length;
+
+  /* Venue du cockpit, la semaine se pose d'elle-même sur la semaine que l'on
+     regardait : `placeOn` est ce lundi. Sans lui, rien ne change, la semaine
+     entre dans le cockpit par la règle de repli ou par la feuille Composer. */
+  const placeOn = (location.state as { placeOn?: string } | null)?.placeOn;
 
   function createWeek(openSettings: boolean) {
     const plan = createEmptyWeekPlan(t("weekly.generate.defaultName"));
     savePlan(plan);
+    if (typeof placeOn === "string") {
+      saveTodayComposition(placeWeek(loadTodayComposition(), plan.id, dateFromIso(placeOn)));
+    }
     navigate(`/weeks/${plan.id}`, openSettings ? { state: { openSettings: true } } : undefined);
   }
 

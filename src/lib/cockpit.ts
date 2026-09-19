@@ -1,10 +1,16 @@
 import type { PlanSession, TrainingPlan } from "@/types/plan";
 import {
-  dateToWeekAndDay,
-  getPlanMonday,
   getSessionCalendarDate,
   isoDateOnly,
 } from "@/lib/planDates";
+import {
+  EMPTY_COMPOSITION,
+  byNewest,
+  resolveTodaySources,
+  sourcePosition,
+  type TodayComposition,
+  type TodaySource,
+} from "@/lib/todayComposition";
 
 /**
  * Ce que le cockpit reprend.
@@ -14,12 +20,20 @@ import {
  * La règle tient en une phrase, et c'est volontaire, quelqu'un doit pouvoir
  * prédire ce qu'il va voir :
  *
- *   **le plan dans lequel on est aujourd'hui ; si on est dans plusieurs, le
- *   plus récemment créé ; sinon le prochain à commencer.**
+ *   **tout ce que la composition suit et qui est en cours aujourd'hui,
+ *   empilé jour par jour ; sinon la prochaine source à commencer.**
  *
- * Une semaine seule est un plan d'une semaine (`config.isSingleWeek`, cf.
- * `lib/weekToPlan.ts`) et se reprend **comme une semaine** : `isWeek` le dit,
- * pour que l'écran ne la déguise pas en plan de 16 semaines.
+ * Ce que la composition suit est décidé dans `lib/todayComposition.ts` : les
+ * plans, tant qu'on ne les éteint pas, et les semaines seules qu'on a POSÉES
+ * sur le calendrier. Le cockpit ne reprenait qu'un plan, le plus récent, et
+ * une semaine composée pendant un plan faisait disparaître le plan : c'est
+ * fini, les deux se lisent ensemble, séance par séance.
+ *
+ * Il reste UN plan primaire, `plan` : celui qui donne la ligne de position
+ * (semaine 6 / 16 · J-70) et le chemin du lien. C'est le plan en cours le
+ * plus récent, et une semaine posée seulement quand aucun plan ne l'est.
+ * `isWeek` le dit, pour que l'écran ne déguise pas une semaine en plan de
+ * 16 semaines.
  *
  * Un jour sans séance n'est pas un trou : c'est du repos, et le dire est une
  * information. D'où `state: "rest"` plutôt qu'une absence.
@@ -35,38 +49,54 @@ export type TodayState = "session" | "rest" | "upcoming" | "none";
  */
 export type DayStatus = "rest" | "planned" | "completed" | "modified" | "skipped";
 
+/**
+ * L'ADRESSE d'une séance : le plan, sa semaine, son index dans la semaine.
+ *
+ * `updateSessionCompletion` adresse une séance par ces trois-là, il n'y a pas
+ * d'identifiant de séance dans le modèle. Le cockpit ne gardait que l'index,
+ * le plan étant unique ; dès que deux sources s'empilent, chaque séance doit
+ * dire de laquelle elle vient, sinon clore la séance de renforcement écrirait
+ * dans le plan marathon.
+ */
+export interface SessionRef {
+  planId: string;
+  /** 1-indexé, dans le plan de `planId`. */
+  weekNumber: number;
+  /** L'index dans `plan.weeks[n].sessions`. */
+  index: number;
+}
+
 export interface TodayFocus {
   state: TodayState;
+  /** Le plan primaire : position, chemin. `null` sans rien à reprendre. */
   plan: TrainingPlan | null;
-  /** Vrai pour une semaine seule. L'écran n'annonce alors pas ton plan. */
+  /** Vrai quand le primaire est une semaine seule. */
   isWeek: boolean;
-  /** 1-indexé, et 0 quand le plan n'a pas commencé. */
+  /**
+   * Les sources EN COURS que l'écran empile, primaire en tête. Vide sans
+   * rien en cours ; pour `upcoming`, la seule source à venir.
+   */
+  sources: TodaySource[];
+  /** 1-indexé dans le primaire, et 0 quand rien n'a commencé. */
   weekNumber: number;
   /** 0 = lundi … 6 = dimanche, convention du dépôt. */
   dayOfWeek: number;
-  /** Les séances du jour. Vide sur un jour de repos. */
+  /** Les séances du jour, toutes sources confondues. Vide sur un jour de repos. */
   sessions: PlanSession[];
-  /**
-   * Les index de `sessions` dans `plan.weeks[n].sessions`, alignés un pour un.
-   *
-   * `updateSessionCompletion` adresse une séance par (planId, weekNumber,
-   * INDEX) : il n'y a pas d'identifiant de séance dans le modèle. Le
-   * regroupement par jour ci-dessous perdait cet index, ce qui rendait la
-   * clôture impossible depuis le cockpit. On le garde, dans la même passe.
-   */
-  sessionIndexes: number[];
+  /** L'adresse de chaque séance de `sessions`, alignée un pour un. */
+  sessionRefs: SessionRef[];
   /**
    * La semaine en cours, sept cases, lundi d'abord, ce que la bande des sept
    * jours consomme. Toujours de longueur 7 ; une case vide est un jour de
    * repos, pas une absence de donnée.
    *
-   * Vide (longueur 0) quand il n'y a pas de semaine en cours à montrer : un
-   * plan qui n'a pas commencé, ou pas de plan du tout. La bande ne s'affiche
-   * alors pas, elle ne prétend pas connaître une semaine qui n'existe pas.
+   * Vide (longueur 0) quand il n'y a pas de semaine en cours à montrer : rien
+   * n'a commencé, ou pas de source du tout. La bande ne s'affiche alors pas,
+   * elle ne prétend pas connaître une semaine qui n'existe pas.
    */
   week: PlanSession[][];
-  /** Les index de `week`, case par case. Même contrat que `sessionIndexes`. */
-  weekIndexes: number[][];
+  /** Les adresses de `week`, case par case. Même contrat que `sessionRefs`. */
+  weekRefs: SessionRef[][];
   /** Jours restants avant le début, pour l'état `upcoming`. */
   daysUntilStart: number;
 }
@@ -75,26 +105,17 @@ const NOTHING: TodayFocus = {
   state: "none",
   plan: null,
   isWeek: false,
+  sources: [],
   weekNumber: 0,
   dayOfWeek: 0,
   sessions: [],
-  sessionIndexes: [],
+  sessionRefs: [],
   week: [],
-  weekIndexes: [],
+  weekRefs: [],
   daysUntilStart: 0,
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-
-function createdAtMs(plan: TrainingPlan): number {
-  const parsed = Date.parse(plan.config.createdAt);
-  return Number.isNaN(parsed) ? 0 : parsed;
-}
-
-/** Le plus récemment créé d'abord, ce sur quoi je travaille en ce moment. */
-function byNewest(a: TrainingPlan, b: TrainingPlan): number {
-  return createdAtMs(b) - createdAtMs(a);
-}
 
 function startOfDay(date: Date): Date {
   const d = new Date(date);
@@ -102,81 +123,108 @@ function startOfDay(date: Date): Date {
   return d;
 }
 
+/**
+ * Le primaire parmi des sources en cours : un plan avant une semaine, le plus
+ * récent à égalité. `resolveTodaySources` les rend déjà dans cet ordre.
+ */
+function primaryOf(sources: readonly TodaySource[]): TodaySource | null {
+  return sources.find((s) => !s.isWeek) ?? sources[0] ?? null;
+}
+
+/**
+ * Les séances d'un JOUR d'une source, avec leur adresse. `null` hors de la
+ * source. L'ordre est celui de la semaine stockée, l'index en dépend.
+ */
+function sourceDay(
+  source: TodaySource,
+  date: Date,
+): { weekNumber: number; dayOfWeek: number; sessions: PlanSession[]; refs: SessionRef[] } | null {
+  const position = sourcePosition(source, date);
+  if (!position) return null;
+  const week = source.plan.weeks.find((w) => w.weekNumber === position.weekNumber);
+  const sessions: PlanSession[] = [];
+  const refs: SessionRef[] = [];
+  const all = week?.sessions ?? [];
+  for (let i = 0; i < all.length; i++) {
+    if (all[i].dayOfWeek !== position.dayOfWeek) continue;
+    sessions.push(all[i]);
+    refs.push({ planId: source.plan.id, weekNumber: position.weekNumber, index: i });
+  }
+  return { ...position, sessions, refs };
+}
+
 export function pickTodayFocus(
   plans: readonly TrainingPlan[],
   today: Date = new Date(),
+  composition: TodayComposition = EMPTY_COMPOSITION,
 ): TodayFocus {
   if (plans.length === 0) return NOTHING;
 
   const midnight = startOfDay(today);
-  const inProgress: { plan: TrainingPlan; weekNumber: number; dayOfWeek: number }[] = [];
-  const upcoming: { plan: TrainingPlan; days: number }[] = [];
+  const sources = resolveTodaySources(plans, composition, midnight);
+  const underWay = sources.filter((s) => sourcePosition(s, midnight) !== null);
 
-  for (const plan of plans) {
-    const monday = getPlanMonday(plan);
-    const position = dateToWeekAndDay(monday, midnight);
+  if (underWay.length > 0) {
+    const primary = primaryOf(underWay)!;
+    const ordered = [primary, ...underWay.filter((s) => s !== primary)];
+    const position = sourcePosition(primary, midnight)!;
 
-    if (!position) {
-      // Le plan commence plus tard : `dateToWeekAndDay` rend null avant la
-      // semaine 1, ce qui est exactement l'information pas encore commencé.
-      upcoming.push({
-        plan,
-        days: Math.ceil((monday.getTime() - midnight.getTime()) / DAY_MS),
-      });
-      continue;
-    }
-    // Un plan terminé ne se reprend pas : on ne le propose plus.
-    if (position.weekNumber > plan.totalWeeks) continue;
-    inProgress.push({ plan, ...position });
-  }
-
-  if (inProgress.length > 0) {
-    inProgress.sort((a, b) => byNewest(a.plan, b.plan));
-    const { plan, weekNumber, dayOfWeek } = inProgress[0];
-    const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
     // Une seule traversée pour les sept jours : la journée courante n'est
-    // qu'une case de la semaine, et la bande a besoin des six autres. On range
-    // l'INDEX en parallèle de la séance, il est la seule adresse qu'ait une
-    // séance et la clôture en a besoin.
+    // qu'une case de la semaine, et la bande a besoin des six autres. Toutes
+    // les sources partagent le même lundi calendaire (chaque lundi de source
+    // est normalisé), donc la case d'un jour est la concaténation, primaire
+    // en tête, de ce que chaque source y porte.
     const byDay: PlanSession[][] = [[], [], [], [], [], [], []];
-    const byDayIndex: number[][] = [[], [], [], [], [], [], []];
-    const weekSessions = week?.sessions ?? [];
-    for (let i = 0; i < weekSessions.length; i++) {
-      const session = weekSessions[i];
-      const slot = byDay[session.dayOfWeek];
-      if (!slot) continue;
-      slot.push(session);
-      byDayIndex[session.dayOfWeek].push(i);
+    const byDayRefs: SessionRef[][] = [[], [], [], [], [], [], []];
+    for (let day = 0; day < 7; day++) {
+      const date = new Date(midnight);
+      date.setDate(date.getDate() + (day - position.dayOfWeek));
+      for (const source of ordered) {
+        const found = sourceDay(source, date);
+        if (!found) continue;
+        byDay[day].push(...found.sessions);
+        byDayRefs[day].push(...found.refs);
+      }
     }
-    const sessions = byDay[dayOfWeek] ?? [];
+    const sessions = byDay[position.dayOfWeek];
     return {
       state: sessions.length > 0 ? "session" : "rest",
-      plan,
-      isWeek: plan.config.isSingleWeek === true,
-      weekNumber,
-      dayOfWeek,
+      plan: primary.plan,
+      isWeek: primary.isWeek,
+      sources: ordered,
+      weekNumber: position.weekNumber,
+      dayOfWeek: position.dayOfWeek,
       sessions,
-      sessionIndexes: byDayIndex[dayOfWeek] ?? [],
+      sessionRefs: byDayRefs[position.dayOfWeek],
       week: byDay,
-      weekIndexes: byDayIndex,
+      weekRefs: byDayRefs,
       daysUntilStart: 0,
     };
   }
 
+  // Rien en cours : la source la plus proche de commencer, la plus récemment
+  // créée à égalité. Une source déjà terminée n'a rien à annoncer.
+  const upcoming = sources
+    .filter((s) => s.monday.getTime() > midnight.getTime())
+    .map((s) => ({
+      source: s,
+      days: Math.ceil((s.monday.getTime() - midnight.getTime()) / DAY_MS),
+    }))
+    .sort((a, b) => a.days - b.days || byNewest(a.source.plan, b.source.plan));
+
   if (upcoming.length > 0) {
-    // Le plus proche de commencer, puis le plus récemment créé à égalité.
-    upcoming.sort((a, b) => a.days - b.days || byNewest(a.plan, b.plan));
-    const { plan, days } = upcoming[0];
+    const { source, days } = upcoming[0];
     return {
       state: "upcoming",
-      plan,
-      isWeek: plan.config.isSingleWeek === true,
+      plan: source.plan,
+      isWeek: source.isWeek,
+      sources: [source],
       weekNumber: 0,
       dayOfWeek: 0,
       sessions: [],
-      sessionIndexes: [],
+      sessionRefs: [],
       week: [],
-      weekIndexes: [],
+      weekRefs: [],
       daysUntilStart: days,
     };
   }
@@ -260,8 +308,10 @@ export function planPosition(focus: TodayFocus, today: Date = new Date()): PlanP
     }
   }
   if (!goal) {
-    // Le dimanche de la dernière semaine, la fin du plan lui-même.
-    goal = getSessionCalendarDate(getPlanMonday(plan), plan.totalWeeks, 6);
+    // Le dimanche de la dernière semaine, la fin du plan lui-même, compté
+    // depuis le lundi de la SOURCE : une semaine posée finit là où on l'a posée.
+    const monday = focus.sources[0]?.monday ?? startOfDay(today);
+    goal = getSessionCalendarDate(monday, plan.totalWeeks, 6);
   }
 
   const days = Math.round((startOfDay(goal).getTime() - midnight.getTime()) / DAY_MS);
@@ -553,24 +603,25 @@ export function monthRange(ref: MonthRef): { from: string; to: string } {
 }
 
 /**
- * Une journée du plan, adressée par sa date.
+ * Une journée du cockpit, adressée par sa date.
  *
- * `weekNumber` est la semaine du plan qui contient cette date, `0` quand la
- * date est hors du plan (avant son lundi, après sa dernière semaine, ou pas
- * de plan du tout). `indexes` garde la seule adresse qu'ait une séance,
- * comme `weekIndexes` : c'est ce qui permet de clore une séance de n'importe
- * quelle semaine depuis la grille.
+ * `weekNumber` est la semaine du plan PRIMAIRE qui contient cette date, `0`
+ * quand la date est hors de lui. `refs` garde la seule adresse qu'ait une
+ * séance, comme `weekRefs` : c'est ce qui permet de clore une séance de
+ * n'importe quelle semaine, de n'importe quelle source, depuis la grille.
+ * `inPlan` est vrai dès qu'UNE source couvre la date : une semaine posée
+ * après la fin du plan est une journée du cockpit comme une autre.
  */
 export interface PlanDay {
   /** "YYYY-MM-DD". */
   date: string;
-  /** 1-indexé, `0` hors plan. */
+  /** 1-indexé dans le primaire, `0` hors de lui. */
   weekNumber: number;
   /** 0 = lundi … 6 = dimanche. */
   dayOfWeek: number;
   sessions: PlanSession[];
-  indexes: number[];
-  /** Vrai quand la date tombe dans une semaine du plan. */
+  refs: SessionRef[];
+  /** Vrai quand la date tombe dans une semaine d'une source. */
   inPlan: boolean;
 }
 
@@ -579,30 +630,52 @@ export function planDay(focus: TodayFocus, date: Date): PlanDay {
   const iso = isoDateOnly(midnight);
   // `getDay` rend 0 le dimanche, la convention du dépôt est lundi = 0.
   const dayOfWeek = (midnight.getDay() + 6) % 7;
-  const empty: PlanDay = { date: iso, weekNumber: 0, dayOfWeek, sessions: [], indexes: [], inPlan: false };
+  const day: PlanDay = { date: iso, weekNumber: 0, dayOfWeek, sessions: [], refs: [], inPlan: false };
 
-  const plan = focus.plan;
-  if (!plan) return empty;
-  const position = dateToWeekAndDay(getPlanMonday(plan), midnight);
-  if (!position || position.weekNumber > plan.totalWeeks) return empty;
-
-  const week = plan.weeks.find((w) => w.weekNumber === position.weekNumber);
-  const sessions: PlanSession[] = [];
-  const indexes: number[] = [];
-  const all = week?.sessions ?? [];
-  for (let i = 0; i < all.length; i++) {
-    if (all[i].dayOfWeek !== position.dayOfWeek) continue;
-    sessions.push(all[i]);
-    indexes.push(i);
+  for (const source of focus.sources) {
+    const found = sourceDay(source, midnight);
+    if (!found) continue;
+    day.inPlan = true;
+    if (source.plan === focus.plan) day.weekNumber = found.weekNumber;
+    day.sessions.push(...found.sessions);
+    day.refs.push(...found.refs);
   }
-  return {
-    date: iso,
-    weekNumber: position.weekNumber,
-    dayOfWeek: position.dayOfWeek,
-    sessions,
-    indexes,
-    inPlan: true,
-  };
+  return day;
+}
+
+/**
+ * Les séances de toutes les sources dont la DATE tombe dans l'intervalle,
+ * bornes comprises. C'est `planSessionsBetween` (`lib/weekReview.ts`) porté
+ * à plusieurs sources, chacune datée depuis SON lundi : le bilan du mois et
+ * celui de la semaine en ont besoin, et ils ne peuvent plus lire un seul plan.
+ */
+export function focusSessionsBetween(focus: TodayFocus, from: string, to: string): PlanSession[] {
+  const out: PlanSession[] = [];
+  for (const source of focus.sources) {
+    for (const week of source.plan.weeks) {
+      // Une semaine entièrement hors de l'intervalle ne se parcourt pas.
+      const weekFrom = isoDateOnly(getSessionCalendarDate(source.monday, week.weekNumber, 0));
+      const weekTo = isoDateOnly(getSessionCalendarDate(source.monday, week.weekNumber, 6));
+      if (weekTo < from || weekFrom > to) continue;
+      for (const session of week.sessions) {
+        const date = isoDateOnly(
+          getSessionCalendarDate(source.monday, week.weekNumber, session.dayOfWeek),
+        );
+        if (date >= from && date <= to) out.push(session);
+      }
+    }
+  }
+  return out;
+}
+
+/** Le nom d'une source, dans la langue. Une semaine seule porte son nom donné. */
+export function sourceName(source: TodaySource, isEn: boolean): string {
+  return isEn ? source.plan.nameEn : source.plan.name;
+}
+
+/** Le chemin d'une source : la semaine seule sous /weeks, le plan sous /plan. */
+export function sourceHref(source: TodaySource): string {
+  return source.isWeek ? `/weeks/${source.plan.id}` : `/plan/${source.plan.id}`;
 }
 
 /** Une case de la grille du mois. */
@@ -641,16 +714,20 @@ export function monthCells(focus: TodayFocus, ref: MonthRef, today: Date): Month
 }
 
 /**
- * Les mois que la grille peut montrer : du mois du lundi du plan à celui de
- * son dernier dimanche. Hors du plan il n'y a rien à choisir, donc rien à
- * feuilleter. `null` sans plan.
+ * Les mois que la grille peut montrer : du mois du premier lundi d'une source
+ * à celui du dernier dimanche d'une source, toutes sources confondues. Hors
+ * de tout il n'y a rien à choisir, donc rien à feuilleter. `null` sans source.
  */
 export function monthBounds(focus: TodayFocus): { min: MonthRef; max: MonthRef } | null {
-  const plan = focus.plan;
-  if (!plan) return null;
-  const monday = getPlanMonday(plan);
-  const last = getSessionCalendarDate(monday, plan.totalWeeks, 6);
-  return { min: monthOf(monday), max: monthOf(last) };
+  let min: MonthRef | null = null;
+  let max: MonthRef | null = null;
+  for (const source of focus.sources) {
+    const first = monthOf(source.monday);
+    const last = monthOf(getSessionCalendarDate(source.monday, source.plan.totalWeeks, 6));
+    if (!min || compareMonth(first, min) < 0) min = first;
+    if (!max || compareMonth(last, max) > 0) max = last;
+  }
+  return min && max ? { min, max } : null;
 }
 
 /** La cellule ramenée dans les bornes, pour que le mois d'arrivée soit toujours feuilletable. */

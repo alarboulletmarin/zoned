@@ -29,7 +29,8 @@
     "openDetail": "See the details",
     "next": "Next session: {{day}}, {{duration}}",
     "rank": "session {{n}} / {{total}}",
-    "reclose": "Change the outcome"
+    "reclose": "Change the outcome",
+    "alsoLabel": "Also"
   },
   "quick": {
     "draw": "Draw me a session",
@@ -83,5 +84,23 @@
     "ahead_one": "in a day",
     "ahead_other": "in {{count}} days",
     "back": "Back to today"
+  },
+  "compose": {
+    "open": "Compose the cockpit",
+    "title": "What the cockpit follows",
+    "body": "A plan is followed until you switch it off. A standalone week is placed on a calendar week, and reads next to the plan, session by session.",
+    "plans": "Plans",
+    "weeks": "My weeks",
+    "noPlans": "No plan under way or upcoming.",
+    "noWeeks": "No week built yet.",
+    "underWay": "week {{n}} / {{total}}",
+    "startsIn_one": "starts tomorrow",
+    "startsIn_other": "starts in {{count}} days",
+    "placedOn": "placed on the week of {{date}}",
+    "moveHere": "Place on the week of {{date}}",
+    "newWeek": "Build a new week",
+    "newPlan": "Create a plan",
+    "switchPlan": "Follow {{name}}",
+    "switchWeek": "Place {{name}}"
   }
 }

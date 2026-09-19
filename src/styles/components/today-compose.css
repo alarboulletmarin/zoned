@@ -1,0 +1,117 @@
+/* Composer le cockpit, la feuille ouverte depuis /today.
+ *
+ * Deux listes de lignes, un interrupteur à droite de chacune : le nom et
+ * l'état à gauche, en deux lignes, le geste à droite. La ligne entière est un
+ * label, donc toucher le nom bascule l'interrupteur : à une main, avant de
+ * sortir, la cible est la ligne et pas la pastille.
+ *
+ * Aucune boîte : des filets entre les lignes, comme le reste du cockpit. */
+
+.zn-compose__groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding-block: var(--sp-6);
+}
+
+.zn-compose__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-compose__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.zn-compose__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding-block: var(--sp-4);
+  border-block-start: 1px solid var(--line-divider);
+}
+
+.zn-compose__row:first-child {
+  border-block-start: 0;
+}
+
+.zn-compose__label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  cursor: pointer;
+}
+
+.zn-compose__name {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  font: var(--type-body);
+  color: var(--text);
+}
+
+/* La catégorie, à côté du nom, en mono et en retrait : une propriété de la
+   semaine, pas une seconde ligne. */
+.zn-compose__category,
+.zn-compose__status {
+  font: var(--type-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* Poser sur la semaine regardée : un lien d'action, pas un bouton de plus. */
+.zn-compose__move {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--type-mono);
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--line-divider);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.zn-compose__move:hover {
+  text-decoration-color: currentColor;
+}
+
+.zn-compose__exits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, var(--sp-4));
+  margin: 0;
+  padding-block: var(--sp-4) var(--sp-2);
+  border-block-start: 1px solid var(--line-divider);
+}
+
+.zn-compose__exit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  align-self: flex-start;
+  min-block-size: 44px;
+  font: var(--type-body);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.zn-compose__exit > svg {
+  inline-size: 16px;
+  block-size: 16px;
+  color: var(--text-muted);
+}
+
+.zn-compose__exit:hover {
+  color: var(--accent);
+}
