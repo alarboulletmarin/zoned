@@ -7,7 +7,7 @@
 import type { RefObject } from "react";
 import { THEME_COLOR, documentTheme } from "@/lib/theme";
 import { triggerDownload } from "./download";
-import { deliverImage, type ShareMethod } from "./share";
+import { deliverImage, renderPng, type ShareMethod } from "./share";
 
 /**
  * Le fond de la capture suit le theme peint.
@@ -68,10 +68,9 @@ export async function exportToPNG(
     throw new Error("Element is not available");
   }
 
-  const { toPng } = await import("html-to-image");
   const padding = options.padding ?? 0;
 
-  const dataUrl = await toPng(element, {
+  const dataUrl = await renderPng(element, {
     pixelRatio: 2, // 2x resolution for retina quality
     backgroundColor: exportBackground(),
     cacheBust: true,

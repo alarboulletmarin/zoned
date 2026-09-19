@@ -17,11 +17,63 @@ import type { RefObject } from "react";
 import { THEME_COLOR, documentTheme } from "@/lib/theme";
 import { triggerDownload } from "./download";
 
-interface ToPngOptions {
+export interface ToPngOptions {
   pixelRatio?: number;
   backgroundColor?: string;
   cacheBust?: boolean;
   skipFonts?: boolean;
+  width?: number;
+  height?: number;
+  style?: Partial<CSSStyleDeclaration>;
+}
+
+/** Au-dela, la capture n'est pas lente, elle est bloquee. */
+const CAPTURE_TIMEOUT_MS = 15_000;
+
+/**
+ * `toPng`, avec deux secondes chances.
+ *
+ * La capture passe par un SVG `foreignObject` serialise puis charge dans une
+ * `<img>`, et cette etape echoue par intermittence hors Chromium : le README
+ * de html-to-image le dit lui-meme, Chrome rend les gros arbres DOM nettement
+ * mieux que Firefox et Safari. S'y ajoutent les trois polices embarquees en
+ * base64, pas toujours decodees au premier passage. Le meme appel repasse
+ * presque toujours au coup suivant : c'est exactement ce que le message
+ * d'erreur demandait a l'utilisateur de faire a la main.
+ *
+ * Le garde-fou de duree n'est pas decoratif. `createImage()` de la lib fait
+ * `img.decode().then(...)` sans `.catch` ; quand Firefox rejette ce decode,
+ * la promesse ne se resout jamais et le toast "Generation..." tourne dans le
+ * vide. Le delai transforme ce blocage en echec, donc en nouvel essai.
+ */
+export async function renderPng(
+  element: HTMLElement,
+  options: ToPngOptions,
+): Promise<string> {
+  const { toPng } = await import("html-to-image");
+  let lastError: unknown = new Error("PNG capture failed");
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      return await Promise.race([
+        toPng(element, options),
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(
+            () => reject(new Error("PNG capture timed out")),
+            CAPTURE_TIMEOUT_MS,
+          );
+        }),
+      ]);
+    } catch (error) {
+      lastError = error;
+      console.error(`[export] capture PNG, essai ${attempt}/3`, error);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  throw lastError;
 }
 
 type Target = HTMLElement | RefObject<HTMLElement | null>;
@@ -37,7 +89,6 @@ async function nodeToBlob(
   transparent: boolean,
 ): Promise<Blob> {
   const element = resolveElement(target);
-  const { toPng } = await import("html-to-image");
   const opts: ToPngOptions = {
     pixelRatio: 2,
     cacheBust: true,
@@ -52,7 +103,7 @@ async function nodeToBlob(
   }
   // When backgroundColor is omitted, html-to-image keeps the PNG alpha
   // channel, exactly what we want for overlays.
-  const dataUrl = await toPng(element, opts);
+  const dataUrl = await renderPng(element, opts);
   const res = await fetch(dataUrl);
   return res.blob();
 }
