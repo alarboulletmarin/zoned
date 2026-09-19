@@ -636,6 +636,12 @@
 }
 
 
+/* Ajouter une séance : un bouton en contour, à gauche, à sa ligne. Il
+   n'appelle pas, il propose ; le seul aplat de l'écran reste voir le détail. */
+.zn-cockpit__add {
+  align-self: flex-start;
+}
+
 /* ── Les sources ────────────────────────────────────────────────────────── */
 
 /* Le plan primaire, puis ce qui a été posé à côté : une ligne par source, du

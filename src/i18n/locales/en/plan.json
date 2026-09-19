@@ -259,7 +259,11 @@
     "cancel": "Cancel",
     "save": "Save",
     "datesUpdated": "Dates updated",
-    "editDates": "Edit dates"
+    "editDates": "Edit dates",
+    "placedWeeks": {
+      "label": "Placed alongside in the cockpit",
+      "item": "{{name}} · week {{n}}"
+    }
   },
   "completion": {
     "planned": "Planned",

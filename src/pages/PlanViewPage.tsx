@@ -36,6 +36,8 @@ import { Alert } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { usePlan } from "@/hooks/usePlans";
+import { getAllPlans } from "@/lib/planStorage";
+import { loadTodayComposition, mondayOf, sourcePosition } from "@/lib/todayComposition";
 import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
 import { computeAdaptation, type AdaptationPreview } from "@/lib/planGenerator/adapt";
 import { AdaptationPreviewDialog } from "@/components/domain/AdaptationPreviewDialog";
@@ -752,6 +754,31 @@ export function PlanViewPage() {
   }, [plan, reschedulePreview, currentWeek, reloadPlan, t]);
 
   // Loading state
+  /* Les semaines seules POSÉES sur ce plan dans le cockpit, et sur quelle
+     semaine à lui. Le plan ne les contient pas, elles se lisent à côté dans
+     /today ; mais c'est ici qu'on regarde une semaine de pic, et ne pas dire
+     qu'un renforcement y est posé serait mentir par omission. Lu au montage :
+     cette page n'écrit pas la composition. Avant les retours anticipés, comme
+     tout crochet. */
+  const placedWeeks = useMemo(() => {
+    const composition = loadTodayComposition();
+    const out: { id: string; name: string; weekNumber: number }[] = [];
+    if (!plan) return out;
+    const monday = getPlanMonday(plan);
+    for (const layer of composition.layers) {
+      if (!layer.enabled || !layer.anchor) continue;
+      const week = getAllPlans().find((p) => p.id === layer.id && p.config.isSingleWeek === true);
+      if (!week) continue;
+      const [y, m, d] = layer.anchor.split("-").map(Number);
+      const position = sourcePosition(
+        { plan, isWeek: false, monday, explicit: false },
+        mondayOf(new Date(y, m - 1, d)),
+      );
+      if (position) out.push({ id: week.id, name: pick(week, "name"), weekNumber: position.weekNumber });
+    }
+    return out.sort((a, b) => a.weekNumber - b.weekNumber);
+  }, [plan, pick]);
+
   if (isLoading) {
     return (
       <div className="zn-planview">
@@ -947,6 +974,16 @@ export function PlanViewPage() {
         <section className="zn-planview__head">
           <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
             <span className="zn-kicker">{headKicker}</span>
+            {placedWeeks.length > 0 && (
+              <p className="zn-mono zn-muted zn-planview__placed">
+                {t("view.placedWeeks.label")}
+                {placedWeeks.map((w) => (
+                  <Link key={w.id} to={`/weeks/${w.id}`} className="zn-planview__placed-item">
+                    {t("view.placedWeeks.item", { name: w.name, n: w.weekNumber })}
+                  </Link>
+                ))}
+              </p>
+            )}
 
             {isEditingName ? (
               <input

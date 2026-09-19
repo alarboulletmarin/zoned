@@ -100,46 +100,35 @@ toujours une semaine calendaire, et `calendarWeekRange` suffit pour les bilans.
 - `/weeks/new` reçoit `state.placeOn` (un lundi) depuis la feuille : une
   semaine composée depuis le cockpit se pose d'elle-même sur la semaine
   regardée. Seules les deux portes qui créent directement le portent ; la
-  porte du catalogue passe par deux écrans et ne le transmet pas encore.
+  porte du catalogue passe par deux écrans et ne le transmet pas, le badge
+  de la page de la semaine prend le relais.
 - `src/pages/ActivitiesPage.tsx` : le bilan lit la même composition.
+- **Poser depuis la semaine elle-même** : `WeekViewPage` porte un troisième
+  badge, Cockpit, à côté de la catégorie et du budget (cette semaine, la
+  prochaine, retirer). Poser ailleurs se fait depuis la grille du mois de
+  `/today`. `WeeksListPage` dit où chaque semaine est posée.
+- **Écrire depuis le cockpit vers une source** : Ajouter une séance, sur le
+  jour choisi, ouvre un menu qui nomme la source (chaque plan ou semaine
+  couvrant ce jour, plus Une nouvelle semaine, posée ici), puis le
+  sélecteur de séance du plan (`PlanWorkoutPanel`, en feuille). La séance
+  est composée par `sessionFromWorkout` ou `makeActivitySession`, exactement
+  comme depuis la page de la semaine, et posée par `pushSessionToPlan`. La
+  semaine neuve est nommée par son lundi et posée à sa naissance.
+- **Fusionner une semaine dans le plan** : depuis Composer, une semaine posée
+  sur une semaine d'un plan en cours ou à venir propose Fusionner dans
+  {plan}, semaine N, puis demande en toutes lettres ajouter ou remplacer.
+  `mergeWeekIntoPlan` (`lib/planStorage.ts`) copie ce qui décrit la séance,
+  laisse ce qui a été vécu et le verrou, et s'écrit sous `withUndoSnapshot`
+  (`kind: "merge_week"`), donc se défait depuis la page du plan. La couche
+  est retirée : fusionnée, la semaine est DANS le plan. La semaine seule,
+  elle, n'est pas touchée, c'est un gabarit.
+- **La page du plan lit la composition** : sous le kicker, une ligne mono
+  liste les semaines posées sur ce plan et sur quelle semaine à lui, avec
+  un lien chacune. Lecture seule.
 
 ## Ce qui reste, dans l'ordre où ça vaut le coup
 
-### 1. Poser depuis la semaine elle-même
-
-`WeekViewPage` n'a pas encore de geste Poser dans le cockpit. Aujourd'hui on
-compose la semaine, on revient dans `/today`, on ouvre Composer, on l'allume.
-Un bouton dans la rangée d'actions de la semaine (à côté du partage) qui
-appelle `placeWeek` sur la semaine en cours, ou ouvre un choix de lundi,
-raccourcit le chemin à un tap. Même geste sur la porte catalogue
-(`PrebuiltWeekDetailPage`), en transmettant `placeOn` à travers la liste.
-
-### 2. Écrire depuis le cockpit vers une source
-
-Le cockpit lit plusieurs sources ; il n'écrit encore dans aucune, hormis la
-clôture. Ajouter une séance depuis `/today` demande de **choisir la source**
-qui la reçoit, parce que c'est ce choix qui décide où elle vit :
-
-- dans le plan (semaine N du plan, `addSessionToPlan`) : elle suit le plan ;
-- dans une semaine posée : elle suit la semaine, et se repose avec elle ;
-- dans une nouvelle semaine seule, créée et posée à la volée sur cette semaine.
-
-Le panneau `PlanWorkoutPanel` et `sessionFromWorkout` existent déjà ; il manque
-le sélecteur de source (une ligne de `Segmented` avec les sources en cours)
-et le point d'entrée dans la pile. Le jour sans séance a déjà un primaire
-vide qui peut le porter.
-
-### 3. Fusionner une semaine dans le plan
-
-Poser une semaine à côté du plan la lit ; la **fusionner** l'écrit dans le
-plan, semaine N, et retire la couche. C'est une fonction de `planStorage`
-(copier les séances de `week.weeks[0]` dans `plan.weeks[N]`, en gardant la
-précision et la discipline, statut remis à prévu), sous `withUndoSnapshot`
-pour que ce soit annulable, plus un geste dans la feuille Composer. À
-décider : fusionner remplace ou ajoute (ajouter par défaut, le plan garde
-ses séances ; remplacer est le cas décharge, et il doit être explicite).
-
-### 4. Répéter une semaine
+### 1. Répéter une semaine
 
 `anchor` pose une semaine une fois. Une semaine de renforcement que l'on veut
 **chaque** semaine demanderait `repeat: true`. Ce n'est pas fait, et pas par
@@ -147,20 +136,18 @@ oubli : la clôture s'adresse par `(plan, semaine 1, index)`, donc marquer
 faite la séance du lundi la marquerait faite pour toutes les répétitions. Il
 faut d'abord soit un journal de clôture par date, soit matérialiser la
 répétition en copies. Le journal par date est la bonne voie (il sert aussi
-au point 5) ; en attendant, reposer la semaine chaque lundi est un geste
-d'un tap dans Composer.
+au point 3) ; en attendant, reposer la semaine chaque lundi est un geste
+d'un tap, depuis Composer ou depuis le badge de la semaine.
 
-### 5. Les autres écrans lisent la composition
+### 2. L'audit du plan compte ce qui est posé à côté
 
-- `PlanViewPage` (`/plan/:id`) montre le plan seul. Il devrait au moins dire
-  qu'une semaine est posée sur telle de ses semaines, et l'audit de charge
-  (`planGenerator/audit`) devrait compter ce que la semaine posée ajoute :
-  une semaine de renforcement posée sur la semaine de pic est précisément le
-  genre de chose qu'un audit doit voir.
-- `WeeksListPage` (`/weeks`) devrait marquer les semaines posées et où.
-- `HomePage` ne lit pas le cockpit ; rien à faire tant qu'elle ne le lit pas.
+`PlanViewPage` nomme les semaines posées mais son audit de charge
+(`planGenerator/audit`) ne les compte pas : une semaine de renforcement posée
+sur la semaine de pic est précisément le genre de chose qu'un audit doit
+voir. Les séances posées peuvent lui être passées comme des séances de la
+semaine N, sans être écrites dans le plan.
 
-### 6. Les conflits
+### 3. Les conflits
 
 Deux sources le même jour ne sont pas un conflit, c'est le cas nominal (course
 le matin, renforcement le soir). Deux sources qui **posent la même séance
@@ -168,6 +155,12 @@ clé** le même jour, ou dépassent un budget de charge, le sont. Rien ne
 l'annonce aujourd'hui. Le bon endroit est le bilan de la semaine
 (`weekReview`), qui compte déjà les séances clés, et la jauge de
 polarisation, qui voit déjà l'intensité.
+
+### 4. Le catalogue de semaines transmet `placeOn`
+
+La porte catalogue de `/weeks/new` (liste, puis détail) ne transporte pas le
+lundi visé jusqu'à `PrebuiltWeekDetailPage`. Deux `state` à faire suivre, et
+le même `placeWeek` à l'enregistrement que dans `WeekNewPage`.
 
 ## Ce qu'il ne faut pas refaire
 

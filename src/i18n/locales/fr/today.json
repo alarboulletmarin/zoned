@@ -109,5 +109,13 @@
     "mergeDone": "Fusionnée dans le plan. Annulable depuis la page du plan.",
     "mergeFailed": "La fusion n'a pas pu être enregistrée.",
     "mergeLabel": "{{week}} fusionnée dans la semaine {{n}}"
+  },
+  "add": {
+    "action": "Ajouter une séance",
+    "into": "Dans quoi ?",
+    "newWeek": "Une nouvelle semaine, posée ici",
+    "newWeekName": "Semaine du {{date}}",
+    "done": "Séance ajoutée à {{source}}.",
+    "failed": "La séance n'a pas pu être enregistrée."
   }
 }
