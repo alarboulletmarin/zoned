@@ -87,9 +87,14 @@
       "e3Link": "Methods"
     },
     "s02": {
-      "kicker": "Suggested this week",
-      "title": "Three sessions to stay on the right volume",
-      "body": "Deterministic by ISO week. No A/B, no engagement loop."
+      "kicker": "At random from the catalogue",
+      "title": "A run, a ride, a swim",
+      "body": "Three sessions drawn at random on every visit, one per sport. Reload the page to see others.",
+      "sport": {
+        "running": "Running",
+        "cycling": "Cycling",
+        "swimming": "Swimming"
+      }
     },
     "s04": {
       "kicker": "The methods",
