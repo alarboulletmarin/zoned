@@ -71,8 +71,6 @@
     "save": "Enregistrer",
     "saveFailed": "Le profil n'a pas été enregistré.",
     "saved": "Profil enregistré",
-    "updateZones": "Mettre à jour mes zones",
-    "zonesUpdated": "Zones mises à jour",
     "createPlan": "Créer un plan",
     "migrated": "Données existantes récupérées",
     "errorHint": "corrige la valeur pour enregistrer",

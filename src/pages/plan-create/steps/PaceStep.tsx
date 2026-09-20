@@ -1,138 +1,128 @@
 import { useState, type CSSProperties } from "react";
-import { AlertTriangle } from "@/components/icons";
 import { Segmented } from "@/components/ui/segmented";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import {
-  estimateFinishTime,
-  finishTimeToPaceSeconds,
-  formatPace,
-  parseFinishTimeToSeconds,
-} from "../helpers";
+  formatPaceDigits,
+  formatTimeDigits,
+  normalizePaceDigits,
+  paceDigits,
+  secondsToPaceDigits,
+  timeDigits,
+  timeDigitsToSeconds,
+} from "@/lib/paceFields";
+import { estimateFinishTime, finishTimeToPaceSeconds, formatPace } from "../helpers";
 import type { StepContext, StepDef } from "../types";
 
 /**
  * L'allure cible, saisie comme une allure ou comme un chrono d'arrivée.
  *
- * Le mode de saisie et le chrono tapé sont de l'état LOCAL : ils ne sortaient
- * jamais de cette étape, et les garder dans la page en faisait deux `useState`
- * de plus au sommet du parcours. Le brouillon ne les persiste pas non plus,
- * ce qui compte est l'allure, et elle vit dans `form.targetPace`.
+ * Les deux champs portent le masque du chronomètre (`lib/paceFields.ts`) :
+ * les chiffres entrent par la droite, 530 se lit 5:30, et le pavé est celui
+ * des CHIFFRES seuls. Ils demandaient avant un deux-points tapé à la main et
+ * refusaient tout le reste avec une erreur de format ; plus rien n'est à
+ * refuser, 5:75 se range en 6:15 quand le champ est quitté.
+ *
+ * `form.targetPace` reste la chaîne `M:SS` que le reste du parcours lit. Le
+ * mode de saisie et le chrono tapé sont de l'état LOCAL : le brouillon ne les
+ * persiste pas, ce qui compte est l'allure.
  */
 function PaceBody({ form, setForm, uid, t, derived, goForward }: StepContext) {
   const [paceInputMode, setPaceInputMode] = useState<"pace" | "time">("pace");
-  const [targetFinishTime, setTargetFinishTime] = useState("");
+  const [finishDigits, setFinishDigits] = useState("");
 
   const { paceSeconds } = derived;
   const distanceKm = form.raceDistance
     ? RACE_DISTANCE_META[form.raceDistance].distanceKm
     : 0;
-  const finishSeconds = parseFinishTimeToSeconds(targetFinishTime);
-  // `isTrail` ne gouvernait qu'une phrase d'aide, et le champ dénivelé qui
-  // vivait ici rendait SANS CONDITION, un coureur de 5 km sur route se
-  // faisait demander un D+. Le dénivelé est parti dans l'étape terrain, qui
-  // n'apparaît qu'en trail et en ultra ; et la pratique est maintenant la
-  // source, au lieu d'une devinette sur la distance.
+  const finishSeconds = timeDigitsToSeconds(finishDigits, distanceKm);
   const isTrail = form.practice === "trail" || form.practice === "ultra";
+
+  const setPaceFromDigits = (digits: string) =>
+    setForm((f) => ({ ...f, targetPace: formatPaceDigits(digits) }));
 
   return (
     <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
-                {isTrail && <p className="zn-caption zn-faint">{t("pace.trailHint")}</p>}
+      {isTrail && <p className="zn-caption zn-faint">{t("pace.trailHint")}</p>}
 
-                <Segmented
-                  label={t("pace.title")}
-                  value={paceInputMode}
-                  onChange={(v) => setPaceInputMode(v as "pace" | "time")}
-                  options={[
-                    { value: "pace", label: t("pace.targetPaceTab") },
-                    { value: "time", label: t("pace.targetTimeTab") },
-                  ]}
-                />
+      <Segmented
+        label={t("pace.title")}
+        value={paceInputMode}
+        onChange={(v) => setPaceInputMode(v as "pace" | "time")}
+        options={[
+          { value: "pace", label: t("pace.targetPaceTab") },
+          { value: "time", label: t("pace.targetTimeTab") },
+        ]}
+      />
 
-                {paceInputMode === "pace" ? (
-                  <div className="zn-contrib-field">
-                    <label className="zn-contrib-field__label" htmlFor={`${uid}-pace`}>
-                      {t("pace.targetPaceLabel")}
-                    </label>
-                    <input
-                      id={`${uid}-pace`}
-                      type="text"
-                      inputMode="numeric"
-                      data-mono="true"
-                      className="zn-contrib-input"
-                      placeholder={t("pace.pacePlaceholder")}
-                      value={form.targetPace}
-                      aria-invalid={(!!form.targetPace && !paceSeconds) || undefined}
-                      aria-describedby={
-                        form.targetPace && !paceSeconds ? `${uid}-pace-error` : undefined
-                      }
-                      onChange={(e) => {
-                        setForm((f) => ({ ...f, targetPace: e.target.value }));
-                        setTargetFinishTime("");
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && (paceSeconds || !form.targetPace)) goForward();
-                      }}
-                    />
-                    {paceSeconds && distanceKm > 0 && (
-                      <p className="zn-mono zn-faint">
-                        {t("pace.estimatedFinish")}
-                        {estimateFinishTime(paceSeconds, distanceKm)}
-                      </p>
-                    )}
-                    {form.targetPace && !paceSeconds && (
-                      <p id={`${uid}-pace-error`} role="alert" className="zn-contrib-field__error">
-                        <AlertTriangle size={14} />
-                        {t("pace.paceFormatError")}
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <div className="zn-contrib-field">
-                    <label className="zn-contrib-field__label" htmlFor={`${uid}-finish`}>
-                      {t("pace.targetFinishTimeLabel")}
-                    </label>
-                    <input
-                      id={`${uid}-finish`}
-                      type="text"
-                      inputMode="numeric"
-                      data-mono="true"
-                      className="zn-contrib-input"
-                      placeholder={t("pace.timePlaceholder")}
-                      value={targetFinishTime}
-                      aria-invalid={(!!targetFinishTime && !finishSeconds) || undefined}
-                      aria-describedby={
-                        targetFinishTime && !finishSeconds ? `${uid}-finish-error` : undefined
-                      }
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setTargetFinishTime(val);
-                        const totalSec = parseFinishTimeToSeconds(val);
-                        if (totalSec && distanceKm > 0) {
-                          const paceSec = finishTimeToPaceSeconds(totalSec, distanceKm);
-                          setForm((f) => ({ ...f, targetPace: formatPace(paceSec) }));
-                        } else {
-                          setForm((f) => ({ ...f, targetPace: "" }));
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && (finishSeconds || !targetFinishTime)) goForward();
-                      }}
-                    />
-                    {finishSeconds && distanceKm > 0 && (
-                      <p className="zn-mono zn-faint">
-                        {t("pace.requiredPace")}
-                        {`${formatPace(finishTimeToPaceSeconds(finishSeconds, distanceKm))} min/km`}
-                      </p>
-                    )}
-                    {targetFinishTime && !finishSeconds && (
-                      <p id={`${uid}-finish-error`} role="alert" className="zn-contrib-field__error">
-                        <AlertTriangle size={14} />
-                        {t("pace.timeFormatHint")}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
+      {paceInputMode === "pace" ? (
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-pace`}>
+            {t("pace.targetPaceLabel")}
+          </label>
+          <input
+            id={`${uid}-pace`}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            autoComplete="off"
+            data-mono="true"
+            className="zn-contrib-input"
+            placeholder={t("pace.pacePlaceholder")}
+            value={form.targetPace}
+            onChange={(e) => {
+              setPaceFromDigits(paceDigits(e.target.value));
+              setFinishDigits("");
+            }}
+            onBlur={() => setPaceFromDigits(normalizePaceDigits(paceDigits(form.targetPace)))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") goForward();
+            }}
+          />
+          <p className="zn-mono zn-faint">
+            {paceSeconds && distanceKm > 0
+              ? `${t("pace.estimatedFinish")}${estimateFinishTime(paceSeconds, distanceKm)}`
+              : t("pace.paceMaskHint")}
+          </p>
+        </div>
+      ) : (
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-finish`}>
+            {t("pace.targetFinishTimeLabel")}
+          </label>
+          <input
+            id={`${uid}-finish`}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            autoComplete="off"
+            data-mono="true"
+            className="zn-contrib-input"
+            placeholder={t("pace.timePlaceholder")}
+            value={formatTimeDigits(finishDigits)}
+            onChange={(e) => {
+              const digits = timeDigits(e.target.value);
+              setFinishDigits(digits);
+              const totalSec = timeDigitsToSeconds(digits, distanceKm);
+              if (totalSec && distanceKm > 0) {
+                setPaceFromDigits(
+                  secondsToPaceDigits(finishTimeToPaceSeconds(totalSec, distanceKm)),
+                );
+              } else {
+                setForm((f) => ({ ...f, targetPace: "" }));
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") goForward();
+            }}
+          />
+          <p className="zn-mono zn-faint">
+            {finishSeconds && distanceKm > 0
+              ? `${t("pace.requiredPace")}${formatPace(finishTimeToPaceSeconds(finishSeconds, distanceKm))} min/km`
+              : t("pace.timeMaskHint")}
+          </p>
+        </div>
+      )}
+    </div>
   );
 }
 

@@ -13,7 +13,7 @@
  *
  * What we exclude (matches robots.txt Disallow rules):
  *   - /my-zones, /favorites, /settings, /profile, /activities (per-user state)
- *   - /plans (user dashboard), /plan/new/assisted, /plan/new/free
+ *   - /plans (user dashboard), /plan/new/free
  *   - /plan/:id (localStorage-only entities)
  *
  * Date strategy:

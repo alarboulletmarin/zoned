@@ -1,5 +1,5 @@
 /* The plan wizard, the three screens that decide what the generator builds:
-   /plan/new (the three doors), /plan/new/assisted (the questions) and
+   /plan/new (the questions) and
    /plan/new/free (the blank plan).
 
    All three read as one sheet: mono kicker, the QUESTION as the display title,
@@ -630,4 +630,22 @@
     order: 1;
     padding-block-start: var(--gap-section);
   }
+}
+
+/* Les en-têtes de groupe de la première question : Route, Trail, et Pas de
+   course en vue. Ce sont des repères dans UNE liste de réponses, pas des
+   sections, donc un micro-label et un peu d'air au-dessus, jamais un filet. */
+.zn-wiz__group {
+  margin-block-start: var(--sp-6);
+}
+
+.zn-wiz__group:first-child {
+  margin-block-start: 0;
+}
+
+/* La VMA tient en quatre caractères : un champ de la largeur du chiffre, et
+   l'unité à côté, plutôt qu'un champ pleine largeur pour 14,5. */
+.zn-wiz__vma {
+  inline-size: 10ch;
+  flex: none;
 }

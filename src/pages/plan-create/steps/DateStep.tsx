@@ -4,10 +4,10 @@ import { Alert } from "@/components/ui/alert";
 import { DateInput } from "@/components/ui/date-input";
 import { Segmented } from "@/components/ui/segmented";
 import { formatDate } from "@/lib/i18n-utils";
-import type { StepContext, StepDef } from "../types";
+import type { StepContext } from "../types";
 
 /** La date de la course, et le départ du plan. */
-function DateBody({ form, setForm, uid, t, derived }: StepContext) {
+export function DateBody({ form, setForm, uid, t, derived }: StepContext) {
   const {
     minDate,
     minWeeksForDistance,
@@ -89,12 +89,3 @@ function DateBody({ form, setForm, uid, t, derived }: StepContext) {
   );
 }
 
-export const dateStep: StepDef = {
-  id: "date",
-  titleKey: "date.title",
-  subtitleKey: "date.subtitle",
-  subtitleParams: (_form, derived) => ({ min: derived.minWeeksForDistance }),
-  Body: DateBody,
-  isComplete: (_form, derived) => derived.dateValid,
-  nextLabelKey: "nav.continue",
-};

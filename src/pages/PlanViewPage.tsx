@@ -774,6 +774,10 @@ export function PlanViewPage() {
   }
 
   const isFreePlan = plan.config.planMode === "free";
+  /* Sans VMA, le générateur a posé les allures depuis le niveau. Il le
+     faisait déjà, sans le dire : les allures affichées avaient l'air
+     mesurées. Le plan le dit tant que Mes zones ne la connaît pas. */
+  const pacesEstimated = !isFreePlan && plan.config.vma === undefined;
   const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
   const planName = plan.config.planName || (isFreePlan
     ? plan.name
@@ -2038,11 +2042,18 @@ export function PlanViewPage() {
 
         {/* 3, ce qui a changé, ce qu'il faut regarder : un avertissement
             d'audit n'est pas plus urgent que la séance du soir */}
-        {(ended || plan._lastUndoableChange || auditFindings.length > 0) && (
+        {(ended || pacesEstimated || plan._lastUndoableChange || auditFindings.length > 0) && (
           <section className="zn-planview__band">
             <div className="zn-planview__notes">
               {/* An ended plan stays viewable as training history. */}
               {ended && <Alert kind="info">{t("view.planEnded")}</Alert>}
+
+              {pacesEstimated && (
+                <Alert kind="info" title={t("view.estimatedPacesTitle")}>
+                  {t("view.estimatedPaces")}{" "}
+                  <Link to="/my-zones">{t("view.estimatedPacesLink")}</Link>
+                </Alert>
+              )}
 
               {plan._lastUndoableChange && (
                 <LastChangePanel

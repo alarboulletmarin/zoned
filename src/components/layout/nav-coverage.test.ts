@@ -40,9 +40,9 @@ const NOT_A_DESTINATION: Record<string, string> = {
   "/race-simulator/shared": "atterrissage d'un lien partagé",
   "/library/weekly": "redirection historique vers /weeks",
   "/quiz": "redirection historique vers /library/draw",
-  "/plan/new/mode": "étape interne du parcours, atteinte depuis /plan/new",
-  "/plan/new/assisted": "étape interne du parcours, atteinte depuis /plan/new/mode",
-  "/plan/new/free": "étape interne du parcours, atteinte depuis /plan/new/mode",
+  "/plan/new/mode": "redirection historique vers /plan/new",
+  "/plan/new/assisted": "redirection historique vers /plan/new",
+  "/plan/new/free": "étape interne du parcours, atteinte depuis /plan/new",
 };
 
 function reachableFromNav(): Set<string> {

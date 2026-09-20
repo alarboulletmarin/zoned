@@ -1,7 +1,7 @@
-import type { StepContext, StepDef } from "../types";
+import type { StepContext } from "../types";
 
 /** Le nom de la course. Facultatif, d'où le passer. */
-function RaceNameBody({ form, setForm, uid, t, goForward }: StepContext) {
+export function RaceNameBody({ form, setForm, uid, t, goForward }: StepContext) {
   return (
     <div className="zn-contrib-field">
       <label className="zn-contrib-field__label" htmlFor={`${uid}-race-name`}>
@@ -23,12 +23,3 @@ function RaceNameBody({ form, setForm, uid, t, goForward }: StepContext) {
   );
 }
 
-export const raceNameStep: StepDef = {
-  id: "race_name",
-  titleKey: "raceName.title",
-  subtitleKey: "raceName.subtitle",
-  Body: RaceNameBody,
-  isComplete: () => true,
-  nextLabelKey: "nav.continue",
-  showSkip: true,
-};

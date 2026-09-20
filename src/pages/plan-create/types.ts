@@ -42,6 +42,13 @@ export interface FormState {
   useCustomStartDate: boolean;
   raceName: string;
   runnerLevel: Difficulty | null;
+  /**
+   * La VMA, telle que tapée (`14,5`). Le seul chiffre que le générateur lit :
+   * sans elle il inventait une valeur par niveau, sans le dire. Elle est
+   * posée sur l'écran du niveau, préremplie depuis ce que l'app connaît déjà,
+   * et enregistrée avec le plan pour que Mes zones la retrouve.
+   */
+  vma: string;
   daysPerWeek: number;
   longRunDay: number;
   targetPace: string;
@@ -54,11 +61,6 @@ export interface FormState {
   intermediateGoals: IntermediateGoal[];
   /** Le terrain visé, trail et ultra. Oriente la sélection des séances. */
   terrain: TerrainType;
-  /** La logistique d'un ultra. Des préférences, pas des paramètres moteur. */
-  ultraNight: boolean;
-  ultraFuelling: boolean;
-  ultraPoles: boolean;
-  ultraBackToBack: boolean;
 }
 
 /**
@@ -87,6 +89,10 @@ export interface WizardDerived {
   intermediateGoalValidation: ValidationResult;
   intermediateGoalMaxDate: string | undefined;
   isRacePlan: boolean;
+  /** `?practice=` dans l'URL : la première question ne montre que ses courses. */
+  presetPractice: Practice | null;
+  /** La VMA saisie, lue en km/h, ou `undefined` : le générateur estimera. */
+  vma: number | undefined;
 }
 
 /** Ce qu'une étape reçoit. Rien de plus, rien de moins. */
@@ -143,18 +149,11 @@ export interface StepContext {
 }
 
 export type StepId =
-  | "practice"
-  | "purpose"
-  | "distance"
-  | "date"
+  | "race"
+  | "event"
   | "duration"
-  | "race_name"
-  | "intermediate_goals"
   | "level"
   | "goal"
-  | "fitness"
-  | "terrain"
-  | "ultra_logistics"
   | "schedule"
   | "pace"
   | "summary";

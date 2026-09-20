@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { toast } from "@/components/ui/toast";
 import {
-  Gauge,
   Save,
   Trash2,
   Plus,
@@ -377,17 +376,14 @@ function BaseDataSection({
       toast.failure(t("base.saveFailed"), saved);
       return;
     }
+    /* Une seule VMA dans l'app. Enregistrer le profil laissait Mes zones,
+       donc le générateur, sur l'ancienne valeur, et il fallait un second
+       bouton pour les mettre d'accord. Les deux s'écrivent ensemble. */
+    if (parsedFcMax || parsedVma) {
+      saveUserZonePrefs({ fcMax: parsedFcMax, vma: parsedVma });
+    }
     onSave(loadRunnerProfile()!);
     toast.success(t("base.saved"));
-  }
-
-  function handleUpdateZones() {
-    if (!parsedFcMax && !parsedVma) return;
-    saveUserZonePrefs({
-      fcMax: parsedFcMax,
-      vma: parsedVma,
-    });
-    toast.success(t("base.zonesUpdated"));
   }
 
   return (
@@ -476,14 +472,6 @@ function BaseDataSection({
             <Button onClick={handleSave} disabled={hasError}>
               <Save />
               {t("base.save")}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleUpdateZones}
-              disabled={!parsedFcMax && !parsedVma}
-            >
-              <Gauge />
-              {t("base.updateZones")}
             </Button>
             <Button variant="outline" asChild>
               <Link to="/plan/new">

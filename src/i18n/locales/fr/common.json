@@ -426,7 +426,7 @@
     "plansMine": "Mes plans",
     "plansMineDesc": "Plans en cours et passés",
     "plansNew": "Nouveau plan",
-    "plansNewDesc": "Assisté, libre ou pré-construit",
+    "plansNewDesc": "Une course, une date, tes jours",
     "raceSim": "Simulateur jour J",
     "raceSimDesc": "Splits, nutrition et pacing pour ta course",
     "calculatorsAll": "Tous les calculateurs",
@@ -834,7 +834,7 @@
     "myZones": "Mes Zones",
     "favorites": "Mes Favoris",
     "planNew": "Nouveau plan d'entraînement",
-    "planNewDesc": "Choisis comment créer ton plan d'entraînement.",
+    "planNewDesc": "Une course, une date, tes jours disponibles : le plan se construit en sept écrans.",
     "collectionsDesc": "Des parcours thématiques pour chaque objectif. Parcourez les collections de course à pied.",
     "libraryTitle": "Bibliothèque",
     "aboutSeoTitle": "À propos"
