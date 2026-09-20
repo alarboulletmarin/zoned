@@ -1,37 +1,20 @@
-import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { useMemo, type CSSProperties, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, ChevronDown } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import {
-  ResponsiveTable,
-  type ResponsiveTableColumn,
-} from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
 import { useWorkouts } from "@/hooks";
 import { useAppStats } from "@/hooks/useAppStats";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
-import { usePlans } from "@/hooks/usePlans";
-import { ZONE_META, type ZoneNumber } from "@/types";
-import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
-import { getISOWeek, pickWeeklyWorkouts, EXPORT_FORMATS } from "@/lib/landing-stats";
+import { useIsEnglish } from "@/lib/i18n-utils";
+import { getISOWeek, pickWeeklyWorkouts } from "@/lib/landing-stats";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
-import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
 import { DoorCard } from "@/components/domain/DoorCard";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
-import { ZoneFigures } from "@/components/domain/ZoneFigures";
-import { StatBlock } from "@/components/domain/StatBlock";
 import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
-import {
-  loadUserZonePrefs,
-  calculateAllZones,
-  formatPace,
-} from "@/lib/zones";
-import { cn } from "@/lib/utils";
-
-const ZONES = [1, 2, 3, 4, 5, 6] as const;
 
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -107,46 +90,12 @@ const CALCULATORS: Array<{
   },
 ];
 
-// Frequently-asked questions answered on the page (no external link).
-// The id picks both the question and the answer in homepage.s09.q[id]. Each
-// answer has been verified against README.md and src/lib/export/* so the
-// list never advertises a feature that isn't shipped.
-const FAQ_IDS = [
-  "hrm",
-  "export",
-  "custom",
-  "free",
-  "devices",
-  "offline",
-  "data",
-] as const;
-
-// Canonical Seiler-style polarised reference, these are *teaching values*,
-// not measurements of the user's library. They illustrate what a well-dosed
-// training week looks like under the 80/20 model.
-
-
-// ── §03 zone metadata. RPE and the "% FCmax" model lines describe the
-// physiology and don't depend on the user; the bpm and pace columns are
-// computed from their measured FCmax / VMA when available (see
-// calculateAllZones), and this dash appears when nothing has been measured.
-const NOT_MEASURED = "-";
-const ZONE_FC_PERCENT: Record<ZoneNumber, string> = {
-  1: "50-60 % FCmax",
-  2: "60-70 % FCmax",
-  3: "70-80 % FCmax",
-  4: "80-90 % FCmax",
-  5: "90-100 % FCmax",
-  6: "> 100 % FCmax",
-};
-const ZONE_RPE: Record<ZoneNumber, string> = {
-  1: "1-2 / 10",
-  2: "3-4 / 10",
-  3: "5-6 / 10",
-  4: "7 / 10",
-  5: "8-9 / 10",
-  6: "10 / 10",
-};
+// Les questions qu'on se pose AVANT de commencer, et seulement celles-là :
+// faut-il un capteur, est-ce gratuit, où vont mes données. La page en posait
+// sept, dont l'export vers la montre et le hors-ligne, qui sont des questions
+// de la deuxième semaine ; le titre promettait cinq. L'id choisit la question
+// et la réponse dans homepage.s09.q[id].
+const FAQ_IDS = ["hrm", "free", "data"] as const;
 
 // ────────────────────────────────────────────────────────────────────────────
 // HomePage
@@ -154,33 +103,10 @@ const ZONE_RPE: Record<ZoneNumber, string> = {
 
 export function HomePage() {
   const { t } = useTranslation(["homepage", "common", "calculators"]);
-  const pickLang = usePickLang();
   const isEn = useIsEnglish();
-  const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
-
-  // User's measured references (VMA, FCmax), read once at mount. Updates from
-  // Read once at mount, and only read: the form that used to write them from
-  // this page is gone, so /my-zones and the runner profile are the only
-  // writers left. Nothing on this screen can change them under the table.
-  const userPrefs = useMemo(() => loadUserZonePrefs(), []);
-
-  const personalRanges = useMemo(() => {
-    if (!userPrefs) return null;
-    const all = calculateAllZones(userPrefs);
-    if (all.length === 0) return null;
-    return all.reduce(
-      (acc, range) => {
-        acc[range.zone] = range;
-        return acc;
-      },
-      {} as Record<ZoneNumber, (typeof all)[number]>,
-    );
-  }, [userPrefs]);
 
   // Catalogue counts, read straight off the shipped data (never hardcoded).
   const appStats = useAppStats();
-  const { plans: userPlans } = usePlans();
-  const hasPlans = userPlans.length > 0;
   const prebuiltPlans = useMemo(() => getAllPrebuiltPlans(), []);
 
   // The three weekly picks need the workout chunks. None of it is
@@ -304,82 +230,6 @@ export function HomePage() {
     },
   ];
 
-  // The zone atlas, as table rows. One markup for both viewports,
-  // ResponsiveTable turns it into a card per zone below its own breakpoint.
-  const zoneColumns: ResponsiveTableColumn<ZoneNumber>[] = [
-    {
-      key: "zone",
-      header: t("homepage:home.s03.zone"),
-      hideOnMobile: true,
-      cell: (z) => (
-        <span className="zn-home__zcode" data-zone={z}>
-          Z{z}
-        </span>
-      ),
-    },
-    {
-      key: "name",
-      header: t("homepage:home.s03.name"),
-      hideOnMobile: true,
-      cell: (z) => (
-        <button
-          type="button"
-          className="zn-home__zname"
-          onClick={() => setSelectedZone(z)}
-        >
-          {pickLang(ZONE_META[z], "label")}
-        </button>
-      ),
-    },
-    {
-      key: "hr",
-      header: t("homepage:home.s03.hr"),
-      cell: (z) => {
-        const range = personalRanges?.[z];
-        return (
-          <div className="zn-stack" style={{ "--gap": "var(--sp-1)" } as CSSProperties}>
-            <span
-              className={cn("zn-mono", range ? "zn-home__measured" : "zn-faint")}
-            >
-              {range?.hrMin && range?.hrMax
-                ? `${range.hrMin}-${range.hrMax} bpm`
-                : NOT_MEASURED}
-            </span>
-            <span className="zn-mono zn-faint">{ZONE_FC_PERCENT[z]}</span>
-          </div>
-        );
-      },
-    },
-    {
-      key: "rpe",
-      header: t("homepage:home.s03.rpe"),
-      cell: (z) => <span className="zn-mono zn-muted">{ZONE_RPE[z]}</span>,
-    },
-    {
-      key: "adaptation",
-      header: t("homepage:home.s03.adaptation"),
-      cell: (z) => (
-        <span className="zn-body zn-body--sm">
-          {pickLang(ZONE_META[z], "benefit")}
-        </span>
-      ),
-    },
-    {
-      key: "pace",
-      header: t("homepage:home.s03.refPace"),
-      cell: (z) => {
-        const range = personalRanges?.[z];
-        return (
-          <span className={cn("zn-mono", range ? "zn-home__measured" : "zn-faint")}>
-            {range?.paceMinPerKm && range?.paceMaxPerKm
-              ? `${formatPace(range.paceMinPerKm)}-${formatPace(range.paceMaxPerKm)}/km`
-              : NOT_MEASURED}
-          </span>
-        );
-      },
-    },
-  ];
-
   return (
     <div className="zn-home">
       <SEOHead
@@ -412,21 +262,15 @@ export function HomePage() {
           </p>
           {/* The screen's single vermillon fill lives here and nowhere else.
 
-              Un seul CTA conditionnel, et c'est tout le pont entre les deux
-              pages : quelqu'un qui a déjà une donnée locale revient pour
-              s'entraîner, pas pour relire l'argumentaire, donc le bouton
-              principal l'emmène au cockpit. Pas de bandeau, pas
-              d'interstitiel, pas de rejet à mémoriser, et surtout pas de
-              redirection, "/" reste la page publique que les robots
-              indexent et que les gens partagent. */}
+              Un seul lecteur depuis le 20 septembre 2026 : la personne qui
+              découvre. Quelqu'un qui a un plan n'arrive plus ici, la racine
+              l'emmène au cockpit (RootPage, App.tsx), donc le bouton n'a
+              plus de condition et la page n'a plus qu'une tâche, faire
+              créer un plan. */}
           <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
             <Button asChild size="lg">
-              <Link to={hasPlans ? "/today" : "/plan/new"}>
-                {t(
-                  hasPlans
-                    ? "homepage:home.hero.ctaPrimaryHasPlans"
-                    : "homepage:home.hero.ctaPrimary",
-                )}
+              <Link to="/plan/new">
+                {t("homepage:home.hero.ctaPrimary")}
                 <ArrowRight />
               </Link>
             </Button>
@@ -534,66 +378,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          §03, the zone atlas
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="zn-section" aria-labelledby="home-zones-title">
-        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
-          <SectionHead
-            id="home-zones-title"
-            kicker={t("homepage:home.s03.kicker")}
-            title={
-              <>
-                {t("homepage:home.s03.title1")}
-                <br />
-                {t("homepage:home.s03.title2")}
-              </>
-            }
-            body={t("homepage:home.s03.body")}
-          />
-
-          <ZoneFigures label={t("homepage:home.s03.figuresLabel")} />
-
-          {/* The "calcule tes zones personnalisées" form stood here: two inputs
-              and a submit, above the table it filled in. It was the only thing
-              on the landing page asking the reader for something. The table
-              still shows their bpm and pace ranges whenever the values exist,
-              read from the same localStorage, and /my-zones is where they are
-              set, which is a page whose whole job that is. */}
-
-          <ResponsiveTable<ZoneNumber>
-            data={[...ZONES]}
-            columns={zoneColumns}
-            rowKey={(z) => z}
-            caption={t("homepage:home.s03.fig")}
-            mobileCardTitle={(z) => (
-              <span
-                className="zn-row"
-                style={{ "--gap": "var(--sp-6)" } as CSSProperties}
-              >
-                <span className="zn-home__zcode" data-zone={z}>
-                  Z{z}
-                </span>
-                <button
-                  type="button"
-                  className="zn-home__zname"
-                  onClick={() => setSelectedZone(z)}
-                >
-                  {pickLang(ZONE_META[z], "label")}
-                </button>
-              </span>
-            )}
-          />
-        </div>
-      </section>
-
-      <ZoneDetailModal
-        zone={selectedZone}
-        zoneMeta={selectedZone ? ZONE_META[selectedZone] : null}
-        open={selectedZone !== null}
-        onOpenChange={(open) => !open && setSelectedZone(null)}
-      />
-
       {/* §04, the researchers, their citations and the quote of the day were
           here. A landing page makes the claim; /methodology is where it is
           argued and sourced, and that page carries the same list in full. */}
@@ -602,58 +386,14 @@ export function HomePage() {
           the hub lists them, and a landing page does not need to name all
           twelve to say they exist. */}
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          §08, ethos, the one inverted band. Kept on the owner's call: the
-          lede and the footer say "local" in words, this says it in figures,
-          and it is the claim the project is built on.
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section
-        className="zn-section zn-split zn-home__ethos"
-        style={{ "--split": "1fr 1fr", "--gap": "var(--sp-18)" } as CSSProperties}
-        aria-labelledby="home-ethos-title"
-      >
-        <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
-          <span className="zn-kicker">{t("homepage:home.s08.kicker")}</span>
-          <h2 id="home-ethos-title" className="zn-display" data-level="3">
-            {t("homepage:home.s08.title1")}
-            <br />
-            {t("homepage:home.s08.title2")}
-          </h2>
-          <p className="zn-body zn-measure">{t("homepage:home.s08.body")}</p>
-        </div>
-
-        <ul className="zn-home__ethos-list">
-          <li>
-            <StatBlock
-              size="lg"
-              value="00"
-              label={t("homepage:home.s08.lines.trackers")}
-            />
-          </li>
-          <li>
-            <StatBlock
-              size="lg"
-              value="00"
-              label={t("homepage:home.s08.lines.account")}
-            />
-          </li>
-          <li>
-            <StatBlock
-              size="lg"
-              value="00"
-              label={t("homepage:home.s08.lines.network")}
-            />
-          </li>
-          <li>
-            <StatBlock
-              size="lg"
-              value={String(EXPORT_FORMATS.length).padStart(2, "0")}
-              label={t("homepage:home.s08.lines.exports")}
-              footnote={EXPORT_FORMATS.map((f) => `.${f}`).join(" · ")}
-            />
-          </li>
-        </ul>
-      </section>
+      {/* §03, l'atlas des zones (six dessins puis une table de six lignes),
+          §08, la bande éthos (quatre compteurs à zéro) et l'appel de fin de
+          page ont vécu ici. À 390 px la page faisait 6 300 px pour un seul
+          lecteur, la personne qui découvre : l'atlas est une page de
+          référence (Mes zones, Méthodes la portent), la bande répétait en
+          chiffres ce que le chapô dit en une phrase, et le bouton de fin ne
+          servait qu'à une page trop longue pour son héros. Un seul primaire,
+          celui du héros. */}
 
       {/* ═══════════════════════════════════════════════════════════════════
           §09, questions answered in place
@@ -686,32 +426,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          The last call before the shell's footer
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="zn-section zn-home__cta" aria-labelledby="home-cta-title">
-        <span className="zn-kicker">{t("homepage:home.cta.kicker")}</span>
-        <h2
-          id="home-cta-title"
-          className="zn-display zn-home__cta-title"
-          data-level="3"
-        >
-          {t("homepage:home.cta.line1")}
-          <br />
-          {t("homepage:home.cta.line2")}
-        </h2>
-        <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-          <Button asChild size="lg" variant="outline-primary">
-            <Link to="/plan/new">
-              {t("homepage:home.cta.primary")}
-              <ArrowRight />
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link to="/library">{t("homepage:home.cta.secondary")}</Link>
-          </Button>
-        </div>
-      </section>
     </div>
   );
 }

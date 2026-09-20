@@ -689,6 +689,7 @@ chaque visite.
 | 4 | Parcours plan | `/plan/new` EST l'assistant : sept écrans pour une course, six sans. **race** = pratique + pourquoi + distance (la pratique se déduit de la course), **event** = date + nom + terrain + prépa en repli, le volume actuel rejoint la semaine type. La VMA est posée sur l'écran du niveau, préremplie, enregistrée dans Mes zones ; sans elle, le récapitulatif prévient et la vue du plan porte un bandeau. Les saisies d'allure et de chrono portent le masque des activités (`lib/paceFields.ts`), le chrono lit 52:30 comme 52 minutes sur 10 km. |
 | 5 | Racine et semaine | `/` mène au cockpit dès qu'un plan non terminé existe. `/weeks/new` crée et pose la semaine sur la semaine en cours, plus de trois portes ; une semaine du catalogue est posée d'office. À 390 px, les titres des cartes compactes tiennent sur deux lignes au lieu d'un mot. |
 
+| 6 | Accueil | Un seul lecteur depuis que la racine mène au cockpit : la personne qui découvre. Huit sections et 6 300 px à 390 px ramenés à quatre et 2 800 : le héros, les quatre portes, les trois séances de la semaine, trois questions. L'atlas des zones (une page de référence, Mes zones et Méthodes la portent), la bande éthos (quatre compteurs répétant le chapô) et l'appel de fin de page partent, avec 400 lignes de CSS mortes de cette page. |
 ## Ce qui ne change pas
 
 Les clés `localStorage` gardent leurs noms et leurs formes. La VMA a toujours
@@ -704,5 +705,3 @@ autre schéma, sont écartés.
 - Six guichets de VMA (profil, Mes zones, deux calculateurs, tapis, fiche
   séance). Ils écrivent tous la même valeur maintenant ; ils sont toujours
   six.
-- L'accueil fait 6 300 px sur téléphone pour qui découvre ; il n'est plus la
-  page de qui s'entraîne, mais il reste long.
