@@ -259,8 +259,8 @@ export function ShareSheet<P extends object>({
     try {
       await downloadImage(node, filename(), transparent);
       toast.success(t("share.toast.downloaded"), { id: toastId });
-    } catch {
-      toast.error(t("share.toast.error"), { id: toastId });
+    } catch (err) {
+      toast.failure(t("share.toast.error"), err, { id: toastId });
     } finally {
       setBusy(null);
     }
@@ -279,8 +279,8 @@ export function ShareSheet<P extends object>({
       const ok = await copyImage(node, transparent);
       if (ok) toast.success(t("share.toast.copied"), { id: toastId });
       else toast.error(t("share.toast.copyUnsupported"), { id: toastId });
-    } catch {
-      toast.error(t("share.toast.error"), { id: toastId });
+    } catch (err) {
+      toast.failure(t("share.toast.error"), err, { id: toastId });
     } finally {
       setBusy(null);
     }
@@ -300,11 +300,8 @@ export function ShareSheet<P extends object>({
         { id: toastId },
       );
     } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") {
-        toast.dismiss(toastId);
-      } else {
-        toast.error(t("share.toast.error"), { id: toastId });
-      }
+      // A dismissed native sheet is a cancellation: `toast.failure` says nothing.
+      toast.failure(t("share.toast.error"), err, { id: toastId });
     } finally {
       setBusy(null);
     }
@@ -315,8 +312,8 @@ export function ShareSheet<P extends object>({
     try {
       await navigator.clipboard.writeText(shareUrl);
       toast.success(t("share.toast.linkCopied"));
-    } catch {
-      toast.error(t("share.toast.error"));
+    } catch (err) {
+      toast.failure(t("share.toast.linkCopyFailed"), err);
     } finally {
       setBusy(null);
     }

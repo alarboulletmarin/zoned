@@ -15,6 +15,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { Route } from "@/types/route";
+import type { Outcome } from "@/lib/failure";
 import {
   deleteRoute as deleteRouteStorage,
   getAllRoutes,
@@ -53,13 +54,13 @@ export function useRoutes() {
   }, [reload]);
 
   const saveRoute = useCallback(
-    async (route: Route): Promise<boolean> => {
-      const ok = await saveRouteStorage(route);
-      if (ok) {
+    async (route: Route): Promise<Outcome> => {
+      const saved = await saveRouteStorage(route);
+      if (saved.ok) {
         await reload();
         notifyOtherTabs();
       }
-      return ok;
+      return saved;
     },
     [reload],
   );

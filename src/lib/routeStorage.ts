@@ -25,6 +25,7 @@ import {
   setMany as idbSetMany,
 } from "idb-keyval";
 import type { Route } from "@/types/route";
+import { OK, failed, type Outcome } from "@/lib/failure";
 import { ROUTE_STORAGE_SOFT_LIMIT } from "./routeGenerator/constants";
 
 /** Legacy localStorage key, kept for one-shot migration only. */
@@ -137,8 +138,8 @@ export async function getRoute(id: string): Promise<Route | null> {
   }
 }
 
-export async function saveRoute(route: Route): Promise<boolean> {
-  if (!HAS_IDB) return false;
+export async function saveRoute(route: Route): Promise<Outcome> {
+  if (!HAS_IDB) return failed("unsupported");
   try {
     await ensureMigrated();
     const stamped: Route = { ...route, updatedAt: new Date().toISOString() };
@@ -148,10 +149,10 @@ export async function saveRoute(route: Route): Promise<boolean> {
     // front so the listing stays in last-edited order.
     const next = [route.id, ...ids.filter((id) => id !== route.id)];
     await writeIndex(next);
-    return true;
+    return OK;
   } catch (err) {
     console.warn("routeStorage: failed to persist route", err);
-    return false;
+    return failed(err);
   }
 }
 

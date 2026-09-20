@@ -123,8 +123,9 @@ export function FreePlanCreatePage() {
       trainingGoal,
       planPurpose,
     });
-    if (!savePlan(plan)) {
-      toast.error(t("common:errors.planSaveFailed"));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("common:errors.planSaveFailed"), saved);
       return;
     }
     triggerStorageWarning();

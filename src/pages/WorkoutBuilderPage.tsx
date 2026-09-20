@@ -45,6 +45,7 @@ import {
 import { getWorkoutById } from "@/data/workouts";
 import { isRunningWorkout } from "@/lib/workoutTemplate";
 import type { WorkoutTemplate, WorkoutStep } from "@/types";
+import { failureReason } from "@/lib/failure";
 
 type SectionKey = "warmup" | "main" | "cooldown";
 
@@ -64,8 +65,7 @@ function WorkoutListView() {
     removeFavorite(id);
     setDeleteTarget(null);
     forceUpdate();
-    toast.success(t("calculators:workoutBuilder.workoutDeleted"));
-  }, [t, removeFavorite]);
+  }, [removeFavorite]);
 
   const handleExportAll = useCallback(() => {
     if (workouts.length === 0) return;
@@ -373,8 +373,14 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
           state: { placeWorkoutId: updated.id, day: placeOn.day },
         });
       }
-    } catch {
-      toast.error(t("calculators:workoutBuilder.maxReached"));
+    } catch (err) {
+      // The cap and a full storage used to share one message; only one of
+      // them was ever true. The reason tells them apart.
+      const reason = failureReason(err);
+      toast.failure(
+        t(reason === "limit" ? "calculators:workoutBuilder.maxReached" : "calculators:workoutBuilder.saveFailed"),
+        reason,
+      );
     }
   }, [workout, canSave, t, navigate, placeOn]);
 
@@ -390,15 +396,18 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
       }
       return;
     }
-    await navigator.clipboard.writeText(url);
-    toast.success(t("common:share.toast.linkCopied"));
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t("common:share.toast.linkCopied"));
+    } catch (err) {
+      toast.failure(t("common:share.toast.linkCopyFailed"), err);
+    }
   }, [workout, canSave, t]);
 
   const handleDelete = useCallback(() => {
     deleteCustomWorkout(workout.id);
-    toast.success(t("calculators:workoutBuilder.workoutDeleted"));
     navigate("/workout/builder");
-  }, [workout.id, t, navigate]);
+  }, [workout.id, navigate]);
 
   const getSteps = (section: SectionKey): WorkoutStep[] => {
     return getWorkoutPhaseSteps(workout, section);

@@ -121,13 +121,10 @@ export function WorkoutStructure({ workout, userZones, className, exportable }: 
     );
   };
 
-  /** Une feuille de partage refermee sans rien choisir n'est pas un echec. */
+  /** Une feuille de partage refermee sans rien choisir n'est pas un echec :
+      `toast.failure` le sait, et dit la cause pour tout le reste. */
   const reportExportFailure = (error: unknown, toastId: string | number) => {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      toast.dismiss(toastId);
-      return;
-    }
-    toast.error(tCommon("export.error.image"), { id: toastId });
+    toast.failure(tCommon("export.error.image"), error, { id: toastId });
   };
 
   /** Le bloc entier, tel qu'il est a l'ecran, ses trois cartes cote a cote. */

@@ -10,6 +10,7 @@ import type {
 import type { Difficulty, TerrainType, UserZonePreferences } from "@/types";
 import type { Practice } from "@/types/practice";
 import type { ValidationResult } from "@/lib/intermediateGoalValidation";
+import type { FailureReason } from "@/lib/failure";
 
 /**
  * Le contrat du registre d'étapes.
@@ -131,7 +132,7 @@ export interface StepContext {
   submit: {
     generate: () => void;
     isGenerating: boolean;
-    error: string | null;
+    error: FailureReason | null;
   };
   /** Les mutateurs des objectifs intermédiaires, qui vivent dans la coquille. */
   goals: {

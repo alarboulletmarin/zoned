@@ -1,3 +1,4 @@
+import { AppFailure } from "@/lib/failure";
 const STORAGE_KEY = "zoned-race-simulations";
 const MAX_SIMULATIONS = 10;
 
@@ -34,7 +35,7 @@ export function saveSimulation(sim: SavedSimulation): void {
     sims[existing] = sim;
   } else {
     if (sims.length >= MAX_SIMULATIONS) {
-      throw new Error(`Maximum ${MAX_SIMULATIONS} simulations. Supprimez une simulation existante.`);
+      throw new AppFailure("limit", `Maximum ${MAX_SIMULATIONS} simulations`);
     }
     sims.push(sim);
   }

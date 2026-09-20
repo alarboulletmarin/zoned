@@ -115,7 +115,6 @@ export function CommuteSection() {
     setIncludeInPlan(false);
     setDiscipline("cycling");
     setHasStored(false);
-    toast.success(t("commute.deleted"));
   };
 
   return (

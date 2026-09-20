@@ -56,7 +56,6 @@ import type { PlanStats, EnhancedPlanAnalysis } from "@/lib/planStats";
 import type { Difficulty } from "@/types";
 import { getZoneNumber } from "@/types";
 import type { WhatIfInsight } from "@/lib/whatIfInsights";
-import { toast } from "@/components/ui/toast";
 import { formatDate } from "@/lib/i18n-utils";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
 
@@ -184,6 +183,8 @@ function loadSavedScenarios(): SavedScenario[] {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch {
+    // Unreadable storage (private mode, corrupt entry): start with no saved
+    // scenario rather than no page. Nothing is written here.
     return [];
   }
 }
@@ -434,8 +435,7 @@ export function WhatIfPage() {
     setSavedScenarios(updated);
     setSaveName("");
     setSaveDialogOpen(false);
-    toast.success(t("toast.saved"));
-  }, [saveName, shared, scenarioA, scenarioB, savedScenarios, t]);
+  }, [saveName, shared, scenarioA, scenarioB, savedScenarios]);
 
   const handleLoad = useCallback((scenario: SavedScenario) => {
     setRaceDistance(scenario.shared.raceDistance);
@@ -454,8 +454,7 @@ export function WhatIfPage() {
     persistScenarios(updated);
     setSavedScenarios(updated);
     setDeleteTarget(null);
-    toast.success(t("toast.deleted"));
-  }, [deleteTarget, savedScenarios, t]);
+  }, [deleteTarget, savedScenarios]);
 
   // ── Derived data for visualizations ────────────────────────────────
 

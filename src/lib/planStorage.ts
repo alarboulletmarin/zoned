@@ -2,6 +2,7 @@ import type { TrainingPlan, PlanSession, CrossTrainingSession, PlanUndoableChang
 import type { SessionType, StrengthCategory, WorkoutCategory } from "@/types";
 import { getWorkoutById } from "@/data/workouts";
 import { parseImportedPlanJson, preparePlanForStorage, normalizeStoredPlan } from "@/lib/planSchema";
+import { OK, failed, type Outcome } from "@/lib/failure";
 
 const STORAGE_KEY = "zoned-plans";
 
@@ -65,21 +66,25 @@ export function importPlan(json: string): string | null {
   const importedPlan = parseImportedPlanJson(json);
   if (!importedPlan) return null;
 
-  if (!savePlan(importedPlan)) return null;
+  if (!savePlan(importedPlan).ok) return null;
   return importedPlan.id;
 }
 
 /**
  * Persist a plan to localStorage.
- * Returns true on success, false on failure (invalid plan or storage quota exceeded).
+ *
+ * Answers an `Outcome` rather than a boolean so the caller can say WHY when
+ * it fails: a plan the schema refuses is `invalid`, a write the browser
+ * refuses is read from the error (`quota`, most often). Nothing is written
+ * on either path.
  */
-export function savePlan(plan: TrainingPlan): boolean {
+export function savePlan(plan: TrainingPlan): Outcome {
   let normalizedPlan: TrainingPlan;
   try {
     normalizedPlan = preparePlanForStorage(plan);
   } catch (err) {
     console.error("Invalid plan, cannot save", err);
-    return false;
+    return failed("invalid");
   }
   const plans = getAllPlans();
   const existing = plans.findIndex(p => p.id === normalizedPlan.id);
@@ -90,10 +95,10 @@ export function savePlan(plan: TrainingPlan): boolean {
   }
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
-    return true;
+    return OK;
   } catch (err) {
     console.error("Failed to persist plan", err);
-    return false;
+    return failed(err);
   }
 }
 
@@ -128,7 +133,7 @@ export function duplicatePlan(id: string, newName?: string): string | null {
     }
   }
 
-  return savePlan(clone) ? newId : null;
+  return savePlan(clone).ok ? newId : null;
 }
 
 export function deletePlan(id: string): boolean {
@@ -176,7 +181,7 @@ export function moveSession(
     toWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
   }
 
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 /**
@@ -218,7 +223,7 @@ export function duplicateSession(
   if (!copy.paceNotes) delete copy.paceNotes;
 
   week.sessions.splice(sessionIndex + 1, 0, copy);
-  return savePlan(plan) ? sessionIndex + 1 : null;
+  return savePlan(plan).ok ? sessionIndex + 1 : null;
 }
 
 export function deleteSessionFromPlan(
@@ -236,7 +241,7 @@ export function deleteSessionFromPlan(
   if (sessionIndex < 0 || sessionIndex >= week.sessions.length) return false;
 
   week.sessions.splice(sessionIndex, 1);
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 /**
@@ -308,14 +313,14 @@ export function updateSessionCompletion(
   weekNumber: number,
   sessionIndex: number,
   completion: SessionCompletionData,
-): boolean {
+): Outcome {
   const plans = getAllPlans();
   const planIdx = plans.findIndex(p => p.id === planId);
-  if (planIdx === -1) return false;
+  if (planIdx === -1) return failed("notFound");
 
   const plan = plans[planIdx];
   const week = plan.weeks.find(w => w.weekNumber === weekNumber);
-  if (!week || sessionIndex < 0 || sessionIndex >= week.sessions.length) return false;
+  if (!week || sessionIndex < 0 || sessionIndex >= week.sessions.length) return failed("notFound");
 
   const session = week.sessions[sessionIndex];
   session.status = completion.status;
@@ -337,9 +342,9 @@ export function updateSessionCompletion(
 
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
-    return true;
-  } catch {
-    return false;
+    return OK;
+  } catch (err) {
+    return failed(err);
   }
 }
 
@@ -373,7 +378,7 @@ export async function addSessionToPlan(
 
   week.sessions.push(newSession);
   week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 /**
@@ -396,7 +401,7 @@ export function pushSessionToPlan(
   if (!week) return null;
   week.sessions.push(session);
   week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  return savePlan(plan) ? week.sessions.indexOf(session) : null;
+  return savePlan(plan).ok ? week.sessions.indexOf(session) : null;
 }
 
 // ── Cross-training ──────────────────────────────────────────────────
@@ -413,7 +418,7 @@ export function addCrossTraining(
   if (!week.crossTraining) week.crossTraining = [];
   week.crossTraining.push(session);
   week.crossTraining.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 export function deleteCrossTraining(
@@ -426,7 +431,7 @@ export function deleteCrossTraining(
   const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
   if (!week?.crossTraining) return false;
   week.crossTraining = week.crossTraining.filter((s) => s.id !== sessionId);
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 // ── Unavailabilities ───────────────────────────────────────────────
@@ -439,7 +444,7 @@ export function updateUnavailabilities(
   const plan = plans.find(p => p.id === planId);
   if (!plan) return false;
   plan.config.unavailabilities = unavailabilities;
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 // ── Fusionner une semaine seule dans un plan ───────────────────────

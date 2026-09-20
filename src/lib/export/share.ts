@@ -14,6 +14,7 @@
  */
 
 import type { RefObject } from "react";
+import { AppFailure } from "@/lib/failure";
 import { THEME_COLOR, documentTheme } from "@/lib/theme";
 import { triggerDownload } from "./download";
 
@@ -136,7 +137,7 @@ export async function renderPng(
         toPng(element, { ...options, fontEmbedCSS }),
         new Promise<never>((_, reject) => {
           timer = setTimeout(
-            () => reject(new Error("PNG capture timed out")),
+            () => reject(new AppFailure("timeout", "PNG capture timed out")),
             CAPTURE_TIMEOUT_MS,
           );
         }),

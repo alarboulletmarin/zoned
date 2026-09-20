@@ -197,11 +197,12 @@ export function TrackFinderPage() {
 
   const onSave = useCallback(async () => {
     if (!route) return;
-    if (await saveRoute(route)) {
+    const saved = await saveRoute(route);
+    if (saved.ok) {
       toast.success(t("result.saved"));
       navigate(`/routes/${route.id}`);
     } else {
-      toast.error(t("result.saveFailed"));
+      toast.failure(t("result.saveFailed"), saved);
     }
   }, [route, saveRoute, t, navigate]);
 

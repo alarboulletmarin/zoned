@@ -21,6 +21,7 @@ function getDismissedIds(): string[] {
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : [];
   } catch {
+    // Unreadable: no tip was dismissed, they all show again. Harmless.
     return [];
   }
 }

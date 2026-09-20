@@ -305,11 +305,12 @@ export function RouteGeneratorPage() {
       estimatedDurationSec: displayDurationSec || route.estimatedDurationSec,
       ...(trainingPreset?.planSessionRef ? { planSessionRef: trainingPreset.planSessionRef } : {}),
     };
-    if (await saveRoute(routeToSave)) {
+    const saved = await saveRoute(routeToSave);
+    if (saved.ok) {
       toast.success(t("result.saved"));
       navigate(`/routes/${routeToSave.id}`);
     } else {
-      toast.error(t("result.saveFailed"));
+      toast.failure(t("result.saveFailed"), saved);
     }
   };
 

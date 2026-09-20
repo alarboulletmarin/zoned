@@ -136,8 +136,9 @@ export function SharedWeekPage() {
   const handleAdd = () => {
     // A fresh copy, with its own id: the preview stays what the URL says.
     const plan = sharedWeekToPlan(payload, new Set(byId.keys()));
-    if (!savePlan(plan)) {
-      toast.error(t("weekly.toast.saveFailed", { defaultValue: "Échec de l'enregistrement" }));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("weekly.toast.saveFailed"), saved);
       return;
     }
     triggerStorageWarning();

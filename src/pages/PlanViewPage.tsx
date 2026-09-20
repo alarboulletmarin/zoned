@@ -322,11 +322,14 @@ export function PlanViewPage() {
     if (!plan) return;
     const fixed = applyAuditFix(plan, finding);
     if (fixed) {
-      savePlan(fixed);
+      const saved = savePlan(fixed);
+      if (!saved.ok) {
+        toast.failure(t("audit.fixFailed"), saved);
+        return;
+      }
       reloadPlan();
-      toast.success(t("audit.fixApplied"));
     } else {
-      toast.error(t("audit.fixFailed"));
+      toast.failure(t("audit.fixFailed"));
     }
   }, [plan, reloadPlan, t]);
 
@@ -421,12 +424,8 @@ export function PlanViewPage() {
     if (originalIndex === -1) return;
 
     const success = updatePlanSession(plan.id, swapTarget.weekNumber, originalIndex, workout.id);
-    if (success) {
-      reloadPlan();
-      toast.success(t("view.sessionReplaced"));
-    } else {
-      toast.error(t("view.sessionUpdateFailed"));
-    }
+    if (success) reloadPlan();
+    else toast.failure(t("view.sessionUpdateFailed"));
     setSwapTarget(null);
   }, [plan, swapTarget, isEn, reloadPlan]);
 
@@ -453,12 +452,8 @@ export function PlanViewPage() {
           isKeySession: false,
         },
       );
-      if (success) {
-        reloadPlan();
-        toast.success(t("view.sessionSubstituted"));
-      } else {
-        toast.error(t("view.sessionUpdateFailed"));
-      }
+      if (success) reloadPlan();
+      else toast.failure(t("view.sessionUpdateFailed"));
       setSubstituteTarget(null);
     },
     [plan, substituteTarget, reloadPlan, t],
@@ -482,23 +477,15 @@ export function PlanViewPage() {
       return;
     }
     const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay);
-    if (success) {
-      reloadPlan();
-      toast.success(t("view.sessionMoved"));
-    } else {
-      toast.error(t("view.sessionMoveFailed"));
-    }
+    if (success) reloadPlan();
+    else toast.failure(t("view.sessionMoveFailed"));
   }, [plan, isEn, reloadPlan, blockedDaysSet, t]);
 
   const handleSessionDelete = useCallback((weekNumber: number, sessionIndex: number) => {
     if (!plan) return;
     const success = deleteSessionFromPlan(plan.id, weekNumber, sessionIndex);
-    if (success) {
-      reloadPlan();
-      toast.success(t("view.sessionDeleted"));
-    } else {
-      toast.error(t("view.sessionDeleteFailed"));
-    }
+    if (success) reloadPlan();
+    else toast.failure(t("view.sessionDeleteFailed"));
   }, [plan, isEn, reloadPlan]);
 
   // Run adaptation on a week if all sessions are resolved
@@ -551,7 +538,7 @@ export function PlanViewPage() {
     );
 
     if (!success) {
-      toast.error(t("errors.planSaveFailed"));
+      toast.failure(t("errors.planSaveFailed"));
       return;
     }
     reloadPlan();
@@ -583,13 +570,12 @@ export function PlanViewPage() {
   const handleCompletionSave = useCallback((data: import("@/lib/planStorage").SessionCompletionData) => {
     if (!plan || !completionTarget) return;
     const { weekNumber, sessionIndex } = completionTarget;
-    const success = updateSessionCompletion(plan.id, weekNumber, sessionIndex, data);
-    if (!success) {
-      toast.error(t("errors.planSaveFailed"));
+    const saved = updateSessionCompletion(plan.id, weekNumber, sessionIndex, data);
+    if (!saved.ok) {
+      toast.failure(t("errors.planSaveFailed"), saved);
       return;
     }
     reloadPlan();
-    toast.success(t("completion.saved"));
     setCompletionTarget(null);
     // Auto-trigger adaptation if all sessions in the week are now resolved
     runAdaptationIfReady(weekNumber, false);
@@ -730,29 +716,27 @@ export function PlanViewPage() {
         estimatedDurationMin: 0,
       });
       week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-      if (!savePlan(plan)) {
-        toast.error(t("errors.planSaveFailed"));
+      const saved = savePlan(plan);
+      if (!saved.ok) {
+        toast.failure(t("errors.planSaveFailed"), saved);
         return;
       }
       reloadPlan();
-      toast.success(t("view.activityAdded"));
       return;
     }
 
     const success = await addSessionToPlan(plan.id, weekNumber, workoutId, day);
-    if (success) {
-      reloadPlan();
-      toast.success(t("view.workoutAdded"));
-    } else {
-      toast.error(t("view.workoutAddFailed"));
-    }
+    if (success) reloadPlan();
+    else toast.failure(t("view.workoutAddFailed"));
   }, [plan, isEn, reloadPlan]);
 
   const handleSaveUnavailabilities = useCallback((items: Unavailability[]) => {
     if (!plan) return;
-    updateUnavailabilities(plan.id, items);
+    if (!updateUnavailabilities(plan.id, items)) {
+      toast.failure(t("errors.planSaveFailed"));
+      return;
+    }
     reloadPlan();
-    toast.success(t("unavailability.saved"));
     setShowUnavailabilityManager(false);
   }, [plan, reloadPlan, t]);
 
@@ -778,7 +762,7 @@ export function PlanViewPage() {
     );
 
     if (!success) {
-      toast.error(t("errors.planSaveFailed"));
+      toast.failure(t("errors.planSaveFailed"));
       return;
     }
     reloadPlan();
@@ -1013,12 +997,9 @@ export function PlanViewPage() {
                   const trimmed = editName.trim();
                   if (trimmed && trimmed !== planName) {
                     plan.config.planName = trimmed;
-                    if (savePlan(plan)) {
-                      reloadPlan();
-                      toast.success(t("view.nameUpdated"));
-                    } else {
-                      toast.error(t("errors.planSaveFailed"));
-                    }
+                    const saved = savePlan(plan);
+                    if (saved.ok) reloadPlan();
+                    else toast.failure(t("errors.planSaveFailed"), saved);
                   }
                   setIsEditingName(false);
                 }}
@@ -2457,13 +2438,13 @@ export function PlanViewPage() {
                     delete plan.config.startDate;
                     delete plan.config.endDate;
                   }
-                  if (!savePlan(plan)) {
-                    toast.error(t("errors.planSaveFailed"));
+                  const saved = savePlan(plan);
+                  if (!saved.ok) {
+                    toast.failure(t("errors.planSaveFailed"), saved);
                     return;
                   }
                   reloadPlan();
                   setShowDateDialog(false);
-                  toast.success(t("view.datesUpdated"));
                 }}
               >
                 {t("view.save")}

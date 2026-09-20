@@ -215,10 +215,11 @@
       "downloaded": "Image enregistrée",
       "copied": "Image copiée dans le presse-papier",
       "linkCopied": "Lien copié dans le presse-papier",
-      "linkCopyFailed": "Copie impossible : ton navigateur a bloqué le presse-papier. Réessaie.",
+      "linkCopyFailed": "Le lien n'a pas été copié.",
+      "textCopyFailed": "Le texte n'a pas été copié.",
       "copyUnsupported": "Copie image dispo uniquement en HTTPS (utilise Enregistrer ou Partager)",
       "loading": "Génération de l'image…",
-      "error": "Erreur lors de la génération"
+      "error": "L'image n'a pas pu être générée."
     }
   },
   "export": {
@@ -240,10 +241,10 @@
       "garmin": "Fichier Garmin exporté"
     },
     "error": {
-      "calendar": "L'export calendrier a échoué. Réessaie.",
-      "image": "L'export image a échoué. Réessaie.",
-      "pdf": "L'export PDF a échoué. Réessaie.",
-      "garmin": "L'export Garmin a échoué. Réessaie."
+      "calendar": "L'export calendrier a échoué.",
+      "image": "L'export image a échoué.",
+      "pdf": "L'export PDF a échoué.",
+      "garmin": "L'export Garmin a échoué."
     },
     "loading": {
       "calendar": "Génération du calendrier…",
@@ -462,7 +463,7 @@
   "errors": {
     "workoutNotFound": "Séance non trouvée",
     "generic": "L'action n'a pas abouti. Réessaie dans un instant.",
-    "planSaveFailed": "Impossible d'enregistrer le plan (espace de stockage insuffisant).",
+    "planSaveFailed": "Le plan n'a pas été enregistré.",
     "notFound": {
       "title": "Page introuvable",
       "description": "La page que tu cherches n'existe pas ou a été déplacée.",
@@ -767,7 +768,7 @@
     "fitGarminOnly": "Le FIT ne marche que sur Garmin. Ailleurs, recrée la séance à la main dans l'app de ta montre.",
     "copyInstructions": "Copier les instructions",
     "instructionsCopied": "Instructions copiées !",
-    "copyFailed": "Erreur de copie",
+    "copyFailed": "Les instructions n'ont pas été copiées.",
     "gotIt": "Compris",
     "osPath": {
       "windows": "Explorateur de fichiers → Ce PC → GARMIN",
@@ -955,6 +956,17 @@
       "corosPath": "Créer",
       "applePath": "Exercice → Créer (watchOS 9+)"
     }
+  },
+  "failure": {
+    "quota": "Le stockage du navigateur est plein, rien n'a été écrit. Tes données déjà enregistrées sont intactes. Libère de la place en supprimant un plan, une semaine ou un parcours, ou exporte une sauvegarde depuis les réglages.",
+    "invalid": "Les données ont été refusées à la vérification, rien n'a été écrit. Ce qui était enregistré est intact. Recharge la page et réessaie.",
+    "notFound": "L'élément n'existe plus dans ce navigateur, peut-être supprimé depuis un autre onglet. Rien d'autre n'a bougé. Recharge la page pour voir l'état à jour.",
+    "limit": "La limite d'éléments enregistrés est atteinte, rien n'a été ajouté. Supprime-en un pour libérer une place.",
+    "timeout": "Le rendu a pris trop de temps et a été interrompu. Rien n'a été perdu. Réessaie, et ferme les onglets lourds si ça se reproduit.",
+    "offline": "Tu es hors ligne et cette action a besoin du réseau. Tes données restent accessibles. Réessaie une fois la connexion rétablie.",
+    "denied": "Le navigateur a refusé l'accès au presse-papier ou au partage. Rien n'a été perdu. Autorise-le depuis la barre d'adresse, ou passe par Enregistrer.",
+    "unsupported": "Ce navigateur ne prend pas cette fonction en charge. Rien n'a été perdu. Essaie avec une version récente de Chrome, Firefox ou Safari, ou passe par Enregistrer.",
+    "unknown": "Une erreur inattendue s'est produite, rien n'a été modifié. Réessaie, et recharge la page si ça se reproduit."
   },
   "alert": {
     "error": "Erreur",

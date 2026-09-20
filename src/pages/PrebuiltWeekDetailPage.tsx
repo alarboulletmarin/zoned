@@ -103,8 +103,9 @@ export function PrebuiltWeekDetailPage() {
 
   const handleUse = () => {
     const plan = prebuiltWeekToPlan(week);
-    if (!savePlan(plan)) {
-      toast.error(t("weekly.toast.saveFailed", { defaultValue: "Échec de l'enregistrement" }));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("weekly.toast.saveFailed"), saved);
       return;
     }
     triggerStorageWarning();

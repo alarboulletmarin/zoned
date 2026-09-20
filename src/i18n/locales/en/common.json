@@ -215,10 +215,11 @@
       "downloaded": "Image saved",
       "copied": "Image copied to clipboard",
       "linkCopied": "Link copied to clipboard",
-      "linkCopyFailed": "Copy blocked by your browser. Try again.",
+      "linkCopyFailed": "The link was not copied.",
+      "textCopyFailed": "The text was not copied.",
       "copyUnsupported": "Image copy requires HTTPS (use Save or Share)",
       "loading": "Generating image…",
-      "error": "Generation failed"
+      "error": "The image could not be generated."
     }
   },
   "export": {
@@ -240,10 +241,10 @@
       "garmin": "Garmin file exported"
     },
     "error": {
-      "calendar": "Calendar export failed. Try again.",
-      "image": "Image export failed. Try again.",
-      "pdf": "PDF export failed. Try again.",
-      "garmin": "Garmin export failed. Try again."
+      "calendar": "Calendar export failed.",
+      "image": "Image export failed.",
+      "pdf": "PDF export failed.",
+      "garmin": "Garmin export failed."
     },
     "loading": {
       "calendar": "Generating calendar…",
@@ -462,7 +463,7 @@
   "errors": {
     "workoutNotFound": "Workout not found",
     "generic": "That didn't go through. Try again in a moment.",
-    "planSaveFailed": "Couldn't save the plan (not enough storage space).",
+    "planSaveFailed": "The plan was not saved.",
     "notFound": {
       "title": "Page not found",
       "description": "The page you are looking for does not exist or has been moved.",
@@ -767,7 +768,7 @@
     "fitGarminOnly": "FIT export is compatible with Garmin watches only. For other brands, recreate this workout manually in your watch's companion app.",
     "copyInstructions": "Copy workout instructions",
     "instructionsCopied": "Instructions copied!",
-    "copyFailed": "Failed to copy",
+    "copyFailed": "The instructions were not copied.",
     "gotIt": "Got it",
     "osPath": {
       "windows": "File Explorer → This PC → GARMIN",
@@ -955,6 +956,17 @@
       "corosPath": "Create",
       "applePath": "Workout → Create (watchOS 9+)"
     }
+  },
+  "failure": {
+    "quota": "The browser's storage is full, nothing was written. What you had saved is intact. Free some room by deleting a plan, a week or a route, or export a backup from the settings.",
+    "invalid": "The data was refused by validation, nothing was written. What was saved is intact. Reload the page and try again.",
+    "notFound": "This item no longer exists in this browser, maybe deleted from another tab. Nothing else moved. Reload the page to see the current state.",
+    "limit": "The limit of saved items is reached, nothing was added. Delete one to free a slot.",
+    "timeout": "The render took too long and was interrupted. Nothing was lost. Try again, and close heavy tabs if it happens again.",
+    "offline": "You are offline and this action needs the network. Your data stays available. Try again once the connection is back.",
+    "denied": "The browser refused access to the clipboard or the share sheet. Nothing was lost. Allow it from the address bar, or use Save instead.",
+    "unsupported": "This browser does not support this feature. Nothing was lost. Try a recent Chrome, Firefox or Safari, or use Save instead.",
+    "unknown": "Something unexpected happened, nothing was changed. Try again, and reload the page if it happens again."
   },
   "alert": {
     "error": "Error",

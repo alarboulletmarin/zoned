@@ -3,6 +3,7 @@ import { toast as sonner } from "sonner";
 import { useTranslation } from "react-i18next";
 import { AlertTriangle, Check, Info, Loader2, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { failureReason, type FailureReason } from "@/lib/failure";
 
 /**
  * The house toast: the only way the app is allowed to speak from the corner.
@@ -29,6 +30,12 @@ import { Button } from "@/components/ui/button";
  * own: the caller resolves it into a success or an error under the same id,
  * and the guard against a promise that never settles lives at the call site
  * (`renderPng` in `lib/export/share.ts` is the model).
+ *
+ * An error is reported through `toast.failure(title, cause)`: the title says
+ * what did not happen, in the caller's words, and the cause, whatever the
+ * `catch` received, becomes the second line through `lib/failure`, the same
+ * three beats everywhere: what happened, what is intact, what to do. A
+ * dismissed native sheet (`cancelled`) shows nothing.
  */
 export type ToastKind = "success" | "error" | "warning" | "info" | "loading";
 
@@ -88,17 +95,21 @@ function ToastCard({
   kind,
   title,
   description,
+  reason,
   action,
   onClose,
 }: {
   kind: ToastKind;
   title: ReactNode;
   description?: ReactNode;
+  /** Said under the title when no description is given, in the house words. */
+  reason?: FailureReason;
   action?: ToastAction;
   onClose: () => void;
 }) {
   const { t } = useTranslation("common");
   const Glyph = GLYPH[kind];
+  const text = description ?? (reason ? t(`failure.${reason}`) : null);
 
   return (
     <div className="zn-toast" data-kind={kind}>
@@ -111,7 +122,7 @@ function ToastCard({
             alone, and a toast is read in the corner of the eye. */}
         <span className="zn-toast__kind">{t(`alert.${kind}`)}</span>
         <span className="zn-toast__title">{title}</span>
-        {description ? <span className="zn-toast__text">{description}</span> : null}
+        {text ? <span className="zn-toast__text">{text}</span> : null}
         {action ? (
           <span className="zn-toast__actions">
             <Button
@@ -144,7 +155,12 @@ function ToastCard({
   );
 }
 
-function show(kind: ToastKind, title: ReactNode, options: ToastOptions = {}) {
+function show(
+  kind: ToastKind,
+  title: ReactNode,
+  options: ToastOptions = {},
+  reason?: FailureReason,
+) {
   const { id, description, action, duration } = options;
   return sonner.custom(
     (toastId) => (
@@ -152,6 +168,7 @@ function show(kind: ToastKind, title: ReactNode, options: ToastOptions = {}) {
         kind={kind}
         title={title}
         description={description}
+        reason={reason}
         action={action}
         onClose={() => sonner.dismiss(toastId)}
       />
@@ -160,9 +177,24 @@ function show(kind: ToastKind, title: ReactNode, options: ToastOptions = {}) {
   );
 }
 
+/**
+ * An error with its cause. `cause` is whatever the `catch` received, an
+ * `Outcome` a helper answered, or a bare reason; `undefined` reads as unknown
+ * and still gets the honest generic line rather than nothing.
+ */
+function failure(title: ReactNode, cause?: unknown, options: ToastOptions = {}) {
+  const reason = failureReason(cause);
+  if (reason === "cancelled") {
+    if (options.id !== undefined) sonner.dismiss(options.id);
+    return options.id;
+  }
+  return show("error", title, options, reason);
+}
+
 export const toast = {
   success: (title: ReactNode, options?: ToastOptions) => show("success", title, options),
   error: (title: ReactNode, options?: ToastOptions) => show("error", title, options),
+  failure,
   warning: (title: ReactNode, options?: ToastOptions) => show("warning", title, options),
   info: (title: ReactNode, options?: ToastOptions) => show("info", title, options),
   loading: (title: ReactNode, options?: ToastOptions) => show("loading", title, options),

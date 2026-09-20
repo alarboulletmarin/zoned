@@ -103,8 +103,9 @@ export function SharedPlanPage() {
   ].join(" · ");
 
   const handleAdd = () => {
-    if (!savePlan(plan)) {
-      toast.error(t("errors.planSaveFailed"));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("errors.planSaveFailed"), saved);
       return;
     }
     triggerStorageWarning();

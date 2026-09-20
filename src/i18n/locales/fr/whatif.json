@@ -87,10 +87,7 @@
     "title": "La comparaison n'a pas abouti",
     "intact": "Tes réglages sont conservés : relance la comparaison."
   },
-  "toast": {
-    "saved": "Scénario sauvegardé",
-    "deleted": "Scénario supprimé"
-  },
+  "toast": {},
   "saveDialog": {
     "description": "Donne un nom à ta comparaison pour la retrouver plus tard.",
     "placeholder": "ex. 10K : 3x vs 5x/sem",

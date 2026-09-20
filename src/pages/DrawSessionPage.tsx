@@ -130,6 +130,8 @@ function readDrawSnapshot(): Partial<DrawSnapshot> {
     const raw = sessionStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as Partial<DrawSnapshot>) : {};
   } catch {
+    // The snapshot is a convenience for the back button; unreadable, it is
+    // simply absent and the draw starts from its defaults.
     return {};
   }
 }
