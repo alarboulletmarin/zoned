@@ -10,7 +10,7 @@ import {
 } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 
 import { Activity, ArrowLeftRight, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Download, EyeOff, Loader2, Maximize2, Minimize2, Pencil, RotateCcw, Save, TrendingUp, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";

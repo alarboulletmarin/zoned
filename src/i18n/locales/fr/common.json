@@ -960,7 +960,8 @@
     "error": "Erreur",
     "success": "Succès",
     "warning": "Attention",
-    "info": "Info"
+    "info": "Info",
+    "loading": "En cours"
   },
   "status": {
     "loading": "Chargement"

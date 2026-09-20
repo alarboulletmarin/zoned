@@ -24,7 +24,7 @@ import { isMac } from "@/lib/platform";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { useFavorites } from "@/hooks";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { sharedWorkoutUrl } from "@/lib/share/workoutShare";
 import {
   getCustomWorkout,

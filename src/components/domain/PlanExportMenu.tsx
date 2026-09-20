@@ -14,7 +14,7 @@ import { triggerDownload } from "@/lib/export/download";
 import { planFilename } from "@/lib/export/planFilename";
 import { getWorkoutById } from "@/data/workouts";
 import { preparePlanForStorage } from "@/lib/planSchema";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import type { TrainingPlan } from "@/types/plan";
 import type { AnyWorkoutTemplate } from "@/types";
 import { pickLang } from "@/lib/i18n-utils";

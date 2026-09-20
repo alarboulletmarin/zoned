@@ -72,7 +72,7 @@ import type { SavedSimulation } from "@/lib/raceSimStorage";
 import { useSettings } from "@/hooks/useSettings";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { convertPace, getPaceUnit } from "@/lib/units";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
 import { useIsEnglish, usePickLang, formatDate } from "@/lib/i18n-utils";
 

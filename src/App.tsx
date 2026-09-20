@@ -9,7 +9,8 @@ import {
 import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { TopBar, Footer } from "@/components/layout";
 import { ModuleGate } from "@/components/layout/ModuleGate";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -206,7 +207,13 @@ function App() {
   // Toaster placement: bottom-right covers the share-sheet action row on
   // mobile (Copier / Partager / Télécharger). On small viewports we surface
   // the toast at the top instead so it never overlaps a button the user just
-  // tapped, and dismiss it slightly faster.
+  // tapped.
+  //
+  // How long a toast stays is not decided here either: `components/ui/toast`
+  // holds one duration per kind (a confirmation leaves, an error stays long
+  // enough to be read), the same on every screen. The drawing is ours too,
+  // through `toast.custom`, so sonner gets no `richColors`, no `closeButton`
+  // and no theme: it only places and times what we hand it.
   //
   // Ou il se pose exactement, c'est `toast.css` qui le dit : il doit franchir
   // la barre du haut, sauf quand une feuille modale occupe deja l'ecran, et
@@ -382,11 +389,11 @@ function App() {
               keeps placing and sizing its own list. */}
           <div className="zn-toast-layer">
             <Toaster
-              richColors
-              closeButton
               position={isMobile ? "top-center" : "bottom-right"}
-              duration={isMobile ? 2500 : 4000}
-
+              /* Two at once, not three: the newest and, behind it, the one
+                 pinned notice the app keeps (offline). A burst of
+                 confirmations replaces itself instead of piling up. */
+              visibleToasts={2}
             />
           </div>
           </BrowserRouter>

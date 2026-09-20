@@ -46,7 +46,7 @@ import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import Plank from "@/assets/doodles/plank.svg?react";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { copyToClipboard } from "@/lib/issueBuilder";
 import { buildStravaShareText } from "@/lib/export";
 import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
