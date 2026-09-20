@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Copy, Route as RouteIcon } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Copy } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -60,7 +60,6 @@ interface PlanWeeklyViewProps {
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
   /** "Ma semaine": copy a session onto its day, to be dragged where it goes. */
   onSessionDuplicate?: (weekNumber: number, sessionIndex: number) => void;
-  onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
   /** "Ma semaine": lock a session so it survives week (re)generation. */
   onToggleLock?: (weekNumber: number, sessionIndex: number) => void;
@@ -72,7 +71,6 @@ interface PlanWeeklyViewProps {
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
   onWeekChange?: (week: number) => void;
-  onFindWeekRoute?: (weekNumber: number) => void;
   blockedDays?: Set<string>;
   /** Standalone "Ma semaine": hide week nav + free-plan guide, rest cards on empty days. */
   singleWeek?: boolean;
@@ -98,7 +96,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onSessionMove,
   onSessionDelete,
   onSessionDuplicate,
-  onFindRoute,
   onToggleComplete,
   onToggleLock,
   onRedraw,
@@ -107,7 +104,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onWorkoutAdd,
   onAddToDay,
   onWeekChange,
-  onFindWeekRoute,
   blockedDays,
   singleWeek = false,
   tapOpensSession = false,
@@ -580,16 +576,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           return null;
         })()}
 
-        {weekData && onFindWeekRoute && (
-          <button
-            type="button"
-            onClick={() => onFindWeekRoute(selectedWeek)}
-            className="zn-planweek__pill"
-          >
-            <RouteIcon />
-            {t("view.findWeekRoute")}
-          </button>
-        )}
 
         {/* ── Week guidance (free plans only) ── */}
         {weekData && plan.config.planMode === "free" && !singleWeek && (
@@ -661,7 +647,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         onTouchMove={handleTouchMove}
                         onTouchEnd={handleTouchEnd}
                         onSessionClick={onSessionClick}
-                        onFindRoute={onFindRoute}
                         onToggleComplete={onToggleComplete}
                         onToggleLock={onToggleLock}
                         onRedraw={onRedraw}
@@ -723,7 +708,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                     onSessionClick={onSessionClick}
-                    onFindRoute={onFindRoute}
                     onToggleComplete={onToggleComplete}
                     onToggleLock={onToggleLock}
                     onRedraw={onRedraw}
@@ -816,12 +800,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                   contextMenu.workoutId,
                 ),
             },
-            onFindRoute && {
-              key: "route",
-              icon: <RouteIcon />,
-              label: t("view.findRoute"),
-              onSelect: () => onFindRoute(contextMenu.weekNumber, contextMenu.sessionIndex),
-            },
             onToggleComplete && {
               key: "done",
               icon: (
@@ -901,7 +879,6 @@ interface DayCellProps {
   onTouchMove: (e: React.TouchEvent) => void;
   onTouchEnd: () => void;
   onSessionClick?: (weekNumber: number, sessionIndex: number, workoutId: string) => void;
-  onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
   onToggleLock?: (weekNumber: number, sessionIndex: number) => void;
   onRedraw?: (weekNumber: number, sessionIndex: number) => void;
@@ -944,7 +921,6 @@ const DayCell = memo(function DayCell({
   onTouchMove,
   onTouchEnd,
   onSessionClick,
-  onFindRoute,
   onToggleComplete,
   onToggleLock,
   onRedraw,
@@ -1117,19 +1093,6 @@ const DayCell = memo(function DayCell({
                       stays visible once set. Touch users reach them through the
                       long-press context menu. */}
                   <div className="zn-sess__actions">
-                    {onFindRoute && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onFindRoute(selectedWeek, originalIndex);
-                        }}
-                        className="zn-sess__action"
-                        title={t("view.findRoute")}
-                      >
-                        <RouteIcon />
-                      </button>
-                    )}
                     {onRedraw && isRedrawable(session.workoutId) && !session.locked && (
                       <button
                         type="button"

@@ -72,11 +72,10 @@ interface AboutRow {
  * is reported to the cleanup lot rather than deleted here.
  */
 export function SettingsPage() {
-  const { t, i18n } = useTranslation(["common", "routes", "content"]);
+  const { t, i18n } = useTranslation(["common", "content"]);
   const {
     settings,
     setUnitSystem,
-    setRouteGeneratorEnabled,
     setOpeningAnimation,
     setEnabledPractices,
     setModuleHidden,
@@ -383,36 +382,6 @@ export function SettingsPage() {
                       },
                     ]}
                   />
-                </div>
-
-                {/* The one feature that emits a coordinate to a public
-                    service, so it keeps its own switch and its caveat. */}
-                <div className="zn-set__toggle">
-                  <div
-                    className="zn-row zn-row--split zn-row--start"
-                    style={{ "--gap": "var(--sp-10)" } as CSSProperties}
-                  >
-                    <label
-                      className="zn-label zn-fill"
-                      htmlFor="settings-routes"
-                    >
-                      {t("routes:privacy.toggle")}
-                    </label>
-                    <Switch
-                      id="settings-routes"
-                      aria-describedby="settings-routes-hint"
-                      className="zn-fixed"
-                      checked={settings.routeGeneratorEnabled}
-                      onCheckedChange={setRouteGeneratorEnabled}
-                    />
-                  </div>
-                  <p
-                    id="settings-routes-hint"
-                    className="zn-caption zn-muted"
-                    style={{ marginBlockStart: "var(--sp-4)" }}
-                  >
-                    {t("settingsPage.routesCaveat")}
-                  </p>
                 </div>
               </CardContent>
             </Card>

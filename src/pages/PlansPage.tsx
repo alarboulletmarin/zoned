@@ -263,14 +263,13 @@ export function PlansPage() {
           </div>
 
           <div className="zn-cluster">
-            {/* L'import reste possible à zéro plan, mais dans la note de
-                l'état vide, en prose : un état vide n'a qu'une action. */}
-            {planCount > 0 && (
-              <Button variant="outline" onClick={handleImport}>
-                <Upload />
-                {t("plansPage.import")}
-              </Button>
-            )}
+            {/* L'import reste en tête même à zéro plan : c'est la voie de
+                quelqu'un qui arrive avec un fichier, et elle ne concurrence
+                pas la création, elle la précède. */}
+            <Button variant="outline" onClick={handleImport}>
+              <Upload />
+              {t("plansPage.import")}
+            </Button>
             {/* Sur une étagère vide, la création est dans l'état vide, avec
                 l'explication ; la répéter ici, même en contour, faisait deux
                 boutons du même nom sur un même écran. Elle revient en tête,
@@ -337,14 +336,6 @@ export function PlansPage() {
                     <ArrowRight />
                   </Link>
                 </Button>
-              }
-              hint={
-                <>
-                  {t("plansPage.importHint")}{" "}
-                  <Button variant="link" onClick={handleImport}>
-                    {t("plansPage.importHintLink")}
-                  </Button>
-                </>
               }
             />
           </section>

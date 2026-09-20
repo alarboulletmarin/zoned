@@ -145,9 +145,9 @@ export const PRIMARY_NAV: NavSection[] = [
  * Chacun est un module que les réglages peuvent masquer, d'où le champ
  * `module` : masquer retire la ligne, la route reste (`ModuleGate.tsx`).
  *
- * Ce qui n'est PAS ici, et pourquoi : le générateur de parcours en est
- * sorti le 18 septembre 2026, sur décision du propriétaire, il se joint par
- * le pied de page, la palette et le hub des calculateurs. Les comparatifs,
+ * Ce qui n'est PAS ici, et pourquoi : le générateur de parcours a quitté
+ * la nav le 18 septembre 2026 puis l'app le 20, sur décision du
+ * propriétaire (8 visiteurs en un mois, aucun retour). Les comparatifs,
  * les nouveautés, la contribution et le dépôt sont des pages du projet, pas
  * de l'entraînement ; elles vivent dans le pied de page, dans la palette et
  * dans le menu de compte du bureau. La liste des écartées de
@@ -237,8 +237,6 @@ export const FOOTER_GROUPS: { titleKey: string; links: FooterLink[] }[] = [
       { labelKey: "common:topnav.weeksPrebuilt", to: "/weeks/new/prebuilt" },
       { labelKey: "common:topnav.collections", to: "/collections" },
       { labelKey: "common:topnav.raceSim", to: "/race-simulator" },
-      { labelKey: "homepage:home.footer.product.routes", to: "/routes" },
-      { labelKey: "common:topnav.tracks", to: "/routes/tracks" },
     ],
   },
   {

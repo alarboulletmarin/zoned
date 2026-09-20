@@ -45,7 +45,7 @@ const CALC_GROUPS: CalcGroup[] = [
   {
     id: "race",
     titleKey: "calculators:calculateurs.groups.race",
-    members: ["splits", "equivalence", "age-graded", "race-simulator", "what-if"],
+    members: ["splits", "equivalence", "race-simulator"],
   },
 ];
 
@@ -141,16 +141,6 @@ export const CALCULATEURS: CalculateurEntry[] = [
     href: "/calculators/equivalence",
   },
   {
-    id: "age-graded",
-    kicker: "% record mondial",
-    kickerEn: "% world record",
-    title: "Performance age-graded",
-    titleEn: "Age-graded performance",
-    description: "Situe ton chrono face au record mondial de ton âge et de ton sexe.",
-    descriptionEn: "Place your time against the world record for your age and sex.",
-    href: "/calculators/age-graded",
-  },
-  {
     id: "race-simulator",
     kicker: "jour de course",
     kickerEn: "race day",
@@ -159,16 +149,6 @@ export const CALCULATEURS: CalculateurEntry[] = [
     description: "Cale horaires, allures, ravitaillements et repères mentaux avant le départ.",
     descriptionEn: "Set the schedule, paces, fuelling and mental cues before the gun.",
     href: "/race-simulator",
-  },
-  {
-    id: "what-if",
-    kicker: "deux scénarios",
-    kickerEn: "two scenarios",
-    title: "Simulateur what-if",
-    titleEn: "What-if simulator",
-    description: "Compare deux entraînements et lis l'écart semaine par semaine.",
-    descriptionEn: "Compare two training scenarios and read the gap week by week.",
-    href: "/calculators/what-if",
   },
 ];
 

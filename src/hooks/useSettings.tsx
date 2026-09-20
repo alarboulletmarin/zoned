@@ -22,7 +22,6 @@ const STORAGE_KEY = "zoned-settings";
 interface SettingsContextValue {
   settings: UserSettings;
   setUnitSystem: (unit: UnitSystem) => void;
-  setRouteGeneratorEnabled: (enabled: boolean) => void;
   setOpeningAnimation: (opening: OpeningAnimation) => void;
   setEnabledPractices: (practices: Practice[]) => void;
   setModuleHidden: (module: ModuleId, hidden: boolean) => void;
@@ -66,10 +65,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setSettings((prev) => ({ ...prev, unitSystem: unit }));
   }, []);
 
-  const setRouteGeneratorEnabled = useCallback((enabled: boolean) => {
-    setSettings((prev) => ({ ...prev, routeGeneratorEnabled: enabled }));
-  }, []);
-
   /* The launch screen paints before this hook exists, so it reads the value
      straight from localStorage via the inline script in index.html. Mirroring
      it onto the root element here keeps the two in step when the choice
@@ -102,7 +97,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       value={{
         settings,
         setUnitSystem,
-        setRouteGeneratorEnabled,
         setOpeningAnimation,
         setEnabledPractices,
         setModuleHidden,

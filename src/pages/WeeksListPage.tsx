@@ -322,17 +322,13 @@ export function WeeksListPage() {
                   e.target.value = "";
                 }}
               />
-              {/* L'import commente une planche qui existe : à zéro semaine
-                  il faisait une seconde action au-dessus de la première. */}
-              {weeks.length > 0 && (
-                <Button
-                  variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <Upload size={17} />
-                  {t("weekly.list.import")}
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload size={17} />
+                {t("weekly.list.import")}
+              </Button>
               {/* Sur une planche vide, la création est dans l'état vide,
                   avec l'explication et la seconde voie ; la répéter ici
                   faisait deux boutons identiques sur un même écran. Elle

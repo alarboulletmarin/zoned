@@ -14,7 +14,6 @@ import {
   Mountain,
   Link2,
   MoreHorizontal,
-  Route,
   Share,
   StravaIcon,
   SlidersHorizontal,
@@ -211,9 +210,6 @@ export function WorkoutDetailPage() {
   // in place instead, and one with no number to move has nothing to offer.
   const isOwnWorkout = isCustomWorkoutId(workout.id);
   const canAdjust = !isOwnWorkout && hasAdjustableParams(workout);
-  const canGenerateRoute =
-    !workout.environment.requiresTrack &&
-    (workoutDiscipline === "running" || workoutDiscipline === "cycling");
   // Plan context: duration from plan generation (volume-scaled, may differ for long runs)
   const planWeekNumber = locationState?.weekNumber;
   const planVolumePercent = locationState?.volumePercent;
@@ -406,14 +402,6 @@ export function WorkoutDetailPage() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {canGenerateRoute && (
-              <DropdownMenuItem asChild>
-                <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
-                  <Route />
-                  {t("session:actions.findRoute")}
-                </Link>
-              </DropdownMenuItem>
-            )}
 
             {canAdjust && (
               <DropdownMenuItem

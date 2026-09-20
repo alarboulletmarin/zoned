@@ -20,7 +20,6 @@ import type frContribute from "./locales/fr/contribute.json";
 import type frPlan from "./locales/fr/plan.json";
 import type frGuides from "./locales/fr/guides.json";
 import type frSimulator from "./locales/fr/simulator.json";
-import type frWhatif from "./locales/fr/whatif.json";
 import type frStrength from "./locales/fr/strength.json";
 import type frCalculators from "./locales/fr/calculators.json";
 import type frContent from "./locales/fr/content.json";
@@ -35,7 +34,6 @@ export type I18nResources = {
   plan: typeof frPlan;
   guides: typeof frGuides;
   simulator: typeof frSimulator;
-  whatif: typeof frWhatif;
   strength: typeof frStrength;
   calculators: typeof frCalculators;
   content: typeof frContent;

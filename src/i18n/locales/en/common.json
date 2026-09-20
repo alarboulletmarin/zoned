@@ -4,7 +4,7 @@
   },
   "app": {
     "name": "Zoned",
-    "tagline": "219 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans, route generator and 12 calculators. Free, no account.",
+    "tagline": "219 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans and 10 calculators. Free, no account.",
     "heroTitle": "Prepare your next",
     "heroTitleAccent": "race"
   },
@@ -429,10 +429,8 @@
     "plansNewDesc": "Assisted, free or pre-built",
     "raceSim": "Race-day simulator",
     "raceSimDesc": "Splits, nutrition and pacing for your race",
-    "routes": "Route generator",
-    "routesDesc": "Real-world loops with elevation and GPX",
     "calculatorsAll": "All calculators",
-    "calculatorsAllDesc": "12 tools, instant local computation",
+    "calculatorsAllDesc": "10 tools, instant local computation",
     "calcZones": "Training zones",
     "calcVma": "VMA from a race time",
     "calcFtp": "FTP cycling test",
@@ -457,8 +455,7 @@
     "activitiesDesc": "Your bike commutes and off-plan sessions",
     "plansPrebuilt": "Ready-made plans",
     "plansPrebuiltDesc": "Plans already written, take one as is",
-    "weeksPrebuilt": "Ready-made weeks",
-    "tracks": "Find a track"
+    "weeksPrebuilt": "Ready-made weeks"
   },
   "errors": {
     "workoutNotFound": "Workout not found",
@@ -651,7 +648,7 @@
   "stats": {
     "workoutsTitle": "workouts",
     "workoutsSubtitle": "One-click Garmin FIT export",
-    "calculatorsTitle": "12 calculators",
+    "calculatorsTitle": "10 calculators",
     "calculatorsSubtitle": "VMA, zones, splits, equivalences...",
     "simulatorTitle": "Race simulator",
     "simulatorSubtitle": "Splits, nutrition, warm-up, race day"
@@ -987,7 +984,6 @@
     "unitsHint": "Changes paces, distances and elevation.",
     "unitsMetric": "km · min/km",
     "unitsImperial": "mi · min/mi",
-    "routesCaveat": "Your position goes to a public routing service for one request. Nothing is stored.",
     "about": "About",
     "tableItem": "Item",
     "tableValue": "Value",
@@ -1029,9 +1025,6 @@
     "label": "In this section"
   },
   "modules": {
-    "routes": {
-      "name": "Routes"
-    },
     "raceSimulator": {
       "name": "Race simulator"
     },

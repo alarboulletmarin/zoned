@@ -4,7 +4,7 @@
   },
   "app": {
     "name": "Zoned",
-    "tagline": "219 séances course, 10 vélo, 10 natation, 17 renforcement, plans du 5K au marathon, générateur de parcours et 12 calculateurs. Gratuit, sans compte.",
+    "tagline": "219 séances course, 10 vélo, 10 natation, 17 renforcement, plans du 5K au marathon et 10 calculateurs. Gratuit, sans compte.",
     "heroTitle": "Prépare ton prochain",
     "heroTitleAccent": "objectif"
   },
@@ -429,10 +429,8 @@
     "plansNewDesc": "Assisté, libre ou pré-construit",
     "raceSim": "Simulateur jour J",
     "raceSimDesc": "Splits, nutrition et pacing pour ta course",
-    "routes": "Générateur de parcours",
-    "routesDesc": "Boucles réelles avec dénivelé et GPX",
     "calculatorsAll": "Tous les calculateurs",
-    "calculatorsAllDesc": "12 outils, calcul local instantané",
+    "calculatorsAllDesc": "10 outils, calcul local instantané",
     "calcZones": "Zones d'entraînement",
     "calcVma": "VMA depuis un chrono",
     "calcFtp": "Test FTP vélo",
@@ -457,8 +455,7 @@
     "activitiesDesc": "Ton vélotaf et tes séances hors plan",
     "plansPrebuilt": "Plans prêts à l'emploi",
     "plansPrebuiltDesc": "Des plans déjà écrits, à prendre tel quel",
-    "weeksPrebuilt": "Semaines prêtes à l'emploi",
-    "tracks": "Trouver une piste"
+    "weeksPrebuilt": "Semaines prêtes à l'emploi"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",
@@ -651,7 +648,7 @@
   "stats": {
     "workoutsTitle": "séances",
     "workoutsSubtitle": "Export Garmin FIT en 1 clic",
-    "calculatorsTitle": "12 calculateurs",
+    "calculatorsTitle": "10 calculateurs",
     "calculatorsSubtitle": "VMA, zones, splits, équivalences...",
     "simulatorTitle": "Simulateur de course",
     "simulatorSubtitle": "Splits, nutrition, échauffement, jour-J"
@@ -987,7 +984,6 @@
     "unitsHint": "Change les allures, les distances et les dénivelés.",
     "unitsMetric": "km · min/km",
     "unitsImperial": "mi · min/mi",
-    "routesCaveat": "Ta position part vers un service de routage public le temps d'une requête. Rien n'est stocké.",
     "about": "À propos",
     "tableItem": "Élément",
     "tableValue": "Valeur",
@@ -1029,9 +1025,6 @@
     "label": "Dans cette section"
   },
   "modules": {
-    "routes": {
-      "name": "Parcours"
-    },
     "raceSimulator": {
       "name": "Simulateur de course"
     },

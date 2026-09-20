@@ -131,16 +131,6 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     keywords: ["equivalence", "prediction", "distances", "5k", "10k", "semi", "marathon", "predict"],
   },
   {
-    id: "calc-age-graded",
-    section: "calculator",
-    title: "Performance age-graded",
-    titleEn: "Age-Graded Performance",
-    subtitle: "Compare ta performance au record mondial de ta catégorie",
-    subtitleEn: "Compare your performance to the world record for your category",
-    url: "/calculators/age-graded",
-    keywords: ["age", "age-graded", "performance", "record", "categorie", "wma"],
-  },
-  {
     id: "calc-race-simulator",
     section: "calculator",
     title: "Simulateur jour de course",
@@ -150,16 +140,6 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     url: "/race-simulator",
     keywords: ["course", "race", "simulateur", "simulator", "objectif", "chrono", "pacing", "negative split", "jour j"],
     featured: true,
-  },
-  {
-    id: "calc-what-if",
-    section: "calculator",
-    title: "Simulateur What-If",
-    titleEn: "What-If Simulator",
-    subtitle: "Compare deux scénarios d'entraînement et vois ce qui change",
-    subtitleEn: "Compare two training scenarios and visualize the differences",
-    url: "/calculators/what-if",
-    keywords: ["what-if", "scenario", "comparer", "compare", "simulation"],
   },
 
   // --- Guides ---
@@ -308,16 +288,6 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     subtitleEn: "Your saved workouts and content",
     url: "/favorites",
     keywords: ["favoris", "favorites", "enregistres", "saved", "bookmarks"],
-  },
-  {
-    id: "routes",
-    section: "page",
-    title: "Parcours",
-    titleEn: "Routes",
-    subtitle: "Génère et explore des parcours de course",
-    subtitleEn: "Generate and explore running routes",
-    url: "/routes",
-    keywords: ["parcours", "routes", "trail", "itineraire", "carte", "map", "gpx"],
   },
   {
     id: "quiz",
@@ -482,16 +452,6 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     keywords: ["allures", "pace", "chrono", "prediction", "vma", "temps"],
   },
   {
-    id: "tracks",
-    section: "page",
-    title: "Trouver une piste",
-    titleEn: "Find a track",
-    subtitle: "Les pistes d'athlétisme autour de toi",
-    subtitleEn: "Athletics tracks near you",
-    url: "/routes/tracks",
-    keywords: ["piste", "track", "stade", "athletisme", "400m"],
-  },
-  {
     id: "activities",
     section: "page",
     title: "Activités complémentaires",
@@ -500,16 +460,6 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     subtitleEn: "Your bike commutes and off-plan sessions",
     url: "/activities",
     keywords: ["velotaf", "commute", "activite", "activity", "journal", "log", "deplacement", "velo"],
-  },
-  {
-    id: "my-routes",
-    section: "page",
-    title: "Mes parcours",
-    titleEn: "My routes",
-    subtitle: "Les parcours que tu as enregistrés",
-    subtitleEn: "The routes you saved",
-    url: "/routes/mine",
-    keywords: ["mes parcours", "my routes", "enregistres", "saved", "gpx"],
   },
 ];
 

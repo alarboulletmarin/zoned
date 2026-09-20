@@ -17,7 +17,6 @@ import {
   Shuffle,
   MoreHorizontal,
   Eye,
-  Route as RouteIcon,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -96,7 +95,6 @@ import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
 import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
-import { pickWeekRouteTarget } from "@/lib/routeGenerator/recommendation";
 import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
 import Zone2 from "@/assets/doodles/zone-2.svg?react";
 import Zone3 from "@/assets/doodles/zone-3.svg?react";
@@ -648,44 +646,6 @@ export function PlanViewPage() {
       });
     }
   }, [plan, isEn, navigate]);
-
-  const handleFindRoute = useCallback((weekNumber: number, sessionIndex: number) => {
-    if (!plan) return;
-    const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
-    const session = week?.sessions[sessionIndex];
-    if (!session) return;
-    if (session.workoutId === "__race_day__" || session.workoutId === "__intermediate_race__" || session.workoutId.startsWith("__activity_")) {
-      toast.error(t("view.noRouteableSession"));
-      return;
-    }
-
-    navigate("/routes", {
-      state: {
-        planRouteSession: {
-          session,
-          planSessionRef: {
-            planId: plan.id,
-            weekNumber,
-            sessionIndex,
-          },
-        },
-      },
-    });
-  }, [plan, navigate, t]);
-
-  const handleFindWeekRoute = useCallback((weekNumber: number) => {
-    if (!plan) return;
-    const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
-    if (!week) return;
-
-    const target = pickWeekRouteTarget(week);
-    if (!target) {
-      toast.error(t("view.noRouteableSession"));
-      return;
-    }
-
-    handleFindRoute(weekNumber, target.sessionIndex);
-  }, [plan, handleFindRoute, t]);
 
   const handleAddToDay = useCallback((weekNumber: number, day: number) => {
     if (blockedDaysSet.has(`${weekNumber}-${day}`)) {
@@ -1375,7 +1335,6 @@ export function PlanViewPage() {
               minWeek={visibleMin}
               maxWeek={visibleMax}
               onWeekChange={setGuidanceWeekNum}
-              onGenerateRoute={() => handleFindWeekRoute(wn)}
             />
           ) : null;
         })()}
@@ -1393,7 +1352,6 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
-                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
@@ -1430,12 +1388,10 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
-                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
-                onFindWeekRoute={handleFindWeekRoute}
                 blockedDays={blockedDaysSet}
               />
             </div>
@@ -1465,7 +1421,6 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
-                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
@@ -1913,25 +1868,6 @@ export function PlanViewPage() {
                                         <Shuffle />
                                       </button>
                                     )}
-                                    <Link
-                                      to="/routes"
-                                      className="zn-sess__action"
-                                      state={{
-                                        planRouteSession: {
-                                          session,
-                                          planSessionRef: {
-                                            planId: plan.id,
-                                            weekNumber: week.weekNumber,
-                                            sessionIndex: originalIndex,
-                                          },
-                                        },
-                                      }}
-                                      onClick={(e) => e.stopPropagation()}
-                                      title={t("view.findRoute")}
-                                      aria-label={t("view.findRoute")}
-                                    >
-                                      <RouteIcon />
-                                    </Link>
                                     <button
                                       type="button"
                                       className="zn-sess__action"
@@ -2045,24 +1981,6 @@ export function PlanViewPage() {
                 onSelect: () =>
                   navigate(`/workout/${menuSession.workoutId}`, {
                     state: { from: "plan", planId: plan.id, planName },
-                  }),
-              });
-              items.push({
-                key: "route",
-                icon: <RouteIcon />,
-                label: t("view.findRoute"),
-                onSelect: () =>
-                  navigate("/routes", {
-                    state: {
-                      planRouteSession: {
-                        session: menuSession,
-                        planSessionRef: {
-                          planId: plan.id,
-                          weekNumber: listMenu.weekNumber,
-                          sessionIndex: listMenu.sessionIndex,
-                        },
-                      },
-                    },
                   }),
               });
             }

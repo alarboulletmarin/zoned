@@ -35,7 +35,7 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 | **17** strength sessions | full body, legs, core, plyometrics, mobility |
 | **10** cycling + **10** swimming sessions | Coggan FTP / CSS zones |
 | **10** training plans | 5K → marathon, with strength periodization |
-| **12** calculators | zones, paces, VMA, FTP, CSS, age-graded, what-if, race-day |
+| **10** calculators | zones, paces, VMA, FTP, CSS, splits, equivalence, race-day |
 | **16** collections · **12** articles · **116** glossary terms | bilingual FR / EN |
 
 ---
@@ -125,15 +125,6 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **Weekly composer** (`/weeks`): generate a balanced standalone 80/20 week (sessions count, volume, quality session) when you don't want a full plan; lock a session and re-roll the rest
 - **10 curated weeks**: first steps, aerobic base, hill block, development block, VO₂max sharpening, race-pace, peak week, big volume, recovery, gentle return; categorised, filterable and duplicable from *My weeks*
 - **Export**: PDF, ICS (Google/Apple/Outlook Calendar); weeks also import/export as JSON
-
-### Routes
-- **Route generator**: build a real-world loop or out-and-back from your position
-- **POI-aware routing**: waypoints picked from parks, promenades, greenways and beaches via Overpass
-- **3 candidates per request**: each with elevation profile, estimated duration and named POI markers
-- **Track finder**: locate athletics tracks near you and route to them
-- **GPX export** + locally saved routes (`/routes/mine`)
-- **Per-session routes**: "Trouver un parcours adapté" on a workout page pre-fills the generator with that session's distance
-- **Privacy toggle**: routing is opt-in; no coordinates leave the browser unless you enable it in Settings
 
 ### Discovery
 - **Workout draw** ("Tirer une séance", `/library/draw`): pull a random session matching your filters (discipline, duration, zones, terrain, equipment…)

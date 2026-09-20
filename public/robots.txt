@@ -12,11 +12,9 @@ Disallow: /favorites
 Disallow: /plans$
 Disallow: /plan/new/assisted
 Disallow: /plan/new/free
-Disallow: /routes/mine
 Disallow: /profile
 Disallow: /settings
 Disallow: /plan/$
-Disallow: /routes/$
 
 # Allow major social crawlers to fetch og-images and previews
 User-agent: Twitterbot

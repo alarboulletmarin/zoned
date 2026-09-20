@@ -3,8 +3,7 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { usePickLang } from "@/lib/i18n-utils";
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Lightbulb, ChevronDown, ChevronLeft, ChevronRight, Route as RouteIcon } from "@/components/icons";
+import { Lightbulb, ChevronDown, ChevronLeft, ChevronRight } from "@/components/icons";
 import { PHASE_GUIDANCE } from "@/data/guidance/phaseGuidance";
 import { tips } from "@/data/tips/data";
 import type { PlanWeek } from "@/types/plan";
@@ -22,7 +21,6 @@ interface WeekGuidancePanelProps {
   /** Max navigable week (default totalWeeks). */
   maxWeek?: number;
   onWeekChange?: (weekNumber: number) => void;
-  onGenerateRoute?: () => void;
   className?: string;
 }
 
@@ -40,7 +38,6 @@ export const WeekGuidancePanel = memo(function WeekGuidancePanel({
   minWeek = 1,
   maxWeek,
   onWeekChange,
-  onGenerateRoute,
   className,
 }: WeekGuidancePanelProps) {
   const { t } = useTranslation("plan");
@@ -209,17 +206,6 @@ export const WeekGuidancePanel = memo(function WeekGuidancePanel({
             </p>
           )}
 
-          {onGenerateRoute && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onGenerateRoute}
-              className="zn-pguide__cta"
-            >
-              <RouteIcon size={15} />
-              {t("view.findWeekRoute")}
-            </Button>
-          )}
         </div>
       )}
     </div>

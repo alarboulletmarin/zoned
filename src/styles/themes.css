@@ -5,7 +5,7 @@
    CSS now and reads `src/styles/design/*.css` directly, so most of the contract
    went out with Tailwind, every name below has a reader, and only those do:
 
-     --background, --muted          inline styles (Skeleton, MiniRouteMap)
+     --background, --muted          inline styles (Skeleton)
      --muted-foreground             the scrollbar, sessionColors.ts, a timeline
      --border, --ring               the element defaults in overrides.css
      --primary                      useZoneColors.ts
