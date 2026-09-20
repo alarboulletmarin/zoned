@@ -87,9 +87,14 @@
       "e3Link": "Méthodes"
     },
     "s02": {
-      "kicker": "Suggéré cette semaine",
-      "title": "Trois séances pour rester dans le bon volume cette semaine",
-      "body": "Sélection déterministe par semaine ISO. Ni A/B, ni boucle d'engagement."
+      "kicker": "Au hasard dans le catalogue",
+      "title": "Une course, un vélo, une nage",
+      "body": "Trois séances tirées au sort à chaque visite, une par sport. Recharge la page pour en voir d'autres.",
+      "sport": {
+        "running": "Course à pied",
+        "cycling": "Vélo",
+        "swimming": "Natation"
+      }
     },
     "s04": {
       "kicker": "Les méthodes",

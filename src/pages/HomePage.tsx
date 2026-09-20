@@ -9,7 +9,7 @@ import { useAppStats } from "@/hooks/useAppStats";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
 import { useIsEnglish } from "@/lib/i18n-utils";
-import { getISOWeek, pickWeeklyWorkouts } from "@/lib/landing-stats";
+import { getISOWeek, pickRandomWorkouts } from "@/lib/landing-stats";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
 import { DoorCard } from "@/components/domain/DoorCard";
@@ -121,21 +121,24 @@ export function HomePage() {
     enabled: libraryFetchReady,
   });
 
-  // ── Three weekly suggestions. Pick one run, one bike, one swim from the
-  // library, the deterministic week-keyed picker keeps the trio stable for
-  // the entire ISO week, which matches the editorial "issue" framing.
+  // ── Une course, un vélo, une nage, tirés au sort à chaque visite. Le trio
+  // était figé pour la semaine ISO et rien ne disait que c'étaient trois
+  // sports : chaque carte porte maintenant le sien en en-tête. Le tirage
+  // course évite les footings de récupération, qui ne montrent rien du
+  // catalogue.
   const suggested = useMemo(() => {
-    const tempo = pickWeeklyWorkouts(
+    const running = pickRandomWorkouts(
       runWorkouts,
-      (w) => (w.discipline ?? "running") === "running" && w.category === "tempo",
+      (w) => (w.discipline ?? "running") === "running" && w.category !== "recovery",
       1,
-      0,
     )[0];
-    const cycling = pickWeeklyWorkouts(cyclingWorkouts, () => true, 1, 1)[0];
-    const swimming = pickWeeklyWorkouts(swimWorkouts, () => true, 1, 2)[0];
-    return [tempo, cycling, swimming].filter(
-      (w): w is NonNullable<typeof w> => w != null,
-    );
+    const cycling = pickRandomWorkouts(cyclingWorkouts, () => true, 1)[0];
+    const swimming = pickRandomWorkouts(swimWorkouts, () => true, 1)[0];
+    return [
+      running && { sport: "running" as const, workout: running },
+      cycling && { sport: "cycling" as const, workout: cycling },
+      swimming && { sport: "swimming" as const, workout: swimming },
+    ].filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
   }, [runWorkouts, cyclingWorkouts, swimWorkouts]);
 
   // ── Plans by distance, ordered race-progression. Filter to distances that
@@ -372,8 +375,20 @@ export function HomePage() {
         {/* --gap is re-stated here: the section sets one for its own two
             columns, and custom properties inherit. */}
         <div className="zn-grid" style={{ "--gap": "var(--gap-grid)" } as CSSProperties}>
-          {suggested.map((w) => (
-            <WorkoutCard key={w.id} workout={w} />
+          {suggested.map(({ sport, workout }) => (
+            <div
+              key={workout.id}
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+            >
+              {/* Le sport au-dessus de la carte : la carte, elle, ne le dit
+                  que par le préfixe de son identifiant, CYC ou SWM, ce que
+                  personne ne lit. */}
+              <span className="zn-kicker zn-kicker--inline">
+                {t(`homepage:home.s02.sport.${sport}`)}
+              </span>
+              <WorkoutCard workout={workout} />
+            </div>
           ))}
         </div>
       </section>
