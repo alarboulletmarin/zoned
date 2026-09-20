@@ -91,7 +91,11 @@ export function VmaCalculatorPage() {
   const handleUseVma = () => {
     if (!calculatedVma) return;
     saveUserZonePrefs({ vma: calculatedVma });
-    updateBaseData({ vma: calculatedVma });
+    const saved = updateBaseData({ vma: calculatedVma });
+    if (!saved.ok) {
+      toast.failure(t("profile:base.saveFailed"), saved);
+      return;
+    }
     toast.success(t("calculators:calculateurs.vma.vmaSaved", { vma: calculatedVma }));
   };
 

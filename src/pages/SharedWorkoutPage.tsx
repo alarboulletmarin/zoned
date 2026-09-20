@@ -22,6 +22,7 @@ import {
 import { saveCustomWorkout } from "@/lib/customWorkoutStorage";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import type { WorkoutPhaseKey } from "@/types";
+import { failureReason } from "@/lib/failure";
 
 const PHASES: { key: WorkoutPhaseKey; labelKey: string }[] = [
   { key: "warmup", labelKey: "workoutBuilder.warmup" },
@@ -87,8 +88,12 @@ export function SharedWorkoutPage() {
   const handleAdd = () => {
     try {
       saveCustomWorkout(workout);
-    } catch {
-      toast.error(t("calculators:workoutBuilder.maxReached"));
+    } catch (err) {
+      const reason = failureReason(err);
+      toast.failure(
+        t(reason === "limit" ? "calculators:workoutBuilder.maxReached" : "calculators:workoutBuilder.saveFailed"),
+        reason,
+      );
       return;
     }
     toast.success(t("calculators:workoutBuilder.workoutSaved"));

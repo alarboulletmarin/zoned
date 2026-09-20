@@ -285,7 +285,6 @@
   },
   "workoutBuilder": {
     "myWorkouts": "My workouts",
-    "workoutDeleted": "Workout deleted",
     "workoutsExported": "{{count}} workout(s) exported",
     "workoutExported": "Workout exported",
     "workoutsImported": "{{count}} workout(s) imported",
@@ -312,6 +311,7 @@
     "delete": "Delete",
     "workoutSaved": "Workout saved",
     "maxReached": "Maximum 20 custom workouts reached",
+    "saveFailed": "The workout was not saved.",
     "warmup": "Warm-up",
     "mainSet": "Main set",
     "cooldown": "Cool-down",
@@ -347,7 +347,7 @@
   "raceSimulator": {
     "seoBreadcrumb": "Race Simulator",
     "pdfExported": "PDF exported",
-    "exportFailed": "Export failed",
+    "exportFailed": "PDF export failed.",
     "deleteConfirm": "Delete this simulation?",
     "cancel": "Cancel",
     "deleteDescription": "This simulation will be permanently deleted. This action cannot be undone."

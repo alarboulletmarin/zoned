@@ -1,6 +1,7 @@
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { normalizeWorkoutStructureSource } from "@/lib/workoutStructure";
 import { triggerDownload } from "@/lib/export/download";
+import { AppFailure } from "@/lib/failure";
 
 const STORAGE_KEY = "zoned-custom-workouts";
 const MAX_WORKOUTS = 20;
@@ -27,8 +28,10 @@ export function saveCustomWorkout(workout: WorkoutTemplate): void {
   if (index >= 0) {
     workouts[index] = normalized;
   } else {
+    // A named failure, so the page can tell the cap from a full storage:
+    // the two used to share one message, and only one of them was true.
     if (workouts.length >= MAX_WORKOUTS) {
-      throw new Error("Maximum custom workouts reached");
+      throw new AppFailure("limit", "Maximum custom workouts reached");
     }
     workouts.push(normalized);
   }

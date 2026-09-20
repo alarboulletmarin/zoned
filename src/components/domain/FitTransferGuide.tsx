@@ -75,8 +75,8 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
     try {
       await navigator.clipboard.writeText(formatWorkoutAsText());
       toast.success(t("fitTransfer.instructionsCopied"));
-    } catch {
-      toast.error(t("fitTransfer.copyFailed"));
+    } catch (err) {
+      toast.failure(t("fitTransfer.copyFailed"), err);
     }
   }
 

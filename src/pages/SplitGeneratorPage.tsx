@@ -152,11 +152,7 @@ export function SplitGeneratorPage() {
         { id: toastId },
       );
     } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        toast.dismiss(toastId);
-      } else {
-        toast.error(t("export.error.image"), { id: toastId });
-      }
+      toast.failure(t("export.error.image"), error, { id: toastId });
     }
   };
 

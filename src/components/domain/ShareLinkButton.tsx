@@ -42,8 +42,8 @@ export function ShareLinkButton({
     try {
       await navigator.clipboard.writeText(url);
       toast.success(t("share.toast.linkCopied"));
-    } catch {
-      toast.error(t("share.toast.linkCopyFailed"));
+    } catch (err) {
+      toast.failure(t("share.toast.linkCopyFailed"), err);
     }
   }, [buildUrl, title, t]);
 

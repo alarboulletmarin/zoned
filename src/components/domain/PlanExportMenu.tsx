@@ -89,8 +89,8 @@ export function PlanExportMenu({
       if (plan.config.isSingleWeek) await exportWeekToPDF(plan, names, templates);
       else await exportPlanToPDF(plan, names, templates);
       toast.success(t("export.success.pdf"), { id: toastId });
-    } catch {
-      toast.error(t("export.error.pdf"), { id: toastId });
+    } catch (error) {
+      toast.failure(t("export.error.pdf"), error, { id: toastId });
     } finally {
       setIsExporting(false);
     }
@@ -103,8 +103,8 @@ export function PlanExportMenu({
       const { names, templates } = await getWorkoutData();
       exportPlanToICS(plan, names, templates);
       toast.success(t("export.success.calendar"), { id: toastId });
-    } catch {
-      toast.error(t("export.error.calendar"), { id: toastId });
+    } catch (error) {
+      toast.failure(t("export.error.calendar"), error, { id: toastId });
     } finally {
       setIsExporting(false);
     }

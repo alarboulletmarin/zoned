@@ -75,6 +75,7 @@ import { convertPace, getPaceUnit } from "@/lib/units";
 import { toast } from "@/components/ui/toast";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
 import { useIsEnglish, usePickLang, formatDate } from "@/lib/i18n-utils";
+import { failureReason } from "@/lib/failure";
 
 type SectionId =
   | "timeline"
@@ -202,9 +203,9 @@ export function RaceSimulatorPage() {
         input: planInput,
       });
       setSavedSimulations(getAllSimulations());
-      toast.success(t("saved.savedSuccess"));
-    } catch {
-      toast.error(t("saved.maxReached"));
+    } catch (err) {
+      const reason = failureReason(err);
+      toast.failure(t(reason === "limit" ? "saved.maxReached" : "saved.saveFailed"), reason);
     }
   }, [plan, planInput, isEn, t]);
 
@@ -219,8 +220,12 @@ export function RaceSimulatorPage() {
       }
       return;
     }
-    await navigator.clipboard.writeText(url);
-    toast.success(tCommon("share.toast.linkCopied"));
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(tCommon("share.toast.linkCopied"));
+    } catch (err) {
+      toast.failure(tCommon("share.toast.linkCopyFailed"), err);
+    }
   }, [plan, planInput, tCommon]);
 
   const handleExportPdf = useCallback(async () => {
@@ -232,8 +237,8 @@ export function RaceSimulatorPage() {
     try {
       await exportRaceSimToPDF(plan, isEn);
       toast.success(tCommon("calculators:raceSimulator.pdfExported"), { id: toastId });
-    } catch {
-      toast.error(tCommon("calculators:raceSimulator.exportFailed"), { id: toastId });
+    } catch (err) {
+      toast.failure(tCommon("calculators:raceSimulator.exportFailed"), err, { id: toastId });
     } finally {
       setExporting(false);
     }
@@ -244,8 +249,7 @@ export function RaceSimulatorPage() {
     deleteSimulation(deleteTarget);
     setSavedSimulations(getAllSimulations());
     setDeleteTarget(null);
-    toast.success(t("saved.deletedSuccess"));
-  }, [deleteTarget, t]);
+  }, [deleteTarget]);
 
   const toggleSection = useCallback((id: string) => {
     setOpenSections((prev) => ({

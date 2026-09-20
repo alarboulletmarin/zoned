@@ -451,7 +451,7 @@ export function WorkoutDetailPage() {
                   buildStravaShareText(workout),
                 );
                 if (ok) toast.success(t("session:strava.copied"));
-                else toast.error(t("common:errors.generic"));
+                else toast.failure(t("common:share.toast.textCopyFailed"));
               }}
             >
               <StravaIcon />
@@ -463,7 +463,7 @@ export function WorkoutDetailPage() {
                   publicWorkoutUrl(workout),
                 );
                 if (ok) toast.success(t("common:actions.linkCopied"));
-                else toast.error(t("common:errors.generic"));
+                else toast.failure(t("common:share.toast.linkCopyFailed"));
               }}
             >
               <Link2 />
@@ -1128,7 +1128,7 @@ function StrengthWorkoutDetail({
                 onClick={async () => {
                   const ok = await copyToClipboard(window.location.href);
                   if (ok) toast.success(tCommon("actions.linkCopied"));
-                  else toast.error(tCommon("errors.generic"));
+                  else toast.failure(tCommon("share.toast.linkCopyFailed"));
                 }}
               >
                 <Link2 />

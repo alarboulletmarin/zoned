@@ -130,7 +130,7 @@ export function DataExportImport() {
           // best-effort rollback, keep going even if a single key fails
         }
       }
-      toast.error(t("settings.data.importError"));
+      toast.failure(t("settings.data.importError"), err);
       setIsRestoring(false);
       setShowConfirm(false);
       return;

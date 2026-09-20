@@ -127,9 +127,8 @@
   "saved": {
     "title": "Saved simulations",
     "empty": "No saved simulations",
-    "savedSuccess": "Simulation saved",
-    "deletedSuccess": "Simulation deleted",
-    "maxReached": "Maximum of 10 simulations reached"
+    "maxReached": "Maximum of 10 simulations reached",
+    "saveFailed": "The simulation was not saved."
   },
   "nutrition": {
     "carbsPerHour": "Carbs/hour",

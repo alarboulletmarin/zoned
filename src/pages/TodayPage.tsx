@@ -406,15 +406,15 @@ export function TodayPage() {
      différentes. */
   const handleClose = useCallback(
     (ref: SessionRef, data: SessionCompletionData) => {
-      const ok = updateSessionCompletion(ref.planId, ref.weekNumber, ref.index, data);
-      if (!ok) {
-        toast.error(t("common:errors.planSaveFailed"));
+      const saved = updateSessionCompletion(ref.planId, ref.weekNumber, ref.index, data);
+      if (!saved.ok) {
+        toast.failure(t("common:errors.planSaveFailed"), saved);
         return;
       }
       // `reload` remplace le tableau des plans, donc `focus` se recalcule et la
-      // bande comme la ligne de clôture suivent sans rien de plus.
+      // bande comme la ligne de clôture suivent sans rien de plus. La ligne
+      // de clôture EST la confirmation : pas de toast par-dessus.
       reload();
-      toast.success(t("plan:completion.saved"));
     },
     [reload, t],
   );
@@ -462,7 +462,7 @@ export function TodayPage() {
         if (workout) session = sessionFromWorkout(day, workout);
       }
       if (!session) {
-        toast.error(t("today:add.failed"));
+        toast.failure(t("today:add.failed"), "notFound");
         return;
       }
 
@@ -478,8 +478,9 @@ export function TodayPage() {
           date: monday.toLocaleDateString(isEn ? "en-GB" : "fr-FR", { day: "numeric", month: "short" }),
         });
         const week = createEmptyWeekPlan(name);
-        if (!savePlan(week)) {
-          toast.error(t("today:add.failed"));
+        const saved = savePlan(week);
+        if (!saved.ok) {
+          toast.failure(t("today:add.failed"), saved);
           return;
         }
         updateComposition(placeWeek(composition, week.id, monday));
@@ -490,7 +491,7 @@ export function TodayPage() {
       }
 
       if (pushSessionToPlan(planId, weekNumber, session) === null) {
-        toast.error(t("today:add.failed"));
+        toast.failure(t("today:add.failed"));
         return;
       }
       reload();

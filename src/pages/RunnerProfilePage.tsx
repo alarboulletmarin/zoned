@@ -372,7 +372,11 @@ function BaseDataSection({
       currentLongRunKm: parsedLong,
       runnerLevel: (runnerLevel || undefined) as Difficulty | undefined,
     };
-    saveRunnerProfile(updated);
+    const saved = saveRunnerProfile(updated);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     onSave(loadRunnerProfile()!);
     toast.success(t("base.saved"));
   }
@@ -665,17 +669,24 @@ function PerformanceReferencesSection({
     distance: RaceDistance,
     data: { totalSeconds: number; date?: string; label?: string },
   ) {
-    setPerformanceReference(distance, data);
+    const saved = setPerformanceReference(distance, data);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
     toast.success(t("references.saved"));
   }
 
   function handleClear(distance: RaceDistance) {
-    removePerformanceReference(distance);
+    const saved = removePerformanceReference(distance);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("references.cleared"));
   }
 
   const filled = RACE_DISTANCES.filter(
@@ -749,29 +760,39 @@ function BenchmarkHistorySection({
     const result = Number(bmResult);
     if (!result || result <= 0) return;
     const derived = deriveVma(bmType, result);
-    addBenchmark({
+    const saved = addBenchmark({
       type: bmType,
       date: bmDate,
       result,
       derivedVma: derived,
       notes: bmNotes || undefined,
     });
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("benchmarks.added"));
     setDialogOpen(false);
     resetDialog();
   }
 
   function handleDelete(id: string) {
-    deleteBenchmark(id);
+    const saved = deleteBenchmark(id);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("benchmarks.deleted"));
   }
 
   function handleUseVma(vma: number) {
-    updateBaseData({ vma });
+    const saved = updateBaseData({ vma });
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     saveUserZonePrefs({ vma });
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
@@ -1037,25 +1058,31 @@ function PersonalRecordsSection({
     if (totalSec <= 0) return;
     const distance = prDistance === "other" ? prCustom : prDistance;
     if (!distance) return;
-    addPersonalRecord({
+    const saved = addPersonalRecord({
       distance,
       timeSeconds: totalSec,
       date: prDate || undefined,
       label: prLabel || undefined,
       provenance: "manual",
     });
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("records.added"));
     setDialogOpen(false);
     resetDialog();
   }
 
   function handleDelete(index: number) {
-    deletePersonalRecord(index);
+    const saved = deletePersonalRecord(index);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("records.deleted"));
   }
 
   // We need the original index for deletion (since we sort for display)

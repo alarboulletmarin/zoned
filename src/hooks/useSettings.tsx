@@ -45,6 +45,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     try {
       return parseStoredSettings(localStorage.getItem(STORAGE_KEY));
     } catch {
+      // Storage itself refused the read (private mode, blocked site data):
+      // the defaults apply for this session, nothing is lost on disk.
       return DEFAULT_SETTINGS;
     }
   });

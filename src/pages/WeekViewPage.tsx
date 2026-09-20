@@ -302,7 +302,7 @@ export function WeekViewPage() {
     (_fromWeek: number, fromIndex: number, _toWeek: number, toDay: number) => {
       if (!plan) return;
       if (moveSession(plan.id, 1, fromIndex, 1, toDay)) reload();
-      else toast.error(t("plan:view.sessionMoveFailed"));
+      else toast.failure(t("plan:view.sessionMoveFailed"));
     },
     [plan, reload, t],
   );
@@ -341,6 +341,18 @@ export function WeekViewPage() {
     setAddTarget(null);
   }, []);
 
+  /* Every write of this page goes through here. A refused write is said,
+     with its reason, and the caller stops rather than reloading a week that
+     did not change: nine handlers used to call `savePlan` and look away. */
+  const persist = useCallback(
+    (fresh: NonNullable<ReturnType<typeof getPlan>>): boolean => {
+      const saved = savePlan(fresh);
+      if (!saved.ok) toast.failure(t("library:weekly.toast.saveFailed"), saved);
+      return saved.ok;
+    },
+    [t],
+  );
+
   /** Pushes a session on its day and saves; returns its index in the week. */
   const pushSession = useCallback(
     (session: PlanSession): number | null => {
@@ -349,11 +361,11 @@ export function WeekViewPage() {
       if (!fresh) return null;
       fresh.weeks[0].sessions.push(session);
       fresh.weeks[0].sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-      savePlan(fresh);
+      if (!persist(fresh)) return null;
       reload();
       return fresh.weeks[0].sessions.indexOf(session);
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   const handleWorkoutAdd = useCallback(
@@ -373,7 +385,6 @@ export function WeekViewPage() {
         // on the spot, on the duration field, which a phone answers with its
         // keyboard and a zoom. The duration is optional, and one tap away.
         pushSession(session);
-        toast.success(t("plan:view.activityAdded"));
         return;
       }
       const workout = byId.get(workoutId);
@@ -436,18 +447,18 @@ export function WeekViewPage() {
       const fresh = getPlan(plan.id);
       if (!fresh || !fresh.weeks[0].sessions[sessionIndex]) return;
       fresh.weeks[0].sessions[sessionIndex] = next;
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       setSheetIndex(null);
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   const handleSheetMove = useCallback(
     (sessionIndex: number, day: number) => {
       if (!plan) return;
       if (moveSession(plan.id, 1, sessionIndex, 1, day)) reload();
-      else toast.error(t("plan:view.sessionMoveFailed"));
+      else toast.failure(t("plan:view.sessionMoveFailed"));
     },
     [plan, reload, t],
   );
@@ -496,9 +507,8 @@ export function WeekViewPage() {
             fresh.config.longRunDay = cfg.longRunDay;
             // The week now aims at what it was composed to.
             fresh.config.targetVolumeH = cfg.targetVolumeH;
-            savePlan(fresh);
+            persist(fresh);
           }
-          toast.success(t("library:weekly.toast.generated"));
         },
       });
     },
@@ -518,10 +528,10 @@ export function WeekViewPage() {
       const session = fresh?.weeks[0].sessions[sessionIndex];
       if (!fresh || !session) return;
       session.locked = !session.locked;
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   const handleUnlockAll = useCallback(() => {
@@ -529,9 +539,9 @@ export function WeekViewPage() {
     const fresh = getPlan(plan.id);
     if (!fresh) return;
     for (const session of fresh.weeks[0].sessions) delete session.locked;
-    savePlan(fresh);
+    if (!persist(fresh)) return;
     reload();
-  }, [plan, reload]);
+  }, [plan, reload, persist]);
 
   /** Draw another workout for a single session, the rest of the week is kept. */
   const handleRedraw = useCallback(
@@ -567,8 +577,7 @@ export function WeekViewPage() {
             kind,
             replacement,
           );
-          savePlan(fresh);
-          toast.success(t("library:weekly.toast.rerolled"));
+          persist(fresh);
         },
       });
     },
@@ -605,10 +614,10 @@ export function WeekViewPage() {
       fresh.config.planName = value;
       fresh.name = value;
       fresh.nameEn = value;
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   /**
@@ -623,11 +632,11 @@ export function WeekViewPage() {
       const hours = value === "none" ? undefined : Number(value);
       if (hours === undefined) delete fresh.config.targetVolumeH;
       else fresh.config.targetVolumeH = hours;
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       if (hours !== undefined) setSettings((s) => ({ ...s, targetVolumeH: hours }));
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   // The budgets on offer, in hours, plus the week's own if it is not one of
@@ -646,10 +655,10 @@ export function WeekViewPage() {
       if (!fresh) return;
       fresh.config.weekCategory =
         value === "none" ? undefined : (value as WeekCategory);
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   if (isLoading) return null;

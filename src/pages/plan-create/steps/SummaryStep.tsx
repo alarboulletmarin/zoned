@@ -203,7 +203,7 @@ function SummaryBody({
 
           {submit.error && (
             <Alert kind="error" title={t("wizard.errorTitle")}>
-              {submit.error} {t("wizard.errorHint")}
+              {t(`common:failure.${submit.error}`)} {t("wizard.errorHint")}
             </Alert>
           )}
         </CardContent>

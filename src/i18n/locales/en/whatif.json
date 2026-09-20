@@ -87,10 +87,7 @@
     "title": "The comparison did not finish",
     "intact": "Your settings are kept, run the comparison again."
   },
-  "toast": {
-    "saved": "Scenario saved",
-    "deleted": "Scenario deleted"
-  },
+  "toast": {},
   "saveDialog": {
     "description": "Give your scenario comparison a name to find it later.",
     "placeholder": "e.g. 10K: 3x vs 5x/week",

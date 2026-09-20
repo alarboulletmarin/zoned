@@ -1,4 +1,5 @@
 import type { RaceDistance } from "@/types/plan";
+import { OK, failed, type Outcome } from "@/lib/failure";
 import type {
   RunnerProfile,
   RaceTime,
@@ -69,14 +70,24 @@ export function loadRunnerProfile(): RunnerProfile | null {
   }
 }
 
-export function saveRunnerProfile(profile: RunnerProfile): boolean {
+/**
+ * Answers an `Outcome`: a profile the validation refuses is `invalid`, a write
+ * the browser refuses is read from its error. The page used to say "Profil
+ * enregistré" without looking, so a full storage was announced as a save.
+ */
+export function saveRunnerProfile(profile: RunnerProfile): Outcome {
+  let validated: RunnerProfile;
   try {
-    const validated = validateProfile(profile);
+    validated = validateProfile(profile);
+  } catch {
+    return failed("invalid");
+  }
+  try {
     validated.updatedAt = new Date().toISOString();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(validated));
-    return true;
-  } catch {
-    return false;
+    return OK;
+  } catch (err) {
+    return failed(err);
   }
 }
 
@@ -90,62 +101,62 @@ function loadOrCreate(): RunnerProfile {
 
 export function updateBaseData(
   data: Partial<Pick<RunnerProfile, "fcMax" | "vma" | "currentWeeklyKm" | "currentLongRunKm" | "runnerLevel">>,
-): boolean {
+): Outcome {
   const profile = loadOrCreate();
   Object.assign(profile, data);
   return saveRunnerProfile(profile);
 }
 
-export function setPerformanceReference(distance: RaceDistance, time: RaceTime): boolean {
+export function setPerformanceReference(distance: RaceDistance, time: RaceTime): Outcome {
   const profile = loadOrCreate();
   profile.performanceReferences[distance] = time;
   return saveRunnerProfile(profile);
 }
 
-export function removePerformanceReference(distance: RaceDistance): boolean {
+export function removePerformanceReference(distance: RaceDistance): Outcome {
   const profile = loadOrCreate();
   delete profile.performanceReferences[distance];
   return saveRunnerProfile(profile);
 }
 
-export function addBenchmark(entry: Omit<BenchmarkEntry, "id">): boolean {
+export function addBenchmark(entry: Omit<BenchmarkEntry, "id">): Outcome {
   const profile = loadOrCreate();
   profile.benchmarks.push({ ...entry, id: crypto.randomUUID() });
   return saveRunnerProfile(profile);
 }
 
-export function updateBenchmark(id: string, updates: Partial<BenchmarkEntry>): boolean {
+export function updateBenchmark(id: string, updates: Partial<BenchmarkEntry>): Outcome {
   const profile = loadOrCreate();
   const index = profile.benchmarks.findIndex((b) => b.id === id);
-  if (index === -1) return false;
+  if (index === -1) return failed("notFound");
   profile.benchmarks[index] = { ...profile.benchmarks[index], ...updates };
   return saveRunnerProfile(profile);
 }
 
-export function deleteBenchmark(id: string): boolean {
+export function deleteBenchmark(id: string): Outcome {
   const profile = loadOrCreate();
   const before = profile.benchmarks.length;
   profile.benchmarks = profile.benchmarks.filter((b) => b.id !== id);
-  if (profile.benchmarks.length === before) return false;
+  if (profile.benchmarks.length === before) return failed("notFound");
   return saveRunnerProfile(profile);
 }
 
-export function addPersonalRecord(record: PersonalRecord): boolean {
+export function addPersonalRecord(record: PersonalRecord): Outcome {
   const profile = loadOrCreate();
   profile.personalRecords.push(record);
   return saveRunnerProfile(profile);
 }
 
-export function updatePersonalRecord(index: number, record: PersonalRecord): boolean {
+export function updatePersonalRecord(index: number, record: PersonalRecord): Outcome {
   const profile = loadOrCreate();
-  if (index < 0 || index >= profile.personalRecords.length) return false;
+  if (index < 0 || index >= profile.personalRecords.length) return failed("notFound");
   profile.personalRecords[index] = record;
   return saveRunnerProfile(profile);
 }
 
-export function deletePersonalRecord(index: number): boolean {
+export function deletePersonalRecord(index: number): Outcome {
   const profile = loadOrCreate();
-  if (index < 0 || index >= profile.personalRecords.length) return false;
+  if (index < 0 || index >= profile.personalRecords.length) return failed("notFound");
   profile.personalRecords.splice(index, 1);
   return saveRunnerProfile(profile);
 }

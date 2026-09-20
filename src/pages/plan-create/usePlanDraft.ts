@@ -173,6 +173,8 @@ function readDraft<F>(): DraftPayload<F> | null {
     if (Date.now() - parsed.ts > DRAFT_TTL_MS) return null;
     return parsed;
   } catch {
+    // A draft that cannot be read is a draft that does not exist: the wizard
+    // starts blank, which is what an unreadable draft would have meant anyway.
     return null;
   }
 }

@@ -104,10 +104,7 @@ export function RouteDetailPage() {
   };
 
   const onDelete = async () => {
-    if (await deleteRoute(route.id)) {
-      toast.success(t("result.deleted"));
-      navigate("/routes/mine");
-    }
+    if (await deleteRoute(route.id)) navigate("/routes/mine");
   };
 
   return (

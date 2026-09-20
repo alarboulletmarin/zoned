@@ -31,6 +31,10 @@ export function AddressSearchInput({
   const [query, setQuery] = useState(selectedLabel ?? "");
   const [results, setResults] = useState<GeocodeResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  // A search that failed is not a search with no result: the list said
+  // "aucune adresse" over a network error, which sent people retyping the
+  // address. The failure gets its own line, and clears at the next attempt.
+  const [failed, setFailed] = useState(false);
   const [open, setOpen] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -53,14 +57,18 @@ export function AddressSearchInput({
       const ctrl = new AbortController();
       abortRef.current = ctrl;
       setIsSearching(true);
+      setFailed(false);
       try {
         const found = await searchAddress({ query, signal: ctrl.signal });
         setResults(found);
         setOpen(true);
       } catch (err) {
-        if ((err as Error).name !== "AbortError") {
-          console.warn("AddressSearchInput: search failed", err);
-        }
+        // An aborted request is ours: a newer keystroke superseded it.
+        if ((err as Error).name === "AbortError") return;
+        console.warn("AddressSearchInput: search failed", err);
+        setResults([]);
+        setFailed(true);
+        setOpen(true);
       } finally {
         setIsSearching(false);
       }
@@ -130,7 +138,9 @@ export function AddressSearchInput({
       {open && (results.length > 0 || (query.length >= 3 && !isSearching)) && (
         <ul id="address-suggestions" role="listbox" className="zn-addr__list">
           {results.length === 0 ? (
-            <li className="zn-addr__empty">{t("form.addressNoResults")}</li>
+            <li className="zn-addr__empty" role={failed ? "alert" : undefined}>
+              {t(failed ? "form.addressSearchFailed" : "form.addressNoResults")}
+            </li>
           ) : (
             results.map((result) => (
               <li key={`${result.point[0]}-${result.point[1]}`} role="option" aria-selected={false}>

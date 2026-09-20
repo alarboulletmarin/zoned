@@ -29,6 +29,8 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       return stored ? JSON.parse(stored) : [];
     } catch {
+      // Unreadable favourites read as none. The entry is not overwritten
+      // here, so a later, working read still finds it.
       return [];
     }
   });

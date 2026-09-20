@@ -51,6 +51,7 @@ export const WeekGuidancePanel = memo(function WeekGuidancePanel({
     try {
       return localStorage.getItem(STORAGE_KEY) === "true";
     } catch {
+      // A remembered fold, nothing more: unreadable, the panel opens.
       return false;
     }
   });

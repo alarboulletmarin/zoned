@@ -69,6 +69,7 @@
     "runnerLevel": "Niveau",
     "selectLevel": "Sélectionner un niveau",
     "save": "Enregistrer",
+    "saveFailed": "Le profil n'a pas été enregistré.",
     "saved": "Profil enregistré",
     "updateZones": "Mettre à jour mes zones",
     "zonesUpdated": "Zones mises à jour",
@@ -97,8 +98,7 @@
     "hours": "h",
     "minutes": "min",
     "seconds": "s",
-    "saved": "Temps de référence enregistré",
-    "cleared": "Temps de référence supprimé"
+    "saved": "Temps de référence enregistré"
   },
   "benchmarks": {
     "title": "Historique des tests",
@@ -115,8 +115,6 @@
     "vmaUpdated": "VMA mise à jour à {{vma}} km/h",
     "delete": "Supprimer",
     "deleteConfirm": "Supprimer ce test ?",
-    "deleted": "Test supprimé",
-    "added": "Test ajouté",
     "empty": "Zéro test au compteur : ajoutes-en un et tu verras ta VMA bouger d'une date à l'autre.",
     "emptyTitle": "Aucun test enregistré",
     "count_one": "{{count}} test enregistré",
@@ -168,8 +166,6 @@
     },
     "delete": "Supprimer",
     "deleteConfirm": "Supprimer ce record ?",
-    "deleted": "Record supprimé",
-    "added": "Record ajouté",
     "empty": "Zéro record au compteur, sur {{distances}} distances de référence. Ajoute un temps pour les remplir.",
     "emptyTitle": "Aucun record enregistré",
     "count_one": "{{count}} record enregistré",

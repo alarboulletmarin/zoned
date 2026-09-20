@@ -127,9 +127,8 @@
   "saved": {
     "title": "Simulations sauvegardées",
     "empty": "Aucune simulation sauvegardée",
-    "savedSuccess": "Simulation sauvegardée",
-    "deletedSuccess": "Simulation supprimée",
-    "maxReached": "Maximum de 10 simulations atteint"
+    "maxReached": "Maximum de 10 simulations atteint",
+    "saveFailed": "La simulation n'a pas été enregistrée."
   },
   "nutrition": {
     "carbsPerHour": "Glucides/heure",

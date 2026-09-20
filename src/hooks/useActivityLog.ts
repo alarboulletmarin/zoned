@@ -109,7 +109,8 @@ export function useActivityLog(): ActivityLogController {
         toast.error(t("toast.saveFailed"));
         return;
       }
-      toast.success(t(editing ? "toast.updated" : "toast.added"));
+      // The sheet closes on the list, and the line is there: that is the
+      // confirmation. The refusal above is the only thing worth a toast.
       setOpen(false);
       setEditing(null);
     },
@@ -119,11 +120,10 @@ export function useActivityLog(): ActivityLogController {
   const onDelete = useCallback(
     (id: string) => {
       if (!remove(id)) return;
-      toast.success(t("toast.deleted"));
       setOpen(false);
       setEditing(null);
     },
-    [remove, t],
+    [remove],
   );
 
   return {

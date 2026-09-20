@@ -239,11 +239,10 @@ export function WeeksListPage() {
       `${pick(week, "name")} ${t("weekly.saved.copySuffix")}`,
     );
     if (!newId) {
-      toast.error(t("weekly.toast.duplicateError"));
+      toast.failure(t("weekly.toast.duplicateError"));
       return;
     }
     reload();
-    toast.success(t("weekly.toast.duplicated"));
   };
 
   const handleShare = async (week: TrainingPlan) => {
@@ -257,8 +256,12 @@ export function WeeksListPage() {
       }
       return;
     }
-    await navigator.clipboard.writeText(url);
-    toast.success(t("common:share.toast.linkCopied"));
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t("common:share.toast.linkCopied"));
+    } catch (err) {
+      toast.failure(t("common:share.toast.linkCopyFailed"), err);
+    }
   };
 
   const handleImportFile = async (file: File) => {
@@ -271,12 +274,12 @@ export function WeeksListPage() {
       toast.error(t("weekly.toast.importNotWeek"));
       return;
     }
-    if (!savePlan(plan)) {
-      toast.error(t("weekly.toast.importError"));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("weekly.toast.saveFailed"), saved);
       return;
     }
     reload();
-    toast.success(t("weekly.toast.imported"));
   };
 
   const filtering = categoryFilter !== "all";

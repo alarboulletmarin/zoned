@@ -54,7 +54,7 @@ export function ExportMenu({ workout, className, size = "sm", variant = "default
       await exportToICS(workout, dateTime);
       toast.success(t("export.success.calendar"), { id: toastId });
     } catch (error) {
-      toast.error(t("export.error.calendar"), { id: toastId });
+      toast.failure(t("export.error.calendar"), error, { id: toastId });
     } finally {
       setIsExporting(false);
     }
@@ -81,12 +81,9 @@ export function ExportMenu({ workout, className, size = "sm", variant = "default
         throw new Error("Export card not rendered");
       }
     } catch (error) {
-      // La feuille de partage refermee sans rien choisir n'est pas un echec.
-      if (error instanceof DOMException && error.name === "AbortError") {
-        toast.dismiss(toastId);
-      } else {
-        toast.error(t("export.error.image"), { id: toastId });
-      }
+      // Une feuille de partage refermee sans rien choisir n'est pas un echec :
+      // `toast.failure` le sait et ne dit rien dans ce cas.
+      toast.failure(t("export.error.image"), error, { id: toastId });
     } finally {
       setRenderForExport(false);
       setIsExporting(false);
@@ -100,7 +97,7 @@ export function ExportMenu({ workout, className, size = "sm", variant = "default
       await exportToPDF(workout);
       toast.success(t("export.success.pdf"), { id: toastId });
     } catch (error) {
-      toast.error(t("export.error.pdf"), { id: toastId });
+      toast.failure(t("export.error.pdf"), error, { id: toastId });
     } finally {
       setIsExporting(false);
     }
@@ -114,7 +111,7 @@ export function ExportMenu({ workout, className, size = "sm", variant = "default
       toast.success(t("export.success.garmin"), { id: toastId });
       setShowFitGuide(true);
     } catch (error) {
-      toast.error(t("export.error.garmin"), { id: toastId });
+      toast.failure(t("export.error.garmin"), error, { id: toastId });
     } finally {
       setIsExporting(false);
     }

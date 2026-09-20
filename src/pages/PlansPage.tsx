@@ -191,8 +191,8 @@ export function PlansPage() {
         } else {
           toast.error(t("plansPage.importInvalid"));
         }
-      } catch {
-        toast.error(t("plansPage.importReadError"));
+      } catch (err) {
+        toast.failure(t("plansPage.importReadError"), err);
       }
     };
     input.click();

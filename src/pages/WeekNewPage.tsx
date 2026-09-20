@@ -9,6 +9,7 @@ import { savePlan } from "@/lib/planStorage";
 import { dateFromIso } from "@/lib/cockpit";
 import { loadTodayComposition, placeWeek, saveTodayComposition } from "@/lib/todayComposition";
 import { createEmptyWeekPlan } from "@/lib/weekToPlan";
+import { toast } from "@/components/ui/toast";
 
 /**
  * Week creation: three doors, no wizard.
@@ -39,7 +40,11 @@ export function WeekNewPage() {
 
   function createWeek(openSettings: boolean) {
     const plan = createEmptyWeekPlan(t("weekly.generate.defaultName"));
-    savePlan(plan);
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("weekly.toast.saveFailed"), saved);
+      return;
+    }
     if (typeof placeOn === "string") {
       saveTodayComposition(placeWeek(loadTodayComposition(), plan.id, dateFromIso(placeOn)));
     }

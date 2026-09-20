@@ -178,8 +178,7 @@ export function useRouteEditor({
     setEditWaypoints(null);
     setLastValidWaypoints(null);
     setEditPreview(null);
-    toast.success(t("edit.applied"));
-  }, [editPreview, onExitEdit, onApply, t]);
+  }, [editPreview, onExitEdit, onApply]);
 
   const onWaypointMove = useCallback(
     (index: number, point: RouteCoordinate) => {

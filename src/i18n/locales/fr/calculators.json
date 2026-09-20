@@ -285,7 +285,6 @@
   },
   "workoutBuilder": {
     "myWorkouts": "Mes séances",
-    "workoutDeleted": "Séance supprimée",
     "workoutsExported": "{{count}} séance(s) exportée(s)",
     "workoutExported": "Séance exportée",
     "workoutsImported": "{{count}} séance(s) importée(s)",
@@ -312,6 +311,7 @@
     "delete": "Supprimer",
     "workoutSaved": "Séance sauvegardée",
     "maxReached": "Maximum de 20 séances personnalisées atteint",
+    "saveFailed": "La séance n'a pas été enregistrée.",
     "warmup": "Échauffement",
     "mainSet": "Corps de séance",
     "cooldown": "Retour au calme",
@@ -347,7 +347,7 @@
   "raceSimulator": {
     "seoBreadcrumb": "Simulateur de course",
     "pdfExported": "PDF exporté",
-    "exportFailed": "Erreur d'export",
+    "exportFailed": "L'export PDF a échoué.",
     "deleteConfirm": "Supprimer cette simulation ?",
     "cancel": "Annuler",
     "deleteDescription": "Cette simulation sera définitivement supprimée. Cette action est irréversible."
