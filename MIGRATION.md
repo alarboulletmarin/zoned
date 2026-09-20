@@ -664,3 +664,45 @@ Ils sont listés parce qu'aucun n'a été attrapé par `tsc`, les tests ou le bu
    `no-results` sont employées. Le glyphe de `default` ne rend jamais.
 2. **`runners-duo` ne se retouche pas.** Un dessin approuvé ne se corrige plus,
    et son allure un peu dégingandée *est* le doodle.
+
+# Troisième chantier, faire simple (20 septembre 2026)
+
+Branche : `claude/app-complexity-ux-txhucf`. Cinq commits, vert à chacun.
+
+Le deuxième chantier avait refait l'architecture de l'information. Celui-ci
+part d'une mesure : sur trente et un jours d'audience (130 visiteurs, 69 %
+sur téléphone), le générateur de parcours a reçu 8 visiteurs sans un retour,
+mes parcours, les pistes, le what-if et l'age-graded zéro ; le cockpit est la
+seule page où l'on revient (3,3 vues par visiteur) ; le parcours de plan
+perdait la moitié des gens entre `/plan/new` et un plan. La charge n'était
+plus dans la nav, elle était dans les systèmes parallèles, les concepts à
+apprendre avant la première séance, et la longue traîne d'outils chargés à
+chaque visite.
+
+## Lots
+
+| # | Lot | Ce qui compte |
+|---|---|---|
+| 1 | États vides | Titre = ce qui manque, description = ce que ça change, une action, la note en prose. Le cockpit vide proposait cinq gestes ; il en propose un. Import reste en tête des plans et des semaines : c'est une voie d'entrée, pas un commentaire. La bibliothèque lit enfin `?search=` (palette) et `?q=` (SearchAction). |
+| 2 | Retraits | Générateur de parcours et ses trois pages, what-if, age-graded : 13 400 lignes, quatre services externes, Leaflet, IndexedDB, deux drapeaux. Redirections 301 dans `vercel.json`. `mulberry32` déménage dans `lib/prng.ts`, le générateur de plans en dépendait. Changelog, nutrition et les autres calculateurs restent, décision du propriétaire. |
+| 3 | Nettoyage | Cinq paquets jamais importés, cinq fichiers que rien n'appelle, le CSS du carrousel mort. |
+| 4 | Parcours plan | `/plan/new` EST l'assistant : sept écrans pour une course, six sans. **race** = pratique + pourquoi + distance (la pratique se déduit de la course), **event** = date + nom + terrain + prépa en repli, le volume actuel rejoint la semaine type. La VMA est posée sur l'écran du niveau, préremplie, enregistrée dans Mes zones ; sans elle, le récapitulatif prévient et la vue du plan porte un bandeau. Les saisies d'allure et de chrono portent le masque des activités (`lib/paceFields.ts`), le chrono lit 52:30 comme 52 minutes sur 10 km. |
+| 5 | Racine et semaine | `/` mène au cockpit dès qu'un plan non terminé existe. `/weeks/new` crée et pose la semaine sur la semaine en cours, plus de trois portes ; une semaine du catalogue est posée d'office. À 390 px, les titres des cartes compactes tiennent sur deux lignes au lieu d'un mot. |
+
+## Ce qui ne change pas
+
+Les clés `localStorage` gardent leurs noms et leurs formes. La VMA a toujours
+deux clés, `zoned-userZones` et `zoned-runner-profile`, mais chaque écriture
+passe par les deux : les fusionner demanderait une migration, et rien ne
+l'exige. Le brouillon du parcours passe en version 2 ; les anciens, d'un
+autre schéma, sont écartés.
+
+## Ce qui reste, si l'on continue
+
+- La semaine comme plan d'une semaine sans notion de pose ni de fusion : la
+  pose par défaut en retire le coût quotidien, le modèle reste.
+- Six guichets de VMA (profil, Mes zones, deux calculateurs, tapis, fiche
+  séance). Ils écrivent tous la même valeur maintenant ; ils sont toujours
+  six.
+- L'accueil fait 6 300 px sur téléphone pour qui découvre ; il n'est plus la
+  page de qui s'entraîne, mais il reste long.

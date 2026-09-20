@@ -13,6 +13,8 @@ import { Toaster } from "sonner";
 import { toast } from "@/components/ui/toast";
 import { TopBar, Footer } from "@/components/layout";
 import { ModuleGate } from "@/components/layout/ModuleGate";
+import { getAllPlans } from "@/lib/planStorage";
+import { isPlanEnded } from "@/lib/planUtils";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
@@ -165,6 +167,22 @@ function ConditionalFooter() {
   return <Footer />;
 }
 
+/**
+ * La racine : la landing pour qui découvre, le cockpit pour qui s'entraîne.
+ *
+ * Sur trente et un jours, `/` était la page la plus vue (192 vues pour 79
+ * visiteurs) et `/today` celle où l'on revenait le plus (3,3 vues par
+ * visiteur). Quelqu'un qui a un plan en cours et ouvre l'app arrivait donc
+ * sur une landing de 6 300 px avant de trouver sa séance. Dès qu'un plan non
+ * terminé existe dans ce navigateur, la racine mène au cockpit. Les robots
+ * n'ont pas de localStorage : la landing reste ce qu'ils voient et ce que le
+ * prérendu écrit.
+ */
+function RootPage() {
+  const hasLivePlan = getAllPlans().some((plan) => !isPlanEnded(plan));
+  return hasLivePlan ? <Navigate to="/today" replace /> : <HomePage />;
+}
+
 function ScrollToTopOnNavigate() {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -278,7 +296,7 @@ function App() {
                   <div className="zn-page">
                     <ErrorBoundary>
                         <Routes>
-                          <Route path="/" element={<HomePage />} />
+                          <Route path="/" element={<RootPage />} />
                           {/* Le cockpit. `/` reste la landing publique et
                               indexée ; celle-ci est l'écran privé, donc hors
                               sitemap et hors prérendu, comme /plans et

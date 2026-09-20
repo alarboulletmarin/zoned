@@ -189,7 +189,7 @@
       "title": "Mes semaines",
       "subtitle": "Tes semaines d'entraînement, générées ou composées à la main.",
       "create": "Créer une semaine",
-      "empty": "Une semaine seule, ce sont sept jours composés sans plan derrière : une reprise en douceur, un bloc de côtes, ou le générateur à l'essai sans t'engager. Elle se pose ensuite dans le cockpit.",
+      "empty": "Une semaine seule, ce sont sept jours composés sans plan derrière : une reprise en douceur, un bloc de côtes, ou le générateur à l'essai sans t'engager. Elle arrive dans ton cockpit dès qu'elle existe.",
       "emptyAction": "Composer ma semaine",
       "emptyHint": "Dix semaines toutes prêtes existent aussi, à prendre telles quelles.",
       "emptyHintLink": "Voir les semaines prêtes",
@@ -243,29 +243,7 @@
     },
     "new": {
       "title": "Créer une semaine",
-      "subtitle": "Choisis comment composer ta semaine d'entraînement.",
-      "back": "Retour aux semaines",
-      "modes": {
-        "scratch": {
-          "kicker": "À la main",
-          "title": "Partir de zéro",
-          "desc": "Une semaine vide que tu remplis séance par séance, sans passer par le générateur.",
-          "cta": "Composer ma semaine"
-        },
-        "generate": {
-          "kicker": "Générateur 80/20",
-          "title": "Générer une semaine",
-          "desc": "Règle le volume, les séances et les disciplines : le générateur compose une semaine polarisée.",
-          "cta": "Régler et générer"
-        },
-        "prebuilt": {
-          "title": "Semaine pré-construite",
-          "desc": "Choisis une semaine type sourcée et commence immédiatement.",
-          "kicker": "Catalogue",
-          "cta": "{{count}} semaines prêtes"
-        }
-      },
-      "kicker": "3 façons de commencer"
+      "creating": "Ta semaine se prépare…"
     },
     "prebuilt": {
       "title": "Semaines pré-construites",

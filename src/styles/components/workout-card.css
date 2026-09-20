@@ -155,3 +155,13 @@
     min-block-size: var(--hit-min);
   }
 }
+
+/* À 390 px, deux colonnes de cartes compactes coupaient le titre à un mot :
+   Footing…, Récup…, Endurance…, dix-huit fois de suite. Deux lignes rendent
+   le nom lisible sans perdre la densité de la grille. */
+@media (max-width: 479px) {
+  .zn-wcard[data-size="compact"] .zn-wcard__title {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
