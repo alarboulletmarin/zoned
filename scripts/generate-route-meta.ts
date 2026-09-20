@@ -96,7 +96,7 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
   {
     path: "/calculators",
     title: "Calculateurs running",
-    description: `${stats.calculators} calculateurs gratuits : zones, allures, VMA, FTP, CSS, tapis, équivalences et age-graded. Sans compte, tout reste dans votre navigateur.`,
+    description: `${stats.calculators} calculateurs gratuits : zones, allures, VMA, FTP, CSS, tapis et équivalences. Sans compte, tout reste dans votre navigateur.`,
     image: "og-calculators.png",
   },
   {
@@ -196,18 +196,6 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     image: "og-learn.png",
   },
   {
-    path: "/routes",
-    title: "Générateur de parcours",
-    description:
-      "Générez un parcours de course réel depuis n'importe quelle adresse : boucle, aller-retour ou point à point, avec dénivelé, distance cible et export GPX.",
-  },
-  {
-    path: "/routes/tracks",
-    title: "Trouver une piste d'athlétisme",
-    description:
-      "Localisez les pistes d'athlétisme autour de vous pour vos séances de fractionné sur 400 m, avec distance et itinéraire.",
-  },
-  {
     path: "/compare",
     title: "Comparatifs",
     description:
@@ -250,8 +238,6 @@ const CALCULATOR_KEYS: Record<string, string> = {
   "/calculators/ftp": "ftp",
   "/calculators/css": "css",
   "/calculators/equivalence": "equivalence",
-  "/calculators/age-graded": "ageGraded",
-  "/calculators/what-if": "whatIf",
 };
 
 function getCalculatorRoutes(): RouteMeta[] {

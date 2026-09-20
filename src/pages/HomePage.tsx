@@ -100,22 +100,10 @@ const CALCULATORS: Array<{
     descKey: "homepage:home.s06.tools.equivalence",
   },
   {
-    key: "ageGraded",
-    slug: "/calculators/age-graded",
-    titleKey: "calculators:calculateurs.ageGraded.title",
-    descKey: "homepage:home.s06.tools.ageGraded",
-  },
-  {
     key: "raceSimulator",
     slug: "/race-simulator",
     titleKey: "homepage:home.s06.tools.raceSimulator.title",
     descKey: "homepage:home.s06.tools.raceSimulator.desc",
-  },
-  {
-    key: "whatIf",
-    slug: "/calculators/what-if",
-    titleKey: "calculators:calculateurs.whatIf.title",
-    descKey: "homepage:home.s06.tools.whatIf",
   },
 ];
 

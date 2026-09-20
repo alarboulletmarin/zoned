@@ -91,18 +91,12 @@ const RacePrepGuidePage = lazyPage(() => import("@/pages/RacePrepGuidePage").the
 const WarmupGuidePage = lazyPage(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
 const PaceConverterPage = lazyPage(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
 const PaceTablePage = lazyPage(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
-const AgeGradedPage = lazyPage(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
-const WhatIfPage = lazyPage(() => import("@/pages/WhatIfPage").then(m => ({ default: m.WhatIfPage })));
 const WorkoutBuilderPage = lazyPage(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
 const RaceSimulatorPage = lazyPage(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
 const CompareHubPage = lazyPage(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
 const CompareDetailPage = lazyPage(() => import("@/pages/CompareDetailPage").then(m => ({ default: m.CompareDetailPage })));
 const RunnerProfilePage = lazyPage(() => import("@/pages/RunnerProfilePage").then(m => ({ default: m.RunnerProfilePage })));
 const ActivitiesPage = lazyPage(() => import("@/pages/ActivitiesPage").then(m => ({ default: m.ActivitiesPage })));
-const RouteGeneratorPage = lazyPage(() => import("@/pages/RouteGeneratorPage").then(m => ({ default: m.RouteGeneratorPage })));
-const MyRoutesPage = lazyPage(() => import("@/pages/MyRoutesPage").then(m => ({ default: m.MyRoutesPage })));
-const RouteDetailPage = lazyPage(() => import("@/pages/RouteDetailPage").then(m => ({ default: m.RouteDetailPage })));
-const TrackFinderPage = lazyPage(() => import("@/pages/TrackFinderPage").then(m => ({ default: m.TrackFinderPage })));
 const NotFoundPage = lazyPage(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 // Command palette body: lazy so its search index (workout structures,
@@ -317,8 +311,6 @@ function App() {
                           <Route path="/calculators/ftp" element={<FtpTestPage />} />
                           <Route path="/calculators/css" element={<CssTestPage />} />
                           <Route path="/calculators/equivalence" element={<RaceEquivalencePage />} />
-                          <Route path="/calculators/age-graded" element={<AgeGradedPage />} />
-                          <Route path="/calculators/what-if" element={<WhatIfPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/profile" element={<RunnerProfilePage />} />
                           <Route path="/activities" element={<ActivitiesPage />} />
@@ -351,10 +343,6 @@ function App() {
                           <Route path="/plan/:id" element={<PlanViewPage />} />
                           <Route path="/race-simulator" element={<ModuleGate module="raceSimulator" canonical="/race-simulator"><RaceSimulatorPage /></ModuleGate>} />
                           <Route path="/race-simulator/shared" element={<RaceSimulatorPage />} />
-                          <Route path="/routes" element={<ModuleGate module="routes" canonical="/routes"><RouteGeneratorPage /></ModuleGate>} />
-                          <Route path="/routes/tracks" element={<ModuleGate module="routes" canonical="/routes/tracks"><TrackFinderPage /></ModuleGate>} />
-                          <Route path="/routes/mine" element={<ModuleGate module="routes"><MyRoutesPage /></ModuleGate>} />
-                          <Route path="/routes/:id" element={<ModuleGate module="routes"><RouteDetailPage /></ModuleGate>} />
                           <Route path="/compare" element={<CompareHubPage />} />
                           <Route path="/compare/:slug" element={<CompareDetailPage />} />
                           <Route path="*" element={<NotFoundPage />} />

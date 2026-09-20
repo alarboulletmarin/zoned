@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Star, Flag, Clock, Trash2, Eye, Dumbbell, Route as RouteIcon } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, Dumbbell } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan, PlanSession, IntermediateGoal } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -30,7 +30,6 @@ interface PlanCalendarProps {
     toDay: number,
   ) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
-  onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
   onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
@@ -58,7 +57,6 @@ export const PlanCalendar = memo(function PlanCalendar({
   onSessionClick,
   onSessionMove,
   onSessionDelete,
-  onFindRoute,
   onToggleComplete,
   onValidateWeek,
   onWorkoutAdd,
@@ -659,11 +657,6 @@ export const PlanCalendar = memo(function PlanCalendar({
                                         ? () => onSessionDelete(week.weekNumber, originalIndex)
                                         : undefined
                                     }
-                                    onFindRoute={
-                                      onFindRoute && !isSpecialSession
-                                        ? () => onFindRoute(week.weekNumber, originalIndex)
-                                        : undefined
-                                    }
                                     onToggleComplete={
                                       onToggleComplete && !isSpecialSession
                                         ? () => onToggleComplete(week.weekNumber, originalIndex)
@@ -728,19 +721,6 @@ export const PlanCalendar = memo(function PlanCalendar({
                 {t("calendar.viewSession")}
               </button>
             )}
-            {onFindRoute && (
-              <button
-                type="button"
-                className="zn-menu__item"
-                onClick={() => {
-                  onFindRoute(contextMenu.weekNumber, contextMenu.sessionIndex);
-                  setContextMenu(null);
-                }}
-              >
-                <RouteIcon />
-                {t("view.findRoute")}
-              </button>
-            )}
             {onToggleComplete && (
               <>
                 <button
@@ -789,7 +769,6 @@ const SessionCell = memo(function SessionCell({
   workoutName,
   onClick,
   onDelete,
-  onFindRoute,
   onToggleComplete,
   onContextMenu,
   completionKey,
@@ -801,7 +780,6 @@ const SessionCell = memo(function SessionCell({
   workoutName?: string;
   onClick?: () => void;
   onDelete?: () => void;
-  onFindRoute?: () => void;
   onToggleComplete?: () => void;
   onContextMenu?: (e: React.MouseEvent) => void;
   completionKey?: string;
@@ -850,21 +828,6 @@ const SessionCell = memo(function SessionCell({
       onContextMenu={onContextMenu}
     >
       <div className="zn-sess__actions">
-        {onFindRoute && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onFindRoute();
-            }}
-            onPointerDown={(e) => e.stopPropagation()}
-            className="zn-sess__action"
-            title={t("view.findRoute")}
-          >
-            <RouteIcon />
-          </button>
-        )}
         {onDelete && (
           <button
             type="button"

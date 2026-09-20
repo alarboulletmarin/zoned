@@ -178,17 +178,6 @@ interface LegacyPlan {
   config: LegacyPlanConfig;
 }
 
-interface LegacyScenarioShared {
-  runnerLevel?: string;
-  currentWeeklyKm?: number;
-  currentLongRunKm?: number;
-}
-
-interface LegacyScenario {
-  savedAt: string;
-  shared: LegacyScenarioShared;
-}
-
 export function migrateFromLegacyStorage(): RunnerProfile | null {
   try {
     const profile = createEmptyProfile();
@@ -219,30 +208,6 @@ export function migrateFromLegacyStorage(): RunnerProfile | null {
         }
         if (profile.vma === undefined && cfg.vma !== undefined) {
           profile.vma = cfg.vma;
-          hasData = true;
-        }
-      }
-    }
-
-    // 3. zoned-whatif-scenarios -> fill remaining gaps
-    const whatifRaw = localStorage.getItem("zoned-whatif-scenarios");
-    if (whatifRaw) {
-      const scenarios = JSON.parse(whatifRaw) as LegacyScenario[];
-      if (Array.isArray(scenarios) && scenarios.length > 0) {
-        const sorted = [...scenarios].sort(
-          (a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime(),
-        );
-        const shared = sorted[0].shared;
-        if (profile.runnerLevel === undefined && shared.runnerLevel !== undefined) {
-          profile.runnerLevel = shared.runnerLevel as RunnerProfile["runnerLevel"];
-          hasData = true;
-        }
-        if (profile.currentWeeklyKm === undefined && shared.currentWeeklyKm !== undefined) {
-          profile.currentWeeklyKm = shared.currentWeeklyKm;
-          hasData = true;
-        }
-        if (profile.currentLongRunKm === undefined && shared.currentLongRunKm !== undefined) {
-          profile.currentLongRunKm = shared.currentLongRunKm;
           hasData = true;
         }
       }

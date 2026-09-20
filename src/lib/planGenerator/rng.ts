@@ -17,7 +17,7 @@
  */
 
 import type { PlanConfig } from "@/types/plan";
-import { mulberry32 } from "@/lib/routeGenerator/algorithms/shared/rng";
+import { mulberry32 } from "@/lib/prng";
 
 let draw: () => number = mulberry32(0x5eed);
 

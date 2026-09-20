@@ -10,7 +10,7 @@ describe("BACKUP_STORAGE_KEYS", () => {
   test("includes saved race simulations in full backups", () => {
     expect(BACKUP_STORAGE_KEYS).toContain("zoned-race-simulations");
     expect(BACKUP_STORAGE_KEYS).toContain("zoned-planViewMode");
-    expect(BACKUP_STORAGE_KEYS).toContain("zoned-whatif-scenarios");
+    expect(BACKUP_STORAGE_KEYS).toContain("zoned-runner-profile");
   });
 
   test("includes multi-discipline profile keys", () => {

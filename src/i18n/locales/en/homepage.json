@@ -9,7 +9,7 @@
     "random": "Random",
     "surpriseMe": "Surprise me!",
     "calculators": "Calculators",
-    "nineTools": "12 tools",
+    "nineTools": "10 tools",
     "myZones": "My Zones",
     "hrPaceZones": "HR & pace zones",
     "featuredWorkouts": "Featured Workouts",
@@ -21,10 +21,6 @@
     "newBadge": "New",
     "spotlightLabel": "What's new",
     "spotlightGoto": "Go to slide {{index}}",
-    "routesEyebrow": "Route Generator",
-    "routesTitle": "Build your route in one click",
-    "routesDesc": "Real-world loop or out-and-back from your position, with elevation and GPX export.",
-    "routesCta": "Generate a route",
     "cyclingEyebrow": "Cycling",
     "cyclingTitle": "Cycling lands on Zoned",
     "cyclingDesc": "10 sessions: endurance, sweet spot, threshold, intervals. Built-in FTP zones.",
@@ -200,12 +196,10 @@
         "ftp": "Estimate your FTP from a 20-min or a ramp test.",
         "css": "Estimate your CSS from a 400 m + 200 m swim test.",
         "equivalence": "Predict your times across every distance from one result.",
-        "ageGraded": "Compare your performance to the world record for your category.",
         "raceSimulator": {
           "title": "Race-day simulator",
           "desc": "Full race-day plan: schedule, paces, nutrition, mental cues."
-        },
-        "whatIf": "Compare two training scenarios side by side."
+        }
       }
     },
     "s07": {
@@ -283,8 +277,7 @@
       "product": {
         "library": "Library",
         "plans": "Plans",
-        "calculators": "Calculators",
-        "routes": "Route generator"
+        "calculators": "Calculators"
       },
       "science": {
         "methodology": "Methods",

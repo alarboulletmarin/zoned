@@ -15,13 +15,11 @@ export const BACKUP_STORAGE_KEYS = [
   "zoned-language",
   "zoned-custom-workouts",
   "zoned-race-simulations",
-  "zoned-whatif-scenarios",
   "zoned-storage-warning-seen",
   "zoned-runner-profile",
   "zoned-cycling-profile",
   "zoned-swimming-profile",
   "zoned-commute-pattern",
-  "zoned-routes",
   "zoned-activities",
 ] as const;
 
