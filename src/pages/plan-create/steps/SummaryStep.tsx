@@ -201,6 +201,15 @@ function SummaryBody({
             )}
           </dl>
 
+          {/* Le générateur pose les allures sur la VMA. Sans elle, il en prend
+              une par niveau, ce qu'il faisait déjà, mais en silence : ici on
+              le dit avant de générer, et la vue du plan le redira. */}
+          {!derived.vma && form.planPurpose === "race" && (
+            <Alert kind="info" title={t("summary.noVmaTitle")}>
+              {t("summary.noVmaBody")}
+            </Alert>
+          )}
+
           {submit.error && (
             <Alert kind="error" title={t("wizard.errorTitle")}>
               {t(`common:failure.${submit.error}`)} {t("wizard.errorHint")}

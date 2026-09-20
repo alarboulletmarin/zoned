@@ -71,8 +71,6 @@
     "save": "Save",
     "saveFailed": "The profile was not saved.",
     "saved": "Profile saved",
-    "updateZones": "Update my zones",
-    "zonesUpdated": "Zones updated",
     "createPlan": "Create a plan",
     "migrated": "Existing data recovered",
     "errorHint": "fix the value to save",

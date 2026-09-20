@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { useCreatePlan } from "@/hooks/usePlans";
-import { loadUserZonePrefs } from "@/lib/zones";
+import { loadUserZonePrefs, saveUserZonePrefs } from "@/lib/zones";
+import { parseVma, vmaToInput } from "@/lib/paceFields";
 import type { AssistedPlanConfig, IntermediateGoal } from "@/types/plan";
 import type { UserZonePreferences } from "@/types";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
@@ -54,9 +55,11 @@ import { PRACTICES, type Practice } from "@/types/practice";
  * ici que ce qui est vraiment commun : l'état du brouillon, les valeurs
  * dérivées, la navigation, et la génération.
  *
- * Ce lot ne change AUCUN comportement : mêmes étapes, même ordre, mêmes
- * libellés, même plan produit. Changer le parcours en même temps que le
- * découper aurait rendu le diff impossible à relire.
+ * Depuis le 20 septembre 2026 elle EST `/plan/new` : les deux couloirs qui
+ * la précédaient (la pratique, puis le mode de fabrication) ont disparu, la
+ * première question est la course, et le parcours tient en sept écrans.
+ * Un plan déjà écrit ou un calendrier vide se rejoignent par deux liens
+ * sous cette première question.
  */
 export function PlanCreatePage() {
   const { t } = useTranslation("plan");
@@ -66,9 +69,9 @@ export function PlanCreatePage() {
   const [searchParams] = useSearchParams();
   const { createPlan, isGenerating, error } = useCreatePlan();
 
-  /* `/plan/new` envoie la pratique choisie : on démarre alors à l'étape
-     suivante plutôt que de reposer la même question. Une valeur inconnue est
-     ignorée, le parcours repart de sa première question. */
+  /* `?practice=trail` depuis une carte de pratique : la première question
+     ne montre alors que les courses de cette pratique. Une valeur inconnue
+     est ignorée. */
   const presetPractice = useMemo<Practice | null>(() => {
     const raw = searchParams.get("practice");
     return raw && (PRACTICES as readonly string[]).includes(raw)
@@ -76,7 +79,7 @@ export function PlanCreatePage() {
       : null;
   }, [searchParams]);
 
-  const [stepIndex, setStepIndex] = useState(() => (presetPractice ? 1 : 0));
+  const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const todayDate = useMemo(() => getTodayDateInputValue(), []);
 
@@ -85,6 +88,7 @@ export function PlanCreatePage() {
      un objet incomplet TYPÉ complet. `revive` fusionne sur celui-ci. */
   const initialForm = useMemo<FormState>(() => {
     const rp = loadRunnerProfile();
+    const prefs = loadUserZonePrefs();
     return {
       practice: presetPractice,
       planPurpose: "race",
@@ -95,6 +99,9 @@ export function PlanCreatePage() {
       useCustomStartDate: false,
       raceName: "",
       runnerLevel: rp?.runnerLevel ?? null,
+      /* Préremplie de ce que l'app sait déjà : Mes zones d'abord, le profil
+         ensuite, les deux écrivant la même valeur depuis ce lot. */
+      vma: vmaToInput(prefs?.vma ?? rp?.vma),
       daysPerWeek: 4,
       longRunDay: 6,
       targetPace: "",
@@ -106,22 +113,16 @@ export function PlanCreatePage() {
       strengthFrequency: 2,
       intermediateGoals: [],
       terrain: "trail_runnable",
-      ultraNight: false,
-      ultraFuelling: false,
-      ultraPoles: false,
-      ultraBackToBack: false,
     };
   }, [todayDate, presetPractice]);
 
   const [form, setForm] = useState<FormState>(initialForm);
 
   const steps = useMemo(() => stepsFor(form), [form]);
-  /* Borner l'index au parcours courant. Il peut le dépasser de deux façons :
-     un préréglage `?practice=` qui démarre à l'étape 2 d'un parcours qui n'en
-     a qu'une (le triathlon annoncé), ou une réponse qui raccourcit la liste en
-     cours de route. Sans ça l'écran annonçait Étape 2 sur 1. */
+  /* Borner l'index au parcours courant : une réponse peut raccourcir la
+     liste en cours de route. Sans ça l'écran annonçait Étape 2 sur 1. */
   const safeIndex = Math.min(stepIndex, steps.length - 1);
-  const currentStepId = steps[safeIndex] ?? "practice";
+  const currentStepId = steps[safeIndex] ?? "race";
 
   // Auto-save the wizard so a closed tab / hard reload doesn't lose progress.
   // Persistence stops when the plan is finalized; the banner appears on mount
@@ -247,6 +248,8 @@ export function PlanCreatePage() {
     [userPrefs],
   );
 
+  const vma = useMemo(() => parseVma(form.vma), [form.vma]);
+
   const intermediateGoalValidation = useMemo(() => {
     if (form.intermediateGoals.length === 0 || !form.raceDate)
       return { valid: true, errors: [] };
@@ -289,6 +292,8 @@ export function PlanCreatePage() {
     intermediateGoalValidation,
     intermediateGoalMaxDate,
     isRacePlan,
+    presetPractice,
+    vma,
   };
 
   // ── Submit handler ───────────────────────────────────────────────
@@ -311,7 +316,7 @@ export function PlanCreatePage() {
       runnerLevel: form.runnerLevel,
       daysPerWeek: form.daysPerWeek,
       longRunDay: form.longRunDay,
-      vma: userPrefs?.vma,
+      vma,
       targetPaceMinKm: paceSeconds ? paceSeconds / 60 : undefined,
       elevationGain: form.elevationGain
         ? parseInt(form.elevationGain, 10)
@@ -341,13 +346,19 @@ export function PlanCreatePage() {
 
     try {
       const plan = await createPlan(config);
+      /* La VMA saisie ici devient celle de l'app : Mes zones et le profil la
+         lisent tous deux (`saveUserZonePrefs` écrit les deux). Une seule
+         question, une seule valeur. */
+      if (vma && vma !== userPrefs?.vma) {
+        saveUserZonePrefs({ ...(userPrefs ?? {}), vma });
+      }
       finalize();
       triggerStorageWarning();
       navigate(`/plan/${plan.id}`);
     } catch {
       // Error is exposed via the hook's error state
     }
-  }, [form, userPrefs, paceSeconds, createPlan, navigate, finalize, isRacePlan]);
+  }, [form, userPrefs, vma, paceSeconds, createPlan, navigate, finalize, isRacePlan]);
 
   // ── Intermediate goals ───────────────────────────────────────────
 
@@ -441,7 +452,7 @@ export function PlanCreatePage() {
       <SEOHead
         title={t("seo.createTitle")}
         description={t("seo.createDescription")}
-        canonical="/plan/create"
+        canonical="/plan/new"
       />
 
       <div className="zn-wiz">
@@ -451,7 +462,7 @@ export function PlanCreatePage() {
         <div className="zn-stack zn-wiz__head">
           {safeIndex === 0 && (
             <Button variant="ghost" size="sm" asChild className="zn-wiz__lone">
-              <Link to="/plan/new">
+              <Link to="/plans">
                 <ArrowLeft />
                 {t("nav.back")}
               </Link>
@@ -568,8 +579,14 @@ export function PlanCreatePage() {
                 );
               })}
             </ol>
+            {/* Avant la première réponse, le parcours n'a pas encore de
+                longueur (sept écrans pour une course, six sans) : dire
+                Étape 1 sur 1 promettait une question unique. On annonce
+                le plafond. */}
             <p className="zn-mono zn-wiz__where">
-              {t("wizard.where", { current: safeIndex + 1, total: totalSteps })}
+              {totalSteps === 1
+                ? t("wizard.whereFirst")
+                : t("wizard.where", { current: safeIndex + 1, total: totalSteps })}
             </p>
           </div>
 

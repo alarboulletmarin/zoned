@@ -74,8 +74,9 @@
     "weeksShort": "sem"
   },
   "schedule": {
-    "title": "Planning d'entraînement",
-    "subtitle": "Combien de séances par semaine ?",
+    "title": "Ta semaine type",
+    "subtitle": "Combien de séances, quel jour la longue, et d'où tu pars.",
+    "currentVolume": "D'où tu pars, si tu le sais",
     "sessionsPerWeek": "Séances par semaine",
     "longRunDay": "Jour de la sortie longue",
     "longRunDayDesc": "Ta sortie longue hebdomadaire, la séance clé d'endurance",
@@ -121,7 +122,11 @@
     "advancedDesc": "4 à 5 sorties/semaine · 40-70 km/semaine",
     "elite": "Élite",
     "eliteDesc": "5 à 7 sorties/semaine · 70+ km/semaine",
-    "suggested": "Suggéré"
+    "suggested": "Suggéré",
+    "vmaLabel": "Ta VMA, si tu la connais",
+    "vmaPlaceholder": "14,5",
+    "vmaHint": "Facultatif. Sans elle, les allures du plan sont estimées depuis ton niveau.",
+    "vmaUnknown": "Je ne la connais pas"
   },
   "config": {
     "title": "Configuration",
@@ -145,7 +150,9 @@
     "requiredPace": "Allure nécessaire : ",
     "paceFormatError": "Format : MM:SS (ex. 5:30)",
     "timeFormatHint": "Format : H:MM ou H:MM:SS (ex. 3:30 ou 3:30:00)",
-    "skip": "Passer cette étape"
+    "skip": "Passer cette étape",
+    "paceMaskHint": "Tape les chiffres, le deux-points se place seul : 530 donne 5:30.",
+    "timeMaskHint": "Tape les chiffres : 4500 donne 45:00, 33000 donne 3:30:00."
   },
   "summary": {
     "title": "Récapitulatif",
@@ -175,7 +182,9 @@
     "purposeBaseBuilding": "Construction de base",
     "purposeReturnFromInjury": "Retour de blessure",
     "purposeBeginnerStart": "Débuter",
-    "weeksShort": "sem."
+    "weeksShort": "sem.",
+    "noVmaTitle": "Allures estimées",
+    "noVmaBody": "Tu n'as pas donné ta VMA : les allures du plan seront déduites de ton niveau. Reviens à l'étape Niveau pour la renseigner, ou fais-le plus tard dans Mes zones."
   },
   "seo": {
     "createTitle": "Créer un plan d'entraînement",
@@ -211,6 +220,9 @@
     "prebuilt": "Pré-construit",
     "addDates": "Ajouter des dates",
     "planEnded": "Ce plan est terminé. Il reste consultable comme historique d'entraînement.",
+    "estimatedPacesTitle": "Allures estimées, pas mesurées",
+    "estimatedPaces": "Ce plan a été calculé sans ta VMA : ses allures viennent de ton niveau. Renseigne-la pour des allures à toi.",
+    "estimatedPacesLink": "Ouvrir Mes zones",
     "clickToRename": "Cliquer pour renommer",
     "sessionUpdateFailed": "La séance n'a pas été modifiée.",
     "sessionMoveFailed": "La séance n'a pas été déplacée.",
@@ -739,32 +751,41 @@
     "createNote": "{{n}} semaines vides, à remplir séance par séance"
   },
   "wizard": {
-    "kicker": "Plan assisté",
+    "kicker": "Nouveau plan",
     "lede": "Le volume monte de 10 % par semaine au maximum, avec une semaine allégée toutes les trois.",
     "source": "Mujika & Padilla 2003 · Pfitzinger & Douglas 2009",
     "limitsKicker": "Sans compte, sans rappel",
     "limitsBody": "Le plan ne t'envoie rien et ne compte pas tes jours d'affilée. Tu le modifies ou tu le supprimes quand tu veux.",
     "where": "Étape {{current}} sur {{total}} · rien n'est envoyé",
+    "whereFirst": "Sept écrans au plus · rien n'est envoyé",
     "draftBody": "Tes réponses de la dernière fois sont là. Reprends où tu en étais, ou repars de zéro.",
     "errorTitle": "Le plan n'a pas été généré",
     "errorHint": "Tes réponses sont intactes : réessaie, ou reviens en arrière pour changer une réponse.",
     "step": {
-      "purpose": "Objectif",
-      "distance": "Distance",
-      "date": "Date de course",
+      "race": "Course",
+      "event": "La course",
       "duration": "Durée",
-      "race_name": "Nom",
-      "intermediate_goals": "Courses de prépa",
       "level": "Niveau",
       "goal": "État d'esprit",
-      "fitness": "Forme actuelle",
       "schedule": "Semaine type",
       "pace": "Allure",
-      "summary": "Récapitulatif",
-      "practice": "Pratique",
-      "terrain": "Terrain",
-      "ultra_logistics": "Logistique"
+      "summary": "Récapitulatif"
     }
+  },
+  "race": {
+    "title": "Qu'est-ce que tu prépares ?",
+    "subtitle": "Une course, ou un bloc sans course en vue. Ça décide des questions qui suivent.",
+    "noRace": "Pas de course en vue ?",
+    "otherWays": "Tu préfères",
+    "prebuiltLink": "un plan déjà écrit",
+    "freeLink": "un calendrier vide à remplir toi-même",
+    "announce": "Ultra et triathlon : les séances sont là, les plans arrivent."
+  },
+  "event": {
+    "title": "Ta course",
+    "subtitle": "La date décide de la longueur du plan : au moins {{min}} semaines.",
+    "prepTitle": "Courses de préparation",
+    "prepBody": "Jusqu'à cinq courses avant l'objectif, le plan s'allège autour."
   },
   "practice": {
     "title": "Qu'est-ce que tu prépares ?",

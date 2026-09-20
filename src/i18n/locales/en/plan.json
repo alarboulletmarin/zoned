@@ -74,8 +74,9 @@
     "weeksShort": "wks"
   },
   "schedule": {
-    "title": "Training schedule",
-    "subtitle": "How many sessions per week?",
+    "title": "Your typical week",
+    "subtitle": "How many sessions, which day for the long run, and where you start from.",
+    "currentVolume": "Where you start from, if you know",
     "sessionsPerWeek": "Sessions per week",
     "longRunDay": "Long run day",
     "longRunDayDesc": "Your weekly long run, the key endurance session",
@@ -121,7 +122,11 @@
     "advancedDesc": "4-5 runs/week · 40-70 km/week",
     "elite": "Elite",
     "eliteDesc": "5-7 runs/week · 70+ km/week",
-    "suggested": "Suggested"
+    "suggested": "Suggested",
+    "vmaLabel": "Your VMA, if you know it",
+    "vmaPlaceholder": "14.5",
+    "vmaHint": "Optional. Without it, the plan's paces are estimated from your level.",
+    "vmaUnknown": "I don't know it"
   },
   "config": {
     "title": "Configuration",
@@ -145,7 +150,9 @@
     "requiredPace": "Required pace: ",
     "paceFormatError": "Format: MM:SS (e.g. 5:30)",
     "timeFormatHint": "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)",
-    "skip": "Skip this step"
+    "skip": "Skip this step",
+    "paceMaskHint": "Type the digits, the colon places itself: 530 reads 5:30.",
+    "timeMaskHint": "Type the digits: 4500 reads 45:00, 33000 reads 3:30:00."
   },
   "summary": {
     "title": "Summary",
@@ -175,7 +182,9 @@
     "purposeBaseBuilding": "Base Building",
     "purposeReturnFromInjury": "Return from Injury",
     "purposeBeginnerStart": "Beginner Start",
-    "weeksShort": "weeks"
+    "weeksShort": "weeks",
+    "noVmaTitle": "Estimated paces",
+    "noVmaBody": "You did not give your VMA: the plan's paces will be derived from your level. Go back to the Level step to enter it, or do it later in My zones."
   },
   "seo": {
     "createTitle": "Create Training Plan",
@@ -211,6 +220,9 @@
     "prebuilt": "Pre-built",
     "addDates": "Add dates",
     "planEnded": "This plan has ended. It remains available as your training history.",
+    "estimatedPacesTitle": "Estimated paces, not measured",
+    "estimatedPaces": "This plan was computed without your VMA: its paces come from your level. Enter it for paces that are yours.",
+    "estimatedPacesLink": "Open My zones",
     "clickToRename": "Click to rename",
     "sessionUpdateFailed": "The session was not updated.",
     "sessionMoveFailed": "The session was not moved.",
@@ -739,32 +751,41 @@
     "createNote": "{{n}} empty weeks to fill, session by session"
   },
   "wizard": {
-    "kicker": "Assisted plan",
+    "kicker": "New plan",
     "lede": "Volume rises by at most 10% a week, with an easier week every three.",
     "source": "Mujika & Padilla 2003 · Pfitzinger & Douglas 2009",
     "limitsKicker": "No account, no reminders",
     "limitsBody": "The plan sends you nothing and counts no streaks. You edit it or delete it whenever you want.",
     "where": "Step {{current}} of {{total}} · nothing is sent",
+    "whereFirst": "Seven screens at most · nothing is sent",
     "draftBody": "Your answers from last time are here. Pick up where you stopped, or start over.",
     "errorTitle": "The plan was not generated",
     "errorHint": "Your answers are intact: try again, or step back to change one.",
     "step": {
-      "purpose": "Purpose",
-      "distance": "Distance",
-      "date": "Race date",
+      "race": "Race",
+      "event": "The race",
       "duration": "Length",
-      "race_name": "Name",
-      "intermediate_goals": "Prep races",
       "level": "Level",
       "goal": "Mindset",
-      "fitness": "Fitness",
       "schedule": "Typical week",
       "pace": "Pace",
-      "summary": "Summary",
-      "practice": "Discipline",
-      "terrain": "Terrain",
-      "ultra_logistics": "Logistics"
+      "summary": "Summary"
     }
+  },
+  "race": {
+    "title": "What are you preparing?",
+    "subtitle": "A race, or a block with no race in sight. It decides the questions that follow.",
+    "noRace": "No race in sight?",
+    "otherWays": "Rather have",
+    "prebuiltLink": "a plan already written",
+    "freeLink": "an empty calendar to fill yourself",
+    "announce": "Ultra and triathlon: the sessions are here, the plans are coming."
+  },
+  "event": {
+    "title": "Your race",
+    "subtitle": "The date sets the plan's length: at least {{min}} weeks.",
+    "prepTitle": "Preparation races",
+    "prepBody": "Up to five races before the goal, the plan eases around them."
   },
   "practice": {
     "title": "What are you training for?",

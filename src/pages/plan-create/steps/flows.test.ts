@@ -2,12 +2,11 @@ import { describe, expect, test } from "bun:test";
 
 import { indexOfStep, stepsFor } from "./flows";
 import type { FormState, StepId } from "../types";
-import { PRACTICES, isPracticeLive } from "@/types/practice";
 
 /** Un brouillon minimal : seuls les champs que `stepsFor` regarde comptent. */
 function draft(over: Partial<FormState> = {}): FormState {
   return {
-    practice: "road",
+    practice: null,
     planPurpose: "race",
     trainingGoal: "time",
     raceDistance: null,
@@ -16,6 +15,7 @@ function draft(over: Partial<FormState> = {}): FormState {
     useCustomStartDate: false,
     raceName: "",
     runnerLevel: null,
+    vma: "",
     daysPerWeek: 4,
     longRunDay: 6,
     targetPace: "",
@@ -27,148 +27,93 @@ function draft(over: Partial<FormState> = {}): FormState {
     strengthFrequency: 2,
     intermediateGoals: [],
     terrain: "trail_runnable",
-    ultraNight: false,
-    ultraFuelling: false,
-    ultraPoles: false,
-    ultraBackToBack: false,
     ...over,
   };
 }
 
 describe("stepsFor", () => {
-  test("sans pratique choisie, il n'y a qu'une question à poser", () => {
-    expect(stepsFor(draft({ practice: null }))).toEqual(["practice"]);
+  test("tant que rien n'est choisi, il n'y a qu'une question à poser", () => {
+    expect(stepsFor(draft())).toEqual(["race"]);
   });
 
-  test("la pratique est toujours la première étape", () => {
-    for (const practice of PRACTICES) {
-      expect(stepsFor(draft({ practice }))[0]).toBe("practice");
-    }
-  });
-
-  // Le triathlon est annoncé, pas livré : l'écran le dit et s'arrête. Ni
-  // demi-parcours, ni champ en trompe-l'œil.
-  test("le triathlon s'arrête à sa première étape", () => {
-    expect(stepsFor(draft({ practice: "triathlon" }))).toEqual(["practice"]);
-  });
-
-  test("la route ne demande ni terrain ni logistique", () => {
-    const steps = stepsFor(draft({ practice: "road" }));
-    expect(steps).not.toContain("terrain");
-    expect(steps).not.toContain("ultra_logistics");
-  });
-
-  // Le champ dénivelé existait, mais sur l'écran d'allure et SANS condition :
-  // un coureur de 5 km sur route se faisait demander un D+.
-  test("le trail demande le terrain, pas la logistique ultra", () => {
-    const steps = stepsFor(draft({ practice: "trail" }));
-    expect(steps).toContain("terrain");
-    expect(steps).not.toContain("ultra_logistics");
-  });
-
-  // L'ultra a rejoint le triathlon le 12 septembre 2026 : son parcours ne
-  // s'ouvre plus. Les deux étapes qu'il demandait, terrain, logistique,
-  // restent déclarées ; c'est la porte qui est fermée, pas la machine, et
-  // toutes les étapes déclarées sont atteignables plus bas nomme la seule
-  // qui reste garée derrière.
-  test("une pratique annoncée s'arrête à la première question", () => {
-    for (const practice of PRACTICES) {
-      if (isPracticeLive(practice)) continue;
-      expect(stepsFor(draft({ practice }))).toEqual(["practice"]);
-    }
-  });
-
-  test("le terrain vient avant la semaine type", () => {
-    const steps = stepsFor(draft({ practice: "trail" }));
-    expect(steps.indexOf("terrain")).toBeGreaterThanOrEqual(0);
-    expect(steps.indexOf("terrain")).toBeLessThan(steps.indexOf("schedule"));
-  });
-
-  test("chaque parcours finit par le récapitulatif", () => {
-    for (const practice of PRACTICES) {
-      if (!isPracticeLive(practice)) continue;
-      const steps = stepsFor(draft({ practice }));
+  // Sept écrans pour une course : c'est le budget du parcours, et ce test le
+  // tient. En ajouter un demande d'en retirer un, ou de changer ce nombre en
+  // sachant ce qu'il coûte.
+  test("une course, c'est sept écrans, la course en tête et le récapitulatif en queue", () => {
+    for (const raceDistance of ["5K", "10K", "semi", "marathon", "trail_short", "trail"] as const) {
+      const steps = stepsFor(draft({ raceDistance, practice: raceDistance.startsWith("trail") ? "trail" : "road" }));
+      expect(steps).toHaveLength(7);
+      expect(steps[0]).toBe("race");
       expect(steps[steps.length - 1]).toBe("summary");
     }
+  });
+
+  test("le trail ne coûte pas d'écran de plus : le terrain vit dans la course", () => {
+    expect(stepsFor(draft({ raceDistance: "trail", practice: "trail" }))).toEqual(
+      stepsFor(draft({ raceDistance: "10K", practice: "road" })),
+    );
+  });
+
+  test("un plan sans course visée ne demande ni course ni allure, mais une durée", () => {
     for (const purpose of ["base_building", "return_from_injury", "beginner_start"] as const) {
-      const steps = stepsFor(draft({ planPurpose: purpose }));
+      const steps = stepsFor(draft({ planPurpose: purpose, practice: "road" }));
+      expect(steps).toHaveLength(6);
+      expect(steps).not.toContain("event");
+      expect(steps).not.toContain("pace");
+      expect(steps).toContain("duration");
       expect(steps[steps.length - 1]).toBe("summary");
     }
-  });
-
-  test("un plan sans course visée ne demande ni date ni distance", () => {
-    const steps = stepsFor(draft({ planPurpose: "base_building" }));
-    expect(steps).not.toContain("distance");
-    expect(steps).not.toContain("date");
-    expect(steps).toContain("duration");
   });
 
   test("aucune étape n'apparaît deux fois", () => {
-    for (const practice of PRACTICES) {
-      const steps = stepsFor(draft({ practice }));
+    for (const form of [
+      draft({ raceDistance: "10K", practice: "road" }),
+      draft({ planPurpose: "base_building", practice: "road" }),
+    ]) {
+      const steps = stepsFor(form);
       expect(new Set(steps).size).toBe(steps.length);
     }
   });
 
   // Les StepId déclarés doivent tous être atteignables : une étape que personne
-  // ne peut voir est du code mort qui se lit comme une intention.
-  // (Le registre lui-même n'est pas importé ici : il tire les composants,
-  // donc react-i18next, dont `import.meta.glob` n'existe pas hors de Vite.
-  // Le lien registre ↔ StepId est garanti par `Record<StepId, StepDef>`.)
-  //
-  // UNE exception, et elle est nommée : `ultra_logistics` n'appartient qu'au
-  // parcours ultra, fermé depuis que l'ultra est annoncé. La liste est EXACTE
-  // dans les deux sens, rouvrir l'ultra sans la vider fait échouer ce test
-  // autant qu'oublier d'y inscrire une étape devenue morte. C'est ce qui
-  // l'empêche de devenir le tapis sous lequel on pousse.
+  // ne peut voir est du code mort qui se lit comme une intention. Le lien
+  // registre ↔ StepId est garanti par `Record<StepId, StepDef>`.
   test("toutes les étapes déclarées sont atteignables", () => {
     const reachable = new Set<StepId>();
-    for (const practice of PRACTICES) {
-      for (const purpose of ["race", "base_building", "return_from_injury", "beginner_start"] as const) {
-        for (const id of stepsFor(draft({ practice, planPurpose: purpose }))) reachable.add(id);
-      }
+    for (const form of [
+      draft({ raceDistance: "10K", practice: "road" }),
+      draft({ raceDistance: "trail", practice: "trail" }),
+      draft({ planPurpose: "base_building", practice: "road" }),
+    ]) {
+      for (const id of stepsFor(form)) reachable.add(id);
     }
     const declared: StepId[] = [
-      "practice", "purpose", "distance", "date", "duration", "race_name",
-      "intermediate_goals", "level", "goal", "fitness", "terrain",
-      "ultra_logistics", "schedule", "pace", "summary",
+      "race", "event", "duration", "level", "goal", "schedule", "pace", "summary",
     ];
-    const parked: StepId[] = ["ultra_logistics"];
-    expect(declared.filter((id) => !reachable.has(id))).toEqual(parked);
+    expect(declared.filter((id) => !reachable.has(id))).toEqual([]);
   });
 });
 
 /**
  * Le garde-fou de la reprise d'un brouillon.
  *
- * Un index n'a de sens que dans le parcours où il a été écrit : l'ajout de
- * l'étape pratique en tête a décalé tous les autres d'un cran. Reprendre
- * par l'index ferait donc revenir sur la mauvaise question, en silence.
+ * Un index n'a de sens que dans le parcours où il a été écrit. Reprendre par
+ * l'index ferait revenir sur la mauvaise question, en silence.
  */
 describe("indexOfStep", () => {
   test("retrouve une étape par son id dans le bon parcours", () => {
-    expect(indexOfStep("practice", draft())).toBe(0);
-    expect(indexOfStep("summary", draft({ practice: "road" }))).toBe(
-      stepsFor(draft({ practice: "road" })).length - 1,
-    );
+    const road = draft({ raceDistance: "10K", practice: "road" });
+    expect(indexOfStep("race", road)).toBe(0);
+    expect(indexOfStep("summary", road)).toBe(stepsFor(road).length - 1);
   });
 
   test("rend null pour une étape absente de CE parcours", () => {
-    // terrain existe, mais pas pour la route.
-    expect(indexOfStep("terrain", draft({ practice: "road" }))).toBeNull();
-    expect(indexOfStep("terrain", draft({ practice: "trail" }))).not.toBeNull();
+    // La course existe, mais pas pour un plan sans course visée.
+    expect(indexOfStep("event", draft({ planPurpose: "base_building", practice: "road" }))).toBeNull();
+    expect(indexOfStep("event", draft({ raceDistance: "10K", practice: "road" }))).not.toBeNull();
   });
 
   test("rend null pour un id inconnu", () => {
     expect(indexOfStep("pas_une_etape", draft())).toBeNull();
-  });
-
-  // Le décalage exact que l'ajout de la pratique a créé : l'index 5 désignait
-  // Niveau dans l'ancien parcours, et désigne Courses de prépa dans le
-  // nouveau. C'est pour ça que l'id gagne toujours.
-  test("l'id désigne la même question que l'index ne désigne plus", () => {
-    const steps = stepsFor(draft({ practice: "road" }));
-    expect(steps[5]).toBe("intermediate_goals");
-    expect(indexOfStep("level", draft({ practice: "road" }))).toBe(6);
   });
 });

@@ -426,7 +426,7 @@
     "plansMine": "My plans",
     "plansMineDesc": "Active and past plans",
     "plansNew": "New plan",
-    "plansNewDesc": "Assisted, free or pre-built",
+    "plansNewDesc": "A race, a date, your days",
     "raceSim": "Race-day simulator",
     "raceSimDesc": "Splits, nutrition and pacing for your race",
     "calculatorsAll": "All calculators",
@@ -834,7 +834,7 @@
     "myZones": "My Zones",
     "favorites": "My Favorites",
     "planNew": "New Training Plan",
-    "planNewDesc": "Choose how to create your training plan.",
+    "planNewDesc": "A race, a date, the days you can train: the plan builds itself in seven screens.",
     "collectionsDesc": "Themed workout paths for every goal. Browse curated running collections.",
     "libraryTitle": "Workout Library",
     "aboutSeoTitle": "About"

@@ -67,8 +67,6 @@ const CollectionsPage = lazyPage(() => import("@/pages/CollectionsPage").then(m 
 const CollectionDetailPage = lazyPage(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
 const ChangelogPage = lazyPage(() => import("@/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
 const PlansPage = lazyPage(() => import("@/pages/PlansPage").then(m => ({ default: m.PlansPage })));
-const PlanNewPage = lazyPage(() => import("@/pages/PlanNewPage").then(m => ({ default: m.PlanNewPage })));
-const PlanModePage = lazyPage(() => import("@/pages/PlanModePage").then(m => ({ default: m.PlanModePage })));
 const PlanCreatePage = lazyPage(() => import("@/pages/PlanCreatePage").then(m => ({ default: m.PlanCreatePage })));
 const FreePlanCreatePage = lazyPage(() => import("@/pages/FreePlanCreatePage").then(m => ({ default: m.FreePlanCreatePage })));
 const PlanViewPage = lazyPage(() => import("@/pages/PlanViewPage").then(m => ({ default: m.PlanViewPage })));
@@ -333,9 +331,10 @@ function App() {
                           <Route path="/nutrition" element={<NutritionHubPage />} />
                           <Route path="/plans" element={<PlansPage />} />
                           <Route path="/plans/methodology" element={<PlanMethodologyPage />} />
-                          <Route path="/plan/new" element={<PlanNewPage />} />
-                          <Route path="/plan/new/mode" element={<PlanModePage />} />
-                          <Route path="/plan/new/assisted" element={<PlanCreatePage />} />
+                          <Route path="/plan/new" element={<PlanCreatePage />} />
+                          {/* Les deux couloirs d'avant le 20 septembre 2026 : la pratique, puis le mode. Les liens partagés retombent sur la première question. */}
+                          <Route path="/plan/new/mode" element={<Navigate to="/plan/new" replace />} />
+                          <Route path="/plan/new/assisted" element={<Navigate to="/plan/new" replace />} />
                           <Route path="/plan/new/free" element={<FreePlanCreatePage />} />
                           <Route path="/plan/new/prebuilt" element={<PrebuiltPlansPage />} />
                           <Route path="/plan/prebuilt/:slug" element={<PrebuiltPlanDetailPage />} />
