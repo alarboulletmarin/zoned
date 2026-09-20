@@ -36,7 +36,6 @@
       ],
       "lead": "Know exactly what to run tomorrow. {{plans}} training plans from 5K to marathon, {{sessions}} workouts grounded in the science (Seiler, Daniels, Billat, Coggan) and {{calculators}} calculators. Free, no account, everything stays in your browser.",
       "ctaPrimary": "Generate my plan",
-      "ctaPrimaryHasPlans": "Pick training back up",
       "ctaSecondary": "Explore the workouts",
       "scrollHint": "Scroll to discover",
       "title": "What am I running today?",
@@ -91,20 +90,6 @@
       "kicker": "Suggested this week",
       "title": "Three sessions to stay on the right volume",
       "body": "Deterministic by ISO week. No A/B, no engagement loop."
-    },
-    "s03": {
-      "kicker": "The zone atlas",
-      "title1": "Six zones, six adaptations,",
-      "title2": "one coherent grid",
-      "body": "Enter your VMA or HRmax to compute your ranges. Every session in the catalogue maps onto them.",
-      "zone": "Zone",
-      "name": "Name",
-      "hr": "Heart rate",
-      "rpe": "RPE",
-      "adaptation": "Targeted adaptation",
-      "refPace": "Pace",
-      "fig": "Fig. 02, 6-zone model, calibrated on HRmax / FTP / threshold pace",
-      "figuresLabel": "The same runner at six intensities, from a walk to a sprint: the higher the zone, the more the torso leans and the darker the line."
     },
     "s04": {
       "kicker": "The methods",
@@ -200,21 +185,9 @@
       "zone": "Zone",
       "lvl": "Level"
     },
-    "s08": {
-      "kicker": "Ethos",
-      "title1": "No data",
-      "title2": "ever leaves your device",
-      "body": "No server, no account, no third-party cookies. Public code under the MIT licence.",
-      "lines": {
-        "trackers": "Cookie",
-        "account": "Account required",
-        "network": "Data sent",
-        "exports": "Local exports"
-      }
-    },
     "s09": {
       "kicker": "Frequently asked",
-      "title": "Five questions answered upfront",
+      "title": "Three questions before you start",
       "more": "{{count}} more articles in the learning library.",
       "moreLink": "Read all →",
       "q": {
@@ -222,25 +195,9 @@
           "q": "Do I need a heart rate strap?",
           "a": "No. Zones calibrate from pace or power. A heart-rate strap mainly helps validate Z1-Z2."
         },
-        "export": {
-          "q": "How do I send a session to my watch?",
-          "a": ".fit, .ics, .pdf or .png; routes as .gpx. Every export is generated locally."
-        },
-        "custom": {
-          "q": "Can I customise a plan?",
-          "a": "Yes: shift a week, substitute a session, drag a day to another. A free-form mode exists too."
-        },
         "free": {
           "q": "Is Zoned free?",
           "a": "Yes, and forever. No paid tier, no ads. Open-source under the MIT licence."
-        },
-        "devices": {
-          "q": "What devices does Zoned run on?",
-          "a": "Any modern browser. Nothing to install: Zoned is a PWA, a shortcut is enough."
-        },
-        "offline": {
-          "q": "Does Zoned work offline?",
-          "a": "Yes. After the first load the app and the sessions are cached. Sessions, calculators and your plan stay available."
         },
         "data": {
           "q": "Where is my data stored?",
@@ -249,13 +206,6 @@
       }
     },
     "tip": "Tip of the day",
-    "cta": {
-      "kicker": "Get started",
-      "line1": "Your next race starts here",
-      "line2": "A complete plan in two clicks, free, no account",
-      "primary": "Generate my plan",
-      "secondary": "Explore the workouts"
-    },
     "footer": {
       "groups": {
         "product": "Product",

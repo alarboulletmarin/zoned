@@ -36,7 +36,6 @@
       ],
       "lead": "Sache exactement quoi courir demain. {{plans}} plans d'entraînement du 5K au marathon, {{sessions}} séances expliquées par la science (Seiler, Daniels, Billat, Coggan) et {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans ton navigateur.",
       "ctaPrimary": "Générer mon plan",
-      "ctaPrimaryHasPlans": "Reprendre l'entraînement",
       "ctaSecondary": "Explorer les séances",
       "scrollHint": "Découvrir l'app",
       "title": "Qu'est-ce que je cours aujourd'hui ?",
@@ -91,20 +90,6 @@
       "kicker": "Suggéré cette semaine",
       "title": "Trois séances pour rester dans le bon volume cette semaine",
       "body": "Sélection déterministe par semaine ISO. Ni A/B, ni boucle d'engagement."
-    },
-    "s03": {
-      "kicker": "L'atlas des zones",
-      "title1": "Six zones, six adaptations,",
-      "title2": "une grille cohérente",
-      "body": "Entre ta VMA ou ta FCmax pour calculer tes plages. Chaque séance du catalogue s'y rattache.",
-      "zone": "Zone",
-      "name": "Nom",
-      "hr": "Fréquence cardiaque",
-      "rpe": "RPE",
-      "adaptation": "Adaptation visée",
-      "refPace": "Allure",
-      "fig": "Fig. 02 · Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil",
-      "figuresLabel": "Le même coureur à six intensités, du pas de marche au sprint : plus la zone monte, plus le buste s'engage et plus le trait est sombre."
     },
     "s04": {
       "kicker": "Les méthodes",
@@ -200,21 +185,9 @@
       "zone": "Zone",
       "lvl": "Niveau"
     },
-    "s08": {
-      "kicker": "Éthos",
-      "title1": "Aucune donnée",
-      "title2": "ne quitte ton appareil",
-      "body": "Pas de serveur, pas de compte, pas de cookie tiers. Code public sous licence MIT.",
-      "lines": {
-        "trackers": "Cookie",
-        "account": "Compte requis",
-        "network": "Données envoyées",
-        "exports": "Exports locaux"
-      }
-    },
     "s09": {
       "kicker": "Questions fréquentes",
-      "title": "Cinq points levés d'avance",
+      "title": "Trois questions avant de commencer",
       "more": "{{count}} articles complémentaires dans la bibliothèque pédagogique.",
       "moreLink": "Tout lire →",
       "q": {
@@ -222,25 +195,9 @@
           "q": "Faut-il un capteur cardiaque ?",
           "a": "Non. Les zones se calibrent à l'allure ou à la puissance. Le cardio sert surtout à valider Z1-Z2."
         },
-        "export": {
-          "q": "Comment exporter une séance vers ma montre ?",
-          "a": "En .fit, .ics, .pdf ou .png ; les parcours en .gpx. Tout est généré en local."
-        },
-        "custom": {
-          "q": "Puis-je personnaliser un plan ?",
-          "a": "Oui : décaler une semaine, substituer une séance, déplacer un jour au glisser-déposer. Un mode libre existe aussi."
-        },
         "free": {
           "q": "Zoned est-il gratuit ?",
           "a": "Oui, et pour toujours. Pas de niveau payant, pas de publicité. Open-source sous licence MIT."
-        },
-        "devices": {
-          "q": "Sur quels appareils Zoned fonctionne-t-il ?",
-          "a": "Tout navigateur moderne. Rien à installer : Zoned est une PWA, un raccourci suffit."
-        },
-        "offline": {
-          "q": "Zoned fonctionne-t-il hors-ligne ?",
-          "a": "Oui. Après le premier chargement, l'app et les séances sont en cache. Séances, calculateurs et plan restent accessibles."
         },
         "data": {
           "q": "Où sont stockées mes données ?",
@@ -249,13 +206,6 @@
       }
     },
     "tip": "Conseil du jour",
-    "cta": {
-      "kicker": "Commencer maintenant",
-      "line1": "Ta prochaine course commence ici",
-      "line2": "Un plan complet en deux clics, gratuit, sans compte",
-      "primary": "Générer mon plan",
-      "secondary": "Explorer les séances"
-    },
     "footer": {
       "groups": {
         "product": "Produit",
