@@ -21,8 +21,11 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -53,6 +56,9 @@ import {
   deleteSessionFromPlan,
   savePlan,
   getPlan,
+  getAllPlans,
+  mergeWeekIntoPlan,
+  type MergeWeekMode,
 } from "@/lib/planStorage";
 import {
   ACTIVITY_KINDS,
@@ -79,6 +85,8 @@ import {
   loadTodayComposition,
   mondayOf,
   placeWeek,
+  planWeekAt,
+  removeLayer,
   saveTodayComposition,
   setLayerEnabled,
   type TodayComposition,
@@ -690,10 +698,32 @@ export function WeekViewPage() {
     writeComposition(placeWeek(composition, plan.id, on));
     toast.success(t("library:weekly.cockpit.toastPlaced", { date: formatMonday(isoDateOnly(on)) }));
   };
+  /* Le plan qui couvre la semaine où celle-ci est suivie, et sa semaine à
+     lui : c'est là qu'elle peut s'ajouter. Le geste vivait dans la feuille du
+     cockpit seulement ; quand on veut jouer avec un plan et une semaine, on
+     est ICI, sur la semaine. */
+  const displayName = name ?? pick(plan, "name");
+
+  const mergeTarget = placedOn
+    ? planWeekAt(getAllPlans(), (() => { const [y, m, d] = placedOn.split("-").map(Number); return new Date(y, m - 1, d); })())
+    : null;
+  const handleMerge = (mode: MergeWeekMode) => {
+    if (!mergeTarget) return;
+    const ok = mergeWeekIntoPlan(mergeTarget.plan.id, mergeTarget.weekNumber, plan.id, mode, {
+      label: t("library:weekly.merge.label", { week: displayName, n: mergeTarget.weekNumber, lng: "fr" }),
+      labelEn: t("library:weekly.merge.label", { week: displayName, n: mergeTarget.weekNumber, lng: "en" }),
+    });
+    if (!ok) {
+      toast.error(t("library:weekly.merge.failed"));
+      return;
+    }
+    // Ajoutée au plan, la semaine n'a plus à se lire à côté de lui.
+    writeComposition(removeLayer(composition, plan.id));
+    toast.success(t("library:weekly.merge.done"));
+  };
   // A regular (multi-week) plan should use the full plan editor.
   if (!plan.config.isSingleWeek) return <Navigate to={`/plan/${plan.id}`} replace />;
 
-  const displayName = name ?? pick(plan, "name");
 
   // The share button opens the image sheet; the link is one of its actions.
   const shareUrl = sharedWeekUrl(plan, displayName);
@@ -767,8 +797,12 @@ export function WeekViewPage() {
                   className="zn-cluster zn-cluster--split"
                   style={{ "--gap": "var(--sp-6)" } as CSSProperties}
                 >
+                  {/* Un cluster et non une rangée : le troisième badge porte
+                      une date, et à 390 px les trois ne tiennent pas sur une
+                      ligne, le dernier passe dessous au lieu de sortir de
+                      l'écran. */}
                   <div
-                    className="zn-row"
+                    className="zn-cluster"
                     style={{ "--gap": "var(--sp-4)" } as CSSProperties}
                   >
                   <DropdownMenu>
@@ -885,8 +919,30 @@ export function WeekViewPage() {
                           {t("library:weekly.cockpit.remove")}
                         </DropdownMenuRadioItem>
                       </DropdownMenuRadioGroup>
+                      {/* Suivie sur une semaine d'un plan, elle peut y entrer
+                          pour de bon : le geste est ici, sous l'endroit où
+                          elle est suivie, et demande en toutes lettres
+                          ajouter ou remplacer. */}
+                      {mergeTarget && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuLabel>
+                            {t("library:weekly.merge.into", {
+                              plan: isEn ? mergeTarget.plan.nameEn : mergeTarget.plan.name,
+                              n: mergeTarget.weekNumber,
+                            })}
+                          </DropdownMenuLabel>
+                          <DropdownMenuItem onSelect={() => handleMerge("add")}>
+                            {t("library:weekly.merge.add")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => handleMerge("replace")}>
+                            {t("library:weekly.merge.replace")}
+                          </DropdownMenuItem>
+                        </>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
+
                   </div>
 
                   <div

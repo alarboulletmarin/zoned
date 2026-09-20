@@ -212,15 +212,23 @@
       "none": "No category"
     },
     "cockpit": {
-      "label": "Cockpit",
-      "place": "Place in the cockpit",
-      "placed": "Cockpit · week of {{date}}",
+      "label": "Followed",
+      "place": "Follow this week",
+      "placed": "Followed · week of {{date}}",
       "thisWeek": "This week",
       "nextWeek": "Next week",
-      "remove": "Remove from the cockpit",
-      "listPlaced": "in the cockpit · week of {{date}}",
-      "toastPlaced": "Placed in the cockpit, week of {{date}}",
-      "toastRemoved": "Removed from the cockpit"
+      "remove": "Stop following",
+      "listPlaced": "followed · week of {{date}}",
+      "toastPlaced": "Followed on the week of {{date}}",
+      "toastRemoved": "No longer followed"
+    },
+    "merge": {
+      "into": "Into {{plan}}, week {{n}}",
+      "add": "Add to the plan's sessions",
+      "replace": "Replace the plan's sessions",
+      "done": "Added to the plan. Undo from the plan page.",
+      "failed": "The addition could not be saved.",
+      "label": "{{week}} added to week {{n}}"
     },
     "budget": {
       "label": "Budget",

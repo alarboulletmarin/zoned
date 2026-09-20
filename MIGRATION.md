@@ -690,6 +690,7 @@ chaque visite.
 | 5 | Racine et semaine | `/` mène au cockpit dès qu'un plan non terminé existe. `/weeks/new` crée et pose la semaine sur la semaine en cours, plus de trois portes ; une semaine du catalogue est posée d'office. À 390 px, les titres des cartes compactes tiennent sur deux lignes au lieu d'un mot. |
 
 | 6 | Accueil | Un seul lecteur depuis que la racine mène au cockpit : la personne qui découvre. Huit sections et 6 300 px à 390 px ramenés à quatre et 2 800 : le héros, les quatre portes, les trois séances de la semaine, trois questions. L'atlas des zones (une page de référence, Mes zones et Méthodes la portent), la bande éthos (quatre compteurs répétant le chapô) et l'appel de fin de page partent, avec 400 lignes de CSS mortes de cette page. |
+| 7 | Semaine et plan | La semaine reste une entité à part, c'est la position du propriétaire : deux semaines suivies la même semaine se combinent, et une semaine s'ajoute à une semaine du plan. Le vocabulaire suit cette lecture (suivre, suivie sur, ajouter au plan ; plus de couche, de pose ni de fusion à l'écran) et le geste d'ajout existe aux trois endroits où l'on est quand on y pense : la feuille du cockpit, la page de la semaine, la page du plan, catalogue compris. |
 ## Ce qui ne change pas
 
 Les clés `localStorage` gardent leurs noms et leurs formes. La VMA a toujours
@@ -700,8 +701,6 @@ autre schéma, sont écartés.
 
 ## Ce qui reste, si l'on continue
 
-- La semaine comme plan d'une semaine sans notion de pose ni de fusion : la
-  pose par défaut en retire le coût quotidien, le modèle reste.
 - Six guichets de VMA (profil, Mes zones, deux calculateurs, tapis, fiche
   séance). Ils écrivent tous la même valeur maintenant ; ils sont toujours
   six.
