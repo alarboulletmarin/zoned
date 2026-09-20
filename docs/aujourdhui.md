@@ -41,8 +41,12 @@ Deux objets, deux façons d'entrer dans le cockpit :
 - **un plan est daté par lui-même** (`startDate`, sinon `createdAt`). Il est
   suivi tant qu'on ne l'éteint pas, aucune couche à écrire ;
 - **une semaine seule est un gabarit**, sans date. Elle entre dans le cockpit
-  quand on la **pose** sur une semaine du calendrier (`anchor`), et seulement
-  là. La même semaine peut être reposée ailleurs plus tard.
+  quand on la **pose** sur une semaine du calendrier (`anchor`). Depuis le
+  20 septembre 2026, **la création pose** : une semaine composée, tirée du
+  catalogue ou ajoutée depuis le cockpit est posée à sa naissance, sur le
+  lundi demandé ou sur celui de la semaine en cours. La pose reste une
+  propriété de la composition, jamais de la semaine, et la même semaine se
+  repose ailleurs depuis son badge Cockpit ou depuis la grille du mois.
 
 ### La règle de résolution (`resolveTodaySources`)
 
@@ -53,9 +57,10 @@ Trois lignes, et quelqu'un doit pouvoir la prédire :
 3. Une semaine seule **sans couche** ne se montre que lorsqu'aucun plan suivi
    n'est en cours aujourd'hui, sur sa semaine de création.
 
-La ligne 3 est la compatibilité : pour qui n'a pas de plan, rien ne change
-(composer une semaine la met dans le cockpit). Pour qui en a un, c'est la fin
-du bug : la semaine n'écrase plus le plan, elle attend qu'on la pose.
+La ligne 3 est la compatibilité des semaines créées avant que la création ne
+pose : elles n'ont pas de couche. Une semaine créée aujourd'hui en a toujours
+une, donc la ligne 2 suffit à la prédire : elle est dans le cockpit, cette
+semaine, à côté du plan s'il y en a un.
 
 ### Ce que le cockpit rend (`pickTodayFocus`)
 
@@ -102,10 +107,12 @@ toujours une semaine calendaire, et `calendarWeekRange` suffit pour les bilans.
   passe par la `SessionRef`, la ligne de position reste celle du primaire et
   les autres sources se listent sous elle. Bilan de la semaine et du mois
   sur toutes les sources.
-- `/weeks/new` reçoit `state.placeOn` (un lundi) depuis la feuille : une
-  semaine composée depuis le cockpit se pose d'elle-même sur la semaine
-  regardée, par les trois portes, catalogue compris (l'état traverse la
-  liste jusqu'au détail, qui l'enregistre).
+- `/weeks/new` crée la semaine et l'ouvre, sans écran de choix : les trois
+  portes (à la main, générer, catalogue) créaient la même semaine vide, et
+  le catalogue est un lien de l'état vide de la liste. Il reçoit
+  `state.placeOn` (un lundi) depuis la feuille et pose la semaine dessus ;
+  sans lui, sur le lundi de la semaine en cours. Le détail d'une semaine du
+  catalogue fait de même.
 - `src/pages/ActivitiesPage.tsx` : le bilan lit la même composition.
 - **Poser depuis la semaine elle-même** : `WeekViewPage` porte un troisième
   badge, Cockpit, à côté de la catégorie et du budget (cette semaine, la

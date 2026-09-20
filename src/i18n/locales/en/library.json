@@ -189,7 +189,7 @@
       "title": "My weeks",
       "subtitle": "Your training weeks, generated or built by hand.",
       "create": "Create a week",
-      "empty": "A standalone week is seven days built with no plan behind them: a gentle comeback, a hills block, or the generator on trial with no commitment. It then sits in the cockpit.",
+      "empty": "A standalone week is seven days built with no plan behind them: a gentle comeback, a hills block, or the generator on trial with no commitment. It reaches your cockpit as soon as it exists.",
       "emptyAction": "Build my week",
       "emptyHint": "Ten ready-made weeks exist too, to take as they are.",
       "emptyHintLink": "See the ready-made weeks",
@@ -243,29 +243,7 @@
     },
     "new": {
       "title": "Create a week",
-      "subtitle": "Choose how to compose your training week.",
-      "back": "Back to weeks",
-      "modes": {
-        "scratch": {
-          "kicker": "By hand",
-          "title": "From scratch",
-          "desc": "An empty week you fill in session by session, without the generator.",
-          "cta": "Build my week"
-        },
-        "generate": {
-          "kicker": "80/20 generator",
-          "title": "Generate a week",
-          "desc": "Set the volume, sessions and disciplines: the generator composes a polarised week.",
-          "cta": "Tune and generate"
-        },
-        "prebuilt": {
-          "title": "Pre-built week",
-          "desc": "Pick a sourced template week and start right away.",
-          "kicker": "Catalogue",
-          "cta": "{{count}} ready-made weeks"
-        }
-      },
-      "kicker": "3 ways to start"
+      "creating": "Preparing your week…"
     },
     "prebuilt": {
       "title": "Pre-built weeks",

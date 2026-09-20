@@ -14,7 +14,7 @@ import { prebuiltWeekToPlan, planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
 import { savePlan } from "@/lib/planStorage";
 import { dateFromIso } from "@/lib/cockpit";
-import { loadTodayComposition, placeWeek, saveTodayComposition } from "@/lib/todayComposition";
+import { loadTodayComposition, mondayOf, placeWeek, saveTodayComposition } from "@/lib/todayComposition";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -109,10 +109,10 @@ export function PrebuiltWeekDetailPage() {
       return;
     }
     triggerStorageWarning();
-    // Venue du cockpit : la semaine se pose sur le lundi qu'on regardait.
-    if (typeof placeOn === "string") {
-      saveTodayComposition(placeWeek(loadTodayComposition(), plan.id, dateFromIso(placeOn)));
-    }
+    // La semaine arrive dans le cockpit dès qu'elle existe : sur le lundi
+    // qu'on regardait en venant du cockpit, sinon sur celui de cette semaine.
+    const monday = typeof placeOn === "string" ? dateFromIso(placeOn) : mondayOf(new Date());
+    saveTodayComposition(placeWeek(loadTodayComposition(), plan.id, monday));
     toast.success(t("weekly.prebuilt.weekAdded"));
     navigate(`/weeks/${plan.id}`);
   };
