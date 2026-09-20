@@ -706,7 +706,7 @@
     "workoutCount_one": "{{count}} séance",
     "workoutCount_other": "{{count}} séances",
     "emptyTitle": "Aucune collection chargée",
-    "emptyDescription": "Le catalogue n'a rendu aucun parcours. Recharge la page, ou ouvre la bibliothèque et ses {{workouts}} séances.",
+    "emptyDescription": "Le catalogue n'a rien renvoyé. Recharge la page, ou ouvre la bibliothèque et ses {{workouts}} séances.",
     "emptyAction": "Ouvrir la bibliothèque"
   },
   "library": {
@@ -814,8 +814,8 @@
     "subtitle": "Les séances que tu as marquées, prêtes à relancer.",
     "kicker_one": "{{count}} favori · {{total}} au catalogue",
     "kicker_other": "{{count}} favoris · {{total}} au catalogue",
-    "emptyDescription": "Aucun favori pour l'instant. La bibliothèque en compte {{total}} : appuie sur le cœur d'une séance pour la garder ici.",
-    "emptyAction": "Ouvrir la bibliothèque"
+    "emptyDescription": "Le cœur d'une fiche la range ici, pour la relancer sans refaire les filtres. La bibliothèque en compte {{total}}.",
+    "emptyAction": "Explorer la bibliothèque"
   },
   "comparePage": {
     "whyComparisons": "Pourquoi ces comparaisons ?",

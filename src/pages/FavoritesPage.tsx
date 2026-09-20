@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Heart } from "@/components/icons";
+import { ArrowRight, Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Spinner } from "@/components/ui/spinner";
@@ -83,7 +83,10 @@ export function FavoritesPage() {
             </div>
           ) : (
             <EmptyState
-              variant="no-results"
+              /* Rien n'a été cherché ici : c'est un rayon jamais commencé,
+                 pas un filtre sans résultat. La figure et l'aplat du bouton
+                 suivent. */
+              variant="not-started"
               icon={Heart}
               title={t("common:favorites.noFavoritesYet")}
               description={
@@ -94,8 +97,11 @@ export function FavoritesPage() {
                   : t("common:favorites.noFavoritesDesc")
               }
               action={
-                <Button variant="outline" asChild>
-                  <Link to="/library">{t("common:favorites.emptyAction")}</Link>
+                <Button asChild>
+                  <Link to="/library">
+                    {t("common:favorites.emptyAction")}
+                    <ArrowRight />
+                  </Link>
                 </Button>
               }
             />

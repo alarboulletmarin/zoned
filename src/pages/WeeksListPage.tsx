@@ -322,13 +322,17 @@ export function WeeksListPage() {
                   e.target.value = "";
                 }}
               />
-              <Button
-                variant="outline"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <Upload size={17} />
-                {t("weekly.list.import")}
-              </Button>
+              {/* L'import commente une planche qui existe : à zéro semaine
+                  il faisait une seconde action au-dessus de la première. */}
+              {weeks.length > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Upload size={17} />
+                  {t("weekly.list.import")}
+                </Button>
+              )}
               {/* Sur une planche vide, la création est dans l'état vide,
                   avec l'explication et la seconde voie ; la répéter ici
                   faisait deux boutons identiques sur un même écran. Elle
@@ -427,25 +431,22 @@ export function WeeksListPage() {
                 ) : (
                   // Le seul aplat vermillon de l'écran, ici et pas en tête :
                   // la première semaine se crée là où on explique ce qu'elle
-                  // est. La seconde voie, en prendre une toute prête, est à
-                  // côté, en contour.
-                  <div
-                    className="zn-cluster"
-                    style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
-                  >
-                    <Button asChild>
-                      <Link to="/weeks/new">
-                        <Plus size={17} />
-                        {t("weekly.list.create")}
-                      </Link>
-                    </Button>
-                    <Button variant="outline" asChild>
-                      <Link to="/weeks/new/prebuilt">
-                        {t("common:topnav.weeksPrebuilt")}
-                        <ArrowRight size={17} />
-                      </Link>
-                    </Button>
-                  </div>
+                  // est. La seconde voie, en prendre une toute prête, est
+                  // dans la note, en prose : un état vide n'a qu'une action.
+                  <Button asChild>
+                    <Link to="/weeks/new">
+                      <Plus size={17} />
+                      {t("weekly.list.emptyAction")}
+                    </Link>
+                  </Button>
+                )
+              }
+              hint={
+                filtering ? undefined : (
+                  <>
+                    {t("weekly.list.emptyHint")}{" "}
+                    <Link to="/weeks/new/prebuilt">{t("weekly.list.emptyHintLink")}</Link>
+                  </>
                 )
               }
             />

@@ -15,9 +15,11 @@
       "line_other": "Your plan starts in {{count}} days."
     },
     "none": {
-      "line": "Nothing under way.",
-      "body": "Build a plan, or just put together a week if you don't want to commit further.",
-      "cta": "Create a plan"
+      "line": "No plan yet.",
+      "body": "As soon as a plan exists, this screen becomes your session of the day: the duration, the zones, and a box to tick in the evening.",
+      "cta": "Create my plan",
+      "hint": "Not ready to commit to several weeks?",
+      "hintLink": "Draw a session from the library"
     },
     "inPlan": "Plan",
     "inWeek": "My week",
