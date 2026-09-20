@@ -18,6 +18,7 @@ import {
   layerFor,
   mondayOf,
   placeWeek,
+  planWeekAt,
   removeLayer,
   resolveTodaySources,
   setLayerEnabled,
@@ -117,13 +118,7 @@ export function TodayComposePanel({
      rien où se fondre, et le geste ne s'affiche pas. */
   const mergeTarget = (anchor: string): { plan: TrainingPlan; weekNumber: number } | null => {
     const [y, m, d] = anchor.split("-").map(Number);
-    const monday = new Date(y, m - 1, d);
-    for (const plan of planRows.map((r) => r.plan)) {
-      const source: TodaySource = { plan, isWeek: false, monday: getPlanMonday(plan), explicit: false };
-      const position = sourcePosition(source, monday);
-      if (position) return { plan, weekNumber: position.weekNumber };
-    }
-    return null;
+    return planWeekAt(planRows.map((r) => r.plan), new Date(y, m - 1, d));
   };
 
   const handleMerge = (week: TrainingPlan, mode: MergeWeekMode) => {

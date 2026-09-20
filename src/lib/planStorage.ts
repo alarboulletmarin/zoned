@@ -478,8 +478,24 @@ export function mergeWeekIntoPlan(
 ): boolean {
   const week = getPlan(weekId);
   if (!week || week.config.isSingleWeek !== true) return false;
-  const source = week.weeks[0]?.sessions ?? [];
+  return mergeSessionsIntoPlanWeek(planId, weekNumber, week.weeks[0]?.sessions ?? [], mode, labels);
+}
 
+/**
+ * Ajoute des séances à une semaine du plan, en les ajoutant aux siennes ou en
+ * les remplaçant. C'est le geste de `mergeWeekIntoPlan`, ouvert aux semaines
+ * qui ne sont pas enregistrées : une semaine du catalogue s'ajoute au plan
+ * sans passer par Mes semaines. Ce qui décrit la séance est copié ; ce qui a
+ * été vécu (statut, durée réelle, RPE, note) et le verrou ne le sont pas.
+ * Écrit sous `withUndoSnapshot`, donc annulable depuis la page du plan.
+ */
+export function mergeSessionsIntoPlanWeek(
+  planId: string,
+  weekNumber: number,
+  source: readonly PlanSession[],
+  mode: MergeWeekMode,
+  labels: { label: string; labelEn: string },
+): boolean {
   return withUndoSnapshot(planId, "merge_week", labels.label, labels.labelEn, (plan) => {
     const target = plan.weeks.find(w => w.weekNumber === weekNumber);
     if (!target) throw new Error("week not in plan");

@@ -86,6 +86,7 @@ import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
+import { AddWeekToPlanSheet } from "@/components/domain/AddWeekToPlanSheet";
 import { LastChangePanel } from "@/components/domain/LastChangePanel";
 import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
@@ -207,6 +208,8 @@ export function PlanViewPage() {
     unresolvedSessions: UnresolvedSessionPreview[];
   } | null>(null);
   const [showUnavailabilityManager, setShowUnavailabilityManager] = useState(false);
+  /* La semaine du plan à laquelle on ajoute une semaine, feuille ouverte. */
+  const [addWeekTarget, setAddWeekTarget] = useState<number | null>(null);
   const [reschedulePreview, setReschedulePreview] = useState<{ changes: AutoChange[]; updatedPlan: import("@/types/plan").TrainingPlan } | null>(null);
   const [adaptationPreview, setAdaptationPreview] = useState<AdaptationPreview | null>(null);
 
@@ -1396,6 +1399,7 @@ export function PlanViewPage() {
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
+                onAddWeek={setAddWeekTarget}
                 blockedDays={blockedDaysSet}
               />
             </div>
@@ -2174,6 +2178,15 @@ export function PlanViewPage() {
           planId={plan.id}
           unavailabilities={plan.config.unavailabilities ?? []}
           onSave={handleSaveUnavailabilities}
+        />
+
+        {/* Ajouter une de mes semaines, ou une du catalogue, à une semaine
+            du plan. Le geste vivait dans la feuille du cockpit seulement. */}
+        <AddWeekToPlanSheet
+          plan={plan}
+          weekNumber={addWeekTarget}
+          onOpenChange={(open) => { if (!open) setAddWeekTarget(null); }}
+          onMerged={reloadPlan}
         />
 
         {/* Reschedule Preview Dialog */}

@@ -238,6 +238,28 @@ export function sourcePosition(
   return position;
 }
 
+/**
+ * Le plan (pas une semaine seule) dont une semaine couvre ce lundi, et
+ * laquelle : c'est là qu'une semaine suivie sur ce lundi peut s'ajouter.
+ * Un lundi hors de tout plan n'a rien où s'ajouter, et le geste ne
+ * s'affiche pas. Le plus récent gagne quand deux plans se chevauchent, comme
+ * partout dans le cockpit.
+ */
+export function planWeekAt(
+  plans: readonly TrainingPlan[],
+  monday: Date,
+): { plan: TrainingPlan; weekNumber: number } | null {
+  const target = mondayOf(monday);
+  for (const plan of [...plans].filter((p) => p.config.isSingleWeek !== true).sort(byNewest)) {
+    const position = sourcePosition(
+      { plan, isWeek: false, monday: getPlanMonday(plan), explicit: false },
+      target,
+    );
+    if (position) return { plan, weekNumber: position.weekNumber };
+  }
+  return null;
+}
+
 /** Vrai quand la source a une semaine en cours à cette date. */
 export function isUnderWay(source: TodaySource, date: Date): boolean {
   return sourcePosition(source, date) !== null;

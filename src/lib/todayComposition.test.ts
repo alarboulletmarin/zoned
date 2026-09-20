@@ -12,6 +12,7 @@ import {
   resolveTodaySources,
   setLayerEnabled,
   sourcePosition,
+  planWeekAt,
 } from "./todayComposition";
 import type { PlanWeek, TrainingPlan } from "@/types/plan";
 
@@ -191,5 +192,37 @@ describe("les sources suivies", () => {
     expect(
       resolveTodaySources([renfo, older, marathon], composition, MONDAY).map((s) => s.plan.id),
     ).toEqual(["marathon", "older", "renfo"]);
+  });
+});
+
+describe("planWeekAt", () => {
+  const monday = (iso: string) => {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  };
+  const plan = (id: string, startDate: string, totalWeeks: number, isSingleWeek = false) =>
+    ({
+      id,
+      name: id,
+      nameEn: id,
+      totalWeeks,
+      weeks: [],
+      config: { startDate, createdAt: `${startDate}T08:00:00.000Z`, isSingleWeek },
+    }) as unknown as import("@/types/plan").TrainingPlan;
+
+  test("rend le plan et sa semaine qui couvrent ce lundi", () => {
+    const marathon = plan("marathon", "2026-09-07", 16);
+    expect(planWeekAt([marathon], monday("2026-09-21"))).toEqual({ plan: marathon, weekNumber: 3 });
+  });
+
+  test("rend null hors de tout plan, et ignore les semaines seules", () => {
+    const marathon = plan("marathon", "2026-09-07", 2);
+    const week = plan("semaine", "2026-09-21", 1, true);
+    expect(planWeekAt([marathon, week], monday("2026-09-28"))).toBeNull();
+  });
+
+  test("un jour de la semaine mène au même lundi", () => {
+    const marathon = plan("marathon", "2026-09-07", 16);
+    expect(planWeekAt([marathon], monday("2026-09-24"))?.weekNumber).toBe(3);
   });
 });

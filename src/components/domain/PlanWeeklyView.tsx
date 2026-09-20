@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Copy } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Copy, Plus } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -70,6 +70,8 @@ interface PlanWeeklyViewProps {
   onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
+  /** Plan : ajouter une de mes semaines, ou une du catalogue, à cette semaine-ci. */
+  onAddWeek?: (weekNumber: number) => void;
   onWeekChange?: (week: number) => void;
   blockedDays?: Set<string>;
   /** Standalone "Ma semaine": hide week nav + free-plan guide, rest cards on empty days. */
@@ -103,6 +105,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onValidateWeek,
   onWorkoutAdd,
   onAddToDay,
+  onAddWeek,
   onWeekChange,
   blockedDays,
   singleWeek = false,
@@ -576,6 +579,18 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           return null;
         })()}
 
+        {/* Ajouter une semaine ICI : le geste vivait dans la feuille du
+            cockpit, où l'on ne va pas quand on travaille son plan. */}
+        {weekData && onAddWeek && !singleWeek && (
+          <button
+            type="button"
+            className="zn-planweek__pill"
+            onClick={() => onAddWeek(selectedWeek)}
+          >
+            <Plus size={14} />
+            {t("view.addWeek.button")}
+          </button>
+        )}
 
         {/* ── Week guidance (free plans only) ── */}
         {weekData && plan.config.planMode === "free" && !singleWeek && (

@@ -24,6 +24,11 @@ décharge posée par-dessus.
 **Le cockpit ne suit pas un plan, il suit une composition** : des couches
 posées sur le calendrier, que l'on allume et que l'on éteint.
 
+Le vocabulaire à l'écran, depuis le 20 septembre 2026 : un plan est **suivi**,
+une semaine est **suivie sur** une semaine du calendrier, et une semaine
+**s'ajoute au plan**. Ni couche, ni pose, ni fusion ne sont écrits à l'écran ;
+ce sont les mots du code, et de ce document.
+
 ```ts
 interface TodayLayer {
   id: string;        // TrainingPlan.id, plan ou semaine seule
@@ -125,7 +130,14 @@ toujours une semaine calendaire, et `calendarWeekRange` suffit pour les bilans.
   est composée par `sessionFromWorkout` ou `makeActivitySession`, exactement
   comme depuis la page de la semaine, et posée par `pushSessionToPlan`. La
   semaine neuve est nommée par son lundi et posée à sa naissance.
-- **Fusionner une semaine dans le plan** : depuis Composer, une semaine posée
+- **Ajouter une semaine au plan** (le geste s'appelait Fusionner) : depuis la
+  feuille Ce qui compose ma semaine, depuis la page de la semaine (badge
+  Ajouter au plan · semaine N, quand elle est suivie sur une semaine d'un
+  plan) et depuis la page du plan (Ajouter une semaine ici, sur la semaine
+  regardée, une des miennes ou une du catalogue, `AddWeekToPlanSheet`).
+  `mergeSessionsIntoPlanWeek` fait le travail, `mergeWeekIntoPlan` n'en est
+  qu'un cas ; `planWeekAt` dit quel plan et quelle semaine couvrent un lundi.
+  Depuis Composer, une semaine posée
   sur une semaine d'un plan en cours ou à venir propose Fusionner dans
   {plan}, semaine N, puis demande en toutes lettres ajouter ou remplacer.
   `mergeWeekIntoPlan` (`lib/planStorage.ts`) copie ce qui décrit la séance,
