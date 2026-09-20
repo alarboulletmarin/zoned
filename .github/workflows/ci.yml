@@ -66,6 +66,12 @@ jobs:
       - name: Typographie
         run: bun run check:typography
 
+      # Aucun catch muet dans pages, components et hooks : un echec se dit
+      # (toast.failure, un etat d'erreur, onError) ou porte un commentaire qui
+      # justifie le silence. Regle du 20 septembre 2026, scripts/qa-error-surface.ts.
+      - name: Surface des erreurs
+        run: bun run check:errors
+
       # The gate existed and nothing ran it, so the two SVG drifted from their
       # generator at the typography pass and nobody saw it. It also re-checks
       # that the maskable icon's mark still fits the safe zone, which is the
