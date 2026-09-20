@@ -240,27 +240,37 @@ export function PlansPage() {
             <p className="zn-body zn-body--lead zn-plans__lede">
               {t("plansPage.subtitle")}
             </p>
-            <div className="zn-cluster">
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/plans/methodology">
-                  <FlaskConical />
-                  {t("plansPage.science")}
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/calculators/what-if">
-                  <Scale />
-                  {t("plansPage.whatIf")}
-                </Link>
-              </Button>
-            </div>
+            {/* La science et le what-if commentent des plans : sur une
+                étagère vide ils passaient AVANT le seul bouton qui compte,
+                et le repoussaient sous le pli. Ils arrivent avec le premier
+                plan. */}
+            {planCount > 0 && (
+              <div className="zn-cluster">
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/plans/methodology">
+                    <FlaskConical />
+                    {t("plansPage.science")}
+                  </Link>
+                </Button>
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/calculators/what-if">
+                    <Scale />
+                    {t("plansPage.whatIf")}
+                  </Link>
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="zn-cluster">
-            <Button variant="outline" onClick={handleImport}>
-              <Upload />
-              {t("plansPage.import")}
-            </Button>
+            {/* L'import reste possible à zéro plan, mais dans la note de
+                l'état vide, en prose : un état vide n'a qu'une action. */}
+            {planCount > 0 && (
+              <Button variant="outline" onClick={handleImport}>
+                <Upload />
+                {t("plansPage.import")}
+              </Button>
+            )}
             {/* Sur une étagère vide, la création est dans l'état vide, avec
                 l'explication ; la répéter ici, même en contour, faisait deux
                 boutons du même nom sur un même écran. Elle revient en tête,
@@ -327,6 +337,14 @@ export function PlansPage() {
                     <ArrowRight />
                   </Link>
                 </Button>
+              }
+              hint={
+                <>
+                  {t("plansPage.importHint")}{" "}
+                  <Button variant="link" onClick={handleImport}>
+                    {t("plansPage.importHintLink")}
+                  </Button>
+                </>
               }
             />
           </section>

@@ -15,9 +15,11 @@
       "line_other": "Ton plan commence dans {{count}} jours."
     },
     "none": {
-      "line": "Rien en cours.",
-      "body": "Construis un plan, ou compose juste une semaine si tu ne veux pas t'engager plus loin.",
-      "cta": "Créer un plan"
+      "line": "Pas encore de plan.",
+      "body": "Dès qu'un plan existe, cet écran devient ta séance du jour : la durée, les zones, et une case à cocher le soir.",
+      "cta": "Créer mon plan",
+      "hint": "Pas envie de t'engager sur plusieurs semaines ?",
+      "hintLink": "Tire une séance dans la bibliothèque"
     },
     "inPlan": "Plan",
     "inWeek": "Ma semaine",

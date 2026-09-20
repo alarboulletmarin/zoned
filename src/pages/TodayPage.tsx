@@ -781,6 +781,14 @@ export function TodayPage() {
               {headline}
             </h1>
 
+            {/* Sans plan, le titre dit ce qui manque et cette ligne dit ce
+                que \u00E7a change : ce que l'\u00E9cran deviendra d\u00E8s qu'il y en aura
+                un. Elle pr\u00E9c\u00E8de le bouton, parce qu'on comprend avant
+                d'agir. */}
+            {dayState === "none" && (
+              <p className="zn-body zn-muted zn-measure">{t("today:resume.none.body")}</p>
+            )}
+
             {reserve && <p className="zn-cockpit__size">{"\u00A0"}</p>}
 
             {(reserve || nextLine) && (
@@ -800,6 +808,20 @@ export function TodayPage() {
               </Link>
             </Button>
           </div>
+
+          {/* L'unique alternative, en prose et non en bouton : un état vide
+              qui propose cinq gestes n'en propose aucun. Le tirage garde sa
+              marque de geste (flèche, pas de souligné), c'est le même
+              registre que la rangée des sorties des jours pleins. */}
+          {dayState === "none" && (
+            <p className="zn-cockpit__exits">
+              <span>{t("today:resume.none.hint")}</span>
+              <Link to="/library/draw" className="zn-cockpit__exit" data-role="move">
+                {t("today:resume.none.hintLink")}
+                <ArrowRight />
+              </Link>
+            </p>
+          )}
         </>
       )}
 
@@ -843,17 +865,14 @@ export function TodayPage() {
             </p>
           ))}
         </div>
-      ) : (
-        dayState === "none" && (
-          <p className="zn-body zn-muted zn-measure">{t("today:resume.none.body")}</p>
-        )
-      )}
+      ) : null}
 
       {/* Ajouter une séance au jour choisi, dans une source nommée. Un menu
           quand il y a le choix ; sinon la semaine neuve, seule, se pose sans
           question. Le sélecteur est celui du plan et de la semaine, pas un
-          troisième. */}
-      {!isLoading && (
+          troisième. Sans rien en cours, il n'y a rien à quoi ajouter : le
+          bouton attend le premier plan, comme la rangée des sorties. */}
+      {!isLoading && dayState !== "none" && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button type="button" variant="outline" size="sm" className="zn-cockpit__add">
@@ -938,7 +957,7 @@ export function TodayPage() {
           </li>
         </ul>
       )}
-      {settings.cockpit.shortcuts && (
+      {settings.cockpit.shortcuts && dayState !== "none" && (
         <p className="zn-cockpit__exits">
           {/* La saisie n'est PAS une sortie, et elle portait pourtant leur
               marque. La flèche de cette rangée dit deux choses à la fois,

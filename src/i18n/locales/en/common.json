@@ -706,7 +706,7 @@
     "workoutCount_one": "{{count}} workout",
     "workoutCount_other": "{{count}} workouts",
     "emptyTitle": "No collection loaded",
-    "emptyDescription": "The catalogue returned no path. Reload the page, or open the library and its {{workouts}} sessions.",
+    "emptyDescription": "The catalogue returned nothing. Reload the page, or open the library and its {{workouts}} sessions.",
     "emptyAction": "Open the library"
   },
   "library": {
@@ -814,8 +814,8 @@
     "subtitle": "The sessions you starred, ready to run again.",
     "kicker_one": "{{count}} favourite · {{total}} in the catalogue",
     "kicker_other": "{{count}} favourites · {{total}} in the catalogue",
-    "emptyDescription": "No favourite yet. The library holds {{total}}: tap a session's heart to keep it here.",
-    "emptyAction": "Open the library"
+    "emptyDescription": "A session's heart keeps it here, to run again without redoing the filters. The library holds {{total}}.",
+    "emptyAction": "Explore the library"
   },
   "comparePage": {
     "whyComparisons": "Why these comparisons?",
