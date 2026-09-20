@@ -28,7 +28,7 @@ import { SEOHead } from "@/components/seo";
 import { HubNav, navSection } from "@/components/layout";
 import { usePlans } from "@/hooks/usePlans";
 import { importPlan } from "@/lib/planStorage";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import {
   PHASE_META,
   RACE_DISTANCE_META,

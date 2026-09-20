@@ -7,7 +7,7 @@ import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { ZoneScale } from "@/components/visualization";
 import { usePickLang } from "@/lib/i18n-utils";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { SESSION_ZONE, sessionColor } from "@/lib/sessionColors";
 
 /** A session type with no aerobic zone gets the hollow mark, never a hue. */

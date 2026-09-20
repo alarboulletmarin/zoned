@@ -642,6 +642,7 @@
     "apply": "Apply adaptation",
     "keep": "Keep current plan",
     "applied": "Adaptation applied",
+    "undo": "Undo",
     "undone": "Adaptation undone",
     "volumeReduced": "Volume reduced",
     "volumeIncreased": "Volume increased",

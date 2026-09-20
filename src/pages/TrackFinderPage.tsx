@@ -10,7 +10,7 @@ import {
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 
 import { ArrowRight, Download, EyeOff, Loader2, MapPin, RotateCcw, Save } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";

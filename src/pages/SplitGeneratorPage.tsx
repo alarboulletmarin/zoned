@@ -19,7 +19,7 @@ import { buildParamsUrl } from "@/lib/share/urlParams";
 import { SEOHead } from "@/components/seo";
 import { useSettings } from "@/hooks/useSettings";
 import { exportToPNG } from "@/lib/export/png";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { convertPace, convertDistance, getPaceUnit, getDistanceUnit } from "@/lib/units";
 import { generateSplits, formatSplitTime as formatTime, formatPaceDisplay } from "@/lib/splits";
 import type { SplitStrategy as Strategy } from "@/lib/splits";

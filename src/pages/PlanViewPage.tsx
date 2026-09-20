@@ -67,7 +67,7 @@ import {
   RACE_DISTANCE_META,
 } from "@/types/plan";
 import type { AnyWorkoutTemplate, TrainingPhase, WorkoutTemplate } from "@/types";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { SubstituteSessionDialog } from "@/components/domain/SubstituteSessionDialog";
 import { isSessionSubstitutable } from "@/lib/planGenerator/substitute";
@@ -558,7 +558,7 @@ export function PlanViewPage() {
     setAdaptationPreview(null);
     toast.success(t("adaptation.applied"), {
       action: {
-        label: t("adaptation.undone"),
+        label: t("adaptation.undo"),
         onClick: () => {
           if (undoLastChange(plan.id)) {
             reloadPlan();
@@ -566,7 +566,6 @@ export function PlanViewPage() {
           }
         },
       },
-      duration: 10000,
     });
   }, [plan, adaptationPreview, reloadPlan, t]);
 
@@ -794,7 +793,6 @@ export function PlanViewPage() {
           }
         },
       },
-      duration: 10000,
     });
   }, [plan, reschedulePreview, currentWeek, reloadPlan, t]);
 

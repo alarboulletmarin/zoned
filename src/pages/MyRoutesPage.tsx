@@ -20,7 +20,7 @@ import { useRoutes } from "@/hooks/useRoutes";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { ROUTE_STORAGE_SOFT_LIMIT } from "@/lib/routeGenerator";
 import type { Discipline } from "@/types";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 
 /** The two disciplines the generator can route. A saved route never carries a
  *  third, but the raw value is printed rather than swallowed if one appears. */

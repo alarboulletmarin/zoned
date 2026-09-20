@@ -22,7 +22,7 @@ import { ExportDatePicker } from "./ExportDatePicker";
 import { ExportableWorkoutCard } from "./ExportableWorkoutCard";
 import { FitTransferGuide } from "./FitTransferGuide";
 import { exportToICS, exportToPNG, exportToPDF, exportToFIT } from "@/lib/export";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import type { WorkoutTemplate } from "@/types";
 
 interface ExportMenuProps {

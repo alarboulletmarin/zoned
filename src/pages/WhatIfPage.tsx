@@ -56,7 +56,7 @@ import type { PlanStats, EnhancedPlanAnalysis } from "@/lib/planStats";
 import type { Difficulty } from "@/types";
 import { getZoneNumber } from "@/types";
 import type { WhatIfInsight } from "@/lib/whatIfInsights";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { formatDate } from "@/lib/i18n-utils";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
 

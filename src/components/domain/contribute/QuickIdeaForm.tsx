@@ -1,6 +1,6 @@
 import { useId, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -51,7 +51,7 @@ export function QuickIdeaForm() {
     } else {
       const copied = await copyToClipboard(markdown);
       if (copied) {
-        toast.success(t("submit.urlTooLong"));
+        toast.warning(t("submit.urlTooLong"));
       }
     }
   };
