@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
+import { HOME_LINK_STATE } from "@/components/layout/navigation";
 import { useTranslation } from "react-i18next";
 import { BookOpen, ChevronLeft, ChevronRight, Home } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
@@ -567,6 +568,7 @@ export function ArticlePage() {
           >
             <Link
               to="/"
+              state={HOME_LINK_STATE}
               aria-label={t("content:article.home")}
               className="zn-article__crumb"
             >

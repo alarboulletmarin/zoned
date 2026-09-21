@@ -20,7 +20,22 @@ export interface NavChild {
   labelKey: string;
   /** Short caption shown under the label in the dropdown. Optional. */
   descKey?: string;
+  /** L'état de navigation que le lien transmet à la route, au sens de
+   *  react-router. Seul l'accueil en a besoin, voir `HOME_LINK_STATE`. */
+  state?: Record<string, unknown>;
 }
+
+/**
+ * L'état que porte tout lien interne vers `/`.
+ *
+ * La racine mène au cockpit dès qu'un plan est en cours (voir `RootPage`
+ * dans `App.tsx`) : c'est ce qu'on veut en ouvrant l'app, pas en appuyant
+ * sur le logo ou sur Accueil, où l'on demande précisément la landing. Ces
+ * liens le disent par cet état, et la racine le lit avant de rediriger. Une
+ * arrivée directe, tapée ou suivie depuis le web, n'a pas d'état et garde le
+ * comportement d'ouverture.
+ */
+export const HOME_LINK_STATE = { landing: true } as const;
 
 export interface NavSection {
   /** Stable id, the door's name in the design kit. */
@@ -188,12 +203,18 @@ export const TOOLS_NAV: NavSection[] = [
 /**
  * Le sol du menu plein écran, sous le filet : ce qui n'est pas une
  * destination d'entraînement mais qu'on doit pouvoir atteindre sans
- * chercher. Deux lignes, discrètes. La langue et le thème n'y sont plus :
+ * chercher. Trois lignes, discrètes. La langue et le thème n'y sont plus :
  * la barre du haut les garde sur tous les écrans, et les réglages les
  * portent avec leur nom entier ; les répéter ici au même poids que les
  * portes était le bruit que la relecture du 18 septembre a nommé.
+ *
+ * L'accueil est ici depuis le 21 septembre 2026 : depuis que la racine mène
+ * au cockpit, le logo était le seul chemin vers la landing, et il y
+ * échouait aussi. La ligne porte `HOME_LINK_STATE` pour passer la
+ * redirection.
  */
 export const MENU_FOOT_LINKS: NavChild[] = [
+  { to: "/", labelKey: "nav.home", state: HOME_LINK_STATE },
   { to: "/settings", labelKey: "nav.settings" },
   { to: "/about", labelKey: "nav.about" },
 ];

@@ -6,6 +6,7 @@ import {
   useCallback,
 } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
+import { HOME_LINK_STATE } from "@/components/layout/navigation";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -255,7 +256,7 @@ export function WorkoutDetailPage() {
   const workoutName = pick(workout, "name");
   const categoryLabel = t(`library:categories.${workout.category}`);
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: t("common:nav.home"), to: "/" },
+    { label: t("common:nav.home"), to: "/", state: HOME_LINK_STATE },
   ];
 
   if (locationState?.from === "plan" && locationState.planId) {
@@ -971,7 +972,7 @@ function StrengthWorkoutDetail({
   );
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: tCommon("nav.home"), to: "/" },
+    { label: tCommon("nav.home"), to: "/", state: HOME_LINK_STATE },
   ];
 
   if (locationState?.from === "plan" && locationState.planId) {

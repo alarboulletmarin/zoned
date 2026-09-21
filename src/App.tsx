@@ -177,10 +177,18 @@ function ConditionalFooter() {
  * terminé existe dans ce navigateur, la racine mène au cockpit. Les robots
  * n'ont pas de localStorage : la landing reste ce qu'ils voient et ce que le
  * prérendu écrit.
+ *
+ * Sauf quand on la demande. Le logo de la barre et la ligne Accueil du menu
+ * portent `HOME_LINK_STATE` : depuis l'app, appuyer dessus veut dire la
+ * landing, pas le cockpit, et la redirection rendait la page inaccessible à
+ * qui s'entraîne. L'état ne vit que dans l'historique du navigateur, donc
+ * une arrivée directe sur `/` n'en a pas et suit la règle d'ouverture.
  */
 function RootPage() {
+  const location = useLocation();
+  const wantsLanding = (location.state as { landing?: boolean } | null)?.landing === true;
   const hasLivePlan = getAllPlans().some((plan) => !isPlanEnded(plan));
-  return hasLivePlan ? <Navigate to="/today" replace /> : <HomePage />;
+  return hasLivePlan && !wantsLanding ? <Navigate to="/today" replace /> : <HomePage />;
 }
 
 function ScrollToTopOnNavigate() {
