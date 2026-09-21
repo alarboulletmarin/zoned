@@ -2,7 +2,13 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-import { FOOTER_GROUPS, MENU_FOOT_LINKS, PRIMARY_NAV, TOOLS_NAV } from "./navigation";
+import {
+  FOOTER_GROUPS,
+  HOME_LINK_STATE,
+  MENU_FOOT_LINKS,
+  PRIMARY_NAV,
+  TOOLS_NAV,
+} from "./navigation";
 import { COMMAND_SURFACES } from "@/data/command-surfaces";
 
 /**
@@ -33,7 +39,6 @@ const STATIC_ROUTES = [...APP.matchAll(/path="(\/[^"]*)"/g)]
  * Toute nouvelle entrée ici doit porter sa justification.
  */
 const NOT_A_DESTINATION: Record<string, string> = {
-  "/": "la landing publique, on y arrive par le logo et par le web, pas par la nav",
   "/workout/shared": "atterrissage d'un lien partagé",
   "/weeks/shared": "atterrissage d'un lien partagé",
   "/plan/shared": "atterrissage d'un lien partagé",
@@ -125,7 +130,7 @@ describe("la navigation elle-même", () => {
   });
 
   test("le menu mobile tient en dix lignes", () => {
-    // Cinq portes, les outils, deux liens de service : c'est ce qui
+    // Cinq portes, les outils, trois liens de service : c'est ce qui
     // remplace un panneau de trente-cinq lignes dépliables. La onzième ligne
     // est le retour du plan de site, et elle se refuse ici.
     const lines = PRIMARY_NAV.length + TOOLS_NAV.length + MENU_FOOT_LINKS.length;
@@ -154,6 +159,16 @@ describe("la navigation elle-même", () => {
 
   test("le cockpit est la première porte", () => {
     expect(PRIMARY_NAV[0].to).toBe("/today");
+  });
+
+  test("l'accueil est dans le menu, et son lien demande la landing", () => {
+    // Depuis que la racine mène au cockpit dès qu'un plan est en cours, un
+    // lien nu vers `/` n'atteint plus la landing. Le menu en a une ligne,
+    // et elle porte l'état que `RootPage` lit avant de rediriger.
+    const home = MENU_FOOT_LINKS.find((link) => link.to === "/");
+    expect(home).toBeDefined();
+    expect(home?.state).toEqual(HOME_LINK_STATE);
+    expect(HOME_LINK_STATE.landing).toBe(true);
   });
 
   test("aucune entrée n'est répétée dans deux portes", () => {
