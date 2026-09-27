@@ -37,46 +37,6 @@ export function parsePaceToSeconds(paceStr: string): number | null {
   return min * 60 + sec;
 }
 
-export function estimateFinishTime(
-  paceSecondsPerKm: number,
-  distanceKm: number
-): string {
-  const totalSeconds = paceSecondsPerKm * distanceKm;
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = Math.round(totalSeconds % 60);
-  if (hours > 0) {
-    return `${hours}h${minutes.toString().padStart(2, "0")}min${seconds.toString().padStart(2, "0")}s`;
-  }
-  return `${minutes}min${seconds.toString().padStart(2, "0")}s`;
-}
-
-export function parseFinishTimeToSeconds(timeStr: string): number | null {
-  // Supports H:MM:SS, H:MM, HH:MM:SS, HH:MM, MM:SS (if no hours)
-  const full = timeStr.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
-  if (full) {
-    const h = parseInt(full[1], 10);
-    const m = parseInt(full[2], 10);
-    const s = parseInt(full[3], 10);
-    if (m >= 60 || s >= 60) return null;
-    return h * 3600 + m * 60 + s;
-  }
-  const short = timeStr.match(/^(\d{1,2}):(\d{2})$/);
-  if (short) {
-    const a = parseInt(short[1], 10);
-    const b = parseInt(short[2], 10);
-    if (b >= 60) return null;
-    // If a >= 1 and context suggests hours (for marathon-type distances), treat as H:MM
-    // We always treat as H:MM if a < 60
-    return a * 3600 + b * 60;
-  }
-  return null;
-}
-
-export function finishTimeToPaceSeconds(finishTimeSeconds: number, distanceKm: number): number {
-  return finishTimeSeconds / distanceKm;
-}
-
 export function generateId(): string {
   return `plan-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }

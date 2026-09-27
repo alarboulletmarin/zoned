@@ -1,0 +1,63 @@
+/* ══ ChronoInput, le champ de temps ═════════════════════════════════════
+ *
+ * Le cadre d'un temps ou d'une allure qui porte une question à lui seul : le
+ * chiffre en mono gras, l'unité peinte DANS le cadre, et sous lui la lecture
+ * en clair de ce qui a été compris. Même corps que le temps objectif du
+ * simulateur (`.zn-rs-field--time`), pour qu'un temps se tape et se lise de
+ * la même façon partout.
+ *
+ * Le cadre est l'input lui-même, pas un conteneur : l'anneau de focus de
+ * base.css entoure donc le chiffre et son unité d'un seul trait.
+ */
+
+.zn-chrono {
+  position: relative;
+  display: block;
+}
+
+.zn-chrono__input {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-6) var(--sp-8);
+  /* Place pour l'unité, "min/km" au plus long. */
+  padding-inline-end: calc(var(--sp-8) + 8ch);
+
+  font: var(--fw-semibold) var(--fs-body-lg) / 1.2 var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-chrono__input::placeholder {
+  font-weight: var(--fw-regular);
+  color: var(--text-faint);
+}
+
+.zn-chrono__input[aria-invalid="true"] {
+  border-color: var(--state-danger);
+}
+
+.zn-chrono__unit {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--sp-8);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+
+  font: var(--fw-medium) var(--fs-body-sm) / 1 var(--font-mono);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+}
+
+/* Ce que les chiffres veulent dire, en mots : 3 h 30 min, 12,0 km/h. */
+.zn-chrono__reading {
+  margin: 0;
+  font: var(--type-body-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
