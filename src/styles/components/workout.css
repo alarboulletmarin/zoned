@@ -708,6 +708,14 @@
   margin: 0;
 }
 
+/* Un chrono au masque (ChronoInput) tient en un champ : 3:30:00 ou 45:00.
+   Sans unité à côté, la ligne de base du cadre n'a rien à aligner : le champ
+   se centre dans sa hauteur. */
+.zn-numfield__input--chrono {
+  --field-w: 9ch;
+  align-self: center;
+}
+
 .zn-numfield__unit {
   font-family: var(--font-mono);
   font-size: var(--fs-mono-sm);

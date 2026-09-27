@@ -11,6 +11,7 @@ import {
   Trash2,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import {
   Sheet,
@@ -27,13 +28,7 @@ import {
   activitySessionZone,
   applyActivityDraft,
 } from "@/lib/activitySession";
-import {
-  durationDigits,
-  durationToMinutes,
-  formatDurationDigits,
-  minutesToDurationDigits,
-  normalizeDurationDigits,
-} from "@/lib/durationFields";
+import { durationToMinutes, minutesToDurationDigits } from "@/lib/durationFields";
 import { usePickLocale } from "@/lib/i18n-utils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { sessionColor } from "@/lib/sessionColors";
@@ -179,11 +174,6 @@ export function WeekSessionSheet({
   const asksDuration = activity ? activity.timed : precision === "fixed" || !loosable;
   const canSave = !asksDuration || (minutes !== undefined && minutes > 0);
 
-  const tidyDuration = () => {
-    const tidy = normalizeDurationDigits(duration);
-    if (tidy !== duration) setDuration(tidy);
-  };
-
   const save = () => {
     if (!canSave) return;
     let next: PlanSession;
@@ -288,18 +278,12 @@ export function WeekSessionSheet({
                 <span className="zn-kicker zn-kicker--inline zn-plabel">
                   {t("library:weekly.sheet.duration")}
                 </span>
-                {/* type text, pas number : le masque h:mm porte un deux-points.
-                    inputMode numeric donne le pavé de chiffres, voir
-                    lib/durationFields.ts. */}
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  autoComplete="off"
+                {/* Le champ de temps commun, au masque h:mm (ui/chrono-input.tsx). */}
+                <ChronoInput
+                  format="hm"
                   placeholder="h:mm"
-                  value={formatDurationDigits(duration)}
-                  onChange={(e) => setDuration(durationDigits(e.target.value))}
-                  onBlur={tidyDuration}
+                  digits={duration}
+                  onDigitsChange={setDuration}
                   className="zn-pfield zn-wksheet__durfield"
                 />
                 {activity?.kind === "commute" && (

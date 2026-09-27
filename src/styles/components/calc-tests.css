@@ -110,38 +110,6 @@
   }
 }
 
-/* Minutes and seconds on one baseline, each in its own frame, with the unit
-   printed under the box it names. */
-.zn-ct__time {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-5);
-}
-
-.zn-ct__timepart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sp-2);
-}
-
-.zn-ct__timeunit {
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  letter-spacing: var(--ls-mono-label);
-  text-transform: uppercase;
-  color: var(--text-faint);
-  cursor: pointer;
-}
-
-/* The colon between mm and ss. It is punctuation, not data. */
-.zn-ct__timesep {
-  padding-block-start: var(--sp-5);
-  font-family: var(--font-mono);
-  font-size: var(--fs-body-lg);
-  color: var(--text-faint);
-}
-
 /* A number field wide enough for the value it holds. */
 .zn-ct__numfield {
   --field-w: 56px;

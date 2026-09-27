@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ChronoValueInput } from "@/components/ui/chrono-input";
 import { Switch } from "@/components/ui/switch";
 import {
   AlertTriangle,
@@ -476,15 +477,14 @@ export function FullWorkoutWizard() {
             <label className="zn-contrib-field__label" htmlFor={`${uid}-duration-min`}>
               {t("fullWorkout.durationMin")}
             </label>
-            <input
+            <ChronoValueInput
               id={`${uid}-duration-min`}
-              type="number"
-              min={0}
+              format="hm"
               value={data.typicalDuration?.min ?? 30}
-              onChange={(e) =>
+              onValueChange={(minutes) =>
                 update({
                   typicalDuration: {
-                    min: Number(e.target.value),
+                    min: minutes ?? 0,
                     max: data.typicalDuration?.max ?? 60,
                   },
                 })
@@ -496,16 +496,15 @@ export function FullWorkoutWizard() {
             <label className="zn-contrib-field__label" htmlFor={`${uid}-duration-max`}>
               {t("fullWorkout.durationMax")}
             </label>
-            <input
+            <ChronoValueInput
               id={`${uid}-duration-max`}
-              type="number"
-              min={0}
+              format="hm"
               value={data.typicalDuration?.max ?? 60}
-              onChange={(e) =>
+              onValueChange={(minutes) =>
                 update({
                   typicalDuration: {
+                    max: minutes ?? 0,
                     min: data.typicalDuration?.min ?? 30,
-                    max: Number(e.target.value),
                   },
                 })
               }

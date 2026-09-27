@@ -12,13 +12,14 @@
  * as-is, nothing in here knows about pace.
  *
  * WHAT THIS FILE DOES NOT REDECLARE. The head band, the lede, the panel, the
- * legend band, the h:m:s row and the numeric table column already exist in
- * numbers.css as `.zn-num__head`, `.zn-num__lede`, `.zn-num__panel`,
- * `.zn-num__legend`, `.zn-num__time` and `.zn-num__num`, these seven screens
+ * legend band and the numeric table column already exist in numbers.css as
+ * `.zn-num__head`, `.zn-num__lede`, `.zn-num__panel`, `.zn-num__legend` and
+ * `.zn-num__num`, these seven screens
  * are more rooms of the same "mes chiffres" door as /calculators/zones and
  * /calculators/allures, and they use those classes verbatim. The field
  * vocabulary is workout.css's `.zn-calc__field` / `.zn-calc__label` /
- * `.zn-calc__error`, and the small number entry is `.zn-numfield`. The tables
+ * `.zn-calc__error`, the small number entry is `.zn-numfield`, and every time
+ * is one `ChronoInput` at the chronometer mask. The tables
  * are the ported ResponsiveTable, the figures are StatBlock, the zone chips
  * are ZoneBadge, and the layout verbs come from _layout.css.
  *

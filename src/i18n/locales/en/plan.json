@@ -315,7 +315,7 @@
     "modifiedHint": "Log actual duration, distance or effort",
     "skipped": "Skipped",
     "skippedHint": "This session did not happen",
-    "actualDuration": "Actual duration (min)",
+    "actualDuration": "Actual duration",
     "actualDistance": "Actual distance (km)",
     "rpeLabel": "Rate of Perceived Effort",
     "noteLabel": "Note",

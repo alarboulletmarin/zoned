@@ -72,6 +72,7 @@ import type { SavedSimulation } from "@/lib/raceSimStorage";
 import { useSettings } from "@/hooks/useSettings";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { convertPace, getPaceUnit } from "@/lib/units";
+import { secondsToTimeDigits } from "@/lib/paceFields";
 import { toast } from "@/components/ui/toast";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
 import { useIsEnglish, usePickLang, formatDate } from "@/lib/i18n-utils";
@@ -111,11 +112,11 @@ function settingsFromInput(input: RaceSimInput): RaceSimSettings {
   );
   return {
     distance: match ? match.value : "custom",
-    customDistance: match ? "" : String(input.distanceKm),
-    targetTime: formatSplitTime(input.targetTimeSeconds),
+    customDistance: match ? "" : String(input.distanceKm).replace(".", ","),
+    targetTime: secondsToTimeDigits(input.targetTimeSeconds, input.distanceKm),
     startTime: input.startTime,
     strategy: input.strategy,
-    weight: input.bodyWeightKg?.toString() ?? "",
+    weight: input.bodyWeightKg?.toString().replace(".", ",") ?? "",
   };
 }
 
@@ -166,7 +167,7 @@ export function RaceSimulatorPage() {
       targetTimeSeconds: resolved.targetSeconds,
       startTime: settings.startTime,
       strategy: settings.strategy,
-      bodyWeightKg: settings.weight ? parseFloat(settings.weight) : undefined,
+      bodyWeightKg: settings.weight ? parseFloat(settings.weight.replace(",", ".")) || undefined : undefined,
     });
   }, [resolved, settings, applyPlan]);
 

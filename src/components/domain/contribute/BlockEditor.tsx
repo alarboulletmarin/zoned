@@ -1,6 +1,7 @@
 import { useId, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
+import { ChronoValueInput } from "@/components/ui/chrono-input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -140,16 +141,11 @@ export function BlockEditor({
               <label className="zn-contrib-field__label" htmlFor={`${uid}-duration`}>
                 {t("blocks.duration")}
               </label>
-              <input
+              <ChronoValueInput
                 id={`${uid}-duration`}
-                type="number"
-                min={0}
-                value={block.durationMin ?? ""}
-                onChange={(e) =>
-                  update({
-                    durationMin: e.target.value ? Number(e.target.value) : undefined,
-                  })
-                }
+                format="hm"
+                value={block.durationMin}
+                onValueChange={(durationMin) => update({ durationMin })}
                 data-mono="true"
                 className="zn-contrib-input"
               />

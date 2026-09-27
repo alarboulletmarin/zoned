@@ -315,7 +315,7 @@
     "modifiedHint": "Saisir la durée, distance ou ressenti réel",
     "skipped": "Sautée",
     "skippedHint": "Cette séance n'a pas eu lieu",
-    "actualDuration": "Durée réelle (min)",
+    "actualDuration": "Durée réelle",
     "actualDistance": "Distance réelle (km)",
     "rpeLabel": "Ressenti (RPE)",
     "noteLabel": "Note",
