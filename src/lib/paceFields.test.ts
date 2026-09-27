@@ -3,10 +3,12 @@ import {
   formatPaceDigits,
   formatTimeDigits,
   normalizePaceDigits,
+  normalizeTimeDigits,
   normalizeVma,
   paceDigits,
   paceDigitsToSeconds,
   parseVma,
+  secondsToTimeDigits,
   timeDigits,
   timeDigitsToSeconds,
   vmaInput,
@@ -60,8 +62,46 @@ describe("chrono d'arrivée", () => {
     expect(timeDigitsToSeconds("4500", 10)).toBe(45 * 60);
   });
 
+  test("sans distance, deux groupes se lisent comme un chronomètre, m:ss", () => {
+    expect(timeDigitsToSeconds("2500", 0)).toBe(25 * 60);
+    expect(timeDigitsToSeconds("13000", 0)).toBe(3600 + 30 * 60);
+    expect(formatTimeDigits(normalizeTimeDigits("9000", 0))).toBe("1:30:00");
+  });
+
   test("trois groupes se lisent tels quels", () => {
     expect(timeDigitsToSeconds("33000", 42.195)).toBe(3 * 3600 + 30 * 60);
+  });
+});
+
+describe("chrono, le rangement à la sortie", () => {
+  test("ce qui déborde remonte", () => {
+    expect(formatTimeDigits(normalizeTimeDigits("4575", 10))).toBe("46:15");
+    expect(formatTimeDigits(normalizeTimeDigits("39000", 42.195))).toBe("4:30:00");
+  });
+
+  test("la lecture retenue pour la distance s'écrit en clair", () => {
+    expect(formatTimeDigits(normalizeTimeDigits("330", 42.195))).toBe("3:30:00");
+    expect(formatTimeDigits(normalizeTimeDigits("4500", 10))).toBe("45:00");
+  });
+
+  test("le rangement se relit à l'identique", () => {
+    for (const [seconds, km] of [
+      [45 * 60, 10],
+      [59 * 60, 42.195],
+      [3 * 3600 + 29 * 60 + 59, 42.195],
+      [18 * 60 + 30, 5],
+      [1 * 3600 + 35 * 60, 21.0975],
+    ] as const) {
+      const digits = secondsToTimeDigits(seconds, km);
+      expect(timeDigitsToSeconds(digits, km)).toBe(seconds);
+    }
+    // 59 minutes sur marathon se lirait 59 heures : le zéro des heures reste.
+    expect(formatTimeDigits(secondsToTimeDigits(59 * 60, 42.195))).toBe("0:59:00");
+  });
+
+  test("rien de lisible, champ vide", () => {
+    expect(normalizeTimeDigits("", 10)).toBe("");
+    expect(secondsToTimeDigits(0, 10)).toBe("");
   });
 });
 

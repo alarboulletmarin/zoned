@@ -21,8 +21,8 @@ export { WarmupChecklist } from "./WarmupChecklist";
 export { useNowMinutes } from "./useNowMinutes";
 export {
   exerciseSeconds,
+  formatReadableTime,
   formatShortDuration,
   minutesToTime,
-  parseTargetTime,
   timeToMinutes,
 } from "./utils";

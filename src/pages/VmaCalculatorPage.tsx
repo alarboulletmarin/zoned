@@ -10,6 +10,7 @@ import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import { ZoneScale } from "@/components/visualization";
 import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import {
   Select,
   SelectContent,
@@ -25,6 +26,12 @@ import { updateBaseData } from "@/lib/runnerProfile";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
+import {
+  hmsParamsToSeconds,
+  secondsToHmsParams,
+  secondsToTimeDigits,
+  timeDigitsToSeconds,
+} from "@/lib/paceFields";
 import { enduranceIndexFor, sustainableVmaFraction, vmaFromRaceTime } from "@/lib/racePerformance";
 
 /**
@@ -51,18 +58,20 @@ export function VmaCalculatorPage() {
   const [distanceId, setDistanceId] = useState<string>(
     () => searchParams.get("d") ?? "10k",
   );
-  const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "");
-  const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "");
-  const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "");
+  // One masked field, digits entering from the right. Shared links still
+  // carry `h`, `m`, `s`: summed on the way in, split again on the way out.
+  const [timeDigitsValue, setTimeDigitsValue] = useState<string>(() =>
+    secondsToTimeDigits(
+      hmsParamsToSeconds(searchParams.get("h"), searchParams.get("m"), searchParams.get("s")),
+      DISTANCES.find((d) => d.id === (searchParams.get("d") ?? "10k"))?.distanceKm ?? 0,
+    ),
+  );
 
   const selectedDistance = DISTANCES.find((d) => d.id === distanceId)!;
 
-  // Parse time inputs
-  const parsedHours = hours !== "" ? parseInt(hours, 10) : 0;
-  const parsedMinutes = minutes !== "" ? parseInt(minutes, 10) : 0;
-  const parsedSeconds = seconds !== "" ? parseInt(seconds, 10) : 0;
-
-  const totalTimeMinutes = parsedHours * 60 + parsedMinutes + parsedSeconds / 60;
+  const totalTimeSeconds =
+    timeDigitsToSeconds(timeDigitsValue, selectedDistance.distanceKm) ?? 0;
+  const totalTimeMinutes = totalTimeSeconds / 60;
   const hasValidTime = totalTimeMinutes > 0;
 
   // Share of VMA the entered time corresponds to (Péronnet-Thibault)
@@ -104,25 +113,6 @@ export function VmaCalculatorPage() {
     saveUserZonePrefs({ vma: calculatedVma });
     updateBaseData({ vma: calculatedVma });
     navigate("/plan/new");
-  };
-
-  // Clamp numeric input within range
-  const handleNumericInput = (
-    value: string,
-    setter: (v: string) => void,
-    max: number,
-  ) => {
-    if (value === "") {
-      setter("");
-      return;
-    }
-    const num = parseInt(value, 10);
-    if (Number.isNaN(num) || num < 0) return;
-    if (num > max) {
-      setter(String(max));
-      return;
-    }
-    setter(String(num));
   };
 
   return (
@@ -200,49 +190,16 @@ export function VmaCalculatorPage() {
                 <span className="zn-calc__label">
                   {t("calculators:calculateurs.vma.raceTime")}
                 </span>
-                <div className="zn-num__time">
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={9}
-                      placeholder="0"
-                      value={hours}
-                      onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.vma.hours")}
-                    />
-                    <span className="zn-numfield__unit">
-                      {t("calculators:calculateurs.vma.hoursShort")}
-                    </span>
-                  </span>
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      placeholder="00"
-                      value={minutes}
-                      onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.vma.minutes")}
-                    />
-                    <span className="zn-numfield__unit">min</span>
-                  </span>
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      placeholder="00"
-                      value={seconds}
-                      onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.vma.seconds")}
-                    />
-                    <span className="zn-numfield__unit">sec</span>
-                  </span>
-                </div>
+                <span className="zn-numfield">
+                  <ChronoInput
+                    format="hms"
+                    distanceKm={selectedDistance.distanceKm}
+                    digits={timeDigitsValue}
+                    onDigitsChange={setTimeDigitsValue}
+                    className="zn-numfield__input zn-numfield__input--chrono"
+                    aria-label={t("calculators:calculateurs.vma.raceTime")}
+                  />
+                </span>
               </div>
             </CardContent>
           </Card>
@@ -307,9 +264,7 @@ export function VmaCalculatorPage() {
                   buildUrl={() =>
                     buildParamsUrl("/calculators/vma", {
                       d: distanceId,
-                      h: hours,
-                      m: minutes,
-                      s: seconds,
+                      ...secondsToHmsParams(totalTimeSeconds),
                     })
                   }
                   title={t("calculators:calculateurs.vma.title")}

@@ -127,7 +127,9 @@ export function timeDigitsToSeconds(digits: string, distanceKm: number): number 
   const a = Number.parseInt(padded.slice(0, -2), 10);
   const asHours = a * 3600 + b * 60;
   const asMinutes = a * 60 + b;
-  if (!(distanceKm > 0)) return asHours;
+  // Sans distance, la lecture du chronomètre : deux groupes sont m:ss, comme
+  // le masque les affiche (une durée d'intervalle, un temps sans course).
+  if (!(distanceKm > 0)) return asMinutes;
   const plausible = (seconds: number) => {
     const pace = seconds / distanceKm;
     return pace >= PLAUSIBLE_PACE_MIN && pace <= PLAUSIBLE_PACE_MAX;
@@ -137,6 +139,67 @@ export function timeDigitsToSeconds(digits: string, distanceKm: number): number 
   if (hoursOk && !minutesOk) return asHours;
   if (minutesOk && !hoursOk) return asMinutes;
   return distanceKm >= 21 ? asHours : asMinutes;
+}
+
+/**
+ * Des secondes, remises dans le champ du chrono, sous la forme que
+ * `timeDigitsToSeconds` relira à l'identique pour CETTE distance.
+ *
+ * Au-delà de l'heure, trois groupes, sans ambiguïté. En dessous, deux groupes
+ * suffisent tant que la distance les lit en minutes ; si elle les lirait en
+ * heures (59:00 sur un marathon), le zéro des heures est gardé devant, et le
+ * champ affiche 0:59:00. Le rangement est visible, il ne réinterprète rien.
+ */
+export function secondsToTimeDigits(totalSeconds: number, distanceKm: number): string {
+  if (!Number.isFinite(totalSeconds) || totalSeconds <= 0) return "";
+  const total = Math.round(totalSeconds);
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+  const mm = String(minutes).padStart(2, "0");
+  const ss = String(seconds).padStart(2, "0");
+  if (hours > 0) return `${hours}${mm}${ss}`;
+  const short = trimLeadingZeros(`${minutes}${ss}`);
+  if (timeDigitsToSeconds(short, distanceKm) === total) return short;
+  return `0${mm}${ss}`;
+}
+
+/**
+ * Le chrono rangé : les secondes et les minutes qui débordent remontent
+ * (45:75 devient 46:15), et la lecture retenue pour la distance s'écrit en
+ * clair (330 sur un marathon devient 3:30:00). Appelé à la sortie du champ.
+ */
+export function normalizeTimeDigits(digits: string, distanceKm: number): string {
+  const total = timeDigitsToSeconds(digits, distanceKm);
+  if (total === undefined || total <= 0) return "";
+  return secondsToTimeDigits(total, distanceKm);
+}
+
+/**
+ * Les anciens liens partagés portent le chrono en trois paramètres, `h`, `m`
+ * et `s`. Ils restent lisibles : on les additionne à l'entrée, on les
+ * redécoupe à la sortie, le champ, lui, n'en a plus qu'un.
+ */
+export function hmsParamsToSeconds(
+  h: string | null,
+  m: string | null,
+  s: string | null,
+): number {
+  const read = (v: string | null) => {
+    const n = Number.parseInt(v ?? "", 10);
+    return Number.isFinite(n) && n > 0 ? n : 0;
+  };
+  return read(h) * 3600 + read(m) * 60 + read(s);
+}
+
+/** Des secondes, redécoupées en `h`, `m`, `s` pour un lien partagé. */
+export function secondsToHmsParams(totalSeconds: number): { h: string; m: string; s: string } {
+  const total = Math.max(0, Math.round(totalSeconds));
+  return {
+    h: String(Math.floor(total / 3600)),
+    m: String(Math.floor((total % 3600) / 60)),
+    s: String(total % 60),
+  };
 }
 
 // ── VMA, un décimal ───────────────────────────────────────────────────────

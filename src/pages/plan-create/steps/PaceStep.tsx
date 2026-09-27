@@ -1,13 +1,11 @@
 import { useState, type CSSProperties } from "react";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { Segmented } from "@/components/ui/segmented";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import {
   formatPaceDigits,
-  formatTimeDigits,
-  normalizePaceDigits,
   paceDigits,
   secondsToPaceDigits,
-  timeDigits,
   timeDigitsToSeconds,
 } from "@/lib/paceFields";
 import { estimateFinishTime, finishTimeToPaceSeconds, formatPace } from "../helpers";
@@ -59,21 +57,17 @@ function PaceBody({ form, setForm, uid, t, derived, goForward }: StepContext) {
           <label className="zn-contrib-field__label" htmlFor={`${uid}-pace`}>
             {t("pace.targetPaceLabel")}
           </label>
-          <input
+          <ChronoInput
             id={`${uid}-pace`}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            autoComplete="off"
+            format="ms"
             data-mono="true"
             className="zn-contrib-input"
             placeholder={t("pace.pacePlaceholder")}
-            value={form.targetPace}
-            onChange={(e) => {
-              setPaceFromDigits(paceDigits(e.target.value));
+            digits={paceDigits(form.targetPace)}
+            onDigitsChange={(digits) => {
+              setPaceFromDigits(digits);
               setFinishDigits("");
             }}
-            onBlur={() => setPaceFromDigits(normalizePaceDigits(paceDigits(form.targetPace)))}
             onKeyDown={(e) => {
               if (e.key === "Enter") goForward();
             }}
@@ -89,18 +83,15 @@ function PaceBody({ form, setForm, uid, t, derived, goForward }: StepContext) {
           <label className="zn-contrib-field__label" htmlFor={`${uid}-finish`}>
             {t("pace.targetFinishTimeLabel")}
           </label>
-          <input
+          <ChronoInput
             id={`${uid}-finish`}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            autoComplete="off"
+            format="hms"
+            distanceKm={distanceKm}
             data-mono="true"
             className="zn-contrib-input"
             placeholder={t("pace.timePlaceholder")}
-            value={formatTimeDigits(finishDigits)}
-            onChange={(e) => {
-              const digits = timeDigits(e.target.value);
+            digits={finishDigits}
+            onDigitsChange={(digits) => {
               setFinishDigits(digits);
               const totalSec = timeDigitsToSeconds(digits, distanceKm);
               if (totalSec && distanceKm > 0) {

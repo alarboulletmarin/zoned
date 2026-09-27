@@ -4,6 +4,7 @@ import { toast } from "@/components/ui/toast";
 import { Save } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { SEOHead } from "@/components/seo";
@@ -15,137 +16,57 @@ import {
   type SwimZone,
 } from "@/lib/planGenerator/swimmingPaceEngine";
 import { updateSwimmingBaseData } from "@/lib/athleteProfile";
+import { paceDigitsToSeconds } from "@/lib/paceFields";
 
 const ZONE_ORDER: SwimZone[] = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6"];
 
 interface TimeInputProps {
-  /** Prefix for the two field ids the labels point at. */
   id: string;
   label: string;
-  minutes: string;
-  seconds: string;
-  onMinutesChange: (v: string) => void;
-  onSecondsChange: (v: string) => void;
-  minutesLabel: string;
-  secondsLabel: string;
-  /** Outlines both boxes; the written reason is printed by the caller. */
+  /** The typed digits, mask removed (`lib/paceFields.ts`). */
+  digits: string;
+  onDigitsChange: (v: string) => void;
+  /** Outlines the box; the written reason is printed by the caller. */
   invalid?: boolean;
   describedBy?: string;
 }
 
 /**
- * A duration typed as mm:ss. Two number fields on one baseline, each in its
- * own frame with its unit printed under it, and each unit is the field's
- * real `<label htmlFor>`, not a caption sitting next to an unlabelled box.
+ * A swim time typed as m:ss, one field at the chronometer mask: digits enter
+ * from the right, 612 reads 6:12, and 5:75 tidies to 6:15 on leaving.
  */
-function TimeInput({
-  id,
-  label,
-  minutes,
-  seconds,
-  onMinutesChange,
-  onSecondsChange,
-  minutesLabel,
-  secondsLabel,
-  invalid,
-  describedBy,
-}: TimeInputProps) {
-  const handle = (value: string, setter: (v: string) => void, max: number) => {
-    if (value === "") {
-      setter("");
-      return;
-    }
-    const num = parseInt(value, 10);
-    if (Number.isNaN(num) || num < 0) return;
-    if (num > max) {
-      setter(String(max));
-      return;
-    }
-    setter(String(num));
-  };
-
+function TimeInput({ id, label, digits, onDigitsChange, invalid, describedBy }: TimeInputProps) {
   return (
-    <div
-      className="zn-ct__field"
-      role="group"
-      aria-labelledby={`${id}-label`}
-      aria-describedby={describedBy}
-    >
-      <span id={`${id}-label`} className="zn-label">
+    <div className="zn-ct__field">
+      <label htmlFor={id} className="zn-label">
         {label}
+      </label>
+      <span
+        className="zn-numfield zn-ct__numfield"
+        data-invalid={invalid ? "true" : undefined}
+      >
+        <ChronoInput
+          id={id}
+          format="ms"
+          digits={digits}
+          onDigitsChange={onDigitsChange}
+          aria-invalid={invalid || undefined}
+          aria-describedby={describedBy}
+          className="zn-numfield__input zn-numfield__input--chrono"
+        />
       </span>
-      <div className="zn-ct__time">
-        <div className="zn-ct__timepart">
-          <span
-            className="zn-numfield zn-ct__numfield"
-            data-invalid={invalid ? "true" : undefined}
-          >
-            <input
-              id={`${id}-min`}
-              type="number"
-              min={0}
-              max={59}
-              placeholder="0"
-              value={minutes}
-              onChange={(e) => handle(e.target.value, onMinutesChange, 59)}
-              aria-label={minutesLabel}
-              aria-invalid={invalid || undefined}
-              className="zn-numfield__input"
-            />
-          </span>
-          <label htmlFor={`${id}-min`} className="zn-ct__timeunit">
-            {minutesLabel}
-          </label>
-        </div>
-
-        <span className="zn-ct__timesep" aria-hidden="true">
-          :
-        </span>
-
-        <div className="zn-ct__timepart">
-          <span
-            className="zn-numfield zn-ct__numfield"
-            data-invalid={invalid ? "true" : undefined}
-          >
-            <input
-              id={`${id}-sec`}
-              type="number"
-              min={0}
-              max={59}
-              placeholder="00"
-              value={seconds}
-              onChange={(e) => handle(e.target.value, onSecondsChange, 59)}
-              aria-label={secondsLabel}
-              aria-invalid={invalid || undefined}
-              className="zn-numfield__input"
-            />
-          </span>
-          <label htmlFor={`${id}-sec`} className="zn-ct__timeunit">
-            {secondsLabel}
-          </label>
-        </div>
-      </div>
     </div>
   );
-}
-
-function parseSeconds(minutes: string, seconds: string): number {
-  const m = minutes === "" ? 0 : parseInt(minutes, 10);
-  const s = seconds === "" ? 0 : parseInt(seconds, 10);
-  if (!Number.isFinite(m) || !Number.isFinite(s)) return 0;
-  return m * 60 + s;
 }
 
 export function CssTestPage() {
   const { t } = useTranslation("calculators");
 
-  const [m400, setM400] = useState<string>("");
-  const [s400, setS400] = useState<string>("");
-  const [m200, setM200] = useState<string>("");
-  const [s200, setS200] = useState<string>("");
+  const [d400, setD400] = useState<string>("");
+  const [d200, setD200] = useState<string>("");
 
-  const time400 = parseSeconds(m400, s400);
-  const time200 = parseSeconds(m200, s200);
+  const time400 = paceDigitsToSeconds(d400) ?? 0;
+  const time200 = paceDigitsToSeconds(d200) ?? 0;
 
   const cssSecPer100m = useMemo(() => {
     if (time400 <= 0 || time200 <= 0) return 0;
@@ -221,12 +142,8 @@ export function CssTestPage() {
               <TimeInput
                 id="time400"
                 label={t("calculateurs.css.time400")}
-                minutes={m400}
-                seconds={s400}
-                onMinutesChange={setM400}
-                onSecondsChange={setS400}
-                minutesLabel={t("calculateurs.css.minutes")}
-                secondsLabel={t("calculateurs.css.seconds")}
+                digits={d400}
+                onDigitsChange={setD400}
                 invalid={orderError}
                 describedBy={orderError ? "css-order-error" : undefined}
               />
@@ -234,12 +151,8 @@ export function CssTestPage() {
               <TimeInput
                 id="time200"
                 label={t("calculateurs.css.time200")}
-                minutes={m200}
-                seconds={s200}
-                onMinutesChange={setM200}
-                onSecondsChange={setS200}
-                minutesLabel={t("calculateurs.css.minutes")}
-                secondsLabel={t("calculateurs.css.seconds")}
+                digits={d200}
+                onDigitsChange={setD200}
                 invalid={orderError}
                 describedBy={orderError ? "css-order-error" : undefined}
               />

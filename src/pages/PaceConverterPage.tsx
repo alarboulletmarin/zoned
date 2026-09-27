@@ -8,25 +8,17 @@ import { buildParamsUrl } from "@/lib/share/urlParams";
 import { useSettings } from "@/hooks/useSettings";
 import { loadUserZonePrefs, calculatePaceZones } from "@/lib/zones";
 import type { ZoneNumber } from "@/types";
+import { ChronoInput } from "@/components/ui/chrono-input";
+import { formatPaceDigits, paceDigits, paceDigitsToSeconds } from "@/lib/paceFields";
 
 /**
- * Parse a pace string like "4:30" into total minutes (4.5).
- * Returns null if the input is invalid or incomplete.
+ * Read a pace field ("4:30", mask applied) into total minutes (4.5). Tolerant
+ * like every masked field: 4:75 reads 5:15 and tidies on leaving the field.
+ * Returns null when nothing is typed.
  */
 function parsePaceInput(value: string): number | null {
-  const trimmed = value.trim();
-  if (!trimmed) return null;
-
-  const parts = trimmed.split(":");
-  if (parts.length !== 2) return null;
-
-  const minutes = parseInt(parts[0], 10);
-  const seconds = parseInt(parts[1], 10);
-
-  if (!Number.isFinite(minutes) || minutes < 0) return null;
-  if (!Number.isFinite(seconds) || seconds < 0 || seconds > 59) return null;
-
-  return minutes + seconds / 60;
+  const seconds = paceDigitsToSeconds(paceDigits(value));
+  return seconds === undefined ? null : seconds / 60;
 }
 
 /**
@@ -89,7 +81,7 @@ export function PaceConverterPage() {
   const currentPaceMinPerKm = useMemo(() => {
     // Try to derive from primaryPace first (most recently likely edited)
     // but since we update all three on change, we use speed as canonical
-    const speedVal = parseFloat(speed);
+    const speedVal = parseFloat(speed.replace(",", "."));
     if (Number.isFinite(speedVal) && speedVal > 0) {
       if (isImperial) {
         // speed is mph, convert to km/h first
@@ -144,7 +136,7 @@ export function PaceConverterPage() {
   const handleSpeedChange = useCallback(
     (value: string) => {
       setSpeed(value);
-      const speedVal = parseFloat(value);
+      const speedVal = parseFloat(value.replace(",", "."));
       if (!Number.isFinite(speedVal) || speedVal <= 0) {
         setPrimaryPace("");
         setSecondaryPace("");
@@ -260,13 +252,11 @@ export function PaceConverterPage() {
                 {primaryLabel}
               </label>
               <span className="zn-tool__entry">
-                <input
+                <ChronoInput
                   id="pace-primary"
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="4:30"
-                  value={primaryPace}
-                  onChange={(e) => handlePrimaryPaceChange(e.target.value)}
+                  format="ms"
+                  digits={paceDigits(primaryPace)}
+                  onDigitsChange={(digits) => handlePrimaryPaceChange(formatPaceDigits(digits))}
                   className="zn-tool__entry-input"
                 />
                 <span className="zn-tool__entry-unit">{primaryLabel}</span>
@@ -296,13 +286,11 @@ export function PaceConverterPage() {
                 {secondaryLabel}
               </label>
               <span className="zn-tool__entry">
-                <input
+                <ChronoInput
                   id="pace-secondary"
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="7:14"
-                  value={secondaryPace}
-                  onChange={(e) => handleSecondaryPaceChange(e.target.value)}
+                  format="ms"
+                  digits={paceDigits(secondaryPace)}
+                  onDigitsChange={(digits) => handleSecondaryPaceChange(formatPaceDigits(digits))}
                   className="zn-tool__entry-input"
                 />
                 <span className="zn-tool__entry-unit">{secondaryLabel}</span>

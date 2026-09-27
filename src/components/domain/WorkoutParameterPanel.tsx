@@ -19,7 +19,9 @@
 
 import { useEffect, useId, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { Slider } from "@/components/ui/slider";
+import { secondsToTimeDigits, timeDigitsToSeconds } from "@/lib/paceFields";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { getHardLimits, type AdjustableParam, type AdjustableParamKind } from "@/lib/workoutAdjust";
 import type { WorkoutPhaseKey } from "@/types";
@@ -143,9 +145,9 @@ function ParameterRow({
 }
 
 /**
- * The typed side of a parameter. Durations get the minutes/seconds pair the
- * step editor below already uses, rather than a raw count of seconds, nobody
- * types 1500 to mean twenty-five minutes.
+ * The typed side of a parameter. Durations get the chronometer mask every
+ * time field of the app uses (`ChronoInput`), rather than a raw count of
+ * seconds, nobody types 1500 to mean twenty-five minutes: 2500 reads 25:00.
  */
 function ParameterFields({
   param,
@@ -159,27 +161,14 @@ function ParameterFields({
   const limits = getHardLimits(param.kind);
 
   if (isDuration(param.kind)) {
-    const minutes = Math.floor(param.value / 60);
-    const seconds = param.value % 60;
     return (
-      <div className="zn-params__fields">
-        <NumberField
-          value={minutes}
-          min={0}
-          max={Math.floor(limits.max / 60)}
-          unit="min"
-          label={`${label} · min`}
-          onCommit={(next) => onCommit(param.id, next * 60 + seconds)}
-        />
-        <NumberField
-          value={seconds}
-          min={0}
-          max={59}
-          unit="s"
-          label={`${label} · s`}
-          onCommit={(next) => onCommit(param.id, minutes * 60 + next)}
-        />
-      </div>
+      <DurationField
+        value={param.value}
+        min={limits.min}
+        max={limits.max}
+        label={label}
+        onCommit={(next) => onCommit(param.id, next)}
+      />
     );
   }
 
@@ -193,6 +182,60 @@ function ParameterFields({
       onCommit={(next) => onCommit(param.id, next)}
       style={{ "--field-w": "56px" } as CSSProperties}
     />
+  );
+}
+
+/**
+ * A duration at the chronometer mask that only reports on commit, like
+ * NumberField: held as digits while focused, clamped to the hard limits on
+ * leaving. m:ss, then h:mm:ss past four digits, a block can run to 4 h.
+ */
+function DurationField({
+  value,
+  min,
+  max,
+  label,
+  onCommit,
+}: {
+  value: number;
+  min: number;
+  max: number;
+  label: string;
+  onCommit: (value: number) => void;
+}) {
+  const [draft, setDraft] = useState(() => secondsToTimeDigits(value, 0));
+
+  useEffect(() => setDraft(secondsToTimeDigits(value, 0)), [value]);
+
+  const commit = () => {
+    const parsed = timeDigitsToSeconds(draft, 0);
+    if (parsed === undefined) {
+      setDraft(secondsToTimeDigits(value, 0));
+      return;
+    }
+    const clamped = Math.min(max, Math.max(min, parsed));
+    setDraft(secondsToTimeDigits(clamped, 0));
+    if (clamped !== value) onCommit(clamped);
+  };
+
+  return (
+    <span className="zn-numfield">
+      <ChronoInput
+        format="hms"
+        digits={draft}
+        onDigitsChange={setDraft}
+        keepOnBlur
+        aria-label={label}
+        onBlur={commit}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            event.currentTarget.blur();
+          }
+        }}
+        className="zn-numfield__input zn-numfield__input--chrono"
+      />
+    </span>
   );
 }
 

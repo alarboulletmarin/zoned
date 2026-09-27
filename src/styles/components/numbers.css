@@ -134,15 +134,6 @@
   }
 }
 
-/* Hours, minutes, seconds, three number fields on one baseline, each with its
-   unit inside its own frame. */
-.zn-num__time {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--sp-4);
-}
-
 /* The actions of a card, under a divider: the block above is what you typed,
    the block below is what happens to it. */
 .zn-num__actions {
