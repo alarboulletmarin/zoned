@@ -10,7 +10,8 @@ import { timeDigitsToSeconds } from "@/lib/paceFields";
 import { formatPaceDisplay, type SplitStrategy } from "@/lib/splits";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { cn } from "@/lib/utils";
-import { formatReadableTime } from "./utils";
+import { durationToMinutes } from "@/lib/durationFields";
+import { formatReadableTime, minutesToTime } from "./utils";
 import { FieldLabel } from "./RaceSimSection";
 
 export interface RaceSimSettings {
@@ -22,6 +23,11 @@ export interface RaceSimSettings {
    * "33000" reads 3:30:00. See `ChronoInput` and `lib/paceFields.ts`.
    */
   targetTime: string;
+  /**
+   * The start as typed DIGITS at the h:mm mask, "830" reads 8:30. A native
+   * time input was the one field sized by the browser rather than by the
+   * form: iOS Safari gives it an intrinsic width that ignores the frame.
+   */
   startTime: string;
   strategy: SplitStrategy;
   /** Empty means "not provided": the plan falls back to 70 kg internally.
@@ -47,7 +53,7 @@ export const DEFAULT_SETTINGS: RaceSimSettings = {
   distance: "10",
   customDistance: "",
   targetTime: "4500",
-  startTime: "08:30",
+  startTime: "830",
   strategy: "even",
   weight: "",
 };
@@ -57,6 +63,9 @@ export interface ResolvedSettings {
   targetSeconds: number | null;
   /** True when the time field holds something that is not a time (0:00). */
   timeError: boolean;
+  /** The start as "HH:mm", or null when the field holds no time of day. */
+  startTime: string | null;
+  startError: boolean;
   valid: boolean;
 }
 
@@ -66,11 +75,16 @@ export function resolveSettings(s: RaceSimSettings): ResolvedSettings {
       ? parseFloat(s.customDistance.replace(",", ".")) || 0
       : parseFloat(s.distance);
   const targetSeconds = timeDigitsToSeconds(s.targetTime, distanceKm) ?? null;
+  const startMinutes = durationToMinutes(s.startTime);
+  const startTime =
+    startMinutes !== undefined && startMinutes < 24 * 60 ? minutesToTime(startMinutes) : null;
   return {
     distanceKm,
     targetSeconds,
     timeError: s.targetTime !== "" && !(targetSeconds !== null && targetSeconds > 0),
-    valid: distanceKm > 0 && targetSeconds !== null && targetSeconds > 0,
+    startTime,
+    startError: s.startTime !== "" && startTime === null,
+    valid: distanceKm > 0 && targetSeconds !== null && targetSeconds > 0 && startTime !== null,
   };
 }
 
@@ -217,13 +231,21 @@ export function RaceSimForm({
         <label htmlFor={`${uid}-start`}>
           <FieldLabel>{t("inputs.startTime")}</FieldLabel>
         </label>
-        <input
+        <ChronoInput
           id={`${uid}-start`}
-          type="time"
-          value={settings.startTime}
-          onChange={(e) => set("startTime", e.target.value)}
+          format="hm"
+          placeholder="8:30"
+          aria-invalid={resolved.startError || undefined}
+          aria-describedby={resolved.startError ? `${uid}-start-hint` : undefined}
+          digits={settings.startTime}
+          onDigitsChange={(digits) => set("startTime", digits)}
           className="zn-rs-field zn-rs-field--mono"
         />
+        {resolved.startError && (
+          <p id={`${uid}-start-hint`} className="zn-rs-form__hint" data-error>
+            {t("inputs.startInvalid")}
+          </p>
+        )}
       </div>
 
       {/* Strategy */}
