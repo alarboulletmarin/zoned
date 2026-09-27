@@ -10,7 +10,8 @@ import { DIFFICULTY_META } from "@/types";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { sortIntermediateGoals } from "@/lib/intermediateGoalValidation";
 import type { IntermediateGoal } from "@/types/plan";
-import { estimateFinishTime, formatPace } from "../helpers";
+import { formatReadableTime } from "@/lib/splits";
+import { formatPace } from "../helpers";
 import { SummaryRow } from "../Option";
 import type { StepContext, StepDef } from "../types";
 
@@ -146,7 +147,7 @@ function SummaryBody({
               <SummaryRow
                 label={t("summary.pace")}
                 mono
-                value={`${formatPace(paceSeconds)}/km → ${estimateFinishTime(paceSeconds, distanceKm)}`}
+                value={`${formatPace(paceSeconds)}/km → ${formatReadableTime(paceSeconds * distanceKm)}`}
               />
             )}
             {form.elevationGain && (

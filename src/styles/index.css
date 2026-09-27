@@ -46,6 +46,7 @@
 @import "./components/calc-tests.css" layer(components);
 @import "./components/calendar.css" layer(components);
 @import "./components/card.css" layer(components);
+@import "./components/chrono.css" layer(components);
 @import "./components/cockpit.css" layer(components);
 @import "./components/today-compose.css" layer(components);
 @import "./components/content.css" layer(components);

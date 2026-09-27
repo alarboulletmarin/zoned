@@ -135,24 +135,14 @@
     "longRunDay": "Jour de sortie longue"
   },
   "pace": {
-    "title": "Ton allure cible",
+    "title": "Ton allure cible et ton temps cible",
     "subtitle": "Optionnel - tu peux passer cette étape",
     "trailHint": "En trail, l'allure ne veut pas dire grand-chose : c'est l'effort et le temps qui comptent. Tu peux passer cette étape.",
-    "targetPace": "Allure cible",
-    "targetTime": "Temps cible",
-    "targetPaceTab": "Allure cible",
-    "targetTimeTab": "Temps cible",
-    "targetPaceLabel": "Allure cible (min/km)",
-    "targetFinishTimeLabel": "Temps d'arrivée visé",
-    "pacePlaceholder": "Ex: 5:30",
-    "timePlaceholder": "ex. 3:30 ou 3:30:00",
-    "estimatedFinish": "Temps estimé : ",
-    "requiredPace": "Allure nécessaire : ",
-    "paceFormatError": "Format : MM:SS (ex. 5:30)",
-    "timeFormatHint": "Format : H:MM ou H:MM:SS (ex. 3:30 ou 3:30:00)",
-    "skip": "Passer cette étape",
-    "paceMaskHint": "Tape les chiffres, le deux-points se place seul : 530 donne 5:30.",
-    "timeMaskHint": "Tape les chiffres : 4500 donne 45:00, 33000 donne 3:30:00."
+    "linkedHint": "Remplis l'un, l'autre suit. Tape les chiffres, ils se rangent tout seuls : 430 donne 4:30, 33000 donne 3:30:00.",
+    "targetPaceLabel": "Allure cible",
+    "targetFinishTimeLabel": "Temps visé · {{distance}}",
+    "speedReading": "Soit {{speed}} km/h",
+    "timeReading": "Soit {{time}}"
   },
   "summary": {
     "title": "Récapitulatif",

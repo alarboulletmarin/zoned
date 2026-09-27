@@ -135,24 +135,14 @@
     "longRunDay": "Long run day"
   },
   "pace": {
-    "title": "Your target pace",
+    "title": "Your target pace and finish time",
     "subtitle": "Optional - you can skip this step",
     "trailHint": "On trail, pace does not mean much: effort and time are what count. You can skip this step.",
-    "targetPace": "Target pace",
-    "targetTime": "Finish time",
-    "targetPaceTab": "Target pace",
-    "targetTimeTab": "Finish time",
-    "targetPaceLabel": "Target pace (min/km)",
-    "targetFinishTimeLabel": "Target finish time",
-    "pacePlaceholder": "E.g.: 5:30",
-    "timePlaceholder": "e.g. 3:30 or 3:30:00",
-    "estimatedFinish": "Estimated finish: ",
-    "requiredPace": "Required pace: ",
-    "paceFormatError": "Format: MM:SS (e.g. 5:30)",
-    "timeFormatHint": "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)",
-    "skip": "Skip this step",
-    "paceMaskHint": "Type the digits, the colon places itself: 530 reads 5:30.",
-    "timeMaskHint": "Type the digits: 4500 reads 45:00, 33000 reads 3:30:00."
+    "linkedHint": "Fill one, the other follows. Type the digits, they fall into place: 430 reads 4:30, 33000 reads 3:30:00.",
+    "targetPaceLabel": "Target pace",
+    "targetFinishTimeLabel": "Target time · {{distance}}",
+    "speedReading": "That is {{speed}} km/h",
+    "timeReading": "That is {{time}}"
   },
   "summary": {
     "title": "Summary",

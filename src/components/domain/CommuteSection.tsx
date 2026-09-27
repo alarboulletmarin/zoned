@@ -24,6 +24,8 @@ import {
   saveCommutePattern,
 } from "@/lib/athleteProfile";
 import type { CommutePattern } from "@/types/athlete-profile";
+import { ChronoInput } from "@/components/ui/chrono-input";
+import { durationToMinutes, minutesToDurationDigits } from "@/lib/durationFields";
 
 type CommuteDiscipline = CommutePattern["discipline"];
 
@@ -47,6 +49,7 @@ export function CommuteSection() {
   const { t } = useTranslation("profile");
   const [discipline, setDiscipline] = useState<CommuteDiscipline>("cycling");
   const [days, setDays] = useState<Set<number>>(() => new Set());
+  /** Digits at the h:mm mask, see `lib/durationFields.ts`. */
   const [durationMin, setDurationMin] = useState<string>("");
   const [includeInPlan, setIncludeInPlan] = useState(false);
   const [hasStored, setHasStored] = useState(false);
@@ -56,7 +59,7 @@ export function CommuteSection() {
     if (!existing) return;
     setDiscipline(existing.discipline);
     setDays(new Set(existing.daysOfWeek));
-    setDurationMin(String(existing.durationMin));
+    setDurationMin(minutesToDurationDigits(existing.durationMin));
     setIncludeInPlan(existing.includeInPlan);
     setHasStored(true);
   }, []);
@@ -70,21 +73,7 @@ export function CommuteSection() {
     });
   };
 
-  const handleDurationChange = (value: string) => {
-    if (value === "") {
-      setDurationMin("");
-      return;
-    }
-    const num = parseInt(value, 10);
-    if (Number.isNaN(num) || num < 0) return;
-    if (num > 240) {
-      setDurationMin("240");
-      return;
-    }
-    setDurationMin(String(num));
-  };
-
-  const parsedDuration = durationMin === "" ? 0 : parseInt(durationMin, 10);
+  const parsedDuration = durationToMinutes(durationMin) ?? 0;
   const canSave = days.size > 0 && parsedDuration > 0 && parsedDuration <= 240;
 
   const handleSave = () => {
@@ -178,14 +167,12 @@ export function CommuteSection() {
           <label htmlFor="commuteDuration" className="zn-commute__label">
             {t("commute.durationMin")}
           </label>
-          <input
+          <ChronoInput
             id="commuteDuration"
-            type="number"
-            min={0}
-            max={240}
-            placeholder="30"
-            value={durationMin}
-            onChange={(e) => handleDurationChange(e.target.value)}
+            format="hm"
+            placeholder="0:30"
+            digits={durationMin}
+            onDigitsChange={setDurationMin}
             className="zn-route-field zn-route-field--num"
             style={{ "--w": "112px" } as CSSProperties}
           />

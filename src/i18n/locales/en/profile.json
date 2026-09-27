@@ -28,7 +28,7 @@
     "disciplineCycling": "Cycling",
     "disciplineRunning": "Running",
     "daysOfWeek": "Days of the week",
-    "durationMin": "Duration per trip (minutes)",
+    "durationMin": "Duration per trip",
     "durationHint": "One-way duration. Double it if you also commute back.",
     "includeInPlan": "Include in the plan",
     "includeInPlanHint": "When on, the plan reduces easy sessions to avoid overload. Otherwise, commute stays an untracked extra.",

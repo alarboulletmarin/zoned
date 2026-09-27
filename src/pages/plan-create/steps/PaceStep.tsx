@@ -1,116 +1,127 @@
 import { useState, type CSSProperties } from "react";
 import { ChronoInput } from "@/components/ui/chrono-input";
-import { Segmented } from "@/components/ui/segmented";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import {
   formatPaceDigits,
   paceDigits,
+  paceDigitsToSeconds,
   secondsToPaceDigits,
+  secondsToTimeDigits,
   timeDigitsToSeconds,
 } from "@/lib/paceFields";
-import { estimateFinishTime, finishTimeToPaceSeconds, formatPace } from "../helpers";
+import { useIsEnglish } from "@/lib/i18n-utils";
+import { formatReadableTime } from "@/lib/splits";
 import type { StepContext, StepDef } from "../types";
 
 /**
- * L'allure cible, saisie comme une allure ou comme un chrono d'arrivée.
+ * L'allure cible et le temps cible, sur le même écran, liés.
  *
- * Les deux champs portent le masque du chronomètre (`lib/paceFields.ts`) :
- * les chiffres entrent par la droite, 530 se lit 5:30, et le pavé est celui
- * des CHIFFRES seuls. Ils demandaient avant un deux-points tapé à la main et
- * refusaient tout le reste avec une erreur de format ; plus rien n'est à
- * refuser, 5:75 se range en 6:15 quand le champ est quitté.
+ * C'étaient deux onglets : taper un temps cachait l'allure qu'il donnait, et
+ * repasser sur l'allure effaçait le temps. Les deux champs sont maintenant
+ * côte à côte et chacun SUIT l'autre, comme sur le convertisseur d'allure :
+ * on remplit celui que l'on connaît, on lit l'autre.
+ *
+ * Les deux portent le masque du chronomètre (`ChronoInput`) : les chiffres
+ * entrent par la droite, 430 se lit 4:30, 33000 se lit 3:30:00, et la
+ * distance départage minutes et heures sur quatre chiffres. Sous chacun, la
+ * lecture en clair : la vitesse sous l'allure, le temps en mots sous le
+ * chrono, pour que 3:30 ne laisse aucun doute.
  *
  * `form.targetPace` reste la chaîne `M:SS` que le reste du parcours lit. Le
- * mode de saisie et le chrono tapé sont de l'état LOCAL : le brouillon ne les
- * persiste pas, ce qui compte est l'allure.
+ * chrono est de l'état LOCAL, rederivé de l'allure à l'ouverture : le
+ * brouillon ne persiste que l'allure, ce qui compte pour le plan.
  */
-function PaceBody({ form, setForm, uid, t, derived, goForward }: StepContext) {
-  const [paceInputMode, setPaceInputMode] = useState<"pace" | "time">("pace");
-  const [finishDigits, setFinishDigits] = useState("");
-
-  const { paceSeconds } = derived;
-  const distanceKm = form.raceDistance
-    ? RACE_DISTANCE_META[form.raceDistance].distanceKm
-    : 0;
-  const finishSeconds = timeDigitsToSeconds(finishDigits, distanceKm);
+function PaceBody({ form, setForm, uid, t, pick, goForward }: StepContext) {
+  const isEn = useIsEnglish();
+  const meta = form.raceDistance ? RACE_DISTANCE_META[form.raceDistance] : null;
+  const distanceKm = meta?.distanceKm ?? 0;
   const isTrail = form.practice === "trail" || form.practice === "ultra";
 
-  const setPaceFromDigits = (digits: string) =>
+  const paceSeconds = paceDigitsToSeconds(paceDigits(form.targetPace));
+  const finishFromPace = (seconds: number | undefined) =>
+    seconds && distanceKm > 0
+      ? secondsToTimeDigits(Math.round(seconds * distanceKm), distanceKm)
+      : "";
+
+  const [finishDigits, setFinishDigits] = useState(() => finishFromPace(paceSeconds));
+  const finishSeconds = timeDigitsToSeconds(finishDigits, distanceKm);
+
+  const onPaceDigits = (digits: string) => {
     setForm((f) => ({ ...f, targetPace: formatPaceDigits(digits) }));
+    setFinishDigits(finishFromPace(paceDigitsToSeconds(digits)));
+  };
+
+  const onFinishDigits = (digits: string) => {
+    setFinishDigits(digits);
+    const total = timeDigitsToSeconds(digits, distanceKm);
+    const pace =
+      total && distanceKm > 0 ? formatPaceDigits(secondsToPaceDigits(total / distanceKm)) : "";
+    setForm((f) => ({ ...f, targetPace: pace }));
+  };
+
+  const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") goForward();
+  };
+
+  const speed =
+    paceSeconds && paceSeconds > 0
+      ? (3600 / paceSeconds).toFixed(1).replace(".", isEn ? "." : ",")
+      : null;
 
   return (
     <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
       {isTrail && <p className="zn-caption zn-faint">{t("pace.trailHint")}</p>}
+      <p className="zn-caption zn-faint">{t("pace.linkedHint")}</p>
 
-      <Segmented
-        label={t("pace.title")}
-        value={paceInputMode}
-        onChange={(v) => setPaceInputMode(v as "pace" | "time")}
-        options={[
-          { value: "pace", label: t("pace.targetPaceTab") },
-          { value: "time", label: t("pace.targetTimeTab") },
-        ]}
-      />
-
-      {paceInputMode === "pace" ? (
-        <div className="zn-contrib-field">
-          <label className="zn-contrib-field__label" htmlFor={`${uid}-pace`}>
-            {t("pace.targetPaceLabel")}
-          </label>
+      <div className="zn-contrib-field">
+        <label className="zn-contrib-field__label" htmlFor={`${uid}-pace`}>
+          {t("pace.targetPaceLabel")}
+        </label>
+        <span className="zn-chrono">
           <ChronoInput
             id={`${uid}-pace`}
             format="ms"
-            data-mono="true"
-            className="zn-contrib-input"
-            placeholder={t("pace.pacePlaceholder")}
+            placeholder="0:00"
+            aria-describedby={speed ? `${uid}-pace-reading` : undefined}
             digits={paceDigits(form.targetPace)}
-            onDigitsChange={(digits) => {
-              setPaceFromDigits(digits);
-              setFinishDigits("");
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") goForward();
-            }}
+            onDigitsChange={onPaceDigits}
+            onKeyDown={onEnter}
+            className="zn-chrono__input"
           />
-          <p className="zn-mono zn-faint">
-            {paceSeconds && distanceKm > 0
-              ? `${t("pace.estimatedFinish")}${estimateFinishTime(paceSeconds, distanceKm)}`
-              : t("pace.paceMaskHint")}
+          <span className="zn-chrono__unit" aria-hidden="true">
+            min/km
+          </span>
+        </span>
+        {speed && (
+          <p id={`${uid}-pace-reading`} className="zn-chrono__reading">
+            {t("pace.speedReading", { speed })}
           </p>
-        </div>
-      ) : (
+        )}
+      </div>
+
+      {meta && (
         <div className="zn-contrib-field">
           <label className="zn-contrib-field__label" htmlFor={`${uid}-finish`}>
-            {t("pace.targetFinishTimeLabel")}
+            {t("pace.targetFinishTimeLabel", { distance: pick(meta, "label") })}
           </label>
-          <ChronoInput
-            id={`${uid}-finish`}
-            format="hms"
-            distanceKm={distanceKm}
-            data-mono="true"
-            className="zn-contrib-input"
-            placeholder={t("pace.timePlaceholder")}
-            digits={finishDigits}
-            onDigitsChange={(digits) => {
-              setFinishDigits(digits);
-              const totalSec = timeDigitsToSeconds(digits, distanceKm);
-              if (totalSec && distanceKm > 0) {
-                setPaceFromDigits(
-                  secondsToPaceDigits(finishTimeToPaceSeconds(totalSec, distanceKm)),
-                );
-              } else {
-                setForm((f) => ({ ...f, targetPace: "" }));
-              }
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") goForward();
-            }}
-          />
-          <p className="zn-mono zn-faint">
-            {finishSeconds && distanceKm > 0
-              ? `${t("pace.requiredPace")}${formatPace(finishTimeToPaceSeconds(finishSeconds, distanceKm))} min/km`
-              : t("pace.timeMaskHint")}
-          </p>
+          <span className="zn-chrono">
+            <ChronoInput
+              id={`${uid}-finish`}
+              format="hms"
+              distanceKm={distanceKm}
+              placeholder="0:00:00"
+              aria-describedby={finishSeconds ? `${uid}-finish-reading` : undefined}
+              digits={finishDigits}
+              onDigitsChange={onFinishDigits}
+              onKeyDown={onEnter}
+              className="zn-chrono__input"
+            />
+          </span>
+          {finishSeconds ? (
+            <p id={`${uid}-finish-reading`} className="zn-chrono__reading">
+              {t("pace.timeReading", { time: formatReadableTime(finishSeconds) })}
+            </p>
+          ) : null}
         </div>
       )}
     </div>

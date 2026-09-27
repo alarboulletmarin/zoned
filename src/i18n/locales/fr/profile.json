@@ -28,7 +28,7 @@
     "disciplineCycling": "Vélo",
     "disciplineRunning": "Footing",
     "daysOfWeek": "Jours concernés",
-    "durationMin": "Durée par trajet (minutes)",
+    "durationMin": "Durée par trajet",
     "durationHint": "Durée aller simple. Double-la si tu fais l'aller-retour.",
     "includeInPlan": "Intégrer au plan",
     "includeInPlanHint": "Si activé, le plan réduit les séances faciles pour éviter la surcharge. Sinon, le vélotaf reste un extra non comptabilisé.",
