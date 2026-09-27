@@ -56,6 +56,7 @@ import {
   Stat,
   WarmupChecklist,
   resolveSettings,
+  timeToMinutes,
   type RaceSimNavItem,
   type RaceSimSettings,
 } from "@/components/domain/raceSim";
@@ -73,6 +74,7 @@ import { useSettings } from "@/hooks/useSettings";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { secondsToTimeDigits } from "@/lib/paceFields";
+import { minutesToDurationDigits } from "@/lib/durationFields";
 import { toast } from "@/components/ui/toast";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
 import { useIsEnglish, usePickLang, formatDate } from "@/lib/i18n-utils";
@@ -114,7 +116,7 @@ function settingsFromInput(input: RaceSimInput): RaceSimSettings {
     distance: match ? match.value : "custom",
     customDistance: match ? "" : String(input.distanceKm).replace(".", ","),
     targetTime: secondsToTimeDigits(input.targetTimeSeconds, input.distanceKm),
-    startTime: input.startTime,
+    startTime: minutesToDurationDigits(timeToMinutes(input.startTime)),
     strategy: input.strategy,
     weight: input.bodyWeightKg?.toString().replace(".", ",") ?? "",
   };
@@ -161,11 +163,11 @@ export function RaceSimulatorPage() {
   }, []);
 
   const handleGenerate = useCallback(() => {
-    if (!resolved.valid || resolved.targetSeconds === null) return;
+    if (!resolved.valid || resolved.targetSeconds === null || resolved.startTime === null) return;
     applyPlan({
       distanceKm: resolved.distanceKm,
       targetTimeSeconds: resolved.targetSeconds,
-      startTime: settings.startTime,
+      startTime: resolved.startTime,
       strategy: settings.strategy,
       bodyWeightKg: settings.weight ? parseFloat(settings.weight.replace(",", ".")) || undefined : undefined,
     });

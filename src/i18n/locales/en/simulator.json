@@ -14,6 +14,7 @@
     "timeHint": "Type the digits, they fall into place: 4500 reads 45:00, 33000 reads 3:30:00.",
     "timeInvalid": "That time does not read. Try 4500 for 45:00.",
     "timeReading": "That is {{time}} · {{pace}}",
+    "startInvalid": "A start time runs from 0:00 to 23:59, for instance 830 for 8:30.",
     "generate": "Generate my race plan",
     "regenerate": "Regenerate plan",
     "adjust": "Adjust",

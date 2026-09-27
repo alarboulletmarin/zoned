@@ -14,6 +14,7 @@
     "timeHint": "Tape les chiffres, ils se rangent tout seuls : 4500 donne 45:00, 33000 donne 3:30:00.",
     "timeInvalid": "Ce temps ne se lit pas. Essaie 4500 pour 45:00.",
     "timeReading": "Soit {{time}} · {{pace}}",
+    "startInvalid": "Une heure de départ se tape entre 0:00 et 23:59, par exemple 830 pour 8:30.",
     "generate": "Générer mon plan de course",
     "regenerate": "Regénérer le plan",
     "adjust": "Ajuster",
