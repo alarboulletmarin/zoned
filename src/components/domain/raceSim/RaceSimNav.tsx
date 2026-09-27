@@ -64,13 +64,17 @@ export function RaceSimNav({
   const current = activeIdOverride ?? activeId;
 
   // Keep the active chip in view on mobile, an off-screen highlight is no
-  // better than no highlight.
+  // better than no highlight. The STRIP scrolls, sideways, and nothing else:
+  // `scrollIntoView` walks every scrolling ancestor, the page included, and
+  // fired from the scroll-spy it cut the page's momentum at every section
+  // boundary, which read as a stutter on iOS and Android.
   useEffect(() => {
     if (variant !== "chips" || !current) return;
-    const chip = chipsRef.current?.querySelector<HTMLElement>(
-      `[data-nav-chip="${current}"]`,
-    );
-    chip?.scrollIntoView({ block: "nearest", inline: "center" });
+    const strip = chipsRef.current;
+    const chip = strip?.querySelector<HTMLElement>(`[data-nav-chip="${current}"]`);
+    if (!strip || !chip) return;
+    const left = chip.offsetLeft - (strip.clientWidth - chip.offsetWidth) / 2;
+    strip.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
   }, [current, variant]);
 
   if (items.length === 0) return null;
