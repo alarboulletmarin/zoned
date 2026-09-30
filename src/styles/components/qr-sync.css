@@ -1,0 +1,76 @@
+/* Synchro par code QR animé, Réglages. Deux fenêtres : le code qui défile
+   (émetteur) et la caméra avec sa progression (récepteur).
+
+   Le code QR reste noir sur blanc dans les deux thèmes : un lecteur cherche un
+   contraste précis, et un code inversé en mode sombre n'est pas lu partout.
+   C'est l'un des rares endroits où des valeurs brutes sont voulues. */
+
+.zn-qrsync__code {
+  inline-size: min(100%, 320px);
+  margin-inline: auto;
+  aspect-ratio: 1;
+  background: #fff;
+  color: #000;
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+}
+
+.zn-qrsync__code svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  fill: currentColor;
+}
+
+.zn-qrsync__meter,
+.zn-qrsync__progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+}
+
+.zn-qrsync__progress {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.zn-qrsync__count {
+  font: var(--type-mono);
+  color: var(--ink-2);
+}
+
+.zn-qrsync__note {
+  font: var(--type-caption);
+  color: var(--ink-3);
+}
+
+.zn-qrsync__scanner {
+  display: block;
+  inline-size: min(100%, 320px);
+  margin-inline: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+}
+
+/* Une case par image : pleine quand elle est reçue, au trait sinon. La forme
+   porte l'information, pas la couleur seule. */
+.zn-qrsync__cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+
+.zn-qrsync__cell {
+  inline-size: var(--sp-4);
+  block-size: var(--sp-4);
+  border: var(--rule-bite) solid var(--ink-1);
+  border-radius: var(--sp-1);
+}
+
+.zn-qrsync__cell[data-on="true"] {
+  background: var(--ink-1);
+}

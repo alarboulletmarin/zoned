@@ -11,3 +11,11 @@ declare module "*.svg?react" {
   const content: FunctionComponent<SVGProps<SVGElement>>;
   export default content;
 }
+
+/** Détecteur de codes-barres natif (Chrome, Android) : absent des types DOM. */
+interface BarcodeDetector {
+  detect(source: CanvasImageSource): Promise<{ rawValue: string }[]>;
+}
+declare const BarcodeDetector:
+  | { new (options?: { formats?: string[] }): BarcodeDetector }
+  | undefined;
