@@ -40,6 +40,7 @@ import { MODULE_IDS } from "@/types/settings";
 import { isModuleHidden, visiblePractices } from "@/lib/settingsSchema";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { DataExportImport } from "@/components/domain/DataExportImport";
+import { QrSync } from "@/components/domain/QrSync";
 import { useAppStats } from "@/hooks/useAppStats";
 import { useFavorites } from "@/hooks/useFavorites";
 import { usePlans } from "@/hooks/usePlans";
@@ -496,6 +497,8 @@ export function SettingsPage() {
             style={{ "--gap": "var(--sp-11)" } as CSSProperties}
           >
             <DataExportImport />
+
+            <QrSync />
 
             <Alert kind="info" title={t("settingsPage.privacyTitle")}>
               {t("settingsPage.privacyBody")}

@@ -22,12 +22,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  BACKUP_STORAGE_KEYS,
   buildBackupData,
-  buildManagedStorageSnapshot,
   parseBackupData,
+  restoreBackup,
   type BackupData,
-  type BackupStorageKey,
   type RestoreMode,
 } from "@/lib/backup";
 
@@ -87,49 +85,10 @@ export function DataExportImport() {
     if (!pendingImport || isRestoring) return;
     setIsRestoring(true);
 
-    // Snapshot current state so we can roll back if writing fails partway.
-    const previousState = new Map<BackupStorageKey, string | null>();
-    for (const key of BACKUP_STORAGE_KEYS) {
-      previousState.set(key, localStorage.getItem(key));
-    }
-
-    const currentManagedEntries = Object.fromEntries(
-      BACKUP_STORAGE_KEYS.flatMap((key) => {
-        const value = previousState.get(key) ?? null;
-        return value === null ? [] : [[key, value]];
-      })
-    ) as Partial<Record<BackupStorageKey, string>>;
-
-    const snapshot = buildManagedStorageSnapshot(
-      currentManagedEntries,
-      pendingImport.localStorage,
-      restoreMode,
-    );
-
     try {
-      if (restoreMode === "replace") {
-        for (const key of BACKUP_STORAGE_KEYS) {
-          localStorage.removeItem(key);
-        }
-      }
-      for (const [key, value] of Object.entries(snapshot)) {
-        if (typeof value !== "string") continue;
-        localStorage.setItem(key, value);
-      }
+      restoreBackup(localStorage, pendingImport.localStorage, restoreMode);
     } catch (err) {
-      console.error("Restore failed, rolling back", err);
-      // Roll back: restore every managed key to its previous value.
-      for (const [key, prev] of previousState.entries()) {
-        try {
-          if (prev === null) {
-            localStorage.removeItem(key);
-          } else {
-            localStorage.setItem(key, prev);
-          }
-        } catch {
-          // best-effort rollback, keep going even if a single key fails
-        }
-      }
+      console.error("Restore failed, rolled back", err);
       toast.failure(t("settings.data.importError"), err);
       setIsRestoring(false);
       setShowConfirm(false);

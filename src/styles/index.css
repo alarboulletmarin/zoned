@@ -83,6 +83,7 @@
 @import "./components/responsive-table.css" layer(components);
 @import "./components/run-cycle.css" layer(components);
 @import "./components/scroll-to-top.css" layer(components);
+@import "./components/qr-sync.css" layer(components);
 @import "./components/segmented.css" layer(components);
 @import "./components/select.css" layer(components);
 @import "./components/search.css" layer(components);

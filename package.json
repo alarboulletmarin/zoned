@@ -68,6 +68,7 @@
     "i18next": "^25.8.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "ics": "^3.8.1",
+    "jsqr": "^1.4.0",
     "pdfmake": "^0.3.3",
     "puppeteer-core": "^25.1.0",
     "qrcode": "^1.5.4",
