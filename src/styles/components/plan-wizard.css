@@ -65,6 +65,36 @@
   max-inline-size: 640px;
 }
 
+/* Une étape de CHOIX (sept distances, trois niveaux) n'est pas un formulaire :
+   ce sont des réponses de même forme, et en une colonne de 640 px la première
+   question faisait 1600 px de haut pour moitié de largeur de page vide. Sur un
+   écran large la carte s'élargit et les réponses se posent sur deux colonnes ;
+   l'en-tête d'un groupe (Route, Trail, Pas de course en vue) reste sur toute la
+   largeur. Les étapes à CHAMPS gardent leurs 640 px : un champ de date de
+   800 px n'est pas plus lisible. `:has()` choisit la carte sur ce qu'elle
+   contient, aucune étape n'a à se déclarer. */
+@media (min-width: 900px) {
+  .zn-wiz__col:has(.zn-contrib-group) {
+    max-inline-size: 880px;
+  }
+
+  .zn-wiz__col .zn-contrib-group.zn-stack {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-5);
+    align-items: stretch;
+  }
+
+  .zn-wiz__col .zn-contrib-group > .zn-wiz__group {
+    grid-column: 1 / -1;
+  }
+
+  /* Les tuiles (six chiffres sur une rangée) ont leur propre grille. */
+  .zn-wiz__col .zn-contrib-group > .zn-wiz__tiles {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ── stepper, eleven steps wide ───────────────────────────────────────── */
 
 /* The contribution wizard has four steps and can print all four names on a
