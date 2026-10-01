@@ -373,6 +373,35 @@
   opacity: 0.4;
 }
 
+/* The place a held session would take inside its day: a line of ink, above
+   the card it lands in front of, or under the last card when it closes the
+   day. Ink and not vermillon, as the drop ring is: vermillon says "now". The
+   line sits in the gap and takes no room, so the cards do not jump while the
+   pointer decides. */
+.zn-plan-drag {
+  position: relative;
+}
+
+.zn-plan-drag[data-drop-before="true"]::before,
+.zn-plan-drag[data-drop-after="true"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  z-index: 1;
+  block-size: var(--bw-heavy);
+  background: var(--line-strong);
+  border-radius: var(--r-pill);
+  pointer-events: none;
+}
+
+.zn-plan-drag[data-drop-before="true"]::before {
+  inset-block-start: calc(var(--sp-2) * -1);
+}
+
+.zn-plan-drag[data-drop-after="true"]::after {
+  inset-block-end: calc(var(--sp-2) * -1);
+}
+
 /* ══ the session mark ══════════════════════════════════════════════════ */
 
 /* One object, two densities: a cell inside the whole-plan grid, a card on the
@@ -513,6 +542,28 @@
   block-size: var(--sp-6);
   flex: none;
   color: var(--text-muted);
+}
+
+/* The sport's mark, named in words for a screen reader and on hover (the
+   icon alone is a picture). It carries no size of its own: the icon does. */
+.zn-sess__sport {
+  display: inline-flex;
+  flex: none;
+}
+
+/* A step above the dot's own 12px: the sport is the first thing to read on a
+   card, and a 12px glyph beside a 10px dot reads as one more dot. */
+.zn-sess__sport > .zn-sess__icon {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  color: var(--text-body);
+}
+
+/* The shape of the session, the library card's compact profile. Its own
+   height (18px) and ink come from .zn-profile-mini; this only seats it
+   between the name and the facts. */
+.zn-sess__profile {
+  margin-block-start: var(--sp-3);
 }
 
 /* The zone's code next to its ink. The ramp orders the zones, it does not name
@@ -1976,17 +2027,15 @@
   }
 }
 
-/* ── the week board on a phone: the dock adds, the row only rests ─────── */
+/* ── the week board on a phone: a rest day is one dashed line ────────── */
 
-/* Under 640px the standalone week has a dock carrying "add", so the small +
-   at the end of a filled day goes: it was 44px under the thumb for a gesture
-   the dock states in words, and the dock covered it on the last rows. A rest
-   day keeps its slot, drawn as one dashed line the width of the row. */
+/* Under 640px the standalone week has a dock carrying "add", but the dock
+   adds to the first free day and the + at the end of a filled day adds to THIS
+   one: it is how a second session lands on a day that already has one, so it
+   stays (the base phone rule above draws it as a bare glyph, 44px square, at
+   the end of the line). A rest day keeps its slot, drawn as one dashed line
+   the width of the row. */
 @media (max-width: 639px) {
-  .zn-planweek__day[data-single-week="true"] > .zn-planweek__add[data-slot="tail"] {
-    display: none;
-  }
-
   .zn-planweek__day[data-single-week="true"] > .zn-planweek__add:not([data-slot="tail"]) {
     flex: 1 1 auto;
     flex-direction: row;

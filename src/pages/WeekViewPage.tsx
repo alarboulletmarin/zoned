@@ -35,7 +35,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { SEOHead } from "@/components/seo";
-import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
+import {
+  PlanWeeklyView,
+  type WorkoutCardMeta,
+  type WorkoutCardProfile,
+} from "@/components/domain/PlanWeeklyView";
+import { toZoneBarBlocks } from "@/components/visualization";
+import { dayStep } from "@/lib/dayOrder";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import {
   WeekSessionSheet,
@@ -166,6 +172,24 @@ export function WeekViewPage() {
     }
     return meta;
   }, [catalog]);
+
+  // The small picture of each session on the board, the library card's own:
+  // only for the workouts the week holds, because walking a structure is the
+  // costly part and the catalogue is a few hundred sessions.
+  const workoutProfiles = useMemo(() => {
+    const profiles: Record<string, WorkoutCardProfile> = {};
+    for (const session of plan?.weeks[0]?.sessions ?? []) {
+      const w = byId.get(session.workoutId);
+      if (!w || profiles[w.id]) continue;
+      if (isStrengthWorkout(w)) {
+        profiles[w.id] = { kind: "strength", intensity: w.intensity };
+        continue;
+      }
+      const blocks = toZoneBarBlocks(w);
+      if (blocks.length > 0) profiles[w.id] = { kind: "zones", blocks };
+    }
+    return profiles;
+  }, [plan, byId]);
 
   const workoutNames = useMemo(() => {
     const names: Record<string, string> = {};
@@ -307,12 +331,30 @@ export function WeekViewPage() {
   const weekIsPopulated = stats.sessions > 0;
 
   const handleMove = useCallback(
-    (_fromWeek: number, fromIndex: number, _toWeek: number, toDay: number) => {
+    (
+      _fromWeek: number,
+      fromIndex: number,
+      _toWeek: number,
+      toDay: number,
+      beforeIndex?: number,
+    ) => {
       if (!plan) return;
-      if (moveSession(plan.id, 1, fromIndex, 1, toDay)) reload();
+      if (moveSession(plan.id, 1, fromIndex, 1, toDay, beforeIndex)) reload();
       else toast.failure(t("plan:view.sessionMoveFailed"));
     },
     [plan, reload, t],
+  );
+
+  /** One place up or down the session's own day, from the sheet. */
+  const handleSheetReorder = useCallback(
+    (sessionIndex: number, direction: "up" | "down") => {
+      if (!plan) return;
+      const sessions = plan.weeks[0].sessions;
+      const step = dayStep(sessions, sessionIndex, direction);
+      if (!step) return;
+      handleMove(1, sessionIndex, 1, sessions[sessionIndex].dayOfWeek, step.before);
+    },
+    [plan, handleMove],
   );
 
   const handleDelete = useCallback(
@@ -435,6 +477,8 @@ export function WeekViewPage() {
       session,
       workout: byId.get(session.workoutId) ?? null,
       name: workoutNames[session.workoutId] || session.workoutId,
+      canMoveUp: dayStep(plan.weeks[0].sessions, sheetIndex, "up") !== null,
+      canMoveDown: dayStep(plan.weeks[0].sessions, sheetIndex, "down") !== null,
     };
   }, [sheetIndex, plan, byId, workoutNames]);
   const commuteProfileMin = useMemo(
@@ -1029,6 +1073,7 @@ export function WeekViewPage() {
                     plan={plan}
                     workoutNames={workoutNames}
                     workoutMeta={workoutMeta}
+                    workoutProfiles={workoutProfiles}
                     currentWeek={1}
                     initialWeek={1}
                     isEn={isEn}
@@ -1136,6 +1181,7 @@ export function WeekViewPage() {
         onRedraw={(index) => handleRedraw(1, index)}
         onToggleLock={(index) => handleToggleLock(1, index)}
         onMove={handleSheetMove}
+        onReorder={handleSheetReorder}
         onDuplicate={(index) => handleDuplicate(1, index)}
         onDelete={(index) => handleDelete(1, index)}
       />

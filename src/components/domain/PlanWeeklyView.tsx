@@ -1,11 +1,15 @@
 import { useState, useRef, useMemo, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, Dumbbell, Dices, Lock, LockOpen, Copy, Plus } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Dumbbell, Dices, Lock, LockOpen, Copy, Plus, Run, Bike, Pool } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
-import type { TrainingPlan } from "@/types/plan";
+import type { PlanSession, TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { ZoneScale } from "@/components/visualization";
+import { ZoneScale, ZoneBar, type ZoneBarBlock } from "@/components/visualization";
+import { IntensityMeter } from "@/components/domain/StrengthWorkoutCard";
+import type { StrengthIntensity } from "@/types/strength";
+import { sessionDiscipline } from "@/lib/planStats";
+import { dayStep, staysInPlace } from "@/lib/dayOrder";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "@/components/ui/toast";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
@@ -41,21 +45,85 @@ export interface WorkoutCardMeta {
   tss?: number | null;
 }
 
+/**
+ * The little picture of a session, the one the library's compact card draws:
+ * the zone profile of a run, a ride or a swim, the intensity steps of a
+ * strength session. Handed in by the page, which owns the catalogue, so the
+ * board never walks a workout's structure itself.
+ */
+export type WorkoutCardProfile =
+  | { kind: "zones"; blocks: ZoneBarBlock[] }
+  | { kind: "strength"; intensity: StrengthIntensity };
+
+/** The sport a card names, as an icon: the library's own vocabulary. */
+const DISCIPLINE_ICON = {
+  running: Run,
+  cycling: Bike,
+  swimming: Pool,
+  strength: Dumbbell,
+} as const;
+
+/**
+ * The sport of a session, or null when it has none to name (yoga, cross
+ * training, a loose rest): those keep the dot and nothing more, an icon
+ * naming a sport they are not would be worse than none.
+ */
+function cardDiscipline(session: PlanSession): keyof typeof DISCIPLINE_ICON | null {
+  if (session.sessionType === "strength" || session.workoutId.startsWith("STR-")) return "strength";
+  const d = sessionDiscipline(session);
+  return d === "other" ? null : d;
+}
+
+/**
+ * Where, inside a day, a session held at `clientY` would land: in front of the
+ * first session whose middle is under the pointer, at the end of the day when
+ * none is. Read off the day's own cards, which are the only thing that knows
+ * how tall they are: a mobile row stacks them, a desktop column too, and the
+ * dragged card is left out, it is the one being placed.
+ */
+function slotInDay(day: Element, clientY: number, draggedIndex: number): number | undefined {
+  for (const el of day.querySelectorAll<HTMLElement>("[data-session-index]")) {
+    const index = Number(el.dataset.sessionIndex);
+    if (index === draggedIndex) continue;
+    const box = el.getBoundingClientRect();
+    if (clientY < box.top + box.height / 2) return index;
+  }
+  return undefined;
+}
+
+/** Where a drag is hovering: a day, and the place in it (end of day if absent). */
+interface DropSlot {
+  weekNumber: number;
+  day: number;
+  before?: number;
+}
+
+function sameSlot(a: DropSlot | null, b: DropSlot | null): boolean {
+  return a?.weekNumber === b?.weekNumber && a?.day === b?.day && a?.before === b?.before;
+}
+
 interface PlanWeeklyViewProps {
   plan: TrainingPlan;
   workoutNames: Record<string, string>;
   /** Optional zone/TSS per workout id, adds a meta line to each card. */
   workoutMeta?: Record<string, WorkoutCardMeta>;
+  /** Optional profile per workout id: the card's small picture of the session. */
+  workoutProfiles?: Record<string, WorkoutCardProfile>;
   currentWeek: number;
   initialWeek?: number;
   isEn: boolean;
   planStartDate?: string;
   onSessionClick?: (weekNumber: number, sessionIndex: number, workoutId: string) => void;
+  /**
+   * `beforeSessionIndex` is the session of `toDay` the moved one lands in
+   * front of (its index in the week before the move); absent, it closes the day.
+   */
   onSessionMove?: (
     fromWeek: number,
     fromSessionIndex: number,
     toWeek: number,
     toDay: number,
+    beforeSessionIndex?: number,
   ) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
   /** "Ma semaine": copy a session onto its day, to be dragged where it goes. */
@@ -90,6 +158,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   plan,
   workoutNames,
   workoutMeta,
+  workoutProfiles,
   currentWeek,
   initialWeek,
   isEn,
@@ -138,7 +207,11 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     weekNumber: number;
     sessionIndex: number;
   } | null>(null);
-  const [dropTarget, setDropTarget] = useState<{ weekNumber: number; day: number } | null>(null);
+  const [dropTarget, setDropTarget] = useState<DropSlot | null>(null);
+  // The session in the air, readable the instant the drag starts: the state
+  // above is set a frame later (the browser needs the card to keep its
+  // drag image), and the first dragover does not wait for it.
+  const draggedRef = useRef<{ weekNumber: number; sessionIndex: number } | null>(null);
 
   // Trash drop zone, surfaced only while a session is being dragged, so
   // "remove a session" is discoverable without a right-click.
@@ -151,7 +224,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     sessionIndex: number;
   } | null>(null);
   const touchGhostRef = useRef<HTMLElement | null>(null);
-  const dropTargetRef = useRef<{ weekNumber: number; day: number } | null>(null);
+  const dropTargetRef = useRef<DropSlot | null>(null);
 
   // Long-press / context menu state
   const [contextMenu, setContextMenu] = useState<{
@@ -179,10 +252,16 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
      l'écouteur posé sur `document` qui vivait ici le pouvait. */
 
   // Lock state of the session the context menu targets (drives lock/unlock label).
-  const contextSessionLocked =
-    contextMenu != null &&
-    plan.weeks.find((w) => w.weekNumber === contextMenu.weekNumber)
-      ?.sessions[contextMenu.sessionIndex]?.locked === true;
+  const contextWeek =
+    contextMenu != null ? plan.weeks.find((w) => w.weekNumber === contextMenu.weekNumber) : undefined;
+  const contextSession = contextMenu != null ? contextWeek?.sessions[contextMenu.sessionIndex] : undefined;
+  const contextSessionLocked = contextSession?.locked === true;
+  // One place up or down its day, when there is a place to go: the way to
+  // order a day without a drag, for a keyboard, a thumb or a tired hand.
+  const contextStepUp =
+    contextWeek && contextMenu ? dayStep(contextWeek.sessions, contextMenu.sessionIndex, "up") : null;
+  const contextStepDown =
+    contextWeek && contextMenu ? dayStep(contextWeek.sessions, contextMenu.sessionIndex, "down") : null;
 
   // ── Desktop drag handlers (HTML5 Drag and Drop) ───────────────
 
@@ -190,6 +269,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     (e: React.DragEvent, weekNumber: number, sessionIndex: number) => {
       e.stopPropagation();
       e.dataTransfer.effectAllowed = "move";
+      draggedRef.current = { weekNumber, sessionIndex };
       requestAnimationFrame(() => {
         setDraggedSession({ weekNumber, sessionIndex });
       });
@@ -201,7 +281,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     (e: React.DragEvent, weekNumber: number, day: number) => {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
-      setDropTarget({ weekNumber, day });
+      // Over a day, the pointer also says WHERE in it: a card dragged from the
+      // library has no place to keep, a session of the board does.
+      const dragged = draggedRef.current;
+      const next: DropSlot = { weekNumber, day };
+      if (dragged && dragged.weekNumber === weekNumber) {
+        next.before = slotInDay(e.currentTarget, e.clientY, dragged.sessionIndex);
+      }
+      setDropTarget((prev) => (sameSlot(prev, next) ? prev : next));
     },
     [],
   );
@@ -214,6 +301,9 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     (e: React.DragEvent, weekNumber: number, day: number) => {
       e.preventDefault();
       setDropTarget(null);
+
+      const dragged = draggedRef.current;
+      draggedRef.current = null;
 
       // Block drop on unavailable days
       if (blockedDays?.has(`${weekNumber}-${day}`)) {
@@ -230,20 +320,36 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         return;
       }
 
-      if (!draggedSession || !onSessionMove) return;
+      const held = dragged ?? draggedSession;
+      if (!held || !onSessionMove) return;
+
+      // Where in the day: the pointer's place among its cards, as the hover
+      // showed it. Another week has no cards of the dragged session to
+      // compare with, it simply closes the day.
+      const before =
+        held.weekNumber === weekNumber
+          ? slotInDay(e.currentTarget as Element, e.clientY, held.sessionIndex)
+          : undefined;
 
       // Don't move to same position
-      const week = plan.weeks.find((w) => w.weekNumber === draggedSession.weekNumber);
-      const session = week?.sessions[draggedSession.sessionIndex];
-      if (session && session.dayOfWeek === day && draggedSession.weekNumber === weekNumber) return;
+      const week = plan.weeks.find((w) => w.weekNumber === held.weekNumber);
+      if (
+        week &&
+        held.weekNumber === weekNumber &&
+        staysInPlace(week.sessions, held.sessionIndex, day, before)
+      ) {
+        setDraggedSession(null);
+        return;
+      }
 
-      onSessionMove(draggedSession.weekNumber, draggedSession.sessionIndex, weekNumber, day);
+      onSessionMove(held.weekNumber, held.sessionIndex, weekNumber, day, before);
       setDraggedSession(null);
     },
     [draggedSession, onSessionMove, onWorkoutAdd, plan.weeks, blockedDays, t],
   );
 
   const handleDragEnd = useCallback(() => {
+    draggedRef.current = null;
     setDraggedSession(null);
     setDropTarget(null);
   }, []);
@@ -361,12 +467,13 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
         if (dropCell) {
           const [weekStr, dayStr] = (dropCell.getAttribute("data-drop-id") || "").split("-");
-          const newTarget = { weekNumber: Number(weekStr), day: Number(dayStr) };
-          if (
-            !dropTargetRef.current ||
-            dropTargetRef.current.weekNumber !== newTarget.weekNumber ||
-            dropTargetRef.current.day !== newTarget.day
-          ) {
+          const newTarget: DropSlot = { weekNumber: Number(weekStr), day: Number(dayStr) };
+          // The finger says the place in the day as the mouse does.
+          const held = touchDragRef.current;
+          if (held && held.weekNumber === newTarget.weekNumber) {
+            newTarget.before = slotInDay(dropCell, touch.clientY, held.sessionIndex);
+          }
+          if (!sameSlot(dropTargetRef.current, newTarget)) {
             dropTargetRef.current = newTarget;
             setDropTarget(newTarget);
           }
@@ -416,15 +523,20 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           toast.error(t("reschedule.blockedDrop"));
         } else {
           const week = plan.weeks.find((w) => w.weekNumber === dragState.weekNumber);
-          const session = week?.sessions[dragState.sessionIndex];
           if (
             !(
-              session &&
-              session.dayOfWeek === target.day &&
-              dragState.weekNumber === target.weekNumber
+              week &&
+              dragState.weekNumber === target.weekNumber &&
+              staysInPlace(week.sessions, dragState.sessionIndex, target.day, target.before)
             )
           ) {
-            onSessionMove(dragState.weekNumber, dragState.sessionIndex, target.weekNumber, target.day);
+            onSessionMove(
+              dragState.weekNumber,
+              dragState.sessionIndex,
+              target.weekNumber,
+              target.day,
+              target.before,
+            );
           }
         }
       }
@@ -650,6 +762,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         isToday={isToday}
                         workoutNames={workoutNames}
                         workoutMeta={workoutMeta}
+                        workoutProfiles={workoutProfiles}
                         dropTarget={dropTarget}
                         draggedSession={draggedSession}
                         singleWeek={singleWeek}
@@ -710,6 +823,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     isToday={isToday}
                     workoutNames={workoutNames}
                     workoutMeta={workoutMeta}
+                    workoutProfiles={workoutProfiles}
                     dropTarget={dropTarget}
                     draggedSession={draggedSession}
                     isDesktop
@@ -847,6 +961,36 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               label: t("library:weekly.slot.duplicate"),
               onSelect: () => onSessionDuplicate(contextMenu.weekNumber, contextMenu.sessionIndex),
             },
+            onSessionMove &&
+              contextSession &&
+              contextStepUp && {
+                key: "up",
+                icon: <ChevronUp />,
+                label: t("library:weekly.slot.moveUp"),
+                onSelect: () =>
+                  onSessionMove(
+                    contextMenu.weekNumber,
+                    contextMenu.sessionIndex,
+                    contextMenu.weekNumber,
+                    contextSession.dayOfWeek,
+                    contextStepUp.before,
+                  ),
+              },
+            onSessionMove &&
+              contextSession &&
+              contextStepDown && {
+                key: "down",
+                icon: <ChevronDown />,
+                label: t("library:weekly.slot.moveDown"),
+                onSelect: () =>
+                  onSessionMove(
+                    contextMenu.weekNumber,
+                    contextMenu.sessionIndex,
+                    contextMenu.weekNumber,
+                    contextSession.dayOfWeek,
+                    contextStepDown.before,
+                  ),
+              },
             onSessionDelete && {
               key: "delete",
               icon: <Trash2 />,
@@ -875,7 +1019,8 @@ interface DayCellProps {
   isToday?: boolean;
   workoutNames: Record<string, string>;
   workoutMeta?: Record<string, WorkoutCardMeta>;
-  dropTarget: { weekNumber: number; day: number } | null;
+  workoutProfiles?: Record<string, WorkoutCardProfile>;
+  dropTarget: DropSlot | null;
   draggedSession: { weekNumber: number; sessionIndex: number } | null;
   isDesktop?: boolean;
   /** Standalone "Ma semaine" board: rest cards on empty days, taller mobile cells. */
@@ -923,6 +1068,7 @@ const DayCell = memo(function DayCell({
   isToday,
   workoutNames,
   workoutMeta,
+  workoutProfiles,
   dropTarget,
   draggedSession,
   isDesktop,
@@ -953,6 +1099,14 @@ const DayCell = memo(function DayCell({
   // its own content, same cell, same position, so nothing can drift.
   const scanContent = renderScanCell?.(dayIndex) ?? null;
   const isDropHere = dropTarget?.weekNumber === selectedWeek && dropTarget?.day === dayIndex;
+  // The line of the place a held session would take: above the card it lands
+  // in front of, or under the last card of the day when it lands at the end.
+  // A day with no other card has no line to draw, the day's own ring says it.
+  const heldIndex =
+    draggedSession?.weekNumber === selectedWeek ? draggedSession.sessionIndex : null;
+  const lastOfDay = isDropHere && dropTarget?.before === undefined
+    ? sessions.map((s) => weekData.sessions.indexOf(s)).filter((i) => i !== heldIndex).pop()
+    : undefined;
 
   return (
     <div
@@ -1030,6 +1184,9 @@ const DayCell = memo(function DayCell({
         const sessionName = workoutNames[session.workoutId] || session.workoutId;
         const isStrength = session.sessionType === "strength" || session.workoutId?.startsWith("STR-");
         const isActivity = isActivitySession(session.workoutId);
+        const discipline = cardDiscipline(session);
+        const DisciplineIcon = discipline ? DISCIPLINE_ICON[discipline] : null;
+        const profile = workoutProfiles?.[session.workoutId];
         // An activity carries its own zone and load, from its planned effort,
         // so its card reads like the others: Z2 · 45 min · 33 TSS.
         const meta: WorkoutCardMeta | undefined = isActivity
@@ -1071,6 +1228,9 @@ const DayCell = memo(function DayCell({
             style={isSpecialSession ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
             className={isSpecialSession ? undefined : "zn-plan-drag"}
             data-dragging={isDragging || undefined}
+            data-session-index={originalIndex}
+            data-drop-before={(isDropHere && dropTarget?.before === originalIndex) || undefined}
+            data-drop-after={originalIndex === lastOfDay || undefined}
           >
             <div
               className="zn-sess"
@@ -1213,9 +1373,20 @@ const DayCell = memo(function DayCell({
                         )}
                       </button>
                     )}
-                    {isStrength ? (
-                      <Dumbbell className="zn-sess__icon" />
-                    ) : (
+                    {/* The sport, named the way the library names it: the dot
+                        says how hard, this says what. Left of the dot, so the
+                        two read as one mark, "run, zone 2". */}
+                    {discipline && DisciplineIcon && (
+                      <span
+                        role="img"
+                        className="zn-sess__sport"
+                        aria-label={t(`library:activityToggle.${discipline}`)}
+                        title={t(`library:activityToggle.${discipline}`)}
+                      >
+                        <DisciplineIcon className="zn-sess__icon" />
+                      </span>
+                    )}
+                    {!isStrength && (
                       <span
                         className="zn-sess__dot"
                         style={
@@ -1265,6 +1436,24 @@ const DayCell = memo(function DayCell({
                   >
                     {sessionName}
                   </span>
+                  {/* The shape of the session, small, as the library's compact
+                      card draws it. The name says which session, this says
+                      what it asks: a 30/30 and a steady ride no longer wear
+                      the same card. */}
+                  {profile?.kind === "zones" && profile.blocks.length > 0 && (
+                    <ZoneBar
+                      condense
+                      blocks={profile.blocks}
+                      className="zn-profile-mini zn-sess__profile"
+                      label={t("library:zoneBar.of", { name: sessionName })}
+                    />
+                  )}
+                  {profile?.kind === "strength" && (
+                    <IntensityMeter
+                      intensity={profile.intensity}
+                      className="zn-profile-mini zn-sess__profile"
+                    />
+                  )}
                   {/* An activity of the week board without a duration is a
                       card that weighs nothing yet: say so, where the duration
                       would be, rather than leave the line blank. */}

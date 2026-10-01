@@ -6,7 +6,12 @@ import { ArrowLeft, Plus } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
-import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
+import {
+  PlanWeeklyView,
+  type WorkoutCardMeta,
+  type WorkoutCardProfile,
+} from "@/components/domain/PlanWeeklyView";
+import { toZoneBarBlocks } from "@/components/visualization";
 import { WeekSummaryStrip } from "@/components/weekly";
 import { ACTIVITY_KINDS, isActivitySession } from "@/lib/activitySession";
 import {
@@ -94,6 +99,22 @@ export function SharedWeekPage() {
     [sessions, byId],
   );
   const unknownCount = sessions.length - knownSessions.length;
+
+  // The editor's small picture of each session, for the workouts this week holds.
+  const workoutProfiles = useMemo(() => {
+    const profiles: Record<string, WorkoutCardProfile> = {};
+    for (const session of knownSessions) {
+      const w = byId.get(session.workoutId);
+      if (!w || profiles[w.id]) continue;
+      if (isStrengthWorkout(w)) {
+        profiles[w.id] = { kind: "strength", intensity: w.intensity };
+        continue;
+      }
+      const blocks = toZoneBarBlocks(w);
+      if (blocks.length > 0) profiles[w.id] = { kind: "zones", blocks };
+    }
+    return profiles;
+  }, [knownSessions, byId]);
 
   // The preview is the plan the "add" call would save, so the board and the
   // summary show exactly what lands: unknown sessions are already out.
@@ -207,6 +228,7 @@ export function SharedWeekPage() {
                   plan={preview}
                   workoutNames={workoutNames}
                   workoutMeta={workoutMeta}
+                  workoutProfiles={workoutProfiles}
                   currentWeek={1}
                   initialWeek={1}
                   isEn={isEn}

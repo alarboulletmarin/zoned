@@ -375,6 +375,8 @@
       "lock": "Lock",
       "unlock": "Unlock",
       "reroll": "Re-roll",
+      "moveUp": "Move up in the day",
+      "moveDown": "Move down in the day",
       "duplicate": "Duplicate",
       "viewDetail": "View detail",
       "rest": "Rest day",
