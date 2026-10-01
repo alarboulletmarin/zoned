@@ -573,8 +573,11 @@
   margin-block-end: var(--sp-8);
 }
 
+/* Deux classes : `.zn-card` pose `display: flex` à une classe, et card.css est
+   importé APRÈS cette feuille. Avec une seule, le formulaire du téléphone
+   restait affiché à côté de celui du rail, le même formulaire deux fois. */
 @media (min-width: 1024px) {
-  .zn-rsp__mobileform {
+  .zn-card.zn-rsp__mobileform {
     display: none;
   }
 }
