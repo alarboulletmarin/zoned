@@ -993,7 +993,11 @@ export function TodayPage() {
   );
 
   return (
-    <div className="zn-cockpit" data-view={view}>
+    <div
+      className="zn-cockpit"
+      data-view={view}
+      data-split={(view === "week" && focus.week.length > 0) || undefined}
+    >
       <SEOHead title={t("today:seoTitle")} description={t("today:seoDescription")} noindex />
 
       {isLoading ? (
@@ -1095,7 +1099,7 @@ export function TodayPage() {
               )}
             </div>
           ) : (
-            <>
+            <div className="zn-cockpit__week-split">
               {switcher}
               {focus.week.length > 0 && (
                 <WeekStrip
@@ -1105,10 +1109,14 @@ export function TodayPage() {
                   extras={weekExtras}
                 />
               )}
-              {answer}
+              <div className="zn-cockpit__week-answer">{answer}</div>
               {/* Le bilan, le dimanche, et pas un autre jour. */}
-              {showReview && <WeekReviewPanel review={review} />}
-            </>
+              {showReview && (
+                <div className="zn-cockpit__week-review">
+                  <WeekReviewPanel review={review} />
+                </div>
+              )}
+            </div>
           )}
         </section>
       )}

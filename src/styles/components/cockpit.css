@@ -1327,3 +1327,64 @@ button.zn-cockpit__exit {
 .zn-cockpit__picker > .zn-sheet__close {
   display: none;
 }
+
+/* ── La semaine, en deux colonnes sur un écran large ─────────────────────────
+ *
+ * Le mode mois se dispose déjà en deux colonnes dès 900 px ; la semaine restait
+ * une colonne de 620 px au milieu de 1440 : près de 900 px de papier vide, la
+ * bande des sept jours étirée sur une ligne et la séance du jour sous elle.
+ * Sur un écran large les deux se lisent côte à côte : la semaine et son bilan
+ * à gauche, ce que le jour choisi demande à droite. C'est le même écran, aux
+ * mêmes blocs : seul leur ordre dans la grille change, jamais leur ordre dans
+ * le DOM, donc le téléphone (une colonne) et la lecture au clavier ne bougent
+ * pas.
+ *
+ * Le wrapper est une colonne à l'écart de la section jusqu'à 1000 px, un
+ * simple remplaçant de l'enfilade de la section dont il prend la place.
+ */
+.zn-cockpit__week-split {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+.zn-cockpit__week-answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+@media (min-width: 1000px) {
+  .zn-cockpit[data-split] {
+    max-inline-size: 1040px;
+  }
+
+  .zn-cockpit__week-split {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-areas:
+      "switch answer"
+      "strip answer"
+      "review answer";
+    grid-template-rows: auto auto 1fr;
+    column-gap: var(--sp-16);
+    row-gap: var(--sp-7);
+    align-items: start;
+  }
+
+  .zn-cockpit__week-split > .zn-cockpit__view {
+    grid-area: switch;
+  }
+
+  .zn-cockpit__week-split > .zn-cockpit__week {
+    grid-area: strip;
+  }
+
+  .zn-cockpit__week-split > .zn-cockpit__week-answer {
+    grid-area: answer;
+  }
+
+  .zn-cockpit__week-split > .zn-cockpit__week-review {
+    grid-area: review;
+  }
+}
