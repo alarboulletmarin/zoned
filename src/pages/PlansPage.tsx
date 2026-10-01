@@ -8,7 +8,6 @@ import {
   Trash2,
   Upload,
   FlaskConical,
-  Scale,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -240,22 +239,15 @@ export function PlansPage() {
             <p className="zn-body zn-body--lead zn-plans__lede">
               {t("plansPage.subtitle")}
             </p>
-            {/* La science et le what-if commentent des plans : sur une
-                étagère vide ils passaient AVANT le seul bouton qui compte,
-                et le repoussaient sous le pli. Ils arrivent avec le premier
-                plan. */}
+            {/* La science commente des plans : sur une étagère vide
+                elle passait AVANT le seul bouton qui compte, et le
+                repoussait sous le pli. Elle arrive avec le premier plan. */}
             {planCount > 0 && (
               <div className="zn-cluster">
                 <Button variant="outline" size="sm" asChild>
                   <Link to="/plans/methodology">
                     <FlaskConical />
                     {t("plansPage.science")}
-                  </Link>
-                </Button>
-                <Button variant="outline" size="sm" asChild>
-                  <Link to="/calculators/what-if">
-                    <Scale />
-                    {t("plansPage.whatIf")}
                   </Link>
                 </Button>
               </div>
