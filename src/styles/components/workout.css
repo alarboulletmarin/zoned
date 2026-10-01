@@ -662,7 +662,11 @@
 
 .zn-numfield {
   display: inline-flex;
-  align-items: baseline;
+  /* Centré, pas sur la ligne de base : avec `baseline`, la valeur et l'unité se
+     calent sur le HAUT du cadre dès que rien ne le remplit (la hauteur est
+     fixée, le champ n'a pas de rembourrage), et le chiffre flotte contre le
+     filet du haut. */
+  align-items: center;
   justify-content: flex-end;
   gap: var(--sp-1);
   block-size: 36px;
