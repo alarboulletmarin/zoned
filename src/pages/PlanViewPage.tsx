@@ -471,13 +471,14 @@ export function PlanViewPage() {
     fromSessionIndex: number,
     toWeek: number,
     toDay: number,
+    beforeSessionIndex?: number,
   ) => {
     if (!plan) return;
     if (blockedDaysSet.has(`${toWeek}-${toDay}`)) {
       toast.error(t("reschedule.blockedDrop"));
       return;
     }
-    const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay);
+    const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay, beforeSessionIndex);
     if (success) reloadPlan();
     else toast.failure(t("view.sessionMoveFailed"));
   }, [plan, isEn, reloadPlan, blockedDaysSet, t]);

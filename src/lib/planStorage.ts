@@ -147,12 +147,24 @@ export function deletePlan(id: string): boolean {
   }
 }
 
+/**
+ * Moves a session to `toDay`, and says WHERE in that day.
+ *
+ * The order of the sessions inside a day is the order of the array, and it is
+ * what the board prints top to bottom: it is the athlete's order for the day
+ * (the morning ride before the evening swim). `beforeSessionIndex` is the
+ * index, in the target week AS IT IS BEFORE THE MOVE, of the session to land
+ * in front of; left out, the session closes the day. Landing in front of a
+ * session of another day is not a position, it is a mistake, and the session
+ * closes `toDay` instead of jumping the queue of a day it was not sent to.
+ */
 export function moveSession(
   planId: string,
   fromWeekNumber: number,
   fromSessionIndex: number,
   toWeekNumber: number,
   toDay: number,
+  beforeSessionIndex?: number,
 ): boolean {
   const plans = getAllPlans();
   const plan = plans.find(p => p.id === planId);
@@ -164,22 +176,33 @@ export function moveSession(
   const session = fromWeek.sessions[fromSessionIndex];
   if (!session) return false;
 
+  const toWeek =
+    toWeekNumber === fromWeekNumber
+      ? fromWeek
+      : plan.weeks.find(w => w.weekNumber === toWeekNumber);
+  if (!toWeek) return false;
+
+  // In front of itself is where it already is.
+  if (beforeSessionIndex === fromSessionIndex && toWeek === fromWeek) return true;
+
+  // The session to land in front of is named by its place in the week as the
+  // caller saw it, so it is read before anything is spliced out.
+  const anchor =
+    beforeSessionIndex !== undefined ? toWeek.sessions[beforeSessionIndex] : undefined;
+
   // Remove from source week
   fromWeek.sessions.splice(fromSessionIndex, 1);
 
   // Update day
   session.dayOfWeek = toDay;
 
-  // Add to target week
-  if (toWeekNumber === fromWeekNumber) {
-    fromWeek.sessions.push(session);
-    fromWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  } else {
-    const toWeek = plan.weeks.find(w => w.weekNumber === toWeekNumber);
-    if (!toWeek) return false;
-    toWeek.sessions.push(session);
-    toWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  }
+  // Add to target week: in front of the anchor when it is a session of that
+  // day, else at the end. The sort below is stable, so it only groups the
+  // days and leaves the order inside each one as it was placed.
+  const at = anchor && anchor.dayOfWeek === toDay ? toWeek.sessions.indexOf(anchor) : -1;
+  if (at >= 0) toWeek.sessions.splice(at, 0, session);
+  else toWeek.sessions.push(session);
+  toWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
 
   return savePlan(plan).ok;
 }

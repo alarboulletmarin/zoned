@@ -4,6 +4,8 @@ import {
   ArrowRight,
   Copy,
   Dices,
+  ChevronDown,
+  ChevronUp,
   Eye,
   Lock,
   LockOpen,
@@ -52,6 +54,9 @@ export interface WeekSessionSheetTarget {
   /** Le gabarit du catalogue, `null` pour une activité ou une séance inconnue. */
   workout: AnyWorkoutTemplate | null;
   name: string;
+  /** Une place plus haut / plus bas dans SA journée : faux seule ou en bout de file. */
+  canMoveUp: boolean;
+  canMoveDown: boolean;
 }
 
 interface WeekSessionSheetProps {
@@ -64,6 +69,8 @@ interface WeekSessionSheetProps {
   onRedraw?: (sessionIndex: number) => void;
   onToggleLock: (sessionIndex: number) => void;
   onMove: (sessionIndex: number, day: number) => void;
+  /** Une place plus haut ou plus bas dans la journée, sans glisser. */
+  onReorder?: (sessionIndex: number, direction: "up" | "down") => void;
   /** Copies the session onto its day; the copy is then dragged where it goes. */
   onDuplicate?: (sessionIndex: number) => void;
   onDelete: (sessionIndex: number) => void;
@@ -92,6 +99,7 @@ export function WeekSessionSheet({
   onRedraw,
   onToggleLock,
   onMove,
+  onReorder,
   onDuplicate,
   onDelete,
 }: WeekSessionSheetProps) {
@@ -374,6 +382,28 @@ export function WeekSessionSheet({
                   </button>
                 ))}
               </div>
+            )}
+            {/* L'ordre de la journée : seulement quand elle en a un, c'est-à-dire
+                quand il y a une autre séance à enjamber. */}
+            {onReorder && target.canMoveUp && (
+              <button
+                type="button"
+                className="zn-wksheet__action"
+                onClick={action(target.sessionIndex, (i) => onReorder(i, "up"))}
+              >
+                <ChevronUp />
+                {t("library:weekly.slot.moveUp")}
+              </button>
+            )}
+            {onReorder && target.canMoveDown && (
+              <button
+                type="button"
+                className="zn-wksheet__action"
+                onClick={action(target.sessionIndex, (i) => onReorder(i, "down"))}
+              >
+                <ChevronDown />
+                {t("library:weekly.slot.moveDown")}
+              </button>
             )}
             {onDuplicate && (
               <button type="button" className="zn-wksheet__action" onClick={action(target.sessionIndex, onDuplicate)}>

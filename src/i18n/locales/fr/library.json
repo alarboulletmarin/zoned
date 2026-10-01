@@ -375,6 +375,8 @@
       "lock": "Verrouiller",
       "unlock": "Déverrouiller",
       "reroll": "Re-tirer",
+      "moveUp": "Monter dans la journée",
+      "moveDown": "Descendre dans la journée",
       "duplicate": "Dupliquer",
       "viewDetail": "Voir le détail",
       "rest": "Jour de repos",
