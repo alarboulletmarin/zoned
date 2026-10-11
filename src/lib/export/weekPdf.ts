@@ -15,6 +15,7 @@
 import type { Content, TableCell } from "pdfmake/interfaces";
 import i18n from "@/i18n";
 import { activityKindOf, activitySessionZone } from "@/lib/activitySession";
+import { exportSessionName } from "./sessionName";
 import { planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
 import { weekRhythm } from "@/lib/weekRhythm";
@@ -147,7 +148,7 @@ export function daysTable(
 
     own.forEach((session, i) => {
       const template = templates[session.workoutId];
-      const name = names[session.workoutId] || session.workoutId;
+      const name = exportSessionName(session.workoutId, names);
       const zone = sessionZone(session, template);
       let summary = "";
       if (template && isStrengthWorkout(template)) summary = buildStrengthSummary(template, exerciseNames);

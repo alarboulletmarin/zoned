@@ -173,7 +173,15 @@ function show(
         onClose={() => sonner.dismiss(toastId)}
       />
     ),
-    { id, duration: toastDuration(kind, { duration, action }) },
+    // `id` only when the caller gave one. sonner's `custom` spreads these
+    // options over the id it just minted, so an `id: undefined` key erased
+    // it: the toast was stored under a second id while `custom` returned the
+    // first, and the success meant to replace a "loading" under that first
+    // id landed beside it, leaving the spinner pinned forever.
+    {
+      ...(id !== undefined && { id }),
+      duration: toastDuration(kind, { duration, action }),
+    },
   );
 }
 

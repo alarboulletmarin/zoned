@@ -26,3 +26,15 @@ describe("toastDuration", () => {
     expect(toastDuration("success", { duration: 1000, action })).toBe(1000);
   });
 });
+
+describe("toast ids", () => {
+  test("a success under the loading toast's id replaces it instead of stacking", async () => {
+    const { toast } = await import("./toast");
+    const { toast: sonner } = await import("sonner");
+    const before = sonner.getToasts().length;
+    const id = toast.loading("Génération du PDF");
+    toast.success("PDF exporté", { id });
+    expect(sonner.getToasts().length - before).toBe(1);
+    expect(sonner.getToasts().some((t) => t.id === id)).toBe(true);
+  });
+});
