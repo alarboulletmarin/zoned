@@ -67,7 +67,8 @@ interface WeekSessionSheetProps {
   onSave: (sessionIndex: number, next: PlanSession) => void;
   onView: (workoutId: string) => void;
   onRedraw?: (sessionIndex: number) => void;
-  onToggleLock: (sessionIndex: number) => void;
+  /** Absent where a lock means nothing: a plan is never re-drawn around it. */
+  onToggleLock?: (sessionIndex: number) => void;
   onMove: (sessionIndex: number, day: number) => void;
   /** Une place plus haut ou plus bas dans la journée, sans glisser. */
   onReorder?: (sessionIndex: number, direction: "up" | "down") => void;
@@ -354,10 +355,12 @@ export function WeekSessionSheet({
                 {t("library:weekly.slot.reroll")}
               </button>
             )}
-            <button type="button" className="zn-wksheet__action" onClick={action(target.sessionIndex, onToggleLock)}>
-              {session.locked ? <LockOpen /> : <Lock />}
-              {t(session.locked ? "library:weekly.slot.unlock" : "library:weekly.slot.lock")}
-            </button>
+            {onToggleLock && (
+              <button type="button" className="zn-wksheet__action" onClick={action(target.sessionIndex, onToggleLock)}>
+                {session.locked ? <LockOpen /> : <Lock />}
+                {t(session.locked ? "library:weekly.slot.unlock" : "library:weekly.slot.lock")}
+              </button>
+            )}
             <button
               type="button"
               className="zn-wksheet__action"

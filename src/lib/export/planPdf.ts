@@ -27,6 +27,7 @@ import i18n from "@/i18n";
 import { formatDateMedium, pickLang } from "@/lib/i18n-utils";
 import { triggerDownload } from "./download";
 import { planFilename } from "./planFilename";
+import { exportSessionName } from "./sessionName";
 import { INK, INK_2, INK_PALE, createHouse, preparePdfMake, type House } from "./pdfHouse";
 
 // ── Constants ──────────────────────────────────────────────────────
@@ -486,7 +487,7 @@ export async function exportPlanToPDF(
         }
 
         const template = workoutTemplates[session.workoutId];
-        const wName = workoutNames[session.workoutId] || session.workoutId;
+        const wName = exportSessionName(session.workoutId, workoutNames);
         const isStr = template ? isStrengthWorkout(template) : session.workoutId.startsWith("STR-");
 
         let summary = "";

@@ -444,3 +444,28 @@ describe("exportPlanToICS: totals", () => {
     expect(strengthBullets).toHaveLength(strength.coachingTips.length);
   });
 });
+
+describe("exportPlanToICS: activities placed in a week", () => {
+  test("a commute and a rest day are named by their kind, never by their internal id", async () => {
+    const plan = makePlan([
+      session({
+        dayOfWeek: 0,
+        workoutId: "__activity_commute__",
+        discipline: "cycling",
+        sessionType: "cycling",
+        estimatedDurationMin: 135,
+        intensity: "easy",
+      }),
+      session({ dayOfWeek: 5, workoutId: "__activity_rest__", sessionType: "rest", estimatedDurationMin: 0 }),
+    ]);
+
+    // No names handed over, as from the plans list.
+    const { ics } = await runExport(plan, {}, {});
+    const [commute, rest] = events(ics);
+
+    expect(ics).not.toContain("__activity_");
+    expect(prop(commute, "SUMMARY")).toBe("plan:activity.commute - 135min [Z2]");
+    expect(prop(commute, "CATEGORIES")).toContain("Cycling");
+    expect(prop(rest, "SUMMARY")).toBe("plan:activity.rest");
+  });
+});

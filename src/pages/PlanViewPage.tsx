@@ -81,7 +81,7 @@ import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDi
 import { autoReschedule } from "@/lib/planGenerator/reschedule";
 import { updateUnavailabilities, undoLastChange, withUndoSnapshot } from "@/lib/planStorage";
 import { getPlanMonday, dateToWeekAndDay, isoDateOnly } from "@/lib/planDates";
-import type { AutoChange, TrainingPlan, Unavailability } from "@/types/plan";
+import type { AutoChange, PlanSession, TrainingPlan, Unavailability } from "@/types/plan";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
@@ -90,6 +90,9 @@ import { AddWeekToPlanSheet } from "@/components/domain/AddWeekToPlanSheet";
 import { LastChangePanel } from "@/components/domain/LastChangePanel";
 import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
+import { WeekSessionSheet, type WeekSessionSheetTarget } from "@/components/domain/WeekSessionSheet";
+import { isActivitySession } from "@/lib/activitySession";
+import { loadCommutePattern } from "@/lib/athleteProfile";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { isShareablePlan, sharedPlanUrl } from "@/lib/share/planShare";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
@@ -170,6 +173,12 @@ export function PlanViewPage() {
 
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
   const [workoutTemplates, setWorkoutTemplates] = useState<Record<string, AnyWorkoutTemplate>>({});
+  // The activity whose duration and effort are open (a commute, a swim):
+  // it has no session page, so a tap opens this sheet instead.
+  const [activityTarget, setActivityTarget] = useState<{
+    weekNumber: number;
+    sessionIndex: number;
+  } | null>(null);
   const [swapTarget, setSwapTarget] = useState<{
     weekNumber: number;
     sessionIndex: number;
@@ -627,6 +636,11 @@ export function PlanViewPage() {
   }, [plan, reloadPlan, runAdaptationIfReady]);
 
   const handleSessionClick = useCallback((weekNumber: number, sessionIndex: number, workoutId: string) => {
+    // The menu offers "Durée et effort" on an activity; this is where it opens.
+    if (isActivitySession(workoutId)) {
+      setActivityTarget({ weekNumber, sessionIndex });
+      return;
+    }
     if (workoutId && workoutId !== "__race_day__" && workoutId !== "__intermediate_race__" && !workoutId.startsWith("__activity_")) {
       // Persist current week in URL before navigating away so browser back restores it
       const url = new URL(window.location.href);
@@ -650,6 +664,40 @@ export function PlanViewPage() {
       });
     }
   }, [plan, isEn, navigate]);
+
+  const activitySheetTarget = useMemo<WeekSessionSheetTarget | null>(() => {
+    if (!plan || !activityTarget) return null;
+    const week = plan.weeks.find((w) => w.weekNumber === activityTarget.weekNumber);
+    const session = week?.sessions[activityTarget.sessionIndex];
+    if (!session || !isActivitySession(session.workoutId)) return null;
+    return {
+      sessionIndex: activityTarget.sessionIndex,
+      session,
+      workout: null,
+      name: workoutNames[session.workoutId] || session.workoutId,
+      canMoveUp: false,
+      canMoveDown: false,
+    };
+  }, [plan, activityTarget, workoutNames]);
+  const commuteProfileMin = useMemo(
+    () => (activitySheetTarget ? (loadCommutePattern()?.durationMin ?? null) : null),
+    [activitySheetTarget],
+  );
+
+  const handleActivitySave = useCallback((sessionIndex: number, next: PlanSession) => {
+    if (!plan || !activityTarget) return;
+    const fresh = getPlan(plan.id);
+    const week = fresh?.weeks.find((w) => w.weekNumber === activityTarget.weekNumber);
+    if (!fresh || !week?.sessions[sessionIndex]) return;
+    week.sessions[sessionIndex] = next;
+    const saved = savePlan(fresh);
+    if (!saved.ok) {
+      toast.failure(t("view.sessionUpdateFailed"), saved);
+      return;
+    }
+    setActivityTarget(null);
+    reloadPlan();
+  }, [plan, activityTarget, reloadPlan, t]);
 
   const handleAddToDay = useCallback((weekNumber: number, day: number) => {
     if (blockedDaysSet.has(`${weekNumber}-${day}`)) {
@@ -2404,6 +2452,21 @@ export function PlanViewPage() {
             handleWorkoutAdd(workoutId, addTarget.weekNumber, addTarget.day);
             setAddTarget(null);
           } : undefined}
+        />
+
+        {/* An activity's duration and effort, opened from its card or menu. */}
+        <WeekSessionSheet
+          target={activitySheetTarget}
+          commuteProfileMin={commuteProfileMin}
+          onClose={() => setActivityTarget(null)}
+          onSave={handleActivitySave}
+          onView={() => {}}
+          onMove={(index, day) => {
+            if (activityTarget) handleSessionMove(activityTarget.weekNumber, index, activityTarget.weekNumber, day);
+          }}
+          onDelete={(index) => {
+            if (activityTarget) handleSessionDelete(activityTarget.weekNumber, index);
+          }}
         />
 
         {/* Swap Session Dialog */}
