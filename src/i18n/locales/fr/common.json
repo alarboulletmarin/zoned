@@ -601,11 +601,11 @@
     },
     "privacy": {
       "title": "Vie privée",
-      "description": "Ce que Zoned collecte",
-      "noServer": "Aucune donnée personnelle n'est envoyée à un serveur",
+      "description": "Rien n'est collecté",
+      "noServer": "Aucune donnée n'est envoyée à un serveur",
       "noAccount": "Aucun compte utilisateur n'est requis",
       "localStorage": "Toutes tes données restent dans ton navigateur (localStorage)",
-      "analytics": "Vercel Analytics mesure uniquement les pages vues de manière anonyme (pas de cookies, pas d'identification)"
+      "analytics": "Pas d'analytique, pas de tracking. Rien ne quitte ce navigateur."
     },
     "scienceMode": {
       "title": "Mode Science",
@@ -900,7 +900,7 @@
       },
       "noData": {
         "title": "Aucune donnée personnelle",
-        "description": "Aucun compte, aucune donnée d'entraînement envoyée. Seules des vues de page anonymes sont mesurées."
+        "description": "Aucun compte, aucune analytique, aucune donnée d'entraînement envoyée."
       },
       "openSource": {
         "title": "Open Source",
@@ -1029,7 +1029,7 @@
     "sourceCode": "Code source",
     "contribute": "Proposer une séance",
     "privacyTitle": "Ce qui reste sur ton appareil",
-    "privacyBody": "Pas de compte, pas de serveur. Tes données restent dans ce navigateur. Vercel Analytics compte les pages vues, sans cookie ni identification.",
+    "privacyBody": "Pas de compte, pas de serveur, pas d'analytique, pas de tracking. Tes données restent dans ce navigateur.",
     "statStorage": "données locales",
     "statFavorites": "favoris",
     "storageValue": "{{n}} Ko",

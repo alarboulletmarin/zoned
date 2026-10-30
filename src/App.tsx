@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
-import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "sonner";
 import { toast } from "@/components/ui/toast";
 import { TopBar, Footer } from "@/components/layout";
@@ -384,7 +383,6 @@ function App() {
             <DeferredCommandPalette />
           </CommandPaletteProvider>
           </GlossaryMatcherProvider>
-          <Analytics />
           <StorageWarning />
           {/* Mounted once, outside <Routes>, so the banners survive navigation.
               The update comes first in the DOM because it comes first in
