@@ -25,7 +25,7 @@
 
 ## What is Zoned?
 
-Zoned is a free, open-source web app for structured endurance training. Everything ships in a single static React 19 bundle. There's no backend, no account system and no telemetry beyond anonymous page views. Your zones, favorites and custom workouts stay in `localStorage`.
+Zoned is a free, open-source web app for structured endurance training. Everything ships in a single static React 19 bundle. There's no backend, no account system, no analytics and no tracking. Your zones, favorites and custom workouts stay in `localStorage`.
 
 The catalogue is grounded in published training science (**Seiler**, **Billat**, **Daniels**, **Coggan**, **Bangsbo**, **Beattie**, **Rønnestad**), with every workout, plan and calculator versioned in this repo as plain JSON / TypeScript. It is built in collaboration with [Claude Code](https://claude.ai/code).
 
@@ -172,9 +172,9 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 
 | | |
 |---|---|
-| **Zero tracking** | No cookies, no user accounts, no server-side data |
+| **Zero tracking** | No cookies, no analytics, no user accounts, no server-side data |
 | **Local-first** | Zones, favorites and custom workouts live in your browser |
-| **Privacy by design** | Only anonymous page views via Vercel Analytics |
+| **Privacy by design** | No analytics and no tracking. Nothing leaves the browser. |
 | **100% free** | No premium tier, no paywall, ever |
 | **Open source** | MIT licensed: fork it, host it, audit it |
 
@@ -204,7 +204,7 @@ docker compose up -d   # http://localhost:8080
 
 ### Self-host
 
-The build output in `dist/` is a static SPA. Drop it on any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages, S3, nginx, Caddy). No environment variables required to run; analytics is opt-in via Vercel.
+The build output in `dist/` is a static SPA. Drop it on any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages, S3, nginx, Caddy). No environment variables required to run.
 
 ---
 
@@ -243,7 +243,6 @@ Want a high-level tour of how a workout flows from JSON to the rendered detail p
 | Illustration | 23 doodles generated from one rig (`scripts/doodles/rig.mjs`) |
 | i18n | i18next (FR / EN) |
 | PWA | Workbox |
-| Analytics | Vercel Analytics (anonymous page views only) |
 | Runtime | Bun |
 
 This table said "Tailwind CSS 4 + shadcn/ui" and "Recharts" for a while after

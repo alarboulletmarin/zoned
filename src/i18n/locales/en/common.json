@@ -601,11 +601,11 @@
     },
     "privacy": {
       "title": "Privacy",
-      "description": "What Zoned collects",
-      "noServer": "No personal data is sent to any server",
+      "description": "Nothing is collected",
+      "noServer": "No data is sent to any server",
       "noAccount": "No user account required",
       "localStorage": "All your data stays in your browser (localStorage)",
-      "analytics": "Vercel Analytics only measures page views anonymously (no cookies, no identification)"
+      "analytics": "No analytics and no tracking. Nothing leaves this browser."
     },
     "scienceMode": {
       "title": "Science Mode",
@@ -900,7 +900,7 @@
       },
       "noData": {
         "title": "No personal data",
-        "description": "No account, no training data sent. Only anonymous page views are measured."
+        "description": "No account, no analytics, no training data sent."
       },
       "openSource": {
         "title": "Open Source",
@@ -1029,7 +1029,7 @@
     "sourceCode": "Source code",
     "contribute": "Suggest a workout",
     "privacyTitle": "What stays on your device",
-    "privacyBody": "No account, no server. Your data stays in this browser. Vercel Analytics counts page views, with no cookie and no identification.",
+    "privacyBody": "No account, no server, no analytics, no tracking. Your data stays in this browser.",
     "statStorage": "local data",
     "statFavorites": "favourites",
     "storageValue": "{{n}} kB",
