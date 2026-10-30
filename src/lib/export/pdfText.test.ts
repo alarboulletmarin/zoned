@@ -15,19 +15,22 @@
 
 import { describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync, statSync } from "fs";
-import { join } from "path";
-
-// `fontkit` et le VFS de pdfmake sont deux modules CommonJS sans export par
-// defaut sous Bun ; ils se chargent donc par `createRequire`.
 import { createRequire } from "module";
+import { dirname, join } from "path";
+
+// `fontkit` est un module CommonJS sans export par defaut sous Bun.
+import { pdfSafeDocument, pdfText } from "./pdfText";
 
 const require_ = createRequire(import.meta.url);
 const fontkit = require_("fontkit") as { create(buffer: Buffer): unknown };
-const vfs = require_("pdfmake/build/vfs_fonts") as Record<string, string>;
 
-import { pdfSafeDocument, pdfText } from "./pdfText";
-
-// ── La fonte, telle que pdfmake la sert ─────────────────────────────
+// ── La fonte, telle que pdfmake la livre ────────────────────────────
+//
+// Les quatre fichiers sont ceux que `build/vfs_fonts.js` embarque. On les
+// lit sur disque plutot que via `require("pdfmake/build/vfs_fonts")` :
+// `pdf.test.ts` et `planPdf.test.ts` remplacent ce module par un VFS vide,
+// et `mock.module` est global au processus. Selon l'ordre de chargement,
+// `bun test` fait alors echouer ce fichier alors que les fontes sont la.
 
 const FACES = [
   "Roboto-Regular.ttf",
@@ -36,12 +39,19 @@ const FACES = [
   "Roboto-MediumItalic.ttf",
 ] as const;
 
+const ROBOTO_DIR = join(dirname(require_.resolve("pdfmake/package.json")), "fonts", "Roboto");
+
 type Font = { glyphsForString(text: string): { id: number }[] };
 
 const fonts: Font[] = FACES.map((face) => {
-  const base64 = vfs[face];
-  if (!base64) throw new Error(`pdfmake no longer ships ${face}`);
-  return fontkit.create(Buffer.from(base64, "base64")) as unknown as Font;
+  const file = join(ROBOTO_DIR, face);
+  let bytes: Buffer;
+  try {
+    bytes = readFileSync(file);
+  } catch {
+    throw new Error(`pdfmake no longer ships ${face}`);
+  }
+  return fontkit.create(bytes) as unknown as Font;
 });
 
 /** Les caracteres de `text` qu'au moins une des quatre fontes ne sait pas dessiner. */
