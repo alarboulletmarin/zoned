@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { HOME_LINK_STATE } from "@/components/layout/navigation";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,9 @@ export function NotFoundPage() {
         </h1>
         <p className="zn-body zn-void__body">{t("errors.notFound.body")}</p>
         <Button asChild>
-          <Link to="/">{t("errors.notFound.backHome")}</Link>
+          <Link to="/" state={HOME_LINK_STATE}>
+            {t("errors.notFound.backHome")}
+          </Link>
         </Button>
       </div>
     </>

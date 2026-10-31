@@ -4,7 +4,7 @@
   },
   "app": {
     "name": "Zoned",
-    "tagline": "219 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans, route generator and 12 calculators. Free, no account.",
+    "tagline": "219 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans and 10 calculators. Free, no account.",
     "heroTitle": "Prepare your next",
     "heroTitleAccent": "race"
   },
@@ -215,10 +215,11 @@
       "downloaded": "Image saved",
       "copied": "Image copied to clipboard",
       "linkCopied": "Link copied to clipboard",
-      "linkCopyFailed": "Copy blocked by your browser. Try again.",
+      "linkCopyFailed": "The link was not copied.",
+      "textCopyFailed": "The text was not copied.",
       "copyUnsupported": "Image copy requires HTTPS (use Save or Share)",
       "loading": "Generating image…",
-      "error": "Generation failed"
+      "error": "The image could not be generated."
     }
   },
   "export": {
@@ -240,10 +241,10 @@
       "garmin": "Garmin file exported"
     },
     "error": {
-      "calendar": "Calendar export failed. Try again.",
-      "image": "Image export failed. Try again.",
-      "pdf": "PDF export failed. Try again.",
-      "garmin": "Garmin export failed. Try again."
+      "calendar": "Calendar export failed.",
+      "image": "Image export failed.",
+      "pdf": "PDF export failed.",
+      "garmin": "Garmin export failed."
     },
     "loading": {
       "calendar": "Generating calendar…",
@@ -425,13 +426,11 @@
     "plansMine": "My plans",
     "plansMineDesc": "Active and past plans",
     "plansNew": "New plan",
-    "plansNewDesc": "Assisted, free or pre-built",
+    "plansNewDesc": "A race, a date, your days",
     "raceSim": "Race-day simulator",
     "raceSimDesc": "Splits, nutrition and pacing for your race",
-    "routes": "Route generator",
-    "routesDesc": "Real-world loops with elevation and GPX",
     "calculatorsAll": "All calculators",
-    "calculatorsAllDesc": "12 tools, instant local computation",
+    "calculatorsAllDesc": "10 tools, instant local computation",
     "calcZones": "Training zones",
     "calcVma": "VMA from a race time",
     "calcFtp": "FTP cycling test",
@@ -456,13 +455,12 @@
     "activitiesDesc": "Your bike commutes and off-plan sessions",
     "plansPrebuilt": "Ready-made plans",
     "plansPrebuiltDesc": "Plans already written, take one as is",
-    "weeksPrebuilt": "Ready-made weeks",
-    "tracks": "Find a track"
+    "weeksPrebuilt": "Ready-made weeks"
   },
   "errors": {
     "workoutNotFound": "Workout not found",
     "generic": "That didn't go through. Try again in a moment.",
-    "planSaveFailed": "Couldn't save the plan (not enough storage space).",
+    "planSaveFailed": "The plan was not saved.",
     "notFound": {
       "title": "Page not found",
       "description": "The page you are looking for does not exist or has been moved.",
@@ -603,11 +601,11 @@
     },
     "privacy": {
       "title": "Privacy",
-      "description": "What Zoned collects",
-      "noServer": "No personal data is sent to any server",
+      "description": "Nothing is collected",
+      "noServer": "No data is sent to any server",
       "noAccount": "No user account required",
       "localStorage": "All your data stays in your browser (localStorage)",
-      "analytics": "Vercel Analytics only measures page views anonymously (no cookies, no identification)"
+      "analytics": "No analytics and no tracking. Nothing leaves this browser."
     },
     "scienceMode": {
       "title": "Science Mode",
@@ -635,6 +633,39 @@
       "replaceModeDescription": "Clears local Zoned data first, then restores only what is present in the backup.",
       "mergeModeTitle": "Merge",
       "mergeModeDescription": "Keeps local Zoned data missing from the backup and only replaces keys present in the file."
+    },
+    "qrSync": {
+      "title": "To another device",
+      "description": "Send your plans, activities and profiles to your phone or computer, with no network and no account: an animated QR code, filmed by the other device. Theme, language and layout stay specific to each device.",
+      "sendButton": "Send",
+      "receiveButton": "Receive",
+      "unsupported": "This browser cannot decompress data, so QR sync is unavailable here. Use the file export.",
+      "sendTitle": "Send to another device",
+      "sendHint": "On the other device, open Settings then Receive, and point its camera at this code. Keep both screens on until it finishes.",
+      "preparing": "Preparing the code",
+      "sendFailed": "Could not prepare the data to send. Nothing changed.",
+      "qrLabel": "QR code, frame {{current}} of {{total}}",
+      "pause": "Pause",
+      "resume": "Resume",
+      "localNote": "Nothing goes through a server: the data only leaves this device through the screen.",
+      "done": "Done",
+      "receiveTitle": "Receive from another device",
+      "receiveHint": "On the other device, open Settings then Send, and point this camera at its screen.",
+      "starting": "Opening the camera",
+      "aim": "Point at the QR code on the other device",
+      "progress": "{{got}} of {{count}} frames",
+      "camera": "Camera feed",
+      "denied": "Camera access is denied. Allow it in the browser settings, then try again.",
+      "unavailable": "No camera is available on this device. Use the file export.",
+      "newer": "This data comes from a newer version of Zoned. Update this device, then try again.",
+      "invalid": "The data received is unreadable or incomplete. Nothing changed, start the send again.",
+      "retry": "Try again",
+      "close": "Close",
+      "confirmTitle": "Data received",
+      "confirmDescription": "Choose how to apply it on this device. Its theme and language do not change.",
+      "apply": "Apply",
+      "applied": "Data received. The page is reloading.",
+      "applyError": "Could not apply it. Your data is untouched, nothing changed."
     }
   },
   "tips": {
@@ -650,7 +681,7 @@
   "stats": {
     "workoutsTitle": "workouts",
     "workoutsSubtitle": "One-click Garmin FIT export",
-    "calculatorsTitle": "12 calculators",
+    "calculatorsTitle": "10 calculators",
     "calculatorsSubtitle": "VMA, zones, splits, equivalences...",
     "simulatorTitle": "Race simulator",
     "simulatorSubtitle": "Splits, nutrition, warm-up, race day"
@@ -705,7 +736,7 @@
     "workoutCount_one": "{{count}} workout",
     "workoutCount_other": "{{count}} workouts",
     "emptyTitle": "No collection loaded",
-    "emptyDescription": "The catalogue returned no path. Reload the page, or open the library and its {{workouts}} sessions.",
+    "emptyDescription": "The catalogue returned nothing. Reload the page, or open the library and its {{workouts}} sessions.",
     "emptyAction": "Open the library"
   },
   "library": {
@@ -767,7 +798,7 @@
     "fitGarminOnly": "FIT export is compatible with Garmin watches only. For other brands, recreate this workout manually in your watch's companion app.",
     "copyInstructions": "Copy workout instructions",
     "instructionsCopied": "Instructions copied!",
-    "copyFailed": "Failed to copy",
+    "copyFailed": "The instructions were not copied.",
     "gotIt": "Got it",
     "osPath": {
       "windows": "File Explorer → This PC → GARMIN",
@@ -813,8 +844,8 @@
     "subtitle": "The sessions you starred, ready to run again.",
     "kicker_one": "{{count}} favourite · {{total}} in the catalogue",
     "kicker_other": "{{count}} favourites · {{total}} in the catalogue",
-    "emptyDescription": "No favourite yet. The library holds {{total}}: tap a session's heart to keep it here.",
-    "emptyAction": "Open the library"
+    "emptyDescription": "A session's heart keeps it here, to run again without redoing the filters. The library holds {{total}}.",
+    "emptyAction": "Explore the library"
   },
   "comparePage": {
     "whyComparisons": "Why these comparisons?",
@@ -836,7 +867,7 @@
     "myZones": "My Zones",
     "favorites": "My Favorites",
     "planNew": "New Training Plan",
-    "planNewDesc": "Choose how to create your training plan.",
+    "planNewDesc": "A race, a date, the days you can train: the plan builds itself in seven screens.",
     "collectionsDesc": "Themed workout paths for every goal. Browse curated running collections.",
     "libraryTitle": "Workout Library",
     "aboutSeoTitle": "About"
@@ -869,7 +900,7 @@
       },
       "noData": {
         "title": "No personal data",
-        "description": "No account, no training data sent. Only anonymous page views are measured."
+        "description": "No account, no analytics, no training data sent."
       },
       "openSource": {
         "title": "Open Source",
@@ -956,11 +987,23 @@
       "applePath": "Workout → Create (watchOS 9+)"
     }
   },
+  "failure": {
+    "quota": "The browser's storage is full, nothing was written. What you had saved is intact. Free some room by deleting a plan, a week or a route, or export a backup from the settings.",
+    "invalid": "The data was refused by validation, nothing was written. What was saved is intact. Reload the page and try again.",
+    "notFound": "This item no longer exists in this browser, maybe deleted from another tab. Nothing else moved. Reload the page to see the current state.",
+    "limit": "The limit of saved items is reached, nothing was added. Delete one to free a slot.",
+    "timeout": "The render took too long and was interrupted. Nothing was lost. Try again, and close heavy tabs if it happens again.",
+    "offline": "You are offline and this action needs the network. Your data stays available. Try again once the connection is back.",
+    "denied": "The browser refused access to the clipboard or the share sheet. Nothing was lost. Allow it from the address bar, or use Save instead.",
+    "unsupported": "This browser does not support this feature. Nothing was lost. Try a recent Chrome, Firefox or Safari, or use Save instead.",
+    "unknown": "Something unexpected happened, nothing was changed. Try again, and reload the page if it happens again."
+  },
   "alert": {
     "error": "Error",
     "success": "Success",
     "warning": "Warning",
-    "info": "Info"
+    "info": "Info",
+    "loading": "In progress"
   },
   "status": {
     "loading": "Loading"
@@ -974,7 +1017,6 @@
     "unitsHint": "Changes paces, distances and elevation.",
     "unitsMetric": "km · min/km",
     "unitsImperial": "mi · min/mi",
-    "routesCaveat": "Your position goes to a public routing service for one request. Nothing is stored.",
     "about": "About",
     "tableItem": "Item",
     "tableValue": "Value",
@@ -987,7 +1029,7 @@
     "sourceCode": "Source code",
     "contribute": "Suggest a workout",
     "privacyTitle": "What stays on your device",
-    "privacyBody": "No account, no server. Your data stays in this browser. Vercel Analytics counts page views, with no cookie and no identification.",
+    "privacyBody": "No account, no server, no analytics, no tracking. Your data stays in this browser.",
     "statStorage": "local data",
     "statFavorites": "favourites",
     "storageValue": "{{n}} kB",
@@ -1016,9 +1058,6 @@
     "label": "In this section"
   },
   "modules": {
-    "routes": {
-      "name": "Routes"
-    },
     "raceSimulator": {
       "name": "Race simulator"
     },

@@ -151,13 +151,3 @@
   border-color: var(--zone-color);
 }
 
-/* ==========================================================================
-   LEAFLET, restore tile/marker max-width that the reset in base.css clamps
-   ========================================================================== */
-.leaflet-pane img,
-.leaflet-tile,
-.leaflet-marker-icon,
-.leaflet-marker-shadow {
-  max-width: none !important;
-  max-height: none !important;
-}

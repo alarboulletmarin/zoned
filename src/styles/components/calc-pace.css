@@ -12,13 +12,14 @@
  * as-is, nothing in here knows about pace.
  *
  * WHAT THIS FILE DOES NOT REDECLARE. The head band, the lede, the panel, the
- * legend band, the h:m:s row and the numeric table column already exist in
- * numbers.css as `.zn-num__head`, `.zn-num__lede`, `.zn-num__panel`,
- * `.zn-num__legend`, `.zn-num__time` and `.zn-num__num`, these seven screens
+ * legend band and the numeric table column already exist in numbers.css as
+ * `.zn-num__head`, `.zn-num__lede`, `.zn-num__panel`, `.zn-num__legend` and
+ * `.zn-num__num`, these seven screens
  * are more rooms of the same "mes chiffres" door as /calculators/zones and
  * /calculators/allures, and they use those classes verbatim. The field
  * vocabulary is workout.css's `.zn-calc__field` / `.zn-calc__label` /
- * `.zn-calc__error`, and the small number entry is `.zn-numfield`. The tables
+ * `.zn-calc__error`, the small number entry is `.zn-numfield`, and every time
+ * is one `ChronoInput` at the chronometer mask. The tables
  * are the ported ResponsiveTable, the figures are StatBlock, the zone chips
  * are ZoneBadge, and the layout verbs come from _layout.css.
  *
@@ -61,6 +62,48 @@
   inline-size: 100%;
   max-inline-size: 672px;
   margin-inline: auto;
+}
+
+/* Sur un écran large, la phrase de l'outil se lit en deux temps : ce qu'on
+   remplit à gauche, ce qui s'imprime à droite, au lieu d'une colonne de 672 px
+   centrée sous un titre aligné à gauche (deux axes sur la même page, et près de
+   la moitié de l'écran vide). Le formulaire est le premier enfant et reste
+   sous les yeux pendant qu'on lit un tableau long.
+
+   Seulement quand il y a un résultat à poser à côté : un formulaire seul,
+   avant la première saisie, resterait une colonne de 400 px devant du vide.
+   Pas d'écart de ligne : le formulaire s'étend sur des rangées sans hauteur, et
+   un écart de ligne les compterait une à une. L'air entre deux résultats est
+   une marge, la première n'en paie pas. */
+@media (min-width: 1024px) {
+  .zn-stack.zn-tool:has(> :nth-child(2)) {
+    display: grid;
+    grid-template-columns: minmax(320px, 400px) minmax(0, 1fr);
+    column-gap: var(--sp-17);
+    row-gap: 0;
+    align-items: start;
+  }
+
+  .zn-stack.zn-tool:has(> :nth-child(2)) > * {
+    max-inline-size: none;
+    margin-inline: 0;
+  }
+
+  .zn-stack.zn-tool:has(> :nth-child(2)) > :first-child {
+    grid-column: 1;
+    grid-row: 1 / span 12;
+    position: sticky;
+    inset-block-start: var(--sp-10);
+  }
+
+  .zn-stack.zn-tool:has(> :nth-child(2)) > :not(:first-child) {
+    grid-column: 2;
+    margin-block-start: var(--sp-17);
+  }
+
+  .zn-stack.zn-tool:has(> :nth-child(2)) > :nth-child(2) {
+    margin-block-start: 0;
+  }
 }
 
 /* A control that fills its field. `.zn-calc__field` starts its children at the

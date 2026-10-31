@@ -349,10 +349,12 @@ export function MobileMenu() {
               {t("mobileMenu.search")}
             </button>
 
-            {/* Réglages et À propos, en petit et en gris : on doit pouvoir
-                les atteindre sans les chercher, pas les voir avant les
-                portes. Le point vermillon les suit aussi quand on y est,
-                même marqueur que plus haut. */}
+            {/* Accueil, Réglages et À propos, en petit et en gris : on doit
+                pouvoir les atteindre sans les chercher, pas les voir avant
+                les portes. Le point vermillon les suit aussi quand on y est,
+                même marqueur que plus haut. L'état du lien est celui que la
+                donnée porte : l'accueil s'en sert pour passer la redirection
+                de la racine vers le cockpit. */}
             <ul className="zn-menu__foot-links">
               {MENU_FOOT_LINKS.map((link) => {
                 const here = pathname === link.to;
@@ -360,6 +362,7 @@ export function MobileMenu() {
                   <li key={link.to}>
                     <Link
                       to={link.to}
+                      state={link.state}
                       viewTransition
                       className="zn-menu__foot-link"
                       data-current={here || undefined}

@@ -2,10 +2,17 @@ import type { CSSProperties } from "react";
 import { Segmented } from "@/components/ui/segmented";
 import { Switch } from "@/components/ui/switch";
 import { DAYS_PER_WEEK_OPTIONS } from "../constants";
+import { FitnessBody } from "./FitnessStep";
 import type { StepContext, StepDef } from "../types";
 
-/** La semaine type : combien de séances, quel jour la longue, du renfort. */
-function ScheduleBody({ form, setForm, uid, t }: StepContext) {
+/**
+ * La semaine type : combien de séances, quel jour la longue, du renfort. Et,
+ * en bas, d'où l'on part : le volume actuel avait son écran à lui, deux
+ * champs facultatifs entre l'état d'esprit et la semaine. C'est la même
+ * question, combien tu cours, posée au même endroit.
+ */
+function ScheduleBody(ctx: StepContext) {
+  const { form, setForm, uid, t } = ctx;
   // Une reprise et un début de course ne se font pas à sept séances.
   const dayOptions = DAYS_PER_WEEK_OPTIONS.filter((n) =>
     form.planPurpose === "return_from_injury" ? n <= 4
@@ -79,6 +86,11 @@ function ScheduleBody({ form, setForm, uid, t }: StepContext) {
                     />
                   </div>
                 )}
+
+                <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                  <span className="zn-kicker zn-kicker--inline">{t("schedule.currentVolume")}</span>
+                  <FitnessBody {...ctx} />
+                </div>
               </div>
   );
 }

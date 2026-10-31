@@ -12,6 +12,8 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { ChronoInput } from "@/components/ui/chrono-input";
+import { durationToMinutes, minutesToDurationDigits } from "@/lib/durationFields";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { PlanSession } from "@/types/plan";
 import type { SessionCompletionData } from "@/lib/planStorage";
@@ -55,6 +57,7 @@ function getDefaultRpe(sessionType: PlanSession["sessionType"] | undefined): num
 interface CompletionFormProps {
   choice: Choice;
   setChoice: (c: Choice) => void;
+  /** Digits at the h:mm mask, see `lib/durationFields.ts`. */
   durationMin: string;
   setDurationMin: (v: string) => void;
   distanceKm: string;
@@ -144,13 +147,11 @@ function CompletionForm({
               <span className="zn-kicker zn-kicker--inline zn-plabel">
                 {t("sessionCompletion.actualDuration")}
               </span>
-              <input
-                type="number"
-                inputMode="decimal"
-                min={0}
-                step={1}
-                value={durationMin}
-                onChange={(e) => setDurationMin(e.target.value)}
+              <ChronoInput
+                format="hm"
+                digits={durationMin}
+                onDigitsChange={setDurationMin}
+                placeholder="h:mm"
                 className="zn-pfield"
               />
             </label>
@@ -280,9 +281,7 @@ export function SessionCompletionPanel({
     if (!open || !session) return;
     setChoice(initialChoice);
     setDurationMin(
-      session.actualDurationMin != null
-        ? String(session.actualDurationMin)
-        : String(session.estimatedDurationMin ?? ""),
+      minutesToDurationDigits(session.actualDurationMin ?? session.estimatedDurationMin ?? 0),
     );
     setDistanceKm(
       session.actualDistanceKm != null
@@ -330,7 +329,7 @@ export function SessionCompletionPanel({
     }
 
     // choice === "modified"
-    const parsedDuration = Number.parseFloat(durationMin.replace(",", "."));
+    const parsedDuration = durationToMinutes(durationMin) ?? Number.NaN;
     const parsedDistance = Number.parseFloat(distanceKm.replace(",", "."));
     onSave({
       status: "modified",

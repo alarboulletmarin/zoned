@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import type { TrainingPlan, AssistedPlanConfig } from "@/types/plan";
 import { getAllPlans, getPlan, savePlan, deletePlan } from "@/lib/planStorage";
 import { generatePlan } from "@/lib/planGenerator";
+import { AppFailure, failureReason, type FailureReason } from "@/lib/failure";
 
 /**
  * Hook to get all saved plans.
@@ -56,20 +57,20 @@ export function usePlan(id: string | undefined) {
  */
 export function useCreatePlan() {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<FailureReason | null>(null);
 
   const createPlan = useCallback(async (config: AssistedPlanConfig): Promise<TrainingPlan> => {
     setIsGenerating(true);
     setError(null);
     try {
       const plan = await generatePlan(config);
-      if (!savePlan(plan)) {
-        throw new Error("Impossible d'enregistrer le plan (espace de stockage insuffisant).");
-      }
+      const saved = savePlan(plan);
+      if (!saved.ok) throw new AppFailure(saved.reason);
       return plan;
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Erreur lors de la génération du plan";
-      setError(message);
+      // The reason, not a sentence: the summary step puts it into words in
+      // the user's language, next to what is intact and what to do.
+      setError(failureReason(err));
       throw err;
     } finally {
       setIsGenerating(false);

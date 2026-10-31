@@ -6,6 +6,7 @@ import {
   useCallback,
 } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
+import { HOME_LINK_STATE } from "@/components/layout/navigation";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -14,7 +15,6 @@ import {
   Mountain,
   Link2,
   MoreHorizontal,
-  Route,
   Share,
   StravaIcon,
   SlidersHorizontal,
@@ -46,7 +46,7 @@ import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import Plank from "@/assets/doodles/plank.svg?react";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { copyToClipboard } from "@/lib/issueBuilder";
 import { buildStravaShareText } from "@/lib/export";
 import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
@@ -211,9 +211,6 @@ export function WorkoutDetailPage() {
   // in place instead, and one with no number to move has nothing to offer.
   const isOwnWorkout = isCustomWorkoutId(workout.id);
   const canAdjust = !isOwnWorkout && hasAdjustableParams(workout);
-  const canGenerateRoute =
-    !workout.environment.requiresTrack &&
-    (workoutDiscipline === "running" || workoutDiscipline === "cycling");
   // Plan context: duration from plan generation (volume-scaled, may differ for long runs)
   const planWeekNumber = locationState?.weekNumber;
   const planVolumePercent = locationState?.volumePercent;
@@ -259,7 +256,7 @@ export function WorkoutDetailPage() {
   const workoutName = pick(workout, "name");
   const categoryLabel = t(`library:categories.${workout.category}`);
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: t("common:nav.home"), to: "/" },
+    { label: t("common:nav.home"), to: "/", state: HOME_LINK_STATE },
   ];
 
   if (locationState?.from === "plan" && locationState.planId) {
@@ -406,14 +403,6 @@ export function WorkoutDetailPage() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {canGenerateRoute && (
-              <DropdownMenuItem asChild>
-                <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
-                  <Route />
-                  {t("session:actions.findRoute")}
-                </Link>
-              </DropdownMenuItem>
-            )}
 
             {canAdjust && (
               <DropdownMenuItem
@@ -451,7 +440,7 @@ export function WorkoutDetailPage() {
                   buildStravaShareText(workout),
                 );
                 if (ok) toast.success(t("session:strava.copied"));
-                else toast.error(t("common:errors.generic"));
+                else toast.failure(t("common:share.toast.textCopyFailed"));
               }}
             >
               <StravaIcon />
@@ -463,7 +452,7 @@ export function WorkoutDetailPage() {
                   publicWorkoutUrl(workout),
                 );
                 if (ok) toast.success(t("common:actions.linkCopied"));
-                else toast.error(t("common:errors.generic"));
+                else toast.failure(t("common:share.toast.linkCopyFailed"));
               }}
             >
               <Link2 />
@@ -983,7 +972,7 @@ function StrengthWorkoutDetail({
   );
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: tCommon("nav.home"), to: "/" },
+    { label: tCommon("nav.home"), to: "/", state: HOME_LINK_STATE },
   ];
 
   if (locationState?.from === "plan" && locationState.planId) {
@@ -1128,7 +1117,7 @@ function StrengthWorkoutDetail({
                 onClick={async () => {
                   const ok = await copyToClipboard(window.location.href);
                   if (ok) toast.success(tCommon("actions.linkCopied"));
-                  else toast.error(tCommon("errors.generic"));
+                  else toast.failure(tCommon("share.toast.linkCopyFailed"));
                 }}
               >
                 <Link2 />

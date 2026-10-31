@@ -24,6 +24,8 @@ interface DoorCardProps {
   cta: string;
   /** Router path this door opens. */
   to: string;
+  /** Router state carried through the door, when the next screen needs it. */
+  state?: unknown;
   className?: string;
 }
 
@@ -33,10 +35,11 @@ export function DoorCard({
   body,
   cta,
   to,
+  state,
   className,
 }: DoorCardProps) {
   return (
-    <Link to={to} className={cn("zn-door", className)}>
+    <Link to={to} state={state} className={cn("zn-door", className)}>
       <span className="zn-kicker">{kicker}</span>
       <span className="zn-door__title">{title}</span>
       <span className="zn-door__body">{body}</span>

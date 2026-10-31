@@ -15,9 +15,11 @@
       "line_other": "Your plan starts in {{count}} days."
     },
     "none": {
-      "line": "Nothing under way.",
-      "body": "Build a plan, or just put together a week if you don't want to commit further.",
-      "cta": "Create a plan"
+      "line": "No plan yet.",
+      "body": "As soon as a plan exists, this screen becomes your session of the day: the duration, the zones, and a box to tick in the evening.",
+      "cta": "Create my plan",
+      "hint": "Not ready to commit to several weeks?",
+      "hintLink": "Draw a session from the library"
     },
     "inPlan": "Plan",
     "inWeek": "My week",
@@ -29,7 +31,8 @@
     "openDetail": "See the details",
     "next": "Next session: {{day}}, {{duration}}",
     "rank": "session {{n}} / {{total}}",
-    "reclose": "Change the outcome"
+    "reclose": "Change the outcome",
+    "alsoLabel": "Also"
   },
   "quick": {
     "draw": "Draw me a session",
@@ -83,5 +86,41 @@
     "ahead_one": "in a day",
     "ahead_other": "in {{count}} days",
     "back": "Back to today"
+  },
+  "compose": {
+    "open": "What makes up my week",
+    "title": "My week is made of",
+    "body": "The plan under way, and the weeks you follow alongside it. A followed week reads next to the plan, session by session; added to the plan, it goes inside it.",
+    "plans": "Plans",
+    "weeks": "My weeks",
+    "noPlans": "No plan under way or upcoming.",
+    "noWeeks": "No week built yet.",
+    "underWay": "week {{n}} / {{total}}",
+    "startsIn_one": "starts tomorrow",
+    "startsIn_other": "starts in {{count}} days",
+    "placedOn": "followed on the week of {{date}}",
+    "moveHere": "Follow on the week of {{date}}",
+    "newWeek": "Build a new week",
+    "newPlan": "Create a plan",
+    "switchPlan": "Follow {{name}}",
+    "switchWeek": "Follow {{name}}",
+    "merge": "Add to plan {{plan}}, week {{n}}",
+    "mergeAdd": "Add to the plan's sessions",
+    "mergeReplace": "Replace the plan's sessions that week",
+    "mergeCancel": "Cancel",
+    "mergeDone": "Added to the plan. Undo from the plan page.",
+    "mergeFailed": "The addition could not be saved.",
+    "mergeLabel": "{{week}} added to week {{n}}"
+  },
+  "add": {
+    "action": "Add a session",
+    "into": "Into what?",
+    "newWeek": "A new week, placed here",
+    "newWeekName": "Week of {{date}}",
+    "done": "Session added to {{source}}.",
+    "failed": "The session could not be saved."
+  },
+  "conflicts": {
+    "line": "{{day}}: two key sessions, {{sources}}"
   }
 }

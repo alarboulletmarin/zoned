@@ -662,7 +662,11 @@
 
 .zn-numfield {
   display: inline-flex;
-  align-items: baseline;
+  /* Centré, pas sur la ligne de base : avec `baseline`, la valeur et l'unité se
+     calent sur le HAUT du cadre dès que rien ne le remplit (la hauteur est
+     fixée, le champ n'a pas de rembourrage), et le chiffre flotte contre le
+     filet du haut. */
+  align-items: center;
   justify-content: flex-end;
   gap: var(--sp-1);
   block-size: 36px;
@@ -706,6 +710,14 @@
 .zn-numfield__input::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
+}
+
+/* Un chrono au masque (ChronoInput) tient en un champ : 3:30:00 ou 45:00.
+   Sans unité à côté, la ligne de base du cadre n'a rien à aligner : le champ
+   se centre dans sa hauteur. */
+.zn-numfield__input--chrono {
+  --field-w: 9ch;
+  align-self: center;
 }
 
 .zn-numfield__unit {

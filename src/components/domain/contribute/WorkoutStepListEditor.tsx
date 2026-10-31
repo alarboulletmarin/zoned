@@ -1,5 +1,6 @@
 import { useId, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
+import { ChronoValueInput } from "@/components/ui/chrono-input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -176,14 +177,6 @@ function SegmentEditor({
 }) {
   const { t } = useTranslation("contribute");
   const uid = useId();
-  const totalSec = step.durationSec ?? 0;
-  const minutes = Math.floor(totalSec / 60);
-  const seconds = totalSec % 60;
-
-  const updateDuration = (nextMinutes: number, nextSeconds: number) => {
-    const nextTotal = Math.max(0, nextMinutes * 60 + nextSeconds);
-    onChange({ ...step, durationSec: nextTotal || undefined });
-  };
 
   return (
     <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
@@ -222,33 +215,17 @@ function SegmentEditor({
 
       <div
         className="zn-grid"
-        style={{ "--cols": 4, "--cols-md": 2, "--gap": "var(--sp-6)" } as CSSProperties}
+        style={{ "--cols": 3, "--cols-md": 3, "--gap": "var(--sp-6)" } as CSSProperties}
       >
         <div className="zn-contrib-field">
-          <label className="zn-contrib-field__label" htmlFor={`${uid}-minutes`}>
-            {t("blocks.durationMinutes")}
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-duration`}>
+            {t("blocks.durationClock")}
           </label>
-          <input
-            id={`${uid}-minutes`}
-            type="number"
-            min={0}
-            value={minutes}
-            onChange={(e) => updateDuration(Number(e.target.value || 0), seconds)}
-            data-mono="true"
-            className="zn-contrib-input"
-          />
-        </div>
-        <div className="zn-contrib-field">
-          <label className="zn-contrib-field__label" htmlFor={`${uid}-seconds`}>
-            {t("blocks.durationSeconds")}
-          </label>
-          <input
-            id={`${uid}-seconds`}
-            type="number"
-            min={0}
-            max={59}
-            value={seconds}
-            onChange={(e) => updateDuration(minutes, Number(e.target.value || 0))}
+          <ChronoValueInput
+            id={`${uid}-duration`}
+            format="hms"
+            value={step.durationSec}
+            onValueChange={(durationSec) => onChange({ ...step, durationSec })}
             data-mono="true"
             className="zn-contrib-input"
           />

@@ -44,7 +44,7 @@ const HEAD_ROW = { "--gap": "var(--sp-6)" } as CSSProperties;
  * their ink; every step carries its height, so the silhouette reads the level
  * a second time. Decorative, the level is named in words by IntensityBadge.
  */
-function IntensityMeter({
+export function IntensityMeter({
   intensity,
   className,
 }: {

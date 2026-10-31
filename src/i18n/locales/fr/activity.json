@@ -102,9 +102,6 @@
     "dayExtra": "{{minutes}} en plus du plan"
   },
   "toast": {
-    "added": "Activité enregistrée",
-    "updated": "Activité modifiée",
-    "deleted": "Activité supprimée",
     "saveFailed": "Impossible d'enregistrer l'activité"
   },
   "plan": {

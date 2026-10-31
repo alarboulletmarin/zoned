@@ -114,6 +114,7 @@
   },
   "noResults": "Aucune séance ne correspond à tes critères",
   "clearFilters": "Effacer les filtres",
+  "clearSearch": "Effacer la recherche",
   "showMore": "Voir plus",
   "showingCount": "{{visible}} sur {{total}} séances",
   "draw": {
@@ -188,7 +189,10 @@
       "title": "Mes semaines",
       "subtitle": "Tes semaines d'entraînement, générées ou composées à la main.",
       "create": "Créer une semaine",
-      "empty": "Génère ta première semaine, ou compose-la séance par séance.",
+      "empty": "Une semaine seule, ce sont sept jours composés sans plan derrière : une reprise en douceur, un bloc de côtes, ou le générateur à l'essai sans t'engager. Elle arrive dans ton cockpit dès qu'elle existe.",
+      "emptyAction": "Composer ma semaine",
+      "emptyHint": "Dix semaines toutes prêtes existent aussi, à prendre telles quelles.",
+      "emptyHintLink": "Voir les semaines prêtes",
       "sessionsCount_one": "{{count}} séance",
       "sessionsCount_other": "{{count}} séances",
       "view": "Voir",
@@ -206,6 +210,25 @@
     "category": {
       "label": "Catégorie",
       "none": "Sans catégorie"
+    },
+    "cockpit": {
+      "label": "Suivi",
+      "place": "Suivre cette semaine",
+      "placed": "Suivie · semaine du {{date}}",
+      "thisWeek": "Cette semaine",
+      "nextWeek": "Semaine prochaine",
+      "remove": "Ne plus suivre",
+      "listPlaced": "suivie · semaine du {{date}}",
+      "toastPlaced": "Suivie sur la semaine du {{date}}",
+      "toastRemoved": "Plus suivie"
+    },
+    "merge": {
+      "into": "Dans {{plan}}, semaine {{n}}",
+      "add": "Ajouter aux séances du plan",
+      "replace": "Remplacer les séances du plan",
+      "done": "Ajoutée au plan. Annulable depuis la page du plan.",
+      "failed": "L'ajout n'a pas pu être enregistré.",
+      "label": "{{week}} ajoutée à la semaine {{n}}"
     },
     "budget": {
       "label": "Budget",
@@ -228,29 +251,7 @@
     },
     "new": {
       "title": "Créer une semaine",
-      "subtitle": "Choisis comment composer ta semaine d'entraînement.",
-      "back": "Retour aux semaines",
-      "modes": {
-        "scratch": {
-          "kicker": "À la main",
-          "title": "Partir de zéro",
-          "desc": "Une semaine vide que tu remplis séance par séance, sans passer par le générateur.",
-          "cta": "Composer ma semaine"
-        },
-        "generate": {
-          "kicker": "Générateur 80/20",
-          "title": "Générer une semaine",
-          "desc": "Règle le volume, les séances et les disciplines : le générateur compose une semaine polarisée.",
-          "cta": "Régler et générer"
-        },
-        "prebuilt": {
-          "title": "Semaine pré-construite",
-          "desc": "Choisis une semaine type sourcée et commence immédiatement.",
-          "kicker": "Catalogue",
-          "cta": "{{count}} semaines prêtes"
-        }
-      },
-      "kicker": "3 façons de commencer"
+      "creating": "Ta semaine se prépare…"
     },
     "prebuilt": {
       "title": "Semaines pré-construites",
@@ -374,6 +375,8 @@
       "lock": "Verrouiller",
       "unlock": "Déverrouiller",
       "reroll": "Re-tirer",
+      "moveUp": "Monter dans la journée",
+      "moveDown": "Descendre dans la journée",
       "duplicate": "Dupliquer",
       "viewDetail": "Voir le détail",
       "rest": "Jour de repos",
@@ -407,14 +410,11 @@
       "sessionDuplicated": "Séance dupliquée · glisse la copie où tu veux",
       "saved": "Semaine enregistrée",
       "exported": "Export généré",
-      "generated": "Semaine générée",
       "exportError": "L'export a échoué",
-      "duplicated": "Semaine dupliquée",
-      "duplicateError": "La duplication a échoué",
-      "imported": "Semaine importée",
+      "duplicateError": "La semaine n'a pas été dupliquée.",
+      "saveFailed": "La semaine n'a pas été enregistrée.",
       "importError": "Import impossible : fichier invalide",
       "importNotWeek": "Ce fichier contient un plan complet, pas une semaine",
-      "rerolled": "Séance re-tirée",
       "rerollEmpty": "Aucune autre séance disponible avec ces réglages"
     },
     "boardHint": "Cliquez une séance pour la modifier · glissez-la pour la déplacer ou la retirer",

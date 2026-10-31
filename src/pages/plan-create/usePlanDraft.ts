@@ -16,7 +16,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
  */
 
 const STORAGE_KEY = "zoned:plan-draft";
-const DRAFT_VERSION = 1;
+const DRAFT_VERSION = 2;
 /** Drafts older than this are treated as stale and silently discarded. */
 const DRAFT_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
@@ -173,6 +173,8 @@ function readDraft<F>(): DraftPayload<F> | null {
     if (Date.now() - parsed.ts > DRAFT_TTL_MS) return null;
     return parsed;
   } catch {
+    // A draft that cannot be read is a draft that does not exist: the wizard
+    // starts blank, which is what an unreadable draft would have meant anyway.
     return null;
   }
 }

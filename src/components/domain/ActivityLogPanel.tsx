@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 
 import { Activity as ActivityIcon, Bike, ChevronDown, Pool, Run } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { DateInput } from "@/components/ui/date-input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Segmented } from "@/components/ui/segmented";
@@ -16,13 +17,7 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { formatDurationMinutes } from "@/components/visualization";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { recallDurations, type ActivityRecall } from "@/lib/activityRecall";
-import {
-  durationDigits,
-  durationToMinutes,
-  formatDurationDigits,
-  minutesToDurationDigits,
-  normalizeDurationDigits,
-} from "@/lib/durationFields";
+import { durationToMinutes, minutesToDurationDigits } from "@/lib/durationFields";
 import { rpeColor, rpeWordKey } from "@/lib/sessionColors";
 import {
   ACTIVITY_DISCIPLINE_META,
@@ -428,17 +423,6 @@ function ActivityForm({
     durationRef.current?.focus({ preventScroll: true });
   }, [isEdit, pointsWithoutKeyboard]);
 
-  /* Le curseur revient à la FIN après chaque frappe, tant que le champ est
-     tenu. C'est ce qui rend le masque prévisible : les chiffres entrent par la
-     droite, donc l'effacement doit toujours retirer le dernier, où que le
-     doigt ait posé le curseur dans 1:25. */
-  useEffect(() => {
-    const field = durationRef.current;
-    if (!field || document.activeElement !== field) return;
-    const end = field.value.length;
-    field.setSelectionRange(end, end);
-  }, [duration]);
-
   const disciplineOptions = useMemo(
     () =>
       ACTIVITY_DISCIPLINES.map((id) => {
@@ -466,13 +450,6 @@ function ActivityForm({
       }),
     [t, discipline],
   );
-
-  /* Le rangement se fait à la SORTIE du champ, jamais pendant la frappe : le
-     premier chiffre de 90 serait devenu 0:09 avant que le second n'arrive. */
-  const tidyDuration = () => {
-    const tidy = normalizeDurationDigits(duration);
-    if (tidy !== duration) setDuration(tidy);
-  };
 
   const currentDuration = durationToMinutes(duration);
 
@@ -538,21 +515,14 @@ function ActivityForm({
             </div>
           )}
 
-          {/* type text et pas number : un champ numérique natif refuse le
-              deux-points du masque, et sur un clavier logiciel il ouvre un
-              pavé qui porte aussi le point et le moins. inputMode numeric et
-              pattern donnent le pavé de CHIFFRES seuls, sur iOS comme sur
-              Android. */}
-          <input
+          {/* Le champ de temps commun à toute l'app : pavé de chiffres,
+              curseur en fin, rangement à la sortie (ui/chrono-input.tsx). */}
+          <ChronoInput
             ref={durationRef}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            autoComplete="off"
+            format="hm"
             placeholder={t("activity:form.durationPlaceholder")}
-            value={formatDurationDigits(duration)}
-            onChange={(e) => setDuration(durationDigits(e.target.value))}
-            onBlur={tidyDuration}
+            digits={duration}
+            onDigitsChange={setDuration}
             className="zn-pfield zn-actlog__durfield"
           />
         </label>

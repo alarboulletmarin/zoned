@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { ArrowLeft, Clock, Sparkles, Star } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import { getPrebuiltWeekBySlug } from "@/data/prebuilt-weeks";
 import { prebuiltWeekToPlan, planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
 import { savePlan } from "@/lib/planStorage";
+import { dateFromIso } from "@/lib/cockpit";
+import { loadTodayComposition, mondayOf, placeWeek, saveTodayComposition } from "@/lib/todayComposition";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -40,6 +42,8 @@ const DIFFICULTY_KEYS: Record<string, string> = {
 export function PrebuiltWeekDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const placeOn = (location.state as { placeOn?: string } | null)?.placeOn;
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
   const pickLocale = usePickLocale();
@@ -99,11 +103,16 @@ export function PrebuiltWeekDetailPage() {
 
   const handleUse = () => {
     const plan = prebuiltWeekToPlan(week);
-    if (!savePlan(plan)) {
-      toast.error(t("weekly.toast.saveFailed", { defaultValue: "Échec de l'enregistrement" }));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("weekly.toast.saveFailed"), saved);
       return;
     }
     triggerStorageWarning();
+    // La semaine arrive dans le cockpit dès qu'elle existe : sur le lundi
+    // qu'on regardait en venant du cockpit, sinon sur celui de cette semaine.
+    const monday = typeof placeOn === "string" ? dateFromIso(placeOn) : mondayOf(new Date());
+    saveTodayComposition(placeWeek(loadTodayComposition(), plan.id, monday));
     toast.success(t("weekly.prebuilt.weekAdded"));
     navigate(`/weeks/${plan.id}`);
   };

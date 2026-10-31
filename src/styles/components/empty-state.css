@@ -142,8 +142,15 @@
     margin-block-end: calc(-1 * var(--rule-bite));
   }
 
+  /* Sa propre ligne, sous le filet. `flex-basis: 100%` ne suffisait pas : le
+     plafond de 44ch de la règle de base le ramenait à 44ch, assez étroit pour
+     tenir sur la rangée du bouton, et le texte flottait à droite en raccourcissant
+     le filet. La mesure passe en marge intérieure, relative à la largeur du
+     conteneur, et non en plafond. */
   .zn-empty__hint {
     flex-basis: 100%;
+    max-inline-size: none;
+    padding-inline-end: max(0px, calc(100% - 44ch));
   }
 }
 

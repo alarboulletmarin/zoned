@@ -44,6 +44,8 @@ export function QRSvg({
       }
       return { rows, n };
     } catch {
+      // A payload too long for the QR alphabet: the template draws the card
+      // without its code rather than failing the whole share sheet.
       return { rows: [], n: 0 };
     }
   }, [value]);

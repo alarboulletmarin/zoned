@@ -4,7 +4,7 @@
   },
   "app": {
     "name": "Zoned",
-    "tagline": "219 séances course, 10 vélo, 10 natation, 17 renforcement, plans du 5K au marathon, générateur de parcours et 12 calculateurs. Gratuit, sans compte.",
+    "tagline": "219 séances course, 10 vélo, 10 natation, 17 renforcement, plans du 5K au marathon et 10 calculateurs. Gratuit, sans compte.",
     "heroTitle": "Prépare ton prochain",
     "heroTitleAccent": "objectif"
   },
@@ -215,10 +215,11 @@
       "downloaded": "Image enregistrée",
       "copied": "Image copiée dans le presse-papier",
       "linkCopied": "Lien copié dans le presse-papier",
-      "linkCopyFailed": "Copie impossible : ton navigateur a bloqué le presse-papier. Réessaie.",
+      "linkCopyFailed": "Le lien n'a pas été copié.",
+      "textCopyFailed": "Le texte n'a pas été copié.",
       "copyUnsupported": "Copie image dispo uniquement en HTTPS (utilise Enregistrer ou Partager)",
       "loading": "Génération de l'image…",
-      "error": "Erreur lors de la génération"
+      "error": "L'image n'a pas pu être générée."
     }
   },
   "export": {
@@ -240,10 +241,10 @@
       "garmin": "Fichier Garmin exporté"
     },
     "error": {
-      "calendar": "L'export calendrier a échoué. Réessaie.",
-      "image": "L'export image a échoué. Réessaie.",
-      "pdf": "L'export PDF a échoué. Réessaie.",
-      "garmin": "L'export Garmin a échoué. Réessaie."
+      "calendar": "L'export calendrier a échoué.",
+      "image": "L'export image a échoué.",
+      "pdf": "L'export PDF a échoué.",
+      "garmin": "L'export Garmin a échoué."
     },
     "loading": {
       "calendar": "Génération du calendrier…",
@@ -425,13 +426,11 @@
     "plansMine": "Mes plans",
     "plansMineDesc": "Plans en cours et passés",
     "plansNew": "Nouveau plan",
-    "plansNewDesc": "Assisté, libre ou pré-construit",
+    "plansNewDesc": "Une course, une date, tes jours",
     "raceSim": "Simulateur jour J",
     "raceSimDesc": "Splits, nutrition et pacing pour ta course",
-    "routes": "Générateur de parcours",
-    "routesDesc": "Boucles réelles avec dénivelé et GPX",
     "calculatorsAll": "Tous les calculateurs",
-    "calculatorsAllDesc": "12 outils, calcul local instantané",
+    "calculatorsAllDesc": "10 outils, calcul local instantané",
     "calcZones": "Zones d'entraînement",
     "calcVma": "VMA depuis un chrono",
     "calcFtp": "Test FTP vélo",
@@ -456,13 +455,12 @@
     "activitiesDesc": "Ton vélotaf et tes séances hors plan",
     "plansPrebuilt": "Plans prêts à l'emploi",
     "plansPrebuiltDesc": "Des plans déjà écrits, à prendre tel quel",
-    "weeksPrebuilt": "Semaines prêtes à l'emploi",
-    "tracks": "Trouver une piste"
+    "weeksPrebuilt": "Semaines prêtes à l'emploi"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",
     "generic": "L'action n'a pas abouti. Réessaie dans un instant.",
-    "planSaveFailed": "Impossible d'enregistrer le plan (espace de stockage insuffisant).",
+    "planSaveFailed": "Le plan n'a pas été enregistré.",
     "notFound": {
       "title": "Page introuvable",
       "description": "La page que tu cherches n'existe pas ou a été déplacée.",
@@ -603,11 +601,11 @@
     },
     "privacy": {
       "title": "Vie privée",
-      "description": "Ce que Zoned collecte",
-      "noServer": "Aucune donnée personnelle n'est envoyée à un serveur",
+      "description": "Rien n'est collecté",
+      "noServer": "Aucune donnée n'est envoyée à un serveur",
       "noAccount": "Aucun compte utilisateur n'est requis",
       "localStorage": "Toutes tes données restent dans ton navigateur (localStorage)",
-      "analytics": "Vercel Analytics mesure uniquement les pages vues de manière anonyme (pas de cookies, pas d'identification)"
+      "analytics": "Pas d'analytique, pas de tracking. Rien ne quitte ce navigateur."
     },
     "scienceMode": {
       "title": "Mode Science",
@@ -635,6 +633,39 @@
       "replaceModeDescription": "Nettoie les données Zoned locales puis restaure uniquement le contenu de la sauvegarde.",
       "mergeModeTitle": "Fusionner",
       "mergeModeDescription": "Conserve les données Zoned locales absentes de la sauvegarde et remplace uniquement les clés présentes."
+    },
+    "qrSync": {
+      "title": "Vers un autre appareil",
+      "description": "Envoie tes plans, activités et profils à ton téléphone ou ton ordinateur, sans réseau ni compte : un code QR animé, filmé par l'autre appareil. Le thème, la langue et la mise en page restent propres à chaque appareil.",
+      "sendButton": "Envoyer",
+      "receiveButton": "Recevoir",
+      "unsupported": "Ce navigateur ne sait pas décompresser les données, la synchro par QR est indisponible ici. Utilise l'export de fichier.",
+      "sendTitle": "Envoyer à un autre appareil",
+      "sendHint": "Sur l'autre appareil, ouvre Réglages puis Recevoir, et cadre ce code avec la caméra. Garde les deux écrans allumés jusqu'à la fin.",
+      "preparing": "Préparation du code",
+      "sendFailed": "Impossible de préparer les données à envoyer. Rien n'a changé.",
+      "qrLabel": "Code QR, image {{current}} sur {{total}}",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "localNote": "Rien ne passe par un serveur : les données ne quittent cet appareil que par l'écran.",
+      "done": "Terminé",
+      "receiveTitle": "Recevoir d'un autre appareil",
+      "receiveHint": "Sur l'autre appareil, ouvre Réglages puis Envoyer, et cadre son écran avec la caméra.",
+      "starting": "Ouverture de la caméra",
+      "aim": "Cadre le code QR de l'autre appareil",
+      "progress": "{{got}} images sur {{count}}",
+      "camera": "Flux de la caméra",
+      "denied": "L'accès à la caméra est refusé. Autorise-le dans les réglages du navigateur, puis recommence.",
+      "unavailable": "La caméra n'est pas disponible sur cet appareil. Utilise l'export de fichier.",
+      "newer": "Ces données viennent d'une version plus récente de Zoned. Mets cet appareil à jour, puis recommence.",
+      "invalid": "Les données reçues sont illisibles ou incomplètes. Rien n'a changé, recommence l'envoi.",
+      "retry": "Réessayer",
+      "close": "Fermer",
+      "confirmTitle": "Données reçues",
+      "confirmDescription": "Choisis comment les appliquer sur cet appareil. Son thème et sa langue ne changent pas.",
+      "apply": "Appliquer",
+      "applied": "Données reçues. La page se recharge.",
+      "applyError": "Application impossible. Tes données sont intactes, rien n'a changé."
     }
   },
   "tips": {
@@ -650,7 +681,7 @@
   "stats": {
     "workoutsTitle": "séances",
     "workoutsSubtitle": "Export Garmin FIT en 1 clic",
-    "calculatorsTitle": "12 calculateurs",
+    "calculatorsTitle": "10 calculateurs",
     "calculatorsSubtitle": "VMA, zones, splits, équivalences...",
     "simulatorTitle": "Simulateur de course",
     "simulatorSubtitle": "Splits, nutrition, échauffement, jour-J"
@@ -705,7 +736,7 @@
     "workoutCount_one": "{{count}} séance",
     "workoutCount_other": "{{count}} séances",
     "emptyTitle": "Aucune collection chargée",
-    "emptyDescription": "Le catalogue n'a rendu aucun parcours. Recharge la page, ou ouvre la bibliothèque et ses {{workouts}} séances.",
+    "emptyDescription": "Le catalogue n'a rien renvoyé. Recharge la page, ou ouvre la bibliothèque et ses {{workouts}} séances.",
     "emptyAction": "Ouvrir la bibliothèque"
   },
   "library": {
@@ -767,7 +798,7 @@
     "fitGarminOnly": "Le FIT ne marche que sur Garmin. Ailleurs, recrée la séance à la main dans l'app de ta montre.",
     "copyInstructions": "Copier les instructions",
     "instructionsCopied": "Instructions copiées !",
-    "copyFailed": "Erreur de copie",
+    "copyFailed": "Les instructions n'ont pas été copiées.",
     "gotIt": "Compris",
     "osPath": {
       "windows": "Explorateur de fichiers → Ce PC → GARMIN",
@@ -813,8 +844,8 @@
     "subtitle": "Les séances que tu as marquées, prêtes à relancer.",
     "kicker_one": "{{count}} favori · {{total}} au catalogue",
     "kicker_other": "{{count}} favoris · {{total}} au catalogue",
-    "emptyDescription": "Aucun favori pour l'instant. La bibliothèque en compte {{total}} : appuie sur le cœur d'une séance pour la garder ici.",
-    "emptyAction": "Ouvrir la bibliothèque"
+    "emptyDescription": "Le cœur d'une fiche la range ici, pour la relancer sans refaire les filtres. La bibliothèque en compte {{total}}.",
+    "emptyAction": "Explorer la bibliothèque"
   },
   "comparePage": {
     "whyComparisons": "Pourquoi ces comparaisons ?",
@@ -836,7 +867,7 @@
     "myZones": "Mes Zones",
     "favorites": "Mes Favoris",
     "planNew": "Nouveau plan d'entraînement",
-    "planNewDesc": "Choisis comment créer ton plan d'entraînement.",
+    "planNewDesc": "Une course, une date, tes jours disponibles : le plan se construit en sept écrans.",
     "collectionsDesc": "Des parcours thématiques pour chaque objectif. Parcourez les collections de course à pied.",
     "libraryTitle": "Bibliothèque",
     "aboutSeoTitle": "À propos"
@@ -869,7 +900,7 @@
       },
       "noData": {
         "title": "Aucune donnée personnelle",
-        "description": "Aucun compte, aucune donnée d'entraînement envoyée. Seules des vues de page anonymes sont mesurées."
+        "description": "Aucun compte, aucune analytique, aucune donnée d'entraînement envoyée."
       },
       "openSource": {
         "title": "Open Source",
@@ -956,11 +987,23 @@
       "applePath": "Exercice → Créer (watchOS 9+)"
     }
   },
+  "failure": {
+    "quota": "Le stockage du navigateur est plein, rien n'a été écrit. Tes données déjà enregistrées sont intactes. Libère de la place en supprimant un plan, une semaine ou un parcours, ou exporte une sauvegarde depuis les réglages.",
+    "invalid": "Les données ont été refusées à la vérification, rien n'a été écrit. Ce qui était enregistré est intact. Recharge la page et réessaie.",
+    "notFound": "L'élément n'existe plus dans ce navigateur, peut-être supprimé depuis un autre onglet. Rien d'autre n'a bougé. Recharge la page pour voir l'état à jour.",
+    "limit": "La limite d'éléments enregistrés est atteinte, rien n'a été ajouté. Supprime-en un pour libérer une place.",
+    "timeout": "Le rendu a pris trop de temps et a été interrompu. Rien n'a été perdu. Réessaie, et ferme les onglets lourds si ça se reproduit.",
+    "offline": "Tu es hors ligne et cette action a besoin du réseau. Tes données restent accessibles. Réessaie une fois la connexion rétablie.",
+    "denied": "Le navigateur a refusé l'accès au presse-papier ou au partage. Rien n'a été perdu. Autorise-le depuis la barre d'adresse, ou passe par Enregistrer.",
+    "unsupported": "Ce navigateur ne prend pas cette fonction en charge. Rien n'a été perdu. Essaie avec une version récente de Chrome, Firefox ou Safari, ou passe par Enregistrer.",
+    "unknown": "Une erreur inattendue s'est produite, rien n'a été modifié. Réessaie, et recharge la page si ça se reproduit."
+  },
   "alert": {
     "error": "Erreur",
     "success": "Succès",
     "warning": "Attention",
-    "info": "Info"
+    "info": "Info",
+    "loading": "En cours"
   },
   "status": {
     "loading": "Chargement"
@@ -974,7 +1017,6 @@
     "unitsHint": "Change les allures, les distances et les dénivelés.",
     "unitsMetric": "km · min/km",
     "unitsImperial": "mi · min/mi",
-    "routesCaveat": "Ta position part vers un service de routage public le temps d'une requête. Rien n'est stocké.",
     "about": "À propos",
     "tableItem": "Élément",
     "tableValue": "Valeur",
@@ -987,7 +1029,7 @@
     "sourceCode": "Code source",
     "contribute": "Proposer une séance",
     "privacyTitle": "Ce qui reste sur ton appareil",
-    "privacyBody": "Pas de compte, pas de serveur. Tes données restent dans ce navigateur. Vercel Analytics compte les pages vues, sans cookie ni identification.",
+    "privacyBody": "Pas de compte, pas de serveur, pas d'analytique, pas de tracking. Tes données restent dans ce navigateur.",
     "statStorage": "données locales",
     "statFavorites": "favoris",
     "storageValue": "{{n}} Ko",
@@ -1016,9 +1058,6 @@
     "label": "Dans cette section"
   },
   "modules": {
-    "routes": {
-      "name": "Parcours"
-    },
     "raceSimulator": {
       "name": "Simulateur de course"
     },

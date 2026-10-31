@@ -4,7 +4,7 @@
     "statsWorkouts": "Workouts",
     "statsCalculators": "Calculators",
     "title": "A training library, built by a runner",
-    "description": "Zone-based workouts, training plans and calculators. No subscription, no tracking, no fluff.",
+    "description": "Zone-based workouts, training plans and calculators. No subscription, no analytics, no tracking.",
     "personal": {
       "title": "The project",
       "bio": "Zoned was born from the need for a simple, zone-based tool to train without a proprietary platform."
@@ -19,7 +19,7 @@
     },
     "privacy": {
       "title": "Privacy",
-      "noServer": "No server, no account, no cookie. Your data stays in your browser."
+      "noServer": "No server, no account, no cookie, no analytics. Your data stays in your browser."
     },
     "credits": {
       "title": "Tech stack",

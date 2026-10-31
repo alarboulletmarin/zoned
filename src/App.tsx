@@ -8,10 +8,12 @@ import {
 } from "react-router-dom";
 import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
-import { Analytics } from "@vercel/analytics/react";
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { TopBar, Footer } from "@/components/layout";
 import { ModuleGate } from "@/components/layout/ModuleGate";
+import { getAllPlans } from "@/lib/planStorage";
+import { isPlanEnded } from "@/lib/planUtils";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
@@ -66,8 +68,6 @@ const CollectionsPage = lazyPage(() => import("@/pages/CollectionsPage").then(m 
 const CollectionDetailPage = lazyPage(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
 const ChangelogPage = lazyPage(() => import("@/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
 const PlansPage = lazyPage(() => import("@/pages/PlansPage").then(m => ({ default: m.PlansPage })));
-const PlanNewPage = lazyPage(() => import("@/pages/PlanNewPage").then(m => ({ default: m.PlanNewPage })));
-const PlanModePage = lazyPage(() => import("@/pages/PlanModePage").then(m => ({ default: m.PlanModePage })));
 const PlanCreatePage = lazyPage(() => import("@/pages/PlanCreatePage").then(m => ({ default: m.PlanCreatePage })));
 const FreePlanCreatePage = lazyPage(() => import("@/pages/FreePlanCreatePage").then(m => ({ default: m.FreePlanCreatePage })));
 const PlanViewPage = lazyPage(() => import("@/pages/PlanViewPage").then(m => ({ default: m.PlanViewPage })));
@@ -90,18 +90,12 @@ const RacePrepGuidePage = lazyPage(() => import("@/pages/RacePrepGuidePage").the
 const WarmupGuidePage = lazyPage(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
 const PaceConverterPage = lazyPage(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
 const PaceTablePage = lazyPage(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
-const AgeGradedPage = lazyPage(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
-const WhatIfPage = lazyPage(() => import("@/pages/WhatIfPage").then(m => ({ default: m.WhatIfPage })));
 const WorkoutBuilderPage = lazyPage(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
 const RaceSimulatorPage = lazyPage(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
 const CompareHubPage = lazyPage(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
 const CompareDetailPage = lazyPage(() => import("@/pages/CompareDetailPage").then(m => ({ default: m.CompareDetailPage })));
 const RunnerProfilePage = lazyPage(() => import("@/pages/RunnerProfilePage").then(m => ({ default: m.RunnerProfilePage })));
 const ActivitiesPage = lazyPage(() => import("@/pages/ActivitiesPage").then(m => ({ default: m.ActivitiesPage })));
-const RouteGeneratorPage = lazyPage(() => import("@/pages/RouteGeneratorPage").then(m => ({ default: m.RouteGeneratorPage })));
-const MyRoutesPage = lazyPage(() => import("@/pages/MyRoutesPage").then(m => ({ default: m.MyRoutesPage })));
-const RouteDetailPage = lazyPage(() => import("@/pages/RouteDetailPage").then(m => ({ default: m.RouteDetailPage })));
-const TrackFinderPage = lazyPage(() => import("@/pages/TrackFinderPage").then(m => ({ default: m.TrackFinderPage })));
 const NotFoundPage = lazyPage(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 // Command palette body: lazy so its search index (workout structures,
@@ -172,6 +166,30 @@ function ConditionalFooter() {
   return <Footer />;
 }
 
+/**
+ * La racine : la landing pour qui découvre, le cockpit pour qui s'entraîne.
+ *
+ * Sur trente et un jours, `/` était la page la plus vue (192 vues pour 79
+ * visiteurs) et `/today` celle où l'on revenait le plus (3,3 vues par
+ * visiteur). Quelqu'un qui a un plan en cours et ouvre l'app arrivait donc
+ * sur une landing de 6 300 px avant de trouver sa séance. Dès qu'un plan non
+ * terminé existe dans ce navigateur, la racine mène au cockpit. Les robots
+ * n'ont pas de localStorage : la landing reste ce qu'ils voient et ce que le
+ * prérendu écrit.
+ *
+ * Sauf quand on la demande. Le logo de la barre et la ligne Accueil du menu
+ * portent `HOME_LINK_STATE` : depuis l'app, appuyer dessus veut dire la
+ * landing, pas le cockpit, et la redirection rendait la page inaccessible à
+ * qui s'entraîne. L'état ne vit que dans l'historique du navigateur, donc
+ * une arrivée directe sur `/` n'en a pas et suit la règle d'ouverture.
+ */
+function RootPage() {
+  const location = useLocation();
+  const wantsLanding = (location.state as { landing?: boolean } | null)?.landing === true;
+  const hasLivePlan = getAllPlans().some((plan) => !isPlanEnded(plan));
+  return hasLivePlan && !wantsLanding ? <Navigate to="/today" replace /> : <HomePage />;
+}
+
 function ScrollToTopOnNavigate() {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -206,7 +224,13 @@ function App() {
   // Toaster placement: bottom-right covers the share-sheet action row on
   // mobile (Copier / Partager / Télécharger). On small viewports we surface
   // the toast at the top instead so it never overlaps a button the user just
-  // tapped, and dismiss it slightly faster.
+  // tapped.
+  //
+  // How long a toast stays is not decided here either: `components/ui/toast`
+  // holds one duration per kind (a confirmation leaves, an error stays long
+  // enough to be read), the same on every screen. The drawing is ours too,
+  // through `toast.custom`, so sonner gets no `richColors`, no `closeButton`
+  // and no theme: it only places and times what we hand it.
   //
   // Ou il se pose exactement, c'est `toast.css` qui le dit : il doit franchir
   // la barre du haut, sauf quand une feuille modale occupe deja l'ecran, et
@@ -279,7 +303,7 @@ function App() {
                   <div className="zn-page">
                     <ErrorBoundary>
                         <Routes>
-                          <Route path="/" element={<HomePage />} />
+                          <Route path="/" element={<RootPage />} />
                           {/* Le cockpit. `/` reste la landing publique et
                               indexée ; celle-ci est l'écran privé, donc hors
                               sitemap et hors prérendu, comme /plans et
@@ -310,8 +334,6 @@ function App() {
                           <Route path="/calculators/ftp" element={<FtpTestPage />} />
                           <Route path="/calculators/css" element={<CssTestPage />} />
                           <Route path="/calculators/equivalence" element={<RaceEquivalencePage />} />
-                          <Route path="/calculators/age-graded" element={<AgeGradedPage />} />
-                          <Route path="/calculators/what-if" element={<WhatIfPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/profile" element={<RunnerProfilePage />} />
                           <Route path="/activities" element={<ActivitiesPage />} />
@@ -334,9 +356,10 @@ function App() {
                           <Route path="/nutrition" element={<NutritionHubPage />} />
                           <Route path="/plans" element={<PlansPage />} />
                           <Route path="/plans/methodology" element={<PlanMethodologyPage />} />
-                          <Route path="/plan/new" element={<PlanNewPage />} />
-                          <Route path="/plan/new/mode" element={<PlanModePage />} />
-                          <Route path="/plan/new/assisted" element={<PlanCreatePage />} />
+                          <Route path="/plan/new" element={<PlanCreatePage />} />
+                          {/* Les deux couloirs d'avant le 20 septembre 2026 : la pratique, puis le mode. Les liens partagés retombent sur la première question. */}
+                          <Route path="/plan/new/mode" element={<Navigate to="/plan/new" replace />} />
+                          <Route path="/plan/new/assisted" element={<Navigate to="/plan/new" replace />} />
                           <Route path="/plan/new/free" element={<FreePlanCreatePage />} />
                           <Route path="/plan/new/prebuilt" element={<PrebuiltPlansPage />} />
                           <Route path="/plan/prebuilt/:slug" element={<PrebuiltPlanDetailPage />} />
@@ -344,10 +367,6 @@ function App() {
                           <Route path="/plan/:id" element={<PlanViewPage />} />
                           <Route path="/race-simulator" element={<ModuleGate module="raceSimulator" canonical="/race-simulator"><RaceSimulatorPage /></ModuleGate>} />
                           <Route path="/race-simulator/shared" element={<RaceSimulatorPage />} />
-                          <Route path="/routes" element={<ModuleGate module="routes" canonical="/routes"><RouteGeneratorPage /></ModuleGate>} />
-                          <Route path="/routes/tracks" element={<ModuleGate module="routes" canonical="/routes/tracks"><TrackFinderPage /></ModuleGate>} />
-                          <Route path="/routes/mine" element={<ModuleGate module="routes"><MyRoutesPage /></ModuleGate>} />
-                          <Route path="/routes/:id" element={<ModuleGate module="routes"><RouteDetailPage /></ModuleGate>} />
                           <Route path="/compare" element={<CompareHubPage />} />
                           <Route path="/compare/:slug" element={<CompareDetailPage />} />
                           <Route path="*" element={<NotFoundPage />} />
@@ -364,7 +383,6 @@ function App() {
             <DeferredCommandPalette />
           </CommandPaletteProvider>
           </GlossaryMatcherProvider>
-          <Analytics />
           <StorageWarning />
           {/* Mounted once, outside <Routes>, so the banners survive navigation.
               The update comes first in the DOM because it comes first in
@@ -382,11 +400,11 @@ function App() {
               keeps placing and sizing its own list. */}
           <div className="zn-toast-layer">
             <Toaster
-              richColors
-              closeButton
               position={isMobile ? "top-center" : "bottom-right"}
-              duration={isMobile ? 2500 : 4000}
-
+              /* Two at once, not three: the newest and, behind it, the one
+                 pinned notice the app keeps (offline). A burst of
+                 confirmations replaces itself instead of piling up. */
+              visibleToasts={2}
             />
           </div>
           </BrowserRouter>

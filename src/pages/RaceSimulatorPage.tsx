@@ -56,6 +56,7 @@ import {
   Stat,
   WarmupChecklist,
   resolveSettings,
+  timeToMinutes,
   type RaceSimNavItem,
   type RaceSimSettings,
 } from "@/components/domain/raceSim";
@@ -72,9 +73,12 @@ import type { SavedSimulation } from "@/lib/raceSimStorage";
 import { useSettings } from "@/hooks/useSettings";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { convertPace, getPaceUnit } from "@/lib/units";
-import { toast } from "sonner";
+import { secondsToTimeDigits } from "@/lib/paceFields";
+import { minutesToDurationDigits } from "@/lib/durationFields";
+import { toast } from "@/components/ui/toast";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
 import { useIsEnglish, usePickLang, formatDate } from "@/lib/i18n-utils";
+import { failureReason } from "@/lib/failure";
 
 type SectionId =
   | "timeline"
@@ -110,11 +114,11 @@ function settingsFromInput(input: RaceSimInput): RaceSimSettings {
   );
   return {
     distance: match ? match.value : "custom",
-    customDistance: match ? "" : String(input.distanceKm),
-    targetTime: formatSplitTime(input.targetTimeSeconds),
-    startTime: input.startTime,
+    customDistance: match ? "" : String(input.distanceKm).replace(".", ","),
+    targetTime: secondsToTimeDigits(input.targetTimeSeconds, input.distanceKm),
+    startTime: minutesToDurationDigits(timeToMinutes(input.startTime)),
     strategy: input.strategy,
-    weight: input.bodyWeightKg?.toString() ?? "",
+    weight: input.bodyWeightKg?.toString().replace(".", ",") ?? "",
   };
 }
 
@@ -159,13 +163,13 @@ export function RaceSimulatorPage() {
   }, []);
 
   const handleGenerate = useCallback(() => {
-    if (!resolved.valid || resolved.targetSeconds === null) return;
+    if (!resolved.valid || resolved.targetSeconds === null || resolved.startTime === null) return;
     applyPlan({
       distanceKm: resolved.distanceKm,
       targetTimeSeconds: resolved.targetSeconds,
-      startTime: settings.startTime,
+      startTime: resolved.startTime,
       strategy: settings.strategy,
-      bodyWeightKg: settings.weight ? parseFloat(settings.weight) : undefined,
+      bodyWeightKg: settings.weight ? parseFloat(settings.weight.replace(",", ".")) || undefined : undefined,
     });
   }, [resolved, settings, applyPlan]);
 
@@ -202,9 +206,9 @@ export function RaceSimulatorPage() {
         input: planInput,
       });
       setSavedSimulations(getAllSimulations());
-      toast.success(t("saved.savedSuccess"));
-    } catch {
-      toast.error(t("saved.maxReached"));
+    } catch (err) {
+      const reason = failureReason(err);
+      toast.failure(t(reason === "limit" ? "saved.maxReached" : "saved.saveFailed"), reason);
     }
   }, [plan, planInput, isEn, t]);
 
@@ -219,8 +223,12 @@ export function RaceSimulatorPage() {
       }
       return;
     }
-    await navigator.clipboard.writeText(url);
-    toast.success(tCommon("share.toast.linkCopied"));
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(tCommon("share.toast.linkCopied"));
+    } catch (err) {
+      toast.failure(tCommon("share.toast.linkCopyFailed"), err);
+    }
   }, [plan, planInput, tCommon]);
 
   const handleExportPdf = useCallback(async () => {
@@ -232,8 +240,8 @@ export function RaceSimulatorPage() {
     try {
       await exportRaceSimToPDF(plan, isEn);
       toast.success(tCommon("calculators:raceSimulator.pdfExported"), { id: toastId });
-    } catch {
-      toast.error(tCommon("calculators:raceSimulator.exportFailed"), { id: toastId });
+    } catch (err) {
+      toast.failure(tCommon("calculators:raceSimulator.exportFailed"), err, { id: toastId });
     } finally {
       setExporting(false);
     }
@@ -244,8 +252,7 @@ export function RaceSimulatorPage() {
     deleteSimulation(deleteTarget);
     setSavedSimulations(getAllSimulations());
     setDeleteTarget(null);
-    toast.success(t("saved.deletedSuccess"));
-  }, [deleteTarget, t]);
+  }, [deleteTarget]);
 
   const toggleSection = useCallback((id: string) => {
     setOpenSections((prev) => ({

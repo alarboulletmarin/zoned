@@ -138,8 +138,12 @@ Donc, concrètement :
 
 - la bande de la bibliothèque montre ses séances, avec « bientôt » sur la
   pastille ;
-- `stepsFor` du parcours renvoie `["practice"]` : l'étape 1 propose ce qui
-  marche déjà et s'arrête là. Ni demi-parcours, ni champ en trompe-l'œil ;
+- la première question du parcours de plan ne liste que les courses des
+  pratiques servies (`distancesOfPractice` des pratiques `live`) ; les
+  pratiques annoncées y tiennent en une ligne, avec le lien vers leurs
+  séances. Ni carte qui mène à une impasse, ni champ en trompe-l'œil. Depuis
+  le 20 septembre 2026 la pratique n'est plus une question : elle se déduit
+  de la course choisie, comme partout ailleurs ;
 - la carte de pratique n'affiche **aucun compteur** — « bientôt », et rien
   d'autre. Un chiffre sur une étagère qui n'est pas ouverte est une promesse ;
 - `WeekSlot` de `weekTemplate.ts` **reste sans discipline**.

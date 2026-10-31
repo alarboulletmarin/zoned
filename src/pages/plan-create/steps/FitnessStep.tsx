@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
-import type { StepContext, StepDef } from "../types";
+import type { StepContext } from "../types";
 
 /** Où j'en suis : volume et sortie longue actuels. Facultatif. */
-function FitnessBody({ form, setForm, uid, t }: StepContext) {
+export function FitnessBody({ form, setForm, uid, t }: StepContext) {
   return (
     <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
               <div className="zn-contrib-field">
@@ -52,12 +52,3 @@ function FitnessBody({ form, setForm, uid, t }: StepContext) {
   );
 }
 
-export const fitnessStep: StepDef = {
-  id: "fitness",
-  titleKey: "fitness.title",
-  subtitleKey: "fitness.subtitle",
-  Body: FitnessBody,
-  isComplete: () => true,
-  nextLabelKey: "nav.continue",
-  showSkip: true,
-};

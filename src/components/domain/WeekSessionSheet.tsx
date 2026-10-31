@@ -4,6 +4,8 @@ import {
   ArrowRight,
   Copy,
   Dices,
+  ChevronDown,
+  ChevronUp,
   Eye,
   Lock,
   LockOpen,
@@ -11,6 +13,7 @@ import {
   Trash2,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import {
   Sheet,
@@ -27,13 +30,7 @@ import {
   activitySessionZone,
   applyActivityDraft,
 } from "@/lib/activitySession";
-import {
-  durationDigits,
-  durationToMinutes,
-  formatDurationDigits,
-  minutesToDurationDigits,
-  normalizeDurationDigits,
-} from "@/lib/durationFields";
+import { durationToMinutes, minutesToDurationDigits } from "@/lib/durationFields";
 import { usePickLocale } from "@/lib/i18n-utils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { sessionColor } from "@/lib/sessionColors";
@@ -57,6 +54,9 @@ export interface WeekSessionSheetTarget {
   /** Le gabarit du catalogue, `null` pour une activité ou une séance inconnue. */
   workout: AnyWorkoutTemplate | null;
   name: string;
+  /** Une place plus haut / plus bas dans SA journée : faux seule ou en bout de file. */
+  canMoveUp: boolean;
+  canMoveDown: boolean;
 }
 
 interface WeekSessionSheetProps {
@@ -67,8 +67,11 @@ interface WeekSessionSheetProps {
   onSave: (sessionIndex: number, next: PlanSession) => void;
   onView: (workoutId: string) => void;
   onRedraw?: (sessionIndex: number) => void;
-  onToggleLock: (sessionIndex: number) => void;
+  /** Absent where a lock means nothing: a plan is never re-drawn around it. */
+  onToggleLock?: (sessionIndex: number) => void;
   onMove: (sessionIndex: number, day: number) => void;
+  /** Une place plus haut ou plus bas dans la journée, sans glisser. */
+  onReorder?: (sessionIndex: number, direction: "up" | "down") => void;
   /** Copies the session onto its day; the copy is then dragged where it goes. */
   onDuplicate?: (sessionIndex: number) => void;
   onDelete: (sessionIndex: number) => void;
@@ -97,6 +100,7 @@ export function WeekSessionSheet({
   onRedraw,
   onToggleLock,
   onMove,
+  onReorder,
   onDuplicate,
   onDelete,
 }: WeekSessionSheetProps) {
@@ -178,11 +182,6 @@ export function WeekSessionSheet({
   const looseKm = looseKmEstimate({ ...session, estimatedDurationMin: looseMinutes });
   const asksDuration = activity ? activity.timed : precision === "fixed" || !loosable;
   const canSave = !asksDuration || (minutes !== undefined && minutes > 0);
-
-  const tidyDuration = () => {
-    const tidy = normalizeDurationDigits(duration);
-    if (tidy !== duration) setDuration(tidy);
-  };
 
   const save = () => {
     if (!canSave) return;
@@ -288,18 +287,12 @@ export function WeekSessionSheet({
                 <span className="zn-kicker zn-kicker--inline zn-plabel">
                   {t("library:weekly.sheet.duration")}
                 </span>
-                {/* type text, pas number : le masque h:mm porte un deux-points.
-                    inputMode numeric donne le pavé de chiffres, voir
-                    lib/durationFields.ts. */}
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  autoComplete="off"
+                {/* Le champ de temps commun, au masque h:mm (ui/chrono-input.tsx). */}
+                <ChronoInput
+                  format="hm"
                   placeholder="h:mm"
-                  value={formatDurationDigits(duration)}
-                  onChange={(e) => setDuration(durationDigits(e.target.value))}
-                  onBlur={tidyDuration}
+                  digits={duration}
+                  onDigitsChange={setDuration}
                   className="zn-pfield zn-wksheet__durfield"
                 />
                 {activity?.kind === "commute" && (
@@ -362,10 +355,12 @@ export function WeekSessionSheet({
                 {t("library:weekly.slot.reroll")}
               </button>
             )}
-            <button type="button" className="zn-wksheet__action" onClick={action(target.sessionIndex, onToggleLock)}>
-              {session.locked ? <LockOpen /> : <Lock />}
-              {t(session.locked ? "library:weekly.slot.unlock" : "library:weekly.slot.lock")}
-            </button>
+            {onToggleLock && (
+              <button type="button" className="zn-wksheet__action" onClick={action(target.sessionIndex, onToggleLock)}>
+                {session.locked ? <LockOpen /> : <Lock />}
+                {t(session.locked ? "library:weekly.slot.unlock" : "library:weekly.slot.lock")}
+              </button>
+            )}
             <button
               type="button"
               className="zn-wksheet__action"
@@ -390,6 +385,28 @@ export function WeekSessionSheet({
                   </button>
                 ))}
               </div>
+            )}
+            {/* L'ordre de la journée : seulement quand elle en a un, c'est-à-dire
+                quand il y a une autre séance à enjamber. */}
+            {onReorder && target.canMoveUp && (
+              <button
+                type="button"
+                className="zn-wksheet__action"
+                onClick={action(target.sessionIndex, (i) => onReorder(i, "up"))}
+              >
+                <ChevronUp />
+                {t("library:weekly.slot.moveUp")}
+              </button>
+            )}
+            {onReorder && target.canMoveDown && (
+              <button
+                type="button"
+                className="zn-wksheet__action"
+                onClick={action(target.sessionIndex, (i) => onReorder(i, "down"))}
+              >
+                <ChevronDown />
+                {t("library:weekly.slot.moveDown")}
+              </button>
             )}
             {onDuplicate && (
               <button type="button" className="zn-wksheet__action" onClick={action(target.sessionIndex, onDuplicate)}>

@@ -21,12 +21,10 @@ describe("sanitizeSettings", () => {
     const legacy = {
       colorPalette: "standard",
       unitSystem: "imperial",
-      routeGeneratorEnabled: false,
       openingAnimation: "never",
     };
     const settings = sanitizeSettings(legacy);
     expect(settings.unitSystem).toBe("imperial");
-    expect(settings.routeGeneratorEnabled).toBe(false);
     expect(settings.openingAnimation).toBe("never");
     expect(settings.enabledPractices).toEqual([]);
     expect(settings.disabledModules).toEqual([]);
@@ -39,20 +37,20 @@ describe("sanitizeSettings", () => {
   // attend un tableau faisait lever `.includes()` en plein rendu.
   test("une liste qui n'est pas une liste ne fait pas tomber l'app", () => {
     const settings = sanitizeSettings({
-      disabledModules: "routes",
+      disabledModules: "collections",
       enabledPractices: { road: true },
     });
     expect(settings.disabledModules).toEqual([]);
     expect(settings.enabledPractices).toEqual([]);
-    expect(() => isModuleHidden(settings, "routes")).not.toThrow();
+    expect(() => isModuleHidden(settings, "collections")).not.toThrow();
   });
 
   test("les entrées inconnues d'une liste sont jetées, le reste survit", () => {
     const settings = sanitizeSettings({
-      disabledModules: ["routes", "teleportation", 7, null, "learn"],
+      disabledModules: ["collections", "teleportation", 7, null, "learn"],
       enabledPractices: ["trail", "skiing", "trail"],
     });
-    expect(settings.disabledModules).toEqual(["routes", "learn"]);
+    expect(settings.disabledModules).toEqual(["collections", "learn"]);
     // Et les doublons partent.
     expect(settings.enabledPractices).toEqual(["trail"]);
   });
@@ -96,7 +94,7 @@ describe("parseStoredSettings", () => {
     const settings = parseStoredSettings(stored);
     expect(settings.unitSystem).toBe("imperial");
     expect(isModuleHidden(settings, "learn")).toBe(true);
-    expect(isModuleHidden(settings, "routes")).toBe(false);
+    expect(isModuleHidden(settings, "collections")).toBe(false);
   });
 });
 

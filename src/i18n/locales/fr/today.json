@@ -15,9 +15,11 @@
       "line_other": "Ton plan commence dans {{count}} jours."
     },
     "none": {
-      "line": "Rien en cours.",
-      "body": "Construis un plan, ou compose juste une semaine si tu ne veux pas t'engager plus loin.",
-      "cta": "Créer un plan"
+      "line": "Pas encore de plan.",
+      "body": "Dès qu'un plan existe, cet écran devient ta séance du jour : la durée, les zones, et une case à cocher le soir.",
+      "cta": "Créer mon plan",
+      "hint": "Pas envie de t'engager sur plusieurs semaines ?",
+      "hintLink": "Tire une séance dans la bibliothèque"
     },
     "inPlan": "Plan",
     "inWeek": "Ma semaine",
@@ -29,7 +31,8 @@
     "openDetail": "Voir le détail",
     "next": "Prochaine séance : {{day}}, {{duration}}",
     "rank": "séance {{n}} / {{total}}",
-    "reclose": "Modifier la clôture"
+    "reclose": "Modifier la clôture",
+    "alsoLabel": "Aussi"
   },
   "quick": {
     "draw": "Tire-moi une séance",
@@ -83,5 +86,41 @@
     "ahead_one": "dans un jour",
     "ahead_other": "dans {{count}} jours",
     "back": "Revenir à aujourd'hui"
+  },
+  "compose": {
+    "open": "Ce qui compose ma semaine",
+    "title": "Ma semaine se compose de",
+    "body": "Le plan en cours, et les semaines que tu suis à côté. Une semaine suivie se lit à côté du plan, séance par séance ; ajoutée au plan, elle entre dedans.",
+    "plans": "Plans",
+    "weeks": "Mes semaines",
+    "noPlans": "Aucun plan en cours ni à venir.",
+    "noWeeks": "Aucune semaine composée.",
+    "underWay": "semaine {{n}} / {{total}}",
+    "startsIn_one": "commence demain",
+    "startsIn_other": "commence dans {{count}} jours",
+    "placedOn": "suivie sur la semaine du {{date}}",
+    "moveHere": "Suivre sur la semaine du {{date}}",
+    "newWeek": "Composer une nouvelle semaine",
+    "newPlan": "Créer un plan",
+    "switchPlan": "Suivre {{name}}",
+    "switchWeek": "Suivre {{name}}",
+    "merge": "Ajouter au plan {{plan}}, semaine {{n}}",
+    "mergeAdd": "Ajouter aux séances du plan",
+    "mergeReplace": "Remplacer les séances du plan cette semaine-là",
+    "mergeCancel": "Annuler",
+    "mergeDone": "Ajoutée au plan. Annulable depuis la page du plan.",
+    "mergeFailed": "L'ajout n'a pas pu être enregistré.",
+    "mergeLabel": "{{week}} ajoutée à la semaine {{n}}"
+  },
+  "add": {
+    "action": "Ajouter une séance",
+    "into": "Dans quoi ?",
+    "newWeek": "Une nouvelle semaine, posée ici",
+    "newWeekName": "Semaine du {{date}}",
+    "done": "Séance ajoutée à {{source}}.",
+    "failed": "La séance n'a pas pu être enregistrée."
+  },
+  "conflicts": {
+    "line": "{{day}} : deux séances clés, {{sources}}"
   }
 }

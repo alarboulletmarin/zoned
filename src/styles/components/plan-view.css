@@ -1380,3 +1380,25 @@
     display: inline-flex;
   }
 }
+
+/* Les semaines seules posées sur ce plan dans le cockpit : une ligne mono
+   sous le kicker, un lien par semaine, parce que le plan ne les contient pas
+   et qu'on doit pouvoir aller les voir. */
+.zn-planview__placed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-5);
+  margin: 0;
+}
+
+.zn-planview__placed-item {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--line-divider);
+  text-underline-offset: 3px;
+}
+
+.zn-planview__placed-item:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}

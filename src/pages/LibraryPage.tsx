@@ -186,6 +186,14 @@ function parseFiltersFromParams(
     ) as WorkoutFiltersState["muscleGroup"];
   }
 
+  // La palette de commandes envoie `?search=`, et le SearchAction déclaré
+  // aux moteurs promet `?q=`. Aucun des deux n'était lu : le lien arrivait
+  // sur la bibliothèque entière, sans la requête qu'on venait de taper.
+  const search = searchParams.get("search") ?? searchParams.get("q");
+  if (search) {
+    filters.searchQuery = search;
+  }
+
   return filters;
 }
 
@@ -453,10 +461,14 @@ export function LibraryPage() {
     if (filters.muscleGroup.length > 0) {
       params.set("muscleGroup", filters.muscleGroup.join(","));
     }
+    if (filters.searchQuery) {
+      params.set("search", filters.searchQuery);
+    }
 
     setSearchParams(params, { replace: true });
   }, [
     activityType,
+    filters.searchQuery,
     filters.category,
     filters.difficulty,
     filters.terrain,
@@ -1087,13 +1099,25 @@ export function LibraryPage() {
                   : t("emptyState.noResults")
               }
               description={emptyDescription}
+              /* L'action nomme ce qu'elle défait : quand seule la requête
+                 vide le rayon, effacer les filtres promettait plus qu'il
+                 n'y avait à effacer, et la requête restait dans le champ. */
               action={
-                <Button
-                  variant="outline"
-                  onClick={() => setFilters(defaultFilters)}
-                >
-                  {t("clearFilters")}
-                </Button>
+                activeFiltersCount === 0 && filters.searchQuery ? (
+                  <Button
+                    variant="outline"
+                    onClick={() => setFilters({ ...filters, searchQuery: "" })}
+                  >
+                    {t("clearSearch")}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    onClick={() => setFilters(defaultFilters)}
+                  >
+                    {t("clearFilters")}
+                  </Button>
+                )
               }
             />
           )}

@@ -9,7 +9,7 @@
     "random": "Aléatoire",
     "surpriseMe": "Surprends-moi !",
     "calculators": "Calculateurs",
-    "nineTools": "12 outils",
+    "nineTools": "10 outils",
     "myZones": "Mes Zones",
     "hrPaceZones": "FC & allures",
     "featuredWorkouts": "Séances en vedette",
@@ -18,21 +18,6 @@
     "strengthForRunnersDesc": "Séances de renforcement basées sur la science pour améliorer ton économie de course et prévenir les blessures.",
     "seeAll": "Voir tout",
     "browseByCategory": "Parcourir par catégorie",
-    "newBadge": "Nouveau",
-    "spotlightLabel": "Nouveautés",
-    "spotlightGoto": "Aller à la slide {{index}}",
-    "routesEyebrow": "Générateur de parcours",
-    "routesTitle": "Crée ton parcours en un clic",
-    "routesDesc": "Boucle ou aller-retour réel depuis ta position, avec dénivelé et export GPX.",
-    "routesCta": "Générer un parcours",
-    "cyclingEyebrow": "Cyclisme",
-    "cyclingTitle": "Le vélo arrive sur Zoned",
-    "cyclingDesc": "10 séances : endurance, sweet spot, seuil, intervalles. Zones FTP intégrées.",
-    "cyclingCta": "Voir les séances vélo",
-    "swimmingEyebrow": "Natation",
-    "swimmingTitle": "Plonge dans le bassin",
-    "swimmingDesc": "10 séances : technique, endurance, sprints, pyramides. Zones CSS intégrées.",
-    "swimmingCta": "Voir les séances natation",
     "masthead": {
       "volume": "Vol.",
       "issue": "N°",
@@ -51,7 +36,6 @@
       ],
       "lead": "Sache exactement quoi courir demain. {{plans}} plans d'entraînement du 5K au marathon, {{sessions}} séances expliquées par la science (Seiler, Daniels, Billat, Coggan) et {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans ton navigateur.",
       "ctaPrimary": "Générer mon plan",
-      "ctaPrimaryHasPlans": "Reprendre l'entraînement",
       "ctaSecondary": "Explorer les séances",
       "scrollHint": "Découvrir l'app",
       "title": "Qu'est-ce que je cours aujourd'hui ?",
@@ -103,23 +87,14 @@
       "e3Link": "Méthodes"
     },
     "s02": {
-      "kicker": "Suggéré cette semaine",
-      "title": "Trois séances pour rester dans le bon volume cette semaine",
-      "body": "Sélection déterministe par semaine ISO. Ni A/B, ni boucle d'engagement."
-    },
-    "s03": {
-      "kicker": "L'atlas des zones",
-      "title1": "Six zones, six adaptations,",
-      "title2": "une grille cohérente",
-      "body": "Entre ta VMA ou ta FCmax pour calculer tes plages. Chaque séance du catalogue s'y rattache.",
-      "zone": "Zone",
-      "name": "Nom",
-      "hr": "Fréquence cardiaque",
-      "rpe": "RPE",
-      "adaptation": "Adaptation visée",
-      "refPace": "Allure",
-      "fig": "Fig. 02 · Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil",
-      "figuresLabel": "Le même coureur à six intensités, du pas de marche au sprint : plus la zone monte, plus le buste s'engage et plus le trait est sombre."
+      "kicker": "Au hasard dans le catalogue",
+      "title": "Une course, un vélo, une nage",
+      "body": "Trois séances tirées au sort à chaque visite, une par sport. Recharge la page pour en voir d'autres.",
+      "sport": {
+        "running": "Course à pied",
+        "cycling": "Vélo",
+        "swimming": "Natation"
+      }
     },
     "s04": {
       "kicker": "Les méthodes",
@@ -200,12 +175,10 @@
         "ftp": "Estime ta FTP depuis un test 20 minutes ou un ramp test.",
         "css": "Estime ta CSS depuis un test 400 m + 200 m.",
         "equivalence": "Prédis tes temps sur toutes les distances depuis un résultat.",
-        "ageGraded": "Compare ta performance au record mondial de ta catégorie.",
         "raceSimulator": {
           "title": "Simulateur jour de course",
           "desc": "Plan complet pour ton jour de course : horaires, allures, nutrition, mental."
-        },
-        "whatIf": "Comparez deux scénarios d'entraînement et visualisez les différences."
+        }
       }
     },
     "s07": {
@@ -217,21 +190,9 @@
       "zone": "Zone",
       "lvl": "Niveau"
     },
-    "s08": {
-      "kicker": "Éthos",
-      "title1": "Aucune donnée",
-      "title2": "ne quitte ton appareil",
-      "body": "Pas de serveur, pas de compte, pas de cookie tiers. Code public sous licence MIT.",
-      "lines": {
-        "trackers": "Cookie",
-        "account": "Compte requis",
-        "network": "Données envoyées",
-        "exports": "Exports locaux"
-      }
-    },
     "s09": {
       "kicker": "Questions fréquentes",
-      "title": "Cinq points levés d'avance",
+      "title": "Trois questions avant de commencer",
       "more": "{{count}} articles complémentaires dans la bibliothèque pédagogique.",
       "moreLink": "Tout lire →",
       "q": {
@@ -239,25 +200,9 @@
           "q": "Faut-il un capteur cardiaque ?",
           "a": "Non. Les zones se calibrent à l'allure ou à la puissance. Le cardio sert surtout à valider Z1-Z2."
         },
-        "export": {
-          "q": "Comment exporter une séance vers ma montre ?",
-          "a": "En .fit, .ics, .pdf ou .png ; les parcours en .gpx. Tout est généré en local."
-        },
-        "custom": {
-          "q": "Puis-je personnaliser un plan ?",
-          "a": "Oui : décaler une semaine, substituer une séance, déplacer un jour au glisser-déposer. Un mode libre existe aussi."
-        },
         "free": {
           "q": "Zoned est-il gratuit ?",
           "a": "Oui, et pour toujours. Pas de niveau payant, pas de publicité. Open-source sous licence MIT."
-        },
-        "devices": {
-          "q": "Sur quels appareils Zoned fonctionne-t-il ?",
-          "a": "Tout navigateur moderne. Rien à installer : Zoned est une PWA, un raccourci suffit."
-        },
-        "offline": {
-          "q": "Zoned fonctionne-t-il hors-ligne ?",
-          "a": "Oui. Après le premier chargement, l'app et les séances sont en cache. Séances, calculateurs et plan restent accessibles."
         },
         "data": {
           "q": "Où sont stockées mes données ?",
@@ -266,13 +211,6 @@
       }
     },
     "tip": "Conseil du jour",
-    "cta": {
-      "kicker": "Commencer maintenant",
-      "line1": "Ta prochaine course commence ici",
-      "line2": "Un plan complet en deux clics, gratuit, sans compte",
-      "primary": "Générer mon plan",
-      "secondary": "Explorer les séances"
-    },
     "footer": {
       "groups": {
         "product": "Produit",
@@ -283,8 +221,7 @@
       "product": {
         "library": "Bibliothèque",
         "plans": "Plans",
-        "calculators": "Calculateurs",
-        "routes": "Générateur de parcours"
+        "calculators": "Calculateurs"
       },
       "science": {
         "methodology": "Méthodes",

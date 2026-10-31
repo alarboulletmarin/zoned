@@ -113,7 +113,7 @@ export function PrebuiltPlansPage() {
                 description={t("prebuiltList.missingBody", { practice: label })}
                 action={
                   <Button asChild variant="outline" size="sm">
-                    <Link to={`/plan/new/assisted?practice=${practice}`}>
+                    <Link to={`/plan/new?practice=${practice}`}>
                       {t("prebuiltList.missingCta", { practice: label.toLowerCase() })}
                       <ArrowRight size={16} />
                     </Link>

@@ -72,6 +72,7 @@ scripts/qa-*.ts
 !scripts/qa-workout-schema.ts
 !scripts/qa-workout-schema.test.ts
 !scripts/qa-typography.ts
+!scripts/qa-error-surface.ts
 
 # Design handoff bundle, reference material, not project source.
 # Source of truth: the Claude Design project.

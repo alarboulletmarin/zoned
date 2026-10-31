@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { ArrowLeft } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,7 @@ import {
 import { saveCustomWorkout } from "@/lib/customWorkoutStorage";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import type { WorkoutPhaseKey } from "@/types";
+import { failureReason } from "@/lib/failure";
 
 const PHASES: { key: WorkoutPhaseKey; labelKey: string }[] = [
   { key: "warmup", labelKey: "workoutBuilder.warmup" },
@@ -87,8 +88,12 @@ export function SharedWorkoutPage() {
   const handleAdd = () => {
     try {
       saveCustomWorkout(workout);
-    } catch {
-      toast.error(t("calculators:workoutBuilder.maxReached"));
+    } catch (err) {
+      const reason = failureReason(err);
+      toast.failure(
+        t(reason === "limit" ? "calculators:workoutBuilder.maxReached" : "calculators:workoutBuilder.saveFailed"),
+        reason,
+      );
       return;
     }
     toast.success(t("calculators:workoutBuilder.workoutSaved"));

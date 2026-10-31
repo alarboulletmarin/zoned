@@ -10,7 +10,8 @@ import { DIFFICULTY_META } from "@/types";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { sortIntermediateGoals } from "@/lib/intermediateGoalValidation";
 import type { IntermediateGoal } from "@/types/plan";
-import { estimateFinishTime, formatPace } from "../helpers";
+import { formatReadableTime } from "@/lib/splits";
+import { formatPace } from "../helpers";
 import { SummaryRow } from "../Option";
 import type { StepContext, StepDef } from "../types";
 
@@ -146,7 +147,7 @@ function SummaryBody({
               <SummaryRow
                 label={t("summary.pace")}
                 mono
-                value={`${formatPace(paceSeconds)}/km → ${estimateFinishTime(paceSeconds, distanceKm)}`}
+                value={`${formatPace(paceSeconds)}/km → ${formatReadableTime(paceSeconds * distanceKm)}`}
               />
             )}
             {form.elevationGain && (
@@ -201,9 +202,18 @@ function SummaryBody({
             )}
           </dl>
 
+          {/* Le générateur pose les allures sur la VMA. Sans elle, il en prend
+              une par niveau, ce qu'il faisait déjà, mais en silence : ici on
+              le dit avant de générer, et la vue du plan le redira. */}
+          {!derived.vma && form.planPurpose === "race" && (
+            <Alert kind="info" title={t("summary.noVmaTitle")}>
+              {t("summary.noVmaBody")}
+            </Alert>
+          )}
+
           {submit.error && (
             <Alert kind="error" title={t("wizard.errorTitle")}>
-              {submit.error} {t("wizard.errorHint")}
+              {t(`common:failure.${submit.error}`)} {t("wizard.errorHint")}
             </Alert>
           )}
         </CardContent>

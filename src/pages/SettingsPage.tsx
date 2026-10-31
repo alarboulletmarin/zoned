@@ -1,7 +1,7 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { Code, FileText, Send, Trash2 } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { Alert } from "@/components/ui/alert";
@@ -40,6 +40,7 @@ import { MODULE_IDS } from "@/types/settings";
 import { isModuleHidden, visiblePractices } from "@/lib/settingsSchema";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { DataExportImport } from "@/components/domain/DataExportImport";
+import { QrSync } from "@/components/domain/QrSync";
 import { useAppStats } from "@/hooks/useAppStats";
 import { useFavorites } from "@/hooks/useFavorites";
 import { usePlans } from "@/hooks/usePlans";
@@ -72,11 +73,10 @@ interface AboutRow {
  * is reported to the cleanup lot rather than deleted here.
  */
 export function SettingsPage() {
-  const { t, i18n } = useTranslation(["common", "routes", "content"]);
+  const { t, i18n } = useTranslation(["common", "content"]);
   const {
     settings,
     setUnitSystem,
-    setRouteGeneratorEnabled,
     setOpeningAnimation,
     setEnabledPractices,
     setModuleHidden,
@@ -384,36 +384,6 @@ export function SettingsPage() {
                     ]}
                   />
                 </div>
-
-                {/* The one feature that emits a coordinate to a public
-                    service, so it keeps its own switch and its caveat. */}
-                <div className="zn-set__toggle">
-                  <div
-                    className="zn-row zn-row--split zn-row--start"
-                    style={{ "--gap": "var(--sp-10)" } as CSSProperties}
-                  >
-                    <label
-                      className="zn-label zn-fill"
-                      htmlFor="settings-routes"
-                    >
-                      {t("routes:privacy.toggle")}
-                    </label>
-                    <Switch
-                      id="settings-routes"
-                      aria-describedby="settings-routes-hint"
-                      className="zn-fixed"
-                      checked={settings.routeGeneratorEnabled}
-                      onCheckedChange={setRouteGeneratorEnabled}
-                    />
-                  </div>
-                  <p
-                    id="settings-routes-hint"
-                    className="zn-caption zn-muted"
-                    style={{ marginBlockStart: "var(--sp-4)" }}
-                  >
-                    {t("settingsPage.routesCaveat")}
-                  </p>
-                </div>
               </CardContent>
             </Card>
 
@@ -527,6 +497,8 @@ export function SettingsPage() {
             style={{ "--gap": "var(--sp-11)" } as CSSProperties}
           >
             <DataExportImport />
+
+            <QrSync />
 
             <Alert kind="info" title={t("settingsPage.privacyTitle")}>
               {t("settingsPage.privacyBody")}

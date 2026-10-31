@@ -17,7 +17,6 @@ import {
   Shuffle,
   MoreHorizontal,
   Eye,
-  Route as RouteIcon,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -36,6 +35,8 @@ import { Alert } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { usePlan } from "@/hooks/usePlans";
+import { getAllPlans } from "@/lib/planStorage";
+import { loadTodayComposition, mondayOf, sourcePosition } from "@/lib/todayComposition";
 import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
 import { computeAdaptation, type AdaptationPreview } from "@/lib/planGenerator/adapt";
 import { AdaptationPreviewDialog } from "@/components/domain/AdaptationPreviewDialog";
@@ -65,7 +66,7 @@ import {
   RACE_DISTANCE_META,
 } from "@/types/plan";
 import type { AnyWorkoutTemplate, TrainingPhase, WorkoutTemplate } from "@/types";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { SubstituteSessionDialog } from "@/components/domain/SubstituteSessionDialog";
 import { isSessionSubstitutable } from "@/lib/planGenerator/substitute";
@@ -80,21 +81,24 @@ import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDi
 import { autoReschedule } from "@/lib/planGenerator/reschedule";
 import { updateUnavailabilities, undoLastChange, withUndoSnapshot } from "@/lib/planStorage";
 import { getPlanMonday, dateToWeekAndDay, isoDateOnly } from "@/lib/planDates";
-import type { AutoChange, Unavailability } from "@/types/plan";
+import type { AutoChange, PlanSession, TrainingPlan, Unavailability } from "@/types/plan";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
+import { AddWeekToPlanSheet } from "@/components/domain/AddWeekToPlanSheet";
 import { LastChangePanel } from "@/components/domain/LastChangePanel";
 import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
+import { WeekSessionSheet, type WeekSessionSheetTarget } from "@/components/domain/WeekSessionSheet";
+import { isActivitySession } from "@/lib/activitySession";
+import { loadCommutePattern } from "@/lib/athleteProfile";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { isShareablePlan, sharedPlanUrl } from "@/lib/share/planShare";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
 import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
-import { pickWeekRouteTarget } from "@/lib/routeGenerator/recommendation";
 import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
 import Zone2 from "@/assets/doodles/zone-2.svg?react";
 import Zone3 from "@/assets/doodles/zone-3.svg?react";
@@ -169,6 +173,12 @@ export function PlanViewPage() {
 
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
   const [workoutTemplates, setWorkoutTemplates] = useState<Record<string, AnyWorkoutTemplate>>({});
+  // The activity whose duration and effort are open (a commute, a swim):
+  // it has no session page, so a tap opens this sheet instead.
+  const [activityTarget, setActivityTarget] = useState<{
+    weekNumber: number;
+    sessionIndex: number;
+  } | null>(null);
   const [swapTarget, setSwapTarget] = useState<{
     weekNumber: number;
     sessionIndex: number;
@@ -207,6 +217,8 @@ export function PlanViewPage() {
     unresolvedSessions: UnresolvedSessionPreview[];
   } | null>(null);
   const [showUnavailabilityManager, setShowUnavailabilityManager] = useState(false);
+  /* La semaine du plan à laquelle on ajoute une semaine, feuille ouverte. */
+  const [addWeekTarget, setAddWeekTarget] = useState<number | null>(null);
   const [reschedulePreview, setReschedulePreview] = useState<{ changes: AutoChange[]; updatedPlan: import("@/types/plan").TrainingPlan } | null>(null);
   const [adaptationPreview, setAdaptationPreview] = useState<AdaptationPreview | null>(null);
 
@@ -266,20 +278,68 @@ export function PlanViewPage() {
     return set;
   }, [plan]);
 
+  /* Les semaines seules POSÉES sur ce plan dans le cockpit, et sur quelle
+     semaine à lui. Le plan ne les contient pas, elles se lisent à côté dans
+     /today ; mais c'est ici qu'on regarde une semaine de pic, et ne pas dire
+     qu'un renforcement y est posé serait mentir par omission. Lu au montage :
+     cette page n'écrit pas la composition. Avant les retours anticipés, comme
+     tout crochet. */
+  const placedWeeks = useMemo(() => {
+    const composition = loadTodayComposition();
+    const out: { id: string; name: string; weekNumber: number; week: TrainingPlan }[] = [];
+    if (!plan) return out;
+    const monday = getPlanMonday(plan);
+    for (const layer of composition.layers) {
+      if (!layer.enabled || !layer.anchor) continue;
+      const week = getAllPlans().find((p) => p.id === layer.id && p.config.isSingleWeek === true);
+      if (!week) continue;
+      const [y, m, d] = layer.anchor.split("-").map(Number);
+      const position = sourcePosition(
+        { plan, isWeek: false, monday, explicit: false },
+        mondayOf(new Date(y, m - 1, d)),
+      );
+      if (position) out.push({ id: week.id, name: pick(week, "name"), weekNumber: position.weekNumber, week });
+    }
+    return out.sort((a, b) => a.weekNumber - b.weekNumber);
+  }, [plan, pick]);
+
+  /* L'audit lit le plan, PLUS ce qui est posé à côté dans le cockpit : une
+     semaine de renforcement posée sur la semaine de pic est précisément ce
+     qu'un audit doit voir. Les séances posées sont ajoutées à une COPIE du
+     plan, et seuls les constats que cette copie fait apparaître en plus sont
+     gardés, sans correctif : un correctif s'adresse par index dans le plan
+     réel, et ces séances-là n'y sont pas. */
   const auditFindings = useMemo(() => {
     if (!plan) return [];
-    return auditPlan(plan);
-  }, [plan]);
+    const own = auditPlan(plan);
+    if (placedWeeks.length === 0) return own;
+    const augmented = structuredClone(plan);
+    for (const placed of placedWeeks) {
+      const target = augmented.weeks.find((w) => w.weekNumber === placed.weekNumber);
+      if (!target) continue;
+      target.sessions = [...target.sessions, ...(placed.week.weeks[0]?.sessions ?? [])].sort(
+        (a, b) => a.dayOfWeek - b.dayOfWeek,
+      );
+    }
+    const known = new Set(own.map((f) => `${f.code}:${f.weekNumber}:${f.messageEn}`));
+    const extra = auditPlan(augmented)
+      .filter((f) => !known.has(`${f.code}:${f.weekNumber}:${f.messageEn}`))
+      .map((f) => ({ ...f, id: `placed-${f.id}`, sessionIndex: undefined, fixable: false }));
+    return [...own, ...extra];
+  }, [plan, placedWeeks]);
 
   const handleAuditFix = useCallback((finding: PlanFinding) => {
     if (!plan) return;
     const fixed = applyAuditFix(plan, finding);
     if (fixed) {
-      savePlan(fixed);
+      const saved = savePlan(fixed);
+      if (!saved.ok) {
+        toast.failure(t("audit.fixFailed"), saved);
+        return;
+      }
       reloadPlan();
-      toast.success(t("audit.fixApplied"));
     } else {
-      toast.error(t("audit.fixFailed"));
+      toast.failure(t("audit.fixFailed"));
     }
   }, [plan, reloadPlan, t]);
 
@@ -374,12 +434,8 @@ export function PlanViewPage() {
     if (originalIndex === -1) return;
 
     const success = updatePlanSession(plan.id, swapTarget.weekNumber, originalIndex, workout.id);
-    if (success) {
-      reloadPlan();
-      toast.success(t("view.sessionReplaced"));
-    } else {
-      toast.error(t("view.sessionUpdateFailed"));
-    }
+    if (success) reloadPlan();
+    else toast.failure(t("view.sessionUpdateFailed"));
     setSwapTarget(null);
   }, [plan, swapTarget, isEn, reloadPlan]);
 
@@ -406,12 +462,8 @@ export function PlanViewPage() {
           isKeySession: false,
         },
       );
-      if (success) {
-        reloadPlan();
-        toast.success(t("view.sessionSubstituted"));
-      } else {
-        toast.error(t("view.sessionUpdateFailed"));
-      }
+      if (success) reloadPlan();
+      else toast.failure(t("view.sessionUpdateFailed"));
       setSubstituteTarget(null);
     },
     [plan, substituteTarget, reloadPlan, t],
@@ -428,30 +480,23 @@ export function PlanViewPage() {
     fromSessionIndex: number,
     toWeek: number,
     toDay: number,
+    beforeSessionIndex?: number,
   ) => {
     if (!plan) return;
     if (blockedDaysSet.has(`${toWeek}-${toDay}`)) {
       toast.error(t("reschedule.blockedDrop"));
       return;
     }
-    const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay);
-    if (success) {
-      reloadPlan();
-      toast.success(t("view.sessionMoved"));
-    } else {
-      toast.error(t("view.sessionMoveFailed"));
-    }
+    const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay, beforeSessionIndex);
+    if (success) reloadPlan();
+    else toast.failure(t("view.sessionMoveFailed"));
   }, [plan, isEn, reloadPlan, blockedDaysSet, t]);
 
   const handleSessionDelete = useCallback((weekNumber: number, sessionIndex: number) => {
     if (!plan) return;
     const success = deleteSessionFromPlan(plan.id, weekNumber, sessionIndex);
-    if (success) {
-      reloadPlan();
-      toast.success(t("view.sessionDeleted"));
-    } else {
-      toast.error(t("view.sessionDeleteFailed"));
-    }
+    if (success) reloadPlan();
+    else toast.failure(t("view.sessionDeleteFailed"));
   }, [plan, isEn, reloadPlan]);
 
   // Run adaptation on a week if all sessions are resolved
@@ -504,14 +549,14 @@ export function PlanViewPage() {
     );
 
     if (!success) {
-      toast.error(t("errors.planSaveFailed"));
+      toast.failure(t("errors.planSaveFailed"));
       return;
     }
     reloadPlan();
     setAdaptationPreview(null);
     toast.success(t("adaptation.applied"), {
       action: {
-        label: t("adaptation.undone"),
+        label: t("adaptation.undo"),
         onClick: () => {
           if (undoLastChange(plan.id)) {
             reloadPlan();
@@ -519,7 +564,6 @@ export function PlanViewPage() {
           }
         },
       },
-      duration: 10000,
     });
   }, [plan, adaptationPreview, reloadPlan, t]);
 
@@ -537,13 +581,12 @@ export function PlanViewPage() {
   const handleCompletionSave = useCallback((data: import("@/lib/planStorage").SessionCompletionData) => {
     if (!plan || !completionTarget) return;
     const { weekNumber, sessionIndex } = completionTarget;
-    const success = updateSessionCompletion(plan.id, weekNumber, sessionIndex, data);
-    if (!success) {
-      toast.error(t("errors.planSaveFailed"));
+    const saved = updateSessionCompletion(plan.id, weekNumber, sessionIndex, data);
+    if (!saved.ok) {
+      toast.failure(t("errors.planSaveFailed"), saved);
       return;
     }
     reloadPlan();
-    toast.success(t("completion.saved"));
     setCompletionTarget(null);
     // Auto-trigger adaptation if all sessions in the week are now resolved
     runAdaptationIfReady(weekNumber, false);
@@ -593,6 +636,11 @@ export function PlanViewPage() {
   }, [plan, reloadPlan, runAdaptationIfReady]);
 
   const handleSessionClick = useCallback((weekNumber: number, sessionIndex: number, workoutId: string) => {
+    // The menu offers "Durée et effort" on an activity; this is where it opens.
+    if (isActivitySession(workoutId)) {
+      setActivityTarget({ weekNumber, sessionIndex });
+      return;
+    }
     if (workoutId && workoutId !== "__race_day__" && workoutId !== "__intermediate_race__" && !workoutId.startsWith("__activity_")) {
       // Persist current week in URL before navigating away so browser back restores it
       const url = new URL(window.location.href);
@@ -617,43 +665,39 @@ export function PlanViewPage() {
     }
   }, [plan, isEn, navigate]);
 
-  const handleFindRoute = useCallback((weekNumber: number, sessionIndex: number) => {
-    if (!plan) return;
-    const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
-    const session = week?.sessions[sessionIndex];
-    if (!session) return;
-    if (session.workoutId === "__race_day__" || session.workoutId === "__intermediate_race__" || session.workoutId.startsWith("__activity_")) {
-      toast.error(t("view.noRouteableSession"));
+  const activitySheetTarget = useMemo<WeekSessionSheetTarget | null>(() => {
+    if (!plan || !activityTarget) return null;
+    const week = plan.weeks.find((w) => w.weekNumber === activityTarget.weekNumber);
+    const session = week?.sessions[activityTarget.sessionIndex];
+    if (!session || !isActivitySession(session.workoutId)) return null;
+    return {
+      sessionIndex: activityTarget.sessionIndex,
+      session,
+      workout: null,
+      name: workoutNames[session.workoutId] || session.workoutId,
+      canMoveUp: false,
+      canMoveDown: false,
+    };
+  }, [plan, activityTarget, workoutNames]);
+  const commuteProfileMin = useMemo(
+    () => (activitySheetTarget ? (loadCommutePattern()?.durationMin ?? null) : null),
+    [activitySheetTarget],
+  );
+
+  const handleActivitySave = useCallback((sessionIndex: number, next: PlanSession) => {
+    if (!plan || !activityTarget) return;
+    const fresh = getPlan(plan.id);
+    const week = fresh?.weeks.find((w) => w.weekNumber === activityTarget.weekNumber);
+    if (!fresh || !week?.sessions[sessionIndex]) return;
+    week.sessions[sessionIndex] = next;
+    const saved = savePlan(fresh);
+    if (!saved.ok) {
+      toast.failure(t("view.sessionUpdateFailed"), saved);
       return;
     }
-
-    navigate("/routes", {
-      state: {
-        planRouteSession: {
-          session,
-          planSessionRef: {
-            planId: plan.id,
-            weekNumber,
-            sessionIndex,
-          },
-        },
-      },
-    });
-  }, [plan, navigate, t]);
-
-  const handleFindWeekRoute = useCallback((weekNumber: number) => {
-    if (!plan) return;
-    const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
-    if (!week) return;
-
-    const target = pickWeekRouteTarget(week);
-    if (!target) {
-      toast.error(t("view.noRouteableSession"));
-      return;
-    }
-
-    handleFindRoute(weekNumber, target.sessionIndex);
-  }, [plan, handleFindRoute, t]);
+    setActivityTarget(null);
+    reloadPlan();
+  }, [plan, activityTarget, reloadPlan, t]);
 
   const handleAddToDay = useCallback((weekNumber: number, day: number) => {
     if (blockedDaysSet.has(`${weekNumber}-${day}`)) {
@@ -684,29 +728,27 @@ export function PlanViewPage() {
         estimatedDurationMin: 0,
       });
       week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-      if (!savePlan(plan)) {
-        toast.error(t("errors.planSaveFailed"));
+      const saved = savePlan(plan);
+      if (!saved.ok) {
+        toast.failure(t("errors.planSaveFailed"), saved);
         return;
       }
       reloadPlan();
-      toast.success(t("view.activityAdded"));
       return;
     }
 
     const success = await addSessionToPlan(plan.id, weekNumber, workoutId, day);
-    if (success) {
-      reloadPlan();
-      toast.success(t("view.workoutAdded"));
-    } else {
-      toast.error(t("view.workoutAddFailed"));
-    }
+    if (success) reloadPlan();
+    else toast.failure(t("view.workoutAddFailed"));
   }, [plan, isEn, reloadPlan]);
 
   const handleSaveUnavailabilities = useCallback((items: Unavailability[]) => {
     if (!plan) return;
-    updateUnavailabilities(plan.id, items);
+    if (!updateUnavailabilities(plan.id, items)) {
+      toast.failure(t("errors.planSaveFailed"));
+      return;
+    }
     reloadPlan();
-    toast.success(t("unavailability.saved"));
     setShowUnavailabilityManager(false);
   }, [plan, reloadPlan, t]);
 
@@ -732,7 +774,7 @@ export function PlanViewPage() {
     );
 
     if (!success) {
-      toast.error(t("errors.planSaveFailed"));
+      toast.failure(t("errors.planSaveFailed"));
       return;
     }
     reloadPlan();
@@ -747,7 +789,6 @@ export function PlanViewPage() {
           }
         },
       },
-      duration: 10000,
     });
   }, [plan, reschedulePreview, currentWeek, reloadPlan, t]);
 
@@ -785,6 +826,10 @@ export function PlanViewPage() {
   }
 
   const isFreePlan = plan.config.planMode === "free";
+  /* Sans VMA, le générateur a posé les allures depuis le niveau. Il le
+     faisait déjà, sans le dire : les allures affichées avaient l'air
+     mesurées. Le plan le dit tant que Mes zones ne la connaît pas. */
+  const pacesEstimated = !isFreePlan && plan.config.vma === undefined;
   const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
   const planName = plan.config.planName || (isFreePlan
     ? plan.name
@@ -947,6 +992,16 @@ export function PlanViewPage() {
         <section className="zn-planview__head">
           <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
             <span className="zn-kicker">{headKicker}</span>
+            {placedWeeks.length > 0 && (
+              <p className="zn-mono zn-muted zn-planview__placed">
+                {t("view.placedWeeks.label")}
+                {placedWeeks.map((w) => (
+                  <Link key={w.id} to={`/weeks/${w.id}`} className="zn-planview__placed-item">
+                    {t("view.placedWeeks.item", { name: w.name, n: w.weekNumber })}
+                  </Link>
+                ))}
+              </p>
+            )}
 
             {isEditingName ? (
               <input
@@ -958,12 +1013,9 @@ export function PlanViewPage() {
                   const trimmed = editName.trim();
                   if (trimmed && trimmed !== planName) {
                     plan.config.planName = trimmed;
-                    if (savePlan(plan)) {
-                      reloadPlan();
-                      toast.success(t("view.nameUpdated"));
-                    } else {
-                      toast.error(t("errors.planSaveFailed"));
-                    }
+                    const saved = savePlan(plan);
+                    if (saved.ok) reloadPlan();
+                    else toast.failure(t("errors.planSaveFailed"), saved);
                   }
                   setIsEditingName(false);
                 }}
@@ -1339,7 +1391,6 @@ export function PlanViewPage() {
               minWeek={visibleMin}
               maxWeek={visibleMax}
               onWeekChange={setGuidanceWeekNum}
-              onGenerateRoute={() => handleFindWeekRoute(wn)}
             />
           ) : null;
         })()}
@@ -1357,7 +1408,6 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
-                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
@@ -1394,12 +1444,11 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
-                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
-                onFindWeekRoute={handleFindWeekRoute}
+                onAddWeek={setAddWeekTarget}
                 blockedDays={blockedDaysSet}
               />
             </div>
@@ -1429,7 +1478,6 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
-                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
@@ -1877,25 +1925,6 @@ export function PlanViewPage() {
                                         <Shuffle />
                                       </button>
                                     )}
-                                    <Link
-                                      to="/routes"
-                                      className="zn-sess__action"
-                                      state={{
-                                        planRouteSession: {
-                                          session,
-                                          planSessionRef: {
-                                            planId: plan.id,
-                                            weekNumber: week.weekNumber,
-                                            sessionIndex: originalIndex,
-                                          },
-                                        },
-                                      }}
-                                      onClick={(e) => e.stopPropagation()}
-                                      title={t("view.findRoute")}
-                                      aria-label={t("view.findRoute")}
-                                    >
-                                      <RouteIcon />
-                                    </Link>
                                     <button
                                       type="button"
                                       className="zn-sess__action"
@@ -2011,24 +2040,6 @@ export function PlanViewPage() {
                     state: { from: "plan", planId: plan.id, planName },
                   }),
               });
-              items.push({
-                key: "route",
-                icon: <RouteIcon />,
-                label: t("view.findRoute"),
-                onSelect: () =>
-                  navigate("/routes", {
-                    state: {
-                      planRouteSession: {
-                        session: menuSession,
-                        planSessionRef: {
-                          planId: plan.id,
-                          weekNumber: listMenu.weekNumber,
-                          sessionIndex: listMenu.sessionIndex,
-                        },
-                      },
-                    },
-                  }),
-              });
             }
             items.push({
               key: "done",
@@ -2084,11 +2095,18 @@ export function PlanViewPage() {
 
         {/* 3, ce qui a changé, ce qu'il faut regarder : un avertissement
             d'audit n'est pas plus urgent que la séance du soir */}
-        {(ended || plan._lastUndoableChange || auditFindings.length > 0) && (
+        {(ended || pacesEstimated || plan._lastUndoableChange || auditFindings.length > 0) && (
           <section className="zn-planview__band">
             <div className="zn-planview__notes">
               {/* An ended plan stays viewable as training history. */}
               {ended && <Alert kind="info">{t("view.planEnded")}</Alert>}
+
+              {pacesEstimated && (
+                <Alert kind="info" title={t("view.estimatedPacesTitle")}>
+                  {t("view.estimatedPaces")}{" "}
+                  <Link to="/my-zones">{t("view.estimatedPacesLink")}</Link>
+                </Alert>
+              )}
 
               {plan._lastUndoableChange && (
                 <LastChangePanel
@@ -2209,6 +2227,15 @@ export function PlanViewPage() {
           planId={plan.id}
           unavailabilities={plan.config.unavailabilities ?? []}
           onSave={handleSaveUnavailabilities}
+        />
+
+        {/* Ajouter une de mes semaines, ou une du catalogue, à une semaine
+            du plan. Le geste vivait dans la feuille du cockpit seulement. */}
+        <AddWeekToPlanSheet
+          plan={plan}
+          weekNumber={addWeekTarget}
+          onOpenChange={(open) => { if (!open) setAddWeekTarget(null); }}
+          onMerged={reloadPlan}
         />
 
         {/* Reschedule Preview Dialog */}
@@ -2402,13 +2429,13 @@ export function PlanViewPage() {
                     delete plan.config.startDate;
                     delete plan.config.endDate;
                   }
-                  if (!savePlan(plan)) {
-                    toast.error(t("errors.planSaveFailed"));
+                  const saved = savePlan(plan);
+                  if (!saved.ok) {
+                    toast.failure(t("errors.planSaveFailed"), saved);
                     return;
                   }
                   reloadPlan();
                   setShowDateDialog(false);
-                  toast.success(t("view.datesUpdated"));
                 }}
               >
                 {t("view.save")}
@@ -2425,6 +2452,21 @@ export function PlanViewPage() {
             handleWorkoutAdd(workoutId, addTarget.weekNumber, addTarget.day);
             setAddTarget(null);
           } : undefined}
+        />
+
+        {/* An activity's duration and effort, opened from its card or menu. */}
+        <WeekSessionSheet
+          target={activitySheetTarget}
+          commuteProfileMin={commuteProfileMin}
+          onClose={() => setActivityTarget(null)}
+          onSave={handleActivitySave}
+          onView={() => {}}
+          onMove={(index, day) => {
+            if (activityTarget) handleSessionMove(activityTarget.weekNumber, index, activityTarget.weekNumber, day);
+          }}
+          onDelete={(index) => {
+            if (activityTarget) handleSessionDelete(activityTarget.weekNumber, index);
+          }}
         />
 
         {/* Swap Session Dialog */}

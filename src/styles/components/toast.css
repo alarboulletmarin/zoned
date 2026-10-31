@@ -1,14 +1,11 @@
-/* Toast, the house rendering over `sonner`'s transport.
+/* Toast, the house card on `sonner`'s transport.
  *
- * The handoff allows keeping sonner as the mechanism as long as the rendering
- * is ours, and that is by far the cheaper trade: `toast.success(...)` is called
- * from about forty files, and sonner already handles the queue, the stacking,
- * the swipe-to-dismiss, the timers and the `aria-live` region. Replacing it
- * would mean rewriting all of that to gain nothing but the markup.
- *
- * So this file repaints it. sonner exposes its palette as custom properties on
- * `[data-sonner-toaster]` and its states as data attributes on each toast, so
- * every rule below is a plain override, no call site changes, no wrapper.
+ * sonner keeps the queue, the stacking, the swipe-to-dismiss, the timers and
+ * the `aria-live` region; `components/ui/toast.tsx` hands it a finished card
+ * through `toast.custom`, so sonner paints nothing of its own: no icon slot,
+ * no close button, no `data-type`, and its styled rules (`[data-styled=true]`)
+ * never match. What this sheet paints is the <li> sonner positions, and the
+ * row inside it, in the anatomy Alert and the shell banners already share.
  *
  * A toast is a floating surface, which makes it one of the few places
  * --shadow-block belongs.
@@ -101,115 +98,167 @@
   --mobile-offset-top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
 }
 
-[data-sonner-toaster] {
-  --normal-bg: var(--surface-card);
-  --normal-border: var(--line-strong);
-  --normal-text: var(--text-body);
-  --normal-bg-hover: var(--surface-band);
-  --normal-border-hover: var(--line-strong);
+/* ── the card ─────────────────────────────────────────────────────────── */
 
-  /* richColors is on, so these four decide the tinted variants. The system has
-     one accent and one green: error and warning share the vermillon, told apart
-     by their words and their glyph, and info stays on plain paper. */
-  --success-bg: var(--state-success-soft);
-  --success-border: var(--line-strong);
-  --success-text: var(--text-body);
+/* The paper is on sonner's own <li>, not on our row inside it. sonner sizes
+   the <li>: while the stack is collapsed it gives every back toast the front
+   one's height, so the surface that has to follow that height is the <li>
+   itself. A paper on the child would stick out under a shorter front card.
 
-  --error-bg: var(--state-danger-soft);
-  --error-border: var(--line-strong);
-  --error-text: var(--text-body);
-
-  --warning-bg: var(--state-warning-soft);
-  --warning-border: var(--line-strong);
-  --warning-text: var(--text-body);
-
-  --info-bg: var(--state-info-soft);
-  --info-border: var(--line-strong);
-  --info-text: var(--text-body);
-
-  --border-radius: var(--r-xl);
-}
-
-[data-sonner-toast][data-styled="true"] {
-  border-width: var(--bw-rule);
-  box-shadow: var(--shadow-block);
+   The width has to be said: sonner sets `--width` on its list but only reads
+   it on its styled toast. On a phone its own full-width rule wins over this
+   one (it is unlayered), which is the intent. */
+[data-sonner-toast] {
+  inline-size: var(--width);
   padding: var(--sp-7) var(--sp-8);
-  gap: var(--sp-6);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-block);
   font-family: var(--font-text);
+
+  /* A toast enters in 240ms and slows as it arrives, the system's slow step.
+     sonner drives the transform itself and writes its timing unlayered; only
+     the timing is ours, hence the insistence. */
+  transition-duration: var(--dur-slow) !important;
+  transition-timing-function: var(--ease-out) !important;
 }
 
-[data-sonner-toast] [data-title] {
+/* sonner zeroes the outline and draws focus as a grey blurred halo, both
+   unlayered, so the house ring (base.css) never reached the <li>. Said again
+   here, with the weight it takes. */
+[data-sonner-toast]:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring) !important;
+  outline-offset: 2px;
+  box-shadow: var(--shadow-block) !important;
+}
+
+/* A back toast in the collapsed stack shows only its edge under the front
+   one. sonner fades the children of its styled toasts there; ours need the
+   same, or their words peek out from under the card above. */
+[data-sonner-toast][data-expanded="false"][data-front="false"] > * {
+  opacity: 0;
+}
+
+/* The kind tints the paper the way Alert does: only failure and success, in
+   the soft tones, so the screen's one accent fill stays with the buttons.
+   Warning and info keep the plain card; their disc says what they are. */
+[data-sonner-toast]:has(.zn-toast[data-kind="error"]) {
+  background: var(--state-danger-soft);
+}
+
+[data-sonner-toast]:has(.zn-toast[data-kind="success"]) {
+  background: var(--state-success-soft);
+}
+
+/* ── the row ──────────────────────────────────────────────────────────── */
+
+.zn-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+}
+
+/* The kind is carried by the disc, the same 26px ink disc as the alert's and
+   the banner's, not by a coloured pictogram floating on the paper. */
+.zn-toast__glyph {
+  inline-size: 26px;
+  block-size: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--ink-1);
+  color: var(--paper-raised);
+}
+
+.zn-toast[data-kind="error"] .zn-toast__glyph {
+  background: var(--state-danger);
+}
+
+.zn-toast[data-kind="success"] .zn-toast__glyph {
+  background: var(--state-success);
+}
+
+/* A caution, not a failure: the accent disc on plain paper, as in Alert. */
+.zn-toast[data-kind="warning"] .zn-toast__glyph {
+  background: var(--accent);
+}
+
+.zn-toast[data-kind="loading"] .zn-toast__glyph > svg {
+  animation: zoned-spin 700ms linear infinite;
+}
+
+.zn-toast__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The kind, named in words. No state in this system rests on colour alone. */
+.zn-toast__kind {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-toast__title {
   font: var(--fw-semibold) var(--fs-body-sm) / 1.3 var(--font-text);
   color: var(--text-body);
 }
 
-[data-sonner-toast] [data-description] {
-  font: var(--type-body-sm);
-  font-size: var(--fs-caption);
+.zn-toast__text {
+  font: var(--type-caption);
   color: var(--text-muted);
 }
 
-/* The glyph follows the toast's own text colour: no coloured pictogram, and no
-   second hue competing with the accent. */
-[data-sonner-toast] [data-icon] {
-  color: currentColor;
+.zn-toast__actions {
+  margin-block-start: var(--sp-3);
 }
 
-/* Actions inside a toast are the house button, in miniature. `sonner` renders
-   them as bare <button>s, so they need the full treatment here. */
-[data-sonner-toast] [data-button] {
-  min-block-size: 32px;
-  padding: var(--sp-3) var(--sp-6);
+/* The corner dismiss. Same shape as the alert's and the banner's, because it
+   is the same gesture: make this go away without answering it. */
+.zn-toast__dismiss {
+  inline-size: 28px;
+  block-size: 28px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
 
-  font: var(--fw-semibold) var(--fs-body-sm) / 1.1 var(--font-text);
-  border: var(--border-rule);
-  border-radius: var(--r-pill);
-  background: var(--accent);
-  color: var(--accent-fg);
-
-  transition:
-    background var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
-}
-
-[data-sonner-toast] [data-button]:hover {
-  background: var(--accent-press);
-}
-
-[data-sonner-toast] [data-button]:active {
-  transform: translateY(var(--press-shift));
-}
-
-/* The undo path, when there is one, is the quiet twin of the action. */
-[data-sonner-toast] [data-button][data-cancel] {
+  border: none;
   background: transparent;
-  color: var(--ink-1);
-}
-
-[data-sonner-toast] [data-button][data-cancel]:hover {
-  background: var(--surface-band);
-}
-
-[data-sonner-toast] [data-close-button] {
-  inline-size: 22px;
-  block-size: 22px;
-
-  border: var(--border-rule);
+  color: var(--text-faint);
   border-radius: var(--r-pill);
-  background: var(--surface-card);
-  color: var(--ink-3);
-
+  cursor: pointer;
   transition: color var(--dur-fast) var(--ease-out);
 }
 
-[data-sonner-toast] [data-close-button]:hover {
+.zn-toast__dismiss:hover {
   color: var(--ink-1);
-  background: var(--surface-band);
 }
 
-/* A toast enters in 240ms and slows as it arrives, the system's slow step.
-   sonner drives the transform itself; only the timing is ours. */
-[data-sonner-toast] {
-  transition-duration: var(--dur-slow) !important;
-  transition-timing-function: var(--ease-out) !important;
+.zn-toast__dismiss:active {
+  transform: translateY(var(--press-shift));
+}
+
+@media (pointer: coarse) {
+  .zn-toast__dismiss {
+    inline-size: var(--hit-min);
+    block-size: var(--hit-min);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zn-toast[data-kind="loading"] .zn-toast__glyph > svg {
+    animation: none;
+  }
 }

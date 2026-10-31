@@ -5,6 +5,7 @@ import { Route, Download } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { Segmented } from "@/components/ui/segmented";
 import {
   Select,
@@ -19,11 +20,17 @@ import { buildParamsUrl } from "@/lib/share/urlParams";
 import { SEOHead } from "@/components/seo";
 import { useSettings } from "@/hooks/useSettings";
 import { exportToPNG } from "@/lib/export/png";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { convertPace, convertDistance, getPaceUnit, getDistanceUnit } from "@/lib/units";
 import { generateSplits, formatSplitTime as formatTime, formatPaceDisplay } from "@/lib/splits";
 import type { SplitStrategy as Strategy } from "@/lib/splits";
 import { usePickLang } from "@/lib/i18n-utils";
+import {
+  hmsParamsToSeconds,
+  secondsToHmsParams,
+  secondsToTimeDigits,
+  timeDigitsToSeconds,
+} from "@/lib/paceFields";
 
 interface RaceOption {
   label: string;
@@ -68,9 +75,20 @@ export function SplitGeneratorPage() {
   const [customDistance, setCustomDistance] = useState<string>(
     () => searchParams.get("km") ?? "",
   );
-  const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "0");
-  const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "45");
-  const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "0");
+  // One masked field, digits entering from the right. Shared links still
+  // carry `h`, `m`, `s`: summed on the way in, split again on the way out.
+  const [timeDigitsValue, setTimeDigitsValue] = useState<string>(() => {
+    const shared = hmsParamsToSeconds(
+      searchParams.get("h"),
+      searchParams.get("m"),
+      searchParams.get("s"),
+    );
+    const km =
+      searchParams.get("d") === "custom"
+        ? parseFloat(searchParams.get("km") ?? "") || 0
+        : parseFloat(searchParams.get("d") ?? "10");
+    return secondsToTimeDigits(shared > 0 ? shared : 45 * 60, km);
+  });
   const [strategy, setStrategy] = useState<Strategy>(() => {
     const shared = searchParams.get("strat");
     return shared === "negative" || shared === "positive" ? shared : "even";
@@ -81,10 +99,7 @@ export function SplitGeneratorPage() {
     ? parseFloat(customDistance) || 0
     : parseFloat(selectedRace);
 
-  const totalTimeSeconds =
-    (parseInt(hours) || 0) * 3600 +
-    (parseInt(minutes) || 0) * 60 +
-    (parseInt(seconds) || 0);
+  const totalTimeSeconds = timeDigitsToSeconds(timeDigitsValue, distanceKm) ?? 0;
 
   const hasValidInput = distanceKm > 0 && totalTimeSeconds > 0;
 
@@ -152,11 +167,7 @@ export function SplitGeneratorPage() {
         { id: toastId },
       );
     } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        toast.dismiss(toastId);
-      } else {
-        toast.error(t("export.error.image"), { id: toastId });
-      }
+      toast.failure(t("export.error.image"), error, { id: toastId });
     }
   };
 
@@ -254,44 +265,16 @@ export function SplitGeneratorPage() {
                 <span className="zn-calc__label">
                   {t("calculators:calculateurs.splits.targetTime")}
                 </span>
-                <div className="zn-num__time">
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={23}
-                      value={hours}
-                      onChange={(e) => setHours(e.target.value)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.splits.hours")}
-                    />
-                    <span className="zn-numfield__unit">h</span>
-                  </span>
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      value={minutes}
-                      onChange={(e) => setMinutes(e.target.value)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.splits.minutes")}
-                    />
-                    <span className="zn-numfield__unit">min</span>
-                  </span>
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      value={seconds}
-                      onChange={(e) => setSeconds(e.target.value)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.splits.seconds")}
-                    />
-                    <span className="zn-numfield__unit">s</span>
-                  </span>
-                </div>
+                <span className="zn-numfield">
+                  <ChronoInput
+                    format="hms"
+                    distanceKm={distanceKm}
+                    digits={timeDigitsValue}
+                    onDigitsChange={setTimeDigitsValue}
+                    className="zn-numfield__input zn-numfield__input--chrono"
+                    aria-label={t("calculators:calculateurs.splits.targetTime")}
+                  />
+                </span>
               </div>
 
               <div className="zn-calc__field">
@@ -392,9 +375,7 @@ export function SplitGeneratorPage() {
                       buildParamsUrl("/calculators/splits", {
                         d: selectedRace,
                         km: customDistance,
-                        h: hours,
-                        m: minutes,
-                        s: seconds,
+                        ...secondsToHmsParams(totalTimeSeconds),
                         strat: strategy,
                       })
                     }

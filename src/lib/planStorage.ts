@@ -2,6 +2,7 @@ import type { TrainingPlan, PlanSession, CrossTrainingSession, PlanUndoableChang
 import type { SessionType, StrengthCategory, WorkoutCategory } from "@/types";
 import { getWorkoutById } from "@/data/workouts";
 import { parseImportedPlanJson, preparePlanForStorage, normalizeStoredPlan } from "@/lib/planSchema";
+import { OK, failed, type Outcome } from "@/lib/failure";
 
 const STORAGE_KEY = "zoned-plans";
 
@@ -65,21 +66,25 @@ export function importPlan(json: string): string | null {
   const importedPlan = parseImportedPlanJson(json);
   if (!importedPlan) return null;
 
-  if (!savePlan(importedPlan)) return null;
+  if (!savePlan(importedPlan).ok) return null;
   return importedPlan.id;
 }
 
 /**
  * Persist a plan to localStorage.
- * Returns true on success, false on failure (invalid plan or storage quota exceeded).
+ *
+ * Answers an `Outcome` rather than a boolean so the caller can say WHY when
+ * it fails: a plan the schema refuses is `invalid`, a write the browser
+ * refuses is read from the error (`quota`, most often). Nothing is written
+ * on either path.
  */
-export function savePlan(plan: TrainingPlan): boolean {
+export function savePlan(plan: TrainingPlan): Outcome {
   let normalizedPlan: TrainingPlan;
   try {
     normalizedPlan = preparePlanForStorage(plan);
   } catch (err) {
     console.error("Invalid plan, cannot save", err);
-    return false;
+    return failed("invalid");
   }
   const plans = getAllPlans();
   const existing = plans.findIndex(p => p.id === normalizedPlan.id);
@@ -90,10 +95,10 @@ export function savePlan(plan: TrainingPlan): boolean {
   }
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
-    return true;
+    return OK;
   } catch (err) {
     console.error("Failed to persist plan", err);
-    return false;
+    return failed(err);
   }
 }
 
@@ -128,7 +133,7 @@ export function duplicatePlan(id: string, newName?: string): string | null {
     }
   }
 
-  return savePlan(clone) ? newId : null;
+  return savePlan(clone).ok ? newId : null;
 }
 
 export function deletePlan(id: string): boolean {
@@ -142,12 +147,24 @@ export function deletePlan(id: string): boolean {
   }
 }
 
+/**
+ * Moves a session to `toDay`, and says WHERE in that day.
+ *
+ * The order of the sessions inside a day is the order of the array, and it is
+ * what the board prints top to bottom: it is the athlete's order for the day
+ * (the morning ride before the evening swim). `beforeSessionIndex` is the
+ * index, in the target week AS IT IS BEFORE THE MOVE, of the session to land
+ * in front of; left out, the session closes the day. Landing in front of a
+ * session of another day is not a position, it is a mistake, and the session
+ * closes `toDay` instead of jumping the queue of a day it was not sent to.
+ */
 export function moveSession(
   planId: string,
   fromWeekNumber: number,
   fromSessionIndex: number,
   toWeekNumber: number,
   toDay: number,
+  beforeSessionIndex?: number,
 ): boolean {
   const plans = getAllPlans();
   const plan = plans.find(p => p.id === planId);
@@ -159,24 +176,35 @@ export function moveSession(
   const session = fromWeek.sessions[fromSessionIndex];
   if (!session) return false;
 
+  const toWeek =
+    toWeekNumber === fromWeekNumber
+      ? fromWeek
+      : plan.weeks.find(w => w.weekNumber === toWeekNumber);
+  if (!toWeek) return false;
+
+  // In front of itself is where it already is.
+  if (beforeSessionIndex === fromSessionIndex && toWeek === fromWeek) return true;
+
+  // The session to land in front of is named by its place in the week as the
+  // caller saw it, so it is read before anything is spliced out.
+  const anchor =
+    beforeSessionIndex !== undefined ? toWeek.sessions[beforeSessionIndex] : undefined;
+
   // Remove from source week
   fromWeek.sessions.splice(fromSessionIndex, 1);
 
   // Update day
   session.dayOfWeek = toDay;
 
-  // Add to target week
-  if (toWeekNumber === fromWeekNumber) {
-    fromWeek.sessions.push(session);
-    fromWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  } else {
-    const toWeek = plan.weeks.find(w => w.weekNumber === toWeekNumber);
-    if (!toWeek) return false;
-    toWeek.sessions.push(session);
-    toWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  }
+  // Add to target week: in front of the anchor when it is a session of that
+  // day, else at the end. The sort below is stable, so it only groups the
+  // days and leaves the order inside each one as it was placed.
+  const at = anchor && anchor.dayOfWeek === toDay ? toWeek.sessions.indexOf(anchor) : -1;
+  if (at >= 0) toWeek.sessions.splice(at, 0, session);
+  else toWeek.sessions.push(session);
+  toWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
 
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 /**
@@ -218,7 +246,7 @@ export function duplicateSession(
   if (!copy.paceNotes) delete copy.paceNotes;
 
   week.sessions.splice(sessionIndex + 1, 0, copy);
-  return savePlan(plan) ? sessionIndex + 1 : null;
+  return savePlan(plan).ok ? sessionIndex + 1 : null;
 }
 
 export function deleteSessionFromPlan(
@@ -236,7 +264,7 @@ export function deleteSessionFromPlan(
   if (sessionIndex < 0 || sessionIndex >= week.sessions.length) return false;
 
   week.sessions.splice(sessionIndex, 1);
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 /**
@@ -308,14 +336,14 @@ export function updateSessionCompletion(
   weekNumber: number,
   sessionIndex: number,
   completion: SessionCompletionData,
-): boolean {
+): Outcome {
   const plans = getAllPlans();
   const planIdx = plans.findIndex(p => p.id === planId);
-  if (planIdx === -1) return false;
+  if (planIdx === -1) return failed("notFound");
 
   const plan = plans[planIdx];
   const week = plan.weeks.find(w => w.weekNumber === weekNumber);
-  if (!week || sessionIndex < 0 || sessionIndex >= week.sessions.length) return false;
+  if (!week || sessionIndex < 0 || sessionIndex >= week.sessions.length) return failed("notFound");
 
   const session = week.sessions[sessionIndex];
   session.status = completion.status;
@@ -337,9 +365,9 @@ export function updateSessionCompletion(
 
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
-    return true;
-  } catch {
-    return false;
+    return OK;
+  } catch (err) {
+    return failed(err);
   }
 }
 
@@ -373,7 +401,30 @@ export async function addSessionToPlan(
 
   week.sessions.push(newSession);
   week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  return savePlan(plan);
+  return savePlan(plan).ok;
+}
+
+/**
+ * Poser une séance déjà composée dans la semaine `weekNumber` d'un plan, à sa
+ * place dans l'ordre des jours. `addSessionToPlan` ne connaît qu'un id et
+ * refabrique la séance depuis le gabarit de course ; ici la séance arrive
+ * entière (discipline, précision, durée), telle que `sessionFromWorkout` ou
+ * `makeActivitySession` l'ont écrite. Rend l'index de la séance posée, ou
+ * `null`.
+ */
+export function pushSessionToPlan(
+  planId: string,
+  weekNumber: number,
+  session: PlanSession,
+): number | null {
+  const plans = getAllPlans();
+  const plan = plans.find(p => p.id === planId);
+  if (!plan) return null;
+  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+  if (!week) return null;
+  week.sessions.push(session);
+  week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+  return savePlan(plan).ok ? week.sessions.indexOf(session) : null;
 }
 
 // ── Cross-training ──────────────────────────────────────────────────
@@ -390,7 +441,7 @@ export function addCrossTraining(
   if (!week.crossTraining) week.crossTraining = [];
   week.crossTraining.push(session);
   week.crossTraining.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 export function deleteCrossTraining(
@@ -403,7 +454,7 @@ export function deleteCrossTraining(
   const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
   if (!week?.crossTraining) return false;
   week.crossTraining = week.crossTraining.filter((s) => s.id !== sessionId);
-  return savePlan(plan);
+  return savePlan(plan).ok;
 }
 
 // ── Unavailabilities ───────────────────────────────────────────────
@@ -416,7 +467,81 @@ export function updateUnavailabilities(
   const plan = plans.find(p => p.id === planId);
   if (!plan) return false;
   plan.config.unavailabilities = unavailabilities;
-  return savePlan(plan);
+  return savePlan(plan).ok;
+}
+
+// ── Fusionner une semaine seule dans un plan ───────────────────────
+
+export type MergeWeekMode = "add" | "replace";
+
+/**
+ * Copier les séances d'une semaine seule dans la semaine `weekNumber` d'un
+ * plan. La semaine seule n'est pas touchée : c'est un gabarit, on le REJOUE
+ * dans le plan, on ne le déplace pas.
+ *
+ * Deux modes, et le second est explicite parce qu'il efface :
+ * - `add`, le plan garde ses séances et reçoit celles de la semaine à côté,
+ *   c'est le renforcement posé sur une semaine de course ;
+ * - `replace`, les séances du plan cette semaine-là partent, et la semaine
+ *   seule prend leur place, c'est la décharge qu'on substitue.
+ *
+ * Ce qui traverse : tout ce qui DÉCRIT la séance (gabarit, durée, précision,
+ * discipline, effort prévu). Ce qui ne traverse pas : ce qui a été VÉCU
+ * (statut, clôture, ressenti, note) et le verrou du générateur, qui n'ont de
+ * sens que dans la semaine où ils ont été écrits. Le tout sous un instantané
+ * d'annulation : `replace` est le seul geste de ce module qui retire des
+ * séances non closes en nombre, il doit se défaire d'un tap.
+ */
+export function mergeWeekIntoPlan(
+  planId: string,
+  weekNumber: number,
+  weekId: string,
+  mode: MergeWeekMode,
+  labels: { label: string; labelEn: string },
+): boolean {
+  const week = getPlan(weekId);
+  if (!week || week.config.isSingleWeek !== true) return false;
+  return mergeSessionsIntoPlanWeek(planId, weekNumber, week.weeks[0]?.sessions ?? [], mode, labels);
+}
+
+/**
+ * Ajoute des séances à une semaine du plan, en les ajoutant aux siennes ou en
+ * les remplaçant. C'est le geste de `mergeWeekIntoPlan`, ouvert aux semaines
+ * qui ne sont pas enregistrées : une semaine du catalogue s'ajoute au plan
+ * sans passer par Mes semaines. Ce qui décrit la séance est copié ; ce qui a
+ * été vécu (statut, durée réelle, RPE, note) et le verrou ne le sont pas.
+ * Écrit sous `withUndoSnapshot`, donc annulable depuis la page du plan.
+ */
+export function mergeSessionsIntoPlanWeek(
+  planId: string,
+  weekNumber: number,
+  source: readonly PlanSession[],
+  mode: MergeWeekMode,
+  labels: { label: string; labelEn: string },
+): boolean {
+  return withUndoSnapshot(planId, "merge_week", labels.label, labels.labelEn, (plan) => {
+    const target = plan.weeks.find(w => w.weekNumber === weekNumber);
+    if (!target) throw new Error("week not in plan");
+    const copies: PlanSession[] = source.map(session => {
+      const {
+        status: _status,
+        completedAt: _completedAt,
+        actualDurationMin: _actualDurationMin,
+        actualDistanceKm: _actualDistanceKm,
+        rpe: _rpe,
+        userNote: _userNote,
+        locked: _locked,
+        ...kept
+      } = session;
+      const copy: PlanSession = { ...kept, paceNotes: session.paceNotes?.map(n => ({ ...n })) };
+      if (!copy.paceNotes) delete copy.paceNotes;
+      return copy;
+    });
+    target.sessions = (mode === "replace" ? copies : [...target.sessions, ...copies]).sort(
+      (a, b) => a.dayOfWeek - b.dayOfWeek,
+    );
+    return [];
+  });
 }
 
 // ── Undo last change ───────────────────────────────────────────────
@@ -457,7 +582,14 @@ export function withUndoSnapshot(
   const plan = plans[planIdx];
   const before = structuredClone(plan);
 
-  const changes = mutator(plan);
+  let changes: AutoChange[];
+  try {
+    changes = mutator(plan);
+  } catch {
+    // Le mutateur a refusé : rien n'est écrit, et le plan lu reste intact
+    // pour l'appelant puisque `getAllPlans` relit le stockage.
+    return false;
+  }
 
   plan._lastUndoableChange = {
     at: new Date().toISOString(),

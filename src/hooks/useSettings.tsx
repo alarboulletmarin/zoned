@@ -22,7 +22,6 @@ const STORAGE_KEY = "zoned-settings";
 interface SettingsContextValue {
   settings: UserSettings;
   setUnitSystem: (unit: UnitSystem) => void;
-  setRouteGeneratorEnabled: (enabled: boolean) => void;
   setOpeningAnimation: (opening: OpeningAnimation) => void;
   setEnabledPractices: (practices: Practice[]) => void;
   setModuleHidden: (module: ModuleId, hidden: boolean) => void;
@@ -45,6 +44,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     try {
       return parseStoredSettings(localStorage.getItem(STORAGE_KEY));
     } catch {
+      // Storage itself refused the read (private mode, blocked site data):
+      // the defaults apply for this session, nothing is lost on disk.
       return DEFAULT_SETTINGS;
     }
   });
@@ -62,10 +63,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   const setUnitSystem = useCallback((unit: UnitSystem) => {
     setSettings((prev) => ({ ...prev, unitSystem: unit }));
-  }, []);
-
-  const setRouteGeneratorEnabled = useCallback((enabled: boolean) => {
-    setSettings((prev) => ({ ...prev, routeGeneratorEnabled: enabled }));
   }, []);
 
   /* The launch screen paints before this hook exists, so it reads the value
@@ -100,7 +97,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       value={{
         settings,
         setUnitSystem,
-        setRouteGeneratorEnabled,
         setOpeningAnimation,
         setEnabledPractices,
         setModuleHidden,

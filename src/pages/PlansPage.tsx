@@ -8,7 +8,6 @@ import {
   Trash2,
   Upload,
   FlaskConical,
-  Scale,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,7 @@ import { SEOHead } from "@/components/seo";
 import { HubNav, navSection } from "@/components/layout";
 import { usePlans } from "@/hooks/usePlans";
 import { importPlan } from "@/lib/planStorage";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
@@ -191,8 +190,8 @@ export function PlansPage() {
         } else {
           toast.error(t("plansPage.importInvalid"));
         }
-      } catch {
-        toast.error(t("plansPage.importReadError"));
+      } catch (err) {
+        toast.failure(t("plansPage.importReadError"), err);
       }
     };
     input.click();
@@ -240,23 +239,25 @@ export function PlansPage() {
             <p className="zn-body zn-body--lead zn-plans__lede">
               {t("plansPage.subtitle")}
             </p>
-            <div className="zn-cluster">
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/plans/methodology">
-                  <FlaskConical />
-                  {t("plansPage.science")}
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/calculators/what-if">
-                  <Scale />
-                  {t("plansPage.whatIf")}
-                </Link>
-              </Button>
-            </div>
+            {/* La science commente des plans : sur une étagère vide
+                elle passait AVANT le seul bouton qui compte, et le
+                repoussait sous le pli. Elle arrive avec le premier plan. */}
+            {planCount > 0 && (
+              <div className="zn-cluster">
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/plans/methodology">
+                    <FlaskConical />
+                    {t("plansPage.science")}
+                  </Link>
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="zn-cluster">
+            {/* L'import reste en tête même à zéro plan : c'est la voie de
+                quelqu'un qui arrive avec un fichier, et elle ne concurrence
+                pas la création, elle la précède. */}
             <Button variant="outline" onClick={handleImport}>
               <Upload />
               {t("plansPage.import")}

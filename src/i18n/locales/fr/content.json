@@ -4,7 +4,7 @@
     "statsWorkouts": "Séances",
     "statsCalculators": "Calculateurs",
     "title": "Une bibliothèque d'entraînement, par un coureur",
-    "description": "Des séances par zones, des plans et des calculateurs. Sans abonnement, sans suivi, sans superflu.",
+    "description": "Des séances par zones, des plans et des calculateurs. Sans abonnement, sans analytique, sans suivi.",
     "personal": {
       "title": "Le projet",
       "bio": "Zoned est né du besoin d'un outil simple, par zones, pour s'entraîner sans dépendre d'une plateforme propriétaire."
@@ -19,7 +19,7 @@
     },
     "privacy": {
       "title": "Vie privée",
-      "noServer": "Aucun serveur, aucun compte, aucun cookie. Tes données restent dans ton navigateur."
+      "noServer": "Aucun serveur, aucun compte, aucun cookie, aucune analytique. Tes données restent dans ton navigateur."
     },
     "credits": {
       "title": "Stack technique",

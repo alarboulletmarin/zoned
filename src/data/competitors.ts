@@ -40,18 +40,12 @@ const criteriaLabels: Array<{ key: string; labelFr: string; labelEn: string }> =
 const zonedValues: Record<string, ComparisonValue> = {
   price: { type: "text", valueFr: "Gratuit", valueEn: "Free" },
   account: { type: "no" },
-  // Not "no": src/App.tsx mounts Vercel Web Analytics unconditionally, so each
-  // page view is measured, anonymously, without a cookie or an account.
-  dataCollection: {
-    type: "partial",
-    labelFr: "Analytique de pages, anonyme",
-    labelEn: "Anonymous page analytics",
-  },
+  dataCollection: { type: "no" },
   personalizedPlans: { type: "yes" },
   exportFit: { type: "yes" },
   exportPdf: { type: "yes" },
   library: { type: "text", valueFr: "262 séances", valueEn: "262 workouts" },
-  calculators: { type: "text", valueFr: "12 calculateurs", valueEn: "12 calculators" },
+  calculators: { type: "text", valueFr: "10 calculateurs", valueEn: "10 calculators" },
   openSource: { type: "yes" },
 };
 

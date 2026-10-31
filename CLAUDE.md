@@ -22,8 +22,9 @@ bun run build:seo      # build + prerender (headless Chrome, slow)
 
 Gates CI runs on every PR, in this order: `bunx tsc --noEmit`, `bun test`,
 `bun run check:i18n` (FR/EN namespace parity), `bun run check:typography`,
+`bun run check:errors` (no silent `catch` in pages, components, hooks),
 `bun run scripts/generate-wordmark.mjs --check`, `bun run scripts/qa-zone-colors.ts`,
-`bun run scripts/qa-workout-schema.ts`. Run those seven before claiming green.
+`bun run scripts/qa-workout-schema.ts`. Run those eight before claiming green.
 `scripts/qa-zone-audit.ts` also runs but is informational: it exits 0 whatever it
 finds, so read its log rather than its exit code.
 
@@ -123,6 +124,7 @@ Some QA scripts exist only on a developer machine, so a CI step naming one would
 
 ## Docs worth reading before a related change
 
-`docs/pratiques.md` (practice axis, triathlon stance), `docs/workout-format.md` (authoring
+`docs/pratiques.md` (practice axis, triathlon stance), `docs/aujourdhui.md` (what `/today`
+follows: plans plus placed weeks, and the roadmap for writing back), `docs/workout-format.md` (authoring
 a valid workout), `docs/icon-mapping.md`, `docs/doodles.md` (23 illustrations generated
 from `scripts/doodles/rig.mjs`), `CONTRIBUTING.md` (bilingual policy, id conventions).

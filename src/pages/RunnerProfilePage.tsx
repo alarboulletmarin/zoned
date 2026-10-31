@@ -6,9 +6,8 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import {
-  Gauge,
   Save,
   Trash2,
   Plus,
@@ -46,6 +45,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { DateInput } from "@/components/ui/date-input";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { SEOHead } from "@/components/seo";
@@ -63,6 +63,7 @@ import {
 } from "@/lib/runnerProfile";
 import { saveUserZonePrefs } from "@/lib/zones";
 import { usePickLang } from "@/lib/i18n-utils";
+import { secondsToTimeDigits, timeDigitsToSeconds } from "@/lib/paceFields";
 import { CommuteSection } from "@/components/domain/CommuteSection";
 import type {
   RunnerProfile,
@@ -125,68 +126,31 @@ type PersonalRecordEntry = RunnerProfile["personalRecords"][number];
 // TimeInputs (reusable sub-component)
 // ---------------------------------------------------------------------------
 
-/** Hours, minutes, seconds, three outlined number fields, each carrying its
- *  own unit inside the frame, so the row reads as one duration. */
+/** A finish time, one outlined mono field at the chronometer mask: digits
+ *  enter from the right, 4500 reads 45:00, 33000 reads 3:30:00. The distance
+ *  settles whether four digits are minutes or hours (`lib/paceFields.ts`). */
 function TimeInputs({
-  hours,
-  minutes,
-  seconds,
-  onHoursChange,
-  onMinutesChange,
-  onSecondsChange,
-  hLabel,
-  mLabel,
-  sLabel,
+  digits,
+  onDigitsChange,
+  distanceKm,
+  label,
 }: {
-  hours: string;
-  minutes: string;
-  seconds: string;
-  onHoursChange: (v: string) => void;
-  onMinutesChange: (v: string) => void;
-  onSecondsChange: (v: string) => void;
-  hLabel: string;
-  mLabel: string;
-  sLabel: string;
+  digits: string;
+  onDigitsChange: (v: string) => void;
+  distanceKm: number;
+  label: string;
 }) {
   return (
-    <div className="zn-num__time">
-      <span className="zn-numfield" style={{ "--field-w": "30px" } as CSSProperties}>
-        <input
-          type="number"
-          min={0}
-          max={9}
-          value={hours}
-          onChange={(e) => onHoursChange(e.target.value)}
-          className="zn-numfield__input"
-          aria-label={hLabel}
-        />
-        <span className="zn-numfield__unit">{hLabel}</span>
-      </span>
-      <span className="zn-numfield" style={{ "--field-w": "36px" } as CSSProperties}>
-        <input
-          type="number"
-          min={0}
-          max={59}
-          value={minutes}
-          onChange={(e) => onMinutesChange(e.target.value)}
-          className="zn-numfield__input"
-          aria-label={mLabel}
-        />
-        <span className="zn-numfield__unit">{mLabel}</span>
-      </span>
-      <span className="zn-numfield" style={{ "--field-w": "36px" } as CSSProperties}>
-        <input
-          type="number"
-          min={0}
-          max={59}
-          value={seconds}
-          onChange={(e) => onSecondsChange(e.target.value)}
-          className="zn-numfield__input"
-          aria-label={sLabel}
-        />
-        <span className="zn-numfield__unit">{sLabel}</span>
-      </span>
-    </div>
+    <span className="zn-numfield">
+      <ChronoInput
+        format="hms"
+        distanceKm={distanceKm}
+        digits={digits}
+        onDigitsChange={onDigitsChange}
+        className="zn-numfield__input zn-numfield__input--chrono"
+        aria-label={label}
+      />
+    </span>
   );
 }
 
@@ -224,24 +188,12 @@ function PanelHead({
   );
 }
 
-function timeToFields(totalSeconds: number | undefined): {
-  h: string;
-  m: string;
-  s: string;
-} {
-  if (!totalSeconds) return { h: "", m: "", s: "" };
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = totalSeconds % 60;
-  return { h: h > 0 ? String(h) : "", m: String(m), s: s > 0 ? String(s) : "" };
-}
-
-function fieldsToSeconds(h: string, m: string, s: string): number {
-  return (
-    (parseInt(h, 10) || 0) * 3600 +
-    (parseInt(m, 10) || 0) * 60 +
-    (parseInt(s, 10) || 0)
-  );
+/** A record's distance in km, for the minutes-or-hours reading of the mask.
+ *  Custom distances are free text ("15K", "30 km"): their number, or 0. */
+function recordDistanceKm(distance: string): number {
+  const meta = RACE_DISTANCE_META[distance as RaceDistance];
+  if (meta) return meta.distanceKm;
+  return parseFloat(distance.replace(",", ".")) || 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -372,18 +324,19 @@ function BaseDataSection({
       currentLongRunKm: parsedLong,
       runnerLevel: (runnerLevel || undefined) as Difficulty | undefined,
     };
-    saveRunnerProfile(updated);
+    const saved = saveRunnerProfile(updated);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
+    /* Une seule VMA dans l'app. Enregistrer le profil laissait Mes zones,
+       donc le générateur, sur l'ancienne valeur, et il fallait un second
+       bouton pour les mettre d'accord. Les deux s'écrivent ensemble. */
+    if (parsedFcMax || parsedVma) {
+      saveUserZonePrefs({ fcMax: parsedFcMax, vma: parsedVma });
+    }
     onSave(loadRunnerProfile()!);
     toast.success(t("base.saved"));
-  }
-
-  function handleUpdateZones() {
-    if (!parsedFcMax && !parsedVma) return;
-    saveUserZonePrefs({
-      fcMax: parsedFcMax,
-      vma: parsedVma,
-    });
-    toast.success(t("base.zonesUpdated"));
   }
 
   return (
@@ -473,14 +426,6 @@ function BaseDataSection({
               <Save />
               {t("base.save")}
             </Button>
-            <Button
-              variant="outline"
-              onClick={handleUpdateZones}
-              disabled={!parsedFcMax && !parsedVma}
-            >
-              <Gauge />
-              {t("base.updateZones")}
-            </Button>
             <Button variant="outline" asChild>
               <Link to="/plan/new">
                 <Target />
@@ -548,24 +493,20 @@ function ReferenceRow({
   const pickLang = usePickLang();
   const meta = RACE_DISTANCE_META[distance];
 
-  const init = timeToFields(initialRef?.totalSeconds);
-  const [hours, setHours] = useState(init.h);
-  const [minutes, setMinutes] = useState(init.m);
-  const [seconds, setSeconds] = useState(init.s);
+  const [timeDigitsValue, setTimeDigitsValue] = useState(() =>
+    secondsToTimeDigits(initialRef?.totalSeconds ?? 0, meta.distanceKm),
+  );
   const [date, setDate] = useState(initialRef?.date ?? "");
   const [label, setLabel] = useState(initialRef?.label ?? "");
 
   // Re-sync if parent profile changes
   useEffect(() => {
-    const f = timeToFields(initialRef?.totalSeconds);
-    setHours(f.h);
-    setMinutes(f.m);
-    setSeconds(f.s);
+    setTimeDigitsValue(secondsToTimeDigits(initialRef?.totalSeconds ?? 0, meta.distanceKm));
     setDate(initialRef?.date ?? "");
     setLabel(initialRef?.label ?? "");
-  }, [initialRef?.totalSeconds, initialRef?.date, initialRef?.label]);
+  }, [initialRef?.totalSeconds, initialRef?.date, initialRef?.label, meta.distanceKm]);
 
-  const totalSec = fieldsToSeconds(hours, minutes, seconds);
+  const totalSec = timeDigitsToSeconds(timeDigitsValue, meta.distanceKm) ?? 0;
   const distanceLabel = pickLang(meta, "label");
 
   function handleSave() {
@@ -598,15 +539,10 @@ function ReferenceRow({
       <div className="zn-num__field">
         <span className="zn-label">{t("references.time")}</span>
         <TimeInputs
-          hours={hours}
-          minutes={minutes}
-          seconds={seconds}
-          onHoursChange={setHours}
-          onMinutesChange={setMinutes}
-          onSecondsChange={setSeconds}
-          hLabel={t("references.hours")}
-          mLabel={t("references.minutes")}
-          sLabel={t("references.seconds")}
+          digits={timeDigitsValue}
+          onDigitsChange={setTimeDigitsValue}
+          distanceKm={meta.distanceKm}
+          label={`${t("references.time")} · ${distanceLabel}`}
         />
       </div>
 
@@ -665,17 +601,24 @@ function PerformanceReferencesSection({
     distance: RaceDistance,
     data: { totalSeconds: number; date?: string; label?: string },
   ) {
-    setPerformanceReference(distance, data);
+    const saved = setPerformanceReference(distance, data);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
     toast.success(t("references.saved"));
   }
 
   function handleClear(distance: RaceDistance) {
-    removePerformanceReference(distance);
+    const saved = removePerformanceReference(distance);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("references.cleared"));
   }
 
   const filled = RACE_DISTANCES.filter(
@@ -749,29 +692,39 @@ function BenchmarkHistorySection({
     const result = Number(bmResult);
     if (!result || result <= 0) return;
     const derived = deriveVma(bmType, result);
-    addBenchmark({
+    const saved = addBenchmark({
       type: bmType,
       date: bmDate,
       result,
       derivedVma: derived,
       notes: bmNotes || undefined,
     });
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("benchmarks.added"));
     setDialogOpen(false);
     resetDialog();
   }
 
   function handleDelete(id: string) {
-    deleteBenchmark(id);
+    const saved = deleteBenchmark(id);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("benchmarks.deleted"));
   }
 
   function handleUseVma(vma: number) {
-    updateBaseData({ vma });
+    const saved = updateBaseData({ vma });
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     saveUserZonePrefs({ vma });
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
@@ -1002,9 +955,7 @@ function PersonalRecordsSection({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [prDistance, setPrDistance] = useState<string>("10K");
   const [prCustom, setPrCustom] = useState("");
-  const [prHours, setPrHours] = useState("");
-  const [prMinutes, setPrMinutes] = useState("");
-  const [prSeconds, setPrSeconds] = useState("");
+  const [prTimeDigits, setPrTimeDigits] = useState("");
   const [prDate, setPrDate] = useState("");
   const [prLabel, setPrLabel] = useState("");
 
@@ -1020,9 +971,7 @@ function PersonalRecordsSection({
   function resetDialog() {
     setPrDistance("10K");
     setPrCustom("");
-    setPrHours("");
-    setPrMinutes("");
-    setPrSeconds("");
+    setPrTimeDigits("");
     setPrDate("");
     setPrLabel("");
   }
@@ -1032,30 +981,39 @@ function PersonalRecordsSection({
     setDialogOpen(true);
   }
 
+  const prDistanceKm = recordDistanceKm(prDistance === "other" ? prCustom : prDistance);
+  const prTotalSec = timeDigitsToSeconds(prTimeDigits, prDistanceKm) ?? 0;
+
   function handleAdd() {
-    const totalSec = fieldsToSeconds(prHours, prMinutes, prSeconds);
+    const totalSec = prTotalSec;
     if (totalSec <= 0) return;
     const distance = prDistance === "other" ? prCustom : prDistance;
     if (!distance) return;
-    addPersonalRecord({
+    const saved = addPersonalRecord({
       distance,
       timeSeconds: totalSec,
       date: prDate || undefined,
       label: prLabel || undefined,
       provenance: "manual",
     });
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("records.added"));
     setDialogOpen(false);
     resetDialog();
   }
 
   function handleDelete(index: number) {
-    deletePersonalRecord(index);
+    const saved = deletePersonalRecord(index);
+    if (!saved.ok) {
+      toast.failure(t("base.saveFailed"), saved);
+      return;
+    }
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
-    toast.success(t("records.deleted"));
   }
 
   // We need the original index for deletion (since we sort for display)
@@ -1224,15 +1182,10 @@ function PersonalRecordsSection({
             <div className="zn-num__field">
               <span className="zn-label">{t("records.time")}</span>
               <TimeInputs
-                hours={prHours}
-                minutes={prMinutes}
-                seconds={prSeconds}
-                onHoursChange={setPrHours}
-                onMinutesChange={setPrMinutes}
-                onSecondsChange={setPrSeconds}
-                hLabel={t("records.hours")}
-                mLabel={t("records.minutes")}
-                sLabel={t("records.seconds")}
+                digits={prTimeDigits}
+                onDigitsChange={setPrTimeDigits}
+                distanceKm={prDistanceKm}
+                label={t("records.time")}
               />
             </div>
 
@@ -1269,7 +1222,7 @@ function PersonalRecordsSection({
             <Button
               onClick={handleAdd}
               disabled={
-                fieldsToSeconds(prHours, prMinutes, prSeconds) <= 0 ||
+                prTotalSec <= 0 ||
                 (prDistance === "other" && !prCustom.trim())
               }
             >

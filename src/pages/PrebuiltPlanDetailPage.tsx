@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import {
   ArrowLeft,
   CalendarRange,
@@ -137,8 +137,9 @@ export function PrebuiltPlanDetailPage() {
   const handleUse = () => {
     if (!prebuilt) return;
     const plan = convertPrebuiltToPlan(prebuilt);
-    if (!savePlan(plan)) {
-      toast.error(t("errors.planSaveFailed"));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("errors.planSaveFailed"), saved);
       return;
     }
     triggerStorageWarning();

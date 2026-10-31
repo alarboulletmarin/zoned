@@ -2,6 +2,12 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/routes", "destination": "/library", "permanent": true },
+    { "source": "/routes/:path*", "destination": "/library", "permanent": true },
+    { "source": "/calculators/what-if", "destination": "/calculators", "permanent": true },
+    { "source": "/calculators/age-graded", "destination": "/calculators/equivalence", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ],

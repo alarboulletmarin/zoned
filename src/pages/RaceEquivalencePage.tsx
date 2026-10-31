@@ -7,6 +7,7 @@ import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import { ZoneScale } from "@/components/visualization";
 import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import {
   Select,
   SelectContent,
@@ -21,6 +22,12 @@ import { calculatePaceZones, loadUserZonePrefs } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
+import {
+  hmsParamsToSeconds,
+  secondsToHmsParams,
+  secondsToTimeDigits,
+  timeDigitsToSeconds,
+} from "@/lib/paceFields";
 
 /**
  * Standard race distances in km.
@@ -99,9 +106,19 @@ export function RaceEquivalencePage() {
     () => searchParams.get("d") ?? "10k",
   );
   const [customKm, setCustomKm] = useState<string>(() => searchParams.get("km") ?? "");
-  const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "");
-  const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "");
-  const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "");
+  // One masked field, digits entering from the right. Shared links still
+  // carry `h`, `m`, `s`: summed on the way in, split again on the way out.
+  const [timeDigitsValue, setTimeDigitsValue] = useState<string>(() => {
+    const id = searchParams.get("d") ?? "10k";
+    const km =
+      id === "custom"
+        ? parseFloat(searchParams.get("km") ?? "") || 0
+        : (STANDARD_DISTANCES.find((d) => d.id === id)?.km ?? 0);
+    return secondsToTimeDigits(
+      hmsParamsToSeconds(searchParams.get("h"), searchParams.get("m"), searchParams.get("s")),
+      km,
+    );
+  });
 
   // Resolve input distance in km
   const inputDistanceKm = useMemo(() => {
@@ -114,10 +131,7 @@ export function RaceEquivalencePage() {
   }, [distanceId, customKm]);
 
   // Parse time
-  const parsedHours = hours !== "" ? parseInt(hours, 10) : 0;
-  const parsedMinutes = minutes !== "" ? parseInt(minutes, 10) : 0;
-  const parsedSeconds = seconds !== "" ? parseInt(seconds, 10) : 0;
-  const totalSeconds = parsedHours * 3600 + parsedMinutes * 60 + parsedSeconds;
+  const totalSeconds = timeDigitsToSeconds(timeDigitsValue, inputDistanceKm) ?? 0;
   const hasValidInput = totalSeconds > 0 && inputDistanceKm > 0;
 
   // Load user zone prefs for zone badge
@@ -143,25 +157,6 @@ export function RaceEquivalencePage() {
       };
     });
   }, [hasValidInput, totalSeconds, inputDistanceKm, distanceId, paceZones]);
-
-  // Clamp numeric input
-  const handleNumericInput = (
-    value: string,
-    setter: (v: string) => void,
-    max: number,
-  ) => {
-    if (value === "") {
-      setter("");
-      return;
-    }
-    const num = parseInt(value, 10);
-    if (Number.isNaN(num) || num < 0) return;
-    if (num > max) {
-      setter(String(max));
-      return;
-    }
-    setter(String(num));
-  };
 
   return (
     <>
@@ -257,47 +252,16 @@ export function RaceEquivalencePage() {
                 <span className="zn-calc__label">
                   {t("calculators:calculateurs.equivalence.raceTime")}
                 </span>
-                <div className="zn-num__time">
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={9}
-                      placeholder="0"
-                      value={hours}
-                      onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.equivalence.hours")}
-                    />
-                    <span className="zn-numfield__unit">h</span>
-                  </span>
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      placeholder="00"
-                      value={minutes}
-                      onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.equivalence.minutes")}
-                    />
-                    <span className="zn-numfield__unit">min</span>
-                  </span>
-                  <span className="zn-numfield">
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      placeholder="00"
-                      value={seconds}
-                      onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
-                      className="zn-numfield__input"
-                      aria-label={t("calculators:calculateurs.equivalence.seconds")}
-                    />
-                    <span className="zn-numfield__unit">sec</span>
-                  </span>
-                </div>
+                <span className="zn-numfield">
+                  <ChronoInput
+                    format="hms"
+                    distanceKm={inputDistanceKm}
+                    digits={timeDigitsValue}
+                    onDigitsChange={setTimeDigitsValue}
+                    className="zn-numfield__input zn-numfield__input--chrono"
+                    aria-label={t("calculators:calculateurs.equivalence.raceTime")}
+                  />
+                </span>
               </div>
             </CardContent>
           </Card>
@@ -378,9 +342,7 @@ export function RaceEquivalencePage() {
                       buildParamsUrl("/calculators/equivalence", {
                         d: distanceId,
                         km: customKm,
-                        h: hours,
-                        m: minutes,
-                        s: seconds,
+                        ...secondsToHmsParams(totalSeconds),
                       })
                     }
                     title={t("calculators:calculateurs.equivalence.title")}

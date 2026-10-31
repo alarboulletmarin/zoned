@@ -20,7 +20,7 @@ Le site est :
 - [Accueil](https://zoned.run/): vue d'ensemble du site avec les zones, séances de la semaine et statistiques globales
 - [Bibliothèque de séances](https://zoned.run/library): catalogue filtrable de 256 séances scientifiques par zone, catégorie, durée, discipline (course, vélo, natation, renforcement)
 - [Plans d'entraînement](https://zoned.run/plan/new/prebuilt): plans pré-construits pour 5K, 10K, semi, marathon, trail, retour de blessure
-- [Calculateurs](https://zoned.run/calculators): VMA, allures, zones, table d'allures, tapis roulant, splits, équivalences, age-graded
+- [Calculateurs](https://zoned.run/calculators): VMA, allures, zones, table d'allures, tapis roulant, splits, équivalences
 - [Glossaire](https://zoned.run/glossary): 50+ termes (VMA, FCmax, seuil, lactate, polarisé, etc.)
 - [Apprendre](https://zoned.run/learn): articles pédagogiques sur les zones, la VMA, la nutrition, la récupération
 - [Méthodologie](https://zoned.run/methodology): sources scientifiques et choix de conception
@@ -49,7 +49,6 @@ Le système Zoned utilise 6 zones d'intensité construites depuis la VMA et la F
 - [Tapis roulant](https://zoned.run/calculators/tapis-roulant): convertit pente et vitesse en effort équivalent route
 - [Splits négatifs](https://zoned.run/calculators/splits): planifie votre pacing course
 - [Équivalence courses](https://zoned.run/calculators/equivalence): prédit vos temps sur d'autres distances
-- [Age-graded](https://zoned.run/calculators/age-graded): performance ajustée par âge et sexe
 - [Test FTP vélo](https://zoned.run/calculators/ftp): zones de puissance cyclisme (modèle Coggan)
 - [Test CSS natation](https://zoned.run/calculators/css): vitesse critique de nage et allures associées
 - [Simulateur what-if](https://zoned.run/calculators/what-if): compare des scénarios d'entraînement (volume, niveau, objectif)

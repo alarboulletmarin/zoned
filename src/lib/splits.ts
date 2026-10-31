@@ -18,6 +18,21 @@ export function formatSplitTime(totalSeconds: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+/**
+ * A finish time spelled out, "3 h 30 min" / "45 min 30 s". Under a masked
+ * time field it states which reading was taken: "3:30" alone could still be
+ * read either way, words cannot.
+ */
+export function formatReadableTime(totalSeconds: number): string {
+  const total = Math.round(totalSeconds);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const sec = s > 0 ? ` ${s.toString().padStart(2, "0")} s` : "";
+  if (h > 0) return `${h} h ${m.toString().padStart(2, "0")} min${sec}`;
+  return `${m} min${sec}`;
+}
+
 export function formatPaceDisplay(paceMinPerKm: number): string {
   const min = Math.floor(paceMinPerKm);
   const sec = Math.round((paceMinPerKm - min) * 60);

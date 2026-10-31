@@ -446,7 +446,7 @@ export function PlanWorkoutPanel({
                 data-workout-id={workout.id}
                 draggable={!!inline}
                 onDragStart={inline ? (e) => handleDragStart(e, workout) : undefined}
-                onClick={!inline && onSelectWorkout ? () => select(workout.id) : undefined}
+                onClick={onSelectWorkout ? () => select(workout.id) : undefined}
                 className="zn-planpanel__item"
                 data-draggable={inline ? "true" : undefined}
               >

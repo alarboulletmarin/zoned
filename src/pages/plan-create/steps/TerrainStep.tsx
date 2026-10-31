@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { Segmented } from "@/components/ui/segmented";
 import type { TerrainType } from "@/types";
-import type { StepContext, StepDef } from "../types";
+import type { StepContext } from "../types";
 
 /** Les trois terrains qu'un trail traverse, du plus roulant au plus raide. */
 const TERRAINS: TerrainType[] = ["trail_runnable", "trail_technical", "mountain"];
@@ -19,7 +19,7 @@ const TERRAINS: TerrainType[] = ["trail_runnable", "trail_technical", "mountain"
  * la sélection des séances via leur `terrainType`. **Aucune formule du moteur
  * ne bouge**, c'est la ligne de périmètre de tout ce chantier.
  */
-function TerrainBody({ form, setForm, uid, t }: StepContext) {
+export function TerrainBody({ form, setForm, uid, t }: StepContext) {
   return (
     <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
       <div className="zn-contrib-field">
@@ -61,12 +61,3 @@ function TerrainBody({ form, setForm, uid, t }: StepContext) {
   );
 }
 
-export const terrainStep: StepDef = {
-  id: "terrain",
-  titleKey: "terrain.title",
-  subtitleKey: "terrain.subtitle",
-  Body: TerrainBody,
-  isComplete: () => true,
-  nextLabelKey: "nav.continue",
-  showSkip: true,
-};

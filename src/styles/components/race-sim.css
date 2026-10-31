@@ -229,8 +229,11 @@
 }
 
 /* The mobile strip. Bleeds to the screen edge and pays its own margin back so
-   the first and last chip clear the page gutter. */
+   the first and last chip clear the page gutter. Positioned so the chips
+   measure their offset against the strip itself, which is what centring the
+   active one by scrolling the strip alone needs (RaceSimNav). */
 .zn-rs-chips {
+  position: relative;
   display: flex;
   gap: var(--sp-3);
   margin-inline: calc(var(--sp-8) * -1);

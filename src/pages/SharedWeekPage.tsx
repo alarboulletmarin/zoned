@@ -1,12 +1,17 @@
 import { useMemo } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { ArrowLeft, Plus } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
-import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
+import {
+  PlanWeeklyView,
+  type WorkoutCardMeta,
+  type WorkoutCardProfile,
+} from "@/components/domain/PlanWeeklyView";
+import { toZoneBarBlocks } from "@/components/visualization";
 import { WeekSummaryStrip } from "@/components/weekly";
 import { ACTIVITY_KINDS, isActivitySession } from "@/lib/activitySession";
 import {
@@ -95,6 +100,22 @@ export function SharedWeekPage() {
   );
   const unknownCount = sessions.length - knownSessions.length;
 
+  // The editor's small picture of each session, for the workouts this week holds.
+  const workoutProfiles = useMemo(() => {
+    const profiles: Record<string, WorkoutCardProfile> = {};
+    for (const session of knownSessions) {
+      const w = byId.get(session.workoutId);
+      if (!w || profiles[w.id]) continue;
+      if (isStrengthWorkout(w)) {
+        profiles[w.id] = { kind: "strength", intensity: w.intensity };
+        continue;
+      }
+      const blocks = toZoneBarBlocks(w);
+      if (blocks.length > 0) profiles[w.id] = { kind: "zones", blocks };
+    }
+    return profiles;
+  }, [knownSessions, byId]);
+
   // The preview is the plan the "add" call would save, so the board and the
   // summary show exactly what lands: unknown sessions are already out.
   const preview = useMemo(
@@ -136,8 +157,9 @@ export function SharedWeekPage() {
   const handleAdd = () => {
     // A fresh copy, with its own id: the preview stays what the URL says.
     const plan = sharedWeekToPlan(payload, new Set(byId.keys()));
-    if (!savePlan(plan)) {
-      toast.error(t("weekly.toast.saveFailed", { defaultValue: "Échec de l'enregistrement" }));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("weekly.toast.saveFailed"), saved);
       return;
     }
     triggerStorageWarning();
@@ -206,6 +228,7 @@ export function SharedWeekPage() {
                   plan={preview}
                   workoutNames={workoutNames}
                   workoutMeta={workoutMeta}
+                  workoutProfiles={workoutProfiles}
                   currentWeek={1}
                   initialWeek={1}
                   isEn={isEn}

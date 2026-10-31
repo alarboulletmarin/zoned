@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -75,8 +75,8 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
     try {
       await navigator.clipboard.writeText(formatWorkoutAsText());
       toast.success(t("fitTransfer.instructionsCopied"));
-    } catch {
-      toast.error(t("fitTransfer.copyFailed"));
+    } catch (err) {
+      toast.failure(t("fitTransfer.copyFailed"), err);
     }
   }
 

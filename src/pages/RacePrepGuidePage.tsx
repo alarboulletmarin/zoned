@@ -46,6 +46,8 @@ export function RacePrepGuidePage() {
       const stored = localStorage.getItem(STORAGE_KEY);
       return stored ? JSON.parse(stored) : {};
     } catch {
+      // Unreadable checklist state: every box starts unchecked, nothing else
+      // depends on it.
       return {};
     }
   });

@@ -20,13 +20,11 @@ export const NAMESPACES = [
   "plan",
   "guides",
   "simulator",
-  "whatif",
   "strength",
   "calculators",
   "content",
   "homepage",
   "profile",
-  "routes",
   "nutrition",
   "today",
 ] as const;
@@ -55,7 +53,7 @@ i18n
     fallbackLng: "fr",
     defaultNS: "common",
     fallbackNS: "common",
-    ns: ["common", "activity", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes", "nutrition", "today"],
+    ns: ["common", "activity", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "strength", "calculators", "content", "homepage", "profile", "nutrition", "today"],
 
     // Detection options
     detection: {

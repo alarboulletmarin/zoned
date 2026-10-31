@@ -53,7 +53,15 @@
    trop grand, il ne le rétrécit jamais, et sans plafond la dernière semaine du
    mois se retrouverait hors de la fenêtre, inatteignable. */
 [data-slot="popover-content"].zn-date-input__popover {
-  inline-size: auto;
+  /* Une largeur posée, pas `auto`. Le calendrier est une table à
+     `inline-size: 100%` : dans un panneau qui se dimensionne sur son contenu,
+     le pourcentage n'a rien à mesurer et la grille grossit jusqu'au plafond
+     ci-dessous, c'est-à-dire toute la fenêtre (cases carrées de 190 px sur un
+     écran de 1440). Le plafond de 320 px de calendar.css ne vaut que sous
+     560 px, là où le tiroir prend le relais. 344 px = grille de 312 px, sept
+     cases de 38 px. Un pointeur grossier (écran tactile de portable) garde
+     ses 44 px par case : 400 px. */
+  inline-size: 344px;
   max-inline-size: min(
     var(--radix-popover-content-available-width, 100vw),
     calc(100vw - var(--sp-12))
@@ -64,6 +72,12 @@
   overscroll-behavior: contain;
 
   padding: 0;
+}
+
+@media (pointer: coarse) {
+  [data-slot="popover-content"].zn-date-input__popover {
+    inline-size: 400px;
+  }
 }
 
 /* ── le tiroir du téléphone ───────────────────────────────────────────── */

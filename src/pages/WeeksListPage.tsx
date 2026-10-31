@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import {
   ArrowRight,
   Plus,
@@ -37,6 +37,7 @@ import { ZoneScale } from "@/components/visualization";
 import { WeekRhythmChart } from "@/components/weekly";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { usePlans } from "@/hooks/usePlans";
+import { layerFor, loadTodayComposition, type TodayComposition } from "@/lib/todayComposition";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
@@ -56,6 +57,7 @@ function WeekCard({
   byId,
   workoutNames,
   locale,
+  composition,
   onDelete,
   onDuplicate,
   onShare,
@@ -64,6 +66,7 @@ function WeekCard({
   byId: Map<string, AnyWorkoutTemplate>;
   workoutNames: Record<string, string>;
   locale: string;
+  composition: TodayComposition;
   onDelete: (id: string) => void;
   onDuplicate: (week: TrainingPlan) => void;
   onShare: (week: TrainingPlan) => void;
@@ -85,6 +88,20 @@ function WeekCard({
     new Date(week.config.createdAt).toLocaleDateString(locale),
   ].join(" · ");
 
+  /* Posée dans le cockpit : une ligne de plus, en mono, et seulement quand
+     c'est le cas. C'est la seule chose que la liste ne savait pas dire d'une
+     semaine : où elle est en train de servir. */
+  const layer = layerFor(composition, week.id);
+  const placedOn =
+    layer?.enabled && layer.anchor
+      ? t("weekly.cockpit.listPlaced", {
+          date: (() => {
+            const [y, m, d] = layer.anchor.split("-").map(Number);
+            return new Date(y, m - 1, d).toLocaleDateString(locale, { day: "numeric", month: "short" });
+          })(),
+        })
+      : null;
+
   return (
     <Card className="zn-pw__week">
       {/* The whole upper block is the link to the week, a real anchor, the
@@ -103,6 +120,7 @@ function WeekCard({
         </div>
 
         <span className="zn-mono zn-pw__facts">{facts}</span>
+        {placedOn && <span className="zn-mono zn-pw__facts">{placedOn}</span>}
 
         <WeekRhythmChart slots={slots} />
       </Link>
@@ -161,6 +179,9 @@ export function WeeksListPage() {
   const pick = usePickLang();
   const isEn = useIsEnglish();
   const { plans, remove, reload } = usePlans();
+  // La composition du cockpit, pour dire où chaque semaine sert. Lue une
+  // fois : cette page ne la modifie pas.
+  const composition = useMemo(() => loadTodayComposition(), []);
   const [categoryFilter, setCategoryFilter] = useState<WeekCategory | "all">("all");
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -218,11 +239,10 @@ export function WeeksListPage() {
       `${pick(week, "name")} ${t("weekly.saved.copySuffix")}`,
     );
     if (!newId) {
-      toast.error(t("weekly.toast.duplicateError"));
+      toast.failure(t("weekly.toast.duplicateError"));
       return;
     }
     reload();
-    toast.success(t("weekly.toast.duplicated"));
   };
 
   const handleShare = async (week: TrainingPlan) => {
@@ -236,8 +256,12 @@ export function WeeksListPage() {
       }
       return;
     }
-    await navigator.clipboard.writeText(url);
-    toast.success(t("common:share.toast.linkCopied"));
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t("common:share.toast.linkCopied"));
+    } catch (err) {
+      toast.failure(t("common:share.toast.linkCopyFailed"), err);
+    }
   };
 
   const handleImportFile = async (file: File) => {
@@ -250,12 +274,12 @@ export function WeeksListPage() {
       toast.error(t("weekly.toast.importNotWeek"));
       return;
     }
-    if (!savePlan(plan)) {
-      toast.error(t("weekly.toast.importError"));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("weekly.toast.saveFailed"), saved);
       return;
     }
     reload();
-    toast.success(t("weekly.toast.imported"));
   };
 
   const filtering = categoryFilter !== "all";
@@ -375,6 +399,7 @@ export function WeeksListPage() {
                   byId={byId}
                   workoutNames={workoutNames}
                   locale={isEn ? "en" : "fr"}
+                  composition={composition}
                   onDelete={setDeleteTarget}
                   onDuplicate={handleDuplicate}
                   onShare={handleShare}
@@ -402,25 +427,22 @@ export function WeeksListPage() {
                 ) : (
                   // Le seul aplat vermillon de l'écran, ici et pas en tête :
                   // la première semaine se crée là où on explique ce qu'elle
-                  // est. La seconde voie, en prendre une toute prête, est à
-                  // côté, en contour.
-                  <div
-                    className="zn-cluster"
-                    style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
-                  >
-                    <Button asChild>
-                      <Link to="/weeks/new">
-                        <Plus size={17} />
-                        {t("weekly.list.create")}
-                      </Link>
-                    </Button>
-                    <Button variant="outline" asChild>
-                      <Link to="/weeks/new/prebuilt">
-                        {t("common:topnav.weeksPrebuilt")}
-                        <ArrowRight size={17} />
-                      </Link>
-                    </Button>
-                  </div>
+                  // est. La seconde voie, en prendre une toute prête, est
+                  // dans la note, en prose : un état vide n'a qu'une action.
+                  <Button asChild>
+                    <Link to="/weeks/new">
+                      <Plus size={17} />
+                      {t("weekly.list.emptyAction")}
+                    </Link>
+                  </Button>
+                )
+              }
+              hint={
+                filtering ? undefined : (
+                  <>
+                    {t("weekly.list.emptyHint")}{" "}
+                    <Link to="/weeks/new/prebuilt">{t("weekly.list.emptyHintLink")}</Link>
+                  </>
                 )
               }
             />

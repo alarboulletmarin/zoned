@@ -13,7 +13,9 @@ import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
 import i18n from "@/i18n";
 import { isEnglish, pickLang, pickLangArray } from "@/lib/i18n-utils";
+import { activityKindOf, activitySessionZone } from "@/lib/activitySession";
 import { triggerDownload } from "./download";
+import { exportSessionName } from "./sessionName";
 import { planFilename } from "./planFilename";
 
 /**
@@ -123,7 +125,8 @@ export function exportPlanToICS(
           });
         } else {
           // Regular training session: all-day event
-          const workoutName = workoutNames[session.workoutId] || session.workoutId;
+          const workoutName = exportSessionName(session.workoutId, workoutNames);
+          const activity = activityKindOf(session.workoutId);
           const dayLabel = dayLabels[session.dayOfWeek];
           const weekLabel = isEn
             ? (week.weekLabelEn || `W${week.weekNumber}`)
@@ -132,7 +135,9 @@ export function exportPlanToICS(
           const descriptionLines: string[] = [];
           descriptionLines.push(`${t("week")}: ${weekLabel}`);
           descriptionLines.push(`${t("dayLabel")}: ${dayLabel}`);
-          descriptionLines.push(`${t("durationLabel")}: ${session.estimatedDurationMin} min`);
+          if (session.estimatedDurationMin > 0) {
+            descriptionLines.push(`${t("durationLabel")}: ${session.estimatedDurationMin} min`);
+          }
           if (session.isKeySession) {
             descriptionLines.push(t("keySession"));
           }
@@ -144,7 +149,11 @@ export function exportPlanToICS(
 
           const template = workoutTemplates[session.workoutId];
           const isStrength = template ? isStrengthWorkout(template) : false;
-          const primaryZone = template && isRunningWorkout(template) ? `Z${getDominantZone(template)}` : "";
+          // An activity has no template; its zone is the effort it was planned at.
+          const activityZone = activity ? activitySessionZone(session) : null;
+          const primaryZone = template && isRunningWorkout(template)
+            ? `Z${getDominantZone(template)}`
+            : activityZone !== null ? `Z${activityZone}` : "";
           const zoneTag = primaryZone ? ` [${primaryZone}]` : isStrength ? " [Renfo]" : "";
 
           if (template && isStrengthWorkout(template)) {
@@ -228,9 +237,19 @@ export function exportPlanToICS(
               sessionDate.getMonth() + 1,
               sessionDate.getDate(),
             ],
-            title: `${workoutName} - ${session.estimatedDurationMin}min${zoneTag}`,
+            // A rest day has no duration to announce: "Repos actif", not "- 0min".
+            title: session.estimatedDurationMin > 0
+              ? `${workoutName} - ${session.estimatedDurationMin}min${zoneTag}`
+              : `${workoutName}${zoneTag}`,
             description: descriptionLines.join("\n"),
-            categories: [isStrength ? "Strength" : "Running", "Workout", session.sessionType],
+            categories: [
+              isStrength ? "Strength"
+                : session.discipline === "cycling" ? "Cycling"
+                : session.discipline === "swimming" ? "Swimming"
+                : "Running",
+              "Workout",
+              session.sessionType,
+            ],
             status: "CONFIRMED" as const,
             transp: "TRANSPARENT" as const,
             productId: "zoned-app",

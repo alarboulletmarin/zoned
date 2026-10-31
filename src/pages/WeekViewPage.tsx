@@ -14,15 +14,18 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { ArrowLeft, ChevronDown, Plus, Share, Sparkles } from "@/components/icons";
 import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -32,7 +35,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { SEOHead } from "@/components/seo";
-import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
+import {
+  PlanWeeklyView,
+  type WorkoutCardMeta,
+  type WorkoutCardProfile,
+} from "@/components/domain/PlanWeeklyView";
+import { toZoneBarBlocks } from "@/components/visualization";
+import { dayStep } from "@/lib/dayOrder";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import {
   WeekSessionSheet,
@@ -53,6 +62,9 @@ import {
   deleteSessionFromPlan,
   savePlan,
   getPlan,
+  getAllPlans,
+  mergeWeekIntoPlan,
+  type MergeWeekMode,
 } from "@/lib/planStorage";
 import {
   ACTIVITY_KINDS,
@@ -74,6 +86,18 @@ import {
   slotToSession,
 } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
+import {
+  layerFor,
+  loadTodayComposition,
+  mondayOf,
+  placeWeek,
+  planWeekAt,
+  removeLayer,
+  saveTodayComposition,
+  setLayerEnabled,
+  type TodayComposition,
+} from "@/lib/todayComposition";
+import { isoDateOnly } from "@/lib/planDates";
 import { buildScanSchedule } from "@/lib/scanSchedule";
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import type { AnyWorkoutTemplate } from "@/types";
@@ -149,6 +173,24 @@ export function WeekViewPage() {
     return meta;
   }, [catalog]);
 
+  // The small picture of each session on the board, the library card's own:
+  // only for the workouts the week holds, because walking a structure is the
+  // costly part and the catalogue is a few hundred sessions.
+  const workoutProfiles = useMemo(() => {
+    const profiles: Record<string, WorkoutCardProfile> = {};
+    for (const session of plan?.weeks[0]?.sessions ?? []) {
+      const w = byId.get(session.workoutId);
+      if (!w || profiles[w.id]) continue;
+      if (isStrengthWorkout(w)) {
+        profiles[w.id] = { kind: "strength", intensity: w.intensity };
+        continue;
+      }
+      const blocks = toZoneBarBlocks(w);
+      if (blocks.length > 0) profiles[w.id] = { kind: "zones", blocks };
+    }
+    return profiles;
+  }, [plan, byId]);
+
   const workoutNames = useMemo(() => {
     const names: Record<string, string> = {};
     for (const w of catalog) names[w.id] = pick(w, "name");
@@ -164,6 +206,16 @@ export function WeekViewPage() {
   const [name, setName] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+
+  /* Où la semaine est posée dans le cockpit, si elle l'est. La composition
+     est une vue SUR les semaines, pas une propriété de la semaine, mais c'est
+     ici qu'on la compose : le geste doit être à côté du nom, pas dans /today.
+     Lue une fois, réécrite à chaque geste. */
+  const [composition, setComposition] = useState<TodayComposition>(() => loadTodayComposition());
+  const writeComposition = useCallback((next: TodayComposition) => {
+    setComposition(next);
+    saveTodayComposition(next);
+  }, []);
 
   // The session whose sheet is open, by index: the sheet reads the session
   // off the plan at render time, so it never shows a stale copy.
@@ -279,12 +331,30 @@ export function WeekViewPage() {
   const weekIsPopulated = stats.sessions > 0;
 
   const handleMove = useCallback(
-    (_fromWeek: number, fromIndex: number, _toWeek: number, toDay: number) => {
+    (
+      _fromWeek: number,
+      fromIndex: number,
+      _toWeek: number,
+      toDay: number,
+      beforeIndex?: number,
+    ) => {
       if (!plan) return;
-      if (moveSession(plan.id, 1, fromIndex, 1, toDay)) reload();
-      else toast.error(t("plan:view.sessionMoveFailed"));
+      if (moveSession(plan.id, 1, fromIndex, 1, toDay, beforeIndex)) reload();
+      else toast.failure(t("plan:view.sessionMoveFailed"));
     },
     [plan, reload, t],
+  );
+
+  /** One place up or down the session's own day, from the sheet. */
+  const handleSheetReorder = useCallback(
+    (sessionIndex: number, direction: "up" | "down") => {
+      if (!plan) return;
+      const sessions = plan.weeks[0].sessions;
+      const step = dayStep(sessions, sessionIndex, direction);
+      if (!step) return;
+      handleMove(1, sessionIndex, 1, sessions[sessionIndex].dayOfWeek, step.before);
+    },
+    [plan, handleMove],
   );
 
   const handleDelete = useCallback(
@@ -321,6 +391,18 @@ export function WeekViewPage() {
     setAddTarget(null);
   }, []);
 
+  /* Every write of this page goes through here. A refused write is said,
+     with its reason, and the caller stops rather than reloading a week that
+     did not change: nine handlers used to call `savePlan` and look away. */
+  const persist = useCallback(
+    (fresh: NonNullable<ReturnType<typeof getPlan>>): boolean => {
+      const saved = savePlan(fresh);
+      if (!saved.ok) toast.failure(t("library:weekly.toast.saveFailed"), saved);
+      return saved.ok;
+    },
+    [t],
+  );
+
   /** Pushes a session on its day and saves; returns its index in the week. */
   const pushSession = useCallback(
     (session: PlanSession): number | null => {
@@ -329,11 +411,11 @@ export function WeekViewPage() {
       if (!fresh) return null;
       fresh.weeks[0].sessions.push(session);
       fresh.weeks[0].sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-      savePlan(fresh);
+      if (!persist(fresh)) return null;
       reload();
       return fresh.weeks[0].sessions.indexOf(session);
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   const handleWorkoutAdd = useCallback(
@@ -353,7 +435,6 @@ export function WeekViewPage() {
         // on the spot, on the duration field, which a phone answers with its
         // keyboard and a zoom. The duration is optional, and one tap away.
         pushSession(session);
-        toast.success(t("plan:view.activityAdded"));
         return;
       }
       const workout = byId.get(workoutId);
@@ -396,6 +477,8 @@ export function WeekViewPage() {
       session,
       workout: byId.get(session.workoutId) ?? null,
       name: workoutNames[session.workoutId] || session.workoutId,
+      canMoveUp: dayStep(plan.weeks[0].sessions, sheetIndex, "up") !== null,
+      canMoveDown: dayStep(plan.weeks[0].sessions, sheetIndex, "down") !== null,
     };
   }, [sheetIndex, plan, byId, workoutNames]);
   const commuteProfileMin = useMemo(
@@ -416,18 +499,18 @@ export function WeekViewPage() {
       const fresh = getPlan(plan.id);
       if (!fresh || !fresh.weeks[0].sessions[sessionIndex]) return;
       fresh.weeks[0].sessions[sessionIndex] = next;
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       setSheetIndex(null);
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   const handleSheetMove = useCallback(
     (sessionIndex: number, day: number) => {
       if (!plan) return;
       if (moveSession(plan.id, 1, sessionIndex, 1, day)) reload();
-      else toast.error(t("plan:view.sessionMoveFailed"));
+      else toast.failure(t("plan:view.sessionMoveFailed"));
     },
     [plan, reload, t],
   );
@@ -476,9 +559,8 @@ export function WeekViewPage() {
             fresh.config.longRunDay = cfg.longRunDay;
             // The week now aims at what it was composed to.
             fresh.config.targetVolumeH = cfg.targetVolumeH;
-            savePlan(fresh);
+            persist(fresh);
           }
-          toast.success(t("library:weekly.toast.generated"));
         },
       });
     },
@@ -498,10 +580,10 @@ export function WeekViewPage() {
       const session = fresh?.weeks[0].sessions[sessionIndex];
       if (!fresh || !session) return;
       session.locked = !session.locked;
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   const handleUnlockAll = useCallback(() => {
@@ -509,9 +591,9 @@ export function WeekViewPage() {
     const fresh = getPlan(plan.id);
     if (!fresh) return;
     for (const session of fresh.weeks[0].sessions) delete session.locked;
-    savePlan(fresh);
+    if (!persist(fresh)) return;
     reload();
-  }, [plan, reload]);
+  }, [plan, reload, persist]);
 
   /** Draw another workout for a single session, the rest of the week is kept. */
   const handleRedraw = useCallback(
@@ -547,8 +629,7 @@ export function WeekViewPage() {
             kind,
             replacement,
           );
-          savePlan(fresh);
-          toast.success(t("library:weekly.toast.rerolled"));
+          persist(fresh);
         },
       });
     },
@@ -585,10 +666,10 @@ export function WeekViewPage() {
       fresh.config.planName = value;
       fresh.name = value;
       fresh.nameEn = value;
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   /**
@@ -603,11 +684,11 @@ export function WeekViewPage() {
       const hours = value === "none" ? undefined : Number(value);
       if (hours === undefined) delete fresh.config.targetVolumeH;
       else fresh.config.targetVolumeH = hours;
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       if (hours !== undefined) setSettings((s) => ({ ...s, targetVolumeH: hours }));
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   // The budgets on offer, in hours, plus the week's own if it is not one of
@@ -626,18 +707,67 @@ export function WeekViewPage() {
       if (!fresh) return;
       fresh.config.weekCategory =
         value === "none" ? undefined : (value as WeekCategory);
-      savePlan(fresh);
+      if (!persist(fresh)) return;
       reload();
     },
-    [plan, reload],
+    [plan, reload, persist],
   );
 
   if (isLoading) return null;
   if (!plan) return <Navigate to="/weeks" replace />;
+
+  /* La couche de cette semaine : posée (ancrée sur un lundi), ou rien. Une
+     semaine sans couche se montre encore dans le cockpit quand aucun plan
+     n'est en cours (la règle de repli), mais elle n'est pas POSÉE, et le
+     badge ne prétend pas qu'elle l'est. */
+  const layer = layerFor(composition, plan.id);
+  const placedOn = layer?.enabled && layer.anchor ? layer.anchor : null;
+  const formatMonday = (iso: string) => {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+      day: "numeric",
+      month: "short",
+    });
+  };
+  const thisMonday = mondayOf(new Date());
+  const nextMonday = new Date(thisMonday);
+  nextMonday.setDate(nextMonday.getDate() + 7);
+  const handlePlace = (value: string) => {
+    if (value === "none") {
+      writeComposition(setLayerEnabled(composition, plan.id, false));
+      toast.success(t("library:weekly.cockpit.toastRemoved"));
+      return;
+    }
+    const on = value === "next" ? nextMonday : thisMonday;
+    writeComposition(placeWeek(composition, plan.id, on));
+    toast.success(t("library:weekly.cockpit.toastPlaced", { date: formatMonday(isoDateOnly(on)) }));
+  };
+  /* Le plan qui couvre la semaine où celle-ci est suivie, et sa semaine à
+     lui : c'est là qu'elle peut s'ajouter. Le geste vivait dans la feuille du
+     cockpit seulement ; quand on veut jouer avec un plan et une semaine, on
+     est ICI, sur la semaine. */
+  const displayName = name ?? pick(plan, "name");
+
+  const mergeTarget = placedOn
+    ? planWeekAt(getAllPlans(), (() => { const [y, m, d] = placedOn.split("-").map(Number); return new Date(y, m - 1, d); })())
+    : null;
+  const handleMerge = (mode: MergeWeekMode) => {
+    if (!mergeTarget) return;
+    const ok = mergeWeekIntoPlan(mergeTarget.plan.id, mergeTarget.weekNumber, plan.id, mode, {
+      label: t("library:weekly.merge.label", { week: displayName, n: mergeTarget.weekNumber, lng: "fr" }),
+      labelEn: t("library:weekly.merge.label", { week: displayName, n: mergeTarget.weekNumber, lng: "en" }),
+    });
+    if (!ok) {
+      toast.error(t("library:weekly.merge.failed"));
+      return;
+    }
+    // Ajoutée au plan, la semaine n'a plus à se lire à côté de lui.
+    writeComposition(removeLayer(composition, plan.id));
+    toast.success(t("library:weekly.merge.done"));
+  };
   // A regular (multi-week) plan should use the full plan editor.
   if (!plan.config.isSingleWeek) return <Navigate to={`/plan/${plan.id}`} replace />;
 
-  const displayName = name ?? pick(plan, "name");
 
   // The share button opens the image sheet; the link is one of its actions.
   const shareUrl = sharedWeekUrl(plan, displayName);
@@ -711,8 +841,12 @@ export function WeekViewPage() {
                   className="zn-cluster zn-cluster--split"
                   style={{ "--gap": "var(--sp-6)" } as CSSProperties}
                 >
+                  {/* Un cluster et non une rangée : le troisième badge porte
+                      une date, et à 390 px les trois ne tiennent pas sur une
+                      ligne, le dernier passe dessous au lieu de sortir de
+                      l'écran. */}
                   <div
-                    className="zn-row"
+                    className="zn-cluster"
                     style={{ "--gap": "var(--sp-4)" } as CSSProperties}
                   >
                   <DropdownMenu>
@@ -787,6 +921,72 @@ export function WeekViewPage() {
                       </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>
+
+                  {/* Où la semaine est posée dans le cockpit : un troisième
+                      badge de la même famille, parce que c'est la troisième
+                      chose que la semaine EST. Cette semaine, la prochaine,
+                      ou nulle part ; poser ailleurs se fait depuis la grille
+                      du mois de /today, où l'on voit la semaine visée. */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      className={badgeVariants({
+                        variant: placedOn ? "secondary" : "outline",
+                        className: "zn-pw__cat",
+                      })}
+                      title={t("library:weekly.cockpit.label")}
+                    >
+                      {placedOn
+                        ? t("library:weekly.cockpit.placed", { date: formatMonday(placedOn) })
+                        : t("library:weekly.cockpit.place")}
+                      <ChevronDown size={13} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuRadioGroup
+                        value={
+                          placedOn === isoDateOnly(thisMonday)
+                            ? "this"
+                            : placedOn === isoDateOnly(nextMonday)
+                              ? "next"
+                              : placedOn
+                                ? "elsewhere"
+                                : "none"
+                        }
+                        onValueChange={handlePlace}
+                      >
+                        <DropdownMenuRadioItem value="this">
+                          {t("library:weekly.cockpit.thisWeek")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="next">
+                          {t("library:weekly.cockpit.nextWeek")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="none">
+                          {t("library:weekly.cockpit.remove")}
+                        </DropdownMenuRadioItem>
+                      </DropdownMenuRadioGroup>
+                      {/* Suivie sur une semaine d'un plan, elle peut y entrer
+                          pour de bon : le geste est ici, sous l'endroit où
+                          elle est suivie, et demande en toutes lettres
+                          ajouter ou remplacer. */}
+                      {mergeTarget && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuLabel>
+                            {t("library:weekly.merge.into", {
+                              plan: isEn ? mergeTarget.plan.nameEn : mergeTarget.plan.name,
+                              n: mergeTarget.weekNumber,
+                            })}
+                          </DropdownMenuLabel>
+                          <DropdownMenuItem onSelect={() => handleMerge("add")}>
+                            {t("library:weekly.merge.add")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => handleMerge("replace")}>
+                            {t("library:weekly.merge.replace")}
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
                   </div>
 
                   <div
@@ -873,6 +1073,7 @@ export function WeekViewPage() {
                     plan={plan}
                     workoutNames={workoutNames}
                     workoutMeta={workoutMeta}
+                    workoutProfiles={workoutProfiles}
                     currentWeek={1}
                     initialWeek={1}
                     isEn={isEn}
@@ -980,6 +1181,7 @@ export function WeekViewPage() {
         onRedraw={(index) => handleRedraw(1, index)}
         onToggleLock={(index) => handleToggleLock(1, index)}
         onMove={handleSheetMove}
+        onReorder={handleSheetReorder}
         onDuplicate={(index) => handleDuplicate(1, index)}
         onDelete={(index) => handleDelete(1, index)}
       />

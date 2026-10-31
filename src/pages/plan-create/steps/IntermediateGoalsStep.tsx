@@ -6,7 +6,7 @@ import { DateInput } from "@/components/ui/date-input";
 import { Option } from "../Option";
 import { RACE_DISTANCE_META, type RaceDistance } from "@/types/plan";
 import { PRIORITY_OPTIONS, VALIDATION_KEYS } from "../constants";
-import type { StepContext, StepDef } from "../types";
+import type { StepContext } from "../types";
 
 /**
  * Les courses de préparation. Facultatif, jusqu'à cinq.
@@ -15,7 +15,7 @@ import type { StepContext, StepDef } from "../types";
  * parce qu'ils touchent `form.intermediateGoals` et que la validation croisée
  * des dates est dérivée là-haut.
  */
-function IntermediateGoalsBody({
+export function IntermediateGoalsBody({
   form,
   uid,
   t,
@@ -164,13 +164,3 @@ function IntermediateGoalsBody({
   );
 }
 
-export const intermediateGoalsStep: StepDef = {
-  id: "intermediate_goals",
-  titleKey: "intermediateGoals.title",
-  subtitleKey: "intermediateGoals.subtitle",
-  Body: IntermediateGoalsBody,
-  isComplete: (form, derived) =>
-    form.intermediateGoals.length === 0 || derived.intermediateGoalValidation.valid,
-  nextLabelKey: "nav.continue",
-  showSkip: true,
-};

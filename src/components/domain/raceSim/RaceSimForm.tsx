@@ -2,22 +2,36 @@ import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { Flag } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { ChronoInput } from "@/components/ui/chrono-input";
 import { Segmented } from "@/components/ui/segmented";
+import { useSettings } from "@/hooks/useSettings";
 import { usePickLang } from "@/lib/i18n-utils";
-import type { SplitStrategy } from "@/lib/splits";
+import { timeDigitsToSeconds } from "@/lib/paceFields";
+import { formatPaceDisplay, type SplitStrategy } from "@/lib/splits";
+import { convertPace, getPaceUnit } from "@/lib/units";
 import { cn } from "@/lib/utils";
-import { parseTargetTime } from "./utils";
+import { durationToMinutes } from "@/lib/durationFields";
+import { formatReadableTime, minutesToTime } from "./utils";
 import { FieldLabel } from "./RaceSimSection";
 
 export interface RaceSimSettings {
   /** A RACE_OPTIONS value, or "custom". */
   distance: string;
   customDistance: string;
-  /** Raw text, "45:00", "3:30:00", "45". */
+  /**
+   * The finish time as typed DIGITS, mask removed: "4500" reads 45:00,
+   * "33000" reads 3:30:00. See `ChronoInput` and `lib/paceFields.ts`.
+   */
   targetTime: string;
+  /**
+   * The start as typed DIGITS at the h:mm mask, "830" reads 8:30. A native
+   * time input was the one field sized by the browser rather than by the
+   * form: iOS Safari gives it an intrinsic width that ignores the frame.
+   */
   startTime: string;
   strategy: SplitStrategy;
-  /** Empty means "not provided": the plan falls back to 70 kg internally. */
+  /** Empty means "not provided": the plan falls back to 70 kg internally.
+   *  Decimal comma on screen, like `customDistance`. */
   weight: string;
 }
 
@@ -38,8 +52,8 @@ export const RACE_OPTIONS: RaceOption[] = [
 export const DEFAULT_SETTINGS: RaceSimSettings = {
   distance: "10",
   customDistance: "",
-  targetTime: "45:00",
-  startTime: "08:30",
+  targetTime: "4500",
+  startTime: "830",
   strategy: "even",
   weight: "",
 };
@@ -47,23 +61,44 @@ export const DEFAULT_SETTINGS: RaceSimSettings = {
 export interface ResolvedSettings {
   distanceKm: number;
   targetSeconds: number | null;
-  /** True when the time field holds something, but nothing parseable. */
+  /** True when the time field holds something that is not a time (0:00). */
   timeError: boolean;
+  /** The start as "HH:mm", or null when the field holds no time of day. */
+  startTime: string | null;
+  startError: boolean;
   valid: boolean;
 }
 
 export function resolveSettings(s: RaceSimSettings): ResolvedSettings {
   const distanceKm =
     s.distance === "custom"
-      ? parseFloat(s.customDistance) || 0
+      ? parseFloat(s.customDistance.replace(",", ".")) || 0
       : parseFloat(s.distance);
-  const targetSeconds = parseTargetTime(s.targetTime);
+  const targetSeconds = timeDigitsToSeconds(s.targetTime, distanceKm) ?? null;
+  const startMinutes = durationToMinutes(s.startTime);
+  const startTime =
+    startMinutes !== undefined && startMinutes < 24 * 60 ? minutesToTime(startMinutes) : null;
   return {
     distanceKm,
     targetSeconds,
-    timeError: s.targetTime.trim() !== "" && targetSeconds === null,
-    valid: distanceKm > 0 && targetSeconds !== null && targetSeconds > 0,
+    timeError: s.targetTime !== "" && !(targetSeconds !== null && targetSeconds > 0),
+    startTime,
+    startError: s.startTime !== "" && startTime === null,
+    valid: distanceKm > 0 && targetSeconds !== null && targetSeconds > 0 && startTime !== null,
   };
+}
+
+/**
+ * A decimal field, typed on the decimal pad: digits and ONE separator, comma
+ * or point, whatever the keyboard offers, written as a comma on screen
+ * (same rule as the VMA field, `vmaInput`). A native number field rejects the
+ * French comma on iOS and turns under a scrolling mouse wheel.
+ */
+function decimalInput(raw: string): string {
+  const unified = raw.replace(/\./g, ",").replace(/[^\d,]/g, "");
+  const sep = unified.indexOf(",");
+  if (sep === -1) return unified.slice(0, 3);
+  return `${unified.slice(0, sep).slice(0, 3)},${unified.slice(sep + 1).replace(/,/g, "").slice(0, 2)}`;
 }
 
 /** Every field group is a small stack: label, control, hint. */
@@ -91,6 +126,19 @@ export function RaceSimForm({
   const pick = usePickLang();
   const uid = useId();
   const resolved = resolveSettings(settings);
+  const { settings: userSettings } = useSettings();
+  const unit = userSettings.unitSystem;
+
+  // What the digits were read as, in words, with the pace it asks for. The
+  // mask alone cannot say whether 3:30 is three hours or three minutes; this
+  // line does, before the plan is generated from the wrong one.
+  const reading =
+    resolved.valid && resolved.targetSeconds !== null
+      ? t("inputs.timeReading", {
+          time: formatReadableTime(resolved.targetSeconds),
+          pace: `${formatPaceDisplay(convertPace(resolved.targetSeconds / 60 / resolved.distanceKm, unit))}${getPaceUnit(unit)}`,
+        })
+      : null;
 
   const set = <K extends keyof RaceSimSettings>(
     key: K,
@@ -137,15 +185,14 @@ export function RaceSimForm({
         {settings.distance === "custom" && (
           <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
             <input
-              type="number"
-              min={0.5}
-              max={200}
-              step={0.1}
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
               autoFocus
               placeholder="15"
               aria-label={t("inputs.custom")}
               value={settings.customDistance}
-              onChange={(e) => set("customDistance", e.target.value)}
+              onChange={(e) => set("customDistance", decimalInput(e.target.value))}
               className="zn-rs-field zn-rs-field--mono zn-rs-field--short"
             />
             <span className="zn-rs-form__suffix">km</span>
@@ -158,16 +205,14 @@ export function RaceSimForm({
         <label htmlFor={`${uid}-time`}>
           <FieldLabel>{t("inputs.targetTime")}</FieldLabel>
         </label>
-        <input
+        <ChronoInput
           id={`${uid}-time`}
-          type="text"
-          inputMode="numeric"
-          autoComplete="off"
-          placeholder="45:00"
+          format="hms"
+          distanceKm={resolved.distanceKm}
           aria-invalid={resolved.timeError || undefined}
           aria-describedby={`${uid}-time-hint`}
-          value={settings.targetTime}
-          onChange={(e) => set("targetTime", e.target.value)}
+          digits={settings.targetTime}
+          onDigitsChange={(digits) => set("targetTime", digits)}
           className="zn-rs-field zn-rs-field--time"
         />
         <p
@@ -175,7 +220,9 @@ export function RaceSimForm({
           className="zn-rs-form__hint"
           data-error={resolved.timeError || undefined}
         >
-          {resolved.timeError ? t("inputs.timeInvalid") : t("inputs.timeHint")}
+          {resolved.timeError
+            ? t("inputs.timeInvalid")
+            : (reading ?? t("inputs.timeHint"))}
         </p>
       </div>
 
@@ -184,13 +231,21 @@ export function RaceSimForm({
         <label htmlFor={`${uid}-start`}>
           <FieldLabel>{t("inputs.startTime")}</FieldLabel>
         </label>
-        <input
+        <ChronoInput
           id={`${uid}-start`}
-          type="time"
-          value={settings.startTime}
-          onChange={(e) => set("startTime", e.target.value)}
+          format="hm"
+          placeholder="8:30"
+          aria-invalid={resolved.startError || undefined}
+          aria-describedby={resolved.startError ? `${uid}-start-hint` : undefined}
+          digits={settings.startTime}
+          onDigitsChange={(digits) => set("startTime", digits)}
           className="zn-rs-field zn-rs-field--mono"
         />
+        {resolved.startError && (
+          <p id={`${uid}-start-hint`} className="zn-rs-form__hint" data-error>
+            {t("inputs.startInvalid")}
+          </p>
+        )}
       </div>
 
       {/* Strategy */}
@@ -213,13 +268,12 @@ export function RaceSimForm({
         <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
           <input
             id={`${uid}-weight`}
-            type="number"
-            min={30}
-            max={200}
-            step={0.5}
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
             placeholder="70"
             value={settings.weight}
-            onChange={(e) => set("weight", e.target.value)}
+            onChange={(e) => set("weight", decimalInput(e.target.value))}
             className="zn-rs-field zn-rs-field--mono zn-rs-field--short"
           />
           <span className="zn-rs-form__suffix">{t("inputs.weightUnit")}</span>

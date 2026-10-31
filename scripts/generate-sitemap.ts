@@ -13,8 +13,8 @@
  *
  * What we exclude (matches robots.txt Disallow rules):
  *   - /my-zones, /favorites, /settings, /profile, /activities (per-user state)
- *   - /plans (user dashboard), /plan/new/assisted, /plan/new/free
- *   - /plan/:id, /routes/:id (localStorage-only entities)
+ *   - /plans (user dashboard), /plan/new/free
+ *   - /plan/:id (localStorage-only entities)
  *
  * Date strategy:
  *   - Articles get their real publishedAt/updatedAt from metadata.ts.
@@ -245,8 +245,6 @@ async function generateSitemap(): Promise<string> {
     { loc: "/weeks/new/prebuilt", lastmod: shell },
     // Public tools with no per-user state
     { loc: "/library/draw", lastmod: shell },
-    { loc: "/routes", lastmod: shell },
-    { loc: "/routes/tracks", lastmod: shell },
   ];
 
   // Calculators

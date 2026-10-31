@@ -36,7 +36,7 @@ import { isMac } from "@/lib/platform";
 // ────────────────────────────────────────────────────────────────────────────
 
 import type { NavChild, NavSection } from "./navigation";
-import { PRIMARY_NAV, isNavActive } from "./navigation";
+import { HOME_LINK_STATE, PRIMARY_NAV, isNavActive } from "./navigation";
 
 export type { NavChild, NavSection };
 export { PRIMARY_NAV, isNavActive };
@@ -76,7 +76,16 @@ export function TopBar() {
           context, z-index or overflow can reach. */}
       <MobileMenu />
 
-      <Link to="/" viewTransition className="zn-topbar__brand" aria-label={t("app.name")}>
+      {/* Le logo demande la landing, pas l'ouverture de l'app : sans cet
+          état, la racine renverrait au cockpit quiconque a un plan en cours
+          (voir `RootPage`). */}
+      <Link
+        to="/"
+        state={HOME_LINK_STATE}
+        viewTransition
+        className="zn-topbar__brand"
+        aria-label={t("app.name")}
+      >
         <Wordmark />
       </Link>
 

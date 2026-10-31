@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { ArrowLeft } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -103,8 +103,9 @@ export function SharedPlanPage() {
   ].join(" · ");
 
   const handleAdd = () => {
-    if (!savePlan(plan)) {
-      toast.error(t("errors.planSaveFailed"));
+    const saved = savePlan(plan);
+    if (!saved.ok) {
+      toast.failure(t("errors.planSaveFailed"), saved);
       return;
     }
     triggerStorageWarning();

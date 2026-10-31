@@ -46,7 +46,9 @@
 @import "./components/calc-tests.css" layer(components);
 @import "./components/calendar.css" layer(components);
 @import "./components/card.css" layer(components);
+@import "./components/chrono.css" layer(components);
 @import "./components/cockpit.css" layer(components);
+@import "./components/today-compose.css" layer(components);
 @import "./components/content.css" layer(components);
 @import "./components/contribute.css" layer(components);
 @import "./components/date-input.css" layer(components);
@@ -79,10 +81,9 @@
 @import "./components/race-sim.css" layer(components);
 @import "./components/reference.css" layer(components);
 @import "./components/responsive-table.css" layer(components);
-@import "./components/routes-pages.css" layer(components);
-@import "./components/routes.css" layer(components);
 @import "./components/run-cycle.css" layer(components);
 @import "./components/scroll-to-top.css" layer(components);
+@import "./components/qr-sync.css" layer(components);
 @import "./components/segmented.css" layer(components);
 @import "./components/select.css" layer(components);
 @import "./components/search.css" layer(components);

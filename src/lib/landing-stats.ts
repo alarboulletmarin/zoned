@@ -201,23 +201,27 @@ export function getISOWeek(d: Date = new Date()): number {
   return 1 + Math.ceil((firstThursday - target.valueOf()) / 604800000);
 }
 
-/** Pick N workouts deterministically for the current ISO week, optionally
- *  filtering by discipline. Sorted by id so the order is stable across
- *  reloads, then sliced from a week-dependent offset. */
-export function pickWeeklyWorkouts(
+/**
+ * Tire N séances au hasard, sans remise, parmi celles qui passent le filtre.
+ *
+ * Le trio de l'accueil était choisi par semaine ISO, le même du lundi au
+ * dimanche : c'était une revue hebdomadaire. Le propriétaire a voulu un
+ * tirage à chaque visite (20 septembre 2026), pour que la page montre la
+ * largeur du catalogue plutôt que trois séances figées. Fisher-Yates partiel
+ * sur `Math.random`, rien à reproduire, rien à stocker.
+ */
+export function pickRandomWorkouts(
   workouts: WorkoutTemplate[],
   filter: (w: WorkoutTemplate) => boolean,
   count: number,
-  weekOffset = 0,
 ): WorkoutTemplate[] {
-  const pool = workouts.filter(filter).sort((a, b) => a.id.localeCompare(b.id));
-  if (pool.length === 0) return [];
-  const week = getISOWeek() + weekOffset;
-  const out: WorkoutTemplate[] = [];
-  for (let i = 0; i < count && i < pool.length; i++) {
-    out.push(pool[(week * 7 + i * 13) % pool.length]);
+  const pool = workouts.filter(filter);
+  const n = Math.min(count, pool.length);
+  for (let i = 0; i < n; i++) {
+    const j = i + Math.floor(Math.random() * (pool.length - i));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  return out;
+  return pool.slice(0, n);
 }
 
 /** Estimate TSS for a workout, rough but consistent across the library.

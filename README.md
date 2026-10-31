@@ -10,9 +10,9 @@
 
   *Free. No account. No tracking. Forever.*
 
-  ### [→ zoned.run](https://zoned.run)
+  ### [→ zoned.run](https://zoned.run) *(French)* · [English](https://zoned.run/?lang=en)
 
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE) [![Version](https://img.shields.io/badge/version-v1.0.1-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md) [![Good first issues](https://img.shields.io/github/issues/alarboulletmarin/zoned/good%20first%20issue?style=flat-square&color=7057ff&label=good%20first%20issues)](https://github.com/alarboulletmarin/zoned/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) [![Open issues](https://img.shields.io/github/issues/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/issues) [![Last commit](https://img.shields.io/github/last-commit/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/commits/main) [![Stars](https://img.shields.io/github/stars/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/stargazers)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE) [![Version](https://img.shields.io/github/v/release/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md) [![Good first issues](https://img.shields.io/github/issues/alarboulletmarin/zoned/good%20first%20issue?style=flat-square&color=7057ff&label=good%20first%20issues)](https://github.com/alarboulletmarin/zoned/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) [![Open issues](https://img.shields.io/github/issues/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/issues) [![Last commit](https://img.shields.io/github/last-commit/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/commits/main) [![Stars](https://img.shields.io/github/stars/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/stargazers)
   <br/>
   [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev) [![Bun](https://img.shields.io/badge/Bun-runtime-fbf0df?style=flat-square&logo=bun&logoColor=black)](https://bun.sh)
 
@@ -25,7 +25,7 @@
 
 ## What is Zoned?
 
-Zoned is a free, open-source web app for structured endurance training. Everything ships in a single static React 19 bundle. There's no backend, no account system and no telemetry beyond anonymous page views. Your zones, favorites and custom workouts stay in `localStorage`.
+Zoned is a free, open-source web app for structured endurance training. Everything ships in a single static React 19 bundle. There's no backend, no account system, no analytics and no tracking. Your zones, favorites and custom workouts stay in `localStorage`.
 
 The catalogue is grounded in published training science (**Seiler**, **Billat**, **Daniels**, **Coggan**, **Bangsbo**, **Beattie**, **Rønnestad**), with every workout, plan and calculator versioned in this repo as plain JSON / TypeScript. It is built in collaboration with [Claude Code](https://claude.ai/code).
 
@@ -35,8 +35,8 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 | **17** strength sessions | full body, legs, core, plyometrics, mobility |
 | **10** cycling + **10** swimming sessions | Coggan FTP / CSS zones |
 | **10** training plans | 5K → marathon, with strength periodization |
-| **12** calculators | zones, paces, VMA, FTP, CSS, age-graded, what-if, race-day |
-| **16** collections · **12** articles · **116** glossary terms | bilingual FR / EN |
+| **10** calculators | zones, paces, VMA, FTP, CSS, splits, equivalence, race-day |
+| **15** collections · **12** articles · **116** glossary terms | bilingual FR / EN |
 
 ---
 
@@ -107,16 +107,15 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 - **Custom workout builder** (`/workout/builder`): assemble sessions block by block (warm-up, main set, cool-down) with undo/redo, then export them like any catalog workout, or share them as JSON (single or bulk export, import with validation)
 - **Workout detail pages**: session timeline, zone distribution, personalized pace table, coaching tips, related workouts and science references, with glossary terms linked inline
 
-### Calculators (12)
-Training zones · Pace converter · Pace reference table · Treadmill converter · Split generator · VMA from race time · FTP cycling test · CSS swimming test · Race equivalence · Age-graded performance · Race-day simulator · What-if simulator
+### Calculators (10)
+Training zones · Pace converter · Pace reference table · Treadmill converter · Split generator · VMA from race time · FTP cycling test · CSS swimming test · Race equivalence · Race-day simulator
 
-- **What-if simulator**: compare training scenarios (volume, level, goal) with zone distribution and load preview; scenarios can be named and saved
 - **Race-day simulator**: km-by-km pacing, gel/water/electrolyte timing, pre-race checklists (race week, morning, logistics), kit-bag list, saved simulations, PDF export
 - **"Race day" view**: a chronological run sheet with a next-up countdown and a *now* marker in the timeline, plus a pace curve for negative and positive split strategies
 
 ### Training plans
 - **Assisted plan generator**: personalised multi-week plans (5K to marathon) with start date, level and optional intermediate goals (half-way, 4-weeks-out, taper)
-- **9 prebuilt plans** with integrated strength training, plus free mode to build from scratch
+- **10 prebuilt plans** with integrated strength training, plus free mode to build from scratch
 - **Strength periodization**: auto-suggested strength sessions per training phase
 - **4 view modes**: Calendar, Weekly, Monthly, List
 - **Drag-and-drop** calendar, cross-training support (strength, cycling, swimming, yoga)
@@ -125,15 +124,6 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **Weekly composer** (`/weeks`): generate a balanced standalone 80/20 week (sessions count, volume, quality session) when you don't want a full plan; lock a session and re-roll the rest
 - **10 curated weeks**: first steps, aerobic base, hill block, development block, VO₂max sharpening, race-pace, peak week, big volume, recovery, gentle return; categorised, filterable and duplicable from *My weeks*
 - **Export**: PDF, ICS (Google/Apple/Outlook Calendar); weeks also import/export as JSON
-
-### Routes
-- **Route generator**: build a real-world loop or out-and-back from your position
-- **POI-aware routing**: waypoints picked from parks, promenades, greenways and beaches via Overpass
-- **3 candidates per request**: each with elevation profile, estimated duration and named POI markers
-- **Track finder**: locate athletics tracks near you and route to them
-- **GPX export** + locally saved routes (`/routes/mine`)
-- **Per-session routes**: "Trouver un parcours adapté" on a workout page pre-fills the generator with that session's distance
-- **Privacy toggle**: routing is opt-in; no coordinates leave the browser unless you enable it in Settings
 
 ### Discovery
 - **Workout draw** ("Tirer une séance", `/library/draw`): pull a random session matching your filters (discipline, duration, zones, terrain, equipment…)
@@ -149,16 +139,16 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **My zones** (`/my-zones`): your personalized HR + pace zones with a pace converter alongside
 
 ### Settings, data & privacy
-- **Full backup**: export *all* your data (plans, favorites, custom workouts, zones, profile, routes, scenarios, settings) as a single dated JSON file
+- **Full backup**: export *all* your data (plans, favorites, custom workouts, zones, profile, race simulations, settings) as a single dated JSON file
 - **Restore**: import a backup in **merge** mode (keeps current data) or **replace** mode, with validation and automatic rollback if the import fails
 - **Colorblind-safe palettes**: standard, deuteranopia and tritanopia zone color schemes
 - **Units**: metric (km, min/km) or imperial (mi, min/mile), applied app-wide
 - **Bilingual**: full French / English interface and content; light / dark theme
-- **Privacy panel**: plain-language summary of what is stored where (everything in `localStorage`, no server, no account) and the single opt-in network feature (route generation)
+- **Privacy panel**: plain-language summary of what is stored where (everything in `localStorage`, no server, no account)
 
 ### Export & sharing
 - **Workouts**: ICS (Google/Apple/Outlook) · PNG · PDF · **Garmin FIT** (native workout file, with on-device transfer guide)
-- **Plans**: PDF · ICS — **Routes**: GPX — **Race plan**: PDF — **Custom workouts**: JSON
+- **Plans**: PDF · ICS — **Race plan**: PDF — **Custom workouts**: JSON
 - **Share by link**: custom workouts, training plans, weeks and race simulations encode into a compact URL; the recipient gets a preview page and a one-click "add to mine". No account, no upload: the whole payload lives in the link
 - **Share cards**: multiple social-ready templates per workout (compact, hero, minimal, dark…), copy/download/native share, plus a ready-to-paste Strava description
 
@@ -182,9 +172,9 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 
 | | |
 |---|---|
-| **Zero tracking** | No cookies, no user accounts, no server-side data |
-| **Local-first** | Zones, favorites, custom workouts and routes live in your browser |
-| **Privacy by design** | Only anonymous page views via Vercel Analytics |
+| **Zero tracking** | No cookies, no analytics, no user accounts, no server-side data |
+| **Local-first** | Zones, favorites and custom workouts live in your browser |
+| **Privacy by design** | No analytics and no tracking. Nothing leaves the browser. |
 | **100% free** | No premium tier, no paywall, ever |
 | **Open source** | MIT licensed: fork it, host it, audit it |
 
@@ -214,7 +204,7 @@ docker compose up -d   # http://localhost:8080
 
 ### Self-host
 
-The build output in `dist/` is a static SPA. Drop it on any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages, S3, nginx, Caddy). No environment variables required to run; analytics is opt-in via Vercel.
+The build output in `dist/` is a static SPA. Drop it on any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages, S3, nginx, Caddy). No environment variables required to run.
 
 ---
 
@@ -253,7 +243,6 @@ Want a high-level tour of how a workout flows from JSON to the rendered detail p
 | Illustration | 23 doodles generated from one rig (`scripts/doodles/rig.mjs`) |
 | i18n | i18next (FR / EN) |
 | PWA | Workbox |
-| Analytics | Vercel Analytics (anonymous page views only) |
 | Runtime | Bun |
 
 This table said "Tailwind CSS 4 + shadcn/ui" and "Recharts" for a while after
@@ -295,10 +284,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for workout ID conventions, the `WorkoutT
 
 ## Roadmap
 
-Tracked publicly in [GitHub Issues](https://github.com/alarboulletmarin/zoned/issues) and the [Releases](https://github.com/alarboulletmarin/zoned/releases) page. Recent waves:
-
-- **0.5.x** — multi-discipline (cycling / swimming), route generator, strength periodization
-- **next** — additional bilingual articles, more curated collections, broader plan library, deeper trail metrics
+What's next is tracked in [GitHub Issues](https://github.com/alarboulletmarin/zoned/issues). Shipped versions are on the [Releases](https://github.com/alarboulletmarin/zoned/releases) page, with the notes in [CHANGELOG.md](CHANGELOG.md).
 
 Feature requests are welcome via issues.
 

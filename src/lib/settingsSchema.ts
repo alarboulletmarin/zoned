@@ -16,7 +16,7 @@ import { PRACTICES } from "@/types/practice";
  * suffit à faire traverser des champs additifs, mais fait aussi entrer le
  * contenu du stockage **tel quel**, typé comme s'il était valide. Tant que les
  * réglages n'étaient que trois chaînes, le pire cas était un thème inconnu.
- * Avec des tableaux, un `disabledModules: "routes"` (une chaîne, écrite à la
+ * Avec des tableaux, un `disabledModules: "learn"` (une chaîne, écrite à la
  * main, restaurée d'une sauvegarde bricolée, ou corrompue) fait lever chaque
  * `.includes()` en plein rendu, donc un écran blanc, et pas seulement un
  * réglage ignoré.
@@ -70,10 +70,6 @@ export function sanitizeSettings(raw: unknown): UserSettings {
   if (!isObject(raw)) return { ...DEFAULT_SETTINGS, cockpit: { ...DEFAULT_SETTINGS.cockpit } };
   return {
     unitSystem: asUnitSystem(raw.unitSystem),
-    routeGeneratorEnabled: asBoolean(
-      raw.routeGeneratorEnabled,
-      DEFAULT_SETTINGS.routeGeneratorEnabled,
-    ),
     openingAnimation: asOpeningAnimation(raw.openingAnimation),
     enabledPractices: asKnownList<Practice>(raw.enabledPractices, PRACTICES),
     disabledModules: asKnownList<ModuleId>(raw.disabledModules, MODULE_IDS),

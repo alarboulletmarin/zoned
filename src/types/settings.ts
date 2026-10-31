@@ -18,14 +18,12 @@ export type UnitSystem = "metric" | "imperial";
  * navigation cesse d'y mener. Voir `ModuleGate`.
  */
 export type ModuleId =
-  | "routes"
   | "raceSimulator"
   | "learn"
   | "collections"
   | "strength";
 
 export const MODULE_IDS: readonly ModuleId[] = [
-  "routes",
   "raceSimulator",
   "learn",
   "collections",
@@ -56,17 +54,6 @@ export interface CockpitSettings {
 export interface UserSettings {
   unitSystem: UnitSystem;
   /**
-   * Route Generator opt-in. Sending the start coordinate to public services
-   * (Brouter, Nominatim, Overpass) is the only privacy-relevant network
-   * traffic the app emits, so users can disable it from Settings.
-   *
-   * **Distinct de `disabledModules`, et à garder distinct** : ce n'est pas une
-   * bascule d'affichage, c'est le seul consentement de sortie réseau de
-   * l'app. Les confondre laisserait un choix de navigation réactiver des
-   * requêtes sortantes sans que personne ne l'ait demandé. On lit les deux.
-   */
-  routeGeneratorEnabled: boolean;
-  /**
    * Whether the launch screen plays its run cycle. Read before any bundle by
    * the inline script in index.html, which mirrors it onto
    * `document.documentElement.dataset.opening`.
@@ -91,7 +78,6 @@ export const DEFAULT_COCKPIT: CockpitSettings = {
 
 export const DEFAULT_SETTINGS: UserSettings = {
   unitSystem: "metric",
-  routeGeneratorEnabled: true,
   openingAnimation: "system",
   enabledPractices: [],
   disabledModules: [],
