@@ -84,6 +84,7 @@ import {
 } from "@/lib/units";
 import { ZoneBar, formatDurationMinutes, toZoneBarBlocks } from "@/components/visualization";
 import { useIsEnglish } from "@/lib/i18n-utils";
+import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { isStrengthWorkout } from "@/types";
 import type { PlanSession } from "@/types/plan";
 import { purposeLabelKey, type ComplementaryActivity } from "@/types/activity";
@@ -189,6 +190,19 @@ const KIND_ICONS: Record<SessionKind, FunctionComponent<IconProps>> = {
  * est le bilan de la semaine nourri d'un mois, borné à aujourd'hui pour le
  * mois en cours. Le mode n'est pas mémorisé : l'écran d'arrivée est la
  * semaine, chaque matin.
+ *
+ * ── LA CINQUIÈME VERSION : LE BUREAU N'EST PAS UN TÉLÉPHONE ──────────────
+ *
+ * La colonne de 620 px est juste debout, à une main, dix secondes. Sur un
+ * écran large elle restait cette colonne au milieu du cadre, et la bande,
+ * sept barres de 18 px, ne nommait aucune séance tant qu'on ne l'avait pas
+ * choisie. Regarder sa semaine, c'était choisir, puis descendre lire.
+ *
+ * Dès 900 px les deux modes partagent le même partage : à gauche on choisit,
+ * à droite on lit, et les deux tiennent dans l'écran. La bande se couche en
+ * liste, chaque jour porte son type, sa durée et sa marque, et choisir un
+ * jour recharge la colonne de droite sans déplacer la liste. Sous 900 px
+ * cette liste n'est pas peinte. La bande reste la figure.
  *
  * `/` reste la landing publique et indexée ; celle-ci est l'écran privé, donc
  * `noindex`, hors sitemap et hors prérendu.
@@ -602,13 +616,49 @@ export function TodayPage() {
     />
   );
 
+  /* Sur téléphone, les séances d'un même jour restent une pile : le pouce
+     déroule naturellement. Sur bureau, elles ne doivent pas former trois
+     grandes fiches concurrentes ; un sélecteur montre qu'elles coexistent et
+     une seule prend la surface de lecture. Le rang revient à zéro à chaque
+     changement de jour, afin de ne jamais afficher par surprise la deuxième
+     séance d'un autre jour. */
+  const [activeSessionRank, setActiveSessionRank] = useState(0);
+  useEffect(() => setActiveSessionRank(0), [dayIso]);
+
   const answer = (
     <>
       {sessions.length > 0 ? (
         /* La pile. Un élément le plus souvent, deux les jours doubles, et
            c'est le même bloc dans les deux cas : rien n'est écrit pour le
            cas rare qui ne serve pas au cas courant. */
-        <div className="zn-cockpit__stack">
+        <div className="zn-cockpit__session-deck">
+          <div
+            className="zn-cockpit__session-tabs"
+            data-reserved={sessions.length < 2 || undefined}
+            role={sessions.length > 1 ? "tablist" : undefined}
+            aria-label={
+              sessions.length > 1
+                ? t("today:resume.session.line", { count: sessions.length, week: selected.weekNumber })
+                : undefined
+            }
+            aria-hidden={sessions.length < 2 || undefined}
+          >
+            {sessions.length > 1 &&
+              sessions.map((session, rank) => (
+                <button
+                  key={indexes[rank] ?? rank}
+                  type="button"
+                  role="tab"
+                  aria-selected={rank === activeSessionRank}
+                  className="zn-cockpit__session-tab"
+                  onClick={() => setActiveSessionRank(rank)}
+                >
+                  <span className="zn-mono">{String(rank + 1).padStart(2, "0")}</span>
+                  <span>{sessionDeckLabel(session, isEn)}</span>
+                </button>
+              ))}
+          </div>
+          <div className="zn-cockpit__stack" data-active-session={activeSessionRank}>
           {sessions.map((session, rank) => (
             <CockpitSession
               key={indexes[rank] ?? rank}
@@ -616,6 +666,7 @@ export function TodayPage() {
               index={indexes[rank]}
               rank={rank}
               count={sessions.length}
+              isActive={rank === activeSessionRank}
               isToday={isToday}
               weekNumber={selected.weekNumber}
               canClose={focus.plan != null && indexes[rank] != null}
@@ -625,6 +676,7 @@ export function TodayPage() {
               onClose={handleClose}
             />
           ))}
+          </div>
         </div>
       ) : (
         <>
@@ -779,7 +831,7 @@ export function TodayPage() {
   );
 
   return (
-    <div className="zn-cockpit" data-view={view}>
+    <div className="zn-cockpit" data-view={view} data-pending={isLoading || undefined}>
       <SEOHead title={t("today:seoTitle")} description={t("today:seoDescription")} noindex />
 
       {isLoading ? (
@@ -815,33 +867,42 @@ export function TodayPage() {
             </p>
           </div>
 
-          {/* Le mois se dispose en DEUX COLONNES dès que l'écran le paie :
-              la grille et son bilan à gauche, la journée choisie à droite, on
-              lit le mois et la séance sans défiler. Sous 900 px, la grille
-              reste une colonne dans l'ordre de la semaine. La semaine, elle,
-              ne change pas de forme : c'est l'écran de dix secondes. */}
-          {focus.week.length > 0 && view === "month" ? (
+          {/* Dès 900 px, semaine comme mois : l'instrument à gauche, la
+              journée à droite. Sous 900 px le split est une colonne, et
+              l'ordre du DOM est celui du téléphone. Sans semaine à parcourir,
+              il n'y a pas d'instrument, et la réponse reste seule. */}
+          {focus.week.length > 0 ? (
             <div className="zn-cockpit__split">
               <div className="zn-cockpit__split-switch">{switcher}</div>
               <div className="zn-cockpit__split-grid">
-                <MonthGrid
-                              focus={focus}
-                              month={monthRef}
-                              label={monthLabel}
-                              canPrev={bounds != null && compareMonth(monthRef, bounds.min) > 0}
-                              canNext={bounds != null && compareMonth(monthRef, bounds.max) < 0}
-                              onShift={(delta) => setMonth(shiftMonth(monthRef, delta))}
-                              selected={dayIso}
-                              onSelect={setPicked}
-                              activities={activities}
-                              now={now}
-                            />
+                {view === "month" ? (
+                  <MonthGrid
+                                focus={focus}
+                                month={monthRef}
+                                label={monthLabel}
+                                canPrev={bounds != null && compareMonth(monthRef, bounds.min) > 0}
+                                canNext={bounds != null && compareMonth(monthRef, bounds.max) < 0}
+                                onShift={(delta) => setMonth(shiftMonth(monthRef, delta))}
+                                selected={dayIso}
+                                onSelect={setPicked}
+                                activities={activities}
+                                now={now}
+                              />
+                ) : (
+                  <WeekStrip
+                    focus={focus}
+                    selected={day}
+                    onSelect={(index) => setPicked(weekDates[index])}
+                    extras={weekExtras}
+                    dates={weekDates}
+                  />
+                )}
               </div>
               <div className="zn-cockpit__split-answer">{answer}</div>
               {/* Ce que le mois a pesé, en mode mois, et seulement s'il a quelque
                   chose à dire. C'est le bilan de la semaine, nourri d'un mois :
                   même dessin, mêmes règles, les kilomètres restent par sport. */}
-              {monthReview && hasSomethingToReview(monthReview) && (
+              {view === "month" && monthReview && hasSomethingToReview(monthReview) && (
                 <div className="zn-cockpit__split-review">
                   <WeekReviewPanel
                     review={monthReview}
@@ -879,20 +940,17 @@ export function TodayPage() {
                   )}
                 </div>
               )}
+              {/* Le bilan de la semaine, le dimanche, sous les deux colonnes.
+                  Sans plan, il reste sous la réponse, dans la branche d'en bas. */}
+              {showReview && (
+                <div className="zn-cockpit__split-review">
+                  <WeekReviewPanel review={review} />
+                </div>
+              )}
             </div>
           ) : (
             <>
-              {switcher}
-              {focus.week.length > 0 && (
-                <WeekStrip
-                  focus={focus}
-                  selected={day}
-                  onSelect={(index) => setPicked(weekDates[index])}
-                  extras={weekExtras}
-                />
-              )}
               {answer}
-              {/* Le bilan, le dimanche, et pas un autre jour. */}
               {showReview && <WeekReviewPanel review={review} />}
             </>
           )}
@@ -941,6 +999,7 @@ function CockpitSession({
   index,
   rank,
   count,
+  isActive,
   isToday,
   weekNumber,
   canClose,
@@ -953,6 +1012,7 @@ function CockpitSession({
   index: number | undefined;
   rank: number;
   count: number;
+  isActive: boolean;
   isToday: boolean;
   weekNumber: number;
   canClose: boolean;
@@ -1099,10 +1159,10 @@ function CockpitSession({
   // Un seul `<h1>` par écran : le premier bloc le porte, les suivants sont des
   // `<h2>`. Même style, deux niveaux, ce qui est exactement la relation entre
   // la première séance du jour et celles qui la suivent.
-  const Heading = rank === 0 ? "h1" : "h2";
+  const Heading = isActive ? "h1" : "h2";
 
   return (
-    <article className="zn-cockpit__session">
+    <article className="zn-cockpit__session" data-active={isActive || undefined}>
       {/* Les quatre lignes sont TOUJOURS écrites, vides au besoin. Une ligne
           qui apparaît et disparaît selon le jour choisi décale tout ce qui la
           suit, et c'est le bouton qui finit par se déplacer sous le pouce :
@@ -1278,20 +1338,47 @@ function paceRangeOf(session: PlanSession, isEn: boolean, unit: UnitSystem): str
  * Un jour de repos est un bouton comme les six autres : il n'y a rien à y
  * ouvrir, mais il y a quelque chose à y LIRE, repos et la prochaine sortie.
  * C'est toute la différence entre choisir un jour et y aller.
+ *
+ * Sur un écran large la même bande se couche en liste. Le type, la durée et
+ * la marque sont dans le DOM pour les sept jours, et le CSS les peint
+ * seulement dès 900 px : les montrer dans la figure élargirait la colonne
+ * du téléphone. Le nom accessible, lui, les disait déjà.
  */
+function sessionDeckLabel(session: PlanSession, isEn: boolean): string {
+  const pair = SESSION_TYPE_LABELS[session.sessionType];
+  return pair ? (isEn ? pair.en : pair.fr) : session.sessionType;
+}
+
+function deskLabel(day: readonly PlanSession[], rest: string, isEn: boolean): string {
+  const locale = isEn ? "en" : "fr";
+  const cap = (value: string) =>
+    value.length === 0 ? value : value.charAt(0).toLocaleUpperCase(locale) + value.slice(1);
+  if (day.length === 0) return cap(rest);
+  const unique: string[] = [];
+  for (const session of day) {
+    const name = sessionDeckLabel(session, isEn);
+    if (!unique.includes(name)) unique.push(name);
+  }
+  return cap(unique.join(" · "));
+}
+
 function WeekStrip({
   focus,
   selected,
   onSelect,
   extras,
+  dates,
 }: {
   focus: TodayFocus;
   selected: number;
   onSelect: (day: number) => void;
   /** Les minutes complémentaires du lundi au dimanche. Toujours sept cases. */
   extras: number[];
+  /** Les sept dates ISO de la semaine, pour le numéro du jour sur bureau. */
+  dates: readonly string[];
 }) {
   const { t } = useTranslation(["today", "library"]);
+  const isEn = useIsEnglish();
   const railRef = useRef<HTMLDivElement>(null);
 
   // Les sept jours, en indices : c'est la valeur que le rail déplace, et elle
@@ -1370,9 +1457,13 @@ function WeekStrip({
             data-selected={isSelected || undefined}
             aria-current={isToday ? "date" : undefined}
             aria-label={name}
+            data-rest={day.length === 0 || undefined}
             onClick={() => onSelect(index)}
           >
             <span className="zn-cockpit__day-letter">{letters[index]}</span>
+            <span className="zn-cockpit__day-num" aria-hidden="true">
+              {dates[index] ? Number(dates[index].slice(8)) : "\u00A0"}
+            </span>
 
             {/* Les familles du jour, entre la lettre et les blocs. La rangée
                 est TOUJOURS là, vide les jours de repos : c'est la même règle
@@ -1436,6 +1527,29 @@ function WeekStrip({
                 à la bande et faisait remonter tout l'écran de vingt pixels. */}
             <span className="zn-kicker zn-kicker--xs zn-cockpit__day-value">
               {(isSelected && duration) || "\u00A0"}
+            </span>
+
+            {/* La liste du bureau. Masquée sur la figure : le CSS la montre
+                dès 900 px, et le bouton porte déjà tout ça dans son nom. */}
+            <span className="zn-cockpit__day-desk" aria-hidden="true">
+              <span className="zn-cockpit__day-desk-label">
+                {deskLabel(day, t("week.rest"), isEn)}
+              </span>
+              <span className="zn-cockpit__day-desk-time">{duration ?? "\u00A0"}</span>
+              <span className="zn-cockpit__day-desk-marks">
+                {day.length === 0 ? (
+                  <span className="zn-cockpit__cell-mark" data-shape="rest" />
+                ) : (
+                  day.map((session, i) => (
+                    <span
+                      key={i}
+                      className="zn-cockpit__cell-mark"
+                      data-shape={dayStatus([session])}
+                    />
+                  ))
+                )}
+                {extras[index] > 0 && <span className="zn-cockpit__cell-extra" />}
+              </span>
             </span>
           </button>
         );

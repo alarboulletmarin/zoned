@@ -14,16 +14,17 @@
  * unique, cibles à 44 px.
  */
 
-/* La colonne est étroite et CENTRÉE.
+/* La colonne est étroite et CENTRÉE sur le téléphone, et lorsqu'il n'y a
+ * pas de semaine à poser à côté de la séance.
  *
  * Le reste de l'app est aligné à gauche dans une colonne large, ce qui est
- * juste pour une page qu'on lit. Ici la page tenait dans 1072 px de conteneur
- * mais tout se collait à gauche : ~700 px de vide à droite, et un dessin seul
- * au milieu de rien. Un écran qu'on consulte dix secondes debout n'a pas de
- * colonne à remplir, il a un centre de gravité à avoir.
+ * juste pour une page qu'on lit. Une séance seule dans ce cadre se collait
+ * à gauche : ~700 px de vide à droite, et un dessin seul au milieu de rien.
+ * L'écran de dix secondes n'a pas de colonne à remplir, il a un centre.
  *
- * Le TEXTE reste aligné à gauche à l'intérieur : c'est le bloc qui se centre,
- * pas les lignes. Un titre centré et un corps centré se lisent moins bien. */
+ * Dès 900 px, une semaine ouverte quitte cette colonne et prend celle de la
+ * page : la liste des jours à gauche, la séance à droite. Le TEXTE de la
+ * séance reste aligné à gauche. Un titre centré se lirait moins bien. */
 .zn-cockpit {
   display: flex;
   flex-direction: column;
@@ -68,6 +69,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-10);
+}
+
+/* Le sélecteur n'existe que lorsque le bureau doit arbitrer entre plusieurs
+   séances. Le téléphone les garde toutes dans son flux ; masquer ce contrôle
+   là-bas évite deux manières de faire la même chose sous le pouce. */
+.zn-cockpit__session-tabs {
+  display: none;
 }
 
 .zn-cockpit__session {
@@ -171,10 +179,11 @@
    fait. Mesurée au navigateur, pas calculée, sur la même semaine à neuf
    largeurs : 604 px à partir de 768, 557 de 430 à 640, 632 à 390 et 648 à
    360, les plus étroits repliant une ligne de plus sur la position dans le
-   plan. On garde la valeur des larges, comme depuis toujours. Toute retouche
-   aux écarts de `.zn-cockpit__answer`, à la réserve du titre, au créneau de
-   `.zn-cockpit__day-bar`, à la rangée de `.zn-cockpit__day-kinds` ou à la
-   réserve de `.zn-cockpit__how` invalide ces nombres. */
+   plan.    On garde la valeur des larges, comme depuis toujours. Dès 900 px la
+   réserve est celle de la liste à côté de la séance, mesurée plus bas.
+   Toute retouche aux écarts de `.zn-cockpit__answer`, à la réserve du titre,
+   au créneau de `.zn-cockpit__day-bar`, à la rangée de `.zn-cockpit__day-kinds`
+   ou à la réserve de `.zn-cockpit__how` invalide ces nombres. */
 .zn-cockpit__hold {
   min-block-size: 604px;
 }
@@ -369,6 +378,13 @@
    repère d'axe, pas une seconde annonce. */
 .zn-cockpit__day-value {
   color: var(--text-muted);
+}
+
+/* La liste du bureau. Hors de la figure : les peindre ici, dans la colonne
+   du téléphone, ajouterait une ligne sous chaque barre. */
+.zn-cockpit__day-num,
+.zn-cockpit__day-desk {
+  display: none;
 }
 
 /* LE CRÉNEAU de la barre, et il est de hauteur FIXE.
@@ -1178,19 +1194,16 @@ button.zn-cockpit__exit {
   color: var(--text-faint);
 }
 
-/* ── Le mois, en deux colonnes sur un écran large ───────────────────────── */
+/* ── Bureau : l'instrument à gauche, la journée à droite ─────────────────── */
 
-/* Le cockpit est une colonne de 620 px, dessinée pour le téléphone et gardée
-   telle quelle sur bureau : un écran de dix secondes n'a pas de colonne à
-   remplir. Le mois, lui, est une consultation, et il empilait une grille de
-   six rangées, un bilan et une jauge dans cette colonne : 2100 px de haut
-   pour la moitié de la largeur vide. Dès que l'écran le paie, il se dispose
-   en deux colonnes, la grille et son bilan à gauche, la journée choisie à
-   droite, et l'on lit le mois et la séance sans défiler.
+/* Le téléphone empile le commutateur, l'instrument, la séance et le bilan
+   dans 620 px. Sur un écran large cette pile laisse la séance sous la ligne
+   de flottaison et la semaine illisible tant qu'on n'a pas choisi un jour.
 
-   Sous 900 px, le conteneur est une colonne et ses enfants gardent l'ordre
-   du DOM, qui est l'ordre validé sur téléphone : le commutateur, la grille,
-   la réponse, le bilan. Le mode semaine ne passe pas par ici. */
+   Dès 900 px les deux modes prennent la colonne de la page. Le commutateur
+   et l'instrument restent à gauche, la séance à droite, le bilan en pleine
+   largeur dessous. Sous 900 px le conteneur est une colonne et ses enfants
+   gardent l'ordre du DOM : commutateur, instrument, réponse, bilan. */
 .zn-cockpit__split {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -1207,34 +1220,242 @@ button.zn-cockpit__exit {
 }
 
 @media (min-width: 900px) {
-  /* Deux colonnes de 620 px moins l'écart, dans le même gabarit : le mode
-     mois élargit le cockpit, le mode semaine garde sa colonne. */
-  .zn-cockpit[data-view="month"] {
-    max-inline-size: 1160px;
+  /* La page paie déjà sa marge. Une seconde, dans le cockpit, rétrécissait
+     les deux colonnes sans les aligner sur le reste de l'app. La largeur
+     est celle du premier rendu : la lecture du plan arrive une frame plus
+     tard, et un cockpit qui s'élargit à ce moment-là déplace la figure. */
+  .zn-cockpit {
+    max-inline-size: none;
+    padding-inline: 0;
+    padding-block-start: var(--sp-18);
   }
 
+  /* Sans semaine, la réponse reste la colonne du téléphone, au centre.
+     L'élargir recollait le titre à gauche dans un champ vide. La figure
+     suit le bord gauche de cette colonne. Pendant le premier rendu elle
+     reste au bord de la page, là où la semaine la posera : la déplacer
+     au moment où le plan arrive ferait sauter le dessin. */
+  .zn-cockpit:not(:has(.zn-cockpit__split)) .zn-cockpit__resume {
+    max-inline-size: 620px;
+    margin-inline: auto;
+    inline-size: 100%;
+  }
+
+  .zn-cockpit:not(:has(.zn-cockpit__split)):not([data-pending]) .zn-cockpit__art {
+    margin-inline-start: max(0px, calc((100% - 620px) / 2));
+  }
+
+  /* Mesuré au navigateur, 1440 px, un jour de séance. Le téléphone garde
+     604. Toute retouche aux écarts du bureau invalide ce nombre. */
+  .zn-cockpit__hold {
+    min-block-size: 607px;
+  }
+
+  /* Le retour à aujourd'hui suit l'écart. En bout de ligne, sur la largeur
+     de la page, il s'en éloignait d'un écran. */
+  .zn-cockpit:has(.zn-cockpit__split) .zn-cockpit__date-row {
+    justify-content: flex-start;
+    gap: var(--sp-8);
+  }
+
+  /* Le bureau n'est pas une version dilatée du téléphone. La journée est
+     l'objet principal : elle prend la surface encre et la semaine devient son
+     index. Cette opposition évite deux colonnes pâles de même poids, qui ne
+     disent pas où regarder en premier. */
   .zn-cockpit__split {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(440px, 1.18fr) minmax(300px, 0.82fr);
     grid-template-areas:
-      "switch answer"
-      "grid answer"
+      "answer switch"
+      "answer grid"
       "review review";
-    column-gap: var(--sp-16);
-    row-gap: var(--sp-11);
+    column-gap: 0;
+    row-gap: var(--sp-9);
     align-items: start;
     align-content: start;
   }
 
-  /* Le bilan en pleine largeur sous les deux colonnes : à gauche il
-     allongeait sa colonne pendant que celle de droite s'arrêtait au tiers.
-     Sous les deux, le bilan et la jauge se posent côte à côte. */
+  /* La semaine aligne la liste et la séance sur le même bord haut. Le
+     commutateur reste la légende de la liste, pas un onglet au-dessus de
+     la séance. La liste a une largeur stable : l'allonger n'ajoute rien
+     à un libellé, et la séance garde la place. */
+  .zn-cockpit[data-view="week"] .zn-cockpit__split {
+    grid-template-columns: minmax(440px, 1.18fr) minmax(300px, 0.82fr);
+    grid-template-areas:
+      "answer switch"
+      "answer grid"
+      "review review";
+    row-gap: var(--sp-4);
+  }
+
+  .zn-cockpit__split-switch {
+    padding: var(--sp-10) 0 0 var(--sp-14);
+  }
+
+  .zn-cockpit__split-grid {
+    min-block-size: 100%;
+    padding: 0 0 var(--sp-12) var(--sp-14);
+  }
+
+  .zn-cockpit__split-answer {
+    align-self: stretch;
+    /* Une hauteur MINIMALE ne stabilise pas l'écran : dès qu'un jour contient
+       un complément, le panneau grandit et repousse le bilan. Le bureau fixe
+       donc le créneau de lecture ; les rares contenus plus longs défilent
+       DANS ce créneau, sans déplacer le reste du cockpit. */
+    box-sizing: border-box;
+    block-size: 720px;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    padding: clamp(var(--sp-16), 5vw, var(--sp-20));
+    background: var(--surface-band);
+  }
+
+  .zn-cockpit__split-answer .zn-cockpit__answer {
+    gap: var(--sp-7);
+  }
+
+  .zn-cockpit__session-deck {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-12);
+  }
+
+  .zn-cockpit__session-tabs {
+    display: flex;
+    align-items: stretch;
+    gap: var(--sp-2);
+    min-block-size: 36px;
+    overflow-x: auto;
+    padding-block-end: var(--sp-2);
+  }
+
+  .zn-cockpit__session-tabs[data-reserved] {
+    visibility: hidden;
+  }
+
+  .zn-cockpit__session-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-4);
+    min-block-size: 36px;
+    padding: var(--sp-4) var(--sp-6);
+    color: var(--text-muted);
+    background: transparent;
+    border: 0;
+    border-radius: var(--r-xs);
+    font: var(--type-body-sm);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .zn-cockpit__session-tab:hover {
+    color: var(--text-body);
+    background: var(--paper-raised);
+  }
+
+  .zn-cockpit__session-tab[aria-selected="true"] {
+    color: var(--text-body);
+    background: var(--paper-raised);
+    font-weight: var(--fw-semibold);
+  }
+
+  .zn-cockpit__session-tab .zn-mono {
+    color: var(--text-faint);
+  }
+
+  .zn-cockpit__stack[data-active-session] {
+    gap: 0;
+  }
+
+  .zn-cockpit__stack[data-active-session] .zn-cockpit__session:not([data-active]) {
+    display: none;
+  }
+
+  .zn-cockpit__stack[data-active-session] .zn-cockpit__session + .zn-cockpit__session {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  .zn-cockpit__split-answer .zn-cockpit__headline {
+    max-inline-size: 16ch;
+  }
+
+  .zn-cockpit__split-answer .zn-cockpit__exits {
+    padding-block-start: var(--sp-9);
+  }
+
+  /* Une illustration de fermeture a une place sur le téléphone, après les
+     actions. À côté d'un poste de travail elle devient un objet isolé qui
+     étire artificiellement l'écran : le contenu suffit à terminer la vue. */
+  .zn-cockpit:has(.zn-cockpit__split) .zn-cockpit__art {
+    display: none;
+  }
+
+  /* Le bilan clôt la page : il prend la largeur du poste de travail et ses
+     données se lisent en travers, non dans une troisième colonne étroite
+     sous la séance. La version mois, qui porte aussi une jauge, conserve sa
+     grille à deux objets plus bas. */
   .zn-cockpit__split-review {
+    align-items: start;
+    border-block-start: 0;
+    padding: var(--sp-12) 0 var(--sp-4);
+  }
+
+  .zn-cockpit__split-review:not(:has(> :nth-child(2))) {
+    display: block;
+    padding: var(--sp-16) clamp(var(--sp-14), 4vw, var(--sp-18));
+    background: var(--surface-band);
+  }
+
+  .zn-cockpit__split-review:not(:has(> :nth-child(2))) > .zn-wreview[data-variant="bare"] {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.55fr) minmax(260px, 1.25fr) minmax(180px, 0.8fr);
+    grid-template-areas:
+      "head head head"
+      "ratio volume facts"
+      "note volume facts"
+      "table table table";
+    column-gap: var(--sp-16);
+    row-gap: var(--sp-8);
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  .zn-cockpit__split-review:not(:has(> :nth-child(2))) .zn-wreview__head {
+    grid-area: head;
+  }
+
+  .zn-cockpit__split-review:not(:has(> :nth-child(2))) .zn-wreview__ratio {
+    grid-area: ratio;
+  }
+
+  .zn-cockpit__split-review:not(:has(> :nth-child(2))) .zn-wreview__say {
+    grid-area: note;
+    align-self: start;
+  }
+
+  .zn-cockpit__split-review:not(:has(> :nth-child(2))) .zn-wreview__vol {
+    grid-area: volume;
+    align-self: center;
+  }
+
+  .zn-cockpit__split-review:not(:has(> :nth-child(2))) .zn-wreview__facts {
+    grid-area: facts;
+    align-content: start;
+  }
+
+  .zn-cockpit__split-review:not(:has(> :nth-child(2))) .zn-wreview__table {
+    grid-area: table;
+    margin-block-start: var(--sp-4);
+  }
+
+  .zn-cockpit__split-review:has(> :nth-child(2)) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: var(--sp-16);
-    align-items: start;
-    border-block-start: var(--border-rule);
-    padding-block-start: var(--sp-9);
   }
 
   .zn-cockpit__split-review > .zn-cockpit__intensity {
@@ -1250,14 +1471,138 @@ button.zn-cockpit__exit {
     grid-area: grid;
   }
 
-  /* La réponse commence à la hauteur du commutateur, pas de la grille : la
-     séance du jour choisi est ce qu'on vient chercher, elle ne s'aligne pas
-     sous un onglet qu'elle ne porte pas. */
+  /* Le mois : la séance commence à la hauteur du commutateur. La grille
+     est haute, et la séance est ce qu'on vient chercher. */
   .zn-cockpit__split-answer {
     grid-area: answer;
   }
 
   .zn-cockpit__split-review {
     grid-area: review;
+  }
+
+  /* ── La bande, couchée en liste ───────────────────────────────────────── */
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__week {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    padding-block-end: 0;
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--sp-4);
+    min-block-size: var(--hit-min);
+    padding-inline: var(--sp-4);
+    text-align: start;
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day + .zn-cockpit__day {
+    border-block-start: var(--border-divider);
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day[data-selected] {
+    background: var(--surface-band);
+  }
+
+  /* Le filet sous la lettre est la marque de la figure. En liste, le filet
+     de la ligne le remplace : les deux à la fois faisaient deux coches. */
+  .zn-cockpit[data-view="week"] .zn-cockpit__day[data-selected] .zn-cockpit__day-letter {
+    border-block-end-color: transparent;
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day-letter {
+    flex: none;
+    inline-size: 1.25em;
+    text-align: center;
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day-num {
+    display: block;
+    flex: none;
+    inline-size: 2ch;
+    font: var(--type-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-faint);
+    text-align: end;
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day[data-selected] .zn-cockpit__day-num {
+    color: var(--text-body);
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day-kinds {
+    flex: none;
+    inline-size: 30px;
+    margin-block: 0;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+
+  /* La figure reste dans le DOM, elle ne se peint plus : la durée est écrite
+     sur les sept jours, et la hauteur des barres n'a plus de colonne. */
+  .zn-cockpit[data-view="week"] .zn-cockpit__day-col,
+  .zn-cockpit[data-view="week"] .zn-cockpit__day-value {
+    display: none;
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day-desk {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--sp-5);
+    min-inline-size: 0;
+  }
+
+  .zn-cockpit__day-desk-label {
+    flex: 1;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: var(--type-body-sm);
+    color: var(--text-muted);
+  }
+
+  .zn-cockpit__day-desk-time {
+    flex: none;
+    inline-size: 5.5ch;
+    font: var(--type-mono);
+    font-size: var(--fs-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    text-align: end;
+  }
+
+  .zn-cockpit__day-desk-marks {
+    display: flex;
+    flex: none;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 2px;
+    inline-size: 46px;
+    block-size: 8px;
+  }
+
+  .zn-cockpit__day-desk-marks .zn-cockpit__cell-extra {
+    margin-inline-start: var(--sp-3);
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day[data-rest]:not([data-selected]) .zn-cockpit__day-desk-label {
+    color: var(--text-faint);
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day[data-selected] .zn-cockpit__day-desk-label,
+  .zn-cockpit[data-view="week"] .zn-cockpit__day[data-selected] .zn-cockpit__day-desk-time {
+    color: var(--text-body);
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__day:hover .zn-cockpit__day-desk-label,
+  .zn-cockpit[data-view="week"] .zn-cockpit__day:hover .zn-cockpit__day-num {
+    color: var(--text-body);
   }
 }
