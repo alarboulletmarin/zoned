@@ -252,6 +252,10 @@ export function TodayPage() {
      (sa feuille est masquée, il vit dans un rail) : ici il n'y a pas de rail,
      il s'ouvre donc en panneau latéral, en mode inline dedans. */
   const wide = useMediaQuery("(min-width: 901px)");
+  /* Même seuil que la carte à deux colonnes. En dessous, un seul jour est
+     monté : la pile du téléphone ne pousse pas la bande, et sept séances
+     chargeraient sept chunks pour rien. */
+  const desk = useMediaQuery("(min-width: 900px)");
   const [composeOpen, setComposeOpen] = useState(false);
   const focus = useMemo(
     () => pickTodayFocus(plans, now, composition),
@@ -286,6 +290,18 @@ export function TodayPage() {
     () => [0, 1, 2, 3, 4, 5, 6].map((i) => isoDateOnly(focusDayDate(focus, i, now))),
     [focus, now],
   );
+  /* La semaine du jour choisi, pas seulement celle qu'on vit : depuis le
+     mois, jeudi prochain doit mesurer ses six voisins, sinon sa carte
+     grandit toute seule et la grille bouge. */
+  const paneDates = useMemo(() => {
+    if (!desk) return [dayIso];
+    const start = dateFromIso(calendarWeekRange(dateFromIso(dayIso)).from);
+    return [0, 1, 2, 3, 4, 5, 6].map((offset) => {
+      const date = new Date(start);
+      date.setDate(start.getDate() + offset);
+      return isoDateOnly(date);
+    });
+  }, [desk, dayIso]);
   const dayIndex = weekDates.indexOf(dayIso);
   // La bande ne montre que la semaine en cours : hors d'elle, elle marque le
   // jour courant, ce qui n'arrive que le temps d'un mode.
@@ -295,25 +311,12 @@ export function TodayPage() {
      Pour la semaine en cours c'est exactement `focus.week[day]`, lu au même
      endroit ; pour une case du mois c'est la seule façon de le savoir. */
   const selected = useMemo(() => planDay(focus, dateFromIso(dayIso)), [focus, dayIso]);
-  const sessions = selected.sessions;
-  const refs = selected.refs;
 
   /* On peut changer de jour : il y a donc des hauteurs à RÉSERVER, pour que
      passer du dimanche au mardi ne fasse pas remonter l'écran. Sans semaine à
      parcourir (pas de plan, ou un plan qui n'a pas commencé), la bande ne
      s'affiche pas, rien ne peut changer, et réserver ne ferait que du vide. */
   const reserve = focus.week.length > 0;
-
-  /* L'état du JOUR CHOISI, qui n'est celui d'aujourd'hui que tant qu'on n'a
-     rien choisi d'autre. `upcoming` et `none` ne dépendent, eux, d'aucun
-     jour : ils disent qu'il n'y a pas de semaine à parcourir, et la bande ne
-     s'affiche même pas. */
-  const dayState =
-    focus.state === "session" || focus.state === "rest"
-      ? sessions.length > 0
-        ? "session"
-        : "rest"
-      : focus.state;
 
   /* La ligne de date suit le choix : sans elle, jeudi s'afficherait sous
      mardi 16 septembre, et l'écran dirait deux jours à la fois. */
@@ -331,44 +334,6 @@ export function TodayPage() {
     isEn ? "en-GB" : "fr-FR",
     { weekday: "long", day: "numeric", month: "long" },
   );
-
-  /* Le titre EST la réponse. Un `<h1>` qui dirait Aujourd'hui au-dessus
-     d'un chapô à faire aujourd'hui et d'une ligne une séance t'attend
-     ferait dire trois fois la même chose avant le contenu, et la porte de la
-     nav dit déjà Aujourd'hui.
-
-     Il n'est écrit ici que pour les journées SANS séance : dès qu'il y en a
-     une, c'est la pile qui porte les titres, un par séance, parce qu'une
-     séance est nommée par son nom et non par le nombre qu'elles sont. */
-  const headline = useMemo(() => {
-    if (dayState === "none") return t("today:resume.none.line");
-    if (dayState === "upcoming")
-      return t("today:resume.upcoming.line", { count: focus.daysUntilStart });
-    return t("today:resume.rest.line");
-  }, [dayState, focus.daysUntilStart, t]);
-
-  /** Un jour de repos n'est pas un trou : il dit quand on ressort.
-   *
-   * Dans la semaine du jour choisi, qui n'est celle qu'on vit que tant que
-   * la grille du mois n'a pas emmené ailleurs. */
-  const nextLine = useMemo(() => {
-    if (dayState !== "rest" || focus.week.length === 0 || !selected.inPlan) return null;
-    const names = t("today:week.dayNames").split(",");
-    // Jour par jour et toutes sources confondues : la prochaine sortie peut
-    // venir de la semaine posée quand le plan, lui, se repose.
-    for (let index = selected.dayOfWeek + 1; index <= 6; index++) {
-      const date = dateFromIso(selected.date);
-      date.setDate(date.getDate() + (index - selected.dayOfWeek));
-      const next = planDay(focus, date).sessions;
-      if (next.length === 0) continue;
-      const min = next.reduce((n, s) => n + (s.estimatedDurationMin ?? 0), 0);
-      return t("today:resume.next", {
-        day: names[index],
-        duration: formatDurationMinutes(min),
-      });
-    }
-    return null;
-  }, [dayState, focus, selected, t]);
 
   /** Où l'on en est du plan : le dénominateur, l'échéance, ce qu'on vise. */
   const position = useMemo(() => planPosition(focus, now), [focus, now]);
@@ -443,17 +408,6 @@ export function TodayPage() {
   type AddTarget = { planId: string; weekNumber: number; name: string } | { fresh: true };
   const [addTarget, setAddTarget] = useState<AddTarget | null>(null);
 
-  const addTargets = useMemo(() => {
-    const date = dateFromIso(dayIso);
-    const out: { planId: string; weekNumber: number; name: string }[] = [];
-    for (const source of focus.sources) {
-      const position = sourcePosition(source, date);
-      if (!position) continue;
-      out.push({ planId: source.plan.id, weekNumber: position.weekNumber, name: sourceName(source, isEn) });
-    }
-    return out;
-  }, [focus.sources, dayIso, isEn]);
-
   const handleAddWorkout = useCallback(
     async (workoutId: string) => {
       const target = addTarget;
@@ -514,19 +468,6 @@ export function TodayPage() {
     [addTarget, selected.dayOfWeek, dayIso, isEn, composition, updateComposition, reload, t],
   );
 
-  /* Le primaire des journées sans séance. Il mène au plan, sauf quand il n'y
-     a pas de plan du tout, où il mène à sa création. Les journées à séances,
-     elles, ont un bouton PAR séance, dans la pile. */
-  const emptyCta = useMemo(() => {
-    if (!planUrl || dayState === "none") {
-      return { to: "/plan/new", label: t("today:resume.none.cta") };
-    }
-    return {
-      to: focus.weekNumber > 0 ? `${planUrl}?week=${focus.weekNumber}` : planUrl,
-      label: t(focus.isWeek ? "today:resume.openWeek" : "today:resume.openPlan"),
-    };
-  }, [planUrl, dayState, focus.weekNumber, focus.isWeek, t]);
-
   /* Le raccourci du bas mène à la semaine où l'on EST, et il ne retombe sur
      l'atelier de composition que lorsqu'il n'y a pas de semaine à retrouver.
      Le libellé suit la destination, il ne la précède pas : c'est tout le
@@ -540,11 +481,6 @@ export function TodayPage() {
      bande, pas aujourd'hui : on note souvent la veille au soir. */
   const log = useActivityLog();
   const activities = log.activities;
-
-  const dayActivities = useMemo(
-    () => activitiesOn(activities, dayIso),
-    [activities, dayIso],
-  );
 
   /* ── Le bilan du dimanche ─────────────────────────────────────────────
      Il n'a pas d'écran à lui et n'en veut pas : la bande CHOISIT déjà un
@@ -756,8 +692,75 @@ export function TodayPage() {
   const [activeSessionRank, setActiveSessionRank] = useState(0);
   useEffect(() => setActiveSessionRank(0), [dayIso]);
 
-  const answer = (
-    <>
+  /* Un jour de la carte. Sur bureau les sept jours de la semaine sont
+     montés ensemble et empilés : la carte prend la hauteur du plus haut,
+     et choisir un autre jour ne déplace plus la liste. */
+  const dayPane = (iso: string) => {
+    const active = iso === dayIso;
+    const selected = planDay(focus, dateFromIso(iso));
+    const sessions = selected.sessions;
+    const refs = selected.refs;
+    const shownRank = active ? activeSessionRank : 0;
+    const isToday = iso === todayIso;
+    /* `upcoming` et `none` ne dépendent d'aucun jour : ils disent qu'il n'y
+       a pas de semaine à parcourir, et la bande ne s'affiche même pas. */
+    const dayState =
+      focus.state === "session" || focus.state === "rest"
+        ? sessions.length > 0
+          ? "session"
+          : "rest"
+        : focus.state;
+    /* Le titre n'est écrit que pour les journées SANS séance : dès qu'il y
+       en a une, c'est la pile qui porte les titres. */
+    const headline =
+      dayState === "none"
+        ? t("today:resume.none.line")
+        : dayState === "upcoming"
+          ? t("today:resume.upcoming.line", { count: focus.daysUntilStart })
+          : t("today:resume.rest.line");
+    /* Un jour de repos dit quand on ressort, dans la semaine du jour. */
+    let nextLine: string | null = null;
+    if (dayState === "rest" && focus.week.length > 0 && selected.inPlan) {
+      const names = t("today:week.dayNames").split(",");
+      for (let index = selected.dayOfWeek + 1; index <= 6; index++) {
+        const date = dateFromIso(selected.date);
+        date.setDate(date.getDate() + (index - selected.dayOfWeek));
+        const next = planDay(focus, date).sessions;
+        if (next.length === 0) continue;
+        const min = next.reduce((n, s) => n + (s.estimatedDurationMin ?? 0), 0);
+        nextLine = t("today:resume.next", {
+          day: names[index],
+          duration: formatDurationMinutes(min),
+        });
+        break;
+      }
+    }
+    const emptyCta =
+      !planUrl || dayState === "none"
+        ? { to: "/plan/new", label: t("today:resume.none.cta") }
+        : {
+            to: focus.weekNumber > 0 ? `${planUrl}?week=${focus.weekNumber}` : planUrl,
+            label: t(focus.isWeek ? "today:resume.openWeek" : "today:resume.openPlan"),
+          };
+    const addTargets: { planId: string; weekNumber: number; name: string }[] = [];
+    for (const source of focus.sources) {
+      const position = sourcePosition(source, dateFromIso(iso));
+      if (!position) continue;
+      addTargets.push({
+        planId: source.plan.id,
+        weekNumber: position.weekNumber,
+        name: sourceName(source, isEn),
+      });
+    }
+    const dayActivities = activitiesOn(activities, iso);
+
+    return (
+    <div
+      key={iso}
+      className="zn-cockpit__day-pane"
+      data-active={active ? "true" : undefined}
+      inert={active ? undefined : true}
+    >
       {sessions.length > 0 ? (
         /* La pile. Un élément le plus souvent, deux les jours doubles, et
            c'est le même bloc dans les deux cas : rien n'est écrit pour le
@@ -784,7 +787,7 @@ export function TodayPage() {
                   }
                   type="button"
                   role="tab"
-                  aria-selected={rank === activeSessionRank}
+                  aria-selected={rank === shownRank}
                   className="zn-cockpit__session-tab"
                   onClick={() => setActiveSessionRank(rank)}
                 >
@@ -793,7 +796,7 @@ export function TodayPage() {
                 </button>
               ))}
           </div>
-          <div className="zn-cockpit__stack" data-active-session={activeSessionRank}>
+          <div className="zn-cockpit__stack" data-active-session={shownRank}>
           {sessions.map((session, rank) => (
             <CockpitSession
               key={
@@ -805,7 +808,7 @@ export function TodayPage() {
               sessionRef={refs[rank]}
               rank={rank}
               count={sessions.length}
-              isActive={rank === activeSessionRank}
+              isActive={rank === shownRank}
               isToday={isToday}
               weekNumber={refs[rank]?.weekNumber ?? selected.weekNumber}
               linkState={sessionState(session, refs[rank])}
@@ -1031,7 +1034,7 @@ export function TodayPage() {
             variant="outline"
             size="sm"
             className="zn-cockpit__log"
-            onClick={() => log.logOn(dayIso)}
+            onClick={() => log.logOn(iso)}
           >
             <Plus size={16} />
             {t("activity:cockpit.add")}
@@ -1045,8 +1048,9 @@ export function TodayPage() {
           </Link>
         </p>
       )}
-    </>
-  );
+    </div>
+    );
+  };
 
   return (
     <div className="zn-cockpit" data-view={view} data-pending={isLoading || undefined}>
@@ -1091,6 +1095,7 @@ export function TodayPage() {
               il n'y a pas d'instrument, et la réponse reste seule. */}
           {focus.week.length > 0 ? (
             <div className="zn-cockpit__split">
+              <div className="zn-cockpit__split-side">
               <div className="zn-cockpit__split-switch">{switcher}</div>
               <div className="zn-cockpit__split-grid">
                 {view === "month" ? (
@@ -1116,7 +1121,10 @@ export function TodayPage() {
                   />
                 )}
               </div>
-              <div className="zn-cockpit__split-answer">{answer}</div>
+              </div>
+              <div className="zn-cockpit__split-answer">
+                {paneDates.map((iso) => dayPane(iso))}
+              </div>
               {/* Ce que le mois a pesé, en mode mois, et seulement s'il a quelque
                   chose à dire. C'est le bilan de la semaine, nourri d'un mois :
                   même dessin, mêmes règles, les kilomètres restent par sport. */}
@@ -1168,7 +1176,7 @@ export function TodayPage() {
             </div>
           ) : (
             <>
-              {answer}
+              {dayPane(dayIso)}
               {showReview && <WeekReviewPanel review={review} />}
             </>
           )}

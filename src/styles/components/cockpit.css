@@ -1278,6 +1278,28 @@ button.zn-cockpit__exit {
   gap: var(--sp-7);
 }
 
+/* Un jour de la carte. L'écart entre ses blocs est celui de la colonne,
+   que le panneau soit seul ou empilé avec les six autres jours. */
+.zn-cockpit__day-pane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+  min-inline-size: 0;
+}
+
+/* Le téléphone n'en montre qu'un. Les autres, s'ils sont montés, ne
+   doivent pas s'ajouter sous la séance. */
+.zn-cockpit__day-pane:not([data-active]) {
+  display: none;
+}
+
+.zn-cockpit__split-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+  min-inline-size: 0;
+}
+
 @media (min-width: 900px) {
   /* La page paie déjà sa marge. Une seconde, dans le cockpit, rétrécissait
      les deux colonnes sans les aligner sur le reste de l'app. La largeur
@@ -1324,8 +1346,7 @@ button.zn-cockpit__exit {
   .zn-cockpit__split {
     grid-template-columns: minmax(440px, 1.18fr) minmax(300px, 0.82fr);
     grid-template-areas:
-      "answer switch"
-      "answer grid"
+      "answer side"
       "review review";
     column-gap: 0;
     row-gap: var(--sp-9);
@@ -1340,10 +1361,21 @@ button.zn-cockpit__exit {
   .zn-cockpit[data-view="week"] .zn-cockpit__split {
     grid-template-columns: minmax(440px, 1.18fr) minmax(300px, 0.82fr);
     grid-template-areas:
-      "answer switch"
-      "answer grid"
+      "answer side"
       "review review";
     row-gap: var(--sp-4);
+  }
+
+  /* Le commutateur et la liste sont UNE colonne. La séance, même plus
+     haute, ne peut plus écarter l'un de l'autre : ils ne partagent plus
+     une rangée avec elle. */
+  .zn-cockpit__split-side {
+    grid-area: side;
+    gap: var(--sp-9);
+  }
+
+  .zn-cockpit[data-view="week"] .zn-cockpit__split-side {
+    gap: var(--sp-4);
   }
 
   .zn-cockpit__split-switch {
@@ -1357,16 +1389,21 @@ button.zn-cockpit__exit {
 
   .zn-cockpit__split-answer {
     align-self: stretch;
-    /* Une hauteur MINIMALE ne stabilise pas l'écran : dès qu'un jour contient
-       un complément, le panneau grandit et repousse le bilan. Le bureau fixe
-       donc le créneau de lecture ; les rares contenus plus longs défilent
-       DANS ce créneau, sans déplacer le reste du cockpit. */
-    box-sizing: border-box;
-    block-size: 720px;
-    overflow-y: auto;
-    scrollbar-gutter: stable;
+    /* Les sept jours sont empilés dans la même case. La carte mesure le
+       plus haut, donc choisir un autre jour ne déplace ni la liste ni le
+       bilan. Pas de défilement interne : ce qui dépasse allonge la page. */
+    display: grid;
     padding: clamp(var(--sp-16), 5vw, var(--sp-20));
     background: var(--surface-band);
+  }
+
+  .zn-cockpit__split-answer .zn-cockpit__day-pane {
+    grid-area: 1 / 1;
+  }
+
+  .zn-cockpit__split-answer .zn-cockpit__day-pane:not([data-active]) {
+    display: flex;
+    visibility: hidden;
   }
 
   .zn-cockpit__split-answer .zn-cockpit__answer {
@@ -1520,14 +1557,6 @@ button.zn-cockpit__exit {
   .zn-cockpit__split-review > .zn-cockpit__intensity {
     border-block-start: 0;
     padding-block-start: 0;
-  }
-
-  .zn-cockpit__split-switch {
-    grid-area: switch;
-  }
-
-  .zn-cockpit__split-grid {
-    grid-area: grid;
   }
 
   /* Le mois : la séance commence à la hauteur du commutateur. La grille
