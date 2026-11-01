@@ -13,6 +13,8 @@
  */
 
 import { Link } from "react-router-dom";
+import { useIsEnglish } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 import { useTranslation } from "react-i18next";
 import type { CSSProperties } from "react";
 import { Dumbbell, UserRound } from "@/components/icons";
@@ -92,9 +94,10 @@ export function StrengthWorkoutCard({ workout, className }: StrengthWorkoutCardP
   const pick = usePickLang();
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const equipment = useEquipmentLabel(workout);
+  const isEn = useIsEnglish();
 
   return (
-    <Link to={`/workout/${workout.id}`} className="zn-wcard-link">
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link">
       <article className={cn("zn-wcard", className)}>
         <div className="zn-row zn-row--start" style={HEAD_ROW}>
           <h3 className="zn-wcard__title zn-fill">{pick(workout, "name")}</h3>
@@ -149,9 +152,10 @@ export function StrengthWorkoutCardCompact({
   const pick = usePickLang();
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const needsEquipment = workout.equipment.some((e) => e !== "none");
+  const isEn = useIsEnglish();
 
   return (
-    <Link to={`/workout/${workout.id}`} className="zn-wcard-link">
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link">
       <article className={cn("zn-wcard", className)} data-size="compact">
         <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
           <h3 className="zn-wcard__title zn-fill">{pick(workout, "name")}</h3>
@@ -188,9 +192,10 @@ export function StrengthWorkoutListItem({ workout, className }: StrengthWorkoutL
   const pick = usePickLang();
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const equipment = useEquipmentLabel(workout);
+  const isEn = useIsEnglish();
 
   return (
-    <Link to={`/workout/${workout.id}`} className={cn("zn-str-row", className)}>
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className={cn("zn-str-row", className)}>
       {/* Title and mobile duration */}
       <div className="zn-fill">
         <span className="zn-str-row__name">{pick(workout, "name")}</span>

@@ -702,11 +702,12 @@ function outputPath(routePath: string): string {
  */
 function assertSitemapCoverage(covered: Set<string>): void {
   const sitemap = readFileSync(join(ROOT, "public/sitemap.xml"), "utf-8");
-  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) =>
-    m[1].replace(SITE_URL, "")
-  );
+  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => {
+    const bare = m[1].replace(SITE_URL, "").split("?")[0];
+    return bare === "" ? "/" : bare;
+  });
 
-  const missing = locs.filter((loc) => !covered.has(loc === "" ? "/" : loc));
+  const missing = [...new Set(locs)].filter((loc) => !covered.has(loc));
   if (missing.length > 0) {
     throw new Error(
       `${missing.length} sitemap URL(s) have no static shell and would serve the ` +

@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, ChevronDown } from "@/components/icons";
@@ -147,12 +147,19 @@ export function HomePage() {
 
   // The hero kicker: today's date and the ISO week, the way a training log
   // is dated. Mono, uppercased by the stylesheet.
-  const today = useMemo(() => new Date(), []);
-  const dateLine = `${today.toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  })} · ${t("homepage:home.hero.week", { n: getISOWeek(today) })}`;
+  // La date du jour ne peut pas etre dans le HTML pret a l'emploi : il est
+  // genere au build, et l'hydratation des jours suivants ne collerait plus.
+  const [dateLine, setDateLine] = useState("");
+  useEffect(() => {
+    const today = new Date();
+    setDateLine(
+      `${today.toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      })} · ${t("homepage:home.hero.week", { n: getISOWeek(today) })}`,
+    );
+  }, [isEn, t]);
 
   const seoDescription = t("common:pages.home.seoDescription", {
     count: appStats.workouts || 200,

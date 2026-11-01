@@ -16,6 +16,7 @@ import type {
 import { DEFAULT_SETTINGS } from "@/types/settings";
 import type { Practice } from "@/types/practice";
 import { parseStoredSettings } from "@/lib/settingsSchema";
+import { isServerSnapshot } from "@/prerender/snapshot";
 
 const STORAGE_KEY = "zoned-settings";
 
@@ -40,7 +41,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
      mal formée ne donne plus un réglage ignoré mais un écran blanc, parce que
      `.includes()` lève sur une chaîne. `parseStoredSettings` assainit champ
      par champ et ne rejette jamais l'objet entier. */
+  const snapshot = isServerSnapshot();
   const [settings, setSettings] = useState<UserSettings>(() => {
+    if (snapshot) return DEFAULT_SETTINGS;
     try {
       return parseStoredSettings(localStorage.getItem(STORAGE_KEY));
     } catch {
@@ -49,6 +52,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       return DEFAULT_SETTINGS;
     }
   });
+  const [persistReady, setPersistReady] = useState(!snapshot);
 
   // Keep the root attribute the inline boot script set in step with the
   // choice, so a change applies to the next launch without a reload.
@@ -56,10 +60,23 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     document.documentElement.dataset.opening = settings.openingAnimation;
   }, [settings.openingAnimation]);
 
-  // Persist to localStorage when settings change
   useEffect(() => {
+    if (!snapshot) return;
+    try {
+      setSettings(parseStoredSettings(localStorage.getItem(STORAGE_KEY)));
+    } catch {
+      // Meme repli que le premier rendu : les defauts restent.
+    }
+    setPersistReady(true);
+  }, [snapshot]);
+
+  // Persist to localStorage when settings change. On a prerendered page the
+  // first paint uses defaults, so we wait until the stored value is loaded
+  // and do not overwrite it with those defaults.
+  useEffect(() => {
+    if (!persistReady) return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  }, [settings]);
+  }, [settings, persistReady]);
 
   const setUnitSystem = useCallback((unit: UnitSystem) => {
     setSettings((prev) => ({ ...prev, unitSystem: unit }));

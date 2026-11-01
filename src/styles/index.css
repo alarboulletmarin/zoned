@@ -67,6 +67,7 @@
 @import "./components/annotation.css" layer(components);
 @import "./components/illustration-slot.css" layer(components);
 @import "./components/learn.css" layer(components);
+@import "./components/hub-links.css" layer(components);
 @import "./components/library.css" layer(components);
 @import "./components/mobile-menu.css" layer(components);
 @import "./components/numbers.css" layer(components);

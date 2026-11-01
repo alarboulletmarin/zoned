@@ -1,6 +1,7 @@
 // src/pages/GlossaryTermPage.tsx
 // Detail page for a single glossary term
 
+import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Book, Search, ArrowLeft } from "@/components/icons";
@@ -18,8 +19,11 @@ export function GlossaryTermPage() {
   const isEn = i18n.language?.startsWith("en") ?? false;
   const navigate = useNavigate();
 
-  // Detect if user came from within the app (has history to go back to)
-  const canGoBack = window.history.length > 1;
+  // history.length n'existe pas au prerendu. Le bouton arrive apres.
+  const [canGoBack, setCanGoBack] = useState(false);
+  useEffect(() => {
+    setCanGoBack(window.history.length > 1);
+  }, []);
 
   const { term, isLoading } = useGlossaryTerm(id);
 

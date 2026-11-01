@@ -1,3 +1,4 @@
+import { StaticRouter } from "react-router";
 import {
   BrowserRouter,
   Routes,
@@ -6,7 +7,7 @@ import {
   useLocation,
   useNavigationType,
 } from "react-router-dom";
-import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from "react";
+import { useState, useEffect, useRef, lazy, Suspense, type ComponentType, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Toaster } from "sonner";
 import { toast } from "@/components/ui/toast";
@@ -27,6 +28,8 @@ import { ThemeProvider } from "@/hooks/useTheme";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
 import { i18nReady } from "@/i18n";
+import { isServerSnapshot } from "@/prerender/snapshot";
+import { RouteHubLinks } from "@/components/seo/RouteHubLinks";
 
 /** React.lazy that also waits for the active language's translation bundles
  *  (loaded in parallel with the page chunk). The page renders only once both
@@ -186,7 +189,16 @@ function ConditionalFooter() {
 function RootPage() {
   const location = useLocation();
   const wantsLanding = (location.state as { landing?: boolean } | null)?.landing === true;
-  const hasLivePlan = getAllPlans().some((plan) => !isPlanEnded(plan));
+  // Au prerendu, pas de plan local : la landing reste dans le HTML.
+  // Le cockpit ne s'ouvre qu'apres, si ce navigateur a un plan en cours.
+  const snapshot = isServerSnapshot();
+  const [hasLivePlan, setHasLivePlan] = useState(() =>
+    snapshot ? false : getAllPlans().some((plan) => !isPlanEnded(plan)),
+  );
+  useEffect(() => {
+    if (!snapshot) return;
+    setHasLivePlan(getAllPlans().some((plan) => !isPlanEnded(plan)));
+  }, [snapshot]);
   return hasLivePlan && !wantsLanding ? <Navigate to="/today" replace /> : <HomePage />;
 }
 
@@ -218,7 +230,12 @@ function ScrollToTopOnNavigate() {
   );
 }
 
-function App() {
+function Router({ location, children }: { location?: string; children: ReactNode }) {
+  if (location !== undefined) return <StaticRouter location={location}>{children}</StaticRouter>;
+  return <BrowserRouter>{children}</BrowserRouter>;
+}
+
+export default function App({ ssrLocation }: { ssrLocation?: string } = {}) {
   const { t } = useTranslation("common");
   const { canInstall, promptInstall, dismissInstall, isOnline } = usePWA();
   // Toaster placement: bottom-right covers the share-sheet action row on
@@ -267,7 +284,7 @@ function App() {
     <SettingsProvider>
       <ThemeProvider>
         <FavoritesProvider>
-          <BrowserRouter>
+          <Router location={ssrLocation}>
           <GlossaryMatcherProvider>
           <CommandPaletteProvider>
             <a href="#main-content" className="zn-skip">
@@ -371,6 +388,7 @@ function App() {
                           <Route path="/compare/:slug" element={<CompareDetailPage />} />
                           <Route path="*" element={<NotFoundPage />} />
                         </Routes>
+                        <RouteHubLinks />
                     </ErrorBoundary>
                   </div>
                 </main>
@@ -407,11 +425,10 @@ function App() {
               visibleToasts={2}
             />
           </div>
-          </BrowserRouter>
+          </Router>
         </FavoritesProvider>
       </ThemeProvider>
     </SettingsProvider>
   );
 }
 
-export default App;

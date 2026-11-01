@@ -1,5 +1,6 @@
 {
   "title": "Workout Library",
+  "catalogueIndex": "Every session",
   "catalogue": "{{workouts}} sessions · {{categories}} categories · {{disciplines}} disciplines",
   "subtitle": "{{count}} scientific training sessions",
   "subtitleStrength": "{{count}} strength sessions",

@@ -10,9 +10,9 @@ import {
   type ContentRef,
   type RelatedContentResult,
 } from "@/lib/content-relationships";
-import { loadAllWorkouts } from "@/data/workouts";
+import { getAllWorkoutsSync, isAllWorkoutsLoaded, loadAllWorkouts } from "@/data/workouts";
 import { getAllArticleMeta } from "@/data/articles/metadata";
-import { loadAllTerms } from "@/data/glossary";
+import { getAllTermsSync, isAllTermsLoaded, loadAllTerms } from "@/data/glossary";
 
 const EMPTY: RelatedContentResult = { workouts: [], articles: [], glossaryTerms: [] };
 
@@ -22,8 +22,12 @@ export function useRelatedContent(source: ContentRef | null): {
   glossaryTerms: GlossaryTerm[];
   isLoading: boolean;
 } {
-  const [result, setResult] = useState<RelatedContentResult>(EMPTY);
-  const [isLoading, setIsLoading] = useState(false);
+  const initial = (() => {
+    if (!source || !isAllWorkoutsLoaded() || !isAllTermsLoaded()) return null;
+    return findRelatedContent(source, getAllWorkoutsSync(), getAllArticleMeta(), getAllTermsSync());
+  })();
+  const [result, setResult] = useState<RelatedContentResult>(initial ?? EMPTY);
+  const [isLoading, setIsLoading] = useState(initial == null && source != null);
 
   useEffect(() => {
     if (!source) {

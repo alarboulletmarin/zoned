@@ -8,6 +8,7 @@ import {
   type ComponentType,
 } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { localeTo } from "@/lib/seo/locale-to";
 import { useTranslation } from "react-i18next";
 import {
   Search,
@@ -1122,6 +1123,21 @@ export function LibraryPage() {
             />
           )}
         </section>
+
+        {!isLoading && allWorkouts.length > 0 && (
+          <nav className="zn-crawl" aria-label={t("catalogueIndex")}>
+            <h2 className="zn-kicker">{t("catalogueIndex")}</h2>
+            <ul className="zn-crawl__list">
+              {allWorkouts.map((workout) => (
+                <li key={workout.id}>
+                  <Link to={localeTo(`/workout/${workout.id}`, isEn)}>
+                    {isEn && workout.nameEn ? workout.nameEn : workout.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
       </div>
 
       <ScrollToTop />

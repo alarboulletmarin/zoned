@@ -1,0 +1,44 @@
+/* Liens contextuels et index de catalogue. Texte reel, pas un bouton generique. */
+
+.zn-hub {
+  margin-top: var(--sp-14);
+  padding-top: var(--sp-10);
+  border-top: 1px solid var(--line-divider);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-hub__list,
+.zn-crawl__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-hub__list a,
+.zn-crawl__list a {
+  color: var(--text-body);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.zn-hub__list a:hover,
+.zn-crawl__list a:hover {
+  color: var(--text-muted);
+}
+
+.zn-crawl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  margin-top: var(--sp-14);
+}
+
+.zn-crawl__list a {
+  font-size: 0.9rem;
+}

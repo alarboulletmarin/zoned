@@ -16,7 +16,8 @@ import type { IconProps } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import type { Collection } from "@/data/collections/types";
 import { PRACTICE_META } from "@/types/practice";
-import { usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   Footprints,
@@ -40,12 +41,13 @@ interface CollectionCardProps {
 export function CollectionCard({ collection, className }: CollectionCardProps) {
   const { t } = useTranslation("common");
   const pick = usePickLang();
+  const isEn = useIsEnglish();
 
   const Icon = ICON_MAP[collection.icon] ?? Target;
 
   return (
     <Link
-      to={`/collections/${collection.slug}`}
+      to={localeTo(`/collections/${collection.slug}`, isEn)}
       className={cn("zn-ecard", className)}
     >
       <div className="zn-row" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>

@@ -1,4 +1,8 @@
 /**
+ * Ancien prerendu Chrome. Le build utilise `scripts/prerender-routes.ts`
+ * (rendu React au build, sans navigateur). Ce fichier reste pour un
+ * passage manuel quand on veut le DOM apres les effets.
+ *
  * USAGE: bun run scripts/prerender.ts
  *
  * Post-build prerendering script.

@@ -1,8 +1,10 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import App from "./App";
 import "./styles/index.css";
 import "./i18n";
+import { changeLanguage, type SupportedLanguage } from "./i18n";
+import { isServerSnapshot } from "./prerender/snapshot";
 
 /* The shell holds for two full strides before it hands over: --rc-start
    (0ms, the figure runs from the first frame) plus twice --rc-dur (660ms, the
@@ -32,11 +34,29 @@ const hideLoadingShell = () => {
 // static ones before mounting to avoid two og:title, two descriptions, etc.
 document.querySelectorAll("[data-default-seo]").forEach((el) => el.remove());
 
-createRoot(document.getElementById("root")!).render(
+const rootEl = document.getElementById("root");
+const app = (
   <StrictMode>
     <App />
   </StrictMode>
 );
+
+if (rootEl && isServerSnapshot()) {
+  const lang: SupportedLanguage =
+    document.documentElement.getAttribute("data-prerender-lang") === "en" ? "en" : "fr";
+  void changeLanguage(lang)
+    .then(() => import("./prerender/preload"))
+    .then(({ preloadRoute }) => preloadRoute(window.location.pathname))
+    .then(() => {
+      hydrateRoot(rootEl, app, {
+        onRecoverableError(error) {
+          console.error(error);
+        },
+      });
+    });
+} else if (rootEl) {
+  createRoot(rootEl).render(app);
+}
 
 /* Hide the shell once the app has mounted AND the strides are over.
    How much is left is measured against the RUN CYCLE'S OWN CLOCK, not against

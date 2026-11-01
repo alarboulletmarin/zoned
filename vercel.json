@@ -11,6 +11,18 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ],
+  "routes": [
+    {
+      "src": "/",
+      "has": [{ "type": "query", "key": "lang", "value": "en" }],
+      "dest": "/_en"
+    },
+    {
+      "src": "/((?!_en(?:/|$)|spa\\.html$)[^.]*)",
+      "has": [{ "type": "query", "key": "lang", "value": "en" }],
+      "dest": "/_en/$1"
+    }
+  ],
   "headers": [
     {
       "source": "/sw.js",

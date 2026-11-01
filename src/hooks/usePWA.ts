@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { isServerSnapshot } from "@/prerender/snapshot";
 
 const DISMISS_KEY = "zoned-pwa-install-dismissed";
 const DISMISS_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -18,10 +19,18 @@ interface BeforeInstallPromptEvent extends Event {
 export function usePWA() {
   const [installEvent, setInstallEvent] =
     useState<BeforeInstallPromptEvent | null>(null);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(() =>
+    isServerSnapshot() || typeof navigator === "undefined" ? true : navigator.onLine,
+  );
   const [installDismissed, setInstallDismissed] = useState(() => {
-    const ts = localStorage.getItem(DISMISS_KEY);
-    return ts ? Date.now() - Number(ts) < DISMISS_TTL : false;
+    if (isServerSnapshot()) return false;
+    try {
+      const ts = localStorage.getItem(DISMISS_KEY);
+      return ts ? Date.now() - Number(ts) < DISMISS_TTL : false;
+    } catch {
+      // Stockage illisible : on propose l'installation, rien n'est perdu.
+      return false;
+    }
   });
 
   useEffect(() => {

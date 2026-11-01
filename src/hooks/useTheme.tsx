@@ -19,6 +19,7 @@ import {
   storePreference,
   watchSystemTheme,
 } from "@/lib/theme";
+import { isServerSnapshot } from "@/prerender/snapshot";
 
 interface ThemeContextValue {
   /** What the user chose. `system` means "keep following the OS". */
@@ -51,7 +52,11 @@ const getServerSnapshot = (): boolean => false;
  * the settings card, never the page tree.
  */
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [preference, setPreference] = useState<ThemePreference>(readStoredPreference);
+  const snapshot = isServerSnapshot();
+  const [preference, setPreference] = useState<ThemePreference>(() =>
+    snapshot ? "system" : readStoredPreference(),
+  );
+  const [persistReady, setPersistReady] = useState(!snapshot);
 
   const systemDark = useSyncExternalStore(watchSystemTheme, prefersDark, getServerSnapshot);
   const resolved = resolveTheme(preference, systemDark);
@@ -61,8 +66,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [resolved]);
 
   useEffect(() => {
+    if (!snapshot) return;
+    setPreference(readStoredPreference());
+    setPersistReady(true);
+  }, [snapshot]);
+
+  useEffect(() => {
+    if (!persistReady) return;
     storePreference(preference);
-  }, [preference]);
+  }, [preference, persistReady]);
 
   // Toggling out of `system` has to land on an explicit value, and the one the
   // user expects is the opposite of what they are looking at, not the opposite

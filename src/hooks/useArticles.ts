@@ -7,6 +7,7 @@ import {
 } from "@/data/articles/metadata";
 import {
   loadArticleContent,
+  getArticleBySlugSync,
   isArticleContentLoaded,
 } from "@/data/articles";
 
@@ -53,8 +54,9 @@ export function useArticles(): UseArticlesResult {
  * Returns metadata immediately, then loads content asynchronously
  */
 export function useArticle(slug: string | undefined): UseArticleResult {
-  const [article, setArticle] = useState<Article | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const initial = slug ? getArticleBySlugSync(slug) : null;
+  const [article, setArticle] = useState<Article | null>(initial);
+  const [isLoading, setIsLoading] = useState(Boolean(slug) && !initial);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {

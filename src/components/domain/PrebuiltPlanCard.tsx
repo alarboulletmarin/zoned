@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import type { PrebuiltPlan } from "@/data/prebuilt-plans/types";
-import { usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 
 const DIFFICULTY_KEYS: Record<string, string> = {
   beginner: "collections.difficulty.beginner",
@@ -22,6 +23,7 @@ interface PrebuiltPlanCardProps {
 export function PrebuiltPlanCard({ plan, className }: PrebuiltPlanCardProps) {
   const { t } = useTranslation("common");
   const pickLang = usePickLang();
+  const isEn = useIsEnglish();
 
   const difficultyKey = DIFFICULTY_KEYS[plan.difficulty];
   const raceMeta = plan.raceDistance
@@ -30,7 +32,7 @@ export function PrebuiltPlanCard({ plan, className }: PrebuiltPlanCardProps) {
 
   return (
     <Link
-      to={`/plan/prebuilt/${plan.slug}`}
+      to={localeTo(`/plan/prebuilt/${plan.slug}`, isEn)}
       className={cn("zn-ecard", className)}
     >
       {difficultyKey && (

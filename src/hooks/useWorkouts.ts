@@ -6,6 +6,7 @@ import {
   getWorkoutByIdAsync,
   getRelatedWorkoutsAsync,
   getAllWorkoutsSync,
+  getWorkoutByIdSync,
   isAllWorkoutsLoaded,
 } from "@/data/workouts";
 import { getCustomWorkouts } from "@/lib/customWorkoutStorage";
@@ -49,10 +50,12 @@ export function useWorkouts(
   options: { enabled?: boolean } = {}
 ): UseWorkoutsResult {
   const { enabled = true } = options;
+  // `enabled: false` (accueil, avant idle) ne doit pas lire le cache :
+  // le tirage au sort changerait entre le HTML et l'hydratation.
   const [workouts, setWorkouts] = useState<WorkoutTemplate[]>(() =>
-    mergeWithCustom(getAllWorkoutsSync())
+    enabled ? mergeWithCustom(getAllWorkoutsSync()) : []
   );
-  const [isLoading, setIsLoading] = useState(!isAllWorkoutsLoaded());
+  const [isLoading, setIsLoading] = useState(enabled && !isAllWorkoutsLoaded());
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -93,8 +96,9 @@ export function useWorkouts(
  * Hook to load a single workout by ID
  */
 export function useWorkout(id: string | undefined): UseWorkoutResult {
-  const [workout, setWorkout] = useState<AnyWorkoutTemplate | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const initial = id ? getWorkoutByIdSync(id) ?? null : null;
+  const [workout, setWorkout] = useState<AnyWorkoutTemplate | null>(initial);
+  const [isLoading, setIsLoading] = useState(Boolean(id) && !initial);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -177,8 +181,15 @@ export function useCategoryWorkouts(
 export function useRelatedWorkouts(
   workout: WorkoutTemplate | null
 ): UseRelatedWorkoutsResult {
-  const [relatedWorkouts, setRelatedWorkouts] = useState<WorkoutTemplate[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const initial = (() => {
+    if (!workout || !isAllWorkoutsLoaded()) return null;
+    const all = getAllWorkoutsSync();
+    return workout.variationIds
+      .map((vid) => all.find((item) => item.id === vid))
+      .filter((item): item is WorkoutTemplate => item != null);
+  })();
+  const [relatedWorkouts, setRelatedWorkouts] = useState<WorkoutTemplate[]>(initial ?? []);
+  const [isLoading, setIsLoading] = useState(initial == null && Boolean(workout));
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {

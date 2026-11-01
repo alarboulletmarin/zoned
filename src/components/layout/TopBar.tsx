@@ -29,6 +29,9 @@ import { Wordmark } from "./Wordmark";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { isMac } from "@/lib/platform";
+import { isServerSnapshot } from "@/prerender/snapshot";
+import { useIsEnglish } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Les quatre portes vivent dans `navigation.ts`, en donnée pure et testable.
@@ -47,12 +50,17 @@ export { PRIMARY_NAV, isNavActive };
 
 export function TopBar() {
   const { t } = useTranslation("common");
+  const isEn = useIsEnglish();
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
   // Below lg (1024px) the five doors plus the tool cluster no longer fit, so
   // the doors move to the full-screen MobileMenu, opened by the one glyph the
   // bar gains at its start.
   const isCompact = useMediaQuery("(max-width: 1023px)");
+  const [mac, setMac] = useState(() => (isServerSnapshot() ? false : isMac));
+  useEffect(() => {
+    if (isMac) setMac(true);
+  }, []);
   // Reading the resolved theme from context is what keeps this icon honest
   // when the OS flips under a `system` preference. The button is a two-state
   // light/dark switch; the third preference lives on /settings.
@@ -80,7 +88,7 @@ export function TopBar() {
           état, la racine renverrait au cockpit quiconque a un plan en cours
           (voir `RootPage`). */}
       <Link
-        to="/"
+        to={localeTo("/", isEn)}
         state={HOME_LINK_STATE}
         viewTransition
         className="zn-topbar__brand"
@@ -119,7 +127,7 @@ export function TopBar() {
           <Search />
           <span className="zn-topbar__search-text">{t("actions.search")}</span>
           <span className="zn-topbar__search-hint" aria-hidden>
-            {isMac ? "⌘K" : "Ctrl+K"}
+            {mac ? "⌘K" : "Ctrl+K"}
           </span>
         </button>
 
@@ -157,6 +165,7 @@ export function TopBar() {
 
 function NavDoor({ section, active }: { section: NavSection; active: boolean }) {
   const { t } = useTranslation("common");
+  const isEn = useIsEnglish();
   const { pathname } = useLocation();
   const hasChildren = !!section.children?.length;
   const [open, setOpen] = useState(false);
@@ -183,7 +192,7 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
   if (!hasChildren) {
     return (
       <Link
-        to={section.to}
+        to={localeTo(section.to, isEn)}
         viewTransition
         aria-current={active ? "page" : undefined}
         className="zn-topbar__door"
@@ -214,7 +223,7 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
             {section.children!.map((child) => (
               <li key={child.to}>
                 <Link
-                  to={child.to}
+                  to={localeTo(child.to, isEn)}
                   viewTransition
                   onClick={() => setOpen(false)}
                   aria-current={pathname === child.to ? "page" : undefined}
