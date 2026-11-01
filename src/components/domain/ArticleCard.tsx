@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ArticleMeta } from "@/data/articles";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
-import { usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 
 interface ArticleCardProps {
   article: ArticleMeta;
@@ -21,9 +22,10 @@ interface ArticleCardProps {
 export function ArticleCard({ article, className }: ArticleCardProps) {
   const { t } = useTranslation(["content", "common"]);
   const pick = usePickLang();
+  const isEn = useIsEnglish();
 
   return (
-    <Link to={`/learn/${article.slug}`} className={cn("zn-ecard", className)}>
+    <Link to={localeTo(`/learn/${article.slug}`, isEn)} className={cn("zn-ecard", className)}>
       <Badge variant="outline">
         {t(`content:learn.categories.${article.category}`)}
       </Badge>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { isServerSnapshot } from "@/prerender/snapshot";
 
 export type ViewMode = "grid" | "list" | "compact";
 
@@ -16,7 +17,9 @@ function getDefaultViewMode(): ViewMode {
  * Hook to manage library view mode preference with localStorage persistence
  */
 export function useViewMode() {
+  const snapshot = isServerSnapshot();
   const [viewMode, setViewModeState] = useState<ViewMode>(() => {
+    if (snapshot) return "grid";
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored && VALID_MODES.includes(stored as ViewMode)) {
@@ -27,14 +30,31 @@ export function useViewMode() {
     }
     return getDefaultViewMode();
   });
+  const [persistReady, setPersistReady] = useState(!snapshot);
 
   useEffect(() => {
+    if (!snapshot) return;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored && VALID_MODES.includes(stored as ViewMode)) {
+        setViewModeState(stored as ViewMode);
+      } else {
+        setViewModeState(getDefaultViewMode());
+      }
+    } catch {
+      // localStorage not available
+    }
+    setPersistReady(true);
+  }, [snapshot]);
+
+  useEffect(() => {
+    if (!persistReady) return;
     try {
       localStorage.setItem(STORAGE_KEY, viewMode);
     } catch {
       // localStorage not available
     }
-  }, [viewMode]);
+  }, [viewMode, persistReady]);
 
   const setViewMode = useCallback((mode: ViewMode) => {
     if (VALID_MODES.includes(mode)) {

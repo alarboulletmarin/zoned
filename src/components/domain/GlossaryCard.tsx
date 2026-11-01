@@ -4,6 +4,8 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useIsEnglish } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
 import type { GlossaryTerm } from "@/data/glossary/types";
@@ -24,6 +26,7 @@ export const GlossaryCard = memo(function GlossaryCard({
 }: GlossaryCardProps) {
   const { i18n } = useTranslation();
   const isEn = i18n.language?.startsWith("en") ?? false;
+  const english = useIsEnglish();
 
   // Get localized content
   const displayTerm = isEn && term.termEn ? term.termEn : term.term;
@@ -31,7 +34,7 @@ export const GlossaryCard = memo(function GlossaryCard({
 
   return (
     <Link
-      to={`/glossary/${term.id}`}
+      to={localeTo(`/glossary/${term.id}`, english)}
       className={cn("zn-ecard", className)}
       data-size="compact"
     >

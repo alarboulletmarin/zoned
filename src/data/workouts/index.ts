@@ -5,6 +5,7 @@ import type {
   WorkoutCategoryFile,
   Discipline,
 } from "@/types";
+import { getAllStrengthSessionsSync } from "@/data/strength";
 import { normalizeSearch } from "@/lib/search-utils";
 
 /**
@@ -313,6 +314,20 @@ export function isCategoryLoaded(category: WorkoutCategory): boolean {
  */
 export function getAllWorkoutsSync(): WorkoutTemplate[] {
   return allWorkoutsCache || [];
+}
+
+/** Lecture synchrone, y compris renfo, velo et natation, si le cache est chaud. */
+export function getWorkoutByIdSync(id: string): AnyWorkoutTemplate | undefined {
+  if (id.startsWith("STR-")) {
+    return getAllStrengthSessionsSync().find((session) => session.id === id);
+  }
+  if (id.startsWith("CYC-")) {
+    return getDisciplineWorkoutsCached("cycling")?.find((workout) => workout.id === id);
+  }
+  if (id.startsWith("SWM-")) {
+    return getDisciplineWorkoutsCached("swimming")?.find((workout) => workout.id === id);
+  }
+  return getAllWorkoutsSync().find((workout) => workout.id === id);
 }
 
 /**

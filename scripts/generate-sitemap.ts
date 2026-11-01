@@ -288,20 +288,32 @@ async function generateSitemap(): Promise<string> {
     urls.push({ loc: `/compare/${slug}`, lastmod: shell });
   }
 
+  const alternates = (loc: string) => {
+    const fr = `${SITE_URL}${loc}`;
+    const en = `${SITE_URL}${loc}?lang=en`;
+    return `    <xhtml:link rel="alternate" hreflang="fr-FR" href="${fr}" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="${en}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${fr}" />`;
+  };
+
+  const blocks = urls.flatMap((url) => {
+    const lastmod = url.lastmod ? `\n    <lastmod>${url.lastmod}</lastmod>` : "";
+    const links = alternates(url.loc);
+    return [
+      `  <url>
+    <loc>${SITE_URL}${url.loc}</loc>
+${links}${lastmod}
+  </url>`,
+      `  <url>
+    <loc>${SITE_URL}${url.loc}?lang=en</loc>
+${links}${lastmod}
+  </url>`,
+    ];
+  });
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${urls
-  .map(
-    (url) => `  <url>
-    <loc>${SITE_URL}${url.loc}</loc>
-    <xhtml:link rel="alternate" hreflang="fr-FR" href="${SITE_URL}${url.loc}" />
-    <xhtml:link rel="alternate" hreflang="en-US" href="${SITE_URL}${url.loc}?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${url.loc}" />${
-      url.lastmod ? `\n    <lastmod>${url.lastmod}</lastmod>` : ""
-    }
-  </url>`
-  )
-  .join("\n")}
+${blocks.join("\n")}
 </urlset>`;
 
   return xml;

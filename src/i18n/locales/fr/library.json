@@ -1,5 +1,6 @@
 {
   "title": "Bibliothèque de séances",
+  "catalogueIndex": "Toutes les séances",
   "catalogue": "{{workouts}} séances · {{categories}} catégories · {{disciplines}} disciplines",
   "subtitle": "{{count}} séances d'entraînement scientifiques",
   "subtitleStrength": "{{count}} séances de renforcement",

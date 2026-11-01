@@ -15,6 +15,9 @@ Disallow: /profile
 Disallow: /settings
 Disallow: /plan/$
 
+# HTML anglais servi en interne pour ?lang=en. L'URL publique reste la query.
+Disallow: /_en
+
 # Allow major social crawlers to fetch og-images and previews
 User-agent: Twitterbot
 Allow: /

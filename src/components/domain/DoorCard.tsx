@@ -9,6 +9,8 @@
 
 import { Link } from "react-router-dom";
 import { ArrowRight } from "@/components/icons";
+import { useIsEnglish } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 import { cn } from "@/lib/utils";
 
 /* A door is type only. It carried a doodle for a while; at the 64-88px a card
@@ -38,8 +40,9 @@ export function DoorCard({
   state,
   className,
 }: DoorCardProps) {
+  const isEn = useIsEnglish();
   return (
-    <Link to={to} state={state} className={cn("zn-door", className)}>
+    <Link to={localeTo(to, isEn)} state={state} className={cn("zn-door", className)}>
       <span className="zn-kicker">{kicker}</span>
       <span className="zn-door__title">{title}</span>
       <span className="zn-door__body">{body}</span>

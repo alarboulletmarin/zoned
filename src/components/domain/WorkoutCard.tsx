@@ -14,6 +14,8 @@ import {
   MiniElevationProfile,
 } from "@/components/visualization";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
+import { useIsEnglish } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, isStrengthWorkout } from "@/types";
@@ -186,8 +188,9 @@ export function WorkoutCardChrome({
 
 /** Internal running-only card with properly typed props */
 function RunningWorkoutCard({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
+  const isEn = useIsEnglish();
   return (
-    <Link to={`/workout/${workout.id}`} className="zn-wcard-link">
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link">
       <WorkoutCardChrome
         workout={workout}
         className={className}
@@ -217,6 +220,7 @@ export function WorkoutCardCompact({
 
 /** Internal running-only compact card */
 function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
+  const isEn = useIsEnglish();
   const { t } = useTranslation("library");
   const pick = usePickLang();
   const dominantZone = getDominantZone(workout);
@@ -233,7 +237,7 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
       : null;
 
   return (
-    <Link to={`/workout/${workout.id}`} className="zn-wcard-link">
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link">
       <article className={cn("zn-wcard", className)} data-size="compact">
         <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
           <h3 className="zn-wcard__title zn-fill">{name}</h3>

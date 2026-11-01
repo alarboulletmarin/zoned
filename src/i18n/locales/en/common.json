@@ -564,6 +564,10 @@
       "pages": "Pages"
     }
   },
+  "hubLinks": {
+    "title": "Keep going",
+    "label": "Related pages"
+  },
   "relatedContent": {
     "title": "Related Content",
     "articles": "Articles",

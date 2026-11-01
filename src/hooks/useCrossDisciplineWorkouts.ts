@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Discipline, WorkoutTemplate } from "@/types";
-import { loadDisciplineWorkouts } from "@/data/workouts";
+import { getDisciplineWorkoutsCached, loadDisciplineWorkouts } from "@/data/workouts";
 
 type CrossDiscipline = Exclude<Discipline, "running">;
 
@@ -20,8 +20,9 @@ export function useCrossDisciplineWorkouts(
   options: { enabled?: boolean } = {},
 ): UseCrossDisciplineWorkoutsResult {
   const { enabled = true } = options;
-  const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const cached = enabled ? getDisciplineWorkoutsCached(discipline) : undefined;
+  const [workouts, setWorkouts] = useState<WorkoutTemplate[]>(() => cached ?? []);
+  const [isLoading, setIsLoading] = useState(enabled && !cached);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {

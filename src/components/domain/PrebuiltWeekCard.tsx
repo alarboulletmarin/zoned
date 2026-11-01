@@ -12,7 +12,8 @@ import {
 import type { IconProps } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import type { PrebuiltWeek } from "@/data/prebuilt-weeks/types";
-import { usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { localeTo } from "@/lib/seo/locale-to";
 
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   Mountain,
@@ -40,12 +41,13 @@ interface PrebuiltWeekCardProps {
 export function PrebuiltWeekCard({ week, state, className }: PrebuiltWeekCardProps) {
   const { t } = useTranslation("library");
   const pickLang = usePickLang();
+  const isEn = useIsEnglish();
 
   const Icon = ICON_MAP[week.icon] ?? Mountain;
 
   return (
     <Link
-      to={`/weeks/prebuilt/${week.slug}`}
+      to={localeTo(`/weeks/prebuilt/${week.slug}`, isEn)}
       state={state}
       className={cn("zn-ecard", className)}
     >

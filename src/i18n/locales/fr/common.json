@@ -564,6 +564,10 @@
       "pages": "Pages"
     }
   },
+  "hubLinks": {
+    "title": "Pour aller plus loin",
+    "label": "Pages liées"
+  },
   "relatedContent": {
     "title": "Contenu lié",
     "articles": "Articles",

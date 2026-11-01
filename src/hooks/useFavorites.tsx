@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
+import { isServerSnapshot } from "@/prerender/snapshot";
 
 const STORAGE_KEY = "zoned-favorites";
 
@@ -24,7 +25,9 @@ const FavoritesContext = createContext<FavoritesContextValue | null>(null);
  * Provider to share favorites state across all components
  */
 export function FavoritesProvider({ children }: { children: ReactNode }) {
+  const snapshot = isServerSnapshot();
   const [favorites, setFavorites] = useState<string[]>(() => {
+    if (snapshot) return [];
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       return stored ? JSON.parse(stored) : [];
@@ -34,11 +37,24 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       return [];
     }
   });
+  const [persistReady, setPersistReady] = useState(!snapshot);
+
+  useEffect(() => {
+    if (!snapshot) return;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      setFavorites(stored ? JSON.parse(stored) : []);
+    } catch {
+      // Favoris illisibles : on garde la liste vide de ce rendu.
+    }
+    setPersistReady(true);
+  }, [snapshot]);
 
   // Persist to localStorage when favorites change
   useEffect(() => {
+    if (!persistReady) return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
-  }, [favorites]);
+  }, [favorites, persistReady]);
 
   const addFavorite = useCallback((id: string) => {
     setFavorites((prev) => {
