@@ -9,7 +9,8 @@
     { "source": "/calculators/age-graded", "destination": "/calculators/equivalence", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/(today|activities|favorites|my-zones|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" },
+    { "source": "/_en/(today|activities|favorites|my-zones|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" }
   ],
   "routes": [
     {

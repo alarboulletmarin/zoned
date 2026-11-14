@@ -253,6 +253,14 @@ async function main(): Promise<void> {
     }
     shells.set(pathname, readFileSync(file, "utf-8"));
   }
+  // Vercel sert dist/404.html avec un statut 404 pour toute URL sans fichier ni
+  // rewrite. Coquille nue en noindex : le SPA y affiche NotFoundPage.
+  const notFound = stripDefaultSeo(shells.get("/") ?? readFileSync(join(DIST, "index.html"), "utf-8")).replace(
+    "</head>",
+    `<title>Page introuvable | Zoned</title><meta name="robots" content="noindex" /></head>`,
+  );
+  writeFileSync(join(DIST, "404.html"), notFound);
+
   const langs = ["fr", "en"] as const;
   const failures: string[] = [];
   let done = 0;
