@@ -16,6 +16,7 @@ import {
   THEME_STORAGE_KEY,
   type ThemePreference,
   isThemePreference,
+  nextPreference,
   readStoredPreference,
   resolveTheme,
   storePreference,
@@ -108,5 +109,13 @@ describe("readStoredPreference", () => {
   test("stores a bare string, not JSON, the boot script cannot parse", () => {
     storePreference("dark");
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe("dark");
+  });
+});
+
+describe("nextPreference", () => {
+  test("cycles system, light, dark and back to system", () => {
+    expect(nextPreference("system")).toBe("light");
+    expect(nextPreference("light")).toBe("dark");
+    expect(nextPreference("dark")).toBe("system");
   });
 });

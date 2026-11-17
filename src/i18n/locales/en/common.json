@@ -504,7 +504,8 @@
   "theme": {
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "button": "Theme: {{mode}}"
   },
   "language": {
     "fr": "Français",

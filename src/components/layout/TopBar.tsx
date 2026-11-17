@@ -5,6 +5,7 @@ import {
   Search,
   Moon,
   Sun,
+  ThemeAuto,
   UserRound,
   Heart,
   Settings,
@@ -61,10 +62,10 @@ export function TopBar() {
   useEffect(() => {
     if (isMac) setMac(true);
   }, []);
-  // Reading the resolved theme from context is what keeps this icon honest
-  // when the OS flips under a `system` preference. The button is a two-state
-  // light/dark switch; the third preference lives on /settings.
-  const { resolved: theme, toggle: onThemeToggle } = useTheme();
+  // Three states, like /settings: the icon shows the preference, not the
+  // painted theme, so `system` stays visible and reachable from here.
+  const { preference: themePreference, cycle: onThemeCycle } = useTheme();
+  const themeLabel = t("theme.button", { mode: t(`theme.${themePreference}`) });
   const { pathname } = useLocation();
 
   const langLabel = currentLang === "fr" ? "EN" : "FR";
@@ -143,11 +144,18 @@ export function TopBar() {
 
         <button
           type="button"
-          onClick={onThemeToggle}
-          aria-label={theme === "light" ? t("theme.dark") : t("theme.light")}
+          onClick={onThemeCycle}
+          title={themeLabel}
+          aria-label={themeLabel}
           className="zn-topbar__tool"
         >
-          {theme === "light" ? <Moon /> : <Sun />}
+          {themePreference === "system" ? (
+            <ThemeAuto />
+          ) : themePreference === "light" ? (
+            <Sun />
+          ) : (
+            <Moon />
+          )}
         </button>
 
         {!isCompact && <AccountMenu />}

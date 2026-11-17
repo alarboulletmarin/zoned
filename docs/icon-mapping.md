@@ -142,6 +142,7 @@ Deux reprises directes de l'ancien set n'avaient aucun rapport avec ce qu'elles 
 | `Languages` | `translate` | oui | exact | export jamais importé |
 | `Moon` | `dark_mode` | oui | exact | — |
 | `Sun` | `light_mode` | oui | exact | — |
+| `ThemeAuto` | `brightness_auto` | oui | exact | thème selon le système |
 | `Image` | `image` | oui | exact | — |
 | `FileText` | `description` | oui | exact | — |
 | `Watch` | `watch` | oui | exact | — |

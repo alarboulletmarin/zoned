@@ -66,6 +66,7 @@ UserRound|person|exact|
 Languages|translate|exact|export jamais importé
 Moon|dark_mode|exact|
 Sun|light_mode|exact|
+ThemeAuto|brightness_auto|exact|thème selon le système, bouton de la barre du haut
 Image|image|exact|
 FileText|description|exact|
 Watch|watch|exact|

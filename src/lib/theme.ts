@@ -71,6 +71,18 @@ export function resolveTheme(
   return preference;
 }
 
+/**
+ * Order of the TopBar button: system, then light, then dark, then back to
+ * system. A three-state cycle rather than a light/dark flip, because a flip
+ * can only ever land on an explicit value and so loses OS following after
+ * one tap, with no way back short of /settings.
+ */
+export function nextPreference(preference: ThemePreference): ThemePreference {
+  if (preference === "system") return "light";
+  if (preference === "light") return "dark";
+  return "system";
+}
+
 export function readStoredPreference(): ThemePreference {
   try {
     const raw = localStorage.getItem(THEME_STORAGE_KEY);

@@ -13,6 +13,7 @@ import {
   type ResolvedTheme,
   type ThemePreference,
   applyResolvedTheme,
+  nextPreference,
   prefersDark,
   readStoredPreference,
   resolveTheme,
@@ -27,8 +28,8 @@ interface ThemeContextValue {
   /** What is actually painted right now. */
   resolved: ResolvedTheme;
   setPreference: (preference: ThemePreference) => void;
-  /** Flips to the opposite of what is painted, as an explicit choice. */
-  toggle: () => void;
+  /** Steps system, light, dark, system. */
+  cycle: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -76,16 +77,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     storePreference(preference);
   }, [preference, persistReady]);
 
-  // Toggling out of `system` has to land on an explicit value, and the one the
-  // user expects is the opposite of what they are looking at, not the opposite
-  // of the preference, which is not a colour.
-  const toggle = useCallback(() => {
-    setPreference(resolved === "dark" ? "light" : "dark");
-  }, [resolved]);
+  const cycle = useCallback(() => {
+    setPreference((current) => nextPreference(current));
+  }, []);
 
   const value = useMemo(
-    () => ({ preference, resolved, setPreference, toggle }),
-    [preference, resolved, toggle],
+    () => ({ preference, resolved, setPreference, cycle }),
+    [preference, resolved, cycle],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
