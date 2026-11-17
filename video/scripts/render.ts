@@ -53,6 +53,7 @@ const FILM_SHOTS: Record<string, string[]> = {
   "Feature-Routes": ["routes"],
   "Feature-Science": ["science"],
   "Feature-Zones": ["zones"],
+  Showreel: [],
 };
 
 const DEVICES: Record<string, string[]> = { routes: ["desktop"] };

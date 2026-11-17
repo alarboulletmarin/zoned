@@ -6,6 +6,7 @@ import { Teaser, TEASER_FRAMES } from "./compositions/Teaser";
 import { Spot, SPOT_FRAMES } from "./compositions/Spot";
 import { Overview, OVERVIEW_FRAMES } from "./compositions/Overview";
 import { FeatureDemo, FEATURE_IDS, FEATURE_FRAMES } from "./compositions/FeatureDemo";
+import { Showreel, SHOWREEL_FRAMES } from "./showreel/Showreel";
 
 /**
  * Every film is registered once per format and once per language: twelve films
@@ -34,6 +35,14 @@ const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export const RemotionRoot: React.FC = () => (
   <>
+    {/* The reel is one cut, in English, 16:9: a showreel is a landscape piece. */}
+    <Composition
+      id="Showreel-Wide-EN"
+      component={Showreel}
+      durationInFrames={SHOWREEL_FRAMES}
+      fps={FPS}
+      {...DIMENSIONS.wide}
+    />
     {LANGS.map((lang) =>
       FORMATS.map((format) => {
         const size = DIMENSIONS[format];
