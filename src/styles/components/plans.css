@@ -520,6 +520,26 @@ a.zn-plancard__open:hover .zn-plancard__name {
   min-block-size: var(--hit-min);
 }
 
+/* Sur un téléphone, les trois formats d'export sur une rangée, l'icône
+   au-dessus du mot : trois cibles de 56 px de haut, un tiers de menu chacune. */
+.zn-planmenu__formats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+.zn-planmenu__formats .zn-menu__item {
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-block-size: 56px;
+  padding: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono-label);
+  text-align: center;
+}
+
 /* Deleting is the press shade of the accent, as type, until it is
    highlighted and inverts like every destructive entry. */
 .zn-planmenu__delete:not([data-highlighted]) {

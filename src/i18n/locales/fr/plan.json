@@ -504,7 +504,12 @@
       "export": "Exporter…",
       "duplicate": "Dupliquer",
       "rename": "Renommer",
-      "delete": "Supprimer…"
+      "delete": "Supprimer…",
+      "formats": {
+        "pdf": "PDF",
+        "ics": "ICS",
+        "json": "JSON"
+      }
     },
     "renameLabel": "Nom du plan",
     "copySuffix": "(copie)",

@@ -116,9 +116,16 @@ et le plus destructeur au niveau du contenu. Les gestes rares sont dans un
 bouton ··· de 44 px, posé sur la carte mais hors du lien, avec une étiquette
 qui nomme le plan (`Actions du plan Marathon de Séville`) :
 
-- **Exporter…** ouvre un sous-menu PDF, calendrier, JSON. Les trois fonctions
-  sont celles de `PlanExportMenu`, extraites dans `usePlanExport` pour que le
-  bouton de la page du plan et ce menu ne divergent pas.
+- **Exporter…** ouvre un sous-menu PDF, calendrier, JSON à partir de
+  640 px. Sous 640 px, il n'y a pas de sous-menu : il n'avait de place ni à
+  droite ni à gauche du menu, et Radix le poussait hors de l'écran. Les trois
+  formats sont alors une rangée de trois cibles dans le menu même, sous
+  l'intitulé Exporter, l'icône au-dessus du mot. Une rangée et pas trois
+  lignes : empilés, ils portaient le menu à 330 px, plus que la place sous
+  le bouton, et il s'ouvrait vers le haut, Supprimer caché sous un
+  défilement. En rangée, il fait 258 px et s'ouvre en entier. Les trois
+  fonctions sont celles de `PlanExportMenu`, extraites dans `usePlanExport`
+  pour que le bouton de la page du plan et ce menu ne divergent pas.
 - **Dupliquer** passe par `duplicatePlan`, sans limite de nombre (décision du
   propriétaire). La copie prend le suffixe `(copie)`. Elle garde les dates de
   l'original : la copie d'un plan terminé est un plan terminé, et rejoint
