@@ -462,7 +462,9 @@
   display: flex;
   align-items: center;
   gap: var(--sp-6);
-  padding: var(--sp-5) var(--sp-8);
+  /* The button ··· is a 44px round target: a short end margin keeps its
+     glyph on the inset of the text on the other side. */
+  padding: var(--sp-5) var(--sp-3) var(--sp-5) var(--sp-8);
 
   background: var(--surface-card);
   border: var(--border-rule);
@@ -476,8 +478,16 @@
   font: var(--fw-medium) var(--fs-body-sm) / 1.3 var(--font-text);
 }
 
+/* The name and the date give way before the actions do. */
+.zn-ct__saveditem > .zn-fill {
+  min-inline-size: 0;
+}
+
 .zn-ct__saveddate {
   display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   margin-block-start: var(--sp-1);
   font-family: var(--font-mono);
   font-size: var(--fs-mono-sm);
@@ -673,6 +683,9 @@
 
 .zn-rsp__savedlist {
   display: grid;
+  /* A declared column: an implicit one takes the row's natural width, and a
+     row with its button ··· ran 16px past the column on a 320px phone. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-4);
   margin: 0;
   padding: 0;

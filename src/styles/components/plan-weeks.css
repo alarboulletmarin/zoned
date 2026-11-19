@@ -306,49 +306,9 @@
 
 /* ── the saved-week card ──────────────────────────────────────────────── */
 
-/* Same object as a saved plan (.zn-plancard): cream, ink rule, no shadow, the
-   whole upper block one link, a row of actions under it. Kept in step with
-   plan-view.css so the two shelves read as one. */
-.zn-pw__week {
-  gap: var(--sp-8);
-  block-size: 100%;
-}
-
-/* The upper block is the link to the week, a real anchor, so the keyboard
-   reaches it and a middle click still opens a tab. It carries no box of its
-   own: the card is already the drawn object. */
-.zn-pw__week-open {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-6);
-  padding: 0 var(--pad-card);
-  color: inherit;
-  text-decoration: none;
-}
-
-.zn-pw__week-title {
-  font: var(--fw-semibold) var(--fs-h4) / 1.1 var(--font-display);
-  letter-spacing: var(--ls-h4);
-  color: var(--text-body);
-  text-underline-offset: 3px;
-  overflow-wrap: anywhere;
-}
-
-.zn-pw__week-open:hover .zn-pw__week-title {
-  color: var(--text-link);
-  text-decoration: underline;
-}
-
-.zn-pw__week-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-4);
-  padding-inline: var(--pad-card);
-}
-
-.zn-pw__week-actions > :first-child {
-  flex: 1;
-}
+/* The saved-week card is the plan card of /plans (.zn-plancard, plans.css),
+   with a week's four rows: category, name, facts, rhythm. Its rules live
+   there, beside the plan card's, so the two shelves cannot drift apart. */
 
 /* ── the editor ───────────────────────────────────────────────────────── */
 

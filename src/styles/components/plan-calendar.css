@@ -1,9 +1,10 @@
 /* The plan surfaces, a training plan drawn as paper.
  *
- * One family, five screens of the same object: the whole-plan grid
+ * One family, four screens of the same object: the whole-plan grid
  * (.zn-plancal), one week blown up (.zn-planweek), the month chrome around the
- * grid (.zn-planmonth), the catalogue you drag from (.zn-planpanel), and the
- * volume sparkline (.zn-spark). They share the session mark (.zn-sess), the
+ * grid (.zn-planmonth) and the catalogue you drag from (.zn-planpanel). The
+ * volume sparkline that used to close the list left with the /plans redesign
+ * (plans.css draws its timeline). They share the session mark (.zn-sess), the
  * long-press menu (.zn-plan-menu) and the drag-to-delete target
  * (.zn-plan-trash), because those are literally the same piece on each screen.
  *
@@ -1937,35 +1938,6 @@
   flex: none;
   margin-block-start: var(--sp-1);
   color: var(--text-faint);
-}
-
-/* ══ the volume sparkline ══════════════════════════════════════════════ */
-
-/* Weeks as bars on the ink ramp: what is done is dark, what is still ahead is
-   pale, and the week you are in is the one vermillon mark. The second channel
-   is height, which is the volume itself. */
-.zn-spark {
-  inline-size: 100%;
-}
-
-.zn-spark__svg {
-  display: block;
-}
-
-.zn-spark__bar {
-  fill: var(--zone-2);
-}
-
-.zn-spark__bar[data-when="past"] {
-  fill: var(--zone-4);
-}
-
-.zn-spark__bar[data-when="current"] {
-  fill: var(--accent);
-}
-
-.zn-spark__marker {
-  fill: var(--accent);
 }
 
 /* ══ one phase of a session ════════════════════════════════════════════ */

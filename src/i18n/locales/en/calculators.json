@@ -255,8 +255,6 @@
     "sectionCount_other": "{{count}} blocks",
     "untitled": "Untitled",
     "blocks": "blocks",
-    "exportLabel": "Export",
-    "deleteLabel": "Delete",
     "deleteConfirm": "Delete this workout?",
     "deleteDescription": "This action cannot be undone. The workout will be permanently deleted.",
     "cancel": "Cancel",
@@ -294,7 +292,10 @@
         "distance": "Distance"
       },
       "offRecommendation": "Outside the recommended range ({{range}})"
-    }
+    },
+    "actionsLabel": "Actions for session {{name}}",
+    "exportJson": "Export as JSON",
+    "deleteMenu": "Delete…"
   },
   "raceSimulator": {
     "seoBreadcrumb": "Race Simulator",

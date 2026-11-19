@@ -1,17 +1,8 @@
-import { useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Calendar,
-  Plus,
-  ArrowRight,
-  Trash2,
-  Upload,
-  FlaskConical,
-} from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
+import { Calendar, Plus, ArrowRight, Trash2, Upload, FlaskConical } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Spinner } from "@/components/ui/spinner";
 import {
@@ -25,152 +16,57 @@ import {
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
 import { HubNav, navSection } from "@/components/layout";
+import { PlanCard } from "@/components/domain/PlanCard";
+import { PlanHistory } from "@/components/domain/PlanHistory";
 import { usePlans } from "@/hooks/usePlans";
-import { importPlan } from "@/lib/planStorage";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { duplicatePlan, importPlan, savePlan } from "@/lib/planStorage";
 import { toast } from "@/components/ui/toast";
-import {
-  PHASE_META,
-  RACE_DISTANCE_META,
-} from "@/types/plan";
-import type { TrainingPlan, PhaseRange } from "@/types/plan";
-import type { TrainingPhase } from "@/types";
-import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
-import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
-import { PlanSparkline } from "@/components/domain/PlanSparkline";
-import { useIsEnglish, usePickLang, formatDateShort } from "@/lib/i18n-utils";
+import { getWorkoutById, getWorkoutByIdSync } from "@/data/workouts";
+import type { TrainingPlan } from "@/types/plan";
+import type { AnyWorkoutTemplate } from "@/types";
+import { isPlanEnded } from "@/lib/planUtils";
+import { buildPlanCardModel } from "@/lib/planCardModel";
+import { activityKindOf, isActivitySession } from "@/lib/activitySession";
+import { isLooseSession } from "@/lib/sessionPrecision";
+import { pickLang, usePickLang } from "@/lib/i18n-utils";
 
+/**
+ * /plans : les plans en cours, une carte chacun, puis l'historique compact.
+ *
+ * Le seul aplat vermillon de l'écran est Créer un plan. Les cartes n'en
+ * portent aucun, la frise non plus. Voir docs/plans.md pour les décisions.
+ */
 
-function getCurrentPhase(
-  currentWeek: number,
-  phases: PhaseRange[]
-): TrainingPhase | null {
-  for (const range of phases) {
-    if (currentWeek >= range.startWeek && currentWeek <= range.endWeek) {
-      return range.phase;
-    }
-  }
-  return null;
+/** Le nom qu'affiche le plan, celui que la page du plan affiche aussi. */
+function planDisplayName(plan: TrainingPlan, pick: ReturnType<typeof usePickLang>): string {
+  if (plan.config.planName) return plan.config.planName;
+  return plan.config.planMode === "free" ? plan.name : pick(plan, "name");
 }
 
-function PlanCard({
-  plan,
-  onDelete,
-}: {
-  plan: TrainingPlan;
-  onDelete: (id: string) => void;
-}) {
-  const { t } = useTranslation("plan");
-  const isEn = useIsEnglish();
-  const pick = usePickLang();
-  const isFreePlan = plan.config.planMode === "free";
-  const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
-  const planName = isFreePlan
-    ? (plan.config.planName || plan.name)
-    : pick(plan, "name");
-  const currentWeek = getCurrentWeek(plan.config.startDate || plan.config.createdAt);
-  const currentPhase = getCurrentPhase(currentWeek, plan.phases);
-  const progressPercent = Math.min(
-    Math.max((currentWeek / plan.totalWeeks) * 100, 0),
-    100
-  );
-  const weeksElapsed = Math.min(Math.max(currentWeek, 0), plan.totalWeeks);
-  const totalSessions = plan.weeks.reduce((sum, w) => sum + w.sessions.length, 0);
-  const ended = isPlanEnded(plan);
-
-  // The span the plan actually covers. Prefer the explicit start→end range;
-  // fall through to createdAt→raceDate only when no start date is set (#102).
-  const span = plan.config.startDate
-    ? plan.config.endDate
-      ? `${formatDateShort(plan.config.startDate)} → ${formatDateShort(plan.config.endDate)}`
-      : formatDateShort(plan.config.startDate)
-    : plan.config.raceDate
-      ? `${formatDateShort(plan.config.createdAt)} → ${formatDateShort(plan.config.raceDate)}`
-      : formatDateShort(plan.config.createdAt);
-
-  // Numbers, not adjectives: what the plan holds, on one mono line.
-  const shape = [
-    currentPhase ? pick(PHASE_META[currentPhase], "label") : null,
-    t("plansPage.sessionsCount", { count: totalSessions }),
-  ]
-    .filter(Boolean)
-    .join(" · ");
-
-  return (
-    <Card className="zn-plancard" data-ended={ended ? "true" : undefined}>
-      <Link className="zn-plancard__open" to={`/plan/${plan.id}`}>
-        <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}>
-          <span className="zn-plancard__name zn-fill">{planName}</span>
-          <Badge
-            variant={raceMeta ? "default" : "secondary"}
-            className="zn-fixed"
-          >
-            {raceMeta
-              ? pick(raceMeta, "label")
-              : plan.config.planMode === "prebuilt"
-                ? t("view.prebuilt")
-                : t("view.freePlan")}
-          </Badge>
-        </div>
-
-        <div className="zn-plancard__facts zn-mono">
-          <span>{ended ? `${t("plansPage.ended")} · ${span}` : span}</span>
-          <span>{shape}</span>
-          {plan.raceTimePrediction && (
-            <span>
-              {t("plansPage.target")}
-              {plan.raceTimePrediction}
-            </span>
-          )}
-        </div>
-
-        <PlanSparkline plan={plan} currentWeek={currentWeek} isEn={isEn} />
-
-        <div className="zn-plancard__track">
-          <span
-            className="zn-plancard__fill"
-            style={{ "--zn-progress": `${progressPercent}%` } as React.CSSProperties}
-          />
-        </div>
-        <div className="zn-row zn-row--split zn-mono zn-faint">
-          <span>
-            {t("plansPage.weekProgress", { current: weeksElapsed, total: plan.totalWeeks })}
-          </span>
-          <span>{Math.round(progressPercent)}%</span>
-        </div>
-      </Link>
-
-      <div className="zn-plancard__actions">
-        <Button variant="outline" size="sm" asChild>
-          <Link to={`/plan/${plan.id}`}>
-            <ArrowRight />
-            {t("plansPage.view")}
-          </Link>
-        </Button>
-        <PlanExportMenu plan={plan} size="sm" variant="outline" />
-        <Button
-          variant="outline"
-          size="icon-sm"
-          className="zn-plancard__del"
-          aria-label={t("plansPage.deleteButton")}
-          title={t("plansPage.deleteButton")}
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(plan.id);
-          }}
-        >
-          <Trash2 />
-        </Button>
-      </div>
-    </Card>
-  );
+/** Les gabarits dont la carte a besoin : ceux des prochaines séances et des séances souples. */
+function templateIdsOf(plans: TrainingPlan[]): string[] {
+  const ids = new Set<string>();
+  for (const plan of plans) {
+    for (const week of plan.weeks) {
+      for (const s of week.sessions) {
+        if (!s.workoutId || s.workoutId.startsWith("__")) continue;
+        if (isLooseSession(s) || !s.status || s.status === "planned") ids.add(s.workoutId);
+      }
+    }
+  }
+  return [...ids];
 }
 
 export function PlansPage() {
   const { t } = useTranslation("plan");
+  const { t: tc } = useTranslation("common");
   const pick = usePickLang();
   const navigate = useNavigate();
+  const wide = useMediaQuery("(min-width: 1024px)");
   const { plans, isLoading, remove, reload } = usePlans();
-  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TrainingPlan | null>(null);
+  const [templates, setTemplates] = useState<Record<string, AnyWorkoutTemplate>>({});
 
   const handleImport = useCallback(() => {
     const input = document.createElement("input");
@@ -196,18 +92,14 @@ export function PlansPage() {
     };
     input.click();
   }, [t, reload, navigate]);
-  const deleteTargetPlan = plans.find((p) => p.id === deleteTarget);
 
-  // Sort plans by creation date (newest first). Standalone weeks live under
-  // their own /weeks section, so they're excluded here. Ended plans (past
-  // their date range) are split into their own section below the active ones.
+  // Newest first. Standalone weeks live under /weeks, so they are left out.
   const { activePlans, endedPlans } = useMemo(() => {
     const sorted = [...plans]
       .filter((p) => !p.config.isSingleWeek)
       .sort(
         (a, b) =>
-          new Date(b.config.createdAt).getTime() -
-          new Date(a.config.createdAt).getTime()
+          new Date(b.config.createdAt).getTime() - new Date(a.config.createdAt).getTime(),
       );
     return {
       activePlans: sorted.filter((p) => !isPlanEnded(p)),
@@ -216,56 +108,121 @@ export function PlansPage() {
   }, [plans]);
   const planCount = activePlans.length + endedPlans.length;
 
+  // Les gabarits arrivent du catalogue, paresseux : en attendant, une séance
+  // souple compte sa durée posée et la prochaine séance son nom générique.
+  useEffect(() => {
+    const ids = templateIdsOf(activePlans).filter((id) => !templates[id]);
+    if (ids.length === 0) return;
+    let cancelled = false;
+    Promise.all(ids.map((id) => getWorkoutById(id).then((w) => [id, w] as const)))
+      .then((pairs) => {
+        if (cancelled) return;
+        const next: Record<string, AnyWorkoutTemplate> = {};
+        for (const [id, w] of pairs) if (w) next[id] = w;
+        setTemplates((prev) => ({ ...prev, ...next }));
+      })
+      .catch(() => {
+        // Silence voulu : sans catalogue la carte reste juste, une séance
+        // souple compte sa durée posée (déjà le milieu de sa fourchette) et
+        // la prochaine séance prend son nom générique. Rien n'a échoué que
+        // la personne ait demandé.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [activePlans, templates]);
+
+  const entries = useMemo(() => {
+    const today = new Date();
+    const workoutOf = (id: string) => templates[id] ?? getWorkoutByIdSync(id);
+    const build = (plan: TrainingPlan) => ({
+      plan,
+      name: planDisplayName(plan, pick),
+      model: buildPlanCardModel(plan, today, workoutOf),
+    });
+    return { active: activePlans.map(build), ended: endedPlans.map(build) };
+  }, [activePlans, endedPlans, templates, pick]);
+
+  const nextName = useCallback(
+    (workoutId: string): string | null => {
+      if (workoutId === "__intermediate_race__") return t("plansPage.nextIntermediate");
+      if (isActivitySession(workoutId)) {
+        const kind = activityKindOf(workoutId);
+        return kind ? t(`activity.${kind.kind}`) : null;
+      }
+      const w = templates[workoutId] ?? getWorkoutByIdSync(workoutId);
+      return w ? pickLang(w, "name") : null;
+    },
+    [templates, t],
+  );
+
+  const handleDuplicate = useCallback(
+    (plan: TrainingPlan) => {
+      const name = `${planDisplayName(plan, pick)} ${t("plansPage.copySuffix")}`;
+      const newId = duplicatePlan(plan.id, name);
+      if (!newId) {
+        toast.failure(t("plansPage.duplicateFailed"));
+        return;
+      }
+      reload();
+      toast.success(t("plansPage.duplicated", { name }));
+    },
+    [pick, reload, t],
+  );
+
+  const handleRename = useCallback(
+    (plan: TrainingPlan, name: string) => {
+      const saved = savePlan({ ...plan, config: { ...plan.config, planName: name } });
+      if (!saved.ok) {
+        toast.failure(tc("errors.planSaveFailed"), saved);
+        return;
+      }
+      reload();
+    },
+    [reload, tc],
+  );
+
+  const actions = {
+    onDuplicate: handleDuplicate,
+    onRename: handleRename,
+    onDelete: setDeleteTarget,
+  };
+
   return (
     <>
-      <SEOHead
-        noindex={true}
-        title={t("plansPage.title")}
-        canonical="/plans"
-      />
+      <SEOHead noindex={true} title={t("plansPage.title")} canonical="/plans" />
       <div className="zn-plans">
-        {/* 1, the shelf, counted, with the two ways onto it */}
         <section className="zn-plans__head">
           <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}>
-            <span className="zn-kicker">
-              {planCount > 0 ? t("plansPage.planCount", { count: planCount }) : " "}
-            </span>
+            {planCount > 0 && (
+              <span className="zn-kicker">
+                {t("plansPage.headCount", { count: planCount })} ·{" "}
+                {t("plansPage.headActive", { count: activePlans.length })}
+              </span>
+            )}
             <h1 className="zn-display" data-level="2">
               {t("plansPage.title")}
             </h1>
-            {/* Les pages de la porte, sous 1024px : le nouveau plan a déjà
-                son bouton, à droite, et c'est le seul aplat de la page. */}
-            <HubNav section={navSection("plan")} omit={["/plan/new"]} />
-            <p className="zn-body zn-body--lead zn-plans__lede">
-              {t("plansPage.subtitle")}
-            </p>
-            {/* La science commente des plans : sur une étagère vide
-                elle passait AVANT le seul bouton qui compte, et le
-                repoussait sous le pli. Elle arrive avec le premier plan. */}
-            {planCount > 0 && (
-              <div className="zn-cluster">
-                <Button variant="outline" size="sm" asChild>
-                  <Link to="/plans/methodology">
-                    <FlaskConical />
-                    {t("plansPage.science")}
-                  </Link>
-                </Button>
-              </div>
+            {/* Une étagère vide se présente : où l'on est, à quoi sert la
+                page. Dès qu'un plan existe, les plans parlent d'eux-mêmes. */}
+            {planCount === 0 && !isLoading && (
+              <>
+                <HubNav section={navSection("plan")} omit={["/plan/new"]} />
+                <p className="zn-body zn-body--lead zn-plans__lede">{t("plansPage.subtitle")}</p>
+              </>
             )}
           </div>
 
-          <div className="zn-cluster">
+          <div className="zn-plans__actions">
             {/* L'import reste en tête même à zéro plan : c'est la voie de
-                quelqu'un qui arrive avec un fichier, et elle ne concurrence
-                pas la création, elle la précède. */}
-            <Button variant="outline" onClick={handleImport}>
+                quelqu'un qui arrive avec un fichier. Il est discret, la
+                création est le seul aplat de l'écran. */}
+            <Button variant="ghost" onClick={handleImport}>
               <Upload />
               {t("plansPage.import")}
             </Button>
             {/* Sur une étagère vide, la création est dans l'état vide, avec
-                l'explication ; la répéter ici, même en contour, faisait deux
-                boutons du même nom sur un même écran. Elle revient en tête,
-                en vermillon, dès qu'il y a un plan à côté. */}
+                l'explication ; la répéter ici ferait deux boutons du même nom. */}
             {planCount > 0 && (
               <Button asChild>
                 <Link to="/plan/new">
@@ -277,42 +234,40 @@ export function PlansPage() {
           </div>
         </section>
 
-        {/* 2, the plans */}
         {isLoading ? (
           <div className="zn-plans__band zn-plans__wait">
             <Spinner size={22} />
           </div>
         ) : planCount > 0 ? (
           <>
-            {activePlans.length > 0 && (
-              <section className="zn-plans__band">
-                <div className="zn-grid">
-                  {activePlans.map((plan) => (
-                    <PlanCard key={plan.id} plan={plan} onDelete={setDeleteTarget} />
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Ended plans: kept as training history, on their own band */}
-            {endedPlans.length > 0 && (
-              <section className="zn-plans__band">
-                <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}>
-                  <h2 className="zn-kicker">
-                    {t("plansPage.endedSection")} · {endedPlans.length}
+            {entries.active.length > 0 && (
+              <section className="zn-plans__band" aria-labelledby="zn-plans-active">
+                <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
+                  <h2 id="zn-plans-active" className="zn-kicker">
+                    {t("plansPage.activeSection", { count: entries.active.length })}
                   </h2>
-                  <div className="zn-grid">
-                    {endedPlans.map((plan) => (
-                      <PlanCard key={plan.id} plan={plan} onDelete={setDeleteTarget} />
+                  <div className="zn-plans__grid" data-wide={wide || undefined}>
+                    {entries.active.map(({ plan, name, model }) => (
+                      <PlanCard
+                        key={plan.id}
+                        plan={plan}
+                        name={name}
+                        model={model}
+                        nextName={model.next ? nextName(model.next.workoutId) : null}
+                        wide={wide}
+                        {...actions}
+                      />
                     ))}
                   </div>
                 </div>
               </section>
             )}
 
-            <p className="zn-mono zn-plans__total">
-              {t("plansPage.planCount", { count: planCount })}
-            </p>
+            {entries.ended.length > 0 && (
+              <div className="zn-plans__band">
+                <PlanHistory entries={entries.ended} table={wide} {...actions} />
+              </div>
+            )}
           </>
         ) : (
           <section className="zn-plans__band">
@@ -329,6 +284,16 @@ export function PlansPage() {
                   </Link>
                 </Button>
               }
+              hint={
+                // La science vient APRÈS le seul bouton qui compte : posée
+                // avant, elle le repoussait sous le pli.
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/plans/methodology">
+                    <FlaskConical />
+                    {t("plansPage.science")}
+                  </Link>
+                </Button>
+              }
             />
           </section>
         )}
@@ -338,26 +303,22 @@ export function PlansPage() {
       <Dialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {t("plansPage.deleteTitle")}
-            </DialogTitle>
+            <DialogTitle>{t("plansPage.deleteTitle")}</DialogTitle>
             <DialogDescription>
-              {deleteTargetPlan
-                ? t("plansPage.deleteConfirm", { name: pick(deleteTargetPlan, "name") })
+              {deleteTarget
+                ? t("plansPage.deleteConfirm", { name: planDisplayName(deleteTarget, pick) })
                 : ""}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">
-                {t("plansPage.cancelButton")}
-              </Button>
+              <Button variant="outline">{t("plansPage.cancelButton")}</Button>
             </DialogClose>
             <Button
               variant="destructive"
               onClick={() => {
                 if (deleteTarget) {
-                  remove(deleteTarget);
+                  remove(deleteTarget.id);
                   setDeleteTarget(null);
                 }
               }}
@@ -368,7 +329,6 @@ export function PlansPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
     </>
   );
 }

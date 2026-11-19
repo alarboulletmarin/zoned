@@ -429,7 +429,9 @@
   display: flex;
   align-items: center;
   gap: var(--sp-4);
-  padding-inline-end: var(--sp-6);
+  /* The button ··· is a 44px round target: a short margin keeps its glyph
+     on the same inset as the row's text on the other side. */
+  padding-inline-end: var(--sp-3);
 
   background: var(--surface-card);
   border: var(--border-rule);
@@ -441,8 +443,9 @@
   background: var(--surface-band);
 }
 
-/* The whole row is the link; the two icon buttons sit beside it, outside the
-   anchor, so an export never has to be an anchor inside an anchor. */
+/* The whole row is the link; the favourite and the button ··· sit beside it,
+   outside the anchor, so an action never has to be an anchor inside an
+   anchor. */
 .zn-build__rowlink {
   display: flex;
   align-items: center;
@@ -452,6 +455,15 @@
   padding: var(--sp-10) 0 var(--sp-10) var(--pad-card-sm);
   color: var(--text-body);
   text-decoration: none;
+}
+
+/* On a phone the arrow is the third mark beside the favourite and the
+   button ···, and the row is already one link: it gives its 32px back to
+   the name, which otherwise ran to three lines. */
+@media (max-width: 479px) {
+  .zn-build__rowarrow {
+    display: none;
+  }
 }
 
 .zn-build__rowname {

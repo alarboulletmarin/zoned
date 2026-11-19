@@ -76,6 +76,7 @@
 @import "./components/plan-calendar.css" layer(components);
 @import "./components/plan-panels.css" layer(components);
 @import "./components/plan-view.css" layer(components);
+@import "./components/plans.css" layer(components);
 @import "./components/plan-weeks.css" layer(components);
 @import "./components/plan-wizard.css" layer(components);
 @import "./components/popover.css" layer(components);

@@ -467,7 +467,6 @@
     "importSuccess": "Plan imported!",
     "importInvalid": "Invalid plan file",
     "importReadError": "The file could not be read.",
-    "view": "View",
     "buildArc": "No plan yet.",
     "buildArcDesc": "A plan is your race, its date and the days you can train: the generator lays out the weeks, and the cockpit serves you the day's session.",
     "createFirst": "Create my plan",
@@ -475,14 +474,72 @@
     "deleteConfirm": "\"{{name}}\" will be permanently deleted. This action cannot be undone.",
     "deleteButton": "Delete",
     "cancelButton": "Cancel",
-    "weekProgress": "Week {{current}} / {{total}}",
-    "target": "Target: ",
-    "sessionsCount_one": "{{count}} session",
-    "sessionsCount_other": "{{count}} sessions",
-    "planCount_one": "{{count}} plan",
-    "planCount_other": "{{count}} plans",
-    "ended": "Ended",
-    "endedSection": "Past plans"
+    "headCount_one": "{{count}} plan",
+    "headCount_other": "{{count}} plans",
+    "headActive": "{{count}} active",
+    "activeSection": "Active · {{count}}",
+    "doneSection": "Completed · {{count}}",
+    "week": "Week {{current}}/{{total}}",
+    "weekLabel": "Week",
+    "startsOn": "Starts {{date}}",
+    "countdown": {
+      "days": "D-{{count}}",
+      "today_race": "Race day",
+      "today_end": "Last day",
+      "race": "Race",
+      "end": "Plan ends"
+    },
+    "stats": {
+      "sessions": "Sessions to date",
+      "volume": "Volume to date"
+    },
+    "next": "Next session",
+    "nextFallback": "Session",
+    "nextIntermediate": "Tune-up race",
+    "chips": {
+      "target": "Target {{value}}"
+    },
+    "menu": {
+      "label": "Actions for plan {{name}}",
+      "duplicate": "Duplicate",
+      "rename": "Rename",
+      "delete": "Delete…",
+      "formats": {
+        "pdf": "PDF",
+        "ics": "ICS",
+        "json": "JSON",
+        "link": "Link"
+      },
+      "share": "Share",
+      "weekLabel": "Actions for week {{name}}",
+      "exportShare": "Export or share"
+    },
+    "renameLabel": "Plan name",
+    "copySuffix": "(copy)",
+    "duplicated": "Plan duplicated: {{name}}",
+    "duplicateFailed": "The plan could not be duplicated.",
+    "timeline": {
+      "aria_one": "{{count}} week, week {{week}} in progress, {{done}} sessions done of {{planned}} planned to date",
+      "aria_other": "{{count}} weeks, week {{week}} in progress, {{done}} sessions done of {{planned}} planned to date",
+      "ariaEnded_one": "{{count}} week, plan completed, {{done}} sessions done of {{planned}} planned",
+      "ariaEnded_other": "{{count}} weeks, plan completed, {{done}} sessions done of {{planned}} planned",
+      "weekShort": "W{{n}}"
+    },
+    "phaseShort": {
+      "base": "Base",
+      "build": "Build",
+      "peak": "Peak",
+      "taper": "Taper",
+      "recovery": "Rec."
+    },
+    "history": {
+      "plan": "Plan",
+      "period": "Period",
+      "sessions": "Sessions",
+      "volume": "Volume",
+      "weeks": "Weeks",
+      "actions": "Actions"
+    }
   },
   "prebuilt": {
     "notFound": "Plan not found",

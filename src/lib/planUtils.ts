@@ -4,11 +4,15 @@
  * getCurrentWeek parses the date string as local midnight to avoid
  * UTC/local timezone mismatches that could shift the result by one day
  * (and therefore one week) near week boundaries.
+ *
+ * Both take the reference instant as an optional last argument, the clock by
+ * default: a pure caller (planCardModel) passes its own `today` and stays
+ * testable without mocking Date.
  */
 
 import type { TrainingPlan } from "@/types/plan";
 
-export function getCurrentWeek(dateStr: string): number {
+export function getCurrentWeek(dateStr: string, now: Date = new Date()): number {
   // Parse as local date components to avoid UTC offset issues
   const dateOnly = dateStr.split("T")[0];
   const [y, m, d] = dateOnly.split("-").map(Number);
@@ -19,7 +23,6 @@ export function getCurrentWeek(dateStr: string): number {
   const offset = jsDay === 0 ? -6 : 1 - jsDay;
   start.setDate(start.getDate() + offset);
 
-  const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   const diffMs = today.getTime() - start.getTime();
@@ -35,18 +38,17 @@ export function getCurrentWeek(dateStr: string): number {
  * plans without dates fall back to the week arithmetic (createdAt-based),
  * matching the progress bar.
  */
-export function isPlanEnded(plan: TrainingPlan): boolean {
+export function isPlanEnded(plan: TrainingPlan, now: Date = new Date()): boolean {
   const explicitEnd = plan.config.endDate || plan.config.raceDate;
   if (explicitEnd) {
     // Local-midnight parsing, same reasoning as getCurrentWeek
     const [y, m, d] = explicitEnd.split("T")[0].split("-").map(Number);
     const end = new Date(y, m - 1, d);
-    const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return today.getTime() > end.getTime();
   }
   return (
-    getCurrentWeek(plan.config.startDate || plan.config.createdAt) >
+    getCurrentWeek(plan.config.startDate || plan.config.createdAt, now) >
     plan.totalWeeks
   );
 }

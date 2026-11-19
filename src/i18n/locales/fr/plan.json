@@ -467,7 +467,6 @@
     "importSuccess": "Plan importé !",
     "importInvalid": "Fichier de plan invalide",
     "importReadError": "Le fichier n'a pas pu être lu.",
-    "view": "Voir",
     "buildArc": "Aucun plan pour l'instant.",
     "buildArcDesc": "Un plan, c'est ta course, sa date et tes jours disponibles : le générateur pose les semaines, et le cockpit te sert la séance du jour.",
     "createFirst": "Créer mon plan",
@@ -475,14 +474,72 @@
     "deleteConfirm": "\"{{name}}\" sera définitivement supprimé. Cette action est irréversible.",
     "deleteButton": "Supprimer",
     "cancelButton": "Annuler",
-    "weekProgress": "Semaine {{current}} / {{total}}",
-    "target": "Objectif : ",
-    "sessionsCount_one": "{{count}} séance",
-    "sessionsCount_other": "{{count}} séances",
-    "planCount_one": "{{count}} plan",
-    "planCount_other": "{{count}} plans",
-    "ended": "Terminé",
-    "endedSection": "Plans terminés"
+    "headCount_one": "{{count}} plan",
+    "headCount_other": "{{count}} plans",
+    "headActive": "{{count}} en cours",
+    "activeSection": "En cours · {{count}}",
+    "doneSection": "Terminés · {{count}}",
+    "week": "Semaine {{current}}/{{total}}",
+    "weekLabel": "Semaine",
+    "startsOn": "Commence {{date}}",
+    "countdown": {
+      "days": "J-{{count}}",
+      "today_race": "Jour J",
+      "today_end": "Jour J",
+      "race": "Course",
+      "end": "Fin du plan"
+    },
+    "stats": {
+      "sessions": "Séances à date",
+      "volume": "Volume à date"
+    },
+    "next": "Prochaine séance",
+    "nextFallback": "Séance",
+    "nextIntermediate": "Course intermédiaire",
+    "chips": {
+      "target": "Objectif {{value}}"
+    },
+    "menu": {
+      "label": "Actions du plan {{name}}",
+      "duplicate": "Dupliquer",
+      "rename": "Renommer",
+      "delete": "Supprimer…",
+      "formats": {
+        "pdf": "PDF",
+        "ics": "ICS",
+        "json": "JSON",
+        "link": "Lien"
+      },
+      "share": "Partager",
+      "weekLabel": "Actions de la semaine {{name}}",
+      "exportShare": "Exporter ou partager"
+    },
+    "renameLabel": "Nom du plan",
+    "copySuffix": "(copie)",
+    "duplicated": "Plan dupliqué : {{name}}",
+    "duplicateFailed": "Le plan n'a pas pu être dupliqué.",
+    "timeline": {
+      "aria_one": "{{count}} semaine, semaine {{week}} en cours, {{done}} séances faites sur {{planned}} prévues à date",
+      "aria_other": "{{count}} semaines, semaine {{week}} en cours, {{done}} séances faites sur {{planned}} prévues à date",
+      "ariaEnded_one": "{{count}} semaine, plan terminé, {{done}} séances faites sur {{planned}} prévues",
+      "ariaEnded_other": "{{count}} semaines, plan terminé, {{done}} séances faites sur {{planned}} prévues",
+      "weekShort": "S{{n}}"
+    },
+    "phaseShort": {
+      "base": "Base",
+      "build": "Constr.",
+      "peak": "Pic",
+      "taper": "Aff.",
+      "recovery": "Récup."
+    },
+    "history": {
+      "plan": "Plan",
+      "period": "Période",
+      "sessions": "Séances",
+      "volume": "Volume",
+      "weeks": "Semaines",
+      "actions": "Actions"
+    }
   },
   "prebuilt": {
     "notFound": "Plan introuvable",
