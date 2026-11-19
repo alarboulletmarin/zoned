@@ -43,6 +43,9 @@ export function PlanTimeline({ model, variant = "card" }: PlanTimelineProps) {
   const mini = variant === "mini";
   const labelStep = Math.ceil(weeks.length / MAX_WEEK_LABELS);
   const dense = weeks.length > 16;
+  // Une seule grille de colonnes pour les quatre étages : repères, barres,
+  // numéros et phases tombent sur les mêmes bords, écarts compris.
+  const columnsStyle = { "--zn-weeks": weeks.length } as React.CSSProperties;
 
   const label = model.ended
     ? t("plansPage.timeline.ariaEnded", {
@@ -81,7 +84,13 @@ export function PlanTimeline({ model, variant = "card" }: PlanTimelineProps) {
 
   if (mini) {
     return (
-      <div className="zn-planline" data-variant="mini" data-dense={dense || undefined} aria-hidden="true">
+      <div
+        className="zn-planline"
+        data-variant="mini"
+        data-dense={dense || undefined}
+        style={columnsStyle}
+        aria-hidden="true"
+      >
         {bars}
       </div>
     );
@@ -92,6 +101,7 @@ export function PlanTimeline({ model, variant = "card" }: PlanTimelineProps) {
       className="zn-planline"
       data-variant={variant}
       data-dense={dense || undefined}
+      style={columnsStyle}
       role="img"
       aria-label={label}
     >
@@ -132,7 +142,7 @@ export function PlanTimeline({ model, variant = "card" }: PlanTimelineProps) {
               className="zn-planline__phase"
               data-phase={p.phase}
               data-current={p.current || undefined}
-              style={{ flexGrow: p.weeks }}
+              style={{ gridColumn: `${p.start} / span ${p.weeks}` }}
             >
               <span className="zn-planline__tone" />
               <span className="zn-planline__phase-label">

@@ -553,12 +553,18 @@ a.zn-plancard__open:hover .zn-plancard__name {
   --zn-gap: var(--sp-1);
 }
 
+/* Les quatre étages sont la MÊME grille : N colonnes égales, le même écart.
+   Une phase de trois semaines couvre exactement trois barres et leurs deux
+   écarts, bord à bord. Des segments en flex, au prorata des semaines, ne
+   comptaient qu'un écart entre deux phases et dérivaient de 1 à 2 px à
+   chaque frontière. */
 .zn-planline__marks,
 .zn-planline__bars,
 .zn-planline__nums,
 .zn-planline__phases {
-  display: flex;
-  gap: var(--zn-gap);
+  display: grid;
+  grid-template-columns: repeat(var(--zn-weeks, 1), minmax(0, 1fr));
+  column-gap: var(--zn-gap);
 }
 
 .zn-planline__marks {
@@ -566,7 +572,6 @@ a.zn-plancard__open:hover .zn-plancard__name {
 }
 
 .zn-planline__mark {
-  flex: 1 1 0;
   min-inline-size: 0;
   display: flex;
   justify-content: center;
@@ -590,13 +595,14 @@ a.zn-plancard__open:hover .zn-plancard__name {
 
 .zn-planline__bars {
   block-size: var(--zn-bars);
-  align-items: flex-end;
+  /* Une rangée définie, pour que la hauteur en % de chaque barre s'y calcule. */
+  grid-template-rows: minmax(0, 1fr);
 }
 
 /* Past: the house rule. Current: the heavy ink stroke. Future: dashed, ink
    at 40%. Three outlines, so the state never rests on the fill alone. */
 .zn-planline__bar {
-  flex: 1 1 0;
+  align-self: end;
   min-inline-size: 0;
   block-size: max(var(--zn-h, 0%), 4px);
   box-sizing: border-box;
@@ -624,7 +630,6 @@ a.zn-plancard__open:hover .zn-plancard__name {
 }
 
 .zn-planline__nums span {
-  flex: 1 1 0;
   min-inline-size: 0;
   font-family: var(--font-mono);
   font-size: var(--fs-mono-xs);
@@ -641,7 +646,6 @@ a.zn-plancard__open:hover .zn-plancard__name {
 /* The phases: one segment per phase, as wide as its weeks, on the ramp of
    the zones. No new colour. */
 .zn-planline__phase {
-  flex-basis: 0;
   min-inline-size: 0;
   display: flex;
   flex-direction: column;

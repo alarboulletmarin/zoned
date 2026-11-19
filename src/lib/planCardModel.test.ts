@@ -138,12 +138,24 @@ describe("buildPlanCardModel, les semaines et les phases", () => {
 
   test("les phases avec leur nombre de semaines et la phase en cours", () => {
     expect(m.phases).toEqual([
-      { phase: "base", weeks: 1, current: false },
-      { phase: "build", weeks: 2, current: true },
-      { phase: "taper", weeks: 1, current: false },
+      { phase: "base", start: 1, weeks: 1, current: false },
+      { phase: "build", start: 2, weeks: 2, current: true },
+      { phase: "taper", start: 4, weeks: 1, current: false },
     ]);
     expect(m.phaseNow).toBe("build");
   });
+});
+
+test("une phase qui déborde de la frise est bornée à ses colonnes", () => {
+  const p = plan();
+  p.phases = [
+    { phase: "base", startWeek: 1, endWeek: 2 },
+    { phase: "taper", startWeek: 3, endWeek: 6 },
+  ];
+  expect(buildPlanCardModel(p, THURSDAY, workoutOf).phases.map((x) => [x.start, x.weeks])).toEqual([
+    [1, 2],
+    [3, 2],
+  ]);
 });
 
 describe("buildPlanCardModel, le compte à rebours", () => {

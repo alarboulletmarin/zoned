@@ -54,6 +54,8 @@ export interface PlanCardWeek {
 
 export interface PlanCardPhase {
   phase: TrainingPhase;
+  /** La colonne de sa première semaine dans la frise, 1-indexée. */
+  start: number;
   weeks: number;
   current: boolean;
 }
@@ -236,11 +238,22 @@ export function buildPlanCardModel(
       };
     });
 
-  const phases: PlanCardPhase[] = plan.phases.map((range) => ({
-    phase: range.phase,
-    weeks: Math.max(1, range.endWeek - range.startWeek + 1),
-    current: weekNow >= range.startWeek && weekNow <= range.endWeek,
-  }));
+  // Les phases se rangent sur les colonnes des semaines : une phase couvre
+  // exactement les barres de ses semaines, bornée à la frise.
+  const firstWeek = weeks[0]?.number ?? 1;
+  const columns = weeks.length;
+  const phases: PlanCardPhase[] = plan.phases
+    .map((range) => {
+      const start = Math.max(1, range.startWeek - firstWeek + 1);
+      const end = Math.min(columns, range.endWeek - firstWeek + 1);
+      return {
+        phase: range.phase,
+        start,
+        weeks: end - start + 1,
+        current: weekNow >= range.startWeek && weekNow <= range.endWeek,
+      };
+    })
+    .filter((p) => p.weeks > 0);
   const phaseNow =
     plan.phases.find((r) => weekNow >= r.startWeek && weekNow <= r.endWeek)?.phase ??
     weeks.find((w) => w.number === weekNow)?.phase ??

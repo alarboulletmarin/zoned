@@ -209,6 +209,14 @@ de chaque étage, prises dans le DOM) :
   ligne qu'entre deux segments, jamais dedans. Le point est dessiné en CSS
   dans l'écart et rogné quand le segment suivant ouvre une ligne : il ne
   reste jamais seul en bout de ligne (`Segs`, `.zn-segs`).
+- **Les phases tombent sur les bords des semaines.** Les quatre étages de
+  la frise (repères, barres, numéros, phases) sont une même grille de N
+  colonnes au même écart, et une phase occupe les colonnes de ses semaines
+  (`grid-column: start / span n`, `start` donné par le modèle). Avant, les
+  segments étaient en flex au prorata des semaines : ils ne comptaient qu'un
+  écart entre deux phases, là où les barres en comptent un par semaine, et
+  chaque frontière dérivait de 1 à 2 px. Mesuré après : 0 px à chaque bord,
+  à 390, 800 et 1280 px.
 - **L'historique sous 480 px** passe la frise et le compte sous la période.
   Les trois colonnes de la liste ne laissaient que 155 px au nom : un nom de
   vingt lettres et sa période passaient chacun sur deux lignes.
