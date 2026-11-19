@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Page séance</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position: relative; width: {{root.w}}; height: {{root.h}}; overflow: {{root.overflow}}; box-sizing: border-box; background: {{t.page}}; font-family: 'Space Grotesk', system-ui, sans-serif; color: {{t.ink1}}">
+<div style="max-width: 1152px; margin: 0 auto; box-sizing: border-box; padding: {{L.pad}}; display: grid; grid-template-columns: {{L.cols}}; column-gap: {{L.colGap}}; row-gap: {{L.rowGap}}; align-items: start">
+
+<nav aria-label="Fil d'Ariane" style="grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.ink3}}">
+<a href="#" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: {{t.ink1}}; text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8 H3 M7 4 L3 8 L7 12" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg>Retour</a>
+<span>Bibliothèque / Mixte</span>
+</nav>
+
+<header style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">MIX-010 · Séance mixte · Terrain plat de préférence</p>
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: {{L.h1}}; line-height: 0.95; letter-spacing: -0.035em">Séance pré-compétition</h1>
+<p style="margin: 0; font-size: {{L.lede}}; line-height: 1.55; color: {{t.ink2}}; max-width: 34em">Rappel multi-allures avant une course. Touche à tout sans fatiguer.</p>
+</header>
+
+<div style="display: flex; flex-direction: column; gap: 18px; min-width: 0; padding-top: {{L.heroRightPad}}">
+<dl style="margin: 0; display: grid; grid-template-columns: {{L.factCols}}; border: 1.5px solid {{t.ink1}}; border-radius: 16px; overflow: hidden; background: {{t.card}}">
+<sc-for list="{{facts}}" as="f" hint-placeholder-count="4">
+<div style="padding: 12px 16px; border-left: {{f.bl}}; border-top: {{f.bt}}; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<dt style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">{{f.k}}</dt>
+<dd style="margin: 0; font-size: {{f.size}}; font-weight: 500; color: {{f.color}}; font-variant-numeric: tabular-nums">{{f.v}}</dd>
+</div>
+</sc-for>
+</dl>
+<sc-if value="{{inlineActions}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+<button type="button" onClick="{{openSheet}}" style="height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: #E8452A; color: #FFFFFF; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2 V14 M2 8 H14" style="fill: none; stroke: currentColor; stroke-width: 1.8px"></path></svg>Ajouter à…</button>
+<button type="button" style="height: 48px; padding: 0 18px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; background: transparent; color: {{t.ink1}}; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2 V11 M4 7 L8 11 L12 7 M2.5 14 H13.5" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg>Exporter</button>
+<button type="button" aria-label="Ajouter aux favoris" style="width: 48px; height: 48px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; background: transparent; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 15 L3 9.2 C1.4 7.6 1.6 5 3.4 3.9 C5 3 7.2 3.6 9 5.6 C10.8 3.6 13 3 14.6 3.9 C16.4 5 16.6 7.6 15 9.2 Z" style="fill: none; stroke: currentColor; stroke-width: 1.5px"></path></svg></button>
+<button type="button" aria-label="Plus d'actions" style="width: 48px; height: 48px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; background: transparent; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="10" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="15.5" cy="10" r="1.6" style="fill: currentColor"></circle></svg></button>
+</div>
+</sc-if>
+</div>
+
+<section aria-labelledby="structure" style="display: flex; flex-direction: column; gap: 20px; min-width: 0; padding-top: {{L.sectionPad}}">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<h2 id="structure" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: {{L.h2}}; letter-spacing: -0.02em">Structure</h2>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">3 phases · 0 → 37 min</span>
+</div>
+
+<div role="img" aria-label="Intensité : endurance 32 min 30, qualité 4 min, pic en zone 5" style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase">
+<span>Endurance <span style="color: {{t.ink3}}">Z1-Z3</span> · 32 min 30</span>
+<span>Qualité <span style="color: {{t.ink3}}">Z4+</span> · 4 min</span>
+</div>
+<div style="display: flex; height: 14px; border: 1.5px solid {{t.ink1}}; border-radius: 4px; overflow: hidden">
+<div style="flex: 32.5; background: {{t.z2}}"></div>
+<div style="flex: 4; background: {{t.z5}}; border-left: 1.5px solid {{t.ink1}}"></div>
+</div>
+</div>
+<div role="img" aria-label="Profil de la séance : 15 minutes d'échauffement en zones 1 à 2, 5 minutes en zones 3 à 4, 3 minutes de récupération, 3 répétitions de 30 secondes en zone 5, 10 minutes de retour au calme" style="display: flex; align-items: flex-end; gap: 2px; height: {{L.profileH}}; padding: 8px; border: 1.5px solid {{t.ink1}}; border-radius: 10px; background: {{t.card}}">
+<sc-for list="{{profile}}" as="b" hint-placeholder-count="12">
+<div style="flex: {{b.flex}}; height: {{b.h}}; background: {{b.bg}}; border: 1px solid {{t.ink1}}; border-radius: 2px; box-sizing: border-box"></div>
+</sc-for>
+</div>
+
+<sc-if value="{{noVma}}" hint-placeholder-val="{{ true }}">
+<form style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; padding: 12px 14px; border: 1.5px dashed {{t.ink2}}; border-radius: 12px">
+<label for="vma" style="display: flex; flex-direction: column; gap: 2px; font-size: 15px">Affiche tes allures sur chaque bloc
+<a href="#" style="font-size: 13px; color: {{t.ink2}}; text-decoration: underline; text-underline-offset: 3px">Je ne connais pas ma VMA</a></label>
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="display: flex; align-items: center; gap: 4px; height: 44px; padding: 0 12px; border: 1.5px solid {{t.ink1}}; border-radius: 8px; background: {{t.card}}"><input id="vma" type="text" inputmode="decimal" value="15" style="width: 32px; border: 0; background: transparent; color: {{t.ink1}}; font-family: 'Space Grotesk', sans-serif; font-size: 16px; text-align: right"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: {{t.ink3}}">km/h</span></span>
+<button type="submit" onClick="{{setVma}}" style="height: 44px; padding: 0 16px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; background: transparent; color: {{t.ink1}}; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer">Afficher</button>
+</span>
+</form>
+</sc-if>
+<sc-if value="{{hasVma}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}"><span>Allures pour une VMA de 15 km/h</span><button type="button" onClick="{{clearVma}}" style="min-height: 44px; padding: 0; border: 0; background: transparent; color: {{t.ink1}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 3px; cursor: pointer">Modifier</button></p>
+</sc-if>
+
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border: 1.5px solid {{t.ink1}}; border-radius: 16px; background: {{t.card}}; overflow: hidden">
+<sc-for list="{{phases}}" as="ph" hint-placeholder-count="3">
+<li style="padding: 14px 16px 10px; border-top: {{ph.sep}}">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 6px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 500">{{ph.title}}</h3>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.ink2}}">{{ph.dur}}</span>
+</div>
+<sc-for list="{{ph.steps}}" as="st" hint-placeholder-count="1">
+<div style="display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 48px">
+<span style="justify-self: start; padding: 3px 7px; border-radius: 4px; border: 1px solid {{t.ink1}}; background: {{st.bg}}; color: {{st.fg}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500">{{st.z}}</span>
+<span style="display: flex; flex-direction: column; gap: 1px; min-width: 0"><span style="font-size: 15px">{{st.label}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{st.paceColor}}">{{st.pace}}</span></span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-variant-numeric: tabular-nums">{{st.dur}}</span>
+</div>
+</sc-for>
+<sc-if value="{{ph.hasRep}}" hint-placeholder-val="{{ false }}">
+<div style="margin: 4px 0 2px 6px; padding-left: 14px; border-left: 1.5px solid {{t.ink1}}">
+<span style="display: block; padding: 2px 0 2px; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500">{{ph.rep}} ×</span>
+<sc-for list="{{ph.repSteps}}" as="st" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 44px">
+<span style="justify-self: start; padding: 3px 7px; border-radius: 4px; border: 1px solid {{t.ink1}}; background: {{st.bg}}; color: {{st.fg}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500">{{st.z}}</span>
+<span style="display: flex; flex-direction: column; gap: 1px; min-width: 0"><span style="font-size: 15px">{{st.label}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{st.paceColor}}">{{st.pace}}</span></span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-variant-numeric: tabular-nums">{{st.dur}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</li>
+</sc-for>
+</ol>
+</section>
+
+<aside style="display: flex; flex-direction: column; gap: 32px; min-width: 0; padding-top: {{L.sectionPad}}">
+<section aria-labelledby="repartition" style="display: flex; flex-direction: column; gap: 14px">
+<h2 id="repartition" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: {{L.h2}}; letter-spacing: -0.02em">Répartition</h2>
+<div aria-hidden="true" style="display: flex; height: 16px; border: 1.5px solid {{t.ink1}}; border-radius: 4px; overflow: hidden">
+<sc-for list="{{dist}}" as="d" hint-placeholder-count="5">
+<div style="flex: {{d.min}}; background: {{d.bar}}; border-left: {{d.bl}}"></div>
+</sc-for>
+</div>
+<table style="width: 100%; border-collapse: collapse; font-size: 15px">
+<caption style="position: absolute; width: 1px; height: 1px; overflow: hidden">Temps passé par zone</caption>
+<tbody>
+<sc-for list="{{dist}}" as="d" hint-placeholder-count="5">
+<tr style="border-top: {{d.rowSep}}">
+<td style="width: 44px; padding: 8px 0"><span style="padding: 2px 6px; border-radius: 4px; border: 1px solid {{t.ink1}}; background: {{d.bg}}; color: {{d.fg}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500">{{d.z}}</span></td>
+<td style="padding: 8px 0">{{d.name}}</td>
+<td style="padding: 8px 0; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-variant-numeric: tabular-nums">{{d.time}}</td>
+<td style="width: 52px; padding: 8px 0; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: {{t.ink3}}">{{d.pct}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</section>
+
+<section aria-labelledby="conseils" style="display: grid; grid-template-columns: {{L.adviceCols}}; gap: 20px 24px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h2 id="conseils" style="margin: 0; font-size: 17px; font-weight: 500">Conseils</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.45">
+<sc-for list="{{tips}}" as="x" hint-placeholder-count="3">
+<li style="display: flex; gap: 10px; align-items: baseline"><span aria-hidden="true" style="flex: none; width: 6px; height: 6px; background: {{t.ink1}}; transform: translateY(-2px)"></span>{{x}}</li>
+</sc-for>
+</ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 500">Erreurs courantes</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.45">
+<sc-for list="{{errors}}" as="x" hint-placeholder-count="2">
+<li style="display: flex; gap: 10px; align-items: baseline"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style="flex: none"><path d="M1.5 1.5 L8.5 8.5 M8.5 1.5 L1.5 8.5" style="fill: none; stroke: {{t.ink1}}; stroke-width: 1.6px"></path></svg>{{x}}</li>
+</sc-for>
+</ul>
+</div>
+<p style="grid-column: 1 / -1; margin: 0; display: flex; gap: 12px; padding: 14px 16px; border: 1.5px solid {{t.ink1}}; border-radius: 16px; background: {{t.card}}; font-size: 15px; line-height: 1.5"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M6.5 13.5 H11.5 M7 16 H11 M9 2 C5.9 2 4 4.2 4 6.8 C4 8.6 5 9.7 6 10.6 C6.4 11 6.5 11.5 6.5 12 H11.5 C11.5 11.5 11.6 11 12 10.6 C13 9.7 14 8.6 14 6.8 C14 4.2 12.1 2 9 2 Z" style="fill: none; stroke: {{t.ink1}}; stroke-width: 1.4px"></path></svg><span>Les fibres lentes (type I) sont recrutées en premier, les fibres rapides (type II) entrent en jeu à haute intensité : les 30 s en Z5 les réveillent sans les épuiser.</span></p>
+</section>
+</aside>
+
+<div style="grid-column: 1 / -1; display: flex; flex-direction: column; border-top: 1.5px solid {{t.divider}}">
+<sc-for list="{{folds}}" as="fo" hint-placeholder-count="2">
+<button type="button" aria-expanded="false" style="display: flex; justify-content: space-between; align-items: center; min-height: 60px; padding: 0; border: 0; border-bottom: 1.5px solid {{t.divider}}; background: transparent; color: {{t.ink1}}; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: -0.015em; text-align: left; cursor: pointer">{{fo}}<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6 L8 10.5 L12.5 6" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg></button>
+</sc-for>
+</div>
+
+<section aria-labelledby="ensuite" style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px">
+<h2 id="ensuite" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: {{L.h2}}; letter-spacing: -0.02em">Dans le même esprit</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: {{L.relCols}}; gap: 12px">
+<sc-for list="{{related}}" as="r" hint-placeholder-count="3">
+<li><a href="#" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 64px; padding: 12px 16px; border: 1.5px solid {{t.ink1}}; border-radius: 14px; background: {{t.card}}; color: {{t.ink1}}; text-decoration: none"><span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-size: 16px; font-weight: 500">{{r.name}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: {{t.ink3}}">{{r.meta}}</span></span><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true" style="flex: none"><path d="M4 10 H16 M11 5 L16 10 L11 15" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg></a></li>
+</sc-for>
+</ul>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 8px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}; margin-right: 6px">Glossaire</span>
+<sc-for list="{{glossary}}" as="g" hint-placeholder-count="4">
+<a href="#" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; color: {{t.ink1}}; text-decoration: none; font-size: 14px">{{g}}</a>
+</sc-for>
+</div>
+</section>
+
+</div>
+
+<sc-if value="{{showBar}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 8px; padding: 12px 16px 20px; background: {{t.page}}; border-top: 1.5px solid {{t.ink1}}">
+<button type="button" onClick="{{openSheet}}" style="flex: 1; height: 52px; border: 0; border-radius: 999px; background: #E8452A; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2 V14 M2 8 H14" style="fill: none; stroke: currentColor; stroke-width: 1.8px"></path></svg>Ajouter à…</button>
+<button type="button" aria-label="Exporter" style="width: 52px; height: 52px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; background: {{t.card}}; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2 V11 M4 7 L8 11 L12 7 M2.5 14 H13.5" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg></button>
+<button type="button" aria-label="Ajouter aux favoris" style="width: 52px; height: 52px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; background: {{t.card}}; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 15 L3 9.2 C1.4 7.6 1.6 5 3.4 3.9 C5 3 7.2 3.6 9 5.6 C10.8 3.6 13 3 14.6 3.9 C16.4 5 16.6 7.6 15 9.2 Z" style="fill: none; stroke: currentColor; stroke-width: 1.5px"></path></svg></button>
+<button type="button" aria-label="Plus d'actions" style="width: 52px; height: 52px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; background: {{t.card}}; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="10" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="15.5" cy="10" r="1.6" style="fill: currentColor"></circle></svg></button>
+</div>
+</sc-if>
+
+<sc-if value="{{sheetOpen}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: {{t.scrim}}; display: flex; flex-direction: column; justify-content: flex-end">
+<div role="dialog" aria-modal="true" aria-labelledby="sheet-title" style="background: {{t.page}}; border-top: 1.5px solid {{t.ink1}}; border-radius: 22px 22px 0 0; padding: 10px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+<span aria-hidden="true" style="align-self: center; width: 40px; height: 4px; border-radius: 999px; background: {{t.divider}}"></span>
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="sheet-title" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.02em">Ajouter la séance</h2>
+<span style="font-size: 14px; color: {{t.ink2}}">Séance pré-compétition · 37 min</span>
+</div>
+<button type="button" aria-label="Fermer" onClick="{{closeSheet}}" style="width: 44px; height: 44px; margin: -6px -10px 0 0; border: 0; background: transparent; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3 L13 13 M13 3 L3 13" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg></button>
+</div>
+<fieldset style="margin: 0; padding: 0; border: 1.5px solid {{t.ink1}}; border-radius: 14px; background: {{t.card}}; overflow: hidden">
+<legend style="position: absolute; width: 1px; height: 1px; overflow: hidden">Où ajouter la séance</legend>
+<sc-for list="{{targets}}" as="o" hint-placeholder-count="4">
+<label style="display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 6px 14px; border-top: {{o.sep}}; cursor: pointer">
+<input type="radio" name="cible" checked="{{o.on}}" onChange="{{o.pick}}" style="width: 18px; height: 18px; accent-color: {{t.ink1}}; flex: none">
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 15px; font-weight: 500">{{o.label}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: {{t.ink3}}">{{o.sub}}</span></span>
+</label>
+</sc-for>
+</fieldset>
+<sc-if value="{{showDays}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="Jour de la semaine" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{days}}" as="d" hint-placeholder-count="7">
+<button type="button" aria-pressed="{{d.on}}" onClick="{{d.pick}}" style="height: 44px; border: 1.5px solid {{d.border}}; border-radius: 10px; background: {{d.bg}}; color: {{d.fg}}; font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer">{{d.l}}</button>
+</sc-for>
+</div>
+</sc-if>
+<button type="button" style="height: 52px; border: 0; border-radius: 999px; background: #E8452A; color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer">{{confirm}}</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"layout":{"editor":"enum","options":["colonne","tablette","bureau"],"default":"colonne"},"vma":{"editor":"boolean","default":false},"theme":{"editor":"enum","options":["clair","sombre"],"default":"clair"},"viewport":{"editor":"boolean","default":false},"sheet":{"editor":"boolean","default":false},"bare":{"editor":"boolean","default":false},"$preview":{"width":390,"height":2900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { vma: null, sheet: null, target: 'today', day: 3 };
+  }
+  renderVals() {
+    var self = this;
+    function flag(v) { return v === true || v === 'true'; }
+    var PAL = {
+      clair: { page: '#F6F5F2', card: '#FFFFFF', ink1: '#171614', ink2: '#4A4845', ink3: '#6C6A65', cream: '#F6F5F2', divider: 'rgba(23,22,20,0.18)', scrim: 'rgba(23,22,20,0.42)',
+        z: ['', 'rgba(23,22,20,0.14)', 'rgba(23,22,20,0.30)', 'rgba(23,22,20,0.46)', 'rgba(23,22,20,0.62)', 'rgba(23,22,20,0.80)'],
+        zb: ['', 'rgba(23,22,20,0.07)', 'rgba(23,22,20,0.12)', 'rgba(23,22,20,0.18)', 'rgba(23,22,20,0.62)', 'rgba(23,22,20,0.80)'],
+        hatch: 'repeating-linear-gradient(45deg, #6C6A65 0 1.5px, transparent 1.5px 6px)' },
+      sombre: { page: '#171614', card: '#211F1D', ink1: '#EDEBE7', ink2: '#C2BFB9', ink3: '#918E88', cream: '#171614', divider: 'rgba(237,235,231,0.18)', scrim: 'rgba(10,9,7,0.72)',
+        z: ['', 'rgba(237,235,231,0.14)', 'rgba(237,235,231,0.30)', 'rgba(237,235,231,0.46)', 'rgba(237,235,231,0.62)', 'rgba(237,235,231,0.80)'],
+        zb: ['', 'rgba(237,235,231,0.07)', 'rgba(237,235,231,0.12)', 'rgba(237,235,231,0.18)', 'rgba(237,235,231,0.62)', 'rgba(237,235,231,0.80)'],
+        hatch: 'repeating-linear-gradient(45deg, #918E88 0 1.5px, transparent 1.5px 6px)' }
+    };
+    var t = PAL[this.props.theme === 'sombre' ? 'sombre' : 'clair'];
+    t.z2 = t.z[2]; t.z5 = t.z[5];
+    var layout = this.props.layout || 'colonne';
+    var bare = flag(this.props.bare);
+    var viewport = flag(this.props.viewport);
+    var vma = this.state.vma === null ? flag(this.props.vma) : this.state.vma;
+    var sheetOpen = this.state.sheet === null ? flag(this.props.sheet) : this.state.sheet;
+
+    var LAY = {
+      colonne: { pad: '8px 20px 48px', cols: 'minmax(0, 1fr)', colGap: '0', rowGap: '24px', h1: '40px', lede: '17px', h2: '26px', heroRightPad: '0', sectionPad: '16px', profileH: '96px', factCols: 'repeat(2, minmax(0, 1fr))', adviceCols: 'minmax(0, 1fr)', relCols: 'minmax(0, 1fr)' },
+      tablette: { pad: '16px 40px 56px', cols: 'minmax(0, 1fr)', colGap: '0', rowGap: '28px', h1: '56px', lede: '19px', h2: '30px', heroRightPad: '0', sectionPad: '20px', profileH: '120px', factCols: 'repeat(4, minmax(0, 1fr))', adviceCols: 'repeat(2, minmax(0, 1fr))', relCols: 'repeat(2, minmax(0, 1fr))' },
+      bureau: { pad: '24px 0 72px', cols: 'minmax(0, 1.45fr) minmax(0, 1fr)', colGap: '56px', rowGap: '32px', h1: '72px', lede: '19px', h2: '32px', heroRightPad: '44px', sectionPad: '24px', profileH: '140px', factCols: 'repeat(2, minmax(0, 1fr))', adviceCols: 'repeat(2, minmax(0, 1fr))', relCols: 'repeat(3, minmax(0, 1fr))' }
+    };
+    var L = LAY[layout] || LAY.colonne;
+    var phoneLike = layout === 'colonne';
+
+    function tone(n) { return { bg: t.zb[n], fg: n >= 4 ? t.cream : t.ink1 }; }
+    var Hs = ['', '30%', '44%', '58%', '72%', '86%'];
+    var profile = [];
+    function blk(min, n, hatch) { profile.push({ flex: min, h: Hs[n], bg: hatch ? t.hatch : t.z[n] }); }
+    blk(7.5, 1); blk(7.5, 2); blk(5, 4); blk(3, 1);
+    for (var i = 0; i < 3; i++) { blk(0.5, 5); blk(1, 1, true); }
+    blk(10, 1);
+
+    function step(z, n, label, pace, dur) {
+      var tn = tone(n);
+      return { z: z, bg: tn.bg, fg: tn.fg, label: label, pace: vma ? pace : 'Allure · VMA requise', paceColor: vma ? t.ink2 : t.ink3, dur: dur };
+    }
+    var phases = [
+      { title: 'Échauffement', dur: '15 min', sep: '0', hasRep: false, rep: 0, repSteps: [],
+        steps: [step('Z1-Z2', 2, 'Footing progressif', '6:40 → 5:40 /km', '15 min')] },
+      { title: 'Corps de séance', dur: '11 min 30', sep: '1.5px solid ' + t.divider, hasRep: true, rep: 3,
+        steps: [step('Z3-Z4', 4, 'Allure course', '4:45 → 4:30 /km', '5 min'), step('Z1', 1, 'Récupération trottinée', '6:40 /km', '3 min')],
+        repSteps: [step('Z5', 5, 'Rapide', '4:10 → 4:00 /km', '30 s'), step('Z1', 1, 'Footing', '6:40 /km', '1 min')] },
+      { title: 'Retour au calme', dur: '10 min', sep: '1.5px solid ' + t.divider, hasRep: false, rep: 0, repSteps: [],
+        steps: [step('Z1', 1, 'Footing de récupération', '6:40 /km', '10 min')] }
+    ];
+
+    var D = [['Z1', 1, 'Récupération', 22.5, '22 min 30', '61 %'], ['Z2', 2, 'Endurance', 7.5, '7 min 30', '20 %'], ['Z3', 3, 'Tempo', 2.5, '2 min 30', '7 %'], ['Z4', 4, 'Seuil', 2.5, '2 min 30', '7 %'], ['Z5', 5, 'VO2max', 1.5, '1 min 30', '4 %']];
+    var dist = D.map(function (d, i) {
+      var tn = tone(d[1]);
+      return { z: d[0], name: d[2], min: d[3], time: d[4], pct: d[5], bar: t.z[d[1]], bg: tn.bg, fg: tn.fg,
+        bl: i === 0 ? '0' : '1px solid ' + t.ink1, rowSep: i === 0 ? '0' : '1px solid ' + t.divider };
+    });
+
+    var facts = [
+      { k: 'Durée', v: '37 min' },
+      { k: 'Distance', v: vma ? '≈ 6,5 km' : 'Avec ta VMA', muted: !vma },
+      { k: 'Niveau', v: 'Intermédiaire' },
+      { k: 'Pic', v: 'Z5 · 30 s' }
+    ].map(function (f, i) {
+      var cols = layout === 'tablette' ? 4 : 2;
+      return { k: f.k, v: f.v, color: f.muted ? t.ink3 : t.ink1, size: f.muted ? '15px' : '17px',
+        bl: i % cols === 0 ? '0' : '1.5px solid ' + t.divider, bt: i < cols ? '0' : '1.5px solid ' + t.divider };
+    });
+
+    var targets = [
+      ['today', "Aujourd'hui", 'Jeu. 20 nov.'],
+      ['day', 'Un autre jour de cette semaine', 'Semaine 47'],
+      ['plan', 'Dans mon plan', 'Trail + Triathlon S · semaine 2'],
+      ['week', 'Dans une semaine type', 'Mes semaines']
+    ].map(function (o, i) {
+      return { label: o[1], sub: o[2], on: self.state.target === o[0], sep: i === 0 ? '0' : '1.5px solid ' + t.divider,
+        pick: function () { self.setState({ target: o[0] }); } };
+    });
+    var DL = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+    var days = DL.map(function (l, i) {
+      var on = self.state.day === i;
+      return { l: l, on: on, bg: on ? t.ink1 : t.card, fg: on ? t.cream : t.ink1, border: on ? t.ink1 : t.divider,
+        pick: function () { self.setState({ day: i }); } };
+    });
+    var DAYN = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+    var confirm = { today: 'Ajouter à aujourd\'hui', day: 'Ajouter ' + DAYN[this.state.day], plan: 'Choisir le jour dans le plan', week: 'Choisir la semaine type' }[this.state.target];
+
+    var root = viewport
+      ? { w: '100%', h: '780px', overflow: 'hidden' }
+      : bare ? { w: '100%', h: 'auto', overflow: 'visible' } : { w: layout === 'bureau' ? '1440px' : layout === 'tablette' ? '820px' : '390px', h: 'auto', overflow: 'visible' };
+
+    return {
+      t: t, L: L, root: root, profile: profile, phases: phases, dist: dist, facts: facts,
+      noVma: !vma, hasVma: vma,
+      setVma: function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ vma: true }); },
+      clearVma: function () { self.setState({ vma: false }); },
+      inlineActions: !phoneLike, showBar: phoneLike && viewport && !sheetOpen,
+      sheetOpen: sheetOpen && viewport,
+      openSheet: function () { self.setState({ sheet: true }); },
+      closeSheet: function () { self.setState({ sheet: false }); },
+      targets: targets, days: days, showDays: this.state.target === 'day', confirm: confirm,
+      tips: ['Juste un rappel des différentes allures', 'Aucune fatigue résiduelle', 'Termine confiant et affûté'],
+      errors: ['En faire trop avant la course', 'Courir les efforts trop fort'],
+      folds: ['Nutrition et récupération', 'Pourquoi ça marche'],
+      related: [
+        { name: 'Allure pré-course', meta: 'RP-008 · Allure spécifique' },
+        { name: 'Échauffement simulation course', meta: 'RP-016 · Allure spécifique' },
+        { name: 'VMA pre-race', meta: 'VMA-020 · VMA' }
+      ],
+      glossary: ['VMA', 'Zone 5', 'Allure spécifique', 'Affûtage']
+    };
+  }
+}
+</script>
+</body>
+</html>
