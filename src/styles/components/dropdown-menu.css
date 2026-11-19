@@ -220,3 +220,75 @@
     min-block-size: var(--hit-min);
   }
 }
+
+/* ── the "···" of a saved object ──────────────────────────────────────── */
+
+/* ActionsMenu (ui/actions-menu.tsx): the one button that holds the rare
+   gestures of a plan, a week, a built session or a simulation. A 44px round
+   target, no outline, a faint ink wash under the finger and while open. */
+.zn-more {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--hit-min);
+  block-size: var(--hit-min);
+  padding: 0;
+  color: var(--text-body);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-more:hover,
+.zn-more[data-state="open"] {
+  background: var(--state-disabled-fill);
+}
+
+/* Entries at the 44px floor, a touch above the menu's 40px default. */
+.zn-more__list {
+  min-inline-size: 210px;
+}
+
+.zn-more__list .zn-menu__item {
+  min-block-size: var(--hit-min);
+}
+
+/* Exports on a phone: three formats on ONE row, icon over word. Stacked,
+   they pushed the menu past the room under its button, it opened upward
+   over the top bar and the last entry hid behind a scroll. */
+.zn-more__formats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+/* Four tiles (the three formats and the link) need a wider menu: 240px
+   leaves each one 56px, room for "JSON" in spaced mono. */
+.zn-more__list:has(.zn-more__formats[data-count="4"]) {
+  min-inline-size: 240px;
+}
+
+.zn-more__formats[data-count="4"] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.zn-more__formats .zn-menu__item {
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-block-size: 56px;
+  padding: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono-label);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Deleting is the press shade of the accent, as type (7.2:1 light, 5.4:1
+   dark), until it is highlighted and inverts like every destructive entry. */
+.zn-more__danger:not([data-highlighted]) {
+  color: var(--accent-press);
+}

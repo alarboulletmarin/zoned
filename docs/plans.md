@@ -245,12 +245,42 @@ Clair et sombre par les seuls tokens. Les libellés mono de 10 et 11 px sont en
 clair, 5,0:1 et 5,9:1 en sombre. Supprimer en `--accent-press` : 7,2:1 en
 clair, 5,4:1 en sombre.
 
-## Ce qui reste à faire : l'étagère des semaines
+## Les autres étagères : semaines, séances, simulations
 
-`/weeks` (`plan-weeks.css`, `.zn-pw__week`) a été dessinée comme la jumelle
-de l'ancienne carte de plan, et son commentaire dit encore qu'elle est
-kept in step avec `.zn-plancard`. Elle n'a pas été touchée : ses classes
-sont les siennes, donc la nouvelle carte ne la casse pas, mais les deux
-étagères ne se ressemblent plus. Son tour viendra dans un deuxième temps,
-avec les mêmes questions : quel chiffre à date pour une semaine type, quelle
-place pour la corbeille et Voir, et quel menu ···.
+Le bouton ··· est un composant partagé, `ActionsMenu`
+(`src/components/ui/actions-menu.tsx`, styles `.zn-more` dans
+`dropdown-menu.css`) : une cible de 44 px, une étiquette qui nomme l'objet,
+une marge de 16 px contre les bords de l'écran, la destructive en dernier sous
+un séparateur. `PlanActionsMenu` le compose pour un plan ou une semaine
+(export, partage, duplication, renommage, suppression). Il sert à trois
+étagères de plus, qui portaient toutes la même rangée de boutons et la même
+corbeille toujours visible :
+
+- **`/weeks`**. La carte de semaine EST la carte de plan (`.zn-plancard
+  .zn-weekcard`, plans.css), à quatre étages : catégorie, nom, faits, rythme.
+  Voir, le bouton Exporter et le ⋮ de 32 px sont partis pour le bouton ···
+  posé sur la carte (Exporter…, Partager, Dupliquer, Renommer, Supprimer…).
+  Renommer écrit `planName`, `name` et `nameEn`, comme la page de la semaine.
+  Les cartes d'une rangée sont des sous-grilles de la grille : avant, un nom
+  sur trois lignes descendait les faits, le rythme et les boutons de 23 px
+  par rapport aux voisines ; après, chaque étage tombe au même pixel. Les
+  faits sont des segments, qui ne laissent plus un point en bout de ligne.
+  Sur un téléphone, Partager rejoint la rangée d'export (Exporter ou
+  partager : PDF, ICS, JSON, Lien) : avec une ligne de plus, le menu
+  dépassait la place sur un iPhone SE et cachait Supprimer sous un
+  défilement. Il fait 258 px et s'ouvre en entier sur les deux téléphones
+  mesurés.
+- **Mes séances** (`/workout/builder`). L'export JSON et la corbeille passent
+  dans le bouton ···. Le favori reste dehors : c'est un état, pas une action.
+  Sous 480 px la flèche de la ligne, redondante avec la ligne-lien, rend sa
+  place au nom, et les faits sont des segments (`1` et `blocs` se
+  coupaient).
+- **Les simulations sauvegardées** (`/race-simulator`). Charger reste dehors,
+  c'est l'action de la ligne ; Partager et Supprimer… passent dans le bouton
+  ···. Partager réutilise la fonction de la page, élargie à une simulation
+  sauvegardée. La liste déclare sa colonne : sa colonne implicite prenait la
+  largeur naturelle de la ligne, qui débordait de 16 px sur un téléphone de
+  320 px.
+
+Les menus restent dans l'écran à 320, 393, 640, 800, 1024 et 1280 px, mesuré.
+

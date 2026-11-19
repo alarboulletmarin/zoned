@@ -20,6 +20,8 @@ import {
 import { decodeSharedSimulation, sharedSimulationUrl } from "@/lib/share/raceSimShare";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ActionsMenu } from "@/components/ui/actions-menu";
+import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Segmented } from "@/components/ui/segmented";
 import {
   Dialog,
@@ -212,12 +214,13 @@ export function RaceSimulatorPage() {
     }
   }, [plan, planInput, isEn, t]);
 
-  const handleShare = useCallback(async () => {
-    if (!plan || !planInput) return;
-    const url = sharedSimulationUrl(planInput);
+  // Partager une simulation, celle à l'écran ou une sauvegardée : le lien
+  // porte les entrées, qui décrivent la simulation entière.
+  const shareSimulation = useCallback(async (input: RaceSimInput, title: string) => {
+    const url = sharedSimulationUrl(input);
     if (navigator.share) {
       try {
-        await navigator.share({ title: plan.distanceLabel, url });
+        await navigator.share({ title, url });
       } catch {
         // Share sheet dismissed, nothing to do.
       }
@@ -229,7 +232,12 @@ export function RaceSimulatorPage() {
     } catch (err) {
       toast.failure(tCommon("share.toast.linkCopyFailed"), err);
     }
-  }, [plan, planInput, tCommon]);
+  }, [tCommon]);
+
+  const handleShare = useCallback(async () => {
+    if (!plan || !planInput) return;
+    await shareSimulation(planInput, plan.distanceLabel);
+  }, [plan, planInput, shareSimulation]);
 
   const handleExportPdf = useCallback(async () => {
     if (!plan) return;
@@ -703,14 +711,21 @@ export function RaceSimulatorPage() {
                         >
                           {t("actions.load")}
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon-sm"
-                          aria-label={t("actions.delete")}
-                          onClick={() => setDeleteTarget(sim.id)}
-                        >
-                          <Trash2 size={15} />
-                        </Button>
+                        <ActionsMenu label={t("saved.actionsLabel", { name: sim.label })}>
+                          <DropdownMenuItem onSelect={() => shareSimulation(sim.input, sim.label)}>
+                            <Share />
+                            {t("actions.share")}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            variant="destructive"
+                            className="zn-more__danger"
+                            onSelect={() => setDeleteTarget(sim.id)}
+                          >
+                            <Trash2 />
+                            {t("actions.deleteMenu")}
+                          </DropdownMenuItem>
+                        </ActionsMenu>
                       </div>
                     </li>
                   ))}

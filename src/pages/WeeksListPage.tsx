@@ -1,27 +1,9 @@
-import { useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "@/components/ui/toast";
-import {
-  ArrowRight,
-  Plus,
-  Trash2,
-  CalendarRange,
-  Copy,
-  MoreVertical,
-  Share,
-  Upload,
-} from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
+import { Plus, Trash2, CalendarRange, Upload } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -35,7 +17,8 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
 import { ZoneScale } from "@/components/visualization";
 import { WeekRhythmChart } from "@/components/weekly";
-import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
+import { PlanActionsMenu } from "@/components/domain/PlanActionsMenu";
+import { PlanNameField, Segs } from "@/components/domain/PlanCard";
 import { usePlans } from "@/hooks/usePlans";
 import { layerFor, loadTodayComposition, type TodayComposition } from "@/lib/todayComposition";
 import { useWorkouts } from "@/hooks";
@@ -51,7 +34,18 @@ import type { AnyWorkoutTemplate } from "@/types";
 import type { TrainingPlan, WeekCategory } from "@/types/plan";
 import { WEEK_CATEGORIES } from "@/types/plan";
 
-/** One saved week: its name, its numbers, its shape, and what you can do to it. */
+/**
+ * One saved week: its category, its name, its numbers, its shape, and a
+ * button ··· for what you can do to it.
+ *
+ * Same object as a plan card on /plans (`.zn-plancard`, plans.css): paper,
+ * ink rule, the upper block one link, the button ··· laid over it outside
+ * the link. The row of buttons under it is gone: View doubled the link,
+ * Export and the menu weighed as much as the content, and the bin waited in
+ * the menu anyway. In the grid, the card is a subgrid of four rows (chips,
+ * name, facts, rhythm), so the cards of one row line up row by row even when
+ * a name runs to three lines.
+ */
 function WeekCard({
   week,
   byId,
@@ -61,6 +55,7 @@ function WeekCard({
   onDelete,
   onDuplicate,
   onShare,
+  onRename,
 }: {
   week: TrainingPlan;
   byId: Map<string, AnyWorkoutTemplate>;
@@ -70,9 +65,13 @@ function WeekCard({
   onDelete: (id: string) => void;
   onDuplicate: (week: TrainingPlan) => void;
   onShare: (week: TrainingPlan) => void;
+  onRename: (week: TrainingPlan, name: string) => void;
 }) {
   const { t } = useTranslation("library");
+  const { t: tp } = useTranslation("plan");
   const pick = usePickLang();
+  const nameId = useId();
+  const [editing, setEditing] = useState(false);
   const slots = useMemo(
     () => planWeekToSlots(week.weeks[0], byId),
     [week, byId],
@@ -81,12 +80,13 @@ function WeekCard({
   const name = pick(week, "name");
 
   // Numbers, not adjectives: what is in the week, then when it was written.
+  // Segments, so a narrow card breaks between two facts, never inside one.
   const facts = [
     t("weekly.list.sessionsCount", { count: stats.sessions }),
     `${stats.totalHours.toFixed(1)} h`,
     `${stats.totalTss} TSS`,
     new Date(week.config.createdAt).toLocaleDateString(locale),
-  ].join(" · ");
+  ];
 
   /* Posée dans le cockpit : une ligne de plus, en mono, et seulement quand
      c'est le cas. C'est la seule chose que la liste ne savait pas dire d'une
@@ -102,75 +102,59 @@ function WeekCard({
         })
       : null;
 
-  return (
-    <Card className="zn-pw__week">
-      {/* The whole upper block is the link to the week, a real anchor, the
-          same way a plan card opens: keyboard reaches it, middle click works. */}
-      <Link className="zn-pw__week-open" to={`/weeks/${week.id}`}>
-        <div
-          className="zn-row zn-row--start"
-          style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
-        >
-          <span className="zn-pw__week-title zn-fill">{name}</span>
-          <Badge variant="secondary" className="zn-fixed">
-            {week.config.weekCategory
-              ? t(`weekly.prebuilt.category.${week.config.weekCategory}`)
-              : t("weekly.category.none")}
-          </Badge>
-        </div>
-
-        <span className="zn-mono zn-pw__facts">{facts}</span>
-        {placedOn && <span className="zn-mono zn-pw__facts">{placedOn}</span>}
-
-        <WeekRhythmChart slots={slots} />
-      </Link>
-
-      {/* Same row as a plan card: open, export, then the rest. */}
-      <div className="zn-pw__week-actions">
-        <Button variant="outline" size="sm" asChild>
-          <Link to={`/weeks/${week.id}`}>
-            <ArrowRight />
-            {t("weekly.list.view")}
-          </Link>
-        </Button>
-        <PlanExportMenu
-          plan={week}
-          workoutNames={workoutNames}
-          size="sm"
-          variant="outline"
+  const body = (
+    <>
+      <ul className="zn-plancard__chips">
+        <li className="zn-planchip">
+          {week.config.weekCategory
+            ? t(`weekly.prebuilt.category.${week.config.weekCategory}`)
+            : t("weekly.category.none")}
+        </li>
+      </ul>
+      {editing ? (
+        <PlanNameField
+          initial={name}
+          className="zn-plancard__rename"
+          onDone={(next) => {
+            setEditing(false);
+            if (next !== null) onRename(week, next);
+          }}
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              aria-label={t("weekly.list.actions")}
-              title={t("weekly.list.actions")}
-            >
-              <MoreVertical size={15} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onShare(week)}>
-              <Share size={16} />
-              {t("weekly.share.action")}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDuplicate(week)}>
-              <Copy size={16} />
-              {t("weekly.saved.duplicate")}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={() => onDelete(week.id)}
-            >
-              <Trash2 size={16} />
-              {t("weekly.list.delete")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      ) : (
+        <h3 id={nameId} className="zn-plancard__name">
+          {name}
+        </h3>
+      )}
+      <div className="zn-weekcard__facts">
+        <Segs className="zn-weekcard__fact" parts={facts} />
+        {placedOn && <Segs className="zn-weekcard__fact" parts={[placedOn]} />}
       </div>
-    </Card>
+      <WeekRhythmChart slots={slots} />
+    </>
+  );
+
+  return (
+    <article className="zn-plancard zn-weekcard" data-layout="card">
+      {/* Pendant le renommage, le haut n'est plus un lien : un champ dans
+          une ancre enverrait chaque clic vers la semaine. */}
+      {editing ? (
+        <div className="zn-plancard__open">{body}</div>
+      ) : (
+        <Link className="zn-plancard__open" to={`/weeks/${week.id}`} aria-labelledby={nameId}>
+          {body}
+        </Link>
+      )}
+      <PlanActionsMenu
+        plan={week}
+        label={tp("plansPage.menu.weekLabel", { name })}
+        workoutNames={workoutNames}
+        className="zn-plancard__menu"
+        onShare={() => onShare(week)}
+        onDuplicate={() => onDuplicate(week)}
+        onRename={() => setEditing(true)}
+        onDelete={() => onDelete(week.id)}
+      />
+    </article>
   );
 }
 
@@ -262,6 +246,21 @@ export function WeeksListPage() {
     } catch (err) {
       toast.failure(t("common:share.toast.linkCopyFailed"), err);
     }
+  };
+
+  // Comme la page de la semaine : le nom vit dans planName, name et nameEn.
+  const handleRename = (week: TrainingPlan, name: string) => {
+    const saved = savePlan({
+      ...week,
+      name,
+      nameEn: name,
+      config: { ...week.config, planName: name },
+    });
+    if (!saved.ok) {
+      toast.failure(t("weekly.toast.saveFailed"), saved);
+      return;
+    }
+    reload();
   };
 
   const handleImportFile = async (file: File) => {
@@ -391,7 +390,7 @@ export function WeeksListPage() {
 
         <section className="zn-pw__band">
           {visibleWeeks.length > 0 ? (
-            <div className="zn-grid">
+            <div className="zn-grid zn-weekgrid">
               {visibleWeeks.map((week) => (
                 <WeekCard
                   key={week.id}
@@ -403,6 +402,7 @@ export function WeeksListPage() {
                   onDelete={setDeleteTarget}
                   onDuplicate={handleDuplicate}
                   onShare={handleShare}
+                  onRename={handleRename}
                 />
               ))}
             </div>

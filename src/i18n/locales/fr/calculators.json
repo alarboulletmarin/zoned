@@ -255,8 +255,6 @@
     "sectionCount_other": "{{count}} blocs",
     "untitled": "Sans titre",
     "blocks": "blocs",
-    "exportLabel": "Exporter",
-    "deleteLabel": "Supprimer",
     "deleteConfirm": "Supprimer cette séance ?",
     "deleteDescription": "Cette action est irréversible. La séance sera définitivement supprimée.",
     "cancel": "Annuler",
@@ -294,7 +292,10 @@
         "distance": "Distance"
       },
       "offRecommendation": "Hors de la plage conseillée ({{range}})"
-    }
+    },
+    "actionsLabel": "Actions de la séance {{name}}",
+    "exportJson": "Exporter en JSON",
+    "deleteMenu": "Supprimer…"
   },
   "raceSimulator": {
     "seoBreadcrumb": "Simulateur de course",

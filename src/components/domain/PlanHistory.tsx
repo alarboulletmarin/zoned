@@ -111,7 +111,7 @@ function HistoryRow({
   const menu = (
     <PlanActionsMenu
       plan={plan}
-      name={name}
+      label={t("plansPage.menu.label", { name })}
       onDuplicate={() => onDuplicate(plan)}
       onRename={() => setEditing(true)}
       onDelete={() => onDelete(plan)}

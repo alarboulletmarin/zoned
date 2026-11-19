@@ -490,60 +490,39 @@ a.zn-plancard__open:hover .zn-plancard__name {
   font-size: var(--fs-body);
 }
 
-/* ══ the "···" ═════════════════════════════════════════════════════════ */
+/* ══ the saved-week card (/weeks) ══════════════════════════════════════ */
 
-.zn-planmenu {
-  display: grid;
-  place-items: center;
-  inline-size: var(--hit-min);
-  block-size: var(--hit-min);
-  padding: 0;
-  color: var(--text-body);
-  background: transparent;
-  border: 0;
-  border-radius: var(--r-pill);
-  cursor: pointer;
-  transition: background var(--dur-fast) var(--ease-out);
+/* Same card, four rows instead of six: chips, name, facts, rhythm. Declared
+   after the plan card, so its spans win over the plan card's. */
+.zn-weekcard[data-layout="card"] {
+  grid-row: span 4;
 }
 
-.zn-planmenu:hover,
-.zn-planmenu[data-state="open"] {
-  background: var(--state-disabled-fill);
+.zn-weekcard[data-layout="card"] > .zn-plancard__open {
+  grid-row: span 4;
+  padding-block-end: var(--sp-6);
 }
 
-/* Entries at the 44px floor, a touch above the menu's 40px default. */
-.zn-planmenu__list {
-  min-inline-size: 210px;
+/* The rows of a week's grid are the cards': top-aligned, so a short card
+   does not stretch its facts away from its name. */
+.zn-weekgrid {
+  align-items: start;
 }
 
-.zn-planmenu__list .zn-menu__item {
-  min-block-size: var(--hit-min);
-}
-
-/* Sur un téléphone, les trois formats d'export sur une rangée, l'icône
-   au-dessus du mot : trois cibles de 56 px de haut, un tiers de menu chacune. */
-.zn-planmenu__formats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sp-2);
-}
-
-.zn-planmenu__formats .zn-menu__item {
+.zn-weekcard__facts {
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: var(--sp-2);
-  min-block-size: 56px;
-  padding: var(--sp-3);
+  gap: var(--sp-1);
+}
+
+/* Mono, faint, in sentence case: "5.7 h" and "296 TSS" are units, and the
+   capitals of a micro-label would turn the hour into an "H". */
+.zn-weekcard__fact {
   font-family: var(--font-mono);
   font-size: var(--fs-mono);
-  letter-spacing: var(--ls-mono-label);
-  text-align: center;
-}
-
-/* Deleting is the press shade of the accent, as type, until it is
-   highlighted and inverts like every destructive entry. */
-.zn-planmenu__delete:not([data-highlighted]) {
-  color: var(--accent-press);
+  letter-spacing: var(--ls-mono);
+  line-height: 1.4;
+  color: var(--text-faint);
 }
 
 /* ══ the week timeline ═════════════════════════════════════════════════ */
@@ -786,7 +765,7 @@ a.zn-plancard__open:hover .zn-plancard__name {
 
   .zn-planhist__row > .zn-planhist__open { grid-area: open; }
   .zn-planhist__row > .zn-planhist__mid { grid-area: mid; }
-  .zn-planhist__row > .zn-planmenu { grid-area: menu; }
+  .zn-planhist__row > .zn-more { grid-area: menu; }
 
   .zn-planhist__row .zn-planhist__count {
     flex-direction: row;

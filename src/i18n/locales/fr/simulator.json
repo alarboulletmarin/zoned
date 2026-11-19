@@ -124,13 +124,15 @@
     "exportPdf": "Exporter en PDF",
     "delete": "Supprimer",
     "load": "Charger",
-    "newSimulation": "Nouvelle simulation"
+    "newSimulation": "Nouvelle simulation",
+    "deleteMenu": "Supprimer…"
   },
   "saved": {
     "title": "Simulations sauvegardées",
     "empty": "Aucune simulation sauvegardée",
     "maxReached": "Maximum de 10 simulations atteint",
-    "saveFailed": "La simulation n'a pas été enregistrée."
+    "saveFailed": "La simulation n'a pas été enregistrée.",
+    "actionsLabel": "Actions de la simulation {{name}}"
   },
   "nutrition": {
     "carbsPerHour": "Glucides/heure",

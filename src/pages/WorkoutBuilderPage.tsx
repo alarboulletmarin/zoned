@@ -5,6 +5,9 @@ import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, ArrowLeft, Down
 import { useUndoRedo } from "@/hooks/useUndoRedo";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { Button } from "@/components/ui/button";
+import { ActionsMenu } from "@/components/ui/actions-menu";
+import { Segs } from "@/components/domain/PlanCard";
+import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
   Dialog,
@@ -186,30 +189,42 @@ function WorkoutListView() {
                         <span className="zn-build__rowname">
                           {w.name || t("calculators:workoutBuilder.untitled")}
                         </span>
-                        <span className="zn-mono zn-faint">
-                          ~{formatDurationMinutes(totalMin)} · {mainStepCount}{" "}
-                          {t("calculators:workoutBuilder.blocks")}
-                        </span>
+                        {/* Des segments : un téléphone coupait 1 et blocs
+                            sur deux lignes. */}
+                        <Segs
+                          className="zn-mono zn-faint"
+                          parts={[
+                            `~${formatDurationMinutes(totalMin)}`,
+                            `${mainStepCount} ${t("calculators:workoutBuilder.blocks")}`,
+                          ]}
+                        />
                       </span>
-                      <ArrowRight size={16} className="zn-fixed zn-faint" />
+                      <ArrowRight size={16} className="zn-fixed zn-faint zn-build__rowarrow" />
                     </Link>
                     <FavoriteButton workoutId={w.id} size="sm" />
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      onClick={() => handleExportOne(w)}
-                      aria-label={t("calculators:workoutBuilder.exportLabel")}
+                    {/* L'export et la suppression, les gestes rares, dans le
+                        bouton ··· ; la corbeille n'est plus toujours visible
+                        au poids du nom. Le favori reste dehors : c'est un
+                        état, pas une action. */}
+                    <ActionsMenu
+                      label={t("calculators:workoutBuilder.actionsLabel", {
+                        name: w.name || t("calculators:workoutBuilder.untitled"),
+                      })}
                     >
-                      <Download size={16} />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      onClick={() => setDeleteTarget(w.id)}
-                      aria-label={t("calculators:workoutBuilder.deleteLabel")}
-                    >
-                      <Trash2 size={16} />
-                    </Button>
+                      <DropdownMenuItem onSelect={() => handleExportOne(w)}>
+                        <Download />
+                        {t("calculators:workoutBuilder.exportJson")}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        variant="destructive"
+                        className="zn-more__danger"
+                        onSelect={() => setDeleteTarget(w.id)}
+                      >
+                        <Trash2 />
+                        {t("calculators:workoutBuilder.deleteMenu")}
+                      </DropdownMenuItem>
+                    </ActionsMenu>
                   </div>
                 );
               })}

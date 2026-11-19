@@ -66,7 +66,7 @@ export function PlanCard({
   const menu = (
     <PlanActionsMenu
       plan={plan}
-      name={name}
+      label={t("plansPage.menu.label", { name })}
       className="zn-plancard__menu"
       onDuplicate={() => onDuplicate(plan)}
       onRename={() => setEditing(true)}

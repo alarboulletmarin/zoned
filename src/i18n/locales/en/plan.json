@@ -508,8 +508,12 @@
       "formats": {
         "pdf": "PDF",
         "ics": "ICS",
-        "json": "JSON"
-      }
+        "json": "JSON",
+        "link": "Link"
+      },
+      "share": "Share",
+      "weekLabel": "Actions for week {{name}}",
+      "exportShare": "Export or share"
     },
     "renameLabel": "Plan name",
     "copySuffix": "(copy)",
