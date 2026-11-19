@@ -163,7 +163,7 @@ export function VinylDieCut({ workout, transparent }: ShareTemplateProps) {
               color: "#0f172a",
             }}
           >
-            {formatDurationMinutes(hero.durationMin)}
+            {formatDurationMinutes(hero.durationMin, { compact: true })}
           </span>
         </div>
       </div>

@@ -112,7 +112,7 @@ export function CornerStamp({ workout, transparent }: ShareTemplateProps) {
             color: "#0f172a",
           }}
         >
-          {formatDurationMinutes(hero.durationMin)} · {workout.id}
+          {formatDurationMinutes(hero.durationMin, { compact: true })} · {workout.id}
         </div>
       </div>
     </div>

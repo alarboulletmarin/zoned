@@ -151,7 +151,7 @@ export function QRCard({ workout, transparent }: ShareTemplateProps) {
               marginTop: 6,
             }}
           >
-            {formatDurationMinutes(hero.durationMin)} ·{" "}
+            {formatDurationMinutes(hero.durationMin, { compact: true })} ·{" "}
             {t(`library:difficulty.${workout.difficulty}`)} · RPE {hero.rpe}/10
           </div>
         </div>

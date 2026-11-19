@@ -201,7 +201,7 @@ export function BoxingPoster({ workout }: ShareTemplateProps) {
       >
         {[
           { l: "ROUNDS", v: `${hero.blockCount}` },
-          { l: "BELL", v: formatDurationMinutes(hero.durationMin) },
+          { l: "BELL", v: formatDurationMinutes(hero.durationMin, { compact: true }) },
           { l: "PUNCH", v: `RPE ${hero.rpe}` },
         ].map((s) => (
           <div key={s.l}>

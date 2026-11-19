@@ -81,7 +81,7 @@ function SegmentTooltipContent({ segment, zoneColors, t }: SegmentTooltipContent
           />
         )}
         <span>{typeLabel}</span>
-        <span>{formatDurationMinutes(segment.durationMin)}</span>
+        <span>{formatDurationMinutes(segment.durationMin, { compact: true })}</span>
         {segment.zoneNumber && <span>Z{segment.zoneNumber}</span>}
       </div>
       {segment.repetitionIndex && segment.totalRepetitions && (
@@ -174,7 +174,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                     {/* Hover label */}
                     {isHovered && segment.zoneNumber && segment.widthPercent > 3 && (
                       <div className="zn-timeline__flag">
-                        Z{segment.zoneNumber} · {formatDurationMinutes(segment.durationMin)}
+                        Z{segment.zoneNumber} · {formatDurationMinutes(segment.durationMin, { compact: true })}
                       </div>
                     )}
                   </div>
@@ -207,12 +207,12 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
           <div className="zn-timeline__end">
             <span className="zn-timeline__tick-mark" />
             <span className="zn-timeline__tick-label">
-              {formatDurationMinutes(totalDurationMin)}
+              {formatDurationMinutes(totalDurationMin, { compact: true })}
             </span>
           </div>
         </div>
         <span className="sr-only">
-          {t("visualization.start")} · {formatDurationMinutes(totalDurationMin)} · {t("visualization.end")}
+          {t("visualization.start")} · {formatDurationMinutes(totalDurationMin, { compact: true })} · {t("visualization.end")}
         </span>
       </div>
     </TooltipProvider>

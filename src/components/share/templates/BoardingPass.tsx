@@ -155,7 +155,7 @@ export function BoardingPass({ workout, transparent }: ShareTemplateProps) {
                   textTransform: "uppercase",
                 }}
               >
-                {formatDurationMinutes(hero.durationMin)}
+                {formatDurationMinutes(hero.durationMin, { compact: true })}
               </span>
             </div>
             <div style={{ textAlign: "right" }}>

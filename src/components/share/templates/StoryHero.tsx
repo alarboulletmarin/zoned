@@ -125,7 +125,7 @@ export function StoryHero({ workout, transparent }: ShareTemplateProps) {
             marginTop: 24,
           }}
         >
-          <Stat label="Durée" value={formatDurationMinutes(hero.durationMin)} />
+          <Stat label="Durée" value={formatDurationMinutes(hero.durationMin, { compact: true })} />
           <Stat
             label="Niveau"
             value={t(`library:difficulty.${workout.difficulty}`)}

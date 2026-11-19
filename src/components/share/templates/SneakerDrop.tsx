@@ -170,7 +170,7 @@ export function SneakerDrop({ workout, transparent }: ShareTemplateProps) {
             border: "3px solid #0f172a",
           }}
         >
-          <Spec label="Runtime" value={formatDurationMinutes(hero.durationMin)} />
+          <Spec label="Runtime" value={formatDurationMinutes(hero.durationMin, { compact: true })} />
           <Spec label="Effort" value={`RPE ${hero.rpe} / 10`} right />
           <Spec label="Level" value={t(`library:difficulty.${workout.difficulty}`)} top />
           <Spec label="Blocks" value={String(hero.blockCount)} right top />

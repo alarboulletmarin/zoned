@@ -203,7 +203,7 @@ export function MoviePoster({ workout, transparent }: ShareTemplateProps) {
             <br />
             <span style={{ color: "#94a3b8" }}>Runtime</span>{" "}
             <span style={{ color: "#ffffff", fontWeight: 700 }}>
-              {formatDurationMinutes(hero.durationMin)}
+              {formatDurationMinutes(hero.durationMin, { compact: true })}
             </span>
           </div>
           <div style={{ textAlign: "right" }}>

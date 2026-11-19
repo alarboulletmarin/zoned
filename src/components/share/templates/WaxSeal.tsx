@@ -172,7 +172,7 @@ export function WaxSeal({ workout, transparent }: ShareTemplateProps) {
             color: "rgba(255,255,255,0.78)",
           }}
         >
-          {formatDurationMinutes(hero.durationMin)} · {workout.id}
+          {formatDurationMinutes(hero.durationMin, { compact: true })} · {workout.id}
         </div>
       </div>
     </div>

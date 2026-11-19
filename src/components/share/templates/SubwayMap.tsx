@@ -256,7 +256,7 @@ export function SubwayMap({ workout }: ShareTemplateProps) {
           letterSpacing: "0.16em",
         }}
       >
-        <span>NEXT TRAIN · {formatDurationMinutes(hero.durationMin)}</span>
+        <span>NEXT TRAIN · {formatDurationMinutes(hero.durationMin, { compact: true })}</span>
         <span style={{ color: zoneHex }}>RPE {hero.rpe}/10</span>
         <span>zoned.run · {workout.id}</span>
       </div>

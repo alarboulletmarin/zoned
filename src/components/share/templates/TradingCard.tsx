@@ -238,7 +238,7 @@ export function TradingCard({ workout, transparent }: ShareTemplateProps) {
 
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
-                  { label: "DUR", value: formatDurationMinutes(hero.durationMin) },
+                  { label: "DUR", value: formatDurationMinutes(hero.durationMin, { compact: true }) },
                   { label: "RPE", value: `${hero.rpe}/10` },
                   { label: "BLOCKS", value: `${hero.blockCount}` },
                   { label: "ZONE", value: zoneLabel },

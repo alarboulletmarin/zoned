@@ -1235,14 +1235,11 @@ export function PlanViewPage() {
                   label={t("stats.sessions")}
                   footnote={t("view.sessionsLeft", { count: weekResolution.unresolved })}
                 />
-                {/* Rien de posé, c'est zéro minute, pas zéro seconde :
-                    formatDurationMinutes rend 0s sous la minute, ce qui est
-                    juste pour un bloc de séance et absurde pour le compteur
-                    d'une semaine qui n'a pas commencé. */}
+                {/* Rien de posé s'écrit 0 min : le formateur le sait. */}
                 <StatBlock
                   tone="ink"
                   size="sm"
-                  value={weekDoneMin > 0 ? formatDurationMinutes(weekDoneMin) : "0min"}
+                  value={formatDurationMinutes(weekDoneMin)}
                   label={t("view.timeLogged")}
                   footnote={`/ ${formatDurationMinutes(weekPlannedMin)} · ${Math.round(
                     computeWeekKm(focusWeek),
