@@ -14,7 +14,7 @@ import {
 } from "@/lib/weekRings";
 
 /**
- * Les anneaux de la semaine : Endurance (Z1-Z3), Qualité (Z4+), Renfo, le
+ * Les anneaux de la semaine : Endurance (Z1-Z2), Qualité (Z3+), Renfo, le
  * fait contre le prévu. Le modèle vient de `lib/weekRings.ts`, qui porte les
  * règles et leurs raisons ; ce fichier dessine et formate, rien d'autre.
  *

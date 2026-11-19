@@ -140,14 +140,14 @@
     "endurance": {
       "label": "Endurance",
       "short": "Endur.",
-      "code": "Z1-Z3",
-      "spoken": "Z1 to Z3"
+      "code": "Z1-Z2",
+      "spoken": "Z1 to Z2"
     },
     "quality": {
       "label": "Quality",
       "short": "Quality",
-      "code": "Z4+",
-      "spoken": "Z4 and above"
+      "code": "Z3+",
+      "spoken": "Z3 and above"
     },
     "strength": {
       "label": "Strength",
@@ -172,12 +172,12 @@
       "strengthAvg_other": "Strength: {{done}} sessions, average {{count}}"
     },
     "total": "Week total",
-    "load": "Load",
+    "load": "Load · TSS",
     "offPlan": {
       "title": "Off plan · not in the rings",
       "count_one": "{{count}} activity",
       "count_other": "{{count}} activities",
-      "load": "+{{load}} load"
+      "load": "+{{load}} TSS"
     }
   }
 }

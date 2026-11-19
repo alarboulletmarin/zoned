@@ -1,9 +1,10 @@
 import type { PlanSession } from "@/types/plan";
 import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
-import { getZoneNumber, isRunningWorkout, isStrengthWorkout } from "@/types";
+import { getDominantZone, getZoneNumber, isRunningWorkout, isStrengthWorkout } from "@/types";
 import type { Practice } from "@/types/practice";
 import type { RingMetric } from "@/types/settings";
 import {
+  defaultRpe,
   purposeLabelKey,
   type ActivityDiscipline,
   type ComplementaryActivity,
@@ -15,10 +16,11 @@ import {
   rangeMidpoint,
   sessionTssFor,
 } from "@/lib/sessionPrecision";
-import { isHardWorkout } from "@/lib/weekStats";
 import { computeTotalElevationGain } from "@/lib/workoutMetrics";
 import { activitySessionTss, isActivitySession } from "@/lib/activitySession";
 import { summarizeActivities } from "@/lib/activityStats";
+import { zoneFromRpe } from "@/lib/periodIntensity";
+import { runTssFromZone } from "@/lib/planGenerator/tss";
 import type { DateRange } from "@/lib/weekReview";
 
 /**
@@ -29,9 +31,14 @@ import type { DateRange } from "@/lib/weekReview";
  * Zoned est une app de course. Un anneau par sport donnerait un anneau course
  * qui porte tout et deux anneaux vides : la question d'un coureur n'est pas
  * combien de sports, c'est combien de facile, combien de dur, et est-ce que
- * le renfo a eu lieu. Le découpage suit la frontière du design system,
- * `--zone-threshold: 4` dans `design/zones.css` : Z1-Z3 est l'endurance,
- * Z4 et plus la qualité. C'est la même frontière qu'`isHardWorkout`.
+ * le renfo a eu lieu. Le découpage suit la frontière du 80/20 de l'app,
+ * celle de `PolarizationGauge` et de `computeWeekStats` : Z1-Z2 est
+ * l'endurance, Z3 et plus la qualité. Le tempo est du côté dur.
+ *
+ * Ce n'est pas `--zone-threshold: 4` du design system, et c'est voulu : avec
+ * Z3 en Endurance, la même semaine se lisait trop dure sur la jauge 80/20 de
+ * la page de la semaine et sous le prévu en Qualité sur le cockpit. Deux
+ * écrans de la même app ne doivent pas classer la même minute de deux façons.
  *
  * ── Le prévu ─────────────────────────────────────────────────────────────
  *
@@ -43,7 +50,7 @@ import type { DateRange } from "@/lib/weekReview";
  * - ses minutes se répartissent entre Endurance et Qualité BLOC PAR BLOC, par
  *   `addSessionZoneMinutes` (la logique de `planStats`) : l'échauffement et le
  *   retour au calme tombent en Endurance, les blocs de seuil en Qualité. Un
- *   gabarit sans blocs se rabat sur sa zone dominante (`isHardWorkout`), un
+ *   gabarit sans blocs se rabat sur sa zone dominante (`getDominantZone`), un
  *   gabarit pas encore chargé compte en Endurance le temps d'arriver ;
  * - ses KM sont ceux de la séance, sinon l'estimation à l'allure de son type
  *   (`plannedSessionKm`, le gabarit ne porte pas de distance à lui) ; son D+
@@ -71,7 +78,17 @@ import type { DateRange } from "@/lib/weekReview";
  *
  * Le journal `zoned-activities` n'entre JAMAIS dans les anneaux : un anneau
  * compare un fait à un prévu, et un vélotaf n'a pas de prévu. Il est rendu à
- * part (`offPlan`), avec sa charge en session-RPE.
+ * part (`offPlan`), avec sa charge.
+ *
+ * ── Une seule unité de charge ────────────────────────────────────────────
+ *
+ * La charge du plan est en TSS ; celle du journal était en session-RPE
+ * (durée fois effort perçu), une unité arbitraire qui ne se compare qu'à
+ * elle-même. Côte à côte, `114 / 186` et `+270 charge` laissaient croire que
+ * trois vélotafs pesaient plus que la semaine. Le hors plan est donc converti
+ * ici en TSS, par le chemin qu'emprunte déjà une activité posée dans une
+ * semaine : son effort perçu (saisi, ou déduit du motif) donne une zone
+ * (`zoneFromRpe`), la zone donne le TSS (`runTssFromZone`).
  *
  * ── Sans plan ────────────────────────────────────────────────────────────
  *
@@ -81,8 +98,11 @@ import type { DateRange } from "@/lib/weekReview";
  * alerte. Sans historique non plus, `null`, on ne dessine pas d'anneaux vides.
  */
 
-/** La frontière de `--zone-threshold`, `design/zones.css` : Z4 et plus est de la qualité. */
-export const ZONE_THRESHOLD = 4;
+/**
+ * La première zone de la Qualité : Z3, la frontière du 80/20 (le tempo
+ * compte du côté dur, comme dans `PolarizationGauge`).
+ */
+export const QUALITY_FROM_ZONE = 3;
 
 export type { RingMetric };
 
@@ -133,7 +153,7 @@ export interface OffPlanSummary {
   minutes: number;
   /** Les km, seulement quand toutes les activités sont du même sport. */
   km: number | null;
-  /** La charge en session-RPE (`activityLoad`). */
+  /** La charge en TSS, la même unité que celle du plan. */
   load: number;
   /** Le motif partagé par toutes les activités, la clé de `activity:purpose.*`. */
   purposeKey: ReturnType<typeof purposeLabelKey> | null;
@@ -236,11 +256,11 @@ export function qualityShareOf(
     let quality = 0;
     for (const [code, value] of Object.entries(zones)) {
       total += value;
-      if (getZoneNumber(code) >= ZONE_THRESHOLD) quality += value;
+      if (getZoneNumber(code) >= QUALITY_FROM_ZONE) quality += value;
     }
     if (total > 0) return quality / total;
   }
-  return isHardWorkout(workout) ? 1 : 0;
+  return getDominantZone(workout) >= QUALITY_FROM_ZONE ? 1 : 0;
 }
 
 function tallySessions(
@@ -306,6 +326,12 @@ function tallySessions(
 
 // ── Le hors plan ─────────────────────────────────────────────────────
 
+/** Le TSS d'une activité du journal : son effort perçu donne une zone, la zone le TSS. */
+export function offPlanTss(activity: ComplementaryActivity): number {
+  const rpe = activity.rpe ?? defaultRpe(activity.purpose);
+  return runTssFromZone(activity.durationMin, zoneFromRpe(rpe));
+}
+
 export function summarizeOffPlan(
   activities: readonly ComplementaryActivity[],
 ): OffPlanSummary | null {
@@ -324,7 +350,7 @@ export function summarizeOffPlan(
     count: summary.count,
     minutes: summary.minutes,
     km: km !== null && km > 0 ? Math.round(km * 10) / 10 : null,
-    load: summary.load,
+    load: Math.round(activities.reduce((sum, a) => sum + offPlanTss(a), 0)),
     purposeKey:
       purposes.size === 1 && purpose
         ? purposeLabelKey(disciplines.size === 1 && discipline ? discipline : "other", purpose)

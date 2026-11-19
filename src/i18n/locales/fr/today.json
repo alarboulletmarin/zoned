@@ -140,14 +140,14 @@
     "endurance": {
       "label": "Endurance",
       "short": "Endur.",
-      "code": "Z1-Z3",
-      "spoken": "Z1 à Z3"
+      "code": "Z1-Z2",
+      "spoken": "Z1 à Z2"
     },
     "quality": {
       "label": "Qualité",
       "short": "Qualité",
-      "code": "Z4+",
-      "spoken": "Z4 et plus"
+      "code": "Z3+",
+      "spoken": "Z3 et plus"
     },
     "strength": {
       "label": "Renfo",
@@ -172,12 +172,12 @@
       "strengthAvg_other": "Renfo : {{done}} séances, moyenne {{count}}"
     },
     "total": "Total semaine",
-    "load": "Charge",
+    "load": "Charge · TSS",
     "offPlan": {
       "title": "Hors plan · hors anneaux",
       "count_one": "{{count}} activité",
       "count_other": "{{count}} activités",
-      "load": "+{{load}} charge"
+      "load": "+{{load}} TSS"
     }
   }
 }

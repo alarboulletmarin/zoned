@@ -4,8 +4,9 @@ import { describe, expect, mock, test } from "bun:test";
 // `import.meta.glob` de Vite : on la remplace avant de charger le module.
 mock.module("@/i18n", () => ({ default: { language: "fr" } }));
 
-const { buildWeekRings, plannedMinutesOf, qualityShareOf, resolveRingMetric, ringState } =
+const { buildWeekRings, offPlanTss, plannedMinutesOf, qualityShareOf, resolveRingMetric, ringState } =
   await import("./weekRings");
+const { runTssFromZone } = await import("./planGenerator/tss");
 
 import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
 import type { PlanSession } from "@/types/plan";
@@ -40,6 +41,12 @@ const CATALOG: Record<string, AnyWorkoutTemplate> = {
     warmup: [{ durationMin: 15, zone: "Z1-Z2" }],
     main: [{ durationMin: 30, zone: "Z4" }],
     cooldown: [{ durationMin: 10, zone: "Z1" }],
+  }),
+  // Un tempo : 10 min d'échauffement, 20 en Z3, 10 en Z2-Z3, 5 de retour au calme.
+  "TMP-001": running("TMP-001", {
+    warmup: [{ durationMin: 10, zone: "Z1-Z2" }],
+    main: [{ durationMin: 20, zone: "Z3" }, { durationMin: 10, zone: "Z2-Z3" }],
+    cooldown: [{ durationMin: 5, zone: "Z1" }],
   }),
   // Un footing souple de 30 à 50 min.
   "END-001": running("END-001", { main: [{ durationMin: 40, zone: "Z2" }] }, [30, 50]),
@@ -84,6 +91,13 @@ describe("le prévu", () => {
     expect(rings.endurance.target.time).toBeCloseTo(25);
     expect(rings.quality.target.time).toBeCloseTo(30);
     expect(qualityShareOf(session({ workoutId: "THR-001" }), CATALOG["THR-001"], 55)).toBeCloseTo(30 / 55);
+  });
+
+  test("le tempo est de la Qualité, comme dans le 80/20 : Z3 compte du côté dur", () => {
+    const rings = build([session({ workoutId: "TMP-001", sessionType: "tempo", estimatedDurationMin: 45 })])!;
+    // 20 min de Z3, la moitié Z3 de la plage Z2-Z3 ; le reste en Endurance.
+    expect(rings.quality.target.time).toBeCloseTo(25);
+    expect(rings.endurance.target.time).toBeCloseTo(20);
   });
 
   test("la répartition suit la durée de la séance, mise à l'échelle", () => {
@@ -203,7 +217,9 @@ describe("le hors plan", () => {
     expect(rings.offPlan!.count).toBe(3);
     expect(rings.offPlan!.minutes).toBe(90);
     expect(rings.offPlan!.km).toBe(22);
-    expect(rings.offPlan!.load).toBeGreaterThan(0);
+    // Dans l'unité du plan : un vélotaf sans RPE vaut 3, donc Z2, donc le TSS de Z2.
+    expect(rings.offPlan!.load).toBe(Math.round(3 * runTssFromZone(30, 2)));
+    expect(offPlanTss(activity({ rpe: 7 }))).toBe(runTssFromZone(30, 4));
     expect(rings.offPlan!.purposeKey).toBe("commuteCycling");
   });
 
