@@ -106,6 +106,7 @@
 @import "./components/topbar.css" layer(components);
 @import "./components/visualization.css" layer(components);
 @import "./components/weekly.css" layer(components);
+@import "./components/week-rings.css" layer(components);
 @import "./components/wordmark.css" layer(components);
 @import "./components/workout-card.css" layer(components);
 @import "./components/workout.css" layer(components);

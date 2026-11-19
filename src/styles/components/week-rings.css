@@ -1,0 +1,427 @@
+/* Les anneaux de la semaine, `components/weekly/WeekRings.tsx`.
+
+   Une carte Zoned : papier relevé, filet d'encre, rayon xl, aucune ombre. Le
+   seul vermillon est l'excédent de Qualité, qui est la seule chose de la
+   carte à signaler. Les couleurs sont celles de la rampe des zones, rien de
+   neuf : l'Endurance prend le ton de Z3, la Qualité l'encre pleine de Z6, le
+   Renfo le ton de Z5, la piste celui de Z1. La forme fait le reste, le Renfo
+   en segments, l'excédent sur une orbite à part. */
+
+.zn-rings {
+  --rings-endurance: var(--zone-3);
+  --rings-quality: var(--zone-6);
+  --rings-strength: var(--zone-5);
+  --rings-track: var(--zone-1);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  color: var(--text-body);
+  min-inline-size: 0;
+}
+
+.zn-rings--card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--sp-9) var(--sp-8) var(--sp-3);
+}
+
+/* ── Les micro-labels ─────────────────────────────────────────────────── */
+
+.zn-rings__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-rings__kicker--ink {
+  color: var(--text-body);
+}
+
+.zn-rings__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: 20px;
+}
+
+.zn-rings__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  min-inline-size: 0;
+}
+
+.zn-rings__reference {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.4;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Le sélecteur pleine largeur, cibles de 44 px. */
+.zn-rings__metric .zn-segmented__item {
+  min-block-size: var(--hit-min);
+}
+
+/* ── L'anneau ─────────────────────────────────────────────────────────── */
+
+.zn-ring {
+  display: block;
+  overflow: visible;
+}
+
+.zn-ring circle {
+  fill: none;
+  stroke-linecap: butt;
+}
+
+.zn-ring__track {
+  stroke: var(--rings-track);
+  stroke-width: 9px;
+}
+
+.zn-ring__progress {
+  stroke-width: 9px;
+}
+
+.zn-ring[data-size="strip"] .zn-ring__track,
+.zn-ring[data-size="strip"] .zn-ring__progress {
+  stroke-width: 15px;
+}
+
+.zn-ring[data-kind="endurance"] .zn-ring__progress {
+  stroke: var(--rings-endurance);
+}
+
+.zn-ring[data-kind="quality"] .zn-ring__progress {
+  stroke: var(--rings-quality);
+}
+
+.zn-ring[data-kind="strength"] .zn-ring__progress {
+  stroke: var(--rings-strength);
+}
+
+.zn-ring__orbit {
+  stroke: var(--ink-3);
+  stroke-width: 3px;
+}
+
+.zn-ring[data-kind="quality"] .zn-ring__orbit {
+  stroke: var(--accent);
+}
+
+/* ── La grille des trois anneaux ──────────────────────────────────────── */
+
+.zn-rings__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-3);
+  padding-block-start: var(--sp-2);
+}
+
+.zn-rings__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+  text-align: center;
+}
+
+/* 96 px, et moins quand la colonne n'en a pas autant : dans le panneau de
+   la bande, à 390 px, une colonne en fait 88. */
+.zn-rings__dial {
+  position: relative;
+  display: block;
+  inline-size: min(96px, 100%);
+  aspect-ratio: 1;
+}
+
+.zn-rings__ring {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.zn-rings__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Peut passer à la ligne : 25min sur 50min ne tient pas dans une colonne
+   de téléphone. La grille aligne les cellules par le haut, les anneaux
+   restent sur la même ligne. */
+.zn-rings__sub {
+  font-size: var(--fs-caption);
+  line-height: 1.3;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  text-wrap: balance;
+}
+
+.zn-rings__label,
+.zn-rings__code {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.2;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+}
+
+.zn-rings__code {
+  margin-block-start: calc(var(--sp-3) * -1);
+  color: var(--text-faint);
+}
+
+.zn-rings__glyph {
+  inline-size: 12px;
+  block-size: 12px;
+  flex: none;
+}
+
+/* La pastille d'excédent. Endurance : encre atténuée, sans glyphe, c'est du
+   volume en plus et pas une alerte. Qualité : le vermillon foncé du texte,
+   lisible sur papier dans les deux thèmes, et le triangle. */
+.zn-rings__over {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: calc(var(--sp-1) * -1);
+  padding: var(--sp-1) var(--sp-4);
+  border: var(--bw-rule) solid var(--ink-3);
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.3;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-rings__over[data-warn] {
+  border-color: var(--accent-press);
+  color: var(--accent-press);
+}
+
+.zn-rings__over .zn-rings__glyph {
+  inline-size: 11px;
+  block-size: 11px;
+}
+
+/* ── Total, charge, hors plan ─────────────────────────────────────────── */
+
+.zn-rings__totals,
+.zn-rings__off {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  border-block-start: var(--border-divider);
+  padding-block-start: var(--sp-6);
+}
+
+.zn-rings__totals {
+  align-items: flex-end;
+}
+
+.zn-rings__off {
+  align-items: center;
+  padding-block-end: var(--sp-5);
+}
+
+.zn-rings__fact,
+.zn-rings__off-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.zn-rings__fact--end {
+  align-items: flex-end;
+}
+
+.zn-rings__fact-value {
+  font-size: 17px;
+  font-weight: var(--fw-medium);
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-rings__fact-of {
+  font-weight: var(--fw-regular);
+  color: var(--text-faint);
+}
+
+.zn-rings__off-label {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.zn-rings__off-load {
+  flex: none;
+  padding: var(--sp-2) var(--sp-5);
+  border: var(--bw-rule) dashed var(--text-muted);
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ── La bande repliée ─────────────────────────────────────────────────── */
+
+.zn-rings--strip {
+  border-block-end: var(--border-rule);
+}
+
+.zn-rings--strip > .zn-rings__summary {
+  container: rings-strip / inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-6);
+  margin: 0;
+  padding: var(--sp-6) var(--sp-6) var(--sp-7);
+  border-radius: var(--r-xl);
+}
+
+.zn-rings--strip[open] > .zn-rings__summary {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.zn-rings__summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-rings__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-body);
+}
+
+.zn-rings__more .zn-disclosure__chevron {
+  inline-size: 14px;
+  block-size: 14px;
+}
+
+.zn-rings__more-open,
+.zn-rings--strip[open] .zn-rings__more-closed {
+  display: none;
+}
+
+.zn-rings--strip[open] .zn-rings__more-open {
+  display: inline;
+}
+
+/* Les colonnes prennent la largeur de leur contenu et se répartissent le
+   reste : à 360 px, trois colonnes égales coupaient la valeur de la Qualité,
+   la plus large à cause de son triangle. */
+.zn-rings__mini-row {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.zn-rings__mini {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+}
+
+.zn-rings__mini-ring {
+  inline-size: 36px;
+  block-size: 36px;
+  flex: none;
+}
+
+.zn-rings__mini-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.zn-rings__mini-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.zn-rings__mini-label .zn-rings__glyph {
+  inline-size: 10px;
+  block-size: 10px;
+  color: var(--text-body);
+}
+
+.zn-rings__mini-label .zn-rings__glyph--warn {
+  color: var(--accent-press);
+}
+
+.zn-rings__mini-value {
+  font-size: 15px;
+  font-weight: var(--fw-medium);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sous 375 px de téléphone, les trois anneaux et leurs libellés ne tiennent
+   plus côte à côte : la Qualité, la plus large à cause de son triangle,
+   demande une centaine de pixels. Le texte passe sous l'anneau plutôt que
+   d'être coupé, et rien ne se perd. Mesuré : 267 px de contenu au plus. */
+@container rings-strip (max-width: 272px) {
+  .zn-rings__mini-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .zn-rings__mini {
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+
+  .zn-rings__mini-text {
+    align-items: center;
+  }
+}
+
+.zn-rings__panel {
+  padding: var(--sp-8) var(--sp-6) var(--sp-3);
+  border-block-start: var(--border-divider);
+}

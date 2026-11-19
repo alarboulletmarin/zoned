@@ -173,19 +173,22 @@
    passée à 544. Puis les réserves du choix de jour sont arrivées, titre sur
    deux lignes, durée et micro-label toujours écrits, et elle est passée à
    589. Puis la rangée des familles sous les blocs, 15 px de bande en plus, et
-   elle passe à 604.
+   elle passe à 604. Puis les anneaux de la semaine, repliés en bande sous
+   la liste des jours : 90 px de bande et 14 d'écart, elle passe à 708.
 
    La valeur est celle d'un jour de séance, l'état pour lequel cet écran est
    fait. Mesurée au navigateur, pas calculée, sur la même semaine à neuf
    largeurs : 604 px à partir de 768, 557 de 430 à 640, 632 à 390 et 648 à
    360, les plus étroits repliant une ligne de plus sur la position dans le
-   plan.    On garde la valeur des larges, comme depuis toujours. Dès 900 px la
+   plan.    On garde la valeur des larges, comme depuis toujours. La bande des
+   anneaux y ajoute 104 px partout (140 sous 375 px, où son texte passe sous
+   les anneaux), mesurés au navigateur le 19 novembre 2026. Dès 900 px la
    réserve est celle de la liste à côté de la séance, mesurée plus bas.
    Toute retouche aux écarts de `.zn-cockpit__answer`, à la réserve du titre,
    au créneau de `.zn-cockpit__day-bar`, à la rangée de `.zn-cockpit__day-kinds`
    ou à la réserve de `.zn-cockpit__how` invalide ces nombres. */
 .zn-cockpit__hold {
-  min-block-size: 604px;
+  min-block-size: 708px;
 }
 
 /* ── La bande des sept jours ────────────────────────────────────────────────
@@ -829,8 +832,9 @@
     --slot-w: 98px;
   }
 
+  /* 557 mesurés de 430 à 640, plus les 104 de la bande des anneaux. */
   .zn-cockpit__hold {
-    min-block-size: 560px;
+    min-block-size: 664px;
   }
 }
 
@@ -1326,10 +1330,16 @@ button.zn-cockpit__exit {
     margin-inline-start: max(0px, calc((100% - 620px) / 2));
   }
 
-  /* Mesuré au navigateur, 1440 px, un jour de séance. Le téléphone garde
-     604. Toute retouche aux écarts du bureau invalide ce nombre. */
+  /* Mesuré au navigateur, 1440 px, un jour de séance, journal vide :
+     862 px. Depuis les anneaux de la semaine, c'est la colonne de droite qui
+     donne la hauteur (commutateur, liste des sept jours, puis la carte des
+     anneaux), et la séance s'étire sur elle : le nombre ne dépend plus du
+     jour choisi. Un journal non vide ajoute la ligne hors plan, 76 px de
+     plus ; on garde la valeur sans, l'état d'arrivée de quelqu'un qui n'a
+     rien noté. C'était 607 avant les anneaux. Toute retouche aux écarts du
+     bureau ou à la carte des anneaux invalide ce nombre. */
   .zn-cockpit__hold {
-    min-block-size: 607px;
+    min-block-size: 862px;
   }
 
   /* Le retour à aujourd'hui suit l'écart. En bout de ligne, sur la largeur
@@ -1385,6 +1395,12 @@ button.zn-cockpit__exit {
   .zn-cockpit__split-grid {
     min-block-size: 100%;
     padding: 0 0 var(--sp-12) var(--sp-14);
+  }
+
+  /* Les anneaux de la semaine ferment la colonne, sur le même bord gauche
+     que le commutateur et la liste. */
+  .zn-cockpit__rings {
+    margin-inline-start: var(--sp-14);
   }
 
   .zn-cockpit__split-answer {

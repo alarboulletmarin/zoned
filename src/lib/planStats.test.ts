@@ -1,7 +1,15 @@
 import { describe, expect, test } from "bun:test";
 
-import type { PlanSession, PlanWeek } from "@/types/plan";
-import { computeWeekDuration, computeWeekKm, estimateSessionDurationMin } from "./planStats";
+import type { PlanSession, PlanWeek, TrainingPlan } from "@/types/plan";
+import type { WorkoutTemplate } from "@/types";
+import { loadAllWorkouts } from "@/data/workouts";
+import {
+  addSessionZoneMinutes,
+  computeEnhancedPlanAnalysis,
+  computeWeekDuration,
+  computeWeekKm,
+  estimateSessionDurationMin,
+} from "./planStats";
 
 describe("computeWeekKm", () => {
   test("prefers actual and target distances over pace-based estimates", () => {
@@ -235,5 +243,83 @@ describe("computeWeekDuration", () => {
       ],
     };
     expect(computeWeekDuration(week)).toBe(75);
+  });
+});
+
+describe("addSessionZoneMinutes", () => {
+  // Le moteur de structure lit la description de chaque bloc.
+  const block = (b: Record<string, unknown>) => ({ description: "bloc", descriptionEn: "block", ...b });
+  const template = {
+    id: "THR-X",
+    warmupTemplate: [block({ durationMin: 10, zone: "Z1-Z2" })],
+    mainSetTemplate: [
+      block({ durationMin: 20, zone: "Z4" }),
+      block({ durationMin: 10, zone: "Z3-Z4" }),
+      block({ durationMin: 5 }),
+    ],
+    cooldownTemplate: [block({ durationMin: 5, zone: "Z1" })],
+  } as unknown as WorkoutTemplate;
+
+  test("répartit bloc par bloc, à l'échelle de la séance", () => {
+    const zones: Record<string, number> = {};
+    // 50 min de blocs, séance de 100 min : tout double.
+    addSessionZoneMinutes(template, 100, zones);
+    expect(zones.Z1).toBeCloseTo(10 + 10); // la moitié de l'échauffement, le retour au calme
+    expect(zones.Z2).toBeCloseTo(10 + 10); // l'autre moitié, le bloc sans zone
+    expect(zones.Z3).toBeCloseTo(10);
+    expect(zones.Z4).toBeCloseTo(40 + 10);
+  });
+
+  test("accumule dans la table qu'on lui passe", () => {
+    const zones: Record<string, number> = { Z4: 5 };
+    addSessionZoneMinutes(template, 50, zones);
+    expect(zones.Z4).toBeCloseTo(5 + 25);
+  });
+
+  test("déroule les répétitions et compte les récupérations dans leur zone", () => {
+    // 20 min d'échauffement, 3 × 8 min Z4 avec 2 min de récupération entre
+    // chaque, 10 min de retour au calme : 58 min. L'ancien calcul comptait
+    // 8 min de Z4 et mettait le reste à l'échelle sur l'échauffement.
+    const intervals = {
+      id: "THR-R",
+      warmupTemplate: [block({ durationMin: 20, zone: "Z1-Z2" })],
+      mainSetTemplate: [block({ durationMin: 8, repetitions: 3, zone: "Z4", recovery: "2min footing Z1", recoveryEn: "2min jog Z1" })],
+      cooldownTemplate: [block({ durationMin: 10, zone: "Z1" })],
+    } as unknown as WorkoutTemplate;
+    const zones: Record<string, number> = {};
+    addSessionZoneMinutes(intervals, 58, zones);
+    expect(zones.Z4).toBeCloseTo(24);
+    expect(zones.Z1).toBeCloseTo(10 + 4 + 10);
+    expect(zones.Z2).toBeCloseTo(10);
+  });
+
+  test("computeEnhancedPlanAnalysis rend ce que la fonction extraite calcule, séance par séance", async () => {
+    const workouts = (await loadAllWorkouts()).filter(
+      (w) => (w.discipline ?? "running") === "running" && w.warmupTemplate && w.mainSetTemplate && w.cooldownTemplate,
+    );
+    const picked = workouts.slice(0, 3);
+    const sessions: PlanSession[] = picked.map((w, i) => ({
+      dayOfWeek: i,
+      workoutId: w.id,
+      sessionType: "endurance",
+      isKeySession: false,
+      estimatedDurationMin: 40 + i * 15,
+    }));
+    const plan = {
+      id: "p",
+      config: {},
+      weeks: [{ weekNumber: 1, phase: "base", isRecoveryWeek: false, volumePercent: 100, sessions }],
+      totalWeeks: 1,
+      phases: [],
+      name: "p",
+      nameEn: "p",
+    } as unknown as TrainingPlan;
+
+    const expected: Record<string, number> = {};
+    picked.forEach((w, i) => addSessionZoneMinutes(w, sessions[i].estimatedDurationMin, expected));
+    const analysis = await computeEnhancedPlanAnalysis(plan);
+    for (const row of analysis.zoneDistribution) {
+      expect(row.minutes).toBe(Math.round((expected[row.zone] || 0) * 10) / 10);
+    }
   });
 });

@@ -49,7 +49,17 @@ export interface CockpitSettings {
   shortcuts: boolean;
   /** La figure de clôture. */
   art: boolean;
+  /**
+   * La mesure des anneaux de la semaine, telle que la personne l'a choisie.
+   * Absente tant qu'elle n'a rien choisi : le défaut suit alors la pratique
+   * du plan (D+ en trail et en ultra, temps sinon), voir `lib/weekRings.ts`.
+   */
+  ringsMetric?: RingMetric;
 }
+
+/** La mesure des anneaux de la semaine : temps, kilomètres, dénivelé positif. */
+export type RingMetric = "time" | "km" | "dplus";
+export const RING_METRICS: readonly RingMetric[] = ["time", "km", "dplus"] as const;
 
 export interface UserSettings {
   unitSystem: UnitSystem;

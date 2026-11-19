@@ -161,6 +161,14 @@ toujours une semaine calendaire, et `calendarWeekRange` suffit pour les bilans.
   pas d'index), parce qu'un correctif s'adresse par index dans le plan réel
   et que ces séances-là n'y sont pas.
 
+- **Les anneaux de la semaine** (`lib/weekRings.ts`, `WeekRings`) : en vue
+  Semaine, en fin de colonne de la liste des jours, Endurance Z1-Z2, Qualité
+  Z3+ (la frontière du 80/20) et Renfo, fait contre prévu de la semaine calendaire en cours. Repliés
+  en bande sous 900 px, carte ouverte au-delà. Le hors plan n'y entre pas, il
+  a sa ligne dessous. Le bilan du dimanche (`WeekReviewPanel`) n'a pas bougé,
+  mais sa barre de volume fait désormais doublon avec le total des anneaux.
+  Voir `docs/anneaux.md`.
+
 ## Ce qui reste
 
 ### 1. Répéter une semaine
