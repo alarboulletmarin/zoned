@@ -3,7 +3,7 @@
 // and glossary terms using curated links + category/zone heuristics.
 
 import type { WorkoutTemplate, WorkoutCategory, ZoneNumber } from "@/types";
-import { parseZoneSpan } from "@/types";
+import { getPeakZone, parseZoneSpan } from "@/types";
 import type { ArticleMeta } from "@/data/articles/types";
 import type { GlossaryTerm } from "@/data/glossary/types";
 
@@ -213,26 +213,200 @@ function findArticlesForWorkout(
   return results;
 }
 
-function findGlossaryForWorkout(
+// ---------------------------------------------------------------------------
+// Glossary for a workout: the session's own words
+// ---------------------------------------------------------------------------
+
+/**
+ * Ce que la séance EST, dans le vocabulaire du glossaire. Le type de séance
+ * passe avant la catégorie : MIX-010 est de catégorie mixte, mais c'est une
+ * séance d'allure spécifique.
+ */
+const SESSION_TYPE_TERMS: Partial<Record<string, string>> = {
+  recovery: "recovery-run",
+  endurance: "endurance-fondamentale",
+  tempo: "tempo-run",
+  threshold: "seuil-lactique",
+  vo2max: "vo2max",
+  speed: "sprint",
+  long_run: "long-run",
+  hills: "hill-repeats",
+  fartlek: "fartlek",
+  race_specific: "race-pace",
+};
+
+const CATEGORY_TERMS: Partial<Record<WorkoutCategory, string>> = {
+  recovery: "recovery-run",
+  endurance: "endurance-fondamentale",
+  tempo: "tempo-run",
+  threshold: "seuil-lactique",
+  vma_intervals: "intervals",
+  long_run: "long-run",
+  hills: "hill-repeats",
+  fartlek: "fartlek",
+  race_pace: "race-pace",
+  assessment: "vma",
+};
+
+/** Les étiquettes du catalogue qui nomment un terme du glossaire. */
+const TAG_TERMS: Record<string, string> = {
+  taper: "taper",
+  "pre-race": "taper",
+  strides: "strides",
+  progressive: "progressive-run",
+  progression: "progressive-run",
+  marathon: "marathon",
+  "half-marathon": "semi-marathon",
+  pyramid: "pyramide",
+  vo2max: "vo2max",
+  lactate: "lactate-threshold",
+  economy: "running-economy",
+  sprint: "sprint",
+  intervals: "intervals",
+  "aerobic-base": "base-building",
+  base: "base-building",
+  "negative-split": "negative-split",
+};
+
+/** La mesure dont la page tire les allures, selon la discipline. */
+const MEASURE_TERMS: Record<string, string> = {
+  running: "vma",
+  cycling: "ftp",
+  swimming: "css",
+};
+
+const CYCLING_WORDS = ["cyclisme", "vélo"];
+const SWIMMING_WORDS = ["natation", "nage"];
+
+/**
+ * Un terme propre à une autre discipline n'a rien à faire sur la séance : pas
+ * de FTP ni d'over-unders sur une séance de course. La discipline d'un terme
+ * se lit dans ses mots-clés, `ftp` porte `cyclisme` et `vélo`.
+ */
+function termFitsDiscipline(term: GlossaryTerm, discipline: string): boolean {
+  const keywords = (term.keywords ?? []).map((k) => k.toLowerCase());
+  if (keywords.some((k) => CYCLING_WORDS.includes(k))) return discipline === "cycling";
+  if (keywords.some((k) => SWIMMING_WORDS.includes(k))) return discipline === "swimming";
+  if (term.id === "brick") return false;
+  return true;
+}
+
+/**
+ * Les termes du glossaire que la séance emploie, dans cet ordre :
+ *
+ * 1. la mesure qui donne ses allures (VMA en course) ;
+ * 2. sa zone de pic, celle que la bande de chiffres nomme ;
+ * 3. ce qu'elle est, par son type de séance puis sa catégorie ;
+ * 4. ses étiquettes (`taper`, `pre-race`, `strides`...) ;
+ * 5. les autres zones qu'elle traverse, de la plus haute à la plus basse.
+ *
+ * Rien n'est tiré d'ailleurs que de la séance. L'ancienne règle cherchait les
+ * termes de la zone la plus fréquente du corps de séance, comptée en blocs :
+ * MIX-010 tombait sur Z4 et proposait FTP, CV, Threshold et Over-unders.
+ */
+export function findGlossaryForWorkout(
   workout: WorkoutTemplate,
   allTerms: GlossaryTerm[],
   excludeIds: Set<string>,
   limit: number,
 ): GlossaryTerm[] {
-  const dominant = getWorkoutDominantZone(workout);
-  const results: GlossaryTerm[] = [];
+  const byId = new Map(allTerms.map((t) => [t.id, t]));
+  const discipline = workout.discipline ?? "running";
 
-  if (dominant != null) {
-    for (const term of allTerms) {
-      if (results.length >= limit) break;
-      if (excludeIds.has(term.id)) continue;
-      if (term.zone === dominant) {
-        results.push(term);
-        excludeIds.add(term.id);
-      }
-    }
+  const wanted: string[] = [];
+  const measure = MEASURE_TERMS[discipline];
+  if (measure) wanted.push(measure);
+  const zones = zonesOf(workout);
+  if (zones.length > 0) wanted.push(`zone-${getPeakZone(workout)}`);
+  const bySessionType = SESSION_TYPE_TERMS[workout.sessionType];
+  if (bySessionType) wanted.push(bySessionType);
+  const byCategory = CATEGORY_TERMS[workout.category];
+  if (byCategory) wanted.push(byCategory);
+  for (const tag of workout.selectionCriteria?.tags ?? []) {
+    const id = TAG_TERMS[tag];
+    if (id) wanted.push(id);
+  }
+  for (const zone of [...zones].sort((a, b) => b - a)) wanted.push(`zone-${zone}`);
+
+  const results: GlossaryTerm[] = [];
+  for (const id of wanted) {
+    if (results.length >= limit) break;
+    if (excludeIds.has(id)) continue;
+    const term = byId.get(id);
+    if (!term || !termFitsDiscipline(term, discipline)) continue;
+    results.push(term);
+    excludeIds.add(id);
+  }
+  return results;
+}
+
+/** Les zones que la séance traverse, tous blocs confondus, sans doublon. */
+function zonesOf(workout: WorkoutTemplate): ZoneNumber[] {
+  const zones = new Set<ZoneNumber>();
+  const blocks = [...workout.warmupTemplate, ...workout.mainSetTemplate, ...workout.cooldownTemplate];
+  for (const block of blocks) {
+    const span = parseZoneSpan(block.zone);
+    if (!span) continue;
+    for (let z = span.min; z <= span.max; z++) zones.add(z as ZoneNumber);
+  }
+  return [...zones];
+}
+
+// ---------------------------------------------------------------------------
+// Workouts for a workout: three sessions in the same spirit
+// ---------------------------------------------------------------------------
+
+/** Trois séances liées, ni plus ni moins quand le catalogue le permet. */
+export const RELATED_SESSIONS = 3;
+
+function sharedTags(a: WorkoutTemplate, b: WorkoutTemplate): number {
+  const tags = new Set(a.selectionCriteria?.tags ?? []);
+  return (b.selectionCriteria?.tags ?? []).filter((t) => tags.has(t)).length;
+}
+
+function typicalMid(w: WorkoutTemplate): number {
+  return (w.typicalDuration.min + w.typicalDuration.max) / 2;
+}
+
+/**
+ * Les séances dans le même esprit : ses variantes déclarées d'abord
+ * (`variationIds`), puis, pour arriver à trois, des séances de même
+ * catégorie, puis de même zone de pic. Toujours dans la même discipline.
+ * Entre deux candidates, celle qui partage le plus d'étiquettes, puis la
+ * durée la plus proche, puis l'ordre du catalogue.
+ */
+export function findWorkoutsForWorkout(
+  workout: WorkoutTemplate,
+  allWorkouts: WorkoutTemplate[],
+  excludeIds: Set<string>,
+  limit: number,
+): WorkoutTemplate[] {
+  const results: WorkoutTemplate[] = [];
+  const take = (w: WorkoutTemplate) => {
+    if (results.length >= limit || excludeIds.has(w.id)) return;
+    results.push(w);
+    excludeIds.add(w.id);
+  };
+
+  const byId = new Map(allWorkouts.map((w) => [w.id, w]));
+  for (const id of workout.variationIds ?? []) {
+    const variation = byId.get(id);
+    if (variation) take(variation);
   }
 
+  const discipline = workout.discipline ?? "running";
+  const sameDiscipline = allWorkouts.filter(
+    (w) => (w.discipline ?? "running") === discipline && !excludeIds.has(w.id),
+  );
+  const rank = (pool: WorkoutTemplate[]) =>
+    pool
+      .map((w, index) => ({ w, index, tags: sharedTags(workout, w), gap: Math.abs(typicalMid(w) - typicalMid(workout)) }))
+      .sort((a, b) => b.tags - a.tags || a.gap - b.gap || a.index - b.index)
+      .map((entry) => entry.w);
+
+  for (const w of rank(sameDiscipline.filter((w) => w.category === workout.category))) take(w);
+  const peak = getPeakZone(workout);
+  for (const w of rank(sameDiscipline.filter((w) => getPeakZone(w) === peak))) take(w);
   return results;
 }
 
@@ -438,6 +612,17 @@ export function findRelatedContent(
     case "workout": {
       const workout = workoutsById.get(source.id);
       if (!workout) break;
+
+      if (result.workouts.length < RELATED_SESSIONS) {
+        result.workouts.push(
+          ...findWorkoutsForWorkout(
+            workout,
+            allWorkouts,
+            usedWorkoutIds,
+            RELATED_SESSIONS - result.workouts.length,
+          ),
+        );
+      }
 
       if (result.articles.length < MAX_ARTICLES) {
         result.articles.push(
