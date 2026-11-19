@@ -19,7 +19,14 @@ interface RelatedContentProps {
   className?: string;
   /** Set false when an enclosing Section already provides the heading. */
   showTitle?: boolean;
+  /**
+   * Les groupes à rendre, tous par défaut. La page de séance dessine elle-même
+   * ses séances liées et son glossaire, et ne garde ici que les articles.
+   */
+  include?: ReadonlyArray<"articles" | "workouts" | "glossary">;
 }
+
+const ALL_GROUPS = ["articles", "workouts", "glossary"] as const;
 
 function ArticleCardCompact({ article }: { article: ArticleMeta }) {
   const { t } = useTranslation("common");
@@ -49,9 +56,18 @@ function GlossaryChip({ term }: { term: GlossaryTerm }) {
   );
 }
 
-export function RelatedContent({ source, className, showTitle = true }: RelatedContentProps) {
+export function RelatedContent({
+  source,
+  className,
+  showTitle = true,
+  include = ALL_GROUPS,
+}: RelatedContentProps) {
   const { t } = useTranslation("common");
-  const { workouts, articles, glossaryTerms, isLoading } = useRelatedContent(source);
+  const related = useRelatedContent(source);
+  const { isLoading } = related;
+  const articles = include.includes("articles") ? related.articles : [];
+  const workouts = include.includes("workouts") ? related.workouts : [];
+  const glossaryTerms = include.includes("glossary") ? related.glossaryTerms : [];
 
   if (isLoading) return null;
 

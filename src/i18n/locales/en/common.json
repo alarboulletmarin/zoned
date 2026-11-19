@@ -512,9 +512,7 @@
     "en": "English"
   },
   "zonePersonalization": {
-    "ctaMessage": "Enter your VMA to see your paces on every step",
-    "noVma": "I don't know my VMA",
-    "submit": "Show my paces"
+    "noVma": "I don't know my VMA"
   },
   "myZones": {
     "title": "My zones",

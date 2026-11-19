@@ -220,7 +220,7 @@ export function AlbumCover({ workout }: ShareTemplateProps) {
           color: accent,
         }}
       >
-        TOTAL {formatDurationMinutes(hero.durationMin)} · RPE {hero.rpe}/10
+        TOTAL {formatDurationMinutes(hero.durationMin, { compact: true })} · RPE {hero.rpe}/10
       </div>
     </div>
   );

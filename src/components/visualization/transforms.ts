@@ -114,22 +114,46 @@ export function transformSessionBlocks(input: TransformInput): SessionVisualizat
   };
 }
 
+/** Espace insécable : 37 min ne se coupe jamais entre le nombre et l'unité. */
+const NBSP = "\u00a0";
+
+export interface FormatDurationOptions {
+  /**
+   * La forme serrée, sans espace (`37min`, `22min30`, `1h05`, `30s`), pour
+   * les surfaces peintes à largeur fixe : les cartes de partage PNG et les
+   * libellés SVG des frises. Partout ailleurs, la forme par défaut.
+   */
+  compact?: boolean;
+}
+
 /**
- * Format duration in minutes to human-readable string.
+ * Une durée en minutes, écrite d'une seule façon dans toute l'app :
+ * `37 min`, `22 min 30`, `1 h 05`, `1 h`, `30 s`, avec une espace insécable
+ * entre le nombre et l'unité.
+ *
+ * L'arrondi se fait une fois, à la seconde, avant le découpage : 59,999 min
+ * donne `1 h` et pas `59 min 60`. Au-delà de l'heure, la minute suffit.
+ * Zéro s'écrit `0 min` : un compteur vide est zéro minute, pas zéro seconde.
  */
-export function formatDurationMinutes(minutes: number): string {
-  if (minutes < 1) {
-    return `${Math.round(minutes * 60)}s`;
+export function formatDurationMinutes(
+  minutes: number,
+  options: FormatDurationOptions = {},
+): string {
+  const sep = options.compact ? "" : NBSP;
+  const totalSec = Math.max(0, Math.round((Number.isFinite(minutes) ? minutes : 0) * 60));
+  if (totalSec === 0) return `0${sep}min`;
+  if (totalSec < 60) return `${totalSec}${sep}s`;
+  if (totalSec < 3600) {
+    const mins = Math.floor(totalSec / 60);
+    const secs = totalSec % 60;
+    if (secs === 0) return `${mins}${sep}min`;
+    return `${mins}${sep}min${sep}${secs.toString().padStart(2, "0")}`;
   }
-  if (minutes < 60) {
-    const mins = Math.floor(minutes);
-    const secs = Math.round((minutes - mins) * 60);
-    if (secs === 0) return `${mins}min`;
-    return `${mins}min${secs.toString().padStart(2, "0")}`;
-  }
-  const hours = Math.floor(minutes / 60);
-  const mins = Math.round(minutes % 60);
-  return mins > 0 ? `${hours}h${mins.toString().padStart(2, "0")}` : `${hours}h`;
+  const totalMin = Math.round(totalSec / 60);
+  const hours = Math.floor(totalMin / 60);
+  const mins = totalMin % 60;
+  if (mins === 0) return `${hours}${sep}h`;
+  return `${hours}${sep}h${sep}${mins.toString().padStart(2, "0")}`;
 }
 
 export function getWorkoutDuration(workout: WorkoutStructureSource): number {

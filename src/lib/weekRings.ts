@@ -1,6 +1,6 @@
 import type { PlanSession } from "@/types/plan";
 import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
-import { getDominantZone, getZoneNumber, isRunningWorkout, isStrengthWorkout } from "@/types";
+import { getPeakZone, getZoneNumber, isRunningWorkout, isStrengthWorkout } from "@/types";
 import type { Practice } from "@/types/practice";
 import type { RingMetric } from "@/types/settings";
 import {
@@ -50,7 +50,7 @@ import type { DateRange } from "@/lib/weekReview";
  * - ses minutes se répartissent entre Endurance et Qualité BLOC PAR BLOC, par
  *   `addSessionZoneMinutes` (la logique de `planStats`) : l'échauffement et le
  *   retour au calme tombent en Endurance, les blocs de seuil en Qualité. Un
- *   gabarit sans blocs se rabat sur sa zone dominante (`getDominantZone`), un
+ *   gabarit sans blocs se rabat sur sa zone dominante (`getPeakZone`), un
  *   gabarit pas encore chargé compte en Endurance le temps d'arriver ;
  * - ses KM sont ceux de la séance, sinon l'estimation à l'allure de son type
  *   (`plannedSessionKm`, le gabarit ne porte pas de distance à lui) ; son D+
@@ -237,6 +237,27 @@ export function plannedMinutesOf(
 }
 
 /**
+ * Les minutes d'une séance de course, Endurance d'un côté, Qualité de
+ * l'autre, BLOC PAR BLOC (`addSessionZoneMinutes`), ramenées à `minutes`.
+ * C'est la règle des anneaux, et la barre d'intensité de la page de séance
+ * la lit aussi : les deux écrans classent la même minute de la même façon.
+ */
+export function enduranceQualityMinutes(
+  workout: WorkoutTemplate,
+  minutes: number,
+): { endurance: number; quality: number } {
+  const zones: Record<string, number> = {};
+  addSessionZoneMinutes(workout, minutes, zones);
+  let endurance = 0;
+  let quality = 0;
+  for (const [code, value] of Object.entries(zones)) {
+    if (getZoneNumber(code) >= QUALITY_FROM_ZONE) quality += value;
+    else endurance += value;
+  }
+  return { endurance, quality };
+}
+
+/**
  * La part de Qualité d'une séance de course, entre 0 et 1, bloc par bloc.
  * Un gabarit sans blocs prend sa zone dominante, un gabarit absent compte
  * en Endurance.
@@ -250,17 +271,11 @@ export function qualityShareOf(
   if (session.workoutId === "__intermediate_race__") return 1;
   if (!workout || !isRunningWorkout(workout)) return 0;
   if (hasBlocks(workout)) {
-    const zones: Record<string, number> = {};
-    addSessionZoneMinutes(workout, minutes > 0 ? minutes : 60, zones);
-    let total = 0;
-    let quality = 0;
-    for (const [code, value] of Object.entries(zones)) {
-      total += value;
-      if (getZoneNumber(code) >= QUALITY_FROM_ZONE) quality += value;
-    }
-    if (total > 0) return quality / total;
+    const split = enduranceQualityMinutes(workout, minutes > 0 ? minutes : 60);
+    const total = split.endurance + split.quality;
+    if (total > 0) return split.quality / total;
   }
-  return getDominantZone(workout) >= QUALITY_FROM_ZONE ? 1 : 0;
+  return getPeakZone(workout) >= QUALITY_FROM_ZONE ? 1 : 0;
 }
 
 function tallySessions(

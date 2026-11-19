@@ -160,7 +160,7 @@ export function EnamelPin({ workout, transparent }: ShareTemplateProps) {
             color: GOLD_LIGHT,
           }}
         >
-          {formatDurationMinutes(hero.durationMin)} · {workout.id}
+          {formatDurationMinutes(hero.durationMin, { compact: true })} · {workout.id}
         </div>
       </div>
     </div>

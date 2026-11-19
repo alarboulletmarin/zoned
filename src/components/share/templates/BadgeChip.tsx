@@ -120,7 +120,7 @@ export function BadgeChip({ workout, transparent }: ShareTemplateProps) {
               letterSpacing: "0.06em",
             }}
           >
-            <span>{formatDurationMinutes(hero.durationMin)}</span>
+            <span>{formatDurationMinutes(hero.durationMin, { compact: true })}</span>
             <span>RPE {hero.rpe}/10</span>
           </div>
         </div>

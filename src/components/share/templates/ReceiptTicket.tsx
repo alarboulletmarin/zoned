@@ -241,7 +241,7 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
               TOTAL
             </span>
             <span style={{ fontSize: 36, fontWeight: 800, color: zoneHex }}>
-              {formatDurationMinutes(hero.durationMin)}
+              {formatDurationMinutes(hero.durationMin, { compact: true })}
             </span>
           </div>
 

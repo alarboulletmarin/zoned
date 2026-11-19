@@ -95,7 +95,7 @@ export function MinimalTypo({ workout, transparent }: ShareTemplateProps) {
         >
           <InlineStat
             label="Durée"
-            value={formatDurationMinutes(hero.durationMin)}
+            value={formatDurationMinutes(hero.durationMin, { compact: true })}
           />
           <InlineStat
             label="Niveau"

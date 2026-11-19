@@ -21,7 +21,7 @@ import { computeWeekStats } from "@/lib/weekStats";
 import { weekRhythm } from "@/lib/weekRhythm";
 import { polarisationStatus } from "@/components/weekly/PolarizationGauge";
 import { ZONE_HEX_LIGHT } from "@/lib/zoneColors";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import type { AnyWorkoutTemplate } from "@/types";
 import type { PlanSession, TrainingPlan } from "@/types/plan";
 import { isRunningWorkout } from "@/lib/workoutTemplate";
@@ -55,7 +55,7 @@ function tLib(key: string, opts?: Record<string, unknown>): string {
 function sessionZone(session: PlanSession, template: AnyWorkoutTemplate | undefined): number | null {
   if (activityKindOf(session.workoutId)) return activitySessionZone(session);
   if (!template || isStrengthWorkout(template)) return null;
-  return getDominantZone(template);
+  return getPeakZone(template);
 }
 
 // ── The rhythm ───────────────────────────────────────────────────────
@@ -286,7 +286,7 @@ export async function exportWeekToPDF(
       const facts = [typeLabel("strength", template), template.intensity, dur].filter(Boolean).join(" · ");
       entries.push(h.strengthStructure(template, exerciseNames, { facts }));
     } else {
-      const facts = [typeLabel(template.sessionType, template), `Z${getDominantZone(template)}`, dur]
+      const facts = [typeLabel(template.sessionType, template), `Z${getPeakZone(template)}`, dur]
         .filter(Boolean)
         .join(" · ");
       entries.push(h.runningStructure(template, { facts }));

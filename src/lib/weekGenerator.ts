@@ -21,7 +21,7 @@ import {
 } from "@/lib/workoutFilters";
 import { computeWeekStats } from "@/lib/weekStats";
 import type { AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import type {
   DayIndex,
   GeneratedWeek,
@@ -116,7 +116,7 @@ function pickNearDuration(
 /** Highest zone reached, strength has none, treated as 0. */
 function topZone(w: AnyWorkoutTemplate): number {
   if (isStrengthWorkout(w)) return 0;
-  return getDominantZone(w);
+  return getPeakZone(w);
 }
 
 /** Does this workout's top intensity match the requested quality type? */

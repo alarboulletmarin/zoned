@@ -28,7 +28,7 @@
  */
 
 import type { AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import type { PlanSession, SessionPrecision } from "@/types/plan";
 import { getAnyWorkoutDuration, getAnyWorkoutTss } from "@/lib/workoutFilters";
 import { plannedSessionKm, sessionDiscipline } from "@/lib/planStats";
@@ -70,7 +70,7 @@ export function canBeLoose(workout: AnyWorkoutTemplate): boolean {
 /** Le défaut à la pose : la qualité au chrono, le reste à la sensation. */
 export function defaultPrecisionFor(workout: AnyWorkoutTemplate): SessionPrecision {
   if (isStrengthWorkout(workout) || !canBeLoose(workout)) return "fixed";
-  return getDominantZone(workout) >= 4 ? "fixed" : "loose";
+  return getPeakZone(workout) >= 4 ? "fixed" : "loose";
 }
 
 /**

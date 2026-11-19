@@ -45,7 +45,7 @@ import {
 } from "@/lib/sessionPrecision";
 import { sessionDiscipline } from "@/lib/planStats";
 import type { AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import type { CrossTrainingIntensity, PlanSession, SessionPrecision } from "@/types/plan";
 
 export interface WeekSessionSheetTarget {
@@ -175,7 +175,7 @@ export function WeekSessionSheet({
   const zone = activity
     ? activitySessionZone(session)
     : workout && !isStrengthWorkout(workout)
-      ? getDominantZone(workout)
+      ? getPeakZone(workout)
       : null;
   const typeLabel = SESSION_TYPE_LABELS[session.sessionType];
   const looseMinutes = range ? rangeMidpoint(range) : session.estimatedDurationMin;

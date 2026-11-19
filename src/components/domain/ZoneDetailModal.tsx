@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import type { ZoneNumber, ZoneMeta } from "@/types";
 import { useWorkouts } from "@/hooks";
-import { getDominantZone } from "@/types";
+import { getPeakZone } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
 
 interface ZoneDetailModalProps {
@@ -41,7 +41,7 @@ export function ZoneDetailModal({
   // Find 3 example workouts for this zone
   const exampleWorkouts = zone
     ? allWorkouts
-        .filter((w) => getDominantZone(w) === zone)
+        .filter((w) => getPeakZone(w) === zone)
         .slice(0, 3)
     : [];
 

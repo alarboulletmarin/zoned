@@ -441,8 +441,18 @@ function collectStepZones(steps: WorkoutStep[], zones: ZoneNumber[]) {
   }
 }
 
-// Helper to get dominant zone from workout
-export function getDominantZone(workout: WorkoutTemplate): ZoneNumber {
+/**
+ * La zone de PIC d'une séance : la plus haute que touche son corps de séance,
+ * Z2 sans zone du tout.
+ *
+ * Elle s'appelait `getDominantZone`, et le nom mentait : MIX-010 passe 22 min
+ * 30 en Z1 et 1 min 30 en Z5, sa zone dite dominante était Z5. Tous ses
+ * appelants voulaient bien le pic (une séance avec du Z4 est une séance de
+ * qualité, le badge d'une carte dit jusqu'où elle monte), ils l'appellent
+ * maintenant par son nom. La zone où l'on passe le plus de minutes se lit
+ * dans la répartition (`transformSessionBlocks().zoneBreakdown`).
+ */
+export function getPeakZone(workout: WorkoutTemplate): ZoneNumber {
   const zones: ZoneNumber[] = [];
 
   if (workout.mainSetStructure?.length) {

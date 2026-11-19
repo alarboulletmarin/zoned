@@ -71,7 +71,7 @@ export const periodizationTerms: GlossaryTerm[] = [
   },
   {
     id: "taper",
-    term: "Taper",
+    term: "Affûtage",
     termEn: "Taper",
     category: "periodization",
     shortDefinition:
@@ -118,7 +118,7 @@ export const periodizationTerms: GlossaryTerm[] = [
   },
   {
     id: "base-building",
-    term: "Base Building",
+    term: "Construction de la base",
     termEn: "Base Building",
     category: "periodization",
     shortDefinition:

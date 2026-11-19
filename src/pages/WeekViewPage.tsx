@@ -101,7 +101,7 @@ import { isoDateOnly } from "@/lib/planDates";
 import { buildScanSchedule } from "@/lib/scanSchedule";
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import type { AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import { WEEK_CATEGORIES, type WeekCategory } from "@/types/plan";
 import {
   DEFAULT_WEEK_SETTINGS,
@@ -166,7 +166,7 @@ export function WeekViewPage() {
     const meta: Record<string, WorkoutCardMeta> = {};
     for (const w of catalog) {
       meta[w.id] = {
-        zone: isStrengthWorkout(w) ? undefined : getDominantZone(w),
+        zone: isStrengthWorkout(w) ? undefined : getPeakZone(w),
         tss: getAnyWorkoutTss(w),
       };
     }

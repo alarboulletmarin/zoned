@@ -25,7 +25,7 @@ const activity = (over: Partial<ComplementaryActivity> = {}): ComplementaryActiv
   ...over,
 });
 
-/** Un gabarit réduit à ce que `getDominantZone` lit : son corps de séance. */
+/** Un gabarit réduit à ce que `getPeakZone` lit : son corps de séance. */
 function template(id: string, zone: string): AnyWorkoutTemplate {
   return {
     id,

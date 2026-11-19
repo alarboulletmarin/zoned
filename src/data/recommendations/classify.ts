@@ -1,5 +1,5 @@
 import type { WorkoutTemplate } from "@/types";
-import { getDominantZone } from "@/types";
+import { getPeakZone } from "@/types";
 import type { DurationCategory, IntensityCategory, WorkoutProfile } from "./types";
 
 /**
@@ -31,7 +31,7 @@ export function classifyDuration(workout: WorkoutTemplate): DurationCategory {
  * - high:     Z4-Z6
  */
 export function classifyIntensity(workout: WorkoutTemplate): IntensityCategory {
-  const zone = getDominantZone(workout);
+  const zone = getPeakZone(workout);
   if (zone <= 2) return "low";
   if (zone === 3) return "moderate";
   return "high";

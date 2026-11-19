@@ -15,7 +15,7 @@
 
 import type { Content, Size, TableCell } from "pdfmake/interfaces";
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
-import { CATEGORY_META, DIFFICULTY_META, getDominantZone } from "@/types";
+import { CATEGORY_META, DIFFICULTY_META, getPeakZone } from "@/types";
 import { getWorkoutDuration, toZoneBarBlocks } from "@/components/visualization";
 import { ZONE_HEX_LIGHT, UNZONED_HEX } from "@/lib/zoneColors";
 import i18n from "@/i18n";
@@ -137,7 +137,7 @@ export async function exportToPDF(workout: WorkoutTemplate): Promise<void> {
     const difficulty = pickLang(DIFFICULTY_META[workout.difficulty], "label");
     const tips = pickLangArray<string>(workout, "coachingTips");
     const mistakes = pickLangArray<string>(workout, "commonMistakes");
-    const zone = getDominantZone(workout);
+    const zone = getPeakZone(workout);
 
     const facts = [category, difficulty, formatDuration(duration), `Z${zone}`].filter(Boolean).join("  ·  ");
 

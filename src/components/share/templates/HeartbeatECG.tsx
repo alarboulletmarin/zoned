@@ -229,7 +229,7 @@ export function HeartbeatECG({ workout, transparent }: ShareTemplateProps) {
             }}
           >
             <span>0:00</span>
-            <span>{formatDurationMinutes(hero.durationMin)}</span>
+            <span>{formatDurationMinutes(hero.durationMin, { compact: true })}</span>
           </div>
         </div>
 
@@ -242,7 +242,7 @@ export function HeartbeatECG({ workout, transparent }: ShareTemplateProps) {
             gap: 16,
           }}
         >
-          <Stat label="Durée" value={formatDurationMinutes(hero.durationMin)} accent={zoneHex} />
+          <Stat label="Durée" value={formatDurationMinutes(hero.durationMin, { compact: true })} accent={zoneHex} />
           <Stat label="Niveau" value={t(`library:difficulty.${workout.difficulty}`)} accent={zoneHex} />
           <Stat label="RPE" value={`${hero.rpe} / 10`} accent={zoneHex} />
         </div>

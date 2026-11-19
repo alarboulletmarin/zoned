@@ -7,7 +7,7 @@ import { ZoneBadge } from "./ZoneBadge";
 import { FavoriteButton } from "./FavoriteButton";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration, ZoneBar, toZoneBarBlocks } from "@/components/visualization";
 import { StrengthWorkoutListItem } from "./StrengthWorkoutCard";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -32,7 +32,7 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
   const name = pick(workout, "name");
-  const dominantZone = getDominantZone(workout);
+  const dominantZone = getPeakZone(workout);
   const duration = getWorkoutDuration(workout);
   // Le profil de la séance, au format d'une rangée : la même bar et le même
   // condensé que la carte, dans une vignette de 18px posée avant le favori.

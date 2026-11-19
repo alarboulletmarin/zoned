@@ -208,7 +208,7 @@ export function PeriodicElement({
             }}
           >
             <span>{hero.blockCount} blocks</span>
-            <span>{formatDurationMinutes(hero.durationMin)}</span>
+            <span>{formatDurationMinutes(hero.durationMin, { compact: true })}</span>
           </div>
         </div>
       </div>

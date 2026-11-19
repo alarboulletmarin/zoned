@@ -277,7 +277,7 @@ export function CassetteTape({ workout, transparent }: ShareTemplateProps) {
       >
         <span>zoned.run</span>
         <span>
-          {formatDurationMinutes(hero.durationMin)} · RPE {hero.rpe}/10
+          {formatDurationMinutes(hero.durationMin, { compact: true })} · RPE {hero.rpe}/10
         </span>
         <span>{workout.id}</span>
       </div>

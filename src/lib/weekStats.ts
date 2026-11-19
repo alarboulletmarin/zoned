@@ -18,7 +18,7 @@
 import { getAnyWorkoutDuration } from "@/lib/workoutFilters";
 import { sessionTssFor } from "@/lib/sessionPrecision";
 import type { AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import type { WeekSlot } from "@/types/week";
 
 /** Seiler-style three-bucket split, expressed in minutes and shares. */
@@ -55,7 +55,7 @@ export interface WeekStats {
 /** Considered "hard" when the session's characteristic peak zone is Z4+. */
 export function isHardWorkout(w: AnyWorkoutTemplate): boolean {
   if (isStrengthWorkout(w)) return false;
-  return getDominantZone(w) >= 4;
+  return getPeakZone(w) >= 4;
 }
 
 export function computeWeekStats(slots: WeekSlot[]): WeekStats {
@@ -94,7 +94,7 @@ export function computeWeekStats(slots: WeekSlot[]): WeekStats {
 
     if (!isStrengthWorkout(w)) {
       // Classify the whole session by its characteristic (peak) intensity.
-      const z = getDominantZone(w);
+      const z = getPeakZone(w);
       if (z <= 2) lowMinutes += duration;
       else if (z === 3) midMinutes += duration;
       else highMinutes += duration;

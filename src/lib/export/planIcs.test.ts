@@ -341,7 +341,7 @@ describe("exportPlanToICS: empty phase arrays", () => {
     expect(description).not.toContain(WARMUP_SEP);
     expect(description).not.toContain(MAIN_SEP);
     expect(description).not.toContain(COOLDOWN_SEP);
-    // No main-set zones to pick from: getDominantZone falls back to Z2.
+    // No main-set zones to pick from: getPeakZone falls back to Z2.
     expect(prop(event, "SUMMARY")).toBe("Vide - 50min [Z2]");
   });
 

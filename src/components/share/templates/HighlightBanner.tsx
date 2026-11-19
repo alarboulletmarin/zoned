@@ -117,7 +117,7 @@ export function HighlightBanner({ workout, transparent }: ShareTemplateProps) {
             gap: 28,
           }}
         >
-          <Stat label="Durée" value={formatDurationMinutes(hero.durationMin)} />
+          <Stat label="Durée" value={formatDurationMinutes(hero.durationMin, { compact: true })} />
           <Stat label="Zone" value={`Z${hero.dominantZone}`} color={zoneHex} />
           <Stat label="RPE" value={`${hero.rpe}`} />
         </div>

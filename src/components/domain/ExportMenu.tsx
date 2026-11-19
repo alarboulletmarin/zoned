@@ -32,9 +32,11 @@ interface ExportMenuProps {
   size?: "sm" | "default" | "lg";
   /** "outline" when another action owns the primary slot. */
   variant?: "default" | "outline";
+  /** The glyph alone, named by its aria-label: the phone dock has no room for the word. */
+  iconOnly?: boolean;
 }
 
-export function ExportMenu({ workout, className, size = "sm", variant = "default" }: ExportMenuProps) {
+export function ExportMenu({ workout, className, size = "sm", variant = "default", iconOnly = false }: ExportMenuProps) {
   const { t } = useTranslation("common");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFitGuide, setShowFitGuide] = useState(false);
@@ -123,12 +125,13 @@ export function ExportMenu({ workout, className, size = "sm", variant = "default
         <DropdownMenuTrigger asChild>
           <Button
             variant={variant}
-            size={size}
+            size={iconOnly ? "icon" : size}
             disabled={isExporting}
             className={className}
+            aria-label={iconOnly ? t("export.title") : undefined}
           >
             {isExporting ? <Loader2 className="zn-spin" /> : <Download />}
-            {t("export.title")}
+            {!iconOnly && t("export.title")}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

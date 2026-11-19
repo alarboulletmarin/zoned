@@ -21,7 +21,7 @@ const {
 } = await import("./sessionPrecision");
 const { sessionFromWorkout, planWeekToSlots } = await import("./weekToPlan");
 const { computeWeekStats } = await import("./weekStats");
-const { getDominantZone } = await import("@/types");
+const { getPeakZone } = await import("@/types");
 const { getAnyWorkoutDuration, getAnyWorkoutTss } = await import("./workoutFilters");
 
 import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
@@ -29,8 +29,8 @@ import type { PlanWeek } from "@/types/plan";
 
 const running = await loadAllWorkouts();
 const strength = await loadAllStrengthSessions();
-const easy = running.find((w) => getDominantZone(w) <= 2 && w.typicalDuration.max > w.typicalDuration.min)!;
-const hard = running.find((w) => getDominantZone(w) >= 4)!;
+const easy = running.find((w) => getPeakZone(w) <= 2 && w.typicalDuration.max > w.typicalDuration.min)!;
+const hard = running.find((w) => getPeakZone(w) >= 4)!;
 const lift = strength[0];
 
 describe("what can be loose", () => {

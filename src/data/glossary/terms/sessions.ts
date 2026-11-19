@@ -6,7 +6,7 @@ import type { GlossaryTerm } from "../types";
 export const sessionsTerms: GlossaryTerm[] = [
   {
     id: "tempo-run",
-    term: "Tempo Run",
+    term: "Course tempo",
     termEn: "Tempo Run",
     category: "sessions",
     shortDefinition:
@@ -108,7 +108,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "recovery-run",
-    term: "Recovery Run",
+    term: "Footing de récupération",
     termEn: "Recovery Run",
     category: "sessions",
     shortDefinition:
@@ -128,7 +128,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "long-run",
-    term: "Long Run",
+    term: "Sortie longue",
     termEn: "Long Run",
     category: "sessions",
     shortDefinition:
@@ -149,7 +149,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "race-pace",
-    term: "Race Pace",
+    term: "Allure spécifique",
     termEn: "Race Pace",
     category: "sessions",
     shortDefinition:
@@ -188,7 +188,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "strides",
-    term: "Strides",
+    term: "Lignes droites",
     termEn: "Strides",
     category: "sessions",
     shortDefinition:
@@ -208,7 +208,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "negative-split",
-    term: "Negative Split",
+    term: "Split négatif",
     termEn: "Negative Split",
     category: "sessions",
     shortDefinition:
@@ -228,7 +228,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "progressive-run",
-    term: "Progressive Run",
+    term: "Course progressive",
     termEn: "Progressive Run",
     category: "sessions",
     shortDefinition:

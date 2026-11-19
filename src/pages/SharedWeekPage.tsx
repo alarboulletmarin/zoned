@@ -29,7 +29,7 @@ import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
-import { getDominantZone, isStrengthWorkout, type AnyWorkoutTemplate } from "@/types";
+import { getPeakZone, isStrengthWorkout, type AnyWorkoutTemplate } from "@/types";
 
 /**
  * A week that arrived as a link. Everything on this screen is decoded from the
@@ -74,7 +74,7 @@ export function SharedWeekPage() {
     const meta: Record<string, WorkoutCardMeta> = {};
     for (const w of catalog) {
       meta[w.id] = {
-        zone: isStrengthWorkout(w) ? undefined : getDominantZone(w),
+        zone: isStrengthWorkout(w) ? undefined : getPeakZone(w),
         tss: getAnyWorkoutTss(w),
       };
     }

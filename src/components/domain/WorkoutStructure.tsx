@@ -565,17 +565,17 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
   const mistakes = pickLangArray<string>(workout, "commonMistakes");
 
   return (
-    // The kit's marks rather than two coloured glyphs: an em rule for advice,
-    // a cross for a mistake, both in vermillon type. The success green was a
-    // second hue the system reserves for a success state.
+    // Deux listes, et deux marques en ENCRE : un petit carré pour un conseil,
+    // une croix pour une erreur. Elles étaient en vermillon, l'accent qui doit
+    // rester celui de l'action principale de l'écran.
     <div className={cn("zn-coaching", className)}>
       {tips.length > 0 && (
         <div className="zn-coaching__group">
-          <h4 className="zn-coaching__title">{t("coaching.tips")}</h4>
+          <h3 className="zn-coaching__title">{t("coaching.tips")}</h3>
           <ul className="zn-coaching__list">
             {tips.map((tip, index) => (
               <li key={index} className="zn-coaching__item">
-                <span className="zn-coaching__mark" aria-hidden="true">-</span>
+                <CoachingMark kind="tip" />
                 <GlossaryLinkedText text={tip} />
               </li>
             ))}
@@ -585,11 +585,11 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
 
       {mistakes.length > 0 && (
         <div className="zn-coaching__group">
-          <h4 className="zn-coaching__title">{t("coaching.mistakes")}</h4>
+          <h3 className="zn-coaching__title">{t("coaching.mistakes")}</h3>
           <ul className="zn-coaching__list">
             {mistakes.map((mistake, index) => (
               <li key={index} className="zn-coaching__item">
-                <span className="zn-coaching__mark" aria-hidden="true">×</span>
+                <CoachingMark kind="mistake" />
                 <GlossaryLinkedText text={mistake} />
               </li>
             ))}
@@ -597,5 +597,15 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
         </div>
       )}
     </div>
+  );
+}
+
+/** Le carré d'un conseil, la croix d'une erreur. Décoratifs : le titre dit déjà lequel. */
+export function CoachingMark({ kind }: { kind: "tip" | "mistake" }) {
+  if (kind === "tip") return <span className="zn-coaching__mark" data-kind="tip" aria-hidden="true" />;
+  return (
+    <svg className="zn-coaching__mark" data-kind="mistake" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+      <path d="M1.5 1.5 L8.5 8.5 M8.5 1.5 L1.5 8.5" />
+    </svg>
   );
 }
