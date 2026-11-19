@@ -88,7 +88,8 @@
     "environment": "Environment",
     "frequency": "Frequency",
     "recovery": "Recovery",
-    "elevation": "Elevation"
+    "elevation": "Elevation",
+    "peak": "Peak"
   },
   "targetSystems": {
     "aerobic_base": "Aerobic Base",
@@ -184,5 +185,30 @@
   "illustration": {
     "strengthBrief": "Plank seen from the side, 2 px line, contact points in accent",
     "strengthLabel": "The session's plank, drawn in one line, contact points in accent"
+  },
+  "page": {
+    "structureTitle": "Structure",
+    "structureKicker_one": "{{count}} phase · 0 → {{duration}}",
+    "structureKicker_other": "{{count}} phases · 0 → {{duration}}",
+    "endurance": "Endurance",
+    "quality": "Quality",
+    "intensityLabel": "Intensity: endurance {{endurance}}, quality {{quality}}",
+    "intensityPeak": ", peak in zone {{zone}}",
+    "distanceNeedsVma": "With your VMA",
+    "distanceEstimate": "≈ {{km}} km",
+    "paceNeeded": "Pace · VMA needed",
+    "vmaPrompt": "Show your paces on every block",
+    "vmaSubmit": "Show",
+    "zonesForVma": "Paces for a VMA of {{vma}} km/h",
+    "zonesForHr": "Heart rates for a max HR of {{fcMax}} bpm",
+    "zonesEdit": "Edit",
+    "zonesEditLabel": "Edit my VMA",
+    "repeat": "{{count}} ×",
+    "noZone": "No zone",
+    "distributionTitle": "Distribution",
+    "distributionCaption": "Time spent per zone",
+    "distributionLabel": "Time per zone: {{parts}}",
+    "relatedTitle": "In the same spirit",
+    "glossary": "Glossary"
   }
 }

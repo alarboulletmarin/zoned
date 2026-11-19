@@ -2,7 +2,6 @@ import {
   useState,
   useEffect,
   type CSSProperties,
-  type ReactNode,
   useCallback,
 } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
@@ -10,9 +9,7 @@ import { HOME_LINK_STATE } from "@/components/layout/navigation";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
-  Circle,
   Dumbbell,
-  Mountain,
   Link2,
   MoreHorizontal,
   Share,
@@ -31,20 +28,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  ZoneBadge,
-  WorkoutCardCompact,
   FavoriteButton,
   ZonePersonalizationCTA,
   TipCard,
 } from "@/components/domain";
-import {
-  WorkoutStructure,
-  CoachingTips,
-} from "@/components/domain/WorkoutStructure";
+import { CoachingMark, CoachingTips } from "@/components/domain/WorkoutStructure";
+import { IntensityBar } from "@/components/domain/session/IntensityBar";
+import { SessionPhaseList } from "@/components/domain/session/SessionPhaseList";
+import { SessionRelated } from "@/components/domain/session/SessionRelated";
+import { ZoneSplit } from "@/components/domain/session/ZoneSplit";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import Plank from "@/assets/doodles/plank.svg?react";
-import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
 import { toast } from "@/components/ui/toast";
 import { copyToClipboard } from "@/lib/issueBuilder";
@@ -61,24 +56,23 @@ import {
   transformSessionBlocks,
   formatDurationMinutes,
   MiniElevationProfile,
-  type ZoneNumber,
 } from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
 import { MuscleDistribution } from "@/components/visualization/MuscleDistribution";
 import { MuscleMap } from "@/components/visualization/MuscleMap";
-import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
+import { useWorkout, useTips } from "@/hooks";
 import { RelatedContent } from "@/components/domain/RelatedContent";
-import type { ZoneRange } from "@/types";
+import type { UserZonePreferences, ZoneRange } from "@/types";
 import { getWorkoutDiscipline, getPeakZone } from "@/types";
 import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { getWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
-import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang, usePickLangArray } from "@/lib/i18n-utils";
+import { estimateDistanceKm, intensitySplit, peakOf } from "@/lib/sessionFacts";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
 import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
-import { CATEGORY_ICONS } from "@/components/domain/CategoryIcon";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
 import { hasAdjustableParams } from "@/lib/workoutAdjust";
 import {
@@ -100,6 +94,8 @@ interface Fact {
   value: string;
   /** The value this one replaced, printed struck through beside it. */
   was?: string;
+  /** A value that is not a number yet, what is missing to have one. */
+  muted?: boolean;
 }
 
 export function WorkoutDetailPage() {
@@ -108,6 +104,7 @@ export function WorkoutDetailPage() {
   const navigate = useNavigate();
   const { t } = useTranslation(["session", "library", "common"]);
   const pick = usePickLang();
+  const isEn = useIsEnglish();
   // 640px, the line every mobile rule on this page uses. Read here, above the
   // loading and not-found returns: a hook after an early return is a hook that
   // does not run on every render.
@@ -129,20 +126,19 @@ export function WorkoutDetailPage() {
   const { workout, isLoading } = useWorkout(id);
   const runningWorkout = workout && isRunningWorkout(workout) ? workout : null;
   const isStrength = workout ? isStrengthWorkout(workout) : false;
-  const { workouts: relatedWorkouts } = useRelatedWorkouts(runningWorkout);
 
-  // Get contextual tip based on dominant zone (running workouts only)
-  const dominantZoneForTip = runningWorkout
-    ? getPeakZone(runningWorkout)
-    : undefined;
+  // The contextual tip follows the session's PEAK zone, as it always did: the
+  // tip of a VO2 session is about VO2, even when most of its minutes are easy.
+  const peakZoneForTip = runningWorkout ? getPeakZone(runningWorkout) : undefined;
   const { tip } = useTips({
-    filters: dominantZoneForTip ? { zones: [dominantZoneForTip] } : undefined,
+    filters: peakZoneForTip ? { zones: [peakZoneForTip] } : undefined,
     autoLoad: !!workout && !isStrength,
   });
 
-  // Load user zones from localStorage
+  // The athlete's zones, from localStorage. `zonePrefs` says what they were
+  // computed from (a VMA, a max HR), the VMA line and the distance read it.
   const [userZones, setUserZones] = useState<ZoneRange[]>([]);
-  const [hasUserZones, setHasUserZones] = useState(false);
+  const [zonePrefs, setZonePrefs] = useState<UserZonePreferences | null>(null);
 
   // Share modal (5 social templates)
   const [shareOpen, setShareOpen] = useState(false);
@@ -150,12 +146,11 @@ export function WorkoutDetailPage() {
   const refreshUserZones = useCallback(() => {
     const prefs = loadUserZonePrefs();
     if (prefs && (prefs.fcMax || prefs.vma)) {
-      const zones = calculateAllZones(prefs);
-      setUserZones(zones);
-      setHasUserZones(true);
+      setUserZones(calculateAllZones(prefs));
+      setZonePrefs(prefs);
     } else {
       setUserZones([]);
-      setHasUserZones(false);
+      setZonePrefs(null);
     }
   }, []);
 
@@ -205,7 +200,7 @@ export function WorkoutDetailPage() {
     );
   }
 
-  const dominantZone = getPeakZone(workout);
+  const peakZone = getPeakZone(workout);
   const workoutDiscipline = getWorkoutDiscipline(workout);
   // Adjusting means copying: a workout already living in My Workouts is edited
   // in place instead, and one with no number to move has nothing to offer.
@@ -219,8 +214,8 @@ export function WorkoutDetailPage() {
   const hasPlanContext =
     locationState?.from === "plan" && planEstimatedDuration != null;
 
-  // Base session data from workout template. One call, reused three times: the
-  // profile bar, the zone split and the durations all read the same segments.
+  // Base session data from workout template. One call, reused: the profile
+  // bar, the zone split and the durations all read the same segments.
   const sessionData = transformSessionBlocks({
     warmupTemplate: workout.warmupTemplate,
     mainSetTemplate: workout.mainSetTemplate,
@@ -245,12 +240,12 @@ export function WorkoutDetailPage() {
   const phaseCount = PHASE_KEYS.filter(
     (key) => getWorkoutPhaseSteps(workout, key).length > 0,
   ).length;
-  const zonedRows = sessionData.zoneBreakdown.filter(
-    (row): row is typeof row & { zone: ZoneNumber } => row.zone != null,
+  // The template's own minutes, unless a plan scaled them: then the plan's.
+  const split = intensitySplit(
+    workout,
+    hasPlanContext ? duration : sessionData.totalDurationMin,
   );
-  const unzonedRow = sessionData.zoneBreakdown.find((row) => row.zone == null);
-
-  const CategoryIcon = CATEGORY_ICONS[workout.category];
+  const peak = peakOf(workout);
 
   // Breadcrumb trail
   const workoutName = pick(workout, "name");
@@ -299,47 +294,33 @@ export function WorkoutDetailPage() {
     trailMetrics.totalElevationLossM > 0 ||
     trailMetrics.dominantTerrain != null;
 
-  // Where the session has to be run. A LIST, it stays one.
-  //
-  // These used to be joined with " · " and pushed into `facts`, where the
-  // strip printed them in 20px display type like a measurement. "Nécessite une
-  // piste · Terrain plat préféré" then wrapped to three lines, took its row
-  // from 68px to 109, and left the cell beside it with 40px of nothing. The
-  // comment over `facts` says it out loud: the numbers that decide whether
-  // this is today's session. A sentence is not one of them.
-  //
-  // Chips, under the block, with the marks the session card already uses.
-  //
-  // The labels are library:terrain.*, not session:environment.*. Both exist and
-  // both are correct; the library's are the short ones, "Piste requise" rather
-  // than "Nécessite une piste", and they keep the required/preferred
-  // distinction that a bare "Piste" would lose. Measured at 390px: the long
-  // pair wrapped to two lines and cost 81px, the short pair sits on one at 40.
-  // It also means the session page and the library filter now name the same
-  // fact with the same words.
-  const envRequirements: { key: string; label: string; icon?: ReactNode }[] = [];
-  if (workout.environment.requiresTrack) {
-    envRequirements.push({
-      key: "track",
-      label: t("library:terrain.track"),
-      icon: <Circle size={12} />,
-    });
+  // ONE line of metadata, in mono: the code, what the session is, then the
+  // discipline when it is not running (the default goes without saying) and
+  // the ground when the session states one. It replaces five chips in four
+  // styles, the zone badge among them, which named the peak as if it were
+  // the session's character.
+  const metaParts: string[] = [
+    workout.id,
+    t(`library:metaLine.category.${workout.category}`),
+  ];
+  if (workoutDiscipline !== "running") {
+    metaParts.push(t(`library:activityToggle.${workoutDiscipline}`));
   }
-  if (workout.environment.requiresHills && !hasTrail) {
-    envRequirements.push({
-      key: "hills",
-      label: t("library:terrain.hills"),
-      icon: <Mountain size={12} />,
-    });
-  }
-  if (workout.environment.prefersFlat) {
-    envRequirements.push({
-      key: "flat",
-      label: t("library:terrain.flat"),
-    });
-  }
+  if (workout.environment.requiresTrack) metaParts.push(t("library:metaLine.terrain.track"));
+  if (workout.environment.requiresHills && !hasTrail) metaParts.push(t("library:metaLine.terrain.hills"));
+  if (workout.environment.prefersFlat) metaParts.push(t("library:metaLine.terrain.flat"));
 
-  // The strip: the numbers that decide whether this is today's session.
+  // The four numbers that decide whether this is today's session. The old
+  // fourth, the target system, repeated the category line and is gone.
+  const estimatedKm =
+    planTargetDistanceKm != null && planTargetDistanceKm > 0
+      ? planTargetDistanceKm
+      : zonePrefs?.vma != null
+        ? estimateDistanceKm(workout, zonePrefs.vma)
+        : null;
+  const kmFormat = new Intl.NumberFormat(isEn ? "en-GB" : "fr-FR", {
+    maximumFractionDigits: 1,
+  });
   const facts: Fact[] = [
     {
       label: t("session:stats.duration"),
@@ -349,49 +330,32 @@ export function WorkoutDetailPage() {
           ? formatDurationMinutes(baseDuration)
           : undefined,
     },
+    estimatedKm != null && estimatedKm > 0
+      ? {
+          label: t("session:stats.distance"),
+          value: t("session:page.distanceEstimate", { km: kmFormat.format(estimatedKm) }),
+        }
+      : {
+          label: t("session:stats.distance"),
+          value: t("session:page.distanceNeedsVma"),
+          muted: true,
+        },
+    {
+      label: t("session:stats.difficulty"),
+      value: t(`library:difficulty.${workout.difficulty}`),
+    },
+    {
+      label: t("session:stats.peak"),
+      value: peak
+        ? peak.seconds > 0
+          ? `Z${peak.zone} · ${formatDurationMinutes(peak.seconds / 60)}`
+          : `Z${peak.zone}`
+        : "-",
+    },
   ];
-  if (planTargetDistanceKm != null && planTargetDistanceKm > 0) {
-    facts.push({
-      label: t("session:stats.distance"),
-      value: `${workout.category !== "long_run" ? "~" : ""}${planTargetDistanceKm} km`,
-    });
-  }
-  facts.push({
-    label: t("session:stats.difficulty"),
-    value: t(`library:difficulty.${workout.difficulty}`),
-  });
-  facts.push({
-    label: t("session:stats.target"),
-    value: t(`session:targetSystems.${workout.targetSystem}`),
-  });
-  if (hasTrail && trailMetrics.totalElevationGainM > 0) {
-    facts.push({
-      label: t("session:stats.elevation"),
-      value: `+${trailMetrics.totalElevationGainM} m`,
-    });
-  }
 
-  // The action cluster, rendered in one of two places.
-  //
-  // On a wide screen it belongs in the hero, beside the facts. On a phone it
-  // is docked to the floor of the viewport (.zn-session__dock, below 640):
-  // 88px of buttons between the session's name and its profile is 88px of
-  // someone not yet seeing the session.
-  //
-  // Three pills, and only three: send this to my watch, keep it, everything
-  // else. The bar is sized for exactly that. A fourth control, the "see my
-  // paces" call that focused the VMA field, landed here for a few hours and
-  // ran off the left edge of a real iPhone; the owner had it removed. The VMA
-  // field under the steps is the page's one entry point for the paces.
-  const actionCluster = (
-      <div
-        className="zn-cluster zn-session__actions"
-        style={{ "--gap": "var(--sp-6)" } as CSSProperties}
-      >
-        <ExportMenu workout={workout} size="lg" />
-
-        <FavoriteButton workoutId={workout.id} />
-
+  // The menu behind the dots: everything that is not the primary action.
+  const moreMenu = (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -460,7 +424,23 @@ export function WorkoutDetailPage() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+  );
+
+  // The action cluster, rendered in one of two places: in the page from
+  // 641px, docked to the floor of the viewport below (.zn-session__dock).
+  // Export is an outline button: the screen's one vermillon is kept for
+  // its primary action.
+  const actionCluster = (
+    <div className="zn-session__actions">
+      <ExportMenu
+        workout={workout}
+        size="lg"
+        variant="outline"
+        iconOnly={isPhone}
+      />
+      <FavoriteButton workoutId={workout.id} />
+      {moreMenu}
+    </div>
   );
 
   return (
@@ -507,7 +487,7 @@ export function WorkoutDetailPage() {
               {
                 "@type": "PropertyValue",
                 name: "Peak Zone",
-                value: `Z${dominantZone}`,
+                value: `Z${peakZone}`,
               },
             ],
             isPartOf: {
@@ -590,38 +570,20 @@ export function WorkoutDetailPage() {
           },
         ]}
       />
-
-      <div className="zn-session">
+      <div className="zn-session zn-session--run">
         <SessionTrail breadcrumbs={breadcrumbs} onBack={() => navigate(-1)} />
 
-        {/* 1, what the session is, and the one thing to do with it */}
-        <section className="zn-session__hero">
-          <div className="zn-stack zn-session__head">
-            <div
-              className="zn-cluster"
-              style={{ "--gap": "var(--sp-5)" } as CSSProperties}
-            >
-              <span className="zn-mono zn-session__code">{workout.id}</span>
-              <ZoneBadge zone={dominantZone} size="md" showLabel />
-              <Badge variant="outline">
-                <CategoryIcon className="zn-cat-icon" />
-                {categoryLabel}
-              </Badge>
-              <Badge variant="secondary">
-                {t(`library:activityToggle.${workoutDiscipline}`)}
-              </Badge>
-            </div>
-
+        <div className="zn-session__grid">
+          {/* 1, what the session is */}
+          <header className="zn-session__header">
+            <p className="zn-session__meta">{metaParts.join(" · ")}</p>
             <h1 className="zn-display">{workoutName}</h1>
-
             <p className="zn-body zn-body--lead zn-session__lede">
               <GlossaryLinkedText text={pick(workout, "description")} />
             </p>
-
             {workout.sourceWorkoutId && (
               <WorkoutProvenance sourceId={workout.sourceWorkoutId} />
             )}
-
             {hasPlanContext && (
               <p className="zn-mono zn-faint">
                 {t("session:planContext.banner", {
@@ -631,166 +593,95 @@ export function WorkoutDetailPage() {
                 })}
               </p>
             )}
+          </header>
 
+          {/* 2, its numbers, and what to do with it */}
+          <div className="zn-session__summary">
+            <FactStrip facts={facts} variant="grid" />
             {!isPhone && actionCluster}
-
-            <FactStrip facts={facts} />
-
-            {envRequirements.length > 0 && (
-              <div className="zn-cluster zn-session__env">
-                {envRequirements.map((req) => (
-                  <Badge key={req.key} variant="outline">
-                    {req.icon}
-                    {req.label}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </div>
-        </section>
 
-        {/* 2, the session itself: the whole profile, then phase by phase */}
-        <section className="zn-section" aria-labelledby="session-structure">
-          <div
-            className="zn-stack"
-            style={{ "--gap": "var(--sp-12)" } as CSSProperties}
-          >
-            <div
-              className="zn-row zn-row--baseline"
-              style={{ "--gap": "var(--sp-8)" } as CSSProperties}
-            >
-              <h2 id="session-structure" className="zn-title" data-level="1">
-                {t("session:screen.structureTitle")}
+          {/* 3, the session itself: intensity, profile, then phase by phase */}
+          <section className="zn-session__structure" aria-labelledby="session-structure">
+            <div className="zn-session__titlerow">
+              <h2 id="session-structure" className="zn-session__h2">
+                {t("session:page.structureTitle")}
               </h2>
-              <span className="zn-kicker zn-kicker--inline">
-                {t("session:screen.structureKicker", {
+              <span className="zn-session__kicker">
+                {t("session:page.structureKicker", {
+                  count: phaseCount,
                   duration: formatDurationMinutes(duration),
-                  phases: phaseCount,
                 })}
               </span>
             </div>
 
-            <div>
-              {/* Le profil, seul. Il portait une annotation, la hauteur dit
-                  l'intensité, la largeur dit le temps passé dedans, sa
-                  flèche et sa figure ; le propriétaire n'en veut plus. L'axe
-                  sous la frise nomme déjà le temps, la teinte des blocs nomme
-                  déjà la zone, et la table de répartition dit les deux en
-                  chiffres. */}
-              <ZoneBar
-                blocks={profileBlocks}
-                height={112}
-                className="zn-session__profile"
-              />
-              <div className="zn-session__axis">
-                <span className="zn-kicker zn-kicker--inline">
-                  {t("session:screen.axisStart")}
-                </span>
-                <span className="zn-kicker zn-kicker--inline">
-                  {t("session:screen.axisEnd", {
-                    duration: formatDurationMinutes(duration),
-                  })}
-                </span>
-              </div>
+            <IntensityBar split={split} peakZone={peak?.zone ?? null} />
+
+            <div className="zn-session__profile">
+              <ZoneBar blocks={profileBlocks} />
             </div>
-          </div>
 
-          <WorkoutStructure
-            workout={workout}
-            userZones={hasUserZones ? userZones : undefined}
-            className="zn-session__phases"
-            exportable
-          />
+            <ZonePersonalizationCTA
+              className="zn-session__zone-cta"
+              current={zonePrefs}
+              onSaved={refreshUserZones}
+            />
 
-          {/* The offer to set your zones sits AFTER the session now. It was in
-              the hero, between the facts and the drawing, 123px of aside
-              standing between someone arriving and the workout they came for.
-              Here it lands where it makes sense: right under the steps whose
-              paces it would fill in. */}
-          {!hasUserZones && (
-            <ZonePersonalizationCTA className="zn-session__zone-cta" onSaved={refreshUserZones} />
-          )}
-        </section>
-
-        {/* 3, where the time goes, against how to spend it */}
-        <section className="zn-session__split">
-          <div
-            className="zn-session__half zn-stack"
-            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
-            aria-labelledby="session-zones"
-          >
-            <h2 id="session-zones" className="zn-title">
-              {t("session:titles.zoneDistribution")}
-            </h2>
-            <div className="zn-session__zones">
-              {zonedRows.map((row) => (
-                <ZoneRow
-                  key={row.zone}
-                  zone={row.zone}
-                  name={row.label}
-                  value={formatDurationMinutes(row.durationMin)}
-                  percent={row.percent}
-                />
-              ))}
-            </div>
-            <p className="zn-mono zn-session__zones-total">
-              {t("session:screen.total", {
-                duration: formatDurationMinutes(duration),
-              })}
-              {unzonedRow
-                ? ` · ${unzonedRow.label} ${formatDurationMinutes(unzonedRow.durationMin)}`
-                : ""}
-            </p>
-          </div>
-
-          <div className="zn-session__half zn-session__advice">
-            <CoachingTips workout={workout} />
-            {tip && (
-              <TipCard tip={tip} variant="banner" className="zn-session__tip" />
-            )}
-          </div>
-        </section>
-
-        {/* 4, the ground, when the session has one */}
-        {hasTrail && (
-          <section
-            className="zn-section zn-stack"
-            style={{ "--gap": "var(--sp-8)" } as CSSProperties}
-            aria-labelledby="session-trail"
-          >
-            <h2 id="session-trail" className="zn-title" data-level="3">
-              {t("session:titles.trailProfile")}
-            </h2>
-            <div className="zn-session__elevation">
-              <MiniElevationProfile workout={workout} height={72} />
-            </div>
-            {trailMetrics.dominantTerrain && (
-              <p className="zn-mono zn-faint">
-                {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}
-                {trailMetrics.verticalDensityMPerKm > 0 && (
-                  <>
-                    {" · "}
-                    {t("library:trail.verticalDensity", {
-                      value: trailMetrics.verticalDensityMPerKm,
-                    })}
-                  </>
-                )}
-                {trailMetrics.avgGradientPercent !== 0 && (
-                  <>
-                    {" · "}
-                    {t("library:trail.gradientAvg", {
-                      value: trailMetrics.avgGradientPercent,
-                    })}
-                  </>
-                )}
-              </p>
-            )}
+            <SessionPhaseList
+              workout={workout}
+              userZones={userZones.length > 0 ? userZones : undefined}
+            />
           </section>
-        )}
 
-        {/* 5, the rest, folded: it stays in the DOM, it just waits its turn */}
-        <section className="zn-section">
-          <div className="zn-session__folds">
+          {/* 4, where the time goes, then how to spend it */}
+          <aside className="zn-session__aside">
+            <section className="zn-session__distribution" aria-labelledby="session-zones">
+              <h2 id="session-zones" className="zn-session__h2">
+                {t("session:page.distributionTitle")}
+              </h2>
+              <ZoneSplit rows={sessionData.zoneBreakdown} />
+            </section>
+
+            <section className="zn-session__advice" aria-label={t("session:titles.coachingTips")}>
+              <CoachingTips workout={workout} />
+              {tip && (
+                <TipCard tip={tip} variant="banner" className="zn-session__tip" />
+              )}
+            </section>
+          </aside>
+
+          {/* 5, the ground, when the session has one */}
+          {hasTrail && (
+            <section className="zn-session__wide zn-stack" aria-labelledby="session-trail">
+              <h2 id="session-trail" className="zn-session__h2">
+                {t("session:titles.trailProfile")}
+              </h2>
+              <div className="zn-session__elevation">
+                <MiniElevationProfile workout={workout} height={72} />
+              </div>
+              <p className="zn-mono zn-faint">
+                {[
+                  trailMetrics.totalElevationGainM > 0
+                    ? `+${trailMetrics.totalElevationGainM} m D+`
+                    : null,
+                  trailMetrics.dominantTerrain
+                    ? t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)
+                    : null,
+                  trailMetrics.verticalDensityMPerKm > 0
+                    ? t("library:trail.verticalDensity", { value: trailMetrics.verticalDensityMPerKm })
+                    : null,
+                  trailMetrics.avgGradientPercent !== 0
+                    ? t("library:trail.gradientAvg", { value: trailMetrics.avgGradientPercent })
+                    : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
+            </section>
+          )}
+
+          {/* 6, the rest, folded: it stays in the DOM, it just waits its turn */}
+          <div className="zn-session__wide zn-session__folds">
             <Section collapsible title={t("session:titles.nutritionRecovery")}>
               <NutritionRecoverySection workout={workout} />
             </Section>
@@ -798,41 +689,30 @@ export function WorkoutDetailPage() {
               <ScienceSection workout={workout} />
             </Section>
           </div>
-        </section>
+
+          {/* 7, the next tap */}
+          <section className="zn-session__wide zn-session__next" aria-labelledby="session-next">
+            <h2 id="session-next" className="zn-session__h2">
+              {t("session:page.relatedTitle")}
+            </h2>
+            <SessionRelated workoutId={workout.id} />
+            <RelatedContent
+              source={{ type: "workout", id: workout.id }}
+              showTitle={false}
+              include={["articles"]}
+            />
+          </section>
+        </div>
 
         <ShareDialog
           workout={workout}
           open={shareOpen}
           onOpenChange={setShareOpen}
         />
-
-        {/* 6, the next tap */}
-        <section
-          className="zn-section zn-stack"
-          style={{ "--gap": "var(--sp-13)" } as CSSProperties}
-          aria-labelledby="session-next"
-        >
-          <h2 id="session-next" className="zn-title" data-level="1">
-            {t("session:titles.continueExploring")}
-          </h2>
-          {relatedWorkouts.length > 0 && (
-            <div className="zn-grid">
-              {relatedWorkouts.slice(0, 3).map((related) => (
-                <WorkoutCardCompact key={related.id} workout={related} />
-              ))}
-            </div>
-          )}
-          <RelatedContent
-            source={{ type: "workout", id: workout.id }}
-            showTitle={false}
-          />
-        </section>
       </div>
 
-      {/* The thumb-zone bar, on a phone and on this page only.
-          Same shape as the shared-session dock below: pinned to the viewport
-          floor, on a rule, giving up the end of its own gutter so the menu
-          pill sits beside it rather than over it. */}
+      {/* The thumb-zone bar, on a phone and on this page only: pinned to the
+          viewport floor, full width, on a rule. */}
       {isPhone && <div className="zn-session__dock">{actionCluster}</div>}
     </>
   );
@@ -893,14 +773,18 @@ function SessionTrail({
   );
 }
 
-/** The four-up strip of facts under the hero: mono label, display value. */
-function FactStrip({ facts }: { facts: Fact[] }) {
+/**
+ * The facts block: mono label, value. `grid` is the running page's four
+ * figures, 2 x 2 on a phone and beside the header on a desktop, 4 x 1 on a
+ * tablet; the default is the strength page's strip.
+ */
+function FactStrip({ facts, variant }: { facts: Fact[]; variant?: "grid" }) {
   return (
-    <dl className="zn-session__facts">
+    <dl className="zn-session__facts" data-variant={variant}>
       {facts.map((fact) => (
         <div key={fact.label} className="zn-session__fact">
           <dt className="zn-kicker zn-kicker--inline">{fact.label}</dt>
-          <dd className="zn-session__fact-value">
+          <dd className="zn-session__fact-value" data-muted={fact.muted || undefined}>
             {fact.value}
             {fact.was && (
               <span className="zn-session__fact-was">{fact.was}</span>
@@ -1283,8 +1167,8 @@ function StrengthWorkoutDetail({
 
 /**
  * The same two lists the running session prints, from the strength template's
- * own fields: an em rule for advice, a cross for a mistake, both in vermillon
- * type. The paint is `.zn-coaching`, shared with `CoachingTips`.
+ * own fields: an ink square for advice, an ink cross for a mistake. The paint
+ * is `.zn-coaching`, shared with `CoachingTips`.
  */
 function StrengthCoachingTips({
   tips,
@@ -1295,9 +1179,9 @@ function StrengthCoachingTips({
 }) {
   const { t } = useTranslation("session");
 
-  const groups: { title: string; mark: ReactNode; items: string[] }[] = [
-    { title: t("coaching.tips"), mark: "-", items: tips },
-    { title: t("coaching.mistakes"), mark: "×", items: mistakes },
+  const groups: { title: string; mark: "tip" | "mistake"; items: string[] }[] = [
+    { title: t("coaching.tips"), mark: "tip", items: tips },
+    { title: t("coaching.mistakes"), mark: "mistake", items: mistakes },
   ];
 
   return (
@@ -1310,9 +1194,7 @@ function StrengthCoachingTips({
             <ul className="zn-coaching__list">
               {group.items.map((item, index) => (
                 <li key={index} className="zn-coaching__item">
-                  <span className="zn-coaching__mark" aria-hidden="true">
-                    {group.mark}
-                  </span>
+                  <CoachingMark kind={group.mark} />
                   <GlossaryLinkedText text={item} />
                 </li>
               ))}

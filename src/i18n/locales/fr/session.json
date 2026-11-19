@@ -88,7 +88,8 @@
     "environment": "Terrain",
     "frequency": "Fréquence",
     "recovery": "Récupération",
-    "elevation": "Dénivelé"
+    "elevation": "Dénivelé",
+    "peak": "Pic"
   },
   "targetSystems": {
     "aerobic_base": "Base aérobie",
@@ -184,5 +185,30 @@
   "illustration": {
     "strengthBrief": "Gainage vu de profil, trait 2 px, appuis en accent",
     "strengthLabel": "Le gainage de la séance, dessiné d'un trait, les appuis en accent"
+  },
+  "page": {
+    "structureTitle": "Structure",
+    "structureKicker_one": "{{count}} phase · 0 → {{duration}}",
+    "structureKicker_other": "{{count}} phases · 0 → {{duration}}",
+    "endurance": "Endurance",
+    "quality": "Qualité",
+    "intensityLabel": "Intensité : endurance {{endurance}}, qualité {{quality}}",
+    "intensityPeak": ", pic en zone {{zone}}",
+    "distanceNeedsVma": "Avec ta VMA",
+    "distanceEstimate": "≈ {{km}} km",
+    "paceNeeded": "Allure · VMA requise",
+    "vmaPrompt": "Affiche tes allures sur chaque bloc",
+    "vmaSubmit": "Afficher",
+    "zonesForVma": "Allures pour une VMA de {{vma}} km/h",
+    "zonesForHr": "Fréquences pour une FC max de {{fcMax}} bpm",
+    "zonesEdit": "Modifier",
+    "zonesEditLabel": "Modifier ma VMA",
+    "repeat": "{{count}} ×",
+    "noZone": "Sans zone",
+    "distributionTitle": "Répartition",
+    "distributionCaption": "Temps passé par zone",
+    "distributionLabel": "Répartition du temps par zone : {{parts}}",
+    "relatedTitle": "Dans le même esprit",
+    "glossary": "Glossaire"
   }
 }

@@ -373,12 +373,30 @@
   color: var(--text-muted);
 }
 
-/* The kit's marks: an em rule for advice, a cross for a mistake. Vermillon
-   type on two characters, not a second accent fill. */
+/* The marks, in INK: a small square for advice, a cross for a mistake. They
+   were vermillon, the accent the screen keeps for its primary action. */
 .zn-coaching__mark {
   flex: none;
-  color: var(--text-link);
-  font-weight: var(--fw-bold);
+  align-self: baseline;
+}
+
+.zn-coaching__mark[data-kind="tip"] {
+  inline-size: 6px;
+  block-size: 6px;
+  background: var(--ink-1);
+  transform: translateY(-2px);
+}
+
+.zn-coaching__mark[data-kind="mistake"] {
+  inline-size: 10px;
+  block-size: 10px;
+  fill: none;
+  stroke: var(--ink-1);
+  stroke-width: 1.6px;
+}
+
+.zn-coaching__item {
+  align-items: baseline;
 }
 
 /* ══ WorkoutListItem ═════════════════════════════════════════════════════ */
@@ -1351,35 +1369,31 @@
    and the button's own outline. The screen's one vermillon fill is elsewhere. */
 
 .zn-zone-cta {
-  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: var(--sp-6);
-  padding: var(--sp-8);
-
-  background: var(--surface-card);
-  border: var(--border-rule);
-  border-radius: var(--r-xl);
-}
-
-.zn-zone-cta__body {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-6);
-}
-
-.zn-zone-cta__icon {
-  inline-size: 18px;
-  block-size: 18px;
-  flex: none;
-  margin-block-start: 1px;
-  color: var(--text-link);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5) var(--sp-8);
+  padding: var(--sp-6) var(--sp-7);
+  border: var(--border-dashed);
+  border-radius: var(--r-lg);
 }
 
 .zn-zone-cta__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
   margin: 0;
   font: var(--type-body-sm);
+  font-size: 15px;
+  color: var(--text-body);
+}
+
+.zn-zone-cta__help {
+  font: var(--type-caption);
   color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .zn-zone-cta__actions {
@@ -1388,46 +1402,40 @@
   gap: var(--sp-4);
 }
 
-.zn-zone-cta__help {
-  display: block;
-  margin-block-start: var(--sp-1);
-  font: var(--type-caption);
-  color: var(--text-link);
+.zn-zone-cta__field {
+  block-size: var(--hit-min);
+  --field-w: 36px;
+}
+
+/* An outline pill, not the vermillon fill: the call of this screen is
+   elsewhere. */
+.zn-zone-cta__submit {
+  block-size: var(--hit-min);
+  padding-inline: var(--sp-8);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-body);
+  font: var(--fw-medium) var(--fs-body-sm) / 1 var(--font-text);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.zn-zone-cta__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.zn-zone-cta__submit:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .zn-zone-cta__error {
+  flex-basis: 100%;
   margin: 0;
   font: var(--type-caption);
   color: var(--state-danger);
-}
-
-/* On a phone the banner was a full card with a full-width button under two
-   lines of text, 133px spent on an aside, above the session it interrupts.
-   The button goes back to its own width and the padding to a note's. */
-@media (max-width: 639px) {
-  .zn-zone-cta {
-    gap: var(--sp-5);
-    padding: var(--sp-6) var(--sp-7);
-  }
-}
-
-@media (min-width: 640px) {
-  .zn-zone-cta {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--sp-8);
-  }
-  .zn-zone-cta__body {
-    padding-inline-end: 0;
-  }
-  .zn-zone-cta__actions {
-    flex: none;
-  }
-  .zn-zone-cta__error {
-    flex-basis: 100%;
-  }
 }
 
 /* ══ ScanCard ════════════════════════════════════════════════════════════

@@ -165,11 +165,6 @@
   }
 }
 
-/* The zone offer, now under the steps rather than in the hero. */
-.zn-session__zone-cta {
-  margin-block-start: var(--sp-13);
-}
-
 /* ── the thumb zone ───────────────────────────────────────────────────── */
 
 /* A band, and four pills on it.
@@ -270,28 +265,10 @@
   .zn-session {
     padding-block-end: calc(var(--hit-min) + var(--sp-16));
   }
-
-  .zn-session__phases {
-    margin-block-start: var(--sp-12);
-  }
-}
-
-/* The hero's text column. 40px between every block is the page's rhythm on a
-   1440px screen; on a phone the same seven blocks spend 240px on air alone,
-   more than the drawing beside them. The rhythm halves rather than the blocks
-   shrinking, which is what keeps the type scale intact. */
-.zn-session__head {
-  --gap: var(--sp-12);
-}
-
-@media (max-width: 640px) {
-  .zn-session__head {
-    --gap: var(--sp-9);
-  }
 }
 
 .zn-session__code {
-  color: var(--text-link);
+  color: var(--text-faint);
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-mono-label);
   text-transform: uppercase;
@@ -355,12 +332,6 @@
    version further down, one column count higher. */
 .zn-session__fact:last-child:nth-child(3n + 1) {
   grid-column: 1 / -1;
-}
-
-/* Where the session has to be run, under the numbers rather than among them.
-   Outlined chips, the same mark the session card uses for the same fact. */
-.zn-session__env {
-  margin-block-start: var(--sp-8);
 }
 
 .zn-session__fact-value {
@@ -440,36 +411,6 @@
   border-block-start: var(--bw-hair) solid var(--line-axis);
 }
 
-/* ── phases ───────────────────────────────────────────────────────────── */
-
-/* WorkoutStructure stacks its phases; on this screen they run three across,
-   with the zone legend spanning the row above them. Composed onto the
-   component's own classes rather than restated: the cards, the step rows and
-   the legend are drawn in workout.css, and only the arrangement is ours. */
-.zn-session__phases.zn-structure {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gap-grid);
-  align-items: start;
-  margin-block-start: var(--sp-14);
-}
-
-.zn-session__phases.zn-structure > .zn-structure__legend {
-  grid-column: 1 / -1;
-}
-
-@media (max-width: 1100px) {
-  .zn-session__phases.zn-structure {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .zn-session__phases.zn-structure {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
 /* ── the split: zones against advice ──────────────────────────────────── */
 
 /* Les deux moitiés gardent leur filet VERTICAL, il sépare deux colonnes de
@@ -496,33 +437,6 @@
   .zn-session__half + .zn-session__half {
     border-inline-start: none;
     border-block-start: var(--border-rule);
-  }
-}
-
-.zn-session__zones {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-6);
-}
-
-.zn-session__zones-total {
-  padding-block-start: var(--sp-6);
-  border-block-start: var(--border-divider);
-  color: var(--text-faint);
-}
-
-/* Advice and mistakes side by side, the way the kit prints them. CoachingTips
-   already draws both lists and their vermillon marks. */
-.zn-session__advice .zn-coaching {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-14);
-}
-
-@media (max-width: 1100px) {
-  .zn-session__advice .zn-coaching {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--sp-12);
   }
 }
 
@@ -711,4 +625,648 @@
   .zn-session__fact {
     padding: var(--sp-7) var(--sp-8);
   }
+}
+
+/* ══ the running session ══════════════════════════════════════════════════
+
+   One vermillon per screen, the primary action's. Everything else on this
+   page is ink: the code, the marks, the links, the VMA line, the related
+   sessions. See docs/seance.md.
+
+   Three widths, the dock's line kept where isPhone puts it:
+   - up to 640px, one column, and the actions docked to the floor;
+   - 641-1023px, one roomier column, the facts four across, the advice and
+     the related sessions two across, the actions in the page;
+   - from 1024px, a 1.45fr / 1fr grid inside --page-max: the header and the
+     facts on the first row, the structure and the aside on the second, then
+     the folds and the related sessions across the whole width. */
+
+.zn-session__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  row-gap: var(--sp-12);
+  padding: var(--sp-6) var(--pad-screen-x) var(--sp-17);
+}
+
+.zn-session__header,
+.zn-session__summary,
+.zn-session__structure,
+.zn-session__aside,
+.zn-session__next {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.zn-session__header {
+  gap: var(--sp-8);
+}
+
+.zn-session__summary {
+  gap: var(--sp-9);
+}
+
+.zn-session__structure {
+  gap: var(--sp-10);
+  padding-block-start: var(--sp-8);
+}
+
+.zn-session__aside {
+  gap: var(--sp-14);
+  padding-block-start: var(--sp-8);
+}
+
+.zn-session__next {
+  gap: var(--sp-8);
+}
+
+@media (min-width: 641px) {
+  .zn-session__grid {
+    row-gap: var(--sp-13);
+    padding-block: var(--sp-8) var(--sp-18);
+  }
+  .zn-session__structure,
+  .zn-session__aside {
+    padding-block-start: var(--sp-10);
+  }
+}
+
+@media (min-width: 1024px) {
+  .zn-session__grid {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    column-gap: var(--sp-18);
+    row-gap: var(--sp-14);
+  }
+  .zn-session__wide {
+    grid-column: 1 / -1;
+  }
+  /* The figures start where the name does, not where the kicker does. */
+  .zn-session__summary {
+    padding-block-start: var(--sp-16);
+  }
+  .zn-session__structure,
+  .zn-session__aside {
+    padding-block-start: var(--sp-12);
+  }
+}
+
+/* ── header ───────────────────────────────────────────────────────────── */
+
+/* The one metadata line: code, kind, discipline when not running, ground. */
+.zn-session__meta {
+  margin: 0;
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-session--run .zn-session__lede {
+  max-inline-size: 34em;
+}
+
+/* ── the four figures ─────────────────────────────────────────────────── */
+
+/* 2 x 2 on a phone and on a desktop, 4 x 1 on a tablet. Restated after the
+   strength strip's rules above, at a higher specificity, so its 3-column
+   edges never leak in. */
+.zn-session__facts[data-variant="grid"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-radius: var(--r-xl);
+}
+
+.zn-session__facts[data-variant="grid"] > .zn-session__fact {
+  gap: var(--sp-2);
+  padding: var(--sp-6) var(--sp-8);
+  border: 0;
+  grid-column: auto;
+}
+
+.zn-session__facts[data-variant="grid"] > .zn-session__fact:nth-child(even) {
+  border-inline-start: var(--border-divider);
+}
+
+.zn-session__facts[data-variant="grid"] > .zn-session__fact:nth-child(n + 3) {
+  border-block-start: var(--border-divider);
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  .zn-session__facts[data-variant="grid"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .zn-session__facts[data-variant="grid"] > .zn-session__fact:nth-child(n) {
+    border-block-start: 0;
+    border-inline-start: var(--border-divider);
+  }
+  .zn-session__facts[data-variant="grid"] > .zn-session__fact:first-child {
+    border-inline-start: 0;
+  }
+}
+
+.zn-session__facts[data-variant="grid"] .zn-session__fact-value {
+  font: var(--fw-medium) var(--fs-body-lg) / 1.25 var(--font-text);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Not a number yet: what is missing to have one. */
+.zn-session__facts[data-variant="grid"] .zn-session__fact-value[data-muted] {
+  font-size: var(--fs-body);
+  color: var(--text-faint);
+}
+
+/* ── actions, in the page ─────────────────────────────────────────────── */
+
+.zn-session__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-session__actions .zn-btn {
+  min-block-size: var(--hit-min);
+}
+
+/* ── titles ───────────────────────────────────────────────────────────── */
+
+.zn-session__titlerow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4) var(--sp-6);
+}
+
+.zn-session__h2 {
+  margin: 0;
+  font: var(--type-h2);
+  letter-spacing: var(--ls-h2);
+}
+
+.zn-session__kicker {
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ── intensity ────────────────────────────────────────────────────────── */
+
+/* Endurance and Quality, as wide as their minutes: the profile's summary,
+   so it comes before the profile. */
+.zn-ibar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-ibar__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-2) var(--sp-6);
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.zn-ibar__range {
+  color: var(--text-faint);
+}
+
+.zn-ibar__bar {
+  display: flex;
+  block-size: 14px;
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+
+.zn-ibar__part {
+  flex: var(--flex, 1) 1 0;
+  min-inline-size: 3px;
+}
+
+.zn-ibar__part[data-kind="endurance"] {
+  background: var(--zone-2);
+}
+
+.zn-ibar__part[data-kind="quality"] {
+  background: var(--zone-5);
+}
+
+.zn-ibar__part + .zn-ibar__part {
+  border-inline-start: var(--border-rule);
+}
+
+/* ── the profile ──────────────────────────────────────────────────────── */
+
+/* The bar draws its own --border-rule frame (zone.css); this only sizes it,
+   and the axis that used to sit under it is gone, the kicker says 0 -> N. */
+.zn-session__profile {
+  --zn-zonebar-h: 96px;
+}
+
+.zn-session__profile .zn-zonebar {
+  display: flex;
+  inline-size: 100%;
+  padding: var(--sp-4);
+  border-radius: var(--r-lg);
+}
+
+@media (min-width: 641px) {
+  .zn-session__profile {
+    --zn-zonebar-h: 120px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .zn-session__profile {
+    --zn-zonebar-h: 140px;
+  }
+}
+
+/* ── the VMA line, with zones ─────────────────────────────────────────── */
+
+.zn-zone-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 var(--sp-6);
+  margin: 0;
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-zone-line__edit {
+  min-block-size: var(--hit-min);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-body);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* ── zone chip ────────────────────────────────────────────────────────── */
+
+/* The compact chip: the code, always written, on its zone's tint. */
+.zn-zchip {
+  justify-self: start;
+  display: inline-block;
+  padding: 3px 7px;
+  border: var(--bw-hair) solid var(--line-strong);
+  border-radius: var(--r-sm);
+  font: var(--fw-medium) var(--fs-mono-sm) / 1.2 var(--font-mono);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-zchip[data-zone="1"] { background: var(--zone-1-bg); color: var(--zone-1-text); }
+.zn-zchip[data-zone="2"] { background: var(--zone-2-bg); color: var(--zone-2-text); }
+.zn-zchip[data-zone="3"] { background: var(--zone-3-bg); color: var(--zone-3-text); }
+.zn-zchip[data-zone="4"] { background: var(--zone-4-bg); color: var(--zone-4-text); }
+.zn-zchip[data-zone="5"] { background: var(--zone-5-bg); color: var(--zone-5-text); }
+.zn-zchip[data-zone="6"] { background: var(--zone-6-bg); color: var(--zone-6-text); }
+.zn-zchip[data-zone="none"] { background: var(--surface-card); color: var(--text-faint); }
+
+/* ── the phases, one list ─────────────────────────────────────────────── */
+
+.zn-plist {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+
+.zn-plist__phase {
+  padding: var(--sp-7) var(--sp-8) var(--sp-5);
+}
+
+.zn-plist__phase + .zn-plist__phase {
+  border-block-start: var(--border-divider);
+}
+
+.zn-plist__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  padding-block-end: var(--sp-3);
+}
+
+.zn-plist__title {
+  margin: 0;
+  font: var(--fw-medium) var(--fs-body) / 1.3 var(--font-text);
+}
+
+.zn-plist__dur {
+  font: var(--type-mono);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-plist__step {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-6);
+  min-block-size: 48px;
+}
+
+.zn-plist__step[data-nested] {
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  min-block-size: var(--hit-min);
+}
+
+.zn-plist__label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.zn-plist__name {
+  font: var(--fw-regular) var(--fs-body-sm) / 1.35 var(--font-text);
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.zn-plist__target {
+  font: var(--type-mono);
+  color: var(--text-muted);
+}
+
+.zn-plist__target[data-missing] {
+  color: var(--text-faint);
+}
+
+.zn-plist__size {
+  font: var(--fw-regular) var(--fs-caption) / 1.3 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* A repetition: its bracket down the left, its count on top. */
+.zn-plist__repeat {
+  margin: var(--sp-2) 0 var(--sp-1) var(--sp-3);
+  padding-inline-start: var(--sp-7);
+  border-inline-start: var(--border-rule);
+}
+
+.zn-plist__count {
+  display: block;
+  padding-block: var(--sp-1);
+  font: var(--fw-medium) var(--fs-mono) / 1.3 var(--font-mono);
+}
+
+.zn-plist__between {
+  display: block;
+  padding-block-start: var(--sp-3);
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ── distribution ─────────────────────────────────────────────────────── */
+
+.zn-session__distribution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+.zn-zsplit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-zsplit__bar {
+  display: flex;
+  block-size: 16px;
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+
+.zn-zsplit__part {
+  flex: var(--flex, 1) 1 0;
+  min-inline-size: 2px;
+}
+
+.zn-zsplit__part + .zn-zsplit__part {
+  border-inline-start: var(--bw-hair) solid var(--line-strong);
+}
+
+.zn-zsplit__part[data-zone="1"] { background: var(--zone-1); }
+.zn-zsplit__part[data-zone="2"] { background: var(--zone-2); }
+.zn-zsplit__part[data-zone="3"] { background: var(--zone-3); }
+.zn-zsplit__part[data-zone="4"] { background: var(--zone-4); }
+.zn-zsplit__part[data-zone="5"] { background: var(--zone-5); }
+.zn-zsplit__part[data-zone="6"] { background: var(--zone-6); }
+.zn-zsplit__part[data-zone="none"] { background: var(--zone-recovery); }
+
+.zn-zsplit__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font: var(--type-body-sm);
+  font-size: 15px;
+}
+
+.zn-zsplit__table tr + tr {
+  border-block-start: var(--border-divider);
+}
+
+.zn-zsplit__table th,
+.zn-zsplit__table td {
+  padding-block: var(--sp-4);
+  text-align: start;
+  font-weight: var(--fw-regular);
+}
+
+.zn-zsplit__chip {
+  inline-size: 52px;
+}
+
+.zn-zsplit__table .zn-zsplit__time,
+.zn-zsplit__table .zn-zsplit__pct {
+  text-align: end;
+  font: var(--fw-regular) var(--fs-caption) / 1.3 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.zn-zsplit__table .zn-zsplit__pct {
+  inline-size: 56px;
+  color: var(--text-faint);
+}
+
+/* ── advice ───────────────────────────────────────────────────────────── */
+
+/* Two lists side by side from 641px, the tip card under them across. */
+.zn-session__advice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.zn-session__advice .zn-coaching {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-10) var(--sp-12);
+}
+
+@media (min-width: 641px) {
+  .zn-session__advice .zn-coaching {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.zn-session__advice .zn-coaching__title {
+  font: var(--fw-medium) 17px / 1.3 var(--font-text);
+  letter-spacing: 0;
+}
+
+.zn-session__advice .zn-coaching__item {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-body);
+}
+
+.zn-session--run .zn-session__tip {
+  margin-block-start: 0;
+}
+
+/* The tip card's bulb and link in ink, like everything that is not the call. */
+.zn-session--run .zn-tip__icon,
+.zn-session--run .zn-tip .zn-clink {
+  color: var(--text-body);
+}
+
+/* ── folds, on the grid ───────────────────────────────────────────────── */
+
+.zn-session--run .zn-session__folds {
+  border-block-start: var(--border-divider);
+}
+
+/* ── related sessions ─────────────────────────────────────────────────── */
+
+.zn-srel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 641px) {
+  .zn-srel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .zn-srel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.zn-srel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  block-size: 100%;
+  min-block-size: 64px;
+  padding: var(--sp-6) var(--sp-8);
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-srel__row:hover {
+  background: var(--surface-band);
+}
+
+.zn-srel__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.zn-srel__name {
+  font: var(--fw-medium) var(--fs-body) / 1.3 var(--font-text);
+}
+
+.zn-srel__meta {
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-srel__arrow {
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+/* The glossary, the session's own words, in the page's language. */
+.zn-sgloss {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-block-start: var(--sp-4);
+}
+
+.zn-sgloss__label {
+  margin-inline-end: var(--sp-3);
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-sgloss__list {
+  display: contents;
+  list-style: none;
+}
+
+.zn-sgloss__chip {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-6);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  color: var(--text-body);
+  font: var(--type-body-sm);
+  text-decoration: none;
+}
+
+.zn-sgloss__chip:hover {
+  background: var(--surface-band);
 }

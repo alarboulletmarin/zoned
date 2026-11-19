@@ -512,9 +512,7 @@
     "en": "English"
   },
   "zonePersonalization": {
-    "ctaMessage": "Entre ta VMA pour voir tes allures sur chaque bloc",
-    "noVma": "Je ne connais pas ma VMA",
-    "submit": "Voir mes allures"
+    "noVma": "Je ne connais pas ma VMA"
   },
   "myZones": {
     "title": "Mes zones",

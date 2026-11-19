@@ -448,5 +448,26 @@
     "all": "Toutes",
     "soon": "bientôt",
     "draw": "Tire-moi une séance"
+  },
+  "metaLine": {
+    "category": {
+      "recovery": "Séance de récupération",
+      "endurance": "Séance d'endurance",
+      "tempo": "Séance tempo",
+      "threshold": "Séance au seuil",
+      "vma_intervals": "Séance de VMA",
+      "long_run": "Sortie longue",
+      "hills": "Séance de côtes",
+      "fartlek": "Fartlek",
+      "race_pace": "Séance d'allure spécifique",
+      "mixed": "Séance mixte",
+      "assessment": "Test",
+      "trail": "Séance trail"
+    },
+    "terrain": {
+      "flat": "Terrain plat de préférence",
+      "hills": "Côtes requises",
+      "track": "Piste requise"
+    }
   }
 }

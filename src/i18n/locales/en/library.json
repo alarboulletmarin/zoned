@@ -448,5 +448,26 @@
     "all": "All",
     "soon": "soon",
     "draw": "Draw me a session"
+  },
+  "metaLine": {
+    "category": {
+      "recovery": "Recovery session",
+      "endurance": "Endurance session",
+      "tempo": "Tempo session",
+      "threshold": "Threshold session",
+      "vma_intervals": "VMA session",
+      "long_run": "Long run",
+      "hills": "Hill session",
+      "fartlek": "Fartlek",
+      "race_pace": "Race-pace session",
+      "mixed": "Mixed session",
+      "assessment": "Test",
+      "trail": "Trail session"
+    },
+    "terrain": {
+      "flat": "Flat ground preferred",
+      "hills": "Hills required",
+      "track": "Track required"
+    }
   }
 }
