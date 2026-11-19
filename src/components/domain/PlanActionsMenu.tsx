@@ -6,12 +6,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import { usePlanExport } from "@/components/domain/PlanExportMenu";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { TrainingPlan } from "@/types/plan";
 
 /**
@@ -53,10 +49,6 @@ export function PlanActionsMenu({
   // Renommer met le focus dans le champ du nom : le menu ne doit pas le
   // reprendre en se fermant, comme il le fait pour tout autre choix.
   const keepFocus = useRef(false);
-  // Sur un téléphone, un sous-menu n'a de place ni à droite ni à gauche du
-  // menu : Radix le poussait hors de l'écran. Sous 640 px, les trois formats
-  // sont posés dans le menu lui-même, sous un intitulé, en une rangée.
-  const flat = useMediaQuery("(max-width: 639px)");
 
   return (
     <ActionsMenu
@@ -70,72 +62,41 @@ export function PlanActionsMenu({
         }
       }}
     >
-      {flat ? (
-        <>
-          {/* Trois formats sur UNE rangée : empilés, ils portaient le menu à
-              330 px, plus que la place sous le bouton sur un téléphone ; il
-              s'ouvrait alors vers le haut, par-dessus la barre, et Supprimer
-              ne se voyait plus qu'en faisant défiler. */}
-          {/* Partager rejoint la rangée quand il existe : c'est une
-              quatrième façon de sortir l'objet de l'app, et une ligne de
-              moins. Sur un iPhone SE, la ligne de trop faisait défiler le
-              menu d'une semaine et cachait Supprimer. */}
-          <DropdownMenuLabel>{onShare ? t("plansPage.menu.exportShare") : tc("export.title")}</DropdownMenuLabel>
-          <div
-            className="zn-more__formats"
-            data-count={onShare ? 4 : 3}
-            role="group"
-            aria-label={onShare ? t("plansPage.menu.exportShare") : tc("export.title")}
-          >
-            <DropdownMenuItem aria-label={tc("export.pdf")} onSelect={handleExportPDF} disabled={isExporting}>
-              <FileText />
-              {t("plansPage.menu.formats.pdf")}
-            </DropdownMenuItem>
-            <DropdownMenuItem aria-label={tc("export.calendar")} onSelect={handleExportICS} disabled={isExporting}>
-              <Calendar />
-              {t("plansPage.menu.formats.ics")}
-            </DropdownMenuItem>
-            <DropdownMenuItem aria-label={tc("export.json")} onSelect={handleExportJSON} disabled={isExporting}>
-              <Download />
-              {t("plansPage.menu.formats.json")}
-            </DropdownMenuItem>
-            {onShare && (
-              <DropdownMenuItem aria-label={t("plansPage.menu.share")} onSelect={onShare}>
-                <Share />
-                {t("plansPage.menu.formats.link")}
-              </DropdownMenuItem>
-            )}
-          </div>
-          <DropdownMenuSeparator />
-        </>
-      ) : (
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger disabled={isExporting}>
-            <Download />
-            {t("plansPage.menu.export")}
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent className="zn-more__list" collisionPadding={16}>
-            <DropdownMenuItem onSelect={handleExportPDF} disabled={isExporting}>
-              <FileText />
-              {tc("export.pdf")}
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={handleExportICS} disabled={isExporting}>
-              <Calendar />
-              {tc("export.calendar")}
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={handleExportJSON} disabled={isExporting}>
-              <Download />
-              {tc("export.json")}
-            </DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-      )}
-      {onShare && !flat && (
-        <DropdownMenuItem onSelect={onShare}>
-          <Share />
-          {t("plansPage.menu.share")}
+      {/* Exporter et partager en UNE rangée de cases, à toutes les
+          largeurs : un format se choisit d'un seul geste, sans sous-menu.
+          Le sous-menu demandait un second clic, et sur un téléphone il
+          n'avait de place ni à droite ni à gauche du menu. Une rangée et
+          pas une colonne : empilés, les formats portaient le menu au-delà
+          de la place sous le bouton sur un iPhone SE, et Supprimer passait
+          sous un défilement. Partager rejoint la rangée quand il existe :
+          c'est une façon de plus de sortir l'objet de l'app. */}
+      <DropdownMenuLabel>{onShare ? t("plansPage.menu.exportShare") : tc("export.title")}</DropdownMenuLabel>
+      <div
+        className="zn-more__formats"
+        data-count={onShare ? 4 : 3}
+        role="group"
+        aria-label={onShare ? t("plansPage.menu.exportShare") : tc("export.title")}
+      >
+        <DropdownMenuItem aria-label={tc("export.pdf")} title={tc("export.pdf")} onSelect={handleExportPDF} disabled={isExporting}>
+          <FileText />
+          {t("plansPage.menu.formats.pdf")}
         </DropdownMenuItem>
-      )}
+        <DropdownMenuItem aria-label={tc("export.calendar")} title={tc("export.calendar")} onSelect={handleExportICS} disabled={isExporting}>
+          <Calendar />
+          {t("plansPage.menu.formats.ics")}
+        </DropdownMenuItem>
+        <DropdownMenuItem aria-label={tc("export.json")} title={tc("export.json")} onSelect={handleExportJSON} disabled={isExporting}>
+          <Download />
+          {t("plansPage.menu.formats.json")}
+        </DropdownMenuItem>
+        {onShare && (
+          <DropdownMenuItem aria-label={t("plansPage.menu.share")} title={t("plansPage.menu.share")} onSelect={onShare}>
+            <Share />
+            {t("plansPage.menu.formats.link")}
+          </DropdownMenuItem>
+        )}
+      </div>
+      <DropdownMenuSeparator />
       <DropdownMenuItem onSelect={onDuplicate}>
         <Copy />
         {t("plansPage.menu.duplicate")}

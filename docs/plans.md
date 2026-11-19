@@ -116,16 +116,18 @@ et le plus destructeur au niveau du contenu. Les gestes rares sont dans un
 bouton ··· de 44 px, posé sur la carte mais hors du lien, avec une étiquette
 qui nomme le plan (`Actions du plan Marathon de Séville`) :
 
-- **Exporter…** ouvre un sous-menu PDF, calendrier, JSON à partir de
-  640 px. Sous 640 px, il n'y a pas de sous-menu : il n'avait de place ni à
-  droite ni à gauche du menu, et Radix le poussait hors de l'écran. Les trois
-  formats sont alors une rangée de trois cibles dans le menu même, sous
-  l'intitulé Exporter, l'icône au-dessus du mot. Une rangée et pas trois
-  lignes : empilés, ils portaient le menu à 330 px, plus que la place sous
-  le bouton, et il s'ouvrait vers le haut, Supprimer caché sous un
-  défilement. En rangée, il fait 258 px et s'ouvre en entier. Les trois
-  fonctions sont celles de `PlanExportMenu`, extraites dans `usePlanExport`
-  pour que le bouton de la page du plan et ce menu ne divergent pas.
+- **Exporter** est une rangée de trois cases en tête du menu (PDF, ICS,
+  JSON), l'icône au-dessus du sigle, à toutes les largeurs : un format se
+  choisit d'un seul clic. Un sous-menu Exporter… demandait un second clic,
+  et sur un téléphone il n'avait de place ni à droite ni à gauche du menu,
+  Radix le poussait hors de l'écran. Une rangée et pas une colonne : empilés,
+  les formats portaient le menu à 330 px, plus que la place sous le bouton,
+  et Supprimer passait sous un défilement. En rangée, il fait 258 px et
+  s'ouvre en entier. Chaque case porte le nom complet du format en étiquette
+  et en infobulle. Au clavier, la flèche du bas parcourt les cases puis les
+  entrées. Les trois fonctions sont celles de `PlanExportMenu`, extraites
+  dans `usePlanExport` pour que le bouton de la page du plan et ce menu ne
+  divergent pas.
 - **Dupliquer** passe par `duplicatePlan`, sans limite de nombre (décision du
   propriétaire). La copie prend le suffixe `(copie)`. Elle garde les dates de
   l'original : la copie d'un plan terminé est un plan terminé, et rejoint
@@ -265,11 +267,10 @@ corbeille toujours visible :
   sur trois lignes descendait les faits, le rythme et les boutons de 23 px
   par rapport aux voisines ; après, chaque étage tombe au même pixel. Les
   faits sont des segments, qui ne laissent plus un point en bout de ligne.
-  Sur un téléphone, Partager rejoint la rangée d'export (Exporter ou
-  partager : PDF, ICS, JSON, Lien) : avec une ligne de plus, le menu
-  dépassait la place sur un iPhone SE et cachait Supprimer sous un
-  défilement. Il fait 258 px et s'ouvre en entier sur les deux téléphones
-  mesurés.
+  Partager est une quatrième case de la rangée d'export (Exporter ou
+  partager : PDF, ICS, JSON, Lien), à toutes les largeurs : avec une ligne
+  de plus, le menu dépassait la place sur un iPhone SE et cachait Supprimer
+  sous un défilement. Il fait 258 px et s'ouvre en entier.
 - **Mes séances** (`/workout/builder`). L'export JSON et la corbeille passent
   dans le bouton ···. Le favori reste dehors : c'est un état, pas une action.
   Sous 480 px la flèche de la ligne, redondante avec la ligne-lien, rend sa

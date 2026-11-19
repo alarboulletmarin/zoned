@@ -501,7 +501,6 @@
     },
     "menu": {
       "label": "Actions du plan {{name}}",
-      "export": "Exporter…",
       "duplicate": "Dupliquer",
       "rename": "Renommer",
       "delete": "Supprimer…",
