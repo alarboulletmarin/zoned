@@ -871,7 +871,8 @@
 /* ── the profile ──────────────────────────────────────────────────────── */
 
 /* The bar draws its own --border-rule frame (zone.css); this only sizes it,
-   and the axis that used to sit under it is gone, the kicker says 0 -> N. */
+   and the axis that used to sit under it is gone, the kicker gives the
+   duration. */
 .zn-session__profile {
   --zn-zonebar-h: 96px;
 }
@@ -1287,6 +1288,13 @@
   gap: var(--sp-8);
 }
 
+/* The sheet scrolls; its parts never shrink. Without this, a short viewport
+   (an iPhone under Safari's bars) squeezed the list of choices and its
+   overflow clipped the last one. */
+.zn-addto > * {
+  flex-shrink: 0;
+}
+
 /* The side sheet is a column of choices, not a panel of settings. */
 .zn-addto[data-side="right"] {
   inline-size: min(100vw, 420px);
@@ -1333,12 +1341,25 @@
   border-block-start: var(--border-divider);
 }
 
+/* Drawn rather than native: iOS paints an unchecked radio as a filled disc
+   in the dark theme, which reads as checked. A ring, and a dot when chosen,
+   in the ink of the theme. */
 .zn-addto__choice input {
   flex: none;
-  inline-size: 18px;
-  block-size: 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 20px;
+  block-size: 20px;
   margin: 0;
-  accent-color: var(--ink-1);
+  border: var(--bw-rule) solid var(--ink-1);
+  border-radius: 50%;
+  background: var(--surface-card);
+  cursor: pointer;
+}
+
+.zn-addto__choice input:checked {
+  background: var(--ink-1);
+  box-shadow: inset 0 0 0 4px var(--surface-card);
 }
 
 .zn-addto__choice:has(input:focus-visible) {

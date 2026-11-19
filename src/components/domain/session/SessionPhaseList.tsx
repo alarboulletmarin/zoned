@@ -60,7 +60,9 @@ export function SessionPhaseList({
         <li key={phase.key} className="zn-plist__phase">
           <div className="zn-plist__head">
             <h3 className="zn-plist__title">{t(`structure.${phase.key}`)}</h3>
-            {phase.seconds > 0 && (
+            {/* A phase of one block would say its duration twice, on its
+                title and on its only step: the step keeps it. */}
+            {phase.seconds > 0 && !(phase.steps.length === 1 && phase.steps[0].kind === "segment") && (
               <span className="zn-plist__dur">{formatDurationMinutes(phase.seconds / 60)}</span>
             )}
           </div>

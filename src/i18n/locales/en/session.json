@@ -188,8 +188,8 @@
   },
   "page": {
     "structureTitle": "Structure",
-    "structureKicker_one": "{{count}} phase · 0 → {{duration}}",
-    "structureKicker_other": "{{count}} phases · 0 → {{duration}}",
+    "structureKicker_one": "{{count}} phase · {{duration}}",
+    "structureKicker_other": "{{count}} phases · {{duration}}",
     "endurance": "Endurance",
     "quality": "Quality",
     "intensityLabel": "Intensity: endurance {{endurance}}, quality {{quality}}",

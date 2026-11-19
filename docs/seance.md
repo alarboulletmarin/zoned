@@ -106,7 +106,7 @@ frises, peints à largeur fixe. Les exports FIT, GPX, ICS, PDF et le texte
 Strava n'appelaient pas ce formateur.
 
 La durée n'est plus écrite qu'aux endroits où elle sert : la bande de
-chiffres, le kicker `3 phases · 0 → 37 min`, la durée de chaque phase et de
+chiffres, le kicker `3 phases · 37 min`, la durée de chaque phase et de
 chaque étape. La ligne Total de la répartition et l'axe sous le profil sont
 partis.
 
