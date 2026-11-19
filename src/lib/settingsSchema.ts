@@ -2,10 +2,11 @@ import type {
   CockpitSettings,
   ModuleId,
   OpeningAnimation,
+  RingMetric,
   UnitSystem,
   UserSettings,
 } from "@/types/settings";
-import { DEFAULT_SETTINGS, MODULE_IDS } from "@/types/settings";
+import { DEFAULT_SETTINGS, MODULE_IDS, RING_METRICS } from "@/types/settings";
 import type { Practice } from "@/types/practice";
 import { PRACTICES } from "@/types/practice";
 
@@ -59,11 +60,17 @@ function asKnownList<T extends string>(value: unknown, known: readonly T[]): T[]
 function asCockpit(value: unknown): CockpitSettings {
   const fallback = DEFAULT_SETTINGS.cockpit;
   if (!isObject(value)) return { ...fallback };
-  return {
+  const cockpit: CockpitSettings = {
     resume: asBoolean(value.resume, fallback.resume),
     shortcuts: asBoolean(value.shortcuts, fallback.shortcuts),
     art: asBoolean(value.art, fallback.art),
   };
+  // Optionnelle : absente, ou illisible, elle laisse le défaut de la pratique.
+  const metric = value.ringsMetric;
+  if (typeof metric === "string" && (RING_METRICS as readonly string[]).includes(metric)) {
+    cockpit.ringsMetric = metric as RingMetric;
+  }
+  return cockpit;
 }
 
 export function sanitizeSettings(raw: unknown): UserSettings {

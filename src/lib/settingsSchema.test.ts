@@ -71,6 +71,12 @@ describe("sanitizeSettings", () => {
     expect(settings.cockpit.shortcuts).toBe(true);
   });
 
+  test("la mesure des anneaux se garde quand elle est connue, se perd sinon", () => {
+    expect(sanitizeSettings({ cockpit: { ringsMetric: "km" } }).cockpit.ringsMetric).toBe("km");
+    expect(sanitizeSettings({ cockpit: { ringsMetric: "miles" } }).cockpit.ringsMetric).toBeUndefined();
+    expect(sanitizeSettings({ cockpit: {} }).cockpit).toEqual(DEFAULT_SETTINGS.cockpit);
+  });
+
   test("un cockpit qui n'est pas un objet retombe entièrement", () => {
     expect(sanitizeSettings({ cockpit: "tout" }).cockpit).toEqual(DEFAULT_SETTINGS.cockpit);
   });

@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Anneaux de la semaine</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: {{root.w}}; height: {{root.h}}; box-sizing: border-box; padding: {{root.pad}}; background: {{root.bg}}; font-family: 'Space Grotesk', system-ui, sans-serif; color: {{t.ink1}}">
+
+<sc-if value="{{isCompact}}" hint-placeholder-val="{{ false }}">
+<section aria-label="Anneaux de la semaine, résumé" style="background: {{t.card}}; border: 1.5px solid {{t.ink1}}; border-radius: 16px; padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">Ta semaine · {{s.day}}</span>
+<button type="button" aria-expanded="false" onClick="{{toggle}}" style="display: flex; align-items: center; gap: 4px; min-height: 44px; margin: -12px -8px -12px 0; padding: 0 8px; border: 0; background: transparent; color: {{t.ink1}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer">Détails<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg></button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{rings}}" as="r" hint-placeholder-count="3">
+<div role="img" aria-label="{{r.aria}}" style="display: flex; align-items: center; gap: 8px; min-width: 0">
+<svg viewBox="0 0 96 96" width="36" height="36" aria-hidden="true" style="transform: rotate(-90deg); flex: none">
+<circle cx="48" cy="48" r="38" style="fill: none; stroke: {{r.trackColor}}; stroke-width: 15px; stroke-dasharray: {{r.trackDash}}"></circle>
+<circle cx="48" cy="48" r="38" style="fill: none; stroke: {{r.color}}; stroke-width: 15px; stroke-dasharray: {{r.dash}}"></circle>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+<span style="display: flex; align-items: center; gap: 3px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: {{t.ink3}}; white-space: nowrap">{{r.short}}
+<sc-if value="{{r.warn}}" hint-placeholder-val="{{ false }}"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true" style="color: {{t.accentText}}"><path d="M6 1.5 L11 10.5 L1 10.5 Z M6 5 L6 7.5 M6 8.6 L6 9.2" style="fill: none; stroke: currentColor; stroke-width: 1.5px"></path></svg></sc-if>
+<sc-if value="{{r.complete}}" hint-placeholder-val="{{ false }}"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5 L5 9 L10 3" style="fill: none; stroke: {{t.ink1}}; stroke-width: 1.8px"></path></svg></sc-if>
+</span>
+<span style="font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap">{{r.center}}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isCard}}" hint-placeholder-val="{{ true }}">
+<section aria-label="Anneaux de la semaine" style="background: {{t.card}}; border: 1.5px solid {{t.ink1}}; border-radius: 16px; padding: 18px 16px 6px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 20px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">{{s.week}}</span>
+<sc-if value="{{canFold}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-expanded="true" onClick="{{toggle}}" style="display: flex; align-items: center; gap: 4px; min-height: 44px; margin: -12px -8px; padding: 0 8px; border: 0; background: transparent; color: {{t.ink1}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer">Replier<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 L6 4 L9.5 7.5" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg></button>
+</sc-if>
+<sc-if value="{{noFold}}" hint-placeholder-val="{{ true }}">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink1}}">{{s.day}}</span>
+</sc-if>
+</div>
+
+<sc-if value="{{s.isRef}}" hint-placeholder-val="{{ false }}">
+<p style="margin: -6px 0 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: {{t.ink2}}">Sans plan · repère = ta moyenne sur 4 semaines</p>
+</sc-if>
+
+<div role="group" aria-label="Mesure affichée" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1.5px solid {{t.ink1}}; border-radius: 999px; padding: 3px; gap: 3px">
+<sc-for list="{{tabs}}" as="tab" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{tab.pressed}}" onClick="{{tab.pick}}" style="height: 40px; border: 0; border-radius: 999px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; background: {{tab.bg}}; color: {{tab.fg}}">{{tab.label}}</button>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding-top: 4px">
+<sc-for list="{{rings}}" as="r" hint-placeholder-count="3">
+<div role="img" aria-label="{{r.aria}}" style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0">
+<div style="position: relative; width: 96px; height: 96px">
+<svg viewBox="0 0 96 96" width="96" height="96" aria-hidden="true" style="transform: rotate(-90deg); display: block">
+<circle cx="48" cy="48" r="38" style="fill: none; stroke: {{r.trackColor}}; stroke-width: 9px; stroke-dasharray: {{r.trackDash}}"></circle>
+<circle cx="48" cy="48" r="38" style="fill: none; stroke: {{r.color}}; stroke-width: 9px; stroke-dasharray: {{r.dash}}"></circle>
+<circle cx="48" cy="48" r="46" style="fill: none; stroke: {{r.overColor}}; stroke-width: 3px; stroke-dasharray: {{r.overDash}}"></circle>
+</svg>
+<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center">
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 19px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap">{{r.center}}</span>
+</div>
+</div>
+<span style="font-size: 13px; color: {{t.ink2}}; font-variant-numeric: tabular-nums; white-space: nowrap">{{r.sub}}</span>
+<span style="display: flex; align-items: center; gap: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink1}}">
+<sc-if value="{{r.complete}}" hint-placeholder-val="{{ false }}">
+<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5 L5 9 L10 3" style="fill: none; stroke: currentColor; stroke-width: 1.8px"></path></svg>
+</sc-if>
+{{r.label}}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}; margin-top: -6px">{{r.code}}</span>
+<sc-if value="{{r.hasOver}}" hint-placeholder-val="{{ false }}">
+<span style="display: flex; align-items: center; gap: 4px; margin-top: -2px; padding: 2px 8px; border-radius: 999px; border: 1.5px solid {{r.overText}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: {{r.overText}}; white-space: nowrap">
+<sc-if value="{{r.warn}}" hint-placeholder-val="{{ false }}">
+<svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5 L11 10.5 L1 10.5 Z M6 5 L6 7.5 M6 8.6 L6 9.2" style="fill: none; stroke: currentColor; stroke-width: 1.4px"></path></svg>
+</sc-if>
+{{r.overLabel}}</span>
+</sc-if>
+</div>
+</sc-for>
+</div>
+
+<div style="border-top: 1.5px solid {{t.divider}}; display: flex; justify-content: space-between; align-items: flex-end; padding-top: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">Total semaine</span>
+<span style="font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">{{total.done}} <span style="color: {{t.ink3}}; font-weight: 400">/ {{total.target}}</span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-end">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">Charge</span>
+<span style="font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">{{s.load0}} <span style="color: {{t.ink3}}; font-weight: 400">/ {{s.load1}}</span></span>
+</div>
+</div>
+
+<div style="border-top: 1.5px solid {{t.divider}}; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0 10px">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">Hors plan · hors anneaux</span>
+<span style="font-size: 15px; color: {{t.ink1}}">{{s.off.label}}</span>
+</div>
+<span style="flex: none; padding: 4px 10px; border: 1.5px dashed {{t.ink2}}; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.ink2}}">+{{s.off.load}} charge</span>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isWide}}" hint-placeholder-val="{{ false }}">
+<section aria-label="Anneaux de la semaine" style="background: {{t.card}}; border: 1.5px solid {{t.ink1}}; border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">{{s.week}}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink1}}">{{s.day}}</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{rings}}" as="r" hint-placeholder-count="3">
+<div role="img" aria-label="{{r.aria}}" style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0">
+<div style="position: relative; width: 104px; height: 104px">
+<svg viewBox="0 0 96 96" width="104" height="104" aria-hidden="true" style="transform: rotate(-90deg); display: block">
+<circle cx="48" cy="48" r="38" style="fill: none; stroke: {{r.trackColor}}; stroke-width: 9px; stroke-dasharray: {{r.trackDash}}"></circle>
+<circle cx="48" cy="48" r="38" style="fill: none; stroke: {{r.color}}; stroke-width: 9px; stroke-dasharray: {{r.dash}}"></circle>
+<circle cx="48" cy="48" r="46" style="fill: none; stroke: {{r.overColor}}; stroke-width: 3px; stroke-dasharray: {{r.overDash}}"></circle>
+</svg>
+<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center">
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap">{{r.center}}</span>
+</div>
+</div>
+<span style="font-size: 13px; color: {{t.ink2}}; font-variant-numeric: tabular-nums; white-space: nowrap">{{r.sub}}</span>
+<span style="display: flex; align-items: center; gap: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink1}}">
+<sc-if value="{{r.complete}}" hint-placeholder-val="{{ false }}">
+<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5 L5 9 L10 3" style="fill: none; stroke: currentColor; stroke-width: 1.8px"></path></svg>
+</sc-if>
+{{r.label}} <span style="color: {{t.ink3}}">{{r.code}}</span></span>
+<sc-if value="{{r.hasOver}}" hint-placeholder-val="{{ false }}">
+<span style="display: flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; border: 1.5px solid {{r.overText}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: {{r.overText}}; white-space: nowrap">
+<sc-if value="{{r.warn}}" hint-placeholder-val="{{ false }}">
+<svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5 L11 10.5 L1 10.5 Z M6 5 L6 7.5 M6 8.6 L6 9.2" style="fill: none; stroke: currentColor; stroke-width: 1.4px"></path></svg>
+</sc-if>
+{{r.overLabel}}</span>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; padding-left: 24px; border-left: 1.5px solid {{t.divider}}">
+<div role="group" aria-label="Mesure affichée" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1.5px solid {{t.ink1}}; border-radius: 999px; padding: 3px; gap: 3px">
+<sc-for list="{{tabs}}" as="tab" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{tab.pressed}}" onClick="{{tab.pick}}" style="height: 40px; border: 0; border-radius: 999px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; background: {{tab.bg}}; color: {{tab.fg}}">{{tab.label}}</button>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">Total semaine</span>
+<span style="font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">{{total.done}} <span style="color: {{t.ink3}}; font-weight: 400">/ {{total.target}}</span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">Charge</span>
+<span style="font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">{{s.load0}} <span style="color: {{t.ink3}}; font-weight: 400">/ {{s.load1}}</span></span>
+</div>
+</div>
+<div style="border-top: 1.5px solid {{t.divider}}; padding-top: 12px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: {{t.ink3}}">Hors plan · hors anneaux</span>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+<span style="font-size: 15px">{{s.off.label}}</span>
+<span style="flex: none; padding: 4px 10px; border: 1.5px dashed {{t.ink2}}; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{t.ink2}}">+{{s.off.load}}</span>
+</div>
+</div>
+</div>
+</section>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"scenario":{"editor":"enum","options":["semaine","trail","surcharge","sansplan"],"default":"semaine"},"theme":{"editor":"enum","options":["clair","sombre"],"default":"clair"},"layout":{"editor":"enum","options":["carte","compact","large"],"default":"carte"},"bare":{"editor":"boolean","default":false},"$preview":{"width":390,"height":560}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { metric: null, expanded: false };
+  }
+  renderVals() {
+    var PAL = {
+      clair: { page: '#F6F5F2', card: '#FFFFFF', ink1: '#171614', ink2: '#4A4845', ink3: '#6C6A65', inv: '#F6F5F2', divider: 'rgba(23,22,20,0.18)', track: 'rgba(23,22,20,0.12)', end: 'rgba(23,22,20,0.46)', qual: '#171614', renfo: 'rgba(23,22,20,0.80)', accent: '#E8452A', accentText: '#A32B12' },
+      sombre: { page: '#171614', card: '#211F1D', ink1: '#EDEBE7', ink2: '#C2BFB9', ink3: '#918E88', inv: '#171614', divider: 'rgba(237,235,231,0.18)', track: 'rgba(237,235,231,0.12)', end: 'rgba(237,235,231,0.46)', qual: '#EDEBE7', renfo: 'rgba(237,235,231,0.80)', accent: '#E8452A', accentText: '#F2694F' }
+    };
+    var DATA = {
+      semaine: { week: 'Semaine 47 · 17–23 nov.', day: 'Jeu. · J4/7', def: 'time', isRef: false,
+        end: { time: [125, 190], km: [22.4, 34], dplus: [180, 300] },
+        qual: { time: [24, 40], km: [5.1, 8.5], dplus: [40, 60] },
+        renfo: [1, 2, 25, 50],
+        total: { time: [174, 280], km: [27.5, 42.5], dplus: [220, 360] },
+        load0: 182, load1: 290, off: { label: 'Vélotaf ×3 · 1 h 30 · 22 km', load: 64 } },
+      trail: { week: 'Semaine 47 · 17–23 nov.', day: 'Sam. · J6/7', def: 'dplus', isRef: false,
+        end: { time: [160, 240], km: [24, 36], dplus: [1150, 1800] },
+        qual: { time: [30, 45], km: [6, 9], dplus: [210, 300] },
+        renfo: [2, 2, 50, 50],
+        total: { time: [240, 335], km: [30, 45], dplus: [1360, 2100] },
+        load0: 256, load1: 340, off: { label: 'Vélotaf ×2 · 1 h 00 · 14 km', load: 41 } },
+      surcharge: { week: 'Semaine 47 · 17–23 nov.', day: 'Ven. · J5/7', def: 'time', isRef: false,
+        end: { time: [110, 190], km: [19.5, 34], dplus: [150, 300] },
+        qual: { time: [58, 40], km: [12.2, 8.5], dplus: [70, 60] },
+        renfo: [0, 2, 0, 50],
+        total: { time: [168, 280], km: [31.7, 42.5], dplus: [220, 360] },
+        load0: 231, load1: 290, off: { label: 'Vélotaf ×4 · 2 h 00 · 30 km', load: 85 } },
+      sansplan: { week: 'Semaine 47 · 17–23 nov.', day: 'Mer. · J3/7', def: 'time', isRef: true,
+        end: { time: [95, 170], km: [17.2, 30], dplus: [140, 260] },
+        qual: { time: [20, 30], km: [4.1, 6], dplus: [30, 50] },
+        renfo: [1, 2, 25, 45],
+        total: { time: [140, 245], km: [21.3, 36], dplus: [170, 310] },
+        load0: 150, load1: 250, off: { label: 'Vélotaf ×2 · 1 h 00 · 15 km', load: 42 } }
+    };
+    var sc = this.props.scenario || 'semaine';
+    var s = DATA[sc] || DATA.semaine;
+    var t = PAL[this.props.theme === 'sombre' ? 'sombre' : 'clair'];
+    var layout = this.props.layout || 'carte';
+    var bare = this.props.bare === true || this.props.bare === 'true';
+    var metric = this.state.metric || s.def;
+    var self = this;
+
+    var isCompact = layout === 'compact' && !this.state.expanded;
+    var isCard = layout === 'carte' || (layout === 'compact' && this.state.expanded);
+    var isWide = layout === 'large';
+    var canFold = layout === 'compact' && this.state.expanded;
+
+    function pad2(n) { return (n < 10 ? '0' : '') + n; }
+    function fTime(m) { m = Math.round(m); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + pad2(m % 60); }
+    function fKm(x) { return (Math.round(x * 10) / 10).toString().replace('.', ','); }
+    function fM(x) { x = Math.round(x); return x >= 1000 ? Math.floor(x / 1000) + ' ' + ('00' + (x % 1000)).slice(-3) : String(x); }
+    function center(v) { return metric === 'time' ? fTime(v) : metric === 'km' ? fKm(v) : fM(v); }
+    function full(v) { return metric === 'time' ? fTime(v) : metric === 'km' ? fKm(v) + ' km' : fM(v) + ' m'; }
+
+    var C = 2 * Math.PI * 38, C2 = 2 * Math.PI * 46;
+    var pre = s.isRef ? 'moy. ' : 'sur ';
+
+    function zoneRing(key, label, short, code, color, warnOnOver) {
+      var pair = s[key][metric], done = pair[0], target = pair[1];
+      var ratio = target > 0 ? done / target : 0;
+      var p = Math.min(ratio, 1);
+      var ex = s.isRef ? 0 : Math.min(Math.max(ratio - 1, 0), 1);
+      var hasOver = ex > 0;
+      var diff = done - target;
+      return {
+        label: label, short: short, code: code, color: color,
+        trackColor: t.track,
+        trackDash: s.isRef ? '2 4' : 'none',
+        dash: (C * p).toFixed(1) + ' ' + C.toFixed(1),
+        overColor: warnOnOver ? t.accent : t.ink3,
+        overDash: hasOver ? (C2 * ex).toFixed(1) + ' ' + C2.toFixed(1) : '0 ' + C2.toFixed(1),
+        hasOver: hasOver, warn: warnOnOver && hasOver,
+        overText: warnOnOver ? t.accentText : t.ink2,
+        overLabel: '+' + full(diff),
+        center: center(done), sub: pre + full(target),
+        complete: !s.isRef && ratio >= 1 && !warnOnOver,
+        aria: label + ' ' + code + ' : ' + full(done) + (s.isRef ? ', moyenne ' : ' sur ') + full(target) + (hasOver ? ', ' + full(diff) + ' au-delà du prévu' : '')
+      };
+    }
+
+    var rd = s.renfo, n = rd[1], gap = 6, seg = C / n - gap;
+    var doneDash = '';
+    for (var i = 0; i < rd[0]; i++) doneDash += seg.toFixed(1) + ' ' + gap + ' ';
+    doneDash += '0 ' + C.toFixed(1);
+    var renfo = {
+      label: 'Renfo', short: 'Renfo', code: 'séances', color: t.renfo,
+      trackColor: t.track, trackDash: seg.toFixed(1) + ' ' + gap,
+      dash: doneDash, overColor: t.ink3, overDash: '0 ' + C2.toFixed(1),
+      hasOver: false, warn: false, overText: t.ink2, overLabel: '',
+      center: rd[0] + '/' + n,
+      sub: metric === 'time' ? fTime(rd[2]) + ' ' + pre + fTime(rd[3]) : (s.isRef ? 'moy. ' + n + ' séances' : n + ' prévues'),
+      complete: !s.isRef && rd[0] >= n,
+      aria: 'Renfo : ' + rd[0] + ' séance(s) sur ' + n
+    };
+
+    var rings = [
+      zoneRing('end', 'Endurance', 'Endur.', 'Z1–Z3', t.end, false),
+      zoneRing('qual', 'Qualité', 'Qualité', 'Z4+', t.qual, true),
+      renfo
+    ];
+
+    var labels = { time: 'Temps', km: 'Km', dplus: 'D+' };
+    var tabs = ['time', 'km', 'dplus'].map(function (k) {
+      var on = k === metric;
+      return { label: labels[k], pressed: on, bg: on ? t.ink1 : 'transparent', fg: on ? t.inv : t.ink1,
+        pick: function () { self.setState({ metric: k }); } };
+    });
+
+    var tp = s.total[metric];
+    var root = bare
+      ? { w: '100%', h: 'auto', pad: '0', bg: 'transparent' }
+      : { w: '390px', h: '560px', pad: '20px', bg: t.page };
+    return {
+      s: s, t: t, rings: rings, tabs: tabs, root: root,
+      isCompact: isCompact, isCard: isCard, isWide: isWide, canFold: canFold, noFold: !canFold,
+      toggle: function () { self.setState({ expanded: !self.state.expanded }); },
+      total: { done: full(tp[0]), target: full(tp[1]) }
+    };
+  }
+}
+</script>
+</body>
+</html>

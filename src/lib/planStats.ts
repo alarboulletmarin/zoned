@@ -269,6 +269,76 @@ function estimateBlockMinutes(block: { durationMin?: number; repetitions?: numbe
 }
 
 /**
+ * Les minutes d'UNE séance, bloc par bloc, ajoutées zone par zone à `zoneMinutes`.
+ *
+ * C'est la boucle de `computeEnhancedPlanAnalysis`, sortie telle quelle pour
+ * servir aussi aux anneaux de la semaine (`lib/weekRings.ts`). Elle écrit
+ * dans l'accumulateur qu'on lui passe, dans le même ordre qu'avant, pour que
+ * la répartition du plan reste au bit près ce qu'elle était :
+ *
+ * - les blocs sont mis à l'échelle de la durée de la séance ;
+ * - l'échauffement se partage moitié Z1, moitié Z2 ;
+ * - un bloc du corps de séance va dans sa zone, une plage (`Z3-Z4`) se
+ *   partage à parts égales entre ses bornes, un bloc sans zone va en Z2 ;
+ * - le retour au calme va en Z1.
+ *
+ * Les clés sont les codes tels qu'écrits dans le catalogue (`Z4`, `Z5+`).
+ */
+export function addSessionZoneMinutes(
+  workout: WorkoutTemplate,
+  sessionTotal: number,
+  zoneMinutes: Record<string, number>,
+): void {
+  // Compute raw block durations for warmup, main, cooldown
+  let warmupRaw = 0;
+  for (const block of workout.warmupTemplate) {
+    warmupRaw += estimateBlockMinutes(block);
+  }
+
+  let mainRaw = 0;
+  for (const block of workout.mainSetTemplate) {
+    mainRaw += estimateBlockMinutes(block);
+  }
+
+  let cooldownRaw = 0;
+  for (const block of workout.cooldownTemplate) {
+    cooldownRaw += estimateBlockMinutes(block);
+  }
+
+  const totalRaw = warmupRaw + mainRaw + cooldownRaw;
+  // Scale factor so block durations sum to session estimated duration
+  const scale = totalRaw > 0 ? sessionTotal / totalRaw : 1;
+
+  // Warmup: split evenly between Z1 and Z2
+  const warmupMin = warmupRaw * scale;
+  zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + warmupMin / 2;
+  zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + warmupMin / 2;
+
+  // Main set: distribute by block zone
+  for (const block of workout.mainSetTemplate) {
+    const blockMin = estimateBlockMinutes(block) * scale;
+    if (!block.zone) {
+      // No zone specified, default to Z2
+      zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + blockMin;
+    } else if (block.zone.includes("-")) {
+      // Range like "Z1-Z2": split evenly
+      const parts = block.zone.split("-");
+      const perPart = blockMin / parts.length;
+      for (const part of parts) {
+        const z = part.startsWith("Z") ? part : `Z${part}`;
+        zoneMinutes[z] = (zoneMinutes[z] || 0) + perPart;
+      }
+    } else {
+      zoneMinutes[block.zone] = (zoneMinutes[block.zone] || 0) + blockMin;
+    }
+  }
+
+  // Cooldown: assign to Z1
+  const cooldownMin = cooldownRaw * scale;
+  zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + cooldownMin;
+}
+
+/**
  * Compute zone-level and target-system-level analysis for a training plan.
  *
  * Loads each unique workout template to inspect block zones and target systems.
@@ -307,55 +377,7 @@ export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<E
       // Safety guard: skip if this workout lacks running block arrays
       if (!workout.warmupTemplate || !workout.mainSetTemplate || !workout.cooldownTemplate) continue;
 
-      const sessionTotal = session.estimatedDurationMin;
-
-      // Compute raw block durations for warmup, main, cooldown
-      let warmupRaw = 0;
-      for (const block of workout.warmupTemplate) {
-        warmupRaw += estimateBlockMinutes(block);
-      }
-
-      let mainRaw = 0;
-      for (const block of workout.mainSetTemplate) {
-        mainRaw += estimateBlockMinutes(block);
-      }
-
-      let cooldownRaw = 0;
-      for (const block of workout.cooldownTemplate) {
-        cooldownRaw += estimateBlockMinutes(block);
-      }
-
-      const totalRaw = warmupRaw + mainRaw + cooldownRaw;
-      // Scale factor so block durations sum to session estimated duration
-      const scale = totalRaw > 0 ? sessionTotal / totalRaw : 1;
-
-      // Warmup: split evenly between Z1 and Z2
-      const warmupMin = warmupRaw * scale;
-      zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + warmupMin / 2;
-      zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + warmupMin / 2;
-
-      // Main set: distribute by block zone
-      for (const block of workout.mainSetTemplate) {
-        const blockMin = estimateBlockMinutes(block) * scale;
-        if (!block.zone) {
-          // No zone specified, default to Z2
-          zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + blockMin;
-        } else if (block.zone.includes("-")) {
-          // Range like "Z1-Z2": split evenly
-          const parts = block.zone.split("-");
-          const perPart = blockMin / parts.length;
-          for (const part of parts) {
-            const z = part.startsWith("Z") ? part : `Z${part}`;
-            zoneMinutes[z] = (zoneMinutes[z] || 0) + perPart;
-          }
-        } else {
-          zoneMinutes[block.zone] = (zoneMinutes[block.zone] || 0) + blockMin;
-        }
-      }
-
-      // Cooldown: assign to Z1
-      const cooldownMin = cooldownRaw * scale;
-      zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + cooldownMin;
+      addSessionZoneMinutes(workout, session.estimatedDurationMin, zoneMinutes);
     }
   }
 

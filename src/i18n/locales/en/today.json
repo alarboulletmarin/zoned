@@ -122,5 +122,62 @@
   },
   "conflicts": {
     "line": "{{day}}: two key sessions, {{sources}}"
+  },
+  "rings": {
+    "label": "Week rings",
+    "week": "Week {{n}} · {{dates}}",
+    "day": "{{day}} · D{{n}}/7",
+    "strip": "Your week · D{{n}}/7",
+    "details": "Details",
+    "fold": "Fold",
+    "reference": "No plan · reference = your 4-week average",
+    "metric": {
+      "label": "Measure shown",
+      "time": "Time",
+      "km": "Km",
+      "dplus": "Gain"
+    },
+    "endurance": {
+      "label": "Endurance",
+      "short": "Endur.",
+      "code": "Z1-Z3",
+      "spoken": "Z1 to Z3"
+    },
+    "quality": {
+      "label": "Quality",
+      "short": "Quality",
+      "code": "Z4+",
+      "spoken": "Z4 and above"
+    },
+    "strength": {
+      "label": "Strength",
+      "short": "Strength",
+      "code": "sessions",
+      "planned_one": "{{count}} planned",
+      "planned_other": "{{count}} planned",
+      "average_one": "avg {{count}} session",
+      "average_other": "avg {{count}} sessions",
+      "none": "none planned"
+    },
+    "of": "of {{value}}",
+    "avg": "avg {{value}}",
+    "over": "+{{value}}",
+    "aria": {
+      "zone": "{{label}} {{code}}: {{done}} of {{target}}",
+      "zoneAvg": "{{label}} {{code}}: {{done}}, average {{target}}",
+      "over": ", {{value}} beyond the plan",
+      "strength_one": "Strength: {{done}} of {{count}} planned session done",
+      "strength_other": "Strength: {{done}} of {{count}} planned sessions done",
+      "strengthAvg_one": "Strength: {{done}} session, average {{count}}",
+      "strengthAvg_other": "Strength: {{done}} sessions, average {{count}}"
+    },
+    "total": "Week total",
+    "load": "Load",
+    "offPlan": {
+      "title": "Off plan · not in the rings",
+      "count_one": "{{count}} activity",
+      "count_other": "{{count}} activities",
+      "load": "+{{load}} load"
+    }
   }
 }

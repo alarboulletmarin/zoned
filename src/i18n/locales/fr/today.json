@@ -122,5 +122,62 @@
   },
   "conflicts": {
     "line": "{{day}} : deux séances clés, {{sources}}"
+  },
+  "rings": {
+    "label": "Anneaux de la semaine",
+    "week": "Semaine {{n}} · {{dates}}",
+    "day": "{{day}} · J{{n}}/7",
+    "strip": "Ta semaine · J{{n}}/7",
+    "details": "Détails",
+    "fold": "Replier",
+    "reference": "Sans plan · repère = ta moyenne sur 4 semaines",
+    "metric": {
+      "label": "Mesure affichée",
+      "time": "Temps",
+      "km": "Km",
+      "dplus": "D+"
+    },
+    "endurance": {
+      "label": "Endurance",
+      "short": "Endur.",
+      "code": "Z1-Z3",
+      "spoken": "Z1 à Z3"
+    },
+    "quality": {
+      "label": "Qualité",
+      "short": "Qualité",
+      "code": "Z4+",
+      "spoken": "Z4 et plus"
+    },
+    "strength": {
+      "label": "Renfo",
+      "short": "Renfo",
+      "code": "séances",
+      "planned_one": "{{count}} prévue",
+      "planned_other": "{{count}} prévues",
+      "average_one": "moy. {{count}} séance",
+      "average_other": "moy. {{count}} séances",
+      "none": "aucune prévue"
+    },
+    "of": "sur {{value}}",
+    "avg": "moy. {{value}}",
+    "over": "+{{value}}",
+    "aria": {
+      "zone": "{{label}} {{code}} : {{done}} sur {{target}}",
+      "zoneAvg": "{{label}} {{code}} : {{done}}, moyenne {{target}}",
+      "over": ", {{value}} au-delà du prévu",
+      "strength_one": "Renfo : {{done}} séance faite sur {{count}} prévue",
+      "strength_other": "Renfo : {{done}} séances faites sur {{count}} prévues",
+      "strengthAvg_one": "Renfo : {{done}} séance, moyenne {{count}}",
+      "strengthAvg_other": "Renfo : {{done}} séances, moyenne {{count}}"
+    },
+    "total": "Total semaine",
+    "load": "Charge",
+    "offPlan": {
+      "title": "Hors plan · hors anneaux",
+      "count_one": "{{count}} activité",
+      "count_other": "{{count}} activités",
+      "load": "+{{load}} charge"
+    }
   }
 }

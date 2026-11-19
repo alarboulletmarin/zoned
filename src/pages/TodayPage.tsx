@@ -89,7 +89,9 @@ import {
 import { loadCommutePattern } from "@/lib/athleteProfile";
 import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
 import { WeekReviewPanel } from "@/components/domain/WeekReviewPanel";
-import { PolarizationGauge } from "@/components/weekly";
+import { PolarizationGauge, WeekRings } from "@/components/weekly";
+import { buildWeekRings, resolveRingMetric, type RingMetric } from "@/lib/weekRings";
+import { practiceFromRaceDistance } from "@/types/practice";
 import { getWorkoutByIdAsync } from "@/data/workouts";
 import { intensitySplit } from "@/lib/periodIntensity";
 import type { AnyWorkoutTemplate } from "@/types";
@@ -236,7 +238,7 @@ export function TodayPage() {
   const { t } = useTranslation(["today", "common", "plan", "activity"]);
   const isEn = useIsEnglish();
   const { plans, isLoading, reload } = usePlans();
-  const { settings } = useSettings();
+  const { settings, setCockpit } = useSettings();
 
   // `new Date()` une seule fois par montage : un rendu qui recalcule quel
   // jour on est peut changer d'avis en cours de session. La ligne de date le
@@ -532,6 +534,20 @@ export function TodayPage() {
 
   const showReview = view === "week" && day === 6 && hasSomethingToReview(review);
 
+  /* ── Les anneaux de la semaine ────────────────────────────────────────
+     La semaine CALENDAIRE qu'on vit, pas celle du jour choisi : la vue
+     Semaine ne montre qu'elle, et choisir jeudi ne doit rien changer aux
+     anneaux. Les gabarits viennent de la même table que le mois, chargée à
+     la demande ; tant qu'un gabarit n'est pas là, sa séance compte en
+     Endurance, et seuls les chiffres bougent, jamais la mise en page.
+     Pas d'historique passé : sans séance du plan cette semaine il n'y a pas
+     d'anneaux, voir `docs/anneaux.md`. */
+  const ringsRange = useMemo(() => calendarWeekRange(now), [now]);
+  const ringsSessions = useMemo(
+    () => (focus.week.length > 0 ? focusSessionsBetween(focus, ringsRange.from, ringsRange.to) : []),
+    [focus, ringsRange],
+  );
+
   /* ── Le mois ──────────────────────────────────────────────────────────
      Le même instrument que la bande, un cran plus loin : une grille de dates
      dont le choix recharge la pile, et sous elle ce que le mois a pesé. Le
@@ -586,13 +602,16 @@ export function TodayPage() {
     () =>
       Array.from(
         new Set(
-          monthSessions
-            .filter((s) => s.status === "completed" || s.status === "modified")
+          [
+            ...monthSessions.filter((s) => s.status === "completed" || s.status === "modified"),
+            // Les anneaux lisent toute la semaine, prévue comme faite.
+            ...(view === "week" ? ringsSessions : []),
+          ]
             .map((s) => s.workoutId)
             .filter((id) => !id.startsWith("__")),
         ),
       ).sort(),
-    [monthSessions],
+    [monthSessions, ringsSessions, view],
   );
 
   /* `null` pour un gabarit introuvable, et il reste dans la table : sans ça
@@ -619,6 +638,26 @@ export function TodayPage() {
       cancelled = true;
     };
   }, [doneIds, templates]);
+
+  const rings = useMemo(() => {
+    if (ringsSessions.length === 0) return null;
+    const config = focus.plan?.config;
+    const practice =
+      config?.practice ?? (config?.raceDistance ? practiceFromRaceDistance(config.raceDistance) : null);
+    return buildWeekRings({
+      sessions: ringsSessions,
+      activities: activitiesBetween(activities, ringsRange.from, ringsRange.to),
+      range: ringsRange,
+      today: now,
+      workoutOf: (id) => templates.get(id) ?? undefined,
+      practice,
+    });
+  }, [ringsSessions, focus.plan, activities, ringsRange, now, templates]);
+  const ringsMetric = rings ? resolveRingMetric(rings, settings.cockpit.ringsMetric) : "time";
+  const pickRingsMetric = useCallback(
+    (metric: RingMetric) => setCockpit({ ringsMetric: metric }),
+    [setCockpit],
+  );
 
   const monthIntensity = useMemo(() => {
     if (!monthReview) return null;
@@ -1121,6 +1160,19 @@ export function TodayPage() {
                   />
                 )}
               </div>
+              {/* Les anneaux de la semaine, en fin de colonne : sous la liste
+                  des jours sur téléphone, en bas de la colonne de droite sur
+                  bureau. Repliés sous 900 px, la carte ouverte au-delà, le
+                  seuil de la grille du cockpit. Pas en vue Mois. */}
+              {view === "week" && rings && (
+                <WeekRings
+                  model={rings}
+                  metric={ringsMetric}
+                  onMetricChange={pickRingsMetric}
+                  variant={desk ? "card" : "strip"}
+                  className="zn-cockpit__rings"
+                />
+              )}
               </div>
               <div className="zn-cockpit__split-answer">
                 {paneDates.map((iso) => dayPane(iso))}

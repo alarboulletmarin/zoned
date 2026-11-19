@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- The cockpit gains the week's rings: Endurance (Z1-Z3), Quality (Z4+) and Strength, done against planned for the calendar week being lived, in the week view of `/today`. Not one ring per sport, which on a running app would be one full ring and two empty ones, but one per intensity, on the threshold the design system already draws (`--zone-threshold`) and `isHardWorkout` already applies. Planned minutes split between Endurance and Quality block by block, with the per-zone loop of the plan statistics extracted as `addSessionZoneMinutes` without changing what they produce; a loose session counts at the middle of its range, a fixed one at its set duration; strength counts in sessions, one arc each. Done keeps the planned proportions over the actual duration, the one honest assumption without a FIT file, written where it is made. A `Time / Km / Gain` switch changes the measure (gain only when the week carries some, and first on a trail or ultra plan), and the choice is kept in the cockpit settings. Quality never takes a check mark: past the plan it takes a vermillon arc on an outer orbit, a pill and a triangle, since more intensity is not success; the Endurance overshoot is drawn in muted ink without a glyph. Off-plan activities stay out of the rings, which compare done to planned and a commute has no plan, and sit on their own line underneath with their session-RPE load. Under 900px the rings fold into a strip under the list of days, as a disclosure; from 900px they are an open card at the bottom of the right column. The pending reserve of the cockpit is re-measured accordingly (708, 664 and 862px). Rationale in `docs/anneaux.md`, and the canvas the design came from in `docs/design/week-rings.reference.html`
+
 ## [1.0.1] - 2026-09-19
 
 ### Added
