@@ -789,6 +789,12 @@
   min-block-size: var(--hit-min);
 }
 
+/* Four controls on one row of the narrower column: the two pills keep their
+   words and give up some padding, the two glyphs stay 44px round. */
+.zn-session__summary .zn-session__actions .zn-btn:not([data-size="icon"]) {
+  padding-inline: var(--sp-8);
+}
+
 /* ── titles ───────────────────────────────────────────────────────────── */
 
 .zn-session__titlerow {
@@ -1269,4 +1275,184 @@
 
 .zn-sgloss__chip:hover {
   background: var(--surface-band);
+}
+
+/* ══ Ajouter à… ════════════════════════════════════════════════════════════
+
+   The sheet of the primary action: where to put the session, four choices,
+   then one vermillon button whose words follow the choice. From the bottom
+   on a phone, from the side beyond. */
+
+.zn-addto {
+  gap: var(--sp-8);
+}
+
+/* The side sheet is a column of choices, not a panel of settings. */
+.zn-addto[data-side="right"] {
+  inline-size: min(100vw, 420px);
+}
+
+.zn-addto__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding-inline-end: var(--hit-min);
+}
+
+.zn-addto__title {
+  margin: 0;
+  font: var(--type-h3);
+  letter-spacing: var(--ls-h3);
+}
+
+.zn-addto__sub {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-addto__choices {
+  margin: 0;
+  padding: 0;
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  background: var(--surface-card);
+  overflow: hidden;
+}
+
+.zn-addto__choice {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  min-block-size: 56px;
+  padding: var(--sp-3) var(--sp-7);
+  cursor: pointer;
+}
+
+.zn-addto__choice + .zn-addto__choice {
+  border-block-start: var(--border-divider);
+}
+
+.zn-addto__choice input {
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+  margin: 0;
+  accent-color: var(--ink-1);
+}
+
+.zn-addto__choice:has(input:focus-visible) {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: -4px;
+}
+
+.zn-addto__choice-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.zn-addto__choice-label {
+  font: var(--fw-medium) var(--fs-body-sm) / 1.3 var(--font-text);
+  font-size: 15px;
+}
+
+.zn-addto__choice-sub {
+  font: var(--type-kicker);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  overflow-wrap: anywhere;
+}
+
+.zn-addto__pickers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-addto__picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  font: var(--type-kicker);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-addto__picker select {
+  min-block-size: var(--hit-min);
+  color: var(--text-body);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Seven days, Mon to Sun, the picked one in ink. */
+.zn-addto__days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+.zn-addto__day {
+  block-size: var(--hit-min);
+  padding: 0;
+  border: var(--border-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font: var(--type-mono);
+  cursor: pointer;
+}
+
+.zn-addto__day[aria-pressed="true"] {
+  border: var(--border-rule);
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-addto__day:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-addto__empty {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-addto__empty-link,
+.zn-addto__toast-link {
+  color: var(--text-body);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The one vermillon of the sheet, full width. */
+.zn-addto__confirm {
+  min-block-size: 52px;
+  padding-inline: var(--sp-10);
+  border: 0;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font: var(--fw-medium) var(--fs-body) / 1.2 var(--font-text);
+  cursor: pointer;
+}
+
+.zn-addto__confirm:hover {
+  background: var(--accent-press);
+}
+
+.zn-addto__confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.zn-addto__confirm:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
 }

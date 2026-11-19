@@ -16,6 +16,7 @@ import {
   StravaIcon,
   SlidersHorizontal,
   Pencil,
+  Plus,
 } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,7 @@ import {
   TipCard,
 } from "@/components/domain";
 import { CoachingMark, CoachingTips } from "@/components/domain/WorkoutStructure";
+import { AddToSheet } from "@/components/domain/session/AddToSheet";
 import { IntensityBar } from "@/components/domain/session/IntensityBar";
 import { SessionPhaseList } from "@/components/domain/session/SessionPhaseList";
 import { SessionRelated } from "@/components/domain/session/SessionRelated";
@@ -109,6 +111,9 @@ export function WorkoutDetailPage() {
   // loading and not-found returns: a hook after an early return is a hook that
   // does not run on every render.
   const isPhone = useMediaQuery("(max-width: 640px)");
+  // From 1024 to 1199px the right column is too narrow for four controls on
+  // one row: Export gives up its word there, as it does in the dock.
+  const isNarrowDesk = useMediaQuery("(min-width: 1024px) and (max-width: 1199px)");
 
   const locationState = location.state as {
     from?: string;
@@ -142,6 +147,8 @@ export function WorkoutDetailPage() {
 
   // Share modal (5 social templates)
   const [shareOpen, setShareOpen] = useState(false);
+  // Ajouter à…, the page's primary action.
+  const [addOpen, setAddOpen] = useState(false);
 
   const refreshUserZones = useCallback(() => {
     const prefs = loadUserZonePrefs();
@@ -428,15 +435,24 @@ export function WorkoutDetailPage() {
 
   // The action cluster, rendered in one of two places: in the page from
   // 641px, docked to the floor of the viewport below (.zn-session__dock).
-  // Export is an outline button: the screen's one vermillon is kept for
-  // its primary action.
+  // Ajouter à… is the call, the screen's one vermillon; Export is an outline
+  // button beside it, a glyph alone in the dock.
   const actionCluster = (
     <div className="zn-session__actions">
+      <Button
+        size="lg"
+        className="zn-session__add"
+        aria-haspopup="dialog"
+        onClick={() => setAddOpen(true)}
+      >
+        <Plus />
+        {t("session:addTo.action")}
+      </Button>
       <ExportMenu
         workout={workout}
         size="lg"
         variant="outline"
-        iconOnly={isPhone}
+        iconOnly={isPhone || isNarrowDesk}
       />
       <FavoriteButton workoutId={workout.id} />
       {moreMenu}
@@ -708,6 +724,14 @@ export function WorkoutDetailPage() {
           workout={workout}
           open={shareOpen}
           onOpenChange={setShareOpen}
+        />
+
+        <AddToSheet
+          workout={workout}
+          durationMin={duration}
+          open={addOpen}
+          onOpenChange={setAddOpen}
+          side={isPhone ? "bottom" : "right"}
         />
       </div>
 
