@@ -69,7 +69,7 @@ import { MuscleMap } from "@/components/visualization/MuscleMap";
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import { RelatedContent } from "@/components/domain/RelatedContent";
 import type { ZoneRange } from "@/types";
-import { getWorkoutDiscipline, getDominantZone } from "@/types";
+import { getWorkoutDiscipline, getPeakZone } from "@/types";
 import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { getWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
@@ -133,7 +133,7 @@ export function WorkoutDetailPage() {
 
   // Get contextual tip based on dominant zone (running workouts only)
   const dominantZoneForTip = runningWorkout
-    ? getDominantZone(runningWorkout)
+    ? getPeakZone(runningWorkout)
     : undefined;
   const { tip } = useTips({
     filters: dominantZoneForTip ? { zones: [dominantZoneForTip] } : undefined,
@@ -205,7 +205,7 @@ export function WorkoutDetailPage() {
     );
   }
 
-  const dominantZone = getDominantZone(workout);
+  const dominantZone = getPeakZone(workout);
   const workoutDiscipline = getWorkoutDiscipline(workout);
   // Adjusting means copying: a workout already living in My Workouts is edited
   // in place instead, and one with no number to move has nothing to offer.
@@ -506,7 +506,7 @@ export function WorkoutDetailPage() {
               },
               {
                 "@type": "PropertyValue",
-                name: "Dominant Zone",
+                name: "Peak Zone",
                 value: `Z${dominantZone}`,
               },
             ],

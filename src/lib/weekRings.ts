@@ -1,6 +1,6 @@
 import type { PlanSession } from "@/types/plan";
 import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
-import { getDominantZone, getZoneNumber, isRunningWorkout, isStrengthWorkout } from "@/types";
+import { getPeakZone, getZoneNumber, isRunningWorkout, isStrengthWorkout } from "@/types";
 import type { Practice } from "@/types/practice";
 import type { RingMetric } from "@/types/settings";
 import {
@@ -50,7 +50,7 @@ import type { DateRange } from "@/lib/weekReview";
  * - ses minutes se répartissent entre Endurance et Qualité BLOC PAR BLOC, par
  *   `addSessionZoneMinutes` (la logique de `planStats`) : l'échauffement et le
  *   retour au calme tombent en Endurance, les blocs de seuil en Qualité. Un
- *   gabarit sans blocs se rabat sur sa zone dominante (`getDominantZone`), un
+ *   gabarit sans blocs se rabat sur sa zone dominante (`getPeakZone`), un
  *   gabarit pas encore chargé compte en Endurance le temps d'arriver ;
  * - ses KM sont ceux de la séance, sinon l'estimation à l'allure de son type
  *   (`plannedSessionKm`, le gabarit ne porte pas de distance à lui) ; son D+
@@ -260,7 +260,7 @@ export function qualityShareOf(
     }
     if (total > 0) return quality / total;
   }
-  return getDominantZone(workout) >= QUALITY_FROM_ZONE ? 1 : 0;
+  return getPeakZone(workout) >= QUALITY_FROM_ZONE ? 1 : 0;
 }
 
 function tallySessions(

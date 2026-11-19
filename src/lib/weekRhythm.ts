@@ -5,7 +5,7 @@
  */
 
 import { getAnyWorkoutDuration } from "@/lib/workoutFilters";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import type { AnyWorkoutTemplate } from "@/types";
 import type { DayIndex, WeekSlot } from "@/types/week";
 
@@ -26,7 +26,7 @@ export interface RhythmDay {
 /** Accent zone for a slot, strength/rest have no aerobic zone. */
 function slotZone(w: AnyWorkoutTemplate | null): number | null {
   if (!w || isStrengthWorkout(w)) return null;
-  return getDominantZone(w);
+  return getPeakZone(w);
 }
 
 /**

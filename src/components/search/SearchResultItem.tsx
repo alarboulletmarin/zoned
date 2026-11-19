@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Clock, Dumbbell } from "@/components/icons";
 import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import type { AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, CATEGORY_META } from "@/types";
+import { getPeakZone, CATEGORY_META } from "@/types";
 import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { getWorkoutDuration } from "@/components/visualization";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -24,7 +24,7 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
   const categoryLabel = isStrengthWorkout(workout)
     ? tStrength(`categories.${workout.category}`)
     : pick(CATEGORY_META[workout.category], "label");
-  const dominantZone = isRunningWorkout(workout) ? getDominantZone(workout) : null;
+  const dominantZone = isRunningWorkout(workout) ? getPeakZone(workout) : null;
   const duration = isStrengthWorkout(workout)
     ? formatDurationMinutes(Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2))
     : formatDurationMinutes(getWorkoutDuration(workout));

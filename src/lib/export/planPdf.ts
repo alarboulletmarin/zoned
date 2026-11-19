@@ -18,7 +18,7 @@ import type { TrainingPlan } from "@/types/plan";
 import type { AnyWorkoutTemplate, WorkoutTemplate, WorkoutBlock, Zone } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
-import { getDominantZone } from "@/types";
+import { getPeakZone } from "@/types";
 import { WORKOUT_PHASES, getWorkoutPhaseBlocks, isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { calculatePaceZones, formatPace } from "@/lib/zones";
@@ -267,7 +267,7 @@ const SESSION_COLUMNS = 6;
 /** The zone cell of a session row: the dominant zone, or a dash for work without one. */
 function zoneCell(h: House, template: AnyWorkoutTemplate | undefined, isStr: boolean): TableCell {
   if (!isStr && template && isRunningWorkout(template)) {
-    return h.mono(`Z${getDominantZone(template)}`, { bold: true, alignment: "center", color: INK }) as TableCell;
+    return h.mono(`Z${getPeakZone(template)}`, { bold: true, alignment: "center", color: INK }) as TableCell;
   }
   return h.mono("-", { alignment: "center", color: INK_PALE }) as TableCell;
 }
@@ -549,7 +549,7 @@ export async function exportPlanToPDF(
         const facts = [typeLabel("strength", template), template.intensity, dur].filter(Boolean).join(" · ");
         entries.push(h.strengthStructure(template, exerciseNames, { facts }));
       } else {
-        const facts = [typeLabel(template.sessionType, template), `Z${getDominantZone(template)}`, dur]
+        const facts = [typeLabel(template.sessionType, template), `Z${getPeakZone(template)}`, dur]
           .filter(Boolean)
           .join(" · ");
         entries.push(h.runningStructure(template, { facts }));

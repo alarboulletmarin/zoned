@@ -18,7 +18,7 @@ import { useIsEnglish } from "@/lib/i18n-utils";
 import { localeTo } from "@/lib/seo/locale-to";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import {
   StrengthWorkoutCard,
   StrengthWorkoutCardCompact,
@@ -81,7 +81,7 @@ export function WorkoutCardChrome({
 }: WorkoutCardChromeProps) {
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
-  const dominantZone = getDominantZone(workout);
+  const dominantZone = getPeakZone(workout);
   const duration = getWorkoutDuration(workout);
   const name = pick(workout, "name");
 
@@ -223,7 +223,7 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
   const isEn = useIsEnglish();
   const { t } = useTranslation("library");
   const pick = usePickLang();
-  const dominantZone = getDominantZone(workout);
+  const dominantZone = getPeakZone(workout);
   const duration = getWorkoutDuration(workout);
   const name = pick(workout, "name");
   // Le profil, à la taille de la carte dense. Même bar que la grille, même

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getAllTermsSync } from "@/data/glossary";
 import { getWorkoutByIdSync } from "@/data/workouts";
-import { getDominantZone, getWorkoutDiscipline, isRunningWorkout, isStrengthWorkout } from "@/types";
+import { getPeakZone, getWorkoutDiscipline, isRunningWorkout, isStrengthWorkout } from "@/types";
 import { linksFor, type HubLang, type LinkSource } from "@/lib/seo/hub-links";
 import { preloadRoute } from "@/prerender/preload";
 import { HubLinks } from "./HubLinks";
@@ -24,7 +24,7 @@ function sourceFor(pathname: string): LinkSource | null {
         kind: "workout",
         id: workout.id,
         category: workout.category,
-        zone: hasZones ? getDominantZone(workout) : null,
+        zone: hasZones ? getPeakZone(workout) : null,
         discipline: getWorkoutDiscipline(workout),
       };
     }

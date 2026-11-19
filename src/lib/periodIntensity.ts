@@ -1,6 +1,6 @@
 import type { PlanSession } from "@/types/plan";
 import type { AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import { defaultRpe, type ComplementaryActivity } from "@/types/activity";
 import { activitySessionZone, isActivitySession } from "@/lib/activitySession";
 import type { PolarisedSplit } from "@/lib/weekStats";
@@ -90,7 +90,7 @@ export function intensitySplit(params: {
       if (minutes > 0) strengthMinutes += minutes;
       continue;
     }
-    add(getDominantZone(workout), minutes);
+    add(getPeakZone(workout), minutes);
   }
 
   for (const activity of params.activities) {

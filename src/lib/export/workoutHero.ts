@@ -10,7 +10,7 @@
 import type { WorkoutTemplate, ZoneNumber, ZoneMeta } from "@/types";
 import {
   ZONE_META,
-  getDominantZone,
+  getPeakZone,
   getWorkoutDiscipline,
   type Discipline,
 } from "@/types";
@@ -61,7 +61,7 @@ export function getWorkoutHero(workout: WorkoutTemplate): WorkoutHero {
     workout.mainSetTemplate.length +
     (workout.cooldownTemplate?.length ?? 0);
   const discipline = getWorkoutDiscipline(workout);
-  const dominantZone = getDominantZone(workout);
+  const dominantZone = getPeakZone(workout);
   const zoneMeta = ZONE_META[dominantZone];
 
   // Share visuals plot the zone ramp only: the unzoned catch-all bar (drills,

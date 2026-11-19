@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/card";
 import {
   ZONE_META,
-  getDominantZone,
+  getPeakZone,
   type ZoneNumber,
   type ZoneRange,
   type UserZonePreferences,
@@ -48,7 +48,7 @@ const MAX_EXAMPLES_MOBILE = 2;
 
 /**
  * Build a map from ZoneNumber to up to MAX_EXAMPLES workout examples.
- * Uses getDominantZone to classify each workout, then picks the first
+ * Uses getPeakZone to classify each workout, then picks the first
  * MAX_EXAMPLES per zone (deterministic order from data files).
  */
 function buildZoneWorkoutMap(
@@ -66,7 +66,7 @@ function buildZoneWorkoutMap(
   for (const w of workouts) {
     // Skip custom workouts (no stable route)
     if (w.id.startsWith("CUSTOM-")) continue;
-    const zone = getDominantZone(w);
+    const zone = getPeakZone(w);
     if (map[zone].length < MAX_EXAMPLES) {
       map[zone].push(w);
     }

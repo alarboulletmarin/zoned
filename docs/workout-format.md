@@ -271,7 +271,7 @@ A `repeat` repeats `steps` `count` times, inserting `between` **in the gaps**, s
 
 Read that as 12 efforts separated by 11 jogs, the whole block twice, separated by one 3-minute jog. It comes to 24 reps of 30s of work (12min) and 26min of main set in total. `getStructuredWorkoutDurationSeconds()` returns 3360s for the whole template once the 20min warm-up and 10min cool-down are added.
 
-[`src/lib/workoutStructure.ts`](../src/lib/workoutStructure.ts) derives real duration, zone distribution and the dominant zone from this tree. The timeline (`components/visualization/transforms.ts`), the share codec (`lib/share/workoutShare.ts`), the workout builder and the contribution wizard all consume it. `getDominantZone()` in `src/types/index.ts` prefers the tree and only falls back to the flat `zone` fields on `mainSetTemplate`, which loses the nesting.
+[`src/lib/workoutStructure.ts`](../src/lib/workoutStructure.ts) derives real duration, zone distribution and the dominant zone from this tree. The timeline (`components/visualization/transforms.ts`), the share codec (`lib/share/workoutShare.ts`), the workout builder and the contribution wizard all consume it. `getPeakZone()` in `src/types/index.ts` prefers the tree and only falls back to the flat `zone` fields on `mainSetTemplate`, which loses the nesting.
 
 **34 of 239 templates carry a `mainSetStructure` today.** It is optional for backward compatibility, not because it is second-class. Add one to any interval, hill or fartlek session you contribute, meaning anything whose shape is more than a single steady effort.
 

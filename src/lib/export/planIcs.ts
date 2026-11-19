@@ -7,7 +7,7 @@
 import { createEvents, type EventAttributes } from "ics";
 import type { TrainingPlan } from "@/types/plan";
 import type { AnyWorkoutTemplate } from "@/types";
-import { getDominantZone } from "@/types";
+import { getPeakZone } from "@/types";
 import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
@@ -152,7 +152,7 @@ export function exportPlanToICS(
           // An activity has no template; its zone is the effort it was planned at.
           const activityZone = activity ? activitySessionZone(session) : null;
           const primaryZone = template && isRunningWorkout(template)
-            ? `Z${getDominantZone(template)}`
+            ? `Z${getPeakZone(template)}`
             : activityZone !== null ? `Z${activityZone}` : "";
           const zoneTag = primaryZone ? ` [${primaryZone}]` : isStrength ? " [Renfo]" : "";
 

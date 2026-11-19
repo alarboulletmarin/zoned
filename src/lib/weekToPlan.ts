@@ -11,7 +11,7 @@ import { activitySlotInfo, isActivitySession } from "@/lib/activitySession";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { defaultPrecisionFor, initialDurationFor } from "@/lib/sessionPrecision";
 import { getDrawDiscipline } from "@/lib/workoutFilters";
-import { getDominantZone, isStrengthWorkout } from "@/types";
+import { getPeakZone, isStrengthWorkout } from "@/types";
 import type { Discipline, SessionType, AnyWorkoutTemplate } from "@/types";
 import type { TrainingPlan, PlanSession, PlanWeek } from "@/types/plan";
 import type { DayIndex, GeneratedWeek, SlotKind, WeekSlot } from "@/types/week";
@@ -21,7 +21,7 @@ function sessionTypeFor(kind: SlotKind, w: AnyWorkoutTemplate): SessionType {
   if (isStrengthWorkout(w)) return "strength";
   if (kind === "long") return "long_run";
   if (kind === "quality") {
-    const z = getDominantZone(w);
+    const z = getPeakZone(w);
     if (z >= 5) return "vo2max";
     if (z === 4) return "threshold";
     return "tempo";
@@ -86,7 +86,7 @@ export function sessionFromWorkout(day: number, workout: AnyWorkoutTemplate): Pl
   let kind: SlotKind = "easy";
   if (!isStrengthWorkout(workout)) {
     if (workout.category === "long_run") kind = "long";
-    else if (getDominantZone(workout) >= 4) kind = "quality";
+    else if (getPeakZone(workout) >= 4) kind = "quality";
   }
   return slotToSession(day, kind, workout);
 }

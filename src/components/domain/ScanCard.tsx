@@ -1,4 +1,4 @@
-import { getDominantZone, isRunningWorkout } from "@/types";
+import { getPeakZone, isRunningWorkout } from "@/types";
 import type { AnyWorkoutTemplate } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ export function ScanCard({
   /** Board-cell sizing: matches a real day card so the flicker reads as one. */
   compact?: boolean;
 }) {
-  const zone = isRunningWorkout(workout) ? getDominantZone(workout) : 2;
+  const zone = isRunningWorkout(workout) ? getPeakZone(workout) : 2;
   return (
     <div
       className={cn("zn-scan zn-zone-edge", className)}

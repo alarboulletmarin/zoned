@@ -52,7 +52,7 @@ import type {
   ZoneNumber,
 } from "@/types";
 import {
-  getDominantZone,
+  getPeakZone,
   isStrengthWorkout,
   isRunningWorkout,
 } from "@/types";
@@ -625,7 +625,7 @@ export function DrawSessionPage() {
                 </div>
                 <div className="zn-cluster">
                   {history.map((w) => {
-                    const zone = isRunningWorkout(w) ? getDominantZone(w) : null;
+                    const zone = isRunningWorkout(w) ? getPeakZone(w) : null;
                     return (
                       <button
                         key={w.id}
@@ -739,7 +739,7 @@ function ResultCard({
   const isStrength = isStrengthWorkout(workout);
   const discipline = getDrawDiscipline(workout);
   const DisciplineIcon = DISCIPLINE_ICONS[discipline];
-  const dominantZone = isRunningWorkout(workout) ? getDominantZone(workout) : 2;
+  const dominantZone = isRunningWorkout(workout) ? getPeakZone(workout) : 2;
   const zones = getAnyWorkoutZones(workout);
   const duration = getAnyWorkoutDuration(workout);
   const tss = getAnyWorkoutTss(workout);
