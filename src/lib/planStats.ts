@@ -8,6 +8,7 @@ import {
   type WorkoutTemplate,
 } from "@/types";
 import { getWorkoutById } from "@/data/workouts";
+import { flattenWorkoutSegments } from "@/lib/workoutStructure";
 
 // ── Helpers for identifying non-running sessions ──────────────────
 const NON_RUNNING_SESSION_TYPES = new Set([
@@ -256,30 +257,44 @@ export interface EnhancedPlanAnalysis {
   targetSystemBreakdown: TargetSystemBreakdown[];
 }
 
-/** Default rep duration in minutes when only repetitions are specified */
-const DEFAULT_REP_MIN = 1;
-
-/**
- * Estimate the time in minutes for a single workout block.
- */
-function estimateBlockMinutes(block: { durationMin?: number; repetitions?: number }): number {
-  if (block.durationMin && block.durationMin > 0) return block.durationMin;
-  if (block.repetitions && block.repetitions > 0) return block.repetitions * DEFAULT_REP_MIN;
-  return 0;
+/** Ajoute des minutes à une zone écrite comme dans le catalogue, plage comprise. */
+function addZoneMinutes(zoneMinutes: Record<string, number>, zone: string | null | undefined, minutes: number): void {
+  if (!zone) {
+    // Sans zone, un bloc du corps de séance compte en Z2.
+    zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + minutes;
+  } else if (zone.includes("-")) {
+    // Une plage comme "Z1-Z2" se partage à parts égales entre ses bornes.
+    const parts = zone.split("-");
+    const perPart = minutes / parts.length;
+    for (const part of parts) {
+      const z = part.startsWith("Z") ? part : `Z${part}`;
+      zoneMinutes[z] = (zoneMinutes[z] || 0) + perPart;
+    }
+  } else {
+    zoneMinutes[zone] = (zoneMinutes[zone] || 0) + minutes;
+  }
 }
 
 /**
- * Les minutes d'UNE séance, bloc par bloc, ajoutées zone par zone à `zoneMinutes`.
+ * Les minutes d'UNE séance, bloc par bloc, ajoutées zone par zone à
+ * `zoneMinutes`. Sert à la répartition par zone du plan
+ * (`computeEnhancedPlanAnalysis`) et aux anneaux de la semaine
+ * (`lib/weekRings.ts`).
  *
- * C'est la boucle de `computeEnhancedPlanAnalysis`, sortie telle quelle pour
- * servir aussi aux anneaux de la semaine (`lib/weekRings.ts`). Elle écrit
- * dans l'accumulateur qu'on lui passe, dans le même ordre qu'avant, pour que
- * la répartition du plan reste au bit près ce qu'elle était :
+ * Les durées sont celles du moteur de structure (`flattenWorkoutSegments`),
+ * le même qui donne leur durée aux séances partout ailleurs. La version
+ * d'avant lisait `durationMin` sur chaque bloc sans le multiplier par ses
+ * répétitions : `3 × 8 min Z4` pesait 8 minutes, et la mise à l'échelle
+ * rendait le reste à l'échauffement. Un seuil de 55 minutes donnait 12
+ * minutes de Z4 au lieu de 24. Le moteur déroule les répétitions et les
+ * séries, et compte les récupérations entre elles dans leur propre zone.
  *
- * - les blocs sont mis à l'échelle de la durée de la séance ;
+ * Les conventions, elles, n'ont pas bougé :
+ *
+ * - les minutes sont mises à l'échelle de la durée de la séance ;
  * - l'échauffement se partage moitié Z1, moitié Z2 ;
- * - un bloc du corps de séance va dans sa zone, une plage (`Z3-Z4`) se
- *   partage à parts égales entre ses bornes, un bloc sans zone va en Z2 ;
+ * - un segment du corps de séance va dans sa zone, une plage (`Z3-Z4`) se
+ *   partage à parts égales entre ses bornes, un segment sans zone va en Z2 ;
  * - le retour au calme va en Z1.
  *
  * Les clés sont les codes tels qu'écrits dans le catalogue (`Z4`, `Z5+`).
@@ -289,53 +304,33 @@ export function addSessionZoneMinutes(
   sessionTotal: number,
   zoneMinutes: Record<string, number>,
 ): void {
-  // Compute raw block durations for warmup, main, cooldown
   let warmupRaw = 0;
-  for (const block of workout.warmupTemplate) {
-    warmupRaw += estimateBlockMinutes(block);
-  }
-
-  let mainRaw = 0;
-  for (const block of workout.mainSetTemplate) {
-    mainRaw += estimateBlockMinutes(block);
-  }
-
   let cooldownRaw = 0;
-  for (const block of workout.cooldownTemplate) {
-    cooldownRaw += estimateBlockMinutes(block);
+  const main: { minutes: number; zone: string | null }[] = [];
+  for (const segment of flattenWorkoutSegments(workout)) {
+    const minutes = segment.durationSec / 60;
+    if (segment.phase === "warmup") warmupRaw += minutes;
+    else if (segment.phase === "cooldown") cooldownRaw += minutes;
+    else main.push({ minutes, zone: segment.zone });
   }
+  const mainRaw = main.reduce((sum, segment) => sum + segment.minutes, 0);
 
   const totalRaw = warmupRaw + mainRaw + cooldownRaw;
-  // Scale factor so block durations sum to session estimated duration
+  // Les minutes de la structure, ramenées à la durée de la séance.
   const scale = totalRaw > 0 ? sessionTotal / totalRaw : 1;
 
-  // Warmup: split evenly between Z1 and Z2
+  // Échauffement : moitié Z1, moitié Z2.
   const warmupMin = warmupRaw * scale;
   zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + warmupMin / 2;
   zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + warmupMin / 2;
 
-  // Main set: distribute by block zone
-  for (const block of workout.mainSetTemplate) {
-    const blockMin = estimateBlockMinutes(block) * scale;
-    if (!block.zone) {
-      // No zone specified, default to Z2
-      zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + blockMin;
-    } else if (block.zone.includes("-")) {
-      // Range like "Z1-Z2": split evenly
-      const parts = block.zone.split("-");
-      const perPart = blockMin / parts.length;
-      for (const part of parts) {
-        const z = part.startsWith("Z") ? part : `Z${part}`;
-        zoneMinutes[z] = (zoneMinutes[z] || 0) + perPart;
-      }
-    } else {
-      zoneMinutes[block.zone] = (zoneMinutes[block.zone] || 0) + blockMin;
-    }
+  // Corps de séance : chaque segment dans sa zone, récupérations comprises.
+  for (const segment of main) {
+    addZoneMinutes(zoneMinutes, segment.zone, segment.minutes * scale);
   }
 
-  // Cooldown: assign to Z1
-  const cooldownMin = cooldownRaw * scale;
-  zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + cooldownMin;
+  // Retour au calme : Z1.
+  zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + cooldownRaw * scale;
 }
 
 /**

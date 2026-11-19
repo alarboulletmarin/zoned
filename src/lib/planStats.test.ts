@@ -247,11 +247,17 @@ describe("computeWeekDuration", () => {
 });
 
 describe("addSessionZoneMinutes", () => {
+  // Le moteur de structure lit la description de chaque bloc.
+  const block = (b: Record<string, unknown>) => ({ description: "bloc", descriptionEn: "block", ...b });
   const template = {
     id: "THR-X",
-    warmupTemplate: [{ durationMin: 10, zone: "Z1-Z2" }],
-    mainSetTemplate: [{ durationMin: 20, zone: "Z4" }, { durationMin: 10, zone: "Z3-Z4" }, { durationMin: 5 }],
-    cooldownTemplate: [{ durationMin: 5, zone: "Z1" }],
+    warmupTemplate: [block({ durationMin: 10, zone: "Z1-Z2" })],
+    mainSetTemplate: [
+      block({ durationMin: 20, zone: "Z4" }),
+      block({ durationMin: 10, zone: "Z3-Z4" }),
+      block({ durationMin: 5 }),
+    ],
+    cooldownTemplate: [block({ durationMin: 5, zone: "Z1" })],
   } as unknown as WorkoutTemplate;
 
   test("répartit bloc par bloc, à l'échelle de la séance", () => {
@@ -268,6 +274,23 @@ describe("addSessionZoneMinutes", () => {
     const zones: Record<string, number> = { Z4: 5 };
     addSessionZoneMinutes(template, 50, zones);
     expect(zones.Z4).toBeCloseTo(5 + 25);
+  });
+
+  test("déroule les répétitions et compte les récupérations dans leur zone", () => {
+    // 20 min d'échauffement, 3 × 8 min Z4 avec 2 min de récupération entre
+    // chaque, 10 min de retour au calme : 58 min. L'ancien calcul comptait
+    // 8 min de Z4 et mettait le reste à l'échelle sur l'échauffement.
+    const intervals = {
+      id: "THR-R",
+      warmupTemplate: [block({ durationMin: 20, zone: "Z1-Z2" })],
+      mainSetTemplate: [block({ durationMin: 8, repetitions: 3, zone: "Z4", recovery: "2min footing Z1", recoveryEn: "2min jog Z1" })],
+      cooldownTemplate: [block({ durationMin: 10, zone: "Z1" })],
+    } as unknown as WorkoutTemplate;
+    const zones: Record<string, number> = {};
+    addSessionZoneMinutes(intervals, 58, zones);
+    expect(zones.Z4).toBeCloseTo(24);
+    expect(zones.Z1).toBeCloseTo(10 + 4 + 10);
+    expect(zones.Z2).toBeCloseTo(10);
   });
 
   test("computeEnhancedPlanAnalysis rend ce que la fonction extraite calcule, séance par séance", async () => {
