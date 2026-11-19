@@ -5,6 +5,7 @@ import { PlanTimeline } from "@/components/domain/PlanTimeline";
 import { PlanActionsMenu } from "@/components/domain/PlanActionsMenu";
 import {
   PlanNameField,
+  Segs,
   formatVolume,
   useChipLabel,
   type PlanCardActions,
@@ -156,9 +157,7 @@ function HistoryRow({
       {nameNode ?? (
         <Link className="zn-planhist__open" to={`/plan/${plan.id}`}>
           <span className="zn-planhist__name">{name}</span>
-          <span className="zn-planhist__meta">
-            {[span(model, false), kindLabel].filter(Boolean).join(" · ")}
-          </span>
+          <Segs className="zn-planhist__meta" parts={[span(model, false), kindLabel]} />
         </Link>
       )}
       <div className="zn-planhist__mid">

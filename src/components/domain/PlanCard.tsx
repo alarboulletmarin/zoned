@@ -9,6 +9,7 @@ import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { PRACTICE_META } from "@/types/practice";
 import { formatDate, usePickLang } from "@/lib/i18n-utils";
+import { cn } from "@/lib/utils";
 import type { PlanCardModel, PlanChip, Tally } from "@/lib/planCardModel";
 
 /**
@@ -57,11 +58,10 @@ export function PlanCard({
 
   const phaseLabel = model.phaseNow ? pick(PHASE_META[model.phaseNow], "label") : null;
   const started = model.weekNow >= 1;
-  const weekLine = started
+  const startsOn = t("plansPage.startsOn", { date: dayLabel(model.span.start) });
+  const weekParts = started
     ? [t("plansPage.week", { current: model.weekNow, total: model.weekTotal }), phaseLabel]
-        .filter(Boolean)
-        .join(" · ")
-    : t("plansPage.startsOn", { date: dayLabel(model.span.start) });
+    : [startsOn];
 
   const menu = (
     <PlanActionsMenu
@@ -89,7 +89,7 @@ export function PlanCard({
     </h3>
   );
 
-  const countdown = <Countdown model={model} />;
+  const countdown = model.countdown ? <Countdown countdown={model.countdown} /> : null;
   const stats = (
     <dl className="zn-plancard__stats">
       <Stat label={t("plansPage.stats.sessions")} value={model.sessionsToDate} />
@@ -118,11 +118,11 @@ export function PlanCard({
           <div className="zn-plancard__lead">
             {chips}
             {title}
-            {countdown}
+            {countdown && <div className="zn-plancard__countdown">{countdown}</div>}
             {stats}
           </div>
           <div className="zn-plancard__graph">
-            <p className="zn-plancard__weekline">{weekLine}</p>
+            <Segs className="zn-plancard__weekline" parts={weekParts} />
             <PlanTimeline model={model} variant="wide" />
           </div>
         </>)
@@ -130,23 +130,26 @@ export function PlanCard({
         open(<>
           {chips}
           {title}
+          {/* Quatre cellules sur deux rangées : les deux grands chiffres sur
+              une même ligne de pied, leurs libellés sur une même ligne de
+              tête, quel que soit le nombre de lignes de chacun. */}
           <div className="zn-plancard__count">
             {countdown}
-            <div className="zn-plancard__week">
-              {started && (
-                <span className="zn-plancard__weeknum">
-                  {model.weekNow}
-                  <span className="zn-plancard__of">/{model.weekTotal}</span>
-                </span>
-              )}
-              <span className="zn-plancard__label">
-                {started
-                  ? [t("plansPage.weekLabel"), phaseLabel].filter(Boolean).join(" · ")
-                  : weekLine}
+            {started && (
+              <span className="zn-plancard__weeknum">
+                {model.weekNow}
+                <span className="zn-plancard__of">/{model.weekTotal}</span>
               </span>
-            </div>
+            )}
+            <Segs
+              className="zn-plancard__label zn-plancard__weeklabel"
+              align="end"
+              parts={started ? [t("plansPage.weekLabel"), phaseLabel] : [startsOn]}
+            />
           </div>
-          <PlanTimeline model={model} variant="card" />
+          <div className="zn-plancard__line">
+            <PlanTimeline model={model} variant="card" />
+          </div>
           {stats}
         </>)
       )}
@@ -187,21 +190,51 @@ export function dayLabel(iso: string): string {
   return raw.charAt(0).toUpperCase() + raw.slice(1);
 }
 
-function Countdown({ model }: { model: PlanCardModel }) {
+/** Le grand chiffre et son libellé, en fragment : la carte les range dans sa grille. */
+function Countdown({ countdown: c }: { countdown: NonNullable<PlanCardModel["countdown"]> }) {
   const { t } = useTranslation("plan");
-  const c = model.countdown;
-  if (!c) return null;
   const date = formatDate(c.date, { weekday: "short", day: "numeric", month: "short" });
-  const big = c.days === 0 ? t(`plansPage.countdown.today_${c.kind}`) : t("plansPage.countdown.days", { count: c.days });
+  const big =
+    c.days === 0
+      ? t(`plansPage.countdown.today_${c.kind}`)
+      : t("plansPage.countdown.days", { count: c.days });
   return (
-    <div className="zn-plancard__countdown">
+    <>
       <span className="zn-plancard__cd" data-today={c.days === 0 || undefined}>
         {big}
       </span>
-      <span className="zn-plancard__label">
-        {t(`plansPage.countdown.${c.kind}`, { date })}
-      </span>
-    </div>
+      <Segs
+        className="zn-plancard__label zn-plancard__cdlabel"
+        parts={[t(`plansPage.countdown.${c.kind}`), date]}
+      />
+    </>
+  );
+}
+
+/**
+ * Des libellés séparés par un point médian, qui passent à la ligne ENTRE deux
+ * segments et jamais dans l'un d'eux. Le point est dessiné en CSS, dans
+ * l'écart, et rogné quand le segment suivant ouvre une ligne : il ne reste
+ * jamais seul en bout de ligne. `align="end"` pour un bloc aligné à droite.
+ */
+export function Segs({
+  parts,
+  className,
+  align = "start",
+}: {
+  parts: (string | null | undefined)[];
+  className?: string;
+  align?: "start" | "end";
+}) {
+  const shown = parts.filter((p): p is string => Boolean(p));
+  return (
+    <span className={cn("zn-segs", className)} data-align={align}>
+      {shown.map((part, i) => (
+        <span key={i} className="zn-segs__part">
+          {part}
+        </span>
+      ))}
+    </span>
   );
 }
 
@@ -236,7 +269,9 @@ export function useChipLabel() {
 
 function Chips({ chips }: { chips: PlanChip[] }) {
   const label = useChipLabel();
-  if (chips.length === 0) return null;
+  // Sans pastille, la place reste : la carte est une grille d'étages alignés
+  // avec ses voisines, un étage manquant décalerait tous les suivants.
+  if (chips.length === 0) return <div className="zn-plancard__chips" aria-hidden="true" />;
   return (
     <ul className="zn-plancard__chips">
       {chips.map((chip) => (

@@ -184,6 +184,45 @@ Carte ou large, liste ou tableau : c'est la page qui choisit, par
 qui doubleraient les liens et les étiquettes pour un lecteur d'écran.
 L'en-tête passe ses actions sous le titre sous 1024 px.
 
+## Alignements
+
+Relevés sur les captures et corrigés, mesures à l'appui (positions relatives
+de chaque étage, prises dans le DOM) :
+
+- **Deux cartes côte à côte, entre 640 et 1023 px, s'alignent étage par
+  étage.** Chaque carte est une sous-grille (`grid-template-rows: subgrid`)
+  de six rangées prises dans la grille de la page : pastilles, nom, compte à
+  rebours, frise, chiffres, prochaine séance. Des pastilles sur deux lignes
+  dans une carte agrandissent l'étage des deux, au lieu de tout décaler dans
+  une seule. Avant : 463 et 455 px de haut, chaque étage décalé de 27 px.
+  Après : 481 px toutes les deux, mêmes décalages au pixel. Les pieds font la
+  même hauteur, leur texte calé en haut et leur flèche au milieu.
+- **Les cartes larges empilées ont la même hauteur** (`grid-auto-rows: 1fr`).
+  Les chiffres à date se posent au pied de la colonne de gauche et la frise
+  au pied de celle de droite : le bas des chiffres et celui des libellés de
+  phases sont sur une même ligne.
+- **Le compte à rebours et la semaine** sont quatre cellules sur deux
+  rangées : les grands chiffres partagent leur ligne de pied, les libellés
+  leur ligne de tête, quel que soit le nombre de lignes de chacun.
+- **Les libellés à point médian** (`Course · dim. 10 janv.`,
+  `Semaine · Construction`, la période d'un plan terminé) ne passent à la
+  ligne qu'entre deux segments, jamais dedans. Le point est dessiné en CSS
+  dans l'écart et rogné quand le segment suivant ouvre une ligne : il ne
+  reste jamais seul en bout de ligne (`Segs`, `.zn-segs`).
+- **L'historique sous 480 px** passe la frise et le compte sous la période.
+  Les trois colonnes de la liste ne laissaient que 155 px au nom : un nom de
+  vingt lettres et sa période passaient chacun sur deux lignes.
+- **La mini-frise de la liste** dessine le prévu en teinte claire
+  (`--zone-2`) et le fait en `--zone-4`, sans contour. Onze semaines dans
+  44 px laissent 3 px par barre, et un contour de 1 px de chaque côté n'y
+  laissait rien à remplir : la frise se lisait comme une rangée de traits.
+  Le tableau, à 150 px, garde le contour.
+
+Ce qui reste volontaire : sur un téléphone, deux cartes empilées gardent
+chacune leur hauteur, puisqu'aucune ligne ne les compare ; et une frise de
+quatre semaines a des barres larges, parce que toutes les frises occupent la
+même largeur.
+
 ## Thèmes et contrastes
 
 Clair et sombre par les seuls tokens. Les libellés mono de 10 et 11 px sont en

@@ -70,8 +70,46 @@
   }
 }
 
+/* Empilées, les cartes larges prennent toutes la hauteur de la plus haute :
+   un nom sur deux lignes dans l'une ne fait plus une pile en dents de scie. */
 .zn-plans__grid[data-wide] {
   grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+}
+
+/* Les cartes d'une même rangée partagent leurs étages : chaque carte est une
+   sous-grille de six rangées (pastilles, nom, compte à rebours, frise,
+   chiffres, prochaine séance) prises dans la grille de la page. Des pastilles
+   sur deux lignes dans une carte agrandissent l'étage des deux, au lieu de
+   décaler tout ce qui suit dans l'une seulement ; les deux cartes finissent
+   à la même hauteur et leurs frises commencent sur la même ligne. */
+.zn-plancard[data-layout="card"] {
+  display: grid;
+  grid-row: span 6;
+  grid-template-rows: subgrid;
+  row-gap: var(--sp-8);
+}
+
+.zn-plancard[data-layout="card"] > .zn-plancard__open {
+  display: grid;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
+  row-gap: var(--sp-8);
+}
+
+/* Le pied se pose en haut de son étage : les filets des deux cartes sont sur
+   une même ligne, même quand une séance tient sur deux lignes et pas l'autre. */
+.zn-plancard[data-layout="card"] > .zn-plancard__next {
+  grid-row: 6;
+  align-self: stretch;
+}
+
+/* Les deux pieds font la même hauteur : le texte se cale en haut, pour que
+   les libellés soient sur une ligne, et la flèche au milieu, pour qu'elles
+   le soient aussi, que la séance tienne sur une ligne ou sur deux. */
+.zn-plancard[data-layout="card"] > .zn-plancard__next .zn-plancard__next-text {
+  align-self: flex-start;
 }
 
 /* ══ a mono pill ═══════════════════════════════════════════════════════ */
@@ -129,6 +167,10 @@ a.zn-plancard__open:hover .zn-plancard__name {
 .zn-plancard__chips {
   display: flex;
   flex-wrap: wrap;
+  /* L'étage est celui de la carte voisine quand ses pastilles tiennent sur
+     deux lignes : les nôtres restent en haut, à leur taille. */
+  align-content: flex-start;
+  align-items: flex-start;
   gap: var(--sp-3);
   margin: 0;
   /* Room for the "···" laid over the top right corner. */
@@ -188,6 +230,59 @@ a.zn-plancard__open:hover .zn-plancard__name {
   color: var(--text-faint);
 }
 
+/* Des segments séparés par un point médian, qui ne passent à la ligne
+   qu'entre deux segments. Le point est dessiné dans l'écart, côté segment
+   suivant (ou précédent, aligné à droite) ; quand le segment ouvre une
+   ligne, son point tombe hors de la boîte et le débordement le rogne. Il ne
+   reste donc jamais seul en bout de ligne. */
+.zn-segs {
+  --zn-seg-gap: 1.3em;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--zn-seg-gap);
+  min-inline-size: 0;
+  overflow: hidden;
+}
+
+.zn-segs[data-align="end"] {
+  justify-content: flex-end;
+  text-align: end;
+  /* Le chasse laisse une espace après la dernière lettre : sans cette marge,
+     un libellé aligné à droite rentre d'un pixel et demi sous son chiffre. */
+  margin-inline-end: calc(-1 * var(--ls-mono-label));
+}
+
+.zn-segs__part {
+  position: relative;
+  max-inline-size: 100%;
+  overflow: visible;
+  white-space: nowrap;
+}
+
+/* Le point occupe tout l'écart et s'y centre. Le chasse des capitales
+   ajoute une espace après la dernière lettre du segment précédent : la
+   moitié de ce chasse décale le point d'autant, pour qu'il tombe au milieu
+   du blanc VISIBLE et pas de la boîte. */
+.zn-segs[data-align="start"] .zn-segs__part + .zn-segs__part::before,
+.zn-segs[data-align="end"] .zn-segs__part:not(:last-child)::after {
+  content: "\00B7";
+  position: absolute;
+  inset-block-start: 0;
+  inline-size: var(--zn-seg-gap);
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.zn-segs[data-align="start"] .zn-segs__part + .zn-segs__part::before {
+  inset-inline-end: 100%;
+  translate: -0.07em 0;
+}
+
+.zn-segs[data-align="end"] .zn-segs__part:not(:last-child)::after {
+  inset-inline-start: 100%;
+  translate: -0.07em 0;
+}
+
 .zn-plancard__of {
   font-weight: var(--fw-regular);
   color: var(--text-faint);
@@ -195,11 +290,32 @@ a.zn-plancard__open:hover .zn-plancard__name {
 
 /* ── countdown and week ───────────────────────────────────────────────── */
 
+/* Deux colonnes, deux rangées : les grands chiffres partagent leur ligne de
+   pied, les libellés leur ligne de tête. Un libellé sur deux lignes ne fait
+   plus remonter le chiffre au-dessus de lui. */
 .zn-plancard__count {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: var(--sp-6);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: var(--sp-6);
+  row-gap: var(--sp-2);
+  align-items: end;
+}
+
+.zn-plancard__count .zn-plancard__cd { grid-area: 1 / 1; }
+.zn-plancard__count .zn-plancard__cdlabel { grid-area: 2 / 1; align-self: start; }
+.zn-plancard__count .zn-plancard__weeknum { grid-area: 1 / 2; justify-self: end; }
+.zn-plancard__count .zn-plancard__weeklabel {
+  grid-area: 2 / 2;
+  align-self: start;
+  justify-self: end;
+  max-inline-size: 18ch;
+}
+
+/* Sans compte à rebours ni semaine, la colonne de droite prend tout. */
+.zn-plancard__count .zn-plancard__weeklabel:first-child {
+  grid-column: 1 / -1;
+  justify-self: start;
 }
 
 .zn-plancard__countdown {
@@ -215,14 +331,6 @@ a.zn-plancard__open:hover .zn-plancard__name {
   line-height: 0.9;
   letter-spacing: -0.035em;
   font-variant-numeric: tabular-nums;
-}
-
-.zn-plancard__week {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--sp-2);
-  text-align: end;
 }
 
 .zn-plancard__weeknum {
@@ -299,6 +407,7 @@ a.zn-plancard__open:hover .zn-plancard__name {
 }
 
 .zn-plancard[data-layout="wide"] .zn-plancard__open {
+  flex: 1;
   display: grid;
   grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
   column-gap: var(--sp-15);
@@ -325,7 +434,10 @@ a.zn-plancard__open:hover .zn-plancard__name {
   font-size: 56px;
 }
 
+/* Les deux chiffres se posent au pied de la colonne, sur la même ligne que
+   les libellés des phases en face, au lieu de flotter au-dessus. */
 .zn-plancard[data-layout="wide"] .zn-plancard__stats {
+  margin-block-start: auto;
   padding-block-start: var(--sp-2);
 }
 
@@ -334,6 +446,13 @@ a.zn-plancard__open:hover .zn-plancard__name {
   flex-direction: column;
   gap: var(--sp-5);
   min-inline-size: 0;
+}
+
+/* La frise se pose au pied de sa colonne, comme les chiffres en face : les
+   libellés des phases et les deux chiffres finissent sur une même ligne, et
+   la ligne de la semaine reste en tête, à la hauteur des pastilles. */
+.zn-plancard[data-layout="wide"] .zn-plancard__graph > .zn-planline {
+  margin-block-start: auto;
 }
 
 /* The week line shares its row with the "···", the button laid over its
@@ -580,6 +699,21 @@ a.zn-plancard__open:hover .zn-plancard__name {
   border-radius: 1px;
 }
 
+/* Dans la liste, 44 px pour onze semaines laissent 2 px par barre : un
+   contour de 1 px de chaque côté n'y laisse plus de place au remplissage, et
+   la frise se lit comme une rangée de traits noirs. Le prévu y passe donc en
+   teinte claire de la rampe et le fait en --zone-4 par-dessus, sans contour.
+   Le tableau, à 150 px, garde le contour. */
+.zn-planhist__row .zn-planline[data-variant="mini"] {
+  --zn-gap: 1px;
+}
+
+.zn-planhist__row .zn-planline[data-variant="mini"] .zn-planline__bar {
+  background: var(--zone-2);
+  border: 0;
+  border-radius: 1px;
+}
+
 /* ══ finished plans ════════════════════════════════════════════════════ */
 
 .zn-planhist {
@@ -612,6 +746,31 @@ a.zn-plancard__open:hover .zn-plancard__name {
   border-block-start: var(--border-divider);
 }
 
+/* Sur un téléphone, trois colonnes laissaient 155 px au nom : un nom de
+   vingt lettres passait sur deux lignes, la période aussi, et la frise
+   flottait au milieu de quatre lignes de texte. Sous 480 px, la frise et le
+   compte passent sous la période, et le texte prend toute la largeur moins
+   le bouton ···, centré sur la ligne entière. */
+@media (max-width: 479px) {
+  .zn-planhist__row {
+    grid-template-columns: minmax(0, 1fr) var(--hit-min);
+    grid-template-areas:
+      "open menu"
+      "mid  menu";
+    row-gap: var(--sp-4);
+  }
+
+  .zn-planhist__row > .zn-planhist__open { grid-area: open; }
+  .zn-planhist__row > .zn-planhist__mid { grid-area: mid; }
+  .zn-planhist__row > .zn-planmenu { grid-area: menu; }
+
+  .zn-planhist__row .zn-planhist__count {
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--sp-3);
+  }
+}
+
 .zn-planhist__open {
   display: flex;
   flex-direction: column;
@@ -626,10 +785,18 @@ a.zn-plancard__open:hover .zn-plancard__name {
   text-underline-offset: 3px;
 }
 
+/* Dans la liste, le nom passe à la ligne plutôt que d'être coupé : sur un
+   téléphone la colonne fait 160 px, et un nom tronqué ne se reconnaît plus.
+   Le tableau, qui a la place, le garde sur une ligne. */
 .zn-planhist__name {
-  overflow: hidden;
   font-size: var(--fs-body);
   font-weight: var(--fw-medium);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.zn-planhist__table .zn-planhist__name {
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }

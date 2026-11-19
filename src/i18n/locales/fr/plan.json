@@ -486,8 +486,8 @@
       "days": "J-{{count}}",
       "today_race": "Jour J",
       "today_end": "Jour J",
-      "race": "Course · {{date}}",
-      "end": "Fin du plan · {{date}}"
+      "race": "Course",
+      "end": "Fin du plan"
     },
     "stats": {
       "sessions": "Séances à date",

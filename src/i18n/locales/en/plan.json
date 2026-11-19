@@ -486,8 +486,8 @@
       "days": "D-{{count}}",
       "today_race": "Race day",
       "today_end": "Last day",
-      "race": "Race · {{date}}",
-      "end": "Plan ends · {{date}}"
+      "race": "Race",
+      "end": "Plan ends"
     },
     "stats": {
       "sessions": "Sessions to date",
