@@ -1,0 +1,764 @@
+/* /plans, the shelf of training plans.
+ *
+ * Three objects: the plan card (.zn-plancard), its week timeline
+ * (.zn-planline), and the history of finished plans (.zn-planhist). The
+ * decisions behind them are in docs/plans.md.
+ *
+ * One vermillon fill on the screen, "Créer un plan". Nothing in a card is
+ * vermillon: the week being lived is marked by a heavier stroke and a
+ * triangle, never by a colour alone. Every tint is a token: the ramp of the
+ * zones for the phases and the done fill, the ink for every outline.
+ *
+ * Widths follow the thresholds the type scale and the top bar already use:
+ * 640px (two columns of cards) and 1024px (one wide card per plan, history as
+ * a table). The choice between card and wide, list and table, is made by the
+ * page with useMediaQuery, so this sheet only paints each shape. */
+
+/* ══ the head ══════════════════════════════════════════════════════════ */
+
+/* Title on the left, the two calls on the right, on the title's baseline
+   block. Under 1024px the calls drop under the title. */
+.zn-plans__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-10) var(--sp-17);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .zn-plans__head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+}
+
+.zn-plans__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.zn-plans__lede {
+  max-inline-size: 46ch;
+}
+
+.zn-plans__wait {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  padding-block: var(--sp-19);
+  color: var(--text-faint);
+}
+
+/* ══ the active plans ══════════════════════════════════════════════════ */
+
+/* Stacked on a phone, two columns from 640px, aligned at the top so a card
+   with a next session does not stretch its neighbour. From 1024px each plan
+   takes a wide card, stacked again. */
+.zn-plans__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap-grid);
+  align-items: start;
+}
+
+@media (min-width: 640px) {
+  .zn-plans__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.zn-plans__grid[data-wide] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ══ a mono pill ═══════════════════════════════════════════════════════ */
+
+/* The chips of a card and the kind of a finished plan: mono, outlined, no
+   fill. A label, not a button. */
+.zn-planchip {
+  flex: none;
+  padding: 2px var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+/* ══ the plan card ═════════════════════════════════════════════════════ */
+
+/* Paper card, ink rule, no shadow: a hard offset belongs to floating
+   surfaces, never to a card in a list. The "···" is laid over the card,
+   outside the link, so two targets never nest. */
+.zn-plancard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--sp-8) var(--sp-8) var(--sp-2);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* The upper block is one link to the plan, a real anchor, so the keyboard
+   reaches it and a middle click still opens a tab. */
+.zn-plancard__open {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  min-inline-size: 0;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--r-md);
+}
+
+a.zn-plancard__open:hover .zn-plancard__name {
+  text-decoration: underline;
+  text-decoration-thickness: var(--bw-rule);
+  text-underline-offset: 4px;
+}
+
+.zn-plancard__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin: 0;
+  /* Room for the "···" laid over the top right corner. */
+  padding: 0 var(--hit-min) 0 0;
+  list-style: none;
+}
+
+/* Centred on the chips row: 16px of padding plus half a 24px row, minus
+   half the 44px target. */
+.zn-plancard__menu {
+  position: absolute;
+  inset-block-start: calc(var(--sp-8) + var(--sp-6) - var(--hit-min) / 2);
+  inset-inline-end: var(--sp-4);
+}
+
+/* Bricolage at 24px on a card, 30px on the wide one. Literal sizes: the
+   display steps shrink on a phone, and the card is drawn for the phone. */
+.zn-plancard__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+/* Renaming in place: the same type, an ink underline as the field. */
+.zn-plancard__rename,
+.zn-planhist__rename {
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: 0;
+  color: var(--text-body);
+  background: transparent;
+  border: none;
+  border-block-end: var(--bw-heavy) solid var(--line-strong);
+  border-radius: 0;
+}
+
+.zn-plancard__rename {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+/* The mono micro-label under every figure. --text-faint passes 4.5:1 on the
+   card and on the band, in both themes. */
+.zn-plancard__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.3;
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-plancard__of {
+  font-weight: var(--fw-regular);
+  color: var(--text-faint);
+}
+
+/* ── countdown and week ───────────────────────────────────────────────── */
+
+.zn-plancard__count {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--sp-6);
+}
+
+.zn-plancard__countdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.zn-plancard__cd {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 46px;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-plancard__week {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-2);
+  text-align: end;
+}
+
+.zn-plancard__weeknum {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── the two figures ──────────────────────────────────────────────────── */
+
+.zn-plancard__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+  margin: 0;
+}
+
+.zn-plancard__stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.zn-plancard__stat dd {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 17px;
+  font-weight: var(--fw-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── the next session ─────────────────────────────────────────────────── */
+
+.zn-plancard__next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  min-block-size: 52px;
+  padding-block: var(--sp-3);
+  color: inherit;
+  text-decoration: none;
+  border-block-start: var(--border-divider);
+}
+
+.zn-plancard__next svg {
+  flex: none;
+}
+
+.zn-plancard__next-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+}
+
+.zn-plancard__next-what {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.zn-plancard__next:hover .zn-plancard__next-what {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── the wide card, from 1024px ───────────────────────────────────────── */
+
+.zn-plancard[data-layout="wide"] {
+  padding: var(--sp-12) 28px var(--sp-3);
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__open {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  column-gap: var(--sp-15);
+}
+
+.zn-plancard__lead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-9);
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__chips {
+  padding-inline-end: 0;
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__name,
+.zn-plancard[data-layout="wide"] .zn-plancard__rename {
+  font-size: 30px;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__cd {
+  font-size: 56px;
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__stats {
+  padding-block-start: var(--sp-2);
+}
+
+.zn-plancard__graph {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  min-inline-size: 0;
+}
+
+/* The week line shares its row with the "···", the button laid over its
+   right end. The row is as tall as the chips row of the left column, so the
+   two columns start on one line. */
+.zn-plancard__weekline {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--sp-12);
+  margin: 0;
+  padding-inline-end: var(--hit-min);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__menu {
+  inset-block-start: calc(var(--sp-12) + var(--sp-6) - var(--hit-min) / 2);
+  inset-inline-end: var(--sp-6);
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__next {
+  min-block-size: 56px;
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__next-text {
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--sp-7);
+}
+
+.zn-plancard[data-layout="wide"] .zn-plancard__next-what {
+  font-size: var(--fs-body);
+}
+
+/* ══ the "···" ═════════════════════════════════════════════════════════ */
+
+.zn-planmenu {
+  display: grid;
+  place-items: center;
+  inline-size: var(--hit-min);
+  block-size: var(--hit-min);
+  padding: 0;
+  color: var(--text-body);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-planmenu:hover,
+.zn-planmenu[data-state="open"] {
+  background: var(--state-disabled-fill);
+}
+
+/* Entries at the 44px floor, a touch above the menu's 40px default. */
+.zn-planmenu__list {
+  min-inline-size: 210px;
+}
+
+.zn-planmenu__list .zn-menu__item {
+  min-block-size: var(--hit-min);
+}
+
+/* Deleting is the press shade of the accent, as type, until it is
+   highlighted and inverts like every destructive entry. */
+.zn-planmenu__delete:not([data-highlighted]) {
+  color: var(--accent-press);
+}
+
+/* ══ the week timeline ═════════════════════════════════════════════════ */
+
+/* One column per week, all the same width, on three tiers: the marks, the
+   bars, the phases. The bar's HEIGHT is the week's planned minutes against
+   the plan's largest week; its OUTLINE is where you are; its FILL, from the
+   bottom, is what was done. What was not done stays empty, on purpose.
+   Named planline, not timeline: .zn-timeline is the zone timeline of a
+   session (visualization.css), and the two would paint each other. */
+.zn-planline {
+  --zn-gap: var(--sp-2);
+  --zn-bars: 72px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+}
+
+.zn-planline[data-variant="wide"] {
+  --zn-gap: var(--sp-3);
+  --zn-bars: 132px;
+}
+
+/* A long plan narrows its gaps before its bars. */
+.zn-planline[data-dense] {
+  --zn-gap: var(--sp-1);
+}
+
+.zn-planline__marks,
+.zn-planline__bars,
+.zn-planline__nums,
+.zn-planline__phases {
+  display: flex;
+  gap: var(--zn-gap);
+}
+
+.zn-planline__marks {
+  block-size: 14px;
+}
+
+.zn-planline__mark {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.zn-planline__mark svg {
+  flex: none;
+}
+
+.zn-planline__now path {
+  fill: var(--ink-1);
+}
+
+.zn-planline__flag path {
+  fill: none;
+  stroke: var(--ink-1);
+  stroke-width: var(--bw-rule);
+}
+
+.zn-planline__bars {
+  block-size: var(--zn-bars);
+  align-items: flex-end;
+}
+
+/* Past: the house rule. Current: the heavy ink stroke. Future: dashed, ink
+   at 40%. Three outlines, so the state never rests on the fill alone. */
+.zn-planline__bar {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  block-size: max(var(--zn-h, 0%), 4px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+}
+
+.zn-planline__bar[data-state="current"] {
+  border: var(--bw-heavy) solid var(--line-strong);
+}
+
+.zn-planline__bar[data-state="future"] {
+  border: var(--border-dashed);
+}
+
+.zn-planline__done {
+  display: block;
+  flex: none;
+  block-size: var(--zn-fill, 0%);
+  background: var(--zone-4);
+}
+
+.zn-planline__nums span {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: 0.08em;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--text-faint);
+}
+
+.zn-planline__nums span[data-current] {
+  color: var(--text-body);
+}
+
+/* The phases: one segment per phase, as wide as its weeks, on the ramp of
+   the zones. No new colour. */
+.zn-planline__phase {
+  flex-basis: 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  container-type: inline-size;
+}
+
+.zn-planline__tone {
+  display: block;
+  block-size: 6px;
+  border-radius: 2px;
+  background: var(--zone-1);
+}
+
+.zn-planline__phase[data-phase="build"] .zn-planline__tone { background: var(--zone-3); }
+.zn-planline__phase[data-phase="peak"] .zn-planline__tone { background: var(--zone-5); }
+.zn-planline__phase[data-phase="taper"] .zn-planline__tone { background: var(--zone-2); }
+
+.zn-planline__phase-label {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text-faint);
+}
+
+.zn-planline__phase[data-current] .zn-planline__phase-label {
+  color: var(--text-body);
+}
+
+.zn-planline__phase-short {
+  display: none;
+}
+
+/* "Construction" in 10px mono needs about 96px; under that, the short form. */
+@container (max-width: 96px) {
+  .zn-planline__phase-full { display: none; }
+  .zn-planline__phase-short { display: inline; }
+}
+
+/* The mini timeline of a history row: bars only, a hair outline. */
+.zn-planline[data-variant="mini"] {
+  --zn-gap: 2px;
+  --zn-bars: 22px;
+  flex: none;
+  inline-size: 44px;
+}
+
+.zn-planline[data-variant="mini"] .zn-planline__bar {
+  border-width: var(--bw-hair);
+  border-radius: 1px;
+}
+
+/* ══ finished plans ════════════════════════════════════════════════════ */
+
+.zn-planhist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-planhist__box {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* ── the list, under 1024px ───────────────────────────────────────────── */
+
+.zn-planhist__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto var(--hit-min);
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-7) var(--sp-3) var(--sp-7) var(--sp-8);
+}
+
+.zn-planhist__row + .zn-planhist__row {
+  border-block-start: var(--border-divider);
+}
+
+.zn-planhist__open {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.zn-planhist__open:hover .zn-planhist__name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-planhist__name {
+  overflow: hidden;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.zn-planhist__rename {
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+}
+
+.zn-planhist__meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-planhist__mid {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+}
+
+.zn-planhist__count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-1);
+}
+
+.zn-planhist__figure {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-planhist__of {
+  font-weight: var(--fw-regular);
+  color: var(--text-faint);
+}
+
+.zn-planhist__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ── the table, from 1024px ───────────────────────────────────────────── */
+
+.zn-planhist__table {
+  inline-size: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.zn-planhist__table th,
+.zn-planhist__table td {
+  padding: 0 var(--sp-4);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.zn-planhist__table thead th {
+  padding-block: var(--sp-6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  border-block-end: var(--border-rule);
+}
+
+.zn-planhist__table tbody tr {
+  block-size: 64px;
+}
+
+.zn-planhist__table tbody tr + tr {
+  border-block-start: var(--border-divider);
+}
+
+.zn-planhist__table tbody th {
+  font-weight: var(--fw-regular);
+}
+
+.zn-planhist__table :is(th, td):first-child {
+  padding-inline-start: var(--sp-12);
+}
+
+.zn-planhist__table :is(th, td):last-child {
+  inline-size: 60px;
+  padding-inline: 0 var(--sp-4);
+}
+
+.zn-planhist__table :is(th, td):nth-child(2) { inline-size: 24%; }
+.zn-planhist__table :is(th, td):nth-child(3),
+.zn-planhist__table :is(th, td):nth-child(4) { inline-size: 110px; }
+.zn-planhist__table :is(th, td):nth-child(5) { inline-size: 166px; }
+
+.zn-planhist__table [data-num] {
+  text-align: end;
+}
+
+.zn-planhist__table .zn-planhist__open {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.zn-planhist__period {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-muted);
+}
+
+.zn-planhist__volume {
+  font-weight: var(--fw-regular);
+}
+
+.zn-planhist__table .zn-planline[data-variant="mini"] {
+  --zn-gap: 3px;
+  --zn-bars: 28px;
+  inline-size: 150px;
+}
+
+.zn-planhist__table .zn-planline[data-variant="mini"] .zn-planline__bar {
+  border-radius: 2px;
+}

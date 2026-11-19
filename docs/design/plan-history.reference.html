@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Plans terminés</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: {{root.w}}; height: {{root.h}}; box-sizing: border-box; padding: {{root.pad}}; background: {{root.bg}}; font-family: 'Space Grotesk', system-ui, sans-serif; color: {{t.ink1}}">
+<section aria-labelledby="hist-title" style="display: flex; flex-direction: column; gap: 12px">
+<h2 id="hist-title" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: {{t.ink3}}">Terminés · {{count}}</h2>
+
+<sc-if value="{{isList}}" hint-placeholder-val="{{ true }}">
+<ul style="list-style: none; margin: 0; padding: 0; background: {{t.band}}; border: 1.5px solid {{t.ink1}}; border-radius: 16px; overflow: hidden">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="2">
+<li style="display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: center; gap: 12px; padding: 14px 6px 14px 16px; border-top: {{r.sep}}">
+<a href="#" style="display: flex; flex-direction: column; gap: 4px; min-width: 0; color: {{t.ink1}}; text-decoration: none">
+<span style="font-size: 16px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.name}}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: {{t.ink3}}">{{r.span}} · {{r.kind}}</span>
+</a>
+<div style="display: flex; align-items: center; gap: 10px">
+<div aria-hidden="true" style="display: flex; gap: 2px; height: 22px; width: 44px; align-items: flex-end">
+<sc-for list="{{r.bars}}" as="b" hint-placeholder-count="4">
+<div style="flex: 1; height: {{b.h}}; box-sizing: border-box; border: 1px solid {{t.ink1}}; border-radius: 1px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden"><div style="height: {{b.fill}}; background: {{t.doneFill}}"></div></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px">
+<span style="font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums">{{r.s0}}<span style="color: {{t.ink3}}; font-weight: 400">/{{r.s1}}</span></span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: {{t.ink3}}">Séances</span>
+</div>
+</div>
+<button type="button" aria-label="{{r.menuLabel}}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="10" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="15.5" cy="10" r="1.6" style="fill: currentColor"></circle></svg></button>
+</li>
+</sc-for>
+</ul>
+</sc-if>
+
+<sc-if value="{{isTable}}" hint-placeholder-val="{{ false }}">
+<div style="background: {{t.band}}; border: 1.5px solid {{t.ink1}}; border-radius: 16px; overflow: hidden">
+<div style="display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr) 110px 110px 150px 56px; align-items: center; gap: 16px; padding: 12px 8px 12px 24px; border-bottom: 1.5px solid {{t.ink1}}; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">
+<span>Plan</span><span>Période</span><span style="text-align: right">Séances</span><span style="text-align: right">Volume</span><span>Semaines</span><span></span>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr) 110px 110px 150px 56px; align-items: center; gap: 16px; min-height: 64px; padding: 0 8px 0 24px; border-top: {{r.sep}}">
+<a href="#" style="display: flex; align-items: center; gap: 12px; min-width: 0; color: {{t.ink1}}; text-decoration: none">
+<span style="font-size: 16px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.name}}</span>
+<span style="flex: none; padding: 2px 8px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase">{{r.kind}}</span>
+</a>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: {{t.ink2}}">{{r.spanLong}}</span>
+<span style="text-align: right; font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums">{{r.s0}}<span style="color: {{t.ink3}}; font-weight: 400"> / {{r.s1}}</span></span>
+<span style="text-align: right; font-size: 16px; font-variant-numeric: tabular-nums">{{r.vol}}</span>
+<div aria-hidden="true" style="display: flex; gap: 3px; height: 28px; align-items: flex-end">
+<sc-for list="{{r.bars}}" as="b" hint-placeholder-count="4">
+<div style="flex: 1; height: {{b.h}}; box-sizing: border-box; border: 1px solid {{t.ink1}}; border-radius: 2px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden"><div style="height: {{b.fill}}; background: {{t.doneFill}}"></div></div>
+</sc-for>
+</div>
+<button type="button" aria-label="{{r.menuLabel}}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="10" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="15.5" cy="10" r="1.6" style="fill: currentColor"></circle></svg></button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["clair","sombre"],"default":"clair"},"layout":{"editor":"enum","options":["liste","table"],"default":"liste"},"bare":{"editor":"boolean","default":false},"$preview":{"width":390,"height":260}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var PAL = {
+      clair: { page: '#F6F5F2', band: '#EFEEEA', ink1: '#171614', ink2: '#4A4845', ink3: '#6C6A65', divider: 'rgba(23,22,20,0.18)', doneFill: 'rgba(23,22,20,0.62)' },
+      sombre: { page: '#171614', band: '#100F0E', ink1: '#EDEBE7', ink2: '#C2BFB9', ink3: '#918E88', divider: 'rgba(237,235,231,0.18)', doneFill: 'rgba(237,235,231,0.62)' }
+    };
+    var t = PAL[this.props.theme === 'sombre' ? 'sombre' : 'clair'];
+    var layout = this.props.layout || 'liste';
+    var bare = this.props.bare === true || this.props.bare === 'true';
+    var DATA = [
+      { name: 'Marathon Nice-Cannes', kind: 'Marathon', span: '12 oct. → 8 nov.', spanLong: '12 oct. → 8 nov. 2026', s0: 26, s1: 28, vol: '18 h 20',
+        planned: [300, 240, 330, 250], done: [290, 230, 310, 235] },
+      { name: 'Trail 20K · septembre', kind: 'Trail', span: '4 août → 21 sept.', spanLong: '4 août → 21 sept. 2026', s0: 31, s1: 36, vol: '27 h 10',
+        planned: [200, 230, 250, 220, 270, 290, 180], done: [200, 200, 240, 120, 260, 250, 175] }
+    ];
+    var rows = DATA.map(function (d, i) {
+      var max = Math.max.apply(null, d.planned);
+      return {
+        name: d.name, kind: d.kind, span: d.span, spanLong: d.spanLong, s0: d.s0, s1: d.s1, vol: d.vol,
+        sep: i === 0 ? '0' : '1.5px solid ' + t.divider,
+        menuLabel: 'Actions du plan ' + d.name,
+        bars: d.planned.map(function (p, j) {
+          return { h: Math.round(p / max * 100) + '%', fill: Math.round(Math.min(d.done[j] / p, 1) * 100) + '%' };
+        })
+      };
+    });
+    var root = bare ? { w: '100%', h: 'auto', pad: '0', bg: 'transparent' } : { w: '390px', h: '260px', pad: '20px', bg: t.page };
+    return { t: t, rows: rows, count: rows.length, root: root, isList: layout !== 'table', isTable: layout === 'table' };
+  }
+}
+</script>
+</body>
+</html>

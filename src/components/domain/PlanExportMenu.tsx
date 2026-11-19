@@ -57,13 +57,15 @@ async function resolvePlanWorkouts(plan: TrainingPlan) {
   return { names, templates };
 }
 
-export function PlanExportMenu({
-  plan,
-  workoutNames: preloadedNames,
-  workoutTemplates: preloadedTemplates,
-  size = "default",
-  variant = "default",
-}: PlanExportMenuProps) {
+/**
+ * The three exports of a plan (PDF, calendar, JSON), shared by this button
+ * and by the plan card's "···" menu on /plans, so the two never drift.
+ */
+export function usePlanExport(
+  plan: TrainingPlan,
+  preloadedNames?: Record<string, string>,
+  preloadedTemplates?: Record<string, AnyWorkoutTemplate>,
+) {
   const { t } = useTranslation("common");
   const [isExporting, setIsExporting] = useState(false);
 
@@ -116,6 +118,23 @@ export function PlanExportMenu({
     triggerDownload(blob, planFilename(plan, "json"));
     toast.success(t("plans.planExported"));
   }, [plan, t]);
+
+  return { isExporting, handleExportPDF, handleExportICS, handleExportJSON };
+}
+
+export function PlanExportMenu({
+  plan,
+  workoutNames: preloadedNames,
+  workoutTemplates: preloadedTemplates,
+  size = "default",
+  variant = "default",
+}: PlanExportMenuProps) {
+  const { isExporting, handleExportPDF, handleExportICS, handleExportJSON } = usePlanExport(
+    plan,
+    preloadedNames,
+    preloadedTemplates,
+  );
+  const { t } = useTranslation("common");
 
   const isSmall = size === "sm";
 

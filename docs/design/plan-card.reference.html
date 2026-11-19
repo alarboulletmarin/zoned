@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Carte de plan en cours</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: {{root.w}}; height: {{root.h}}; box-sizing: border-box; padding: {{root.pad}}; background: {{root.bg}}; font-family: 'Space Grotesk', system-ui, sans-serif; color: {{t.ink1}}">
+
+<sc-if value="{{isCard}}" hint-placeholder-val="{{ true }}">
+<article style="position: relative; background: {{t.card}}; border: 1.5px solid {{t.ink1}}; border-radius: 16px; padding: 16px 16px 4px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+<div style="display: flex; gap: 6px; flex-wrap: wrap">
+<sc-for list="{{s.chips}}" as="c" hint-placeholder-count="2">
+<span style="padding: 3px 9px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase">{{c}}</span>
+</sc-for>
+</div>
+<button type="button" aria-label="Actions du plan" aria-haspopup="menu" aria-expanded="{{menuOpen}}" onClick="{{toggleMenu}}" style="width: 44px; height: 44px; margin: -8px -8px -8px 0; border: 0; border-radius: 999px; background: {{menuBtnBg}}; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="10" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="15.5" cy="10" r="1.6" style="fill: currentColor"></circle></svg></button>
+</div>
+
+<a href="#" style="color: {{t.ink1}}; text-decoration: none"><h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 24px; line-height: 1.05; letter-spacing: -0.02em">{{s.name}}</h2></a>
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 46px; line-height: 0.9; letter-spacing: -0.035em; font-variant-numeric: tabular-nums">{{s.cd}}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">{{s.cdLabel}}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end; text-align: right">
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">{{s.weekNow}}<span style="color: {{t.ink3}}">/{{s.weekTotal}}</span></span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">Semaine · {{s.phaseNow}}</span>
+</div>
+</div>
+
+<div role="img" aria-label="{{friseAria}}" style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; gap: 4px; height: 14px">
+<sc-for list="{{weeks}}" as="w" hint-placeholder-count="5">
+<div style="flex: 1; display: flex; justify-content: center; align-items: flex-end">
+<sc-if value="{{w.isNow}}" hint-placeholder-val="{{ false }}"><svg width="10" height="8" viewBox="0 0 10 8" aria-hidden="true"><path d="M0 0 H10 L5 7 Z" style="fill: {{t.ink1}}"></path></svg></sc-if>
+<sc-if value="{{w.isRace}}" hint-placeholder-val="{{ false }}"><svg width="12" height="13" viewBox="0 0 12 13" aria-hidden="true"><path d="M2 12.5 V1 H10 L8 4 L10 7 H2" style="fill: none; stroke: {{t.ink1}}; stroke-width: 1.5px"></path></svg></sc-if>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 4px; height: 72px; align-items: flex-end">
+<sc-for list="{{weeks}}" as="w" hint-placeholder-count="5">
+<div style="flex: 1; height: {{w.h}}; box-sizing: border-box; border: {{w.border}}; border-radius: 4px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden">
+<div style="height: {{w.fill}}; background: {{t.doneFill}}"></div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 4px">
+<sc-for list="{{phases}}" as="p" hint-placeholder-count="3">
+<div style="flex: {{p.n}}; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<div style="height: 6px; border-radius: 2px; background: {{p.tone}}"></div>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: {{p.textColor}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{p.short}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">Séances à date</span>
+<span style="font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">{{s.sess0}} <span style="color: {{t.ink3}}; font-weight: 400">/ {{s.sess1}}</span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">Volume à date</span>
+<span style="font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">{{s.vol0}} <span style="color: {{t.ink3}}; font-weight: 400">/ {{s.vol1}}</span></span>
+</div>
+</div>
+
+<a href="#" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; border-top: 1.5px solid {{t.divider}}; color: {{t.ink1}}; text-decoration: none">
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">Prochaine séance</span>
+<span style="font-size: 15px">{{s.next}}</span>
+</span>
+<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10 H16 M11 5 L16 10 L11 15" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg>
+</a>
+
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{ false }}">
+<div role="menu" aria-label="Actions du plan" style="position: absolute; top: 52px; right: 12px; width: 210px; background: {{t.card}}; border: 1.5px solid {{t.ink1}}; border-radius: 10px; box-shadow: 8px 8px 0 {{t.shadow}}; padding: 6px; display: flex; flex-direction: column; z-index: 2">
+<sc-for list="{{menu}}" as="m" hint-placeholder-count="4">
+<sc-if value="{{m.sep}}" hint-placeholder-val="{{ false }}"><div style="height: 1.5px; background: {{t.divider}}; margin: 4px 0"></div></sc-if>
+<button type="button" role="menuitem" style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: {{m.color}}; font-family: 'Space Grotesk', sans-serif; font-size: 15px; text-align: left; cursor: pointer">{{m.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+</article>
+</sc-if>
+
+<sc-if value="{{isWide}}" hint-placeholder-val="{{ false }}">
+<article style="position: relative; background: {{t.card}}; border: 1.5px solid {{t.ink1}}; border-radius: 16px; padding: 24px 28px 6px; display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); column-gap: 40px; row-gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; gap: 6px; flex-wrap: wrap">
+<sc-for list="{{s.chips}}" as="c" hint-placeholder-count="2">
+<span style="padding: 3px 9px; border: 1.5px solid {{t.ink1}}; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase">{{c}}</span>
+</sc-for>
+</div>
+<a href="#" style="color: {{t.ink1}}; text-decoration: none"><h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 30px; line-height: 1.02; letter-spacing: -0.025em">{{s.name}}</h2></a>
+<div style="display: flex; align-items: flex-end; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 56px; line-height: 0.9; letter-spacing: -0.035em; font-variant-numeric: tabular-nums">{{s.cd}}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">{{s.cdLabel}}</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 4px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">Séances à date</span>
+<span style="font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">{{s.sess0}} <span style="color: {{t.ink3}}; font-weight: 400">/ {{s.sess1}}</span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">Volume à date</span>
+<span style="font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums">{{s.vol0}} <span style="color: {{t.ink3}}; font-weight: 400">/ {{s.vol1}}</span></span>
+</div>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">Semaine {{s.weekNow}}/{{s.weekTotal}} · {{s.phaseNow}}</span>
+<button type="button" aria-label="Actions du plan" aria-haspopup="menu" aria-expanded="{{menuOpen}}" onClick="{{toggleMenu}}" style="width: 44px; height: 44px; margin: -10px -12px -10px 0; border: 0; border-radius: 999px; background: {{menuBtnBg}}; color: {{t.ink1}}; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="10" cy="10" r="1.6" style="fill: currentColor"></circle><circle cx="15.5" cy="10" r="1.6" style="fill: currentColor"></circle></svg></button>
+</div>
+<div role="img" aria-label="{{friseAria}}" style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; gap: 6px; height: 14px">
+<sc-for list="{{weeks}}" as="w" hint-placeholder-count="5">
+<div style="flex: 1; display: flex; justify-content: center; align-items: flex-end">
+<sc-if value="{{w.isNow}}" hint-placeholder-val="{{ false }}"><svg width="10" height="8" viewBox="0 0 10 8" aria-hidden="true"><path d="M0 0 H10 L5 7 Z" style="fill: {{t.ink1}}"></path></svg></sc-if>
+<sc-if value="{{w.isRace}}" hint-placeholder-val="{{ false }}"><svg width="12" height="13" viewBox="0 0 12 13" aria-hidden="true"><path d="M2 12.5 V1 H10 L8 4 L10 7 H2" style="fill: none; stroke: {{t.ink1}}; stroke-width: 1.5px"></path></svg></sc-if>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 6px; height: 132px; align-items: flex-end">
+<sc-for list="{{weeks}}" as="w" hint-placeholder-count="5">
+<div style="flex: 1; height: {{w.h}}; box-sizing: border-box; border: {{w.border}}; border-radius: 4px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden">
+<div style="height: {{w.fill}}; background: {{t.doneFill}}"></div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 6px">
+<sc-for list="{{weeks}}" as="w" hint-placeholder-count="5">
+<span style="flex: 1; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: {{w.numColor}}">S{{w.n}}</span>
+</sc-for>
+</div>
+<div style="display: flex; gap: 6px">
+<sc-for list="{{phases}}" as="p" hint-placeholder-count="3">
+<div style="flex: {{p.n}}; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<div style="height: 6px; border-radius: 2px; background: {{p.tone}}"></div>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: {{p.textColor}}; white-space: nowrap">{{p.label}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<a href="#" style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; border-top: 1.5px solid {{t.divider}}; color: {{t.ink1}}; text-decoration: none">
+<span style="display: flex; align-items: baseline; gap: 14px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: {{t.ink3}}">Prochaine séance</span>
+<span style="font-size: 16px">{{s.next}}</span>
+</span>
+<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10 H16 M11 5 L16 10 L11 15" style="fill: none; stroke: currentColor; stroke-width: 1.6px"></path></svg>
+</a>
+
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{ false }}">
+<div role="menu" aria-label="Actions du plan" style="position: absolute; top: 58px; right: 20px; width: 220px; background: {{t.card}}; border: 1.5px solid {{t.ink1}}; border-radius: 10px; box-shadow: 8px 8px 0 {{t.shadow}}; padding: 6px; display: flex; flex-direction: column; z-index: 2">
+<sc-for list="{{menu}}" as="m" hint-placeholder-count="4">
+<sc-if value="{{m.sep}}" hint-placeholder-val="{{ false }}"><div style="height: 1.5px; background: {{t.divider}}; margin: 4px 0"></div></sc-if>
+<button type="button" role="menuitem" style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: {{m.color}}; font-family: 'Space Grotesk', sans-serif; font-size: 15px; text-align: left; cursor: pointer">{{m.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+</article>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"scenario":{"editor":"enum","options":["libre","course","retard"],"default":"libre"},"theme":{"editor":"enum","options":["clair","sombre"],"default":"clair"},"layout":{"editor":"enum","options":["carte","large"],"default":"carte"},"menu":{"editor":"boolean","default":false},"bare":{"editor":"boolean","default":false},"$preview":{"width":390,"height":640}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { menu: null };
+  }
+  renderVals() {
+    var PAL = {
+      clair: { page: '#F6F5F2', card: '#FFFFFF', ink1: '#171614', ink2: '#4A4845', ink3: '#6C6A65', divider: 'rgba(23,22,20,0.18)', future: 'rgba(23,22,20,0.40)', doneFill: 'rgba(23,22,20,0.62)', z1: 'rgba(23,22,20,0.14)', z2: 'rgba(23,22,20,0.30)', z3: 'rgba(23,22,20,0.46)', z5: 'rgba(23,22,20,0.80)', danger: '#A32B12', shadow: 'rgba(23,22,20,0.09)', press: 'rgba(23,22,20,0.07)' },
+      sombre: { page: '#171614', card: '#211F1D', ink1: '#EDEBE7', ink2: '#C2BFB9', ink3: '#918E88', divider: 'rgba(237,235,231,0.18)', future: 'rgba(237,235,231,0.40)', doneFill: 'rgba(237,235,231,0.62)', z1: 'rgba(237,235,231,0.14)', z2: 'rgba(237,235,231,0.30)', z3: 'rgba(237,235,231,0.46)', z5: 'rgba(237,235,231,0.80)', danger: '#F2694F', shadow: 'rgba(0,0,0,0.5)', press: 'rgba(237,235,231,0.07)' }
+    };
+    var DATA = {
+      libre: { chips: ['Plan libre', 'Trail'], name: 'Trail + Triathlon S · Décembre', cd: 'J-24', cdLabel: 'Fin du plan · sam. 13 déc.',
+        weekNow: 2, weekTotal: 5, phaseNow: 'Construction', race: false,
+        planned: [240, 300, 330, 300, 200], done: [230, 140, 0, 0, 0],
+        phases: [['Base', 'Base', 1, 'z1'], ['Construction', 'Construction', 3, 'z3'], ['Affûtage', 'Aff.', 1, 'z2']],
+        sess0: 11, sess1: 12, vol0: '6 h 10', vol1: '6 h 40', next: 'Ven. 21 · Footing 40 min' },
+      course: { chips: ['10 km', 'Route', 'Objectif 42:30'], name: '10 km de janvier', cd: 'J-52', cdLabel: 'Course · dim. 10 janv.',
+        weekNow: 1, weekTotal: 8, phaseNow: 'Base', race: true,
+        planned: [180, 200, 220, 190, 240, 260, 230, 150], done: [65, 0, 0, 0, 0, 0, 0, 0],
+        phases: [['Base', 'Base', 3, 'z1'], ['Construction', 'Constr.', 3, 'z3'], ['Pic', 'Pic', 1, 'z5'], ['Affûtage', 'Aff.', 1, 'z2']],
+        sess0: 2, sess1: 2, vol0: '1 h 05', vol1: '1 h 05', next: 'Sam. 22 · Sortie longue 1 h 10' },
+      retard: { chips: ['Plan libre', 'Trail'], name: 'Trail + Triathlon S · Décembre', cd: 'J-17', cdLabel: 'Fin du plan · sam. 13 déc.',
+        weekNow: 3, weekTotal: 5, phaseNow: 'Construction', race: false,
+        planned: [240, 300, 330, 300, 200], done: [230, 150, 45, 0, 0],
+        phases: [['Base', 'Base', 1, 'z1'], ['Construction', 'Construction', 3, 'z3'], ['Affûtage', 'Aff.', 1, 'z2']],
+        sess0: 13, sess1: 18, vol0: '7 h 05', vol1: '9 h 50', next: 'Mer. 26 · Seuil 3 × 10 min' }
+    };
+    var self = this;
+    var s = DATA[this.props.scenario] || DATA.libre;
+    var t = PAL[this.props.theme === 'sombre' ? 'sombre' : 'clair'];
+    var layout = this.props.layout || 'carte';
+    var bare = this.props.bare === true || this.props.bare === 'true';
+    var menuProp = this.props.menu === true || this.props.menu === 'true';
+    var menuOpen = this.state.menu === null ? menuProp : this.state.menu;
+
+    var max = Math.max.apply(null, s.planned);
+    var weeks = s.planned.map(function (p, i) {
+      var n = i + 1, isNow = n === s.weekNow, past = n < s.weekNow;
+      var border = isNow ? '2.5px solid ' + t.ink1 : past ? '1.5px solid ' + t.ink1 : '1.5px dashed ' + t.future;
+      return { n: n, isNow: isNow, isRace: s.race && n === s.weekTotal,
+        h: Math.round(p / max * 100) + '%', fill: Math.round(Math.min(s.done[i] / p, 1) * 100) + '%',
+        border: border, numColor: isNow ? t.ink1 : t.ink3 };
+    });
+    var acc = 0;
+    var phases = s.phases.map(function (ph) {
+      var start = acc + 1; acc += ph[2];
+      var on = s.weekNow >= start && s.weekNow <= acc;
+      return { label: ph[0], short: ph[1], n: ph[2], tone: t[ph[3]], textColor: on ? t.ink1 : t.ink3 };
+    });
+    var menu = [
+      { label: 'Exporter…', color: t.ink1, sep: false },
+      { label: 'Dupliquer', color: t.ink1, sep: false },
+      { label: 'Renommer', color: t.ink1, sep: false },
+      { label: 'Supprimer…', color: t.danger, sep: true }
+    ];
+    var root = bare ? { w: '100%', h: 'auto', pad: '0', bg: 'transparent' } : { w: '390px', h: '640px', pad: '20px', bg: t.page };
+    return {
+      s: s, t: t, weeks: weeks, phases: phases, menu: menu, root: root,
+      isCard: layout !== 'large', isWide: layout === 'large',
+      menuOpen: menuOpen, menuBtnBg: menuOpen ? t.press : 'transparent',
+      toggleMenu: function () { self.setState({ menu: !menuOpen }); },
+      friseAria: 'Semaines du plan : ' + s.weekTotal + ' semaines, semaine ' + s.weekNow + ' en cours, ' + s.sess0 + ' séances faites sur ' + s.sess1 + ' prévues à date'
+    };
+  }
+}
+</script>
+</body>
+</html>
