@@ -159,7 +159,7 @@ export function DiagonalSplit({ workout, transparent }: ShareTemplateProps) {
             borderTop: "2px solid #0f172a",
           }}
         >
-          <StatCell label="Durée" value={formatDurationMinutes(hero.durationMin, { compact: true })} />
+          <StatCell label="Durée" value={formatDurationMinutes(hero.durationMin)} />
           <StatCell label="Niveau" value={t(`library:difficulty.${workout.difficulty}`)} />
           <StatCell label="RPE" value={`${hero.rpe} / 10`} />
         </div>

@@ -184,7 +184,7 @@ export function BibCard({ workout, transparent }: ShareTemplateProps) {
               background: "#fafafa",
             }}
           >
-            <BibStat label="Durée" value={formatDurationMinutes(hero.durationMin, { compact: true })} />
+            <BibStat label="Durée" value={formatDurationMinutes(hero.durationMin)} />
             <BibStat label="Effort" value={`RPE ${hero.rpe}`} />
             <BibStat label="Blocs" value={String(hero.blockCount)} />
           </div>

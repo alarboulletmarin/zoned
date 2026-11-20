@@ -223,7 +223,7 @@ export function Y2KChrome({ workout }: ShareTemplateProps) {
         }}
       >
         <span>{zoneLabel}</span>
-        <span>{formatDurationMinutes(hero.durationMin, { compact: true })}</span>
+        <span>{formatDurationMinutes(hero.durationMin)}</span>
         <span>RPE {hero.rpe}/10</span>
       </div>
     </div>

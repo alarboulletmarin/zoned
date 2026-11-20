@@ -124,7 +124,7 @@ export function LandscapeWide({ workout, transparent }: ShareTemplateProps) {
                 gap: 12,
               }}
             >
-              <Stat label="Durée" value={formatDurationMinutes(hero.durationMin, { compact: true })} />
+              <Stat label="Durée" value={formatDurationMinutes(hero.durationMin)} />
               <Stat label="Niveau" value={t(`library:difficulty.${workout.difficulty}`)} />
               <Stat label="RPE" value={`${hero.rpe} / 10`} />
             </div>

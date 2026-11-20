@@ -125,7 +125,7 @@ export function CasinoChip({ workout, transparent }: ShareTemplateProps) {
             marginTop: 2,
           }}
         >
-          {formatDurationMinutes(hero.durationMin, { compact: true })}
+          {formatDurationMinutes(hero.durationMin)}
         </div>
         <div
           style={{

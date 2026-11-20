@@ -151,7 +151,7 @@ export function MapPinDrop({ workout, transparent }: ShareTemplateProps) {
             color: "#475569",
           }}
         >
-          {formatDurationMinutes(hero.durationMin, { compact: true })} · {workout.id}
+          {formatDurationMinutes(hero.durationMin)} · {workout.id}
         </div>
       </div>
     </div>

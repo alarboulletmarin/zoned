@@ -128,7 +128,7 @@ export function PaperSheet({ workout, transparent }: ShareTemplateProps) {
           >
             <Fact
               label={isEn ? "Duration" : "Durée"}
-              value={formatDurationMinutes(hero.durationMin, { compact: true })}
+              value={formatDurationMinutes(hero.durationMin)}
             />
             <Fact
               label={`Zone Z${hero.dominantZone}`}

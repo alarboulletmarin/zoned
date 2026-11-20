@@ -205,7 +205,7 @@ export function Postcard({ workout, transparent }: ShareTemplateProps) {
                   letterSpacing: "0.02em",
                 }}
               >
-                {formatDurationMinutes(hero.durationMin, { compact: true })} · RPE {hero.rpe}/10<br />
+                {formatDurationMinutes(hero.durationMin)} · RPE {hero.rpe}/10<br />
                 {t(`library:difficulty.${workout.difficulty}`)} · {hero.blockCount} blocs
               </div>
             </div>

@@ -28,9 +28,16 @@ describe("formatDurationMinutes", () => {
     expect(formatDurationMinutes(0.5)).toBe(n("30 s"));
   });
 
-  test("zéro est zéro minute", () => {
-    expect(formatDurationMinutes(0)).toBe(n("0 min"));
-    expect(formatDurationMinutes(Number.NaN)).toBe(n("0 min"));
+  test("zéro s'écrit 0, sans unité", () => {
+    expect(formatDurationMinutes(0)).toBe("0");
+    expect(formatDurationMinutes(Number.NaN)).toBe("0");
+    expect(formatDurationMinutes(-3)).toBe("0");
+  });
+
+  test("les exemples de référence", () => {
+    expect(formatDurationMinutes(2.5)).toBe(n("2 min 30"));
+    expect(formatDurationMinutes(200)).toBe(n("3 h 20"));
+    expect(formatDurationMinutes(120)).toBe(n("2 h"));
   });
 
   test("l'arrondi ne déborde pas", () => {
@@ -43,12 +50,9 @@ describe("formatDurationMinutes", () => {
     expect(formatDurationMinutes(22.5)).toContain(NBSP);
   });
 
-  test("forme compacte pour les surfaces peintes", () => {
-    const c = { compact: true };
-    expect(formatDurationMinutes(37, c)).toBe("37min");
-    expect(formatDurationMinutes(22.5, c)).toBe("22min30");
-    expect(formatDurationMinutes(65, c)).toBe("1h05");
-    expect(formatDurationMinutes(60, c)).toBe("1h");
-    expect(formatDurationMinutes(0.5, c)).toBe("30s");
+  test("une seule forme, plus de variante serrée", () => {
+    // La forme sans espace (37min, 1h05) servait aux cartes de partage :
+    // elle se lisait comme une coquille, elle est retirée.
+    expect(formatDurationMinutes.length).toBe(1);
   });
 });
