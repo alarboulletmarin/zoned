@@ -846,3 +846,374 @@ span.zn-plansess__state {
   white-space: normal;
   text-align: start;
 }
+
+.zn-planpage__emptyplan {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  padding: var(--sp-9);
+  border: var(--border-dashed);
+  border-radius: var(--r-xl);
+}
+
+.zn-planpage__emptyplan p {
+  margin: 0;
+  font: var(--type-body);
+}
+
+/* ── Le mode Modifier ────────────────────────────────────────────────── */
+
+/* La place de la barre Annuler / Enregistrer sous la dernière journée. */
+.zn-planpage--edit {
+  max-inline-size: var(--page-max-narrow);
+  padding-block-end: calc(140px + env(safe-area-inset-bottom, 0px));
+}
+
+.zn-planpage__title--edit {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+}
+
+.zn-planpage__prev {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-4);
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  font: var(--type-label);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.zn-planpage__prev:hover {
+  color: var(--text-body);
+}
+
+.zn-planpage__editweek {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+/* La seule surface flottante de la page, et le seul vermillon. */
+.zn-editdock {
+  position: fixed;
+  z-index: 44;
+  inset-inline: var(--pad-screen-x);
+  inset-block-end: calc(var(--sp-8) + env(safe-area-inset-bottom, 0px));
+  max-inline-size: 560px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-block);
+}
+
+.zn-editdock__cancel,
+.zn-editdock__save {
+  min-block-size: 52px;
+  border: 0;
+  border-radius: var(--r-pill);
+  font: var(--fw-semibold) var(--fs-body) / 1.1 var(--font-text);
+  cursor: pointer;
+}
+
+.zn-editdock__cancel {
+  background: transparent;
+  color: var(--text-body);
+}
+
+.zn-editdock__save {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.zn-editdock__cancel:focus-visible,
+.zn-editdock__save:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Déplacer sans glisser : sept jours en boutons. */
+.zn-movedays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+.zn-movedays__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  min-block-size: 56px;
+  padding: var(--sp-3) 0;
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font: var(--type-caption);
+  cursor: pointer;
+}
+
+.zn-movedays__day strong {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+}
+
+.zn-movedays__day:disabled {
+  border-style: dashed;
+  color: var(--text-faint);
+  cursor: default;
+}
+
+/* ── La feuille Changer de séance ────────────────────────────────────── */
+
+.zn-change {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+.zn-change__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-inline-end: var(--sp-16);
+}
+
+.zn-change__title {
+  margin: 0;
+}
+
+.zn-change__when {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font: var(--type-label);
+  color: var(--text-muted);
+}
+
+.zn-change__search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: 52px;
+  padding-inline: var(--sp-8);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--surface-card);
+  color: var(--text-muted);
+}
+
+.zn-change__search:focus-within {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-change__search input {
+  flex: 1;
+  min-inline-size: 0;
+  border: 0;
+  background: transparent;
+  font: var(--type-body);
+  color: var(--text-body);
+  outline: none;
+}
+
+/* Les familles sur une ligne, qui défile, jamais de retour à la ligne. */
+.zn-change__families {
+  display: flex;
+  gap: var(--sp-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-inline: calc(-1 * var(--sp-2));
+  padding: var(--sp-2);
+}
+
+.zn-change__families button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-6);
+  white-space: nowrap;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--surface-card);
+  font: var(--type-label);
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.zn-change__families button[aria-pressed="true"] {
+  background: var(--surface-inverse);
+  border-color: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.zn-change__families button:focus-visible,
+.zn-change__filter:focus-visible,
+.zn-alt:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-change__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.zn-change__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-6);
+  white-space: nowrap;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: transparent;
+  font: var(--type-label);
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.zn-change__filter[data-active] {
+  border-width: var(--bw-heavy);
+}
+
+.zn-change__count {
+  margin-inline-start: auto;
+  white-space: nowrap;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-change__wait,
+.zn-change__empty {
+  display: grid;
+  place-items: center;
+  min-block-size: 160px;
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-muted);
+}
+
+.zn-change__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.zn-alt {
+  inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-7) var(--sp-7) var(--sp-6);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.zn-alt[data-easier] {
+  border-width: var(--bw-heavy);
+}
+
+.zn-alt__easier {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font: var(--type-label);
+}
+
+.zn-alt__name {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+  line-height: 1.25;
+}
+
+.zn-alt__name svg {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.zn-alt__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-12);
+}
+
+.zn-alt__facts > span {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: var(--text-muted);
+}
+
+.zn-alt__facts > span > span {
+  display: flex;
+  flex-direction: column;
+  font: var(--type-label);
+  color: var(--text-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-alt__facts small {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-alt__profile {
+  position: relative;
+  display: block;
+  padding-block-end: var(--sp-10);
+}
+
+.zn-alt__profile .zn-zonebar {
+  display: flex;
+}
+
+.zn-alt__ticks span {
+  position: absolute;
+  inset-block-end: 0;
+  transform: translateX(-2px);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  color: var(--text-faint);
+}
+
+.zn-change > * {
+  flex: none;
+}
+
+.zn-change__search input:focus-visible {
+  outline: none;
+}
+
+.zn-plansess__card[data-edit] {
+  gap: var(--sp-3);
+}
