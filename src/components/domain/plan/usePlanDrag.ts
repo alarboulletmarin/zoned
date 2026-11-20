@@ -62,10 +62,21 @@ export function usePlanDrag(onDrop: (source: DragSource, target: DropTarget) => 
       if (event.pointerType === "mouse" && event.button !== 0) return;
       event.preventDefault();
       const handle = event.currentTarget;
-      handle.setPointerCapture(event.pointerId);
+      const pointerId = event.pointerId;
+      try {
+        handle.setPointerCapture(pointerId);
+      } catch (error) {
+        // Un pointeur déjà relâché ne se capture plus : le glisser s'arrête là.
+        console.warn("usePlanDrag: capture", error);
+        return;
+      }
+      // La carte ne suit le doigt qu'à la verticale : les jours sont empilés,
+      // et une carte tirée vers la droite élargissait la page, que Safari
+      // dézoomait aussitôt pour la montrer en entier.
       const x0 = event.clientX;
       const y0 = event.clientY + window.scrollY;
       let over: DropTarget | null = null;
+      let done = false;
 
       const scrollTick = () => {
         const y = pointerY.current;
@@ -78,25 +89,39 @@ export function usePlanDrag(onDrop: (source: DragSource, target: DropTarget) => 
       frame.current = requestAnimationFrame(scrollTick);
 
       const move = (e: PointerEvent) => {
+        if (e.pointerId !== pointerId) return;
         pointerY.current = e.clientY;
-        over = targetAt(e.clientX, e.clientY);
-        setState({ source, over, dx: e.clientX - x0, dy: e.clientY + window.scrollY - y0 });
+        // La cible se lit sous le doigt, à sa vraie position horizontale.
+        over = targetAt(Math.max(x0, 1), e.clientY) ?? targetAt(e.clientX, e.clientY);
+        setState({ source, over, dx: 0, dy: e.clientY + window.scrollY - y0 });
       };
-      const end = (commit: boolean) => () => {
-        handle.removeEventListener("pointermove", move);
-        handle.removeEventListener("pointerup", up);
-        handle.removeEventListener("pointercancel", cancel);
+      /* La fin du geste arrive par plusieurs portes : le relâchement, une
+         annulation, ou iOS qui reprend la main (perte de la capture). Une
+         seule compte ; sans elles toutes, une carte restait figée hors de sa
+         colonne, son jour vide. */
+      const finish = (commit: boolean) => (e?: Event) => {
+        if (done) return;
+        if (e && "pointerId" in e && (e as PointerEvent).pointerId !== pointerId) return;
+        done = true;
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", cancel);
+        handle.removeEventListener("lostpointercapture", lost);
         stopScroll();
         setState(null);
         if (commit && over && (over.week !== source.week || over.day !== source.day)) {
           drop.current(source, over);
         }
       };
-      const up = end(true);
-      const cancel = end(false);
-      handle.addEventListener("pointermove", move);
-      handle.addEventListener("pointerup", up);
-      handle.addEventListener("pointercancel", cancel);
+      const up = finish(true);
+      const cancel = finish(false);
+      // La capture perdue après un relâchement normal arrive en second : le
+      // relâchement a déjà conclu. Seule, c'est une interruption.
+      const lost = finish(false);
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", cancel);
+      handle.addEventListener("lostpointercapture", lost);
       setState({ source, over: null, dx: 0, dy: 0 });
     },
     [stopScroll],

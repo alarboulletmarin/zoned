@@ -55,6 +55,8 @@
 }
 
 .zn-planpage {
+  /* Rien ne peut élargir la page, pas même une carte qu'on glisse. */
+  overflow-x: clip;
   inline-size: 100%;
   max-inline-size: var(--page-max);
   margin-inline: auto;
