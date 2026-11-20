@@ -53,7 +53,11 @@ export function generateRaceWeek(
   // Opener session 2 days before race
   const openerDay = (longRunDay - OPENER_DAYS_BEFORE_RACE + 7) % 7;
   const openerWorkout = findOpenerWorkout(allWorkouts, difficulty);
-  if (openerWorkout) {
+  // Rien ne se court après la course dans sa propre semaine : une course du
+  // lundi ou du mardi n'a pas d'activation dans la semaine, elle tombe dans
+  // celle d'avant que le plan ne réécrit pas.
+  const openerInWeek = openerDay < longRunDay;
+  if (openerWorkout && openerInWeek) {
     sessions.push({
       dayOfWeek: openerDay,
       workoutId: openerWorkout.id,
@@ -79,6 +83,7 @@ export function generateRaceWeek(
   // Only add easy runs on non-consecutive days, well before the race
   const candidateDays = [0, 1, 2, 3, 4, 5, 6]
     .filter(d => !usedDays.has(d))
+    .filter(d => d < longRunDay)
     .filter(d => {
       // At least 3 days before race (circular)
       const daysBeforeRace = (longRunDay - d + 7) % 7;

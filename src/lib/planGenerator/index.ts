@@ -39,7 +39,7 @@ import { buildSession } from "./sessionBuilder";
 import { fitWeeklyVolume } from "./weeklyVolumeFit";
 import { goalDemandFactor } from "./goalCalibration";
 import { planSeedFromConfig, seedPlanRng } from "./rng";
-import { calculateWeeksBetweenDates } from "@/lib/planDates";
+import { calculatePlanWeekCount, isoDayOfWeek, planWeekOfDate } from "@/lib/planDates";
 import { intermediateGoalToWeekNumber } from "@/lib/intermediateGoalValidation";
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -69,7 +69,7 @@ function generateNonRacePlanName(
  * Uses the user-chosen start date (falls back to today if absent).
  */
 function calculateTotalWeeks(startDate: string, raceDate: string): number {
-  return calculateWeeksBetweenDates(startDate, raceDate);
+  return calculatePlanWeekCount(startDate, raceDate);
 }
 
 /**
@@ -322,11 +322,19 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
 
     // Race week (last week), only for race plans
     if (weekNum === totalWeeks && isRacePlan) {
+      // La course tombe le jour de sa date quand elle est dans la dernière
+      // semaine du plan, pas le jour de la sortie longue : une course du
+      // samedi avec des sorties longues le dimanche mettait le drapeau au
+      // lendemain. Une durée forcée (`totalWeeksOverride`) peut détacher le
+      // plan de la date ; on garde alors le jour de la sortie longue.
+      const raceInLastWeek =
+        !!config.raceDate &&
+        planWeekOfDate(config.startDate ?? config.createdAt, config.raceDate) === totalWeeks;
       const raceWeek = generateRaceWeek(
         weekNum,
         effectiveDistance,
         config.daysPerWeek,
-        config.longRunDay,
+        raceInLastWeek ? isoDayOfWeek(config.raceDate) : config.longRunDay,
         config.runnerLevel,
         allWorkouts,
         (paces.E.min + paces.E.max) / 2,

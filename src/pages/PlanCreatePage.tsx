@@ -24,7 +24,7 @@ import { usePickLang } from "@/lib/i18n-utils";
 import {
   addWeeksToDate,
   buildRacePlanDateRange,
-  calculateWeeksBetweenDates,
+  calculatePlanWeekCount,
 } from "@/lib/planDates";
 import {
   validateIntermediateGoals,
@@ -217,7 +217,7 @@ export function PlanCreatePage() {
   const weeksCount = useMemo(
     () =>
       form.raceDate
-        ? calculateWeeksBetweenDates(form.startDate || todayDate, form.raceDate)
+        ? calculatePlanWeekCount(form.startDate || todayDate, form.raceDate)
         : 0,
     [form.raceDate, form.startDate, todayDate],
   );
