@@ -1,4 +1,4 @@
-import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
+import type { AnyWorkoutTemplate, WorkoutStep, WorkoutTemplate } from "@/types";
 import { getWorkoutDiscipline, isStrengthWorkout } from "@/types";
 import type { PlanSession } from "@/types/plan";
 
@@ -16,11 +16,25 @@ import type { PlanSession } from "@/types/plan";
  * Cinq familles, celles que la feuille propose en pilules : côtes et trail,
  * route, renfo, vélo, natation. Une séance appartient à une seule.
  *
+ * ── La famille d'effort ───────────────────────────────────────────────────
+ *
+ * Dans la famille de la séance actuelle, on reste dans sa famille d'effort :
+ * un footing se remplace par un footing ou une récupération, pas par un
+ * seuil ; une séance de qualité par une autre séance de qualité. Sans cette
+ * borne, la famille Route proposait près de deux cents séances pour un
+ * footing. Les autres familles (passer d'une séance de route à des côtes,
+ * au renfo, au vélo) restent entières : c'est un changement voulu.
+ *
+ * ── Mesurée, ou rien ─────────────────────────────────────────────────────
+ *
+ * Une séance dont un effort du corps de séance n'a pas de zone (le yoga de
+ * Yoga-running, des gammes) ne se mesure pas : son profil est hachuré, ses
+ * minutes ne tombent dans aucun anneau. Elle n'est jamais proposée.
+ *
  * ── L'ordre ──────────────────────────────────────────────────────────────
  *
- * Même famille d'abord (le filtre l'impose), puis la distance à la séance
- * actuelle : l'écart de durée relatif à sa durée, plus l'écart d'intensité.
- * La séance elle-même n'est jamais proposée.
+ * Puis la distance à la séance actuelle : l'écart de durée relatif à sa
+ * durée, plus l'écart d'intensité. La séance elle-même n'est jamais proposée.
  *
  * ── L'alternative plus facile ────────────────────────────────────────────
  *
@@ -67,6 +81,49 @@ export function familyOf(workout: AnyWorkoutTemplate): AlternativeFamily {
   return workout.category === "hills" || workout.category === "trail" ? "hills_trail" : "road";
 }
 
+export type EffortGroup = "easy" | "long" | "quality" | "hills" | "trail" | "strength" | "cycling" | "swimming";
+
+const EFFORT_BY_CATEGORY: Record<string, EffortGroup> = {
+  recovery: "easy",
+  endurance: "easy",
+  mixed: "easy",
+  long_run: "long",
+  tempo: "quality",
+  threshold: "quality",
+  vma_intervals: "quality",
+  fartlek: "quality",
+  race_pace: "quality",
+  assessment: "quality",
+  hills: "hills",
+  trail: "trail",
+};
+
+export function effortOf(workout: AnyWorkoutTemplate): EffortGroup {
+  if (isStrengthWorkout(workout)) return "strength";
+  const discipline = getWorkoutDiscipline(workout);
+  if (discipline === "cycling" || discipline === "swimming") return discipline;
+  return EFFORT_BY_CATEGORY[workout.category] ?? "easy";
+}
+
+function stepsUnzoned(steps: readonly WorkoutStep[]): boolean {
+  for (const step of steps) {
+    if (step.kind === "segment") {
+      if (step.role !== "recovery" && !step.zone) return true;
+    } else if (stepsUnzoned(step.steps)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/** Chaque effort du corps de séance porte une zone. Un renfo n'en a pas besoin. */
+export function isMeasured(workout: AnyWorkoutTemplate): boolean {
+  if (isStrengthWorkout(workout)) return true;
+  if (workout.mainSetStructure?.length) return !stepsUnzoned(workout.mainSetStructure);
+  const blocks = workout.mainSetTemplate ?? [];
+  return blocks.length > 0 && blocks.every((b) => !!b.zone);
+}
+
 export function intensityOf(workout: AnyWorkoutTemplate): IntensityLevel {
   if (isStrengthWorkout(workout)) return STRENGTH_LEVEL[workout.intensity] ?? 2;
   return LOAD_LEVEL[(workout as WorkoutTemplate).selectionCriteria?.relativeLoad ?? "moderate"] ?? 1;
@@ -111,10 +168,13 @@ export function rankAlternatives(
   const currentLevel: IntensityLevel = workout ? intensityOf(workout) : 1;
 
   const excluded = new Set(filters.excludeIds ?? []);
+  const effort = workout && familyOf(workout) === filters.family ? effortOf(workout) : null;
   const ranked: RankedAlternative[] = [];
   for (const candidate of catalogue) {
     if (candidate.id === session.workoutId || excluded.has(candidate.id)) continue;
     if (familyOf(candidate) !== filters.family) continue;
+    if (effort && effortOf(candidate) !== effort) continue;
+    if (!isMeasured(candidate)) continue;
     if (!matchesQuery(candidate, filters.query)) continue;
     const durationMin = typicalMinutes(candidate);
     const intensity = intensityOf(candidate);

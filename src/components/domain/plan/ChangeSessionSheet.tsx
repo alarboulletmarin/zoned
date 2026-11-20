@@ -22,6 +22,7 @@ import {
   durationBandOf,
   familyOf,
   intensityOf,
+  isMeasured,
   matchesQuery,
   rankAlternatives,
   type AlternativeFamily,
@@ -147,7 +148,7 @@ export function ChangeSessionSheet({ target, current, side, onClose, onPick }: C
         candidates: catalogues[family],
       });
       let rows: Row[] = ranked
-        .filter((c) => matchesQuery(c.workout, query))
+        .filter((c) => isMeasured(c.workout) && matchesQuery(c.workout, query))
         .map((c) => ({
           workout: c.workout,
           durationMin: c.estimatedDurationMin,
