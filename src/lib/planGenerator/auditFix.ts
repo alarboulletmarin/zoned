@@ -1,5 +1,5 @@
 import type { TrainingPlan, PlanWeek } from "@/types/plan";
-import type { PlanFinding } from "./audit";
+import { duplicateReplacement, type PlanFinding } from "./audit";
 
 /**
  * Apply an auto-fix for a specific audit finding.
@@ -22,6 +22,8 @@ export function applyAuditFix(plan: TrainingPlan, finding: PlanFinding): Trainin
     case "VOLUME_JUMP_TOO_LARGE":
     case "VOLUME_JUMP_AFTER_RECOVERY":
       return fixVolumeJump(draft, week);
+    case "DUPLICATE_WORKOUT_IN_WEEK":
+      return fixDuplicateWorkout(draft, week, finding.sessionIndex);
     default:
       return null;
   }
@@ -48,6 +50,21 @@ function sortSessions(week: PlanWeek): void {
 }
 
 // ── Fix implementations ─────────────────────────────────────────────
+
+/** La seconde occurrence prend une autre séance du même type, son jour et sa durée restent. */
+function fixDuplicateWorkout(
+  draft: TrainingPlan,
+  week: PlanWeek,
+  sessionIndex: number | undefined,
+): TrainingPlan | null {
+  if (sessionIndex === undefined) return null;
+  const replacement = duplicateReplacement(draft, week, sessionIndex);
+  if (!replacement) return null;
+  const session = week.sessions[sessionIndex];
+  week.sessions[sessionIndex] = { ...session, workoutId: replacement, locked: undefined };
+  if (week.sessions[sessionIndex].locked === undefined) delete week.sessions[sessionIndex].locked;
+  return draft;
+}
 
 function fixKeySessionsTooClose(draft: TrainingPlan, week: PlanWeek): TrainingPlan | null {
   const keySessions = week.sessions.filter(
