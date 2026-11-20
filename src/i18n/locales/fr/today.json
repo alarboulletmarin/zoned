@@ -178,6 +178,9 @@
       "count_one": "{{count}} activité",
       "count_other": "{{count}} activités",
       "load": "+{{load}} TSS"
+    },
+    "unit": {
+      "dplus": "m D+"
     }
   }
 }

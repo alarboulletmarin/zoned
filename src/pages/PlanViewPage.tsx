@@ -208,7 +208,11 @@ export function PlanViewPage() {
       practice,
     });
   }, [plan, selectedWeek, log.activities, today, workoutOf, practice]);
-  const metric: RingMetric = rings ? resolveRingMetric(rings, settings.cockpit.ringsMetric) : "time";
+  /* La page d'un plan s'ouvre sur le temps, ou sur la dernière mesure
+     choisie (le réglage d'Aujourd'hui, partagé) : la mesure par défaut d'un
+     plan trail, D+, lisait 0 sur 0 une semaine où trois séances étaient
+     faites. */
+  const metric: RingMetric = rings ? resolveRingMetric(rings, settings.cockpit.ringsMetric ?? "time") : "time";
   const pickMetric = useCallback((m: RingMetric) => setCockpit({ ringsMetric: m }), [setCockpit]);
 
   /* Les semaines seules POSÉES sur ce plan dans le cockpit, et sur quelle
@@ -546,7 +550,7 @@ export function PlanViewPage() {
         if (r.kind === "strength") value = `${r.doneSessions}/${r.targetSessions}`;
         else if (metric === "time") value = formatDurationMinutes(Math.round(r.done.time));
         else if (metric === "km") value = `${new Intl.NumberFormat(f.locale, { maximumFractionDigits: 1 }).format(r.done.km)} km`;
-        else value = `${Math.round(r.done.dplus)} m`;
+        else value = `${Math.round(r.done.dplus)} ${t("today:rings.unit.dplus")}`;
         return { ring: r, state, value };
       })
     : [];

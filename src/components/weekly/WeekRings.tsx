@@ -148,6 +148,10 @@ interface Formats {
 }
 
 function useFormats(locale: string): Formats {
+  const { t } = useTranslation("today");
+  // 430 m se lisait 430 minutes à côté de durées en min : le
+  // dénivelé dit ce qu'il est.
+  const dplusUnit = t("rings.unit.dplus");
   return useMemo(() => {
     const km = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
     const meters = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 });
@@ -158,10 +162,10 @@ function useFormats(locale: string): Formats {
     };
     const full = (metric: RingMetric, value: number) => {
       if (metric === "time") return bare(metric, value);
-      return `${bare(metric, value)} ${metric === "km" ? "km" : "m"}`;
+      return `${bare(metric, value)}\u00a0${metric === "km" ? "km" : dplusUnit}`;
     };
     return { bare, full };
-  }, [locale]);
+  }, [locale, dplusUnit]);
 }
 
 // ── Les anneaux, lus ─────────────────────────────────────────────────
@@ -427,7 +431,7 @@ function CardBody({
         <p className="zn-rings__fact">
           <span className="zn-rings__kicker">{t("today:rings.total")}</span>
           <span className="zn-rings__fact-value">
-            {formats.full(metric, totals.done[metric])}{" "}
+            {formats.bare(metric, totals.done[metric])}{" "}
             <span className="zn-rings__fact-of">/ {formats.full(metric, totals.target[metric])}</span>
           </span>
         </p>
