@@ -659,7 +659,10 @@ span.zn-plansess__state {
   position: fixed;
   z-index: 39;
   inset-inline: 0;
-  inset-block-start: var(--topbar-h);
+  /* Un pixel sous la barre : son filet de 1,5 px s'arrondit au pixel de
+     l'appareil, la barre mesure 61 px quand --topbar-h en dit 61,5, et le
+     demi-pixel laissait voir la page entre les deux. */
+  inset-block-start: calc(var(--topbar-h) - 1px);
   display: flex;
   justify-content: space-between;
   align-items: center;
