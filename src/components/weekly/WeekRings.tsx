@@ -252,10 +252,22 @@ export interface WeekRingsProps {
   onMetricChange: (metric: RingMetric) => void;
   /** `card` toujours ouverte, `strip` repliée derrière une `zn-disclosure`. */
   variant?: "card" | "strip";
+  /**
+   * L'en-tête de la carte (semaine ISO et jour). Faux là où la semaine est
+   * déjà nommée au-dessus, comme sur la page d'un plan.
+   */
+  showHead?: boolean;
   className?: string;
 }
 
-export function WeekRings({ model, metric, onMetricChange, variant = "card", className }: WeekRingsProps) {
+export function WeekRings({
+  model,
+  metric,
+  onMetricChange,
+  variant = "card",
+  showHead = true,
+  className,
+}: WeekRingsProps) {
   const { t, i18n } = useTranslation("today");
   const en = i18n.language?.startsWith("en");
   const locale = en ? "en-GB" : "fr-FR";
@@ -332,10 +344,12 @@ export function WeekRings({ model, metric, onMetricChange, variant = "card", cla
 
   return (
     <section className={cn("zn-rings zn-rings--card", className)} aria-label={t("rings.label")}>
-      <div className="zn-rings__head">
-        <span className="zn-rings__kicker">{head.week}</span>
-        <span className="zn-rings__kicker zn-rings__kicker--ink">{head.day}</span>
-      </div>
+      {showHead && (
+        <div className="zn-rings__head">
+          <span className="zn-rings__kicker">{head.week}</span>
+          <span className="zn-rings__kicker zn-rings__kicker--ink">{head.day}</span>
+        </div>
+      )}
       {body}
     </section>
   );

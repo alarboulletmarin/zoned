@@ -8,11 +8,6 @@
    en segments, l'excédent sur une orbite à part. */
 
 .zn-rings {
-  --rings-endurance: var(--zone-3);
-  --rings-quality: var(--zone-6);
-  --rings-strength: var(--zone-5);
-  --rings-track: var(--zone-1);
-
   background: var(--surface-card);
   border: var(--border-rule);
   border-radius: var(--r-xl);
@@ -74,7 +69,15 @@
 
 /* ── L'anneau ─────────────────────────────────────────────────────────── */
 
+/* Les couleurs vivent sur l'anneau lui-même : un `WeekRing` posé seul, hors
+   de la carte (le bandeau de la page d'un plan), les trouve sans recopie.
+   Les jetons de zone portent déjà leur thème sombre. */
 .zn-ring {
+  --rings-endurance: var(--zone-3);
+  --rings-quality: var(--zone-6);
+  --rings-strength: var(--zone-5);
+  --rings-track: var(--zone-1);
+
   display: block;
   overflow: visible;
 }
