@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowUp, Calendar, Check, Pencil } from "@/components/icons";
@@ -324,24 +324,39 @@ export function PlanViewPage() {
     [setWeekParam],
   );
 
-  /* Changer de semaine depuis le bas de la liste remonte au début de la
-     nouvelle semaine : on n'atterrit pas sur le dimanche suivant sans savoir
-     où l'on est. Si le début de la semaine est déjà à l'écran, rien ne bouge. */
+  /* Changer de semaine ne déplace pas la lecture : le jour qu'on regardait
+     (le premier encore visible sous la barre du haut) reste à la même hauteur
+     dans la nouvelle semaine. Lu dimanche, on lit le dimanche suivant ; en
+     haut de la page, on reste en haut. */
   const gridRef = useRef<HTMLDivElement>(null);
-  const revealWeekTop = useCallback(() => {
-    requestAnimationFrame(() => {
-      const grid = gridRef.current;
-      if (!grid) return;
-      const topbar = document.querySelector(".zn-topbar")?.getBoundingClientRect().bottom ?? 0;
-      if (grid.getBoundingClientRect().top < topbar) grid.scrollIntoView({ block: "start" });
-    });
+  const keepDay = useRef<{ day: number; top: number } | null>(null);
+  const holdViewedDay = useCallback(() => {
+    const topbar = document.querySelector(".zn-topbar")?.getBoundingClientRect().bottom ?? 0;
+    const grid = gridRef.current;
+    if (!grid || grid.getBoundingClientRect().top >= topbar) {
+      keepDay.current = null;
+      return;
+    }
+    const first = Array.from(document.querySelectorAll<HTMLElement>(".zn-planpage__week .zn-planday")).find(
+      (el) => el.getBoundingClientRect().bottom > topbar + 80,
+    );
+    keepDay.current = first ? { day: Number(first.dataset.day), top: first.getBoundingClientRect().top } : null;
   }, []);
+  useLayoutEffect(() => {
+    const keep = keepDay.current;
+    if (!keep) return;
+    keepDay.current = null;
+    const el = document.querySelector<HTMLElement>(
+      `.zn-planpage__week .zn-planday[data-week="${selectedWeek}"][data-day="${keep.day}"]`,
+    );
+    if (el) window.scrollBy(0, el.getBoundingClientRect().top - keep.top);
+  }, [selectedWeek]);
   const changeWeek = useCallback(
     (week: number) => {
+      holdViewedDay();
       setWeekParam(week);
-      revealWeekTop();
     },
-    [setWeekParam, revealWeekTop],
+    [setWeekParam, holdViewedDay],
   );
 
   // ── Le bandeau des anneaux, au défilement (téléphone et tablette) ───
@@ -881,6 +896,7 @@ export function PlanViewPage() {
         currentWeek={currentWeek}
         side={wide ? "right" : "bottom"}
         onSelectWeek={(n) => {
+          holdViewedDay();
           setSearchParams(
             (prev) => {
               prev.set("week", String(n));
@@ -889,7 +905,6 @@ export function PlanViewPage() {
             },
             { replace: true },
           );
-          revealWeekTop();
         }}
         onLogActivity={() => log.logOn()}
       />

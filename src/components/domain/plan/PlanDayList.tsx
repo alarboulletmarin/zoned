@@ -177,9 +177,10 @@ export function PlanDayList({
       ? (f.locale === "en-GB" ? session.notesEn ?? session.notes : session.notes)
           .split("\n")
           .filter(Boolean)[0]
-          // Une fourchette d'allure ne se coupe pas en son milieu.
-          ?.replace(/ - /g, "\u00a0-\u00a0")
       : null;
+    // Une note d'allure se lit en deux morceaux, le libellé et la fourchette,
+    // et la fourchette ne se coupe jamais en son milieu.
+    const noteParts = notes ? /^(.*?)\s*:\s*(.+)$/.exec(notes) : null;
 
     return (
       <div
@@ -238,7 +239,19 @@ export function PlanDayList({
             <span className="zn-plansess__text">
               <span className="zn-plansess__name">{name}</span>
               {facts(slot.durationMin, slot.distanceKm)}
-              {notes && <span className="zn-plansess__note">{notes}</span>}
+              {notes && (
+                <span className="zn-plansess__note">
+                  {noteParts ? (
+                    <>
+                      {noteParts[1]}
+                      {"\u00a0: "}
+                      <span className="zn-plansess__pace">{noteParts[2]}</span>
+                    </>
+                  ) : (
+                    notes
+                  )}
+                </span>
+              )}
             </span>
           </button>
           {editing && edit && (
@@ -312,6 +325,12 @@ export function PlanDayList({
           const over = drag?.over?.week === model.weekNumber && drag.over.day === day.dayOfWeek;
           const blocked = blockedDays?.has(day.dayOfWeek) ?? false;
           const many = !editing && day.sessions.length + day.offPlan.length > 1;
+          // La date s'aligne sur la première carte, pas sur l'étiquette posée
+          // au-dessus d'elle.
+          const tagged =
+            !blocked &&
+            ((day.sessions[0] && (day.sessions[0].tag || day.sessions[0].kind === "intermediate")) ||
+              (day.sessions.length === 0 && day.offPlan.length > 0 && !editing));
           return (
             <li
               key={day.dayOfWeek}
@@ -321,6 +340,7 @@ export function PlanDayList({
               data-over={over || undefined}
               data-week={model.weekNumber}
               data-day={day.dayOfWeek}
+              data-tagged={tagged || undefined}
               data-drop-week={editing ? model.weekNumber : undefined}
               data-drop-day={editing ? day.dayOfWeek : undefined}
             >

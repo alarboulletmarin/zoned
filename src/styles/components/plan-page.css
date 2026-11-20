@@ -43,6 +43,17 @@
 
 /* ── La page ─────────────────────────────────────────────────────────── */
 
+/* Deux appuis rapides sur une flèche de semaine, pour avancer de deux
+   semaines, déclenchaient le zoom par double appui de Safari sur iPhone : la
+   page s'agrandissait, coupée à droite, sans barre en haut ni en bas.
+   `manipulation` garde le défilement et le zoom à deux doigts et retire le
+   double appui ; il vaut pour tout ce que la page contient. */
+.zn-planpage,
+.zn-plansheet,
+.zn-change {
+  touch-action: manipulation;
+}
+
 .zn-planpage {
   inline-size: 100%;
   max-inline-size: var(--page-max);
@@ -382,9 +393,17 @@
   gap: var(--sp-3);
 }
 
+/* Une hauteur fixe : la colonne de la date se décale d'autant pour
+   s'aligner sur la carte, pas sur l'étiquette. */
 .zn-plansess__tag {
+  --zn-tag-h: 24px;
   align-self: flex-start;
-  padding: 2px var(--sp-4);
+  box-sizing: border-box;
+  block-size: var(--zn-tag-h);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--sp-4);
+  line-height: 1;
   border: var(--border-rule);
   border-radius: var(--r-pill);
   font-family: var(--font-mono);
@@ -399,10 +418,12 @@
   color: var(--text-muted);
 }
 
+/* Tout s'aligne en haut, sur la première ligne du nom : centrée, la tuile
+   tombait sous le titre dès qu'il passait sur deux lignes. */
 .zn-plansess__card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
+  align-items: start;
   gap: var(--sp-5);
   min-block-size: 68px;
   padding: var(--sp-4) var(--sp-5);
@@ -533,11 +554,20 @@ span.zn-plansess__state {
   font-variant-numeric: tabular-nums;
 }
 
-/* L'allure passe à la ligne : tronquée (4:5…), elle ne disait plus rien. */
+/* L'allure passe à la ligne : tronquée (4:5…), elle ne disait plus rien.
+   La fourchette reste d'un seul tenant. */
 .zn-plansess__note {
   font: var(--type-caption);
   color: var(--text-faint);
-  overflow-wrap: anywhere;
+}
+
+.zn-plansess__pace {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-planday[data-tagged] .zn-planday__date {
+  padding-block-start: calc(24px + var(--sp-3));
 }
 
 /* La course : drapeau, Course et son nom, au trait épais. */
@@ -1396,4 +1426,17 @@ span.zn-plansess__state {
    retournée. */
 .zn-planpage__next svg {
   transform: rotate(180deg);
+}
+
+/* Le centre de la tuile, de la poignée et du menu ⋮ tombe sur celui de la
+   première ligne du nom : 8 px de rembourrage de la carte, 4 du bouton, puis
+   une demi-ligne de 20,8 px. Une cible de 44 px y arrive en remontant de
+   8 px. */
+.zn-plansess__card > .zn-plansess__state {
+  margin-block: calc(-2 * var(--sp-2)) 0;
+}
+
+.zn-plansess__card > .zn-plansess__grip,
+.zn-plansess__card > .zn-iconbtn {
+  margin-block-start: calc(-2 * var(--sp-2));
 }
