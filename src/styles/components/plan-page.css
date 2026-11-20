@@ -1,0 +1,47 @@
+/* La page d'un plan, /plan/:id : la semaine au centre.
+
+   Le déroulé vient de Stamina (la semaine choisie, ses sept jours en barres,
+   ses anneaux, puis chaque jour l'un sous l'autre), l'apparence est celle de
+   Zoned : papier et encre, filets de 1,5 px, un seul vermillon (Enregistrer,
+   en mode Modifier), rien qui flotte hors de ce mode sauf le bandeau des
+   anneaux au défilement, qui double ce qui vient de sortir de l'écran.
+
+   Les barres des jours sont la frise du plan (`.zn-planline`, plans.css) à
+   sept colonnes : cette feuille n'ajoute que le jour de repos et les
+   lettres. */
+
+/* ── Les barres des sept jours ───────────────────────────────────────── */
+
+.zn-daybars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* Un jour de repos est un trait au sol, pas une barre vide. */
+.zn-daybars .zn-planline__bar[data-rest] {
+  block-size: 2px;
+  border: 0;
+  border-radius: 1px;
+  background: var(--line-divider);
+}
+
+.zn-daybars .zn-planline__bar[data-rest][data-state="current"] {
+  background: var(--line-strong);
+}
+
+.zn-daybars__letters {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  column-gap: var(--sp-2);
+  text-align: center;
+  font: var(--type-label);
+  color: var(--text-faint);
+}
+
+.zn-daybars__letters [data-today] {
+  color: var(--text-body);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: var(--sp-2);
+}

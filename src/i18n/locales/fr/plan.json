@@ -911,5 +911,166 @@
     "polesDesc": "Monter en marchant avec des bâtons, ça se travaille.",
     "backToBack": "Deux jours de suite",
     "backToBackDesc": "Une sortie longue le samedi, une autre le dimanche sur jambes fatiguées."
+  },
+  "page": {
+    "back": "Plans",
+    "tools": {
+      "plan": "Le plan, toutes les semaines",
+      "edit": "Modifier le plan",
+      "more": "Actions du plan {{name}}"
+    },
+    "countdown": {
+      "days": "J-{{count}}",
+      "race": "avant la course, {{date}}",
+      "end": "avant la fin du plan, {{date}}",
+      "raceDay": "Jour de course",
+      "endDay": "Dernier jour du plan",
+      "ended": "Plan terminé le {{date}}"
+    },
+    "week": {
+      "title": "Semaine {{n}}",
+      "of": "sur {{total}}",
+      "meta": "{{phase}}, du {{dates}}",
+      "range": "{{from}} au {{to}}",
+      "prev": "Semaine précédente",
+      "next": "Semaine suivante",
+      "sessions": "Les séances de la semaine {{n}}"
+    },
+    "bars": {
+      "label": "Les sept jours de la semaine {{n}}",
+      "rest": "{{day}} repos",
+      "planned": "{{day}} {{planned}} prévues",
+      "skipped": "{{day}} {{planned}} prévues, sautée",
+      "done": "{{day}} {{done}} faites",
+      "partial": "{{day}} {{done}} faites sur {{planned}}",
+      "today": "aujourd'hui"
+    },
+    "day": {
+      "rest": "Repos",
+      "today": "Aujourd'hui"
+    },
+    "tag": {
+      "long_run": "Sortie longue",
+      "key": "Séance clé",
+      "offPlan": "Hors plan",
+      "blocked": "Indisponible"
+    },
+    "race": {
+      "title": "Course",
+      "intermediate": "Course intermédiaire"
+    },
+    "status": {
+      "done": "{{name}}, faite, modifier le statut",
+      "modified": "{{name}}, faite avec des changements, modifier le statut",
+      "skipped": "{{name}}, sautée, modifier le statut",
+      "todo": "{{name}}, à faire, marquer le statut",
+      "offPlan": "{{name}}, faite, hors plan"
+    },
+    "open": "Ouvrir {{name}}",
+    "addActivity": "Ajouter une activité",
+    "review": "À revoir",
+    "empty": {
+      "title": "Ce plan n'a pas encore de séance.",
+      "action": "Ajouter des séances"
+    },
+    "sheet": {
+      "title": "Le plan",
+      "subtitleRace_one": "{{count}} semaine, course le {{date}}",
+      "subtitleRace_other": "{{count}} semaines, course le {{date}}",
+      "subtitle_one": "{{count}} semaine, jusqu'au {{date}}",
+      "subtitle_other": "{{count}} semaines, jusqu'au {{date}}",
+      "prediction": "Temps estimé {{time}}",
+      "weeks": "Semaines",
+      "numbers": "Chiffres",
+      "view": "Ce que montre la feuille",
+      "weekShort": "S{{n}}",
+      "weekItem": "Semaine {{n}}, {{phase}}, {{dates}}, {{done}} faites sur {{planned}}"
+    },
+    "menu": {
+      "editDates": "Modifier les dates",
+      "addDates": "Ajouter des dates",
+      "addWeek": "Ajouter une semaine"
+    },
+    "rename": {
+      "title": "Renommer le plan",
+      "label": "Nom du plan",
+      "save": "Renommer"
+    },
+    "duplicated": {
+      "open": "Ouvrir"
+    },
+    "edit": {
+      "title": "Modifier le plan",
+      "loadPrev": "Charger la semaine précédente",
+      "addSession": "Ajouter une séance",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "changeLabel": "Plan modifié",
+      "saved": "Plan modifié. Annulable depuis cette page.",
+      "saveFailed": "Les changements n'ont pas pu être enregistrés.",
+      "discarded": "Changements annulés",
+      "grip": "Glisser pour déplacer {{name}}",
+      "actions": "Actions pour {{name}}",
+      "change": "Changer de séance",
+      "redraw": "Tirer une autre séance",
+      "move": "Déplacer…",
+      "duplicate": "Dupliquer",
+      "remove": "Retirer",
+      "redrawEmpty": "Pas d'autre séance à tirer pour ce créneau.",
+      "moveTitle": "Déplacer la séance",
+      "moveDescription": "{{name}} : choisis la semaine et le jour.",
+      "moveWeek": "Semaine",
+      "moveDay": "Jour",
+      "moveCurrent": "jour actuel",
+      "leaveTitle": "Quitter sans enregistrer ?",
+      "leaveBody": "Les changements faits dans ce mode seront perdus.",
+      "leaveStay": "Continuer à modifier",
+      "leaveDiscard": "Quitter sans enregistrer",
+      "dropHere": "Déposer ici"
+    },
+    "change": {
+      "title": "Changer de séance",
+      "search": "Rechercher une séance",
+      "families": "Famille",
+      "family": {
+        "hills_trail": "Côtes et trail",
+        "road": "Route",
+        "strength": "Renfo",
+        "cycling": "Vélo",
+        "swimming": "Natation"
+      },
+      "intensity": "Intensité",
+      "intensityAll": "Toutes les intensités",
+      "level": {
+        "0": "Facile",
+        "1": "Modérée",
+        "2": "Soutenue"
+      },
+      "duration": "Durée",
+      "durationAll": "Toutes les durées",
+      "band": {
+        "short": "Moins de 30 min",
+        "medium": "30 à 60 min",
+        "long": "Plus de 60 min"
+      },
+      "count_one": "{{count}} séance",
+      "count_other": "{{count}} séances",
+      "sort": "Trier",
+      "sortMatch": "Les plus proches",
+      "sortDuration": "Les plus courtes",
+      "easier": "Alternative plus facile",
+      "time": "Temps",
+      "distance": "Dist. estimée",
+      "load": "Charge",
+      "tss": "~{{tss}} TSS",
+      "empty": "Aucune séance ne correspond.",
+      "loading": "Chargement du catalogue",
+      "replaced": "Séance remplacée par {{name}}",
+      "undo": "Annuler",
+      "undone": "Remplacement annulé",
+      "label": "{{from}} remplacée par {{to}}",
+      "pick": "Choisir {{name}}, {{time}}"
+    },
+    "ticks": "Repères en minutes"
   }
 }

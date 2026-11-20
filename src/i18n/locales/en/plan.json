@@ -911,5 +911,166 @@
     "polesDesc": "Power-hiking with poles is a skill of its own.",
     "backToBack": "Two days in a row",
     "backToBackDesc": "A long run on Saturday, another on Sunday on tired legs."
+  },
+  "page": {
+    "back": "Plans",
+    "tools": {
+      "plan": "The plan, every week",
+      "edit": "Edit the plan",
+      "more": "Actions for the plan {{name}}"
+    },
+    "countdown": {
+      "days": "D-{{count}}",
+      "race": "to race day, {{date}}",
+      "end": "to the end of the plan, {{date}}",
+      "raceDay": "Race day",
+      "endDay": "Last day of the plan",
+      "ended": "Plan ended on {{date}}"
+    },
+    "week": {
+      "title": "Week {{n}}",
+      "of": "of {{total}}",
+      "meta": "{{phase}}, {{dates}}",
+      "range": "{{from}}-{{to}}",
+      "prev": "Previous week",
+      "next": "Next week",
+      "sessions": "The sessions of week {{n}}"
+    },
+    "bars": {
+      "label": "The seven days of week {{n}}",
+      "rest": "{{day}} rest",
+      "planned": "{{day}} {{planned}} planned",
+      "skipped": "{{day}} {{planned}} planned, skipped",
+      "done": "{{day}} {{done}} done",
+      "partial": "{{day}} {{done}} done of {{planned}}",
+      "today": "today"
+    },
+    "day": {
+      "rest": "Rest",
+      "today": "Today"
+    },
+    "tag": {
+      "long_run": "Long run",
+      "key": "Key session",
+      "offPlan": "Off plan",
+      "blocked": "Unavailable"
+    },
+    "race": {
+      "title": "Race",
+      "intermediate": "Tune-up race"
+    },
+    "status": {
+      "done": "{{name}}, done, change the status",
+      "modified": "{{name}}, done with changes, change the status",
+      "skipped": "{{name}}, skipped, change the status",
+      "todo": "{{name}}, to do, set the status",
+      "offPlan": "{{name}}, done, off plan"
+    },
+    "open": "Open {{name}}",
+    "addActivity": "Log an activity",
+    "review": "To review",
+    "empty": {
+      "title": "This plan has no session yet.",
+      "action": "Add sessions"
+    },
+    "sheet": {
+      "title": "The plan",
+      "subtitleRace_one": "{{count}} week, race on {{date}}",
+      "subtitleRace_other": "{{count}} weeks, race on {{date}}",
+      "subtitle_one": "{{count}} week, until {{date}}",
+      "subtitle_other": "{{count}} weeks, until {{date}}",
+      "prediction": "Estimated time {{time}}",
+      "weeks": "Weeks",
+      "numbers": "Numbers",
+      "view": "What the sheet shows",
+      "weekShort": "W{{n}}",
+      "weekItem": "Week {{n}}, {{phase}}, {{dates}}, {{done}} done of {{planned}}"
+    },
+    "menu": {
+      "editDates": "Edit the dates",
+      "addDates": "Add dates",
+      "addWeek": "Add a week"
+    },
+    "rename": {
+      "title": "Rename the plan",
+      "label": "Plan name",
+      "save": "Rename"
+    },
+    "duplicated": {
+      "open": "Open"
+    },
+    "edit": {
+      "title": "Edit the plan",
+      "loadPrev": "Load the previous week",
+      "addSession": "Add a session",
+      "cancel": "Cancel",
+      "save": "Save",
+      "changeLabel": "Plan edited",
+      "saved": "Plan edited. You can undo it from this page.",
+      "saveFailed": "The changes could not be saved.",
+      "discarded": "Changes discarded",
+      "grip": "Drag to move {{name}}",
+      "actions": "Actions for {{name}}",
+      "change": "Change session",
+      "redraw": "Draw another session",
+      "move": "Move…",
+      "duplicate": "Duplicate",
+      "remove": "Remove",
+      "redrawEmpty": "No other session to draw for this slot.",
+      "moveTitle": "Move the session",
+      "moveDescription": "{{name}}: pick the week and the day.",
+      "moveWeek": "Week",
+      "moveDay": "Day",
+      "moveCurrent": "current day",
+      "leaveTitle": "Leave without saving?",
+      "leaveBody": "The changes made in this mode will be lost.",
+      "leaveStay": "Keep editing",
+      "leaveDiscard": "Leave without saving",
+      "dropHere": "Drop here"
+    },
+    "change": {
+      "title": "Change session",
+      "search": "Search a session",
+      "families": "Family",
+      "family": {
+        "hills_trail": "Hills and trail",
+        "road": "Road",
+        "strength": "Strength",
+        "cycling": "Cycling",
+        "swimming": "Swimming"
+      },
+      "intensity": "Intensity",
+      "intensityAll": "Every intensity",
+      "level": {
+        "0": "Easy",
+        "1": "Moderate",
+        "2": "Hard"
+      },
+      "duration": "Duration",
+      "durationAll": "Every duration",
+      "band": {
+        "short": "Under 30 min",
+        "medium": "30 to 60 min",
+        "long": "Over 60 min"
+      },
+      "count_one": "{{count}} session",
+      "count_other": "{{count}} sessions",
+      "sort": "Sort",
+      "sortMatch": "Closest first",
+      "sortDuration": "Shortest first",
+      "easier": "Easier alternative",
+      "time": "Time",
+      "distance": "Est. distance",
+      "load": "Load",
+      "tss": "~{{tss}} TSS",
+      "empty": "No session matches.",
+      "loading": "Loading the catalogue",
+      "replaced": "Session replaced with {{name}}",
+      "undo": "Undo",
+      "undone": "Replacement undone",
+      "label": "{{from}} replaced with {{to}}",
+      "pick": "Pick {{name}}, {{time}}"
+    },
+    "ticks": "Minute marks"
   }
 }
