@@ -350,7 +350,7 @@ pas d'avoir un plan pour compter.
 |---|---|
 | `/today` | La saisie en dix secondes, sur le JOUR CHOISI de la bande et non sur aujourd'hui : on note souvent la veille au soir. Plus la liste des activités du jour, qui est l'accusé de réception. |
 | `/activities` | Le journal : relire, corriger, totaliser. Aucun de ces trois gestes n'a sa place sur un écran qu'on ouvre debout avant de sortir. |
-| `/plan/:id`, onglet statistiques | Ce qui a été fait en plus, sur les dates du plan. |
+| `/plan/:id` | Les activités hors plan d'un jour dans la liste des jours de la semaine, la saisie sous la semaine en cours, et le total sur les dates du plan dans la feuille Le plan (segment Chiffres). |
 | `/profile`, onglet vélotaf | Le motif récurrent dit explicitement qu'il est une habitude et renvoie au journal. |
 
 Les deux premières partagent le **même** panneau (`ActivityLogPanel`), donc

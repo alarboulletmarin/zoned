@@ -14,7 +14,7 @@ interface ViewModeSelectorProps {
    boîte carrée fait un cercle. Rendu, la pilule redevient une pilule sans qu'on
    touche à son rayon.
 
-   Même geste que PlanViewModeSelector, et le même <Segmented> derrière : le
+   Le même <Segmented> derrière que tous les sélecteurs de vue : le
    tabindex roulant, les flèches et Home/End viennent avec. */
 const MODES: { value: ViewMode; labelKey: string }[] = [
   { value: "compact", labelKey: "viewMode.compact" },

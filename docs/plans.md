@@ -285,3 +285,25 @@ corbeille toujours visible :
 
 Les menus restent dans l'écran à 320, 393, 640, 800, 1024 et 1280 px, mesuré.
 
+
+## La page d'un plan : la semaine au centre (novembre 2026)
+
+`/plan/:id` ne montre plus qu'une chose à la fois : la semaine choisie
+(`?week=N`, par défaut la semaine en cours, la première avant le départ, la
+dernière après la fin). Semaine N sur M, la phase et les dates, sept barres
+(`WeekDayBars`, la grammaire de `.zn-planline` à sept colonnes), les anneaux
+(`WeekRings`, sans son en-tête), puis chaque jour l'un sous l'autre
+(`PlanDayList`). Le modèle est `buildPlanWeekModel` (`src/lib/planWeekModel.ts`).
+
+Le reste passe derrière trois boutons en haut de page :
+
+| bouton | ce qu'il ouvre |
+|---|---|
+| calendrier | la feuille Le plan (`?sheet=plan`) : la frise et la liste des semaines, puis les chiffres (`PlanStatsSection`) |
+| crayon | le mode Modifier (`?mode=edit`) : glisser, déplacer au clavier, changer, tirer, dupliquer, retirer, ajouter ; un brouillon enregistré en un seul changement annulable |
+| ··· | exporter et partager, les dates, les indisponibilités et la réorganisation, ajouter une semaine, dupliquer, renommer, supprimer |
+
+Ont quitté la page : le cockpit Cette semaine, les vues liste, calendrier
+et mois, les onglets Programme et Statistiques, la frise des phases et sa
+figure. Le seul vermillon est Enregistrer, en mode Modifier. L'audit vit sous
+la liste des jours, titre À revoir.
