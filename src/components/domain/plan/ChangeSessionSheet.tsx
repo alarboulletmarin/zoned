@@ -33,6 +33,7 @@ import {
 } from "@/lib/rankAlternatives";
 import { isStrengthWorkout, type AnyWorkoutTemplate, type Discipline, type WorkoutTemplate } from "@/types";
 import type { PlanSession } from "@/types/plan";
+import { useQuietInitialFocus } from "@/hooks/useQuietInitialFocus";
 import { usePlanFormats } from "./planFormat";
 
 export interface ChangeTarget {
@@ -104,6 +105,7 @@ export function ChangeSessionSheet({ target, current, side, onClose, onPick }: C
   // À l'ouverture, le focus va sur la famille choisie, pas sur la recherche :
   // un champ focalisé ferait surgir le clavier d'un téléphone.
   const familyRef = useRef<HTMLButtonElement>(null);
+  useQuietInitialFocus(familyRef, open);
 
   useEffect(() => {
     if (!open) return;

@@ -244,7 +244,6 @@
     "completed": "Fait",
     "skipped": "Passé",
     "modified": "Modifiée",
-    "validate": "Valider la semaine ({{done}}/{{total}} faites)",
     "validated": "Semaine validée",
     "weekValidated": "Semaine {{week}} validée !",
     "markDone": "Clôturer la séance",
@@ -1026,6 +1025,10 @@
       "undone": "Remplacement annulé",
       "label": "{{from}} remplacée par {{to}}",
       "pick": "Choisir {{name}}, {{time}}"
+    },
+    "validate": {
+      "label": "Valider la semaine",
+      "count": "{{done}}/{{total}} closes"
     },
     "ticks": "Repères en minutes"
   }

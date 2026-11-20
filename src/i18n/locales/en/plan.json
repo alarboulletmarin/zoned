@@ -244,7 +244,6 @@
     "completed": "Completed",
     "skipped": "Skipped",
     "modified": "Modified",
-    "validate": "Validate week ({{done}}/{{total}} done)",
     "validated": "Week validated",
     "weekValidated": "Week {{week}} validated!",
     "markDone": "Complete session",
@@ -1026,6 +1025,10 @@
       "undone": "Replacement undone",
       "label": "{{from}} replaced with {{to}}",
       "pick": "Pick {{name}}, {{time}}"
+    },
+    "validate": {
+      "label": "Close the week",
+      "count": "{{done}}/{{total}} closed"
     },
     "ticks": "Minute marks"
   }

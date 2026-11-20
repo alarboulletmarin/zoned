@@ -8,6 +8,7 @@ import { formatDurationMinutes } from "@/components/visualization/transforms";
 import type { PlanCardModel } from "@/lib/planCardModel";
 import { planWeekRange } from "@/lib/weekReview";
 import type { TrainingPlan } from "@/types/plan";
+import { useQuietInitialFocus } from "@/hooks/useQuietInitialFocus";
 import { usePlanFormats } from "./planFormat";
 
 type Segment = "weeks" | "numbers";
@@ -49,6 +50,7 @@ export function PlanSheet({
   const f = usePlanFormats();
   const [segment, setSegment] = useState<Segment>("weeks");
   const selectedRef = useRef<HTMLButtonElement>(null);
+  useQuietInitialFocus(selectedRef, open);
 
   // La semaine choisie est rendue visible dans la liste qui défile, sans
   // faire sauter la feuille. Le focus y est posé par `initialFocus`.

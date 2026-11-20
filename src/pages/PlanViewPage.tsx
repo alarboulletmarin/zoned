@@ -568,10 +568,15 @@ export function PlanViewPage() {
             {t("completion.validated")}
           </p>
         ) : (
-          <Button variant="outline" size="sm" onClick={() => actions.validateWeek(selectedWeek)}>
-            <Check />
-            {t("completion.validate", { done: resolved, total: week.sessions.length })}
-          </Button>
+          <span className="zn-planpage__validate">
+            <Button variant="outline" size="sm" onClick={() => actions.validateWeek(selectedWeek)}>
+              <Check />
+              {t("page.validate.label")}
+            </Button>
+            <span className="zn-planpage__count">
+              {t("page.validate.count", { done: resolved, total: week.sessions.length })}
+            </span>
+          </span>
         ))}
       {weekModel.state === "current" && (
         <button type="button" className="zn-planpage__addactivity" onClick={() => log.logOn(isoDateOnly(today))}>

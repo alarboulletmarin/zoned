@@ -177,6 +177,8 @@ export function PlanDayList({
       ? (f.locale === "en-GB" ? session.notesEn ?? session.notes : session.notes)
           .split("\n")
           .filter(Boolean)[0]
+          // Une fourchette d'allure ne se coupe pas en son milieu.
+          ?.replace(/ - /g, "\u00a0-\u00a0")
       : null;
 
     return (

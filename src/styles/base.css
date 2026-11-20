@@ -281,6 +281,15 @@ p {
   outline-offset: 2px;
 }
 
+/* Le focus qu'une feuille pose seule à son ouverture, au doigt ou à la
+   souris (useQuietInitialFocus) : pas d'anneau, il revient à la première
+   touche. Ouverte au clavier, la feuille ne pose pas l'attribut. Ici et non
+   dans la feuille du composant, pour la même raison que le curseur
+   ci-dessous : cette feuille n'est pas dans une couche. */
+[data-quiet-focus]:focus-visible {
+  outline: none;
+}
+
 /* The one place the ring moves rather than goes: a range input is a box as
    wide as its rail, and a ring around the whole rail says nothing about which
    of two handles holds the focus. `components/slider.css` draws it on the

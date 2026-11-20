@@ -18,16 +18,11 @@
   gap: var(--sp-3);
 }
 
-/* Un jour de repos est un trait au sol, pas une barre vide. */
+/* Un jour de repos est un trait au sol, au filet clair, même aujourd'hui :
+   encré, le repos du jour se lisait comme la barre en cours d'une séance
+   et faisait paraître plus lourd le contour vide d'un jour sauté. */
 .zn-daybars .zn-planline__bar[data-rest] {
-  block-size: 2px;
-  border: 0;
-  border-radius: 1px;
-  background: var(--line-divider);
-}
-
-.zn-daybars .zn-planline__bar[data-rest][data-state="current"] {
-  background: var(--line-strong);
+  border: var(--bw-rule) solid var(--line-divider);
 }
 
 .zn-daybars__letters {
@@ -538,12 +533,11 @@ span.zn-plansess__state {
   font-variant-numeric: tabular-nums;
 }
 
+/* L'allure passe à la ligne : tronquée (4:5…), elle ne disait plus rien. */
 .zn-plansess__note {
   font: var(--type-caption);
   color: var(--text-faint);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 /* La course : drapeau, Course et son nom, au trait épais. */
@@ -841,13 +835,22 @@ span.zn-plansess__state {
   margin: 0;
 }
 
-/* Le bouton de validation peut passer à la ligne plutôt que déborder. */
-.zn-planpage__after > .zn-btn {
+.zn-planpage__validate {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-4);
   max-inline-size: 100%;
-  block-size: auto;
-  min-block-size: var(--hit-min);
-  white-space: normal;
-  text-align: start;
+}
+
+.zn-planpage__count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .zn-planpage__emptyplan {
