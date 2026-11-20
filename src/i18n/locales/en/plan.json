@@ -925,7 +925,8 @@
       "end": "to the end of the plan, {{date}}",
       "raceDay": "Race day",
       "endDay": "Last day of the plan",
-      "ended": "Plan ended on {{date}}"
+      "ended": "Plan ended on {{date}}",
+      "endDate": "Plan ends on {{date}}"
     },
     "week": {
       "title": "Week {{n}}",

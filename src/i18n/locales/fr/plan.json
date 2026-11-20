@@ -925,7 +925,8 @@
       "end": "avant la fin du plan, {{date}}",
       "raceDay": "Jour de course",
       "endDay": "Dernier jour du plan",
-      "ended": "Plan terminé le {{date}}"
+      "ended": "Plan terminé le {{date}}",
+      "endDate": "Fin du plan le {{date}}"
     },
     "week": {
       "title": "Semaine {{n}}",

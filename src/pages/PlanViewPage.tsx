@@ -1,314 +1,224 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import { useParams, useNavigate, useLocation, useSearchParams, Link } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  ArrowLeft,
-  ArrowLeftRight,
-  Calendar,
-  CalendarOff,
-  Clock,
-  Star,
-  Trash2,
-  Flag,
-  ChevronDown,
-  ChevronUp,
-  Plus,
-  Pencil,
-  Shuffle,
-  MoreHorizontal,
-  Eye,
-} from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { SEOHead } from "@/components/seo";
+import { ArrowLeft, Calendar, Check } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { StatBlock } from "@/components/domain/StatBlock";
-import { usePlan } from "@/hooks/usePlans";
-import { getAllPlans } from "@/lib/planStorage";
-import { loadTodayComposition, mondayOf, sourcePosition } from "@/lib/todayComposition";
-import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
-import { computeAdaptation, type AdaptationPreview } from "@/lib/planGenerator/adapt";
-import { AdaptationPreviewDialog } from "@/components/domain/AdaptationPreviewDialog";
-import { auditPlan, type PlanFinding } from "@/lib/planGenerator/audit";
-import { applyAuditFix } from "@/lib/planGenerator/auditFix";
-import { PlanAuditPanel } from "@/components/domain/PlanAuditPanel";
-import { getWorkoutById } from "@/data/workouts";
-import { computeWeekKm, computeWeekDuration, estimateSessionDurationMin } from "@/lib/planStats";
-import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { useIsEnglish, usePickLang, usePickLocale, formatDate, formatDateShort, formatDateMedium, formatWeekday } from "@/lib/i18n-utils";
-import { DateInput } from "@/components/ui/date-input";
-import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
-import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
-import { useActivityLog } from "@/hooks/useActivityLog";
-import { activitiesBetween } from "@/lib/activityStorage";
-import { planWeekRange } from "@/lib/weekReview";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Section } from "@/components/editorial/Section";
-import {
-  PHASE_META,
-  RACE_DISTANCE_META,
-} from "@/types/plan";
-import type { AnyWorkoutTemplate, TrainingPhase, WorkoutTemplate } from "@/types";
 import { toast } from "@/components/ui/toast";
-import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
-import { SubstituteSessionDialog } from "@/components/domain/SubstituteSessionDialog";
-import { isSessionSubstitutable } from "@/lib/planGenerator/substitute";
-import {
-  SessionActionMenu,
-  type SessionActionMenuItem,
-} from "@/components/domain/SessionActionMenu";
-import type { Discipline } from "@/types";
-import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
-import { UnavailabilityManager } from "@/components/domain/UnavailabilityManager";
-import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDialog";
-import { autoReschedule } from "@/lib/planGenerator/reschedule";
-import { updateUnavailabilities, undoLastChange, withUndoSnapshot } from "@/lib/planStorage";
-import { getPlanMonday, dateToWeekAndDay, isoDateOnly } from "@/lib/planDates";
-import type { AutoChange, PlanSession, TrainingPlan, Unavailability } from "@/types/plan";
-import { PlanCalendar } from "@/components/domain/PlanCalendar";
-import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
-import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
-import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
-import { AddWeekToPlanSheet } from "@/components/domain/AddWeekToPlanSheet";
+import { SEOHead } from "@/components/seo";
+import { WeekRing, WeekRings } from "@/components/weekly/WeekRings";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { ActivityLogPanel } from "@/components/domain/ActivityLogPanel";
 import { LastChangePanel } from "@/components/domain/LastChangePanel";
-import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
-import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
+import { PlanAuditPanel } from "@/components/domain/PlanAuditPanel";
+import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
 import { WeekSessionSheet, type WeekSessionSheetTarget } from "@/components/domain/WeekSessionSheet";
+import { PlanDayList } from "@/components/domain/plan/PlanDayList";
+import { PlanDialogs, type PlanDialog } from "@/components/domain/plan/PlanDialogs";
+import { PlanMenu } from "@/components/domain/plan/PlanMenu";
+import { PlanSheet } from "@/components/domain/plan/PlanSheet";
+import { PlanWeekHeader } from "@/components/domain/plan/PlanWeekHeader";
+import { WeekDayBars } from "@/components/domain/plan/WeekDayBars";
+import { usePlanActions } from "@/components/domain/plan/usePlanActions";
+import { usePlanFormats } from "@/components/domain/plan/planFormat";
+import { getWorkoutById, getWorkoutByIdSync } from "@/data/workouts";
+import { usePlan } from "@/hooks/usePlans";
+import { useActivityLog } from "@/hooks/useActivityLog";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useSettings } from "@/hooks/useSettings";
+import { useShareLink } from "@/hooks/useShareLink";
+import { activitiesBetween } from "@/lib/activityStorage";
 import { isActivitySession } from "@/lib/activitySession";
 import { loadCommutePattern } from "@/lib/athleteProfile";
-import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
-import { isShareablePlan, sharedPlanUrl } from "@/lib/share/planShare";
-import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
-import { usePlanViewMode } from "@/hooks/usePlanViewMode";
+import { usePickLang } from "@/lib/i18n-utils";
+import { buildPlanCardModel } from "@/lib/planCardModel";
+import { getPlanMonday, isoDateOnly } from "@/lib/planDates";
+import { auditPlan } from "@/lib/planGenerator/audit";
+import { getAllPlans, undoLastChange } from "@/lib/planStorage";
 import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
-import { SESSION_TYPE_LABELS } from "@/lib/labels";
-import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
-import Zone2 from "@/assets/doodles/zone-2.svg?react";
-import Zone3 from "@/assets/doodles/zone-3.svg?react";
-import Zone4 from "@/assets/doodles/zone-4.svg?react";
-import Zone5 from "@/assets/doodles/zone-5.svg?react";
-import Stretching from "@/assets/doodles/stretching.svg?react";
-import Standing from "@/assets/doodles/standing.svg?react";
-import WalkingAway from "@/assets/doodles/walking-away.svg?react";
+import { buildPlanWeekModel, defaultPlanWeek } from "@/lib/planWeekModel";
+import { isShareablePlan, sharedPlanUrl } from "@/lib/share/planShare";
+import { loadTodayComposition, mondayOf, sourcePosition } from "@/lib/todayComposition";
+import { buildWeekRings, resolveRingMetric, ringState, type RingMetric } from "@/lib/weekRings";
+import { planWeekRange } from "@/lib/weekReview";
+import { getWeekResolutionSummary } from "@/lib/weekValidation";
+import type { AnyWorkoutTemplate } from "@/types";
+import { practiceFromRaceDistance } from "@/types/practice";
+import type { PlanSession, TrainingPlan } from "@/types/plan";
 
-/* Who stands on the phase ribbon. The pose is the phase under the feet, the
-   same body that walks in Z2 and sprints in Z5 on the zone plate, and the
-   ribbon's top edge is the ground: each SVG's viewBox stops at the sole, so the
-   box bottom is the contact line. `foot` is where along the box the vermillon
-   sole touches (measured on the accent path, not guessed), `aspect` is the
-   viewBox ratio, both feed the CSS so the sole lands on the "now" marker and
-   the box gets a real size (an svgr import with no width collapses). A recovery
-   week stretches; a plan not started stands at the start line; an ended one
-   walks off the end. Taper deliberately differs from the swatch ramp in
-   plan-panels.css (zone-1 there): the swatch says load, the pose says pace. */
-type Pose = { Art: typeof Zone2; foot: number; aspect: number; flip?: boolean };
-const POSES: Record<TrainingPhase | "before" | "after", Pose> = {
-  base: { Art: Zone2, foot: 0.373, aspect: 0.5605 },
-  build: { Art: Zone3, foot: 0.312, aspect: 0.6025 },
-  peak: { Art: Zone5, foot: 0.161, aspect: 0.6353 },
-  taper: { Art: Zone4, foot: 0.201, aspect: 0.5965 },
-  recovery: { Art: Stretching, foot: 0.37, aspect: 0.3791 },
-  // Standing faces left as drawn; flipped, it looks down the ribbon it is
-  // about to start. Walking-away already walks right, off the end.
-  before: { Art: Standing, foot: 0.254, aspect: 0.3737, flip: true },
-  after: { Art: WalkingAway, foot: 0.825, aspect: 0.3781 },
+const ACTIVITY_LABEL_KEYS: Record<string, string> = {
+  __activity_strength__: "strength",
+  __activity_cycling__: "cycling",
+  __activity_swimming__: "swimming",
+  __activity_yoga__: "yoga",
+  __activity_rest__: "rest",
+  __activity_cross_training__: "cross_training",
+  __activity_commute__: "commute",
 };
 
-
+/**
+ * La page d'un plan : la semaine.
+ *
+ * On y lit où l'on en est (semaine N sur M, phase, dates), ce que la semaine
+ * représente (sept barres, trois anneaux) et chaque jour l'un sous l'autre,
+ * avec son statut. Tout le reste se range derrière trois boutons en haut de
+ * page : la feuille Le plan (les semaines et les chiffres), le mode Modifier
+ * et le menu ···.
+ *
+ * La semaine vit dans l'URL (`?week=N`), la feuille aussi (`?sheet=plan`).
+ */
 export function PlanViewPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation(["plan", "activity"]);
-  const isEn = useIsEnglish();
   const pick = usePickLang();
-  const pickLocale = usePickLocale();
+  const f = usePlanFormats();
+  const wide = useMediaQuery("(min-width: 1024px)");
+  const { settings, setCockpit } = useSettings();
 
-  // Week persistence via URL search params (?week=N)
   const [searchParams, setSearchParams] = useSearchParams();
   const weekParam = searchParams.get("week");
   const weekFromUrl = weekParam ? parseInt(weekParam, 10) : null;
+  const sheet = searchParams.get("sheet");
 
-  const setWeekParam = useCallback((week: number) => {
-    setSearchParams((prev) => {
-      prev.set("week", String(week));
-      return prev;
-    }, { replace: true });
-  }, [setSearchParams]);
+  const setParam = useCallback(
+    (key: string, value: string | null, replace = true) => {
+      setSearchParams(
+        (prev) => {
+          if (value === null) prev.delete(key);
+          else prev.set(key, value);
+          return prev;
+        },
+        { replace },
+      );
+    },
+    [setSearchParams],
+  );
+  const setWeekParam = useCallback((week: number) => setParam("week", String(week)), [setParam]);
 
-  // Restore scroll position when returning from workout detail
+  // Revenir d'une séance remet la page où on l'avait laissée.
   const returnState = location.state as { returnScrollY?: number } | null;
   useEffect(() => {
     if (returnState?.returnScrollY != null) {
-      requestAnimationFrame(() => {
-        window.scrollTo(0, returnState.returnScrollY!);
-      });
+      requestAnimationFrame(() => window.scrollTo(0, returnState.returnScrollY!));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { plan, isLoading, reload: reloadPlan } = usePlan(id);
-  const { planViewMode, setPlanViewMode } = usePlanViewMode();
-
-  const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [guidanceWeekNum, setGuidanceWeekNum] = useState<number | null>(null);
-  const [monthlyVisibleWeeks, setMonthlyVisibleWeeks] = useState<number[]>([]);
-
-  const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
-  const [workoutTemplates, setWorkoutTemplates] = useState<Record<string, AnyWorkoutTemplate>>({});
-  // The activity whose duration and effort are open (a commute, a swim):
-  // it has no session page, so a tap opens this sheet instead.
-  const [activityTarget, setActivityTarget] = useState<{
-    weekNumber: number;
-    sessionIndex: number;
-  } | null>(null);
-  const [swapTarget, setSwapTarget] = useState<{
-    weekNumber: number;
-    sessionIndex: number;
-    workoutId: string;
-    sessionType: string;
-  } | null>(null);
-  const [substituteTarget, setSubstituteTarget] = useState<{
-    weekNumber: number;
-    sessionIndex: number;
-  } | null>(null);
-
-  /* Le menu d'une séance de la vue liste, ce que le tableau de la semaine
-     ouvre depuis toujours au doigt, et que la liste n'avait pas : un appui sur
-     une rangée n'y faisait rien du tout. Même composant, mêmes entrées. */
-  const [listMenu, setListMenu] = useState<{
-    x: number;
-    y: number;
-    weekNumber: number;
-    sessionIndex: number;
-  } | null>(null);
-
-  const [showWorkoutPanel, setShowWorkoutPanel] = useState(false);
-  const [addTarget, setAddTarget] = useState<{ weekNumber: number; day: number } | null>(null);
-  const [showDateDialog, setShowDateDialog] = useState(false);
-  const [editStartDate, setEditStartDate] = useState("");
-  const [completionTarget, setCompletionTarget] = useState<{ weekNumber: number; sessionIndex: number } | null>(null);
-  // Deux cases portent désormais la même clé de clôture, celle de la bande
-  // cette semaine et celle de la grille. On retient celle qui a été
-  // cliquée plutôt que de deviner la première visible du document.
-  const completionAnchor = useRef<HTMLElement | null>(null);
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [editName, setEditName] = useState("");
-  const [pendingWeekValidation, setPendingWeekValidation] = useState<{
-    weekNumber: number;
-    unresolved: number;
-    unresolvedSessions: UnresolvedSessionPreview[];
-  } | null>(null);
-  const [showUnavailabilityManager, setShowUnavailabilityManager] = useState(false);
-  /* La semaine du plan à laquelle on ajoute une semaine, feuille ouverte. */
-  const [addWeekTarget, setAddWeekTarget] = useState<number | null>(null);
-  const [reschedulePreview, setReschedulePreview] = useState<{ changes: AutoChange[]; updatedPlan: import("@/types/plan").TrainingPlan } | null>(null);
-  const [adaptationPreview, setAdaptationPreview] = useState<AdaptationPreview | null>(null);
-
-  const currentWeek = useMemo(() => {
-    if (!plan) return 0;
-    const referenceDate = plan.config.startDate || plan.config.createdAt;
-    return getCurrentWeek(referenceDate);
-  }, [plan]);
-
-  // Effective initial week: URL param (clamped) > current training week,
-  // itself clamped so ended plans open on their last week (not an empty
-  // out-of-range one) and not-yet-started plans on week 1.
-  const initialWeek = useMemo(() => {
-    if (weekFromUrl != null && plan) {
-      return Math.max(1, Math.min(weekFromUrl, plan.totalWeeks));
-    }
-    if (plan) {
-      return Math.max(1, Math.min(currentWeek, plan.totalWeeks));
-    }
-    return currentWeek;
-  }, [weekFromUrl, currentWeek, plan]);
-
-  /* ── Ce que la semaine porte EN PLUS du plan ───────────────────────────
-     Le vélotaf ne vit pas dans le plan (il lui survit, et il existe sans lui,
-     cf. `types/activity.ts`), mais il se NOTE là où l'on regarde sa semaine,
-     et jusqu'ici cette page ne savait que l'afficher. Le hameçon porte tout
-     ce qui entoure la saisie, pour que la page du plan et le cockpit ne
-     puissent pas diverger. */
+  const { plan, isLoading, reload } = usePlan(id);
+  const actions = usePlanActions(plan ?? null, reload);
   const log = useActivityLog();
 
-  const parsedPlanStart = useMemo(() => {
-    if (!plan) return null;
-    const raw = plan.config.startDate || plan.config.createdAt;
-    if (!raw) return null;
-    const dateOnly = raw.split("T")[0];
-    const [y, m, d] = dateOnly.split("-").map(Number);
-    const date = new Date(y, m - 1, d);
-    // Normalize to Monday of that week (same logic as PlanCalendar)
-    const jsDay = date.getDay();
-    const offset = jsDay === 0 ? -6 : 1 - jsDay;
-    date.setDate(date.getDate() + offset);
-    return date;
-  }, [plan]);
+  const today = useMemo(() => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }, []);
 
-  const blockedDaysSet = useMemo(() => {
-    if (!plan) return new Set<string>();
-    const set = new Set<string>();
-    const unavails = plan.config.unavailabilities ?? [];
-    if (unavails.length === 0) return set;
-    const monday = getPlanMonday(plan);
-    for (const u of unavails) {
-      const [y, m, d] = u.date.split("-").map(Number);
-      const dateObj = new Date(y, m - 1, d);
-      const result = dateToWeekAndDay(monday, dateObj);
-      if (result) set.add(`${result.weekNumber}-${result.dayOfWeek}`);
+  // ── Le catalogue des séances du plan ────────────────────────────────
+  const [templates, setTemplates] = useState<Record<string, AnyWorkoutTemplate>>({});
+  useEffect(() => {
+    if (!plan) return;
+    const ids = new Set<string>();
+    for (const week of plan.weeks) {
+      for (const s of week.sessions) if (!s.workoutId.startsWith("__")) ids.add(s.workoutId);
     }
-    return set;
-  }, [plan]);
+    const missing = [...ids].filter((wid) => !templates[wid]);
+    if (missing.length === 0) return;
+    let cancelled = false;
+    Promise.all(missing.map(async (wid) => [wid, await getWorkoutById(wid)] as const)).then((pairs) => {
+      if (cancelled) return;
+      setTemplates((prev) => {
+        const next = { ...prev };
+        for (const [wid, w] of pairs) if (w) next[wid] = w;
+        return next;
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [plan, templates]);
+  const workoutOf = useCallback(
+    (wid: string) => templates[wid] ?? getWorkoutByIdSync(wid),
+    [templates],
+  );
+
+  const workoutNames = useMemo(() => {
+    const names: Record<string, string> = {};
+    for (const [wid, w] of Object.entries(templates)) names[wid] = pick(w, "name");
+    for (const [aid, key] of Object.entries(ACTIVITY_LABEL_KEYS)) names[aid] = t(`activity.${key}`);
+    return names;
+  }, [templates, pick, t]);
+
+  const nameOf = useCallback(
+    (s: PlanSession) => {
+      if (s.workoutId === "__race_day__") return t("page.race.title");
+      if (s.workoutId === "__intermediate_race__") return t("page.race.intermediate");
+      return workoutNames[s.workoutId] ?? s.workoutId;
+    },
+    [workoutNames, t],
+  );
+
+  // ── Où l'on est ─────────────────────────────────────────────────────
+  const currentWeek = useMemo(
+    () => (plan ? getCurrentWeek(plan.config.startDate || plan.config.createdAt, today) : 0),
+    [plan, today],
+  );
+  const selectedWeek = plan ? defaultPlanWeek(plan.totalWeeks, currentWeek, weekFromUrl) : 1;
+
+  const cardModel = useMemo(
+    () => (plan ? buildPlanCardModel(plan, today, workoutOf) : null),
+    [plan, today, workoutOf],
+  );
+  const weekModel = useMemo(
+    () => (plan ? buildPlanWeekModel(plan, selectedWeek, today, workoutOf, log.activities) : null),
+    [plan, selectedWeek, today, workoutOf, log.activities],
+  );
+
+  const practice = plan
+    ? plan.config.practice ?? (plan.config.raceDistance ? practiceFromRaceDistance(plan.config.raceDistance) : null)
+    : null;
+  const rings = useMemo(() => {
+    if (!plan) return null;
+    const week = plan.weeks.find((w) => w.weekNumber === selectedWeek);
+    if (!week) return null;
+    const range = planWeekRange(plan, selectedWeek);
+    return buildWeekRings({
+      sessions: week.sessions,
+      activities: activitiesBetween(log.activities, range.from, range.to),
+      range,
+      today,
+      workoutOf,
+      practice,
+    });
+  }, [plan, selectedWeek, log.activities, today, workoutOf, practice]);
+  const metric: RingMetric = rings ? resolveRingMetric(rings, settings.cockpit.ringsMetric) : "time";
+  const pickMetric = useCallback((m: RingMetric) => setCockpit({ ringsMetric: m }), [setCockpit]);
 
   /* Les semaines seules POSÉES sur ce plan dans le cockpit, et sur quelle
      semaine à lui. Le plan ne les contient pas, elles se lisent à côté dans
      /today ; mais c'est ici qu'on regarde une semaine de pic, et ne pas dire
-     qu'un renforcement y est posé serait mentir par omission. Lu au montage :
-     cette page n'écrit pas la composition. Avant les retours anticipés, comme
-     tout crochet. */
+     qu'un renforcement y est posé serait mentir par omission. */
   const placedWeeks = useMemo(() => {
-    const composition = loadTodayComposition();
     const out: { id: string; name: string; weekNumber: number; week: TrainingPlan }[] = [];
     if (!plan) return out;
+    const composition = loadTodayComposition();
     const monday = getPlanMonday(plan);
     for (const layer of composition.layers) {
       if (!layer.enabled || !layer.anchor) continue;
       const week = getAllPlans().find((p) => p.id === layer.id && p.config.isSingleWeek === true);
       if (!week) continue;
       const [y, m, d] = layer.anchor.split("-").map(Number);
-      const position = sourcePosition(
-        { plan, isWeek: false, monday, explicit: false },
-        mondayOf(new Date(y, m - 1, d)),
-      );
+      const position = sourcePosition({ plan, isWeek: false, monday, explicit: false }, mondayOf(new Date(y, m - 1, d)));
       if (position) out.push({ id: week.id, name: pick(week, "name"), weekNumber: position.weekNumber, week });
     }
     return out.sort((a, b) => a.weekNumber - b.weekNumber);
   }, [plan, pick]);
 
-  /* L'audit lit le plan, PLUS ce qui est posé à côté dans le cockpit : une
-     semaine de renforcement posée sur la semaine de pic est précisément ce
-     qu'un audit doit voir. Les séances posées sont ajoutées à une COPIE du
-     plan, et seuls les constats que cette copie fait apparaître en plus sont
-     gardés, sans correctif : un correctif s'adresse par index dans le plan
-     réel, et ces séances-là n'y sont pas. */
+  /* L'audit lit le plan, plus ce qui est posé à côté dans le cockpit. Les
+     séances posées sont ajoutées à une COPIE du plan, et seuls les constats
+     que cette copie fait apparaître en plus sont gardés, sans correctif : un
+     correctif s'adresse par index dans le plan réel. */
   const auditFindings = useMemo(() => {
     if (!plan) return [];
     const own = auditPlan(plan);
@@ -321,493 +231,109 @@ export function PlanViewPage() {
         (a, b) => a.dayOfWeek - b.dayOfWeek,
       );
     }
-    const known = new Set(own.map((f) => `${f.code}:${f.weekNumber}:${f.messageEn}`));
+    const known = new Set(own.map((x) => `${x.code}:${x.weekNumber}:${x.messageEn}`));
     const extra = auditPlan(augmented)
-      .filter((f) => !known.has(`${f.code}:${f.weekNumber}:${f.messageEn}`))
-      .map((f) => ({ ...f, id: `placed-${f.id}`, sessionIndex: undefined, fixable: false }));
+      .filter((x) => !known.has(`${x.code}:${x.weekNumber}:${x.messageEn}`))
+      .map((x) => ({ ...x, id: `placed-${x.id}`, sessionIndex: undefined, fixable: false }));
     return [...own, ...extra];
   }, [plan, placedWeeks]);
 
-  const handleAuditFix = useCallback((finding: PlanFinding) => {
-    if (!plan) return;
-    const fixed = applyAuditFix(plan, finding);
-    if (fixed) {
-      const saved = savePlan(fixed);
-      if (!saved.ok) {
-        toast.failure(t("audit.fixFailed"), saved);
-        return;
-      }
-      reloadPlan();
-    } else {
-      toast.failure(t("audit.fixFailed"));
-    }
-  }, [plan, reloadPlan, t]);
+  // ── Les panneaux ────────────────────────────────────────────────────
+  const [dialog, setDialog] = useState<PlanDialog>(null);
+  const [completion, setCompletion] = useState<{ week: number; index: number; anchor: HTMLElement | null } | null>(null);
+  const [activityTarget, setActivityTarget] = useState<{ week: number; index: number } | null>(null);
+  const weekTopRef = useRef<HTMLDivElement>(null);
 
-  // Auto-expand current week
-  useEffect(() => {
-    if (currentWeek > 0) {
-      setExpandedWeeks(new Set([currentWeek]));
-    }
-  }, [currentWeek]);
-
-  // Auto-open workout panel for empty free plans
-  useEffect(() => {
-    if (
-      plan &&
-      plan.config.planMode === "free" &&
-      plan.weeks.every((w) => w.sessions.length === 0)
-    ) {
-      setShowWorkoutPanel(true);
-    }
-  }, [plan]);
-
-  // Load workout names
-  useEffect(() => {
-    if (!plan) return;
-    const workoutIds = new Set<string>();
-    for (const week of plan.weeks) {
-      for (const session of week.sessions) {
-        if (session.workoutId && session.workoutId !== "__race_day__" && session.workoutId !== "__intermediate_race__") {
-          workoutIds.add(session.workoutId);
-        }
-      }
-    }
-    Promise.all(
-      Array.from(workoutIds).map(async (wid) => {
-        const workout = await getWorkoutById(wid);
-        return [wid, workout] as [string, AnyWorkoutTemplate | undefined];
-      })
-    ).then((results) => {
-      const names: Record<string, string> = {};
-      const templates: Record<string, AnyWorkoutTemplate> = {};
-      for (const [wid, workout] of results) {
-        if (workout) {
-          names[wid] = pick(workout, "name");
-          templates[wid] = workout;
-        }
-      }
-      // Add activity labels
-      const activityKeys: Record<string, string> = {
-        __activity_strength__: "strength",
-        __activity_cycling__: "cycling",
-        __activity_swimming__: "swimming",
-        __activity_yoga__: "yoga",
-        __activity_rest__: "rest",
-        __activity_cross_training__: "cross_training",
-        __activity_commute__: "commute",
-      };
-      for (const [aid, key] of Object.entries(activityKeys)) {
-        names[aid] = t(`activity.${key}`);
-      }
-      setWorkoutNames(names);
-      setWorkoutTemplates(templates);
-    });
-  }, [plan, isEn, t]);
-
-  const toggleWeek = (weekNumber: number) => {
-    setExpandedWeeks((prev) => {
-      const next = new Set(prev);
-      if (next.has(weekNumber)) {
-        next.delete(weekNumber);
-      } else {
-        next.add(weekNumber);
-      }
-      return next;
-    });
-  };
-
-  const handleDelete = () => {
-    if (!plan) return;
-    deletePlan(plan.id);
-    navigate("/plans");
-  };
-
-
-
-  const handleSwapSession = useCallback((workout: WorkoutTemplate) => {
-    if (!plan || !swapTarget) return;
-
-    const week = plan.weeks.find(w => w.weekNumber === swapTarget.weekNumber);
-    if (!week) return;
-
-    const originalIndex = week.sessions.findIndex(s => s.workoutId === swapTarget.workoutId);
-    if (originalIndex === -1) return;
-
-    const success = updatePlanSession(plan.id, swapTarget.weekNumber, originalIndex, workout.id);
-    if (success) reloadPlan();
-    else toast.failure(t("view.sessionUpdateFailed"));
-    setSwapTarget(null);
-  }, [plan, swapTarget, isEn, reloadPlan]);
-
-  const handleSubstituteSession = useCallback(
-    (workout: WorkoutTemplate, discipline: Discipline) => {
-      if (!plan || !substituteTarget) return;
-      const week = plan.weeks.find((w) => w.weekNumber === substituteTarget.weekNumber);
-      if (!week) return;
-      const session = week.sessions[substituteTarget.sessionIndex];
-      if (!session) return;
-
-      const avgDuration = Math.round(
-        (workout.typicalDuration.min + workout.typicalDuration.max) / 2,
-      );
-      const success = updatePlanSession(
-        plan.id,
-        substituteTarget.weekNumber,
-        substituteTarget.sessionIndex,
-        workout.id,
-        {
-          discipline,
-          sessionType: workout.sessionType,
-          estimatedDurationMin: avgDuration,
-          isKeySession: false,
-        },
-      );
-      if (success) reloadPlan();
-      else toast.failure(t("view.sessionUpdateFailed"));
-      setSubstituteTarget(null);
-    },
-    [plan, substituteTarget, reloadPlan, t],
+  const planName = plan ? plan.config.planName || (plan.config.planMode === "free" ? plan.name : pick(plan, "name")) : "";
+  const share = useShareLink(
+    useCallback(() => (plan ? sharedPlanUrl(plan.config) : ""), [plan]),
+    planName,
   );
 
-  const plannedSubstituteSession = useMemo(() => {
-    if (!plan || !substituteTarget) return null;
-    const week = plan.weeks.find((w) => w.weekNumber === substituteTarget.weekNumber);
-    return week?.sessions[substituteTarget.sessionIndex] ?? null;
-  }, [plan, substituteTarget]);
-
-  const handleSessionMove = useCallback((
-    fromWeek: number,
-    fromSessionIndex: number,
-    toWeek: number,
-    toDay: number,
-    beforeSessionIndex?: number,
-  ) => {
-    if (!plan) return;
-    if (blockedDaysSet.has(`${toWeek}-${toDay}`)) {
-      toast.error(t("reschedule.blockedDrop"));
-      return;
-    }
-    const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay, beforeSessionIndex);
-    if (success) reloadPlan();
-    else toast.failure(t("view.sessionMoveFailed"));
-  }, [plan, isEn, reloadPlan, blockedDaysSet, t]);
-
-  const handleSessionDelete = useCallback((weekNumber: number, sessionIndex: number) => {
-    if (!plan) return;
-    const success = deleteSessionFromPlan(plan.id, weekNumber, sessionIndex);
-    if (success) reloadPlan();
-    else toast.failure(t("view.sessionDeleteFailed"));
-  }, [plan, isEn, reloadPlan]);
-
-  // Run adaptation on a week if all sessions are resolved
-  const runAdaptationIfReady = useCallback((weekNumber: number, showToast: boolean) => {
-    if (!plan) return;
-
-    // Re-read fresh data from storage
-    const freshPlan = getPlan(plan.id);
-    if (!freshPlan) return;
-
-    const freshWeek = freshPlan.weeks.find((w: { weekNumber: number }) => w.weekNumber === weekNumber);
-    if (!freshWeek) return;
-
-    // Check if all sessions are resolved (completed / modified / skipped)
-    const allResolved = freshWeek.sessions.every(
-      (s: { status?: string }) => s.status === "completed" || s.status === "modified" || s.status === "skipped"
-    );
-    if (!allResolved) return;
-
-    const preview = computeAdaptation(freshPlan, weekNumber);
-    if (preview.adapted) {
-      setAdaptationPreview(preview);
-    } else if (showToast) {
-      toast.success(t("view.weekValidated", { week: weekNumber }));
-    }
-  }, [plan, t]);
-
-  const handleApplyAdaptation = useCallback(() => {
-    if (!plan || !adaptationPreview) return;
-
-    const success = withUndoSnapshot(
-      plan.id,
-      "adaptation",
-      adaptationPreview.summary,
-      adaptationPreview.summaryEn,
-      (mutablePlan) => {
-        // Apply volume/recovery changes from the preview clone
-        for (const draftWeek of adaptationPreview.updatedPlan.weeks) {
-          const target = mutablePlan.weeks.find(w => w.weekNumber === draftWeek.weekNumber);
-          if (!target) continue;
-          target.volumePercent = draftWeek.volumePercent;
-          target.targetKm = draftWeek.targetKm;
-          target.isRecoveryWeek = draftWeek.isRecoveryWeek;
-          target._originalVolumePercent = draftWeek._originalVolumePercent;
-          target._originalTargetKm = draftWeek._originalTargetKm;
-          target._originalIsRecovery = draftWeek._originalIsRecovery;
-        }
-        return adaptationPreview.changes;
-      },
-    );
-
-    if (!success) {
-      toast.failure(t("errors.planSaveFailed"));
-      return;
-    }
-    reloadPlan();
-    setAdaptationPreview(null);
-    toast.success(t("adaptation.applied"), {
-      action: {
-        label: t("adaptation.undo"),
-        onClick: () => {
-          if (undoLastChange(plan.id)) {
-            reloadPlan();
-            toast.info(t("adaptation.undone"));
-          }
-        },
-      },
-    });
-  }, [plan, adaptationPreview, reloadPlan, t]);
-
-  const handleToggleComplete = useCallback((weekNumber: number, sessionIndex: number, anchor?: HTMLElement | null) => {
-    if (!plan) return;
-    const week = plan.weeks.find(w => w.weekNumber === weekNumber);
-    if (!week) return;
-    const session = week.sessions[sessionIndex];
-    if (!session) return;
-    // Open the completion sheet for this session
-    completionAnchor.current = anchor ?? null;
-    setCompletionTarget({ weekNumber, sessionIndex });
-  }, [plan]);
-
-  const handleCompletionSave = useCallback((data: import("@/lib/planStorage").SessionCompletionData) => {
-    if (!plan || !completionTarget) return;
-    const { weekNumber, sessionIndex } = completionTarget;
-    const saved = updateSessionCompletion(plan.id, weekNumber, sessionIndex, data);
-    if (!saved.ok) {
-      toast.failure(t("errors.planSaveFailed"), saved);
-      return;
-    }
-    reloadPlan();
-    setCompletionTarget(null);
-    // Auto-trigger adaptation if all sessions in the week are now resolved
-    runAdaptationIfReady(weekNumber, false);
-  }, [plan, completionTarget, reloadPlan, runAdaptationIfReady, t]);
-
-  const handleWeekValidationDecision = useCallback((decision: "mark_skipped" | "keep_unresolved") => {
-    if (!plan || !pendingWeekValidation) return;
-
-    const week = plan.weeks.find((w) => w.weekNumber === pendingWeekValidation.weekNumber);
-    if (!week) return;
-
-    const result = applyWeekValidationDecision(week, decision);
-    for (const index of result.changedSessionIndexes) {
-      updateSessionCompletion(plan.id, pendingWeekValidation.weekNumber, index, {
-        status: "skipped",
-      });
-    }
-
-    setPendingWeekValidation(null);
-    reloadPlan();
-
-    if (decision === "mark_skipped") {
-      runAdaptationIfReady(week.weekNumber, true);
-      return;
-    }
-
-    toast.info(t("completion.keptForLater", { count: result.updatedSessions.filter((session) => !session.status || session.status === "planned").length }));
-  }, [plan, pendingWeekValidation, reloadPlan, runAdaptationIfReady, t]);
-
-  // Validate an entire week: if unresolved sessions remain, ask what to do instead of skipping silently
-  const handleValidateWeek = useCallback((weekNumber: number) => {
-    if (!plan) return;
-    const week = plan.weeks.find(w => w.weekNumber === weekNumber);
-    if (!week) return;
-
-    const summary = getWeekResolutionSummary(week);
-    if (summary.unresolved > 0) {
-      setPendingWeekValidation({
-        weekNumber,
-        unresolved: summary.unresolved,
-        unresolvedSessions: getUnresolvedSessions(week),
-      });
-      return;
-    }
-
-    runAdaptationIfReady(weekNumber, true);
-  }, [plan, reloadPlan, runAdaptationIfReady]);
-
-  const handleSessionClick = useCallback((weekNumber: number, sessionIndex: number, workoutId: string) => {
-    // The menu offers "Durée et effort" on an activity; this is where it opens.
-    if (isActivitySession(workoutId)) {
-      setActivityTarget({ weekNumber, sessionIndex });
-      return;
-    }
-    if (workoutId && workoutId !== "__race_day__" && workoutId !== "__intermediate_race__" && !workoutId.startsWith("__activity_")) {
-      // Persist current week in URL before navigating away so browser back restores it
-      const url = new URL(window.location.href);
-      url.searchParams.set("week", String(weekNumber));
-      window.history.replaceState(window.history.state, "", url.toString());
-
-      // Find the session to pass volume info for scaled duration display (#32)
-      const week = plan?.weeks.find((w) => w.weekNumber === weekNumber);
-      const session = week?.sessions[sessionIndex];
-      navigate(`/workout/${workoutId}`, {
+  const openSession = useCallback(
+    (week: number, index: number) => {
+      if (!plan) return;
+      const session = plan.weeks.find((w) => w.weekNumber === week)?.sessions[index];
+      if (!session) return;
+      if (isActivitySession(session.workoutId)) {
+        setActivityTarget({ week, index });
+        return;
+      }
+      if (session.workoutId.startsWith("__")) return;
+      const weekData = plan.weeks.find((w) => w.weekNumber === week);
+      navigate(`/workout/${session.workoutId}`, {
         state: {
           from: "plan",
-          planId: plan?.id,
-          planName: plan ? pick(plan, "name") : "",
-          weekNumber,
-          volumePercent: week?.volumePercent,
-          estimatedDurationMin: session?.estimatedDurationMin,
-          targetDistanceKm: session?.targetDistanceKm,
+          planId: plan.id,
+          planName,
+          weekNumber: week,
+          volumePercent: weekData?.volumePercent,
+          estimatedDurationMin: session.estimatedDurationMin,
+          targetDistanceKm: session.targetDistanceKm,
           scrollY: window.scrollY,
         },
       });
-    }
-  }, [plan, isEn, navigate]);
+    },
+    [plan, planName, navigate],
+  );
 
   const activitySheetTarget = useMemo<WeekSessionSheetTarget | null>(() => {
     if (!plan || !activityTarget) return null;
-    const week = plan.weeks.find((w) => w.weekNumber === activityTarget.weekNumber);
-    const session = week?.sessions[activityTarget.sessionIndex];
+    const session = plan.weeks.find((w) => w.weekNumber === activityTarget.week)?.sessions[activityTarget.index];
     if (!session || !isActivitySession(session.workoutId)) return null;
     return {
-      sessionIndex: activityTarget.sessionIndex,
+      sessionIndex: activityTarget.index,
       session,
       workout: null,
-      name: workoutNames[session.workoutId] || session.workoutId,
+      name: nameOf(session),
       canMoveUp: false,
       canMoveDown: false,
     };
-  }, [plan, activityTarget, workoutNames]);
+  }, [plan, activityTarget, nameOf]);
   const commuteProfileMin = useMemo(
     () => (activitySheetTarget ? (loadCommutePattern()?.durationMin ?? null) : null),
     [activitySheetTarget],
   );
 
-  const handleActivitySave = useCallback((sessionIndex: number, next: PlanSession) => {
-    if (!plan || !activityTarget) return;
-    const fresh = getPlan(plan.id);
-    const week = fresh?.weeks.find((w) => w.weekNumber === activityTarget.weekNumber);
-    if (!fresh || !week?.sessions[sessionIndex]) return;
-    week.sessions[sessionIndex] = next;
-    const saved = savePlan(fresh);
-    if (!saved.ok) {
-      toast.failure(t("view.sessionUpdateFailed"), saved);
+  const goToWeek = useCallback(
+    (week: number) => {
+      setWeekParam(week);
+      requestAnimationFrame(() => weekTopRef.current?.scrollIntoView({ block: "start" }));
+    },
+    [setWeekParam],
+  );
+
+  // ── Le bandeau des anneaux, au défilement (téléphone et tablette) ───
+  const sentinel = useRef<HTMLDivElement>(null);
+  const [stripOn, setStripOn] = useState(false);
+  useEffect(() => {
+    const el = sentinel.current;
+    if (!el || wide || typeof IntersectionObserver === "undefined") {
+      setStripOn(false);
       return;
     }
-    setActivityTarget(null);
-    reloadPlan();
-  }, [plan, activityTarget, reloadPlan, t]);
-
-  const handleAddToDay = useCallback((weekNumber: number, day: number) => {
-    if (blockedDaysSet.has(`${weekNumber}-${day}`)) {
-      toast.error(t("reschedule.blockedDrop"));
-      return;
-    }
-    setAddTarget({ weekNumber, day });
-    setShowWorkoutPanel(true);
-  }, [blockedDaysSet, t]);
-
-  const handleWorkoutAdd = useCallback(async (workoutId: string, weekNumber: number, day: number) => {
-    if (!plan) return;
-    if (blockedDaysSet.has(`${weekNumber}-${day}`)) {
-      toast.error(t("reschedule.blockedDrop"));
-      return;
-    }
-    // Handle cross-training activities (__activity_strength__, etc.)
-    const activityMatch = workoutId.match(/^__activity_(\w+)__$/);
-    if (activityMatch) {
-      const activityType = activityMatch[1];
-      const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
-      if (!week) return;
-      week.sessions.push({
-        dayOfWeek: day,
-        workoutId,
-        sessionType: activityType as import("@/types").SessionType,
-        isKeySession: false,
-        estimatedDurationMin: 0,
-      });
-      week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-      const saved = savePlan(plan);
-      if (!saved.ok) {
-        toast.failure(t("errors.planSaveFailed"), saved);
-        return;
-      }
-      reloadPlan();
-      return;
-    }
-
-    const success = await addSessionToPlan(plan.id, weekNumber, workoutId, day);
-    if (success) reloadPlan();
-    else toast.failure(t("view.workoutAddFailed"));
-  }, [plan, isEn, reloadPlan]);
-
-  const handleSaveUnavailabilities = useCallback((items: Unavailability[]) => {
-    if (!plan) return;
-    if (!updateUnavailabilities(plan.id, items)) {
-      toast.failure(t("errors.planSaveFailed"));
-      return;
-    }
-    reloadPlan();
-    setShowUnavailabilityManager(false);
-  }, [plan, reloadPlan, t]);
-
-  const handleReschedule = useCallback(() => {
-    if (!plan) return;
-    const result = autoReschedule(plan, currentWeek > 0 ? currentWeek : 1);
-    setReschedulePreview({ changes: result.changes, updatedPlan: result.updatedPlan });
-  }, [plan, currentWeek]);
-
-  const handleApplyReschedule = useCallback(() => {
-    if (!plan || !reschedulePreview) return;
-
-    const success = withUndoSnapshot(
-      plan.id,
-      "reschedule",
-      `${reschedulePreview.changes.length} séance(s) marquée(s) comme sautée(s) (indisponibilité)`,
-      `${reschedulePreview.changes.length} session(s) marked as skipped (unavailability)`,
-      (mutablePlan) => {
-        mutablePlan.weeks = reschedulePreview.updatedPlan.weeks;
-        mutablePlan.config = reschedulePreview.updatedPlan.config;
-        return reschedulePreview.changes;
-      },
-    );
-
-    if (!success) {
-      toast.failure(t("errors.planSaveFailed"));
-      return;
-    }
-    reloadPlan();
-    setReschedulePreview(null);
-    toast.success(t("reschedule.applied"), {
-      action: {
-        label: t("reschedule.undo"),
-        onClick: () => {
-          if (undoLastChange(plan.id)) {
-            reloadPlan();
-            toast.info(t("reschedule.undone"));
-          }
-        },
-      },
+    const io = new IntersectionObserver(([entry]) => {
+      setStripOn(!entry.isIntersecting && entry.boundingClientRect.top < window.innerHeight / 2);
     });
-  }, [plan, reschedulePreview, currentWeek, reloadPlan, t]);
+    io.observe(el);
+    return () => io.disconnect();
+  }, [wide, rings, plan]);
 
-  // Loading state
+  // ── Les états vides ─────────────────────────────────────────────────
   if (isLoading) {
     return (
-      <div className="zn-planview">
-        <div className="zn-planview__empty">
+      <div className="zn-planpage">
+        <div className="zn-planpage__empty">
           <Spinner size={22} />
         </div>
       </div>
     );
   }
 
-  // 404 state, say what happened and offer the way back, never a dead end.
-  if (!plan) {
+  if (!plan || !weekModel || !cardModel) {
     return (
-      <div className="zn-planview">
-        <div className="zn-planview__empty">
+      <div className="zn-planpage">
+        <div className="zn-planpage__empty">
           <Alert
             kind="error"
             title={t("view.notFound")}
@@ -825,1286 +351,119 @@ export function PlanViewPage() {
     );
   }
 
-  const isFreePlan = plan.config.planMode === "free";
-  /* Sans VMA, le générateur a posé les allures depuis le niveau. Il le
-     faisait déjà, sans le dire : les allures affichées avaient l'air
-     mesurées. Le plan le dit tant que Mes zones ne la connaît pas. */
-  const pacesEstimated = !isFreePlan && plan.config.vma === undefined;
-  const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
-  const planName = plan.config.planName || (isFreePlan
-    ? plan.name
-    : pick(plan, "name"));
-  const raceDate = plan.config.raceDate;
-  const ended = isPlanEnded(plan);
-
-  // Where you are is where the foot touches. The figure stands mid-week on the
-  // ribbon and the "now" rule stays under its sole; a plan not started waits at
-  // the start line and an ended one walks off the end (the CSS places those two
-  // by the box, not the foot). The caption names the week, the phase and its
-  // bounds; it exists only while someone is on the ribbon.
-  const standing = ended || currentWeek > plan.totalWeeks ? "after" : currentWeek < 1 ? "before" : "on";
-  const standingPhase = plan.phases.find(
-    (p) => currentWeek >= p.startWeek && currentWeek <= p.endWeek,
+  const ended = isPlanEnded(plan, today);
+  const pacesEstimated = plan.config.planMode !== "free" && plan.config.vma === undefined;
+  const week = plan.weeks.find((w) => w.weekNumber === selectedWeek)!;
+  const blockedDays = new Set(
+    [0, 1, 2, 3, 4, 5, 6].filter((d) => actions.isBlocked(selectedWeek, d)),
   );
-  const pose =
-    standing !== "on"
-      ? POSES[standing]
-      : plan.weeks[currentWeek - 1]?.isRecoveryWeek
-        ? POSES.recovery
-        : POSES[standingPhase?.phase ?? "base"];
-  const standingAt = standing === "on" ? ((currentWeek - 0.5) / plan.totalWeeks) * 100 : 0;
-  const standingCaption =
-    standing === "on"
-      ? [
-          t("view.standingWeek", { week: currentWeek }),
-          standingPhase ? pick(PHASE_META[standingPhase.phase], "label") : null,
-          standingPhase ? `${standingPhase.startWeek}-${standingPhase.endWeek}` : null,
-        ]
-          .filter(Boolean)
-          .join(" · ")
-      : null;
+  const resolution = getWeekResolutionSummary(week);
+  const resolved = resolution.completed + resolution.skipped;
 
-  // The one mono line over the title: what this plan is, when it lands, how
-  // long it runs, and the time it is built for.
-  const headKicker = [
-    raceMeta
-      ? pick(raceMeta, "label")
-      : isFreePlan
-        ? t("view.freePlan")
-        : t("view.prebuilt"),
-    raceDate ? formatDate(raceDate, { day: "numeric", month: "long" }) : null,
-    t("shared.weeks", { count: plan.totalWeeks }),
-    plan.raceTimePrediction
-      ? `${t("view.racePrediction")} ${plan.raceTimePrediction}`
-      : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  // La ligne sous le titre : le compte à rebours, le jour J, ou la fin.
+  const countdown = cardModel.countdown;
+  let raceLine: React.ReactNode = null;
+  if (ended) {
+    raceLine = t("page.countdown.ended", { date: f.dayDate(cardModel.span.end) });
+  } else if (countdown && countdown.kind === "race") {
+    raceLine =
+      countdown.days === 0 ? (
+        <strong className="zn-planpage__cd">{t("page.countdown.raceDay")}</strong>
+      ) : (
+        <>
+          <strong className="zn-planpage__cd">{t("page.countdown.days", { count: countdown.days })}</strong>{" "}
+          {t("page.countdown.race", { date: f.dayDate(countdown.date) })}
+        </>
+      );
+  } else if (countdown) {
+    raceLine = t("page.countdown.endDate", { date: f.dayDate(countdown.date) });
+  }
 
-  // The span the plan covers. The explicit start→end range wins; createdAt→
-  // raceDate is only the fallback when no start date is set (#102).
-  const dateSpan = plan.config.startDate
-    ? plan.config.endDate
-      ? `${formatDate(plan.config.startDate)} → ${formatDate(plan.config.endDate)}`
-      : formatDate(plan.config.startDate)
-    : raceDate
-      ? `${formatDate(plan.config.createdAt)} → ${formatDate(raceDate)}`
-      : formatDate(plan.config.createdAt);
+  const ringValues = rings
+    ? ([rings.endurance, rings.quality, rings.strength] as const).map((r) => {
+        const state = ringState(r, metric, rings.reference);
+        let value: string;
+        if (r.kind === "strength") value = `${r.doneSessions}/${r.targetSessions}`;
+        else if (metric === "time") value = formatDurationMinutes(Math.round(r.done.time));
+        else if (metric === "km") value = `${new Intl.NumberFormat(f.locale, { maximumFractionDigits: 1 }).format(r.done.km)} km`;
+        else value = `${Math.round(r.done.dplus)} m`;
+        return { ring: r, state, value };
+      })
+    : [];
 
-  // La semaine en vue : la semaine courante, bornée pour qu'un plan pas encore
-  // commencé lise la semaine 1 et un plan fini sa dernière.
-  const focusWeekNumber = Math.max(1, Math.min(currentWeek || 1, plan.totalWeeks));
-  const focusWeek = plan.weeks[focusWeekNumber - 1];
-
-  /* ── ce qui se court cette semaine ──────────────────────────────────────
-     Rien n'est calculé ici qui ne le soit déjà dans lib/. La bande ne fait
-     que choisir : la séance du jour, ce qui reste, la prochaine clé. */
-
-  // dayOfWeek est 0 = lundi (types/plan.ts) ; getDay() est 0 = dimanche.
-  const todayIndex = (new Date().getDay() + 6) % 7;
-  const isFocusCurrent =
-    currentWeek === focusWeekNumber && currentWeek >= 1 && currentWeek <= plan.totalWeeks;
-
-  const weekResolution = focusWeek
-    ? getWeekResolutionSummary(focusWeek)
-    : { completed: 0, skipped: 0, unresolved: 0 };
-
-  const todaySessionIndex =
-    isFocusCurrent && focusWeek
-      ? focusWeek.sessions.findIndex((s) => s.dayOfWeek === todayIndex)
-      : -1;
-  const todaySession =
-    todaySessionIndex >= 0 ? (focusWeek?.sessions[todaySessionIndex] ?? null) : null;
-
-  // Les jalons (course, activité) n'ont pas de fiche derrière eux :
-  // workoutNames ne les contient pas et handleSessionClick les ignore.
-  const sessionLabel = (s: import("@/types/plan").PlanSession) =>
-    s.workoutId === "__race_day__" || s.workoutId === "__intermediate_race__"
-      ? t("view.raceDay")
-      : workoutNames[s.workoutId] || s.workoutId;
-  const isOpenable = (s: import("@/types/plan").PlanSession) =>
-    !s.workoutId.startsWith("__");
-
-  // Temps posé : estimateSessionDurationMin prend la durée réelle quand elle
-  // existe, l'estimée sinon.
-  const weekPlannedMin = focusWeek
-    ? focusWeek.sessions.reduce((sum, s) => sum + s.estimatedDurationMin, 0)
-    : 0;
-  const weekDoneMin = focusWeek
-    ? focusWeek.sessions
-        .filter((s) => s.status === "completed" || s.status === "modified")
-        .reduce((sum, s) => sum + estimateSessionDurationMin(s), 0)
-    : 0;
-
-  // La séance à ne pas manquer : la première clé encore ouverte, jamais celle
-  // d'aujourd'hui (elle a déjà sa carte), jamais une déjà passée.
-  const nextKeySession = focusWeek
-    ? focusWeek.sessions.find(
-        (s, i) =>
-          s.isKeySession &&
-          i !== todaySessionIndex &&
-          (!s.status || s.status === "planned") &&
-          (!isFocusCurrent || s.dayOfWeek >= todayIndex),
-      ) ?? null
+  const completionSession = completion
+    ? plan.weeks.find((w) => w.weekNumber === completion.week)?.sessions[completion.index] ?? null
     : null;
 
-  /* Les activités complémentaires tombées dans la semaine en vue. Calcul nu
-     et non mémoïsé, comme `focusWeekRange` juste dessous : les hameçons de
-     cette page sont tous posés avant ses deux sorties anticipées, et filtrer
-     quelques centaines de dates coûte moins qu'une règle enfreinte. */
-  const focusWeekActivities = focusWeek
-    ? (() => {
-        const range = planWeekRange(plan, focusWeekNumber);
-        return activitiesBetween(log.activities, range.from, range.to);
-      })()
-    : [];
-  const focusWeekExtraMin = focusWeekActivities.reduce((sum, a) => sum + a.durationMin, 0);
-
-  // La plage de la semaine, par Intl, pas de table de mois écrite à la main.
-  const focusWeekRange = (() => {
-    if (!parsedPlanStart) return null;
-    const start = new Date(parsedPlanStart);
-    start.setDate(start.getDate() + (focusWeekNumber - 1) * 7);
-    const end = new Date(start);
-    end.setDate(end.getDate() + 6);
-    return `${formatDateShort(start)} - ${formatDateShort(end)}`;
-  })();
+  const footer = (
+    <div className="zn-planpage__after">
+      {resolved > 0 &&
+        (resolution.unresolved === 0 ? (
+          <p className="zn-planpage__validated">
+            <Check size={14} />
+            {t("completion.validated")}
+          </p>
+        ) : (
+          <Button variant="outline" size="sm" onClick={() => actions.validateWeek(selectedWeek)}>
+            <Check />
+            {t("completion.validate", { done: resolved, total: week.sessions.length })}
+          </Button>
+        ))}
+      {weekModel.state === "current" && (
+        <button type="button" className="zn-planpage__addactivity" onClick={() => log.logOn(isoDateOnly(today))}>
+          <span aria-hidden="true">+</span> {t("page.addActivity")}
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <>
-      <SEOHead
-        noindex={true}
-        title={planName}
-        canonical={`/plan/${plan.id}`}
-      />
-      <div className="zn-planview">
-        {/* Back to the shelf */}
-        <div className="zn-planview__back">
-          <Button variant="link" asChild>
-            <Link to="/plans">
-              <ArrowLeft />
-              {t("view.backToPlans")}
-            </Link>
-          </Button>
-        </div>
-
-        {/* 1, the plan, named and dated, with its four numbers */}
-        <section className="zn-planview__head">
-          <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
-            <span className="zn-kicker">{headKicker}</span>
-            {placedWeeks.length > 0 && (
-              <p className="zn-mono zn-muted zn-planview__placed">
-                {t("view.placedWeeks.label")}
-                {placedWeeks.map((w) => (
-                  <Link key={w.id} to={`/weeks/${w.id}`} className="zn-planview__placed-item">
-                    {t("view.placedWeeks.item", { name: w.name, n: w.weekNumber })}
-                  </Link>
-                ))}
-              </p>
-            )}
-
-            {isEditingName ? (
-              <input
-                autoFocus
-                aria-label={t("view.clickToRename")}
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                onBlur={() => {
-                  const trimmed = editName.trim();
-                  if (trimmed && trimmed !== planName) {
-                    plan.config.planName = trimmed;
-                    const saved = savePlan(plan);
-                    if (saved.ok) reloadPlan();
-                    else toast.failure(t("errors.planSaveFailed"), saved);
-                  }
-                  setIsEditingName(false);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") e.currentTarget.blur();
-                  if (e.key === "Escape") setIsEditingName(false);
-                }}
-                className="zn-planview__rename"
-              />
-            ) : (
-              <h1 className="zn-display" data-level="2">
-                <button
-                  type="button"
-                  className="zn-planview__title"
-                  onClick={() => { setEditName(planName); setIsEditingName(true); }}
-                  title={t("view.clickToRename")}
-                >
-                  {planName}
-                  <Pencil className="zn-planview__pencil" size={18} />
-                </button>
-              </h1>
-            )}
-
-            <div className="zn-cluster">
-              <span className="zn-mono zn-planview__facts">{dateSpan}</span>
-              {plan.config.startDate ? (
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  onClick={() => {
-                    setEditStartDate(plan.config.startDate || "");
-                    setShowDateDialog(true);
-                  }}
-                  title={t("view.editDates")}
-                  aria-label={t("view.editDates")}
-                >
-                  <Pencil />
-                </Button>
-              ) : (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setEditStartDate("");
-                    setShowDateDialog(true);
-                  }}
-                >
-                  <Plus />
-                  {t("view.addDates")}
-                </Button>
-              )}
-            </div>
-
-            <div className="zn-cluster">
-              {/* The screen's one vermillon fill: the export. */}
-              <PlanExportMenu
-                plan={plan}
-                workoutNames={workoutNames}
-                workoutTemplates={workoutTemplates}
-              />
-              {/* Only assisted plans replay from their config, see planShare.ts.
-                  Partager reste dans la barre : ShareLinkButton ne relaie ni ref
-                  ni gestionnaires, il ne survivrait pas au Slot d'un item de menu. */}
-              {isShareablePlan(plan.config) && (
-                <ShareLinkButton
-                  buildUrl={() => sharedPlanUrl(plan.config)}
-                  title={planName}
-                  label={t("shared.shareLink")}
-                />
-              )}
-              {/* Nécessaires, jamais quotidiennes : elles ne s'interposent plus
-                  entre le titre et la semaine. */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" aria-label={t("view.moreActions")}>
-                    <MoreHorizontal />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start">
-                  <DropdownMenuItem onSelect={() => setShowUnavailabilityManager(true)}>
-                    <CalendarOff />
-                    {t("unavailability.title")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    disabled={(plan.config.unavailabilities ?? []).length === 0}
-                    onSelect={handleReschedule}
-                  >
-                    <Shuffle />
-                    {t("reschedule.button")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem variant="destructive" onSelect={() => setShowDeleteDialog(true)}>
-                    <Trash2 />
-                    {t("view.delete")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-
-          {/* Ce qu'il reste à courir avant dimanche. Colonne de droite sur
-              écran large, premier bloc sous le titre sur téléphone, la
-              grille de .zn-planview__head s'en charge seule. */}
-          {focusWeek && (
-            <section className="zn-weeknow" aria-labelledby="zn-weeknow-title">
-              <div className="zn-weeknow__head">
-                <h2 id="zn-weeknow-title" className="zn-kicker zn-weeknow__title">
-                  {t("stats.thisWeek")}
-                </h2>
-                <span className="zn-mono zn-weeknow__where">
-                  {[
-                    t("view.standingWeek", { week: focusWeekNumber }),
-                    pick(PHASE_META[focusWeek.phase], "label"),
-                    focusWeekRange,
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </span>
-              </div>
-
-              {/* La séance du jour, en entier : une colonne de 76px dans la
-                  grille ne peut pas la nommer, une carte pleine largeur si. */}
-              {todaySession ? (
-                <div className="zn-weeknow__today" data-status={todaySession.status}>
-                  {/* Ce n'est pas une case à cocher : elle ouvre le panneau de
-                      clôture, d'où aria-haspopup et non role="checkbox".
-                      Pas de data-completion-key ici : elle passe son propre
-                      élément en ancre, et porter la clé la ferait gagner le
-                      querySelectorAll de repli contre la case de la grille,
-                      qui ancrerait le panneau 700px au-dessus du doigt. */}
-                  <button
-                    type="button"
-                    className="zn-sess__check zn-weeknow__check"
-                    data-status={todaySession.status}
-                    aria-haspopup="dialog"
-                    aria-label={`${
-                      todaySession.status === "completed"
-                        ? t("completion.completed")
-                        : todaySession.status === "modified"
-                          ? t("completion.modified")
-                          : todaySession.status === "skipped"
-                            ? t("completion.skipped")
-                            : t("completion.markDone")
-                    } · ${sessionLabel(todaySession)}`}
-                    onClick={(e) =>
-                      handleToggleComplete(focusWeekNumber, todaySessionIndex, e.currentTarget)
-                    }
-                  >
-                    {todaySession.status === "completed" && (
-                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M2 6l3 3 5-5" />
-                      </svg>
-                    )}
-                    {todaySession.status === "modified" && (
-                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
-                      </svg>
-                    )}
-                    {todaySession.status === "skipped" && (
-                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M3 3l6 6M9 3l-6 6" />
-                      </svg>
-                    )}
-                  </button>
-
-                  {(() => {
-                    const body = (
-                      <>
-                        <span className="zn-kicker zn-kicker--xs zn-kicker--inline">
-                          {t("view.today")}
-                        </span>
-                        <span className="zn-weeknow__name">{sessionLabel(todaySession)}</span>
-                        <span className="zn-mono zn-weeknow__facts">
-                          {formatDurationMinutes(todaySession.estimatedDurationMin)}
-                          {todaySession.targetDistanceKm
-                            ? ` · ${todaySession.targetDistanceKm} km`
-                            : ""}
-                        </span>
-                      </>
-                    );
-                    // Un jour de course n'a pas de fiche à ouvrir : pas de
-                    // bouton mort.
-                    return isOpenable(todaySession) ? (
-                      <button
-                        type="button"
-                        className="zn-weeknow__open"
-                        onClick={() =>
-                          handleSessionClick(
-                            focusWeekNumber,
-                            todaySessionIndex,
-                            todaySession.workoutId,
-                          )
-                        }
-                      >
-                        {body}
-                      </button>
-                    ) : (
-                      <span className="zn-weeknow__open" data-static="true">
-                        {body}
-                      </span>
-                    );
-                  })()}
-                </div>
-              ) : (
-                <p className="zn-mono zn-weeknow__rest">
-                  {isFocusCurrent ? t("view.restToday") : t("view.notStartedYet")}
-                </p>
-              )}
-
-              {/* Deux nombres, pas quatre : ce qui reste, et le temps déjà
-                  posé. L'emphase passe par l'inversion à l'encre, l'aplat
-                  vermillon de l'écran appartient à Exporter. */}
-              <div className="zn-weeknow__facts-grid">
-                <StatBlock
-                  tone="card"
-                  size="sm"
-                  value={`${weekResolution.completed}/${focusWeek.sessions.length}`}
-                  label={t("stats.sessions")}
-                  footnote={t("view.sessionsLeft", { count: weekResolution.unresolved })}
-                />
-                {/* Rien de posé s'écrit 0 min : le formateur le sait. */}
-                <StatBlock
-                  tone="ink"
-                  size="sm"
-                  value={formatDurationMinutes(weekDoneMin)}
-                  label={t("view.timeLogged")}
-                  footnote={`/ ${formatDurationMinutes(weekPlannedMin)} · ${Math.round(
-                    computeWeekKm(focusWeek),
-                  )} km`}
-                />
-              </div>
-
-              {nextKeySession && (
-                <p className="zn-weeknow__next">
-                  <Star filled size={14} className="zn-weeknow__star" />
-                  <span className="zn-body zn-body--sm">
-                    {t("view.nextKey")} : {t(`daysShort.${nextKeySession.dayOfWeek}`)} ·{" "}
-                    {sessionLabel(nextKeySession)} ·{" "}
-                    {formatDurationMinutes(nextKeySession.estimatedDurationMin)}
-                  </span>
-                </p>
-              )}
-
-              {/* Ce que la semaine a porté en plus du plan, et la porte pour en
-                  ajouter. Les deux vont ensemble : un bouton qui écrit sans
-                  que rien ne bouge à l'écran n'a pas de fin perceptible, et le
-                  chiffre seul serait une statistique de plus.
-
-                  La saisie vise AUJOURD'HUI quand la semaine en vue est celle
-                  qu'on vit, et le lundi de la semaine sinon : on ne note pas
-                  une sortie du 14 septembre sur une carte qui parle du 5
-                  octobre, et le formulaire garde de toute façon son champ de
-                  date. */}
-              <p className="zn-weeknow__extra">
-                {focusWeekExtraMin > 0 && (
-                  <span className="zn-mono zn-weeknow__extra-time">
-                    {t("activity:cockpit.weekExtra", {
-                      time: formatDurationMinutes(focusWeekExtraMin),
-                    })}
-                  </span>
-                )}
-                {/* Un BOUTON, encadré, et un plus. Ce contrôle portait le
-                    texte-plus-flèche des sorties du cockpit, et la flèche y
-                    promet une page : celle-ci n'emmène nulle part, elle ouvre
-                    un panneau sur place et écrit. Le cadre dit contrôle, le
-                    plus dit ajouter, et c'est le même plus que le bouton du
-                    journal. Les mots restent à la première personne, ils
-                    répondent à la séance du jour juste au-dessus. */}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    log.logOn(
-                      isFocusCurrent
-                        ? isoDateOnly(new Date())
-                        : planWeekRange(plan, focusWeekNumber).from,
-                    )
-                  }
-                >
-                  <Plus size={16} />
-                  {t("activity:cockpit.add")}
-                </Button>
-              </p>
-            </section>
-          )}
-        </section>
-
-
-        {/* 2, the programme itself */}
-        <Tabs defaultValue="programme" className="zn-planview__band">
-          <TabsList>
-            <TabsTrigger value="programme">{t("view.schedule")}</TabsTrigger>
-            <TabsTrigger value="stats">{t("view.statistics")}</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="stats">
-            <PlanStatsSection
+      <SEOHead noindex={true} title={planName} canonical={`/plan/${plan.id}`} />
+      <div className="zn-planpage" data-wide={wide || undefined}>
+        <div className="zn-planpage__top">
+          <Link to="/plans" className="zn-planpage__back">
+            <ArrowLeft size={16} />
+            {t("page.back")}
+          </Link>
+          <div className="zn-planpage__tools">
+            <button
+              type="button"
+              className="zn-iconbtn"
+              aria-label={t("page.tools.plan")}
+              aria-haspopup="dialog"
+              onClick={() => setParam("sheet", "plan", false)}
+            >
+              <Calendar size={20} />
+            </button>
+            <PlanMenu
               plan={plan}
-              currentWeek={currentWeek}
-              collapsible={false}
-              onLogActivity={() => log.logOn()}
+              name={planName}
+              workoutNames={workoutNames}
+              workoutTemplates={templates}
+              onShare={isShareablePlan(plan.config) ? share : undefined}
+              onEditDates={() => setDialog("dates")}
+              onUnavailability={() => setDialog("unavailability")}
+              onReschedule={() => actions.previewReschedule(currentWeek)}
+              onAddWeek={() => setDialog("addWeek")}
+              onDuplicate={() => setDialog("duplicate")}
+              onRename={() => setDialog("rename")}
+              onDelete={() => setDialog("delete")}
             />
-          </TabsContent>
-
-          <TabsContent value="programme" className="zn-planview__programme">
-
-        {/* View mode + the way to add a session */}
-        <div className="zn-planview__toolbar">
-          <Button
-            variant="outline"
-            className="zn-planview__add-btn"
-            aria-pressed={showWorkoutPanel}
-            onClick={() => setShowWorkoutPanel(v => !v)}
-          >
-            <Plus />
-            {t("view.addWorkout")}
-          </Button>
-          <PlanViewModeSelector value={planViewMode} onChange={setPlanViewMode} />
+          </div>
         </div>
 
-        {/* Ce que les marques veulent dire : utile une fois, servi avant d'être
-            demandé le reste du temps. Replié, le contenu reste dans le DOM. */}
-        <details className="zn-disclosure zn-planview__hints">
-          <summary className="zn-disclosure__summary">
-            <span className="zn-kicker zn-fill">{t("completion.legendTitle")}</span>
-            <ChevronDown className="zn-disclosure__chevron" />
-          </summary>
-          <div className="zn-disclosure__panel zn-planview__hints-body">
-            {(["planned", "completed", "modified", "skipped"] as const).map((status) => (
-              <span key={status} className="zn-planview__hint">
-                <span className="zn-sess__check" data-status={status} aria-hidden="true">
-                  {status === "completed" && (
-                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M2 6l3 3 5-5" />
-                    </svg>
-                  )}
-                  {status === "modified" && (
-                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
-                    </svg>
-                  )}
-                  {status === "skipped" && (
-                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M3 3l6 6M9 3l-6 6" />
-                    </svg>
-                  )}
-                </span>
-                <span className="zn-kicker zn-kicker--xs">{t(`completion.${status}`)}</span>
-              </span>
-            ))}
-            <span className="zn-caption">{t("completion.hint")}</span>
-            <span className="zn-caption zn-planview__hint-fine">{t("view.rightClickOptions")}</span>
-            <span className="zn-caption zn-planview__hint-coarse">{t("view.longPressOptions")}</span>
-          </div>
-        </details>
-
-        {/* ── Week guidance for non-weekly views (free plans only) ── */}
-        {plan.config.planMode === "free" && planViewMode !== "weekly" && (() => {
-          const isMonthly = planViewMode === "monthly";
-          const visibleMin = isMonthly && monthlyVisibleWeeks.length > 0 ? monthlyVisibleWeeks[0] : 1;
-          const visibleMax = isMonthly && monthlyVisibleWeeks.length > 0 ? monthlyVisibleWeeks[monthlyVisibleWeeks.length - 1] : plan.totalWeeks;
-          const wn = Math.max(visibleMin, Math.min(visibleMax, guidanceWeekNum ?? initialWeek ?? 1));
-          const guidanceWeek = plan.weeks[wn - 1];
-          return guidanceWeek ? (
-            <WeekGuidancePanel
-              week={guidanceWeek}
-              daysPerWeek={plan.config.daysPerWeek}
-              showWeekNav
-              totalWeeks={plan.totalWeeks}
-              minWeek={visibleMin}
-              maxWeek={visibleMax}
-              onWeekChange={setGuidanceWeekNum}
-            />
-          ) : null;
-        })()}
-
-        {/* Calendar View */}
-        {planViewMode === "calendar" && (
-          <div className="zn-planview__board">
-            <div className="zn-planview__main">
-              <PlanCalendar
-                plan={plan}
-                workoutNames={workoutNames}
-                currentWeek={currentWeek}
-                initialWeek={initialWeek}
-                isEn={isEn}
-                onSessionClick={handleSessionClick}
-                onSessionMove={handleSessionMove}
-                onSessionDelete={handleSessionDelete}
-                onToggleComplete={handleToggleComplete}
-                onValidateWeek={handleValidateWeek}
-                onWorkoutAdd={handleWorkoutAdd}
-                onAddToDay={handleAddToDay}
-                planStartDate={plan.config.startDate || plan.config.createdAt}
-                blockedDays={blockedDaysSet}
-              />
-            </div>
-            {/* Desktop/tablet inline panel */}
-            {showWorkoutPanel && (
-              <div className="zn-planview__side">
-                <PlanWorkoutPanel
-                  isOpen={showWorkoutPanel}
-                  onClose={() => setShowWorkoutPanel(false)}
-                  inline
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Weekly View */}
-        {planViewMode === "weekly" && (
-          <div className="zn-planview__board">
-            <div className="zn-planview__main">
-              <PlanWeeklyView
-                plan={plan}
-                workoutNames={workoutNames}
-                currentWeek={currentWeek}
-                initialWeek={initialWeek}
-                isEn={isEn}
-                onWeekChange={setWeekParam}
-                planStartDate={plan.config.startDate || plan.config.createdAt}
-                onSessionClick={handleSessionClick}
-                onSessionMove={handleSessionMove}
-                onSessionDelete={handleSessionDelete}
-                onToggleComplete={handleToggleComplete}
-                onValidateWeek={handleValidateWeek}
-                onWorkoutAdd={handleWorkoutAdd}
-                onAddToDay={handleAddToDay}
-                onAddWeek={setAddWeekTarget}
-                blockedDays={blockedDaysSet}
-              />
-            </div>
-            {showWorkoutPanel && (
-              <div className="zn-planview__side">
-                <PlanWorkoutPanel
-                  isOpen={showWorkoutPanel}
-                  onClose={() => setShowWorkoutPanel(false)}
-                  inline
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Monthly View */}
-        {planViewMode === "monthly" && (
-          <div className="zn-planview__board">
-            <div className="zn-planview__main">
-              <PlanMonthlyView
-                plan={plan}
-                workoutNames={workoutNames}
-                currentWeek={currentWeek}
-                initialWeek={initialWeek}
-                isEn={isEn}
-                startDate={plan.config.startDate || plan.config.createdAt}
-                onSessionClick={handleSessionClick}
-                onSessionMove={handleSessionMove}
-                onSessionDelete={handleSessionDelete}
-                onToggleComplete={handleToggleComplete}
-                onValidateWeek={handleValidateWeek}
-                onWorkoutAdd={handleWorkoutAdd}
-                onAddToDay={handleAddToDay}
-                onWeekChange={setWeekParam}
-                onVisibleWeeksChange={setMonthlyVisibleWeeks}
-                blockedDays={blockedDaysSet}
-              />
-            </div>
-            {showWorkoutPanel && (
-              <div className="zn-planview__side">
-                <PlanWorkoutPanel
-                  isOpen={showWorkoutPanel}
-                  onClose={() => setShowWorkoutPanel(false)}
-                  inline
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Week List */}
-        {planViewMode === "list" && (
-          <div className="zn-planview__board">
-            <div className="zn-planview__main zn-planlist">
-          {plan.weeks.map((week) => {
-            const isExpanded = expandedWeeks.has(week.weekNumber);
-            const isCurrent =
-              currentWeek === week.weekNumber &&
-              currentWeek >= 1 &&
-              currentWeek <= plan.totalWeeks;
-            const phaseMeta = PHASE_META[week.phase];
-            const weekLabel = isEn
-              ? week.weekLabelEn || `W${week.weekNumber}`
-              : week.weekLabel || `S${week.weekNumber}`;
-
-            let weekDateRange = "";
-            if (parsedPlanStart) {
-              const shortMonths = isEn
-                ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-                : ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
-              const weekStart = new Date(parsedPlanStart);
-              weekStart.setDate(weekStart.getDate() + (week.weekNumber - 1) * 7);
-              const weekEnd = new Date(parsedPlanStart);
-              weekEnd.setDate(weekEnd.getDate() + (week.weekNumber - 1) * 7 + 6);
-              weekDateRange = weekStart.getMonth() === weekEnd.getMonth()
-                ? `${weekStart.getDate()}-${weekEnd.getDate()} ${shortMonths[weekStart.getMonth()]}`
-                : `${weekStart.getDate()} ${shortMonths[weekStart.getMonth()]} - ${weekEnd.getDate()} ${shortMonths[weekEnd.getMonth()]}`;
-            }
-
-            // The week in numbers: distance, time, and its share of the peak.
-            const weekFacts = [
-              week.sessions.length > 0
-                ? `${Math.round(computeWeekKm(week))} km · ${formatDurationMinutes(computeWeekDuration(week))}`
-                : null,
-              `${week.volumePercent} %`,
-            ]
-              .filter(Boolean)
-              .join(" · ");
-
-            return (
-              <Card
-                key={week.weekNumber}
-                size="flush"
-                className="zn-planlist__week"
-                data-week={week.weekNumber}
-                data-current={isCurrent ? "true" : undefined}
-              >
-                {/* Week header, opens and closes the week */}
-                <button
-                  type="button"
-                  className="zn-planlist__toggle"
-                  aria-expanded={isExpanded}
-                  aria-controls={`plan-week-${week.weekNumber}`}
-                  onClick={() => toggleWeek(week.weekNumber)}
-                >
-                  <span
-                    className="zn-fill zn-stack"
-                    style={{ "--gap": "var(--sp-1)" } as React.CSSProperties}
-                  >
-                    <span className="zn-planlist__label">
-                      {weekLabel} · {pick(phaseMeta, "label")}
-                    </span>
-                    {weekDateRange && (
-                      <span className="zn-mono zn-faint">{weekDateRange}</span>
-                    )}
-                  </span>
-
-                  {/* Les marques et les chiffres de la semaine, en UN bloc.
-                      Ils étaient quatre enfants de rang égal à côté du titre,
-                      tous insécables : mesuré à 390 px, la pastille (162),
-                      les chiffres (146), le chevron (16) et leurs écarts
-                      demandaient 372 px pour 316 disponibles. Le titre, seul
-                      élément élastique, était donc écrasé à ZÉRO, son texte
-                      débordait sous la pastille, et le chevron tombait hors
-                      de la carte, que `overflow: hidden` découpait.
-                      Groupés, ils descendent d'une ligne sous le titre sur
-                      téléphone (plan-view.css) au lieu de lui prendre sa
-                      place. Sur grand écran, la rangée ne bouge pas. */}
-                  {/* Les pastilles de l'en-tête passent au petit calibre.
-                      SEMAINE EN COURS au calibre normal mesurait 162 px
-                      sur 32 de haut pour trois mots de métadonnée, à côté d'un
-                      titre de semaine qui en fait 16 : la marque criait plus
-                      fort que ce qu'elle marquait. */}
-                  <span className="zn-planlist__aside">
-                    {isCurrent && (
-                      <Badge data-size="sm" className="zn-fixed">{t("view.currentWeek")}</Badge>
-                    )}
-                    {week.isRecoveryWeek && (
-                      <Badge data-size="sm" variant="secondary" className="zn-fixed">
-                        {t("calendar.recoveryWeek")}
-                      </Badge>
-                    )}
-                    {week.intermediateRace && (
-                      <Badge data-size="sm" variant="outline" className="zn-fixed">
-                        {t("intermediateGoals.weekLabel")}
-                      </Badge>
-                    )}
-
-                    <span
-                      className="zn-mono zn-faint zn-fixed zn-nowrap"
-                      title={t("view.trainingVolume")}
-                    >
-                      {weekFacts}
-                    </span>
-                  </span>
-                  {isExpanded ? (
-                    <ChevronUp size={16} className="zn-fixed" />
-                  ) : (
-                    <ChevronDown size={16} className="zn-fixed" />
-                  )}
-                </button>
-
-                {/* Week sessions */}
-                {isExpanded && (
-                  <div
-                    id={`plan-week-${week.weekNumber}`}
-                    className="zn-planlist__body"
-                  >
-                    {week.sessions.length === 0 ? (
-                      <p className="zn-body zn-body--sm zn-muted">
-                        {t("view.noSessionsThisWeek")}
-                      </p>
-                    ) : (
-                      (() => {
-                        const sortedSessions = [...week.sessions].sort((a, b) => {
-                          const priority = (s: typeof a) => {
-                            if (s.workoutId === "__race_day__") return 0;
-                            if (s.workoutId === "__intermediate_race__") return 0.5;
-                            if (s.sessionType === "long_run") return 1;
-                            if (s.isKeySession) return 2;
-                            if (s.sessionType === "endurance") return 3;
-                            return 4;
-                          };
-                          return priority(a) - priority(b);
-                        });
-                        return sortedSessions.map((session) => {
-                          const isRaceDay =
-                            session.workoutId === "__race_day__";
-                          const isIntermediateRace =
-                            session.workoutId === "__intermediate_race__";
-                          const isSpecialSession = isRaceDay || isIntermediateRace;
-                          const isActivity = session.workoutId.startsWith("__activity_");
-                          const sessionLabel =
-                            SESSION_TYPE_LABELS[session.sessionType];
-                          const originalIndex = week.sessions.indexOf(session);
-                          const isBlocked = blockedDaysSet.has(
-                            `${week.weekNumber}-${session.dayOfWeek}`,
-                          );
-
-                          /* Ouvrir le menu de la séance sur la rangée elle-même,
-                             comme le tableau de la semaine le fait sur sa carte :
-                             un appui court (ou un clic droit) n'importe où sur la
-                             ligne, SAUF sur ce qui a déjà un geste à soi, le nom,
-                             qui mène à la séance, et les boutons. */
-                          const openMenu = (
-                            e: React.MouseEvent<HTMLDivElement>,
-                          ) => {
-                            if (isSpecialSession) return;
-                            if ((e.target as HTMLElement).closest("a, button")) return;
-                            e.preventDefault();
-                            setListMenu({
-                              x: e.clientX,
-                              y: e.clientY,
-                              weekNumber: week.weekNumber,
-                              sessionIndex: originalIndex,
-                            });
-                          };
-
-                          return (
-                            <div
-                              key={originalIndex}
-                              className="zn-sess zn-planlist__sess"
-                              onClick={openMenu}
-                              onContextMenu={openMenu}
-                              data-kind={
-                                isRaceDay
-                                  ? "race"
-                                  : isIntermediateRace
-                                    ? "intermediate"
-                                    : undefined
-                              }
-                              data-status={
-                                !isSpecialSession && session.status
-                                  ? session.status
-                                  : undefined
-                              }
-                              data-blocked={
-                                !isSpecialSession && isBlocked ? "true" : undefined
-                              }
-                            >
-                              {/* Completion box, the same mark the calendar uses */}
-                              {!isSpecialSession && (
-                                <button
-                                  type="button"
-                                  role="checkbox"
-                                  aria-checked={
-                                    session.status === "completed" ||
-                                    session.status === "modified"
-                                  }
-                                  data-completion-key={`${week.weekNumber}-${originalIndex}`}
-                                  className="zn-sess__check"
-                                  data-status={session.status}
-                                  aria-label={
-                                    session.status === "completed" ? t("completion.completed")
-                                      : session.status === "modified" ? t("completion.modified")
-                                        : session.status === "skipped" ? t("completion.skipped")
-                                          : t("completion.markDone")
-                                  }
-                                  title={
-                                    session.status === "completed" ? t("completion.completed")
-                                      : session.status === "modified" ? t("completion.modified")
-                                        : session.status === "skipped" ? t("completion.skipped")
-                                          : t("completion.markDone")
-                                  }
-                                  onClick={() => handleToggleComplete(week.weekNumber, originalIndex)}
-                                >
-                                  {session.status === "completed" && (
-                                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                                      <path d="M2 6l3 3 5-5" />
-                                    </svg>
-                                  )}
-                                  {session.status === "modified" && (
-                                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                                      <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
-                                    </svg>
-                                  )}
-                                  {session.status === "skipped" && (
-                                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                                      <path d="M3 3l6 6M9 3l-6 6" />
-                                    </svg>
-                                  )}
-                                </button>
-                              )}
-
-                              <div className="zn-planlist__sess-main">
-                                {isRaceDay ? (
-                                  <span
-                                    className="zn-row"
-                                    style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
-                                  >
-                                    <Flag className="zn-sess__flag" />
-                                    <span className="zn-sess__race-label">
-                                      {t("view.raceDay")}
-                                    </span>
-                                  </span>
-                                ) : isIntermediateRace ? (
-                                  <span
-                                    className="zn-cluster"
-                                    style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}
-                                  >
-                                    <Flag className="zn-sess__flag" />
-                                    <span className="zn-sess__race-label">
-                                      {t("intermediateGoals.raceDayLabel")}
-                                    </span>
-                                    {week.intermediateRace && (
-                                      <>
-                                        {week.intermediateRace.raceName && (
-                                          <span className="zn-body zn-body--sm zn-muted">
-                                            {week.intermediateRace.raceName}
-                                          </span>
-                                        )}
-                                        <Badge variant="outline">
-                                          {RACE_DISTANCE_META[week.intermediateRace.raceDistance]
-                                            ? pick(RACE_DISTANCE_META[week.intermediateRace.raceDistance], "label")
-                                            : week.intermediateRace.raceDistance}
-                                        </Badge>
-                                        <span
-                                          className="zn-sess__priority"
-                                          data-priority={week.intermediateRace.priority}
-                                        >
-                                          {t(`intermediateGoals.badge.${week.intermediateRace.priority}`)}
-                                        </span>
-                                      </>
-                                    )}
-                                  </span>
-                                ) : isActivity ? (
-                                  <span className="zn-body zn-body--sm zn-muted">
-                                    {workoutNames[session.workoutId] || session.workoutId}
-                                  </span>
-                                ) : (
-                                  <>
-                                    <Link
-                                      to={`/workout/${session.workoutId}`}
-                                      state={{ from: "plan", planId: plan.id, planName: planName }}
-                                      className="zn-planlist__link"
-                                    >
-                                      {workoutNames[session.workoutId] ||
-                                        session.workoutId}
-                                    </Link>
-                                    {/* Les notes sont écrites en PARTIES jointes
-                                        par un `\n` (sessionBuilder). En HTML un
-                                        retour à la ligne se réduit à une espace,
-                                        et elles se lisaient collées : Allure
-                                        endurance : 7:37 - 8:47/km Sortie longue :
-                                        4 km (~33 min). Le point médian les
-                                        sépare, c'est déjà le séparateur de toutes
-                                        les lignes de faits de l'app. */}
-                                    {pick(session, "notes") && (
-                                      <p className="zn-caption zn-muted zn-clamp zn-planlist__note">
-                                        {pick(session, "notes")
-                                          .split("\n")
-                                          .filter(Boolean)
-                                          .join(" · ")}
-                                      </p>
-                                    )}
-                                  </>
-                                )}
-
-                                {/* Ce que la séance COÛTE, sur une seule ligne
-                                    mono sous son nom.
-
-                                    C'étaient trois objets posés à droite du
-                                    titre : une pastille pleine pour le type,
-                                    une horloge et ses chiffres, et la rangée
-                                    d'actions. La pastille pesait autant que le
-                                    nom qu'elle qualifiait, même hauteur, même
-                                    contour de 1.5px, et cinq par semaine, et
-                                    l'ensemble était insécable, ce qui écrasait
-                                    le titre (voir plan-view.css). En mono
-                                    discret, séparés par des points, ils
-                                    redeviennent ce qu'ils sont : une légende.
-
-                                    L'horloge part avec la pastille : 1h03
-                                    n'a jamais eu besoin d'un pictogramme pour
-                                    se lire comme une durée. */}
-                                {(!isSpecialSession || session.isKeySession) && (
-                                  <p className="zn-planlist__facts">
-                                    {/* L'étoile est un ÉTAT, pas une action.
-                                        Elle était rangée avec les quatre
-                                        boutons de la rangée d'actions, où elle
-                                        se lisait comme un cinquième bouton
-                                        qu'on ne peut pas presser. Sa place est
-                                        ici, avec ce qui décrit la séance. */}
-                                    {session.isKeySession && (
-                                      <span className="zn-sess__key" title={t("view.keySession")}>
-                                        <Star filled />
-                                      </span>
-                                    )}
-                                    {!isSpecialSession && isBlocked && (
-                                      <span className="zn-planlist__blocked">
-                                        {t("unavailability.blocked")}
-                                      </span>
-                                    )}
-                                    {!isSpecialSession && sessionLabel && (
-                                      <span className="zn-planlist__type">
-                                        {pickLocale(sessionLabel)}
-                                      </span>
-                                    )}
-                                    {!isSpecialSession && !isActivity && (
-                                      <span className="zn-planlist__cost">
-                                        {formatDurationMinutes(session.estimatedDurationMin)}
-                                        {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
-                                          <> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm} km</>
-                                        )}
-                                      </span>
-                                    )}
-                                  </p>
-                                )}
-                              </div>
-
-                              <div className="zn-planlist__meta">
-                                {/* Au doigt, les quatre gestes passent par le
-                                    menu : quatre glyphes de 14px alignés au
-                                    bout d'une ligne de 350 sont autant de
-                                    cibles qu'on rate, et rien ne dit lequel
-                                    fait quoi. Un seul bouton les nomme.
-                                    Sur bureau, où la place et le survol
-                                    existent, ce sont les glyphes qui restent
-                                    et le bouton qui s'efface (plan-view.css),
-                                    le clic droit ouvre le même menu. */}
-                                {!isSpecialSession && (
-                                  <button
-                                    type="button"
-                                    className="zn-planlist__more"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      const r = e.currentTarget.getBoundingClientRect();
-                                      setListMenu({
-                                        x: r.left + r.width / 2,
-                                        y: r.bottom,
-                                        weekNumber: week.weekNumber,
-                                        sessionIndex: originalIndex,
-                                      });
-                                    }}
-                                    title={t("view.sessionActions")}
-                                    aria-label={t("view.sessionActions")}
-                                  >
-                                    <MoreHorizontal />
-                                  </button>
-                                )}
-                                {!isSpecialSession && (
-                                  <div className="zn-planlist__acts">
-                                    <button
-                                      type="button"
-                                      className="zn-sess__action"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setSwapTarget({
-                                          weekNumber: week.weekNumber,
-                                          sessionIndex: originalIndex,
-                                          workoutId: session.workoutId,
-                                          sessionType: session.sessionType,
-                                        });
-                                      }}
-                                      title={t("view.replaceSession")}
-                                      aria-label={t("view.replaceSession")}
-                                    >
-                                      <ArrowLeftRight />
-                                    </button>
-                                    {isSessionSubstitutable(session) && (
-                                      <button
-                                        type="button"
-                                        className="zn-sess__action"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setSubstituteTarget({
-                                            weekNumber: week.weekNumber,
-                                            sessionIndex: originalIndex,
-                                          });
-                                        }}
-                                        title={t("view.substituteSession")}
-                                        aria-label={t("view.substituteSession")}
-                                      >
-                                        <Shuffle />
-                                      </button>
-                                    )}
-                                    <button
-                                      type="button"
-                                      className="zn-sess__action"
-                                      data-variant="destructive"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleSessionDelete(week.weekNumber, originalIndex);
-                                      }}
-                                      title={t("view.removeSession")}
-                                      aria-label={t("view.removeSession")}
-                                    >
-                                      <Trash2 />
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        });
-                      })()
-                    )}
-
-                    {/* Close the week out, offered only once something is done */}
-                    {(() => {
-                      const resolved = week.sessions.filter(s => s.status === "completed" || s.status === "skipped").length;
-                      const total = week.sessions.length;
-                      const allDone = resolved === total;
-                      const hasResolved = resolved > 0;
-
-                      if (allDone && hasResolved) {
-                        return (
-                          <p className="zn-mono zn-planlist__done">
-                            <svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                              <path d="M2 6l3 3 5-5" />
-                            </svg>
-                            {t("completion.validated")}
-                          </p>
-                        );
-                      }
-
-                      if (hasResolved && !allDone) {
-                        return (
-                          <button
-                            type="button"
-                            onClick={() => handleValidateWeek(week.weekNumber)}
-                            className="zn-planlist__validate"
-                          >
-                            <svg viewBox="0 0 12 12" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                              <path d="M2 6l3 3 5-5" />
-                            </svg>
-                            {t("completion.validate", { done: resolved, total })}
-                          </button>
-                        );
-                      }
-
-                      return null;
-                    })()}
-
-                    {/* Phone: the panel is a sheet, so the week carries its own way in */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAddTarget({ weekNumber: week.weekNumber, day: 0 });
-                        setShowWorkoutPanel(true);
-                      }}
-                      className="zn-planlist__add"
-                    >
-                      <Plus />
-                      {t("view.add")}
-                    </button>
-                  </div>
-                )}
-              </Card>
-            );
-          })}
-            </div>
-          {/* List view inline panel (tap to add, no drag) */}
-          {showWorkoutPanel && (
-            <div className="zn-planview__side">
-              <PlanWorkoutPanel
-                isOpen={showWorkoutPanel}
-                onClose={() => setShowWorkoutPanel(false)}
-                inline
-                onSelectWorkout={(workoutId) => {
-                  // Add to current week, first available day
-                  const targetWeek = Math.max(1, currentWeek);
-                  handleWorkoutAdd(workoutId, targetWeek, 0);
-                }}
-              />
-            </div>
-          )}
-
-          {/* Le menu d'une séance. Les entrées sont celles que la liste sait
-              faire ; le tableau de la semaine compose les siennes et rend le
-              même composant. Les libellés sont ceux des boutons qu'il
-              remplace, Trouver un parcours adapté, Clôturer la
-              séance, donc rien de nouveau à apprendre. */}
-          {listMenu && (() => {
-            const menuWeek = plan.weeks.find((w) => w.weekNumber === listMenu.weekNumber);
-            const menuSession = menuWeek?.sessions[listMenu.sessionIndex];
-            if (!menuSession) return null;
-            const close = () => setListMenu(null);
-            const isActivity = menuSession.workoutId.startsWith("__activity_");
-
-            const items: SessionActionMenuItem[] = [];
-            if (!isActivity) {
-              items.push({
-                key: "view",
-                icon: <Eye />,
-                label: t("calendar.viewSession"),
-                onSelect: () =>
-                  navigate(`/workout/${menuSession.workoutId}`, {
-                    state: { from: "plan", planId: plan.id, planName },
-                  }),
-              });
-            }
-            items.push({
-              key: "done",
-              icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12l5 5 9-9" />
-                </svg>
-              ),
-              label: t("completion.toggleDone"),
-              onSelect: () => handleToggleComplete(listMenu.weekNumber, listMenu.sessionIndex),
-            });
-            items.push({
-              key: "swap",
-              icon: <ArrowLeftRight />,
-              label: t("view.replaceSession"),
-              onSelect: () =>
-                setSwapTarget({
-                  weekNumber: listMenu.weekNumber,
-                  sessionIndex: listMenu.sessionIndex,
-                  workoutId: menuSession.workoutId,
-                  sessionType: menuSession.sessionType,
-                }),
-            });
-            if (isSessionSubstitutable(menuSession)) {
-              items.push({
-                key: "substitute",
-                icon: <Shuffle />,
-                label: t("view.substituteSession"),
-                onSelect: () =>
-                  setSubstituteTarget({
-                    weekNumber: listMenu.weekNumber,
-                    sessionIndex: listMenu.sessionIndex,
-                  }),
-              });
-            }
-            items.push({
-              key: "delete",
-              icon: <Trash2 />,
-              label: t("view.removeSession"),
-              variant: "destructive",
-              onSelect: () => handleSessionDelete(listMenu.weekNumber, listMenu.sessionIndex),
-            });
-
-            return (
-              <SessionActionMenu x={listMenu.x} y={listMenu.y} items={items} onClose={close} />
-            );
-          })()}
-          </div>
-        )}
-
-          </TabsContent>
-        </Tabs>
-
-        {/* 3, ce qui a changé, ce qu'il faut regarder : un avertissement
-            d'audit n'est pas plus urgent que la séance du soir */}
-        {(ended || pacesEstimated || plan._lastUndoableChange || auditFindings.length > 0) && (
-          <section className="zn-planview__band">
-            <div className="zn-planview__notes">
-              {/* An ended plan stays viewable as training history. */}
+        <header className="zn-planpage__plan">
+          <h1 className="zn-planpage__title">{planName}</h1>
+          {raceLine && <p className="zn-planpage__raceline">{raceLine}</p>}
+          {(ended || pacesEstimated || plan._lastUndoableChange || placedWeeks.length > 0) && (
+            <div className="zn-planpage__notes">
               {ended && <Alert kind="info">{t("view.planEnded")}</Alert>}
-
               {pacesEstimated && (
                 <Alert kind="info" title={t("view.estimatedPacesTitle")}>
-                  {t("view.estimatedPaces")}{" "}
-                  <Link to="/my-zones">{t("view.estimatedPacesLink")}</Link>
+                  {t("view.estimatedPaces")} <Link to="/my-zones">{t("view.estimatedPacesLink")}</Link>
                 </Alert>
               )}
-
               {plan._lastUndoableChange && (
                 <LastChangePanel
                   label={plan._lastUndoableChange.label}
@@ -2112,424 +471,153 @@ export function PlanViewPage() {
                   at={plan._lastUndoableChange.at}
                   onUndo={() => {
                     if (undoLastChange(plan.id)) {
-                      reloadPlan();
+                      reload();
                       toast.info(t("lastChange.undone"));
                     }
                   }}
                 />
               )}
-
-              {auditFindings.length > 0 && (
-                <PlanAuditPanel
-                  findings={auditFindings}
-                  onFix={handleAuditFix}
-                  onGoToWeek={(weekNumber) => {
-                    setWeekParam(weekNumber);
-                    // List view: expand the target week
-                    if (planViewMode === "list") {
-                      setExpandedWeeks((prev) => new Set([...prev, weekNumber]));
-                    }
-                    // Scroll to the week header in calendar/list views
-                    requestAnimationFrame(() => {
-                      const el = document.querySelector(`[data-week="${weekNumber}"]`);
-                      el?.scrollIntoView({ behavior: "smooth", block: "center" });
-                    });
-                  }}
-                />
+              {placedWeeks.length > 0 && (
+                <p className="zn-planpage__placed">
+                  {t("view.placedWeeks.label")}
+                  {placedWeeks.map((w) => (
+                    <Link key={w.id} to={`/weeks/${w.id}`}>
+                      {t("view.placedWeeks.item", { name: w.name, n: w.weekNumber })}
+                    </Link>
+                  ))}
+                </p>
               )}
             </div>
-          </section>
-        )}
+          )}
+        </header>
 
-        {/* 4, l'arc du plan : la largeur est la part, l'encre est l'intensité.
-            Il répond à et sur toute la durée ?, une question qu'on se pose
-            après avoir regardé sa semaine, d'où sa place ici, replié. */}
-        {plan.phases.length > 0 && (
-          <Section
-            collapsible
-            title={t("view.phases")}
-            className="zn-planview__band zn-planview__arc"
-          >
-            <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}>
-              <div
-                className="zn-planview__ribbon"
-                data-standing={standing}
-                style={{
-                  "--zn-at": `${standingAt}%`,
-                  "--zn-fig-aspect": pose.aspect,
-                  "--zn-fig-foot": pose.flip ? 1 - pose.foot : pose.foot,
-                  "--zn-where-chars": standingCaption?.length ?? 0,
-                } as React.CSSProperties}
-              >
-                <pose.Art
-                  className="zn-planview__figure"
-                  data-flip={pose.flip ? "true" : undefined}
-                  aria-hidden="true"
-                  focusable="false"
-                />
-                <div className="zn-planview__track">
-                  {plan.phases.map((phaseRange) => {
-                    const meta = PHASE_META[phaseRange.phase];
-                    const widthPercent =
-                      ((phaseRange.endWeek - phaseRange.startWeek + 1) /
-                        plan.totalWeeks) *
-                      100;
-                    return (
-                      <span
-                        key={`${phaseRange.phase}-${phaseRange.startWeek}`}
-                        className="zn-pswatch"
-                        data-phase={phaseRange.phase}
-                        data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
-                        style={{ "--zn-span": `${widthPercent}%` } as React.CSSProperties}
-                        title={`${pick(meta, "label")} · ${phaseRange.startWeek}-${phaseRange.endWeek}`}
-                      />
-                    );
-                  })}
-                </div>
-                {standing === "on" && (
-                  <span className="zn-planview__now" aria-hidden="true" />
-                )}
-                {standingCaption && (
-                  <span className="zn-planview__where zn-mono">{standingCaption}</span>
-                )}
-              </div>
-              <div className="zn-planview__legend">
-                {plan.phases.map((phaseRange) => (
-                  <span
-                    key={`legend-${phaseRange.phase}-${phaseRange.startWeek}`}
-                    className="zn-planview__legend-item"
-                  >
-                    <span
-                      className="zn-pswatch"
-                      data-phase={phaseRange.phase}
-                      data-hatch={phaseRange.phase === "recovery" ? "true" : undefined}
-                      aria-hidden="true"
-                    />
-                    <span className="zn-mono">
-                      {pick(PHASE_META[phaseRange.phase], "label")}
-                      {" · "}
-                      {phaseRange.startWeek}-{phaseRange.endWeek}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          </Section>
-        )}
-
-        {/* Unavailability Manager Sheet */}
-        <UnavailabilityManager
-          open={showUnavailabilityManager}
-          onOpenChange={setShowUnavailabilityManager}
-          planId={plan.id}
-          unavailabilities={plan.config.unavailabilities ?? []}
-          onSave={handleSaveUnavailabilities}
-        />
-
-        {/* Ajouter une de mes semaines, ou une du catalogue, à une semaine
-            du plan. Le geste vivait dans la feuille du cockpit seulement. */}
-        <AddWeekToPlanSheet
-          plan={plan}
-          weekNumber={addWeekTarget}
-          onOpenChange={(open) => { if (!open) setAddWeekTarget(null); }}
-          onMerged={reloadPlan}
-        />
-
-        {/* Reschedule Preview Dialog */}
-        <ReschedulePreviewDialog
-          open={reschedulePreview !== null}
-          onOpenChange={(open) => { if (!open) setReschedulePreview(null); }}
-          changes={reschedulePreview?.changes ?? []}
-          workoutNames={workoutNames}
-          onApply={handleApplyReschedule}
-        />
-
-        {/* Adaptation Preview Dialog */}
-        <AdaptationPreviewDialog
-          open={adaptationPreview !== null}
-          onOpenChange={(open) => { if (!open) setAdaptationPreview(null); }}
-          changes={adaptationPreview?.changes ?? []}
-          summary={adaptationPreview?.summary ?? ""}
-          summaryEn={adaptationPreview?.summaryEn ?? ""}
-          onApply={handleApplyAdaptation}
-        />
-
-        {/* Delete Confirmation Dialog */}
-        <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                {t("view.deleteTitle")}
-              </DialogTitle>
-              <DialogDescription>
-                {t("view.deleteConfirm", { name: planName })}
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">
-                  {t("view.cancel")}
-                </Button>
-              </DialogClose>
-              <Button variant="destructive" onClick={handleDelete}>
-                <Trash2 />
-                {t("view.delete")}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog
-          open={pendingWeekValidation !== null}
-          onOpenChange={(open) => {
-            if (!open) setPendingWeekValidation(null);
-          }}
-        >
-          <DialogContent className="zn-planview__dialog">
-            <DialogHeader>
-              <DialogTitle>{t("completion.confirmTitle")}</DialogTitle>
-              <DialogDescription>
-                {t("completion.confirmDescription", {
-                  count: pendingWeekValidation?.unresolved ?? 0,
-                  week: pendingWeekValidation?.weekNumber ?? 0,
-                })}
-              </DialogDescription>
-            </DialogHeader>
-            {pendingWeekValidation && pendingWeekValidation.unresolvedSessions.length > 0 && (
-              <ul className="zn-planview__unresolved">
-                {pendingWeekValidation.unresolvedSessions.map((s, i) => {
-                  const label = SESSION_TYPE_LABELS[s.sessionType];
-                  return (
-                    <li key={i}>
-                      <span className="zn-body zn-body--sm zn-truncate">
-                        {t(`daysShort.${s.dayOfWeek}`)} · {label ? pickLocale(label) : s.sessionType}
-                      </span>
-                      <span className="zn-mono zn-faint zn-fixed">
-                        {s.estimatedDurationMin} min
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
+        <div className="zn-planpage__grid">
+          <div className="zn-planpage__side" ref={weekTopRef}>
+            <PlanWeekHeader model={weekModel} onNavigate={setWeekParam} />
+            <WeekDayBars model={weekModel} />
+            {rings && (
+              <WeekRings model={rings} metric={metric} onMetricChange={pickMetric} variant="card" showHead={false} />
             )}
-            <DialogFooter className="zn-planview__choices">
-              <Button onClick={() => handleWeekValidationDecision("mark_skipped")}>
-                {t("completion.markRemainingSkipped")}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => handleWeekValidationDecision("keep_unresolved")}
-              >
-                {t("completion.keepForLater")}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            <div ref={sentinel} className="zn-planpage__sentinel" aria-hidden="true" />
+          </div>
 
-        {/* Date Edit Dialog */}
-        {/* Le corps porte la barre de défilement, pas le dialogue : voir
-            .zn-planview__datebody (plan-view.css). */}
-        <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
-          <DialogContent className="zn-planview__datedialog">
-            <DialogHeader>
-              <DialogTitle>
-                {t("view.editDatesTitle")}
-              </DialogTitle>
-              <DialogDescription>
-                {t("view.editDatesDescription")}
-              </DialogDescription>
-            </DialogHeader>
-            <div
-              className="zn-stack zn-planview__datebody"
-              style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
-            >
-              <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
-                <label htmlFor="edit-start-date" className="zn-label">
-                  {t("view.startDate")}
-                </label>
-                <DateInput
-                  id="edit-start-date"
-                  value={editStartDate}
-                  onChange={(e) => setEditStartDate(e.target.value)}
-                />
-              </div>
+          <section className="zn-planpage__week" aria-label={t("page.week.sessions", { n: selectedWeek })}>
+            <PlanDayList
+              model={weekModel}
+              mode="read"
+              nameOf={nameOf}
+              workoutOf={workoutOf}
+              raceName={plan.config.raceName}
+              intermediateRace={week.intermediateRace}
+              blockedDays={blockedDays}
+              onStatus={(index, anchor) => setCompletion({ week: selectedWeek, index, anchor })}
+              onOpen={(index) => openSession(selectedWeek, index)}
+              onOpenActivity={log.edit}
+              footer={footer}
+            />
 
-              {/* Quick action: next Monday */}
-              {(() => {
-                const now = new Date();
-                const dayOfWeek = now.getDay();
-                const daysUntilMonday = dayOfWeek === 0 ? 1 : dayOfWeek === 1 ? 7 : 8 - dayOfWeek;
-                const nextMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysUntilMonday);
-                const nextMondayStr = nextMonday.toISOString().split("T")[0];
-                return (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setEditStartDate(nextMondayStr)}
-                  >
-                    <Calendar />
-                    {t("view.startNextMonday")}
-                    {" "}({formatDateShort(nextMonday)})
-                  </Button>
-                );
-              })()}
+            {auditFindings.length > 0 && (
+              <section className="zn-planpage__review" aria-labelledby="zn-planpage-review">
+                <h2 id="zn-planpage-review" className="zn-planpage__h2">
+                  {t("page.review")}
+                </h2>
+                <PlanAuditPanel findings={auditFindings} onFix={actions.fixFinding} onGoToWeek={goToWeek} />
+              </section>
+            )}
+          </section>
+        </div>
 
-              {/* Summary */}
-              {editStartDate && (() => {
-                const [y, m, d] = editStartDate.split("-").map(Number);
-                const startD = new Date(y, m - 1, d);
-                const endD = new Date(y, m - 1, d + plan.totalWeeks * 7);
-                const weekdayStr = formatWeekday(startD);
-                const isPast = startD < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-
-                return (
-                  <>
-                    <div className="zn-planview__summary">
-                      <span className="zn-planview__summary-row zn-body zn-body--sm">
-                        <Calendar size={16} />
-                        <span>
-                          {t("view.startLabel")} : {formatDateMedium(startD)}
-                          {" "}
-                          <span className="zn-muted">({weekdayStr})</span>
-                        </span>
-                      </span>
-                      <span className="zn-planview__summary-row zn-body zn-body--sm">
-                        <Flag size={16} />
-                        <span>{t("view.endLabel")} : {formatDateMedium(endD)}</span>
-                      </span>
-                      <span className="zn-planview__summary-row zn-body zn-body--sm">
-                        <Clock size={16} />
-                        <span>{plan.totalWeeks} {t("duration.weeks")}</span>
-                      </span>
-                    </div>
-                    {isPast && (
-                      <Alert kind="warning">{t("view.pastDateWarning")}</Alert>
-                    )}
-                  </>
-                );
-              })()}
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">
-                  {t("view.cancel")}
-                </Button>
-              </DialogClose>
-              <Button
-                onClick={() => {
-                  if (editStartDate) {
-                    const [y, m, d] = editStartDate.split("-").map(Number);
-                    const endD = new Date(y, m - 1, d + plan.totalWeeks * 7);
-                    plan.config.startDate = editStartDate;
-                    plan.config.endDate = endD.toISOString().split("T")[0];
-                  } else {
-                    delete plan.config.startDate;
-                    delete plan.config.endDate;
-                  }
-                  const saved = savePlan(plan);
-                  if (!saved.ok) {
-                    toast.failure(t("errors.planSaveFailed"), saved);
-                    return;
-                  }
-                  reloadPlan();
-                  setShowDateDialog(false);
-                }}
-              >
-                {t("view.save")}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        {/* Workout Library Panel (mobile bottom sheet) */}
-        <PlanWorkoutPanel
-          isOpen={showWorkoutPanel}
-          onClose={() => { setShowWorkoutPanel(false); setAddTarget(null); }}
-          onSelectWorkout={addTarget ? (workoutId) => {
-            handleWorkoutAdd(workoutId, addTarget.weekNumber, addTarget.day);
-            setAddTarget(null);
-          } : undefined}
-        />
-
-        {/* An activity's duration and effort, opened from its card or menu. */}
-        <WeekSessionSheet
-          target={activitySheetTarget}
-          commuteProfileMin={commuteProfileMin}
-          onClose={() => setActivityTarget(null)}
-          onSave={handleActivitySave}
-          onView={() => {}}
-          onMove={(index, day) => {
-            if (activityTarget) handleSessionMove(activityTarget.weekNumber, index, activityTarget.weekNumber, day);
-          }}
-          onDelete={(index) => {
-            if (activityTarget) handleSessionDelete(activityTarget.weekNumber, index);
-          }}
-        />
-
-        {/* Swap Session Dialog */}
-        <SwapSessionDialog
-          open={swapTarget !== null}
-          onOpenChange={(open) => !open && setSwapTarget(null)}
-          currentWorkoutId={swapTarget?.workoutId ?? ""}
-          sessionType={swapTarget?.sessionType ?? ""}
-          onSelect={handleSwapSession}
-        />
-
-        {/* Cross-discipline Substitution Dialog */}
-        <SubstituteSessionDialog
-          open={substituteTarget !== null}
-          onOpenChange={(open) => !open && setSubstituteTarget(null)}
-          plannedSession={plannedSubstituteSession}
-          onSelect={handleSubstituteSession}
-        />
-
-        {/* Noter une activité complémentaire. Le MÊME panneau que le cockpit
-            et que le journal : trois portes, une seule saisie, donc elles ne
-            peuvent pas se mettre à demander des choses différentes. */}
-        <ActivityLogPanel {...log.panel} />
+        {!wide && rings && (
+          <div className="zn-weekstrip" data-on={stripOn || undefined} aria-hidden="true">
+            <span className="zn-weekstrip__week">
+              {t("page.week.title", { n: selectedWeek })}
+              <small>{f.range(weekModel.from, weekModel.to)}</small>
+            </span>
+            <span className="zn-weekstrip__rings">
+              {ringValues.map(({ ring, state, value }) => (
+                <span key={ring.kind} className="zn-weekstrip__ring">
+                  <WeekRing
+                    kind={ring.kind}
+                    state={state}
+                    reference={rings.reference}
+                    segments={ring.kind === "strength" && rings.reference === "plan" ? ring.targetSessions : 0}
+                    size="strip"
+                  />
+                  <span>{value}</span>
+                </span>
+              ))}
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Session completion panel, popover on desktop, sheet on mobile */}
-      {(() => {
-        if (!completionTarget) {
-          return (
-            <SessionCompletionPanel
-              open={false}
-              onOpenChange={() => setCompletionTarget(null)}
-              session={null}
-              weekNumber={0}
-              sessionName=""
-              onSave={handleCompletionSave}
-            />
+      <PlanSheet
+        open={sheet === "plan"}
+        onOpenChange={(open) => {
+          if (!open) setParam("sheet", null);
+        }}
+        plan={plan}
+        model={cardModel}
+        selectedWeek={selectedWeek}
+        currentWeek={currentWeek}
+        side={wide ? "right" : "bottom"}
+        onSelectWeek={(n) => {
+          setSearchParams(
+            (prev) => {
+              prev.set("week", String(n));
+              prev.delete("sheet");
+              return prev;
+            },
+            { replace: true },
           );
-        }
-        const targetWeek = plan.weeks.find(w => w.weekNumber === completionTarget.weekNumber);
-        const targetSession = targetWeek?.sessions[completionTarget.sessionIndex] ?? null;
-        const targetName = targetSession ? (workoutNames[targetSession.workoutId] || targetSession.workoutId) : "";
-        // Find the visible checkbox (mobile layout duplicates elements with display:none).
-        // La case cliquée l'emporte : la bande cette semaine et la grille
-        // affichent la même clé en même temps, et le repli sur la première
-        // visible ancrerait le popover 700px au-dessus du doigt.
-        const anchorEl =
-          completionAnchor.current && completionAnchor.current.offsetWidth > 0
-            ? completionAnchor.current
-            : Array.from(
-                document.querySelectorAll<HTMLElement>(
-                  `[data-completion-key="${completionTarget.weekNumber}-${completionTarget.sessionIndex}"]`,
-                ),
-              ).find((el) => el.offsetWidth > 0) ?? null;
-        return (
-          <SessionCompletionPanel
-            open={true}
-            onOpenChange={(open) => { if (!open) setCompletionTarget(null); }}
-            session={targetSession}
-            weekNumber={completionTarget.weekNumber}
-            sessionName={targetName}
-            onSave={handleCompletionSave}
-            anchorElement={anchorEl}
-          />
-        );
-      })()}
+        }}
+        onLogActivity={() => log.logOn()}
+      />
+
+      <PlanDialogs
+        plan={plan}
+        planName={planName}
+        dialog={dialog}
+        onClose={() => setDialog(null)}
+        selectedWeek={selectedWeek}
+        workoutNames={workoutNames}
+        actions={actions}
+        reload={reload}
+        onDuplicated={(newId) => navigate(`/plan/${newId}`)}
+        onDeleted={() => navigate("/plans")}
+      />
+
+      <WeekSessionSheet
+        target={activitySheetTarget}
+        commuteProfileMin={commuteProfileMin}
+        onClose={() => setActivityTarget(null)}
+        onSave={(index, next) => {
+          if (activityTarget && actions.saveSession(activityTarget.week, index, next)) setActivityTarget(null);
+        }}
+        onView={() => {}}
+        onMove={(index, day) => {
+          if (activityTarget) actions.moveTo(activityTarget.week, index, activityTarget.week, day);
+        }}
+        onDelete={(index) => {
+          if (activityTarget) actions.removeSession(activityTarget.week, index);
+        }}
+      />
+
+      <SessionCompletionPanel
+        open={completion !== null}
+        onOpenChange={(open) => {
+          if (!open) setCompletion(null);
+        }}
+        session={completionSession}
+        weekNumber={completion?.week ?? 0}
+        sessionName={completionSession ? nameOf(completionSession) : ""}
+        onSave={(data) => {
+          if (completion && actions.saveCompletion(completion.week, completion.index, data)) setCompletion(null);
+        }}
+        anchorElement={completion?.anchor ?? null}
+      />
+
+      <ActivityLogPanel {...log.panel} />
     </>
   );
 }

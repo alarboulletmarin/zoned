@@ -45,3 +45,804 @@
   text-decoration-thickness: 2px;
   text-underline-offset: var(--sp-2);
 }
+
+/* ── La page ─────────────────────────────────────────────────────────── */
+
+.zn-planpage {
+  inline-size: 100%;
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  box-sizing: border-box;
+  padding: var(--sp-8) var(--pad-screen-x) var(--sp-19);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.zn-planpage__empty {
+  display: grid;
+  place-items: center;
+  min-block-size: 40vh;
+}
+
+/* Un bouton icône rond de 44 px, filet d'encre, papier relevé. */
+.zn-iconbtn {
+  flex: none;
+  inline-size: var(--hit-min);
+  block-size: var(--hit-min);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--surface-card);
+  color: var(--text-body);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-iconbtn:hover:not(:disabled) {
+  background: var(--surface-band);
+}
+
+.zn-iconbtn:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-iconbtn:disabled {
+  border-color: var(--state-disabled-border);
+  color: var(--state-disabled-text);
+  background: transparent;
+  cursor: default;
+}
+
+.zn-iconbtn--flat {
+  border-color: transparent;
+  background: transparent;
+}
+
+/* ── L'en-tête ───────────────────────────────────────────────────────── */
+
+.zn-planpage__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.zn-planpage__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--hit-min);
+  font: var(--type-label);
+  color: var(--text-body);
+  text-decoration: none;
+}
+
+.zn-planpage__back:hover {
+  text-decoration: underline;
+  text-underline-offset: var(--sp-2);
+}
+
+.zn-planpage__tools {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.zn-planpage__plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+.zn-planpage__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-display-3);
+  line-height: var(--lh-display-3);
+  letter-spacing: var(--ls-display-3);
+  overflow-wrap: anywhere;
+}
+
+.zn-planpage__raceline {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-muted);
+}
+
+.zn-planpage__cd {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h4);
+  color: var(--text-body);
+}
+
+.zn-planpage__notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-2);
+}
+
+.zn-planpage__placed {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.zn-planpage__placed a {
+  color: var(--text-body);
+}
+
+/* ── La grille : une colonne, puis deux à partir de 1024 px ─────────── */
+
+.zn-planpage__grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.zn-planpage__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  min-inline-size: 0;
+  scroll-margin-block-start: calc(var(--topbar-h) + var(--sp-8));
+}
+
+.zn-planpage__sentinel {
+  block-size: 1px;
+  margin-block-start: calc(-1 * var(--sp-8));
+}
+
+.zn-planpage__week {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  min-inline-size: 0;
+}
+
+@media (min-width: 1024px) {
+  .zn-planpage__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+    gap: var(--sp-19);
+    align-items: start;
+  }
+
+  .zn-planpage__side {
+    position: sticky;
+    inset-block-start: calc(var(--topbar-h) + var(--sp-8));
+  }
+}
+
+.zn-planpage__h2 {
+  margin: 0 0 var(--sp-6);
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+}
+
+/* ── L'en-tête de semaine ────────────────────────────────────────────── */
+
+.zn-weekhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.zn-weekhead__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+}
+
+.zn-weekhead__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+}
+
+.zn-weekhead__of {
+  font-weight: var(--fw-regular);
+  color: var(--text-muted);
+}
+
+.zn-weekhead__meta {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-weekhead__nav {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+/* ── Les jours ───────────────────────────────────────────────────────── */
+
+.zn-plandays {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.zn-planday {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  gap: var(--sp-6);
+  border-radius: var(--r-lg);
+}
+
+.zn-planday__date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.zn-planday__box {
+  inline-size: 56px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: var(--sp-3);
+  border: var(--bw-heavy) solid transparent;
+  border-radius: var(--r-lg);
+}
+
+.zn-planday[data-today] .zn-planday__box {
+  border-color: var(--line-strong);
+}
+
+.zn-planday__dow,
+.zn-planday__mon {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-planday__num {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Plusieurs séances le même jour : un rail les relie, sous la date. */
+.zn-planday__rail {
+  flex: 1;
+  inline-size: var(--bw-rule);
+  min-block-size: var(--sp-10);
+  background: var(--line-strong);
+}
+
+.zn-planday__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+  padding-block-start: var(--sp-2);
+}
+
+.zn-planday__rest {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: 64px;
+  font-size: var(--fs-body-lg);
+  color: var(--text-muted);
+}
+
+.zn-planday__add {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--hit-min);
+  padding: 0 var(--sp-2);
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  font: var(--type-body);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.zn-planday__add:hover {
+  color: var(--text-body);
+}
+
+.zn-planday[data-over] {
+  outline: var(--bw-heavy) dashed var(--line-strong);
+  outline-offset: var(--sp-2);
+}
+
+/* ── Une séance ──────────────────────────────────────────────────────── */
+
+.zn-plansess {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.zn-plansess__tag {
+  align-self: flex-start;
+  padding: 2px var(--sp-4);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.zn-plansess__tag[data-blocked] {
+  border-style: dashed;
+  color: var(--text-muted);
+}
+
+.zn-plansess__card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: 68px;
+  padding: var(--sp-4) var(--sp-5);
+  box-sizing: border-box;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-plansess__card[data-edit] {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding-inline-end: var(--sp-2);
+}
+
+/* La tuile de statut : un bouton de 44 px, sa marque de 32. */
+.zn-plansess__state {
+  position: relative;
+  inline-size: var(--hit-min);
+  block-size: var(--hit-min);
+  display: grid;
+  place-items: center;
+  margin: calc(-1 * var(--sp-2));
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.zn-plansess__state::before {
+  content: "";
+  position: absolute;
+  inset: calc((var(--hit-min) - 32px) / 2);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+  background: var(--surface-card);
+}
+
+.zn-plansess__state > svg {
+  position: relative;
+}
+
+.zn-plansess__state[data-status="done"] {
+  color: var(--text-inverse);
+}
+
+.zn-plansess__state[data-status="done"]::before {
+  background: var(--surface-inverse);
+  border-color: var(--surface-inverse);
+}
+
+.zn-plansess__state[data-status="skipped"] {
+  color: var(--accent-press);
+}
+
+.zn-plansess__state[data-status="skipped"]::before {
+  background: var(--state-danger-soft);
+  border-color: transparent;
+}
+
+.zn-plansess__state:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: -2px;
+  border-radius: var(--r-md);
+}
+
+span.zn-plansess__state {
+  cursor: default;
+}
+
+.zn-plansess__open {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-2) 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-body);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.zn-plansess__open[data-static],
+.zn-plansess__open:disabled {
+  cursor: default;
+}
+
+.zn-plansess__open:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+.zn-plansess__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  block-size: calc(var(--fs-body) * 1.3);
+  color: var(--text-muted);
+}
+
+.zn-plansess__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+}
+
+.zn-plansess__name {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  line-height: 1.3;
+}
+
+.zn-plansess[data-status="skipped"] .zn-plansess__name {
+  color: var(--text-muted);
+}
+
+.zn-plansess__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-8);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-plansess__note {
+  font: var(--type-caption);
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* La course : drapeau, Course et son nom, au trait épais. */
+.zn-plansess__race {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: 68px;
+  padding: var(--sp-4) var(--sp-6);
+  box-sizing: border-box;
+  border: var(--bw-heavy) solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+}
+
+.zn-plansess__racename {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h4);
+  line-height: 1.2;
+}
+
+.zn-plansess__racesub {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* Le mode Modifier : la poignée et la carte qu'on glisse. */
+.zn-plansess__grip {
+  inline-size: 28px;
+  block-size: var(--hit-min);
+  display: grid;
+  place-items: center;
+  margin-inline-start: calc(-1 * var(--sp-2));
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-faint);
+  cursor: grab;
+  touch-action: none;
+}
+
+.zn-plansess__grip svg {
+  fill: currentColor;
+}
+
+.zn-plansess__grip:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+}
+
+.zn-plansess[data-dragging] {
+  position: relative;
+  z-index: 5;
+  transform: translate(var(--zn-dx, 0), var(--zn-dy, 0));
+  pointer-events: none;
+}
+
+.zn-plansess[data-dragging] .zn-plansess__card {
+  box-shadow: var(--shadow-block);
+  cursor: grabbing;
+}
+
+/* ── Sous la liste ───────────────────────────────────────────────────── */
+
+.zn-planpage__after {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-6);
+  padding-inline-start: calc(60px + var(--sp-6));
+}
+
+.zn-planpage__validated {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.zn-planpage__addactivity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--hit-min);
+  padding: 0 var(--sp-2);
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  font: var(--type-body);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.zn-planpage__addactivity:hover {
+  color: var(--text-body);
+}
+
+/* ── Le bandeau des anneaux, au défilement ───────────────────────────── */
+
+/* Sous la barre du haut, jamais par-dessus : son z-index est sous celui de
+   .zn-topbar (40). Il double les anneaux sortis de l'écran, il est donc
+   caché aux lecteurs d'écran. */
+.zn-weekstrip {
+  position: fixed;
+  z-index: 39;
+  inset-inline: 0;
+  inset-block-start: var(--topbar-h);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-4) var(--pad-screen-x);
+  background: var(--surface-page);
+  border-block-end: var(--border-rule);
+  transform: translateY(-110%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    visibility 0s linear var(--dur-base);
+}
+
+.zn-weekstrip[data-on] {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zn-weekstrip,
+  .zn-weekstrip[data-on] {
+    transition: none;
+  }
+}
+
+.zn-weekstrip__week {
+  display: flex;
+  flex-direction: column;
+  font: var(--type-label);
+  min-inline-size: 0;
+}
+
+.zn-weekstrip__week small {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-weekstrip__rings {
+  display: flex;
+  gap: var(--sp-6);
+}
+
+.zn-weekstrip__ring {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font: var(--type-label);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.zn-weekstrip__ring svg {
+  inline-size: 30px;
+  block-size: 30px;
+}
+
+@media (max-width: 380px) {
+  .zn-weekstrip__rings {
+    gap: var(--sp-4);
+  }
+
+  .zn-weekstrip__ring svg {
+    inline-size: 24px;
+    block-size: 24px;
+  }
+}
+
+/* ── La feuille Le plan ──────────────────────────────────────────────── */
+
+.zn-plansheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.zn-plansheet__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-inline-end: var(--sp-16);
+}
+
+.zn-plansheet__title {
+  margin: 0;
+}
+
+.zn-plansheet__sub {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-plansheet__weeks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  background: var(--surface-card);
+  overflow: hidden;
+}
+
+.zn-plansheet__weeks li + li {
+  border-block-start: var(--border-divider);
+}
+
+.zn-plansheet__weeks button {
+  inline-size: 100%;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: 56px;
+  padding: var(--sp-3) var(--sp-7);
+  border: 0;
+  background: transparent;
+  color: var(--text-body);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.zn-plansheet__weeks button:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: -3px;
+}
+
+.zn-plansheet__weeks button[aria-current] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.zn-plansheet__weeks button[aria-current] small,
+.zn-plansheet__weeks button[aria-current] .zn-plansheet__of {
+  color: inherit;
+  opacity: 0.75;
+}
+
+.zn-plansheet__wn {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+}
+
+.zn-plansheet__wp {
+  display: flex;
+  flex-direction: column;
+  font: var(--type-label);
+  min-inline-size: 0;
+}
+
+.zn-plansheet__wp small {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-plansheet__wv {
+  font: var(--type-body-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.zn-plansheet__of {
+  color: var(--text-muted);
+}
+
+.zn-planpage__review .zn-section,
+.zn-planpage__review > div {
+  margin: 0;
+}
+
+/* Le bouton de validation peut passer à la ligne plutôt que déborder. */
+.zn-planpage__after > .zn-btn {
+  max-inline-size: 100%;
+  block-size: auto;
+  min-block-size: var(--hit-min);
+  white-space: normal;
+  text-align: start;
+}
