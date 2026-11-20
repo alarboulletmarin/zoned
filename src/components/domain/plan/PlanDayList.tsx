@@ -319,6 +319,8 @@ export function PlanDayList({
               data-today={day.isToday || undefined}
               data-rest={day.rest || undefined}
               data-over={over || undefined}
+              data-week={model.weekNumber}
+              data-day={day.dayOfWeek}
               data-drop-week={editing ? model.weekNumber : undefined}
               data-drop-day={editing ? day.dayOfWeek : undefined}
             >

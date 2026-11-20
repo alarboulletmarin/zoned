@@ -871,7 +871,9 @@
     "tools": {
       "plan": "The plan, every week",
       "edit": "Edit the plan",
-      "more": "Actions for the plan {{name}}"
+      "more": "Actions for the plan {{name}}",
+      "planShort": "The plan",
+      "editShort": "Edit"
     },
     "countdown": {
       "days": "D-{{count}}",
@@ -889,7 +891,9 @@
       "range": "{{from}}-{{to}}",
       "prev": "Previous week",
       "next": "Next week",
-      "sessions": "The sessions of week {{n}}"
+      "sessions": "The sessions of week {{n}}",
+      "today": "This week",
+      "todayLabel": "Back to the current week, week {{n}}"
     },
     "bars": {
       "label": "The seven days of week {{n}}",
@@ -981,7 +985,8 @@
       "leaveBody": "The changes made in this mode will be lost.",
       "leaveStay": "Keep editing",
       "leaveDiscard": "Leave without saving",
-      "dropHere": "Drop here"
+      "dropHere": "Drop here",
+      "loadNext": "Load the next week"
     },
     "change": {
       "title": "Change session",
@@ -1029,6 +1034,10 @@
     "validate": {
       "label": "Close the week",
       "count": "{{done}}/{{total}} closed"
+    },
+    "dock": {
+      "label": "Week and editing",
+      "week": "Week {{n}}, {{dates}}, see every week"
     },
     "ticks": "Minute marks"
   }

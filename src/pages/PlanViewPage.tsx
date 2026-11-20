@@ -27,6 +27,7 @@ import { ChangeSessionSheet, type ChangeTarget } from "@/components/domain/plan/
 import { MoveSessionDialog, type MoveTarget } from "@/components/domain/plan/MoveSessionDialog";
 import { PlanDayList, type PlanDayListEditActions } from "@/components/domain/plan/PlanDayList";
 import { PlanEditDock } from "@/components/domain/plan/PlanEditDock";
+import { PlanWeekDock } from "@/components/domain/plan/PlanWeekDock";
 import { usePlanDrag } from "@/components/domain/plan/usePlanDrag";
 import { usePlanEditMode } from "@/components/domain/plan/usePlanEditMode";
 import { PlanDialogs, type PlanDialog } from "@/components/domain/plan/PlanDialogs";
@@ -323,6 +324,26 @@ export function PlanViewPage() {
     [setWeekParam],
   );
 
+  /* Changer de semaine depuis le bas de la liste remonte au début de la
+     nouvelle semaine : on n'atterrit pas sur le dimanche suivant sans savoir
+     où l'on est. Si le début de la semaine est déjà à l'écran, rien ne bouge. */
+  const gridRef = useRef<HTMLDivElement>(null);
+  const revealWeekTop = useCallback(() => {
+    requestAnimationFrame(() => {
+      const grid = gridRef.current;
+      if (!grid) return;
+      const topbar = document.querySelector(".zn-topbar")?.getBoundingClientRect().bottom ?? 0;
+      if (grid.getBoundingClientRect().top < topbar) grid.scrollIntoView({ block: "start" });
+    });
+  }, []);
+  const changeWeek = useCallback(
+    (week: number) => {
+      setWeekParam(week);
+      revealWeekTop();
+    },
+    [setWeekParam, revealWeekTop],
+  );
+
   // ── Le bandeau des anneaux, au défilement (téléphone et tablette) ───
   const sentinel = useRef<HTMLDivElement>(null);
   const [stripOn, setStripOn] = useState(false);
@@ -347,11 +368,59 @@ export function PlanViewPage() {
   );
   const edit = usePlanEditMode(plan?.id, editing, setEditing, reload);
   const [prevWeeks, setPrevWeeks] = useState(0);
+  const [nextWeeks, setNextWeeks] = useState(0);
+
+  /* Entrer en mode Modifier, ou en sortir, garde le jour qu'on regardait :
+     le premier jour dont le bas est encore sous la barre du haut. En haut de
+     la page, pas d'ancre, on repart du haut. */
+  const anchor = useRef<{ week: number; day: number } | null | undefined>(undefined);
+  const captureAnchor = useCallback(() => {
+    const topbar = document.querySelector(".zn-topbar")?.getBoundingClientRect().bottom ?? 0;
+    const days = Array.from(document.querySelectorAll<HTMLElement>(".zn-planday"));
+    const first = days.find((el) => el.getBoundingClientRect().bottom > topbar + 80);
+    const grid = gridRef.current ?? document.querySelector(".zn-planpage__editweek");
+    const atTop = !grid || grid.getBoundingClientRect().top >= topbar;
+    anchor.current =
+      first && !atTop ? { week: Number(first.dataset.week), day: Number(first.dataset.day) } : null;
+  }, []);
+  const enterEdit = useCallback(() => {
+    captureAnchor();
+    edit.enter();
+  }, [captureAnchor, edit]);
+  const leaveEdit = useCallback(
+    (how: "cancel" | "save") => {
+      captureAnchor();
+      if (how === "cancel") edit.cancel();
+      else edit.save();
+    },
+    [captureAnchor, edit],
+  );
+  useEffect(() => {
+    const a = anchor.current;
+    if (a === undefined) return;
+    // Le jour regardé en mode Modifier appartient peut-être à une autre
+    // semaine que la semaine choisie : la lecture s'y rend d'abord. Une mise
+    // à jour de l'URL à part, après la sortie du mode, sinon les deux
+    // s'écrasent l'une l'autre.
+    if (!editing && a && a.week !== selectedWeek) {
+      setWeekParam(a.week);
+      return;
+    }
+    anchor.current = undefined;
+    requestAnimationFrame(() => {
+      const el = a && document.querySelector<HTMLElement>(`.zn-planday[data-week="${a.week}"][data-day="${a.day}"]`);
+      if (el) el.scrollIntoView({ block: "start" });
+      else window.scrollTo(0, 0);
+    });
+  }, [editing, selectedWeek, setWeekParam]);
   const [moveTarget, setMoveTarget] = useState<MoveTarget | null>(null);
   const [changeTarget, setChangeTarget] = useState<ChangeTarget | null>(null);
   const [addTarget, setAddTarget] = useState<{ week: number; day: number } | null>(null);
   useEffect(() => {
-    if (!editing) setPrevWeeks(0);
+    if (!editing) {
+      setPrevWeeks(0);
+      setNextWeeks(0);
+    }
   }, [editing]);
 
   /** Un geste du brouillon : l'état d'avant est gardé, le brouillon marqué. */
@@ -589,7 +658,7 @@ export function PlanViewPage() {
   // Le mode Modifier montre la semaine choisie et la suivante, plus les
   // semaines d'avant qu'on a chargées une à une.
   const firstEditWeek = Math.max(1, selectedWeek - prevWeeks);
-  const lastEditWeek = Math.min(plan.totalWeeks, selectedWeek + 1);
+  const lastEditWeek = Math.min(plan.totalWeeks, selectedWeek + 1 + nextWeeks);
   const editWeeks: number[] = [];
   for (let n = firstEditWeek; n <= lastEditWeek; n++) editWeeks.push(n);
   const editBody = (
@@ -621,7 +690,13 @@ export function PlanViewPage() {
           </section>
         );
       })}
-      <PlanEditDock onCancel={edit.cancel} onSave={edit.save} />
+      {lastEditWeek < plan.totalWeeks && (
+        <button type="button" className="zn-planpage__prev zn-planpage__next" onClick={() => setNextWeeks((n) => n + 1)}>
+          <ArrowUp size={16} />
+          {t("page.edit.loadNext")}
+        </button>
+      )}
+      <PlanEditDock onCancel={() => leaveEdit("cancel")} onSave={() => leaveEdit("save")} />
     </div>
   );
 
@@ -629,30 +704,15 @@ export function PlanViewPage() {
     <>
       <SEOHead noindex={true} title={planName} canonical={`/plan/${plan.id}`} />
       {editing ? editBody : (
-      <div className="zn-planpage" data-wide={wide || undefined}>
+      <div className="zn-planpage" data-wide={wide || undefined} data-dock={!wide || undefined}>
         <div className="zn-planpage__top">
           <Link to="/plans" className="zn-planpage__back">
             <ArrowLeft size={16} />
             {t("page.back")}
           </Link>
+          {/* En haut, les gestes rares seulement. Le plan et Modifier sont
+              dans la barre du bas sous 1024 px, dans la colonne fixe au-delà. */}
           <div className="zn-planpage__tools">
-            <button
-              type="button"
-              className="zn-iconbtn"
-              aria-label={t("page.tools.plan")}
-              aria-haspopup="dialog"
-              onClick={() => setParam("sheet", "plan", false)}
-            >
-              <Calendar size={20} />
-            </button>
-            <button
-              type="button"
-              className="zn-iconbtn"
-              aria-label={t("page.tools.edit")}
-              onClick={edit.enter}
-            >
-              <Pencil size={18} />
-            </button>
             <PlanMenu
               plan={plan}
               name={planName}
@@ -708,9 +768,32 @@ export function PlanViewPage() {
           )}
         </header>
 
-        <div className="zn-planpage__grid">
+        <div className="zn-planpage__grid" ref={gridRef}>
           <div className="zn-planpage__side" ref={weekTopRef}>
-            <PlanWeekHeader model={weekModel} onNavigate={setWeekParam} />
+            {wide && (
+              <div className="zn-sidetools">
+                <button
+                  type="button"
+                  className="zn-sidetools__btn"
+                  aria-label={t("page.tools.plan")}
+                  aria-haspopup="dialog"
+                  onClick={() => setParam("sheet", "plan", false)}
+                >
+                  <Calendar size={18} />
+                  {t("page.tools.planShort")}
+                </button>
+                <button type="button" className="zn-sidetools__btn" aria-label={t("page.tools.edit")} onClick={enterEdit}>
+                  <Pencil size={16} />
+                  {t("page.tools.editShort")}
+                </button>
+              </div>
+            )}
+            <PlanWeekHeader
+              model={weekModel}
+              onNavigate={wide ? changeWeek : undefined}
+              currentWeek={currentWeek}
+              onToday={() => changeWeek(currentWeek)}
+            />
             <WeekDayBars model={weekModel} />
             {rings && (
               <WeekRings model={rings} metric={metric} onMetricChange={pickMetric} variant="card" showHead={false} />
@@ -722,7 +805,7 @@ export function PlanViewPage() {
             {plan.weeks.every((w) => w.sessions.length === 0) && (
               <div className="zn-planpage__emptyplan">
                 <p>{t("page.empty.title")}</p>
-                <Button variant="outline" onClick={edit.enter}>
+                <Button variant="outline" onClick={enterEdit}>
                   <Pencil />
                   {t("page.empty.action")}
                 </Button>
@@ -752,6 +835,15 @@ export function PlanViewPage() {
             )}
           </section>
         </div>
+
+        {!wide && (
+          <PlanWeekDock
+            model={weekModel}
+            onNavigate={changeWeek}
+            onOpenPlan={() => setParam("sheet", "plan", false)}
+            onEdit={enterEdit}
+          />
+        )}
 
         {!wide && rings && (
           <div className="zn-weekstrip" data-on={stripOn || undefined} aria-hidden="true">
@@ -797,6 +889,7 @@ export function PlanViewPage() {
             },
             { replace: true },
           );
+          revealWeekTop();
         }}
         onLogActivity={() => log.logOn()}
       />

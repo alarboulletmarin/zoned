@@ -871,7 +871,9 @@
     "tools": {
       "plan": "Le plan, toutes les semaines",
       "edit": "Modifier le plan",
-      "more": "Actions du plan {{name}}"
+      "more": "Actions du plan {{name}}",
+      "planShort": "Le plan",
+      "editShort": "Modifier"
     },
     "countdown": {
       "days": "J-{{count}}",
@@ -889,7 +891,9 @@
       "range": "{{from}} au {{to}}",
       "prev": "Semaine précédente",
       "next": "Semaine suivante",
-      "sessions": "Les séances de la semaine {{n}}"
+      "sessions": "Les séances de la semaine {{n}}",
+      "today": "Cette semaine",
+      "todayLabel": "Revenir à la semaine en cours, semaine {{n}}"
     },
     "bars": {
       "label": "Les sept jours de la semaine {{n}}",
@@ -981,7 +985,8 @@
       "leaveBody": "Les changements faits dans ce mode seront perdus.",
       "leaveStay": "Continuer à modifier",
       "leaveDiscard": "Quitter sans enregistrer",
-      "dropHere": "Déposer ici"
+      "dropHere": "Déposer ici",
+      "loadNext": "Charger la semaine suivante"
     },
     "change": {
       "title": "Changer de séance",
@@ -1029,6 +1034,10 @@
     "validate": {
       "label": "Valider la semaine",
       "count": "{{done}}/{{total}} closes"
+    },
+    "dock": {
+      "label": "Semaine et modification",
+      "week": "Semaine {{n}}, {{dates}}, voir toutes les semaines"
     },
     "ticks": "Repères en minutes"
   }

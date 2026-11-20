@@ -1223,3 +1223,177 @@ span.zn-plansess__state {
 .zn-plansess__card[data-edit] {
   gap: var(--sp-3);
 }
+
+/* ── La barre de la semaine, en bas (sous 1024 px) ───────────────────── */
+
+/* La même pilule que la barre Annuler / Enregistrer du mode Modifier : on
+   agit en bas, dans la zone du pouce, dans les deux modes. Sans vermillon :
+   en lecture, rien n'est à enregistrer. */
+.zn-weekdock {
+  position: fixed;
+  z-index: 44;
+  inset-inline: var(--pad-screen-x);
+  inset-block-end: calc(var(--sp-8) + env(safe-area-inset-bottom, 0px));
+  max-inline-size: 560px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: var(--hit-min) minmax(0, 1fr) var(--hit-min) var(--hit-min);
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-block);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+}
+
+/* Le pied de page à l'écran : la barre s'efface pour ne pas couvrir ses liens. */
+.zn-weekdock[data-hidden] {
+  transform: translateY(calc(100% + var(--sp-8)));
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zn-weekdock {
+    transition: none;
+  }
+}
+
+.zn-weekdock__btn,
+.zn-weekdock__edit,
+.zn-weekdock__week {
+  min-block-size: var(--hit-min);
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.zn-weekdock__btn,
+.zn-weekdock__edit {
+  inline-size: var(--hit-min);
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.zn-weekdock__btn:disabled {
+  color: var(--state-disabled-text);
+  cursor: default;
+}
+
+/* Modifier se distingue par l'encre pleine : c'est l'entrée dans l'autre
+   mode, pas un pas de plus dans la semaine. */
+.zn-weekdock__edit {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.zn-weekdock__week {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-inline-size: 0;
+  padding: var(--sp-1) var(--sp-4);
+  font: inherit;
+}
+
+.zn-weekdock__n {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-body);
+  line-height: 1.15;
+}
+
+.zn-weekdock__dates {
+  font: var(--type-caption);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-inline-size: 100%;
+}
+
+.zn-weekdock__btn:focus-visible,
+.zn-weekdock__edit:focus-visible,
+.zn-weekdock__week:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* La place de la barre sous la dernière journée. */
+.zn-planpage[data-dock] {
+  padding-block-end: calc(var(--sp-19) + 72px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Un jour retrouvé (entrée et sortie du mode Modifier) se pose sous la barre
+   du haut et sous le bandeau des anneaux. */
+.zn-planday {
+  scroll-margin-block-start: calc(var(--topbar-h) + 72px);
+}
+
+.zn-planpage__grid {
+  scroll-margin-block-start: calc(var(--topbar-h) + var(--sp-8));
+}
+
+/* ── Le plan et Modifier, dans la colonne fixe (1024 px et plus) ─────── */
+
+.zn-sidetools {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.zn-sidetools__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--hit-min);
+  padding-inline: var(--sp-6);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--surface-card);
+  font: var(--type-label);
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.zn-sidetools__btn:hover {
+  background: var(--surface-band);
+}
+
+.zn-sidetools__btn:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ── Revenir à la semaine en cours ───────────────────────────────────── */
+
+.zn-weekhead__today {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-block-size: var(--hit-min);
+  margin-block: calc(-1 * var(--sp-3));
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: var(--type-label);
+  color: var(--text-body);
+  text-decoration: underline;
+  text-underline-offset: var(--sp-2);
+  cursor: pointer;
+}
+
+/* Charger la semaine suivante : la flèche de Charger la semaine précédente,
+   retournée. */
+.zn-planpage__next svg {
+  transform: rotate(180deg);
+}

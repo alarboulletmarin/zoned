@@ -9,13 +9,19 @@ interface PlanWeekHeaderProps {
   onNavigate?: (weekNumber: number) => void;
   /** Le niveau du titre : h2 sous le titre du plan. */
   headingId?: string;
+  /**
+   * La semaine en cours, quand on en regarde une autre : un raccourci pour
+   * y revenir sans repasser par la feuille Le plan.
+   */
+  currentWeek?: number;
+  onToday?: () => void;
 }
 
 /**
  * Où l'on est : Semaine 4 sur 10, la phase et les dates, et les deux
  * flèches pour passer d'une semaine à l'autre, désactivées aux bornes.
  */
-export function PlanWeekHeader({ model, onNavigate, headingId }: PlanWeekHeaderProps) {
+export function PlanWeekHeader({ model, onNavigate, headingId, currentWeek, onToday }: PlanWeekHeaderProps) {
   const { t } = useTranslation("plan");
   const f = usePlanFormats();
   const phase = f.phase(model.phase);
@@ -31,6 +37,18 @@ export function PlanWeekHeader({ model, onNavigate, headingId }: PlanWeekHeaderP
         <p className="zn-weekhead__meta">
           {t("page.week.meta", { phase, dates: f.range(model.from, model.to) })}
         </p>
+        {onToday && currentWeek != null && currentWeek !== n && currentWeek >= 1 && currentWeek <= model.totalWeeks && (
+          <button
+            type="button"
+            className="zn-weekhead__today"
+            aria-label={t("page.week.todayLabel", { n: currentWeek })}
+            onClick={onToday}
+          >
+            {currentWeek < n ? <ChevronLeft size={16} /> : null}
+            {t("page.week.today")}
+            {currentWeek > n ? <ChevronRight size={16} /> : null}
+          </button>
+        )}
       </div>
       {onNavigate && (
         <div className="zn-weekhead__nav">
