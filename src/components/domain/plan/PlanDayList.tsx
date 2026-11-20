@@ -332,14 +332,17 @@ export function PlanDayList({
               </div>
               <div className="zn-planday__stack">
                 {blocked && <span className="zn-plansess__tag" data-blocked="true">{t("page.tag.blocked")}</span>}
-                {day.rest && (
+                {/* En mode Modifier, les activités hors plan s'effacent : elles ne
+                    sont pas des séances du plan, rien ne s'y déplace ni ne s'y
+                    change. Un jour qui n'a qu'elles s'y lit donc en repos. */}
+                {(editing ? day.sessions.length === 0 : day.rest) && (
                   <p className="zn-planday__rest">
                     <Moon size={20} />
                     {t("page.day.rest")}
                   </p>
                 )}
                 {day.sessions.map((slot) => card(slot, day.dayOfWeek))}
-                {day.offPlan.map(offPlanCard)}
+                {!editing && day.offPlan.map(offPlanCard)}
                 {editing && edit && (
                   <button type="button" className="zn-planday__add" onClick={() => edit.onAdd(day.dayOfWeek)}>
                     <Plus size={16} />
