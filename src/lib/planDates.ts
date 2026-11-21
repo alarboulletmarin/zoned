@@ -38,6 +38,27 @@ export function isoDayOfWeek(iso: string): number {
   return (new Date(y, m - 1, d).getDay() + 6) % 7;
 }
 
+/**
+ * Le départ par défaut d'un plan : lundi prochain, ou aujourd'hui si l'on est
+ * lundi. Un plan qui partait du lundi de la semaine en cours posait ses
+ * premières séances dans le passé dès qu'on le créait un autre jour.
+ */
+export function defaultPlanStart(today: string): string {
+  const dow = isoDayOfWeek(today);
+  return dow === 0 ? today.split("T")[0] : addDaysToDate(today, 7 - dow);
+}
+
+/** `date` + `days` jours, au format "YYYY-MM-DD". */
+export function addDaysToDate(date: string, days: number): string {
+  const [year, month, day] = date.split("T")[0].split("-").map(Number);
+  return isoDateOnly(new Date(year, month - 1, day + days));
+}
+
+/** Le lundi de la semaine d'une date, au format "YYYY-MM-DD". */
+export function mondayOfDate(date: string): string {
+  return isoDateOnly(mondayOfIso(date));
+}
+
 export function addWeeksToDate(startDate: string, weeks: number): string {
   const [year, month, day] = startDate.split("T")[0].split("-").map(Number);
   const date = new Date(year, month - 1, day + weeks * 7);

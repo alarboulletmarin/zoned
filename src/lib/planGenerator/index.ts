@@ -555,6 +555,38 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     await addStrengthSuggestions(weeks, config.strengthFrequency ?? 2);
   }
 
+  // Step 12c: Rien après la course dans sa semaine. Le renfo se posait sur
+  // n'importe quel jour libre, y compris le lendemain d'une course du mardi.
+  if (isRacePlan) {
+    const raceWeek = weeks[weeks.length - 1];
+    const race = raceWeek?.sessions.find((s) => s.workoutId === "__race_day__");
+    if (race) {
+      raceWeek.sessions = raceWeek.sessions.filter((s) => s.dayOfWeek <= race.dayOfWeek);
+    }
+  }
+
+  // Step 12d: Aucune séance avant le départ. La semaine 1 est la semaine
+  // calendaire du départ ; un départ un jeudi laisse lundi à mercredi vides
+  // plutôt que de poser des séances déjà passées. La semaine 1 s'allège
+  // d'autant, c'est voulu.
+  if (config.startDate && weeks.length > 0) {
+    const firstDay = isoDayOfWeek(config.startDate);
+    const week1 = weeks[0];
+    const kept = week1.sessions.filter((s) => s.dayOfWeek >= firstDay);
+    if (kept.length !== week1.sessions.length) {
+      const easy = (paces.E.min + paces.E.max) / 2;
+      week1.sessions = kept;
+      week1.targetKm = Math.round(
+        kept.reduce((sum, s) => {
+          if (s.workoutId === "__race_day__" || s.sessionType === "strength") return sum;
+          if (s.targetDistanceKm && s.targetDistanceKm > 0) return sum + s.targetDistanceKm;
+          return sum + s.estimatedDurationMin / easy;
+        }, 0),
+      );
+      week1.weeklyLoadScore = Math.round(kept.reduce((sum, s) => sum + (s.loadScore ?? 0), 0));
+    }
+  }
+
   // Step 12: Return complete plan
   return {
     id: crypto.randomUUID(),
