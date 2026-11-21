@@ -428,3 +428,15 @@
   padding: var(--sp-8) var(--sp-6) var(--sp-3);
   border-block-start: var(--border-divider);
 }
+
+/* L'arc qui vient de gagner une séance pousse depuis sa longueur d'avant, à
+   240 ms, au bout de la propagation de la clôture (voir cockpit.css). Posé
+   par le cockpit le temps d'un seul passage, jamais au chargement. */
+.zn-ring__progress[data-just-done] {
+  animation: zn-ring-grow var(--dur-slow) var(--ease-out) var(--dur-slow) backwards;
+}
+
+@keyframes zn-ring-grow {
+  from { stroke-dashoffset: var(--ring-grow); }
+  to { stroke-dashoffset: 0; }
+}

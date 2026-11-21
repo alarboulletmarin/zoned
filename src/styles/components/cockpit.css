@@ -56,40 +56,305 @@
 
 /* ── La pile des séances du jour ────────────────────────────────────────── */
 
-/* Un jour porte une séance, parfois deux. Les deux cas sont le MÊME bloc
-   empilé, et non un écran pour une séance plus un écran pour deux : le jour
-   double n'avait, lui, aucun écran : le titre disait 2 séances t'attendent,
-   rien ne montrait ce qu'elles demandaient, et aucune des deux ne pouvait
-   être close.
-
-   L'écart entre deux séances est celui d'une SECTION, pas celui d'une phrase
-   (`--sp-7` dans la réponse) : deux séances ne se lisent pas d'affilée, on
-   lit celle qu'on va courir. */
-.zn-cockpit__stack {
+/* Un jour porte une séance, parfois deux ou trois. Il n'en montre qu'UNE, le
+   héros, à toutes les largeurs : au-dessus, le rail dit la journée entière et
+   choisit (`SessionRail`). Une journée à une seule séance n'a pas de rail, le
+   héros est seul et l'écran est celui d'avant. Aucune branche téléphone ou
+   bureau ici : c'est le même composant partout. */
+.zn-cockpit__session-deck {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-10);
+  gap: var(--sp-9);
 }
 
-/* Le sélecteur n'existe que lorsque le bureau doit arbitrer entre plusieurs
-   séances. Le téléphone les garde toutes dans son flux ; masquer ce contrôle
-   là-bas évite deux manières de faire la même chose sous le pouce. */
-.zn-cockpit__session-tabs {
-  display: none;
+/* ── Le rail ────────────────────────────────────────────────────────────── */
+
+.zn-cockpit__rail-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* Les onglets se partagent la largeur au prorata de leur durée (`flex-grow`
+   posé par le composant) ; le plancher de 44 px garde une séance de vingt
+   minutes tapable à côté d'une sortie longue. */
+.zn-cockpit__rail {
+  position: relative;
+  display: flex;
+  gap: var(--sp-4);
+  block-size: 44px;
+}
+
+.zn-cockpit__rail-tab {
+  position: relative;
+  flex: 1 1 0;
+  min-inline-size: 44px;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  border: var(--bw-rule) solid var(--line-divider);
+  border-radius: var(--r-xs);
+  cursor: pointer;
+}
+
+.zn-cockpit__rail-tab:hover {
+  border-color: var(--line-strong);
+}
+
+.zn-cockpit__rail-tab:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-cockpit__rail-tab:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+
+/* Le fond d'une séance faite : le papier enfoncé, pas l'encre. Une journée
+   bouclée en aplats noirs devenait la chose la plus lourde de l'écran, plus
+   que l'action qui reste ; ce qui est fait doit se retirer, pas crier. La
+   forme le dit quand même : un fond plein, une coche, un profil éteint.
+   Un élément à lui, pour se remplir depuis le bas le jour où elle VIENT
+   d'être faite. */
+.zn-cockpit__rail-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--paper-sunken);
+  transform-origin: bottom;
+  transform: scaleY(0);
+}
+
+.zn-cockpit__rail-tab[data-state="done"] {
+  border-color: var(--line-strong);
+}
+
+.zn-cockpit__rail-tab[data-state="done"] .zn-cockpit__rail-fill {
+  transform: none;
+}
+
+/* Sautée : la hachure de la grille du mois, sur le contour pâle. */
+.zn-cockpit__rail-tab[data-state="skipped"] {
+  background-image: var(--zone-recovery);
+}
+
+.zn-cockpit__rail-profile {
+  position: absolute;
+  inset-inline: 5px;
+  inset-block-end: 5px;
+  display: block;
+}
+
+/* Le même profil que le héros, sans sa boîte : l'onglet en est déjà une. */
+.zn-cockpit__rail-profile .zn-zonebar {
+  inline-size: 100%;
+  padding-inline: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Le profil d'une séance faite s'éteint : il reste lisible, il ne dispute
+   plus rien au héros. */
+.zn-cockpit__rail-tab[data-state="done"] .zn-cockpit__rail-profile {
+  opacity: 0.45;
+}
+
+.zn-cockpit__rail-check {
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-end: 5px;
+  inline-size: 14px;
+  block-size: 14px;
+  fill: none;
+  stroke: var(--ink-1);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* La sélection : un cadre épais, UN élément posé sur l'onglet choisi et
+   mesuré par le composant. Il glisse d'un onglet à l'autre, et seulement
+   après sa première pose (`data-placed`) : à l'arrivée sur la page, il est
+   déjà là. */
+.zn-cockpit__rail-frame {
+  position: absolute;
+  inset-block: -5px;
+  inset-inline-start: calc(var(--frame-x, 0px) - 5px);
+  inline-size: calc(var(--frame-w, 0px) + 10px);
+  box-sizing: border-box;
+  border: var(--bw-heavy) solid var(--ink-1);
+  border-radius: calc(var(--r-xs) + 4px);
+  pointer-events: none;
+}
+
+.zn-cockpit__rail[data-placed] .zn-cockpit__rail-frame {
+  transition:
+    inset-inline-start var(--dur-slow) var(--ease-out),
+    inline-size var(--dur-slow) var(--ease-out);
+}
+
+.zn-cockpit__rail-legend {
+  display: flex;
+  gap: var(--sp-4);
+}
+
+.zn-cockpit__rail-legend-item {
+  flex: 1 1 0;
+  min-inline-size: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  overflow: hidden;
+  font: var(--type-mono);
+  font-size: var(--fs-mono-sm);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.zn-cockpit__rail-legend-item[data-selected] {
+  color: var(--text-body);
+}
+
+/* ── Le geste qui porte : la clôture ──────────────────────────────────────
+
+   Tout ce qui suit n'existe que sous `[data-just-done]`, posé par le cockpit
+   le temps d'un seul passage, au moment où une clôture est enregistrée. Un
+   rendu qui trouve une séance déjà faite ne bouge pas (motion.css).
+
+   Le geste remonte de la séance vers la semaine : le tampon à 0, l'onglet du
+   rail à 120 ms, la barre du jour et l'arc des anneaux à 240 ms. Aucune
+   animation ne garde sa dernière image (`forwards` interdit) : chacune finit
+   sur le style de base de l'élément, et les décalages tiennent par
+   `backwards`, qui ne vaut que pendant l'attente. */
+
+/* Le tampon, sur le bouton de clôture : l'encre se remplit depuis le centre,
+   la coche se trace, puis le tout se retire sur le bouton tel qu'il est
+   désormais, Modifier la clôture. */
+.zn-cockpit__close {
+  position: relative;
+  overflow: hidden;
+}
+
+.zn-stamp {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--ink-1);
+  pointer-events: none;
+  opacity: 0;
+  /* 600 ms en tout : il finit avant l'avancée automatique, à 700 ms. */
+  animation: zn-stamp-ink calc(var(--dur-slow) * 2.5) var(--ease-out);
+}
+
+.zn-stamp__check {
+  inline-size: 22px;
+  block-size: 22px;
+  fill: none;
+  stroke: var(--text-inverse);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  animation: zn-stamp-check var(--dur-slow) var(--ease-out) var(--dur-fast) backwards;
+}
+
+@keyframes zn-stamp-ink {
+  0% { opacity: 1; transform: scale(0); }
+  30% { opacity: 1; transform: none; }
+  75% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: none; }
+}
+
+@keyframes zn-stamp-check {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+.zn-cockpit__rail-tab[data-just-done] .zn-cockpit__rail-fill {
+  animation: zn-fill-up var(--dur-slow) var(--ease-out) var(--dur-fast) backwards;
+}
+
+.zn-cockpit__rail-tab[data-just-done] .zn-cockpit__rail-check {
+  animation: zn-fade-in var(--dur-fast) linear calc(var(--dur-fast) + var(--dur-slow)) backwards;
+}
+
+/* La barre du jour, dans la bande : le bloc de la séance se remplit depuis
+   le sol, par un aplat posé dessus le temps du passage. */
+.zn-cockpit__day-block[data-shape][data-just-done] {
+  position: relative;
+  background: transparent;
+  border-color: var(--line-strong);
+}
+
+.zn-cockpit__day-block[data-shape][data-just-done]::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--bw-rule) * -1);
+  border-radius: inherit;
+  background: var(--ink-1);
+  transform-origin: bottom;
+  animation: zn-fill-up var(--dur-slow) var(--ease-out) var(--dur-slow) backwards;
+}
+
+.zn-cockpit__day-block[data-shape="modified"][data-just-done]::after {
+  background: var(--ink-2);
+}
+
+@keyframes zn-fill-up {
+  from { transform: scaleY(0); }
+  to { transform: none; }
+}
+
+@keyframes zn-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Le héros change dans le sens du geste ────────────────────────────────
+
+   Une transition de vue nommée sur le héros du jour regardé (un seul nom par
+   page : sur bureau les six autres jours sont montés, masqués). Le contenu
+   sort de 12 px et entre de 12 px, vers la gauche quand on avance. Le reste
+   de la page bascule net pendant ce temps, le fondu de `root` est coupé : le
+   cadre du rail, vivant dans la nouvelle vue, glisse par lui-même. */
+.zn-cockpit__day-pane[data-active] .zn-cockpit__hero {
+  view-transition-name: zn-cockpit-hero;
+}
+
+html[data-hero-move]::view-transition-old(root),
+html[data-hero-move]::view-transition-new(root) {
+  animation: none;
+}
+
+html[data-hero-move]::view-transition-group(zn-cockpit-hero) {
+  animation: none;
+}
+
+html[data-hero-move]::view-transition-old(zn-cockpit-hero) {
+  animation: zn-hero-out var(--dur-fast) var(--ease-out) both;
+}
+
+html[data-hero-move]::view-transition-new(zn-cockpit-hero) {
+  animation: zn-hero-in var(--dur-base) var(--ease-out) var(--dur-fast) both;
+}
+
+html[data-hero-move="next"] { --hero-out: -12px; --hero-in: 12px; }
+html[data-hero-move="prev"] { --hero-out: 12px; --hero-in: -12px; }
+
+@keyframes zn-hero-out {
+  to { opacity: 0; transform: translateX(var(--hero-out)); }
+}
+
+@keyframes zn-hero-in {
+  from { opacity: 0; transform: translateX(var(--hero-in)); }
 }
 
 .zn-cockpit__session {
   display: flex;
   flex-direction: column;
   gap: var(--sp-7);
-}
-
-/* Un filet entre les séances, et rien autour d'elles : cette page n'a pas une
-   seule boîte, et deux cartes posées l'une sur l'autre en auraient fait deux.
-   Le filet dit la séparation, la boîte dirait l'objet. */
-.zn-cockpit__session + .zn-cockpit__session {
-  padding-block-start: var(--sp-10);
-  border-block-start: var(--bw-rule) solid var(--line-divider);
 }
 
 /* Le glyphe de famille, puis le titre. Une rangée et non un flux : le titre
@@ -1424,71 +1689,6 @@ button.zn-cockpit__exit {
 
   .zn-cockpit__split-answer .zn-cockpit__answer {
     gap: var(--sp-7);
-  }
-
-  .zn-cockpit__session-deck {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-12);
-  }
-
-  .zn-cockpit__session-tabs {
-    display: flex;
-    align-items: stretch;
-    gap: var(--sp-2);
-    min-block-size: 36px;
-    overflow-x: auto;
-    padding-block-end: var(--sp-2);
-  }
-
-  .zn-cockpit__session-tabs[data-reserved] {
-    visibility: hidden;
-  }
-
-  .zn-cockpit__session-tab {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-4);
-    min-block-size: 36px;
-    padding: var(--sp-4) var(--sp-6);
-    color: var(--text-muted);
-    background: transparent;
-    border: 0;
-    border-radius: var(--r-xs);
-    font: var(--type-body-sm);
-    cursor: pointer;
-    white-space: nowrap;
-    transition:
-      background var(--dur-fast) var(--ease-out),
-      color var(--dur-fast) var(--ease-out);
-  }
-
-  .zn-cockpit__session-tab:hover {
-    color: var(--text-body);
-    background: var(--paper-raised);
-  }
-
-  .zn-cockpit__session-tab[aria-selected="true"] {
-    color: var(--text-body);
-    background: var(--paper-raised);
-    font-weight: var(--fw-semibold);
-  }
-
-  .zn-cockpit__session-tab .zn-mono {
-    color: var(--text-faint);
-  }
-
-  .zn-cockpit__stack[data-active-session] {
-    gap: 0;
-  }
-
-  .zn-cockpit__stack[data-active-session] .zn-cockpit__session:not([data-active]) {
-    display: none;
-  }
-
-  .zn-cockpit__stack[data-active-session] .zn-cockpit__session + .zn-cockpit__session {
-    padding-block-start: 0;
-    border-block-start: 0;
   }
 
   .zn-cockpit__split-answer .zn-cockpit__headline {

@@ -17,11 +17,14 @@ export function useRadioRail<T>({
   value,
   onChange,
   railRef,
+  role = "radio",
 }: {
   items: readonly T[];
   value: T;
   onChange: (next: T) => void;
   railRef: RefObject<HTMLElement | null>;
+  /** Le rôle des boutons du rail. Le même clavier sert un `tablist`. */
+  role?: "radio" | "tab";
 }) {
   const move = useCallback(
     (index: number) => {
@@ -29,10 +32,10 @@ export function useRadioRail<T>({
       if (next === undefined) return;
       onChange(next);
       railRef.current
-        ?.querySelectorAll<HTMLButtonElement>('[role="radio"]')
+        ?.querySelectorAll<HTMLButtonElement>(`[role="${role}"]`)
         [index]?.focus();
     },
-    [items, onChange, railRef],
+    [items, onChange, railRef, role],
   );
 
   const onKeyDown = useCallback(

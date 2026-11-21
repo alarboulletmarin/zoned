@@ -1,12 +1,14 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
   type CSSProperties,
   type FunctionComponent,
 } from "react";
+import { flushSync } from "react-dom";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "@/components/ui/toast";
@@ -71,6 +73,15 @@ import {
   type SessionRef,
   type TodayFocus,
 } from "@/lib/cockpit";
+import {
+  advanceTarget,
+  closuresBetween,
+  defaultSessionRank,
+  isDone,
+  isResolved,
+  railWeights,
+  sessionKey,
+} from "@/lib/cockpitRail";
 import { useTodayComposition } from "@/hooks/useTodayComposition";
 import { TodayComposePanel } from "@/components/domain/TodayComposePanel";
 import {
@@ -392,12 +403,19 @@ export function TodayPage() {
         toast.failure(t("common:errors.planSaveFailed"), saved);
         return;
       }
+      /* Le héros reste sur la séance qu'on vient de clore, même si personne
+         ne l'avait choisie : sans cette épingle, la séance montrée par défaut
+         (la première qui reste à faire) changerait dans le même rendu, et le
+         tampon se poserait sur un bouton déjà parti. C'est l'avancée
+         automatique qui la déplace, après lui. */
+      const rank = selected.refs.findIndex((r) => sessionKey(r) === sessionKey(ref));
+      if (rank >= 0) setActiveSession({ iso: dayIso, rank });
       // `reload` remplace le tableau des plans, donc `focus` se recalcule et la
       // bande comme la ligne de clôture suivent sans rien de plus. La ligne
       // de clôture EST la confirmation : pas de toast par-dessus.
       reload();
     },
-    [reload, t],
+    [reload, t, selected.refs, dayIso],
   );
 
   /* ── Ajouter une séance, DANS une source ──────────────────────────────
@@ -722,14 +740,89 @@ export function TodayPage() {
     />
   );
 
-  /* Sur téléphone, les séances d'un même jour restent une pile : le pouce
-     déroule naturellement. Sur bureau, elles ne doivent pas former trois
-     grandes fiches concurrentes ; un sélecteur montre qu'elles coexistent et
-     une seule prend la surface de lecture. Le rang revient à zéro à chaque
-     changement de jour, afin de ne jamais afficher par surprise la deuxième
-     séance d'un autre jour. */
-  const [activeSessionRank, setActiveSessionRank] = useState(0);
-  useEffect(() => setActiveSessionRank(0), [dayIso]);
+  /* ── Le rail et le héros ──────────────────────────────────────────────
+     Une journée à plusieurs séances en montre UNE, le héros, et le rail au-dessus
+     dit la journée entière et choisit. Le même composant à toutes les largeurs.
+
+     Le rang choisi est attaché à SON jour, et oublié au changement de jour :
+     on n'arrive jamais par surprise sur la deuxième séance d'un autre jour.
+     Sans choix, le héros montre la première séance qui reste à faire, sinon la
+     dernière, celle qui a fermé la journée. */
+  const [activeSession, setActiveSession] = useState<{ iso: string; rank: number } | null>(null);
+  useEffect(() => setActiveSession(null), [dayIso]);
+  const rankOn = (iso: string, sessions: readonly PlanSession[]) =>
+    activeSession?.iso === iso && activeSession.rank < sessions.length
+      ? activeSession.rank
+      : defaultSessionRank(sessions.map((s) => s.status));
+
+  /* Changer de séance ou de jour fait partir le contenu du héros dans le sens
+     du geste, vers la gauche quand on avance. */
+  const pickSession = (iso: string, from: number, rank: number) => {
+    if (rank === from) return;
+    withHeroTransition(rank > from ? "next" : "prev", () => setActiveSession({ iso, rank }));
+  };
+  const pickDay = (iso: string | null) => {
+    const target = iso ?? todayIso;
+    if (target === dayIso) return;
+    withHeroTransition(target > dayIso ? "next" : "prev", () => setPicked(iso));
+  };
+
+  /* ── Ce qui vient d'être fait ─────────────────────────────────────────
+     Le mouvement confirme un geste, il ne décore pas un état (motion.css).
+     Clore une séance recharge tous les plans : le rendu qui suit sait qu'une
+     séance EST faite, pas qu'elle VIENT de l'être. D'où la mémoire des statuts
+     du jour regardé : seul le passage d'ouvert à clos compte, une seule fois.
+     Au premier rendu, sur un rechargement ou une réouverture, rien ne bouge.
+
+     En effet de MISE EN PAGE, pas en effet : la marque doit être posée avant
+     que le navigateur peigne le rendu rechargé, sinon le bouton, l'onglet et
+     la barre se montrent une image pleins, puis se vident pour se remplir. */
+  const statusMemory = useRef(new Map<string, PlanSession["status"]>());
+  const [justDone, setJustDone] = useState<ReadonlySet<string>>(NOTHING_DONE);
+  const justDoneTimer = useRef<number | undefined>(undefined);
+  const advanceTimer = useRef<number | undefined>(undefined);
+  useLayoutEffect(() => {
+    const entries = selected.refs.map(
+      (ref, rank) => [sessionKey(ref), selected.sessions[rank]?.status] as const,
+    );
+    const closures = closuresBetween(statusMemory.current, entries);
+    for (const [key, status] of entries) statusMemory.current.set(key, status);
+    if (closures.length === 0) return;
+
+    const done = closures.filter((c) => c.done).map((c) => c.key);
+    if (done.length > 0) {
+      setJustDone(new Set(done));
+      // Le tampon se sent aussi, là où le téléphone sait vibrer (pas iOS).
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        navigator.vibrate?.(8);
+      }
+      // La marque part à la fin du tampon (`onAnimationEnd` plus bas) ; ceci
+      // est le filet, pour un écran où le tampon n'est pas monté.
+      window.clearTimeout(justDoneTimer.current);
+      justDoneTimer.current = window.setTimeout(() => setJustDone(NOTHING_DONE), 1500);
+    }
+
+    /* L'avancée automatique : la séance suivante qui reste à faire, après la
+       séquence du tampon. Rien quand la journée est bouclée, le héros reste
+       sur la dernière séance close. */
+    const statuses = selected.sessions.map((s) => s.status);
+    const closed = entries.findIndex(([key]) => key === closures[0].key);
+    const target = advanceTarget(statuses, closed);
+    window.clearTimeout(advanceTimer.current);
+    if (target == null) return;
+    const iso = dayIso;
+    advanceTimer.current = window.setTimeout(() => {
+      withHeroTransition(target > closed ? "next" : "prev", () => setActiveSession({ iso, rank: target }));
+    }, 700);
+  }, [selected, dayIso]);
+  useEffect(
+    () => () => {
+      window.clearTimeout(justDoneTimer.current);
+      window.clearTimeout(advanceTimer.current);
+    },
+    [],
+  );
+  const justDoneRanks = selected.refs.flatMap((ref, rank) => (justDone.has(sessionKey(ref)) ? [rank] : []));
 
   /* Un jour de la carte. Sur bureau les sept jours de la semaine sont
      montés ensemble et empilés : la carte prend la hauteur du plus haut,
@@ -739,7 +832,7 @@ export function TodayPage() {
     const selected = planDay(focus, dateFromIso(iso));
     const sessions = selected.sessions;
     const refs = selected.refs;
-    const shownRank = active ? activeSessionRank : 0;
+    const shownRank = rankOn(iso, sessions);
     const isToday = iso === todayIso;
     /* `upcoming` et `none` ne dépendent d'aucun jour : ils disent qu'il n'y
        a pas de semaine à parcourir, et la bande ne s'affiche même pas. */
@@ -805,58 +898,40 @@ export function TodayPage() {
            c'est le même bloc dans les deux cas : rien n'est écrit pour le
            cas rare qui ne serve pas au cas courant. */
         <div className="zn-cockpit__session-deck">
-          <div
-            className="zn-cockpit__session-tabs"
-            data-reserved={sessions.length < 2 || undefined}
-            role={sessions.length > 1 ? "tablist" : undefined}
-            aria-label={
-              sessions.length > 1
-                ? t("today:resume.session.line", { count: sessions.length, week: selected.weekNumber })
-                : undefined
-            }
-            aria-hidden={sessions.length < 2 || undefined}
-          >
-            {sessions.length > 1 &&
-              sessions.map((session, rank) => (
-                <button
-                  key={
-                    refs[rank]
-                      ? `${refs[rank].planId}:${refs[rank].weekNumber}:${refs[rank].index}`
-                      : rank
-                  }
-                  type="button"
-                  role="tab"
-                  aria-selected={rank === shownRank}
-                  className="zn-cockpit__session-tab"
-                  onClick={() => setActiveSessionRank(rank)}
-                >
-                  <span className="zn-mono">{String(rank + 1).padStart(2, "0")}</span>
-                  <span>{sessionDeckLabel(session, isEn)}</span>
-                </button>
-              ))}
-          </div>
-          <div className="zn-cockpit__stack" data-active-session={shownRank}>
-          {sessions.map((session, rank) => (
-            <CockpitSession
-              key={
-                refs[rank]
-                  ? `${refs[rank].planId}:${refs[rank].weekNumber}:${refs[rank].index}`
-                  : rank
-              }
-              session={session}
-              sessionRef={refs[rank]}
-              rank={rank}
-              count={sessions.length}
-              isActive={rank === shownRank}
-              isToday={isToday}
-              weekNumber={refs[rank]?.weekNumber ?? selected.weekNumber}
-              linkState={sessionState(session, refs[rank])}
-              unit={settings.unitSystem}
+          {sessions.length > 1 && (
+            <SessionRail
+              sessions={sessions}
+              refs={refs}
+              selected={shownRank}
+              onPick={(rank) => pickSession(iso, shownRank, rank)}
+              idBase={`zn-day-${iso}`}
+              justDone={active ? justDone : NOTHING_DONE}
               isEn={isEn}
-              onClose={handleClose}
             />
-          ))}
-          </div>
+          )}
+          {(() => {
+            const session = sessions[shownRank];
+            const ref = refs[shownRank];
+            return (
+              <CockpitSession
+                key={ref ? sessionKey(ref) : shownRank}
+                session={session}
+                sessionRef={ref}
+                rank={shownRank}
+                count={sessions.length}
+                isActive={active}
+                isToday={isToday}
+                weekNumber={ref?.weekNumber ?? selected.weekNumber}
+                linkState={sessionState(session, ref)}
+                unit={settings.unitSystem}
+                isEn={isEn}
+                onClose={handleClose}
+                panelId={`zn-day-${iso}-hero`}
+                tabId={sessions.length > 1 ? `zn-day-${iso}-tab-${shownRank}` : undefined}
+                justDone={active && ref != null && justDone.has(sessionKey(ref))}
+              />
+            );
+          })()}
         </div>
       ) : (
         <>
@@ -1092,7 +1167,15 @@ export function TodayPage() {
   };
 
   return (
-    <div className="zn-cockpit" data-view={view} data-pending={isLoading || undefined}>
+    <div
+      className="zn-cockpit"
+      data-view={view}
+      data-pending={isLoading || undefined}
+      onAnimationEnd={(event) => {
+        // Le tampon est le dernier à finir : la marque part avec lui.
+        if (event.animationName === "zn-stamp-ink") setJustDone(NOTHING_DONE);
+      }}
+    >
       <SEOHead title={t("today:seoTitle")} description={t("today:seoDescription")} noindex />
 
       {isLoading ? (
@@ -1119,7 +1202,7 @@ export function TodayPage() {
               <button
                 type="button"
                 className="zn-cockpit__back"
-                onClick={() => setPicked(null)}
+                onClick={() => pickDay(null)}
                 tabIndex={isToday ? -1 : 0}
                 aria-hidden={isToday || undefined}
               >
@@ -1146,7 +1229,7 @@ export function TodayPage() {
                                 canNext={bounds != null && compareMonth(monthRef, bounds.max) < 0}
                                 onShift={(delta) => setMonth(shiftMonth(monthRef, delta))}
                                 selected={dayIso}
-                                onSelect={setPicked}
+                                onSelect={pickDay}
                                 activities={activities}
                                 now={now}
                               />
@@ -1154,9 +1237,10 @@ export function TodayPage() {
                   <WeekStrip
                     focus={focus}
                     selected={day}
-                    onSelect={(index) => setPicked(weekDates[index])}
+                    onSelect={(index) => pickDay(weekDates[index])}
                     extras={weekExtras}
                     dates={weekDates}
+                    justDone={dayIndex >= 0 && justDoneRanks.length > 0 ? { day: dayIndex, ranks: justDoneRanks } : null}
                   />
                 )}
               </div>
@@ -1171,6 +1255,7 @@ export function TodayPage() {
                   onMetricChange={pickRingsMetric}
                   variant={desk ? "card" : "strip"}
                   className="zn-cockpit__rings"
+                  justDone={justDone.size > 0}
                 />
               )}
               </div>
@@ -1326,6 +1411,9 @@ function CockpitSession({
   unit,
   isEn,
   onClose,
+  panelId,
+  tabId,
+  justDone,
 }: {
   session: PlanSession;
   /** L'adresse de la séance dans sa source. Sans elle, pas de clôture. */
@@ -1339,6 +1427,11 @@ function CockpitSession({
   unit: UnitSystem;
   isEn: boolean;
   onClose: (ref: SessionRef, data: SessionCompletionData) => void;
+  panelId: string;
+  /** L'onglet du rail qui nomme ce héros, les jours à plusieurs séances. */
+  tabId: string | undefined;
+  /** La séance vient d'être faite : le bouton de clôture porte le tampon. */
+  justDone: boolean;
 }) {
   const { t } = useTranslation(["today", "plan", "library"]);
   const { workout } = useWorkout(session.workoutId);
@@ -1475,13 +1568,18 @@ function CockpitSession({
     .filter(Boolean)
     .join(" · ");
 
-  // Un seul `<h1>` par écran : le premier bloc le porte, les suivants sont des
-  // `<h2>`. Même style, deux niveaux, ce qui est exactement la relation entre
-  // la première séance du jour et celles qui la suivent.
+  // Un seul `<h1>` par écran : le héros du jour regardé le porte. Sur bureau
+  // les six autres jours sont montés, masqués, et portent des `<h2>`.
   const Heading = isActive ? "h1" : "h2";
 
   return (
-    <article className="zn-cockpit__session" data-active={isActive || undefined}>
+    <article
+      className="zn-cockpit__session zn-cockpit__hero"
+      data-active={isActive || undefined}
+      id={panelId}
+      role={tabId ? "tabpanel" : undefined}
+      aria-labelledby={tabId}
+    >
       {/* Les quatre lignes sont TOUJOURS écrites, vides au besoin. Une ligne
           qui apparaît et disparaît selon le jour choisi décale tout ce qui la
           suit, et c'est le bouton qui finit par se déplacer sous le pouce :
@@ -1537,7 +1635,9 @@ function CockpitSession({
 
             C'est aussi, depuis que la bande ne navigue plus, la SEULE sortie
             de l'écran vers une séance. */}
-        <Button asChild className="zn-cockpit__cta">
+        {/* Une seule chose orange à l'écran, celle qui reste à faire : sur une
+            séance close, voir la séance passe au contour, comme la clôture. */}
+        <Button asChild variant={isResolved ? "outline" : "default"} className="zn-cockpit__cta">
           <Link to={sessionHref(session)} state={linkState}>
             {t("today:resume.openDetail")}
             <ArrowRight />
@@ -1547,6 +1647,8 @@ function CockpitSession({
         {sessionRef != null && (
           <Button
             variant="outline"
+            className="zn-cockpit__close"
+            data-just-done={justDone || undefined}
             onClick={(event) => {
               // L'ancre du popover est le bouton lui-même. `currentTarget`
               // l'a déjà, pas besoin d'une ref à tenir à jour.
@@ -1555,6 +1657,15 @@ function CockpitSession({
             }}
           >
             {isResolved ? t("today:resume.reclose") : t("plan:completion.markDone")}
+            {/* Le tampon : l'encre remplit le bouton depuis le centre, puis la
+                coche se trace. Monté le temps d'un seul passage. */}
+            {justDone && (
+              <span className="zn-stamp" aria-hidden="true">
+                <svg className="zn-stamp__check" viewBox="0 0 24 24" focusable="false">
+                  <path d="M5 12.5l4.5 4.5L19 7" pathLength={1} />
+                </svg>
+              </span>
+            )}
           </Button>
         )}
       </div>
@@ -1668,6 +1779,225 @@ function sessionDeckLabel(session: PlanSession, isEn: boolean): string {
   return pair ? (isEn ? pair.en : pair.fr) : session.sessionType;
 }
 
+const NOTHING_DONE: ReadonlySet<string> = new Set();
+
+/**
+ * Le contenu du héros part dans le sens du geste : vers la gauche quand on
+ * avance, vers la droite quand on recule. Une transition de vue nommée
+ * (`zn-cockpit-hero`, voir cockpit.css) là où l'API existe ; ailleurs, et
+ * sous `prefers-reduced-motion`, la bascule est nette.
+ */
+function withHeroTransition(direction: "next" | "prev", update: () => void) {
+  if (
+    typeof document.startViewTransition !== "function" ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    update();
+    return;
+  }
+  const root = document.documentElement;
+  root.dataset.heroMove = direction;
+  const transition = document.startViewTransition(() => flushSync(update));
+  void transition.finished.finally(() => {
+    delete root.dataset.heroMove;
+  });
+}
+
+/**
+ * Le rail : la journée d'un coup d'oeil, et le choix de la séance montrée.
+ *
+ * Un onglet par séance, large comme sa durée, qui porte son profil (le même
+ * `ZoneBar` que le héros et la bibliothèque, en petit). L'état se lit à la
+ * FORME : faite, le fond se remplit d'encre et une coche apparaît ; sautée, la
+ * hachure de la grille du mois ; prévue, le contour seul. La sélection est un
+ * cadre épais, UN élément posé sur l'onglet choisi, qui glisse de l'un à
+ * l'autre au lieu de sauter.
+ */
+function SessionRail({
+  sessions,
+  refs,
+  selected,
+  onPick,
+  idBase,
+  justDone,
+  isEn,
+}: {
+  sessions: readonly PlanSession[];
+  refs: readonly (SessionRef | undefined)[];
+  selected: number;
+  onPick: (rank: number) => void;
+  idBase: string;
+  justDone: ReadonlySet<string>;
+  isEn: boolean;
+}) {
+  const { t } = useTranslation(["today"]);
+  const railRef = useRef<HTMLDivElement>(null);
+  const ranks = useMemo(() => sessions.map((_, rank) => rank), [sessions]);
+  const rail = useRadioRail<number>({ items: ranks, value: selected, onChange: onPick, railRef, role: "tab" });
+  const weights = railWeights(sessions.map((s) => s.estimatedDurationMin));
+  const total = sessions.reduce((n, s) => n + (s.estimatedDurationMin ?? 0), 0);
+  const closed = sessions.every((s) => isResolved(s.status));
+
+  /* Le cadre se pose sur l'onglet choisi, mesuré : les largeurs viennent de
+     flex et du plancher de 44 px, le CSS seul ne sait pas où tombe l'onglet.
+     La transition n'est permise qu'après la première pose, sinon le cadre
+     glisserait depuis le bord à l'arrivée sur la page. */
+  const [placed, setPlaced] = useState(false);
+  useLayoutEffect(() => {
+    const el = railRef.current;
+    if (!el) return;
+    const place = () => {
+      const tab = el.querySelectorAll<HTMLElement>('[role="tab"]')[selected];
+      if (!tab) return;
+      el.style.setProperty("--frame-x", `${tab.offsetLeft}px`);
+      el.style.setProperty("--frame-w", `${tab.offsetWidth}px`);
+    };
+    place();
+    const observer = new ResizeObserver(place);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [selected, sessions.length]);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setPlaced(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  const words = t("today:rail.words").split(",");
+  const kicker = closed
+    ? t("today:rail.closed", { duration: formatDurationMinutes(total) })
+    : t("today:rail.count", {
+        count: sessions.length,
+        n: words[sessions.length - 1] ?? String(sessions.length),
+        duration: formatDurationMinutes(total),
+      });
+
+  return (
+    <div className="zn-cockpit__rail-block">
+      <span className="zn-kicker zn-kicker--xs">{kicker}</span>
+      <div
+        ref={railRef}
+        className="zn-cockpit__rail"
+        role="tablist"
+        aria-label={t("today:rail.label")}
+        data-placed={placed || undefined}
+        onKeyDown={rail.onKeyDown}
+      >
+        {sessions.map((session, rank) => {
+          const ref = refs[rank];
+          return (
+            <RailTab
+              key={ref ? sessionKey(ref) : rank}
+              session={session}
+              rank={rank}
+              count={sessions.length}
+              weight={weights[rank]}
+              selected={rank === selected}
+              id={`${idBase}-tab-${rank}`}
+              controls={`${idBase}-hero`}
+              justDone={ref != null && justDone.has(sessionKey(ref))}
+              onPick={() => onPick(rank)}
+              isEn={isEn}
+            />
+          );
+        })}
+        <span className="zn-cockpit__rail-frame" aria-hidden="true" />
+      </div>
+      {/* La légende : la famille et la durée, sous chaque onglet, à sa largeur. */}
+      <div className="zn-cockpit__rail-legend" aria-hidden="true">
+        {sessions.map((session, rank) => {
+          const Glyph = KIND_ICONS[sessionKind(session)];
+          return (
+            <span
+              key={rank}
+              className="zn-cockpit__rail-legend-item"
+              data-selected={rank === selected || undefined}
+              style={{ flexGrow: weights[rank] }}
+            >
+              <Glyph size={13} />
+              {formatDurationMinutes(session.estimatedDurationMin ?? 0)}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** Un onglet du rail. Un composant, parce que le profil et le nom viennent du catalogue, par hook. */
+function RailTab({
+  session,
+  rank,
+  count,
+  weight,
+  selected,
+  id,
+  controls,
+  justDone,
+  onPick,
+  isEn,
+}: {
+  session: PlanSession;
+  rank: number;
+  count: number;
+  weight: number;
+  selected: boolean;
+  id: string;
+  controls: string;
+  justDone: boolean;
+  onPick: () => void;
+  isEn: boolean;
+}) {
+  const { t } = useTranslation(["today"]);
+  const { workout } = useWorkout(session.workoutId);
+  const state = isDone(session.status) ? "done" : session.status === "skipped" ? "skipped" : "planned";
+  const profile = useMemo(() => {
+    if (!workout) return null;
+    if (isStrengthWorkout(workout)) {
+      return [{ seconds: Math.max(1, (session.estimatedDurationMin ?? 0) * 60), zone: 0 as const }];
+    }
+    return toZoneBarBlocks(workout);
+  }, [workout, session.estimatedDurationMin]);
+  const name = workout ? (isEn ? workout.nameEn : workout.name) : sessionDeckLabel(session, isEn);
+  const label = [
+    t("today:rail.tab", {
+      n: rank + 1,
+      total: count,
+      name,
+      duration: formatDurationMinutes(session.estimatedDurationMin ?? 0),
+    }),
+    state === "planned" ? null : t(`today:rail.state.${session.status}`),
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  return (
+    <button
+      type="button"
+      role="tab"
+      id={id}
+      aria-selected={selected}
+      aria-controls={controls}
+      aria-label={label}
+      tabIndex={selected ? 0 : -1}
+      className="zn-cockpit__rail-tab"
+      data-state={state}
+      data-just-done={justDone || undefined}
+      style={{ flexGrow: weight }}
+      onClick={onPick}
+    >
+      <span className="zn-cockpit__rail-fill" aria-hidden="true" />
+      <span className="zn-cockpit__rail-profile" aria-hidden="true">
+        {profile && profile.length > 0 && <ZoneBar blocks={profile} condense height={16} />}
+      </span>
+      {state === "done" && (
+        <svg className="zn-cockpit__rail-check" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M5 12.5l4.5 4.5L19 7" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
 function deskLabel(day: readonly PlanSession[], rest: string, isEn: boolean): string {
   const locale = isEn ? "en" : "fr";
   const cap = (value: string) =>
@@ -1687,10 +2017,13 @@ function WeekStrip({
   onSelect,
   extras,
   dates,
+  justDone,
 }: {
   focus: TodayFocus;
   selected: number;
   onSelect: (day: number) => void;
+  /** Les séances qui viennent d'être faites, par jour et par rang : leur bloc se remplit. */
+  justDone: { day: number; ranks: readonly number[] } | null;
   /** Les minutes complémentaires du lundi au dimanche. Toujours sept cases. */
   extras: number[];
   /** Les sept dates ISO de la semaine, pour le numéro du jour sur bureau. */
@@ -1809,6 +2142,7 @@ function WeekStrip({
                       key={i}
                       className="zn-cockpit__day-block"
                       data-shape={block.shape}
+                      data-just-done={(justDone?.day === index && justDone.ranks.includes(i)) || undefined}
                       /* Un style inline est le bon outil : la valeur est une
                          donnée du plan, pas un réglage de design. */
                       style={{ "--block-h": `${block.height}px` } as CSSProperties}
