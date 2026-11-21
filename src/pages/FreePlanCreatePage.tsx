@@ -10,7 +10,6 @@ import { Slider } from "@/components/ui/slider";
 import { SEOHead } from "@/components/seo";
 import { savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
-import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { formatDate } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
 import type { TrainingGoal, PlanPurpose } from "@/types/plan";
@@ -128,7 +127,6 @@ export function FreePlanCreatePage() {
       toast.failure(t("common:errors.planSaveFailed"), saved);
       return;
     }
-    triggerStorageWarning();
     navigate(`/plan/${plan.id}`);
   };
 

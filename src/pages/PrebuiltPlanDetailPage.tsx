@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { toast } from "@/components/ui/toast";
 import {
   ArrowLeft,
   CalendarRange,
@@ -21,15 +20,12 @@ import { ZoneScale } from "@/components/visualization";
 import { sessionColor } from "@/lib/sessionColors";
 import { getPrebuiltBySlug } from "@/data/prebuilt-plans";
 import { getWorkoutById } from "@/data/workouts";
-import { convertPrebuiltToPlan } from "@/lib/prebuiltPlanConverter";
-import { savePlan } from "@/lib/planStorage";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import type { AnyWorkoutTemplate } from "@/types";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
-import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
@@ -134,17 +130,11 @@ export function PrebuiltPlanDetailPage() {
     });
   };
 
+  /* Un plan prêt se cale sur la date de la course : Utiliser ce plan
+     ouvre le parcours sur la date, ce plan déjà choisi, puis l'aperçu. */
   const handleUse = () => {
     if (!prebuilt) return;
-    const plan = convertPrebuiltToPlan(prebuilt);
-    const saved = savePlan(plan);
-    if (!saved.ok) {
-      toast.failure(t("errors.planSaveFailed"), saved);
-      return;
-    }
-    triggerStorageWarning();
-    toast.success(t("prebuilt.planAdded"));
-    navigate(`/plan/${plan.id}`);
+    navigate(`/plan/new?prebuilt=${prebuilt.slug}`);
   };
 
   // Phase distribution for the macrocycle ramp

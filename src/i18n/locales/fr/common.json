@@ -1074,5 +1074,13 @@
       "description": "Tu as masqué cette partie de l'app dans tes réglages. Le lien reste valide, tu peux la réafficher tout de suite.",
       "cta": "Réafficher"
     }
+  },
+  "datePicker": {
+    "previousMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "month": "Mois",
+    "year": "Année",
+    "today": "Aujourd'hui, {{date}}",
+    "selected": "{{date}}, choisi"
   }
 }

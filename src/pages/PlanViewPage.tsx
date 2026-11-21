@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate, useParams, useSearchParams } from "reac
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowUp, Calendar, Check, Pencil } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
+import { StorageNote } from "@/components/domain/StorageWarning";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -801,32 +802,31 @@ export function PlanViewPage() {
           {/* Origine : le nom rejoint celui de la carte activée. */}
           <h1 className="zn-planpage__title" style={{ viewTransitionName: sharedTransitionName("plan", plan.id, "title") }}>{planName}</h1>
           {raceLine && <p className="zn-planpage__raceline">{raceLine}</p>}
-          {(ended || pacesEstimated || showLastChange || placedWeeks.length > 0) && (
-            <div className="zn-planpage__notes">
-              {ended && <Alert kind="info">{t("view.planEnded")}</Alert>}
-              {pacesEstimated && (
-                <PlanVmaForm onSave={(vma) => actions.updateVma(vma, isoDateOnly(today))} />
-              )}
-              {showLastChange && (
-                <LastChangePanel
-                  label={lastChange.label}
-                  labelEn={lastChange.labelEn}
-                  at={lastChange.at}
-                  onUndo={undoPlanChange}
-                />
-              )}
-              {placedWeeks.length > 0 && (
-                <p className="zn-planpage__placed">
-                  {t("view.placedWeeks.label")}
-                  {placedWeeks.map((w) => (
-                    <Link key={w.id} to={`/weeks/${w.id}`}>
-                      {t("view.placedWeeks.item", { name: w.name, n: w.weekNumber })}
-                    </Link>
-                  ))}
-                </p>
-              )}
-            </div>
-          )}
+          <div className="zn-planpage__notes">
+            <StorageNote />
+            {ended && <Alert kind="info">{t("view.planEnded")}</Alert>}
+            {pacesEstimated && (
+              <PlanVmaForm onSave={(vma) => actions.updateVma(vma, isoDateOnly(today))} />
+            )}
+            {showLastChange && (
+              <LastChangePanel
+                label={lastChange.label}
+                labelEn={lastChange.labelEn}
+                at={lastChange.at}
+                onUndo={undoPlanChange}
+              />
+            )}
+            {placedWeeks.length > 0 && (
+              <p className="zn-planpage__placed">
+                {t("view.placedWeeks.label")}
+                {placedWeeks.map((w) => (
+                  <Link key={w.id} to={`/weeks/${w.id}`}>
+                    {t("view.placedWeeks.item", { name: w.name, n: w.weekNumber })}
+                  </Link>
+                ))}
+              </p>
+            )}
+          </div>
         </header>
 
         <div className="zn-planpage__grid" ref={gridRef}>

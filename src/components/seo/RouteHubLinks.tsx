@@ -52,7 +52,6 @@ function sourceFor(pathname: string): LinkSource | null {
     path === "/race-simulator" ||
     path === "/compare" ||
     path.startsWith("/compare/") ||
-    path === "/plan/new" ||
     path === "/plan/new/prebuilt" ||
     path === "/plans/methodology" ||
     path === "/learn"

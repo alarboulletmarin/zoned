@@ -1,657 +1,451 @@
-import { withDirectionalTransition } from "@/lib/directionalTransition";
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ArrowRight, Check } from "@/components/icons";
+import { ArrowLeft } from "@/components/icons";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { toast } from "@/components/ui/toast";
 import { SEOHead } from "@/components/seo";
 import { useCreatePlan } from "@/hooks/usePlans";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { formatDate, usePickLang } from "@/lib/i18n-utils";
 import { loadUserZonePrefs, saveUserZonePrefs } from "@/lib/zones";
 import { parseVma, vmaToInput } from "@/lib/paceFields";
-import type { AssistedPlanConfig, IntermediateGoal } from "@/types/plan";
-import type { UserZonePreferences } from "@/types";
-import { triggerStorageWarning } from "@/components/domain/StorageWarning";
-import { usePickLang } from "@/lib/i18n-utils";
-import {
-  addWeeksToDate,
-  buildRacePlanDateRange,
-  calculatePlanWeekCount,
-} from "@/lib/planDates";
-import {
-  validateIntermediateGoals,
-  sortIntermediateGoals,
-} from "@/lib/intermediateGoalValidation";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
-import { usePlanDraft } from "./plan-create/usePlanDraft";
-import { RECOMMENDED_WEEKS } from "./plan-create/constants";
+import { savePlan } from "@/lib/planStorage";
+import { validateIntermediateGoals } from "@/lib/intermediateGoalValidation";
+import { MAX_PLAN_WEEKS, RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
+import { anchorPrebuilt } from "@/lib/prebuiltPlanConverter";
 import {
-  generateId,
-  getTodayDateInputValue,
-  parsePaceToSeconds,
-  suggestLevel,
-} from "./plan-create/helpers";
-import { STEPS } from "./plan-create/steps/registry";
-import { indexOfStep, stepsFor } from "./plan-create/steps/flows";
-import type { FormState, StepContext, WizardDerived } from "./plan-create/types";
-import { PRACTICES, type Practice } from "@/types/practice";
+  PURPOSE_DEFAULTS,
+  buildAssistedConfig,
+  emptyPlanForm,
+  goalOf,
+  matchingPrebuilts,
+  planEndOf,
+  planStartOf,
+  planWeeksOf,
+  type PlanForm,
+  type PlanGoal,
+} from "@/lib/planCreate";
+import { getPrebuiltBySlug } from "@/data/prebuilt-plans";
+import { RACE_DISTANCE_META } from "@/types/plan";
+import { PRACTICES, practiceFromRaceDistance, type Practice } from "@/types/practice";
+import { generateId, getTodayDateInputValue } from "./plan-create/helpers";
+import { isScreenId, reachableStep, stepsFor, type ScreenId } from "./plan-create/flows";
+import { usePlanDraft } from "./plan-create/usePlanDraft";
+import { useLivePlan } from "./plan-create/useLivePlan";
+import { useDebouncedValue } from "./plan-create/useDebouncedValue";
+import { GoalScreen } from "./plan-create/GoalScreen";
+import { DateScreen } from "./plan-create/DateScreen";
+import { PathScreen } from "./plan-create/PathScreen";
+import { YouScreen } from "./plan-create/YouScreen";
+import { PreviewScreen } from "./plan-create/PreviewScreen";
+import { PlanAside } from "./plan-create/PlanAside";
+import { RefinePanel } from "./plan-create/RefinePanel";
+
+/** Les champs tapés au clavier : ils régénèrent l'aperçu après 150 ms, pas à chaque touche. */
+const TEXT_FIELDS = [
+  "raceName",
+  "vma",
+  "targetPace",
+  "elevationGain",
+  "currentWeeklyKm",
+  "currentLongRunKm",
+  "intermediateGoals",
+] as const satisfies readonly (keyof PlanForm)[];
+type TypedFields = Pick<PlanForm, (typeof TEXT_FIELDS)[number]>;
+
+/** Les réponses d'un plan prêt ouvert depuis sa fiche (`?prebuilt=<slug>`). */
+function formForPrebuilt(form: PlanForm, slug: string | null): PlanForm {
+  const pb = slug ? getPrebuiltBySlug(slug) : undefined;
+  if (!pb) return form;
+  const purpose = pb.planPurpose ?? "race";
+  if (purpose === "race") {
+    if (!pb.raceDistance) return form;
+    return {
+      ...form,
+      planPurpose: "race",
+      raceDistance: pb.raceDistance,
+      practice: practiceFromRaceDistance(pb.raceDistance),
+      prebuiltSlug: pb.slug,
+    };
+  }
+  return {
+    ...form,
+    planPurpose: purpose,
+    raceDistance: null,
+    practice: form.practice ?? "road",
+    ...PURPOSE_DEFAULTS[purpose],
+    totalWeeksOverride: pb.totalWeeks,
+    prebuiltSlug: pb.slug,
+  };
+}
 
 /**
- * La coquille du parcours de plan.
- *
- * Elle faisait 1 609 lignes : douze formulaires, PLUS un `switch canProceed`,
- * PLUS un `renderSummary` géant, tous refermés sur le même état. N'en extraire
- * que les formulaires aurait donné un monolithe avec des fichiers en plus,
- * ce qui compte, c'est que chaque étape déclare maintenant sa question, ce qui
- * y répond et sa condition d'avancement (`plan-create/steps/`). Il ne reste
- * ici que ce qui est vraiment commun : l'état du brouillon, les valeurs
- * dérivées, la navigation, et la génération.
- *
- * Depuis le 20 septembre 2026 elle EST `/plan/new` : les deux couloirs qui
- * la précédaient (la pratique, puis le mode de fabrication) ont disparu, la
- * première question est la course, et le parcours tient en sept écrans.
- * Un plan déjà écrit ou un calendrier vide se rejoignent par deux liens
- * sous cette première question.
+ * Créer un plan : l'objectif, la date, le choix entre un plan prêt et le sur
+ * mesure, toi et ta semaine, puis le plan lui-même, généré avant d'être
+ * enregistré. L'écran courant vit dans l'URL (`?step=`) : le bouton retour du
+ * navigateur remonte le parcours.
  */
 export function PlanCreatePage() {
   const { t } = useTranslation("plan");
   const pick = usePickLang();
   const navigate = useNavigate();
-  const uid = useId();
-  const [searchParams] = useSearchParams();
-  const { createPlan, isGenerating, error } = useCreatePlan();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const today = useMemo(() => getTodayDateInputValue(), []);
+  const { createPlan, isGenerating, error: createError } = useCreatePlan();
 
-  /* `?practice=trail` depuis une carte de pratique : la première question
-     ne montre alors que les courses de cette pratique. Une valeur inconnue
-     est ignorée. */
+  /* `?practice=trail` depuis une carte de pratique : la première question ne
+     montre que les courses de cette pratique. Une valeur inconnue est ignorée. */
   const presetPractice = useMemo<Practice | null>(() => {
     const raw = searchParams.get("practice");
-    return raw && (PRACTICES as readonly string[]).includes(raw)
-      ? (raw as Practice)
-      : null;
+    return raw && (PRACTICES as readonly string[]).includes(raw) ? (raw as Practice) : null;
   }, [searchParams]);
 
-  const [stepIndex, setStepIndex] = useState(0);
-  const [direction, setDirection] = useState<"forward" | "backward">("forward");
-  const todayDate = useMemo(() => getTodayDateInputValue(), []);
-
-  /* L'état de départ est mémorisé, pas seulement utilisé : un brouillon écrit
-     avant l'ajout d'un champ n'en a pas la clé, et le poser tel quel donnerait
-     un objet incomplet TYPÉ complet. `revive` fusionne sur celui-ci. */
-  const initialForm = useMemo<FormState>(() => {
+  /* Déjà rempli : le profil coureur et Mes zones d'abord, des valeurs
+     courantes sinon. Mémorisé pour compléter un brouillon d'avant un champ. */
+  const userPrefs = useMemo(() => loadUserZonePrefs(), []);
+  const [initialForm] = useState<PlanForm>(() => {
     const rp = loadRunnerProfile();
-    const prefs = loadUserZonePrefs();
     return {
+      ...emptyPlanForm(),
       practice: presetPractice,
-      planPurpose: "race",
-      trainingGoal: "time",
-      raceDistance: null,
-      raceDate: "",
-      startDate: todayDate,
-      useCustomStartDate: false,
-      raceName: "",
-      runnerLevel: rp?.runnerLevel ?? null,
-      /* Préremplie de ce que l'app sait déjà : Mes zones d'abord, le profil
-         ensuite, les deux écrivant la même valeur depuis ce lot. */
-      vma: vmaToInput(prefs?.vma ?? rp?.vma),
-      daysPerWeek: 4,
-      longRunDay: 6,
-      targetPace: "",
-      elevationGain: "",
-      totalWeeksOverride: 0,
+      runnerLevel: rp?.runnerLevel ?? "intermediate",
+      vma: vmaToInput(userPrefs?.vma ?? rp?.vma),
       currentWeeklyKm: rp?.currentWeeklyKm != null ? String(rp.currentWeeklyKm) : "",
       currentLongRunKm: rp?.currentLongRunKm != null ? String(rp.currentLongRunKm) : "",
-      includeStrength: false,
-      strengthFrequency: 2,
-      intermediateGoals: [],
-      terrain: "trail_runnable",
     };
-  }, [todayDate, presetPractice]);
+  });
+  const [form, setForm] = useState<PlanForm>(() =>
+    formForPrebuilt(initialForm, searchParams.get("prebuilt")),
+  );
+  const patch = useCallback((next: Partial<PlanForm>) => setForm((f) => ({ ...f, ...next })), []);
 
-  const [form, setForm] = useState<FormState>(initialForm);
+  // ── Le parcours ─────────────────────────────────────────────────
+  const goal = goalOf(form);
+  const goalKey = goal ? (goal.kind === "race" ? goal.distance : goal.purpose) : "";
+  // La liste ne dépend que de l'objectif.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const prebuilts = useMemo(() => (goal ? matchingPrebuilts(goal) : []), [goalKey]);
+  const prebuilt = prebuilts.find((p) => p.slug === form.prebuiltSlug) ?? null;
+  const steps = stepsFor({ prebuiltSlug: prebuilt?.slug ?? null }, prebuilts.length);
+  const isRace = form.planPurpose === "race";
 
-  const steps = useMemo(() => stepsFor(form), [form]);
-  /* Borner l'index au parcours courant : une réponse peut raccourcir la
-     liste en cours de route. Sans ça l'écran annonçait Étape 2 sur 1. */
-  const safeIndex = Math.min(stepIndex, steps.length - 1);
-  const currentStepId = steps[safeIndex] ?? "race";
+  const weeks = planWeeksOf(form, today);
+  const start = planStartOf(form, today);
+  const end = planEndOf(form, today);
+  const rec = RECOMMENDED_PLAN_WEEKS[form.raceDistance ?? "10K"];
+  const dateOk = isRace ? !!form.raceDate && weeks >= rec.min && weeks <= MAX_PLAN_WEEKS : true;
 
-  // Auto-save the wizard so a closed tab / hard reload doesn't lose progress.
-  // Persistence stops when the plan is finalized; the banner appears on mount
-  // when a previous draft is found and lets the user resume or start fresh.
-  const { hasDraft, restoreDraft, clearDraft, finalize } = usePlanDraft<FormState>(
-    form,
-    setForm,
-    stepIndex,
-    setStepIndex,
-    {
-      stepId: currentStepId,
-      revive: (stored) => ({ ...initialForm, ...stored }),
-      resolveStepIndex: indexOfStep,
-    },
+  const urlStep = searchParams.get("step");
+  const wanted: ScreenId = isScreenId(urlStep)
+    ? urlStep
+    : searchParams.has("prebuilt")
+      ? "date"
+      : "goal";
+  const step = reachableStep(wanted, steps, { goal: !!goal, date: dateOk });
+  const at = steps.indexOf(step);
+
+  const go = useCallback(
+    (next: ScreenId, replace = false) =>
+      setSearchParams(
+        (prev) => {
+          const params = new URLSearchParams(prev);
+          params.set("step", next);
+          params.delete("prebuilt");
+          return params;
+        },
+        { replace },
+      ),
+    [setSearchParams],
   );
 
-  // Load user zone preferences for VMA suggestion
-  const userPrefs: UserZonePreferences | null = useMemo(
-    () => loadUserZonePrefs(),
-    [],
-  );
-
-  // ── Dynamic step flow ────────────────────────────────────────────
-
-  const isRacePlan = form.planPurpose === "race";
-  const step = STEPS[currentStepId];
-  const totalSteps = steps.length;
-
-  // ── Navigation ───────────────────────────────────────────────────
-
-  /* Le parcours courant, lu au moment où on avance et non au moment où le
-     geste a été fait. Les deux diffèrent : répondre pratique fait passer
-     la liste d'UNE étape à treize, et `goForward` fermé sur l'ancienne liste
-     calculait `Math.min(1, 0)`, il ne bougeait pas. */
-  const stepsRef = useRef(steps);
-  stepsRef.current = steps;
-
-  const advanceTimer = useRef<number | null>(null);
-
-  const cancelAdvance = useCallback(() => {
-    if (advanceTimer.current !== null) {
-      window.clearTimeout(advanceTimer.current);
-      advanceTimer.current = null;
-    }
-  }, []);
-
-  useEffect(() => cancelAdvance, [cancelAdvance]);
-
-  const goForward = useCallback(() => {
-    cancelAdvance();
-    withDirectionalTransition("next", () => {
-      setDirection("forward");
-      setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
-    });
-  }, [cancelAdvance]);
-
-  const goBack = useCallback(() => {
-    cancelAdvance();
-    withDirectionalTransition("prev", () => {
-      setDirection("backward");
-      setStepIndex((s) => Math.max(s - 1, 0));
-    });
-  }, [cancelAdvance]);
-
-  /** The stepper only walks backwards: a step ahead has not been answered. */
-  const goBackTo = useCallback(
-    (index: number) => {
-      cancelAdvance();
-      withDirectionalTransition("prev", () => {
-        setDirection("backward");
-        setStepIndex(index);
-      });
-    },
-    [cancelAdvance],
-  );
-
-  /**
-   * Une réponse à choix unique avance d'elle-même.
-   *
-   * Le battement n'est pas un effet de style : le clic du label arrive AVANT
-   * que la radio ne change d'état, donc avancer dans la foulée lirait l'ancien
-   * brouillon, et l'ancien parcours, qui n'a pas encore la longueur que la
-   * réponse vient de lui donner. 160 ms laissent aussi voir l'option se
-   * cocher, ce qui est ce qui fait que l'écran suivant n'a pas l'air d'un
-   * accident.
-   */
-  const commit = useCallback(() => {
-    cancelAdvance();
-    advanceTimer.current = window.setTimeout(() => {
-      advanceTimer.current = null;
-      withDirectionalTransition("next", () => {
-        setDirection("forward");
-        setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
-      });
-    }, 160);
-  }, [cancelAdvance]);
-
-  // ── Derived values ───────────────────────────────────────────────
-
-  const weeksCount = useMemo(
-    () =>
-      form.raceDate
-        ? calculatePlanWeekCount(form.startDate || todayDate, form.raceDate)
-        : 0,
-    [form.raceDate, form.startDate, todayDate],
-  );
-
-  const recommendedWeeks = useMemo(
-    () => RECOMMENDED_WEEKS[form.raceDistance ?? "10K"] ?? RECOMMENDED_WEEKS["10K"],
-    [form.raceDistance],
-  );
-
-  const minWeeksForDistance = recommendedWeeks.min;
-
-  // Valid if enough weeks (min is a hard constraint, max is just a warning)
-  const dateValid = weeksCount >= minWeeksForDistance;
-  const dateTooLong = weeksCount > recommendedWeeks.max;
-
-  const minDate = useMemo(
-    () => addWeeksToDate(form.startDate || todayDate, minWeeksForDistance),
-    [form.startDate, minWeeksForDistance, todayDate],
-  );
-
-  const paceSeconds = useMemo(
-    () => parsePaceToSeconds(form.targetPace),
-    [form.targetPace],
-  );
-
-  const suggestedLevel = useMemo(
-    () => (userPrefs?.vma ? suggestLevel(userPrefs.vma) : null),
-    [userPrefs],
-  );
-
-  const vma = useMemo(() => parseVma(form.vma), [form.vma]);
-
-  const intermediateGoalValidation = useMemo(() => {
-    if (form.intermediateGoals.length === 0 || !form.raceDate)
-      return { valid: true, errors: [] };
-    return validateIntermediateGoals(
-      form.intermediateGoals,
-      form.raceDate,
-      form.startDate || todayDate,
-      form.raceDistance ?? "10K",
-    );
-  }, [
-    form.intermediateGoals,
-    form.raceDate,
-    form.startDate,
-    form.raceDistance,
-    todayDate,
-  ]);
-
-  const intermediateGoalMaxDate = useMemo(() => {
-    if (!form.raceDate) return undefined;
-    // 2 weeks before main race
-    const d = new Date(form.raceDate);
-    d.setDate(d.getDate() - 14);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
-  }, [form.raceDate]);
-
-  const derived: WizardDerived = {
-    todayDate,
-    weeksCount,
-    recommendedWeeks,
-    minWeeksForDistance,
-    dateValid,
-    dateTooLong,
-    minDate,
-    paceSeconds,
-    suggestedLevel,
-    userPrefs,
-    intermediateGoalValidation,
-    intermediateGoalMaxDate,
-    isRacePlan,
-    presetPractice,
-    vma,
-  };
-
-  // ── Submit handler ───────────────────────────────────────────────
-
-  const handleGenerate = useCallback(async () => {
-    if (!form.runnerLevel) return;
-    if (isRacePlan && (!form.raceDistance || !form.raceDate)) return;
-
-    const effectiveRaceDate =
-      form.raceDate ||
-      new Date(
-        Date.now() + 86400000 * 7 * (form.totalWeeksOverride || 12),
-      ).toISOString();
-
-    const config: AssistedPlanConfig = {
-      id: generateId(),
-      raceDistance: form.raceDistance ?? "10K",
-      raceDate: effectiveRaceDate,
-      raceName: form.raceName || undefined,
-      runnerLevel: form.runnerLevel,
-      daysPerWeek: form.daysPerWeek,
-      longRunDay: form.longRunDay,
-      vma,
-      targetPaceMinKm: paceSeconds ? paceSeconds / 60 : undefined,
-      elevationGain: form.elevationGain
-        ? parseInt(form.elevationGain, 10)
-        : undefined,
-      createdAt: new Date().toISOString(),
-      ...buildRacePlanDateRange(form.startDate, effectiveRaceDate),
-      /* La pratique n'est stockée QUE pour un plan sans course visée : dans
-         tous les autres cas elle se déduit de `raceDistance`, ce qui est ce
-         qui évite toute migration de `zoned-plans`. */
-      practice: isRacePlan ? undefined : (form.practice ?? undefined),
-      planPurpose: form.planPurpose,
-      trainingGoal: form.trainingGoal,
-      totalWeeksOverride: !isRacePlan ? form.totalWeeksOverride : undefined,
-      currentWeeklyKm: form.currentWeeklyKm
-        ? parseInt(form.currentWeeklyKm, 10)
-        : undefined,
-      currentLongRunKm: form.currentLongRunKm
-        ? parseInt(form.currentLongRunKm, 10)
-        : undefined,
-      includeStrength: form.includeStrength || undefined,
-      strengthFrequency: form.includeStrength ? form.strengthFrequency : undefined,
-      intermediateGoals:
-        form.intermediateGoals.length > 0
-          ? sortIntermediateGoals(form.intermediateGoals)
-          : undefined,
-    };
-
-    try {
-      const plan = await createPlan(config);
-      /* La VMA saisie ici devient celle de l'app : Mes zones et le profil la
-         lisent tous deux (`saveUserZonePrefs` écrit les deux). Une seule
-         question, une seule valeur. */
-      if (vma && vma !== userPrefs?.vma) {
-        saveUserZonePrefs({ ...(userPrefs ?? {}), vma });
-      }
-      finalize();
-      triggerStorageWarning();
-      navigate(`/plan/${plan.id}`);
-    } catch {
-      // Error is exposed via the hook's error state
-    }
-  }, [form, userPrefs, vma, paceSeconds, createPlan, navigate, finalize, isRacePlan]);
-
-  // ── Intermediate goals ───────────────────────────────────────────
-
-  const addIntermediateGoal = useCallback(() => {
-    setForm((f) => {
-      if (f.intermediateGoals.length >= 5) return f;
-      const newGoal: IntermediateGoal = {
-        raceDistance: "10K",
-        raceDate: "",
-        raceName: "",
-        priority: "B",
-      };
-      return { ...f, intermediateGoals: [...f.intermediateGoals, newGoal] };
-    });
-  }, []);
-
-  const removeIntermediateGoal = useCallback((index: number) => {
-    setForm((f) => ({
-      ...f,
-      intermediateGoals: f.intermediateGoals.filter((_, i) => i !== index),
-    }));
-  }, []);
-
-  const updateIntermediateGoal = useCallback(
-    (index: number, patch: Partial<IntermediateGoal>) => {
-      setForm((f) => ({
-        ...f,
-        intermediateGoals: f.intermediateGoals.map((g, i) =>
-          i === index ? { ...g, ...patch } : g,
-        ),
-      }));
-    },
-    [],
-  );
-
-  // ── Furniture ────────────────────────────────────────────────────
-
-  const questionId = `${uid}-question`;
-
-  const patch = useCallback(
-    (next: Partial<FormState>) => setForm((f) => ({ ...f, ...next })),
-    [],
-  );
-
-  const ctx: StepContext = {
-    form,
-    setForm,
-    patch,
-    derived,
-    uid,
-    questionId,
-    t,
-    pick,
-    goForward,
-    goBack,
-    commit,
-    direction,
-    submit: { generate: handleGenerate, isGenerating, error },
-    goals: {
-      add: addIntermediateGoal,
-      remove: removeIntermediateGoal,
-      update: updateIntermediateGoal,
-    },
-  };
-
-  const canProceed = step.isComplete(form, derived);
-
-  /**
-   * Chaque étape s'ouvre sur sa question.
-   *
-   * Sans ça, l'écran suivant héritait de la position où le doigt avait laissé
-   * le précédent : on descendait chercher Suivant, et l'étape d'après
-   * s'ouvrait à mi-hauteur, question déjà hors champ. Sur treize étapes, c'est
-   * le sentiment de il manque toujours quelque chose en haut.
-   *
-   * Sans animation : le volet joue déjà son glissement, et deux mouvements
-   * simultanés se lisent comme un saut. Le premier rendu est exclu, une page
-   * ouverte par un lien ancré n'a pas à être ramenée en haut.
-   */
-  const firstPaint = useRef(true);
+  // `?prebuilt=` est lu une fois, au premier rendu ; ensuite l'URL dit l'écran.
   useEffect(() => {
-    if (firstPaint.current) {
-      firstPaint.current = false;
-      return;
-    }
+    if (searchParams.has("prebuilt")) go("date", true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Un écran pas encore atteignable (lien direct, page rechargée) : l'URL dit celui qu'on voit.
+  useEffect(() => {
+    if (urlStep && urlStep !== step) go(step, true);
+  }, [urlStep, step, go]);
+
+  const { hasDraft, restoreDraft, clearDraft, finalize } = usePlanDraft<PlanForm>(
+    form,
+    setForm,
+    step,
+    (s) => go(isScreenId(s) ? s : "goal", true),
+    (stored) => ({ ...initialForm, ...stored }),
+  );
+
+  /* Chaque écran s'ouvre en haut, le focus sur sa question. Pas au premier
+     rendu : une page ouverte par un lien n'a pas à bouger. */
+  const shownStep = useRef(step);
+  useEffect(() => {
+    if (shownStep.current === step) return;
+    shownStep.current = step;
     window.scrollTo({ top: 0 });
-  }, [safeIndex]);
+    document.querySelector<HTMLElement>(".zn-pc__title")?.focus({ preventScroll: true });
+  }, [step]);
+
+  // ── Le plan, en direct ──────────────────────────────────────────
+  const anchored = useMemo(() => {
+    if (!prebuilt || !dateOk) return null;
+    return anchorPrebuilt(
+      prebuilt,
+      isRace ? { raceDate: form.raceDate, today, raceName: form.raceName } : { startDate: start },
+    );
+  }, [prebuilt, dateOk, isRace, form.raceDate, form.raceName, today, start]);
+
+  const goalsValidation = useMemo(
+    () =>
+      isRace && form.raceDate && form.raceDistance && form.intermediateGoals.length > 0
+        ? validateIntermediateGoals(form.intermediateGoals, form.raceDate, start, form.raceDistance)
+        : { valid: true, errors: [] },
+    [isRace, form.raceDate, form.raceDistance, form.intermediateGoals, start],
+  );
+
+  const textNow = JSON.stringify(Object.fromEntries(TEXT_FIELDS.map((k) => [k, form[k]])));
+  const textLater = useDebouncedValue(textNow, 150);
+  /* Sur bureau, le plan se dessine pendant qu'on répond, dans le panneau de
+     droite des écrans 2.2 à 2.4. Sur téléphone, il n'est généré que pour
+     l'aperçu. */
+  const wide = useMediaQuery("(min-width: 1024px)");
+  const withAside = wide && (step === "date" || step === "path" || step === "you");
+  const liveNeeded = step === "preview" || withAside;
+  const liveConfig = useMemo(() => {
+    if (prebuilt || !goalKey || !dateOk || !liveNeeded) return null;
+    const settled: PlanForm = { ...form, ...(JSON.parse(textLater) as TypedFields) };
+    // Une course de préparation mal datée ne compte pas : l'erreur est sous ses champs.
+    if (
+      settled.intermediateGoals.length > 0 &&
+      (!settled.raceDistance ||
+        !validateIntermediateGoals(
+          settled.intermediateGoals,
+          settled.raceDate,
+          planStartOf(settled, today),
+          settled.raceDistance,
+        ).valid)
+    ) {
+      settled.intermediateGoals = [];
+    }
+    return buildAssistedConfig(settled, today);
+  }, [form, textLater, prebuilt, goalKey, dateOk, liveNeeded, today]);
+  const live = useLivePlan(liveConfig);
+  const plan = prebuilt ? (anchored?.ok ? anchored.plan : null) : live.plan;
+
+  // ── Les gestes ──────────────────────────────────────────────────
+  const pickGoal = (next: PlanGoal) => {
+    setForm((f) =>
+      next.kind === "race"
+        ? {
+            ...f,
+            planPurpose: "race",
+            raceDistance: next.distance,
+            practice: practiceFromRaceDistance(next.distance),
+            prebuiltSlug: null,
+          }
+        : {
+            ...f,
+            planPurpose: next.purpose,
+            raceDistance: null,
+            practice: presetPractice ?? "road",
+            ...PURPOSE_DEFAULTS[next.purpose],
+            prebuiltSlug: null,
+          },
+    );
+    go("date");
+  };
+
+  /* Après la date : un plan prêt déjà choisi qui tient dans le calendrier
+     mène à l'aperçu ; sinon l'écran suivant du parcours. */
+  const afterDate = () => {
+    if (prebuilt && anchored?.ok) go("preview");
+    else go(steps[steps.indexOf("date") + 1]);
+  };
+
+  const back = () => go(steps[Math.max(0, at - 1)]);
+
+  const vma = parseVma(form.vma);
+  const handleCreate = async () => {
+    let id: string;
+    if (prebuilt) {
+      if (!anchored?.ok) return;
+      const saved = savePlan(anchored.plan);
+      if (!saved.ok) {
+        toast.failure(t("common:errors.planSaveFailed"), saved);
+        return;
+      }
+      id = anchored.plan.id;
+    } else {
+      try {
+        const created = await createPlan(
+          buildAssistedConfig(form, today, { id: generateId(), createdAt: new Date().toISOString() }),
+        );
+        id = created.id;
+      } catch {
+        return; // L'erreur s'affiche sous les repères (`createError`).
+      }
+    }
+    /* La VMA saisie ici devient celle de l'app : Mes zones et le profil la
+       lisent tous deux. */
+    if (vma && vma !== userPrefs?.vma) saveUserZonePrefs({ ...(userPrefs ?? {}), vma });
+    finalize();
+    navigate(`/plan/${id}`);
+  };
+
+  // ── Les libellés ────────────────────────────────────────────────
+  const goalLabel = !goal
+    ? ""
+    : goal.kind === "race"
+      ? pick(RACE_DISTANCE_META[goal.distance], "label")
+      : t(`parcours.goal.purpose.${goal.purpose}`);
+  const previewTitle =
+    (isRace && form.raceName.trim()) ||
+    (isRace && form.raceDate
+      ? t("parcours.preview.titleRace", {
+          goal: goalLabel,
+          date: formatDate(form.raceDate, { day: "numeric", month: "long" }),
+        })
+      : prebuilt
+        ? pick(prebuilt, "name")
+        : goalLabel);
+
+  const screen = (() => {
+    switch (step) {
+      case "goal":
+        return <GoalScreen goal={goal} presetPractice={presetPractice} onPick={pickGoal} />;
+      case "date":
+        return (
+          <DateScreen
+            form={form}
+            patch={patch}
+            today={today}
+            goalLabel={goalLabel}
+            weeks={prebuilt && anchored?.ok ? prebuilt.totalWeeks : weeks}
+            start={anchored?.ok ? anchored.startDate : start}
+            end={end}
+            dateOk={dateOk}
+            prebuilt={prebuilt && !isRace ? prebuilt : null}
+            onContinue={afterDate}
+          />
+        );
+      case "path":
+        return (
+          <PathScreen
+            form={form}
+            today={today}
+            prebuilts={prebuilts}
+            start={start}
+            weeks={weeks}
+            onPickPrebuilt={(slug) => {
+              patch({ prebuiltSlug: slug });
+              go("preview");
+            }}
+            onPickCustom={() => {
+              patch({ prebuiltSlug: null });
+              go("you");
+            }}
+          />
+        );
+      case "you":
+        return <YouScreen form={form} patch={patch} onContinue={() => go("preview")} />;
+      case "preview":
+        return (
+          <PreviewScreen
+            kind={prebuilt ? "ready" : "custom"}
+            title={previewTitle}
+            prebuiltName={prebuilt && isRace ? pick(prebuilt, "name") : null}
+            plan={plan}
+            busy={!prebuilt && live.busy}
+            error={prebuilt ? null : live.error}
+            start={anchored?.ok ? anchored.startDate : start}
+            raceDate={isRace ? form.raceDate : null}
+            raceName={isRace ? form.raceName.trim() || null : null}
+            sessionsPerWeek={prebuilt ? prebuilt.sessionsPerWeek : form.daysPerWeek}
+            noVma={!prebuilt && !vma}
+            onCreate={handleCreate}
+            creating={isGenerating}
+            blocked={!goalsValidation.valid}
+            createError={createError}
+            refine={
+              prebuilt ? undefined : (
+                <RefinePanel
+                  form={form}
+                  patch={patch}
+                  today={today}
+                  start={start}
+                  isTrail={!!form.raceDistance && practiceFromRaceDistance(form.raceDistance) !== "road"}
+                  goalsValidation={goalsValidation}
+                />
+              )
+            }
+          />
+        );
+    }
+  })();
 
   return (
     <>
-      <SEOHead
-        title={t("seo.createTitle")}
-        description={t("seo.createDescription")}
-        canonical="/plan/new"
-      />
-
-      <div className="zn-wiz">
-        {/* La pile du titre. Son écart vit dans la feuille et non en style en
-            ligne : un style en ligne bat toute règle, et le bloc téléphone de
-            plan-wizard.css a précisément à le resserrer. */}
-        <div className="zn-stack zn-wiz__head">
-          {safeIndex === 0 && (
-            <Button variant="ghost" size="sm" asChild className="zn-wiz__lone">
-              <Link to="/plans">
-                <ArrowLeft />
-                {t("nav.back")}
-              </Link>
-            </Button>
+      <SEOHead title={t("seo.createTitle")} description={t("seo.createDescription")} canonical="/plan/new" />
+      <div className="zn-pc" data-step={step}>
+        <div className="zn-pc__bar">
+          {at > 0 ? (
+            <button type="button" className="zn-pc__back" onClick={back}>
+              <ArrowLeft size={18} />
+              {t("nav.back")}
+            </button>
+          ) : (
+            <Link to="/plans" className="zn-pc__back">
+              <ArrowLeft size={18} />
+              {t("parcours.back")}
+            </Link>
           )}
-
-          {/* LA QUESTION est le titre de l'écran, et c'est le seul.
-              Elle était un `h2` de niveau 3 DANS la carte, sous un `h1` en
-              display qui disait Réponds, le plan se construit, la même
-              phrase aux treize étapes. Relu en niveaux de gris et flouté à
-              390 px : la masse la plus lourde de l'écran était la phrase
-              générique, pas ce qu'on demande. Le parcours veut la question,
-              puis les réponses, puis continuer, rien d'autre ; la phrase est
-              donc partie et la question a pris sa place.
-
-              Le titre vit ici, HORS de la branche `ownsNav` : le récapitulatif
-              n'a pas de carte de question, et laisser le titre dedans lui
-              aurait retiré son `h1`. */}
-          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-            <span className="zn-kicker">{t("wizard.kicker")}</span>
-            <h1 id={questionId} className="zn-display" data-level="2">
-              {t(step.titleKey)}
-            </h1>
-            {step.subtitleKey ? (
-              <p className="zn-body zn-body--sm zn-muted zn-measure">
-                {t(step.subtitleKey, step.subtitleParams?.(form, derived))}
-              </p>
-            ) : null}
-          </div>
+          <ol className="zn-pc__dots" aria-label={t("nav.step", { current: at + 1, total: steps.length })}>
+            {steps.map((s, i) => (
+              <li key={s} data-on={i <= at || undefined} />
+            ))}
+          </ol>
         </div>
 
-        {/* The promise and its limits are stated once, on the first step,
-            past that the question on screen is what matters.
-
-            Elles ont QUITTÉ la pile du titre : sur un téléphone, ce bloc
-            posait un paragraphe, une source et une carte entre la première
-            question et ses réponses, les sept pratiques commençaient sous la
-            ligne de flottaison, à l'écran même où l'on ne sait pas encore de
-            quoi il s'agit. C'est maintenant un frère du titre et de la bande,
-            et `.zn-wiz__promise` le fait passer SOUS les réponses en dessous
-            de 900 px (plan-wizard.css). Sur grand écran, rien ne bouge. */}
-        {safeIndex === 0 && (
-          <div className="zn-wiz__promise">
-            <div
-              className="zn-split"
-              style={{ "--split": "1fr 340px", "--gap": "var(--sp-14)" } as CSSProperties}
-            >
-              <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-                <p className="zn-body zn-body--lead">{t("wizard.lede")}</p>
-                <p className="zn-source">{t("wizard.source")}</p>
-              </div>
-              <Card size="compact">
-                <CardContent
-                  className="zn-stack"
-                  style={{ "--gap": "var(--sp-5)" } as CSSProperties}
-                >
-                  <span className="zn-kicker zn-kicker--inline">
-                    {t("wizard.limitsKicker")}
-                  </span>
-                  <p className="zn-body zn-body--sm zn-muted">{t("wizard.limitsBody")}</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        )}
-
-        <section className="zn-wiz__band">
-          {hasDraft && safeIndex === 0 && (
-            <Alert
-              kind="info"
-              title={t("draft.found")}
-              action={
-                <span
-                  className="zn-cluster"
-                  style={{ "--gap": "var(--sp-4)" } as CSSProperties}
-                >
-                  <Button size="sm" variant="outline" onClick={restoreDraft}>
-                    {t("draft.restore")}
-                  </Button>
-                  <Button size="sm" variant="ghost" onClick={clearDraft}>
-                    {t("draft.discard")}
-                  </Button>
-                </span>
-              }
-            >
-              {t("wizard.draftBody")}
-            </Alert>
-          )}
-
-          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-            <ol className="zn-stepper zn-wiz__steps">
-              {steps.map((id, index) => {
-                const done = index < safeIndex;
-                const current = index === safeIndex;
-                return (
-                  <li key={id} className="zn-stepper__item">
-                    <button
-                      type="button"
-                      className="zn-stepper__step"
-                      data-state={done ? "done" : current ? "current" : "todo"}
-                      aria-current={current ? "step" : undefined}
-                      disabled={!done}
-                      onClick={() => goBackTo(index)}
-                    >
-                      <span className="zn-stepper__rail" aria-hidden="true" />
-                      <span className="zn-stepper__name">
-                        <span className="zn-stepper__num">
-                          {done ? <Check size={12} /> : String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span className="zn-stepper__label">{t(`wizard.step.${id}`)}</span>
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-            {/* Avant la première réponse, le parcours n'a pas encore de
-                longueur (sept écrans pour une course, six sans) : dire
-                Étape 1 sur 1 promettait une question unique. On annonce
-                le plafond. */}
-            <p className="zn-mono zn-wiz__where">
-              {totalSteps === 1
-                ? t("wizard.whereFirst")
-                : t("wizard.where", { current: safeIndex + 1, total: totalSteps })}
-            </p>
-          </div>
-
-          {/* La coquille rend la question et la navigation ; l'étape ne rend
-              que ce qui répond. C'est ce qui a fait disparaître
-              `renderQuestion` et `renderNav` des douze corps. Le
-              récapitulatif est la seule exception : son bouton ne fait pas
-              suivant, il génère le plan. */}
-          {/* Geste : seule une navigation anime les étapes, jamais leur montage. */}
-          <Card className="zn-wiz__col" style={{ viewTransitionName: "zn-wizard-step" }}>
-            {step.ownsNav ? (
-              <step.Body {...ctx} />
-            ) : (
-              <>
-                <CardContent className="zn-wiz__pane" data-direction={direction}>
-                  <step.Body {...ctx} />
-                </CardContent>
-                {/* Une étape qui avance d'elle-même n'a pas de Suivant :
-                    la réponse EST le geste d'avancer, et un bouton primaire
-                    qui double le tap qu'on vient de faire n'est pas une
-                    sortie de secours, c'est une décision de plus. Il n'y
-                    reste que Retour, et sur la première question, où
-                    Retour serait désactivé, la barre entière disparaît.
-                    Le clavier garde sa sortie : Entrée sur la réponse
-                    (Option.tsx). */}
-                {(!step.autoAdvance || safeIndex > 0) && (
-                  <CardFooter className="zn-wiz__nav">
-                    <Button variant="outline" onClick={goBack} disabled={safeIndex === 0}>
-                      <ArrowLeft className="zn-wiz__nav-arrow" />
-                      {t("nav.back")}
+        <div className="zn-pc__grid">
+          <div className="zn-pc__main">
+            {hasDraft && step === "goal" && (
+              <Alert
+                kind="info"
+                title={t("draft.found")}
+                action={
+                  <span className="zn-pc__draft-actions">
+                    <Button size="sm" variant="outline" onClick={restoreDraft}>
+                      {t("draft.restore")}
                     </Button>
-                    {/* Passer et Continuer dans UN groupe poussé à
-                        droite, au lieu de trois enfants séparés par une cale.
-                        La cale comptait comme un enfant de plus, donc un
-                        écart de plus : les trois boutons demandaient 356 px
-                        pour 348 disponibles à 390 px, et passaient à la
-                        ligne pour huit pixels. */}
-                    {!step.autoAdvance && (
-                      <span className="zn-wiz__nav-end">
-                        {step.showSkip && (
-                          <Button variant="ghost" onClick={goForward}>
-                            {t("nav.skip")}
-                          </Button>
-                        )}
-                        <Button onClick={goForward} disabled={!canProceed}>
-                          {step.nextLabelKey ? t(step.nextLabelKey) : t("nav.next")}
-                          <ArrowRight className="zn-wiz__nav-arrow" />
-                        </Button>
-                      </span>
-                    )}
-                  </CardFooter>
-                )}
-              </>
+                    <Button size="sm" variant="ghost" onClick={clearDraft}>
+                      {t("draft.discard")}
+                    </Button>
+                  </span>
+                }
+              >
+                {t("wizard.draftBody")}
+              </Alert>
             )}
-          </Card>
-        </section>
+            {screen}
+          </div>
+          {withAside && (
+            <PlanAside
+              name={(isRace && form.raceName.trim()) || goalLabel}
+              goalLabel={goalLabel}
+              isRace={isRace}
+              raceDate={form.raceDate}
+              weeks={weeks}
+              start={start}
+              week={step === "you" ? { days: form.daysPerWeek, longRunDay: form.longRunDay } : null}
+              plan={dateOk ? plan : null}
+              busy={live.busy}
+            />
+          )}
+        </div>
       </div>
     </>
   );

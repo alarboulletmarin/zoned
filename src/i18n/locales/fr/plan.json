@@ -73,16 +73,8 @@
     "weeksShort": "sem"
   },
   "schedule": {
-    "title": "Ta semaine type",
-    "subtitle": "Combien de séances, quel jour la longue, et d'où tu pars.",
-    "currentVolume": "D'où tu pars, si tu le sais",
     "sessionsPerWeek": "Séances par semaine",
-    "longRunDay": "Jour de la sortie longue",
-    "longRunDayDesc": "Ta sortie longue hebdomadaire, la séance clé d'endurance",
-    "includeStrength": "Inclure le renforcement",
-    "includeStrengthDesc": "Ajouter des séances adaptées à chaque phase",
-    "strengthFrequency": "Fréquence renforcement",
-    "strengthPerWeek": "{{n}}x / sem"
+    "longRunDay": "Jour de la sortie longue"
   },
   "distance": {
     "title": "Choisis ta distance",
@@ -109,20 +101,8 @@
     "label": "Nom de la course"
   },
   "level": {
-    "title": "Ton niveau de course",
-    "subtitle": "Cela détermine l'intensité des séances",
     "vmaSuggestion": "VMA {{vma}} km/h · niveau suggéré : ",
     "vmaSuggestionSuffix": ".",
-    "beginner": "Débutant",
-    "beginnerDesc": "1 à 2 sorties/semaine · moins de 15 km/semaine",
-    "intermediate": "Intermédiaire",
-    "intermediateDesc": "3 à 4 sorties/semaine · 20-40 km/semaine",
-    "advanced": "Avancé",
-    "advancedDesc": "4 à 5 sorties/semaine · 40-70 km/semaine",
-    "elite": "Élite",
-    "eliteDesc": "5 à 7 sorties/semaine · 70+ km/semaine",
-    "suggested": "Suggéré",
-    "vmaLabel": "Ta VMA, si tu la connais",
     "vmaPlaceholder": "14,5",
     "vmaHint": "Facultatif. Sans elle, les allures du plan sont estimées depuis ton niveau.",
     "vmaUnknown": "Je ne la connais pas"
@@ -368,9 +348,7 @@
   },
   "nav": {
     "back": "Retour",
-    "next": "Suivant",
     "continue": "Continuer",
-    "skip": "Passer",
     "step": "Étape {{current}} sur {{total}}"
   },
   "viewMode": {
@@ -775,26 +753,9 @@
     "createNote": "{{n}} semaines vides, à remplir séance par séance"
   },
   "wizard": {
-    "kicker": "Nouveau plan",
-    "lede": "Le volume monte de 10 % par semaine au maximum, avec une semaine allégée toutes les trois.",
-    "source": "Mujika & Padilla 2003 · Pfitzinger & Douglas 2009",
-    "limitsKicker": "Sans compte, sans rappel",
-    "limitsBody": "Le plan ne t'envoie rien et ne compte pas tes jours d'affilée. Tu le modifies ou tu le supprimes quand tu veux.",
-    "where": "Étape {{current}} sur {{total}} · rien n'est envoyé",
-    "whereFirst": "Sept écrans au plus · rien n'est envoyé",
     "draftBody": "Tes réponses de la dernière fois sont là. Reprends où tu en étais, ou repars de zéro.",
     "errorTitle": "Le plan n'a pas été généré",
-    "errorHint": "Tes réponses sont intactes : réessaie, ou reviens en arrière pour changer une réponse.",
-    "step": {
-      "race": "Course",
-      "event": "La course",
-      "duration": "Durée",
-      "level": "Niveau",
-      "goal": "État d'esprit",
-      "schedule": "Semaine type",
-      "pace": "Allure",
-      "summary": "Récapitulatif"
-    }
+    "errorHint": "Tes réponses sont intactes : réessaie, ou reviens en arrière pour changer une réponse."
   },
   "race": {
     "title": "Qu'est-ce que tu prépares ?",
@@ -1047,5 +1008,139 @@
       "week": "Semaine {{n}}, {{dates}}, voir toutes les semaines"
     },
     "ticks": "Repères en minutes"
+  },
+  "parcours": {
+    "goal": {
+      "title": "Qu'est-ce que tu prépares ?",
+      "road": "Route",
+      "trail": "Trail",
+      "weeksRange": "{{min}} à {{max}} semaines",
+      "upTo": "jusqu'à {{km}} km",
+      "ready_one": "Prêt",
+      "ready_other": "{{count}} prêts",
+      "readyA11y_one": "{{name}}, {{count}} plan prêt à l'emploi",
+      "readyA11y_other": "{{name}}, {{count}} plans prêts à l'emploi",
+      "noRace": "Sans course en vue",
+      "readyAvailable": "{{hint}}, plan prêt disponible",
+      "purpose": {
+        "base_building": "Construire ma base",
+        "return_from_injury": "Reprendre",
+        "beginner_start": "Débuter"
+      },
+      "purposeHint": {
+        "base_building": "De l'endurance, sans date",
+        "return_from_injury": "Après une pause ou une blessure",
+        "beginner_start": "Mes premières semaines"
+      },
+      "blank": "Partir d'un calendrier vide",
+      "blankHint": "Tu poses chaque séance toi-même"
+    },
+    "date": {
+      "title": "Quand a lieu ta course ?",
+      "lede": "{{goal}}. Il faut au moins {{min}} semaines de préparation.",
+      "pick": "Choisis le jour de la course.",
+      "weeks_one": "{{count}} semaine",
+      "weeks_other": "{{count}} semaines",
+      "live": " de préparation, du {{start}} au {{end}}",
+      "name": "Nom de la course",
+      "optional": "facultatif",
+      "namePlaceholder": "Trail des Balcons",
+      "calendar": "Jour de la course"
+    },
+    "duration": {
+      "title": "Sur combien de semaines ?",
+      "lede": "{{goal}}. Tu pourras prolonger le plan plus tard.",
+      "weeks": "semaines",
+      "range": "Du {{start}} au {{end}}",
+      "prebuilt": "{{name}} dure {{count}} semaines."
+    },
+    "path": {
+      "title": "Un plan tout fait, ou sur mesure ?",
+      "ledeRace": "Les deux finissent le {{date}}, jour de ta course.",
+      "ledeOpen": "Les deux commencent le {{date}}",
+      "ready": "Prêt à l'emploi",
+      "weeks_one": "{{count}} semaine",
+      "weeks_other": "{{count}} semaines",
+      "perWeek_one": "{{count}} séance par semaine",
+      "perWeek_other": "{{count}} séances par semaine",
+      "starts": "Commence le {{date}}",
+      "tooShort": "Il te faut {{needed}} semaines, il en reste {{available}}",
+      "custom": "Sur mesure",
+      "customTitle": "Taillé pour toi",
+      "customFacts": "tes jours, ton niveau",
+      "customBody": "Trois réponses sur ton niveau et ta semaine, et le plan se construit.",
+      "all": "Voir tous les plans prêts"
+    },
+    "you": {
+      "title": "Toi et ta semaine",
+      "lede": "Tout est déjà rempli avec des valeurs courantes. Change ce qui ne te ressemble pas.",
+      "level": "Ton niveau",
+      "levelHint": {
+        "beginner": "moins de 15 km par semaine",
+        "intermediate": "20 à 40 km par semaine",
+        "advanced": "40 à 70 km par semaine",
+        "elite": "plus de 70 km par semaine"
+      },
+      "vma": "VMA, si tu la connais",
+      "aim": "Ce que tu vises",
+      "rhythm": "Ton rythme",
+      "aims": {
+        "finish": "Finir",
+        "time": "Un temps",
+        "compete": "Performer"
+      },
+      "aimHint": {
+        "finish": "Progression douce, beaucoup d'endurance.",
+        "time": "Équilibre entre qualité et endurance.",
+        "compete": "Plus d'intensité, plus de volume."
+      },
+      "see": "Voir mon plan"
+    },
+    "preview": {
+      "custom": "Sur mesure",
+      "ready": "Prêt à l'emploi",
+      "titleRace": "{{goal}}, {{date}}",
+      "range": ", du {{start}} au {{end}}",
+      "raceDay": ", jour de la course",
+      "perWeek": "Par semaine",
+      "perWeekValue_one": "{{count}} séance",
+      "perWeekValue_other": "{{count}} séances",
+      "peak": "Semaine la plus chargée",
+      "longest": "Sortie la plus longue",
+      "create": "Créer le plan",
+      "noVma": "Allures estimées depuis ton niveau, faute de VMA.",
+      "noVmaLink": "La renseigner dans Mes zones",
+      "week1": "Ta première semaine",
+      "timeline": "Le plan, semaine par semaine"
+    },
+    "refine": {
+      "title": "Affiner",
+      "summaryRoad": "renfo, volume actuel, allure, courses de préparation",
+      "summaryTrail": "renfo, volume actuel, terrain, courses de préparation",
+      "thisWeek": "Commencer cette semaine",
+      "thisWeekHint": "La semaine 1 commence le {{date}} ; les jours déjà passés restent vides.",
+      "strength": "Ajouter du renfo",
+      "strengthFreq": "Séances de renfo",
+      "strengthPerWeek_one": "{{count}} par semaine",
+      "strengthPerWeek_other": "{{count}} par semaine",
+      "weeklyKm": "Ce que tu cours en ce moment",
+      "weeklyKmUnit": "km par semaine",
+      "longRunKm": "Ta plus longue sortie récente",
+      "longRunKmUnit": "km",
+      "elevationUnit": "m D+",
+      "prep": "Courses de préparation"
+    },
+    "aside": {
+      "kicker": "Ton plan",
+      "newPlan": "Nouveau plan",
+      "goal": "Objectif",
+      "race": "Course",
+      "duration": "Durée",
+      "start": "Début",
+      "week": "Semaine type",
+      "weekValue": "{{count}} séances, longue le {{day}}",
+      "empty": "La frise apparaît dès que la date est choisie."
+    },
+    "back": "Plans"
   }
 }

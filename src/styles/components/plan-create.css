@@ -1,0 +1,451 @@
+/* Créer un plan (/plan/new) : cinq écrans au plus, le plan visible avant
+   d'être créé. Une colonne sur téléphone ; sur bureau, la question à gauche
+   et le plan qui se dessine à droite (dates, choix, toi et ta semaine), une
+   colonne centrée pour l'objectif et l'aperçu. */
+.zn-pc {
+  /* Les trois largeurs du parcours : la colonne d'une question, celle des
+     écrans à une colonne, et le calendrier. */
+  --zn-pc-question: 600px;
+  --zn-pc-single: 760px;
+  --zn-pc-calendar: 420px;
+
+  inline-size: 100%;
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  box-sizing: border-box;
+  padding: var(--sp-6) var(--pad-screen-x) var(--sp-19);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+/* La barre : retour à gauche, la progression à droite. */
+.zn-pc__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-6);
+}
+.zn-pc__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--hit-min);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: var(--type-label);
+  color: var(--text-body);
+  text-decoration: none;
+  cursor: pointer;
+}
+.zn-pc__dots {
+  display: flex;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.zn-pc__dots li {
+  inline-size: var(--sp-10);
+  block-size: var(--sp-2);
+  border-radius: var(--r-pill);
+  background: var(--line-divider);
+}
+.zn-pc__dots li[data-on] { background: var(--text-body); }
+
+.zn-pc__grid { display: flex; flex-direction: column; gap: var(--sp-12); }
+.zn-pc__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+  min-inline-size: 0;
+}
+
+/* Le titre d'écran, qui reçoit le focus à chaque étape. */
+.zn-pc__head { display: flex; flex-direction: column; gap: var(--sp-4); }
+.zn-pc__kicker { font: var(--type-label); color: var(--text-muted); }
+.zn-pc__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-display-3);
+  line-height: var(--lh-display-3);
+  letter-spacing: var(--ls-display-3);
+  text-wrap: balance;
+}
+.zn-pc__lede { margin: 0; font: var(--type-body); color: var(--text-muted); max-inline-size: 52ch; }
+.zn-pc__lede strong { color: var(--text-body); font-weight: var(--fw-semibold); }
+.zn-pc__h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+}
+.zn-pc__draft-actions { display: inline-flex; flex-wrap: wrap; gap: var(--sp-4); }
+
+/* 2.1 L'objectif : des tuiles, deux par ligne, quatre sur bureau. */
+.zn-pc__group { display: flex; flex-direction: column; gap: var(--sp-5); }
+.zn-pc__group-title { margin: 0; font: var(--type-label); color: var(--text-muted); }
+.zn-pc__tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+.zn-pc__tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  min-block-size: calc(2 * var(--sp-17));
+  padding: var(--sp-6);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.zn-pc__tile > svg { color: var(--text-muted); margin-block-end: auto; }
+.zn-pc__tile[aria-pressed="true"] { border-width: var(--bw-heavy); }
+.zn-pc__tile-name {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+  line-height: var(--lh-h4);
+}
+.zn-pc__tile-sub { font: var(--type-body-sm); color: var(--text-muted); }
+.zn-pc__chip {
+  position: absolute;
+  inset-block-start: var(--sp-5);
+  inset-inline-end: var(--sp-5);
+  padding: var(--sp-1) var(--sp-4);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+}
+.zn-pc__rows { display: flex; flex-direction: column; gap: var(--sp-3); }
+.zn-pc__row {
+  display: grid;
+  grid-template-columns: var(--sp-12) minmax(0, 1fr) var(--sp-10);
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: var(--sp-20);
+  padding: var(--sp-4) var(--sp-6);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.zn-pc__row > svg:first-child { color: var(--text-muted); }
+.zn-pc__row[aria-pressed="true"] { border-width: var(--bw-heavy); }
+.zn-pc__row--blank { border-style: dashed; background: transparent; }
+.zn-pc__row-text { display: flex; flex-direction: column; gap: var(--sp-1); }
+.zn-pc__row-name { font: var(--type-body); font-weight: var(--fw-medium); }
+
+/* 2.2 La date : le calendrier dans la page, pas dans une feuille. */
+.zn-pc__cal {
+  align-self: flex-start;
+  inline-size: min(100%, var(--zn-pc-calendar));
+  box-sizing: border-box;
+  padding: var(--sp-4);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  background: var(--surface-card);
+}
+.zn-pc__live { margin: 0; font: var(--type-body); color: var(--text-muted); }
+.zn-pc__live strong { color: var(--text-body); font-weight: var(--fw-semibold); }
+.zn-pc__field { display: flex; flex-direction: column; gap: var(--sp-3); }
+.zn-pc__field label { font: var(--type-label); color: var(--text-body); }
+.zn-pc__field em { font-style: normal; font-weight: var(--fw-regular); color: var(--text-faint); }
+.zn-pc__input {
+  box-sizing: border-box;
+  min-block-size: var(--sp-17);
+  padding-inline: var(--sp-6);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--surface-card);
+  font: var(--type-body);
+  color: var(--text-body);
+}
+.zn-pc__input--short { inline-size: calc(2 * var(--sp-17)); text-align: end; font-variant-numeric: tabular-nums; }
+.zn-pc__weeks {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+.zn-pc__tile--num { align-items: center; justify-content: center; min-block-size: var(--sp-20); }
+.zn-pc__num {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+}
+
+/* 2.3 Deux chemins, au même poids. */
+.zn-pc__choices { display: flex; flex-direction: column; gap: var(--sp-5); }
+.zn-pc__choice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-8) var(--sp-7);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.zn-pc__choice:disabled {
+  cursor: default;
+  color: var(--text-faint);
+  border-style: dashed;
+  background: transparent;
+}
+.zn-pc__choice-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font: var(--type-label);
+  color: var(--text-muted);
+}
+.zn-pc__choice-title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+}
+.zn-pc__choice-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-8);
+  font: var(--type-body-sm);
+  font-weight: var(--fw-medium);
+}
+.zn-pc__choice-body { font: var(--type-body-sm); color: var(--text-muted); }
+.zn-pc__choice:disabled .zn-pc__choice-body,
+.zn-pc__choice:disabled .zn-pc__choice-kicker { color: var(--text-faint); }
+.zn-pc__choice-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-block-start: auto;
+  padding-block-start: var(--sp-5);
+  border-block-start: var(--border-divider);
+  font: var(--type-label);
+}
+.zn-pc__quiet-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--hit-min);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  text-underline-offset: 3px;
+}
+
+/* 2.4 Toi et ta semaine : tout sur un écran, déjà rempli. */
+.zn-pc__set {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.zn-pc__set > legend { padding: 0; margin-block-end: var(--sp-4); font: var(--type-label); }
+.zn-pc__pills { display: grid; gap: var(--sp-3); }
+.zn-pc__pills--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.zn-pc__pills--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.zn-pc__pill {
+  min-block-size: var(--sp-17);
+  padding-inline: var(--sp-4);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--surface-card);
+  font: var(--type-label);
+  color: var(--text-body);
+  cursor: pointer;
+}
+.zn-pc__pill[aria-pressed="true"] {
+  background: var(--surface-inverse);
+  border-color: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+.zn-pc__hint { margin: 0; font: var(--type-body-sm); color: var(--text-muted); }
+.zn-pc__inline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-6);
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+.zn-pc__unit { display: inline-flex; align-items: center; gap: var(--sp-3); color: var(--text-muted); }
+
+.zn-pc__actions { display: flex; gap: var(--sp-4); padding-block-start: var(--sp-4); }
+@media (max-width: 600px) {
+  .zn-pc__actions > * { flex: 1; }
+}
+
+/* 2.5 L'aperçu, avant d'enregistrer. */
+.zn-pc__timeline { transition: opacity var(--dur-fast, 120ms) ease; }
+.zn-pc__timeline[data-busy] { opacity: 0.45; }
+.zn-pc__ghost {
+  block-size: calc(3 * var(--sp-18));
+  border: var(--border-dashed);
+  border-radius: var(--r-lg);
+}
+.zn-pc__facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-6);
+  padding-block: var(--sp-6);
+  border-block: var(--border-divider);
+}
+.zn-pc__facts div { display: flex; flex-direction: column; gap: var(--sp-2); }
+.zn-pc__facts dt { font: var(--type-caption); color: var(--text-muted); }
+.zn-pc__facts dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+  font-variant-numeric: tabular-nums;
+}
+.zn-pc__week1 { display: flex; flex-direction: column; gap: var(--sp-8); }
+
+@media (min-width: 1024px) {
+  .zn-pc__tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .zn-pc__pills--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .zn-pc__choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .zn-pc__grid {
+    display: grid;
+    grid-template-columns: minmax(0, var(--zn-pc-single));
+    justify-content: center;
+  }
+}
+.zn-pc__hint a { color: var(--text-body); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Bureau : le plan qui se dessine à droite des questions 2.2 à 2.4. */
+.zn-pc__aside {
+  position: sticky;
+  inset-block-start: calc(var(--topbar-h) + var(--sp-8));
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--sp-8);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  background: var(--surface-card);
+}
+.zn-pc__aside-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+  overflow-wrap: anywhere;
+}
+.zn-pc__recap { margin: 0; display: flex; flex-direction: column; }
+.zn-pc__recap div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  padding-block: var(--sp-4);
+  border-block-end: var(--border-divider);
+  font: var(--type-body-sm);
+}
+.zn-pc__recap dt { color: var(--text-muted); }
+.zn-pc__recap dd { margin: 0; font-weight: var(--fw-medium); text-align: end; }
+.zn-pc__ghost--sm {
+  block-size: calc(2 * var(--sp-19));
+  display: grid;
+  place-items: center;
+  padding: var(--sp-6);
+  text-align: center;
+  font: var(--type-body-sm);
+  color: var(--text-faint);
+}
+
+@media (min-width: 1024px) {
+  .zn-pc[data-step="date"] .zn-pc__grid,
+  .zn-pc[data-step="path"] .zn-pc__grid,
+  .zn-pc[data-step="you"] .zn-pc__grid {
+    grid-template-columns: minmax(0, var(--zn-pc-question)) minmax(0, 1fr);
+    column-gap: var(--sp-19);
+    align-items: start;
+    justify-content: stretch;
+  }
+}
+
+/* Affiner : replié par défaut, sur mesure seulement. */
+.zn-pc__refine { border: var(--border-rule); border-radius: var(--r-xl); background: var(--surface-card); }
+.zn-pc__refine-head {
+  inline-size: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) var(--sp-10);
+  align-items: center;
+  gap: var(--sp-5);
+  min-block-size: var(--sp-19);
+  padding-inline: var(--sp-7);
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  font: var(--type-label);
+  color: var(--text-body);
+  text-align: start;
+  cursor: pointer;
+}
+.zn-pc__refine-sum { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.zn-pc__refine-head > svg { transition: transform var(--dur-fast, 120ms) ease; }
+.zn-pc__refine-head[aria-expanded="true"] > svg { transform: rotate(180deg); }
+.zn-pc__refine-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+  padding: var(--sp-7) var(--sp-7) var(--sp-8);
+  border-block-start: var(--border-divider);
+}
+.zn-pc__switch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-6);
+  min-block-size: var(--hit-min);
+  font: var(--type-body-sm);
+}
+.zn-pc__add { align-self: flex-start; }
+.zn-pc__prep {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--sp-7);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+.zn-pc__prep-head { display: flex; justify-content: space-between; align-items: center; }
+.zn-pc__field-label { font: var(--type-label); color: var(--text-body); }
+.zn-pc__error {
+  margin: 0;
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  font: var(--type-body-sm);
+  color: var(--text-body);
+}
+.zn-pc__error svg { flex: none; margin-block-start: var(--sp-1); }

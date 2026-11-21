@@ -11,12 +11,10 @@ import {
   TrendingUp,
   type IconProps,
 } from "@/components/icons";
-import { RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
 import type {
   PlanPurpose,
   RaceDistance,
   RacePriority,
-  TrainingGoal,
 } from "@/types/plan";
 
 /**
@@ -28,14 +26,6 @@ import type {
 
 export const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
 
-/**
- * Recommended week ranges per distance, warnings, not hard blocks.
- * Single source of truth: this page used to keep its own, looser copy
- * (marathon min 12 against 14), so the wizard let through plans the generator
- * itself considers too short.
- */
-export const RECOMMENDED_WEEKS = RECOMMENDED_PLAN_WEEKS;
-
 export const RACE_DISTANCE_ICONS: Record<RaceDistance, ComponentType<IconProps>> = {
   "5K": Zap,
   "10K": Timer,
@@ -46,35 +36,7 @@ export const RACE_DISTANCE_ICONS: Record<RaceDistance, ComponentType<IconProps>>
   ultra: Mountain,
 };
 
-export const DURATION_OPTIONS = [
-  { weeks: 4 },
-  { weeks: 6 },
-  { weeks: 8 },
-  { weeks: 10 },
-  { weeks: 12 },
-  { weeks: 16 },
-];
 
-export const GOAL_OPTION_KEYS: { value: TrainingGoal; icon: ComponentType<IconProps>; labelKey: string; descKey: string }[] = [
-  {
-    value: "finish",
-    icon: Flag,
-    labelKey: "goal.finish",
-    descKey: "goal.finishDesc",
-  },
-  {
-    value: "time",
-    icon: Timer,
-    labelKey: "goal.time",
-    descKey: "goal.timeDesc",
-  },
-  {
-    value: "compete",
-    icon: TrendingUp,
-    labelKey: "goal.compete",
-    descKey: "goal.competeDesc",
-  },
-];
 
 export const PURPOSE_OPTIONS: { value: PlanPurpose; icon: ComponentType<IconProps>; labelKey: string; descKey: string }[] = [
   { value: "race", icon: Target, labelKey: "purpose.race", descKey: "purpose.raceDesc" },

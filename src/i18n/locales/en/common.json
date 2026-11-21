@@ -1074,5 +1074,13 @@
       "description": "You hid this part of the app in your settings. The link still works, you can bring it back right now.",
       "cta": "Bring it back"
     }
+  },
+  "datePicker": {
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "month": "Month",
+    "year": "Year",
+    "today": "Today, {{date}}",
+    "selected": "{{date}}, selected"
   }
 }

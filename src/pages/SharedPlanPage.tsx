@@ -11,7 +11,6 @@ import { decodeSharedPlan } from "@/lib/share/planShare";
 import { generatePlan } from "@/lib/planGenerator";
 import { computePlanStats } from "@/lib/planStats";
 import { savePlan } from "@/lib/planStorage";
-import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { usePickLang } from "@/lib/i18n-utils";
 import type { TrainingPlan } from "@/types/plan";
 
@@ -108,7 +107,6 @@ export function SharedPlanPage() {
       toast.failure(t("errors.planSaveFailed"), saved);
       return;
     }
-    triggerStorageWarning();
     toast.success(t("shared.added"));
     navigate(`/plan/${plan.id}`);
   };
