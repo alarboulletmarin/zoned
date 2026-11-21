@@ -1,3 +1,4 @@
+import { withDirectionalTransition } from "@/lib/directionalTransition";
 import {
   useCallback,
   useEffect,
@@ -173,22 +174,28 @@ export function PlanCreatePage() {
 
   const goForward = useCallback(() => {
     cancelAdvance();
-    setDirection("forward");
-    setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
+    withDirectionalTransition("next", () => {
+      setDirection("forward");
+      setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
+    });
   }, [cancelAdvance]);
 
   const goBack = useCallback(() => {
     cancelAdvance();
-    setDirection("backward");
-    setStepIndex((s) => Math.max(s - 1, 0));
+    withDirectionalTransition("prev", () => {
+      setDirection("backward");
+      setStepIndex((s) => Math.max(s - 1, 0));
+    });
   }, [cancelAdvance]);
 
   /** The stepper only walks backwards: a step ahead has not been answered. */
   const goBackTo = useCallback(
     (index: number) => {
       cancelAdvance();
-      setDirection("backward");
-      setStepIndex(index);
+      withDirectionalTransition("prev", () => {
+        setDirection("backward");
+        setStepIndex(index);
+      });
     },
     [cancelAdvance],
   );
@@ -207,8 +214,10 @@ export function PlanCreatePage() {
     cancelAdvance();
     advanceTimer.current = window.setTimeout(() => {
       advanceTimer.current = null;
-      setDirection("forward");
-      setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
+      withDirectionalTransition("next", () => {
+        setDirection("forward");
+        setStepIndex((s) => Math.min(s + 1, stepsRef.current.length - 1));
+      });
     }, 160);
   }, [cancelAdvance]);
 
@@ -595,7 +604,8 @@ export function PlanCreatePage() {
               `renderQuestion` et `renderNav` des douze corps. Le
               récapitulatif est la seule exception : son bouton ne fait pas
               suivant, il génère le plan. */}
-          <Card className="zn-wiz__col">
+          {/* Geste : seule une navigation anime les étapes, jamais leur montage. */}
+          <Card className="zn-wiz__col" style={{ viewTransitionName: "zn-wizard-step" }}>
             {step.ownsNav ? (
               <step.Body {...ctx} />
             ) : (

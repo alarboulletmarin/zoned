@@ -63,3 +63,15 @@ and nothing else.
 between. Sheets are still imported into `@layer components`, under the empty
 `utilities` layer: the layer costs nothing, and it is what keeps `.sr-only`
 above every component rule.
+
+## Screen continuity
+
+The cockpit hero, the selected plan week and the plan wizard use the same
+12 px directional view transition in `animations.css`, only after a gesture.
+The wizard stays still on first render; its progress rails transition in
+`--dur-slow`. Activated workout cards and the cockpit hero share their title
+and zone profile with the session detail; plan cards share their title with
+the plan header (the detail has no matching timeline). Navigation waits for
+the destination layout, bounded by a 300 ms safety timeout. Reduced motion
+and browsers without the API switch directly. `WeekViewPage` displays a
+single week and has no previous/next navigation to animate.

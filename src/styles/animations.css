@@ -85,10 +85,52 @@
   animation-duration: var(--dur-base);
 }
 
+/* Geste : héros, semaine et étape suivent la direction demandée, à 12 px. */
+html[data-move="next"] { --move-out: -12px; --move-in: 12px; }
+html[data-move="prev"] { --move-out: 12px; --move-in: -12px; }
+
+/* Origine : le profil et le titre rejoignent leur place dans le détail. */
+::view-transition-group(*) {
+  animation-duration: var(--dur-slow);
+  animation-timing-function: var(--ease-in-out);
+}
+
+html[data-move]::view-transition-old(root),
+html[data-move]::view-transition-new(root),
+html[data-move]::view-transition-group(zn-cockpit-hero),
+html[data-move]::view-transition-group(zn-plan-week),
+html[data-move]::view-transition-group(zn-wizard-step) {
+  animation: none;
+}
+
+html[data-move]::view-transition-old(zn-cockpit-hero),
+html[data-move]::view-transition-old(zn-plan-week),
+html[data-move]::view-transition-old(zn-wizard-step) {
+  opacity: 0;
+  animation: zn-direction-out var(--dur-fast) var(--ease-out) backwards;
+}
+
+html[data-move]::view-transition-new(zn-cockpit-hero),
+html[data-move]::view-transition-new(zn-plan-week),
+html[data-move]::view-transition-new(zn-wizard-step) {
+  animation: zn-direction-in var(--dur-base) var(--ease-out) var(--dur-fast) backwards;
+}
+
+@keyframes zn-direction-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(var(--move-out)); }
+}
+@keyframes zn-direction-in {
+  from { opacity: 0; transform: translateX(var(--move-in)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Geste : le changement reste net quand le mouvement est réduit. */
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
 

@@ -1,6 +1,9 @@
+import { markViewReady } from "@/lib/directionalTransition";
+import { sharedTransitionName } from "@/lib/sharedTransition";
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   type CSSProperties,
   useCallback,
 } from "react";
@@ -164,6 +167,16 @@ export function WorkoutDetailPage() {
   useEffect(() => {
     refreshUserZones();
   }, [refreshUserZones]);
+
+  // Attente : le détail libère la capture seulement après son vrai contenu.
+  useLayoutEffect(() => {
+    if (isLoading || !workout) return;
+    // Attente : useWorkout peut remplacer son cache initial par un squelette.
+    queueMicrotask(() => {
+      const name = sharedTransitionName("wk", workout.id, "title");
+      if (document.querySelector(`[style*="${name}"]`)) markViewReady(`workout:${workout.id}`);
+    });
+  }, [isLoading, workout]);
 
   if (isLoading) {
     return (
@@ -593,7 +606,8 @@ export function WorkoutDetailPage() {
           {/* 1, what the session is */}
           <header className="zn-session__header">
             <p className="zn-session__meta">{metaParts.join(" · ")}</p>
-            <h1 className="zn-display">{workoutName}</h1>
+            {/* Origine : le titre conserve son identité depuis la carte ou le héros. */}
+            <h1 className="zn-display" style={{ viewTransitionName: sharedTransitionName("wk", workout.id, "title") }}>{workoutName}</h1>
             <p className="zn-body zn-body--lead zn-session__lede">
               <GlossaryLinkedText text={pick(workout, "description")} />
             </p>
@@ -634,7 +648,8 @@ export function WorkoutDetailPage() {
             <IntensityBar split={split} peakZone={peak?.zone ?? null} />
 
             <div className="zn-session__profile">
-              <ZoneBar blocks={profileBlocks} />
+              {/* Origine : le profil grandit depuis la carte ou le héros. */}
+              <ZoneBar blocks={profileBlocks} style={{ viewTransitionName: sharedTransitionName("wk", workout.id, "profile") }} />
             </div>
 
             <ZonePersonalizationCTA
@@ -996,7 +1011,8 @@ function StrengthWorkoutDetail({
               </Badge>
             </div>
 
-            <h1 className="zn-display">{workoutName}</h1>
+            {/* Origine : le titre conserve son identité depuis la carte ou le héros. */}
+            <h1 className="zn-display" style={{ viewTransitionName: sharedTransitionName("wk", workout.id, "title") }}>{workoutName}</h1>
 
             <p className="zn-body zn-body--lead zn-session__lede">
               <GlossaryLinkedText text={description} />

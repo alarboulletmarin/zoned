@@ -289,34 +289,6 @@
   view-transition-name: zn-cockpit-hero;
 }
 
-html[data-hero-move]::view-transition-old(root),
-html[data-hero-move]::view-transition-new(root) {
-  animation: none;
-}
-
-html[data-hero-move]::view-transition-group(zn-cockpit-hero) {
-  animation: none;
-}
-
-html[data-hero-move]::view-transition-old(zn-cockpit-hero) {
-  animation: zn-hero-out var(--dur-fast) var(--ease-out) both;
-}
-
-html[data-hero-move]::view-transition-new(zn-cockpit-hero) {
-  animation: zn-hero-in var(--dur-base) var(--ease-out) var(--dur-fast) both;
-}
-
-html[data-hero-move="next"] { --hero-out: -12px; --hero-in: 12px; }
-html[data-hero-move="prev"] { --hero-out: 12px; --hero-in: -12px; }
-
-@keyframes zn-hero-out {
-  to { opacity: 0; transform: translateX(var(--hero-out)); }
-}
-
-@keyframes zn-hero-in {
-  from { opacity: 0; transform: translateX(var(--hero-in)); }
-}
-
 .zn-cockpit__session {
   display: flex;
   flex-direction: column;

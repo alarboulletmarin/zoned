@@ -1,3 +1,5 @@
+import { startNavTransition, markViewReady } from "@/lib/directionalTransition";
+import { sharedTransitionName } from "@/lib/sharedTransition";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -192,6 +194,13 @@ export function PlanViewPage() {
     [plan, selectedWeek, today, workoutOf, log.activities],
   );
 
+  // Attente : le titre et la nouvelle semaine sont réellement montés.
+  useLayoutEffect(() => {
+    if (isLoading || !plan || !weekModel || !cardModel) return;
+    markViewReady(`plan:${plan.id}`);
+    markViewReady(`plan:${plan.id}:week:${selectedWeek}`);
+  }, [isLoading, plan, weekModel, cardModel, selectedWeek]);
+
   const practice = plan
     ? plan.config.practice ?? (plan.config.raceDistance ? practiceFromRaceDistance(plan.config.raceDistance) : null)
     : null;
@@ -320,10 +329,15 @@ export function PlanViewPage() {
 
   const goToWeek = useCallback(
     (week: number) => {
-      setWeekParam(week);
+      if (week === selectedWeek) return;
+      // Geste : attendre le montage de la semaine dans le sens du parcours.
+      startNavTransition(() => setWeekParam(week), {
+        direction: week > selectedWeek ? "next" : "prev",
+        key: `plan:${id}:week:${week}`,
+      });
       requestAnimationFrame(() => weekTopRef.current?.scrollIntoView({ block: "start" }));
     },
-    [setWeekParam],
+    [setWeekParam, selectedWeek, id],
   );
 
   /* Changer de semaine ne déplace pas la lecture : le jour qu'on regardait
@@ -356,9 +370,14 @@ export function PlanViewPage() {
   const changeWeek = useCallback(
     (week: number) => {
       holdViewedDay();
-      setWeekParam(week);
+      if (week === selectedWeek) return;
+      // Geste : attendre le montage de la semaine dans le sens du parcours.
+      startNavTransition(() => setWeekParam(week), {
+        direction: week > selectedWeek ? "next" : "prev",
+        key: `plan:${id}:week:${week}`,
+      });
     },
-    [setWeekParam, holdViewedDay],
+    [setWeekParam, holdViewedDay, selectedWeek, id],
   );
 
   // ── Le bandeau des anneaux, au défilement (téléphone et tablette) ───
@@ -752,7 +771,8 @@ export function PlanViewPage() {
         </div>
 
         <header className="zn-planpage__plan">
-          <h1 className="zn-planpage__title">{planName}</h1>
+          {/* Origine : le nom rejoint celui de la carte activée. */}
+          <h1 className="zn-planpage__title" style={{ viewTransitionName: sharedTransitionName("plan", plan.id, "title") }}>{planName}</h1>
           {raceLine && <p className="zn-planpage__raceline">{raceLine}</p>}
           {(ended || pacesEstimated || plan._lastUndoableChange || placedWeeks.length > 0) && (
             <div className="zn-planpage__notes">
@@ -823,7 +843,8 @@ export function PlanViewPage() {
             <div ref={sentinel} className="zn-planpage__sentinel" aria-hidden="true" />
           </div>
 
-          <section className="zn-planpage__week" aria-label={t("page.week.sessions", { n: selectedWeek })}>
+          {/* Geste : seule la semaine consultée sort et entre. */}
+          <section className="zn-planpage__week" style={{ viewTransitionName: "zn-plan-week" }} aria-label={t("page.week.sessions", { n: selectedWeek })}>
             {plan.weeks.every((w) => w.sessions.length === 0) && (
               <div className="zn-planpage__emptyplan">
                 <p>{t("page.empty.title")}</p>
@@ -904,15 +925,20 @@ export function PlanViewPage() {
         currentWeek={currentWeek}
         side={wide ? "right" : "bottom"}
         onSelectWeek={(n) => {
+          if (n === selectedWeek) {
+            setParam("sheet", null);
+            return;
+          }
           holdViewedDay();
-          setSearchParams(
+          // Geste : le choix dans le plan suit aussi le parcours des semaines.
+          startNavTransition(() => setSearchParams(
             (prev) => {
               prev.set("week", String(n));
               prev.delete("sheet");
               return prev;
             },
             { replace: true },
-          );
+          ), { direction: n > selectedWeek ? "next" : "prev", key: `plan:${id}:week:${n}` });
         }}
         onLogActivity={() => log.logOn()}
       />

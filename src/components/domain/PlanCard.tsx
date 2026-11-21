@@ -1,3 +1,4 @@
+import { useSharedTransition } from "@/lib/sharedTransition";
 import { useId, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -54,6 +55,8 @@ export function PlanCard({
   const { t } = useTranslation("plan");
   const pick = usePickLang();
   const nameId = useId();
+  // Origine : le titre de la carte activée rejoint celui du plan.
+  const shareOrigin = useSharedTransition(`/plan/${plan.id}`, "plan", plan.id, ".zn-plancard__name");
   const [editing, setEditing] = useState(false);
 
   const phaseLabel = model.phaseNow ? pick(PHASE_META[model.phaseNow], "label") : null;
@@ -106,7 +109,7 @@ export function PlanCard({
     editing ? (
       <div className="zn-plancard__open">{children}</div>
     ) : (
-      <Link className="zn-plancard__open" to={`/plan/${plan.id}`} aria-labelledby={nameId}>
+      <Link className="zn-plancard__open" to={`/plan/${plan.id}`} aria-labelledby={nameId} onClick={shareOrigin}>
         {children}
       </Link>
     );
