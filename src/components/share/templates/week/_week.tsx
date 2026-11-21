@@ -596,7 +596,7 @@ export function DayColumns({
                         color: INK_2,
                       }}
                     >
-                      {formatDurationMinutes(l.durationMin, { compact: true })}
+                      {formatDurationMinutes(l.durationMin)}
                     </span>
                   )}
                 </div>
@@ -725,7 +725,7 @@ export function SessionRows({
                         }}
                       >
                         {l.zone ? `Z${l.zone} · ` : ""}
-                        {l.durationMin > 0 ? formatDurationMinutes(l.durationMin, { compact: true }) : ""}
+                        {l.durationMin > 0 ? formatDurationMinutes(l.durationMin) : ""}
                       </span>
                     </div>
                     {bars && l.durationMin > 0 && (

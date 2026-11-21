@@ -20,16 +20,10 @@ const viewBox = (name: string) => {
 const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
 
 describe("les cadres recopiés suivent les fichiers SVG", () => {
-  test("PlanViewPage : les sept rapports d'aspect de POSES", () => {
-    const src = read("src/pages/PlanViewPage.tsx");
-    const imports = Object.fromEntries([...src.matchAll(/import (\w+) from "@\/assets\/doodles\/([\w-]+)\.svg\?react"/g)].map((m) => [m[1], m[2]]));
-    const poses = [...src.matchAll(/(\w+): \{ Art: (\w+), foot: [0-9.]+, aspect: ([0-9.]+)/g)];
-    expect(poses.length).toBe(7);
-    for (const [, key, art, aspect] of poses) {
-      const [, , w, h] = viewBox(imports[art]);
-      expect(Math.abs(Number(aspect) - w / h), `${key} (${imports[art]})`).toBeLessThan(5e-4);
-    }
-  });
+  /* La frise des phases de PlanViewPage portait sept poses (POSES), leurs
+     rapports d'aspect recopiés et gardés ici. Elle a quitté la page d'un plan
+     en novembre 2026 : les phases se lisent dans la feuille Le plan, sur
+     PlanTimeline, sans figure. Plus rien à garder. */
 
   test("ZoneFigures : les six largeurs de FIGURES", () => {
     const src = read("src/components/domain/ZoneFigures.tsx");

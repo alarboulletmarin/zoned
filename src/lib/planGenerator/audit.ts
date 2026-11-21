@@ -62,6 +62,38 @@ function dayDistance(a: number, b: number): number {
   return Math.min(diff, 7 - diff);
 }
 
+/**
+ * Une autre séance du même type pour remplacer un doublon de la semaine,
+ * prise dans le plan lui-même, au plus près de la semaine : le correctif reste
+ * synchrone et ne propose que des séances que ce plan programme déjà à ce
+ * niveau. Aucune séance déjà présente dans la semaine. `null` sinon.
+ */
+export function duplicateReplacement(
+  plan: TrainingPlan,
+  week: TrainingPlan["weeks"][number],
+  sessionIndex: number,
+): string | null {
+  const session = week.sessions[sessionIndex];
+  if (!session) return null;
+  const inWeek = new Set(week.sessions.map((s) => s.workoutId));
+  const others = [...plan.weeks]
+    .filter((w) => w.weekNumber !== week.weekNumber)
+    .sort(
+      (a, b) =>
+        Math.abs(a.weekNumber - week.weekNumber) - Math.abs(b.weekNumber - week.weekNumber),
+    );
+  for (const other of others) {
+    const match = other.sessions.find(
+      (s) =>
+        s.sessionType === session.sessionType &&
+        !s.workoutId.startsWith("__") &&
+        !inWeek.has(s.workoutId),
+    );
+    if (match) return match.workoutId;
+  }
+  return null;
+}
+
 // ── Audit engine ─────────────────────────────────────────────────────
 
 export function auditPlan(plan: TrainingPlan): PlanFinding[] {
@@ -304,6 +336,31 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         });
       }
     }
+
+    // ── Check 9b: DUPLICATE_WORKOUT_IN_WEEK ─────────────────────────
+    // La même séance deux fois dans la semaine (le générateur l'a fait, un
+    // glisser ou un Dupliquer le refait). Les jalons et les activités n'ont
+    // pas de séance derrière eux, ils ne comptent pas.
+    const seenWorkouts = new Set<string>();
+    week.sessions.forEach((s, index) => {
+      if (s.workoutId.startsWith("__")) return;
+      if (!seenWorkouts.has(s.workoutId)) {
+        seenWorkouts.add(s.workoutId);
+        return;
+      }
+      findings.push({
+        id: nextId(),
+        severity: "warning",
+        code: "DUPLICATE_WORKOUT_IN_WEEK",
+        weekNumber: week.weekNumber,
+        sessionIndex: index,
+        message: `Semaine ${week.weekNumber} : ${s.workoutId} revient le ${DAY_NAMES_FR[s.dayOfWeek]}, la même séance deux fois dans la semaine.`,
+        messageEn: `Week ${week.weekNumber}: ${s.workoutId} comes back on ${DAY_NAMES_EN[s.dayOfWeek]}, the same session twice in the week.`,
+        suggestion: `Remplacer la seconde par une autre séance du même type.`,
+        suggestionEn: `Replace the second one with another session of the same type.`,
+        fixable: duplicateReplacement(plan, week, index) !== null,
+      });
+    });
 
     // ── Check 10: VOLUME_JUMP_AFTER_RECOVERY ────────────────────────
     // Check volume jump across recovery weeks: compare to the last NON-recovery week

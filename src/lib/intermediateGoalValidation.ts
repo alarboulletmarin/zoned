@@ -1,6 +1,6 @@
 import type { IntermediateGoal, RaceDistance } from "@/types/plan";
 import { RACE_DISTANCE_META } from "@/types/plan";
-import { calculateWeeksBetweenDates } from "@/lib/planDates";
+import { planWeekOfDate } from "@/lib/planDates";
 import { TAPER_WEEKS } from "@/lib/planGenerator/constants";
 
 // ── Error types ───────────────────────────────────────────────────
@@ -50,7 +50,7 @@ export function sortIntermediateGoals(goals: IntermediateGoal[]): IntermediateGo
  * Returns the 1-based week number for a goal date within the plan.
  */
 export function intermediateGoalToWeekNumber(goalDate: string, planStartDate: string): number {
-  return calculateWeeksBetweenDates(planStartDate, goalDate) + 1;
+  return planWeekOfDate(planStartDate, goalDate);
 }
 
 /**

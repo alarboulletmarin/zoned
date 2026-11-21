@@ -100,7 +100,7 @@ export function SpotifyWrap({ workout }: ShareTemplateProps) {
             gap: 28,
           }}
         >
-          <BigStat number={formatDurationMinutes(hero.durationMin, { compact: true })} label="durée totale" rotate={-1} />
+          <BigStat number={formatDurationMinutes(hero.durationMin)} label="durée totale" rotate={-1} />
           <BigStat number={`Z${hero.dominantZone}`} label={`zone · ${zoneLabel}`} rotate={1.2} accent={zoneTop} />
           <BigStat number={`${hero.rpe}/10`} label={`RPE · ${t(`library:difficulty.${workout.difficulty}`)}`} rotate={-1.5} />
         </div>

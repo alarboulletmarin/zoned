@@ -264,8 +264,9 @@ touche qu'au `viewBox`, et repasser dessus ne change rien. `svg()` du gréement
 n'émet plus de sol et cadre de la même façon ; `groundY` ne sert plus au cadre.
 Standing, wondering, pointing, easy-run et plank se régénèrent au byte près.
 
-Quatre endroits du code recopient un cadre en dur : les sept rapports d'aspect
-du ruban du plan (`PlanViewPage.tsx`), les six largeurs de la planche
+Trois endroits du code recopient un cadre en dur (les sept rapports d'aspect
+du ruban du plan en faisaient un quatrième, jusqu'à ce que le ruban quitte la
+page d'un plan en novembre 2026) : les six largeurs de la planche
 (`ZoneFigures.tsx`), la hauteur de sa scène (`zone-figures.css`) et le duo
 inliné dans `index.html`. `src/assets/doodles/frames.test.ts` lit les SVG et
 les vérifie : trois de ces constantes avaient dérivé le 6 septembre. Une
@@ -651,7 +652,10 @@ walking-away marche vers le vide à son bout, retourné par CSS — une
 orientation de scène, pas une correction du dessin. Le « 404 » est une cote en
 mono posée après la fin du sol. L'alerte et son glyphe sont partis.
 
-**Le ruban du plan.** Une figure se tient sur le bord haut du ruban des phases,
+**Le ruban du plan** (retiré en novembre 2026 : la page d'un plan est
+centrée sur la semaine, et ses phases se lisent dans la feuille Le plan, sur
+`PlanTimeline`, sans figure. Le paragraphe reste pour l'histoire.)
+ Une figure se tient sur le bord haut du ruban des phases,
 au milieu de la semaine en cours ; la pose dit la phase sous les pieds — marche
 de Z2 en base, foulée de Z3 en construction, sprint de Z5 au pic, allure de Z4
 en affûtage, étirement en récupération. Décision du propriétaire : le trait

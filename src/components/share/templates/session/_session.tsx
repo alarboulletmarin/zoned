@@ -57,7 +57,7 @@ export function SessionFacts({
   const parts = [
     pickLang(CATEGORY_META[workout.category], "label"),
     pickLang(DIFFICULTY_META[workout.difficulty], "label"),
-    formatDurationMinutes(hero.durationMin, { compact: true }),
+    formatDurationMinutes(hero.durationMin),
     `Z${hero.dominantZone}`,
     `${sessionTss(hero.zoneBreakdown)} TSS`,
   ].filter(Boolean);
@@ -108,7 +108,7 @@ export function ZoneSplit({
         }}
       >
         <span style={{ fontWeight: 700 }}>{isEn ? "Time in zones" : "Temps par zone"}</span>
-        <span style={{ color: INK_2 }}>{formatDurationMinutes(hero.durationMin, { compact: true })}</span>
+        <span style={{ color: INK_2 }}>{formatDurationMinutes(hero.durationMin)}</span>
       </div>
       <div
         style={{
@@ -473,7 +473,7 @@ export function PhaseLines({ phases, s, descriptions = true, gutter = 150 }: Pha
               whiteSpace: "nowrap",
             }}
           >
-            {formatDurationMinutes(phase.minutes, { compact: true })}
+            {formatDurationMinutes(phase.minutes)}
           </span>
         </div>
       ))}
@@ -499,7 +499,7 @@ export function FriezeAxis({ minutes, size = 15 }: { minutes: number; size?: num
       }}
     >
       <span>{t("screen.axisStart")}</span>
-      <span>{t("screen.axisEnd", { duration: formatDurationMinutes(minutes, { compact: true }) })}</span>
+      <span>{t("screen.axisEnd", { duration: formatDurationMinutes(minutes) })}</span>
     </div>
   );
 }

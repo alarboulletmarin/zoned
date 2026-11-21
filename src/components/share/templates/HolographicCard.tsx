@@ -180,7 +180,7 @@ export function HolographicCard({ workout, transparent }: ShareTemplateProps) {
             color: "#ffffff",
           }}
         >
-          <span>{formatDurationMinutes(hero.durationMin, { compact: true })}</span>
+          <span>{formatDurationMinutes(hero.durationMin)}</span>
           <span
             style={{
               width: 4,

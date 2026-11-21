@@ -236,7 +236,7 @@ export interface AutoChange {
 
 export interface PlanUndoableChange {
   at: string; // ISO datetime
-  kind: "reschedule" | "adaptation" | "bulk_move" | "merge_week" | "add_session";
+  kind: "reschedule" | "adaptation" | "bulk_move" | "merge_week" | "add_session" | "edit";
   label: string;     // Human summary (FR)
   labelEn: string;   // Human summary (EN)
   before: TrainingPlan; // Full snapshot before change

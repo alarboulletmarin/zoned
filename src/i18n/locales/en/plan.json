@@ -12,7 +12,6 @@
     "weeks_other": "{{count}} weeks",
     "sessions_one": "{{count}} session",
     "sessions_other": "{{count}} sessions",
-    "shareLink": "Share",
     "phase": {
       "base": "Base",
       "build": "Build",
@@ -182,22 +181,10 @@
   },
   "view": {
     "title": "My plan",
-    "currentWeek": "Current week",
-    "today": "Today",
-    "restToday": "Rest day",
-    "notStartedYet": "The plan hasn't started yet",
-    "sessionsLeft_one": "{{count}} left",
-    "sessionsLeft_other": "{{count}} left",
-    "timeLogged": "Time logged",
-    "nextKey": "Next key session",
-    "moreActions": "More actions",
-    "phases": "Training phases",
-    "standingWeek": "W{{week}}",
     "sessions": "sessions",
     "duration": "{{min}} min",
     "keySession": "Key session",
     "raceDay": "Race Day!",
-    "racePrediction": "Estimated time",
     "delete": "Delete plan",
     "deleteTitle": "Delete this plan?",
     "deleteConfirm": "\"{{name}}\" will be permanently deleted. This action cannot be undone.",
@@ -208,7 +195,6 @@
     "backToPlans": "Back to plans",
     "freePlan": "Free plan",
     "prebuilt": "Pre-built",
-    "addDates": "Add dates",
     "planEnded": "This plan has ended. It remains available as your training history.",
     "estimatedPacesTitle": "Estimated paces, not measured",
     "estimatedPaces": "This plan was computed without your VMA: its paces come from your level. Enter it for paces that are yours.",
@@ -232,35 +218,13 @@
       "label": "{{week}} added to week {{n}}",
       "undoHint": "What was lived in the plan, sessions done or skipped, is never overwritten. The addition undoes in one gesture, from the plan's banner."
     },
-    "clickToRename": "Click to rename",
     "sessionUpdateFailed": "The session was not updated.",
     "sessionMoveFailed": "The session was not moved.",
     "sessionDeleteFailed": "The session was not deleted.",
     "weekValidated": "Week {{week}} validated!",
-    "addWorkout": "Add workout",
     "workoutAddFailed": "The workout was not added.",
-    "replaceSession": "Replace session",
-    "substituteSession": "Replace with cycling or swimming",
-    "substituteTitle": "Swap to another discipline",
-    "substituteDescription": "Target load ~{{tss}} TSS, within ±20 %.",
-    "substituteDescriptionNoTss": "Pick an equivalent session in cycling or swimming.",
-    "substituteCycling": "Cycling",
-    "substituteSwimming": "Swimming",
-    "substituteNoMatches": "No equivalent session within tolerance.",
-    "substituteTssLabel": "~{{tss}} TSS",
-    "substituteMatchExact": "exact match",
-    "substituteMatchDeviation": "±{{deviation}}%",
     "substituteLongRunWarningTitle": "Long run: degraded substitution",
     "substituteLongRunWarningBody": "Cycling and swimming do not reproduce the orthopedic adaptations of a long run. Keep this swap for the weeks when running is impossible.",
-    "removeSession": "Remove session",
-    "sessionActions": "Session actions",
-    "noSessionsThisWeek": "No sessions this week",
-    "schedule": "Schedule",
-    "statistics": "Statistics",
-    "trainingVolume": "Training volume relative to plan peak",
-    "add": "Add",
-    "rightClickOptions": "Right-click for options · Drag to move",
-    "longPressOptions": "Long-press for options · Swipe to move",
     "editDatesTitle": "Edit dates",
     "editDatesDescription": "Set a start date for your plan. The end date is calculated automatically.",
     "startDate": "Start date",
@@ -270,7 +234,6 @@
     "pastDateWarning": "This date is in the past. The first weeks will already be elapsed.",
     "cancel": "Cancel",
     "save": "Save",
-    "editDates": "Edit dates",
     "placedWeeks": {
       "label": "Placed alongside in the cockpit",
       "item": "{{name}} · week {{n}}"
@@ -281,11 +244,8 @@
     "completed": "Completed",
     "skipped": "Skipped",
     "modified": "Modified",
-    "hint": "Click checkbox to complete this session",
-    "validate": "Validate week ({{done}}/{{total}} done)",
     "validated": "Week validated",
     "weekValidated": "Week {{week}} validated!",
-    "legendTitle": "Marks and gestures",
     "markDone": "Complete session",
     "toggleDone": "Complete session",
     "completedCount": "{{done}}/{{total}} completed",
@@ -350,7 +310,6 @@
     "target8020": "Target: 80% easy / 20% hard",
     "trainingLoad": "Training load",
     "trainingLoadDesc": "Load score = duration × intensity factor (higher = harder week)",
-    "thisWeek": "This week",
     "predictedTime": "Predicted finish time",
     "completion": "Completion",
     "done": "done",
@@ -413,15 +372,10 @@
   "viewMode": {
     "label": "View mode",
     "calendar": "Calendar",
-    "weekly": "Weekly",
-    "monthly": "Monthly",
     "list": "List"
   },
   "monthlyView": {
-    "noStartDate": "Set a start date to display the monthly view",
-    "setStartDate": "Set date",
-    "previousMonth": "Previous month",
-    "nextMonth": "Next month"
+    "setStartDate": "Set date"
   },
   "weeklyView": {
     "weekTitle": "Week {{week}}",
@@ -911,5 +865,180 @@
     "polesDesc": "Power-hiking with poles is a skill of its own.",
     "backToBack": "Two days in a row",
     "backToBackDesc": "A long run on Saturday, another on Sunday on tired legs."
+  },
+  "page": {
+    "back": "Plans",
+    "tools": {
+      "plan": "The plan, every week",
+      "edit": "Edit the plan",
+      "more": "Actions for the plan {{name}}",
+      "planShort": "The plan",
+      "editShort": "Edit"
+    },
+    "countdown": {
+      "days": "D-{{count}}",
+      "race": "to race day, {{date}}",
+      "end": "to the end of the plan, {{date}}",
+      "raceDay": "Race day",
+      "endDay": "Last day of the plan",
+      "ended": "Plan ended on {{date}}",
+      "endDate": "Plan ends on {{date}}"
+    },
+    "week": {
+      "title": "Week {{n}}",
+      "of": "of {{total}}",
+      "meta": "{{phase}}, {{dates}}",
+      "range": "{{from}}-{{to}}",
+      "prev": "Previous week",
+      "next": "Next week",
+      "sessions": "The sessions of week {{n}}",
+      "today": "This week",
+      "todayLabel": "Back to the current week, week {{n}}"
+    },
+    "bars": {
+      "label": "The seven days of week {{n}}",
+      "rest": "{{day}} rest",
+      "planned": "{{day}} {{planned}} planned",
+      "skipped": "{{day}} {{planned}} planned, skipped",
+      "done": "{{day}} {{done}} done",
+      "partial": "{{day}} {{done}} done of {{planned}}",
+      "today": "today"
+    },
+    "day": {
+      "rest": "Rest",
+      "today": "Today"
+    },
+    "tag": {
+      "long_run": "Long run",
+      "key": "Key session",
+      "offPlan": "Off plan",
+      "blocked": "Unavailable"
+    },
+    "race": {
+      "title": "Race",
+      "intermediate": "Tune-up race"
+    },
+    "status": {
+      "done": "{{name}}, done, change the status",
+      "modified": "{{name}}, done with changes, change the status",
+      "skipped": "{{name}}, skipped, change the status",
+      "todo": "{{name}}, to do, set the status",
+      "offPlan": "{{name}}, done, off plan"
+    },
+    "open": "Open {{name}}",
+    "addActivity": "Log an activity",
+    "review": "To review",
+    "empty": {
+      "title": "This plan has no session yet.",
+      "action": "Add sessions"
+    },
+    "sheet": {
+      "title": "The plan",
+      "subtitleRace_one": "{{count}} week, race on {{date}}",
+      "subtitleRace_other": "{{count}} weeks, race on {{date}}",
+      "subtitle_one": "{{count}} week, until {{date}}",
+      "subtitle_other": "{{count}} weeks, until {{date}}",
+      "prediction": "Estimated time {{time}}",
+      "weeks": "Weeks",
+      "numbers": "Numbers",
+      "view": "What the sheet shows",
+      "weekShort": "W{{n}}",
+      "weekItem": "Week {{n}}, {{phase}}, {{dates}}, {{done}} done of {{planned}}"
+    },
+    "menu": {
+      "editDates": "Edit the dates",
+      "addDates": "Add dates",
+      "addWeek": "Add a week"
+    },
+    "rename": {
+      "title": "Rename the plan",
+      "label": "Plan name",
+      "save": "Rename"
+    },
+    "duplicated": {
+      "open": "Open"
+    },
+    "edit": {
+      "title": "Edit the plan",
+      "loadPrev": "Load the previous week",
+      "addSession": "Add a session",
+      "cancel": "Cancel",
+      "save": "Save",
+      "changeLabel": "Plan edited",
+      "saved": "Plan edited. You can undo it from this page.",
+      "saveFailed": "The changes could not be saved.",
+      "discarded": "Changes discarded",
+      "grip": "Drag to move {{name}}",
+      "actions": "Actions for {{name}}",
+      "change": "Change session",
+      "redraw": "Draw another session",
+      "move": "Move…",
+      "duplicate": "Duplicate",
+      "remove": "Remove",
+      "redrawEmpty": "No other session to draw for this slot.",
+      "moveTitle": "Move the session",
+      "moveDescription": "{{name}}: pick the week and the day.",
+      "moveWeek": "Week",
+      "moveDay": "Day",
+      "moveCurrent": "current day",
+      "leaveTitle": "Leave without saving?",
+      "leaveBody": "The changes made in this mode will be lost.",
+      "leaveStay": "Keep editing",
+      "leaveDiscard": "Leave without saving",
+      "dropHere": "Drop here",
+      "loadNext": "Load the next week"
+    },
+    "change": {
+      "title": "Change session",
+      "search": "Search a session",
+      "families": "Family",
+      "family": {
+        "hills_trail": "Hills and trail",
+        "road": "Road",
+        "strength": "Strength",
+        "cycling": "Cycling",
+        "swimming": "Swimming"
+      },
+      "intensity": "Intensity",
+      "intensityAll": "Every intensity",
+      "level": {
+        "0": "Easy",
+        "1": "Moderate",
+        "2": "Hard"
+      },
+      "duration": "Duration",
+      "durationAll": "Every duration",
+      "band": {
+        "short": "Under 30 min",
+        "medium": "30 to 60 min",
+        "long": "Over 60 min"
+      },
+      "count_one": "{{count}} session",
+      "count_other": "{{count}} sessions",
+      "sort": "Sort",
+      "sortMatch": "Closest first",
+      "sortDuration": "Shortest first",
+      "easier": "Easier alternative",
+      "time": "Time",
+      "distance": "Est. distance",
+      "load": "Load",
+      "tss": "~{{tss}} TSS",
+      "empty": "No session matches.",
+      "loading": "Loading the catalogue",
+      "replaced": "Session replaced with {{name}}",
+      "undo": "Undo",
+      "undone": "Replacement undone",
+      "label": "{{from}} replaced with {{to}}",
+      "pick": "Pick {{name}}, {{time}}"
+    },
+    "validate": {
+      "label": "Close the week",
+      "count": "{{done}}/{{total}} closed"
+    },
+    "dock": {
+      "label": "Week and editing",
+      "week": "Week {{n}}, {{dates}}, see every week"
+    },
+    "ticks": "Minute marks"
   }
 }

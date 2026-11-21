@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   addWeeksToDate,
   buildRacePlanDateRange,
-  calculateWeeksBetweenDates,
+  calculatePlanWeekCount,
   dateToWeekAndDay,
   getPlanMonday,
   getSessionCalendarDate,
@@ -11,22 +11,38 @@ import {
 } from "./planDates";
 import type { TrainingPlan } from "@/types/plan";
 
-describe("calculateWeeksBetweenDates", () => {
-  test("calculates available weeks from the chosen start date", () => {
-    expect(calculateWeeksBetweenDates("2026-01-01", "2026-01-29")).toBe(4);
+describe("calculatePlanWeekCount", () => {
+  test("départ un lundi, course un dimanche : la semaine de course compte", () => {
+    // Lun. 26 oct. 2026 -> dim. 10 janv. 2027 : 76 jours, mais 11 semaines
+    // calendaires, la course tombe dans la onzième.
+    expect(calculatePlanWeekCount("2026-10-26", "2027-01-10")).toBe(11);
   });
 
-  test("is independent of the machine clock (start != today)", () => {
-    // 13 weeks exactly, regardless of when this test runs.
-    expect(calculateWeeksBetweenDates("2026-05-15", "2026-08-14")).toBe(13);
+  test("départ en milieu de semaine : la semaine du départ est la première", () => {
+    // Mer. 28 oct. 2026 -> dim. 10 janv. 2027, même découpage.
+    expect(calculatePlanWeekCount("2026-10-28", "2027-01-10")).toBe(11);
   });
 
-  test("returns 0 when start and end dates are the same", () => {
-    expect(calculateWeeksBetweenDates("2026-01-01", "2026-01-01")).toBe(0);
+  test("course un samedi", () => {
+    expect(calculatePlanWeekCount("2026-10-26", "2027-01-09")).toBe(11);
   });
 
-  test("accepts ISO datetime strings with a T suffix", () => {
-    expect(calculateWeeksBetweenDates("2026-01-01T00:00:00Z", "2026-01-29")).toBe(4);
+  test("course un lundi : elle ouvre une semaine de plus", () => {
+    expect(calculatePlanWeekCount("2026-10-26", "2027-01-11")).toBe(12);
+  });
+
+  test("course la semaine du départ", () => {
+    expect(calculatePlanWeekCount("2026-10-26", "2026-11-01")).toBe(1);
+    expect(calculatePlanWeekCount("2026-10-28", "2026-10-28")).toBe(1);
+  });
+
+  test("accepte un horodatage ISO complet", () => {
+    expect(calculatePlanWeekCount("2026-10-26T00:00:00Z", "2027-01-10")).toBe(11);
+  });
+
+  test("ne dépend pas d'un changement d'heure", () => {
+    // Le passage à l'heure d'hiver tombe le 25 octobre 2026.
+    expect(calculatePlanWeekCount("2026-10-19", "2026-11-01")).toBe(2);
   });
 });
 

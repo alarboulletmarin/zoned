@@ -61,7 +61,7 @@ export function MiniSessionTimeline({
         </p>
         {dominantZone && !isMobile && (
           <p className="zn-minitl__meta">
-            Z{dominantZone.zone} · {formatDurationMinutes(data.totalDurationMin, { compact: true })}
+            Z{dominantZone.zone} · {formatDurationMinutes(data.totalDurationMin)}
           </p>
         )}
       </div>
@@ -92,7 +92,7 @@ export function MiniSessionTimeline({
       <div className="zn-minitl__end">
         {isMobile && (
           <span className="zn-minitl__time">
-            {formatDurationMinutes(data.totalDurationMin, { compact: true })}
+            {formatDurationMinutes(data.totalDurationMin)}
           </span>
         )}
         <span className="zn-minitl__hint">

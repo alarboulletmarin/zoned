@@ -141,7 +141,7 @@ export function ZoneHero({ workout }: ShareTemplateProps) {
             flexWrap: "wrap",
           }}
         >
-          <Chip label="Durée" value={formatDurationMinutes(hero.durationMin, { compact: true })} />
+          <Chip label="Durée" value={formatDurationMinutes(hero.durationMin)} />
           <Chip
             label="Niveau"
             value={t(`library:difficulty.${workout.difficulty}`)}

@@ -177,7 +177,7 @@ export function CoffeeStamp({ workout, transparent }: ShareTemplateProps) {
           }}
         >
           <span style={{ textTransform: "uppercase" }}>{zoneLabel}</span>
-          <span>{formatDurationMinutes(hero.durationMin, { compact: true })}</span>
+          <span>{formatDurationMinutes(hero.durationMin)}</span>
         </div>
       </div>
     </div>

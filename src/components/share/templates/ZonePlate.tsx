@@ -130,7 +130,7 @@ export function ZonePlate({ workout, transparent }: ShareTemplateProps) {
               color: INK_2,
             }}
           >
-            {formatDurationMinutes(hero.durationMin, { compact: true })} · {tss} TSS ·{" "}
+            {formatDurationMinutes(hero.durationMin)} · {tss} TSS ·{" "}
             {isEn ? "dominant" : "dominante"} Z{hero.dominantZone}
           </div>
 

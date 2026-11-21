@@ -97,7 +97,7 @@ export function SquareStats({ workout, transparent }: ShareTemplateProps) {
             flex: 1,
           }}
         >
-          <BigStat label="Durée" value={formatDurationMinutes(hero.durationMin, { compact: true })} />
+          <BigStat label="Durée" value={formatDurationMinutes(hero.durationMin)} />
           <BigStat
             label="Niveau"
             value={t(`library:difficulty.${workout.difficulty}`)}

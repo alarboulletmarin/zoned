@@ -168,7 +168,7 @@ export function PolaroidSquare({ workout, transparent }: ShareTemplateProps) {
               ● Z{hero.dominantZone} · {zoneLabel}
             </span>
             <span style={{ color: "#a8a29e" }}>·</span>
-            <span>{formatDurationMinutes(hero.durationMin, { compact: true })}</span>
+            <span>{formatDurationMinutes(hero.durationMin)}</span>
             <span style={{ color: "#a8a29e" }}>·</span>
             <span>RPE {hero.rpe}/10</span>
           </div>

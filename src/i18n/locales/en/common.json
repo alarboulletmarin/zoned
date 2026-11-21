@@ -759,11 +759,6 @@
     "prebuiltPlans": "Pre-built plans",
     "prebuiltPlansDesc": "Choose a structured plan and start immediately",
     "planExported": "Plan exported",
-    "replaceSession": "Replace session",
-    "chooseFromLibrary": "Choose a workout from the library",
-    "searchWorkouts": "Search workouts...",
-    "all": "All",
-    "noMatchingWorkouts": "No matching workouts",
     "weeks": "wk",
     "weeksEn": "wk"
   },

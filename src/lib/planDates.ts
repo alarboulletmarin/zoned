@@ -1,14 +1,41 @@
 import type { TrainingPlan } from "@/types/plan";
 
-export function calculateWeeksBetweenDates(startDate: string, endDate: string): number {
-  const [startYear, startMonth, startDay] = startDate.split("T")[0].split("-").map(Number);
-  const [endYear, endMonth, endDay] = endDate.split("T")[0].split("-").map(Number);
+/** Le lundi de la semaine d'une date "YYYY-MM-DD", à minuit local. */
+function mondayOfIso(iso: string): Date {
+  const [y, m, d] = iso.split("T")[0].split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+  const offset = date.getDay() === 0 ? -6 : 1 - date.getDay();
+  date.setDate(date.getDate() + offset);
+  return date;
+}
 
-  const start = new Date(startYear, startMonth - 1, startDay);
-  const end = new Date(endYear, endMonth - 1, endDay);
-  const diffMs = end.getTime() - start.getTime();
+/**
+ * La semaine du plan (1 = la semaine du départ) qui contient `date`. Un plan
+ * se lit par semaines calendaires, du lundi au dimanche (`getPlanMonday`) :
+ * on compte donc de lundi à lundi, et non des tranches de sept jours depuis
+ * le départ, qui coupaient une course du dimanche dans la semaine d'avant.
+ * Une date avant le départ donne 0 ou moins.
+ */
+export function planWeekOfDate(startDate: string, date: string): number {
+  const days = Math.round(
+    (mondayOfIso(date).getTime() - mondayOfIso(startDate).getTime()) / (24 * 60 * 60 * 1000),
+  );
+  return Math.floor(days / 7) + 1;
+}
 
-  return Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000));
+/**
+ * Le nombre de semaines d'un plan qui part le `startDate` et finit sur la
+ * course du `raceDate` : du lundi du départ au lundi de la semaine de course,
+ * plus la semaine de course elle-même.
+ */
+export function calculatePlanWeekCount(startDate: string, raceDate: string): number {
+  return planWeekOfDate(startDate, raceDate);
+}
+
+/** Le jour de la semaine d'une date "YYYY-MM-DD", 0 = lundi ... 6 = dimanche. */
+export function isoDayOfWeek(iso: string): number {
+  const [y, m, d] = iso.split("T")[0].split("-").map(Number);
+  return (new Date(y, m - 1, d).getDay() + 6) % 7;
 }
 
 export function addWeeksToDate(startDate: string, weeks: number): string {

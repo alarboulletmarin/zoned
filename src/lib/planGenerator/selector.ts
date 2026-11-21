@@ -153,6 +153,13 @@ function findBestWorkout(
   excludeWorkoutIds: string[] = [],
   targetDurationMin?: number,
   preferTags: string[] = [],
+  /**
+   * Retire les séances de la semaine AVANT de resserrer le pool, et rend le
+   * filtre de phase souple. Les filtres suivants ne gardent leur résultat que
+   * s'il n'est pas vide : une séance déjà posée ne peut donc plus revenir
+   * tant qu'une autre de la même catégorie existe au catalogue.
+   */
+  excludeEarly = false,
 ): WorkoutSelection | null {
   const categories = SESSION_TO_CATEGORY[sessionType] ?? [];
   const diffLevel = DIFFICULTY_LEVELS[difficulty];
@@ -213,13 +220,20 @@ function findBestWorkout(
     );
   }
 
+  if (excludeEarly && excludeWorkoutIds.length > 0) {
+    const excluded = new Set(excludeWorkoutIds);
+    candidates = candidates.filter((w) => !excluded.has(w.id));
+    if (candidates.length === 0) return null;
+  }
+
   // Step 2: Filter by phase
   // For easy/recovery slots, relax the phase filter, low-intensity
   // workouts are appropriate regardless of training phase
   if (slotType !== "easy" && slotType !== "recovery") {
-    candidates = candidates.filter((w) =>
+    const inPhase = candidates.filter((w) =>
       w.selectionCriteria.phases.includes(phase),
     );
+    candidates = excludeEarly && inPhase.length === 0 ? candidates : inPhase;
   }
   // Easy and recovery slots keep the full pool: an easy run is an easy run in
   // every phase. Restricting them to phase-tagged templates left only 8 easy
@@ -442,8 +456,33 @@ export function selectWorkout(
     if (result) return result;
   }
 
-  // Nothing fresh left for any of the slot's types, retry without the
-  // same-week exclusion rather than leaving the day empty.
+  // Nothing fresh in the narrowed pools: widen them, still without anything
+  // already placed this week. Retrying straight without the exclusion put
+  // the same tempo on Wednesday and Friday of a taper week while the
+  // catalogue held a dozen others.
+  if (excludeWorkoutIds.length > 0) {
+    for (const sessionType of slot.sessionTypes) {
+      const result = findBestWorkout(
+        sessionType,
+        phase,
+        difficulty,
+        raceDistance,
+        allWorkouts,
+        usedWorkoutIds,
+        slot.slotType,
+        elevationGain,
+        daysPerWeek,
+        excludeWorkoutIds,
+        targetDurationMin,
+        preferTags,
+        true,
+      );
+      if (result) return result;
+    }
+  }
+
+  // The catalogue has nothing else for any of the slot's types: repeat a
+  // session rather than leave the day empty.
   if (excludeWorkoutIds.length > 0) {
     for (const sessionType of slot.sessionTypes) {
       const result = findBestWorkout(

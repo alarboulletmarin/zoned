@@ -22,14 +22,13 @@ import { getPlanMonday, getSessionCalendarDate, isoDateOnly } from "@/lib/planDa
 import { ChevronDown, Plus } from "@/components/icons";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
+/** Le formateur de toute l'app, à la minute près : 37 min, 1 h 05. */
 function formatMinutes(min: number): string {
-  if (min < 60) return `${Math.round(min)}min`;
-  const h = Math.floor(min / 60);
-  const m = Math.round(min % 60);
-  return m > 0 ? `${h}h${m.toString().padStart(2, "0")}` : `${h}h`;
+  return formatDurationMinutes(Math.round(min));
 }
 
 // ── Bar chart ────────────────────────────────────────────────────────
@@ -283,7 +282,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           <StatBlock
             tone="card"
             size="sm"
-            value={`${Math.round(stats.totalDurationMin / 60)}h`}
+            value={formatDurationMinutes(Math.round(stats.totalDurationMin / 60) * 60)}
             label={t("stats.total")}
           />
           <StatBlock

@@ -1254,8 +1254,7 @@ textarea.zn-pfield {
      .zn-dialog.zn-pdialog plus bas, qui défile) : deux barres l'une contre
      l'autre, et le titre du dialogue sorti par le haut pendant que la liste
      défilait toute seule. Mesuré sur l'aperçu de replanification d'un plan à
-     25 jours bloqués, à 390 x 600 comme à 1280 x 700. C'est la règle que
-     .zn-pdialog--list applique déjà à ses propres listes. */
+     25 jours bloqués, à 390 x 600 comme à 1280 x 700. */
   flex: 1 1 auto;
   min-block-size: 0;
   max-block-size: 40vh;
@@ -1324,116 +1323,4 @@ textarea.zn-pfield {
 .zn-dialog.zn-pdialog {
   max-block-size: 85vh;
   overflow-y: auto;
-}
-
-/* ── the picker dialogs (substitute / swap) ───────────────────────────── */
-
-.zn-dialog.zn-pdialog--list {
-  max-block-size: 80vh;
-  overflow: hidden;
-}
-
-.zn-ppick {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-6);
-  flex: 1;
-  min-block-size: 0;
-}
-
-.zn-ppick__filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-4);
-  max-block-size: 96px;
-  overflow-y: auto;
-}
-
-.zn-ppick__list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-4);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  flex: 1;
-  min-block-size: 0;
-  overflow-y: auto;
-}
-
-/* Not compressible: a scrolling flex column squeezes its children before it
-   gives them a scrollbar, and WebKit does not hold them at min-content the way
-   Chrome does. Long note on .zn-planpanel__list, plan-calendar.css. */
-.zn-ppick__list > * {
-  flex: none;
-}
-
-.zn-ppick__item {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-6);
-  inline-size: 100%;
-  padding: var(--sp-6) var(--sp-8);
-
-  text-align: start;
-  background: var(--surface-card);
-  color: var(--text-body);
-  border: var(--border-rule);
-  border-radius: var(--r-lg);
-  cursor: pointer;
-
-  transition:
-    background var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
-}
-
-.zn-ppick__item:hover {
-  background: var(--surface-band);
-}
-
-.zn-ppick__item:active {
-  transform: translateY(var(--press-shift));
-}
-
-.zn-ppick__text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-1);
-  flex: 1;
-  min-inline-size: 0;
-}
-
-.zn-ppick__name {
-  font: var(--type-label);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.zn-ppick__meta {
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  letter-spacing: var(--ls-mono);
-  font-variant-numeric: tabular-nums;
-  color: var(--text-faint);
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.zn-ppick__wait,
-.zn-ppick__empty {
-  display: flex;
-  justify-content: center;
-  padding-block: var(--sp-15);
-  margin: 0;
-  font: var(--type-body-sm);
-  color: var(--text-faint);
-}
-
-@media (pointer: coarse) {
-  .zn-ppick__item {
-    min-block-size: var(--hit-min);
-  }
 }

@@ -12,7 +12,6 @@
     "weeks_other": "{{count}} semaines",
     "sessions_one": "{{count}} séance",
     "sessions_other": "{{count}} séances",
-    "shareLink": "Partager",
     "phase": {
       "base": "Base",
       "build": "Construction",
@@ -182,22 +181,10 @@
   },
   "view": {
     "title": "Mon plan",
-    "currentWeek": "Semaine en cours",
-    "today": "Aujourd'hui",
-    "restToday": "Repos aujourd'hui",
-    "notStartedYet": "Le plan n'a pas encore commencé",
-    "sessionsLeft_one": "{{count}} restante",
-    "sessionsLeft_other": "{{count}} restantes",
-    "timeLogged": "Temps posé",
-    "nextKey": "Prochaine séance clé",
-    "moreActions": "Autres actions",
-    "phases": "Phases d'entraînement",
-    "standingWeek": "S{{week}}",
     "sessions": "séances",
     "duration": "{{min}} min",
     "keySession": "Séance clé",
     "raceDay": "Jour de course !",
-    "racePrediction": "Temps estimé",
     "delete": "Supprimer le plan",
     "deleteTitle": "Supprimer ce plan ?",
     "deleteConfirm": "\"{{name}}\" sera définitivement supprimé. Cette action est irréversible.",
@@ -208,7 +195,6 @@
     "backToPlans": "Retour aux plans",
     "freePlan": "Plan libre",
     "prebuilt": "Pré-construit",
-    "addDates": "Ajouter des dates",
     "planEnded": "Ce plan est terminé. Il reste consultable comme historique d'entraînement.",
     "estimatedPacesTitle": "Allures estimées, pas mesurées",
     "estimatedPaces": "Ce plan a été calculé sans ta VMA : ses allures viennent de ton niveau. Renseigne-la pour des allures à toi.",
@@ -232,35 +218,13 @@
       "label": "{{week}} ajoutée à la semaine {{n}}",
       "undoHint": "Ce qui a été vécu dans le plan, séances faites ou sautées, n'est jamais écrasé. L'ajout s'annule d'un geste, depuis le bandeau du plan."
     },
-    "clickToRename": "Cliquer pour renommer",
     "sessionUpdateFailed": "La séance n'a pas été modifiée.",
     "sessionMoveFailed": "La séance n'a pas été déplacée.",
     "sessionDeleteFailed": "La séance n'a pas été supprimée.",
     "weekValidated": "Semaine {{week}} validée !",
-    "addWorkout": "Ajouter une séance",
     "workoutAddFailed": "La séance n'a pas été ajoutée.",
-    "replaceSession": "Remplacer la séance",
-    "substituteSession": "Remplacer par vélo ou natation",
-    "substituteTitle": "Remplacer par une autre discipline",
-    "substituteDescription": "Charge cible ~{{tss}} TSS, tolérance ±20 %.",
-    "substituteDescriptionNoTss": "Choisis une séance équivalente en vélo ou en natation.",
-    "substituteCycling": "Vélo",
-    "substituteSwimming": "Natation",
-    "substituteNoMatches": "Aucune séance équivalente dans cette tolérance.",
-    "substituteTssLabel": "~{{tss}} TSS",
-    "substituteMatchExact": "match exact",
-    "substituteMatchDeviation": "±{{deviation}} %",
     "substituteLongRunWarningTitle": "Sortie longue : substitution en mode dégradé",
     "substituteLongRunWarningBody": "Le vélo et la natation ne reproduisent pas les adaptations orthopédiques de la sortie longue. Garde ce remplacement pour les semaines où courir est impossible.",
-    "removeSession": "Retirer la séance",
-    "sessionActions": "Actions de la séance",
-    "noSessionsThisWeek": "Aucune séance cette semaine",
-    "schedule": "Programme",
-    "statistics": "Statistiques",
-    "trainingVolume": "Volume d'entraînement relatif au pic du plan",
-    "add": "Ajouter",
-    "rightClickOptions": "Clic droit pour les options · Glisser pour déplacer",
-    "longPressOptions": "Appui long pour les options · Glisser pour déplacer",
     "editDatesTitle": "Modifier les dates",
     "editDatesDescription": "Définis une date de début pour ton plan. La date de fin est calculée automatiquement.",
     "startDate": "Date de début",
@@ -270,7 +234,6 @@
     "pastDateWarning": "Cette date est dans le passé. Les premières semaines seront déjà écoulées.",
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "editDates": "Modifier les dates",
     "placedWeeks": {
       "label": "Posée à côté dans le cockpit",
       "item": "{{name}} · semaine {{n}}"
@@ -281,11 +244,8 @@
     "completed": "Fait",
     "skipped": "Passé",
     "modified": "Modifiée",
-    "hint": "Clique sur la case pour clôturer la séance",
-    "validate": "Valider la semaine ({{done}}/{{total}} faites)",
     "validated": "Semaine validée",
     "weekValidated": "Semaine {{week}} validée !",
-    "legendTitle": "Marques et gestes",
     "markDone": "Clôturer la séance",
     "toggleDone": "Clôturer la séance",
     "completedCount": "{{done}}/{{total}} terminées",
@@ -350,7 +310,6 @@
     "target8020": "Objectif : 80% facile / 20% dur",
     "trainingLoad": "Charge d'entraînement",
     "trainingLoadDesc": "Score de charge = durée × facteur d'intensité (plus haut = semaine plus dure)",
-    "thisWeek": "Cette semaine",
     "predictedTime": "Temps de course estimé",
     "completion": "Complétion",
     "done": "faites",
@@ -413,15 +372,10 @@
   "viewMode": {
     "label": "Mode d'affichage",
     "calendar": "Calendrier",
-    "weekly": "Semaine",
-    "monthly": "Mois",
     "list": "Liste"
   },
   "monthlyView": {
-    "noStartDate": "Définis une date de début pour afficher la vue mensuelle",
-    "setStartDate": "Définir la date",
-    "previousMonth": "Mois précédent",
-    "nextMonth": "Mois suivant"
+    "setStartDate": "Définir la date"
   },
   "weeklyView": {
     "weekTitle": "Semaine {{week}}",
@@ -911,5 +865,180 @@
     "polesDesc": "Monter en marchant avec des bâtons, ça se travaille.",
     "backToBack": "Deux jours de suite",
     "backToBackDesc": "Une sortie longue le samedi, une autre le dimanche sur jambes fatiguées."
+  },
+  "page": {
+    "back": "Plans",
+    "tools": {
+      "plan": "Le plan, toutes les semaines",
+      "edit": "Modifier le plan",
+      "more": "Actions du plan {{name}}",
+      "planShort": "Le plan",
+      "editShort": "Modifier"
+    },
+    "countdown": {
+      "days": "J-{{count}}",
+      "race": "avant la course, {{date}}",
+      "end": "avant la fin du plan, {{date}}",
+      "raceDay": "Jour de course",
+      "endDay": "Dernier jour du plan",
+      "ended": "Plan terminé le {{date}}",
+      "endDate": "Fin du plan le {{date}}"
+    },
+    "week": {
+      "title": "Semaine {{n}}",
+      "of": "sur {{total}}",
+      "meta": "{{phase}}, du {{dates}}",
+      "range": "{{from}} au {{to}}",
+      "prev": "Semaine précédente",
+      "next": "Semaine suivante",
+      "sessions": "Les séances de la semaine {{n}}",
+      "today": "Cette semaine",
+      "todayLabel": "Revenir à la semaine en cours, semaine {{n}}"
+    },
+    "bars": {
+      "label": "Les sept jours de la semaine {{n}}",
+      "rest": "{{day}} repos",
+      "planned": "{{day}} {{planned}} prévues",
+      "skipped": "{{day}} {{planned}} prévues, sautée",
+      "done": "{{day}} {{done}} faites",
+      "partial": "{{day}} {{done}} faites sur {{planned}}",
+      "today": "aujourd'hui"
+    },
+    "day": {
+      "rest": "Repos",
+      "today": "Aujourd'hui"
+    },
+    "tag": {
+      "long_run": "Sortie longue",
+      "key": "Séance clé",
+      "offPlan": "Hors plan",
+      "blocked": "Indisponible"
+    },
+    "race": {
+      "title": "Course",
+      "intermediate": "Course intermédiaire"
+    },
+    "status": {
+      "done": "{{name}}, faite, modifier le statut",
+      "modified": "{{name}}, faite avec des changements, modifier le statut",
+      "skipped": "{{name}}, sautée, modifier le statut",
+      "todo": "{{name}}, à faire, marquer le statut",
+      "offPlan": "{{name}}, faite, hors plan"
+    },
+    "open": "Ouvrir {{name}}",
+    "addActivity": "Ajouter une activité",
+    "review": "À revoir",
+    "empty": {
+      "title": "Ce plan n'a pas encore de séance.",
+      "action": "Ajouter des séances"
+    },
+    "sheet": {
+      "title": "Le plan",
+      "subtitleRace_one": "{{count}} semaine, course le {{date}}",
+      "subtitleRace_other": "{{count}} semaines, course le {{date}}",
+      "subtitle_one": "{{count}} semaine, jusqu'au {{date}}",
+      "subtitle_other": "{{count}} semaines, jusqu'au {{date}}",
+      "prediction": "Temps estimé {{time}}",
+      "weeks": "Semaines",
+      "numbers": "Chiffres",
+      "view": "Ce que montre la feuille",
+      "weekShort": "S{{n}}",
+      "weekItem": "Semaine {{n}}, {{phase}}, {{dates}}, {{done}} faites sur {{planned}}"
+    },
+    "menu": {
+      "editDates": "Modifier les dates",
+      "addDates": "Ajouter des dates",
+      "addWeek": "Ajouter une semaine"
+    },
+    "rename": {
+      "title": "Renommer le plan",
+      "label": "Nom du plan",
+      "save": "Renommer"
+    },
+    "duplicated": {
+      "open": "Ouvrir"
+    },
+    "edit": {
+      "title": "Modifier le plan",
+      "loadPrev": "Charger la semaine précédente",
+      "addSession": "Ajouter une séance",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "changeLabel": "Plan modifié",
+      "saved": "Plan modifié. Annulable depuis cette page.",
+      "saveFailed": "Les changements n'ont pas pu être enregistrés.",
+      "discarded": "Changements annulés",
+      "grip": "Glisser pour déplacer {{name}}",
+      "actions": "Actions pour {{name}}",
+      "change": "Changer de séance",
+      "redraw": "Tirer une autre séance",
+      "move": "Déplacer…",
+      "duplicate": "Dupliquer",
+      "remove": "Retirer",
+      "redrawEmpty": "Pas d'autre séance à tirer pour ce créneau.",
+      "moveTitle": "Déplacer la séance",
+      "moveDescription": "{{name}} : choisis la semaine et le jour.",
+      "moveWeek": "Semaine",
+      "moveDay": "Jour",
+      "moveCurrent": "jour actuel",
+      "leaveTitle": "Quitter sans enregistrer ?",
+      "leaveBody": "Les changements faits dans ce mode seront perdus.",
+      "leaveStay": "Continuer à modifier",
+      "leaveDiscard": "Quitter sans enregistrer",
+      "dropHere": "Déposer ici",
+      "loadNext": "Charger la semaine suivante"
+    },
+    "change": {
+      "title": "Changer de séance",
+      "search": "Rechercher une séance",
+      "families": "Famille",
+      "family": {
+        "hills_trail": "Côtes et trail",
+        "road": "Route",
+        "strength": "Renfo",
+        "cycling": "Vélo",
+        "swimming": "Natation"
+      },
+      "intensity": "Intensité",
+      "intensityAll": "Toutes les intensités",
+      "level": {
+        "0": "Facile",
+        "1": "Modérée",
+        "2": "Soutenue"
+      },
+      "duration": "Durée",
+      "durationAll": "Toutes les durées",
+      "band": {
+        "short": "Moins de 30 min",
+        "medium": "30 à 60 min",
+        "long": "Plus de 60 min"
+      },
+      "count_one": "{{count}} séance",
+      "count_other": "{{count}} séances",
+      "sort": "Trier",
+      "sortMatch": "Les plus proches",
+      "sortDuration": "Les plus courtes",
+      "easier": "Alternative plus facile",
+      "time": "Temps",
+      "distance": "Dist. estimée",
+      "load": "Charge",
+      "tss": "~{{tss}} TSS",
+      "empty": "Aucune séance ne correspond.",
+      "loading": "Chargement du catalogue",
+      "replaced": "Séance remplacée par {{name}}",
+      "undo": "Annuler",
+      "undone": "Remplacement annulé",
+      "label": "{{from}} remplacée par {{to}}",
+      "pick": "Choisir {{name}}, {{time}}"
+    },
+    "validate": {
+      "label": "Valider la semaine",
+      "count": "{{done}}/{{total}} closes"
+    },
+    "dock": {
+      "label": "Semaine et modification",
+      "week": "Semaine {{n}}, {{dates}}, voir toutes les semaines"
+    },
+    "ticks": "Repères en minutes"
   }
 }

@@ -9,7 +9,7 @@ import type { TrainingPhase } from "@/types";
 function makeSession(day: number, overrides?: Partial<PlanSession>): PlanSession {
   return {
     dayOfWeek: day,
-    workoutId: "workout-easy",
+    workoutId: `workout-${day}`,
     sessionType: "endurance",
     isKeySession: false,
     estimatedDurationMin: 45,
@@ -250,5 +250,61 @@ describe("auditPlan", () => {
     expect(match).toBeDefined();
     expect(match!.severity).toBe("info");
     expect(match!.weekNumber).toBe(2);
+  });
+});
+
+describe("DUPLICATE_WORKOUT_IN_WEEK", () => {
+  test("signale la seconde occurrence d'une séance dans la semaine, et la remplace", async () => {
+    const { applyAuditFix } = await import("./auditFix");
+    const plan = makePlan([
+      { sessions: [makeSession(2, { workoutId: "TMP-004", sessionType: "tempo" })] },
+      {
+        sessions: [
+          makeSession(0, { workoutId: "REC-012", sessionType: "recovery" }),
+          makeSession(2, { workoutId: "TMP-015", sessionType: "tempo" }),
+          makeSession(4, { workoutId: "TMP-015", sessionType: "tempo" }),
+          makeSession(6, { workoutId: "__race_day__", sessionType: "race_specific" }),
+        ],
+      },
+    ]);
+    const dup = auditPlan(plan).filter((f) => f.code === "DUPLICATE_WORKOUT_IN_WEEK");
+    expect(dup).toHaveLength(1);
+    expect(dup[0].weekNumber).toBe(2);
+    expect(dup[0].sessionIndex).toBe(2);
+    expect(dup[0].fixable).toBe(true);
+
+    const fixed = applyAuditFix(plan, dup[0]);
+    expect(fixed?.weeks[1].sessions.map((s) => s.workoutId)).toEqual([
+      "REC-012",
+      "TMP-015",
+      "TMP-004",
+      "__race_day__",
+    ]);
+    expect(auditPlan(fixed!).some((f) => f.code === "DUPLICATE_WORKOUT_IN_WEEK")).toBe(false);
+  });
+
+  test("les jalons et les activités ne comptent pas", () => {
+    const plan = makePlan([
+      {
+        sessions: [
+          makeSession(1, { workoutId: "__activity_commute__" }),
+          makeSession(3, { workoutId: "__activity_commute__" }),
+        ],
+      },
+    ]);
+    expect(auditPlan(plan).some((f) => f.code === "DUPLICATE_WORKOUT_IN_WEEK")).toBe(false);
+  });
+
+  test("sans autre séance du même type dans le plan, le constat n'est pas corrigeable", () => {
+    const plan = makePlan([
+      {
+        sessions: [
+          makeSession(2, { workoutId: "TMP-015", sessionType: "tempo" }),
+          makeSession(4, { workoutId: "TMP-015", sessionType: "tempo" }),
+        ],
+      },
+    ]);
+    const dup = auditPlan(plan).find((f) => f.code === "DUPLICATE_WORKOUT_IN_WEEK");
+    expect(dup?.fixable).toBe(false);
   });
 });

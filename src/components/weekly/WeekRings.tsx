@@ -148,6 +148,10 @@ interface Formats {
 }
 
 function useFormats(locale: string): Formats {
+  const { t } = useTranslation("today");
+  // 430 m se lisait 430 minutes à côté de durées en min : le
+  // dénivelé dit ce qu'il est.
+  const dplusUnit = t("rings.unit.dplus");
   return useMemo(() => {
     const km = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
     const meters = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 });
@@ -158,10 +162,10 @@ function useFormats(locale: string): Formats {
     };
     const full = (metric: RingMetric, value: number) => {
       if (metric === "time") return bare(metric, value);
-      return `${bare(metric, value)} ${metric === "km" ? "km" : "m"}`;
+      return `${bare(metric, value)}\u00a0${metric === "km" ? "km" : dplusUnit}`;
     };
     return { bare, full };
-  }, [locale]);
+  }, [locale, dplusUnit]);
 }
 
 // ── Les anneaux, lus ─────────────────────────────────────────────────
@@ -252,10 +256,22 @@ export interface WeekRingsProps {
   onMetricChange: (metric: RingMetric) => void;
   /** `card` toujours ouverte, `strip` repliée derrière une `zn-disclosure`. */
   variant?: "card" | "strip";
+  /**
+   * L'en-tête de la carte (semaine ISO et jour). Faux là où la semaine est
+   * déjà nommée au-dessus, comme sur la page d'un plan.
+   */
+  showHead?: boolean;
   className?: string;
 }
 
-export function WeekRings({ model, metric, onMetricChange, variant = "card", className }: WeekRingsProps) {
+export function WeekRings({
+  model,
+  metric,
+  onMetricChange,
+  variant = "card",
+  showHead = true,
+  className,
+}: WeekRingsProps) {
   const { t, i18n } = useTranslation("today");
   const en = i18n.language?.startsWith("en");
   const locale = en ? "en-GB" : "fr-FR";
@@ -332,10 +348,12 @@ export function WeekRings({ model, metric, onMetricChange, variant = "card", cla
 
   return (
     <section className={cn("zn-rings zn-rings--card", className)} aria-label={t("rings.label")}>
-      <div className="zn-rings__head">
-        <span className="zn-rings__kicker">{head.week}</span>
-        <span className="zn-rings__kicker zn-rings__kicker--ink">{head.day}</span>
-      </div>
+      {showHead && (
+        <div className="zn-rings__head">
+          <span className="zn-rings__kicker">{head.week}</span>
+          <span className="zn-rings__kicker zn-rings__kicker--ink">{head.day}</span>
+        </div>
+      )}
       {body}
     </section>
   );
@@ -413,7 +431,7 @@ function CardBody({
         <p className="zn-rings__fact">
           <span className="zn-rings__kicker">{t("today:rings.total")}</span>
           <span className="zn-rings__fact-value">
-            {formats.full(metric, totals.done[metric])}{" "}
+            {formats.bare(metric, totals.done[metric])}{" "}
             <span className="zn-rings__fact-of">/ {formats.full(metric, totals.target[metric])}</span>
           </span>
         </p>

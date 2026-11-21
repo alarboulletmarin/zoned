@@ -156,7 +156,7 @@ export function MagazineCover({ workout, transparent }: ShareTemplateProps) {
           <CoverLine
             kicker="01"
             title="Structure"
-            detail={`${hero.blockCount} blocs · ${formatDurationMinutes(hero.durationMin, { compact: true })}`}
+            detail={`${hero.blockCount} blocs · ${formatDurationMinutes(hero.durationMin)}`}
           />
           <CoverLine
             kicker="02"

@@ -1,8 +1,9 @@
 /* The plan surfaces, a training plan drawn as paper.
  *
- * One family, four screens of the same object: the whole-plan grid
- * (.zn-plancal), one week blown up (.zn-planweek), the month chrome around the
- * grid (.zn-planmonth) and the catalogue you drag from (.zn-planpanel). The
+ * One family, three screens of the same object: the whole-plan grid
+ * (.zn-plancal), one week blown up (.zn-planweek) and the catalogue you drag
+ * from (.zn-planpanel). The month chrome (.zn-planmonth) left with the plan
+ * page's monthly view in November 2026. The
  * volume sparkline that used to close the list left with the /plans redesign
  * (plans.css draws its timeline). They share the session mark (.zn-sess), the
  * long-press menu (.zn-plan-menu) and the drag-to-delete target
@@ -1425,26 +1426,6 @@
 .zn-plan-menu .zn-menu__item[data-variant="destructive"]:hover {
   background: var(--state-danger);
   color: var(--accent-fg);
-}
-
-/* ══ the month chrome ══════════════════════════════════════════════════ */
-
-.zn-planmonth {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-11);
-}
-
-.zn-planmonth__nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-4);
-}
-
-.zn-planmonth__title {
-  font: var(--fw-semibold) var(--fs-h4) / 1.05 var(--font-display);
-  letter-spacing: var(--ls-h4);
 }
 
 /* ══ the workout catalogue you drag from ═══════════════════════════════ */
