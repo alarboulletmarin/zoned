@@ -42,6 +42,7 @@ import { PathScreen } from "./plan-create/PathScreen";
 import { YouScreen } from "./plan-create/YouScreen";
 import { PreviewScreen } from "./plan-create/PreviewScreen";
 import { PlanAside } from "./plan-create/PlanAside";
+import { RefinePanel } from "./plan-create/RefinePanel";
 
 /** Les champs tapés au clavier : ils régénèrent l'aperçu après 150 ms, pas à chaque touche. */
 const TEXT_FIELDS = [
@@ -51,7 +52,9 @@ const TEXT_FIELDS = [
   "elevationGain",
   "currentWeeklyKm",
   "currentLongRunKm",
-] as const;
+  "intermediateGoals",
+] as const satisfies readonly (keyof PlanForm)[];
+type TypedFields = Pick<PlanForm, (typeof TEXT_FIELDS)[number]>;
 
 /** Les réponses d'un plan prêt ouvert depuis sa fiche (`?prebuilt=<slug>`). */
 function formForPrebuilt(form: PlanForm, slug: string | null): PlanForm {
@@ -204,7 +207,7 @@ export function PlanCreatePage() {
     [isRace, form.raceDate, form.raceDistance, form.intermediateGoals, start],
   );
 
-  const textNow = JSON.stringify(TEXT_FIELDS.map((k) => form[k]));
+  const textNow = JSON.stringify(Object.fromEntries(TEXT_FIELDS.map((k) => [k, form[k]])));
   const textLater = useDebouncedValue(textNow, 150);
   /* Sur bureau, le plan se dessine pendant qu'on répond, dans le panneau de
      droite des écrans 2.2 à 2.4. Sur téléphone, il n'est généré que pour
@@ -214,15 +217,22 @@ export function PlanCreatePage() {
   const liveNeeded = step === "preview" || withAside;
   const liveConfig = useMemo(() => {
     if (prebuilt || !goalKey || !dateOk || !liveNeeded) return null;
-    const typed = JSON.parse(textLater) as string[];
-    const settled: PlanForm = { ...form };
-    TEXT_FIELDS.forEach((k, i) => {
-      settled[k] = typed[i];
-    });
-    // Une course de préparation mal datée ne régénère pas : l'erreur est sous ses champs.
-    if (!goalsValidation.valid) settled.intermediateGoals = [];
+    const settled: PlanForm = { ...form, ...(JSON.parse(textLater) as TypedFields) };
+    // Une course de préparation mal datée ne compte pas : l'erreur est sous ses champs.
+    if (
+      settled.intermediateGoals.length > 0 &&
+      (!settled.raceDistance ||
+        !validateIntermediateGoals(
+          settled.intermediateGoals,
+          settled.raceDate,
+          planStartOf(settled, today),
+          settled.raceDistance,
+        ).valid)
+    ) {
+      settled.intermediateGoals = [];
+    }
     return buildAssistedConfig(settled, today);
-  }, [form, textLater, prebuilt, goalKey, dateOk, liveNeeded, goalsValidation.valid, today]);
+  }, [form, textLater, prebuilt, goalKey, dateOk, liveNeeded, today]);
   const live = useLivePlan(liveConfig);
   const plan = prebuilt ? (anchored?.ok ? anchored.plan : null) : live.plan;
 
@@ -360,6 +370,18 @@ export function PlanCreatePage() {
             creating={isGenerating}
             blocked={!goalsValidation.valid}
             createError={createError}
+            refine={
+              prebuilt ? undefined : (
+                <RefinePanel
+                  form={form}
+                  patch={patch}
+                  today={today}
+                  start={start}
+                  isTrail={!!form.raceDistance && practiceFromRaceDistance(form.raceDistance) !== "road"}
+                  goalsValidation={goalsValidation}
+                />
+              )
+            }
           />
         );
     }
