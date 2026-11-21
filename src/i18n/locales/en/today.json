@@ -34,6 +34,19 @@
     "reclose": "Change the outcome",
     "alsoLabel": "Also"
   },
+  "rail": {
+    "label": "Today's sessions",
+    "words": "one,two,three,four,five,six",
+    "count_one": "{{n}} session · {{duration}}",
+    "count_other": "{{n}} sessions · {{duration}}",
+    "closed": "Day wrapped · {{duration}}",
+    "tab": "Session {{n}} of {{total}}, {{name}}, {{duration}}",
+    "state": {
+      "completed": "done",
+      "modified": "done, modified",
+      "skipped": "skipped"
+    }
+  },
   "quick": {
     "draw": "Draw me a session",
     "week": "My week",

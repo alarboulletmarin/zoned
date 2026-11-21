@@ -34,6 +34,19 @@
     "reclose": "Modifier la clôture",
     "alsoLabel": "Aussi"
   },
+  "rail": {
+    "label": "Séances du jour",
+    "words": "une,deux,trois,quatre,cinq,six",
+    "count_one": "{{n}} séance · {{duration}}",
+    "count_other": "{{n}} séances · {{duration}}",
+    "closed": "Journée bouclée · {{duration}}",
+    "tab": "Séance {{n}} sur {{total}}, {{name}}, {{duration}}",
+    "state": {
+      "completed": "faite",
+      "modified": "faite, modifiée",
+      "skipped": "sautée"
+    }
+  },
   "quick": {
     "draw": "Tire-moi une séance",
     "week": "Ma semaine",
