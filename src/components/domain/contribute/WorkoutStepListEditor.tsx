@@ -1,4 +1,5 @@
-import { useId, type CSSProperties } from "react";
+import { useId, useRef, type CSSProperties } from "react";
+import { useFlip } from "@/hooks/useFlip";
 import { useTranslation } from "react-i18next";
 import { ChronoValueInput } from "@/components/ui/chrono-input";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,16 @@ function createDefaultRepeat(): WorkoutStepRepeat {
 export function WorkoutStepListEditor({ steps, onChange, label, depth = 0 }: WorkoutStepListEditorProps) {
   const { t } = useTranslation("contribute");
 
+  // Geste : pour qu'un bloc déplacé garde son nœud (et que le FLIP le voie
+  // glisser), chaque bloc porte un identifiant stable, suivi à côté des
+  // étapes. Un changement venu d'ailleurs (annuler, longueur différente) est
+  // rattrapé en ajustant la liste à la longueur reçue.
+  const ids = useRef<number[]>([]);
+  const nextId = useRef(0);
+  while (ids.current.length < steps.length) ids.current.push(nextId.current++);
+  ids.current.length = steps.length;
+  const flipRef = useFlip<HTMLDivElement>(ids.current.join(","));
+
   const updateStep = (index: number, nextStep: WorkoutStep) => {
     const next = [...steps];
     next[index] = nextStep;
@@ -55,10 +66,14 @@ export function WorkoutStepListEditor({ steps, onChange, label, depth = 0 }: Wor
   };
 
   const removeStep = (index: number) => {
+    ids.current = ids.current.filter((_, currentIndex) => currentIndex !== index);
     onChange(steps.filter((_, currentIndex) => currentIndex !== index));
   };
 
   const moveStep = (from: number, to: number) => {
+    const nextIds = [...ids.current];
+    nextIds.splice(to, 0, ...nextIds.splice(from, 1));
+    ids.current = nextIds;
     const next = [...steps];
     const [moved] = next.splice(from, 1);
     next.splice(to, 0, moved);
@@ -80,10 +95,10 @@ export function WorkoutStepListEditor({ steps, onChange, label, depth = 0 }: Wor
           <p className="zn-body zn-body--sm zn-muted">{t("blocks.emptyState")}</p>
         </div>
       ) : (
-        <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+        <div ref={flipRef} className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
           {steps.map((step, index) => (
+            <div key={ids.current[index]} data-flip-key={ids.current[index]}>
             <WorkoutStepEditor
-              key={`${step.kind}-${index}`}
               step={step}
               depth={depth}
               onChange={(nextStep) => updateStep(index, nextStep)}
@@ -93,6 +108,7 @@ export function WorkoutStepListEditor({ steps, onChange, label, depth = 0 }: Wor
               onMoveUp={() => moveStep(index, index - 1)}
               onMoveDown={() => moveStep(index, index + 1)}
             />
+            </div>
           ))}
         </div>
       )}

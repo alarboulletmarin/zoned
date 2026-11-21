@@ -86,6 +86,12 @@
   border-radius: 2px 2px 0 0;
   background: var(--zn-block-fill, transparent);
   block-size: var(--zn-block-h, 26%);
+
+  /* Geste : un bloc dont le temps ou la zone change glisse vers sa nouvelle
+     largeur et hauteur. Ne joue qu'au changement, jamais au montage. */
+  transition:
+    flex-grow var(--dur-base) var(--ease-out),
+    block-size var(--dur-base) var(--ease-out);
 }
 
 /* A recovery block is not a zone. It is a 45 degree hatch at 26%, the same
