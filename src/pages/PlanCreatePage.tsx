@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { SEOHead } from "@/components/seo";
 import { useCreatePlan } from "@/hooks/usePlans";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { formatDate, usePickLang } from "@/lib/i18n-utils";
 import { loadUserZonePrefs, saveUserZonePrefs } from "@/lib/zones";
 import { parseVma, vmaToInput } from "@/lib/paceFields";
@@ -40,6 +41,7 @@ import { DateScreen } from "./plan-create/DateScreen";
 import { PathScreen } from "./plan-create/PathScreen";
 import { YouScreen } from "./plan-create/YouScreen";
 import { PreviewScreen } from "./plan-create/PreviewScreen";
+import { PlanAside } from "./plan-create/PlanAside";
 
 /** Les champs tapés au clavier : ils régénèrent l'aperçu après 150 ms, pas à chaque touche. */
 const TEXT_FIELDS = [
@@ -204,7 +206,12 @@ export function PlanCreatePage() {
 
   const textNow = JSON.stringify(TEXT_FIELDS.map((k) => form[k]));
   const textLater = useDebouncedValue(textNow, 150);
-  const liveNeeded = step === "preview";
+  /* Sur bureau, le plan se dessine pendant qu'on répond, dans le panneau de
+     droite des écrans 2.2 à 2.4. Sur téléphone, il n'est généré que pour
+     l'aperçu. */
+  const wide = useMediaQuery("(min-width: 1024px)");
+  const withAside = wide && (step === "date" || step === "path" || step === "you");
+  const liveNeeded = step === "preview" || withAside;
   const liveConfig = useMemo(() => {
     if (prebuilt || !goalKey || !dateOk || !liveNeeded) return null;
     const typed = JSON.parse(textLater) as string[];
@@ -403,6 +410,19 @@ export function PlanCreatePage() {
             )}
             {screen}
           </div>
+          {withAside && (
+            <PlanAside
+              name={(isRace && form.raceName.trim()) || goalLabel}
+              goalLabel={goalLabel}
+              isRace={isRace}
+              raceDate={form.raceDate}
+              weeks={weeks}
+              start={start}
+              week={step === "you" ? { days: form.daysPerWeek, longRunDay: form.longRunDay } : null}
+              plan={dateOk ? plan : null}
+              busy={live.busy}
+            />
+          )}
         </div>
       </div>
     </>
