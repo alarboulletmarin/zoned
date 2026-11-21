@@ -176,9 +176,12 @@
 @keyframes zn-sheet-out-top { from { visibility: visible; } to { visibility: visible; transform: translateY(-100%); } }
 @keyframes zn-sheet-out-left { from { visibility: visible; } to { visibility: visible; transform: translateX(-100%); } }
 @keyframes zn-sheet-out-right { from { visibility: visible; } to { visibility: visible; transform: translateX(100%); } }
-@keyframes zn-scene-out { from { visibility: visible; } to { visibility: visible; opacity: 0; } }
+@keyframes zn-scene-out { from { visibility: visible; opacity: 1; } to { visibility: visible; opacity: 0; } }
 
-.zn-sheet[data-state="closed"] {
+/* `[data-side]` passe devant `[data-side][open]` : sans lui, la sortie
+   gardait la durée de l'entrée, le panneau finissait après le fond, et le
+   fond, qui hérite de sa visibilité, revenait entier le temps d'une image. */
+.zn-sheet[data-state="closed"][data-side] {
   visibility: hidden;
   pointer-events: none;
   animation: zn-sheet-out-right var(--dur-fast) var(--ease-in-out);
@@ -188,7 +191,9 @@
 .zn-sheet[data-state="closed"][data-side="left"] { animation-name: zn-sheet-out-left; }
 
 /* Le fond suit le panneau. */
+/* Tenu à zéro après sa sortie, quoi qu'il reste au panneau. */
 .zn-sheet[data-state="closed"]::backdrop {
+  opacity: 0;
   animation: zn-scene-out var(--dur-fast) var(--ease-in-out);
 }
 
