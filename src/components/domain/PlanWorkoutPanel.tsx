@@ -8,9 +8,10 @@ import { getCustomWorkouts, isCustomWorkoutId } from "@/lib/customWorkoutStorage
 import { useFavorites } from "@/hooks";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import { useScrollLock } from "@/components/ui/native-dialog";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useSheetDrag } from "@/hooks/useSheetDrag";
-import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
+import type { AnyWorkoutTemplate, WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
 import { sessionColor } from "@/lib/sessionColors";
@@ -95,8 +96,10 @@ interface PlanWorkoutPanelProps {
   onClose: () => void;
   /** Render as inline content (no fixed positioning), used on desktop/tablet */
   inline?: boolean;
+  /** Open the catalogue in a modal sheet from a named plan day. */
+  side?: "bottom" | "right";
   /** Mobile: tap a workout to select it, then tap a calendar cell to place it */
-  onSelectWorkout?: (workoutId: string) => void;
+  onSelectWorkout?: (workoutId: string, workout?: AnyWorkoutTemplate) => void;
   /**
    * The day a tapped session lands on. With `onDayChange`, the panel shows
    * the seven days so the day can be picked from the panel itself, which is
@@ -114,6 +117,7 @@ export function PlanWorkoutPanel({
   isOpen,
   onClose,
   inline,
+  side,
   onSelectWorkout,
   day,
   onDayChange,
@@ -148,11 +152,11 @@ export function PlanWorkoutPanel({
   // 767 : entre 768 et 900 la sheet était à l'écran et la page défilait
   // dessous.
   const sheetIsOnScreen = useMediaQuery("(max-width: 900px)");
-  useScrollLock(isOpen && !inline && sheetIsOnScreen);
+  useScrollLock(isOpen && !side && !inline && sheetIsOnScreen);
 
   // Le glisser-pour-fermer est le même que celui des sheets de la primitive :
   // hooks/useSheetDrag.ts. La prise est marquée data-sheet-handle ci-dessous.
-  const sheetDrag = useSheetDrag(!inline, onClose);
+  const sheetDrag = useSheetDrag(!side && !inline, onClose);
 
   // Every catalog loads when the panel opens: running (with the sessions the
   // builder made), strength, cycling and swimming.
@@ -217,29 +221,36 @@ export function PlanWorkoutPanel({
     [],
   );
 
-  const select = (workoutId: string) => {
-    onSelectWorkout?.(workoutId);
+  const select = (workoutId: string, workout?: AnyWorkoutTemplate) => {
+    onSelectWorkout?.(workoutId, workout);
     if (!inline) onClose();
   };
 
   // ── Don't render if closed ───────────────────────────────────
-  if (!isOpen) return null;
+  if (!isOpen && !side) return null;
 
   const dayName = day != null ? tLibrary(`weekly.days.${day}`) : "";
 
+  const Item = side ? "button" : "div";
   const panelContent = (
     <div className="zn-planpanel__body">
       {/* Header, the sheet's drag handle on a phone. */}
       <div className="zn-planpanel__bar" data-sheet-handle={!inline || undefined}>
-        <h3 className="zn-planpanel__title">{t("workoutPanel.title")}</h3>
-        <button
-          type="button"
-          onClick={onClose}
-          className="zn-planpanel__close"
-          aria-label={t("workoutPanel.close")}
-        >
-          <X />
-        </button>
+        {side ? (
+          <SheetTitle className="zn-planpanel__title">{t("workoutPanel.title")}</SheetTitle>
+        ) : (
+          <>
+            <h3 className="zn-planpanel__title">{t("workoutPanel.title")}</h3>
+            <button
+              type="button"
+              onClick={onClose}
+              className="zn-planpanel__close"
+              aria-label={t("workoutPanel.close")}
+            >
+              <X />
+            </button>
+          </>
+        )}
       </div>
 
       {/* La consigne reste au desktop, où le geste (glisser) ne va pas de soi.
@@ -348,7 +359,7 @@ export function PlanWorkoutPanel({
                 .join(", ");
 
               return (
-                <div
+                <Item type={side ? "button" : undefined}
                   key={session.id}
                   data-workout-id={session.id}
                   draggable={!!inline}
@@ -356,11 +367,11 @@ export function PlanWorkoutPanel({
                     e.dataTransfer.effectAllowed = "copyMove";
                     e.dataTransfer.setData("workout-id", session.id);
                   } : undefined}
-                  onClick={() => select(session.id)}
+                  onClick={() => select(session.id, session)}
                   className="zn-planpanel__item"
                   data-draggable={inline ? "true" : undefined}
                 >
-                  <div className="zn-planpanel__item-main">
+                  <span className="zn-planpanel__item-main">
                     <span className="zn-planpanel__item-name">{name}</span>
                     <span className="zn-planpanel__item-meta">
                       <Dumbbell />
@@ -376,9 +387,9 @@ export function PlanWorkoutPanel({
                     {muscles && (
                       <span className="zn-planpanel__item-sub">{muscles}</span>
                     )}
-                  </div>
-                  <Grab />
-                </div>
+                  </span>
+                  {inline && <Grab />}
+                </Item>
               );
             })
           )
@@ -387,7 +398,7 @@ export function PlanWorkoutPanel({
             {PANEL_ACTIVITY_KINDS.map((kind) => {
               const workoutId = activityWorkoutId(kind);
               return (
-                <div
+                <Item type={side ? "button" : undefined}
                   key={kind}
                   draggable={!!inline}
                   onDragStart={inline ? (e) => {
@@ -401,7 +412,7 @@ export function PlanWorkoutPanel({
                   {/* No aerobic zone behind a cross-training slot: the mark stays
                       hollow rather than borrowing a colour it has no claim to. */}
                   <span className="zn-sess__dot" />
-                  <div className="zn-planpanel__item-main">
+                  <span className="zn-planpanel__item-main">
                     <span className="zn-planpanel__item-name">
                       {t(`crossTraining.${kind}`)}
                     </span>
@@ -410,8 +421,8 @@ export function PlanWorkoutPanel({
                         {t("workoutPanel.commuteProfile", { minutes: commutePattern.durationMin })}
                       </span>
                     )}
-                  </div>
-                </div>
+                  </span>
+                </Item>
               );
             })}
           </>
@@ -441,12 +452,12 @@ export function PlanWorkoutPanel({
             const labelKey = CATEGORY_LABEL_KEY[workout.category];
 
             return (
-              <div
+              <Item type={side ? "button" : undefined}
                 key={workout.id}
                 data-workout-id={workout.id}
                 draggable={!!inline}
                 onDragStart={inline ? (e) => handleDragStart(e, workout) : undefined}
-                onClick={onSelectWorkout ? () => select(workout.id) : undefined}
+                onClick={onSelectWorkout ? () => select(workout.id, workout) : undefined}
                 className="zn-planpanel__item"
                 data-draggable={inline ? "true" : undefined}
               >
@@ -455,7 +466,7 @@ export function PlanWorkoutPanel({
                   className="zn-sess__dot"
                   style={{ "--zn-dot": sessionColor(sessionType) } as React.CSSProperties}
                 />
-                <div className="zn-planpanel__item-main">
+                <span className="zn-planpanel__item-main">
                   <span className="zn-planpanel__item-name">{name}</span>
                   <span className="zn-planpanel__item-meta">
                     <span className="zn-planpanel__item-cat">
@@ -464,9 +475,9 @@ export function PlanWorkoutPanel({
                     <Clock />
                     {formatDurationMinutes(workout.typicalDuration.min)}-{formatDurationMinutes(workout.typicalDuration.max)}
                   </span>
-                </div>
-                <Grab />
-              </div>
+                </span>
+                {inline && <Grab />}
+              </Item>
             );
           })
         )}
@@ -474,6 +485,16 @@ export function PlanWorkoutPanel({
 
     </div>
   );
+
+  if (side) {
+    return (
+      <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <SheetContent side={side} className="zn-planpanel zn-planpanel--modal" aria-describedby={undefined}>
+          {panelContent}
+        </SheetContent>
+      </Sheet>
+    );
+  }
 
   // Inline mode: render content directly (used in desktop flex layout)
   if (inline) {

@@ -198,9 +198,11 @@ export function StrengthWorkoutListItem({ workout, className }: StrengthWorkoutL
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const equipment = useEquipmentLabel(workout);
   const isEn = useIsEnglish();
+  const to = localeTo(`/workout/${workout.id}`, isEn);
+  const shareOrigin = useSharedTransition(to, "wk", workout.id, ".zn-str-row__name");
 
   return (
-    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className={cn("zn-str-row", className)}>
+    <Link to={to} className={cn("zn-str-row", className)} onClick={shareOrigin}>
       {/* Title and mobile duration */}
       <div className="zn-fill">
         <span className="zn-str-row__name">{pick(workout, "name")}</span>

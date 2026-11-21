@@ -257,13 +257,17 @@ export function SessionCompletionPanel({
   open,
   onOpenChange,
   session: sessionProp,
-  weekNumber,
-  sessionName,
+  weekNumber: weekProp,
+  sessionName: nameProp,
   onSave,
-  anchorElement,
+  anchorElement: anchorProp,
 }: SessionCompletionPanelProps) {
-  // Tenue le temps de la sortie : l'appelant passe null une fois fermé.
-  const session = useHeld(sessionProp);
+  // Origine : le panneau repart avec son titre et son ancre d'ouverture.
+  const panel = useHeld(open && sessionProp
+    ? { session: sessionProp, weekNumber: weekProp, sessionName: nameProp, anchorElement: anchorProp }
+    : null);
+  const session = panel?.session;
+  const anchorElement = panel?.anchorElement;
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   const initialChoice: Choice = useMemo(() => {
@@ -302,7 +306,7 @@ export function SessionCompletionPanel({
     return { current: anchorElement };
   }, [anchorElement]);
 
-  if (!session) return null;
+  if (!session || !panel) return null;
 
   const handleSubmit = () => {
     const nowIso = new Date().toISOString();
@@ -355,8 +359,8 @@ export function SessionCompletionPanel({
     setRpe,
     note,
     setNote,
-    weekNumber,
-    sessionName,
+    weekNumber: panel.weekNumber,
+    sessionName: panel.sessionName,
     onCancel: () => onOpenChange(false),
     onSubmit: handleSubmit,
   };

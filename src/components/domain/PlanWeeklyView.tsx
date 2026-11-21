@@ -1,3 +1,4 @@
+import { createSessionDragGhost, slotInDay } from "@/lib/sessionDrag";
 import { useState, useRef, useMemo, useCallback, memo } from "react";
 import { Stamp } from "@/components/ui/stamp";
 import { useJustChanged } from "@/hooks/useJustChanged";
@@ -75,23 +76,6 @@ function cardDiscipline(session: PlanSession): keyof typeof DISCIPLINE_ICON | nu
   if (session.sessionType === "strength" || session.workoutId.startsWith("STR-")) return "strength";
   const d = sessionDiscipline(session);
   return d === "other" ? null : d;
-}
-
-/**
- * Where, inside a day, a session held at `clientY` would land: in front of the
- * first session whose middle is under the pointer, at the end of the day when
- * none is. Read off the day's own cards, which are the only thing that knows
- * how tall they are: a mobile row stacks them, a desktop column too, and the
- * dragged card is left out, it is the one being placed.
- */
-function slotInDay(day: Element, clientY: number, draggedIndex: number): number | undefined {
-  for (const el of day.querySelectorAll<HTMLElement>("[data-session-index]")) {
-    const index = Number(el.dataset.sessionIndex);
-    if (index === draggedIndex) continue;
-    const box = el.getBoundingClientRect();
-    if (clientY < box.top + box.height / 2) return index;
-  }
-  return undefined;
 }
 
 /** Where a drag is hovering: a day, and the place in it (end of day if absent). */
@@ -361,25 +345,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
   const startDrag = useCallback(
     (touch: React.Touch, weekNumber: number, sessionIndex: number, target: HTMLElement | null) => {
+      if (!target) return;
       isDraggingRef.current = true;
       touchDragRef.current = { weekNumber, sessionIndex };
       setDraggedSession({ weekNumber, sessionIndex });
 
-      // Clone the dragged element as ghost
-      const ghost = target
-        ? (target.cloneNode(true) as HTMLElement)
-        : document.createElement("div");
-
-      ghost.style.cssText = `
-        position: fixed; z-index: 9999; pointer-events: none;
-        width: ${target?.offsetWidth || 80}px;
-        opacity: 0.85;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        transform: translate(-50%, -50%);
-      `;
+      const ghost = createSessionDragGhost(target);
       ghost.style.left = `${touch.clientX}px`;
       ghost.style.top = `${touch.clientY}px`;
-      document.body.appendChild(ghost);
       touchGhostRef.current = ghost;
     },
     [],

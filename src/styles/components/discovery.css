@@ -212,7 +212,7 @@
 .zn-draw__aside {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-13);
+  gap: var(--sp-7);
 }
 
 /* Closed drawer on a phone. Reopened unconditionally at desktop width, where
@@ -256,12 +256,17 @@
 .zn-draw__counter {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-6);
-  padding: var(--pad-card);
+  --gap: var(--sp-4);
+  gap: var(--sp-4);
+  padding: var(--sp-7);
 
   background: var(--surface-card);
   border: var(--border-rule);
   border-radius: var(--r-3xl);
+}
+
+.zn-draw__counter > p {
+  margin: 0;
 }
 
 /* The proportion, drawn: an outlined track with an ink fill. Ink, not
@@ -285,7 +290,11 @@
 .zn-draw__group {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-6);
+  gap: var(--sp-3);
+}
+
+.zn-draw__group > .zn-cluster {
+  --gap: var(--sp-3);
 }
 
 /* The levels read as a column rather than a wrapped row, four values, each
@@ -404,10 +413,18 @@
   transform: translateY(var(--press-shift));
 }
 
-/* La moitié de l'écart : la scène au-dessus paie déjà ses 26 px, et un
-   --gap-section entier ici portait la frontière à 74 px. */
 .zn-draw__recent {
-  padding-block-start: calc(var(--gap-section) / 2);
+  padding-block-start: var(--sp-8);
+}
+
+.zn-draw__recent > .zn-disc__grouphead {
+  --gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-block-end: var(--sp-3);
+}
+
+.zn-draw__recent > .zn-cluster {
+  --gap: var(--sp-3);
 }
 
 /* A recent draw's name must not push the chip past the column. */

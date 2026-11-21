@@ -2,13 +2,13 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "@/components/ui/toast";
 import {
-  addSessionToPlan,
   deletePlan,
   deleteSessionFromPlan,
   duplicatePlan,
   duplicateSession,
   getPlan,
   moveSession,
+  pushSessionToPlan,
   savePlan,
   undoLastChange,
   updatePlanSession,
@@ -24,7 +24,12 @@ import type { PlanFinding } from "@/lib/planGenerator/audit";
 import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
 import { getPlanMonday, dateToWeekAndDay } from "@/lib/planDates";
 import type { AutoChange, PlanSession, TrainingPlan, Unavailability } from "@/types/plan";
-import type { SessionType } from "@/types";
+import type { AnyWorkoutTemplate } from "@/types";
+import { activityKindOf, defaultActivityDraft, makeActivitySession } from "@/lib/activitySession";
+import { loadCommutePattern } from "@/lib/athleteProfile";
+import { sessionFromWorkout } from "@/lib/weekToPlan";
+import { applyPlanVma } from "@/lib/planGenerator/sessionBuilder";
+import { getRunnerProfileOrMigrate, updateBaseData } from "@/lib/runnerProfile";
 
 export interface WeekValidationPrompt {
   weekNumber: number;
@@ -72,13 +77,13 @@ export function usePlanActions(plan: TrainingPlan | null, reload: () => void) {
   // ── Les séances ─────────────────────────────────────────────────────
 
   const moveTo = useCallback(
-    (fromWeek: number, fromIndex: number, toWeek: number, toDay: number): boolean => {
+    (fromWeek: number, fromIndex: number, toWeek: number, toDay: number, before?: number): boolean => {
       if (!planId) return false;
       if (isBlocked(toWeek, toDay)) {
         toast.error(t("reschedule.blockedDrop"));
         return false;
       }
-      const ok = moveSession(planId, fromWeek, fromIndex, toWeek, toDay);
+      const ok = moveSession(planId, fromWeek, fromIndex, toWeek, toDay, before);
       if (ok) reload();
       else toast.failure(t("view.sessionMoveFailed"));
       return ok;
@@ -109,41 +114,57 @@ export function usePlanActions(plan: TrainingPlan | null, reload: () => void) {
   );
 
   const addWorkout = useCallback(
-    async (workoutId: string, week: number, day: number): Promise<boolean> => {
+    (workoutId: string, week: number, day: number, workout?: AnyWorkoutTemplate): boolean => {
       if (!planId) return false;
       if (isBlocked(week, day)) {
         toast.error(t("reschedule.blockedDrop"));
         return false;
       }
-      // Une activité (vélotaf, renfo libre...) se pose telle quelle.
-      const activityMatch = workoutId.match(/^__activity_(\w+)__$/);
-      if (activityMatch) {
-        const fresh = getPlan(planId);
-        const target = fresh?.weeks.find((w) => w.weekNumber === week);
-        if (!fresh || !target) return false;
-        target.sessions.push({
-          dayOfWeek: day,
-          workoutId,
-          sessionType: activityMatch[1] as SessionType,
-          isKeySession: false,
-          estimatedDurationMin: 0,
-        });
-        target.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-        const saved = savePlan(fresh);
-        if (!saved.ok) {
-          toast.failure(t("errors.planSaveFailed"), saved);
-          return false;
-        }
-        reload();
-        return true;
+
+      const activity = activityKindOf(workoutId);
+      const pattern = activity?.kind === "commute" ? loadCommutePattern() : null;
+      const session = activity
+        ? makeActivitySession(activity.kind, day, defaultActivityDraft(activity.kind, pattern), pattern)
+        : workout && sessionFromWorkout(day, workout);
+      if (!session || pushSessionToPlan(planId, week, session) === null) {
+        toast.failure(t("view.workoutAddFailed"), session ? undefined : "notFound");
+        return false;
       }
-      const ok = await addSessionToPlan(planId, week, workoutId, day);
-      if (ok) reload();
-      else toast.failure(t("view.workoutAddFailed"));
-      return ok;
+      reload();
+      return true;
     },
     [planId, isBlocked, reload, t],
   );
+
+  const updateVma = useCallback((vma: number, today: string) => {
+    if (!planId) return false;
+    const latest = getPlan(planId);
+    if (!latest || latest.config.vma !== undefined) return false;
+
+    getRunnerProfileOrMigrate();
+    const profile = updateBaseData({ vma });
+    if (!profile.ok) {
+      toast.failure(t("view.estimatedPacesProfileFailed"), profile);
+      return false;
+    }
+
+    const updated = applyPlanVma(latest, vma, today);
+    if (latest._lastUndoableChange) {
+      // Annuler une modification antérieure conserve les nouvelles allures.
+      updated._lastUndoableChange = {
+        ...latest._lastUndoableChange,
+        before: applyPlanVma(latest._lastUndoableChange.before, vma, today),
+      };
+    }
+    const saved = savePlan(updated);
+    if (!saved.ok) {
+      toast.failure(t("view.estimatedPacesPlanFailed"), saved);
+      return false;
+    }
+    reload();
+    toast.success(t("view.estimatedPacesSaved"));
+    return true;
+  }, [planId, reload, t]);
 
   /** Remplace le gabarit d'une séance, en gardant son jour. */
   const replaceWorkout = useCallback(
@@ -426,6 +447,7 @@ export function usePlanActions(plan: TrainingPlan | null, reload: () => void) {
     removeSession,
     duplicate,
     addWorkout,
+    updateVma,
     replaceWorkout,
     saveSession,
     saveCompletion,

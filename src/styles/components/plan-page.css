@@ -176,6 +176,18 @@
   margin-block-start: var(--sp-2);
 }
 
+.zn-plan-vma {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.zn-plan-vma__error {
+  flex-basis: 100%;
+  color: var(--state-danger);
+}
+
 .zn-planpage__placed {
   margin: 0;
   display: flex;
@@ -383,8 +395,9 @@
 }
 
 .zn-planday[data-over] {
-  outline: var(--bw-heavy) dashed var(--line-strong);
+  outline: var(--bw-rule) solid var(--line-strong);
   outline-offset: var(--sp-2);
+  border-radius: var(--r-md);
 }
 
 /* ── Une séance ──────────────────────────────────────────────────────── */
@@ -636,6 +649,7 @@ span.zn-plansess__state {
 
 .zn-plansess__grip svg {
   fill: currentColor;
+  pointer-events: none;
 }
 
 .zn-plansess__grip:focus-visible {
@@ -643,15 +657,11 @@ span.zn-plansess__state {
 }
 
 .zn-plansess[data-dragging] {
-  position: relative;
-  z-index: 5;
-  transform: translate(var(--zn-dx, 0), var(--zn-dy, 0));
-  pointer-events: none;
+  opacity: 0.4;
 }
 
-.zn-plansess[data-dragging] .zn-plansess__card {
-  box-shadow: var(--shadow-block);
-  cursor: grabbing;
+.zn-plansess__profile {
+  inline-size: min(100%, 11rem);
 }
 
 /* ── Sous la liste ───────────────────────────────────────────────────── */

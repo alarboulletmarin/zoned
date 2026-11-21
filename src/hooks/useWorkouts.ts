@@ -96,41 +96,41 @@ export function useWorkouts(
  * Hook to load a single workout by ID
  */
 export function useWorkout(id: string | undefined): UseWorkoutResult {
-  const initial = id ? getWorkoutByIdSync(id) ?? null : null;
-  const [workout, setWorkout] = useState<AnyWorkoutTemplate | null>(initial);
-  const [isLoading, setIsLoading] = useState(Boolean(id) && !initial);
-  const [error, setError] = useState<Error | null>(null);
+  const cached = id ? getWorkoutByIdSync(id) ?? null : null;
+  const [resolved, setResolved] = useState<{
+    id: string;
+    workout: AnyWorkoutTemplate | null;
+    error: Error | null;
+  } | null>(null);
+  const current = resolved?.id === id ? resolved : null;
 
   useEffect(() => {
-    if (!id) {
-      setWorkout(null);
-      setIsLoading(false);
-      return;
-    }
+    if (!id || cached) return;
 
     let cancelled = false;
-    setIsLoading(true);
 
     getWorkoutByIdAsync(id)
       .then((data) => {
         if (!cancelled) {
-          setWorkout(data || null);
-          setIsLoading(false);
+          setResolved({ id, workout: data ?? null, error: null });
         }
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err : new Error(String(err)));
-          setIsLoading(false);
+          setResolved({ id, workout: null, error: err instanceof Error ? err : new Error(String(err)) });
         }
       });
 
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, cached]);
 
-  return { workout, isLoading, error };
+  return {
+    workout: cached ?? current?.workout ?? null,
+    isLoading: Boolean(id) && !cached && !current,
+    error: cached ? null : current?.error ?? null,
+  };
 }
 
 /**

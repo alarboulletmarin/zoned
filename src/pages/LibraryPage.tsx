@@ -11,6 +11,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { localeTo } from "@/lib/seo/locale-to";
 import { useTranslation } from "react-i18next";
 import {
+  ChevronDown,
   Search,
   SlidersHorizontal,
   Dumbbell,
@@ -21,6 +22,7 @@ import {
   type IconProps,
 } from "@/components/icons";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { preloadWorkoutDetail } from "@/lib/sharedTransition";
 
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -1019,7 +1021,12 @@ export function LibraryPage() {
         </div>
 
         {/* 5, the results */}
-        <section className="zn-lib__results" aria-busy={isLoading}>
+        <section
+          className="zn-lib__results"
+          aria-busy={isLoading}
+          onPointerEnter={preloadWorkoutDetail}
+          onFocus={preloadWorkoutDetail}
+        >
           {isLoading ? (
             <div className="zn-grid zn-lib__grid">
               {Array.from({ length: 6 }).map((_, i) => (
@@ -1125,18 +1132,23 @@ export function LibraryPage() {
         </section>
 
         {!isLoading && allWorkouts.length > 0 && (
-          <nav className="zn-crawl" aria-label={t("catalogueIndex")}>
-            <h2 className="zn-kicker">{t("catalogueIndex")}</h2>
-            <ul className="zn-crawl__list">
-              {allWorkouts.map((workout) => (
-                <li key={workout.id}>
-                  <Link to={localeTo(`/workout/${workout.id}`, isEn)}>
-                    {isEn && workout.nameEn ? workout.nameEn : workout.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <details className="zn-crawl zn-disclosure">
+            <summary className="zn-disclosure__summary">
+              {t("catalogueIndex")}
+              <ChevronDown className="zn-disclosure__chevron" aria-hidden="true" />
+            </summary>
+            <nav className="zn-disclosure__panel" aria-label={t("catalogueIndex")}>
+              <ul className="zn-crawl__list">
+                {allWorkouts.map((workout) => (
+                  <li key={workout.id}>
+                    <Link to={localeTo(`/workout/${workout.id}`, isEn)}>
+                      {isEn && workout.nameEn ? workout.nameEn : workout.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </details>
         )}
       </div>
 

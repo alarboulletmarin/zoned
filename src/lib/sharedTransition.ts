@@ -8,7 +8,42 @@ export function sharedTransitionName(kind: "wk" | "plan", id: string, part: "tit
   return `zn-${kind}-${part}-${safeId}`;
 }
 
+export function preloadWorkoutDetail() {
+  void import("@/pages/WorkoutDetailPage").catch((error) => {
+    console.warn("Workout detail preload failed", error);
+  });
+}
+
 /** Origine : seule la carte activée rejoint le titre et le profil du détail. */
+export function transitionFrom(
+  scope: Element | null,
+  kind: "wk" | "plan",
+  id: string,
+  titleSelector: string,
+  navigate: () => void,
+) {
+  const marked: { node: HTMLElement; previous: string }[] = [];
+  if (scope && typeof document.startViewTransition === "function" &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const mark = (selector: string, part: "title" | "profile") => {
+      const node = scope.querySelector<HTMLElement>(selector);
+      if (!node?.getClientRects().length) return;
+      marked.push({ node, previous: node.style.viewTransitionName });
+      node.style.viewTransitionName = sharedTransitionName(kind, id, part);
+    };
+    mark(titleSelector, "title");
+    if (kind === "wk") mark(".zn-zonebar", "profile");
+  }
+  const transition = startNavTransition(navigate, {
+    key: `${kind === "wk" ? "workout" : "plan"}:${id}`,
+  });
+  const clear = () => {
+    for (const { node, previous } of marked) node.style.viewTransitionName = previous;
+  };
+  if (transition) void transition.finished.then(clear, clear);
+  else clear();
+}
+
 export function useSharedTransition(
   to: To,
   kind: "wk" | "plan",
@@ -25,25 +60,6 @@ export function useSharedTransition(
     ) return;
     event.preventDefault();
     const scope = containerSelector ? event.currentTarget.closest(containerSelector) : event.currentTarget;
-    const marked: { node: HTMLElement; previous: string }[] = [];
-    if (scope && typeof document.startViewTransition === "function" &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const mark = (selector: string, part: "title" | "profile") => {
-        const node = scope.querySelector<HTMLElement>(selector);
-        if (!node) return;
-        marked.push({ node, previous: node.style.viewTransitionName });
-        node.style.viewTransitionName = sharedTransitionName(kind, id, part);
-      };
-      mark(titleSelector, "title");
-      if (kind === "wk") mark(".zn-zonebar", "profile");
-    }
-    const transition = startNavTransition(() => navigate(to, { state }), {
-      key: `${kind === "wk" ? "workout" : "plan"}:${id}`,
-    });
-    const clear = () => {
-      for (const { node, previous } of marked) node.style.viewTransitionName = previous;
-    };
-    if (transition) void transition.finished.then(clear, clear);
-    else clear();
+    transitionFrom(scope, kind, id, titleSelector, () => navigate(to, { state }));
   };
 }

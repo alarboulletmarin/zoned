@@ -38,7 +38,7 @@ function environment(reduced = false, api = true) {
       const finished = new Promise<void>((resolve, fail) => { finish = resolve; reject = () => fail(new Error("skipped")); });
       const capture = { begin, finish, reject, skipped: false };
       captures.push(capture);
-      return { finished, skipTransition: () => { capture.skipped = true; } };
+      return { finished, ready: Promise.resolve(), skipTransition: () => { capture.skipped = true; } };
     } : undefined,
   } });
   return { dataset, timers, captures, setReduced: (value: boolean) => { reduced = value; } };
@@ -70,6 +70,23 @@ describe("transitions de navigation", () => {
     expect(env.dataset.move).toBeUndefined();
   });
 
+  test("seule l'ouverture d'une séance masque l'ancienne vue pendant sa capture", async () => {
+    const env = environment();
+    startNavTransition(() => {}, { key: "workout:REC-018" });
+    expect(env.dataset.workoutTransition).toBe("");
+    const waiting = env.captures[0].begin();
+    markViewReady("workout:REC-018");
+    await waiting;
+    env.captures[0].finish();
+    await Promise.resolve();
+    expect(env.dataset.workoutTransition).toBeUndefined();
+
+    startNavTransition(() => {}, { key: "plan:42" });
+    expect(env.dataset.workoutTransition).toBeUndefined();
+    env.captures[1].finish();
+    await Promise.resolve();
+  });
+
   test("seul le vrai contenu de la destination libère la capture", async () => {
     const env = environment();
     let updated = false;
@@ -88,12 +105,14 @@ describe("transitions de navigation", () => {
     expect(env.dataset.move).toBeUndefined();
   });
 
-  test("le filet libère une destination lente après 300 ms", async () => {
+  test("une destination lente renonce à la capture après 300 ms", async () => {
     const env = environment();
     startNavTransition(() => {}, { key: "slow" });
     const waiting = env.captures[0].begin();
     for (const callback of env.timers.values()) callback();
     await waiting;
+    expect(env.captures[0].skipped).toBe(true);
+    expect(markViewReady("slow")).toBe(false);
     expect(env.timers.size).toBe(0);
     env.captures[0].finish();
     await Promise.resolve();

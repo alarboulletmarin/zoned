@@ -13,6 +13,7 @@ function startTransition(run: () => void, options: { direction?: Direction; key?
     active?.transition?.skipTransition();
     active = undefined;
     delete document.documentElement.dataset.move;
+    delete document.documentElement.dataset.workoutTransition;
     run();
     return;
   }
@@ -23,6 +24,8 @@ function startTransition(run: () => void, options: { direction?: Direction; key?
   const root = document.documentElement;
   if (options.direction) root.dataset.move = options.direction;
   else delete root.dataset.move;
+  if (options.key?.startsWith("workout:")) root.dataset.workoutTransition = "";
+  else delete root.dataset.workoutTransition;
   const transition = document.startViewTransition(() => {
     if (active !== pending) return;
     if (!options.key) {
@@ -30,8 +33,11 @@ function startTransition(run: () => void, options: { direction?: Direction; key?
       return;
     }
     return new Promise<void>((resolve) => {
-      // Attente réelle : libérer la capture au montage, au plus après 300 ms.
-      const timer = window.setTimeout(() => pending.ready?.(), 300);
+      // Attente réelle : au-delà du délai, laisser la page s'afficher sans capturer l'ancien écran.
+      const timer = window.setTimeout(() => {
+        pending.transition?.skipTransition();
+        pending.ready?.();
+      }, 300);
       pending.ready = () => {
         window.clearTimeout(timer);
         pending.ready = undefined;
@@ -46,10 +52,13 @@ function startTransition(run: () => void, options: { direction?: Direction; key?
     });
   });
   pending.transition = transition;
+  // Une capture annulée rejette ready, même si la navigation a abouti.
+  void transition.ready.catch(() => {});
   const clear = () => {
     pending.ready?.();
     if (active !== pending) return;
     delete root.dataset.move;
+    delete root.dataset.workoutTransition;
     active = undefined;
   };
   void transition.finished.then(clear, clear);
@@ -68,5 +77,7 @@ export function startNavTransition(run: () => void, options: { key: string; dire
 
 /** Attente : seule la destination demandée peut libérer sa capture. */
 export function markViewReady(key: string) {
-  if (active?.key === key) active.ready?.();
+  if (active?.key !== key || !active.ready) return false;
+  active.ready();
+  return true;
 }

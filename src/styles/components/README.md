@@ -86,8 +86,8 @@ carries a comment naming its clause.
 | Copied, on the copy button, 1.5s | `useCopiedFlag`, `.zn-swap` in `button.css` | geste |
 | A new activity row enters 8px, the review bar grows | `useJustAdded`, `activity.css` | origine, geste |
 | The session an undo brought back is tinted, then fades | `PlanDayList.tsx`, `plan-page.css` | geste |
-| Hero, plan week and wizard step slide 12px in the direction of travel | `lib/directionalTransition.ts`, `animations.css` | geste |
-| Card title and profile carry into the detail page | `lib/sharedTransition.ts` | origine |
+| Hero, plan week and wizard step slide 12px in the direction of travel. The mobile week controls keep their foreground position. | `lib/directionalTransition.ts`, `animations.css` | geste |
+| The title carries into the workout detail from the catalogue, a plan session, or its sheet in a week. The profile follows when present at the source. The destination stays readable during the move, with a short entry when the shared capture is unavailable. | `lib/sharedTransition.ts`, `WorkoutDetailPage.tsx`, `animations.css` | origine |
 | Calculator shapes and the editor profile follow the input; blocks slide to their new place | `race-sim.css`, `visualization.css`, `zone.css`, `useFlip` | geste |
 | The dice turns a quarter, the drawn session lands from the button | `discovery.css` | geste, origine |
 
