@@ -121,7 +121,6 @@
   "draw": {
     "title": "Draw a session",
     "subtitle": "Let chance pick your next session from the catalogue",
-    "scanning": "Scanning the catalogue…",
     "draw": "Draw a session",
     "redraw": "Re-draw",
     "surprise": "Surprise me (whole catalogue)",

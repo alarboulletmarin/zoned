@@ -550,3 +550,52 @@
 .zn-build__steps {
   padding-block-start: var(--sp-10);
 }
+
+/* ── Le tirage atterrit ───────────────────────────────────────────────────
+   Geste : tirer est le seul endroit où l'app peut sourire, sans rien
+   simuler. Le dé fait UN quart de tour au clic (sa clé change à chaque
+   tirage, rien ne tourne à l'arrivée sur la page). L'animation part d'un
+   quart en arrière et finit sur le glyphe au repos, sans `forwards`. */
+.zn-draw__dice {
+  display: inline-flex;
+}
+
+.zn-draw__dice[data-rolled] {
+  animation: zn-dice-turn var(--dur-slow) var(--ease-out);
+}
+
+@keyframes zn-dice-turn {
+  from { transform: rotate(-90deg); }
+  to { transform: none; }
+}
+
+/* Origine : la séance tirée entre depuis le bouton, au-dessus d'elle (12 px
+   vers le bas, avec un fondu), et l'ancienne sort de l'autre côté, vers le
+   bas. La transition de vue est celle de `withDirectionalTransition` ; ici,
+   seul l'axe change. */
+.zn-draw__landing {
+  view-transition-name: zn-draw-result;
+}
+
+html[data-move]::view-transition-group(zn-draw-result) {
+  animation: none;
+}
+
+html[data-move]::view-transition-old(zn-draw-result) {
+  opacity: 0;
+  animation: zn-draw-out var(--dur-fast) var(--ease-out) backwards;
+}
+
+html[data-move]::view-transition-new(zn-draw-result) {
+  animation: zn-draw-in var(--dur-base) var(--ease-out) var(--dur-fast) backwards;
+}
+
+@keyframes zn-draw-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(12px); }
+}
+
+@keyframes zn-draw-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: none; }
+}

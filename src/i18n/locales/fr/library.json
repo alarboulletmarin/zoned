@@ -121,7 +121,6 @@
   "draw": {
     "title": "Tirer une séance",
     "subtitle": "Laisse le hasard choisir ta prochaine séance dans le catalogue",
-    "scanning": "Scan du catalogue…",
     "draw": "Tirer une séance",
     "redraw": "Re-tirer",
     "surprise": "Surprends-moi (tout le catalogue)",
