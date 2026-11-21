@@ -1,5 +1,6 @@
 import { DayPicker, type DayPickerProps } from "react-day-picker";
 import { fr, enGB } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 import {
@@ -16,10 +17,27 @@ type CalendarProps = DayPickerProps & {
 function Calendar({ className, ...props }: CalendarProps) {
   const isEn = useIsEnglish();
   const locale = isEn ? enGB : fr;
+  const { t } = useTranslation("common");
+
+  /* Les noms accessibles par défaut de react-day-picker sont en anglais
+     (Go to the Next Month, Today, selected), quelle que soit la locale. */
+  const labels: DayPickerProps["labels"] = {
+    labelPrevious: () => t("datePicker.previousMonth"),
+    labelNext: () => t("datePicker.nextMonth"),
+    labelMonthDropdown: () => t("datePicker.month"),
+    labelYearDropdown: () => t("datePicker.year"),
+    labelDayButton: (date, modifiers, _options, dateLib) => {
+      let label = dateLib ? dateLib.format(date, "PPPP") : date.toLocaleDateString();
+      if (modifiers.today) label = t("datePicker.today", { date: label });
+      if (modifiers.selected) label = t("datePicker.selected", { date: label });
+      return label;
+    },
+  };
 
   return (
     <DayPicker
       locale={locale}
+      labels={labels}
       showOutsideDays
       fixedWeeks
       /* Structure only. react-day-picker puts every day modifier on the cell as
