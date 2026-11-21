@@ -1,6 +1,5 @@
-/* The plan wizard, the three screens that decide what the generator builds:
-   /plan/new (the questions) and
-   /plan/new/free (the blank plan).
+/* What is left of the plan wizard: /plan/new/free (the blank plan) and the
+   option rows Affiner reuses. /plan/new has its own sheet, plan-create.css.
 
    All three read as one sheet: mono kicker, the QUESTION as the display title,
    one sentence, then the form. Header and form are separated by blank space
@@ -47,11 +46,6 @@
   margin-block-start: var(--gap-section);
 }
 
-/* La pile du titre : le retour, le sur-titre, la question, sa phrase. */
-.zn-wiz__head {
-  --gap: var(--sp-11);
-}
-
 /* A control that must not stretch to the column it sits in, the back link,
    a disclosure toggle. A stack stretches its children by default, and a ghost
    button spanning 640px stops reading as a button. */
@@ -84,82 +78,6 @@
     gap: var(--sp-5);
     align-items: stretch;
   }
-
-  .zn-wiz__col .zn-contrib-group > .zn-wiz__group {
-    grid-column: 1 / -1;
-  }
-
-  /* Les tuiles (six chiffres sur une rangée) ont leur propre grille. */
-  .zn-wiz__col .zn-contrib-group > .zn-wiz__tiles {
-    grid-column: 1 / -1;
-  }
-}
-
-/* ── stepper, eleven steps wide ───────────────────────────────────────── */
-
-/* The contribution wizard has four steps and can print all four names on a
-   laptop. A race plan has eleven: at that count the names stop being labels
-   and start being a grey ribbon, so only the step being answered keeps its
-   name, and it keeps it at every width down to the phone.
-
-   Hidden visually, never removed: the label is the button's only text and an
-   answered step is clickable, so a display:none here would leave every
-   back-navigation button nameless. */
-.zn-stepper.zn-wiz__steps {
-  gap: var(--sp-2);
-}
-
-@media (max-width: 1100px) {
-  .zn-wiz__steps .zn-stepper__step:not([aria-current="step"]) .zn-stepper__label {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-    border: 0;
-  }
-}
-
-/* Where the wizard is, in words, for anyone who cannot see the rails. */
-.zn-wiz__where {
-  color: var(--text-faint);
-}
-
-/* ── a step ───────────────────────────────────────────────────────────── */
-
-/* Geste : la transition directionnelle commune anime seulement le parcours. */
-.zn-wiz__pane {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-11);
-}
-
-/* Geste : la progression suit la réponse, sans animation au montage. */
-.zn-wiz__steps .zn-stepper__rail {
-  transition: background var(--dur-slow) var(--ease-out);
-}
-
-/* Previous / next, over the rule that closes the step. The primary sits at the
-   far end: it is the one vermillon fill on the screen. */
-.zn-card__footer.zn-wiz__nav {
-  gap: var(--sp-6);
-  flex-wrap: wrap;
-  padding-block-start: var(--sp-11);
-  margin-block-start: var(--sp-2);
-  border-block-start: var(--border-divider);
-}
-
-/* Ce qui va vers l'avant, en un seul bloc poussé à droite : passer et
-   continuer sont deux façons de faire le même pas, et la barre ne compte
-   plus que deux enfants, donc un seul écart entre eux. */
-.zn-wiz__nav-end {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-6);
-  margin-inline-start: auto;
 }
 
 /* ── an answer ────────────────────────────────────────────────────────── */
@@ -275,14 +193,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Six two-digit numbers stay a grid on a phone. .zn-grid collapses to one
-   column under 640px, which is right for a card and wrong for a tile: it would
-   make the shortest question on the wizard the longest screen. Two classes, so
-   the rule wins whatever order the two files are imported in. */
-.zn-grid.zn-wiz__tiles {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 /* ── une réponse nommée mais pas encore servie ────────────────────────────
  *
  * Une pratique annoncée, le triathlon, et l'ultra depuis le 12 septembre
@@ -390,137 +300,6 @@
   transform: rotate(180deg);
 }
 
-/* ── the recap ────────────────────────────────────────────────────────── */
-
-/* Every answer, in the order it was asked. A description list, because that is
-   what it is: a term and its value, divided by a hairline. */
-.zn-wiz-sum {
-  margin: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0 var(--sp-8);
-}
-
-.zn-wiz-sum__label {
-  grid-column: 1;
-  padding-block: var(--sp-5);
-  font: var(--type-body-sm);
-  color: var(--text-muted);
-  border-block-start: var(--border-divider);
-}
-
-.zn-wiz-sum__value {
-  grid-column: 2;
-  margin: 0;
-  padding-block: var(--sp-5);
-  font: var(--fw-medium) var(--fs-body-sm) / var(--lh-body-sm) var(--font-text);
-  color: var(--text-body);
-  text-align: end;
-  border-block-start: var(--border-divider);
-}
-
-/* Le plan en chiffres, en tête du récapitulatif. `.zn-grid` se replie en UNE
-   colonne sous 640px, juste pour une carte de séance, faux pour trois nombres
-   de deux chiffres : trois pavés pleine largeur, deux cent quatre-vingts
-   pixels, avant la première ligne. Deux colonnes, et la même chose tient en
-   deux rangées. */
-@media (max-width: 640px) {
-  .zn-grid.zn-wiz-sum__stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .zn-wiz-sum__stats .zn-stat[data-tone="card"],
-  .zn-wiz-sum__stats .zn-stat[data-tone="ink"] {
-    padding: var(--sp-8);
-  }
-}
-
-/* Numbers print as numbers wherever the recap shows one. */
-.zn-wiz-sum__value[data-mono="true"] {
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono);
-  letter-spacing: var(--ls-mono);
-  font-variant-numeric: tabular-nums;
-}
-
-.zn-wiz-sum > :first-child,
-.zn-wiz-sum > :nth-child(2) {
-  border-block-start: none;
-}
-
-/* The prep races, listed under their own term rather than crammed into a
-   value: each has a priority, a distance and a date. */
-.zn-wiz-sum__nest {
-  grid-column: 1 / -1;
-  margin: 0;
-  padding-block: var(--sp-5);
-  border-block-start: var(--border-divider);
-}
-
-@media (max-width: 520px) {
-  .zn-wiz-sum {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .zn-wiz-sum__label {
-    padding-block-end: 0;
-  }
-
-  .zn-wiz-sum__value {
-    grid-column: 1;
-    padding-block-start: var(--sp-2);
-    text-align: start;
-    border-block-start: none;
-  }
-}
-
-/* ── the prep-race editor ─────────────────────────────────────────────── */
-
-/* A race that is not the objective is drawn dashed: it belongs to the plan
-   around it rather than standing on the page in its own right. */
-.zn-card.zn-wiz-race {
-  border: var(--border-dashed);
-}
-
-/* Removing a row is danger as vermillon TYPE, the screen's one fill is still
-   the primary action at the foot of the card. */
-.zn-btn[data-variant="ghost"].zn-wiz-race__remove {
-  color: var(--state-danger);
-}
-
-/* ── L'annonce d'une pratique pas encore livrée ──────────────────────────
- *
- * Le triathlon se choisit, et l'écran dit alors ce qui existe VRAIMENT :
- * ses séances sont consultables, ses plans n'existent pas. Pas un teaser, pas
- * un plan factice. Une bande d'encre sur filet, pas une carte : ce n'est pas
- * une chose à choisir, c'est une réponse.
- */
-.zn-wiz__announce {
-  padding-block-start: calc(var(--gap-section) / 2);
-}
-
-/* Les deux autres façons d'avoir un plan : une ligne de liens sous les
-   pratiques. La question comment se pose après quoi. */
-.zn-wiz__modes {
-  padding-block-start: calc(var(--gap-section) / 2);
-}
-
-.zn-wiz__modes a {
-  color: var(--text-body);
-  text-underline-offset: 3px;
-}
-
-.zn-wiz__modes a:hover {
-  color: var(--accent);
-}
-
-@media (pointer: coarse) {
-  .zn-wiz__modes a {
-    display: inline-block;
-    padding-block: var(--sp-4);
-  }
-}
-
 /* ── le parcours sur un téléphone ─────────────────────────────────────────
  *
  * La plainte, mot pour mot : sur toutes les étapes je n'ai pas toutes les
@@ -553,11 +332,6 @@
     padding-block: var(--sp-6) var(--sp-14);
   }
 
-  /* La pile du titre : le sur-titre, la question, sa phrase. */
-  .zn-wiz__head {
-    --gap: var(--sp-8);
-  }
-
   /* La question garde son rang de `h1`, elle perd le corps d'affiche.
      Dans quel état d'esprit es-tu ? au pas display-2 tenait sur deux
      lignes de 38 px, soit 70 px ; au pas h2 (22 px depuis le même lot) elle
@@ -573,26 +347,6 @@
     margin-block-start: var(--sp-11);
   }
 
-  /* Les rails seuls. Le numéro et le nom de l'étape étaient déjà masqués pour
-     douze des treize ; le dernier chiffre visible tenait sur 23 px de colonne
-     et se lisait comme une poussière. La ligne Étape 3 sur 13 le dit en
-     toutes lettres douze pixels plus bas.
-     La surface tactile, elle, reste entière : le bouton garde 24 px de haut
-     (le plancher AA du critère 2.5.8) autour d'un rail de 4 px. */
-  .zn-wiz__steps .zn-stepper__num,
-  .zn-wiz__steps .zn-stepper__label {
-    display: none;
-  }
-
-  .zn-wiz__steps .zn-stepper__step {
-    justify-content: center;
-    min-block-size: 24px;
-  }
-
-  .zn-wiz__steps .zn-stepper__rail {
-    block-size: 4px;
-  }
-
   /* La carte d'étape rend 16 px de haut et 16 px de côté. */
   .zn-wiz__col.zn-card {
     padding-block: var(--sp-9);
@@ -603,78 +357,9 @@
     padding-inline: var(--sp-9);
   }
 
-  .zn-wiz__pane {
-    gap: var(--sp-9);
-  }
-
-  .zn-card__footer.zn-wiz__nav {
-    padding-block-start: var(--sp-9);
-  }
-
   /* Une réponse : 12/14 au lieu de 16/18. Quatre réponses, 32 px repris. */
   .zn-wiz-opt {
     gap: var(--sp-5);
     padding: var(--sp-6) var(--sp-7);
   }
-
-  /* Passer rend sa boîte, pas sa cible.
-     Mesuré : Retour 108, Passer 83, Continuer 129, plus les écarts, 356 px
-     pour 348 disponibles à 390, et les trois tombaient sur deux lignes.
-     Passer est une sortie, pas une action de même poids que les deux
-     autres : il perd son rembourrage latéral et se lit comme le mot qu'il est.
-     36 px repris, et la rangée tient sur une ligne de 360 px jusqu'en haut de
-     la gamme. Le plancher de 44 px, lui, ne bouge pas, c'est la hauteur qui
-     fait la cible, pas la largeur d'un rembourrage. */
-  .zn-wiz__nav .zn-btn[data-variant="ghost"] {
-    padding-inline: 0;
-  }
-
-  /* Et les deux flèches de direction rendent leurs 24 px chacune (le glyphe et
-     son écart). Elles répètent ce que le mot dit déjà, Retour,
-     Continuer ne se lisent pas dans l'autre sens , , et sans elles la
-     rangée passe de 307 px à 260 pour 282 disponibles à 360. Seules les
-     flèches partent : la coche du récapitulatif et le rouet de génération
-     portent, eux, une information que le libellé n'a pas. */
-  .zn-wiz__nav .zn-wiz__nav-arrow {
-    display: none;
-  }
-}
-
-/* ── la promesse, et sa place ─────────────────────────────────────────────
- *
- * Le volume monte de 10 % par semaine au maximum…, la source, et la carte
- * sans compte, sans rappel. Elles ne se disent qu'une fois, à la première
- * question, mais elles se disaient ENTRE la question et ses réponses, et sur
- * un téléphone les sept pratiques commençaient donc sous la ligne de
- * flottaison. Elles passent après : on choisit d'abord, on lit ensuite ce que
- * l'outil promet. Au-dessus de 900 px la colonne est assez large pour que la
- * carte tienne à côté du texte, et l'ordre d'origine tient.
- */
-.zn-wiz__promise {
-  padding-block-start: var(--sp-11);
-}
-
-@media (max-width: 900px) {
-  .zn-wiz__promise {
-    order: 1;
-    padding-block-start: var(--gap-section);
-  }
-}
-
-/* Les en-têtes de groupe de la première question : Route, Trail, et Pas de
-   course en vue. Ce sont des repères dans UNE liste de réponses, pas des
-   sections, donc un micro-label et un peu d'air au-dessus, jamais un filet. */
-.zn-wiz__group {
-  margin-block-start: var(--sp-6);
-}
-
-.zn-wiz__group:first-child {
-  margin-block-start: 0;
-}
-
-/* La VMA tient en quatre caractères : un champ de la largeur du chiffre, et
-   l'unité à côté, plutôt qu'un champ pleine largeur pour 14,5. */
-.zn-wiz__vma {
-  inline-size: 10ch;
-  flex: none;
 }

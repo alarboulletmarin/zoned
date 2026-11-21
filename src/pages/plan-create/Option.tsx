@@ -1,5 +1,4 @@
-import type { ComponentType, ReactNode } from "react";
-import type { CSSProperties } from "react";
+import type { ComponentType } from "react";
 import type { IconProps } from "@/components/icons";
 
 // ── One answer, drawn ────────────────────────────────────────────────
@@ -91,44 +90,5 @@ export function Option({
       </span>
       {data ? <span className="zn-mono zn-wiz-opt__data">{data}</span> : null}
     </label>
-  );
-}
-
-/** One line of the recap: a term and its value. */
-export function SummaryRow({
-  label,
-  value,
-  mono,
-}: {
-  label: string;
-  value: string;
-  mono?: boolean;
-}) {
-  return (
-    <>
-      <dt className="zn-wiz-sum__label">{label}</dt>
-      <dd className="zn-wiz-sum__value" data-mono={mono ? "true" : undefined}>
-        {value}
-      </dd>
-    </>
-  );
-}
-
-/** Le groupe de choix d'une question. Un `fieldset`, étiqueté par la question. */
-export function OptionStack({
-  questionId,
-  children,
-}: {
-  questionId: string;
-  children: ReactNode;
-}) {
-  return (
-    <fieldset
-      className="zn-contrib-group zn-stack"
-      style={{ "--gap": "var(--sp-5)" } as CSSProperties}
-      aria-labelledby={questionId}
-    >
-      {children}
-    </fieldset>
   );
 }

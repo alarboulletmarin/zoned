@@ -73,16 +73,8 @@
     "weeksShort": "sem"
   },
   "schedule": {
-    "title": "Ta semaine type",
-    "subtitle": "Combien de séances, quel jour la longue, et d'où tu pars.",
-    "currentVolume": "D'où tu pars, si tu le sais",
     "sessionsPerWeek": "Séances par semaine",
-    "longRunDay": "Jour de la sortie longue",
-    "longRunDayDesc": "Ta sortie longue hebdomadaire, la séance clé d'endurance",
-    "includeStrength": "Inclure le renforcement",
-    "includeStrengthDesc": "Ajouter des séances adaptées à chaque phase",
-    "strengthFrequency": "Fréquence renforcement",
-    "strengthPerWeek": "{{n}}x / sem"
+    "longRunDay": "Jour de la sortie longue"
   },
   "distance": {
     "title": "Choisis ta distance",
@@ -109,20 +101,8 @@
     "label": "Nom de la course"
   },
   "level": {
-    "title": "Ton niveau de course",
-    "subtitle": "Cela détermine l'intensité des séances",
     "vmaSuggestion": "VMA {{vma}} km/h · niveau suggéré : ",
     "vmaSuggestionSuffix": ".",
-    "beginner": "Débutant",
-    "beginnerDesc": "1 à 2 sorties/semaine · moins de 15 km/semaine",
-    "intermediate": "Intermédiaire",
-    "intermediateDesc": "3 à 4 sorties/semaine · 20-40 km/semaine",
-    "advanced": "Avancé",
-    "advancedDesc": "4 à 5 sorties/semaine · 40-70 km/semaine",
-    "elite": "Élite",
-    "eliteDesc": "5 à 7 sorties/semaine · 70+ km/semaine",
-    "suggested": "Suggéré",
-    "vmaLabel": "Ta VMA, si tu la connais",
     "vmaPlaceholder": "14,5",
     "vmaHint": "Facultatif. Sans elle, les allures du plan sont estimées depuis ton niveau.",
     "vmaUnknown": "Je ne la connais pas"
@@ -368,9 +348,7 @@
   },
   "nav": {
     "back": "Retour",
-    "next": "Suivant",
     "continue": "Continuer",
-    "skip": "Passer",
     "step": "Étape {{current}} sur {{total}}"
   },
   "viewMode": {
@@ -775,26 +753,9 @@
     "createNote": "{{n}} semaines vides, à remplir séance par séance"
   },
   "wizard": {
-    "kicker": "Nouveau plan",
-    "lede": "Le volume monte de 10 % par semaine au maximum, avec une semaine allégée toutes les trois.",
-    "source": "Mujika & Padilla 2003 · Pfitzinger & Douglas 2009",
-    "limitsKicker": "Sans compte, sans rappel",
-    "limitsBody": "Le plan ne t'envoie rien et ne compte pas tes jours d'affilée. Tu le modifies ou tu le supprimes quand tu veux.",
-    "where": "Étape {{current}} sur {{total}} · rien n'est envoyé",
-    "whereFirst": "Sept écrans au plus · rien n'est envoyé",
     "draftBody": "Tes réponses de la dernière fois sont là. Reprends où tu en étais, ou repars de zéro.",
     "errorTitle": "Le plan n'a pas été généré",
-    "errorHint": "Tes réponses sont intactes : réessaie, ou reviens en arrière pour changer une réponse.",
-    "step": {
-      "race": "Course",
-      "event": "La course",
-      "duration": "Durée",
-      "level": "Niveau",
-      "goal": "État d'esprit",
-      "schedule": "Semaine type",
-      "pace": "Allure",
-      "summary": "Récapitulatif"
-    }
+    "errorHint": "Tes réponses sont intactes : réessaie, ou reviens en arrière pour changer une réponse."
   },
   "race": {
     "title": "Qu'est-ce que tu prépares ?",

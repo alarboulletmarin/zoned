@@ -98,8 +98,7 @@ html[data-move="prev"] { --move-out: 12px; --move-in: -12px; }
 html[data-move]::view-transition-old(root),
 html[data-move]::view-transition-new(root),
 html[data-move]::view-transition-group(zn-cockpit-hero),
-html[data-move]::view-transition-group(zn-plan-week),
-html[data-move]::view-transition-group(zn-wizard-step) {
+html[data-move]::view-transition-group(zn-plan-week) {
   animation: none;
 }
 
@@ -131,15 +130,13 @@ html[data-move]::view-transition-new(zn-plan-week-dock) {
 }
 
 html[data-move]::view-transition-old(zn-cockpit-hero),
-html[data-move]::view-transition-old(zn-plan-week),
-html[data-move]::view-transition-old(zn-wizard-step) {
+html[data-move]::view-transition-old(zn-plan-week) {
   opacity: 0;
   animation: zn-direction-out var(--dur-fast) var(--ease-out) backwards;
 }
 
 html[data-move]::view-transition-new(zn-cockpit-hero),
-html[data-move]::view-transition-new(zn-plan-week),
-html[data-move]::view-transition-new(zn-wizard-step) {
+html[data-move]::view-transition-new(zn-plan-week) {
   animation: zn-direction-in var(--dur-base) var(--ease-out) var(--dur-fast) backwards;
 }
 
