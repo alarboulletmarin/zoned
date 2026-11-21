@@ -1,4 +1,7 @@
-import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { Stamp } from "@/components/ui/stamp";
+import { restoredPositions, useJustChanged } from "@/hooks/useJustChanged";
+import { becameDone } from "@/lib/cockpitRail";
 import { useTranslation } from "react-i18next";
 import {
   Activity,
@@ -58,6 +61,8 @@ interface PlanDayListProps {
   blockedDays?: ReadonlySet<number>;
   /** Lecture : la tuile de statut. */
   onStatus?: (index: number, anchor: HTMLElement) => void;
+  /** Incrémenté par la page à chaque annulation : ce qui revient est montré. */
+  undoToken?: number;
   /** Lecture : le reste de la carte. */
   onOpen?: (index: number) => void;
   onOpenActivity?: (activity: ComplementaryActivity) => void;
@@ -136,11 +141,46 @@ export function PlanDayList({
   onOpenActivity,
   edit,
   footer,
+  undoToken,
 }: PlanDayListProps) {
   const { t } = useTranslation(["plan", "activity"]);
   const f = usePlanFormats();
   const editing = mode === "edit";
   const drag = edit?.drag ?? null;
+
+  // Geste : la séance qui vient d'être close reçoit le tampon, une fois.
+  // Clé par semaine, place et séance : changer de semaine n'est pas clore.
+  const markKey = (slot: PlanWeekSession) => `${model.weekNumber}-${slot.index}-${slot.session.workoutId}`;
+  /* Geste : après une annulation, la séance qui revient reçoit un fond creusé
+     qui s'efface, pour dire que c'est revenu ici. Une seule, celle dont la
+     signature n'existait pas avant l'annulation (`restoredPositions`). */
+  const slots = model.days.flatMap((day) => day.sessions);
+  const signatures = slots.map(
+    (slot) =>
+      `${slot.session.workoutId}|${slot.session.dayOfWeek}|${slot.session.status ?? ""}|${slot.durationMin}|${slot.session.sessionType}`,
+  );
+  const signatureKey = signatures.join("\u0001");
+  const seen = useRef<{ token: number | undefined; signatures: string[] } | null>(null);
+  const [restored, setRestored] = useState<ReadonlySet<number>>(() => new Set());
+  const restoreTimer = useRef<number | undefined>(undefined);
+  useLayoutEffect(() => {
+    const before = seen.current;
+    const now = signatureKey === "" ? [] : signatureKey.split("\u0001");
+    seen.current = { token: undoToken, signatures: now };
+    if (!before || before.token === undoToken) return;
+    const positions = restoredPositions(before.signatures, now);
+    if (positions.length === 0) return;
+    setRestored(new Set(positions.map((position) => slots[position].index)));
+    window.clearTimeout(restoreTimer.current);
+    restoreTimer.current = window.setTimeout(() => setRestored(new Set()), 1500);
+    // `slots` suit `signatureKey` : le relire ici ne rate aucun changement.
+  }, [signatureKey, undoToken]);
+  useEffect(() => () => window.clearTimeout(restoreTimer.current), []);
+
+  const stamped = useJustChanged(
+    model.days.flatMap((day) => day.sessions.map((slot) => [markKey(slot), slot.session.status] as const)),
+    becameDone,
+  );
 
   const facts = (minutes: number, km: number | null) => (
     <span className="zn-plansess__facts">
@@ -187,6 +227,7 @@ export function PlanDayList({
         key={index}
         className="zn-plansess"
         data-status={slot.status}
+        data-restored={restored.has(index) || undefined}
         data-dragging={dragging || undefined}
         style={dragging ? ({ "--zn-dx": `${drag!.dx}px`, "--zn-dy": `${drag!.dy}px` } as CSSProperties) : undefined}
       >
@@ -221,8 +262,10 @@ export function PlanDayList({
               aria-haspopup="dialog"
               aria-label={t(`page.status.${statusKey}`, { name })}
               onClick={(e) => onStatus?.(index, e.currentTarget)}
+              data-just-done={stamped.keys.has(markKey(slot)) || undefined}
             >
               <StatusGlyph status={slot.status} />
+              {stamped.keys.has(markKey(slot)) && <Stamp onDone={() => stamped.clear(markKey(slot))} />}
             </button>
           )}
           <button

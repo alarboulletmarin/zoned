@@ -261,6 +261,8 @@ export function PlanViewPage() {
 
   // ── Les panneaux ────────────────────────────────────────────────────
   const [dialog, setDialog] = useState<PlanDialog>(null);
+  // Chaque annulation l'incrémente : PlanDayList montre ce qui revient.
+  const [undoToken, setUndoToken] = useState(0);
   const [completion, setCompletion] = useState<{ week: number; index: number; anchor: HTMLElement | null } | null>(null);
   const [activityTarget, setActivityTarget] = useState<{ week: number; index: number } | null>(null);
   const weekTopRef = useRef<HTMLDivElement>(null);
@@ -556,7 +558,10 @@ export function PlanViewPage() {
             action: {
               label: t("page.change.undo"),
               onClick: () => {
-                if (edit.undoStep()) toast.info(t("page.change.undone"));
+                if (edit.undoStep()) {
+                  setUndoToken((n) => n + 1);
+                  toast.info(t("page.change.undone"));
+                }
               },
             },
           });
@@ -695,6 +700,7 @@ export function PlanViewPage() {
             <PlanDayList
               model={m}
               mode="edit"
+              undoToken={undoToken}
               nameOf={nameOf}
               workoutOf={workoutOf}
               raceName={plan.config.raceName}
@@ -763,6 +769,7 @@ export function PlanViewPage() {
                   at={plan._lastUndoableChange.at}
                   onUndo={() => {
                     if (undoLastChange(plan.id)) {
+                      setUndoToken((n) => n + 1);
                       reload();
                       toast.info(t("lastChange.undone"));
                     }
@@ -829,6 +836,7 @@ export function PlanViewPage() {
             <PlanDayList
               model={weekModel}
               mode="read"
+              undoToken={undoToken}
               nameOf={nameOf}
               workoutOf={workoutOf}
               raceName={plan.config.raceName}

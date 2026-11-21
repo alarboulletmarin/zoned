@@ -223,3 +223,20 @@
     min-inline-size: var(--hit-min);
   }
 }
+
+/* Deux libellés pour une même place (Partager le lien, puis Copié) : ils
+   partagent une case de grille et seul `[data-shown]` se voit. Le bouton
+   garde la largeur du plus long, donc rien ne bouge autour de lui quand le
+   libellé change. Le caché sort aussi du nom accessible. */
+.zn-swap {
+  display: inline-grid;
+}
+
+.zn-swap > span {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+
+.zn-swap > [data-shown] {
+  visibility: visible;
+}

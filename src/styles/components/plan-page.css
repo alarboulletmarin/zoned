@@ -468,6 +468,24 @@
   position: relative;
 }
 
+/* Geste : la séance qu'une annulation vient de remettre porte un fond creusé,
+   tenu un instant puis effacé (`backwards` tient la première image pendant
+   le délai, rien n'est tenu après). Une seule fois, sur elle seule. */
+.zn-plansess[data-restored] .zn-plansess__card {
+  animation: zn-restored var(--dur-slow) var(--ease-out) var(--dur-slow) backwards;
+}
+
+@keyframes zn-restored {
+  from { background-color: var(--paper-sunken); }
+}
+
+/* Le tampon (stamp.css) se pose sur la marque de 32 px, pas sur la cible
+   de 44 : c'est la marque qui se remplit. */
+.zn-plansess__state > .zn-stamp {
+  inset: calc((var(--hit-min) - 32px) / 2);
+  border-radius: var(--r-md);
+}
+
 .zn-plansess__state[data-status="done"] {
   color: var(--text-inverse);
 }

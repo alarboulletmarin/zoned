@@ -1,4 +1,5 @@
 import { useMemo, type CSSProperties } from "react";
+import { useJustAdded } from "@/hooks/useJustChanged";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -64,6 +65,8 @@ export function ActivitiesPage() {
   const isEn = useIsEnglish();
   const log = useActivityLog();
   const activities = log.activities;
+  // Origine : la ligne qui vient d'être enregistrée entre, une fois.
+  const justAdded = useJustAdded(activities.map((activity) => activity.id));
   const { plans } = usePlans();
   const navigate = useNavigate();
   const location = useLocation();
@@ -171,7 +174,7 @@ export function ActivitiesPage() {
         </section>
 
         {/* Le bilan de la semaine en cours, avant la liste. */}
-        <section className="zn-acts__band">
+        <section className="zn-acts__band" data-just-added={justAdded.size > 0 || undefined}>
           <WeekReviewPanel review={review} variant="card" />
         </section>
 
@@ -226,7 +229,11 @@ export function ActivitiesPage() {
                     if (activity.avgWatts) facts.push(`${activity.avgWatts} W`);
                     const [, m, d] = activity.date.split("-");
                     return (
-                      <li key={activity.id} className="zn-acts__item">
+                      <li
+                        key={activity.id}
+                        className="zn-acts__item"
+                        data-just-added={justAdded.has(activity.id) || undefined}
+                      >
                         <button
                           type="button"
                           className="zn-acts__row"
@@ -261,6 +268,10 @@ export function ActivitiesPage() {
       </div>
 
       <ActivityLogPanel {...log.panel} />
+      {/* L'ajout se voit à la ligne qui entre ; ceci le dit à qui ne la voit pas. */}
+      <span className="sr-only" aria-live="polite">
+        {justAdded.size > 0 ? t("activity:page.added") : ""}
+      </span>
     </>
   );
 }

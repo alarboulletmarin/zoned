@@ -39,6 +39,7 @@ import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPan
 import { SEOHead } from "@/components/seo";
 import { usePlans } from "@/hooks/usePlans";
 import { useWorkout } from "@/hooks/useWorkouts";
+import { Stamp } from "@/components/ui/stamp";
 import { useSlidingIndicator } from "@/hooks/useSlidingIndicator";
 import { useRadioRail } from "@/hooks/useRadioRail";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -1660,13 +1661,7 @@ function CockpitSession({
             {isResolved ? t("today:resume.reclose") : t("plan:completion.markDone")}
             {/* Le tampon : l'encre remplit le bouton depuis le centre, puis la
                 coche se trace. Monté le temps d'un seul passage. */}
-            {justDone && (
-              <span className="zn-stamp" aria-hidden="true">
-                <svg className="zn-stamp__check" viewBox="0 0 24 24" focusable="false">
-                  <path d="M5 12.5l4.5 4.5L19 7" pathLength={1} />
-                </svg>
-              </span>
-            )}
+            {justDone && <Stamp />}
           </Button>
         )}
       </div>

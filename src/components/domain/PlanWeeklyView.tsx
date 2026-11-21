@@ -1,4 +1,7 @@
 import { useState, useRef, useMemo, useCallback, memo } from "react";
+import { Stamp } from "@/components/ui/stamp";
+import { useJustChanged } from "@/hooks/useJustChanged";
+import { becameDone } from "@/lib/cockpitRail";
 import { useTranslation } from "react-i18next";
 import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Dumbbell, Dices, Lock, LockOpen, Copy, Plus, Run, Bike, Pool } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
@@ -1095,6 +1098,13 @@ const DayCell = memo(function DayCell({
   const { t } = useTranslation(["plan", "library"]);
   const pickLang = usePickLang();
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
+  // Geste : la séance qui vient d'être close reçoit le tampon, une fois.
+  const markKey = (session: PlanSession) =>
+    `${selectedWeek}-${weekData.sessions.indexOf(session)}-${session.workoutId}`;
+  const stamped = useJustChanged(
+    sessions.map((session) => [markKey(session), session.status] as const),
+    becameDone,
+  );
   // While the draw animation runs, this day shows the spinning card instead of
   // its own content, same cell, same position, so nothing can drift.
   const scanContent = renderScanCell?.(dayIndex) ?? null;
@@ -1346,6 +1356,7 @@ const DayCell = memo(function DayCell({
                         }}
                         className="zn-sess__check"
                         data-status={session.status}
+                        data-just-done={stamped.keys.has(markKey(session)) || undefined}
                         title={
                           session.status === "completed"
                             ? t("completion.completed")
@@ -1370,6 +1381,9 @@ const DayCell = memo(function DayCell({
                           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M3 3l6 6M9 3l-6 6" />
                           </svg>
+                        )}
+                        {stamped.keys.has(markKey(session)) && (
+                          <Stamp onDone={() => stamped.clear(markKey(session))} />
                         )}
                       </button>
                     )}

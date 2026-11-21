@@ -91,6 +91,12 @@
   border-block-start: var(--border-divider);
 }
 
+/* Origine : la ligne qu'on vient d'enregistrer monte de 8 px en paraissant,
+   une fois (`useJustAdded`). Les autres ne bougent pas. */
+.zn-acts__item[data-just-added] {
+  animation: zoned-slide-in var(--dur-base) var(--ease-out);
+}
+
 /* La ligne entière est le bouton : une ligne de journal n'a qu'une action,
    la corriger, et un crayon de 15 px en bout de ligne serait une cible de
    15 px. Le crayon reste, comme MARQUE que la ligne s'ouvre, pas comme cible. */
@@ -364,6 +370,18 @@
 .zn-wreview__seg {
   inline-size: var(--w, 0%);
   flex: none;
+}
+
+/* Geste : une activité qu'on vient d'ajouter allonge le segment, le nombre de
+   la légende est remplacé net. Seulement sous `[data-just-added]` (la page
+   Activités le pose le temps d'un ajout) : quand les données arrivent au
+   chargement, la barre se pose net. */
+[data-just-added] .zn-wreview__seg {
+  transition: inline-size var(--dur-base) var(--ease-out);
+}
+
+[data-just-added] .zn-wreview__tick {
+  transition: inset-inline-start var(--dur-base) var(--ease-out);
 }
 
 /* Fait : le plein. La seule teinte ajoutee de ce systeme est celle de la

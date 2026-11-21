@@ -46,12 +46,14 @@ import {
   Copy,
   Share,
   Link2,
+  Check,
   Loader2,
   X,
   ChevronLeft,
   ChevronRight,
 } from "@/components/icons";
 import { NativeDialog } from "@/components/ui/native-dialog";
+import { useCopiedFlag } from "@/hooks/useShareLink";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import {
@@ -108,6 +110,7 @@ export function ShareSheet<P extends object>({
   const { t } = useTranslation("common");
   const [selectedId, setSelectedId] = useState<string>(templates[0].id);
   const [transparent, setTransparent] = useState(false);
+  const [linkCopied, flashLinkCopied] = useCopiedFlag();
   const [busy, setBusy] = useState<
     null | "download" | "copy" | "share" | "copyLink"
   >(null);
@@ -311,7 +314,9 @@ export function ShareSheet<P extends object>({
     setBusy("copyLink");
     try {
       await navigator.clipboard.writeText(shareUrl);
-      toast.success(t("share.toast.linkCopied"));
+      // Geste : confirmé sur le bouton (coche, Copié) et dans la région
+      // vivante, pas dans un toast au coin opposé.
+      flashLinkCopied();
     } catch (err) {
       toast.failure(t("share.toast.linkCopyFailed"), err);
     } finally {
@@ -504,9 +509,12 @@ export function ShareSheet<P extends object>({
             onClick={handleCopyLink}
             disabled={!!busy}
             busy={busy === "copyLink"}
-            icon={<Link2 />}
-            label={t("share.action.copyLink")}
+            icon={linkCopied ? <Check /> : <Link2 />}
+            label={linkCopied ? t("share.copiedShort") : t("share.action.copyLink")}
           />
+          <span className="sr-only" aria-live="polite">
+            {linkCopied ? t("share.toast.linkCopied") : ""}
+          </span>
         </div>
       </footer>
 
