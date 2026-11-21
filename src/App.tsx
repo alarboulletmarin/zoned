@@ -7,7 +7,7 @@ import {
   useLocation,
   useNavigationType,
 } from "react-router-dom";
-import { useState, useEffect, useRef, lazy, Suspense, type ComponentType, type ReactNode } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense, type ComponentType, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Toaster } from "sonner";
 import { toast } from "@/components/ui/toast";
@@ -207,13 +207,14 @@ function ScrollToTopOnNavigate() {
   const navigationType = useNavigationType();
   const [announcement, setAnnouncement] = useState("");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Un REPLACE, c'est une page qui réécrit son propre état dans l'URL
     // (les filtres de la bibliothèque, la semaine d'un plan), pas un
     // changement de page : la position de lecture reste.
     if (navigationType === "REPLACE") return;
     const state = location.state as { returnScrollY?: number } | null;
     if (state?.returnScrollY != null) return;
+    // La capture de la nouvelle vue doit déjà voir le haut de la page.
     window.scrollTo(0, 0);
   }, [location.pathname, location.search, location.state, navigationType]);
 

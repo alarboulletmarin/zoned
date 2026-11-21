@@ -10,8 +10,10 @@ import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
 import { getPeakZone, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration, ZoneBar, toZoneBarBlocks } from "@/components/visualization";
 import { StrengthWorkoutListItem } from "./StrengthWorkoutCard";
-import { usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
+import { localeTo } from "@/lib/seo/locale-to";
+import { useSharedTransition } from "@/lib/sharedTransition";
 
 interface WorkoutListItemProps {
   workout: AnyWorkoutTemplate;
@@ -31,6 +33,9 @@ export function WorkoutListItem({ workout, className }: WorkoutListItemProps) {
 function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
+  const isEn = useIsEnglish();
+  const to = localeTo(`/workout/${workout.id}`, isEn);
+  const shareOrigin = useSharedTransition(to, "wk", workout.id, ".zn-wrow__name");
   const name = pick(workout, "name");
   const dominantZone = getPeakZone(workout);
   const duration = getWorkoutDuration(workout);
@@ -48,7 +53,7 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
   return (
     // No tint behind the row: the zone is the badge at the end, which carries
     // the code the ink ramp cannot say on its own.
-    <Link to={`/workout/${workout.id}`} className={cn("zn-wrow", className)}>
+    <Link to={to} className={cn("zn-wrow", className)} onClick={shareOrigin}>
       {/* Title and mobile duration */}
       <div className="zn-wrow__main">
         <span className="zn-wrow__name">{name}</span>

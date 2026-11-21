@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { useSlidingIndicator } from "@/hooks/useSlidingIndicator";
 
 export interface SegmentedOption<T extends string> {
   value: T;
@@ -24,7 +25,9 @@ interface SegmentedProps<T extends string> {
  * selection, as a radiogroup is required to.
  *
  * The paint lives in `src/styles/components/segmented.css`, selecting on the
- * `aria-checked` the radios already carry.
+ * `aria-checked` the radios already carry. The ink pill is ONE element under
+ * the row that slides to the chosen segment (geste : le choix vient de
+ * changer), measured by `useSlidingIndicator`.
  */
 export function Segmented<T extends string>({
   value,
@@ -38,6 +41,7 @@ export function Segmented<T extends string>({
   // Nothing selected yet: the first option holds the tab stop so the group
   // never falls out of the tab order.
   const tabStop = selected === -1 ? 0 : selected;
+  const placed = useSlidingIndicator(groupRef, '[role="radio"][aria-checked="true"]', value);
 
   const move = (index: number) => {
     const next = options[index];
@@ -79,8 +83,10 @@ export function Segmented<T extends string>({
       role="radiogroup"
       aria-label={label}
       onKeyDown={handleKeyDown}
+      data-placed={placed || undefined}
       className={cn("zn-segmented", className)}
     >
+      <span className="zn-segmented__thumb" aria-hidden="true" />
       {options.map((opt, index) => (
         <button
           key={opt.value}

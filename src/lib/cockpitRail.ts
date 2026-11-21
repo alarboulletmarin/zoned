@@ -18,6 +18,11 @@ export function isDone(status: Status): boolean {
   return status === "completed" || status === "modified";
 }
 
+/** Le passage qui mérite le tampon : d'ouverte à courue. */
+export function becameDone(prev: Status, next: Status): boolean {
+  return !isResolved(prev) && isDone(next);
+}
+
 /**
  * La séance montrée en arrivant sur un jour : la première qui reste à faire,
  * sinon la dernière, celle qui a fermé la journée.

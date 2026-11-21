@@ -23,9 +23,10 @@
   border-radius: var(--r-pill);
   cursor: pointer;
 
+  /* Geste : la pastille glisse et le fond la suit, au même pas. */
   transition:
-    background var(--dur-base) var(--ease-out),
-    border-color var(--dur-base) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
 }
 
@@ -56,8 +57,8 @@
   border-radius: var(--r-pill);
   background: var(--ink-1);
   transition:
-    transform var(--dur-base) var(--ease-out),
-    background var(--dur-base) var(--ease-out);
+    transform var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
 }
 
 /* 44 track - 2x1.5 border - 2x2 gutter - 18 knob = 19px of travel. */

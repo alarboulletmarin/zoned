@@ -19,6 +19,7 @@
 }
 
 .zn-tabs__list {
+  position: relative;
   display: flex;
   align-items: stretch;
   gap: var(--sp-2);
@@ -30,6 +31,8 @@
 }
 
 .zn-tabs__trigger {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -92,6 +95,56 @@
   background: var(--ink-2);
   border-color: var(--ink-2);
   color: var(--ink-on-dark);
+}
+
+/* La pilule d'encre : UN élément, posé sous l'onglet ouvert par
+   `useSlidingIndicator`, qui glisse vers le suivant (geste : le choix vient
+   de changer). Transition seulement le temps d'un choix (`data-sliding`).
+   Tant qu'elle n'est pas mesurée (`data-indicator` absent), l'onglet garde
+   son propre fond, les deux règles juste au-dessus. */
+.zn-tabs__indicator {
+  display: none;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  box-sizing: border-box;
+  inline-size: var(--ind-w);
+  block-size: var(--ind-h);
+  transform: translate(var(--ind-x), var(--ind-y));
+  background: var(--ink-1);
+  border: var(--bw-rule) solid var(--ink-1);
+  border-radius: var(--r-pill);
+  pointer-events: none;
+}
+
+.zn-tabs__list[data-indicator] > .zn-tabs__indicator {
+  display: block;
+}
+
+.zn-tabs__list[data-sliding] > .zn-tabs__indicator {
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    inline-size var(--dur-base) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-tabs__list[data-indicator] > .zn-tabs__trigger[data-state="active"],
+.zn-tabs__list[data-indicator] > .zn-tabs__trigger[data-state="active"]:hover:not(:disabled) {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Avant la première pose, l'onglet ouvert passe de son propre fond à la
+   pilule : ce passage est un chargement, il se fait net. */
+.zn-tabs__list:not([data-placed]) > .zn-tabs__trigger {
+  transition: none;
+}
+
+/* Survoler l'onglet ouvert éclaircit la pilule d'un cran, comme avant. */
+.zn-tabs__list:has(> .zn-tabs__trigger[data-state="active"]:hover:not(:disabled)) > .zn-tabs__indicator {
+  background: var(--ink-2);
+  border-color: var(--ink-2);
 }
 
 .zn-tabs__trigger:disabled,

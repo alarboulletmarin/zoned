@@ -8,8 +8,9 @@
    choisi) se rejoue à chaque montage, donc à chaque visite : ce n'est plus un
    geste qui porte, c'est un décor. Ce qui confirme un geste s'accroche à un
    PASSAGE, repéré par le code au moment où il a lieu, et posé le temps d'un
-   seul passage (`data-just-done` sur le cockpit). Le CSS n'anime que sous
-   cette marque. Aucun jeton de durée de plus : les trois ci-dessous suffisent.
+   seul passage (`data-just-done`, posé par `useJustChanged` et ses voisins
+   de `hooks/useJustChanged.ts`). Le CSS n'anime que sous cette marque. La
+   liste de ce qui bouge, et pourquoi : `components/README.md`. Aucun jeton de durée de plus : les trois ci-dessous suffisent.
 
    The one thing that LOOPS is the run cycle (src/styles/components/
    run-cycle.css, and its copy inlined in index.html's shell): six frames at

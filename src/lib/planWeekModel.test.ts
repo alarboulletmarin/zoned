@@ -96,6 +96,29 @@ describe("buildPlanWeekModel", () => {
     expect(m.doneMin).toBe(55);
   });
 
+  test("jour réordonné : le renfo placé avant la course à pied y reste", () => {
+    const weeks = [
+      week(1, [
+        s({ dayOfWeek: 2, workoutId: "STR-001", sessionType: "strength", estimatedDurationMin: 25 }),
+        s({ dayOfWeek: 2, estimatedDurationMin: 33 }),
+      ]),
+    ];
+    const m = buildPlanWeekModel(plan(weeks), 1, THURSDAY, workoutOf)!;
+    expect(m.days[2].sessions.map((x) => x.index)).toEqual([0, 1]);
+    expect(m.days[2].sessions[0].strength).toBe(true);
+  });
+
+  test("jour de course : la course passe devant ce qui est placé avant elle", () => {
+    const weeks = [
+      week(1, [
+        s({ dayOfWeek: 6, estimatedDurationMin: 20 }),
+        s({ dayOfWeek: 6, workoutId: "__race_day__", sessionType: "race_specific", estimatedDurationMin: 0 }),
+      ]),
+    ];
+    const m = buildPlanWeekModel(plan(weeks), 1, THURSDAY, workoutOf)!;
+    expect(m.days[6].sessions.map((x) => x.kind)[0]).toBe("race");
+  });
+
   test("étiquettes : la sortie longue l'emporte sur la séance clé", () => {
     const m = buildPlanWeekModel(plan(FOUR_WEEKS), 4, THURSDAY, workoutOf)!;
     expect(m.days[4].sessions[0].tag).toBe("key");

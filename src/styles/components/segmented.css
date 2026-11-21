@@ -14,6 +14,7 @@
   grid-auto-columns: minmax(0, 1fr);
   gap: var(--sp-1);
 
+  position: relative;
   padding: var(--sp-1);
   background: var(--surface-band);
   border: var(--border-rule);
@@ -21,6 +22,8 @@
 }
 
 .zn-segmented__item {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -80,6 +83,48 @@
   background: var(--ink-1);
   color: var(--ink-on-dark);
   border-color: var(--line-strong);
+}
+
+/* La pilule d'encre : UN élément, posé sous le segment choisi par
+   `useSlidingIndicator`, qui glisse vers le suivant (geste : le choix vient
+   de changer). La transition n'existe qu'après la première pose
+   (`data-sliding`, le temps d'un choix) : à l'arrivée, la pilule est là. Tant
+   qu'elle n'est pas mesurée (`data-indicator` absent), le segment garde son
+   propre fond, la règle juste au-dessus. */
+.zn-segmented__thumb {
+  display: none;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  box-sizing: border-box;
+  inline-size: var(--ind-w);
+  block-size: var(--ind-h);
+  transform: translate(var(--ind-x), var(--ind-y));
+  background: var(--ink-1);
+  border: var(--bw-rule) solid var(--line-strong);
+  border-radius: var(--r-pill);
+  pointer-events: none;
+}
+
+.zn-segmented[data-indicator] > .zn-segmented__thumb {
+  display: block;
+}
+
+.zn-segmented[data-sliding] > .zn-segmented__thumb {
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    inline-size var(--dur-base) var(--ease-out);
+}
+
+.zn-segmented[data-indicator] > .zn-segmented__item[aria-checked="true"] {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Avant la première pose, le segment choisi passe de son propre fond à la
+   pilule : ce passage est un chargement, il se fait net. */
+.zn-segmented:not([data-placed]) > .zn-segmented__item {
+  transition: none;
 }
 
 /* WCAG 2.5.8: 44px on a coarse pointer. Tailwind never carried this here,

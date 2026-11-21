@@ -2,6 +2,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { useHeld } from "@/components/ui/native-dialog";
 import { toast } from "@/components/ui/toast";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
@@ -55,7 +56,7 @@ export function AddToSheet({ workout, durationMin, open, onOpenChange, side }: A
   const name = pick(workout, "name");
 
   // Ce que la feuille sait du monde, relu quand elle s'ouvre.
-  const world = useMemo(() => {
+  const freshWorld = useMemo(() => {
     if (!open) return null;
     const today = new Date();
     const plans = getAllPlans();
@@ -69,6 +70,8 @@ export function AddToSheet({ workout, durationMin, open, onOpenChange, side }: A
     };
   }, [open, isEn]);
 
+  // Tenu le temps de la sortie : fermée, la feuille ne relit plus rien.
+  const world = useHeld(freshWorld);
   const todayIndex = world ? weekdayIndex(world.today) : 0;
   const [target, setTarget] = useState<Target>("today");
   const [day, setDay] = useState<number | null>(null);

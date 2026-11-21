@@ -15,7 +15,7 @@ import type { TrainingPlan } from "@/types/plan";
  * - Annuler le remet tel quel (`savePlan`) ;
  * - Enregistrer remet l'instantané, puis réécrit l'état modifié d'un seul
  *   tenant par `withUndoSnapshot` : un seul changement annulable, Plan
- *   modifié, que le bandeau du dernier changement sait défaire ;
+ *   modifié, que le menu du plan permet de défaire ;
  * - quitter le mode par le retour du navigateur avec des changements non
  *   enregistrés demande confirmation, dans une boîte Zoned ;
  * - fermer l'onglet avec des changements demande la confirmation du

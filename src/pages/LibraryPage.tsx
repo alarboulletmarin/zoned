@@ -11,6 +11,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { localeTo } from "@/lib/seo/locale-to";
 import { useTranslation } from "react-i18next";
 import {
+  ChevronDown,
   Search,
   SlidersHorizontal,
   Dumbbell,
@@ -21,6 +22,7 @@ import {
   type IconProps,
 } from "@/components/icons";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { preloadWorkoutDetail } from "@/lib/sharedTransition";
 
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -50,7 +52,7 @@ import type {
 import { SEOHead } from "@/components/seo";
 import { HubNav, navSection } from "@/components/layout";
 import {
-  useFavorites,
+  useFavoriteIds,
   useKeyboardShortcuts,
   useWorkouts,
   useViewMode,
@@ -229,7 +231,6 @@ export function LibraryPage() {
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchParams, setSearchParams] = useSearchParams();
-  const { favorites } = useFavorites();
   const { settings } = useSettings();
   const stats = useAppStats();
   const { workouts: runningWorkouts, isLoading: isLoadingRunning } =
@@ -371,6 +372,15 @@ export function LibraryPage() {
       ...paramsFilters,
     };
   });
+  // Defer the filter object so a fast typist doesn't block paint while
+  // re-running the (otherwise pure) workout filter against ~200 entries.
+  const deferredFilters = useDeferredValue(filters);
+  // Les favoris ne pèsent sur la liste que sous le filtre Favoris : un coeur
+  // cliqué ailleurs ne refiltre ni ne redessine la bibliothèque.
+  const favorites = useFavoriteIds(deferredFilters.favoritesOnly);
+  // Attente : sur un écran tactile, le survol qui préchargeait la fiche
+  // n'arrive qu'avec le tap. La liste montée, la fiche se charge d'avance.
+  useEffect(preloadWorkoutDetail, []);
 
   // Handle activity type change
   const handleActivityTypeChange = useCallback((newType: ActivityType) => {
@@ -665,9 +675,6 @@ export function LibraryPage() {
     [favorites, activityType, practice],
   );
 
-  // Defer the filter object so a fast typist doesn't block paint while
-  // re-running the (otherwise pure) workout filter against ~200 entries.
-  const deferredFilters = useDeferredValue(filters);
 
   // Filter workouts
   const filteredWorkouts = useMemo(() => {
@@ -1019,7 +1026,12 @@ export function LibraryPage() {
         </div>
 
         {/* 5, the results */}
-        <section className="zn-lib__results" aria-busy={isLoading}>
+        <section
+          className="zn-lib__results"
+          aria-busy={isLoading}
+          onPointerEnter={preloadWorkoutDetail}
+          onFocus={preloadWorkoutDetail}
+        >
           {isLoading ? (
             <div className="zn-grid zn-lib__grid">
               {Array.from({ length: 6 }).map((_, i) => (
@@ -1125,18 +1137,23 @@ export function LibraryPage() {
         </section>
 
         {!isLoading && allWorkouts.length > 0 && (
-          <nav className="zn-crawl" aria-label={t("catalogueIndex")}>
-            <h2 className="zn-kicker">{t("catalogueIndex")}</h2>
-            <ul className="zn-crawl__list">
-              {allWorkouts.map((workout) => (
-                <li key={workout.id}>
-                  <Link to={localeTo(`/workout/${workout.id}`, isEn)}>
-                    {isEn && workout.nameEn ? workout.nameEn : workout.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <details className="zn-crawl zn-disclosure">
+            <summary className="zn-disclosure__summary">
+              {t("catalogueIndex")}
+              <ChevronDown className="zn-disclosure__chevron" aria-hidden="true" />
+            </summary>
+            <nav className="zn-disclosure__panel" aria-label={t("catalogueIndex")}>
+              <ul className="zn-crawl__list">
+                {allWorkouts.map((workout) => (
+                  <li key={workout.id}>
+                    <Link to={localeTo(`/workout/${workout.id}`, isEn)}>
+                      {isEn && workout.nameEn ? workout.nameEn : workout.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </details>
         )}
       </div>
 

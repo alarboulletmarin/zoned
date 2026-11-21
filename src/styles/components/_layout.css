@@ -212,10 +212,35 @@
 }
 
 /* ── disclosure ───────────────────────────────────────────────────────────
-   A <details> block on an ink rule. The chevron turns; nothing else moves. */
+   A <details> block on an ink rule. The chevron turns, and the panel opens
+   in height from the summary it hangs off (origine : ce qui apparaît vient
+   de la ligne qu'on vient d'ouvrir). */
 
 .zn-disclosure {
   border-block-end: var(--border-divider);
+}
+
+/* La hauteur se déroule là où le navigateur sait animer vers `auto`
+   (`interpolate-size`, `::details-content`) ; ailleurs, l'ouverture reste
+   nette. `content-visibility` est discret : `allow-discrete` le garde visible
+   le temps de la fermeture. Limité à `.zn-disclosure` : le `overflow: clip`
+   que demande la hauteur couperait ce qui déborde d'un autre `<details>`. */
+@supports (interpolate-size: allow-keywords) and selector(::details-content) {
+  .zn-disclosure {
+    interpolate-size: allow-keywords;
+  }
+
+  .zn-disclosure::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size var(--dur-base) var(--ease-out),
+      content-visibility var(--dur-base) allow-discrete;
+  }
+
+  .zn-disclosure[open]::details-content {
+    block-size: auto;
+  }
 }
 
 .zn-disclosure__summary {
@@ -247,7 +272,7 @@
   block-size: 20px;
   flex: none;
   color: var(--text-faint);
-  transition: transform var(--dur-base) var(--ease-out);
+  transition: transform var(--dur-fast) var(--ease-out);
 }
 
 .zn-disclosure[open] .zn-disclosure__chevron {

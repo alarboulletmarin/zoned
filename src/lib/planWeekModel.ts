@@ -100,11 +100,9 @@ export function sessionTagOf(session: PlanSession): PlanSessionTag {
   return null;
 }
 
-/** L'ordre dans une journée : la course d'abord, puis la course à pied, le renfo, les activités. */
+/** L'ordre dans une journée : la course d'abord, puis l'ordre choisi par le coureur. */
 function rankOf(s: PlanWeekSession): number {
-  if (s.kind === "race" || s.kind === "intermediate") return 0;
-  if (s.kind === "activity") return 3;
-  return s.strength ? 2 : 1;
+  return s.kind === "race" || s.kind === "intermediate" ? 0 : 1;
 }
 
 function stateOf(date: string, today: string): PlanDayState {

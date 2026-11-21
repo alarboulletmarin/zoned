@@ -1,8 +1,12 @@
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   useCallback,
   useContext,
+  useMemo,
+  useRef,
+  useSyncExternalStore,
   createContext,
   type ReactNode,
 } from "react";
@@ -20,6 +24,19 @@ interface FavoritesContextValue {
 }
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
+
+/* Les abonnés fins : un coeur ne relit que sa propre séance, et la liste
+   n'est lue que par qui la demande. Sans cela, un clic sur un coeur
+   redessinait toute la bibliothèque (près d'une demi-seconde sur un
+   téléphone). */
+interface FavoritesStore {
+  subscribe: (listener: () => void) => () => void;
+  get: () => string[];
+  toggleFavorite: (id: string) => void;
+}
+
+const FavoritesStoreContext = createContext<FavoritesStore | null>(null);
+const NONE: string[] = [];
 
 /**
  * Provider to share favorites state across all components
@@ -82,19 +99,57 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     [favorites]
   );
 
-  return (
-    <FavoritesContext.Provider
-      value={{
-        favorites,
-        addFavorite,
-        removeFavorite,
-        toggleFavorite,
-        isFavorite,
-      }}
-    >
-      {children}
-    </FavoritesContext.Provider>
+  const current = useRef(favorites);
+  const listeners = useRef(new Set<() => void>());
+  useLayoutEffect(() => {
+    current.current = favorites;
+    for (const listener of listeners.current) listener();
+  }, [favorites]);
+
+  const store = useMemo<FavoritesStore>(
+    () => ({
+      subscribe: (listener) => {
+        listeners.current.add(listener);
+        return () => listeners.current.delete(listener);
+      },
+      get: () => current.current,
+      toggleFavorite,
+    }),
+    [toggleFavorite],
   );
+
+  const value = useMemo(
+    () => ({ favorites, addFavorite, removeFavorite, toggleFavorite, isFavorite }),
+    [favorites, addFavorite, removeFavorite, toggleFavorite, isFavorite],
+  );
+
+  return (
+    <FavoritesStoreContext.Provider value={store}>
+      <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>
+    </FavoritesStoreContext.Provider>
+  );
+}
+
+function useFavoritesStore(): FavoritesStore {
+  const store = useContext(FavoritesStoreContext);
+  if (!store) throw new Error("useFavoritesStore must be used within a FavoritesProvider");
+  return store;
+}
+
+/** Un seul identifiant : le composant ne se redessine que si son état change. */
+export function useIsFavorite(id: string): [boolean, () => void] {
+  const store = useFavoritesStore();
+  const read = () => store.get().includes(id);
+  const favorited = useSyncExternalStore(store.subscribe, read, read);
+  const toggle = useCallback(() => store.toggleFavorite(id), [store, id]);
+  return [favorited, toggle];
+}
+
+/** La liste, lue seulement quand `enabled` : sinon une liste vide stable. */
+export function useFavoriteIds(enabled: boolean): string[] {
+  const store = useFavoritesStore();
+  const read = () => (enabled ? store.get() : NONE);
+  return useSyncExternalStore(store.subscribe, read, read);
 }
 
 /**

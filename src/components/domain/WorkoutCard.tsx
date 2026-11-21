@@ -1,3 +1,4 @@
+import { useSharedTransition } from "@/lib/sharedTransition";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -189,8 +190,10 @@ export function WorkoutCardChrome({
 /** Internal running-only card with properly typed props */
 function RunningWorkoutCard({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
   const isEn = useIsEnglish();
+  // Origine : seul le titre et le profil de la carte activée rejoignent le détail.
+  const shareOrigin = useSharedTransition(localeTo(`/workout/${workout.id}`, isEn), "wk", workout.id, ".zn-wcard__title");
   return (
-    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link">
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link" onClick={shareOrigin}>
       <WorkoutCardChrome
         workout={workout}
         className={className}
@@ -221,6 +224,8 @@ export function WorkoutCardCompact({
 /** Internal running-only compact card */
 function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
   const isEn = useIsEnglish();
+  // Origine : seul le titre et le profil de la carte activée rejoignent le détail.
+  const shareOrigin = useSharedTransition(localeTo(`/workout/${workout.id}`, isEn), "wk", workout.id, ".zn-wcard__title");
   const { t } = useTranslation("library");
   const pick = usePickLang();
   const dominantZone = getPeakZone(workout);
@@ -237,7 +242,7 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
       : null;
 
   return (
-    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link">
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link" onClick={shareOrigin}>
       <article className={cn("zn-wcard", className)} data-size="compact">
         <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-4)" } as React.CSSProperties}>
           <h3 className="zn-wcard__title zn-fill">{name}</h3>

@@ -2,7 +2,8 @@ import { useTranslation } from "react-i18next";
 import { Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useFavorites } from "@/hooks";
+import { useIsFavorite } from "@/hooks";
+import { useJustChanged } from "@/hooks/useJustChanged";
 
 interface FavoriteButtonProps {
   workoutId: string;
@@ -29,6 +30,10 @@ interface FavoriteButtonProps {
  * accent, and a second one cancels the first. And nothing bounces: motion says
  * where something came from or that a wait is real, so a 400ms scale animation
  * on a state change is decoration and it is gone.
+ *
+ * Geste : au clic, et seulement au clic, le plein s'ouvre depuis le centre
+ * du contour, sans que le coeur grossisse ; le retrait le referme, plus vite.
+ * Le plein est un second glyphe posé sur le contour (favorite-button.css).
  */
 export function FavoriteButton({
   workoutId,
@@ -37,13 +42,14 @@ export function FavoriteButton({
   className,
 }: FavoriteButtonProps) {
   const { t } = useTranslation("common");
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const favorited = isFavorite(workoutId);
+  const [favorited, toggleFavorite] = useIsFavorite(workoutId);
+  const just = useJustChanged([[workoutId, favorited] as const], (prev, next) => prev !== next);
+  const justChanged = just.keys.has(workoutId);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleFavorite(workoutId);
+    toggleFavorite();
   };
 
   const label = favorited ? t("actions.removeFromFavorites") : t("actions.addToFavorites");
@@ -58,7 +64,19 @@ export function FavoriteButton({
       aria-label={label}
       onClick={handleClick}
     >
-      <Heart filled={favorited} />
+      <span className="zn-favorite__glyph" data-just={justChanged ? (favorited ? "on" : "off") : undefined}>
+        <Heart />
+        {(favorited || justChanged) && (
+          <span
+            className="zn-favorite__fill"
+            onAnimationEnd={(event) => {
+              if (event.target === event.currentTarget) just.clear(workoutId);
+            }}
+          >
+            <Heart filled />
+          </span>
+        )}
+      </span>
       {showLabel && <span className="zn-favorite__label">{label}</span>}
     </Button>
   );

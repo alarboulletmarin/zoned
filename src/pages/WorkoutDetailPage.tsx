@@ -1,10 +1,14 @@
+import { markViewReady } from "@/lib/directionalTransition";
+import { sharedTransitionName } from "@/lib/sharedTransition";
 import {
   useState,
   useEffect,
+  useLayoutEffect,
+  useRef,
   type CSSProperties,
   useCallback,
 } from "react";
-import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate, useNavigationType } from "react-router-dom";
 import { HOME_LINK_STATE } from "@/components/layout/navigation";
 import { useTranslation } from "react-i18next";
 import {
@@ -104,6 +108,7 @@ export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const { t } = useTranslation(["session", "library", "common"]);
   const pick = usePickLang();
   const isEn = useIsEnglish();
@@ -165,6 +170,25 @@ export function WorkoutDetailPage() {
     refreshUserZones();
   }, [refreshUserZones]);
 
+  const viewed = useRef<{ workoutId: string; locationKey: string } | null>(null);
+  const [entryKey, setEntryKey] = useState<string | null>(null);
+  const animateEntry = entryKey === location.key;
+
+  // Origine : le détail est prêt quand son titre et son profil sont dans la page.
+  useLayoutEffect(() => {
+    if (isLoading || !workout) return;
+    const previous = viewed.current;
+    if (previous?.locationKey === location.key) return;
+    viewed.current = { workoutId: workout.id, locationKey: location.key };
+    const shared = markViewReady(`workout:${workout.id}`);
+    if (
+      !shared && navigationType === "PUSH" && previous?.workoutId !== workout.id &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setEntryKey(location.key);
+    }
+  }, [isLoading, location.key, navigationType, workout]);
+
   if (isLoading) {
     return (
       <div className="zn-session__loading" aria-busy="true">
@@ -203,7 +227,7 @@ export function WorkoutDetailPage() {
   // Narrowing here is what makes `workout` a WorkoutTemplate below.
   if (isStrengthWorkout(workout)) {
     return (
-      <StrengthWorkoutDetail workout={workout} locationState={locationState} />
+      <StrengthWorkoutDetail workout={workout} locationState={locationState} animateEntry={animateEntry} />
     );
   }
 
@@ -586,14 +610,15 @@ export function WorkoutDetailPage() {
           },
         ]}
       />
-      <div className="zn-session zn-session--run">
+      <div className="zn-session zn-session--run" data-entry-motion={animateEntry || undefined}>
         <SessionTrail breadcrumbs={breadcrumbs} onBack={() => navigate(-1)} />
 
         <div className="zn-session__grid">
           {/* 1, what the session is */}
           <header className="zn-session__header">
             <p className="zn-session__meta">{metaParts.join(" · ")}</p>
-            <h1 className="zn-display">{workoutName}</h1>
+            {/* Origine : le titre conserve son identité depuis la carte ou le héros. */}
+            <h1 className="zn-display" style={{ viewTransitionName: sharedTransitionName("wk", workout.id, "title") }}>{workoutName}</h1>
             <p className="zn-body zn-body--lead zn-session__lede">
               <GlossaryLinkedText text={pick(workout, "description")} />
             </p>
@@ -634,7 +659,8 @@ export function WorkoutDetailPage() {
             <IntensityBar split={split} peakZone={peak?.zone ?? null} />
 
             <div className="zn-session__profile">
-              <ZoneBar blocks={profileBlocks} />
+              {/* Origine : le profil grandit depuis la carte ou le héros. */}
+              <ZoneBar blocks={profileBlocks} style={{ viewTransitionName: sharedTransitionName("wk", workout.id, "profile") }} />
             </div>
 
             <ZonePersonalizationCTA
@@ -846,6 +872,7 @@ function WorkoutProvenance({ sourceId }: { sourceId: string }) {
 
 interface StrengthWorkoutDetailProps {
   workout: StrengthWorkoutTemplate;
+  animateEntry: boolean;
   locationState: {
     from?: string;
     planId?: string;
@@ -861,6 +888,7 @@ interface StrengthWorkoutDetailProps {
 
 function StrengthWorkoutDetail({
   workout,
+  animateEntry,
   locationState,
 }: StrengthWorkoutDetailProps) {
   const navigate = useNavigate();
@@ -973,7 +1001,7 @@ function StrengthWorkoutDetail({
         ]}
       />
 
-      <div className="zn-session">
+      <div className="zn-session" data-entry-motion={animateEntry || undefined}>
         <SessionTrail breadcrumbs={breadcrumbs} onBack={() => navigate(-1)} />
 
         <section className="zn-session__hero">
@@ -996,7 +1024,8 @@ function StrengthWorkoutDetail({
               </Badge>
             </div>
 
-            <h1 className="zn-display">{workoutName}</h1>
+            {/* Origine : le titre conserve son identité depuis la carte ou le héros. */}
+            <h1 className="zn-display" style={{ viewTransitionName: sharedTransitionName("wk", workout.id, "title") }}>{workoutName}</h1>
 
             <p className="zn-body zn-body--lead zn-session__lede">
               <GlossaryLinkedText text={description} />

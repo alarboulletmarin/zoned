@@ -85,10 +85,102 @@
   animation-duration: var(--dur-base);
 }
 
+/* Geste : héros, semaine et étape suivent la direction demandée, à 12 px. */
+html[data-move="next"] { --move-out: -12px; --move-in: 12px; }
+html[data-move="prev"] { --move-out: 12px; --move-in: -12px; }
+
+/* Origine : le profil et le titre rejoignent leur place dans le détail. */
+::view-transition-group(*) {
+  animation-duration: var(--dur-slow);
+  animation-timing-function: var(--ease-in-out);
+}
+
+html[data-move]::view-transition-old(root),
+html[data-move]::view-transition-new(root),
+html[data-move]::view-transition-group(zn-cockpit-hero),
+html[data-move]::view-transition-group(zn-plan-week),
+html[data-move]::view-transition-group(zn-wizard-step) {
+  animation: none;
+}
+
+/* Origine : les contrôles du plan restent devant les séances en transition. */
+html[data-move]:has(.zn-planpage__week) .zn-topbar { view-transition-name: zn-plan-topbar; }
+html[data-move] .zn-weekstrip { view-transition-name: zn-plan-week-strip; }
+html[data-move] .zn-weekdock { view-transition-name: zn-plan-week-dock; }
+
+html[data-move]::view-transition-group(zn-plan-week-strip) { z-index: 1; }
+html[data-move]::view-transition-group(zn-plan-topbar) { z-index: 2; }
+html[data-move]::view-transition-group(zn-plan-week-dock) { z-index: 3; }
+
+html[data-move]::view-transition-group(zn-plan-week-strip),
+html[data-move]::view-transition-group(zn-plan-topbar),
+html[data-move]::view-transition-group(zn-plan-week-dock) {
+  animation: none;
+}
+/* L'ancienne image reste affichée : tant que la semaine suivante se monte,
+   le navigateur ne peint qu'elle, et la cacher laissait la page à la place
+   de la barre. La nouvelle se pose dessus, sans fondu additif. */
+html[data-move]::view-transition-old(zn-plan-week-strip),
+html[data-move]::view-transition-old(zn-plan-topbar),
+html[data-move]::view-transition-old(zn-plan-week-dock),
+html[data-move]::view-transition-new(zn-plan-week-strip),
+html[data-move]::view-transition-new(zn-plan-topbar),
+html[data-move]::view-transition-new(zn-plan-week-dock) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-move]::view-transition-old(zn-cockpit-hero),
+html[data-move]::view-transition-old(zn-plan-week),
+html[data-move]::view-transition-old(zn-wizard-step) {
+  opacity: 0;
+  animation: zn-direction-out var(--dur-fast) var(--ease-out) backwards;
+}
+
+html[data-move]::view-transition-new(zn-cockpit-hero),
+html[data-move]::view-transition-new(zn-plan-week),
+html[data-move]::view-transition-new(zn-wizard-step) {
+  animation: zn-direction-in var(--dur-base) var(--ease-out) var(--dur-fast) backwards;
+}
+
+@keyframes zn-direction-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(var(--move-out)); }
+}
+@keyframes zn-direction-in {
+  from { opacity: 0; transform: translateX(var(--move-in)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Origine : le titre et le profil voyagent au-dessus d'une fiche déjà lisible. */
+html[data-workout-transition] .zn-topbar { view-transition-name: zn-workout-topbar; }
+html[data-workout-transition] .zn-session h1 { background: var(--surface-page); }
+
+html[data-workout-transition]::view-transition-group(zn-workout-topbar) {
+  z-index: 1;
+  animation: none;
+}
+
+html[data-workout-transition]::view-transition-old(*) { display: none; }
+html[data-workout-transition]::view-transition-new(*) { animation: none; }
+
+/* Origine : la fiche arrive après l'ouverture d'une séance, même sans capture partagée. */
+@media (prefers-reduced-motion: no-preference) {
+  .zn-session[data-entry-motion] :is(.zn-session__header, .zn-session__hero, .zn-session__profile) {
+    animation: zn-workout-entry var(--dur-base) var(--ease-out);
+  }
+}
+
+@keyframes zn-workout-entry {
+  from { opacity: 0.65; transform: translateY(var(--sp-4)); }
+}
+
+/* Geste : le changement reste net quand le mouvement est réduit. */
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
 

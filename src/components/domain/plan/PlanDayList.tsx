@@ -1,4 +1,7 @@
-import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
+import { memo, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { Stamp } from "@/components/ui/stamp";
+import { restoredPositions, useJustChanged } from "@/hooks/useJustChanged";
+import { becameDone } from "@/lib/cockpitRail";
 import { useTranslation } from "react-i18next";
 import {
   Activity,
@@ -24,6 +27,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { ZoneBar, toZoneBarBlocks } from "@/components/visualization/ZoneBar";
+import { IntensityMeter } from "@/components/domain/StrengthWorkoutCard";
+import { preloadWorkoutDetail } from "@/lib/sharedTransition";
 import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
 import { isStrengthWorkout } from "@/types";
 import { purposeLabelKey, type ComplementaryActivity } from "@/types/activity";
@@ -31,19 +37,19 @@ import type { IntermediateGoal, PlanSession } from "@/types/plan";
 import { activityKindOf } from "@/lib/activitySession";
 import { sessionDiscipline } from "@/lib/planStats";
 import type { PlanWeekModel, PlanWeekSession } from "@/lib/planWeekModel";
-import type { DragSource, DragState } from "./usePlanDrag";
+import type { usePlanDrag } from "./usePlanDrag";
 import { usePlanFormats } from "./planFormat";
 
 export interface PlanDayListEditActions {
   onChange: (index: number) => void;
   onRedraw?: (index: number) => void;
   onMove: (index: number) => void;
+  onReorder: (index: number, direction: "up" | "down") => void;
   onDuplicate: (index: number) => void;
   onRemove: (index: number) => void;
   onAdd: (day: number) => void;
   canRedraw: (session: PlanSession) => boolean;
-  drag: DragState | null;
-  startDrag: (event: ReactPointerEvent<HTMLElement>, source: DragSource) => void;
+  drag: ReturnType<typeof usePlanDrag>;
 }
 
 interface PlanDayListProps {
@@ -58,8 +64,10 @@ interface PlanDayListProps {
   blockedDays?: ReadonlySet<number>;
   /** Lecture : la tuile de statut. */
   onStatus?: (index: number, anchor: HTMLElement) => void;
+  /** Incrémenté par la page à chaque annulation : ce qui revient est montré. */
+  undoToken?: number;
   /** Lecture : le reste de la carte. */
-  onOpen?: (index: number) => void;
+  onOpen?: (index: number, origin: HTMLElement) => void;
   onOpenActivity?: (activity: ComplementaryActivity) => void;
   edit?: PlanDayListEditActions;
   /** Ce qui suit la liste, dans la même colonne (ajouter une activité). */
@@ -67,6 +75,13 @@ interface PlanDayListProps {
 }
 
 const NBSP = " ";
+
+const EditProfile = memo(function EditProfile({ workout }: { workout: AnyWorkoutTemplate }) {
+  const className = "zn-profile-mini zn-plansess__profile";
+  if (isStrengthWorkout(workout)) return <IntensityMeter intensity={workout.intensity} className={className} />;
+  const blocks = toZoneBarBlocks(workout);
+  return blocks.length > 0 ? <ZoneBar condense blocks={blocks} className={className} /> : null;
+});
 
 function formatKm(km: number, locale: string): string {
   return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(km)}${NBSP}km`;
@@ -136,11 +151,46 @@ export function PlanDayList({
   onOpenActivity,
   edit,
   footer,
+  undoToken,
 }: PlanDayListProps) {
-  const { t } = useTranslation(["plan", "activity"]);
+  const { t } = useTranslation(["plan", "activity", "library"]);
   const f = usePlanFormats();
   const editing = mode === "edit";
-  const drag = edit?.drag ?? null;
+  const drag = edit?.drag.drag ?? null;
+
+  // Geste : la séance qui vient d'être close reçoit le tampon, une fois.
+  // Clé par semaine, place et séance : changer de semaine n'est pas clore.
+  const markKey = (slot: PlanWeekSession) => `${model.weekNumber}-${slot.index}-${slot.session.workoutId}`;
+  /* Geste : après une annulation, la séance qui revient reçoit un fond creusé
+     qui s'efface, pour dire que c'est revenu ici. Une seule, celle dont la
+     signature n'existait pas avant l'annulation (`restoredPositions`). */
+  const slots = model.days.flatMap((day) => day.sessions);
+  const signatures = slots.map(
+    (slot) =>
+      `${slot.session.workoutId}|${slot.session.dayOfWeek}|${slot.session.status ?? ""}|${slot.durationMin}|${slot.session.sessionType}`,
+  );
+  const signatureKey = signatures.join("\u0001");
+  const seen = useRef<{ token: number | undefined; signatures: string[] } | null>(null);
+  const [restored, setRestored] = useState<ReadonlySet<number>>(() => new Set());
+  const restoreTimer = useRef<number | undefined>(undefined);
+  useLayoutEffect(() => {
+    const before = seen.current;
+    const now = signatureKey === "" ? [] : signatureKey.split("\u0001");
+    seen.current = { token: undoToken, signatures: now };
+    if (!before || before.token === undoToken) return;
+    const positions = restoredPositions(before.signatures, now);
+    if (positions.length === 0) return;
+    setRestored(new Set(positions.map((position) => slots[position].index)));
+    window.clearTimeout(restoreTimer.current);
+    restoreTimer.current = window.setTimeout(() => setRestored(new Set()), 1500);
+    // `slots` suit `signatureKey` : le relire ici ne rate aucun changement.
+  }, [signatureKey, undoToken]);
+  useEffect(() => () => window.clearTimeout(restoreTimer.current), []);
+
+  const stamped = useJustChanged(
+    model.days.flatMap((day) => day.sessions.map((slot) => [markKey(slot), slot.session.status] as const)),
+    becameDone,
+  );
 
   const facts = (minutes: number, km: number | null) => (
     <span className="zn-plansess__facts">
@@ -149,7 +199,7 @@ export function PlanDayList({
     </span>
   );
 
-  const card = (slot: PlanWeekSession, day: number): ReactNode => {
+  const card = (slot: PlanWeekSession, first: boolean, last: boolean, dropAfter: boolean): ReactNode => {
     const { session, index } = slot;
     const name = nameOf(session);
 
@@ -171,6 +221,8 @@ export function PlanDayList({
     }
 
     const isActivity = slot.kind === "activity";
+    const workout = workoutOf(session.workoutId);
+    const source = { week: model.weekNumber, index };
     const statusKey = session.status === "modified" ? "modified" : slot.status;
     const dragging = drag?.source.week === model.weekNumber && drag.source.index === index;
     const notes = !editing && session.notes
@@ -187,8 +239,11 @@ export function PlanDayList({
         key={index}
         className="zn-plansess"
         data-status={slot.status}
+        data-restored={restored.has(index) || undefined}
         data-dragging={dragging || undefined}
-        style={dragging ? ({ "--zn-dx": `${drag!.dx}px`, "--zn-dy": `${drag!.dy}px` } as CSSProperties) : undefined}
+        data-session-index={editing ? index : undefined}
+        data-drop-before={(drag?.over?.week === model.weekNumber && drag.over.before === index) || undefined}
+        data-drop-after={dropAfter || undefined}
       >
         {slot.tag && <span className="zn-plansess__tag">{t(`page.tag.${slot.tag}`)}</span>}
         <div className="zn-plansess__card" data-edit={editing || undefined}>
@@ -197,7 +252,7 @@ export function PlanDayList({
               type="button"
               className="zn-plansess__grip"
               aria-label={t("page.edit.grip", { name })}
-              onPointerDown={(e) => edit?.startDrag(e, { week: model.weekNumber, index, day })}
+              onPointerDown={(event) => edit?.drag.onPointerDown(event, source)}
               // Le clavier (Entrée, Espace) ouvre le choix du jour ; un clic de
               // souris, qui suit un glisser, ne le rouvre pas.
               onClick={(e) => {
@@ -221,24 +276,29 @@ export function PlanDayList({
               aria-haspopup="dialog"
               aria-label={t(`page.status.${statusKey}`, { name })}
               onClick={(e) => onStatus?.(index, e.currentTarget)}
+              data-just-done={stamped.keys.has(markKey(slot)) || undefined}
             >
               <StatusGlyph status={slot.status} />
+              {stamped.keys.has(markKey(slot)) && <Stamp onDone={() => stamped.clear(markKey(slot))} />}
             </button>
           )}
           <button
             type="button"
             className="zn-plansess__open"
-            onClick={() => onOpen?.(index)}
+            onClick={(event) => onOpen?.(index, event.currentTarget)}
+            onPointerEnter={onOpen && workout ? preloadWorkoutDetail : undefined}
+            onFocus={onOpen && workout ? preloadWorkoutDetail : undefined}
             disabled={editing && isActivity}
             tabIndex={editing ? -1 : undefined}
             aria-label={editing ? undefined : t("page.open", { name })}
           >
             <span className="zn-plansess__icon" aria-hidden="true">
-              <SessionIcon session={session} workout={workoutOf(session.workoutId)} />
+              <SessionIcon session={session} workout={workout} />
             </span>
             <span className="zn-plansess__text">
               <span className="zn-plansess__name">{name}</span>
               {facts(slot.durationMin, slot.distanceKm)}
+              {editing && workout && <EditProfile workout={workout} />}
               {notes && (
                 <span className="zn-plansess__note">
                   {noteParts ? (
@@ -269,6 +329,12 @@ export function PlanDayList({
                   <DropdownMenuItem onSelect={() => edit.onRedraw?.(index)}>{t("page.edit.redraw")}</DropdownMenuItem>
                 )}
                 <DropdownMenuItem onSelect={() => edit.onMove(index)}>{t("page.edit.move")}</DropdownMenuItem>
+                {!first && (
+                  <DropdownMenuItem onSelect={() => edit.onReorder(index, "up")}>{t("library:weekly.slot.moveUp")}</DropdownMenuItem>
+                )}
+                {!last && (
+                  <DropdownMenuItem onSelect={() => edit.onReorder(index, "down")}>{t("library:weekly.slot.moveDown")}</DropdownMenuItem>
+                )}
                 <DropdownMenuItem onSelect={() => edit.onDuplicate(index)}>{t("page.edit.duplicate")}</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive" className="zn-more__danger" onSelect={() => edit.onRemove(index)}>
@@ -322,8 +388,12 @@ export function PlanDayList({
     <>
       <ol className="zn-plandays" data-mode={mode}>
         {model.days.map((day) => {
-          const over = drag?.over?.week === model.weekNumber && drag.over.day === day.dayOfWeek;
           const blocked = blockedDays?.has(day.dayOfWeek) ?? false;
+          const over = !blocked && drag?.over?.week === model.weekNumber && drag.over.day === day.dayOfWeek;
+          const movable = editing ? day.sessions.filter((slot) => slot.kind === "workout" || slot.kind === "activity") : [];
+          const dropAfter = over && drag?.over?.before === undefined
+            ? movable.filter((slot) => drag?.source.week !== model.weekNumber || drag.source.index !== slot.index).at(-1)
+            : undefined;
           const many = !editing && day.sessions.length + day.offPlan.length > 1;
           // La date s'aligne sur la première carte, pas sur l'étiquette posée
           // au-dessus d'elle.
@@ -363,10 +433,14 @@ export function PlanDayList({
                     {t("page.day.rest")}
                   </p>
                 )}
-                {day.sessions.map((slot) => card(slot, day.dayOfWeek))}
+                {day.sessions.map((slot) => card(slot, slot === movable[0], slot === movable.at(-1), slot === dropAfter))}
                 {!editing && day.offPlan.map(offPlanCard)}
                 {editing && edit && (
-                  <button type="button" className="zn-planday__add" onClick={() => edit.onAdd(day.dayOfWeek)}>
+                  <button
+                    type="button"
+                    className="zn-planday__add"
+                    onClick={() => edit.onAdd(day.dayOfWeek)}
+                  >
                     <Plus size={16} />
                     {t("page.edit.addSession")}
                   </button>

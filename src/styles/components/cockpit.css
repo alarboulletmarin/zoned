@@ -174,20 +174,20 @@
 
 /* La sélection : un cadre épais, UN élément posé sur l'onglet choisi et
    mesuré par le composant. Il glisse d'un onglet à l'autre, et seulement
-   après sa première pose (`data-placed`) : à l'arrivée sur la page, il est
-   déjà là. */
+   le temps d'un choix (`data-sliding`, useSlidingIndicator) : à l'arrivée
+   sur la page, il est déjà là. */
 .zn-cockpit__rail-frame {
   position: absolute;
   inset-block: -5px;
-  inset-inline-start: calc(var(--frame-x, 0px) - 5px);
-  inline-size: calc(var(--frame-w, 0px) + 10px);
+  inset-inline-start: calc(var(--ind-x, 0px) - 5px);
+  inline-size: calc(var(--ind-w, 0px) + 10px);
   box-sizing: border-box;
   border: var(--bw-heavy) solid var(--ink-1);
   border-radius: calc(var(--r-xs) + 4px);
   pointer-events: none;
 }
 
-.zn-cockpit__rail[data-placed] .zn-cockpit__rail-frame {
+.zn-cockpit__rail[data-sliding] .zn-cockpit__rail-frame {
   transition:
     inset-inline-start var(--dur-slow) var(--ease-out),
     inline-size var(--dur-slow) var(--ease-out);
@@ -235,42 +235,8 @@
   overflow: hidden;
 }
 
-.zn-stamp {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  border-radius: inherit;
-  background: var(--ink-1);
-  pointer-events: none;
-  opacity: 0;
-  /* 600 ms en tout : il finit avant l'avancée automatique, à 700 ms. */
-  animation: zn-stamp-ink calc(var(--dur-slow) * 2.5) var(--ease-out);
-}
-
-.zn-stamp__check {
-  inline-size: 22px;
-  block-size: 22px;
-  fill: none;
-  stroke: var(--text-inverse);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  animation: zn-stamp-check var(--dur-slow) var(--ease-out) var(--dur-fast) backwards;
-}
-
-@keyframes zn-stamp-ink {
-  0% { opacity: 1; transform: scale(0); }
-  30% { opacity: 1; transform: none; }
-  75% { opacity: 1; transform: none; }
-  100% { opacity: 0; transform: none; }
-}
-
-@keyframes zn-stamp-check {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
-}
+/* Le tampon lui-même vit dans stamp.css, partagé avec la semaine et le
+   calendrier d'un plan. */
 
 .zn-cockpit__rail-tab[data-just-done] .zn-cockpit__rail-fill {
   animation: zn-fill-up var(--dur-slow) var(--ease-out) var(--dur-fast) backwards;
@@ -321,34 +287,6 @@
    cadre du rail, vivant dans la nouvelle vue, glisse par lui-même. */
 .zn-cockpit__day-pane[data-active] .zn-cockpit__hero {
   view-transition-name: zn-cockpit-hero;
-}
-
-html[data-hero-move]::view-transition-old(root),
-html[data-hero-move]::view-transition-new(root) {
-  animation: none;
-}
-
-html[data-hero-move]::view-transition-group(zn-cockpit-hero) {
-  animation: none;
-}
-
-html[data-hero-move]::view-transition-old(zn-cockpit-hero) {
-  animation: zn-hero-out var(--dur-fast) var(--ease-out) both;
-}
-
-html[data-hero-move]::view-transition-new(zn-cockpit-hero) {
-  animation: zn-hero-in var(--dur-base) var(--ease-out) var(--dur-fast) both;
-}
-
-html[data-hero-move="next"] { --hero-out: -12px; --hero-in: 12px; }
-html[data-hero-move="prev"] { --hero-out: 12px; --hero-in: -12px; }
-
-@keyframes zn-hero-out {
-  to { opacity: 0; transform: translateX(var(--hero-out)); }
-}
-
-@keyframes zn-hero-in {
-  from { opacity: 0; transform: translateX(var(--hero-in)); }
 }
 
 .zn-cockpit__session {

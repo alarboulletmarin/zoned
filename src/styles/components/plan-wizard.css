@@ -130,17 +130,16 @@
 
 /* ── a step ───────────────────────────────────────────────────────────── */
 
-/* Motion says which way the step came from and nothing else. The keyframes are
-   the app's own, retimed onto the system's step. */
+/* Geste : la transition directionnelle commune anime seulement le parcours. */
 .zn-wiz__pane {
   display: flex;
   flex-direction: column;
   gap: var(--sp-11);
-  animation: slide-in-right var(--dur-base) var(--ease-out) both;
 }
 
-.zn-wiz__pane[data-direction="backward"] {
-  animation-name: slide-in-left;
+/* Geste : la progression suit la réponse, sans animation au montage. */
+.zn-wiz__steps .zn-stepper__rail {
+  transition: background var(--dur-slow) var(--ease-out);
 }
 
 /* Previous / next, over the rule that closes the step. The primary sits at the

@@ -22,18 +22,22 @@ import type {
   TrainingPhase,
   SessionType,
 } from "@/types";
-import type { RaceDistance, PlanSession, PaceNote } from "@/types/plan";
+import type { RaceDistance, PlanSession, PaceNote, TrainingPlan } from "@/types/plan";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { parseZoneSpan } from "@/types";
 import type { WeekSlot } from "./weekTemplate";
 import type { TrainingPaces } from "./paceEngine";
 import {
   sessionTypeToIntensity,
+  calculateTrainingPaces,
   computeBlockLoad,
+  formatPaceRange,
   type DanielsIntensity,
 } from "./paceEngine";
 import { selectWorkout } from "./selector";
 import { MAX_LONG_RUN_MINUTES } from "./longRunProgression";
+import { getPlanMonday, getSessionCalendarDate, isoDateOnly } from "@/lib/planDates";
+import { sessionDiscipline } from "@/lib/planStats";
 
 // ── Types ──────────────────────────────────────────────────────
 
@@ -94,6 +98,52 @@ const INTENSITY_LABELS: Record<DanielsIntensity, { fr: string; en: string }> = {
   I: { fr: "Allure VMA", en: "VO2max pace" },
   R: { fr: "Allure vitesse", en: "Repetition pace" },
 };
+
+function noteIntensity(zone: string): DanielsIntensity | undefined {
+  if (Object.hasOwn(INTENSITY_LABELS, zone)) return zone as DanielsIntensity;
+  const number = parseZoneNumber(zone);
+  return number === null ? undefined : zoneToIntensity(number);
+}
+
+/** Met à jour les allures prescrites sans déplacer les séances ni refaire le plan. */
+export function applyPlanVma(plan: TrainingPlan, vma: number, today: string): TrainingPlan {
+  const paces = calculateTrainingPaces(vma, plan.config.runnerLevel);
+  const monday = getPlanMonday(plan);
+  const weeks = plan.weeks.map((week) => ({
+    ...week,
+    sessions: week.sessions.map((session) => {
+      if (
+        (session.status && session.status !== "planned") ||
+        session.workoutId.startsWith("__") ||
+        sessionDiscipline(session) !== "running" ||
+        (plan.config.startDate && isoDateOnly(getSessionCalendarDate(monday, week.weekNumber, session.dayOfWeek)) < today)
+      ) return session;
+
+      const paceNotes = session.paceNotes?.map((note) => {
+        const intensity = noteIntensity(note.zone);
+        if (!intensity) return note;
+        const { min, max } = paces[intensity];
+        return { ...note, paceMinKm: min, paceMaxKm: max };
+      });
+      const fallback = sessionTypeToIntensity(session.sessionType, plan.config.raceDistance);
+      const rewrite = (notes: string | undefined, language: "fr" | "en") => {
+        const lines = notes?.split("\n").filter(Boolean) ?? [];
+        const colon = language === "fr" ? " : " : ": ";
+        const identified = (Object.keys(INTENSITY_LABELS) as DanielsIntensity[]).find((key) => {
+          const prefix = INTENSITY_LABELS[key][language] + colon;
+          const line = lines[0];
+          return line?.startsWith(prefix) && /^\d+:\d{2} - \d+:\d{2}\/km$/.test(line.slice(prefix.length));
+        });
+        if (identified) lines.shift();
+        const intensity = identified ?? fallback;
+        const label = INTENSITY_LABELS[intensity][language];
+        return [`${label}${colon}${formatPaceRange(paces[intensity])}/km`, ...lines].join("\n");
+      };
+      return { ...session, paceNotes, notes: rewrite(session.notes, "fr"), notesEn: rewrite(session.notesEn, "en") };
+    }),
+  }));
+  return { ...plan, config: { ...plan.config, vma }, weeks };
+}
 
 // ── Main builder ────────────────────────────────────────────────
 

@@ -2,7 +2,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
   type CSSProperties,
 } from "react";
@@ -23,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { EmptyState } from "@/components/ui/empty-state";
-import { WorkoutCardChrome, ScanCard, DifficultyIcon } from "@/components/domain";
+import { WorkoutCardChrome, DifficultyIcon } from "@/components/domain";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { formatDurationMinutes, ZoneScale } from "@/components/visualization";
@@ -57,9 +56,8 @@ import {
   isRunningWorkout,
 } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
-import { buildScanSchedule } from "@/lib/scanSchedule";
+import { withDirectionalTransition } from "@/lib/directionalTransition";
 import { cn } from "@/lib/utils";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Constants & helpers
@@ -181,16 +179,12 @@ export function DrawSessionPage() {
   const [result, setResult] = useState<AnyWorkoutTemplate | null>(
     restored.result ?? null,
   );
-  const [scanWorkout, setScanWorkout] = useState<AnyWorkoutTemplate | null>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-
-  /* La borne CSS de motion.css ne voit pas le JS : il faut lire la
-     préférence ici pour que le balayage la respecte. */
-  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  // Chaque tirage relance le quart de tour du dé (sa clé change) ; 0 au
+  // montage, donc rien ne tourne à l'arrivée sur la page.
+  const [rolls, setRolls] = useState(0);
   const [history, setHistory] = useState<AnyWorkoutTemplate[]>(
     restored.history ?? [],
   );
-  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const filtered = useMemo(
     () => catalog.filter((w) => matchesFilters(w, filters)),
@@ -200,13 +194,6 @@ export function DrawSessionPage() {
   const filtersActive = isFilterActive(filters);
   const hasMatches = filtered.length > 0;
   const proportion = catalog.length > 0 ? filtered.length / catalog.length : 0;
-
-  const clearTimeouts = useCallback(() => {
-    timeoutsRef.current.forEach(clearTimeout);
-    timeoutsRef.current = [];
-  }, []);
-
-  useEffect(() => clearTimeouts, [clearTimeouts]);
 
   // Persist the draw so navigating to a workout and back restores it.
   useEffect(() => {
@@ -227,63 +214,28 @@ export function DrawSessionPage() {
   );
 
   /**
-   * Run the "archive drawer" scan: flash through random candidate cards while
-   * decelerating (ease-out) over ~1.5s, then settle on the final pick.
+   * Tirer : le résultat est là dès qu'il est tiré. Le balayage de cartes qui
+   * le précédait (1,5 s de défilement) simulait une attente pour faire du
+   * suspense, ce que motion.css interdit : aucune attente n'est réelle ici.
    *
-   * Le balayage INFORME, il dit je pioche au hasard dans un lot, ce qui
-   * est le sujet même de la page, donc il reste par défaut. Mais il est
-   * piloté par des `setTimeout` en JS, et la borne `prefers-reduced-motion` de
-   * `styles/design/motion.css` ne peut pas atteindre du JS : quelqu'un qui a
-   * demandé moins de mouvement à son système se prenait les 1,5 s quand même.
-   * Sous cette préférence, le résultat arrive donc directement. Le seul
-   * contournement légitime d'une préférence d'accessibilité est la même
-   * personne qui le demande, ce qui n'est pas le cas ici.
+   * Geste : le dé fait un quart de tour, la séance entre depuis le bouton
+   * (d'en haut, 12 px) et l'ancienne sort de l'autre côté, vers le bas
+   * (discovery.css, transition de vue `zn-draw-result`). Sous mouvement
+   * réduit, la bascule est nette.
    */
   const runDraw = useCallback(
     (pool: AnyWorkoutTemplate[]) => {
-      if (pool.length === 0 || isDrawing) return;
-      clearTimeouts();
-
+      if (pool.length === 0) return;
       const final = pickFinal(pool);
-
-      if (prefersReducedMotion) {
-        setScanWorkout(null);
+      setRolls((n) => n + 1);
+      withDirectionalTransition("next", () => {
         setResult(final);
-        setIsDrawing(false);
         setHistory((prev) =>
           [final, ...prev.filter((w) => w.id !== final.id)].slice(0, HISTORY_LIMIT),
         );
-        return;
-      }
-
-      setIsDrawing(true);
-      setResult(null);
-
-      // Schedule whose gaps grow geometrically → ease-out feel (shared helper).
-      const times = buildScanSchedule();
-
-      times.forEach((at, i) => {
-        const isLast = i === times.length - 1;
-        timeoutsRef.current.push(
-          setTimeout(() => {
-            if (isLast) {
-              setScanWorkout(null);
-              setResult(final);
-              setIsDrawing(false);
-              setHistory((prev) =>
-                [final, ...prev.filter((w) => w.id !== final.id)].slice(
-                  0,
-                  HISTORY_LIMIT,
-                ),
-              );
-            } else {
-              setScanWorkout(sample(pool));
-            }
-          }, at),
-        );
       });
     },
-    [isDrawing, clearTimeouts, pickFinal, prefersReducedMotion],
+    [pickFinal],
   );
 
   const handleDraw = useCallback(() => runDraw(filtered), [runDraw, filtered]);
@@ -303,13 +255,13 @@ export function DrawSessionPage() {
       ) {
         return;
       }
-      if (!hasMatches || isDrawing) return;
+      if (!hasMatches) return;
       e.preventDefault();
       handleDraw();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [handleDraw, hasMatches, isDrawing]);
+  }, [handleDraw, hasMatches]);
 
   // ── Filter mutators ────────────────────────────────────────────────────────
   const toggleDiscipline = (d: DrawDiscipline) =>
@@ -547,14 +499,12 @@ export function DrawSessionPage() {
                   size="lg"
                   className="zn-draw__cta"
                   onClick={handleDraw}
-                  disabled={!hasMatches || isDrawing}
+                  disabled={!hasMatches}
                 >
-                  <Dices size={18} />
-                  {isDrawing
-                    ? t("draw.scanning")
-                    : result
-                      ? t("draw.redraw")
-                      : t("draw.draw")}
+                  <span key={rolls} className="zn-draw__dice" data-rolled={rolls > 0 || undefined}>
+                    <Dices size={18} />
+                  </span>
+                  {result ? t("draw.redraw") : t("draw.draw")}
                 </Button>
                 {!isMobile && (
                   <p className="zn-caption zn-faint">{t("draw.spaceHint")}</p>
@@ -564,7 +514,6 @@ export function DrawSessionPage() {
                     type="button"
                     className="zn-chip zn-chip--more"
                     onClick={handleSurprise}
-                    disabled={isDrawing}
                   >
                     <Sparkles size={14} />
                     {t("draw.surprise")}
@@ -586,15 +535,15 @@ export function DrawSessionPage() {
                     </Button>
                   }
                 />
-              ) : isDrawing && scanWorkout ? (
-                <ScanCard workout={scanWorkout} pick={pick} />
               ) : result ? (
-                <ResultCard
-                  workout={result}
-                  pick={pick}
-                  t={t}
-                  tStrength={tStrength}
-                />
+                <div className="zn-draw__landing">
+                  <ResultCard
+                    workout={result}
+                    pick={pick}
+                    t={t}
+                    tStrength={tStrength}
+                  />
+                </div>
               ) : (
                 <EmptyState
                   variant="not-started"
@@ -632,12 +581,7 @@ export function DrawSessionPage() {
                         type="button"
                         className="zn-chip"
                         aria-pressed={result?.id === w.id}
-                        onClick={() => {
-                          clearTimeouts();
-                          setIsDrawing(false);
-                          setScanWorkout(null);
-                          setResult(w);
-                        }}
+                        onClick={() => setResult(w)}
                       >
                         {zone && (
                           <span className="zn-disc__swatch" aria-hidden="true">

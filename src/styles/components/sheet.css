@@ -134,8 +134,9 @@
 /* ── motion ───────────────────────────────────────────────────────────── */
 
 /* Each side comes in from its own edge, so the panel says where it came from.
-   There is no exit: the node is unmounted the moment it closes, and an
-   animation needs an element to play on. */
+   Origine, encore, à la fermeture : le panneau repart vers ce même bord, plus
+   vite qu'il n'est venu. `usePresence` le garde monté sous
+   `data-state="closed"` le temps de cette sortie. */
 @keyframes zn-sheet-in-bottom {
   from { transform: translateY(100%); }
   to { transform: none; }
@@ -164,6 +165,36 @@
 }
 .zn-sheet[data-side="right"][open] {
   animation: zn-sheet-in-right var(--dur-base) var(--ease-out);
+}
+
+/* Les sorties ne disent pas d'où partir pour le transform : elles partent de
+   là où le panneau est, y compris là où un glisser-pour-fermer l'a lâché.
+   Le panneau fermé est `visibility: hidden`, et l'animation le tient visible
+   jusqu'à sa dernière image : sans cela, l'image entre `animationend` et le
+   démontage le remontrait entier. Rien n'est tenu par `forwards`. */
+@keyframes zn-sheet-out-bottom { from { visibility: visible; } to { visibility: visible; transform: translateY(100%); } }
+@keyframes zn-sheet-out-top { from { visibility: visible; } to { visibility: visible; transform: translateY(-100%); } }
+@keyframes zn-sheet-out-left { from { visibility: visible; } to { visibility: visible; transform: translateX(-100%); } }
+@keyframes zn-sheet-out-right { from { visibility: visible; } to { visibility: visible; transform: translateX(100%); } }
+@keyframes zn-scene-out { from { visibility: visible; opacity: 1; } to { visibility: visible; opacity: 0; } }
+
+/* `[data-side]` passe devant `[data-side][open]` : sans lui, la sortie
+   gardait la durée de l'entrée, le panneau finissait après le fond, et le
+   fond, qui hérite de sa visibilité, revenait entier le temps d'une image. */
+.zn-sheet[data-state="closed"][data-side] {
+  visibility: hidden;
+  pointer-events: none;
+  animation: zn-sheet-out-right var(--dur-fast) var(--ease-in-out);
+}
+.zn-sheet[data-state="closed"][data-side="bottom"] { animation-name: zn-sheet-out-bottom; }
+.zn-sheet[data-state="closed"][data-side="top"] { animation-name: zn-sheet-out-top; }
+.zn-sheet[data-state="closed"][data-side="left"] { animation-name: zn-sheet-out-left; }
+
+/* Le fond suit le panneau. */
+/* Tenu à zéro après sa sortie, quoi qu'il reste au panneau. */
+.zn-sheet[data-state="closed"]::backdrop {
+  opacity: 0;
+  animation: zn-scene-out var(--dur-fast) var(--ease-in-out);
 }
 
 /* ── header / footer ──────────────────────────────────────────────────── */

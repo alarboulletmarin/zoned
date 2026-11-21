@@ -12,6 +12,7 @@ import {
   Share,
   Shuffle,
   Trash2,
+  Undo2,
 } from "@/components/icons";
 import {
   DropdownMenu,
@@ -39,6 +40,7 @@ interface PlanMenuProps {
   onDuplicate: () => void;
   onRename: () => void;
   onDelete: () => void;
+  onUndo?: () => void;
 }
 
 /**
@@ -64,6 +66,7 @@ export function PlanMenu({
   onDuplicate,
   onRename,
   onDelete,
+  onUndo,
 }: PlanMenuProps) {
   const { t } = useTranslation(["plan", "common"]);
   const { isExporting, handleExportPDF, handleExportICS, handleExportJSON } = usePlanExport(
@@ -104,6 +107,12 @@ export function PlanMenu({
           )}
         </div>
         <DropdownMenuSeparator />
+        {onUndo && (
+          <DropdownMenuItem onSelect={onUndo}>
+            <Undo2 />
+            {t("page.edit.undoSaved")}
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onSelect={onEditDates}>
           <Calendar />
           {plan.config.startDate ? t("page.menu.editDates") : t("page.menu.addDates")}

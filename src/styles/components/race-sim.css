@@ -799,12 +799,17 @@
    transparency outside the zone ramp, and this graphic paints no zones. */
 .zn-rs-curve__area {
   fill: var(--surface-band);
+  /* Geste, en réponse à une saisie : la forme glisse vers sa nouvelle valeur. Ne joue
+     qu'au changement de `d`, jamais au montage. */
+  transition: d var(--dur-base) var(--ease-out);
 }
 
 .zn-rs-curve__line {
   fill: none;
   stroke: var(--ink-1);
   stroke-width: var(--bw-rule);
+  /* Même clause que l'aire : geste, une saisie. */
+  transition: d var(--dur-base) var(--ease-out);
 }
 
 /* The two axis lines are the fastest and the slowest split, the pair the

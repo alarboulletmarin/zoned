@@ -1,3 +1,5 @@
+import { startNavTransition, markViewReady } from "@/lib/directionalTransition";
+import { preloadWorkoutDetail, sharedTransitionName, transitionFrom } from "@/lib/sharedTransition";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -33,6 +35,7 @@ import { usePlanEditMode } from "@/components/domain/plan/usePlanEditMode";
 import { PlanDialogs, type PlanDialog } from "@/components/domain/plan/PlanDialogs";
 import { PlanMenu } from "@/components/domain/plan/PlanMenu";
 import { PlanSheet } from "@/components/domain/plan/PlanSheet";
+import { PlanVmaForm } from "@/components/domain/plan/PlanVmaForm";
 import { PlanWeekHeader } from "@/components/domain/plan/PlanWeekHeader";
 import { WeekDayBars } from "@/components/domain/plan/WeekDayBars";
 import { usePlanActions } from "@/components/domain/plan/usePlanActions";
@@ -46,6 +49,7 @@ import { useShareLink } from "@/hooks/useShareLink";
 import { activitiesBetween } from "@/lib/activityStorage";
 import { isActivitySession } from "@/lib/activitySession";
 import { loadCommutePattern } from "@/lib/athleteProfile";
+import { dayStep, staysInPlace } from "@/lib/dayOrder";
 import { usePickLang } from "@/lib/i18n-utils";
 import { buildPlanCardModel } from "@/lib/planCardModel";
 import { getPlanMonday, getSessionCalendarDate, isoDateOnly } from "@/lib/planDates";
@@ -124,6 +128,8 @@ export function PlanViewPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { plan, isLoading, reload } = usePlan(id);
+  // Attente : la fiche d'une séance se charge d'avance, le tap n'a pas de survol.
+  useEffect(preloadWorkoutDetail, []);
   const actions = usePlanActions(plan ?? null, reload);
   const log = useActivityLog();
 
@@ -191,6 +197,13 @@ export function PlanViewPage() {
     () => (plan ? buildPlanWeekModel(plan, selectedWeek, today, workoutOf, log.activities) : null),
     [plan, selectedWeek, today, workoutOf, log.activities],
   );
+
+  // Attente : le titre et la nouvelle semaine sont réellement montés.
+  useLayoutEffect(() => {
+    if (isLoading || !plan || !weekModel || !cardModel) return;
+    markViewReady(`plan:${plan.id}`);
+    markViewReady(`plan:${plan.id}:week:${selectedWeek}`);
+  }, [isLoading, plan, weekModel, cardModel, selectedWeek]);
 
   const practice = plan
     ? plan.config.practice ?? (plan.config.raceDistance ? practiceFromRaceDistance(plan.config.raceDistance) : null)
@@ -261,6 +274,8 @@ export function PlanViewPage() {
 
   // ── Les panneaux ────────────────────────────────────────────────────
   const [dialog, setDialog] = useState<PlanDialog>(null);
+  // Chaque annulation l'incrémente : PlanDayList montre ce qui revient.
+  const [undoToken, setUndoToken] = useState(0);
   const [completion, setCompletion] = useState<{ week: number; index: number; anchor: HTMLElement | null } | null>(null);
   const [activityTarget, setActivityTarget] = useState<{ week: number; index: number } | null>(null);
   const weekTopRef = useRef<HTMLDivElement>(null);
@@ -272,7 +287,7 @@ export function PlanViewPage() {
   );
 
   const openSession = useCallback(
-    (week: number, index: number) => {
+    (week: number, index: number, origin: HTMLElement) => {
       if (!plan) return;
       const session = plan.weeks.find((w) => w.weekNumber === week)?.sessions[index];
       if (!session) return;
@@ -282,17 +297,18 @@ export function PlanViewPage() {
       }
       if (session.workoutId.startsWith("__")) return;
       const weekData = plan.weeks.find((w) => w.weekNumber === week);
-      navigate(`/workout/${session.workoutId}`, {
-        state: {
-          from: "plan",
-          planId: plan.id,
-          planName,
-          weekNumber: week,
-          volumePercent: weekData?.volumePercent,
-          estimatedDurationMin: session.estimatedDurationMin,
-          targetDistanceKm: session.targetDistanceKm,
-          scrollY: window.scrollY,
-        },
+      const state = {
+        from: "plan",
+        planId: plan.id,
+        planName,
+        weekNumber: week,
+        volumePercent: weekData?.volumePercent,
+        estimatedDurationMin: session.estimatedDurationMin,
+        targetDistanceKm: session.targetDistanceKm,
+        scrollY: window.scrollY,
+      };
+      transitionFrom(origin, "wk", session.workoutId, ".zn-plansess__name", () => {
+        navigate(`/workout/${session.workoutId}`, { state });
       });
     },
     [plan, planName, navigate],
@@ -318,10 +334,15 @@ export function PlanViewPage() {
 
   const goToWeek = useCallback(
     (week: number) => {
-      setWeekParam(week);
+      if (week === selectedWeek) return;
+      // Geste : attendre le montage de la semaine dans le sens du parcours.
+      startNavTransition(() => setWeekParam(week), {
+        direction: week > selectedWeek ? "next" : "prev",
+        key: `plan:${id}:week:${week}`,
+      });
       requestAnimationFrame(() => weekTopRef.current?.scrollIntoView({ block: "start" }));
     },
-    [setWeekParam],
+    [setWeekParam, selectedWeek, id],
   );
 
   /* Changer de semaine ne déplace pas la lecture : le jour qu'on regardait
@@ -354,9 +375,14 @@ export function PlanViewPage() {
   const changeWeek = useCallback(
     (week: number) => {
       holdViewedDay();
-      setWeekParam(week);
+      if (week === selectedWeek) return;
+      // Geste : attendre le montage de la semaine dans le sens du parcours.
+      startNavTransition(() => setWeekParam(week), {
+        direction: week > selectedWeek ? "next" : "prev",
+        key: `plan:${id}:week:${week}`,
+      });
     },
-    [setWeekParam, holdViewedDay],
+    [setWeekParam, holdViewedDay, selectedWeek, id],
   );
 
   // ── Le bandeau des anneaux, au défilement (téléphone et tablette) ───
@@ -440,23 +466,31 @@ export function PlanViewPage() {
 
   /** Un geste du brouillon : l'état d'avant est gardé, le brouillon marqué. */
   const step = useCallback(
-    (run: () => boolean | Promise<boolean>) => {
+    (run: () => boolean) => {
       edit.before();
-      Promise.resolve(run()).then((ok) => {
-        if (ok) edit.changed();
-      });
+      const ok = run();
+      if (ok) edit.changed();
+      return ok;
     },
     [edit],
   );
 
-  const { drag, startDrag } = usePlanDrag((source, to) => {
-    step(() => actions.moveTo(source.week, source.index, to.week, to.day));
+  const drag = usePlanDrag((source, to) => {
+    const sessions = plan?.weeks.find((w) => w.weekNumber === source.week)?.sessions;
+    if (!sessions || (source.week === to.week && staysInPlace(sessions, source.index, to.day, to.before))) return;
+    step(() => actions.moveTo(source.week, source.index, to.week, to.day, to.before));
   });
 
   const sessionAt = useCallback(
     (week: number, index: number) => plan?.weeks.find((w) => w.weekNumber === week)?.sessions[index],
     [plan],
   );
+  const undoPlanChange = useCallback(() => {
+    if (!plan || !undoLastChange(plan.id)) return;
+    setUndoToken((n) => n + 1);
+    reload();
+    toast.info(t("lastChange.undone"));
+  }, [plan, reload, t]);
 
   /* Tirer une autre séance : le sélecteur du générateur, pour ce créneau,
      sans aucune des séances déjà posées dans la semaine. */
@@ -516,8 +550,20 @@ export function PlanViewPage() {
         const session = sessionAt(week, index);
         if (session) setMoveTarget({ week, index, day: session.dayOfWeek, name: nameOf(session) });
       },
+      onReorder: (index, direction) => {
+        const sessions = plan?.weeks.find((w) => w.weekNumber === week)?.sessions;
+        const session = sessions?.[index];
+        if (!session || !sessions) return;
+        const target = dayStep(sessions, index, direction);
+        if (target) step(() => actions.moveTo(week, index, week, session.dayOfWeek, target.before));
+      },
       onDuplicate: (index) => step(() => actions.duplicate(week, index)),
-      onRemove: (index) => step(() => actions.removeSession(week, index)),
+      onRemove: (index) => {
+        const session = sessionAt(week, index);
+        if (session && step(() => actions.removeSession(week, index))) {
+          toast.success(t("page.edit.sessionRemoved", { name: nameOf(session) }));
+        }
+      },
       onAdd: (day) => {
         if (actions.isBlocked(week, day)) {
           toast.error(t("reschedule.blockedDrop"));
@@ -526,9 +572,8 @@ export function PlanViewPage() {
         setAddTarget({ week, day });
       },
       drag,
-      startDrag,
     }),
-    [sessionAt, plan, redraw, nameOf, step, actions, drag, startDrag, t],
+    [sessionAt, plan, redraw, nameOf, step, actions, drag, t],
   );
 
   const pickChange = useCallback(
@@ -556,7 +601,10 @@ export function PlanViewPage() {
             action: {
               label: t("page.change.undo"),
               onClick: () => {
-                if (edit.undoStep()) toast.info(t("page.change.undone"));
+                if (edit.undoStep()) {
+                  setUndoToken((n) => n + 1);
+                  toast.info(t("page.change.undone"));
+                }
               },
             },
           });
@@ -601,6 +649,8 @@ export function PlanViewPage() {
 
   const ended = isPlanEnded(plan, today);
   const pacesEstimated = plan.config.planMode !== "free" && plan.config.vma === undefined;
+  const lastChange = plan._lastUndoableChange;
+  const showLastChange = lastChange && lastChange.kind !== "edit";
   const week = plan.weeks.find((w) => w.weekNumber === selectedWeek)!;
   const blockedDays = new Set(
     [0, 1, 2, 3, 4, 5, 6].filter((d) => actions.isBlocked(selectedWeek, d)),
@@ -695,6 +745,7 @@ export function PlanViewPage() {
             <PlanDayList
               model={m}
               mode="edit"
+              undoToken={undoToken}
               nameOf={nameOf}
               workoutOf={workoutOf}
               raceName={plan.config.raceName}
@@ -741,32 +792,27 @@ export function PlanViewPage() {
               onDuplicate={() => setDialog("duplicate")}
               onRename={() => setDialog("rename")}
               onDelete={() => setDialog("delete")}
+              onUndo={lastChange?.kind === "edit" ? undoPlanChange : undefined}
             />
           </div>
         </div>
 
         <header className="zn-planpage__plan">
-          <h1 className="zn-planpage__title">{planName}</h1>
+          {/* Origine : le nom rejoint celui de la carte activée. */}
+          <h1 className="zn-planpage__title" style={{ viewTransitionName: sharedTransitionName("plan", plan.id, "title") }}>{planName}</h1>
           {raceLine && <p className="zn-planpage__raceline">{raceLine}</p>}
-          {(ended || pacesEstimated || plan._lastUndoableChange || placedWeeks.length > 0) && (
+          {(ended || pacesEstimated || showLastChange || placedWeeks.length > 0) && (
             <div className="zn-planpage__notes">
               {ended && <Alert kind="info">{t("view.planEnded")}</Alert>}
               {pacesEstimated && (
-                <Alert kind="info" title={t("view.estimatedPacesTitle")}>
-                  {t("view.estimatedPaces")} <Link to="/my-zones">{t("view.estimatedPacesLink")}</Link>
-                </Alert>
+                <PlanVmaForm onSave={(vma) => actions.updateVma(vma, isoDateOnly(today))} />
               )}
-              {plan._lastUndoableChange && (
+              {showLastChange && (
                 <LastChangePanel
-                  label={plan._lastUndoableChange.label}
-                  labelEn={plan._lastUndoableChange.labelEn}
-                  at={plan._lastUndoableChange.at}
-                  onUndo={() => {
-                    if (undoLastChange(plan.id)) {
-                      reload();
-                      toast.info(t("lastChange.undone"));
-                    }
-                  }}
+                  label={lastChange.label}
+                  labelEn={lastChange.labelEn}
+                  at={lastChange.at}
+                  onUndo={undoPlanChange}
                 />
               )}
               {placedWeeks.length > 0 && (
@@ -811,12 +857,13 @@ export function PlanViewPage() {
             />
             <WeekDayBars model={weekModel} />
             {rings && (
-              <WeekRings model={rings} metric={metric} onMetricChange={pickMetric} variant="card" showHead={false} />
+              <WeekRings model={rings} metric={metric} onMetricChange={pickMetric} variant={wide ? "card" : "strip"} showHead={false} />
             )}
             <div ref={sentinel} className="zn-planpage__sentinel" aria-hidden="true" />
           </div>
 
-          <section className="zn-planpage__week" aria-label={t("page.week.sessions", { n: selectedWeek })}>
+          {/* Geste : seule la semaine consultée sort et entre. */}
+          <section className="zn-planpage__week" style={{ viewTransitionName: "zn-plan-week" }} aria-label={t("page.week.sessions", { n: selectedWeek })}>
             {plan.weeks.every((w) => w.sessions.length === 0) && (
               <div className="zn-planpage__emptyplan">
                 <p>{t("page.empty.title")}</p>
@@ -829,13 +876,14 @@ export function PlanViewPage() {
             <PlanDayList
               model={weekModel}
               mode="read"
+              undoToken={undoToken}
               nameOf={nameOf}
               workoutOf={workoutOf}
               raceName={plan.config.raceName}
               intermediateRace={week.intermediateRace}
               blockedDays={blockedDays}
               onStatus={(index, anchor) => setCompletion({ week: selectedWeek, index, anchor })}
-              onOpen={(index) => openSession(selectedWeek, index)}
+              onOpen={(index, origin) => openSession(selectedWeek, index, origin)}
               onOpenActivity={log.edit}
               footer={footer}
             />
@@ -896,15 +944,20 @@ export function PlanViewPage() {
         currentWeek={currentWeek}
         side={wide ? "right" : "bottom"}
         onSelectWeek={(n) => {
+          if (n === selectedWeek) {
+            setParam("sheet", null);
+            return;
+          }
           holdViewedDay();
-          setSearchParams(
+          // Geste : le choix dans le plan suit aussi le parcours des semaines.
+          startNavTransition(() => setSearchParams(
             (prev) => {
               prev.set("week", String(n));
               prev.delete("sheet");
               return prev;
             },
             { replace: true },
-          );
+          ), { direction: n > selectedWeek ? "next" : "prev", key: `plan:${id}:week:${n}` });
         }}
         onLogActivity={() => log.logOn()}
       />
@@ -976,11 +1029,14 @@ export function PlanViewPage() {
 
       <PlanWorkoutPanel
         isOpen={addTarget !== null}
+        side={wide ? "right" : "bottom"}
         onClose={() => setAddTarget(null)}
-        onSelectWorkout={(workoutId) => {
+        onSelectWorkout={(workoutId, workout) => {
           const target = addTarget;
-          setAddTarget(null);
-          if (target) step(() => actions.addWorkout(workoutId, target.week, target.day));
+          if (target && step(() => actions.addWorkout(workoutId, target.week, target.day, workout))) {
+            const name = workout ? pick(workout, "name") : workoutNames[workoutId] ?? workoutId;
+            toast.success(t("page.edit.sessionAdded", { name }));
+          }
         }}
       />
 
