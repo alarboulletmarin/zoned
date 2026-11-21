@@ -1470,3 +1470,4 @@ span.zn-plansess__state {
 .zn-plansess__card > .zn-iconbtn {
   margin-block-start: calc(-2 * var(--sp-2));
 }
+.zn-planpage__notes:empty { display: none; }
