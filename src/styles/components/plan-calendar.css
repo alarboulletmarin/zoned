@@ -375,6 +375,10 @@
   opacity: 0.4;
 }
 
+.zn-plansess:is([data-drop-before], [data-drop-after]) {
+  position: relative;
+}
+
 /* The place a held session would take inside its day: a line of ink, above
    the card it lands in front of, or under the last card when it closes the
    day. Ink and not vermillon, as the drop ring is: vermillon says "now". The
@@ -384,8 +388,8 @@
   position: relative;
 }
 
-.zn-plan-drag[data-drop-before="true"]::before,
-.zn-plan-drag[data-drop-after="true"]::after {
+:is(.zn-plan-drag, .zn-plansess)[data-drop-before="true"]::before,
+:is(.zn-plan-drag, .zn-plansess)[data-drop-after="true"]::after {
   content: "";
   position: absolute;
   inset-inline: 0;
@@ -396,12 +400,21 @@
   pointer-events: none;
 }
 
-.zn-plan-drag[data-drop-before="true"]::before {
+:is(.zn-plan-drag, .zn-plansess)[data-drop-before="true"]::before {
   inset-block-start: calc(var(--sp-2) * -1);
 }
 
-.zn-plan-drag[data-drop-after="true"]::after {
+:is(.zn-plan-drag, .zn-plansess)[data-drop-after="true"]::after {
   inset-block-end: calc(var(--sp-2) * -1);
+}
+
+.zn-session-drag-ghost {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.85;
+  box-shadow: var(--shadow-block);
+  transform: translate(-50%, -50%);
 }
 
 /* ══ the session mark ══════════════════════════════════════════════════ */
@@ -1446,6 +1459,20 @@
   block-size: calc(100vh - 160px);
 }
 
+.zn-planpanel.zn-planpanel--modal {
+  padding: 0;
+  overflow: hidden;
+}
+
+.zn-planpanel--modal[data-side="bottom"] {
+  block-size: 82dvh;
+  padding-block: var(--sp-4) env(safe-area-inset-bottom, 0px);
+}
+
+.zn-planpanel--modal .zn-planpanel__bar {
+  min-block-size: calc(var(--hit-min) + var(--sp-4));
+  padding-inline-end: calc(var(--hit-min) + var(--sp-8));
+}
 /* As a bottom sheet it floats, which is what earns it the hard offset.
    z-index 50 is the modal layer mobile-menu.css names: above the floating MENU
    pill (45), which used to be painted straight through the list. 85dvh rather

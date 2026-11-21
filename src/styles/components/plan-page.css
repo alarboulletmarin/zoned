@@ -176,6 +176,18 @@
   margin-block-start: var(--sp-2);
 }
 
+.zn-plan-vma {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.zn-plan-vma__error {
+  flex-basis: 100%;
+  color: var(--state-danger);
+}
+
 .zn-planpage__placed {
   margin: 0;
   display: flex;
@@ -383,8 +395,9 @@
 }
 
 .zn-planday[data-over] {
-  outline: var(--bw-heavy) dashed var(--line-strong);
+  outline: var(--bw-rule) solid var(--line-strong);
   outline-offset: var(--sp-2);
+  border-radius: var(--r-md);
 }
 
 /* ── Une séance ──────────────────────────────────────────────────────── */
@@ -466,6 +479,24 @@
 
 .zn-plansess__state > svg {
   position: relative;
+}
+
+/* Geste : la séance qu'une annulation vient de remettre porte un fond creusé,
+   tenu un instant puis effacé (`backwards` tient la première image pendant
+   le délai, rien n'est tenu après). Une seule fois, sur elle seule. */
+.zn-plansess[data-restored] .zn-plansess__card {
+  animation: zn-restored var(--dur-slow) var(--ease-out) var(--dur-slow) backwards;
+}
+
+@keyframes zn-restored {
+  from { background-color: var(--paper-sunken); }
+}
+
+/* Le tampon (stamp.css) se pose sur la marque de 32 px, pas sur la cible
+   de 44 : c'est la marque qui se remplit. */
+.zn-plansess__state > .zn-stamp {
+  inset: calc((var(--hit-min) - 32px) / 2);
+  border-radius: var(--r-md);
 }
 
 .zn-plansess__state[data-status="done"] {
@@ -618,6 +649,7 @@ span.zn-plansess__state {
 
 .zn-plansess__grip svg {
   fill: currentColor;
+  pointer-events: none;
 }
 
 .zn-plansess__grip:focus-visible {
@@ -625,15 +657,11 @@ span.zn-plansess__state {
 }
 
 .zn-plansess[data-dragging] {
-  position: relative;
-  z-index: 5;
-  transform: translate(var(--zn-dx, 0), var(--zn-dy, 0));
-  pointer-events: none;
+  opacity: 0.4;
 }
 
-.zn-plansess[data-dragging] .zn-plansess__card {
-  box-shadow: var(--shadow-block);
-  cursor: grabbing;
+.zn-plansess__profile {
+  inline-size: min(100%, 11rem);
 }
 
 /* ── Sous la liste ───────────────────────────────────────────────────── */

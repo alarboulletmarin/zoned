@@ -1,4 +1,7 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
+import { Stamp } from "@/components/ui/stamp";
+import { useJustChanged } from "@/hooks/useJustChanged";
+import { becameDone } from "@/lib/cockpitRail";
 import { useTranslation } from "react-i18next";
 import { Star, Flag, Clock, Trash2, Eye, Dumbbell } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
@@ -786,6 +789,10 @@ const SessionCell = memo(function SessionCell({
 }) {
   const { t } = useTranslation("plan");
   const pick = usePickLang();
+  // Geste : la séance qui vient d'être close reçoit le tampon, une fois.
+  const stampKey = `${completionKey ?? ""}-${session.workoutId}`;
+  const stamped = useJustChanged([[stampKey, session.status] as const], becameDone);
+  const justDone = stamped.keys.has(stampKey);
   if (isRaceDay) {
     return (
       <div className="zn-sess" data-kind="race">
@@ -868,6 +875,7 @@ const SessionCell = memo(function SessionCell({
             onPointerDown={(e) => e.stopPropagation()}
             className="zn-sess__check"
             data-status={session.status}
+            data-just-done={justDone || undefined}
             title={
               isCompleted ? t("completion.completed")
                 : isModified ? t("completion.modified")
@@ -890,6 +898,7 @@ const SessionCell = memo(function SessionCell({
                 <path d="M3 3l6 6M9 3l-6 6" />
               </svg>
             )}
+            {justDone && <Stamp onDone={() => stamped.clear(stampKey)} />}
           </button>
         )}
 

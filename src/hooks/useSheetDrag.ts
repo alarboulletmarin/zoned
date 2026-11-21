@@ -94,9 +94,14 @@ export function useSheetDrag(actif: boolean, onClose: () => void) {
       // La transition d'abord, la position ensuite : c'est le style d'arrivée
       // qui porte la transition, donc le retour s'anime.
       e.currentTarget.style.transition = "";
+      // Un geste qui ferme laisse le panneau où le doigt l'a lâché : la
+      // sortie (sheet.css) repart de là vers le bas, au lieu de remonter
+      // d'abord au bord pour redescendre.
+      if (shouldCloseSheet(course, v)) {
+        onClose();
+        return;
+      }
       e.currentTarget.style.transform = "";
-
-      if (shouldCloseSheet(course, v)) onClose();
     },
     [onClose],
   );

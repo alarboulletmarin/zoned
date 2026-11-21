@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { useSlidingIndicator } from "@/hooks/useSlidingIndicator";
 
 /* Tabs, the WAI-ARIA tab pattern, hand-written.
    There is no native element for this, so the whole contract is here:
@@ -72,16 +73,27 @@ function Tabs({
   );
 }
 
-function TabsList({ className, ...props }: React.ComponentProps<"div">) {
+/* La pilule d'encre est UN élément sous la rangée, qui glisse vers l'onglet
+   ouvert (geste : le choix vient de changer) au lieu que chaque onglet
+   change de fond sur place. */
+function TabsList({ className, children, ...props }: React.ComponentProps<"div">) {
+  const listRef = React.useRef<HTMLDivElement>(null);
+  const selected = React.useContext(TabsContext)?.value;
+  const placed = useSlidingIndicator(listRef, '[role="tab"][aria-selected="true"]', selected);
   return (
     <div
+      ref={listRef}
       role="tablist"
       aria-orientation="horizontal"
       data-orientation="horizontal"
       data-slot="tabs-list"
+      data-placed={placed || undefined}
       className={cn("zn-tabs__list", className)}
       {...props}
-    />
+    >
+      <span className="zn-tabs__indicator" aria-hidden="true" />
+      {children}
+    </div>
   );
 }
 

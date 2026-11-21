@@ -1,0 +1,44 @@
+/* Le tampon, `ui/stamp.tsx` : geste, une séance vient d'être close. Monté le
+   temps d'un seul passage sous un parent `[data-just-done]` en position
+   relative. L'encre se remplit depuis le centre, la coche se trace, puis le
+   tout se retire sur la marque telle qu'elle est désormais. Aucune image
+   tenue par `forwards` : l'élément est démonté après. */
+
+.zn-stamp {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--ink-1);
+  pointer-events: none;
+  opacity: 0;
+  /* 600 ms en tout : il finit avant l'avancée automatique, à 700 ms. */
+  animation: zn-stamp-ink calc(var(--dur-slow) * 2.5) var(--ease-out);
+}
+
+.zn-stamp__check {
+  /* 22 px sur le bouton du cockpit, moins sur la case d'une séance. */
+  inline-size: min(22px, 80%);
+  aspect-ratio: 1;
+  fill: none;
+  stroke: var(--text-inverse);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  animation: zn-stamp-check var(--dur-slow) var(--ease-out) var(--dur-fast) backwards;
+}
+
+@keyframes zn-stamp-ink {
+  0% { opacity: 1; transform: scale(0); }
+  30% { opacity: 1; transform: none; }
+  75% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: none; }
+}
+
+@keyframes zn-stamp-check {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+

@@ -8,7 +8,8 @@ import {
   type CSSProperties,
   type FunctionComponent,
 } from "react";
-import { flushSync } from "react-dom";
+import { withDirectionalTransition } from "@/lib/directionalTransition";
+import { useSharedTransition } from "@/lib/sharedTransition";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "@/components/ui/toast";
@@ -39,6 +40,8 @@ import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPan
 import { SEOHead } from "@/components/seo";
 import { usePlans } from "@/hooks/usePlans";
 import { useWorkout } from "@/hooks/useWorkouts";
+import { Stamp } from "@/components/ui/stamp";
+import { useSlidingIndicator } from "@/hooks/useSlidingIndicator";
 import { useRadioRail } from "@/hooks/useRadioRail";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
@@ -759,12 +762,12 @@ export function TodayPage() {
      du geste, vers la gauche quand on avance. */
   const pickSession = (iso: string, from: number, rank: number) => {
     if (rank === from) return;
-    withHeroTransition(rank > from ? "next" : "prev", () => setActiveSession({ iso, rank }));
+    withDirectionalTransition(rank > from ? "next" : "prev", () => setActiveSession({ iso, rank }));
   };
   const pickDay = (iso: string | null) => {
     const target = iso ?? todayIso;
     if (target === dayIso) return;
-    withHeroTransition(target > dayIso ? "next" : "prev", () => setPicked(iso));
+    withDirectionalTransition(target > dayIso ? "next" : "prev", () => setPicked(iso));
   };
 
   /* ── Ce qui vient d'être fait ─────────────────────────────────────────
@@ -812,7 +815,7 @@ export function TodayPage() {
     if (target == null) return;
     const iso = dayIso;
     advanceTimer.current = window.setTimeout(() => {
-      withHeroTransition(target > closed ? "next" : "prev", () => setActiveSession({ iso, rank: target }));
+      withDirectionalTransition(target > closed ? "next" : "prev", () => setActiveSession({ iso, rank: target }));
     }, 700);
   }, [selected, dayIso]);
   useEffect(
@@ -1435,6 +1438,8 @@ function CockpitSession({
 }) {
   const { t } = useTranslation(["today", "plan", "library"]);
   const { workout } = useWorkout(session.workoutId);
+  // Origine : le héros partage son titre et son profil avec la page séance.
+  const shareOrigin = useSharedTransition(sessionHref(session), "wk", session.workoutId, ".zn-cockpit__headline", ".zn-cockpit__hero", linkState);
 
   /* La FAMILLE de la séance, et elle est lue sur le plan, pas sur le
      catalogue : `sessionKind` est synchrone, donc le glyphe est là dès le
@@ -1638,7 +1643,7 @@ function CockpitSession({
         {/* Une seule chose orange à l'écran, celle qui reste à faire : sur une
             séance close, voir la séance passe au contour, comme la clôture. */}
         <Button asChild variant={isResolved ? "outline" : "default"} className="zn-cockpit__cta">
-          <Link to={sessionHref(session)} state={linkState}>
+          <Link to={sessionHref(session)} state={linkState} onClick={shareOrigin}>
             {t("today:resume.openDetail")}
             <ArrowRight />
           </Link>
@@ -1659,13 +1664,7 @@ function CockpitSession({
             {isResolved ? t("today:resume.reclose") : t("plan:completion.markDone")}
             {/* Le tampon : l'encre remplit le bouton depuis le centre, puis la
                 coche se trace. Monté le temps d'un seul passage. */}
-            {justDone && (
-              <span className="zn-stamp" aria-hidden="true">
-                <svg className="zn-stamp__check" viewBox="0 0 24 24" focusable="false">
-                  <path d="M5 12.5l4.5 4.5L19 7" pathLength={1} />
-                </svg>
-              </span>
-            )}
+            {justDone && <Stamp />}
           </Button>
         )}
       </div>
@@ -1782,28 +1781,6 @@ function sessionDeckLabel(session: PlanSession, isEn: boolean): string {
 const NOTHING_DONE: ReadonlySet<string> = new Set();
 
 /**
- * Le contenu du héros part dans le sens du geste : vers la gauche quand on
- * avance, vers la droite quand on recule. Une transition de vue nommée
- * (`zn-cockpit-hero`, voir cockpit.css) là où l'API existe ; ailleurs, et
- * sous `prefers-reduced-motion`, la bascule est nette.
- */
-function withHeroTransition(direction: "next" | "prev", update: () => void) {
-  if (
-    typeof document.startViewTransition !== "function" ||
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  ) {
-    update();
-    return;
-  }
-  const root = document.documentElement;
-  root.dataset.heroMove = direction;
-  const transition = document.startViewTransition(() => flushSync(update));
-  void transition.finished.finally(() => {
-    delete root.dataset.heroMove;
-  });
-}
-
-/**
  * Le rail : la journée d'un coup d'oeil, et le choix de la séance montrée.
  *
  * Un onglet par séance, large comme sa durée, qui porte son profil (le même
@@ -1840,27 +1817,8 @@ function SessionRail({
 
   /* Le cadre se pose sur l'onglet choisi, mesuré : les largeurs viennent de
      flex et du plancher de 44 px, le CSS seul ne sait pas où tombe l'onglet.
-     La transition n'est permise qu'après la première pose, sinon le cadre
-     glisserait depuis le bord à l'arrivée sur la page. */
-  const [placed, setPlaced] = useState(false);
-  useLayoutEffect(() => {
-    const el = railRef.current;
-    if (!el) return;
-    const place = () => {
-      const tab = el.querySelectorAll<HTMLElement>('[role="tab"]')[selected];
-      if (!tab) return;
-      el.style.setProperty("--frame-x", `${tab.offsetLeft}px`);
-      el.style.setProperty("--frame-w", `${tab.offsetWidth}px`);
-    };
-    place();
-    const observer = new ResizeObserver(place);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [selected, sessions.length]);
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setPlaced(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
+     Le même indicateur que `Segmented` et `Tabs`. */
+  const placed = useSlidingIndicator(railRef, '[role="tab"][aria-selected="true"]', `${selected}/${sessions.length}`);
 
   const words = t("today:rail.words").split(",");
   const kicker = closed

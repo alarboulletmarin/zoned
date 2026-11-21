@@ -23,6 +23,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { useHeld } from "@/components/ui/native-dialog";
+import { preloadWorkoutDetail, transitionFrom } from "@/lib/sharedTransition";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   ACTIVITY_INTENSITIES,
@@ -92,7 +94,7 @@ const DAYS = [0, 1, 2, 3, 4, 5, 6] as const;
  * verrouiller, déplacer, retirer.
  */
 export function WeekSessionSheet({
-  target,
+  target: targetProp,
   commuteProfileMin,
   onClose,
   onSave,
@@ -116,12 +118,18 @@ export function WeekSessionSheet({
   const [intensity, setIntensity] = useState<CrossTrainingIntensity>("easy");
   const [moving, setMoving] = useState(false);
 
+  // Tenue le temps de la sortie : le parent remet la cible à null en fermant.
+  const target = useHeld(targetProp);
   const session = target?.session ?? null;
   const workout = target?.workout ?? null;
   const activity = session ? activityKindOf(session.workoutId) : null;
   const loosable = !!workout && !activity && canBeLoose(workout);
   const range = workout ? catalogRange(workout) : null;
   const discipline = session ? sessionDiscipline(session) : "running";
+  const canView = !!targetProp?.workout && !activity;
+  useEffect(() => {
+    if (canView) preloadWorkoutDetail();
+  }, [canView]);
   // Les kilomètres se posent à pied et à vélo ; en natation on compte en
   // mètres partout ailleurs, et un champ en km y ferait saisir un facteur mille.
   const asksDistance = !activity && (discipline === "running" || discipline === "cycling");
@@ -204,7 +212,7 @@ export function WeekSessionSheet({
   };
 
   return (
-    <Sheet open onOpenChange={(open) => !open && onClose()}>
+    <Sheet open={targetProp != null} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
         side={fromBottom ? "bottom" : "right"}
         className="zn-wksheet"
@@ -344,7 +352,17 @@ export function WeekSessionSheet({
           {/* ── Les gestes du menu ── */}
           <div className="zn-wksheet__actions">
             {workout && !activity && (
-              <button type="button" className="zn-wksheet__action" onClick={action(target.sessionIndex, () => onView(session.workoutId))}>
+              <button
+                type="button"
+                className="zn-wksheet__action"
+                onClick={(event) => {
+                  // Origine : garder le panneau ouvert pour la capture de son titre.
+                  transitionFrom(event.currentTarget.closest(".zn-wksheet"), "wk", session.workoutId, "[data-slot=sheet-title]", () => {
+                    onView(session.workoutId);
+                    onClose();
+                  });
+                }}
+              >
                 <Eye />
                 {t("library:weekly.sheet.view")}
               </button>

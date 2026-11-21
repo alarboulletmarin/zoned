@@ -1,6 +1,6 @@
 {
   "title": "Bibliothèque de séances",
-  "catalogueIndex": "Toutes les séances",
+  "catalogueIndex": "Index de toutes les séances",
   "catalogue": "{{workouts}} séances · {{categories}} catégories · {{disciplines}} disciplines",
   "subtitle": "{{count}} séances d'entraînement scientifiques",
   "subtitleStrength": "{{count}} séances de renforcement",
@@ -121,7 +121,6 @@
   "draw": {
     "title": "Tirer une séance",
     "subtitle": "Laisse le hasard choisir ta prochaine séance dans le catalogue",
-    "scanning": "Scan du catalogue…",
     "draw": "Tirer une séance",
     "redraw": "Re-tirer",
     "surprise": "Surprends-moi (tout le catalogue)",

@@ -33,10 +33,11 @@
 }
 
 .zn-crawl {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-6);
-  margin-top: var(--sp-14);
+  margin-top: var(--sp-7);
+}
+
+.zn-crawl > .zn-disclosure__summary {
+  justify-content: space-between;
 }
 
 .zn-crawl__list a {

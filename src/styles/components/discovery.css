@@ -212,7 +212,7 @@
 .zn-draw__aside {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-13);
+  gap: var(--sp-7);
 }
 
 /* Closed drawer on a phone. Reopened unconditionally at desktop width, where
@@ -256,12 +256,17 @@
 .zn-draw__counter {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-6);
-  padding: var(--pad-card);
+  --gap: var(--sp-4);
+  gap: var(--sp-4);
+  padding: var(--sp-7);
 
   background: var(--surface-card);
   border: var(--border-rule);
   border-radius: var(--r-3xl);
+}
+
+.zn-draw__counter > p {
+  margin: 0;
 }
 
 /* The proportion, drawn: an outlined track with an ink fill. Ink, not
@@ -285,7 +290,11 @@
 .zn-draw__group {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-6);
+  gap: var(--sp-3);
+}
+
+.zn-draw__group > .zn-cluster {
+  --gap: var(--sp-3);
 }
 
 /* The levels read as a column rather than a wrapped row, four values, each
@@ -404,10 +413,18 @@
   transform: translateY(var(--press-shift));
 }
 
-/* La moitié de l'écart : la scène au-dessus paie déjà ses 26 px, et un
-   --gap-section entier ici portait la frontière à 74 px. */
 .zn-draw__recent {
-  padding-block-start: calc(var(--gap-section) / 2);
+  padding-block-start: var(--sp-8);
+}
+
+.zn-draw__recent > .zn-disc__grouphead {
+  --gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-block-end: var(--sp-3);
+}
+
+.zn-draw__recent > .zn-cluster {
+  --gap: var(--sp-3);
 }
 
 /* A recent draw's name must not push the chip past the column. */
@@ -549,4 +566,53 @@
 
 .zn-build__steps {
   padding-block-start: var(--sp-10);
+}
+
+/* ── Le tirage atterrit ───────────────────────────────────────────────────
+   Geste : tirer est le seul endroit où l'app peut sourire, sans rien
+   simuler. Le dé fait UN quart de tour au clic (sa clé change à chaque
+   tirage, rien ne tourne à l'arrivée sur la page). L'animation part d'un
+   quart en arrière et finit sur le glyphe au repos, sans `forwards`. */
+.zn-draw__dice {
+  display: inline-flex;
+}
+
+.zn-draw__dice[data-rolled] {
+  animation: zn-dice-turn var(--dur-slow) var(--ease-out);
+}
+
+@keyframes zn-dice-turn {
+  from { transform: rotate(-90deg); }
+  to { transform: none; }
+}
+
+/* Origine : la séance tirée entre depuis le bouton, au-dessus d'elle (12 px
+   vers le bas, avec un fondu), et l'ancienne sort de l'autre côté, vers le
+   bas. La transition de vue est celle de `withDirectionalTransition` ; ici,
+   seul l'axe change. */
+.zn-draw__landing {
+  view-transition-name: zn-draw-result;
+}
+
+html[data-move]::view-transition-group(zn-draw-result) {
+  animation: none;
+}
+
+html[data-move]::view-transition-old(zn-draw-result) {
+  opacity: 0;
+  animation: zn-draw-out var(--dur-fast) var(--ease-out) backwards;
+}
+
+html[data-move]::view-transition-new(zn-draw-result) {
+  animation: zn-draw-in var(--dur-base) var(--ease-out) var(--dur-fast) backwards;
+}
+
+@keyframes zn-draw-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(12px); }
+}
+
+@keyframes zn-draw-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: none; }
 }

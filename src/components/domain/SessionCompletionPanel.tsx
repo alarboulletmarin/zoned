@@ -6,6 +6,7 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet";
+import { useHeld } from "@/components/ui/native-dialog";
 import {
   Popover,
   PopoverAnchor,
@@ -255,12 +256,18 @@ function CompletionForm({
 export function SessionCompletionPanel({
   open,
   onOpenChange,
-  session,
-  weekNumber,
-  sessionName,
+  session: sessionProp,
+  weekNumber: weekProp,
+  sessionName: nameProp,
   onSave,
-  anchorElement,
+  anchorElement: anchorProp,
 }: SessionCompletionPanelProps) {
+  // Origine : le panneau repart avec son titre et son ancre d'ouverture.
+  const panel = useHeld(open && sessionProp
+    ? { session: sessionProp, weekNumber: weekProp, sessionName: nameProp, anchorElement: anchorProp }
+    : null);
+  const session = panel?.session;
+  const anchorElement = panel?.anchorElement;
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   const initialChoice: Choice = useMemo(() => {
@@ -299,7 +306,7 @@ export function SessionCompletionPanel({
     return { current: anchorElement };
   }, [anchorElement]);
 
-  if (!session) return null;
+  if (!session || !panel) return null;
 
   const handleSubmit = () => {
     const nowIso = new Date().toISOString();
@@ -352,8 +359,8 @@ export function SessionCompletionPanel({
     setRpe,
     note,
     setNote,
-    weekNumber,
-    sessionName,
+    weekNumber: panel.weekNumber,
+    sessionName: panel.sessionName,
     onCancel: () => onOpenChange(false),
     onSubmit: handleSubmit,
   };

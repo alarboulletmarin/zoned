@@ -5,7 +5,7 @@ import { X } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
 import { Slot } from "@/components/ui/slot";
-import { NativeDialog } from "@/components/ui/native-dialog";
+import { NativeDialog, usePresence } from "@/components/ui/native-dialog";
 
 /**
  * Dialog, a centred paper panel over an ink wash.
@@ -75,13 +75,15 @@ function DialogContent({
 
   // Mounted only while open, as the portal was: the share sheet alone holds 37
   // template previews, and they have no business rendering on a page nobody
-  // opened. The cost is the exit animation, which needs a node to play on.
-  if (!open) return null;
+  // opened. `usePresence` keeps the node for the length of its exit.
+  const presence = usePresence(open);
+  if (!presence.present) return null;
 
   return (
     <NativeDialog
       data-slot="dialog-content"
-      data-state="open"
+      data-state={presence.closing ? "closed" : "open"}
+      onAnimationEnd={presence.onAnimationEnd}
       className={cn("zn-dialog", className)}
       aria-labelledby={titleId}
       aria-describedby={descriptionId}

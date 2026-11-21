@@ -40,6 +40,10 @@ export function PaceCurve({
   });
 
   const paceUnit = getPaceUnit(unit);
+  // Geste : la saisie fait glisser la courbe. Elle est un `d` CSS, pas un `points`, pour que la saisie
+  // vers sa nouvelle forme (même nombre de points, sinon net).
+  const line = `M ${points.join(" L ")}`;
+  const area = `M 0,100 L ${points.join(" L ")} L 100,100 Z`;
 
   return (
     <figure
@@ -64,8 +68,9 @@ export function PaceCurve({
           })}
           className="zn-rs-curve__svg"
         >
-          <polygon
-            points={`0,100 ${points.join(" ")} 100,100`}
+          <path
+            d={area}
+            style={{ d: `path("${area}")` } as React.CSSProperties}
             className="zn-rs-curve__area"
           />
           <line
@@ -84,8 +89,9 @@ export function PaceCurve({
             vectorEffect="non-scaling-stroke"
             className="zn-rs-curve__axis"
           />
-          <polyline
-            points={points.join(" ")}
+          <path
+            d={line}
+            style={{ d: `path("${line}")` } as React.CSSProperties}
             vectorEffect="non-scaling-stroke"
             strokeLinecap="round"
             strokeLinejoin="round"

@@ -128,6 +128,19 @@
   border-radius: 2px 2px 0 0;
 
   cursor: pointer;
+  /* Geste : quand un réglage ou un bloc change, largeur et hauteur glissent
+     vers leur nouvelle valeur. Une transition ne joue qu'au changement, jamais
+     au montage. Pendant un glisser de curseur, voir plus bas. */
+  transition:
+    filter var(--dur-fast) var(--ease-out),
+    flex-grow var(--dur-base) var(--ease-out),
+    block-size var(--dur-base) var(--ease-out);
+}
+
+/* Pendant un glisser de curseur, le doigt est la source du mouvement : le
+   profil le suit sans retard, rien n'anime. Seul le relâché retrouve la
+   transition. */
+:root:has(.zn-slider input:active) .zn-timeline__seg {
   transition: filter var(--dur-fast) var(--ease-out);
 }
 

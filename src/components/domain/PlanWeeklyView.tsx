@@ -1,4 +1,8 @@
+import { createSessionDragGhost, slotInDay } from "@/lib/sessionDrag";
 import { useState, useRef, useMemo, useCallback, memo } from "react";
+import { Stamp } from "@/components/ui/stamp";
+import { useJustChanged } from "@/hooks/useJustChanged";
+import { becameDone } from "@/lib/cockpitRail";
 import { useTranslation } from "react-i18next";
 import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Dumbbell, Dices, Lock, LockOpen, Copy, Plus, Run, Bike, Pool } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
@@ -72,23 +76,6 @@ function cardDiscipline(session: PlanSession): keyof typeof DISCIPLINE_ICON | nu
   if (session.sessionType === "strength" || session.workoutId.startsWith("STR-")) return "strength";
   const d = sessionDiscipline(session);
   return d === "other" ? null : d;
-}
-
-/**
- * Where, inside a day, a session held at `clientY` would land: in front of the
- * first session whose middle is under the pointer, at the end of the day when
- * none is. Read off the day's own cards, which are the only thing that knows
- * how tall they are: a mobile row stacks them, a desktop column too, and the
- * dragged card is left out, it is the one being placed.
- */
-function slotInDay(day: Element, clientY: number, draggedIndex: number): number | undefined {
-  for (const el of day.querySelectorAll<HTMLElement>("[data-session-index]")) {
-    const index = Number(el.dataset.sessionIndex);
-    if (index === draggedIndex) continue;
-    const box = el.getBoundingClientRect();
-    if (clientY < box.top + box.height / 2) return index;
-  }
-  return undefined;
 }
 
 /** Where a drag is hovering: a day, and the place in it (end of day if absent). */
@@ -358,25 +345,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
   const startDrag = useCallback(
     (touch: React.Touch, weekNumber: number, sessionIndex: number, target: HTMLElement | null) => {
+      if (!target) return;
       isDraggingRef.current = true;
       touchDragRef.current = { weekNumber, sessionIndex };
       setDraggedSession({ weekNumber, sessionIndex });
 
-      // Clone the dragged element as ghost
-      const ghost = target
-        ? (target.cloneNode(true) as HTMLElement)
-        : document.createElement("div");
-
-      ghost.style.cssText = `
-        position: fixed; z-index: 9999; pointer-events: none;
-        width: ${target?.offsetWidth || 80}px;
-        opacity: 0.85;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        transform: translate(-50%, -50%);
-      `;
+      const ghost = createSessionDragGhost(target);
       ghost.style.left = `${touch.clientX}px`;
       ghost.style.top = `${touch.clientY}px`;
-      document.body.appendChild(ghost);
       touchGhostRef.current = ghost;
     },
     [],
@@ -1095,6 +1071,13 @@ const DayCell = memo(function DayCell({
   const { t } = useTranslation(["plan", "library"]);
   const pickLang = usePickLang();
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
+  // Geste : la séance qui vient d'être close reçoit le tampon, une fois.
+  const markKey = (session: PlanSession) =>
+    `${selectedWeek}-${weekData.sessions.indexOf(session)}-${session.workoutId}`;
+  const stamped = useJustChanged(
+    sessions.map((session) => [markKey(session), session.status] as const),
+    becameDone,
+  );
   // While the draw animation runs, this day shows the spinning card instead of
   // its own content, same cell, same position, so nothing can drift.
   const scanContent = renderScanCell?.(dayIndex) ?? null;
@@ -1346,6 +1329,7 @@ const DayCell = memo(function DayCell({
                         }}
                         className="zn-sess__check"
                         data-status={session.status}
+                        data-just-done={stamped.keys.has(markKey(session)) || undefined}
                         title={
                           session.status === "completed"
                             ? t("completion.completed")
@@ -1370,6 +1354,9 @@ const DayCell = memo(function DayCell({
                           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M3 3l6 6M9 3l-6 6" />
                           </svg>
+                        )}
+                        {stamped.keys.has(markKey(session)) && (
+                          <Stamp onDone={() => stamped.clear(markKey(session))} />
                         )}
                       </button>
                     )}

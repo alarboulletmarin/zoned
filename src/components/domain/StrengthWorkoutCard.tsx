@@ -1,3 +1,4 @@
+import { useSharedTransition } from "@/lib/sharedTransition";
 /**
  * The strength session in the catalogue: the grid card, the dense card and the
  * list row.
@@ -95,9 +96,11 @@ export function StrengthWorkoutCard({ workout, className }: StrengthWorkoutCardP
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const equipment = useEquipmentLabel(workout);
   const isEn = useIsEnglish();
+  // Origine : le titre de la carte activée rejoint celui de la séance.
+  const shareOrigin = useSharedTransition(localeTo(`/workout/${workout.id}`, isEn), "wk", workout.id, ".zn-wcard__title");
 
   return (
-    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link">
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link" onClick={shareOrigin}>
       <article className={cn("zn-wcard", className)}>
         <div className="zn-row zn-row--start" style={HEAD_ROW}>
           <h3 className="zn-wcard__title zn-fill">{pick(workout, "name")}</h3>
@@ -153,9 +156,11 @@ export function StrengthWorkoutCardCompact({
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const needsEquipment = workout.equipment.some((e) => e !== "none");
   const isEn = useIsEnglish();
+  // Origine : le titre de la carte activée rejoint celui de la séance.
+  const shareOrigin = useSharedTransition(localeTo(`/workout/${workout.id}`, isEn), "wk", workout.id, ".zn-wcard__title");
 
   return (
-    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link">
+    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className="zn-wcard-link" onClick={shareOrigin}>
       <article className={cn("zn-wcard", className)} data-size="compact">
         <div className="zn-row zn-row--start" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
           <h3 className="zn-wcard__title zn-fill">{pick(workout, "name")}</h3>
@@ -193,9 +198,11 @@ export function StrengthWorkoutListItem({ workout, className }: StrengthWorkoutL
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const equipment = useEquipmentLabel(workout);
   const isEn = useIsEnglish();
+  const to = localeTo(`/workout/${workout.id}`, isEn);
+  const shareOrigin = useSharedTransition(to, "wk", workout.id, ".zn-str-row__name");
 
   return (
-    <Link to={localeTo(`/workout/${workout.id}`, isEn)} className={cn("zn-str-row", className)}>
+    <Link to={to} className={cn("zn-str-row", className)} onClick={shareOrigin}>
       {/* Title and mobile duration */}
       <div className="zn-fill">
         <span className="zn-str-row__name">{pick(workout, "name")}</span>
