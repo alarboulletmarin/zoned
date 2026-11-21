@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useLayoutEffect, useMemo, useRef, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { AlertTriangle, Check, ChevronDown } from "@/components/icons";
 import { Segmented } from "@/components/ui/segmented";
@@ -53,6 +53,8 @@ export interface WeekRingProps {
   segments?: number;
   /** `card` : trait de 9, orbite d'excédent ; `strip` : trait de 15, sans orbite. */
   size?: "card" | "strip";
+  /** Une séance vient d'être faite : l'arc qui a gagné pousse, une fois. */
+  justDone?: boolean;
   className?: string;
 }
 
@@ -68,6 +70,7 @@ export function WeekRing({
   reference,
   segments = 0,
   size = "card",
+  justDone = false,
   className,
 }: WeekRingProps) {
   const strip = size === "strip";
@@ -75,18 +78,39 @@ export function WeekRing({
 
   let trackDash: string | undefined;
   let progressDash: string | null = null;
+  /** La longueur d'arc tracée, ce qui pousse quand une séance est faite. */
+  let drawn = 0;
 
   if (strength && segments > 0) {
     const seg = Math.max(C / segments - SEGMENT_GAP, 1);
     trackDash = `${fixed(seg)} ${SEGMENT_GAP}`;
     const done = Math.min(Math.round(state.done), segments);
+    drawn = done * (seg + SEGMENT_GAP);
     if (done > 0) {
       progressDash = `${Array.from({ length: done }, () => `${fixed(seg)} ${SEGMENT_GAP}`).join(" ")} 0 ${fixed(C)}`;
     }
   } else {
     if (reference === "average") trackDash = "2 4";
+    drawn = C * Math.min(1, state.progress);
     if (state.progress > 0) progressDash = `${fixed(C * state.progress)} ${fixed(C)}`;
   }
+
+  /* Ce que l'arc a gagné au dernier changement, gardé tant que la marque du
+     cockpit est posée. Le cockpit la pose au rendu qui SUIT celui des données
+     neuves : c'est donc ici, à la mise en page, que l'écart est noté, et il
+     s'efface au premier rendu sans marque. Un arc qui n'a pas bougé ne
+     pousse pas, même quand une autre séance vient d'être faite. */
+  const last = useRef(drawn);
+  const grown = useRef(0);
+  useLayoutEffect(() => {
+    if (drawn !== last.current) {
+      grown.current = drawn - last.current;
+      last.current = drawn;
+    } else if (!justDone) {
+      grown.current = 0;
+    }
+  });
+  const grow = justDone && grown.current > 0 ? grown.current : 0;
 
   const showOrbit = !strip && state.excess > 0;
 
@@ -114,6 +138,8 @@ export function WeekRing({
             cy={CENTER}
             r={R}
             strokeDasharray={progressDash}
+            data-just-done={grow > 0 || undefined}
+            style={grow > 0 ? ({ "--ring-grow": fixed(grow) } as CSSProperties) : undefined}
           />
         )}
         {showOrbit && (
@@ -261,6 +287,8 @@ export interface WeekRingsProps {
    * déjà nommée au-dessus, comme sur la page d'un plan.
    */
   showHead?: boolean;
+  /** Une séance vient d'être faite : voir `WeekRing`. */
+  justDone?: boolean;
   className?: string;
 }
 
@@ -270,6 +298,7 @@ export function WeekRings({
   onMetricChange,
   variant = "card",
   showHead = true,
+  justDone = false,
   className,
 }: WeekRingsProps) {
   const { t, i18n } = useTranslation("today");
@@ -303,6 +332,7 @@ export function WeekRings({
       onMetricChange={onMetricChange}
       views={views}
       locale={locale}
+      justDone={justDone}
     />
   );
 
@@ -327,6 +357,7 @@ export function WeekRings({
                   reference={model.reference}
                   segments={view.segments}
                   size="strip"
+                  justDone={justDone}
                   className="zn-rings__mini-ring"
                 />
                 <span className="zn-rings__mini-text">
@@ -365,12 +396,14 @@ function CardBody({
   onMetricChange,
   views,
   locale,
+  justDone,
 }: {
   model: WeekRingsModel;
   metric: RingMetric;
   onMetricChange: (metric: RingMetric) => void;
   views: RingView[];
   locale: string;
+  justDone: boolean;
 }) {
   const { t } = useTranslation(["today", "activity"]);
   const formats = useFormats(locale);
@@ -407,6 +440,7 @@ function CardBody({
                 state={view.state}
                 reference={model.reference}
                 segments={view.segments}
+                justDone={justDone}
                 className="zn-rings__ring"
               />
               <span className="zn-rings__center">{view.center}</span>
