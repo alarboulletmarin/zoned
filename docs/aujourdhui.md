@@ -108,7 +108,7 @@ toujours une semaine calendaire, et `calendarWeekRange` suffit pour les bilans.
   décharge trois semaines plus loin sans quitter l'écran. Les interrupteurs
   disent l'état réel rendu par `resolveTodaySources`, pas ce que la
   composition a écrit.
-- `src/pages/TodayPage.tsx` : la pile du jour empile les sources, la clôture
+- `src/pages/TodayPage.tsx` : la journée réunit les sources, la clôture
   passe par la `SessionRef`, la ligne de position reste celle du primaire et
   les autres sources se listent sous elle. Bilan de la semaine et du mois
   sur toutes les sources.
@@ -190,6 +190,38 @@ d'un tap, depuis Composer ou depuis le badge de la semaine.
   gabarit, sa date est une propriété de la pose, pas de la semaine.
 - Ne pas faire écrire le cockpit dans une source sans nommer la source.
 
+## Le rail et le héros
+
+Une journée à plusieurs séances était une **pile** sur téléphone (les séances
+l'une sous l'autre, séparées par un filet) et des **onglets texte** sur
+bureau : deux modèles pour la même chose, et aucun ne montrait la journée d'un
+coup d'oeil. Les deux disparaissent au profit d'un seul composant, à toutes
+les largeurs :
+
+- **le rail** (`SessionRail`) : un onglet par séance, large comme sa durée
+  estimée (44 px au moins, une cible au doigt), qui porte le profil de la
+  séance (`ZoneBar`, le même dessin que le héros, en 16 px) et, dessous, sa
+  famille et sa durée. Il choisit ET résume. L'état se lit à la forme : faite,
+  un fond plein (le papier enfoncé, pas l'encre : une journée bouclée en
+  aplats noirs devenait la chose la plus lourde de l'écran) et une coche ;
+  sautée, la hachure ; prévue, le contour seul. La sélection est un cadre
+  épais, un seul élément, qui glisse d'un onglet à l'autre. Au-dessus, le
+  kicker compte la journée, `DEUX SÉANCES · 1 H 31`, puis
+  `JOURNÉE BOUCLÉE · 1 H 31` quand tout est clos ;
+- **le héros** : la séance choisie, rendue par `CockpitSession` comme avant.
+  Une seule est montée. Sans choix, c'est la première qui reste à faire,
+  sinon la dernière. Sur une séance close, Voir le détail passe au contour :
+  une seule chose orange à l'écran, celle qui reste à faire.
+
+Une journée à une seule séance n'a pas de rail : le héros seul, l'écran
+d'avant. Sur bureau, la rangée d'onglets réservée (invisible) au-dessus de la
+séance a disparu avec les onglets : le héros d'un jour simple remonte de
+60 px.
+
+Clore une séance du jour regardé, quand il en reste une à faire, fait passer
+le héros à elle après le tampon (700 ms). Jamais sur une réouverture. Les
+règles pures sont dans `src/lib/cockpitRail.ts`, testées.
+
 ## Le mouvement
 
 `src/styles/design/motion.css` fixe la règle, et le cockpit est le premier
@@ -205,3 +237,16 @@ animation lue sur le statut se rejouerait à chaque visite. Le cockpit garde
 le statut précédent de chaque séance du jour et ne réagit qu'au passage d'un
 statut ouvert à un statut clos (`closuresBetween`, `lib/cockpitRail.ts`). Une
 réouverture, un rechargement, un premier rendu ne déclenchent rien.
+
+La clôture se propage de la séance vers la semaine : le tampon sur le bouton
+à 0 (l'encre depuis le centre, puis la coche, 600 ms en tout), l'onglet du
+rail à 120 ms, le bloc du jour dans la bande et l'arc des anneaux à 240 ms.
+Changer de séance ou de jour fait partir le contenu du héros de 12 px dans le
+sens du geste, vers la gauche quand on avance (transition de vue nommée
+`zn-cockpit-hero`, bascule nette là où l'API manque). Tout passe par les
+jetons de `motion.css`, donc tout tombe à 1 ms sous `prefers-reduced-motion`.
+Le rond du jour choisi dans la bande n'est pas devenu un élément unique qui
+glisse : sur la figure, la marque est le filet sous la lettre, et en liste
+le fond de la ligne ; les deux sont portés par le bouton radio lui-même, et
+les sortir casserait la sémantique du groupe pour un gain mince.
+
