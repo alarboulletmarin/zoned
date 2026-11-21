@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useFavorites } from "@/hooks";
+import { useIsFavorite } from "@/hooks";
 import { useJustChanged } from "@/hooks/useJustChanged";
 
 interface FavoriteButtonProps {
@@ -42,15 +42,14 @@ export function FavoriteButton({
   className,
 }: FavoriteButtonProps) {
   const { t } = useTranslation("common");
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const favorited = isFavorite(workoutId);
+  const [favorited, toggleFavorite] = useIsFavorite(workoutId);
   const just = useJustChanged([[workoutId, favorited] as const], (prev, next) => prev !== next);
   const justChanged = just.keys.has(workoutId);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleFavorite(workoutId);
+    toggleFavorite();
   };
 
   const label = favorited ? t("actions.removeFromFavorites") : t("actions.addToFavorites");

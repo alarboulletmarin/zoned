@@ -52,7 +52,7 @@ import type {
 import { SEOHead } from "@/components/seo";
 import { HubNav, navSection } from "@/components/layout";
 import {
-  useFavorites,
+  useFavoriteIds,
   useKeyboardShortcuts,
   useWorkouts,
   useViewMode,
@@ -231,7 +231,6 @@ export function LibraryPage() {
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchParams, setSearchParams] = useSearchParams();
-  const { favorites } = useFavorites();
   const { settings } = useSettings();
   const stats = useAppStats();
   const { workouts: runningWorkouts, isLoading: isLoadingRunning } =
@@ -373,6 +372,15 @@ export function LibraryPage() {
       ...paramsFilters,
     };
   });
+  // Defer the filter object so a fast typist doesn't block paint while
+  // re-running the (otherwise pure) workout filter against ~200 entries.
+  const deferredFilters = useDeferredValue(filters);
+  // Les favoris ne pèsent sur la liste que sous le filtre Favoris : un coeur
+  // cliqué ailleurs ne refiltre ni ne redessine la bibliothèque.
+  const favorites = useFavoriteIds(deferredFilters.favoritesOnly);
+  // Attente : sur un écran tactile, le survol qui préchargeait la fiche
+  // n'arrive qu'avec le tap. La liste montée, la fiche se charge d'avance.
+  useEffect(preloadWorkoutDetail, []);
 
   // Handle activity type change
   const handleActivityTypeChange = useCallback((newType: ActivityType) => {
@@ -667,9 +675,6 @@ export function LibraryPage() {
     [favorites, activityType, practice],
   );
 
-  // Defer the filter object so a fast typist doesn't block paint while
-  // re-running the (otherwise pure) workout filter against ~200 entries.
-  const deferredFilters = useDeferredValue(filters);
 
   // Filter workouts
   const filteredWorkouts = useMemo(() => {

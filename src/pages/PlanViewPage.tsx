@@ -1,5 +1,5 @@
 import { startNavTransition, markViewReady } from "@/lib/directionalTransition";
-import { sharedTransitionName, transitionFrom } from "@/lib/sharedTransition";
+import { preloadWorkoutDetail, sharedTransitionName, transitionFrom } from "@/lib/sharedTransition";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -128,6 +128,8 @@ export function PlanViewPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { plan, isLoading, reload } = usePlan(id);
+  // Attente : la fiche d'une séance se charge d'avance, le tap n'a pas de survol.
+  useEffect(preloadWorkoutDetail, []);
   const actions = usePlanActions(plan ?? null, reload);
   const log = useActivityLog();
 
