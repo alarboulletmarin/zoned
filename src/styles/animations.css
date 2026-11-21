@@ -117,12 +117,18 @@ html[data-move]::view-transition-group(zn-plan-topbar),
 html[data-move]::view-transition-group(zn-plan-week-dock) {
   animation: none;
 }
+/* L'ancienne image reste affichée : tant que la semaine suivante se monte,
+   le navigateur ne peint qu'elle, et la cacher laissait la page à la place
+   de la barre. La nouvelle se pose dessus, sans fondu additif. */
 html[data-move]::view-transition-old(zn-plan-week-strip),
 html[data-move]::view-transition-old(zn-plan-topbar),
-html[data-move]::view-transition-old(zn-plan-week-dock) { display: none; }
+html[data-move]::view-transition-old(zn-plan-week-dock),
 html[data-move]::view-transition-new(zn-plan-week-strip),
 html[data-move]::view-transition-new(zn-plan-topbar),
-html[data-move]::view-transition-new(zn-plan-week-dock) { animation: none; }
+html[data-move]::view-transition-new(zn-plan-week-dock) {
+  animation: none;
+  mix-blend-mode: normal;
+}
 
 html[data-move]::view-transition-old(zn-cockpit-hero),
 html[data-move]::view-transition-old(zn-plan-week),
