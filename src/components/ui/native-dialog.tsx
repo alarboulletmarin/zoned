@@ -155,6 +155,53 @@ export function useDialogContainer() {
   return useContext(DialogContainerContext);
 }
 
+/* ── la sortie ────────────────────────────────────────────────────────── */
+
+/**
+ * Garder le panneau monté le temps de sa sortie.
+ *
+ * Origine : un panneau repart d'où il est venu, il ne disparaît pas net. Les
+ * surfaces sont montées seulement ouvertes (la feuille de partage tient 37
+ * gabarits), donc fermer les démontait sur-le-champ, sans élément sur quoi
+ * jouer une sortie. Ici `open` qui passe à faux laisse le nœud en place avec
+ * `closing`, le CSS joue la sortie sous `data-state="closed"`, et `finish`
+ * (à `animationend` du panneau) le démonte. Le minuteur est le filet pour un
+ * navigateur où l'animation ne part pas.
+ */
+export function usePresence(open: boolean) {
+  const [shown, setShown] = useState(open);
+  // Rouvrir pendant la sortie reprend le même nœud, sans le démonter.
+  if (open && !shown) setShown(true);
+  const closing = !open && shown;
+
+  useEffect(() => {
+    if (!closing) return;
+    const timer = window.setTimeout(() => setShown(false), 400);
+    return () => window.clearTimeout(timer);
+  }, [closing]);
+
+  return {
+    present: shown,
+    closing,
+    /** À brancher sur `onAnimationEnd` du panneau : seule SA fin compte. */
+    onAnimationEnd: (event: { target: EventTarget; currentTarget: EventTarget }) => {
+      if (closing && event.target === event.currentTarget) setShown(false);
+    },
+  };
+}
+
+/**
+ * La dernière valeur non nulle. Un appelant qui remet sa sélection à null en
+ * fermant (la séance cliquée, la cible d'une feuille) démonterait le contenu
+ * avant que sa sortie (`usePresence`) ait pu se jouer : il le garde ainsi
+ * le temps de partir.
+ */
+export function useHeld<T>(value: T | null | undefined): T | null {
+  const held = useRef<T | null>(value ?? null);
+  if (value != null) held.current = value;
+  return value ?? held.current;
+}
+
 /* ── the element ──────────────────────────────────────────────────────── */
 
 export interface NativeDialogProps extends Omit<ComponentProps<"dialog">, "open"> {
@@ -207,6 +254,16 @@ export function NativeDialog({
       dismiss.current?.();
     };
     dialog.addEventListener("close", handleClose);
+    // Échap passe par le parent au lieu de fermer l'élément sur place : c'est
+    // le parent qui démonte, après la sortie (`usePresence`). Le navigateur
+    // peut refuser l'annulation (deux Échap sans geste entre eux) ; le
+    // `close` qui suit ferme alors net, ce qui reste une fermeture correcte.
+    const handleCancel = (event: Event) => {
+      if (!dismiss.current) return;
+      event.preventDefault();
+      dismiss.current();
+    };
+    dialog.addEventListener("cancel", handleCancel);
     const target = focusTarget.current?.current ?? null;
     if (target) target.setAttribute("autofocus", "");
     dialog.showModal();
@@ -224,6 +281,7 @@ export function NativeDialog({
       // `close` event would ever have triggered, and the element is closed by
       // hand, which is what releases the top layer and hands the focus back.
       dialog.removeEventListener("close", handleClose);
+      dialog.removeEventListener("cancel", handleCancel);
       unlockScroll();
       dialog.close();
       lowerToastLayer();
@@ -247,7 +305,10 @@ export function NativeDialog({
           event.clientX <= box.right &&
           event.clientY >= box.top &&
           event.clientY <= box.bottom;
-        if (!insidePanel) event.currentTarget.close();
+        if (insidePanel) return;
+        // Même chemin qu'Échap : le parent ferme, la sortie se joue.
+        if (dismiss.current) dismiss.current();
+        else event.currentTarget.close();
       }}
       {...props}
     >

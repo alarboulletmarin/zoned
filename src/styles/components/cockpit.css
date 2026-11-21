@@ -174,20 +174,20 @@
 
 /* La sélection : un cadre épais, UN élément posé sur l'onglet choisi et
    mesuré par le composant. Il glisse d'un onglet à l'autre, et seulement
-   après sa première pose (`data-placed`) : à l'arrivée sur la page, il est
-   déjà là. */
+   le temps d'un choix (`data-sliding`, useSlidingIndicator) : à l'arrivée
+   sur la page, il est déjà là. */
 .zn-cockpit__rail-frame {
   position: absolute;
   inset-block: -5px;
-  inset-inline-start: calc(var(--frame-x, 0px) - 5px);
-  inline-size: calc(var(--frame-w, 0px) + 10px);
+  inset-inline-start: calc(var(--ind-x, 0px) - 5px);
+  inline-size: calc(var(--ind-w, 0px) + 10px);
   box-sizing: border-box;
   border: var(--bw-heavy) solid var(--ink-1);
   border-radius: calc(var(--r-xs) + 4px);
   pointer-events: none;
 }
 
-.zn-cockpit__rail[data-placed] .zn-cockpit__rail-frame {
+.zn-cockpit__rail[data-sliding] .zn-cockpit__rail-frame {
   transition:
     inset-inline-start var(--dur-slow) var(--ease-out),
     inline-size var(--dur-slow) var(--ease-out);

@@ -70,8 +70,9 @@
 }
 
 /* The panel arrives from 8px below, the same 8px zoned-slide-in uses.
-   Nothing scales. There is no exit: the node is unmounted the moment it
-   closes, and an animation needs an element to play on. */
+   Nothing scales. Origine, à la fermeture : il redescend de ces 8px en
+   s'effaçant, et le fond le suit. `usePresence` garde le nœud monté sous
+   `data-state="closed"` le temps de cette sortie. */
 @keyframes zn-dialog-in {
   from { opacity: 0; transform: translateY(var(--sp-4)); }
   to { opacity: 1; transform: none; }
@@ -79,6 +80,26 @@
 @keyframes zn-dialog-scene-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+/* Le panneau fermé est `visibility: hidden` et la sortie le tient visible
+   jusqu'à sa dernière image : l'image entre `animationend` et le démontage
+   ne le remontre pas entier. Rien n'est tenu par `forwards`. */
+@keyframes zn-dialog-out {
+  from { visibility: visible; }
+  to { visibility: visible; opacity: 0; transform: translateY(var(--sp-4)); }
+}
+@keyframes zn-dialog-scene-out {
+  from { visibility: visible; }
+  to { visibility: visible; opacity: 0; }
+}
+
+.zn-dialog[data-state="closed"] {
+  visibility: hidden;
+  pointer-events: none;
+  animation: zn-dialog-out var(--dur-fast) var(--ease-in-out);
+}
+.zn-dialog[data-state="closed"]::backdrop {
+  animation: zn-dialog-scene-out var(--dur-fast) var(--ease-in-out);
 }
 
 /* ── header / footer ──────────────────────────────────────────────────── */

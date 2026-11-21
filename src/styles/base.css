@@ -234,6 +234,18 @@
   }
 }
 
+/* Geste : tout ce qui se clique s'enfonce d'un pixel, le tampon qui touche le
+   papier, et pas seulement `Button`. Dans la couche de base et sous `:where`,
+   donc sans aucun poids : une feuille de composant qui pose son propre
+   `transform` (un bouton centré par translate, une poignée de glisser) le
+   garde, et ne perd que la pression. Un lien dans le texte n'en reçoit rien,
+   `transform` ne s'applique pas à une boîte en ligne. */
+@layer base {
+  :where(button, a[href], summary, [role="button"], [role="tab"], [role="radio"]):active:where(:not(:disabled, [aria-disabled="true"])) {
+    transform: translateY(var(--press-shift));
+  }
+}
+
 /* The one utility the app still calls by name, at 23 call sites. It was
    declared twice, by Tailwind and by components/_layout.css, and Tailwind's
    copy is the one that applied, because it sat in the utilities layer. Kept

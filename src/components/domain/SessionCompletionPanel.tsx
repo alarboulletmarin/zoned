@@ -6,6 +6,7 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet";
+import { useHeld } from "@/components/ui/native-dialog";
 import {
   Popover,
   PopoverAnchor,
@@ -255,12 +256,14 @@ function CompletionForm({
 export function SessionCompletionPanel({
   open,
   onOpenChange,
-  session,
+  session: sessionProp,
   weekNumber,
   sessionName,
   onSave,
   anchorElement,
 }: SessionCompletionPanelProps) {
+  // Tenue le temps de la sortie : l'appelant passe null une fois fermé.
+  const session = useHeld(sessionProp);
   const isMobile = useMediaQuery("(max-width: 767px)");
 
   const initialChoice: Choice = useMemo(() => {

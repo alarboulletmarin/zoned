@@ -5,7 +5,7 @@ import { X } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
 import { Slot } from "@/components/ui/slot";
-import { NativeDialog, type NativeDialogProps } from "@/components/ui/native-dialog";
+import { NativeDialog, usePresence, type NativeDialogProps } from "@/components/ui/native-dialog";
 import { useSheetDrag } from "@/hooks/useSheetDrag";
 
 /**
@@ -77,12 +77,14 @@ function SheetContent({
     React.useCallback(() => onOpenChange?.(false), [onOpenChange]),
   );
 
-  if (!open) return null;
+  const presence = usePresence(open);
+  if (!presence.present) return null;
 
   return (
     <NativeDialog
       data-slot="sheet-content"
-      data-state="open"
+      data-state={presence.closing ? "closed" : "open"}
+      onAnimationEnd={presence.onAnimationEnd}
       data-side={side}
       className={cn("zn-sheet", className)}
       aria-labelledby={titleId}

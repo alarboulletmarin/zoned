@@ -39,6 +39,7 @@ import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPan
 import { SEOHead } from "@/components/seo";
 import { usePlans } from "@/hooks/usePlans";
 import { useWorkout } from "@/hooks/useWorkouts";
+import { useSlidingIndicator } from "@/hooks/useSlidingIndicator";
 import { useRadioRail } from "@/hooks/useRadioRail";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
@@ -1840,27 +1841,8 @@ function SessionRail({
 
   /* Le cadre se pose sur l'onglet choisi, mesuré : les largeurs viennent de
      flex et du plancher de 44 px, le CSS seul ne sait pas où tombe l'onglet.
-     La transition n'est permise qu'après la première pose, sinon le cadre
-     glisserait depuis le bord à l'arrivée sur la page. */
-  const [placed, setPlaced] = useState(false);
-  useLayoutEffect(() => {
-    const el = railRef.current;
-    if (!el) return;
-    const place = () => {
-      const tab = el.querySelectorAll<HTMLElement>('[role="tab"]')[selected];
-      if (!tab) return;
-      el.style.setProperty("--frame-x", `${tab.offsetLeft}px`);
-      el.style.setProperty("--frame-w", `${tab.offsetWidth}px`);
-    };
-    place();
-    const observer = new ResizeObserver(place);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [selected, sessions.length]);
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setPlaced(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
+     Le même indicateur que `Segmented` et `Tabs`. */
+  const placed = useSlidingIndicator(railRef, '[role="tab"][aria-selected="true"]', `${selected}/${sessions.length}`);
 
   const words = t("today:rail.words").split(",");
   const kicker = closed

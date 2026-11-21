@@ -23,6 +23,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { useHeld } from "@/components/ui/native-dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   ACTIVITY_INTENSITIES,
@@ -92,7 +93,7 @@ const DAYS = [0, 1, 2, 3, 4, 5, 6] as const;
  * verrouiller, déplacer, retirer.
  */
 export function WeekSessionSheet({
-  target,
+  target: targetProp,
   commuteProfileMin,
   onClose,
   onSave,
@@ -116,6 +117,8 @@ export function WeekSessionSheet({
   const [intensity, setIntensity] = useState<CrossTrainingIntensity>("easy");
   const [moving, setMoving] = useState(false);
 
+  // Tenue le temps de la sortie : le parent remet la cible à null en fermant.
+  const target = useHeld(targetProp);
   const session = target?.session ?? null;
   const workout = target?.workout ?? null;
   const activity = session ? activityKindOf(session.workoutId) : null;
@@ -204,7 +207,7 @@ export function WeekSessionSheet({
   };
 
   return (
-    <Sheet open onOpenChange={(open) => !open && onClose()}>
+    <Sheet open={targetProp != null} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
         side={fromBottom ? "bottom" : "right"}
         className="zn-wksheet"
