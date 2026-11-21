@@ -189,3 +189,19 @@ d'un tap, depuis Composer ou depuis le badge de la semaine.
 - Ne pas dater les semaines seules dans `zoned-plans`. Une semaine est un
   gabarit, sa date est une propriété de la pose, pas de la semaine.
 - Ne pas faire écrire le cockpit dans une source sans nommer la source.
+
+## Le mouvement
+
+`src/styles/design/motion.css` fixe la règle, et le cockpit est le premier
+écran à se servir de sa troisième clause : le mouvement dit d'où vient une
+chose, qu'une attente est réelle, ou qu'un geste a porté. **On anime ce qui
+change, jamais ce qui est** : rien ne bouge au chargement de la page, seul ce
+que la personne vient de faire bouge, et une seule fois.
+
+La garde tient en une ligne de code. Clore une séance appelle `reload()`, qui
+remplace tout le tableau des plans : un rendu ne sait donc pas, à lui seul,
+qu'une séance VIENT d'être faite, il sait seulement qu'elle l'est. Une
+animation lue sur le statut se rejouerait à chaque visite. Le cockpit garde
+le statut précédent de chaque séance du jour et ne réagit qu'au passage d'un
+statut ouvert à un statut clos (`closuresBetween`, `lib/cockpitRail.ts`). Une
+réouverture, un rechargement, un premier rendu ne déclenchent rien.

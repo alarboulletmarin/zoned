@@ -1,6 +1,15 @@
-/* Motion says where something came from, or that a wait is real. Nothing else
-   moves, nothing blinks to catch the eye. Press is a 1px push down, the
-   stamp pressing into the paper.
+/* Le mouvement dit d'où vient une chose, qu'une attente est réelle, ou qu'un
+   geste a porté. On anime ce qui change, jamais ce qui est : rien ne bouge au
+   chargement d'une page, seul ce que la personne vient de faire bouge, et une
+   seule fois. Rien ne clignote pour attirer l'oeil. La pression est une
+   poussée d'un pixel vers le bas, le tampon qui s'enfonce dans le papier.
+
+   La troisième clause a sa garde. Une animation pilotée par un ÉTAT (fait,
+   choisi) se rejoue à chaque montage, donc à chaque visite : ce n'est plus un
+   geste qui porte, c'est un décor. Ce qui confirme un geste s'accroche à un
+   PASSAGE, repéré par le code au moment où il a lieu, et posé le temps d'un
+   seul passage (`data-just-done` sur le cockpit). Le CSS n'anime que sous
+   cette marque. Aucun jeton de durée de plus : les trois ci-dessous suffisent.
 
    The one thing that LOOPS is the run cycle (src/styles/components/
    run-cycle.css, and its copy inlined in index.html's shell): six frames at
