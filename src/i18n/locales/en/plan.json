@@ -1047,5 +1047,139 @@
       "week": "Week {{n}}, {{dates}}, see every week"
     },
     "ticks": "Minute marks"
+  },
+  "parcours": {
+    "goal": {
+      "title": "What are you training for?",
+      "road": "Road",
+      "trail": "Trail",
+      "weeksRange": "{{min}} to {{max}} weeks",
+      "upTo": "up to {{km}} km",
+      "ready_one": "Ready",
+      "ready_other": "{{count}} ready",
+      "readyA11y_one": "{{name}}, {{count}} ready-made plan",
+      "readyA11y_other": "{{name}}, {{count}} ready-made plans",
+      "noRace": "No race in sight",
+      "readyAvailable": "{{hint}}, ready-made plan available",
+      "purpose": {
+        "base_building": "Build my base",
+        "return_from_injury": "Come back",
+        "beginner_start": "Get started"
+      },
+      "purposeHint": {
+        "base_building": "Endurance, no date",
+        "return_from_injury": "After a break or an injury",
+        "beginner_start": "My first weeks"
+      },
+      "blank": "Start from an empty calendar",
+      "blankHint": "You place every session yourself"
+    },
+    "date": {
+      "title": "When is your race?",
+      "lede": "{{goal}}. It takes at least {{min}} weeks of preparation.",
+      "pick": "Pick the race day.",
+      "weeks_one": "{{count}} week",
+      "weeks_other": "{{count}} weeks",
+      "live": " of preparation, from {{start}} to {{end}}",
+      "name": "Race name",
+      "optional": "optional",
+      "namePlaceholder": "Balcony Trail",
+      "calendar": "Race day"
+    },
+    "duration": {
+      "title": "Over how many weeks?",
+      "lede": "{{goal}}. You can extend the plan later.",
+      "weeks": "weeks",
+      "range": "From {{start}} to {{end}}",
+      "prebuilt": "{{name}} lasts {{count}} weeks."
+    },
+    "path": {
+      "title": "A ready-made plan, or a tailored one?",
+      "ledeRace": "Both end on {{date}}, your race day.",
+      "ledeOpen": "Both start on {{date}}",
+      "ready": "Ready-made",
+      "weeks_one": "{{count}} week",
+      "weeks_other": "{{count}} weeks",
+      "perWeek_one": "{{count}} session a week",
+      "perWeek_other": "{{count}} sessions a week",
+      "starts": "Starts on {{date}}",
+      "tooShort": "You need {{needed}} weeks, {{available}} are left",
+      "custom": "Tailored",
+      "customTitle": "Built for you",
+      "customFacts": "your days, your level",
+      "customBody": "Three answers about your level and your week, and the plan builds itself.",
+      "all": "See all ready-made plans"
+    },
+    "you": {
+      "title": "You and your week",
+      "lede": "Everything is filled in with common values. Change what doesn't fit you.",
+      "level": "Your level",
+      "levelHint": {
+        "beginner": "under 15 km a week",
+        "intermediate": "20 to 40 km a week",
+        "advanced": "40 to 70 km a week",
+        "elite": "over 70 km a week"
+      },
+      "vma": "VMA, if you know it",
+      "aim": "What you're aiming for",
+      "rhythm": "Your pace of progress",
+      "aims": {
+        "finish": "Finish",
+        "time": "A time",
+        "compete": "Perform"
+      },
+      "aimHint": {
+        "finish": "Gentle progression, lots of endurance.",
+        "time": "Balance between quality and endurance.",
+        "compete": "More intensity, more volume."
+      },
+      "see": "See my plan"
+    },
+    "preview": {
+      "custom": "Tailored",
+      "ready": "Ready-made",
+      "titleRace": "{{goal}}, {{date}}",
+      "range": ", from {{start}} to {{end}}",
+      "raceDay": ", race day",
+      "perWeek": "Per week",
+      "perWeekValue_one": "{{count}} session",
+      "perWeekValue_other": "{{count}} sessions",
+      "peak": "Busiest week",
+      "longest": "Longest run",
+      "create": "Create the plan",
+      "noVma": "Paces estimated from your level, without a VMA.",
+      "noVmaLink": "Set it in My zones",
+      "week1": "Your first week",
+      "timeline": "The plan, week by week"
+    },
+    "refine": {
+      "title": "Refine",
+      "summaryRoad": "strength, current volume, pace, tune-up races",
+      "summaryTrail": "strength, current volume, terrain, tune-up races",
+      "thisWeek": "Start this week",
+      "thisWeekHint": "Week 1 starts on {{date}}; the days already past stay empty.",
+      "strength": "Add strength work",
+      "strengthFreq": "Strength sessions",
+      "strengthPerWeek_one": "{{count}} a week",
+      "strengthPerWeek_other": "{{count}} a week",
+      "weeklyKm": "What you run these days",
+      "weeklyKmUnit": "km a week",
+      "longRunKm": "Your longest recent run",
+      "longRunKmUnit": "km",
+      "elevationUnit": "m gain",
+      "prep": "Tune-up races"
+    },
+    "aside": {
+      "kicker": "Your plan",
+      "newPlan": "New plan",
+      "goal": "Goal",
+      "race": "Race",
+      "duration": "Length",
+      "start": "Start",
+      "week": "Typical week",
+      "weekValue": "{{count}} sessions, long run on {{day}}",
+      "empty": "The timeline appears once the date is chosen."
+    },
+    "back": "Plans"
   }
 }

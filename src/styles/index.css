@@ -81,6 +81,7 @@
 @import "./components/plan-page.css" layer(components);
 @import "./components/plan-weeks.css" layer(components);
 @import "./components/plan-wizard.css" layer(components);
+@import "./components/plan-create.css" layer(components);
 @import "./components/popover.css" layer(components);
 @import "./components/race-sim.css" layer(components);
 @import "./components/reference.css" layer(components);
