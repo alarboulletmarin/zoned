@@ -64,14 +64,37 @@ between. Sheets are still imported into `@layer components`, under the empty
 `utilities` layer: the layer costs nothing, and it is what keeps `.sr-only`
 above every component rule.
 
-## Screen continuity
+## What moves, and why
 
-The cockpit hero, the selected plan week and the plan wizard use the same
-12 px directional view transition in `animations.css`, only after a gesture.
-The wizard stays still on first render; its progress rails transition in
-`--dur-slow`. Activated workout cards and the cockpit hero share their title
-and zone profile with the session detail; plan cards share their title with
-the plan header (the detail has no matching timeline). Navigation waits for
-the destination layout, bounded by a 300 ms safety timeout. Reduced motion
-and browsers without the API switch directly. `WeekViewPage` displays a
-single week and has no previous/next navigation to animate.
+`design/motion.css` holds the rule: motion says where a thing came from
+(origine), that a wait is real (attente), or that a gesture landed (geste).
+Animate what changes, never what is: nothing moves on page load, only what was
+just done moves, once. Only the three duration tokens, no `forwards`, and the
+reduced-motion clamp covers every CSS animation; the few lines of JS motion
+(FLIP, view transitions) read the preference themselves. Each rule below
+carries a comment naming its clause.
+
+| What | Where | Clause |
+|---|---|---|
+| The ink pill slides to the chosen segment, tab or rail session | `useSlidingIndicator`, `segmented.css`, `tabs.css`, `cockpit.css` | geste |
+| A sheet or dialog leaves the way it came | `usePresence` and `useHeld` in `ui/native-dialog.tsx`, `sheet.css`, `dialog.css` | origine |
+| A disclosure opens and closes in height, the chevron turns | `_layout.css` | origine |
+| The switch knob and its track | `switch.css` | geste |
+| One-pixel press on everything clickable | `base.css` | geste |
+| The stamp on a session just closed | `ui/stamp.tsx`, `stamp.css`, `useJustChanged` | geste |
+| The favourite heart fills from its centre | `FavoriteButton.tsx`, `favorite-button.css` | geste |
+| Copied, on the copy button, 1.5s | `useCopiedFlag`, `.zn-swap` in `button.css` | geste |
+| A new activity row enters 8px, the review bar grows | `useJustAdded`, `activity.css` | origine, geste |
+| The session an undo brought back is tinted, then fades | `PlanDayList.tsx`, `plan-page.css` | geste |
+| Hero, plan week and wizard step slide 12px in the direction of travel | `lib/directionalTransition.ts`, `animations.css` | geste |
+| Card title and profile carry into the detail page | `lib/sharedTransition.ts` | origine |
+| Calculator shapes and the editor profile follow the input; blocks slide to their new place | `race-sim.css`, `visualization.css`, `zone.css`, `useFlip` | geste |
+| The dice turns a quarter, the drawn session lands from the button | `discovery.css` | geste, origine |
+
+The only loop is still the run cycle, shown while something actually loads.
+
+Screen continuity waits for the destination layout, bounded by a 300 ms safety
+timeout, because the app runs on `BrowserRouter`: React Router's own
+`viewTransition` needs a data router, so the props on `TopBar` and
+`MobileMenu` are inert. `WeekViewPage` displays a single week and has no
+previous/next navigation to animate.
