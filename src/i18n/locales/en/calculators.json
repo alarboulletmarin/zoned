@@ -178,8 +178,8 @@
       "customDistanceLabel": "Custom distance in km"
     },
     "equivalence": {
-      "seoTitle": "Race Equivalence, Riegel Formula",
-      "seoDescription": "Race time equivalence calculator using the Riegel formula. Predict your finish times across 5K, 10K, half marathon, and marathon from one race result.",
+      "seoTitle": "Race Equivalence · Péronnet-Thibault",
+      "seoDescription": "Race time equivalence across distances, 5K to marathon, with the Péronnet-Thibault model, the same one that gives your vVO2max. Free.",
       "seoAppName": "Race Equivalence Calculator",
       "seoAppDescription": "Predict your race times across all distances from a recent result",
       "seoBreadcrumb": "Race Equivalence",
@@ -194,11 +194,11 @@
       "paceCol": "Pace",
       "zoneCol": "Zone",
       "ref": "ref",
-      "riegelExplanation": "Based on Riegel's formula (1977), used by most running calculators. More reliable between similar distances (5K→10K) than distant ones (5K→Marathon).",
       "hours": "Hours",
       "minutes": "Minutes",
       "seconds": "Seconds",
-      "kicker": "5K → marathon"
+      "kicker": "5K → marathon",
+      "modelExplanation": "Péronnet and Thibault model (1989), intermediate profile: the time entered gives a vVO2max, the vVO2max gives the other times. Same model as the vVO2max page, so the two cannot disagree."
     },
     "paceTable": {
       "seoTitle": "Pace Reference Table",
@@ -327,5 +327,16 @@
     "daysPerWeekHint": "How many days per week do you want to run?",
     "advancedOptions": "Advanced options",
     "noneSelected": "None"
+  },
+  "kit": {
+    "back": "Calculators",
+    "less": "Less, {{label}}",
+    "more": "More, {{label}}",
+    "unset": "to set",
+    "why": "Where the number comes from",
+    "next": "What next",
+    "km": "km",
+    "split": "split",
+    "passage": "elapsed"
   }
 }

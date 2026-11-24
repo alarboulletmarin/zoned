@@ -178,8 +178,8 @@
       "customDistanceLabel": "Distance personnalisée en km"
     },
     "equivalence": {
-      "seoTitle": "Équivalence entre distances · Formule de Riegel",
-      "seoDescription": "Équivalence temps de course entre distances avec la formule de Riegel. Prédiction de chronos du 5K au marathon à partir d'un résultat récent. Gratuit.",
+      "seoTitle": "Équivalence entre distances · Péronnet-Thibault",
+      "seoDescription": "Équivalence de temps de course entre distances, du 5 km au marathon, avec le modèle de Péronnet et Thibault, celui qui donne aussi ta VMA. Gratuit.",
       "seoAppName": "Calculateur d'équivalence de course",
       "seoAppDescription": "Prédis tes temps de course sur toutes les distances",
       "seoBreadcrumb": "Équivalence entre distances",
@@ -194,11 +194,11 @@
       "paceCol": "Allure",
       "zoneCol": "Zone",
       "ref": "réf",
-      "riegelExplanation": "Basé sur la formule de Riegel (1977), utilisée par la plupart des calculateurs de course. Plus fiable entre distances proches (5K→10K) qu'entre distances éloignées (5K→Marathon).",
       "hours": "Heures",
       "minutes": "Minutes",
       "seconds": "Secondes",
-      "kicker": "5 km → marathon"
+      "kicker": "5 km → marathon",
+      "modelExplanation": "Modèle de Péronnet et Thibault (1989), profil intermédiaire : le temps saisi donne une VMA, la VMA donne les autres temps. C'est le même modèle que la VMA depuis un chrono, les deux pages ne peuvent pas se contredire."
     },
     "paceTable": {
       "seoTitle": "Table de référence des allures",
@@ -327,5 +327,16 @@
     "daysPerWeekHint": "Combien de jours par semaine veux-tu courir ?",
     "advancedOptions": "Options avancées",
     "noneSelected": "Aucun"
+  },
+  "kit": {
+    "back": "Calculateurs",
+    "less": "Moins, {{label}}",
+    "more": "Plus, {{label}}",
+    "unset": "à poser",
+    "why": "D'où vient le chiffre",
+    "next": "Et ensuite",
+    "km": "km",
+    "split": "split",
+    "passage": "passage"
   }
 }

@@ -22,6 +22,7 @@ import { calculatePaceZones, loadUserZonePrefs } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
+import { enduranceIndexFor, equivalentRaceMinutes } from "@/lib/racePerformance";
 import {
   hmsParamsToSeconds,
   secondsToHmsParams,
@@ -47,11 +48,9 @@ const DISTANCE_OPTIONS = [
   { id: "custom", label: "Personnalisé", labelEn: "Custom", km: 0 },
 ] as const;
 
-/**
- * Riegel formula: t2 = t1 * (d2 / d1) ^ 1.06
- */
-function riegel(t1Seconds: number, d1Km: number, d2Km: number): number {
-  return t1Seconds * Math.pow(d2Km / d1Km, 1.06);
+/** Same model as the VMA page (Péronnet-Thibault), so the two never disagree. */
+function equivalent(t1Seconds: number, d1Km: number, d2Km: number): number {
+  return equivalentRaceMinutes(d1Km, t1Seconds / 60, d2Km, enduranceIndexFor("intermediate")) * 60;
 }
 
 /**
@@ -145,7 +144,7 @@ export function RaceEquivalencePage() {
   const predictions = useMemo(() => {
     if (!hasValidInput) return null;
     return STANDARD_DISTANCES.map((d) => {
-      const predictedSeconds = riegel(totalSeconds, inputDistanceKm, d.km);
+      const predictedSeconds = equivalent(totalSeconds, inputDistanceKm, d.km);
       const paceMinPerKm = predictedSeconds / 60 / d.km;
       const zone = paceZones ? findZoneForPace(paceMinPerKm, paceZones) : null;
       return {
@@ -354,7 +353,7 @@ export function RaceEquivalencePage() {
             <div className="zn-tool__note">
               <Info />
               <p className="zn-body zn-body--sm zn-muted">
-                {t("calculators:calculateurs.equivalence.riegelExplanation")}
+                {t("calculators:calculateurs.equivalence.modelExplanation")}
               </p>
             </div>
           </div>

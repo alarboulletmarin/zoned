@@ -78,8 +78,8 @@
     "noVmaBody": "Sans elle, tes six zones et tes allures restent vides. Le reste de ton profil est intact : un test de 6 minutes suffit à combler le trou.",
     "noVmaAction": "Estimer ma VMA",
     "sourceTitle": "D'où viennent ces chiffres",
-    "sourceBody": "Zones en pourcentage de VMA, fréquences cibles par la méthode Karvonen, prédictions par la formule de Riegel calibrée sur tes propres courses.",
-    "sourceCitation": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957 · Riegel, Runner's World, 1977"
+    "sourceBody": "Zones en pourcentage de VMA, fréquences cibles par la méthode Karvonen, temps prédits par le modèle de Péronnet et Thibault, le même qui donne ta VMA depuis un chrono.",
+    "sourceCitation": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957 · Péronnet et Thibault, J Appl Physiol, 1989"
   },
   "references": {
     "title": "Temps de référence",

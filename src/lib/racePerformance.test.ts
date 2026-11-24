@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   ENDURANCE_INDEX,
+  equivalentRaceMinutes,
   predictRaceMinutes,
   raceVmaFraction,
   sustainableVmaFraction,
@@ -44,5 +45,23 @@ describe("racePerformance (Péronnet-Thibault)", () => {
   test("invalid inputs return zero", () => {
     expect(predictRaceMinutes(0, 10, 6)).toBe(0);
     expect(vmaFromRaceTime(10, 0, 6)).toBe(0);
+  });
+});
+
+describe("equivalentRaceMinutes", () => {
+  const e = ENDURANCE_INDEX.intermediate;
+  test("the distance entered gives back the time entered", () => {
+    expect(equivalentRaceMinutes(10, 41.5, 10, e)).toBeCloseTo(41.5, 1);
+    expect(equivalentRaceMinutes(42.195, 200, 42.195, e)).toBeCloseTo(200, 1);
+  });
+  test("VMA -> time -> VMA is stable", () => {
+    for (const vma of [10, 14, 16, 20]) {
+      const minutes = predictRaceMinutes(vma, 21.1, e);
+      expect(vmaFromRaceTime(21.1, minutes, e)).toBeCloseTo(vma, 2);
+    }
+  });
+  test("a 10 km in 41:30 predicts a marathon near 3:17:50", () => {
+    const m = equivalentRaceMinutes(10, 41.5, 42.195, e);
+    expect(Math.abs(m - (3 * 60 + 17 + 49 / 60))).toBeLessThan(1.5);
   });
 });
