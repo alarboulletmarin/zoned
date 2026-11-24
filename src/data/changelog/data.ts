@@ -2,6 +2,222 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "1.1.0",
+    date: "2026-11-24",
+    changes: {
+      added: [
+        {
+          text: "L'édition d'un plan permet d'insérer et de réordonner dans une même journée, avec le profil de la séance dans l'aperçu du glisser. L'avis d'allure du plan accepte directement la VMA et met à jour les prescriptions de course à venir.",
+          textEn: "Plan editing supports insertion and reordering within the same day, with a workout profile in the drag preview. The plan's pace notice accepts VMA directly and updates upcoming running prescriptions.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Continuité entre écrans : le cockpit, les semaines de plan et l'assistant partagent des transitions directionnelles après navigation. Les cartes de séance et le héros du cockpit emmènent leur titre et leur profil de zones vers la page séance, les cartes de plan leur titre vers l'en-tête du plan. Le mouvement réduit passe directement.",
+          textEn: "Screen continuity: the cockpit, plan weeks and plan wizard share directional transitions after navigation. Workout cards and the cockpit hero carry their title and zone profile into the session page, plan cards carry their title into the plan header. Reduced motion switches directly.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "La page séance est redessinée et gagne Ajouter à…, qui relie pour la première fois une séance du catalogue au cockpit, aux plans et aux semaines. Un seul vermillon par écran, celui de l'action principale, et une ligne de métadonnées en mono dans l'en-tête.",
+          textEn: "The session page is redrawn and gains Add to…, which links a catalogue session to the cockpit, the plans and the weeks for the first time. One vermillon per screen, the primary action's, and one mono metadata line in the header.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Le cockpit gagne les anneaux de la semaine : Endurance (Z1-Z2), Qualité (Z3+) et Renfo, fait contre prévu pour la semaine civile, dans la vue semaine du cockpit. Un anneau par intensité plutôt que par sport, sur la ligne que la jauge 80/20 trace déjà.",
+          textEn: "The cockpit gains the week's rings: Endurance (Z1-Z2), Quality (Z3+) and Strength, done against planned for the calendar week, in the week view of the cockpit. One ring per intensity rather than per sport, on the line the 80/20 gauge already draws.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Synchronisation entre appareils par code QR animé, depuis les Réglages. Plans, activités, profils et simulations sont compressés puis diffusés en boucle de QR codes qu'un autre appareil filme, sans réseau ni compte. Les images peuvent arriver dans le désordre, et la restauration vérifie la version et une somme de contrôle : tout ou rien.",
+          textEn: "Sync between devices by animated QR code, from Settings. Plans, activities, profiles and simulations are compressed and played as a loop of QR frames that another device films, with no network and no account. Frames can arrive in any order, and the receiver checks the format version and a checksum before restoring everything or nothing.",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Le cockpit suit une composition plutôt qu'un seul plan : tous les plans en cours, plus les semaines seules que vous posez sur une semaine du calendrier. Une feuille active ou éteint chaque source, on peut ajouter une séance à la source de son choix depuis le jour choisi, fusionner une semaine posée dans une semaine de plan (en ajoutant ou en remplaçant, avec annulation), et le cockpit signale deux séances clés posées le même jour par deux sources. L'audit du plan compte aussi les semaines posées.",
+          textEn: "The cockpit follows a composition instead of a single plan: every plan in progress, plus standalone weeks you place on a calendar week. A sheet turns each one on or off, a session can be added to the source of your choice from the chosen day, a placed week can be merged into a plan week (added to its sessions or replacing them, undoable), and the cockpit says when two sources put a key session on the same day. The plan audit counts the placed weeks too.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Une semaine seule se suit désormais au lieu de se poser : badge Suivi sur sa page, réglage Cockpit (cette semaine, la suivante, ou ne plus suivre), et la liste des semaines dit où chacune est posée. Les séances d'une semaine se réordonnent dans la journée par glisser ou avec Monter et Descendre, et les cartes portent l'icône du sport et un mini-profil de zones. Le + de fin de journée n'est plus masqué sur téléphone.",
+          textEn: "A standalone week is now followed instead of placed: a Followed badge on its page, a Cockpit control (this week, next week, or stop following), and the weeks list says where each one sits. Sessions of a week can be reordered within a day by dragging or with Up and Down, and the cards carry the sport icon and a mini zone profile. The end-of-day + is no longer hidden on a phone.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le bouton de thème fait tourner trois états, Auto, Clair, Sombre, et son icône montre le réglage en cours. Avant, un clic enregistrait un choix explicite et l'app ne suivait plus jamais le système.",
+          textEn: "The theme button cycles three states, Auto, Light, Dark, and its icon shows the current one. Before, one click saved an explicit choice and the app never followed the system again.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Un seul champ de temps, au masque chronomètre, partout où l'on saisit un temps : les chiffres entrent par la droite et le pavé numérique suffit. À la création d'un plan, l'allure cible et le temps cible sont sur le même écran et se suivent, avec une lecture en clair dessous (`3 h 30 min`). L'heure de départ du simulateur jour J prend le même masque.",
+          textEn: "One time field, with a stopwatch mask, everywhere a time is typed: digits enter from the right and the numeric keypad is enough. In plan creation, target pace and target time sit on the same screen and follow each other, with a plain reading underneath (`3 h 30 min`). The race-day simulator's start time uses the same mask.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Le catalogue est prérendu au build, en français et en anglais, avec un canonique vers elle-même sur chaque URL du sitemap. Les pages classées entre la 8e et la 20e place reçoivent des liens descriptifs depuis les séances et le glossaire, pour que les robots trouvent un titre et des liens dans le HTML statique.",
+          textEn: "The catalogue is prerendered at build, in French and English, with a self-referencing canonical on every URL of the sitemap. Pages ranked 8 to 20 get descriptive links from the sessions and the glossary, so crawlers find a heading and links in the static HTML.",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+      ],
+      changed: [
+        {
+          text: "Le mouvement au-delà du cockpit : contrôles segmentés, onglets et rail du cockpit partagent une seule pilule d'encre qui glisse vers le choix. Les feuilles et dialogues repartent comme ils sont venus, Échap compris, et tout ce qui se clique s'enfonce. Rien ne bouge au chargement de la page.",
+          textEn: "Motion beyond the cockpit: segmented controls, tabs and the cockpit rail share one ink pill that slides to the choice. Sheets and dialogs leave the way they came in, Escape included, and everything clickable presses in. Nothing moves on page load.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Une journée à plusieurs séances dans le cockpit en montre une à la fois, avec un rail d'onglets aussi larges que la durée de chaque séance, chacun dessinant son profil de zones, et un résumé de la journée (`DEUX SÉANCES · 1 H 31`, puis `JOURNÉE BOUCLÉE · 1 H 31`).",
+          textEn: "A day with several sessions in the cockpit shows one at a time, with a rail of tabs as wide as each session's duration, each drawing its zone profile, and a day summary (`TWO SESSIONS · 1 H 31`, then `DAY WRAPPED · 1 H 31`).",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Clore une séance se confirme : le bouton se remplit d'encre et une coche se dessine, puis l'onglet, la barre du jour et l'arc de l'anneau se remplissent à leur tour, avec une courte vibration sur les téléphones compatibles. Changer de séance ou de jour fait glisser la carte dans le sens du déplacement.",
+          textEn: "Closing a session confirms itself: the button fills with ink and a check draws, then the tab, the day's bar and the ring's arc fill in turn, with a short vibration on phones that support it. Switching session or day slides the card in the direction of travel.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les durées s'écrivent d'une seule façon dans l'app : `37 min`, `22 min 30`, `1 h 05`, `30 s`, avec une espace insécable. La forme serrée est gardée pour les cartes de partage et les étiquettes de la frise.",
+          textEn: "Durations are written one way across the app: `37 min`, `22 min 30`, `1 h 05`, `30 s`, with a non-breaking space. The tight form is kept for the share cards and the timeline labels.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Neuf termes du glossaire qui portaient leur nom anglais en français (Taper, Race Pace, Long Run, Recovery Run, Tempo Run, Strides, Progressive Run, Negative Split, Base Building) ont maintenant leur nom français. Les identifiants et les URLs ne changent pas.",
+          textEn: "Nine glossary terms that carried their English name in French (Taper, Race Pace, Long Run, Recovery Run, Tempo Run, Strides, Progressive Run, Negative Split, Base Building) now have their French one. Ids and URLs are unchanged.",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "La page des plans est redessinée autour de ce qui a été fait : la carte d'un plan en cours montre ses pastilles, une frise et un compte à rebours, et mesure les séances faites plutôt que le calendrier, si bien qu'un plan fini mais vide ne dit plus 100 %. Les plans passés forment un historique compact.",
+          textEn: "The plans page is redrawn around what was actually done: an active plan's card shows its chips, a timeline and a countdown, and measures sessions done rather than the calendar, so a finished empty plan no longer reads 100%. Past plans are a compact history.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Les semaines enregistrées, les séances construites et les simulations de course enregistrées suivent la page des plans : un bouton `···` de 44 px nommant son objet remplace la rangée de boutons et la corbeille toujours visible, et les cartes d'une même rangée s'alignent.",
+          textEn: "Saved weeks, built sessions and saved race simulations follow the plans page: one 44 px `···` button naming its object replaces the row of buttons and the always-visible bin, and cards of one row line up.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "`getDominantZone` devient `getPeakZone`, ce qu'elle a toujours renvoyé. Rien ne change à l'écran.",
+          textEn: "`getDominantZone` is renamed `getPeakZone`, which is what it always returned. Nothing changes on screen.",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Créer un plan tient en un seul parcours : `/plan/new` est l'assistant lui-même, en quatre écrans. Les plans prêts passent en premier et le plan se voit avant d'être créé. La VMA est demandée là où elle sert. Le départ par défaut est le lundi suivant, et aucune séance n'est posée avant le départ ni après la course.",
+          textEn: "Creating a plan is one path: `/plan/new` is the wizard itself, in four screens. Ready-made plans come first and the plan can be seen before it is created. VMA is asked where it is used. The default start is next Monday, and no session is placed before the start date or after the race.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "La racine ouvre le cockpit dès qu'un plan est en cours, et le logo comme une nouvelle ligne Accueil du menu mènent toujours à la page d'accueil. Celle-ci passe à quatre sections (héros, quatre portes, trois séances, trois questions) et tire au sort une séance de course, de vélo et de natation à chaque visite, chaque carte nommant son sport.",
+          textEn: "The root URL opens the cockpit as soon as a plan is in progress, and the logo and a new Home line in the menu still lead to the landing page. The landing page is cut to four sections (hero, four doors, three sessions, three questions) and shows a random run, bike and swim session at each visit, each card naming its sport.",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Les toasts prennent le style de la maison et durent selon leur nature : succès 2,5 s, info 4 s, avertissement 6 s, erreur 8 s, chargement jusqu'à sa résolution. Un échec dit maintenant pourquoi (quota, annulation, hors ligne, accès refusé) au lieu d'une erreur générique, et n'affirme plus une cause jamais vérifiée.",
+          textEn: "Toasts follow the house look and last as long as their nature calls for: success 2.5 s, info 4 s, warning 6 s, error 8 s, loading until resolved. A failure now says why (quota, cancelled, offline, access denied) instead of a generic error, and no longer states a cause that was never checked.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les états vides disent ce qui manque, ce que l'écran deviendra, et proposent une seule action. Le cockpit sans plan, Mes plans et Mes semaines à zéro n'affichent plus qu'un bouton et une note, le reste attend le premier plan.",
+          textEn: "Empty states say what is missing, what the screen will become, and offer one action. The cockpit without a plan, My plans and My weeks at zero each show a single button and one note, and the extras wait for the first plan.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les grands écrans utilisent leur largeur : les cinq calculateurs placent le formulaire à gauche et les résultats à droite dès 1024 px, la semaine du cockpit passe sur deux colonnes dès 1000 px, et la création de plan affiche ses étapes de choix sur deux colonnes dès 900 px. Le calendrier a une largeur fixe sur bureau au lieu de remplir la fenêtre.",
+          textEn: "Wide screens use their width: the five calculators put the form on the left and the results on the right from 1024 px, the cockpit week splits in two columns from 1000 px, and plan creation shows its choice steps on two columns from 900 px. The date picker has a fixed width on desktop instead of filling the window.",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Nouvelle porte de CI, `check:errors` : un `catch` muet dans les pages, composants et hooks échoue, il doit dire l'échec ou porter un commentaire qui justifie le silence.",
+          textEn: "A new CI gate, `check:errors`, fails on a silent `catch` in pages, components and hooks: it must report the failure or carry a comment that justifies the silence.",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Le générateur de parcours, Mes parcours, le simulateur what-if et l'age-graded sont retirés. Sur 31 jours, le premier a reçu 8 visiteurs sans retour et les autres aucun, pour environ 10 800 lignes, quatre services externes, Leaflet et un stockage IndexedDB. Les boutons qui y menaient disparaissent.",
+          textEn: "The route generator, My routes, the what-if simulator and age-graded results are removed. In 31 days they had 8 visitors with no return, and none for the other two, while costing about 10,800 lines, four external services, Leaflet and IndexedDB storage. The buttons that led to them are gone.",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Vercel Analytics est retiré : plus aucune mesure de pages vues, et les textes qui disaient le contraire sont corrigés. Cinq dépendances jamais importées (`framer-motion`, `zod`, `react-hook-form`, `@hookform/resolvers`, `react-loading-skeleton`) et cinq fichiers que rien n'appelait partent aussi.",
+          textEn: "Vercel Analytics is removed: no more page-view measurement, and the texts that said otherwise are corrected. Five unused dependencies (`framer-motion`, `zod`, `react-hook-form`, `@hookform/resolvers`, `react-loading-skeleton`) and five files nothing called are removed too.",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      fixed: [
+        {
+          text: "Sauter à la fin de la bibliothèque charge plus de cartes et garde l'index complet replié, et ouvrir une séance depuis une bibliothèque défilée arrive en haut de sa page. Une courte animation d'entrée couvre les navigateurs sans transitions partagées.",
+          textEn: "Jumping to the end of the library loads more cards and keeps the full index folded, and opening a workout from a scrolled library lands at the top of its page. A short entry motion covers browsers without shared transitions.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Sur mobile, les contrôles de semaine d'un plan restent au-dessus de la transition, le panneau de clôture garde son contenu en se fermant, l'ajout de séances fonctionne en largeur bureau, les confirmations expirent et le menu du plan propose d'annuler après enregistrement.",
+          textEn: "Plan mobile week controls stay above the week transition, the completion panel keeps its content while closing, adding sessions works at desktop widths, confirmations expire, and the plan menu offers undo after saving.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "La répartition par zones d'un plan comptait un bloc d'intervalles une seule fois : `3 × 8 min Z4` pesait 8 minutes, et une séance seuil de 55 minutes montrait 12 minutes de Z4 au lieu de 24. La répartition lit maintenant les segments du moteur de structure, dans la distribution du plan comme dans les anneaux.",
+          textEn: "The zone split of a plan counted an interval block once: `3 × 8 min Z4` weighed 8 minutes, so a 55-minute threshold session showed 12 minutes of Z4 instead of 24. The split now reads the structure engine's segments, on the plan's zone distribution and in the rings alike.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le nombre de semaines d'un plan va maintenant jusqu'à la semaine de course. Un plan démarrant le lundi 26 octobre pour une course le dimanche 10 janvier comptait 10 semaines et posait la course le 3 janvier, parce que les jours étaient comptés par tranches de sept. Les objectifs intermédiaires et l'assistant lisent le même compte.",
+          textEn: "The plan week count now runs to the race week. A plan starting Monday 26 October with a race on Sunday 10 January had 10 weeks and put the race on 3 January, because days were counted in blocks of seven. Intermediate goals and the creation wizard read the same count.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Exports : le `.ics` nomme les activités par leur type au lieu de `__activity_commute__`, porte la zone d'effort et range le vélo en Cycling. L'export d'image réessaie une capture échouée, ce qui arrivait sur Firefox, et embarque lui-même les polices. Le toast de chargement ne reste plus à côté du succès, et Durée et effort ouvre la feuille de séance pour une activité sur la page du plan.",
+          textEn: "Exports: the `.ics` names activities by their type instead of `__activity_commute__`, carries the effort zone, and files bike sessions under Cycling. Image export retries a failed capture, which happened on Firefox, and embeds the fonts itself. The loading toast no longer stays on screen next to the success one, and Duration and effort opens the session sheet for an activity on the plan page.",
+          category: "Export",
+          categoryEn: "Export",
+        },
+        {
+          text: "Cockpit sur bureau : la carte du jour ne défile plus à l'intérieur d'elle-même et changer de jour ne décale pas la semaine, la grille du mois montre les semaines posées plus loin, et le sélecteur de séance s'ouvre en panneau latéral sur grand écran.",
+          textEn: "Cockpit on desktop: the day card no longer scrolls inside itself and switching day does not shift the week, the month grid shows weeks placed further away, and the session picker opens as a side panel on wide screens.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Formulaires : les champs numériques n'ont plus qu'un seul anneau de focus au lieu d'un cadre dans un cadre, avec valeur et unité centrées. Le formulaire téléphone du simulateur n'apparaît plus en double sur bureau, son heure de départ ne déborde plus de sa carte sur iOS, et la page garde son élan de défilement au changement de section. Le texte d'aide d'un état vide garde sa ligne.",
+          textEn: "Forms: numeric fields show a single focus ring instead of a ring inside a ring, with value and unit centred in the frame. The simulator's phone form no longer shows twice on desktop, its start time no longer overflows its card on iOS, and the page keeps its scroll momentum when the section changes. An empty state's help text keeps its line.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les URL inconnues renvoient un vrai 404 avec une page noindex, au lieu de l'accueil servi en 200 avec un canonique vers `/`, que la Search Console signalait en soft 404.",
+          textEn: "Unknown URLs now return a real 404 with a noindex page instead of the home page served as 200 with a canonical to `/`, which Search Console reported as soft 404s.",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+      ],
+    },
+  },
+  {
     version: "1.0.1",
     date: "2026-09-19",
     changes: {

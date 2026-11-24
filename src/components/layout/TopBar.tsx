@@ -58,6 +58,15 @@ export function TopBar() {
   // the doors move to the full-screen MobileMenu, opened by the one glyph the
   // bar gains at its start.
   const isCompact = useMediaQuery("(max-width: 1023px)");
+  // A prerendered page does not know the width it will land on, and
+  // `useMediaQuery` answers false there, so the static HTML used to carry the
+  // desktop bar alone: on a phone the doors ran 943px wide until hydration,
+  // the fixed loading shell stretched with the page and re-centred when the
+  // bar shrank (CLS 0.09, Lighthouse CI red from 1 November). Until the first
+  // effect, both versions are rendered and topbar.css shows the one that fits.
+  const [snapshot, setSnapshot] = useState(isServerSnapshot);
+  useEffect(() => setSnapshot(false), []);
+  const showDesktop = snapshot || !isCompact;
   const [mac, setMac] = useState(() => (isServerSnapshot() ? false : isMac));
   useEffect(() => {
     if (isMac) setMac(true);
@@ -83,7 +92,7 @@ export function TopBar() {
           this bar: it has to be a child. Its <dialog> is not a problem here,
           showModal() lifts it into the top layer, which no ancestor stacking
           context, z-index or overflow can reach. */}
-      <MobileMenu />
+      <MobileMenu snapshot={snapshot} />
 
       {/* Le logo demande la landing, pas l'ouverture de l'app : sans cet
           état, la racine renverrait au cockpit quiconque a un plan en cours
@@ -98,7 +107,7 @@ export function TopBar() {
         <Wordmark />
       </Link>
 
-      {!isCompact && (
+      {showDesktop && (
         <nav aria-label={t("nav.primary")} className="zn-topbar__nav">
           {PRIMARY_NAV.map((section) => (
             <NavDoor
@@ -158,7 +167,7 @@ export function TopBar() {
           )}
         </button>
 
-        {!isCompact && <AccountMenu />}
+        {showDesktop && <AccountMenu />}
       </div>
     </header>
   );
@@ -258,7 +267,7 @@ function AccountMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button type="button" className="zn-topbar__tool" aria-label={t("topnav.account")}>
+        <button type="button" className="zn-topbar__tool zn-topbar__tool--account" aria-label={t("topnav.account")}>
           <UserRound />
         </button>
       </DropdownMenuTrigger>
