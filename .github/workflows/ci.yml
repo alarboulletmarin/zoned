@@ -13,7 +13,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 # A PR that gets three pushes in a minute only needs the last one checked.
 concurrency:
