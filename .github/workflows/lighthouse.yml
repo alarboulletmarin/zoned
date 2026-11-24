@@ -49,7 +49,7 @@ name: Lighthouse CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
   lighthouse:

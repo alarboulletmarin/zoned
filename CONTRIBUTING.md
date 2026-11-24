@@ -28,7 +28,7 @@ Pour les contributeurs techniques, vous pouvez directement proposer le fichier J
    ```
 
    Le script **echoue** (code de sortie non nul), il n'avertit pas. Il tourne sur chaque Pull Request en CI : une seance invalide passe au rouge avant la fusion, pas au deploiement.
-5. Ouvrez une Pull Request.
+5. Ouvrez une Pull Request vers la branche `develop` (`main` ne recoit que les releases).
 
 ### 3. Via le formulaire integre
 
@@ -133,7 +133,7 @@ For technical contributors, you can directly propose the JSON file.
    ```
 
    The script **fails** with a non-zero exit code, it does not warn. It runs on every Pull Request in CI, so an invalid workout goes red before merge rather than on deploy.
-5. Open a Pull Request.
+5. Open a Pull Request against the `develop` branch (`main` only receives releases).
 
 ### 3. Via the in-app form
 

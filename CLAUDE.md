@@ -35,6 +35,18 @@ catalogue file. `bun run scripts/site-stats.ts` re-measures the catalogue counts
 CI deliberately skips `prerender`, `generate:og`, `generate:pwa-screenshots`, `demo:gif`
 and the full `build`, because they drive a headless Chrome and cost minutes.
 
+## Branches and releases
+
+`develop` is the working branch and the default one on GitHub: every PR targets it, and
+Vercel gives it preview deployments. `main` is production (Vercel deploys it to zoned.run)
+and only receives release PRs. Write each user-visible change into `## [Unreleased]` of
+`CHANGELOG.md` as it lands. To release: add the FR/EN entry for the version to
+`src/data/changelog/data.ts`, then from a clean, up-to-date develop run
+`scripts/release.sh X.Y.Z` (`DRY_RUN=1` first). It dates the changelog, bumps
+`package.json`, runs the CI gates and opens `release/X.Y.Z` -> `main`. Merging that PR is
+the release: `release.yml` tags `vX.Y.Z`, publishes the GitHub Release from the CHANGELOG
+section and merges main back into develop. Never tag by hand.
+
 ## Architecture
 
 Single static React 19 + Vite 7 SPA. **No backend, no accounts, no database.** All user

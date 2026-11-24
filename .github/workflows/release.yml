@@ -1,21 +1,26 @@
-# Publish a GitHub Release when a version tag is pushed.
+# Publish a release when main receives a new version.
 #
-# Pushing a tag only creates a tag: the Releases page stays empty unless
-# something creates the Release object. That is why the page sat on v0.4.0
-# while ten tags (v0.5.1 -> v0.7.3) had been pushed.
+# main only takes release pull requests (scripts/release.sh opens them from
+# develop). When one is merged, package.json carries a version that has no tag
+# yet: this workflow tags that commit vX.Y.Z, publishes the GitHub Release with
+# the CHANGELOG.md section of that version as its notes, then merges main back
+# into develop so the release commit (and the merge commit, whatever the merge
+# strategy) is in develop's history before the next release.
+#
+# A push to main whose version is already tagged publishes nothing.
 #
 # The notes are the CHANGELOG.md section for that version, so the Release and
 # the changelog can never drift. No section, no release: an empty release body
 # is worse than a loud failure.
 #
-# workflow_dispatch takes a tag name so already-pushed tags can be published
-# after the fact, without deleting and re-pushing the tag.
+# workflow_dispatch takes an existing tag so an old tag can be published after
+# the fact (the Releases page once sat on v0.4.0 while ten tags had been
+# pushed). It does not merge back.
 name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
   workflow_dispatch:
     inputs:
       tag:
@@ -30,20 +35,42 @@ on:
 permissions:
   contents: write
 
+# Two merges into main in a row must not race on the same tag or on develop.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Resolve tag
-        id: tag
-        run: echo "name=${{ inputs.tag || github.ref_name }}" >> "$GITHUB_OUTPUT"
-
       - uses: actions/checkout@v5
         with:
-          ref: ${{ steps.tag.outputs.name }}
+          ref: ${{ inputs.tag || github.sha }}
+          fetch-depth: 0
+
+      - name: Resolve the version
+        id: tag
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ -n "$INPUT_TAG" ]; then
+            echo "name=$INPUT_TAG" >> "$GITHUB_OUTPUT"
+            echo "new=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          tag="v$(jq -r .version package.json)"
+          echo "name=$tag" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+            echo "$tag is already tagged: nothing to publish."
+            echo "new=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "new=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Extract the changelog section
-        id: notes
+        if: steps.tag.outputs.new == 'true'
         env:
           TAG: ${{ steps.tag.outputs.name }}
         run: |
@@ -63,13 +90,31 @@ jobs:
           echo "--- release notes for $TAG ---"
           cat release-notes.md
 
+      # Creates the tag on this exact commit when it does not exist yet.
       - name: Publish the release
+        if: steps.tag.outputs.new == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.name }}
+          target_commitish: ${{ github.sha }}
           name: ${{ steps.tag.outputs.name }}
           body_path: release-notes.md
-          # A pushed tag is a genuinely new version and takes "Latest". A manual
-          # run defaults to not taking it: backfilling old tags one by one
+          # A merged release is genuinely new and takes "Latest". A manual run
+          # defaults to not taking it: backfilling old tags one by one
           # otherwise leaves the oldest published release wearing the badge.
           make_latest: ${{ github.event_name == 'push' || inputs.make_latest }}
+
+      # Fast-forward when develop has not moved since the release branch was
+      # cut, a merge commit otherwise. A conflict (someone edited the same
+      # CHANGELOG lines on develop meanwhile) fails here, after the release is
+      # out: merge main into develop by hand.
+      - name: Merge main back into develop
+        if: github.event_name == 'push' && steps.tag.outputs.new == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch -q origin develop
+          git switch -q -c develop origin/develop
+          git merge --no-edit "$GITHUB_SHA" -m "chore(release): ramène ${{ steps.tag.outputs.name }} dans develop"
+          git push origin develop
