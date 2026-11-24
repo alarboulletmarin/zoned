@@ -400,3 +400,24 @@ html {
 /* .zn-topbar__tool carries the same floor unconditionally, on every pointer:
    the control has no frame to aim at, so the target has to be there even when
    a mouse is what finds it. */
+
+/* ── one bar per width, decided by CSS while the page is a snapshot ───── */
+
+/* A prerendered page carries both bars until its first effect (TopBar.tsx,
+   `snapshot`): the doors and the account door for a desktop, the menu glyph
+   for a phone. These rules show the one that fits before any script runs, so
+   the static HTML neither overflows a phone nor shifts when React takes
+   over. Once mounted, the component renders one bar only and they match
+   nothing more. Last in the file so they beat `.zn-topbar__tool`. */
+@media (max-width: 1023px) {
+  .zn-topbar__nav,
+  .zn-topbar__tool--account {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .zn-menu-trigger {
+    display: none;
+  }
+}

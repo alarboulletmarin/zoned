@@ -44,6 +44,17 @@
 # (~0.6-1.2s slower than that box) that is 7.0-7.6s, so 9000ms restores the
 # 1.4-2.0s cushion this budget was originally calibrated with — rather than
 # leaving a tripwire loosened for a reason that has since shrunk.
+#
+# FCP recalibrated 2026-11 to 3300ms. Lighthouse simulates this metric, so it
+# is a function of the bytes on the critical path and comes out the same to
+# the millisecond on every run: 2556-2567ms on 13b96f23 (10-31), then
+# 2758-2878ms once every route shipped prerendered HTML (b806b9eb, document
+# 13.4KB -> 21.4KB), then 3008-3015ms with the session page (225732ae, the
+# single render-blocking stylesheet 61.0KB -> 64.8KB). Both are features, not
+# leaks, and 3000ms had no room left. 3300ms gives back ~300ms, roughly what
+# another 7KB of render-blocking CSS costs (3.8KB cost 150ms). The lever, if FCP matters more
+# than this budget, is splitting src/styles per lazy page instead of one
+# index.css: the whole app's CSS currently blocks the first paint.
 name: Lighthouse CI
 
 on:
