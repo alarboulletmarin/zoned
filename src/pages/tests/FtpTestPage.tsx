@@ -1,12 +1,10 @@
-import { useState, useMemo, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "@/components/ui/toast";
-import { Save } from "@/components/icons";
+import { Check } from "@/components/icons";
+import { Answer, NextSteps, Provenance, StepField, ToolHeader } from "@/components/calc";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { Segmented } from "@/components/ui/segmented";
-import { PageContainer } from "@/components/layout/PageContainer";
+import { toast } from "@/components/ui/toast";
 import { SEOHead } from "@/components/seo";
 import {
   calculateCyclingZones,
@@ -15,55 +13,40 @@ import {
   formatPowerRange,
   type CogganZone,
 } from "@/lib/planGenerator/cyclingPaceEngine";
-import { updateCyclingBaseData } from "@/lib/athleteProfile";
+import { FTP_WATTS_RANGE, loadCyclingProfile, updateCyclingBaseData } from "@/lib/athleteProfile";
 
 type Protocol = "20min" | "ramp";
 
 const ZONE_ORDER: CogganZone[] = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6", "Z7"];
 
-const MAX_WATTS = 1500;
-
+/**
+ * FTP : un test de puissance in, la FTP et les sept zones Coggan out. Sans
+ * saisie, la page part de la FTP enregistrée, lue dans un effet (prérendu).
+ */
 export function FtpTestPage() {
   const { t } = useTranslation("calculators");
   const [protocol, setProtocol] = useState<Protocol>("20min");
-  const [powerInput, setPowerInput] = useState<string>("");
+  const [power, setPower] = useState<number | undefined>();
+  const [savedFtp, setSavedFtp] = useState<number | undefined>();
+  useEffect(() => setSavedFtp(loadCyclingProfile()?.ftpWatts), []);
 
-  const parsedPower = powerInput === "" ? 0 : parseInt(powerInput, 10);
-  const validPower = Number.isFinite(parsedPower) && parsedPower > 0;
-  // Empty is not wrong, it is unanswered. A typed zero is wrong, and until now
-  // it produced silence: the field says so out loud.
-  const powerError = powerInput !== "" && !validPower;
+  const estimated = power
+    ? protocol === "20min"
+      ? estimateFtpFrom20Min(power)
+      : estimateFtpFromRamp(power)
+    : undefined;
+  const ftp = estimated || savedFtp;
+  const zones = ftp ? calculateCyclingZones({ ftpWatts: ftp }).power : undefined;
+  const same = estimated !== undefined && estimated === savedFtp;
+  const savable = estimated !== undefined && estimated >= FTP_WATTS_RANGE[0] && estimated <= FTP_WATTS_RANGE[1];
 
-  const estimatedFtp = useMemo(() => {
-    if (!validPower) return 0;
-    return protocol === "20min"
-      ? estimateFtpFrom20Min(parsedPower)
-      : estimateFtpFromRamp(parsedPower);
-  }, [parsedPower, protocol, validPower]);
-
-  const zones = useMemo(() => {
-    if (estimatedFtp <= 0) return null;
-    return calculateCyclingZones({ ftpWatts: estimatedFtp });
-  }, [estimatedFtp]);
-
-  const handleSave = () => {
-    if (estimatedFtp <= 0) return;
-    updateCyclingBaseData({ ftpWatts: estimatedFtp });
-    toast.success(t("calculateurs.ftp.ftpSaved", { ftp: estimatedFtp }));
-  };
-
-  const handlePowerInput = (value: string) => {
-    if (value === "") {
-      setPowerInput("");
+  const save = () => {
+    if (!savable) return;
+    if (!updateCyclingBaseData({ ftpWatts: estimated })) {
+      toast.failure(t("profile:base.saveFailed"));
       return;
     }
-    const num = parseInt(value, 10);
-    if (Number.isNaN(num) || num < 0) return;
-    if (num > MAX_WATTS) {
-      setPowerInput(String(MAX_WATTS));
-      return;
-    }
-    setPowerInput(String(num));
+    setSavedFtp(estimated);
   };
 
   return (
@@ -91,149 +74,97 @@ export function FtpTestPage() {
         ]}
       />
 
-      <PageContainer width="narrow" className="zn-ct">
-        {/* Mono kicker, display title, one sentence. */}
-        <header
-          className="zn-ct__head zn-stack"
-          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
-        >
-          <span className="zn-kicker">{t("calculateurs.ftp.kicker")}</span>
-          <h1 className="zn-display" data-level="2">
-            {t("calculateurs.ftp.title")}
-          </h1>
-          <p className="zn-body zn-body--lead zn-ct__lede">
-            {t("calculateurs.ftp.description")}
-          </p>
-        </header>
+      <div className="zn-calc">
+        <ToolHeader kicker={t("calculateurs.ftp.kicker")} title={t("calculateurs.ftp.title")} />
 
-        {/* The test you did, and what it measured. */}
-        <section className="zn-ct__band">
-          <Card>
-            <CardContent
-              className="zn-stack"
-              style={{ "--gap": "var(--sp-12)" } as CSSProperties}
-            >
-              <div
-                className="zn-ct__field"
-                style={{ "--gap": "var(--sp-5)" } as CSSProperties}
-              >
-                <span className="zn-kicker zn-kicker--inline">
-                  {t("calculateurs.ftp.protocol")}
-                </span>
-                <Segmented
-                  label={t("calculateurs.ftp.protocol")}
-                  value={protocol}
-                  onChange={setProtocol}
-                  options={[
-                    { value: "20min", label: t("calculateurs.ftp.protocol20min") },
-                    { value: "ramp", label: t("calculateurs.ftp.protocolRamp") },
-                  ]}
-                />
-                <p className="zn-ct__hint">
-                  {protocol === "20min"
-                    ? t("calculateurs.ftp.protocol20minHelp")
-                    : t("calculateurs.ftp.protocolRampHelp")}
-                </p>
-              </div>
+        <div className="zn-calc-fields">
+          <div className="zn-calc-field zn-calc-field--wide">
+            <span className="zn-calc-field__label">{t("calculateurs.ftp.protocol")}</span>
+            <Segmented
+              label={t("calculateurs.ftp.protocol")}
+              value={protocol}
+              onChange={setProtocol}
+              options={[
+                { value: "20min", label: t("calculateurs.ftp.protocol20min") },
+                { value: "ramp", label: t("calculateurs.ftp.protocolRamp") },
+              ]}
+            />
+          </div>
+          <StepField
+            label={t("calculateurs.ftp.powerField")}
+            unit="W"
+            value={power}
+            onChange={setPower}
+            step={5}
+            min={1}
+            max={1500}
+            fallback={protocol === "20min" ? 250 : 300}
+          />
+        </div>
+        <p className="zn-calc-hint">
+          {protocol === "20min" ? t("calculateurs.ftp.protocol20minHelp") : t("calculateurs.ftp.protocolRampHelp")}
+        </p>
 
-              <div className="zn-ct__field">
-                <label htmlFor="power" className="zn-label">
-                  {t("calculateurs.ftp.avgPowerWatts")}
-                </label>
-                <span
-                  className="zn-numfield zn-ct__numfield"
-                  data-invalid={powerError ? "true" : undefined}
-                >
-                  <input
-                    id="power"
-                    type="number"
-                    min={0}
-                    max={MAX_WATTS}
-                    placeholder="250"
-                    value={powerInput}
-                    onChange={(e) => handlePowerInput(e.target.value)}
-                    aria-invalid={powerError || undefined}
-                    aria-describedby={powerError ? "power-error" : undefined}
-                    className="zn-numfield__input"
-                  />
-                  <span className="zn-numfield__unit">
-                    {t("calculateurs.ftp.watts")}
-                  </span>
-                </span>
-                {powerError && (
-                  <p id="power-error" className="zn-ct__error">
-                    {t("calculateurs.ftp.invalidPower", { max: MAX_WATTS })}
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        {estimatedFtp > 0 && zones?.power && (
+        {ftp && zones && (
           <>
-            {/* The answer, then what it implies, then the way to keep it. */}
-            <section className="zn-ct__band">
-              <div className="zn-ct__figure">
-                <span className="zn-kicker">
-                  {t("calculateurs.ftp.estimatedFtp")}
-                </span>
-                <p className="zn-ct__figure-value">{estimatedFtp}</p>
-                <span className="zn-ct__figure-unit">
-                  {t("calculateurs.ftp.watts")}
-                </span>
-              </div>
-            </section>
-
-            <section
-              className="zn-ct__band zn-stack"
-              style={{ "--gap": "var(--sp-13)" } as CSSProperties}
-              aria-labelledby="ftp-zones"
+            <Answer
+              label={estimated ? t("calculateurs.ftp.estimatedFtp") : t("calculateurs.ftp.yourFtp")}
+              value={ftp}
+              unit="W"
             >
-              <h2 id="ftp-zones" className="zn-title" data-level="3">
-                {t("calculateurs.ftp.zonesPreview")}
-              </h2>
+              {!same && (
+                <p className="zn-calc-answer__say">
+                  {!estimated
+                    ? t("calculateurs.ftp.fromSaved")
+                    : savedFtp === undefined
+                      ? t("calculateurs.ftp.noSaved")
+                      : t("calculateurs.ftp.compareSaved", { ftp: savedFtp })}
+                </p>
+              )}
+              {savable && !same && (
+                <div className="zn-calc-answer__actions">
+                  <Button onClick={save}>{t("calculateurs.ftp.take", { ftp: estimated })}</Button>
+                </div>
+              )}
+              {estimated && !savable && <p className="zn-calc-hint">{t("calculateurs.ftp.unsavable")}</p>}
+              {estimated && same && (
+                <p className="zn-calc-hint zn-zonesaved" aria-live="polite">
+                  <Check size={16} />
+                  {t("tools.zones.saved")}
+                </p>
+              )}
+            </Answer>
 
-              {/* Every zone is named in words in the first column, so this
-                  table is its own legend: no ink ramp is painted here, and the
-                  seven Coggan zones would not fit the six-step ramp anyway. */}
-              <ResponsiveTable
-                data={ZONE_ORDER}
-                rowKey={(zone) => zone}
-                columns={[
-                  {
-                    key: "zone",
-                    header: t("calculateurs.ftp.zone"),
-                    // The mobile card already prints this as its title.
-                    hideOnMobile: true,
-                    cell: (zone) => (
-                      <span className="zn-ct__zonename">
-                        {t(`calculateurs.ftp.zoneLabel${zone}`)}
-                      </span>
-                    ),
-                  },
-                  {
-                    key: "power",
-                    header: t("calculateurs.ftp.power"),
-                    className: "zn-ct__num",
-                    cell: (zone) => formatPowerRange(zones.power![zone]),
-                  },
-                ]}
-                mobileCardTitle={(zone) =>
-                  t(`calculateurs.ftp.zoneLabel${zone}`)
-                }
-              />
-
-              <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-                <Button onClick={handleSave}>
-                  <Save size={15} />
-                  {t("calculateurs.ftp.useThisFtp")}
-                </Button>
+            <section className="zn-calc-section">
+              <h2 className="zn-calc-h2">{t("calculateurs.ftp.zonesPreview")}</h2>
+              <div className="zn-calc-tablebox">
+                <table className="zn-calc-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{t("calculateurs.ftp.zone")}</th>
+                      <th scope="col">{t("calculateurs.ftp.power")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ZONE_ORDER.map((zone) => (
+                      <tr key={zone}>
+                        <th scope="row">{t(`calculateurs.ftp.zoneLabel${zone}`)}</th>
+                        <td>{formatPowerRange(zones[zone])}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </section>
           </>
         )}
-      </PageContainer>
+
+        <Provenance>
+          <p>{t("calculateurs.ftp.provenance")}</p>
+        </Provenance>
+
+        <NextSteps links={[{ to: "/library?type=cycling", label: t("calculateurs.ftp.nextLibrary") }]} />
+      </div>
     </>
   );
 }

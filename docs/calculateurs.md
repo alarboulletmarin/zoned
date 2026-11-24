@@ -36,7 +36,11 @@ pointillés, jamais un exemple inventé.
 
 La table des allures reste une page (`/calculators/table-allures`), en tableau
 dense, ouverte depuis Allures. FTP et CSS (vélo, natation) gardent leurs
-routes mais sortent de la grille : une ligne en bas du hub.
+routes mais sortent de la grille : une ligne en bas du hub. Elles suivent la
+même anatomie que les six outils et, sans test saisi, s'ouvrent sur la FTP ou
+la CSS enregistrée (profils vélo et natation, lus dans un effet). `Prendre X`
+n'apparaît que pour une valeur que le profil garde (`FTP_WATTS_RANGE`,
+`CSS_SEC_PER_100M_RANGE` dans `src/lib/athleteProfile.ts`).
 
 Zones renvoie vers les séances de la zone ouverte : `/library?peak=N`, le
 filtre de pic de la bibliothèque (`getPeakZone`, celle du badge des cartes,
@@ -63,6 +67,8 @@ Les primitives de `src/components/calc/index.tsx` :
 - `StepField` / `StepChrono` : saisie encadrée de - et +, brouillon local ;
   une saisie invalide se signale, et la sortie du champ rend la dernière
   valeur valide.
+  Un choix posé dans la même grille (protocole, distance) prend
+  `zn-calc-field--wide` : toute la ligne.
 - `Answer` : le chiffre en grand, puis ce qui le situe.
 - `ZoneBand` : la bande des zones en % de VMA, avec le marqueur.
 - `SplitBars` : une barre par kilomètre, hauteur selon l'écart réel de vitesse.
@@ -118,7 +124,7 @@ rendu sans eux (`isServerSnapshot`) : le client repeint.
 - **Allures en trail** : il faut un modèle de dénivelé (montée, descente,
   terrain). Reporté.
 - **Réserver la place des résultats avant la lecture du profil** sur
-  Allures et Depuis un chrono : avec une VMA enregistrée, la bande ou les
+  Allures, Depuis un chrono, FTP et CSS : avec une VMA enregistrée, la bande ou les
   résultats apparaissent après l'effet. Le budget Lighthouse (profil vide)
   n'est pas touché ; le décalage reste pour qui a un profil.
 - **Effacer un repère depuis un calculateur** : effacer un champ ne supprime

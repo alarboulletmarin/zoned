@@ -33,11 +33,15 @@ export function createEmptyCyclingProfile(): CyclingProfile {
   };
 }
 
+/** What the profiles keep; outside, the value is dropped on save. */
+export const FTP_WATTS_RANGE = [50, 600] as const;
+export const CSS_SEC_PER_100M_RANGE = [60, 300] as const;
+
 export function validateCyclingProfile(profile: CyclingProfile): CyclingProfile {
   const result = { ...profile };
 
   if (result.ftpWatts !== undefined) {
-    if (!Number.isFinite(result.ftpWatts) || result.ftpWatts < 50 || result.ftpWatts > 600) {
+    if (!Number.isFinite(result.ftpWatts) || result.ftpWatts < FTP_WATTS_RANGE[0] || result.ftpWatts > FTP_WATTS_RANGE[1]) {
       result.ftpWatts = undefined;
     }
   }
@@ -178,8 +182,8 @@ export function validateSwimmingProfile(profile: SwimmingProfile): SwimmingProfi
   if (result.cssSecPer100m !== undefined) {
     if (
       !Number.isFinite(result.cssSecPer100m) ||
-      result.cssSecPer100m < 60 ||
-      result.cssSecPer100m > 300
+      result.cssSecPer100m < CSS_SEC_PER_100M_RANGE[0] ||
+      result.cssSecPer100m > CSS_SEC_PER_100M_RANGE[1]
     ) {
       result.cssSecPer100m = undefined;
     }
