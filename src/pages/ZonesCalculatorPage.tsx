@@ -162,7 +162,7 @@ export function ZonesCalculatorPage() {
         </div>
 
         <p className="zn-calc-hint">
-          {t("tools.zones.openSay", { zone: open, say: pickLang(openMeta, "benefit") })}{" "}
+          {t("tools.zones.openSay", { zone: open, say: pickLang(openMeta, "benefit") })}{" · "}
           <Link to="/library">{t("tools.zones.libraryLink")}</Link>
         </p>
 

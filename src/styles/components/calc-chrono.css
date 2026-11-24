@@ -9,10 +9,11 @@
 
 .zn-chrono-distances {
   inline-size: 100%;
+  /* Marathon est deux fois plus long que Semi : chaque case prend sa largeur. */
+  grid-auto-columns: auto;
 }
 
 .zn-chrono-distances .zn-segmented__item {
-  flex: 1 1 0;
   min-block-size: 44px;
   padding-inline: var(--sp-1);
 }

@@ -68,6 +68,14 @@
   gap: var(--sp-6);
 }
 
+/* Sur téléphone, un champ par ligne : - et + prennent 100px, il ne resterait
+   pas la place d'un chiffre et de son unité dans une demi-colonne. */
+@media (max-width: 560px) {
+  .zn-calc-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .zn-calc-field {
   display: flex;
   flex-direction: column;
@@ -133,6 +141,10 @@
   font: var(--fs-mono-sm) var(--font-mono);
   color: var(--text-faint);
   pointer-events: none;
+}
+
+.zn-calc-step:has(.zn-calc-step__unit) .zn-calc-step__input {
+  padding-inline: 3em;
 }
 
 .zn-calc-step__input::placeholder {
