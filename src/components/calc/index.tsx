@@ -143,7 +143,7 @@ export function StepField({
             if (e.target.value.trim() === "") onChange(undefined);
             else if (n !== undefined && n >= min && n <= max) onChange(n);
           }}
-          onBlur={() => !invalid && setDraft(show(value))}
+          onBlur={() => setDraft(show(value))}
         />
         {unit && <span className="zn-calc-step__unit" aria-hidden="true">{unit}</span>}
       </StepButtons>

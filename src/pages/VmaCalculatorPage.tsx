@@ -122,7 +122,7 @@ export function VmaCalculatorPage() {
       <div className="zn-calc">
         <ToolHeader kicker={t("tools.chrono.kicker")} title={t("tools.chrono.title")} />
         <div className="zn-calc-fields">
-          <div className="zn-calc-field">
+          <div className="zn-calc-field zn-chrono-distance">
             <span className="zn-calc-field__label">{t("tools.chrono.distance")}</span>
             <Segmented className="zn-chrono-distances" value={distanceId} onChange={setDistanceId} label={t("tools.chrono.distance")} options={[...DISTANCES.map((d) => ({ value: d.id as string, label: t(`tools.chrono.distances.${d.id}`) })), { value: "custom", label: t("tools.chrono.distances.custom") }]} />
           </div>

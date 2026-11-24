@@ -3,7 +3,16 @@
   position: relative;
 }
 
+.zn-chrono-distance {
+  grid-column: 1 / -1;
+}
+
+.zn-chrono-distances {
+  inline-size: 100%;
+}
+
 .zn-chrono-distances .zn-segmented__item {
+  flex: 1 1 0;
   min-block-size: 44px;
   padding-inline: var(--sp-1);
 }

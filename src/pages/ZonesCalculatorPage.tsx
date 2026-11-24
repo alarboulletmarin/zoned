@@ -42,6 +42,8 @@ export function ZonesCalculatorPage() {
   const zones = useMemo(() => calculateAllZones({ vma, fcMax }), [vma, fcMax]);
   const hasValues = vma !== undefined || fcMax !== undefined;
   const dirty = (vma !== undefined && vma !== numbers.vma) || (fcMax !== undefined && fcMax !== numbers.fcMax);
+  // A cleared field does not delete the saved number: say saved only when the screen shows it.
+  const saved = vma === numbers.vma && fcMax === numbers.fcMax;
 
   const save = () => {
     saveUserZonePrefs({ vma, fcMax });
@@ -169,7 +171,7 @@ export function ZonesCalculatorPage() {
             <div className="zn-calc-answer__actions">
               <Button onClick={save}>{t("tools.zones.save")}</Button>
             </div>
-          ) : (
+          ) : saved && (
             <p className="zn-calc-hint zn-zonesaved">
               <Check size={16} />
               {t("tools.zones.saved")}
