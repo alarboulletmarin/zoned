@@ -381,5 +381,26 @@
     "other": "Vélo et natation :",
     "ftp": "test FTP",
     "css": "test CSS"
+  },
+  "tools": {
+    "zones": {
+      "kicker": "VMA · FC max → 6 zones",
+      "title": "Zones",
+      "vma": "VMA",
+      "fcMax": "FC max",
+      "hintFromNumbers": "VMA reprise de tes repères.",
+      "hintFree": "VMA et FC max servent à placer tes six zones.",
+      "hintNoHr": "Sans FC max, pas de plages cardio.",
+      "colZone": "Zone",
+      "colPace": "Allure {{unit}}",
+      "colHr": "FC",
+      "notSet": "non posée",
+      "openSay": "Z{{zone}} ouverte : {{say}}",
+      "libraryLink": "Parcourir les séances",
+      "save": "Enregistrer dans mes repères",
+      "saved": "Enregistré dans tes repères",
+      "why": "Allure : 50-60, 60-75, 75-85, 85-92, 92-100 et 100-120 % de ta VMA. Cardio : tranches de 10 % de ta FC max, de 50 à 110 %.",
+      "nextVma": "Ta VMA depuis un chrono"
+    }
   }
 }

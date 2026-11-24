@@ -381,5 +381,26 @@
     "other": "Cycling and swimming:",
     "ftp": "FTP test",
     "css": "CSS test"
+  },
+  "tools": {
+    "zones": {
+      "kicker": "VMA · max HR → 6 zones",
+      "title": "Zones",
+      "vma": "VMA",
+      "fcMax": "Max HR",
+      "hintFromNumbers": "VMA taken from your numbers.",
+      "hintFree": "VMA and max HR place your six zones.",
+      "hintNoHr": "Without max HR, no heart-rate ranges.",
+      "colZone": "Zone",
+      "colPace": "Pace {{unit}}",
+      "colHr": "HR",
+      "notSet": "not set",
+      "openSay": "Z{{zone}} open: {{say}}",
+      "libraryLink": "Browse sessions",
+      "save": "Save to my numbers",
+      "saved": "Saved to your numbers",
+      "why": "Pace: 50-60, 60-75, 75-85, 85-92, 92-100 and 100-120 % of your VMA. Heart rate: 10 % bands of your max HR, from 50 to 110 %.",
+      "nextVma": "Your VMA from a time"
+    }
   }
 }
