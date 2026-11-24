@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-24
+
 ### Added
 - Plan editing supports insertion and reordering within the same day, with a workout profile in the drag preview. The plan's pace notice accepts VMA directly and updates upcoming running prescriptions.
 - Screen continuity: the cockpit, plan weeks and plan wizard share directional view transitions after navigation, with no wizard animation on first render. Activated workout cards and the cockpit hero carry their title and zone profile into the session detail; plan cards carry their title into the plan header. Reduced motion switches directly.
