@@ -166,8 +166,7 @@
     "fromPlan": "depuis ton plan",
     "daysLeft_one": "J-{{count}}",
     "daysLeft_other": "J-{{count}}",
-    "other": "Autre",
-    "otherOnly": "Décrire une course"
+    "other": "Autre"
   },
   "band": {
     "target": "Objectif",
@@ -293,5 +292,6 @@
         "detail": "Marcher, s'étirer légèrement, boire. Manger dans les 2 heures."
       }
     }
-  }
+  },
+  "descriptionNoPlan": "Décris ta course : toute la journée se cale dessus, de la veille à l'arrivée."
 }

@@ -426,33 +426,36 @@ export function RaceSimulatorPage() {
         {/* Choisir la course : celles du plan, puis Autre. */}
         <div className="zn-rs2__pick">
           <p className="zn-kicker">{t("kicker")}</p>
-          <div className="zn-rs2__chips" role="radiogroup" aria-label={t("pick.label")}>
-            {numbers.races.map((r) => (
+          {/* Sans course dans le plan, Autre serait seul et déjà choisi : pas de choix à montrer. */}
+          {numbers.races.length > 0 && (
+            <div className="zn-rs2__chips" role="radiogroup" aria-label={t("pick.label")}>
+              {numbers.races.map((r) => (
+                <button
+                  key={r.key}
+                  type="button"
+                  role="radio"
+                  aria-checked={effectiveChoice === r.key}
+                  className="zn-rs2__chip"
+                  onClick={() => {
+                    setChoice(r.key);
+                    setChecked({});
+                  }}
+                >
+                  <span>{raceLabel(r, isEn)}</span>
+                  <span className="zn-rs2__chipmeta">{t("pick.daysLeft", { count: r.daysLeft })}</span>
+                </button>
+              ))}
               <button
-                key={r.key}
                 type="button"
                 role="radio"
-                aria-checked={effectiveChoice === r.key}
+                aria-checked={effectiveChoice === "other"}
                 className="zn-rs2__chip"
-                onClick={() => {
-                  setChoice(r.key);
-                  setChecked({});
-                }}
+                onClick={() => setChoice("other")}
               >
-                <span>{raceLabel(r, isEn)}</span>
-                <span className="zn-rs2__chipmeta">{t("pick.daysLeft", { count: r.daysLeft })}</span>
+                {t("pick.other")}
               </button>
-            ))}
-            <button
-              type="button"
-              role="radio"
-              aria-checked={effectiveChoice === "other"}
-              className="zn-rs2__chip"
-              onClick={() => setChoice("other")}
-            >
-              {numbers.races.length > 0 ? t("pick.other") : t("pick.otherOnly")}
-            </button>
-          </div>
+            </div>
+          )}
         </div>
 
         <header className="zn-rs2__head">
@@ -460,7 +463,9 @@ export function RaceSimulatorPage() {
             {title}
           </h1>
           {subline && <p className="zn-body zn-muted">{subline}</p>}
-          {!race && !plan && <p className="zn-body zn-muted">{t("descriptionShort")}</p>}
+          {!race && !plan && (
+            <p className="zn-body zn-muted">{t(numbers.races.length > 0 ? "descriptionShort" : "descriptionNoPlan")}</p>
+          )}
         </header>
 
         {isShared && (

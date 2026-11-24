@@ -166,8 +166,7 @@
     "fromPlan": "from your plan",
     "daysLeft_one": "{{count}} day to go",
     "daysLeft_other": "{{count}} days to go",
-    "other": "Other",
-    "otherOnly": "Describe a race"
+    "other": "Other"
   },
   "band": {
     "target": "Target",
@@ -293,5 +292,6 @@
         "detail": "Walk, stretch lightly, drink. Eat within 2 hours."
       }
     }
-  }
+  },
+  "descriptionNoPlan": "Describe your race: the whole day is set from it, from the evening before to the finish."
 }
