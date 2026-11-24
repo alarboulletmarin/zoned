@@ -259,7 +259,10 @@ export function HomePage() {
           the buttons, still on the rule (docs/doodles.md). */}
       <section className="zn-home__hero">
         <div className="zn-stack" style={{ "--gap": "var(--sp-13)" } as CSSProperties}>
-          <span className="zn-kicker">{dateLine}</span>
+          {/* A no-break space until the date is known: the prerendered HTML
+              has no date, and an empty kicker took no line, so filling it in
+              pushed the whole hero down after hydration (CLS). */}
+          <span className="zn-kicker">{dateLine || "\u00a0"}</span>
           <h1 className="zn-display zn-home__headline">
             {t("homepage:home.hero.title")}
           </h1>
