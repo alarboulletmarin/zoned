@@ -48,6 +48,9 @@ const NOT_A_DESTINATION: Record<string, string> = {
   "/plan/new/mode": "redirection historique vers /plan/new",
   "/plan/new/assisted": "redirection historique vers /plan/new",
   "/plan/new/free": "étape interne du parcours, atteinte depuis /plan/new",
+  "/calculators/convertisseur": "redirection vers /calculators/allures (outils fusionnés)",
+  "/calculators/equivalence": "redirection vers /calculators/vma (outils fusionnés)",
+  "/calculators/age-graded": "redirection historique vers /calculators/vma",
 };
 
 function reachableFromNav(): Set<string> {
