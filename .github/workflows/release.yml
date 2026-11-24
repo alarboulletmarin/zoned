@@ -7,7 +7,8 @@
 # into develop so the release commit (and the merge commit, whatever the merge
 # strategy) is in develop's history before the next release.
 #
-# A push to main whose version is already tagged publishes nothing.
+# A push to main whose version is already tagged publishes nothing, and is
+# still merged back into develop.
 #
 # The notes are the CHANGELOG.md section for that version, so the Release and
 # the changelog can never drift. No section, no release: an empty release body
@@ -104,17 +105,22 @@ jobs:
           # otherwise leaves the oldest published release wearing the badge.
           make_latest: ${{ github.event_name == 'push' || inputs.make_latest }}
 
+      # Every push to main, not only a new version: a re-run after a failed
+      # back-merge finds the tag already there and must still merge, and a
+      # hotfix pushed to main belongs in develop too. Already merged is a no-op.
       # Fast-forward when develop has not moved since the release branch was
-      # cut, a merge commit otherwise. A conflict (someone edited the same
-      # CHANGELOG lines on develop meanwhile) fails here, after the release is
-      # out: merge main into develop by hand.
+      # cut, a merge commit otherwise. That commit is pushed with GITHUB_TOKEN,
+      # so by GitHub's rule it starts no CI run; both of its parents were
+      # checked already. A conflict (someone edited the same CHANGELOG lines on
+      # develop meanwhile) fails here, after the release is out: merge main
+      # into develop by hand.
       - name: Merge main back into develop
-        if: github.event_name == 'push' && steps.tag.outputs.new == 'true'
+        if: github.event_name == 'push'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch -q origin develop
           git switch -q -c develop origin/develop
-          git merge --no-edit "$GITHUB_SHA" -m "chore(release): ramène ${{ steps.tag.outputs.name }} dans develop"
+          git merge --no-edit "$GITHUB_SHA" -m "chore(release): ramène main (${{ steps.tag.outputs.name }}) dans develop"
           git push origin develop
