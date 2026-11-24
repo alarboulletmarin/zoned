@@ -96,7 +96,7 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
   {
     path: "/calculators",
     title: "Calculateurs running",
-    description: `${stats.calculators} calculateurs gratuits qui partent de tes repères : zones, VMA depuis un chrono, allures, tapis, splits et jour de course. Sans compte, tout reste dans votre navigateur.`,
+    description: `${stats.calculators} calculateurs gratuits qui partent de tes repères : zones, VMA depuis un chrono, allures, tapis, splits et jour de course. Sans compte.`,
     image: "og-calculators.png",
   },
   {
