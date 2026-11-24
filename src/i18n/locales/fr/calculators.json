@@ -401,6 +401,24 @@
       "saved": "Enregistré dans tes repères",
       "why": "Allure : 50-60, 60-75, 75-85, 85-92, 92-100 et 100-120 % de ta VMA. Cardio : tranches de 10 % de ta FC max, de 50 à 110 %.",
       "nextVma": "Ta VMA depuis un chrono"
+    },
+    "tapis": {
+      "kicker": "Tapis ⇄ dehors",
+      "title": "Tapis roulant",
+      "way": "Sens",
+      "toOutside": "Tapis → dehors",
+      "toTreadmill": "Dehors → tapis",
+      "speed": "Vitesse",
+      "incline": "Pente",
+      "outPace": "Allure dehors",
+      "answerOutside": "Dehors, c'est comme",
+      "answerTreadmill": "Règle le tapis à",
+      "sayVma": "{{kmh}} km/h sur le plat, soit {{pct}} % de ta VMA : {{zone}}.",
+      "sayFlat": "{{kmh}} km/h sur le plat.",
+      "setVma": "Pose ta VMA pour la situer.",
+      "sayTreadmill": "À {{incline}} % de pente, pour courir à cette allure dehors.",
+      "why": "Chaque % de pente ajoute environ 3 % d'effort : on multiplie la vitesse du tapis par 1 + 0,03 × pente. Le calcul ne tient pas compte de l'absence de vent sur le tapis.",
+      "nextZones": "Voir mes zones"
     }
   }
 }

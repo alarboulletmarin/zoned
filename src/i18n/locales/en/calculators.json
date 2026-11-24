@@ -401,6 +401,24 @@
       "saved": "Saved to your numbers",
       "why": "Pace: 50-60, 60-75, 75-85, 85-92, 92-100 and 100-120 % of your VMA. Heart rate: 10 % bands of your max HR, from 50 to 110 %.",
       "nextVma": "Your VMA from a time"
+    },
+    "tapis": {
+      "kicker": "Treadmill ⇄ outside",
+      "title": "Treadmill",
+      "way": "Direction",
+      "toOutside": "Treadmill → outside",
+      "toTreadmill": "Outside → treadmill",
+      "speed": "Speed",
+      "incline": "Incline",
+      "outPace": "Outdoor pace",
+      "answerOutside": "Outside, it feels like",
+      "answerTreadmill": "Set the treadmill to",
+      "sayVma": "{{kmh}} km/h on the flat, {{pct}} % of your VMA: {{zone}}.",
+      "sayFlat": "{{kmh}} km/h on the flat.",
+      "setVma": "Set your VMA to place it.",
+      "sayTreadmill": "At {{incline}} % incline, to run this pace outside.",
+      "why": "Each % of incline adds about 3 % of effort: the treadmill speed is multiplied by 1 + 0.03 × incline. The calculation does not account for the lack of wind on a treadmill.",
+      "nextZones": "See my zones"
     }
   }
 }
