@@ -1,6 +1,6 @@
 {
   "title": "Simulateur jour de course",
-  "kicker": "Km par km",
+  "kicker": "Jour de course",
   "description": "Génère ton plan complet pour le jour de la course : allures par kilomètre, nutrition, échauffement, timeline et checklist.",
   "inputs": {
     "title": "Paramètres de course",
@@ -25,7 +25,8 @@
     "positive": "Positif",
     "evenDesc": "Tous les splits à la même allure.",
     "negativeDesc": "Départ plus lent, arrivée plus rapide.",
-    "positiveDesc": "Départ plus rapide, arrivée plus lente."
+    "positiveDesc": "Départ plus rapide, arrivée plus lente.",
+    "unset": "à poser"
   },
   "view": {
     "label": "Mode d'affichage",
@@ -125,14 +126,16 @@
     "delete": "Supprimer",
     "load": "Charger",
     "newSimulation": "Nouvelle simulation",
-    "deleteMenu": "Supprimer…"
+    "deleteMenu": "Supprimer…",
+    "wristband": "Bande-poignet"
   },
   "saved": {
     "title": "Simulations sauvegardées",
     "empty": "Aucune simulation sauvegardée",
     "maxReached": "Maximum de 10 simulations atteint",
     "saveFailed": "La simulation n'a pas été enregistrée.",
-    "actionsLabel": "Actions de la simulation {{name}}"
+    "actionsLabel": "Actions de la simulation {{name}}",
+    "done": "Simulation sauvegardée."
   },
   "nutrition": {
     "carbsPerHour": "Glucides/heure",
@@ -155,5 +158,140 @@
     "splits": "Tes allures, split par split",
     "nutrition": "Ce que tu bois et manges, et à quel moment",
     "mental": "Des repères mentaux découpés par segment"
+  },
+  "titleOther": "Une course",
+  "descriptionShort": "Choisis une course de ton plan, ou décris-en une : la journée se cale dessus, de la veille à l'arrivée.",
+  "pick": {
+    "label": "Course",
+    "fromPlan": "depuis ton plan",
+    "daysLeft_one": "J-{{count}}",
+    "daysLeft_other": "J-{{count}}",
+    "other": "Autre",
+    "otherOnly": "Décrire une course"
+  },
+  "band": {
+    "target": "Objectif",
+    "pace": "Allure",
+    "start": "Départ",
+    "missing": "Pose l'objectif et l'heure de départ : toute la journée se cale dessus.",
+    "saveFailed": "Tes horaires n'ont pas été gardés sur cet appareil.",
+    "missingStart": "Pose l'heure de départ : toute la journée se cale dessus."
+  },
+  "doc": {
+    "chapters": "Chapitres",
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "eve": {
+      "name": "La veille",
+      "dayBefore": "J-1",
+      "title": "Poser le sac, dormir",
+      "bag_one": "Le sac, {{count}} point",
+      "bag_other": "Le sac, {{count}} points"
+    },
+    "morning": {
+      "name": "Le matin",
+      "title": "Manger tôt, arriver large",
+      "wake": "Réveil",
+      "breakfast": "Petit-déjeuner",
+      "venue": "Sur place, retrait du dossard, repérage du sas"
+    },
+    "warmup": {
+      "name": "Échauffement",
+      "title_one": "{{minutes}} min, en {{count}} temps",
+      "title_other": "{{minutes}} min, en {{count}} temps",
+      "jog": "Footing facile",
+      "drills": "Gammes : {{list}}",
+      "strides": "4 à 6 lignes droites à {{pace}}",
+      "rest": "Dans le sas, respiration lente",
+      "stridesTrail": "4 à 6 lignes droites, sans forcer"
+    },
+    "race": {
+      "name": "La course",
+      "titleTrail": "Objectif {{time}}",
+      "titleEven": "Tenir {{pace}} du début à la fin",
+      "titleSplit": "Partir en {{first}}, finir en {{last}}",
+      "chart": "Allure par kilomètre, de {{first}} à {{last}}",
+      "halfway": "mi-course",
+      "trailSoon": "En trail, les allures au kilomètre arrivent bientôt : le dénivelé décide de tout, on ne les découpe pas encore.",
+      "fuel": "Ravitaillement : {{carbs}} g de glucides par heure, {{gels}} gels, un toutes les {{every}} min, et {{fluid}} ml d'eau par heure.",
+      "fuelWater": "Ravitaillement : de l'eau à la soif, rien d'autre sur {{minutes}} min.",
+      "passages_one": "Le passage",
+      "passages_other": "Les {{count}} passages"
+    },
+    "after": {
+      "name": "Après",
+      "title": "Marcher, boire, manger",
+      "body": "Dans les 2 h : glucides et protéines, au moins 200 ml d'eau."
+    },
+    "table": {
+      "km": "Km",
+      "split": "Split",
+      "passage": "Passage",
+      "clock": "Heure"
+    },
+    "passagesTitle": "Passages · {{strategy}}",
+    "passagesHint": "Heure de passage, départ à {{time}}."
+  },
+  "day": {
+    "rehearsal": "Répétition.",
+    "rehearsalIn_one": "Ta course est demain. Fais glisser l'heure pour voir ce qui t'attendra ; le {{date}}, l'horloge sera la vraie.",
+    "rehearsalIn_other": "Ta course est dans {{count}} jours. Fais glisser l'heure pour voir ce qui t'attendra ; le {{date}}, l'horloge sera la vraie.",
+    "rehearsalNoDate": "Sans date de course, l'horloge ne sera jamais la vraie : fais glisser l'heure pour parcourir la journée.",
+    "itIs": "Il est",
+    "now": "Maintenant",
+    "next": "Ensuite",
+    "notStarted": "La journée n'a pas commencé",
+    "startsAt": "Elle démarre à {{time}}.",
+    "left_one": "encore {{count}} min",
+    "left_other": "encore {{count}} min",
+    "over": "c'est fini, bravo",
+    "kmNow": "km {{km}} · vise {{pace}}",
+    "passage": "passage km {{km}} à {{time}}",
+    "done": "C'est fait",
+    "doneDone": "Fait",
+    "nothingElse": "Rien d'autre aujourd'hui",
+    "inMin_one": "dans {{count}} min",
+    "inMin_other": "dans {{count}} min",
+    "list": "La journée",
+    "lastSip": "Dernière gorgée vers {{time}}.",
+    "steps": {
+      "wake": {
+        "title": "Réveil",
+        "detail": "Un verre d'eau, on se lève sans traîner."
+      },
+      "breakfast": {
+        "title": "Petit-déjeuner",
+        "detail": ""
+      },
+      "venue": {
+        "title": "Sur place",
+        "detail": "Retrait du dossard, repérage du sas et des toilettes."
+      },
+      "jog": {
+        "title": "Footing facile",
+        "detail": "10 min tout doux pour monter en température."
+      },
+      "drills": {
+        "title": "Gammes",
+        "detail": ""
+      },
+      "strides": {
+        "title": "Lignes droites",
+        "detail": "4 à 6 accélérations de 80 m à {{pace}}, retour en marchant.",
+        "detailTrail": "4 à 6 accélérations de 80 m, sans forcer, retour en marchant."
+      },
+      "rest": {
+        "title": "Dans le sas",
+        "detail": "Repos en marchant, respiration lente. Montre prête."
+      },
+      "race": {
+        "title": "La course",
+        "detail": "Pars à ton allure, pas à celle des autres."
+      },
+      "finish": {
+        "title": "Arrivée",
+        "detail": "Marcher, s'étirer légèrement, boire. Manger dans les 2 heures."
+      }
+    }
   }
 }
