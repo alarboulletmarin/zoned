@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Segmented } from "@/components/ui/segmented";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
-import { Answer, NextSteps, Provenance, StepChrono, StepField, ToolHeader, Wristband, printWristband } from "@/components/calc";
+import { Answer, NextSteps, Provenance, SplitBars, StepChrono, StepField, ToolHeader, Wristband, printWristband } from "@/components/calc";
 import { SEOHead } from "@/components/seo";
 import { useMyNumbers } from "@/hooks/useMyNumbers";
 import { useSettings } from "@/hooks/useSettings";
@@ -59,8 +59,7 @@ export function SplitGeneratorPage() {
   });
   const [start, setStart] = useState(() => readStart(searchParams.get("start")));
   const [edited, setEdited] = useState(false);
-  const [animate, setAnimate] = useState(false);
-  const markEdit = () => { setEdited(true); setAnimate(true); };
+  const markEdit = () => setEdited(true);
   const selectedDistance = distanceEdit ?? (planRace ? DISTANCES.includes(String(planRace.distanceKm)) ? String(planRace.distanceKm) : "custom" : "10");
   const distanceKm = selectedDistance === "custom" ? kmEdit ?? (distanceEdit === undefined ? planRace?.distanceKm : undefined) ?? 0 : Number(selectedDistance);
   const goal = goalEdit === null ? planRace?.targetSeconds : goalEdit;
@@ -91,7 +90,6 @@ export function SplitGeneratorPage() {
   const params = { km: String(distanceKm), ...hms, strat: strategy, ...(startValue ? { start: startValue } : {}) };
   const fromPlan = planRace && !edited ? planRace : undefined;
   const simulatorUrl = fromPlan ? `/race-simulator?race=${encodeURIComponent(fromPlan.key)}` : `/race-simulator?${new URLSearchParams(params)}`;
-  const fastest = splits.length ? Math.min(...splits.map((split) => split.paceMinPerKm)) : 1;
 
   return (
     <>
@@ -125,7 +123,7 @@ export function SplitGeneratorPage() {
           distance: number(fromPlan.distanceKm), name: fromPlan.name ? ` ${fromPlan.name}` : "",
           date: new Intl.DateTimeFormat(i18n.language, { day: "numeric", month: "long" }).format(new Date(`${fromPlan.date}T12:00:00`)),
         })}</p>}
-        <Segmented value={strategy} onChange={(value) => { setAnimate(true); setStrategy(value); }} label={t("tools.splits.strategy")} options={[
+        <Segmented value={strategy} onChange={(value) => { setStrategy(value); }} label={t("tools.splits.strategy")} options={[
           { value: "even", label: t("tools.splits.even") }, { value: "negative", label: t("tools.splits.negative") }, { value: "positive", label: t("tools.splits.positive") },
         ]} />
         <Answer label={t("tools.splits.average")} value={valid ? formatPaceDisplay(goal! / distanceKm / 60) : t("kit.unset")} unit={valid ? "/km" : undefined}>
@@ -133,12 +131,11 @@ export function SplitGeneratorPage() {
           {valid && settings.unitSystem === "imperial" && <p className="zn-calc-hint">{formatPaceDisplay(convertPace(goal! / distanceKm / 60, "imperial"))}{getPaceUnit("imperial")}</p>}
         </Answer>
         {valid && <>
-          <div className="zn-splits__chart" role="img" aria-label={t("tools.splits.chart", { distance: number(distanceKm), summary })}>
-            <div className="zn-splits__bars" data-animate={animate || undefined} aria-hidden="true">
-              {splits.map((split, index) => <span key={split.index} className="zn-splits__bar" data-half={index < splits.length / 2 ? "first" : "second"} style={{ height: `${fastest / split.paceMinPerKm * 100}%` }} />)}
-            </div>
-            <div className="zn-splits__axis" aria-hidden="true"><span>km 1</span><span>{t("tools.splits.halfway")}</span><span>km {number(Math.ceil(distanceKm))}</span></div>
-          </div>
+          <SplitBars
+            paces={splits.map((split) => split.paceMinPerKm)}
+            label={t("tools.splits.chart", { distance: number(distanceKm), summary })}
+            axis={["km 1", t("tools.splits.halfway"), `km ${number(Math.ceil(distanceKm))}`]}
+          />
         </>}
         <div className="zn-splits__start" data-midnight={start === 0 || undefined} onChange={(event) => {
           // The shared duration field treats zero as empty; a clock must keep midnight.

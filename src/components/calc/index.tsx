@@ -363,3 +363,45 @@ export function printWristband() {
   window.addEventListener("afterprint", done);
   window.print();
 }
+
+/**
+ * L'allure kilomètre par kilomètre en barres, deux teintes (première et
+ * seconde moitié). La hauteur suit la vitesse sur l'écart réel entre le km le
+ * plus lent et le plus rapide : à pleine échelle, 3:59 contre 3:49 ne se
+ * verrait pas. La hauteur transitionne quand la saisie change (calc-splits.css).
+ */
+export function SplitBars({
+  paces,
+  label,
+  axis,
+}: {
+  /** min/km of each split, in order. */
+  paces: number[];
+  label: string;
+  axis: [string, string, string];
+}) {
+  if (paces.length === 0) return null;
+  const speeds = paces.map((p) => 1 / p);
+  const lo = Math.min(...speeds);
+  const hi = Math.max(...speeds);
+  const height = (s: number) => (hi - lo < 1e-9 ? 70 : 35 + (65 * (s - lo)) / (hi - lo));
+  return (
+    <div className="zn-splits__chart" role="img" aria-label={label}>
+      <div className="zn-splits__bars" data-animate aria-hidden="true">
+        {speeds.map((s, i) => (
+          <span
+            key={i}
+            className="zn-splits__bar"
+            data-half={i < paces.length / 2 ? "first" : "second"}
+            style={{ height: `${height(s)}%` }}
+          />
+        ))}
+      </div>
+      <div className="zn-splits__axis" aria-hidden="true">
+        <span>{axis[0]}</span>
+        <span>{axis[1]}</span>
+        <span>{axis[2]}</span>
+      </div>
+    </div>
+  );
+}

@@ -114,7 +114,7 @@
   inline-size: 100%;
   min-block-size: var(--hit-min);
   padding: var(--sp-4) var(--sp-6);
-  border: var(--border-heavy);
+  border: var(--border-rule);
   border-radius: var(--r-lg);
   background: var(--surface-card);
   color: var(--text-body);
