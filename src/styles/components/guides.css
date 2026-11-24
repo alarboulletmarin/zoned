@@ -399,27 +399,12 @@
 
 /* ── the fuelling calculator ──────────────────────────────────────────── */
 
-/* Three numbers in, one plan out. The fields reuse the shared .zn-numfield of
-   workout.css, which already draws the frame around a mono value and its
-   unit; only the column arrangement belongs here. */
-.zn-guide__fields {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sp-10);
-}
-
-@media (max-width: 640px) {
-  .zn-guide__fields {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.zn-guide__field {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--sp-4);
-  min-inline-size: 0;
+/* Three numbers in, one plan out. The fields are the calculators' own
+   (StepField, StepChrono, calc.css); only the distance presets belong here.
+   Marathon est deux fois plus long que 5K : chaque case prend sa largeur, sinon
+   il est coupé sur téléphone. */
+.zn-segmented.zn-guide__presets {
+  grid-auto-columns: auto;
 }
 
 /* The plan itself: a vertical rule with the checkpoints hung off it. The rule

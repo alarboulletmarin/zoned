@@ -17,7 +17,9 @@ du plan) et répond avant qu'elle tape. Tout passe par `useMyNumbers()`
 - `races` : les courses à venir des plans de course, objectifs intermédiaires
   compris, triées par date, sans doublon. Chaque course a une `key`
   (`planId|date|distance`) qui sert de lien : `/race-simulator?race=<key>`,
-  `/calculators/splits?race=<key>`.
+  `/calculators/splits?race=<key>`, `/guides/nutrition?race=<key>` (le
+  calculateur de ravitaillement). Une clé qui n'est plus dans le plan suit
+  le plan.
 
 Le hook suit la règle de prérendu : premier rendu vide, comme le HTML, lecture
 du stockage dans un effet. Une valeur absente s'affiche `à poser`, en

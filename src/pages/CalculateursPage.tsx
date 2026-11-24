@@ -9,7 +9,7 @@ import { useMyNumbers } from "@/hooks/useMyNumbers";
 import { calculatePaceZones, formatPace } from "@/lib/zones";
 import { formatSplitTime } from "@/lib/splits";
 import { RACE_DISTANCE_META } from "@/types/plan";
-import type { MyNumbers, UpcomingRace } from "@/lib/myNumbers";
+import { raceLabel, type MyNumbers, type UpcomingRace } from "@/lib/myNumbers";
 
 /**
  * One tool of the hub. The page lists six, in three families; cycling and
@@ -56,12 +56,6 @@ export const CALCULATEURS: CalculateurEntry[] = [
 ];
 
 const FAMILIES = ["benchmarks", "convert", "race"] as const;
-
-/** Name of a race as the person wrote it, else its distance. */
-export function raceLabel(race: UpcomingRace, isEn: boolean): string {
-  const meta = RACE_DISTANCE_META[race.distance];
-  return race.name ?? (isEn ? meta.labelEn : meta.label);
-}
 
 /** Threshold midpoint rounded to 5 s, min/km. */
 function thresholdMid(n: MyNumbers): number | undefined {

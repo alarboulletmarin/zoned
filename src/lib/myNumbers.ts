@@ -43,6 +43,12 @@ export interface MyNumbers {
 
 export const NO_NUMBERS: MyNumbers = { races: [] };
 
+/** Name of a race as the person wrote it, else its distance. */
+export function raceLabel(race: UpcomingRace, isEn: boolean): string {
+  const meta = RACE_DISTANCE_META[race.distance];
+  return race.name ?? (isEn ? meta.labelEn : meta.label);
+}
+
 /** Days from `fromIso` to `toIso`, both "YYYY-MM-DD", calendar days. */
 export function daysBetween(fromIso: string, toIso: string): number {
   const a = Date.UTC(+fromIso.slice(0, 4), +fromIso.slice(5, 7) - 1, +fromIso.slice(8, 10));
