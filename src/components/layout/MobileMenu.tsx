@@ -94,7 +94,7 @@ import { isModuleHidden } from "@/lib/settingsSchema";
 // le cycle d'import.
 import { MENU_FOOT_LINKS, PRIMARY_NAV, TOOLS_NAV, isNavActive } from "./navigation";
 
-export function MobileMenu() {
+export function MobileMenu({ snapshot = false }: { snapshot?: boolean }) {
   const { t } = useTranslation("common");
   const { pathname } = useLocation();
   const { openPalette } = useCommandPalette();
@@ -184,7 +184,9 @@ export function MobileMenu() {
     close();
   }, [pathname, close]);
 
-  if (!isCompact) return null;
+  // In a prerendered snapshot the trigger is rendered at every width and
+  // topbar.css hides it from 1024px (see TopBar).
+  if (!isCompact && !snapshot) return null;
 
   return (
     <>
