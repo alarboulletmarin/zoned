@@ -56,28 +56,9 @@
       "yourZone": "Ta zone"
     },
     "vma": {
-      "seoTitle": "VMA depuis un Chrono",
-      "seoDescription": "Calculer sa VMA gratuitement depuis un chrono de course (5K, 10K, semi, marathon). Test VMA en ligne avec calcul instantané et zones d'entraînement.",
-      "seoAppName": "Calculateur VMA depuis un Chrono",
-      "seoAppDescription": "Estime ta VMA à partir d'un résultat de course",
-      "seoBreadcrumb": "VMA depuis un chrono",
-      "title": "VMA depuis un chrono",
-      "description": "Entre un chrono récent pour estimer ta VMA (Vitesse Maximale Aérobie) et voir tes zones d'entraînement.",
-      "raceDistance": "Distance de course",
-      "vmaPercentUsed": "Pourcentage de VMA utilisé : {{percent}}%",
-      "raceTime": "Temps de course",
-      "estimatedVma": "VMA estimée",
-      "paceZonesPreview": "Aperçu des zones d'allure",
-      "zone": "Zone",
-      "pace": "Allure",
-      "useThisVma": "Utiliser cette VMA",
-      "createPlan": "Créer un plan",
-      "vmaSaved": "VMA enregistrée : {{vma}} km/h",
-      "hours": "Heures",
-      "minutes": "Minutes",
-      "seconds": "Secondes",
-      "hoursShort": "h",
-      "kicker": "chrono → VMA"
+      "seoTitle": "Depuis un chrono : VMA et équivalence de temps",
+      "seoDescription": "Estime ta VMA et tes temps du 5 km au marathon depuis un chrono de course avec le modèle de Péronnet et Thibault. Compare les distances et pose tes zones.",
+      "title": "VMA depuis un chrono"
     },
     "ftp": {
       "seoTitle": "Test FTP Vélo",
@@ -466,6 +447,43 @@
       "caption": "Allures et temps de course",
       "jump": "Aller à ton seuil, {{pace}}/km",
       "jumpPace": "Aller à {{pace}}/km"
+    },
+    "chrono": {
+      "kicker": "Chrono → VMA · temps",
+      "title": "Depuis un chrono",
+      "home": "Accueil",
+      "seoTitle": "Depuis un chrono : VMA et équivalence de temps",
+      "seoDescription": "Estime ta VMA et tes temps du 5 km au marathon depuis un chrono de course avec le modèle de Péronnet et Thibault. Compare les distances et pose tes zones.",
+      "seoAppName": "Calculateur de VMA et équivalence de chronos",
+      "distance": "Distance",
+      "distances": {
+        "5k": "5 km",
+        "10k": "10 km",
+        "semi": "Semi",
+        "marathon": "Marathon",
+        "custom": "Autre"
+      },
+      "customDistance": "Distance personnalisée",
+      "chrono": "Ton chrono",
+      "paceHint": "soit {{pace}}/km",
+      "estimatedVma": "Ta VMA estimée",
+      "say": "Sur {{time}}, tu as tenu {{percent}} % de ta VMA.",
+      "aboveVma": "C'est {{delta}} au-dessus de celle que tu as posée ({{vma}}).",
+      "belowVma": "C'est {{delta}} en dessous de celle que tu as posée ({{vma}}).",
+      "equalVma": "C'est celle que tu as posée ({{vma}}).",
+      "noVma": "Tu n'as pas encore posé de VMA.",
+      "takeVma": "Prendre {{vma}} comme VMA",
+      "zonesChange": "Tes zones bougeraient de quelques secondes : seuil {{before}} → {{next}}/km.",
+      "zonesSaved": "C'est ta VMA. Seuil {{next}}/km.",
+      "zonesNew": "Tes zones suivraient cette VMA : seuil {{next}}/km.",
+      "unsavable": "Les repères acceptent une VMA entre 8 et 30 km/h.",
+      "elsewhere": "Ce que ça donne ailleurs",
+      "time": "Temps",
+      "pace": "Allure",
+      "yourChrono": "ton chrono",
+      "provenance": "Modèle de Péronnet et Thibault, profil intermédiaire. Le même modèle donne ta VMA et tes temps : les deux ne peuvent pas se contredire.",
+      "nextSplits": "Découper un {{distance}} en {{time}}",
+      "nextZones": "Voir mes zones avec {{vma}}"
     }
   }
 }

@@ -56,28 +56,9 @@
       "yourZone": "Your zone"
     },
     "vma": {
-      "seoTitle": "VMA from Race Time",
-      "seoDescription": "Calculate your VMA (Maximal Aerobic Speed) free from a race result. Enter your 5K, 10K, half marathon or marathon time to estimate VMA and pace zones.",
-      "seoAppName": "VMA Calculator from Race Time",
-      "seoAppDescription": "Estimate your VMA from a recent race result",
-      "seoBreadcrumb": "VMA from Race Time",
-      "title": "VMA from Race Time",
-      "description": "Enter a recent race time to estimate your VMA (Maximal Aerobic Speed) and see your training zones.",
-      "raceDistance": "Race distance",
-      "vmaPercentUsed": "VMA percentage used: {{percent}}%",
-      "raceTime": "Race time",
-      "estimatedVma": "Estimated VMA",
-      "paceZonesPreview": "Pace zones preview",
-      "zone": "Zone",
-      "pace": "Pace",
-      "useThisVma": "Use this VMA",
-      "createPlan": "Create a plan",
-      "vmaSaved": "VMA saved: {{vma}} km/h",
-      "hours": "Hours",
-      "minutes": "Minutes",
-      "seconds": "Seconds",
-      "hoursShort": "h",
-      "kicker": "race time → VMA"
+      "seoTitle": "From a race time: MAS and equivalent race times",
+      "seoDescription": "Estimate your maximal aerobic speed and race times from 5 km to marathon using the Péronnet and Thibault model. Compare distances and set your training zones.",
+      "title": "VMA from Race Time"
     },
     "ftp": {
       "seoTitle": "FTP Cycling Test",
@@ -466,6 +447,43 @@
       "caption": "Paces and race times",
       "jump": "Jump to your threshold, {{pace}}/km",
       "jumpPace": "Jump to {{pace}}/km"
+    },
+    "chrono": {
+      "kicker": "Race time → MAS · times",
+      "title": "From a race time",
+      "home": "Home",
+      "seoTitle": "From a race time: MAS and equivalent race times",
+      "seoDescription": "Estimate your maximal aerobic speed and race times from 5 km to marathon using the Péronnet and Thibault model. Compare distances and set your training zones.",
+      "seoAppName": "MAS and equivalent race time calculator",
+      "distance": "Distance",
+      "distances": {
+        "5k": "5 km",
+        "10k": "10 km",
+        "semi": "Half",
+        "marathon": "Marathon",
+        "custom": "Other"
+      },
+      "customDistance": "Custom distance",
+      "chrono": "Your race time",
+      "paceHint": "that is {{pace}}/km",
+      "estimatedVma": "Your estimated MAS",
+      "say": "Over {{time}}, you sustained {{percent}}% of your MAS.",
+      "aboveVma": "That is {{delta}} above the value you set ({{vma}}).",
+      "belowVma": "That is {{delta}} below the value you set ({{vma}}).",
+      "equalVma": "That matches the value you set ({{vma}}).",
+      "noVma": "You have not set your MAS yet.",
+      "takeVma": "Use {{vma}} as my MAS",
+      "zonesChange": "Your zones would move by a few seconds: threshold {{before}} → {{next}}/km.",
+      "zonesSaved": "This is your MAS. Threshold {{next}}/km.",
+      "zonesNew": "Your zones would follow this MAS: threshold {{next}}/km.",
+      "unsavable": "Saved values accept a MAS between 8 and 30 km/h.",
+      "elsewhere": "What it means at other distances",
+      "time": "Time",
+      "pace": "Pace",
+      "yourChrono": "your race time",
+      "provenance": "Péronnet and Thibault model, intermediate profile. The same model gives your MAS and race times, so they cannot contradict each other.",
+      "nextSplits": "Split a {{distance}} in {{time}}",
+      "nextZones": "See my zones with {{vma}}"
     }
   }
 }

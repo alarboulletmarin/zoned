@@ -1,1 +1,15 @@
-/* Calculateur chrono : ce qui lui est propre. La base commune est calc.css. */
+/* The saved VMA uses the same single-pass stamp as the cockpit. */
+.zn-chrono-adopt {
+  position: relative;
+}
+
+.zn-chrono-distances .zn-segmented__item {
+  min-block-size: 44px;
+  padding-inline: var(--sp-1);
+}
+
+@media (min-width: 640px) {
+  .zn-chrono-distances .zn-segmented__item {
+    padding-inline: var(--sp-5);
+  }
+}
