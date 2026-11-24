@@ -1,0 +1,27 @@
+/* Calculateur zones : ce qui lui est propre. La base commune est calc.css. */
+
+/* La ligne s'ouvre par un vrai bouton dans son en-tête de ligne. */
+.zn-zonerow__btn {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  min-block-size: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.zn-zonerow__code {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+}
+
+.zn-zonesaved {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}

@@ -1,24 +1,8 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Brain,
-  ClipboardCheck,
-  Clock,
-  Download,
-  Flag,
-  Flame,
-  Heart,
-  Info,
-  Loader2,
-  Route,
-  Save,
-  Share,
-  Trash2,
-  Utensils,
-} from "@/components/icons";
+import { Download, Loader2, Save, Share, Trash2, Watch } from "@/components/icons";
 import { decodeSharedSimulation, sharedSimulationUrl } from "@/lib/share/raceSimShare";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ActionsMenu } from "@/components/ui/actions-menu";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -32,88 +16,44 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { SEOHead } from "@/components/seo";
 import { Alert } from "@/components/ui/alert";
 import { PageContainer } from "@/components/layout/PageContainer";
+import { StepChrono, Wristband, printWristband } from "@/components/calc";
 import {
-  Checklist,
   DEFAULT_SETTINGS,
-  MentalCuesPanel,
-  NutritionPanel,
   RACE_OPTIONS,
-  RaceDaySheet,
-  RaceSimActions,
   RaceSimForm,
-  RaceSimNav,
-  RaceSimSection,
-  RaceSimSummaryBar,
-  RaceTimeline,
-  SplitsPanel,
-  Stat,
-  WarmupChecklist,
   resolveSettings,
   timeToMinutes,
-  type RaceSimNavItem,
   type RaceSimSettings,
 } from "@/components/domain/raceSim";
-import { cn } from "@/lib/utils";
-import { generateRacePlan, getDistanceLabelEn } from "@/lib/raceSimulator";
-import type { RacePlan, RaceSimInput } from "@/lib/raceSimulator";
-import { formatSplitTime, formatPaceDisplay } from "@/lib/splits";
 import {
-  getAllSimulations,
-  saveSimulation,
-  deleteSimulation,
-} from "@/lib/raceSimStorage";
+  PassagesTable,
+  RacePrepDocument,
+  useChapters,
+  type ChapterId,
+} from "@/components/domain/raceSim/RacePrepDocument";
+import { RaceDayNow } from "@/components/domain/raceSim/RaceDayNow";
+import { generateRacePlan, getDistanceLabelEn } from "@/lib/raceSimulator";
+import type { RaceSimInput } from "@/lib/raceSimulator";
+import { formatSplitTime, formatPaceDisplay, type SplitStrategy } from "@/lib/splits";
+import { getAllSimulations, saveSimulation, deleteSimulation } from "@/lib/raceSimStorage";
 import type { SavedSimulation } from "@/lib/raceSimStorage";
-import { useSettings } from "@/hooks/useSettings";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { convertPace, getPaceUnit } from "@/lib/units";
-import { secondsToTimeDigits } from "@/lib/paceFields";
+import { secondsToTimeDigits, hmsParamsToSeconds } from "@/lib/paceFields";
 import { minutesToDurationDigits } from "@/lib/durationFields";
 import { toast } from "@/components/ui/toast";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
-import { useIsEnglish, usePickLang, formatDate } from "@/lib/i18n-utils";
+import { useIsEnglish, formatDate } from "@/lib/i18n-utils";
 import { failureReason } from "@/lib/failure";
-
-type SectionId =
-  | "timeline"
-  | "dayBefore"
-  | "packing"
-  | "morning"
-  | "warmup"
-  | "race"
-  | "nutrition"
-  | "mental"
-  | "recovery";
-
-/**
- * Reference blocks start folded; the ones you act on start open. Collapsing
- * everything by default made the chevrons decorative, and opening everything
- * made the page a four-thousand-pixel tunnel.
- */
-const DEFAULT_OPEN: Record<SectionId, boolean> = {
-  timeline: true,
-  dayBefore: true,
-  packing: false,
-  morning: true,
-  warmup: false,
-  race: true,
-  nutrition: true,
-  mental: false,
-  recovery: false,
-};
+import { useMyNumbers } from "@/hooks/useMyNumbers";
+import { minutesToHm } from "@/lib/raceDay";
+import { RACE_DISTANCE_META } from "@/types/plan";
+import type { UpcomingRace } from "@/lib/myNumbers";
+import { raceLabel } from "@/pages/CalculateursPage";
 
 function settingsFromInput(input: RaceSimInput): RaceSimSettings {
-  const match = RACE_OPTIONS.find(
-    (opt) => Math.abs(opt.distanceKm - input.distanceKm) < 0.01,
-  );
+  const match = RACE_OPTIONS.find((opt) => Math.abs(opt.distanceKm - input.distanceKm) < 0.01);
   return {
     distance: match ? match.value : "custom",
     customDistance: match ? "" : String(input.distanceKm).replace(".", ","),
@@ -124,127 +64,215 @@ function settingsFromInput(input: RaceSimInput): RaceSimSettings {
   };
 }
 
+/** What the person typed for one race of their plan: the plan knows neither the gun time nor, sometimes, the target. */
+interface RaceEntry {
+  target?: number;
+  start?: number;
+  strategy?: SplitStrategy;
+}
+
+const ENTRIES_KEY = "zoned-race-sim-entries";
+
+const CHAPTER_IDS: ChapterId[] = ["eve", "morning", "warmup", "race", "after"];
+
+function loadEntries(): Record<string, RaceEntry> {
+  try {
+    const raw = localStorage.getItem(ENTRIES_KEY);
+    const parsed = raw ? (JSON.parse(raw) as unknown) : {};
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, RaceEntry>) : {};
+  } catch {
+    // Unreadable storage: the times are typed again, nothing else depends on them.
+    return {};
+  }
+}
+
+function saveEntries(entries: Record<string, RaceEntry>) {
+  localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+}
+
+/** `?km=&h=&m=&s=&strat=&start=HHMM`, from the split generator. */
+function settingsFromSplitsLink(params: URLSearchParams): RaceSimSettings | null {
+  const km = Number((params.get("km") ?? "").replace(",", "."));
+  if (!(km > 0)) return null;
+  const seconds = hmsParamsToSeconds(params.get("h"), params.get("m"), params.get("s"));
+  const strat = params.get("strat");
+  const start = params.get("start") ?? "";
+  const match = RACE_OPTIONS.find((opt) => Math.abs(opt.distanceKm - km) < 0.01);
+  return {
+    ...DEFAULT_SETTINGS,
+    distance: match ? match.value : "custom",
+    customDistance: match ? "" : String(km).replace(".", ","),
+    targetTime: seconds > 0 ? secondsToTimeDigits(seconds, km) : "",
+    startTime: /^\d{3,4}$/.test(start) ? String(Number(start)) : "",
+    strategy: strat === "negative" || strat === "positive" ? strat : "even",
+  };
+}
+
 export function RaceSimulatorPage() {
   const { t } = useTranslation("simulator");
   const { t: tCommon } = useTranslation("common");
   const isEn = useIsEnglish();
-  const pick = usePickLang();
-  const { settings: userSettings } = useSettings();
-  const unit = userSettings.unitSystem;
-  // The settings panel lives in the left column on desktop and in a sheet
-  // below it, "Ajuster" has to reach the one that is actually on screen.
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const { numbers, ready } = useMyNumbers();
+  const [searchParams] = useSearchParams();
 
-  const [settings, setSettings] = useState<RaceSimSettings>(DEFAULT_SETTINGS);
-  const [plan, setPlan] = useState<RacePlan | null>(null);
-  const [planInput, setPlanInput] = useState<RaceSimInput | null>(null);
+  /** A race key, "other", or null to follow the plan (first race, else other). */
+  const [choice, setChoice] = useState<string | null>(() => searchParams.get("race"));
+  const [entries, setEntries] = useState<Record<string, RaceEntry>>({});
+  const [settings, setSettings] = useState<RaceSimSettings>(() => settingsFromSplitsLink(searchParams) ?? DEFAULT_SETTINGS);
+  const [otherInput, setOtherInput] = useState<RaceSimInput | null>(null);
   const [view, setView] = useState<"prepare" | "raceDay">("prepare");
-  const [formOpen, setFormOpen] = useState(true);
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [openSections, setOpenSections] = useState<Partial<Record<SectionId, boolean>>>({});
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [exporting, setExporting] = useState(false);
   const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>([]);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [isShared, setIsShared] = useState(false);
-  const [searchParams] = useSearchParams();
+  const [activeChapter, setActiveChapter] = useState<ChapterId>("eve");
 
   useEffect(() => {
     setSavedSimulations(getAllSimulations());
+    setEntries(loadEntries());
   }, []);
 
   const resolved = resolveSettings(settings);
+  const fromSplits = searchParams.has("km");
+  const effectiveChoice = choice ?? (fromSplits || !ready ? "other" : numbers.races[0]?.key ?? "other");
+  const race: UpcomingRace | undefined = numbers.races.find((r) => r.key === effectiveChoice);
+  const entry = race ? entries[race.key] ?? {} : {};
 
-  const applyPlan = useCallback((input: RaceSimInput) => {
-    setPlan(generateRacePlan(input));
-    setPlanInput(input);
+  const updateEntry = (patch: RaceEntry) => {
+    if (!race) return;
+    setEntries((prev) => {
+      const next = { ...prev, [race.key]: { ...prev[race.key], ...patch } };
+      try {
+        saveEntries(next);
+      } catch (err) {
+        // Kept for this visit; only the next one will have to type it again.
+        toast.failure(t("band.saveFailed"), err);
+      }
+      return next;
+    });
+  };
+
+  // A race of the plan: its distance and target, plus what was typed here.
+  const raceTarget = entry.target ?? race?.targetSeconds;
+  const raceStrategy: SplitStrategy = entry.strategy ?? "negative";
+  const raceInput: RaceSimInput | null =
+    race && raceTarget && entry.start !== undefined
+      ? {
+          distanceKm: race.distanceKm,
+          targetTimeSeconds: raceTarget,
+          startTime: minutesToHm(entry.start).padStart(5, "0"),
+          strategy: race.isTrail ? "even" : raceStrategy,
+        }
+      : null;
+
+  const input = race ? raceInput : otherInput;
+  const plan = useMemo(() => (input ? generateRacePlan(input) : null), [input]);
+  const isTrail = race?.isTrail ?? false;
+  const strategy = input?.strategy ?? "even";
+
+  const handleLoad = useCallback((loaded: RaceSimInput) => {
+    setChoice("other");
+    setSettings(settingsFromInput(loaded));
+    setOtherInput(loaded);
     setChecked({});
-    setOpenSections({});
-    setFormOpen(false);
-    setSheetOpen(false);
   }, []);
 
   const handleGenerate = useCallback(() => {
     if (!resolved.valid || resolved.targetSeconds === null || resolved.startTime === null) return;
-    applyPlan({
+    setOtherInput({
       distanceKm: resolved.distanceKm,
       targetTimeSeconds: resolved.targetSeconds,
       startTime: resolved.startTime,
       strategy: settings.strategy,
       bodyWeightKg: settings.weight ? parseFloat(settings.weight.replace(",", ".")) || undefined : undefined,
     });
-  }, [resolved, settings, applyPlan]);
+    setChecked({});
+  }, [resolved, settings]);
 
-  const handleLoad = useCallback(
-    (input: RaceSimInput) => {
-      setSettings(settingsFromInput(input));
-      applyPlan(input);
-    },
-    [applyPlan],
-  );
+  // A split-generator link that already carries everything: the day is laid out at once.
+  useEffect(() => {
+    if (fromSplits && resolved.valid) handleGenerate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // `/race-simulator/shared?d=…`, the inputs fully describe the plan, so a shared
-  // link just replays them through the same path a saved simulation takes.
+  // `/race-simulator?d=…`, a shared simulation replays its inputs.
   const sharedParam = searchParams.get("d");
   useEffect(() => {
     if (!sharedParam) return;
-    const input = decodeSharedSimulation(sharedParam);
-    if (!input) {
+    const decoded = decodeSharedSimulation(sharedParam);
+    if (!decoded) {
       toast.error(t("shared.invalid"));
       return;
     }
-    handleLoad(input);
+    handleLoad(decoded);
     setIsShared(true);
   }, [sharedParam, handleLoad, t]);
 
+  const distanceText = (km: number) => (isEn ? getDistanceLabelEn(km) : plan?.distanceLabel ?? `${km} km`);
+  const title = race
+    ? raceLabel(race, isEn)
+    : plan
+      ? distanceText(plan.distanceKm)
+      : t("titleOther");
+
+  const raceDateLong = race
+    ? new Date(`${race.date}T12:00:00`).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      })
+    : "";
+  const subline = race
+    ? [
+        isEn ? RACE_DISTANCE_META[race.distance].labelEn : RACE_DISTANCE_META[race.distance].label,
+        race.elevationGain ? `${race.elevationGain} D+` : null,
+        raceDateLong,
+        t("pick.fromPlan"),
+      ]
+        .filter(Boolean)
+        .join(" · ")
+    : null;
+
   const handleSave = useCallback(() => {
-    if (!plan || !planInput) return;
-    const label = `${isEn ? getDistanceLabelEn(plan.distanceKm) : plan.distanceLabel} - ${formatSplitTime(plan.targetTimeSeconds)}`;
+    if (!plan || !input) return;
+    const label = `${race ? raceLabel(race, isEn) : distanceText(plan.distanceKm)} - ${formatSplitTime(plan.targetTimeSeconds)}`;
     try {
-      saveSimulation({
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        label,
-        input: planInput,
-      });
+      saveSimulation({ id: crypto.randomUUID(), createdAt: new Date().toISOString(), label, input });
       setSavedSimulations(getAllSimulations());
+      toast.success(t("saved.done"));
     } catch (err) {
       const reason = failureReason(err);
       toast.failure(t(reason === "limit" ? "saved.maxReached" : "saved.saveFailed"), reason);
     }
-  }, [plan, planInput, isEn, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan, input, race, isEn, t]);
 
-  // Partager une simulation, celle à l'écran ou une sauvegardée : le lien
-  // porte les entrées, qui décrivent la simulation entière.
-  const shareSimulation = useCallback(async (input: RaceSimInput, title: string) => {
-    const url = sharedSimulationUrl(input);
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-      } catch {
-        // Share sheet dismissed, nothing to do.
+  const shareSimulation = useCallback(
+    async (shared: RaceSimInput, shareTitle: string) => {
+      const url = sharedSimulationUrl(shared);
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: shareTitle, url });
+        } catch {
+          // Share sheet dismissed, nothing to do.
+        }
+        return;
       }
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success(tCommon("share.toast.linkCopied"));
-    } catch (err) {
-      toast.failure(tCommon("share.toast.linkCopyFailed"), err);
-    }
-  }, [tCommon]);
-
-  const handleShare = useCallback(async () => {
-    if (!plan || !planInput) return;
-    await shareSimulation(planInput, plan.distanceLabel);
-  }, [plan, planInput, shareSimulation]);
+      try {
+        await navigator.clipboard.writeText(url);
+        toast.success(tCommon("share.toast.linkCopied"));
+      } catch (err) {
+        toast.failure(tCommon("share.toast.linkCopyFailed"), err);
+      }
+    },
+    [tCommon],
+  );
 
   const handleExportPdf = useCallback(async () => {
     if (!plan) return;
     setExporting(true);
-    const toastId = toast.loading(
-      tCommon("export.loading.pdf", tCommon("export.title")),
-    );
+    const toastId = toast.loading(tCommon("export.loading.pdf", tCommon("export.title")));
     try {
       await exportRaceSimToPDF(plan, isEn);
       toast.success(tCommon("calculators:raceSimulator.pdfExported"), { id: toastId });
@@ -262,230 +290,113 @@ export function RaceSimulatorPage() {
     setDeleteTarget(null);
   }, [deleteTarget]);
 
-  const toggleSection = useCallback((id: string) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [id as SectionId]: !(prev[id as SectionId] ?? DEFAULT_OPEN[id as SectionId]),
-    }));
-  }, []);
-
   const toggleChecked = useCallback((key: string) => {
     setChecked((prev) => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
-  const handleJump = useCallback((id: string) => {
-    setOpenSections((prev) => ({ ...prev, [id as SectionId]: true }));
-    requestAnimationFrame(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const chapters = useChapters(plan ?? PLACEHOLDER_PLAN, race?.date);
+
+  // The chapter rail follows the reading: the active chapter is the last one
+  // whose top has reached the line where a tap on the rail puts it (its
+  // scroll-margin). Over the last half screen of the page that line slides
+  // down to the bottom of the viewport, so the chapters a short page cannot
+  // lift that high still take their turn, the last one included. While a
+  // tapped chapter is being scrolled to, the rail keeps the tap.
+  const jumping = useRef<number | null>(null);
+  const followReading = useCallback(() => {
+    if (jumping.current !== null) return;
+    const els = CHAPTER_IDS.map((id) => document.getElementById(`rs-${id}`));
+    if (!els[0]) return;
+    const base = parseFloat(getComputedStyle(els[0]).scrollMarginTop) + 8;
+    const span = window.innerHeight / 2;
+    const remaining = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+    const line = remaining < span ? base + (window.innerHeight - base) * (1 - Math.max(0, remaining) / span) : base;
+    let active = 0;
+    els.forEach((el, i) => {
+      if (el && el.getBoundingClientRect().top <= line) active = i;
     });
+    setActiveChapter(CHAPTER_IDS[active]);
   }, []);
 
-  const paceUnit = getPaceUnit(unit);
-
-  // Every plan block, in the order you meet it on the day. Drives both the
-  // rendered grid and the anchor rail, so the two can never drift apart.
-  const sections = useMemo(() => {
-    if (!plan) return [];
-    const durationMin = plan.targetTimeSeconds / 60;
-    const recovery = plan.fuelingPlan.timeline.filter(
-      (cp) => cp.timeMin >= durationMin,
-    );
-
-    const list: {
-      id: SectionId;
-      label: string;
-      navLabel: string;
-      icon: React.ReactNode;
-      meta?: React.ReactNode;
-      wide?: boolean;
-      body: React.ReactNode;
-    }[] = [
-      {
-        id: "timeline",
-        label: t("sections.timeline"),
-        navLabel: t("nav.timeline"),
-        icon: <Clock />,
-        meta: `${plan.wakeUpTime} → ${plan.estimatedFinishTime}`,
-        body: <RaceTimeline timeline={plan.timeline} />,
-      },
-    ];
-
-    if (plan.dayBeforeChecklist.length > 0) {
-      list.push({
-        id: "dayBefore",
-        label: t("sections.dayBefore"),
-        navLabel: t("nav.dayBefore"),
-        icon: <Flag />,
-        meta: t("meta.items", { count: plan.dayBeforeChecklist.length }),
-        body: (
-          <Checklist
-            entries={plan.dayBeforeChecklist.map((item, i) => ({
-              key: `dayBefore:${i}`,
-              text: pick(item, "text"),
-            }))}
-            checked={checked}
-            onToggle={toggleChecked}
-          />
-        ),
+  useEffect(() => {
+    if (!plan || view !== "prepare") return;
+    let frame = 0;
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(() => {
+        frame = 0;
+        followReading();
       });
-    }
+    };
+    followReading();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [plan, view, followReading]);
 
-    if (plan.raceDayChecklist.length > 0) {
-      list.push({
-        id: "packing",
-        label: t("sections.packing"),
-        navLabel: t("nav.packing"),
-        icon: <ClipboardCheck />,
-        meta: t("meta.items", { count: plan.raceDayChecklist.length }),
-        body: (
-          <Checklist
-            entries={plan.raceDayChecklist.map((item, i) => ({
-              key: `packing:${i}`,
-              text: pick(item, "text"),
-            }))}
-            checked={checked}
-            onToggle={toggleChecked}
-          />
-        ),
-      });
-    }
+  // On a phone the rail scrolls sideways: keep the active chapter in it.
+  const railRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const rail = railRef.current;
+    const pill = rail?.querySelector<HTMLElement>("[aria-current]");
+    if (!rail || !pill || rail.scrollWidth <= rail.clientWidth) return;
+    rail.scrollTo({ left: pill.offsetLeft - (rail.clientWidth - pill.offsetWidth) / 2, behavior: "smooth" });
+  }, [activeChapter]);
 
-    list.push({
-      id: "morning",
-      label: t("sections.morning"),
-      navLabel: t("nav.morning"),
-      icon: <Utensils />,
-      meta: plan.wakeUpTime,
-      body: (
-        <div className="zn-stack" style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}>
-          <div className="zn-rs-stats">
-            <Stat label={t("labels.wakeUp")} value={plan.wakeUpTime} />
-            <Stat
-              label={t("labels.breakfast")}
-              value={plan.breakfast.time}
-              hint={t("meta.carbs", { amount: plan.breakfast.carbsG })}
-            />
-          </div>
-          <p className="zn-rs-note zn-rs-note--muted">
-            {pick(plan.breakfast, "description")}
-          </p>
-        </div>
-      ),
-    });
+  const endJump = useRef<(() => void) | null>(null);
+  const jump = (id: ChapterId) => {
+    setActiveChapter(id);
+    endJump.current?.();
+    const started = performance.now();
+    const end = () => {
+      window.removeEventListener("scrollend", onScrollEnd);
+      window.clearTimeout(timer);
+      jumping.current = null;
+      endJump.current = null;
+    };
+    // A scrollend this early belongs to a scroll that was already running.
+    const onScrollEnd = () => performance.now() - started >= 100 && end();
+    // scrollend is not in every Safari: the timeout releases the rail anyway.
+    const timer = window.setTimeout(end, 1200);
+    jumping.current = timer;
+    endJump.current = end;
+    window.addEventListener("scrollend", onScrollEnd);
+    document.getElementById(`rs-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-    if (plan.warmupExercises.length > 0) {
-      list.push({
-        id: "warmup",
-        label: t("sections.warmup"),
-        navLabel: t("nav.warmup"),
-        icon: <Flame />,
-        meta: `${plan.warmupStartTime} · ${plan.warmupDurationMin} min`,
-        body: (
-          <WarmupChecklist
-            exercises={plan.warmupExercises}
-            startTime={plan.warmupStartTime}
-            totalDurationMin={plan.warmupDurationMin}
-            checked={checked}
-            onToggle={toggleChecked}
-          />
-        ),
-      });
-    }
+  const wristRows = plan
+    ? plan.splits.map((s, i) => ({
+        km: String(i === plan.splits.length - 1 ? plan.distanceKm : s.index),
+        split: formatSplitTime(s.splitTimeSeconds),
+        passage: formatSplitTime(s.cumulativeTimeSeconds),
+      }))
+    : [];
+  const hasSplits = !!plan && !isTrail && plan.splits.length > 0;
 
-    list.push({
-      id: "race",
-      label: t("sections.race"),
-      navLabel: t("nav.race"),
-      icon: <Route />,
-      wide: true,
-      meta: `${formatPaceDisplay(convertPace(plan.targetTimeSeconds / 60 / plan.distanceKm, unit))}${paceUnit}`,
-      body: (
-        <SplitsPanel
-          plan={plan}
-          strategy={planInput?.strategy ?? "even"}
-          unit={unit}
-        />
-      ),
-    });
-
-    list.push({
-      id: "nutrition",
-      label: t("sections.nutrition"),
-      navLabel: t("nav.nutrition"),
-      icon: <Utensils />,
-      meta:
-        plan.fuelingPlan.carbsPerHourG > 0
-          ? `${plan.fuelingPlan.carbsPerHourG} g/h`
-          : t("meta.hydrationOnly"),
-      body: (
-        <NutritionPanel
-          fuelingPlan={plan.fuelingPlan}
-          durationMin={durationMin}
-        />
-      ),
-    });
-
-    list.push({
-      id: "mental",
-      label: t("sections.mental"),
-      navLabel: t("nav.mental"),
-      icon: <Brain />,
-      meta: t("meta.segments", { count: plan.mentalCues.length }),
-      body: <MentalCuesPanel cues={plan.mentalCues} />,
-    });
-
-    if (recovery.length > 0) {
-      list.push({
-        id: "recovery",
-        label: t("sections.recovery"),
-        navLabel: t("nav.recovery"),
-        icon: <Heart />,
-        body: (
-          <ul className="zn-rs-cp">
-            {recovery.map((cp, i) => (
-              <li key={i} className="zn-rs-cp__item">
-                <span className="zn-rs-cp__text">{pick(cp, "action")}</span>
-              </li>
-            ))}
-          </ul>
-        ),
-      });
-    }
-
-    return list;
-  }, [plan, planInput, checked, toggleChecked, pick, t, unit, paceUnit]);
-
-  const navItems: RaceSimNavItem[] = sections.map((s) => ({
-    id: s.id,
-    label: s.navLabel,
-  }));
-
-  const allOpen =
-    sections.length > 0 &&
-    sections.every((s) => openSections[s.id] ?? DEFAULT_OPEN[s.id]);
-
-  const handleToggleAll = useCallback(() => {
-    const next = !allOpen;
-    setOpenSections(
-      Object.fromEntries(sections.map((s) => [s.id, next])) as Partial<
-        Record<SectionId, boolean>
-      >,
-    );
-  }, [allOpen, sections]);
-
-  const distanceLabel = plan
-    ? isEn
-      ? getDistanceLabelEn(plan.distanceKm)
-      : plan.distanceLabel
-    : "";
-
-  const formNode = (
-    <RaceSimForm
-      settings={settings}
-      onChange={setSettings}
-      onGenerate={handleGenerate}
-      submitLabel={plan ? t("inputs.regenerate") : t("inputs.generate")}
-    />
+  const actions = plan && (
+    <div className="zn-rs2__actions">
+      <Button variant="outline" onClick={handleExportPdf} disabled={exporting}>
+        {exporting ? <Loader2 className="zn-rsp__barspin" /> : <Download />}
+        {t("actions.exportPdf")}
+      </Button>
+      {hasSplits && (
+        <Button variant="outline" onClick={printWristband}>
+          <Watch />
+          {t("actions.wristband")}
+        </Button>
+      )}
+      <Button variant="outline" onClick={() => input && shareSimulation(input, title)}>
+        <Share />
+        {t("actions.share")}
+      </Button>
+      <Button variant="ghost" onClick={handleSave}>
+        <Save />
+        {t("actions.save")}
+      </Button>
+    </div>
   );
 
   return (
@@ -511,276 +422,234 @@ export function RaceSimulatorPage() {
           },
         ]}
       />
-      <PageContainer width="wide" className="zn-rsp">
-        {/* Mono kicker, display title, one sentence. */}
-        <header
-          className="zn-rsp__head zn-stack"
-          style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
-        >
-          <span className="zn-kicker">{t("kicker")}</span>
+      <PageContainer width="wide" className="zn-rs2">
+        {/* Choisir la course : celles du plan, puis Autre. */}
+        <div className="zn-rs2__pick">
+          <p className="zn-kicker">{t("kicker")}</p>
+          {/* Sans course dans le plan, Autre serait seul et déjà choisi : pas de choix à montrer. */}
+          {numbers.races.length > 0 && (
+            <div className="zn-rs2__chips" role="radiogroup" aria-label={t("pick.label")}>
+              {numbers.races.map((r) => (
+                <button
+                  key={r.key}
+                  type="button"
+                  role="radio"
+                  aria-checked={effectiveChoice === r.key}
+                  className="zn-rs2__chip"
+                  onClick={() => {
+                    setChoice(r.key);
+                    setChecked({});
+                  }}
+                >
+                  <span>{raceLabel(r, isEn)}</span>
+                  <span className="zn-rs2__chipmeta">{t("pick.daysLeft", { count: r.daysLeft })}</span>
+                </button>
+              ))}
+              <button
+                type="button"
+                role="radio"
+                aria-checked={effectiveChoice === "other"}
+                className="zn-rs2__chip"
+                onClick={() => setChoice("other")}
+              >
+                {t("pick.other")}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <header className="zn-rs2__head">
           <h1 className="zn-display" data-level="2">
-            {t("title")}
+            {title}
           </h1>
-          <p className="zn-body zn-body--lead zn-measure">{t("description")}</p>
+          {subline && <p className="zn-body zn-muted">{subline}</p>}
+          {!race && !plan && (
+            <p className="zn-body zn-muted">{t(numbers.races.length > 0 ? "descriptionShort" : "descriptionNoPlan")}</p>
+          )}
         </header>
 
         {isShared && (
-          <Alert kind="info" className="zn-rsp__banner">
+          <Alert kind="info" className="zn-rs2__banner">
             {t("shared.banner")}
           </Alert>
         )}
 
-        {plan && (
-          <RaceSimSummaryBar
-            className="zn-rsp__summary"
-            distanceLabel={distanceLabel}
-            timeLabel={formatSplitTime(plan.targetTimeSeconds)}
-            paceLabel={`${formatPaceDisplay(convertPace(plan.targetTimeSeconds / 60 / plan.distanceKm, unit))}${paceUnit}`}
-            startTime={plan.startTime}
-            strategyLabel={t(`inputs.${planInput?.strategy ?? "even"}`)}
-            onAdjust={() => {
-              if (isDesktop) {
-                setFormOpen(true);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              } else {
-                setSheetOpen(true);
-              }
-            }}
-          />
-        )}
-
-        <div className="zn-rsp__layout">
-          {/* Left rail, settings before generation, navigation after. The app
-              header is in flow in this design, so the rail sticks to the top of
-              the viewport rather than under a bar that is no longer there. */}
-          <aside className="zn-rsp__rail">
-            {formOpen || !plan ? (
-              <Card size="flush" className="zn-rsp__settings">
-                <h2 className="zn-kicker zn-rsp__settingstitle">
-                  {t("inputs.title")}
-                </h2>
-                {formNode}
-                {plan && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="zn-rsp__closeform"
-                    onClick={() => setFormOpen(false)}
-                  >
-                    {t("inputs.close")}
-                  </Button>
+        <div className="zn-rs2__band">
+          {race ? (
+            <>
+              <div className="zn-rs2__cells">
+                <StepChrono
+                  label={t("band.target")}
+                  format="hms"
+                  value={raceTarget}
+                  distanceKm={race.distanceKm}
+                  step={30}
+                  fallback={Math.round((race.distanceKm * 360) / 300) * 300}
+                  onChange={(v) => updateEntry({ target: v })}
+                />
+                {!race.isTrail && (
+                  <div className="zn-rs2__cell">
+                    <span className="zn-calc-field__label">{t("band.pace")}</span>
+                    <span className="zn-rs2__cellvalue">
+                      {raceTarget ? `${formatPaceDisplay(raceTarget / 60 / race.distanceKm)}/km` : "-"}
+                    </span>
+                  </div>
                 )}
-              </Card>
-            ) : (
-              <div
-                className="zn-stack"
-                style={{ "--gap": "var(--sp-13)" } as React.CSSProperties}
-              >
-                {/* The anchors only exist in "Préparer", the race-day sheet
-                    renders one continuous run sheet, with nothing to jump to. */}
-                {view === "prepare" && (
-                  <RaceSimNav
-                    items={navItems}
-                    onJump={handleJump}
-                    onToggleAll={handleToggleAll}
-                    allOpen={allOpen}
-                  />
-                )}
-                <RaceSimActions
-                  onExportPdf={handleExportPdf}
-                  onSave={handleSave}
-                  onShare={handleShare}
-                  exporting={exporting}
+                <StepChrono
+                  label={t("band.start")}
+                  format="hm"
+                  value={entry.start}
+                  min={0}
+                  max={23 * 60 + 59}
+                  step={5}
+                  fallback={9 * 60}
+                  onChange={(v) => updateEntry({ start: v })}
                 />
               </div>
-            )}
-          </aside>
-
-          {/* Plan */}
-          <div className="zn-rsp__panel">
-            {/* Mobile settings, inline until a plan exists, then behind "Ajuster". */}
-            {!plan && (
-              <Card size="flush" className="zn-rsp__settings zn-rsp__mobileform">
-                <h2 className="zn-kicker zn-rsp__settingstitle">
-                  {t("inputs.title")}
-                </h2>
-                {formNode}
-              </Card>
-            )}
-
-            {!plan ? (
-              <EmptyPlan />
-            ) : (
-              <>
-                <div
-                  className="zn-cluster zn-rsp__viewbar"
-                  style={{ "--gap": "var(--sp-8)" } as React.CSSProperties}
-                >
-                  <Segmented
-                    className="zn-rsp__switch"
-                    label={t("view.label")}
-                    value={view}
-                    onChange={setView}
-                    options={[
-                      { value: "prepare", label: t("view.prepare") },
-                      { value: "raceDay", label: t("view.raceDay") },
-                    ]}
-                  />
-                  <p className="zn-caption zn-muted">
-                    {view === "prepare" ? t("view.prepareHint") : t("view.raceDayHint")}
-                  </p>
-                </div>
-
-                {view === "prepare" ? (
-                  <>
-                    <div className="zn-rsp__strip">
-                      <RaceSimNav items={navItems} onJump={handleJump} variant="chips" />
-                    </div>
-
-                    <div className="zn-rsp__sections">
-                      {sections.map((section) => (
-                        <RaceSimSection
-                          key={section.id}
-                          id={section.id}
-                          icon={section.icon}
-                          title={section.label}
-                          meta={section.meta}
-                          open={openSections[section.id] ?? DEFAULT_OPEN[section.id]}
-                          onToggle={toggleSection}
-                          className={cn(
-                            "zn-rsp__section",
-                            section.wide && "zn-rsp__section--wide",
-                          )}
-                        >
-                          {section.body}
-                        </RaceSimSection>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <RaceDaySheet
-                    plan={plan}
-                    unit={unit}
-                    checked={checked}
-                    onToggle={toggleChecked}
-                  />
-                )}
-
-                {/* Keeping the plan is secondary, so it stays in the page.
-                    The thumb dock below has room for the call and nothing
-                    else once the menu pill has taken its end of the gutter,
-                    and "Ajuster" is already on the summary line above. */}
-                <div className="zn-rsp__keep">
-                  <Button variant="outline" onClick={handleSave}>
-                    <Save />
-                    {t("actions.save")}
-                  </Button>
-                  <Button variant="outline" onClick={handleShare}>
-                    <Share />
-                    {t("actions.share")}
-                  </Button>
-                </div>
-              </>
-            )}
-
-            {/* Saved simulations */}
-            {savedSimulations.length > 0 && (
-              <section className="zn-rsp__saved" aria-labelledby="rs-saved">
-                <h2 id="rs-saved" className="zn-kicker zn-rsp__savedtitle">
-                  {t("saved.title")}
-                </h2>
-                <ul className="zn-rsp__savedlist">
-                  {savedSimulations.map((sim) => (
-                    <li key={sim.id} className="zn-ct__saveditem">
-                      <div className="zn-fill">
-                        <span className="zn-ct__savedname zn-truncate">
-                          {sim.label}
-                        </span>
-                        <span className="zn-ct__saveddate">
-                          {formatDate(new Date(sim.createdAt))}
-                        </span>
-                      </div>
-                      <div
-                        className="zn-cluster zn-fixed"
-                        style={{ "--gap": "var(--sp-2)" } as React.CSSProperties}
-                      >
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleLoad(sim.input)}
-                        >
-                          {t("actions.load")}
-                        </Button>
-                        <ActionsMenu label={t("saved.actionsLabel", { name: sim.label })}>
-                          <DropdownMenuItem onSelect={() => shareSimulation(sim.input, sim.label)}>
-                            <Share />
-                            {t("actions.share")}
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            variant="destructive"
-                            className="zn-more__danger"
-                            onSelect={() => setDeleteTarget(sim.id)}
-                          >
-                            <Trash2 />
-                            {t("actions.deleteMenu")}
-                          </DropdownMenuItem>
-                        </ActionsMenu>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-          </div>
+              {!race.isTrail && (
+                <Segmented
+                  label={t("inputs.strategy")}
+                  value={raceStrategy}
+                  onChange={(v) => updateEntry({ strategy: v })}
+                  options={[
+                    { value: "even", label: t("inputs.even") },
+                    { value: "negative", label: t("inputs.negative") },
+                    { value: "positive", label: t("inputs.positive") },
+                  ]}
+                />
+              )}
+              {!raceInput && <p className="zn-rs2__missing">{t(raceTarget ? "band.missingStart" : "band.missing")}</p>}
+            </>
+          ) : (
+            <div className="zn-rs2__form">
+              <RaceSimForm
+                settings={settings}
+                onChange={setSettings}
+                onGenerate={handleGenerate}
+                submitLabel={plan ? t("inputs.regenerate") : t("inputs.generate")}
+              />
+            </div>
+          )}
         </div>
+
+        {plan && (
+          <>
+            <div className="zn-rs2__mode">
+              <Segmented
+                label={t("view.label")}
+                value={view}
+                onChange={setView}
+                options={[
+                  { value: "prepare", label: t("view.prepare") },
+                  { value: "raceDay", label: t("view.raceDay") },
+                ]}
+              />
+            </div>
+
+            {view === "prepare" && (
+              <nav ref={railRef} className="zn-rs2__chapters" aria-label={t("doc.chapters")}>
+                {chapters.map((c) => (
+                  <a
+                    key={c.id}
+                    href={`#rs-${c.id}`}
+                    aria-current={activeChapter === c.id || undefined}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      jump(c.id);
+                    }}
+                  >
+                    <span>{c.name}</span>
+                    <span className="zn-rs2__chapterat">{c.at}</span>
+                  </a>
+                ))}
+              </nav>
+            )}
+
+            <div className="zn-rs2__doc">
+              {view === "prepare" ? (
+                <RacePrepDocument
+                  plan={plan}
+                  chapters={chapters}
+                  strategy={strategy}
+                  isTrail={isTrail}
+                  checked={checked}
+                  onToggle={toggleChecked}
+                />
+              ) : (
+                <RaceDayNow
+                  plan={plan}
+                  raceDate={race?.date}
+                  isTrail={isTrail}
+                  done={checked}
+                  onToggleDone={toggleChecked}
+                />
+              )}
+            </div>
+
+            <aside className="zn-rs2__side">
+              {hasSplits && (
+                <section className="zn-rs2__passages" aria-labelledby="rs-passages">
+                  <h2 id="rs-passages" className="zn-kicker">
+                    {t("doc.passagesTitle", { strategy: t(`inputs.${strategy}`) })}
+                  </h2>
+                  <PassagesTable plan={plan} compact />
+                  <p className="zn-calc-hint">{t("doc.passagesHint", { time: minutesToHm(timeToMinutes(plan.startTime)) })}</p>
+                </section>
+              )}
+              {actions}
+            </aside>
+            {hasSplits && <Wristband title={`${title} · ${formatSplitTime(plan.targetTimeSeconds)}`} rows={wristRows} />}
+          </>
+        )}
+
+        {savedSimulations.length > 0 && (
+          <section className="zn-rs2__saved zn-rsp__saved" aria-labelledby="rs-saved">
+            <h2 id="rs-saved" className="zn-kicker zn-rsp__savedtitle">
+              {t("saved.title")}
+            </h2>
+            <ul className="zn-rsp__savedlist">
+              {savedSimulations.map((sim) => (
+                <li key={sim.id} className="zn-ct__saveditem">
+                  <div className="zn-fill">
+                    <span className="zn-ct__savedname zn-truncate">{sim.label}</span>
+                    <span className="zn-ct__saveddate">{formatDate(new Date(sim.createdAt))}</span>
+                  </div>
+                  <div className="zn-cluster zn-fixed">
+                    <Button variant="ghost" size="sm" onClick={() => handleLoad(sim.input)}>
+                      {t("actions.load")}
+                    </Button>
+                    <ActionsMenu label={t("saved.actionsLabel", { name: sim.label })}>
+                      <DropdownMenuItem onSelect={() => shareSimulation(sim.input, sim.label)}>
+                        <Share />
+                        {t("actions.share")}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        variant="destructive"
+                        className="zn-more__danger"
+                        onSelect={() => setDeleteTarget(sim.id)}
+                      >
+                        <Trash2 />
+                        {t("actions.deleteMenu")}
+                      </DropdownMenuItem>
+                    </ActionsMenu>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </PageContainer>
 
-      {/* Mobile action bar, the PDF is what ends up on a phone race morning.
-          Opaque cream on an ink rule: no blur, no translucency. One call and
-          nothing else: below 1024px the menu pill takes 120px of this bar's
-          end, and what is left measures the export button exactly. */}
-      {plan && (
-        <div className="zn-rsp__bar">
-          <Button
-            className="zn-rsp__barcall"
-            onClick={handleExportPdf}
-            disabled={exporting}
-          >
-            {exporting ? <Loader2 className="zn-rsp__barspin" /> : <Download />}
-            {t("actions.exportPdf")}
-          </Button>
-        </div>
-      )}
-
-      {/* Mobile settings sheet */}
-      <Sheet open={sheetOpen && !!plan && !isDesktop} onOpenChange={setSheetOpen}>
-        <SheetContent side="bottom" className="zn-rsp__sheet">
-          <SheetHeader>
-            <SheetTitle>{t("inputs.title")}</SheetTitle>
-          </SheetHeader>
-          <div className="zn-rsp__sheetbody">{formNode}</div>
-        </SheetContent>
-      </Sheet>
-
-      <Dialog
-        open={deleteTarget !== null}
-        onOpenChange={(open) => !open && setDeleteTarget(null)}
-      >
+      <Dialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {tCommon("calculators:raceSimulator.deleteConfirm")}
-            </DialogTitle>
-            <DialogDescription>
-              {tCommon("calculators:raceSimulator.deleteDescription")}
-            </DialogDescription>
+            <DialogTitle>{tCommon("calculators:raceSimulator.deleteConfirm")}</DialogTitle>
+            <DialogDescription>{tCommon("calculators:raceSimulator.deleteDescription")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">
-                {tCommon("calculators:raceSimulator.cancel")}
-              </Button>
+              <Button variant="outline">{tCommon("calculators:raceSimulator.cancel")}</Button>
             </DialogClose>
             <Button variant="destructive" onClick={confirmDelete}>
               <Trash2 size={15} />
@@ -793,40 +662,5 @@ export function RaceSimulatorPage() {
   );
 }
 
-/**
- * No plan yet. The form that undoes this state sits in the rail on desktop and
- * directly above on a phone, so the block names what is missing and prints the
- * four things the form will produce rather than repeating the button.
- */
-function EmptyPlan() {
-  const { t } = useTranslation("simulator");
-  const steps = [
-    { icon: <Clock size={15} />, text: t("emptyState.timeline") },
-    { icon: <Route size={15} />, text: t("emptyState.splits") },
-    { icon: <Utensils size={15} />, text: t("emptyState.nutrition") },
-    { icon: <Brain size={15} />, text: t("emptyState.mental") },
-  ];
-  return (
-    <Card
-      size="flush"
-      className="zn-rsp__empty zn-stack"
-      style={{ "--gap": "var(--sp-13)" } as React.CSSProperties}
-    >
-      <div
-        className="zn-row zn-row--start"
-        style={{ "--gap": "var(--sp-5)" } as React.CSSProperties}
-      >
-        <Info size={15} className="zn-fixed zn-faint" />
-        <p className="zn-body zn-body--sm zn-muted">{t("empty")}</p>
-      </div>
-      <ul className="zn-rsp__steps">
-        {steps.map((step, i) => (
-          <li key={i} className="zn-rsp__step">
-            {step.icon}
-            {step.text}
-          </li>
-        ))}
-      </ul>
-    </Card>
-  );
-}
+/** Keeps `useChapters` unconditional before a plan exists; never rendered. */
+const PLACEHOLDER_PLAN = generateRacePlan({ distanceKm: 10, targetTimeSeconds: 3000, startTime: "09:00", strategy: "even" });

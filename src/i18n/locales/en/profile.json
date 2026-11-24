@@ -78,8 +78,8 @@
     "noVmaBody": "Without it your six zones and your paces stay empty. The rest of your profile is intact: a 6-minute test fills the gap.",
     "noVmaAction": "Estimate my vVO2max",
     "sourceTitle": "Where these numbers come from",
-    "sourceBody": "Zones as a percentage of vVO2max, target heart rates by the Karvonen method, predictions by Riegel's formula calibrated on your own races.",
-    "sourceCitation": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957 · Riegel, Runner's World, 1977"
+    "sourceBody": "Zones as a percentage of vVO2max, target heart rates by the Karvonen method, predicted times by the Péronnet and Thibault model, the same one that gives your vVO2max from a race time.",
+    "sourceCitation": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957 · Péronnet and Thibault, J Appl Physiol, 1989"
   },
   "references": {
     "title": "Reference times",

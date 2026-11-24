@@ -13,8 +13,12 @@ export function isServerSnapshot(): boolean {
   const path = window.location.pathname.replace(/\/$/, "") || "/";
   const expected = stampedPath.replace(/\/$/, "") || "/";
   if (path !== expected) return false;
+  const query = new URLSearchParams(window.location.search);
+  // Le HTML a ete rendu sans parametres : un lien qui en porte (?kmh=15,
+  // ?race=..., ?d=...) donne un autre premier rendu. Le client repeint.
+  if ([...query.keys()].some((key) => key !== "lang")) return false;
   const stampedLang = document.documentElement.getAttribute("data-prerender-lang") === "en" ? "en" : "fr";
-  const queryLang = new URLSearchParams(window.location.search).get("lang") === "en" ? "en" : "fr";
+  const queryLang = query.get("lang") === "en" ? "en" : "fr";
   if (queryLang !== stampedLang) return false;
   try {
     const stored = localStorage.getItem("zoned-language");

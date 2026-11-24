@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+- Calculators start from your numbers. The hub (`/calculators`) opens on four tiles (VMA, max HR, threshold, next race of the plan, each `to set` when missing) and lists six tools in three families, each row already giving its answer: Set your numbers (Zones, From a race time), Convert (Paces, Treadmill), Prepare a race (Splits, Race day). Cycling FTP and swimming CSS keep their routes and move to one line at the bottom. Every tool reads the profile and the plans (`useMyNumbers`), answers before anything is typed, and shares one anatomy: stepped fields with - and +, the answer in large type, the zone band, where the number comes from, where to go next. Rationale in `docs/calculateurs.md`
+- One performance model: Péronnet-Thibault, intermediate profile. From a race time merges the VMA and equivalence calculators: a race time gives the VMA and the times on the other distances, and the VMA can be saved in one tap. Riegel is gone from code and copy
+- Paces merges the pace converter and the pace calculator: one pace, read in min/km, km/h and min/mi, placed on your zones. The pace table stays a page, redrawn as a dense table that highlights your zones
+- The race-day simulator opens on the next race of your plan, with one chip per race and `Other` for a free form; the plan gives distance and target, the start time is set once and kept per race. Prepare is one chronological document in five chapters (evening before, morning, warm-up in four parts, race, after), three columns on desktop with the splits and the wristband on the right. Race day shows Now and Next, with a `Done` button; the clock is the real one only on the race date, where the screen is kept awake, and any other day is a rehearsal with a time slider. A trail race shows its target as a time, without per-kilometre splits, which are coming
+- Old links redirect permanently: `/calculators/equivalence` and `/calculators/age-graded` to `/calculators/vma`, `/calculators/convertisseur` to `/calculators/allures`, keeping their query string
+
+### Fixed
+- A link carrying query parameters no longer hydrates the prerendered page, which was rendered without them, so the first render cannot disagree with the HTML
+
 ## [1.1.0] - 2026-11-24
 
 ### Added

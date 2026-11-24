@@ -93,6 +93,20 @@ export function vmaFromRaceTime(distanceKm: number, minutes: number, e: number):
 }
 
 /**
+ * A time on one distance projected onto another, through the VMA it implies.
+ * The same model gives the VMA and the predicted times, so the two pages that
+ * show them can never disagree.
+ */
+export function equivalentRaceMinutes(
+  fromKm: number,
+  fromMinutes: number,
+  toKm: number,
+  e: number,
+): number {
+  return predictRaceMinutes(vmaFromRaceTime(fromKm, fromMinutes, e), toKm, e);
+}
+
+/**
  * Format minutes as h:mm:ss or mm:ss.
  */
 export function formatRaceMinutes(totalMinutes: number): string {
