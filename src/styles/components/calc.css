@@ -109,6 +109,10 @@
   font: var(--fw-medium) var(--fs-h3) / 1 var(--font-text);
   cursor: pointer;
   transition: transform var(--dur-fast) var(--ease-out);
+  /* On tape vite sur - et + : ni sélection du signe, ni zoom au double tap. */
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .zn-calc-step__btn:active {
@@ -141,6 +145,8 @@
   font: var(--fs-mono-sm) var(--font-mono);
   color: var(--text-faint);
   pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .zn-calc-step:has(.zn-calc-step__unit) .zn-calc-step__input {
