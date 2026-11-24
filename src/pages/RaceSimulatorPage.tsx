@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Download, Loader2, Save, Share, Trash2, Watch } from "@/components/icons";
@@ -72,6 +72,8 @@ interface RaceEntry {
 }
 
 const ENTRIES_KEY = "zoned-race-sim-entries";
+
+const CHAPTER_IDS: ChapterId[] = ["eve", "morning", "warmup", "race", "after"];
 
 function loadEntries(): Record<string, RaceEntry> {
   try {
@@ -294,25 +296,74 @@ export function RaceSimulatorPage() {
 
   const chapters = useChapters(plan ?? PLACEHOLDER_PLAN, race?.date);
 
-  // The chapter rail follows the reading.
-  useEffect(() => {
-    if (!plan || view !== "prepare" || typeof IntersectionObserver === "undefined") return;
-    const observer = new IntersectionObserver(
-      (items) => {
-        const visible = items.filter((i) => i.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-        if (visible) setActiveChapter(visible.target.id.replace("rs-", "") as ChapterId);
-      },
-      { rootMargin: "-30% 0px -60% 0px" },
-    );
-    for (const c of chapters) {
-      const el = document.getElementById(`rs-${c.id}`);
-      if (el) observer.observe(el);
-    }
-    return () => observer.disconnect();
-  }, [plan, view, chapters]);
+  // The chapter rail follows the reading: the active chapter is the last one
+  // whose top has reached the line where a tap on the rail puts it (its
+  // scroll-margin). Over the last half screen of the page that line slides
+  // down to the bottom of the viewport, so the chapters a short page cannot
+  // lift that high still take their turn, the last one included. While a
+  // tapped chapter is being scrolled to, the rail keeps the tap.
+  const jumping = useRef<number | null>(null);
+  const followReading = useCallback(() => {
+    if (jumping.current !== null) return;
+    const els = CHAPTER_IDS.map((id) => document.getElementById(`rs-${id}`));
+    if (!els[0]) return;
+    const base = parseFloat(getComputedStyle(els[0]).scrollMarginTop) + 8;
+    const span = window.innerHeight / 2;
+    const remaining = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+    const line = remaining < span ? base + (window.innerHeight - base) * (1 - Math.max(0, remaining) / span) : base;
+    let active = 0;
+    els.forEach((el, i) => {
+      if (el && el.getBoundingClientRect().top <= line) active = i;
+    });
+    setActiveChapter(CHAPTER_IDS[active]);
+  }, []);
 
+  useEffect(() => {
+    if (!plan || view !== "prepare") return;
+    let frame = 0;
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(() => {
+        frame = 0;
+        followReading();
+      });
+    };
+    followReading();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [plan, view, followReading]);
+
+  // On a phone the rail scrolls sideways: keep the active chapter in it.
+  const railRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const rail = railRef.current;
+    const pill = rail?.querySelector<HTMLElement>("[aria-current]");
+    if (!rail || !pill || rail.scrollWidth <= rail.clientWidth) return;
+    rail.scrollTo({ left: pill.offsetLeft - (rail.clientWidth - pill.offsetWidth) / 2, behavior: "smooth" });
+  }, [activeChapter]);
+
+  const endJump = useRef<(() => void) | null>(null);
   const jump = (id: ChapterId) => {
     setActiveChapter(id);
+    endJump.current?.();
+    const started = performance.now();
+    const end = () => {
+      window.removeEventListener("scrollend", onScrollEnd);
+      window.clearTimeout(timer);
+      jumping.current = null;
+      endJump.current = null;
+    };
+    // A scrollend this early belongs to a scroll that was already running.
+    const onScrollEnd = () => performance.now() - started >= 100 && end();
+    // scrollend is not in every Safari: the timeout releases the rail anyway.
+    const timer = window.setTimeout(end, 1200);
+    jumping.current = timer;
+    endJump.current = end;
+    window.addEventListener("scrollend", onScrollEnd);
     document.getElementById(`rs-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -491,7 +542,7 @@ export function RaceSimulatorPage() {
             </div>
 
             {view === "prepare" && (
-              <nav className="zn-rs2__chapters" aria-label={t("doc.chapters")}>
+              <nav ref={railRef} className="zn-rs2__chapters" aria-label={t("doc.chapters")}>
                 {chapters.map((c) => (
                   <a
                     key={c.id}
