@@ -198,7 +198,10 @@ async function getSlugsFromDir(dir: string): Promise<SlugEntry[]> {
  */
 function getCalculatorPaths(): string[] {
   const app = readFileSync(join(ROOT, "src/App.tsx"), "utf-8");
-  const paths = [...app.matchAll(/path="(\/calculators\/[a-z0-9-]+)"/g)].map((m) => m[1]);
+  const paths = [...app.matchAll(/path="(\/calculators\/[a-z0-9-]+)" element=\{<(\w+)/g)]
+    // A redirect (NavigateKeepingQuery) is not a page: no sitemap entry, no shell.
+    .filter((m) => !m[2].startsWith("Navigate"))
+    .map((m) => m[1]);
   return [...new Set(paths)];
 }
 

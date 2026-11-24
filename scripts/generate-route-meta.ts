@@ -230,14 +230,12 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
 const CALCULATOR_KEYS: Record<string, string> = {
   "/calculators/zones": "zones",
   "/calculators/allures": "paces",
-  "/calculators/convertisseur": "converter",
   "/calculators/table-allures": "paceTable",
   "/calculators/tapis-roulant": "treadmill",
   "/calculators/splits": "splits",
   "/calculators/vma": "vma",
   "/calculators/ftp": "ftp",
   "/calculators/css": "css",
-  "/calculators/equivalence": "equivalence",
 };
 
 function getCalculatorRoutes(): RouteMeta[] {
@@ -246,7 +244,10 @@ function getCalculatorRoutes(): RouteMeta[] {
   ) as { calculateurs: Record<string, { seoTitle?: string; seoDescription?: string }> };
 
   const app = readFileSync(join(ROOT, "src/App.tsx"), "utf-8");
-  const declared = [...app.matchAll(/path="(\/calculators\/[a-z0-9-]+)"/g)].map((m) => m[1]);
+  const declared = [...app.matchAll(/path="(\/calculators\/[a-z0-9-]+)" element=\{<(\w+)/g)]
+    // A redirect (NavigateKeepingQuery) is not a page: no sitemap entry, no shell.
+    .filter((m) => !m[2].startsWith("Navigate"))
+    .map((m) => m[1]);
 
   const missing = declared.filter((p) => !(p in CALCULATOR_KEYS));
   if (missing.length > 0) {

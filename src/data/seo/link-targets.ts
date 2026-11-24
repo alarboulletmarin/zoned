@@ -40,7 +40,7 @@ export interface SeoTarget {
 
 /**
  * Pages deja proches de la premiere page, ou requetes francaises
- * encore loin (VMA, zones, Riegel, MAF, Runna).
+ * encore loin (VMA, zones, equivalences, MAF, Runna).
  */
 export const SEO_TARGETS: SeoTarget[] = [
   {
@@ -61,7 +61,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     fromWorkouts: { categories: ["assessment", "vma_intervals"] },
     fromGlossary: { ids: ["vma", "vo2max", "vitesse-critique", "zone-5"] },
     fromArticles: { ids: ["testing-vma", "zones"] },
-    fromCalculators: { paths: ["/calculators/zones", "/calculators/allures", "/calculators/equivalence"] },
+    fromCalculators: { paths: ["/calculators/zones", "/calculators/allures"] },
   },
   {
     path: "/learn/testing-vma",
@@ -293,7 +293,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     fromWorkouts: { categories: ["race_pace", "long_run"] },
     fromGlossary: { ids: ["marathon", "semi-marathon"] },
     fromArticles: { ids: ["tapering", "nutrition"] },
-    fromCalculators: { paths: ["/calculators/splits", "/calculators/equivalence", "/calculators/allures"] },
+    fromCalculators: { paths: ["/calculators/splits", "/calculators/vma", "/calculators/allures"] },
   },
   {
     path: "/guides",
@@ -306,15 +306,15 @@ export const SEO_TARGETS: SeoTarget[] = [
     fromPages: { paths: ["/guides/nutrition", "/guides/race-prep", "/guides/warmup", "/nutrition"] },
   },
   {
-    path: "/calculators/equivalence",
-    note: "Formule de Riegel, pas de page dediee ailleurs.",
+    path: "/calculators/vma",
+    note: "Equivalences entre distances : l'ancienne page /calculators/equivalence est fusionnee ici (redirection 301).",
     anchors: {
-      fr: ["Formule de Riegel, équivalences de distance", "Passer d'un 10 km à un marathon"],
-      en: ["Riegel formula race equivalents", "Predict a marathon from a 10K"],
+      fr: ["Équivalences entre distances, du 5 km au marathon", "Passer d'un 10 km à un marathon"],
+      en: ["Race equivalents, 5K to marathon", "Predict a marathon from a 10K"],
     },
     fromWorkouts: { categories: ["race_pace"] },
     fromGlossary: { ids: ["marathon", "semi-marathon"] },
-    fromCalculators: { paths: ["/calculators/vma", "/calculators/splits"] },
+    fromCalculators: { paths: ["/calculators/splits", "/calculators/table-allures"] },
     fromArticles: { ids: ["tapering"] },
   },
   {
@@ -330,13 +330,13 @@ export const SEO_TARGETS: SeoTarget[] = [
   },
   {
     path: "/calculators/allures",
-    note: "La page existe, le hub pointe vers le convertisseur. Elle restait sans lien entrant.",
+    note: "Allures, qui reprend l'ancien convertisseur (redirection 301 depuis /calculators/convertisseur).",
     anchors: {
       fr: ["Calculateur d'allures", "Passer d'un chrono à une allure"],
       en: ["Pace calculator", "Turn a finish time into a pace"],
     },
     fromCalculators: {
-      paths: ["/calculators", "/calculators/convertisseur", "/calculators/table-allures", "/calculators/vma", "/calculators/splits"],
+      paths: ["/calculators", "/calculators/table-allures", "/calculators/vma", "/calculators/splits"],
     },
     fromWorkouts: { categories: ["tempo", "race_pace"] },
   },
@@ -348,7 +348,7 @@ export const SEO_TARGETS: SeoTarget[] = [
       en: ["Pace table", "Minutes per kilometre, in a table"],
     },
     fromWorkouts: { categories: ["tempo", "threshold", "race_pace"] },
-    fromCalculators: { paths: ["/calculators/allures", "/calculators/vma", "/calculators/equivalence"] },
+    fromCalculators: { paths: ["/calculators/allures", "/calculators/vma"] },
   },
   {
     path: "/workout/FAR-013",
@@ -428,11 +428,11 @@ export const SEO_HUBS: SeoTarget[] = [
     fromGlossary: { ids: ["vma", "vo2max", "zone-5"] },
   },
   {
-    path: "/calculators/equivalence",
-    note: "Formule de Riegel. Rappel pour les sorties longues, si la cible specifique a ete ecartee.",
+    path: "/calculators/vma",
+    note: "Equivalences. Rappel pour les sorties longues, si la cible specifique a ete ecartee.",
     anchors: {
-      fr: ["Formule de Riegel, équivalences entre distances", "Projeter un chrono sur une autre distance"],
-      en: ["Riegel formula, race equivalents", "Project a time onto another distance"],
+      fr: ["Équivalences entre distances", "Projeter un chrono sur une autre distance"],
+      en: ["Race equivalents", "Project a time onto another distance"],
     },
     fromWorkouts: { categories: ["long_run", "race_pace"] },
     fromGlossary: { ids: ["marathon", "semi-marathon"] },

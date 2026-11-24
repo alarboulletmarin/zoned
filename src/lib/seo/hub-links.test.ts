@@ -12,7 +12,6 @@ const STRIKING = [
   "/glossary/zone-4",
   "/learn/testing-vma",
   "/workout/ASS-008",
-  "/calculators/equivalence",
   "/calculators/css",
   "/glossary/oscillation-verticale",
   "/glossary/tempo-run",
