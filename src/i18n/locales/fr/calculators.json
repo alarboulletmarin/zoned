@@ -338,5 +338,48 @@
     "km": "km",
     "split": "split",
     "passage": "passage"
+  },
+  "hub": {
+    "kicker": "Mes chiffres · {{count}} outils",
+    "lede": "Tes repères d'abord. Chaque outil part d'eux et répond avant que tu tapes.",
+    "mine": "Tes repères",
+    "setIt": "La poser",
+    "daysLeft_one": "J-{{count}}",
+    "daysLeft_other": "J-{{count}}",
+    "tiles": {
+      "vma": "VMA",
+      "vmaFoot": "soit {{pace}}/km",
+      "fcMax": "FC max",
+      "fcMaxFoot": "battements par minute",
+      "threshold": "Seuil · Z4",
+      "thresholdFoot": "/km, depuis ta VMA",
+      "race": "Prochaine course"
+    },
+    "families": {
+      "benchmarks": "Poser tes repères",
+      "convert": "Convertir",
+      "race": "Préparer une course"
+    },
+    "names": {
+      "zones": "Zones d'entraînement",
+      "vma": "Depuis un chrono",
+      "allures": "Allures",
+      "tapis-roulant": "Tapis roulant",
+      "splits": "Splits",
+      "race-simulator": "Jour de course"
+    },
+    "rows": {
+      "zones": "VMA et FC max → 6 zones",
+      "zonesAnswer": "Z2 endurance · {{range}}/km",
+      "vma": "un résultat → ta VMA et tes temps",
+      "allures": "min/km, km/h, mile et temps",
+      "tapis": "vitesse et pente → allure dehors",
+      "splits": "un objectif → tes passages au km",
+      "splitsAnswer": "{{distance}} en {{time}} → {{pace}}/km",
+      "raceSim": "horaires, allures, ravitaillement"
+    },
+    "other": "Vélo et natation :",
+    "ftp": "test FTP",
+    "css": "test CSS"
   }
 }

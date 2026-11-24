@@ -338,5 +338,48 @@
     "km": "km",
     "split": "split",
     "passage": "elapsed"
+  },
+  "hub": {
+    "kicker": "My numbers · {{count}} tools",
+    "lede": "Your numbers first. Every tool starts from them and answers before you type.",
+    "mine": "Your numbers",
+    "setIt": "Set it",
+    "daysLeft_one": "{{count}} day to go",
+    "daysLeft_other": "{{count}} days to go",
+    "tiles": {
+      "vma": "vVO2max",
+      "vmaFoot": "that is {{pace}}/km",
+      "fcMax": "Max HR",
+      "fcMaxFoot": "beats per minute",
+      "threshold": "Threshold · Z4",
+      "thresholdFoot": "/km, from your vVO2max",
+      "race": "Next race"
+    },
+    "families": {
+      "benchmarks": "Set your numbers",
+      "convert": "Convert",
+      "race": "Prepare a race"
+    },
+    "names": {
+      "zones": "Training zones",
+      "vma": "From a race time",
+      "allures": "Paces",
+      "tapis-roulant": "Treadmill",
+      "splits": "Splits",
+      "race-simulator": "Race day"
+    },
+    "rows": {
+      "zones": "vVO2max and max HR → 6 zones",
+      "zonesAnswer": "Z2 endurance · {{range}}/km",
+      "vma": "one result → your vVO2max and times",
+      "allures": "min/km, km/h, mile and times",
+      "tapis": "speed and incline → outdoor pace",
+      "splits": "a target → your km splits",
+      "splitsAnswer": "{{distance}} in {{time}} → {{pace}}/km",
+      "raceSim": "schedule, paces, fuelling"
+    },
+    "other": "Cycling and swimming:",
+    "ftp": "FTP test",
+    "css": "CSS test"
   }
 }

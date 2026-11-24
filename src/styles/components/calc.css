@@ -597,3 +597,108 @@ a.zn-calc-tile:hover {
     font-weight: 700;
   }
 }
+
+/* ── la page des calculateurs ─────────────────────────────────────────── */
+
+.zn-calc-hub {
+  gap: var(--sp-15);
+}
+
+.zn-calc-hub__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.zn-calc-hub__titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-calc-hub__titles h1 {
+  margin: 0;
+}
+
+@media (min-width: 900px) {
+  .zn-calc-hub__titles {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--sp-15);
+  }
+
+  .zn-calc-hub__titles .zn-calc-head__lede {
+    max-inline-size: 380px;
+  }
+}
+
+.zn-calc-hub__families {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-14);
+}
+
+@media (min-width: 900px) {
+  .zn-calc-hub__families {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-15);
+  }
+}
+
+.zn-calc-hub__familyhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: var(--sp-5);
+  border-bottom: var(--border-rule);
+}
+
+.zn-calc-hub__family ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-calc-hub__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--sp-6);
+  row-gap: var(--sp-2);
+  align-items: center;
+  padding-block: var(--sp-7);
+  border-bottom: 1px solid var(--line-divider);
+  color: var(--text-body);
+  text-decoration: none;
+}
+
+.zn-calc-hub__row > svg {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.zn-calc-hub__name {
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+}
+
+.zn-calc-hub__answer {
+  font: var(--fs-mono-sm) / 1.4 var(--font-mono);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.zn-calc-hub__row:hover .zn-calc-hub__name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-calc-hub__other {
+  margin: 0;
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-calc-hub__other a {
+  color: var(--text-body);
+}
