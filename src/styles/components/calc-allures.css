@@ -1,1 +1,71 @@
 /* Calculateur allures : ce qui lui est propre. La base commune est calc.css. */
+
+.zn-allures-range {
+  inline-size: 100%;
+  block-size: 44px;
+  margin: 0;
+  accent-color: var(--text-body);
+}
+
+/* The value of a tile: a button first, an input once touched. */
+.zn-allures-val {
+  all: unset;
+  box-sizing: border-box;
+  min-block-size: 44px;
+  inline-size: 100%;
+  display: flex;
+  align-items: center;
+  font: var(--fw-medium) 28px / 1.1 var(--font-mono);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  cursor: text;
+}
+
+.zn-allures-val:focus-visible {
+  outline: 2px solid var(--text-body);
+  outline-offset: 2px;
+}
+
+input.zn-allures-val {
+  border-block-end: 2px solid var(--text-body);
+}
+
+.zn-allures-tablelink {
+  display: flex;
+  align-items: center;
+  min-block-size: 44px;
+  margin-top: var(--sp-5);
+  color: var(--text-body);
+}
+
+/* Table page */
+.zn-allures-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: 44px;
+  font-size: var(--fs-body-sm);
+}
+
+.zn-allures-jump {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  color: var(--text-body);
+}
+
+.zn-calc-table tr[id] {
+  scroll-margin-block-start: calc(var(--topbar-h) + var(--sp-12));
+}
+
+@media (min-width: 700px) {
+  .zn-allures-tablebox {
+    overflow: visible;
+  }
+  .zn-allures-tablebox thead th {
+    position: sticky;
+    inset-block-start: calc(var(--topbar-h) - var(--bw-rule));
+    background: var(--surface-page, var(--paper));
+    padding-block: var(--sp-4);
+  }
+}
