@@ -66,6 +66,14 @@ résultats) étaient des exemples, tout compte vient du catalogue.
     transition partagée du nom vers la séance, et la légende `ZoneScale`,
     une fois, sous l'en-tête des résultats (hors renfo, qui ne peint pas de
     zone).
+11. **La légende est le filtre de pic.** Ses six puces ressemblaient à des
+    boutons et ne faisaient rien. Toucher Z2 garde les séances qui
+    culminent en Z2 (`peak=2`), exactement comme la rangée Pic d'intensité
+    du panneau, qui reste synchronisée ; un second toucher retire le filtre.
+    La zone choisie porte un anneau d'encre, les autres s'estompent.
+    `ZoneScale` ne devient cliquable qu'avec `onToggle` : ailleurs elle
+    reste une légende. Elle reste affichée quand le pic vide la liste, pour
+    pouvoir le défaire d'ici.
 
 ## La rangée
 

@@ -15,6 +15,16 @@ interface ZoneScaleProps {
   zones?: ZoneNumber[];
   /** Drop the mono title where the surrounding band already names the scale. */
   showTitle?: boolean;
+  /** Replaces the default title, where the legend does more than name. */
+  title?: string;
+  /**
+   * Makes each entry a toggle, where the screen can filter by zone (the
+   * library's intensity peak). Without it the legend stays a legend: a chip
+   * that looks pressable and does nothing is a promise the screen breaks.
+   */
+  onToggle?: (zone: ZoneNumber) => void;
+  /** The zones currently on, with `onToggle`. */
+  selected?: readonly ZoneNumber[];
   className?: string;
 }
 
@@ -35,22 +45,46 @@ export function ZoneScale({
   layout = "row",
   zones = ALL_ZONES,
   showTitle = true,
+  title,
+  onToggle,
+  selected = [],
   className,
 }: ZoneScaleProps) {
   const { t } = useTranslation("common");
+  const heading = title ?? t("zones.scaleTitle");
 
   return (
-    <div className={cn("zn-zonescale", className)} data-layout={layout}>
+    <div
+      className={cn("zn-zonescale", className)}
+      data-layout={layout}
+      data-filtering={onToggle && selected.length > 0 ? "" : undefined}
+    >
       {showTitle && (
-        <span className="zn-kicker zn-kicker--inline">
-          {t("zones.scaleTitle")}
+        <span className="zn-kicker zn-kicker--inline" aria-hidden={onToggle ? true : undefined}>
+          {heading}
         </span>
       )}
-      <span className="zn-zonescale__items">
-        {zones.map((zone) => (
-          <ZoneBadge key={zone} zone={zone} showLabel />
-        ))}
-      </span>
+      {onToggle ? (
+        <span className="zn-zonescale__items" role="group" aria-label={heading}>
+          {zones.map((zone) => (
+            <button
+              key={zone}
+              type="button"
+              className="zn-zonescale__toggle"
+              aria-pressed={selected.includes(zone)}
+              onClick={() => onToggle(zone)}
+            >
+              <ZoneBadge zone={zone} showLabel />
+            </button>
+          ))}
+        </span>
+      ) : (
+        <span className="zn-zonescale__items">
+          {zones.map((zone) => (
+            <ZoneBadge key={zone} zone={zone} showLabel />
+          ))}
+        </span>
+      )}
     </div>
   );
 }

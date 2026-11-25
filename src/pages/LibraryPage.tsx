@@ -39,7 +39,7 @@ import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { formatDurationMinutes, ZoneScale } from "@/components/visualization";
 import { categories } from "@/data/workouts";
-import type { AnyWorkoutTemplate, WorkoutCategory } from "@/types";
+import type { AnyWorkoutTemplate, WorkoutCategory, ZoneNumber } from "@/types";
 import { useRadioRail } from "@/hooks/useRadioRail";
 import { useSettings } from "@/hooks/useSettings";
 import { resolvePractice, saveLastPractice } from "@/lib/practicePrefs";
@@ -328,6 +328,15 @@ export function LibraryPage() {
       anchor.scrollIntoView({ block: "start" });
     }
   });
+
+  const togglePeak = useCallback((zone: ZoneNumber) => {
+    setFilters((prev) => ({
+      ...prev,
+      peak: prev.peak.includes(zone)
+        ? prev.peak.filter((z) => z !== zone)
+        : [...prev.peak, zone].sort((a, b) => a - b),
+    }));
+  }, []);
 
   const cycleSort = () => {
     const index = LIBRARY_SORTS.indexOf(sort);
@@ -654,8 +663,17 @@ export function LibraryPage() {
                   )}
                 </div>
 
-                {filteredWorkouts.length > 0 && showLegend && (
-                  <ZoneScale className="zn-lib__legend" />
+                {/* La légende EST le filtre de pic : toucher Z2 garde les séances
+                    qui culminent en Z2, comme la rangée du panneau, qui suit.
+                    Elle reste là quand le pic vide la liste, sinon on ne
+                    pourrait plus défaire d'ici ce qu'on y a fait. */}
+                {showLegend && (filteredWorkouts.length > 0 || filters.peak.length > 0) && (
+                  <ZoneScale
+                    className="zn-lib__legend"
+                    title={t("filters.peak")}
+                    selected={filters.peak}
+                    onToggle={togglePeak}
+                  />
                 )}
 
                 {filteredWorkouts.length > 0 ? (

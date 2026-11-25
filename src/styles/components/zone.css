@@ -164,6 +164,64 @@
   }
 }
 
+/* ── the legend as a filter ────────────────────────────────────────────
+
+   Where a screen can filter by zone (the library), each entry is a toggle.
+   The badge keeps its paint, the press is said by shape: an ink ring around
+   the chosen ones, and the others fade back once one is chosen, so the
+   filter reads from across the room without a single word. */
+.zn-zonescale__toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--r-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-zonescale__toggle .zn-zone-badge {
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.zn-zonescale__toggle:hover .zn-zone-badge {
+  box-shadow: 0 0 0 1px var(--line-strong);
+}
+
+.zn-zonescale__toggle:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-zonescale__toggle:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.zn-zonescale__toggle[aria-pressed="true"] .zn-zone-badge {
+  box-shadow:
+    0 0 0 2px var(--surface-page),
+    0 0 0 4px var(--line-strong);
+}
+
+.zn-zonescale[data-filtering] .zn-zonescale__toggle[aria-pressed="false"] {
+  opacity: 0.45;
+}
+
+.zn-zonescale[data-filtering] .zn-zonescale__toggle[aria-pressed="false"]:hover {
+  opacity: 0.8;
+}
+
+@media (pointer: coarse) {
+  .zn-zonescale__toggle {
+    min-block-size: var(--hit-min);
+  }
+}
+
 /* 38x20 swatch, one of the raw sizes the design system states outright. The
    legend itself no longer prints one (its entries are ZoneBadge chips); the
    zones table in ZoneCalculator still does, one per row. */
