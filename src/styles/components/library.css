@@ -861,9 +861,10 @@
     grid-template-areas:
       "head head"
       "side search"
+      "side tools"
       "side main"
       "side crawl";
-    grid-template-rows: auto auto auto 1fr;
+    grid-template-rows: auto auto auto auto 1fr;
     column-gap: var(--sp-15);
     align-items: start;
   }
@@ -894,19 +895,35 @@
     grid-area: crawl;
   }
 
-  /* La colonne colle sous la barre du haut et défile seule si elle est plus
-     haute que l'écran. */
+  /* La colonne colle sous la barre du haut et tient dans l'écran d'un seul
+     coup d'œil : pratiques, familles, autres sports, sans défilement à elle.
+     Seule la liste des séances défile. C'est ce qui a fait sortir les
+     raccourcis et Tous les filtres de la colonne (ils sont sous la
+     recherche) et passer les autres sports en une rangée de puces. */
   .zn-lib__side {
     grid-area: side;
     display: flex;
     flex-direction: column;
-    gap: var(--sp-12);
+    gap: var(--sp-10);
     position: sticky;
     inset-block-start: calc(var(--topbar-h) + var(--sp-10));
-    max-block-size: calc(100dvh - var(--topbar-h) - 2 * var(--sp-10));
-    overflow-y: auto;
     padding: var(--sp-3);
     margin: calc(-1 * var(--sp-3));
+  }
+
+  /* Les raccourcis et la porte du panneau, sous la recherche : une rangée,
+     la porte au bout. */
+  .zn-lib__tools {
+    grid-area: tools;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-6);
+    margin-block-start: var(--sp-8);
+  }
+
+  .zn-lib__tools .zn-lib__filters-btn--side {
+    margin-inline-start: auto;
   }
 
   .zn-lib__controls {
@@ -921,9 +938,13 @@
     display: none;
   }
 
+  /* Les pratiques tiennent sur deux lignes dans les 280 px de la colonne. */
+  .zn-lib__side .zn-lib__practice {
+    padding-inline: var(--sp-6);
+  }
+
   .zn-lib__filters-btn--side {
     display: inline-flex;
-    align-self: flex-start;
   }
 
   .zn-lib__sidelabel {
@@ -937,7 +958,7 @@
   }
 
   .zn-lib__families .zn-lib__sidelabel:not(:first-child) {
-    margin-block-start: var(--sp-12);
+    margin-block-start: var(--sp-10);
   }
 
   .zn-lib__shortcuts {
@@ -953,7 +974,7 @@
   }
 
   .zn-lib__results {
-    margin-block-start: var(--sp-13);
+    margin-block-start: var(--sp-10);
   }
 
   .zn-lib__resulttitle {
@@ -987,7 +1008,9 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--sp-6);
-  min-block-size: 40px;
+  /* 34 px : treize familles et Toutes tiennent dans la colonne sans la faire
+     défiler. La colonne n'existe que sur bureau, au pointeur fin. */
+  min-block-size: 34px;
   padding-inline: var(--sp-6);
 
   border: none;
@@ -1189,4 +1212,27 @@
 .zn-lib__rows .zn-zonebar__block,
 .zn-wtable .zn-zonebar__block {
   transition: none;
+}
+
+/* Les autres sports dans la colonne de bureau : une rangée de puces. */
+.zn-lib__sportchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding-block-start: var(--sp-4);
+  border-block-start: var(--border-rule);
+}
+
+.zn-lib__sportchip {
+  min-block-size: 34px;
+  padding: 6px 10px;
+}
+
+/* Sous 800 px de haut, la colonne ne tiendrait plus dans l'écran : plutôt que
+   d'en cacher le bas sous le bord tant qu'elle colle, elle défile avec la
+   page. */
+@media (min-width: 1024px) and (max-height: 799px) {
+  .zn-lib__side {
+    position: static;
+  }
 }

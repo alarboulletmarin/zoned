@@ -112,14 +112,19 @@ effet n'a pas tranché, et `library.css` en montre une. Ensuite seule la
 bonne est montée.
 
 - **Téléphone** : compteur et titre, `HubNav`, recherche, bande collante
-  (pratiques + Filtres), raccourcis qui défilent, puis l'index des familles
-  au repos ou les résultats. `.zn-lib__side` y est en `display: contents`,
-  pour que la bande colle pendant tout le défilement.
+  (pratiques + Filtres), raccourcis qui défilent (`.zn-lib__tools`), puis
+  l'index des familles au repos ou les résultats. `.zn-lib__side` y est en
+  `display: contents`, pour que la bande colle pendant tout le défilement.
 - **Bureau** : grille de deux colonnes. À gauche, collante, 280 px :
-  pratiques, familles (Toutes en tête, `aria-pressed`), autres sports,
-  raccourcis, Tous les filtres. À droite : recherche, en-tête des résultats,
-  légende, tableau. Pas d'index de repos : la colonne est l'index, et sans
-  famille le tableau montre tout.
+  pratiques, familles (Toutes en tête, `aria-pressed`), autres sports en une
+  rangée de puces. Elle tient dans l'écran d'un coup d'œil et ne défile
+  jamais à elle seule : seule la liste des séances défile (sous 800 px de
+  haut, elle défile avec la page plutôt que de cacher son bas). À droite :
+  recherche, puis les raccourcis et Tous les filtres sur une rangée, juste
+  dessous, l'en-tête des résultats, la légende, le tableau. Les raccourcis
+  étaient au bas de la colonne et obligeaient à la faire défiler. Pas
+  d'index de repos : la colonne est l'index, et sans famille le tableau
+  montre tout.
 
 Le repos, c'est ni famille, ni recherche, ni filtre (le sport compte comme
 un filtre). L'index liste les familles non vides dans la pratique et le

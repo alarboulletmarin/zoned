@@ -569,11 +569,14 @@ export function LibraryPage() {
               />
             </nav>
           )}
+        </div>
 
+        {/* Les raccourcis et la porte du panneau. Sur téléphone, sous la bande
+            collante ; sur bureau, juste sous la recherche, en tête des
+            résultats : ce qui rétrécit la liste se trouve sans descendre au
+            bas de la colonne des familles. */}
+        <div className="zn-lib__tools">
           <div className="zn-lib__shortcuts" role="group" aria-label={t("shortcuts.label")}>
-            <span className="zn-kicker zn-lib__sidelabel" aria-hidden="true">
-              {t("shortcuts.label")}
-            </span>
             <div className="zn-lib__shortcut-rail">
               {shortcuts.map((chip) => (
                 <button
@@ -925,7 +928,10 @@ function FamilyIndex({
   );
 }
 
-/** Les autres sports, sous les familles de la colonne de bureau. */
+/**
+ * Les autres sports, sous les familles de la colonne de bureau : une rangée de
+ * puces et non une liste, la colonne doit tenir dans l'écran sans défiler.
+ */
 function SidebarSports({
   activityType,
   counts,
@@ -943,21 +949,21 @@ function SidebarSports({
       <span className="zn-kicker zn-lib__sidelabel" aria-hidden="true">
         {t("index.otherSports")}
       </span>
-      <ul className="zn-lib__famlist">
+      <div className="zn-lib__sportchips" role="group" aria-label={t("index.otherSports")}>
         {sports.map((sport) => (
-          <li key={sport}>
-            <button
-              type="button"
-              className="zn-lib__fam"
-              aria-pressed={activityType === sport}
-              onClick={() => onSelect(sport)}
-            >
-              {t(`activityToggle.${sport}`)}
-              <span className="zn-mono zn-lib__famcount">{counts[sport]}</span>
-            </button>
-          </li>
+          <button
+            key={sport}
+            type="button"
+            role="checkbox"
+            aria-checked={activityType === sport}
+            className="zn-chip zn-lib__sportchip"
+            onClick={() => onSelect(sport)}
+          >
+            {t(`activityToggleShort.${sport}`)}
+            <span className="zn-mono zn-lib__chipcount">{counts[sport]}</span>
+          </button>
         ))}
-      </ul>
+      </div>
     </>
   );
 }
