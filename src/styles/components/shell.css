@@ -7,13 +7,21 @@
    design does not pay. The rule is the separation; nothing floats over it. */
 
 :root {
-  /* The content column. The design states a 1440px page with 40px margins,
-     which is the 1360px "wide" cap; "default" and "narrow" keep the caps the
-     app's 60 pages are already laid out against, so moving the frame onto this
-     vocabulary re-flows nothing. */
-  --page-max: 1152px;
+  /* The content column, side margins included (`.zn-page` is border-box).
+     The design states a 1440px page with 40px margins, so 1360px of content,
+     and since 25 November 2026 it is the default: on a 1440px screen the
+     content starts where the top bar's logo starts, instead of 144px further
+     in. It was held at 1152px so that moving the frame onto this vocabulary
+     re-flowed nothing, and the margins it left on every page read as wasted
+     room. Beyond 1440px the column stops growing (a table or a grid stretched
+     to 2560px is no easier to scan) and the top bar's contents stop with it
+     (topbar.css), so the logo and the page title stay on one vertical.
+     Reading pages keep their own narrow measure (`--page-max-narrow`, a line
+     of prose). "wide" equals the default now; it stays a name so the few
+     pages that ask for it keep saying so. */
+  --page-max: 1440px;
   --page-max-narrow: 768px;
-  --page-max-wide: 1360px;
+  --page-max-wide: 1440px;
 }
 
 /* ── frame ────────────────────────────────────────────────────────────── */
