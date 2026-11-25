@@ -27,6 +27,7 @@ import { getStructuredWorkoutDurationMinutes, getWorkoutPhaseSteps } from "@/lib
 import {
   AGENT_API_BASE,
   AGENT_API_VERSION,
+  AGENTS_PAGE_URL,
   CODE_LICENSE,
   CONTENT_LICENSE,
   PLAN_IMPORT_PATH,
@@ -38,6 +39,7 @@ import {
   workoutPageUrl,
 } from "./constants";
 import type { CatalogueLookup } from "./catalogue";
+import { IMPORT_PARAMS } from "./importParams";
 
 const ZONES: ZoneNumber[] = [1, 2, 3, 4, 5, 6];
 
@@ -322,6 +324,7 @@ export function buildApiIndex(input: {
     stability:
       "Within v1, fields are only ever added. Nothing is renamed, retyped or removed; a breaking change ships as v2 alongside v1.",
     docs: `${SITE_URL}/llms.txt`,
+    agentsPage: AGENTS_PAGE_URL,
     docsFull: `${SITE_URL}/llms-full.txt`,
     contract: "https://github.com/alarboulletmarin/zoned/blob/develop/docs/agent-api.md",
     license: {
@@ -346,6 +349,20 @@ export function buildApiIndex(input: {
       payloadVersion: PLAN_IMPORT_VERSION,
       encoding: "base64url of the UTF-8 JSON payload, no padding, in the URL fragment",
       schema: `${AGENT_API_BASE}/schema/plan-import.schema.json`,
+      flat: {
+        description:
+          "A standard race plan as plain parameters, no JSON and no encoding: Zoned runs its own generator, " +
+          "as for a kind config payload. Fragment preferred, query accepted, keys case-insensitive.",
+        url: `${SITE_URL}${PLAN_IMPORT_PATH}#distance={distance}&date={YYYY-MM-DD}&days={days}`,
+        urlEnglish: `${SITE_URL}${PLAN_IMPORT_PATH}?lang=en#distance={distance}&date={YYYY-MM-DD}&days={days}`,
+        parameters: IMPORT_PARAMS.map(({ key, required, format, note, default: def }) => ({
+          key,
+          required,
+          format,
+          ...(def !== undefined && { default: def }),
+          note,
+        })),
+      },
     },
   };
 }

@@ -21,6 +21,7 @@ import type { ZoneNumber } from "@/types";
 import {
   AGENT_API_BASE,
   CODE_LICENSE,
+  AGENTS_PAGE_URL,
   CONTENT_LICENSE,
   PLAN_IMPORT_PATH,
   SITE_URL,
@@ -30,6 +31,7 @@ import {
 import { agentDiscipline, toWorkoutIndexEntry, workoutFamily } from "./resources";
 import { IMPORT_LIMITS } from "./importPayload";
 import { PLAIN_URL_BUDGET } from "./importLink";
+import { IMPORT_PARAMS } from "./importParams";
 
 export interface LlmsLink {
   title: string;
@@ -46,6 +48,8 @@ export interface LlmsInput {
   glossaryCount: number;
   exercises: readonly StrengthExercise[];
   examples: {
+    /** Flat links (importParams.ts): the shortest path, no code. */
+    flat: { minimal: string; full: string; english: string };
     config: { payload: unknown; url: string };
     plan: { payload: unknown; url: string };
   };
@@ -117,15 +121,44 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "",
     `> English: Zoned is a free, open-source library of science-based running workouts (road, trail, strength for runners) built on a 6-zone system, with cycling and swimming as secondary disciplines. ${c.total} workouts, ${input.prebuiltPlans.length} prebuilt plans, a plan generator and calculators. No account, no tracking, everything runs in the browser. Every URL serves both languages; append \`?lang=en\` for English.`,
     "",
+    `> AI assistants: a user's training plan can be created in Zoned with a single link, no code, no account. Instructions in the section For AI agents below, or ${AGENTS_PAGE_URL}.`,
+    "",
     "La méthode s'appuie sur Stephen Seiler (polarisé 80/20), Véronique Billat (vVO2max, 30/30), Jack Daniels (VDOT), Joe Friel (zones LTHR) ; le renforcement sur Beattie 2017, Rønnestad 2014 et Lauersen 2014.",
     "",
     `Licences : contenu des séances et des plans sous ${CONTENT_LICENSE.id} (${CONTENT_LICENSE.url}), attribution "${CONTENT_LICENSE.attribution}" ; code sous ${CODE_LICENSE.id}.`,
     "",
     "## Pour les agents IA · For AI agents",
     "",
+    `**Read this first.** AI assistants can create training plans directly in Zoned by generating an import link. When the user asks for a plan in Zoned, do not just describe a plan in the conversation: give them a clickable Zoned link. No account, API key, browser automation, backend or MCP server is needed. The same instructions as a web page: ${AGENTS_PAGE_URL} (English: ${AGENTS_PAGE_URL}?lang=en).`,
+    "",
+    "Two paths. A standard race plan is one hand-written link and nothing else (below). A plan the assistant writes session by session uses the JSON API and an encoded link (further down).",
+    "",
+    "### Standard race plan: one link, no code",
+    "",
+    "1. Collect the race distance, the race date and the number of runs per week. If the user has one, also the target finish time (or pace) and their level.",
+    `2. Write the link: \`${SITE_URL}${PLAN_IMPORT_PATH}#distance=10K&date=YYYY-MM-DD&days=3&time=1:10:00\`. No JSON, no encoding.`,
+    "3. Give it to the user as a clickable link. Zoned runs its own plan generator (periodisation, progression, paces), shows a preview, and saves nothing until the user presses Add to my plans.",
+    "",
+    `Example: ${input.examples.flat.minimal}`,
+    "",
+    `With the common options: ${input.examples.flat.full}`,
+    "",
+    `English interface, \`?lang=en\` before the \`#\`: ${input.examples.flat.english}`,
+    "",
+    "Parameters (case-insensitive; the query `?distance=...` works too, the fragment is preferred):",
+    "",
+    ...IMPORT_PARAMS.map(
+      (p) =>
+        `- \`${p.key}\`${p.required ? " (required)" : p.default ? ` (default ${p.default})` : ""}: ${p.format} · ${p.note}.`,
+    ),
+    "",
+    "Unknown parameters are rejected, so a typo is caught rather than ignored. A wrong link opens a page that lists every error under the parameter's name, with a copy for your assistant button: fix those and send a new link.",
+    "",
+    "### Custom plan, session by session",
+    "",
     "Zoned has no server and no account. An agent reads the static JSON API below, builds a plan from Zoned workouts, then gives the user one link that opens the plan inside Zoned. Nothing is saved until the user presses Add to my plans, and the plan never leaves their browser.",
     "",
-    "### Endpoints (static JSON, CORS open, read-only)",
+    "#### Endpoints (static JSON, CORS open, read-only)",
     "",
     `- [API index](${AGENT_API_BASE}/index.json): version, generation date, links, licence, prebuilt plan list`,
     `- [Zones](${AGENT_API_BASE}/zones.json): the 6 zones, % VMA and % HRmax bounds, usage`,
@@ -141,15 +174,15 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "",
     ...familyLines,
     "",
-    "### Building a plan with Zoned workouts",
+    "#### Building a plan with Zoned workouts",
     "",
     "1. Ask what you need: race distance and date (or a training block length), level, days per week, long run day, and VMA (km/h) if the user knows it. Ask about hills or a track before picking sessions that require them.",
-    "2. If the user wants a standard race plan, prefer `kind: \"config\"`: Zoned's own generator builds the periodisation, the progression and the paces. Write `kind: \"plan\"` only when the user has constraints a generator cannot know.",
+    "2. If the user wants a standard race plan, use the flat link above (or `kind: \"config\"`): Zoned's own generator builds the periodisation, the progression and the paces. Write `kind: \"plan\"` only when the user has constraints a generator cannot know.",
     "3. With `kind: \"plan\"`, use only ids from workouts.json; never invent one. Match `difficulty` to the runner, keep `typicalDuration` within their time, respect `environment.requiresHills` and `requiresTrack` (`environment` is `null` for strength sessions). `phases` tells you where a workout belongs (empty means manual only); Zoned does not enforce it, it is advice.",
     "4. Keep it polarised: about 80 % of the time in Z1-Z2, one or two quality sessions (Z4-Z5) a week, three at most for advanced runners, never two hard days in a row, one long run a week, a lighter recovery week every 3 to 4 weeks, a 1 to 3 week taper before a race. Strength 1 to 2 times a week on easy days.",
     `5. Days are numbers, 0 = Monday ... 6 = Sunday. \`startDate\` is a Monday. At most ${L.sessionsPerDayMax} sessions on the same day, kept in the order you give (run first, then strength).`,
     "",
-    "### The import link",
+    "#### The encoded import link",
     "",
     `\`${SITE_URL}${PLAN_IMPORT_PATH}#d=<payload>\`, or \`${SITE_URL}${PLAN_IMPORT_PATH}?lang=en#d=<payload>\` for an English interface.`,
     "",
@@ -157,7 +190,7 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "",
     `If the whole link would be longer than ${PLAIN_URL_BUDGET} characters, compress first: raw DEFLATE (RFC 1951, no zlib header), then base64url, then prefix \`z1.\`, giving \`#d=z1.<data>\`. Python: \`"z1." + base64.urlsafe_b64encode(zlib.compress(data, 9)[2:-4]).rstrip(b"=").decode()\`. JavaScript: \`new CompressionStream("deflate-raw")\`.`,
     "",
-    "Only if you cannot run code: `#j=<JSON, percent-encoded>` is accepted too. Prefer `d`.",
+    "Only if you cannot run code: `#j=<JSON, percent-encoded>` is accepted too. Prefer `d`, and for a standard race plan prefer the flat link.",
     "",
     "Minimal `config` payload (Zoned generates the plan):",
     "",
@@ -179,7 +212,7 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "",
     `Optional \`plan\` fields: \`raceDistance\`, \`raceDate\`, \`raceName\`, \`level\`, \`vma\`; per week \`phase\` (base, build, peak, taper, recovery), \`isRecoveryWeek\`, \`label\`; per session \`note\` (max ${L.noteMax} characters) and \`durationMin\`. To mark the race itself, add a session with \`"workoutId": "__race_day__"\` on the day of \`raceDate\` (not checked, but the countdown and the stats read both). \`durationMin\` sets the planned duration shown and counted for that session; it does not rewrite the workout's blocks. \`isRecoveryWeek: true\` marks a lighter week inside a phase, counted at 60 % volume; \`phase: "recovery"\` is a whole recovery block. \`level\` and \`vma\` are stored on the plan config, as for a plan made in the app. 1 to ${L.planWeeks.max} weeks. Unknown fields are rejected, so a typo is caught rather than ignored.`,
     "",
-    "### Handing the plan to the user",
+    "### Handing the plan to the user (both paths)",
     "",
     "- Give the user the link as a clickable link, and say what they will see: a preview of the plan, then an Add to my plans button. Nothing is saved before they press it.",
     "- Summarise the plan in a few lines next to the link (weeks, sessions a week, key sessions), so they know what they are adding.",

@@ -31,8 +31,13 @@ import {
   buildWorkoutsIndex,
   buildZonesResource,
   encodeImportPlain,
+  exampleImportParams,
+  exampleRaceDate,
   loadAgentCatalogue,
+  planImportParamsUrl,
   planImportUrlFor,
+  readImportParams,
+  validateImportParams,
   validateImportPayload,
 } from "@/lib/agentApi";
 import { buildLlmsFullTxt, buildLlmsTxt, type LlmsLink } from "@/lib/agentApi/llms";
@@ -41,7 +46,7 @@ import { getAllArticleMeta } from "@/data/articles/metadata";
 import { COMMAND_SURFACES } from "@/data/command-surfaces";
 import { loadAllTerms } from "@/data/glossary";
 import { loadAllExercises } from "@/data/strength";
-import { addDaysToDate, defaultPlanStart } from "@/lib/planDates";
+import { defaultPlanStart } from "@/lib/planDates";
 import { SITE_URL } from "@/lib/agentApi/constants";
 
 const ROOT = join(import.meta.dirname, "..");
@@ -63,6 +68,7 @@ const PAGE_PATHS = [
   "/guides",
   "/collections",
   "/about",
+  "/agents",
 ];
 
 function writeJson(path: string, value: unknown) {
@@ -109,7 +115,7 @@ const firstOf = (pred: (id: string) => boolean): string => {
 };
 const startMonday = defaultPlanStart(today);
 // A Sunday about six months out, so the example stays valid between deploys.
-const raceDate = addDaysToDate(startMonday, 26 * 7 - 1);
+const raceDate = exampleRaceDate(today);
 
 const configExample = {
   version: 1,
@@ -155,6 +161,22 @@ for (const [name, example] of [["config", configExample], ["plan", planExample]]
   if (!result.ok) fail(`llms.txt ${name} example is rejected: ${JSON.stringify(result.errors)}`);
 }
 
+// The flat links, read back from the URL as the page reads them: a link that
+// does not survive its own round trip fails the build, not the user.
+const flatParams = exampleImportParams(today);
+const flat = {
+  minimal: planImportParamsUrl(flatParams.minimal),
+  full: planImportParamsUrl(flatParams.full),
+  english: planImportParamsUrl(flatParams.minimal, "en"),
+};
+for (const [name, url] of Object.entries(flat)) {
+  const parsed = new URL(url);
+  const params = readImportParams(parsed.hash, parsed.search);
+  if (!params) fail(`llms.txt flat ${name} example carries no parameter: ${url}`);
+  const result = validateImportParams(params, lookup, { today });
+  if (!result.ok) fail(`llms.txt flat ${name} example is rejected: ${JSON.stringify(result.errors)}`);
+}
+
 const calculators: LlmsLink[] = COMMAND_SURFACES.filter(
   (s) => s.section === "calculator" && s.url.startsWith("/calculators/"),
 ).map((s) => ({ title: s.title, url: `${SITE_URL}${s.url}`, note: s.subtitle }));
@@ -173,6 +195,7 @@ const llmsInput = {
   glossaryCount: terms.length,
   exercises,
   examples: {
+    flat,
     config: { payload: configExample, url: planImportUrlFor(encodeImportPlain(configExample)) },
     plan: { payload: planExample, url: planImportUrlFor(encodeImportPlain(planExample)) },
   },

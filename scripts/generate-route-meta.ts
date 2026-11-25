@@ -207,6 +207,12 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     description: `Pourquoi Zoned existe : ${stats.workouts} séances fondées sur la science, ${stats.plans} plans et ${stats.calculators} calculateurs, gratuits, open source, sans compte ni tracking, pour toujours.`,
   },
   {
+    path: "/agents",
+    title: "API et assistants IA",
+    description:
+      "Comment un assistant IA crée un plan d'entraînement dans Zoned : un lien d'import écrit à la main, sans compte, sans clé d'API, sans serveur.",
+  },
+  {
     path: "/contribute",
     title: "Contribuer",
     description:

@@ -41,7 +41,7 @@
     "reportCopied": "Rapport copié",
     "reportCopyFailed": "Le rapport n'a pas pu être copié",
     "unreadable": {
-      "missing": "Ce lien ne contient pas de plan. Il doit se terminer par #d= suivi du plan encodé.",
+      "missing": "Ce lien ne contient pas de plan. Il doit se terminer par les paramètres du plan (#distance=10K&date=...) ou par #d= suivi du plan encodé. Voir zoned.run/agents.",
       "malformed_base64": "Le plan contenu dans ce lien est tronqué ou mal encodé. Le lien a peut-être été coupé en le copiant.",
       "malformed_json": "Le plan contenu dans ce lien n'est pas du JSON valide.",
       "unknown_encoding": "Ce lien utilise un encodage que cette version de Zoned ne connaît pas."

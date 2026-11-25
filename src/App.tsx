@@ -61,6 +61,7 @@ const PlanImportPage = lazyPage(() => import("@/pages/PlanImportPage").then(m =>
 const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
 const AboutPage = lazyPage(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
+const AgentsPage = lazyPage(() => import("@/pages/AgentsPage").then(m => ({ default: m.AgentsPage })));
 const LearnPage = lazyPage(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
 const MethodologyPage = lazyPage(() => import("@/pages/MethodologyPage").then(m => ({ default: m.MethodologyPage })));
 const ArticlePage = lazyPage(() => import("@/pages/ArticlePage").then(m => ({ default: m.ArticlePage })));
@@ -368,6 +369,7 @@ export default function App({ ssrLocation }: { ssrLocation?: string } = {}) {
                           <Route path="/quiz" element={<Navigate to="/library/draw" replace />} />
                           <Route path="/contribute" element={<ContributePage />} />
                           <Route path="/about" element={<AboutPage />} />
+                          <Route path="/agents" element={<AgentsPage />} />
                           <Route path="/learn" element={<ModuleGate module="learn" canonical="/learn"><LearnPage /></ModuleGate>} />
                           <Route path="/methodology" element={<MethodologyPage />} />
                           <Route path="/learn/:slug" element={<ModuleGate module="learn"><ArticlePage /></ModuleGate>} />
