@@ -49,34 +49,14 @@
   },
   "meta": {
     "results_one": "{{count}} session",
-    "results_other": "{{count}} sessions",
-    "filters_one": "{{count}} active filter",
-    "filters_other": "{{count}} active filters"
-  },
-  "viewMode": {
-    "label": "View",
-    "grid": "Grid",
-    "compact": "Compact",
-    "list": "List"
+    "results_other": "{{count}} sessions"
   },
   "filters": {
     "title": "Filters",
-    "category": "Category",
-    "difficulty": "Difficulty",
     "duration": "Duration",
     "terrain": "Terrain",
-    "targetSystem": "Target System",
-    "allCategories": "All categories",
-    "allDifficulties": "All levels",
-    "allTerrains": "All terrains",
-    "allSystems": "All systems",
-    "durationRange": "{{min}} - {{max}} min",
-    "favoritesOnly": "Favorites only",
-    "search": "Search...",
     "searchPlaceholder": "Search: “30/30”, “threshold”, “hills”…",
     "searchLabel": "Search workouts",
-    "apply": "Apply",
-    "activeFilters": "active filters",
     "all": "All filters",
     "seeResults_one": "Show {{count}} session",
     "seeResults_other": "Show {{count}} sessions",
@@ -97,14 +77,6 @@
     "no_track": "No track",
     "climb": "With elevation",
     "no_hills": "No hills"
-  },
-  "targetSystem": {
-    "aerobic_base": "Aerobic Base",
-    "aerobic_power": "Aerobic Power",
-    "lactate_threshold": "Lactate Threshold",
-    "vo2max": "VO2max",
-    "speed": "Speed",
-    "strength": "Strength"
   },
   "categories": {
     "recovery": "Recovery",
@@ -152,10 +124,6 @@
     "elite": "Elite"
   },
   "sort": {
-    "label": "Sort by",
-    "name": "Name",
-    "difficulty": "Difficulty",
-    "duration": "Duration",
     "by": {
       "duration": "Duration",
       "intensity": "Intensity",
@@ -501,8 +469,7 @@
   "practice": {
     "label": "Discipline",
     "all": "All",
-    "soon": "soon",
-    "draw": "Draw me a session"
+    "soon": "soon"
   },
   "metaLine": {
     "category": {

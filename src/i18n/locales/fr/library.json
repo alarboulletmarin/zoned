@@ -49,34 +49,14 @@
   },
   "meta": {
     "results_one": "{{count}} séance",
-    "results_other": "{{count}} séances",
-    "filters_one": "{{count}} filtre actif",
-    "filters_other": "{{count}} filtres actifs"
-  },
-  "viewMode": {
-    "label": "Affichage",
-    "grid": "Grille",
-    "compact": "Compact",
-    "list": "Liste"
+    "results_other": "{{count}} séances"
   },
   "filters": {
     "title": "Filtres",
-    "category": "Catégorie",
-    "difficulty": "Difficulté",
     "duration": "Durée",
     "terrain": "Terrain",
-    "targetSystem": "Système ciblé",
-    "allCategories": "Toutes les catégories",
-    "allDifficulties": "Tous les niveaux",
-    "allTerrains": "Tous les terrains",
-    "allSystems": "Tous les systèmes",
-    "durationRange": "{{min}} - {{max}} min",
-    "favoritesOnly": "Favoris uniquement",
-    "search": "Rechercher...",
     "searchPlaceholder": "Rechercher : 30/30, seuil, côtes…",
     "searchLabel": "Rechercher des séances",
-    "apply": "Appliquer",
-    "activeFilters": "filtres actifs",
     "all": "Tous les filtres",
     "seeResults_one": "Voir {{count}} séance",
     "seeResults_other": "Voir {{count}} séances",
@@ -97,14 +77,6 @@
     "no_track": "Sans piste",
     "climb": "Avec D+",
     "no_hills": "Sans côte"
-  },
-  "targetSystem": {
-    "aerobic_base": "Base aérobie",
-    "aerobic_power": "Puissance aérobie",
-    "lactate_threshold": "Seuil lactique",
-    "vo2max": "VO2max",
-    "speed": "Vitesse",
-    "strength": "Force"
   },
   "categories": {
     "recovery": "Récupération",
@@ -152,10 +124,6 @@
     "elite": "Élite"
   },
   "sort": {
-    "label": "Trier par",
-    "name": "Nom",
-    "difficulty": "Difficulté",
-    "duration": "Durée",
     "by": {
       "duration": "Durée",
       "intensity": "Intensité",
@@ -501,8 +469,7 @@
   "practice": {
     "label": "Pratique",
     "all": "Toutes",
-    "soon": "bientôt",
-    "draw": "Tire-moi une séance"
+    "soon": "bientôt"
   },
   "metaLine": {
     "category": {
