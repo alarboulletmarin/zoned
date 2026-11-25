@@ -1,12 +1,26 @@
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
+import { Mountain } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import type { Difficulty } from "@/types";
+import { ZONE_META } from "@/types";
 import type { StrengthCategory, StrengthEquipment, MuscleGroup } from "@/types/strength";
 import { strengthCategories } from "@/data/strength";
+import { usePickLang } from "@/lib/i18n-utils";
+import { useRadioRail } from "@/hooks/useRadioRail";
+import { DifficultyIcon } from "./DifficultyIcon";
 import {
+  ACTIVITY_TYPES,
+  DIFFICULTIES,
+  DURATION_BUCKETS,
+  DURATION_OPEN,
+  PEAK_ZONES,
+  TERRAIN_FILTERS,
+  bucketOfRange,
   defaultFilters,
+  rangeOfBucket,
+  toggleTerrain,
   type ActivityType,
+  type DurationBucket,
   type WorkoutFiltersState,
 } from "@/lib/libraryFilters";
 
@@ -41,8 +55,6 @@ const muscleGroupOptions: MuscleGroup[] = [
   "chest",
 ];
 
-const difficultyOptions: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
-
 interface WorkoutFiltersProps {
   filters: WorkoutFiltersState;
   onFiltersChange: (filters: WorkoutFiltersState) => void;
@@ -54,41 +66,64 @@ interface WorkoutFiltersProps {
 
 /* ── Chip ──
    A filter value the athlete switches on or off. Selected is a full ink
-   inversion, never a tint, the paint lives in `library.css`. */
+   inversion, never a tint, the paint lives in `library.css`. A radio chip
+   carries the roving tab stop of its rail (`useRadioRail`). */
 function Chip({
   label,
   selected,
   onClick,
+  role = "checkbox",
+  className,
+  children,
+  dataValue,
 }: {
-  label: string;
+  label?: string;
   selected: boolean;
   onClick: () => void;
+  role?: "checkbox" | "radio";
+  className?: string;
+  children?: ReactNode;
+  dataValue?: string;
 }) {
   return (
     <button
       type="button"
-      role="checkbox"
+      role={role}
       aria-checked={selected}
+      tabIndex={role === "radio" ? (selected ? 0 : -1) : undefined}
+      data-value={dataValue}
       onClick={onClick}
-      className="zn-chip"
+      className={cn("zn-chip", className)}
     >
-      {label}
+      {children ?? label}
     </button>
   );
 }
 
-/* ── One filter row: an 88px mono label, then its chips ── */
+/* ── One filter row: a mono label, then its chips ── */
 function FilterRow({
   label,
   children,
   className,
+  role = "group",
+  railRef,
+  onKeyDown,
 }: {
   label: string;
   children: React.ReactNode;
   className?: string;
+  role?: "group" | "radiogroup";
+  railRef?: React.RefObject<HTMLDivElement | null>;
+  onKeyDown?: React.KeyboardEventHandler<HTMLElement>;
 }) {
   return (
-    <div className={cn("zn-lib__row", className)} role="group" aria-label={label}>
+    <div
+      ref={railRef}
+      className={cn("zn-lib__row", className)}
+      role={role}
+      aria-label={label}
+      onKeyDown={onKeyDown}
+    >
       {/* The row is already named for assistive tech by the group label. */}
       <span
         className="zn-kicker zn-kicker--inline zn-lib__rowlabel"
@@ -138,20 +173,33 @@ function ExpandableChipGroup({
 }
 
 /**
- * The filter band: rows of chips under the discipline strip, then the duration
- * range, the favourites switch and the clear button.
+ * The filter panel, row by row:
  *
- * It is one band on every viewport, the drawer it used to hide behind on
- * mobile is gone, so the same filters are visible whatever the screen.
+ * 1. Sport FIRST: it decides which other rows make sense (a strength session
+ *    has no zone, no family, no terrain), so changing it below the others
+ *    would move the panel under the finger. Radios, one sport at a time.
+ * 2. Intensity peak (endurance): six chips, each with its rung of the ramp.
+ * 3. Duration: five slices, one at a time, on the session page's real duration.
+ * 4. Level, with the app's gauge.
+ * 5. Terrain (running): No track, With elevation, No hills.
+ * 6. Strength (when the sport is): family, equipment, muscles.
+ *
+ * Gone: the target system (a physiologist's vocabulary in an app built
+ * around zones), the 0 to 300 min slider, the favourites switch (a shortcut
+ * chip on the page now), the view selector, and the families, which are the
+ * page itself.
  */
 export function WorkoutFilters({
   filters,
   onFiltersChange,
   className,
   activityType = "all",
+  onActivityTypeChange,
+  sportCounts,
 }: WorkoutFiltersProps) {
   const { t } = useTranslation("library");
   const { t: tStrength } = useTranslation("strength");
+  const pick = usePickLang();
 
   const toggleFilter = <K extends keyof WorkoutFiltersState>(
     key: K,
@@ -164,6 +212,31 @@ export function WorkoutFilters({
     onFiltersChange({ ...filters, [key]: next });
   };
 
+  const sportRailRef = useRef<HTMLDivElement>(null);
+  const sportRail = useRadioRail<ActivityType>({
+    items: ACTIVITY_TYPES,
+    value: activityType,
+    onChange: (next) => onActivityTypeChange?.(next),
+    railRef: sportRailRef,
+  });
+
+  const bucket = bucketOfRange(filters.durationRange);
+  const setBucket = (next: DurationBucket | null) =>
+    onFiltersChange({
+      ...filters,
+      durationRange: next ? rangeOfBucket(next) : [0, DURATION_OPEN],
+    });
+  const bucketIds = DURATION_BUCKETS.map((b) => b.id);
+  const durationRailRef = useRef<HTMLDivElement>(null);
+  const durationRail = useRadioRail<DurationBucket | null>({
+    items: bucketIds,
+    value: bucket,
+    onChange: setBucket,
+    railRef: durationRailRef,
+  });
+
+  const showEndurance = activityType !== "strength";
+  const showTerrain = activityType === "all" || activityType === "running";
   const showStrengthFilters = activityType === "strength";
 
   return (
@@ -171,17 +244,96 @@ export function WorkoutFilters({
       className={cn("zn-lib__filters", className)}
       aria-label={t("filters.title")}
     >
-      {/* Difficulty (shared) */}
-      <FilterRow label={t("filters.difficulty")}>
-        {difficultyOptions.map((d) => (
+      {onActivityTypeChange && (
+        <FilterRow
+          label={t("filters.sport")}
+          role="radiogroup"
+          railRef={sportRailRef}
+          onKeyDown={sportRail.onKeyDown}
+        >
+          {ACTIVITY_TYPES.map((type) => (
+            <Chip
+              key={type}
+              role="radio"
+              selected={activityType === type}
+              onClick={() => onActivityTypeChange(type)}
+            >
+              {t(`activityToggleShort.${type}`)}
+              {sportCounts && (
+                <span className="zn-mono zn-lib__chipcount">{sportCounts[type]}</span>
+              )}
+            </Chip>
+          ))}
+        </FilterRow>
+      )}
+
+      {showEndurance && (
+        <FilterRow label={t("filters.peak")} className="zn-lib__row--grid">
+          {PEAK_ZONES.map((zone) => (
+            <Chip
+              key={zone}
+              selected={filters.peak.includes(zone)}
+              onClick={() => toggleFilter("peak", zone)}
+              className="zn-lib__zonechip"
+            >
+              <span className="zn-zone-swatch" aria-hidden="true">
+                <span data-zone={zone} />
+              </span>
+              <b className="zn-lib__zonecode">Z{zone}</b>
+              {pick(ZONE_META[zone], "label")}
+            </Chip>
+          ))}
+        </FilterRow>
+      )}
+
+      <FilterRow
+        label={t("filters.duration")}
+        role="radiogroup"
+        railRef={durationRailRef}
+        onKeyDown={durationRail.onKeyDown}
+      >
+        {DURATION_BUCKETS.map(({ id }) => (
           <Chip
-            key={d}
-            label={t(`difficulty.${d}`)}
-            selected={filters.difficulty.includes(d)}
-            onClick={() => toggleFilter("difficulty", d)}
+            key={id}
+            role="radio"
+            label={t(`durationBucket.${id}`)}
+            selected={bucket === id}
+            // Une tranche cochée se décoche : la durée redevient libre.
+            onClick={() => setBucket(bucket === id ? null : id)}
           />
         ))}
       </FilterRow>
+
+      <FilterRow label={t("filters.level")} className="zn-lib__row--grid">
+        {DIFFICULTIES.map((d) => (
+          <Chip
+            key={d}
+            selected={filters.difficulty.includes(d)}
+            onClick={() => toggleFilter("difficulty", d)}
+            className="zn-lib__levelchip"
+          >
+            {t(`difficulty.${d}`)}
+            <DifficultyIcon difficulty={d} size={18} />
+          </Chip>
+        ))}
+      </FilterRow>
+
+      {showTerrain && (
+        <FilterRow label={t("filters.terrain")}>
+          {TERRAIN_FILTERS.map((terrain) => (
+            <Chip
+              key={terrain}
+              selected={filters.terrain.includes(terrain)}
+              onClick={() =>
+                onFiltersChange({ ...filters, terrain: toggleTerrain(filters.terrain, terrain) })
+              }
+            >
+              {terrain === "climb" && <Mountain size={15} />}
+              {t(`terrain.${terrain}`)}
+            </Chip>
+          ))}
+        </FilterRow>
+      )}
 
       {showStrengthFilters && (
         <FilterRow label={tStrength("title")}>
@@ -196,7 +348,6 @@ export function WorkoutFilters({
         </FilterRow>
       )}
 
-      {/* Strength: equipment */}
       {showStrengthFilters && (
         <FilterRow label={tStrength("detail.equipmentNeeded")}>
           <ExpandableChipGroup
@@ -215,7 +366,6 @@ export function WorkoutFilters({
         </FilterRow>
       )}
 
-      {/* Strength: muscle group */}
       {showStrengthFilters && (
         <FilterRow label={tStrength("detail.targetMuscles")}>
           <ExpandableChipGroup

@@ -81,7 +81,8 @@
     "seeResults_one": "Voir {{count}} séance",
     "seeResults_other": "Voir {{count}} séances",
     "peak": "Pic d'intensité",
-    "sport": "Sport"
+    "sport": "Sport",
+    "level": "Niveau"
   },
   "emptyState": {
     "noResults": "Aucune séance trouvée",

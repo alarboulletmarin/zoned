@@ -81,7 +81,8 @@
     "seeResults_one": "Show {{count}} session",
     "seeResults_other": "Show {{count}} sessions",
     "peak": "Intensity peak",
-    "sport": "Sport"
+    "sport": "Sport",
+    "level": "Level"
   },
   "emptyState": {
     "noResults": "No workouts found",

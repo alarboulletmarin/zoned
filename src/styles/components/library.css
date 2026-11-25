@@ -442,6 +442,45 @@
   }
 }
 
+/* Dans le panneau, l'étiquette tient sa ligne au-dessus des puces : la
+   gouttière de 104 px mangeait le tiers d'un panneau de 420. Un filet fin
+   sépare les rangées. */
+.zn-lib__filters-panel .zn-lib__rowlabel {
+  inline-size: 100%;
+}
+
+.zn-lib__filters-panel .zn-lib__row + .zn-lib__row {
+  padding-block-start: var(--sp-9);
+  border-block-start: var(--bw-hair) solid var(--line-divider);
+}
+
+/* Le pic et le niveau sur deux colonnes : six zones et quatre niveaux se
+   lisent en échelle, de haut en bas comme de gauche à droite. */
+.zn-lib__row--grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.zn-lib__row--grid > .zn-lib__rowlabel {
+  grid-column: 1 / -1;
+}
+
+.zn-lib__zonecode {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-mono);
+}
+
+/* Le libellé, puis la jauge du niveau à droite. */
+.zn-lib__levelchip {
+  justify-content: space-between;
+}
+
+.zn-lib__chipcount {
+  font-size: var(--fs-mono);
+  opacity: 0.75;
+}
+
 /* ── chips ────────────────────────────────────────────────────────────── */
 
 /* A filter value the athlete switches on or off. Selected is a FULL ink
