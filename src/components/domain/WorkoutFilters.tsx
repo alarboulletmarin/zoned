@@ -1,29 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { X } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import type { WorkoutCategory, Difficulty, TargetSystem } from "@/types";
+import type { Difficulty } from "@/types";
 import type { StrengthCategory, StrengthEquipment, MuscleGroup } from "@/types/strength";
-import { categories } from "@/data/workouts";
 import { strengthCategories } from "@/data/strength";
+import {
+  defaultFilters,
+  type ActivityType,
+  type WorkoutFiltersState,
+} from "@/lib/libraryFilters";
 
-export type ActivityType = "running" | "strength" | "cycling" | "swimming" | "all";
-
-// Terrain filter options
-export type TerrainFilter = "flat" | "hills" | "track";
-
-// Target system options for filter
-const targetSystems: TargetSystem[] = [
-  "aerobic_base",
-  "aerobic_power",
-  "lactate_threshold",
-  "vo2max",
-  "speed",
-  "strength",
-];
+export { defaultFilters, type ActivityType, type WorkoutFiltersState };
 
 // Equipment options for strength filter
 const strengthEquipmentOptions: StrengthEquipment[] = [
@@ -54,33 +41,16 @@ const muscleGroupOptions: MuscleGroup[] = [
   "chest",
 ];
 
-const terrainOptions: TerrainFilter[] = ["flat", "hills", "track"];
-
 const difficultyOptions: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
-
-export interface WorkoutFiltersState {
-  category: WorkoutCategory[];
-  difficulty: Difficulty[];
-  durationRange: [number, number];
-  searchQuery: string;
-  terrain: TerrainFilter[];
-  targetSystem: TargetSystem[];
-  favoritesOnly: boolean;
-  // Strength-specific filters
-  strengthCategory: StrengthCategory[];
-  equipment: StrengthEquipment[];
-  muscleGroup: MuscleGroup[];
-}
 
 interface WorkoutFiltersProps {
   filters: WorkoutFiltersState;
   onFiltersChange: (filters: WorkoutFiltersState) => void;
   className?: string;
   activityType?: ActivityType;
+  onActivityTypeChange?: (next: ActivityType) => void;
+  sportCounts?: Record<ActivityType, number>;
 }
-
-const DURATION_MIN = 0;
-const DURATION_MAX = 300;
 
 /* ── Chip ──
    A filter value the athlete switches on or off. Selected is a full ink
@@ -183,13 +153,6 @@ export function WorkoutFilters({
   const { t } = useTranslation("library");
   const { t: tStrength } = useTranslation("strength");
 
-  const updateFilter = <K extends keyof WorkoutFiltersState>(
-    key: K,
-    value: WorkoutFiltersState[K]
-  ) => {
-    onFiltersChange({ ...filters, [key]: value });
-  };
-
   const toggleFilter = <K extends keyof WorkoutFiltersState>(
     key: K,
     value: WorkoutFiltersState[K] extends (infer T)[] ? T : never
@@ -201,47 +164,6 @@ export function WorkoutFilters({
     onFiltersChange({ ...filters, [key]: next });
   };
 
-  const hasActiveFilters =
-    filters.category.length > 0 ||
-    filters.difficulty.length > 0 ||
-    filters.durationRange[0] !== DURATION_MIN ||
-    filters.durationRange[1] !== DURATION_MAX ||
-    filters.searchQuery !== "" ||
-    filters.terrain.length > 0 ||
-    filters.targetSystem.length > 0 ||
-    filters.favoritesOnly ||
-    filters.strengthCategory.length > 0 ||
-    filters.equipment.length > 0 ||
-    filters.muscleGroup.length > 0;
-
-  const clearFilters = () => {
-    onFiltersChange({
-      category: [],
-      difficulty: [],
-      durationRange: [DURATION_MIN, DURATION_MAX],
-      searchQuery: "",
-      terrain: [],
-      targetSystem: [],
-      favoritesOnly: false,
-      strengthCategory: [],
-      equipment: [],
-      muscleGroup: [],
-    });
-  };
-
-  // Categories always shown when the type matches (including "all").
-  // Cycling and swimming workouts reuse the shared WorkoutCategory enum
-  // (endurance / tempo / threshold / vma_intervals / recovery) so the same
-  // running category chips apply when a discipline other than strength is
-  // selected.
-  const showRunningCategories =
-    activityType === "running" ||
-    activityType === "cycling" ||
-    activityType === "swimming" ||
-    activityType === "all";
-  const showStrengthCategories = activityType === "strength" || activityType === "all";
-  // Specific filters only shown when a type is explicitly selected (not "all")
-  const showRunningFilters = activityType === "running";
   const showStrengthFilters = activityType === "strength";
 
   return (
@@ -249,34 +171,6 @@ export function WorkoutFilters({
       className={cn("zn-lib__filters", className)}
       aria-label={t("filters.title")}
     >
-      {/* Running / cycling / swimming: category */}
-      {showRunningCategories && (
-        <FilterRow label={t("filters.category")}>
-          {categories.map((cat) => (
-            <Chip
-              key={cat}
-              label={t(`categories.${cat}`)}
-              selected={filters.category.includes(cat as WorkoutCategory)}
-              onClick={() => toggleFilter("category", cat as WorkoutCategory)}
-            />
-          ))}
-        </FilterRow>
-      )}
-
-      {/* Strength: category */}
-      {showStrengthCategories && (
-        <FilterRow label={tStrength("title")}>
-          {strengthCategories.map((cat) => (
-            <Chip
-              key={cat}
-              label={tStrength(`categories.${cat}`)}
-              selected={filters.strengthCategory.includes(cat as StrengthCategory)}
-              onClick={() => toggleFilter("strengthCategory", cat as StrengthCategory)}
-            />
-          ))}
-        </FilterRow>
-      )}
-
       {/* Difficulty (shared) */}
       <FilterRow label={t("filters.difficulty")}>
         {difficultyOptions.map((d) => (
@@ -289,29 +183,14 @@ export function WorkoutFilters({
         ))}
       </FilterRow>
 
-      {/* Running: terrain */}
-      {showRunningFilters && (
-        <FilterRow label={t("filters.terrain")}>
-          {terrainOptions.map((ter) => (
+      {showStrengthFilters && (
+        <FilterRow label={tStrength("title")}>
+          {strengthCategories.map((cat) => (
             <Chip
-              key={ter}
-              label={t(`terrain.${ter}`)}
-              selected={filters.terrain.includes(ter)}
-              onClick={() => toggleFilter("terrain", ter)}
-            />
-          ))}
-        </FilterRow>
-      )}
-
-      {/* Running: target system */}
-      {showRunningFilters && (
-        <FilterRow label={t("filters.targetSystem")}>
-          {targetSystems.map((sys) => (
-            <Chip
-              key={sys}
-              label={t(`targetSystem.${sys}`)}
-              selected={filters.targetSystem.includes(sys)}
-              onClick={() => toggleFilter("targetSystem", sys)}
+              key={cat}
+              label={tStrength(`categories.${cat}`)}
+              selected={filters.strengthCategory.includes(cat as StrengthCategory)}
+              onClick={() => toggleFilter("strengthCategory", cat as StrengthCategory)}
             />
           ))}
         </FilterRow>
@@ -354,64 +233,6 @@ export function WorkoutFilters({
           />
         </FilterRow>
       )}
-
-      {/* Duration, favourites, and the way out of every filter above. */}
-      <FilterRow label={t("filters.duration")} className="zn-lib__controls">
-        <div className="zn-lib__duration">
-          <Slider
-            value={filters.durationRange}
-            min={DURATION_MIN}
-            max={DURATION_MAX}
-            step={5}
-            thumbLabel={t("filters.duration")}
-            onValueChange={(value) =>
-              updateFilter("durationRange", value as [number, number])
-            }
-          />
-          <span className="zn-mono zn-lib__duration-value">
-            {t("filters.durationRange", {
-              min: filters.durationRange[0],
-              max: filters.durationRange[1],
-            })}
-          </span>
-        </div>
-
-        <label className="zn-lib__switch" htmlFor="favoritesOnly">
-          <Switch
-            id="favoritesOnly"
-            aria-label={t("filters.favoritesOnly")}
-            checked={filters.favoritesOnly}
-            onCheckedChange={(checked) => updateFilter("favoritesOnly", checked)}
-          />
-          <span className="zn-label">{t("filters.favoritesOnly")}</span>
-        </label>
-
-        {hasActiveFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearFilters}
-            className="zn-push"
-          >
-            <X size={15} />
-            {t("clearFilters")}
-          </Button>
-        )}
-      </FilterRow>
     </section>
   );
 }
-
-// Default filter state
-export const defaultFilters: WorkoutFiltersState = {
-  category: [],
-  difficulty: [],
-  durationRange: [DURATION_MIN, DURATION_MAX],
-  searchQuery: "",
-  terrain: [],
-  targetSystem: [],
-  favoritesOnly: false,
-  strengthCategory: [],
-  equipment: [],
-  muscleGroup: [],
-};

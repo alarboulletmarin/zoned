@@ -2,6 +2,34 @@
   "title": "Bibliothèque de séances",
   "catalogueIndex": "Index de toutes les séances",
   "catalogue": "{{workouts}} séances · {{categories}} catégories · {{disciplines}} disciplines",
+  "catalogueFamilies": "{{workouts}} séances · {{families}} familles",
+  "results": {
+    "all": "Séances",
+    "forQuery": "Résultats pour {{query}}",
+    "backToFamilies": "Toutes les familles"
+  },
+  "shortcuts": {
+    "label": "Raccourcis",
+    "favorites": "Favoris"
+  },
+  "families": {
+    "label": "Familles",
+    "all": "Toutes"
+  },
+  "index": {
+    "title": "Par famille",
+    "otherSports": "Autres sports",
+    "meta_one": "{{count}} séance · {{duration}}",
+    "meta_other": "{{count}} séances · {{duration}}",
+    "durationRange": "{{min}} à {{max}}"
+  },
+  "durationBucket": {
+    "le30": "30 min ou moins",
+    "30_45": "30 à 45 min",
+    "45_60": "45 à 60 min",
+    "60_90": "1 h à 1 h 30",
+    "gt90": "Plus long"
+  },
   "subtitle": "{{count}} séances d'entraînement scientifiques",
   "subtitleStrength": "{{count}} séances de renforcement",
   "subtitleAll": "{{count}} séances au total",
@@ -48,7 +76,12 @@
     "searchPlaceholder": "Rechercher : 30/30, seuil, côtes…",
     "searchLabel": "Rechercher des séances",
     "apply": "Appliquer",
-    "activeFilters": "filtres actifs"
+    "activeFilters": "filtres actifs",
+    "all": "Tous les filtres",
+    "seeResults_one": "Voir {{count}} séance",
+    "seeResults_other": "Voir {{count}} séances",
+    "peak": "Pic d'intensité",
+    "sport": "Sport"
   },
   "emptyState": {
     "noResults": "Aucune séance trouvée",
@@ -60,9 +93,9 @@
     "noMatchForQuery": "{{query}} ne correspond à aucune des {{total}} séances du catalogue."
   },
   "terrain": {
-    "flat": "Plat préféré",
-    "hills": "Côtes requises",
-    "track": "Piste requise"
+    "no_track": "Sans piste",
+    "climb": "Avec D+",
+    "no_hills": "Sans côte"
   },
   "targetSystem": {
     "aerobic_base": "Base aérobie",
@@ -115,12 +148,24 @@
     "label": "Trier par",
     "name": "Nom",
     "difficulty": "Difficulté",
-    "duration": "Durée"
+    "duration": "Durée",
+    "by": {
+      "duration": "Durée",
+      "intensity": "Intensité",
+      "level": "Niveau"
+    },
+    "word": {
+      "duration": "durée",
+      "intensity": "intensité",
+      "level": "niveau"
+    },
+    "cycle": "Trié par {{current}}. Toucher pour trier par {{next}}"
   },
   "noResults": "Aucune séance ne correspond à tes critères",
   "clearFilters": "Effacer les filtres",
   "clearSearch": "Effacer la recherche",
-  "showMore": "Voir plus",
+  "showMore_one": "Voir l'autre séance",
+  "showMore_other": "Voir les {{count}} autres",
   "showingCount": "{{visible}} sur {{total}} séances",
   "draw": {
     "title": "Tirer une séance",
