@@ -131,7 +131,9 @@
     "statsArticles": "Articles",
     "statsZones": "Zones",
     "countsLabel": "The catalogue in numbers",
-    "claimsTitle": "What that means"
+    "claimsTitle": "What that means",
+    "agentsLead": "For AI assistants:",
+    "agentsApi": "Workouts JSON API"
   },
   "changelogPage": {
     "releases": "{{n}} releases shipped",

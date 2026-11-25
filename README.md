@@ -312,6 +312,8 @@ A ⭐ on the repo is also greatly appreciated and helps other runners find the p
 
 [MIT](LICENSE): free to use, fork, host or adapt. Attribution is appreciated.
 
+**Workout and plan content** (the catalogue under `src/data/`, published as JSON at [zoned.run/api/v1](https://zoned.run/api/v1/index.json) and as [llms-full.txt](https://zoned.run/llms-full.txt)) is offered under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): reuse it anywhere, credit "Zoned (https://zoned.run)". The agent API is documented in [docs/agent-api.md](docs/agent-api.md).
+
 **MIT covers Zoned's own source code.** Third-party material keeps its own terms:
 
 | | |

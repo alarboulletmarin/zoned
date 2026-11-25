@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+- AI agents can read Zoned and hand a plan back. A static, versioned JSON API is generated at build time under `/api/v1/` (`index.json`, `zones.json`, `workouts.json`, one `workouts/{id}.json` per session with its step tree and display copy, resolved prebuilt plans, and the JSON Schema of the import payload), served with open CORS and a short cache. `/plan/import#d=…` opens a plan an assistant wrote: either the settings of an assisted plan, which Zoned generates, or a plan written week by week with catalogue sessions. The payload stays in the URL fragment, so it never reaches a server, and is deflated (`z1.`) when the link would be long. Validation reports every issue with its place (week 3, session 2: unknown workout END-999) and a copy for your assistant button; nothing is saved until Add to my plans. Contract in `docs/agent-api.md`
+- `llms.txt` is generated from the data instead of written by hand, centred on running, with a section for AI agents (endpoints, how to build a plan with Zoned sessions, the import link with a working example of each kind), and `llms-full.txt` lists every session in compact Markdown. The About page links both
+- Workout and plan content is offered under CC BY 4.0; the code stays MIT
+
 ### Changed
 - Calculators start from your numbers. The hub (`/calculators`) opens on four tiles (VMA, max HR, threshold, next race of the plan, each `to set` when missing) and lists six tools in three families, each row already giving its answer: Set your numbers (Zones, From a race time), Convert (Paces, Treadmill), Prepare a race (Splits, Race day). Cycling FTP and swimming CSS keep their routes and move to one line at the bottom. Every tool reads the profile and the plans (`useMyNumbers`), answers before anything is typed, and shares one anatomy: stepped fields with - and +, the answer in large type, the zone band, where the number comes from, where to go next. Rationale in `docs/calculateurs.md`
 - One performance model: Péronnet-Thibault, intermediate profile. From a race time merges the VMA and equivalence calculators: a race time gives the VMA and the times on the other distances, and the VMA can be saved in one tap. Riegel is gone from code and copy

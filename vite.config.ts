@@ -140,6 +140,10 @@ export default defineConfig({
           "**/fitsdk*",
           "**/garmin*",
           "**/og/workout/*",
+          // The agent API (scripts/generate-agent-api.ts) is for agents, not
+          // for the app: 2MB of JSON no screen reads. It is written after
+          // vite build, so this only guards against a future reordering.
+          "**/api/**",
         ],
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
@@ -149,7 +153,9 @@ export default defineConfig({
         // while curl, having no service worker, gets the real file. No route
         // ends in .txt or .xml, so the pattern cannot swallow a real page.
         navigateFallback: "/index.html",
-        navigateFallbackDenylist: [/\.(txt|xml)$/],
+        // /api and .json: the agent API's static files, which a navigation
+        // (an agent's browser tool, a user opening a link) must reach as JSON.
+        navigateFallbackDenylist: [/\.(txt|xml|json)$/, /^\/api\//],
         // No skipWaiting, no clientsClaim, deliberately. Together with
         // registerType "prompt" they are the whole guarantee: with neither set,
         // no code path can activate a new version behind the app's back.
