@@ -271,7 +271,7 @@
       "colHr": "FC",
       "notSet": "non posée",
       "openSay": "Z{{zone}} ouverte : {{say}}",
-      "libraryLink": "Parcourir les séances",
+      "libraryLink": "Séances qui montent en Z{{zone}}",
       "save": "Enregistrer dans mes repères",
       "saved": "Enregistré dans tes repères",
       "why": "Allure : 50-60, 60-75, 75-85, 85-92, 92-100 et 100-120 % de ta VMA. Cardio : tranches de 10 % de ta FC max, de 50 à 110 %.",

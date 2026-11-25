@@ -38,6 +38,12 @@ La table des allures reste une page (`/calculators/table-allures`), en tableau
 dense, ouverte depuis Allures. FTP et CSS (vélo, natation) gardent leurs
 routes mais sortent de la grille : une ligne en bas du hub.
 
+Zones renvoie vers les séances de la zone ouverte : `/library?peak=N`, le
+filtre de pic de la bibliothèque (`getPeakZone`, celle du badge des cartes,
+voir `docs/bibliotheque.md`). La zone où
+l'on passe le plus de minutes ne sert pas : l'échauffement et le retour au
+calme la tirent vers Z1-Z2, et aucune séance n'aurait Z5 ou Z6.
+
 `scripts/site-stats.ts` compte les lignes `id:` de `CALCULATEURS` : une par
 outil, pas plus.
 
@@ -111,8 +117,6 @@ rendu sans eux (`isServerSnapshot`) : le client repeint.
 
 - **Allures en trail** : il faut un modèle de dénivelé (montée, descente,
   terrain). Reporté.
-- **Filtre de zone sur la bibliothèque** : `/library` n'en a pas en URL ;
-  Zones mène à la bibliothèque sans filtre.
 - **Réserver la place des résultats avant la lecture du profil** sur
   Allures et Depuis un chrono : avec une VMA enregistrée, la bande ou les
   résultats apparaissent après l'effet. Le budget Lighthouse (profil vide)

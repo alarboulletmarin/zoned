@@ -271,7 +271,7 @@
       "colHr": "HR",
       "notSet": "not set",
       "openSay": "Z{{zone}} open: {{say}}",
-      "libraryLink": "Browse sessions",
+      "libraryLink": "Sessions that peak in Z{{zone}}",
       "save": "Save to my numbers",
       "saved": "Saved to your numbers",
       "why": "Pace: 50-60, 60-75, 75-85, 85-92, 92-100 and 100-120 % of your VMA. Heart rate: 10 % bands of your max HR, from 50 to 110 %.",
