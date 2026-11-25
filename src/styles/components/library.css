@@ -1033,8 +1033,8 @@
 
 .zn-wtable th:nth-child(2) { inline-size: 200px; }
 .zn-wtable th:nth-child(3) { inline-size: 56px; }
-.zn-wtable th:nth-child(4) { inline-size: 80px; }
-.zn-wtable th:nth-child(5) { inline-size: 132px; }
+.zn-wtable th:nth-child(4) { inline-size: 100px; }
+.zn-wtable th:nth-child(5) { inline-size: 128px; }
 .zn-wtable th:nth-child(6) { inline-size: 72px; }
 
 .zn-wtable thead th {
