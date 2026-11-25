@@ -1,8 +1,8 @@
 export { ZoneBadge, ZoneBadges } from "./ZoneBadge";
 export { WorkoutCard, WorkoutCardCompact, WorkoutCardChrome } from "./WorkoutCard";
-export { WorkoutListItem } from "./WorkoutListItem";
-export { StrengthWorkoutCard, StrengthWorkoutCardCompact, StrengthWorkoutListItem } from "./StrengthWorkoutCard";
-export { ViewModeSelector } from "./ViewModeSelector";
+export { WorkoutRow, FavoriteMark } from "./WorkoutRow";
+export { WorkoutTable } from "./WorkoutTable";
+export { StrengthWorkoutCard, StrengthWorkoutCardCompact } from "./StrengthWorkoutCard";
 export {
   WorkoutFilters,
   defaultFilters,
@@ -25,8 +25,6 @@ export { ScanCard } from "./ScanCard";
 // import { ExportableWorkoutCard } from "@/components/domain/ExportableWorkoutCard";
 //
 // Lazy-loaded pages only:
-// import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
-// import { PaceCalculator } from "@/components/domain/PaceCalculator";
 // import { ExportDatePicker } from "@/components/domain/ExportDatePicker";
 // import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 //

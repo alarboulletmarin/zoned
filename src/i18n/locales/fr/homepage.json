@@ -167,18 +167,14 @@
       "body": "Tous les calculs tournent dans ton navigateur. Les formules sont documentées.",
       "tools": {
         "zones": "Calcule tes zones FC et allures depuis ta VMA ou ta FCmax.",
-        "converter": "Convertissez entre min/km, km/h et min/mile en temps réel.",
-        "paceTable": "Toutes les allures de 3:00 à 10:00/km avec temps estimés.",
         "treadmill": "Convertissez vitesse et inclinaison en allure équivalente.",
         "splits": "Planifie tes passages pour atteindre ton objectif chrono.",
-        "vma": "Estime ta VMA à partir d'un résultat de course.",
-        "ftp": "Estime ta FTP depuis un test 20 minutes ou un ramp test.",
-        "css": "Estime ta CSS depuis un test 400 m + 200 m.",
-        "equivalence": "Prédis tes temps sur toutes les distances depuis un résultat.",
+        "vma": "Ta VMA et tes temps sur toutes les distances, depuis un seul résultat.",
         "raceSimulator": {
           "title": "Simulateur jour de course",
           "desc": "Plan complet pour ton jour de course : horaires, allures, nutrition, mental."
-        }
+        },
+        "allures": "Passe de min/km à km/h et au mile, et vois le temps que ça donne sur 5 km comme sur marathon."
       }
     },
     "s07": {

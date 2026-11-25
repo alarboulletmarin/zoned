@@ -20,6 +20,33 @@
       "recovery": "Récupération"
     }
   },
+  "import": {
+    "title": "Plan importé",
+    "loading": "Lecture du plan…",
+    "subtitleConfig": "Un assistant a préparé les réglages de ce plan, Zoned l'a construit avec son propre générateur. Rien n'est enregistré tant que tu ne l'ajoutes pas.",
+    "subtitlePlan": "Un assistant a écrit ce plan avec des séances Zoned. Rien n'est enregistré tant que tu ne l'ajoutes pas.",
+    "add": "Ajouter à mes plans",
+    "added": "Plan ajouté à tes plans",
+    "backToPlans": "Mes plans",
+    "raceDay": "Jour de course",
+    "recoveryWeek": "récupération",
+    "warningsTitle": "Ajusté à l'import",
+    "failed": "Le plan n'a pas pu être construit à partir de ce lien.",
+    "invalidKicker_one": "{{count}} erreur",
+    "invalidKicker_other": "{{count}} erreurs",
+    "invalidTitle": "Ce plan ne peut pas être importé",
+    "invalidLead": "Le lien est lisible, mais son contenu ne respecte pas le format de Zoned. Copie le rapport et colle-le à l'assistant qui l'a écrit : chaque ligne lui dit quoi corriger.",
+    "issuesLabel": "Erreurs du plan",
+    "copyReport": "Copier pour mon assistant",
+    "reportCopied": "Rapport copié",
+    "reportCopyFailed": "Le rapport n'a pas pu être copié",
+    "unreadable": {
+      "missing": "Ce lien ne contient pas de plan. Il doit se terminer par #d= suivi du plan encodé.",
+      "malformed_base64": "Le plan contenu dans ce lien est tronqué ou mal encodé. Le lien a peut-être été coupé en le copiant.",
+      "malformed_json": "Le plan contenu dans ce lien n'est pas du JSON valide.",
+      "unknown_encoding": "Ce lien utilise un encodage que cette version de Zoned ne connaît pas."
+    }
+  },
   "title": "Plans d'entraînement",
   "create": "Créer un plan",
   "createTitle": "Nouveau plan d'entraînement",
@@ -763,8 +790,7 @@
     "noRace": "Pas de course en vue ?",
     "otherWays": "Tu préfères",
     "prebuiltLink": "un plan déjà écrit",
-    "freeLink": "un calendrier vide à remplir toi-même",
-    "announce": "Ultra et triathlon : les séances sont là, les plans arrivent."
+    "freeLink": "un calendrier vide à remplir toi-même"
   },
   "event": {
     "title": "Ta course",
@@ -775,7 +801,6 @@
   "practice": {
     "title": "Qu'est-ce que tu prépares ?",
     "subtitle": "Ça décide de tout le reste : les distances proposées, et les questions posées.",
-    "soon": "bientôt",
     "distanceCount_one": "{{count}} distance",
     "distanceCount_other": "{{count}} distances",
     "workoutCount_one": "{{count}} séance",
@@ -790,20 +815,7 @@
     "trail": {
       "label": "Trail",
       "body": "Du trail court au 60 km : dénivelé, terrain, descente."
-    },
-    "ultra": {
-      "label": "Ultra",
-      "body": "Au-delà du trail : temps sur les pieds, nuit, ravitaillement.",
-      "announce": "Un plan ultra se bâtit sur seize à cinquante-deux semaines, avec du temps sur les pieds, de la nuit et une stratégie de ravitaillement. Ce que le générateur en sort n'est pas encore assez fiable pour qu'on te le propose, alors on ne le propose pas. En attendant, rien n'est bloqué : les séances ultra sont dans la bibliothèque, et les calculateurs donnent tes allures."
-    },
-    "triathlon": {
-      "label": "Triathlon",
-      "body": "Nage, vélo, course. Les séances sont là, les plans arrivent.",
-      "announce": "Les plans triathlon demandent des créneaux par discipline et des enchaînements : c'est un chantier à part, et il n'est pas commencé. En attendant, rien n'est bloqué, les séances vélo et natation sont dans la bibliothèque, et les tests FTP et CSS calculent tes zones."
-    },
-    "announceKicker": "Ce qui existe déjà",
-    "announceLibrary": "Voir les séances",
-    "announceNumbers": "Ouvrir les calculateurs"
+    }
   },
   "terrain": {
     "title": "Sur quoi tu cours ?",
@@ -818,18 +830,6 @@
     "elevation": "Dénivelé positif de la course (m)",
     "elevationPlaceholder": "Ex. 1200",
     "elevationDesc": "Le D+ total annoncé par l'organisateur. Facultatif."
-  },
-  "ultra": {
-    "title": "Ce qu'il faut répéter",
-    "subtitle": "Ce qui arrivera en course et qui s'apprend à l'entraînement. Coche ce qui te concerne.",
-    "night": "Courir de nuit",
-    "nightDesc": "Une sortie à la frontale, pour ne pas découvrir le noir le jour J.",
-    "fuelling": "Répéter le ravitaillement",
-    "fuellingDesc": "Manger et boire en courant : l'estomac s'entraîne comme les jambes.",
-    "poles": "Utiliser des bâtons",
-    "polesDesc": "Monter en marchant avec des bâtons, ça se travaille.",
-    "backToBack": "Deux jours de suite",
-    "backToBackDesc": "Une sortie longue le samedi, une autre le dimanche sur jambes fatiguées."
   },
   "page": {
     "back": "Plans",
@@ -1109,7 +1109,7 @@
       "longest": "Sortie la plus longue",
       "create": "Créer le plan",
       "noVma": "Allures estimées depuis ton niveau, faute de VMA.",
-      "noVmaLink": "La renseigner dans Mes zones",
+      "noVmaLink": "La poser dans ton profil",
       "week1": "Ta première semaine",
       "timeline": "Le plan, semaine par semaine"
     },

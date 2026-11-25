@@ -136,10 +136,9 @@ export const PRIMARY_NAV: NavSection[] = [
        bien un de mes chiffres, mais le budget de la nav est de 18 entrées et
        il tient. Il se joint par le pied de page, par Cmd+K, depuis le cockpit
        et depuis le profil, qui porte déjà le motif de vélotaf. */
-    prefix: ["/calculators", "/profile", "/my-zones", "/activities"],
+    prefix: ["/calculators", "/profile", "/activities"],
     children: [
       { to: "/calculators", labelKey: "topnav.calculatorsAll", descKey: "topnav.calculatorsAllDesc" },
-      { to: "/my-zones", labelKey: "nav.myZones", descKey: "topnav.myZonesDesc" },
       { to: "/profile", labelKey: "nav.profile", descKey: "topnav.profileDesc" },
       { to: "/calculators/zones", labelKey: "topnav.calcZones" },
       { to: "/calculators/vma", labelKey: "topnav.calcVma" },

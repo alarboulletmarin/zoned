@@ -2,14 +2,6 @@
   "title": "Mon profil coureur",
   "description": "Centralise tes données physiologiques, temps de référence et records personnels.",
   "kicker": "Calculé sur cet appareil",
-  "stats": {
-    "vma": "VMA · km/h",
-    "vmaFoot_one": "d'après {{count}} test",
-    "vmaFoot_other": "d'après {{count}} tests",
-    "fcMax": "FC max · bpm",
-    "weekly": "Volume hebdo · km",
-    "longRun": "Sortie longue · km"
-  },
   "seo": {
     "title": "Profil Coureur, Zoned",
     "description": "Ta fiche coureur : données physio, temps de référence, historique de tests et records personnels."
@@ -49,15 +41,7 @@
   },
   "base": {
     "title": "Données de base",
-    "description": "Tes données physiologiques et ton volume d'entraînement actuel.",
-    "fcMax": "FC Max",
-    "fcMaxUnit": "bpm",
-    "fcMaxPlaceholder": "Ex : 185",
-    "fcMaxError": "La FC Max doit être entre 100 et 250 bpm",
-    "vma": "VMA",
-    "vmaUnit": "km/h",
-    "vmaPlaceholder": "Ex : 16.5",
-    "vmaError": "La VMA doit être entre 8 et 30 km/h",
+    "description": "Ton volume d'entraînement actuel et ton niveau.",
     "weeklyKm": "Volume hebdomadaire",
     "weeklyKmUnit": "km/semaine",
     "weeklyKmPlaceholder": "Ex : 40",
@@ -78,8 +62,8 @@
     "noVmaBody": "Sans elle, tes six zones et tes allures restent vides. Le reste de ton profil est intact : un test de 6 minutes suffit à combler le trou.",
     "noVmaAction": "Estimer ma VMA",
     "sourceTitle": "D'où viennent ces chiffres",
-    "sourceBody": "Zones en pourcentage de VMA, fréquences cibles par la méthode Karvonen, prédictions par la formule de Riegel calibrée sur tes propres courses.",
-    "sourceCitation": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957 · Riegel, Runner's World, 1977"
+    "sourceBody": "Zones en pourcentage de VMA, fréquences cibles par la méthode Karvonen, temps prédits par le modèle de Péronnet et Thibault, le même qui donne ta VMA depuis un chrono.",
+    "sourceCitation": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957 · Péronnet et Thibault, J Appl Physiol, 1989"
   },
   "references": {
     "title": "Temps de référence",
@@ -173,5 +157,13 @@
     "hours": "h",
     "minutes": "min",
     "seconds": "s"
+  },
+  "numbers": {
+    "setLabel": "Poser : {{label}}",
+    "changeLabel": "Changer ou supprimer : {{label}}",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "thresholdFromVma": "vient de ta VMA"
   }
 }

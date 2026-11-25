@@ -1550,7 +1550,7 @@
           "kind": "segment",
           "description": "Transition sans arret",
           "descriptionEn": "Transition without stopping",
-          "role": "effort"
+          "role": "transition"
         },
         {
           "kind": "segment",
@@ -1565,7 +1565,7 @@
           "kind": "segment",
           "description": "Transition sans arret",
           "descriptionEn": "Transition without stopping",
-          "role": "effort"
+          "role": "transition"
         },
         {
           "kind": "segment",
@@ -2517,6 +2517,7 @@
         {
           "description": "Gammes complètes (montées de genoux, talons-fesses, pas chassés)",
           "descriptionEn": "Full drills (high knees, butt kicks, side shuffles)",
+          "zone": "Z2",
           "durationMin": 5
         },
         {
@@ -2552,6 +2553,7 @@
           "kind": "segment",
           "description": "Gammes complètes (montées de genoux, talons-fesses, pas chassés)",
           "descriptionEn": "Full drills (high knees, butt kicks, side shuffles)",
+          "zone": "Z2",
           "durationSec": 300,
           "role": "effort"
         },

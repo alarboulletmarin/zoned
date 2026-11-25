@@ -1,6 +1,6 @@
 {
   "title": "Race Day Simulator",
-  "kicker": "Km by km",
+  "kicker": "Race day",
   "description": "Generate your complete race day plan: per-kilometer pacing, nutrition, warm-up, timeline and checklist.",
   "inputs": {
     "title": "Race parameters",
@@ -25,7 +25,8 @@
     "positive": "Positive",
     "evenDesc": "All splits at the same pace.",
     "negativeDesc": "Start slower, finish faster.",
-    "positiveDesc": "Start faster, finish slower."
+    "positiveDesc": "Start faster, finish slower.",
+    "unset": "to set"
   },
   "view": {
     "label": "Display mode",
@@ -125,14 +126,16 @@
     "delete": "Delete",
     "load": "Load",
     "newSimulation": "New simulation",
-    "deleteMenu": "Delete…"
+    "deleteMenu": "Delete…",
+    "wristband": "Wristband"
   },
   "saved": {
     "title": "Saved simulations",
     "empty": "No saved simulations",
     "maxReached": "Maximum of 10 simulations reached",
     "saveFailed": "The simulation was not saved.",
-    "actionsLabel": "Actions for simulation {{name}}"
+    "actionsLabel": "Actions for simulation {{name}}",
+    "done": "Simulation saved."
   },
   "nutrition": {
     "carbsPerHour": "Carbs/hour",
@@ -155,5 +158,140 @@
     "splits": "Your pacing, split by split",
     "nutrition": "What you drink and eat, and when",
     "mental": "Mental cues broken down by segment"
-  }
+  },
+  "titleOther": "A race",
+  "descriptionShort": "Pick a race from your plan, or describe one: the whole day is set from it, from the evening before to the finish.",
+  "pick": {
+    "label": "Race",
+    "fromPlan": "from your plan",
+    "daysLeft_one": "{{count}} day to go",
+    "daysLeft_other": "{{count}} days to go",
+    "other": "Other"
+  },
+  "band": {
+    "target": "Target",
+    "pace": "Pace",
+    "start": "Start",
+    "missing": "Set the target and the start time: the whole day is set from them.",
+    "saveFailed": "Your times were not kept on this device.",
+    "missingStart": "Set the start time: the whole day is set from it."
+  },
+  "doc": {
+    "chapters": "Chapters",
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "eve": {
+      "name": "The evening before",
+      "dayBefore": "Day before",
+      "title": "Pack the bag, sleep",
+      "bag_one": "The bag, {{count}} item",
+      "bag_other": "The bag, {{count}} items"
+    },
+    "morning": {
+      "name": "The morning",
+      "title": "Eat early, arrive with time to spare",
+      "wake": "Wake up",
+      "breakfast": "Breakfast",
+      "venue": "On site, bib pick-up, find your pen"
+    },
+    "warmup": {
+      "name": "Warm-up",
+      "title_one": "{{minutes}} min, in {{count}} part",
+      "title_other": "{{minutes}} min, in {{count}} parts",
+      "jog": "Easy jog",
+      "drills": "Drills: {{list}}",
+      "strides": "4 to 6 strides at {{pace}}",
+      "rest": "In the pen, slow breathing",
+      "stridesTrail": "4 to 6 strides, relaxed"
+    },
+    "race": {
+      "name": "The race",
+      "titleTrail": "Target {{time}}",
+      "titleEven": "Hold {{pace}} from start to finish",
+      "titleSplit": "Start at {{first}}, finish at {{last}}",
+      "chart": "Pace per kilometre, from {{first}} to {{last}}",
+      "halfway": "halfway",
+      "trailSoon": "Per-kilometre paces for trail are coming: the climbing decides everything, so they are not split yet.",
+      "fuel": "Fuelling: {{carbs}} g of carbs per hour, {{gels}} gels, one every {{every}} min, and {{fluid}} ml of water per hour.",
+      "fuelWater": "Fuelling: water to thirst, nothing else over {{minutes}} min.",
+      "passages_one": "The split",
+      "passages_other": "All {{count}} splits"
+    },
+    "after": {
+      "name": "After",
+      "title": "Walk, drink, eat",
+      "body": "Within 2 h: carbs and protein, at least 200 ml of water."
+    },
+    "table": {
+      "km": "Km",
+      "split": "Split",
+      "passage": "Elapsed",
+      "clock": "Clock"
+    },
+    "passagesTitle": "Splits · {{strategy}}",
+    "passagesHint": "Clock time at each split, start at {{time}}."
+  },
+  "day": {
+    "rehearsal": "Rehearsal.",
+    "rehearsalIn_one": "Your race is tomorrow. Slide the time to see what awaits you; on {{date}}, the clock will be the real one.",
+    "rehearsalIn_other": "Your race is in {{count}} days. Slide the time to see what awaits you; on {{date}}, the clock will be the real one.",
+    "rehearsalNoDate": "With no race date, the clock is never the real one: slide the time to walk through the day.",
+    "itIs": "It is",
+    "now": "Now",
+    "next": "Next",
+    "notStarted": "The day has not started",
+    "startsAt": "It starts at {{time}}.",
+    "left_one": "{{count}} min left",
+    "left_other": "{{count}} min left",
+    "over": "it's over, well done",
+    "kmNow": "km {{km}} · aim for {{pace}}",
+    "passage": "km {{km}} split at {{time}}",
+    "done": "Mark done",
+    "doneDone": "Done",
+    "nothingElse": "Nothing else today",
+    "inMin_one": "in {{count}} min",
+    "inMin_other": "in {{count}} min",
+    "list": "The day",
+    "lastSip": "Last sip around {{time}}.",
+    "steps": {
+      "wake": {
+        "title": "Wake up",
+        "detail": "A glass of water, get up without lingering."
+      },
+      "breakfast": {
+        "title": "Breakfast",
+        "detail": ""
+      },
+      "venue": {
+        "title": "On site",
+        "detail": "Bib pick-up, find your pen and the toilets."
+      },
+      "jog": {
+        "title": "Easy jog",
+        "detail": "10 easy minutes to warm up."
+      },
+      "drills": {
+        "title": "Drills",
+        "detail": ""
+      },
+      "strides": {
+        "title": "Strides",
+        "detail": "4 to 6 accelerations of 80 m at {{pace}}, walk back.",
+        "detailTrail": "4 to 6 relaxed accelerations of 80 m, walk back."
+      },
+      "rest": {
+        "title": "In the pen",
+        "detail": "Walk, breathe slowly. Watch ready."
+      },
+      "race": {
+        "title": "The race",
+        "detail": "Run your pace, not everyone else's."
+      },
+      "finish": {
+        "title": "Finish",
+        "detail": "Walk, stretch lightly, drink. Eat within 2 hours."
+      }
+    }
+  },
+  "descriptionNoPlan": "Describe your race: the whole day is set from it, from the evening before to the finish."
 }

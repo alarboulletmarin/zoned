@@ -2441,7 +2441,7 @@
           "kind": "segment",
           "description": "--- 6-8h de repos ---",
           "descriptionEn": "--- 6-8h rest ---",
-          "role": "effort"
+          "role": "transition"
         },
         {
           "kind": "repeat",
@@ -2756,7 +2756,8 @@
         },
         {
           "description": "Ajustez l'allure selon les mesures",
-          "descriptionEn": "Adjust pace based on readings"
+          "descriptionEn": "Adjust pace based on readings",
+          "zone": "Z4"
         }
       ],
       "mainSetStructure": [
@@ -2790,6 +2791,7 @@
           "kind": "segment",
           "description": "Ajustez l'allure selon les mesures",
           "descriptionEn": "Adjust pace based on readings",
+          "zone": "Z4",
           "role": "effort"
         }
       ],

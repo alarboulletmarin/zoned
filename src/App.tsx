@@ -57,7 +57,7 @@ const SharedWeekPage = lazyPage(() => import("@/pages/SharedWeekPage").then(m =>
 const WorkoutDetailPage = lazyPage(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const SharedWorkoutPage = lazyPage(() => import("@/pages/SharedWorkoutPage").then(m => ({ default: m.SharedWorkoutPage })));
 const SharedPlanPage = lazyPage(() => import("@/pages/SharedPlanPage").then(m => ({ default: m.SharedPlanPage })));
-const MyZonesPage = lazyPage(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
+const PlanImportPage = lazyPage(() => import("@/pages/PlanImportPage").then(m => ({ default: m.PlanImportPage })));
 const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
 const AboutPage = lazyPage(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
@@ -88,10 +88,8 @@ const SplitGeneratorPage = lazyPage(() => import("@/pages/SplitGeneratorPage").t
 const VmaCalculatorPage = lazyPage(() => import("@/pages/VmaCalculatorPage").then(m => ({ default: m.VmaCalculatorPage })));
 const FtpTestPage = lazyPage(() => import("@/pages/tests/FtpTestPage").then(m => ({ default: m.FtpTestPage })));
 const CssTestPage = lazyPage(() => import("@/pages/tests/CssTestPage").then(m => ({ default: m.CssTestPage })));
-const RaceEquivalencePage = lazyPage(() => import("@/pages/RaceEquivalencePage").then(m => ({ default: m.RaceEquivalencePage })));
 const RacePrepGuidePage = lazyPage(() => import("@/pages/RacePrepGuidePage").then(m => ({ default: m.RacePrepGuidePage })));
 const WarmupGuidePage = lazyPage(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
-const PaceConverterPage = lazyPage(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
 const PaceTablePage = lazyPage(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
 const WorkoutBuilderPage = lazyPage(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
 const RaceSimulatorPage = lazyPage(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
@@ -111,6 +109,16 @@ const LazyCommandPalette = lazy(() =>
     i18nReady,
   ]).then(([module]) => module)
 );
+
+/**
+ * An old URL whose tool was merged into another: same query string, so a
+ * shared link (?d=&h=&m=&s=, ?kmh=) lands on the new page with its values.
+ * vercel.json and nginx.conf answer 301 first; this covers in-app links.
+ */
+function NavigateKeepingQuery({ to }: { to: string }) {
+  const { search, hash } = useLocation();
+  return <Navigate to={`${to}${search}${hash}`} replace />;
+}
 
 function DeferredCommandPalette() {
   const { isOpen } = useCommandPalette();
@@ -340,18 +348,19 @@ export default function App({ ssrLocation }: { ssrLocation?: string } = {}) {
                           <Route path="/workout/builder/:id" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/shared" element={<SharedWorkoutPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />
-                          <Route path="/my-zones" element={<MyZonesPage />} />
+                          <Route path="/my-zones" element={<NavigateKeepingQuery to="/calculators/zones" />} />
                           <Route path="/calculators" element={<CalculateursPage />} />
                           <Route path="/calculators/zones" element={<ZonesCalculatorPage />} />
                           <Route path="/calculators/allures" element={<PaceCalculatorPage />} />
-                          <Route path="/calculators/convertisseur" element={<PaceConverterPage />} />
+                          <Route path="/calculators/convertisseur" element={<NavigateKeepingQuery to="/calculators/allures" />} />
                           <Route path="/calculators/table-allures" element={<PaceTablePage />} />
                           <Route path="/calculators/tapis-roulant" element={<TreadmillConverterPage />} />
                           <Route path="/calculators/splits" element={<SplitGeneratorPage />} />
                           <Route path="/calculators/vma" element={<VmaCalculatorPage />} />
                           <Route path="/calculators/ftp" element={<FtpTestPage />} />
                           <Route path="/calculators/css" element={<CssTestPage />} />
-                          <Route path="/calculators/equivalence" element={<RaceEquivalencePage />} />
+                          <Route path="/calculators/equivalence" element={<NavigateKeepingQuery to="/calculators/vma" />} />
+                          <Route path="/calculators/age-graded" element={<NavigateKeepingQuery to="/calculators/vma" />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/profile" element={<RunnerProfilePage />} />
                           <Route path="/activities" element={<ActivitiesPage />} />
@@ -382,6 +391,7 @@ export default function App({ ssrLocation }: { ssrLocation?: string } = {}) {
                           <Route path="/plan/new/prebuilt" element={<PrebuiltPlansPage />} />
                           <Route path="/plan/prebuilt/:slug" element={<PrebuiltPlanDetailPage />} />
                           <Route path="/plan/shared" element={<SharedPlanPage />} />
+                          <Route path="/plan/import" element={<PlanImportPage />} />
                           <Route path="/plan/:id" element={<PlanViewPage />} />
                           <Route path="/race-simulator" element={<ModuleGate module="raceSimulator" canonical="/race-simulator"><RaceSimulatorPage /></ModuleGate>} />
                           <Route path="/race-simulator/shared" element={<RaceSimulatorPage />} />

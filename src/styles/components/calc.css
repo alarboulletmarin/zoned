@@ -1,0 +1,731 @@
+/* L'anatomie commune des calculateurs, `components/calc/index.tsx`.
+ *
+ * Une colonne de lecture (en-tête, saisie, réponse, détail, provenance, et
+ * ensuite), la même sur les six outils. Les chiffres sont en mono, alignés à
+ * droite dans les tableaux ; un tableau reste un tableau sur téléphone, il
+ * défile dans sa boîte au lieu de devenir une pile de cartes.
+ *
+ * Mouvement (motion.css) : les FORMES qui suivent une saisie (bande, repère,
+ * barres) transitionnent en --dur-base ; les chiffres sont remplacés net.
+ * Rien ne bouge au chargement, puisque rien ne transitionne sans changement.
+ */
+
+.zn-calc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  max-inline-size: 640px;
+  padding-block: var(--sp-8) var(--sp-15);
+}
+
+.zn-calc--wide {
+  max-inline-size: 1072px;
+}
+
+/* ── en-tête ──────────────────────────────────────────────────────────── */
+
+.zn-calc-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-calc-head__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  align-self: flex-start;
+  min-block-size: var(--hit-min);
+  margin-block: calc(var(--sp-6) * -1) 0;
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.zn-calc-head__back:hover {
+  color: var(--text-body);
+}
+
+.zn-calc-head__kicker {
+  color: var(--text-muted);
+}
+
+.zn-calc-head__title {
+  margin: 0;
+}
+
+.zn-calc-head__lede {
+  margin: var(--sp-2) 0 0;
+  color: var(--text-muted);
+  max-inline-size: 52ch;
+}
+
+/* ── champs ───────────────────────────────────────────────────────────── */
+
+.zn-calc-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+}
+
+/* Sur téléphone, un champ par ligne : - et + prennent 100px, il ne resterait
+   pas la place d'un chiffre et de son unité dans une demi-colonne. */
+@media (max-width: 560px) {
+  .zn-calc-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Un choix (protocole, distance) prend toute la ligne : à côté de lui, le champ
+   chiffré n'aurait plus la place de dire à poser. */
+.zn-calc-field--wide {
+  grid-column: 1 / -1;
+}
+
+.zn-calc-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+.zn-calc-field__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.zn-calc-step {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-3);
+}
+
+.zn-calc-step__btn {
+  flex: none;
+  inline-size: var(--hit-min);
+  min-block-size: var(--hit-min);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  background: transparent;
+  color: var(--text-body);
+  font: var(--fw-medium) var(--fs-h3) / 1 var(--font-text);
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out);
+  /* On tape vite sur - et + : ni sélection du signe, ni zoom au double tap. */
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.zn-calc-step__btn:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-calc-step__input {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-4) var(--sp-6);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  color: var(--text-body);
+  font: var(--fw-medium) var(--fs-h3) / 1.2 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ls-mono);
+  text-align: center;
+}
+
+.zn-calc-step__unit {
+  position: absolute;
+  inset-inline-end: calc(var(--hit-min) + var(--sp-3) + var(--sp-5));
+  inset-block: 0;
+  display: grid;
+  place-items: center;
+  font: var(--fs-mono-sm) var(--font-mono);
+  color: var(--text-faint);
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* La place de l'unité, de son seul côté et seulement quand elle se voit. En
+   em (taille du gros chiffre) et des deux côtés, elle laissait une vingtaine de
+   pixels au nombre dans une demi-colonne : 12,0 et à poser y étaient coupés. */
+.zn-calc-step:has(.zn-calc-step__unit):not([data-empty]) .zn-calc-step__input {
+  padding-inline: var(--sp-6) 3rem;
+}
+
+.zn-calc-step__input::placeholder {
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  color: var(--text-muted);
+}
+
+/* Sans valeur connue : pointillés, et à poser à la place d'un chiffre. */
+.zn-calc-step[data-empty] .zn-calc-step__input {
+  border: var(--border-dashed);
+  background: transparent;
+}
+
+.zn-calc-step[data-empty] .zn-calc-step__unit {
+  display: none;
+}
+
+.zn-calc-step[data-invalid] .zn-calc-step__input {
+  border-color: var(--accent);
+}
+
+.zn-calc-field[data-size="lg"] .zn-calc-step__input {
+  min-block-size: 64px;
+  font-size: var(--fs-h1);
+}
+
+.zn-calc-field[data-size="lg"] .zn-calc-step__btn {
+  inline-size: 52px;
+}
+
+.zn-calc-hint {
+  margin: 0;
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+}
+
+/* ── réponse ──────────────────────────────────────────────────────────── */
+
+.zn-calc-answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-10);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+  background: var(--surface-card);
+}
+
+.zn-calc-answer > p {
+  margin: 0;
+}
+
+.zn-calc-answer__value {
+  font: var(--fw-medium) 52px / 1 var(--font-mono);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.zn-calc-answer__unit {
+  font-size: var(--fs-body-lg);
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+
+.zn-calc-answer__say {
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.zn-calc-answer__say b {
+  font-weight: var(--fw-semibold);
+  color: var(--text-body);
+}
+
+.zn-calc-answer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+}
+
+/* Le bouton qui pose une valeur porte le tampon partagé (stamp.css). */
+.zn-calc-answer__actions [data-just-done] {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── tableau dense ────────────────────────────────────────────────────── */
+
+.zn-calc-tablebox {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.zn-calc-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-body);
+}
+
+.zn-calc-table caption {
+  text-align: start;
+  padding-bottom: var(--sp-5);
+  font: var(--fw-semibold) var(--fs-h4) / 1.2 var(--font-display);
+}
+
+.zn-calc-table thead th {
+  padding: 0 var(--sp-4) var(--sp-4);
+  font: var(--fw-regular) var(--fs-mono-xs) var(--font-mono);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: end;
+  white-space: nowrap;
+}
+
+.zn-calc-table thead th:first-child {
+  text-align: start;
+  padding-inline-start: 0;
+}
+
+.zn-calc-table tbody tr {
+  border-top: 1px solid var(--line-divider);
+}
+
+.zn-calc-table tbody tr:first-child {
+  border-top: var(--border-rule);
+}
+
+.zn-calc-table tbody tr:last-child {
+  border-bottom: 1px solid var(--line-divider);
+}
+
+.zn-calc-table th[scope="row"] {
+  padding: var(--sp-5) var(--sp-4) var(--sp-5) 0;
+  text-align: start;
+  font-weight: var(--fw-regular);
+  white-space: nowrap;
+}
+
+.zn-calc-table td {
+  padding: var(--sp-5) var(--sp-4);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+}
+
+.zn-calc-table td:last-child {
+  padding-inline-end: 0;
+}
+
+.zn-calc-table .zn-calc-table__muted {
+  color: var(--text-muted);
+}
+
+/* La ligne de référence (le chrono saisi, la zone ouverte, le seuil). */
+.zn-calc-table tr[data-ref] {
+  background: var(--paper-sunken);
+}
+
+.zn-calc-table tr[data-ref] th[scope="row"] {
+  font-weight: var(--fw-semibold);
+  padding-inline-start: var(--sp-4);
+}
+
+.zn-calc-table tr[data-ref] td {
+  font-weight: var(--fw-medium);
+}
+
+.zn-calc-table tr[data-ref] td:last-child {
+  padding-inline-end: var(--sp-4);
+}
+
+.zn-calc-table button.zn-calc-table__rowbtn {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: 24px;
+}
+
+.zn-calc-table button.zn-calc-table__rowbtn:focus-visible {
+  outline: 2px solid var(--text-body);
+  outline-offset: 2px;
+}
+
+/* ── provenance, et ensuite ───────────────────────────────────────────── */
+
+.zn-calc-why {
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-calc-why > summary {
+  cursor: pointer;
+  min-block-size: var(--hit-min);
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.zn-calc-why__body p {
+  margin: 0 0 var(--sp-4);
+  line-height: 1.55;
+}
+
+.zn-calc-next h2 {
+  margin: 0 0 var(--sp-4);
+  color: var(--text-muted);
+}
+
+.zn-calc-next ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: var(--border-rule);
+}
+
+.zn-calc-next a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-6);
+  min-block-size: var(--hit-min);
+  padding-block: var(--sp-5);
+  border-bottom: 1px solid var(--line-divider);
+  color: var(--text-body);
+  text-decoration: none;
+  font-size: var(--fs-body-lg);
+}
+
+.zn-calc-next a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-calc-h2 {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-h3) / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.zn-calc-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+/* ── la bande des zones ───────────────────────────────────────────────── */
+
+.zn-calc-band__row {
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  gap: 2px;
+  block-size: 26px;
+}
+
+.zn-calc-band__zone {
+  flex-basis: 0;
+  min-inline-size: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  font: var(--fw-medium) var(--fs-mono-xs) var(--font-mono);
+  color: var(--zone-1-text);
+}
+
+.zn-calc-band__zone[data-zone="1"] { background: var(--zone-1); }
+.zn-calc-band__zone[data-zone="2"] { background: var(--zone-2); }
+.zn-calc-band__zone[data-zone="3"] { background: var(--zone-3); }
+.zn-calc-band__zone[data-zone="4"] { background: var(--zone-4); color: var(--text-inverse); }
+.zn-calc-band__zone[data-zone="5"] { background: var(--zone-5); color: var(--text-inverse); }
+.zn-calc-band__zone[data-zone="6"] { background: var(--zone-6); color: var(--text-inverse); }
+
+.zn-calc-band__zone[data-active] {
+  outline: 2px solid var(--text-body);
+  outline-offset: 1px;
+}
+
+.zn-calc-band__marker {
+  position: absolute;
+  inset-block: -6px;
+  inset-inline-start: -2px;
+  inline-size: 4px;
+  border-radius: 2px;
+  background: var(--accent);
+  outline: 2px solid var(--surface-card);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-calc-band__axis {
+  position: relative;
+  block-size: 1.4em;
+  margin-top: var(--sp-2);
+  font: var(--fs-mono-xs) var(--font-mono);
+  color: var(--text-faint);
+}
+
+.zn-calc-band__axis span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.zn-calc-band__axis span:first-child { transform: none; }
+.zn-calc-band__axis span:last-child { transform: translateX(-100%); }
+
+/* ── tuiles (les repères, les valeurs liées d'Allures) ────────────────── */
+
+.zn-calc-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-5);
+}
+
+@media (min-width: 900px) {
+  .zn-calc-tiles[data-cols="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.zn-calc-tiles[data-cols="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.zn-calc-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-block-size: 118px;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  padding: var(--sp-7);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+  background: var(--surface-card);
+  color: var(--text-body);
+  text-decoration: none;
+}
+
+.zn-calc-tile__label {
+  font: var(--fs-mono-xs) var(--font-mono);
+  letter-spacing: var(--ls-mono-kicker);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.zn-calc-tile__value {
+  font: var(--fw-medium) 28px / 1.1 var(--font-mono);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.zn-calc-tile__value small {
+  font-size: var(--fs-body-sm);
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+
+.zn-calc-tile__foot {
+  margin-top: auto;
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-calc-tile[data-empty] {
+  border: var(--border-dashed);
+  background: transparent;
+}
+
+.zn-calc-tile[data-empty] .zn-calc-tile__value {
+  color: var(--text-faint);
+}
+
+.zn-calc-tile[data-empty] .zn-calc-tile__foot {
+  color: var(--text-body);
+  font-weight: var(--fw-medium);
+}
+
+.zn-calc-tile[data-ink] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-color: var(--surface-inverse);
+}
+
+.zn-calc-tile[data-ink] .zn-calc-tile__label,
+.zn-calc-tile[data-ink] .zn-calc-tile__foot {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.zn-calc-tile[data-ink] .zn-calc-tile__value {
+  font: var(--fw-semibold) var(--fs-h4) / 1.15 var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+a.zn-calc-tile:hover {
+  border-style: solid;
+  border-color: var(--text-body);
+}
+
+/* ── impression : la bande-poignet ────────────────────────────────────── */
+
+.zn-wristband {
+  display: none;
+}
+
+@media print {
+  body.zn-print-wristband * {
+    visibility: hidden;
+  }
+
+  body.zn-print-wristband .zn-wristband,
+  body.zn-print-wristband .zn-wristband * {
+    visibility: visible;
+  }
+
+  body.zn-print-wristband .zn-wristband {
+    display: block;
+    position: absolute;
+    inset: 0 auto auto 0;
+    inline-size: 40mm;
+    padding: 2mm;
+    border: 0.3mm solid #000;
+    color: #000;
+    background: #fff;
+    font: 8pt / 1.2 var(--font-mono);
+  }
+
+  .zn-wristband table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .zn-wristband th,
+  .zn-wristband td {
+    padding: 0.4mm 0.6mm;
+    border-bottom: 0.15mm solid #000;
+    text-align: end;
+  }
+
+  .zn-wristband th:first-child,
+  .zn-wristband td:first-child {
+    text-align: start;
+  }
+
+  .zn-wristband p {
+    margin: 0 0 1mm;
+    font-weight: 700;
+  }
+}
+
+/* ── la page des calculateurs ─────────────────────────────────────────── */
+
+.zn-calc-hub {
+  gap: var(--sp-15);
+}
+
+.zn-calc-hub__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.zn-calc-hub__titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-calc-hub__titles h1 {
+  margin: 0;
+}
+
+@media (min-width: 900px) {
+  .zn-calc-hub__titles {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--sp-15);
+  }
+
+  .zn-calc-hub__titles .zn-calc-head__lede {
+    max-inline-size: 380px;
+  }
+}
+
+.zn-calc-hub__families {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-14);
+}
+
+@media (min-width: 900px) {
+  .zn-calc-hub__families {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-15);
+  }
+}
+
+.zn-calc-hub__familyhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: var(--sp-5);
+  border-bottom: var(--border-rule);
+}
+
+.zn-calc-hub__family ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-calc-hub__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--sp-6);
+  row-gap: var(--sp-2);
+  align-items: center;
+  padding-block: var(--sp-7);
+  border-bottom: 1px solid var(--line-divider);
+  color: var(--text-body);
+  text-decoration: none;
+}
+
+.zn-calc-hub__row > svg {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.zn-calc-hub__name {
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+}
+
+.zn-calc-hub__answer {
+  font: var(--fs-mono-sm) / 1.4 var(--font-mono);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.zn-calc-hub__row:hover .zn-calc-hub__name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-calc-hub__other {
+  margin: 0;
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-calc-hub__other a {
+  color: var(--text-body);
+}

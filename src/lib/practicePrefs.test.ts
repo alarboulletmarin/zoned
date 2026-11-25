@@ -23,7 +23,7 @@ describe("la mémoire du dernier choix", () => {
   });
 
   test("null efface", () => {
-    saveLastPractice("ultra");
+    saveLastPractice("trail");
     saveLastPractice(null);
     expect(loadLastPractice()).toBeNull();
   });
@@ -44,13 +44,13 @@ describe("la mémoire du dernier choix", () => {
 
 describe("resolvePractice", () => {
   test("l'URL gagne sur la mémoire", () => {
-    saveLastPractice("ultra");
+    saveLastPractice("road");
     expect(resolvePractice("trail", PRACTICES)).toBe("trail");
   });
 
   test("sans paramètre, la mémoire prend le relais", () => {
-    saveLastPractice("ultra");
-    expect(resolvePractice(null, PRACTICES)).toBe("ultra");
+    saveLastPractice("trail");
+    expect(resolvePractice(null, PRACTICES)).toBe("trail");
   });
 
   test("sans paramètre ni mémoire, aucune pratique n'est devinée", () => {
@@ -60,13 +60,19 @@ describe("resolvePractice", () => {
   test("un paramètre illisible ne réveille pas la mémoire", () => {
     // Sinon un lien partagé avec ?practice=nimportequoi afficherait la
     // pratique du destinataire, pas celle du lien : surprenant et faux.
-    saveLastPractice("ultra");
+    saveLastPractice("trail");
     expect(resolvePractice("nimportequoi", PRACTICES)).toBeNull();
   });
 
   test("une pratique que la personne a masquée n'est pas rouverte", () => {
-    saveLastPractice("triathlon");
-    expect(resolvePractice(null, ["road", "trail"])).toBeNull();
-    expect(resolvePractice("triathlon", ["road", "trail"])).toBeNull();
+    saveLastPractice("trail");
+    expect(resolvePractice(null, ["road"])).toBeNull();
+    expect(resolvePractice("trail", ["road"])).toBeNull();
+  });
+
+  test("une pratique retirée, mémorisée par une ancienne version, ne revient pas", () => {
+    store.set("zoned:practice", "ultra");
+    expect(loadLastPractice()).toBeNull();
+    expect(resolvePractice("triathlon", PRACTICES)).toBeNull();
   });
 });

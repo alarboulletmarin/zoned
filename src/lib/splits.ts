@@ -9,9 +9,10 @@ export interface SplitRow {
 }
 
 export function formatSplitTime(totalSeconds: number): string {
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = Math.round(totalSeconds % 60);
+  const total = Math.round(totalSeconds);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
   if (h > 0) {
     return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   }
@@ -34,9 +35,7 @@ export function formatReadableTime(totalSeconds: number): string {
 }
 
 export function formatPaceDisplay(paceMinPerKm: number): string {
-  const min = Math.floor(paceMinPerKm);
-  const sec = Math.round((paceMinPerKm - min) * 60);
-  return `${min}:${sec.toString().padStart(2, "0")}`;
+  return formatSplitTime(paceMinPerKm * 60);
 }
 
 export function generateSplits(
@@ -46,7 +45,7 @@ export function generateSplits(
 ): SplitRow[] {
   const fullSplits = Math.floor(distanceKm);
   const partialKm = distanceKm - fullSplits;
-  const hasPartial = partialKm > 0.001;
+  const hasPartial = partialKm > 1e-9;
   const numberOfSplits = hasPartial ? fullSplits + 1 : fullSplits;
 
   // Base pace in seconds per km
@@ -81,13 +80,17 @@ export function generateSplits(
     });
   }
 
-  // Adjust last split cumulative to match exact total time
-  // (floating point rounding correction)
-  if (splits.length > 0) {
-    const diff = totalTimeSeconds - splits[splits.length - 1].cumulativeTimeSeconds;
-    splits[splits.length - 1].cumulativeTimeSeconds = totalTimeSeconds;
-    splits[splits.length - 1].splitTimeSeconds += diff;
+  // Normalize all splits, including partial kilometres, to the exact goal.
+  // Keeping one factor preserves the linear pace progression at the finish.
+  const factor = totalTimeSeconds / cumulative;
+  cumulative = 0;
+  for (const split of splits) {
+    split.splitTimeSeconds *= factor;
+    split.paceMinPerKm *= factor;
+    cumulative += split.splitTimeSeconds;
+    split.cumulativeTimeSeconds = cumulative;
   }
+  if (splits.length > 0) splits[splits.length - 1].cumulativeTimeSeconds = totalTimeSeconds;
 
   return splits;
 }

@@ -33,9 +33,9 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     summaryEn:
       "Your plan is split into 4 progressive phases: Base, Build, Peak and Taper. Each phase has a specific purpose.",
     details:
-      "La périodisation suit le modèle de Daniels (Phases I-IV) adapté à chaque distance. Hors affûtage, un plan 5K consacre 35 % des semaines à la base, 35 % au build et 30 % au peak ; un marathon 45 / 33 / 22 ; un ultra 55 / 30 / 15. Les plans courts (< 12 semaines) compriment la base de 8 points au profit du build et du peak. Le bloc spécifique est dimensionné en premier et garde un minimum (2 semaines sur 5K, 10K et semi, 3 sur marathon et ultra) dès que le plan compte 8 semaines hors affûtage : une seule semaine à allure marathon n'est pas une phase de peak. La base est plafonnée à 12 semaines, le surplus va au build (60 %) et au peak (40 %).",
+      "La périodisation suit le modèle de Daniels (Phases I-IV) adapté à chaque distance. Hors affûtage, un plan 5K consacre 35 % des semaines à la base, 35 % au build et 30 % au peak ; un marathon 45 / 33 / 22 . Les plans courts (< 12 semaines) compriment la base de 8 points au profit du build et du peak. Le bloc spécifique est dimensionné en premier et garde un minimum (2 semaines sur 5K, 10K et semi, 3 sur marathon) dès que le plan compte 8 semaines hors affûtage : une seule semaine à allure marathon n'est pas une phase de peak. La base est plafonnée à 12 semaines, le surplus va au build (60 %) et au peak (40 %).",
     detailsEn:
-      "Periodization follows Daniels' model (Phases I-IV) adapted to each distance. Outside the taper, a 5K plan spends 35% of its weeks in base, 35% in build and 30% in peak; a marathon 45 / 33 / 22; an ultra 55 / 30 / 15. Short plans (< 12 weeks) compress the base by 8 points in favour of build and peak. The specific block is sized first and keeps a minimum (2 weeks for 5K, 10K and half, 3 for marathon and ultra) once the plan has 8 weeks outside the taper: a single week of marathon-pace work is not a peak phase. The base is capped at 12 weeks, the surplus goes to build (60%) and peak (40%).",
+      "Periodization follows Daniels' model (Phases I-IV) adapted to each distance. Outside the taper, a 5K plan spends 35% of its weeks in base, 35% in build and 30% in peak; a marathon 45 / 33 / 22. Short plans (< 12 weeks) compress the base by 8 points in favour of build and peak. The specific block is sized first and keeps a minimum (2 weeks for 5K, 10K and half, 3 for marathon) once the plan has 8 weeks outside the taper: a single week of marathon-pace work is not a peak phase. The base is capped at 12 weeks, the surplus goes to build (60%) and peak (40%).",
     rules: [
       {
         text: "5K : Base 35 % | Build 35 % | Peak 30 % | Taper 1 sem.",
@@ -50,12 +50,8 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
         textEn: "Marathon: Base 45% | Build 33% | Peak 22% | Taper 3 wks",
       },
       {
-        text: "Ultra : Base 55 % | Build 30 % | Peak 15 % | Taper 3 sem.",
-        textEn: "Ultra: Base 55% | Build 30% | Peak 15% | Taper 3 wks",
-      },
-      {
-        text: "Peak minimum : 2 semaines (5K à semi), 3 semaines (marathon, ultra) ; base plafonnée à 12 semaines",
-        textEn: "Peak minimum: 2 weeks (5K to half), 3 weeks (marathon, ultra); base capped at 12 weeks",
+        text: "Peak minimum : 2 semaines (5K à semi), 3 semaines (marathon) ; base plafonnée à 12 semaines",
+        textEn: "Peak minimum: 2 weeks (5K to half), 3 weeks (marathon); base capped at 12 weeks",
       },
     ],
     references: [
@@ -159,9 +155,9 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     summaryEn:
       "The slope is computed so the peak lands 2 to 3 weeks before the taper. Never more than +10% a week, but that is only a ceiling.",
     details:
-      "Le générateur calcule des cibles en km réels à partir de ta distance, ton niveau, tes jours par semaine et le volume que tu déclares (un marathonien intermédiaire passe de 55 à 90 km par semaine, comme le plan 18/55 de Pfitzinger). L'augmentation hebdomadaire est celle qui mène du départ au pic dans les semaines de charge disponibles, pour que le pic arrive 2 semaines (5K à semi) ou 3 semaines (marathon, ultra) avant l'affûtage, puis ondule entre 93 et 100 %. Le +10 % est un plafond de sécurité, pas une consigne : la règle des 10 % n'a pas de preuve expérimentale (Buist 2008), ce que les données montrent, c'est le risque des sauts de plus de 20 à 30 %. Chaque distance impose aussi un volume de pic minimal (50 km sur marathon, 35 sur semi), que le nombre de jours ou l'objectif finir ne peuvent pas faire descendre.",
+      "Le générateur calcule des cibles en km réels à partir de ta distance, ton niveau, tes jours par semaine et le volume que tu déclares (un marathonien intermédiaire passe de 55 à 90 km par semaine, comme le plan 18/55 de Pfitzinger). L'augmentation hebdomadaire est celle qui mène du départ au pic dans les semaines de charge disponibles, pour que le pic arrive 2 semaines (5K à semi) ou 3 semaines (marathon) avant l'affûtage, puis ondule entre 93 et 100 %. Le +10 % est un plafond de sécurité, pas une consigne : la règle des 10 % n'a pas de preuve expérimentale (Buist 2008), ce que les données montrent, c'est le risque des sauts de plus de 20 à 30 %. Chaque distance impose aussi un volume de pic minimal (50 km sur marathon, 35 sur semi), que le nombre de jours ou l'objectif finir ne peuvent pas faire descendre.",
     detailsEn:
-      "The generator computes real km targets from your distance, level, days per week and the volume you declare (an intermediate marathoner goes from 55 to 90 km a week, like Pfitzinger's 18/55). The weekly increase is the one that gets from start to peak in the load weeks available, so the peak lands 2 weeks (5K to half) or 3 weeks (marathon, ultra) before the taper, then undulates between 93 and 100%. The +10% is a safety ceiling, not a prescription: the 10% rule has no experimental support (Buist 2008), what the data shows is the risk of jumps above 20-30%. Each distance also sets a minimum peak volume (50 km for a marathon, 35 for a half) that the number of days or the \"finish\" goal cannot lower.",
+      "The generator computes real km targets from your distance, level, days per week and the volume you declare (an intermediate marathoner goes from 55 to 90 km a week, like Pfitzinger's 18/55). The weekly increase is the one that gets from start to peak in the load weeks available, so the peak lands 2 weeks (5K to half) or 3 weeks (marathon) before the taper, then undulates between 93 and 100%. The +10% is a safety ceiling, not a prescription: the 10% rule has no experimental support (Buist 2008), what the data shows is the risk of jumps above 20-30%. Each distance also sets a minimum peak volume (50 km for a marathon, 35 for a half) that the number of days or the \"finish\" goal cannot lower.",
     rules: [
       {
         text: "Pente calculée pour atteindre le pic 2-3 semaines avant l'affûtage ; +10 % par semaine en plafond",
@@ -216,8 +212,8 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
         textEn: "Caps: 36 km or 3 h 15 (marathon), 30 km or 150 min (half), 4 h (trail)",
       },
       {
-        text: "Pic 2 semaines avant la course (5K/10K), 3 (semi), 4 (marathon/ultra)",
-        textEn: "Peak 2 weeks before the race (5K/10K), 3 (half), 4 (marathon/ultra)",
+        text: "Pic 2 semaines avant la course (5K/10K), 3 (semi), 4 (marathon)",
+        textEn: "Peak 2 weeks before the race (5K/10K), 3 (half), 4 (marathon)",
       },
     ],
     references: [
@@ -286,8 +282,8 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
       "Bosquet's meta-analysis (2007) gives the recipe: cut volume by 41-60% in total, progressively rather than in one step, over about two weeks, keeping intensity and frequency. Zoned follows the ladders of the reference plans: for a marathon 78% of peak at day −21, 60% at day −14, 40% in race week (Pfitzinger: 75 / 60 / 40; Higdon: 73 / 53 / 23), and a disciplined three-week taper, which is what works best for recreational runners (Smyth & Lawlor 2021). For 10K and half, 72% then 45%; for a 5K, a race week at 55%. Key sessions stay, shortened; the long run comes down with the volume. In race week the jogs are sized on the target, the race itself is not counted.",
     rules: [
       {
-        text: "Marathon / ultra : 78 % → 60 % → 40 % du pic (semaine de course)",
-        textEn: "Marathon / ultra: 78% → 60% → 40% of peak (race week)",
+        text: "Marathon : 78 % → 60 % → 40 % du pic (semaine de course)",
+        textEn: "Marathon: 78% → 60% → 40% of peak (race week)",
       },
       {
         text: "10K / Semi / Trail : 72 % → 45 % ; 5K : 55 % en semaine de course",

@@ -6,11 +6,15 @@
     { "source": "/routes", "destination": "/library", "permanent": true },
     { "source": "/routes/:path*", "destination": "/library", "permanent": true },
     { "source": "/calculators/what-if", "destination": "/calculators", "permanent": true },
-    { "source": "/calculators/age-graded", "destination": "/calculators/equivalence", "permanent": true }
+    { "source": "/calculators/age-graded", "destination": "/calculators/vma", "permanent": true },
+    { "source": "/calculators/equivalence", "destination": "/calculators/vma", "permanent": true },
+    { "source": "/calculators/convertisseur", "destination": "/calculators/allures", "permanent": true },
+    { "source": "/collections/objectif-ultra", "destination": "/collections/objectif-trail-long", "permanent": true },
+    { "source": "/my-zones", "destination": "/calculators/zones", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/(today|activities|favorites|my-zones|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" },
-    { "source": "/_en/(today|activities|favorites|my-zones|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" }
+    { "source": "/(today|activities|favorites|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" },
+    { "source": "/_en/(today|activities|favorites|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" }
   ],
   "routes": [
     {
@@ -19,7 +23,7 @@
       "dest": "/_en"
     },
     {
-      "src": "/((?!_en(?:/|$)|spa\\.html$)[^.]*)",
+      "src": "/((?!_en(?:/|$)|spa\\.html$|api(?:/|$))[^.]*)",
       "has": [{ "type": "query", "key": "lang", "value": "en" }],
       "dest": "/_en/$1"
     }
@@ -47,6 +51,23 @@
       "source": "/index.html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Content-Type", "value": "application/json; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" }
+      ]
+    },
+    {
+      "source": "/(llms|llms-full)\\.txt",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" }
       ]
     },
     {

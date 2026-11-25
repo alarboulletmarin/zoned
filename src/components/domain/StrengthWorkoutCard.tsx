@@ -1,7 +1,7 @@
 import { useSharedTransition } from "@/lib/sharedTransition";
 /**
- * The strength session in the catalogue: the grid card, the dense card and the
- * list row.
+ * The strength session in the catalogue: the grid card and the dense card.
+ * The library row is `WorkoutRow`, shared with the endurance sessions.
  *
  * The grid and dense cards are .zn-wcard (workout-card.css), the same piece of
  * paper the running card uses, a library grid mixing the two disciplines has
@@ -71,7 +71,7 @@ export function IntensityMeter({
 }
 
 /** "Haltères, kettlebell +2", or the bodyweight mark. */
-function useEquipmentLabel(workout: StrengthWorkoutTemplate) {
+export function useEquipmentLabel(workout: StrengthWorkoutTemplate) {
   const { t } = useTranslation("strength");
   const list = workout.equipment.filter((e) => e !== "none");
 
@@ -181,63 +181,6 @@ export function StrengthWorkoutCardCompact({
           <span className="zn-wcard__code">{workout.id}</span>
         </div>
       </article>
-    </Link>
-  );
-}
-
-// List item version for strength workouts
-interface StrengthWorkoutListItemProps {
-  workout: StrengthWorkoutTemplate;
-  className?: string;
-}
-
-export function StrengthWorkoutListItem({ workout, className }: StrengthWorkoutListItemProps) {
-  const { t: tStrength } = useTranslation("strength");
-  const { t: tLib } = useTranslation("library");
-  const pick = usePickLang();
-  const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
-  const equipment = useEquipmentLabel(workout);
-  const isEn = useIsEnglish();
-  const to = localeTo(`/workout/${workout.id}`, isEn);
-  const shareOrigin = useSharedTransition(to, "wk", workout.id, ".zn-str-row__name");
-
-  return (
-    <Link to={to} className={cn("zn-str-row", className)} onClick={shareOrigin}>
-      {/* Title and mobile duration */}
-      <div className="zn-fill">
-        <span className="zn-str-row__name">{pick(workout, "name")}</span>
-        {/* Mobile: show duration below title */}
-        <div className="zn-str-row__small">
-          {formatDurationMinutes(avgDuration)}
-        </div>
-      </div>
-
-      {/* Desktop: show all info inline */}
-      <div className="zn-str-row__facts">
-        <span className="zn-str-row__col">
-          {tStrength(`categories.${workout.category}`)}
-        </span>
-        <span className="zn-str-row__col" style={{ "--col": "6ch" } as CSSProperties}>
-          {formatDurationMinutes(avgDuration)}
-        </span>
-        <Badge variant="secondary">{tLib(`difficulty.${workout.difficulty}`)}</Badge>
-        <span className="zn-str-row__col" style={{ "--col": "14ch" } as CSSProperties}>
-          {equipment.label}
-        </span>
-      </div>
-
-      {/* La rampe, entre les faits et le favori, là où la rangée de course
-          porte son profil : la même vignette au même endroit. */}
-      <IntensityMeter
-        intensity={workout.intensity}
-        className="zn-profile-mini zn-str-row__profile"
-      />
-
-      {/* Actions */}
-      <div className="zn-row zn-fixed" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
-        <FavoriteButton workoutId={workout.id} size="sm" />
-        <IntensityBadge intensity={workout.intensity} size="sm" />
-      </div>
     </Link>
   );
 }

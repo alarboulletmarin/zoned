@@ -12,7 +12,7 @@
  *   - All prebuilt training plans
  *
  * What we exclude (matches robots.txt Disallow rules):
- *   - /my-zones, /favorites, /settings, /profile, /activities (per-user state)
+ *   - /favorites, /settings, /profile, /activities (per-user state)
  *   - /plans (user dashboard), /plan/new/free
  *   - /plan/:id (localStorage-only entities)
  *
@@ -198,7 +198,10 @@ async function getSlugsFromDir(dir: string): Promise<SlugEntry[]> {
  */
 function getCalculatorPaths(): string[] {
   const app = readFileSync(join(ROOT, "src/App.tsx"), "utf-8");
-  const paths = [...app.matchAll(/path="(\/calculators\/[a-z0-9-]+)"/g)].map((m) => m[1]);
+  const paths = [...app.matchAll(/path="(\/calculators\/[a-z0-9-]+)" element=\{<(\w+)/g)]
+    // A redirect (NavigateKeepingQuery) is not a page: no sitemap entry, no shell.
+    .filter((m) => !m[2].startsWith("Navigate"))
+    .map((m) => m[1]);
   return [...new Set(paths)];
 }
 

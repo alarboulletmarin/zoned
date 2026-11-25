@@ -1,0 +1,84 @@
+/* The split chart stays inside the field grid even with 43 marathon bars. */
+.zn-splits__select {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--hit-min);
+  padding: var(--sp-4);
+  border: var(--bw-rule) solid var(--ink-1);
+  border-radius: var(--r-md);
+  background: var(--paper-raised);
+  color: var(--text-body);
+  font: inherit;
+}
+
+.zn-splits__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  block-size: 72px;
+  inline-size: 100%;
+}
+
+.zn-splits__bar {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  background: var(--zone-3);
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+}
+
+.zn-splits__bar[data-half="second"] { background: var(--zone-5); }
+
+.zn-splits__bars[data-animate] .zn-splits__bar {
+  transition: height var(--dur-base) var(--ease-out);
+}
+
+.zn-splits__axis {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--fs-caption);
+  font-family: var(--font-mono);
+}
+
+.zn-splits__start { max-inline-size: 320px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .zn-splits__bars[data-animate] .zn-splits__bar { transition: none; }
+}
+
+/* hm is a duration primitive and paints zero as empty. A clock keeps midnight. */
+.zn-splits__start[data-midnight] .zn-calc-step { position: relative; }
+.zn-splits__start[data-midnight] input::placeholder { color: transparent; }
+.zn-splits__start[data-midnight] .zn-calc-step::after {
+  content: "0:00";
+  position: absolute;
+  inset-inline: calc(var(--hit-min) + var(--sp-3));
+  inset-block: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  color: var(--text-body);
+  font: var(--fw-medium) var(--fs-h3) / 1.2 var(--font-mono);
+}
+
+/* Keep the goal readable beside the distance at phone widths. */
+@media (max-width: 480px) {
+  .zn-splits .zn-calc-fields .zn-calc-step {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .zn-splits .zn-calc-fields .zn-calc-step__input {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding-inline: var(--sp-3);
+    font-size: var(--fs-body);
+  }
+  .zn-splits .zn-calc-fields .zn-calc-step__btn { inline-size: 100%; }
+  .zn-splits .zn-calc-fields .zn-calc-step__unit {
+    inset-block-end: auto;
+    block-size: var(--hit-min);
+    inset-inline-end: var(--sp-3);
+  }
+}

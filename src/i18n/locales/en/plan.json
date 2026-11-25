@@ -20,6 +20,33 @@
       "recovery": "Recovery"
     }
   },
+  "import": {
+    "title": "Imported plan",
+    "loading": "Reading the plan…",
+    "subtitleConfig": "An assistant prepared the settings of this plan, and Zoned built it with its own generator. Nothing is saved until you add it.",
+    "subtitlePlan": "An assistant wrote this plan with Zoned workouts. Nothing is saved until you add it.",
+    "add": "Add to my plans",
+    "added": "Plan added to your plans",
+    "backToPlans": "My plans",
+    "raceDay": "Race day",
+    "recoveryWeek": "recovery",
+    "warningsTitle": "Adjusted on import",
+    "failed": "The plan could not be built from this link.",
+    "invalidKicker_one": "{{count}} error",
+    "invalidKicker_other": "{{count}} errors",
+    "invalidTitle": "This plan cannot be imported",
+    "invalidLead": "The link is readable, but what it holds does not follow the Zoned format. Copy the report and paste it to the assistant that wrote it: each line tells it what to fix.",
+    "issuesLabel": "Plan errors",
+    "copyReport": "Copy for my assistant",
+    "reportCopied": "Report copied",
+    "reportCopyFailed": "The report could not be copied",
+    "unreadable": {
+      "missing": "This link holds no plan. It must end with #d= followed by the encoded plan.",
+      "malformed_base64": "The plan in this link is truncated or badly encoded. The link may have been cut when it was copied.",
+      "malformed_json": "The plan in this link is not valid JSON.",
+      "unknown_encoding": "This link uses an encoding this version of Zoned does not know."
+    }
+  },
   "title": "Training Plans",
   "create": "Create a plan",
   "createTitle": "New training plan",
@@ -763,8 +790,7 @@
     "noRace": "No race in sight?",
     "otherWays": "Rather have",
     "prebuiltLink": "a plan already written",
-    "freeLink": "an empty calendar to fill yourself",
-    "announce": "Ultra and triathlon: the sessions are here, the plans are coming."
+    "freeLink": "an empty calendar to fill yourself"
   },
   "event": {
     "title": "Your race",
@@ -775,7 +801,6 @@
   "practice": {
     "title": "What are you training for?",
     "subtitle": "This decides everything else: the distances offered, and the questions asked.",
-    "soon": "soon",
     "distanceCount_one": "{{count}} distance",
     "distanceCount_other": "{{count}} distances",
     "workoutCount_one": "{{count}} session",
@@ -790,20 +815,7 @@
     "trail": {
       "label": "Trail",
       "body": "From short trail to 60K: elevation, terrain, descent."
-    },
-    "ultra": {
-      "label": "Ultra",
-      "body": "Beyond trail: time on feet, night running, fuelling.",
-      "announce": "An ultra plan is built over sixteen to fifty-two weeks, on time on feet, night running and a fuelling strategy. What the generator produces at that distance is not dependable enough to offer yet, so we don't offer it. Nothing is blocked in the meantime: the ultra sessions are in the library, and the calculators work out your paces."
-    },
-    "triathlon": {
-      "label": "Triathlon",
-      "body": "Swim, bike, run. The sessions are here, the plans are coming.",
-      "announce": "Triathlon plans need per-discipline slots and brick sessions: that's a separate project, and it hasn't started. Nothing is blocked in the meantime, the bike and swim sessions are in the library, and the FTP and CSS tests work out your zones."
-    },
-    "announceKicker": "What already works",
-    "announceLibrary": "See the sessions",
-    "announceNumbers": "Open the calculators"
+    }
   },
   "terrain": {
     "title": "What are you running on?",
@@ -818,18 +830,6 @@
     "elevation": "Race elevation gain (m)",
     "elevationPlaceholder": "e.g. 1200",
     "elevationDesc": "The total climb the organiser advertises. Optional."
-  },
-  "ultra": {
-    "title": "What needs rehearsing",
-    "subtitle": "What will happen on race day and can be learnt in training. Tick what applies.",
-    "night": "Running at night",
-    "nightDesc": "A headtorch run, so race night isn't the first one.",
-    "fuelling": "Rehearsing fuelling",
-    "fuellingDesc": "Eating and drinking on the move: the stomach trains like the legs.",
-    "poles": "Using poles",
-    "polesDesc": "Power-hiking with poles is a skill of its own.",
-    "backToBack": "Two days in a row",
-    "backToBackDesc": "A long run on Saturday, another on Sunday on tired legs."
   },
   "page": {
     "back": "Plans",
@@ -1109,7 +1109,7 @@
       "longest": "Longest run",
       "create": "Create the plan",
       "noVma": "Paces estimated from your level, without a VMA.",
-      "noVmaLink": "Set it in My zones",
+      "noVmaLink": "Set it in your profile",
       "week1": "Your first week",
       "timeline": "The plan, week by week"
     },

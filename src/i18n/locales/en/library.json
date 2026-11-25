@@ -2,6 +2,34 @@
   "title": "Workout Library",
   "catalogueIndex": "Index of all sessions",
   "catalogue": "{{workouts}} sessions · {{categories}} categories · {{disciplines}} disciplines",
+  "catalogueFamilies": "{{workouts}} sessions · {{families}} families",
+  "results": {
+    "all": "Sessions",
+    "forQuery": "Results for {{query}}",
+    "backToFamilies": "All families"
+  },
+  "shortcuts": {
+    "label": "Shortcuts",
+    "favorites": "Favorites"
+  },
+  "families": {
+    "label": "Families",
+    "all": "All"
+  },
+  "index": {
+    "title": "By family",
+    "otherSports": "Other sports",
+    "meta_one": "{{count}} session · {{duration}}",
+    "meta_other": "{{count}} sessions · {{duration}}",
+    "durationRange": "{{min}} to {{max}}"
+  },
+  "durationBucket": {
+    "le30": "30 min or less",
+    "30_45": "30 to 45 min",
+    "45_60": "45 to 60 min",
+    "60_90": "1 h to 1 h 30",
+    "gt90": "Longer"
+  },
   "subtitle": "{{count}} scientific training sessions",
   "subtitleStrength": "{{count}} strength sessions",
   "subtitleAll": "{{count}} total sessions",
@@ -21,34 +49,19 @@
   },
   "meta": {
     "results_one": "{{count}} session",
-    "results_other": "{{count}} sessions",
-    "filters_one": "{{count}} active filter",
-    "filters_other": "{{count}} active filters"
-  },
-  "viewMode": {
-    "label": "View",
-    "grid": "Grid",
-    "compact": "Compact",
-    "list": "List"
+    "results_other": "{{count}} sessions"
   },
   "filters": {
     "title": "Filters",
-    "category": "Category",
-    "difficulty": "Difficulty",
     "duration": "Duration",
     "terrain": "Terrain",
-    "targetSystem": "Target System",
-    "allCategories": "All categories",
-    "allDifficulties": "All levels",
-    "allTerrains": "All terrains",
-    "allSystems": "All systems",
-    "durationRange": "{{min}} - {{max}} min",
-    "favoritesOnly": "Favorites only",
-    "search": "Search...",
     "searchPlaceholder": "Search: “30/30”, “threshold”, “hills”…",
     "searchLabel": "Search workouts",
-    "apply": "Apply",
-    "activeFilters": "active filters"
+    "seeResults_one": "Show {{count}} session",
+    "seeResults_other": "Show {{count}} sessions",
+    "peak": "Intensity peak",
+    "sport": "Sport",
+    "level": "Level"
   },
   "emptyState": {
     "noResults": "No workouts found",
@@ -60,17 +73,9 @@
     "noMatchForQuery": "“{{query}}” matches none of the {{total}} sessions in the catalogue."
   },
   "terrain": {
-    "flat": "Flat preferred",
-    "hills": "Hills required",
-    "track": "Track required"
-  },
-  "targetSystem": {
-    "aerobic_base": "Aerobic Base",
-    "aerobic_power": "Aerobic Power",
-    "lactate_threshold": "Lactate Threshold",
-    "vo2max": "VO2max",
-    "speed": "Speed",
-    "strength": "Strength"
+    "no_track": "No track",
+    "climb": "With elevation",
+    "no_hills": "No hills"
   },
   "categories": {
     "recovery": "Recovery",
@@ -101,6 +106,16 @@
   "zoneBar": {
     "of": "{{name}} profile"
   },
+  "row": {
+    "favorite": "In your favorites",
+    "track": "Track"
+  },
+  "table": {
+    "session": "Session",
+    "profile": "Profile",
+    "peak": "Peak",
+    "climb": "D+"
+  },
   "difficulty": {
     "beginner": "Beginner",
     "intermediate": "Intermediate",
@@ -108,15 +123,23 @@
     "elite": "Elite"
   },
   "sort": {
-    "label": "Sort by",
-    "name": "Name",
-    "difficulty": "Difficulty",
-    "duration": "Duration"
+    "by": {
+      "duration": "Duration",
+      "intensity": "Intensity",
+      "level": "Level"
+    },
+    "word": {
+      "duration": "duration",
+      "intensity": "intensity",
+      "level": "level"
+    },
+    "cycle": "Sorted by {{current}}. Tap to sort by {{next}}"
   },
   "noResults": "No workouts match your criteria",
   "clearFilters": "Clear filters",
   "clearSearch": "Clear the search",
-  "showMore": "Show more",
+  "showMore_one": "Show the other session",
+  "showMore_other": "Show the other {{count}}",
   "showingCount": "{{visible}} of {{total}} workouts",
   "draw": {
     "title": "Draw a session",
@@ -444,9 +467,7 @@
   },
   "practice": {
     "label": "Discipline",
-    "all": "All",
-    "soon": "soon",
-    "draw": "Draw me a session"
+    "all": "All"
   },
   "metaLine": {
     "category": {

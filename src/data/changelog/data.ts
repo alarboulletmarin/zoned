@@ -2,6 +2,120 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "1.2.0",
+    date: "2026-11-25",
+    changes: {
+      added: [
+        {
+          text: "Les agents IA peuvent lire Zoned et rendre un plan. Une API JSON statique et versionnée est générée au build sous `/api/v1/` (zones, séances avec leur arbre d'étapes, plans tout faits, schéma JSON de l'import), en CORS ouvert. `/plan/import#d=…` ouvre un plan écrit par un assistant : les réglages d'un plan assisté, que Zoned génère, ou un plan écrit semaine par semaine avec des séances du catalogue. Le contenu reste dans le fragment de l'URL et n'atteint jamais un serveur. La validation situe chaque problème (semaine 3, séance 2) et rien n'est enregistré avant Ajouter à mes plans.",
+          textEn: "AI agents can read Zoned and hand a plan back. A static, versioned JSON API is generated at build time under `/api/v1/` (zones, sessions with their step tree, prebuilt plans, the import JSON Schema), with open CORS. `/plan/import#d=…` opens a plan an assistant wrote: the settings of an assisted plan, which Zoned generates, or a plan written week by week with catalogue sessions. The payload stays in the URL fragment and never reaches a server. Validation places every issue (week 3, session 2) and nothing is saved until Add to my plans.",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "`llms.txt` est généré depuis les données, centré sur la course, avec une section pour les agents IA, et `llms-full.txt` liste toutes les séances. La page À propos renvoie aux deux. Les séances et les plans sont proposés sous CC BY 4.0, le code reste sous MIT.",
+          textEn: "`llms.txt` is generated from the data, centred on running, with a section for AI agents, and `llms-full.txt` lists every session. The About page links both. Workout and plan content is offered under CC BY 4.0; the code stays MIT.",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Zones renvoie aux séances qui montent dans la zone ouverte (`/library?peak=N`, Séances qui montent en Z5) au lieu de la bibliothèque entière.",
+          textEn: "Zones links to the sessions that peak in the open zone (`/library?peak=N`, Sessions that peak in Z5) instead of the whole library.",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+      ],
+      changed: [
+        {
+          text: "La bibliothèque de séances est redessinée autour d'une rangée, une action : chaque séance est un seul lien, avec son nom (un petit cœur plein si elle est en favori), son profil de zones en pleine largeur, son pic, sa durée (`1 h 03`), son niveau, son D+ et Piste si besoin. Les vues grille et compacte disparaissent. Sur téléphone, les douze familles sont l'entrée ; sur bureau, une colonne fixe tient pratique, familles et autres sports, et les résultats forment un vrai tableau triable. La légende des zones filtre par pic, quatre raccourcis (30 min ou moins, Débutant, Sans piste, Favoris) reprennent le panneau, et Voir les N autres remplace le défilement infini.",
+          textEn: "The session library is redrawn around one row, one action: each session is a single link, with its name (a small filled heart when it is a favourite), its zone profile at full width, its peak, its duration (`1 h 03`), its level, its D+ and Track when needed. Grid and compact views are gone. On a phone the twelve families are the way in; on a desktop a sticky column holds practice, families and other sports, and the results are a real sortable table. The zone legend filters by peak, four shortcuts (30 min or less, Beginner, No track, Favorites) mirror the panel, and Show the other N replaces infinite scroll.",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "Filtres de la bibliothèque : le sport passe en premier avec le vélo et la natation, Pic d'intensité (Z1 à Z6) remplace Système ciblé, la durée devient cinq tranches sur la durée réelle, et le terrain se dit Sans piste, Avec dénivelé, Sans côtes, combinables. Nouveaux paramètres d'URL `peak`, `minDuration`, `terrain`, `sort`, `favorites=1` ; les anciens liens marchent toujours. Recherche et Filtres sont côte à côte, et sur téléphone ce bandeau reste en haut.",
+          textEn: "Library filters: sport comes first with cycling and swimming, Intensity peak (Z1 to Z6) replaces Target system, duration becomes five slices on the real duration, and terrain reads No track, With elevation, No hills, which combine. New URL parameters `peak`, `minDuration`, `terrain`, `sort`, `favorites=1`; old links still work. Search and Filters sit side by side, and on a phone that band stays at the top.",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "Les calculateurs partent de vos chiffres. `/calculators` s'ouvre sur quatre tuiles (VMA, FC max, seuil, prochaine course du plan) et range six outils en trois familles, chaque ligne donnant déjà sa réponse : Poser vos chiffres (Zones, Depuis un chrono), Convertir (Allures, Tapis roulant), Préparer une course (Splits, Jour de course). Chaque outil lit le profil et les plans, répond avant toute saisie et partage la même anatomie : champs à - et +, réponse en grand, bande de zones, provenance du chiffre, suite. Les tests FTP vélo et CSS natation prennent la même anatomie et ne proposent d'enregistrer qu'une valeur que le profil garde.",
+          textEn: "Calculators start from your numbers. `/calculators` opens on four tiles (VMA, max HR, threshold, next race of the plan) and lists six tools in three families, each row already giving its answer: Set your numbers (Zones, From a race time), Convert (Paces, Treadmill), Prepare a race (Splits, Race day). Every tool reads the profile and the plans, answers before anything is typed and shares one anatomy: stepped fields with - and +, the answer in large type, the zone band, where the number comes from, where to go next. The cycling FTP and swimming CSS tests share that anatomy and only offer to save a value the profile keeps.",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Un seul modèle de performance, Péronnet-Thibault profil intermédiaire. Depuis un chrono fusionne les calculateurs VMA et équivalences, et la VMA s'enregistre en un geste. Allures fusionne le convertisseur et le calculateur d'allure, placés sur vos zones ; la table des allures devient un tableau dense. Riegel disparaît.",
+          textEn: "One performance model, Péronnet-Thibault intermediate profile. From a race time merges the VMA and equivalence calculators, and the VMA can be saved in one tap. Paces merges the pace converter and the pace calculator, placed on your zones; the pace table becomes a dense table. Riegel is gone.",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Le simulateur jour J s'ouvre sur la prochaine course du plan, une pastille par course et Autre pour un formulaire libre. Préparer est un document chronologique en cinq chapitres (veille, matin, échauffement, course, après). Jour de course montre Maintenant et Ensuite avec un bouton Fait ; l'horloge n'est réelle que le jour de la course, écran maintenu allumé, sinon c'est une répétition avec un curseur de temps.",
+          textEn: "The race-day simulator opens on the next race of your plan, one chip per race and Other for a free form. Prepare is one chronological document in five chapters (evening before, morning, warm-up, race, after). Race day shows Now and Next with a Done button; the clock is the real one only on the race date, with the screen kept awake, otherwise it is a rehearsal with a time slider.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le calculateur de ravitaillement (`/guides/nutrition`) part des courses du plan comme le simulateur, répond dès que distance et durée sont connues, sans bouton Calculer, et suit le réglage d'unités : miles, livres et onces liquides en impérial.",
+          textEn: "The fuelling calculator (`/guides/nutrition`) starts from the races of your plan as the simulator does, answers as soon as distance and duration are known, without a Calculate button, and follows the unit setting: miles, pounds and fluid ounces in imperial.",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Mes zones fusionne dans Zones. Le profil s'ouvre sur trois tuiles (VMA, FC max, seuil) où VMA et FC max se posent, se changent et se suppriment, et un chiffre supprimé ne revient plus de l'ancien stockage. Les anciennes adresses redirigent définitivement en gardant leurs paramètres : `/my-zones` vers Zones, équivalences et age-graded vers `/calculators/vma`, le convertisseur vers `/calculators/allures`.",
+          textEn: "My zones merges into Zones. The profile opens on three tiles (VMA, max HR, threshold) where VMA and max HR are set, changed and deleted, and a deleted number no longer comes back from the old storage. Old addresses redirect permanently, keeping their query string: `/my-zones` to Zones, equivalence and age-graded to `/calculators/vma`, the converter to `/calculators/allures`.",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Ultra et triathlon quittent l'application : annoncés bientôt, ils menaient nulle part. Restent deux pratiques, Route et Trail. Leurs séances restent (sous Route, Trail ou Autres sports), et les plans, liens et records déjà enregistrés en ultra s'ouvrent toujours, rangés sous Trail. La collection Objectif ultra-trail devient Objectif trail long, avec redirection.",
+          textEn: "Ultra and triathlon leave the app: announced as coming soon, they led nowhere. Two practices remain, Road and Trail. Their sessions stay (under Road, Trail or Other sports), and plans, links and records already saved as ultra still open, filed under Trail. The Ultra-trail goal collection becomes Long trail goal, with a redirect.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les pages sont plus larges sur bureau : la colonne passe de 1152 à 1440 px, la page de la maquette, et le contenu de la barre du haut s'arrête avec elle, pour que logo et titre restent alignés à toute largeur. Les pages de lecture gardent leur mesure étroite.",
+          textEn: "Pages are wider on desktop: the column goes from 1152 to 1440 px, the page the design states, and the top bar's contents stop with it, so logo and title stay aligned at every width. Reading pages keep their narrow measure.",
+          category: "Design",
+          categoryEn: "Design",
+        },
+      ],
+      fixed: [
+        {
+          text: "Les profils condensés des séances peignaient une série d'intervalles en un seul bloc Z5 : 30/30, 45/15 et douze minutes à VO2max se ressemblaient. Une série montre maintenant ses répétitions en dents, sans cadre, et un bloc Z6 ne touche plus le bord de la barre.",
+          textEn: "Condensed session profiles painted an interval set as one solid Z5 block: 30/30, 45/15 and twelve minutes at VO2max looked alike. A set now shows its repetitions as teeth, without a frame, and a Z6 block no longer touches the bar's edge.",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Onze séances du catalogue avaient des efforts sans zone, si bien que leur profil les hachurait comme de la récupération et que leur pic retombait en Z2. Elles sont corrigées, et le validateur refuse désormais tout effort du corps de séance sans zone.",
+          textEn: "Eleven catalogue sessions had efforts without a zone, so their profile hatched them like recovery and their peak fell back to Z2. They are fixed, and the validator now rejects any main-set effort without a zone.",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Le filtre de terrain de la bibliothèque faisait autre chose que ce qu'il disait : Côtes requises gardait aussi les séances plates.",
+          textEn: "The library's terrain filter did something other than what it said: Hills required also kept flat sessions.",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "Un bouton désactivé n'a plus l'air actif : il gardait le vermillon ou le contour de sa variante. Un champ de calculateur avec unité ne coupe plus son chiffre en demi-colonne.",
+          textEn: "A disabled button no longer looks live: it kept its variant's vermillon or outline. A calculator field with a unit no longer clips its number in a half-width column.",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Un lien avec des paramètres n'hydrate plus la page prérendue, rendue sans eux, pour que le premier rendu ne contredise pas le HTML.",
+          textEn: "A link with query parameters no longer hydrates the prerendered page, rendered without them, so the first render cannot disagree with the HTML.",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+    },
+  },
+  {
     version: "1.1.0",
     date: "2026-11-24",
     changes: {

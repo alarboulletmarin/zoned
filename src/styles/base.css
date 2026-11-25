@@ -312,12 +312,11 @@ p {
 }
 
 /* Le troisième cas, la même raison de couche. Un champ numérique, un
-   chrono ou une recherche vit DANS un cadre (`.zn-numfield`, `.zn-tool__entry`,
-   les champs de recherche) qui dessine déjà l'anneau, par `:focus-within`. Leur `outline: none` est dans la couche des
+   chrono ou une recherche vit DANS un cadre (`.zn-numfield`, les champs de
+   recherche) qui dessine déjà l'anneau, par `:focus-within`. Leur `outline: none` est dans la couche des
    composants, donc cette règle sans couche l'écrasait : deux anneaux, un cadre
    vermillon dans le cadre vermillon. */
 .zn-numfield__input:focus-visible,
-.zn-tool__entry-input:focus-visible,
 .zn-lib__search-input:focus-visible,
 .zn-ref__search-input:focus-visible,
 .zn-build__name:focus-visible {

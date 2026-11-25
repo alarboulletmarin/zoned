@@ -476,7 +476,7 @@ export function buildWeekRings(input: {
   const total = { done: totalOf(done), target: totalOf(target) };
   const hasElevation = total.done.dplus > 0 || total.target.dplus > 0;
   const metrics: RingMetric[] = hasElevation ? ["time", "km", "dplus"] : ["time", "km"];
-  const mountain = input.practice === "trail" || input.practice === "ultra";
+  const mountain = input.practice === "trail";
 
   return {
     range: input.range,

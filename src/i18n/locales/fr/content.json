@@ -131,7 +131,9 @@
     "statsArticles": "Articles",
     "statsZones": "Zones",
     "countsLabel": "Le catalogue en chiffres",
-    "claimsTitle": "Ce que ça implique"
+    "claimsTitle": "Ce que ça implique",
+    "agentsLead": "Pour les assistants IA :",
+    "agentsApi": "API JSON des séances"
   },
   "changelogPage": {
     "releases": "{{n}} versions publiées",

@@ -167,18 +167,14 @@
       "body": "Every computation runs in your browser. The formulas are documented.",
       "tools": {
         "zones": "Compute your HR and pace zones from your VMA or HRmax.",
-        "converter": "Convert between min/km, km/h and min/mile in real time.",
-        "paceTable": "Every pace from 3:00 to 10:00/km with estimated times.",
         "treadmill": "Convert speed and incline into an equivalent outdoor pace.",
         "splits": "Plan your splits to hit your target time.",
-        "vma": "Estimate your VMA from a recent race result.",
-        "ftp": "Estimate your FTP from a 20-min or a ramp test.",
-        "css": "Estimate your CSS from a 400 m + 200 m swim test.",
-        "equivalence": "Predict your times across every distance from one result.",
+        "vma": "Your vVO2max and your times over every distance, from one result.",
         "raceSimulator": {
           "title": "Race-day simulator",
           "desc": "Full race-day plan: schedule, paces, nutrition, mental cues."
-        }
+        },
+        "allures": "Move between min/km, km/h and mile, and see the time it gives from 5K to marathon."
       }
     },
     "s07": {

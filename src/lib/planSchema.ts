@@ -2,7 +2,7 @@ import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, RaceDistance, Train
 import { WEEK_CATEGORIES } from "@/types/plan";
 
 // Domain bounds, defensive guards against pathological imports.
-const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
+export const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
 const MAX_VOLUME_PERCENT = 200;
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -128,12 +128,15 @@ function normalizeConfig(raw: unknown, fallbackId: string, fallbackCreatedAt: st
     planName: typeof raw.planName === "string" ? raw.planName : undefined,
     // Liste blanche littérale, comme `discipline` dans normalizeSession : une
     // valeur inconnue redevient undefined, et la pratique se déduit alors de
-    // raceDistance. Rien à migrer, aucune version à monter.
+    // raceDistance. Rien à migrer, aucune version à monter. Un ancien plan
+    // marqué ultra court en trail ; triathlon, qui n'a jamais eu de plan,
+    // retombe sur la déduction.
     practice:
-      raw.practice === "road" || raw.practice === "trail" ||
-      raw.practice === "ultra" || raw.practice === "triathlon"
+      raw.practice === "road" || raw.practice === "trail"
         ? raw.practice
-        : undefined,
+        : raw.practice === "ultra"
+          ? "trail"
+          : undefined,
     raceDistance: typeof raw.raceDistance === "string" ? raw.raceDistance as PlanConfig["raceDistance"] : undefined,
     raceDate: typeof raw.raceDate === "string" ? raw.raceDate : undefined,
     raceName: typeof raw.raceName === "string" ? raw.raceName : undefined,

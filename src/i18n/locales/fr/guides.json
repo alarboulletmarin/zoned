@@ -18,17 +18,16 @@
     "subtitle": "Ce que tu manges et bois à l'entraînement, en course et après la ligne.",
     "calculatorTitle": "Calculateur de ravitaillement",
     "calculatorDescription": "Ton plan de ravitaillement, calculé d'après Jeukendrup 2014 et les recommandations ACSM.",
-    "distanceLabel": "Distance (km)",
-    "durationLabel": "Durée (min)",
-    "weightLabel": "Poids (kg, optionnel)",
-    "calculate": "Calculer",
+    "distanceLabel": "Distance",
+    "durationLabel": "Durée",
+    "weightLabel": "Poids (optionnel)",
     "carbsPerHour": "Glucides / heure",
     "totalLabel": "{{value}}g total",
     "gelsNeeded": "Gels nécessaires",
     "gelFrequency": "toutes les {{min}} min",
     "gelNotNeeded": "non nécessaire",
     "fluidPerHour": "Hydratation / heure",
-    "totalFluid": "{{value}}ml total",
+    "totalFluid": "{{value}} au total",
     "sodiumPerHour": "Sodium / heure",
     "electrolyteDrinkRecommended": "boisson électrolytes recommandée",
     "waterSufficient": "eau suffisante",
@@ -48,7 +47,9 @@
       "recoveryAnswer": "La fameuse fenêtre de 30 minutes est un mythe : la vraie fenêtre est de 4-6 h pour le glycogène et 24-48 h pour les protéines (Aragon & Schoenfeld 2013, Margolis 2021). Le repas suivant suffit dans 9 cas sur 10. Si tu enchaînes une autre séance dans les 4 h : 1 à 1,2 g de glucides/kg + 0,3 g de protéines/kg (lait chocolaté validé). Sinon, repas complet dans les 2 h. Caséine 40 g avant le coucher (Trommelen 2023). Réhydrater à 1,5x le poids perdu, avec sodium. Éviter l'alcool 4-6 h après (-24 % de réparation musculaire)."
     },
     "kicker": "{{n}} thèmes",
-    "presetsLabel": "Distance de course"
+    "presetsLabel": "Distance de course",
+    "fromPlan": "Distance et objectif tirés de ton plan.",
+    "fromPlanNoTarget": "Distance tirée de ton plan, qui ne donne pas d'objectif de temps : pose la durée."
   },
   "racePrep": {
     "title": "Préparation de course",

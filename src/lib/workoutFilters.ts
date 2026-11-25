@@ -7,9 +7,10 @@
  * lookups and the multi-select filter matching used across the app.
  */
 
-import {
-  getWorkoutDuration,
-} from "@/components/visualization";
+// Straight from lib, not through `@/components/visualization`: that barrel
+// drags every chart and i18next along, and the agent API (lib/agentApi), read
+// by a Bun build script, reaches this module through sessionPrecision.
+import { getStructuredWorkoutDurationMinutes } from "@/lib/workoutStructure";
 import { estimateTSS, getWorkoutZones } from "@/lib/landing-stats";
 import type { AnyWorkoutTemplate, Difficulty, ZoneNumber } from "@/types";
 import { getWorkoutDiscipline, isStrengthWorkout } from "@/types";
@@ -41,7 +42,7 @@ export function getStrengthDuration(w: StrengthWorkoutTemplate): number {
 
 export function getAnyWorkoutDuration(w: AnyWorkoutTemplate): number {
   if (isStrengthWorkout(w)) return getStrengthDuration(w);
-  return getWorkoutDuration(w);
+  return Math.round(getStructuredWorkoutDurationMinutes(w));
 }
 
 /** Zones touched by a workout. Strength sessions have no aerobic zones. */

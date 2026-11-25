@@ -43,7 +43,14 @@ html {
   display: flex;
   align-items: center;
   gap: var(--sp-14);
-  padding: var(--sp-10) var(--pad-screen-x);
+  padding-block: var(--sp-10);
+  /* The rule runs edge to edge, the contents stop where the page column
+     stops (--page-max, shell.css): beyond it the logo would sit 40px from the
+     screen's edge while the page title sat hundreds of pixels in. */
+  padding-inline: max(
+    var(--pad-screen-x),
+    calc((100% - var(--page-max)) / 2 + var(--pad-screen-x))
+  );
   background: var(--surface-page);
   border-block-end: var(--border-rule);
 }

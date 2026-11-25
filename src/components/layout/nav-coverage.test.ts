@@ -42,12 +42,17 @@ const NOT_A_DESTINATION: Record<string, string> = {
   "/workout/shared": "atterrissage d'un lien partagé",
   "/weeks/shared": "atterrissage d'un lien partagé",
   "/plan/shared": "atterrissage d'un lien partagé",
+  "/plan/import": "atterrissage d'un lien écrit par un assistant IA",
   "/race-simulator/shared": "atterrissage d'un lien partagé",
   "/library/weekly": "redirection historique vers /weeks",
   "/quiz": "redirection historique vers /library/draw",
   "/plan/new/mode": "redirection historique vers /plan/new",
   "/plan/new/assisted": "redirection historique vers /plan/new",
   "/plan/new/free": "étape interne du parcours, atteinte depuis /plan/new",
+  "/calculators/convertisseur": "redirection vers /calculators/allures (outils fusionnés)",
+  "/calculators/equivalence": "redirection vers /calculators/vma (outils fusionnés)",
+  "/calculators/age-graded": "redirection historique vers /calculators/vma",
+  "/my-zones": "redirection vers /calculators/zones (outils fusionnés)",
 };
 
 function reachableFromNav(): Set<string> {

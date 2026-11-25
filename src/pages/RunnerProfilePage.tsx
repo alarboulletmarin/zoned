@@ -47,11 +47,10 @@ import {
 } from "@/components/ui/select";
 import { ChronoInput } from "@/components/ui/chrono-input";
 import { DateInput } from "@/components/ui/date-input";
-import { StatBlock } from "@/components/domain/StatBlock";
+import { MyNumbersTiles } from "@/components/domain/MyNumbersTiles";
 import { SEOHead } from "@/components/seo";
 import {
   getRunnerProfileOrMigrate,
-  saveRunnerProfile,
   loadRunnerProfile,
   updateBaseData,
   setPerformanceReference,
@@ -61,7 +60,7 @@ import {
   addPersonalRecord,
   deletePersonalRecord,
 } from "@/lib/runnerProfile";
-import { saveUserZonePrefs } from "@/lib/zones";
+import { setMyNumber } from "@/lib/zones";
 import { usePickLang } from "@/lib/i18n-utils";
 import { secondsToTimeDigits, timeDigitsToSeconds } from "@/lib/paceFields";
 import { CommuteSection } from "@/components/domain/CommuteSection";
@@ -73,7 +72,7 @@ import type {
 import type { RaceDistance } from "@/types/plan";
 import type { Difficulty } from "@/types";
 import { DIFFICULTY_META } from "@/types";
-import { RACE_DISTANCE_META } from "@/types/plan";
+import { OFFERED_RACE_DISTANCES, RACE_DISTANCE_META } from "@/types/plan";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -104,7 +103,9 @@ function deriveVma(type: BenchmarkType, result: number): number | undefined {
 
 const TODAY_ISO = new Date().toISOString().slice(0, 10);
 
-const RACE_DISTANCES = Object.keys(RACE_DISTANCE_META) as RaceDistance[];
+/** Ce que le profil propose de remplir ; l'ordre de tri garde toutes les distances. */
+const RACE_DISTANCES = OFFERED_RACE_DISTANCES;
+const ALL_RACE_DISTANCES = Object.keys(RACE_DISTANCE_META) as RaceDistance[];
 const DIFFICULTY_KEYS: Difficulty[] = [
   "beginner",
   "intermediate",
@@ -271,17 +272,14 @@ function BaseDataSection({
   const { t } = useTranslation("profile");
   const pickLang = usePickLang();
 
-  const [fcMax, setFcMax] = useState("");
-  const [vma, setVma] = useState("");
   const [weeklyKm, setWeeklyKm] = useState("");
   const [longRunKm, setLongRunKm] = useState("");
   const [runnerLevel, setRunnerLevel] = useState("");
 
-  // Sync from profile when it changes
+  // Sync from the saved values, not from every profile change: a number set in
+  // a tile above must not wipe what is being typed here.
   useEffect(() => {
     if (!profile) return;
-    setFcMax(profile.fcMax != null ? String(profile.fcMax) : "");
-    setVma(profile.vma != null ? String(profile.vma) : "");
     setWeeklyKm(
       profile.currentWeeklyKm != null ? String(profile.currentWeeklyKm) : "",
     );
@@ -289,51 +287,30 @@ function BaseDataSection({
       profile.currentLongRunKm != null ? String(profile.currentLongRunKm) : "",
     );
     setRunnerLevel(profile.runnerLevel ?? "");
-  }, [profile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.currentWeeklyKm, profile?.currentLongRunKm, profile?.runnerLevel]);
 
-  const parsedFcMax = fcMax !== "" ? Number(fcMax) : undefined;
-  const parsedVma = vma !== "" ? Number(vma) : undefined;
   const parsedWeekly = weeklyKm !== "" ? Number(weeklyKm) : undefined;
   const parsedLong = longRunKm !== "" ? Number(longRunKm) : undefined;
 
-  const fcMaxError =
-    parsedFcMax !== undefined && (parsedFcMax < 100 || parsedFcMax > 250);
-  const vmaError =
-    parsedVma !== undefined && (parsedVma < 8 || parsedVma > 30);
   const weeklyError =
     parsedWeekly !== undefined && (parsedWeekly < 0 || parsedWeekly > 500);
   const longError =
     parsedLong !== undefined && (parsedLong < 0 || parsedLong > 200);
 
-  const hasError = fcMaxError || vmaError || weeklyError || longError;
+  const hasError = weeklyError || longError;
 
   function handleSave() {
     if (hasError) return;
-    const updated: RunnerProfile = {
-      ...(profile ?? {
-        version: 1 as const,
-        performanceReferences: {},
-        benchmarks: [],
-        personalRecords: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }),
-      fcMax: parsedFcMax,
-      vma: parsedVma,
+    // VMA and max HR are the tiles' (MyNumbersTiles): this form leaves them as stored.
+    const saved = updateBaseData({
       currentWeeklyKm: parsedWeekly,
       currentLongRunKm: parsedLong,
       runnerLevel: (runnerLevel || undefined) as Difficulty | undefined,
-    };
-    const saved = saveRunnerProfile(updated);
+    });
     if (!saved.ok) {
       toast.failure(t("base.saveFailed"), saved);
       return;
-    }
-    /* Une seule VMA dans l'app. Enregistrer le profil laissait Mes zones,
-       donc le générateur, sur l'ancienne valeur, et il fallait un second
-       bouton pour les mettre d'accord. Les deux s'écrivent ensemble. */
-    if (parsedFcMax || parsedVma) {
-      saveUserZonePrefs({ fcMax: parsedFcMax, vma: parsedVma });
     }
     onSave(loadRunnerProfile()!);
     toast.success(t("base.saved"));
@@ -354,31 +331,6 @@ function BaseDataSection({
           style={{ "--gap": "var(--sp-11)" } as CSSProperties}
         >
           <div className="zn-num__fields">
-            <NumberField
-              id="profile-vma"
-              label={t("base.vma")}
-              unit={t("base.vmaUnit")}
-              value={vma}
-              onChange={setVma}
-              error={vmaError ? t("base.vmaError") : undefined}
-              min={8}
-              max={30}
-              step={0.1}
-              placeholder="16.5"
-              width="52px"
-            />
-            <NumberField
-              id="profile-fcmax"
-              label={t("base.fcMax")}
-              unit={t("base.fcMaxUnit")}
-              value={fcMax}
-              onChange={setFcMax}
-              error={fcMaxError ? t("base.fcMaxError") : undefined}
-              min={100}
-              max={250}
-              placeholder="185"
-              width="52px"
-            />
             <NumberField
               id="profile-weekly"
               label={t("base.weeklyKm")}
@@ -720,12 +672,11 @@ function BenchmarkHistorySection({
   }
 
   function handleUseVma(vma: number) {
-    const saved = updateBaseData({ vma });
+    const saved = setMyNumber("vma", vma);
     if (!saved.ok) {
       toast.failure(t("base.saveFailed"), saved);
       return;
     }
-    saveUserZonePrefs({ vma });
     const updated = loadRunnerProfile();
     if (updated) onUpdate(updated);
     toast.success(t("benchmarks.vmaUpdated", { vma }));
@@ -961,8 +912,8 @@ function PersonalRecordsSection({
 
   // Sort records by RACE_DISTANCE_META order, custom distances last
   const records = [...(profile?.personalRecords ?? [])].sort((a, b) => {
-    const aIdx = RACE_DISTANCES.indexOf(a.distance as RaceDistance);
-    const bIdx = RACE_DISTANCES.indexOf(b.distance as RaceDistance);
+    const aIdx = ALL_RACE_DISTANCES.indexOf(a.distance as RaceDistance);
+    const bIdx = ALL_RACE_DISTANCES.indexOf(b.distance as RaceDistance);
     const aOrder = aIdx >= 0 ? aIdx : 999;
     const bOrder = bIdx >= 0 ? bIdx : 999;
     return aOrder - bOrder;
@@ -1260,7 +1211,6 @@ export function RunnerProfilePage() {
     if (updated) setProfile(updated);
   };
 
-  const testCount = profile?.benchmarks.length ?? 0;
 
   return (
     <>
@@ -1271,65 +1221,22 @@ export function RunnerProfilePage() {
       />
 
       <div className="zn-num">
-        {/* The four numbers everything else is computed from, next to the
-            title that names them. */}
         <section
-          className="zn-split zn-num__head"
-          style={{ "--split": "1fr 380px" } as CSSProperties}
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
         >
-          <div
-            className="zn-stack"
-            style={{ "--gap": "var(--sp-6)" } as CSSProperties}
-          >
-            <span className="zn-kicker">{t("kicker")}</span>
-            <h1 className="zn-display" data-level="2">
-              {t("title")}
-            </h1>
-            <p className="zn-body zn-body--lead zn-num__lede">
-              {t("description")}
-            </p>
-          </div>
-
-          <div className="zn-num__stats">
-            {/* The one value the five other screens are computed from, so it
-                takes the full ink inversion rather than a tint. */}
-            <StatBlock
-              tone="ink"
-              value={profile?.vma != null ? String(profile.vma) : NOT_SET}
-              label={t("stats.vma")}
-              footnote={
-                testCount > 0
-                  ? t("stats.vmaFoot", { count: testCount })
-                  : undefined
-              }
-            />
-            <StatBlock
-              tone="card"
-              value={profile?.fcMax != null ? String(profile.fcMax) : NOT_SET}
-              label={t("stats.fcMax")}
-            />
-            <StatBlock
-              tone="card"
-              size="sm"
-              value={
-                profile?.currentWeeklyKm != null
-                  ? String(profile.currentWeeklyKm)
-                  : NOT_SET
-              }
-              label={t("stats.weekly")}
-            />
-            <StatBlock
-              tone="card"
-              size="sm"
-              value={
-                profile?.currentLongRunKm != null
-                  ? String(profile.currentLongRunKm)
-                  : NOT_SET
-              }
-              label={t("stats.longRun")}
-            />
-          </div>
+          <span className="zn-kicker">{t("kicker")}</span>
+          <h1 className="zn-display" data-level="2">
+            {t("title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
+            {t("description")}
+          </p>
         </section>
+
+        {/* The numbers everything else is computed from: set, changed and
+            deleted here, and nowhere else. */}
+        <MyNumbersTiles revision={profile?.updatedAt} onChange={reloadProfile} />
 
         <Tabs defaultValue="base">
           <TabsList className="zn-num__tabs">

@@ -1,0 +1,25 @@
+/* The saved VMA uses the same single-pass stamp as the cockpit. */
+.zn-chrono-adopt {
+  position: relative;
+}
+
+.zn-chrono-distance {
+  grid-column: 1 / -1;
+}
+
+.zn-chrono-distances {
+  inline-size: 100%;
+  /* Marathon est deux fois plus long que Semi : chaque case prend sa largeur. */
+  grid-auto-columns: auto;
+}
+
+.zn-chrono-distances .zn-segmented__item {
+  min-block-size: 44px;
+  padding-inline: var(--sp-1);
+}
+
+@media (min-width: 640px) {
+  .zn-chrono-distances .zn-segmented__item {
+    padding-inline: var(--sp-5);
+  }
+}

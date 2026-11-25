@@ -12,7 +12,6 @@ import {
   Send,
   Sparkles,
   Info,
-  Gauge,
   Plus,
   ChevronDown,
 } from "@/components/icons";
@@ -276,12 +275,6 @@ function AccountMenu() {
           <Link to="/profile">
             <UserRound />
             {t("nav.profile")}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/my-zones">
-            <Gauge />
-            {t("nav.myZones")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

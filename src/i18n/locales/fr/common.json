@@ -402,7 +402,6 @@
     "methodology": "Méthodologie",
     "builder": "Créer une séance",
     "planMethodology": "Guide des plans",
-    "myZones": "Mes Zones",
     "profile": "Mon Profil",
     "nutrition": "Nutrition",
     "calculators": "Calculateurs",
@@ -450,7 +449,6 @@
     "learnGlossary": "Glossaire",
     "learnGlossaryDesc": "50+ termes techniques",
     "favoritesDesc": "Les séances que tu as gardées",
-    "myZonesDesc": "Tes six zones, calculées sur ta VMA",
     "profileDesc": "Ton niveau, tes contraintes, tes records",
     "activities": "Activités complémentaires",
     "activitiesDesc": "Ton vélotaf et tes séances hors plan",
@@ -516,36 +514,8 @@
     "noVma": "Je ne connais pas ma VMA"
   },
   "myZones": {
-    "title": "Mes zones",
-    "description": "Une seule valeur commande le reste : ta VMA. Les six zones et les allures en découlent.",
-    "kicker": "Calculé sur cet appareil",
-    "caveat": "Les allures sont des cibles, pas des contrats : en côte, par vent ou au-dessus de 15 °C, la fréquence cardiaque commande et l'allure suit.",
-    "source": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957",
     "zoneCalculator": {
-      "title": "Calculateur de Zones",
-      "description": "Entre ta FCmax et/ou ta VMA pour afficher tes zones personnalisées",
-      "fcMax": "Fréquence cardiaque max",
-      "vma": "Vitesse Maximale Aérobie",
-      "zone": "Zone",
-      "heartRate": "Fréquence cardiaque",
-      "pace": "Allure",
-      "save": "Sauvegarder",
-      "saved": "Sauvegardé",
-      "clear": "Effacer",
-      "invalidFcMax": "FCmax doit être entre 100 et 250 bpm",
-      "invalidVma": "VMA doit être entre 8 et 30 km/h",
-      "sensation": "Sensation",
-      "benefit": "Bénéfice",
-      "exampleWorkouts": "Exemples de séances"
-    },
-    "paceCalculator": {
-      "title": "Calculateur d'Allures",
-      "description": "Estime tes temps de course à partir de ta VMA",
-      "distance": "Distance",
-      "vmaPercent": "% VMA",
-      "pace": "Allure",
-      "time": "Temps estimé",
-      "noVma": "Entre ta VMA pour afficher les estimations de temps"
+      "invalidVma": "VMA doit être entre 8 et 30 km/h"
     }
   },
   "search": {
@@ -863,7 +833,6 @@
     "quiz": "Quiz d'entraînement",
     "quizDesc": "Réponds à quelques questions pour trouver la séance qui colle à tes objectifs.",
     "settings": "Paramètres",
-    "myZones": "Mes Zones",
     "favorites": "Mes Favoris",
     "planNew": "Nouveau plan d'entraînement",
     "planNewDesc": "Une course, une date, tes jours disponibles : le plan se construit en sept écrans.",
@@ -940,10 +909,7 @@
         "10K",
         "semi",
         "marathon",
-        "trail",
-        "ultra",
-        "triathlon",
-        "ironman"
+        "trail"
       ]
     },
     "articleFaq": {

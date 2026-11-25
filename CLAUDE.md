@@ -12,12 +12,15 @@ bun run dev            # Vite dev server, http://localhost:5173
 bun run preview        # serve the built dist/
 
 bunx tsc --noEmit      # typecheck (what CI runs)
-bun test               # whole unit suite (71 *.test.ts / *.test.tsx files, Bun's runner)
+bun test               # whole unit suite (every *.test.ts / *.test.tsx, Bun's runner)
 bun test src/lib/planGenerator/tss.test.ts     # one file
 bun test -t "negative split"                    # one test by name
 
-bun run build          # tsc + workout schema QA + icon check + sitemap + licenses + vite build + route-meta
-bun run build:seo      # build + prerender (headless Chrome, slow)
+bun run build          # tsc + workout schema QA + icon check + sitemap + licenses + vite build
+                       # + route-meta + prerender-routes (every sitemap URL, FR and EN, no Chrome)
+bunx @lhci/cli@0.15.1 autorun   # after a build: the Lighthouse CI run, same budgets as CI
+
+DRY_RUN=1 scripts/release.sh X.Y.Z   # see "Branches and releases"
 ```
 
 Gates CI runs on every PR, in this order: `bunx tsc --noEmit`, `bun test`,
@@ -27,6 +30,12 @@ Gates CI runs on every PR, in this order: `bunx tsc --noEmit`, `bun test`,
 `bun run scripts/qa-workout-schema.ts`. Run those eight before claiming green.
 `scripts/qa-zone-audit.ts` also runs but is informational: it exits 0 whatever it
 finds, so read its log rather than its exit code.
+
+A second workflow, Lighthouse CI, builds the production bundle and asserts the budgets
+of `.lighthouserc.json` (mobile, simulated 4G, median of 3 on `/` and
+`/calculators/zones`): CLS exactly 0, FCP, LCP, TBT, script bytes. Every budget change is
+argued with measurements in the header of `.github/workflows/lighthouse.yml`; keep doing
+that rather than raising a number to get green.
 
 `bun run scripts/qa-workout-schema.ts --file src/data/workouts/vma.json` validates a single
 catalogue file. `bun run scripts/site-stats.ts` re-measures the catalogue counts
@@ -90,8 +99,18 @@ modality (`running | cycling | swimming | strength`), it does not replace it.
 shell per public URL, because social crawlers never run JS and `vercel.json` would
 otherwise hand every URL the same `index.html` with a homepage canonical. `cleanUrls: true`
 makes Vercel serve `dist/library.html` for `/library` before the SPA rewrite.
-`scripts/prerender.ts` is the heavier variant that renders each route with Puppeteer
-(full `puppeteer` locally, `@sparticuz/chromium` + `puppeteer-core` on Vercel).
+`scripts/prerender-routes.ts`, last step of every `build`, then renders each sitemap URL
+in French and English with `react-dom/static` into those files, and the client hydrates
+them (`src/main.tsx`). `scripts/prerender.ts`, the older Puppeteer variant, is no longer
+wired into any script.
+
+Hydration rule: on a prerendered page, the first client render must equal the server
+one, so `isServerSnapshot()` (`src/prerender/snapshot.ts`) makes hooks start from neutral
+values and read storage, the date or the viewport in an effect (`useMediaQuery` answers
+false). Whatever then differs by viewport must already be right in the static HTML through
+CSS, or it shifts at hydration: the top bar renders both its desktop and its phone version
+until the first effect and `topbar.css` picks one, and the home date line keeps its line
+while empty. That is what broke Lighthouse (CLS) from 1 November to 24 November 2026.
 
 Share cards are painted, not composed at request time (there is no backend to compose
 them). `scripts/generate-og-image.ts` writes the six section cards, and
@@ -136,7 +155,7 @@ Some QA scripts exist only on a developer machine, so a CI step naming one would
 
 ## Docs worth reading before a related change
 
-`docs/pratiques.md` (practice axis, triathlon stance), `docs/seance.md` (the session page and Add to), `docs/aujourdhui.md` (what `/today`
+`docs/pratiques.md` (practice axis, triathlon stance), `docs/seance.md` (the session page and Add to), `docs/bibliotheque.md` (the library: one row, the families, filters and their URL parameters), `docs/aujourdhui.md` (what `/today`
 follows: plans plus placed weeks, and the roadmap for writing back), `docs/workout-format.md` (authoring
 a valid workout), `docs/icon-mapping.md`, `docs/doodles.md` (23 illustrations generated
 from `scripts/doodles/rig.mjs`), `CONTRIBUTING.md` (bilingual policy, id conventions).

@@ -1,44 +1,49 @@
 /* The workout library screen.
 
-   The page reads top to bottom as one sheet of paper: a mono count, the title,
-   the search; then the practice band; then the one row of controls; then the
-   results. Every band is separated by blank space alone (--gap-section) since
-   12 September 2026, it was a full-width ink rule until then.
+   Two presentations of one page, chosen by CSS at 1024px so that the
+   prerendered HTML is already right before hydration (LibraryPage renders
+   both until its first effect, then keeps one):
 
-   The discipline strip and the view-mode selector this header used to describe
-   have moved into the filters panel; the zone legend keeps its sunken band,
-   which is what detaches it now that it has no rule.
+   - on a phone, one column: the count and title, the search, the sticky band
+     (practice + Filtres), the shortcuts, then the family index at rest or the
+     results;
+   - on a desktop, two: a sticky 280px column on the left (practice, the
+     families, the shortcuts, all the filters), the search and the results
+     table on the right.
 
    The screen lives inside the shell's centred column, which already pays the
-   40px (20px mobile) side margin, so the bands do NOT bleed out of it: a
-   negative inline margin here would overflow the viewport at every width
-   between --page-max and --page-max + 2 x the margin, and the page must never
-   scroll sideways. "Full width" on this screen means the width of the column,
-   and every rule runs from one of its edges to the other. */
+   side margin, so nothing bleeds out of it except the shortcut rail below
+   1024px, whose bleed equals that margin exactly. The page must never scroll
+   sideways. */
 
 .zn-lib {
   display: flex;
   flex-direction: column;
+  padding-block-end: var(--sp-17);
 }
 
 /* ── header ───────────────────────────────────────────────────────────── */
 
-/* Content and search, bottom-aligned: the pill sits on the title's baseline
-   block, not floating above it. */
 .zn-lib__head {
-  align-items: end;
-  padding-block-start: var(--sp-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-block-start: var(--sp-11);
 }
 
-@media (max-width: 900px) {
-  .zn-lib__head {
-    gap: var(--sp-10);
-  }
+.zn-lib__title {
+  margin: 0;
+}
+
+.zn-lib__head .zn-hubnav {
+  margin-block-start: var(--sp-3);
 }
 
 /* ── search ───────────────────────────────────────────────────────────── */
 
 .zn-lib__search {
+  flex: 1 1 auto;
+  min-inline-size: 0;
   display: flex;
   align-items: center;
   gap: var(--sp-5);
@@ -68,6 +73,7 @@
 .zn-lib__search-input {
   flex: 1;
   min-inline-size: 0;
+  text-overflow: ellipsis;
   border: none;
   background: transparent;
   font: var(--type-body);
@@ -115,27 +121,35 @@
   inset: -11px;
 }
 
-/* ── discipline strip ─────────────────────────────────────────────────── */
+/* The real shortcut, `/` (useKeyboardShortcuts). Only where there is a
+   keyboard to press it on. */
+.zn-lib__kbd {
+  display: none;
+  flex: none;
+  padding: 1px 7px;
+  border: var(--border-hair);
+  border-radius: var(--r-xs);
+  font: var(--type-mono);
+  color: var(--text-faint);
+}
 
-/* ── la bande des pratiques ──────────────────────────────────────────────
- *
- * La bande primaire, au-dessus de la modalité. Les pastilles portent l'encre,
- * pas l'accent : l'écran garde son unique aplat vermillon pour son action
- * primaire, et une rangée d'onglets n'est pas une action.
- */
+@media (min-width: 1024px) and (hover: hover) {
+  .zn-lib__kbd {
+    display: inline-block;
+  }
+}
 
-/* La bande de commandes, et elle TIENT LE HAUT DE L'ÉCRAN.
+/* ── chercher : la recherche et Filtres ──────────────────────────────────
  *
- * Elle défilait avec la page : poser un filtre depuis le six-centième pixel
- * de la liste demandait de remonter la chercher, de la poser, puis de
- * redescendre. Sur un catalogue de deux cent soixante séances c'est le geste
- * le plus fréquent de la page, et c'était le plus cher.
+ * Une bande, et sur téléphone elle TIENT LE HAUT DE L'ÉCRAN.
  *
- * Ce qui colle, et RIEN d'autre : l'axe des pratiques et la porte du panneau
- * de filtres, ce qui rétrécit la liste. Le compte et le tirage sont
- * descendus d'une rangée (`.zn-lib__bar`) et défilent avec le reste : une
- * bande collante de cent pixels sous une barre du haut qui en prend soixante
- * aurait repris d'une main ce que le collant donne de l'autre.
+ * Poser un filtre ou relancer une recherche depuis le six-centième pixel de
+ * la liste demandait de remonter, de poser, puis de redescendre. Ce qui
+ * colle, et RIEN d'autre : les deux gestes qui trouvent une séance. La
+ * pratique s'y trouvait avant ; elle se choisit une fois et se retient, elle
+ * défile désormais avec les raccourcis. Une bande collante de cent pixels sous
+ * une barre du haut qui en prend soixante aurait repris d'une main ce que le
+ * collant donne de l'autre.
  *
  * `--topbar-h` est le décalage, parce que la barre du haut est collante elle
  * aussi : la bande doit s'arrêter SOUS elle, pas se glisser dessous. z-index
@@ -146,7 +160,7 @@
  * Le fond est opaque et le filet ferme la bande : sans eux les cartes
  * passeraient au travers, et une carte à moitié effacée derrière du vide ne
  * se lit pas comme un dessous, elle se lit comme un bug de rendu. */
-.zn-lib__controls {
+.zn-lib__find {
   position: sticky;
   /* Moins l'épaisseur du filet : `--topbar-h` est un calcul, pas une mesure,
      et il dépasse la hauteur rendue d'un demi-pixel. Un demi-pixel de retard,
@@ -158,20 +172,41 @@
 
   display: flex;
   align-items: center;
-  gap: var(--sp-5) var(--sp-6);
+  gap: var(--sp-5);
 
-  margin-block-start: var(--sp-13);
+  margin-block-start: var(--sp-6);
   padding-block: var(--sp-6);
 
   background: var(--surface-page);
   border-block-end: var(--border-divider);
 }
 
-/* Ce qui suit la bande garde son air : le padding collant a remplacé
-   l'ancienne demi-section, il ne s'y ajoute pas. */
-.zn-lib__controls + .zn-lib__bar {
-  margin-block-start: var(--sp-10);
+.zn-lib__find .zn-lib__filters-btn {
+  flex: none;
+  /* La hauteur de la recherche, pour une bande d'un seul trait. */
+  align-self: stretch;
 }
+
+@media (max-width: 479px) {
+  .zn-lib__find .zn-lib__filters-btn {
+    padding-inline: var(--sp-7);
+  }
+
+  .zn-lib__filters-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ── les pratiques ───────────────────────────────────────────────────────
+ *
+ * Toutes, Route, Trail. Les pastilles portent l'encre, pas l'accent :
+ * l'écran garde son unique aplat vermillon pour son action primaire, et une
+ * rangée d'onglets n'est pas une action. */
 
 /* L'ancre du retour en haut de liste : sans hauteur, sans encre. Elle est le
    repère que `scrollIntoView` vise, et elle est HORS de la bande collante,
@@ -186,8 +221,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--sp-2);
-  flex: 1 1 auto;
   min-inline-size: 0;
+  margin-block-start: var(--sp-8);
 }
 
 .zn-lib__practice {
@@ -219,154 +254,10 @@
   color: var(--text-inverse);
 }
 
-/* bientôt : une pratique nommée dont les plans n'existent pas encore. En
-   mono minuscule, comme une cote, pas comme un badge qui réclame le regard. */
-.zn-lib__practice-soon {
-  font: var(--type-mono);
-  font-size: var(--fs-mono-xs);
-  letter-spacing: var(--ls-mono-label);
-  text-transform: uppercase;
-  opacity: 0.7;
-}
-
-/* Le tirage : une sortie, pas une action primaire. Contour, à droite. */
-.zn-lib__draw {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-4);
-  padding: var(--sp-4) var(--sp-8);
-  border: var(--border-rule);
-  border-radius: var(--r-pill);
-  color: var(--text-body);
-  font: var(--type-label);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.zn-lib__draw:hover {
-  border-color: var(--line-strong);
-}
-
-.zn-lib__draw:active {
-  transform: translateY(var(--press-shift));
-}
-
 @media (pointer: coarse) {
-  .zn-lib__practice,
-  .zn-lib__draw {
+  .zn-lib__practice {
     min-block-size: var(--hit-min);
   }
-}
-
-/* Sur 390 px le rail défile horizontalement : cinq pastilles repliées en deux
-   rangées coûtaient une rangée de plus, et une pastille de pratique tronquée
-   n'est pas lisible.
-
-   Le tirage avait ici une règle `flex: 1 1 100%` qui lui donnait toute la
-   largeur : il partageait cette rangée avec le rail, et deux pastilles plus un
-   bouton sur une ligne auraient donné des cibles de 90 px. Il a déménagé dans
-   la rangée de légende, sous la bande collante.
-
-   Le bouton Filtres partage maintenant cette rangée avec le rail, et c'est
-   ce qui tient la bande collante sur UNE ligne : le rail prend ce qui reste et
-   défile sous le doigt, le bouton ne se replie jamais. */
-@media (max-width: 640px) {
-  /* UN SEUL AXE. `overflow-x: auto` seul ne défile pas que sur x : la règle
-     CSS transforme le `visible` de l'autre axe en `auto`, donc le rail était
-     aussi un conteneur qui défile verticalement. Quarante-quatre pixels de
-     hauteur pour quarante-quatre pixels de contenu, la course était nulle ou
-     d'un pixel selon l'arrondi de la pastille pressée, mais le doigt, lui,
-     trouvait la prise : un geste vertical parti d'une pastille tirait la
-     bande au lieu de la page, et c'est ce flottement qu'on sentait sous le
-     pouce. `hidden` ferme l'axe, la course verticale disparaît et le geste
-     repart à la page, qui est ce qu'on voulait faire défiler.
-
-     Le rail garde sa hauteur de rangée : les 6px de marge intérieure sont
-     repris en marge négative, ils n'existent que pour que l'anneau de focus
-     (2.5px, décalé de 2px) tienne DANS la zone de défilement au lieu d'être
-     coupé par elle.
-
-     `overscroll-behavior-inline: contain` pour le geste horizontal : arrivé
-     au bout du rail, il ne se propage plus au navigateur, qui y lisait le
-     balayage de retour en arrière. */
-  .zn-lib__practice-rail {
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-inline: contain;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
-
-    padding-block: var(--sp-3);
-    margin-block: calc(-1 * var(--sp-3));
-  }
-
-  .zn-lib__practice-rail::-webkit-scrollbar {
-    display: none;
-  }
-
-  .zn-lib__practice {
-    white-space: nowrap;
-  }
-
-  .zn-lib__controls {
-    flex-wrap: nowrap;
-  }
-
-  .zn-lib__controls .zn-lib__filters-btn {
-    flex: none;
-  }
-}
-
-/* ── la légende, sous la bande ────────────────────────────────────────── */
-
-/* Ce qu'il y a à l'écran, et le tirage. Ni l'un ni l'autre ne rétrécit la
-   liste : ils ont donc quitté la bande collante et défilent avec la page.
-   Le compte se relit d'un coup d'œil en haut, et combien de filtres sont
-   posés reste visible en permanence, c'est le compteur porté par le
-   bouton Filtres, qui, lui, colle. */
-.zn-lib__bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--sp-5) var(--sp-6);
-  padding-block-end: calc(var(--gap-section) / 2);
-}
-
-.zn-lib__meta {
-  flex: 1 1 auto;
-  min-inline-size: 0;
-  color: var(--text-faint);
-}
-
-/* ── ce qui rétrécit la liste ─────────────────────────────────────────── */
-
-/* La puce ne rend que lorsqu'une modalité est posée : par défaut cette rangée
-   n'existe pas dans l'arbre, donc elle ne coûte rien à l'état par défaut. */
-.zn-lib__narrowed {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-4);
-  margin-block-start: var(--sp-7);
-}
-
-/* Une puce de retrait, pas une puce de choix : elle est toujours cochée, elle ne s'affiche que si le filtre est posé, et le tap la retire. La
-   croix le dit à l'œil, le texte masqué le dit au lecteur d'écran. */
-.zn-lib__narrow-chip {
-  gap: var(--sp-4);
-}
-
-.zn-lib__narrow-chip > svg:last-of-type {
-  color: var(--text-inverse);
-  opacity: 0.7;
-}
-
-/* La rangée du mode d'affichage : pas d'étiquette mono à 88 px devant, le
-   <Segmented> porte déjà la sienne. Le filet la sépare des filtres de valeur
-   qui suivent, au-dessus on choisit CE QU'ON regarde et comment, en dessous
-   on rétrécit. */
-.zn-lib__row--view {
-  padding-block-end: var(--sp-9);
-  border-block-end: var(--border-divider);
 }
 
 /* ── filters ──────────────────────────────────────────────────────────── */
@@ -509,35 +400,43 @@
   }
 }
 
-/* The last row: duration, the favourites switch, then the ghost clear button
-   pushed to the far end. */
-.zn-lib__controls {
-  gap: var(--sp-13);
+/* Dans le panneau, l'étiquette tient sa ligne au-dessus des puces : la
+   gouttière de 104 px mangeait le tiers d'un panneau de 420. Un filet fin
+   sépare les rangées. */
+.zn-lib__filters-panel .zn-lib__rowlabel {
+  inline-size: 100%;
 }
 
-.zn-lib__duration {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-6);
-  inline-size: 260px;
-  max-inline-size: 100%;
+.zn-lib__filters-panel .zn-lib__row + .zn-lib__row {
+  padding-block-start: var(--sp-9);
+  border-block-start: var(--bw-hair) solid var(--line-divider);
 }
 
-.zn-lib__duration .zn-slider {
-  flex: 1;
+/* Le pic et le niveau sur deux colonnes : six zones et quatre niveaux se
+   lisent en échelle, de haut en bas comme de gauche à droite. */
+.zn-lib__row--grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.zn-lib__duration-value {
-  flex: none;
-  color: var(--text-muted);
+.zn-lib__row--grid > .zn-lib__rowlabel {
+  grid-column: 1 / -1;
 }
 
-.zn-lib__switch {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-5);
-  min-block-size: var(--hit-min);
-  cursor: pointer;
+.zn-lib__zonecode {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-mono);
+}
+
+/* Le libellé, puis la jauge du niveau à droite. */
+.zn-lib__levelchip {
+  justify-content: space-between;
+}
+
+.zn-lib__chipcount {
+  font-size: var(--fs-mono);
+  opacity: 0.75;
 }
 
 /* ── chips ────────────────────────────────────────────────────────────── */
@@ -605,75 +504,288 @@
   }
 }
 
-/* ── zone legend ──────────────────────────────────────────────────────── */
+/* ── la colonne de gauche, qui n'existe que sur bureau ─────────────────
 
-/* The ramp orders the zones but does not name them, so the screen that paints
-   zone fills carries the legend once, on the sunken band. */
-/* Le fond sombre (--surface-band) suffit à détacher la légende : elle était le
-   seul objet du dépôt à porter un changement de surface ET un filet. */
-.zn-lib__legend {
-  padding-block: var(--sp-10);
-  background: var(--surface-band);
+   Sous 1024 px elle n'a pas de boîte : ses enfants rejoignent le flux de la
+   page, et le rail des pratiques suit la bande collante dans le flux. */
+.zn-lib__side {
+  display: contents;
 }
 
-/* Below 640 the six swatches wrap onto five lines, four hundred pixels of
-   legend standing between the title and the first session. The cards name
-   their zone in text ("Z3") anyway, so on a phone the ramp goes. */
-@media (max-width: 640px) {
-  .zn-lib__legend {
+.zn-lib__families,
+.zn-lib__sidelabel {
+  display: none;
+}
+
+/* ── les raccourcis ───────────────────────────────────────────────────── */
+
+/* Quatre puces qui miroitent le panneau : cocher ici coche là-bas, et le
+   compteur du bouton Filtres suit. Sur téléphone elles défilent sur une
+   ligne, du bord au bord de l'écran. */
+.zn-lib__shortcuts {
+  margin-block-start: var(--sp-5);
+}
+
+.zn-lib__shortcut-rail {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.zn-lib__shortcut {
+  flex: none;
+  white-space: nowrap;
+}
+
+/* Le coeur garde son vermillon, cochée ou non : c'est le même signe que
+   celui des rangées. */
+.zn-lib__heart {
+  color: var(--accent);
+  flex: none;
+}
+
+@media (max-width: 1023px) {
+  .zn-lib__shortcut-rail {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--pad-screen-x));
+    padding-inline: var(--pad-screen-x);
+    /* Le même jeu que le rail des pratiques : l'anneau de focus tient dans
+       la zone de défilement au lieu d'être coupé par elle. */
+    padding-block: var(--sp-3);
+    margin-block: calc(-1 * var(--sp-3));
+  }
+
+  .zn-lib__shortcut-rail::-webkit-scrollbar {
     display: none;
   }
 }
 
-/* ── results ──────────────────────────────────────────────────────────── */
+/* ── l'index des familles, sur téléphone au repos ─────────────────────── */
+
+.zn-lib__index {
+  margin-block-start: var(--sp-13);
+}
+
+.zn-lib__indextitle {
+  margin: 0;
+  padding-block-end: var(--sp-5);
+  border-block-end: var(--border-rule);
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.zn-lib__indextitle--sub {
+  margin-block-start: var(--sp-14);
+}
+
+.zn-lib__indexlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-lib__indexlist > li {
+  border-block-end: var(--bw-hair) solid var(--line-divider);
+}
+
+/* 64 px, une cible pleine largeur : le nom, de quoi la famille est faite
+   (sa plage de pics, combien, de combien à combien), un chevron. */
+.zn-lib__indexrow {
+  inline-size: 100%;
+  min-block-size: 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16px;
+  gap: var(--sp-3) var(--sp-6);
+  align-items: center;
+  padding-block: var(--sp-6);
+  padding-inline: 0;
+
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-body);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-lib__indexrow:hover {
+  background: var(--surface-band);
+}
+
+.zn-lib__indexrow:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-lib__indexname {
+  font-family: var(--font-text);
+  font-weight: var(--fw-medium);
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.zn-lib__indexmeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-lib__indexchevron {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+/* ── les résultats ────────────────────────────────────────────────────── */
+
+.zn-lib__main {
+  min-inline-size: 0;
+}
 
 .zn-lib__results {
-  padding-block: var(--sp-14) var(--sp-17);
+  margin-block-start: var(--sp-10);
 }
 
-/* Compact and list views keep the density they had; the grid vocabulary only
-   states the desktop count, and these two need their own mobile steps. */
-.zn-lib__grid[data-view="compact"] {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+/* Le retour, au-dessus du titre : un lien de texte, pas un bouton de plus. */
+.zn-lib__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: 32px;
+  margin-block-end: var(--sp-6);
+  padding: 0;
+
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font: var(--type-body-sm);
+  cursor: pointer;
 }
 
-@media (max-width: 900px) {
-  .zn-lib__grid[data-view="compact"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.zn-lib__back:hover {
+  color: var(--text-body);
 }
 
-@media (max-width: 640px) {
-  .zn-lib__grid[data-view="compact"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.zn-lib__resulthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-6);
+  padding-block-end: var(--sp-5);
+  border-block-end: var(--border-rule);
 }
 
+.zn-lib__resulttitle {
+  margin: 0;
+  min-inline-size: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.zn-lib__count {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-caption);
+  letter-spacing: 0;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Un seul bouton qui fait défiler durée, intensité, niveau. */
+.zn-lib__sort {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 36px;
+  padding-inline: var(--sp-1);
+
+  border: none;
+  background: transparent;
+  color: var(--text-body);
+  font: var(--type-label);
+  cursor: pointer;
+}
+
+/* La légende, une fois, sous l'en-tête : l'encre ordonne les zones sans les
+   nommer, et chaque rangée en peint. */
+.zn-lib__legend {
+  padding-block: var(--sp-8);
+  border-block-end: var(--bw-hair) solid var(--line-divider);
+}
+
+.zn-lib__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.zn-lib__rows > li {
+  border-block-end: var(--bw-hair) solid var(--line-divider);
+}
+
+/* Une fin visible : le bouton qui en montre plus, et combien il en reste.
+   Le pied de page est atteignable, ce que le défilement infini interdisait. */
 .zn-lib__more {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--sp-6);
-  padding-block-start: var(--sp-13);
+  padding-block-start: var(--sp-10);
+}
+
+.zn-lib__more-btn {
+  inline-size: 100%;
+}
+
+.zn-lib__showing {
+  margin: 0;
   color: var(--text-faint);
 }
 
-.zn-lib__sentinel {
-  inline-size: 100%;
-  block-size: 1px;
+@media (pointer: coarse) {
+  .zn-lib__back,
+  .zn-lib__sort {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* Au repos sur téléphone, l'index tient la place des résultats. Le premier
+   rendu les porte tous deux (le serveur ne connaît pas l'écran) : la règle
+   tranche avant l'hydratation. */
+@media (max-width: 1023px) {
+  .zn-lib__results[data-rest] {
+    display: none;
+  }
 }
 
 /* ── skeleton ─────────────────────────────────────────────────────────── */
 
-/* The shape of a session card, drawn in paper and ink. */
+/* La forme d'une rangée : un nom, un profil, une ligne de faits. */
+.zn-lib__skeletons {
+  margin-block-start: var(--sp-13);
+}
+
 .zn-lib__skeleton {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-8);
-  padding: var(--sp-12);
-  background: var(--surface-card);
-  border: var(--border-rule);
-  border-radius: var(--r-3xl);
+  gap: 9px;
+  padding-block: var(--sp-7);
+  border-block-end: var(--bw-hair) solid var(--line-divider);
 }
 
 .zn-lib__skeleton .zn-skeleton {
@@ -681,21 +793,389 @@
 }
 
 .zn-lib__skeleton-title {
-  block-size: var(--sp-11);
-  inline-size: 70%;
+  block-size: var(--sp-9);
+  inline-size: 60%;
 }
 
 .zn-lib__skeleton-line {
   block-size: var(--sp-6);
+  inline-size: 45%;
+}
+
+/* Les 28 px de la ZoneBar d'une rangée : rien ne saute quand les données arrivent. */
+.zn-lib__skeleton-bar {
+  block-size: 28px;
+  border-radius: var(--r-md);
+}
+
+/* ── bureau, à partir de 1024 px ──────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .zn-lib {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    grid-template-areas:
+      "head head"
+      "side search"
+      "side tools"
+      "side main"
+      "side crawl";
+    grid-template-rows: auto auto auto auto 1fr;
+    column-gap: var(--sp-15);
+    align-items: start;
+  }
+
+  .zn-lib__head {
+    grid-area: head;
+    padding-block-start: var(--sp-15);
+    padding-block-end: var(--sp-14);
+  }
+
+  .zn-lib__find {
+    grid-area: search;
+    position: static;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  /* L'ancre se pose sur le haut de la recherche : remonter en haut des
+     résultats ramène la recherche avec eux. */
+  .zn-lib__anchor {
+    grid-area: search;
+    align-self: start;
+  }
+
+  .zn-lib__main {
+    grid-area: main;
+  }
+
+  .zn-lib > .zn-crawl {
+    grid-area: crawl;
+  }
+
+  /* La colonne colle sous la barre du haut et tient dans l'écran d'un seul
+     coup d'œil : pratiques, familles, autres sports, sans défilement à elle.
+     Seule la liste des séances défile. C'est ce qui a fait sortir les
+     raccourcis et Filtres de la colonne (ils sont avec la recherche) et
+     passer les autres sports en une rangée de puces. */
+  .zn-lib__side .zn-lib__practice-rail {
+    margin-block-start: 0;
+  }
+
+  .zn-lib__side {
+    grid-area: side;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-10);
+    position: sticky;
+    inset-block-start: calc(var(--topbar-h) + var(--sp-10));
+    padding: var(--sp-3);
+    margin: calc(-1 * var(--sp-3));
+  }
+
+  /* Les raccourcis, sous la recherche. */
+  .zn-lib__tools {
+    grid-area: tools;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-6);
+    margin-block-start: var(--sp-8);
+  }
+
+  /* Les pratiques tiennent sur deux lignes dans les 280 px de la colonne. */
+  .zn-lib__side .zn-lib__practice {
+    padding-inline: var(--sp-6);
+  }
+
+  .zn-lib__sidelabel {
+    display: block;
+    margin-block-end: var(--sp-4);
+  }
+
+  .zn-lib__families {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .zn-lib__families .zn-lib__sidelabel:not(:first-child) {
+    margin-block-start: var(--sp-10);
+  }
+
+  .zn-lib__shortcuts {
+    margin-block-start: 0;
+  }
+
+  .zn-lib__shortcut-rail {
+    flex-wrap: wrap;
+  }
+
+  .zn-lib__index {
+    display: none;
+  }
+
+  .zn-lib__results {
+    margin-block-start: var(--sp-10);
+  }
+
+  .zn-lib__resulttitle {
+    font-size: 26px;
+  }
+
+  .zn-lib__more {
+    align-items: flex-start;
+  }
+
+  .zn-lib__more-btn {
+    inline-size: auto;
+  }
+}
+
+/* La liste des familles de la colonne : un bouton par famille, son compte en
+   mono, celle qui est ouverte en encre pleine. */
+.zn-lib__famlist {
+  list-style: none;
+  margin: 0;
+  padding: var(--sp-2) 0 0;
+  border-block-start: var(--border-rule);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.zn-lib__fam {
+  inline-size: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-6);
+  /* 34 px : treize familles et Toutes tiennent dans la colonne sans la faire
+     défiler. La colonne n'existe que sur bureau, au pointeur fin. */
+  min-block-size: 34px;
+  padding-inline: var(--sp-6);
+
+  border: none;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text-body);
+  font: var(--type-label);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-lib__fam:hover {
+  background: var(--surface-band);
+}
+
+.zn-lib__fam[aria-pressed="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-lib__famcount {
+  font-size: var(--fs-mono);
+  opacity: 0.8;
+}
+
+
+/* ── le tableau, sur bureau ───────────────────────────────────────────── */
+
+/* Un vrai <table> : Séance | Profil (200 px) | Pic | Durée | Niveau | D+.
+   La largeur des colonnes est posée, pas calculée sur le contenu : une
+   colonne qui bouge d'une page à l'autre ne se compare plus. */
+.zn-wtable {
+  display: none;
+  inline-size: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font: var(--type-body-sm);
+  color: var(--text-body);
+}
+
+.zn-wtable th:nth-child(2) { inline-size: 200px; }
+.zn-wtable th:nth-child(3) { inline-size: 56px; }
+.zn-wtable th:nth-child(4) { inline-size: 100px; }
+.zn-wtable th:nth-child(5) { inline-size: 128px; }
+.zn-wtable th:nth-child(6) { inline-size: 72px; }
+
+.zn-wtable thead th {
+  padding: var(--sp-4) var(--sp-5);
+  border-block-end: var(--border-rule);
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  text-align: start;
+  color: var(--text-muted);
+}
+
+.zn-wtable thead th:first-child,
+.zn-wtable td:first-child,
+.zn-wtable tbody th {
+  padding-inline-start: var(--sp-3);
+}
+
+.zn-wtable__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-block-size: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+/* La marque du tri ne se montre que sur la colonne triée. */
+.zn-wtable__sortmark {
+  visibility: hidden;
+}
+
+.zn-wtable__sort[data-active] .zn-wtable__sortmark {
+  visibility: visible;
+}
+
+.zn-wtable__sort[data-active] {
+  font-weight: var(--fw-bold);
+}
+
+.zn-wtable__row {
+  position: relative;
+  border-block-end: var(--bw-hair) solid var(--line-divider);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-wtable__row:hover {
+  background: var(--surface-band);
+}
+
+/* Le focus du lien se dessine sur la ligne entière, qui est sa cible. */
+.zn-wtable__row:has(.zn-wtable__link:focus-visible) {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.zn-wtable tbody th,
+.zn-wtable td {
+  padding: var(--sp-4) var(--sp-5);
+  min-block-size: 52px;
+  block-size: 52px;
+  text-align: start;
+  vertical-align: middle;
+  font-weight: var(--fw-regular);
+}
+
+.zn-wtable__name {
+  overflow-wrap: anywhere;
+}
+
+.zn-wtable__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.zn-wtable__link:focus-visible {
+  outline: none;
+}
+
+/* Le nom étendu à toute la ligne : une cible, pas six. */
+.zn-wtable__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.zn-wtable__title {
+  font-family: var(--font-text);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body);
+  line-height: 1.25;
+}
+
+.zn-wtable__name .zn-favmark {
+  margin-inline-start: var(--sp-4);
+}
+
+.zn-wtable__profile {
+  --zn-zonebar-h: 26px;
   inline-size: 100%;
 }
 
-.zn-lib__skeleton-line--short {
-  inline-size: 55%;
+.zn-wtable__kind,
+.zn-wtable__climb {
+  color: var(--text-muted);
 }
 
-/* The same 36px the ZoneBar occupies, so nothing jumps when the data lands. */
-.zn-lib__skeleton-bar {
-  block-size: 36px;
-  border-radius: var(--r-md);
+.zn-wtable .zn-wfact--duration {
+  font-family: var(--font-mono);
+}
+
+.zn-wtable .zn-wfact {
+  color: var(--text-muted);
+}
+
+@media (min-width: 1024px) {
+  .zn-wtable {
+    display: table;
+  }
+
+  .zn-lib__rows,
+  .zn-lib__sort {
+    display: none;
+  }
+}
+
+/* ── le mouvement de la page ──────────────────────────────────────────────
+
+   On anime ce qui change, jamais ce qui est (motion.css). Ici, trois gestes
+   seulement : une puce change d'état en --dur-fast (fond et couleur, la règle
+   de .zn-chip), une rangée s'enfonce d'un pixel sous le doigt, un survol
+   teinte. Rien d'autre :
+
+   - rien ne bouge au chargement, rien n'entre en cascade ;
+   - une liste refiltrée ou retriée est remplacée net. Les rangées ont la
+     séance pour clé, donc une rangée ne change jamais de séance ; la règle
+     ci-dessous le garantit quand même : un bloc de profil ne glisse pas d'une
+     forme vers une autre dans une liste, ce geste appartient à la page séance
+     quand on y règle un paramètre ;
+   - ouvrir une famille n'est pas une transition de page : le haut des
+     résultats revient sous la bande collante, c'est tout ;
+   - le nom de la séance garde sa transition partagée vers la page séance
+     (sharedTransition.ts), qui se coupe d'elle-même sous reduced-motion. */
+.zn-lib__rows .zn-zonebar__block,
+.zn-wtable .zn-zonebar__block {
+  transition: none;
+}
+
+/* Les autres sports dans la colonne de bureau : une rangée de puces. */
+.zn-lib__sportchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding-block-start: var(--sp-4);
+  border-block-start: var(--border-rule);
+}
+
+.zn-lib__sportchip {
+  min-block-size: 34px;
+  padding: 6px 10px;
+}
+
+/* Sous 800 px de haut, la colonne ne tiendrait plus dans l'écran : plutôt que
+   d'en cacher le bas sous le bord tant qu'elle colle, elle défile avec la
+   page. */
+@media (min-width: 1024px) and (max-height: 799px) {
+  .zn-lib__side {
+    position: static;
+  }
 }

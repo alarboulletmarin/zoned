@@ -18,17 +18,16 @@
     "subtitle": "What you eat and drink in training, on race day and after the line.",
     "calculatorTitle": "Fueling Calculator",
     "calculatorDescription": "Get a personalized fueling plan based on Jeukendrup 2014 and ACSM guidelines.",
-    "distanceLabel": "Distance (km)",
-    "durationLabel": "Duration (min)",
-    "weightLabel": "Weight (kg, optional)",
-    "calculate": "Calculate",
+    "distanceLabel": "Distance",
+    "durationLabel": "Duration",
+    "weightLabel": "Weight (optional)",
     "carbsPerHour": "Carbs / hour",
     "totalLabel": "{{value}}g total",
     "gelsNeeded": "Gels needed",
     "gelFrequency": "every {{min}} min",
     "gelNotNeeded": "not needed",
     "fluidPerHour": "Fluid / hour",
-    "totalFluid": "{{value}}ml total",
+    "totalFluid": "{{value}} in total",
     "sodiumPerHour": "Sodium / hour",
     "electrolyteDrinkRecommended": "electrolyte drink recommended",
     "waterSufficient": "water sufficient",
@@ -48,7 +47,9 @@
       "recoveryAnswer": "The famous '30-minute window' is a myth: the real window is 4-6 h for glycogen and 24-48 h for protein (Aragon & Schoenfeld 2013, Margolis 2021). The next meal is enough in 9 cases out of 10. If you have another session within 4 h: 1 to 1.2 g carbs/kg + 0.3 g protein/kg (chocolate milk validated). Otherwise, full meal within 2 h. 40 g casein before sleep (Trommelen 2023). Rehydrate at 1.5x weight lost, with sodium. Avoid alcohol 4-6 h after (-24% muscle repair)."
     },
     "kicker": "{{n}} topics",
-    "presetsLabel": "Race distance"
+    "presetsLabel": "Race distance",
+    "fromPlan": "Distance and target from your plan.",
+    "fromPlanNoTarget": "Distance from your plan, which gives no target time: set the duration."
   },
   "racePrep": {
     "title": "Race preparation",

@@ -69,3 +69,10 @@
 .zn-hubnav__link[aria-current="page"] .zn-hubnav__chevron {
   display: none;
 }
+
+/* Au-dessus de 1024px ces pages sont à un survol, dans les menus de la barre. */
+@media (min-width: 1024px) {
+  .zn-hubnav {
+    display: none;
+  }
+}

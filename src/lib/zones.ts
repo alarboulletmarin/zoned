@@ -1,8 +1,10 @@
 import type { ZoneNumber, ZoneRange, UserZonePreferences } from "@/types";
-import { loadRunnerProfile, saveRunnerProfile } from "@/lib/runnerProfile";
+import { loadRunnerProfile, saveRunnerProfile, updateBaseData } from "@/lib/runnerProfile";
+import { OK, failed, type Outcome } from "@/lib/failure";
 
-// HR Zone percentages (% of FCmax)
-const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
+// HR Zone percentages (% of FCmax). Exported: the agent API (`lib/agentApi`)
+// publishes these bounds, so they are read from here rather than restated.
+export const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
   1: [50, 60],
   2: [60, 70],
   3: [70, 80],
@@ -11,8 +13,8 @@ const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
   6: [100, 110], // Sprint zone can exceed max
 };
 
-// VMA Zone percentages (% of VMA)
-const VMA_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
+// VMA Zone percentages (% of VMA), same reason.
+export const VMA_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
   1: [50, 60],
   2: [60, 75],
   3: [75, 85],
@@ -137,6 +139,29 @@ export function saveUserZonePrefs(prefs: UserZonePreferences): void {
     if (validated.vma !== undefined) profile.vma = validated.vma;
     saveRunnerProfile(profile);
   }
+}
+
+/**
+ * Pose, change ou supprime un repère (`undefined` supprime) aux deux endroits
+ * où il vit : le profil, qui fait foi, et l'ancienne clé des zones, que
+ * `loadUserZonePrefs` relit quand le profil n'a ni VMA ni FC max. Supprimer du
+ * seul profil laissait l'ancienne valeur revenir par là.
+ */
+export function setMyNumber(key: "vma" | "fcMax", value: number | undefined): Outcome {
+  const saved = updateBaseData({ [key]: value });
+  if (!saved.ok) return saved;
+  const profile = loadRunnerProfile();
+  try {
+    if (profile?.vma === undefined && profile?.fcMax === undefined) {
+      localStorage.removeItem(STORAGE_KEY);
+    } else {
+      const data = { vma: profile.vma, fcMax: profile.fcMax, updatedAt: new Date().toISOString() };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+  } catch (err) {
+    return failed(err);
+  }
+  return OK;
 }
 
 /**

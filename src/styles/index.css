@@ -42,7 +42,12 @@
 @import "./components/alert.css" layer(components);
 @import "./components/badge.css" layer(components);
 @import "./components/button.css" layer(components);
-@import "./components/calc-pace.css" layer(components);
+@import "./components/calc.css" layer(components);
+@import "./components/calc-zones.css" layer(components);
+@import "./components/calc-chrono.css" layer(components);
+@import "./components/calc-allures.css" layer(components);
+@import "./components/calc-tapis.css" layer(components);
+@import "./components/calc-splits.css" layer(components);
 @import "./components/calc-tests.css" layer(components);
 @import "./components/calendar.css" layer(components);
 @import "./components/card.css" layer(components);

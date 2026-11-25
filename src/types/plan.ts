@@ -301,6 +301,17 @@ export const RACE_DISTANCE_META: Record<
   },
 };
 
+/**
+ * Les distances que l'app PROPOSE : parcours de plan, objectifs intermédiaires,
+ * références et records du profil. Toutes sauf l'ultra, retiré le 25 novembre
+ * 2026 (docs/pratiques.md). La valeur reste dans `RaceDistance` et dans le
+ * moteur, parce que des plans et des records déjà enregistrés la portent et
+ * doivent continuer de s'ouvrir ; elle ne se choisit plus nulle part.
+ */
+export const OFFERED_RACE_DISTANCES: readonly RaceDistance[] = (
+  Object.keys(RACE_DISTANCE_META) as RaceDistance[]
+).filter((d) => d !== "ultra");
+
 export const PHASE_META: Record<
   TrainingPhase,
   {

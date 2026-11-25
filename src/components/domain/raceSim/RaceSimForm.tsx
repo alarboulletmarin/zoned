@@ -52,8 +52,8 @@ export const RACE_OPTIONS: RaceOption[] = [
 export const DEFAULT_SETTINGS: RaceSimSettings = {
   distance: "10",
   customDistance: "",
-  targetTime: "4500",
-  startTime: "830",
+  targetTime: "",
+  startTime: "",
   strategy: "even",
   weight: "",
 };
@@ -189,7 +189,7 @@ export function RaceSimForm({
               inputMode="decimal"
               autoComplete="off"
               autoFocus
-              placeholder="15"
+              placeholder={t("inputs.unset")}
               aria-label={t("inputs.custom")}
               value={settings.customDistance}
               onChange={(e) => set("customDistance", decimalInput(e.target.value))}
@@ -208,6 +208,7 @@ export function RaceSimForm({
         <ChronoInput
           id={`${uid}-time`}
           format="hms"
+          placeholder={t("inputs.unset")}
           distanceKm={resolved.distanceKm}
           aria-invalid={resolved.timeError || undefined}
           aria-describedby={`${uid}-time-hint`}
@@ -234,7 +235,7 @@ export function RaceSimForm({
         <ChronoInput
           id={`${uid}-start`}
           format="hm"
-          placeholder="8:30"
+          placeholder={t("inputs.unset")}
           aria-invalid={resolved.startError || undefined}
           aria-describedby={resolved.startError ? `${uid}-start-hint` : undefined}
           digits={settings.startTime}
@@ -271,7 +272,7 @@ export function RaceSimForm({
             type="text"
             inputMode="decimal"
             autoComplete="off"
-            placeholder="70"
+            placeholder={t("inputs.unset")}
             value={settings.weight}
             onChange={(e) => set("weight", decimalInput(e.target.value))}
             className="zn-rs-field zn-rs-field--mono zn-rs-field--short"

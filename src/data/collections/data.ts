@@ -318,16 +318,16 @@ export const collections: Collection[] = [
     ],
   },
   {
-    id: "objectif-ultra",
-    slug: "objectif-ultra",
-    name: "Objectif ultra-trail",
-    nameEn: "Ultra-Trail Goal",
+    id: "objectif-trail-long",
+    slug: "objectif-trail-long",
+    name: "Objectif trail long",
+    nameEn: "Long Trail Goal",
     description:
-      "Construis l'endurance extrême et la résistance nécessaires pour l'ultra-distance.",
+      "Construis l'endurance et la résistance nécessaires aux longues distances en trail.",
     descriptionEn:
-      "Build the extreme endurance and résilience needed for ultra-distance",
+      "Build the endurance and resilience needed for long trail distances.",
     icon: "Mountain",
-    practice: "ultra",
+    practice: "trail",
     difficulty: "elite",
     isProgression: true,
     workoutIds: [
@@ -343,7 +343,6 @@ export const collections: Collection[] = [
       "RP-005",   // Allure trail
     ],
     tags: [
-      "ultra",
       "trail",
       "endurance",
       "montagne",
