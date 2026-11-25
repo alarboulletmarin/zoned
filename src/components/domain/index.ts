@@ -1,8 +1,8 @@
 export { ZoneBadge, ZoneBadges } from "./ZoneBadge";
 export { WorkoutCard, WorkoutCardCompact, WorkoutCardChrome } from "./WorkoutCard";
 export { WorkoutRow, FavoriteMark } from "./WorkoutRow";
+export { WorkoutTable } from "./WorkoutTable";
 export { StrengthWorkoutCard, StrengthWorkoutCardCompact } from "./StrengthWorkoutCard";
-export { ViewModeSelector } from "./ViewModeSelector";
 export {
   WorkoutFilters,
   defaultFilters,

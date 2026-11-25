@@ -30,7 +30,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
-import { WorkoutFilters, WorkoutRow, ZoneBadge } from "@/components/domain";
+import { WorkoutFilters, WorkoutRow, WorkoutTable, ZoneBadge } from "@/components/domain";
 import { SEOHead } from "@/components/seo";
 import { HubNav, navSection } from "@/components/layout";
 import { useFavoriteIds, useKeyboardShortcuts, useWorkouts } from "@/hooks";
@@ -657,13 +657,24 @@ export function LibraryPage() {
 
                 {filteredWorkouts.length > 0 ? (
                   <>
-                    <ul className="zn-lib__rows">
-                      {visibleWorkouts.map((workout) => (
-                        <li key={workout.id}>
-                          <WorkoutRow workout={workout} favorite={favoriteSet.has(workout.id)} />
-                        </li>
-                      ))}
-                    </ul>
+                    {showMobile && (
+                      <ul className="zn-lib__rows">
+                        {visibleWorkouts.map((workout) => (
+                          <li key={workout.id}>
+                            <WorkoutRow workout={workout} favorite={favoriteSet.has(workout.id)} />
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {showDesktop && (
+                      <WorkoutTable
+                        workouts={visibleWorkouts}
+                        favorites={favoriteSet}
+                        sort={sort}
+                        onSort={setSort}
+                        caption={resultTitle}
+                      />
+                    )}
 
                     <div className="zn-lib__more">
                       {remaining > 0 && (

@@ -823,7 +823,7 @@
       "side main"
       "side crawl";
     grid-template-rows: auto auto auto 1fr;
-    column-gap: var(--sp-18);
+    column-gap: var(--sp-15);
     align-items: start;
   }
 
@@ -975,3 +975,155 @@
   opacity: 0.8;
 }
 
+
+/* ── le tableau, sur bureau ───────────────────────────────────────────── */
+
+/* Un vrai <table> : Séance | Profil (200 px) | Pic | Durée | Niveau | D+.
+   La largeur des colonnes est posée, pas calculée sur le contenu : une
+   colonne qui bouge d'une page à l'autre ne se compare plus. */
+.zn-wtable {
+  display: none;
+  inline-size: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font: var(--type-body-sm);
+  color: var(--text-body);
+}
+
+.zn-wtable th:nth-child(2) { inline-size: 200px; }
+.zn-wtable th:nth-child(3) { inline-size: 56px; }
+.zn-wtable th:nth-child(4) { inline-size: 80px; }
+.zn-wtable th:nth-child(5) { inline-size: 132px; }
+.zn-wtable th:nth-child(6) { inline-size: 72px; }
+
+.zn-wtable thead th {
+  padding: var(--sp-4) var(--sp-5);
+  border-block-end: var(--border-rule);
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  text-align: start;
+  color: var(--text-muted);
+}
+
+.zn-wtable thead th:first-child,
+.zn-wtable td:first-child,
+.zn-wtable tbody th {
+  padding-inline-start: var(--sp-3);
+}
+
+.zn-wtable__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-block-size: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+/* La marque du tri ne se montre que sur la colonne triée. */
+.zn-wtable__sortmark {
+  visibility: hidden;
+}
+
+.zn-wtable__sort[data-active] .zn-wtable__sortmark {
+  visibility: visible;
+}
+
+.zn-wtable__sort[data-active] {
+  font-weight: var(--fw-bold);
+}
+
+.zn-wtable__row {
+  position: relative;
+  border-block-end: var(--bw-hair) solid var(--line-divider);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-wtable__row:hover {
+  background: var(--surface-band);
+}
+
+/* Le focus du lien se dessine sur la ligne entière, qui est sa cible. */
+.zn-wtable__row:has(.zn-wtable__link:focus-visible) {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.zn-wtable tbody th,
+.zn-wtable td {
+  padding: var(--sp-4) var(--sp-5);
+  min-block-size: 52px;
+  block-size: 52px;
+  text-align: start;
+  vertical-align: middle;
+  font-weight: var(--fw-regular);
+}
+
+.zn-wtable__name {
+  overflow-wrap: anywhere;
+}
+
+.zn-wtable__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.zn-wtable__link:focus-visible {
+  outline: none;
+}
+
+/* Le nom étendu à toute la ligne : une cible, pas six. */
+.zn-wtable__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.zn-wtable__title {
+  font-family: var(--font-text);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body);
+  line-height: 1.25;
+}
+
+.zn-wtable__name .zn-favmark {
+  margin-inline-start: var(--sp-4);
+}
+
+.zn-wtable__profile {
+  --zn-zonebar-h: 26px;
+  inline-size: 100%;
+}
+
+.zn-wtable__kind,
+.zn-wtable__climb {
+  color: var(--text-muted);
+}
+
+.zn-wtable .zn-wfact--duration {
+  font-family: var(--font-mono);
+}
+
+.zn-wtable .zn-wfact {
+  color: var(--text-muted);
+}
+
+@media (min-width: 1024px) {
+  .zn-wtable {
+    display: table;
+  }
+
+  .zn-lib__rows,
+  .zn-lib__sort {
+    display: none;
+  }
+}

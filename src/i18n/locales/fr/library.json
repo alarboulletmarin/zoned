@@ -138,6 +138,12 @@
     "favorite": "Dans tes favoris",
     "track": "Piste"
   },
+  "table": {
+    "session": "Séance",
+    "profile": "Profil",
+    "peak": "Pic",
+    "climb": "D+"
+  },
   "difficulty": {
     "beginner": "Débutant",
     "intermediate": "Intermédiaire",
