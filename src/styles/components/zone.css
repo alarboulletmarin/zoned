@@ -69,7 +69,10 @@
   gap: var(--sp-1);
 
   block-size: var(--zn-zonebar-h, 36px);
+  /* The same 3px inset on top as on the sides: a Z6 block is 100% tall, and
+     without it its top edge fused with the bar's own frame. */
   padding-inline: 3px;
+  padding-block-start: 3px;
 
   background: var(--surface-card);
   border: var(--border-rule);
@@ -114,6 +117,9 @@
    this block's own --zn-block-fill. */
 .zn-zonebar__block[data-set] {
   background: var(--zn-set-teeth);
+  /* No outline: around teeth the hairline drew a box, a lid over the
+     repetitions that read as one more block. The teeth stand on their own. */
+  border: none;
 }
 
 /* ── the legend ───────────────────────────────────────────────────────── */
@@ -245,6 +251,7 @@
   block-size: 18px;
   gap: 1px;
   padding-inline: 2px;
+  padding-block-start: 2px;
   border-radius: var(--r-sm);
 }
 
