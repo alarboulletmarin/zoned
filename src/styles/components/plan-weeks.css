@@ -312,10 +312,11 @@
 
 /* ── the editor ───────────────────────────────────────────────────────── */
 
-/* The editor takes the wide column. Seven days across the default 1152px,
-   beside a 340px rail, left each day 95px: three words of a name and the
-   hover actions printed over the zone mark. The outer column is the
-   shell's, so it is widened from here, off the editor it holds. */
+/* The editor takes the wide column. Seven days across the former 1152px
+   default, beside a 340px rail, left each day 95px: three words of a name and
+   the hover actions printed over the zone mark. The outer column is the
+   shell's, so it is widened from here, off the editor it holds (the default
+   is the same width now, the rule keeps the intent written down). */
 .zn-page:has(.zn-pw__editor) {
   max-inline-size: var(--page-max-wide);
 }

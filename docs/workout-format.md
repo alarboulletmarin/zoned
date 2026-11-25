@@ -58,9 +58,9 @@ Three details that do not guess themselves:
 
 ### There is no `"ultra"` category, and there will not be one
 
-Decided, and documented so it is not reopened. Ultra-ness is a property of **duration, terrain and tag**, and `src/lib/practiceIndex.ts` already reads all three. A new member in the `WorkoutCategory` union would mean editing `ID_PREFIX_REGISTRY`, the union itself, **every** exhaustive `Record<WorkoutCategory, …>` downstream, and the `category.*` i18n keys in both languages — to express something the data already says.
+Decided, and documented so it is not reopened. Ultra is not a practice of the app any more (removed on 25 November 2026, see [`docs/pratiques.md`](pratiques.md)): a long session written for it is a `trail` or `long_run` template, filed under trail or road by its terrain. A new member in the `WorkoutCategory` union would mean editing `ID_PREFIX_REGISTRY`, the union itself, **every** exhaustive `Record<WorkoutCategory, …>` downstream, and the `category.*` i18n keys in both languages — to express something the data already says.
 
-An ultra session is therefore a `trail` (or `long_run`) template carrying `"ultra"` in `selectionCriteria.tags`, a high `estimatedDistanceKm`, and `terrainType` on its blocks. See [`docs/pratiques.md`](pratiques.md) for the full practice model.
+The plan generator still reads the `"ultra"` tag in `selectionCriteria.tags` when it selects sessions for an existing ultra plan. See [`docs/pratiques.md`](pratiques.md) for the full practice model.
 
 ## The three axes
 
@@ -240,6 +240,8 @@ A `segment` is one effort:
   "vmaPercent": 98,           // optional
   "intensityType": "I" }      // optional
 ```
+
+**Every effort of the main set has a zone.** `qa-workout-schema` fails on a `mainSetStructure` segment whose role is `effort` (or absent, which reads as effort) and that carries no `zone`: without one the profile hatches it like recovery and the session's peak falls back to Z2. Drills written as prose, a yoga sequence or the hours between the two halves of a double session are not running: they take `"role": "transition"`. Warm-up and cool-down segments are not held to this rule.
 
 A `repeat` repeats `steps` `count` times, inserting `between` **in the gaps**, so `count - 1` times rather than after the last rep:
 

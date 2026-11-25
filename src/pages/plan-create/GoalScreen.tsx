@@ -8,7 +8,6 @@ import { RACE_DISTANCE_META, type RaceDistance } from "@/types/plan";
 import {
   PRACTICES,
   distancesOfPractice,
-  isPracticeLive,
   type Practice,
 } from "@/types/practice";
 import { PURPOSE_OPTIONS, RACE_DISTANCE_ICONS } from "./constants";
@@ -24,16 +23,13 @@ interface GoalScreenProps {
 export function GoalScreen({ goal, presetPractice, onPick }: GoalScreenProps) {
   const { t } = useTranslation("plan");
   const pick = usePickLang();
-  const practices = PRACTICES.filter(isPracticeLive).filter(
-    (p) => !presetPractice || p === presetPractice,
-  );
-  const announced = PRACTICES.filter((p) => !isPracticeLive(p));
+  const practices = PRACTICES.filter((p) => !presetPractice || p === presetPractice);
   const purposes = PURPOSE_OPTIONS.filter(
     (o): o is (typeof PURPOSE_OPTIONS)[number] & { value: OpenPurpose } => o.value !== "race",
   );
 
   const tileContext = (d: RaceDistance) =>
-    d === "trail_short" || d === "trail" || d === "ultra"
+    d === "trail_short" || d === "trail"
       ? t("parcours.goal.upTo", { km: RACE_DISTANCE_META[d].distanceKm })
       : t("parcours.goal.weeksRange", RECOMMENDED_PLAN_WEEKS[d]);
 
@@ -117,13 +113,6 @@ export function GoalScreen({ goal, presetPractice, onPick }: GoalScreenProps) {
         </span>
         <ArrowRight size={18} />
       </Link>
-
-      {announced.length > 0 && (
-        <p className="zn-caption zn-faint zn-measure">
-          {t("race.announce")}{" "}
-          <Link to={`/library?practice=${announced[0]}`}>{t("practice.announceLibrary")}</Link>
-        </p>
-      )}
     </>
   );
 }

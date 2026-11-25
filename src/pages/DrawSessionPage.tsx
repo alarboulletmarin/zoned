@@ -421,7 +421,7 @@ export function DrawSessionPage() {
                       selected={filters.zones.includes(z)}
                       onClick={() => toggleZone(z)}
                     >
-                      <span className="zn-disc__swatch" aria-hidden="true">
+                      <span className="zn-zone-swatch" aria-hidden="true">
                         <span data-zone={z} />
                       </span>
                       {t(`draw.zoneChips.${z}`)}
@@ -584,7 +584,7 @@ export function DrawSessionPage() {
                         onClick={() => setResult(w)}
                       >
                         {zone && (
-                          <span className="zn-disc__swatch" aria-hidden="true">
+                          <span className="zn-zone-swatch" aria-hidden="true">
                             <span data-zone={zone} />
                           </span>
                         )}

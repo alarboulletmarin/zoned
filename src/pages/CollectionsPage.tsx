@@ -31,7 +31,7 @@ const COLLECTION_GROUPS: { id: string; titleKey: string; members: string[] }[] =
       "objectif-10k",
       "objectif-semi",
       "objectif-marathon",
-      "objectif-ultra",
+      "objectif-trail-long",
     ],
   },
   {

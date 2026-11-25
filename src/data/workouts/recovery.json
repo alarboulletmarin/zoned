@@ -717,6 +717,7 @@
         {
           "description": "2-3 foulées bondissantes",
           "descriptionEn": "2-3 bounding strides",
+          "zone": "Z5",
           "durationMin": 2
         }
       ],
@@ -734,6 +735,7 @@
           "kind": "segment",
           "description": "2-3 foulées bondissantes",
           "descriptionEn": "2-3 bounding strides",
+          "zone": "Z5",
           "durationSec": 120,
           "role": "effort"
         }
@@ -931,7 +933,7 @@
           "description": "Séquence yoga/stretching (sun salutations, postures de récupération)",
           "descriptionEn": "Yoga/stretching sequence (sun salutations, recovery poses)",
           "durationSec": 1200,
-          "role": "effort"
+          "role": "transition"
         }
       ],
       "cooldownTemplate": [

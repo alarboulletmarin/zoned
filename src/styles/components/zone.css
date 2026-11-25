@@ -69,7 +69,10 @@
   gap: var(--sp-1);
 
   block-size: var(--zn-zonebar-h, 36px);
+  /* The same 3px inset on top as on the sides: a Z6 block is 100% tall, and
+     without it its top edge fused with the bar's own frame. */
   padding-inline: 3px;
+  padding-block-start: 3px;
 
   background: var(--surface-card);
   border: var(--border-rule);
@@ -106,6 +109,18 @@
 .zn-zonebar__block[data-zone="4"] { --zn-block-fill: var(--zone-4); --zn-block-h: var(--zone-h-4); }
 .zn-zonebar__block[data-zone="5"] { --zn-block-fill: var(--zone-5); --zn-block-h: var(--zone-h-5); }
 .zn-zonebar__block[data-zone="6"] { --zn-block-fill: var(--zone-6); --zn-block-h: var(--zone-h-6); }
+
+/* A condensed set (condenseBlocks): the outline and height of the set, its
+   efforts as teeth of ink, the recoveries between them left as paper. One
+   solid slab said twelve minutes held at VO2max where the session was a
+   30/30. The gradient is built in ZoneBar.tsx from the real timings, over
+   this block's own --zn-block-fill. */
+.zn-zonebar__block[data-set] {
+  background: var(--zn-set-teeth);
+  /* No outline: around teeth the hairline drew a box, a lid over the
+     repetitions that read as one more block. The teeth stand on their own. */
+  border: none;
+}
 
 /* ── the legend ───────────────────────────────────────────────────────── */
 
@@ -149,6 +164,64 @@
   }
 }
 
+/* ── the legend as a filter ────────────────────────────────────────────
+
+   Where a screen can filter by zone (the library), each entry is a toggle.
+   The badge keeps its paint, the press is said by shape: an ink ring around
+   the chosen ones, and the others fade back once one is chosen, so the
+   filter reads from across the room without a single word. */
+.zn-zonescale__toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--r-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-zonescale__toggle .zn-zone-badge {
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.zn-zonescale__toggle:hover .zn-zone-badge {
+  box-shadow: 0 0 0 1px var(--line-strong);
+}
+
+.zn-zonescale__toggle:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-zonescale__toggle:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.zn-zonescale__toggle[aria-pressed="true"] .zn-zone-badge {
+  box-shadow:
+    0 0 0 2px var(--surface-page),
+    0 0 0 4px var(--line-strong);
+}
+
+.zn-zonescale[data-filtering] .zn-zonescale__toggle[aria-pressed="false"] {
+  opacity: 0.45;
+}
+
+.zn-zonescale[data-filtering] .zn-zonescale__toggle[aria-pressed="false"]:hover {
+  opacity: 0.8;
+}
+
+@media (pointer: coarse) {
+  .zn-zonescale__toggle {
+    min-block-size: var(--hit-min);
+  }
+}
+
 /* 38x20 swatch, one of the raw sizes the design system states outright. The
    legend itself no longer prints one (its entries are ZoneBadge chips); the
    zones table in ZoneCalculator still does, one per row. */
@@ -178,6 +251,38 @@
 .zn-zonescale__fill[data-zone="5"] { --zn-block-fill: var(--zone-5); }
 .zn-zonescale__fill[data-zone="6"] { --zn-block-fill: var(--zone-6); }
 
+/* ── la pastille : une marche de la rampe, dans une puce ─────────────── */
+
+/* A zone's rung of the ramp, printed inside its chip (the draw page's zone
+   filter, the library's intensity peak). The plate stays cream
+   and the outline follows the type, so a Z6 block (solid ink) is still
+   visible once the chip itself inverts. */
+.zn-zone-swatch {
+  display: block;
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--bw-hair) solid currentColor;
+  border-radius: var(--r-xs);
+}
+
+.zn-zone-swatch > span {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  background: var(--zn-swatch-fill, transparent);
+}
+
+.zn-zone-swatch > span[data-zone="1"] { --zn-swatch-fill: var(--zone-1); }
+.zn-zone-swatch > span[data-zone="2"] { --zn-swatch-fill: var(--zone-2); }
+.zn-zone-swatch > span[data-zone="3"] { --zn-swatch-fill: var(--zone-3); }
+.zn-zone-swatch > span[data-zone="4"] { --zn-swatch-fill: var(--zone-4); }
+.zn-zone-swatch > span[data-zone="5"] { --zn-swatch-fill: var(--zone-5); }
+.zn-zone-swatch > span[data-zone="6"] { --zn-swatch-fill: var(--zone-6); }
+
 /* ── la vignette : le même profil, à la taille d'une ligne ────────────── */
 
 /* La grille montrait la FORME de la séance (une ZoneBar de 36px), la carte
@@ -204,6 +309,7 @@
   block-size: 18px;
   gap: 1px;
   padding-inline: 2px;
+  padding-block-start: 2px;
   border-radius: var(--r-sm);
 }
 

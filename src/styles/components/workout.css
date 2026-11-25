@@ -399,22 +399,24 @@
   align-items: baseline;
 }
 
-/* ══ WorkoutListItem ═════════════════════════════════════════════════════ */
+/* ══ WorkoutRow, la rangée de la bibliothèque ═══════════════════════════ */
 
-/* A list row is paper lying flat: an outline, no shadow, no lift on hover.
-   The zone is the badge at the end, it carries the code, so the row needs
-   no tint behind it. */
+/* Une séance, trois lignes, un seul lien. Pas de carte : un filet `hair`
+   entre deux rangées (`.zn-lib__rows`, library.css) suffit à les séparer, et
+   la page lit alors comme une liste et non comme une pile de boîtes.
+
+   Le survol teinte, la pression enfonce d'un pixel, le focus encadre TOUT le
+   bloc : la cible est la rangée entière, l'anneau le dit. */
 .zn-wrow {
   display: flex;
-  align-items: center;
-  gap: var(--sp-6);
-  padding: var(--sp-6);
+  flex-direction: column;
+  gap: 9px;
+  min-block-size: var(--hit-min);
+  padding-block: var(--sp-7);
 
-  background: var(--surface-card);
   color: var(--text-body);
   text-decoration: none;
-  border: var(--border-rule);
-  border-radius: var(--r-xl);
+  border-radius: var(--r-sm);
 
   transition:
     background var(--dur-fast) var(--ease-out),
@@ -429,112 +431,84 @@
   transform: translateY(var(--press-shift));
 }
 
-.zn-wrow__main {
-  flex: 1;
+.zn-wrow:focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zn-wrow__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-4);
   min-inline-size: 0;
 }
 
+/* 500 sur 17 px, le titre entier : il passe à la ligne plutôt que de
+   tronquer, un nom de séance coupé ne se distingue plus de son voisin. */
 .zn-wrow__name {
-  display: block;
-  font: var(--type-label);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-family: var(--font-text);
+  font-weight: var(--fw-medium);
+  font-size: 17px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
-/* The duration moves under the name on a phone, where the fact columns are
-   gone; it is the one fact worth the second line. */
-.zn-wrow__compact {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-4);
-  margin-block-start: var(--sp-1);
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  letter-spacing: var(--ls-mono);
-  color: var(--text-faint);
+/* Le profil pleine largeur, 28 px : la hauteur qu'il a dans la maquette, la
+   forme se lit sans prendre la place d'une carte. */
+.zn-wrow__profile {
+  --zn-zonebar-h: 28px;
+  inline-size: 100%;
+}
+
+/* Le renfo n'a pas de profil : sa catégorie et son matériel, en secondaire. */
+.zn-wrow__kind {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
 }
 
 .zn-wrow__facts {
-  display: none;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-8);
-  flex: none;
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono);
-  letter-spacing: var(--ls-mono);
-  font-variant-numeric: tabular-nums;
-  color: var(--text-faint);
+  gap: var(--sp-3) var(--sp-6);
+  font: var(--type-caption);
+  color: var(--text-muted);
 }
 
-.zn-wrow__category {
-  inline-size: 96px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* ── les faits d'une séance, rangée et tableau ───────────────────────── */
+
+.zn-wfact {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   white-space: nowrap;
 }
 
-.zn-wrow__duration {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  inline-size: 64px;
-}
-
-/* min-inline-size, not inline-size: the badge sets its own `inline-size` and
-   this class must widen it to a column without racing that declaration. */
-.zn-wrow__difficulty {
-  min-inline-size: 96px;
-}
-
-.zn-wrow__terrain {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  inline-size: 80px;
-}
-
-.zn-wrow__facts svg,
-.zn-wrow__compact svg {
-  inline-size: 14px;
-  block-size: 14px;
+.zn-wfact > svg {
   flex: none;
 }
 
-/* La vignette de profil (zone.css, .zn-profile-mini) : une colonne fixe juste
-   avant le favori, donc alignée d'une rangée à l'autre comme les colonnes de
-   faits. Elle ne se replie ni ne s'étire, une largeur variable ferait varier
-   la durée apparente d'une séance à l'autre alors que la largeur d'un bloc
-   est du temps. 56px sur un téléphone, où la rangée n'a plus que son nom, et
-   72px dès que les colonnes de faits reviennent. */
-.zn-wrow__profile {
-  inline-size: 56px;
+/* La jauge garde l'encre pleine : c'est elle qui dit le niveau, le libellé
+   ne fait que le nommer. */
+.zn-wfact__gauge {
+  color: var(--text-body);
+}
+
+/* La durée est une mesure : mono, encre pleine, chiffres alignés. */
+.zn-wfact--duration {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* Le coeur d'état, posé sur la ligne de base du nom. Le vermillon de la
+   maison, plein : un favori se reconnaît à sa forme, pas à une teinte. */
+.zn-favmark {
+  display: inline-flex;
   flex: none;
-}
-
-.zn-wrow__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  flex: none;
-}
-
-@media (min-width: 640px) {
-  .zn-wrow__facts {
-    display: flex;
-  }
-  .zn-wrow__compact {
-    display: none;
-  }
-  .zn-wrow__profile {
-    inline-size: 72px;
-  }
-}
-
-@media (pointer: coarse) {
-  .zn-wrow {
-    min-block-size: var(--hit-min);
-  }
+  align-self: baseline;
+  color: var(--accent);
+  transform: translateY(1px);
 }
 
 /* ══ ExportableWorkoutCard ═══════════════════════════════════════════════

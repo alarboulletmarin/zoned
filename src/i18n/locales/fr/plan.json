@@ -790,8 +790,7 @@
     "noRace": "Pas de course en vue ?",
     "otherWays": "Tu préfères",
     "prebuiltLink": "un plan déjà écrit",
-    "freeLink": "un calendrier vide à remplir toi-même",
-    "announce": "Ultra et triathlon : les séances sont là, les plans arrivent."
+    "freeLink": "un calendrier vide à remplir toi-même"
   },
   "event": {
     "title": "Ta course",
@@ -802,7 +801,6 @@
   "practice": {
     "title": "Qu'est-ce que tu prépares ?",
     "subtitle": "Ça décide de tout le reste : les distances proposées, et les questions posées.",
-    "soon": "bientôt",
     "distanceCount_one": "{{count}} distance",
     "distanceCount_other": "{{count}} distances",
     "workoutCount_one": "{{count}} séance",
@@ -817,20 +815,7 @@
     "trail": {
       "label": "Trail",
       "body": "Du trail court au 60 km : dénivelé, terrain, descente."
-    },
-    "ultra": {
-      "label": "Ultra",
-      "body": "Au-delà du trail : temps sur les pieds, nuit, ravitaillement.",
-      "announce": "Un plan ultra se bâtit sur seize à cinquante-deux semaines, avec du temps sur les pieds, de la nuit et une stratégie de ravitaillement. Ce que le générateur en sort n'est pas encore assez fiable pour qu'on te le propose, alors on ne le propose pas. En attendant, rien n'est bloqué : les séances ultra sont dans la bibliothèque, et les calculateurs donnent tes allures."
-    },
-    "triathlon": {
-      "label": "Triathlon",
-      "body": "Nage, vélo, course. Les séances sont là, les plans arrivent.",
-      "announce": "Les plans triathlon demandent des créneaux par discipline et des enchaînements : c'est un chantier à part, et il n'est pas commencé. En attendant, rien n'est bloqué, les séances vélo et natation sont dans la bibliothèque, et les tests FTP et CSS calculent tes zones."
-    },
-    "announceKicker": "Ce qui existe déjà",
-    "announceLibrary": "Voir les séances",
-    "announceNumbers": "Ouvrir les calculateurs"
+    }
   },
   "terrain": {
     "title": "Sur quoi tu cours ?",
@@ -845,18 +830,6 @@
     "elevation": "Dénivelé positif de la course (m)",
     "elevationPlaceholder": "Ex. 1200",
     "elevationDesc": "Le D+ total annoncé par l'organisateur. Facultatif."
-  },
-  "ultra": {
-    "title": "Ce qu'il faut répéter",
-    "subtitle": "Ce qui arrivera en course et qui s'apprend à l'entraînement. Coche ce qui te concerne.",
-    "night": "Courir de nuit",
-    "nightDesc": "Une sortie à la frontale, pour ne pas découvrir le noir le jour J.",
-    "fuelling": "Répéter le ravitaillement",
-    "fuellingDesc": "Manger et boire en courant : l'estomac s'entraîne comme les jambes.",
-    "poles": "Utiliser des bâtons",
-    "polesDesc": "Monter en marchant avec des bâtons, ça se travaille.",
-    "backToBack": "Deux jours de suite",
-    "backToBackDesc": "Une sortie longue le samedi, une autre le dimanche sur jambes fatiguées."
   },
   "page": {
     "back": "Plans",

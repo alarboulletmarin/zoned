@@ -94,35 +94,6 @@
   background: var(--ink-2);
 }
 
-/* A zone's rung of the ramp, printed inside its chip. The plate stays cream
-   and the outline follows the type, so a Z6 block (solid ink) is still
-   visible once the chip itself inverts. */
-.zn-disc__swatch {
-  display: block;
-  inline-size: 15px;
-  block-size: 15px;
-  flex: none;
-  overflow: hidden;
-
-  background: var(--surface-card);
-  border: var(--bw-hair) solid currentColor;
-  border-radius: var(--r-xs);
-}
-
-.zn-disc__swatch > span {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  background: var(--zn-swatch-fill, transparent);
-}
-
-.zn-disc__swatch > span[data-zone="1"] { --zn-swatch-fill: var(--zone-1); }
-.zn-disc__swatch > span[data-zone="2"] { --zn-swatch-fill: var(--zone-2); }
-.zn-disc__swatch > span[data-zone="3"] { --zn-swatch-fill: var(--zone-3); }
-.zn-disc__swatch > span[data-zone="4"] { --zn-swatch-fill: var(--zone-4); }
-.zn-disc__swatch > span[data-zone="5"] { --zn-swatch-fill: var(--zone-5); }
-.zn-disc__swatch > span[data-zone="6"] { --zn-swatch-fill: var(--zone-6); }
-
 /* ══ collections ═══════════════════════════════════════════════════════ */
 
 /* The detail hero. An outlined sheet, not a tinted one: the collection's

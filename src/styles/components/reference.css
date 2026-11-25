@@ -62,7 +62,7 @@
 }
 
 /* A reading column. The two term/comparison screens are prose plus one table,
-   and neither survives the full 1152px measure. */
+   and neither survives the full column. */
 .zn-ref__column {
   inline-size: 100%;
   max-inline-size: var(--page-max-narrow);

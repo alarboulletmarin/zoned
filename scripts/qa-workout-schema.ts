@@ -621,6 +621,46 @@ function checkWorkoutSteps(
   });
 }
 
+/**
+ * Every effort segment of the main set carries a zone.
+ *
+ * An effort without one is drawn as recovery (the profile hatches it) and
+ * leaves the session's peak to the Z2 default, so the library row and the
+ * session page both lied about it: the bounding efforts of HIL-004 were
+ * hatched like the walk down between them. What is not running (drills
+ * written as prose, a yoga sequence, the hours between a double session)
+ * says so with `role: "transition"`. A segment without a role is an effort,
+ * exactly as `workoutStructure.ts` reads it.
+ *
+ * Warm-up and cool-down drills are out of scope: they are not what a session
+ * is filtered or sorted on.
+ */
+function checkMainSetEffortZones(report: Report, id: string, value: unknown): void {
+  if (!Array.isArray(value)) return;
+  const walk = (steps: unknown[], path: string): void => {
+    steps.forEach((step, index) => {
+      const at = `${path}[${index}]`;
+      if (!isRecord(step)) return;
+      if (step.kind === "repeat") {
+        if (Array.isArray(step.steps)) walk(step.steps, `${at}.steps`);
+        if (Array.isArray(step.between)) walk(step.between, `${at}.between`);
+        return;
+      }
+      if (step.kind !== "segment") return;
+      const role = step.role ?? "effort";
+      const zone = typeof step.zone === "string" ? step.zone.trim() : "";
+      if (role === "effort" && zone === "") {
+        report(
+          id,
+          `${at}.zone`,
+          'an effort segment of the main set needs a zone; what is not running takes role "transition"',
+        );
+      }
+    });
+  };
+  walk(value, "mainSetStructure");
+}
+
 function checkStrengthBlocks(
   report: Report,
   id: string,
@@ -816,6 +856,7 @@ function validateRunningTemplate(
   }
   if (template.mainSetStructure !== undefined) {
     checkWorkoutSteps(report, id, "mainSetStructure", template.mainSetStructure);
+    checkMainSetEffortZones(report, id, template.mainSetStructure);
   }
   if (template.cooldownStructure !== undefined) {
     checkWorkoutSteps(report, id, "cooldownStructure", template.cooldownStructure);

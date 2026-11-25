@@ -101,7 +101,7 @@ The inputs of an assisted plan; Zoned runs `generatePlan()` on them, exactly as 
 
 | Field | Required | Values |
 |---|---|---|
-| `raceDistance` | yes | `5K`, `10K`, `semi`, `marathon`, `trail_short`, `trail`, `ultra` |
+| `raceDistance` | yes | `5K`, `10K`, `semi`, `marathon`, `trail_short`, `trail` |
 | `raceDate` | yes | `YYYY-MM-DD`, today or later; 4 to 52 weeks after the start |
 | `level` | yes | `beginner`, `intermediate`, `advanced`, `elite` |
 | `daysPerWeek` | yes | integer 3-7 |

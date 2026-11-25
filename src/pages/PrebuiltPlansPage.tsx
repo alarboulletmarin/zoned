@@ -10,7 +10,6 @@ import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import {
   PRACTICES,
   PRACTICE_META,
-  isPracticeLive,
   practiceFromRaceDistance,
 } from "@/types/practice";
 
@@ -28,21 +27,15 @@ export function PrebuiltPlansPage() {
 
   const plans = getAllPrebuiltPlans();
 
-  /* Les pratiques VIVANTES dont l'étagère est vide.
+  /* Les pratiques dont l'étagère est vide.
      Un rayon vide ne rend jamais une grille vide en silence : il le dit, et il
-     dit ce qui marche à la place. Une pratique ANNONCÉE n'entre pas dans cette
-     liste : elle porte son annonce ailleurs, et compter zéro plan pour une
-     pratique qui n'est pas ouverte serait du bruit, surtout que le bloc
-     renvoie vers le générateur, ce qui serait exactement le contraire de ce
-     que dit l'annonce.
-     C'était l'ultra jusqu'au 12 septembre 2026 ; il est passé annoncé et le
-     bloc a disparu tout seul, sans qu'une ligne change ici. La liste est vide
-     aujourd'hui, et elle se remplira d'elle-même le jour où une pratique
-     ouverte se retrouvera sans plan tout prêt. */
+     dit ce qui marche à la place. La liste est vide aujourd'hui, et elle se
+     remplira d'elle-même le jour où une pratique se retrouvera sans plan tout
+     prêt. */
   const served = new Set(
     plans.filter((p) => p.raceDistance).map((p) => practiceFromRaceDistance(p.raceDistance!)),
   );
-  const unserved = PRACTICES.filter((p) => isPracticeLive(p) && !served.has(p));
+  const unserved = PRACTICES.filter((p) => !served.has(p));
 
   return (
     <>
@@ -97,8 +90,8 @@ export function PrebuiltPlansPage() {
             qu'une section écrite à la main : la variante not-started porte
             déjà la mise en page (la figure sur le filet, les mots à côté sur un
             écran large, dessous sur un téléphone) et le ton d'un appel positif.
-            `art` la remplace par la figure de la pratique, un rayon ultra vide
-            montre la figure qui s'éloigne, pas la figure générique. */}
+            `art` la remplace par la figure de la pratique plutôt que par la
+            figure générique. */}
         {unserved.map((practice) => {
           const label = isEn
             ? PRACTICE_META[practice].labelEn

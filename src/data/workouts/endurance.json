@@ -570,6 +570,7 @@
         {
           "description": "Gammes techniques (talons-fesses, montées genoux, pas chassés)",
           "descriptionEn": "Technical drills (butt kicks, high knees, lateral shuffles)",
+          "zone": "Z2",
           "durationMin": 5
         },
         {
@@ -594,6 +595,7 @@
           "kind": "segment",
           "description": "Gammes techniques (talons-fesses, montées genoux, pas chassés)",
           "descriptionEn": "Technical drills (butt kicks, high knees, lateral shuffles)",
+          "zone": "Z2",
           "durationSec": 300,
           "role": "effort"
         },

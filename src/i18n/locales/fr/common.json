@@ -940,10 +940,7 @@
         "10K",
         "semi",
         "marathon",
-        "trail",
-        "ultra",
-        "triathlon",
-        "ironman"
+        "trail"
       ]
     },
     "articleFaq": {
