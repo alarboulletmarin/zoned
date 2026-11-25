@@ -77,8 +77,8 @@ export function describeIssue(issue: ImportIssue, lang: IssueLang): string {
         : `${at}${issue.path} is ${p.value}, expected ${p.integer ? "an integer " : ""}between ${p.min} and ${p.max}.`;
     case "race_before_start":
       return fr
-        ? `raceDate (${p.raceDate}) doit tomber après la date de début (${p.startDate}).`
-        : `raceDate (${p.raceDate}) must fall after the start date (${p.startDate}).`;
+        ? `${issue.path || "raceDate"} (${p.raceDate}) doit tomber après la date de début (${p.startDate}).`
+        : `${issue.path || "raceDate"} (${p.raceDate}) must fall after the start date (${p.startDate}).`;
     case "weeks_out_of_range":
       if (issue.path === "weeks") {
         return fr
@@ -86,8 +86,8 @@ export function describeIssue(issue: ImportIssue, lang: IssueLang): string {
           : `The plan has ${p.count} weeks, expected between ${p.min} and ${p.max}.`;
       }
       return fr
-        ? `Entre ${p.from} et raceDate il y a ${p.count} semaines, le générateur en accepte entre ${p.min} et ${p.max}.`
-        : `There are ${p.count} weeks between ${p.from} and raceDate, the generator accepts ${p.min} to ${p.max}.`;
+        ? `Entre ${p.from} et ${issue.path || "raceDate"} il y a ${p.count} semaines, le générateur en accepte entre ${p.min} et ${p.max}.`
+        : `There are ${p.count} weeks between ${p.from} and ${issue.path || "raceDate"}, the generator accepts ${p.min} to ${p.max}.`;
     case "text_too_long":
       return fr
         ? `${at}${issue.path} fait ${p.length} caractères, maximum ${p.max}.`
@@ -120,6 +120,22 @@ export function describeIssue(issue: ImportIssue, lang: IssueLang): string {
         : `startDate ${p.from} is not a Monday, the plan starts on Monday ${p.to}.`;
     case "empty_week":
       return fr ? `${at}aucune séance, semaine de repos.` : `${at}no session, a rest week.`;
+    case "invalid_format":
+      return fr
+        ? `${issue.path} vaut ${p.value}, format attendu : ${p.expected}.`
+        : `${issue.path} is ${p.value}, expected ${p.expected}.`;
+    case "conflicting_fields":
+      return fr
+        ? `${issue.path} et ${p.other} sont donnés tous les deux. Gardez l'un des deux.`
+        : `Both ${issue.path} and ${p.other} are given. Keep one of them.`;
+    case "time_needs_road_distance":
+      return fr
+        ? `${issue.path} demande une distance sur route (5K, 10K, semi, marathon), pas ${p.distance}. Utilisez pace, ou rien.`
+        : `${issue.path} needs a road distance (5K, 10K, semi, marathon), not ${p.distance}. Use pace instead, or nothing.`;
+    case "default_applied":
+      return fr
+        ? `${issue.path} absent, valeur par défaut : ${p.value}.`
+        : `${issue.path} not given, defaulting to ${p.value}.`;
   }
 }
 

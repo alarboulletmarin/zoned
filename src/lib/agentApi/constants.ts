@@ -17,6 +17,10 @@ export const AGENT_API_PATH = `/api/${AGENT_API_VERSION}`;
 
 export const AGENT_API_BASE = `${SITE_URL}${AGENT_API_PATH}`;
 
+/** The human-readable docs for agents, a prerendered page. */
+export const AGENTS_PATH = "/agents";
+export const AGENTS_PAGE_URL = `${SITE_URL}${AGENTS_PATH}`;
+
 /** The import route an agent hands the user. */
 export const PLAN_IMPORT_PATH = "/plan/import";
 
