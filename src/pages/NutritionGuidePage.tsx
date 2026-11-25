@@ -1,6 +1,6 @@
-import { useState, useCallback, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   ArrowLeft,
   Utensils,
@@ -12,7 +12,6 @@ import {
   Flame,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -29,11 +28,13 @@ import {
   nutritionSections,
   calculateFueling,
 } from "@/data/guides/nutrition";
-import type {
-  NutritionBlock,
-  FuelingResult,
-} from "@/data/guides/nutrition";
+import type { NutritionBlock } from "@/data/guides/nutrition";
 import { pickLang } from "@/lib/i18n-utils";
+import { StepChrono, StepField } from "@/components/calc";
+import { useMyNumbers } from "@/hooks/useMyNumbers";
+import { useSettings } from "@/hooks/useSettings";
+import { raceLabel } from "@/lib/myNumbers";
+import { convertDistance } from "@/lib/units";
 
 // ---------------------------------------------------------------------------
 // Icon mapping: section icon names -> components
@@ -49,19 +50,23 @@ const SECTION_ICONS: Record<string, React.ComponentType<IconProps>> = {
 };
 
 // ---------------------------------------------------------------------------
-// Shared preset distances
+// The four usual distances, for a race that is not in a plan
 // ---------------------------------------------------------------------------
 const PRESETS = [
-  { label: "5K", km: 5, defaultMin: 25 },
-  { label: "10K", km: 10, defaultMin: 50 },
-  { label: "Semi", km: 21.1, defaultMin: 105 },
-  { label: "Marathon", km: 42.195, defaultMin: 210 },
+  { label: "5K", km: 5 },
+  { label: "10K", km: 10 },
+  { label: "Semi", km: 21.1 },
+  { label: "Marathon", km: 42.195 },
 ] as const;
 
 const PRESET_OPTIONS: SegmentedOption<string>[] = PRESETS.map((p) => ({
   value: p.label,
   label: p.label,
 }));
+
+const MI_PER_KM = convertDistance(1, "imperial");
+const LB_PER_KG = 2.20462;
+const ML_PER_FL_OZ = 29.5735;
 
 // ---------------------------------------------------------------------------
 // Content block renderer
@@ -131,39 +136,38 @@ function renderBlock(
 // Fueling Calculator
 // ---------------------------------------------------------------------------
 function FuelingCalculator() {
-  const { t } = useTranslation("guides");
+  const { t, i18n } = useTranslation(["guides", "simulator"]);
+  const isEn = i18n.language?.startsWith("en") ?? false;
+  const imperial = useSettings().settings.unitSystem === "imperial";
+  const { numbers, ready } = useMyNumbers();
+  const [params] = useSearchParams();
 
-  const [distanceKm, setDistanceKm] = useState("");
-  const [durationMin, setDurationMin] = useState("");
-  const [bodyWeightKg, setBodyWeightKg] = useState("");
-  const [result, setResult] = useState<FuelingResult | null>(null);
-  const [activePreset, setActivePreset] = useState<string | null>(null);
+  /* La course : celle du lien (?race=), sinon la prochaine du plan, sinon
+     Autre. Changer de course repart de ce que le plan en sait. */
+  const [choice, setChoice] = useState<string | null>(() => params.get("race"));
+  // A key that is no longer in the plan (a past race, an old link) follows the plan.
+  const known = choice === "other" || numbers.races.some((r) => r.key === choice);
+  const effective = known ? choice! : ready ? (numbers.races[0]?.key ?? "other") : "other";
+  const race = numbers.races.find((r) => r.key === effective);
+  // null: not touched, the field follows the race.
+  const [kmEdit, setKmEdit] = useState<number | undefined | null>(null);
+  const [secondsEdit, setSecondsEdit] = useState<number | undefined | null>(null);
+  const [weightKg, setWeightKg] = useState<number | undefined>();
+  const pick = (key: string) => {
+    setChoice(key);
+    setKmEdit(null);
+    setSecondsEdit(null);
+  };
 
-  const handlePreset = useCallback((label: string) => {
-    const preset = PRESETS.find((p) => p.label === label);
-    if (!preset) return;
-    setDistanceKm(String(preset.km));
-    setDurationMin(String(preset.defaultMin));
-    setActivePreset(preset.label);
-    setResult(null);
-  }, []);
-
-  const handleCalculate = useCallback(() => {
-    const dist = parseFloat(distanceKm);
-    const dur = parseFloat(durationMin);
-    if (!dist || dist <= 0 || !dur || dur <= 0) return;
-
-    const weight = bodyWeightKg ? parseFloat(bodyWeightKg) : undefined;
-    const r = calculateFueling({
-      distanceKm: dist,
-      durationMin: dur,
-      bodyWeightKg: weight && weight > 0 ? weight : undefined,
-    });
-    setResult(r);
-  }, [distanceKm, durationMin, bodyWeightKg]);
-
-  const canCalculate =
-    parseFloat(distanceKm) > 0 && parseFloat(durationMin) > 0;
+  const km = kmEdit !== null ? kmEdit : race?.distanceKm;
+  const seconds = secondsEdit !== null ? secondsEdit : race?.targetSeconds;
+  const result =
+    km && seconds
+      ? calculateFueling({ distanceKm: km, durationMin: Math.round(seconds / 60), bodyWeightKg: weightKg })
+      : null;
+  const preset = PRESETS.find((p) => p.km === km)?.label ?? "";
+  const fluid = (ml: number) =>
+    imperial ? `${Math.round(ml / ML_PER_FL_OZ)} fl oz` : `${ml} ml`;
 
   return (
     <Card>
@@ -178,96 +182,76 @@ function FuelingCalculator() {
         className="zn-stack"
         style={{ "--gap": "var(--sp-13)" } as CSSProperties}
       >
-        {/* The four usual distances. A radiogroup: one tab stop, arrow keys
-            move the choice, and the chosen segment inverts to ink so the
-            screen's single vermillon fill stays on the action below. */}
-        <Segmented
-          label={t("nutrition.presetsLabel")}
-          value={activePreset ?? ""}
-          onChange={handlePreset}
-          options={PRESET_OPTIONS}
-        />
-
-        <div className="zn-guide__fields">
-          <div className="zn-guide__field">
-            <label htmlFor="calc-distance" className="zn-label">
-              {t("nutrition.distanceLabel")}
-            </label>
-            <span
-              className="zn-numfield"
-              style={{ "--field-w": "76px" } as CSSProperties}
-            >
-              <input
-                id="calc-distance"
-                type="number"
-                min={0.1}
-                step={0.1}
-                placeholder="42.195"
-                value={distanceKm}
-                onChange={(e) => {
-                  setDistanceKm(e.target.value);
-                  setActivePreset(null);
-                  setResult(null);
-                }}
-                className="zn-numfield__input"
-              />
-            </span>
+        {/* Les courses du plan, puis Autre, comme dans le simulateur. */}
+        {numbers.races.length > 0 && (
+          <div className="zn-cluster" role="radiogroup" aria-label={t("simulator:pick.label")}>
+            {[...numbers.races.map((r) => ({
+              key: r.key,
+              label: `${raceLabel(r, isEn)} · ${t("simulator:pick.daysLeft", { count: r.daysLeft })}`,
+            })), { key: "other", label: t("simulator:pick.other") }].map((c) => (
+              <button
+                key={c.key}
+                type="button"
+                role="radio"
+                aria-checked={effective === c.key}
+                className="zn-chip"
+                onClick={() => pick(c.key)}
+              >
+                {c.label}
+              </button>
+            ))}
           </div>
+        )}
 
-          <div className="zn-guide__field">
-            <label htmlFor="calc-duration" className="zn-label">
-              {t("nutrition.durationLabel")}
-            </label>
-            <span
-              className="zn-numfield"
-              style={{ "--field-w": "76px" } as CSSProperties}
-            >
-              <input
-                id="calc-duration"
-                type="number"
-                min={1}
-                step={1}
-                placeholder="210"
-                value={durationMin}
-                onChange={(e) => {
-                  setDurationMin(e.target.value);
-                  setResult(null);
-                }}
-                className="zn-numfield__input"
-              />
-            </span>
-          </div>
+        {/* The four usual distances, when the race is not one of the plan. */}
+        {!race && (
+          <Segmented
+            className="zn-guide__presets"
+            label={t("nutrition.presetsLabel")}
+            value={preset}
+            onChange={(label) => setKmEdit(PRESETS.find((p) => p.label === label)?.km)}
+            options={PRESET_OPTIONS}
+          />
+        )}
 
-          <div className="zn-guide__field">
-            <label htmlFor="calc-weight" className="zn-label">
-              {t("nutrition.weightLabel")}
-            </label>
-            <span
-              className="zn-numfield"
-              style={{ "--field-w": "76px" } as CSSProperties}
-            >
-              <input
-                id="calc-weight"
-                type="number"
-                min={30}
-                max={150}
-                step={0.5}
-                placeholder="70"
-                value={bodyWeightKg}
-                onChange={(e) => {
-                  setBodyWeightKg(e.target.value);
-                  setResult(null);
-                }}
-                className="zn-numfield__input"
-              />
-            </span>
-          </div>
+        <div className="zn-calc-fields">
+          <StepField
+            label={t("nutrition.distanceLabel")}
+            unit={imperial ? "mi" : "km"}
+            value={km === undefined ? undefined : imperial ? km * MI_PER_KM : km}
+            onChange={(v) => setKmEdit(v === undefined ? undefined : imperial ? v / MI_PER_KM : v)}
+            step={0.5}
+            min={0.1}
+            max={500}
+            decimals={1}
+            fallback={10}
+          />
+          <StepChrono
+            label={t("nutrition.durationLabel")}
+            format="hms"
+            value={seconds}
+            onChange={setSecondsEdit}
+            step={60}
+            min={60}
+            distanceKm={km}
+            fallback={3600}
+          />
+          <StepField
+            label={t("nutrition.weightLabel")}
+            unit={imperial ? "lb" : "kg"}
+            value={weightKg === undefined ? undefined : Math.round(imperial ? weightKg * LB_PER_KG : weightKg)}
+            onChange={(v) => setWeightKg(v === undefined ? undefined : imperial ? v / LB_PER_KG : v)}
+            step={1}
+            min={imperial ? 66 : 30}
+            max={imperial ? 330 : 150}
+            fallback={imperial ? 154 : 70}
+          />
         </div>
-
-        {/* The screen's one vermillon fill. */}
-        <Button onClick={handleCalculate} disabled={!canCalculate}>
-          {t("nutrition.calculate")}
-        </Button>
+        {race && kmEdit === null && secondsEdit === null && (
+          <p className="zn-calc-hint">
+            {t(race.targetSeconds ? "nutrition.fromPlan" : "nutrition.fromPlanNoTarget")}
+          </p>
+        )}
 
         {result && (
           <div
@@ -296,9 +280,9 @@ function FuelingCalculator() {
               />
               <StatBlock
                 tone="card"
-                value={`${result.fluidMlPerHour} ml`}
+                value={fluid(result.fluidMlPerHour)}
                 label={t("nutrition.fluidPerHour")}
-                footnote={t("nutrition.totalFluid", { value: result.totalFluidMl })}
+                footnote={t("nutrition.totalFluid", { value: fluid(result.totalFluidMl) })}
               />
               <StatBlock
                 tone="card"
@@ -324,7 +308,7 @@ function FuelingCalculator() {
               <ol className="zn-guide__timeline">
                 {result.timeline.map((cp, i) => {
                   const isPreRace = cp.timeMin < 0;
-                  const isPostRace = cp.timeMin >= parseFloat(durationMin);
+                  const isPostRace = cp.timeMin >= Math.round(seconds! / 60);
                   const phase = isPreRace
                     ? "pre"
                     : isPostRace

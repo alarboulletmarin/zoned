@@ -1,5 +1,6 @@
 import type { ZoneNumber, ZoneRange, UserZonePreferences } from "@/types";
-import { loadRunnerProfile, saveRunnerProfile } from "@/lib/runnerProfile";
+import { loadRunnerProfile, saveRunnerProfile, updateBaseData } from "@/lib/runnerProfile";
+import { OK, failed, type Outcome } from "@/lib/failure";
 
 // HR Zone percentages (% of FCmax). Exported: the agent API (`lib/agentApi`)
 // publishes these bounds, so they are read from here rather than restated.
@@ -138,6 +139,29 @@ export function saveUserZonePrefs(prefs: UserZonePreferences): void {
     if (validated.vma !== undefined) profile.vma = validated.vma;
     saveRunnerProfile(profile);
   }
+}
+
+/**
+ * Pose, change ou supprime un repère (`undefined` supprime) aux deux endroits
+ * où il vit : le profil, qui fait foi, et l'ancienne clé des zones, que
+ * `loadUserZonePrefs` relit quand le profil n'a ni VMA ni FC max. Supprimer du
+ * seul profil laissait l'ancienne valeur revenir par là.
+ */
+export function setMyNumber(key: "vma" | "fcMax", value: number | undefined): Outcome {
+  const saved = updateBaseData({ [key]: value });
+  if (!saved.ok) return saved;
+  const profile = loadRunnerProfile();
+  try {
+    if (profile?.vma === undefined && profile?.fcMax === undefined) {
+      localStorage.removeItem(STORAGE_KEY);
+    } else {
+      const data = { vma: profile.vma, fcMax: profile.fcMax, updatedAt: new Date().toISOString() };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+  } catch (err) {
+    return failed(err);
+  }
+  return OK;
 }
 
 /**

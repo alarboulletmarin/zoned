@@ -25,8 +25,6 @@ export { ScanCard } from "./ScanCard";
 // import { ExportableWorkoutCard } from "@/components/domain/ExportableWorkoutCard";
 //
 // Lazy-loaded pages only:
-// import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
-// import { PaceCalculator } from "@/components/domain/PaceCalculator";
 // import { ExportDatePicker } from "@/components/domain/ExportDatePicker";
 // import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 //

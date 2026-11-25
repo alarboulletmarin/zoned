@@ -17,7 +17,17 @@ du plan) et répond avant qu'elle tape. Tout passe par `useMyNumbers()`
 - `races` : les courses à venir des plans de course, objectifs intermédiaires
   compris, triées par date, sans doublon. Chaque course a une `key`
   (`planId|date|distance`) qui sert de lien : `/race-simulator?race=<key>`,
-  `/calculators/splits?race=<key>`.
+  `/calculators/splits?race=<key>`, `/guides/nutrition?race=<key>` (le
+  calculateur de ravitaillement). Une clé qui n'est plus dans le plan suit
+  le plan.
+
+Les repères se posent, se changent et se suppriment à un seul endroit : les
+tuiles du profil (`/profile`, `src/components/domain/MyNumbersTiles.tsx`).
+Une tuile touchée devient son champ, sur place ; `Supprimer` retire la valeur
+du profil et de l'ancienne clé `zoned-userZones` (`setMyNumber` dans
+`src/lib/zones.ts`), sinon elle reviendrait par le repli. Les calculateurs
+proposent de prendre une valeur, jamais de l'effacer. Mes zones (`/my-zones`)
+a fusionné dans Zones.
 
 Le hook suit la règle de prérendu : premier rendu vide, comme le HTML, lecture
 du stockage dans un effet. Une valeur absente s'affiche `à poser`, en
@@ -36,7 +46,17 @@ pointillés, jamais un exemple inventé.
 
 La table des allures reste une page (`/calculators/table-allures`), en tableau
 dense, ouverte depuis Allures. FTP et CSS (vélo, natation) gardent leurs
-routes mais sortent de la grille : une ligne en bas du hub.
+routes mais sortent de la grille : une ligne en bas du hub. Elles suivent la
+même anatomie que les six outils et, sans test saisi, s'ouvrent sur la FTP ou
+la CSS enregistrée (profils vélo et natation, lus dans un effet). `Prendre X`
+n'apparaît que pour une valeur que le profil garde (`FTP_WATTS_RANGE`,
+`CSS_SEC_PER_100M_RANGE` dans `src/lib/athleteProfile.ts`).
+
+Zones renvoie vers les séances de la zone ouverte : `/library?peak=N`, le
+filtre de pic de la bibliothèque (`getPeakZone`, celle du badge des cartes,
+voir `docs/bibliotheque.md`). La zone où
+l'on passe le plus de minutes ne sert pas : l'échauffement et le retour au
+calme la tirent vers Z1-Z2, et aucune séance n'aurait Z5 ou Z6.
 
 `scripts/site-stats.ts` compte les lignes `id:` de `CALCULATEURS` : une par
 outil, pas plus.
@@ -57,6 +77,8 @@ Les primitives de `src/components/calc/index.tsx` :
 - `StepField` / `StepChrono` : saisie encadrée de - et +, brouillon local ;
   une saisie invalide se signale, et la sortie du champ rend la dernière
   valeur valide.
+  Un choix posé dans la même grille (protocole, distance) prend
+  `zn-calc-field--wide` : toute la ligne.
 - `Answer` : le chiffre en grand, puis ce qui le situe.
 - `ZoneBand` : la bande des zones en % de VMA, avec le marqueur.
 - `SplitBars` : une barre par kilomètre, hauteur selon l'écart réel de vitesse.
@@ -103,6 +125,7 @@ Redirections permanentes, dans `vercel.json`, `nginx.conf` et le routeur
 - `/calculators/equivalence` vers `/calculators/vma`
 - `/calculators/age-graded` vers `/calculators/vma`
 - `/calculators/convertisseur` vers `/calculators/allures`
+- `/my-zones` vers `/calculators/zones`
 
 Un lien qui porte des paramètres n'hydrate pas le HTML prérendu, qui a été
 rendu sans eux (`isServerSnapshot`) : le client repeint.
@@ -111,12 +134,11 @@ rendu sans eux (`isServerSnapshot`) : le client repeint.
 
 - **Allures en trail** : il faut un modèle de dénivelé (montée, descente,
   terrain). Reporté.
-- **Filtre de zone sur la bibliothèque** : `/library` n'en a pas en URL ;
-  Zones mène à la bibliothèque sans filtre.
 - **Réserver la place des résultats avant la lecture du profil** sur
-  Allures et Depuis un chrono : avec une VMA enregistrée, la bande ou les
+  Allures, Depuis un chrono, FTP et CSS : avec une VMA enregistrée, la bande ou les
   résultats apparaissent après l'effet. Le budget Lighthouse (profil vide)
   n'est pas touché ; le décalage reste pour qui a un profil.
 - **Effacer un repère depuis un calculateur** : effacer un champ ne supprime
   pas la valeur enregistrée, la page cesse seulement de dire `enregistré`.
-  La suppression se fait dans le profil.
+  La suppression se fait dans les tuiles du profil, le seul endroit où un
+  repère se change.

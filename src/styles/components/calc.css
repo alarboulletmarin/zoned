@@ -76,6 +76,12 @@
   }
 }
 
+/* Un choix (protocole, distance) prend toute la ligne : à côté de lui, le champ
+   chiffré n'aurait plus la place de dire à poser. */
+.zn-calc-field--wide {
+  grid-column: 1 / -1;
+}
+
 .zn-calc-field {
   display: flex;
   flex-direction: column;
@@ -149,8 +155,11 @@
   user-select: none;
 }
 
-.zn-calc-step:has(.zn-calc-step__unit) .zn-calc-step__input {
-  padding-inline: 3em;
+/* La place de l'unité, de son seul côté et seulement quand elle se voit. En
+   em (taille du gros chiffre) et des deux côtés, elle laissait une vingtaine de
+   pixels au nombre dans une demi-colonne : 12,0 et à poser y étaient coupés. */
+.zn-calc-step:has(.zn-calc-step__unit):not([data-empty]) .zn-calc-step__input {
+  padding-inline: var(--sp-6) 3rem;
 }
 
 .zn-calc-step__input::placeholder {

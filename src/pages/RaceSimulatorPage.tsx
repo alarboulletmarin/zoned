@@ -49,8 +49,7 @@ import { failureReason } from "@/lib/failure";
 import { useMyNumbers } from "@/hooks/useMyNumbers";
 import { minutesToHm } from "@/lib/raceDay";
 import { RACE_DISTANCE_META } from "@/types/plan";
-import type { UpcomingRace } from "@/lib/myNumbers";
-import { raceLabel } from "@/pages/CalculateursPage";
+import { raceLabel, type UpcomingRace } from "@/lib/myNumbers";
 
 function settingsFromInput(input: RaceSimInput): RaceSimSettings {
   const match = RACE_OPTIONS.find((opt) => Math.abs(opt.distanceKm - input.distanceKm) < 0.01);

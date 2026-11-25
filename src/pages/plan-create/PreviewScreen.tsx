@@ -129,7 +129,7 @@ export function PreviewScreen(props: PreviewScreenProps) {
 
       {props.noVma && plan && !error && (
         <p className="zn-pc__hint">
-          {t("parcours.preview.noVma")} <Link to="/my-zones">{t("parcours.preview.noVmaLink")}</Link>
+          {t("parcours.preview.noVma")} <Link to="/profile">{t("parcours.preview.noVmaLink")}</Link>
         </p>
       )}
 

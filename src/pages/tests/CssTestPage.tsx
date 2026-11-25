@@ -1,12 +1,9 @@
-import { useState, useMemo, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "@/components/ui/toast";
-import { Save } from "@/components/icons";
+import { Check } from "@/components/icons";
+import { Answer, NextSteps, Provenance, StepChrono, ToolHeader } from "@/components/calc";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ChronoInput } from "@/components/ui/chrono-input";
-import { ResponsiveTable } from "@/components/ui/responsive-table";
-import { PageContainer } from "@/components/layout/PageContainer";
+import { toast } from "@/components/ui/toast";
 import { SEOHead } from "@/components/seo";
 import {
   calculateSwimmingZones,
@@ -15,79 +12,36 @@ import {
   formatSwimPaceRange,
   type SwimZone,
 } from "@/lib/planGenerator/swimmingPaceEngine";
-import { updateSwimmingBaseData } from "@/lib/athleteProfile";
-import { paceDigitsToSeconds } from "@/lib/paceFields";
+import { CSS_SEC_PER_100M_RANGE, loadSwimmingProfile, updateSwimmingBaseData } from "@/lib/athleteProfile";
 
 const ZONE_ORDER: SwimZone[] = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6"];
 
-interface TimeInputProps {
-  id: string;
-  label: string;
-  /** The typed digits, mask removed (`lib/paceFields.ts`). */
-  digits: string;
-  onDigitsChange: (v: string) => void;
-  /** Outlines the box; the written reason is printed by the caller. */
-  invalid?: boolean;
-  describedBy?: string;
-}
-
 /**
- * A swim time typed as m:ss, one field at the chronometer mask: digits enter
- * from the right, 612 reads 6:12, and 5:75 tidies to 6:15 on leaving.
+ * CSS : un 400 m et un 200 m in, la CSS et six zones d'allure out. Sans
+ * saisie, la page part de la CSS enregistrée, lue dans un effet (prérendu).
  */
-function TimeInput({ id, label, digits, onDigitsChange, invalid, describedBy }: TimeInputProps) {
-  return (
-    <div className="zn-ct__field">
-      <label htmlFor={id} className="zn-label">
-        {label}
-      </label>
-      <span
-        className="zn-numfield zn-ct__numfield"
-        data-invalid={invalid ? "true" : undefined}
-      >
-        <ChronoInput
-          id={id}
-          format="ms"
-          digits={digits}
-          onDigitsChange={onDigitsChange}
-          aria-invalid={invalid || undefined}
-          aria-describedby={describedBy}
-          className="zn-numfield__input zn-numfield__input--chrono"
-        />
-      </span>
-    </div>
-  );
-}
-
 export function CssTestPage() {
   const { t } = useTranslation("calculators");
+  const [time400, setTime400] = useState<number | undefined>();
+  const [time200, setTime200] = useState<number | undefined>();
+  const [savedCss, setSavedCss] = useState<number | undefined>();
+  useEffect(() => setSavedCss(loadSwimmingProfile()?.cssSecPer100m), []);
 
-  const [d400, setD400] = useState<string>("");
-  const [d200, setD200] = useState<string>("");
+  const estimated = time400 && time200 ? estimateCssFrom400And200(time400, time200) || undefined : undefined;
+  // Both times typed and no answer: the 400 was not slower than the 200.
+  const orderError = !!time400 && !!time200 && estimated === undefined;
+  const css = estimated ?? (orderError ? undefined : savedCss);
+  const zones = css ? calculateSwimmingZones({ cssSecPer100m: css }).zones : undefined;
+  const same = estimated !== undefined && estimated === savedCss;
+  const savable = estimated !== undefined && estimated >= CSS_SEC_PER_100M_RANGE[0] && estimated <= CSS_SEC_PER_100M_RANGE[1];
 
-  const time400 = paceDigitsToSeconds(d400) ?? 0;
-  const time200 = paceDigitsToSeconds(d200) ?? 0;
-
-  const cssSecPer100m = useMemo(() => {
-    if (time400 <= 0 || time200 <= 0) return 0;
-    return estimateCssFrom400And200(time400, time200);
-  }, [time400, time200]);
-
-  // Both times typed and the formula still returns nothing: the 400 was not
-  // slower than the 200. Said out loud rather than left as an empty screen.
-  const orderError = time400 > 0 && time200 > 0 && cssSecPer100m <= 0;
-
-  const zones = useMemo(() => {
-    if (cssSecPer100m <= 0) return null;
-    return calculateSwimmingZones({ cssSecPer100m });
-  }, [cssSecPer100m]);
-
-  const handleSave = () => {
-    if (cssSecPer100m <= 0) return;
-    updateSwimmingBaseData({ cssSecPer100m });
-    toast.success(
-      t("calculateurs.css.cssSaved", { css: formatSwimPace(cssSecPer100m) }),
-    );
+  const save = () => {
+    if (!savable) return;
+    if (!updateSwimmingBaseData({ cssSecPer100m: estimated })) {
+      toast.failure(t("profile:base.saveFailed"));
+      return;
+    }
+    setSavedCss(estimated);
   };
 
   return (
@@ -115,122 +69,93 @@ export function CssTestPage() {
         ]}
       />
 
-      <PageContainer width="narrow" className="zn-ct">
-        <header
-          className="zn-ct__head zn-stack"
-          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
-        >
-          <span className="zn-kicker">{t("calculateurs.css.kicker")}</span>
-          <h1 className="zn-display" data-level="2">
-            {t("calculateurs.css.title")}
-          </h1>
-          <p className="zn-body zn-body--lead zn-ct__lede">
-            {t("calculateurs.css.description")}
-          </p>
-        </header>
+      <div className="zn-calc">
+        <ToolHeader kicker={t("calculateurs.css.kicker")} title={t("calculateurs.css.title")} />
 
-        <section className="zn-ct__band">
-          <Card>
-            <CardContent
-              className="zn-stack"
-              style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+        <div className="zn-calc-fields">
+          <StepChrono
+            label={t("calculateurs.css.time400")}
+            format="ms"
+            value={time400}
+            onChange={setTime400}
+            step={5}
+            max={3599}
+            fallback={360}
+          />
+          <StepChrono
+            label={t("calculateurs.css.time200")}
+            format="ms"
+            value={time200}
+            onChange={setTime200}
+            step={5}
+            max={3599}
+            fallback={170}
+          />
+        </div>
+        <p className="zn-calc-hint" role={orderError ? "alert" : undefined}>
+          {orderError ? t("calculateurs.css.invalidOrder") : t("calculateurs.css.protocolHelp")}
+        </p>
+
+        {css && zones && (
+          <>
+            <Answer
+              label={estimated ? t("calculateurs.css.estimatedCss") : t("calculateurs.css.yourCss")}
+              value={formatSwimPace(css)}
+              unit={t("calculateurs.css.per100m")}
             >
-              <p className="zn-ct__hint">
-                {t("calculateurs.css.protocolHelp")}
-              </p>
-
-              <TimeInput
-                id="time400"
-                label={t("calculateurs.css.time400")}
-                digits={d400}
-                onDigitsChange={setD400}
-                invalid={orderError}
-                describedBy={orderError ? "css-order-error" : undefined}
-              />
-
-              <TimeInput
-                id="time200"
-                label={t("calculateurs.css.time200")}
-                digits={d200}
-                onDigitsChange={setD200}
-                invalid={orderError}
-                describedBy={orderError ? "css-order-error" : undefined}
-              />
-
-              {orderError && (
-                <p id="css-order-error" className="zn-ct__error">
-                  {t("calculateurs.css.invalidOrder")}
+              {!same && (
+                <p className="zn-calc-answer__say">
+                  {!estimated
+                    ? t("calculateurs.css.fromSaved")
+                    : savedCss === undefined
+                      ? t("calculateurs.css.noSaved")
+                      : t("calculateurs.css.compareSaved", { css: formatSwimPace(savedCss) })}
                 </p>
               )}
-            </CardContent>
-          </Card>
-        </section>
-
-        {cssSecPer100m > 0 && zones && (
-          <>
-            <section className="zn-ct__band">
-              <div className="zn-ct__figure">
-                <span className="zn-kicker">
-                  {t("calculateurs.css.estimatedCss")}
-                </span>
-                <p className="zn-ct__figure-value">
-                  {formatSwimPace(cssSecPer100m)}
+              {savable && !same && (
+                <div className="zn-calc-answer__actions">
+                  <Button onClick={save}>{t("calculateurs.css.take", { css: formatSwimPace(estimated) })}</Button>
+                </div>
+              )}
+              {estimated && !savable && <p className="zn-calc-hint">{t("calculateurs.css.unsavable")}</p>}
+              {same && (
+                <p className="zn-calc-hint zn-zonesaved" aria-live="polite">
+                  <Check size={16} />
+                  {t("tools.zones.saved")}
                 </p>
-                <span className="zn-ct__figure-unit">
-                  {t("calculateurs.css.per100m")}
-                </span>
-              </div>
-            </section>
+              )}
+            </Answer>
 
-            <section
-              className="zn-ct__band zn-stack"
-              style={{ "--gap": "var(--sp-13)" } as CSSProperties}
-              aria-labelledby="css-zones"
-            >
-              <h2 id="css-zones" className="zn-title" data-level="3">
-                {t("calculateurs.css.zonesPreview")}
-              </h2>
-
-              {/* The swim ramp names its zones differently from the running
-                  one, so the first column is this table's legend and no ink
-                  ramp is painted here. */}
-              <ResponsiveTable
-                data={ZONE_ORDER}
-                rowKey={(zone) => zone}
-                columns={[
-                  {
-                    key: "zone",
-                    header: t("calculateurs.css.zone"),
-                    // The mobile card already prints this as its title.
-                    hideOnMobile: true,
-                    cell: (zone) => (
-                      <span className="zn-ct__zonename">
-                        {t(`calculateurs.css.zoneLabel${zone}`)}
-                      </span>
-                    ),
-                  },
-                  {
-                    key: "pace",
-                    header: t("calculateurs.css.pace"),
-                    className: "zn-ct__num",
-                    cell: (zone) => formatSwimPaceRange(zones.zones[zone]),
-                  },
-                ]}
-                mobileCardTitle={(zone) =>
-                  t(`calculateurs.css.zoneLabel${zone}`)
-                }
-              />
-
-              <div className="zn-cluster" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
-                <Button onClick={handleSave}>
-                  <Save size={15} />
-                  {t("calculateurs.css.useThisCss")}
-                </Button>
+            <section className="zn-calc-section">
+              <h2 className="zn-calc-h2">{t("calculateurs.css.zonesPreview")}</h2>
+              <div className="zn-calc-tablebox">
+                <table className="zn-calc-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{t("calculateurs.css.zone")}</th>
+                      <th scope="col">{t("calculateurs.css.pace")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ZONE_ORDER.map((zone) => (
+                      <tr key={zone}>
+                        <th scope="row">{t(`calculateurs.css.zoneLabel${zone}`)}</th>
+                        <td>{formatSwimPaceRange(zones[zone])}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </section>
           </>
         )}
-      </PageContainer>
+
+        <Provenance>
+          <p>{t("calculateurs.css.provenance")}</p>
+        </Provenance>
+
+        <NextSteps links={[{ to: "/library?type=swimming", label: t("calculateurs.css.nextLibrary") }]} />
+      </div>
     </>
   );
 }

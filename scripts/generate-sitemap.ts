@@ -12,7 +12,7 @@
  *   - All prebuilt training plans
  *
  * What we exclude (matches robots.txt Disallow rules):
- *   - /my-zones, /favorites, /settings, /profile, /activities (per-user state)
+ *   - /favorites, /settings, /profile, /activities (per-user state)
  *   - /plans (user dashboard), /plan/new/free
  *   - /plan/:id (localStorage-only entities)
  *
