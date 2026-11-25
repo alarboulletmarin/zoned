@@ -107,6 +107,15 @@
 .zn-zonebar__block[data-zone="5"] { --zn-block-fill: var(--zone-5); --zn-block-h: var(--zone-h-5); }
 .zn-zonebar__block[data-zone="6"] { --zn-block-fill: var(--zone-6); --zn-block-h: var(--zone-h-6); }
 
+/* A condensed set (condenseBlocks): the outline and height of the set, its
+   efforts as teeth of ink, the recoveries between them left as paper. One
+   solid slab said twelve minutes held at VO2max where the session was a
+   30/30. The gradient is built in ZoneBar.tsx from the real timings, over
+   this block's own --zn-block-fill. */
+.zn-zonebar__block[data-set] {
+  background: var(--zn-set-teeth);
+}
+
 /* ── the legend ───────────────────────────────────────────────────────── */
 
 /* The title, then the chips, two flex items under one wrap. On a wide screen

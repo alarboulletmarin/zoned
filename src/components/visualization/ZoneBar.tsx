@@ -16,6 +16,13 @@ import type { ZoneNumber } from "./types";
 export interface ZoneBarBlock {
   seconds: number;
   zone: ZoneNumber | 0;
+  /**
+   * A condensed set only: where its efforts fall inside it, as [start, end]
+   * fractions of the block. The block keeps the set's outline and height,
+   * the efforts are painted as teeth and the recoveries between them stay
+   * paper. Absent on a plain block, which is filled end to end.
+   */
+  efforts?: [number, number][];
 }
 
 interface ZoneBarProps {
@@ -55,12 +62,14 @@ export function ZoneBar({
   const { t } = useTranslation("common");
   const list = condense ? condenseBlocks(blocks) : blocks;
   const total = list.reduce((sum, b) => sum + b.seconds, 0) || 1;
+  // The spoken profile reads the blocks as they are: a condensed set would
+  // count its recoveries as effort.
 
   return (
     <span
       {...(decorative
         ? { "aria-hidden": true }
-        : { role: "img", "aria-label": label ?? describeProfile(list, t) })}
+        : { role: "img", "aria-label": label ?? describeProfile(blocks, t) })}
       className={cn("zn-zonebar", className)}
       style={
         {
@@ -74,7 +83,13 @@ export function ZoneBar({
           key={i}
           className="zn-zonebar__block"
           data-zone={block.zone}
-          style={{ "--flex": block.seconds / total } as CSSProperties}
+          data-set={block.efforts ? "" : undefined}
+          style={
+            {
+              "--flex": block.seconds / total,
+              ...(block.efforts ? { "--zn-set-teeth": setTeeth(block.efforts) } : null),
+            } as CSSProperties
+          }
         />
       ))}
     </span>
@@ -98,12 +113,20 @@ export function toZoneBarBlocks(workout: WorkoutStructureSource): ZoneBarBlock[]
  * Card-size profile: one strip per phase or set instead of one per repetition.
  *
  * Consecutive hard blocks merge, and a short recovery (<= 2 min) inside a work
- * run is absorbed into its set, a 30/30 reads as two blocks rather than
+ * run is absorbed into its set, a 30/30 reads as two sets rather than
  * fifty-one hairlines. Between-series and cool-down recoveries are longer, so
  * they survive as their own strip.
+ *
+ * A set keeps its repetitions, though, as `efforts`: the set used to be ONE
+ * solid Z5 slab, its recoveries painted over in Z5, so a 30/30, a 45/15 and
+ * twelve minutes held at VO2max were the same picture, and the recovery the
+ * session is built on had vanished. The block now draws its efforts as teeth
+ * with paper between them (`setTeeth`, zone.css): a 30/30 reads half full, a
+ * 45/15 three quarters, a continuous block stays solid.
  */
 export function condenseBlocks(blocks: ZoneBarBlock[]): ZoneBarBlock[] {
-  const out: (ZoneBarBlock & { hard: boolean })[] = [];
+  type Run = ZoneBarBlock & { hard: boolean; parts: [number, number, boolean][] };
+  const out: Run[] = [];
 
   for (const block of blocks) {
     const prev = out[out.length - 1];
@@ -113,14 +136,39 @@ export function condenseBlocks(blocks: ZoneBarBlock[]): ZoneBarBlock[] {
       prev != null && !hard && !prev.hard && prev.zone === block.zone;
 
     if (prev && ((hard && prev.hard) || insideSet || sameEasyZone)) {
+      prev.parts.push([prev.seconds, prev.seconds + block.seconds, hard]);
       prev.seconds += block.seconds;
       if (hard && block.zone > prev.zone) prev.zone = block.zone;
     } else {
-      out.push({ ...block, hard });
+      out.push({ ...block, hard, parts: [[0, block.seconds, hard]] });
     }
   }
 
-  return out.map(({ seconds, zone }) => ({ seconds, zone }));
+  return out.map(({ seconds, zone, hard, parts }) => {
+    if (!hard || seconds <= 0 || parts.every(([, , effort]) => effort)) {
+      return { seconds, zone };
+    }
+    // Neighbouring efforts (a Z5 rep straight into a Z6 sprint) are one tooth.
+    const efforts: [number, number][] = [];
+    for (const [start, end, effort] of parts) {
+      if (!effort) continue;
+      const last = efforts[efforts.length - 1];
+      if (last && last[1] === start / seconds) last[1] = end / seconds;
+      else efforts.push([start / seconds, end / seconds]);
+    }
+    return { seconds, zone, efforts };
+  });
+}
+
+/** The teeth of a set, as a gradient over the block's own zone fill. */
+function setTeeth(efforts: [number, number][]): string {
+  const pct = (x: number) => `${(x * 100).toFixed(3)}%`;
+  const stops: string[] = [];
+  for (const [start, end] of efforts) {
+    stops.push(`transparent ${pct(start)}`, `var(--zn-block-fill) ${pct(start)}`);
+    stops.push(`var(--zn-block-fill) ${pct(end)}`, `transparent ${pct(end)}`);
+  }
+  return `linear-gradient(to right, transparent 0%, ${stops.join(", ")}, transparent 100%)`;
 }
 
 /** "Profil de la séance : Z2 12 min, Z5 8 min, récupération 6 min." */
