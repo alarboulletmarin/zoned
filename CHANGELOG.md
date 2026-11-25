@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+- A standard race plan can be handed to Zoned in one hand-written link, no code: `/plan/import#distance=10K&date=2027-05-30&days=3&time=1:10:00`. Zoned generates the plan as for any assisted plan. Level defaults to intermediate and the long run to Sunday, both said on the preview; `time` (target finish time) or `pace` give the goal; distances, days and paces are read leniently (`half`, `sunday`, `6'45`). A wrong link names each error under the parameter the link used. The query (`?distance=`) works too. Contract in `docs/agent-api.md`
+- `/agents`, a prerendered page for AI assistants, linked from the footer (API and AI assistants), the About page and the command palette: the instruction to give a link rather than describe a plan, the two paths (one link for a standard plan, the JSON API for a plan written session by session), working example links, the table of parameters, the resources
+
+### Changed
+- `llms.txt` opens its agent section on what to do (give the user a Zoned link, do not describe a plan), then the one-link path with three working examples and the parameters, then the session-by-session path. `index.json` describes the flat link under `planImport.flat`. The build reads every example link back and validates it, and fails if one is rejected
+- `robots.txt` names the current AI crawlers and assistants (OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, Perplexity-User and others) in the default group: their former separate `Allow: /` groups lifted every `Disallow` for them
+
 ## [1.2.0] - 2026-11-25
 
 ### Added

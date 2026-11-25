@@ -1,9 +1,29 @@
 # Zoned - https://zoned.run
 # Free, open-source library of science-based running workouts.
 
+# AI assistants and agents are welcome. Start at https://zoned.run/agents
+# (HTML) or https://zoned.run/llms.txt (plain text): a training plan is one
+# import link away, no account and no key.
+#
+# They share the default group rather than having their own: a crawler obeys
+# only the most specific group that names it, so a separate "Allow: /" group
+# silently lifted every Disallow below for them.
 User-agent: *
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Meta-ExternalAgent
+User-agent: MistralAI-User
 Allow: /
-
 # Private state (per-user data, no SEO value)
 Disallow: /my-zones
 Disallow: /favorites
@@ -14,7 +34,6 @@ Disallow: /plan/new/free
 Disallow: /profile
 Disallow: /settings
 Disallow: /plan/$
-
 # HTML anglais servi en interne pour ?lang=en. L'URL publique reste la query.
 Disallow: /_en
 
@@ -29,25 +48,6 @@ User-agent: LinkedInBot
 Allow: /
 
 User-agent: Slackbot
-Allow: /
-
-# LLM / agent crawlers — explicitly welcome, point them at llms.txt
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Google-Extended
 Allow: /
 
 Sitemap: https://zoned.run/sitemap.xml
