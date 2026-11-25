@@ -136,6 +136,16 @@ export function AboutPage() {
               </a>
             </Button>
           </div>
+
+          {/* For AI assistants: a caption, not a call. Plain anchors, these
+              are static files the router must not catch. No navigation
+              entry, on purpose. */}
+          <p className="zn-caption zn-muted">
+            {t("content:aboutPage.agentsLead")}{" "}
+            <a className="zn-inline-link" href="/llms.txt">llms.txt</a>
+            {" · "}
+            <a className="zn-inline-link" href="/api/v1/index.json">{t("content:aboutPage.agentsApi")}</a>
+          </p>
         </section>
 
         {/* 4, the four claims, each with its one line */}

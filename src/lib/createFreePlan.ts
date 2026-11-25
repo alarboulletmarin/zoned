@@ -14,7 +14,7 @@ const RECOVERY_WEEK_VOLUME_PCT = 60;
  * Calculate phase distribution for a free plan (no race distance).
  * Uses a standard periodization: ~40% base, ~30% build, ~15% peak, ~15% taper.
  */
-function calculateFreePhases(totalWeeks: number): PhaseRange[] {
+export function calculateFreePhases(totalWeeks: number): PhaseRange[] {
   if (totalWeeks < 4) {
     return [{ phase: "base", startWeek: 1, endWeek: totalWeeks }];
   }

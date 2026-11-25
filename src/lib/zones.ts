@@ -1,8 +1,9 @@
 import type { ZoneNumber, ZoneRange, UserZonePreferences } from "@/types";
 import { loadRunnerProfile, saveRunnerProfile } from "@/lib/runnerProfile";
 
-// HR Zone percentages (% of FCmax)
-const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
+// HR Zone percentages (% of FCmax). Exported: the agent API (`lib/agentApi`)
+// publishes these bounds, so they are read from here rather than restated.
+export const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
   1: [50, 60],
   2: [60, 70],
   3: [70, 80],
@@ -11,8 +12,8 @@ const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
   6: [100, 110], // Sprint zone can exceed max
 };
 
-// VMA Zone percentages (% of VMA)
-const VMA_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
+// VMA Zone percentages (% of VMA), same reason.
+export const VMA_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
   1: [50, 60],
   2: [60, 75],
   3: [75, 85],

@@ -20,6 +20,33 @@
       "recovery": "Récupération"
     }
   },
+  "import": {
+    "title": "Plan importé",
+    "loading": "Lecture du plan…",
+    "subtitleConfig": "Un assistant a préparé les réglages de ce plan, Zoned l'a construit avec son propre générateur. Rien n'est enregistré tant que tu ne l'ajoutes pas.",
+    "subtitlePlan": "Un assistant a écrit ce plan avec des séances Zoned. Rien n'est enregistré tant que tu ne l'ajoutes pas.",
+    "add": "Ajouter à mes plans",
+    "added": "Plan ajouté à tes plans",
+    "backToPlans": "Mes plans",
+    "raceDay": "Jour de course",
+    "recoveryWeek": "récupération",
+    "warningsTitle": "Ajusté à l'import",
+    "failed": "Le plan n'a pas pu être construit à partir de ce lien.",
+    "invalidKicker_one": "{{count}} erreur",
+    "invalidKicker_other": "{{count}} erreurs",
+    "invalidTitle": "Ce plan ne peut pas être importé",
+    "invalidLead": "Le lien est lisible, mais son contenu ne respecte pas le format de Zoned. Copie le rapport et colle-le à l'assistant qui l'a écrit : chaque ligne lui dit quoi corriger.",
+    "issuesLabel": "Erreurs du plan",
+    "copyReport": "Copier pour mon assistant",
+    "reportCopied": "Rapport copié",
+    "reportCopyFailed": "Le rapport n'a pas pu être copié",
+    "unreadable": {
+      "missing": "Ce lien ne contient pas de plan. Il doit se terminer par #d= suivi du plan encodé.",
+      "malformed_base64": "Le plan contenu dans ce lien est tronqué ou mal encodé. Le lien a peut-être été coupé en le copiant.",
+      "malformed_json": "Le plan contenu dans ce lien n'est pas du JSON valide.",
+      "unknown_encoding": "Ce lien utilise un encodage que cette version de Zoned ne connaît pas."
+    }
+  },
   "title": "Plans d'entraînement",
   "create": "Créer un plan",
   "createTitle": "Nouveau plan d'entraînement",

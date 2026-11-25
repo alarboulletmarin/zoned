@@ -20,6 +20,33 @@
       "recovery": "Recovery"
     }
   },
+  "import": {
+    "title": "Imported plan",
+    "loading": "Reading the plan…",
+    "subtitleConfig": "An assistant prepared the settings of this plan, and Zoned built it with its own generator. Nothing is saved until you add it.",
+    "subtitlePlan": "An assistant wrote this plan with Zoned workouts. Nothing is saved until you add it.",
+    "add": "Add to my plans",
+    "added": "Plan added to your plans",
+    "backToPlans": "My plans",
+    "raceDay": "Race day",
+    "recoveryWeek": "recovery",
+    "warningsTitle": "Adjusted on import",
+    "failed": "The plan could not be built from this link.",
+    "invalidKicker_one": "{{count}} error",
+    "invalidKicker_other": "{{count}} errors",
+    "invalidTitle": "This plan cannot be imported",
+    "invalidLead": "The link is readable, but what it holds does not follow the Zoned format. Copy the report and paste it to the assistant that wrote it: each line tells it what to fix.",
+    "issuesLabel": "Plan errors",
+    "copyReport": "Copy for my assistant",
+    "reportCopied": "Report copied",
+    "reportCopyFailed": "The report could not be copied",
+    "unreadable": {
+      "missing": "This link holds no plan. It must end with #d= followed by the encoded plan.",
+      "malformed_base64": "The plan in this link is truncated or badly encoded. The link may have been cut when it was copied.",
+      "malformed_json": "The plan in this link is not valid JSON.",
+      "unknown_encoding": "This link uses an encoding this version of Zoned does not know."
+    }
+  },
   "title": "Training Plans",
   "create": "Create a plan",
   "createTitle": "New training plan",

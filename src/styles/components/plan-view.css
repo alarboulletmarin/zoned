@@ -222,3 +222,34 @@
     display: none;
   }
 }
+
+/* ── /plan/import ─────────────────────────────────────────────────────────
+   The shared-plan table, plus what an agent-written plan needs: the session
+   names under each week, and one row per issue when the payload is wrong. */
+
+.zn-planimport__week {
+  flex-wrap: wrap;
+}
+
+.zn-planimport__sessions {
+  flex-basis: 100%;
+  padding-inline-start: calc(76px + var(--sp-8));
+  color: var(--text-muted);
+}
+
+.zn-planimport__issue {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.zn-planimport__path {
+  color: var(--text-faint);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 639px) {
+  .zn-planimport__sessions {
+    padding-inline-start: 0;
+  }
+}

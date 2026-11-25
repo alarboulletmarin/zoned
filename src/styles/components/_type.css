@@ -136,6 +136,17 @@
   color: var(--text-faint);
 }
 
+/* A link inside running text, in ink: underlined, never vermillon, so a
+   secondary pointer does not spend the screen's one accent. */
+.zn-inline-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.zn-inline-link:hover {
+  color: var(--ink-1);
+}
+
 /* ── colour roles ─────────────────────────────────────────────────────── */
 
 .zn-muted {

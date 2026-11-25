@@ -2,7 +2,7 @@ import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, RaceDistance, Train
 import { WEEK_CATEGORIES } from "@/types/plan";
 
 // Domain bounds, defensive guards against pathological imports.
-const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
+export const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
 const MAX_VOLUME_PERCENT = 200;
 
 function isObject(value: unknown): value is Record<string, unknown> {

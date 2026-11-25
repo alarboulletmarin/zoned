@@ -57,6 +57,7 @@ const SharedWeekPage = lazyPage(() => import("@/pages/SharedWeekPage").then(m =>
 const WorkoutDetailPage = lazyPage(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const SharedWorkoutPage = lazyPage(() => import("@/pages/SharedWorkoutPage").then(m => ({ default: m.SharedWorkoutPage })));
 const SharedPlanPage = lazyPage(() => import("@/pages/SharedPlanPage").then(m => ({ default: m.SharedPlanPage })));
+const PlanImportPage = lazyPage(() => import("@/pages/PlanImportPage").then(m => ({ default: m.PlanImportPage })));
 const MyZonesPage = lazyPage(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
@@ -391,6 +392,7 @@ export default function App({ ssrLocation }: { ssrLocation?: string } = {}) {
                           <Route path="/plan/new/prebuilt" element={<PrebuiltPlansPage />} />
                           <Route path="/plan/prebuilt/:slug" element={<PrebuiltPlanDetailPage />} />
                           <Route path="/plan/shared" element={<SharedPlanPage />} />
+                          <Route path="/plan/import" element={<PlanImportPage />} />
                           <Route path="/plan/:id" element={<PlanViewPage />} />
                           <Route path="/race-simulator" element={<ModuleGate module="raceSimulator" canonical="/race-simulator"><RaceSimulatorPage /></ModuleGate>} />
                           <Route path="/race-simulator/shared" element={<RaceSimulatorPage />} />

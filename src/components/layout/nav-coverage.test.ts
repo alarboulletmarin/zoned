@@ -42,6 +42,7 @@ const NOT_A_DESTINATION: Record<string, string> = {
   "/workout/shared": "atterrissage d'un lien partagé",
   "/weeks/shared": "atterrissage d'un lien partagé",
   "/plan/shared": "atterrissage d'un lien partagé",
+  "/plan/import": "atterrissage d'un lien écrit par un assistant IA",
   "/race-simulator/shared": "atterrissage d'un lien partagé",
   "/library/weekly": "redirection historique vers /weeks",
   "/quiz": "redirection historique vers /library/draw",
