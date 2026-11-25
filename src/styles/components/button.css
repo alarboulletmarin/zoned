@@ -40,15 +40,6 @@
   transform: translateY(var(--press-shift));
 }
 
-.zn-btn:disabled,
-.zn-btn[data-disabled] {
-  background: var(--state-disabled-fill);
-  color: var(--state-disabled-text);
-  border-color: var(--state-disabled-border);
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
 .zn-btn[aria-invalid="true"] {
   border-color: var(--state-danger);
 }
@@ -119,7 +110,23 @@
   color: var(--ink-1);
   text-decoration: underline;
 }
-.zn-btn[data-variant="link"]:disabled {
+
+/* ── disabled ─────────────────────────────────────────────────────────── */
+
+/* After the variants, which set the same properties at the same specificity:
+   before them, a disabled button kept its variant's paint and looked live. */
+.zn-btn:disabled,
+.zn-btn[data-disabled] {
+  background: var(--state-disabled-fill);
+  color: var(--state-disabled-text);
+  border-color: var(--state-disabled-border);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Boxless variants stay boxless: only the words fade. */
+.zn-btn[data-variant="ghost"]:is(:disabled, [data-disabled]),
+.zn-btn[data-variant="link"]:is(:disabled, [data-disabled]) {
   background: transparent;
   border-color: transparent;
 }

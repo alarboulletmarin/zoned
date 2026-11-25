@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Old links redirect permanently: `/calculators/equivalence` and `/calculators/age-graded` to `/calculators/vma`, `/calculators/convertisseur` to `/calculators/allures`, `/my-zones` to `/calculators/zones`, keeping their query string
 
 ### Fixed
+- A disabled button no longer looks live: it kept its variant's paint (vermillon fill, ink outline or text), because the disabled rule came before the variants. Filled and outlined buttons now turn grey; ghost and link buttons stay boxless and only their words fade
 - Condensed session profiles (library rows, cards) drew each interval set as one solid Z5 slab, its recoveries painted over, so a 30/30, a 45/15 and twelve minutes held at VO2max looked the same. A set now keeps its height and draws its repetitions as teeth with paper between them, without an outline that boxed them in: a 30/30 reads half full, a 45/15 three quarters full. The spoken description of the profile no longer counts those recoveries as effort
 - A Z6 block, 100% tall, touched the frame of the profile bar: the bar now has the same small inset on top as on its sides
 - The library's terrain filter said one thing and did another: `Hills required` kept every session that did not need a track, flat ones included, and `Track required` every session that did not need hills
