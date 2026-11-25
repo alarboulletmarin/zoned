@@ -418,7 +418,9 @@
   text-decoration: none;
   border-radius: var(--r-sm);
 
-  transition: background var(--dur-fast) var(--ease-out);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
 .zn-wrow:hover {

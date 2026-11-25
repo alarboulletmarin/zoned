@@ -656,7 +656,9 @@
   font: inherit;
   text-align: start;
   cursor: pointer;
-  transition: background var(--dur-fast) var(--ease-out);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
 .zn-lib__indexrow:hover {
@@ -1165,4 +1167,26 @@
   .zn-lib__sort {
     display: none;
   }
+}
+
+/* ── le mouvement de la page ──────────────────────────────────────────────
+
+   On anime ce qui change, jamais ce qui est (motion.css). Ici, trois gestes
+   seulement : une puce change d'état en --dur-fast (fond et couleur, la règle
+   de .zn-chip), une rangée s'enfonce d'un pixel sous le doigt, un survol
+   teinte. Rien d'autre :
+
+   - rien ne bouge au chargement, rien n'entre en cascade ;
+   - une liste refiltrée ou retriée est remplacée net. Les rangées ont la
+     séance pour clé, donc une rangée ne change jamais de séance ; la règle
+     ci-dessous le garantit quand même : un bloc de profil ne glisse pas d'une
+     forme vers une autre dans une liste, ce geste appartient à la page séance
+     quand on y règle un paramètre ;
+   - ouvrir une famille n'est pas une transition de page : le haut des
+     résultats revient sous la bande collante, c'est tout ;
+   - le nom de la séance garde sa transition partagée vers la page séance
+     (sharedTransition.ts), qui se coupe d'elle-même sous reduced-motion. */
+.zn-lib__rows .zn-zonebar__block,
+.zn-wtable .zn-zonebar__block {
+  transition: none;
 }
