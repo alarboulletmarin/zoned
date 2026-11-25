@@ -8,7 +8,8 @@
     { "source": "/calculators/what-if", "destination": "/calculators", "permanent": true },
     { "source": "/calculators/age-graded", "destination": "/calculators/vma", "permanent": true },
     { "source": "/calculators/equivalence", "destination": "/calculators/vma", "permanent": true },
-    { "source": "/calculators/convertisseur", "destination": "/calculators/allures", "permanent": true }
+    { "source": "/calculators/convertisseur", "destination": "/calculators/allures", "permanent": true },
+    { "source": "/collections/objectif-ultra", "destination": "/collections/objectif-trail-long", "permanent": true }
   ],
   "rewrites": [
     { "source": "/(today|activities|favorites|my-zones|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" },

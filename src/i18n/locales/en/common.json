@@ -940,10 +940,7 @@
         "10K",
         "half-marathon",
         "marathon",
-        "trail",
-        "ultra",
-        "triathlon",
-        "ironman"
+        "trail"
       ]
     },
     "articleFaq": {

@@ -291,7 +291,8 @@ export function LibraryPage() {
   });
 
   /* La pastille retenue revient sous les yeux : sous 640 px le rail défile,
-     et une pratique restaurée depuis ?practice=ultra était cochée hors champ. */
+     et une pratique restaurée depuis ?practice=trail pouvait être cochée hors
+     champ. */
   useEffect(() => {
     practiceRailRef.current
       ?.querySelector<HTMLElement>(`[data-practice="${practice ?? "all"}"]`)
@@ -443,87 +444,86 @@ export function LibraryPage() {
           <HubNav section={navSection("sessions")} omit={["/favorites"]} />
         </header>
 
-        {/* 2, la recherche. Sur bureau, en tête de la colonne des résultats. */}
-        <div className="zn-lib__search" role="search">
-          <Search size={16} className="zn-lib__search-glyph" />
-          <input
-            ref={searchInputRef}
-            type="search"
-            className="zn-lib__search-input"
-            aria-label={t("filters.searchLabel")}
-            aria-keyshortcuts="/"
-            placeholder={t("filters.searchPlaceholder")}
-            value={filters.searchQuery}
-            onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
-          />
-          {filters.searchQuery ? (
-            <button
-              type="button"
-              className="zn-lib__search-clear"
-              aria-label={t("common:actions.clear")}
-              onClick={() => setFilters({ ...filters, searchQuery: "" })}
-            >
-              <X size={14} />
-            </button>
-          ) : (
-            <kbd className="zn-lib__kbd" aria-hidden="true">
-              /
-            </kbd>
-          )}
-        </div>
-
         {/* L'ancre du retour en haut des résultats. Hors de la bande collante :
             un élément déjà collé est toujours en vue, le viser ne bougerait rien. */}
         <div ref={listAnchorRef} className="zn-lib__anchor" aria-hidden="true" />
 
-        {/* 3, ce qui rétrécit la liste. Sur téléphone ce bloc n'a pas de boîte
-            (`display: contents`) : sa bande colle sous la barre du haut et ses
-            raccourcis défilent avec la page. Sur bureau c'est la colonne de
-            gauche, collante, et l'index des familles. */}
-        <div className="zn-lib__side">
-          <div className="zn-lib__controls">
-            {/* `role="radiogroup"` est déclaré, donc son contrat clavier est
-                dû : un seul arrêt de tabulation, les flèches déplacent et
-                cochent (`useRadioRail`). */}
-            <div
-              ref={practiceRailRef}
-              className="zn-lib__practice-rail"
-              role="radiogroup"
-              aria-label={t("practice.label")}
-              onKeyDown={practiceRail.onKeyDown}
-            >
-              {practiceOptions.map((option) => {
-                const active = practice === option;
-                const meta = option ? PRACTICE_META[option] : null;
-                return (
-                  <button
-                    key={option ?? "all"}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    tabIndex={active ? 0 : -1}
-                    data-practice={option ?? "all"}
-                    data-state={active ? "active" : "inactive"}
-                    className="zn-lib__practice"
-                    onClick={() => handlePracticeChange(option)}
-                  >
-                    {meta ? (isEn ? meta.labelEn : meta.label) : t("practice.all")}
-                    {/* Une pratique annoncée le dit : ses séances existent, ses plans non. */}
-                    {meta?.status === "announced" && (
-                      <span className="zn-lib__practice-soon">{t("practice.soon")}</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            <FiltersButton
-              className="zn-lib__filters-btn--bar"
-              count={activeFiltersCount}
-              open={filtersOpen}
-              label={t("filters.title")}
-              onOpen={() => setFiltersOpen(true)}
+        {/* 2, chercher : la recherche et la porte du panneau, côte à côte.
+            Ce sont les deux gestes qui trouvent une séance, et sur téléphone
+            ils tiennent le haut de l'écran pendant tout le défilement
+            (library.css). La pratique, elle, se choisit une fois et se
+            retient : elle descend d'une rangée et défile avec la page. */}
+        <div className="zn-lib__find">
+          <div className="zn-lib__search" role="search">
+            <Search size={16} className="zn-lib__search-glyph" />
+            <input
+              ref={searchInputRef}
+              type="search"
+              className="zn-lib__search-input"
+              aria-label={t("filters.searchLabel")}
+              aria-keyshortcuts="/"
+              placeholder={t("filters.searchPlaceholder")}
+              value={filters.searchQuery}
+              onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
             />
+            {filters.searchQuery ? (
+              <button
+                type="button"
+                className="zn-lib__search-clear"
+                aria-label={t("common:actions.clear")}
+                onClick={() => setFilters({ ...filters, searchQuery: "" })}
+              >
+                <X size={14} />
+              </button>
+            ) : (
+              <kbd className="zn-lib__kbd" aria-hidden="true">
+                /
+              </kbd>
+            )}
+          </div>
+
+          <FiltersButton
+            count={activeFiltersCount}
+            open={filtersOpen}
+            label={t("filters.title")}
+            onOpen={() => setFiltersOpen(true)}
+          />
+        </div>
+
+        {/* 3, la pratique et les familles. Sur téléphone ce bloc n'a pas de
+            boîte (`display: contents`) : le rail des pratiques suit la bande
+            collante. Sur bureau c'est la colonne de gauche, collante, et
+            l'index des familles. */}
+        <div className="zn-lib__side">
+          {/* `role="radiogroup"` est déclaré, donc son contrat clavier est dû :
+              un seul arrêt de tabulation, les flèches déplacent et cochent
+              (`useRadioRail`). */}
+          <div
+            ref={practiceRailRef}
+            className="zn-lib__practice-rail"
+            role="radiogroup"
+            aria-label={t("practice.label")}
+            onKeyDown={practiceRail.onKeyDown}
+          >
+            {practiceOptions.map((option) => {
+              const active = practice === option;
+              const meta = option ? PRACTICE_META[option] : null;
+              return (
+                <button
+                  key={option ?? "all"}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  tabIndex={active ? 0 : -1}
+                  data-practice={option ?? "all"}
+                  data-state={active ? "active" : "inactive"}
+                  className="zn-lib__practice"
+                  onClick={() => handlePracticeChange(option)}
+                >
+                  {meta ? (isEn ? meta.labelEn : meta.label) : t("practice.all")}
+                </button>
+              );
+            })}
           </div>
 
           {/* Bureau : la colonne est l'index. Toutes en tête, puis les familles
@@ -531,36 +531,36 @@ export function LibraryPage() {
           {showDesktop && (
             <nav className="zn-lib__families" aria-label={t("families.label")}>
               {families.length > 0 && (
-              <>
-              <span className="zn-kicker zn-lib__sidelabel" aria-hidden="true">
-                {t("families.label")}
-              </span>
-              <ul className="zn-lib__famlist">
-                <li>
-                  <button
-                    type="button"
-                    className="zn-lib__fam"
-                    aria-pressed={filters.category.length === 0}
-                    onClick={() => selectFamily(null)}
-                  >
-                    {t("families.all")}
-                  </button>
-                </li>
-                {families.map((family) => (
-                  <li key={family.category}>
-                    <button
-                      type="button"
-                      className="zn-lib__fam"
-                      aria-pressed={openFamily === family.category}
-                      onClick={() => selectFamily(family.category)}
-                    >
-                      {t(`categories.${family.category}`)}
-                      <span className="zn-mono zn-lib__famcount">{family.count}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              </>
+                <>
+                  <span className="zn-kicker zn-lib__sidelabel" aria-hidden="true">
+                    {t("families.label")}
+                  </span>
+                  <ul className="zn-lib__famlist">
+                    <li>
+                      <button
+                        type="button"
+                        className="zn-lib__fam"
+                        aria-pressed={filters.category.length === 0}
+                        onClick={() => selectFamily(null)}
+                      >
+                        {t("families.all")}
+                      </button>
+                    </li>
+                    {families.map((family) => (
+                      <li key={family.category}>
+                        <button
+                          type="button"
+                          className="zn-lib__fam"
+                          aria-pressed={openFamily === family.category}
+                          onClick={() => selectFamily(family.category)}
+                        >
+                          {t(`categories.${family.category}`)}
+                          <span className="zn-mono zn-lib__famcount">{family.count}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
               <SidebarSports
                 activityType={activityType}
@@ -571,10 +571,8 @@ export function LibraryPage() {
           )}
         </div>
 
-        {/* Les raccourcis et la porte du panneau. Sur téléphone, sous la bande
-            collante ; sur bureau, juste sous la recherche, en tête des
-            résultats : ce qui rétrécit la liste se trouve sans descendre au
-            bas de la colonne des familles. */}
+        {/* Les raccourcis. Sur téléphone, sous le rail des pratiques ; sur
+            bureau, juste sous la recherche, en tête des résultats. */}
         <div className="zn-lib__tools">
           <div className="zn-lib__shortcuts" role="group" aria-label={t("shortcuts.label")}>
             <div className="zn-lib__shortcut-rail">
@@ -593,16 +591,7 @@ export function LibraryPage() {
               ))}
             </div>
           </div>
-
-          <FiltersButton
-            className="zn-lib__filters-btn--side"
-            count={activeFiltersCount}
-            open={filtersOpen}
-            label={t("filters.all")}
-            onOpen={() => setFiltersOpen(true)}
-          />
         </div>
-
 
         {/* 4, l'index des familles (téléphone, au repos) ou les résultats */}
         <section
@@ -818,25 +807,26 @@ function FiltersButton({
   open,
   label,
   onOpen,
-  className,
 }: {
   count: number;
   open: boolean;
   label: string;
   onOpen: () => void;
-  className?: string;
 }) {
   return (
     <button
       type="button"
-      className={`zn-lib__filters-btn ${className ?? ""}`}
+      className="zn-lib__filters-btn"
       aria-haspopup="dialog"
       aria-expanded={open}
       data-on={count > 0 || undefined}
       onClick={onOpen}
     >
       <SlidersHorizontal size={15} />
-      {label}
+      {/* Sur un téléphone étroit le mot s'efface et l'icône reste, avec son
+          compteur : la recherche garde la largeur. Le nom accessible, lui,
+          ne change pas. */}
+      <span className="zn-lib__filters-label">{label}</span>
       {count > 0 && <span className="zn-lib__filters-count">{count}</span>}
     </button>
   );

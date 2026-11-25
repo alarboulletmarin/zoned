@@ -110,7 +110,12 @@ describe("visiblePractices", () => {
   });
 
   test("un choix explicite est respecté", () => {
-    const settings = sanitizeSettings({ enabledPractices: ["trail", "ultra"] });
-    expect(visiblePractices(settings)).toEqual(["trail", "ultra"]);
+    const settings = sanitizeSettings({ enabledPractices: ["trail"] });
+    expect(visiblePractices(settings)).toEqual(["trail"]);
+  });
+
+  test("une pratique retirée (ultra, triathlon) tombe à la lecture", () => {
+    const settings = sanitizeSettings({ enabledPractices: ["trail", "ultra", "triathlon"] });
+    expect(visiblePractices(settings)).toEqual(["trail"]);
   });
 });

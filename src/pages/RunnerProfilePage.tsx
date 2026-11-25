@@ -73,7 +73,7 @@ import type {
 import type { RaceDistance } from "@/types/plan";
 import type { Difficulty } from "@/types";
 import { DIFFICULTY_META } from "@/types";
-import { RACE_DISTANCE_META } from "@/types/plan";
+import { OFFERED_RACE_DISTANCES, RACE_DISTANCE_META } from "@/types/plan";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -104,7 +104,9 @@ function deriveVma(type: BenchmarkType, result: number): number | undefined {
 
 const TODAY_ISO = new Date().toISOString().slice(0, 10);
 
-const RACE_DISTANCES = Object.keys(RACE_DISTANCE_META) as RaceDistance[];
+/** Ce que le profil propose de remplir ; l'ordre de tri garde toutes les distances. */
+const RACE_DISTANCES = OFFERED_RACE_DISTANCES;
+const ALL_RACE_DISTANCES = Object.keys(RACE_DISTANCE_META) as RaceDistance[];
 const DIFFICULTY_KEYS: Difficulty[] = [
   "beginner",
   "intermediate",
@@ -961,8 +963,8 @@ function PersonalRecordsSection({
 
   // Sort records by RACE_DISTANCE_META order, custom distances last
   const records = [...(profile?.personalRecords ?? [])].sort((a, b) => {
-    const aIdx = RACE_DISTANCES.indexOf(a.distance as RaceDistance);
-    const bIdx = RACE_DISTANCES.indexOf(b.distance as RaceDistance);
+    const aIdx = ALL_RACE_DISTANCES.indexOf(a.distance as RaceDistance);
+    const bIdx = ALL_RACE_DISTANCES.indexOf(b.distance as RaceDistance);
     const aOrder = aIdx >= 0 ? aIdx : 999;
     const bOrder = bIdx >= 0 ? bIdx : 999;
     return aOrder - bOrder;

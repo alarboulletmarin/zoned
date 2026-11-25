@@ -42,7 +42,8 @@
 /* ── search ───────────────────────────────────────────────────────────── */
 
 .zn-lib__search {
-  margin-block-start: var(--sp-9);
+  flex: 1 1 auto;
+  min-inline-size: 0;
   display: flex;
   align-items: center;
   gap: var(--sp-5);
@@ -72,6 +73,7 @@
 .zn-lib__search-input {
   flex: 1;
   min-inline-size: 0;
+  text-overflow: ellipsis;
   border: none;
   background: transparent;
   font: var(--type-body);
@@ -137,24 +139,17 @@
   }
 }
 
-/* ── la bande des pratiques ──────────────────────────────────────────────
+/* ── chercher : la recherche et Filtres ──────────────────────────────────
  *
- * La bande primaire, au-dessus de la modalité. Les pastilles portent l'encre,
- * pas l'accent : l'écran garde son unique aplat vermillon pour son action
- * primaire, et une rangée d'onglets n'est pas une action.
- */
-
-/* La bande de commandes, et elle TIENT LE HAUT DE L'ÉCRAN.
+ * Une bande, et sur téléphone elle TIENT LE HAUT DE L'ÉCRAN.
  *
- * Elle défilait avec la page : poser un filtre depuis le six-centième pixel
- * de la liste demandait de remonter la chercher, de la poser, puis de
- * redescendre. Sur un catalogue de deux cent soixante séances c'est le geste
- * le plus fréquent de la page, et c'était le plus cher.
- *
- * Ce qui colle, et RIEN d'autre : l'axe des pratiques et la porte du panneau
- * de filtres, ce qui rétrécit la liste. Les raccourcis défilent avec le
- * reste : une bande collante de cent pixels sous une barre du haut qui en
- * prend soixante aurait repris d'une main ce que le collant donne de l'autre.
+ * Poser un filtre ou relancer une recherche depuis le six-centième pixel de
+ * la liste demandait de remonter, de poser, puis de redescendre. Ce qui
+ * colle, et RIEN d'autre : les deux gestes qui trouvent une séance. La
+ * pratique s'y trouvait avant ; elle se choisit une fois et se retient, elle
+ * défile désormais avec les raccourcis. Une bande collante de cent pixels sous
+ * une barre du haut qui en prend soixante aurait repris d'une main ce que le
+ * collant donne de l'autre.
  *
  * `--topbar-h` est le décalage, parce que la barre du haut est collante elle
  * aussi : la bande doit s'arrêter SOUS elle, pas se glisser dessous. z-index
@@ -165,7 +160,7 @@
  * Le fond est opaque et le filet ferme la bande : sans eux les cartes
  * passeraient au travers, et une carte à moitié effacée derrière du vide ne
  * se lit pas comme un dessous, elle se lit comme un bug de rendu. */
-.zn-lib__controls {
+.zn-lib__find {
   position: sticky;
   /* Moins l'épaisseur du filet : `--topbar-h` est un calcul, pas une mesure,
      et il dépasse la hauteur rendue d'un demi-pixel. Un demi-pixel de retard,
@@ -177,7 +172,7 @@
 
   display: flex;
   align-items: center;
-  gap: var(--sp-5) var(--sp-6);
+  gap: var(--sp-5);
 
   margin-block-start: var(--sp-6);
   padding-block: var(--sp-6);
@@ -185,6 +180,33 @@
   background: var(--surface-page);
   border-block-end: var(--border-divider);
 }
+
+.zn-lib__find .zn-lib__filters-btn {
+  flex: none;
+  /* La hauteur de la recherche, pour une bande d'un seul trait. */
+  align-self: stretch;
+}
+
+@media (max-width: 479px) {
+  .zn-lib__find .zn-lib__filters-btn {
+    padding-inline: var(--sp-7);
+  }
+
+  .zn-lib__filters-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ── les pratiques ───────────────────────────────────────────────────────
+ *
+ * Toutes, Route, Trail. Les pastilles portent l'encre, pas l'accent :
+ * l'écran garde son unique aplat vermillon pour son action primaire, et une
+ * rangée d'onglets n'est pas une action. */
 
 /* L'ancre du retour en haut de liste : sans hauteur, sans encre. Elle est le
    repère que `scrollIntoView` vise, et elle est HORS de la bande collante,
@@ -199,8 +221,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--sp-2);
-  flex: 1 1 auto;
   min-inline-size: 0;
+  margin-block-start: var(--sp-8);
 }
 
 .zn-lib__practice {
@@ -232,73 +254,9 @@
   color: var(--text-inverse);
 }
 
-/* bientôt : une pratique nommée dont les plans n'existent pas encore. En
-   mono minuscule, comme une cote, pas comme un badge qui réclame le regard. */
-.zn-lib__practice-soon {
-  font: var(--type-mono);
-  font-size: var(--fs-mono-xs);
-  letter-spacing: var(--ls-mono-label);
-  text-transform: uppercase;
-  opacity: 0.7;
-}
-
 @media (pointer: coarse) {
   .zn-lib__practice {
     min-block-size: var(--hit-min);
-  }
-}
-
-/* Sur 390 px le rail défile horizontalement : cinq pastilles repliées en deux
-   rangées coûtaient une rangée de plus, et une pastille de pratique tronquée
-   n'est pas lisible.
-
-   Le bouton Filtres partage maintenant cette rangée avec le rail, et c'est
-   ce qui tient la bande collante sur UNE ligne : le rail prend ce qui reste et
-   défile sous le doigt, le bouton ne se replie jamais. */
-@media (max-width: 640px) {
-  /* UN SEUL AXE. `overflow-x: auto` seul ne défile pas que sur x : la règle
-     CSS transforme le `visible` de l'autre axe en `auto`, donc le rail était
-     aussi un conteneur qui défile verticalement. Quarante-quatre pixels de
-     hauteur pour quarante-quatre pixels de contenu, la course était nulle ou
-     d'un pixel selon l'arrondi de la pastille pressée, mais le doigt, lui,
-     trouvait la prise : un geste vertical parti d'une pastille tirait la
-     bande au lieu de la page, et c'est ce flottement qu'on sentait sous le
-     pouce. `hidden` ferme l'axe, la course verticale disparaît et le geste
-     repart à la page, qui est ce qu'on voulait faire défiler.
-
-     Le rail garde sa hauteur de rangée : les 6px de marge intérieure sont
-     repris en marge négative, ils n'existent que pour que l'anneau de focus
-     (2.5px, décalé de 2px) tienne DANS la zone de défilement au lieu d'être
-     coupé par elle.
-
-     `overscroll-behavior-inline: contain` pour le geste horizontal : arrivé
-     au bout du rail, il ne se propage plus au navigateur, qui y lisait le
-     balayage de retour en arrière. */
-  .zn-lib__practice-rail {
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-inline: contain;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
-
-    padding-block: var(--sp-3);
-    margin-block: calc(-1 * var(--sp-3));
-  }
-
-  .zn-lib__practice-rail::-webkit-scrollbar {
-    display: none;
-  }
-
-  .zn-lib__practice {
-    white-space: nowrap;
-  }
-
-  .zn-lib__controls {
-    flex-wrap: nowrap;
-  }
-
-  .zn-lib__controls .zn-lib__filters-btn {
-    flex: none;
   }
 }
 
@@ -549,14 +507,12 @@
 /* ── la colonne de gauche, qui n'existe que sur bureau ─────────────────
 
    Sous 1024 px elle n'a pas de boîte : ses enfants rejoignent le flux de la
-   page, et la bande collante (`.zn-lib__controls`) colle alors sous la barre
-   du haut pendant TOUT le défilement, pas seulement le long de la colonne. */
+   page, et le rail des pratiques suit la bande collante dans le flux. */
 .zn-lib__side {
   display: contents;
 }
 
 .zn-lib__families,
-.zn-lib__filters-btn--side,
 .zn-lib__sidelabel {
   display: none;
 }
@@ -875,9 +831,13 @@
     padding-block-end: var(--sp-14);
   }
 
-  .zn-lib__search {
+  .zn-lib__find {
     grid-area: search;
-    margin-block-start: 0;
+    position: static;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
   }
 
   /* L'ancre se pose sur le haut de la recherche : remonter en haut des
@@ -898,8 +858,12 @@
   /* La colonne colle sous la barre du haut et tient dans l'écran d'un seul
      coup d'œil : pratiques, familles, autres sports, sans défilement à elle.
      Seule la liste des séances défile. C'est ce qui a fait sortir les
-     raccourcis et Tous les filtres de la colonne (ils sont sous la
-     recherche) et passer les autres sports en une rangée de puces. */
+     raccourcis et Filtres de la colonne (ils sont avec la recherche) et
+     passer les autres sports en une rangée de puces. */
+  .zn-lib__side .zn-lib__practice-rail {
+    margin-block-start: 0;
+  }
+
   .zn-lib__side {
     grid-area: side;
     display: flex;
@@ -911,8 +875,7 @@
     margin: calc(-1 * var(--sp-3));
   }
 
-  /* Les raccourcis et la porte du panneau, sous la recherche : une rangée,
-     la porte au bout. */
+  /* Les raccourcis, sous la recherche. */
   .zn-lib__tools {
     grid-area: tools;
     display: flex;
@@ -922,29 +885,9 @@
     margin-block-start: var(--sp-8);
   }
 
-  .zn-lib__tools .zn-lib__filters-btn--side {
-    margin-inline-start: auto;
-  }
-
-  .zn-lib__controls {
-    position: static;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: none;
-  }
-
-  .zn-lib__filters-btn--bar {
-    display: none;
-  }
-
   /* Les pratiques tiennent sur deux lignes dans les 280 px de la colonne. */
   .zn-lib__side .zn-lib__practice {
     padding-inline: var(--sp-6);
-  }
-
-  .zn-lib__filters-btn--side {
-    display: inline-flex;
   }
 
   .zn-lib__sidelabel {

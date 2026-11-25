@@ -57,7 +57,6 @@
     "terrain": "Terrain",
     "searchPlaceholder": "Rechercher : 30/30, seuil, côtes…",
     "searchLabel": "Rechercher des séances",
-    "all": "Tous les filtres",
     "seeResults_one": "Voir {{count}} séance",
     "seeResults_other": "Voir {{count}} séances",
     "peak": "Pic d'intensité",
@@ -468,8 +467,7 @@
   },
   "practice": {
     "label": "Pratique",
-    "all": "Toutes",
-    "soon": "bientôt"
+    "all": "Toutes"
   },
   "metaLine": {
     "category": {

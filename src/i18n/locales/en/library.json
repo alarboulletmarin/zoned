@@ -57,7 +57,6 @@
     "terrain": "Terrain",
     "searchPlaceholder": "Search: “30/30”, “threshold”, “hills”…",
     "searchLabel": "Search workouts",
-    "all": "All filters",
     "seeResults_one": "Show {{count}} session",
     "seeResults_other": "Show {{count}} sessions",
     "peak": "Intensity peak",
@@ -468,8 +467,7 @@
   },
   "practice": {
     "label": "Discipline",
-    "all": "All",
-    "soon": "soon"
+    "all": "All"
   },
   "metaLine": {
     "category": {

@@ -336,7 +336,7 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     subtitle: "Toutes les séances, par pratique",
     subtitleEn: "Every session, by discipline",
     url: "/library",
-    keywords: ["bibliotheque", "library", "seances", "sessions", "catalogue", "route", "trail", "ultra"],
+    keywords: ["bibliotheque", "library", "seances", "sessions", "catalogue", "route", "trail"],
     featured: true,
   },
   {

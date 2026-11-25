@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, test } from "bun:test";
 import {
   __resetPracticeIndexCache,
   countByPractice,
-  isUltraSpecific,
   practicesOfWorkout,
   workoutMatchesPractice,
 } from "./practiceIndex";
@@ -70,17 +69,11 @@ describe("classement d'une séance de course", () => {
     expect(practicesOfWorkout(w)).toEqual(["road"]);
   });
 
-  test("le trail sert aussi l'ultra", () => {
-    expect(practicesOfWorkout(running({ id: "T-tu", category: "trail" }))).toContain("ultra");
+  test("une sortie longue sur route reste de la route", () => {
+    expect(practicesOfWorkout(running({ id: "T-lr", category: "long_run" }))).toEqual(["road"]);
   });
 
-  test("une sortie longue sur route sert l'ultra sans devenir du trail", () => {
-    const practices = practicesOfWorkout(running({ id: "T-lr", category: "long_run" }));
-    expect(practices).toEqual(expect.arrayContaining(["road", "ultra"]));
-    expect(practices).not.toContain("trail");
-  });
-
-  test("un tag ultra qualifie une séance qui ne l'annonce pas autrement", () => {
+  test("un tag d'ultra ne crée plus de pratique", () => {
     const w = running({
       id: "T-tag",
       selectionCriteria: {
@@ -88,14 +81,7 @@ describe("classement d'une séance de course", () => {
         tags: ["time-on-feet"], priorityScore: 0,
       },
     });
-    expect(practicesOfWorkout(w)).toContain("ultra");
-    expect(isUltraSpecific(w)).toBe(true);
-  });
-
-  test("une séance trail sans tag sert l'ultra sans être écrite pour lui", () => {
-    const w = running({ id: "T-notspecific", category: "trail" });
-    expect(practicesOfWorkout(w)).toContain("ultra");
-    expect(isUltraSpecific(w)).toBe(false);
+    expect(practicesOfWorkout(w)).toEqual(["road"]);
   });
 
   test("le champ practices explicite gagne sur la déduction", () => {
@@ -108,20 +94,23 @@ describe("classement d'une séance de course", () => {
 });
 
 describe("transversales et modalités", () => {
-  test("vélo et natation vont au triathlon", () => {
+  test("vélo et natation n'appartiennent à aucune pratique, et n'y passent pas", () => {
     const bike = running({ id: "CYC-t", discipline: "cycling" });
     const swim = running({ id: "SWM-t", discipline: "swimming" });
-    expect(practicesOfWorkout(bike)).toEqual(["triathlon"]);
-    expect(practicesOfWorkout(swim)).toEqual(["triathlon"]);
+    expect(practicesOfWorkout(bike)).toHaveLength(0);
+    expect(practicesOfWorkout(swim)).toHaveLength(0);
+    for (const p of ["road", "trail"] as const) {
+      expect(workoutMatchesPractice(bike, p)).toBe(false);
+      expect(workoutMatchesPractice(swim, p)).toBe(false);
+    }
   });
 
   test("le renforcement ne revendique rien et passe sous toutes les pratiques", () => {
     const strength = { id: "STR-t", kind: "strength" } as unknown as AnyWorkoutTemplate;
     expect(practicesOfWorkout(strength)).toHaveLength(0);
-    for (const p of ["road", "trail", "ultra", "triathlon"] as const) {
+    for (const p of ["road", "trail"] as const) {
       expect(workoutMatchesPractice(strength, p)).toBe(true);
     }
-    expect(isUltraSpecific(strength)).toBe(false);
   });
 
   test("une séance route ne passe pas sous le trail", () => {
@@ -140,20 +129,9 @@ describe("mémoïsation", () => {
 });
 
 // Le garde-fou qui compte vraiment : si quelqu'un touche aux règles de
-// classement, ces chiffres bougent et le test le dit.
-//
-// Premier relevé, avant toute écriture : 197 route, 28 trail, 44 ultra dont 11
-// spécifiques, le terrain et les tags étaient déjà là, c'est le critère qui
-// manquait. Les cinq séances écrites pour l'ultra (TRL-015, TRL-017…TRL-020)
-// portent le trail à 33 et l'ultra à 49, dont 16 spécifiques. Une séance ultra
-// ajoutée sans terrain ni tag ne bougerait aucun de ces nombres, et c'est
-// justement ce que ce test attrape.
-//
-// Trois autres avaient été écrites puis RETIRÉES le même jour : elles
-// doublaient des archétypes déjà au catalogue (LR-016 Ultra time-on-feet,
-// TRL-009/TRL-010 Back-to-back jour 1/2, TRL-005 Descente technique
-// contrôlée). Les ids TRL-013, TRL-014 et TRL-016 restent donc brûlés, un
-// identifiant ne se réemploie pas.
+// classement, ces chiffres bougent et le test le dit. 197 séances de route, 33
+// de trail ; le trail les doit à sa catégorie ou à son terrain. Depuis le
+// 25 novembre 2026 il n'existe plus que ces deux pratiques (docs/pratiques.md).
 describe("le catalogue réel", () => {
   test("les compteurs par pratique sont ceux mesurés", async () => {
     __resetPracticeIndexCache();
@@ -168,16 +146,13 @@ describe("le catalogue réel", () => {
     expect(run).toHaveLength(230);
     expect(counts.road).toBe(197);
     expect(counts.trail).toBe(33);
-    expect(counts.ultra).toBe(49);
-    expect(counts.triathlon).toBe(bike.length + swim.length);
+    expect(Object.keys(counts).sort()).toEqual(["road", "trail"]);
 
     // Route + trail partitionnent la course : une séance est sur l'un ou
-    // l'autre, jamais sur les deux, jamais sur aucun.
+    // l'autre, jamais sur les deux, jamais sur aucun. Le vélo et la natation
+    // ne comptent nulle part.
     expect(counts.road + counts.trail).toBe(run.length);
-
-    // L'ultra est un sur-ensemble du trail.
-    expect(counts.ultra).toBeGreaterThan(counts.trail);
-    expect(run.filter(isUltraSpecific)).toHaveLength(16);
+    expect(bike.length + swim.length).toBeGreaterThan(0);
 
     // Le renforcement ne gonfle aucun compteur.
     expect(strength.length).toBeGreaterThan(0);

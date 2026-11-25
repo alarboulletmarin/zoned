@@ -58,9 +58,9 @@ Three details that do not guess themselves:
 
 ### There is no `"ultra"` category, and there will not be one
 
-Decided, and documented so it is not reopened. Ultra-ness is a property of **duration, terrain and tag**, and `src/lib/practiceIndex.ts` already reads all three. A new member in the `WorkoutCategory` union would mean editing `ID_PREFIX_REGISTRY`, the union itself, **every** exhaustive `Record<WorkoutCategory, …>` downstream, and the `category.*` i18n keys in both languages — to express something the data already says.
+Decided, and documented so it is not reopened. Ultra is not a practice of the app any more (removed on 25 November 2026, see [`docs/pratiques.md`](pratiques.md)): a long session written for it is a `trail` or `long_run` template, filed under trail or road by its terrain. A new member in the `WorkoutCategory` union would mean editing `ID_PREFIX_REGISTRY`, the union itself, **every** exhaustive `Record<WorkoutCategory, …>` downstream, and the `category.*` i18n keys in both languages — to express something the data already says.
 
-An ultra session is therefore a `trail` (or `long_run`) template carrying `"ultra"` in `selectionCriteria.tags`, a high `estimatedDistanceKm`, and `terrainType` on its blocks. See [`docs/pratiques.md`](pratiques.md) for the full practice model.
+The plan generator still reads the `"ultra"` tag in `selectionCriteria.tags` when it selects sessions for an existing ultra plan. See [`docs/pratiques.md`](pratiques.md) for the full practice model.
 
 ## The three axes
 

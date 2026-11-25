@@ -59,7 +59,8 @@ résultats) étaient des exemples, tout compte vient du catalogue.
 9. **Une fin visible.** Voir les N autres (par 24) remplace le défilement
    infini, qui rendait le pied de page inaccessible. `24 sur 30 séances`
    reste dessous. `useInfiniteScroll`, qui ne servait qu'ici, est retiré.
-10. **Gardés** : la bande collante pratique + Filtres et son compteur,
+10. **Gardés** : la bande collante, devenue recherche + Filtres (voir plus
+    bas), le compteur de Filtres,
     `HubNav` (le tirage y revient, Favoris en est omis puisqu'il a sa puce),
     l'index caché pour les robots (`zn-crawl`), le SEO, `?search=` et `?q=`,
     l'état vide qui nomme sa cause avec la figure de la pratique, la
@@ -111,17 +112,24 @@ présentations (rangées et tableau, index et colonne) tant que le premier
 effet n'a pas tranché, et `library.css` en montre une. Ensuite seule la
 bonne est montée.
 
-- **Téléphone** : compteur et titre, `HubNav`, recherche, bande collante
-  (pratiques + Filtres), raccourcis qui défilent (`.zn-lib__tools`), puis
-  l'index des familles au repos ou les résultats. `.zn-lib__side` y est en
-  `display: contents`, pour que la bande colle pendant tout le défilement.
+- **Téléphone** : compteur et titre, `HubNav`, puis la bande collante
+  `.zn-lib__find` : la recherche et Filtres côte à côte, les deux gestes qui
+  trouvent une séance, qui tiennent le haut de l'écran pendant tout le
+  défilement (sous 480 px, Filtres n'a plus que son icône et son compteur).
+  Dessous, Toutes / Route / Trail, qui se choisit une fois et se retient,
+  puis les raccourcis qui défilent (`.zn-lib__tools`), puis l'index des
+  familles au repos ou les résultats. `.zn-lib__side` y est en
+  `display: contents`. La bande portait avant la pratique et Filtres : avec
+  cinq pratiques le rail défilait sous le bouton et coupait la dernière
+  pastille, et la recherche, plus utilisée que la pratique, partait avec la
+  page.
 - **Bureau** : grille de deux colonnes. À gauche, collante, 280 px :
   pratiques, familles (Toutes en tête, `aria-pressed`), autres sports en une
   rangée de puces. Elle tient dans l'écran d'un coup d'œil et ne défile
   jamais à elle seule : seule la liste des séances défile (sous 800 px de
   haut, elle défile avec la page plutôt que de cacher son bas). À droite :
-  recherche, puis les raccourcis et Tous les filtres sur une rangée, juste
-  dessous, l'en-tête des résultats, la légende, le tableau. Les raccourcis
+  la recherche et Filtres sur une rangée, les raccourcis juste dessous,
+  l'en-tête des résultats, la légende, le tableau. Les raccourcis
   étaient au bas de la colonne et obligeaient à la faire défiler. Pas
   d'index de repos : la colonne est l'index, et sans famille le tableau
   montre tout.

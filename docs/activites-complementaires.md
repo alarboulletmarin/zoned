@@ -492,9 +492,10 @@ Ce qui est prêt, et ce qui ne l'est pas :
 - la charge en session-RPE vaut déjà pour les trois disciplines, sans
   coefficient à écrire.
 
-**Ce que ça ne fait pas, et ne prétend pas faire** : `PRACTICE_META.triathlon`
-reste `announced`, et un test échoue le jour où quelqu'un le bascule sans les
-plans (`docs/pratiques.md`). Ce chantier-ci ne livre **pas** de plan triathlon,
+**Ce que ça ne fait pas, et ne prétend pas faire** : il n'y a pas de pratique
+triathlon. Elle a été annoncée, puis retirée le 25 novembre 2026 par décision
+du propriétaire (`docs/pratiques.md`) ; le relevé multi-disciplines, lui,
+reste. Ce chantier-ci ne livre **pas** de plan triathlon,
 pas d'enchaînement, pas de créneau par discipline. Il livre le RELEVÉ
 multi-disciplines, qui est la couche sous les plans, et il la livre utile tout
 de suite pour un coureur qui fait du vélotaf. C'est la seule façon de préparer

@@ -34,7 +34,7 @@ export function buildPlanImportSchema() {
   const L = IMPORT_LIMITS;
   const common = {
     version: { const: PLAN_IMPORT_VERSION, description: "Payload version." },
-    raceDistance: { enum: [...IMPORT_RACE_DISTANCES], description: "semi is the half marathon; trail_short ~30 km, trail ~60 km, ultra ~100 km." },
+    raceDistance: { enum: [...IMPORT_RACE_DISTANCES], description: "semi is the half marathon; trail_short ~30 km, trail ~60 km." },
     raceName: { type: "string", maxLength: L.nameMax },
     level: { enum: [...IMPORT_LEVELS] },
     vma: range(L.vma, "VMA (maximal aerobic speed) in km/h."),

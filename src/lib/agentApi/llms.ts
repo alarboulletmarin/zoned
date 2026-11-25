@@ -167,7 +167,7 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "",
     `Link: ${input.examples.config.url}`,
     "",
-    `Optional \`config\` fields: \`startDate\`, \`raceName\`, \`goal\` (finish, time, compete), \`vma\` (km/h, ${L.vma.min}-${L.vma.max}), \`targetPaceMinKm\`, \`elevationGain\` (m), \`currentWeeklyKm\`, \`currentLongRunKm\`, \`includeStrength\`, \`strengthPerWeek\` (1-3). \`raceDistance\`: 5K, 10K, semi, marathon, trail_short, trail, ultra. \`level\`: beginner, intermediate, advanced, elite. ${L.configWeeks.min} to ${L.configWeeks.max} weeks between start and race.`,
+    `Optional \`config\` fields: \`startDate\`, \`raceName\`, \`goal\` (finish, time, compete), \`vma\` (km/h, ${L.vma.min}-${L.vma.max}), \`targetPaceMinKm\`, \`elevationGain\` (m), \`currentWeeklyKm\`, \`currentLongRunKm\`, \`includeStrength\`, \`strengthPerWeek\` (1-3). \`raceDistance\`: 5K, 10K, semi, marathon, trail_short, trail. \`level\`: beginner, intermediate, advanced, elite. ${L.configWeeks.min} to ${L.configWeeks.max} weeks between start and race.`,
     "",
     "Minimal `plan` payload (the agent writes every week):",
     "",

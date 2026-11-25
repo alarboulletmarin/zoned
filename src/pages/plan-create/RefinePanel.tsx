@@ -21,7 +21,7 @@ import { addDaysToDate, isoDayOfWeek, mondayOfDate } from "@/lib/planDates";
 import type { ValidationResult } from "@/lib/intermediateGoalValidation";
 import type { PlanForm } from "@/lib/planCreate";
 import type { TerrainType } from "@/types";
-import { RACE_DISTANCE_META, type IntermediateGoal, type RaceDistance } from "@/types/plan";
+import { OFFERED_RACE_DISTANCES, RACE_DISTANCE_META, type IntermediateGoal } from "@/types/plan";
 import { Option } from "./Option";
 import { PRIORITY_OPTIONS, VALIDATION_KEYS } from "./constants";
 
@@ -342,7 +342,7 @@ function PrepRace(props: {
           {t("intermediateGoals.distance")}
         </span>
         <div className="zn-cluster" role="radiogroup" aria-labelledby={`${uid}-dist`}>
-          {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => (
+          {OFFERED_RACE_DISTANCES.map((dist) => (
             <button
               key={dist}
               type="button"

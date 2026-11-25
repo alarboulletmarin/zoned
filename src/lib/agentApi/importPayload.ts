@@ -46,7 +46,6 @@ export const IMPORT_RACE_DISTANCES: readonly RaceDistance[] = [
   "marathon",
   "trail_short",
   "trail",
-  "ultra",
 ];
 export const IMPORT_LEVELS: readonly Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
 export const IMPORT_GOALS: readonly TrainingGoal[] = ["finish", "time", "compete"];
