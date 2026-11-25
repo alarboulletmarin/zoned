@@ -241,6 +241,8 @@ A `segment` is one effort:
   "intensityType": "I" }      // optional
 ```
 
+**Every effort of the main set has a zone.** `qa-workout-schema` fails on a `mainSetStructure` segment whose role is `effort` (or absent, which reads as effort) and that carries no `zone`: without one the profile hatches it like recovery and the session's peak falls back to Z2. Drills written as prose, a yoga sequence or the hours between the two halves of a double session are not running: they take `"role": "transition"`. Warm-up and cool-down segments are not held to this rule.
+
 A `repeat` repeats `steps` `count` times, inserting `between` **in the gaps**, so `count - 1` times rather than after the last rep:
 
 ```jsonc

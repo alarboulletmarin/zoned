@@ -222,6 +222,8 @@
         {
           "description": "6x côtes courtes",
           "descriptionEn": "6x short hills",
+          "durationMin": 0.75,
+          "zone": "Z5",
           "repetitions": 6,
           "recovery": "1-2 min descente",
           "recoveryEn": "1-2 min downhill",
@@ -260,6 +262,8 @@
               "kind": "segment",
               "description": "côtes courtes",
               "descriptionEn": "short hills",
+              "durationSec": 45,
+              "zone": "Z5",
               "elevationGainM": 12,
               "gradientPercent": 7,
               "terrainType": "trail_runnable",
@@ -2169,7 +2173,7 @@
               "kind": "segment",
               "description": "10 sauts unipodaux par côté + 10 foulées bondissantes + 8 drop jumps + 10 A-skip par côté",
               "descriptionEn": "10 single-leg hops per side + 10 bounding strides + 8 drop jumps + 10 A-skips per side",
-              "role": "effort"
+              "role": "transition"
             }
           ],
           "between": [
