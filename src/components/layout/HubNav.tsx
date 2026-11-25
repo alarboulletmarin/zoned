@@ -29,7 +29,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronRight } from "@/components/icons";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { NavSection } from "./navigation";
 
 export function HubNav({
@@ -42,11 +41,11 @@ export function HubNav({
 }) {
   const { t } = useTranslation("common");
   const { pathname } = useLocation();
-  // The same 1024px line the header uses to decide it cannot show the doors.
-  const isCompact = useMediaQuery("(max-width: 1023px)");
 
-  if (!isCompact) return null;
-
+  /* Toujours rendu, et caché à partir de 1024px par hub-nav.css, la ligne où
+     la barre montre ses menus. Il se montait dans un effet (`useMediaQuery`
+     répond faux au prérendu) : le HTML statique n'avait pas le rail, et la
+     page sautait d'une rangée de liens à l'hydratation. */
   const pages = (section.children ?? []).filter(
     (page) => page.to !== section.to && !omit.includes(page.to),
   );

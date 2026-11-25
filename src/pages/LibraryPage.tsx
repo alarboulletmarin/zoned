@@ -425,7 +425,7 @@ export function LibraryPage() {
           <span className="zn-kicker">
             {stats.workouts > 0
               ? t("catalogueFamilies", { workouts: stats.workouts, families: categories.length })
-              : " "}
+              : "\u00a0"}
           </span>
           <h1 className="zn-display zn-lib__title" data-level="2">
             {t("title")}
