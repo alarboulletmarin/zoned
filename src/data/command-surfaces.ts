@@ -310,6 +310,16 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     url: "/about",
     keywords: ["a propos", "about", "zoned", "qui", "projet"],
   },
+  {
+    id: "agents",
+    section: "page",
+    title: "API et assistants IA",
+    titleEn: "API and AI assistants",
+    subtitle: "Créer un plan Zoned depuis ChatGPT, Claude ou un autre assistant",
+    subtitleEn: "Create a Zoned plan from ChatGPT, Claude or another assistant",
+    url: "/agents",
+    keywords: ["api", "ia", "ai", "agent", "assistant", "chatgpt", "claude", "llm", "llms.txt", "import"],
+  },
 
   // ── Les destinations que les quatre portes ne tiennent plus ──────────
   // Mesuré avant d'écrire ces entrées : le registre couvrait 32 destinations

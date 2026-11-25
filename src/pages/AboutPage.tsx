@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GithubIcon, StravaIcon, ExternalLink } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
@@ -137,11 +138,13 @@ export function AboutPage() {
             </Button>
           </div>
 
-          {/* For AI assistants: a caption, not a call. Plain anchors, these
-              are static files the router must not catch. No navigation
-              entry, on purpose. */}
+          {/* For AI assistants: a caption, not a call. /agents is the page
+              (also in the footer); the two others are static files the
+              router must not catch, hence plain anchors. */}
           <p className="zn-caption zn-muted">
             {t("content:aboutPage.agentsLead")}{" "}
+            <Link className="zn-inline-link" to="/agents">{t("content:aboutPage.agentsPage")}</Link>
+            {" · "}
             <a className="zn-inline-link" href="/llms.txt">llms.txt</a>
             {" · "}
             <a className="zn-inline-link" href="/api/v1/index.json">{t("content:aboutPage.agentsApi")}</a>
