@@ -52,6 +52,7 @@ const NOT_A_DESTINATION: Record<string, string> = {
   "/calculators/convertisseur": "redirection vers /calculators/allures (outils fusionnés)",
   "/calculators/equivalence": "redirection vers /calculators/vma (outils fusionnés)",
   "/calculators/age-graded": "redirection historique vers /calculators/vma",
+  "/my-zones": "redirection vers /calculators/zones (outils fusionnés)",
 };
 
 function reachableFromNav(): Set<string> {

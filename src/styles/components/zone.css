@@ -222,35 +222,6 @@
   }
 }
 
-/* 38x20 swatch, one of the raw sizes the design system states outright. The
-   legend itself no longer prints one (its entries are ZoneBadge chips); the
-   zones table in ZoneCalculator still does, one per row. */
-.zn-zonescale__swatch {
-  display: block;
-  inline-size: 38px;
-  block-size: 20px;
-  flex: none;
-  overflow: hidden;
-
-  background: var(--surface-card);
-  border: var(--border-rule);
-  border-radius: var(--r-xs);
-}
-
-.zn-zonescale__fill {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  background: var(--zn-block-fill, transparent);
-}
-
-.zn-zonescale__fill[data-zone="1"] { --zn-block-fill: var(--zone-1); }
-.zn-zonescale__fill[data-zone="2"] { --zn-block-fill: var(--zone-2); }
-.zn-zonescale__fill[data-zone="3"] { --zn-block-fill: var(--zone-3); }
-.zn-zonescale__fill[data-zone="4"] { --zn-block-fill: var(--zone-4); }
-.zn-zonescale__fill[data-zone="5"] { --zn-block-fill: var(--zone-5); }
-.zn-zonescale__fill[data-zone="6"] { --zn-block-fill: var(--zone-6); }
-
 /* ── la pastille : une marche de la rampe, dans une puce ─────────────── */
 
 /* A zone's rung of the ramp, printed inside its chip (the draw page's zone

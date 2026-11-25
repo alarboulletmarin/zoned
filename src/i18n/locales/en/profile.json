@@ -2,14 +2,6 @@
   "title": "My runner profile",
   "description": "Centralize your physiological data, reference times and personal records.",
   "kicker": "Computed on this device",
-  "stats": {
-    "vma": "vVO2max · km/h",
-    "vmaFoot_one": "from {{count}} test",
-    "vmaFoot_other": "from {{count}} tests",
-    "fcMax": "Max HR · bpm",
-    "weekly": "Weekly volume · km",
-    "longRun": "Long run · km"
-  },
   "seo": {
     "title": "Runner Profile, Zoned",
     "description": "Your runner profile: physiological data, reference times, benchmark history and personal records."
@@ -49,15 +41,7 @@
   },
   "base": {
     "title": "Base data",
-    "description": "Your physiological data and current training volume.",
-    "fcMax": "Max HR",
-    "fcMaxUnit": "bpm",
-    "fcMaxPlaceholder": "E.g. 185",
-    "fcMaxError": "Max HR must be between 100 and 250 bpm",
-    "vma": "vVO2max",
-    "vmaUnit": "km/h",
-    "vmaPlaceholder": "E.g. 16.5",
-    "vmaError": "vVO2max must be between 8 and 30 km/h",
+    "description": "Your current training volume and level.",
     "weeklyKm": "Weekly volume",
     "weeklyKmUnit": "km/week",
     "weeklyKmPlaceholder": "E.g. 40",
@@ -173,5 +157,13 @@
     "hours": "h",
     "minutes": "min",
     "seconds": "s"
+  },
+  "numbers": {
+    "setLabel": "Set: {{label}}",
+    "changeLabel": "Change or delete: {{label}}",
+    "save": "Save",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "thresholdFromVma": "comes from your vVO2max"
   }
 }

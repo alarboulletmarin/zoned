@@ -48,7 +48,7 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     subtitle: "Pose tes zones FC et tes allures depuis ta VMA ou ta FCmax",
     subtitleEn: "Calculate your HR and pace zones from VMA or max HR",
     url: "/calculators/zones",
-    keywords: ["zones", "fc", "fcmax", "vma", "heart rate", "frequence cardiaque", "allures"],
+    keywords: ["zones", "mes zones", "my zones", "fc", "fcmax", "vma", "heart rate", "frequence cardiaque", "allures"],
   },
   {
     id: "calc-vma",
@@ -400,17 +400,6 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     subtitleEn: "Write your own session, block by block",
     url: "/workout/builder",
     keywords: ["creer", "build", "editeur", "builder", "personnalisee", "custom"],
-  },
-  {
-    id: "my-zones",
-    section: "page",
-    title: "Mes zones",
-    titleEn: "My zones",
-    subtitle: "Tes six zones, depuis ta VMA ou ta FCmax",
-    subtitleEn: "Your six zones, from your vVO2max or max HR",
-    url: "/my-zones",
-    keywords: ["mes zones", "my zones", "vma", "fcmax", "personnalisees", "personal"],
-    featured: true,
   },
   {
     id: "learn",

@@ -58,7 +58,6 @@ const WorkoutDetailPage = lazyPage(() => import("@/pages/WorkoutDetailPage").the
 const SharedWorkoutPage = lazyPage(() => import("@/pages/SharedWorkoutPage").then(m => ({ default: m.SharedWorkoutPage })));
 const SharedPlanPage = lazyPage(() => import("@/pages/SharedPlanPage").then(m => ({ default: m.SharedPlanPage })));
 const PlanImportPage = lazyPage(() => import("@/pages/PlanImportPage").then(m => ({ default: m.PlanImportPage })));
-const MyZonesPage = lazyPage(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
 const AboutPage = lazyPage(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
@@ -349,7 +348,7 @@ export default function App({ ssrLocation }: { ssrLocation?: string } = {}) {
                           <Route path="/workout/builder/:id" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/shared" element={<SharedWorkoutPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />
-                          <Route path="/my-zones" element={<MyZonesPage />} />
+                          <Route path="/my-zones" element={<NavigateKeepingQuery to="/calculators/zones" />} />
                           <Route path="/calculators" element={<CalculateursPage />} />
                           <Route path="/calculators/zones" element={<ZonesCalculatorPage />} />
                           <Route path="/calculators/allures" element={<PaceCalculatorPage />} />

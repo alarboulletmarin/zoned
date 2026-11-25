@@ -21,6 +21,14 @@ du plan) et répond avant qu'elle tape. Tout passe par `useMyNumbers()`
   calculateur de ravitaillement). Une clé qui n'est plus dans le plan suit
   le plan.
 
+Les repères se posent, se changent et se suppriment à un seul endroit : les
+tuiles du profil (`/profile`, `src/components/domain/MyNumbersTiles.tsx`).
+Une tuile touchée devient son champ, sur place ; `Supprimer` retire la valeur
+du profil et de l'ancienne clé `zoned-userZones` (`setMyNumber` dans
+`src/lib/zones.ts`), sinon elle reviendrait par le repli. Les calculateurs
+proposent de prendre une valeur, jamais de l'effacer. Mes zones (`/my-zones`)
+a fusionné dans Zones.
+
 Le hook suit la règle de prérendu : premier rendu vide, comme le HTML, lecture
 du stockage dans un effet. Une valeur absente s'affiche `à poser`, en
 pointillés, jamais un exemple inventé.
@@ -117,6 +125,7 @@ Redirections permanentes, dans `vercel.json`, `nginx.conf` et le routeur
 - `/calculators/equivalence` vers `/calculators/vma`
 - `/calculators/age-graded` vers `/calculators/vma`
 - `/calculators/convertisseur` vers `/calculators/allures`
+- `/my-zones` vers `/calculators/zones`
 
 Un lien qui porte des paramètres n'hydrate pas le HTML prérendu, qui a été
 rendu sans eux (`isServerSnapshot`) : le client repeint.
@@ -131,4 +140,5 @@ rendu sans eux (`isServerSnapshot`) : le client repeint.
   n'est pas touché ; le décalage reste pour qui a un profil.
 - **Effacer un repère depuis un calculateur** : effacer un champ ne supprime
   pas la valeur enregistrée, la page cesse seulement de dire `enregistré`.
-  La suppression se fait dans le profil.
+  La suppression se fait dans les tuiles du profil, le seul endroit où un
+  repère se change.

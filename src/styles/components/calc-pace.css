@@ -25,9 +25,9 @@
  *
  * ZONE FILLS. Five of the seven paint a zone. The two whose zone column is
  * there from the first paint, the pace table, the equivalence prediction,
- * carry the ZoneScale legend once, on the `.zn-num__legend` band (the two
- * zone pages, /calculators/zones and /my-zones, no longer use that band: the
- * ZoneFigures plate is their legend, zone-figures.css); the VMA preview
+ * carry the ZoneScale legend once, on the `.zn-num__legend` band (the zone
+ * page, /calculators/zones, no longer uses that band: the ZoneFigures plate
+ * is its legend, zone-figures.css); the VMA preview
  * carries it inside its result instead, since a band appearing above the
  * form as the chrono becomes valid would push the field being typed in down
  * the page. The two that show a
