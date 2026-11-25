@@ -26,6 +26,12 @@ interface ZoneBarProps {
   height?: number;
   /** Overrides the spoken description. Leave unset for the generated one. */
   label?: string;
+  /**
+   * Hidden from assistive tech. For a bar inside a link whose own name already
+   * says which session it is: the bibliothèque row, where the generated
+   * description would be read as part of the link's name.
+   */
+  decorative?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -42,6 +48,7 @@ export function ZoneBar({
   condense = false,
   height,
   label,
+  decorative = false,
   className,
   style,
 }: ZoneBarProps) {
@@ -51,8 +58,9 @@ export function ZoneBar({
 
   return (
     <span
-      role="img"
-      aria-label={label ?? describeProfile(list, t)}
+      {...(decorative
+        ? { "aria-hidden": true }
+        : { role: "img", "aria-label": label ?? describeProfile(list, t) })}
       className={cn("zn-zonebar", className)}
       style={
         {

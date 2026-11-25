@@ -101,6 +101,10 @@
   "zoneBar": {
     "of": "Profil de {{name}}"
   },
+  "row": {
+    "favorite": "Dans tes favoris",
+    "track": "Piste"
+  },
   "difficulty": {
     "beginner": "Débutant",
     "intermediate": "Intermédiaire",

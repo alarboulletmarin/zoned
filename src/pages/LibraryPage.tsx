@@ -40,7 +40,7 @@ import {
   WorkoutCard,
   WorkoutCardCompact,
   WorkoutFilters,
-  WorkoutListItem,
+  WorkoutRow,
   ViewModeSelector,
   defaultFilters,
   type WorkoutFiltersState,
@@ -1063,7 +1063,7 @@ export function LibraryPage() {
                   style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
                 >
                   {visibleWorkouts.map((workout) => (
-                    <WorkoutListItem key={workout.id} workout={workout} />
+                    <WorkoutRow key={workout.id} workout={workout} favorite={false} />
                   ))}
                 </div>
               )}

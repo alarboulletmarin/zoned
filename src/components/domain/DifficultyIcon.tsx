@@ -15,10 +15,11 @@ const DIFFICULTY_ICONS: Record<Difficulty, ComponentType<IconProps>> = {
 
 interface DifficultyIconProps {
   difficulty: Difficulty;
+  size?: number;
   className?: string;
 }
 
-export function DifficultyIcon({ difficulty, className }: DifficultyIconProps) {
+export function DifficultyIcon({ difficulty, size, className }: DifficultyIconProps) {
   const Icon = DIFFICULTY_ICONS[difficulty];
-  return <Icon className={className} />;
+  return <Icon className={className} size={size} />;
 }
