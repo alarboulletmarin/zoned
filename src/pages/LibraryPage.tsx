@@ -637,18 +637,21 @@ export function LibraryPage() {
                       {t("meta.results", { count: filteredWorkouts.length })}
                     </span>
                   </h2>
-                  <button
-                    type="button"
-                    className="zn-lib__sort"
-                    aria-label={t("sort.cycle", {
-                      current: t(`sort.word.${sort}`),
-                      next: t(`sort.word.${nextSort}`),
-                    })}
-                    onClick={cycleSort}
-                  >
-                    {t(`sort.by.${sort}`)}
-                    <ChevronDown size={16} />
-                  </button>
+                  {/* Rien à trier dans une liste vide. */}
+                  {filteredWorkouts.length > 1 && (
+                    <button
+                      type="button"
+                      className="zn-lib__sort"
+                      aria-label={t("sort.cycle", {
+                        current: t(`sort.word.${sort}`),
+                        next: t(`sort.word.${nextSort}`),
+                      })}
+                      onClick={cycleSort}
+                    >
+                      {t(`sort.by.${sort}`)}
+                      <ChevronDown size={16} />
+                    </button>
+                  )}
                 </div>
 
                 {filteredWorkouts.length > 0 && showLegend && (
