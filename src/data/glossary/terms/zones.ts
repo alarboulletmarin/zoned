@@ -18,9 +18,9 @@ export const zonesTerms: GlossaryTerm[] = [
     fullDefinitionEn:
       "Training zones are a classification system that divides exercise intensity into 5 to 6 distinct levels. Each zone corresponds to specific physiological adaptations. The most common model uses 5 zones based on heart rate (Karvonen method) or pace (% of MAS). Polarized training recommends spending 80% of time in zones 1-2 (easy) and 20% in zones 4-5 (intense), avoiding the 'gray' zone 3.",
     example:
-      "Planr utilise 6 zones : Z1 (récupération), Z2 (endurance), Z3 (tempo), Z4 (seuil), Z5 (VO2max), Z6 (anaérobie). Tes zones sont calculées automatiquement à partir de ta FC max, FC repos et VMA.",
+      "Zoned utilise 6 zones : Z1 (récupération), Z2 (endurance), Z3 (tempo), Z4 (seuil), Z5 (VO2max), Z6 (anaérobie). Tes zones sont calculées automatiquement à partir de ta FC max, FC repos et VMA.",
     exampleEn:
-      "Planr uses 6 zones: Z1 (recovery), Z2 (endurance), Z3 (tempo), Z4 (threshold), Z5 (VO2max), Z6 (anaerobic). Your zones are automatically calculated from your max HR, resting HR, and MAS.",
+      "Zoned uses 6 zones: Z1 (recovery), Z2 (endurance), Z3 (tempo), Z4 (threshold), Z5 (VO2max), Z6 (anaerobic). Your zones are automatically calculated from your max HR, resting HR, and MAS.",
     relatedTerms: [
       "zone-1",
       "zone-2",
