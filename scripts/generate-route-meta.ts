@@ -49,6 +49,10 @@ interface RouteMeta {
   ogType?: "website" | "article";
   /** Page-specific schema.org entities, appended to WebSite + Organization. */
   jsonLd?: Record<string, unknown>[];
+  /** Kept out of search results: a door opened by a link, not a page to find. */
+  noindex?: boolean;
+  /** HTML for readers that run no script, such as an assistant's fetch tool. */
+  noscript?: string;
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -205,6 +209,20 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     path: "/about",
     title: "À propos",
     description: `Pourquoi Zoned existe : ${stats.workouts} séances fondées sur la science, ${stats.plans} plans et ${stats.calculators} calculateurs, gratuits, open source, sans compte ni tracking, pour toujours.`,
+  },
+  // Not in the sitemap: without this shell, /plan/import fell through the SPA
+  // rewrite to the home page HTML, so an assistant checking the link it had
+  // just written read the home page and doubted the link.
+  {
+    path: "/plan/import",
+    title: "Importer un plan",
+    description:
+      "Ouvre un plan préparé par un assistant IA : Zoned lit les réglages écrits après le # du lien et construit le plan dans le navigateur, sans compte.",
+    noindex: true,
+    noscript:
+      "<h1>Importer un plan dans Zoned</h1>" +
+      "<p>Cette page lit les réglages écrits après le # du lien, par exemple #distance=10K&amp;date=2027-05-30&amp;days=3&amp;time=1:10:00, et construit le plan dans le navigateur. Rien ne part vers un serveur, rien n'est enregistré avant Ajouter à mes plans. Elle a besoin de JavaScript.</p>" +
+      "<p>This page reads the settings after the # of the link and builds the plan in the browser. It needs JavaScript. For AI assistants: <a href=\"https://zoned.run/agents?lang=en\">https://zoned.run/agents?lang=en</a> and <a href=\"https://zoned.run/llms.txt\">https://zoned.run/llms.txt</a>.</p>",
   },
   {
     path: "/agents",
@@ -642,7 +660,9 @@ function buildSeoBlock(route: RouteMeta): string {
   const tags = [
     `<title data-default-seo>${text(fullTitle)}</title>`,
     `<meta data-default-seo name="description" content="${attr(route.description)}" />`,
-    `<meta data-default-seo name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />`,
+    route.noindex
+      ? `<meta data-default-seo name="robots" content="noindex, follow" />`
+      : `<meta data-default-seo name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />`,
     `<link data-default-seo rel="canonical" href="${attr(url)}" />`,
     `<link data-default-seo rel="alternate" hreflang="fr-FR" href="${attr(url)}" />`,
     `<link data-default-seo rel="alternate" hreflang="en-US" href="${attr(`${url}?lang=en`)}" />`,
@@ -794,7 +814,9 @@ async function main() {
   for (const route of routes) {
     const outPath = outputPath(route.path);
     mkdirSync(dirname(outPath), { recursive: true });
-    writeFileSync(outPath, applyRouteMeta(shell, route), "utf-8");
+    let html = applyRouteMeta(shell, route);
+    if (route.noscript) html = html.replace(/<body([^>]*)>/, `<body$1>\n    <noscript>${route.noscript}</noscript>`);
+    writeFileSync(outPath, html, "utf-8");
   }
 
   console.log(`✓ Wrote per-route metadata for ${routes.length} routes into dist/`);
