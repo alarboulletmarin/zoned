@@ -218,6 +218,26 @@ function applyRender(shell: string, rendered: string, pathname: string, lang: "f
   return html;
 }
 
+/**
+ * Pages an assistant reads when asked for a Zoned plan, and what each must
+ * say in its own content, footer aside: a link to /agents, and on the home
+ * page and /agents an import link it can copy. A cold ChatGPT test read the
+ * home page and the wizard and never found the import, the footer link alone
+ * went unseen (2026-11-26).
+ */
+const AGENT_DOORS: Record<string, readonly RegExp[]> = {
+  "/": [/href="\/agents(?:\?lang=en)?"/, /\/plan\/import#distance=/],
+  "/plan/new": [/href="\/agents(?:\?lang=en)?"/],
+  "/plans/methodology": [/href="\/agents(?:\?lang=en)?"/],
+  "/agents": [/\/plan\/import#distance=/],
+};
+
+function missingAgentDoor(pathname: string, html: string): string | null {
+  const body = html.replace(/<footer[\s\S]*?<\/footer>/g, "");
+  const miss = (AGENT_DOORS[pathname] ?? []).find((re) => !re.test(body));
+  return miss ? `ne mène pas les assistants à l'import (${miss.source})` : null;
+}
+
 async function main(): Promise<void> {
   if (!existsSync(join(DIST, "index.html"))) {
     console.error("dist/index.html est absent. Lancer vite build d'abord.");
@@ -277,6 +297,8 @@ async function main(): Promise<void> {
         const html = applyRender(shell, rendered, pathname, lang);
         if (!/<h1[\s>]/i.test(html)) failures.push(`${lang} ${pathname} : pas de h1`);
         if (!/<a\s[^>]*href="/i.test(html)) failures.push(`${lang} ${pathname} : pas de lien`);
+        const door = missingAgentDoor(pathname, html);
+        if (door) failures.push(`${lang} ${pathname} : ${door}`);
         const out = shellPath(pathname, lang);
         mkdirSync(dirname(out), { recursive: true });
         writeFileSync(out, html);

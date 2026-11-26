@@ -48,6 +48,8 @@
     "figuresLabel": "The six zones drawn: the same body from a walking pace to a sprint, inked darker as the effort rises."
   },
   "planMethodology": {
+    "aiText": "An AI assistant can set up this generator for you: it writes an import link, and Zoned builds the plan on these same principles.",
+    "aiLink": "Create a plan from an AI assistant",
     "title": "Plan Guide",
     "seoDescription": "The 7 evidence-based principles behind Zoned's training plan generation. Understand how your plan is built.",
     "heading": "How Zoned builds your plan",

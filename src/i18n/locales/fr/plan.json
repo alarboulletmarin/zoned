@@ -1033,7 +1033,9 @@
         "beginner_start": "Mes premières semaines"
       },
       "blank": "Partir d'un calendrier vide",
-      "blankHint": "Tu poses chaque séance toi-même"
+      "blankHint": "Tu poses chaque séance toi-même",
+      "assistant": "Avec un assistant IA",
+      "assistantHint": "ChatGPT, Claude ou Gemini écrivent le lien qui ouvre ton plan ici"
     },
     "date": {
       "title": "Quand a lieu ta course ?",

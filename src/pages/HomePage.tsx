@@ -71,7 +71,9 @@ const CALCULATORS: Array<{
 // sept, dont l'export vers la montre et le hors-ligne, qui sont des questions
 // de la deuxième semaine ; le titre promettait cinq. L'id choisit la question
 // et la réponse dans homepage.s09.q[id].
-const FAQ_IDS = ["hrm", "free", "data"] as const;
+const FAQ_IDS = ["hrm", "free", "data", "ai"] as const;
+/** An answer that points somewhere: its link text is `s09.q.<id>.link`. */
+const FAQ_LINKS: Partial<Record<(typeof FAQ_IDS)[number], string>> = { ai: "/agents" };
 
 // ────────────────────────────────────────────────────────────────────────────
 // HomePage
@@ -202,6 +204,14 @@ export function HomePage() {
           acceptedAnswer: {
             "@type": "Answer",
             text: `Plus de ${appStats.workouts || 200} séances de course à pied, plus 10 séances cyclisme et 10 séances natation pour le cross-training, organisées en 6 zones d'intensité.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Puis-je créer mon plan Zoned avec ChatGPT, Claude ou Gemini ?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Oui. L'assistant écrit un lien d'import, par exemple https://zoned.run/plan/import#distance=10K&date=2027-05-30&days=3&time=1:10:00, et Zoned construit le plan avec son propre générateur, sans compte ni clé d'API. Mode d'emploi pour les assistants : https://zoned.run/agents.",
           },
         },
         {
@@ -420,6 +430,14 @@ export function HomePage() {
                 </summary>
                 <p className="zn-body zn-home__faq-a">
                   {t(`homepage:home.s09.q.${id}.a`)}
+                  {FAQ_LINKS[id] && (
+                    <>
+                      {" "}
+                      <Link to={FAQ_LINKS[id]} className="zn-inline-link">
+                        {t(`homepage:home.s09.q.${id}.link`)}
+                      </Link>
+                    </>
+                  )}
                 </p>
               </details>
             ))}

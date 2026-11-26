@@ -1033,7 +1033,9 @@
         "beginner_start": "My first weeks"
       },
       "blank": "Start from an empty calendar",
-      "blankHint": "You place every session yourself"
+      "blankHint": "You place every session yourself",
+      "assistant": "With an AI assistant",
+      "assistantHint": "ChatGPT, Claude or Gemini write the link that opens your plan here"
     },
     "date": {
       "title": "When is your race?",

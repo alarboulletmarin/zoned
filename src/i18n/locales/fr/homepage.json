@@ -188,7 +188,7 @@
     },
     "s09": {
       "kicker": "Questions fréquentes",
-      "title": "Trois questions avant de commencer",
+      "title": "Quatre questions avant de commencer",
       "more": "{{count}} articles complémentaires dans la bibliothèque pédagogique.",
       "moreLink": "Tout lire →",
       "q": {
@@ -203,6 +203,11 @@
         "data": {
           "q": "Où sont stockées mes données ?",
           "a": "Tout reste dans le stockage local de ton navigateur. Export .json depuis les réglages pour sauvegarder ou migrer."
+        },
+        "ai": {
+          "q": "Puis-je créer mon plan avec ChatGPT, Claude ou Gemini ?",
+          "a": "Oui. L'assistant écrit un lien d'import, par exemple https://zoned.run/plan/import#distance=10K&date=2027-05-30&days=3&time=1:10:00, et Zoned construit le plan avec son propre générateur. Tu vois l'aperçu, rien n'est enregistré avant que tu l'ajoutes. Sans compte, sans clé d'API.",
+          "link": "Le mode d'emploi pour les assistants IA"
         }
       }
     },

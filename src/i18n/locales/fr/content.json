@@ -48,6 +48,8 @@
     "figuresLabel": "Les six zones dessinées : le même corps du pas de marche au sprint, encré de plus en plus foncé à mesure que l'effort monte."
   },
   "planMethodology": {
+    "aiText": "Un assistant IA peut régler ce générateur pour toi : il écrit un lien d'import, Zoned construit le plan avec ces mêmes principes.",
+    "aiLink": "Créer un plan depuis un assistant IA",
     "title": "Guide des plans",
     "seoDescription": "Les 7 principes scientifiques derrière la génération des plans d'entraînement Zoned. Comprends comment ton plan est construit.",
     "heading": "Comment Zoned construit ton plan",

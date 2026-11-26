@@ -164,6 +164,8 @@
   padding-block-end: var(--sp-11);
   padding-inline-start: calc(24px + var(--sp-10));
   max-inline-size: 70ch;
+  /* The assistant answer quotes a whole import link, one unbroken word. */
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 640px) {
