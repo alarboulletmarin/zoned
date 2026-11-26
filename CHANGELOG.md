@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+- The pages an assistant reads first point to the import: the home page FAQ answers whether ChatGPT, Claude or Gemini can build the plan, with a link to copy; the plan wizard (`/plan/new`) and the plan guide link to `/agents`. The prerender fails if one of them loses that link outside its footer
+- An import link for a race closer than the recommended length (5K 6 weeks, 10K 8, half 10, marathon 14, short trail 10, trail 14) still builds the plan, down to 4 weeks, and the preview now opens on a warning that the plan is short (`weeks_below_recommended`)
+- `/plan/import` has its own static page (noindex, title, description, a noscript note): an assistant fetching the link it wrote read the home page before
+
+### Changed
+- One plan length everywhere: the home page said 8 to 18 weeks, the wizard a range per distance, the import 4 to 52. The home page, `/agents`, `llms.txt` and the import schema now read the recommended minimum per distance from the generator, and `llms.txt` tells assistants to write the link even when the level is missing
+- `/agents` is titled for what people ask: Create a training plan with ChatGPT, Claude or Gemini
+
+### Fixed
+- An import link opened on a device whose service worker predated `/plan/import` showed Plan not found until the update banner was accepted. The import page is now always fetched from the network; devices still on that old worker see it once more, until they update
+
 ## [1.3.0] - 2026-11-26
 
 ### Added
