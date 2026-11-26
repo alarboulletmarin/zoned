@@ -48,6 +48,8 @@
     "figuresLabel": "The six zones drawn: the same body from a walking pace to a sprint, inked darker as the effort rises."
   },
   "planMethodology": {
+    "aiText": "An AI assistant can set up this generator for you: it writes an import link, and Zoned builds the plan on these same principles.",
+    "aiLink": "Create a plan from an AI assistant",
     "title": "Plan Guide",
     "seoDescription": "The 7 evidence-based principles behind Zoned's training plan generation. Understand how your plan is built.",
     "heading": "How Zoned builds your plan",
@@ -141,8 +143,8 @@
     "showOlder": "Show the {{n}} earlier releases"
   },
   "agentsPage": {
-    "seoTitle": "API and AI assistants",
-    "seoDescription": "How an AI assistant creates a training plan in Zoned: one hand-written import link, no account, no API key, no server.",
+    "seoTitle": "Create a training plan with ChatGPT, Claude or Gemini",
+    "seoDescription": "A 5K, 10K, half, marathon or trail plan made with ChatGPT, Claude or Gemini: the assistant writes a link, Zoned builds the plan. Free, no account, no API key.",
     "kicker": "API · AI assistants",
     "title": "Create a Zoned plan from an AI assistant",
     "lead": "Zoned is a free, open-source, local-first training app: everything stays in the browser. An AI assistant can still create a plan in it directly, by writing an import link. No account, API key, browser automation, backend or MCP server is needed.",
@@ -152,7 +154,7 @@
     "pathsTitle": "Two paths",
     "pathsText": "A standard race plan fits in one link with parameters, no code. A plan the assistant writes session by session goes through the JSON API and an encoded link.",
     "standardTitle": "Standard race plan, in three steps",
-    "step1": "Collect the race distance, the race date and the number of runs per week. If the user has one, also the target finish time (or pace) and their level.",
+    "step1": "Collect the race distance, the race date and the number of runs per week. If the user has one, also the target finish time (or pace) and their level. Do not hold the link back for the rest: whatever is missing gets a default that the preview states. Write the link, name those defaults next to it, offer to change them. A race closer than the recommended length still gets a plan, compressed, with a warning.",
     "step2": "Write the link with the parameters below. No JSON, no encoding.",
     "step3": "Give it as a clickable link. Zoned runs its own generator (periodisation, progression, paces), shows a preview, and saves nothing until the user presses Add to my plans.",
     "templateLabel": "Link shape",

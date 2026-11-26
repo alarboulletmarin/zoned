@@ -80,7 +80,7 @@
       "e1Body": "Filter by discipline, zone, duration, level. Every card states its difficulty and TSS cost.",
       "e1Link": "Library",
       "e2Title": "Follow a structured plan",
-      "e2Body": "From 5K to marathon, 8 to 18 weeks, progressive load and taper.",
+      "e2Body": "From 5K to marathon, 6 to 30 weeks by distance, progressive load and taper.",
       "e2Link": "Plans",
       "e3Title": "Understand the science",
       "e3Body": "Every session cites its method, the zone it targets and its published reference.",
@@ -188,7 +188,7 @@
     },
     "s09": {
       "kicker": "Frequently asked",
-      "title": "Three questions before you start",
+      "title": "Four questions before you start",
       "more": "{{count}} more articles in the learning library.",
       "moreLink": "Read all →",
       "q": {
@@ -203,6 +203,11 @@
         "data": {
           "q": "Where is my data stored?",
           "a": "Everything stays in your browser's local storage. Export .json from Settings to back it up or move it."
+        },
+        "ai": {
+          "q": "Can I create my plan with ChatGPT, Claude or Gemini?",
+          "a": "Yes. The assistant writes an import link, for example https://zoned.run/plan/import#distance=10K&date=2027-05-30&days=3&time=1:10:00, and Zoned builds the plan with its own generator. You see a preview, nothing is saved until you add it. No account, no API key.",
+          "link": "Instructions for AI assistants"
         }
       }
     },

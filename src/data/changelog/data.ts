@@ -2,6 +2,54 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "1.3.1",
+    date: "2026-11-26",
+    changes: {
+      added: [
+        {
+          text: "Les pages qu'un assistant lit en premier mènent à l'import : la FAQ de l'accueil répond à la question de savoir si ChatGPT, Claude ou Gemini peuvent créer le plan, avec un lien d'exemple à copier, et le parcours de création (`/plan/new`) comme le guide des plans renvoient vers `/agents`. Le prérendu échoue si l'une de ces pages perd ce lien hors du pied de page.",
+          textEn: "The pages an assistant reads first point to the import: the home page FAQ answers whether ChatGPT, Claude or Gemini can build the plan, with an example link to copy, and the plan wizard (`/plan/new`) and the plan guide link to `/agents`. The prerender fails if one of them loses that link outside its footer.",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Un lien d'import pour une course plus proche que la durée recommandée (5 km 6 semaines, 10 km 8, semi 10, marathon 14, trail court 10, trail 14) construit quand même le plan, jusqu'à 4 semaines, et l'aperçu s'ouvre sur un avertissement : le plan est court, la progression resserrée.",
+          textEn: "An import link for a race closer than the recommended length (5K 6 weeks, 10K 8, half 10, marathon 14, short trail 10, trail 14) still builds the plan, down to 4 weeks, and the preview opens on a warning: the plan is short, the progression compressed.",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "`/plan/import` a sa propre page statique (non indexée, avec titre, description et un texte pour les lecteurs sans JavaScript) : un assistant qui ouvrait le lien qu'il venait d'écrire lisait la page d'accueil.",
+          textEn: "`/plan/import` has its own static page (noindex, with a title, a description and a note for readers without JavaScript): an assistant fetching the link it had just written read the home page.",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+      ],
+      changed: [
+        {
+          text: "Une seule durée de plan partout : l'accueil disait 8 à 18 semaines, le parcours une plage par distance, l'import 4 à 52. L'accueil, `/agents`, `llms.txt` et le schéma d'import lisent désormais le minimum recommandé par distance dans le générateur, et `llms.txt` dit aux assistants d'écrire le lien même sans le niveau.",
+          textEn: "One plan length everywhere: the home page said 8 to 18 weeks, the wizard a range per distance, the import 4 to 52. The home page, `/agents`, `llms.txt` and the import schema now read the recommended minimum per distance from the generator, and `llms.txt` tells assistants to write the link even when the level is missing.",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "`/agents` porte un titre qui dit ce que les gens cherchent : Un plan d'entraînement avec ChatGPT, Claude ou Gemini.",
+          textEn: "`/agents` is titled for what people ask: Create a training plan with ChatGPT, Claude or Gemini.",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+      ],
+      fixed: [
+        {
+          text: "Un lien d'import ouvert sur un appareil dont le service worker datait d'avant `/plan/import` affichait Plan introuvable tant que la mise à jour n'était pas acceptée. La page d'import est désormais toujours chargée depuis le réseau ; les appareils encore sur cet ancien worker la verront une dernière fois, jusqu'à leur mise à jour.",
+          textEn: "An import link opened on a device whose service worker predated `/plan/import` showed Plan not found until the update banner was accepted. The import page is now always fetched from the network; devices still on that old worker see it once more, until they update.",
+          category: "PWA",
+          categoryEn: "PWA",
+        },
+      ],
+    },
+  },
+  {
     version: "1.3.0",
     date: "2026-11-26",
     changes: {

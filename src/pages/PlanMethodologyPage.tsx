@@ -129,6 +129,12 @@ export function PlanMethodologyPage() {
                 text={t("content:planMethodology.introDisclaimer")}
               />
             </aside>
+            <p className="zn-prose__p">
+              {t("content:planMethodology.aiText")}{" "}
+              <Link to="/agents" className="zn-prose__link">
+                {t("content:planMethodology.aiLink")}
+              </Link>
+            </p>
           </div>
         </section>
 

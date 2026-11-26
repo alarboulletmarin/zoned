@@ -31,6 +31,7 @@ import { PLAN_IMPORT_PATH, PLAN_IMPORT_VERSION, SITE_URL } from "./constants";
 import type { CatalogueLookup } from "./catalogue";
 import {
   IMPORT_LIMITS,
+  RECOMMENDED_MIN_WEEKS_TEXT,
   validateImportPayload,
   type ImportIssue,
   type ValidateOptions,
@@ -103,8 +104,8 @@ export const IMPORT_PARAMS: readonly ImportParamSpec[] = [
     field: "raceDate",
     required: true,
     format: "YYYY-MM-DD",
-    note: `race day, ${L.configWeeks.min} to ${L.configWeeks.max} weeks after the start`,
-    noteFr: `jour de la course, ${L.configWeeks.min} à ${L.configWeeks.max} semaines après le début`,
+    note: `race day, ${L.configWeeks.min} to ${L.configWeeks.max} weeks after the start. Recommended at least ${RECOMMENDED_MIN_WEEKS_TEXT} weeks; shorter still builds a plan, with a warning`,
+    noteFr: `jour de la course, ${L.configWeeks.min} à ${L.configWeeks.max} semaines après le début. Recommandé au moins ${RECOMMENDED_MIN_WEEKS_TEXT} semaines ; plus court, le plan est construit avec un avertissement`,
   },
   {
     key: "days",

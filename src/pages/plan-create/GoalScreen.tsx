@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, LayoutGrid } from "@/components/icons";
+import { ArrowRight, LayoutGrid, Link2 } from "@/components/icons";
 import { usePickLang } from "@/lib/i18n-utils";
 import { RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
 import { matchingPrebuilts, type OpenPurpose, type PlanGoal } from "@/lib/planCreate";
@@ -110,6 +110,18 @@ export function GoalScreen({ goal, presetPractice, onPick }: GoalScreenProps) {
         <span className="zn-pc__row-text">
           <span className="zn-pc__row-name">{t("parcours.goal.blank")}</span>
           <span className="zn-pc__tile-sub">{t("parcours.goal.blankHint")}</span>
+        </span>
+        <ArrowRight size={18} />
+      </Link>
+
+      {/* The other door into this generator: an assistant writes the
+          settings as a link (/plan/import). Said here because this is the
+          page an assistant reads when asked for a Zoned plan. */}
+      <Link to="/agents" className="zn-pc__row zn-pc__row--blank">
+        <Link2 size={20} />
+        <span className="zn-pc__row-text">
+          <span className="zn-pc__row-name">{t("parcours.goal.assistant")}</span>
+          <span className="zn-pc__tile-sub">{t("parcours.goal.assistantHint")}</span>
         </span>
         <ArrowRight size={18} />
       </Link>

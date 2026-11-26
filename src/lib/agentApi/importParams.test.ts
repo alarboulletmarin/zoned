@@ -118,6 +118,7 @@ describe("params to config", () => {
     expect(result.warnings.map((w) => [w.code, w.path])).toEqual([
       ["default_applied", "level"],
       ["default_applied", "longrun"],
+      ["weeks_below_recommended", "date"],
     ]);
     expect(describeIssue(result.warnings[1], "fr")).toBe("longrun absent, valeur par défaut : sun.");
 

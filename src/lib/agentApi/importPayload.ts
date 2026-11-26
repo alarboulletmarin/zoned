@@ -29,7 +29,7 @@ import type {
   TrainingGoal,
   TrainingPlan,
 } from "@/types/plan";
-import { MAX_PLAN_WEEKS, MIN_PLAN_WEEKS } from "@/lib/planGenerator/constants";
+import { MAX_PLAN_WEEKS, MIN_PLAN_WEEKS, RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
 import { calculateFreePhases } from "@/lib/createFreePlan";
 import { MAX_WEEKS_PER_PLAN, preparePlanForStorage } from "@/lib/planSchema";
 import { addDaysToDate, calculatePlanWeekCount, isoDayOfWeek, mondayOfDate } from "@/lib/planDates";
@@ -179,6 +179,7 @@ export type ImportIssueCode =
   | "out_of_range"
   | "race_before_start"
   | "weeks_out_of_range"
+  | "weeks_below_recommended"
   | "text_too_long"
   | "unknown_workout"
   | "custom_workout"
@@ -209,6 +210,16 @@ export interface ValidateOptions {
   /** Today, `YYYY-MM-DD`. Injected so validation is deterministic in tests. */
   today: string;
 }
+
+/**
+ * "5K 6, 10K 8, semi 10, ..." weeks: the minimum the wizard asks per
+ * distance. A link may go shorter, down to `configWeeks.min`, with a
+ * `weeks_below_recommended` warning; every text that states a duration
+ * reads it from here, so none can drift from the generator.
+ */
+export const RECOMMENDED_MIN_WEEKS_TEXT = IMPORT_RACE_DISTANCES.map(
+  (d) => `${d} ${RECOMMENDED_PLAN_WEEKS[d].min}`,
+).join(", ");
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -397,6 +408,15 @@ function validateConfig(obj: Raw, c: Collector, today: string): ImportConfigPayl
           min: L.configWeeks.min,
           max: L.configWeeks.max,
           from,
+        });
+      } else if (raceDistance && weeks < RECOMMENDED_PLAN_WEEKS[raceDistance].min) {
+        // The wizard refuses this window; an assistant may have a reason (a
+        // runner already fit, a late sign-up), so the link builds the plan and
+        // says it is short rather than refusing it.
+        c.warn("weeks_below_recommended", "raceDate", {
+          count: weeks,
+          min: RECOMMENDED_PLAN_WEEKS[raceDistance].min,
+          distance: raceDistance,
         });
       }
     }

@@ -88,6 +88,10 @@ export function describeIssue(issue: ImportIssue, lang: IssueLang): string {
       return fr
         ? `Entre ${p.from} et ${issue.path || "raceDate"} il y a ${p.count} semaines, le générateur en accepte entre ${p.min} et ${p.max}.`
         : `There are ${p.count} weeks between ${p.from} and ${issue.path || "raceDate"}, the generator accepts ${p.min} to ${p.max}.`;
+    case "weeks_below_recommended":
+      return fr
+        ? `${p.count} semaines avant la course, Zoned en recommande au moins ${p.min} pour un ${p.distance}. Le plan est construit, mais court : la progression est resserrée.`
+        : `${p.count} weeks before the race, Zoned recommends at least ${p.min} for a ${p.distance}. The plan is built, but short: the progression is compressed.`;
     case "text_too_long":
       return fr
         ? `${at}${issue.path} fait ${p.length} caractères, maximum ${p.max}.`
