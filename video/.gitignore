@@ -14,3 +14,7 @@ src/data/facts.json
 
 node_modules/
 .remotion/
+
+# Launch film: screens copied from ../assets and the synthesised score.
+# Both regenerate with `bun run launch:assets`.
+public/launch/

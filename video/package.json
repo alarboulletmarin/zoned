@@ -11,7 +11,10 @@
     "render": "bun run scripts/render.ts",
     "gifs": "bun run scripts/readme-gifs.ts",
     "qa:motion": "bun run scripts/qa-motion.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "launch:assets": "bun run scripts/launch-assets.ts",
+    "launch:score": "bun run scripts/launch-score.ts",
+    "launch:render": "remotion render src/launch.ts Launch-Square-EN out/Launch-Square-EN.mp4"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.501",

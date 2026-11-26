@@ -6,6 +6,7 @@ import { Teaser, TEASER_FRAMES } from "./compositions/Teaser";
 import { Spot, SPOT_FRAMES } from "./compositions/Spot";
 import { Overview, OVERVIEW_FRAMES } from "./compositions/Overview";
 import { FeatureDemo, FEATURE_IDS, FEATURE_FRAMES } from "./compositions/FeatureDemo";
+import { LaunchComposition } from "./LaunchRoot";
 
 /**
  * Every film is registered once per format and once per language: twelve films
@@ -80,5 +81,6 @@ export const RemotionRoot: React.FC = () => (
         );
       }),
     )}
+    <LaunchComposition />
   </>
 );
