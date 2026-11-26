@@ -25,6 +25,9 @@ function ignoreCss(): Plugin {
 export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
+    // The day of the build, for example links that must read the same in the
+    // prerendered HTML and in the client's first render (AgentsPage).
+    __BUILD_DAY__: JSON.stringify(process.env.ZONED_BUILD_DAY ?? new Date().toISOString().slice(0, 10)),
   },
   plugins: [ignoreCss(), react(), svgr()],
   resolve: {

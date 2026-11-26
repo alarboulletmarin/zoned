@@ -843,6 +843,7 @@
   "compare": {
     "title": "Comparisons",
     "subtitle": "Zoned vs alternatives",
+    "seoTitle": "Free {{name}} alternative: Zoned vs {{name}}",
     "backToCompare": "Back to comparisons",
     "criteriaCount_one": "{{count}} criterion",
     "criteriaCount_other": "{{count}} criteria",

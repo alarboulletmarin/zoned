@@ -12,5 +12,6 @@ export * from "./catalogue";
 export * from "./resources";
 export * from "./importPayload";
 export * from "./importLink";
+export * from "./importParams";
 export * from "./messages";
 export * from "./schema";

@@ -2,6 +2,54 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "1.3.0",
+    date: "2026-11-26",
+    changes: {
+      added: [
+        {
+          text: "Un plan de course classique se confie à Zoned par un seul lien écrit à la main, sans code : `/plan/import#distance=10K&date=2027-05-30&days=3&time=1:10:00`. Zoned le génère comme tout plan assisté. Le niveau vaut intermédiaire et la sortie longue dimanche par défaut, tous deux annoncés dans l'aperçu ; `time` (temps visé) ou `pace` donnent l'objectif ; distances, jours et allures sont lus avec souplesse (`half`, `sunday`, `6'45`). Un lien faux nomme chaque erreur sous le paramètre employé. La forme `?distance=` marche aussi. Le contrat est dans `docs/agent-api.md`.",
+          textEn: "A standard race plan can be handed to Zoned in one hand-written link, no code: `/plan/import#distance=10K&date=2027-05-30&days=3&time=1:10:00`. Zoned generates it as any assisted plan. Level defaults to intermediate and the long run to Sunday, both said on the preview; `time` (target finish time) or `pace` give the goal; distances, days and paces are read leniently (`half`, `sunday`, `6'45`). A wrong link names each error under the parameter it used. The `?distance=` query works too. The contract is in `docs/agent-api.md`.",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "`/agents`, une page prérendue pour les assistants IA, accessible depuis le pied de page (API et assistants IA), la page À propos et la palette de commandes : la consigne de donner un lien plutôt que de décrire un plan, les deux chemins (un lien pour un plan classique, l'API JSON pour un plan écrit séance par séance), des liens d'exemple qui marchent, le tableau des paramètres et les ressources.",
+          textEn: "`/agents`, a prerendered page for AI assistants, linked from the footer (API and AI assistants), the About page and the command palette: the instruction to give a link rather than describe a plan, the two paths (one link for a standard plan, the JSON API for a plan written session by session), working example links, the table of parameters and the resources.",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+      ],
+      changed: [
+        {
+          text: "`llms.txt` ouvre sa section agents sur ce qu'il faut faire (donner un lien Zoned, ne pas décrire un plan), puis le chemin en un lien avec trois exemples et les paramètres, puis le chemin séance par séance. `index.json` décrit le lien à plat sous `planImport.flat`. Le build relit et valide chaque lien d'exemple, et échoue si l'un est refusé.",
+          textEn: "`llms.txt` opens its agent section on what to do (give the user a Zoned link, do not describe a plan), then the one-link path with three working examples and the parameters, then the session-by-session path. `index.json` describes the flat link under `planImport.flat`. The build reads every example link back, validates it and fails if one is rejected.",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "`robots.txt` range les robots et assistants IA actuels (OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, Perplexity-User et d'autres) dans le groupe par défaut : leurs anciens groupes `Allow: /` séparés levaient pour eux chaque `Disallow`. `/licenses.txt` est servi avec `X-Robots-Tag: noindex`, il apparaissait dans les résultats de recherche.",
+          textEn: "`robots.txt` names the current AI crawlers and assistants (OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, Perplexity-User and others) in the default group: their former separate `Allow: /` groups lifted every `Disallow` for them. `/licenses.txt` is served with `X-Robots-Tag: noindex`: it showed up in search results.",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "Les titres de recherche nomment ce à quoi la page répond : un terme du glossaire devient `<terme> : définition en course à pied`, avec la définition complète en description au lieu de l'infobulle d'une ligne ; les calculateurs s'ouvrent sur Calculateur de VMA et Calculateur de zones (titre et intitulé) ; les pages de comparaison sur Alternative gratuite à <app>.",
+          textEn: "Search titles name what the page answers: a glossary term reads `<term> in running: definition`, with the full definition as description instead of the one-line tooltip; the calculators open on VMA calculator and Zones calculator (title and heading); the comparison pages on Free <app> alternative.",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+      ],
+      fixed: [
+        {
+          text: "L'exemple du glossaire sur les zones d'entraînement nommait encore Zoned par son ancien nom, Planr.",
+          textEn: "The glossary example for training zones still named Zoned by its former name, Planr.",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+    },
+  },
+  {
     version: "1.2.0",
     date: "2026-11-25",
     changes: {

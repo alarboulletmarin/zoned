@@ -843,6 +843,7 @@
   "compare": {
     "title": "Comparaisons",
     "subtitle": "Zoned face aux alternatives",
+    "seoTitle": "Alternative gratuite à {{name}} : comparatif",
     "backToCompare": "Retour aux comparaisons",
     "criteriaCount_one": "{{count}} critère",
     "criteriaCount_other": "{{count}} critères",

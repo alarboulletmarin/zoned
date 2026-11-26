@@ -41,7 +41,7 @@ that rather than raising a number to get green.
 catalogue file. `bun run scripts/site-stats.ts` re-measures the catalogue counts
 (never restate a count from memory or from a doc).
 
-CI deliberately skips `prerender`, `generate:og`, `generate:pwa-screenshots`, `demo:gif`
+CI deliberately skips `prerender`, `generate:og`, `generate:pwa-screenshots`
 and the full `build`, because they drive a headless Chrome and cost minutes.
 
 ## Branches and releases
@@ -151,7 +151,7 @@ validator wins when they disagree.
 Some QA scripts exist only on a developer machine, so a CI step naming one would fail on
 "Module not found". Un-ignore first if a new one should gate.
 
-**Commits.** Conventional Commits in French (`fix(pwa): ...`, `feat(nav): ...`).
+**Commits.** Conventional Commits in English (`fix(pwa): ...`, `feat(nav): ...`).
 
 ## Docs worth reading before a related change
 

@@ -226,6 +226,7 @@
       },
       "project": {
         "about": "À propos",
+        "agents": "API et assistants IA",
         "github": "GitHub",
         "changelog": "Changelog"
       },

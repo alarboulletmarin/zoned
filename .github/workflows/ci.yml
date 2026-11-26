@@ -4,8 +4,8 @@
 # nor FR/EN parity. Vercel builds every push, so a type error or a broken
 # namespace was only discovered once it was already on main.
 #
-# Deliberately excluded: prerender, generate:og, generate:pwa-screenshots,
-# demo:gif and the full `build`. They drive a headless Chrome and cost
+# Deliberately excluded: prerender, generate:og, generate:pwa-screenshots
+# and the full `build`. They drive a headless Chrome and cost
 # minutes; the Lighthouse workflow already builds the production bundle, so
 # this one stays a fast source-level check.
 name: CI

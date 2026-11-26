@@ -1,8 +1,8 @@
 # Doodles — la direction artistique
 
 Ce document décrit le trait, ses règles, et où les dessins doivent aller pour que
-l'app soit reconnaissable. Il complète `design_handoff/design/readme.md`, qui
-décrit le système visuel mais s'interdit de produire des illustrations.
+l'app soit reconnaissable. Les jetons du système visuel (couleurs, typographie,
+espacements) sont dans `src/styles/design/`.
 
 ## Le trait
 

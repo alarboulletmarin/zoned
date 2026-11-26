@@ -55,20 +55,24 @@ export function GlossaryTermPage() {
   }
 
   const termName = term.acronym || (isEn && term.termEn ? term.termEn : term.term);
-  const termDefinition = isEn && term.shortDefinitionEn ? term.shortDefinitionEn : term.shortDefinition;
-  const truncatedDefinition = termDefinition.length > 155 ? termDefinition.slice(0, 152) + "..." : termDefinition;
+  const fullDefinition = isEn && term.fullDefinitionEn ? term.fullDefinitionEn : term.fullDefinition;
+  // The full definition, cut at 155: the short one is a tooltip line of a
+  // dozen words, too thin for a search snippet. Same rule as generate-route-meta.
+  const flatDefinition = fullDefinition.replace(/\s+/g, " ").trim();
+  const truncatedDefinition =
+    flatDefinition.length > 155 ? `${flatDefinition.slice(0, 154).trimEnd()}…` : flatDefinition;
 
   return (
     <>
       <SEOHead
-        title={termName}
+        title={t("seoTermTitle", { term: termName })}
         description={truncatedDefinition}
         canonical={`/glossary/${id}`}
         jsonLd={[
           {
             "@type": "DefinedTerm",
             name: termName,
-            description: isEn && term.fullDefinitionEn ? term.fullDefinitionEn : term.fullDefinition,
+            description: fullDefinition,
             url: `https://zoned.run/glossary/${id}`,
             ...(term.acronym && { termCode: term.acronym }),
             inDefinedTermSet: {

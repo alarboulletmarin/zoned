@@ -15,6 +15,8 @@ import {
   importPlanToTrainingPlan,
   loadAgentCatalogue,
   readImportFragment,
+  readImportParams,
+  validateImportParams,
   validateImportPayload,
   type CatalogueLookup,
   type FragmentReadFailure,
@@ -35,7 +37,8 @@ type State =
   | { status: "ready"; plan: TrainingPlan; warnings: ImportIssue[]; generated: boolean; lookup: CatalogueLookup };
 
 /**
- * `/plan/import#d=…`, the door an AI agent opens back into Zoned.
+ * `/plan/import#d=…` (or `#distance=10K&date=…`), the door an AI agent
+ * opens back into Zoned.
  *
  * The payload is in the fragment, so it never left the user's browser. The
  * page decodes it, validates it against the catalogue, shows the plan, and
@@ -44,7 +47,7 @@ type State =
  * back to the assistant that wrote it. Contract: docs/agent-api.md.
  */
 export function PlanImportPage() {
-  const { hash } = useLocation();
+  const { hash, search } = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation("plan");
   const pick = usePickLang();
@@ -56,15 +59,20 @@ export function PlanImportPage() {
     setState({ status: "loading" });
 
     (async () => {
-      const read = await readImportFragment(hash);
+      // `#distance=10K&date=...`, the flat form (importParams.ts), or failing
+      // that the encoded payload of `#d=` / `#j=`.
+      const params = readImportParams(hash, search);
+      const read = params ? null : await readImportFragment(hash);
       if (cancelled) return;
-      if (!read.ok) {
+      if (read && !read.ok) {
         setState({ status: "unreadable", reason: read.reason });
         return;
       }
       const lookup = buildCatalogueLookup(await loadAgentCatalogue());
       const today = isoDateOnly(new Date());
-      const result = validateImportPayload(read.raw, lookup, { today });
+      const result = params
+        ? validateImportParams(params, lookup, { today })
+        : validateImportPayload(read?.ok ? read.raw : undefined, lookup, { today });
       if (cancelled) return;
       if (!result.ok) {
         setState({ status: "invalid", errors: result.errors, warnings: result.warnings });
@@ -87,7 +95,7 @@ export function PlanImportPage() {
     return () => {
       cancelled = true;
     };
-  }, [hash]);
+  }, [hash, search]);
 
   const head = (title: string) => <SEOHead noindex title={title} canonical="/plan/import" />;
   const back = (

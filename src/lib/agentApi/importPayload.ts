@@ -185,7 +185,12 @@ export type ImportIssueCode =
   | "too_many_sessions_day"
   | "empty_plan"
   | "start_moved_to_monday"
-  | "empty_week";
+  | "empty_week"
+  // Flat links only (importParams.ts).
+  | "invalid_format"
+  | "conflicting_fields"
+  | "time_needs_road_distance"
+  | "default_applied";
 
 export type IssueParams = Record<string, string | number>;
 

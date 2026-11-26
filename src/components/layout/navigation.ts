@@ -274,6 +274,7 @@ export const FOOTER_GROUPS: { titleKey: string; links: FooterLink[] }[] = [
     titleKey: "homepage:home.footer.groups.project",
     links: [
       { labelKey: "homepage:home.footer.project.about", to: "/about" },
+      { labelKey: "homepage:home.footer.project.agents", to: "/agents" },
       { labelKey: "common:compare.title", to: "/compare" },
       { labelKey: "common:nav.contribute", to: "/contribute" },
       { labelKey: "homepage:home.footer.project.changelog", to: "/changelog" },

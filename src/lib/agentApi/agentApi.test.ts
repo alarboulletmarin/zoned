@@ -27,6 +27,8 @@ import {
   planImportUrl,
   planImportUrlFor,
   readImportFragment,
+  readImportParams,
+  validateImportParams,
   validateImportPayload,
   type ImportIssue,
   type ValidationResult,
@@ -164,6 +166,28 @@ describe("generate-agent-api output", () => {
       if (read.ok) expect(validateImportPayload(read.raw, lookup, { today: new Date().toISOString().slice(0, 10) }).ok).toBe(true);
     }
     for (const t of templates) expect(full).toContain(`### ${t.id} `);
+  });
+
+  test("llms.txt says what to do first, and its flat links import", () => {
+    const llms = readFileSync(join(out, "llms.txt"), "utf-8");
+    const agents = llms.indexOf("## Pour les agents IA");
+    expect(agents).toBeGreaterThan(0);
+    expect(llms.slice(agents)).toMatch(/^## Pour les agents IA · For AI agents\n\n\*\*Read this first\.\*\*.*do not just describe a plan/);
+    expect(llms).toContain("https://zoned.run/agents");
+    const flat = [...llms.matchAll(/(https:\/\/zoned\.run\/plan\/import(?:\?lang=en)?#distance=[^\s`]+)/g)]
+      .map((m) => m[1])
+      .filter((link) => !link.includes("YYYY"));
+    expect(flat.length).toBe(3);
+    const today = new Date().toISOString().slice(0, 10);
+    for (const link of flat) {
+      const url = new URL(link);
+      const params = readImportParams(url.hash, url.search);
+      expect(params).not.toBeNull();
+      expect(validateImportParams(params ?? {}, lookup, { today }).ok).toBe(true);
+    }
+    const index = read("index.json");
+    expect(index.agentsPage).toBe("https://zoned.run/agents");
+    expect(index.planImport.flat.parameters.map((p: { key: string }) => p.key)).toContain("distance");
     rmSync(out, { recursive: true, force: true });
   });
 });

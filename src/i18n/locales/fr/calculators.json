@@ -7,7 +7,7 @@
       "seoCollectionName": "Calculateurs Course à Pied"
     },
     "zones": {
-      "seoTitle": "Calculateur de Zones d'Entraînement",
+      "seoTitle": "Calculateur de zones d'entraînement, FC et allure",
       "seoDescription": "Calcule tes 6 zones d'entraînement course à pied (FC et allure) depuis ta VMA ou FCmax. Outil gratuit pour calculer tes zones de fréquence cardiaque.",
       "seoAppName": "Calculateur de Zones d'Entraînement",
       "seoAppDescription": "Calcule tes 6 zones de fréquence cardiaque et d'allure depuis ta VMA ou FCmax",
@@ -24,7 +24,7 @@
       "seoBreadcrumb": "Calculateur d'allures"
     },
     "vma": {
-      "seoTitle": "Depuis un chrono : VMA et équivalence de temps",
+      "seoTitle": "Calculateur de VMA depuis un chrono de course",
       "seoDescription": "Estime ta VMA et tes temps du 5 km au marathon depuis un chrono de course avec le modèle de Péronnet et Thibault. Compare les distances et pose tes zones."
     },
     "ftp": {
@@ -266,7 +266,7 @@
   "tools": {
     "zones": {
       "kicker": "VMA · FC max → 6 zones",
-      "title": "Zones",
+      "title": "Calculateur de zones",
       "vma": "VMA",
       "fcMax": "FC max",
       "hintFromNumbers": "VMA reprise de tes repères.",
@@ -350,9 +350,9 @@
     },
     "chrono": {
       "kicker": "Chrono → VMA · temps",
-      "title": "Depuis un chrono",
+      "title": "Calculateur de VMA",
       "home": "Accueil",
-      "seoTitle": "Depuis un chrono : VMA et équivalence de temps",
+      "seoTitle": "Calculateur de VMA depuis un chrono de course",
       "seoDescription": "Estime ta VMA et tes temps du 5 km au marathon depuis un chrono de course avec le modèle de Péronnet et Thibault. Compare les distances et pose tes zones.",
       "seoAppName": "Calculateur de VMA et équivalence de chronos",
       "distance": "Distance",

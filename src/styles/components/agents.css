@@ -1,0 +1,57 @@
+/* ══ /agents ══════════════════════════════════════════════════════════════
+   The page an AI assistant reads to hand a plan back to Zoned. Prose is
+   .zn-prose (learn.css) at the narrow measure; the two things it adds are a
+   link written out as code, which must wrap rather than push the page
+   sideways, and a parameter table that scrolls inside its own box.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.zn-agents {
+  margin-inline: calc(var(--pad-screen-x) * -1);
+}
+
+.zn-agents__body {
+  max-inline-size: var(--page-max-narrow);
+  margin-inline: auto;
+}
+
+/* A link as the agent should write it. Mono, on the sunken paper, and broken
+   anywhere: a 200-character URL has no word boundary to wait for. */
+.zn-agents__code {
+  margin: 0;
+  padding: var(--sp-6) var(--sp-7);
+  background: var(--paper-sunken);
+  border-inline-start: var(--border-rule);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  line-height: 1.6;
+  color: var(--text-body);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.zn-agents__code a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.zn-agents__code a:hover {
+  text-decoration: none;
+}
+
+/* Inline code inside a sentence: a parameter name, a value. */
+.zn-agents__term {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  overflow-wrap: anywhere;
+}
+
+.zn-agents__scroll {
+  overflow-x: auto;
+}
+
+.zn-agents__scroll .zn-prose__table td:first-child {
+  font-family: var(--font-mono);
+  color: var(--text-body);
+  white-space: nowrap;
+}
