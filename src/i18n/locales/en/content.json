@@ -143,8 +143,8 @@
     "showOlder": "Show the {{n}} earlier releases"
   },
   "agentsPage": {
-    "seoTitle": "API and AI assistants",
-    "seoDescription": "How an AI assistant creates a training plan in Zoned: one hand-written import link, no account, no API key, no server.",
+    "seoTitle": "Create a training plan with ChatGPT, Claude or Gemini",
+    "seoDescription": "A 5K, 10K, half, marathon or trail plan made with ChatGPT, Claude or Gemini: the assistant writes a link, Zoned builds the plan. Free, no account, no API key.",
     "kicker": "API · AI assistants",
     "title": "Create a Zoned plan from an AI assistant",
     "lead": "Zoned is a free, open-source, local-first training app: everything stays in the browser. An AI assistant can still create a plan in it directly, by writing an import link. No account, API key, browser automation, backend or MCP server is needed.",

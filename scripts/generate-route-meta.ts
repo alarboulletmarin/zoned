@@ -208,9 +208,9 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
   },
   {
     path: "/agents",
-    title: "API et assistants IA",
+    title: "Un plan d'entraînement avec ChatGPT, Claude ou Gemini",
     description:
-      "Comment un assistant IA crée un plan d'entraînement dans Zoned : un lien d'import écrit à la main, sans compte, sans clé d'API, sans serveur.",
+      "Un plan 5 km, 10 km, semi, marathon ou trail avec ChatGPT, Claude ou Gemini : l'assistant écrit un lien, Zoned construit le plan. Gratuit, sans compte.",
   },
   {
     path: "/contribute",
