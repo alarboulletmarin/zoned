@@ -41,7 +41,7 @@ that rather than raising a number to get green.
 catalogue file. `bun run scripts/site-stats.ts` re-measures the catalogue counts
 (never restate a count from memory or from a doc).
 
-CI deliberately skips `prerender`, `generate:og`, `generate:pwa-screenshots`, `demo:gif`
+CI deliberately skips `prerender`, `generate:og`, `generate:pwa-screenshots`
 and the full `build`, because they drive a headless Chrome and cost minutes.
 
 ## Branches and releases
