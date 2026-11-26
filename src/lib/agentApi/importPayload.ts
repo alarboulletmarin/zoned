@@ -211,6 +211,16 @@ export interface ValidateOptions {
   today: string;
 }
 
+/**
+ * "5K 6, 10K 8, semi 10, ..." weeks: the minimum the wizard asks per
+ * distance. A link may go shorter, down to `configWeeks.min`, with a
+ * `weeks_below_recommended` warning; every text that states a duration
+ * reads it from here, so none can drift from the generator.
+ */
+export const RECOMMENDED_MIN_WEEKS_TEXT = IMPORT_RACE_DISTANCES.map(
+  (d) => `${d} ${RECOMMENDED_PLAN_WEEKS[d].min}`,
+).join(", ");
+
 // ── Helpers ─────────────────────────────────────────────────────────
 
 type Raw = Record<string, unknown>;

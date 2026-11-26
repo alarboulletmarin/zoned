@@ -29,7 +29,7 @@ import {
   workoutPageUrl,
 } from "./constants";
 import { agentDiscipline, toWorkoutIndexEntry, workoutFamily } from "./resources";
-import { IMPORT_LIMITS } from "./importPayload";
+import { IMPORT_LIMITS, RECOMMENDED_MIN_WEEKS_TEXT } from "./importPayload";
 import { PLAIN_URL_BUDGET } from "./importLink";
 import { IMPORT_PARAMS } from "./importParams";
 
@@ -135,9 +135,11 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "",
     "### Standard race plan: one link, no code",
     "",
-    "1. Collect the race distance, the race date and the number of runs per week. If the user has one, also the target finish time (or pace) and their level.",
+    "1. Collect the race distance, the race date and the number of runs per week. If the user has one, also the target finish time (or pace) and their level. Do not hold the link back for the rest: whatever is missing gets a default that the preview states, so write the link, name the defaults next to it, and offer to change them.",
     `2. Write the link: \`${SITE_URL}${PLAN_IMPORT_PATH}#distance=10K&date=YYYY-MM-DD&days=3&time=1:10:00\`. No JSON, no encoding.`,
     "3. Give it to the user as a clickable link. Zoned runs its own plan generator (periodisation, progression, paces), shows a preview, and saves nothing until the user presses Add to my plans.",
+    "",
+    `Plan length: ${IMPORT_LIMITS.configWeeks.min} to ${IMPORT_LIMITS.configWeeks.max} weeks between today (or \`start\`) and the race. Recommended at least ${RECOMMENDED_MIN_WEEKS_TEXT} weeks. A race closer than that still gets a plan, compressed, with a warning on the preview: give the link anyway and tell the user the plan is short, rather than writing a plan of your own.`,
     "",
     `Example: ${input.examples.flat.minimal}`,
     "",
@@ -200,7 +202,7 @@ export function buildLlmsTxt(input: LlmsInput): string {
     "",
     `Link: ${input.examples.config.url}`,
     "",
-    `Optional \`config\` fields: \`startDate\`, \`raceName\`, \`goal\` (finish, time, compete), \`vma\` (km/h, ${L.vma.min}-${L.vma.max}), \`targetPaceMinKm\`, \`elevationGain\` (m), \`currentWeeklyKm\`, \`currentLongRunKm\`, \`includeStrength\`, \`strengthPerWeek\` (1-3). \`raceDistance\`: 5K, 10K, semi, marathon, trail_short, trail. \`level\`: beginner, intermediate, advanced, elite. ${L.configWeeks.min} to ${L.configWeeks.max} weeks between start and race.`,
+    `Optional \`config\` fields: \`startDate\`, \`raceName\`, \`goal\` (finish, time, compete), \`vma\` (km/h, ${L.vma.min}-${L.vma.max}), \`targetPaceMinKm\`, \`elevationGain\` (m), \`currentWeeklyKm\`, \`currentLongRunKm\`, \`includeStrength\`, \`strengthPerWeek\` (1-3). \`raceDistance\`: 5K, 10K, semi, marathon, trail_short, trail. \`level\`: beginner, intermediate, advanced, elite. ${L.configWeeks.min} to ${L.configWeeks.max} weeks between start and race (recommended at least ${RECOMMENDED_MIN_WEEKS_TEXT}).`,
     "",
     "Minimal `plan` payload (the agent writes every week):",
     "",

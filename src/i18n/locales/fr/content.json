@@ -152,7 +152,7 @@
     "pathsTitle": "Deux parcours",
     "pathsText": "Un plan de course classique tient dans un lien à paramètres, sans code. Un plan écrit séance par séance par l'assistant passe par l'API JSON et un lien encodé.",
     "standardTitle": "Plan de course classique, en trois étapes",
-    "step1": "Recueillir la distance de la course, sa date et le nombre de séances par semaine. Si l'utilisateur en a un, aussi le temps visé (ou l'allure) et son niveau.",
+    "step1": "Recueillir la distance de la course, sa date et le nombre de séances par semaine. Si l'utilisateur en a un, aussi le temps visé (ou l'allure) et son niveau. Ne pas retenir le lien pour le reste : ce qui manque prend une valeur par défaut que l'aperçu affiche. Écrire le lien, nommer ces valeurs à côté, proposer de les changer. Une course plus proche que la durée recommandée a quand même son plan, resserré, avec un avertissement.",
     "step2": "Écrire le lien avec les paramètres ci-dessous. Pas de JSON, pas d'encodage.",
     "step3": "Le donner sous forme de lien cliquable. Zoned lance son propre générateur (périodisation, progression, allures), affiche un aperçu, et n'enregistre rien avant que l'utilisateur appuie sur Ajouter à mes plans.",
     "templateLabel": "Forme du lien",

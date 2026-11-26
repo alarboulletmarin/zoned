@@ -17,6 +17,7 @@ import {
   IMPORT_PHASES,
   IMPORT_RACE_DISTANCES,
   PLAN_FIELDS,
+  RECOMMENDED_MIN_WEEKS_TEXT,
   SESSION_FIELDS,
   WEEK_FIELDS,
 } from "./importPayload";
@@ -46,7 +47,9 @@ export function buildPlanImportSchema() {
     raceDate: date("Race day, today or later."),
     daysPerWeek: range(L.daysPerWeek, "Training days per week.", true),
     longRunDay: day("Long run day, 0 = Monday ... 6 = Sunday."),
-    startDate: date("Optional plan start, defaults to today. The generator needs 4 to 52 weeks before raceDate."),
+    startDate: date(
+      `Optional plan start, defaults to today. The generator needs ${L.configWeeks.min} to ${L.configWeeks.max} weeks before raceDate; under the recommended minimum (${RECOMMENDED_MIN_WEEKS_TEXT} weeks) it still builds the plan, with a weeks_below_recommended warning.`,
+    ),
     goal: { enum: [...IMPORT_GOALS], description: "finish: conservative, time: balanced (default), compete: ambitious." },
     targetPaceMinKm: range(L.targetPaceMinKm, "Target race pace, minutes per km (5.5 = 5:30/km)."),
     elevationGain: range(L.elevationGain, "Race elevation gain in metres, for trail."),
