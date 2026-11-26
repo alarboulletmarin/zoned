@@ -1,5 +1,9 @@
 ---
-name: Bug report about: Report a bug or unexpected behavior title: "[BUG] " labels: bug assignees: ''
+name: Bug report
+about: Report a bug or unexpected behavior
+title: "[BUG] "
+labels: bug
+assignees: ''
 ---
 
 > Feel free to answer in French. Les réponses en français sont les bienvenues.
@@ -10,7 +14,9 @@ name: Bug report about: Report a bug or unexpected behavior title: "[BUG] " labe
 
 ## Steps to reproduce
 
-1. 2. 3.
+1.
+2.
+3.
 
 ## Expected behavior
 
