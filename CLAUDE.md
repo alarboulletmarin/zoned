@@ -151,7 +151,7 @@ validator wins when they disagree.
 Some QA scripts exist only on a developer machine, so a CI step naming one would fail on
 "Module not found". Un-ignore first if a new one should gate.
 
-**Commits.** Conventional Commits in French (`fix(pwa): ...`, `feat(nav): ...`).
+**Commits.** Conventional Commits in English (`fix(pwa): ...`, `feat(nav): ...`).
 
 ## Docs worth reading before a related change
 
