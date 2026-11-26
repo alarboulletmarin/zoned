@@ -375,11 +375,23 @@ html {
 }
 
 .zn-topbar__tool--lang {
+  gap: var(--sp-2);
   font-family: var(--font-mono);
   font-size: var(--fs-mono);
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-mono);
   line-height: 1;
+}
+
+.zn-topbar__tool--lang > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  color: var(--ink-3);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.zn-topbar__tool--lang[data-state="open"] > svg {
+  transform: rotate(180deg);
 }
 
 /* ── the account menu ─────────────────────────────────────────────────── */
