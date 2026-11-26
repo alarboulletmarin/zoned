@@ -16,6 +16,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Search titles name what the page answers: glossary terms read `<term> : définition en course à pied` (`<term> in running: definition`) with the full definition as description instead of the one-line tooltip, the VMA and zones calculators open on `Calculateur de VMA` and `Calculateur de zones` (title and heading), and the comparison pages on `Alternative gratuite à <app>` (`Free <app> alternative`)
 - `/licenses.txt` is served with `X-Robots-Tag: noindex`: it showed up in search results
 
+### Fixed
+- The glossary example for training zones still named Zoned by its former name, Planr
+
 ## [1.2.0] - 2026-11-25
 
 ### Added
