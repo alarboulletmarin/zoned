@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-11-26
+
 ### Added
 - The pages an assistant reads first point to the import: the home page FAQ answers whether ChatGPT, Claude or Gemini can build the plan, with a link to copy; the plan wizard (`/plan/new`) and the plan guide link to `/agents`. The prerender fails if one of them loses that link outside its footer
 - An import link for a race closer than the recommended length (5K 6 weeks, 10K 8, half 10, marathon 14, short trail 10, trail 14) still builds the plan, down to 4 weeks, and the preview now opens on a warning that the plan is short (`weeks_below_recommended`)
