@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 - `llms.txt` opens its agent section on what to do (give the user a Zoned link, do not describe a plan), then the one-link path with three working examples and the parameters, then the session-by-session path. `index.json` describes the flat link under `planImport.flat`. The build reads every example link back and validates it, and fails if one is rejected
 - `robots.txt` names the current AI crawlers and assistants (OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, Perplexity-User and others) in the default group: their former separate `Allow: /` groups lifted every `Disallow` for them
+- Search titles name what the page answers: glossary terms read `<term> : définition en course à pied` (`<term> in running: definition`) with the full definition as description instead of the one-line tooltip, the VMA and zones calculators open on `Calculateur de VMA` and `Calculateur de zones` (title and heading), and the comparison pages on `Alternative gratuite à <app>` (`Free <app> alternative`)
+- `/licenses.txt` is served with `X-Robots-Tag: noindex`: it showed up in search results
 
 ## [1.2.0] - 2026-11-25
 

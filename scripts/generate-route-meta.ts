@@ -359,6 +359,8 @@ interface GlossaryTerm {
 
 async function getGlossaryRoutes(): Promise<RouteMeta[]> {
   const dir = join(DATA_DIR, "glossary/terms");
+  // The key GlossaryTermPage renders, so the shell and <SEOHead> agree.
+  const titleTemplate = readFrKey("glossary", ["seoTermTitle"]);
   const out: RouteMeta[] = [];
 
   for (const file of readdirSync(dir).filter((f) => f.endsWith(".ts"))) {
@@ -368,10 +370,10 @@ async function getGlossaryRoutes(): Promise<RouteMeta[]> {
       for (const term of exported as GlossaryTerm[]) {
         if (!term?.id) continue;
         const name = term.acronym || term.term;
-        const description = clamp(term.shortDefinition);
+        const description = clamp(term.fullDefinition ?? term.shortDefinition);
         out.push({
           path: `/glossary/${term.id}`,
-          title: name,
+          title: interpolate(titleTemplate, { term: name }),
           description,
           image: "og-learn.png",
           jsonLd: [
@@ -466,6 +468,14 @@ async function getCollectionRoutes(): Promise<RouteMeta[]> {
   }));
 }
 
+/** One string from a French namespace, or a hard failure naming the key. */
+function readFrKey(ns: string, path: string[]): string {
+  let node: unknown = JSON.parse(readFileSync(join(ROOT, `src/i18n/locales/fr/${ns}.json`), "utf-8"));
+  for (const key of path) node = (node as Record<string, unknown> | undefined)?.[key];
+  if (typeof node !== "string") throw new Error(`Missing ${path.join(".")} in fr/${ns}.json`);
+  return node;
+}
+
 /** Fill an i18next `{{placeholder}}` template from the French bundle. */
 function interpolate(template: string, values: Record<string, string | number>): string {
   return template.replace(/\{\{(\w+)\}\}/g, (_, key) => String(values[key] ?? ""));
@@ -551,6 +561,7 @@ async function getPrebuiltRoutes(
 }
 
 async function getCompareRoutes(): Promise<RouteMeta[]> {
+  const titleTemplate = readFrKey("common", ["compare", "seoTitle"]);
   const mod = await import(join(DATA_DIR, "competitors.ts"));
   const competitors = (mod.competitors ?? []) as Array<{
     slug: string;
@@ -560,7 +571,7 @@ async function getCompareRoutes(): Promise<RouteMeta[]> {
 
   return competitors.map((c) => ({
     path: `/compare/${c.slug}`,
-    title: `Zoned vs ${c.nameFr}`,
+    title: interpolate(titleTemplate, { name: c.nameFr }),
     description: clamp(c.descriptionFr),
     jsonLd: [
       breadcrumb([

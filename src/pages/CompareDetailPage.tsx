@@ -99,6 +99,7 @@ export function CompareDetailPage() {
   const tagline = pickLang(competitor, "tagline");
   const description = pickLang(competitor, "description");
   const title = `Zoned vs ${name}`;
+  const seoTitle = t("compare.seoTitle", { name });
 
   // The middle column is us, and it is inverted end to end, the answer to
   // "which one is Zoned" then survives greyscale with no colour spent on it.
@@ -128,13 +129,13 @@ export function CompareDetailPage() {
   return (
     <>
       <SEOHead
-        title={title}
+        title={seoTitle}
         description={description}
         canonical={`/compare/${competitor.slug}`}
         jsonLd={[
           {
             "@type": "WebPage",
-            name: title,
+            name: seoTitle,
             description,
             url: `${SITE_URL}/compare/${competitor.slug}`,
           },

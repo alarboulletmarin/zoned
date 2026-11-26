@@ -7,7 +7,7 @@
       "seoCollectionName": "Running Calculators"
     },
     "zones": {
-      "seoTitle": "Training Zones Calculator",
+      "seoTitle": "Training zones calculator, heart rate and pace",
       "seoDescription": "Calculate your 6 heart rate and pace training zones from VMA or max HR. Free tool to personalize your running zones with FC ranges and pace targets.",
       "seoAppName": "Training Zones Calculator",
       "seoAppDescription": "Calculate your 6 heart rate and pace training zones from your VMA or max HR",
@@ -24,7 +24,7 @@
       "seoBreadcrumb": "Race Pace Calculator"
     },
     "vma": {
-      "seoTitle": "From a race time: MAS and equivalent race times",
+      "seoTitle": "VMA (MAS) calculator from a race time",
       "seoDescription": "Estimate your maximal aerobic speed and race times from 5 km to marathon using the Péronnet and Thibault model. Compare distances and set your training zones."
     },
     "ftp": {
@@ -266,7 +266,7 @@
   "tools": {
     "zones": {
       "kicker": "VMA · max HR → 6 zones",
-      "title": "Zones",
+      "title": "Zones calculator",
       "vma": "VMA",
       "fcMax": "Max HR",
       "hintFromNumbers": "VMA taken from your numbers.",
@@ -350,9 +350,9 @@
     },
     "chrono": {
       "kicker": "Race time → MAS · times",
-      "title": "From a race time",
+      "title": "VMA calculator",
       "home": "Home",
-      "seoTitle": "From a race time: MAS and equivalent race times",
+      "seoTitle": "VMA (MAS) calculator from a race time",
       "seoDescription": "Estimate your maximal aerobic speed and race times from 5 km to marathon using the Péronnet and Thibault model. Compare distances and set your training zones.",
       "seoAppName": "MAS and equivalent race time calculator",
       "distance": "Distance",
