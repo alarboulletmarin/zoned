@@ -35,6 +35,8 @@ on:
 
 permissions:
   contents: write
+  # The release also opens its announcement in Discussions.
+  discussions: write
 
 # Two merges into main in a row must not race on the same tag or on develop.
 concurrency:
@@ -100,6 +102,7 @@ jobs:
           target_commitish: ${{ github.sha }}
           name: ${{ steps.tag.outputs.name }}
           body_path: release-notes.md
+          discussion_category_name: Announcements
           # A merged release is genuinely new and takes "Latest". A manual run
           # defaults to not taking it: backfilling old tags one by one
           # otherwise leaves the oldest published release wearing the badge.
