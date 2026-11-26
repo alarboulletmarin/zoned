@@ -152,27 +152,6 @@ correspondance ; un film qui n'y figure pas fait échouer le contrôle plutôt q
 `REMOTION_BROWSER_EXECUTABLE` vise un Chrome déjà présent (image de CI, conteneur) au lieu
 d'en télécharger un second. Non défini, rien ne change.
 
-## Les vignettes du README
-
-```bash
-bun run render Feature-Polarise-Story-EN Feature-Zones-Story-EN Feature-Library-Story-EN
-bun run gifs
-```
-
-Les trois cases « In motion » de `../README.md` sont ces trois films, coupe 9:16, sans leur
-carte de fin, en GIF. En anglais, comme le README.
-
-Elles n'avaient pas de générateur avant, et c'est exactement pour ça qu'elles ont pourri :
-une refonte plus tard, elles montraient encore l'ancien logotype, l'accent orange et les
-six couleurs de zones, sous des titres tirés d'une version de `copy.tsx` qui n'existait
-plus. Rien ne pouvait le signaler, puisque rien ne savait d'où elles venaient.
-
-Le poids est la contrainte, et le fond des films est ce qui coûte : il dérive en
-permanence — voulu, un sol immobile sous du contenu qui bouge se lit comme un diaporama —
-et un dégradé qui dérive est ce qu'un GIF compresse le plus mal. D'où 6 images par seconde,
-300 px, 64 couleurs, et aucun tramage. Le tramage est le piège : il fabrique du bruit là où
-le film est plat, et le bruit ne se compresse pas.
-
 ## D'où viennent les chiffres
 
 Aucun chiffre n'est saisi à la main. `scripts/sync-data.ts` écrit `src/data/facts.json`
