@@ -6,8 +6,10 @@
       "kind": "strength",
       "name": "Renfo full body débutant",
       "nameEn": "Beginner Full Body",
+      "nameIt": "Full body principianti",
       "description": "Séance de renforcement musculaire complète adaptée aux coureurs débutants. Exercices fondamentaux à haute répétition et charge légère pour développer l'endurance musculaire et la proprioception sans fatigue excessive.",
       "descriptionEn": "Complete strength training session designed for beginner runners. Foundational exercises at high répétitions and light load to develop muscular endurance and proprioception without excessive fatigue.",
+      "descriptionIt": "Sessione di potenziamento muscolare completa adatta ai runner principianti. Esercizi fondamentali ad alte ripetizioni e carico leggero per sviluppare resistenza muscolare e propriocezione senza affaticamento eccessivo.",
       "category": "runner_full_body",
       "difficulty": "beginner",
       "typicalDuration": { "min": 30, "max": 40 },
@@ -22,6 +24,7 @@
           "intensity": "mobility",
           "notes": "Activation des fessiers, mouvement contrôlé sans bande",
           "notesEn": "Glute activation, controlled movement without band",
+          "notesIt": "Attivazione dei glutei, movimento controllato senza elastico",
           "rpe": 3
         },
         {
@@ -32,6 +35,7 @@
           "intensity": "mobility",
           "notes": "Étendre bras et jambe opposés lentement, maintenir le bassin stable",
           "notesEn": "Extend opposite arm and leg slowly, keep pelvis stable",
+          "notesIt": "Estendere lentamente braccio e gamba opposti, mantenendo il bacino stabile",
           "rpe": 3
         }
       ],
@@ -44,6 +48,7 @@
           "intensity": "endurance",
           "notes": "Haltère contre la poitrine, descendre jusqu'à ce que les cuisses soient parallèles",
           "notesEn": "Dumbbell held at chest, lower until thighs are parallel",
+          "notesIt": "Manubrio al petto, scendere fino a portare le cosce parallele al pavimento",
           "rpe": 5
         },
         {
@@ -54,6 +59,7 @@
           "intensity": "endurance",
           "notes": "10 répétitions par jambe, genou arrière frôle le sol, tronc droit",
           "notesEn": "10 reps per leg, back knee grazes the floor, torso upright",
+          "notesIt": "10 ripetizioni per gamba, il ginocchio posteriore sfiora il pavimento, busto eretto",
           "rpe": 5
         },
         {
@@ -64,6 +70,7 @@
           "intensity": "endurance",
           "notes": "Corps aligné de la tête aux talons, engager les abdominaux et les fessiers",
           "notesEn": "Body aligned from head to heels, engage abs and glutes",
+          "notesIt": "Corpo allineato dalla testa ai talloni, attivare addominali e glutei",
           "rpe": 5
         },
         {
@@ -74,6 +81,7 @@
           "intensity": "endurance",
           "notes": "Amplitude complète, poitrine frôle le sol. Variante sur les genoux si nécessaire",
           "notesEn": "Full range, chest grazes the floor. Knee variation if needed",
+          "notesIt": "Ampiezza completa, il petto sfiora il pavimento. Variante sulle ginocchia se necessario",
           "rpe": 5
         },
         {
@@ -84,6 +92,7 @@
           "intensity": "endurance",
           "notes": "Pieds à largeur de hanches, serrer les fessiers en haut, pause 1 seconde",
           "notesEn": "Feet hip-width apart, squeeze glutes at top, 1 second pause",
+          "notesIt": "Piedi larghi quanto i fianchi, contrarre i glutei in alto, pausa di 1 secondo",
           "rpe": 5
         }
       ],
@@ -96,6 +105,7 @@
           "intensity": "mobility",
           "notes": "30 secondes par côté, étirement doux du psoas",
           "notesEn": "30 seconds per side, gentle hip flexor stretch",
+          "notesIt": "30 secondi per lato, allungamento dolce dello psoas",
           "rpe": 2
         },
         {
@@ -106,6 +116,7 @@
           "intensity": "mobility",
           "notes": "30 secondes par côté, relâcher la tension dans les fessiers profonds",
           "notesEn": "30 seconds per side, release deep glute tension",
+          "notesIt": "30 secondi per lato, rilasciare la tensione nei glutei profondi",
           "rpe": 2
         }
       ],
@@ -122,6 +133,12 @@
         "Schedule this session at least 48h before an intense running session",
         "Keep a controlled tempo: 2 seconds up, 2 seconds down"
       ],
+      "coachingTipsIt": [
+        "Privilegiate la qualità del movimento rispetto al carico: iniziate leggeri e aumentate progressivamente",
+        "Respirate in modo naturale, espirando durante la fase concentrica",
+        "Programmate questa sessione almeno 48 ore prima di un allenamento di corsa intenso",
+        "Mantenete un ritmo controllato: 2 secondi in salita, 2 secondi in discesa"
+      ],
       "commonMistakes": [
         "Charger trop lourd dès le début, ce qui dégrade la technique",
         "Négliger l'échauffement et passer directement aux exercices principaux",
@@ -131,6 +148,11 @@
         "Loading too heavy from the start, which degrades technique",
         "Skipping the warmup and jumping straight to main exercises",
         "Locking knees in hyperextension during the glute bridge"
+      ],
+      "commonMistakesIt": [
+        "Usare carichi troppo pesanti fin dall'inizio, compromettendo la tecnica",
+        "Saltare il riscaldamento passando direttamente agli esercizi principali",
+        "Bloccare le ginocchia in iperestensione durante il ponte glutei"
       ],
       "variationIds": ["STR-002", "STR-004"],
       "suitablePhases": ["base", "build", "recovery"],
@@ -146,8 +168,10 @@
       "kind": "strength",
       "name": "Renfo full body intermédiaire",
       "nameEn": "Intermediate Full Body",
+      "nameIt": "Full body intermedio",
       "description": "Séance de renforcement complet pour coureurs intermédiaires. Charges modérées et exercices bilatéraux et unilatéraux pour corriger les déséquilibres musculaires et améliorer l'économie de course.",
       "descriptionEn": "Complete strength session for intermediate runners. Moderate loads with bilateral and unilateral exercises to correct muscle imbalances and improve running economy.",
+      "descriptionIt": "Sessione completa di potenziamento per runner intermedi. Carichi moderati con esercizi bilaterali e unilaterali per correggere gli squilibri muscolari e migliorare l'economia di corsa.",
       "category": "runner_full_body",
       "difficulty": "intermediate",
       "typicalDuration": { "min": 40, "max": 50 },
@@ -162,6 +186,7 @@
           "intensity": "mobility",
           "notes": "Avec bande élastique au-dessus des genoux, pas latéraux contrôlés",
           "notesEn": "With resistance band above knees, controlled lateral steps",
+          "notesIt": "Con fascia elastica sopra le ginocchia, passi laterali controllati",
           "rpe": 3
         },
         {
@@ -172,6 +197,7 @@
           "intensity": "mobility",
           "notes": "Garder le bas du dos plaqué au sol, étendre lentement",
           "notesEn": "Keep lower back pressed to floor, extend slowly",
+          "notesIt": "Mantenere la zona lombare aderente a terra, estendere lentamente",
           "rpe": 3
         }
       ],
@@ -184,6 +210,7 @@
           "intensity": "hypertrophy",
           "notes": "Descente contrôlée, cuisses parallèles au sol minimum. Charge modérée, technique prioritaire",
           "notesEn": "Controlled descent, thighs at least parallel to floor. Moderate load, technique first",
+          "notesIt": "Discesa controllata, cosce almeno parallele al pavimento. Carico moderato, priorità alla tecnica",
           "rpe": 7
         },
         {
@@ -194,6 +221,7 @@
           "intensity": "hypertrophy",
           "notes": "Charnière de hanche, haltères le long des jambes, sentir l'étirement des ischio-jambiers",
           "notesEn": "Hip hinge, dumbbells along legs, feel hamstring stretch",
+          "notesIt": "Cerniera d'anca, manubri lungo le gambe, sentire l'allungamento degli ischiocrurali",
           "rpe": 6
         },
         {
@@ -204,6 +232,7 @@
           "intensity": "hypertrophy",
           "notes": "8 répétitions par jambe, monter en poussant par le talon, hauteur de box 40-50 cm",
           "notesEn": "8 reps per leg, push through the heel, box height 40-50 cm",
+          "notesIt": "8 ripetizioni per gamba, salire spingendo con il tallone, altezza box 40-50 cm",
           "rpe": 6
         },
         {
@@ -214,6 +243,7 @@
           "intensity": "hypertrophy",
           "notes": "Résister à la rotation, bras tendus devant, bande ou câble à hauteur de poitrine",
           "notesEn": "Resist rotation, arms extended in front, band or cable at chest height",
+          "notesIt": "Resistere alla rotazione, braccia tese davanti, elastico o cavo all'altezza del petto",
           "rpe": 6
         },
         {
@@ -224,6 +254,7 @@
           "intensity": "hypertrophy",
           "notes": "Tirer les coudes vers l'arriere, serrer les omoplates, tronc stable",
           "notesEn": "Pull elbows back, squeeze shoulder blades, stable torso",
+          "notesIt": "Tirare i gomiti indietro, stringere le scapole, tronco stabile",
           "rpe": 6
         }
       ],
@@ -236,6 +267,7 @@
           "intensity": "mobility",
           "notes": "Rouler lentement sur les ischio-jambiers, insister sur les points sensibles",
           "notesEn": "Roll slowly on hamstrings, focus on tender spots",
+          "notesIt": "Rullare lentamente sugli ischiocrurali, insistendo sui punti sensibili",
           "rpe": 2
         },
         {
@@ -246,6 +278,7 @@
           "intensity": "mobility",
           "notes": "Rouler sur les quadriceps, eviter de rouler directement sur le genou",
           "notesEn": "Roll on quadriceps, avoid rolling directly on the knee",
+          "notesIt": "Rullare sui quadricipiti, evitando di passare direttamente sul ginocchio",
           "rpe": 2
         }
       ],
@@ -262,6 +295,12 @@
         "Schedule this session away from interval sessions (48-72h ideally)",
         "Hydrate between sets, keep water nearby"
       ],
+      "coachingTipsIt": [
+        "Aumentate i carichi del 5% quando completate tutte le ripetizioni con buona tecnica",
+        "Back squat e stacco rumeno sono i pilastri di questa sessione: concentrate lì le vostre energie",
+        "Programmate questa sessione lontano dalle sedute di ripetute (idealmente a 48-72 ore)",
+        "Idratatevi tra le serie tenendo dell'acqua a portata di mano"
+      ],
       "commonMistakes": [
         "Arrondir le dos pendant le Romanian deadlift : maintenir la colonne neutre",
         "Pousser avec l'avant du pied lors du step-up au lieu de pousser par le talon",
@@ -271,6 +310,11 @@
         "Rounding the back during Romanian deadlift: maintain neutral spine",
         "Pushing with the forefoot during step-up instead of driving through the heel",
         "Reducing squat depth to compensate for too heavy a load"
+      ],
+      "commonMistakesIt": [
+        "Incurvare la schiena durante lo stacco rumeno: mantenere la colonna neutra",
+        "Spingere con l'avampiede durante lo step-up invece di spingere attraverso il tallone",
+        "Ridurre la profondità dello squat per compensare un carico eccessivo"
       ],
       "variationIds": ["STR-001", "STR-003"],
       "suitablePhases": ["base", "build"],
@@ -286,8 +330,10 @@
       "kind": "strength",
       "name": "Renfo full body avancé",
       "nameEn": "Advanced Full Body",
+      "nameIt": "Full body avanzato",
       "description": "Séance de force maximale pour coureurs expérimentés. Charges lourdes et faibles répétitions pour maximiser le recrutement neuromusculaire et l'économie de course, selon le protocole de Beattie et al. (2017).",
       "descriptionEn": "Maximal strength session for experienced runners. Heavy loads and low répétitions to maximize neuromuscular recruitment and running economy, following the Beattie et al. (2017) protocol.",
+      "descriptionIt": "Sessione di forza massimale per runner esperti. Carichi elevati e basse ripetizioni per massimizzare il reclutamento neuromuscolare e l'economia di corsa, secondo il protocollo di Beattie et al. (2017).",
       "category": "runner_full_body",
       "difficulty": "advanced",
       "typicalDuration": { "min": 45, "max": 55 },
@@ -302,6 +348,7 @@
           "intensity": "mobility",
           "notes": "Activation progressive des fessiers, amplitude complète",
           "notesEn": "Progressive glute activation, full range of motion",
+          "notesIt": "Attivazione progressiva dei glutei, ampiezza di movimento completa",
           "rpe": 3
         },
         {
@@ -312,6 +359,7 @@
           "intensity": "mobility",
           "notes": "Activation du core avant les charges lourdes, gainage strict",
           "notesEn": "Core activation before heavy loads, strict plank form",
+          "notesIt": "Attivazione del core prima dei carichi pesanti, plank rigoroso",
           "rpe": 4
         }
       ],
@@ -324,6 +372,7 @@
           "intensity": "strength",
           "notes": "Charge lourde, 4-5 RM. Technique irréprochable, arrêt immédiat si la forme se dégrade",
           "notesEn": "Heavy load, 4-5 RM. Flawless technique, stop immediately if form degrades",
+          "notesIt": "Carico pesante, 4-5 RM. Tecnica impeccabile, fermarsi subito se l'esecuzione peggiora",
           "rpe": 8,
           "percentRM": 85
         },
@@ -335,6 +384,7 @@
           "intensity": "strength",
           "notes": "Appui complet du dos sur le banc, serrer les fessiers 2 secondes en haut",
           "notesEn": "Full back support on bench, squeeze glutes for 2 seconds at top",
+          "notesIt": "Appoggio completo della schiena sulla panca, contrarre i glutei per 2 secondi in alto",
           "rpe": 8,
           "percentRM": 80
         },
@@ -346,6 +396,7 @@
           "intensity": "strength",
           "notes": "6 répétitions par jambe, pied arrière sur le banc, descente contrôlée 3 secondes",
           "notesEn": "6 reps per leg, rear foot on bench, 3-second controlled descent",
+          "notesIt": "6 ripetizioni per gamba, piede posteriore sulla panca, discesa controllata di 3 secondi",
           "rpe": 8
         },
         {
@@ -356,6 +407,7 @@
           "intensity": "hypertrophy",
           "notes": "Allongé face au sol, lever les bras en Y, serrer les omoplates",
           "notesEn": "Prone position, raise arms in Y shape, squeeze shoulder blades",
+          "notesIt": "Posizione prona, sollevare le braccia a Y, stringere le scapole",
           "rpe": 5
         },
         {
@@ -366,6 +418,7 @@
           "intensity": "strength",
           "notes": "30 secondes par côté, corps parfaitement aligné, pas de rotation du bassin",
           "notesEn": "30 seconds per side, perfectly aligned body, no pelvic rotation",
+          "notesIt": "30 secondi per lato, corpo perfettamente allineato, nessuna rotazione del bacino",
           "rpe": 7
         }
       ],
@@ -378,6 +431,7 @@
           "intensity": "mobility",
           "notes": "Foam roller sur les ischio-jambiers après les charges lourdes",
           "notesEn": "Foam roller on hamstrings after heavy loading",
+          "notesIt": "Foam roller sugli ischiocrurali dopo i carichi pesanti",
           "rpe": 2
         },
         {
@@ -388,6 +442,7 @@
           "intensity": "mobility",
           "notes": "Étirement du psoas, 30 secondes par côté",
           "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "notesIt": "Allungamento dello psoas, 30 secondi per lato",
           "rpe": 2
         }
       ],
@@ -404,6 +459,12 @@
         "Schedule this session at least 72h from a key running session",
         "If technique degrades before rep 5, reduce the load by 5%"
       ],
+      "coachingTipsIt": [
+        "Le serie di squat a RPE 8 significano che vi restano circa 2 ripetizioni di margine",
+        "Riscaldatevi progressivamente: bilanciere scarico, poi 50%, 70%, 85% del carico target",
+        "Questa sessione va posizionata ad almeno 72 ore da un allenamento di corsa chiave",
+        "Se la tecnica peggiora prima della 5ª ripetizione, riducete il carico del 5%"
+      ],
       "commonMistakes": [
         "Ne pas s'échauffer suffisamment avant les charges lourdes : risque de blessure",
         "Placer cette séance la veille d'un fractionné VMA",
@@ -413,6 +474,11 @@
         "Not warming up enough before heavy loads: injury risk",
         "Scheduling this session the day before a VO2max interval session",
         "Compensating poor ankle mobility with excessive trunk lean during squat"
+      ],
+      "commonMistakesIt": [
+        "Non riscaldarsi a sufficienza prima dei carichi pesanti: rischio di infortunio",
+        "Programmare questa sessione alla vigilia di una seduta di ripetute VO2max",
+        "Compensare una scarsa mobilità della caviglia inclinando eccessivamente il tronco nello squat"
       ],
       "variationIds": ["STR-002"],
       "suitablePhases": ["build", "peak"],
@@ -429,8 +495,10 @@
       "kind": "strength",
       "name": "Renfo maintenance",
       "nameEn": "Maintenance Full Body",
+      "nameIt": "Full body di mantenimento",
       "description": "Séance réduite de maintien des acquis pour les périodes d'affûtage ou de récupération. Volume minimal pour conserver la force sans générer de fatigue supplémentaire avant une compétition.",
       "descriptionEn": "Reduced maintenance session to preserve strength gains during taper or recovery periods. Minimal volume to retain strength without generating additional fatigue before competition.",
+      "descriptionIt": "Sessione ridotta di mantenimento per preservare i guadagni di forza durante i periodi di scarico (taper) o recupero. Volume minimo per mantenere la forza senza generare affaticamento aggiuntivo prima della gara.",
       "category": "runner_full_body",
       "difficulty": "intermediate",
       "typicalDuration": { "min": 25, "max": 35 },
@@ -445,6 +513,7 @@
           "intensity": "mobility",
           "notes": "Mobilité rapide des hanches en 90/90 pour préparer les mouvements",
           "notesEn": "Quick 90/90 hip mobility to prepare for movements",
+          "notesIt": "Mobilità rapida delle anche in 90/90 per preparare i movimenti",
           "rpe": 2
         },
         {
@@ -455,6 +524,7 @@
           "intensity": "mobility",
           "notes": "Mobilité de cheville, genou vers l'avant au-dessus des orteils",
           "notesEn": "Ankle mobility, drive knee forward over toes",
+          "notesIt": "Mobilità della caviglia, spingere il ginocchio in avanti oltre le dita dei piedi",
           "rpe": 2
         }
       ],
@@ -467,6 +537,7 @@
           "intensity": "endurance",
           "notes": "Charge modérée, maintenir la qualité. Pas besoin de chercher la fatigue",
           "notesEn": "Moderate load, maintain quality. No need to chase fatigue",
+          "notesIt": "Carico moderato, mantenere la qualità. Non serve cercare l'affaticamento",
           "rpe": 5
         },
         {
@@ -477,6 +548,7 @@
           "intensity": "endurance",
           "notes": "8 répétitions par jambe, haltère optionnel, équilibre et contrôle prioritaires",
           "notesEn": "8 reps per leg, dumbbell optional, balance and control are priorities",
+          "notesIt": "8 ripetizioni per gamba, manubrio facoltativo, equilibrio e controllo sono prioritari",
           "rpe": 5
         },
         {
@@ -487,6 +559,7 @@
           "intensity": "endurance",
           "notes": "Maintien strict, corps aligné",
           "notesEn": "Strict hold, aligned body",
+          "notesIt": "Tenuta rigorosa, corpo allineato",
           "rpe": 4
         },
         {
@@ -497,6 +570,7 @@
           "intensity": "endurance",
           "notes": "Pompes standard ou sur les genoux, mouvement complet",
           "notesEn": "Standard or knee push-ups, full range of motion",
+          "notesIt": "Piegamenti classici o sulle ginocchia, ampiezza di movimento completa",
           "rpe": 4
         }
       ],
@@ -509,6 +583,7 @@
           "intensity": "mobility",
           "notes": "Étirement léger du piriforme, 30 secondes par côté",
           "notesEn": "Light piriformis stretch, 30 seconds per side",
+          "notesIt": "Stretching leggero del piriforme, 30 secondi per lato",
           "rpe": 2
         }
       ],
@@ -525,6 +600,12 @@
         "Short duration to minimize soreness during taper",
         "Listen to your body: reduce further if you feel residual fatigue"
       ],
+      "coachingTipsIt": [
+        "L'obiettivo è il mantenimento, non la progressione: tenete il 70-80% del vostro carico abituale",
+        "Ideale 3-5 giorni prima di una gara per mantenere il tono muscolare",
+        "Durata breve per ridurre al minimo gli indolenzimenti durante lo scarico",
+        "Ascoltate il vostro corpo: riducete ulteriormente se avvertite fatica residua"
+      ],
       "commonMistakes": [
         "Augmenter les charges pendant l'affûtage au lieu de les réduire",
         "Supprimer complètement le renforcement en période de taper, perdant ainsi les adaptations",
@@ -534,6 +615,11 @@
         "Increasing loads during taper instead of reducing them",
         "Completely dropping strength work during taper, thus losing adaptations",
         "Adding extra exercises out of habit"
+      ],
+      "commonMistakesIt": [
+        "Aumentare i carichi durante lo scarico invece di ridurli",
+        "Eliminare completamente il potenziamento in fase di taper, perdendo gli adattamenti",
+        "Aggiungere esercizi extra per abitudine"
       ],
       "variationIds": ["STR-001"],
       "suitablePhases": ["taper", "recovery"],

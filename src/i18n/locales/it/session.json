@@ -1,0 +1,250 @@
+{
+  "structure": {
+    "warmup": "Riscaldamento",
+    "main": "Corpo centrale",
+    "cooldown": "Defaticamento",
+    "recovery": "Recupero",
+    "interSeries": "{{count}} serie, ~3 min di corsa lenta tra le serie",
+    "loopTemplate": "Un ciclo mostrato qui sotto",
+    "noZone": "Nessuna zona",
+    "repeatUnits": {
+      "reps": "{{count}} ripetizioni",
+      "sets": "{{count}} serie",
+      "blocks": "{{count}} blocchi"
+    },
+    "between": {
+      "reps": "Tra le ripetizioni",
+      "sets": "Tra le serie",
+      "blocks": "Tra i blocchi"
+    },
+    "chips": {
+      "seriesRecovery": "recupero serie {{value}}",
+      "blocksRecovery": "recupero blocchi {{value}}"
+    }
+  },
+  "zones": {
+    "Z1": "Zona 1 - Recupero",
+    "Z2": "Zona 2 - Resistenza",
+    "Z3": "Zona 3 - Tempo",
+    "Z4": "Zona 4 - Soglia",
+    "Z5": "Zona 5 - VO2max",
+    "Z6": "Zona 6 - Sprint"
+  },
+  "zoneShort": {
+    "Z1": "Z1",
+    "Z2": "Z2",
+    "Z3": "Z3",
+    "Z4": "Z4",
+    "Z5": "Z5",
+    "Z6": "Z6"
+  },
+  "visualization": {
+    "noData": "Nessun dato di zona disponibile",
+    "timeline": "Sequenza della seduta",
+    "start": "Inizio",
+    "end": "Fine",
+    "zoneDistribution": "Distribuzione per zona",
+    "backToTimeline": "Torna alla sequenza"
+  },
+  "details": {
+    "duration": "Durata",
+    "difficulty": "Difficoltà",
+    "category": "Categoria",
+    "environment": "Terreno",
+    "targetSystem": "Sistema target"
+  },
+  "titles": {
+    "sessionTimeline": "Sequenza della seduta",
+    "workoutStructure": "Struttura della seduta",
+    "coachingTips": "Consigli tecnici",
+    "zoneDistribution": "Distribuzione per zona",
+    "details": "Dettagli",
+    "relatedWorkouts": "Sedute simili",
+    "nutritionRecovery": "Nutrizione e recupero",
+    "scienceMode": "Perché funziona",
+    "continueExploring": "Continua a esplorare",
+    "trailProfile": "Profilo trail",
+    "commonMistakes": "Errori comuni",
+    "equipment": "Attrezzatura",
+    "suitablePhases": "Fasi adatte",
+    "scientificRefs": "Riferimenti scientifici",
+    "muscleGroups": "Gruppi muscolari"
+  },
+  "captions": {
+    "viz": "Visualizzazione",
+    "nutrition": "Prima · durante · dopo",
+    "science": "La scienza dietro la seduta",
+    "mistakes": "Cosa evitare",
+    "equipment": "Equipaggiamento",
+    "phases": "Periodizzazione",
+    "refs": "Fonti",
+    "related": "Per approfondire"
+  },
+  "stats": {
+    "duration": "Durata",
+    "distance": "Distanza",
+    "difficulty": "Livello",
+    "target": "Obiettivo",
+    "environment": "Terreno",
+    "frequency": "Frequenza",
+    "recovery": "Recupero",
+    "elevation": "Dislivello",
+    "peak": "Picco"
+  },
+  "targetSystems": {
+    "aerobic_base": "Base aerobica",
+    "aerobic_power": "Potenza aerobica",
+    "aerobic_threshold": "Soglia aerobica",
+    "lactate_threshold": "Soglia del lattato",
+    "lactate_tolerance": "Tolleranza al lattato",
+    "vo2max": "VO2max",
+    "speed": "Velocità",
+    "strength": "Forza",
+    "neuromuscular": "Neuromuscolare",
+    "race_specific": "Specifico gara",
+    "mixed": "Misto"
+  },
+  "environment": {
+    "requiresHills": "Richiede salite",
+    "requiresTrack": "Richiede pista",
+    "prefersFlat": "Preferibile terreno pianeggiante",
+    "noRequirements": "Nessun requisito particolare"
+  },
+  "coaching": {
+    "tips": "Consigli",
+    "mistakes": "Errori comuni"
+  },
+  "actions": {
+    "shareStrava": "Condividi su Strava",
+    "moreActions": "Altre azioni",
+    "adjust": "Adatta",
+    "edit": "Modifica"
+  },
+  "strava": {
+    "copied": "Seduta copiata, incollala su Strava!"
+  },
+  "variations": {
+    "title": "Varianti",
+    "related": "Sedute simili"
+  },
+  "recommendations": {
+    "phases": {
+      "before": "Prima",
+      "during": "Durante",
+      "after": "Dopo"
+    },
+    "domains": {
+      "nutrition": "Nutrizione",
+      "hydration": "Idratazione",
+      "recovery": "Recupero"
+    },
+    "learnMore": {
+      "nutrition": "Guida completa alla nutrizione",
+      "recovery": "Guida completa al recupero"
+    },
+    "crossDisciplineNote": "Raccomandazioni scritte per la corsa. I principi aerobici si trasferiscono a ciclismo e nuoto; i dettagli specifici (rifornimento uscite lunghe in bici, idratazione in piscina) arriveranno."
+  },
+  "planContext": {
+    "banner": "Settimana {{week}} · Adattata al volume ({{volume}}%): ~{{duration}} min",
+    "fullSession": "(versione completa: {{duration}} min)",
+    "longRunBanner": "Settimana {{week}} · Lungo target: {{distance}} km (~{{duration}} min al tuo ritmo)",
+    "longRunStructure": "La struttura qui sotto è la traccia di base ({{duration}} min)"
+  },
+  "science": {
+    "toggle": "Attiva",
+    "rationale": "Perché questo formato",
+    "zonesSolicited": "Zone sollecitate",
+    "adaptations": "Adattamenti attesi",
+    "references": "Riferimenti scientifici",
+    "referencesCount_one": "{{count}} studio",
+    "referencesCount_other": "{{count}} studi",
+    "viewStudy": "Vedi studio",
+    "crossDisciplineNote": "La parte scientifica qui sotto è scritta per la corsa. I principi (zone, adattamenti metabolici) valgono per ciclismo e nuoto con le dovute sfumature."
+  },
+  "provenance": {
+    "adaptedFrom": "Adattata da"
+  },
+  "export": {
+    "blockCount_one": "{{count}} blocco",
+    "blockCount_other": "{{count}} blocchi",
+    "andMore_one": "+{{count}} altro",
+    "andMore_other": "+{{count}} altri"
+  },
+  "screen": {
+    "structureTitle": "Struttura della seduta",
+    "structureKicker": "{{duration}} · {{phases}} fasi",
+    "structureDownload": "Scarica la struttura",
+    "structureDownloadAll": "L'intero blocco",
+    "axisStart": "0 min · partenza",
+    "axisEnd": "{{duration}} · fine",
+    "total": "Totale {{duration}}",
+    "exportFormats": ".fit · .ics · .pdf · .png",
+    "notFoundTitle": "Questa seduta ha lasciato il catalogo",
+    "notFoundBody": "Il link punta a un id che il catalogo non conosce più. I tuoi preferiti, piani e sedute salvate restano intatti."
+  },
+  "illustration": {
+    "strengthBrief": "Plank visto di lato, linea 2 px, punti di appoggio in colore accent",
+    "strengthLabel": "Il plank della seduta, disegnato in un solo tratto, punti di appoggio in accent"
+  },
+  "page": {
+    "structureTitle": "Struttura",
+    "structureKicker_one": "{{count}} fase · {{duration}}",
+    "structureKicker_other": "{{count}} fasi · {{duration}}",
+    "endurance": "Resistenza",
+    "quality": "Qualità",
+    "intensityLabel": "Intensità: resistenza {{endurance}}, qualità {{quality}}",
+    "intensityPeak": ", picco in zona {{zone}}",
+    "distanceNeedsVma": "Con la tua VAM",
+    "distanceEstimate": "≈ {{km}} km",
+    "paceNeeded": "Ritmo · VAM necessaria",
+    "vmaPrompt": "Mostra i tuoi ritmi su ogni blocco",
+    "vmaSubmit": "Mostra",
+    "zonesForVma": "Ritmi per una VAM di {{vma}} km/h",
+    "zonesForHr": "Frequenze cardiache per una FC max di {{fcMax}} bpm",
+    "zonesEdit": "Modifica",
+    "zonesEditLabel": "Modifica la mia VAM",
+    "repeat": "{{count}} ×",
+    "noZone": "Nessuna zona",
+    "distributionTitle": "Distribuzione",
+    "distributionCaption": "Tempo trascorso per zona",
+    "distributionLabel": "Tempo per zona: {{parts}}",
+    "relatedTitle": "Nello stesso spirito",
+    "glossary": "Glossario"
+  },
+  "addTo": {
+    "action": "Aggiungi a…",
+    "title": "Aggiungi la seduta",
+    "subtitle": "{{name}} · {{duration}}",
+    "legend": "Dove aggiungere la seduta",
+    "today": "Oggi",
+    "day": "Un altro giorno questa settimana",
+    "daySub": "Settimana {{week}}",
+    "plan": "Nel mio piano",
+    "planSub": "{{name}} · settimana {{week}}",
+    "planPick": "Piano",
+    "weekPick": "Settimana",
+    "weekOption": "Settimana {{week}}",
+    "template": "In una settimana tipo",
+    "templateSub": "Le mie settimane",
+    "templatePick": "Settimana tipo",
+    "templateNone": "Nessuna settimana salvata.",
+    "templateCreate": "Crea una settimana",
+    "dayGroup": "Giorno della settimana",
+    "freshWeek": "nuova settimana",
+    "confirmToday": "Aggiungi a oggi",
+    "confirmDay": "Aggiungi a {{day}}",
+    "confirmPlan": "Aggiungi a {{day}}, settimana {{week}}",
+    "confirmTemplate": "Aggiungi a {{day}} in {{name}}",
+    "done": "Aggiunta a {{day}} {{date}}",
+    "donePlan": "Aggiunta a {{name}}, {{day}} settimana {{week}}",
+    "doneTemplate": "Aggiunta a {{name}}, {{day}}",
+    "openToday": "Vedi nella schermata Oggi",
+    "openPlan": "Vedi nel piano",
+    "openWeek": "Vedi la settimana",
+    "undo": "Annulla",
+    "undone": "Aggiunta annullata",
+    "undoFailed": "Impossibile annullare l'aggiunta.",
+    "failed": "Impossibile aggiungere la seduta.",
+    "snapshot": "Seduta aggiunta: {{name}}"
+  }
+}

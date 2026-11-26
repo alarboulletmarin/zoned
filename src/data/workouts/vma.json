@@ -5,8 +5,10 @@
       "id": "VMA-001",
       "name": "30/30 classique",
       "nameEn": "Classic 30/30",
+      "nameIt": "30/30 classico",
       "description": "Séance VMA en intervalles courts 30 secondes vite / 30 secondes lent. Format de base pour développer la VO2max.",
       "descriptionEn": "VO2max session with short intervals: 30 seconds fast / 30 seconds slow. Foundational format for developing VO2max.",
+      "descriptionIt": "Seduta VAM con intervalli brevi: 30 secondi veloci / 30 secondi lenti. Formato base per sviluppare il VO2max.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -24,6 +26,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -31,6 +34,7 @@
         {
           "description": "Gammes et 4x accélérations progressives",
           "descriptionEn": "Drills and 4x progressive accelerations",
+          "descriptionIt": "Andature e 4x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -39,6 +43,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -48,6 +53,7 @@
           "kind": "segment",
           "description": "Gammes et 4x accélérations progressives",
           "descriptionEn": "Drills and 4x progressive accelerations",
+          "descriptionIt": "Andature e 4x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -56,12 +62,15 @@
         {
           "description": "2x(12x 30s VMA / 30s récup)",
           "descriptionEn": "2x(12x 30s VO2max / 30s recovery)",
+          "descriptionIt": "2x(12x 30s VAM / 30s recupero)",
           "zone": "Z5",
           "repetitions": 12,
           "recovery": "30s footing Z1",
           "recoveryEn": "30s jog Z1",
+          "recoveryIt": "30s corsa lenta Z1",
           "restBetweenSets": "3min footing Z1",
           "restBetweenSetsEn": "3min jog Z1",
+          "restBetweenSetsIt": "3min corsa lenta Z1",
           "intensityType": "I",
           "sets": 2
         }
@@ -81,6 +90,7 @@
                   "kind": "segment",
                   "description": "30s VMA",
                   "descriptionEn": "30s VO2max",
+                  "descriptionIt": "30s VAM",
                   "durationSec": 30,
                   "zone": "Z5",
                   "role": "effort"
@@ -91,6 +101,7 @@
                   "kind": "segment",
                   "description": "30s footing Z1",
                   "descriptionEn": "30s jog Z1",
+                  "descriptionIt": "30s corsa lenta Z1",
                   "durationSec": 30,
                   "zone": "Z1",
                   "role": "recovery"
@@ -103,6 +114,7 @@
               "kind": "segment",
               "description": "3min footing Z1",
               "descriptionEn": "3min jog Z1",
+              "descriptionIt": "3min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -114,6 +126,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -124,6 +137,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -140,6 +154,11 @@
         "Don't walk during recovery, keep jogging",
         "Maintain a smooth stride"
       ],
+      "coachingTipsIt": [
+        "Correte a ritmo VAM o leggermente superiore",
+        "Non camminate durante il recupero, continuate a corricchiare",
+        "Mantenete una falcata fluida"
+      ],
       "commonMistakes": [
         "Partir en sprint sur les premières répétitions",
         "S'arrêter pendant la phase de récupération"
@@ -147,6 +166,10 @@
       "commonMistakesEn": [
         "Sprinting on the first repetitions",
         "Stopping during the recovery phase"
+      ],
+      "commonMistakesIt": [
+        "Partire in sprint sulle prime ripetute",
+        "Fermarsi durante la fase di recupero"
       ],
       "variationIds": [
         "VMA-002",
@@ -182,8 +205,10 @@
       "id": "VMA-002",
       "name": "400m piste",
       "nameEn": "400m track repeats",
+      "nameIt": "Ripetute sui 400m in pista",
       "description": "Répétitions de 400m à allure VMA sur piste. Format idéal pour la régularité d'allure.",
       "descriptionEn": "400m repeats at VO2max pace on track. Ideal format for pace consistency.",
+      "descriptionIt": "Ripetute sui 400m a ritmo VAM in pista. Formato ideale per la regolarità del passo.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -201,6 +226,7 @@
         {
           "description": "Footing autour de la piste",
           "descriptionEn": "Jog around the track",
+          "descriptionIt": "Corsa lenta intorno alla pista",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -208,6 +234,7 @@
         {
           "description": "Gammes et lignes droites",
           "descriptionEn": "Drills and strides",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -216,6 +243,7 @@
           "kind": "segment",
           "description": "Footing autour de la piste",
           "descriptionEn": "Jog around the track",
+          "descriptionIt": "Corsa lenta intorno alla pista",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -225,6 +253,7 @@
           "kind": "segment",
           "description": "Gammes et lignes droites",
           "descriptionEn": "Drills and strides",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -233,11 +262,13 @@
         {
           "description": "10x400m VMA avec 200m récup footing",
           "descriptionEn": "10x400m VO2max with 200m jog recovery",
+          "descriptionIt": "10x400m VAM con 200m recupero in corsa lenta",
           "distanceM": 400,
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "200m footing",
           "recoveryEn": "200m jog",
+          "recoveryIt": "200m corsa lenta",
           "intensityType": "I"
         }
       ],
@@ -251,6 +282,7 @@
               "kind": "segment",
               "description": "400m VMA",
               "descriptionEn": "400m VO2max",
+              "descriptionIt": "400m VAM",
               "distanceM": 400,
               "zone": "Z5",
               "intensityType": "I",
@@ -262,6 +294,7 @@
               "kind": "segment",
               "description": "200m footing",
               "descriptionEn": "200m jog",
+              "descriptionIt": "200m corsa lenta",
               "distanceM": 200,
               "zone": "Z1",
               "role": "recovery"
@@ -273,6 +306,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -283,6 +317,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -299,6 +334,11 @@
         "Recovery time should roughly equal 400m time",
         "Visualize your pace before starting"
       ],
+      "coachingTipsIt": [
+        "Cronometrate ogni 400m per la regolarità",
+        "Il tempo di recupero deve equivalere circa al tempo del 400m",
+        "Visualizzate il vostro ritmo prima di partire"
+      ],
       "commonMistakes": [
         "Partir trop vite sur le premier 400m",
         "Courir les 200m de récup trop vite"
@@ -306,6 +346,10 @@
       "commonMistakesEn": [
         "Starting too fast on the first 400m",
         "Running the 200m recovery too fast"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte sul primo 400m",
+        "Correre i 200m di recupero troppo velocemente"
       ],
       "variationIds": [
         "VMA-001",
@@ -341,8 +385,10 @@
       "id": "VMA-003",
       "name": "1000m VMA",
       "nameEn": "1000m VO2max intervals",
+      "nameIt": "Intervalli 1000m VAM",
       "description": "Intervalles longs de 1000m à allure VMA. Développe l'endurance à haute intensité.",
       "descriptionEn": "Long 1000m intervals at VO2max pace. Develops high-intensity endurance.",
+      "descriptionIt": "Intervalli lunghi da 1000m a ritmo VAM. Sviluppa la resistenza ad alta intensità.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -360,6 +406,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -367,6 +414,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -375,6 +423,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -384,6 +433,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -392,11 +442,13 @@
         {
           "description": "5x1000m VMA avec 400m récup",
           "descriptionEn": "5x1000m VO2max with 400m recovery",
+          "descriptionIt": "5x1000m VAM con 400m recupero",
           "distanceM": 1000,
           "zone": "Z5",
           "repetitions": 5,
           "recovery": "400m footing Z1",
           "recoveryEn": "400m jog Z1",
+          "recoveryIt": "400m corsetta Z1",
           "intensityType": "I"
         }
       ],
@@ -410,6 +462,7 @@
               "kind": "segment",
               "description": "1000m VMA",
               "descriptionEn": "1000m VO2max",
+              "descriptionIt": "1000m VAM",
               "distanceM": 1000,
               "zone": "Z5",
               "intensityType": "I",
@@ -421,6 +474,7 @@
               "kind": "segment",
               "description": "400m footing Z1",
               "descriptionEn": "400m jog Z1",
+              "descriptionIt": "400m corsetta Z1",
               "distanceM": 400,
               "zone": "Z1",
               "role": "recovery"
@@ -432,6 +486,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -442,6 +497,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -458,6 +514,11 @@
         "Each 1000m should be the same time",
         "Recovery must be truly slow"
       ],
+      "coachingTipsIt": [
+        "Seduta impegnativa, presentatevi ben riposati",
+        "Ogni 1000m dovrebbe avere lo stesso tempo",
+        "Il recupero deve essere davvero lento"
+      ],
       "commonMistakes": [
         "Partir trop vite",
         "Récupérer trop activement"
@@ -465,6 +526,10 @@
       "commonMistakesEn": [
         "Starting too fast",
         "Recovering too actively"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte",
+        "Recuperare in modo troppo attivo"
       ],
       "variationIds": [
         "VMA-002",
@@ -498,8 +563,10 @@
       "id": "VMA-004",
       "name": "200m explosifs",
       "nameEn": "Explosive 200m repeats",
+      "nameIt": "Ripetute esplosive sui 200m",
       "description": "Répétitions courtes de 200m à 105% VMA. Développe la puissance et la vitesse.",
       "descriptionEn": "Short 200m repeats at 105% VO2max. Develops power and speed.",
+      "descriptionIt": "Ripetute brevi da 200m al 105% VAM. Sviluppa potenza e velocità.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -517,6 +584,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -524,6 +592,7 @@
         {
           "description": "Gammes complètes et lignes droites",
           "descriptionEn": "Full drills and strides",
+          "descriptionIt": "Andature complete e allunghi",
           "durationMin": 10
         }
       ],
@@ -532,6 +601,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -541,6 +611,7 @@
           "kind": "segment",
           "description": "Gammes complètes et lignes droites",
           "descriptionEn": "Full drills and strides",
+          "descriptionIt": "Andature complete e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -549,11 +620,13 @@
         {
           "description": "12x200m à 105% VMA avec 200m récup",
           "descriptionEn": "12x200m at 105% VO2max with 200m recovery",
+          "descriptionIt": "12x200m al 105% VAM con 200m recupero",
           "distanceM": 200,
           "zone": "Z5+",
           "repetitions": 12,
           "recovery": "200m marche/footing",
-          "recoveryEn": "200m walk / jog"
+          "recoveryEn": "200m walk / jog",
+          "recoveryIt": "200m camminata / corsa lenta"
         }
       ],
       "mainSetStructure": [
@@ -566,6 +639,7 @@
               "kind": "segment",
               "description": "200m à 105% VMA",
               "descriptionEn": "200m at 105% VO2max",
+              "descriptionIt": "200m al 105% VAM",
               "distanceM": 200,
               "zone": "Z5+",
               "role": "effort"
@@ -576,6 +650,7 @@
               "kind": "segment",
               "description": "200m marche/footing",
               "descriptionEn": "200m walk / jog",
+              "descriptionIt": "200m camminata / corsa lenta",
               "distanceM": 200,
               "zone": "Z1",
               "role": "recovery"
@@ -587,6 +662,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -597,6 +673,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -613,6 +690,11 @@
         "Full recovery is important",
         "Focus on technique"
       ],
+      "coachingTipsIt": [
+        "Più veloce del ritmo VAM standard",
+        "Il recupero completo è importante",
+        "Concentratevi sulla tecnica"
+      ],
       "commonMistakes": [
         "Courir en sprint au lieu de VMA+",
         "Ne pas assez récupérer"
@@ -620,6 +702,10 @@
       "commonMistakesEn": [
         "Sprinting instead of VO2max+",
         "Not recovering enough"
+      ],
+      "commonMistakesIt": [
+        "Fare sprint invece di VAM+",
+        "Non recuperare abbastanza"
       ],
       "variationIds": [
         "VMA-002"
@@ -652,8 +738,10 @@
       "id": "VMA-005",
       "name": "45/15",
       "nameEn": "45/15 intervals",
+      "nameIt": "Intervalli 45/15",
       "description": "Format 45 secondes vite / 15 secondes lent. Plus exigeant que le 30/30.",
       "descriptionEn": "45 seconds fast / 15 seconds slow format. More demanding than 30/30.",
+      "descriptionIt": "Formato 45 secondi veloci / 15 secondi lenti. Più impegnativo del 30/30.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -671,6 +759,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -678,6 +767,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 5
         }
       ],
@@ -686,6 +776,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -695,6 +786,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -703,12 +795,15 @@
         {
           "description": "2x(10x 45s VMA / 15s récup)",
           "descriptionEn": "2x(10x 45s VO2max / 15s recovery)",
+          "descriptionIt": "2x(10x 45s VAM / 15s recupero)",
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "15s footing très lent",
           "recoveryEn": "15s very easy jog",
+          "recoveryIt": "15s corsa molto lenta",
           "restBetweenSets": "3min footing Z1",
           "restBetweenSetsEn": "3min jog Z1",
+          "restBetweenSetsIt": "3min corsa lenta Z1",
           "intensityType": "I",
           "sets": 2
         }
@@ -728,6 +823,7 @@
                   "kind": "segment",
                   "description": "45s VMA",
                   "descriptionEn": "45s VO2max",
+                  "descriptionIt": "45s VAM",
                   "durationSec": 45,
                   "zone": "Z5",
                   "role": "effort"
@@ -738,6 +834,7 @@
                   "kind": "segment",
                   "description": "15s footing très lent",
                   "descriptionEn": "15s very easy jog",
+                  "descriptionIt": "15s corsa molto lenta",
                   "durationSec": 15,
                   "zone": "Z1",
                   "role": "recovery"
@@ -750,6 +847,7 @@
               "kind": "segment",
               "description": "3min footing Z1",
               "descriptionEn": "3min jog Z1",
+              "descriptionIt": "3min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -761,6 +859,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -771,6 +870,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -787,6 +887,11 @@
         "Slightly below VO2max pace is acceptable",
         "Very demanding session"
       ],
+      "coachingTipsIt": [
+        "Recupero molto breve = VO2max mantenuto elevato",
+        "Un ritmo leggermente sotto VAM è accettabile",
+        "Seduta molto impegnativa"
+      ],
       "commonMistakes": [
         "Partir à l'allure du 30/30",
         "Ne pas maintenir l'intensité sur les dernières répétitions"
@@ -794,6 +899,10 @@
       "commonMistakesEn": [
         "Starting at 30/30 pace",
         "Failing to maintain intensity on final repetitions"
+      ],
+      "commonMistakesIt": [
+        "Partire al ritmo del 30/30",
+        "Non mantenere l'intensità sulle ultime ripetute"
       ],
       "variationIds": [
         "VMA-001",
@@ -827,8 +936,10 @@
       "id": "VMA-006",
       "name": "1min/1min",
       "nameEn": "1min/1min intervals",
+      "nameIt": "Intervalli 1min/1min",
       "description": "Alternance 1 minute vite / 1 minute lent. Excellent compromis intensité/volume.",
       "descriptionEn": "Alternating 1 minute fast / 1 minute slow. Excellent intensity/volume balance.",
+      "descriptionIt": "Alternanza 1 minuto veloce / 1 minuto lento. Ottimo compromesso tra intensità e volume.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -846,6 +957,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -853,6 +965,7 @@
         {
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationMin": 5
         }
       ],
@@ -861,6 +974,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -870,6 +984,7 @@
           "kind": "segment",
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationSec": 300,
           "role": "effort"
         }
@@ -878,10 +993,12 @@
         {
           "description": "12x(1min VMA / 1min récup)",
           "descriptionEn": "12x(1min VO2max / 1min recovery)",
+          "descriptionIt": "12x(1min VAM / 1min recupero)",
           "zone": "Z5",
           "repetitions": 12,
           "recovery": "1min footing Z1",
           "recoveryEn": "1min jog Z1",
+          "recoveryIt": "1min corsa lenta Z1",
           "intensityType": "I"
         }
       ],
@@ -895,6 +1012,7 @@
               "kind": "segment",
               "description": "1min VMA",
               "descriptionEn": "1min VO2max",
+              "descriptionIt": "1min VAM",
               "durationSec": 60,
               "zone": "Z5",
               "role": "effort"
@@ -905,6 +1023,7 @@
               "kind": "segment",
               "description": "1min footing Z1",
               "descriptionEn": "1min jog Z1",
+              "descriptionIt": "1min corsa lenta Z1",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -916,6 +1035,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -926,6 +1046,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -942,6 +1063,11 @@
         "Full recovery before restarting",
         "More accessible than 30/30 for beginners"
       ],
+      "coachingTipsIt": [
+        "Ritmo VAM sostenuto per un minuto",
+        "Recupero completo prima di ripartire",
+        "Più accessibile del 30/30 per i principianti"
+      ],
       "commonMistakes": [
         "Démarrer trop vite",
         "Ne pas respecter la minute complète de récup"
@@ -949,6 +1075,10 @@
       "commonMistakesEn": [
         "Starting too fast",
         "Not respecting the full minute of recovery"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte",
+        "Non rispettare il minuto completo di recupero"
       ],
       "variationIds": [
         "VMA-001"
@@ -982,8 +1112,10 @@
       "id": "VMA-007",
       "name": "VMA courte débutant",
       "nameEn": "Beginner short VO2max",
+      "nameIt": "VAM breve per principianti",
       "description": "Introduction à la VMA avec des intervalles courts et beaucoup de récup.",
       "descriptionEn": "Introduction to VO2max with short intervals and plenty of recovery.",
+      "descriptionIt": "Introduzione alla VAM con intervalli brevi e molto recupero.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -1001,6 +1133,7 @@
         {
           "description": "Footing très progressif",
           "descriptionEn": "Very progressive jog",
+          "descriptionIt": "Corsa lenta molto progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1008,6 +1141,7 @@
         {
           "description": "Marche rapide et accélérations douces",
           "descriptionEn": "Brisk walking and gentle accelerations",
+          "descriptionIt": "Camminata veloce e accelerazioni dolci",
           "durationMin": 5
         }
       ],
@@ -1016,6 +1150,7 @@
           "kind": "segment",
           "description": "Footing très progressif",
           "descriptionEn": "Very progressive jog",
+          "descriptionIt": "Corsa lenta molto progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1025,6 +1160,7 @@
           "kind": "segment",
           "description": "Marche rapide et accélérations douces",
           "descriptionEn": "Brisk walking and gentle accelerations",
+          "descriptionIt": "Camminata veloce e accelerazioni dolci",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1033,10 +1169,12 @@
         {
           "description": "8x(30s rapide / 1min récup)",
           "descriptionEn": "8x(30s fast / 1min recovery)",
+          "descriptionIt": "8x(30s veloci / 1min recupero)",
           "zone": "Z4-Z5",
           "repetitions": 8,
           "recovery": "1min footing lent",
           "recoveryEn": "1min easy jog",
+          "recoveryIt": "1min corsa lenta",
           "intensityType": "I"
         }
       ],
@@ -1050,6 +1188,7 @@
               "kind": "segment",
               "description": "30s rapide",
               "descriptionEn": "30s fast",
+              "descriptionIt": "30s veloci",
               "durationSec": 30,
               "zone": "Z4-Z5",
               "role": "effort"
@@ -1060,6 +1199,7 @@
               "kind": "segment",
               "description": "1min footing lent",
               "descriptionEn": "1min easy jog",
+              "descriptionIt": "1min corsa lenta",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -1071,6 +1211,7 @@
         {
           "description": "Footing très lent",
           "descriptionEn": "Very slow jog",
+          "descriptionIt": "Corsa molto lenta",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1081,6 +1222,7 @@
           "kind": "segment",
           "description": "Footing très lent",
           "descriptionEn": "Very slow jog",
+          "descriptionIt": "Corsa molto lenta",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1097,6 +1239,11 @@
         "Don't chase performance",
         "Long recovery to absorb the effort"
       ],
+      "coachingTipsIt": [
+        "Prima scoperta dell'alta intensità",
+        "Non cercate la prestazione",
+        "Recupero lungo per assorbire bene lo sforzo"
+      ],
       "commonMistakes": [
         "Vouloir aller trop vite dès le début",
         "Réduire la récupération"
@@ -1104,6 +1251,10 @@
       "commonMistakesEn": [
         "Wanting to go too fast from the start",
         "Cutting the recovery short"
+      ],
+      "commonMistakesIt": [
+        "Voler andare troppo forte fin dall'inizio",
+        "Accorciare il recupero"
       ],
       "variationIds": [
         "VMA-001"
@@ -1136,8 +1287,10 @@
       "id": "VMA-008",
       "name": "VMA pyramide",
       "nameEn": "VO2max pyramid",
+      "nameIt": "Piramide VAM",
       "description": "Intervalles en pyramide : 200-400-600-400-200m.",
       "descriptionEn": "Pyramid intervals: 200-400-600-400-200m.",
+      "descriptionIt": "Intervalli a piramide: 200-400-600-400-200m.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -1155,6 +1308,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1162,6 +1316,7 @@
         {
           "description": "Gammes et lignes droites",
           "descriptionEn": "Drills and strides",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -1170,6 +1325,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1179,6 +1335,7 @@
           "kind": "segment",
           "description": "Gammes et lignes droites",
           "descriptionEn": "Drills and strides",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -1187,62 +1344,144 @@
         {
           "description": "200m VMA",
           "descriptionEn": "200m VO2max",
+          "descriptionIt": "200m VAM",
           "distanceM": 200,
           "zone": "Z5",
           "recovery": "200m récup",
           "recoveryEn": "200m recovery",
+          "recoveryIt": "200m recupero",
           "intensityType": "I"
         },
         {
           "description": "400m VMA",
           "descriptionEn": "400m VO2max",
+          "descriptionIt": "400m VAM",
           "distanceM": 400,
           "zone": "Z5",
           "recovery": "200m récup",
           "recoveryEn": "200m recovery",
+          "recoveryIt": "200m recupero",
           "intensityType": "I"
         },
         {
           "description": "600m VMA",
           "descriptionEn": "600m VO2max",
+          "descriptionIt": "600m VAM",
           "distanceM": 600,
           "zone": "Z5",
           "recovery": "400m récup",
           "recoveryEn": "400m recovery",
+          "recoveryIt": "400m recupero",
           "intensityType": "I"
         },
         {
           "description": "400m VMA",
           "descriptionEn": "400m VO2max",
+          "descriptionIt": "400m VAM",
           "distanceM": 400,
           "zone": "Z5",
           "recovery": "200m récup",
           "recoveryEn": "200m recovery",
+          "recoveryIt": "200m recupero",
           "intensityType": "I"
         },
         {
           "description": "200m VMA",
           "descriptionEn": "200m VO2max",
+          "descriptionIt": "200m VAM",
           "distanceM": 200,
           "zone": "Z5",
           "intensityType": "I"
         }
       ],
       "mainSetStructure": [
-        { "kind": "segment", "description": "200m VMA", "descriptionEn": "200m VO2max", "distanceM": 200, "zone": "Z5", "role": "effort" },
-        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
-        { "kind": "segment", "description": "400m VMA", "descriptionEn": "400m VO2max", "distanceM": 400, "zone": "Z5", "role": "effort" },
-        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
-        { "kind": "segment", "description": "600m VMA", "descriptionEn": "600m VO2max", "distanceM": 600, "zone": "Z5", "role": "effort" },
-        { "kind": "segment", "description": "400m récup", "descriptionEn": "400m recovery", "distanceM": 400, "zone": "Z1", "role": "recovery" },
-        { "kind": "segment", "description": "400m VMA", "descriptionEn": "400m VO2max", "distanceM": 400, "zone": "Z5", "role": "effort" },
-        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
-        { "kind": "segment", "description": "200m VMA", "descriptionEn": "200m VO2max", "distanceM": 200, "zone": "Z5", "role": "effort" }
+        {
+          "kind": "segment",
+          "description": "200m VMA",
+          "descriptionEn": "200m VO2max",
+          "descriptionIt": "200m VAM",
+          "distanceM": 200,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "200m récup",
+          "descriptionEn": "200m recovery",
+          "descriptionIt": "200m recupero",
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "400m VMA",
+          "descriptionEn": "400m VO2max",
+          "descriptionIt": "400m VAM",
+          "distanceM": 400,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "200m récup",
+          "descriptionEn": "200m recovery",
+          "descriptionIt": "200m recupero",
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "600m VMA",
+          "descriptionEn": "600m VO2max",
+          "descriptionIt": "600m VAM",
+          "distanceM": 600,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "400m récup",
+          "descriptionEn": "400m recovery",
+          "descriptionIt": "400m recupero",
+          "distanceM": 400,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "400m VMA",
+          "descriptionEn": "400m VO2max",
+          "descriptionIt": "400m VAM",
+          "distanceM": 400,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "200m récup",
+          "descriptionEn": "200m recovery",
+          "descriptionIt": "200m recupero",
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "200m VMA",
+          "descriptionEn": "200m VO2max",
+          "descriptionIt": "200m VAM",
+          "distanceM": 200,
+          "zone": "Z5",
+          "role": "effort"
+        }
       ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1253,6 +1492,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1269,6 +1509,11 @@
         "The 600m is the key moment",
         "Varied and motivating session"
       ],
+      "coachingTipsIt": [
+        "Stesso ritmo su tutte le distanze",
+        "Il 600m è il momento chiave",
+        "Seduta varia e motivante"
+      ],
       "commonMistakes": [
         "Accélérer sur les courtes distances",
         "Ralentir sur le 600m"
@@ -1276,6 +1521,10 @@
       "commonMistakesEn": [
         "Accelerating on shorter distances",
         "Slowing down on the 600m"
+      ],
+      "commonMistakesIt": [
+        "Accelerare sulle distanze più brevi",
+        "Rallentare sul 600m"
       ],
       "variationIds": [
         "VMA-002"
@@ -1302,8 +1551,10 @@
       "id": "VMA-009",
       "name": "VMA longue 3min",
       "nameEn": "Long VO2max 3min intervals",
+      "nameIt": "VAM lunga 3min",
       "description": "Intervalles longs de 3 minutes à allure VMA. Très exigeant.",
       "descriptionEn": "Long 3-minute intervals at VO2max pace. Very demanding.",
+      "descriptionIt": "Intervalli lunghi da 3 minuti a ritmo VAM. Molto impegnativo.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -1321,6 +1572,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1328,6 +1580,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -1336,6 +1589,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1345,6 +1599,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -1353,11 +1608,13 @@
         {
           "description": "5x3min VMA avec 2min récup",
           "descriptionEn": "5x3min VO2max with 2min recovery",
+          "descriptionIt": "5x3min VAM con 2min recupero",
           "durationMin": 3,
           "zone": "Z5",
           "repetitions": 5,
           "recovery": "2min footing Z1",
           "recoveryEn": "2min jog Z1",
+          "recoveryIt": "2min corsetta Z1",
           "intensityType": "I"
         }
       ],
@@ -1371,6 +1628,7 @@
               "kind": "segment",
               "description": "3min VMA",
               "descriptionEn": "3min VO2max",
+              "descriptionIt": "3min VAM",
               "durationSec": 180,
               "zone": "Z5",
               "intensityType": "I",
@@ -1382,6 +1640,7 @@
               "kind": "segment",
               "description": "2min footing Z1",
               "descriptionEn": "2min jog Z1",
+              "descriptionIt": "2min corsetta Z1",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -1393,6 +1652,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -1403,6 +1663,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -1419,6 +1680,11 @@
         "Each block should be at the same pace",
         "Elite session, excellent fitness required"
       ],
+      "coachingTipsIt": [
+        "15 minuti totali a VAM",
+        "Ogni blocco deve essere allo stesso ritmo",
+        "Seduta d'élite, richiesta ottima forma fisica"
+      ],
       "commonMistakes": [
         "Surestimer son niveau pour cette séance",
         "Partir trop vite sur le premier bloc"
@@ -1426,6 +1692,10 @@
       "commonMistakesEn": [
         "Overestimating your fitness for this session",
         "Starting too fast on the first block"
+      ],
+      "commonMistakesIt": [
+        "Sopravvalutare il proprio livello per questa seduta",
+        "Partire troppo forte nel primo blocco"
       ],
       "variationIds": [
         "VMA-003"
@@ -1458,8 +1728,10 @@
       "id": "VMA-010",
       "name": "500m répétés",
       "nameEn": "500m repeats",
+      "nameIt": "Ripetute sui 500m",
       "description": "Répétitions de 500m à allure VMA. Entre le 400 et le 1000m.",
       "descriptionEn": "500m repeats at VO2max pace. Between 400m and 1000m intervals.",
+      "descriptionIt": "Ripetute sui 500m a ritmo VAM. A metà tra i 400m e i 1000m.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -1477,6 +1749,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1484,6 +1757,7 @@
         {
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationMin": 5
         }
       ],
@@ -1492,6 +1766,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1501,6 +1776,7 @@
           "kind": "segment",
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1509,11 +1785,13 @@
         {
           "description": "8x500m VMA avec 200m récup",
           "descriptionEn": "8x500m VO2max with 200m recovery",
+          "descriptionIt": "8x500m VAM con 200m recupero",
           "distanceM": 500,
           "zone": "Z5",
           "repetitions": 8,
           "recovery": "200m footing Z1",
           "recoveryEn": "200m jog Z1",
+          "recoveryIt": "200m corsa lenta Z1",
           "intensityType": "I"
         }
       ],
@@ -1527,6 +1805,7 @@
               "kind": "segment",
               "description": "500m VMA",
               "descriptionEn": "500m VO2max",
+              "descriptionIt": "500m VAM",
               "distanceM": 500,
               "zone": "Z5",
               "intensityType": "I",
@@ -1538,6 +1817,7 @@
               "kind": "segment",
               "description": "200m footing Z1",
               "descriptionEn": "200m jog Z1",
+              "descriptionIt": "200m corsa lenta Z1",
               "distanceM": 200,
               "zone": "Z1",
               "role": "recovery"
@@ -1549,6 +1829,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1559,6 +1840,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1575,6 +1857,11 @@
         "Approximately 90-100s per 500m depending on level",
         "Consistency is essential"
       ],
+      "coachingTipsIt": [
+        "Buona transizione tra 400m e 1000m",
+        "Circa 90-100s per 500m a seconda del livello",
+        "La regolarità è essenziale"
+      ],
       "commonMistakes": [
         "Varier les temps entre les répétitions",
         "Récupérer trop activement"
@@ -1582,6 +1869,10 @@
       "commonMistakesEn": [
         "Varying times between repetitions",
         "Recovering too actively"
+      ],
+      "commonMistakesIt": [
+        "Variare i tempi tra le ripetute",
+        "Recuperare in modo troppo attivo"
       ],
       "variationIds": [
         "VMA-002",
@@ -1615,8 +1906,10 @@
       "id": "VMA-011",
       "name": "VMA nature",
       "nameEn": "Trail VO2max",
+      "nameIt": "VAM su sentiero",
       "description": "Fractionné VMA sur chemin ou sentier. Alternative à la piste.",
       "descriptionEn": "VO2max intervals on path or trail. Alternative to track work.",
+      "descriptionIt": "Ripetute VAM su strada bianca o sentiero. Alternativa al lavoro in pista.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -1634,6 +1927,7 @@
         {
           "description": "Footing sur sentier",
           "descriptionEn": "Trail jog",
+          "descriptionIt": "Corsa lenta su sentiero",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1641,6 +1935,7 @@
         {
           "description": "Accélérations progressives",
           "descriptionEn": "Progressive accelerations",
+          "descriptionIt": "Allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -1649,6 +1944,7 @@
           "kind": "segment",
           "description": "Footing sur sentier",
           "descriptionEn": "Trail jog",
+          "descriptionIt": "Corsa lenta su sentiero",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1658,6 +1954,7 @@
           "kind": "segment",
           "description": "Accélérations progressives",
           "descriptionEn": "Progressive accelerations",
+          "descriptionIt": "Allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1666,10 +1963,12 @@
         {
           "description": "10x1min VMA / 1min récup sur chemin",
           "descriptionEn": "10x1min VO2max / 1min recovery on path",
+          "descriptionIt": "10x1min VAM / 1min recupero su sentiero",
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "1min footing Z1",
           "recoveryEn": "1min jog Z1",
+          "recoveryIt": "1min corsa lenta Z1",
           "intensityType": "I"
         }
       ],
@@ -1683,6 +1982,7 @@
               "kind": "segment",
               "description": "1min VMA",
               "descriptionEn": "1min VO2max",
+              "descriptionIt": "1min VAM",
               "durationSec": 60,
               "zone": "Z5",
               "intensityType": "I",
@@ -1694,6 +1994,7 @@
               "kind": "segment",
               "description": "1min footing Z1",
               "descriptionEn": "1min jog Z1",
+              "descriptionIt": "1min corsa lenta Z1",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -1705,6 +2006,7 @@
         {
           "description": "Footing retour",
           "descriptionEn": "Return jog",
+          "descriptionIt": "Corsa lenta di rientro",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1715,6 +2017,7 @@
           "kind": "segment",
           "description": "Footing retour",
           "descriptionEn": "Return jog",
+          "descriptionIt": "Corsa lenta di rientro",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1731,6 +2034,11 @@
         "Varied terrain provides additional stimulus",
         "Break from track monotony"
       ],
+      "coachingTipsIt": [
+        "Basatevi sullo sforzo, non sul passo",
+        "Il terreno vario fornisce uno stimolo aggiuntivo",
+        "Staccate dalla monotonia della pista"
+      ],
       "commonMistakes": [
         "Chercher à maintenir l'allure piste",
         "Choisir un terrain trop technique"
@@ -1738,6 +2046,10 @@
       "commonMistakesEn": [
         "Trying to maintain track pace",
         "Choosing terrain that is too technical"
+      ],
+      "commonMistakesIt": [
+        "Cercare di mantenere il passo della pista",
+        "Scegliere un terreno troppo tecnico"
       ],
       "variationIds": [
         "VMA-001"
@@ -1770,8 +2082,10 @@
       "id": "VMA-012",
       "name": "20/20",
       "nameEn": "20/20 intervals",
+      "nameIt": "Intervalli 20/20",
       "description": "Format ultra-court : 20 secondes vite / 20 secondes lent. Très dynamique.",
       "descriptionEn": "Ultra-short format: 20 seconds fast / 20 seconds slow. Very dynamic.",
+      "descriptionIt": "Formato ultra-breve: 20 secondi veloci / 20 secondi lenti. Molto dinamico.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -1789,6 +2103,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1796,6 +2111,7 @@
         {
           "description": "Gammes et sprints courts",
           "descriptionEn": "Drills and short sprints",
+          "descriptionIt": "Andature e sprint brevi",
           "durationMin": 5
         }
       ],
@@ -1804,6 +2120,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1813,6 +2130,7 @@
           "kind": "segment",
           "description": "Gammes et sprints courts",
           "descriptionEn": "Drills and short sprints",
+          "descriptionIt": "Andature e sprint brevi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1821,12 +2139,15 @@
         {
           "description": "3x(15x 20s VMA / 20s récup)",
           "descriptionEn": "3x(15x 20s VO2max / 20s recovery)",
+          "descriptionIt": "3x(15x 20s VAM / 20s recupero)",
           "zone": "Z5+",
           "repetitions": 15,
           "recovery": "20s footing très lent",
           "recoveryEn": "20s very easy jog",
+          "recoveryIt": "20s corsa molto lenta",
           "restBetweenSets": "3min footing Z1",
           "restBetweenSetsEn": "3min jog Z1",
+          "restBetweenSetsIt": "3min corsa lenta Z1",
           "sets": 3
         }
       ],
@@ -1845,6 +2166,7 @@
                   "kind": "segment",
                   "description": "20s VMA",
                   "descriptionEn": "20s VO2max",
+                  "descriptionIt": "20s VAM",
                   "durationSec": 20,
                   "zone": "Z5+",
                   "role": "effort"
@@ -1855,6 +2177,7 @@
                   "kind": "segment",
                   "description": "20s footing très lent",
                   "descriptionEn": "20s very easy jog",
+                  "descriptionIt": "20s corsa molto lenta",
                   "durationSec": 20,
                   "zone": "Z1",
                   "role": "recovery"
@@ -1867,6 +2190,7 @@
               "kind": "segment",
               "description": "3min footing Z1",
               "descriptionEn": "3min jog Z1",
+              "descriptionIt": "3min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -1878,6 +2202,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1888,6 +2213,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1904,6 +2230,11 @@
         "Very dynamic session",
         "Count repetitions carefully"
       ],
+      "coachingTipsIt": [
+        "È possibile un'intensità leggermente superiore alla VAM",
+        "Seduta molto dinamica",
+        "Contate con attenzione le ripetute"
+      ],
       "commonMistakes": [
         "Confondre avec du sprint",
         "Perdre le rythme"
@@ -1911,6 +2242,10 @@
       "commonMistakesEn": [
         "Confusing it with sprinting",
         "Losing the rhythm"
+      ],
+      "commonMistakesIt": [
+        "Confonderlo con lo sprint",
+        "Perdere il ritmo"
       ],
       "variationIds": [
         "VMA-001"
@@ -1944,8 +2279,10 @@
       "id": "VMA-013",
       "name": "VMA 2min",
       "nameEn": "VO2max 2min intervals",
+      "nameIt": "VAM 2min",
       "description": "Intervalles de 2 minutes à VMA. Bon compromis entre court et long.",
       "descriptionEn": "2-minute intervals at VO2max. Good balance between short and long.",
+      "descriptionIt": "Intervalli di 2 minuti a VAM. Buon equilibrio tra corto e lungo.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -1963,6 +2300,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1970,6 +2308,7 @@
         {
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationMin": 5
         }
       ],
@@ -1978,6 +2317,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1987,6 +2327,7 @@
           "kind": "segment",
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1995,11 +2336,13 @@
         {
           "description": "6x2min VMA avec 2min récup",
           "descriptionEn": "6x2min VO2max with 2min recovery",
+          "descriptionIt": "6x2min VAM con 2min recupero",
           "durationMin": 2,
           "zone": "Z5",
           "repetitions": 6,
           "recovery": "2min footing Z1",
           "recoveryEn": "2min jog Z1",
+          "recoveryIt": "2min corsetta Z1",
           "intensityType": "I"
         }
       ],
@@ -2013,6 +2356,7 @@
               "kind": "segment",
               "description": "2min VMA",
               "descriptionEn": "2min VO2max",
+              "descriptionIt": "2min VAM",
               "durationSec": 120,
               "zone": "Z5",
               "intensityType": "I",
@@ -2024,6 +2368,7 @@
               "kind": "segment",
               "description": "2min footing Z1",
               "descriptionEn": "2min jog Z1",
+              "descriptionIt": "2min corsetta Z1",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -2035,6 +2380,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2045,6 +2391,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2061,6 +2408,11 @@
         "1:1 work-to-rest ratio",
         "Transition from short to long intervals"
       ],
+      "coachingTipsIt": [
+        "12 minuti totali a VAM",
+        "Rapporto 1:1 lavoro/recupero",
+        "Transizione dal corto al lungo"
+      ],
       "commonMistakes": [
         "Sous-estimer la difficulté",
         "Partir trop vite"
@@ -2068,6 +2420,10 @@
       "commonMistakesEn": [
         "Underestimating the difficulty",
         "Starting too fast"
+      ],
+      "commonMistakesIt": [
+        "Sottovalutare la difficoltà",
+        "Partire troppo forte"
       ],
       "variationIds": [
         "VMA-006",
@@ -2101,8 +2457,10 @@
       "id": "VMA-014",
       "name": "800m répétés",
       "nameEn": "800m repeats",
+      "nameIt": "Ripetute sui 800m",
       "description": "Répétitions de 800m à allure VMA. Classic de l'entraînement demi-fond.",
       "descriptionEn": "800m repeats at VO2max pace. Classic middle-distance training.",
+      "descriptionIt": "Ripetute sui 800m a ritmo VAM. Classico dell'allenamento per il mezzofondo.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -2120,6 +2478,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2127,6 +2486,7 @@
         {
           "description": "Gammes et lignes droites",
           "descriptionEn": "Drills and strides",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -2135,6 +2495,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2144,6 +2505,7 @@
           "kind": "segment",
           "description": "Gammes et lignes droites",
           "descriptionEn": "Drills and strides",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -2152,11 +2514,13 @@
         {
           "description": "6x800m VMA avec 400m récup",
           "descriptionEn": "6x800m VO2max with 400m recovery",
+          "descriptionIt": "6x800m VAM con 400m recupero",
           "distanceM": 800,
           "zone": "Z5",
           "repetitions": 6,
           "recovery": "400m footing Z1",
           "recoveryEn": "400m jog Z1",
+          "recoveryIt": "400m corsetta Z1",
           "intensityType": "I"
         }
       ],
@@ -2170,6 +2534,7 @@
               "kind": "segment",
               "description": "800m VMA",
               "descriptionEn": "800m VO2max",
+              "descriptionIt": "800m VAM",
               "distanceM": 800,
               "zone": "Z5",
               "intensityType": "I",
@@ -2181,6 +2546,7 @@
               "kind": "segment",
               "description": "400m footing Z1",
               "descriptionEn": "400m jog Z1",
+              "descriptionIt": "400m corsetta Z1",
               "distanceM": 400,
               "zone": "Z1",
               "role": "recovery"
@@ -2192,6 +2558,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2202,6 +2569,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2218,6 +2586,11 @@
         "Each 800m at the same time",
         "Quality session for 5K-10K preparation"
       ],
+      "coachingTipsIt": [
+        "Due giri di pista a ritmo VAM",
+        "Ogni 800m allo stesso tempo",
+        "Seduta di qualità per la preparazione 5K-10K"
+      ],
       "commonMistakes": [
         "Partir en mode 400m",
         "Varier les temps"
@@ -2225,6 +2598,10 @@
       "commonMistakesEn": [
         "Starting as if running a 400m",
         "Varying the times"
+      ],
+      "commonMistakesIt": [
+        "Partire come se si corresse un 400m",
+        "Variare i tempi"
       ],
       "variationIds": [
         "VMA-002",
@@ -2259,8 +2636,10 @@
       "id": "VMA-015",
       "name": "Fartlek VMA",
       "nameEn": "VO2max fartlek",
+      "nameIt": "Fartlek VAM",
       "description": "Fartlek structuré avec efforts à intensité VMA. Plus ludique que la piste.",
       "descriptionEn": "Structured fartlek with VO2max intensity efforts. More playful than track work.",
+      "descriptionIt": "Fartlek strutturato con tratti a intensità VAM. Più divertente rispetto alla pista.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -2278,6 +2657,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2288,6 +2668,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2298,10 +2679,12 @@
         {
           "description": "Fartlek : 8x(1min VMA + 2min Z2)",
           "descriptionEn": "Fartlek: 8x(1min VO2max + 2min Z2)",
+          "descriptionIt": "Fartlek: 8x(1min VAM + 2min Z2)",
           "zone": "Z5",
           "repetitions": 8,
           "recovery": "2min footing Z2",
           "recoveryEn": "2min jog Z2",
+          "recoveryIt": "2min corsa lenta Z2",
           "intensityType": "I"
         }
       ],
@@ -2315,6 +2698,7 @@
               "kind": "segment",
               "description": "1min VMA",
               "descriptionEn": "1min VO2max",
+              "descriptionIt": "1min VAM",
               "durationSec": 60,
               "zone": "Z5",
               "role": "effort"
@@ -2325,6 +2709,7 @@
               "kind": "segment",
               "description": "2min footing Z2",
               "descriptionEn": "2min jog Z2",
+              "descriptionIt": "2min corsa lenta Z2",
               "durationSec": 120,
               "zone": "Z2",
               "role": "recovery"
@@ -2336,6 +2721,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2346,6 +2732,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2362,6 +2749,11 @@
         "Recover in Z2, not Z1",
         "Varied and enjoyable session"
       ],
+      "coachingTipsIt": [
+        "Usate i riferimenti del terreno",
+        "Recuperate in Z2, non in Z1",
+        "Seduta varia e piacevole"
+      ],
       "commonMistakes": [
         "Transformer en simple fartlek non structuré",
         "Ne pas atteindre l'intensité VMA"
@@ -2369,6 +2761,10 @@
       "commonMistakesEn": [
         "Turning it into unstructured fartlek",
         "Not reaching VO2max intensity"
+      ],
+      "commonMistakesIt": [
+        "Trasformarlo in un fartlek non strutturato",
+        "Non raggiungere l'intensità VAM"
       ],
       "variationIds": [
         "VMA-001",
@@ -2402,8 +2798,10 @@
       "id": "VMA-016",
       "name": "VMA descendante",
       "nameEn": "Descending VO2max intervals",
+      "nameIt": "VAM a scalare",
       "description": "Intervalles décroissants : 1000-800-600-400-200m.",
       "descriptionEn": "Descending intervals: 1000-800-600-400-200m.",
+      "descriptionIt": "Intervalli decrescenti: 1000-800-600-400-200m.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -2421,6 +2819,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2428,6 +2827,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -2436,6 +2836,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2445,6 +2846,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -2453,62 +2855,144 @@
         {
           "description": "1000m VMA",
           "descriptionEn": "1000m VO2max",
+          "descriptionIt": "1000m VAM",
           "distanceM": 1000,
           "zone": "Z5",
           "recovery": "400m récup",
           "recoveryEn": "400m recovery",
+          "recoveryIt": "400m recupero",
           "intensityType": "I"
         },
         {
           "description": "800m VMA",
           "descriptionEn": "800m VO2max",
+          "descriptionIt": "800m VAM",
           "distanceM": 800,
           "zone": "Z5",
           "recovery": "300m récup",
           "recoveryEn": "300m recovery",
+          "recoveryIt": "300m recupero",
           "intensityType": "I"
         },
         {
           "description": "600m VMA",
           "descriptionEn": "600m VO2max",
+          "descriptionIt": "600m VAM",
           "distanceM": 600,
           "zone": "Z5",
           "recovery": "200m récup",
           "recoveryEn": "200m recovery",
+          "recoveryIt": "200m recupero",
           "intensityType": "I"
         },
         {
           "description": "400m VMA",
           "descriptionEn": "400m VO2max",
+          "descriptionIt": "400m VAM",
           "distanceM": 400,
           "zone": "Z5",
           "recovery": "200m récup",
           "recoveryEn": "200m recovery",
+          "recoveryIt": "200m recupero",
           "intensityType": "I"
         },
         {
           "description": "200m VMA",
           "descriptionEn": "200m VO2max",
+          "descriptionIt": "200m VAM",
           "distanceM": 200,
           "zone": "Z5",
           "intensityType": "I"
         }
       ],
       "mainSetStructure": [
-        { "kind": "segment", "description": "1000m VMA", "descriptionEn": "1000m VO2max", "distanceM": 1000, "zone": "Z5", "role": "effort" },
-        { "kind": "segment", "description": "400m récup", "descriptionEn": "400m recovery", "distanceM": 400, "zone": "Z1", "role": "recovery" },
-        { "kind": "segment", "description": "800m VMA", "descriptionEn": "800m VO2max", "distanceM": 800, "zone": "Z5", "role": "effort" },
-        { "kind": "segment", "description": "300m récup", "descriptionEn": "300m recovery", "distanceM": 300, "zone": "Z1", "role": "recovery" },
-        { "kind": "segment", "description": "600m VMA", "descriptionEn": "600m VO2max", "distanceM": 600, "zone": "Z5", "role": "effort" },
-        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
-        { "kind": "segment", "description": "400m VMA", "descriptionEn": "400m VO2max", "distanceM": 400, "zone": "Z5", "role": "effort" },
-        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
-        { "kind": "segment", "description": "200m VMA", "descriptionEn": "200m VO2max", "distanceM": 200, "zone": "Z5", "role": "effort" }
+        {
+          "kind": "segment",
+          "description": "1000m VMA",
+          "descriptionEn": "1000m VO2max",
+          "descriptionIt": "1000m VAM",
+          "distanceM": 1000,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "400m récup",
+          "descriptionEn": "400m recovery",
+          "descriptionIt": "400m recupero",
+          "distanceM": 400,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "800m VMA",
+          "descriptionEn": "800m VO2max",
+          "descriptionIt": "800m VAM",
+          "distanceM": 800,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "300m récup",
+          "descriptionEn": "300m recovery",
+          "descriptionIt": "300m recupero",
+          "distanceM": 300,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "600m VMA",
+          "descriptionEn": "600m VO2max",
+          "descriptionIt": "600m VAM",
+          "distanceM": 600,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "200m récup",
+          "descriptionEn": "200m recovery",
+          "descriptionIt": "200m recupero",
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "400m VMA",
+          "descriptionEn": "400m VO2max",
+          "descriptionIt": "400m VAM",
+          "distanceM": 400,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "200m récup",
+          "descriptionEn": "200m recovery",
+          "descriptionIt": "200m recupero",
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "200m VMA",
+          "descriptionEn": "200m VO2max",
+          "descriptionIt": "200m VAM",
+          "distanceM": 200,
+          "zone": "Z5",
+          "role": "effort"
+        }
       ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2519,6 +3003,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2535,6 +3020,11 @@
         "Finish strong on the 200m",
         "Mentally progressive session"
       ],
+      "coachingTipsIt": [
+        "Leggera accelerazione nel corso delle ripetute",
+        "Chiudete forte sul 200m",
+        "Seduta mentalmente progressiva"
+      ],
       "commonMistakes": [
         "Exploser sur le 1000m initial",
         "Ne pas accélérer sur les courtes distances"
@@ -2542,6 +3032,10 @@
       "commonMistakesEn": [
         "Going all out on the initial 1000m",
         "Not accelerating on shorter distances"
+      ],
+      "commonMistakesIt": [
+        "Esplodere sul 1000m iniziale",
+        "Non accelerare sulle distanze più brevi"
       ],
       "variationIds": [
         "VMA-008"
@@ -2568,8 +3062,10 @@
       "id": "VMA-017",
       "name": "VMA séries",
       "nameEn": "VO2max sets",
+      "nameIt": "VAM a serie",
       "description": "Deux ou trois séries de répétitions avec récup longue entre séries.",
       "descriptionEn": "Two or three sets of repetitions with long recovery between sets.",
+      "descriptionIt": "Due o tre serie di ripetute con recupero lungo tra le serie.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -2587,6 +3083,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2594,6 +3091,7 @@
         {
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationMin": 10
         }
       ],
@@ -2602,6 +3100,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2611,6 +3110,7 @@
           "kind": "segment",
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationSec": 600,
           "role": "effort"
         }
@@ -2619,14 +3119,17 @@
         {
           "description": "2x(5x 400m VMA / 200m footing)",
           "descriptionEn": "2x(5x 400m VO2max / 200m jog)",
+          "descriptionIt": "2x(5x 400m VAM / 200m corsa lenta)",
           "distanceM": 400,
           "zone": "Z5",
           "repetitions": 5,
           "sets": 2,
           "recovery": "200m footing",
           "recoveryEn": "200m jog",
+          "recoveryIt": "200m corsa lenta",
           "restBetweenSets": "5min récup longue",
           "restBetweenSetsEn": "5min long recovery",
+          "restBetweenSetsIt": "5min recupero lungo",
           "intensityType": "I"
         }
       ],
@@ -2645,6 +3148,7 @@
                   "kind": "segment",
                   "description": "400m VMA",
                   "descriptionEn": "400m VO2max",
+                  "descriptionIt": "400m VAM",
                   "distanceM": 400,
                   "zone": "Z5",
                   "intensityType": "I",
@@ -2656,6 +3160,7 @@
                   "kind": "segment",
                   "description": "200m footing",
                   "descriptionEn": "200m jog",
+                  "descriptionIt": "200m corsa lenta",
                   "distanceM": 200,
                   "zone": "Z1",
                   "role": "recovery"
@@ -2668,6 +3173,7 @@
               "kind": "segment",
               "description": "Récup longue",
               "descriptionEn": "Long recovery",
+              "descriptionIt": "Recupero lungo",
               "durationSec": 300,
               "zone": "Z1",
               "role": "recovery"
@@ -2679,6 +3185,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2689,6 +3196,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2705,6 +3213,11 @@
         "Same pace for both sets",
         "High total volume: 4km at VO2max"
       ],
+      "coachingTipsIt": [
+        "La pausa tra le serie aiuta ad assorbire lo sforzo",
+        "Stesso ritmo per entrambe le serie",
+        "Alto volume totale: 4km a VAM"
+      ],
       "commonMistakes": [
         "Accélérer sur la deuxième série",
         "Récup entre séries trop courte"
@@ -2712,6 +3225,10 @@
       "commonMistakesEn": [
         "Accelerating on the second set",
         "Recovery between sets too short"
+      ],
+      "commonMistakesIt": [
+        "Accelerare nella seconda serie",
+        "Recupero troppo breve tra le serie"
       ],
       "variationIds": [
         "VMA-002"
@@ -2739,8 +3256,10 @@
       "id": "VMA-018",
       "name": "VMA spécifique 5K",
       "nameEn": "5K-specific VO2max",
+      "nameIt": "VAM specifica 5K",
       "description": "Séance VMA orientée préparation 5km. Intervalles proches de l'allure course.",
       "descriptionEn": "VO2max session targeting 5K preparation. Intervals close to race pace.",
+      "descriptionIt": "Seduta VAM orientata alla preparazione 5K. Intervalli vicini al ritmo gara.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -2758,6 +3277,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2765,6 +3285,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -2773,6 +3294,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2782,6 +3304,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -2790,12 +3313,14 @@
         {
           "description": "5x1000m à allure 5K avec 400m récup",
           "descriptionEn": "5x1000m at 5K pace with 400m recovery",
+          "descriptionIt": "5x1000m a ritmo 5K con 400m recupero",
           "distanceM": 1000,
           "zone": "Z5",
           "pace": "Allure 5K",
           "repetitions": 5,
           "recovery": "400m footing Z1",
           "recoveryEn": "400m jog Z1",
+          "recoveryIt": "400m corsetta Z1",
           "intensityType": "I"
         }
       ],
@@ -2809,6 +3334,7 @@
               "kind": "segment",
               "description": "1000m à allure 5K",
               "descriptionEn": "1000m at 5K pace",
+              "descriptionIt": "1000m a ritmo 5K",
               "distanceM": 1000,
               "zone": "Z5",
               "intensityType": "I",
@@ -2820,6 +3346,7 @@
               "kind": "segment",
               "description": "400m footing Z1",
               "descriptionEn": "400m jog Z1",
+              "descriptionIt": "400m corsetta Z1",
               "distanceM": 400,
               "zone": "Z1",
               "role": "recovery"
@@ -2831,6 +3358,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2841,6 +3369,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2857,6 +3386,11 @@
         "Key session for 5K preparation",
         "Each 1000m at the same time"
       ],
+      "coachingTipsIt": [
+        "Ritmo 5K = circa 95-100% VAM",
+        "Seduta chiave per la preparazione 5K",
+        "Ogni 1000m allo stesso tempo"
+      ],
       "commonMistakes": [
         "Confondre allure 5K et VMA pure",
         "Partir trop vite"
@@ -2864,6 +3398,10 @@
       "commonMistakesEn": [
         "Confusing 5K pace with pure VO2max pace",
         "Starting too fast"
+      ],
+      "commonMistakesIt": [
+        "Confondere il ritmo 5K con la VAM pura",
+        "Partire troppo forte"
       ],
       "variationIds": [
         "VMA-003"
@@ -2896,8 +3434,10 @@
       "id": "VMA-019",
       "name": "VMA duo",
       "nameEn": "Partner VO2max",
+      "nameIt": "VAM in coppia",
       "description": "Séance VMA en binôme avec relais.",
       "descriptionEn": "VO2max session with a partner using relay format.",
+      "descriptionIt": "Seduta VAM in coppia in formato staffetta.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -2915,6 +3455,7 @@
         {
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
+          "descriptionIt": "Corsa lenta insieme",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2922,6 +3463,7 @@
         {
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationMin": 5
         }
       ],
@@ -2930,6 +3472,7 @@
           "kind": "segment",
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
+          "descriptionIt": "Corsa lenta insieme",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2939,6 +3482,7 @@
           "kind": "segment",
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationSec": 300,
           "role": "effort"
         }
@@ -2947,11 +3491,13 @@
         {
           "description": "10x400m en relais (un court, un récupère)",
           "descriptionEn": "10x400m relay (one runs, one recovers)",
+          "descriptionIt": "10x400m a staffetta (uno corre, uno recupera)",
           "distanceM": 400,
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "Temps du partenaire",
           "recoveryEn": "Partner's time",
+          "recoveryIt": "Tempo del compagno",
           "intensityType": "I"
         }
       ],
@@ -2965,6 +3511,7 @@
               "kind": "segment",
               "description": "400m en relais (un court, un récupère)",
               "descriptionEn": "400m relay (one runs, one recovers)",
+              "descriptionIt": "400m a staffetta (uno corre, uno recupera)",
               "distanceM": 400,
               "zone": "Z5",
               "intensityType": "I",
@@ -2976,6 +3523,7 @@
               "kind": "segment",
               "description": "Temps du partenaire",
               "descriptionEn": "Partner's time",
+              "descriptionIt": "Tempo del compagno",
               "zone": "Z1",
               "role": "recovery"
             }
@@ -2986,6 +3534,7 @@
         {
           "description": "Footing de récupération ensemble",
           "descriptionEn": "Recovery jog together",
+          "descriptionIt": "Corsa lenta di recupero insieme",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2996,6 +3545,7 @@
           "kind": "segment",
           "description": "Footing de récupération ensemble",
           "descriptionEn": "Recovery jog together",
+          "descriptionIt": "Corsa lenta di recupero insieme",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3012,6 +3562,11 @@
         "Mutual motivation",
         "Find a partner of similar fitness level"
       ],
+      "coachingTipsIt": [
+        "Il compagno recupera mentre l'altro corre",
+        "Motivazione reciproca",
+        "Trovate un compagno di livello simile"
+      ],
       "commonMistakes": [
         "Partenaire avec trop d'écart de niveau",
         "Se tirer la bourre au lieu de collaborer"
@@ -3019,6 +3574,10 @@
       "commonMistakesEn": [
         "Partner with too big a fitness gap",
         "Competing instead of collaborating"
+      ],
+      "commonMistakesIt": [
+        "Compagno con troppo divario di livello",
+        "Gareggiare invece di collaborare"
       ],
       "variationIds": [
         "VMA-002"
@@ -3052,8 +3611,10 @@
       "id": "VMA-020",
       "name": "VMA pre-race",
       "nameEn": "Pre-race VO2max tune-up",
+      "nameIt": "Richiamo VAM pre-gara",
       "description": "Rappel VMA en semaine de compétition. Court et intense.",
       "descriptionEn": "VO2max tune-up during race week. Short and intense.",
+      "descriptionIt": "Richiamo VAM nella settimana di gara. Breve e intenso.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -3071,6 +3632,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3081,6 +3643,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3091,10 +3654,12 @@
         {
           "description": "5x(30s VMA / 30s récup)",
           "descriptionEn": "5x(30s VO2max / 30s recovery)",
+          "descriptionIt": "5x(30s VAM / 30s recupero)",
           "zone": "Z5",
           "repetitions": 5,
           "recovery": "30s footing Z1",
           "recoveryEn": "30s jog Z1",
+          "recoveryIt": "30s corsa lenta Z1",
           "intensityType": "I"
         }
       ],
@@ -3108,6 +3673,7 @@
               "kind": "segment",
               "description": "30s VMA",
               "descriptionEn": "30s VO2max",
+              "descriptionIt": "30s VAM",
               "durationSec": 30,
               "zone": "Z5",
               "role": "effort"
@@ -3118,6 +3684,7 @@
               "kind": "segment",
               "description": "30s footing Z1",
               "descriptionEn": "30s jog Z1",
+              "descriptionIt": "30s corsa lenta Z1",
               "durationSec": 30,
               "zone": "Z1",
               "role": "recovery"
@@ -3129,6 +3696,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3139,6 +3707,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3155,6 +3724,11 @@
         "Ideal 3-4 days before the race",
         "Finish feeling fresh and sharp"
       ],
+      "coachingTipsIt": [
+        "Solo un richiamo, non una seduta dura",
+        "Ideale 3-4 giorni prima della gara",
+        "Concludete sentendovi freschi e brillanti"
+      ],
       "commonMistakes": [
         "En faire trop en semaine de course",
         "Courir plus vite que nécessaire"
@@ -3162,6 +3736,10 @@
       "commonMistakesEn": [
         "Doing too much during race week",
         "Running faster than necessary"
+      ],
+      "commonMistakesIt": [
+        "Fare troppo nella settimana della gara",
+        "Correre più forte del necessario"
       ],
       "variationIds": [
         "VMA-001"
@@ -3194,8 +3772,10 @@
       "id": "VMA-021",
       "name": "Billat 30/30",
       "nameEn": "Billat 30/30",
+      "nameIt": "Billat 30/30",
       "description": "Protocole Billat original : 30s à 100% vVO2max / 30s à 50% vVO2max. Maximise le temps passé à VO2max selon les travaux de Véronique Billat.",
       "descriptionEn": "Original Billat protocol: 30s at 100% vVO2max / 30s at 50% vVO2max. Maximizes time spent at VO2max according to Veronique Billat's research.",
+      "descriptionIt": "Protocollo originale Billat: 30s al 100% VAM / 30s al 50% VAM. Massimizza il tempo trascorso al VO2max secondo gli studi di Véronique Billat.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -3213,6 +3793,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3220,6 +3801,7 @@
         {
           "description": "Gammes et 4x accélérations progressives",
           "descriptionEn": "Drills and 4x progressive accelerations",
+          "descriptionIt": "Andature e 4x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -3228,6 +3810,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3237,6 +3820,7 @@
           "kind": "segment",
           "description": "Gammes et 4x accélérations progressives",
           "descriptionEn": "Drills and 4x progressive accelerations",
+          "descriptionIt": "Andature e 4x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -3245,12 +3829,15 @@
         {
           "description": "2x(15x 30s à 100% VMA / 30s à 50% VMA) avec 5min entre séries",
           "descriptionEn": "2x(15x 30s at 100% vVO2max / 30s at 50% vVO2max) with 5min between sets",
+          "descriptionIt": "2x(15x 30s al 100% VAM / 30s al 50% VAM) con 5min tra le serie",
           "zone": "Z5",
           "repetitions": 15,
           "recovery": "30s footing à 50% VMA",
           "recoveryEn": "30s jog at 50% vVO2max",
+          "recoveryIt": "30s corsa lenta al 50% VAM",
           "restBetweenSets": "5min footing Z1",
           "restBetweenSetsEn": "5min jog Z1",
+          "restBetweenSetsIt": "5min corsa lenta Z1",
           "intensityType": "I",
           "sets": 2
         }
@@ -3270,6 +3857,7 @@
                   "kind": "segment",
                   "description": "30s à 100% VMA",
                   "descriptionEn": "30s at 100% vVO2max",
+                  "descriptionIt": "30s al 100% VAM",
                   "durationSec": 30,
                   "zone": "Z5",
                   "role": "effort"
@@ -3280,6 +3868,7 @@
                   "kind": "segment",
                   "description": "30s footing à 50% VMA",
                   "descriptionEn": "30s jog at 50% vVO2max",
+                  "descriptionIt": "30s corsa lenta al 50% VAM",
                   "durationSec": 30,
                   "zone": "Z1",
                   "role": "recovery"
@@ -3292,6 +3881,7 @@
               "kind": "segment",
               "description": "5min footing Z1",
               "descriptionEn": "5min jog Z1",
+              "descriptionIt": "5min corsa lenta Z1",
               "durationSec": 300,
               "zone": "Z1",
               "role": "recovery"
@@ -3303,6 +3893,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3313,6 +3904,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3331,6 +3923,12 @@
         "Scientific reference: Billat et al., 2000",
         "15 total minutes at vVO2max per session"
       ],
+      "coachingTipsIt": [
+        "Il recupero al 50% VAM è essenziale per il protocollo",
+        "Non camminate, corricchiate davvero al 50% VAM",
+        "Riferimento scientifico: Billat et al., 2000",
+        "15 minuti totali a VAM per seduta"
+      ],
       "commonMistakes": [
         "Récupérer trop lentement (marche)",
         "Partir trop vite sur les premières répétitions",
@@ -3340,6 +3938,11 @@
         "Recovering too slowly (walking)",
         "Starting too fast on the first repetitions",
         "Not knowing your precise vVO2max"
+      ],
+      "commonMistakesIt": [
+        "Recuperare troppo lentamente (camminando)",
+        "Partire troppo forte sulle prime ripetute",
+        "Non conoscere con precisione la propria VAM"
       ],
       "variationIds": [
         "VMA-001",
@@ -3375,8 +3978,10 @@
       "id": "VMA-022",
       "name": "Speed Endurance 20-40s",
       "nameEn": "Speed Endurance 20-40s",
+      "nameIt": "Resistenza alla velocità 20-40s",
       "description": "Intervalles courts à très haute intensité (105-110% VMA). Développe l'endurance de vitesse et la tolérance lactique. Protocole inspiré des travaux de Mosey Bangsbo.",
       "descriptionEn": "Short intervals at very high intensity (105-110% vVO2max). Develops speed endurance and lactate tolerance. Protocol inspired by Bangsbo's research.",
+      "descriptionIt": "Intervalli brevi ad altissima intensità (105-110% VAM). Sviluppa la resistenza alla velocità e la tolleranza al lattato. Protocollo ispirato alle ricerche di Bangsbo.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "vo2max",
@@ -3394,6 +3999,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3401,6 +4007,7 @@
         {
           "description": "Gammes complètes et 5x accélérations",
           "descriptionEn": "Full drills and 5x accelerations",
+          "descriptionIt": "Andature complete e 5x accelerazioni",
           "durationMin": 10
         }
       ],
@@ -3409,6 +4016,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3418,6 +4026,7 @@
           "kind": "segment",
           "description": "Gammes complètes et 5x accélérations",
           "descriptionEn": "Full drills and 5x accelerations",
+          "descriptionIt": "Andature complete e 5x accelerazioni",
           "durationSec": 600,
           "role": "effort"
         }
@@ -3426,10 +4035,12 @@
         {
           "description": "10 × 20-40s à 105-110% VMA avec 2-3min récup complète",
           "descriptionEn": "10 × 20-40s at 105-110% vVO2max with 2-3min full recovery",
+          "descriptionIt": "10 × 20-40s al 105-110% VAM con 2-3min recupero completo",
           "zone": "Z5+",
           "repetitions": 10,
           "recovery": "2-3min marche/footing lent",
-          "recoveryEn": "2-3min walk / easy jog"
+          "recoveryEn": "2-3min walk / easy jog",
+          "recoveryIt": "2-3min camminata / corsa molto lenta"
         }
       ],
       "mainSetStructure": [
@@ -3442,6 +4053,7 @@
               "kind": "segment",
               "description": "20-40s à 105-110% VMA",
               "descriptionEn": "20-40s at 105-110% vVO2max",
+              "descriptionIt": "20-40s al 105-110% VAM",
               "durationSec": 20,
               "zone": "Z5+",
               "role": "effort"
@@ -3452,6 +4064,7 @@
               "kind": "segment",
               "description": "2-3min marche/footing lent",
               "descriptionEn": "2-3min walk / easy jog",
+              "descriptionIt": "2-3min camminata / corsa molto lenta",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -3463,6 +4076,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3473,6 +4087,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3493,6 +4108,13 @@
         "Quality over quantity",
         "Session reserved for experienced runners"
       ],
+      "coachingTipsIt": [
+        "Da 8 a 10 ripetute in base alla forma del giorno, 10 è il riferimento",
+        "Intensità sovramassimale: sopra la VAM",
+        "Recupero completo tra ogni ripetuta",
+        "La qualità prima della quantità",
+        "Seduta riservata a corridori esperti"
+      ],
       "commonMistakes": [
         "Récupération trop courte",
         "Trop de répétitions",
@@ -3502,6 +4124,11 @@
         "Recovery too short",
         "Too many repetitions",
         "Doing this session when fatigued"
+      ],
+      "commonMistakesIt": [
+        "Recupero troppo breve",
+        "Troppe ripetute",
+        "Fare questa seduta quando si è affaticati"
       ],
       "variationIds": [
         "VMA-004",
@@ -3536,8 +4163,10 @@
       "id": "VMA-023",
       "name": "Sprints neuromusculaires (NRRs)",
       "nameEn": "Neuromuscular Running Repeats (NRRs)",
+      "nameIt": "Ripetute neuromuscolari (NRRs)",
       "description": "10-12x 80m sprints avec récupération complète. Développe la puissance neuromusculaire et l'économie de course. Méthode Hudson/Magness.",
       "descriptionEn": "10-12x 80m sprints with full recovery. Develops neuromuscular power and running economy. Hudson/Magness method.",
+      "descriptionIt": "10-12x sprint da 80m con recupero completo. Sviluppa la potenza neuromuscolare e l'economia di corsa. Metodo Hudson/Magness.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "speed",
@@ -3555,6 +4184,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3562,6 +4192,7 @@
         {
           "description": "Gammes dynamiques et éducatifs de sprint",
           "descriptionEn": "Dynamic drills and sprint technique work",
+          "descriptionIt": "Andature dinamiche ed esercizi tecnici di sprint",
           "durationMin": 10
         }
       ],
@@ -3570,6 +4201,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3579,6 +4211,7 @@
           "kind": "segment",
           "description": "Gammes dynamiques et éducatifs de sprint",
           "descriptionEn": "Dynamic drills and sprint technique work",
+          "descriptionIt": "Andature dinamiche ed esercizi tecnici di sprint",
           "durationSec": 600,
           "role": "effort"
         }
@@ -3587,11 +4220,13 @@
         {
           "description": "12 × 80m sprint (95% effort) avec retour marche",
           "descriptionEn": "12 × 80m sprint (95% effort) with walk-back recovery",
+          "descriptionIt": "12 × 80m sprint (sforzo 95%) con recupero al passo",
           "distanceM": 80,
           "zone": "Z6",
           "repetitions": 12,
           "recovery": "Marche retour ~2min",
           "recoveryEn": "Walk back ~2min",
+          "recoveryIt": "Rientro al passo ~2min",
           "intensityType": "R"
         }
       ],
@@ -3605,6 +4240,7 @@
               "kind": "segment",
               "description": "80m sprint (95% effort)",
               "descriptionEn": "80m sprint (95% effort)",
+              "descriptionIt": "80m sprint (sforzo 95%)",
               "distanceM": 80,
               "zone": "Z6",
               "intensityType": "R",
@@ -3616,6 +4252,7 @@
               "kind": "segment",
               "description": "Marche retour ~2min",
               "descriptionEn": "Walk back ~2min",
+              "descriptionIt": "Rientro al passo ~2min",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -3627,6 +4264,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3637,6 +4275,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3657,6 +4296,13 @@
         "Improves running economy according to Hudson",
         "Can be integrated into an endurance jog"
       ],
+      "coachingTipsIt": [
+        "Da 10 a 12 ripetute in base alla forma del giorno, 12 è il riferimento",
+        "Non sprint massimale: 95% per preservare la tecnica",
+        "Focus su frequenza e ampiezza di falcata",
+        "Migliora l'economia di corsa secondo Hudson",
+        "Può essere integrato in un fondo lento"
+      ],
       "commonMistakes": [
         "Sprinter à 100% et perdre la technique",
         "Récupération trop courte",
@@ -3666,6 +4312,11 @@
         "Sprinting at 100% and losing technique",
         "Recovery too short",
         "Neglecting warm-up"
+      ],
+      "commonMistakesIt": [
+        "Fare sprint al 100% perdendo la tecnica",
+        "Recupero troppo breve",
+        "Trascurare il riscaldamento"
       ],
       "variationIds": [
         "VMA-004"
@@ -3700,8 +4351,10 @@
       "id": "VMA-024",
       "name": "45/45",
       "nameEn": "45/45 intervals",
+      "nameIt": "Intervalli 45/45",
       "description": "Format 45 secondes à VMA / 45 secondes récup active. Développe l'endurance à haute intensité. Plus exigeant que le 30/30, basé sur les principes Billat.",
       "descriptionEn": "45 seconds at VO2max / 45 seconds active recovery format. Develops high-intensity endurance. More demanding than 30/30, based on Billat principles.",
+      "descriptionIt": "Formato 45 secondi a VAM / 45 secondi recupero attivo. Sviluppa la resistenza ad alta intensità. Più impegnativo del 30/30, basato sui principi di Billat.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -3719,6 +4372,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3726,6 +4380,7 @@
         {
           "description": "Gammes et 4x accélérations progressives",
           "descriptionEn": "Drills and 4x progressive accelerations",
+          "descriptionIt": "Andature e 4x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -3734,6 +4389,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3743,6 +4399,7 @@
           "kind": "segment",
           "description": "Gammes et 4x accélérations progressives",
           "descriptionEn": "Drills and 4x progressive accelerations",
+          "descriptionIt": "Andature e 4x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -3751,12 +4408,15 @@
         {
           "description": "2x(10x 45s VMA / 45s récup active) avec 4min entre séries",
           "descriptionEn": "2x(10x 45s VO2max / 45s active recovery) with 4min between sets",
+          "descriptionIt": "2x(10x 45s VAM / 45s recupero attivo) con 4min tra le serie",
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "45s footing à 50-55% VMA",
           "recoveryEn": "45s jog at 50-55% vVO2max",
+          "recoveryIt": "45s corsa lenta al 50-55% VAM",
           "restBetweenSets": "4min footing Z1",
           "restBetweenSetsEn": "4min jog Z1",
+          "restBetweenSetsIt": "4min corsa lenta Z1",
           "intensityType": "I",
           "sets": 2
         }
@@ -3776,6 +4436,7 @@
                   "kind": "segment",
                   "description": "45s VMA",
                   "descriptionEn": "45s VO2max",
+                  "descriptionIt": "45s VAM",
                   "durationSec": 45,
                   "zone": "Z5",
                   "role": "effort"
@@ -3786,6 +4447,7 @@
                   "kind": "segment",
                   "description": "45s footing à 50-55% VMA",
                   "descriptionEn": "45s jog at 50-55% vVO2max",
+                  "descriptionIt": "45s corsa lenta al 50-55% VAM",
                   "durationSec": 45,
                   "zone": "Z1",
                   "role": "recovery"
@@ -3798,6 +4460,7 @@
               "kind": "segment",
               "description": "4min footing Z1",
               "descriptionEn": "4min jog Z1",
+              "descriptionIt": "4min corsa lenta Z1",
               "durationSec": 240,
               "zone": "Z1",
               "role": "recovery"
@@ -3809,6 +4472,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3819,6 +4483,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3837,6 +4502,12 @@
         "More demanding than 30/30, prepare mentally",
         "15 total minutes at VO2max per session"
       ],
+      "coachingTipsIt": [
+        "Recupero attivo obbligatorio al 50-55% VAM",
+        "Non camminate, corricchiate davvero",
+        "Più impegnativo del 30/30, preparatevi mentalmente",
+        "15min totali a VAM per seduta"
+      ],
       "commonMistakes": [
         "Récupérer trop lentement (marche)",
         "Partir trop vite sur les premières répétitions",
@@ -3846,6 +4517,11 @@
         "Recovering too slowly (walking)",
         "Starting too fast on the first repetitions",
         "Failing to maintain intensity on the second set"
+      ],
+      "commonMistakesIt": [
+        "Recuperare troppo lentamente (camminando)",
+        "Partire troppo forte sulle prime ripetute",
+        "Non mantenere l'intensità nella seconda serie"
       ],
       "variationIds": [
         "VMA-001",
@@ -3882,8 +4558,10 @@
       "id": "VMA-025",
       "name": "Float Recovery",
       "nameEn": "Float Recovery Intervals",
+      "nameIt": "Intervalli Float Recovery",
       "description": "Intervalles VMA avec récupération 'flottante' en Z3 au lieu de Z1. Maintient le métabolisme élevé tout au long de la séance. Méthode moderne d'entraînement.",
       "descriptionEn": "VO2max intervals with 'float' recovery in Z3 instead of Z1. Maintains elevated metabolism throughout the session. Modern training method.",
+      "descriptionIt": "Intervalli VAM con recupero 'flottante' in Z3 invece che in Z1. Mantiene il metabolismo elevato per tutta la seduta. Metodo di allenamento moderno.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -3901,6 +4579,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3908,6 +4587,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 5
         }
       ],
@@ -3916,6 +4596,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3925,6 +4606,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -3933,10 +4615,12 @@
         {
           "description": "6x(2min VMA / 2min float Z3)",
           "descriptionEn": "6x(2min VO2max / 2min float Z3)",
+          "descriptionIt": "6x(2min VAM / 2min float Z3)",
           "zone": "Z5",
           "repetitions": 6,
           "recovery": "2min en Z3 (pas Z1)",
           "recoveryEn": "2min in Z3 (not Z1)",
+          "recoveryIt": "2min in Z3 (non Z1)",
           "intensityType": "I"
         }
       ],
@@ -3950,6 +4634,7 @@
               "kind": "segment",
               "description": "2min VMA",
               "descriptionEn": "2min VO2max",
+              "descriptionIt": "2min VAM",
               "durationSec": 120,
               "zone": "Z5",
               "role": "effort"
@@ -3960,6 +4645,7 @@
               "kind": "segment",
               "description": "2min en Z3 (pas Z1)",
               "descriptionEn": "2min in Z3 (not Z1)",
+              "descriptionIt": "2min in Z3 (non Z1)",
               "durationSec": 120,
               "zone": "Z3",
               "role": "recovery"
@@ -3971,6 +4657,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3981,6 +4668,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3999,6 +4687,12 @@
         "More demanding than classic intervals",
         "Excellent for middle-distance and 10K"
       ],
+      "coachingTipsIt": [
+        "Il recupero float è in Z3, non lento",
+        "Mantiene alto lo stress metabolico",
+        "Più impegnativo rispetto agli intervalli classici",
+        "Ottimo per mezzofondo e 10K"
+      ],
       "commonMistakes": [
         "Récupérer trop lentement (en Z1)",
         "Récupérer trop vite (en Z4)",
@@ -4008,6 +4702,11 @@
         "Recovering too slowly (in Z1)",
         "Recovering too fast (in Z4)",
         "Not adjusting VO2max intensity"
+      ],
+      "commonMistakesIt": [
+        "Recuperare troppo lentamente (in Z1)",
+        "Recuperare troppo velocemente (in Z4)",
+        "Non adeguare l'intensità VAM"
       ],
       "variationIds": [
         "VMA-006",
@@ -4042,8 +4741,10 @@
       "id": "VMA-026",
       "name": "Diagonales",
       "nameEn": "Diagonal Sprints",
+      "nameIt": "Diagonali",
       "description": "Sprints en diagonale sur terrain de football. Classique français pour travailler la fréquence, les changements de direction et la vitesse.",
       "descriptionEn": "Diagonal sprints across a football pitch. French classic for working on cadence, direction changes and speed.",
+      "descriptionIt": "Sprint in diagonale su un campo da calcio. Classico francese per allenare cadenza, cambi di direzione e velocità.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "speed",
@@ -4061,6 +4762,7 @@
         {
           "description": "Footing progressif autour du terrain",
           "descriptionEn": "Progressive jog around the pitch",
+          "descriptionIt": "Corsa lenta progressiva intorno al campo",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -4068,6 +4770,7 @@
         {
           "description": "Gammes dynamiques",
           "descriptionEn": "Dynamic drills",
+          "descriptionIt": "Andature dinamiche",
           "durationMin": 10
         }
       ],
@@ -4076,6 +4779,7 @@
           "kind": "segment",
           "description": "Footing progressif autour du terrain",
           "descriptionEn": "Progressive jog around the pitch",
+          "descriptionIt": "Corsa lenta progressiva intorno al campo",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -4085,6 +4789,7 @@
           "kind": "segment",
           "description": "Gammes dynamiques",
           "descriptionEn": "Dynamic drills",
+          "descriptionIt": "Andature dinamiche",
           "durationSec": 600,
           "role": "effort"
         }
@@ -4093,10 +4798,12 @@
         {
           "description": "12 × diagonale sprint (coin à coin) + récup petit côté en trottinant",
           "descriptionEn": "12 × diagonal sprint (corner to corner) + jog recovery on short side",
+          "descriptionIt": "12 × sprint in diagonale (da angolo ad angolo) + recupero in corsa lenta sul lato corto",
           "zone": "Z5-Z6",
           "repetitions": 12,
           "recovery": "Trot sur le petit côté (~30s)",
           "recoveryEn": "Jog on the short side (~30s)",
+          "recoveryIt": "Corsa lenta sul lato corto (~30s)",
           "intensityType": "R"
         }
       ],
@@ -4110,6 +4817,7 @@
               "kind": "segment",
               "description": "Diagonale sprint (coin à coin)",
               "descriptionEn": "Diagonal sprint (corner to corner)",
+              "descriptionIt": "Sprint in diagonale (da angolo ad angolo)",
               "zone": "Z5-Z6",
               "role": "effort",
               "intensityType": "R"
@@ -4120,6 +4828,7 @@
               "kind": "segment",
               "description": "Trot sur le petit côté (~30s)",
               "descriptionEn": "Jog on the short side (~30s)",
+              "descriptionIt": "Corsa lenta sul lato corto (~30s)",
               "durationSec": 30,
               "zone": "Z1",
               "role": "recovery"
@@ -4131,6 +4840,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -4141,6 +4851,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -4161,6 +4872,13 @@
         "Works on acceleration and cadence",
         "Classic French athletics drill"
       ],
+      "coachingTipsIt": [
+        "Da 10 a 12 ripetute in base alla forma del giorno, 12 è il riferimento",
+        "Sprint da un angolo all'angolo opposto",
+        "Recuperate corricchiando lungo il lato corto",
+        "Allena accelerazione e cadenza",
+        "Classico esercizio dell'atletica francese"
+      ],
       "commonMistakes": [
         "Sprinter à 100% dès le début",
         "Récupération trop rapide",
@@ -4170,6 +4888,11 @@
         "Sprinting at 100% from the start",
         "Recovery too fast",
         "Neglecting warm-up"
+      ],
+      "commonMistakesIt": [
+        "Fare sprint al 100% fin dall'inizio",
+        "Recupero troppo veloce",
+        "Trascurare il riscaldamento"
       ],
       "variationIds": [
         "VMA-004",
@@ -4205,8 +4928,10 @@
       "id": "VMA-027",
       "name": "Lignes droites",
       "nameEn": "Strides",
+      "nameIt": "Allunghi",
       "description": "8-10 lignes droites de 100m à 90% avec marche retour. Travail de technique, relâchement et économie de course. Séance de base essentielle.",
       "descriptionEn": "8-10 strides of 100m at 90% with walk-back recovery. Works on technique, relaxation and running economy. Essential basic session.",
+      "descriptionIt": "8-10 allunghi da 100m al 90% con recupero al passo. Lavoro di tecnica, scioltezza ed economia di corsa. Seduta base essenziale.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "neuromuscular",
@@ -4224,6 +4949,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -4231,6 +4957,7 @@
         {
           "description": "Gammes et mobilité",
           "descriptionEn": "Drills and mobility",
+          "descriptionIt": "Andature e mobilità",
           "durationMin": 10
         }
       ],
@@ -4239,6 +4966,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -4248,6 +4976,7 @@
           "kind": "segment",
           "description": "Gammes et mobilité",
           "descriptionEn": "Drills and mobility",
+          "descriptionIt": "Andature e mobilità",
           "durationSec": 600,
           "role": "effort"
         }
@@ -4256,11 +4985,13 @@
         {
           "description": "10 × 100m à 90% (relâché) avec marche retour",
           "descriptionEn": "10 × 100m at 90% (relaxed) with walk-back recovery",
+          "descriptionIt": "10 × 100m al 90% (sciolti) con recupero al passo",
           "distanceM": 100,
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "Marche retour ~90s",
           "recoveryEn": "Walk back ~90s",
+          "recoveryIt": "Rientro al passo ~90s",
           "intensityType": "I"
         }
       ],
@@ -4274,6 +5005,7 @@
               "kind": "segment",
               "description": "100m à 90% (relâché)",
               "descriptionEn": "100m at 90% (relaxed)",
+              "descriptionIt": "100m al 90% (sciolti)",
               "distanceM": 100,
               "zone": "Z5",
               "intensityType": "I",
@@ -4285,6 +5017,7 @@
               "kind": "segment",
               "description": "Marche retour ~90s",
               "descriptionEn": "Walk back ~90s",
+              "descriptionIt": "Rientro al passo ~90s",
               "durationSec": 90,
               "zone": "Z1",
               "role": "recovery"
@@ -4296,6 +5029,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -4306,6 +5040,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -4328,6 +5063,14 @@
         "Can be done at end of easy run",
         "Improves running economy"
       ],
+      "coachingTipsIt": [
+        "Da 8 a 10 ripetute in base alla forma del giorno, 10 è il riferimento",
+        "90% di sforzo, non sprint massimale",
+        "Focus su scioltezza e fluidità",
+        "Recupero completo tra uno e l'altro",
+        "Si può fare a fine corsa lenta",
+        "Migliora l'economia di corsa"
+      ],
       "commonMistakes": [
         "Sprinter au lieu de courir relâché",
         "Récupération trop courte",
@@ -4337,6 +5080,11 @@
         "Sprinting instead of running relaxed",
         "Recovery too short",
         "Neglecting technique"
+      ],
+      "commonMistakesIt": [
+        "Fare sprint invece di correre sciolti",
+        "Recupero troppo breve",
+        "Trascurare la tecnica"
       ],
       "variationIds": [
         "VMA-023"
@@ -4373,8 +5121,10 @@
       "id": "VMA-028",
       "name": "6x1km australien",
       "nameEn": "Australian 6x1km",
+      "nameIt": "6x1km australiano",
       "description": "6x1000m avec seulement 90s de récupération. Format exigeant populaire en Australie et Nouvelle-Zélande. Développe l'endurance à haute intensité.",
       "descriptionEn": "6x1000m with only 90s recovery. Demanding format popular in Australia and New Zealand. Develops high-intensity endurance.",
+      "descriptionIt": "6x1000m con soli 90s di recupero. Formato impegnativo popolare in Australia e Nuova Zelanda. Sviluppa la resistenza ad alta intensità.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -4392,6 +5142,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -4399,6 +5150,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -4407,6 +5159,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -4416,6 +5169,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -4424,11 +5178,13 @@
         {
           "description": "6x1000m à 95% VMA avec 90s récup",
           "descriptionEn": "6x1000m at 95% VO2max with 90s recovery",
+          "descriptionIt": "6x1000m al 95% VAM con 90s recupero",
           "distanceM": 1000,
           "zone": "Z5",
           "repetitions": 6,
           "recovery": "90s footing Z1 (récup courte)",
           "recoveryEn": "90s jog Z1 (short recovery)",
+          "recoveryIt": "90s corsa lenta Z1 (recupero breve)",
           "intensityType": "I"
         }
       ],
@@ -4442,6 +5198,7 @@
               "kind": "segment",
               "description": "1000m à 95% VMA",
               "descriptionEn": "1000m at 95% VO2max",
+              "descriptionIt": "1000m al 95% VAM",
               "distanceM": 1000,
               "zone": "Z5",
               "intensityType": "I",
@@ -4453,6 +5210,7 @@
               "kind": "segment",
               "description": "90s footing Z1 (récup courte)",
               "descriptionEn": "90s jog Z1 (short recovery)",
+              "descriptionIt": "90s corsa lenta Z1 (recupero breve)",
               "durationSec": 90,
               "zone": "Z1",
               "role": "recovery"
@@ -4464,6 +5222,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -4474,6 +5233,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -4494,6 +5254,13 @@
         "Each 1km at the same time",
         "Reserved for experienced runners"
       ],
+      "coachingTipsIt": [
+        "Recupero breve = seduta molto impegnativa",
+        "Popolare tra i corridori australiani/neozelandesi",
+        "Ottimo per 5K e 10K",
+        "Ogni 1km allo stesso tempo",
+        "Riservato a corridori esperti"
+      ],
       "commonMistakes": [
         "Partir trop vite sur les premiers 1km",
         "Allonger la récup quand ça devient dur",
@@ -4503,6 +5270,11 @@
         "Starting too fast on the first 1kms",
         "Extending recovery when it gets hard",
         "Underestimating the difficulty"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte sui primi 1km",
+        "Allungare il recupero quando diventa duro",
+        "Sottovalutare la difficoltà"
       ],
       "variationIds": [
         "VMA-003",
@@ -4537,8 +5309,10 @@
       "id": "VMA-029",
       "name": "Final Kick",
       "nameEn": "Final Kick Training",
+      "nameIt": "Allenamento Final Kick",
       "description": "Travail du finish de course : capacité à accélérer dans les derniers 400-800m. Séance clé pour le 5K et 10K. Inspiré des méthodes de Jimmy Gressier.",
       "descriptionEn": "Race finish training: ability to accelerate in the final 400-800m. Key session for 5K and 10K. Inspired by Jimmy Gressier's methods.",
+      "descriptionIt": "Allenamento per il finale di gara: capacità di accelerare negli ultimi 400-800m. Seduta chiave per 5K e 10K. Ispirato ai metodi di Jimmy Gressier.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "vo2max",
@@ -4556,6 +5330,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -4563,6 +5338,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -4571,6 +5347,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -4580,6 +5357,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -4588,10 +5366,12 @@
         {
           "description": "3x(1200m allure 10K + 400m sprint finish)",
           "descriptionEn": "3x(1200m at 10K pace + 400m sprint finish)",
+          "descriptionIt": "3x(1200m a ritmo 10K + 400m sprint finale)",
           "zone": "Z4→Z5+",
           "repetitions": 3,
           "recovery": "4min footing Z1",
-          "recoveryEn": "4min jog Z1"
+          "recoveryEn": "4min jog Z1",
+          "recoveryIt": "4min corsa lenta Z1"
         }
       ],
       "mainSetStructure": [
@@ -4604,6 +5384,7 @@
               "kind": "segment",
               "description": "1200m allure 10K",
               "descriptionEn": "1200m at 10K pace",
+              "descriptionIt": "1200m a ritmo 10K",
               "distanceM": 1200,
               "zone": "Z4",
               "role": "effort"
@@ -4612,6 +5393,7 @@
               "kind": "segment",
               "description": "400m sprint finish",
               "descriptionEn": "400m sprint finish",
+              "descriptionIt": "400m sprint finale",
               "distanceM": 400,
               "zone": "Z5+",
               "role": "effort"
@@ -4622,6 +5404,7 @@
               "kind": "segment",
               "description": "4min footing Z1",
               "descriptionEn": "4min jog Z1",
+              "descriptionIt": "4min corsa lenta Z1",
               "durationSec": 240,
               "zone": "Z1",
               "role": "recovery"
@@ -4633,6 +5416,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -4643,6 +5427,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -4663,6 +5448,13 @@
         "Mental: learn to accelerate when tired",
         "Session used by Jimmy Gressier in 5K/10K prep"
       ],
+      "coachingTipsIt": [
+        "Simula il finale di gara: passo controllato poi sprint",
+        "Gli ultimi 400m devono essere DAVVERO veloci",
+        "Allena la transizione ritmo→sprint",
+        "Mentale: imparare ad accelerare da stanchi",
+        "Seduta usata da Jimmy Gressier nella preparazione 5K/10K"
+      ],
       "commonMistakes": [
         "Courir le 1200m trop vite",
         "Ne pas vraiment sprinter le 400m",
@@ -4672,6 +5464,11 @@
         "Running the 1200m too fast",
         "Not really sprinting the 400m",
         "Recovery too short"
+      ],
+      "commonMistakesIt": [
+        "Correre il 1200m troppo forte",
+        "Non fare davvero lo sprint sui 400m",
+        "Recupero troppo breve"
       ],
       "variationIds": [
         "VMA-002",
@@ -4702,8 +5499,10 @@
       "id": "VMA-030",
       "name": "VMA découverte",
       "nameEn": "VO2max Discovery",
+      "nameIt": "Scoperta della VAM",
       "description": "Introduction à la VMA pour débutants. 8 intervalles de 30 secondes à allure VMA avec 30 secondes de récupération. Format accessible pour découvrir l'intensité VO2max.",
       "descriptionEn": "Introduction to VO2max for beginners. 8 intervals of 30 seconds at VO2max pace with 30 seconds recovery. Accessible format to discover VO2max intensity.",
+      "descriptionIt": "Introduzione alla VAM per principianti. 8 intervalli da 30 secondi a ritmo VAM con 30 secondi di recupero. Formato accessibile per scoprire l'intensità VO2max.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -4721,6 +5520,7 @@
         {
           "description": "Footing lent avec éducatifs",
           "descriptionEn": "Slow jog with running drills",
+          "descriptionIt": "Corsa lenta con esercizi tecnici",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -4728,6 +5528,7 @@
         {
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -4736,6 +5537,7 @@
           "kind": "segment",
           "description": "Footing lent avec éducatifs",
           "descriptionEn": "Slow jog with running drills",
+          "descriptionIt": "Corsa lenta con esercizi tecnici",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -4745,6 +5547,7 @@
           "kind": "segment",
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -4753,10 +5556,12 @@
         {
           "description": "8x 30s VMA / 30s récup footing",
           "descriptionEn": "8x 30s VO2max / 30s recovery jog",
+          "descriptionIt": "8x 30s VAM / 30s recupero in corsa lenta",
           "zone": "Z5",
           "repetitions": 8,
           "recovery": "30s footing Z1",
           "recoveryEn": "30s jog Z1",
+          "recoveryIt": "30s corsa lenta Z1",
           "intensityType": "I"
         }
       ],
@@ -4770,6 +5575,7 @@
               "kind": "segment",
               "description": "30s VMA",
               "descriptionEn": "30s VO2max",
+              "descriptionIt": "30s VAM",
               "durationSec": 30,
               "zone": "Z5",
               "intensityType": "I",
@@ -4781,6 +5587,7 @@
               "kind": "segment",
               "description": "30s footing Z1",
               "descriptionEn": "30s jog Z1",
+              "descriptionIt": "30s corsa lenta Z1",
               "durationSec": 30,
               "zone": "Z1",
               "role": "recovery"
@@ -4792,6 +5599,7 @@
         {
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -4802,6 +5610,7 @@
           "kind": "segment",
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -4820,6 +5629,12 @@
         "The 30s recovery is short: keep moving",
         "Stepping-stone session before the classic 30/30"
       ],
+      "coachingTipsIt": [
+        "Solo 8 ripetute invece di 12: volume ridotto per principianti",
+        "Ritmo VAM = sforzo molto intenso ma sostenibile per 30 secondi",
+        "Il recupero di 30s è breve: restate in movimento",
+        "Seduta ponte prima del 30/30 classico"
+      ],
       "commonMistakes": [
         "Sprinter au lieu de courir à allure VMA",
         "Partir trop vite et ne pas finir les 8 répétitions",
@@ -4829,6 +5644,11 @@
         "Sprinting instead of running at VO2max pace",
         "Starting too fast and not finishing all 8 repetitions",
         "Stopping completely during recovery"
+      ],
+      "commonMistakesIt": [
+        "Fare sprint invece di correre a ritmo VAM",
+        "Partire troppo forte e non finire tutte e 8 le ripetute",
+        "Fermarsi completamente durante il recupero"
       ],
       "variationIds": [
         "VMA-001",
@@ -4864,8 +5684,10 @@
       "id": "VMA-031",
       "name": "Norvégien 4×4 (Helgerud)",
       "nameEn": "Norwegian 4×4 (Helgerud Protocol)",
+      "nameIt": "Norvegese 4×4 (Protocollo Helgerud)",
       "description": "Protocole VO2max norvégien : 4 intervalles de 4 minutes à 90-95% de la fréquence cardiaque maximale avec 3 minutes de récupération active à 70% FCmax. Méthode Helgerud validée pour des gains significatifs de VO2max.",
       "descriptionEn": "Norwegian VO2max protocol: 4 intervals of 4 minutes at 90-95% of maximum heart rate with 3 minutes of active recovery at 70% HRmax. Helgerud method validated for significant VO2max gains.",
+      "descriptionIt": "Protocollo VO2max norvegese: 4 intervalli da 4 minuti al 90-95% della frequenza cardiaca massima con 3 minuti di recupero attivo al 70% FCmax. Metodo Helgerud validato per guadagni significativi di VO2max.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
@@ -4883,6 +5705,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -4890,6 +5713,7 @@
         {
           "description": "Gammes et 4× accélérations progressives",
           "descriptionEn": "Drills and 4× progressive accelerations",
+          "descriptionIt": "Andature e 4× accelerazioni progressive",
           "durationMin": 5
         }
       ],
@@ -4898,6 +5722,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -4907,6 +5732,7 @@
           "kind": "segment",
           "description": "Gammes et 4× accélérations progressives",
           "descriptionEn": "Drills and 4× progressive accelerations",
+          "descriptionIt": "Andature e 4× accelerazioni progressive",
           "durationSec": 300,
           "role": "effort"
         }
@@ -4915,11 +5741,13 @@
         {
           "description": "4 × 4min à 90-95% FCmax (Z5), récup 3min footing à 70% FCmax",
           "descriptionEn": "4 × 4min at 90-95% HRmax (Z5), recovery 3min jog at 70% HRmax",
+          "descriptionIt": "4 × 4min al 90-95% FCmax (Z5), recupero 3min corsa lenta al 70% FCmax",
           "zone": "Z5",
           "repetitions": 4,
           "durationMin": 4,
           "recovery": "3min footing Z2 bas (70% FCmax)",
           "recoveryEn": "3min jog low Z2 (70% HRmax)",
+          "recoveryIt": "3min corsa lenta Z2 bassa (70% FCmax)",
           "intensityType": "I"
         }
       ],
@@ -4933,6 +5761,7 @@
               "kind": "segment",
               "description": "4min à 90-95% FCmax (Z5)",
               "descriptionEn": "4min at 90-95% HRmax (Z5)",
+              "descriptionIt": "4min al 90-95% FCmax (Z5)",
               "durationSec": 240,
               "zone": "Z5",
               "intensityType": "I",
@@ -4944,6 +5773,7 @@
               "kind": "segment",
               "description": "3min footing Z2 bas (70% FCmax)",
               "descriptionEn": "3min jog low Z2 (70% HRmax)",
+              "descriptionIt": "3min corsa lenta Z2 bassa (70% FCmax)",
               "durationSec": 180,
               "zone": "Z2",
               "role": "recovery"
@@ -4955,6 +5785,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -4965,6 +5796,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -4983,6 +5815,12 @@
         "Use a heart rate monitor to respect the intensities",
         "Progressively increase pace over weeks, not within repetitions"
       ],
+      "coachingTipsIt": [
+        "Puntate al 90-95% FCmax dal secondo minuto di ogni intervallo",
+        "Il recupero attivo deve restare al 70% FCmax, non più basso",
+        "Usate un cardiofrequenzimetro per rispettare le intensità",
+        "Aumentate progressivamente il passo nel corso delle settimane, non dentro le ripetute"
+      ],
       "commonMistakes": [
         "Partir trop vite et ne pas tenir les 4 minutes complètes",
         "Récupérer trop lentement (marche) au lieu de maintenir 70% FCmax",
@@ -4992,6 +5830,11 @@
         "Starting too fast and not holding the full 4 minutes",
         "Recovering too slowly (walking) instead of maintaining 70% HRmax",
         "Scheduling this session more than once per week"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte e non reggere i 4 minuti completi",
+        "Recuperare troppo lentamente (camminando) invece di mantenere il 70% FCmax",
+        "Programmare questa seduta più di una volta a settimana"
       ],
       "variationIds": [
         "VMA-009",
@@ -5028,8 +5871,10 @@
       "id": "VMA-032",
       "name": "Protocole Tabata",
       "nameEn": "Tabata Protocol",
+      "nameIt": "Protocollo Tabata",
       "description": "Protocole d'intervalles supramaximaux : 7-8 répétitions de 20 secondes à effort maximal (~170% vVMA) avec 10 secondes de repos complet. Unique séance améliorant simultanément la VO2max et la capacité anaérobie.",
       "descriptionEn": "Supramaximal interval protocol: 7-8 repetitions of 20 seconds at maximal effort (~170% vVO2max) with 10 seconds complete rest. Unique session improving both VO2max and anaerobic capacity simultaneously.",
+      "descriptionIt": "Protocollo a intervalli sovramassimali: 7-8 ripetute da 20 secondi a sforzo massimale (~170% VAM) con 10 secondi di riposo completo. Unica seduta che migliora simultaneamente VO2max e capacità anaerobica.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "vo2max",
@@ -5047,6 +5892,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -5054,6 +5900,7 @@
         {
           "description": "Gammes, éducatifs et 4× accélérations courtes",
           "descriptionEn": "Drills, technique work and 4× short accelerations",
+          "descriptionIt": "Andature, esercizi tecnici e 4× accelerazioni brevi",
           "durationMin": 5
         }
       ],
@@ -5062,6 +5909,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -5071,6 +5919,7 @@
           "kind": "segment",
           "description": "Gammes, éducatifs et 4× accélérations courtes",
           "descriptionEn": "Drills, technique work and 4× short accelerations",
+          "descriptionIt": "Andature, esercizi tecnici e 4× accelerazioni brevi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -5079,10 +5928,12 @@
         {
           "description": "8 × (20s sprint maximal / 10s repos complet)",
           "descriptionEn": "8 × (20s maximal sprint / 10s complete rest)",
+          "descriptionIt": "8 × (20s sprint massimale / 10s riposo completo)",
           "zone": "Z6",
           "repetitions": 8,
           "recovery": "10s repos complet (arrêt)",
           "recoveryEn": "10s full rest (stopped)",
+          "recoveryIt": "10s riposo completo (da fermo)",
           "intensityType": "R"
         }
       ],
@@ -5096,6 +5947,7 @@
               "kind": "segment",
               "description": "20s sprint maximal",
               "descriptionEn": "20s maximal sprint",
+              "descriptionIt": "20s sprint massimale",
               "durationSec": 20,
               "zone": "Z6",
               "intensityType": "R",
@@ -5107,6 +5959,7 @@
               "kind": "segment",
               "description": "10s repos complet (arrêt)",
               "descriptionEn": "10s full rest (stopped)",
+              "descriptionIt": "10s riposo completo (da fermo)",
               "durationSec": 10,
               "zone": "Z1",
               "role": "recovery"
@@ -5118,6 +5971,7 @@
         {
           "description": "Marche 5min puis footing très lent",
           "descriptionEn": "Walk 5min then very slow jog",
+          "descriptionIt": "Camminata 5min poi corsa molto lenta",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -5128,6 +5982,7 @@
           "kind": "segment",
           "description": "Marche 5min puis footing très lent",
           "descriptionEn": "Walk 5min then very slow jog",
+          "descriptionIt": "Camminata 5min poi corsa molto lenta",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -5146,6 +6001,12 @@
         "A single set is enough, quality over volume",
         "Thorough warm-up is essential given the supramaximal intensity"
       ],
+      "coachingTipsIt": [
+        "Lo sforzo deve essere davvero massimale su ogni ripetuta da 20 secondi",
+        "Il riposo di 10 secondi è completo: fermo totale, niente corsa lenta",
+        "Una sola serie è sufficiente, la qualità prima del volume",
+        "Riscaldamento accurato indispensabile data l'intensità sovramassimale"
+      ],
       "commonMistakes": [
         "Gérer l'effort au lieu de sprinter à 100% sur chaque répétition",
         "Trotter pendant les 10 secondes de repos au lieu de s'arrêter",
@@ -5155,6 +6016,11 @@
         "Pacing effort instead of sprinting at 100% on each repetition",
         "Jogging during the 10-second rest instead of stopping",
         "Doing multiple sets without being ready for this intensity"
+      ],
+      "commonMistakesIt": [
+        "Gestire lo sforzo invece di fare sprint al 100% su ogni ripetuta",
+        "Corricchiare durante i 10 secondi di riposo invece di fermarsi",
+        "Fare più serie senza essere pronti per questa intensità"
       ],
       "variationIds": [
         "VMA-022",
@@ -5191,8 +6057,10 @@
       "id": "VMA-033",
       "name": "Répétitions R-Pace (Daniels)",
       "nameEn": "R-Pace Repetitions (Daniels)",
+      "nameIt": "Ripetute a ritmo R (Daniels)",
       "description": "Répétitions au rythme R selon Jack Daniels : 200m et 400m à allure mile avec récupération complète. Développe l'économie de course et la coordination neuromusculaire par des efforts rapides exécutés sans fatigue.",
       "descriptionEn": "R-pace repetitions per Jack Daniels: 200m and 400m at mile pace with full recovery. Develops running economy and neuromuscular coordination through fast efforts executed without fatigue.",
+      "descriptionIt": "Ripetute a ritmo R secondo Jack Daniels: 200m e 400m a ritmo miglio con recupero completo. Sviluppa l'economia di corsa e la coordinazione neuromuscolare tramite sforzi rapidi eseguiti senza fatica.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "speed",
@@ -5210,6 +6078,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -5217,6 +6086,7 @@
         {
           "description": "Gammes techniques et 3× lignes droites progressives",
           "descriptionEn": "Technical drills and 3× progressive strides",
+          "descriptionIt": "Andature tecniche e 3× allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -5225,6 +6095,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -5234,6 +6105,7 @@
           "kind": "segment",
           "description": "Gammes techniques et 3× lignes droites progressives",
           "descriptionEn": "Technical drills and 3× progressive strides",
+          "descriptionIt": "Andature tecniche e 3× allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -5242,16 +6114,19 @@
         {
           "description": "8 × 200m au rythme R (allure mile), récup 200m marche/trot",
           "descriptionEn": "8 × 200m at R-pace (mile pace), 200m walk/jog recovery",
+          "descriptionIt": "8 × 200m a ritmo R (ritmo miglio), recupero 200m camminata/corsa lenta",
           "zone": "Z5",
           "repetitions": 8,
           "distanceM": 200,
           "recovery": "200m marche/trot (récupération complète)",
           "recoveryEn": "200m walk / jog (full recovery)",
+          "recoveryIt": "200m camminata / corsa lenta (recupero completo)",
           "intensityType": "I"
         },
         {
           "description": "Repos 3-4 min entre les deux séries (marche ou trot très lent)",
           "descriptionEn": "3-4 min rest between the two series (walk or very slow jog)",
+          "descriptionIt": "3-4 min di riposo tra le due serie (camminata o corsa molto lenta)",
           "durationMin": 4,
           "zone": "Z1",
           "intensityType": "E"
@@ -5259,11 +6134,13 @@
         {
           "description": "4 × 400m au rythme R (allure mile), récup 400m marche/trot",
           "descriptionEn": "4 × 400m at R-pace (mile pace), 400m walk/jog recovery",
+          "descriptionIt": "4 × 400m a ritmo R (ritmo miglio), recupero 400m camminata/corsa lenta",
           "zone": "Z5",
           "repetitions": 4,
           "distanceM": 400,
           "recovery": "400m marche/trot (récupération complète)",
           "recoveryEn": "400m walk / jog (full recovery)",
+          "recoveryIt": "400m camminata / corsa lenta (recupero completo)",
           "intensityType": "I"
         }
       ],
@@ -5277,6 +6154,7 @@
               "kind": "segment",
               "description": "200m au rythme R (allure mile)",
               "descriptionEn": "200m at R-pace (mile pace), 200m walk/jog recovery",
+              "descriptionIt": "200m a ritmo R (ritmo miglio), recupero 200m camminata/corsa lenta",
               "distanceM": 200,
               "zone": "Z5",
               "intensityType": "I",
@@ -5288,6 +6166,7 @@
               "kind": "segment",
               "description": "200m marche/trot (récupération complète)",
               "descriptionEn": "200m walk / jog (full recovery)",
+              "descriptionIt": "200m camminata / corsa lenta (recupero completo)",
               "distanceM": 200,
               "zone": "Z1",
               "role": "recovery"
@@ -5298,6 +6177,7 @@
           "kind": "segment",
           "description": "Repos 3-4 min entre les deux séries (marche ou trot très lent)",
           "descriptionEn": "3-4 min rest between the two series (walk or very slow jog)",
+          "descriptionIt": "3-4 min di riposo tra le due serie (camminata o corsa molto lenta)",
           "durationSec": 240,
           "zone": "Z1",
           "intensityType": "E",
@@ -5312,6 +6192,7 @@
               "kind": "segment",
               "description": "400m au rythme R (allure mile)",
               "descriptionEn": "400m at R-pace (mile pace), 400m walk/jog recovery",
+              "descriptionIt": "400m a ritmo R (ritmo miglio), recupero 400m camminata/corsa lenta",
               "distanceM": 400,
               "zone": "Z5",
               "intensityType": "I",
@@ -5323,6 +6204,7 @@
               "kind": "segment",
               "description": "400m marche/trot (récupération complète)",
               "descriptionEn": "400m walk / jog (full recovery)",
+              "descriptionIt": "400m camminata / corsa lenta (recupero completo)",
               "distanceM": 400,
               "zone": "Z1",
               "role": "recovery"
@@ -5334,6 +6216,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -5344,6 +6227,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -5362,6 +6246,12 @@
         "Focus on fluidity and relaxation, not raw power",
         "If your form deteriorates, recovery is too short"
       ],
+      "coachingTipsIt": [
+        "Il recupero completo è essenziale: ogni ripetuta deve essere eseguita con una tecnica perfetta",
+        "Il ritmo R corrisponde circa al vostro ritmo gara sul miglio (1.609m)",
+        "Concentratevi su fluidità e scioltezza, non sulla forza bruta",
+        "Se la tecnica peggiora, il recupero è troppo breve"
+      ],
       "commonMistakes": [
         "Écourter la récupération pour gagner du temps",
         "Sprinter au lieu de courir au rythme R contrôlé",
@@ -5371,6 +6261,11 @@
         "Shortening recovery to 'save time'",
         "Sprinting instead of running at controlled R-pace",
         "Neglecting stride quality at the end of the session"
+      ],
+      "commonMistakesIt": [
+        "Accorciare il recupero per 'risparmiare tempo'",
+        "Fare sprint invece di correre a ritmo R controllato",
+        "Trascurare la qualità della falcata a fine seduta"
       ],
       "variationIds": [
         "VMA-027",

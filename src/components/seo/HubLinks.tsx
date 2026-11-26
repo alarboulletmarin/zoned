@@ -17,7 +17,7 @@ export function HubLinks({ links, lang }: { links: HubLink[]; lang: HubLang }) {
         {links.map((link) => (
           <li key={link.path}>
             <Link
-              to={lang === "en" ? { pathname: link.path, search: "?lang=en" } : link.path}
+              to={lang === "fr" ? link.path : { pathname: link.path, search: `?lang=${lang}` }}
             >
               {link.anchor}
             </Link>

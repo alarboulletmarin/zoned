@@ -1,0 +1,133 @@
+{
+  "title": "Potenziamento",
+  "subtitle": "Sedute di potenziamento muscolare per runner",
+  "description": "Sedute di potenziamento basate sulla scienza per migliorare la performance nella corsa e prevenire gli infortuni.",
+  "activityToggle": {
+    "all": "Tutto",
+    "running": "Corsa",
+    "strength": "Potenziamento"
+  },
+  "categories": {
+    "runner_full_body": "Full Body Runner",
+    "runner_lower": "Gambe",
+    "runner_core": "Core",
+    "runner_upper": "Parte superiore",
+    "plyometrics": "Pliometria",
+    "mobility": "Mobilità",
+    "prehab": "Prevenzione infortuni"
+  },
+  "intensity": {
+    "mobility": "Mobilità",
+    "endurance": "Resistenza muscolare",
+    "hypertrophy": "Ipertrofia",
+    "strength": "Forza",
+    "power": "Potenza"
+  },
+  "intensityDescription": {
+    "mobility": "RPE 2-3 · Movimenti dolci, preparazione articolare",
+    "endurance": "RPE 4-5 · Serie lunghe, carico leggero (12-15 rip)",
+    "hypertrophy": "RPE 6-7 · Volume moderato, carico medio (8-12 rip)",
+    "strength": "RPE 8-9 · Serie brevi, carico pesante (3-6 rip)",
+    "power": "RPE 7-8 · Movimenti esplosivi (4-6 rip)"
+  },
+  "muscles": {
+    "quadriceps": "Quadricipiti",
+    "hamstrings": "Femorali",
+    "glutes": "Glutei",
+    "calves": "Polpacci",
+    "hip_flexors": "Flessori dell'anca",
+    "adductors": "Adduttori",
+    "core_anterior": "Addominali",
+    "core_lateral": "Obliqui",
+    "core_posterior": "Lombari",
+    "upper_back": "Parte alta della schiena",
+    "shoulders": "Spalle",
+    "chest": "Petto"
+  },
+  "equipment": {
+    "none": "Nessuna attrezzatura",
+    "resistance_band": "Elastico",
+    "dumbbells": "Manubri",
+    "kettlebell": "Kettlebell",
+    "barbell": "Bilanciere",
+    "pull_up_bar": "Sbarra per trazioni",
+    "box": "Box / Panca",
+    "foam_roller": "Foam Roller",
+    "medicine_ball": "Palla medica"
+  },
+  "detail": {
+    "exercises": "Esercizi",
+    "sets": "serie",
+    "reps": "rip",
+    "rest": "Recupero",
+    "formCues": "Punti tecnici",
+    "targetMuscles": "Muscoli coinvolti",
+    "primaryMuscles": "Muscoli principali",
+    "secondaryMuscles": "Muscoli secondari",
+    "equipmentNeeded": "Attrezzatura necessaria",
+    "noEquipment": "Nessuna attrezzatura richiesta",
+    "suitablePhases": "Fasi di allenamento adatte",
+    "warmup": "Riscaldamento",
+    "mainSet": "Corpo centrale",
+    "cooldown": "Defaticamento",
+    "superset": "Superset",
+    "perSide": "per lato",
+    "hold": "tenuta",
+    "rpe": "RPE",
+    "intensity": "Intensità",
+    "sessionTimeline": "Struttura della seduta",
+    "muscleDistribution": "Distribuzione muscolare",
+    "exerciseDetail": "Dettaglio degli esercizi",
+    "totalSets": "serie totali",
+    "totalExercises": "esercizi",
+    "estimatedDuration": "~{{minutes}} min",
+    "recovery": "Recupero",
+    "weeklyMax": "Max {{count}}x / settimana",
+    "minRecovery": "{{days}}g rec. min.",
+    "references": "Riferimenti scientifici",
+    "viewStudy": "Vedi studio",
+    "loadingExercises": "Caricamento esercizi...",
+    "muscleMap": "Mappa muscolare",
+    "front": "Fronte",
+    "back": "Retro",
+    "lowIntensity": "Basso",
+    "mediumIntensity": "Medio",
+    "highIntensity": "Alto",
+    "secondary": "secondario",
+    "imageUnavailable": "Illustrazione non disponibile",
+    "positionStart": "posizione iniziale",
+    "positionEnd": "posizione finale",
+    "zoomImages": "Ingrandisci le immagini di {{name}}"
+  },
+  "trainingPhases": {
+    "base": "Base",
+    "build": "Costruzione",
+    "peak": "Picco",
+    "taper": "Scarico",
+    "recovery": "Recupero"
+  },
+  "plan": {
+    "includeStrength": "Includi potenziamento",
+    "includeStrengthDescription": "Aggiungi sedute di potenziamento adatte a ogni fase del piano",
+    "strengthFrequency": "Frequenza potenziamento",
+    "strengthFrequencyDescription": "Numero di sedute di potenziamento a settimana",
+    "perWeek": "{{count}}x / settimana",
+    "suggested": "Consigliata",
+    "suggestedTooltip": "Seduta suggerita dal generatore. Clicca per accettare o rimuovere."
+  },
+  "science": {
+    "title": "Perché fare potenziamento per la corsa?",
+    "economy": "Migliora l'economia di corsa del 2-8% (Denadai 2017)",
+    "injury": "Riduce il rischio di infortuni di ~50% (Lauersen 2014)",
+    "performance": "La forza massimale è più efficace della resistenza muscolare per i runner (Beattie 2017)",
+    "periodization": "La periodizzazione forza → potenza → mantenimento ottimizza i guadagni (Rønnestad 2014)"
+  },
+  "collections": {
+    "strengthForRunners": "Forza per Runner",
+    "strengthForRunnersDesc": "Programma progressivo di potenziamento specifico per la corsa",
+    "coreStability": "Stabilità del Core",
+    "coreStabilityDesc": "Stabilità del core e controllo del tronco per una postura migliore",
+    "injuryPrevention": "Prevenzione infortuni",
+    "injuryPreventionDesc": "Rinforzo mirato delle zone vulnerabili: ginocchia, caviglie, anche"
+  }
+}

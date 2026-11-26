@@ -88,17 +88,20 @@ i18n
 export default i18n;
 
 // Export type for supported languages
-export type SupportedLanguage = "fr" | "en";
+export type SupportedLanguage = "fr" | "en" | "it";
 
 // Export available languages
 export const supportedLanguages: { code: SupportedLanguage; label: string }[] = [
   { code: "fr", label: "Français" },
   { code: "en", label: "English" },
+  { code: "it", label: "Italiano" },
 ];
 
 // Helper to get current language
 export function getCurrentLanguage(): SupportedLanguage {
-  return (i18n.language?.split("-")[0] as SupportedLanguage) || "fr";
+  const code = i18n.language?.split("-")[0];
+  if (code === "en" || code === "it") return code;
+  return "fr";
 }
 
 // ============================================================
@@ -109,7 +112,7 @@ export function getCurrentLanguage(): SupportedLanguage {
  *  unsupported (e.g. navigator "de") renders through the fr fallback,
  *  matching the previous eager-resources behaviour. */
 function activeLanguage(): SupportedLanguage {
-  return getCurrentLanguage() === "en" ? "en" : "fr";
+  return getCurrentLanguage();
 }
 
 const loadedBundles = new Set<string>(["fr:common", "fr:homepage"]);

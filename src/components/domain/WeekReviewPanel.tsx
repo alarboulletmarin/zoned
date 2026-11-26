@@ -2,7 +2,7 @@ import { useMemo, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 
 import { formatDurationMinutes } from "@/components/visualization";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { getDateLocale, useIsEnglish } from "@/lib/i18n-utils";
 import { ACTIVITY_DISCIPLINE_META } from "@/types/activity";
 import type { WeekReview } from "@/lib/weekReview";
 
@@ -77,13 +77,13 @@ interface WeekReviewPanelProps {
   kicker?: string;
 }
 
-function formatRange(from: string, to: string, isEn: boolean): string {
+function formatRange(from: string, to: string, _isEn: boolean): string {
   const parse = (iso: string) => {
     const [y, m, d] = iso.split("-").map(Number);
     return new Date(y, m - 1, d);
   };
   const opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
-  const locale = isEn ? "en-GB" : "fr-FR";
+  const locale = getDateLocale();
   return `${parse(from).toLocaleDateString(locale, opts)} - ${parse(to).toLocaleDateString(locale, opts)}`;
 }
 

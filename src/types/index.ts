@@ -18,6 +18,7 @@ export interface WorkoutStepSegment {
   kind: "segment";
   description: string;
   descriptionEn?: string;
+  descriptionIt?: string;
   durationSec?: number;
   distanceM?: number;
   distanceKm?: number;
@@ -107,6 +108,7 @@ export type RelativeLoad = "light" | "moderate" | "hard" | "key";
 export interface WorkoutBlock {
   description: string;
   descriptionEn?: string;
+  descriptionIt?: string;
   durationMin?: number;
   repetitions?: number;
   distance?: string;
@@ -119,10 +121,12 @@ export interface WorkoutBlock {
                        // the derived WorkoutStep tree turns it into a segment,
                        // and a segment without its twin leaves an English
                        // reader with French text.
+  recoveryIt?: string;
   // ── New fields (v2) ──
   sets?: number;               // Number of series (e.g., 2 series of 12 reps)
   restBetweenSets?: string;    // Rest between series (e.g., "3min footing")
   restBetweenSetsEn?: string;  // English twin, same rule as `recoveryEn`.
+  restBetweenSetsIt?: string;
   vmaPercent?: number;         // % VMA target (alternative to zone)
   intensityType?: "E" | "M" | "T" | "I" | "R"; // Daniels intensity reference
   elevationGainM?: number;
@@ -177,8 +181,10 @@ export interface WorkoutTemplate {
   id: string;
   name: string;
   nameEn: string;
+  nameIt?: string;
   description: string;
   descriptionEn: string;
+  descriptionIt?: string;
   category: WorkoutCategory;
   sessionType: SessionType;
   targetSystem: TargetSystem;
@@ -193,8 +199,10 @@ export interface WorkoutTemplate {
   cooldownStructure?: WorkoutStep[];
   coachingTips: string[];
   coachingTipsEn: string[];
+  coachingTipsIt?: string[];
   commonMistakes: string[];
   commonMistakesEn: string[];
+  commonMistakesIt?: string[];
   variationIds: string[];
   selectionCriteria: SelectionCriteria;
   // ── New fields (v2, optional for backward compat) ──
@@ -225,131 +233,185 @@ export interface WorkoutCategoryFile {
 export interface ZoneMeta {
   label: string;
   labelEn: string;
+  labelIt?: string;
   color: string;
   description: string;
   descriptionEn: string;
+  descriptionIt?: string;
   physiology: string;
   physiologyEn: string;
+  physiologyIt?: string;
   sensation: string;
   sensationEn: string;
+  sensationIt?: string;
   benefit: string;
   benefitEn: string;
+  benefitIt?: string;
   examples: string[];
   examplesEn: string[];
+  examplesIt?: string[];
 }
 
 export const ZONE_META: Record<ZoneNumber, ZoneMeta> = {
   1: {
     label: "Récupération",
     labelEn: "Recovery",
+    labelIt: "Recupero",
     color: "zone-1",
     description: "Effort très léger, récupération active",
     descriptionEn: "Very light effort, active recovery",
+    descriptionIt: "Sforzo molto leggero, recupero attivo",
     physiology:
       "Stimule la circulation sanguine sans stress musculaire, favorise l'élimination des déchets métaboliques",
     physiologyEn:
       "Stimulates blood circulation without muscle stress, promotes metabolic waste elimination",
+    physiologyIt:
+      "Stimola la circolazione sanguigna senza stress muscolare, favorisce l'eliminazione dei cataboliti",
     sensation: "Effort minimal, respiration naturelle, conversation facile",
     sensationEn: "Minimal effort, natural breathing, easy conversation",
+    sensationIt: "Sforzo minimo, respirazione naturale, conversazione facile",
     benefit: "Accélère la récupération entre les séances intenses",
     benefitEn: "Accelerates recovery between intense sessions",
+    benefitIt: "Accelera il recupero tra le sedute intense",
     examples: ["Footing récupération", "Jogging lendemain de compétition"],
     examplesEn: ["Recovery jog", "Day-after-race easy run"],
+    examplesIt: ["Corsa di recupero", "Corsa leggera post-gara"],
   },
   2: {
     label: "Endurance",
     labelEn: "Endurance",
+    labelIt: "Resistenza",
     color: "zone-2",
     description: "Effort modéré, base aérobie",
     descriptionEn: "Moderate effort, aerobic base",
+    descriptionIt: "Sforzo moderato, base aerobica",
     physiology:
       "Développe le réseau capillaire et la densité mitochondriale, améliore l'utilisation des graisses",
     physiologyEn:
       "Develops capillary network and mitochondrial density, improves fat utilization",
+    physiologyIt:
+      "Sviluppa la rete capillare e la densità mitocondriale, migliora l'ossidazione dei grassi",
     sensation:
       "Effort confortable, respiration régulière, peut tenir une conversation",
     sensationEn:
       "Comfortable effort, regular breathing, can hold a conversation",
+    sensationIt:
+      "Sforzo confortevole, respirazione regolare, consente di sostenere una conversazione",
     benefit: "Construit la base aérobie, améliore l'économie de course",
     benefitEn: "Builds aerobic base, improves running economy",
+    benefitIt: "Costruisce la base aerobica, migliora l'economia di corsa",
     examples: ["Sortie longue", "Footing quotidien", "Échauffement"],
     examplesEn: ["Long run", "Daily jog", "Warm-up"],
+    examplesIt: ["Uscita lunga", "Corsa quotidiana", "Riscaldamento"],
   },
   3: {
     label: "Tempo",
     labelEn: "Tempo",
+    labelIt: "Tempo",
     color: "zone-3",
     description: "Effort soutenu, seuil aérobie",
     descriptionEn: "Sustained effort, aerobic threshold",
+    descriptionIt: "Sforzo sostenuto, soglia aerobica",
     physiology:
       "Stimule le seuil lactique 1, améliore la clairance du lactate",
     physiologyEn:
       "Stimulates lactate threshold 1, improves lactate clearance",
+    physiologyIt:
+      "Stimola la prima soglia lattacida (LT1), migliora lo smaltimento del lattato",
     sensation:
       "Effort modéré, respiration plus profonde, phrases courtes possibles",
     sensationEn:
       "Moderate effort, deeper breathing, short sentences possible",
+    sensationIt:
+      "Sforzo moderato, respirazione più profonda, possibili frasi brevi",
     benefit: "Augmente l'endurance à allure marathon",
     benefitEn: "Increases endurance at marathon pace",
+    benefitIt: "Aumenta la resistenza al ritmo maratona",
     examples: ["Tempo run", "Course à allure marathon"],
     examplesEn: ["Tempo run", "Marathon pace run"],
+    examplesIt: ["Tempo run", "Corsa a ritmo maratona"],
   },
   4: {
     label: "Seuil",
     labelEn: "Threshold",
+    labelIt: "Soglia",
     color: "zone-4",
     description: "Effort intense, seuil lactique",
     descriptionEn: "Intense effort, lactate threshold",
+    descriptionIt: "Sforzo intenso, soglia del lattato",
     physiology:
       "Travaille au seuil lactique 2, repousse le point de basculement métabolique",
     physiologyEn:
       "Works at lactate threshold 2, pushes back the metabolic tipping point",
+    physiologyIt:
+      "Lavora alla seconda soglia lattacida (LT2), sposta più in alto il punto di accumulo",
     sensation:
       "Effort soutenu, respiration contrôlée mais intense, quelques mots seulement",
     sensationEn:
       "Sustained effort, controlled but intense breathing, only a few words",
+    sensationIt:
+      "Sforzo sostenuto, respirazione controllata ma intensa, solo poche parole",
     benefit:
       "Améliore la vitesse de croisière sur semi-marathon et plus",
     benefitEn: "Improves cruising speed for half-marathon and beyond",
+    benefitIt:
+      "Migliora la velocità di crociera su mezza maratona e oltre",
     examples: ["Intervalles au seuil", "Tempo soutenu 20-40min"],
     examplesEn: ["Threshold intervals", "Sustained tempo 20-40min"],
+    examplesIt: ["Ripetute alla soglia", "Tempo sostenuto 20-40 min"],
   },
   5: {
     label: "VO2max",
     labelEn: "VO2max",
+    labelIt: "VO2max",
     color: "zone-5",
     description: "Effort très intense, puissance aérobie",
     descriptionEn: "Very intense effort, aerobic power",
+    descriptionIt: "Sforzo molto intenso, potenza aerobica",
     physiology:
       "Sollicite la consommation maximale d'oxygène, développe la puissance aérobie",
     physiologyEn:
       "Engages maximal oxygen consumption, develops aerobic power",
-    sensation: "Effort intense, respiration difficile, impossible de parler",
+    physiologyIt:
+      "Sollecita il massimo consumo di ossigeno, sviluppa la potenza aerobica",
+    sensation: "Effort intense, respiration difficile, impossible to parler",
     sensationEn: "Intense effort, labored breathing, impossible to talk",
+    sensationIt: "Sforzo intenso, respiro affannoso, impossibile parlare",
     benefit:
       "Augmente la VMA et la capacité à maintenir des allures rapides",
     benefitEn: "Increases VO2max and ability to sustain fast paces",
+    benefitIt:
+      "Aumenta la VAM e la capacità di sostenere ritmi elevati",
     examples: ["30/30", "Fractionné court", "Intervalles 400m-1000m"],
     examplesEn: ["30/30 intervals", "Short repeats", "400m-1000m intervals"],
+    examplesIt: ["30/30", "Ripetute brevi", "Ripetute 400m-1000m"],
   },
   6: {
     label: "Sprint",
     labelEn: "Sprint",
+    labelIt: "Sprint",
     color: "zone-6",
     description: "Effort maximal, vitesse",
     descriptionEn: "Maximal effort, speed",
+    descriptionIt: "Sforzo massimale, velocità",
     physiology:
       "Développe la puissance neuromusculaire et la tolérance au lactate",
     physiologyEn:
       "Develops neuromuscular power and lactate tolerance",
+    physiologyIt:
+      "Sviluppa la potenza neuromuscolare e la tolleranza al lattato",
     sensation:
       "Effort maximal, sprint, ne peut pas maintenir plus de 30-60 secondes",
     sensationEn:
       "Maximal effort, sprint, cannot sustain for more than 30-60 seconds",
+    sensationIt:
+      "Sforzo massimale, sprint, non sostenibile oltre 30-60 secondi",
     benefit: "Améliore la vitesse pure et le kick final",
     benefitEn: "Improves pure speed and finishing kick",
+    benefitIt: "Migliora la velocità pura e lo scatto finale",
     examples: ["Sprints courts", "Côtes rapides", "Accélérations"],
     examplesEn: ["Short sprints", "Fast hill repeats", "Accelerations"],
+    examplesIt: ["Sprint brevi", "Salite veloci", "Accelerazioni"],
   },
 };
 
@@ -357,31 +419,31 @@ export const ZONE_META: Record<ZoneNumber, ZoneMeta> = {
 // Icons live in CategoryIcon.tsx (CATEGORY_ICONS), not here.
 export const CATEGORY_META: Record<
   WorkoutCategory,
-  { label: string; labelEn: string }
+  { label: string; labelEn: string; labelIt?: string }
 > = {
-  recovery: { label: "Récupération", labelEn: "Recovery" },
-  endurance: { label: "Endurance", labelEn: "Endurance" },
-  tempo: { label: "Tempo", labelEn: "Tempo" },
-  threshold: { label: "Seuil", labelEn: "Threshold" },
-  vma_intervals: { label: "VMA", labelEn: "VO2max" },
-  long_run: { label: "Sortie longue", labelEn: "Long Run" },
-  hills: { label: "Côtes", labelEn: "Hills" },
-  fartlek: { label: "Fartlek", labelEn: "Fartlek" },
-  race_pace: { label: "Allure course", labelEn: "Race Pace" },
-  mixed: { label: "Mixte", labelEn: "Mixed" },
-  assessment: { label: "Tests", labelEn: "Assessment" },
-  trail: { label: "Trail", labelEn: "Trail" },
+  recovery: { label: "Récupération", labelEn: "Recovery", labelIt: "Recupero" },
+  endurance: { label: "Endurance", labelEn: "Endurance", labelIt: "Resistenza" },
+  tempo: { label: "Tempo", labelEn: "Tempo", labelIt: "Tempo" },
+  threshold: { label: "Seuil", labelEn: "Threshold", labelIt: "Soglia" },
+  vma_intervals: { label: "VMA", labelEn: "VO2max", labelIt: "VAM / VO2max" },
+  long_run: { label: "Sortie longue", labelEn: "Long Run", labelIt: "Lungo" },
+  hills: { label: "Côtes", labelEn: "Hills", labelIt: "Salite" },
+  fartlek: { label: "Fartlek", labelEn: "Fartlek", labelIt: "Fartlek" },
+  race_pace: { label: "Allure course", labelEn: "Race Pace", labelIt: "Ritmo gara" },
+  mixed: { label: "Mixte", labelEn: "Mixed", labelIt: "Misto" },
+  assessment: { label: "Tests", labelEn: "Assessment", labelIt: "Test" },
+  trail: { label: "Trail", labelEn: "Trail", labelIt: "Trail" },
 };
 
 // Difficulty Display Metadata
 export const DIFFICULTY_META: Record<
   Difficulty,
-  { label: string; labelEn: string; level: number; desc: string; descEn: string }
+  { label: string; labelEn: string; labelIt?: string; level: number; desc: string; descEn: string; descIt?: string }
 > = {
-  beginner: { label: "Débutant", labelEn: "Beginner", level: 1, desc: "1 à 2 sorties/semaine · moins de 15 km/semaine", descEn: "1-2 runs/week · less than 15 km/week" },
-  intermediate: { label: "Intermédiaire", labelEn: "Intermediate", level: 2, desc: "3 à 4 sorties/semaine · 20-40 km/semaine", descEn: "3-4 runs/week · 20-40 km/week" },
-  advanced: { label: "Avancé", labelEn: "Advanced", level: 3, desc: "4 à 5 sorties/semaine · 40-70 km/semaine", descEn: "4-5 runs/week · 40-70 km/week" },
-  elite: { label: "Élite", labelEn: "Elite", level: 4, desc: "5 à 7 sorties/semaine · 70+ km/semaine", descEn: "5-7 runs/week · 70+ km/week" },
+  beginner: { label: "Débutant", labelEn: "Beginner", labelIt: "Principiante", level: 1, desc: "1 à 2 sorties/semaine · moins de 15 km/semaine", descEn: "1-2 runs/week · less than 15 km/week", descIt: "1-2 uscite/settimana · meno di 15 km/settimana" },
+  intermediate: { label: "Intermédiaire", labelEn: "Intermediate", labelIt: "Intermedio", level: 2, desc: "3 à 4 sorties/semaine · 20-40 km/semaine", descEn: "3-4 runs/week · 20-40 km/week", descIt: "3-4 uscite/settimana · 20-40 km/settimana" },
+  advanced: { label: "Avancé", labelEn: "Advanced", labelIt: "Avanzato", level: 3, desc: "4 à 5 sorties/semaine · 40-70 km/semaine", descEn: "4-5 runs/week · 40-70 km/week", descIt: "4-5 uscite/settimana · 40-70 km/settimana" },
+  elite: { label: "Élite", labelEn: "Elite", labelIt: "Élite", level: 4, desc: "5 à 7 sorties/semaine · 70+ km/semaine", descEn: "5-7 runs/week · 70+ km/week", descIt: "5-7 uscite/settimana · 70+ km/settimana" },
 };
 
 /** Inclusive zone span. `min === max` for a single-zone spec like `Z5`. */

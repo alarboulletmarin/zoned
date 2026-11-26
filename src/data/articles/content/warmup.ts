@@ -296,6 +296,153 @@ Ideally, the last accelerations should be done 5-10 minutes before the start. No
 Warm-up isn't time lost - it's time invested. Fifteen to twenty minutes of preparation can make the difference between a successful session and an injury, between a race where you feel light and one where you struggle from kilometer one.
 
 Turn it into a ritual. With habit, you'll feel the difference: a body ready for effort responds differently than a body launched cold.`,
+  contentIt: `## Un rituale spesso trascurato
+
+Osserva i runner alla partenza di una gara popolare. Alcuni arrivano corricchiando da 20 minuti, fanno qualche allungo, sembrano rilassati. Altri scendono dall'auto, allacciano le scarpe e si mettono subito sulla linea. I primi finiranno probabilmente meglio dei secondi: non perché siano più forti, ma perché hanno preparato il corpo allo sforzo.
+
+Il riscaldamento non è una formalità. È una sequenza fisiologica che prepara ogni sistema del corpo: muscoli, articolazioni, apparato cardiovascolare, metabolismo. Eseguito bene, migliora la prestazione e riduce il rischio di infortuni. Trascurato o fatto male, ti mette nelle peggiori condizioni per correre.
+
+---
+
+## Cosa succede nel tuo corpo
+
+### L'aumento della temperatura
+
+I muscoli lavorano meglio da caldi. Letteralmente. Un aumento di 1°C della temperatura muscolare migliora la loro capacità di contrazione del 2-5%. Gli enzimi che producono energia lavorano in modo più efficiente, la viscosità muscolare diminuisce, le fibre scorrono meglio le une sulle altre.
+
+Ecco perché la parola "riscaldamento" è appropriata: stai davvero cercando di alzare la temperatura dei tessuti. Una corsa lenta di 10-15 minuti aumenta la temperatura interna di circa 1°C e quella dei muscoli attivi di 2-3°C.
+
+### L'attivazione cardiovascolare
+
+A riposo il cuore batte piano e il sangue circola lentamente nei muscoli. Passare bruscamente a uno sforzo intenso crea uno scarto: i muscoli chiedono ossigeno che il sistema cardiovascolare non è ancora pronto a fornire. Risultato: accumuli un debito di ossigeno fin dai primi minuti e il fiatone arriva troppo presto.
+
+Un riscaldamento progressivo permette al cuore di accelerare gradualmente, ai vasi sanguigni di dilatarsi, al flusso di sangue verso i muscoli di ampliarsi. Quando inizia lo sforzo vero, il sistema è già a regime.
+
+### La lubrificazione articolare
+
+Le articolazioni sono avvolte dal liquido sinoviale, un lubrificante naturale che riduce l'attrito tra le superfici ossee. Questo liquido si addensa a riposo e si fluidifica con il movimento. I primi minuti di corsa leggera "svegliano" le articolazioni: caviglie, ginocchia e anche guadagnano ampiezza e fluidità.
+
+### L'attivazione neuromuscolare
+
+Correre non è solo una questione di muscoli. È una coordinazione complessa tra il cervello e decine di gruppi muscolari che devono contrarsi e rilassarsi al momento giusto, nell'ordine giusto, con l'intensità giusta.
+
+Le andature atletiche — skip alto, calciata dietro, passi laterali — "svegliano" questi circuiti nervosi. Preparano il sistema neuromuscolare ai movimenti specifici della corsa.
+
+---
+
+## Protocollo di riscaldamento completo
+
+### Fase 1: Corsa leggera (10-15 minuti)
+
+Inizia con una corsetta molto lenta, in Zona 1. I primi minuti devono sembrare ridicolmente facili. Se hai il cardiofrequenzimetro, punta al 50-60% della tua FCmax.
+
+Aumenta progressivamente il ritmo col passare dei minuti, senza mai superare la Zona 2. Alla fine di questa fase dovresti sentire un leggero calore, un respiro un po' più presente, ma nessuna fatica.
+
+L'obiettivo non è "prepararsi a essere stanchi". È preparare tutti i sistemi a lavorare insieme in modo efficiente.
+
+> 💡 Inizia sempre ridicolmente piano. Se i primi minuti non ti sembrano "troppo facili", probabilmente stai andando troppo forte.
+
+### Fase 2: Andature atletiche (5-8 minuti)
+
+Su un rettilineo di 30-40 metri, esegui in sequenza questi esercizi tornando indietro al trotto:
+
+**Skip alto (montate di ginocchia)**: solleva le ginocchia in alto davanti a te, un passo dopo l'altro, come se salissi una scala esagerando il gesto. Mantieni il busto eretto, braccia attive. Due tratti da 30 m.
+
+**Calciata dietro**: porta i talloni verso i glutei a ogni falcata. Il movimento deve essere rapido, il contatto a terra breve. Due tratti da 30 m.
+
+**Passi laterali (chassé)**: spostati lateralmente, piedi paralleli, senza incrociare le gambe. Un tratto per lato.
+
+**Corsa a gambe tese**: avanza mantenendo le gambe quasi tese, come una marcia militare esagerata. Questo esercizio allunga gli ischiocrurali attivando i flessori dell'anca. Due tratti da 20 m.
+
+**Corsa balzata**: esagera ogni falcata con una spinta verticale marcata. L'idea è "rimbalzare" da un piede all'altro. Due tratti da 20 m.
+
+### Fase 3: Allunghi progressivi (3-5 minuti)
+
+Prima dei lavori di velocità o di una gara, aggiungi 3-4 allunghi progressivi da 60-80 metri.
+
+Il principio: parti a ritmo moderato e accelera progressivamente fino all'85-90% della tua velocità massima. Non sprintare a tutta: lo scopo è preparare i muscoli alle alte velocità, non stancarti.
+
+Recupero completo tra un allungo e l'altro: torna camminando o corricchiando molto piano.
+
+---
+
+## Adattare il riscaldamento alla seduta
+
+### Prima di un'uscita facile
+
+Un riscaldamento lungo sarebbe controproducente. Parti semplicemente molto piano e i primi 10 minuti della tua uscita fungeranno da riscaldamento naturale. Nessuna andatura necessaria.
+
+### Prima di un lungo
+
+Stessa logica dell'uscita facile, ma con 5-10 minuti di corsa davvero lenta prima di assestarti sul tuo ritmo di crociera. Il corpo ha bisogno di tempo per mobilitare le riserve energetiche.
+
+### Prima di una seduta di soglia o tempo run
+
+Il riscaldamento completo diventa importante. Prevedi 15-20 minuti: corsa progressiva, qualche andatura semplificata e 2-3 allunghi al ritmo obiettivo della seduta. Devi arrivare al primo blocco di lavoro con il cuore "pronto a salire".
+
+### Prima delle ripetute VAM
+
+È qui che il riscaldamento è più cruciale. Gli sforzi molto intensi sollecitano bruscamente muscoli e tendini: partire a freddo moltiplica il rischio di infortuni.
+
+Prevedi 20-25 minuti: corsa progressiva di 15 minuti, andature complete e 3-4 allunghi di cui l'ultimo vicino al ritmo VAM.
+
+> 📌 Più la seduta è intensa, più il riscaldamento deve essere lungo e completo. Per le ripetute VAM prevedi almeno 20 minuti di preparazione.
+
+### Prima di una gara
+
+Il riscaldamento pre-gara è un'arte a sé. Deve essere completo senza risultare stancante e terminare poco prima della partenza (5-10 minuti al massimo).
+
+Su una 10 km o meno, il riscaldamento è determinante: sarai subito sotto sforzo fin dai primi minuti. Prevedi 25-30 minuti con il protocollo completo.
+
+Su una maratona, il riscaldamento può essere più leggero: bastano 10-15 minuti di corsetta e qualche andatura. I primi chilometri di gara completeranno il riscaldamento.
+
+---
+
+## Gli errori che sabotano il riscaldamento
+
+### Lo stretching statico prima dello sforzo
+
+Per decenni si è consigliato di fare stretching prima di correre. Gli studi recenti mostrano l'opposto: lo stretching statico (mantenere una posizione per 20-30 secondi) riduce temporaneamente forza e potenza muscolare del 5-10%.
+
+> ⚠️ Lo stretching statico prima dello sforzo riduce la forza muscolare del 5-10%. Riservane l'uso al post-allenamento e privilegia le andature dinamiche prima di correre.
+
+Riserva lo stretching statico al dopo seduta, quando i muscoli sono caldi e inizia il recupero. Prima dello sforzo, preferisci i movimenti dinamici delle andature atletiche.
+
+### Il riscaldamento troppo breve
+
+"Non ho tempo" è la scusa classica. Ma correre 5 km in più in cattive condizioni è meno efficace che correre 3 km ben preparato.
+
+Un riscaldamento affrettato ti fa partire in debito di ossigeno, con muscoli rigidi e articolazioni poco lubrificate. I primi minuti della seduta diventano così un riscaldamento forzato, ma ormai il danno è fatto.
+
+### Il riscaldamento troppo intenso
+
+All'opposto, alcuni runner trasformano il riscaldamento in un pre-affaticamento. Se hai già il fiatone prima di iniziare la seduta vera, hai sbagliato. Il riscaldamento deve attivare, non esaurire.
+
+Resta in Zona 1-2, tranne che per gli allunghi finali che restano brevi.
+
+### Il timing sbagliato
+
+In gara, finire il riscaldamento 30 minuti prima della partenza annulla tutti i benefici. La temperatura muscolare riscende, il sistema cardiovascolare si "riaddormenta".
+
+Idealmente, gli ultimi allunghi vanno fatti 5-10 minuti prima dello sparo. Non è sempre facile con le griglie e le regole degli organizzatori, ma punta a questo timing.
+
+---
+
+## Condizioni particolari
+
+**Con il freddo**: i muscoli impiegano più tempo a scaldarsi. Aggiungi 5-10 minuti di corsa lenta e indossa capi caldi da togliere poco prima del via.
+
+**Con il caldo**: il rischio non è più il freddo ma il surriscaldamento. Riduci l'intensità del riscaldamento, resta all'ombra se possibile e idratati.
+
+**Al mattino presto**: il corpo esce da diverse ore di immobilità. I dischi intervertebrali sono gonfi di liquido, i muscoli rigidi. Prevedi qualche minuto in più e parti ancora più gradualmente.
+
+---
+
+## In sintesi
+
+Il riscaldamento non è tempo perso: è tempo investito. Quindici-venti minuti di preparazione possono fare la differenza tra una seduta riuscita e un infortunio, tra una gara in cui ti senti leggero e una in cui lotti fin dal primo chilometro.
+
+Trasformalo in un rituale. Con l'abitudine sentirai la differenza: un corpo pronto allo sforzo risponde in tutt'altro modo rispetto a un corpo lanciato a freddo.`,
 };
 
 export default content;

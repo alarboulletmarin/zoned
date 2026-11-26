@@ -5,8 +5,10 @@
       "id": "EX-LB-001",
       "name": "Squat goblet",
       "nameEn": "Goblet Squat",
+      "nameIt": "Goblet squat",
       "description": "Squat avec charge tenue devant la poitrine. Excellent pour apprendre le pattern de squat et renforcer quadriceps, fessiers et core. La position de la charge favorise un buste droit, ce qui en fait un exercice idéal pour les coureurs débutants en musculation.",
       "descriptionEn": "Squat with weight held at chest level. Excellent for learning the squat pattern and strengthening quads, glutes and core. The front-loaded position encourages an upright torso, making it ideal for runners new to strength training.",
+      "descriptionIt": "Squat con carico tenuto davanti al petto. Ottimo per apprendere lo schema motorio dello squat e rinforzare quadricipiti, glutei e core. La posizione frontale del peso favorisce un busto eretto, rendendolo ideale per i runner alle prime armi con i pesi.",
       "primaryMuscles": ["quadriceps", "glutes"],
       "secondaryMuscles": ["core_anterior", "hamstrings"],
       "equipment": ["dumbbells"],
@@ -25,6 +27,13 @@
         "Keep chest up and back straight",
         "Lower until elbows touch inside of knees"
       ],
+      "formCuesIt": [
+        "Piedi larghi quanto le spalle, punte leggermente extraruotate",
+        "Tenere il manubrio aderente al petto, gomiti rivolti verso il basso",
+        "Scendere spingendo le ginocchia verso l'esterno",
+        "Mantenere il petto aperto e la schiena dritta",
+        "Scendere finché i gomiti sfiorano l'interno delle ginocchia"
+      ],
       "regressionId": "EX-LB-002",
       "progressionId": "EX-LB-003",
       "imageSlug": "goblet-squat"
@@ -33,8 +42,10 @@
       "id": "EX-LB-002",
       "name": "Squat au poids du corps",
       "nameEn": "Bodyweight Squat",
+      "nameIt": "Squat a corpo libero",
       "description": "Squat fondamental sans charge additionnelle. Permet de maîtriser le schéma moteur du squat avant d'ajouter de la résistance. Renforce les quadriceps, fessiers et améliore la mobilité de hanches et chevilles.",
       "descriptionEn": "Fundamental squat without additional load. Allows mastering the squat movement pattern before adding resistance. Strengthens quads, glutes and improves hip and ankle mobility.",
+      "descriptionIt": "Squat fondamentale senza carico aggiuntivo. Permette di padroneggiare lo schema motorio dello squat prima di aggiungere resistenza. Rinforza quadricipiti e glutei e migliora la mobilità di anche e caviglie.",
       "primaryMuscles": ["quadriceps", "glutes"],
       "secondaryMuscles": ["core_anterior", "hamstrings", "calves"],
       "equipment": ["none"],
@@ -53,6 +64,13 @@
         "Knees track over toes throughout the movement",
         "Keep heels on the ground throughout"
       ],
+      "formCuesIt": [
+        "Piedi larghi quanto le spalle, punte leggermente extraruotate",
+        "Braccia tese in avanti o incrociate sul petto",
+        "Scendere come per sedersi su una sedia",
+        "Le ginocchia seguono la direzione delle punte dei piedi",
+        "Mantenere i talloni a terra per tutto il movimento"
+      ],
       "regressionId": null,
       "progressionId": "EX-LB-001",
       "imageSlug": "bodyweight-squat"
@@ -61,8 +79,10 @@
       "id": "EX-LB-003",
       "name": "Back squat",
       "nameEn": "Back Squat",
+      "nameIt": "Back squat",
       "description": "Squat avec barre sur les trapèzes. Exercice roi pour le développement de la force des membres inférieurs. Étude Roennestad (2014) : les coureurs ayant ajouté du back squat lourd ont amélioré leur économie de course et leur performance sur 5 km.",
       "descriptionEn": "Squat with barbell on upper back. The gold standard exercise for lower body strength development. Roennestad (2014) study: runners who added heavy back squats improved their running economy and 5K performance.",
+      "descriptionIt": "Squat con bilanciere sui trapezi. Esercizio principe per lo sviluppo della forza degli arti inferiori. Studio di Roennestad (2014): i runner che hanno integrato il back squat pesante hanno migliorato l'economia di corsa e la prestazione sui 5 km.",
       "primaryMuscles": ["quadriceps", "glutes"],
       "secondaryMuscles": ["hamstrings", "core_anterior", "core_posterior"],
       "equipment": ["barbell"],
@@ -81,6 +101,13 @@
         "Lower at least to parallel (thighs horizontal)",
         "Push the floor away with your feet to stand up"
       ],
+      "formCuesIt": [
+        "Bilanciere appoggiato sui trapezi alti, non sul collo",
+        "Piedi larghi quanto le spalle o leggermente di più",
+        "Inspirare in alto, stabilizzare il core prima di scendere",
+        "Scendere almeno fino al parallelo (cosce orizzontali)",
+        "Spingere il pavimento con i piedi per risalire"
+      ],
       "regressionId": "EX-LB-001",
       "progressionId": null,
       "imageSlug": "back-squat"
@@ -89,8 +116,10 @@
       "id": "EX-LB-004",
       "name": "Fente avant",
       "nameEn": "Forward Lunge",
+      "nameIt": "Affondo anteriore",
       "description": "Exercice unilatéral fondamental qui reproduit le schéma de la foulée. Renforce quadriceps et fessiers tout en travaillant l'équilibre et la stabilité du bassin, essentiels pour prévenir les blessures chez le coureur.",
       "descriptionEn": "Fundamental unilateral exercise that mimics the running stride pattern. Strengthens quads and glutes while working balance and pelvic stability, essential for injury prévention in runners.",
+      "descriptionIt": "Esercizio unilaterale fondamentale che riproduce lo schema della falcata. Rinforza quadricipiti e glutei migliorando equilibrio e stabilità del bacino, essenziali per prevenire gli infortuni nei runner.",
       "primaryMuscles": ["quadriceps", "glutes"],
       "secondaryMuscles": ["hamstrings", "core_anterior", "hip_flexors"],
       "equipment": ["none"],
@@ -109,6 +138,13 @@
         "Push through the front heel to return",
         "Alternate legs with each répétition"
       ],
+      "formCuesIt": [
+        "Ampio passo in avanti, il ginocchio posteriore scende verso terra",
+        "Il ginocchio anteriore non supera eccessivamente la punta del piede",
+        "Busto eretto, sguardo rivolto in avanti",
+        "Spingere con il tallone della gamba anteriore per tornare",
+        "Alternare le gambe a ogni ripetizione"
+      ],
       "regressionId": null,
       "progressionId": "EX-LB-005",
       "imageSlug": "forward-lunge"
@@ -117,8 +153,10 @@
       "id": "EX-LB-005",
       "name": "Fente bulgare",
       "nameEn": "Bulgarian Split Squat",
+      "nameIt": "Bulgarian split squat",
       "description": "Exercice unilatéral clé pour les coureurs : pied arrière surélevé sur un banc. Cible intensément quadriceps et fessiers d'une seule jambe, corrige les asymétries de force et améliore la stabilité du bassin en course. Recommandé par Beattie (2017) pour les athlètes d'endurance.",
       "descriptionEn": "Key unilateral exercise for runners: rear foot elevated on a bench. Intensely targets quads and glutes on one leg, corrects strength asymmetries and improves pelvic stability during running. Recommended by Beattie (2017) for endurance athletes.",
+      "descriptionIt": "Esercizio unilaterale chiave per i runner: piede posteriore sollevato su una panca. Colpisce intensamente quadricipiti e glutei di una gamba alla volta, corregge le asimmetrie di forza e migliora la stabilità del bacino in corsa. Raccomandato da Beattie (2017) per gli atleti di endurance.",
       "primaryMuscles": ["quadriceps", "glutes"],
       "secondaryMuscles": ["hamstrings", "hip_flexors", "core_anterior"],
       "equipment": ["dumbbells", "box"],
@@ -137,6 +175,13 @@
         "Torso slightly leaning forward, back straight",
         "Push through the front heel to stand up"
       ],
+      "formCuesIt": [
+        "Piede posteriore appoggiato su una panca o un box (dorso del piede)",
+        "Distanza sufficiente affinché il ginocchio anteriore resti sopra la caviglia",
+        "Scendere verticalmente portando il ginocchio posteriore verso terra",
+        "Busto leggermente inclinato in avanti, schiena dritta",
+        "Spingere con il tallone della gamba anteriore per risalire"
+      ],
       "regressionId": "EX-LB-004",
       "progressionId": null,
       "imageSlug": "bulgarian-split-squat"
@@ -145,8 +190,10 @@
       "id": "EX-LB-006",
       "name": "Step-up",
       "nameEn": "Step-Up",
+      "nameIt": "Step-up su box",
       "description": "Montée sur box unilatérale, extrêmement spécifique à la course à pied. Reproduit la phase de propulsion de la foulée avec une composante verticale. Renforce quadriceps, fessiers et améliore la coordination motrice spécifique au running.",
       "descriptionEn": "Unilateral box step-up, extremely running-specific. Reproduces the propulsion phase of the stride with a vertical component. Strengthens quads, glutes and improves running-specific motor coordination.",
+      "descriptionIt": "Salita unilaterale su box, estremamente specifica per la corsa. Riproduce la fase di spinta della falcata con una componente verticale. Rinforza quadricipiti e glutei e migliora la coordinazione motoria specifica del running.",
       "primaryMuscles": ["quadriceps", "glutes"],
       "secondaryMuscles": ["hamstrings", "calves", "core_anterior"],
       "equipment": ["box", "dumbbells"],
@@ -165,6 +212,13 @@
         "Keep torso upright, eyes looking forward",
         "Control the descent, do not drop down"
       ],
+      "formCuesIt": [
+        "Altezza del box: il ginocchio forma un angolo di circa 90 gradi",
+        "Salire spingendo esclusivamente con la gamba sul box",
+        "Non spingersi con il piede a terra (niente slancio)",
+        "Mantenere il busto eretto, sguardo in avanti",
+        "Controllare la discesa senza lasciarsi cadere"
+      ],
       "regressionId": null,
       "progressionId": null,
       "imageSlug": "step-up"
@@ -173,8 +227,10 @@
       "id": "EX-LB-007",
       "name": "Deadlift roumain",
       "nameEn": "Romanian Deadlift",
+      "nameIt": "Stacco rumeno",
       "description": "Soulevé de terre jambes semi-tendues ciblant la chaîne postérieure. Renforce ischio-jambiers et fessiers en excentrique, crucial pour la phase de balancement arrière de la foulée et la prévention des lésions aux ischio-jambiers (Lauersen 2014).",
       "descriptionEn": "Stiff-legged deadlift targeting the posterior chain. Strengthens hamstrings and glutes eccentrically, crucial for the back-swing phase of the stride and hamstring injury prévention (Lauersen 2014).",
+      "descriptionIt": "Stacco a gambe semitese mirato alla catena posteriore. Rinforza ischiocrurali e glutei in fase eccentrica, fondamentale per la fase di richiamo posteriore della falcata e per la prevenzione degli infortuni ai muscoli posteriori della coscia (Lauersen 2014).",
       "primaryMuscles": ["hamstrings", "glutes"],
       "secondaryMuscles": ["core_posterior", "upper_back"],
       "equipment": ["barbell"],
@@ -193,6 +249,13 @@
         "Feel the stretch in the hamstrings",
         "Return by squeezing glutes at the top of the movement"
       ],
+      "formCuesIt": [
+        "Piedi larghi quanto i fianchi, leggera flessione delle ginocchia",
+        "Spingere i fianchi indietro (cerniera d'anca)",
+        "Il bilanciere scende lungo le cosce, vicino al corpo",
+        "Sentire l'allungamento nei muscoli posteriori della coscia",
+        "Risalire contraendo i glutei nella parte alta del movimento"
+      ],
       "regressionId": "EX-LB-010",
       "progressionId": "EX-LB-008",
       "imageSlug": "romanian-deadlift"
@@ -201,8 +264,10 @@
       "id": "EX-LB-008",
       "name": "Deadlift roumain unipodal",
       "nameEn": "Single-Leg Romanian Deadlift",
+      "nameIt": "Stacco rumeno monopodalico",
       "description": "Version unilatérale du deadlift roumain sur une jambe. Combine renforcement des ischio-jambiers et fessiers avec un travail d'équilibre et de proprioception. Très transférable à la course car chaque foulée est un appui unipodal.",
       "descriptionEn": "Unilateral version of the Romanian deadlift on one leg. Combines hamstring and glute strengthening with balance and proprioception work. Highly transferable to running since each stride is a single-leg stance.",
+      "descriptionIt": "Versione unilaterale dello stacco rumeno su una gamba. Combina il rinforzo di ischiocrurali e glutei con un lavoro di equilibrio e propriocezione. Molto trasferibile alla corsa perché ogni falcata è un appoggio monopodalico.",
       "primaryMuscles": ["hamstrings", "glutes"],
       "secondaryMuscles": ["core_anterior", "core_lateral", "calves"],
       "equipment": ["dumbbells"],
@@ -221,6 +286,13 @@
         "Keep hips level (do not open the hip)",
         "Lower until you feel the hamstring stretch"
       ],
+      "formCuesIt": [
+        "In piedi su una gamba, leggera flessione del ginocchio d'appoggio",
+        "Inclinare il busto in avanti spingendo i fianchi indietro",
+        "La gamba libera si estende indietro in linea con il tronco",
+        "Mantenere i fianchi livellati (non aprire l'anca)",
+        "Scendere fino a sentire l'allungamento degli ischiocrurali"
+      ],
       "regressionId": "EX-LB-007",
       "progressionId": null,
       "imageSlug": "single-leg-rdl"
@@ -229,8 +301,10 @@
       "id": "EX-LB-009",
       "name": "Hip thrust",
       "nameEn": "Hip Thrust",
+      "nameIt": "Hip thrust",
       "description": "Extension de hanche avec charge, dos appuyé sur un banc. Exercice de référence pour l'activation et le renforcement des fessiers en position d'extension maximale. Améliore la puissance de propulsion en course et la vitesse de pointe.",
       "descriptionEn": "Loaded hip extension with upper back resting on a bench. The reference exercise for glute activation and strengthening at maximum hip extension. Improves running propulsion power and top-end speed.",
+      "descriptionIt": "Estensione d'anca con carico, parte alta della schiena appoggiata su una panca. Esercizio di riferimento per l'attivazione e il rinforzo dei glutei in massima estensione d'anca. Migliora la potenza di spinta nella corsa e la velocità di punta.",
       "primaryMuscles": ["glutes"],
       "secondaryMuscles": ["hamstrings", "core_anterior"],
       "equipment": ["barbell", "box"],
@@ -249,6 +323,13 @@
         "At the top, shins are vertical and torso is horizontal",
         "Control the descent, do not bounce at the bottom"
       ],
+      "formCuesIt": [
+        "Parte alta della schiena appoggiata su una panca, piedi piatti a terra",
+        "Bilanciere posizionato sulla piega delle anche (usare un cuscinetto)",
+        "Spingere i fianchi verso il soffitto contraendo i glutei",
+        "In alto, le tibie sono verticali e il busto è orizzontale",
+        "Controllare la discesa, non rimbalzare in basso"
+      ],
       "regressionId": "EX-LB-010",
       "progressionId": null,
       "imageSlug": "hip-thrust"
@@ -257,8 +338,10 @@
       "id": "EX-LB-010",
       "name": "Pont fessier",
       "nameEn": "Glute Bridge",
+      "nameIt": "Ponte glutei",
       "description": "Extension de hanche au sol, exercice fondamental d'activation des fessiers. Idéal comme échauffement avant une séance de course ou comme exercice de base pour les débutants. Corrige l'inhibition des fessiers fréquente chez les personnes sédentaires.",
       "descriptionEn": "Floor-based hip extension, a fundamental glute activation exercise. Ideal as a warm-up before a run or as a baseline exercise for beginners. Corrects glute inhibition common in sedentary individuals.",
+      "descriptionIt": "Estensione d'anca a terra, esercizio fondamentale per l'attivazione dei glutei. Ideale come riscaldamento prima di una corsa o come esercizio base per principianti. Corregge l'inibizione dei glutei frequente nelle persone sedentarie.",
       "primaryMuscles": ["glutes"],
       "secondaryMuscles": ["hamstrings", "core_anterior"],
       "equipment": ["none"],
@@ -277,6 +360,13 @@
         "Hold 1-2 seconds at top, body aligned shoulders-hips-knees",
         "Lower slowly without fully resting glutes on the ground"
       ],
+      "formCuesIt": [
+        "Sdraiati sulla schiena, ginocchia piegate, piedi piatti a terra",
+        "Piedi larghi quanto i fianchi, talloni vicini ai glutei",
+        "Spingere i fianchi verso il soffitto contraendo i glutei",
+        "Mantenere 1-2 secondi in alto, corpo allineato spalle-fianchi-ginocchia",
+        "Scendere lentamente senza appoggiare del tutto i glutei a terra"
+      ],
       "regressionId": null,
       "progressionId": "EX-LB-009",
       "imageSlug": "glute-bridge"
@@ -285,8 +375,10 @@
       "id": "EX-LB-011",
       "name": "Pont fessier unipodal",
       "nameEn": "Single-Leg Glute Bridge",
+      "nameIt": "Ponte glutei monopodalico",
       "description": "Version unilatérale du pont fessier, une jambe en l'air. Augmente la charge sur le fessier de la jambe d'appui et révèle les asymétries de force entre les deux côtés. Exercice spécifique à la course car chaque appui sollicite un seul fessier.",
       "descriptionEn": "Unilateral version of the glute bridge with one leg raised. Increases the load on the working glute and reveals strength asymmetries between sides. Running-specific since each stance loads one glute at a time.",
+      "descriptionIt": "Versione unilaterale del ponte glutei con una gamba sollevata. Aumenta il carico sul gluteo della gamba d'appoggio e mette in luce eventuali asimmetrie di forza tra i due lati. Specifico per la corsa perché ogni appoggio carica un solo gluteo.",
       "primaryMuscles": ["glutes"],
       "secondaryMuscles": ["hamstrings", "core_lateral", "core_anterior"],
       "equipment": ["none"],
@@ -305,6 +397,13 @@
         "Squeeze the glute at the top of the movement",
         "Complete all reps on one side before switching"
       ],
+      "formCuesIt": [
+        "Posizione di ponte glutei, sollevare una gamba tesa verso il soffitto",
+        "Spingere attraverso il tallone della gamba d'appoggio",
+        "Mantenere i fianchi livellati, non inclinarsi di lato",
+        "Contrarre il gluteo nella parte alta del movimento",
+        "Completare tutte le ripetizioni da un lato prima di cambiare"
+      ],
       "regressionId": "EX-LB-010",
       "progressionId": null,
       "imageSlug": "single-leg-glute-bridge"
@@ -313,8 +412,10 @@
       "id": "EX-LB-012",
       "name": "Clamshell",
       "nameEn": "Clamshell",
+      "nameIt": "Clamshell",
       "description": "Exercice d'isolation du moyen fessier avec bande de résistance. Essentiel pour la stabilisation latérale du bassin en course. Un moyen fessier faible est une cause majeure de syndrome de la bandelette iliotibiale et de douleurs de genou chez les coureurs.",
       "descriptionEn": "Glute medius isolation exercise with resistance band. Essential for lateral pelvic stabilization during running. A weak glute medius is a major cause of IT band syndrome and knee pain in runners.",
+      "descriptionIt": "Esercizio di isolamento del medio gluteo con fascia elastica. Essenziale per la stabilizzazione laterale del bacino durante la corsa. Un medio gluteo debole è una delle cause principali della sindrome della bandelletta ileotibiale e di dolori al ginocchio nei runner.",
       "primaryMuscles": ["glutes"],
       "secondaryMuscles": ["adductors"],
       "equipment": ["resistance_band"],
@@ -333,6 +434,13 @@
         "Control the descent, do not let the knee drop",
         "Feel the work on the side of the glute"
       ],
+      "formCuesIt": [
+        "Sdraiati su un fianco, ginocchia piegate a 90 gradi, elastico sopra le ginocchia",
+        "Piedi uniti, aprire il ginocchio superiore come una conchiglia",
+        "Non lasciare ruotare il bacino indietro durante il movimento",
+        "Controllare la discesa, non lasciar cadere il ginocchio",
+        "Sentire il lavoro sulla parte laterale del gluteo"
+      ],
       "regressionId": null,
       "progressionId": "EX-LB-013",
       "imageSlug": "clamshell"
@@ -341,8 +449,10 @@
       "id": "EX-LB-013",
       "name": "Marche latérale avec bande",
       "nameEn": "Lateral Band Walk",
+      "nameIt": "Camminata laterale con elastico",
       "description": "Marche latérale avec bande de résistance autour des chevilles ou des genoux. Active le moyen et le petit fessier pour la stabilité frontale du bassin. Exercice de préhabilitation incontournable pour prévenir les blessures de genou et de hanche chez les coureurs.",
       "descriptionEn": "Lateral walk with resistance band around ankles or knees. Activates the gluteus medius and minimus for frontal plane pelvic stability. An essential prehab exercise to prevent knee and hip injuries in runners.",
+      "descriptionIt": "Camminata laterale con fascia elastica intorno alle caviglie o alle ginocchia. Attiva medio e piccolo gluteo per la stabilità frontale del bacino. Esercizio di prevenzione imprescindibile per prevenire infortuni a ginocchio e anca nei runner.",
       "primaryMuscles": ["glutes"],
       "secondaryMuscles": ["adductors", "quadriceps"],
       "equipment": ["resistance_band"],
@@ -361,6 +471,13 @@
         "Do not let knees collapse inward",
         "Keep torso upright and hips low throughout"
       ],
+      "formCuesIt": [
+        "Elastico intorno alle caviglie (o sopra le ginocchia per una variante più facile)",
+        "Posizione di quarto di squat, piedi larghi quanto le spalle",
+        "Eseguire passi laterali mantenendo costante la tensione dell'elastico",
+        "Non lasciare che le ginocchia cedano verso l'interno",
+        "Mantenere il busto eretto e i fianchi bassi per tutta la serie"
+      ],
       "regressionId": "EX-LB-012",
       "progressionId": null,
       "imageSlug": "lateral-band-walk"
@@ -369,8 +486,10 @@
       "id": "EX-LB-014",
       "name": "Mollets debout",
       "nameEn": "Standing Calf Raise",
+      "nameIt": "Sollevamento polpacci in piedi",
       "description": "Élévation des mollets debout, bilatéral. Renforce le soléaire et les gastrocnémiens, muscles essentiels à la propulsion en course à pied. Le complexe mollet-tendon d'Achille stocke et restitue l'énergie élastique à chaque foulée.",
       "descriptionEn": "Standing bilateral calf raise. Strengthens the soleus and gastrocnemius, essential muscles for running propulsion. The calf-Achilles tendon complex stores and releases elastic energy with each stride.",
+      "descriptionIt": "Sollevamento bilaterale dei polpacci in piedi. Rinforza soleo e gastrocnemio, muscoli essenziali per la spinta nella corsa. Il complesso polpaccio-tendine d'Achille immagazzina e restituisce energia elastica a ogni falcata.",
       "primaryMuscles": ["calves"],
       "secondaryMuscles": [],
       "equipment": ["none"],
@@ -389,6 +508,13 @@
         "Lower slowly below step level (full stretch)",
         "Keep knees slightly bent to target the soleus"
       ],
+      "formCuesIt": [
+        "In piedi sul bordo di un gradino, talloni nel vuoto",
+        "Salire sulle punte dei piedi il più in alto possibile",
+        "Mantenere 1-2 secondi al picco della contrazione",
+        "Scendere lentamente sotto il livello del gradino (allungamento completo)",
+        "Mantenere le ginocchia leggermente flesse per coinvolgere il soleo"
+      ],
       "regressionId": null,
       "progressionId": "EX-LB-015",
       "imageSlug": "standing-calf-raise"
@@ -397,8 +523,10 @@
       "id": "EX-LB-015",
       "name": "Mollet unipodal",
       "nameEn": "Single-Leg Calf Raise",
+      "nameIt": "Sollevamento polpaccio monopodalico",
       "description": "Élévation du mollet sur une seule jambe. Exercice de préhabilitation du tendon d'Achille par excellence (Lauersen 2014). Renforce spécifiquement le complexe mollet-tendon d'Achille pour supporter les forces d'impact répétées en course (2-3x le poids du corps par foulée).",
       "descriptionEn": "Single-leg calf raise. The quintessential Achilles tendon prehab exercise (Lauersen 2014). Specifically strengthens the calf-Achilles tendon complex to handle the repeated impact forces in running (2-3x bodyweight per stride).",
+      "descriptionIt": "Sollevamento del polpaccio su una sola gamba. L'esercizio di prevenzione per eccellenza per il tendine d'Achille (Lauersen 2014). Rinforza in modo specifico il complesso polpaccio-tendine d'Achille per sopportare le forze d'impatto ripetute nella corsa (2-3 volte il peso corporeo per falcata).",
       "primaryMuscles": ["calves"],
       "secondaryMuscles": [],
       "equipment": ["none"],
@@ -416,6 +544,13 @@
         "Rise slowly onto toes (3 seconds)",
         "Lower even more slowly (4-5 seconds, eccentric phase)",
         "Full range of motion: maximum stretch at bottom, peak contraction at top"
+      ],
+      "formCuesIt": [
+        "In piedi su una gamba sul bordo di un gradino, tallone nel vuoto",
+        "Appoggiarsi a un muro o corrimano per equilibrio se necessario",
+        "Salire lentamente sulla punta del piede (3 secondi)",
+        "Scendere ancora più lentamente (4-5 secondi, fase eccentrica)",
+        "Ampiezza completa: massimo allungamento in basso, massima contrazione in alto"
       ],
       "regressionId": "EX-LB-014",
       "progressionId": null,

@@ -1,0 +1,117 @@
+{
+  "title": "Contribuisci",
+  "subtitle": "Proponi una seduta alla community",
+  "description": "Condividi le tue sedute di allenamento preferite con la community di Zoned",
+  "quickIdea": {
+    "title": "Idea rapida",
+    "subtitle": "Descrivi la tua idea di seduta in poche parole",
+    "nameLabel": "Nome della seduta",
+    "namePlaceholder": "Es.: Fartlek nella natura",
+    "descriptionLabel": "Descrizione",
+    "descriptionPlaceholder": "Descrivi la seduta, il suo obiettivo e come svolgerla...",
+    "categoryLabel": "Categoria",
+    "difficultyLabel": "Livello"
+  },
+  "fullWorkout": {
+    "title": "Seduta completa",
+    "subtitle": "Costruisci una seduta dettagliata, con anteprima dal vivo",
+    "step1Title": "Basi",
+    "step2Title": "Riscaldamento e corpo centrale",
+    "step3Title": "Defaticamento",
+    "step4Title": "Anteprima",
+    "nameLabel": "Nome (FR)",
+    "nameEnLabel": "Nome (EN)",
+    "nameEnPlaceholder": "Nome in inglese (facoltativo)",
+    "descriptionLabel": "Descrizione (FR)",
+    "descriptionEnLabel": "Descrizione (EN)",
+    "descriptionEnPlaceholder": "Descrizione in inglese (facoltativa)",
+    "sessionTypeLabel": "Tipo di seduta",
+    "targetSystemLabel": "Sistema target",
+    "durationLabel": "Durata tipica",
+    "durationMin": "Min",
+    "durationMax": "Max"
+  },
+  "blocks": {
+    "warmup": "Riscaldamento",
+    "mainSet": "Corpo centrale",
+    "cooldown": "Defaticamento",
+    "addBlock": "Aggiungi blocco",
+    "addSegment": "Aggiungi segmento",
+    "addRepeat": "Aggiungi ripetizione",
+    "removeBlock": "Rimuovi",
+    "moveUp": "Sposta su",
+    "moveDown": "Sposta giù",
+    "segment": "Segmento",
+    "repeat": "Ripetizione",
+    "description": "Descrizione",
+    "descriptionPlaceholder": "Es.: Corsa progressiva in Z2",
+    "descriptionEn": "Descrizione (EN)",
+    "descriptionEnPlaceholder": "Descrizione in inglese (facoltativa)",
+    "duration": "Durata",
+    "durationMinutes": "Minuti",
+    "durationSeconds": "Secondi",
+    "durationClock": "Durata",
+    "distanceM": "Distanza (m)",
+    "zone": "Zona",
+    "zonePlaceholder": "Es.: Z2 o Z4-Z5",
+    "repetitions": "Ripetizioni",
+    "count": "Numero",
+    "unit": "Unità",
+    "steps": "Fasi nel ciclo",
+    "between": "Fasi tra le serie",
+    "role": "Ruolo",
+    "roles": {
+      "effort": "Sforzo",
+      "recovery": "Recupero",
+      "transition": "Transizione"
+    },
+    "units": {
+      "reps": "Ripetizioni",
+      "sets": "Serie",
+      "blocks": "Blocchi"
+    },
+    "recovery": "Recupero",
+    "recoveryPlaceholder": "Es.: 2min corsa lenta Z1",
+    "emptyState": "Nessun blocco al momento. Aggiungine uno per iniziare."
+  },
+  "tips": {
+    "coachingLabel": "Consigli tecnici",
+    "coachingPlaceholder": "Es.: Mantieni una falcata rilassata e regolare",
+    "mistakesLabel": "Errori comuni",
+    "mistakesPlaceholder": "Es.: Partire troppo forte nelle prime ripetute",
+    "coachingEnLabel": "Consigli tecnici (EN)",
+    "mistakesEnLabel": "Errori comuni (EN)",
+    "addTip": "Aggiungi",
+    "removeTip": "Rimuovi"
+  },
+  "environment": {
+    "title": "Ambiente",
+    "requiresHills": "Richiede salite",
+    "requiresTrack": "Richiede pista",
+    "prefersFlat": "Preferisce terreno pianeggiante",
+    "prefersSoft": "Preferisce terreno morbido"
+  },
+  "preview": {
+    "title": "Anteprima",
+    "show": "Mostra anteprima",
+    "hide": "Nascondi anteprima",
+    "emptyState": "Compila i campi sopra per vedere l'anteprima della seduta"
+  },
+  "submit": {
+    "generateIssue": "Invia su GitHub",
+    "copyDescription": "Copia descrizione",
+    "openGithub": "Apri GitHub",
+    "urlTooLong": "Descrizione troppo lunga per un link diretto. Copiata negli appunti.",
+    "copied": "Copiato negli appunti!",
+    "success": "Grazie per il tuo contributo!",
+    "thankYou": "La tua seduta sarà revisionata dai manutentori del progetto.",
+    "required": "Questo campo è obbligatorio",
+    "atLeastOneBlock": "Aggiungi almeno un blocco al corpo centrale"
+  },
+  "steps": {
+    "next": "Avanti",
+    "previous": "Indietro",
+    "step": "Passo"
+  },
+  "kicker": "Issue GitHub precompilata"
+}

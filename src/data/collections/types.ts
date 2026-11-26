@@ -16,10 +16,14 @@ export interface Collection {
   name: string;
   /** Display name (English) */
   nameEn: string;
+  /** Display name (Italian) */
+  nameIt?: string;
   /** Short description (French) */
   description: string;
   /** Short description (English) */
   descriptionEn: string;
+  /** Short description (Italian) */
+  descriptionIt?: string;
   /** Icon name (matches SVG icon component) */
   icon: string;
   /**

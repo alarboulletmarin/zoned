@@ -6,18 +6,27 @@
       "discipline": "swimming",
       "name": "Technique & éducatifs",
       "nameEn": "Technique & Drills",
+      "nameIt": "Tecnica ed esercizi",
       "description": "Séance à faible intensité centrée sur la technique. Enchaîne éducatifs classiques (rattrapage, poings fermés, 6 battements-3 coups) avec nages complètes lentes pour ancrer les sensations.",
       "descriptionEn": "Low-intensity technique session. Alternates classic drills (catch-up, fists, 6-kick-3-stroke) with easy full-stroke swimming to embed sensation.",
+      "descriptionIt": "Seduta a bassa intensità incentrata sulla tecnica. Alterna esercizi classici (catch-up, pugni chiusi, 6 gambate-3 bracciate) a nuotata completa facile per fissare le sensazioni.",
       "category": "recovery",
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 35, "max": 45 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "400m alterné : 100m nage complète, 100m éducatif, 100m nage complète, 100m dos",
           "descriptionEn": "400m mixed: 100m full stroke, 100m drill, 100m full stroke, 100m backstroke",
+          "descriptionIt": "400m alternati: 100m completo, 100m esercizio, 100m completo, 100m dorso",
           "durationMin": 10,
           "distanceM": 400,
           "zone": "Z1"
@@ -28,6 +37,7 @@
           "kind": "segment",
           "description": "400m alterné : 100m nage complète, 100m éducatif, 100m nage complète, 100m dos",
           "descriptionEn": "400m mixed: 100m full stroke, 100m drill, 100m full stroke, 100m backstroke",
+          "descriptionIt": "400m alternati: 100m completo, 100m esercizio, 100m completo, 100m dorso",
           "durationSec": 600,
           "distanceM": 400,
           "zone": "Z1",
@@ -38,22 +48,26 @@
         {
           "description": "6×100m éducatif (rattrapage / poings fermés / 6-3), repos 20\" entre",
           "descriptionEn": "6×100m drills (catch-up / fists / 6-3), 20\" rest between",
+          "descriptionIt": "6×100m esercizi (catch-up / pugni chiusi / 6-3), 20\" riposo",
           "durationMin": 3,
           "repetitions": 6,
           "distanceM": 100,
           "zone": "Z1-Z2",
           "recovery": "20s repos",
-          "recoveryEn": "20s rest"
+          "recoveryEn": "20s rest",
+          "recoveryIt": "20s riposo"
         },
         {
           "description": "4×50m sensation en glisse (peu de coups, long et lent)",
           "descriptionEn": "4×50m gliding sensation (few strokes, long and slow)",
+          "descriptionIt": "4×50m sensazione di scivolamento (poche bracciate, lungo e lento)",
           "durationMin": 1.5,
           "repetitions": 4,
           "distanceM": 50,
           "zone": "Z1",
           "recovery": "15s repos",
-          "recoveryEn": "15s rest"
+          "recoveryEn": "15s rest",
+          "recoveryIt": "15s riposo"
         }
       ],
       "mainSetStructure": [
@@ -66,6 +80,7 @@
               "kind": "segment",
               "description": "100m éducatif (rattrapage / poings fermés",
               "descriptionEn": "100m drills (catch-up / fists",
+              "descriptionIt": "100m esercizi (catch-up / pugni chiusi",
               "durationSec": 180,
               "distanceM": 100,
               "zone": "Z1-Z2",
@@ -77,6 +92,7 @@
               "kind": "segment",
               "description": "20s repos",
               "descriptionEn": "20s rest",
+              "descriptionIt": "20s riposo",
               "durationSec": 20,
               "zone": "Z1",
               "role": "recovery"
@@ -92,6 +108,7 @@
               "kind": "segment",
               "description": "50m sensation en glisse (peu de coups, long et lent)",
               "descriptionEn": "50m gliding sensation (few strokes, long and slow)",
+              "descriptionIt": "50m sensazione di scivolamento (poche bracciate, lungo e lento)",
               "durationSec": 90,
               "distanceM": 50,
               "zone": "Z1",
@@ -103,6 +120,7 @@
               "kind": "segment",
               "description": "15s repos",
               "descriptionEn": "15s rest",
+              "descriptionIt": "15s riposo",
               "durationSec": 15,
               "zone": "Z1",
               "role": "recovery"
@@ -114,6 +132,7 @@
         {
           "description": "200m nage complète très facile",
           "descriptionEn": "200m very easy full stroke",
+          "descriptionIt": "200m nuotata completa molto facile",
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
@@ -124,6 +143,7 @@
           "kind": "segment",
           "description": "200m nage complète très facile",
           "descriptionEn": "200m very easy full stroke",
+          "descriptionIt": "200m nuotata completa molto facile",
           "durationSec": 300,
           "distanceM": 200,
           "zone": "Z1",
@@ -140,6 +160,11 @@
         "Breathe bilaterally if possible to balance the stroke",
         "Sensation first, stopwatch never"
       ],
+      "coachingTipsIt": [
+        "Conta le bracciate per vasca, cerca di ridurle progressivamente",
+        "Respirazione bilaterale se possibile per equilibrare la nuotata",
+        "Priorità alle sensazioni, non al cronometro"
+      ],
       "commonMistakes": [
         "Pousser l'intensité pour \"ne pas perdre son temps\"",
         "Négliger les éducatifs parce qu'ils sont ennuyeux"
@@ -148,12 +173,29 @@
         "Ramping intensity to \"not waste time\"",
         "Skimping on drills because they're boring"
       ],
+      "commonMistakesIt": [
+        "Alzare l'intensità per \"non perdere tempo\"",
+        "Trascurare gli esercizi perché noiosi"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak", "taper", "recovery"],
-        "weekPositions": ["early", "late"],
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "taper",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early",
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["technique", "recovery", "swimming"],
+        "tags": [
+          "technique",
+          "recovery",
+          "swimming"
+        ],
         "priorityScore": 80
       },
       "weeklyFrequencyMax": 3,
@@ -164,18 +206,27 @@
       "discipline": "swimming",
       "name": "Endurance 2000m",
       "nameEn": "Endurance 2000m",
+      "nameIt": "Resistenza 2000m",
       "description": "Séance aérobie continue construite autour d'un bloc principal de 1500m en Z2. Développe l'endurance et l'efficacité en nage longue.",
       "descriptionEn": "Continuous aerobic session built around a 1500m main set in Z2. Builds endurance and efficiency at long-swim pace.",
+      "descriptionIt": "Seduta aerobica continua costruita attorno a un blocco principale di 1500m in Z2. Sviluppa resistenza ed efficienza sul ritmo lungo.",
       "category": "endurance",
       "sessionType": "endurance",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 40, "max": 50 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "300m progressifs en Z1",
           "descriptionEn": "300m progressive in Z1",
+          "descriptionIt": "300m progressivi in Z1",
           "durationMin": 8,
           "distanceM": 300,
           "zone": "Z1"
@@ -186,6 +237,7 @@
           "kind": "segment",
           "description": "300m progressifs en Z1",
           "descriptionEn": "300m progressive in Z1",
+          "descriptionIt": "300m progressivi in Z1",
           "durationSec": 480,
           "distanceM": 300,
           "zone": "Z1",
@@ -196,12 +248,14 @@
         {
           "description": "3×500m en Z2 (CSS + 8s/100m), repos 30\" entre",
           "descriptionEn": "3×500m in Z2 (CSS + 8s/100m), 30\" rest between",
+          "descriptionIt": "3×500m in Z2 (CSS + 8s/100m), 30\" riposo",
           "durationMin": 10,
           "repetitions": 3,
           "distanceM": 500,
           "zone": "Z2",
           "recovery": "30s repos",
-          "recoveryEn": "30s rest"
+          "recoveryEn": "30s rest",
+          "recoveryIt": "30s riposo"
         }
       ],
       "mainSetStructure": [
@@ -214,6 +268,7 @@
               "kind": "segment",
               "description": "500m en Z2 (CSS + 8s",
               "descriptionEn": "500m in Z2 (CSS + 8s",
+              "descriptionIt": "500m in Z2 (CSS + 8s",
               "durationSec": 600,
               "distanceM": 500,
               "zone": "Z2",
@@ -225,6 +280,7 @@
               "kind": "segment",
               "description": "30s repos",
               "descriptionEn": "30s rest",
+              "descriptionIt": "30s riposo",
               "durationSec": 30,
               "zone": "Z1",
               "role": "recovery"
@@ -236,6 +292,7 @@
         {
           "description": "200m nage facile",
           "descriptionEn": "200m easy",
+          "descriptionIt": "200m nuotata facile",
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
@@ -246,6 +303,7 @@
           "kind": "segment",
           "description": "200m nage facile",
           "descriptionEn": "200m easy",
+          "descriptionIt": "200m nuotata facile",
           "durationSec": 300,
           "distanceM": 200,
           "zone": "Z1",
@@ -262,6 +320,11 @@
         "Don't start too fast: consistency wins",
         "Breathe every 3 strokes if comfortable"
       ],
+      "coachingTipsIt": [
+        "Ritmo regolare, stesso parziale ai 100m su tutti e 3 i blocchi",
+        "Non partire troppo forte: vince la regolarità",
+        "Respirazione ogni 3 bracciate se comoda"
+      ],
       "commonMistakes": [
         "Accélérer sur le dernier 500m et fausser la lecture",
         "Raccourcir les repos pour finir plus vite"
@@ -270,35 +333,63 @@
         "Surging on the last 500m and blurring the data",
         "Cutting rest to finish earlier"
       ],
+      "commonMistakesIt": [
+        "Accelerare sull'ultimo 500m falsando i dati",
+        "Accorciare i riposi per finire prima"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak"],
-        "weekPositions": ["early", "mid", "late"],
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid",
+          "late"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["endurance", "aerobic", "swimming"],
+        "tags": [
+          "endurance",
+          "aerobic",
+          "swimming"
+        ],
         "priorityScore": 85
       },
       "weeklyFrequencyMax": 2,
       "minimumRecoveryDays": 0,
-      "estimatedDistanceKm": { "min": 2, "max": 2.5 }
+      "estimatedDistanceKm": {
+        "min": 2,
+        "max": 2.5
+      }
     },
     {
       "id": "SWM-003",
       "discipline": "swimming",
       "name": "Seuil 8×200m @ CSS",
       "nameEn": "Threshold 8×200m @ CSS",
+      "nameIt": "Soglia 8×200m @ CSS",
       "description": "Séance seuil classique : 8 intervalles de 200m à la vitesse critique (CSS), repos 20 secondes. Repousse le seuil anaérobie en natation.",
       "descriptionEn": "Classic threshold session: 8 × 200m at critical swim speed (CSS), 20 second rest. Lifts the swimming anaerobic threshold.",
+      "descriptionIt": "Seduta classica di soglia: 8 × 200m alla velocità critica (CSS), 20 secondi di riposo. Innalza la soglia anaerobica nel nuoto.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 50, "max": 60 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "400m progressif + 4×50m accélérations",
           "descriptionEn": "400m progressive + 4×50m build-ups",
+          "descriptionIt": "400m progressivi + 4×50m in progressione",
           "durationMin": 12,
           "distanceM": 600,
           "zone": "Z1-Z3"
@@ -309,6 +400,7 @@
           "kind": "segment",
           "description": "400m progressif + 4×50m accélérations",
           "descriptionEn": "400m progressive + 4×50m build-ups",
+          "descriptionIt": "400m progressivi + 4×50m in progressione",
           "durationSec": 720,
           "distanceM": 600,
           "zone": "Z1-Z3",
@@ -319,12 +411,14 @@
         {
           "description": "8×200m à CSS, repos 20\" entre",
           "descriptionEn": "8×200m at CSS, 20\" rest between",
+          "descriptionIt": "8×200m a CSS, 20\" riposo",
           "durationMin": 4,
           "repetitions": 8,
           "distanceM": 200,
           "zone": "Z4",
           "recovery": "20s repos",
-          "recoveryEn": "20s rest"
+          "recoveryEn": "20s rest",
+          "recoveryIt": "20s riposo"
         }
       ],
       "mainSetStructure": [
@@ -337,6 +431,7 @@
               "kind": "segment",
               "description": "200m à CSS, repos 20\" entre",
               "descriptionEn": "200m at CSS, 20\" rest between",
+              "descriptionIt": "200m a CSS, 20\" riposo",
               "durationSec": 240,
               "distanceM": 200,
               "zone": "Z4",
@@ -348,6 +443,7 @@
               "kind": "segment",
               "description": "20s repos",
               "descriptionEn": "20s rest",
+              "descriptionIt": "20s riposo",
               "durationSec": 20,
               "zone": "Z1",
               "role": "recovery"
@@ -359,6 +455,7 @@
         {
           "description": "300m décontraction",
           "descriptionEn": "300m easy",
+          "descriptionIt": "300m sciolti",
           "durationMin": 8,
           "distanceM": 300,
           "zone": "Z1"
@@ -369,6 +466,7 @@
           "kind": "segment",
           "description": "300m décontraction",
           "descriptionEn": "300m easy",
+          "descriptionIt": "300m sciolti",
           "durationSec": 480,
           "distanceM": 300,
           "zone": "Z1",
@@ -385,6 +483,11 @@
         "If the split drifts more than 3s between reps 1 and 8, CSS was too ambitious",
         "Keep breathing cadence steady"
       ],
+      "coachingTipsIt": [
+        "Tempo obiettivo = CSS (secondi/100m) × 2",
+        "Se il parziale peggiora di oltre 3s tra la 1ª e l'8ª ripetuta, la CSS è troppo ambiziosa",
+        "Mantieni un ritmo di respirazione costante"
+      ],
       "commonMistakes": [
         "Partir sous CSS et s'écrouler à mi-séance",
         "Allonger les repos au fil de la séance"
@@ -393,12 +496,25 @@
         "Starting below CSS and crumbling at mid-set",
         "Stretching the rest intervals as the set progresses"
       ],
+      "commonMistakesIt": [
+        "Partire sotto la CSS e crollare a metà seduta",
+        "Allungare i riposi man mano che la seduta prosegue"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["threshold", "css", "swimming"],
+        "tags": [
+          "threshold",
+          "css",
+          "swimming"
+        ],
         "priorityScore": 90
       },
       "weeklyFrequencyMax": 1,
@@ -409,18 +525,27 @@
       "discipline": "swimming",
       "name": "VO2max 16×50m",
       "nameEn": "VO2max 16×50m",
+      "nameIt": "VO2max 16×50m",
       "description": "Intervalles courts rapides. 16 × 50m en Z5 (CSS − 3s/100m), repos 30 secondes. Développe la capacité aérobie maximale en préservant la technique.",
       "descriptionEn": "Short fast intervals. 16 × 50m in Z5 (CSS − 3s/100m), 30 second rest. Builds VO2max while preserving stroke technique.",
+      "descriptionIt": "Intervalli brevi veloci. 16 × 50m in Z5 (CSS − 3s/100m), 30 secondi di riposo. Sviluppa il VO2max preservando la tecnica di nuotata.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 35, "max": 45 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "400m + 4×50m accélérations",
           "descriptionEn": "400m + 4×50m build-ups",
+          "descriptionIt": "400m + 4×50m in progressione",
           "durationMin": 12,
           "distanceM": 600,
           "zone": "Z1-Z4"
@@ -431,6 +556,7 @@
           "kind": "segment",
           "description": "400m + 4×50m accélérations",
           "descriptionEn": "400m + 4×50m build-ups",
+          "descriptionIt": "400m + 4×50m in progressione",
           "durationSec": 720,
           "distanceM": 600,
           "zone": "Z1-Z4",
@@ -441,12 +567,14 @@
         {
           "description": "16×50m en Z5 (CSS − 3s/100m), repos 30\"",
           "descriptionEn": "16×50m Z5 (CSS − 3s/100m), 30\" rest",
+          "descriptionIt": "16×50m in Z5 (CSS − 3s/100m), 30\" riposo",
           "durationMin": 1,
           "repetitions": 16,
           "distanceM": 50,
           "zone": "Z5",
           "recovery": "30s repos",
-          "recoveryEn": "30s rest"
+          "recoveryEn": "30s rest",
+          "recoveryIt": "30s riposo"
         }
       ],
       "mainSetStructure": [
@@ -459,6 +587,7 @@
               "kind": "segment",
               "description": "50m en Z5 (CSS − 3s",
               "descriptionEn": "50m Z5 (CSS − 3s",
+              "descriptionIt": "50m in Z5 (CSS − 3s",
               "durationSec": 60,
               "distanceM": 50,
               "zone": "Z5",
@@ -470,6 +599,7 @@
               "kind": "segment",
               "description": "30s repos",
               "descriptionEn": "30s rest",
+              "descriptionIt": "30s riposo",
               "durationSec": 30,
               "zone": "Z1",
               "role": "recovery"
@@ -481,6 +611,7 @@
         {
           "description": "200m récup",
           "descriptionEn": "200m cool-down",
+          "descriptionIt": "200m defaticamento",
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
@@ -491,6 +622,7 @@
           "kind": "segment",
           "description": "200m récup",
           "descriptionEn": "200m cool-down",
+          "descriptionIt": "200m defaticamento",
           "durationSec": 300,
           "distanceM": 200,
           "zone": "Z1",
@@ -507,6 +639,11 @@
         "Clean turns, they matter on 50s",
         "If technique breaks down, stop early rather than push on"
       ],
+      "coachingTipsIt": [
+        "Privilegia la propulsione: ampiezza di bracciata, non frequenza",
+        "Virate pulite: fanno la differenza sui 50m",
+        "Se la tecnica cede, fermati prima invece di forzare"
+      ],
       "commonMistakes": [
         "Surfréquencer pour accélérer, perte d'efficacité",
         "Sauter le retour au calme"
@@ -515,12 +652,25 @@
         "Over-striding the stroke to go faster, efficiency loss",
         "Skipping the cool-down"
       ],
+      "commonMistakesIt": [
+        "Aumentare troppo la frequenza per andare più forte, perdendo efficienza",
+        "Saltare il defaticamento"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["vo2max", "intervals", "swimming"],
+        "tags": [
+          "vo2max",
+          "intervals",
+          "swimming"
+        ],
         "priorityScore": 80
       },
       "weeklyFrequencyMax": 1,
@@ -531,18 +681,27 @@
       "discipline": "swimming",
       "name": "Bras seuls (pull) 5×200m",
       "nameEn": "Pull Set 5×200m",
+      "nameIt": "Solo braccia (pull) 5×200m",
       "description": "Séance bras seuls avec pull-buoy pour isoler le travail du haut du corps. Cinq blocs de 200m à allure CSS+5s/100m, repos 25 secondes. Renforce la propulsion des bras et améliore la sensation de l'eau.",
       "descriptionEn": "Pull-buoy session isolating upper-body work. Five 200m blocks at CSS+5s/100m, 25 seconds rest. Strengthens arm propulsion and improves feel for the water.",
+      "descriptionIt": "Seduta di sole braccia con pull-buoy per isolare la parte superiore del corpo. Cinque blocchi da 200m a CSS+5s/100m, 25 secondi di riposo. Rinforza la spinta delle braccia e migliora la sensibilità in acqua.",
       "category": "endurance",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 35, "max": 40 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 35,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "300m alterné nage / éducatifs",
           "descriptionEn": "300m mixed swim / drills",
+          "descriptionIt": "300m alternati nuoto / esercizi",
           "durationMin": 8,
           "distanceM": 300,
           "zone": "Z1"
@@ -553,6 +712,7 @@
           "kind": "segment",
           "description": "300m alterné nage / éducatifs",
           "descriptionEn": "300m mixed swim / drills",
+          "descriptionIt": "300m alternati nuoto / esercizi",
           "durationSec": 480,
           "distanceM": 300,
           "zone": "Z1",
@@ -563,12 +723,14 @@
         {
           "description": "5×200m pull-buoy à CSS+5s/100m, repos 25\"",
           "descriptionEn": "5×200m pull-buoy at CSS+5s/100m, 25\" rest",
+          "descriptionIt": "5×200m pull-buoy a CSS+5s/100m, 25\" riposo",
           "durationMin": 4.5,
           "repetitions": 5,
           "distanceM": 200,
           "zone": "Z3",
           "recovery": "25s repos",
-          "recoveryEn": "25s rest"
+          "recoveryEn": "25s rest",
+          "recoveryIt": "25s riposo"
         }
       ],
       "mainSetStructure": [
@@ -581,6 +743,7 @@
               "kind": "segment",
               "description": "200m pull-buoy à CSS+5s",
               "descriptionEn": "200m pull-buoy at CSS+5s",
+              "descriptionIt": "200m pull-buoy a CSS+5s",
               "durationSec": 270,
               "distanceM": 200,
               "zone": "Z3",
@@ -592,6 +755,7 @@
               "kind": "segment",
               "description": "25s repos",
               "descriptionEn": "25s rest",
+              "descriptionIt": "25s riposo",
               "durationSec": 25,
               "zone": "Z1",
               "role": "recovery"
@@ -603,6 +767,7 @@
         {
           "description": "200m décontraction",
           "descriptionEn": "200m easy",
+          "descriptionIt": "200m sciolti",
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
@@ -613,6 +778,7 @@
           "kind": "segment",
           "description": "200m décontraction",
           "descriptionEn": "200m easy",
+          "descriptionIt": "200m sciolti",
           "durationSec": 300,
           "distanceM": 200,
           "zone": "Z1",
@@ -629,6 +795,11 @@
         "Focus on stroke length and underwater pull",
         "Count strokes every 50m"
       ],
+      "coachingTipsIt": [
+        "Pull-buoy alto tra le cosce, nessun movimento delle gambe",
+        "Concentrati sull'ampiezza della bracciata e sulla trazione subacquea",
+        "Conta le bracciate ogni 50m"
+      ],
       "commonMistakes": [
         "Battre des jambes avec le pull-buoy, défait l'objectif",
         "Surfréquencer pour masquer le manque de traction"
@@ -637,12 +808,28 @@
         "Kicking even with the pull-buoy, defeats the purpose",
         "Over-stroking to mask weak pull"
       ],
-      "variationIds": ["SWM-002"],
+      "commonMistakesIt": [
+        "Battere le gambe con il pull-buoy vanifica l'obiettivo",
+        "Aumentare la frequenza per mascherare una trazione debole"
+      ],
+      "variationIds": [
+        "SWM-002"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["pull", "upper_body", "technique", "swimming"],
+        "tags": [
+          "pull",
+          "upper_body",
+          "technique",
+          "swimming"
+        ],
         "priorityScore": 75
       },
       "weeklyFrequencyMax": 1,
@@ -653,18 +840,27 @@
       "discipline": "swimming",
       "name": "Battements (kick) 8×50m",
       "nameEn": "Kick Set 8×50m",
+      "nameIt": "Solo gambe (kick) 8×50m",
       "description": "Séance battements isolés. Huit blocs de 50m battements (planche ou bras tendus), repos 30 secondes. Améliore la position du corps, la propulsion des jambes et la souplesse des chevilles.",
       "descriptionEn": "Kick-only session. Eight 50m blocks (with kickboard or arms extended), 30 seconds rest. Improves body position, leg propulsion and ankle flexibility.",
+      "descriptionIt": "Seduta di sole gambe. Otto blocchi da 50m di gambata (tavoletta o braccia tese), 30 secondi di riposo. Migliora l'assetto, la propulsione delle gambe e la mobilità delle caviglie.",
       "category": "recovery",
       "sessionType": "endurance",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 25, "max": 30 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 25,
+        "max": 30
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "200m nage facile",
           "descriptionEn": "200m easy swim",
+          "descriptionIt": "200m nuoto facile",
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
@@ -675,6 +871,7 @@
           "kind": "segment",
           "description": "200m nage facile",
           "descriptionEn": "200m easy swim",
+          "descriptionIt": "200m nuoto facile",
           "durationSec": 300,
           "distanceM": 200,
           "zone": "Z1",
@@ -685,12 +882,14 @@
         {
           "description": "8×50m battements (planche ou superman), repos 30\"",
           "descriptionEn": "8×50m kick (kickboard or superman), 30\" rest",
+          "descriptionIt": "8×50m gambe (tavoletta o superman), 30\" riposo",
           "durationMin": 1.5,
           "repetitions": 8,
           "distanceM": 50,
           "zone": "Z2",
           "recovery": "30s repos",
-          "recoveryEn": "30s rest"
+          "recoveryEn": "30s rest",
+          "recoveryIt": "30s riposo"
         }
       ],
       "mainSetStructure": [
@@ -703,6 +902,7 @@
               "kind": "segment",
               "description": "50m battements (planche ou superman), repos 30\"",
               "descriptionEn": "50m kick (kickboard or superman), 30\" rest",
+              "descriptionIt": "50m gambe (tavoletta o superman), 30\" riposo",
               "durationSec": 90,
               "distanceM": 50,
               "zone": "Z2",
@@ -714,6 +914,7 @@
               "kind": "segment",
               "description": "30s repos",
               "descriptionEn": "30s rest",
+              "descriptionIt": "30s riposo",
               "durationSec": 30,
               "zone": "Z1",
               "role": "recovery"
@@ -725,6 +926,7 @@
         {
           "description": "200m nage complète facile",
           "descriptionEn": "200m easy full stroke",
+          "descriptionIt": "200m nuotata completa facile",
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
@@ -735,6 +937,7 @@
           "kind": "segment",
           "description": "200m nage complète facile",
           "descriptionEn": "200m easy full stroke",
+          "descriptionIt": "200m nuotata completa facile",
           "durationSec": 300,
           "distanceM": 200,
           "zone": "Z1",
@@ -751,6 +954,11 @@
         "Head in the water, eyes down",
         "Alternate front / back if possible to balance"
       ],
+      "coachingTipsIt": [
+        "Gambata dalle anche, gambe distese, caviglie rilassate",
+        "Testa in acqua, sguardo verso il fondo",
+        "Se possibile alterna prono e dorso per equilibrare"
+      ],
       "commonMistakes": [
         "Plier les genoux trop fort, pédalage inefficace",
         "Sortir la tête sur la planche, casse l'alignement"
@@ -759,12 +967,28 @@
         "Bending knees too much, inefficient pedalling",
         "Head out of the water on the board, breaks alignment"
       ],
+      "commonMistakesIt": [
+        "Piegare troppo le ginocchia, gambata a bicicletta inefficace",
+        "Tenere la testa fuori dall'acqua sulla tavoletta rovina l'allineamento"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["base", "build", "recovery"],
-        "weekPositions": ["early", "late"],
+        "phases": [
+          "base",
+          "build",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early",
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["kick", "lower_body", "technique", "swimming"],
+        "tags": [
+          "kick",
+          "lower_body",
+          "technique",
+          "swimming"
+        ],
         "priorityScore": 65
       },
       "weeklyFrequencyMax": 1,
@@ -775,18 +999,27 @@
       "discipline": "swimming",
       "name": "Endurance longue 4×400m",
       "nameEn": "Long Endurance 4×400m",
+      "nameIt": "Resistenza lunga 4×400m",
       "description": "Séance d'endurance longue. Quatre blocs de 400m en Z2 (CSS+10s/100m), repos 45 secondes. Construit la base aérobie et l'efficacité de nage en distance.",
       "descriptionEn": "Long endurance session. Four 400m blocks in Z2 (CSS+10s/100m), 45 seconds rest. Builds aerobic base and stroke efficiency over distance.",
+      "descriptionIt": "Seduta di resistenza lunga. Quattro blocchi da 400m in Z2 (CSS+10s/100m), 45 secondi di riposo. Costruisce la base aerobica e l'efficienza sulla distanza.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 50, "max": 60 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "400m progressif",
           "descriptionEn": "400m progressive",
+          "descriptionIt": "400m progressivi",
           "durationMin": 10,
           "distanceM": 400,
           "zone": "Z1"
@@ -797,6 +1030,7 @@
           "kind": "segment",
           "description": "400m progressif",
           "descriptionEn": "400m progressive",
+          "descriptionIt": "400m progressivi",
           "durationSec": 600,
           "distanceM": 400,
           "zone": "Z1",
@@ -807,12 +1041,14 @@
         {
           "description": "4×400m en Z2 (CSS+10s/100m), repos 45\"",
           "descriptionEn": "4×400m in Z2 (CSS+10s/100m), 45\" rest",
+          "descriptionIt": "4×400m in Z2 (CSS+10s/100m), 45\" riposo",
           "durationMin": 9,
           "repetitions": 4,
           "distanceM": 400,
           "zone": "Z2",
           "recovery": "45s repos",
-          "recoveryEn": "45s rest"
+          "recoveryEn": "45s rest",
+          "recoveryIt": "45s riposo"
         }
       ],
       "mainSetStructure": [
@@ -825,6 +1061,7 @@
               "kind": "segment",
               "description": "400m en Z2 (CSS+10s",
               "descriptionEn": "400m in Z2 (CSS+10s",
+              "descriptionIt": "400m in Z2 (CSS+10s",
               "durationSec": 540,
               "distanceM": 400,
               "zone": "Z2",
@@ -836,6 +1073,7 @@
               "kind": "segment",
               "description": "45s repos",
               "descriptionEn": "45s rest",
+              "descriptionIt": "45s riposo",
               "durationSec": 45,
               "zone": "Z1",
               "role": "recovery"
@@ -847,6 +1085,7 @@
         {
           "description": "300m décontraction alternée",
           "descriptionEn": "300m mixed cool-down",
+          "descriptionIt": "300m defaticamento misto",
           "durationMin": 8,
           "distanceM": 300,
           "zone": "Z1"
@@ -857,6 +1096,7 @@
           "kind": "segment",
           "description": "300m décontraction alternée",
           "descriptionEn": "300m mixed cool-down",
+          "descriptionIt": "300m defaticamento misto",
           "durationSec": 480,
           "distanceM": 300,
           "zone": "Z1",
@@ -873,6 +1113,11 @@
         "Breathe every 3 strokes if comfortable, else steady every 2",
         "Drink between blocks if the session exceeds 60 minutes"
       ],
+      "coachingTipsIt": [
+        "Massima regolarità, stesso parziale ai 100m su tutti e 4 i blocchi",
+        "Respirazione ogni 3 bracciate se comoda, altrimenti regolare ogni 2",
+        "Bevi tra i blocchi se la seduta supera i 60 minuti"
+      ],
       "commonMistakes": [
         "Partir trop vite et ralentir progressivement",
         "Ignorer la technique sous prétexte de fatigue"
@@ -881,35 +1126,64 @@
         "Starting too fast and slowing progressively",
         "Letting technique slip under the guise of fatigue"
       ],
-      "variationIds": ["SWM-002"],
+      "commonMistakesIt": [
+        "Partire troppo forte e rallentare progressivamente",
+        "Trascurare la tecnica con la scusa della fatica"
+      ],
+      "variationIds": [
+        "SWM-002"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["long_run", "endurance", "aerobic", "swimming"],
+        "tags": [
+          "long_run",
+          "endurance",
+          "aerobic",
+          "swimming"
+        ],
         "priorityScore": 85
       },
       "weeklyFrequencyMax": 1,
       "minimumRecoveryDays": 0,
-      "estimatedDistanceKm": { "min": 1.6, "max": 2.5 }
+      "estimatedDistanceKm": {
+        "min": 1.6,
+        "max": 2.5
+      }
     },
     {
       "id": "SWM-008",
       "discipline": "swimming",
       "name": "4 nages (IM) 8×100m",
       "nameEn": "Individual Medley 8×100m",
+      "nameIt": "Misti (IM) 8×100m",
       "description": "Séance 4 nages style IM. Huit blocs de 100m alternant les 4 nages (papillon, dos, brasse, crawl) à allure modérée Z2-Z3, repos 20 secondes. Variétal pour casser la routine du crawl et travailler les chaînes musculaires.",
       "descriptionEn": "Individual medley session. Eight 100m blocks rotating the 4 strokes (butterfly, backstroke, breaststroke, freestyle) at moderate Z2-Z3, 20 seconds rest. Variety to break crawl routine and work different muscle chains.",
+      "descriptionIt": "Seduta 4 stili (misti). Otto blocchi da 100m alternando i 4 stili (delfino, dorso, rana, stile libero) a ritmo moderato Z2-Z3, 20 secondi di riposo. Varietà per spezzare la routine dello stile libero e allenare diverse catene muscolari.",
       "category": "mixed",
       "sessionType": "fartlek",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 35, "max": 40 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 35,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "300m crawl progressif + 100m éducatifs des 4 nages",
           "descriptionEn": "300m progressive crawl + 100m drills across the 4 strokes",
+          "descriptionIt": "300m stile libero progressivo + 100m esercizi sui 4 stili",
           "durationMin": 10,
           "distanceM": 400,
           "zone": "Z1"
@@ -920,6 +1194,7 @@
           "kind": "segment",
           "description": "300m crawl progressif + 100m éducatifs des 4 nages",
           "descriptionEn": "300m progressive crawl + 100m drills across the 4 strokes",
+          "descriptionIt": "300m stile libero progressivo + 100m esercizi sui 4 stili",
           "durationSec": 600,
           "distanceM": 400,
           "zone": "Z1",
@@ -930,12 +1205,14 @@
         {
           "description": "8×100m IM (2× chaque nage), repos 20\"",
           "descriptionEn": "8×100m IM (2× each stroke), 20\" rest",
+          "descriptionIt": "8×100m misti (2× per stile), 20\" riposo",
           "durationMin": 2.5,
           "repetitions": 8,
           "distanceM": 100,
           "zone": "Z2-Z3",
           "recovery": "20s repos",
-          "recoveryEn": "20s rest"
+          "recoveryEn": "20s rest",
+          "recoveryIt": "20s riposo"
         }
       ],
       "mainSetStructure": [
@@ -948,6 +1225,7 @@
               "kind": "segment",
               "description": "100m IM (2× chaque nage), repos 20\"",
               "descriptionEn": "100m IM (2× each stroke), 20\" rest",
+              "descriptionIt": "100m misti (2× per stile), 20\" riposo",
               "durationSec": 150,
               "distanceM": 100,
               "zone": "Z2-Z3",
@@ -959,6 +1237,7 @@
               "kind": "segment",
               "description": "20s repos",
               "descriptionEn": "20s rest",
+              "descriptionIt": "20s riposo",
               "durationSec": 20,
               "zone": "Z1",
               "role": "recovery"
@@ -970,6 +1249,7 @@
         {
           "description": "200m crawl facile",
           "descriptionEn": "200m easy crawl",
+          "descriptionIt": "200m stile libero facile",
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
@@ -980,6 +1260,7 @@
           "kind": "segment",
           "description": "200m crawl facile",
           "descriptionEn": "200m easy crawl",
+          "descriptionIt": "200m stile libero facile",
           "durationSec": 300,
           "distanceM": 200,
           "zone": "Z1",
@@ -996,6 +1277,11 @@
         "Adapt breathing to each stroke, no panic in butterfly",
         "Cadence over speed"
       ],
+      "coachingTipsIt": [
+        "Se uno stile non è padroneggiato, usa un esercizio (gambe dorso, rana subacquea)",
+        "Respirazione adatta a ogni stile, niente panico a delfino",
+        "Il ritmo conta più della velocità"
+      ],
       "commonMistakes": [
         "Sauter les nages mal maîtrisées, perte du bénéfice variétal",
         "Tenter du papillon en force au début et exploser"
@@ -1004,12 +1290,26 @@
         "Skipping weaker strokes, kills the variety benefit",
         "Forcing butterfly early and burning out"
       ],
+      "commonMistakesIt": [
+        "Saltare gli stili meno padroneggiati vanifica il beneficio della varietà",
+        "Forzare il delfino all'inizio e bruciarsi"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["medley", "IM", "variety", "swimming"],
+        "tags": [
+          "medley",
+          "IM",
+          "variety",
+          "swimming"
+        ],
         "priorityScore": 65
       },
       "weeklyFrequencyMax": 1,
@@ -1020,18 +1320,27 @@
       "discipline": "swimming",
       "name": "Sprints 12×25m all-out",
       "nameEn": "All-out Sprints 12×25m",
+      "nameIt": "Sprint 12×25m massimali",
       "description": "Séance sprint anaérobie alactique. Douze blocs de 25m all-out (Z6, plus rapide que CSS−10s/100m), repos 1 minute complet. Travail de la vitesse pure et du recrutement neuromusculaire.",
       "descriptionEn": "Anaerobic alactic sprint session. Twelve 25m all-out blocks (Z6, faster than CSS−10s/100m), 1 minute full rest. Pure speed and neuromuscular recruitment work.",
+      "descriptionIt": "Seduta di sprint anaerobico alattacido. Dodici blocchi da 25m al massimo (Z6, più veloce di CSS−10s/100m), 1 minuto di riposo completo. Lavoro di velocità pura e reclutamento neuromuscolare.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "neuromuscular",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 30, "max": 35 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 30,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "400m + 4×25m accélérations",
           "descriptionEn": "400m + 4×25m build-ups",
+          "descriptionIt": "400m + 4×25m in progressione",
           "durationMin": 12,
           "distanceM": 500,
           "zone": "Z1-Z4"
@@ -1042,6 +1351,7 @@
           "kind": "segment",
           "description": "400m + 4×25m accélérations",
           "descriptionEn": "400m + 4×25m build-ups",
+          "descriptionIt": "400m + 4×25m in progressione",
           "durationSec": 720,
           "distanceM": 500,
           "zone": "Z1-Z4",
@@ -1052,12 +1362,14 @@
         {
           "description": "12×25m all-out, repos 1' complet",
           "descriptionEn": "12×25m all-out, 1' full rest",
+          "descriptionIt": "12×25m massimali, 1' riposo completo",
           "durationMin": 0.4,
           "repetitions": 12,
           "distanceM": 25,
           "zone": "Z6",
           "recovery": "1min repos",
-          "recoveryEn": "1min rest"
+          "recoveryEn": "1min rest",
+          "recoveryIt": "1min riposo"
         }
       ],
       "mainSetStructure": [
@@ -1070,6 +1382,7 @@
               "kind": "segment",
               "description": "25m all-out, repos 1' complet",
               "descriptionEn": "25m all-out, 1' full rest",
+              "descriptionIt": "25m massimali, 1' riposo completo",
               "durationSec": 24,
               "distanceM": 25,
               "zone": "Z6",
@@ -1081,6 +1394,7 @@
               "kind": "segment",
               "description": "1min repos",
               "descriptionEn": "1min rest",
+              "descriptionIt": "1min riposo",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -1092,6 +1406,7 @@
         {
           "description": "200m décontraction",
           "descriptionEn": "200m cool-down",
+          "descriptionIt": "200m defaticamento",
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
@@ -1102,6 +1417,7 @@
           "kind": "segment",
           "description": "200m décontraction",
           "descriptionEn": "200m cool-down",
+          "descriptionIt": "200m defaticamento",
           "durationSec": 300,
           "distanceM": 200,
           "zone": "Z1",
@@ -1118,6 +1434,11 @@
         "Use a dive or push start: leverage the initial momentum",
         "If split drifts more than 1s between rep 1 and 12, stop early"
       ],
+      "coachingTipsIt": [
+        "Recupero COMPLETO, niente sprint a metà",
+        "Tuffo o spinta dal muro: sfrutta lo slancio iniziale",
+        "Se il tempo peggiora di oltre 1s tra la 1ª e la 12ª ripetuta, fermati prima"
+      ],
       "commonMistakes": [
         "Réduire la récup pour gagner du temps, annule l'objectif vitesse",
         "Tenter des sets continus sans repos, c'est une autre séance"
@@ -1126,12 +1447,26 @@
         "Cutting rest to save time, kills the speed focus",
         "Doing continuous sets without rest, that's another session"
       ],
+      "commonMistakesIt": [
+        "Ridurre il riposo per risparmiare tempo annulla l'obiettivo velocità",
+        "Fare serie continue senza riposo è un altro allenamento"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["sprint", "neuromuscular", "speed", "swimming"],
+        "tags": [
+          "sprint",
+          "neuromuscular",
+          "speed",
+          "swimming"
+        ],
         "priorityScore": 70
       },
       "weeklyFrequencyMax": 1,
@@ -1142,18 +1477,27 @@
       "discipline": "swimming",
       "name": "Pyramide CSS 100/200/400/200/100m",
       "nameEn": "CSS Pyramid 100/200/400/200/100m",
+      "nameIt": "Piramide CSS 100/200/400/200/100m",
       "description": "Séance pyramide à allure CSS. Cinq blocs progressifs puis dégressifs (100, 200, 400, 200, 100m) à CSS, repos 30 secondes. Travaille la régularité d'allure sur des distances variées.",
       "descriptionEn": "CSS pyramid session. Five blocks progressive then regressive (100, 200, 400, 200, 100m) at CSS, 30 seconds rest. Trains pace consistency over varied distances.",
+      "descriptionIt": "Seduta a piramide a ritmo CSS. Cinque blocchi crescenti e decrescenti (100, 200, 400, 200, 100m) a CSS, 30 secondi di riposo. Allena la regolarità del ritmo su distanze varie.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 40, "max": 45 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 40,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "400m progressif + 4×50m accélérations",
           "descriptionEn": "400m progressive + 4×50m build-ups",
+          "descriptionIt": "400m progressivi + 4×50m in progressione",
           "durationMin": 12,
           "distanceM": 600,
           "zone": "Z1-Z3"
@@ -1164,6 +1508,7 @@
           "kind": "segment",
           "description": "400m progressif + 4×50m accélérations",
           "descriptionEn": "400m progressive + 4×50m build-ups",
+          "descriptionIt": "400m progressivi + 4×50m in progressione",
           "durationSec": 720,
           "distanceM": 600,
           "zone": "Z1-Z3",
@@ -1174,10 +1519,12 @@
         {
           "description": "Pyramide 100/200/400/200/100m à CSS, repos 30\" entre chaque",
           "descriptionEn": "Pyramid 100/200/400/200/100m at CSS, 30\" rest between each",
+          "descriptionIt": "Piramide 100/200/400/200/100m a CSS, 30\" riposo tra ogni blocco",
           "durationMin": 22,
           "zone": "Z4",
           "recovery": "30s repos",
-          "recoveryEn": "30s rest"
+          "recoveryEn": "30s rest",
+          "recoveryIt": "30s riposo"
         }
       ],
       "mainSetStructure": [
@@ -1185,6 +1532,7 @@
           "kind": "segment",
           "description": "Pyramide 100/200/400/200/100m à CSS, repos 30\" entre chaque",
           "descriptionEn": "Pyramid 100/200/400/200/100m at CSS, 30\" rest between each",
+          "descriptionIt": "Piramide 100/200/400/200/100m a CSS, 30\" riposo tra ogni blocco",
           "durationSec": 1320,
           "zone": "Z4",
           "role": "effort"
@@ -1194,6 +1542,7 @@
         {
           "description": "300m décontraction",
           "descriptionEn": "300m easy",
+          "descriptionIt": "300m sciolti",
           "durationMin": 8,
           "distanceM": 300,
           "zone": "Z1"
@@ -1204,6 +1553,7 @@
           "kind": "segment",
           "description": "300m décontraction",
           "descriptionEn": "300m easy",
+          "descriptionIt": "300m sciolti",
           "durationSec": 480,
           "distanceM": 300,
           "zone": "Z1",
@@ -1220,6 +1570,11 @@
         "The 400m is the mentally hardest, keep the pace",
         "Steady breathing, do not crank the stroke rate"
       ],
+      "coachingTipsIt": [
+        "Mantieni lo stesso parziale ai 100m su tutti i blocchi (entro ±2s)",
+        "Il 400m è il più duro mentalmente, resta sul ritmo",
+        "Respirazione stabile, non aumentare la frequenza di bracciata"
+      ],
       "commonMistakes": [
         "Partir trop vite sur le 100m initial et perdre le rythme",
         "Accélérer sur le dernier 100m pour \"finir fort\""
@@ -1228,12 +1583,28 @@
         "Going too fast on the opening 100m and losing rhythm",
         "Surging on the last 100m to \"finish strong\""
       ],
-      "variationIds": ["SWM-003"],
+      "commonMistakesIt": [
+        "Partire troppo forte sul 100m iniziale e perdere il ritmo",
+        "Accelerare sull'ultimo 100m per \"finire forte\""
+      ],
+      "variationIds": [
+        "SWM-003"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["threshold", "css", "pyramid", "swimming"],
+        "tags": [
+          "threshold",
+          "css",
+          "pyramid",
+          "swimming"
+        ],
         "priorityScore": 80
       },
       "weeklyFrequencyMax": 1,

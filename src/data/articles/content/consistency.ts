@@ -435,6 +435,222 @@ Athletes who progress quickly often burn out. Those who progress slowly but regu
 - Think in years, not weeks
 
 The most important session is the one you'll do tomorrow. And the day after. And next week. That's consistency.`,
+  contentIt: `## La costanza batte l'intensità
+
+Probabilmente ti è già capitato: una settimana in cui ti alleni come un professionista, seguita da due settimane in cui non fai nulla. Poi riprendi, spingi troppo forte, ti infortuni. E il ciclo ricomincia.
+
+La verità che i runner esperti conoscono bene è questa: **non è la singola seduta eccezionale a farti migliorare, ma l'accumulo di sedute regolari nel corso di mesi e anni.**
+
+> 📌 La costanza batte sempre l'intensità nel lungo periodo. Tre sedute modeste a settimana per un anno producono più risultati di blocchi intensi seguiti da lunghe pause.
+
+---
+
+## L'effetto composto: la magia dei piccoli passi
+
+### Il principio dell'interesse composto
+
+In finanza, l'interesse composto trasforma piccole somme in grandi capitali nel lungo periodo. Nella corsa è esattamente la stessa cosa.
+
+Immagina due runner:
+
+| Runner | Approccio | In 1 anno |
+|--------|-----------|-----------|
+| A | 3 grandi sedute/settimana per 1 mese, poi 2 mesi fermo, ripresa... | ~40 sedute |
+| B | 3 sedute modeste/settimana, 50 settimane su 52 | ~150 sedute |
+
+> 📊 In un anno, un runner costante (3 sedute/settimana, 50 settimane) accumula circa 150 sedute contro appena 40 di chi procede a strappi. Quasi 4 volte più occasioni per migliorare.
+
+Il runner B ha accumulato quasi 4 volte più stimolo di adattamento. Anche se ogni singola seduta era meno intensa, il suo corpo ha avuto molte più opportunità di adattarsi e progredire.
+
+### Gli adattamenti richiedono tempo
+
+Il tuo corpo non si trasforma in una settimana. I diversi sistemi hanno tempi di adattamento differenti:
+
+- **Sistema cardiovascolare**: 2-4 settimane per cambiamenti misurabili
+- **Muscoli**: 4-8 settimane per guadagni di forza significativi
+- **Tendini e legamenti**: 3-6 mesi per un rinforzo duraturo
+- **Densità ossea**: 6-12 mesi per miglioramenti apprezzabili
+- **Capillarizzazione**: adattamento graduale nell'arco di diversi mesi
+
+Ogni volta che ti fermi e riprendi, perdi parte di questi adattamenti. La [[supercompensation]] non ha il tempo di consolidarsi stabilmente.
+
+---
+
+## Perché si perde la costanza
+
+Prima di parlare di soluzioni, capiamo le cause. La maggior parte dei runner molla per motivi prevedibili:
+
+### 1. Obiettivi troppo ambiziosi
+
+Vuoi correre 5 volte a settimana partendo da zero. La prima settimana va bene, la seconda è dura, la terza salti una seduta "solo per questa volta", poi due, e poi smetti.
+
+### 2. Tutto o niente
+
+"Se non posso fare tutta la seduta di ripetute, tanto vale non fare nulla." Questa mentalità è tossica. 20 minuti di corsa leggera valgono infinitamente più di zero.
+
+### 3. Dipendenza dalla motivazione
+
+La motivazione è volatile. Va e viene. Aspettare di essere motivati per uscire a correre garantisce l'incostanza.
+
+### 4. Ignorare la fatica
+
+Spingi quando dovresti recuperare. Alla fine il corpo impone il riposo da solo, sotto forma di infortunio o esaurimento.
+
+### 5. La vita, semplicemente
+
+Lavoro, famiglia, imprevisti. La vita non è un laboratorio in cui controlli tutte le variabili.
+
+---
+
+## Costruire abitudini durature
+
+La costanza non è una questione di forza di volontà. È una questione di sistema.
+
+### Regola 1: Inizia in piccolo
+
+Davvero in piccolo. Se non corri affatto, inizia con 2 uscite da 20 minuti a settimana. Tutto qui. Per un mese.
+
+**Perché?** Costruisci l'abitudine prima della prestazione. Una volta che uscire a correre diventa automatico, puoi aumentare gradualmente.
+
+### Regola 2: Pianifica le sedute come appuntamenti
+
+Non chiederti "correrò domani?". Decidilo in anticipo: "Corro martedì, giovedì e domenica alle 7:00."
+
+Segna questi spazi in agenda come appuntamenti non negoziabili. Se qualcuno ti propone altro, sei "già impegnato".
+
+### Regola 3: Riduci l'attrito
+
+Più è facile iniziare, più lo farai:
+
+- **Prepara l'attrezzatura la sera prima**: scarpe, abbigliamento, orologio pronti
+- **Dormi con i vestiti da corsa** (se corri al mattino)
+- **Elimina le decisioni**: stesso percorso nei giorni di poca voglia
+- **Tieni un piano B**: non hai 45 minuti? Fai 20 minuti
+
+### Regola 4: La regola dei 10 minuti
+
+> 💡 Nei giorni senza motivazione, impegnati per soli 10 minuti. Nel 90% dei casi, una volta fuori, continuerai. E nel restante 10%? Ti sei comunque mosso.
+
+Nei giorni in cui proprio non ne hai voglia: impegnati a fare solo 10 minuti. Esci, corri 10 minuti e, se dopo vuoi rientrare, rientra.
+
+Nel 90% dei casi, una volta partito, continuerai. E nel 10% in cui ti fermi? Ti sei comunque mosso. È una vittoria.
+
+### Regola 5: Celebra la costanza, non solo la prestazione
+
+Non congratularti con te stesso solo per i record personali. Congratulati per aver messo insieme 4 settimane senza saltare una seduta. È questo il vero traguardo.
+
+---
+
+## Segnali d'allarme: troppo vs troppo poco
+
+La costanza sta nel trovare il giusto equilibrio tra fare troppo e fare troppo poco.
+
+### Segnali che stai facendo troppo (sovrallenamento)
+
+- **Stanchezza persistente**: ti svegli stanco anche dopo 8 ore di sonno
+- **Prestazioni in calo**: i ritmi abituali diventano faticosi
+- **Frequenza cardiaca a riposo elevata**: +5-10 bpm rispetto al tuo normale
+- **Disturbi del sonno**: difficoltà ad addormentarti o risvegli notturni
+- **Irritabilità**: sei nervoso senza motivo
+- **Perdita di appetito** o, al contrario, fame continua
+- **Infortuni ricorrenti**: tendiniti, dolori che non passano
+- **Malanni frequenti**: raffreddori, infezioni
+
+Se riconosci 3 o più di questi segnali, è ora di rallentare. Vedi l'articolo su [[recovery]].
+
+### Segnali che stai facendo troppo poco (sottoallenamento)
+
+- **Nessun miglioramento** da diversi mesi
+- **Sedute troppo facili**: finisci senza aver davvero lavorato
+- **Recupero ultra-rapido**: pronto per un'altra seduta poche ore dopo
+- **Noia**: le sedute mancano di stimoli
+- **Stallo di forma**: né meglio né peggio, semplicemente fermo
+
+In questo caso, è il momento di applicare il [[progressive-overload]]: aumentare gradualmente volume o intensità.
+
+---
+
+## Il fattore chiave: la flessibilità
+
+Essere costanti non significa essere rigidi. La vita metterà alla prova i tuoi piani. Ciò che conta è sapersi adattare.
+
+### Adatta, non abbandonare
+
+- **Seduta prevista ma sei stanco**: fai una versione più breve o più facile
+- **Non hai tempo per 1 ora**: fai 30 minuti
+- **Lieve fastidio**: sostituisci la corsa con bici o nuoto
+- **Viaggio**: corri in un posto nuovo (spesso è più motivante)
+- **Settimana difficile**: riduci il volume ma mantieni la frequenza
+
+### La regola del "qualcosa è meglio di niente"
+
+Una seduta al 50% di quanto avevi previsto è pur sempre il 50% in più di zero. E mantiene viva l'abitudine, che è la cosa più importante.
+
+### Accetta le settimane imperfette
+
+Salterai delle sedute. È inevitabile. Ciò che conta è non lasciare che una brutta settimana diventi un brutto mese.
+
+Salti una seduta? Pazienza. Salti due giorni? Pazienza. Ma riprendi. Riprendi sempre.
+
+---
+
+## Consigli pratici per restare costante
+
+### 1. Trova il tuo "perché"
+
+Perché corri? Per la salute? Per una sfida? Per la mente? Per un obiettivo specifico? Ricorda questo motivo nei giorni difficili.
+
+### 2. Unisciti a una community
+
+Correre con altri crea responsabilità sociale. Non disdici se qualcuno ti sta aspettando. Un club, un gruppo di amici o anche una community online.
+
+### 3. Varia gli stimoli
+
+Sempre lo stesso percorso, la stessa seduta? Normale annoiarsi. Esplora nuovi sentieri, prova diversi tipi di allenamento.
+
+### 4. Tieni un diario
+
+Annota le sedute, le sensazioni, i progressi. Vedere l'accumulo scritto rafforza la motivazione e aiuta a individuare gli schemi ricorrenti.
+
+### 5. Pianifica il recupero
+
+Inserisci settimane di scarico nel tuo piano. Pianificando il riposo, eviti il riposo forzato (infortuni, esaurimento).
+
+### 6. Sii paziente
+
+I risultati richiedono tempo. Mesi. Anni. È normale. Ogni seduta è un deposito sul tuo conto di allenamento. Gli interessi arriveranno.
+
+---
+
+## La visione a lungo termine
+
+I migliori runner amatori non sono quelli che si allenano più duramente per una settimana. Sono quelli che si allenano con regolarità per anni.
+
+### L'orizzonte dei 10 anni
+
+Dove sarai tra 10 anni se corri regolarmente 3 volte a settimana? Confrontalo con dove sarai se fai cicli di 2 mesi intensi seguiti da 4 mesi di stop.
+
+### La costanza crea identità
+
+A forza di correre con regolarità, smetti di essere "qualcuno che prova a correre". Diventi "un runner". Questa identità rende naturale la costanza.
+
+### Progressi lenti, progressi duraturi
+
+Gli atleti che migliorano troppo in fretta spesso si bruciano. Chi migliora lentamente ma con regolarità costruisce una base solida che dura decenni.
+
+---
+
+## Da ricordare
+
+- La costanza batte l'intensità nel lungo periodo
+- Inizia in piccolo e costruisci l'abitudine prima della prestazione
+- Pianifica le sedute come appuntamenti non negoziabili
+- Qualcosa è sempre meglio di niente
+- Adattati invece di mollare
+- Osserva i segnali di sovrallenamento E di sottoallenamento
+- Pensa in anni, non in settimane
+
+La seduta più importante è quella che farai domani. E dopodomani. E la prossima settimana. Questa è la costanza.`,
 };
 
 export default content;

@@ -8,7 +8,7 @@ import { useWorkouts } from "@/hooks";
 import { useAppStats } from "@/hooks/useAppStats";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { getDateLocale, useIsEnglish } from "@/lib/i18n-utils";
 import { getISOWeek, pickRandomWorkouts } from "@/lib/landing-stats";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
@@ -129,7 +129,7 @@ export function HomePage() {
   useEffect(() => {
     const today = new Date();
     setDateLine(
-      `${today.toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+      `${today.toLocaleDateString(getDateLocale(), {
         weekday: "long",
         day: "numeric",
         month: "long",

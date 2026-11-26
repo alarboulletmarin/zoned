@@ -5,8 +5,10 @@
       "id": "HIL-001",
       "name": "Côtes courtes",
       "nameEn": "Short Hill Repeats",
+      "nameIt": "Salite brevi",
       "description": "Répétitions de côtes courtes (80-120m) à effort maximal. Développe la puissance musculaire.",
       "descriptionEn": "Short hill repeats (80-120m) at maximum effort. Develops muscular power.",
+      "descriptionIt": "Ripetute in salita breve (80-120m) a sforzo massimale. Sviluppa la potenza muscolare.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
@@ -24,6 +26,7 @@
         {
           "description": "Footing avec activation progressive",
           "descriptionEn": "Jog with progressive activation",
+          "descriptionIt": "Corsa lenta con attivazione progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -31,6 +34,7 @@
         {
           "description": "Gammes et 2-3 côtes d'échauffement",
           "descriptionEn": "Drills and 2-3 warm-up hills",
+          "descriptionIt": "Andature e 2-3 salite di riscaldamento",
           "durationMin": 5,
           "elevationGainM": 15,
           "gradientPercent": 10,
@@ -42,6 +46,7 @@
           "kind": "segment",
           "description": "Footing avec activation progressive",
           "descriptionEn": "Jog with progressive activation",
+          "descriptionIt": "Corsa lenta con attivazione progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -51,6 +56,7 @@
           "kind": "segment",
           "description": "Gammes et 2-3 côtes d'échauffement",
           "descriptionEn": "Drills and 2-3 warm-up hills",
+          "descriptionIt": "Andature e 2-3 salite di riscaldamento",
           "durationSec": 300,
           "elevationGainM": 15,
           "gradientPercent": 10,
@@ -62,11 +68,13 @@
         {
           "description": "8x100m côte effort maximal",
           "descriptionEn": "8x100m hill at maximum effort",
+          "descriptionIt": "8x100m in salita a sforzo massimale",
           "zone": "Z6",
           "distanceM": 100,
           "repetitions": 8,
           "recovery": "2-3 min descente en marchant",
           "recoveryEn": "2-3 min walk down",
+          "recoveryIt": "2-3 min di discesa camminando",
           "elevationGainM": 10,
           "gradientPercent": 10,
           "terrainType": "road"
@@ -82,6 +90,7 @@
               "kind": "segment",
               "description": "100m côte effort maximal",
               "descriptionEn": "100m hill at maximum effort",
+              "descriptionIt": "100m in salita a sforzo massimale",
               "zone": "Z6",
               "distanceM": 100,
               "elevationGainM": 10,
@@ -95,6 +104,7 @@
               "kind": "segment",
               "description": "2-3 min descente en marchant",
               "descriptionEn": "2-3 min walk down",
+              "descriptionIt": "2-3 min di discesa camminando",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -106,6 +116,7 @@
         {
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -116,6 +127,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -132,6 +144,11 @@
         "Drive with arms, high knees",
         "Recover fully before starting again"
       ],
+      "coachingTipsIt": [
+        "Idealmente pendenza 8-12%",
+        "Spingi con le braccia, ginocchia alte",
+        "Recupera completamente prima di ripartire"
+      ],
       "commonMistakes": [
         "Côte trop longue ou trop raide",
         "Ne pas assez récupérer"
@@ -139,6 +156,10 @@
       "commonMistakesEn": [
         "Hill too long or too steep",
         "Not recovering enough"
+      ],
+      "commonMistakesIt": [
+        "Salita troppo lunga o troppo ripida",
+        "Non recuperare abbastanza"
       ],
       "variationIds": [
         "HIL-002",
@@ -168,8 +189,10 @@
       "id": "HIL-002",
       "name": "Côtes moyennes",
       "nameEn": "Medium Hill Repeats",
+      "nameIt": "Salite medie",
       "description": "Répétitions de côtes de 200-300m. Compromis entre puissance et endurance.",
       "descriptionEn": "Hill repeats of 200-300m. Balance between power and endurance.",
+      "descriptionIt": "Ripetute in salita di 200-300m. Equilibrio tra potenza e resistenza.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
@@ -187,6 +210,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -194,6 +218,7 @@
         {
           "description": "Gammes et côtes d'échauffement",
           "descriptionEn": "Drills and warm-up hills",
+          "descriptionIt": "Andature e salite di riscaldamento",
           "durationMin": 5,
           "elevationGainM": 12,
           "gradientPercent": 7,
@@ -205,6 +230,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -214,6 +240,7 @@
           "kind": "segment",
           "description": "Gammes et côtes d'échauffement",
           "descriptionEn": "Drills and warm-up hills",
+          "descriptionIt": "Andature e salite di riscaldamento",
           "durationSec": 300,
           "elevationGainM": 12,
           "gradientPercent": 7,
@@ -225,11 +252,13 @@
         {
           "description": "6x250m côte à 90-95%",
           "descriptionEn": "6x250m hill at 90-95%",
+          "descriptionIt": "6x250m in salita al 90-95%",
           "distanceM": 250,
           "zone": "Z4-Z5",
           "repetitions": 6,
           "recovery": "1-2 min descente en trottinant",
           "recoveryEn": "1-2 min jog down",
+          "recoveryIt": "1-2 min di discesa in corsetta",
           "intensityType": "I",
           "elevationGainM": 18,
           "gradientPercent": 7,
@@ -246,6 +275,7 @@
               "kind": "segment",
               "description": "250m côte à 90-95%",
               "descriptionEn": "250m hill at 90-95%",
+              "descriptionIt": "250m in salita al 90-95%",
               "distanceM": 250,
               "zone": "Z4-Z5",
               "intensityType": "I",
@@ -260,6 +290,7 @@
               "kind": "segment",
               "description": "1-2 min descente en trottinant",
               "descriptionEn": "1-2 min jog down",
+              "descriptionIt": "1-2 min di discesa in corsetta",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -271,6 +302,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -281,6 +313,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -297,6 +330,11 @@
         "Maintain technique to the top",
         "Jog down actively to recover"
       ],
+      "coachingTipsIt": [
+        "Ritmo sostenuto ma non sprint",
+        "Mantieni la tecnica fino in cima",
+        "Scendi correndo piano per recuperare"
+      ],
       "commonMistakes": [
         "Partir trop vite et craquer",
         "Technique qui se dégrade en haut"
@@ -304,6 +342,10 @@
       "commonMistakesEn": [
         "Starting too fast and fading",
         "Technique breaking down at the top"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte e cedere",
+        "Tecnica che si degrada in cima"
       ],
       "variationIds": [
         "HIL-001",
@@ -330,8 +372,10 @@
       "id": "HIL-003",
       "name": "Côtes longues",
       "nameEn": "Long Hill Repeats",
+      "nameIt": "Salite lunghe",
       "description": "Côtes de 400-600m pour développer l'endurance en montée.",
       "descriptionEn": "Hills of 400-600m to develop uphill endurance.",
+      "descriptionIt": "Salite di 400-600m per sviluppare la resistenza in salita.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "aerobic_threshold",
@@ -349,6 +393,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -356,6 +401,7 @@
         {
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationMin": 5
         }
       ],
@@ -364,6 +410,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -373,6 +420,7 @@
           "kind": "segment",
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationSec": 300,
           "role": "effort"
         }
@@ -381,11 +429,13 @@
         {
           "description": "5x500m côte à effort seuil",
           "descriptionEn": "5x500m hill at threshold effort",
+          "descriptionIt": "5x500m in salita a sforzo di soglia",
           "distanceM": 500,
           "zone": "Z4",
           "repetitions": 5,
           "recovery": "3 min descente + 1 min récup",
           "recoveryEn": "3 min downhill + 1 min recovery",
+          "recoveryIt": "3 min discesa + 1 min recupero",
           "intensityType": "T",
           "elevationGainM": 28,
           "gradientPercent": 5.5,
@@ -402,6 +452,7 @@
               "kind": "segment",
               "description": "500m côte à effort seuil",
               "descriptionEn": "500m hill at threshold effort",
+              "descriptionIt": "500m in salita a sforzo di soglia",
               "distanceM": 500,
               "zone": "Z4",
               "intensityType": "T",
@@ -416,6 +467,7 @@
               "kind": "segment",
               "description": "3 min descente + 1 min récup",
               "descriptionEn": "3 min downhill + 1 min recovery",
+              "descriptionIt": "3 min discesa + 1 min recupero",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -427,6 +479,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -437,6 +490,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -453,6 +507,11 @@
         "Consistency is essential",
         "Moderate gradient 5-8%"
       ],
+      "coachingTipsIt": [
+        "Sforzo simile alla soglia",
+        "La regolarità è essenziale",
+        "Pendenza moderata 5-8%"
+      ],
       "commonMistakes": [
         "Choisir une pente trop raide",
         "Partir trop vite"
@@ -460,6 +519,10 @@
       "commonMistakesEn": [
         "Choosing a gradient that's too steep",
         "Starting too fast"
+      ],
+      "commonMistakesIt": [
+        "Scegliere una pendenza troppo ripida",
+        "Partire troppo forte"
       ],
       "variationIds": [
         "HIL-002"
@@ -487,8 +550,10 @@
       "id": "HIL-004",
       "name": "Côtes bondissantes",
       "nameEn": "Bounding Hill Repeats",
+      "nameIt": "Salite balzate",
       "description": "Montées avec foulées bondissantes. Développe l'élasticité et l'économie de course.",
       "descriptionEn": "Uphill with bounding strides. Develops elasticity and running economy.",
+      "descriptionIt": "Salite con corsa balzata. Sviluppa l'elasticità e l'economia di corsa.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
@@ -506,6 +571,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -513,6 +579,7 @@
         {
           "description": "Gammes avec bonds",
           "descriptionEn": "Drills with bounds",
+          "descriptionIt": "Andature con balzi",
           "durationMin": 5
         }
       ],
@@ -521,6 +588,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -530,6 +598,7 @@
           "kind": "segment",
           "description": "Gammes avec bonds",
           "descriptionEn": "Drills with bounds",
+          "descriptionIt": "Andature con balzi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -538,11 +607,13 @@
         {
           "description": "6x80m côte en bonds",
           "descriptionEn": "6x80m hill with bounding",
+          "descriptionIt": "6x80m in salita con balzi",
           "zone": "Z6",
           "distanceM": 80,
           "repetitions": 6,
           "recovery": "2-3 min descente en marchant",
           "recoveryEn": "2-3 min walk down",
+          "recoveryIt": "2-3 min di discesa camminando",
           "elevationGainM": 5,
           "gradientPercent": 6,
           "terrainType": "road"
@@ -558,6 +629,7 @@
               "kind": "segment",
               "description": "80m côte en bonds",
               "descriptionEn": "80m hill",
+              "descriptionIt": "80m in salita con balzi",
               "zone": "Z6",
               "distanceM": 80,
               "elevationGainM": 5,
@@ -571,6 +643,7 @@
               "kind": "segment",
               "description": "2-3 min descente en marchant",
               "descriptionEn": "2-3 min walk down",
+              "descriptionIt": "2-3 min di discesa camminando",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -582,6 +655,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -592,6 +666,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -608,6 +683,11 @@
         "Minimal ground contact time",
         "Moderate gradient 5-8%"
       ],
+      "coachingTipsIt": [
+        "Spingi verso l'alto e in avanti",
+        "Tempo di contatto al suolo minimo",
+        "Pendenza moderata 5-8%"
+      ],
       "commonMistakes": [
         "Confondre avec du sprint",
         "Sauter au lieu de bondir"
@@ -615,6 +695,10 @@
       "commonMistakesEn": [
         "Confusing with sprinting",
         "Jumping instead of bounding"
+      ],
+      "commonMistakesIt": [
+        "Confondere con lo sprint",
+        "Saltare invece di balzare"
       ],
       "variationIds": [
         "HIL-001"
@@ -642,8 +726,10 @@
       "id": "HIL-005",
       "name": "Côtes kenyan",
       "nameEn": "Kenyan Hills",
+      "nameIt": "Salite stile keniano",
       "description": "Style kenyan : côtes courtes répétées sans pause. Très exigeant.",
       "descriptionEn": "Kenyan style: short hills repeated without pause. Very demanding.",
+      "descriptionIt": "Stile keniano: salite brevi ripetute senza pause. Molto impegnativo.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "vo2max",
@@ -661,6 +747,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -668,6 +755,7 @@
         {
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationMin": 5
         }
       ],
@@ -676,6 +764,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -685,6 +774,7 @@
           "kind": "segment",
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationSec": 300,
           "role": "effort"
         }
@@ -693,13 +783,16 @@
         {
           "description": "3x(5x100m côte avec footing descente)",
           "descriptionEn": "3x(5x100m hill with jog down)",
+          "descriptionIt": "3x(5x100m salita con discesa in corsetta)",
           "distanceM": 100,
           "zone": "Z5",
           "repetitions": 5,
           "recovery": "45s footing descente",
           "recoveryEn": "45s jog down",
+          "recoveryIt": "45s discesa in corsetta",
           "restBetweenSets": "3min footing Z1",
           "restBetweenSetsEn": "3min jog Z1",
+          "restBetweenSetsIt": "3min corsa lenta Z1",
           "intensityType": "I",
           "sets": 3,
           "elevationGainM": 10,
@@ -722,6 +815,7 @@
                   "kind": "segment",
                   "description": "100m côte",
                   "descriptionEn": "100m hill",
+                  "descriptionIt": "100m salita",
                   "distanceM": 100,
                   "zone": "Z5",
                   "role": "effort"
@@ -732,6 +826,7 @@
                   "kind": "segment",
                   "description": "Footing descente",
                   "descriptionEn": "Jog down",
+                  "descriptionIt": "Discesa in corsetta",
                   "zone": "Z1",
                   "role": "recovery"
                 }
@@ -743,6 +838,7 @@
               "kind": "segment",
               "description": "3min footing Z1",
               "descriptionEn": "3min jog Z1",
+              "descriptionIt": "3min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -754,6 +850,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -764,6 +861,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -780,6 +878,11 @@
         "Elite format, excellent fitness required",
         "Simulates Kenyan training methods"
       ],
+      "coachingTipsIt": [
+        "Solo recupero attivo",
+        "Formato élite, richiesta ottima condizione fisica",
+        "Simula i metodi di allenamento keniani"
+      ],
       "commonMistakes": [
         "Surestimer son niveau",
         "Ne pas s'arrêter si la technique cède"
@@ -787,6 +890,10 @@
       "commonMistakesEn": [
         "Overestimating your fitness level",
         "Not stopping if technique breaks down"
+      ],
+      "commonMistakesIt": [
+        "Sopravvalutare il proprio livello",
+        "Non fermarsi se la tecnica cede"
       ],
       "variationIds": [
         "HIL-001"
@@ -813,8 +920,10 @@
       "id": "HIL-006",
       "name": "Côtes progressives",
       "nameEn": "Progressive Hills",
+      "nameIt": "Salite progressive",
       "description": "Côtes avec intensité croissante. De l'endurance vers la VMA.",
       "descriptionEn": "Hills with increasing intensity. From endurance to VO2max.",
+      "descriptionIt": "Salite a intensità crescente. Dalla resistenza alla VAM.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "mixed",
@@ -832,6 +941,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -842,6 +952,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -852,10 +963,12 @@
         {
           "description": "2x côte lente Z2",
           "descriptionEn": "2x slow hill Z2",
+          "descriptionIt": "2x salita lenta Z2",
           "distanceM": 200,
           "zone": "Z2",
           "recovery": "2 min descente",
           "recoveryEn": "2 min downhill",
+          "recoveryIt": "2 min discesa",
           "intensityType": "E",
           "elevationGainM": 10,
           "gradientPercent": 5,
@@ -864,10 +977,12 @@
         {
           "description": "2x côte tempo Z3",
           "descriptionEn": "2x tempo hill Z3",
+          "descriptionIt": "2x salita ritmo medio Z3",
           "distanceM": 200,
           "zone": "Z3",
           "recovery": "2 min descente",
           "recoveryEn": "2 min downhill",
+          "recoveryIt": "2 min discesa",
           "intensityType": "M",
           "elevationGainM": 12,
           "gradientPercent": 6,
@@ -876,10 +991,12 @@
         {
           "description": "2x côte seuil Z4",
           "descriptionEn": "2x threshold hill Z4",
+          "descriptionIt": "2x salita soglia Z4",
           "distanceM": 200,
           "zone": "Z4",
           "recovery": "2 min descente",
           "recoveryEn": "2 min downhill",
+          "recoveryIt": "2 min discesa",
           "intensityType": "T",
           "elevationGainM": 14,
           "gradientPercent": 7,
@@ -888,10 +1005,12 @@
         {
           "description": "2x côte VMA Z5",
           "descriptionEn": "2x VO2max hill Z5",
+          "descriptionIt": "2x salita VAM Z5",
           "distanceM": 150,
           "zone": "Z5",
           "recovery": "2 min descente",
           "recoveryEn": "2 min downhill",
+          "recoveryIt": "2 min discesa",
           "intensityType": "I",
           "elevationGainM": 14,
           "gradientPercent": 9,
@@ -904,10 +1023,25 @@
           "count": 2,
           "unit": "reps",
           "steps": [
-            { "kind": "segment", "description": "Côte lente", "descriptionEn": "Easy hill", "distanceM": 200, "zone": "Z2", "role": "effort" }
+            {
+              "kind": "segment",
+              "description": "Côte lente",
+              "descriptionEn": "Easy hill",
+              "descriptionIt": "Salita lenta",
+              "distanceM": 200,
+              "zone": "Z2",
+              "role": "effort"
+            }
           ],
           "between": [
-            { "kind": "segment", "description": "Descente footing", "descriptionEn": "Jog down", "zone": "Z1", "role": "recovery" }
+            {
+              "kind": "segment",
+              "description": "Descente footing",
+              "descriptionEn": "Jog down",
+              "descriptionIt": "Discesa in corsetta",
+              "zone": "Z1",
+              "role": "recovery"
+            }
           ]
         },
         {
@@ -915,10 +1049,25 @@
           "count": 2,
           "unit": "reps",
           "steps": [
-            { "kind": "segment", "description": "Côte tempo", "descriptionEn": "Tempo hill", "distanceM": 200, "zone": "Z3", "role": "effort" }
+            {
+              "kind": "segment",
+              "description": "Côte tempo",
+              "descriptionEn": "Tempo hill",
+              "descriptionIt": "Salita ritmo medio",
+              "distanceM": 200,
+              "zone": "Z3",
+              "role": "effort"
+            }
           ],
           "between": [
-            { "kind": "segment", "description": "Descente footing", "descriptionEn": "Jog down", "zone": "Z1", "role": "recovery" }
+            {
+              "kind": "segment",
+              "description": "Descente footing",
+              "descriptionEn": "Jog down",
+              "descriptionIt": "Discesa in corsetta",
+              "zone": "Z1",
+              "role": "recovery"
+            }
           ]
         },
         {
@@ -926,10 +1075,25 @@
           "count": 2,
           "unit": "reps",
           "steps": [
-            { "kind": "segment", "description": "Côte seuil", "descriptionEn": "Threshold hill", "distanceM": 200, "zone": "Z4", "role": "effort" }
+            {
+              "kind": "segment",
+              "description": "Côte seuil",
+              "descriptionEn": "Threshold hill",
+              "descriptionIt": "Salita soglia",
+              "distanceM": 200,
+              "zone": "Z4",
+              "role": "effort"
+            }
           ],
           "between": [
-            { "kind": "segment", "description": "Descente footing", "descriptionEn": "Jog down", "zone": "Z1", "role": "recovery" }
+            {
+              "kind": "segment",
+              "description": "Descente footing",
+              "descriptionEn": "Jog down",
+              "descriptionIt": "Discesa in corsetta",
+              "zone": "Z1",
+              "role": "recovery"
+            }
           ]
         },
         {
@@ -937,10 +1101,25 @@
           "count": 2,
           "unit": "reps",
           "steps": [
-            { "kind": "segment", "description": "Côte VMA", "descriptionEn": "VO2max hill", "distanceM": 150, "zone": "Z5", "role": "effort" }
+            {
+              "kind": "segment",
+              "description": "Côte VMA",
+              "descriptionEn": "VO2max hill",
+              "descriptionIt": "Salita VAM",
+              "distanceM": 150,
+              "zone": "Z5",
+              "role": "effort"
+            }
           ],
           "between": [
-            { "kind": "segment", "description": "Descente footing", "descriptionEn": "Jog down", "zone": "Z1", "role": "recovery" }
+            {
+              "kind": "segment",
+              "description": "Descente footing",
+              "descriptionEn": "Jog down",
+              "descriptionIt": "Discesa in corsetta",
+              "zone": "Z1",
+              "role": "recovery"
+            }
           ]
         }
       ],
@@ -948,6 +1127,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -958,6 +1138,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -974,6 +1155,11 @@
         "Listen to your body",
         "Complete and varied session"
       ],
+      "coachingTipsIt": [
+        "Progressione logica dell'intensità",
+        "Ascolta le tue sensazioni",
+        "Seduta completa e varia"
+      ],
       "commonMistakes": [
         "Commencer trop vite",
         "Ne pas monter en intensité"
@@ -981,6 +1167,10 @@
       "commonMistakesEn": [
         "Starting too fast",
         "Not building intensity"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte",
+        "Non aumentare l'intensità"
       ],
       "variationIds": [
         "HIL-002"
@@ -1007,8 +1197,10 @@
       "id": "HIL-007",
       "name": "Côtes + descentes",
       "nameEn": "Uphills and Downhills",
+      "nameIt": "Salite e discese",
       "description": "Travail des montées ET des descentes. Complet pour le trail.",
       "descriptionEn": "Working both uphills AND downhills. Complete for trail running.",
+      "descriptionIt": "Lavoro su salite E discese. Completo per il trail running.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
@@ -1026,6 +1218,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1036,6 +1229,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1046,11 +1240,13 @@
         {
           "description": "6x(montée rapide + descente technique)",
           "descriptionEn": "6x(fast uphill + technical downhill)",
+          "descriptionIt": "6x(salita veloce + discesa tecnica)",
           "distanceM": 200,
           "zone": "Z4",
           "repetitions": 6,
           "recovery": "30s en bas",
           "recoveryEn": "30s at the bottom",
+          "recoveryIt": "30s in fondo",
           "intensityType": "T",
           "elevationGainM": 10,
           "gradientPercent": 10,
@@ -1067,6 +1263,7 @@
               "kind": "segment",
               "description": "Montée rapide + descente technique",
               "descriptionEn": "Fast uphill + technical downhill",
+              "descriptionIt": "Salita veloce + discesa tecnica",
               "distanceM": 200,
               "zone": "Z4",
               "role": "effort"
@@ -1077,6 +1274,7 @@
               "kind": "segment",
               "description": "30s en bas",
               "descriptionEn": "30s at the bottom",
+              "descriptionIt": "30s in fondo",
               "durationSec": 30,
               "zone": "Z1",
               "role": "recovery"
@@ -1088,6 +1286,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1098,6 +1297,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1114,6 +1314,11 @@
         "Downhill technique: high cadence",
         "Essential for trail running"
       ],
+      "coachingTipsIt": [
+        "La discesa fa parte del lavoro",
+        "Tecnica di discesa: cadenza elevata",
+        "Indispensabile per il trail"
+      ],
       "commonMistakes": [
         "Négliger le travail de descente",
         "Freiner excessivement"
@@ -1121,6 +1326,10 @@
       "commonMistakesEn": [
         "Neglecting the downhill work",
         "Braking excessively"
+      ],
+      "commonMistakesIt": [
+        "Trascurare il lavoro in discesa",
+        "Frenare eccessivamente"
       ],
       "variationIds": [
         "HIL-002"
@@ -1147,8 +1356,10 @@
       "id": "HIL-008",
       "name": "Côtes débutant",
       "nameEn": "Beginner Hills",
+      "nameIt": "Salite per principianti",
       "description": "Introduction aux côtes. Pente modérée, intensité contrôlée.",
       "descriptionEn": "Introduction to hills. Moderate gradient, controlled intensity.",
+      "descriptionIt": "Introduzione alle salite. Pendenza moderata, intensità controllata.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
@@ -1166,6 +1377,7 @@
         {
           "description": "Footing très progressif",
           "descriptionEn": "Very progressive jog",
+          "descriptionIt": "Corsa lenta molto progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1176,6 +1388,7 @@
           "kind": "segment",
           "description": "Footing très progressif",
           "descriptionEn": "Very progressive jog",
+          "descriptionIt": "Corsa lenta molto progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1186,11 +1399,13 @@
         {
           "description": "5x60m côte modérée",
           "descriptionEn": "5x60m moderate hill",
+          "descriptionIt": "5x60m salita moderata",
           "distanceM": 60,
           "zone": "Z3-Z4",
           "repetitions": 5,
           "recovery": "1-2 min marche descente",
           "recoveryEn": "1-2 min walk down",
+          "recoveryIt": "1-2 min discesa camminando",
           "intensityType": "T",
           "elevationGainM": 3,
           "gradientPercent": 5,
@@ -1207,6 +1422,7 @@
               "kind": "segment",
               "description": "60m côte modérée",
               "descriptionEn": "60m moderate hill",
+              "descriptionIt": "60m salita moderata",
               "distanceM": 60,
               "zone": "Z3-Z4",
               "intensityType": "T",
@@ -1221,6 +1437,7 @@
               "kind": "segment",
               "description": "1-2 min marche descente",
               "descriptionEn": "1-2 min walk down",
+              "descriptionIt": "1-2 min discesa camminando",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -1232,6 +1449,7 @@
         {
           "description": "Footing lent",
           "descriptionEn": "Slow jog",
+          "descriptionIt": "Corsa lenta",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1242,6 +1460,7 @@
           "kind": "segment",
           "description": "Footing lent",
           "descriptionEn": "Slow jog",
+          "descriptionIt": "Corsa lenta",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1258,6 +1477,11 @@
         "Sustained but not maximal effort",
         "Full recovery between reps"
       ],
+      "coachingTipsIt": [
+        "Scegli una pendenza dolce (4-6%)",
+        "Sforzo sostenuto ma non massimale",
+        "Recupero completo tra le ripetute"
+      ],
       "commonMistakes": [
         "Choisir une côte trop raide",
         "Vouloir aller trop vite dès le début"
@@ -1265,6 +1489,10 @@
       "commonMistakesEn": [
         "Choosing a hill that's too steep",
         "Trying to go too fast from the start"
+      ],
+      "commonMistakesIt": [
+        "Scegliere una salita troppo ripida",
+        "Voler andare troppo forte fin dall'inizio"
       ],
       "variationIds": [
         "HIL-001"
@@ -1290,8 +1518,10 @@
       "id": "HIL-009",
       "name": "Côtes en circuit",
       "nameEn": "Hill Circuit",
+      "nameIt": "Circuito di salite",
       "description": "Parcours avec plusieurs côtes enchaînées. Simule une course vallonnée.",
       "descriptionEn": "Course with multiple hills in sequence. Simulates a hilly race.",
+      "descriptionIt": "Percorso con più salite in sequenza. Simula una gara collinare.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "aerobic_threshold",
@@ -1309,6 +1539,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1319,6 +1550,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1329,6 +1561,7 @@
         {
           "description": "3 boucles d'un circuit vallonné, effort soutenu",
           "descriptionEn": "3 loops of a hilly circuit, sustained effort",
+          "descriptionIt": "3 giri di un circuito collinare, sforzo sostenuto",
           "durationMin": 35,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -1342,6 +1575,7 @@
           "kind": "segment",
           "description": "3 boucles d'un circuit vallonné, effort soutenu",
           "descriptionEn": "3 loops of a hilly circuit, sustained effort",
+          "descriptionIt": "3 giri di un circuito collinare, sforzo sostenuto",
           "durationSec": 2100,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -1355,6 +1589,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1365,6 +1600,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1381,6 +1617,11 @@
         "Maintain a steady effort",
         "Perfect for preparing for hilly races"
       ],
+      "coachingTipsIt": [
+        "Trova un circuito con 3-4 salite",
+        "Mantieni uno sforzo regolare",
+        "Perfetto per preparare gare collinari"
+      ],
       "commonMistakes": [
         "Attaquer les côtes trop fort",
         "Ne pas récupérer dans les descentes"
@@ -1388,6 +1629,10 @@
       "commonMistakesEn": [
         "Attacking hills too hard",
         "Not recovering on the descents"
+      ],
+      "commonMistakesIt": [
+        "Attaccare le salite troppo forte",
+        "Non recuperare nelle discese"
       ],
       "variationIds": [
         "HIL-003"
@@ -1415,8 +1660,10 @@
       "id": "HIL-010",
       "name": "Côtes pré-trail",
       "nameEn": "Pre-Trail Hills",
+      "nameIt": "Salite pre-trail",
       "description": "Séance spécifique trail avec côtes variées et terrains techniques.",
       "descriptionEn": "Trail-specific session with varied hills and technical terrain.",
+      "descriptionIt": "Seduta specifica per il trail con salite varie e terreno tecnico.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "mixed",
@@ -1434,6 +1681,7 @@
         {
           "description": "Footing sur sentier",
           "descriptionEn": "Trail jog",
+          "descriptionIt": "Corsa lenta su sentiero",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1445,6 +1693,7 @@
           "kind": "segment",
           "description": "Footing sur sentier",
           "descriptionEn": "Trail jog",
+          "descriptionIt": "Corsa lenta su sentiero",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1456,6 +1705,7 @@
         {
           "description": "Montées variées (3 courtes + 2 longues) sur sentier",
           "descriptionEn": "Varied climbs (3 short + 2 long) on trail",
+          "descriptionIt": "Salite varie (3 brevi + 2 lunghe) su sentiero",
           "durationMin": 40,
           "zone": "Z3-Z5",
           "elevationGainM": 250,
@@ -1468,6 +1718,7 @@
           "kind": "segment",
           "description": "Montées variées (3 courtes + 2 longues) sur sentier",
           "descriptionEn": "Varied climbs (3 short + 2 long) on trail",
+          "descriptionIt": "Salite varie (3 brevi + 2 lunghe) su sentiero",
           "durationSec": 2400,
           "zone": "Z3-Z5",
           "role": "effort"
@@ -1477,6 +1728,7 @@
         {
           "description": "Footing retour",
           "descriptionEn": "Jog back",
+          "descriptionIt": "Corsa di rientro",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1487,6 +1739,7 @@
           "kind": "segment",
           "description": "Footing retour",
           "descriptionEn": "Jog back",
+          "descriptionIt": "Corsa di rientro",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1503,6 +1756,11 @@
         "Work on trail running technique",
         "Use poles if planned for the race"
       ],
+      "coachingTipsIt": [
+        "Varia i tipi di salita",
+        "Lavora sulla tecnica di trail running",
+        "Usa i bastoncini se previsti in gara"
+      ],
       "commonMistakes": [
         "Ne pas s'adapter au terrain",
         "Oublier de tester l'équipement"
@@ -1510,6 +1768,10 @@
       "commonMistakesEn": [
         "Not adapting to the terrain",
         "Forgetting to test equipment"
+      ],
+      "commonMistakesIt": [
+        "Non adattarsi al terreno",
+        "Dimenticare di testare l'attrezzatura"
       ],
       "variationIds": [
         "HIL-009"
@@ -1536,8 +1798,10 @@
       "id": "HIL-011",
       "name": "Descentes techniques",
       "nameEn": "Technical Downhill Training",
+      "nameIt": "Allenamento discese tecniche",
       "description": "Travail spécifique en descente : technique de pied, relâchement, fréquence. Essentiel pour le trail et la prévention des blessures.",
       "descriptionEn": "Specific downhill training: foot technique, relaxation, cadence. Essential for trail running and injury prevention.",
+      "descriptionIt": "Lavoro specifico in discesa: tecnica di appoggio, rilassamento, cadenza. Essenziale per il trail e la prevenzione degli infortuni.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
@@ -1555,6 +1819,7 @@
         {
           "description": "Footing progressif sur terrain vallonné",
           "descriptionEn": "Progressive jog on rolling terrain",
+          "descriptionIt": "Corsa lenta progressiva su terreno ondulato",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1562,6 +1827,7 @@
         {
           "description": "Gammes et mobilité chevilles",
           "descriptionEn": "Drills and ankle mobility",
+          "descriptionIt": "Andature e mobilità delle caviglie",
           "durationMin": 5
         }
       ],
@@ -1570,6 +1836,7 @@
           "kind": "segment",
           "description": "Footing progressif sur terrain vallonné",
           "descriptionEn": "Progressive jog on rolling terrain",
+          "descriptionIt": "Corsa lenta progressiva su terreno ondulato",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1579,6 +1846,7 @@
           "kind": "segment",
           "description": "Gammes et mobilité chevilles",
           "descriptionEn": "Drills and ankle mobility",
+          "descriptionIt": "Andature e mobilità delle caviglie",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1587,11 +1855,13 @@
         {
           "description": "7 × descentes de 200-300m (pente 8-12%) en contrôle",
           "descriptionEn": "7 × downhill 200-300m (8-12% grade) controlled",
+          "descriptionIt": "7 × discesa 200-300m (pendenza 8-12%) in controllo",
           "zone": "Z3",
           "distanceM": 250,
           "repetitions": 7,
           "recovery": "3-4 min remontée en marchant",
           "recoveryEn": "3-4 min walk back up",
+          "recoveryIt": "3-4 min risalita camminando",
           "intensityType": "M",
           "gradientPercent": -10,
           "terrainType": "trail_runnable"
@@ -1607,6 +1877,7 @@
               "kind": "segment",
               "description": "descentes de 200-300m (pente 8-12%) en contrôle",
               "descriptionEn": "downhill 200-300m (8-12% grade) controlled",
+              "descriptionIt": "discesa 200-300m (pendenza 8-12%) in controllo",
               "distanceM": 250,
               "zone": "Z3",
               "intensityType": "M",
@@ -1620,6 +1891,7 @@
               "kind": "segment",
               "description": "3-4 min remontée en marchant",
               "descriptionEn": "3-4 min walk back up",
+              "descriptionIt": "3-4 min risalita camminando",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -1631,6 +1903,7 @@
         {
           "description": "Footing plat de récupération",
           "descriptionEn": "Flat recovery jog",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1641,6 +1914,7 @@
           "kind": "segment",
           "description": "Footing plat de récupération",
           "descriptionEn": "Flat recovery jog",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1663,6 +1937,14 @@
         "Relax shoulders and arms",
         "Midfoot landing, not on heels"
       ],
+      "coachingTipsIt": [
+        "Da 6 a 8 ripetizioni a seconda della giornata, 7 è il riferimento",
+        "Cadenza elevata, evita falcate troppo ampie",
+        "Guarda avanti, non ai piedi",
+        "Corpo leggermente inclinato in avanti",
+        "Rilassa spalle e braccia",
+        "Appoggio di mesopiede, non sui talloni"
+      ],
       "commonMistakes": [
         "Freiner avec les talons",
         "Se pencher en arrière",
@@ -1674,6 +1956,12 @@
         "Leaning backward",
         "Tensing shoulders",
         "Looking at your feet"
+      ],
+      "commonMistakesIt": [
+        "Frenare con i talloni",
+        "Inclinarsi all'indietro",
+        "Contrarre le spalle",
+        "Guardarsi i piedi"
       ],
       "variationIds": [
         "HIL-007",
@@ -1704,8 +1992,10 @@
       "id": "HIL-012",
       "name": "Sprints en côte explosifs",
       "nameEn": "Explosive Hill Sprints",
+      "nameIt": "Sprint esplosivi in salita",
       "description": "Sprints maximaux de 8-10 secondes en côte raide (8-12% de pente). Travail neuromusculaire pur : recrute les fibres rapides et améliore la puissance de propulsion sans accumulation de lactate. Récupération complète entre chaque sprint. Protocole Hudson/Canova.",
       "descriptionEn": "Maximal sprints of 8-10 seconds on a steep hill (8-12% gradient). Pure neuromuscular work: recruits fast-twitch fibers and improves propulsion power without lactate accumulation. Full recovery between sprints. Hudson/Canova protocol.",
+      "descriptionIt": "Sprint massimali di 8-10 secondi su salita ripida (pendenza 8-12%). Lavoro neuromuscolare puro: recluta le fibre veloci e migliora la potenza di spinta senza accumulo di lattato. Recupero completo tra gli sprint. Protocollo Hudson/Canova.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "speed",
@@ -1723,6 +2013,7 @@
         {
           "description": "Footing avec activation progressive incluant la côte",
           "descriptionEn": "Jog with progressive activation including the hill",
+          "descriptionIt": "Corsa lenta con attivazione progressiva includendo la salita",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -1730,6 +2021,7 @@
         {
           "description": "Gammes : montées de genoux, talon-fesses, griffes, plus 2 côtes à 70% d'effort",
           "descriptionEn": "Drills: high knees, butt kicks, pawing, plus 2 hills at 70% effort",
+          "descriptionIt": "Andature: skip alto, calciata dietro, rullata, più 2 salite al 70% dello sforzo",
           "durationMin": 5,
           "zone": "Z3",
           "intensityType": "M",
@@ -1743,6 +2035,7 @@
           "kind": "segment",
           "description": "Footing avec activation progressive incluant la côte",
           "descriptionEn": "Jog with progressive activation including the hill",
+          "descriptionIt": "Corsa lenta con attivazione progressiva includendo la salita",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -1752,6 +2045,7 @@
           "kind": "segment",
           "description": "Gammes : montées de genoux, talon-fesses, griffes, plus 2 côtes à 70% d'effort",
           "descriptionEn": "Drills: high knees, butt kicks, pawing, plus 2 hills at 70% effort",
+          "descriptionIt": "Andature: skip alto, calciata dietro, rullata, più 2 salite al 70% dello sforzo",
           "durationSec": 300,
           "zone": "Z3",
           "intensityType": "M",
@@ -1765,10 +2059,12 @@
         {
           "description": "8 × sprint en côte maximal de 8-10 secondes. Pente 8-12%. Effort 100%.",
           "descriptionEn": "8 × maximal hill sprint of 8-10 seconds. Gradient 8-12%. 100% effort.",
+          "descriptionIt": "8 × sprint massimale in salita di 8-10 secondi. Pendenza 8-12%. Sforzo 100%.",
           "repetitions": 8,
           "zone": "Z6",
           "recovery": "2-3 min descente en marchant + repos complet",
           "recoveryEn": "2-3 min walk down + full rest",
+          "recoveryIt": "2-3 min discesa camminando + recupero completo",
           "intensityType": "R",
           "elevationGainM": 5,
           "gradientPercent": 10,
@@ -1785,6 +2081,7 @@
               "kind": "segment",
               "description": "sprint en côte maximal de 8-10 secondes. Pente 8-12%. Effort 100%.",
               "descriptionEn": "maximal hill sprint of 8-10 seconds. Gradient 8-12%. 100% effort.",
+              "descriptionIt": "sprint massimale in salita di 8-10 secondi. Pendenza 8-12%. Sforzo 100%.",
               "durationSec": 8,
               "zone": "Z6",
               "intensityType": "R",
@@ -1799,6 +2096,7 @@
               "kind": "segment",
               "description": "2-3 min descente en marchant + repos complet",
               "descriptionEn": "2-3 min walk down + full rest",
+              "descriptionIt": "2-3 min discesa camminando + recupero completo",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -1810,6 +2108,7 @@
         {
           "description": "Footing de récupération sur plat",
           "descriptionEn": "Recovery jog on flat",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1820,6 +2119,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur plat",
           "descriptionEn": "Recovery jog on flat",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1838,6 +2138,12 @@
         "Full recovery (2-3 min) is essential: this is neuromuscular work, not cardio",
         "Start with 4 sprints and add 1 per week up to 8-10"
       ],
+      "coachingTipsIt": [
+        "Da 6 a 8 ripetizioni a seconda della forma del giorno, 8 è il riferimento",
+        "Ogni sprint deve essere a sforzo massimale; se rallenti, interrompi la seduta",
+        "Il recupero completo (2-3 min) è essenziale: è lavoro neuromuscolare, non cardio",
+        "Inizia con 4 sprint e aggiungine 1 a settimana fino a 8-10"
+      ],
       "commonMistakes": [
         "Faire des sprints trop longs (15-20s) qui deviennent du travail lactique",
         "Ne pas récupérer assez entre les sprints, dégradant la qualité de l'effort",
@@ -1847,6 +2153,11 @@
         "Doing sprints too long (15-20s) that become lactate work",
         "Not recovering enough between sprints, degrading effort quality",
         "Using a hill too steep (>15%) that degrades running mechanics"
+      ],
+      "commonMistakesIt": [
+        "Fare sprint troppo lunghi (15-20s) che diventano lavoro lattacido",
+        "Non recuperare abbastanza tra gli sprint, compromettendo la qualità dello sforzo",
+        "Usare una salita troppo ripida (>15%) che peggiora la meccanica di corsa"
       ],
       "variationIds": [
         "HIL-001"
@@ -1877,8 +2188,10 @@
       "id": "HIL-013",
       "name": "Côtes en escalier (gradient progressif)",
       "nameEn": "Staircase Hills (Progressive Gradient)",
+      "nameIt": "Salite a gradoni (pendenza progressiva)",
       "description": "Séance sur une côte avec sections de pente croissante. Commencer par la partie la moins raide et progresser vers les sections les plus pentues. Développe la force spécifique en côte de façon progressive.",
       "descriptionEn": "Session on a hill with sections of increasing gradient. Start on the gentlest section and progress to the steepest parts. Develops hill-specific strength progressively.",
+      "descriptionIt": "Seduta su una salita con tratti a pendenza crescente. Inizia dal tratto più dolce e progredisci verso le sezioni più ripide. Sviluppa progressivamente la forza specifica in salita.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "strength",
@@ -1896,6 +2209,7 @@
         {
           "description": "Footing progressif sur le plat et début de côte",
           "descriptionEn": "Progressive jog on flat and start of hill",
+          "descriptionIt": "Corsa lenta progressiva in piano e inizio salita",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -1906,6 +2220,7 @@
           "kind": "segment",
           "description": "Footing progressif sur le plat et début de côte",
           "descriptionEn": "Progressive jog on flat and start of hill",
+          "descriptionIt": "Corsa lenta progressiva in piano e inizio salita",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -1916,11 +2231,13 @@
         {
           "description": "3x200m côte douce (4-6% pente)",
           "descriptionEn": "3x200m gentle hill (4-6% gradient)",
+          "descriptionIt": "3x200m salita dolce (pendenza 4-6%)",
           "distanceM": 200,
           "repetitions": 3,
           "zone": "Z3",
           "recovery": "1-2 min descente en trottinant",
           "recoveryEn": "1-2 min jog down",
+          "recoveryIt": "1-2 min di discesa in corsetta",
           "intensityType": "M",
           "elevationGainM": 10,
           "gradientPercent": 5,
@@ -1929,11 +2246,13 @@
         {
           "description": "3x200m côte moyenne (6-8% pente)",
           "descriptionEn": "3x200m moderate hill (6-8% gradient)",
+          "descriptionIt": "3x200m salita media (pendenza 6-8%)",
           "distanceM": 200,
           "repetitions": 3,
           "zone": "Z4",
           "recovery": "1-2 min descente en trottinant",
           "recoveryEn": "1-2 min jog down",
+          "recoveryIt": "1-2 min di discesa in corsetta",
           "intensityType": "T",
           "elevationGainM": 14,
           "gradientPercent": 7,
@@ -1942,11 +2261,13 @@
         {
           "description": "3x150m côte raide (8-12% pente)",
           "descriptionEn": "3x150m steep hill (8-12% gradient)",
+          "descriptionIt": "3x150m salita ripida (pendenza 8-12%)",
           "distanceM": 150,
           "repetitions": 3,
           "zone": "Z5",
           "recovery": "2 min descente en marchant",
           "recoveryEn": "2 min walk down",
+          "recoveryIt": "2 min discesa camminando",
           "intensityType": "I",
           "elevationGainM": 15,
           "gradientPercent": 10,
@@ -1963,6 +2284,7 @@
               "kind": "segment",
               "description": "200m côte douce (4-6% pente)",
               "descriptionEn": "200m gentle hill (4-6% gradient)",
+              "descriptionIt": "200m salita dolce (pendenza 4-6%)",
               "distanceM": 200,
               "zone": "Z3",
               "intensityType": "M",
@@ -1977,6 +2299,7 @@
               "kind": "segment",
               "description": "1-2 min descente en trottinant",
               "descriptionEn": "1-2 min jog down",
+              "descriptionIt": "1-2 min di discesa in corsetta",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -1992,6 +2315,7 @@
               "kind": "segment",
               "description": "200m côte moyenne (6-8% pente)",
               "descriptionEn": "200m moderate hill (6-8% gradient)",
+              "descriptionIt": "200m salita media (pendenza 6-8%)",
               "distanceM": 200,
               "zone": "Z4",
               "intensityType": "T",
@@ -2006,6 +2330,7 @@
               "kind": "segment",
               "description": "1-2 min descente en trottinant",
               "descriptionEn": "1-2 min jog down",
+              "descriptionIt": "1-2 min di discesa in corsetta",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -2021,6 +2346,7 @@
               "kind": "segment",
               "description": "150m côte raide (8-12% pente)",
               "descriptionEn": "150m steep hill (8-12% gradient)",
+              "descriptionIt": "150m salita ripida (pendenza 8-12%)",
               "distanceM": 150,
               "zone": "Z5",
               "intensityType": "I",
@@ -2035,6 +2361,7 @@
               "kind": "segment",
               "description": "2 min descente en marchant",
               "descriptionEn": "2 min walk down",
+              "descriptionIt": "2 min discesa camminando",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -2046,6 +2373,7 @@
         {
           "description": "Footing de récupération sur terrain plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2056,6 +2384,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur terrain plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2072,6 +2401,11 @@
         "Adapt your technique to the slope: lean forward more and shorten stride on steep sections",
         "If you don't have a variable gradient hill, use 3 different hills"
       ],
+      "coachingTipsIt": [
+        "L'idea è progredire nella difficoltà: non partire dal tratto più ripido",
+        "Adatta la tecnica alla pendenza: inclinati di più in avanti e accorcia la falcata nei tratti ripidi",
+        "Se non hai una salita a pendenza variabile, usa 3 salite diverse"
+      ],
       "commonMistakes": [
         "Courir toutes les répétitions à la même intensité sans adapter au gradient",
         "Négliger la technique de course en côte raide (bras, posture, fréquence)",
@@ -2081,6 +2415,11 @@
         "Running all reps at the same intensity without adapting to the gradient",
         "Neglecting steep hill running technique (arms, posture, cadence)",
         "Moving too quickly between sets of different gradient without recovering"
+      ],
+      "commonMistakesIt": [
+        "Correre tutte le ripetute alla stessa intensità senza adattarsi alla pendenza",
+        "Trascurare la tecnica di corsa su salita ripida (braccia, postura, cadenza)",
+        "Passare troppo velocemente tra serie a pendenza diversa senza recuperare"
       ],
       "variationIds": [
         "HIL-001",
@@ -2111,8 +2450,10 @@
       "id": "HIL-014",
       "name": "Course continue en terrain vallonné",
       "nameEn": "Rolling Hills Continuous Run",
+      "nameIt": "Corsa continua su terreno ondulato",
       "description": "Course continue de 40-50 minutes sur terrain vallonné sans structure d'intervalles. Effort constant basé sur la perception : pousser dans les montées, relâcher légèrement dans les descentes. Méthode Lydiard.",
       "descriptionEn": "40-50 minute continuous run on undulating terrain without interval structure. Constant perceived effort: push on uphills, ease slightly on downhills. Lydiard method.",
+      "descriptionIt": "Corsa continua di 40-50 minuti su terreno ondulato senza struttura a intervalli. Sforzo percepito costante: spingi in salita, rilascia leggermente in discesa. Metodo Lydiard.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "aerobic_base",
@@ -2130,6 +2471,7 @@
         {
           "description": "Footing progressif sur les premiers vallonnements",
           "descriptionEn": "Progressive jog on the first rolling sections",
+          "descriptionIt": "Corsa lenta progressiva sui primi saliscendi",
           "durationMin": 10,
           "zone": "Z2",
           "intensityType": "E",
@@ -2142,6 +2484,7 @@
           "kind": "segment",
           "description": "Footing progressif sur les premiers vallonnements",
           "descriptionEn": "Progressive jog on the first rolling sections",
+          "descriptionIt": "Corsa lenta progressiva sui primi saliscendi",
           "durationSec": 600,
           "zone": "Z2",
           "intensityType": "E",
@@ -2154,6 +2497,7 @@
         {
           "description": "35-45min course continue sur terrain vallonné. Effort constant (Z2-Z3). Pousser dans les montées sans exploser. Relâcher dans les descentes sans sprinter.",
           "descriptionEn": "35-45min continuous run on undulating terrain. Constant effort (Z2-Z3). Push on uphills without blowing up. Ease on downhills without sprinting.",
+          "descriptionIt": "35-45min corsa continua su terreno ondulato. Sforzo costante (Z2-Z3). Spingi in salita senza andare fuori giri. Rilascia in discesa senza sprintare.",
           "durationMin": 40,
           "zone": "Z3",
           "intensityType": "M",
@@ -2167,6 +2511,7 @@
           "kind": "segment",
           "description": "35-45min course continue sur terrain vallonné. Effort constant (Z2-Z3). Pousser dans les montées sans exploser. Relâcher dans les descentes sans sprinter.",
           "descriptionEn": "35-45min continuous run on undulating terrain. Constant effort (Z2-Z3). Push on uphills without blowing up. Ease on downhills without sprinting.",
+          "descriptionIt": "35-45min corsa continua su terreno ondulato. Sforzo costante (Z2-Z3). Spingi in salita senza andare fuori giri. Rilascia in discesa senza sprintare.",
           "durationSec": 2400,
           "zone": "Z3",
           "intensityType": "M",
@@ -2180,6 +2525,7 @@
         {
           "description": "Footing de récupération sur terrain plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2190,6 +2536,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur terrain plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2206,6 +2553,11 @@
         "As Lydiard said: 'undulating, undulating, not hills', seek rolling terrain, not mountain passes",
         "Grassy undulating terrain (park, countryside) is ideal for this session"
       ],
+      "coachingTipsIt": [
+        "Lo sforzo percepito deve restare costante: il passo cambierà col terreno ma la sensazione resta la stessa",
+        "Come diceva Lydiard: 'undulating, undulating, not hills', cerca terreno ondulato, non passi montani",
+        "Un terreno erboso e ondulato (parco, campagna) è ideale per questa seduta"
+      ],
       "commonMistakes": [
         "Accélérer dans les descentes et transformer la séance en interval training naturel",
         "Choisir un terrain trop vallonné avec des côtes trop longues et raides",
@@ -2215,6 +2567,11 @@
         "Speeding up on downhills turning the session into natural interval training",
         "Choosing too hilly terrain with hills that are too long and steep",
         "Focusing on pace instead of perceived effort on this type of terrain"
+      ],
+      "commonMistakesIt": [
+        "Accelerare in discesa trasformando la seduta in un interval training naturale",
+        "Scegliere un terreno troppo collinare con salite troppo lunghe e ripide",
+        "Concentrarsi sul passo invece che sullo sforzo percepito su questo tipo di terreno"
       ],
       "variationIds": [
         "HIL-007"
@@ -2245,8 +2602,10 @@
       "id": "HIL-015",
       "name": "Technique de descente contrôlée",
       "nameEn": "Controlled Downhill Technique",
+      "nameIt": "Tecnica di discesa controllata",
       "description": "Séance dédiée à la technique de descente pour préparer les courses vallonnées et trails. Descentes répétées à allure modérée avec focus sur la technique : cadence élevée, posture droite, atterrissage sous le centre de gravité. Entraîne la contraction excentrique des quadriceps.",
       "descriptionEn": "Session dedicated to downhill technique for hilly races and trail preparation. Repeated descents at moderate pace with focus on technique: high cadence, upright posture, landing under center of gravity. Trains eccentric quadriceps contraction.",
+      "descriptionIt": "Seduta dedicata alla tecnica di discesa per preparare gare collinari e trail. Discese ripetute a ritmo moderato con focus sulla tecnica: cadenza elevata, postura eretta, appoggio sotto il baricentro. Allena la contrazione eccentrica dei quadricipiti.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "strength",
@@ -2264,6 +2623,7 @@
         {
           "description": "Footing progressif sur terrain mixte",
           "descriptionEn": "Progressive jog on mixed terrain",
+          "descriptionIt": "Corsa lenta progressiva su terreno misto",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E",
@@ -2272,6 +2632,7 @@
         {
           "description": "Montée et descente douce en trottinant x2 pour échauffer les quadriceps",
           "descriptionEn": "Gentle uphill and downhill jog x2 to warm up quadriceps",
+          "descriptionIt": "Salita e discesa dolce in corsetta x2 per riscaldare i quadricipiti",
           "durationMin": 5,
           "zone": "Z2",
           "intensityType": "E",
@@ -2285,6 +2646,7 @@
           "kind": "segment",
           "description": "Footing progressif sur terrain mixte",
           "descriptionEn": "Progressive jog on mixed terrain",
+          "descriptionIt": "Corsa lenta progressiva su terreno misto",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -2295,6 +2657,7 @@
           "kind": "segment",
           "description": "Montée et descente douce en trottinant x2 pour échauffer les quadriceps",
           "descriptionEn": "Gentle uphill and downhill jog x2 to warm up quadriceps",
+          "descriptionIt": "Salita e discesa dolce in corsetta x2 per riscaldare i quadricipiti",
           "durationSec": 300,
           "zone": "Z2",
           "intensityType": "E",
@@ -2308,6 +2671,7 @@
         {
           "description": "6x montée en footing (récupération active)",
           "descriptionEn": "6x jog uphill (active recovery)",
+          "descriptionIt": "6x risalita in corsetta (recupero attivo)",
           "durationMin": 3,
           "zone": "Z3",
           "repetitions": 6,
@@ -2319,11 +2683,13 @@
         {
           "description": "6x descente de 200-300m à allure modérée (pente 5-8%). Focus technique : cadence haute (>180 spm), posture droite, pas de freinage, atterrissage médiopied",
           "descriptionEn": "6x 200-300m descent at moderate pace (5-8% grade). Technique focus: high cadence (>180 spm), upright posture, no braking, midfoot landing",
+          "descriptionIt": "6x discesa 200-300m a ritmo moderato (pendenza 5-8%). Focus tecnico: cadenza elevata (>180 ppm), postura eretta, nessuna frenata, appoggio di mesopiede",
           "distanceM": 250,
           "repetitions": 6,
           "zone": "Z2",
           "recovery": "2 min remontée trottée",
           "recoveryEn": "2 min jog back up",
+          "recoveryIt": "2 min risalita in corsetta",
           "intensityType": "E",
           "gradientPercent": -6,
           "terrainType": "trail_runnable"
@@ -2339,6 +2705,7 @@
               "kind": "segment",
               "description": "montée en footing (récupération active)",
               "descriptionEn": "jog uphill (active recovery)",
+              "descriptionIt": "risalita in corsetta (recupero attivo)",
               "durationSec": 180,
               "zone": "Z3",
               "intensityType": "M",
@@ -2358,6 +2725,7 @@
               "kind": "segment",
               "description": "descente de 200-300m à allure modérée (pente 5-8%). Focus technique : cadence haute (>180 spm), posture droite, pas de freinage, atterrissage médiopied",
               "descriptionEn": "200-300m descent at moderate pace (5-8% grade). Technique focus: high cadence (>180 spm), upright posture, no braking, midfoot landing",
+              "descriptionIt": "discesa 200-300m a ritmo moderato (pendenza 5-8%). Focus tecnico: cadenza elevata (>180 ppm), postura eretta, nessuna frenata, appoggio di mesopiede",
               "distanceM": 250,
               "zone": "Z2",
               "intensityType": "E",
@@ -2371,6 +2739,7 @@
               "kind": "segment",
               "description": "2 min remontée trottée",
               "descriptionEn": "2 min jog back up",
+              "descriptionIt": "2 min risalita in corsetta",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -2382,6 +2751,7 @@
         {
           "description": "Footing de récupération sur plat",
           "descriptionEn": "Recovery jog on flat",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2392,6 +2762,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur plat",
           "descriptionEn": "Recovery jog on flat",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2408,6 +2779,11 @@
         "Start with gentle slopes (4-5%) before moving to steeper descents",
         "Wait at least 72h before repeating a downhill session: DOMS arrive with a 24-48h delay"
       ],
+      "coachingTipsIt": [
+        "L'obiettivo NON è la velocità ma la tecnica: cadenza alta, passi brevi, busto dritto",
+        "Inizia con pendenze dolci (4-5%) prima di passare a discese più ripide",
+        "Attendi almeno 72h prima di ripetere una seduta di discesa: i DOMS arrivano con 24-48h di ritardo"
+      ],
       "commonMistakes": [
         "Freiner avec des grands pas en descente : utilisez des pas courts et rapides",
         "Se pencher en arrière : gardez le buste au-dessus des pieds",
@@ -2417,6 +2793,11 @@
         "Braking with long strides on descent: use short, quick steps",
         "Leaning backward: keep your torso above your feet",
         "Doing this session on hard surface (concrete): prefer dirt trails"
+      ],
+      "commonMistakesIt": [
+        "Frenare con passi lunghi in discesa: usa passi corti e rapidi",
+        "Inclinarsi all'indietro: mantieni il busto sopra i piedi",
+        "Fare questa seduta su superficie dura (cemento): preferisci sentieri in terra"
       ],
       "variationIds": [
         "HIL-011"
@@ -2446,8 +2827,10 @@
       "id": "HIL-016",
       "name": "Escaliers découverte",
       "nameEn": "Stair Running Intro",
+      "nameIt": "Introduzione alle scale",
       "description": "Première séance d'escaliers : 8 montées d'une trentaine de marches, marche par marche, à allure soutenue mais contrôlée. Descente en marchant. Renforce cuisses, mollets et fessiers avec moins d'impact qu'une séance de côtes.",
       "descriptionEn": "First stair session: 8 climbs of about thirty steps, one step at a time, at a firm but controlled pace. Walk down. Strengthens quads, calves and glutes with less impact than a hill session.",
+      "descriptionIt": "Prima seduta di scale: 8 salite di circa trenta gradini, un gradino alla volta, a ritmo sostenuto ma controllato. Discesa camminando. Rinforza quadricipiti, polpacci e glutei con meno impatto rispetto alle salite.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "strength",
@@ -2465,6 +2848,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2472,6 +2856,7 @@
         {
           "description": "Gammes puis 2 montées d'escaliers en marchant vite",
           "descriptionEn": "Drills then 2 brisk walking climbs",
+          "descriptionIt": "Andature poi 2 salite camminando a passo svelto",
           "durationMin": 5,
           "zone": "Z2",
           "elevationGainM": 5
@@ -2482,6 +2867,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2491,6 +2877,7 @@
           "kind": "segment",
           "description": "Gammes puis 2 montées d'escaliers en marchant vite",
           "descriptionEn": "Drills then 2 brisk walking climbs",
+          "descriptionIt": "Andature poi 2 salite camminando a passo svelto",
           "durationSec": 300,
           "zone": "Z2",
           "elevationGainM": 5,
@@ -2501,11 +2888,13 @@
         {
           "description": "8x montée de 30 marches en courant, marche par marche (≈20s)",
           "descriptionEn": "8x 30-step climb running one step at a time (≈20s)",
+          "descriptionIt": "8x salita di 30 gradini correndo un gradino alla volta (≈20s)",
           "durationMin": 0.33,
           "repetitions": 8,
           "zone": "Z4",
           "recovery": "Descente en marchant (≈1 min)",
           "recoveryEn": "Walk down (≈1 min)",
+          "recoveryIt": "Discesa camminando (≈1 min)",
           "intensityType": "T",
           "elevationGainM": 5
         }
@@ -2520,6 +2909,7 @@
               "kind": "segment",
               "description": "Montée de 30 marches en courant, marche par marche",
               "descriptionEn": "30-step climb running one step at a time",
+              "descriptionIt": "Salita di 30 gradini correndo un gradino alla volta",
               "durationSec": 20,
               "zone": "Z4",
               "intensityType": "T",
@@ -2532,6 +2922,7 @@
               "kind": "segment",
               "description": "Descente en marchant",
               "descriptionEn": "Walk down",
+              "descriptionIt": "Discesa camminando",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -2543,6 +2934,7 @@
         {
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2553,6 +2945,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2571,6 +2964,12 @@
         "Always walk down, one hand near the railing",
         "A 25 to 40-step staircase is enough: park, stadium, footbridge"
       ],
+      "coachingTipsIt": [
+        "Appoggia tutto il piede sul gradino, sguardo 3-4 gradini avanti",
+        "Usa le braccia: danno il ritmo",
+        "Scendi sempre camminando, una mano vicino al corrimano",
+        "Basta una scalinata di 25-40 gradini: parco, stadio, passerella"
+      ],
       "commonMistakes": [
         "Courir la descente : c'est là que le risque de chute et l'impact sont les plus élevés",
         "Partir trop vite sur les premières montées",
@@ -2580,6 +2979,11 @@
         "Running down: that is where fall risk and impact are highest",
         "Going out too fast on the first climbs",
         "Starting the next climb before fully recovering"
+      ],
+      "commonMistakesIt": [
+        "Scendere correndo: è lì che il rischio di caduta e l'impatto sono maggiori",
+        "Partire troppo forte nelle prime salite",
+        "Iniziare la salita successiva prima di aver recuperato completamente"
       ],
       "variationIds": [
         "HIL-017",
@@ -2611,8 +3015,10 @@
       "id": "HIL-017",
       "name": "Sprints en escaliers",
       "nameEn": "Stair Sprints",
+      "nameIt": "Sprint sulle scale",
       "description": "3 séries de 6 sprints de 10 secondes sur 12 à 15 marches, marche par marche, à effort maximal. Récupération complète entre chaque montée. Puissance, fréquence gestuelle et temps de contact au sol.",
       "descriptionEn": "3 sets of 6 x 10-second sprints over 12-15 steps, one step at a time, at maximum effort. Full recovery between climbs. Power, cadence and ground contact time.",
+      "descriptionIt": "3 serie da 6 sprint di 10 secondi su 12-15 gradini, un gradino alla volta, a sforzo massimale. Recupero completo tra le salite. Potenza, cadenza e tempo di contatto al suolo.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "speed",
@@ -2630,6 +3036,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2637,6 +3044,7 @@
         {
           "description": "Gammes (montées de genoux, talons-fesses) puis 3 montées progressives",
           "descriptionEn": "Drills (high knees, butt kicks) then 3 progressive climbs",
+          "descriptionIt": "Andature (skip alto, calciata dietro) poi 3 salite progressive",
           "durationMin": 5,
           "zone": "Z3",
           "elevationGainM": 3
@@ -2647,6 +3055,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2656,6 +3065,7 @@
           "kind": "segment",
           "description": "Gammes (montées de genoux, talons-fesses) puis 3 montées progressives",
           "descriptionEn": "Drills (high knees, butt kicks) then 3 progressive climbs",
+          "descriptionIt": "Andature (skip alto, calciata dietro) poi 3 salite progressive",
           "durationSec": 300,
           "zone": "Z3",
           "elevationGainM": 3,
@@ -2666,14 +3076,17 @@
         {
           "description": "3x(6x sprint de 10s sur 12-15 marches, marche par marche)",
           "descriptionEn": "3x(6x 10s sprint over 12-15 steps, one step at a time)",
+          "descriptionIt": "3x(6x sprint 10s su 12-15 gradini, un gradino alla volta)",
           "durationMin": 0.17,
           "repetitions": 6,
           "sets": 3,
           "zone": "Z6",
           "recovery": "1 min descente en marchant",
           "recoveryEn": "1 min walk down",
+          "recoveryIt": "1 min discesa camminando",
           "restBetweenSets": "3 min footing Z1",
           "restBetweenSetsEn": "3 min jog Z1",
+          "restBetweenSetsIt": "3 min corsa lenta Z1",
           "intensityType": "R",
           "elevationGainM": 3
         }
@@ -2693,6 +3106,7 @@
                   "kind": "segment",
                   "description": "Sprint de 10s sur 12-15 marches, marche par marche",
                   "descriptionEn": "10s sprint over 12-15 steps, one step at a time",
+                  "descriptionIt": "Sprint 10s su 12-15 gradini, un gradino alla volta",
                   "durationSec": 10,
                   "zone": "Z6",
                   "intensityType": "R",
@@ -2705,6 +3119,7 @@
                   "kind": "segment",
                   "description": "Descente en marchant",
                   "descriptionEn": "Walk down",
+                  "descriptionIt": "Discesa camminando",
                   "durationSec": 60,
                   "zone": "Z1",
                   "role": "recovery"
@@ -2717,6 +3132,7 @@
               "kind": "segment",
               "description": "3 min footing Z1",
               "descriptionEn": "3 min jog Z1",
+              "descriptionIt": "3 min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -2728,6 +3144,7 @@
         {
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2738,6 +3155,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2756,6 +3174,12 @@
         "12 to 15 steps are enough: beyond that speed drops and the goal changes",
         "Recover at least 1 minute: quality over quantity"
       ],
+      "coachingTipsIt": [
+        "Busto dritto, non inclinato in avanti: il gradino fornisce già la pendenza",
+        "Spinta esplosiva, ginocchia alte, braccia a 90°",
+        "Bastano 12-15 gradini: oltre la velocità cala e l'obiettivo cambia",
+        "Recupera almeno 1 minuto: la qualità prima della quantità"
+      ],
       "commonMistakes": [
         "Allonger la montée au détriment de la vitesse",
         "Descendre en courant",
@@ -2765,6 +3189,11 @@
         "Lengthening the climb at the expense of speed",
         "Running down",
         "Cutting recovery short to \"do more\""
+      ],
+      "commonMistakesIt": [
+        "Allungare la salita a scapito della velocità",
+        "Scendere correndo",
+        "Accorciare il recupero per \"fare di più\""
       ],
       "variationIds": [
         "HIL-016",
@@ -2797,8 +3226,10 @@
       "id": "HIL-018",
       "name": "Escaliers deux par deux",
       "nameEn": "Double-Step Stairs",
+      "nameIt": "Scale due gradini alla volta",
       "description": "Deux blocs sur un escalier de 40 marches : 6 montées marche par marche à foulée rapide, puis 6 montées deux marches par deux en poussée puissante. Contact au sol bref, descente en marchant. Force spécifique et amplitude de foulée.",
       "descriptionEn": "Two blocks on a 40-step staircase: 6 climbs one step at a time with quick turnover, then 6 climbs two steps at a time with a powerful push-off. Short ground contact, walk down. Specific strength and stride length.",
+      "descriptionIt": "Due blocchi su una scalinata di 40 gradini: 6 salite un gradino alla volta a frequenza rapida, poi 6 salite due gradini alla volta con spinta potente. Contatto al suolo breve, discesa camminando. Forza specifica e ampiezza di falcata.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "strength",
@@ -2816,6 +3247,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2823,6 +3255,7 @@
         {
           "description": "Gammes puis 2 montées marche par marche à allure modérée",
           "descriptionEn": "Drills then 2 single-step climbs at moderate pace",
+          "descriptionIt": "Andature poi 2 salite un gradino alla volta a ritmo moderato",
           "durationMin": 5,
           "zone": "Z3",
           "elevationGainM": 7
@@ -2833,6 +3266,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2842,6 +3276,7 @@
           "kind": "segment",
           "description": "Gammes puis 2 montées marche par marche à allure modérée",
           "descriptionEn": "Drills then 2 single-step climbs at moderate pace",
+          "descriptionIt": "Andature poi 2 salite un gradino alla volta a ritmo moderato",
           "durationSec": 300,
           "zone": "Z3",
           "elevationGainM": 7,
@@ -2852,17 +3287,20 @@
         {
           "description": "6x montée de 40 marches, marche par marche, foulée rapide (≈25s)",
           "descriptionEn": "6x 40-step climb, one step at a time, quick turnover (≈25s)",
+          "descriptionIt": "6x salita di 40 gradini, un gradino alla volta, frequenza rapida (≈25s)",
           "durationMin": 0.42,
           "repetitions": 6,
           "zone": "Z4",
           "recovery": "1 min descente en marchant",
           "recoveryEn": "1 min walk down",
+          "recoveryIt": "1 min discesa camminando",
           "intensityType": "T",
           "elevationGainM": 7
         },
         {
           "description": "3 min footing entre les deux blocs",
           "descriptionEn": "3 min jog between the two blocks",
+          "descriptionIt": "3 min corsetta tra i due blocchi",
           "durationMin": 3,
           "zone": "Z1",
           "intensityType": "E"
@@ -2870,11 +3308,13 @@
         {
           "description": "6x montée de 40 marches, deux par deux, poussée puissante (≈30s)",
           "descriptionEn": "6x 40-step climb, two steps at a time, powerful push-off (≈30s)",
+          "descriptionIt": "6x salita di 40 gradini, due gradini alla volta, spinta potente (≈30s)",
           "durationMin": 0.5,
           "repetitions": 6,
           "zone": "Z5",
           "recovery": "1min15 descente en marchant",
           "recoveryEn": "1min15 walk down",
+          "recoveryIt": "1min15 discesa camminando",
           "intensityType": "I",
           "elevationGainM": 7
         }
@@ -2889,6 +3329,7 @@
               "kind": "segment",
               "description": "Montée de 40 marches, marche par marche, foulée rapide",
               "descriptionEn": "40-step climb, one step at a time, quick turnover",
+              "descriptionIt": "Salita di 40 gradini, un gradino alla volta, frequenza rapida",
               "durationSec": 25,
               "zone": "Z4",
               "intensityType": "T",
@@ -2901,6 +3342,7 @@
               "kind": "segment",
               "description": "Descente en marchant",
               "descriptionEn": "Walk down",
+              "descriptionIt": "Discesa camminando",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -2911,6 +3353,7 @@
           "kind": "segment",
           "description": "3 min footing entre les deux blocs",
           "descriptionEn": "3 min jog between the two blocks",
+          "descriptionIt": "3 min corsetta tra i due blocchi",
           "durationSec": 180,
           "zone": "Z1",
           "role": "recovery"
@@ -2924,6 +3367,7 @@
               "kind": "segment",
               "description": "Montée de 40 marches, deux par deux, poussée puissante",
               "descriptionEn": "40-step climb, two steps at a time, powerful push-off",
+              "descriptionIt": "Salita di 40 gradini, due gradini alla volta, spinta potente",
               "durationSec": 30,
               "zone": "Z5",
               "intensityType": "I",
@@ -2936,6 +3380,7 @@
               "kind": "segment",
               "description": "Descente en marchant",
               "descriptionEn": "Walk down",
+              "descriptionIt": "Discesa camminando",
               "durationSec": 75,
               "zone": "Z1",
               "role": "recovery"
@@ -2947,6 +3392,7 @@
         {
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2957,6 +3403,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2975,6 +3422,12 @@
         "Keep ground contact time as short as possible",
         "Add 10 steps per week, no more"
       ],
+      "coachingTipsIt": [
+        "Un gradino alla volta: cadenza elevata, piedi leggeri",
+        "Due gradini alla volta: spingi forte sulla gamba d'appoggio, estensione completa dell'anca",
+        "Mantieni il tempo di contatto al suolo più breve possibile",
+        "Aumenta di 10 gradini a settimana, non di più"
+      ],
       "commonMistakes": [
         "Passer au deux par deux sans maîtriser le marche par marche",
         "Se pencher vers l'avant et poser le talon",
@@ -2984,6 +3437,11 @@
         "Moving to double steps before mastering single steps",
         "Leaning forward and landing on the heel",
         "Running down on tired legs"
+      ],
+      "commonMistakesIt": [
+        "Passare ai due gradini alla volta prima di padroneggiare il gradino singolo",
+        "Inclinarsi in avanti e appoggiare il tallone",
+        "Scendere correndo con le gambe stanche"
       ],
       "variationIds": [
         "HIL-016",
@@ -3014,8 +3472,10 @@
       "id": "HIL-019",
       "name": "Pyramide d'escaliers",
       "nameEn": "Stair Pyramid",
+      "nameIt": "Piramide sulle scale",
       "description": "Deux pyramides 15-30-45-60-45-30-15 secondes de montée en courant, à intensité VMA. Récupération en descente marchée puis footing, allongée après les efforts longs. Nécessite un grand escalier (stade, tribunes) ou un enchaînement montée + palier couru.",
       "descriptionEn": "Two 15-30-45-60-45-30-15 second pyramids of running climbs at VO2max intensity. Recovery is a walk down then a jog, longer after the long efforts. Needs a big staircase (stadium, bleachers) or a climb followed by a run along the landing.",
+      "descriptionIt": "Due piramidi 15-30-45-60-45-30-15 secondi di salita correndo a intensità VAM. Recupero in discesa camminando poi corsetta, più lungo dopo gli sforzi lunghi. Richiede una grande scalinata (stadio, tribune) o un concatenamento salita + pianerottolo corso.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "vo2max",
@@ -3033,6 +3493,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3040,6 +3501,7 @@
         {
           "description": "Gammes et 4 accélérations progressives sur le plat",
           "descriptionEn": "Drills and 4 progressive strides on the flat",
+          "descriptionIt": "Andature e 4 allunghi progressivi in piano",
           "durationMin": 5,
           "zone": "Z3"
         }
@@ -3049,6 +3511,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3058,6 +3521,7 @@
           "kind": "segment",
           "description": "Gammes et 4 accélérations progressives sur le plat",
           "descriptionEn": "Drills and 4 progressive strides on the flat",
+          "descriptionIt": "Andature e 4 allunghi progressivi in piano",
           "durationSec": 300,
           "zone": "Z3",
           "role": "effort"
@@ -3067,13 +3531,16 @@
         {
           "description": "2x pyramide 15s-30s-45s-60s-45s-30s-15s de montée en courant, marche par marche",
           "descriptionEn": "2x 15s-30s-45s-60s-45s-30s-15s pyramid of running climbs, one step at a time",
+          "descriptionIt": "2x piramide 15s-30s-45s-60s-45s-30s-15s di salita correndo, un gradino alla volta",
           "durationMin": 4,
           "sets": 2,
           "zone": "Z5",
           "recovery": "1 à 2 min descente en marchant puis footing (plus long après les efforts longs)",
           "recoveryEn": "1 to 2 min walk down then jog (longer after the long efforts)",
+          "recoveryIt": "1-2 min discesa camminando poi corsetta (più lungo dopo gli sforzi lunghi)",
           "restBetweenSets": "4 min footing Z1",
           "restBetweenSetsEn": "4 min jog Z1",
+          "restBetweenSetsIt": "4 min corsa lenta Z1",
           "intensityType": "I",
           "elevationGainM": 64
         }
@@ -3088,6 +3555,7 @@
               "kind": "segment",
               "description": "15s montée en courant",
               "descriptionEn": "15s running climb",
+              "descriptionIt": "15s salita correndo",
               "durationSec": 15,
               "zone": "Z5",
               "intensityType": "I",
@@ -3098,6 +3566,7 @@
               "kind": "segment",
               "description": "Descente en marchant puis footing",
               "descriptionEn": "Walk down then jog",
+              "descriptionIt": "Discesa camminando poi corsetta",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -3106,6 +3575,7 @@
               "kind": "segment",
               "description": "30s montée en courant",
               "descriptionEn": "30s running climb",
+              "descriptionIt": "30s salita correndo",
               "durationSec": 30,
               "zone": "Z5",
               "intensityType": "I",
@@ -3116,6 +3586,7 @@
               "kind": "segment",
               "description": "Descente en marchant puis footing",
               "descriptionEn": "Walk down then jog",
+              "descriptionIt": "Discesa camminando poi corsetta",
               "durationSec": 90,
               "zone": "Z1",
               "role": "recovery"
@@ -3124,6 +3595,7 @@
               "kind": "segment",
               "description": "45s montée en courant",
               "descriptionEn": "45s running climb",
+              "descriptionIt": "45s salita correndo",
               "durationSec": 45,
               "zone": "Z5",
               "intensityType": "I",
@@ -3134,6 +3606,7 @@
               "kind": "segment",
               "description": "Descente en marchant puis footing",
               "descriptionEn": "Walk down then jog",
+              "descriptionIt": "Discesa camminando poi corsetta",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -3142,6 +3615,7 @@
               "kind": "segment",
               "description": "60s montée en courant",
               "descriptionEn": "60s running climb",
+              "descriptionIt": "60s salita correndo",
               "durationSec": 60,
               "zone": "Z5",
               "intensityType": "I",
@@ -3152,6 +3626,7 @@
               "kind": "segment",
               "description": "Descente en marchant puis footing",
               "descriptionEn": "Walk down then jog",
+              "descriptionIt": "Discesa camminando poi corsetta",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -3160,6 +3635,7 @@
               "kind": "segment",
               "description": "45s montée en courant",
               "descriptionEn": "45s running climb",
+              "descriptionIt": "45s salita correndo",
               "durationSec": 45,
               "zone": "Z5",
               "intensityType": "I",
@@ -3170,6 +3646,7 @@
               "kind": "segment",
               "description": "Descente en marchant puis footing",
               "descriptionEn": "Walk down then jog",
+              "descriptionIt": "Discesa camminando poi corsetta",
               "durationSec": 90,
               "zone": "Z1",
               "role": "recovery"
@@ -3178,6 +3655,7 @@
               "kind": "segment",
               "description": "30s montée en courant",
               "descriptionEn": "30s running climb",
+              "descriptionIt": "30s salita correndo",
               "durationSec": 30,
               "zone": "Z5",
               "intensityType": "I",
@@ -3188,6 +3666,7 @@
               "kind": "segment",
               "description": "Descente en marchant puis footing",
               "descriptionEn": "Walk down then jog",
+              "descriptionIt": "Discesa camminando poi corsetta",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -3196,6 +3675,7 @@
               "kind": "segment",
               "description": "15s montée en courant",
               "descriptionEn": "15s running climb",
+              "descriptionIt": "15s salita correndo",
               "durationSec": 15,
               "zone": "Z5",
               "intensityType": "I",
@@ -3208,6 +3688,7 @@
               "kind": "segment",
               "description": "4 min footing Z1",
               "descriptionEn": "4 min jog Z1",
+              "descriptionIt": "4 min corsa lenta Z1",
               "durationSec": 240,
               "zone": "Z1",
               "role": "recovery"
@@ -3219,6 +3700,7 @@
         {
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3229,6 +3711,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3247,6 +3730,12 @@
         "Always walk down, the recovery jog only starts at the bottom",
         "Active arms, eyes towards the top of the stairs"
       ],
+      "coachingTipsIt": [
+        "Lo sforzo di 60s richiede circa 150 gradini: su una scala corta, concatena salita, pianerottolo corso e rampa successiva",
+        "Stessa intensità dai 15s ai 60s: regola il ritmo sui 60s, non sui 15s",
+        "Scendi sempre camminando, la corsetta di recupero inizia solo in fondo",
+        "Braccia attive, sguardo verso la cima delle scale"
+      ],
       "commonMistakes": [
         "Sprinter les 15s et exploser sur le 60s",
         "Rogner la récupération sur la deuxième pyramide",
@@ -3256,6 +3745,11 @@
         "Sprinting the 15s efforts and blowing up on the 60s",
         "Cutting recovery short on the second pyramid",
         "Scheduling this session within 48h of another hard session"
+      ],
+      "commonMistakesIt": [
+        "Sprintare nei 15s e scoppiare sui 60s",
+        "Tagliare il recupero nella seconda piramide",
+        "Programmare questa seduta a meno di 48h da un altro allenamento intenso"
       ],
       "variationIds": [
         "HIL-017",
@@ -3287,8 +3781,10 @@
       "id": "HIL-020",
       "name": "Escaliers bondissants",
       "nameEn": "Stair Bounding Circuit",
+      "nameIt": "Circuito balzi sulle scale",
       "description": "Circuit pliométrique répété 3 fois : pieds joints marche par marche puis deux par deux, cloche-pied sur chaque jambe, et deux montées courues à foulée rapide. Puissance, réactivité du pied et stabilité de cheville. Volume volontairement réduit.",
       "descriptionEn": "Plyometric circuit repeated 3 times: two-footed hops one step then two steps at a time, single-leg hops on each leg, and two fast running climbs. Power, foot reactivity and ankle stability. Deliberately low volume.",
+      "descriptionIt": "Circuito pliometrico ripetuto 3 volte: saltelli a piedi uniti un gradino poi due gradini alla volta, balzi su una gamba per ciascuna gamba e due salite veloci correndo. Potenza, reattività del piede e stabilità della caviglia. Volume volutamente ridotto.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
@@ -3306,6 +3802,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3313,6 +3810,7 @@
         {
           "description": "Gammes, mobilité de cheville et 2 montées d'escaliers en courant",
           "descriptionEn": "Drills, ankle mobility and 2 running stair climbs",
+          "descriptionIt": "Andature, mobilità delle caviglie e 2 salite di scale correndo",
           "durationMin": 5,
           "zone": "Z3",
           "elevationGainM": 7
@@ -3323,6 +3821,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3332,6 +3831,7 @@
           "kind": "segment",
           "description": "Gammes, mobilité de cheville et 2 montées d'escaliers en courant",
           "descriptionEn": "Drills, ankle mobility and 2 running stair climbs",
+          "descriptionIt": "Andature, mobilità delle caviglie e 2 salite di scale correndo",
           "durationSec": 300,
           "zone": "Z3",
           "elevationGainM": 7,
@@ -3342,36 +3842,43 @@
         {
           "description": "3x(15 marches pieds joints une par une + 15 marches pieds joints deux par deux)",
           "descriptionEn": "3x(15 steps two-footed hops one at a time + 15 steps two-footed hops two at a time)",
+          "descriptionIt": "3x(15 gradini saltelli a piedi uniti uno alla volta + 15 gradini saltelli a piedi uniti due alla volta)",
           "durationMin": 0.33,
           "repetitions": 2,
           "sets": 3,
           "zone": "Z4",
           "recovery": "45s descente en marchant",
           "recoveryEn": "45s walk down",
+          "recoveryIt": "45s discesa camminando",
           "elevationGainM": 3
         },
         {
           "description": "3x(12 marches à cloche-pied jambe droite + 12 marches jambe gauche)",
           "descriptionEn": "3x(12 steps single-leg hops right leg + 12 steps left leg)",
+          "descriptionIt": "3x(12 gradini saltelli gamba destra + 12 gradini gamba sinistra)",
           "durationMin": 0.25,
           "repetitions": 2,
           "sets": 3,
           "zone": "Z4",
           "recovery": "30 à 45s descente en marchant",
           "recoveryEn": "30 to 45s walk down",
+          "recoveryIt": "30-45s discesa camminando",
           "elevationGainM": 2
         },
         {
           "description": "3x(2 montées de 40 marches en courant, foulée rapide)",
           "descriptionEn": "3x(2 running 40-step climbs, quick turnover)",
+          "descriptionIt": "3x(2 salite di 40 gradini correndo, frequenza rapida)",
           "durationMin": 0.42,
           "repetitions": 2,
           "sets": 3,
           "zone": "Z5",
           "recovery": "1 min descente en marchant",
           "recoveryEn": "1 min walk down",
+          "recoveryIt": "1 min discesa camminando",
           "restBetweenSets": "3 min footing Z1 entre les circuits",
           "restBetweenSetsEn": "3 min jog Z1 between circuits",
+          "restBetweenSetsIt": "3 min corsa lenta Z1 tra i circuiti",
           "intensityType": "I",
           "elevationGainM": 7
         }
@@ -3386,6 +3893,7 @@
               "kind": "segment",
               "description": "15 marches pieds joints, une par une",
               "descriptionEn": "15 steps two-footed hops, one at a time",
+              "descriptionIt": "15 gradini saltelli a piedi uniti, uno alla volta",
               "durationSec": 20,
               "zone": "Z4",
               "elevationGainM": 3,
@@ -3395,6 +3903,7 @@
               "kind": "segment",
               "description": "Descente en marchant",
               "descriptionEn": "Walk down",
+              "descriptionIt": "Discesa camminando",
               "durationSec": 45,
               "zone": "Z1",
               "role": "recovery"
@@ -3403,6 +3912,7 @@
               "kind": "segment",
               "description": "15 marches pieds joints, deux par deux",
               "descriptionEn": "15 steps two-footed hops, two at a time",
+              "descriptionIt": "15 gradini saltelli a piedi uniti, due alla volta",
               "durationSec": 20,
               "zone": "Z4",
               "elevationGainM": 3,
@@ -3412,6 +3922,7 @@
               "kind": "segment",
               "description": "Descente en marchant",
               "descriptionEn": "Walk down",
+              "descriptionIt": "Discesa camminando",
               "durationSec": 45,
               "zone": "Z1",
               "role": "recovery"
@@ -3420,6 +3931,7 @@
               "kind": "segment",
               "description": "12 marches à cloche-pied, jambe droite",
               "descriptionEn": "12 steps single-leg hops, right leg",
+              "descriptionIt": "12 gradini saltelli su una gamba, gamba destra",
               "durationSec": 15,
               "zone": "Z4",
               "elevationGainM": 2,
@@ -3429,6 +3941,7 @@
               "kind": "segment",
               "description": "Descente en marchant",
               "descriptionEn": "Walk down",
+              "descriptionIt": "Discesa camminando",
               "durationSec": 30,
               "zone": "Z1",
               "role": "recovery"
@@ -3437,6 +3950,7 @@
               "kind": "segment",
               "description": "12 marches à cloche-pied, jambe gauche",
               "descriptionEn": "12 steps single-leg hops, left leg",
+              "descriptionIt": "12 gradini saltelli su una gamba, gamba sinistra",
               "durationSec": 15,
               "zone": "Z4",
               "elevationGainM": 2,
@@ -3446,6 +3960,7 @@
               "kind": "segment",
               "description": "Descente en marchant",
               "descriptionEn": "Walk down",
+              "descriptionIt": "Discesa camminando",
               "durationSec": 45,
               "zone": "Z1",
               "role": "recovery"
@@ -3454,6 +3969,7 @@
               "kind": "segment",
               "description": "Montée de 40 marches en courant, foulée rapide",
               "descriptionEn": "Running 40-step climb, quick turnover",
+              "descriptionIt": "Salita di 40 gradini correndo, frequenza rapida",
               "durationSec": 25,
               "zone": "Z5",
               "intensityType": "I",
@@ -3464,6 +3980,7 @@
               "kind": "segment",
               "description": "Descente en marchant",
               "descriptionEn": "Walk down",
+              "descriptionIt": "Discesa camminando",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -3472,6 +3989,7 @@
               "kind": "segment",
               "description": "Montée de 40 marches en courant, foulée rapide",
               "descriptionEn": "Running 40-step climb, quick turnover",
+              "descriptionIt": "Salita di 40 gradini correndo, frequenza rapida",
               "durationSec": 25,
               "zone": "Z5",
               "intensityType": "I",
@@ -3484,6 +4002,7 @@
               "kind": "segment",
               "description": "3 min footing Z1",
               "descriptionEn": "3 min jog Z1",
+              "descriptionIt": "3 min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -3495,6 +4014,7 @@
         {
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3505,6 +4025,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3523,6 +4044,12 @@
         "Single step before double step: hop quality matters more than height",
         "Once a week at most, never the day before a quality session"
       ],
+      "coachingTipsIt": [
+        "Atterraggio morbido sull'avampiede, ginocchia in asse",
+        "Saltelli su una gamba: massimo 12 gradini, interrompi la serie se l'atterraggio si degrada",
+        "Un gradino prima di due gradini: la qualità del balzo conta più dell'altezza",
+        "Al massimo una volta a settimana, mai il giorno prima di una seduta di qualità"
+      ],
       "commonMistakes": [
         "Trop de volume : la pliométrie se dose en dizaines de sauts, pas en centaines",
         "Sauter sur des marches mouillées ou irrégulières",
@@ -3532,6 +4059,11 @@
         "Too much volume: plyometrics are counted in dozens of jumps, not hundreds",
         "Hopping on wet or uneven steps",
         "Landing on the heel with a stiff leg"
+      ],
+      "commonMistakesIt": [
+        "Troppo volume: la pliometria si dosa a decine di salti, non a centinaia",
+        "Saltare su gradini bagnati o irregolari",
+        "Atterrare sul tallone con la gamba rigida"
       ],
       "variationIds": [
         "HIL-004",
@@ -3564,8 +4096,10 @@
       "id": "HIL-021",
       "name": "Escaliers en continu",
       "nameEn": "Continuous Stair Climbs",
+      "nameIt": "Salite continue sulle scale",
       "description": "3 blocs de 9 minutes d'enchaînement montée courue / descente trottinée sans arrêt, à intensité seuil sur les montées. Endurance de force pour le trail et les courses vallonnées : les jambes apprennent à repartir malgré un dénivelé cumulé important.",
       "descriptionEn": "3 x 9-minute blocks alternating running climbs and jogged descents without stopping, at threshold intensity on the climbs. Strength endurance for trail and hilly races: the legs learn to keep going under a large cumulative elevation gain.",
+      "descriptionIt": "3 blocchi da 9 minuti alternando salite correndo e discese in corsetta senza fermarsi, a intensità di soglia in salita. Resistenza alla forza per trail e gare collinari: le gambe imparano a spingere con un elevato D+ cumulato.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "aerobic_threshold",
@@ -3583,6 +4117,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3590,6 +4125,7 @@
         {
           "description": "2 montées en marchant vite puis 2 montées trottinées",
           "descriptionEn": "2 brisk walking climbs then 2 jogged climbs",
+          "descriptionIt": "2 salite camminando a passo svelto poi 2 salite in corsetta",
           "durationMin": 5,
           "zone": "Z2",
           "elevationGainM": 12
@@ -3600,6 +4136,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3609,6 +4146,7 @@
           "kind": "segment",
           "description": "2 montées en marchant vite puis 2 montées trottinées",
           "descriptionEn": "2 brisk walking climbs then 2 jogged climbs",
+          "descriptionIt": "2 salite camminando a passo svelto poi 2 salite in corsetta",
           "durationSec": 300,
           "zone": "Z2",
           "elevationGainM": 12,
@@ -3619,14 +4157,17 @@
         {
           "description": "3x(6x 45s montée courue allure seuil / 45s descente trottinée)",
           "descriptionEn": "3x(6x 45s running climb at threshold / 45s jogged descent)",
+          "descriptionIt": "3x(6x 45s salita correndo a soglia / 45s discesa in corsetta)",
           "durationMin": 0.75,
           "repetitions": 6,
           "sets": 3,
           "zone": "Z4",
           "recovery": "45s descente trottinée",
           "recoveryEn": "45s jog down",
+          "recoveryIt": "45s discesa in corsetta",
           "restBetweenSets": "3 min footing Z1",
           "restBetweenSetsEn": "3 min jog Z1",
+          "restBetweenSetsIt": "3 min corsa lenta Z1",
           "intensityType": "T",
           "elevationGainM": 12
         }
@@ -3646,6 +4187,7 @@
                   "kind": "segment",
                   "description": "45s montée courue, marche par marche, allure seuil",
                   "descriptionEn": "45s running climb, one step at a time, threshold pace",
+                  "descriptionIt": "45s salita correndo, un gradino alla volta, ritmo soglia",
                   "durationSec": 45,
                   "zone": "Z4",
                   "intensityType": "T",
@@ -3656,6 +4198,7 @@
                   "kind": "segment",
                   "description": "45s descente trottinée, prudente",
                   "descriptionEn": "45s careful jogged descent",
+                  "descriptionIt": "45s discesa in corsetta prudente",
                   "durationSec": 45,
                   "zone": "Z2",
                   "role": "recovery"
@@ -3668,6 +4211,7 @@
               "kind": "segment",
               "description": "3 min footing Z1",
               "descriptionEn": "3 min jog Z1",
+              "descriptionIt": "3 min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -3679,6 +4223,7 @@
         {
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3689,6 +4234,7 @@
           "kind": "segment",
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
+          "descriptionIt": "Corsa di recupero in piano",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3707,6 +4253,12 @@
         "The jogged descent is part of the work: light feet, eyes on the steps",
         "Track the total elevation gain: 200 m in 30 min is already a real trail session"
       ],
+      "coachingTipsIt": [
+        "Una scalinata lunga (80-120 gradini) o una passerella con pianerottoli",
+        "Ritmo soglia in salita: dovresti riuscire a dire qualche parola",
+        "La discesa in corsetta fa parte del lavoro: piedi leggeri, sguardo sui gradini",
+        "Tieni traccia del D+ totale: 200 m in 30 min sono già una vera seduta da trail"
+      ],
       "commonMistakes": [
         "Monter trop vite sur le premier bloc et marcher le troisième",
         "Descendre trop vite : c'est le premier facteur de chute",
@@ -3716,6 +4268,11 @@
         "Climbing too fast on the first block and walking the third",
         "Descending too fast: the number one cause of falls",
         "Turning the session into sprints: that is not the goal"
+      ],
+      "commonMistakesIt": [
+        "Salire troppo forte nel primo blocco e camminare nel terzo",
+        "Scendere troppo forte: è la prima causa di cadute",
+        "Trasformare la seduta in sprint: non è l'obiettivo"
       ],
       "variationIds": [
         "HIL-019",

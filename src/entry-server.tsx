@@ -9,7 +9,7 @@ export async function renderRoute(pathname: string, lang: SupportedLanguage): Pr
   await ensureTranslations(lang);
   await i18n.changeLanguage(lang);
 
-  const url = lang === "en" ? `${pathname}?lang=en` : pathname;
+  const url = lang === "fr" ? pathname : `${pathname}?lang=${lang}`;
   const { prelude } = await prerender(
     <StrictMode>
       <App ssrLocation={url} />

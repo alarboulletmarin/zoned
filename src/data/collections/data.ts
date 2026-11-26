@@ -10,10 +10,13 @@ export const collections: Collection[] = [
     slug: "debuter-le-running",
     name: "Débuter le running",
     nameEn: "Getting Started with Running",
+    nameIt: "Iniziare a correre",
     description:
       "Un parcours progressif pour passer de zéro à coureur régulier en toute sécurité.",
     descriptionEn:
       "A progressive path from zero to regular runner, safely and sustainably",
+    descriptionIt:
+      "Un percorso progressivo per passare da zero a runner regolare in tutta sicurezza.",
     icon: "Footprints",
     difficulty: "beginner",
     isProgression: true,
@@ -43,10 +46,13 @@ export const collections: Collection[] = [
     slug: "anti-stress",
     name: "Running anti-stress",
     nameEn: "Stress-Relief Running",
+    nameIt: "Running antistress",
     description:
       "Des séances douces et ressourçantes pour décompresser et retrouver l'équilibre.",
     descriptionEn:
       "Gentle, restorative sessions to decompress and find balance",
+    descriptionIt:
+      "Sedute dolci e rigeneranti per decomprimere e ritrovare l'equilibrio.",
     icon: "Leaf",
     isProgression: false,
     workoutIds: [
@@ -73,10 +79,13 @@ export const collections: Collection[] = [
     slug: "retour-de-blessure",
     name: "Retour de blessure",
     nameEn: "Comeback from Injury",
+    nameIt: "Rientro da infortunio",
     description:
       "Un protocole prudent et progressif pour reprendre la course après une blessure.",
     descriptionEn:
       "A careful, progressive protocol to resume running after an injury",
+    descriptionIt:
+      "Un protocollo prudente e progressivo per riprendere a correre dopo un infortunio.",
     icon: "Shield",
     difficulty: "beginner",
     isProgression: true,
@@ -105,10 +114,13 @@ export const collections: Collection[] = [
     slug: "post-course",
     name: "Récupération post-course",
     nameEn: "Post-Race Recovery",
+    nameIt: "Recupero post-gara",
     description:
       "Le protocole idéal pour récupérer après une compétition et relancer l'entraînement.",
     descriptionEn:
       "The idéal protocol to recover after a race and restart training",
+    descriptionIt:
+      "Il protocollo ideale per recuperare dopo una gara e riprendere gli allenamenti.",
     icon: "RefreshCw",
     isProgression: true,
     workoutIds: [
@@ -132,10 +144,13 @@ export const collections: Collection[] = [
     slug: "pre-course",
     name: "Préparation pré-course",
     nameEn: "Pre-Race Preparation",
+    nameIt: "Preparazione pre-gara",
     description:
       "Affûtage et activation pour arriver au top le jour J, de J-14 à la veille.",
     descriptionEn:
       "Tapering and activation to arrive at peak form on race day, from D-14 to the eve",
+    descriptionIt:
+      "Tapering e attivazione per arrivare al top il giorno della gara, da -14 giorni alla vigilia.",
     icon: "Flag",
     isProgression: true,
     workoutIds: [
@@ -166,10 +181,13 @@ export const collections: Collection[] = [
     slug: "séances-mythiques",
     name: "Séances mythiques",
     nameEn: "Legendary Workouts",
+    nameIt: "Sedute mitiche",
     description:
       "Les séances de référence utilisées par les meilleurs coureurs du monde.",
     descriptionEn:
       "The benchmark sessions used by the world's best runners",
+    descriptionIt:
+      "Le sedute di riferimento utilizzate dai migliori runner del mondo.",
     icon: "Star",
     isProgression: false,
     workoutIds: [
@@ -203,10 +221,13 @@ export const collections: Collection[] = [
     slug: "objectif-5k",
     name: "Objectif 5K",
     nameEn: "5K Goal",
+    nameIt: "Obiettivo 5K",
     description:
       "Développe ta VMA et ta vitesse pour exploser ton chrono sur 5 km.",
     descriptionEn:
       "Develop your VO2max speed and pace to smash your 5K personal best",
+    descriptionIt:
+      "Sviluppa la tua VAM e la velocità per abbattere il tuo record sui 5 km.",
     icon: "Target",
     practice: "road",
     difficulty: "intermediate",
@@ -228,10 +249,13 @@ export const collections: Collection[] = [
     slug: "objectif-10k",
     name: "Objectif 10K",
     nameEn: "10K Goal",
+    nameIt: "Obiettivo 10K",
     description:
       "Travaille le seuil et le tempo pour tenir l'allure sur 10 kilomètres.",
     descriptionEn:
       "Work on threshold and tempo to sustain your pace over 10 kilometers",
+    descriptionIt:
+      "Allena la soglia e il tempo run per sostenere il ritmo sui 10 chilometri.",
     icon: "Target",
     practice: "road",
     difficulty: "intermediate",
@@ -253,10 +277,13 @@ export const collections: Collection[] = [
     slug: "objectif-semi",
     name: "Objectif semi-marathon",
     nameEn: "Half-Marathon Goal",
+    nameIt: "Obiettivo mezza maratona",
     description:
       "Combine endurance, seuil et allure spécifique pour réussir ton semi.",
     descriptionEn:
       "Combine endurance, threshold and race pace to nail your half-marathon",
+    descriptionIt:
+      "Combina resistenza, soglia e ritmo gara per centrare il tuo obiettivo nella mezza maratona.",
     icon: "Target",
     practice: "road",
     difficulty: "advanced",
@@ -288,10 +315,13 @@ export const collections: Collection[] = [
     slug: "objectif-marathon",
     name: "Objectif marathon",
     nameEn: "Marathon Goal",
+    nameIt: "Obiettivo maratona",
     description:
       "Prépare-toi à courir 42 km avec des sorties longues, du tempo et de l'allure spécifique.",
     descriptionEn:
       "Prepare to run 42K with long runs, tempo work and race-specific pace",
+    descriptionIt:
+      "Preparati a correre i 42 km con lunghi, tempo run e lavoro a ritmo maratona.",
     icon: "Route",
     practice: "road",
     difficulty: "advanced",
@@ -322,10 +352,13 @@ export const collections: Collection[] = [
     slug: "objectif-trail-long",
     name: "Objectif trail long",
     nameEn: "Long Trail Goal",
+    nameIt: "Obiettivo trail lungo",
     description:
       "Construis l'endurance et la résistance nécessaires aux longues distances en trail.",
     descriptionEn:
       "Build the endurance and resilience needed for long trail distances.",
+    descriptionIt:
+      "Costruisci la resistenza e la tenuta necessarie per le lunghe distanze nel trail.",
     icon: "Mountain",
     practice: "trail",
     difficulty: "elite",
@@ -358,10 +391,13 @@ export const collections: Collection[] = [
     slug: "progresser-vma",
     name: "Progresser en VMA",
     nameEn: "Improve Your VO2max Speed",
+    nameIt: "Migliorare la VAM",
     description:
       "Un programme progressif pour développer ta vitesse maximale aérobie.",
     descriptionEn:
       "A progressive program to develop your maximal aerobic speed",
+    descriptionIt:
+      "Un programma progressivo per sviluppare la tua velocità aerobica massima.",
     icon: "Sprint",
     difficulty: "intermediate",
     isProgression: true,
@@ -394,10 +430,13 @@ export const collections: Collection[] = [
     slug: "force-pour-coureurs",
     name: "Force pour coureurs",
     nameEn: "Strength for Runners",
+    nameIt: "Forza per runner",
     description:
       "Programme progressif de renforcement musculaire spécifique à la course à pied. De l'adaptation anatomique à la force maximale, en suivant les protocoles validés par la science (Beattie 2017, Rønnestad 2014).",
     descriptionEn:
       "Progressive strength training program specific to running. From anatomical adaptation to maximal strength, following science-validated protocols (Beattie 2017, Rønnestad 2014).",
+    descriptionIt:
+      "Programma progressivo di potenziamento muscolare specifico per la corsa. Dall'adattamento anatomico alla forza massima, seguendo i protocolli validati dalla scienza (Beattie 2017, Rønnestad 2014).",
     icon: "Dumbbell",
     difficulty: "intermediate",
     isProgression: true,
@@ -415,10 +454,13 @@ export const collections: Collection[] = [
     slug: "core-stability-coureur",
     name: "Core stability coureur",
     nameEn: "Runner Core Stability",
+    nameIt: "Core stability per runner",
     description:
       "Gainage et stabilité du tronc pour une meilleure posture en course. Anti-extension, anti-rotation, anti-flexion latérale : les trois piliers du core pour le coureur.",
     descriptionEn:
       "Core stability and trunk control for better running posture. Anti-extension, anti-rotation, anti-lateral flexion: the three pillars of runner's core.",
+    descriptionIt:
+      "Rinforzo del core e stabilità del tronco per una migliore postura nella corsa. Anti-estensione, anti-rotazione, anti-flessione laterale: i tre pilastri del core per il runner.",
     icon: "Shield",
     difficulty: "beginner",
     isProgression: true,
@@ -434,10 +476,13 @@ export const collections: Collection[] = [
     slug: "prevention-blessures",
     name: "Prévention blessures",
     nameEn: "Injury Prevention",
+    nameIt: "Prevenzione infortuni",
     description:
       "Renforcement ciblé des zones sensibles du coureur : genoux, chevilles, hanches. Basé sur la méta-analyse de Lauersen (2014) qui montre une réduction de 50% du risque de blessure par le renforcement.",
     descriptionEn:
       "Targeted strengthening of runner's vulnerable areas: knees, ankles, hips. Based on Lauersen (2014) meta-analysis showing 50% injury risk reduction through strength training.",
+    descriptionIt:
+      "Rinforzo mirato delle zone vulnerabili del runner: ginocchia, caviglie, anche. Basato sulla meta-analisi di Lauersen (2014) che mostra una riduzione del 50% del rischio di infortuni grazie al potenziamento.",
     icon: "HeartPulse",
     isProgression: false,
     workoutIds: [

@@ -18,6 +18,7 @@ import {
   X,
 } from "@/components/icons";
 import { localeTo } from "@/lib/seo/locale-to";
+import { pickLang } from "@/lib/i18n-utils";
 import { preloadWorkoutDetail } from "@/lib/sharedTransition";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -520,7 +521,7 @@ export function LibraryPage() {
                   className="zn-lib__practice"
                   onClick={() => handlePracticeChange(option)}
                 >
-                  {meta ? (isEn ? meta.labelEn : meta.label) : t("practice.all")}
+                  {meta ? pickLang(meta, "label") : t("practice.all")}
                 </button>
               );
             })}

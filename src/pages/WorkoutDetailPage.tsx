@@ -74,7 +74,7 @@ import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { getWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
-import { useIsEnglish, usePickLang, usePickLangArray } from "@/lib/i18n-utils";
+import { getDateLocale, usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 import { estimateDistanceKm, intensitySplit, peakOf } from "@/lib/sessionFacts";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
@@ -111,7 +111,6 @@ export function WorkoutDetailPage() {
   const navigationType = useNavigationType();
   const { t } = useTranslation(["session", "library", "common"]);
   const pick = usePickLang();
-  const isEn = useIsEnglish();
   // 640px, the line every mobile rule on this page uses. Read here, above the
   // loading and not-found returns: a hook after an early return is a hook that
   // does not run on every render.
@@ -349,7 +348,7 @@ export function WorkoutDetailPage() {
       : zonePrefs?.vma != null
         ? estimateDistanceKm(workout, zonePrefs.vma)
         : null;
-  const kmFormat = new Intl.NumberFormat(isEn ? "en-GB" : "fr-FR", {
+  const kmFormat = new Intl.NumberFormat(getDateLocale(), {
     maximumFractionDigits: 1,
   });
   const facts: Fact[] = [

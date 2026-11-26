@@ -5,8 +5,10 @@
       "id": "RP-001",
       "name": "Allure marathon",
       "nameEn": "Marathon Pace",
+      "nameIt": "Ritmo maratona",
       "description": "Séance à allure spécifique marathon. Habitue le corps à l'allure de course visée.",
       "descriptionEn": "Marathon-specific pace session. Acclimates the body to target race pace.",
+      "descriptionIt": "Seduta a ritmo specifico maratona. Abitua il corpo al ritmo gara target.",
       "category": "race_pace",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
@@ -24,6 +26,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -34,6 +37,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -44,6 +48,7 @@
         {
           "description": "Bloc à allure marathon",
           "descriptionEn": "Marathon pace block",
+          "descriptionIt": "Blocco a ritmo maratona",
           "durationMin": 20,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -52,6 +57,7 @@
         {
           "description": "Récupération",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 3,
           "zone": "Z1",
           "intensityType": "E"
@@ -59,6 +65,7 @@
         {
           "description": "Bloc à allure marathon",
           "descriptionEn": "Marathon pace block",
+          "descriptionIt": "Blocco a ritmo maratona",
           "durationMin": 15,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -70,6 +77,7 @@
           "kind": "segment",
           "description": "Bloc à allure marathon",
           "descriptionEn": "Marathon pace block",
+          "descriptionIt": "Blocco a ritmo maratona",
           "durationSec": 1200,
           "zone": "Z3",
           "intensityType": "M",
@@ -79,6 +87,7 @@
           "kind": "segment",
           "description": "Récupération",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 180,
           "zone": "Z1",
           "intensityType": "E",
@@ -88,6 +97,7 @@
           "kind": "segment",
           "description": "Bloc à allure marathon",
           "descriptionEn": "Marathon pace block",
+          "descriptionIt": "Blocco a ritmo maratona",
           "durationSec": 900,
           "zone": "Z3",
           "intensityType": "M",
@@ -98,6 +108,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -108,6 +119,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -124,6 +136,11 @@
         "Keep breathing controlled",
         "Best on flat, measured courses"
       ],
+      "coachingTipsIt": [
+        "Punta con precisione al tuo ritmo target",
+        "Mantieni una respirazione controllata",
+        "Ideale su percorsi piatti e misurati"
+      ],
       "commonMistakes": [
         "Courir à allure semi au lieu de marathon",
         "Ne pas avoir calculé son allure réaliste"
@@ -131,6 +148,10 @@
       "commonMistakesEn": [
         "Running at half-marathon pace instead of marathon pace",
         "Not having calculated a realistic target pace"
+      ],
+      "commonMistakesIt": [
+        "Correre a ritmo mezza maratona invece che ritmo maratona",
+        "Non aver calcolato un ritmo target realistico"
       ],
       "variationIds": [
         "RP-002",
@@ -160,8 +181,10 @@
       "id": "RP-002",
       "name": "Allure 10K",
       "nameEn": "10K Pace",
+      "nameIt": "Ritmo 10K",
       "description": "Séance à allure spécifique 10km. Travail au seuil lactique.",
       "descriptionEn": "10K-specific pace session. Lactate threshold training.",
+      "descriptionIt": "Seduta a ritmo specifico 10K. Allenamento alla soglia lattacida.",
       "category": "race_pace",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -179,6 +202,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -186,6 +210,7 @@
         {
           "description": "Accélérations progressives",
           "descriptionEn": "Progressive accelerations",
+          "descriptionIt": "Allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -194,6 +219,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -203,6 +229,7 @@
           "kind": "segment",
           "description": "Accélérations progressives",
           "descriptionEn": "Progressive accelerations",
+          "descriptionIt": "Allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -211,12 +238,14 @@
         {
           "description": "3x2km à allure 10K",
           "descriptionEn": "3x2km at 10K pace",
+          "descriptionIt": "3x2km a ritmo 10K",
           "distanceM": 2000,
           "zone": "Z4",
           "pace": "Allure 10K",
           "repetitions": 3,
           "recovery": "500m footing Z1",
           "recoveryEn": "500m jog Z1",
+          "recoveryIt": "500m corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -230,6 +259,7 @@
               "kind": "segment",
               "description": "2km à allure 10K",
               "descriptionEn": "2km at 10K pace",
+              "descriptionIt": "2km a ritmo 10K",
               "distanceM": 2000,
               "zone": "Z4",
               "intensityType": "T",
@@ -241,6 +271,7 @@
               "kind": "segment",
               "description": "500m footing Z1",
               "descriptionEn": "500m jog Z1",
+              "descriptionIt": "500m corsetta Z1",
               "distanceM": 500,
               "zone": "Z1",
               "role": "recovery"
@@ -252,6 +283,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -262,6 +294,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -278,6 +311,11 @@
         "Each block at the same rhythm",
         "Ideal 3-4 weeks before a 10K race"
       ],
+      "coachingTipsIt": [
+        "Ritmo 10K = circa 95-100% della soglia",
+        "Ogni blocco allo stesso ritmo",
+        "Ideale 3-4 settimane prima di una gara 10K"
+      ],
       "commonMistakes": [
         "Confondre allure 10K et 5K",
         "Partir trop vite"
@@ -285,6 +323,10 @@
       "commonMistakesEn": [
         "Confusing 10K pace with 5K pace",
         "Starting too fast"
+      ],
+      "commonMistakesIt": [
+        "Confondere il ritmo 10K con il ritmo 5K",
+        "Partire troppo forte"
       ],
       "variationIds": [
         "RP-001",
@@ -312,8 +354,10 @@
       "id": "RP-003",
       "name": "Allure semi-marathon",
       "nameEn": "Half-Marathon Pace",
+      "nameIt": "Ritmo mezza maratona",
       "description": "Blocs à allure spécifique semi-marathon. Entre tempo et seuil.",
       "descriptionEn": "Half-marathon specific pace blocks. Between tempo and threshold.",
+      "descriptionIt": "Blocchi a ritmo specifico mezza maratona. Tra ritmo medio e soglia.",
       "category": "race_pace",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
@@ -331,6 +375,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -341,6 +386,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -351,12 +397,14 @@
         {
           "description": "2x20min à allure semi",
           "descriptionEn": "2x20min at half-marathon pace",
+          "descriptionIt": "2x20min a ritmo mezza maratona",
           "durationMin": 20,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
           "repetitions": 2,
           "recovery": "3min footing Z1",
           "recoveryEn": "3min jog Z1",
+          "recoveryIt": "3min corsa lenta Z1",
           "intensityType": "T"
         }
       ],
@@ -370,6 +418,7 @@
               "kind": "segment",
               "description": "20min à allure semi",
               "descriptionEn": "20min at half-marathon pace",
+              "descriptionIt": "20min a ritmo mezza maratona",
               "durationSec": 1200,
               "zone": "Z3-Z4",
               "intensityType": "T",
@@ -381,6 +430,7 @@
               "kind": "segment",
               "description": "3min footing Z1",
               "descriptionEn": "3min jog Z1",
+              "descriptionIt": "3min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -392,6 +442,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -402,6 +453,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -418,6 +470,11 @@
         "Sustained but controlled effort",
         "Key session for half-marathon prep"
       ],
+      "coachingTipsIt": [
+        "Ritmo mezza maratona = tra maratona e soglia",
+        "Sforzo sostenuto ma controllato",
+        "Seduta chiave per la preparazione alla mezza maratona"
+      ],
       "commonMistakes": [
         "Courir à allure 10K",
         "Ne pas maintenir l'allure sur le 2e bloc"
@@ -425,6 +482,10 @@
       "commonMistakesEn": [
         "Running at 10K pace",
         "Failing to maintain pace on the second block"
+      ],
+      "commonMistakesIt": [
+        "Correre a ritmo 10K",
+        "Non riuscire a mantenere il ritmo nel secondo blocco"
       ],
       "variationIds": [
         "RP-001",
@@ -452,8 +513,10 @@
       "id": "RP-004",
       "name": "Allure 5K",
       "nameEn": "5K Pace",
+      "nameIt": "Ritmo 5K",
       "description": "Répétitions à allure spécifique 5km. Développe la vitesse de course.",
       "descriptionEn": "5K-specific pace repetitions. Develops race speed.",
+      "descriptionIt": "Ripetute a ritmo specifico 5K. Sviluppa la velocità di gara.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "vo2max",
@@ -471,6 +534,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -478,6 +542,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 10
         }
       ],
@@ -486,6 +551,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -495,6 +561,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -503,12 +570,14 @@
         {
           "description": "5x1000m à allure 5K",
           "descriptionEn": "5x1000m at 5K pace",
+          "descriptionIt": "5x1000m a ritmo 5K",
           "distanceM": 1000,
           "zone": "Z5",
           "pace": "Allure 5K",
           "repetitions": 5,
           "recovery": "400m footing Z1",
           "recoveryEn": "400m jog Z1",
+          "recoveryIt": "400m corsetta Z1",
           "intensityType": "I"
         }
       ],
@@ -522,6 +591,7 @@
               "kind": "segment",
               "description": "1000m à allure 5K",
               "descriptionEn": "1000m at 5K pace",
+              "descriptionIt": "1000m a ritmo 5K",
               "distanceM": 1000,
               "zone": "Z5",
               "intensityType": "I",
@@ -533,6 +603,7 @@
               "kind": "segment",
               "description": "400m footing Z1",
               "descriptionEn": "400m jog Z1",
+              "descriptionIt": "400m corsetta Z1",
               "distanceM": 400,
               "zone": "Z1",
               "role": "recovery"
@@ -544,6 +615,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -554,6 +626,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -570,6 +643,11 @@
         "Key session for 5K racing",
         "Consistency is essential"
       ],
+      "coachingTipsIt": [
+        "Ritmo 5K = circa 95-100% VAM",
+        "Seduta chiave per gare sui 5K",
+        "La regolarità è essenziale"
+      ],
       "commonMistakes": [
         "Confondre avec VMA pure",
         "Partir trop vite"
@@ -577,6 +655,10 @@
       "commonMistakesEn": [
         "Confusing with pure VO2max pace",
         "Starting too fast"
+      ],
+      "commonMistakesIt": [
+        "Confondere con la VAM pura",
+        "Partire troppo forte"
       ],
       "variationIds": [
         "RP-002"
@@ -603,8 +685,10 @@
       "id": "RP-005",
       "name": "Allure trail",
       "nameEn": "Trail Pace",
+      "nameIt": "Ritmo trail",
       "description": "Travail spécifique allure trail sur terrain adapté.",
       "descriptionEn": "Trail-specific effort work on appropriate terrain.",
+      "descriptionIt": "Lavoro di sforzo specifico trail su terreno adatto.",
       "category": "race_pace",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
@@ -622,6 +706,7 @@
         {
           "description": "Footing sur sentier",
           "descriptionEn": "Trail jog",
+          "descriptionIt": "Corsa lenta su sentiero",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -632,6 +717,7 @@
           "kind": "segment",
           "description": "Footing sur sentier",
           "descriptionEn": "Trail jog",
+          "descriptionIt": "Corsa lenta su sentiero",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -642,6 +728,7 @@
         {
           "description": "Course à effort spécifique trail sur terrain varié",
           "descriptionEn": "Trail-specific effort on varied terrain",
+          "descriptionIt": "Sforzo specifico trail su terreno vario",
           "durationMin": 45,
           "zone": "Z3",
           "pace": "Effort Trail",
@@ -656,6 +743,7 @@
           "kind": "segment",
           "description": "Course à effort spécifique trail sur terrain varié",
           "descriptionEn": "Trail-specific effort on varied terrain",
+          "descriptionIt": "Sforzo specifico trail su terreno vario",
           "durationSec": 2700,
           "zone": "Z3",
           "intensityType": "M",
@@ -669,6 +757,7 @@
         {
           "description": "Retour calme",
           "descriptionEn": "Cool down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -679,6 +768,7 @@
           "kind": "segment",
           "description": "Retour calme",
           "descriptionEn": "Cool down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -695,6 +785,11 @@
         "Walk steep uphills",
         "Test your gear"
       ],
+      "coachingTipsIt": [
+        "Sforzo costante, non passo costante",
+        "Cammina sulle salite ripide",
+        "Testa la tua attrezzatura"
+      ],
       "commonMistakes": [
         "Vouloir maintenir une allure",
         "Négliger la nutrition"
@@ -702,6 +797,10 @@
       "commonMistakesEn": [
         "Trying to maintain a pace",
         "Neglecting nutrition"
+      ],
+      "commonMistakesIt": [
+        "Voler mantenere un passo fisso",
+        "Trascurare l'integrazione"
       ],
       "variationIds": [
         "RP-001"
@@ -729,8 +828,10 @@
       "id": "RP-006",
       "name": "Allure progressive",
       "nameEn": "Progressive Pace",
+      "nameIt": "Ritmo progressivo",
       "description": "Séance commençant à allure marathon et finissant à allure semi.",
       "descriptionEn": "Session starting at marathon pace and finishing at half-marathon pace.",
+      "descriptionIt": "Seduta che inizia a ritmo maratona e termina a ritmo mezza maratona.",
       "category": "race_pace",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
@@ -748,6 +849,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -758,6 +860,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -768,6 +871,7 @@
         {
           "description": "15min allure marathon",
           "descriptionEn": "15min at marathon pace",
+          "descriptionIt": "15min a ritmo maratona",
           "durationMin": 15,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -776,6 +880,7 @@
         {
           "description": "10min allure semi",
           "descriptionEn": "10min at half-marathon pace",
+          "descriptionIt": "10min a ritmo mezza maratona",
           "durationMin": 10,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
@@ -784,6 +889,7 @@
         {
           "description": "5min allure 10K",
           "descriptionEn": "5min at 10K pace",
+          "descriptionIt": "5min a ritmo 10K",
           "durationMin": 5,
           "zone": "Z4",
           "pace": "Allure 10K",
@@ -795,6 +901,7 @@
           "kind": "segment",
           "description": "15min allure marathon",
           "descriptionEn": "15min at marathon pace",
+          "descriptionIt": "15min a ritmo maratona",
           "durationSec": 900,
           "zone": "Z3",
           "intensityType": "M",
@@ -804,6 +911,7 @@
           "kind": "segment",
           "description": "10min allure semi",
           "descriptionEn": "10min at half-marathon pace",
+          "descriptionIt": "10min a ritmo mezza maratona",
           "durationSec": 600,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -813,6 +921,7 @@
           "kind": "segment",
           "description": "5min allure 10K",
           "descriptionEn": "5min at 10K pace",
+          "descriptionIt": "5min a ritmo 10K",
           "durationSec": 300,
           "zone": "Z4",
           "intensityType": "T",
@@ -823,6 +932,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -833,6 +943,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -849,6 +960,11 @@
         "Simulates a race finish",
         "Mentally demanding session"
       ],
+      "coachingTipsIt": [
+        "Progressione logica dell'intensità",
+        "Simula un finale di gara",
+        "Seduta mentalmente impegnativa"
+      ],
       "commonMistakes": [
         "Démarrer trop vite",
         "Ne pas accélérer suffisamment"
@@ -856,6 +972,10 @@
       "commonMistakesEn": [
         "Starting too fast",
         "Not accelerating enough"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte",
+        "Non accelerare abbastanza"
       ],
       "variationIds": [
         "RP-001",
@@ -882,8 +1002,10 @@
       "id": "RP-007",
       "name": "Allure marathon longue",
       "nameEn": "Marathon Pace Long Run",
+      "nameIt": "Lungo con ritmo maratona",
       "description": "Long bloc à allure marathon dans une sortie longue.",
       "descriptionEn": "Long block at marathon pace within a long run.",
+      "descriptionIt": "Lungo blocco a ritmo maratona all'interno di un lungo.",
       "category": "race_pace",
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
@@ -901,6 +1023,7 @@
         {
           "description": "Footing tranquille",
           "descriptionEn": "Easy jog",
+          "descriptionIt": "Corsa lenta tranquilla",
           "durationMin": 20,
           "zone": "Z2",
           "intensityType": "E"
@@ -911,6 +1034,7 @@
           "kind": "segment",
           "description": "Footing tranquille",
           "descriptionEn": "Easy jog",
+          "descriptionIt": "Corsa lenta tranquilla",
           "durationSec": 1200,
           "zone": "Z2",
           "intensityType": "E",
@@ -921,6 +1045,7 @@
         {
           "description": "Endurance Z2",
           "descriptionEn": "Z2 endurance",
+          "descriptionIt": "Resistenza Z2",
           "durationMin": 20,
           "zone": "Z2",
           "intensityType": "E"
@@ -928,6 +1053,7 @@
         {
           "description": "Allure marathon",
           "descriptionEn": "Marathon pace",
+          "descriptionIt": "Ritmo maratona",
           "durationMin": 45,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -936,6 +1062,7 @@
         {
           "description": "Retour Z2",
           "descriptionEn": "Return to Z2",
+          "descriptionIt": "Ritorno in Z2",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -946,6 +1073,7 @@
           "kind": "segment",
           "description": "Endurance Z2",
           "descriptionEn": "Z2 endurance",
+          "descriptionIt": "Resistenza Z2",
           "durationSec": 1200,
           "zone": "Z2",
           "intensityType": "E",
@@ -955,6 +1083,7 @@
           "kind": "segment",
           "description": "Allure marathon",
           "descriptionEn": "Marathon pace",
+          "descriptionIt": "Ritmo maratona",
           "durationSec": 2700,
           "zone": "Z3",
           "intensityType": "M",
@@ -964,6 +1093,7 @@
           "kind": "segment",
           "description": "Retour Z2",
           "descriptionEn": "Return to Z2",
+          "descriptionIt": "Ritorno in Z2",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -974,6 +1104,7 @@
         {
           "description": "Récupération",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -984,6 +1115,7 @@
           "kind": "segment",
           "description": "Récupération",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1000,6 +1132,11 @@
         "Long and specific session",
         "Nutrition and hydration are essential"
       ],
+      "coachingTipsIt": [
+        "45min a ritmo maratona su gambe affaticate",
+        "Seduta lunga e specifica",
+        "Integrazione e idratazione sono essenziali"
+      ],
       "commonMistakes": [
         "Courir le bloc spécifique trop vite",
         "Négliger le ravitaillement"
@@ -1007,6 +1144,10 @@
       "commonMistakesEn": [
         "Running the specific block too fast",
         "Neglecting fueling"
+      ],
+      "commonMistakesIt": [
+        "Correre il blocco specifico troppo forte",
+        "Trascurare il ristoro"
       ],
       "variationIds": [
         "RP-001",
@@ -1034,8 +1175,10 @@
       "id": "RP-008",
       "name": "Allure pré-course",
       "nameEn": "Pre-Race Pace Reminder",
+      "nameIt": "Richiamo ritmo pre-gara",
       "description": "Rappel d'allure en semaine de compétition. Court et ciblé.",
       "descriptionEn": "Pace reminder during race week. Short and targeted.",
+      "descriptionIt": "Richiamo di ritmo nella settimana della gara. Breve e mirato.",
       "category": "race_pace",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
@@ -1053,6 +1196,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1063,6 +1207,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1073,12 +1218,14 @@
         {
           "description": "2x5min à allure course cible",
           "descriptionEn": "2x5min at target race pace",
+          "descriptionIt": "2x5min a ritmo gara target",
           "durationMin": 10,
           "zone": "Z3-Z4",
           "pace": "Allure Course",
           "repetitions": 2,
           "recovery": "2min footing Z1",
           "recoveryEn": "2min jog Z1",
+          "recoveryIt": "2min corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -1092,6 +1239,7 @@
               "kind": "segment",
               "description": "5min à allure course cible",
               "descriptionEn": "5min at target race pace",
+              "descriptionIt": "5min a ritmo gara target",
               "durationSec": 600,
               "zone": "Z3-Z4",
               "intensityType": "T",
@@ -1103,6 +1251,7 @@
               "kind": "segment",
               "description": "2min footing Z1",
               "descriptionEn": "2min jog Z1",
+              "descriptionIt": "2min corsetta Z1",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -1114,6 +1263,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1124,6 +1274,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1140,6 +1291,11 @@
         "Ideal on race day -4 or -3",
         "Finish fresh and confident"
       ],
+      "coachingTipsIt": [
+        "Solo un richiamo delle sensazioni",
+        "Ideale a -4 o -3 giorni dalla gara",
+        "Finisci fresco e fiducioso"
+      ],
       "commonMistakes": [
         "En faire trop avant la course",
         "Courir plus vite que l'allure cible"
@@ -1147,6 +1303,10 @@
       "commonMistakesEn": [
         "Doing too much before the race",
         "Running faster than target pace"
+      ],
+      "commonMistakesIt": [
+        "Fare troppo prima della gara",
+        "Correre più forte del ritmo gara target"
       ],
       "variationIds": [
         "RP-001"
@@ -1172,8 +1332,10 @@
       "id": "RP-009",
       "name": "Yasso 800s",
       "nameEn": "Yasso 800s",
+      "nameIt": "Yasso 800",
       "description": "10x800m avec temps cible = objectif marathon. Ex : marathon en 3h30 = 800m en 3min30. Méthode popularisée par Bart Yasso (Runner's World).",
       "descriptionEn": "10x800m with target time = marathon goal. Ex: 3:30 marathon = 800m in 3:30. Method popularized by Bart Yasso (Runner's World).",
+      "descriptionIt": "10x800m con tempo target = obiettivo maratona. Es: maratona 3h30 = 800m in 3min30. Metodo reso popolare da Bart Yasso (Runner's World).",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "vo2max",
@@ -1191,6 +1353,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1198,6 +1361,7 @@
         {
           "description": "Gammes et 4x lignes droites",
           "descriptionEn": "Drills and 4x strides",
+          "descriptionIt": "Andature e 4x allunghi",
           "durationMin": 10
         }
       ],
@@ -1206,6 +1370,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1215,6 +1380,7 @@
           "kind": "segment",
           "description": "Gammes et 4x lignes droites",
           "descriptionEn": "Drills and 4x strides",
+          "descriptionIt": "Andature e 4x allunghi",
           "durationSec": 600,
           "role": "effort"
         }
@@ -1223,11 +1389,13 @@
         {
           "description": "10x800m avec récup jog égale au temps du 800m",
           "descriptionEn": "10x800m with jog recovery equal to 800m time",
+          "descriptionIt": "10x800m con recupero in corsetta pari al tempo degli 800m",
           "distanceM": 800,
           "zone": "Z4-Z5",
           "repetitions": 10,
           "recovery": "Footing 3min (= temps du 800m)",
           "recoveryEn": "3min jog (= the 800m time)",
+          "recoveryIt": "3min corsetta (= tempo degli 800m)",
           "intensityType": "I"
         }
       ],
@@ -1241,6 +1409,7 @@
               "kind": "segment",
               "description": "800m",
               "descriptionEn": "800m",
+              "descriptionIt": "800m",
               "distanceM": 800,
               "zone": "Z4-Z5",
               "intensityType": "I",
@@ -1252,6 +1421,7 @@
               "kind": "segment",
               "description": "Footing 3min (= temps du 800m)",
               "descriptionEn": "3min jog (= the 800m time)",
+              "descriptionIt": "3min corsetta (= tempo degli 800m)",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -1263,6 +1433,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1273,6 +1444,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1291,6 +1463,12 @@
         "Progressive build: start with 6x800m",
         "Recovery = same duration as effort"
       ],
+      "coachingTipsIt": [
+        "Tempo sugli 800m (min:sec) = tempo maratona (h:min)",
+        "Predittore semplice ma non perfetto",
+        "Costruzione progressiva: inizia con 6x800m",
+        "Recupero = stessa durata dello sforzo"
+      ],
       "commonMistakes": [
         "Croire que c'est un prédicteur exact",
         "Commencer par 10 répétitions",
@@ -1300,6 +1478,11 @@
         "Believing it's an exact predictor",
         "Starting with 10 repetitions",
         "Recovery too short"
+      ],
+      "commonMistakesIt": [
+        "Credere che sia un predittore esatto",
+        "Iniziare subito con 10 ripetute",
+        "Recupero troppo breve"
       ],
       "variationIds": [
         "RP-001",
@@ -1329,8 +1512,10 @@
       "id": "RP-010",
       "name": "Rosario 800s",
       "nameEn": "Rosario 800s",
+      "nameIt": "Rosario 800",
       "description": "Alternance 800m rapide + 800m lent en continu sans arrêt. Développe l'endurance à l'allure cible avec récupération active (méthode Canova).",
       "descriptionEn": "Alternating 800m fast + 800m slow continuously without stopping. Develops endurance at target pace with active recovery (Canova method).",
+      "descriptionIt": "Alternanza continua di 800m veloci + 800m lenti senza fermarsi. Sviluppa la resistenza al ritmo target con recupero attivo (metodo Canova).",
       "category": "race_pace",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
@@ -1348,6 +1533,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1355,6 +1541,7 @@
         {
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationMin": 5
         }
       ],
@@ -1363,6 +1550,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1372,6 +1560,7 @@
           "kind": "segment",
           "description": "Gammes",
           "descriptionEn": "Drills",
+          "descriptionIt": "Andature",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1380,6 +1569,7 @@
         {
           "description": "8-10km en alternance: 800m allure semi / 800m Z2",
           "descriptionEn": "8-10km alternating: 800m half-marathon pace / 800m Z2",
+          "descriptionIt": "8-10km alternati: 800m ritmo mezza maratona / 800m Z2",
           "distanceM": 8000,
           "zone": "Z3-Z4",
           "pace": "Alternance semi/Z2",
@@ -1391,6 +1581,7 @@
           "kind": "segment",
           "description": "8-10km en alternance: 800m allure semi / 800m Z2",
           "descriptionEn": "8-10km alternating: 800m half-marathon pace / 800m Z2",
+          "descriptionIt": "8-10km alternati: 800m ritmo mezza maratona / 800m Z2",
           "distanceM": 8000,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -1401,6 +1592,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1411,6 +1603,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1429,6 +1622,12 @@
         "Italian method by Renato Canova",
         "Excellent for half/full marathon runners"
       ],
+      "coachingTipsIt": [
+        "Mai fermarsi, flusso continuo",
+        "Gli 800m lenti devono essere davvero in Z2",
+        "Metodo italiano di Renato Canova",
+        "Ottimo per chi prepara mezza maratona o maratona"
+      ],
       "commonMistakes": [
         "Courir les 800m lents trop vite",
         "S'arrêter entre les répétitions",
@@ -1438,6 +1637,11 @@
         "Running the slow 800ms too fast",
         "Stopping between repetitions",
         "Not counting laps"
+      ],
+      "commonMistakesIt": [
+        "Correre troppo forte gli 800m lenti",
+        "Fermarsi tra le ripetute",
+        "Non contare i giri"
       ],
       "variationIds": [
         "RP-003",
@@ -1467,8 +1671,10 @@
       "id": "RP-011",
       "name": "Cutdown marathon",
       "nameEn": "Marathon Cutdown",
+      "nameIt": "Cutdown maratona",
       "description": "Seance en decroissance: 5km allure marathon, 3km allure semi, 1.5km allure 10K. Simule le finish de marathon avec negative split.",
       "descriptionEn": "Descending session: 5km at marathon pace, 3km at half pace, 1.5km at 10K pace. Simulates marathon finish with negative split.",
+      "descriptionIt": "Seduta a scalare: 5km a ritmo maratona, 3km a ritmo mezza, 1.5km a ritmo 10K. Simula un finale di maratona in negative split.",
       "category": "race_pace",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
@@ -1486,6 +1692,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1496,6 +1703,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1506,6 +1714,7 @@
         {
           "description": "5km à allure marathon",
           "descriptionEn": "5km at marathon pace",
+          "descriptionIt": "5km a ritmo maratona",
           "distanceM": 5000,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -1513,11 +1722,13 @@
         },
         {
           "description": "Transition sans arret",
-          "descriptionEn": "Transition without stopping"
+          "descriptionEn": "Transition without stopping",
+          "descriptionIt": "Transizione senza fermarsi"
         },
         {
           "description": "3km à allure semi-marathon",
           "descriptionEn": "3km at half-marathon pace",
+          "descriptionIt": "3km a ritmo mezza maratona",
           "distanceM": 3000,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
@@ -1525,11 +1736,13 @@
         },
         {
           "description": "Transition sans arret",
-          "descriptionEn": "Transition without stopping"
+          "descriptionEn": "Transition without stopping",
+          "descriptionIt": "Transizione senza fermarsi"
         },
         {
           "description": "1.5km à allure 10K",
           "descriptionEn": "1.5km at 10K pace",
+          "descriptionIt": "1.5km a ritmo 10K",
           "distanceM": 1500,
           "zone": "Z4",
           "pace": "Allure 10K",
@@ -1541,6 +1754,7 @@
           "kind": "segment",
           "description": "5km à allure marathon",
           "descriptionEn": "5km at marathon pace",
+          "descriptionIt": "5km a ritmo maratona",
           "distanceM": 5000,
           "zone": "Z3",
           "intensityType": "M",
@@ -1550,12 +1764,14 @@
           "kind": "segment",
           "description": "Transition sans arret",
           "descriptionEn": "Transition without stopping",
+          "descriptionIt": "Transizione senza fermarsi",
           "role": "transition"
         },
         {
           "kind": "segment",
           "description": "3km à allure semi-marathon",
           "descriptionEn": "3km at half-marathon pace",
+          "descriptionIt": "3km a ritmo mezza maratona",
           "distanceM": 3000,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -1565,12 +1781,14 @@
           "kind": "segment",
           "description": "Transition sans arret",
           "descriptionEn": "Transition without stopping",
+          "descriptionIt": "Transizione senza fermarsi",
           "role": "transition"
         },
         {
           "kind": "segment",
           "description": "1.5km à allure 10K",
           "descriptionEn": "1.5km at 10K pace",
+          "descriptionIt": "1.5km a ritmo 10K",
           "distanceM": 1500,
           "zone": "Z4",
           "intensityType": "T",
@@ -1581,6 +1799,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -1591,6 +1810,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -1609,6 +1829,12 @@
         "Transitions must be smooth",
         "Mentally very demanding session"
       ],
+      "coachingTipsIt": [
+        "Sequenza continua senza pause",
+        "Simula un finale di maratona aggressivo",
+        "Le transizioni devono essere fluide",
+        "Seduta mentalmente molto impegnativa"
+      ],
       "commonMistakes": [
         "Partir trop vite dès le début",
         "Ne pas accélérer suffisamment à la fin",
@@ -1618,6 +1844,11 @@
         "Starting too fast from the beginning",
         "Not accelerating enough at the end",
         "Stopping between segments"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte dall'inizio",
+        "Non accelerare abbastanza nel finale",
+        "Fermarsi tra i segmenti"
       ],
       "variationIds": [
         "RP-001",
@@ -1646,8 +1877,10 @@
       "id": "RP-012",
       "name": "Spé 10km pyramide",
       "nameEn": "10K Specific Pyramid",
+      "nameIt": "Piramide specifica 10K",
       "description": "Séance spécifique 10km en pyramide décroissante : 3km + 2km + 2x1km à allure 10K visée. Développe l'endurance spécifique et la gestion d'allure.",
       "descriptionEn": "10K specific session in descending pyramid: 3km + 2km + 2x1km at target 10K pace. Develops specific endurance and pace management.",
+      "descriptionIt": "Seduta specifica 10K in piramide decrescente: 3km + 2km + 2x1km a ritmo 10K target. Sviluppa resistenza specifica e gestione del ritmo.",
       "category": "race_pace",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -1665,6 +1898,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1672,6 +1906,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 5
         }
       ],
@@ -1680,6 +1915,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1689,6 +1925,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1697,6 +1934,7 @@
         {
           "description": "3km allure 10K visée",
           "descriptionEn": "3km at target 10K pace",
+          "descriptionIt": "3km a ritmo 10K target",
           "distanceM": 3000,
           "zone": "Z4",
           "pace": "Allure 10K",
@@ -1705,6 +1943,7 @@
         {
           "description": "Récup 2min",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -1712,6 +1951,7 @@
         {
           "description": "2km allure 10K visée",
           "descriptionEn": "2km at target 10K pace",
+          "descriptionIt": "2km a ritmo 10K target",
           "distanceM": 2000,
           "zone": "Z4",
           "pace": "Allure 10K",
@@ -1720,6 +1960,7 @@
         {
           "description": "Récup 2min",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -1727,12 +1968,14 @@
         {
           "description": "2x1km allure 10K visée",
           "descriptionEn": "2x1km at target 10K pace",
+          "descriptionIt": "2x1km a ritmo 10K target",
           "distanceM": 1000,
           "zone": "Z4",
           "pace": "Allure 10K",
           "repetitions": 2,
           "recovery": "1min30 footing Z1",
           "recoveryEn": "1min30 jog Z1",
+          "recoveryIt": "1min30 corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -1741,6 +1984,7 @@
           "kind": "segment",
           "description": "3km allure 10K visée",
           "descriptionEn": "3km at target 10K pace",
+          "descriptionIt": "3km a ritmo 10K target",
           "distanceM": 3000,
           "zone": "Z4",
           "intensityType": "T",
@@ -1750,6 +1994,7 @@
           "kind": "segment",
           "description": "Récup 2min",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -1759,6 +2004,7 @@
           "kind": "segment",
           "description": "2km allure 10K visée",
           "descriptionEn": "2km at target 10K pace",
+          "descriptionIt": "2km a ritmo 10K target",
           "distanceM": 2000,
           "zone": "Z4",
           "intensityType": "T",
@@ -1768,6 +2014,7 @@
           "kind": "segment",
           "description": "Récup 2min",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -1782,6 +2029,7 @@
               "kind": "segment",
               "description": "1km allure 10K visée",
               "descriptionEn": "1km at target 10K pace",
+              "descriptionIt": "1km a ritmo 10K target",
               "distanceM": 1000,
               "zone": "Z4",
               "intensityType": "T",
@@ -1793,6 +2041,7 @@
               "kind": "segment",
               "description": "1min30 footing Z1",
               "descriptionEn": "1min30 jog Z1",
+              "descriptionIt": "1min30 corsetta Z1",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -1804,6 +2053,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1814,6 +2064,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1832,6 +2083,12 @@
         "Key session 3-4 weeks before the 10K",
         "Same pace on each block"
       ],
+      "coachingTipsIt": [
+        "8km totali a ritmo 10K",
+        "La piramide decrescente aiuta mentalmente",
+        "Seduta chiave 3-4 settimane prima della 10K",
+        "Stesso ritmo su ogni blocco"
+      ],
       "commonMistakes": [
         "Partir trop vite sur le 3km",
         "Accélérer sur les 1km finaux",
@@ -1841,6 +2098,11 @@
         "Starting too fast on the 3km",
         "Accelerating on the final 1kms",
         "Recovery too short"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte sui 3km",
+        "Accelerare sugli ultimi 1km",
+        "Recupero troppo breve"
       ],
       "variationIds": [
         "RP-002",
@@ -1870,8 +2132,10 @@
       "id": "RP-013",
       "name": "Multi-allures progressif",
       "nameEn": "Progressive Multi-Pace",
+      "nameIt": "Multi-ritmo progressivo",
       "description": "Séance en escalier : 3km allure semi-marathon, 2x1km allure 10K visée, 2x1km allure 5K. 3min de récup entre chaque série. Développe la capacité à accélérer sur jambes fatiguées.",
       "descriptionEn": "Ladder session: 3km at half-marathon pace, 2x1km at target 10K pace, 2x1km at 5K pace. 3min recovery between sets. Develops ability to accelerate on tired legs.",
+      "descriptionIt": "Seduta a scala: 3km a ritmo mezza maratona, 2x1km a ritmo 10K target, 2x1km a ritmo 5K. 3min di recupero tra le serie. Sviluppa la capacità di accelerare su gambe stanche.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "aerobic_threshold",
@@ -1889,6 +2153,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1896,6 +2161,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 5
         }
       ],
@@ -1904,6 +2170,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1913,6 +2180,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1921,6 +2189,7 @@
         {
           "description": "3km allure semi-marathon",
           "descriptionEn": "3km at half-marathon pace",
+          "descriptionIt": "3km a ritmo mezza maratona",
           "distanceM": 3000,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
@@ -1929,6 +2198,7 @@
         {
           "description": "Récup 3min",
           "descriptionEn": "3min recovery",
+          "descriptionIt": "3min recupero",
           "durationMin": 3,
           "zone": "Z1",
           "intensityType": "E"
@@ -1936,17 +2206,20 @@
         {
           "description": "2x1km allure 10K visée",
           "descriptionEn": "2x1km at target 10K pace",
+          "descriptionIt": "2x1km a ritmo 10K target",
           "distanceM": 1000,
           "zone": "Z4",
           "pace": "Allure 10K",
           "repetitions": 2,
           "recovery": "90s footing Z1",
           "recoveryEn": "90s jog Z1",
+          "recoveryIt": "90s corsetta Z1",
           "intensityType": "T"
         },
         {
           "description": "Récup 3min",
           "descriptionEn": "3min recovery",
+          "descriptionIt": "3min recupero",
           "durationMin": 3,
           "zone": "Z1",
           "intensityType": "E"
@@ -1954,12 +2227,14 @@
         {
           "description": "2x1km allure 5K",
           "descriptionEn": "2x1km at 5K pace",
+          "descriptionIt": "2x1km a ritmo 5K",
           "distanceM": 1000,
           "zone": "Z5",
           "pace": "Allure 5K",
           "repetitions": 2,
           "recovery": "90s footing Z1",
           "recoveryEn": "90s jog Z1",
+          "recoveryIt": "90s corsetta Z1",
           "intensityType": "I"
         }
       ],
@@ -1968,6 +2243,7 @@
           "kind": "segment",
           "description": "3km allure semi-marathon",
           "descriptionEn": "3km at half-marathon pace",
+          "descriptionIt": "3km a ritmo mezza maratona",
           "distanceM": 3000,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -1977,6 +2253,7 @@
           "kind": "segment",
           "description": "Récup 3min",
           "descriptionEn": "3min recovery",
+          "descriptionIt": "3min recupero",
           "durationSec": 180,
           "zone": "Z1",
           "intensityType": "E",
@@ -1991,6 +2268,7 @@
               "kind": "segment",
               "description": "1km allure 10K visée",
               "descriptionEn": "1km at target 10K pace",
+              "descriptionIt": "1km a ritmo 10K target",
               "distanceM": 1000,
               "zone": "Z4",
               "intensityType": "T",
@@ -2002,6 +2280,7 @@
               "kind": "segment",
               "description": "90s footing Z1",
               "descriptionEn": "90s jog Z1",
+              "descriptionIt": "90s corsetta Z1",
               "durationSec": 90,
               "zone": "Z1",
               "role": "recovery"
@@ -2012,6 +2291,7 @@
           "kind": "segment",
           "description": "Récup 3min",
           "descriptionEn": "3min recovery",
+          "descriptionIt": "3min recupero",
           "durationSec": 180,
           "zone": "Z1",
           "intensityType": "E",
@@ -2026,6 +2306,7 @@
               "kind": "segment",
               "description": "1km allure 5K",
               "descriptionEn": "1km at 5K pace",
+              "descriptionIt": "1km a ritmo 5K",
               "distanceM": 1000,
               "zone": "Z5",
               "intensityType": "I",
@@ -2037,6 +2318,7 @@
               "kind": "segment",
               "description": "90s footing Z1",
               "descriptionEn": "90s jog Z1",
+              "descriptionIt": "90s corsetta Z1",
               "durationSec": 90,
               "zone": "Z1",
               "role": "recovery"
@@ -2048,6 +2330,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2058,6 +2341,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2076,6 +2360,12 @@
         "The 3min recovery periods are important",
         "Mentally demanding session"
       ],
+      "coachingTipsIt": [
+        "Progressione mezza → 10K → 5K",
+        "Simula un finale aggressivo",
+        "I 3min di recupero sono importanti",
+        "Seduta mentalmente impegnativa"
+      ],
       "commonMistakes": [
         "Partir trop vite sur le 3km semi",
         "Ne pas accélérer suffisamment sur le 5K",
@@ -2085,6 +2375,11 @@
         "Starting too fast on the half-marathon 3km",
         "Not accelerating enough on the 5K portion",
         "Cutting the recovery times"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte sui 3km a ritmo mezza",
+        "Non accelerare abbastanza nella parte 5K",
+        "Tagliare i tempi di recupero"
       ],
       "variationIds": [
         "RP-002",
@@ -2113,8 +2408,10 @@
       "id": "RP-014",
       "name": "Semi-10K combiné",
       "nameEn": "Half-Marathon to 10K Combined",
+      "nameIt": "Combinato mezza maratona e 10K",
       "description": "Séance mixte semi/10K : 1km allure semi, 4km allure 10K visée, 2x2km allure semi. 2min de récup entre les séries. Travaille l'alternance d'allures.",
       "descriptionEn": "Mixed half/10K session: 1km at half pace, 4km at target 10K pace, 2x2km at half pace. 2min recovery between sets. Works on pace alternation.",
+      "descriptionIt": "Seduta mista mezza/10K: 1km a ritmo mezza, 4km a ritmo 10K target, 2x2km a ritmo mezza. 2min di recupero tra le serie. Lavora sull'alternanza di ritmi.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "aerobic_threshold",
@@ -2132,6 +2429,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2139,6 +2437,7 @@
         {
           "description": "Accélérations progressives",
           "descriptionEn": "Progressive accelerations",
+          "descriptionIt": "Allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -2147,6 +2446,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2156,6 +2456,7 @@
           "kind": "segment",
           "description": "Accélérations progressives",
           "descriptionEn": "Progressive accelerations",
+          "descriptionIt": "Allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -2164,6 +2465,7 @@
         {
           "description": "1km allure semi-marathon",
           "descriptionEn": "1km at half-marathon pace",
+          "descriptionIt": "1km a ritmo mezza maratona",
           "distanceM": 1000,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
@@ -2172,6 +2474,7 @@
         {
           "description": "Récup 2min",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -2179,6 +2482,7 @@
         {
           "description": "4km allure 10K visée",
           "descriptionEn": "4km at target 10K pace",
+          "descriptionIt": "4km a ritmo 10K target",
           "distanceM": 4000,
           "zone": "Z4",
           "pace": "Allure 10K",
@@ -2187,6 +2491,7 @@
         {
           "description": "Récup 2min",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -2194,12 +2499,14 @@
         {
           "description": "2x2km allure semi-marathon",
           "descriptionEn": "2x2km at half-marathon pace",
+          "descriptionIt": "2x2km a ritmo mezza maratona",
           "distanceM": 2000,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
           "repetitions": 2,
           "recovery": "2min footing Z1",
           "recoveryEn": "2min jog Z1",
+          "recoveryIt": "2min corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -2208,6 +2515,7 @@
           "kind": "segment",
           "description": "1km allure semi-marathon",
           "descriptionEn": "1km at half-marathon pace",
+          "descriptionIt": "1km a ritmo mezza maratona",
           "distanceM": 1000,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -2217,6 +2525,7 @@
           "kind": "segment",
           "description": "Récup 2min",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -2226,6 +2535,7 @@
           "kind": "segment",
           "description": "4km allure 10K visée",
           "descriptionEn": "4km at target 10K pace",
+          "descriptionIt": "4km a ritmo 10K target",
           "distanceM": 4000,
           "zone": "Z4",
           "intensityType": "T",
@@ -2235,6 +2545,7 @@
           "kind": "segment",
           "description": "Récup 2min",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -2249,6 +2560,7 @@
               "kind": "segment",
               "description": "2km allure semi-marathon",
               "descriptionEn": "2km at half-marathon pace",
+              "descriptionIt": "2km a ritmo mezza maratona",
               "distanceM": 2000,
               "zone": "Z3-Z4",
               "intensityType": "T",
@@ -2260,6 +2572,7 @@
               "kind": "segment",
               "description": "2min footing Z1",
               "descriptionEn": "2min jog Z1",
+              "descriptionIt": "2min corsetta Z1",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -2271,6 +2584,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2281,6 +2595,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2299,6 +2614,12 @@
         "Finishing at half pace = return to control",
         "Excellent for half-marathon preparation"
       ],
+      "coachingTipsIt": [
+        "9km totali con alternanza di ritmi",
+        "Il blocco da 4km a ritmo 10K è il cuore della seduta",
+        "Finire a ritmo mezza = ritorno al controllo",
+        "Ottimo per la preparazione alla mezza maratona"
+      ],
       "commonMistakes": [
         "Courir le 4km trop vite",
         "Ne pas redescendre en allure semi après",
@@ -2308,6 +2629,11 @@
         "Running the 4km too fast",
         "Not dropping back to half pace afterwards",
         "Recovery too short between blocks"
+      ],
+      "commonMistakesIt": [
+        "Correre i 4km troppo forte",
+        "Non tornare poi al ritmo mezza",
+        "Recupero troppo breve tra i blocchi"
       ],
       "variationIds": [
         "RP-002",
@@ -2337,8 +2663,10 @@
       "id": "RP-015",
       "name": "6km confiance 10K",
       "nameEn": "10K Confidence Run",
+      "nameIt": "6km fiducia 10K",
       "description": "6km d'un bloc à allure 10K visée. Séance de confiance à faire 10 jours avant la course. Valide la capacité à tenir l'allure sur plus de la moitié de la distance cible.",
       "descriptionEn": "6km block at target 10K pace. Confidence session to do 10 days before the race. Validates ability to hold pace for more than half the target distance.",
+      "descriptionIt": "Blocco da 6km al ritmo 10K obiettivo. Seduta di fiducia da fare 10 giorni prima della gara. Conferma la capacità di tenere il ritmo per oltre metà della distanza obiettivo.",
       "category": "race_pace",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -2356,6 +2684,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2363,6 +2692,7 @@
         {
           "description": "Quelques accélérations courtes",
           "descriptionEn": "A few short accelerations",
+          "descriptionIt": "Qualche breve accelerazione",
           "durationMin": 5
         }
       ],
@@ -2371,6 +2701,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2380,6 +2711,7 @@
           "kind": "segment",
           "description": "Quelques accélérations courtes",
           "descriptionEn": "A few short accelerations",
+          "descriptionIt": "Qualche breve accelerazione",
           "durationSec": 300,
           "role": "effort"
         }
@@ -2388,6 +2720,7 @@
         {
           "description": "6km allure 10K visée",
           "descriptionEn": "6km at target 10K pace",
+          "descriptionIt": "6km al ritmo 10K obiettivo",
           "distanceM": 6000,
           "zone": "Z4",
           "pace": "Allure 10K visée",
@@ -2399,6 +2732,7 @@
           "kind": "segment",
           "description": "6km allure 10K visée",
           "descriptionEn": "6km at target 10K pace",
+          "descriptionIt": "6km al ritmo 10K obiettivo",
           "distanceM": 6000,
           "zone": "Z4",
           "intensityType": "T",
@@ -2409,6 +2743,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -2419,6 +2754,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -2439,6 +2775,13 @@
         "Don't push too hard, just validate the pace",
         "Session that boosts mental confidence"
       ],
+      "coachingTipsIt": [
+        "Da fare 10 giorni prima della tua 10K",
+        "Dà fiducia per il giorno della gara",
+        "Se riesci a tenere 6km, riuscirai a tenere 10km",
+        "Non forzare troppo, convalida solo il ritmo",
+        "Seduta che rafforza la fiducia mentale"
+      ],
       "commonMistakes": [
         "Courir plus vite que l'allure cible",
         "Faire cette séance trop près de la course",
@@ -2448,6 +2791,11 @@
         "Running faster than target pace",
         "Doing this session too close to the race",
         "Not benefiting from the confidence effect"
+      ],
+      "commonMistakesIt": [
+        "Correre più forte del ritmo gara target",
+        "Fare questa seduta troppo vicino alla gara",
+        "Non sfruttare l'effetto fiducia"
       ],
       "variationIds": [
         "RP-002",
@@ -2478,8 +2826,10 @@
       "id": "RP-016",
       "name": "Échauffement simulation course",
       "nameEn": "Race Day Warm-up Simulation",
+      "nameIt": "Simulazione riscaldamento gara",
       "description": "Simulation complète de l'échauffement du jour de course. Permet de tester et mémoriser sa routine. À faire 1-2 semaines avant la compétition.",
       "descriptionEn": "Complete simulation of race day warm-up. Allows testing and memorizing your routine. Do 1-2 weeks before competition.",
+      "descriptionIt": "Simulazione completa del riscaldamento del giorno della gara. Permette di testare e memorizzare la propria routine. Da fare 1-2 settimane prima della competizione.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "neuromuscular",
@@ -2497,6 +2847,7 @@
         {
           "description": "Footing très progressif",
           "descriptionEn": "Very progressive jog",
+          "descriptionIt": "Corsa lenta molto progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2507,6 +2858,7 @@
           "kind": "segment",
           "description": "Footing très progressif",
           "descriptionEn": "Very progressive jog",
+          "descriptionIt": "Corsa lenta molto progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2517,33 +2869,39 @@
         {
           "description": "Gammes complètes (montées de genoux, talons-fesses, pas chassés)",
           "descriptionEn": "Full drills (high knees, butt kicks, side shuffles)",
+          "descriptionIt": "Andature complete (skip alto, calciata dietro, passo laterale)",
           "zone": "Z2",
           "durationMin": 5
         },
         {
           "description": "4x accélérations progressives 80m",
           "descriptionEn": "4x progressive accelerations 80m",
+          "descriptionIt": "4x allunghi progressivi da 80m",
           "distanceM": 80,
           "zone": "Z4-Z5",
           "repetitions": 4,
           "recovery": "Marche retour",
           "recoveryEn": "Walk back",
+          "recoveryIt": "Ritorno al passo",
           "intensityType": "I"
         },
         {
           "description": "2x 200m à allure course",
           "descriptionEn": "2x 200m at race pace",
+          "descriptionIt": "2x 200m a ritmo gara",
           "distanceM": 200,
           "zone": "Z4",
           "pace": "Allure Course",
           "repetitions": 2,
           "recovery": "2min footing",
           "recoveryEn": "2min jog",
+          "recoveryIt": "2min di corsa lenta",
           "intensityType": "T"
         },
         {
           "description": "5min de repos avant le départ simulé",
           "descriptionEn": "5min rest before simulated start",
+          "descriptionIt": "5min di riposo prima della partenza simulata",
           "durationMin": 5,
           "zone": "Z1"
         }
@@ -2553,6 +2911,7 @@
           "kind": "segment",
           "description": "Gammes complètes (montées de genoux, talons-fesses, pas chassés)",
           "descriptionEn": "Full drills (high knees, butt kicks, side shuffles)",
+          "descriptionIt": "Andature complete (skip alto, calciata dietro, passo laterale)",
           "zone": "Z2",
           "durationSec": 300,
           "role": "effort"
@@ -2566,6 +2925,7 @@
               "kind": "segment",
               "description": "accélérations progressives 80m",
               "descriptionEn": "progressive accelerations 80m",
+              "descriptionIt": "allunghi progressivi da 80m",
               "distanceM": 80,
               "zone": "Z4-Z5",
               "intensityType": "I",
@@ -2577,6 +2937,7 @@
               "kind": "segment",
               "description": "Marche retour",
               "descriptionEn": "Walk back",
+              "descriptionIt": "Ritorno al passo",
               "zone": "Z1",
               "role": "recovery"
             }
@@ -2591,6 +2952,7 @@
               "kind": "segment",
               "description": "200m à allure course",
               "descriptionEn": "200m at race pace",
+              "descriptionIt": "200m a ritmo gara",
               "distanceM": 200,
               "zone": "Z4",
               "intensityType": "T",
@@ -2602,6 +2964,7 @@
               "kind": "segment",
               "description": "2min footing",
               "descriptionEn": "2min jog",
+              "descriptionIt": "2min di corsa lenta",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -2612,6 +2975,7 @@
           "kind": "segment",
           "description": "5min de repos avant le départ simulé",
           "descriptionEn": "5min rest before simulated start",
+          "descriptionIt": "5min di riposo prima della partenza simulata",
           "durationSec": 300,
           "zone": "Z1",
           "role": "effort"
@@ -2621,6 +2985,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2631,6 +2996,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2651,6 +3017,13 @@
         "Finish 5-10min before fictional start",
         "Memorize the feeling of being ready"
       ],
+      "coachingTipsIt": [
+        "Riproduci esattamente la tua routine di gara",
+        "Annota i tempi per il giorno della gara",
+        "Testa il tuo abbigliamento e le scarpe",
+        "Termina 5-10min prima della partenza simulata",
+        "Memorizza la sensazione di essere pronto"
+      ],
       "commonMistakes": [
         "Ne pas chronométrer l'échauffement",
         "Oublier une partie de la routine",
@@ -2660,6 +3033,11 @@
         "Not timing the warm-up",
         "Forgetting part of the routine",
         "Getting tired with too many accelerations"
+      ],
+      "commonMistakesIt": [
+        "Non cronometrare il riscaldamento",
+        "Dimenticare una parte della routine",
+        "Affaticarsi con troppe accelerazioni"
       ],
       "variationIds": [
         "RP-008"
@@ -2687,8 +3065,10 @@
       "id": "RP-017",
       "name": "Découverte allure 5K",
       "nameEn": "5K Pace Introduction",
+      "nameIt": "Introduzione al ritmo 5K",
       "description": "Séance d'introduction à l'allure 5K. Trois répétitions courtes pour apprivoiser l'intensité spécifique sans surcharger.",
       "descriptionEn": "Introduction to 5K pace. Three short repetitions to get familiar with race-specific intensity without overloading.",
+      "descriptionIt": "Seduta introduttiva al ritmo 5K. Tre ripetute brevi per prendere confidenza con l'intensità specifica senza sovraccaricare.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "vo2max",
@@ -2706,6 +3086,7 @@
         {
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2713,6 +3094,7 @@
         {
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -2721,6 +3103,7 @@
           "kind": "segment",
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2730,6 +3113,7 @@
           "kind": "segment",
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -2738,12 +3122,14 @@
         {
           "description": "3x 3min à allure 5K / 3min récup footing",
           "descriptionEn": "3x 3min at 5K pace / 3min easy recovery jog",
+          "descriptionIt": "3x 3min a ritmo 5K / 3min recupero in corsa lenta",
           "durationMin": 3,
           "zone": "Z4-Z5",
           "pace": "Allure 5K",
           "repetitions": 3,
           "recovery": "3min footing Z1-Z2",
           "recoveryEn": "3min jog Z1-Z2",
+          "recoveryIt": "3min corsa lenta Z1-Z2",
           "intensityType": "I"
         }
       ],
@@ -2757,6 +3143,7 @@
               "kind": "segment",
               "description": "3min à allure 5K",
               "descriptionEn": "3min at 5K pace",
+              "descriptionIt": "3min a ritmo 5K",
               "durationSec": 180,
               "zone": "Z4-Z5",
               "intensityType": "I",
@@ -2768,6 +3155,7 @@
               "kind": "segment",
               "description": "3min footing Z1-Z2",
               "descriptionEn": "3min jog Z1-Z2",
+              "descriptionIt": "3min corsa lenta Z1-Z2",
               "durationSec": 180,
               "zone": "Z1-Z2",
               "role": "recovery"
@@ -2779,6 +3167,7 @@
         {
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2789,6 +3178,7 @@
           "kind": "segment",
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2807,6 +3197,12 @@
         "Focus on maintaining a steady rhythm",
         "Ideal session for discovering your specific speed"
       ],
+      "coachingTipsIt": [
+        "Ritmo 5K = sforzo sostenuto ma non uno sprint",
+        "Il recupero di 3min permette di recuperare bene tra gli sforzi",
+        "Concentrati sul mantenere un ritmo regolare",
+        "Seduta ideale per scoprire la tua velocità specifica"
+      ],
       "commonMistakes": [
         "Partir trop vite sur la première répétition",
         "Confondre allure 5K et sprint",
@@ -2816,6 +3212,11 @@
         "Starting too fast on the first repetition",
         "Confusing 5K pace with sprinting",
         "Not respecting the recovery time"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte nella prima ripetuta",
+        "Confondere il ritmo 5K con lo sprint",
+        "Non rispettare il tempo di recupero"
       ],
       "variationIds": [
         "RP-004"
@@ -2843,8 +3244,10 @@
       "id": "RP-018",
       "name": "Découverte allure 10K",
       "nameEn": "10K Pace Introduction",
+      "nameIt": "Introduzione al ritmo 10K",
       "description": "Initiation douce à l'allure spécifique 10K. Trois blocs de 5 minutes pour habituer le corps à l'effort soutenu.",
       "descriptionEn": "Gentle introduction to 10K-specific pace. Three 5-minute blocks to accustom the body to sustained effort.",
+      "descriptionIt": "Approccio graduale al ritmo specifico 10K. Tre blocchi da 5 minuti per abituare il corpo allo sforzo sostenuto.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "lactate_threshold",
@@ -2862,6 +3265,7 @@
         {
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2869,6 +3273,7 @@
         {
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -2877,6 +3282,7 @@
           "kind": "segment",
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2886,6 +3292,7 @@
           "kind": "segment",
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -2894,12 +3301,14 @@
         {
           "description": "3x 5min à allure 10K / 3min récup footing",
           "descriptionEn": "3x 5min at 10K pace / 3min easy recovery jog",
+          "descriptionIt": "3x 5min a ritmo 10K / 3min recupero in corsa lenta",
           "durationMin": 5,
           "zone": "Z4",
           "pace": "Allure 10K",
           "repetitions": 3,
           "recovery": "3min footing Z1-Z2",
           "recoveryEn": "3min jog Z1-Z2",
+          "recoveryIt": "3min corsa lenta Z1-Z2",
           "intensityType": "T"
         }
       ],
@@ -2913,6 +3322,7 @@
               "kind": "segment",
               "description": "5min à allure 10K",
               "descriptionEn": "5min at 10K pace",
+              "descriptionIt": "5min a ritmo 10K",
               "durationSec": 300,
               "zone": "Z4",
               "intensityType": "T",
@@ -2924,6 +3334,7 @@
               "kind": "segment",
               "description": "3min footing Z1-Z2",
               "descriptionEn": "3min jog Z1-Z2",
+              "descriptionIt": "3min corsa lenta Z1-Z2",
               "durationSec": 180,
               "zone": "Z1-Z2",
               "role": "recovery"
@@ -2935,6 +3346,7 @@
         {
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2945,6 +3357,7 @@
           "kind": "segment",
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2963,6 +3376,12 @@
         "The 3min recovery allows a good cooldown between efforts",
         "First step before longer 10K-specific sessions"
       ],
+      "coachingTipsIt": [
+        "Ritmo 10K = circa 85-90% FCmax",
+        "Sforzo sostenuto ma non massimale",
+        "I 3min di recupero permettono di far scendere bene i battiti",
+        "Primo passo prima delle sedute specifiche 10K più lunghe"
+      ],
       "commonMistakes": [
         "Courir à allure 5K au lieu de 10K",
         "Partir trop vite et ne pas tenir les 5 minutes",
@@ -2972,6 +3391,11 @@
         "Running at 5K pace instead of 10K",
         "Starting too fast and not holding the 5 minutes",
         "Walking during recovery instead of jogging"
+      ],
+      "commonMistakesIt": [
+        "Correre a ritmo 5K invece che 10K",
+        "Partire troppo forte e non reggere i 5 minuti",
+        "Camminare durante il recupero invece di correre piano"
       ],
       "variationIds": [
         "RP-002"
@@ -2999,8 +3423,10 @@
       "id": "RP-019",
       "name": "Initiation allure semi",
       "nameEn": "Half Marathon Pace Introduction",
+      "nameIt": "Introduzione al ritmo mezza maratona",
       "description": "Découverte progressive de l'allure semi-marathon. Deux blocs de 10 minutes pour apprendre à gérer un effort prolongé.",
       "descriptionEn": "Progressive introduction to half-marathon pace. Two 10-minute blocks to learn managing a prolonged effort.",
+      "descriptionIt": "Scoperta progressiva del ritmo mezza maratona. Due blocchi da 10 minuti per imparare a gestire uno sforzo prolungato.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "aerobic_base",
@@ -3018,6 +3444,7 @@
         {
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3025,6 +3452,7 @@
         {
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -3033,6 +3461,7 @@
           "kind": "segment",
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3042,6 +3471,7 @@
           "kind": "segment",
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -3050,6 +3480,7 @@
         {
           "description": "10min à allure semi-marathon",
           "descriptionEn": "10min at half-marathon pace",
+          "descriptionIt": "10min a ritmo mezza maratona",
           "durationMin": 10,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
@@ -3058,6 +3489,7 @@
         {
           "description": "Récupération footing",
           "descriptionEn": "Easy jog recovery",
+          "descriptionIt": "Recupero in corsa lenta",
           "durationMin": 5,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3065,6 +3497,7 @@
         {
           "description": "10min à allure semi-marathon",
           "descriptionEn": "10min at half-marathon pace",
+          "descriptionIt": "10min a ritmo mezza maratona",
           "durationMin": 10,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
@@ -3076,6 +3509,7 @@
           "kind": "segment",
           "description": "10min à allure semi-marathon",
           "descriptionEn": "10min at half-marathon pace",
+          "descriptionIt": "10min a ritmo mezza maratona",
           "durationSec": 600,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -3085,6 +3519,7 @@
           "kind": "segment",
           "description": "Récupération footing",
           "descriptionEn": "Easy jog recovery",
+          "descriptionIt": "Recupero in corsa lenta",
           "durationSec": 300,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3094,6 +3529,7 @@
           "kind": "segment",
           "description": "10min à allure semi-marathon",
           "descriptionEn": "10min at half-marathon pace",
+          "descriptionIt": "10min a ritmo mezza maratona",
           "durationSec": 600,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -3104,6 +3540,7 @@
         {
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3114,6 +3551,7 @@
           "kind": "segment",
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3132,6 +3570,12 @@
         "The 5min recovery is important: don't shorten it",
         "Stepping-stone session toward race-pace long runs"
       ],
+      "coachingTipsIt": [
+        "Ritmo mezza = sforzo controllato, respirazione regolare",
+        "Dovresti riuscire a dire qualche parola tra un respiro e l'altro",
+        "Il recupero di 5min è importante: non accorciarlo",
+        "Seduta ponte verso i lunghi a ritmo specifico"
+      ],
       "commonMistakes": [
         "Courir le premier bloc trop vite",
         "Confondre allure semi et allure 10K",
@@ -3141,6 +3585,11 @@
         "Running the first block too fast",
         "Confusing half-marathon pace with 10K pace",
         "Not warming up enough before the effort"
+      ],
+      "commonMistakesIt": [
+        "Correre il primo blocco troppo forte",
+        "Confondere il ritmo mezza con il ritmo 10K",
+        "Non scaldarsi abbastanza prima dello sforzo"
       ],
       "variationIds": [
         "RP-003"
@@ -3168,8 +3617,10 @@
       "id": "RP-020",
       "name": "Initiation allure marathon",
       "nameEn": "Marathon Pace Introduction",
+      "nameIt": "Introduzione al ritmo maratona",
       "description": "Premiers pas à allure marathon. Deux blocs de 12 minutes pour apprendre le rythme de croisière marathon.",
       "descriptionEn": "First steps at marathon pace. Two 12-minute blocks to learn the marathon cruising rhythm.",
+      "descriptionIt": "Primi passi a ritmo maratona. Due blocchi da 12 minuti per imparare il ritmo di crociera da maratona.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "aerobic_base",
@@ -3187,6 +3638,7 @@
         {
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3194,6 +3646,7 @@
         {
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -3202,6 +3655,7 @@
           "kind": "segment",
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3211,6 +3665,7 @@
           "kind": "segment",
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -3219,6 +3674,7 @@
         {
           "description": "12min à allure marathon",
           "descriptionEn": "12min at marathon pace",
+          "descriptionIt": "12min a ritmo maratona",
           "durationMin": 12,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -3227,6 +3683,7 @@
         {
           "description": "Récupération footing",
           "descriptionEn": "Easy jog recovery",
+          "descriptionIt": "Recupero in corsa lenta",
           "durationMin": 5,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3234,6 +3691,7 @@
         {
           "description": "12min à allure marathon",
           "descriptionEn": "12min at marathon pace",
+          "descriptionIt": "12min a ritmo maratona",
           "durationMin": 12,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -3245,6 +3703,7 @@
           "kind": "segment",
           "description": "12min à allure marathon",
           "descriptionEn": "12min at marathon pace",
+          "descriptionIt": "12min a ritmo maratona",
           "durationSec": 720,
           "zone": "Z3",
           "intensityType": "M",
@@ -3254,6 +3713,7 @@
           "kind": "segment",
           "description": "Récupération footing",
           "descriptionEn": "Easy jog recovery",
+          "descriptionIt": "Recupero in corsa lenta",
           "durationSec": 300,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3263,6 +3723,7 @@
           "kind": "segment",
           "description": "12min à allure marathon",
           "descriptionEn": "12min at marathon pace",
+          "descriptionIt": "12min a ritmo maratona",
           "durationSec": 720,
           "zone": "Z3",
           "intensityType": "M",
@@ -3273,6 +3734,7 @@
         {
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3283,6 +3745,7 @@
           "kind": "segment",
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3301,6 +3764,12 @@
         "Memorize this feeling: it's your cruising speed",
         "Foundation session for marathon preparation"
       ],
+      "coachingTipsIt": [
+        "Ritmo maratona = confortevole ma sostenuto",
+        "Dovresti riuscire a sostenere una conversazione con frasi brevi",
+        "Memorizza questa sensazione: è la tua velocità di crociera",
+        "Seduta fondamentale per la preparazione maratona"
+      ],
       "commonMistakes": [
         "Courir trop vite, à allure semi au lieu de marathon",
         "Ne pas utiliser de montre GPS pour calibrer l'allure",
@@ -3310,6 +3779,11 @@
         "Running too fast, at half-marathon pace instead of marathon",
         "Not using a GPS watch to calibrate pace",
         "Shortening the recovery between blocks"
+      ],
+      "commonMistakesIt": [
+        "Correre troppo forte, a ritmo mezza invece che maratona",
+        "Non usare un orologio GPS per calibrare il ritmo",
+        "Accorciare il recupero tra i blocchi"
       ],
       "variationIds": [
         "RP-001"
@@ -3338,8 +3812,10 @@
       "id": "RP-021",
       "name": "Course brisée (Broken Race)",
       "nameEn": "Broken Race",
+      "nameIt": "Gara frazionata (Broken Race)",
       "description": "Distance cible de course (ex : 10 km) courue à allure course, découpée en 3 segments égaux avec 3-4 minutes de récupération en trot entre chaque segment. Permet de pratiquer l'allure spécifique sur la distance complète avec moins de stress qu'un time trial.",
       "descriptionEn": "Target race distance (e.g. 10K) run at race pace, split into 3 equal segments with 3-4 minutes jog recovery between each segment. Allows practicing specific pace over the full distance with less stress than a time trial.",
+      "descriptionIt": "Distanza gara obiettivo (es. 10km) corsa a ritmo gara, suddivisa in 3 segmenti uguali con 3-4 minuti di recupero in corsa leggera tra ciascuno. Permette di allenare il ritmo specifico sull'intera distanza con meno stress rispetto a un test cronometrato.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "race_specific",
@@ -3357,6 +3833,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3364,6 +3841,7 @@
         {
           "description": "Gammes et 3× accélérations progressives",
           "descriptionEn": "Drills and 3× progressive accelerations",
+          "descriptionIt": "Andature e 3× allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -3372,6 +3850,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3381,6 +3860,7 @@
           "kind": "segment",
           "description": "Gammes et 3× accélérations progressives",
           "descriptionEn": "Drills and 3× progressive accelerations",
+          "descriptionIt": "Andature e 3× allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -3389,12 +3869,14 @@
         {
           "description": "3 × 3,3 km à allure 10K (ou 3 × 7 km à allure semi), récup 3-4min trot entre chaque segment",
           "descriptionEn": "3 × 3.3km at 10K pace (or 3 × 7km at half-marathon pace), 3-4min jog recovery between each segment",
+          "descriptionIt": "3 × 3,3km a ritmo 10K (o 3 × 7km a ritmo mezza maratona), 3-4min recupero in corsa leggera tra ogni segmento",
           "zone": "Z4",
           "repetitions": 3,
           "durationMin": 15,
           "distanceM": 3300,
           "recovery": "3-4min trot Z1",
           "recoveryEn": "3-4min jog Z1",
+          "recoveryIt": "3-4min corsa leggera Z1",
           "intensityType": "T"
         }
       ],
@@ -3408,6 +3890,7 @@
               "kind": "segment",
               "description": "3,3 km à allure 10K (ou 3 × 7 km à allure semi)",
               "descriptionEn": "3.3km at 10K pace (or 3 × 7km at half-marathon pace), 3-4min jog recovery between each segment",
+              "descriptionIt": "3,3km a ritmo 10K (o 3 × 7km a ritmo mezza maratona), 3-4min recupero in corsa leggera tra ogni segmento",
               "durationSec": 900,
               "distanceM": 3300,
               "zone": "Z4",
@@ -3420,6 +3903,7 @@
               "kind": "segment",
               "description": "3-4min trot Z1",
               "descriptionEn": "3-4min jog Z1",
+              "descriptionIt": "3-4min corsa leggera Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -3431,6 +3915,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3441,6 +3926,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3459,6 +3945,12 @@
         "Adapt the distance to your goal: 10K as 3×3.3km, half as 3×7km, 5K as 3×1.7km",
         "Ideal 2-3 weeks before the target race as a lower-stress dress rehearsal"
       ],
+      "coachingTipsIt": [
+        "Il ritmo di ogni segmento deve corrispondere esattamente al tuo ritmo gara obiettivo",
+        "I recuperi brevi permettono di mantenere la qualità sulla distanza totale",
+        "Adatta la distanza al tuo obiettivo: 10km in 3×3,3km, mezza in 3×7km, 5km in 3×1,7km",
+        "Ideale 2-3 settimane prima della gara obiettivo come prova generale a minor stress"
+      ],
       "commonMistakes": [
         "Courir les segments plus vite que l'allure cible en profitant des récupérations",
         "Prendre trop de récupération (>5 minutes) entre les segments",
@@ -3468,6 +3960,11 @@
         "Running segments faster than target pace by taking advantage of recoveries",
         "Taking too much recovery (>5 minutes) between segments",
         "Scheduling this session too far from competition for it to have specific impact"
+      ],
+      "commonMistakesIt": [
+        "Correre i segmenti più veloce del ritmo obiettivo approfittando dei recuperi",
+        "Prendere troppo recupero (>5 minuti) tra i segmenti",
+        "Programmare questa seduta troppo lontano dalla gara perché abbia un impatto specifico"
       ],
       "variationIds": [
         "RP-002",
@@ -3498,8 +3995,10 @@
       "id": "RP-022",
       "name": "Intervalles spécifiques extensifs (Canova)",
       "nameEn": "Extensive Specific Intervals (Canova)",
+      "nameIt": "Intervalli specifici estensivi (Canova)",
       "description": "4 répétitions de 5 km à allure marathon (100-103%) avec 1 km de récupération à 85-90% de l'allure marathon entre chaque. Volume total de qualité : environ 24 km. Développe la résistance à la fatigue à allure spécifique marathon avec récupération insuffisante.",
       "descriptionEn": "4 repetitions of 5km at marathon pace (100-103%) with 1km 'recovery' at 85-90% of marathon pace between each. Total quality volume: approximately 24km. Develops fatigue resistance at marathon-specific pace with insufficient recovery.",
+      "descriptionIt": "4 ripetute da 5km a ritmo maratona (100-103%) con 1km di 'recupero' all'85-90% del ritmo maratona tra ciascuna. Volume totale di qualità: circa 24km. Sviluppa la resistenza alla fatica a ritmo specifico maratona con recupero incompleto.",
       "category": "race_pace",
       "sessionType": "race_specific",
       "targetSystem": "race_specific",
@@ -3517,6 +4016,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3527,6 +4027,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3537,12 +4038,14 @@
         {
           "description": "4 × 5 km à 100-103% allure marathon (Z3), avec 1 km récup à 85-90% allure marathon entre chaque (jamais en dessous de Z2 haut)",
           "descriptionEn": "4 × 5km at 100-103% marathon pace (Z3), with 1km 'recovery' at 85-90% marathon pace between each (never below upper Z2)",
+          "descriptionIt": "4 × 5km al 100-103% ritmo maratona (Z3), con 1km di 'recupero' all'85-90% ritmo maratona tra ciascuno (mai sotto Z2 alta)",
           "zone": "Z3",
           "repetitions": 4,
           "durationMin": 23,
           "distanceM": 5000,
           "recovery": "1km à 85-90% allure marathon (~4-5min)",
           "recoveryEn": "1km at 85-90% marathon pace (~4-5min)",
+          "recoveryIt": "1km all'85-90% ritmo maratona (~4-5min)",
           "intensityType": "M"
         }
       ],
@@ -3556,6 +4059,7 @@
               "kind": "segment",
               "description": "5 km à 100-103% allure marathon (Z3),",
               "descriptionEn": "5km at 100-103% marathon pace (Z3),",
+              "descriptionIt": "5km al 100-103% ritmo maratona (Z3),",
               "durationSec": 1380,
               "distanceM": 5000,
               "zone": "Z3",
@@ -3568,6 +4072,7 @@
               "kind": "segment",
               "description": "1km à 85-90% allure marathon (~4-5min)",
               "descriptionEn": "1km at 85-90% marathon pace (~4-5min)",
+              "descriptionIt": "1km all'85-90% ritmo maratona (~4-5min)",
               "durationSec": 240,
               "zone": "Z1",
               "role": "recovery"
@@ -3579,6 +4084,7 @@
         {
           "description": "Footing lent de récupération",
           "descriptionEn": "Slow recovery jog",
+          "descriptionIt": "Corsa lenta di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -3589,6 +4095,7 @@
           "kind": "segment",
           "description": "Footing lent de récupération",
           "descriptionEn": "Slow recovery jog",
+          "descriptionIt": "Corsa lenta di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -3607,6 +4114,12 @@
         "Schedule this session 6-10 weeks before the marathon, followed by 5-7 easy days",
         "If you cannot maintain pace on the 4th block, the session is too ambitious: reduce to 3 × 5km"
       ],
+      "coachingTipsIt": [
+        "I chilometri di recupero restano all'85-90% del ritmo maratona, non è corsa lenta facile",
+        "Il volume totale (~30km inclusi riscaldamento e defaticamento) la rende una seduta chiave della preparazione maratona",
+        "Programma questa seduta 6-10 settimane prima della maratona, seguita da 5-7 giorni facili",
+        "Se non riesci a mantenere il ritmo nel 4° blocco, la seduta è troppo ambiziosa: riduci a 3 × 5km"
+      ],
       "commonMistakes": [
         "Transformer les km de récupération en footing facile au lieu de rester à 85-90% allure marathon",
         "Courir les blocs de 5 km trop vite (au-dessus de 103% allure marathon) en début de séance",
@@ -3616,6 +4129,11 @@
         "Turning recovery kilometers into easy jogging instead of staying at 85-90% marathon pace",
         "Running the 5km blocks too fast (above 103% marathon pace) at the start of the session",
         "Scheduling this session without planning sufficient recovery in the following days"
+      ],
+      "commonMistakesIt": [
+        "Trasformare i km di recupero in corsa lenta facile invece di restare all'85-90% del ritmo maratona",
+        "Correre i blocchi da 5km troppo forte (oltre il 103% del ritmo maratona) all'inizio della seduta",
+        "Programmare questa seduta senza prevedere un recupero sufficiente nei giorni successivi"
       ],
       "variationIds": [
         "RP-007",

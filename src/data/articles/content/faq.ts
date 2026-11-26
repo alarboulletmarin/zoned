@@ -292,6 +292,151 @@ Cold is less problematic than heat but requires clothing adaptation.
 **Extend warm-up.** Cold muscles are less supple. Plan a few extra minutes before accelerating.
 
 **Keep moving.** Avoid long stationary pauses during sessions. Cooling is rapid when sweat wets clothing.`,
+  contentIt: `## Sulle zone di allenamento
+
+### Il mio orologio segna Zona 4 ma io mi sento in Zona 2. A chi devo credere?
+
+Fidati delle tue sensazioni. La frequenza cardiaca può essere falsata da molti fattori: caldo, stress, stanchezza, caffeina, posizione del sensore. Un sensore ottico da polso è particolarmente soggetto a errori durante i movimenti ripetitivi della corsa.
+
+> 💡 La regola d'oro per la Zona 2: se riesci a sostenere una conversazione normale senza sforzo, sei nella zona giusta, qualunque cosa mostri l'orologio.
+
+La regola d'oro per la Zona 2: devi poter sostenere una conversazione normale. Se parli senza fatica, sei nella zona corretta, a prescindere dal dato sull'orologio.
+
+Con l'esperienza imparerai a calibrare le sensazioni con i dati. Ma nel dubbio, l'obiettivo della seduta prevale sul numero visualizzato.
+
+### Devo rimanere esattamente nella mia zona?
+
+No, le zone sono intervalli indicativi, non bersagli al singolo battito. Essere 3-5 bpm sopra o sotto il limite non ha alcuna rilevanza fisiologica significativa.
+
+Ciò che conta è rispettare lo scopo della seduta. Un'uscita "facile" deve essere davvero facile: se finisci col fiatone hai mancato l'obiettivo, anche se l'orologio segnava Z2 tutto il tempo. Una seduta "intensa" deve davvero impegnarti: se finisci fresco come una rosa, non hai spinto abbastanza.
+
+### Come faccio a sapere se le mie zone sono ben calibrate?
+
+Le tue zone sono corrette se:
+- La Zona 2 ti permette di parlare normalmente
+- La Zona 4 (soglia) ti consente di dire poche parole, ma non di tenere una conversazione
+- La Zona 5 (VAM) è sostenibile per 3-6 minuti al massimo, non di più
+
+Se queste corrispondenze non tornano, i tuoi valori di riferimento (FCmax o VAM) sono probabilmente imprecisi. Ripeti un test.
+
+---
+
+## Sul volume di allenamento
+
+### Quante volte a settimana devo correre?
+
+Non esiste una risposta universale: dipende dal tuo livello, dai tuoi obiettivi e dal tuo recupero.
+
+**Principianti (< 1 anno di pratica)**: 2-3 uscite a settimana sono sufficienti. Il tuo corpo non si è ancora adattato alle sollecitazioni della corsa; lasciargli giorni di recupero tra un'uscita e l'altra previene gli infortuni.
+
+**Runner regolari**: 3-5 uscite coprono la maggior parte degli obiettivi, dai 10 km alla maratona. L'importante non è il numero di uscite ma la loro distribuzione: alterna giorni impegnativi e giorni facili.
+
+**Runner avanzati**: 5-7 uscite, talvolta con doppi allenamenti, permettono di accumulare volume senza esaurire l'organismo. Ma questo livello richiede anni di progressione graduale.
+
+### La regola del 10% è un mito o una realtà?
+
+La regola (non aumentare il volume settimanale di oltre il 10%) è un utile argine di sicurezza, non una legge fisiologica assoluta.
+
+Il suo merito: impone progressività. Il corpo si adatta ai carichi, ma ha bisogno di tempo. Passare da 20 km a 40 km a settimana in due settimane è la ricetta per l'infortunio.
+
+Il suo limite: non tiene conto del tuo storico. Un runner che riprende dopo un infortunio, con 10 anni di esperienza, può probabilmente risalire più in fretta di un principiante assoluto.
+
+Usala come principio guida, non come regola rigida.
+
+### Quando vedrò dei miglioramenti?
+
+I primi cambiamenti cardiovascolari compaiono già dopo 2-3 settimane di allenamento regolare. Magari non li vedrai subito sui tempi, ma sentirai che lo sforzo diventa più gestibile.
+
+I miglioramenti misurabili in un test o in gara arrivano in genere dopo 6-12 settimane di lavoro coerente. È il tempo necessario per gli adattamenti muscolari, metabolici e neuromuscolari.
+
+> 💡 I progressi misurabili arrivano dopo 6-12 settimane di lavoro coerente. Cambiare programma ogni 3 settimane non lascia mai il tempo agli adattamenti di consolidarsi.
+
+La pazienza è fondamentale. I runner che cambiano programma ogni 3 settimane non lasciano mai agli adattamenti il tempo di stabilizzarsi.
+
+---
+
+## Sugli infortuni
+
+### Ho dolore durante la corsa. Continuo o mi fermo?
+
+Distingui il fastidio dal dolore:
+
+**Fastidio** (pesantezza, lieve rigidità, indolenzimento): spesso normale, soprattutto a inizio seduta. Continua monitorando: di solito passa dopo 10-15 minuti.
+
+> 💡 Nel dubbio tra fastidio e dolore, fermati. Una seduta saltata per prudenza vale molto più di settimane di stop forzato.
+
+**Dolore** (acuto, localizzato, in aumento o che fa zoppicare): fermati subito. Forzare su un dolore vero trasforma un piccolo problema in un infortunio serio.
+
+Nel dubbio, ascolta il tuo corpo. Una seduta saltata per prudenza è sempre preferibile a settimane di fermo forzato.
+
+### Quando devo consultare un medico?
+
+Consulta un professionista sanitario se:
+- Il dolore persiste per più di 3-4 giorni a riposo
+- C'è gonfiore, rossore o calore locale
+- Non riesci a camminare normalmente
+- Il dolore si ripresenta sistematicamente quando corri
+- Sospetti una frattura da stress (dolore osseo localizzato)
+
+Non aspettare che peggiori. Prima viene affrontato un infortunio, prima guarisce.
+
+### Come posso prevenire gli infortuni?
+
+La prevenzione si basa su alcuni principi semplici:
+
+**Progredisci gradualmente.** La maggior parte degli infortuni nella corsa deriva da aumenti troppo rapidi di volume o intensità.
+
+**Varia gli stimoli.** Terreni diversi, scarpe diverse (a rotazione), ritmi diversi: la varietà distribuisce i carichi.
+
+**Potenziamento muscolare.** Ischiocrurali, quadricipiti, polpacci e glutei forti assorbono meglio gli impatti. 15-20 minuti di forza 2 volte a settimana fanno un'enorme differenza.
+
+**Ascolta i segnali.** Un lieve fastidio che torna a ogni uscita è un campanello d'allarme. Trattarlo in questa fase richiede pochi giorni; ignorarlo può costare mesi.
+
+---
+
+## Domande pratiche
+
+### Mattina o sera, cosa è meglio?
+
+Fisiologicamente, la sera ha un leggero vantaggio: temperatura corporea più alta, articolazioni più mobili, tempi di reazione migliori. Alcuni studi mostrano prestazioni leggermente superiori nel tardo pomeriggio.
+
+Ma la vera risposta è: il momento migliore è quello in cui riesci davvero a correre. Se sei mattiniero e le uscite serali finiscono sul divano, corri al mattino. La costanza batte l'ottimizzazione teorica.
+
+### Posso correre tutti i giorni?
+
+È possibile, ma con precauzioni:
+
+- Alterna tassativamente giorni facili e giorni impegnativi
+- Almeno 1-2 giorni a settimana devono essere molto leggeri o di cross-training (bici, nuoto)
+- Ascolta il tuo corpo: la fatica accumulata prima o poi si manifesta
+
+Molti runner rendono al meglio con 5-6 giorni a settimana e 1-2 giorni di riposo completo. Il riposo fa parte dell'allenamento.
+
+### Come gestire il caldo?
+
+Il caldo è nemico del runner. Il corpo deve sia produrre energia per correre sia dissipare il calore generato: d'estate queste due esigenze entrano in competizione.
+
+**Adatta gli orari.** Corri la mattina presto o la sera tardi, quando il sole è basso e la temperatura più mite.
+
+**Ridimensiona le aspettative.** Le tue zone cardiache salgono naturalmente di 5-15 bpm con il caldo. Correre in Z2 d'estate può corrispondere al passo di Z1 d'inverno: accettalo.
+
+**Idratati di più.** Parti idratato, bevi durante se lo sforzo supera i 45 minuti, reintegra dopo.
+
+**Proteggiti.** Cappellino, abbigliamento chiaro e leggero, crema solare sulle zone esposte.
+
+**Sii paziente.** L'acclimatazione richiede 10-14 giorni di esposizione regolare. Le prime uscite con il caldo intenso sono dure, poi migliora.
+
+### Come gestire il freddo?
+
+Il freddo è meno problematico del caldo, ma richiede di adattare l'abbigliamento.
+
+**Vestiti a strati.** Uno strato tecnico aderente per allontanare il sudore, uno strato intermedio isolante, uno strato esterno antivento se necessario. Alla partenza devi avere leggermente freddo: ti scalderai in fretta.
+
+**Proteggi le estremità.** Guanti, berretto o fascia, calze più spesse se serve. Mani e orecchie si raffreddano rapidamente.
+
+**Allunga il riscaldamento.** I muscoli freddi sono meno elastici. Prevedi qualche minuto in più prima di accelerare.
+
+**Resta in movimento.** Evita lunghe pause da fermo durante le sedute. Il raffreddamento è rapido quando il sudore bagna i vestiti.`,
 };
 
 export default content;

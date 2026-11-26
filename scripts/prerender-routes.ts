@@ -147,11 +147,12 @@ function pathsFromSitemap(): string[] {
   return unique.filter((path) => path === wanted);
 }
 
-function shellPath(pathname: string, lang: "fr" | "en"): string {
+function shellPath(pathname: string, lang: "fr" | "en" | "it"): string {
   if (lang === "fr") {
     return pathname === "/" ? join(DIST, "index.html") : join(DIST, `${pathname.slice(1)}.html`);
   }
-  return pathname === "/" ? join(DIST, "_en.html") : join(DIST, "_en", `${pathname.slice(1)}.html`);
+  const prefix = `_${lang}`;
+  return pathname === "/" ? join(DIST, `${prefix}.html`) : join(DIST, prefix, `${pathname.slice(1)}.html`);
 }
 
 function splitPrelude(html: string): { head: string; body: string } {
@@ -189,18 +190,21 @@ function removeLoadingShell(html: string): string {
   return html;
 }
 
-const EN_GUARD = `<script>
+function langGuard(lang: "en" | "it"): string {
+  const prefix = `/_${lang}`;
+  return `<script>
 (function () {
   var path = location.pathname;
-  if (path === "/_en" || path.indexOf("/_en/") === 0) {
-    var rest = path === "/_en" ? "/" : path.slice(4);
+  if (path === "${prefix}" || path.indexOf("${prefix}/") === 0) {
+    var rest = path === "${prefix}" ? "/" : path.slice(${prefix.length});
     var search = location.search ? location.search + "&" : "?";
-    location.replace(rest + search + "lang=en");
+    location.replace(rest + search + "lang=${lang}");
   }
 })();
 </script>`;
+}
 
-function applyRender(shell: string, rendered: string, pathname: string, lang: "fr" | "en"): string {
+function applyRender(shell: string, rendered: string, pathname: string, lang: "fr" | "en" | "it"): string {
   const { head, body } = splitPrelude(rendered);
   const hoisted = head.replace(/hrefLang=/g, "hreflang=");
   let html = stripDefaultSeo(shell);
@@ -212,7 +216,7 @@ function applyRender(shell: string, rendered: string, pathname: string, lang: "f
     throw new Error(`Pas de #root dans la coquille de ${pathname}`);
   }
   html = html.replace('<div id="root"></div>', `<div id="root">${body}</div>`);
-  const headInsert = `${lang === "en" ? EN_GUARD : ""}${hoisted}`;
+  const headInsert = `${lang !== "fr" ? langGuard(lang) : ""}${hoisted}`;
   html = html.replace("</head>", `${headInsert}</head>`);
   if (!(pathname === "/" && lang === "fr")) html = removeLoadingShell(html);
   return html;
@@ -243,7 +247,7 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  console.log(`Prerendu de ${paths.length} routes, deux langues.`);
+  console.log(`Prerendu de ${paths.length} routes, trois langues.`);
   const shells = new Map<string, string>();
   for (const pathname of paths) {
     const file = shellPath(pathname, "fr");
@@ -261,7 +265,7 @@ async function main(): Promise<void> {
   );
   writeFileSync(join(DIST, "404.html"), notFound);
 
-  const langs = ["fr", "en"] as const;
+  const langs = ["fr", "en", "it"] as const;
   const failures: string[] = [];
   let done = 0;
 
@@ -285,8 +289,8 @@ async function main(): Promise<void> {
         failures.push(`${lang} ${pathname} : ${message}`);
       }
       done += 1;
-      if (done % 25 === 0 || done === paths.length * 2) {
-        console.log(`  ${done}/${paths.length * 2}`);
+      if (done % 25 === 0 || done === paths.length * langs.length) {
+        console.log(`  ${done}/${paths.length * langs.length}`);
       }
     }
   }
@@ -296,7 +300,7 @@ async function main(): Promise<void> {
     for (const line of failures.slice(0, 40)) console.error(`  ${line}`);
     process.exit(1);
   }
-  console.log(`HTML pret pour ${paths.length * 2} documents.`);
+  console.log(`HTML pret pour ${paths.length * langs.length} documents.`);
 }
 
 await main();

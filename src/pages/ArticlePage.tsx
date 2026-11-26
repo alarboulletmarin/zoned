@@ -14,7 +14,7 @@ import { useArticle, useAdjacentArticles } from "@/hooks/useArticles";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { ReadingProgress } from "@/components/domain/ReadingProgress";
 import { TableOfContents } from "@/components/domain/TableOfContents";
-import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
+import { getDateLocale, usePickLang } from "@/lib/i18n-utils";
 import { RelatedContent } from "@/components/domain/RelatedContent";
 
 /** The four kinds of pulled-out block an article can carry. */
@@ -338,7 +338,6 @@ export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation(["content", "common"]);
   const pick = usePickLang();
-  const isEn = useIsEnglish();
 
   const { article, isLoading, error } = useArticle(slug);
   const { prev, next } = useAdjacentArticles(slug);
@@ -392,7 +391,7 @@ export function ArticlePage() {
   const updatedAt = `${article.updatedAt || article.publishedAt}T08:00:00+01:00`;
 
   const updatedLabel = new Date(updatedAt).toLocaleDateString(
-    isEn ? "en-US" : "fr-FR",
+    getDateLocale(),
     { year: "numeric", month: "long", day: "numeric" },
   );
 

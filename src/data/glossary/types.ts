@@ -40,6 +40,9 @@ export interface GlossaryTerm {
   /** English term name (e.g., "Maximal Aerobic Speed") */
   termEn?: string;
 
+  /** Italian term name (e.g., "Velocità Aerobica Massimale") */
+  termIt?: string;
+
   /** Acronym or short form if applicable (e.g., "VMA", "TSS") */
   acronym?: string;
 
@@ -52,17 +55,26 @@ export interface GlossaryTerm {
   /** Short definition in English */
   shortDefinitionEn?: string;
 
+  /** Short definition in Italian */
+  shortDefinitionIt?: string;
+
   /** Full detailed definition */
   fullDefinition: string;
 
   /** Full detailed definition in English */
   fullDefinitionEn?: string;
 
+  /** Full detailed definition in Italian */
+  fullDefinitionIt?: string;
+
   /** Practical example of usage */
   example?: string;
 
   /** Practical example in English */
   exampleEn?: string;
+
+  /** Practical example in Italian */
+  exampleIt?: string;
 
   /** Formula or calculation if applicable */
   formula?: string;
@@ -90,10 +102,14 @@ export interface GlossaryCategoryInfo {
   label: string;
   /** Display label in English */
   labelEn: string;
+  /** Display label in Italian */
+  labelIt?: string;
   /** Short description */
   description: string;
   /** Short description in English */
   descriptionEn: string;
+  /** Short description in Italian */
+  descriptionIt?: string;
   /** Lucide icon name */
   icon: string;
 }

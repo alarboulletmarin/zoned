@@ -59,14 +59,17 @@ export interface StrengthExercise {
   id: string;                        // e.g., "EX-SQ-001"
   name: string;                      // French name
   nameEn: string;                    // English name
+  nameIt?: string;                   // Italian name
   description: string;               // French description
   descriptionEn: string;             // English description
+  descriptionIt?: string;            // Italian description
   primaryMuscles: MuscleGroup[];     // Main muscles targeted
   secondaryMuscles: MuscleGroup[];   // Supporting muscles
   equipment: StrengthEquipment[];    // Required equipment
   isUnilateral: boolean;             // True = per side
   formCues: string[];                // French form cues (3-5 bullet points)
   formCuesEn: string[];              // English form cues
+  formCuesIt?: string[];             // Italian form cues
   tempo?: ExerciseTempo;             // Optional tempo prescription
   regressionId?: string;             // Easier variant exercise ID
   progressionId?: string;            // Harder variant exercise ID
@@ -82,6 +85,7 @@ export interface StrengthBlock {
   intensity: StrengthIntensity;
   notes?: string;                    // French notes
   notesEn?: string;                  // English notes
+  notesIt?: string;                  // Italian notes
   percentRM?: number;                // Optional % of 1RM for advanced users
   rpe?: number;                      // RPE target (1-10)
   supersetGroup?: string;            // "A", "B" etc. for supersets
@@ -93,8 +97,10 @@ export interface StrengthWorkoutTemplate {
   kind: "strength";                  // Discriminator for union type
   name: string;
   nameEn: string;
+  nameIt?: string;
   description: string;
   descriptionEn: string;
+  descriptionIt?: string;
   category: StrengthCategory;
   difficulty: Difficulty;
   typicalDuration: DurationRange;
@@ -106,8 +112,10 @@ export interface StrengthWorkoutTemplate {
   intensity: StrengthIntensity;      // Overall session intensity
   coachingTips: string[];
   coachingTipsEn: string[];
+  coachingTipsIt?: string[];
   commonMistakes: string[];
   commonMistakesEn: string[];
+  commonMistakesIt?: string[];
   variationIds: string[];
   suitablePhases: TrainingPhase[];   // Which plan phases this fits
   weeklyFrequencyMax: number;

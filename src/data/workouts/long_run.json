@@ -5,8 +5,10 @@
       "id": "SL-001",
       "name": "Sortie longue progressive",
       "nameEn": "Progressive Long Run",
+      "nameIt": "Lungo progressivo",
       "description": "Sortie longue avec finish progressif. Première moitié en Z2, accélération vers Z3 sur la deuxième moitié.",
       "descriptionEn": "Long run with progressive finish. First half in Z2, accelerating to Z3 in the second half.",
+      "descriptionIt": "Lungo con finale in progressione. Prima metà in Z2, accelerazione verso Z3 nella seconda metà.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -24,6 +26,7 @@
         {
           "description": "Début très lent",
           "descriptionEn": "Very slow start",
+          "descriptionIt": "Inizio molto lento",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -34,6 +37,7 @@
           "kind": "segment",
           "description": "Début très lent",
           "descriptionEn": "Very slow start",
+          "descriptionIt": "Inizio molto lento",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -44,6 +48,7 @@
         {
           "description": "Course en Z2 confortable",
           "descriptionEn": "Comfortable Z2 running",
+          "descriptionIt": "Corsa in Z2 comoda",
           "durationMin": 50,
           "zone": "Z2",
           "intensityType": "E"
@@ -51,6 +56,7 @@
         {
           "description": "Accélération progressive vers Z3",
           "descriptionEn": "Progressive acceleration to Z3",
+          "descriptionIt": "Accelerazione progressiva verso Z3",
           "durationMin": 30,
           "zone": "Z2-Z3",
           "intensityType": "M"
@@ -61,6 +67,7 @@
           "kind": "segment",
           "description": "Course en Z2 confortable",
           "descriptionEn": "Comfortable Z2 running",
+          "descriptionIt": "Corsa in Z2 comoda",
           "durationSec": 3000,
           "zone": "Z2",
           "intensityType": "E",
@@ -70,6 +77,7 @@
           "kind": "segment",
           "description": "Accélération progressive vers Z3",
           "descriptionEn": "Progressive acceleration to Z3",
+          "descriptionIt": "Accelerazione progressiva verso Z3",
           "durationSec": 1800,
           "zone": "Z2-Z3",
           "intensityType": "M",
@@ -80,6 +88,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -90,6 +99,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -106,6 +116,11 @@
         "The final acceleration should be gradual",
         "Choose a familiar route"
       ],
+      "coachingTipsIt": [
+        "Porta acqua e gel se > 90 min",
+        "L'accelerazione finale deve essere graduale",
+        "Scegli un percorso conosciuto"
+      ],
       "commonMistakes": [
         "Partir trop vite et exploser",
         "Ne pas s'alimenter sur les longues sorties"
@@ -113,6 +128,10 @@
       "commonMistakesEn": [
         "Starting too fast and blowing up",
         "Not fueling on long runs"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte e scoppiare",
+        "Non integrare nei lunghi"
       ],
       "variationIds": [
         "SL-002",
@@ -142,8 +161,10 @@
       "id": "SL-002",
       "name": "Sortie longue allure spécifique",
       "nameEn": "Race-Specific Long Run",
+      "nameIt": "Lungo a ritmo specifico",
       "description": "Sortie longue avec blocs à allure marathon. Développe l'endurance spécifique.",
       "descriptionEn": "Long run with marathon pace blocks. Develops race-specific endurance.",
+      "descriptionIt": "Lungo con blocchi a ritmo maratona. Sviluppa la resistenza specifica.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
@@ -161,6 +182,7 @@
         {
           "description": "Footing tranquille",
           "descriptionEn": "Easy jog",
+          "descriptionIt": "Corsa facile",
           "durationMin": 20,
           "zone": "Z2",
           "intensityType": "E"
@@ -171,6 +193,7 @@
           "kind": "segment",
           "description": "Footing tranquille",
           "descriptionEn": "Easy jog",
+          "descriptionIt": "Corsa facile",
           "durationSec": 1200,
           "zone": "Z2",
           "intensityType": "E",
@@ -181,6 +204,7 @@
         {
           "description": "Course Z2",
           "descriptionEn": "Z2 running",
+          "descriptionIt": "Corsa Z2",
           "durationMin": 30,
           "zone": "Z2",
           "intensityType": "E"
@@ -188,6 +212,7 @@
         {
           "description": "Bloc allure marathon",
           "descriptionEn": "Marathon pace block",
+          "descriptionIt": "Blocco ritmo maratona",
           "durationMin": 30,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -196,6 +221,7 @@
         {
           "description": "Retour en Z2",
           "descriptionEn": "Return to Z2",
+          "descriptionIt": "Ritorno in Z2",
           "durationMin": 20,
           "zone": "Z2",
           "intensityType": "E"
@@ -206,6 +232,7 @@
           "kind": "segment",
           "description": "Course Z2",
           "descriptionEn": "Z2 running",
+          "descriptionIt": "Corsa Z2",
           "durationSec": 1800,
           "zone": "Z2",
           "intensityType": "E",
@@ -215,6 +242,7 @@
           "kind": "segment",
           "description": "Bloc allure marathon",
           "descriptionEn": "Marathon pace block",
+          "descriptionIt": "Blocco ritmo maratona",
           "durationSec": 1800,
           "zone": "Z3",
           "intensityType": "M",
@@ -224,6 +252,7 @@
           "kind": "segment",
           "description": "Retour en Z2",
           "descriptionEn": "Return to Z2",
+          "descriptionIt": "Ritorno in Z2",
           "durationSec": 1200,
           "zone": "Z2",
           "intensityType": "E",
@@ -234,6 +263,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa lenta di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -244,6 +274,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa lenta di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -260,6 +291,11 @@
         "Practice your fueling strategy",
         "Finish tired but not destroyed"
       ],
+      "coachingTipsIt": [
+        "Il blocco a ritmo gara deve restare controllato",
+        "Prova la tua strategia di integrazione",
+        "Termina stanco ma non distrutto"
+      ],
       "commonMistakes": [
         "Courir les blocs spécifiques trop vite",
         "Négliger l'hydratation"
@@ -267,6 +303,10 @@
       "commonMistakesEn": [
         "Running specific blocks too fast",
         "Neglecting hydration"
+      ],
+      "commonMistakesIt": [
+        "Correre i blocchi specifici troppo forte",
+        "Trascurare l'idratazione"
       ],
       "variationIds": [
         "SL-001",
@@ -295,8 +335,10 @@
       "id": "SL-003",
       "name": "Sortie longue endurance pure",
       "nameEn": "Pure Endurance Long Run",
+      "nameIt": "Lungo di resistenza pura",
       "description": "Sortie longue classique en Z2 pure. Construction de la base aérobie.",
       "descriptionEn": "Classic long run in pure Z2. Building aerobic base.",
+      "descriptionIt": "Lungo classico in Z2 pura. Costruzione della base aerobica.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -314,6 +356,7 @@
         {
           "description": "Début très progressif",
           "descriptionEn": "Very gradual start",
+          "descriptionIt": "Inizio molto progressivo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -324,6 +367,7 @@
           "kind": "segment",
           "description": "Début très progressif",
           "descriptionEn": "Very gradual start",
+          "descriptionIt": "Inizio molto progressivo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -334,6 +378,7 @@
         {
           "description": "Course continue Z2",
           "descriptionEn": "Continuous Z2 running",
+          "descriptionIt": "Corsa continua Z2",
           "durationMin": 70,
           "zone": "Z2",
           "intensityType": "E"
@@ -344,6 +389,7 @@
           "kind": "segment",
           "description": "Course continue Z2",
           "descriptionEn": "Continuous Z2 running",
+          "descriptionIt": "Corsa continua Z2",
           "durationSec": 4200,
           "zone": "Z2",
           "intensityType": "E",
@@ -354,6 +400,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -364,6 +411,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -380,6 +428,11 @@
         "Walk if needed to complete",
         "Hydrate regularly"
       ],
+      "coachingTipsIt": [
+        "Nessun vincolo di ritmo, solo durata",
+        "Cammina se necessario per completare",
+        "Idratati regolarmente"
+      ],
       "commonMistakes": [
         "Vouloir aller trop vite",
         "Augmenter la durée trop rapidement"
@@ -387,6 +440,10 @@
       "commonMistakesEn": [
         "Trying to go too fast",
         "Increasing duration too quickly"
+      ],
+      "commonMistakesIt": [
+        "Voler andare troppo forte",
+        "Aumentare la durata troppo rapidamente"
       ],
       "variationIds": [
         "SL-001"
@@ -414,8 +471,10 @@
       "id": "SL-004",
       "name": "Sortie longue semi-marathon",
       "nameEn": "Half-Marathon Long Run",
+      "nameIt": "Lungo mezza maratona",
       "description": "Sortie longue avec blocs à allure semi. Préparation spécifique semi-marathon.",
       "descriptionEn": "Long run with half-marathon pace blocks. Half-marathon specific preparation.",
+      "descriptionIt": "Lungo con blocchi a ritmo mezza maratona. Preparazione specifica per la mezza.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
@@ -433,6 +492,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -443,6 +503,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -453,6 +514,7 @@
         {
           "description": "Course Z2",
           "descriptionEn": "Z2 running",
+          "descriptionIt": "Corsa Z2",
           "durationMin": 25,
           "zone": "Z2",
           "intensityType": "E"
@@ -460,6 +522,7 @@
         {
           "description": "Bloc allure semi",
           "descriptionEn": "Half-marathon pace block",
+          "descriptionIt": "Blocco ritmo mezza maratona",
           "durationMin": 25,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
@@ -468,6 +531,7 @@
         {
           "description": "Retour Z2",
           "descriptionEn": "Return to Z2",
+          "descriptionIt": "Ritorno Z2",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -478,6 +542,7 @@
           "kind": "segment",
           "description": "Course Z2",
           "descriptionEn": "Z2 running",
+          "descriptionIt": "Corsa Z2",
           "durationSec": 1500,
           "zone": "Z2",
           "intensityType": "E",
@@ -487,6 +552,7 @@
           "kind": "segment",
           "description": "Bloc allure semi",
           "descriptionEn": "Half-marathon pace block",
+          "descriptionIt": "Blocco ritmo mezza maratona",
           "durationSec": 1500,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -496,6 +562,7 @@
           "kind": "segment",
           "description": "Retour Z2",
           "descriptionEn": "Return to Z2",
+          "descriptionIt": "Ritorno Z2",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -506,6 +573,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa lenta di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -516,6 +584,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa lenta di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -532,6 +601,11 @@
         "Key session for half-marathon prep",
         "Hydration is important"
       ],
+      "coachingTipsIt": [
+        "Ritmo mezza = tra tempo e soglia",
+        "Seduta chiave per preparazione mezza maratona",
+        "Idratazione importante"
+      ],
       "commonMistakes": [
         "Confondre allure semi et 10K",
         "Ne pas adapter la nutrition"
@@ -539,6 +613,10 @@
       "commonMistakesEn": [
         "Confusing half-marathon and 10K pace",
         "Not adapting nutrition"
+      ],
+      "commonMistakesIt": [
+        "Confondere ritmo mezza e ritmo 10K",
+        "Non adattare l'alimentazione"
       ],
       "variationIds": [
         "SL-002"
@@ -566,8 +644,10 @@
       "id": "SL-005",
       "name": "Sortie longue vallonnée",
       "nameEn": "Hilly Long Run",
+      "nameIt": "Lungo collinare",
       "description": "Sortie longue sur terrain vallonné. Développe force et endurance.",
       "descriptionEn": "Long run on hilly terrain. Develops strength and endurance.",
+      "descriptionIt": "Lungo su terreno collinare. Sviluppa forza e resistenza.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -585,6 +665,7 @@
         {
           "description": "Début sur terrain facile",
           "descriptionEn": "Start on easy terrain",
+          "descriptionIt": "Inizio su terreno facile",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -595,6 +676,7 @@
           "kind": "segment",
           "description": "Début sur terrain facile",
           "descriptionEn": "Start on easy terrain",
+          "descriptionIt": "Inizio su terreno facile",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -605,6 +687,7 @@
         {
           "description": "Course sur terrain vallonné, effort Z2",
           "descriptionEn": "Running on hilly terrain, Z2 effort",
+          "descriptionIt": "Corsa su terreno collinare, sforzo Z2",
           "durationMin": 75,
           "zone": "Z2",
           "intensityType": "E",
@@ -618,6 +701,7 @@
           "kind": "segment",
           "description": "Course sur terrain vallonné, effort Z2",
           "descriptionEn": "Running on hilly terrain, Z2 effort",
+          "descriptionIt": "Corsa su terreno collinare, sforzo Z2",
           "durationSec": 4500,
           "zone": "Z2",
           "intensityType": "E",
@@ -631,6 +715,7 @@
         {
           "description": "Retour tranquille",
           "descriptionEn": "Easy return",
+          "descriptionIt": "Ritorno tranquillo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -641,6 +726,7 @@
           "kind": "segment",
           "description": "Retour tranquille",
           "descriptionEn": "Easy return",
+          "descriptionIt": "Ritorno tranquillo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -657,6 +743,11 @@
         "Walk steep climbs",
         "Plan for more time than usual"
       ],
+      "coachingTipsIt": [
+        "Gestisci lo sforzo, non il ritmo",
+        "Cammina nelle salite ripide",
+        "Prevedi più tempo del solito"
+      ],
       "commonMistakes": [
         "Attaquer les montées trop fort",
         "Sous-estimer le temps nécessaire"
@@ -664,6 +755,10 @@
       "commonMistakesEn": [
         "Attacking climbs too hard",
         "Underestimating time needed"
+      ],
+      "commonMistakesIt": [
+        "Attaccare le salite troppo forte",
+        "Sottovalutare il tempo necessario"
       ],
       "variationIds": [
         "SL-001",
@@ -692,8 +787,10 @@
       "id": "SL-006",
       "name": "Sortie longue trail",
       "nameEn": "Trail Long Run",
+      "nameIt": "Lungo trail",
       "description": "Sortie longue sur sentiers. Préparation aux courses nature.",
       "descriptionEn": "Long run on trails. Preparation for trail races.",
+      "descriptionIt": "Lungo su sentieri. Preparazione alle gare trail.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -711,6 +808,7 @@
         {
           "description": "Marche puis footing sur chemin",
           "descriptionEn": "Walk then jog on path",
+          "descriptionIt": "Camminata poi corsa su sentiero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -721,6 +819,7 @@
           "kind": "segment",
           "description": "Marche puis footing sur chemin",
           "descriptionEn": "Walk then jog on path",
+          "descriptionIt": "Camminata poi corsa su sentiero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -731,6 +830,7 @@
         {
           "description": "Course sur sentiers, effort Z2",
           "descriptionEn": "Trail running, Z2 effort",
+          "descriptionIt": "Corsa su sentieri, sforzo Z2",
           "durationMin": 90,
           "zone": "Z2",
           "intensityType": "E",
@@ -744,6 +844,7 @@
           "kind": "segment",
           "description": "Course sur sentiers, effort Z2",
           "descriptionEn": "Trail running, Z2 effort",
+          "descriptionIt": "Corsa su sentieri, sforzo Z2",
           "durationSec": 5400,
           "zone": "Z2",
           "intensityType": "E",
@@ -757,6 +858,7 @@
         {
           "description": "Retour calme",
           "descriptionEn": "Calm return",
+          "descriptionIt": "Ritorno calmo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -767,6 +869,7 @@
           "kind": "segment",
           "description": "Retour calme",
           "descriptionEn": "Calm return",
+          "descriptionIt": "Ritorno calmo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -783,6 +886,11 @@
         "Bring water and nutrition",
         "Plan extra time for the unexpected"
       ],
+      "coachingTipsIt": [
+        "Cammina nelle salite tecniche",
+        "Porta acqua e rifornimenti",
+        "Prevedi un margine per gli imprevisti"
+      ],
       "commonMistakes": [
         "Sous-estimer les difficultés du terrain",
         "Ne pas adapter l'équipement"
@@ -790,6 +898,10 @@
       "commonMistakesEn": [
         "Underestimating terrain difficulty",
         "Not adapting equipment"
+      ],
+      "commonMistakesIt": [
+        "Sottovalutare le difficoltà del terreno",
+        "Non adattare l'attrezzatura"
       ],
       "variationIds": [
         "SL-005"
@@ -817,8 +929,10 @@
       "id": "SL-007",
       "name": "Sortie longue avec finish tempo",
       "nameEn": "Long Run with Tempo Finish",
+      "nameIt": "Lungo con finale tempo",
       "description": "Sortie longue terminant par 20 minutes à allure tempo.",
       "descriptionEn": "Long run finishing with 20 minutes at tempo pace.",
+      "descriptionIt": "Lungo che termina con 20 minuti a ritmo tempo.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
@@ -836,6 +950,7 @@
         {
           "description": "Début très progressif",
           "descriptionEn": "Very gradual start",
+          "descriptionIt": "Inizio molto progressivo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -846,6 +961,7 @@
           "kind": "segment",
           "description": "Début très progressif",
           "descriptionEn": "Very gradual start",
+          "descriptionIt": "Inizio molto progressivo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -856,6 +972,7 @@
         {
           "description": "Course Z2",
           "descriptionEn": "Z2 running",
+          "descriptionIt": "Corsa Z2",
           "durationMin": 60,
           "zone": "Z2",
           "intensityType": "E"
@@ -863,6 +980,7 @@
         {
           "description": "Tempo final",
           "descriptionEn": "Final tempo",
+          "descriptionIt": "Tempo finale",
           "durationMin": 20,
           "zone": "Z3",
           "intensityType": "M"
@@ -873,6 +991,7 @@
           "kind": "segment",
           "description": "Course Z2",
           "descriptionEn": "Z2 running",
+          "descriptionIt": "Corsa Z2",
           "durationSec": 3600,
           "zone": "Z2",
           "intensityType": "E",
@@ -882,6 +1001,7 @@
           "kind": "segment",
           "description": "Tempo final",
           "descriptionEn": "Final tempo",
+          "descriptionIt": "Tempo finale",
           "durationSec": 1200,
           "zone": "Z3",
           "intensityType": "M",
@@ -892,6 +1012,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -902,6 +1023,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -918,6 +1040,11 @@
         "Simulates marathon finish",
         "Mentally demanding session"
       ],
+      "coachingTipsIt": [
+        "Il blocco tempo arriva su gambe stanche",
+        "Simula il finale di maratona",
+        "Seduta mentalmente impegnativa"
+      ],
       "commonMistakes": [
         "Courir Z2 trop vite",
         "Craquer sur le tempo final"
@@ -925,6 +1052,10 @@
       "commonMistakesEn": [
         "Running Z2 too fast",
         "Cracking on the final tempo"
+      ],
+      "commonMistakesIt": [
+        "Correre la Z2 troppo forte",
+        "Cedere nel blocco tempo finale"
       ],
       "variationIds": [
         "SL-001",
@@ -953,8 +1084,10 @@
       "id": "SL-008",
       "name": "Sortie longue débutant",
       "nameEn": "Beginner Long Run",
+      "nameIt": "Lungo principianti",
       "description": "Première sortie longue pour débutant. Durée modérée, rythme lent.",
       "descriptionEn": "First long run for beginners. Moderate duration, slow pace.",
+      "descriptionIt": "Primo lungo per principianti. Durata moderata, ritmo lento.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -972,6 +1105,7 @@
         {
           "description": "Marche puis footing lent",
           "descriptionEn": "Walk then slow jog",
+          "descriptionIt": "Camminata poi corsa lenta",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -982,6 +1116,7 @@
           "kind": "segment",
           "description": "Marche puis footing lent",
           "descriptionEn": "Walk then slow jog",
+          "descriptionIt": "Camminata poi corsa lenta",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -992,6 +1127,7 @@
         {
           "description": "Footing Z1-Z2, pauses marche autorisées",
           "descriptionEn": "Z1-Z2 jog, walk breaks allowed",
+          "descriptionIt": "Corsa Z1-Z2, pause camminata consentite",
           "durationMin": 70,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1002,6 +1138,7 @@
           "kind": "segment",
           "description": "Footing Z1-Z2, pauses marche autorisées",
           "descriptionEn": "Z1-Z2 jog, walk breaks allowed",
+          "descriptionIt": "Corsa Z1-Z2, pause camminata consentite",
           "durationSec": 4200,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1012,6 +1149,7 @@
         {
           "description": "Marche et étirements",
           "descriptionEn": "Walk and stretching",
+          "descriptionIt": "Camminata e stretching",
           "durationMin": 10
         }
       ],
@@ -1020,6 +1158,7 @@
           "kind": "segment",
           "description": "Marche et étirements",
           "descriptionEn": "Walk and stretching",
+          "descriptionIt": "Camminata e stretching",
           "durationSec": 600,
           "role": "effort"
         }
@@ -1034,6 +1173,11 @@
         "Walk when you need to",
         "Increase by 5-10min each week"
       ],
+      "coachingTipsIt": [
+        "L'obiettivo è la durata, non la velocità",
+        "Cammina quando ne hai bisogno",
+        "Aumenta di 5-10min ogni settimana"
+      ],
       "commonMistakes": [
         "Vouloir courir sans pause",
         "Augmenter trop vite la durée"
@@ -1041,6 +1185,10 @@
       "commonMistakesEn": [
         "Wanting to run without breaks",
         "Increasing duration too quickly"
+      ],
+      "commonMistakesIt": [
+        "Voler correre senza pause",
+        "Aumentare la durata troppo velocemente"
       ],
       "variationIds": [
         "SL-003"
@@ -1066,8 +1214,10 @@
       "id": "SL-009",
       "name": "Sortie longue à jeun",
       "nameEn": "Fasted Long Run",
+      "nameIt": "Lungo a digiuno",
       "description": "Sortie longue matinale à jeun. Améliore l'oxydation des graisses.",
       "descriptionEn": "Morning long run in fasted state. Improves fat oxidation.",
+      "descriptionIt": "Lungo mattutino a digiuno. Migliora l'ossidazione dei grassi.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -1085,6 +1235,7 @@
         {
           "description": "Démarrage très lent",
           "descriptionEn": "Very slow start",
+          "descriptionIt": "Partenza molto lenta",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -1095,6 +1246,7 @@
           "kind": "segment",
           "description": "Démarrage très lent",
           "descriptionEn": "Very slow start",
+          "descriptionIt": "Partenza molto lenta",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -1105,6 +1257,7 @@
         {
           "description": "Course Z1-Z2 bas",
           "descriptionEn": "Low Z1-Z2 running",
+          "descriptionIt": "Corsa in Z1-Z2 bassa",
           "durationMin": 55,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1115,6 +1268,7 @@
           "kind": "segment",
           "description": "Course Z1-Z2 bas",
           "descriptionEn": "Low Z1-Z2 running",
+          "descriptionIt": "Corsa in Z1-Z2 bassa",
           "durationSec": 3300,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1125,6 +1279,7 @@
         {
           "description": "Retour calme",
           "descriptionEn": "Calm return",
+          "descriptionIt": "Ritorno calmo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1135,6 +1290,7 @@
           "kind": "segment",
           "description": "Retour calme",
           "descriptionEn": "Calm return",
+          "descriptionIt": "Ritorno calmo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1151,6 +1307,11 @@
         "Bring an emergency gel",
         "Hydrate before leaving"
       ],
+      "coachingTipsIt": [
+        "Massimo 90 min a digiuno",
+        "Porta un gel di emergenza",
+        "Idratati prima di partire"
+      ],
       "commonMistakes": [
         "Dépasser 90 min à jeun",
         "Courir trop vite sans réserves"
@@ -1158,6 +1319,10 @@
       "commonMistakesEn": [
         "Exceeding 90 min fasted",
         "Running too fast without fuel reserves"
+      ],
+      "commonMistakesIt": [
+        "Superare i 90 min a digiuno",
+        "Correre troppo forte senza riserve"
       ],
       "variationIds": [
         "SL-003"
@@ -1184,8 +1349,10 @@
       "id": "SL-010",
       "name": "Sortie longue simulation course",
       "nameEn": "Race Simulation Long Run",
+      "nameIt": "Lungo simulazione gara",
       "description": "Sortie reproduisant les conditions de course : ravitaillement, équipement, nutrition.",
       "descriptionEn": "Run replicating race conditions: fueling, gear, nutrition.",
+      "descriptionIt": "Uscita che riproduce le condizioni di gara: rifornimenti, attrezzatura, nutrizione.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
@@ -1203,6 +1370,7 @@
         {
           "description": "Échauffement type jour de course",
           "descriptionEn": "Race-day style warm-up",
+          "descriptionIt": "Riscaldamento stile giorno di gara",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1213,6 +1381,7 @@
           "kind": "segment",
           "description": "Échauffement type jour de course",
           "descriptionEn": "Race-day style warm-up",
+          "descriptionIt": "Riscaldamento stile giorno di gara",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1223,6 +1392,7 @@
         {
           "description": "Course à allure marathon avec ravitos tous les 5km",
           "descriptionEn": "Marathon pace running with aid stations every 5km",
+          "descriptionIt": "Corsa a ritmo maratona con ristori ogni 5km",
           "durationMin": 100,
           "zone": "Z3",
           "pace": "Allure Marathon",
@@ -1234,6 +1404,7 @@
           "kind": "segment",
           "description": "Course à allure marathon avec ravitos tous les 5km",
           "descriptionEn": "Marathon pace running with aid stations every 5km",
+          "descriptionIt": "Corsa a ritmo maratona con ristori ogni 5km",
           "durationSec": 6000,
           "zone": "Z3",
           "intensityType": "M",
@@ -1244,6 +1415,7 @@
         {
           "description": "Récupération active",
           "descriptionEn": "Active recovery",
+          "descriptionIt": "Recupero attivo",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -1254,6 +1426,7 @@
           "kind": "segment",
           "description": "Récupération active",
           "descriptionEn": "Active recovery",
+          "descriptionIt": "Recupero attivo",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -1270,6 +1443,11 @@
         "Practice fueling while running",
         "Last dress rehearsal before race"
       ],
+      "coachingTipsIt": [
+        "Testa la tua attrezzatura da gara",
+        "Esercitati a rifornirti correndo",
+        "Ultima prova generale prima della gara"
+      ],
       "commonMistakes": [
         "Tester de nouvelles choses le jour J",
         "Courir plus vite que l'allure cible"
@@ -1277,6 +1455,10 @@
       "commonMistakesEn": [
         "Testing new things on race day",
         "Running faster than target pace"
+      ],
+      "commonMistakesIt": [
+        "Provare cose nuove il giorno della gara",
+        "Correre più forte del ritmo obiettivo"
       ],
       "variationIds": [
         "SL-002"
@@ -1303,8 +1485,10 @@
       "id": "SL-011",
       "name": "Back-to-back jour 2",
       "nameEn": "Back-to-Back Day 2",
+      "nameIt": "Back-to-back giorno 2",
       "description": "Sortie longue le lendemain d'une séance dure. Simule la fatigue marathon.",
       "descriptionEn": "Long run the day after a hard session. Simulates marathon fatigue.",
+      "descriptionIt": "Lungo il giorno dopo una seduta dura. Simula la fatica da maratona.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -1322,6 +1506,7 @@
         {
           "description": "Début très lent",
           "descriptionEn": "Very slow start",
+          "descriptionIt": "Inizio molto lento",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -1332,6 +1517,7 @@
           "kind": "segment",
           "description": "Début très lent",
           "descriptionEn": "Very slow start",
+          "descriptionIt": "Inizio molto lento",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -1342,6 +1528,7 @@
         {
           "description": "Course Z2 sur jambes fatiguées",
           "descriptionEn": "Z2 running on tired legs",
+          "descriptionIt": "Corsa Z2 su gambe stanche",
           "durationMin": 70,
           "zone": "Z2",
           "intensityType": "E"
@@ -1352,6 +1539,7 @@
           "kind": "segment",
           "description": "Course Z2 sur jambes fatiguées",
           "descriptionEn": "Z2 running on tired legs",
+          "descriptionIt": "Corsa Z2 su gambe stanche",
           "durationSec": 4200,
           "zone": "Z2",
           "intensityType": "E",
@@ -1362,6 +1550,7 @@
         {
           "description": "Retour calme",
           "descriptionEn": "Calm return",
+          "descriptionIt": "Ritorno calmo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1372,6 +1561,7 @@
           "kind": "segment",
           "description": "Retour calme",
           "descriptionEn": "Calm return",
+          "descriptionIt": "Ritorno calmo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1388,6 +1578,11 @@
         "Reserved for experienced runners",
         "Significant recovery needed after"
       ],
+      "coachingTipsIt": [
+        "Lo scopo è correre su gambe stanche",
+        "Riservato a runner esperti",
+        "Recupero importante necessario dopo"
+      ],
       "commonMistakes": [
         "Sous-estimer la fatigue",
         "Faire trop de back-to-back"
@@ -1395,6 +1590,10 @@
       "commonMistakesEn": [
         "Underestimating fatigue",
         "Doing too many back-to-backs"
+      ],
+      "commonMistakesIt": [
+        "Sottovalutare la fatica",
+        "Fare troppi back-to-back"
       ],
       "variationIds": [
         "SL-001"
@@ -1421,8 +1620,10 @@
       "id": "SL-012",
       "name": "Sortie longue pré-compétition",
       "nameEn": "Pre-Race Long Run",
+      "nameIt": "Lungo pre-gara",
       "description": "Dernière sortie longue avant la course. Durée réduite, confiance boostée.",
       "descriptionEn": "Last long run before the race. Reduced duration, confidence boosted.",
+      "descriptionIt": "Ultimo lungo prima della gara. Durata ridotta, fiducia al massimo.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -1440,6 +1641,7 @@
         {
           "description": "Début progressif",
           "descriptionEn": "Gradual start",
+          "descriptionIt": "Inizio progressivo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1450,6 +1652,7 @@
           "kind": "segment",
           "description": "Début progressif",
           "descriptionEn": "Gradual start",
+          "descriptionIt": "Inizio progressivo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1460,6 +1663,7 @@
         {
           "description": "Course Z2 avec 10min à allure course",
           "descriptionEn": "Z2 running with 10min at race pace",
+          "descriptionIt": "Corsa Z2 con 10min a ritmo gara",
           "durationMin": 45,
           "zone": "Z2",
           "intensityType": "E"
@@ -1470,6 +1674,7 @@
           "kind": "segment",
           "description": "Course Z2 avec 10min à allure course",
           "descriptionEn": "Z2 running with 10min at race pace",
+          "descriptionIt": "Corsa Z2 con 10min a ritmo gara",
           "durationSec": 2700,
           "zone": "Z2",
           "intensityType": "E",
@@ -1480,6 +1685,7 @@
         {
           "description": "Retour tranquille",
           "descriptionEn": "Easy return",
+          "descriptionIt": "Ritorno tranquillo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1490,6 +1696,7 @@
           "kind": "segment",
           "description": "Retour tranquille",
           "descriptionEn": "Easy return",
+          "descriptionIt": "Ritorno tranquillo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1506,6 +1713,11 @@
         "Shorter than previous long runs",
         "Finish confident and fresh"
       ],
+      "coachingTipsIt": [
+        "Circa 2 settimane prima della gara",
+        "Più corto dei lunghi precedenti",
+        "Termina fiducioso e fresco"
+      ],
       "commonMistakes": [
         "Faire une vraie sortie longue trop près de la course",
         "Vouloir compenser le volume réduit"
@@ -1513,6 +1725,10 @@
       "commonMistakesEn": [
         "Doing a full long run too close to race",
         "Trying to compensate for reduced volume"
+      ],
+      "commonMistakesIt": [
+        "Fare un lungo completo troppo vicino alla gara",
+        "Voler compensare il volume ridotto"
       ],
       "variationIds": [
         "SL-001"
@@ -1539,8 +1755,10 @@
       "id": "LR-013",
       "name": "Sortie longue débutant",
       "nameEn": "Beginner Long Run",
+      "nameIt": "Lungo principianti",
       "description": "Sortie longue accessible pour les débutants. 50 à 60 minutes en Z2 continue pour construire progressivement la base aérobie.",
       "descriptionEn": "Accessible long run for beginners. 50 to 60 minutes of continuous Z2 to progressively build aerobic base.",
+      "descriptionIt": "Lungo accessibile per principianti. Da 50 a 60 minuti in Z2 continua per costruire gradualmente la base aerobica.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -1558,6 +1776,7 @@
         {
           "description": "Marche rapide puis footing très lent",
           "descriptionEn": "Brisk walk then very slow jog",
+          "descriptionIt": "Camminata veloce poi corsa molto lenta",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1568,6 +1787,7 @@
           "kind": "segment",
           "description": "Marche rapide puis footing très lent",
           "descriptionEn": "Brisk walk then very slow jog",
+          "descriptionIt": "Camminata veloce poi corsa molto lenta",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1578,6 +1798,7 @@
         {
           "description": "Course continue en Z2, pauses marche si nécessaire",
           "descriptionEn": "Continuous Z2 run, walk breaks if needed",
+          "descriptionIt": "Corsa continua in Z2, pause camminata se necessario",
           "durationMin": 45,
           "zone": "Z2",
           "intensityType": "E"
@@ -1588,6 +1809,7 @@
           "kind": "segment",
           "description": "Course continue en Z2, pauses marche si nécessaire",
           "descriptionEn": "Continuous Z2 run, walk breaks if needed",
+          "descriptionIt": "Corsa continua in Z2, pause camminata se necessario",
           "durationSec": 2700,
           "zone": "Z2",
           "intensityType": "E",
@@ -1598,6 +1820,7 @@
         {
           "description": "Retour au calme et étirements",
           "descriptionEn": "Cool-down and stretching",
+          "descriptionIt": "Defaticamento e stretching",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1608,6 +1831,7 @@
           "kind": "segment",
           "description": "Retour au calme et étirements",
           "descriptionEn": "Cool-down and stretching",
+          "descriptionIt": "Defaticamento e stretching",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1626,6 +1850,12 @@
         "Increase by 5 to 10 minutes per week",
         "Bring water if > 45 minutes"
       ],
+      "coachingTipsIt": [
+        "L'obiettivo è la durata, non la velocità",
+        "Cammina se ne hai bisogno, è normale",
+        "Aumenta di 5-10 minuti a settimana",
+        "Porta acqua se > 45 minuti"
+      ],
       "commonMistakes": [
         "Vouloir aller trop vite dès le début",
         "Augmenter la durée de plus de 10% par semaine"
@@ -1633,6 +1863,10 @@
       "commonMistakesEn": [
         "Trying to go too fast from the start",
         "Increasing duration by more than 10% per week"
+      ],
+      "commonMistakesIt": [
+        "Voler andare troppo forte fin dall'inizio",
+        "Aumentare la durata di oltre il 10% a settimana"
       ],
       "variationIds": [
         "SL-003",
@@ -1660,8 +1894,10 @@
       "id": "LR-014",
       "name": "Sortie longue courte",
       "nameEn": "Short Long Run",
+      "nameIt": "Lungo breve",
       "description": "Version réduite de la sortie longue pour les semaines de taper ou de récupération. 40 à 50 minutes en Z2.",
       "descriptionEn": "Reduced version of the long run for taper or recovery weeks. 40 to 50 minutes in Z2.",
+      "descriptionIt": "Versione ridotta del lungo per le settimane di scarico o recupero. 40-50 minuti in Z2.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -1679,6 +1915,7 @@
         {
           "description": "Départ très progressif",
           "descriptionEn": "Very gradual start",
+          "descriptionIt": "Partenza molto progressiva",
           "durationMin": 5,
           "zone": "Z1",
           "intensityType": "E"
@@ -1689,6 +1926,7 @@
           "kind": "segment",
           "description": "Départ très progressif",
           "descriptionEn": "Very gradual start",
+          "descriptionIt": "Partenza molto progressiva",
           "durationSec": 300,
           "zone": "Z1",
           "intensityType": "E",
@@ -1699,6 +1937,7 @@
         {
           "description": "Course continue en Z2 confortable",
           "descriptionEn": "Comfortable continuous Z2 run",
+          "descriptionIt": "Corsa continua in Z2 comoda",
           "durationMin": 35,
           "zone": "Z2",
           "intensityType": "E"
@@ -1709,6 +1948,7 @@
           "kind": "segment",
           "description": "Course continue en Z2 confortable",
           "descriptionEn": "Comfortable continuous Z2 run",
+          "descriptionIt": "Corsa continua in Z2 comoda",
           "durationSec": 2100,
           "zone": "Z2",
           "intensityType": "E",
@@ -1719,6 +1959,7 @@
         {
           "description": "Retour au calme et étirements",
           "descriptionEn": "Cool-down and stretching",
+          "descriptionIt": "Defaticamento e stretching",
           "durationMin": 5,
           "zone": "Z1",
           "intensityType": "E"
@@ -1729,6 +1970,7 @@
           "kind": "segment",
           "description": "Retour au calme et étirements",
           "descriptionEn": "Cool-down and stretching",
+          "descriptionIt": "Defaticamento e stretching",
           "durationSec": 300,
           "zone": "Z1",
           "intensityType": "E",
@@ -1747,6 +1989,12 @@
         "Don't compensate by running faster",
         "Finish feeling fresh"
       ],
+      "coachingTipsIt": [
+        "Lungo alleggerito per mantenere il ritmo",
+        "Perfetto per le settimane a carico ridotto",
+        "Non compensare correndo più forte",
+        "Termina sentendoti fresco"
+      ],
       "commonMistakes": [
         "Vouloir compenser la durée réduite par plus de vitesse",
         "Confondre avec un footing classique (la SL courte reste un effort mental)"
@@ -1754,6 +2002,10 @@
       "commonMistakesEn": [
         "Wanting to compensate for reduced duration with more speed",
         "Confusing with a regular jog (the short long run is still a mental effort)"
+      ],
+      "commonMistakesIt": [
+        "Voler compensare la durata ridotta con più velocità",
+        "Confonderlo con una corsa facile classica (il lungo breve resta uno sforzo mentale)"
       ],
       "variationIds": [
         "SL-003",
@@ -1782,8 +2034,10 @@
       "id": "LR-015",
       "name": "Sortie longue durabilité (dérive cardiaque)",
       "nameEn": "Durability Long Run (Cardiac Drift Test)",
+      "nameIt": "Lungo durabilità (test deriva cardiaca)",
       "description": "90-120 minutes de course à effort constant (Z2, guidé par l'allure ou la puissance) avec monitoring de la fréquence cardiaque toutes les 30 minutes. Mesure la durabilité aérobie : la résistance à la dégradation des réponses physiologiques sur la durée.",
       "descriptionEn": "90-120 minutes of running at constant effort (Z2, guided by pace or power) with heart rate monitoring every 30 minutes. Measures aerobic 'durability': resistance to degradation of physiological responses over time.",
+      "descriptionIt": "90-120 minuti di corsa a sforzo costante (Z2, guidato da ritmo o potenza) con monitoraggio della frequenza cardiaca ogni 30 minuti. Misura la durabilità aerobica: la resistenza al degrado fisiologico nel tempo.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -1801,6 +2055,7 @@
         {
           "description": "Footing très lent",
           "descriptionEn": "Very slow jog",
+          "descriptionIt": "Corsa molto lenta",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1811,6 +2066,7 @@
           "kind": "segment",
           "description": "Footing très lent",
           "descriptionEn": "Very slow jog",
+          "descriptionIt": "Corsa molto lenta",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1821,6 +2077,7 @@
         {
           "description": "90-120min à allure Z2 constante (guidé par la pace ou la puissance, PAS par la FC). Relevez la FC à 30min, 60min, 90min et 120min. Score de durabilité = % de dérive cardiaque. Objectif : dérive < 10%. Arrêter si > 15%",
           "descriptionEn": "90-120min at constant Z2 pace (guided by pace or power, NOT by HR). Record HR at 30min, 60min, 90min and 120min. Durability score = % cardiac drift. Target: drift < 10%. Stop if > 15%",
+          "descriptionIt": "90-120min a ritmo Z2 costante (guidato da passo o potenza, NON dalla FC). Rileva la FC a 30min, 60min, 90min e 120min. Indice durabilità = % deriva cardiaca. Obiettivo: deriva < 10%. Fermati se > 15%",
           "durationMin": 105,
           "zone": "Z2",
           "intensityType": "E"
@@ -1831,6 +2088,7 @@
           "kind": "segment",
           "description": "90-120min à allure Z2 constante (guidé par la pace ou la puissance, PAS par la FC). Relevez la FC à 30min, 60min, 90min et 120min. Score de durabilité = % de dérive cardiaque. Objectif : dérive < 10%. Arrêter si > 15%",
           "descriptionEn": "90-120min at constant Z2 pace (guided by pace or power, NOT by HR). Record HR at 30min, 60min, 90min and 120min. Durability score = % cardiac drift. Target: drift < 10%. Stop if > 15%",
+          "descriptionIt": "90-120min a ritmo Z2 costante (guidato da passo o potenza, NON dalla FC). Rileva la FC a 30min, 60min, 90min e 120min. Indice durabilità = % deriva cardiaca. Obiettivo: deriva < 10%. Fermati se > 15%",
           "durationSec": 6300,
           "zone": "Z2",
           "intensityType": "E",
@@ -1841,6 +2099,7 @@
         {
           "description": "Retour au calme progressif",
           "descriptionEn": "Progressive cool-down",
+          "descriptionIt": "Defaticamento progressivo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1851,6 +2110,7 @@
           "kind": "segment",
           "description": "Retour au calme progressif",
           "descriptionEn": "Progressive cool-down",
+          "descriptionIt": "Defaticamento progressivo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1869,6 +2129,12 @@
         "Note conditions (heat, wind, terrain) that influence drift",
         "Repeat this test every 4-6 weeks to measure durability progression"
       ],
+      "coachingTipsIt": [
+        "Corri a ritmo o potenza COSTANTE, NON adattarti alla frequenza cardiaca",
+        "La deriva cardiaca è normale: +5-10% su 2 ore è un buon indice di durabilità",
+        "Annota le condizioni (caldo, vento, terreno) che influenzano la deriva",
+        "Ripeti questo test ogni 4-6 settimane per misurare i progressi della durabilità"
+      ],
       "commonMistakes": [
         "Ralentir quand la FC monte au lieu de maintenir l'allure constante",
         "Courir en Z3 dès le départ, faussant la mesure de dérive",
@@ -1878,6 +2144,11 @@
         "Slowing down when HR rises instead of maintaining constant pace",
         "Running in Z3 from the start, skewing the drift measurement",
         "Not recording HR data at the planned intervals"
+      ],
+      "commonMistakesIt": [
+        "Rallentare quando la FC sale invece di mantenere il ritmo costante",
+        "Correre in Z3 fin dall'inizio, falsando la misura della deriva",
+        "Non annotare i dati di FC agli intervalli previsti"
       ],
       "variationIds": [
         "SL-003",
@@ -1908,8 +2179,10 @@
       "id": "LR-016",
       "name": "Ultra time-on-feet (marche-course)",
       "nameEn": "Ultra Time-on-Feet (Run-Hike)",
+      "nameIt": "Ultra Time-on-Feet (corsa-camminata)",
       "description": "3-5 heures de mouvement continu en Zone 1 strict, alternant 20-30 minutes de course facile et 10-15 minutes de marche active (power hike). Pratique nutritionnelle intégrée toutes les 30-45 minutes. Développe les adaptations spécifiques à l'ultra-endurance.",
       "descriptionEn": "3-5 hours of continuous movement in strict Zone 1, alternating 20-30 minutes of easy running and 10-15 minutes of active walking (power hike). Integrated nutrition practice every 30-45 minutes. Develops ultra-endurance specific adaptations.",
+      "descriptionIt": "3-5 ore di movimento continuo in Zona 1 rigorosa, alternando 20-30 minuti di corsa facile e 10-15 minuti di camminata attiva (power hike). Pratica nutrizionale integrata ogni 30-45 minuti. Sviluppa gli adattamenti specifici dell'ultra-endurance.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
@@ -1928,6 +2201,7 @@
         {
           "description": "Marche progressive 10min",
           "descriptionEn": "Progressive walk 10min",
+          "descriptionIt": "Camminata progressiva 10min",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1938,6 +2212,7 @@
           "kind": "segment",
           "description": "Marche progressive 10min",
           "descriptionEn": "Progressive walk 10min",
+          "descriptionIt": "Camminata progressiva 10min",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1948,6 +2223,7 @@
         {
           "description": "3-5h en Z1 strict (< 70% FCmax). Alternance : 20-30min course facile / 10-15min marche active (power hike, bras actifs). Ravitaillement toutes les 30-45min (gels, barres, eau + électrolytes). Sur sentier si possible",
           "descriptionEn": "3-5h in strict Z1 (< 70% HRmax). Alternating: 20-30min easy run / 10-15min active walk (power hike, arms engaged). Fueling every 30-45min (gels, bars, water + electrolytes). On trails if possible",
+          "descriptionIt": "3-5h in Z1 rigorosa (< 70% FCmax). Alternanza: 20-30min corsa facile / 10-15min camminata attiva (power hike, braccia attive). Rifornimento ogni 30-45min (gel, barrette, acqua + elettroliti). Su sentiero se possibile",
           "durationMin": 210,
           "zone": "Z1",
           "intensityType": "E",
@@ -1961,6 +2237,7 @@
           "kind": "segment",
           "description": "3-5h en Z1 strict (< 70% FCmax). Alternance : 20-30min course facile / 10-15min marche active (power hike, bras actifs). Ravitaillement toutes les 30-45min (gels, barres, eau + électrolytes). Sur sentier si possible",
           "descriptionEn": "3-5h in strict Z1 (< 70% HRmax). Alternating: 20-30min easy run / 10-15min active walk (power hike, arms engaged). Fueling every 30-45min (gels, bars, water + electrolytes). On trails if possible",
+          "descriptionIt": "3-5h in Z1 rigorosa (< 70% FCmax). Alternanza: 20-30min corsa facile / 10-15min camminata attiva (power hike, braccia attive). Rifornimento ogni 30-45min (gel, barrette, acqua + elettroliti). Su sentiero se possibile",
           "durationSec": 12600,
           "zone": "Z1",
           "role": "effort",
@@ -1971,6 +2248,7 @@
         {
           "description": "Marche de récupération et étirements doux",
           "descriptionEn": "Recovery walk and gentle stretches",
+          "descriptionIt": "Camminata di recupero e stretching dolce",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1981,6 +2259,7 @@
           "kind": "segment",
           "description": "Marche de récupération et étirements doux",
           "descriptionEn": "Recovery walk and gentle stretches",
+          "descriptionIt": "Camminata di recupero e stretching dolce",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1999,6 +2278,12 @@
         "Test your race nutrition strategy: find what your stomach tolerates over time",
         "Stay strictly in Z1, any drift into Z2 over this duration causes disproportionate fatigue"
       ],
+      "coachingTipsIt": [
+        "L'obiettivo è il tempo sulle gambe, NON la distanza né il ritmo",
+        "La camminata attiva (power hike) è un'abilità di gara nell'ultra, allenala seriamente",
+        "Testa la tua strategia nutrizionale di gara: scopri cosa tollera il tuo stomaco nel tempo",
+        "Resta rigorosamente in Z1: qualsiasi sconfinamento in Z2 su questa durata causa una fatica sproporzionata"
+      ],
       "commonMistakes": [
         "Courir en Z2 au lieu de Z1, ce qui rend la séance trop éprouvante sur 3-5 heures",
         "Ne pas pratiquer la nutrition en course (attendre la compétition pour tester)",
@@ -2008,6 +2293,11 @@
         "Running in Z2 instead of Z1, which makes the session too demanding over 3-5 hours",
         "Not practicing race nutrition (waiting for competition to test)",
         "Considering walking phases as failure instead of an ultra strategy"
+      ],
+      "commonMistakesIt": [
+        "Correre in Z2 anziché in Z1, rendendo la seduta troppo pesante su 3-5 ore",
+        "Non provare l'alimentazione in corsa (aspettando la gara per testarla)",
+        "Considerare le fasi di camminata come un fallimento invece che una strategia da ultra"
       ],
       "variationIds": [
         "SL-006",

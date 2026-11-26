@@ -392,6 +392,198 @@ Modern tools can help:
 But the best tool remains how you feel. Learn to know yourself, note your sensations in a training log, and adjust accordingly.
 
 Supercompensation is the art of dancing with fatigue: enough stress to progress, enough rest to absorb it. Master this rhythm, and you'll progress for a long time.`,
+  contentIt: `## Il paradosso dell'allenamento
+
+Ecco una verità controintuitiva: non migliori durante le sedute di allenamento. Migliori dopo. La seduta crea soltanto lo stimolo. È durante il riposo che il tuo corpo si adatta e diventa più forte.
+
+Questo fenomeno ha un nome: la [[surcompensation]]. Capire questo meccanismo cambia radicalmente il modo di affrontare l'allenamento.
+
+---
+
+## Il ciclo della supercompensazione
+
+Immagina la tua forma fisica come il livello dell'acqua in un serbatoio. Ogni seduta di allenamento fa scendere questo livello: crei fatica, "consumi" le riserve. Poi, progressivamente, il livello risale. Ma ecco il punto chiave: non torna semplicemente al livello iniziale. Lo supera leggermente.
+
+È questa la supercompensazione: il tuo corpo non si limita a riparare i danni, si prepara a reggere meglio la prossima volta.
+
+> 📌 Non migliori durante lo sforzo, ma dopo. La seduta crea lo stress, il riposo crea l'adattamento. Senza riposo adeguato, niente crescita.
+
+### Fase 1: Lo stimolo (la seduta)
+
+Corri la tua seduta di ripetute. Le fibre muscolari subiscono micro-lesioni. Le riserve di glicogeno si esauriscono. Il sistema nervoso si affatica. Sul momento sei più debole di prima della seduta.
+
+**Cosa succede:**
+- Deplezione del glicogeno muscolare
+- Micro-danni alle fibre muscolari
+- Fatica del sistema nervoso centrale
+- Accumulo di metaboliti
+
+### Fase 2: Il recupero
+
+Nelle ore e nei giorni successivi, il corpo si mette al lavoro. Ripara i tessuti, ricostituisce le riserve, elimina gli scarti. Torni progressivamente al livello di base.
+
+**Cosa succede:**
+- Risintesi del glicogeno (picco a 24-48 ore)
+- Riparazione delle fibre muscolari
+- Eliminazione degli scarti metabolici
+- Ripristino del sistema nervoso
+
+### Fase 3: La supercompensazione
+
+È la fase magica. Il corpo, anticipando un nuovo stress, non si accontenta di tornare alla normalità. Si rinforza oltre il livello iniziale.
+
+**Cosa succede:**
+- Scorte di glicogeno superiori al livello iniziale
+- Fibre muscolari leggermente più resistenti
+- Sistema cardiovascolare più efficiente
+- Maggiore tolleranza allo stress
+
+### Fase 4: Il ritorno alla normalità
+
+> ⚠️ Lanciare un nuovo stimolo troppo presto accumula fatica senza mai raggiungere la supercompensazione. Troppo tardi, e i guadagni svaniscono. Il timing è tutto.
+
+Se non lanci un nuovo stimolo, la supercompensazione sfuma. Il corpo non mantiene all'infinito questi adattamenti "costosi". Usali o perdili.
+
+---
+
+## La finestra ottimale: il timing è tutto
+
+> 📊 La finestra di supercompensazione ottimale si colloca tra 36 e 96 ore dopo una seduta intensa, in base al tipo di sforzo e alla tua capacità di recupero.
+
+Il timing della seduta successiva è cruciale. Troppo presto, accumuli fatica. Troppo tardi, perdi la finestra di supercompensazione.
+
+### Tempi in base all'intensità
+
+| Tipo di seduta | Supercompensazione ottimale | Finestra di recupero |
+|----------------|-----------------------------|----------------------|
+| Corsa lenta facile ([[zone-1]], [[zone-2]]) | 24-36h | 12-48h |
+| Tempo/soglia ([[zone-4]]) | 48-72h | 36-96h |
+| Ripetute VO2max ([[zone-5]]) | 72-96h | 48-120h |
+| Lungo intenso | 72-96h | 48-120h |
+| Gara/competizione | 7-14 giorni | Variabile |
+
+Queste durate sono indicative e variano in base a:
+- Il tuo livello di allenamento
+- La tua età
+- La qualità del recupero (sonno, nutrizione)
+- Il carico globale di vita (stress, lavoro)
+
+### Come riconoscere la propria finestra
+
+I segnali di una supercompensazione ottimale:
+- Ti senti "fresco", pronto a correre
+- Le gambe sono leggere
+- La motivazione è alta
+- La frequenza cardiaca a riposo è normale
+- Dormi bene
+
+I segnali che è troppo presto:
+- Gambe pesanti, rigide
+- Motivazione bassa
+- FC a riposo elevata (+5-10 bpm)
+- Stanchezza generale persistente
+
+---
+
+## Gli errori che sabotano la supercompensazione
+
+### Errore 1: Concatenare le sedute dure
+
+È la trappola più comune. Fai un'ottima seduta di ripetute martedì, ti senti bene mercoledì e fai un'altra seduta intensa. Risultato: accumuli fatica senza mai raggiungere la fase di supercompensazione.
+
+**La regola d'oro:** 48-72h minimo tra due sedute ad alta intensità.
+
+### Errore 2: Correre troppo forte nei giorni facili
+
+I tuoi giorni "facili" non sono abbastanza facili. Invece di recuperare, crei uno stress aggiuntivo che ritarda la supercompensazione.
+
+**Soluzione:** Le corse in [[zone-2]] devono essere davvero a ritmo conversazione. Se non riesci a parlare agevolmente, stai andando troppo forte.
+
+### Errore 3: Sottovalutare i fattori esterni
+
+La supercompensazione non avviene nel vuoto. Stress lavorativo, notte agitata, alimentazione trascurata... tutto ciò allunga il recupero.
+
+**I moltiplicatori del recupero:**
+- Sonno insufficiente (<7h): +20-40% tempo di recupero
+- Stress elevato: +15-30% tempo di recupero
+- Alimentazione scarsa: +15-25% tempo di recupero
+
+### Errore 4: Ignorare i segnali di sovrallenamento
+
+Quando non lasci mai tempo alla supercompensazione di avvenire, accumuli un debito di fatica. Alla fine scivoli nell'[[overtraining]], dove il recupero si misura in settimane, non in giorni.
+
+---
+
+## Applicare la supercompensazione ogni giorno
+
+### Principi di base
+
+1. **Alterna duro e facile:** Ogni seduta di qualità deve essere seguita da 1-2 giorni di recupero o resistenza facile.
+2. **Rispetta gli schemi di carico:** Schema 3:1 (3 settimane di carico, 1 di scarico) o 2:1 per runner più fragili.
+3. **Regolati sui segnali:** Il corpo non mente. FC alta, stanchezza, calo di motivazione = bisogno di recuperare.
+4. **Cura il recupero:** Sonno, nutrizione e gestione dello stress contano quanto l'allenamento stesso.
+
+### Settimana tipo ben periodizzata
+
+Ecco un esempio di microciclo che rispetta i principi della supercompensazione:
+
+| Giorno | Seduta | Logica |
+|--------|--------|--------|
+| Lunedì | Riposo | Recupero dopo il lungo |
+| Martedì | Ripetute VO2max | Seduta di qualità, corpo fresco |
+| Mercoledì | Lento Z2 | Recupero attivo |
+| Giovedì | Tempo/soglia | Seduta di qualità, 48h dopo le ripetute |
+| Venerdì | Riposo | Preparazione al lungo |
+| Sabato | Lento Z2 | Resistenza, non troppo intensa |
+| Domenica | Lungo | Seduta chiave della settimana |
+
+Nota come le sedute di qualità (martedì, giovedì, domenica) siano separate da giorni facili.
+
+---
+
+## La supercompensazione su larga scala
+
+Il principio della supercompensazione si applica anche ai cicli più lunghi.
+
+### Su scala del mesociclo
+
+Dopo 3 settimane di carico progressivo, una settimana di [[deload]] permette una supercompensazione globale. Esci da quella settimana più forte rispetto a prima del blocco.
+
+### Su scala del macrociclo
+
+Il [[taper]] prima di una gara è una mega-supercompensazione pianificata. Riduci il carico per 2-3 settimane per smaltire tutta la fatica accumulata e arrivare al picco di forma.
+
+### Su scala annuale
+
+Dopo una stagione di gare, una fase di transizione (2-4 settimane di riposo o attività ridotta) permette al corpo di rigenerarsi completamente prima del macrociclo successivo.
+
+---
+
+## Supercompensazione e livello di allenamento
+
+I principianti supercompensano più facilmente degli atleti avanzati. Il minimo stimolo genera un adattamento. Ecco perché i progressi sono rapidi all'inizio.
+
+Più sei allenato, più lo stimolo deve essere importante per produrre adattamento e più lungo è il recupero. È la legge dei rendimenti decrescenti.
+
+**Implicazioni pratiche:**
+- Principiante: recupero più rapido, ma attenzione a non strafare
+- Intermedio: equilibrio carico/recupero cruciale
+- Avanzato: stimoli intensi necessari, recupero curato indispensabile
+
+---
+
+## Ascoltare il proprio corpo
+
+La supercompensazione non è una formula matematica. I tempi indicativi sono medie. Il tuo corpo ha un proprio ritmo.
+
+Gli strumenti moderni possono aiutare:
+- **Variabilità cardiaca (HRV)**: un'HRV elevata suggerisce un buon recupero
+- **FC a riposo**: un aumento indica fatica residua
+- **Percezione dello sforzo**: se un lento facile ti sembra duro, non hai recuperato
+
+Ma lo strumento migliore resta come ti senti. Impara a conoscerti, annota le sensazioni in un diario di allenamento e regolati di conseguenza.
+
+La supercompensazione è l'arte di danzare con la fatica: abbastanza stress per migliorare, abbastanza riposo per assimilarlo. Padroneggia questo ritmo e migliorerai a lungo.`,
 };
 
 export default content;

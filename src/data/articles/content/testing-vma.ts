@@ -326,6 +326,168 @@ Note: test yourself in good conditions (rested, not too hot, suitable surface) t
 ## Take action
 
 Tests are a moment of truth: 6 minutes of clarity on your current physical condition. What matters isn't the absolute number, but what you do with it. With your MAS and HRmax in hand, you can now configure your zones and start truly personalized training.`,
+  contentIt: `## Conoscere i propri numeri per allenarsi meglio
+
+Due valori dominano la pianificazione dell'allenamento nella corsa: la VAM (Velocità Aerobica Massima) e la FCmax (Frequenza Cardiaca Massima). La prima determina i tuoi ritmi di lavoro, la seconda definisce le tue zone di intensità. Senza questi riferimenti corri alla cieca: troppo forte certi giorni, troppo piano altri.
+
+Attenzione però: questi valori sono personali. La VAM del tuo compagno di gruppo non dice nulla sulla tua, e le formule generiche nascondono ampie variazioni individuali. Solo una misurazione diretta ti darà dati affidabili.
+
+---
+
+## La VAM: il tuo tetto aerobico
+
+### Cosa misura davvero la VAM
+
+La Velocità Aerobica Massima corrisponde alla velocità di corsa alla quale il tuo consumo di ossigeno raggiunge il massimo. È il punto in cui il sistema aerobico lavora a pieno regime: oltre questa soglia, solo i sistemi anaerobici possono fornire altra energia, ma per un tempo molto limitato.
+
+In laboratorio si misura direttamente il VO2max (volume di ossigeno consumato al minuto) con maschera e tapis roulant. Sul campo si stima invece la VAM: la velocità alla quale raggiungi questo VO2max. Per i runner è un dato più pratico perché si traduce direttamente in ritmi di allenamento.
+
+Concretamente, la VAM è la velocità massima che riesci a mantenere per circa 4-7 minuti. Un runner con una VAM di 15 km/h corre quindi a 15 km/h in un test massimale di 5-6 minuti, ma riuscirà a tenere questo passo solo per pochi minuti prima di dover rallentare.
+
+### Perché è fondamentale
+
+> 📌 Conoscere la propria VAM è indispensabile: tutti i ritmi di allenamento derivano da essa, dal lento di recupero alle ripetute ad alta intensità.
+
+Tutti i ritmi di allenamento derivano dalla VAM. Una seduta alla soglia si corre attorno all'85% della VAM. Un 30/30 si fa al 100-105% della VAM. Il tuo ritmo maratona si aggira attorno al 75-80% della VAM.
+
+Senza conoscere la tua VAM puoi solo tirare a indovinare. E le stime sono spesso sbagliate: o ti sottostimi e ristagni, o ti sovrastimi e accumuli fatica.
+
+---
+
+## I test da campo per la VAM
+
+### Il test di mezzo Cooper (6 minuti)
+
+È il test più semplice e diffuso. Il protocollo è elementare: dopo un riscaldamento completo, corri più lontano possibile in esattamente 6 minuti.
+
+**Preparazione:**
+Riscaldati per 15-20 minuti con corsa lenta progressiva, alcune andature (skip alto, calciata dietro) e 2-3 allunghi progressivi. Devi arrivare alla partenza del test con muscoli caldi e cuore attivo, ma senza fatica.
+
+> 💡 Prevedi 48 ore di riposo prima del test, mangia leggero 2-3 ore prima e scegli una giornata temperata e senza vento per risultati affidabili.
+
+**Esecuzione:**
+Avvia il cronometro e parti. La trappola classica è partire troppo forte: i primi minuti sembrano facili, poi il debito di ossigeno si paga caro. Punta a uno sforzo regolare, impegnativo fin dall'inizio ma sostenibile. Gli ultimi due minuti devono essere una lotta.
+
+**Calcolo:**
+VAM (km/h) = distanza percorsa (in metri) / 100
+
+Se hai percorso 1.620 metri, la tua VAM è 16,2 km/h.
+
+### Il test VAMEVAL
+
+Questo test progressivo a gradini è più preciso ma richiede una pista da 400 m con coni ogni 20 metri, oltre a una traccia audio per i segnali.
+
+Il principio: parti a 8 km/h e la velocità aumenta di 0,5 km/h ogni minuto. Segnali acustici regolari indicano quando passare ogni cono. Quando non riesci più a tenere il ritmo, il test termina.
+
+La tua VAM corrisponde all'ultimo gradino completato per intero. Questo test ha il vantaggio di imporre un ritmo progressivo, evitando il problema della partenza troppo veloce.
+
+### Il test dei 5 minuti
+
+Simile al mezzo Cooper, ma su 5 minuti. Dopo il riscaldamento, corri al massimo delle tue capacità per esattamente 5 minuti.
+
+**Calcolo:**
+VAM (km/h) = distanza (m) x 12 / 1000
+
+Questo test è leggermente più breve e quindi più intenso. Alcuni runner lo preferiscono perché limita la componente mentale: 5 minuti di fatica sembrano più gestibili di 6.
+
+### Test su distanza (1500m o 2000m)
+
+Se preferisci ragionare per distanza anziché per tempo, questi test sono un'alternativa. L'idea: correre 1500 m o 2000 m il più velocemente possibile.
+
+**Calcolo:**
+VAM (km/h) = distanza (m) / tempo (s) x 3,6
+
+Per 1500 m in 5:30 (330 secondi): VAM = 1500 / 330 x 3,6 = 16,4 km/h
+
+---
+
+## Misurare la FCmax
+
+### Perché le formule non bastano
+
+La formula "220 - età" fu stabilita negli anni '70 su una popolazione limitata. Ha una deviazione standard di 10-12 battiti al minuto. In altre parole, per una persona di 40 anni, la FCmax "teorica" di 180 bpm può in realtà trovarsi ovunque tra 168 e 192 bpm.
+
+La formula di Tanaka (208 - 0,7 x età) è leggermente migliore ma resta un'approssimazione. Se basi le tue zone su una FCmax sbagliata di 10 battiti, tutti i tuoi intervalli saranno sfalsati.
+
+### Il test da campo per la FCmax
+
+Il protocollo più affidabile combina progressività e sforzo massimale finale.
+
+**Riscaldamento (20 minuti):**
+Inizia con 10 minuti di corsa molto facile, poi 5 minuti a ritmo moderato. Aggiungi qualche andatura e 2-3 allunghi progressivi su 50 m.
+
+**Fase di salita (10-15 minuti):**
+Trova una salita di 200-400 metri con pendenza del 5-8%. Esegui 3-4 salite di 2-3 minuti aumentando progressivamente l'intensità:
+- 1ª salita: ritmo tempo, respiro controllato
+- 2ª salita: ritmo soglia, respiro più sostenuto
+- 3ª salita: ritmo VAM, respiro massimale
+- 4ª salita: tutto ciò che ti resta, sprint finale negli ultimi 100 metri
+
+**Lettura:**
+Controlla il picco di frequenza cardiaca sull'orologio subito dopo l'ultima salita. Questo picco sarà molto vicino alla tua FCmax reale.
+
+**Precauzioni:**
+Questo test è fisiologicamente molto impegnativo. Eseguilo solo se sei in buona salute, senza precedenti cardiaci e abituato a sforzi intensi. Nel dubbio, opta per un test da sforzo medico.
+
+---
+
+## Interpretare e usare i risultati
+
+### Calcolare le zone cardiache
+
+Una volta nota la FCmax, le zone si calcolano facilmente:
+
+| Zona | Intervallo |
+|------|------------|
+| Zona 1 | 50-60% FCmax |
+| Zona 2 | 60-70% FCmax |
+| Zona 3 | 70-80% FCmax |
+| Zona 4 | 80-90% FCmax |
+| Zona 5 | 90-95% FCmax |
+| Zona 6 | 95-100% FCmax |
+
+Per una FCmax di 185 bpm, la Zona 2 (resistenza di base) si colloca tra 111 e 130 bpm.
+
+### Calcolare i ritmi di allenamento
+
+Dalla tua VAM puoi definire i ritmi obiettivo:
+
+| Tipo di seduta | % VAM | Esempio (VAM 15 km/h) |
+|----------------|-------|-----------------------|
+| Recupero | 60-65% | 9-9,8 km/h |
+| Resistenza di base | 65-75% | 9,8-11,3 km/h |
+| Tempo / Ritmo maratona | 75-85% | 11,3-12,8 km/h |
+| Soglia / Ritmo 10 km | 85-90% | 12,8-13,5 km/h |
+| VAM | 95-105% | 14,3-15,8 km/h |
+
+### Quando ripetere i test
+
+I tuoi valori evolvono con l'allenamento. Prevedi un nuovo test:
+- Ogni 2-3 mesi in fase di progressione attiva
+- Dopo uno stop superiore a 2 settimane
+- Prima di preparare un nuovo obiettivo
+
+Nota: esegui il test in buone condizioni (riposato, non troppo caldo, superficie adatta) per ottenere risultati confrontabili.
+
+---
+
+## Errori da evitare
+
+> ⚠️ L'errore numero uno: partire troppo forte. I primi secondi sembrano facili, ma una partenza troppo veloce si paga sempre negli ultimi minuti del test.
+
+**Partire troppo forte.** È l'errore numero uno nei test a tempo. I primi secondi sembrano facili, ma la partenza affrettata si paga sempre negli ultimi minuti.
+
+**Testare da stanchi.** Un test dopo una settimana pesante sottostimerà le tue reali capacità. Prevedi 48 ore di riposo relativo prima.
+
+**Ignorare le condizioni.** Caldo, vento contrario o percorso collinare falsano i risultati. Scegli una superficie piana, una giornata temperata e possibilmente senza vento.
+
+**Confrontarsi con gli altri.** La tua VAM è personale. Una VAM di 14 km/h per chi corre da 3 mesi è eccellente. Lo stesso valore per un runner con 10 anni di esperienza indica margine di miglioramento.
+
+---
+
+## Passa all'azione
+
+I test sono un momento di verità: 6 minuti di lucidità sulla tua condizione fisica attuale. L'importante non è il numero assoluto, ma cosa ci fai. Con VAM e FCmax in tasca, ora puoi configurare le tue zone e iniziare un allenamento davvero personalizzato.`,
 };
 
 export default content;

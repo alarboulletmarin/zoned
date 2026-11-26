@@ -30,7 +30,7 @@ export interface SeoTarget {
   path: string;
   /** Note pour qui edite le fichier. Pas affichee. */
   note: string;
-  anchors: { fr: string[]; en: string[] };
+  anchors: { fr: string[]; en: string[]; it?: string[] };
   fromWorkouts?: SeoMatch;
   fromGlossary?: SeoMatch;
   fromArticles?: SeoMatch;
@@ -57,6 +57,11 @@ export const SEO_TARGETS: SeoTarget[] = [
         "VMA pace and time",
         "Convert a run time to VMA speed",
       ],
+      it: [
+        "Calcolatore VAM",
+        "Calcola la tua VAM e il ritmo",
+        "Converti un tempo di gara in VAM",
+      ],
     },
     fromWorkouts: { categories: ["assessment", "vma_intervals"] },
     fromGlossary: { ids: ["vma", "vo2max", "vitesse-critique", "zone-5"] },
@@ -69,6 +74,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Mesurer sa VMA et sa FCmax", "Protocoles pour établir sa VMA"],
       en: ["How to test your VMA", "VO2max speed and max heart rate"],
+      it: ["Come misurare VAM e FC max", "Protocolli per calcolare la VAM"],
     },
     fromWorkouts: { categories: ["assessment", "vma_intervals"] },
     fromGlossary: { ids: ["vma", "vo2max"] },
@@ -80,6 +86,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Test MAF, 5 km à fréquence cardiaque", "Suivre le progrès aérobie avec le test MAF"],
       en: ["MAF test, heart-rate 5K", "Monthly MAF aerobic test"],
+      it: ["Test MAF, 5 km a frequenza cardiaca", "Segui i progressi aerobici con il test MAF"],
     },
     fromWorkouts: { categories: ["endurance", "recovery"], zones: [1, 2] },
     fromGlossary: { ids: ["zone-1", "zone-2"], categories: ["physiology"] },
@@ -91,6 +98,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Test de Cooper, 12 minutes", "Estimer son VO2max sur 12 minutes"],
       en: ["Cooper 12-minute test", "Estimate VO2max in 12 minutes"],
+      it: ["Test di Cooper, 12 minuti", "Stima il VO2max in 12 minuti"],
     },
     fromWorkouts: { categories: ["assessment"] },
     fromGlossary: { ids: ["vo2max", "vma"] },
@@ -103,6 +111,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Yasso 800, prédire son marathon", "Dix fois 800 m pour le marathon"],
       en: ["Yasso 800s marathon predictor", "Predict a marathon from 800s"],
+      it: ["Yasso 800, stima la tua maratona", "Dieci volte 800 m per la maratona"],
     },
     fromWorkouts: { categories: ["race_pace", "long_run"] },
     fromGlossary: { ids: ["marathon", "semi-marathon"] },
@@ -114,6 +123,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["La relance, ou surge", "Accélérer 20 à 40 secondes sans récupérer"],
       en: ["What a surge is", "A short surge inside a steady run"],
+      it: ["Il cambio di ritmo, o surge", "Accelerare 20-40 secondi senza recuperare"],
     },
     fromWorkouts: { categories: ["fartlek", "tempo"] },
     fromGlossary: { ids: ["fartlek", "tempo-run", "intervals", "zone-5"] },
@@ -125,6 +135,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["La sortie au seuil, le tempo", "Courir au tempo, zone 3"],
       en: ["Tempo run", "Steady tempo, zone 3"],
+      it: ["Tempo run", "Correre al ritmo tempo, zona 3"],
     },
     fromWorkouts: { categories: ["tempo", "threshold"] },
     fromGlossary: { ids: ["zone-3", "zone-4", "surge"] },
@@ -135,6 +146,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Les lignes droites, ou strides", "Accélérations courtes en fin de footing"],
       en: ["Strides", "Short strides after an easy run"],
+      it: ["Gli allunghi (strides)", "Brevi accelerazioni a fine corsa lenta"],
     },
     fromWorkouts: { categories: ["recovery", "fartlek", "endurance"] },
     fromGlossary: { ids: ["surge", "fartlek"] },
@@ -146,6 +158,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Zone 1, récupération", "Allure et fréquence en zone 1"],
       en: ["Zone 1, recovery", "Heart rate and pace in zone 1"],
+      it: ["Zona 1, recupero", "Ritmo e frequenza cardiaca in zona 1"],
     },
     fromWorkouts: { zones: [1], categories: ["recovery"] },
     fromGlossary: { ids: ["zone-2"], categories: ["zones"] },
@@ -156,6 +169,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Zone 4, le seuil", "Tenir le seuil, zone 4"],
       en: ["Zone 4, threshold", "Lactate threshold, zone 4"],
+      it: ["Zona 4, la soglia", "Soglia del lattato, zona 4"],
     },
     fromWorkouts: { zones: [4], categories: ["threshold", "tempo"] },
     fromGlossary: { ids: ["zone-3", "zone-5", "tempo-run"], categories: ["zones"] },
@@ -166,6 +180,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Zone 5, proche de la VMA", "Fractionné en zone 5"],
       en: ["Zone 5, near VMA", "VO2max intervals, zone 5"],
+      it: ["Zona 5, vicino alla VAM", "Ripetute in zona 5"],
     },
     fromWorkouts: { zones: [5], categories: ["vma_intervals"] },
     fromGlossary: { ids: ["vma", "vo2max", "zone-4"] },
@@ -177,6 +192,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["La vitesse critique", "CSS et vitesse critique"],
       en: ["Critical speed", "Critical swim speed and critical speed"],
+      it: ["Velocità critica", "CSS e velocità critica"],
     },
     fromWorkouts: { disciplines: ["swimming"], categories: ["threshold"] },
     fromGlossary: { ids: ["vma"] },
@@ -188,6 +204,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["L'oscillation verticale", "Limiter le rebond à chaque foulée"],
       en: ["Vertical oscillation", "How much you bounce each stride"],
+      it: ["Oscillazione verticale", "Limitare il rimbalzo a ogni passo"],
     },
     fromGlossary: { ids: ["cycle-foulee", "temps-contact-sol", "attaque-talon", "medio-pied"], categories: ["biomechanics"] },
     fromArticles: { ids: ["warmup"] },
@@ -198,6 +215,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Le cycle de foulée", "Pose du pied et cycle de jambe"],
       en: ["The running stride cycle", "Footstrike and the stride cycle"],
+      it: ["Il ciclo della falcata", "Appoggio del piede e ciclo della gamba"],
     },
     fromGlossary: { categories: ["biomechanics"] },
     fromArticles: { ids: ["warmup"] },
@@ -208,6 +226,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Le temps de contact au sol", "Combien de temps le pied reste posé"],
       en: ["Ground contact time", "How long the foot stays down"],
+      it: ["Tempo di contatto al suolo", "Quanto resta appoggiato il piede"],
     },
     fromGlossary: { ids: ["cycle-foulee", "oscillation-verticale", "strides"] },
   },
@@ -217,6 +236,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["L'attaque médio-pied", "Poser le pied à plat, pas sur le talon"],
       en: ["Midfoot strike", "Landing under the hip"],
+      it: ["Appoggio di mesopiede", "Atterrare sotto il baricentro"],
     },
     fromGlossary: { ids: ["attaque-talon", "cycle-foulee"] },
   },
@@ -226,6 +246,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["L'attaque talon", "Ce que change une pose par le talon"],
       en: ["Heel strike", "What a heel-first landing changes"],
+      it: ["Appoggio di tallone", "Cosa cambia appoggiando prima il tallone"],
     },
     fromGlossary: { ids: ["medio-pied", "cycle-foulee"] },
   },
@@ -235,6 +256,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Préparer un semi-marathon", "Allure et séances pour le semi"],
       en: ["Half marathon training", "Pacing a half marathon"],
+      it: ["Preparare una mezza maratona", "Ritmi e sedute per la mezza"],
     },
     fromWorkouts: { categories: ["long_run", "race_pace"] },
     fromGlossary: { ids: ["marathon"] },
@@ -246,6 +268,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Le pic de forme", "Arriver au sommet le jour de la course"],
       en: ["Peaking for race day", "Timing the peak"],
+      it: ["Il picco di forma", "Arrivare al massimo il giorno della gara"],
     },
     fromWorkouts: { categories: ["race_pace"] },
     fromGlossary: { ids: ["semi-marathon", "marathon"] },
@@ -257,6 +280,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Construire son échauffement", "Échauffement avant un fractionné ou une course"],
       en: ["How to warm up", "Warm-up before intervals or a race"],
+      it: ["Come fare il riscaldamento", "Riscaldamento prima di ripetute o gara"],
     },
     fromWorkouts: { categories: ["vma_intervals", "threshold", "race_pace", "fartlek"] },
     fromGlossary: { ids: ["strides"] },
@@ -268,6 +292,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["La surcompensation", "Pourquoi la forme monte après la fatigue"],
       en: ["Supercompensation", "Why fitness rises after fatigue"],
+      it: ["La supercompensazione", "Perché la forma sale dopo la fatica"],
     },
     fromArticles: { ids: ["recovery", "periodization", "progressive-overload"] },
     fromGlossary: { ids: ["peaking"] },
@@ -278,6 +303,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Les 6 zones d'entraînement", "À quoi sert chaque zone"],
       en: ["The 6 training zones", "What each zone is for"],
+      it: ["Le 6 zone di allenamento", "A cosa serve ogni zona"],
     },
     fromWorkouts: { categories: ["tempo", "threshold", "endurance", "recovery"] },
     fromGlossary: { categories: ["zones"] },
@@ -289,6 +315,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Simulateur d'allure et de ravitaillement", "Prévoir son marathon kilomètre par kilomètre"],
       en: ["Marathon pace simulator", "Plan splits, gels and drink stops"],
+      it: ["Simulatore ritmo e rifornimento", "Pianifica passaggi, gel e ristori"],
     },
     fromWorkouts: { categories: ["race_pace", "long_run"] },
     fromGlossary: { ids: ["marathon", "semi-marathon"] },
@@ -301,6 +328,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Guides d'échauffement, de course et de nutrition", "Les guides pratiques"],
       en: ["Warm-up, race and nutrition guides", "Practical training guides"],
+      it: ["Guide a riscaldamento, gara e nutrizione", "Le guide pratiche"],
     },
     fromArticles: { ids: ["warmup", "nutrition", "tapering"] },
     fromPages: { paths: ["/guides/nutrition", "/guides/race-prep", "/guides/warmup", "/nutrition"] },
@@ -311,6 +339,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Équivalences entre distances, du 5 km au marathon", "Passer d'un 10 km à un marathon"],
       en: ["Race equivalents, 5K to marathon", "Predict a marathon from a 10K"],
+      it: ["Equivalenze tra distanze, dai 5 km alla maratona", "Stima la maratona da un 10 km"],
     },
     fromWorkouts: { categories: ["race_pace"] },
     fromGlossary: { ids: ["marathon", "semi-marathon"] },
@@ -323,6 +352,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Calculateur de vitesse critique en natation", "Tester sa CSS"],
       en: ["Critical swim speed calculator", "CSS test"],
+      it: ["Calcolatore velocità critica nel nuoto", "Test CSS"],
     },
     fromWorkouts: { disciplines: ["swimming"] },
     fromGlossary: { ids: ["vitesse-critique"] },
@@ -334,6 +364,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Calculateur d'allures", "Passer d'un chrono à une allure"],
       en: ["Pace calculator", "Turn a finish time into a pace"],
+      it: ["Calcolatore di ritmi", "Converti un tempo in ritmo al km"],
     },
     fromCalculators: {
       paths: ["/calculators", "/calculators/table-allures", "/calculators/vma", "/calculators/splits"],
@@ -346,6 +377,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Tableau d'allures", "Lire son allure au kilomètre"],
       en: ["Pace table", "Minutes per kilometre, in a table"],
+      it: ["Tabella dei ritmi", "Leggi il tuo ritmo al chilometro"],
     },
     fromWorkouts: { categories: ["tempo", "threshold", "race_pace"] },
     fromCalculators: { paths: ["/calculators/allures", "/calculators/vma"] },
@@ -356,6 +388,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Fartlek 2/1 longue distance", "Alterner 2 minutes vite, 1 minute souple"],
       en: ["Long 2/1 fartlek", "Two minutes on, one minute easy"],
+      it: ["Fartlek 2/1 lunga distanza", "Alterna 2 minuti veloci, 1 minuto facile"],
     },
     fromWorkouts: { categories: ["fartlek", "long_run"] },
     fromGlossary: { ids: ["fartlek", "surge"] },
@@ -366,6 +399,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Alternative à Runna, sans abonnement", "Zoned face à Runna"],
       en: ["A Runna alternative without a subscription", "Zoned compared with Runna"],
+      it: ["Alternativa a Runna, senza abbonamento", "Zoned a confronto con Runna"],
     },
     fromArticles: { ids: ["periodization", "polarized-training"] },
     fromPages: { paths: ["/plan/new", "/plan/new/prebuilt", "/compare", "/plans/methodology"] },
@@ -376,6 +410,7 @@ export const SEO_TARGETS: SeoTarget[] = [
     anchors: {
       fr: ["Runna, Kiprun Pacer et Zoned", "Comparer Kiprun Pacer"],
       en: ["Runna, Kiprun Pacer and Zoned", "Kiprun Pacer compared"],
+      it: ["Runna, Kiprun Pacer e Zoned", "Confronta Kiprun Pacer"],
     },
     fromPages: { paths: ["/compare", "/compare/runna"] },
   },
@@ -400,6 +435,11 @@ export const SEO_HUBS: SeoTarget[] = [
         "Training zones from VMA",
         "Calculate your heart-rate zones",
       ],
+      it: [
+        "Calcolatore zone e frequenza cardiaca",
+        "Zone di allenamento dalla VAM",
+        "Calcola le tue zone cardio",
+      ],
     },
     fromWorkouts: { all: true },
     fromGlossary: { all: true },
@@ -412,6 +452,7 @@ export const SEO_HUBS: SeoTarget[] = [
     anchors: {
       fr: ["Comprendre les 6 zones", "Quelle zone pour quelle séance"],
       en: ["Understanding the 6 zones", "Which zone a session belongs to"],
+      it: ["Capire le 6 zone", "Quale zona per ogni seduta"],
     },
     fromWorkouts: { all: true },
     fromGlossary: { categories: ["zones", "physiology", "metrics"] },
@@ -423,6 +464,7 @@ export const SEO_HUBS: SeoTarget[] = [
     anchors: {
       fr: ["Calculateur de VMA", "Allure à un pourcentage de VMA"],
       en: ["VMA calculator", "Pace at a percent of VMA"],
+      it: ["Calcolatore VAM", "Ritmo in percentuale della VAM"],
     },
     fromWorkouts: { categories: ["assessment", "vma_intervals", "fartlek"] },
     fromGlossary: { ids: ["vma", "vo2max", "zone-5"] },
@@ -433,6 +475,7 @@ export const SEO_HUBS: SeoTarget[] = [
     anchors: {
       fr: ["Équivalences entre distances", "Projeter un chrono sur une autre distance"],
       en: ["Race equivalents", "Project a time onto another distance"],
+      it: ["Equivalenze tra distanze", "Proietta un tempo su un'altra distanza"],
     },
     fromWorkouts: { categories: ["long_run", "race_pace"] },
     fromGlossary: { ids: ["marathon", "semi-marathon"] },
@@ -443,6 +486,7 @@ export const SEO_HUBS: SeoTarget[] = [
     anchors: {
       fr: ["Tableau d'allures de 3:00 à 10:00/km", "Chronos de référence selon l'allure"],
       en: ["Pace table from 3:00 to 10:00 per km", "Reference times at each pace"],
+      it: ["Tabella ritmi da 3:00 a 10:00/km", "Tempi di riferimento per ogni ritmo"],
     },
     fromWorkouts: { categories: ["tempo", "threshold", "race_pace", "endurance"] },
   },

@@ -16,7 +16,7 @@ import { readFileSync, readdirSync } from "fs";
 import { join } from "path";
 
 const LOCALES_DIR = join(import.meta.dirname, "../src/i18n/locales");
-const LANGS = ["fr", "en"] as const;
+const LANGS = ["fr", "en", "it"] as const;
 type Lang = (typeof LANGS)[number];
 
 type Leaf = string | number | boolean | null;
@@ -25,7 +25,7 @@ type JsonValue = Leaf | JsonValue[] | { [k: string]: JsonValue };
 interface Issue {
   namespace: string;
   key: string;
-  kind: "missing-in-fr" | "missing-in-en" | "type-mismatch" | "empty-string";
+  kind: `missing-in-${Lang}` | "type-mismatch" | "empty-string";
   detail?: string;
 }
 
@@ -66,51 +66,52 @@ function typeOf(v: JsonValue): string {
 
 function checkNamespace(ns: string): Issue[] {
   const issues: Issue[] = [];
-  let fr: JsonValue;
-  let en: JsonValue;
-  try {
-    fr = loadNamespace("fr", ns);
-  } catch {
-    issues.push({ namespace: ns, key: "*", kind: "missing-in-fr" });
-    return issues;
-  }
-  try {
-    en = loadNamespace("en", ns);
-  } catch {
-    issues.push({ namespace: ns, key: "*", kind: "missing-in-en" });
-    return issues;
-  }
+  const maps = new Map<Lang, Map<string, JsonValue>>();
 
-  const frKeys = walkKeys(fr);
-  const enKeys = walkKeys(en);
+  for (const lang of LANGS) {
+    try {
+      maps.set(lang, walkKeys(loadNamespace(lang, ns)));
+    } catch {
+      issues.push({ namespace: ns, key: "*", kind: `missing-in-${lang}` });
+    }
+  }
+  if (issues.length > 0) return issues;
 
+  const frKeys = maps.get("fr")!;
   for (const [key, frVal] of frKeys) {
-    if (!enKeys.has(key)) {
-      issues.push({ namespace: ns, key, kind: "missing-in-en" });
-      continue;
-    }
-    const enVal = enKeys.get(key)!;
     const frType = typeOf(frVal);
-    const enType = typeOf(enVal);
-    if (frType !== enType) {
-      issues.push({
-        namespace: ns,
-        key,
-        kind: "type-mismatch",
-        detail: `fr=${frType} en=${enType}`,
-      });
-      continue;
-    }
-    if (frType === "string" && frVal !== "" && enVal === "") {
-      issues.push({ namespace: ns, key, kind: "empty-string", detail: "en is empty" });
-    }
-    if (frType === "string" && enVal !== "" && frVal === "") {
-      issues.push({ namespace: ns, key, kind: "empty-string", detail: "fr is empty" });
+    for (const lang of LANGS) {
+      if (lang === "fr") continue;
+      const langKeys = maps.get(lang)!;
+      if (!langKeys.has(key)) {
+        issues.push({ namespace: ns, key, kind: `missing-in-${lang}` });
+        continue;
+      }
+      const langVal = langKeys.get(key)!;
+      const langType = typeOf(langVal);
+      if (frType !== langType) {
+        issues.push({
+          namespace: ns,
+          key,
+          kind: "type-mismatch",
+          detail: `fr=${frType} ${lang}=${langType}`,
+        });
+        continue;
+      }
+      if (frType === "string" && frVal !== "" && langVal === "") {
+        issues.push({ namespace: ns, key, kind: "empty-string", detail: `${lang} is empty` });
+      }
+      if (frType === "string" && langVal !== "" && frVal === "") {
+        issues.push({ namespace: ns, key, kind: "empty-string", detail: "fr is empty" });
+      }
     }
   }
-  for (const key of enKeys.keys()) {
-    if (!frKeys.has(key)) {
-      issues.push({ namespace: ns, key, kind: "missing-in-fr" });
+  for (const lang of LANGS) {
+    if (lang === "fr") continue;
+    for (const key of maps.get(lang)!.keys()) {
+      if (!frKeys.has(key)) {
+        issues.push({ namespace: ns, key, kind: "missing-in-fr" });
+      }
     }
   }
 
@@ -129,7 +130,7 @@ function main(): void {
   const warnings = allIssues.filter((i) => i.kind === "empty-string");
 
   if (errors.length === 0 && warnings.length === 0) {
-    console.log(`OK, FR/EN parity across ${namespaces.length} namespaces (${namespaces.join(", ")})`);
+    console.log(`OK, FR/EN/IT parity across ${namespaces.length} namespaces (${namespaces.join(", ")})`);
     process.exit(0);
   }
 
@@ -155,7 +156,7 @@ function main(): void {
   }
 
   if (errors.length === 0) {
-    console.log(`OK, FR/EN key parity across ${namespaces.length} namespaces (warnings above)`);
+    console.log(`OK, FR/EN/IT key parity across ${namespaces.length} namespaces (warnings above)`);
     process.exit(0);
   }
 

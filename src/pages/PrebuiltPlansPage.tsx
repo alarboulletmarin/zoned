@@ -7,6 +7,7 @@ import { SEOHead } from "@/components/seo";
 import { PrebuiltPlanCard } from "@/components/domain/PrebuiltPlanCard";
 import { PRACTICE_ART } from "@/components/domain/practice-art";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
+import { usePickLang } from "@/lib/i18n-utils";
 import {
   PRACTICES,
   PRACTICE_META,
@@ -22,8 +23,8 @@ import {
  * the thing it measures, not after it.
  */
 export function PrebuiltPlansPage() {
-  const { t, i18n } = useTranslation("plan");
-  const isEn = i18n.language.startsWith("en");
+  const { t } = useTranslation("plan");
+  const pickLang = usePickLang();
 
   const plans = getAllPrebuiltPlans();
 
@@ -93,9 +94,7 @@ export function PrebuiltPlansPage() {
             `art` la remplace par la figure de la pratique plutôt que par la
             figure générique. */}
         {unserved.map((practice) => {
-          const label = isEn
-            ? PRACTICE_META[practice].labelEn
-            : PRACTICE_META[practice].label;
+          const label = pickLang(PRACTICE_META[practice], "label");
           return (
             <section key={practice} className="zn-pw__band">
               <EmptyState

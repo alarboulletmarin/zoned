@@ -6,8 +6,10 @@
       "kind": "strength",
       "name": "Core stability coureur",
       "nameEn": "Runner Core Stability",
+      "nameIt": "Stabilità del core per runner",
       "description": "Séance de gainage fondamentale pour coureurs, basée sur les trois piliers anti-mouvement : anti-extension, anti-rotation et anti-flexion latérale. Renforce la stabilité du tronc pour un meilleur transfert d'energie à chaque foulée.",
       "descriptionEn": "Foundational core stability session for runners, based on the three anti-movement pillars: anti-extension, anti-rotation, and anti-lateral flexion. Strengthens trunk stability for better energy transfer at each stride.",
+      "descriptionIt": "Sessione fondamentale di stabilità del core per runner, basata sui tre pilastri anti-movimento: anti-estensione, anti-rotazione e anti-flessione laterale. Rinforza la stabilità del tronco per un miglior trasferimento di energia a ogni falcata.",
       "category": "runner_core",
       "difficulty": "beginner",
       "typicalDuration": { "min": 25, "max": 30 },
@@ -22,6 +24,7 @@
           "intensity": "mobility",
           "notes": "Échauffement articulaire, mouvement lent et contrôle, 6 répétitions par côté",
           "notesEn": "Joint warmup, slow and controlled movement, 6 reps per side",
+          "notesIt": "Riscaldamento articolare, movimento lento e controllato, 6 ripetizioni per lato",
           "rpe": 2
         },
         {
@@ -32,6 +35,7 @@
           "intensity": "mobility",
           "notes": "Activation progressive du core, bas du dos plaque au sol",
           "notesEn": "Progressive core activation, lower back pressed to floor",
+          "notesIt": "Attivazione progressiva del core, zona lombare aderente al pavimento",
           "rpe": 2
         }
       ],
@@ -44,6 +48,7 @@
           "intensity": "endurance",
           "notes": "Anti-extension : corps droit de la tete aux talons, contracter fessiers et abdominaux",
           "notesEn": "Anti-extension: straight body from head to heels, contract glutes and abs",
+          "notesIt": "Anti-estensione: corpo dritto dalla testa ai talloni, contrarre glutei e addominali",
           "rpe": 5
         },
         {
@@ -54,6 +59,7 @@
           "intensity": "endurance",
           "notes": "Anti-flexion latérale : 20 secondes par côté, hanches empilees, corps aligne",
           "notesEn": "Anti-lateral flexion: 20 seconds per side, stacked hips, aligned body",
+          "notesIt": "Anti-flessione laterale: 20 secondi per lato, fianchi allineati uno sopra l'altro, corpo in linea",
           "rpe": 5
         },
         {
@@ -64,6 +70,7 @@
           "intensity": "endurance",
           "notes": "Anti-rotation : etendre le bras et la jambe opposes sans que le bassin ne bouge",
           "notesEn": "Anti-rotation: extend opposite arm and leg without pelvis movement",
+          "notesIt": "Anti-rotazione: estendere braccio e gamba opposti senza muovere il bacino",
           "rpe": 5
         },
         {
@@ -74,6 +81,7 @@
           "intensity": "endurance",
           "notes": "Anti-extension dynamique : maintenir le bas du dos au sol tout au long du mouvement",
           "notesEn": "Dynamic anti-extension: keep lower back on the floor throughout the movement",
+          "notesIt": "Anti-estensione dinamica: mantenere la zona lombare a terra per tutto il movimento",
           "rpe": 5
         }
       ],
@@ -86,6 +94,7 @@
           "intensity": "mobility",
           "notes": "Étirement du psoas, 30 secondes par côté pour detendre les fléchisseurs de hanche",
           "notesEn": "Hip flexor stretch, 30 seconds per side to release hip flexors",
+          "notesIt": "Allungamento dello psoas, 30 secondi per lato per rilassare i flessori dell'anca",
           "rpe": 2
         }
       ],
@@ -102,6 +111,12 @@
         "Ideal session before or after an easy run, or as a morning routine",
         "Progress by increasing duration (plank) or répétitions (bird-dog, dead bug) by 10% per week"
       ],
+      "coachingTipsIt": [
+        "Il lavoro sul core per i runner è anti-movimento: l'obiettivo è resistere al movimento, non crearlo",
+        "Privilegiate la qualità: fermatevi appena perdete l'allineamento invece di resistere più a lungo",
+        "Sessione ideale prima o dopo una corsa facile, oppure come routine mattutina",
+        "Progredite aumentando la durata (plank) o le ripetizioni (bird-dog, dead bug) del 10% a settimana"
+      ],
       "commonMistakes": [
         "Laisser les hanches s'affaisser pendant la planche au lieu de maintenir l'alignement",
         "Compenser le manque de force du core par un mouvement excessif du bassin au bird-dog",
@@ -111,6 +126,11 @@
         "Letting hips sag during the plank instead of maintaining alignment",
         "Compensating for core weakness with excessive pelvic movement during bird-dog",
         "Holding your breath: breathe normally during all core exercises"
+      ],
+      "commonMistakesIt": [
+        "Lasciare che i fianchi cedano durante il plank invece di mantenere l'allineamento",
+        "Compensare la debolezza del core con un movimento eccessivo del bacino nel bird-dog",
+        "Trattenere il respiro: respirate normalmente durante tutti gli esercizi di tenuta"
       ],
       "variationIds": ["STR-009", "STR-010"],
       "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
@@ -126,8 +146,10 @@
       "kind": "strength",
       "name": "Core avance",
       "nameEn": "Advanced Core",
+      "nameIt": "Core avanzato",
       "description": "Séance de core avancée avec exercices dynamiques et charges anti-rotation. Développe la force rotationnelle et la stabilité en mouvement, essentielles pour les changements de direction et les terrains techniques.",
       "descriptionEn": "Advanced core session with dynamic exercises and anti-rotation loads. Develops rotational strength and stability in movement, essential for direction changes and technical terrain.",
+      "descriptionIt": "Sessione avanzata per il core con esercizi dinamici e carichi anti-rotazione. Sviluppa forza rotazionale e stabilità in movimento, essenziali per i cambi di direzione e i terreni tecnici.",
       "category": "runner_core",
       "difficulty": "intermediate",
       "typicalDuration": { "min": 30, "max": 40 },
@@ -142,6 +164,7 @@
           "intensity": "mobility",
           "notes": "Planche d'activation rapide pour reveiller le core",
           "notesEn": "Quick activation plank to wake up the core",
+          "notesIt": "Plank di attivazione rapida per risvegliare il core",
           "rpe": 3
         },
         {
@@ -152,6 +175,7 @@
           "intensity": "mobility",
           "notes": "Bird-dog lent pour préparer les rotations",
           "notesEn": "Slow bird-dog to prepare for rotations",
+          "notesIt": "Bird-dog lento per preparare alle rotazioni",
           "rpe": 3
         }
       ],
@@ -164,6 +188,7 @@
           "intensity": "hypertrophy",
           "notes": "10 répétitions par côté avec bande ou cable, resister à la rotation du tronc",
           "notesEn": "10 reps per side with band or cable, resist trunk rotation",
+          "notesIt": "10 ripetizioni per lato con elastico o cavo, resistere alla rotazione del tronco",
           "rpe": 6
         },
         {
@@ -174,6 +199,7 @@
           "intensity": "hypertrophy",
           "notes": "10 répétitions par côté en planche, tirer le genou vers le coude oppose",
           "notesEn": "10 reps per side in plank, drive knee toward opposite elbow",
+          "notesIt": "10 ripetizioni per lato in plank laterale dinamico, movimento controllato dei fianchi",
           "rpe": 7
         },
         {
@@ -184,6 +210,7 @@
           "intensity": "hypertrophy",
           "notes": "Assis, pieds légèrement décollés du sol, rotation contrôlée avec ou sans poids",
           "notesEn": "Seated, feet slightly off floor, controlled rotation with or without weight",
+          "notesIt": "Seduti, piedi leggermente sollevati da terra, rotazione controllata con o senza peso",
           "rpe": 6
         },
         {
@@ -194,6 +221,7 @@
           "intensity": "hypertrophy",
           "notes": "Allongé sur le ventre, lever bras et jambes simultanémentent, maintenir 1 seconde en haut",
           "notesEn": "Prone, lift arms and legs simultaneously, hold 1 second at top",
+          "notesIt": "Proni, sollevare braccia e gambe contemporaneamente, mantenere 1 secondo in alto",
           "rpe": 5
         },
         {
@@ -204,6 +232,7 @@
           "intensity": "hypertrophy",
           "notes": "12 répétitions par côté, coude vers genou oppose, jambe tendue ne touche pas le sol",
           "notesEn": "12 reps per side, elbow to opposite knee, extended leg doesn't touch the floor",
+          "notesIt": "12 ripetizioni per lato, gomito verso ginocchio opposto, la gamba tesa non tocca terra",
           "rpe": 6
         }
       ],
@@ -216,6 +245,7 @@
           "intensity": "mobility",
           "notes": "90/90 pour relâcher les hanches après le travail de core intense",
           "notesEn": "90/90 to release hips after intense core work",
+          "notesIt": "90/90 per rilassare le anche dopo un lavoro intenso sul core",
           "rpe": 2
         },
         {
@@ -226,6 +256,7 @@
           "intensity": "mobility",
           "notes": "Étirement du psoas, 30 secondes par côté",
           "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "notesIt": "Allungamento dello psoas, 30 secondi per lato",
           "rpe": 2
         }
       ],
@@ -242,6 +273,12 @@
         "If you trail run, this session is particularly bénéficial for stability on uneven terrain",
         "Keep the transversus active (belly button in) throughout the session"
       ],
+      "coachingTipsIt": [
+        "Il Pallof press è l'esercizio re dell'anti-rotazione per i runner: padroneggiatelo",
+        "Il Russian twist deve essere un movimento controllato, non balistico",
+        "Se praticate trail running, questa sessione è particolarmente utile per la stabilità su terreni irregolari",
+        "Mantenete il trasverso attivo (ombelico rientrato) per tutta la sessione"
+      ],
       "commonMistakes": [
         "Utiliser l'elan au lieu de la force du core pour les rotations russes",
         "Laisser le bassin tourner pendant le pallof press au lieu de le stabiliser",
@@ -251,6 +288,11 @@
         "Using momentum instead of core strength for Russian twists",
         "Letting the pelvis rotate during the Pallof press instead of stabilizing it",
         "Performing bicycle crunches too fast, losing movement control"
+      ],
+      "commonMistakesIt": [
+        "Usare lo slancio invece della forza del core nei Russian twist",
+        "Lasciare ruotare il bacino durante il Pallof press invece di stabilizzarlo",
+        "Eseguire i bicycle crunch troppo velocemente perdendo il controllo del movimento"
       ],
       "variationIds": ["STR-008", "STR-010"],
       "suitablePhases": ["base", "build"],
@@ -266,8 +308,10 @@
       "kind": "strength",
       "name": "Core running-specific",
       "nameEn": "Running Core",
+      "nameIt": "Core specifico per la corsa",
       "description": "Séance courte et ciblée de gainage spécifique à la course. Exercices anti-mouvement minimalistes conçus pour être combinés avec un footing facile. Maintient la posture de course sans générer de fatigue significative.",
       "descriptionEn": "Short, targeted core session specific to running. Minimalist anti-movement exercises designed to be paired with an easy run. Maintains running posture without generating significant fatigue.",
+      "descriptionIt": "Sessione breve e mirata di potenziamento del core specifica per la corsa. Esercizi anti-movimento minimalisti pensati per essere abbinati a una corsa facile. Mantiene la postura di corsa senza generare affaticamento significativo.",
       "category": "runner_core",
       "difficulty": "intermediate",
       "typicalDuration": { "min": 20, "max": 25 },
@@ -282,6 +326,7 @@
           "intensity": "mobility",
           "notes": "Fentes avec rotation pour ouvrir les hanches et mobiliser la colonne thoracique",
           "notesEn": "Lunges with rotation to open hips and mobilize thoracic spine",
+          "notesIt": "Affondi con rotazione per aprire le anche e mobilizzare la colonna toracica",
           "rpe": 2
         }
       ],
@@ -294,6 +339,7 @@
           "intensity": "endurance",
           "notes": "10 répétitions par côté, mouvement lent et parfaitement contrôle",
           "notesEn": "10 reps per side, slow and perfectly controlled movement",
+          "notesIt": "10 ripetizioni per lato, movimento lento e perfettamente controllato",
           "rpe": 5
         },
         {
@@ -304,6 +350,7 @@
           "intensity": "endurance",
           "notes": "10 répétitions par côté, bas du dos immobile contre le sol",
           "notesEn": "10 reps per side, lower back motionless against the floor",
+          "notesIt": "10 ripetizioni per lato, zona lombare immobile aderente al pavimento",
           "rpe": 5
         },
         {
@@ -314,6 +361,7 @@
           "intensity": "endurance",
           "notes": "Gainage strict 45 secondes, rechercher la qualité plutôt que la durée",
           "notesEn": "Strict 45-second plank, prioritize quality over duration",
+          "notesIt": "Plank rigoroso da 45 secondi, privilegiare la qualità rispetto alla durata",
           "rpe": 5
         },
         {
@@ -324,6 +372,7 @@
           "intensity": "endurance",
           "notes": "30 secondes par côté, corps parfaitement aligne en position latérale",
           "notesEn": "30 seconds per side, perfectly aligned body in lateral position",
+          "notesIt": "30 secondi per lato, corpo perfettamente allineato in posizione laterale",
           "rpe": 5
         }
       ],
@@ -336,6 +385,7 @@
           "intensity": "mobility",
           "notes": "Étirement rapide du psoas, 20 secondes par côté",
           "notesEn": "Quick hip flexor stretch, 20 seconds per side",
+          "notesIt": "Allungamento rapido dello psoas, 20 secondi per lato",
           "rpe": 2
         }
       ],
@@ -352,6 +402,12 @@
         "Think about your running posture during exercises: same core engagement",
         "20 minutes is enough to maintain core adaptations"
       ],
+      "coachingTipsIt": [
+        "Sessione ideale da svolgere subito prima o subito dopo una corsa facile",
+        "La costanza è più importante dell'intensità: 4 volte a settimana è meglio di una sola seduta intensa",
+        "Pensate alla vostra postura di corsa durante gli esercizi: stessa attivazione del core",
+        "20 minuti sono sufficienti per mantenere gli adattamenti del core"
+      ],
       "commonMistakes": [
         "Zapper cette séance parce qu'elle semble trop courte pour être utile",
         "Ajouter des exercices supplémentaires qui dénaturent l'aspect minimaliste et spécifique",
@@ -361,6 +417,11 @@
         "Skipping this session because it seems too short to be useful",
         "Adding extra exercises that defeat the minimalist and specific purpose",
         "Doing planks while holding breath: breathing normally is essential"
+      ],
+      "commonMistakesIt": [
+        "Saltare questa sessione perché sembra troppo breve per essere utile",
+        "Aggiungere esercizi extra che snaturano l'approccio minimalista e specifico",
+        "Fare i plank in apnea: respirare normalmente è essenziale"
       ],
       "variationIds": ["STR-008"],
       "suitablePhases": ["base", "build", "peak", "taper", "recovery"],

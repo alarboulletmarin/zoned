@@ -49,17 +49,22 @@ export function SEOHead({
 }: SEOHeadProps) {
   const { i18n } = useTranslation();
   const rawLang = i18n.language || "fr";
-  const isEn = rawLang.startsWith("en");
-  const lang = isEn ? "en" : "fr";
+  const lang = rawLang.startsWith("it") ? "it" : rawLang.startsWith("en") ? "en" : "fr";
 
   // <html lang> can't be hoisted, so we set it imperatively.
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
 
+  const defaultSubtitle =
+    lang === "it"
+      ? "Allenamenti di corsa scientifici a zone"
+      : lang === "en"
+        ? "Science-Based Running Workouts"
+        : "Séances de course scientifiques par zones";
   const fullTitle = title
     ? `${title} | ${SITE_NAME}`
-    : `${SITE_NAME} · ${isEn ? "Science-Based Running Workouts" : "Séances de course scientifiques par zones"}`;
+    : `${SITE_NAME} · ${defaultSubtitle}`;
 
   const baseLoc = canonical || "/";
 
@@ -73,11 +78,11 @@ export function SEOHead({
   // scratch (LibraryPage, the calculators), which drops `lang` shortly after
   // mount. i18n.language survives that. The two agree for every crawler
   // anyway, with an empty localStorage the language can only come from the
-  // URL, so ?lang=en ⇔ isEn.
-  const canonicalUrl = `${SITE_URL}${baseLoc}${isEn ? "?lang=en" : ""}`;
+  // URL, so ?lang=en ⇔ en and ?lang=it ⇔ it.
+  const canonicalUrl = `${SITE_URL}${baseLoc}${lang === "fr" ? "" : `?lang=${lang}`}`;
 
-  const locale = isEn ? "en_US" : "fr_FR";
-  const altLocale = isEn ? "fr_FR" : "en_US";
+  const locale = lang === "it" ? "it_IT" : lang === "en" ? "en_US" : "fr_FR";
+  const altLocale = lang === "en" ? "fr_FR" : "en_US";
   const fullOgImage = ogImage.startsWith("http") ? ogImage : `${SITE_URL}${ogImage}`;
   const desc = description ?? "";
 
@@ -89,7 +94,7 @@ export function SEOHead({
       "@type": "WebSite",
       name: SITE_NAME,
       url: SITE_URL,
-      inLanguage: ["fr-FR", "en-US"],
+      inLanguage: ["fr-FR", "en-US", "it-IT"],
       potentialAction: {
         "@type": "SearchAction",
         target: {
@@ -132,6 +137,7 @@ export function SEOHead({
       {/* Hreflang -------------------------------------------------------- */}
       <link rel="alternate" hrefLang="fr-FR" href={`${SITE_URL}${baseLoc}`} />
       <link rel="alternate" hrefLang="en-US" href={`${SITE_URL}${baseLoc}?lang=en`} />
+      <link rel="alternate" hrefLang="it-IT" href={`${SITE_URL}${baseLoc}?lang=it`} />
       <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${baseLoc}`} />
 
       {/* Open Graph ------------------------------------------------------ */}

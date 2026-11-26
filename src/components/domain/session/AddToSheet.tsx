@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/
 import { useHeld } from "@/components/ui/native-dialog";
 import { toast } from "@/components/ui/toast";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { getDateLocale, useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 import { getAllPlans } from "@/lib/planStorage";
 import { loadTodayComposition } from "@/lib/todayComposition";
 import {
@@ -91,7 +91,7 @@ export function AddToSheet({ workout, durationMin, open, onOpenChange, side }: A
     const label = t(`plan:days.${index}`);
     return isEn ? label : label.toLocaleLowerCase("fr");
   };
-  const dateFormat = new Intl.DateTimeFormat(isEn ? "en-GB" : "fr-FR", {
+  const dateFormat = new Intl.DateTimeFormat(getDateLocale(), {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -163,7 +163,7 @@ export function AddToSheet({ workout, durationMin, open, onOpenChange, side }: A
       const date = target === "today" ? world.today : dateInWeek(world.today, chosenDay);
       const monday = dateInWeek(date, 0);
       labels.freshWeekName = t("today:add.newWeekName", {
-        date: monday.toLocaleDateString(isEn ? "en-GB" : "fr-FR", { day: "numeric", month: "short" }),
+        date: monday.toLocaleDateString(getDateLocale(), { day: "numeric", month: "short" }),
       });
       result = addToDate(workout, date, labels, world.today);
       message = t("session:addTo.done", {

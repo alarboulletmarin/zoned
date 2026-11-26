@@ -6,8 +6,10 @@
       "kind": "strength",
       "name": "Mobilité hanches coureur",
       "nameEn": "Runner Hip Mobility",
+      "nameIt": "Mobilità delle anche per runner",
       "description": "Séance ciblée sur la mobilité des hanches, articulation clé du coureur. Améliore l'amplitude de la foulée, réduit la raideur après les séances de course et prévient les compensations posturales liées à la position assise prolongée.",
       "descriptionEn": "Targeted session for hip mobility, the runner's key joint. Improves stride amplitude, reduces stiffness after running sessions, and prevents postural compensations linked to prolonged sitting.",
+      "descriptionIt": "Sessione mirata alla mobilità delle anche, articolazione chiave del runner. Migliora l'ampiezza della falcata, riduce la rigidità dopo gli allenamenti di corsa e previene le compensazioni posturali legate alla posizione seduta prolungata.",
       "category": "mobility",
       "difficulty": "beginner",
       "typicalDuration": { "min": 20, "max": 25 },
@@ -22,6 +24,7 @@
           "intensity": "mobility",
           "notes": "Fentes avec rotation pour echauffer progressivement les hanches",
           "notesEn": "Lunges with rotation to progressively warm up hips",
+          "notesIt": "Affondi con rotazione per riscaldare progressivamente le anche",
           "rpe": 2
         }
       ],
@@ -34,6 +37,7 @@
           "intensity": "mobility",
           "notes": "45 secondes par position, transition douce entre rotation interne et externe",
           "notesEn": "45 seconds per position, smooth transition between internal and external rotation",
+          "notesIt": "45 secondi per posizione, transizione fluida tra rotazione interna ed esterna",
           "rpe": 3
         },
         {
@@ -44,6 +48,7 @@
           "intensity": "mobility",
           "notes": "30 secondes par côté, avancer le genou doucement, sentir l'étirement du psoas",
           "notesEn": "30 seconds per side, gently push knee forward, feel the hip flexor stretch",
+          "notesIt": "30 secondi per lato, spingere dolcemente il ginocchio in avanti, sentire l'allungamento dello psoas",
           "rpe": 3
         },
         {
@@ -54,6 +59,7 @@
           "intensity": "mobility",
           "notes": "45 secondes par côté, garder le dos droit, relâcher progressivement dans la posture",
           "notesEn": "45 seconds per side, keep back straight, progressively release into the posture",
+          "notesIt": "45 secondi per lato, mantenere la schiena dritta, rilassarsi progressivamente nella posizione",
           "rpe": 3
         },
         {
@@ -64,6 +70,7 @@
           "intensity": "mobility",
           "notes": "8 répétitions par côté, fente profonde avec rotation thoracique vers le genou avant",
           "notesEn": "8 reps per side, deep lunge with thoracic rotation toward front knee",
+          "notesIt": "8 ripetizioni per lato, affondo profondo con rotazione toracica verso il ginocchio anteriore",
           "rpe": 3
         }
       ],
@@ -76,6 +83,7 @@
           "intensity": "mobility",
           "notes": "Retour en 90/90 detendu, respiration profonde pour finir la séance en relachement",
           "notesEn": "Return to relaxed 90/90, deep breathing to end the session in release",
+          "notesIt": "Ritorno in posizione 90/90 rilassata, respirazione profonda per concludere la sessione in distensione",
           "rpe": 2
         }
       ],
@@ -92,6 +100,12 @@
         "Ideal session in the morning to counter overnight stiffness, or in the evening after a day of sitting",
         "Runners logging more than 40 km/week should do this session at least twice per week"
       ],
+      "coachingTipsIt": [
+        "Respirate profondamente in ogni posizione: l'espirazione favorisce il rilascio muscolare",
+        "Non forzate mai un allungamento: il dolore è un segnale di stop, non di progresso",
+        "Sessione ideale al mattino per contrastare la rigidità notturna, oppure la sera dopo una giornata seduti",
+        "I runner che corrono più di 40 km a settimana dovrebbero eseguire questa sessione almeno 2 volte a settimana"
+      ],
       "commonMistakes": [
         "Forcer les étirements en rebondissant au lieu de maintenir une position stable",
         "Retenir sa respiration pendant les positions tenues, ce qui augmente la tension musculaire",
@@ -101,6 +115,11 @@
         "Forcing stretches by bouncing instead of holding a stable position",
         "Holding breath during held positions, which increases muscle tension",
         "Neglecting hip mobility thinking only leg stretches matter"
+      ],
+      "commonMistakesIt": [
+        "Forzare gli allungamenti molleggiando invece di mantenere una posizione stabile",
+        "Trattenere il respiro durante le posizioni statiche, aumentando la tensione muscolare",
+        "Trascurare la mobilità delle anche pensando che contino solo gli esercizi per le gambe"
       ],
       "variationIds": ["STR-015", "STR-016"],
       "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
@@ -116,8 +135,10 @@
       "kind": "strength",
       "name": "Recup foam roller",
       "nameEn": "Foam Roller Recovery",
+      "nameIt": "Recupero con foam roller",
       "description": "Séance de récupération par auto-massage au foam roller ciblée sur les muscles les plus sollicites en course a pied. Réduit les tensions musculaires, améliore la circulation sanguine et accelere la récupération entre les seances.",
       "descriptionEn": "Recovery session using foam roller self-massage targeting the most stressed muscles in running. Reduces muscle tension, improves blood circulation, and accelerates recovery between sessions.",
+      "descriptionIt": "Sessione di recupero tramite automassaggio con foam roller mirata ai muscoli più sollecitati nella corsa. Riduce le tensioni muscolari, migliora la circolazione sanguigna e accelera il recupero tra gli allenamenti.",
       "category": "mobility",
       "difficulty": "beginner",
       "typicalDuration": { "min": 20, "max": 30 },
@@ -132,6 +153,7 @@
           "intensity": "mobility",
           "notes": "Mobilité de cheville douce avant le travail de foam roller",
           "notesEn": "Gentle ankle mobility before foam roller work",
+          "notesIt": "Mobilità dolce della caviglia prima del lavoro con foam roller",
           "rpe": 2
         }
       ],
@@ -144,6 +166,7 @@
           "intensity": "mobility",
           "notes": "Rouler lentement de l'attache proximale a distale, insister 10 secondes sur les points sensibles",
           "notesEn": "Roll slowly from proximal to distal attachment, hold 10 seconds on tender spots",
+          "notesIt": "Rullare lentamente dall'inserzione prossimale a quella distale, soffermandosi 10 secondi sui punti sensibili",
           "rpe": 3
         },
         {
@@ -154,6 +177,7 @@
           "intensity": "mobility",
           "notes": "Rouler sur les quadriceps, tourner légèrement pour atteindre le vaste interne et externe",
           "notesEn": "Roll on quadriceps, turn slightly to reach vastus medialis and lateralis",
+          "notesIt": "Rullare sui quadricipiti, ruotando leggermente per raggiungere vasto mediale e laterale",
           "rpe": 3
         },
         {
@@ -164,6 +188,7 @@
           "intensity": "mobility",
           "notes": "Rouler sur le côté de la cuisse, du genou à la hanche. Zone souvent sensible chez les coureurs",
           "notesEn": "Roll on the side of the thigh, from knee to hip. Often a tender area for runners",
+          "notesIt": "Rullare sul lato della coscia, dal ginocchio all'anca. Zona spesso sensibile nei runner",
           "rpe": 4
         },
         {
@@ -174,6 +199,7 @@
           "intensity": "mobility",
           "notes": "Mobilité de cheville après le foam roller pour tester l'amélioration de l'amplitude",
           "notesEn": "Ankle mobility after foam roller to test range of motion improvement",
+          "notesIt": "Mobilità della caviglia dopo il foam roller per verificare il miglioramento dell'ampiezza di movimento",
           "rpe": 2
         }
       ],
@@ -186,6 +212,7 @@
           "intensity": "mobility",
           "notes": "Étirement doux du psoas pour finir, 30 secondes par côté",
           "notesEn": "Gentle hip flexor stretch to finish, 30 seconds per side",
+          "notesIt": "Allungamento dolce dello psoas per concludere, 30 secondi per lato",
           "rpe": 2
         },
         {
@@ -196,6 +223,7 @@
           "intensity": "mobility",
           "notes": "Étirement piriforme, 30 secondes par côté",
           "notesEn": "Piriformis stretch, 30 seconds per side",
+          "notesIt": "Stretching del piriforme, 30 secondi per lato",
           "rpe": 2
         }
       ],
@@ -212,6 +240,12 @@
         "Ideal in the evening after a running session or the day after intervals",
         "Avoid rolling directly on bones (kneecap, shin) and joints"
       ],
+      "coachingTipsIt": [
+        "Rullate lentamente: 2-3 cm al secondo, niente movimenti rapidi avanti e indietro",
+        "Insistete 10-15 secondi sui punti sensibili finché non sentite il rilascio",
+        "Ideale la sera dopo una corsa o il giorno successivo a delle ripetute",
+        "Evitate di rullare direttamente sulle ossa (rotula, tibia) e sulle articolazioni"
+      ],
       "commonMistakes": [
         "Rouler trop vite sans laisser le temps aux tissus de se relâcher",
         "Rouler directement sur la bandelette ilio-tibiale avec trop de pression d'emblée",
@@ -221,6 +255,11 @@
         "Rolling too fast without giving tissues time to release",
         "Rolling directly on the IT band with too much pressure from the start",
         "Using the foam roller on an acute injury or inflamed area"
+      ],
+      "commonMistakesIt": [
+        "Rullare troppo velocemente senza dare ai tessuti il tempo di rilassarsi",
+        "Rullare direttamente sulla bandelletta ileotibiale con troppa pressione fin da subito",
+        "Usare il foam roller su un infortunio acuto o su una zona infiammata"
       ],
       "variationIds": ["STR-014", "STR-016"],
       "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
@@ -236,8 +275,10 @@
       "kind": "strength",
       "name": "Mobilité complète",
       "nameEn": "Full Mobility Session",
+      "nameIt": "Sessione di mobilità completa",
       "description": "Séance de mobilité complète combinant travail de hanches, chevilles et auto-massage au foam roller. Couvre l'ensemble des zones à risque du coureur pour une récupération optimale et une prévention globale des blessures.",
       "descriptionEn": "Complete mobility session combining hip work, ankle mobility, and foam roller self-massage. Covers all risk areas for runners for optimal recovery and comprehensive injury prévention.",
+      "descriptionIt": "Sessione di mobilità completa che combina lavoro sulle anche, mobilità della caviglia e automassaggio con foam roller. Copre tutte le aree a rischio del runner per un recupero ottimale e una prevenzione globale degli infortuni.",
       "category": "mobility",
       "difficulty": "beginner",
       "typicalDuration": { "min": 30, "max": 35 },
@@ -252,6 +293,7 @@
           "intensity": "mobility",
           "notes": "Fentes marchées avec rotation thoracique pour echauffer tout le corps",
           "notesEn": "Walking lunges with thoracic rotation to warm up the whole body",
+          "notesIt": "Affondi camminati con rotazione toracica per riscaldare tutto il corpo",
           "rpe": 2
         }
       ],
@@ -264,6 +306,7 @@
           "intensity": "mobility",
           "notes": "Foam roller ischio-jambiers, mouvements lents et progressifs",
           "notesEn": "Foam roller hamstrings, slow and progressive movements",
+          "notesIt": "Foam roller ischiocrurali, movimenti lenti e progressivi",
           "rpe": 3
         },
         {
@@ -274,6 +317,7 @@
           "intensity": "mobility",
           "notes": "Foam roller quadriceps, attention a ne pas rouler sur la rotule",
           "notesEn": "Foam roller quadriceps, be careful not to roll over the kneecap",
+          "notesIt": "Foam roller quadricipiti, attenzione a non passare sulla rotula",
           "rpe": 3
         },
         {
@@ -284,6 +328,7 @@
           "intensity": "mobility",
           "notes": "Foam roller face latérale de la cuisse, du genou à la hanche",
           "notesEn": "Foam roller on lateral thigh, from knee to hip",
+          "notesIt": "Foam roller sulla parte laterale della coscia, dal ginocchio all'anca",
           "rpe": 4
         },
         {
@@ -294,6 +339,7 @@
           "intensity": "mobility",
           "notes": "Transition 90/90 pour la mobilité globale des hanches",
           "notesEn": "90/90 transitions for overall hip mobility",
+          "notesIt": "Transizioni 90/90 per la mobilità globale delle anche",
           "rpe": 3
         },
         {
@@ -304,6 +350,7 @@
           "intensity": "mobility",
           "notes": "Étirement du psoas, 30 secondes par côté, respirer profondement",
           "notesEn": "Hip flexor stretch, 30 seconds per side, breathe deeply",
+          "notesIt": "Allungamento dello psoas, 30 secondi per lato, respirare profondamente",
           "rpe": 3
         },
         {
@@ -314,6 +361,7 @@
           "intensity": "mobility",
           "notes": "Pigeon, 45 secondes par côté, laisser la gravite faire le travail",
           "notesEn": "Pigeon, 45 seconds per side, let gravity do the work",
+          "notesIt": "Posizione del piccione, 45 secondi per lato, lasciare che la gravità faccia il lavoro",
           "rpe": 3
         },
         {
@@ -324,6 +372,7 @@
           "intensity": "mobility",
           "notes": "Mobilité de cheville face au mur, 10 répétitions par côté",
           "notesEn": "Wall ankle mobility, 10 reps per side",
+          "notesIt": "Mobilità della caviglia al muro, 10 ripetizioni per lato",
           "rpe": 2
         }
       ],
@@ -336,6 +385,7 @@
           "intensity": "mobility",
           "notes": "90/90 final en relachement complet, respiration abdominale profonde",
           "notesEn": "Final 90/90 in complete release, deep abdominal breathing",
+          "notesIt": "90/90 finale in completo rilassamento, respirazione addominale profonda",
           "rpe": 1
         }
       ],
@@ -352,6 +402,12 @@
         "Use this session on rest day or in the evening after a running day",
         "Breathe through the belly in each posture: 4 seconds inhale, 6 seconds exhale"
       ],
+      "coachingTipsIt": [
+        "Seguite l'ordine proposto: prima foam roller per rilasciare le tensioni, poi mobilità articolare",
+        "Questa sessione completa sostituisce la combinazione di STR-014 e STR-015 quando avete poco tempo",
+        "Usate questa sessione nel giorno di riposo o la sera dopo una giornata di corsa",
+        "Respirate con il diaframma in ogni posizione: 4 secondi di inspirazione, 6 secondi di espirazione"
+      ],
       "commonMistakes": [
         "Essayer de faire tous les exercices trop vite pour tenir dans le temps imparti",
         "Sauter le foam roller et passer directement aux étirements statiques sur des muscles froids",
@@ -361,6 +417,11 @@
         "Trying to rush through all exercises to fit the time limit",
         "Skipping foam roller and going straight to static stretches on cold muscles",
         "Not adjusting foam roller pressure to your own sensitivity"
+      ],
+      "commonMistakesIt": [
+        "Cercare di eseguire tutti gli esercizi troppo in fretta per rientrare nel tempo previsto",
+        "Saltare il foam roller passando direttamente allo stretching statico su muscoli freddi",
+        "Non adattare la pressione del foam roller alla propria sensibilità"
       ],
       "variationIds": ["STR-014", "STR-015"],
       "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
@@ -376,8 +437,10 @@
       "kind": "strength",
       "name": "Prehab coureur",
       "nameEn": "Runner Prehab",
+      "nameIt": "Prehab per runner",
       "description": "Routine de prévention des blessures ciblée sur les zones à risque du coureur : chevilles, genoux et hanches. Combine mobilité articulaire et renforcement léger des stabilisateurs pour réduire le risque de blessures de surcharge.",
       "descriptionEn": "Injury prévention routine targeting runner risk areas: ankles, knees, and hips. Combines joint mobility and light stabilizer strengthening to reduce overuse injury risk.",
+      "descriptionIt": "Routine di prevenzione degli infortuni mirata alle aree più a rischio del runner: caviglie, ginocchia e anche. Combina mobilità articolare e rinforzo leggero degli stabilizzatori per ridurre il rischio di infortuni da sovraccarico.",
       "category": "prehab",
       "difficulty": "beginner",
       "typicalDuration": { "min": 25, "max": 30 },
@@ -392,6 +455,7 @@
           "intensity": "mobility",
           "notes": "Fentes avec rotation pour echauffer hanches et colonne thoracique",
           "notesEn": "Lunges with rotation to warm up hips and thoracic spine",
+          "notesIt": "Affondi con rotazione per riscaldare anche e colonna toracica",
           "rpe": 2
         }
       ],
@@ -404,6 +468,7 @@
           "intensity": "mobility",
           "notes": "10 répétitions par côté, genou pousse au-delà des orteils face au mur. Previent les entorses",
           "notesEn": "10 reps per side, knee pushes past toes facing wall. Prevents sprains",
+          "notesIt": "10 ripetizioni per lato, spingere il ginocchio oltre le dita dei piedi di fronte al muro. Previene le distorsioni",
           "rpe": 3
         },
         {
@@ -414,6 +479,7 @@
           "intensity": "endurance",
           "notes": "15 répétitions par côté, activation du moyen fessier pour stabiliser le bassin en course",
           "notesEn": "15 reps per side, gluteus medius activation to stabilize pelvis during running",
+          "notesIt": "15 ripetizioni per lato, attivazione del medio gluteo per stabilizzare il bacino durante la corsa",
           "rpe": 4
         },
         {
@@ -424,6 +490,7 @@
           "intensity": "endurance",
           "notes": "Avec bande elastique au-dessus des genoux, pas latéraux en position de demi-squat",
           "notesEn": "With resistance band above knees, lateral steps in half-squat position",
+          "notesIt": "Con fascia elastica sopra le ginocchia, passi laterali in posizione di mezzo squat",
           "rpe": 4
         },
         {
@@ -434,6 +501,7 @@
           "intensity": "endurance",
           "notes": "15 répétitions par jambe, montée complète et descente excentrique de 3 secondes. Protège le tendon d'Achille",
           "notesEn": "15 reps per leg, full rise and 3-second eccentric descent. Protects the Achilles tendon",
+          "notesIt": "15 ripetizioni per gamba, salita completa e discesa eccentrica di 3 secondi. Protegge il tendine d'Achille",
           "rpe": 4
         },
         {
@@ -444,6 +512,7 @@
           "intensity": "endurance",
           "notes": "12 répétitions par jambe, renforce les fessiers et la stabilité du bassin unilatéral",
           "notesEn": "12 reps per leg, strengthens glutes and unilateral pelvic stability",
+          "notesIt": "12 ripetizioni per gamba, rinforza i glutei e la stabilità unilaterale del bacino",
           "rpe": 4
         }
       ],
@@ -456,6 +525,7 @@
           "intensity": "mobility",
           "notes": "Étirement du psoas, 30 secondes par côté",
           "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "notesIt": "Allungamento dello psoas, 30 secondi per lato",
           "rpe": 2
         },
         {
@@ -466,6 +536,7 @@
           "intensity": "mobility",
           "notes": "Étirement piriforme, 30 secondes par côté",
           "notesEn": "Piriformis stretch, 30 seconds per side",
+          "notesIt": "Stretching del piriforme, 30 secondi per lato",
           "rpe": 2
         }
       ],
@@ -482,6 +553,12 @@
         "Clamshells and band walks strengthen the gluteus medius, a key pelvic stabilizer in running",
         "Integrate this session 2-3 times per week during training volume increases"
       ],
+      "coachingTipsIt": [
+        "Questa routine è un investimento: 25 minuti di prehab possono evitare settimane di stop",
+        "I calf raise eccentrici sono il miglior esercizio preventivo per le tendinopatie achillee",
+        "Clamshell e camminate con elastico rinforzano il medio gluteo, stabilizzatore chiave del bacino nella corsa",
+        "Integrate questa sessione 2-3 volte a settimana durante l'aumento del volume di allenamento"
+      ],
       "commonMistakes": [
         "Abandonner le prehab quand on se sent bien : la prévention doit être constante",
         "Faire les calf raises trop vite sans phase excentrique lente",
@@ -491,6 +568,11 @@
         "Dropping prehab when feeling good: prévention must be consistent",
         "Performing calf raises too fast without a slow eccentric phase",
         "Neglecting ankle mobility work thinking only hips matter"
+      ],
+      "commonMistakesIt": [
+        "Abbandonare il prehab quando ci si sente bene: la prevenzione deve essere costante",
+        "Eseguire i calf raise troppo velocemente senza una fase eccentrica lenta",
+        "Trascurare la mobilità della caviglia pensando che contino solo le anche"
       ],
       "variationIds": ["STR-014", "STR-006"],
       "suitablePhases": ["base", "build", "peak", "taper", "recovery"],

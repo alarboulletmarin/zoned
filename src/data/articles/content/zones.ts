@@ -294,6 +294,152 @@ The classic trap is running too fast on easy days and too slow on hard days. Res
 ## Put it into practice
 
 You now know the theory. The next step is to calculate your personal zones and apply them to your sessions. Our calculator allows you to get your précise ranges based on your HRmax and VO2max speed.`,
+  contentIt: `## Il tuo corpo è una macchina a più marce
+
+Immagina il tuo corpo come un'auto ibrida dotata di più motori. A bassa velocità vai in elettrico: è economico, silenzioso, puoi andare avanti per ore. Quando acceleri, entra in gioco il motore termico: più potente, ma i consumi salgono e l'autonomia scende. Spingi al massimo e passi alla modalità boost: prestazioni massime, ma impossibili da mantenere per più di qualche secondo.
+
+Il tuo metabolismo funziona esattamente allo stesso modo. A seconda dell'intensità dello sforzo, il corpo recluta diversi sistemi energetici, ciascuno con i propri vantaggi e limiti. Capire questi meccanismi è la chiave per progredire efficacemente senza esaurirsi.
+
+---
+
+## Le tre vie energetiche
+
+Prima di parlare di zone, bisogna capire come il corpo produce l'energia necessaria per correre. Coesistono tre sistemi, che si danno il cambio in base all'intensità e alla durata dello sforzo.
+
+### La via aerobica: il tuo motore di resistenza
+
+È il sistema principale per gli sforzi prolungati. Utilizza l'ossigeno per trasformare grassi e carboidrati in energia. Il processo è lento ma estremamente efficiente: puoi correre per ore finché arriva abbastanza ossigeno ai muscoli.
+
+La via aerobica si sviluppa in Zona 1 e Zona 2, dove l'intensità resta moderata. Ecco perché i maratoneti trascorrono l'80% del tempo di allenamento a questi ritmi "facili". Stanno costruendo il loro motore di resistenza.
+
+> 📊 I maratoneti d'élite trascorrono l'80% del loro allenamento in Zona 1-2. Non è mancanza di ambizione: è scienza.
+
+### La via anaerobica lattacida: il turbo
+
+Quando l'intensità aumenta, il sistema aerobico non basta più. Il corpo attiva quindi la via anaerobica lattacida, capace di produrre energia senza ossigeno. È rapida e potente, ma ha un prezzo: la produzione di acido lattico.
+
+Questo acido si accumula nei muscoli e provoca la caratteristica sensazione di bruciore. Conosci bene quel momento in cui le gambe diventano pesanti e ogni falcata diventa una lotta. È il sistema lattacido all'opera, sollecitato soprattutto in Zona 4 e Zona 5.
+
+### La via anaerobica alattacida: l'esplosione
+
+Per gli sforzi massimali di pochi secondi entra in gioco un terzo sistema. Attinge alle riserve di fosfocreatina, una molecola immagazzinata direttamente nei muscoli. È energia immediata, quella dello sprint puro.
+
+Questa via si esaurisce in 8-10 secondi, ma le bastano 2-3 minuti per ricostituirsi. È la Zona 6, quella delle accelerazioni fulminee e degli sprint finali.
+
+---
+
+## Le sei zone nel dettaglio
+
+### Zona 1 - Recupero (50-60% FCmax)
+
+La Zona 1 è la corsa di recupero in senso stretto. Devi poter sostenere una conversazione completa senza alcun fiatone. Se non riesci a raccontare il tuo weekend al compagno di allenamento, stai andando troppo forte.
+
+A questa intensità il corpo brucia essenzialmente grassi. L'aumento del flusso sanguigno accelera l'eliminazione degli scarti metabolici accumulati nelle sedute intense. Ecco perché una corsa lenta il giorno dopo una seduta dura fa recuperare meglio del riposo totale.
+
+**Sensazione tipica**: sforzo quasi impercettibile, potresti continuare all'infinito.
+
+### Zona 2 - Resistenza di base (60-70% FCmax)
+
+La Zona 2 è il cuore dell'allenamento di ogni runner serio. È qui che si costruisce la base aerobica, le fondamenta su cui poggia ogni prestazione duratura.
+
+A questa intensità le cellule muscolari sviluppano più mitocondri — le centrali energetiche che trasformano l'ossigeno in movimento. La rete capillare si estende, migliorando l'irrorazione dei muscoli. Il cuore diventa più efficiente, pompando più sangue a ogni battito.
+
+La conversazione resta agevole, anche se magari preferisci frasi più brevi. Sudi, il respiro è presente ma controllato. Molti runner commettono l'errore di trascurare questa zona giudicandola "troppo facile". Eppure è qui che si forgia la resistenza che ti porterà sulle distanze più lunghe.
+
+> 📌 La Zona 2 è la zona più importante per progredire nel lungo periodo. Non trascurarla mai con la scusa che sembra "troppo facile".
+
+**Sensazione tipica**: sforzo confortevole ma reale, senti che stai correndo.
+
+### Zona 3 - Tempo / Medio (70-80% FCmax)
+
+La Zona 3 è una zona di transizione, talvolta chiamata "zona grigia" perché non sviluppa in modo altrettanto mirato una singola via energetica. Corrisponde a un ritmo sostenuto ma gestibile per una lunga durata — tipicamente il tuo ritmo maratona o mezza maratona.
+
+Qui inizi a produrre acido lattico, ma il corpo riesce ancora a smaltirlo man mano che si forma. È un equilibrio: puoi parlare per frasi brevi, ma la chiacchierata diventa meno naturale.
+
+Questa zona è utile per i lunghi qualificati e per imparare a "gestire" uno sforzo prolungato. Allena la mente tanto quanto il fisico.
+
+**Sensazione tipica**: sforzo sostenuto, serve concentrazione per mantenere il ritmo.
+
+### Zona 4 - Soglia (80-90% FCmax)
+
+La soglia lattacida è un concetto chiave della fisiologia dello sforzo. È l'intensità alla quale l'acido lattico inizia ad accumularsi più velocemente di quanto il corpo riesca a smaltirlo. Oltre questo punto, la fatica cresce in modo esponenziale.
+
+Lavorare in Zona 4 significa spingere più in alto questa soglia. Più è alta, più a lungo puoi correre forte. Le sedute alla soglia sono impegnative: 20-40 minuti a un ritmo in cui riesci a dire solo poche parole tra un respiro e l'altro.
+
+È il ritmo della tua 10 km, forse leggermente più veloce. Scomodo ma gestibile per una durata limitata.
+
+**Sensazione tipica**: sforzo duro, conti i minuti.
+
+### Zona 5 - VAM / VO2max (90-95% FCmax)
+
+La Velocità Aerobica Massima rappresenta la velocità alla quale raggiungi il consumo massimo di ossigeno (VO2max). È il vertice della tua capacità aerobica, il confine tra ciò che i polmoni possono fornire e ciò che i muscoli richiedono.
+
+Il lavoro in Zona 5 si svolge a intervalli: da 30 secondi a 3 minuti di sforzo intenso, seguiti da recupero. Queste sedute di ripetute — i celebri "30/30" o i "1000m" — sono quelle che fanno migliorare di più la velocità pura.
+
+Attenzione però: questo tipo di allenamento è molto logorante. Due sedute a settimana al massimo, con almeno 48 ore di recupero tra l'una e l'altra.
+
+> ⚠️ Non superare mai due sedute di VAM a settimana. Oltre questo limite il rischio di infortuni e sovrallenamento cresce bruscamente.
+
+**Sensazione tipica**: respirazione massimale, impossibile parlare, durata limitata.
+
+### Zona 6 - Sprint (95-100% FCmax)
+
+La Zona 6 è il regno dello sforzo massimale, dove vengono reclutate tutte le fibre muscolari. Non si parla più di minuti ma di secondi: 10, 20, 30 secondi di sprint puro.
+
+Questo lavoro sviluppa la coordinazione neuromuscolare — la capacità del cervello di attivare efficacemente i muscoli — e la potenza pura. È particolarmente utile per migliorare la volata finale o la capacità di accelerazione.
+
+Le sedute di salite brevi e gli allunghi veloci a fine corsa lenta sollecitano questa zona.
+
+**Sensazione tipica**: sforzo totale, la fine è quasi un sollievo.
+
+---
+
+## Determinare le tue zone personali
+
+Le percentuali di frequenza cardiaca massima (FCmax) indicate sopra sono medie. Per un allenamento preciso devi conoscere la tua FCmax reale.
+
+### Il test da campo
+
+Il metodo più affidabile resta il test. Dopo un riscaldamento completo di 15-20 minuti, esegui 3-4 salite da 2-3 minuti accelerando progressivamente. Sull'ultima dai tutto quello che hai. Il picco mostrato sull'orologio sarà vicino alla tua FCmax reale.
+
+### Le formule
+
+La formula classica "220 - età" è semplice ma imprecisa, con una deviazione standard di 10-12 battiti. La formula di Tanaka (208 - 0,7 x età) è leggermente più affidabile. Tieni però presente che nessuna formula sostituisce una misurazione diretta.
+
+> 💡 Se non hai un cardiofrequenzimetro, usa il "test della parola": in Zona 2 devi poter parlare con frasi complete senza fiatone.
+
+### La scala di percezione
+
+In aggiunta al cardio, la scala di Borg (RPE da 1 a 10) ti aiuta a calibrare le sensazioni:
+
+| Zona | RPE | Descrizione |
+|------|-----|-------------|
+| Z1 | 2-3 | Molto facile, recupero |
+| Z2 | 3-4 | Confortevole, sostenibile a lungo |
+| Z3 | 5-6 | Moderatamente difficile |
+| Z4 | 7-8 | Difficile, scomodo |
+| Z5 | 8-9 | Molto difficile, respiro massimale |
+| Z6 | 10 | Sforzo massimale, pochi secondi |
+
+Con l'esperienza imparerai a correlare le sensazioni con i dati dell'orologio.
+
+---
+
+## Applicare le zone al tuo allenamento
+
+La ripartizione classica tra i fondisti segue la regola dell'80/20: 80% del volume di allenamento in Zona 1-2, 20% in Zona 4 e oltre. Questa polarizzazione, validata da decenni di ricerca, massimizza gli adattamenti limitando la fatica.
+
+Concretamente, su 4 uscite settimanali:
+- 3 uscite in Zona 1-2 (lenti, lungo)
+- 1 seduta con intensità (soglia, ripetute o tempo)
+
+La trappola classica è correre troppo forte nei giorni facili e troppo piano nei giorni duri. Risultato: sei costantemente in Zona 3, né abbastanza leggero da recuperare né abbastanza intenso da progredire. È il cosiddetto allenamento in "zona grigia": molta fatica per pochi risultati.
+
+---
+
+## Passa alla pratica
+
+Ora conosci la teoria. Il passo successivo è calcolare le tue zone personali e applicarle alle sedute. Il nostro calcolatore ti permette di ottenere i tuoi intervalli precisi in base a FCmax e VAM.`,
 };
 
 export default content;

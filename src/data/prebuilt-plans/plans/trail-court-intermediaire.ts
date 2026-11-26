@@ -5,8 +5,10 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
   "slug": "trail-court-intermediaire",
   "name": "Trail court intermédiaire",
   "nameEn": "Short Trail Intermediate",
+  "nameIt": "Trail corto intermedio",
   "description": "Plan de 14 semaines pour un trail de 30 km. Dénivelé, marche en montée et descente technique, en plus du volume.",
   "descriptionEn": "14-week plan for a 30 km trail race. Elevation, power hiking and technical descents on top of the volume.",
+  "descriptionIt": "Piano di 14 settimane per un trail di 30 km. Dislivello, camminata veloce in salita e discesa tecnica oltre al volume.",
   "icon": "Mountain",
   "difficulty": "intermediate",
   "raceDistance": "trail_short",
@@ -49,6 +51,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 49,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 49,
           "loadScore": 41.2,
           "paceNotes": [],
@@ -62,6 +65,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 58,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 72,
           "loadScore": 122.4,
           "paceNotes": [
@@ -70,7 +74,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 9
@@ -83,6 +88,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 40,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 40,
           "loadScore": 37.8,
           "paceNotes": [
@@ -91,7 +97,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 6
@@ -104,6 +111,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 69,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 9.5 km (~63 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 9.5 km (~63 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 9.5 km (~63 min)",
           "targetDurationMin": 63,
           "loadScore": 48.3,
           "paceNotes": [
@@ -112,7 +120,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 9.5
@@ -129,6 +138,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S1",
       "weekLabelEn": "W1",
+      "weekLabelIt": "S1",
       "targetKm": 32,
       "targetLongRunKm": 9.5,
       "weeklyLoadScore": 281
@@ -147,6 +157,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 63,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 63,
           "loadScore": 53.2,
           "paceNotes": [
@@ -155,7 +166,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 9.5
@@ -168,6 +180,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 42,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 50,
           "loadScore": 50,
           "paceNotes": [
@@ -176,7 +189,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 6.5
@@ -189,6 +203,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 46,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 46,
           "loadScore": 40.8,
           "paceNotes": [
@@ -197,7 +212,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 7
@@ -210,6 +226,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 87,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 11 km (~72 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 11 km (~72 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 11 km (~72 min)",
           "targetDurationMin": 72,
           "loadScore": 60.9,
           "paceNotes": [
@@ -218,7 +235,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -235,6 +253,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S2",
       "weekLabelEn": "W2",
+      "weekLabelIt": "S2",
       "targetKm": 34,
       "targetLongRunKm": 11,
       "weeklyLoadScore": 230
@@ -253,6 +272,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 79,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 79,
           "loadScore": 67.2,
           "paceNotes": [
@@ -261,7 +281,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 12
@@ -274,6 +295,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 31,
           "notes": "Allure vitesse : 4:16 - 4:26/km",
           "notesEn": "Repetition pace: 4:16 - 4:26/km",
+          "notesIt": "Ritmo ripetute: 4:16 - 4:26/km",
           "targetDurationMin": 32,
           "loadScore": 41.6,
           "paceNotes": [
@@ -282,7 +304,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.27,
               "paceMaxKm": 4.44,
               "description": "Allure vitesse",
-              "descriptionEn": "Repetition pace"
+              "descriptionEn": "Repetition pace",
+              "descriptionIt": "Ritmo ripetute"
             }
           ],
           "targetDistanceKm": 5
@@ -295,6 +318,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 63,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 63,
           "loadScore": 55.4,
           "paceNotes": [
@@ -303,7 +327,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 9.5
@@ -316,6 +341,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 78,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 9.5 km (~63 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 9.5 km (~63 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 9.5 km (~63 min)",
           "targetDurationMin": 63,
           "loadScore": 54.6,
           "paceNotes": [
@@ -324,14 +350,16 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 9.5
@@ -348,6 +376,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S3",
       "weekLabelEn": "W3",
+      "weekLabelIt": "S3",
       "targetKm": 36,
       "targetLongRunKm": 9.5,
       "weeklyLoadScore": 229
@@ -366,6 +395,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 36,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 36,
           "loadScore": 30.2,
           "paceNotes": [],
@@ -379,6 +409,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 40,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 40,
           "loadScore": 38.8,
           "paceNotes": [
@@ -387,7 +418,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 6
@@ -400,6 +432,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 40,
           "notes": "Allure vitesse : 4:16 - 4:26/km",
           "notesEn": "Repetition pace: 4:16 - 4:26/km",
+          "notesIt": "Ritmo ripetute: 4:16 - 4:26/km",
           "targetDurationMin": 40,
           "loadScore": 34.7,
           "paceNotes": [
@@ -408,7 +441,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.27,
               "paceMaxKm": 4.44,
               "description": "Allure vitesse",
-              "descriptionEn": "Repetition pace"
+              "descriptionEn": "Repetition pace",
+              "descriptionIt": "Ritmo ripetute"
             }
           ],
           "targetDistanceKm": 6
@@ -421,6 +455,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 65,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 10 km (~65 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 10 km (~65 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 10 km (~65 min)",
           "targetDurationMin": 65,
           "loadScore": 45.5,
           "paceNotes": [
@@ -429,14 +464,16 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 10
@@ -453,6 +490,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
+      "weekLabelIt": "Settimana di scarico",
       "targetKm": 28,
       "targetLongRunKm": 10,
       "weeklyLoadScore": 157
@@ -471,6 +509,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 66,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 66,
           "loadScore": 52.9,
           "paceNotes": [
@@ -479,7 +518,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 10
@@ -492,6 +532,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 37,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 40,
           "loadScore": 40,
           "paceNotes": [
@@ -500,7 +541,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 5.5
@@ -513,6 +555,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 53,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 53,
           "loadScore": 40,
           "paceNotes": [
@@ -521,7 +564,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 8
@@ -534,6 +578,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 95,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 14.5 km (~95 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 14.5 km (~95 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 14.5 km (~95 min)",
           "targetDurationMin": 95,
           "loadScore": 66.5,
           "paceNotes": [
@@ -542,7 +587,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 14.5
@@ -559,6 +605,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S5",
       "weekLabelEn": "W5",
+      "weekLabelIt": "S5",
       "targetKm": 38,
       "targetLongRunKm": 14.5,
       "weeklyLoadScore": 206
@@ -577,6 +624,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 59,
           "notes": "Allure vitesse : 4:16 - 4:26/km",
           "notesEn": "Repetition pace: 4:16 - 4:26/km",
+          "notesIt": "Ritmo ripetute: 4:16 - 4:26/km",
           "targetDurationMin": 59,
           "loadScore": 43.4,
           "paceNotes": [
@@ -585,7 +633,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.27,
               "paceMaxKm": 4.44,
               "description": "Allure vitesse",
-              "descriptionEn": "Repetition pace"
+              "descriptionEn": "Repetition pace",
+              "descriptionIt": "Ritmo ripetute"
             }
           ],
           "targetDistanceKm": 9
@@ -598,6 +647,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 65,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 72,
           "loadScore": 93.6,
           "paceNotes": [
@@ -606,7 +656,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 10.5
@@ -619,6 +670,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 56,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 56,
           "loadScore": 42,
           "paceNotes": [
@@ -627,7 +679,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 8.5
@@ -640,6 +693,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 86,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 12 km (~79 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 12 km (~79 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 12 km (~79 min)",
           "targetDurationMin": 79,
           "loadScore": 60.2,
           "paceNotes": [
@@ -648,14 +702,16 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 12
@@ -672,6 +728,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S6",
       "weekLabelEn": "W6",
+      "weekLabelIt": "S6",
       "targetKm": 40,
       "targetLongRunKm": 12,
       "weeklyLoadScore": 257
@@ -690,6 +747,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 53,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 53,
           "loadScore": 40,
           "paceNotes": [
@@ -698,7 +756,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 8
@@ -711,6 +770,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 44,
           "notes": "Allure seuil : 5:08 - 5:22/km\n2 répétitions",
           "notesEn": "Threshold pace: 5:08 - 5:22/km\n2 repetitions",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km\n2 ripetute",
           "targetDurationMin": 46,
           "loadScore": 59.8,
           "paceNotes": [
@@ -719,7 +779,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "scaledRepetitions": 2,
@@ -733,6 +794,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 72,
           "loadScore": 55.1,
           "paceNotes": [
@@ -741,7 +803,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 11
@@ -754,6 +817,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 105,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 16 km (~105 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 16 km (~105 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 16 km (~105 min)",
           "targetDurationMin": 105,
           "loadScore": 73.5,
           "paceNotes": [
@@ -762,7 +826,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 16
@@ -779,6 +844,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S7",
       "weekLabelEn": "W7",
+      "weekLabelIt": "S7",
       "targetKm": 42,
       "targetLongRunKm": 16,
       "weeklyLoadScore": 269
@@ -797,6 +863,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 49,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 49,
           "loadScore": 41.2,
           "paceNotes": [],
@@ -810,6 +877,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 23,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 23,
           "loadScore": 20.4,
           "paceNotes": [
@@ -818,14 +886,16 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 3.5
@@ -838,6 +908,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 56,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 56,
           "loadScore": 47.6,
           "paceNotes": [
@@ -846,7 +917,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 8.5
@@ -859,6 +931,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 86,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 13 km (~86 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 13 km (~86 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 13 km (~86 min)",
           "targetDurationMin": 86,
           "loadScore": 60.2,
           "paceNotes": [
@@ -867,7 +940,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 13
@@ -884,6 +958,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
+      "weekLabelIt": "Settimana di scarico",
       "targetKm": 33,
       "targetLongRunKm": 13,
       "weeklyLoadScore": 177
@@ -902,6 +977,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 72,
           "loadScore": 55,
           "paceNotes": [
@@ -910,7 +986,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -923,6 +1000,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 36,
           "notes": "Allure VMA : 4:37 - 4:52/km",
           "notesEn": "VO2max pace: 4:37 - 4:52/km",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km",
           "targetDurationMin": 37,
           "loadScore": 48.1,
           "paceNotes": [
@@ -931,28 +1009,32 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             },
             {
               "zone": "I",
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "targetDistanceKm": 5.5
@@ -965,6 +1047,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 66,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 66,
           "loadScore": 48.5,
           "paceNotes": [
@@ -973,7 +1056,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 10
@@ -986,6 +1070,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 106,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 15 km (~99 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 15 km (~99 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 15 km (~99 min)",
           "targetDurationMin": 99,
           "loadScore": 74.2,
           "paceNotes": [
@@ -994,7 +1079,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 15
@@ -1011,6 +1097,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S9",
       "weekLabelEn": "W9",
+      "weekLabelIt": "S9",
       "targetKm": 42,
       "targetLongRunKm": 15,
       "weeklyLoadScore": 238
@@ -1029,6 +1116,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 69,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 69,
           "loadScore": 46.4,
           "paceNotes": [
@@ -1037,7 +1125,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 10.5
@@ -1050,6 +1139,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 44,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 45,
           "loadScore": 58.5,
           "paceNotes": [
@@ -1058,7 +1148,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 7.5
@@ -1071,6 +1162,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 56,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 56,
           "loadScore": 39.7,
           "paceNotes": [
@@ -1079,7 +1171,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 8.5
@@ -1092,6 +1185,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 128,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 19.5 km (~128 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 19.5 km (~128 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 19.5 km (~128 min)",
           "targetDurationMin": 128,
           "loadScore": 89.6,
           "paceNotes": [
@@ -1100,14 +1194,16 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 19.5
@@ -1124,6 +1220,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S10",
       "weekLabelEn": "W10",
+      "weekLabelIt": "S10",
       "targetKm": 46,
       "targetLongRunKm": 19.5,
       "weeklyLoadScore": 258
@@ -1142,6 +1239,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 59,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 59,
           "loadScore": 40.5,
           "paceNotes": [
@@ -1150,7 +1248,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 9
@@ -1163,6 +1262,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 45,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 45,
           "loadScore": 58.5,
           "paceNotes": [
@@ -1171,7 +1271,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 7.5
@@ -1184,6 +1285,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 76,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 76,
           "loadScore": 53.7,
           "paceNotes": [
@@ -1192,7 +1294,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11.5
@@ -1205,6 +1308,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 138,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 21 km (~138 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 21 km (~138 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 21 km (~138 min)",
           "targetDurationMin": 138,
           "loadScore": 96.6,
           "paceNotes": [
@@ -1213,14 +1317,16 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 21
@@ -1237,6 +1343,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S11",
       "weekLabelEn": "W11",
+      "weekLabelIt": "S11",
       "targetKm": 49,
       "targetLongRunKm": 21,
       "weeklyLoadScore": 281
@@ -1255,6 +1362,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 33,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 33,
           "loadScore": 23.3,
           "paceNotes": [
@@ -1263,7 +1371,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 5
@@ -1276,6 +1385,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 122,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 127,
           "loadScore": 127.4,
           "paceNotes": [
@@ -1284,7 +1394,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 18.5
@@ -1297,6 +1408,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 30,
           "notes": "Allure vitesse : 4:16 - 4:26/km",
           "notesEn": "Repetition pace: 4:16 - 4:26/km",
+          "notesIt": "Ritmo ripetute: 4:16 - 4:26/km",
           "targetDurationMin": 30,
           "loadScore": 19.5,
           "paceNotes": [
@@ -1305,7 +1417,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.27,
               "paceMaxKm": 4.44,
               "description": "Allure vitesse",
-              "descriptionEn": "Repetition pace"
+              "descriptionEn": "Repetition pace",
+              "descriptionIt": "Ritmo ripetute"
             }
           ],
           "targetDistanceKm": 4.5
@@ -1318,6 +1431,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 119,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 18 km (~119 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 18 km (~119 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 18 km (~119 min)",
           "targetDurationMin": 119,
           "loadScore": 83.3,
           "paceNotes": [
@@ -1326,14 +1440,16 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 18
@@ -1350,6 +1466,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S12",
       "weekLabelEn": "W12",
+      "weekLabelIt": "S12",
       "targetKm": 46,
       "targetLongRunKm": 18,
       "weeklyLoadScore": 268
@@ -1368,6 +1485,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 40,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 40,
           "loadScore": 36.4,
           "paceNotes": [
@@ -1376,14 +1494,16 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 6
@@ -1396,6 +1516,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 41,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 44,
           "loadScore": 44.4,
           "paceNotes": [
@@ -1404,7 +1525,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 6
@@ -1417,6 +1539,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 33,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 33,
           "loadScore": 23.3,
           "paceNotes": [
@@ -1425,7 +1548,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 5
@@ -1438,6 +1562,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 92,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 14 km (~92 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 14 km (~92 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 14 km (~92 min)",
           "targetDurationMin": 92,
           "loadScore": 64.4,
           "paceNotes": [
@@ -1446,7 +1571,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 14
@@ -1463,6 +1589,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S13",
       "weekLabelEn": "W13",
+      "weekLabelIt": "S13",
       "targetKm": 31,
       "targetLongRunKm": 14,
       "weeklyLoadScore": 176
@@ -1481,6 +1608,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 60,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week",
+          "notesIt": "Corsa facile - settimana gara",
           "targetDistanceKm": 9,
           "loadScore": 42
         },
@@ -1492,6 +1620,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 60,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week",
+          "notesIt": "Corsa facile - settimana gara",
           "targetDistanceKm": 9,
           "loadScore": 42
         },
@@ -1503,6 +1632,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 25,
           "notes": "Activation pré-course : footing léger + quelques accélérations",
           "notesEn": "Pre-race activation: easy jog + a few strides",
+          "notesIt": "Attivazione pre-gara: corsa facile + qualche allungo",
           "targetDistanceKm": 4,
           "loadScore": 17.5
         },
@@ -1513,7 +1643,8 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
           "isKeySession": true,
           "estimatedDurationMin": 0,
           "notes": "Jour de course - Trail court",
-          "notesEn": "Race day - Short Trail"
+          "notesEn": "Race day - Short Trail",
+          "notesIt": "Giorno di gara - Trail corto"
         },
         {
           "dayOfWeek": 2,
@@ -1527,6 +1658,7 @@ export const planTrailCourtIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de course",
       "weekLabelEn": "Race week",
+      "weekLabelIt": "Settimana gara",
       "targetKm": 22,
       "weeklyLoadScore": 116
     }

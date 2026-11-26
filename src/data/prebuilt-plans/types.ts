@@ -6,8 +6,10 @@ export interface PrebuiltPlan {
   slug: string;
   name: string;
   nameEn: string;
+  nameIt?: string;
   description: string;
   descriptionEn: string;
+  descriptionIt?: string;
   icon: string;
   difficulty: Difficulty;
   raceDistance?: RaceDistance;

@@ -418,6 +418,214 @@ Periodization isn't reserved for élites. Whether you're targeting your first ma
 - Maintain motivation over the long term
 
 The best plan is one you can follow. Start with a simple structure (4-week cycles in 3:1), and refine over the seasons based on what works for you.`,
+  contentIt: `## Perché pianificare l'allenamento
+
+Correre a sensazione funziona... per un po'. Migliori per qualche mese, poi ti blocchi. Ti infortuni. Perdi la motivazione. La periodizzazione è esattamente l'opposto: un approccio strutturato che organizza il tuo allenamento nel tempo per massimizzare gli adattamenti e farti arrivare al massimo della forma il giorno della gara.
+
+Il principio è semplice: il tuo corpo non può sviluppare tutto contemporaneamente. Se alleni resistenza, velocità e forza insieme con la stessa intensità, disperdi gli sforzi. La periodizzazione consiste nel concentrare le risorse su qualità specifiche, in un ordine logico, per costruire una prestazione solida.
+
+> 📌 La periodizzazione si basa su un principio chiave: concentrare gli sforzi su una qualità alla volta, in un ordine logico, anziché allenare tutto insieme.
+
+---
+
+## I tre cicli della pianificazione
+
+La periodizzazione si articola su tre livelli di organizzazione, come matrioske: il [[macrocycle]], il [[mesocycle]] e il [[microcycle]].
+
+### Il macrociclo: la visione d'insieme
+
+Il [[macrocycle]] rappresenta l'intero periodo di preparazione verso un obiettivo principale. Per una maratona primaverile, il tuo macrociclo potrebbe andare da novembre ad aprile, cioè circa 20 settimane.
+
+È su questa scala che definisci le grandi fasi e collochi le gare intermedie. Un macrociclo ben costruito alterna periodi di carico e recupero, con una progressione graduale verso l'obiettivo.
+
+La durata tipica di un macrociclo varia in base all'obiettivo:
+- **10 km**: 8-12 settimane
+- **Mezza maratona**: 10-14 settimane
+- **Maratona**: 16-20 settimane
+- **Ultra-trail**: 20-30 settimane
+
+### Il mesociclo: i blocchi di allenamento
+
+Il [[mesocycle]] è un blocco di 3-6 settimane con un obiettivo di sviluppo specifico. Ogni mesociclo si concentra su una qualità particolare: resistenza di base, lavoro alla soglia, velocità specifica...
+
+La struttura classica di un mesociclo segue uno schema di carico progressivo:
+- **Schema 3:1**: 3 settimane di carico crescente + 1 settimana di scarico
+- **Schema 2:1**: 2 settimane di carico + 1 settimana di scarico (per runner più maturi o soggetti a infortuni)
+
+Questa alternanza carico/recupero è fondamentale. È durante le settimane di [[deload]] che il corpo consolida gli adattamenti.
+
+> 💡 Adotta lo schema 3:1 per iniziare: 3 settimane di carico progressivo seguite da 1 settimana di scarico. È il formato più collaudato e semplice da seguire.
+
+### Il microciclo: la settimana tipo
+
+Il [[microcycle]] corrisponde di norma a una settimana di allenamento. Definisce la distribuzione delle sedute, la loro tipologia e i giorni di riposo.
+
+Un microciclo equilibrato alterna con intelligenza:
+- Sedute di qualità (ripetute, soglia, tempo)
+- Sedute di resistenza facile
+- Giorni di riposo o recupero attivo
+
+La sfida è collocare le sedute impegnative quando sei fresco e garantire abbastanza recupero prima della seduta intensa successiva.
+
+---
+
+## Le quattro fasi di preparazione
+
+Un macrociclo completo si suddivide in fasi successive, ciascuna con le proprie priorità.
+
+### Fase 1: Preparazione generale (costruzione della base)
+
+È la fondamenta. Costruisci la tua [[endurance-fondamentale]], rinforzi le strutture (tendini, muscoli, ossa) e sviluppi la capacità aerobica.
+
+**Caratteristiche:**
+- 80-85% del volume in [[zone-2]]
+- Aumento progressivo del volume (max +10%/settimana)
+- Poche o nessuna seduta intensa
+- Lavoro tecnico e potenziamento muscolare
+
+**Durata tipica:** 6-8 settimane
+
+L'errore classico è bruciare questa fase per passare subito alle sedute "che fanno male". Ma senza una base solida, le sedute intense non si appoggiano su nulla.
+
+### Fase 2: Preparazione specifica
+
+Inizi a introdurre lavori a intensità più elevate, specifiche per il tuo obiettivo.
+
+**Caratteristiche:**
+- Introduzione progressiva del lavoro alla [[seuil-lactique]]
+- Prime sedute di ripetute in [[zone-5]]
+- Lunghi con porzioni a ritmo specifico
+- Volume che si stabilizza o aumenta leggermente
+
+**Durata tipica:** 6-8 settimane
+
+È la fase in cui "affili le armi". Il volume resta importante, ma l'intensità cresce.
+
+### Fase 3: Competizione (picco)
+
+Punti al picco di forma per la gara obiettivo. L'allenamento diventa molto specifico.
+
+**Caratteristiche:**
+- Sedute a ritmo gara
+- Volume che inizia a diminuire
+- Intensità mantenuta o leggermente aumentata
+- Focus mentale e fiducia
+
+**Durata tipica:** 3-4 settimane prima dello scarico
+
+### Fase 4: Scarico (tapering)
+
+Riduzione controllata del carico per arrivare freschi il giorno della gara. Ne parliamo in dettaglio nell'articolo dedicato al [[taper]].
+
+**Caratteristiche:**
+- Volume ridotto del 40-60%
+- Intensità delle sedute chiave mantenuta
+- Riposo e sonno prioritari
+
+**Durata tipica:** 2-3 settimane in base alla distanza
+
+---
+
+## Esempio concreto: piano maratona 16 settimane
+
+Ecco come potrebbe articolarsi la periodizzazione di una preparazione maratona:
+
+| Settimane | Fase | Focus | Volume relativo |
+|-----------|------|-------|-----------------|
+| 1-4 | Preparazione generale | Resistenza, volume | 70% -> 85% |
+| 5-8 | Preparazione specifica 1 | Soglia, tempo | 85% -> 95% |
+| 9-12 | Preparazione specifica 2 | Ritmo maratona, VO2max | 95% -> 100% |
+| 13-14 | Picco | Sedute specifiche | 90% -> 80% |
+| 15-16 | Taper | Recupero, freschezza | 60% -> 40% |
+
+Ogni blocco di 4 settimane segue uno schema 3:1 con una settimana di scarico.
+
+**Settimana tipo in preparazione specifica:**
+- Lunedì: Riposo
+- Martedì: Ripetute (es. 6x1000m a ritmo 10 km)
+- Mercoledì: Corsa lenta [[zone-2]]
+- Giovedì: Tempo 40 min alla [[seuil-lactique]]
+- Venerdì: Riposo o corsa leggera
+- Sabato: Corsa lenta [[zone-2]]
+- Domenica: Lungo 1h45-2h15
+
+---
+
+## Periodizzazione lineare vs ondulata
+
+Due grandi approcci si confrontano nel mondo dell'allenamento.
+
+### La periodizzazione lineare (classica)
+
+È l'approccio descritto sopra: fasi successive che sviluppano una qualità alla volta. Si parte da volume e resistenza, si finisce con intensità e specificità.
+
+**Vantaggi:**
+- Semplice da capire e pianificare
+- Collaudata da decenni
+- Ideale per principianti e obiettivi ben definiti
+
+**Limiti:**
+- Le qualità sviluppate presto possono "deallenarsi"
+- Meno adatta a calendari con più gare obiettivo
+
+### La [[periodization-ondulee]]
+
+Vari le intensità all'interno della stessa settimana anziché per blocchi. Ogni settimana include resistenza, soglia e velocità.
+
+**Vantaggi:**
+- Mantiene attive tutte le qualità tutto l'anno
+- Più varietà, meno monotonia
+- Molto adatta ai runner amatori con vincoli di tempo
+
+**Limiti:**
+- Più complessa da gestire
+- Può diluire lo sviluppo di qualità specifiche
+
+### La [[block-periodization]]
+
+Variante avanzata in cui concentri 2-3 settimane su una sola qualità prima di passare alla successiva. Approccio reso celebre da Vladimir Issurin.
+
+**Vantaggi:**
+- Massimizza lo sviluppo di ciascuna qualità
+- Efficace per atleti avanzati
+
+**Limiti:**
+- Richiede ottima conoscenza del proprio corpo
+- Rischio di deallenamento delle altre qualità
+
+---
+
+## Errori da evitare
+
+### 1. Saltare la fase di base
+
+Tutti vogliono fare ripetute. Ma senza solide fondamenta aerobiche, le sedute intense producono solo fatica senza adattamenti duraturi.
+
+### 2. Ignorare le settimane di scarico
+
+"Mi sento bene, continuo." Pessima idea. È durante le settimane di recupero che avvengono gli adattamenti. Eliminarle compromette la crescita.
+
+> ⚠️ Non saltare mai le settimane di scarico, nemmeno quando ti senti in gran forma. È lì che gli adattamenti si consolidano. Ignorarle porta a stallo o infortunio.
+
+### 3. Moltiplicare gli obiettivi
+
+Voler essere al top su una 10 km a marzo, una mezza ad aprile e una maratona a maggio è la ricetta per il fallimento. Scegli un obiettivo principale per macrociclo.
+
+### 4. Essere rigidi
+
+Un piano non è un contratto. Se sei malato, stanco o sovraccarico, adattalo. Ascoltare il tuo corpo resta la bussola migliore.
+
+---
+
+## Periodizzare per migliorare a lungo
+
+La periodizzazione non è riservata agli atleti d'élite. Che tu punti alla prima maratona o a un record personale, strutturare l'allenamento nel tempo ti permetterà di:
+- Progredire in modo continuo
+- Evitare infortuni da sovraccarico
+- Arrivare fresco e fiducioso il giorno della gara
+- Mantenere la motivazione nel lungo periodo
+
+Il piano migliore è quello che riesci a seguire. Inizia con una struttura semplice (cicli di 4 settimane 3:1) e affinala stagione dopo stagione in base a ciò che funziona per te.`,
 };
 
 export default content;

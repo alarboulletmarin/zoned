@@ -6,6 +6,7 @@ export interface Tip {
   id: string;
   text: string;
   textEn: string;
+  textIt?: string;
   category: TipCategory;
   relatedZones?: ZoneNumber[];
   relatedCategories?: WorkoutCategory[];

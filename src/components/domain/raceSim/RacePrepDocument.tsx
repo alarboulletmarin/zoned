@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { SplitBars } from "@/components/calc";
-import { usePickLang } from "@/lib/i18n-utils";
+import { getDateLocale, usePickLang } from "@/lib/i18n-utils";
 import { formatPaceDisplay, formatSplitTime, type SplitStrategy } from "@/lib/splits";
 import type { RacePlan } from "@/lib/raceSimulator";
 import { hmToMinutes, minutesToHm, warmupBlocks } from "@/lib/raceDay";
@@ -19,11 +19,11 @@ export interface Chapter {
   at: string;
 }
 
-function eveDate(raceDate: string | undefined, lang: string): string | undefined {
+function eveDate(raceDate: string | undefined, _lang: string): string | undefined {
   if (!raceDate) return undefined;
   const d = new Date(`${raceDate}T12:00:00`);
   d.setDate(d.getDate() - 1);
-  return d.toLocaleDateString(lang.startsWith("en") ? "en-GB" : "fr-FR", { weekday: "long", day: "numeric" });
+  return d.toLocaleDateString(getDateLocale(), { weekday: "long", day: "numeric" });
 }
 
 /** The five chapters of the day, shared by the document and its rail. */

@@ -328,6 +328,169 @@ Prevention remains the best strategy: respect recovery weeks, don't increase vol
 Recovery isn't weakness, it's intelligence. The runners who progress most aren't those who train hardest - they're those who master the balance between stress and rest.
 
 Integrate recovery as part of your training, not as an absence of training. Sleep enough, eat properly after effort, respect easy days. Your body will repay you in performance.`,
+  contentIt: `## Il paradosso dell'allenamento
+
+Ecco una verità controintuitiva: non migliori mentre corri. Migliori mentre recuperi.
+
+L'allenamento è uno stress. Ogni seduta infligge al corpo dei micro-traumi: fibre muscolari danneggiate, riserve di glicogeno svuotate, sistema nervoso sollecitato. È durante il riposo successivo che avviene la magia. Il corpo non si limita a riparare i danni: supercompensa, diventando un po' più forte e un po' più resistente di prima.
+
+Questo fenomeno si chiama supercompensazione. Ma funziona a una sola condizione: lasciare al corpo il tempo di completare il lavoro di ricostruzione. Interrompere questo processo con una nuova seduta troppo precoce significa costruire su fondamenta incompiute.
+
+> 📌 Non migliori durante lo sforzo, ma durante il recupero successivo. Senza riposo adeguato, niente supercompensazione.
+
+---
+
+## I due tipi di recupero
+
+### Il recupero attivo
+
+Dopo uno sforzo intenso, il sangue è carico di scarti metabolici: lattato, ioni idrogeno, radicali liberi. Queste sostanze, normali e inevitabili, contribuiscono alla sensazione di fatica e rigidità muscolare.
+
+Un movimento leggero — corsa lentissima, bici a bassa intensità, camminata — ne accelera l'eliminazione. L'aumento del flusso sanguigno "ripulisce" i tessuti, portando ossigeno e nutrienti freschi. Ecco perché un'uscita di 20-30 minuti in Zona 1 il giorno dopo una seduta impegnativa spesso fa recuperare meglio del riposo totale.
+
+Il segreto: resistere alla tentazione di accelerare. Se trasformi il recupero attivo in una vera seduta, aggiungi stress invece di eliminarlo.
+
+### Il recupero passivo
+
+A volte il corpo ha bisogno di non fare nulla. Dopo uno sforzo particolarmente duro — gara, seduta alla soglia impegnativa, lungo molto esteso — o in caso di accumulo di fatica, il riposo completo ha la priorità.
+
+Significa: niente corsa, niente cross-training intenso, solo normali attività quotidiane. Sonno, stretching dolce, magari una passeggiata tranquilla. Il corpo dispone così di tutta la sua energia per la ricostruzione.
+
+---
+
+## Il sonno: la tua arma segreta
+
+Se dovessi ricordare una sola cosa di questo articolo, sarebbe questa: il sonno è il fattore di recupero più potente e più sottovalutato.
+
+### Cosa succede di notte
+
+Durante il sonno profondo, il corpo rilascia massicciamente l'ormone della crescita (GH). Questo ormone è il direttore d'orchestra della ricostruzione: stimola la sintesi proteica, ripara le fibre muscolari, rinforza i tendini, consolida gli adattamenti dell'allenamento.
+
+Anche il sistema immunitario lavora di notte. Le cellule di difesa si moltiplicano, le infiammazioni si riassorbono, le micro-lesioni guariscono. Un runner che dorme male compromette questi processi essenziali.
+
+### I bisogni del runner
+
+La raccomandazione standard di 7-8 ore vale per i sedentari. Un runner che si allena regolarmente ha bisogno di più: 8-9 ore per recuperare in modo ottimale. Gli atleti d'élite dormono spesso 9-10 ore, pisolini inclusi.
+
+> 💡 Punta a 8-9 ore di sonno per notte. Aggiungi un pisolino di 20 minuti dopo una seduta intensa per accelerare il recupero.
+
+Oltre alla durata, conta la regolarità. Andare a letto e svegliarsi a orari fissi sincronizza l'orologio biologico, migliorando la qualità del sonno anche a parità di ore.
+
+### Ottimizzare il sonno
+
+**L'ambiente**: camera fresca (18-20°C), buia (tapparelle o mascherina), silenziosa. La temperatura corporea deve scendere per addormentarsi: una stanza troppo calda lo impedisce.
+
+**Gli schermi**: la loro luce blu inibisce la melatonina, l'ormone del sonno. Evitali almeno 30 minuti prima di dormire, idealmente un'ora.
+
+**L'alimentazione**: un pasto troppo abbondante o troppo tardivo disturba l'addormentamento. Ma anche andare a letto a stomaco vuoto: un leggero spuntino glucidico può aiutare.
+
+**La caffeina**: la sua emivita è di 5-6 ore. Un caffè alle 16:00 significa avere ancora caffeina in circolo alle 22:00. Fissa un limite nel primo pomeriggio.
+
+### I segnali d'allarme
+
+Una mancanza cronica di sonno si manifesta con sintomi riconoscibili:
+
+- Frequenza cardiaca a riposo più alta del solito
+- Difficoltà a raggiungere i ritmi abituali
+- Umore basso, motivazione assente
+- Recupero più lento tra le sedute
+- Maggiore sensibilità alle infezioni
+
+Se compaiono questi segnali, prima di modificare l'allenamento, esamina prima il tuo sonno.
+
+---
+
+## La nutrizione di recupero
+
+### La finestra metabolica
+
+Nei 30-60 minuti successivi a uno sforzo, il corpo è in uno stato di particolare ricettività. Gli enzimi che immagazzinano il glicogeno sono iperattivi. I trasportatori del glucosio nei muscoli sono al massimo. È il momento ideale per ricostituire le riserve.
+
+Questa "finestra anabolica" non è un mito: gli studi lo confermano. Saltare questo intervallo non ti impedirà di recuperare, ma recupererai più lentamente.
+
+### Di cosa ha bisogno il tuo corpo
+
+**Carboidrati** per ricostituire il glicogeno muscolare. Dopo una seduta lunga o intensa, le riserve sono parzialmente o totalmente svuotate. I carboidrati a indice glicemico medio-alto (frutta, pane, riso) vengono assorbiti bene.
+
+**Proteine** per riparare le fibre muscolari danneggiate. Bastano 20-30 grammi; di più non dà un beneficio immediato aggiuntivo.
+
+**Acqua** per compensare le perdite idriche. Il sudore porta via anche elettroliti (sodio, potassio): una bevanda leggermente salata o un cibo salato aiuta la reidratazione.
+
+### Esempi pratici
+
+Uno spuntino semplice post-allenamento:
+- Un bicchiere di latte al cioccolato (naturalmente equilibrato in carboidrati/proteine)
+- Una banana con yogurt greco
+- Un panino al prosciutto su pane integrale
+- Un frullato di frutta + proteine in polvere
+
+Il pasto principale, 2-3 ore dopo, può essere più completo: pasta o riso, proteine di qualità (pollo, pesce, uova), verdure e una fonte di grassi buoni (olio d'oliva, avocado).
+
+---
+
+## Pianificare il recupero
+
+### Su scala settimanale
+
+Un piano di allenamento ben progettato integra il recupero. Su 5-6 uscite settimanali, solo 2-3 devono essere davvero impegnative. Le altre sono sedute facili in Zona 1-2 o giorni di riposo completo.
+
+La trappola classica: concatenare due sedute ad alta intensità. Il corpo non ha il tempo di adattarsi tra l'una e l'altra. Una regola semplice: separa sempre le sedute di VAM o soglia di almeno 48-72 ore.
+
+### Su scala mensile
+
+Accumulare fatica settimana dopo settimana porta al sovrallenamento. La soluzione: la settimana di scarico.
+
+Ogni 3-4 settimane, riduci il volume di allenamento del 30-40%. Mantieni una o due sedute qualitative ma accorciate. Questa pausa controllata permette al corpo di "digerire" gli adattamenti accumulati.
+
+I runner che trascurano le settimane di scarico ristagnano o regrediscono: l'esatto opposto di ciò che cercano allenandosi di più.
+
+### Su scala annuale
+
+Anche i migliori hanno bisogno di staccare. Dopo un obiettivo importante (maratona, gara clou), prevedi 2-4 settimane di riposo attivo: niente tabelle, niente obiettivi, solo muoversi per piacere.
+
+Questa pausa rigenera la mente quanto il fisico. Previene l'usura psicologica che accompagna anni di allenamento continuo.
+
+---
+
+## Riconoscere il sovrallenamento
+
+Il sovrallenamento non è semplice stanchezza. È uno stato patologico in cui il corpo non riesce più a recuperare, nemmeno con il riposo. Arrivarci richiede mesi di errori — e uscirne può richiedere altrettanti mesi.
+
+> ⚠️ Se la tua frequenza cardiaca a riposo aumenta di 5+ battiti e le prestazioni calano nonostante l'allenamento, fermati. Sono segnali seri di sovrallenamento.
+
+### I segnali fisici
+
+- Prestazioni che ristagnano o peggiorano nonostante l'allenamento
+- Stanchezza persistente che non sparisce con il riposo
+- Frequenza cardiaca a riposo anormalmente alta o bassa
+- Infortuni ricorrenti (tendiniti, fratture da stress)
+- Disturbi del sonno (insonnia o ipersonnia)
+- Perdita di appetito, calo di peso involontario
+- Infezioni frequenti (sistema immunitario indebolito)
+
+### I segnali psicologici
+
+- Motivazione in caduta libera
+- Irritabilità aumentata
+- Difficoltà di concentrazione
+- Ansia legata all'allenamento
+- Perdita del piacere di correre
+
+### Cosa fare se ti riconosci
+
+Se presenti diversi di questi sintomi, la prima risposta è controintuitiva: fermati. Non una settimana facile, ma uno stop completo dalla corsa per almeno 1-2 settimane.
+
+Consulta un medico dello sport se i sintomi persistono. Il sovrallenamento può mascherare altri problemi (anemia, deficit nutrizionali, disturbi tiroidei).
+
+La prevenzione resta la strategia migliore: rispettare le settimane di scarico, non aumentare il volume troppo in fretta e soprattutto ascoltare il corpo quando chiede riposo.
+
+---
+
+## Una parola finale
+
+Il recupero non è debolezza, è intelligenza. I runner che migliorano di più non sono quelli che si allenano più duramente, ma quelli che padroneggiano l'equilibrio tra stress e riposo.
+
+Integra il recupero come parte integrante del tuo allenamento, non come assenza di allenamento. Dormi a sufficienza, mangia bene dopo lo sforzo, rispetta i giorni facili. Il tuo corpo ti ripagherà in prestazioni.`,
 };
 
 export default content;

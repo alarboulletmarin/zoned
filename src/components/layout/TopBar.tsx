@@ -37,7 +37,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { isMac } from "@/lib/platform";
 import { isServerSnapshot } from "@/prerender/snapshot";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { useLanguage } from "@/lib/i18n-utils";
 import { localeTo } from "@/lib/seo/locale-to";
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -57,7 +57,7 @@ export { PRIMARY_NAV, isNavActive };
 
 export function TopBar() {
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
+  const lang = useLanguage();
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
   // Below lg (1024px) the five doors plus the tool cluster no longer fit, so
@@ -100,7 +100,7 @@ export function TopBar() {
           état, la racine renverrait au cockpit quiconque a un plan en cours
           (voir `RootPage`). */}
       <Link
-        to={localeTo("/", isEn)}
+        to={localeTo("/", lang)}
         state={HOME_LINK_STATE}
         viewTransition
         className="zn-topbar__brand"
@@ -176,7 +176,7 @@ export function TopBar() {
 
 function NavDoor({ section, active }: { section: NavSection; active: boolean }) {
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
+  const lang = useLanguage();
   const { pathname } = useLocation();
   const hasChildren = !!section.children?.length;
   const [open, setOpen] = useState(false);
@@ -203,7 +203,7 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
   if (!hasChildren) {
     return (
       <Link
-        to={localeTo(section.to, isEn)}
+        to={localeTo(section.to, lang)}
         viewTransition
         aria-current={active ? "page" : undefined}
         className="zn-topbar__door"
@@ -234,7 +234,7 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
             {section.children!.map((child) => (
               <li key={child.to}>
                 <Link
-                  to={localeTo(child.to, isEn)}
+                  to={localeTo(child.to, lang)}
                   viewTransition
                   onClick={() => setOpen(false)}
                   aria-current={pathname === child.to ? "page" : undefined}

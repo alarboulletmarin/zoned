@@ -32,9 +32,9 @@ export function localDate(iso: string): Date {
 
 export function usePlanFormats(): PlanFormats {
   const { t, i18n } = useTranslation("plan");
-  const en = i18n.language?.startsWith("en") ?? false;
+  const lang = i18n.language?.startsWith("it") ? "it" : i18n.language?.startsWith("en") ? "en" : "fr";
   return useMemo(() => {
-    const locale = en ? "en-GB" : "fr-FR";
+    const locale = lang === "it" ? "it-IT" : lang === "en" ? "en-GB" : "fr-FR";
     const fmt = (iso: string, options: Intl.DateTimeFormatOptions) =>
       localDate(iso).toLocaleDateString(locale, options);
     const monthShort = (iso: string) => fmt(iso, { month: "short" });
@@ -52,7 +52,12 @@ export function usePlanFormats(): PlanFormats {
         const first = sameMonth ? String(a.getDate()) : fmt(from, { day: "numeric", month: "short" });
         return t("page.week.range", { from: first, to: fmt(to, { day: "numeric", month: "short" }) });
       },
-      phase: (phase) => (en ? PHASE_META[phase].labelEn : PHASE_META[phase].label),
+      phase: (phase) =>
+        lang === "it"
+          ? (PHASE_META[phase].labelIt ?? PHASE_META[phase].labelEn)
+          : lang === "en"
+            ? PHASE_META[phase].labelEn
+            : PHASE_META[phase].label,
     };
-  }, [en, t]);
+  }, [lang, t]);
 }

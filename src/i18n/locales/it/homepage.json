@@ -1,0 +1,239 @@
+{
+  "home": {
+    "seoTitle": "Allenamento strutturato, senza rumore.",
+    "findWorkout": "Trova la tua seduta",
+    "findWorkoutDesc": "5 domande per trovare la seduta perfetta",
+    "raceSimulator": "Simulatore gara",
+    "raceSimulatorSplits": "Passaggi, nutrizione, giorno gara",
+    "planYourRace": "Pianifica la tua gara",
+    "random": "Casuale",
+    "surpriseMe": "Sorprendimi!",
+    "calculators": "Calcolatori",
+    "nineTools": "10 strumenti",
+    "myZones": "Le mie Zone",
+    "hrPaceZones": "Zone FC e ritmo",
+    "featuredWorkouts": "Sedute in evidenza",
+    "viewAll": "Vedi tutto",
+    "strengthForRunners": "Potenziamento per Runner",
+    "strengthForRunnersDesc": "Sedute di forza basate sulla scienza per migliorare l'economia di corsa e prevenire gli infortuni.",
+    "seeAll": "Vedi tutto",
+    "browseByCategory": "Sfoglia per categoria",
+    "masthead": {
+      "volume": "Vol.",
+      "issue": "N.",
+      "openSource": "Open-source",
+      "local": "100 % locale",
+      "noAccount": "Senza account"
+    },
+    "hero": {
+      "head": "Allenamento",
+      "tail": "senza rumore",
+      "accent": [
+        "strutturato",
+        "leggibile",
+        "misurato",
+        "documentato"
+      ],
+      "lead": "Sapere esattamente cosa correre domani. {{plans}} piani di allenamento dai 5 km alla maratona, {{sessions}} sedute basate sulla scienza (Seiler, Daniels, Billat, Coggan) e {{calculators}} calcolatori. Gratis, senza account, tutto resta nel tuo browser.",
+      "ctaPrimary": "Genera il mio piano",
+      "ctaSecondary": "Esplora le sedute",
+      "scrollHint": "Scorri per scoprire",
+      "title": "Cosa corro oggi?",
+      "lede": "{{plans}} piani dai 5 km alla maratona, {{sessions}} sedute spiegate dalla scienza, {{calculators}} calcolatori. Gratis, senza account, tutto resta nel tuo browser.",
+      "week": "settimana {{n}}",
+      "illustrationBrief": "Due runner, linea continua 2 px, nessun riempimento, inchiostro currentColor, contatto a terra in vermiglio",
+      "illustrationLabel": "Due runner disegnati in un solo tratto",
+      "fig": {
+        "kicker": "Fig. 01, modello polarizzato",
+        "source": "Seiler, Scand J Med Sci Sports, 2006",
+        "title": "Com'è fatta una settimana ben dosata",
+        "body": "Il tempo distribuito per zona di sforzo. La regola: 80 % facile, 20 % intenso, quasi nulla nel mezzo.",
+        "zones": {
+          "z1": "Recupero",
+          "z2": "Resistenza",
+          "z3": "Tempo",
+          "z4": "Soglia",
+          "z5": "VO₂max",
+          "z6": "Anaerobica"
+        },
+        "lowRange": "Facile (Z1-Z2)",
+        "lowCaption": "volume aerobico",
+        "highRange": "Sopra soglia (Z4-Z6)",
+        "highCaption": "qualità intensa"
+      }
+    },
+    "stats": {
+      "sessions": "Sedute in catalogo",
+      "plansFrom": "Piani",
+      "calculators": "Calcolatori",
+      "trackers": "Tracker",
+      "noAccount": "0 account"
+    },
+    "s01": {
+      "kicker": "Tre punti d'ingresso",
+      "title": "Uno strumento per uso, non per profilo",
+      "body": "Zoned non ti chiede chi sei. Ti lascia scegliere da dove iniziare.",
+      "e1Kicker": "Il catalogo",
+      "e2Kicker": "Sul lungo periodo",
+      "e3Kicker": "La scienza",
+      "e1Title": "Trova la seduta di oggi",
+      "e1Body": "Filtra per disciplina, zona, durata, livello. Ogni scheda indica difficoltà e costo TSS.",
+      "e1Link": "Libreria",
+      "e2Title": "Segui un piano strutturato",
+      "e2Body": "Dai 5 km alla maratona, da 8 a 18 settimane, carico progressivo e scarico.",
+      "e2Link": "Piani",
+      "e3Title": "Comprendi la scienza",
+      "e3Body": "Ogni seduta cita il suo metodo, la zona sollecitata e il riferimento scientifico.",
+      "e3Link": "Metodi"
+    },
+    "s02": {
+      "kicker": "A caso dal catalogo",
+      "title": "Una corsa, un'uscita in bici, una nuotata",
+      "body": "Tre sedute estratte a caso a ogni visita, una per sport. Ricarica la pagina per vederne altre.",
+      "sport": {
+        "running": "Corsa",
+        "cycling": "Ciclismo",
+        "swimming": "Nuoto"
+      }
+    },
+    "s04": {
+      "kicker": "I metodi",
+      "title": "Ricercatori e metodi di riferimento",
+      "body": "Ogni zona e ogni seduta poggia su studi pubblicati. Ecco le fonti.",
+      "viewPublication": "Vedi pubblicazione",
+      "researchers": {
+        "seiler": {
+          "contribution": "Modello di allenamento polarizzato (80/20).",
+          "citation": "\"Quantifying training intensity distribution in elite endurance athletes\", Scand J Med Sci Sports, 2006."
+        },
+        "billat": {
+          "contribution": "Ricercatrice francese. VAM e protocollo 30/30.",
+          "citation": "\"Interval training at VO₂max: effects on aerobic performance\", Med Sci Sports Exerc, 1999."
+        },
+        "daniels": {
+          "contribution": "Sistema VDOT e zone di allenamento (1933-2025).",
+          "citation": "Daniels' Running Formula (Human Kinetics, 3ª ed., 2014)."
+        },
+        "lydiard": {
+          "contribution": "Periodizzazione e costruzione della base aerobica.",
+          "citation": "Pioniere neozelandese dell'approccio sulla base aerobica, anni '50-'60."
+        },
+        "noakes": {
+          "contribution": "Teoria del governatore centrale e sforzo percepito.",
+          "citation": "Lore of Running (Oxford University Press, 4ª ed., 2003)."
+        },
+        "cologne": {
+          "contribution": "Origini del concetto di soglia del lattato, scuola di Colonia.",
+          "citation": "Lavori fondativi sul metabolismo del lattato, anni '70."
+        },
+        "faude": {
+          "contribution": "Rassegna di riferimento sui concetti di soglia del lattato.",
+          "citation": "\"Lactate Threshold Concepts: How Valid Are They?\", Sports Med, 2009."
+        },
+        "sanMillan": {
+          "contribution": "Allenamento in Zona 2 e salute metabolica.",
+          "citation": "Ricerche sulla funzione mitocondriale e flessibilità metabolica negli atleti di endurance."
+        }
+      }
+    },
+    "s05": {
+      "kicker": "Piani · 5K → Maratona",
+      "title": "Una traiettoria per distanza",
+      "body": "{{count}} piani, da {{min}} a {{max}} settimane. Carico progressivo, scarico ogni 21 giorni, tapering.",
+      "quick": "Un piano attivo in 2 clic, esportabile in PDF o calendario.",
+      "weeks": "settimane",
+      "sessionsPerWeek": "sedute / sett.",
+      "choose": "scegli",
+      "legend": "Fasi del macrociclo",
+      "phases": {
+        "base": "Base aerobica",
+        "build": "Costruzione",
+        "peak": "Specifica",
+        "taper": "Scarico"
+      },
+      "fig": "Fig. 03, Fasi standard di un macrociclo: base · costruzione · specifica · scarico",
+      "distance": {
+        "5K": "5K",
+        "10K": "10K",
+        "semi": "Mezza",
+        "marathon": "Maratona",
+        "trail": "Trail"
+      }
+    },
+    "s06": {
+      "kicker": "Calcolatori",
+      "title": "Misurare le mie fasce",
+      "link": "Calcolatori",
+      "body": "Ogni calcolo gira nel tuo browser. Le formule sono documentate.",
+      "tools": {
+        "zones": "Calcola le tue zone di FC e ritmo dalla tua VAM o FCmax.",
+        "treadmill": "Converti velocità e pendenza in ritmo equivalente su strada.",
+        "splits": "Pianifica i passaggi per centrare il tuo tempo obiettivo.",
+        "vma": "La tua VAM e i tuoi tempi su ogni distanza, da un solo risultato.",
+        "raceSimulator": {
+          "title": "Simulatore giorno gara",
+          "desc": "Piano completo della giornata: orari, ritmi, nutrizione, appigli mentali."
+        },
+        "allures": "Passa tra min/km, km/h e miglio, e scopri il tempo dai 5 km alla maratona."
+      }
+    },
+    "s07": {
+      "kicker": "Seduta della settimana",
+      "open": "Apri la seduta",
+      "target": "Adattamento mirato",
+      "metrics": "Metriche",
+      "dur": "Durata",
+      "zone": "Zona",
+      "lvl": "Livello"
+    },
+    "s09": {
+      "kicker": "Domande frequenti",
+      "title": "Tre domande prima di iniziare",
+      "more": "Altri {{count}} articoli nella libreria per imparare.",
+      "moreLink": "Leggi tutto →",
+      "q": {
+        "hrm": {
+          "q": "Serve una fascia cardio?",
+          "a": "No. Le zone si calibrano sul ritmo o sulla potenza. La fascia cardio aiuta soprattutto a validare Z1-Z2."
+        },
+        "free": {
+          "q": "Zoned è gratuito?",
+          "a": "Sì, e per sempre. Nessun abbonamento, nessuna pubblicità. Open-source con licenza MIT."
+        },
+        "data": {
+          "q": "Dove sono salvati i miei dati?",
+          "a": "Tutto resta nella memoria locale del tuo browser. Esporta il file .json dalle Impostazioni per farne il backup o spostarlo."
+        }
+      }
+    },
+    "tip": "Consiglio del giorno",
+    "footer": {
+      "groups": {
+        "product": "Prodotto",
+        "science": "Scienza",
+        "project": "Progetto",
+        "tools": "Strumenti"
+      },
+      "product": {
+        "library": "Libreria",
+        "plans": "Piani",
+        "calculators": "Calcolatori"
+      },
+      "science": {
+        "methodology": "Metodi",
+        "glossary": "Glossario",
+        "guides": "Guide"
+      },
+      "project": {
+        "about": "Info",
+        "agents": "API e assistenti IA",
+        "github": "GitHub",
+        "changelog": "Novità"
+      },
+      "license": "© {{year}} · ZONED · MIT",
+      "licenses": "Licenze",
+      "sitemap": "Mappa del sito",
+      "version": "v.{{version}}"
+    }
+  }
+}

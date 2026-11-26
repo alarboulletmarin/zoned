@@ -4,7 +4,7 @@
 
 import { SEO_HUBS, SEO_TARGETS, type SeoMatch, type SeoTarget } from "@/data/seo/link-targets";
 
-export type HubLang = "fr" | "en";
+export type HubLang = "fr" | "en" | "it";
 
 export type LinkSource =
   | { kind: "workout"; id: string; category?: string; zone?: number | null; discipline?: string }
@@ -91,7 +91,10 @@ function collect(targets: SeoTarget[], source: LinkSource, lang: HubLang, limit:
     if (out.length >= limit) break;
     if (seen.has(target.path)) continue;
     if (!targetMatches(target, source)) continue;
-    const anchors = target.anchors[lang];
+    const anchors =
+      lang === "it"
+        ? (target.anchors.it ?? target.anchors.en)
+        : target.anchors[lang];
     if (!anchors.length) continue;
     seen.add(target.path);
     out.push({

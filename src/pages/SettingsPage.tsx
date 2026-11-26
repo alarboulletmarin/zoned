@@ -104,10 +104,11 @@ export function SettingsPage() {
       : shownPractices.filter((p) => p !== practice);
     setEnabledPractices(next.length === PRACTICES.length ? [] : [...next]);
   };
-  const pickPracticeLabel = (practice: Practice) =>
-    i18n.language.startsWith("en")
-      ? PRACTICE_META[practice].labelEn
-      : PRACTICE_META[practice].label;
+  const pickPracticeLabel = (practice: Practice) => {
+    const meta = PRACTICE_META[practice];
+    if (i18n.language.startsWith("it")) return meta.labelIt ?? meta.labelEn;
+    return i18n.language.startsWith("en") ? meta.labelEn : meta.label;
+  };
 
   const language = getCurrentLanguage();
 

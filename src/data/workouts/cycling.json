@@ -6,19 +6,29 @@
       "discipline": "cycling",
       "name": "Sortie récupération",
       "nameEn": "Recovery Spin",
+      "nameIt": "Uscita di recupero",
       "description": "Sortie vélo très facile en Z1-Z2 pour activer la récupération, favoriser le retour veineux et dégourdir les jambes sans ajouter de fatigue.",
       "descriptionEn": "Very easy bike spin in Z1-Z2 to flush the legs, promote venous return and aid recovery without adding fatigue.",
+      "descriptionIt": "Uscita in bici molto facile in Z1-Z2 per attivare il recupero, favorire il ritorno venoso e sciogliere le gambe senza aggiungere fatica.",
       "category": "recovery",
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 30, "max": 40 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
         {
           "description": "Pédalage souple en Z1, cadence 90-100 rpm",
           "descriptionEn": "Easy spin in Z1, cadence 90-100 rpm",
+          "descriptionIt": "Pedalata agile in Z1, cadenza 90-100 rpm",
           "durationMin": 35,
           "zone": "Z1"
         }
@@ -28,6 +38,7 @@
           "kind": "segment",
           "description": "Pédalage souple en Z1, cadence 90-100 rpm",
           "descriptionEn": "Easy spin in Z1, cadence 90-100 rpm",
+          "descriptionIt": "Pedalata agile in Z1, cadenza 90-100 rpm",
           "durationSec": 2100,
           "zone": "Z1",
           "role": "effort"
@@ -44,6 +55,11 @@
         "Breathe through your nose to stay minimal",
         "Flat roads, no surges"
       ],
+      "coachingTipsIt": [
+        "Rapporto agile, cadenza alta, nessuna pressione sulle gambe",
+        "Respira dal naso per mantenere l'intensità minima",
+        "Strada pianeggiante, niente rilanci"
+      ],
       "commonMistakes": [
         "Rouler trop fort dès que la route monte",
         "Transformer la séance en Z3 sans s'en rendre compte"
@@ -52,12 +68,29 @@
         "Pushing too hard on any incline",
         "Drifting into Z3 without noticing"
       ],
+      "commonMistakesIt": [
+        "Spingere troppo appena la strada sale",
+        "Trasformare la seduta in Z3 senza accorgersene"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak", "taper", "recovery"],
-        "weekPositions": ["early", "late"],
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "taper",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early",
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "easy", "cycling"],
+        "tags": [
+          "recovery",
+          "easy",
+          "cycling"
+        ],
         "priorityScore": 90
       },
       "weeklyFrequencyMax": 3,
@@ -68,18 +101,27 @@
       "discipline": "cycling",
       "name": "Endurance de base",
       "nameEn": "Base Endurance",
+      "nameIt": "Resistenza di base",
       "description": "Sortie aérobie continue en Z2. Développe la base aérobie, l'économie de pédalage et la capacité à oxyder les graisses. Cadence naturelle 85-95 rpm.",
       "descriptionEn": "Continuous aerobic ride in Z2. Builds the aerobic base, pedalling economy and fat oxidation capacity. Natural cadence 85-95 rpm.",
+      "descriptionIt": "Uscita aerobica continua in Z2. Sviluppa la base aerobica, l'economia di pedalata e la capacità di ossidare i grassi. Cadenza naturale 85-95 rpm.",
       "category": "endurance",
       "sessionType": "endurance",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 90, "max": 110 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 90,
+        "max": 110
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "Mise en route progressive",
           "descriptionEn": "Progressive warm-up",
+          "descriptionIt": "Avvio progressivo",
           "durationMin": 10,
           "zone": "Z1"
         }
@@ -89,6 +131,7 @@
           "kind": "segment",
           "description": "Mise en route progressive",
           "descriptionEn": "Progressive warm-up",
+          "descriptionIt": "Avvio progressivo",
           "durationSec": 600,
           "zone": "Z1",
           "role": "effort"
@@ -98,6 +141,7 @@
         {
           "description": "Endurance continue en Z2, cadence 85-95 rpm",
           "descriptionEn": "Continuous Z2 endurance, cadence 85-95 rpm",
+          "descriptionIt": "Resistenza continua in Z2, cadenza 85-95 rpm",
           "durationMin": 80,
           "zone": "Z2"
         }
@@ -107,6 +151,7 @@
           "kind": "segment",
           "description": "Endurance continue en Z2, cadence 85-95 rpm",
           "descriptionEn": "Continuous Z2 endurance, cadence 85-95 rpm",
+          "descriptionIt": "Resistenza continua in Z2, cadenza 85-95 rpm",
           "durationSec": 4800,
           "zone": "Z2",
           "role": "effort"
@@ -116,6 +161,7 @@
         {
           "description": "Retour au calme en Z1",
           "descriptionEn": "Cool-down in Z1",
+          "descriptionIt": "Defaticamento in Z1",
           "durationMin": 10,
           "zone": "Z1"
         }
@@ -125,6 +171,7 @@
           "kind": "segment",
           "description": "Retour au calme en Z1",
           "descriptionEn": "Cool-down in Z1",
+          "descriptionIt": "Defaticamento in Z1",
           "durationSec": 600,
           "zone": "Z1",
           "role": "effort"
@@ -140,6 +187,11 @@
         "Steady cadence, steady effort, you can hold a conversation",
         "Hydrate from 45 min, fuel after 90 min"
       ],
+      "coachingTipsIt": [
+        "Resta nella parte bassa della zona, non sconfinare in Z3",
+        "Cadenza stabile, sforzo regolare, devi poter sostenere una conversazione",
+        "Idratazione dai 45 minuti, integrazione dopo i 90 minuti"
+      ],
       "commonMistakes": [
         "Partir trop vite et accumuler de la fatigue inutile",
         "Négliger la cadence et mouliner en force"
@@ -148,35 +200,66 @@
         "Starting too fast and accumulating useless fatigue",
         "Neglecting cadence and mashing in big gears"
       ],
-      "variationIds": ["CYC-005"],
+      "commonMistakesIt": [
+        "Partire troppo forte e accumulare fatica inutile",
+        "Trascurare la cadenza e spingere rapporti troppo duri"
+      ],
+      "variationIds": [
+        "CYC-005"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak"],
-        "weekPositions": ["early", "mid", "late"],
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid",
+          "late"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["endurance", "aerobic", "cycling", "base"],
+        "tags": [
+          "endurance",
+          "aerobic",
+          "cycling",
+          "base"
+        ],
         "priorityScore": 85
       },
       "weeklyFrequencyMax": 3,
       "minimumRecoveryDays": 0,
-      "estimatedDistanceKm": { "min": 25, "max": 60 }
+      "estimatedDistanceKm": {
+        "min": 25,
+        "max": 60
+      }
     },
     {
       "id": "CYC-003",
       "discipline": "cycling",
       "name": "Sweet Spot 2×15'",
       "nameEn": "Sweet Spot 2×15'",
+      "nameIt": "Sweet Spot 2×15'",
       "description": "Séance de tempo haut / bas seuil. Deux blocs de 15 minutes à 88-94 % FTP, avec 8 minutes de récupération entre. Développe la puissance aérobie soutenable.",
       "descriptionEn": "Upper-tempo / lower-threshold session. Two 15-minute blocks at 88-94 % FTP, 8 minutes recovery between. Builds sustainable aerobic power.",
+      "descriptionIt": "Seduta di tempo alto / soglia bassa. Due blocchi da 15 minuti all'88-94% FTP, con 8 minuti di recupero tra i blocchi. Sviluppa la potenza aerobica sostenibile.",
       "category": "tempo",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 55, "max": 70 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 55,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "Échauffement progressif + 3×1' en Z3 pour activer",
           "descriptionEn": "Progressive warm-up + 3×1' in Z3 to activate",
+          "descriptionIt": "Riscaldamento progressivo + 3×1' in Z3 per attivare",
           "durationMin": 15,
           "zone": "Z1-Z3"
         }
@@ -186,6 +269,7 @@
           "kind": "segment",
           "description": "Échauffement progressif + 3×1' en Z3 pour activer",
           "descriptionEn": "Progressive warm-up + 3×1' in Z3 to activate",
+          "descriptionIt": "Riscaldamento progressivo + 3×1' in Z3 per attivare",
           "durationSec": 900,
           "zone": "Z1-Z3",
           "role": "effort"
@@ -195,11 +279,13 @@
         {
           "description": "2×15' en sweet-spot (88-94 % FTP, Z3 haut / Z4 bas), récup 8' entre en Z1",
           "descriptionEn": "2×15' sweet spot (88-94 % FTP, upper Z3 / lower Z4), 8' recovery between in Z1",
+          "descriptionIt": "2×15' in sweet spot (88-94% FTP, Z3 alta / Z4 bassa), recupero 8' in Z1",
           "durationMin": 15,
           "repetitions": 2,
           "zone": "Z3-Z4",
           "recovery": "8min Z1",
-          "recoveryEn": "8min Z1"
+          "recoveryEn": "8min Z1",
+          "recoveryIt": "8min Z1"
         }
       ],
       "mainSetStructure": [
@@ -212,6 +298,7 @@
               "kind": "segment",
               "description": "15' en sweet-spot (88-94 % FTP, Z3 haut / Z4 bas)",
               "descriptionEn": "15' sweet spot (88-94 % FTP, upper Z3 / lower Z4), 8' recovery between in Z1",
+              "descriptionIt": "15' in sweet spot (88-94% FTP, Z3 alta / Z4 bassa)",
               "durationSec": 900,
               "zone": "Z3-Z4",
               "role": "effort"
@@ -222,6 +309,7 @@
               "kind": "segment",
               "description": "8min Z1",
               "descriptionEn": "8min Z1",
+              "descriptionIt": "8min Z1",
               "durationSec": 480,
               "zone": "Z1",
               "role": "recovery"
@@ -233,6 +321,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1"
         }
@@ -242,6 +331,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "role": "effort"
@@ -257,6 +347,11 @@
         "Cadence 85-95 rpm, keep breathing controlled",
         "If the second block falls apart, lower the power rather than abandoning"
       ],
+      "coachingTipsIt": [
+        "Punta a un'intensità \"comodamente impegnativa\", non Z4 piena",
+        "Cadenza 85-95 rpm, mantieni una respirazione controllata",
+        "Se il secondo blocco cala, riduci la potenza invece di abbandonare"
+      ],
       "commonMistakes": [
         "Partir trop fort sur le premier bloc",
         "Confondre sweet-spot avec seuil, rester sous FTP"
@@ -265,12 +360,28 @@
         "Going too hard on the first block",
         "Confusing sweet spot with threshold, stay below FTP"
       ],
-      "variationIds": ["CYC-004"],
+      "commonMistakesIt": [
+        "Partire troppo forte nel primo blocco",
+        "Confondere lo sweet spot con la soglia, resta sotto FTP"
+      ],
+      "variationIds": [
+        "CYC-004"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["tempo", "sweet_spot", "threshold_support", "cycling"],
+        "tags": [
+          "tempo",
+          "sweet_spot",
+          "threshold_support",
+          "cycling"
+        ],
         "priorityScore": 80
       },
       "weeklyFrequencyMax": 2,
@@ -281,18 +392,28 @@
       "discipline": "cycling",
       "name": "Seuil 4×8'",
       "nameEn": "Threshold 4×8'",
+      "nameIt": "Soglia 4×8'",
       "description": "Intervalles au seuil. Quatre blocs de 8 minutes à 95-102 % FTP, récupération 4 minutes entre. Classique pour repousser le seuil lactique.",
       "descriptionEn": "Threshold intervals. Four 8-minute blocks at 95-102 % FTP, 4 minutes recovery between. A staple for lifting the lactate threshold.",
+      "descriptionIt": "Intervalli alla soglia. Quattro blocchi da 8 minuti al 95-102% FTP, recupero 4 minuti tra i blocchi. Classico per innalzare la soglia lattacida.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 65, "max": 80 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 65,
+        "max": 80
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
         {
           "description": "Échauffement + 3×30\" en Z5 pour ouvrir",
           "descriptionEn": "Warm-up + 3×30\" Z5 openers",
+          "descriptionIt": "Riscaldamento + 3×30\" in Z5 di apertura",
           "durationMin": 20,
           "zone": "Z1-Z5"
         }
@@ -302,6 +423,7 @@
           "kind": "segment",
           "description": "Échauffement + 3×30\" en Z5 pour ouvrir",
           "descriptionEn": "Warm-up + 3×30\" Z5 openers",
+          "descriptionIt": "Riscaldamento + 3×30\" in Z5 di apertura",
           "durationSec": 1200,
           "zone": "Z1-Z5",
           "role": "effort"
@@ -311,11 +433,13 @@
         {
           "description": "4×8' au seuil (95-102 % FTP), récup 4' en Z1",
           "descriptionEn": "4×8' threshold (95-102 % FTP), 4' recovery in Z1",
+          "descriptionIt": "4×8' alla soglia (95-102% FTP), recupero 4' in Z1",
           "durationMin": 8,
           "repetitions": 4,
           "zone": "Z4",
           "recovery": "4min Z1",
-          "recoveryEn": "4min Z1"
+          "recoveryEn": "4min Z1",
+          "recoveryIt": "4min Z1"
         }
       ],
       "mainSetStructure": [
@@ -328,6 +452,7 @@
               "kind": "segment",
               "description": "8' au seuil (95-102 % FTP)",
               "descriptionEn": "8' threshold (95-102 % FTP), 4' recovery in Z1",
+              "descriptionIt": "8' alla soglia (95-102% FTP)",
               "durationSec": 480,
               "zone": "Z4",
               "role": "effort"
@@ -338,6 +463,7 @@
               "kind": "segment",
               "description": "4min Z1",
               "descriptionEn": "4min Z1",
+              "descriptionIt": "4min Z1",
               "durationSec": 240,
               "zone": "Z1",
               "role": "recovery"
@@ -349,6 +475,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1"
         }
@@ -358,6 +485,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "role": "effort"
@@ -373,6 +501,11 @@
         "If the last rep drops more than 5 % power, the load was too high",
         "Spin smooth, avoid mashing at the end of intervals"
       ],
+      "coachingTipsIt": [
+        "Primo minuto a soglia bassa, ultimo minuto a soglia alta",
+        "Se l'ultima ripetuta cala di oltre il 5% di potenza, il carico è troppo alto",
+        "Pedala rotondo: evita di indurire il rapporto a fine intervallo"
+      ],
       "commonMistakes": [
         "Ouvrir au-dessus du seuil et exploser au troisième intervalle",
         "Raccourcir les récupérations pour \"aller plus vite\""
@@ -381,12 +514,28 @@
         "Opening above threshold and blowing up on the third interval",
         "Cutting recovery short to \"go faster\""
       ],
-      "variationIds": ["CYC-003", "CYC-005"],
+      "commonMistakesIt": [
+        "Partire sopra soglia e scoppiare al terzo intervallo",
+        "Accorciare i recuperi per \"andare più forte\""
+      ],
+      "variationIds": [
+        "CYC-003",
+        "CYC-005"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["threshold", "ftp", "cycling"],
+        "tags": [
+          "threshold",
+          "ftp",
+          "cycling"
+        ],
         "priorityScore": 90
       },
       "weeklyFrequencyMax": 1,
@@ -397,18 +546,27 @@
       "discipline": "cycling",
       "name": "VO2max 5×3'",
       "nameEn": "VO2max 5×3'",
+      "nameIt": "VO2max 5×3'",
       "description": "Intervalles VO2max classiques. Cinq blocs de 3 minutes à 110-120 % FTP, récupération 3 minutes. Pousse la consommation maximale d'oxygène.",
       "descriptionEn": "Classic VO2max intervals. Five 3-minute blocks at 110-120 % FTP, 3 minutes recovery. Pushes maximal oxygen uptake.",
+      "descriptionIt": "Intervalli VO2max classici. Cinque blocchi da 3 minuti al 110-120% FTP, recupero 3 minuti. Stimola il massimo consumo di ossigeno.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 50, "max": 65 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 50,
+        "max": 65
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "Échauffement progressif + 2×1' Z4 + 2×30\" Z5",
           "descriptionEn": "Progressive warm-up + 2×1' Z4 + 2×30\" Z5",
+          "descriptionIt": "Riscaldamento progressivo + 2×1' Z4 + 2×30\" Z5",
           "durationMin": 20,
           "zone": "Z1-Z5"
         }
@@ -418,6 +576,7 @@
           "kind": "segment",
           "description": "Échauffement progressif + 2×1' Z4 + 2×30\" Z5",
           "descriptionEn": "Progressive warm-up + 2×1' Z4 + 2×30\" Z5",
+          "descriptionIt": "Riscaldamento progressivo + 2×1' Z4 + 2×30\" Z5",
           "durationSec": 1200,
           "zone": "Z1-Z5",
           "role": "effort"
@@ -427,11 +586,13 @@
         {
           "description": "5×3' en Z5 (110-120 % FTP), récup 3' en Z1",
           "descriptionEn": "5×3' Z5 (110-120 % FTP), 3' recovery in Z1",
+          "descriptionIt": "5×3' in Z5 (110-120% FTP), recupero 3' in Z1",
           "durationMin": 3,
           "repetitions": 5,
           "zone": "Z5",
           "recovery": "3min Z1",
-          "recoveryEn": "3min Z1"
+          "recoveryEn": "3min Z1",
+          "recoveryIt": "3min Z1"
         }
       ],
       "mainSetStructure": [
@@ -444,6 +605,7 @@
               "kind": "segment",
               "description": "3' en Z5 (110-120 % FTP)",
               "descriptionEn": "3' Z5 (110-120 % FTP), 3' recovery in Z1",
+              "descriptionIt": "3' in Z5 (110-120% FTP)",
               "durationSec": 180,
               "zone": "Z5",
               "role": "effort"
@@ -454,6 +616,7 @@
               "kind": "segment",
               "description": "3min Z1",
               "descriptionEn": "3min Z1",
+              "descriptionIt": "3min Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -465,6 +628,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1"
         }
@@ -474,6 +638,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "role": "effort"
@@ -489,6 +654,11 @@
         "High cadence (95-105 rpm) to reduce muscular load",
         "Maximal breathing peaks around minute 2, that's expected"
       ],
+      "coachingTipsIt": [
+        "Salita progressiva di potenza nei primi 45 secondi",
+        "Cadenza alta (95-105 rpm) per ridurre il carico muscolare",
+        "Respirazione massimale raggiunta verso il 2° minuto, è normale"
+      ],
       "commonMistakes": [
         "Exploser sur le 1er intervalle et saboter les 4 suivants",
         "Couper la récupération trop tôt"
@@ -497,12 +667,27 @@
         "Nuking the first interval and ruining the next four",
         "Cutting the recovery short"
       ],
-      "variationIds": ["CYC-004"],
+      "commonMistakesIt": [
+        "Esagerare nel 1° intervallo e rovinare i 4 successivi",
+        "Tagliare il recupero troppo presto"
+      ],
+      "variationIds": [
+        "CYC-004"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["vo2max", "intervals", "cycling"],
+        "tags": [
+          "vo2max",
+          "intervals",
+          "cycling"
+        ],
         "priorityScore": 85
       },
       "weeklyFrequencyMax": 1,
@@ -513,18 +698,27 @@
       "discipline": "cycling",
       "name": "Sortie longue endurance",
       "nameEn": "Long Endurance Ride",
+      "nameIt": "Uscita lunga di resistenza",
       "description": "Sortie longue à intensité modérée. Construite autour d'un bloc Z2 prolongé qui développe la capillarisation, l'oxydation des lipides et l'endurance fondamentale. Idéale en fin de semaine.",
       "descriptionEn": "Long ride at moderate intensity. Built around an extended Z2 block that develops capillarisation, fat oxidation and aerobic endurance. Ideal for the weekend.",
+      "descriptionIt": "Uscita lunga a intensità moderata. Costruita attorno a un blocco Z2 prolungato che sviluppa capillarizzazione, ossidazione dei grassi e resistenza aerobica. Ideale nel fine settimana.",
       "category": "long_run",
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 145, "max": 175 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 145,
+        "max": 175
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "Mise en route progressive en Z1",
           "descriptionEn": "Progressive warm-up in Z1",
+          "descriptionIt": "Avvio progressivo in Z1",
           "durationMin": 15,
           "zone": "Z1"
         }
@@ -534,6 +728,7 @@
           "kind": "segment",
           "description": "Mise en route progressive en Z1",
           "descriptionEn": "Progressive warm-up in Z1",
+          "descriptionIt": "Avvio progressivo in Z1",
           "durationSec": 900,
           "zone": "Z1",
           "role": "effort"
@@ -543,6 +738,7 @@
         {
           "description": "Endurance continue en Z2 avec quelques relances Z3 si terrain s'y prête",
           "descriptionEn": "Continuous Z2 endurance with occasional Z3 surges if terrain allows",
+          "descriptionIt": "Resistenza continua in Z2 con qualche rilancio in Z3 se il terreno lo consente",
           "durationMin": 130,
           "zone": "Z2"
         }
@@ -552,6 +748,7 @@
           "kind": "segment",
           "description": "Endurance continue en Z2 avec quelques relances Z3 si terrain s'y prête",
           "descriptionEn": "Continuous Z2 endurance with occasional Z3 surges if terrain allows",
+          "descriptionIt": "Resistenza continua in Z2 con qualche rilancio in Z3 se il terreno lo consente",
           "durationSec": 7800,
           "zone": "Z2",
           "role": "effort"
@@ -561,6 +758,7 @@
         {
           "description": "Retour au calme en Z1",
           "descriptionEn": "Cool-down in Z1",
+          "descriptionIt": "Defaticamento in Z1",
           "durationMin": 15,
           "zone": "Z1"
         }
@@ -570,6 +768,7 @@
           "kind": "segment",
           "description": "Retour au calme en Z1",
           "descriptionEn": "Cool-down in Z1",
+          "descriptionIt": "Defaticamento in Z1",
           "durationSec": 900,
           "zone": "Z1",
           "role": "effort"
@@ -585,6 +784,11 @@
         "Drink 500-750 ml per hour depending on heat",
         "Steady cadence 85-90 rpm on average, no lower on flat sections"
       ],
+      "coachingTipsIt": [
+        "Mangia ogni 45 minuti, almeno 60 g di carboidrati all'ora",
+        "Idratati con 500-750 ml/ora in base al caldo",
+        "Cadenza stabile 85-90 rpm di media, non più bassa in pianura"
+      ],
       "commonMistakes": [
         "Partir trop fort dans les 30 premières minutes",
         "Sauter les ravitaillements après 90 minutes"
@@ -593,35 +797,65 @@
         "Going too hard in the first 30 min",
         "Skipping fueling past 90 min"
       ],
-      "variationIds": ["CYC-002"],
+      "commonMistakesIt": [
+        "Partire troppo forte nei primi 30 minuti",
+        "Saltare i rifornimenti dopo i 90 minuti"
+      ],
+      "variationIds": [
+        "CYC-002"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["long_run", "endurance", "aerobic", "cycling", "weekend"],
+        "tags": [
+          "long_run",
+          "endurance",
+          "aerobic",
+          "cycling",
+          "weekend"
+        ],
         "priorityScore": 90
       },
       "weeklyFrequencyMax": 1,
       "minimumRecoveryDays": 1,
-      "estimatedDistanceKm": { "min": 50, "max": 100 }
+      "estimatedDistanceKm": {
+        "min": 50,
+        "max": 100
+      }
     },
     {
       "id": "CYC-007",
       "discipline": "cycling",
       "name": "Sweet Spot 3×12'",
       "nameEn": "Sweet Spot 3×12'",
+      "nameIt": "Sweet Spot 3×12'",
       "description": "Variante sweet-spot plus volumineuse. Trois blocs de 12 minutes à 90-94 % FTP, récupération 6 minutes. Développe la capacité aérobie soutenable sans accumuler de fatigue lactique.",
       "descriptionEn": "Higher-volume sweet-spot variant. Three 12-minute blocks at 90-94 % FTP, 6 minutes recovery. Builds sustainable aerobic capacity without crossing into accumulating lactate fatigue.",
+      "descriptionIt": "Variante sweet spot con maggiore volume. Tre blocchi da 12 minuti al 90-94% FTP, recupero 6 minuti. Sviluppa la capacità aerobica sostenibile senza accumulare fatica lattacida.",
       "category": "tempo",
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 65, "max": 80 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 65,
+        "max": 80
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "Échauffement progressif + 2×1' en Z3 pour activer",
           "descriptionEn": "Progressive warm-up + 2×1' Z3 to activate",
+          "descriptionIt": "Riscaldamento progressivo + 2×1' in Z3 per attivare",
           "durationMin": 15,
           "zone": "Z1-Z3"
         }
@@ -631,6 +865,7 @@
           "kind": "segment",
           "description": "Échauffement progressif + 2×1' en Z3 pour activer",
           "descriptionEn": "Progressive warm-up + 2×1' Z3 to activate",
+          "descriptionIt": "Riscaldamento progressivo + 2×1' in Z3 per attivare",
           "durationSec": 900,
           "zone": "Z1-Z3",
           "role": "effort"
@@ -640,11 +875,13 @@
         {
           "description": "3×12' en sweet-spot (90-94 % FTP), récup 6' Z1",
           "descriptionEn": "3×12' sweet spot (90-94 % FTP), 6' recovery Z1",
+          "descriptionIt": "3×12' in sweet spot (90-94% FTP), recupero 6' Z1",
           "durationMin": 12,
           "repetitions": 3,
           "zone": "Z3-Z4",
           "recovery": "6min Z1",
-          "recoveryEn": "6min Z1"
+          "recoveryEn": "6min Z1",
+          "recoveryIt": "6min Z1"
         }
       ],
       "mainSetStructure": [
@@ -657,6 +894,7 @@
               "kind": "segment",
               "description": "12' en sweet-spot (90-94 % FTP)",
               "descriptionEn": "12' sweet spot (90-94 % FTP), 6' recovery Z1",
+              "descriptionIt": "12' in sweet spot (90-94% FTP)",
               "durationSec": 720,
               "zone": "Z3-Z4",
               "role": "effort"
@@ -667,6 +905,7 @@
               "kind": "segment",
               "description": "6min Z1",
               "descriptionEn": "6min Z1",
+              "descriptionIt": "6min Z1",
               "durationSec": 360,
               "zone": "Z1",
               "role": "recovery"
@@ -678,6 +917,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1"
         }
@@ -687,6 +927,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "role": "effort"
@@ -702,6 +943,11 @@
         "Steady cadence around 90 rpm",
         "Eat something between blocks if the session goes past 75 minutes"
       ],
+      "coachingTipsIt": [
+        "Se la potenza cala di oltre il 5% nell'ultimo blocco, la seduta è stata eccessiva",
+        "Cadenza stabile attorno ai 90 rpm",
+        "Mangia qualcosa tra i blocchi se la seduta supera i 75 minuti"
+      ],
       "commonMistakes": [
         "Confondre sweet-spot avec seuil, tendance à monter trop haut",
         "Raccourcir la récupération pour finir plus vite"
@@ -710,12 +956,29 @@
         "Mistaking sweet spot for threshold, tendency to push too high",
         "Cutting recovery short to finish earlier"
       ],
-      "variationIds": ["CYC-003", "CYC-004"],
+      "commonMistakesIt": [
+        "Confondere lo sweet spot con la soglia, tendendo a spingere troppo",
+        "Accorciare il recupero per finire prima"
+      ],
+      "variationIds": [
+        "CYC-003",
+        "CYC-004"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["tempo", "sweet_spot", "threshold_support", "cycling"],
+        "tags": [
+          "tempo",
+          "sweet_spot",
+          "threshold_support",
+          "cycling"
+        ],
         "priorityScore": 80
       },
       "weeklyFrequencyMax": 2,
@@ -726,18 +989,28 @@
       "discipline": "cycling",
       "name": "Sprints neuromusculaires 8×30\"",
       "nameEn": "Neuromuscular Sprints 8×30\"",
+      "nameIt": "Sprint neuromuscolari 8×30\"",
       "description": "Séance d'activation neuromusculaire. Huit sprints de 30 secondes au maximum (Z6+, ≥150 % FTP), récupération complète 4 minutes. Améliore la puissance maximale et le recrutement musculaire sans charge cardiaque importante.",
       "descriptionEn": "Neuromuscular activation. Eight all-out 30-second sprints (Z6+, ≥150 % FTP), 4 minutes full recovery. Improves peak power and motor unit recruitment without heavy cardiac load.",
+      "descriptionIt": "Seduta di attivazione neuromuscolare. Otto sprint da 30 secondi al massimo (Z6+, ≥150% FTP), recupero completo 4 minuti. Migliora la potenza massima e il reclutamento muscolare senza carico cardiaco elevato.",
       "category": "vma_intervals",
       "sessionType": "speed",
       "targetSystem": "neuromuscular",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 55, "max": 70 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 55,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
         {
           "description": "Échauffement complet + 3×10\" en accélération",
           "descriptionEn": "Full warm-up + 3×10\" build-ups",
+          "descriptionIt": "Riscaldamento completo + 3×10\" in progressione",
           "durationMin": 20,
           "zone": "Z1-Z5"
         }
@@ -747,6 +1020,7 @@
           "kind": "segment",
           "description": "Échauffement complet + 3×10\" en accélération",
           "descriptionEn": "Full warm-up + 3×10\" build-ups",
+          "descriptionIt": "Riscaldamento completo + 3×10\" in progressione",
           "durationSec": 1200,
           "zone": "Z1-Z5",
           "role": "effort"
@@ -756,11 +1030,13 @@
         {
           "description": "8×30\" sprint maximal, récup 4' Z1 complète",
           "descriptionEn": "8×30\" maximal sprint, 4' Z1 full recovery",
+          "descriptionIt": "8×30\" sprint massimale, recupero 4' Z1 completo",
           "durationMin": 0.5,
           "repetitions": 8,
           "zone": "Z6",
           "recovery": "4min Z1",
-          "recoveryEn": "4min Z1"
+          "recoveryEn": "4min Z1",
+          "recoveryIt": "4min Z1"
         }
       ],
       "mainSetStructure": [
@@ -773,6 +1049,7 @@
               "kind": "segment",
               "description": "30\" sprint maximal",
               "descriptionEn": "30\" maximal sprint, 4' Z1 full recovery",
+              "descriptionIt": "30\" sprint massimale",
               "durationSec": 30,
               "zone": "Z6",
               "role": "effort"
@@ -783,6 +1060,7 @@
               "kind": "segment",
               "description": "4min Z1",
               "descriptionEn": "4min Z1",
+              "descriptionIt": "4min Z1",
               "durationSec": 240,
               "zone": "Z1",
               "role": "recovery"
@@ -794,6 +1072,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1"
         }
@@ -803,6 +1082,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "role": "effort"
@@ -818,6 +1098,11 @@
         "Start out of the saddle for maximum torque",
         "If peak power drops more than 10 % between rep 1 and 8, stop at 6 reps"
       ],
+      "coachingTipsIt": [
+        "Recupero COMPLETO tra gli sforzi: è qualità, non volume",
+        "Partenza fuorisella per la massima coppia",
+        "Se la potenza di picco cala di oltre il 10% tra la 1ª e l'8ª ripetuta, fermati a 6"
+      ],
       "commonMistakes": [
         "Réduire la récupération pour gagner du temps, annule les bénéfices",
         "Faire la séance fatigué, aucune adaptation neurale possible"
@@ -826,12 +1111,27 @@
         "Cutting recovery to save time, kills the gains",
         "Doing the session pre-fatigued, no neural adaptation possible"
       ],
+      "commonMistakesIt": [
+        "Ridurre il recupero per risparmiare tempo annulla i benefici",
+        "Fare la seduta da stanchi impedisce l'adattamento neurale"
+      ],
       "variationIds": [],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["sprint", "neuromuscular", "power", "cycling"],
+        "tags": [
+          "sprint",
+          "neuromuscular",
+          "power",
+          "cycling"
+        ],
         "priorityScore": 70
       },
       "weeklyFrequencyMax": 1,
@@ -842,18 +1142,27 @@
       "discipline": "cycling",
       "name": "30/30 vélo Bangsbo",
       "nameEn": "30/30 Bike Bangsbo",
+      "nameIt": "30/30 bici Bangsbo",
       "description": "Adaptation cyclisme du protocole Bangsbo : alternance d'efforts courts haute intensité et récupération active. Deux blocs de 10 répétitions, 5 minutes de récupération entre les blocs.",
       "descriptionEn": "Cycling adaptation of the Bangsbo protocol: short high-intensity efforts alternated with active recovery. Two blocks of 10 reps, 5 minutes recovery between blocks.",
+      "descriptionIt": "Adattamento ciclistico del protocollo Bangsbo: alternanza di sforzi brevi ad alta intensità e recupero attivo. Due blocchi da 10 ripetute, 5 minuti di recupero tra i blocchi.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 45, "max": 55 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "Échauffement progressif + 2×30\" Z5",
           "descriptionEn": "Progressive warm-up + 2×30\" Z5",
+          "descriptionIt": "Riscaldamento progressivo + 2×30\" Z5",
           "durationMin": 15,
           "zone": "Z1-Z5"
         }
@@ -863,6 +1172,7 @@
           "kind": "segment",
           "description": "Échauffement progressif + 2×30\" Z5",
           "descriptionEn": "Progressive warm-up + 2×30\" Z5",
+          "descriptionIt": "Riscaldamento progressivo + 2×30\" Z5",
           "durationSec": 900,
           "zone": "Z1-Z5",
           "role": "effort"
@@ -872,14 +1182,17 @@
         {
           "description": "2×(10×(30\" Z5 / 30\" Z2)), récup 5' Z1 entre les blocs",
           "descriptionEn": "2×(10×(30\" Z5 / 30\" Z2)), 5' Z1 between blocks",
+          "descriptionIt": "2×(10×(30\" Z5 / 30\" Z2)), recupero 5' Z1 tra i blocchi",
           "durationMin": 0.5,
           "repetitions": 10,
           "sets": 2,
           "zone": "Z5",
           "recovery": "30s Z2",
           "recoveryEn": "30s Z2",
+          "recoveryIt": "30s Z2",
           "restBetweenSets": "5min Z1",
-          "restBetweenSetsEn": "5min Z1"
+          "restBetweenSetsEn": "5min Z1",
+          "restBetweenSetsIt": "5min Z1"
         }
       ],
       "mainSetStructure": [
@@ -897,6 +1210,7 @@
                   "kind": "segment",
                   "description": "(10×(30\" Z5",
                   "descriptionEn": "(10×(30\" Z5 / 30\" Z2)), 5' Z1 between blocks",
+                  "descriptionIt": "(10×(30\" Z5 / 30\" Z2))",
                   "durationSec": 30,
                   "zone": "Z5",
                   "role": "effort"
@@ -907,6 +1221,7 @@
                   "kind": "segment",
                   "description": "30s Z2",
                   "descriptionEn": "30s Z2",
+                  "descriptionIt": "30s Z2",
                   "durationSec": 30,
                   "zone": "Z2",
                   "role": "recovery"
@@ -919,6 +1234,7 @@
               "kind": "segment",
               "description": "5min Z1",
               "descriptionEn": "5min Z1",
+              "descriptionIt": "5min Z1",
               "durationSec": 300,
               "zone": "Z1",
               "role": "recovery"
@@ -930,6 +1246,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 10,
           "zone": "Z1"
         }
@@ -939,6 +1256,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 600,
           "zone": "Z1",
           "role": "effort"
@@ -954,6 +1272,11 @@
         "Heart rate stays high between efforts, that's intentional",
         "High cadence (95-105 rpm) to reduce muscular stress"
       ],
+      "coachingTipsIt": [
+        "Z5 = 110-120% FTP, Z2 = 65-75% FTP, né troppo basso né troppo alto",
+        "La frequenza cardiaca non scende tra gli sforzi, è voluto",
+        "Cadenza alta (95-105 rpm) per ridurre lo stress muscolare"
+      ],
       "commonMistakes": [
         "Récupérer trop bas (Z1) entre les efforts, change le stimulus",
         "Confondre Z5 avec Z6, pas de sprint, juste du soutenu"
@@ -962,12 +1285,28 @@
         "Recovering too low (Z1) between efforts, changes the stimulus",
         "Confusing Z5 with Z6, no sprint, just sustained intensity"
       ],
-      "variationIds": ["CYC-005"],
+      "commonMistakesIt": [
+        "Recuperare troppo basso (Z1) tra gli sforzi cambia lo stimolo",
+        "Confondere Z5 con Z6: niente sprint, solo intensità sostenuta"
+      ],
+      "variationIds": [
+        "CYC-005"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["vo2max", "intervals", "bangsbo", "cycling"],
+        "tags": [
+          "vo2max",
+          "intervals",
+          "bangsbo",
+          "cycling"
+        ],
         "priorityScore": 75
       },
       "weeklyFrequencyMax": 1,
@@ -978,18 +1317,27 @@
       "discipline": "cycling",
       "name": "Côtes 6×4'",
       "nameEn": "Hill Repeats 6×4'",
+      "nameIt": "Ripetute in salita 6×4'",
       "description": "Séance de force spécifique en montée. Six répétitions de 4 minutes à 100-110 % FTP en cadence basse (60-70 rpm) en bosse, récupération 4 minutes en redescendant. Développe la force-endurance et la capacité à monter.",
       "descriptionEn": "Specific strength session in climbs. Six 4-minute reps at 100-110 % FTP at low cadence (60-70 rpm) on a hill, 4 minutes recovery on the descent. Builds strength-endurance and climbing capacity.",
+      "descriptionIt": "Seduta di forza specifica in salita. Sei ripetute da 4 minuti al 100-110% FTP a bassa cadenza (60-70 rpm) in salita, recupero 4 minuti in discesa. Sviluppa forza resistente e capacità di scalata.",
       "category": "hills",
       "sessionType": "hills",
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 70, "max": 85 },
-      "environment": { "requiresHills": true, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 70,
+        "max": 85
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
         {
           "description": "Échauffement progressif + 2×30\" Z4 en montée",
           "descriptionEn": "Progressive warm-up + 2×30\" Z4 uphill",
+          "descriptionIt": "Riscaldamento progressivo + 2×30\" Z4 in salita",
           "durationMin": 20,
           "zone": "Z1-Z4"
         }
@@ -999,6 +1347,7 @@
           "kind": "segment",
           "description": "Échauffement progressif + 2×30\" Z4 en montée",
           "descriptionEn": "Progressive warm-up + 2×30\" Z4 uphill",
+          "descriptionIt": "Riscaldamento progressivo + 2×30\" Z4 in salita",
           "durationSec": 1200,
           "zone": "Z1-Z4",
           "role": "effort"
@@ -1008,11 +1357,13 @@
         {
           "description": "6×4' en montée à 100-110 % FTP, cadence 60-70 rpm, récup 4' Z1 en redescendant",
           "descriptionEn": "6×4' uphill at 100-110 % FTP, 60-70 rpm cadence, 4' Z1 descending recovery",
+          "descriptionIt": "6×4' in salita al 100-110% FTP, cadenza 60-70 rpm, recupero 4' Z1 in discesa",
           "durationMin": 4,
           "repetitions": 6,
           "zone": "Z4-Z5",
           "recovery": "4min Z1",
-          "recoveryEn": "4min Z1"
+          "recoveryEn": "4min Z1",
+          "recoveryIt": "4min Z1"
         }
       ],
       "mainSetStructure": [
@@ -1025,6 +1376,7 @@
               "kind": "segment",
               "description": "4' en montée à 100-110 % FTP, cadence 60-70 rpm",
               "descriptionEn": "4' uphill at 100-110 % FTP, 60-70 rpm cadence, 4' Z1 descending recovery",
+              "descriptionIt": "4' in salita al 100-110% FTP, cadenza 60-70 rpm",
               "durationSec": 240,
               "zone": "Z4-Z5",
               "role": "effort"
@@ -1035,6 +1387,7 @@
               "kind": "segment",
               "description": "4min Z1",
               "descriptionEn": "4min Z1",
+              "descriptionIt": "4min Z1",
               "durationSec": 240,
               "zone": "Z1",
               "role": "recovery"
@@ -1046,6 +1399,7 @@
         {
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationMin": 15,
           "zone": "Z1"
         }
@@ -1055,6 +1409,7 @@
           "kind": "segment",
           "description": "Retour au calme",
           "descriptionEn": "Cool-down",
+          "descriptionIt": "Defaticamento",
           "durationSec": 900,
           "zone": "Z1",
           "role": "effort"
@@ -1070,6 +1425,11 @@
         "Stay seated, no out-of-saddle pulling unless surging",
         "If cadence rises above 80 rpm, shift up"
       ],
+      "coachingTipsIt": [
+        "Cadenza bassa rigorosa, l'obiettivo è la forza",
+        "Busto dritto, resta seduto senza tirare fuorisella salvo rilanci",
+        "Se la cadenza sale sopra gli 80 rpm, indurisci il rapporto"
+      ],
       "commonMistakes": [
         "Choisir une côte trop courte qui force à rouler en plat",
         "Pédaler en danseuse permanente, n'est pas l'objectif"
@@ -1078,12 +1438,28 @@
         "Picking a hill too short that forces flat-road riding",
         "Out-of-saddle the entire time, not the goal"
       ],
-      "variationIds": ["CYC-004"],
+      "commonMistakesIt": [
+        "Scegliere una salita troppo corta che costringe a pedalare in pianura",
+        "Pedalare sempre fuorisella non è l'obiettivo"
+      ],
+      "variationIds": [
+        "CYC-004"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["hills", "strength", "climbing", "cycling"],
+        "tags": [
+          "hills",
+          "strength",
+          "climbing",
+          "cycling"
+        ],
         "priorityScore": 85
       },
       "weeklyFrequencyMax": 1,
