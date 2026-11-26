@@ -58,7 +58,7 @@ bun run dev       # http://localhost:5173
 | [docs/agent-api.md](docs/agent-api.md) | the JSON API, `llms.txt` and the plan import link |
 | [CLAUDE.md](CLAUDE.md) | architecture, build pipeline and house rules, in short |
 
-Design notes, in French: [the library](docs/bibliotheque.md), [the session page](docs/seance.md), [today](docs/aujourdhui.md), [plans](docs/plans.md), [calculators](docs/calculateurs.md), [road and trail](docs/pratiques.md).
+The design notes behind each screen are listed in [docs/](docs/README.md), in French.
 
 ## Contributing
 
