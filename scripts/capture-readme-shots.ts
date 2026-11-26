@@ -1,8 +1,9 @@
 /**
  * USAGE:
- *   bun run capture:readme                                   # anglais, depuis le serveur local
- *   ZONED_LOCALE=fr bun run capture:readme
- *   ZONED_BASE_URL=https://zoned.run bun run capture:readme
+ *   bun run scripts/capture-readme-shots.ts                  # anglais, depuis le serveur local
+ *   ZONED_LOCALE=fr bun run scripts/capture-readme-shots.ts
+ *   ZONED_BASE_URL=https://zoned.run bun run scripts/capture-readme-shots.ts
+ *   PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable ...  # sans le Chrome de Puppeteer
  *
  * Refait les captures de `assets/` que le README montre : des rendus bureau
  * propres, en clair ou en sombre selon la vue.
@@ -19,7 +20,6 @@
  *   assets/home_<l>_dark.png             (page d'accueil, sombre)
  *   assets/library_<l>_light.png         (bibliothèque)
  *   assets/workout_<l>_light.png         (une séance canonique)
- *   assets/plan_with_stats_<l>_light.png (plans prêts à l'emploi)
  */
 
 import { mkdirSync } from "fs";
@@ -44,7 +44,6 @@ const SHOTS: Shot[] = [
   { file: `home_${LOCALE}_dark.png`, url: "/", theme: "dark" },
   { file: `library_${LOCALE}_light.png`, url: "/library", theme: "light" },
   { file: `workout_${LOCALE}_light.png`, url: "/workout/VMA-001", theme: "light" },
-  { file: `plan_with_stats_${LOCALE}_light.png`, url: "/plan/new/prebuilt", theme: "light" },
 ];
 
 const VIEWPORT_W = 1440;

@@ -7,10 +7,6 @@
  *                                                       scripts/generate-route-meta.ts
  *   - public/og-images/wordmark-square.png  1080×1080, Instagram / LinkedIn
  *
- * scripts/generate-readme-banner.ts reuses the pieces exported below for the
- * README banner (the site card, recomposed in 1280×400), hence the
- * `import.meta.main` guard at the bottom.
- *
  * Copy is English: these cards are what social crawlers serve to link previews,
  * and the audience there is predominantly English-speaking. Headline numbers are
  * read from the live catalogue (scripts/site-stats.ts) so they can never drift.
