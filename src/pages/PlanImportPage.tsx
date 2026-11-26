@@ -215,7 +215,12 @@ export function PlanImportPage() {
           </p>
           {warnings.length > 0 && (
             <Alert kind="info" title={t("import.warningsTitle")}>
-              {warnings.map((w) => describeIssue(w, lang)).join(" ")}
+              {/* A short plan first: it changes what the runner is adding,
+                  a default only fills a blank. */}
+              {[...warnings]
+                .sort((a, b) => Number(b.code === "weeks_below_recommended") - Number(a.code === "weeks_below_recommended"))
+                .map((w) => describeIssue(w, lang))
+                .join(" ")}
             </Alert>
           )}
           <div className="zn-cluster">
