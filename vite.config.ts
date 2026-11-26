@@ -158,7 +158,14 @@ export default defineConfig({
         navigateFallback: "/index.html",
         // /api and .json: the agent API's static files, which a navigation
         // (an agent's browser tool, a user opening a link) must reach as JSON.
-        navigateFallbackDenylist: [/\.(txt|xml|json)$/, /^\/api\//],
+        //
+        // /plan/import: the door an assistant's link opens, usually on a
+        // device that last cached Zoned versions ago. Served by an old worker,
+        // that link ran the old app, which had no such route and showed
+        // "Plan not found" until the update banner was accepted. From the
+        // network it always runs the current app; offline it fails, but a
+        // link just pasted from an assistant was not opened offline.
+        navigateFallbackDenylist: [/\.(txt|xml|json)$/, /^\/api\//, /^\/plan\/import(?:[/?#]|$)/],
         // No skipWaiting, no clientsClaim, deliberately. Together with
         // registerType "prompt" they are the whole guarantee: with neither set,
         // no code path can activate a new version behind the app's back.
