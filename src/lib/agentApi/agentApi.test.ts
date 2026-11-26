@@ -353,6 +353,20 @@ describe("validation", () => {
     expect(tooSoon[0]).toMatchObject({ code: "weeks_out_of_range", params: { count: 2, min: 4, max: 52 } });
   });
 
+  test("a window under the recommended length is built, with a warning", () => {
+    const warningsFor = (raceDistance: string, raceDate: string) => {
+      const result = validateImportPayload({ ...minimalConfig(), raceDistance, raceDate }, lookup, opts);
+      if (!result.ok) throw new Error(JSON.stringify(result.errors));
+      return result.warnings.map((w) => [w.code, w.params.count, w.params.min]);
+    };
+    // 10K: 8 weeks recommended. 7 warns, 8 does not.
+    const short = warningsFor("10K", "2027-01-10");
+    expect(short).toEqual([["weeks_below_recommended", 7, 8]]);
+    expect(warningsFor("10K", "2027-01-17")).toEqual([]);
+    // Marathon: 14. The 4-week floor still holds for every distance.
+    expect(warningsFor("marathon", "2027-01-03")[0]).toEqual(["weeks_below_recommended", 6, 14]);
+  });
+
   test("plan shape limits", () => {
     const crowded = { ...minimalPlan(), weeks: [{ sessions: [0, 0, 0].map(() => ({ day: 2, workoutId: END[0] })) }] };
     expect(errorsOf(validateImportPayload(crowded, lookup, opts))[0]).toMatchObject({ code: "too_many_sessions_day", params: { day: 2, count: 3 } });

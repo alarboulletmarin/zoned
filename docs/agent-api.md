@@ -68,6 +68,7 @@ https://zoned.run/plan/import?lang=en#distance=10K&date=2027-05-30&days=3&time=1
 Plain parameters that mean `kind: "config"`, for an agent that should not have to run code to hand a plan over. `lib/agentApi/importParams.ts` turns them into a `config` payload and runs the same `validateImportPayload`, so there is one rule set. What it adds:
 
 - **Defaults where the app has one**, each reported as a `default_applied` warning on the preview: `level` is `intermediate` (the plan wizard's default), `longrun` is Sunday.
+- **A short window is built, not refused.** The wizard asks for the recommended length per distance (`RECOMMENDED_PLAN_WEEKS`: 5K 6, 10K 8, semi 10, marathon 14, trail_short 10, trail 14 weeks); a link may go down to the generator's floor of 4 weeks and gets a `weeks_below_recommended` warning on the preview.
 - **Leniency where a person would be lenient**: keys are case-insensitive; `distance` takes `10k`, `half`, `21k`, `42k`; `longrun` takes `sun`, `sunday`, `dimanche` or `6`; `pace` takes `6:45`, `6'45`, `6:45/km`, `6.75`; a decimal comma is a decimal point.
 - **`time`**, a target finish time (`H:MM:SS`, `1h10`), converted to `targetPaceMinKm` on road distances. A trail time is refused (`time_needs_road_distance`), as is a bare number (`70` is minutes or hours) and `time` together with `pace` (`conflicting_fields`). A target sets `goal: "time"` unless `goal` is given.
 - **`strength`**, 0 to 3: 0 is `includeStrength: false`, 1 to 3 sets `includeStrength` and `strengthPerWeek`.
@@ -200,7 +201,7 @@ Each session is built by `sessionFromWorkout`, the path a session picked by hand
 
 On a rejected payload the page lists every issue and offers **Copy for my assistant**, which copies `formatIssueReport()`: one English line per issue, ready to paste back to the agent.
 
-Codes: `not_object`, `unsupported_version`, `unknown_kind`, `unknown_field`, `missing_field`, `invalid_type`, `invalid_enum`, `invalid_date`, `date_in_past`, `out_of_range`, `race_before_start`, `weeks_out_of_range`, `text_too_long`, `unknown_workout`, `custom_workout`, `too_many_sessions_day`, `empty_plan`; warnings `start_moved_to_monday`, `empty_week`. New codes may be added within v1.
+Codes: `not_object`, `unsupported_version`, `unknown_kind`, `unknown_field`, `missing_field`, `invalid_type`, `invalid_enum`, `invalid_date`, `date_in_past`, `out_of_range`, `race_before_start`, `weeks_out_of_range`, `weeks_below_recommended` (warning), `text_too_long`, `unknown_workout`, `custom_workout`, `too_many_sessions_day`, `empty_plan`; warnings `start_moved_to_monday`, `empty_week`. New codes may be added within v1.
 
 ## Licence
 

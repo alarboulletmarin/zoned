@@ -29,7 +29,7 @@ import type {
   TrainingGoal,
   TrainingPlan,
 } from "@/types/plan";
-import { MAX_PLAN_WEEKS, MIN_PLAN_WEEKS } from "@/lib/planGenerator/constants";
+import { MAX_PLAN_WEEKS, MIN_PLAN_WEEKS, RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
 import { calculateFreePhases } from "@/lib/createFreePlan";
 import { MAX_WEEKS_PER_PLAN, preparePlanForStorage } from "@/lib/planSchema";
 import { addDaysToDate, calculatePlanWeekCount, isoDayOfWeek, mondayOfDate } from "@/lib/planDates";
@@ -179,6 +179,7 @@ export type ImportIssueCode =
   | "out_of_range"
   | "race_before_start"
   | "weeks_out_of_range"
+  | "weeks_below_recommended"
   | "text_too_long"
   | "unknown_workout"
   | "custom_workout"
@@ -397,6 +398,15 @@ function validateConfig(obj: Raw, c: Collector, today: string): ImportConfigPayl
           min: L.configWeeks.min,
           max: L.configWeeks.max,
           from,
+        });
+      } else if (raceDistance && weeks < RECOMMENDED_PLAN_WEEKS[raceDistance].min) {
+        // The wizard refuses this window; an assistant may have a reason (a
+        // runner already fit, a late sign-up), so the link builds the plan and
+        // says it is short rather than refusing it.
+        c.warn("weeks_below_recommended", "raceDate", {
+          count: weeks,
+          min: RECOMMENDED_PLAN_WEEKS[raceDistance].min,
+          distance: raceDistance,
         });
       }
     }

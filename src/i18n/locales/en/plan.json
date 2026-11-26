@@ -30,7 +30,7 @@
     "backToPlans": "My plans",
     "raceDay": "Race day",
     "recoveryWeek": "recovery",
-    "warningsTitle": "Adjusted on import",
+    "warningsTitle": "Worth knowing before you add it",
     "failed": "The plan could not be built from this link.",
     "invalidKicker_one": "{{count}} error",
     "invalidKicker_other": "{{count}} errors",
