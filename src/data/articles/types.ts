@@ -15,8 +15,10 @@ export interface ArticleMeta {
   slug: string;
   title: string;
   titleEn: string;
+  titleIt?: string;
   description: string;
   descriptionEn: string;
+  descriptionIt?: string;
   category: ArticleCategory;
   readTime: number;
   /** ISO 8601 publication date, surfaces in Article JSON-LD and OG. */
@@ -31,6 +33,7 @@ export interface ArticleMeta {
 export interface ArticleContent {
   content: string;
   contentEn: string;
+  contentIt?: string;
 }
 
 /**
@@ -39,4 +42,5 @@ export interface ArticleContent {
 export interface Article extends ArticleMeta {
   content: string;
   contentEn: string;
+  contentIt?: string;
 }

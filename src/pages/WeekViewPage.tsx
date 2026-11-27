@@ -99,7 +99,7 @@ import {
 } from "@/lib/todayComposition";
 import { isoDateOnly } from "@/lib/planDates";
 import { buildScanSchedule } from "@/lib/scanSchedule";
-import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
+import { getDateLocale, usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import type { AnyWorkoutTemplate } from "@/types";
 import { getPeakZone, isStrengthWorkout } from "@/types";
 import { WEEK_CATEGORIES, type WeekCategory } from "@/types/plan";
@@ -724,7 +724,7 @@ export function WeekViewPage() {
   const placedOn = layer?.enabled && layer.anchor ? layer.anchor : null;
   const formatMonday = (iso: string) => {
     const [y, m, d] = iso.split("-").map(Number);
-    return new Date(y, m - 1, d).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+    return new Date(y, m - 1, d).toLocaleDateString(getDateLocale(), {
       day: "numeric",
       month: "short",
     });

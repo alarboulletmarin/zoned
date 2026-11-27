@@ -1,0 +1,1054 @@
+{
+  "accessibility": {
+    "skipToContent": "Vai al contenuto"
+  },
+  "app": {
+    "name": "Zoned",
+    "tagline": "219 sedute di corsa, 10 ciclismo, 10 nuoto, 17 potenziamento, piani dai 5 km alla maratona e 10 calcolatori. Gratuito, senza account.",
+    "heroTitle": "Prepara la tua prossima",
+    "heroTitleAccent": "gara"
+  },
+  "share": {
+    "title": "Condividi attività",
+    "weekTitle": "Condividi la settimana",
+    "subtitle": "Scegli una grafica",
+    "trigger": "Condividi",
+    "link": "Condividi",
+    "copiedShort": "Copiato",
+    "close": "Chiudi",
+    "shareOn": "Condividi su",
+    "action": {
+      "download": "Salva",
+      "copy": "Copia",
+      "copyLink": "Copia link",
+      "share": "Condividi"
+    },
+    "transparent": {
+      "label": "Sfondo trasparente",
+      "hint": "Per incollare la grafica su una foto (Insta Story, ecc.)",
+      "notForZoneHero": "Non disponibile su questo modello"
+    },
+    "privacy": "L'immagine è generata nel tuo browser, nessun dato inviato.",
+    "template": {
+      "sessionSheet": {
+        "label": "Scheda",
+        "format": "La seduta in righe, il profilo a fregio · 1080 × 1350"
+      },
+      "sessionSquare": {
+        "label": "Quadrato",
+        "format": "Profilo, blocchi e tempo nelle zone · 1080 × 1080"
+      },
+      "sessionLandscape": {
+        "label": "Orizzontale",
+        "format": "Profilo e blocchi, formato ampio · 1200 × 675"
+      },
+      "sessionStory": {
+        "label": "Storia",
+        "format": "Il profilo in grande, poi i blocchi · 1080 × 1920"
+      },
+      "storyHero": {
+        "label": "Story",
+        "format": "Insta · 1080 × 1920"
+      },
+      "squareStats": {
+        "label": "Stats quadrate",
+        "format": "Feed Insta · 1080 × 1080"
+      },
+      "landscapeWide": {
+        "label": "Orizzontale",
+        "format": "Twitter · 1200 × 675"
+      },
+      "minimalTypo": {
+        "label": "Minimal",
+        "format": "Editoriale · 1080 × 1080"
+      },
+      "zoneHero": {
+        "label": "Zone Hero",
+        "format": "Story colorata · 1080 × 1920"
+      },
+      "heartbeatEcg": {
+        "label": "Battito ECG",
+        "format": "Tracciato cardiaco · 1080 × 1920"
+      },
+      "magazineCover": {
+        "label": "Rivista",
+        "format": "Copertina editoriale · 1080 × 1920"
+      },
+      "diagonalSplit": {
+        "label": "Diagonale",
+        "format": "Geometrico · 1080 × 1080"
+      },
+      "receiptTicket": {
+        "label": "Scontrino",
+        "format": "Ricevuta / pettorale · 1080 × 1920"
+      },
+      "qrCard": {
+        "label": "Codice QR",
+        "format": "Scansione diretta alla seduta · 1080 × 1080"
+      },
+      "bibCard": {
+        "label": "Pettorale",
+        "format": "Stile pettorale gara · 1080 × 1080"
+      },
+      "spotifyWrap": {
+        "label": "Recap",
+        "format": "Sfumatura decisa e testo XL · 1080 × 1920"
+      },
+      "boardingPass": {
+        "label": "Carta d'imbarco",
+        "format": "Biglietto aereo · 1080 × 1920"
+      },
+      "postcard": {
+        "label": "Cartolina",
+        "format": "Vintage con francobollo · 1080 × 1920"
+      },
+      "moviePoster": {
+        "label": "Locandina",
+        "format": "Cinema stile A24 · 1080 × 1920"
+      },
+      "sneakerDrop": {
+        "label": "SNKRS Drop",
+        "format": "Scheda uscita sneaker · 1080 × 1920"
+      },
+      "highlightBanner": {
+        "label": "Banner",
+        "format": "Adesivo per fondo foto orizzontale · 1080 × 360"
+      },
+      "cornerStamp": {
+        "label": "Timbro",
+        "format": "Piccolo adesivo d'angolo · 480 × 480"
+      },
+      "spotifyWrapSquare": {
+        "label": "Recap quadrato",
+        "format": "Versione Feed Insta · 1080 × 1080"
+      },
+      "badgeChip": {
+        "label": "Badge",
+        "format": "Distintivo neo-brutalista · 480 × 480"
+      },
+      "holographicCard": {
+        "label": "Olo",
+        "format": "Carta cromo iridescente · 480 × 480"
+      },
+      "waxSeal": {
+        "label": "Sigillo",
+        "format": "Sigillo in ceralacca · 480 × 480"
+      },
+      "casinoChip": {
+        "label": "Fiche",
+        "format": "Fiche da casinò · 480 × 480"
+      },
+      "vinylDieCut": {
+        "label": "Sticker",
+        "format": "Adesivo fustellato · 480 × 480"
+      },
+      "mapPinDrop": {
+        "label": "Segnaposto",
+        "format": "Segnaposto mappa · 480 × 480"
+      },
+      "coffeeStamp": {
+        "label": "Fedeltà",
+        "format": "Tessera punti · 480 × 480"
+      },
+      "enamelPin": {
+        "label": "Spilla",
+        "format": "Spilla smaltata · 480 × 480"
+      },
+      "polaroidSquare": {
+        "label": "Polaroid",
+        "format": "Polaroid scritta a mano · 1080 × 1080"
+      },
+      "periodicElement": {
+        "label": "Elemento",
+        "format": "Casella tavola periodica · 1080 × 1080"
+      },
+      "albumCover": {
+        "label": "Vinile",
+        "format": "Copertina album duotone · 1080 × 1080"
+      },
+      "tradingCard": {
+        "label": "Figurina",
+        "format": "Carta collezionabile · 1080 × 1080"
+      },
+      "subwayMap": {
+        "label": "Metro",
+        "format": "Linea metro stilizzata · 1080 × 1080"
+      },
+      "cassetteTape": {
+        "label": "Cassetta",
+        "format": "Musicassetta rétro · 1080 × 1080"
+      },
+      "y2kChrome": {
+        "label": "Y2K",
+        "format": "Cromo Frutiger Aero · 1080 × 1080"
+      },
+      "boxingPoster": {
+        "label": "Match",
+        "format": "Locandina pugilato · 1080 × 1080"
+      },
+      "paperSheet": {
+        "label": "Carta",
+        "format": "Carta, inchiostro, un disegno · 1080 × 1350"
+      },
+      "zonePlate": {
+        "label": "Tavola zone",
+        "format": "Le sei zone disegnate · 1080 × 1080"
+      },
+      "weekSheet": {
+        "label": "Scheda",
+        "format": "La settimana in righe, il ritmo a barre · 1080 × 1350"
+      },
+      "weekSquare": {
+        "label": "Quadrato",
+        "format": "Ritmo e griglia dei sette giorni · 1080 × 1080"
+      },
+      "weekLandscape": {
+        "label": "Orizzontale",
+        "format": "Ritmo e griglia, formato ampio · 1200 × 675"
+      },
+      "weekStory": {
+        "label": "Storia",
+        "format": "Il ritmo in grande, poi le sedute · 1080 × 1920"
+      }
+    },
+    "toast": {
+      "shared": "Condiviso tramite menu del dispositivo",
+      "downloaded": "Immagine salvata",
+      "copied": "Immagine copiata negli appunti",
+      "linkCopied": "Link copiato negli appunti",
+      "linkCopyFailed": "Il link non è stato copiato.",
+      "textCopyFailed": "Il testo non è stato copiato.",
+      "copyUnsupported": "La copia immagine richiede HTTPS (usa Salva o Condividi)",
+      "loading": "Generazione immagine…",
+      "error": "Impossibile generare l'immagine."
+    }
+  },
+  "export": {
+    "title": "Esporta",
+    "calendar": "Calendario (ICS)",
+    "image": "Immagine (PNG)",
+    "pdf": "Documento (PDF)",
+    "json": "Dati (JSON)",
+    "garmin": "Garmin (FIT)",
+    "selectDateTime": "Seleziona data e ora",
+    "download": "Scarica",
+    "dateLabel": "Data",
+    "timeLabel": "Ora",
+    "success": {
+      "calendar": "Evento calendario esportato",
+      "image": "Immagine esportata",
+      "imageShared": "Immagine pronta da salvare",
+      "pdf": "Documento PDF esportato",
+      "garmin": "File Garmin esportato"
+    },
+    "error": {
+      "calendar": "Esportazione calendario non riuscita.",
+      "image": "Esportazione immagine non riuscita.",
+      "pdf": "Esportazione PDF non riuscita.",
+      "garmin": "Esportazione Garmin non riuscita."
+    },
+    "loading": {
+      "calendar": "Generazione calendario…",
+      "image": "Generazione immagine…",
+      "pdf": "Generazione PDF…",
+      "garmin": "Generazione file Garmin…"
+    },
+    "planPdf": {
+      "freePlan": "Piano libero",
+      "start": "Inizio",
+      "race": "Gara",
+      "duration": "Durata",
+      "weeks": "settimane",
+      "peakVolume": "Volume di picco",
+      "wk": "sett",
+      "raceName": "Nome gara",
+      "target": "Obiettivo",
+      "sessionsPerWeek": "Sedute/settimana",
+      "peakLongRun": "Lungo massimo",
+      "sessions": "sedute",
+      "key": "chiave",
+      "peakWeek": "settimana di picco",
+      "appendixNote": "I numeri in apice (es. ¹²³) rimandano al Riferimento Sedute alla fine di questo documento ({{count}} sedute uniche).",
+      "targetPaces": "Ritmi obiettivo",
+      "raceThreshold": "Gara / Soglia",
+      "easyLongRun": "Facile / Lungo",
+      "sessionType": "Tipo di seduta",
+      "paceCol": "Ritmo",
+      "zonePaces": "Ritmi di zona (da VAM)",
+      "range": "Intervallo",
+      "trainingPhases": "Fasi di allenamento",
+      "phasesWeeks": "Settimane",
+      "noSessions": "Nessuna seduta questa settimana",
+      "day": "Giorno",
+      "workout": "Seduta",
+      "dur": "Dur.",
+      "summary": "Riepilogo",
+      "raceDay": "GIORNO GARA",
+      "recovery": "Recupero",
+      "workoutReference": "RIFERIMENTO SEDUTE",
+      "generatedBy": "Generato da",
+      "exercises": "esercizi",
+      "warmup": "Riscaldamento",
+      "mainSet": "Corpo",
+      "cooldown": "Defaticamento",
+      "durationCol": "Durata",
+      "exercise": "Esercizio",
+      "sets": "Serie",
+      "rest": "Recupero",
+      "intensity": "Intensità"
+    },
+    "workoutPdf": {
+      "description": "Descrizione",
+      "durationCol": "Durata",
+      "zone": "Zona",
+      "reps": "Rip",
+      "rest": "Recupero",
+      "none": "Nessuno",
+      "category": "Categoria",
+      "difficulty": "Difficoltà",
+      "durationLabel": "Durata",
+      "durationValue": "{{duration}} min",
+      "warmup": "Riscaldamento",
+      "mainSet": "Corpo centrale",
+      "cooldown": "Defaticamento",
+      "coachingTips": "Consigli tecnici",
+      "noTips": "Nessun consiglio specifico",
+      "commonMistakes": "Errori comuni",
+      "noMistakes": "Nessun avviso specifico",
+      "generatedBy": "Generato da",
+      "kicker": "Seduta di allenamento"
+    },
+    "raceSimPdf": {
+      "racePlanTitle": "Piano Gara - {{distance}}",
+      "targetPace": "Ritmo obiettivo: {{pace}}/km | Partenza: {{start}} | Arrivo stimato: {{finish}} | Totale: {{total}}",
+      "timeline": "Tabella oraria giorno gara",
+      "timeCol": "Ora",
+      "eventCol": "Evento",
+      "splitTable": "Tabella passaggi",
+      "dist": "Dist",
+      "split": "Parz",
+      "paceCol": "Ritmo",
+      "cumul": "Cumul",
+      "nutrition": "Nutrizione",
+      "carbsSummary": "Carboidrati: {{perHour}}g/h ({{total}}g totali)",
+      "fluidsSummary": "Liquidi: {{perHour}}ml/h ({{total}}ml totali)",
+      "sodiumSummary": "Sodio: {{perHour}}mg/h",
+      "gelsSummary": "Gel: {{count}} totali, ogni ~{{frequency}} min",
+      "fuelingTimeline": "Sequenza rifornimento",
+      "minCol": "Min",
+      "actionCol": "Azione",
+      "breakfast": "Colazione pre-gara",
+      "breakfastLine": "{{time}} - {{description}}",
+      "mentalCues": "Appigli mentali",
+      "segment": "Segmento",
+      "cue": "Appiglio",
+      "dayBeforeChecklist": "Checklist vigilia",
+      "raceDayChecklist": "Checklist giorno gara",
+      "generatedBy": "Generato da",
+      "filename": "piano-gara-{{slug}}.pdf",
+      "kicker": "Piano gara"
+    },
+    "ics": {
+      "warmupSep": "=== RISCALDAMENTO ===",
+      "mainSetSep": "=== CORPO CENTRALE ===",
+      "cooldownSep": "=== DEFATICAMENTO ===",
+      "tipsSep": "=== CONSIGLI ==="
+    },
+    "planIcs": {
+      "raceDay": "Giorno Gara",
+      "race": "Gara",
+      "targetTime": "Tempo obiettivo",
+      "week": "Settimana",
+      "dayLabel": "Giorno",
+      "durationLabel": "Durata",
+      "keySession": "Seduta chiave",
+      "warmup": "Riscaldamento",
+      "mainSet": "Corpo centrale",
+      "cooldown": "Defaticamento",
+      "warmupSep": "--- Riscaldamento ---",
+      "mainSetSep": "--- Corpo centrale ---",
+      "cooldownSep": "--- Defaticamento ---",
+      "tips": "Consigli",
+      "rest": "riposo"
+    },
+    "weekPdf": {
+      "kicker": "Settimana di allenamento",
+      "key": "chiave",
+      "structures": "Le sedute",
+      "filePrefix": "settimana"
+    }
+  },
+  "randomWorkout": {
+    "title": "Seduta casuale",
+    "description": "Poca ispirazione? Lascia decidere al caso.",
+    "button": "Tenta la fortuna"
+  },
+  "nav": {
+    "home": "Home",
+    "library": "Libreria",
+    "learn": "Impara",
+    "glossary": "Glossario",
+    "favorites": "Preferiti",
+    "about": "Info",
+    "contribute": "Contribuisci",
+    "settings": "Impostazioni",
+    "changelog": "Novità",
+    "plans": "Piani",
+    "discover": "Scopri",
+    "training": "Allenamento",
+    "sessions": "Sedute",
+    "plan": "Piano",
+    "quickActions": "Azioni rapide",
+    "methodology": "Metodologia",
+    "builder": "Crea seduta",
+    "planMethodology": "Guida ai piani",
+    "profile": "Il mio Profilo",
+    "nutrition": "Nutrizione",
+    "calculators": "Calcolatori",
+    "primary": "Navigazione principale",
+    "today": "Oggi",
+    "myPlan": "Il mio piano",
+    "understand": "Capire",
+    "myNumbers": "I miei numeri"
+  },
+  "topnav": {
+    "account": "Account",
+    "libraryAll": "Tutte le sedute",
+    "libraryAllDesc": "Corsa, ciclismo, nuoto, potenziamento",
+    "drawSession": "Estrai una seduta",
+    "drawSessionDesc": "Lascia scegliere al caso la tua seduta",
+    "weeks": "Le mie settimane",
+    "weeksDesc": "Componi una settimana 80/20 o da zero",
+    "collections": "Collezioni",
+    "collectionsDesc": "Sedute raggruppate per tema",
+    "builder": "Crea una seduta",
+    "builderDesc": "Costruisci una seduta blocco per blocco",
+    "plansMine": "I miei piani",
+    "plansMineDesc": "Piani attivi e passati",
+    "plansNew": "Nuovo piano",
+    "plansNewDesc": "Una gara, una data, i tuoi giorni",
+    "raceSim": "Simulatore giorno gara",
+    "raceSimDesc": "Passaggi, nutrizione e ritmo per la tua gara",
+    "calculatorsAll": "Tutti i calcolatori",
+    "calculatorsAllDesc": "10 strumenti, calcolo locale istantaneo",
+    "calcZones": "Zone di allenamento",
+    "calcVma": "VAM da un tempo di gara",
+    "calcFtp": "Test FTP ciclismo",
+    "calcCss": "Test CSS nuoto",
+    "calcEquivalence": "Equivalenza distanze",
+    "methodScience": "Metodologia scientifica",
+    "methodScienceDesc": "Zone, polarizzazione, carico di allenamento",
+    "methodPlans": "Metodologia dei piani",
+    "methodPlansDesc": "Come Zoned costruisce un piano",
+    "learnArticles": "Articoli",
+    "learnArticlesDesc": "Fondamentali e allenamento",
+    "learnNutrition": "Nutrizione",
+    "learnNutritionDesc": "Idratazione, carboidrati, proteine",
+    "learnGuides": "Guide pratiche",
+    "learnGuidesDesc": "Riscaldamento, pre-gara, nutrizione",
+    "learnGlossary": "Glossario",
+    "learnGlossaryDesc": "Oltre 50 termini tecnici",
+    "favoritesDesc": "Le sedute che hai salvato",
+    "profileDesc": "Il tuo livello, i tuoi vincoli, i tuoi record",
+    "activities": "Attività complementari",
+    "activitiesDesc": "I tuoi tragitti in bici e sedute fuori piano",
+    "plansPrebuilt": "Piani pronti",
+    "plansPrebuiltDesc": "Piani già scritti, pronti da usare",
+    "weeksPrebuilt": "Settimane pronte"
+  },
+  "errors": {
+    "workoutNotFound": "Seduta non trovata",
+    "generic": "Non è andato a buon fine. Riprova tra un attimo.",
+    "planSaveFailed": "Il piano non è stato salvato.",
+    "notFound": {
+      "title": "Pagina non trovata",
+      "description": "La pagina che cerchi non esiste o è stata spostata.",
+      "backHome": "Torna alla home",
+      "body": "Questo indirizzo non porta a nessuna pagina. I tuoi piani, sedute e impostazioni salvati sono intatti."
+    },
+    "boundary": {
+      "title": "Qualcosa è andato storto",
+      "description": "Si è verificato un errore imprevisto. Prova a ricaricare la pagina.",
+      "reload": "Ricarica",
+      "backHome": "Torna alla home"
+    }
+  },
+  "actions": {
+    "search": "Cerca",
+    "filter": "Filtra",
+    "clear": "Cancella",
+    "pickDate": "Scegli una data",
+    "viewDetails": "Vedi dettagli",
+    "backToLibrary": "Torna alla libreria",
+    "cancel": "Annulla",
+    "tools": "Strumenti",
+    "navigate": "Naviga",
+    "more": "Altre opzioni",
+    "close": "Chiudi",
+    "menu": "Menu",
+    "scrollToTop": "Torna su",
+    "addToFavorites": "Aggiungi ai preferiti",
+    "removeFromFavorites": "Rimuovi dai preferiti",
+    "viewRepo": "Repository GitHub",
+    "copyLink": "Copia link",
+    "linkCopied": "Link copiato!"
+  },
+  "units": {
+    "minutes": "min",
+    "minutesFull": "minuti",
+    "workouts": "sedute",
+    "categories": "categorie",
+    "zones": "zone"
+  },
+  "theme": {
+    "light": "Chiaro",
+    "dark": "Scuro",
+    "system": "Sistema",
+    "button": "Tema: {{mode}}"
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English",
+    "it": "Italiano"
+  },
+  "zonePersonalization": {
+    "noVma": "Non conosco la mia VAM"
+  },
+  "myZones": {
+    "zoneCalculator": {
+      "invalidVma": "La VAM deve essere tra 8 e 30 km/h"
+    }
+  },
+  "search": {
+    "placeholder": "Cerca sedute, strumenti, guide, pagine...",
+    "shortcut": "Cmd+K",
+    "noResults": "Nessun risultato trovato",
+    "viewAll": "Vedi tutto nella Libreria",
+    "sections": {
+      "quickAccess": "Accesso rapido",
+      "workouts": "Sedute",
+      "collections": "Collezioni",
+      "calculators": "Calcolatori",
+      "guides": "Guide",
+      "articles": "Articoli",
+      "glossary": "Glossario",
+      "pages": "Pagine"
+    }
+  },
+  "hubLinks": {
+    "title": "Continua",
+    "label": "Pagine correlate"
+  },
+  "relatedContent": {
+    "title": "Contenuti correlati",
+    "articles": "Articoli",
+    "workouts": "Sedute",
+    "glossary": "Glossario"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "description": "Personalizza la tua esperienza",
+    "theme": {
+      "title": "Tema",
+      "description": "Chiaro, scuro o segui il sistema"
+    },
+    "openingAnimation": {
+      "title": "Animazione di apertura",
+      "description": "Una figura in corsa all'avvio dell'app. “Segui il sistema” rispetta la tua preferenza di accessibilità: se hai chiesto meno animazioni, la schermata appare comunque ma il corridore resta fermo. “Sempre” la riproduce in ogni caso: la scelta è tua.",
+      "system": "Segui il sistema",
+      "always": "Sempre",
+      "never": "Mai"
+    },
+    "colorPalette": {
+      "title": "Palette colori",
+      "description": "Adattata per accessibilità visiva",
+      "options": {
+        "standard": "Standard",
+        "deuteranopia": "Deuteranopia (Rosso-Verde)",
+        "tritanopia": "Tritanopia (Blu-Giallo)"
+      }
+    },
+    "unitSystem": {
+      "title": "Sistema di unità",
+      "description": "Metrico o imperiale",
+      "metric": "Metrico (km)",
+      "imperial": "Imperiale (miglia)"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "Nulla viene raccolto",
+      "noServer": "Nessun dato viene inviato ad alcun server",
+      "noAccount": "Nessun account utente richiesto",
+      "localStorage": "Tutti i tuoi dati restano nel browser (localStorage)",
+      "analytics": "Nessuna analisi e nessun tracciamento. Nulla esce da questo browser."
+    },
+    "scienceMode": {
+      "title": "Modalità scienza",
+      "description": "Mostra le spiegazioni scientifiche nelle pagine delle sedute",
+      "enabled": "Attivata",
+      "disabled": "Disattivata"
+    },
+    "data": {
+      "title": "I tuoi dati",
+      "description": "Tutto vive in questo browser: profilo, preferiti, piani, zone. Svuotare la cache li cancella.",
+      "exportButton": "Esporta i miei dati",
+      "importButton": "Ripristina i miei dati",
+      "exportSuccess": "Backup esportato",
+      "importSuccess": "Dati ripristinati. La pagina si sta ricaricando.",
+      "importError": "Ripristino non riuscito. I tuoi dati sono intatti, nulla è cambiato.",
+      "invalidFile": "Nulla è cambiato, il tuo profilo e il tuo piano sono intatti. Scegli un .json esportato da Zoned.",
+      "invalidFileTitle": "Questo file non è un backup di Zoned",
+      "chooseAnotherFile": "Scegli un altro file",
+      "reading": "Lettura del file",
+      "confirmTitle": "Ripristinare i dati?",
+      "confirmDescription": "Scegli come applicare il backup.",
+      "confirmButton": "Ripristina",
+      "restoreModeLabel": "Modalità di ripristino",
+      "replaceModeTitle": "Sostituisci",
+      "replaceModeDescription": "Cancella prima i dati locali di Zoned, poi ripristina solo ciò che è presente nel backup.",
+      "mergeModeTitle": "Unisci",
+      "mergeModeDescription": "Mantiene i dati locali di Zoned assenti dal backup e sostituisce solo le chiavi presenti nel file."
+    },
+    "qrSync": {
+      "title": "Verso un altro dispositivo",
+      "description": "Invia i tuoi piani, attività e profili al telefono o computer, senza rete e senza account: un codice QR animato, inquadrato dall'altro dispositivo. Tema, lingua e layout restano specifici di ciascun dispositivo.",
+      "sendButton": "Invia",
+      "receiveButton": "Ricevi",
+      "unsupported": "Questo browser non può decomprimere i dati, quindi la sincronizzazione QR non è disponibile qui. Usa l'esportazione su file.",
+      "sendTitle": "Invia a un altro dispositivo",
+      "sendHint": "Sull'altro dispositivo, apri Impostazioni poi Ricevi e inquadra questo codice con la fotocamera. Tieni entrambi gli schermi accesi fino al termine.",
+      "preparing": "Preparazione del codice",
+      "sendFailed": "Impossibile preparare i dati da inviare. Nulla è cambiato.",
+      "qrLabel": "Codice QR, fotogramma {{current}} di {{total}}",
+      "pause": "Pausa",
+      "resume": "Riprendi",
+      "localNote": "Nulla passa per un server: i dati lasciano questo dispositivo solo attraverso lo schermo.",
+      "done": "Fatto",
+      "receiveTitle": "Ricevi da un altro dispositivo",
+      "receiveHint": "Sull'altro dispositivo, apri Impostazioni poi Invia e inquadra il suo schermo con questa fotocamera.",
+      "starting": "Apertura della fotocamera",
+      "aim": "Inquadra il codice QR sull'altro dispositivo",
+      "progress": "{{got}} di {{count}} fotogrammi",
+      "camera": "Flusso fotocamera",
+      "denied": "L'accesso alla fotocamera è negato. Consentilo nelle impostazioni del browser e riprova.",
+      "unavailable": "Nessuna fotocamera disponibile su questo dispositivo. Usa l'esportazione su file.",
+      "newer": "Questi dati provengono da una versione più recente di Zoned. Aggiorna questo dispositivo e riprova.",
+      "invalid": "I dati ricevuti sono illeggibili o incompleti. Nulla è cambiato, riavvia l'invio.",
+      "retry": "Riprova",
+      "close": "Chiudi",
+      "confirmTitle": "Dati ricevuti",
+      "confirmDescription": "Scegli come applicarli su questo dispositivo. Tema e lingua non cambiano.",
+      "apply": "Applica",
+      "applied": "Dati ricevuti. La pagina si sta ricaricando.",
+      "applyError": "Impossibile applicarli. I tuoi dati sono intatti, nulla è cambiato."
+    }
+  },
+  "tips": {
+    "title": "Lo sapevi?",
+    "learnMore": "Approfondisci",
+    "dismiss": "Ignora"
+  },
+  "simulator": {
+    "title": "Simulatore Gara",
+    "ctaTitle": "Simula la tua gara",
+    "ctaSubtitle": "Passaggi, nutrizione, giorno gara"
+  },
+  "stats": {
+    "workoutsTitle": "sedute",
+    "workoutsSubtitle": "Esportazione Garmin FIT in un clic",
+    "calculatorsTitle": "10 calcolatori",
+    "calculatorsSubtitle": "VAM, zone, passaggi, equivalenze...",
+    "simulatorTitle": "Simulatore gara",
+    "simulatorSubtitle": "Passaggi, nutrizione, riscaldamento, giorno gara"
+  },
+  "workoutDetail": {
+    "back": "Indietro",
+    "environment": {
+      "any": "Qualsiasi"
+    }
+  },
+  "footer": {
+    "strength": "forza"
+  },
+  "donate": {
+    "title": "Sostieni il progetto",
+    "description": "Zoned è 100% gratuito e open source. Se trovi utile l'app, puoi sostenere il suo sviluppo.",
+    "button": "Sostieni il progetto",
+    "footerLink": "Sostieni"
+  },
+  "storageWarning": {
+    "title": "I tuoi dati restano su questo dispositivo",
+    "description": "Zoned non ha server. Preferiti, piani e impostazioni vivono nel tuo browser.",
+    "warning": "Svuotare la cache del browser li cancella. Esporta prima un backup.",
+    "exportButton": "Esporta i miei dati",
+    "understand": "Ho capito"
+  },
+  "collections": {
+    "title": "Collezioni",
+    "subtitle": "Percorsi tematici di sedute per ogni obiettivo",
+    "workoutCount": "{{count}} seduta",
+    "workoutCount_plural": "{{count}} sedute",
+    "viewAll": "Vedi tutte le collezioni",
+    "backToCollections": "Torna alle collezioni",
+    "progression": "Percorso progressivo",
+    "freeSelection": "Selezione libera",
+    "step": "Tappa {{number}}",
+    "featured": "Collezioni in evidenza",
+    "groups": {
+      "starter": "Iniziare e benessere",
+      "race": "Obiettivi gara",
+      "speed": "Velocità e sedute chiave",
+      "strength": "Forza e prevenzione"
+    },
+    "difficulty": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzato"
+    },
+    "kicker": "{{collections}} collezioni · {{groups}} temi",
+    "groupCount_one": "{{count}} collezione",
+    "groupCount_other": "{{count}} collezioni",
+    "workoutCount_one": "{{count}} seduta",
+    "workoutCount_other": "{{count}} sedute",
+    "emptyTitle": "Nessuna collezione caricata",
+    "emptyDescription": "Il catalogo non ha restituito nulla. Ricarica la pagina o apri la libreria con le sue {{workouts}} sedute.",
+    "emptyAction": "Apri la libreria"
+  },
+  "library": {
+    "track": "Pista",
+    "hills": "Salite"
+  },
+  "plans": {
+    "backToPlans": "Torna ai piani",
+    "createPlan": "Crea un piano",
+    "choosePlanType": "Scegli il tipo di piano adatto a te",
+    "myPlans": "I miei piani",
+    "createMyPlan": "Crea il mio piano",
+    "assistedPlan": "Piano assistito",
+    "assistedPlanDesc": "Rispondi a qualche domanda e ottieni un piano generato automaticamente",
+    "freePlan": "Piano libero",
+    "freePlanDesc": "Crea un piano vuoto e inserisci le sedute manualmente",
+    "prebuiltPlans": "Piani pronti",
+    "prebuiltPlansDesc": "Scegli un piano strutturato e inizia subito",
+    "planExported": "Piano esportato",
+    "weeks": "sett",
+    "weeksEn": "sett"
+  },
+  "zones": {
+    "scaleTitle": "Scala di intensità",
+    "profile": "Profilo seduta: {{parts}}.",
+    "profileSegment": "{{zone}} {{minutes}} min",
+    "profileRecovery": "recupero {{minutes}} min",
+    "physiology": "Fisiologia",
+    "howItFeels": "Sensazioni",
+    "benefits": "Benefici",
+    "exampleWorkouts": "Sedute di esempio",
+    "seeAllWorkouts": "Vedi tutte le sedute",
+    "trainingZones": "Zone di Allenamento",
+    "clickZoneToLearn": "Clicca una zona per saperne di più"
+  },
+  "icsExport": {
+    "chooseTrainingDays": "Scegli i tuoi giorni di allenamento",
+    "selectDays": "Seleziona {{count}} giorni per le tue sedute settimanali.",
+    "longRunDay": "Giorno del lungo",
+    "select": "Seleziona...",
+    "cancel": "Annulla",
+    "export": "Esporta"
+  },
+  "fitTransfer": {
+    "workoutDownloaded": "Seduta scaricata!",
+    "fileDownloaded": "Il file {{filename}} è stato scaricato.",
+    "step1": "Collega il tuo orologio Garmin al computer con il cavo USB",
+    "step2OsPath": "L'orologio appare come unità USB: {{path}}",
+    "step3": "Apri la cartella dell'orologio e vai su: GARMIN → NewFiles",
+    "step4": "Copia il file {{filename}} in questa cartella",
+    "step5": "Espelli l'orologio in sicurezza, la seduta apparirà in Allenamento → I miei allenamenti",
+    "compatible": "Compatibile con: Forerunner, Fenix, Enduro, Venu, Epix, Instinct, Vivoactive",
+    "noGarmin": "Non hai un orologio Garmin?",
+    "fitGarminOnly": "L'esportazione FIT è compatibile solo con orologi Garmin. Per altri marchi, ricrea questa seduta manualmente nell'app del tuo orologio.",
+    "copyInstructions": "Copia istruzioni seduta",
+    "instructionsCopied": "Istruzioni copiate!",
+    "copyFailed": "Le istruzioni non sono state copiate.",
+    "gotIt": "Capito",
+    "osPath": {
+      "windows": "Esplora file → Questo PC → GARMIN",
+      "macos": "Finder → Barra laterale → GARMIN",
+      "linux": "Gestore file → /media/GARMIN",
+      "other": "Il tuo gestore file → unità GARMIN"
+    },
+    "warmup": "Riscaldamento",
+    "mainSet": "Corpo centrale",
+    "cooldown": "Defaticamento"
+  },
+  "feedback": {
+    "enduranceRun": "Ottima uscita di resistenza!",
+    "tempoWork": "Solido lavoro a ritmo tempo!",
+    "intenseSession": "Seduta intensa completata!",
+    "recoverySession": "Recupero meritato!",
+    "sessionCompleted": "Seduta completata!",
+    "howDidItFeel": "Come è andata?",
+    "easy": "Facile",
+    "skip": "Salta",
+    "save": "Salva",
+    "rpeVeryEasy": "Molto facile",
+    "rpeEasy": "Facile",
+    "rpeModerate": "Moderato",
+    "rpeHard": "Duro",
+    "rpeVeryHard": "Molto duro",
+    "rpeMaximal": "Massimale"
+  },
+  "collectionsDetail": {
+    "collectionNotFound": "Collezione non trovata",
+    "noWorkoutsFound": "Nessuna seduta trovata per questa collezione.",
+    "notFoundDescription": "Questo indirizzo non corrisponde a nessuno dei {{count}} percorsi. L'indice li elenca tutti.",
+    "noWorkoutsTitle": "Nessuna seduta caricata",
+    "noWorkoutsDescription": "Non è stato possibile leggere le {{count}} sedute di questo percorso. Ricarica la pagina per riprovare.",
+    "kicker": "{{count}} sedute · {{kind}}"
+  },
+  "favorites": {
+    "title": "I miei preferiti",
+    "savedWorkouts": "{{count}} seduta salvata",
+    "savedWorkouts_plural": "{{count}} sedute salvate",
+    "noFavoritesYet": "Ancora nessun preferito",
+    "noFavoritesDesc": "Sfoglia la libreria e tocca l'icona del cuore per salvare qui le tue sedute preferite.",
+    "subtitle": "Le sedute che hai salvato, pronte da correre di nuovo.",
+    "kicker_one": "{{count}} preferito · {{total}} nel catalogo",
+    "kicker_other": "{{count}} preferiti · {{total}} nel catalogo",
+    "emptyDescription": "Il cuore su una seduta la conserva qui, per rifarla senza reimpostare i filtri. La libreria ne contiene {{total}}.",
+    "emptyAction": "Esplora la libreria"
+  },
+  "comparePage": {
+    "whyComparisons": "Perché questi confronti?",
+    "whyComparisonsDesc": "Zoned è gratuito, open source, non richiede account e non raccoglie dati. Crediamo che queste differenze contino: queste pagine ti aiutano a decidere.",
+    "featureComparison": "Confronto funzionalità",
+    "badgeFree": "Gratuito per sempre",
+    "badgeNoAccount": "Senza account"
+  },
+  "toc": {
+    "title": "Indice"
+  },
+  "seo": {
+    "drawTitle": "Estrai una seduta",
+    "contribute": "Contribuisci",
+    "contributeDesc": "Condividi le tue sedute preferite con la community di Zoned",
+    "quiz": "Quiz Seduta",
+    "quizDesc": "Rispondi a qualche domanda per trovare la seduta di corsa perfetta per i tuoi obiettivi e livello.",
+    "settings": "Impostazioni",
+    "favorites": "I miei Preferiti",
+    "planNew": "Nuovo Piano di Allenamento",
+    "planNewDesc": "Una gara, una data, i giorni in cui puoi allenarti: il piano si costruisce in sette schermate.",
+    "collectionsDesc": "Percorsi tematici per ogni obiettivo. Sfoglia le collezioni curate per la corsa.",
+    "libraryTitle": "Libreria delle Sedute",
+    "aboutSeoTitle": "Info"
+  },
+  "compare": {
+    "title": "Confronti",
+    "subtitle": "Zoned vs alternative",
+    "seoTitle": "Alternativa gratuita a {{name}}: Zoned vs {{name}}",
+    "backToCompare": "Torna ai confronti",
+    "criteriaCount_one": "{{count}} criterio",
+    "criteriaCount_other": "{{count}} criteri",
+    "tableHeader": {
+      "criterion": "Criterio",
+      "zoned": "Zoned",
+      "competitor": "Concorrente"
+    },
+    "values": {
+      "yes": "Sì",
+      "no": "No",
+      "partial": "Parziale"
+    },
+    "advantages": {
+      "title": "Perché scegliere Zoned",
+      "free": {
+        "title": "100% gratuito",
+        "description": "Nessun abbonamento, nessun periodo di prova. Tutte le funzionalità, per sempre."
+      },
+      "noAccount": {
+        "title": "Senza registrazione",
+        "description": "Nessun modulo, nessuna password. Apri l'app e inizia a correre."
+      },
+      "noData": {
+        "title": "Nessun dato personale",
+        "description": "Nessun account, nessuna analisi, nessun dato di allenamento inviato."
+      },
+      "openSource": {
+        "title": "Open Source",
+        "description": "Codice sorgente disponibile su GitHub. Verificabile, modificabile, trasparente."
+      }
+    },
+    "cta": {
+      "title": "Prova Zoned gratis",
+      "subtitle": "Senza account. Senza carta di credito. Subito.",
+      "button": "Inizia"
+    },
+    "hub": {
+      "title": "Alternative a Runna, Kiprun Pacer e Campus Coach",
+      "description": "Confronta Zoned con le principali app di corsa. Prezzi, privacy, funzionalità.",
+      "compareWith": "Confronta con {{name}}",
+      "kicker_one": "{{count}} app confrontata",
+      "kicker_other": "{{count}} app confrontate",
+      "readComparison": "Leggi il confronto",
+      "noteKicker": "La nostra posizione"
+    }
+  },
+  "pages": {
+    "workoutDetail": {
+      "back": "Indietro",
+      "planFallback": "Piano",
+      "collectionFallback": "Collezione",
+      "envAny": "Qualsiasi",
+      "exerciseCredits": "Illustrazioni esercizi da free-exercise-db (Pubblico Dominio)."
+    },
+    "about": {
+      "seoDescription": "Scopri Zoned, una libreria open-source di allenamenti di corsa basati sulle zone.",
+      "seoOrgDescription": "Una libreria open-source di allenamenti di corsa basati sulle zone."
+    },
+    "home": {
+      "seoDescription": "{{count}} sedute di corsa basate sulla scienza organizzate per zone di allenamento. Libreria gratuita per runner di ogni livello.",
+      "accentWords": [
+        "5K",
+        "10K",
+        "mezza maratona",
+        "maratona",
+        "trail"
+      ]
+    },
+    "articleFaq": {
+      "q1": "Il mio orologio segna Zona 4 ma mi sento in Zona 2. Di chi fidarsi?",
+      "a1": "Fidati delle tue sensazioni. La frequenza cardiaca può essere falsata da caldo, stress, stanchezza, caffeina o posizione del sensore. La regola d'oro della Zona 2: se riesci a sostenere una conversazione normale senza sforzo, sei nella zona giusta qualunque cosa mostri l'orologio.",
+      "q2": "Devo rimanere esattamente nella mia zona?",
+      "a2": "No, le zone sono intervalli indicativi, non bersagli precisi al battito. Essere 3-5 bpm sopra o sotto il limite non ha alcuna importanza fisiologica significativa. Ciò che conta è rispettare l'obiettivo della seduta.",
+      "q3": "Quante volte a settimana dovrei correre?",
+      "a3": "Principianti (< 1 anno): 2-3 uscite a settimana. Runner regolari: 3-5 uscite coprono la maggior parte degli obiettivi dai 10 km alla maratona, alternando giorni impegnativi e facili. Runner avanzati: 5-7 uscite, talvolta doppie sedute, che richiedono anni di progressione graduale.",
+      "q4": "La regola del 10% è un mito o realtà?",
+      "a4": "La regola del 10% (non aumentare il volume settimanale di oltre il 10%) è un utile argine, non una legge fisiologica assoluta. Impone progressività, ma non tiene conto dello storico di allenamento. Usala come principio guida, non come regola rigida.",
+      "q5": "Quando vedrò dei progressi?",
+      "a5": "I primi adattamenti cardiovascolari compaiono già dopo 2-3 settimane di allenamento regolare. Progressi misurabili su un test o una gara arrivano in genere dopo 6-12 settimane di lavoro costante. La pazienza è fondamentale: cambiare programma ogni 3 settimane impedisce agli adattamenti di consolidarsi.",
+      "q6": "Ho dolore durante la corsa. Continuo o mi fermo?",
+      "a6": "Distingui il fastidio dal dolore. Il fastidio (pesantezza, leggera rigidità, indolenzimento) è spesso normale e di solito passa dopo 10-15 minuti. Il dolore (acuto, localizzato, crescente o che fa zoppicare): fermati subito. Nel dubbio, una seduta saltata per prudenza è sempre preferibile a settimane di stop forzato.",
+      "q7": "Come prevenire gli infortuni nella corsa?",
+      "a7": "Progredisci gradualmente (gran parte degli infortuni deriva da aumenti troppo rapidi di volume o intensità). Varia gli stimoli (terreni diversi, rotazione delle scarpe, ritmi diversi). Fai potenziamento 15-20 minuti due volte a settimana per femorali, quadricipiti, polpacci e glutei. Ascolta subito i segnali d'allarme.",
+      "q8": "Mattina o sera, quando è meglio correre?",
+      "a8": "Fisiologicamente la sera ha un leggero vantaggio: temperatura corporea più alta, articolazioni più mobili, migliore reattività. Ma l'orario migliore è quello in cui riesci davvero a correre. La costanza batte l'ottimizzazione teorica.",
+      "q9": "Posso correre tutti i giorni?",
+      "a9": "È possibile ma con cautela: alterna giorni facili e impegnativi, tieni almeno 1-2 giorni a settimana molto leggeri o di cross-training (bici, nuoto) e ascolta il corpo. Molti runner rendono al meglio con 5-6 giorni a settimana e 1-2 giorni di riposo completo. Il riposo fa parte dell'allenamento."
+    }
+  },
+  "pwa": {
+    "installTitle": "Installa Zoned",
+    "installDesc": "Zoned sulla tua schermata Home, disponibile anche offline.",
+    "install": "Installa",
+    "dismiss": "Più tardi",
+    "updateTitle": "Aggiornamento disponibile",
+    "updateAvailable": "Una nuova versione è pronta. Il tuo lavoro in corso è conservato.",
+    "update": "Aggiorna",
+    "offline": "Sei offline. I tuoi dati restano accessibili.",
+    "backOnline": "Di nuovo online."
+  },
+  "domain": {
+    "fitTransfer": {
+      "polarPath": "Preferiti → Crea",
+      "suuntoPath": "Allenamento → Crea",
+      "corosPath": "Crea",
+      "applePath": "Allenamento → Crea (watchOS 9+)"
+    }
+  },
+  "failure": {
+    "quota": "La memoria del browser è piena, nulla è stato scritto. Ciò che avevi salvato è intatto. Libera spazio eliminando un piano, una settimana o un percorso, oppure esporta un backup dalle impostazioni.",
+    "invalid": "I dati sono stati rifiutati dalla validazione, nulla è stato scritto. Ciò che era salvato è intatto. Ricarica la pagina e riprova.",
+    "notFound": "Questo elemento non esiste più in questo browser, forse eliminato da un'altra scheda. Null'altro è cambiato. Ricarica la pagina per vedere lo stato attuale.",
+    "limit": "Il limite di elementi salvati è stato raggiunto, nulla è stato aggiunto. Eliminane uno per liberare spazio.",
+    "timeout": "Il rendering ha richiesto troppo tempo ed è stato interrotto. Nulla è andato perso. Riprova e chiudi eventuali schede pesanti se succede di nuovo.",
+    "offline": "Sei offline e questa azione richiede la rete. I tuoi dati restano disponibili. Riprova quando torna la connessione.",
+    "denied": "Il browser ha negato l'accesso agli appunti o alla condivisione. Nulla è andato perso. Consenti l'accesso dalla barra degli indirizzi oppure usa Salva.",
+    "unsupported": "Questo browser non supporta questa funzione. Nulla è andato perso. Prova con un Chrome, Firefox o Safari recente, oppure usa Salva.",
+    "unknown": "Si è verificato un errore imprevisto, nulla è stato modificato. Riprova e ricarica la pagina se il problema persiste."
+  },
+  "alert": {
+    "error": "Errore",
+    "success": "Successo",
+    "warning": "Attenzione",
+    "info": "Info",
+    "loading": "In corso"
+  },
+  "status": {
+    "loading": "Caricamento"
+  },
+  "settingsPage": {
+    "kicker": "Profilo locale · senza account",
+    "display": "Aspetto",
+    "displayHint": "Lingua, tema e unità. Tutto resta in questo browser.",
+    "language": "Lingua dell'interfaccia",
+    "languageHint": "Disponibile in francese, inglese e italiano.",
+    "unitsHint": "Cambia ritmi, distanze e dislivello.",
+    "unitsMetric": "km · min/km",
+    "unitsImperial": "mi · min/mi",
+    "about": "Info",
+    "tableItem": "Voce",
+    "tableValue": "Valore",
+    "rowVersion": "Versione",
+    "rowLicence": "Licenza",
+    "rowWorkouts": "Sedute in catalogo",
+    "rowOffline": "Offline",
+    "offlineInstalled": "installata",
+    "offlineTab": "scheda browser",
+    "sourceCode": "Codice sorgente",
+    "contribute": "Proponi una seduta",
+    "privacyTitle": "Cosa resta sul tuo dispositivo",
+    "privacyBody": "Nessun account, nessun server, nessuna analisi, nessun tracciamento. I tuoi dati restano in questo browser.",
+    "statStorage": "dati locali",
+    "statFavorites": "preferiti",
+    "storageValue": "{{n}} kB",
+    "storageFoot": "su {{n}} MB disponibili",
+    "wipeTitle": "Cancella tutto",
+    "wipeBadge": "irreversibile",
+    "wipeBody": "Elimina il profilo, {{favorites}} preferiti, {{plans}} piani e lo storico dei test. Esporta prima un backup: senza di esso nulla può essere recuperato.",
+    "wipeButton": "Cancella i miei dati",
+    "wipeConfirmTitle": "Cancellare tutti i tuoi dati?",
+    "wipeConfirmBody": "Profilo, {{favorites}} preferiti, {{plans}} piani e storico test. Questa azione non può essere annullata.",
+    "wipeConfirmButton": "Elimina definitivamente",
+    "wipeDone": "Dati cancellati. Nulla da annullare.",
+    "tailored": "Su misura",
+    "tailoredDesc": "Ciò che Zoned mette in primo piano e ciò che lascia da parte.",
+    "practices": "Le discipline per cui ti alleni",
+    "practicesHint": "Tutto è mostrato per impostazione predefinita. Deseleziona ciò che non pratichi: libreria e piani si alleggeriscono.",
+    "modules": "Cosa mostra l'app",
+    "modulesHint": "Nascondere rimuove dalla navigazione senza eliminare nulla: link e pagine restano funzionanti."
+  },
+  "mobileMenu": {
+    "goTo": "Vai a",
+    "search": "Cerca tutto",
+    "tools": "Strumenti"
+  },
+  "hubNav": {
+    "label": "In questa sezione"
+  },
+  "modules": {
+    "raceSimulator": {
+      "name": "Simulatore gara"
+    },
+    "learn": {
+      "name": "Impara"
+    },
+    "collections": {
+      "name": "Collezioni"
+    },
+    "strength": {
+      "name": "Potenziamento"
+    },
+    "hidden": {
+      "title": "{{module}} è nascosto",
+      "description": "Hai nascosto questa parte dell'app nelle impostazioni. Il link funziona ancora, puoi riattivarla subito.",
+      "cta": "Riattivala"
+    }
+  },
+  "datePicker": {
+    "previousMonth": "Mese precedente",
+    "nextMonth": "Mese successivo",
+    "month": "Mese",
+    "year": "Anno",
+    "today": "Oggi, {{date}}",
+    "selected": "{{date}}, selezionato"
+  }
+}

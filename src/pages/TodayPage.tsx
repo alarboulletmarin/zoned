@@ -124,7 +124,7 @@ import {
   getPaceUnit,
 } from "@/lib/units";
 import { ZoneBar, formatDurationMinutes, toZoneBarBlocks } from "@/components/visualization";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { getDateLocale, useIsEnglish } from "@/lib/i18n-utils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { isStrengthWorkout } from "@/types";
 import type { PlanSession } from "@/types/plan";
@@ -347,7 +347,7 @@ export function TodayPage() {
   );
 
   const dateLine = dateFromIso(dayIso).toLocaleDateString(
-    isEn ? "en-GB" : "fr-FR",
+    getDateLocale(),
     { weekday: "long", day: "numeric", month: "long" },
   );
 
@@ -466,7 +466,7 @@ export function TodayPage() {
         const monday = dateFromIso(dayIso);
         monday.setDate(monday.getDate() - day);
         name = t("today:add.newWeekName", {
-          date: monday.toLocaleDateString(isEn ? "en-GB" : "fr-FR", { day: "numeric", month: "short" }),
+          date: monday.toLocaleDateString(getDateLocale(), { day: "numeric", month: "short" }),
         });
         const week = createEmptyWeekPlan(name);
         const saved = savePlan(week);
@@ -691,7 +691,7 @@ export function TodayPage() {
 
   const monthLabel = useMemo(
     () =>
-      new Date(monthRef.year, monthRef.month, 1).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+      new Date(monthRef.year, monthRef.month, 1).toLocaleDateString(getDateLocale(), {
         month: "long",
         year: "numeric",
       }),
@@ -704,7 +704,7 @@ export function TodayPage() {
   const reviewToDate = useMemo(
     () =>
       monthReview
-        ? dateFromIso(monthReview.range.to).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+        ? dateFromIso(monthReview.range.to).toLocaleDateString(getDateLocale(), {
             day: "numeric",
             month: "short",
           })
@@ -716,7 +716,7 @@ export function TodayPage() {
      côté porte déjà tout ce qu'il faut, et l'année faisait replier la ligne. */
   const monthName = useMemo(
     () =>
-      new Date(monthRef.year, monthRef.month, 1).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+      new Date(monthRef.year, monthRef.month, 1).toLocaleDateString(getDateLocale(), {
         month: "long",
       }),
     [monthRef, isEn],

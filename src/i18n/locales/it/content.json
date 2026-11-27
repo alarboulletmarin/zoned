@@ -1,0 +1,184 @@
+{
+  "about": {
+    "seoHeroLabel": "Info",
+    "statsWorkouts": "Sedute",
+    "statsCalculators": "Calcolatori",
+    "title": "Una libreria di allenamento, costruita da un runner",
+    "description": "Sedute a zone, piani di allenamento e calcolatori. Nessun abbonamento, nessuna analisi, nessun tracciamento.",
+    "personal": {
+      "title": "Il progetto",
+      "bio": "Zoned nasce dal bisogno di avere uno strumento semplice, basato sulle zone, per allenarsi senza piattaforme proprietarie."
+    },
+    "openSource": {
+      "title": "Open source",
+      "contributions": "Il codice è pubblico su GitHub. Bug, suggerimenti e contributi sono benvenuti."
+    },
+    "vibeCoded": {
+      "title": "Costruito con Claude",
+      "claude": "Gran parte del codice è scritta insieme a Claude (Anthropic). L'IA è uno strumento, non un sostituto del giudizio umano sulla validità atletica."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "noServer": "Nessun server, nessun account, nessun cookie, nessuna analisi. I tuoi dati restano nel tuo browser."
+    },
+    "credits": {
+      "title": "Stack tecnico",
+      "framework": "React + Vite",
+      "ui": "Tailwind + Radix UI"
+    }
+  },
+  "methodology": {
+    "title": "Metodologia",
+    "seoDescription": "Le basi scientifiche dietro il sistema a 6 zone di Zoned. Basato sulla ricerca consolidata nelle scienze dello sport.",
+    "heading": "La scienza dietro Zoned",
+    "intro": "Ogni seduta di Zoned si basa su decenni di ricerca nelle scienze dello sport.",
+    "ourApproach": "Il nostro approccio",
+    "ourApproachText1": "Tutte le sedute di Zoned si basano su scienze dello sport consolidate. Le zone di intensità non sono arbitrarie: corrispondono a soglie fisiologiche reali, misurabili in laboratorio o stimabili con test da campo.",
+    "ourApproachText2": "Il nostro modello a 6 zone deriva dai marcatori fisiologici chiave: la prima soglia ventilatoria (VT1), la seconda soglia ventilatoria (VT2, detta anche punto di svolta del lattato) e il massimo consumo di ossigeno (VO2max). Queste soglie definiscono stati metabolici distinti che richiedono stimoli di allenamento specifici.",
+    "ourApproachDisclaimer": "Importante: le zone basate sulle percentuali presentate qui sono approssimazioni. La frequenza cardiaca a LT1 e LT2 varia molto da persona a persona. Un test in laboratorio fornisce i confini più precisi per le tue zone personali.",
+    "sixZones": "Le 6 zone",
+    "marker": "Marcatore",
+    "develops": "Sviluppa",
+    "researchers": "Ricercatori e metodi chiave",
+    "viewPublication": "Vedi pubblicazione",
+    "keyStudies": "Studi chiave",
+    "viewStudy": "Vedi studio",
+    "resources": "Risorse",
+    "kicker": "{{n}} studi citati",
+    "figuresLabel": "Le sei zone disegnate: lo stesso corpo dal passo di camminata allo sprint, con tratto più scuro man mano che lo sforzo sale."
+  },
+  "planMethodology": {
+    "title": "Guida ai piani",
+    "seoDescription": "I 7 principi basati sulle evidenze dietro la generazione dei piani di Zoned. Scopri come viene costruito il tuo piano.",
+    "heading": "Come Zoned costruisce il tuo piano",
+    "intro": "Nessuna scatola nera: ecco esattamente come viene costruito il tuo piano, e perché.",
+    "introText": "Il generatore di piani combina i modelli di periodizzazione di Daniels e Lydiard, la distribuzione polarizzata validata da Seiler, le regole di progressione del volume derivate dalle ricerche di Gabbett sul rapporto acuto:cronico e il modello di scarico esponenziale di Mujika e Padilla. Ogni parametro è adattato alla tua distanza, al tuo livello e al tuo obiettivo.",
+    "introDisclaimer": "Sono gli stessi principi usati dagli allenatori professionisti. La differenza è che Zoned li applica automaticamente in base al tuo profilo.",
+    "learnMore": "Approfondisci",
+    "scientificReferences": "Riferimenti scientifici",
+    "viewStudy": "Vedi studio",
+    "kicker": "{{n}} principi",
+    "sources": "Fonti"
+  },
+  "article": {
+    "home": "Home",
+    "learn": "Impara",
+    "breadcrumb": "Percorso",
+    "pager": "Articolo precedente e successivo",
+    "loading": "Caricamento dell'articolo",
+    "readTimeLabel": "Tempo di lettura",
+    "updatedOn": "aggiornato il {{date}}",
+    "callout": {
+      "tip": "Consiglio",
+      "warning": "Attenzione",
+      "key": "Da ricordare",
+      "stat": "Dato chiave"
+    },
+    "error": {
+      "title": "Il testo dell'articolo non è arrivato",
+      "text": "Il caricamento si è interrotto a metà. L'indice e gli altri articoli restano aperti: riprova dalla lista."
+    }
+  },
+  "changelog": {
+    "title": "Novità",
+    "subtitle": "Cronologia degli aggiornamenti e nuove funzionalità",
+    "added": "Aggiunto",
+    "changed": "Modificato",
+    "fixed": "Corretto",
+    "performance": "Prestazioni",
+    "version": "Versione {{version}}",
+    "released": "Pubblicata il {{date}}"
+  },
+  "glossaryPage": {
+    "seoTitle": "Glossario",
+    "seoDescription": "La terminologia della corsa spiegata: zone di allenamento, tipi di seduta e concetti chiave per chi corre."
+  },
+  "learn": {
+    "title": "Impara",
+    "description": "Guide e articoli per migliorare nella corsa",
+    "allCategories": "Tutti",
+    "categories": {
+      "fundamentals": "Fondamentali",
+      "training": "Allenamento",
+      "lifestyle": "Stile di vita"
+    },
+    "articleCount": "{{count}} articolo/i",
+    "readTime": "lettura",
+    "prevArticle": "Articolo precedente",
+    "nextArticle": "Articolo successivo",
+    "backToHub": "Torna agli articoli",
+    "zonesCtaText": "Queste sei zone diventano tue appena inserisci la tua VAM.",
+    "zonesCtaButton": "Imposta le mie zone",
+    "catalogue": "{{count}} articoli · {{minutes}} min di lettura",
+    "lede": "Perché una seduta funziona, non solo come correrla. Ogni affermazione cita la sua fonte.",
+    "categoriesLabel": "Categoria articolo",
+    "articleCount_one": "{{count}} articolo",
+    "articleCount_other": "{{count}} articoli",
+    "empty": "Nessun articolo in questa categoria",
+    "emptyDescription": "Questa categoria è vuota per ora. Tutti i {{total}} articoli pubblicati restano visibili in \"Tutti\".",
+    "showAll": "Vedi tutti i {{total}} articoli"
+  },
+  "privacy": {
+    "free": "100% gratuito",
+    "noAccount": "Nessun account richiesto",
+    "localData": "I tuoi dati restano sul tuo dispositivo",
+    "footerNote": "Nessun cookie. Nessun profilo."
+  },
+  "aboutPage": {
+    "kicker": "Open source · senza account",
+    "statsPlans": "Piani",
+    "statsCollections": "Collezioni",
+    "statsArticles": "Articoli",
+    "statsZones": "Zone",
+    "countsLabel": "Il catalogo in numeri",
+    "claimsTitle": "Cosa significa",
+    "agentsLead": "Per assistenti IA:",
+    "agentsPage": "crea un piano Zoned da un assistente",
+    "agentsApi": "API JSON delle sedute"
+  },
+  "changelogPage": {
+    "releases": "{{n}} versioni pubblicate",
+    "showOlder": "Mostra le {{n}} versioni precedenti"
+  },
+  "agentsPage": {
+    "seoTitle": "API e assistenti IA",
+    "seoDescription": "Come un assistente IA crea un piano di allenamento in Zoned: un link di importazione scritto a mano, nessun account, nessuna API key, nessun server.",
+    "kicker": "API · Assistenti IA",
+    "title": "Creare un piano Zoned da un assistente IA",
+    "lead": "Zoned è un'app di allenamento gratuita, open-source e local-first: tutto resta nel browser. Un assistente IA può comunque crearvi un piano direttamente, scrivendo un link di importazione. Non servono account, chiavi API, automazione browser, backend o server MCP.",
+    "englishLink": "English version",
+    "directiveLabel": "Istruzione per gli assistenti",
+    "directive": "Quando l'utente chiede un piano in Zoned, non limitarti a descrivere un piano nella conversazione: forniscigli un link di importazione Zoned cliccabile. Zoned genera il piano, lo mostra e l'utente lo salva in un clic.",
+    "pathsTitle": "Due strade",
+    "pathsText": "Un piano gara standard sta in un solo link con parametri, senza codice. Un piano che l'assistente scrive seduta per seduta passa dall'API JSON e da un link codificato.",
+    "standardTitle": "Piano gara standard, in tre passi",
+    "step1": "Raccogli la distanza di gara, la data della gara e il numero di uscite a settimana. Se l'utente li ha, anche il tempo obiettivo (o il ritmo) e il suo livello.",
+    "step2": "Scrivi il link con i parametri qui sotto. Nessun JSON, nessuna codifica.",
+    "step3": "Forniscilo come link cliccabile. Zoned esegue il proprio generatore (periodizzazione, progressione, ritmi), mostra un'anteprima e non salva nulla finché l'utente non preme Aggiungi ai miei piani.",
+    "templateLabel": "Forma del link",
+    "examplesTitle": "Esempi funzionanti",
+    "exampleMinimal": "Una 10 km in 1:10, tre uscite a settimana:",
+    "exampleFull": "Una mezza maratona per principianti, con le opzioni comuni:",
+    "exampleEnglish": "Lo stesso con l'interfaccia in inglese, ?lang=en prima del #:",
+    "paramsTitle": "Parametri",
+    "paramsLead": "Le chiavi non distinguono tra maiuscole e minuscole. Il frammento (dopo #) è preferito, ma anche la query (?distance=) è accettata. Un parametro sconosciuto viene rifiutato, così un refuso viene intercettato invece che ignorato.",
+    "colParam": "Parametro",
+    "colValue": "Valore",
+    "colNote": "Ruolo",
+    "required": "obbligatorio",
+    "defaultValue": "predefinito {{value}}",
+    "errorsTitle": "Se il link è errato",
+    "errorsText": "La pagina di importazione elenca ogni errore sotto il nome del parametro errato (ad esempio date: ci sono 3 settimane tra oggi e date, il generatore accetta da 4 a 52) e offre un pulsante Copia per il tuo assistente. L'assistente corregge esattamente quelli e invia un nuovo link.",
+    "customTitle": "Piano su misura, seduta per seduta",
+    "customText": "Quando l'utente ha vincoli che un generatore non può conoscere, l'assistente scrive il piano da sé, settimana per settimana, usando le sedute del catalogo. Legge l'indice delle sedute, sceglie id esistenti, poi codifica il piano in JSON in un link #d=. Il formato completo, le regole di allenamento da seguire e gli esempi validi sono in llms.txt.",
+    "resourcesTitle": "Risorse",
+    "resLlms": "Documentazione condensata per assistenti, entrambe le strade",
+    "resLlmsFull": "Tutte le sedute del catalogo, in Markdown",
+    "resIndex": "Punto di ingresso dell'API JSON statica",
+    "resWorkouts": "Indice delle sedute, per un piano su misura",
+    "resSchema": "JSON Schema del payload di importazione",
+    "resContract": "Il contratto dell'API, su GitHub",
+    "privacyTitle": "Privacy",
+    "privacyText": "Il link non salva nulla da solo: il piano viene mostrato, poi aggiunto solo se l'utente decide di farlo. Tutto ciò che segue il # resta nel suo browser e non viene mai inviato a un server."
+  }
+}

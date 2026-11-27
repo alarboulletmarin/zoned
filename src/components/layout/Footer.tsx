@@ -24,7 +24,7 @@ import { ChevronDown, GithubIcon } from "@/components/icons";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { useLanguage } from "@/lib/i18n-utils";
 import { localeTo } from "@/lib/seo/locale-to";
 import { FOOTER_GROUPS, GITHUB_URL } from "./navigation";
 
@@ -40,7 +40,7 @@ const MAP_ID = "zn-footer-map";
 
 export function Footer() {
   const { t } = useTranslation(["homepage", "common"]);
-  const isEn = useIsEnglish();
+  const lang = useLanguage();
   const [mapOpen, setMapOpen] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
   const year = new Date().getFullYear();
@@ -107,7 +107,7 @@ export function Footer() {
               {group.links.map((link) => (
                 <li key={link.labelKey}>
                   {link.to ? (
-                    <Link className="zn-footer__link" to={localeTo(link.to, isEn)}>
+                    <Link className="zn-footer__link" to={localeTo(link.to, lang)}>
                       {t(link.labelKey)}
                     </Link>
                   ) : (

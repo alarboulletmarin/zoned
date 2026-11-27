@@ -508,7 +508,8 @@
   },
   "language": {
     "fr": "Français",
-    "en": "English"
+    "en": "English",
+    "it": "Italiano"
   },
   "zonePersonalization": {
     "noVma": "Je ne connais pas ma VMA"
@@ -979,7 +980,7 @@
     "display": "Affichage",
     "displayHint": "Langue, thème et unités. Tout reste dans ce navigateur.",
     "language": "Langue de l'interface",
-    "languageHint": "Le catalogue existe en français et en anglais.",
+    "languageHint": "Le catalogue existe en français, en anglais et en italien.",
     "unitsHint": "Change les allures, les distances et les dénivelés.",
     "unitsMetric": "km · min/km",
     "unitsImperial": "mi · min/mi",

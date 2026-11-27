@@ -19,18 +19,25 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCommandPalette } from "@/components/search";
-import { changeLanguage, getCurrentLanguage } from "@/i18n";
+import {
+  changeLanguage,
+  getCurrentLanguage,
+  supportedLanguages,
+  type SupportedLanguage,
+} from "@/i18n";
 import { MobileMenu } from "./MobileMenu";
 import { Wordmark } from "./Wordmark";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { isMac } from "@/lib/platform";
 import { isServerSnapshot } from "@/prerender/snapshot";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { useLanguage } from "@/lib/i18n-utils";
 import { localeTo } from "@/lib/seo/locale-to";
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -50,7 +57,7 @@ export { PRIMARY_NAV, isNavActive };
 
 export function TopBar() {
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
+  const lang = useLanguage();
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
   // Below lg (1024px) the five doors plus the tool cluster no longer fit, so
@@ -76,10 +83,6 @@ export function TopBar() {
   const themeLabel = t("theme.button", { mode: t(`theme.${themePreference}`) });
   const { pathname } = useLocation();
 
-  const langLabel = currentLang === "fr" ? "EN" : "FR";
-  const langTitle =
-    currentLang === "fr" ? "Switch to English" : "Passer en français";
-
   return (
     <header className="zn-topbar">
       {/* Below 1024px, the menu glyph and the full-screen panel it opens. It
@@ -97,7 +100,7 @@ export function TopBar() {
           état, la racine renverrait au cockpit quiconque a un plan en cours
           (voir `RootPage`). */}
       <Link
-        to={localeTo("/", isEn)}
+        to={localeTo("/", lang)}
         state={HOME_LINK_STATE}
         viewTransition
         className="zn-topbar__brand"
@@ -140,15 +143,7 @@ export function TopBar() {
           </span>
         </button>
 
-        <button
-          type="button"
-          onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
-          title={langTitle}
-          aria-label={langTitle}
-          className="zn-topbar__tool zn-topbar__tool--lang"
-        >
-          {langLabel}
-        </button>
+        <LanguageMenu currentLang={currentLang} />
 
         <button
           type="button"
@@ -181,7 +176,7 @@ export function TopBar() {
 
 function NavDoor({ section, active }: { section: NavSection; active: boolean }) {
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
+  const lang = useLanguage();
   const { pathname } = useLocation();
   const hasChildren = !!section.children?.length;
   const [open, setOpen] = useState(false);
@@ -208,7 +203,7 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
   if (!hasChildren) {
     return (
       <Link
-        to={localeTo(section.to, isEn)}
+        to={localeTo(section.to, lang)}
         viewTransition
         aria-current={active ? "page" : undefined}
         className="zn-topbar__door"
@@ -239,7 +234,7 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
             {section.children!.map((child) => (
               <li key={child.to}>
                 <Link
-                  to={localeTo(child.to, isEn)}
+                  to={localeTo(child.to, lang)}
                   viewTransition
                   onClick={() => setOpen(false)}
                   aria-current={pathname === child.to ? "page" : undefined}
@@ -256,6 +251,40 @@ function NavDoor({ section, active }: { section: NavSection; active: boolean }) 
         </div>
       </div>
     </div>
+  );
+}
+
+/** Language selector dropdown in the top bar. */
+function LanguageMenu({ currentLang }: { currentLang: SupportedLanguage }) {
+  const { t } = useTranslation("common");
+  const label = t("settingsPage.language");
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          title={label}
+          aria-label={label}
+          className="zn-topbar__tool zn-topbar__tool--lang"
+        >
+          <span>{currentLang.toUpperCase()}</span>
+          <ChevronDown aria-hidden="true" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuRadioGroup
+          value={currentLang}
+          onValueChange={(value) => void changeLanguage(value as SupportedLanguage)}
+        >
+          {supportedLanguages.map((lang) => (
+            <DropdownMenuRadioItem key={lang.code} value={lang.code}>
+              {lang.label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

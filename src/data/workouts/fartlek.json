@@ -5,8 +5,10 @@
       "id": "FAR-001",
       "name": "Fartlek libre",
       "nameEn": "Free Fartlek",
+      "nameIt": "Fartlek libero",
       "description": "Jeu de vitesse non structuré basé sur les sensations. Alternez librement entre efforts et récup.",
       "descriptionEn": "Unstructured speed play based on feel. Freely alternate between efforts and recovery.",
+      "descriptionIt": "Gioco di velocità non strutturato basato sulle sensazioni. Alterna liberamente sforzi e recuperi.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "mixed",
@@ -24,6 +26,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -34,6 +37,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -44,6 +48,7 @@
         {
           "description": "Fartlek libre selon envie",
           "descriptionEn": "Free fartlek as you feel",
+          "descriptionIt": "Fartlek libero a sensazione",
           "durationMin": 25,
           "zone": "Z2-Z4"
         }
@@ -53,6 +58,7 @@
           "kind": "segment",
           "description": "Fartlek libre selon envie",
           "descriptionEn": "Free fartlek as you feel",
+          "descriptionIt": "Fartlek libero a sensazione",
           "durationSec": 1500,
           "zone": "Z2-Z4",
           "role": "effort"
@@ -62,6 +68,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -72,6 +79,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -88,6 +96,11 @@
         "Vary durations based on how you feel",
         "A session to rediscover the joy of running"
       ],
+      "coachingTipsIt": [
+        "Usa i punti di riferimento del percorso",
+        "Varia le durate in base a come ti senti",
+        "Una seduta per ritrovare il piacere di correre"
+      ],
       "commonMistakes": [
         "Transformer en fractionné structuré",
         "Faire uniquement des efforts courts"
@@ -95,6 +108,10 @@
       "commonMistakesEn": [
         "Turning it into structured intervals",
         "Only doing short efforts"
+      ],
+      "commonMistakesIt": [
+        "Trasformarlo in ripetute strutturate",
+        "Fare solo sforzi brevi"
       ],
       "variationIds": [
         "FAR-002",
@@ -125,8 +142,10 @@
       "id": "FAR-002",
       "name": "Fartlek suédois",
       "nameEn": "Swedish Fartlek",
+      "nameIt": "Fartlek svedese",
       "description": "Fartlek original style suédois : efforts et récupérations variés selon le terrain.",
       "descriptionEn": "Original Swedish-style fartlek: varied efforts and recoveries based on terrain.",
+      "descriptionIt": "Fartlek originale in stile svedese: sforzi e recuperi variati in base al terreno.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "mixed",
@@ -144,6 +163,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -154,6 +174,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -164,6 +185,7 @@
         {
           "description": "Fartlek terrain : accélérations sur montées, récup en descentes",
           "descriptionEn": "Terrain fartlek: accelerations on uphills, recovery on downhills",
+          "descriptionIt": "Fartlek su terreno vario: accelerazioni in salita, recupero in discesa",
           "durationMin": 35,
           "zone": "Z2-Z5"
         }
@@ -173,6 +195,7 @@
           "kind": "segment",
           "description": "Fartlek terrain : accélérations sur montées, récup en descentes",
           "descriptionEn": "Terrain fartlek: accelerations on uphills, recovery on downhills",
+          "descriptionIt": "Fartlek su terreno vario: accelerazioni in salita, recupero in discesa",
           "durationSec": 2100,
           "zone": "Z2-Z5",
           "role": "effort"
@@ -182,6 +205,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -192,6 +216,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -208,6 +233,11 @@
         "Push on the uphills",
         "Recover on the downhills"
       ],
+      "coachingTipsIt": [
+        "Sfrutta il profilo del terreno",
+        "Spingi in salita",
+        "Recupera in discesa"
+      ],
       "commonMistakes": [
         "Ignorer le terrain",
         "Courir à plat en mode chrono"
@@ -215,6 +245,10 @@
       "commonMistakesEn": [
         "Ignoring the terrain",
         "Running on flat ground in time-trial mode"
+      ],
+      "commonMistakesIt": [
+        "Ignorare il terreno",
+        "Correre in pianura in modalità cronometro"
       ],
       "variationIds": [
         "FAR-001"
@@ -242,8 +276,10 @@
       "id": "FAR-003",
       "name": "Fartlek structuré",
       "nameEn": "Structured Fartlek",
+      "nameIt": "Fartlek strutturato",
       "description": "Fartlek avec structure définie : 1-2-3-2-1 minutes.",
       "descriptionEn": "Fartlek with defined structure: 1-2-3-2-1 minute pyramid.",
+      "descriptionIt": "Fartlek con struttura definita: piramide da 1-2-3-2-1 minuti.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "mixed",
@@ -261,6 +297,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -271,6 +308,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -281,6 +319,7 @@
         {
           "description": "1min rapide",
           "descriptionEn": "1min fast",
+          "descriptionIt": "1min veloce",
           "durationMin": 1,
           "zone": "Z4",
           "intensityType": "T"
@@ -288,6 +327,7 @@
         {
           "description": "1min récup",
           "descriptionEn": "1min recovery",
+          "descriptionIt": "1min recupero",
           "durationMin": 1,
           "zone": "Z2",
           "intensityType": "E"
@@ -295,6 +335,7 @@
         {
           "description": "2min rapide",
           "descriptionEn": "2min fast",
+          "descriptionIt": "2min veloce",
           "durationMin": 2,
           "zone": "Z4",
           "intensityType": "T"
@@ -302,6 +343,7 @@
         {
           "description": "2min récup",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationMin": 2,
           "zone": "Z2",
           "intensityType": "E"
@@ -309,6 +351,7 @@
         {
           "description": "3min rapide",
           "descriptionEn": "3min fast",
+          "descriptionIt": "3min veloce",
           "durationMin": 3,
           "zone": "Z4",
           "intensityType": "T"
@@ -316,6 +359,7 @@
         {
           "description": "3min récup",
           "descriptionEn": "3min recovery",
+          "descriptionIt": "3min recupero",
           "durationMin": 3,
           "zone": "Z2",
           "intensityType": "E"
@@ -323,6 +367,7 @@
         {
           "description": "2min rapide",
           "descriptionEn": "2min fast",
+          "descriptionIt": "2min veloce",
           "durationMin": 2,
           "zone": "Z4",
           "intensityType": "T"
@@ -330,6 +375,7 @@
         {
           "description": "2min récup",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationMin": 2,
           "zone": "Z2",
           "intensityType": "E"
@@ -337,6 +383,7 @@
         {
           "description": "1min rapide",
           "descriptionEn": "1min fast",
+          "descriptionIt": "1min veloce",
           "durationMin": 1,
           "zone": "Z4",
           "intensityType": "T"
@@ -347,6 +394,7 @@
           "kind": "segment",
           "description": "1min rapide",
           "descriptionEn": "1min fast",
+          "descriptionIt": "1min veloce",
           "durationSec": 60,
           "zone": "Z4",
           "intensityType": "T",
@@ -356,6 +404,7 @@
           "kind": "segment",
           "description": "1min récup",
           "descriptionEn": "1min recovery",
+          "descriptionIt": "1min recupero",
           "durationSec": 60,
           "zone": "Z2",
           "intensityType": "E",
@@ -365,6 +414,7 @@
           "kind": "segment",
           "description": "2min rapide",
           "descriptionEn": "2min fast",
+          "descriptionIt": "2min veloce",
           "durationSec": 120,
           "zone": "Z4",
           "intensityType": "T",
@@ -374,6 +424,7 @@
           "kind": "segment",
           "description": "2min récup",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationSec": 120,
           "zone": "Z2",
           "intensityType": "E",
@@ -383,6 +434,7 @@
           "kind": "segment",
           "description": "3min rapide",
           "descriptionEn": "3min fast",
+          "descriptionIt": "3min veloce",
           "durationSec": 180,
           "zone": "Z4",
           "intensityType": "T",
@@ -392,6 +444,7 @@
           "kind": "segment",
           "description": "3min récup",
           "descriptionEn": "3min recovery",
+          "descriptionIt": "3min recupero",
           "durationSec": 180,
           "zone": "Z2",
           "intensityType": "E",
@@ -401,6 +454,7 @@
           "kind": "segment",
           "description": "2min rapide",
           "descriptionEn": "2min fast",
+          "descriptionIt": "2min veloce",
           "durationSec": 120,
           "zone": "Z4",
           "intensityType": "T",
@@ -410,6 +464,7 @@
           "kind": "segment",
           "description": "2min récup",
           "descriptionEn": "2min recovery",
+          "descriptionIt": "2min recupero",
           "durationSec": 120,
           "zone": "Z2",
           "intensityType": "E",
@@ -419,6 +474,7 @@
           "kind": "segment",
           "description": "1min rapide",
           "descriptionEn": "1min fast",
+          "descriptionIt": "1min veloce",
           "durationSec": 60,
           "zone": "Z4",
           "intensityType": "T",
@@ -429,6 +485,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -439,6 +496,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -455,6 +513,11 @@
         "The 3-minute effort is the key moment",
         "Recovery equals effort time"
       ],
+      "coachingTipsIt": [
+        "Classica struttura piramidale",
+        "La frazione da 3 minuti è il momento chiave",
+        "Recupero uguale al tempo di sforzo"
+      ],
       "commonMistakes": [
         "Partir trop vite sur le 1min",
         "Ralentir sur le 3min"
@@ -462,6 +525,10 @@
       "commonMistakesEn": [
         "Starting too fast on the 1-minute",
         "Slowing down on the 3-minute"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte sul minuto iniziale",
+        "Rallentare sui 3 minuti"
       ],
       "variationIds": [
         "FAR-001"
@@ -488,8 +555,10 @@
       "id": "FAR-004",
       "name": "Fartlek lactique",
       "nameEn": "Lactate Fartlek",
+      "nameIt": "Fartlek lattacido",
       "description": "Fartlek avec efforts courts et intenses. Développe la tolérance lactique.",
       "descriptionEn": "Fartlek with short, intense efforts. Develops lactate tolerance.",
+      "descriptionIt": "Fartlek con sforzi brevi e intensi. Sviluppa la tolleranza al lattato.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "lactate_tolerance",
@@ -507,6 +576,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -514,6 +584,7 @@
         {
           "description": "Accélérations",
           "descriptionEn": "Accelerations",
+          "descriptionIt": "Accelerazioni",
           "durationMin": 5
         }
       ],
@@ -522,6 +593,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -531,6 +603,7 @@
           "kind": "segment",
           "description": "Accélérations",
           "descriptionEn": "Accelerations",
+          "descriptionIt": "Accelerazioni",
           "durationSec": 300,
           "role": "effort"
         }
@@ -539,10 +612,12 @@
         {
           "description": "10x(30s très rapide + 90s récup active)",
           "descriptionEn": "10x(30s very fast + 90s active recovery)",
+          "descriptionIt": "10x(30s molto veloci + 90s recupero attivo)",
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "90s footing Z2",
           "recoveryEn": "90s jog Z2",
+          "recoveryIt": "90s corsa lenta Z2",
           "intensityType": "I"
         }
       ],
@@ -556,6 +631,7 @@
               "kind": "segment",
               "description": "30s très rapide",
               "descriptionEn": "30s very fast",
+              "descriptionIt": "30s molto veloci",
               "durationSec": 30,
               "zone": "Z5",
               "role": "effort"
@@ -566,6 +642,7 @@
               "kind": "segment",
               "description": "90s footing Z2",
               "descriptionEn": "90s jog Z2",
+              "descriptionIt": "90s corsa lenta Z2",
               "durationSec": 90,
               "zone": "Z2",
               "role": "recovery"
@@ -577,6 +654,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -587,6 +665,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -603,6 +682,11 @@
         "Recovery in Z2, not Z1",
         "Develops ability to repeat hard efforts"
       ],
+      "coachingTipsIt": [
+        "Sforzi molto intensi",
+        "Recupero in Z2, non in Z1",
+        "Sviluppa la capacità di ripetere sforzi intensi"
+      ],
       "commonMistakes": [
         "Récupérer trop lentement",
         "Partir en sprint dès le début"
@@ -610,6 +694,10 @@
       "commonMistakesEn": [
         "Recovering too slowly",
         "Going all-out sprint from the start"
+      ],
+      "commonMistakesIt": [
+        "Recuperare troppo lentamente",
+        "Partire in sprint fin dall'inizio"
       ],
       "variationIds": [
         "FAR-003"
@@ -636,8 +724,10 @@
       "id": "FAR-005",
       "name": "Fartlek nature",
       "nameEn": "Trail Fartlek",
+      "nameIt": "Fartlek trail",
       "description": "Fartlek sur sentiers et chemins. Efforts dictés par le terrain.",
       "descriptionEn": "Fartlek on trails and paths. Efforts dictated by terrain.",
+      "descriptionIt": "Fartlek su sentieri e sterrati. Sforzi dettati dal terreno.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "mixed",
@@ -655,6 +745,7 @@
         {
           "description": "Footing sur chemin",
           "descriptionEn": "Jog on path",
+          "descriptionIt": "Corsa lenta su sentiero",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -665,6 +756,7 @@
           "kind": "segment",
           "description": "Footing sur chemin",
           "descriptionEn": "Jog on path",
+          "descriptionIt": "Corsa lenta su sentiero",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -675,6 +767,7 @@
         {
           "description": "Fartlek sur sentier : efforts sur montées et parties techniques",
           "descriptionEn": "Trail fartlek: efforts on climbs and technical sections",
+          "descriptionIt": "Fartlek trail: sforzi sulle salite e nei tratti tecnici",
           "durationMin": 35,
           "zone": "Z2-Z4",
           "elevationGainM": 90,
@@ -687,6 +780,7 @@
           "kind": "segment",
           "description": "Fartlek sur sentier : efforts sur montées et parties techniques",
           "descriptionEn": "Trail fartlek: efforts on climbs and technical sections",
+          "descriptionIt": "Fartlek trail: sforzi sulle salite e nei tratti tecnici",
           "durationSec": 2100,
           "zone": "Z2-Z4",
           "elevationGainM": 90,
@@ -699,6 +793,7 @@
         {
           "description": "Retour tranquille",
           "descriptionEn": "Easy return",
+          "descriptionIt": "Rientro tranquillo",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -709,6 +804,7 @@
           "kind": "segment",
           "description": "Retour tranquille",
           "descriptionEn": "Easy return",
+          "descriptionIt": "Rientro tranquillo",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -725,6 +821,11 @@
         "Push on the runnable sections",
         "Enjoy the scenery"
       ],
+      "coachingTipsIt": [
+        "Lascia che il terreno detti gli sforzi",
+        "Spingi nei tratti corribili",
+        "Goditi il paesaggio"
+      ],
       "commonMistakes": [
         "Ignorer le terrain naturel",
         "Se focaliser sur l'allure"
@@ -732,6 +833,10 @@
       "commonMistakesEn": [
         "Ignoring the natural terrain",
         "Focusing on pace instead of effort"
+      ],
+      "commonMistakesIt": [
+        "Ignorare il terreno naturale",
+        "Concentrarsi sul ritmo invece che sullo sforzo"
       ],
       "variationIds": [
         "FAR-001",
@@ -760,8 +865,10 @@
       "id": "FAR-006",
       "name": "Fartlek tempo",
       "nameEn": "Tempo Fartlek",
+      "nameIt": "Fartlek tempo",
       "description": "Fartlek avec efforts à allure tempo. Plus contrôlé que le fartlek classique.",
       "descriptionEn": "Fartlek with efforts at tempo pace. More controlled than classic fartlek.",
+      "descriptionIt": "Fartlek con frazioni a ritmo tempo. Più controllato rispetto al fartlek classico.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "aerobic_threshold",
@@ -779,6 +886,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -789,6 +897,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -799,11 +908,13 @@
         {
           "description": "6x(3min tempo + 2min récup)",
           "descriptionEn": "6x(3min tempo + 2min recovery)",
+          "descriptionIt": "6x(3min tempo + 2min recupero)",
           "durationMin": 3,
           "zone": "Z3",
           "repetitions": 6,
           "recovery": "2min footing Z2",
           "recoveryEn": "2min jog Z2",
+          "recoveryIt": "2min corsa lenta Z2",
           "intensityType": "M"
         }
       ],
@@ -817,6 +928,7 @@
               "kind": "segment",
               "description": "3min tempo",
               "descriptionEn": "3min tempo",
+              "descriptionIt": "3min tempo",
               "durationSec": 180,
               "zone": "Z3",
               "role": "effort"
@@ -827,6 +939,7 @@
               "kind": "segment",
               "description": "2min footing Z2",
               "descriptionEn": "2min jog Z2",
+              "descriptionIt": "2min corsa lenta Z2",
               "durationSec": 120,
               "zone": "Z2",
               "role": "recovery"
@@ -838,6 +951,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -848,6 +962,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -864,6 +979,11 @@
         "Active recovery in Z2",
         "Transition toward continuous tempo"
       ],
+      "coachingTipsIt": [
+        "Sforzi a ritmo tempo, non oltre",
+        "Recupero attivo in Z2",
+        "Transizione verso il ritmo tempo continuo"
+      ],
       "commonMistakes": [
         "Courir trop vite sur les efforts",
         "Récupérer trop longtemps"
@@ -871,6 +991,10 @@
       "commonMistakesEn": [
         "Running too fast on the efforts",
         "Recovering too long"
+      ],
+      "commonMistakesIt": [
+        "Correre troppo forte le frazioni di sforzo",
+        "Recuperare troppo a lungo"
       ],
       "variationIds": [
         "FAR-003",
@@ -897,8 +1021,10 @@
       "id": "FAR-007",
       "name": "Fartlek en groupe",
       "nameEn": "Group Fartlek",
+      "nameIt": "Fartlek in gruppo",
       "description": "Fartlek couru à plusieurs. Chacun son tour mène un effort.",
       "descriptionEn": "Fartlek run with others. Each person takes turns leading an effort.",
+      "descriptionIt": "Fartlek corso in compagnia. A turno ciascuno guida una frazione di sforzo.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "mixed",
@@ -916,6 +1042,7 @@
         {
           "description": "Footing de groupe",
           "descriptionEn": "Group jog",
+          "descriptionIt": "Corsa lenta di gruppo",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -926,6 +1053,7 @@
           "kind": "segment",
           "description": "Footing de groupe",
           "descriptionEn": "Group jog",
+          "descriptionIt": "Corsa lenta di gruppo",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -936,6 +1064,7 @@
         {
           "description": "Fartlek en groupe : chacun lance un effort à son tour",
           "descriptionEn": "Group fartlek: each person leads an effort in turn",
+          "descriptionIt": "Fartlek in gruppo: ciascuno guida una frazione a turno",
           "durationMin": 30,
           "zone": "Z2-Z4"
         }
@@ -945,6 +1074,7 @@
           "kind": "segment",
           "description": "Fartlek en groupe : chacun lance un effort à son tour",
           "descriptionEn": "Group fartlek: each person leads an effort in turn",
+          "descriptionIt": "Fartlek in gruppo: ciascuno guida una frazione a turno",
           "durationSec": 1800,
           "zone": "Z2-Z4",
           "role": "effort"
@@ -954,6 +1084,7 @@
         {
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
+          "descriptionIt": "Corsa lenta insieme",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -964,6 +1095,7 @@
           "kind": "segment",
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
+          "descriptionIt": "Corsa lenta insieme",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -980,6 +1112,11 @@
         "Rotate who leads the efforts",
         "Social and motivating session"
       ],
+      "coachingTipsIt": [
+        "Adattati al livello del gruppo",
+        "Alternate chi guida gli sforzi",
+        "Seduta sociale e motivante"
+      ],
       "commonMistakes": [
         "Lancer des efforts trop durs",
         "Ne pas participer activement"
@@ -987,6 +1124,10 @@
       "commonMistakesEn": [
         "Launching efforts that are too hard",
         "Not actively participating"
+      ],
+      "commonMistakesIt": [
+        "Lanciare sforzi troppo duri",
+        "Non partecipare attivamente"
       ],
       "variationIds": [
         "FAR-001"
@@ -1014,8 +1155,10 @@
       "id": "FAR-008",
       "name": "Fartlek pré-course",
       "nameEn": "Pre-Race Fartlek",
+      "nameIt": "Fartlek pre-gara",
       "description": "Fartlek léger pour maintenir la fraîcheur avant une compétition.",
       "descriptionEn": "Light fartlek to maintain freshness before a competition.",
+      "descriptionIt": "Fartlek leggero per mantenere la brillantezza prima di una competizione.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "mixed",
@@ -1033,6 +1176,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1043,6 +1187,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1053,6 +1198,7 @@
         {
           "description": "4-5 accélérations de 30s-1min à allure course",
           "descriptionEn": "4-5 accelerations of 30s-1min at race pace",
+          "descriptionIt": "4-5 accelerazioni da 30s-1min a ritmo gara",
           "durationMin": 15,
           "zone": "Z3-Z4",
           "intensityType": "T"
@@ -1063,6 +1209,7 @@
           "kind": "segment",
           "description": "4-5 accélérations de 30s-1min à allure course",
           "descriptionEn": "4-5 accelerations of 30s-1min at race pace",
+          "descriptionIt": "4-5 accelerazioni da 30s-1min a ritmo gara",
           "durationSec": 900,
           "zone": "Z3-Z4",
           "intensityType": "T",
@@ -1073,6 +1220,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1083,6 +1231,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1099,6 +1248,11 @@
         "No residual fatigue",
         "Ideal on race day -3 or -4"
       ],
+      "coachingTipsIt": [
+        "Solo qualche sensazione di velocità",
+        "Nessuna fatica residua",
+        "Ideale a 3 o 4 giorni dalla gara"
+      ],
       "commonMistakes": [
         "En faire trop avant la course",
         "Courir les efforts trop vite"
@@ -1106,6 +1260,10 @@
       "commonMistakesEn": [
         "Doing too much before the race",
         "Running the efforts too fast"
+      ],
+      "commonMistakesIt": [
+        "Fare troppo prima della gara",
+        "Correre gli sforzi troppo velocemente"
       ],
       "variationIds": [
         "FAR-001"
@@ -1132,8 +1290,10 @@
       "id": "FAR-009",
       "name": "Moneghetti Fartlek",
       "nameEn": "Moneghetti Fartlek",
+      "nameIt": "Moneghetti Fartlek",
       "description": "Fartlek australien structuré créé par Steve Moneghetti : 2x90s, 4x60s, 4x30s, 4x15s. Récup = durée de l'effort. Format pyramidal décroissant très populaire.",
       "descriptionEn": "Structured Australian fartlek created by Steve Moneghetti: 2x90s, 4x60s, 4x30s, 4x15s. Recovery = effort duration. Very popular descending pyramid format.",
+      "descriptionIt": "Fartlek australiano strutturato creato da Steve Moneghetti: 2x90s, 4x60s, 4x30s, 4x15s. Recupero = durata dello sforzo. Formato piramidale decrescente molto popolare.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "mixed",
@@ -1151,6 +1311,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1161,6 +1322,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1171,37 +1333,45 @@
         {
           "description": "2x(90s rapide / 90s récup)",
           "descriptionEn": "2x(90s fast / 90s recovery)",
+          "descriptionIt": "2x(90s veloci / 90s recupero)",
           "zone": "Z4-Z5",
           "repetitions": 2,
           "recovery": "90s footing Z2",
           "recoveryEn": "90s jog Z2",
+          "recoveryIt": "90s corsa lenta Z2",
           "intensityType": "I"
         },
         {
           "description": "4x(60s rapide / 60s récup)",
           "descriptionEn": "4x(60s fast / 60s recovery)",
+          "descriptionIt": "4x(60s veloci / 60s recupero)",
           "zone": "Z4-Z5",
           "repetitions": 4,
           "recovery": "60s footing Z2",
           "recoveryEn": "60s jog Z2",
+          "recoveryIt": "60s corsa lenta Z2",
           "intensityType": "I"
         },
         {
           "description": "4x(30s rapide / 30s récup)",
           "descriptionEn": "4x(30s fast / 30s recovery)",
+          "descriptionIt": "4x(30s veloci / 30s recupero)",
           "zone": "Z5",
           "repetitions": 4,
           "recovery": "30s footing Z2",
           "recoveryEn": "30s jog Z2",
+          "recoveryIt": "30s corsa lenta Z2",
           "intensityType": "I"
         },
         {
           "description": "4x(15s sprint / 15s récup)",
           "descriptionEn": "4x(15s sprint / 15s recovery)",
+          "descriptionIt": "4x(15s sprint / 15s recupero)",
           "zone": "Z5+",
           "repetitions": 4,
           "recovery": "15s footing Z2",
-          "recoveryEn": "15s jog Z2"
+          "recoveryEn": "15s jog Z2",
+          "recoveryIt": "15s corsa lenta Z2"
         }
       ],
       "mainSetStructure": [
@@ -1214,6 +1384,7 @@
               "kind": "segment",
               "description": "90s rapide",
               "descriptionEn": "90s fast",
+              "descriptionIt": "90s veloci",
               "durationSec": 90,
               "zone": "Z4-Z5",
               "role": "effort"
@@ -1224,6 +1395,7 @@
               "kind": "segment",
               "description": "90s footing Z2",
               "descriptionEn": "90s jog Z2",
+              "descriptionIt": "90s corsa lenta Z2",
               "durationSec": 90,
               "zone": "Z2",
               "role": "recovery"
@@ -1239,6 +1411,7 @@
               "kind": "segment",
               "description": "60s rapide",
               "descriptionEn": "60s fast",
+              "descriptionIt": "60s veloci",
               "durationSec": 60,
               "zone": "Z4-Z5",
               "role": "effort"
@@ -1249,6 +1422,7 @@
               "kind": "segment",
               "description": "60s footing Z2",
               "descriptionEn": "60s jog Z2",
+              "descriptionIt": "60s corsa lenta Z2",
               "durationSec": 60,
               "zone": "Z2",
               "role": "recovery"
@@ -1264,6 +1438,7 @@
               "kind": "segment",
               "description": "30s rapide",
               "descriptionEn": "30s fast",
+              "descriptionIt": "30s veloci",
               "durationSec": 30,
               "zone": "Z5",
               "role": "effort"
@@ -1274,6 +1449,7 @@
               "kind": "segment",
               "description": "30s footing Z2",
               "descriptionEn": "30s jog Z2",
+              "descriptionIt": "30s corsa lenta Z2",
               "durationSec": 30,
               "zone": "Z2",
               "role": "recovery"
@@ -1289,6 +1465,7 @@
               "kind": "segment",
               "description": "15s sprint",
               "descriptionEn": "15s sprint",
+              "descriptionIt": "15s sprint",
               "durationSec": 15,
               "zone": "Z5+",
               "role": "effort"
@@ -1299,6 +1476,7 @@
               "kind": "segment",
               "description": "15s footing Z2",
               "descriptionEn": "15s jog Z2",
+              "descriptionIt": "15s corsa lenta Z2",
               "durationSec": 15,
               "zone": "Z2",
               "role": "recovery"
@@ -1310,6 +1488,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1320,6 +1499,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1338,6 +1518,12 @@
         "Increasing intensity throughout the session",
         "Created by Steve Moneghetti, Australian marathoner"
       ],
+      "coachingTipsIt": [
+        "Formato piramidale: sforzi via via più brevi",
+        "Recupero = stessa durata dello sforzo",
+        "Intensità crescente lungo la seduta",
+        "Creato da Steve Moneghetti, maratoneta australiano"
+      ],
       "commonMistakes": [
         "Partir trop vite sur les 90s",
         "Ne pas accélérer sur les 15s finaux",
@@ -1347,6 +1533,11 @@
         "Starting too fast on the 90s",
         "Not accelerating on the final 15s",
         "Cutting recovery times"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte sui 90s",
+        "Non accelerare sui 15s finali",
+        "Ridurre i tempi di recupero"
       ],
       "variationIds": [
         "FAR-002",
@@ -1376,8 +1567,10 @@
       "id": "FAR-010",
       "name": "Fartlek découverte",
       "nameEn": "Introduction Fartlek",
+      "nameIt": "Fartlek introduttivo",
       "description": "Fartlek accessible pour les débutants. Huit courtes accélérations de 30 secondes avec récupération généreuse. Jeu de vitesse ludique.",
       "descriptionEn": "Accessible fartlek for beginners. Eight short 30-second accelerations with generous recovery. Fun speed play.",
+      "descriptionIt": "Fartlek accessibile per principianti. Otto brevi accelerazioni di 30 secondi con recupero ampio. Gioco di velocità divertente.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "aerobic_power",
@@ -1395,6 +1588,7 @@
         {
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1402,6 +1596,7 @@
         {
           "description": "Étirements dynamiques",
           "descriptionEn": "Dynamic stretches",
+          "descriptionIt": "Stretching dinamico",
           "durationMin": 5
         }
       ],
@@ -1410,6 +1605,7 @@
           "kind": "segment",
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1419,6 +1615,7 @@
           "kind": "segment",
           "description": "Étirements dynamiques",
           "descriptionEn": "Dynamic stretches",
+          "descriptionIt": "Stretching dinamico",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1427,10 +1624,12 @@
         {
           "description": "8x 30s plus rapide (Z3-Z4) / 90s récup footing facile (Z1-Z2)",
           "descriptionEn": "8x 30s faster (Z3-Z4) / 90s easy recovery jog (Z1-Z2)",
+          "descriptionIt": "8x 30s più veloci (Z3-Z4) / 90s corsa lenta facile di recupero (Z1-Z2)",
           "zone": "Z3-Z4",
           "repetitions": 8,
           "recovery": "90s footing Z1-Z2",
           "recoveryEn": "90s jog Z1-Z2",
+          "recoveryIt": "90s corsa lenta Z1-Z2",
           "intensityType": "T"
         }
       ],
@@ -1444,6 +1643,7 @@
               "kind": "segment",
               "description": "30s plus rapide (Z3-Z4)",
               "descriptionEn": "30s faster (Z3-Z4)",
+              "descriptionIt": "30s più veloci (Z3-Z4)",
               "durationSec": 30,
               "zone": "Z3-Z4",
               "intensityType": "T",
@@ -1455,6 +1655,7 @@
               "kind": "segment",
               "description": "90s footing Z1-Z2",
               "descriptionEn": "90s jog Z1-Z2",
+              "descriptionIt": "90s corsa lenta Z1-Z2",
               "durationSec": 90,
               "zone": "Z1-Z2",
               "role": "recovery"
@@ -1466,6 +1667,7 @@
         {
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1476,6 +1678,7 @@
           "kind": "segment",
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1494,6 +1697,12 @@
         "The 90s recovery allows full recovery",
         "Fun session to discover pace changes"
       ],
+      "coachingTipsIt": [
+        "Le accelerazioni sono moderate, non sprint",
+        "Usa riferimenti visivi (lampioni, alberi)",
+        "Il recupero di 90s permette di recuperare completamente",
+        "Seduta divertente per scoprire i cambi di ritmo"
+      ],
       "commonMistakes": [
         "Partir en sprint dès la première accélération",
         "Récupérer en marchant au lieu de trottiner",
@@ -1503,6 +1712,11 @@
         "Sprinting from the first acceleration",
         "Walking during recovery instead of jogging",
         "Not having fun: fartlek is speed play"
+      ],
+      "commonMistakesIt": [
+        "Partire in sprint fin dalla prima accelerazione",
+        "Camminare durante il recupero invece di correre piano",
+        "Non divertirsi: il fartlek è un gioco di velocità"
       ],
       "variationIds": [
         "FAR-001",
@@ -1530,8 +1744,10 @@
       "id": "FAR-011",
       "name": "Fartlek kényan (1/1)",
       "nameEn": "Kenyan Fartlek (1/1)",
+      "nameIt": "Fartlek keniota (1/1)",
       "description": "Fartlek standard des camps d'entraînement kényans. Alternance stricte 1 minute rapide / 1 minute récup pendant 30-40 minutes. Effort basé sur les sensations, sans montre. Séance emblématique du jeudi à Iten (Kenya).",
       "descriptionEn": "Standard fartlek from Kenyan training camps. Strict alternation of 1 minute fast / 1 minute recovery for 30-40 minutes. Effort-based, no watch needed. Iconic Thursday session in Iten (Kenya).",
+      "descriptionIt": "Fartlek standard dei campi di allenamento kenioti. Alternanza rigorosa di 1 minuto veloce / 1 minuto di recupero per 30-40 minuti. Basato sulle sensazioni, senza orologio. Seduta iconica del giovedì a Iten (Kenya).",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "aerobic_power",
@@ -1548,6 +1764,7 @@
         {
           "description": "Footing progressif sur chemin",
           "descriptionEn": "Progressive jog on path",
+          "descriptionIt": "Corsa lenta progressiva su sentiero",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -1558,6 +1775,7 @@
           "kind": "segment",
           "description": "Footing progressif sur chemin",
           "descriptionEn": "Progressive jog on path",
+          "descriptionIt": "Corsa lenta progressiva su sentiero",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -1568,11 +1786,13 @@
         {
           "description": "20x(1min rapide effort 5K-10K / 1min footing actif)",
           "descriptionEn": "20x(1min fast at 5K-10K effort / 1min active jog)",
+          "descriptionIt": "20x(1min veloce a sforzo 5K-10K / 1min corsa attiva)",
           "durationMin": 1,
           "zone": "Z5",
           "repetitions": 20,
           "recovery": "1min footing soutenu Z2-Z3",
           "recoveryEn": "1min steady jog Z2-Z3",
+          "recoveryIt": "1min corsa sostenuta Z2-Z3",
           "intensityType": "I"
         }
       ],
@@ -1586,6 +1806,7 @@
               "kind": "segment",
               "description": "1min rapide effort 5K-10K",
               "descriptionEn": "1min fast at 5K-10K effort",
+              "descriptionIt": "1min veloce a sforzo 5K-10K",
               "durationSec": 60,
               "zone": "Z5",
               "role": "effort"
@@ -1596,6 +1817,7 @@
               "kind": "segment",
               "description": "1min footing soutenu Z2-Z3",
               "descriptionEn": "1min steady jog Z2-Z3",
+              "descriptionIt": "1min corsa sostenuta Z2-Z3",
               "durationSec": 60,
               "zone": "Z2-Z3",
               "role": "recovery"
@@ -1607,6 +1829,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1617,6 +1840,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1633,6 +1857,11 @@
         "Recovery is a sustained float jog, not walking or very slow jogging",
         "Variation: use 2/1 or 3/1 ratios to vary the stimulus"
       ],
+      "coachingTipsIt": [
+        "Lo sforzo si basa sulle sensazioni, non sul ritmo GPS: corri d'istinto come i kenioti",
+        "Il recupero è una corsa fluida sostenuta (float), non camminata né corsa lentissima",
+        "Variante: usa rapporti 2/1 o 3/1 per variare lo stimolo"
+      ],
       "commonMistakes": [
         "Courir les efforts trop vite au début et ne pas pouvoir maintenir sur 20 répétitions",
         "Récupérer en marchant au lieu de maintenir un rythme de footing actif",
@@ -1642,6 +1871,11 @@
         "Running efforts too fast early and being unable to maintain over 20 reps",
         "Recovering by walking instead of maintaining an active jog rhythm",
         "Constantly checking the watch instead of feeling the effort"
+      ],
+      "commonMistakesIt": [
+        "Correre gli sforzi troppo forte all'inizio e non riuscire a mantenerli su 20 ripetute",
+        "Recuperare camminando invece di mantenere un ritmo di corsa attivo",
+        "Guardare continuamente l'orologio invece di sentire lo sforzo"
       ],
       "variationIds": [
         "FAR-001",
@@ -1671,8 +1905,10 @@
       "id": "FAR-012",
       "name": "Fartlek dégressif",
       "nameEn": "Descending Fartlek",
+      "nameIt": "Fartlek decrescente",
       "description": "Fartlek avec efforts de plus en plus courts mais de plus en plus rapides. Schéma : 5min-4min-3min-2min-1min avec récupération de 90 secondes. Intensité croissante du tempo au sprint. Développe la capacité à accélérer en fin de course.",
       "descriptionEn": "Fartlek with progressively shorter but faster efforts. Pattern: 5min-4min-3min-2min-1min with 90-second recovery. Increasing intensity from tempo to sprint. Develops ability to accelerate in late race stages.",
+      "descriptionIt": "Fartlek con sforzi progressivamente più brevi ma più veloci. Schema: 5min-4min-3min-2min-1min con recupero di 90 secondi. Intensità crescente dal ritmo tempo allo sprint. Sviluppa la capacità di accelerare nel finale di gara.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "aerobic_power",
@@ -1690,6 +1926,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -1697,6 +1934,7 @@
         {
           "description": "Gammes et 3x accélérations",
           "descriptionEn": "Drills and 3x accelerations",
+          "descriptionIt": "Andature e 3x accelerazioni",
           "durationMin": 5,
           "zone": "Z3",
           "intensityType": "M"
@@ -1707,6 +1945,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -1716,6 +1955,7 @@
           "kind": "segment",
           "description": "Gammes et 3x accélérations",
           "descriptionEn": "Drills and 3x accelerations",
+          "descriptionIt": "Andature e 3x accelerazioni",
           "durationSec": 300,
           "zone": "Z3",
           "intensityType": "M",
@@ -1726,6 +1966,7 @@
         {
           "description": "5min à allure tempo",
           "descriptionEn": "5min at tempo pace",
+          "descriptionIt": "5min a ritmo tempo",
           "durationMin": 5,
           "zone": "Z3",
           "intensityType": "M"
@@ -1733,6 +1974,7 @@
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationMin": 1.5,
           "zone": "Z2",
           "intensityType": "E"
@@ -1740,6 +1982,7 @@
         {
           "description": "4min à allure seuil",
           "descriptionEn": "4min at threshold pace",
+          "descriptionIt": "4min a ritmo soglia",
           "durationMin": 4,
           "zone": "Z4",
           "intensityType": "T"
@@ -1747,6 +1990,7 @@
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationMin": 1.5,
           "zone": "Z2",
           "intensityType": "E"
@@ -1754,6 +1998,7 @@
         {
           "description": "3min à allure 10K",
           "descriptionEn": "3min at 10K pace",
+          "descriptionIt": "3min a ritmo 10K",
           "durationMin": 3,
           "zone": "Z4",
           "intensityType": "T"
@@ -1761,6 +2006,7 @@
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationMin": 1.5,
           "zone": "Z2",
           "intensityType": "E"
@@ -1768,6 +2014,7 @@
         {
           "description": "2min à allure 5K",
           "descriptionEn": "2min at 5K pace",
+          "descriptionIt": "2min a ritmo 5K",
           "durationMin": 2,
           "zone": "Z5",
           "intensityType": "I"
@@ -1775,6 +2022,7 @@
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationMin": 1.5,
           "zone": "Z2",
           "intensityType": "E"
@@ -1782,6 +2030,7 @@
         {
           "description": "1min à effort maximal",
           "descriptionEn": "1min at near max effort",
+          "descriptionIt": "1min a sforzo quasi massimale",
           "durationMin": 1,
           "zone": "Z5",
           "intensityType": "I"
@@ -1792,6 +2041,7 @@
           "kind": "segment",
           "description": "5min à allure tempo",
           "descriptionEn": "5min at tempo pace",
+          "descriptionIt": "5min a ritmo tempo",
           "durationSec": 300,
           "zone": "Z3",
           "intensityType": "M",
@@ -1801,6 +2051,7 @@
           "kind": "segment",
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationSec": 90,
           "zone": "Z2",
           "intensityType": "E",
@@ -1810,6 +2061,7 @@
           "kind": "segment",
           "description": "4min à allure seuil",
           "descriptionEn": "4min at threshold pace",
+          "descriptionIt": "4min a ritmo soglia",
           "durationSec": 240,
           "zone": "Z4",
           "intensityType": "T",
@@ -1819,6 +2071,7 @@
           "kind": "segment",
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationSec": 90,
           "zone": "Z2",
           "intensityType": "E",
@@ -1828,6 +2081,7 @@
           "kind": "segment",
           "description": "3min à allure 10K",
           "descriptionEn": "3min at 10K pace",
+          "descriptionIt": "3min a ritmo 10K",
           "durationSec": 180,
           "zone": "Z4",
           "intensityType": "T",
@@ -1837,6 +2091,7 @@
           "kind": "segment",
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationSec": 90,
           "zone": "Z2",
           "intensityType": "E",
@@ -1846,6 +2101,7 @@
           "kind": "segment",
           "description": "2min à allure 5K",
           "descriptionEn": "2min at 5K pace",
+          "descriptionIt": "2min a ritmo 5K",
           "durationSec": 120,
           "zone": "Z5",
           "intensityType": "I",
@@ -1855,6 +2111,7 @@
           "kind": "segment",
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationSec": 90,
           "zone": "Z2",
           "intensityType": "E",
@@ -1864,6 +2121,7 @@
           "kind": "segment",
           "description": "1min à effort maximal",
           "descriptionEn": "1min at near max effort",
+          "descriptionIt": "1min a sforzo quasi massimale",
           "durationSec": 60,
           "zone": "Z5",
           "intensityType": "I",
@@ -1874,6 +2132,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1884,6 +2143,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1900,6 +2160,11 @@
         "The last 1-minute effort should be the fastest of the entire session",
         "90 seconds of recovery is enough to maintain flow without fully recovering"
       ],
+      "coachingTipsIt": [
+        "Lo sforzo deve aumentare progressivamente, non sprintare dall'inizio",
+        "L'ultimo sforzo da 1 minuto deve essere il più veloce dell'intera seduta",
+        "90 secondi di recupero bastano per mantenere il ritmo senza recuperare del tutto"
+      ],
       "commonMistakes": [
         "Courir le 5 minutes trop vite et ne pas pouvoir accélérer ensuite",
         "Garder la même allure sur tous les efforts au lieu d'accélérer progressivement",
@@ -1909,6 +2174,11 @@
         "Running the 5-minute effort too fast and being unable to accelerate later",
         "Keeping the same pace on all efforts instead of progressively accelerating",
         "Extending recoveries beyond 90 seconds"
+      ],
+      "commonMistakesIt": [
+        "Correre troppo forte i 5 minuti e non riuscire più ad accelerare dopo",
+        "Mantenere lo stesso ritmo su tutti gli sforzi invece di accelerare progressivamente",
+        "Allungare i recuperi oltre i 90 secondi"
       ],
       "variationIds": [
         "FAR-003"
@@ -1937,8 +2207,10 @@
       "id": "FAR-013",
       "name": "Fartlek 2/1 longue distance",
       "nameEn": "Long Distance 2/1 Fartlek",
+      "nameIt": "Fartlek 2/1 lunga distanza",
       "description": "Fartlek d'endurance spécifique au demi-marathon et marathon. Alternance 2 minutes à allure seuil / 1 minute footing pendant 40 minutes. Volume élevé à intensité modérée-haute. Classique des camps d'entraînement kényans pour le marathon.",
       "descriptionEn": "Endurance-specific fartlek for half-marathon and marathon. Alternating 2 minutes at threshold pace / 1 minute jog for 40 minutes. High volume at moderate-high intensity. Classic Kenyan camp workout for marathon preparation.",
+      "descriptionIt": "Fartlek specifico di resistenza per mezza maratona e maratona. Alternanza di 2 minuti a ritmo soglia / 1 minuto di corsa lenta per 40 minuti. Alto volume a intensità medio-alta. Classico dei campi kenioti per la preparazione maratona.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "lactate_threshold",
@@ -1955,6 +2227,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -1965,6 +2238,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -1975,11 +2249,13 @@
         {
           "description": "14x(2min à allure seuil / 1min footing actif)",
           "descriptionEn": "14x(2min at threshold pace / 1min active jog)",
+          "descriptionIt": "14x(2min a ritmo soglia / 1min corsa attiva)",
           "durationMin": 2,
           "zone": "Z4",
           "repetitions": 14,
           "recovery": "1min footing Z2-Z3",
           "recoveryEn": "1min jog Z2-Z3",
+          "recoveryIt": "1min corsa lenta Z2-Z3",
           "intensityType": "T"
         }
       ],
@@ -1993,6 +2269,7 @@
               "kind": "segment",
               "description": "2min à allure seuil",
               "descriptionEn": "2min at threshold pace",
+              "descriptionIt": "2min a ritmo soglia",
               "durationSec": 120,
               "zone": "Z4",
               "role": "effort"
@@ -2003,6 +2280,7 @@
               "kind": "segment",
               "description": "1min footing Z2-Z3",
               "descriptionEn": "1min jog Z2-Z3",
+              "descriptionIt": "1min corsa lenta Z2-Z3",
               "durationSec": 60,
               "zone": "Z2-Z3",
               "role": "recovery"
@@ -2014,6 +2292,7 @@
         {
           "description": "Footing de récupération progressif",
           "descriptionEn": "Progressive recovery jog",
+          "descriptionIt": "Corsa di recupero progressiva",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2024,6 +2303,7 @@
           "kind": "segment",
           "description": "Footing de récupération progressif",
           "descriptionEn": "Progressive recovery jog",
+          "descriptionIt": "Corsa di recupero progressiva",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2040,6 +2320,11 @@
         "The recovery minute is a sustained jog, not walking",
         "Key session for half-marathon and marathon: develops threshold endurance"
       ],
+      "coachingTipsIt": [
+        "Il ritmo soglia corrisponde al tuo ritmo mezza maratona o leggermente più veloce",
+        "Il minuto di recupero è una corsa sostenuta, non camminata",
+        "Seduta chiave per mezza maratona e maratona: sviluppa la tenuta alla soglia"
+      ],
       "commonMistakes": [
         "Courir les efforts trop vite : ce n'est pas du VMA mais du seuil",
         "Récupérer trop lentement, ce qui diminue le stimulus aérobie continu",
@@ -2049,6 +2334,11 @@
         "Running efforts too fast: this is threshold work, not VO2max",
         "Recovering too slowly, which reduces the continuous aerobic stimulus",
         "Not having enough endurance base to support 40 minutes of work"
+      ],
+      "commonMistakesIt": [
+        "Correre gli sforzi troppo forte: è lavoro di soglia, non VAM",
+        "Recuperare troppo lentamente, riducendo lo stimolo aerobico continuo",
+        "Non avere abbastanza base di resistenza per sostenere 40 minuti di lavoro"
       ],
       "variationIds": [
         "FAR-011",
@@ -2079,8 +2369,10 @@
       "id": "FAR-014",
       "name": "Fartlek en escalier montant",
       "nameEn": "Ascending Ladder Fartlek",
+      "nameIt": "Fartlek a scala crescente",
       "description": "Fartlek progressif avec efforts de plus en plus longs : 1-2-3-4-5 minutes, avec récupération égale à la moitié du temps d'effort. Apprend à gérer l'effort croissant et développe l'endurance mentale. Idéal pour la préparation marathon.",
       "descriptionEn": "Progressive fartlek with increasingly longer efforts: 1-2-3-4-5 minutes, with recovery equal to half the effort time. Teaches managing increasing effort and develops mental endurance. Ideal for marathon preparation.",
+      "descriptionIt": "Fartlek progressivo con sforzi via via più lunghi: 1-2-3-4-5 minuti, con recupero pari alla metà del tempo di sforzo. Insegna a gestire lo sforzo crescente e sviluppa la tenuta mentale. Ideale per la preparazione maratona.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "aerobic_power",
@@ -2098,6 +2390,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -2108,6 +2401,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -2118,6 +2412,7 @@
         {
           "description": "1min rapide (allure 5K)",
           "descriptionEn": "1min fast (5K pace)",
+          "descriptionIt": "1min veloce (ritmo 5K)",
           "durationMin": 1,
           "zone": "Z5",
           "intensityType": "I"
@@ -2125,6 +2420,7 @@
         {
           "description": "30s récupération footing",
           "descriptionEn": "30s recovery jog",
+          "descriptionIt": "30s corsa di recupero",
           "durationMin": 0.5,
           "zone": "Z2",
           "intensityType": "E"
@@ -2132,6 +2428,7 @@
         {
           "description": "2min rapide (allure 10K)",
           "descriptionEn": "2min fast (10K pace)",
+          "descriptionIt": "2min veloce (ritmo 10K)",
           "durationMin": 2,
           "zone": "Z4",
           "intensityType": "T"
@@ -2139,6 +2436,7 @@
         {
           "description": "1min récupération footing",
           "descriptionEn": "1min recovery jog",
+          "descriptionIt": "1min corsa di recupero",
           "durationMin": 1,
           "zone": "Z2",
           "intensityType": "E"
@@ -2146,6 +2444,7 @@
         {
           "description": "3min soutenu (allure seuil)",
           "descriptionEn": "3min sustained (threshold pace)",
+          "descriptionIt": "3min sostenuti (ritmo soglia)",
           "durationMin": 3,
           "zone": "Z4",
           "intensityType": "T"
@@ -2153,6 +2452,7 @@
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationMin": 1.5,
           "zone": "Z2",
           "intensityType": "E"
@@ -2160,6 +2460,7 @@
         {
           "description": "4min soutenu (allure tempo)",
           "descriptionEn": "4min sustained (tempo pace)",
+          "descriptionIt": "4min sostenuti (ritmo tempo)",
           "durationMin": 4,
           "zone": "Z3",
           "intensityType": "M"
@@ -2167,6 +2468,7 @@
         {
           "description": "2min récupération footing",
           "descriptionEn": "2min recovery jog",
+          "descriptionIt": "2min corsa di recupero",
           "durationMin": 2,
           "zone": "Z2",
           "intensityType": "E"
@@ -2174,6 +2476,7 @@
         {
           "description": "5min soutenu (allure marathon-semi)",
           "descriptionEn": "5min sustained (marathon-half pace)",
+          "descriptionIt": "5min sostenuti (ritmo maratona-mezza)",
           "durationMin": 5,
           "zone": "Z3",
           "intensityType": "M"
@@ -2184,6 +2487,7 @@
           "kind": "segment",
           "description": "1min rapide (allure 5K)",
           "descriptionEn": "1min fast (5K pace)",
+          "descriptionIt": "1min veloce (ritmo 5K)",
           "durationSec": 60,
           "zone": "Z5",
           "intensityType": "I",
@@ -2193,6 +2497,7 @@
           "kind": "segment",
           "description": "30s récupération footing",
           "descriptionEn": "30s recovery jog",
+          "descriptionIt": "30s corsa di recupero",
           "durationSec": 30,
           "zone": "Z2",
           "intensityType": "E",
@@ -2202,6 +2507,7 @@
           "kind": "segment",
           "description": "2min rapide (allure 10K)",
           "descriptionEn": "2min fast (10K pace)",
+          "descriptionIt": "2min veloce (ritmo 10K)",
           "durationSec": 120,
           "zone": "Z4",
           "intensityType": "T",
@@ -2211,6 +2517,7 @@
           "kind": "segment",
           "description": "1min récupération footing",
           "descriptionEn": "1min recovery jog",
+          "descriptionIt": "1min corsa di recupero",
           "durationSec": 60,
           "zone": "Z2",
           "intensityType": "E",
@@ -2220,6 +2527,7 @@
           "kind": "segment",
           "description": "3min soutenu (allure seuil)",
           "descriptionEn": "3min sustained (threshold pace)",
+          "descriptionIt": "3min sostenuti (ritmo soglia)",
           "durationSec": 180,
           "zone": "Z4",
           "intensityType": "T",
@@ -2229,6 +2537,7 @@
           "kind": "segment",
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
+          "descriptionIt": "90s corsa di recupero",
           "durationSec": 90,
           "zone": "Z2",
           "intensityType": "E",
@@ -2238,6 +2547,7 @@
           "kind": "segment",
           "description": "4min soutenu (allure tempo)",
           "descriptionEn": "4min sustained (tempo pace)",
+          "descriptionIt": "4min sostenuti (ritmo tempo)",
           "durationSec": 240,
           "zone": "Z3",
           "intensityType": "M",
@@ -2247,6 +2557,7 @@
           "kind": "segment",
           "description": "2min récupération footing",
           "descriptionEn": "2min recovery jog",
+          "descriptionIt": "2min corsa di recupero",
           "durationSec": 120,
           "zone": "Z2",
           "intensityType": "E",
@@ -2256,6 +2567,7 @@
           "kind": "segment",
           "description": "5min soutenu (allure marathon-semi)",
           "descriptionEn": "5min sustained (marathon-half pace)",
+          "descriptionIt": "5min sostenuti (ritmo maratona-mezza)",
           "durationSec": 300,
           "zone": "Z3",
           "intensityType": "M",
@@ -2266,6 +2578,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2276,6 +2589,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2292,6 +2606,11 @@
         "Short recovery (half the effort time) maintains metabolic stress",
         "Focus on your breathing: controlled during long efforts"
       ],
+      "coachingTipsIt": [
+        "Lo sforzo deve restare costante nonostante l'aumento di durata, non rallentare sui 5min",
+        "Il recupero breve (metà del tempo di sforzo) mantiene lo stress metabolico",
+        "Concentrati sulla respirazione: controllata negli sforzi lunghi"
+      ],
       "commonMistakes": [
         "Partir trop vite sur le 1min et ne pas pouvoir maintenir les efforts suivants",
         "Allonger les récupérations quand l'effort grandit",
@@ -2301,6 +2620,11 @@
         "Starting too fast on the 1min and being unable to maintain subsequent efforts",
         "Extending recoveries as efforts get longer",
         "Mentally giving up on the 4 or 5 minutes, that's the core of the session"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte sul minuto iniziale e non riuscire a reggere gli sforzi successivi",
+        "Allungare i recuperi man mano che gli sforzi diventano più lunghi",
+        "Mollare mentalmente sui 4 o 5 minuti: sono il cuore della seduta"
       ],
       "variationIds": [
         "FAR-003",
@@ -2331,8 +2655,10 @@
       "id": "FAR-015",
       "name": "Fartlek Whistle (intervalles aléatoires)",
       "nameEn": "Whistle Fartlek (Random Intervals)",
+      "nameIt": "Fartlek al fischietto (intervalli casuali)",
       "description": "Fartlek avec changements de rythme aléatoires signalés par un coup de sifflet (ou une alarme). Un partenaire ou une application décide des moments de changement. Efforts de 15s à 3min, imprévisibles. Simule les changements d'allure en course.",
       "descriptionEn": "Fartlek with random pace changes signaled by a whistle (or alarm). A partner or app decides when to change. Efforts from 15s to 3min, unpredictable. Simulates race pace changes.",
+      "descriptionIt": "Fartlek con cambi di ritmo casuali segnalati da un fischietto (o un allarme). Un compagno o un'app decide quando cambiare. Sforzi da 15s a 3min, imprevedibili. Simula i cambi di ritmo in gara.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "speed",
@@ -2349,6 +2675,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z2",
           "intensityType": "E"
@@ -2359,6 +2686,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z2",
           "intensityType": "E",
@@ -2369,6 +2697,7 @@
         {
           "description": "25 minutes de fartlek à intervalles aléatoires : au signal, alternez effort rapide (Z4-Z5) et footing (Z2). Efforts de 15s à 3min, décidés par un partenaire ou une application.",
           "descriptionEn": "25 minutes of random interval fartlek: on the signal, alternate between fast effort (Z4-Z5) and jog (Z2). Efforts from 15s to 3min, decided by a partner or app.",
+          "descriptionIt": "25 minuti di fartlek a intervalli casuali: al segnale, alterna sforzo veloce (Z4-Z5) e corsa lenta (Z2). Sforzi da 15s a 3min, decisi da un compagno o da un'app.",
           "durationMin": 25,
           "zone": "Z4",
           "intensityType": "T"
@@ -2379,6 +2708,7 @@
           "kind": "segment",
           "description": "25 minutes de fartlek à intervalles aléatoires : au signal, alternez effort rapide (Z4-Z5) et footing (Z2). Efforts de 15s à 3min, décidés par un partenaire ou une application.",
           "descriptionEn": "25 minutes of random interval fartlek: on the signal, alternate between fast effort (Z4-Z5) and jog (Z2). Efforts from 15s to 3min, decided by a partner or app.",
+          "descriptionIt": "25 minuti di fartlek a intervalli casuali: al segnale, alterna sforzo veloce (Z4-Z5) e corsa lenta (Z2). Sforzi da 15s a 3min, decisi da un compagno o da un'app.",
           "durationSec": 1500,
           "zone": "Z4",
           "intensityType": "T",
@@ -2389,6 +2719,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2399,6 +2730,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2415,6 +2747,11 @@
         "Unpredictability is key: don't plan intervals in advance",
         "React to the signal immediately, like a pace change in a race"
       ],
+      "coachingTipsIt": [
+        "Usa un'app timer casuale o un compagno con un fischietto",
+        "L'imprevedibilità è la chiave: non pianificare gli intervalli in anticipo",
+        "Reagisci subito al segnale, come a un cambio di ritmo in gara"
+      ],
       "commonMistakes": [
         "Rendre les intervalles prévisibles en utilisant un pattern régulier",
         "Ne pas réagir au signal assez rapidement, la transition doit être immédiate",
@@ -2424,6 +2761,11 @@
         "Making intervals predictable by using a regular pattern",
         "Not reacting to the signal quickly enough, the transition must be immediate",
         "Only doing short efforts at the expense of 2-3 minute efforts"
+      ],
+      "commonMistakesIt": [
+        "Rendere gli intervalli prevedibili usando uno schema regolare",
+        "Non reagire abbastanza in fretta al segnale: la transizione deve essere immediata",
+        "Fare solo sforzi brevi a discapito di quelli da 2-3 minuti"
       ],
       "variationIds": [
         "FAR-001"
@@ -2454,8 +2796,10 @@
       "id": "FAR-016",
       "name": "Fartlek multi-allures Hudson (1-2-3-2-1)",
       "nameEn": "Hudson Multi-Pace Fartlek (1-2-3-2-1)",
+      "nameIt": "Fartlek multi-ritmo Hudson (1-2-3-2-1)",
       "description": "Fartlek pyramidal en allures de course : 1 minute à allure 5K, 2 minutes à allure 10K, 3 minutes à allure semi-marathon, puis redescente. Chaque palier à une allure spécifique différente. Développe la flexibilité neuromusculaire et métabolique.",
       "descriptionEn": "Pyramid fartlek at race paces: 1 minute at 5K pace, 2 minutes at 10K pace, 3 minutes at half-marathon pace, then descending. Each level at a different specific pace. Develops neuromuscular and metabolic flexibility.",
+      "descriptionIt": "Fartlek piramidale ai ritmi gara: 1 minuto a ritmo 5K, 2 minuti a ritmo 10K, 3 minuti a ritmo mezza maratona, poi a scendere. Ogni gradino a un ritmo specifico diverso. Sviluppa la flessibilità neuromuscolare e metabolica.",
       "category": "fartlek",
       "sessionType": "fartlek",
       "targetSystem": "aerobic_power",
@@ -2473,6 +2817,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2483,6 +2828,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2493,6 +2839,7 @@
         {
           "description": "Série 1, 1min allure 5K / 1min trot",
           "descriptionEn": "Set 1, 1min at 5K pace / 1min jog",
+          "descriptionIt": "Serie 1, 1min a ritmo 5K / 1min corsa lenta",
           "durationMin": 2,
           "zone": "Z5",
           "intensityType": "I"
@@ -2500,6 +2847,7 @@
         {
           "description": "2min allure 10K / 1min trot",
           "descriptionEn": "2min at 10K pace / 1min jog",
+          "descriptionIt": "2min a ritmo 10K / 1min corsa lenta",
           "durationMin": 3,
           "zone": "Z4",
           "intensityType": "T"
@@ -2507,6 +2855,7 @@
         {
           "description": "3min allure semi-marathon / 1min trot",
           "descriptionEn": "3min at half-marathon pace / 1min jog",
+          "descriptionIt": "3min a ritmo mezza maratona / 1min corsa lenta",
           "durationMin": 4,
           "zone": "Z3",
           "intensityType": "M"
@@ -2514,6 +2863,7 @@
         {
           "description": "2min allure 10K / 1min trot",
           "descriptionEn": "2min at 10K pace / 1min jog",
+          "descriptionIt": "2min a ritmo 10K / 1min corsa lenta",
           "durationMin": 3,
           "zone": "Z4",
           "intensityType": "T"
@@ -2521,6 +2871,7 @@
         {
           "description": "1min allure 5K / 1min trot",
           "descriptionEn": "1min at 5K pace / 1min jog",
+          "descriptionIt": "1min a ritmo 5K / 1min corsetta",
           "durationMin": 2,
           "zone": "Z5",
           "intensityType": "I"
@@ -2528,6 +2879,7 @@
         {
           "description": "Repos 2-3 min trot léger entre les séries",
           "descriptionEn": "2-3 min easy jog rest between sets",
+          "descriptionIt": "2-3 min di recupero in corsetta leggera tra le serie",
           "durationMin": 3,
           "zone": "Z1",
           "intensityType": "E"
@@ -2535,6 +2887,7 @@
         {
           "description": "Série 2, 1min allure 5K / 1min trot",
           "descriptionEn": "Set 2, 1min at 5K pace / 1min jog",
+          "descriptionIt": "Serie 2, 1min a ritmo 5K / 1min corsetta",
           "durationMin": 2,
           "zone": "Z5",
           "intensityType": "I"
@@ -2542,6 +2895,7 @@
         {
           "description": "2min allure 10K / 1min trot",
           "descriptionEn": "2min at 10K pace / 1min jog",
+          "descriptionIt": "2min a ritmo 10K / 1min corsa lenta",
           "durationMin": 3,
           "zone": "Z4",
           "intensityType": "T"
@@ -2549,6 +2903,7 @@
         {
           "description": "3min allure semi-marathon / 1min trot",
           "descriptionEn": "3min at half-marathon pace / 1min jog",
+          "descriptionIt": "3min a ritmo mezza maratona / 1min corsa lenta",
           "durationMin": 4,
           "zone": "Z3",
           "intensityType": "M"
@@ -2556,6 +2911,7 @@
         {
           "description": "2min allure 10K / 1min trot",
           "descriptionEn": "2min at 10K pace / 1min jog",
+          "descriptionIt": "2min a ritmo 10K / 1min corsa lenta",
           "durationMin": 3,
           "zone": "Z4",
           "intensityType": "T"
@@ -2563,6 +2919,7 @@
         {
           "description": "1min allure 5K / 1min trot",
           "descriptionEn": "1min at 5K pace / 1min jog",
+          "descriptionIt": "1min a ritmo 5K / 1min corsetta",
           "durationMin": 2,
           "zone": "Z5",
           "intensityType": "I"
@@ -2573,6 +2930,7 @@
           "kind": "segment",
           "description": "Série 1, 1min allure 5K / 1min trot",
           "descriptionEn": "Set 1, 1min at 5K pace / 1min jog",
+          "descriptionIt": "Serie 1, 1min a ritmo 5K / 1min corsa lenta",
           "durationSec": 120,
           "zone": "Z5",
           "intensityType": "I",
@@ -2582,6 +2940,7 @@
           "kind": "segment",
           "description": "2min allure 10K / 1min trot",
           "descriptionEn": "2min at 10K pace / 1min jog",
+          "descriptionIt": "2min a ritmo 10K / 1min corsa lenta",
           "durationSec": 180,
           "zone": "Z4",
           "intensityType": "T",
@@ -2591,6 +2950,7 @@
           "kind": "segment",
           "description": "3min allure semi-marathon / 1min trot",
           "descriptionEn": "3min at half-marathon pace / 1min jog",
+          "descriptionIt": "3min a ritmo mezza maratona / 1min corsa lenta",
           "durationSec": 240,
           "zone": "Z3",
           "intensityType": "M",
@@ -2600,6 +2960,7 @@
           "kind": "segment",
           "description": "2min allure 10K / 1min trot",
           "descriptionEn": "2min at 10K pace / 1min jog",
+          "descriptionIt": "2min a ritmo 10K / 1min corsa lenta",
           "durationSec": 180,
           "zone": "Z4",
           "intensityType": "T",
@@ -2609,6 +2970,7 @@
           "kind": "segment",
           "description": "1min allure 5K / 1min trot",
           "descriptionEn": "1min at 5K pace / 1min jog",
+          "descriptionIt": "1min a ritmo 5K / 1min corsetta",
           "durationSec": 120,
           "zone": "Z5",
           "intensityType": "I",
@@ -2618,6 +2980,7 @@
           "kind": "segment",
           "description": "Repos 2-3 min trot léger entre les séries",
           "descriptionEn": "2-3 min easy jog rest between sets",
+          "descriptionIt": "2-3 min di recupero in corsetta leggera tra le serie",
           "durationSec": 180,
           "zone": "Z1",
           "intensityType": "E",
@@ -2627,6 +2990,7 @@
           "kind": "segment",
           "description": "Série 2, 1min allure 5K / 1min trot",
           "descriptionEn": "Set 2, 1min at 5K pace / 1min jog",
+          "descriptionIt": "Serie 2, 1min a ritmo 5K / 1min corsetta",
           "durationSec": 120,
           "zone": "Z5",
           "intensityType": "I",
@@ -2636,6 +3000,7 @@
           "kind": "segment",
           "description": "2min allure 10K / 1min trot",
           "descriptionEn": "2min at 10K pace / 1min jog",
+          "descriptionIt": "2min a ritmo 10K / 1min corsa lenta",
           "durationSec": 180,
           "zone": "Z4",
           "intensityType": "T",
@@ -2645,6 +3010,7 @@
           "kind": "segment",
           "description": "3min allure semi-marathon / 1min trot",
           "descriptionEn": "3min at half-marathon pace / 1min jog",
+          "descriptionIt": "3min a ritmo mezza maratona / 1min corsa lenta",
           "durationSec": 240,
           "zone": "Z3",
           "intensityType": "M",
@@ -2654,6 +3020,7 @@
           "kind": "segment",
           "description": "2min allure 10K / 1min trot",
           "descriptionEn": "2min at 10K pace / 1min jog",
+          "descriptionIt": "2min a ritmo 10K / 1min corsa lenta",
           "durationSec": 180,
           "zone": "Z4",
           "intensityType": "T",
@@ -2663,6 +3030,7 @@
           "kind": "segment",
           "description": "1min allure 5K / 1min trot",
           "descriptionEn": "1min at 5K pace / 1min jog",
+          "descriptionIt": "1min a ritmo 5K / 1min corsetta",
           "durationSec": 120,
           "zone": "Z5",
           "intensityType": "I",
@@ -2673,6 +3041,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2683,6 +3052,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2701,6 +3071,12 @@
         "Stay relaxed on the 5K portions, speed comes from fluidity, not tension",
         "Use the half-marathon pace portions as relative active recovery"
       ],
+      "coachingTipsIt": [
+        "Ogni gradino va corso a un ritmo gara SPECIFICO, non semplicemente 'veloce' o 'moderato'",
+        "Passare da un ritmo all'altro allena il sistema nervoso a cambiare 'marcia' rapidamente",
+        "Resta sciolto nei tratti a ritmo 5K: la velocità nasce dalla fluidità, non dalla tensione",
+        "Usa i tratti a ritmo mezza maratona come recupero attivo relativo"
+      ],
       "commonMistakes": [
         "Courir toutes les portions vite au lieu de différencier les allures 5K, 10K et semi",
         "Sprinter sur les portions 5K au lieu de respecter l'allure spécifique",
@@ -2710,6 +3086,11 @@
         "Running all portions 'fast' instead of differentiating 5K, 10K and half-marathon paces",
         "Sprinting on the 5K portions instead of respecting specific pace",
         "Jogging too slowly between portions instead of maintaining active jog"
+      ],
+      "commonMistakesIt": [
+        "Correre tutti i tratti 'veloci' invece di differenziare i ritmi 5K, 10K e mezza maratona",
+        "Sprintare nei tratti a ritmo 5K invece di rispettare il ritmo specifico",
+        "Corricchiare troppo piano tra i tratti invece di mantenere una corsa attiva"
       ],
       "variationIds": [
         "FAR-009",

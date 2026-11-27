@@ -295,8 +295,10 @@ async function generateSitemap(): Promise<string> {
   const alternates = (loc: string) => {
     const fr = `${SITE_URL}${loc}`;
     const en = `${SITE_URL}${loc}?lang=en`;
+    const it = `${SITE_URL}${loc}?lang=it`;
     return `    <xhtml:link rel="alternate" hreflang="fr-FR" href="${fr}" />
     <xhtml:link rel="alternate" hreflang="en-US" href="${en}" />
+    <xhtml:link rel="alternate" hreflang="it-IT" href="${it}" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${fr}" />`;
   };
 
@@ -310,6 +312,10 @@ ${links}${lastmod}
   </url>`,
       `  <url>
     <loc>${SITE_URL}${url.loc}?lang=en</loc>
+${links}${lastmod}
+  </url>`,
+      `  <url>
+    <loc>${SITE_URL}${url.loc}?lang=it</loc>
 ${links}${lastmod}
   </url>`,
     ];

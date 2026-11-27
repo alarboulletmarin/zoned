@@ -119,6 +119,7 @@ export interface PaceNote {
   paceMaxKm: number;      // Slower end of range (min/km)
   description: string;    // e.g., "Allure seuil"
   descriptionEn: string;  // e.g., "Threshold pace"
+  descriptionIt?: string; // e.g., "Ritmo soglia"
 }
 
 // ── Plan session (single scheduled workout) ────────────────────────
@@ -133,6 +134,7 @@ export interface PlanSession {
   estimatedDurationMin: number;
   notes?: string;
   notesEn?: string;
+  notesIt?: string;
   // ── New fields (v2, all optional for backward compat) ──
   targetDistanceKm?: number;     // Target distance for this session
   targetDurationMin?: number;    // Refined duration from pace engine
@@ -203,6 +205,7 @@ export interface PlanWeek {
   crossTraining?: CrossTrainingSession[];
   weekLabel?: string;
   weekLabelEn?: string;
+  weekLabelIt?: string;
   // ── New fields (v2, all optional) ──
   targetKm?: number;             // Weekly km target
   targetLongRunKm?: number;      // Long run distance target
@@ -265,37 +268,42 @@ export interface TrainingPlan {
 
 export const RACE_DISTANCE_META: Record<
   RaceDistance,
-  { label: string; labelEn: string; distanceKm: number; icon: string }
+  { label: string; labelEn: string; labelIt?: string; distanceKm: number; icon: string }
 > = {
-  "5K": { label: "5 km", labelEn: "5K", distanceKm: 5, icon: "Zap" },
-  "10K": { label: "10 km", labelEn: "10K", distanceKm: 10, icon: "Timer" },
+  "5K": { label: "5 km", labelEn: "5K", labelIt: "5 km", distanceKm: 5, icon: "Zap" },
+  "10K": { label: "10 km", labelEn: "10K", labelIt: "10 km", distanceKm: 10, icon: "Timer" },
   semi: {
     label: "Semi-marathon",
     labelEn: "Half Marathon",
+    labelIt: "Mezza maratona",
     distanceKm: 21.1,
     icon: "Route",
   },
   marathon: {
     label: "Marathon",
     labelEn: "Marathon",
+    labelIt: "Maratona",
     distanceKm: 42.195,
     icon: "Trophy",
   },
   trail_short: {
     label: "Trail court",
     labelEn: "Short Trail",
+    labelIt: "Trail corto",
     distanceKm: 30,
     icon: "Mountain",
   },
   trail: {
     label: "Trail",
     labelEn: "Trail",
+    labelIt: "Trail",
     distanceKm: 60,
     icon: "Mountain",
   },
   ultra: {
     label: "Ultra trail",
     labelEn: "Ultra Trail",
+    labelIt: "Ultra trail",
     distanceKm: 100,
     icon: "Mountain",
   },
@@ -317,44 +325,56 @@ export const PHASE_META: Record<
   {
     label: string;
     labelEn: string;
+    labelIt?: string;
     color: string;
     description: string;
     descriptionEn: string;
+    descriptionIt?: string;
   }
 > = {
   base: {
     label: "Base",
     labelEn: "Base",
+    labelIt: "Base",
     color: "bg-blue-500",
     description: "Construction de l'endurance fondamentale",
     descriptionEn: "Building fundamental endurance",
+    descriptionIt: "Costruzione della resistenza fondamentale",
   },
   build: {
     label: "Construction",
     labelEn: "Build",
+    labelIt: "Costruzione",
     color: "bg-yellow-500",
     description: "Augmentation progressive de l'intensit\u00e9",
     descriptionEn: "Progressive intensity increase",
+    descriptionIt: "Aumento progressivo dell'intensità",
   },
   peak: {
     label: "Pic",
     labelEn: "Peak",
+    labelIt: "Picco",
     color: "bg-orange-500",
     description: "Aff\u00fbtage des allures sp\u00e9cifiques",
     descriptionEn: "Sharpening race-specific paces",
+    descriptionIt: "Rifinitura dei ritmi specifici di gara",
   },
   taper: {
     label: "Aff\u00fbtage",
     labelEn: "Taper",
+    labelIt: "Scarico",
     color: "bg-green-500",
     description: "R\u00e9duction du volume, fra\u00eecheur maximale",
     descriptionEn: "Volume reduction, maximum freshness",
+    descriptionIt: "Riduzione del volume, massima freschezza",
   },
   recovery: {
     label: "R\u00e9cup\u00e9ration",
     labelEn: "Recovery",
+    labelIt: "Recupero",
     color: "bg-slate-400",
     description: "Semaine de r\u00e9cup\u00e9ration active",
     descriptionEn: "Active recovery week",
+    descriptionIt: "Settimana di recupero attivo",
   },
 };

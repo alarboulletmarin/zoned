@@ -14,7 +14,8 @@
   ],
   "rewrites": [
     { "source": "/(today|activities|favorites|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" },
-    { "source": "/_en/(today|activities|favorites|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" }
+    { "source": "/_en/(today|activities|favorites|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" },
+    { "source": "/_it/(today|activities|favorites|profile|settings|quiz|plans|library/weekly|weeks|weeks/new|weeks/shared|weeks/[^/]+|workout/builder|workout/builder/[^/]+|workout/shared|workout/STR-\\d+|plan/new/assisted|plan/new/free|plan/new/mode|plan/shared|plan/[^/]+|race-simulator/shared)", "destination": "/" }
   ],
   "routes": [
     {
@@ -23,9 +24,19 @@
       "dest": "/_en"
     },
     {
-      "src": "/((?!_en(?:/|$)|spa\\.html$|api(?:/|$))[^.]*)",
+      "src": "/((?!_en(?:/|$)|_it(?:/|$)|spa\\.html$|api(?:/|$))[^.]*)",
       "has": [{ "type": "query", "key": "lang", "value": "en" }],
       "dest": "/_en/$1"
+    },
+    {
+      "src": "/",
+      "has": [{ "type": "query", "key": "lang", "value": "it" }],
+      "dest": "/_it"
+    },
+    {
+      "src": "/((?!_en(?:/|$)|_it(?:/|$)|spa\\.html$|api(?:/|$))[^.]*)",
+      "has": [{ "type": "query", "key": "lang", "value": "it" }],
+      "dest": "/_it/$1"
     }
   ],
   "headers": [

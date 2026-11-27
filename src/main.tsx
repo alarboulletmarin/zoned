@@ -42,8 +42,9 @@ const app = (
 );
 
 if (rootEl && isServerSnapshot()) {
+  const rawLang = document.documentElement.getAttribute("data-prerender-lang");
   const lang: SupportedLanguage =
-    document.documentElement.getAttribute("data-prerender-lang") === "en" ? "en" : "fr";
+    rawLang === "en" || rawLang === "it" ? rawLang : "fr";
   void changeLanguage(lang)
     .then(() => import("./prerender/preload"))
     .then(({ preloadRoute }) => preloadRoute(window.location.pathname))

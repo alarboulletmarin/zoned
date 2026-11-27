@@ -414,6 +414,212 @@ The taper may be the most psychologically difficult phase. After weeks of battli
 But it's also where a significant part of performance is decided. Studies are clear: a well-executed taper can make the difference between a good result and an exceptional one.
 
 So resist the temptation to do more. Accept the discomfort of rest. And show up at the starting line with fresh legs and a sharp mind.`,
+  contentIt: `## Cos'è il tapering?
+
+Le settimane di preparazione sono alle spalle. Hai accumulato chilometri, sedute alla soglia, ripetute. Ora arriva la fase più controintuitiva dell'allenamento: fare di meno per rendere di più.
+
+Il [[taper]] (o scarico pre-gara) è una riduzione controllata e progressiva del carico di allenamento nelle settimane che precedono una competizione importante. L'obiettivo? Smaltire la fatica accumulata mantenendo — e persino ottimizzando — la forma.
+
+---
+
+## La scienza dietro il tapering
+
+### Perché funziona
+
+Il tuo corpo funziona su due componenti opposte: forma (fitness) e fatica. Durante l'allenamento aumentano entrambe. La forma cresce, ma la fatica maschera parte di questo progresso.
+
+Il tapering riduce la fatica più rapidamente di quanto cali la forma. Risultato: la tua prestazione "netta" — forma meno fatica — raggiunge un picco.
+
+> 📊 Un tapering ben eseguito può migliorare la prestazione dallo 0,5% al 6%. Su una maratona da 3h30, significa fino a 12 minuti guadagnati.
+
+Gli studi di Mujika e Padilla (2003) mostrano che un tapering ben condotto può migliorare la prestazione dallo 0,5% al 6% a seconda dell'atleta. Su una maratona da 3h30, equivale fino a 12 minuti.
+
+### Gli adattamenti durante il taper
+
+Contrariamente a quanto si potrebbe pensare, il corpo non si limita a riposare. Continua ad adattarsi:
+
+- **Scorte di glicogeno**: le riserve muscolari raggiungono il massimo (+20-25%)
+- **Riparazione tissutale**: muscoli, tendini e legamenti si rigenerano
+- **Ripristino ormonale**: testosterone e ormone della crescita risalgono
+- **Miglioramento neuromuscolare**: migliore reclutamento delle fibre muscolari
+- **Riduzione dell'infiammazione**: i marker infiammatori scendono
+
+---
+
+## Le regole d'oro del tapering
+
+### Regola 1: Ridurre il volume, mantenere l'intensità
+
+> 📌 Il principio chiave del tapering: ridurre il volume del 40-60% mantenendo l'intensità delle sedute. È il volume a generare fatica, non l'intensità.
+
+È il principio fondamentale. Corri di meno, ma mantieni sedute con intensità.
+
+**Il volume** può essere ridotto del 40% al 60% in base alla durata dello scarico.
+
+**L'intensità** delle sedute chiave viene mantenuta. Continui a fare prove a ritmo gara o tratti alla soglia, semplicemente in quantità ridotta.
+
+Perché? L'intensità mantiene gli adattamenti neuromuscolari e la "sensazione" del ritmo obiettivo. Il volume è il principale generatore di fatica, quindi è quello che si taglia.
+
+**Esempio concreto:**
+- Settimana normale: 6x1000m a ritmo 10 km
+- Settimana di taper: 3x1000m allo stesso ritmo
+
+### Regola 2: Ridurre la frequenza con moderazione
+
+La frequenza (numero di uscite) può calare leggermente, ma meno rispetto al volume.
+
+- Se correvi 6 volte/settimana, passa a 4-5
+- Se correvi 4 volte/settimana, mantieni 3-4
+
+Mantenere una frequenza ragionevole preserva il ritmo e le sensazioni.
+
+### Regola 3: Scarico progressivo, non brusco
+
+La riduzione deve essere graduale. Un taglio netto ("non faccio più nulla") è controproducente.
+
+Il modello più efficace è il taper esponenziale: riduzione rapida all'inizio, poi stabilizzazione.
+
+---
+
+## Durata del tapering in base alla distanza
+
+La durata ottimale varia in base alla gara obiettivo:
+
+| Distanza | Durata del taper | Riduzione totale del volume |
+|----------|------------------|-----------------------------|
+| 5 km | 5-7 giorni | 30-40% |
+| 10 km | 7-10 giorni | 40-50% |
+| Mezza maratona | 10-14 giorni | 40-50% |
+| Maratona | 14-21 giorni | 50-60% |
+| Ultra (>50 km) | 21-28 giorni | 50-70% |
+
+Queste durate sono medie. I runner molto allenati possono avere bisogno di uno scarico più lungo per smaltire tutta la fatica accumulata.
+
+---
+
+## Esempio: tapering maratona di 3 settimane
+
+Supponiamo che la tua settimana normale di picco sia da 70 km.
+
+### Settimana -3 (70% del volume = 50 km)
+
+| Giorno | Seduta | Volume |
+|--------|--------|--------|
+| Lunedì | Riposo | - |
+| Martedì | 4x1000m ritmo 10 km | 10 km totali |
+| Mercoledì | Lento [[zone-2]] | 8 km |
+| Giovedì | 20 min alla [[seuil-lactique]] | 10 km totali |
+| Venerdì | Riposo | - |
+| Sabato | Lento [[zone-2]] | 8 km |
+| Domenica | Lungo facile | 14 km |
+
+### Settimana -2 (50% del volume = 35 km)
+
+| Giorno | Seduta | Volume |
+|--------|--------|--------|
+| Lunedì | Riposo | - |
+| Martedì | 3x1000m ritmo 10 km | 8 km totali |
+| Mercoledì | Lento [[zone-2]] | 6 km |
+| Giovedì | 15 min alla [[seuil-lactique]] | 8 km totali |
+| Venerdì | Riposo | - |
+| Sabato | Lento [[zone-2]] | 6 km |
+| Domenica | Uscita moderata | 10 km |
+
+### Settimana della gara (35% del volume = 25 km)
+
+| Giorno | Seduta | Volume |
+|--------|--------|--------|
+| Lunedì | Riposo | - |
+| Martedì | 3x400m ritmo maratona | 6 km totali |
+| Mercoledì | Corsa leggera | 5 km |
+| Giovedì | Riposo o 20 min molto facili | 0-4 km |
+| Venerdì | Riposo | - |
+| Sabato | Attivazione: 15 min con 3x100m progressivi | 3 km |
+| Domenica | MARATONA | 42 km |
+
+---
+
+## Le trappole del tapering
+
+> 💡 Le sensazioni "strane" durante il tapering sono normali: gambe pesanti, impressione di perdere la forma. Fidati del processo: spariscono dopo i primi chilometri di gara.
+
+### Trappola 1: Il panico dell'ultimo minuto
+
+Ti senti improvvisamente "pesante" o "spento". Le gambe sembrano strane. Vai nel panico: "Sto perdendo la forma!" e aggiungi una seduta.
+
+**La realtà:** Queste sensazioni sono normali. Il tuo corpo non è più abituato a tanto riposo. Il "taper panic" è quasi universale e non predice nulla della tua prestazione.
+
+**Soluzione:** Fidati del processo. Di solito queste sensazioni spariscono dopo i primi chilometri di gara.
+
+### Trappola 2: Compensare con altro
+
+Corri di meno, quindi riempi il vuoto: più palestra, bici intensa, escursioni...
+
+**La realtà:** Tutta questa attività aggiunge fatica. Il tapering è anche mentale: accettare di "non fare nulla".
+
+**Soluzione:** Attività leggere consentite (camminata, nuoto dolce), ma nulla che generi fatica.
+
+### Trappola 3: Tagliare troppo
+
+> ⚠️ Interrompere completamente l'allenamento è dannoso quanto non fare scarico. Senza stimolo, perdi gli adattamenti neuromuscolari e la "sensazione" dei tuoi ritmi.
+
+All'opposto, alcuni tagliano tutto e passano una settimana sul divano.
+
+**La realtà:** Senza stimoli, perdi adattamenti neuromuscolari, sensazioni e talvolta persino fiducia.
+
+**Soluzione:** Mantieni sedute brevi con intensità. Vuoi arrivare fresco, non arrugginito.
+
+### Trappola 4: Ignorare la nutrizione
+
+Meno chilometri = meno dispendio calorico. Se mangi uguale, potresti prendere peso (soprattutto acqua).
+
+**La realtà:** Un leggero aumento di peso (1-2 kg) è normale e spesso benefico (scorte di glicogeno + acqua).
+
+**Soluzione:** Mangia normalmente, non restringere, ma nemmeno aumentare. Idratazione ottimale.
+
+---
+
+## Il tapering mentale
+
+Il tapering non è solo fisico. È anche il momento di preparare la gara mentalmente.
+
+### Cosa puoi fare
+
+- **Visualizzare**: immagina la gara, il tuo ritmo, i momenti difficili e come li gestisci
+- **Pianificare**: prepara la logistica (abbigliamento, nutrizione gara, trasporti)
+- **Rileggere il diario**: ricorda il percorso fatto, le sedute riuscite
+- **Riposare davvero**: pisolini, sonno prolungato, riduzione dello stress
+
+### Cosa devi evitare
+
+- Cercare consigli dell'ultimo minuto su internet
+- Analizzare ossessivamente i dati di allenamento
+- Confrontarti con gli altri
+- Sperimentare qualsiasi cosa nuova (materiale, nutrizione, strategia)
+
+---
+
+## Segnali che il tapering sta funzionando
+
+Negli ultimi giorni prima della gara:
+
+- **Gambe leggere**: hai voglia di correre, ti trattieni
+- **Energia mentale**: impazienza, entusiasmo
+- **Sonno migliore**: dormi meglio, più profondamente
+- **Appetito moderato**: niente attacchi di fame eccessivi
+- **Frequenza cardiaca**: FC a riposo normale o leggermente bassa
+
+Se avverti tutto questo, complimenti: il tuo scarico è riuscito. Non resta che goderti la gara.
+
+---
+
+## L'arte dello scarico
+
+Il tapering è forse la fase più difficile psicologicamente. Dopo settimane a lottare contro te stesso, ti viene chiesto di lasciar andare. Di fidarti di tutto il lavoro svolto.
+
+Ma è anche qui che si gioca una parte importante della prestazione. Gli studi sono chiari: un tapering ben eseguito può fare la differenza tra un buon risultato e un risultato eccezionale.
+
+Quindi resisti alla tentazione di fare di più. Accetta il disagio del riposo. E presentati sulla linea di partenza con gambe fresche e mente lucida.`,
 };
 
 export default content;

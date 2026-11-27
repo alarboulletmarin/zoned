@@ -46,7 +46,12 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { usePlans } from "@/hooks/usePlans";
 import { useSettings } from "@/hooks/useSettings";
 import { useTheme } from "@/hooks/useTheme";
-import { changeLanguage } from "@/i18n";
+import {
+  changeLanguage,
+  getCurrentLanguage,
+  supportedLanguages,
+  type SupportedLanguage,
+} from "@/i18n";
 import { getLatestVersionString } from "@/data/changelog";
 import { BACKUP_STORAGE_KEYS } from "@/lib/backup";
 import type { ThemePreference } from "@/lib/theme";
@@ -99,12 +104,13 @@ export function SettingsPage() {
       : shownPractices.filter((p) => p !== practice);
     setEnabledPractices(next.length === PRACTICES.length ? [] : [...next]);
   };
-  const pickPracticeLabel = (practice: Practice) =>
-    i18n.language.startsWith("en")
-      ? PRACTICE_META[practice].labelEn
-      : PRACTICE_META[practice].label;
+  const pickPracticeLabel = (practice: Practice) => {
+    const meta = PRACTICE_META[practice];
+    if (i18n.language.startsWith("it")) return meta.labelIt ?? meta.labelEn;
+    return i18n.language.startsWith("en") ? meta.labelEn : meta.label;
+  };
 
-  const language = i18n.language?.startsWith("en") ? "en" : "fr";
+  const language = getCurrentLanguage();
 
   // What the app actually occupies in this browser, read from the same keys
   // the backup writes, a number, not an adjective.
@@ -268,7 +274,7 @@ export function SettingsPage() {
                   <Select
                     value={language}
                     onValueChange={(value) =>
-                      void changeLanguage(value as "fr" | "en")
+                      void changeLanguage(value as SupportedLanguage)
                     }
                   >
                     <SelectTrigger
@@ -279,8 +285,11 @@ export function SettingsPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="fr">Français</SelectItem>
-                      <SelectItem value="en">English</SelectItem>
+                      {supportedLanguages.map((lang) => (
+                        <SelectItem key={lang.code} value={lang.code}>
+                          {lang.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>

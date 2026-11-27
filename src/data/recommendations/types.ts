@@ -10,6 +10,7 @@ export type RecommendationDomain = "nutrition" | "hydration" | "recovery";
 export interface RecommendationItem {
   text: string;
   textEn: string;
+  textIt?: string;
   priority: number; // 1 = critical, 2 = important, 3 = nice-to-have
 }
 

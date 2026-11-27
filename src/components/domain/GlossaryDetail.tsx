@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import type { GlossaryTerm } from "@/data/glossary/types";
 import { useGlossaryCategoryInfo, useRelatedTerms } from "@/hooks/useGlossary";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface GlossaryDetailProps {
   term: GlossaryTerm;
@@ -20,16 +21,16 @@ interface GlossaryDetailProps {
 const BLOCK_GAP = { "--gap": "var(--sp-6)" } as React.CSSProperties;
 
 export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
-  const { t, i18n } = useTranslation("glossary");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("glossary");
+  const pickLang = usePickLang();
   const category = useGlossaryCategoryInfo(term.category);
   const { terms: relatedTerms } = useRelatedTerms(term.id);
 
   // Get localized content
-  const displayTerm = isEn && term.termEn ? term.termEn : term.term;
-  const fullDef = isEn && term.fullDefinitionEn ? term.fullDefinitionEn : term.fullDefinition;
-  const example = isEn && term.exampleEn ? term.exampleEn : term.example;
-  const categoryLabel = isEn && category?.labelEn ? category.labelEn : category?.label;
+  const displayTerm = pickLang(term, "term");
+  const fullDef = pickLang(term, "fullDefinition");
+  const example = term.example ? pickLang(term, "example") : undefined;
+  const categoryLabel = category ? pickLang(category, "label") : undefined;
 
   return (
     <div
@@ -81,7 +82,7 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
               <Button key={related.id} variant="outline" size="sm" asChild>
                 <Link to={`/glossary/${related.id}`}>
                   <Link2 />
-                  {related.acronym ?? (isEn && related.termEn ? related.termEn : related.term)}
+                  {related.acronym ?? pickLang(related, "term")}
                 </Link>
               </Button>
             ))}

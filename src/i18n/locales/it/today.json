@@ -1,0 +1,199 @@
+{
+  "seoTitle": "Oggi",
+  "seoDescription": "La tua seduta di oggi, cosa ti chiede e le due scorciatoie per quando non sai cosa fare.",
+  "resume": {
+    "todayLabel": "Oggi",
+    "session": {
+      "line_one": "Una seduta ti aspetta, settimana {{week}}.",
+      "line_other": "{{count}} sedute ti aspettano, settimana {{week}}."
+    },
+    "rest": {
+      "line": "Riposo. È previsto, e conta."
+    },
+    "upcoming": {
+      "line_one": "Il tuo piano inizia domani.",
+      "line_other": "Il tuo piano inizia tra {{count}} giorni."
+    },
+    "none": {
+      "line": "Ancora nessun piano.",
+      "body": "Appena esiste un piano, questa schermata diventa la tua seduta del giorno: la durata, le zone e una casella da spuntare la sera.",
+      "cta": "Crea il mio piano",
+      "hint": "Non sei pronto a impegnarti per più settimane?",
+      "hintLink": "Estrai una seduta dalla libreria"
+    },
+    "inPlan": "Piano",
+    "inWeek": "La mia settimana",
+    "position": "settimana {{n}} / {{total}}",
+    "positionOpen": "settimana {{n}}",
+    "countdown": "G-{{days}}",
+    "openPlan": "Apri il mio piano",
+    "openWeek": "Apri la mia settimana",
+    "openDetail": "Vedi i dettagli",
+    "next": "Prossima seduta: {{day}}, {{duration}}",
+    "rank": "seduta {{n}} / {{total}}",
+    "reclose": "Modifica l'esito",
+    "alsoLabel": "Anche"
+  },
+  "rail": {
+    "label": "Sedute di oggi",
+    "words": "uno,due,tre,quattro,cinque,sei",
+    "count_one": "{{n}} seduta · {{duration}}",
+    "count_other": "{{n}} sedute · {{duration}}",
+    "closed": "Giornata chiusa · {{duration}}",
+    "tab": "Seduta {{n}} di {{total}}, {{name}}, {{duration}}",
+    "state": {
+      "completed": "svolta",
+      "modified": "svolta, modificata",
+      "skipped": "saltata"
+    }
+  },
+  "quick": {
+    "draw": "Estrai una seduta",
+    "week": "La mia settimana",
+    "weekNew": "Costruisci una settimana"
+  },
+  "art": {
+    "brief": "Una figura in piedi sulla riga, a riposo prima della corsa.",
+    "label": "Disegno: un runner in piedi, pronto a partire"
+  },
+  "week": {
+    "letters": "L,M,M,G,V,S,D",
+    "dayNames": "Lunedì,Martedì,Mercoledì,Giovedì,Venerdì,Sabato,Domenica",
+    "label": "Settimana {{week}}",
+    "rest": "riposo",
+    "day_one": "una seduta, {{minutes}}",
+    "day_other": "{{count}} sedute, {{minutes}}",
+    "today": "oggi",
+    "done": "svolta",
+    "modified": "modificata",
+    "skipped": "saltata"
+  },
+  "facts": {
+    "distance": "~{{km}} {{unit}}",
+    "rpe": "RPE {{n}}"
+  },
+  "view": {
+    "label": "Settimana o mese",
+    "week": "Settimana",
+    "month": "Mese"
+  },
+  "month": {
+    "previous": "Mese precedente",
+    "next": "Mese successivo",
+    "sessions_one": "una seduta pianificata · {{minutes}}",
+    "sessions_other": "{{count}} sedute pianificate · {{minutes}}",
+    "empty": "nulla di pianificato",
+    "review": "Bilancio di {{month}}",
+    "reviewToDate": "Bilancio al {{date}}",
+    "legendDone": "svolta",
+    "legendPlanned": "pianificata",
+    "legendSkipped": "saltata",
+    "legendRest": "riposo",
+    "legendExtra": "fuori piano",
+    "strength": "{{time}} di potenziamento, senza zone",
+    "unknown": "{{time}} senza modello noto"
+  },
+  "date": {
+    "ago_one": "un giorno fa",
+    "ago_other": "{{count}} giorni fa",
+    "ahead_one": "tra un giorno",
+    "ahead_other": "tra {{count}} giorni",
+    "back": "Torna a oggi"
+  },
+  "compose": {
+    "open": "Cosa compone la mia settimana",
+    "title": "La mia settimana è composta da",
+    "body": "Il piano in corso e le settimane che segui in parallelo. Una settimana seguita si legge accanto al piano, seduta per seduta; aggiunta al piano, entra a farne parte.",
+    "plans": "Piani",
+    "weeks": "Le mie settimane",
+    "noPlans": "Nessun piano in corso o in arrivo.",
+    "noWeeks": "Nessuna settimana ancora costruita.",
+    "underWay": "settimana {{n}} / {{total}}",
+    "startsIn_one": "inizia domani",
+    "startsIn_other": "inizia tra {{count}} giorni",
+    "placedOn": "seguita nella settimana del {{date}}",
+    "moveHere": "Segui nella settimana del {{date}}",
+    "newWeek": "Costruisci una nuova settimana",
+    "newPlan": "Crea un piano",
+    "switchPlan": "Segui {{name}}",
+    "switchWeek": "Segui {{name}}",
+    "merge": "Aggiungi al piano {{plan}}, settimana {{n}}",
+    "mergeAdd": "Aggiungi alle sedute del piano",
+    "mergeReplace": "Sostituisci le sedute del piano in quella settimana",
+    "mergeCancel": "Annulla",
+    "mergeDone": "Aggiunta al piano. Puoi annullare dalla pagina del piano.",
+    "mergeFailed": "Impossibile salvare l'aggiunta.",
+    "mergeLabel": "{{week}} aggiunta alla settimana {{n}}"
+  },
+  "add": {
+    "action": "Aggiungi una seduta",
+    "into": "In cosa?",
+    "newWeek": "Una nuova settimana, messa qui",
+    "newWeekName": "Settimana del {{date}}",
+    "done": "Seduta aggiunta a {{source}}.",
+    "failed": "Impossibile salvare la seduta."
+  },
+  "conflicts": {
+    "line": "{{day}}: due sedute chiave, {{sources}}"
+  },
+  "rings": {
+    "label": "Anelli della settimana",
+    "week": "Settimana {{n}} · {{dates}}",
+    "day": "{{day}} · G{{n}}/7",
+    "strip": "La tua settimana · G{{n}}/7",
+    "details": "Dettagli",
+    "fold": "Comprimi",
+    "reference": "Nessun piano · riferimento = la tua media su 4 settimane",
+    "metric": {
+      "label": "Misura mostrata",
+      "time": "Tempo",
+      "km": "Km",
+      "dplus": "D+"
+    },
+    "endurance": {
+      "label": "Resistenza",
+      "short": "Resist.",
+      "code": "Z1-Z2",
+      "spoken": "Da Z1 a Z2"
+    },
+    "quality": {
+      "label": "Qualità",
+      "short": "Qualità",
+      "code": "Z3+",
+      "spoken": "Z3 e oltre"
+    },
+    "strength": {
+      "label": "Potenziamento",
+      "short": "Forza",
+      "code": "sedute",
+      "planned_one": "{{count}} pianificata",
+      "planned_other": "{{count}} pianificate",
+      "average_one": "media {{count}} seduta",
+      "average_other": "media {{count}} sedute",
+      "none": "nessuna pianificata"
+    },
+    "of": "su {{value}}",
+    "avg": "media {{value}}",
+    "over": "+{{value}}",
+    "aria": {
+      "zone": "{{label}} {{code}}: {{done}} su {{target}}",
+      "zoneAvg": "{{label}} {{code}}: {{done}}, media {{target}}",
+      "over": ", {{value}} oltre il piano",
+      "strength_one": "Potenziamento: {{done}} su {{count}} seduta pianificata svolta",
+      "strength_other": "Potenziamento: {{done}} su {{count}} sedute pianificate svolte",
+      "strengthAvg_one": "Potenziamento: {{done}} seduta, media {{count}}",
+      "strengthAvg_other": "Potenziamento: {{done}} sedute, media {{count}}"
+    },
+    "total": "Totale settimana",
+    "load": "Carico · TSS",
+    "offPlan": {
+      "title": "Fuori piano · non negli anelli",
+      "count_one": "{{count}} attività",
+      "count_other": "{{count}} attività",
+      "load": "+{{load}} TSS"
+    },
+    "unit": {
+      "dplus": "m D+"
+    }
+  }
+}

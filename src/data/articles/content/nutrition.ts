@@ -372,6 +372,191 @@ Nutrition isn't an accessory - it's a performance variable just like training. E
 - Listening to your body and adjusting based on your sensations
 
 Every runner is different. These principles are foundations - it's up to you to adapt them to your metabolism, your tastes, and your individual reactions.`,
+  contentIt: `## Correre significa bruciare energia
+
+La corsa è una delle attività più dispendiose dal punto di vista energetico. Un runner di 70 kg brucia circa 700 calorie all'ora a ritmo moderato: molto più del nuoto, del ciclismo o della palestra. Questo considerevole dispendio energetico rende la nutrizione una leva di prestazione fondamentale, spesso sottoutilizzata.
+
+Alimentarsi male è come partire per un lungo viaggio con il serbatoio mezzo vuoto: non andrai molto lontano e l'esperienza sarà faticosa. Alimentarsi bene significa avere il carburante ottimale al momento giusto, facendo la differenza tra una seduta subita e una seduta padroneggiata.
+
+---
+
+## Prima dello sforzo: caricare senza appesantire
+
+### Il timing è cruciale
+
+> 📌 Il timing nutrizionale attorno all'allenamento è importante quanto il contenuto del piatto: mangia troppo presto e l'energia non è disponibile, troppo tardi e la digestione ostacola lo sforzo.
+
+Il sistema digestivo e il sistema muscolare competono per il flusso sanguigno. Durante la digestione, il sangue affluisce verso stomaco e intestino. Durante lo sforzo, va verso i muscoli. Mangiare troppo a ridosso di una seduta crea un conflitto: crampi, nausea, disagio.
+
+La regola generale: più il pasto è abbondante, più deve essere lontano dallo sforzo.
+
+**3-4 ore prima**: pasto completo normale. È il tuo ultimo "vero" pasto prima di una seduta importante o di una gara. Privilegia i carboidrati complessi (pasta, riso, pane integrale), una fonte di proteine magre (pollo, pesce, uova) e verdure cotte anziché crude. Evita i grassi in eccesso che rallentano lo svuotamento gastrico.
+
+**2-3 ore prima**: pasto leggero se non hai avuto tempo di mangiare prima. Una ciotola di riso con un po' di pollo, un panino semplice, pasta con un condimento leggero.
+
+**1-2 ore prima**: solo uno spuntino leggero. Una banana, una purea di mele, qualche biscotto secco. Lo stomaco deve essere praticamente vuoto alla partenza.
+
+**30 minuti - 1 ora prima**: solo acqua, o una piccola manciata di frutta secca se avverti un leggero languore. Nulla che richieda una vera digestione.
+
+### Cosa evitare
+
+**Fibre in eccesso.** Insalate, verdure crude, cereali integrali ricchi di crusca: ottimi per la salute quotidiana, problematici prima dello sforzo. Fermentano nell'intestino e possono causare gonfiore, gas ed emergenze spiacevoli.
+
+**Grassi pesanti.** Formaggi, fritture, carni grasse: la loro digestione richiede ore. Restano sullo stomaco mentre cerchi di correre.
+
+**Alimenti non testati.** La mattina della gara non è il momento di provare un nuovo gel o una nuova barretta. Ogni novità va validata prima in allenamento.
+
+**Eccesso di caffè.** Un caffè 1-2 ore prima può migliorare attenzione e prestazione. Tre caffè appena prima del via rischiano di renderti nervoso e accelerare il transito intestinale.
+
+---
+
+## Durante lo sforzo: mantenere acceso il motore
+
+### Sforzi brevi (meno di un'ora)
+
+Per un'uscita sotto i 60 minuti, il corpo dispone di riserve sufficienti. L'acqua basta: anzi, con clima fresco e ritmo facile, nemmeno l'acqua è indispensabile.
+
+### Sforzi moderati (1-2 ore)
+
+L'idratazione diventa importante. Bevi regolarmente: 150-200 ml ogni 15-20 minuti, senza aspettare la sete (la sete indica già un inizio di disidratazione).
+
+Di solito basta acqua semplice. Se lo sforzo è intenso o fa molto caldo, uno sport drink con elettroliti (soprattutto sodio) aiuta a mantenere l'equilibrio idrico.
+
+Mangiare durante uno sforzo di questa durata è facoltativo. Un gel o un po' di frutta secca verso 1h15-1h30 possono dare una spinta, ma non sono indispensabili se hai mangiato correttamente prima.
+
+### Sforzi lunghi (oltre 2 ore)
+
+Oltre i 90 minuti di sforzo, le riserve di glicogeno muscolare iniziano a esaurirsi. Se non le reintegri, andrai incontro al "muro": quella sensazione brutale in cui le gambe diventano di piombo e ogni falcata richiede uno sforzo enorme.
+
+**Carboidrati da prevedere:** 30-60 grammi per ora di sforzo, in base all'intensità e alla tolleranza digestiva. Equivale a 1-2 gel energetici, oppure l'equivalente in barrette, gelatine di frutta o frutta secca.
+
+**Strategia di integrazione:** inizia a mangiare presto, verso i 45 minuti di sforzo, quando ti senti ancora bene. Non aspettare di avere fame: a quel punto sei già in deficit.
+
+**Varia i formati:** alcuni stomaci tollerano male i gel dopo diverse ore. Alternare gel, barrette e banane permette di sostenere lo sforzo senza stancare il palato.
+
+**Idratazione potenziata:** con il caldo o in sforzi molto lunghi, passa a una bevanda sportiva con elettroliti per compensare le perdite di sali. Una disidratazione del 2% del peso corporeo riduce le prestazioni del 10-20%.
+
+### La trappola del test il giorno della gara
+
+Ogni organismo reagisce in modo diverso. Un gel che va benissimo al tuo compagno di allenamento può causare crampi a te. L'unico modo per saperlo è testare in allenamento.
+
+Prima di una gara importante, riproduci esattamente la tua strategia di integrazione durante un lungo. Stesse marche, stesse quantità, stessi tempi. Nessuna brutta sorpresa il giorno della gara.
+
+---
+
+## Dopo lo sforzo: ricostruire
+
+### La finestra metabolica esiste
+
+Nei 30-60 minuti successivi allo sforzo, il corpo è in modalità ricostruzione. I trasportatori del glucosio nei muscoli sono al massimo dell'attività. Gli enzimi di sintesi del glicogeno lavorano a pieno regime. È il momento ottimale per rifornirsi.
+
+Questa "finestra anabolica" non è un mito commerciale: gli studi lo confermano. Mangiare in questa fascia non è obbligatorio (recupererai comunque), ma è più efficace.
+
+### Il rapporto ideale
+
+Gli studi indicano un rapporto 3:1 o 4:1 tra carboidrati e proteine per un recupero ottimale.
+
+**I carboidrati** ricostituiscono il glicogeno muscolare. Dopo un lungo o una seduta intensa, le riserve sono svuotate: se non le ricarichi, partirai per la seduta successiva con il serbatoio mezzo vuoto.
+
+**Le proteine** forniscono i mattoni per riparare le fibre muscolari danneggiate. Bastano 20-30 grammi; oltre questa soglia, l'eccesso non porta benefici immediati aggiuntivi.
+
+### Esempi concreti
+
+**Il campione inatteso: il latte al cioccolato.** Questo classico da spogliatoio non è solo una tradizione, ma un rapporto qualità-prezzo imbattibile. Un bicchierone di latte al cioccolato apporta ~30 g di carboidrati e ~10 g di proteine in formato liquido facile da assorbire. Aggiungi una banana e hai uno spuntino di recupero quasi perfetto.
+
+**Altre opzioni efficaci:**
+- Yogurt greco + frutta + miele
+- Panino con tonno o prosciutto
+- Frullato di frutta + latte + proteine in polvere
+- Ciotola di fiocchi di latte + cereali
+
+### Il pasto principale (2-3 ore dopo)
+
+Lo spuntino di recupero non sostituisce un vero pasto. Qualche ora dopo lo sforzo, fai un pasto completo ed equilibrato:
+
+- **Carboidrati complessi**: pasta, riso, patate, quinoa
+- **Proteine di qualità**: pollo, pesce, uova, legumi
+- **Verdure**: per vitamine, minerali e fibre
+- **Grassi buoni**: olio d'oliva, avocado, frutta a guscio
+
+Dopo uno sforzo molto lungo (maratona, uscita di 3+ ore), questo pasto è particolarmente importante. Le riserve sono profondamente intaccate: servono più pasti per ripristinarle completamente.
+
+---
+
+## L'idratazione quotidiana
+
+### I tuoi bisogni di base
+
+Prima ancora di pensare allo sforzo, assicurati di essere ben idratato ogni giorno. Un runner dovrebbe puntare a:
+
+- **1,5-2 litri di acqua al giorno** in condizioni normali
+- **+500 ml - 1 litro** per ogni ora di allenamento
+- **+30%** con clima caldo o in quota
+
+### L'indicatore più affidabile
+
+> 💡 Controlla il colore delle urine prima di ogni seduta: giallo paglierino = ben idratato, giallo scuro = bevi prima di partire.
+
+Dimentica i calcoli complessi. Il colore delle urine ti dice tutto ciò che devi sapere:
+
+| Colore | Interpretazione |
+|--------|-----------------|
+| Trasparente | Possibile lieve iperidratazione |
+| Giallo paglierino | Perfetto |
+| Giallo scuro | Inizia a bere |
+| Ambra/arancione | Disidratazione significativa |
+
+Primo riflesso al risveglio e prima di ogni seduta: controlla le urine. Partire per allenarsi con urine scure significa partire con un handicap.
+
+### Gli elettroliti
+
+L'acqua da sola non basta sempre. Il sudore porta via sali minerali: principalmente sodio, ma anche potassio e magnesio. Negli sforzi lunghi (>2 ore) o con il caldo intenso, queste perdite possono diventare rilevanti.
+
+Una bevanda sportiva, una pastiglia di elettroliti nella borraccia o semplicemente cibi leggermente salati dopo lo sforzo aiutano a compensare.
+
+---
+
+## Gli errori classici
+
+### Mangiare troppo appena prima
+
+> ⚠️ Ciò che mangi 30 minuti prima della corsa non verrà digerito in tempo per fornire energia: creerà solo fastidio.
+
+Lo stomaco pieno che "sciacqua" a ogni falcata non è solo scomodo, ma anche inefficace. Ciò che mangi 30 minuti prima non sarà digerito in tempo per darti energia.
+
+### Testare in gara
+
+Nuovo gel, nuova marca, nuova strategia: testa sempre prima in allenamento. I disturbi digestivi in gara trasformano una bella giornata in un calvario.
+
+### Sottovalutare l'idratazione
+
+> 📊 Una disidratazione di appena il 2% del peso corporeo riduce le prestazioni del 10-20%. Su una mezza maratona significa perdere 5-10 minuti.
+
+Una perdita di liquidi di appena il 2% del peso corporeo riduce le prestazioni del 10-20%. In una mezza maratona con il caldo, è la differenza tra centrare l'obiettivo e metterci dieci minuti in più.
+
+### Dimenticare la finestra di recupero
+
+Torni dall'uscita, fai la doccia, sistemi due cose e all'improvviso sono le 14:00. Hai perso la finestra ottimale. Tieni sempre pronto uno spuntino per i minuti successivi allo sforzo.
+
+### Le diete restrittive
+
+Alcuni runner, soprattutto cercando di dimagrire, tagliano drasticamente i carboidrati o le calorie totali. Risultato: stanchezza cronica, prestazioni in picchiata, infortuni ricorrenti. Un runner ha bisogno di carburante: molto carburante se l'allenamento è consistente.
+
+Se il dimagrimento è un obiettivo, il deficit calorico deve essere moderato e mai creato tagliando prima, durante o dopo l'allenamento.
+
+---
+
+## In sintesi
+
+La nutrizione non è un dettaglio secondario: è una variabile di prestazione al pari dell'allenamento. Mangiare bene significa:
+
+- Pianificare i pasti attorno alle sedute
+- Testare la strategia di integrazione prima delle gare
+- Non iniziare mai lo sforzo senza aver verificato l'idratazione
+- Sfruttare la finestra di recupero per ricostruire
+- Ascoltare il proprio corpo e adattarsi alle sensazioni
+
+Ogni runner è diverso. Questi principi sono una base: sta a te adattarli al tuo metabolismo, ai tuoi gusti e alle tue reazioni individuali.`,
 };
 
 export default content;

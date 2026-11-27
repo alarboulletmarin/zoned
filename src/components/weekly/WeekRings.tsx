@@ -4,6 +4,7 @@ import { AlertTriangle, Check, ChevronDown } from "@/components/icons";
 import { Segmented } from "@/components/ui/segmented";
 import { formatDurationMinutes } from "@/components/visualization";
 import { cn } from "@/lib/utils";
+import { getDateLocale } from "@/lib/i18n-utils";
 import {
   ringState,
   type RingData,
@@ -210,8 +211,8 @@ interface RingView {
 }
 
 function useRingViews(model: WeekRingsModel, metric: RingMetric): RingView[] {
-  const { t, i18n } = useTranslation("today");
-  const formats = useFormats(i18n.language?.startsWith("en") ? "en-GB" : "fr-FR");
+  const { t } = useTranslation("today");
+  const formats = useFormats(getDateLocale());
   const avg = model.reference === "average";
 
   return useMemo(() => {
@@ -301,9 +302,8 @@ export function WeekRings({
   justDone = false,
   className,
 }: WeekRingsProps) {
-  const { t, i18n } = useTranslation("today");
-  const en = i18n.language?.startsWith("en");
-  const locale = en ? "en-GB" : "fr-FR";
+  const { t } = useTranslation("today");
+  const locale = getDateLocale();
   const views = useRingViews(model, metric);
 
   const monday = useMemo(() => new Date(`${model.range.from}T00:00:00`), [model.range.from]);

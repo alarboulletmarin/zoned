@@ -9,6 +9,7 @@ import { useMyNumbers } from "@/hooks/useMyNumbers";
 import { calculatePaceZones, formatPace } from "@/lib/zones";
 import { formatSplitTime } from "@/lib/splits";
 import { RACE_DISTANCE_META } from "@/types/plan";
+import { getDateLocale, pickLang } from "@/lib/i18n-utils";
 import { raceLabel, type MyNumbers, type UpcomingRace } from "@/lib/myNumbers";
 
 /**
@@ -99,9 +100,8 @@ function useRowAnswers(n: MyNumbers): Record<CalculateurEntry["id"], string> {
   };
 }
 
-function raceLabelDistance(race: UpcomingRace, isEn: boolean): string {
-  const meta = RACE_DISTANCE_META[race.distance];
-  return isEn ? meta.labelEn : meta.label;
+function raceLabelDistance(race: UpcomingRace, _isEn: boolean): string {
+  return pickLang(RACE_DISTANCE_META[race.distance], "label");
 }
 
 function Tile({
@@ -141,7 +141,7 @@ export function CalculateursPage() {
     </>
   );
   const raceDate = race
-    ? new Date(`${race.date}T12:00:00`).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+    ? new Date(`${race.date}T12:00:00`).toLocaleDateString(getDateLocale(), {
         weekday: "short",
         day: "numeric",
         month: "short",
@@ -249,7 +249,7 @@ export function CalculateursPage() {
                 }
                 foot={
                   <span className="zn-mono">
-                    {raceDate.toLocaleUpperCase(isEn ? "en-GB" : "fr-FR")} · {t("hub.daysLeft", { count: race.daysLeft })}
+                    {raceDate.toLocaleUpperCase(getDateLocale())} · {t("hub.daysLeft", { count: race.daysLeft })}
                   </span>
                 }
               />

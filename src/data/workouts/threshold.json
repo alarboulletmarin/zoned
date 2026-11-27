@@ -5,8 +5,10 @@
       "id": "THR-001",
       "name": "Seuil continu",
       "nameEn": "Continuous Threshold",
+      "nameIt": "Soglia continua",
       "description": "Course à allure seuil (Z4) pendant 15-20 minutes continues. Travail au seuil lactique.",
       "descriptionEn": "Running at threshold pace (Z4) for 15-20 continuous minutes. Lactate threshold training.",
+      "descriptionIt": "Corsa a ritmo soglia (Z4) per 15-20 minuti continui. Allenamento alla soglia lattacida.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -24,6 +26,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -31,6 +34,7 @@
         {
           "description": "3x30s accélérations progressives",
           "descriptionEn": "3x30s progressive accelerations",
+          "descriptionIt": "3x30s accelerazioni progressive",
           "durationMin": 5
         }
       ],
@@ -39,6 +43,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -48,6 +53,7 @@
           "kind": "segment",
           "description": "3x30s accélérations progressives",
           "descriptionEn": "3x30s progressive accelerations",
+          "descriptionIt": "3x30s accelerazioni progressive",
           "durationSec": 300,
           "role": "effort"
         }
@@ -56,6 +62,7 @@
         {
           "description": "Course au seuil",
           "descriptionEn": "Threshold run",
+          "descriptionIt": "Corsa alla soglia",
           "durationMin": 20,
           "zone": "Z4",
           "intensityType": "T"
@@ -66,6 +73,7 @@
           "kind": "segment",
           "description": "Course au seuil",
           "descriptionEn": "Threshold run",
+          "descriptionIt": "Corsa alla soglia",
           "durationSec": 1200,
           "zone": "Z4",
           "intensityType": "T",
@@ -76,6 +84,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -86,6 +95,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -102,6 +112,11 @@
         "Hard but sustainable effort",
         "Ideal on flat, marked courses"
       ],
+      "coachingTipsIt": [
+        "Ritmo soglia = ritmo 10K o ritmo mezza maratona lento",
+        "Sforzo impegnativo ma sostenibile",
+        "Ideale su percorsi pianeggianti e misurati"
+      ],
       "commonMistakes": [
         "Partir à allure 5K au lieu de seuil",
         "S'arrêter au premier signe d'inconfort"
@@ -109,6 +124,10 @@
       "commonMistakesEn": [
         "Starting at 5K pace instead of threshold",
         "Stopping at the first sign of discomfort"
+      ],
+      "commonMistakesIt": [
+        "Partire a ritmo 5K invece che a ritmo soglia",
+        "Fermarsi al primo segnale di disagio"
       ],
       "variationIds": [
         "THR-002",
@@ -143,8 +162,10 @@
       "id": "THR-002",
       "name": "Seuil fractionné",
       "nameEn": "Interval Threshold",
+      "nameIt": "Soglia frazionata",
       "description": "Intervalles longs au seuil avec récupération courte. Format 3x8min ou 4x6min.",
       "descriptionEn": "Long threshold intervals with short recovery. Format 3x8min or 4x6min.",
+      "descriptionIt": "Ripetute lunghe alla soglia con recupero breve. Formato 3x8min o 4x6min.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -162,6 +183,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -169,6 +191,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 5
         }
       ],
@@ -177,6 +200,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -186,6 +210,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -194,11 +219,13 @@
         {
           "description": "3x8min seuil avec 2min récup",
           "descriptionEn": "3x8min threshold with 2min recovery",
+          "descriptionIt": "3x8min soglia con 2min di recupero",
           "durationMin": 8,
           "zone": "Z4",
           "repetitions": 3,
           "recovery": "2min footing Z1",
           "recoveryEn": "2min jog Z1",
+          "recoveryIt": "2min corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -212,6 +239,7 @@
               "kind": "segment",
               "description": "8min seuil",
               "descriptionEn": "8min threshold",
+              "descriptionIt": "8min soglia",
               "durationSec": 480,
               "zone": "Z4",
               "intensityType": "T",
@@ -223,6 +251,7 @@
               "kind": "segment",
               "description": "2min footing Z1",
               "descriptionEn": "2min jog Z1",
+              "descriptionIt": "2min corsetta Z1",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -234,6 +263,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -244,6 +274,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -260,6 +291,11 @@
         "Active but very slow recovery",
         "Progression toward continuous threshold"
       ],
+      "coachingTipsIt": [
+        "Mantieni lo stesso ritmo in ogni ripetuta",
+        "Recupero attivo ma molto lento",
+        "Progressione verso la soglia continua"
+      ],
       "commonMistakes": [
         "Démarrer le premier intervalle trop vite",
         "Récupérer trop longtemps"
@@ -267,6 +303,10 @@
       "commonMistakesEn": [
         "Starting the first interval too fast",
         "Recovering too long"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte nella prima ripetuta",
+        "Recuperare troppo a lungo"
       ],
       "variationIds": [
         "THR-001",
@@ -300,8 +340,10 @@
       "id": "THR-003",
       "name": "Seuil court débutant",
       "nameEn": "Beginner Short Threshold",
+      "nameIt": "Soglia breve principianti",
       "description": "Introduction au travail au seuil. Blocs courts de 4-5 minutes.",
       "descriptionEn": "Introduction to threshold training. Short blocks of 4-5 minutes.",
+      "descriptionIt": "Introduzione al lavoro alla soglia. Blocchi brevi da 4-5 minuti.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -319,6 +361,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -329,6 +372,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -339,11 +383,13 @@
         {
           "description": "4x4min seuil avec 2min récup",
           "descriptionEn": "4x4min threshold with 2min recovery",
+          "descriptionIt": "4x4min soglia con 2min di recupero",
           "durationMin": 4,
           "zone": "Z4",
           "repetitions": 4,
           "recovery": "2min footing Z1",
           "recoveryEn": "2min jog Z1",
+          "recoveryIt": "2min corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -357,6 +403,7 @@
               "kind": "segment",
               "description": "4min seuil",
               "descriptionEn": "4min threshold",
+              "descriptionIt": "4min soglia",
               "durationSec": 240,
               "zone": "Z4",
               "intensityType": "T",
@@ -368,6 +415,7 @@
               "kind": "segment",
               "description": "2min footing Z1",
               "descriptionEn": "2min jog Z1",
+              "descriptionIt": "2min corsetta Z1",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -379,6 +427,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -389,6 +438,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -405,6 +455,11 @@
         "Short blocks help find the right rhythm",
         "Progress toward longer blocks"
       ],
+      "coachingTipsIt": [
+        "Primo approccio alla soglia",
+        "I blocchi brevi aiutano a trovare il ritmo giusto",
+        "Progredisci verso blocchi più lunghi"
+      ],
       "commonMistakes": [
         "Vouloir aller trop vite",
         "Sauter cette étape d'initiation"
@@ -412,6 +467,10 @@
       "commonMistakesEn": [
         "Trying to go too fast",
         "Skipping this introductory phase"
+      ],
+      "commonMistakesIt": [
+        "Voler andare troppo forte",
+        "Saltare questa fase introduttiva"
       ],
       "variationIds": [
         "THR-002"
@@ -444,8 +503,10 @@
       "id": "THR-004",
       "name": "Seuil 2x15min",
       "nameEn": "Threshold 2x15min",
+      "nameIt": "Soglia 2x15min",
       "description": "Deux blocs de 15 minutes au seuil. Excellent compromis volume/intensité.",
       "descriptionEn": "Two blocks of 15 minutes at threshold. Excellent volume/intensity compromise.",
+      "descriptionIt": "Due blocchi da 15 minuti alla soglia. Ottimo compromesso volume/intensità.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -463,6 +524,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -470,6 +532,7 @@
         {
           "description": "Accélérations",
           "descriptionEn": "Accelerations",
+          "descriptionIt": "Accelerazioni",
           "durationMin": 5
         }
       ],
@@ -478,6 +541,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -487,6 +551,7 @@
           "kind": "segment",
           "description": "Accélérations",
           "descriptionEn": "Accelerations",
+          "descriptionIt": "Accelerazioni",
           "durationSec": 300,
           "role": "effort"
         }
@@ -495,6 +560,7 @@
         {
           "description": "15min seuil",
           "descriptionEn": "15min threshold",
+          "descriptionIt": "15min soglia",
           "durationMin": 15,
           "zone": "Z4",
           "intensityType": "T"
@@ -502,6 +568,7 @@
         {
           "description": "Récupération",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 3,
           "zone": "Z1",
           "intensityType": "E"
@@ -509,6 +576,7 @@
         {
           "description": "15min seuil",
           "descriptionEn": "15min threshold",
+          "descriptionIt": "15min soglia",
           "durationMin": 15,
           "zone": "Z4",
           "intensityType": "T"
@@ -519,6 +587,7 @@
           "kind": "segment",
           "description": "15min seuil",
           "descriptionEn": "15min threshold",
+          "descriptionIt": "15min soglia",
           "durationSec": 900,
           "zone": "Z4",
           "intensityType": "T",
@@ -528,6 +597,7 @@
           "kind": "segment",
           "description": "Récupération",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 180,
           "zone": "Z1",
           "intensityType": "E",
@@ -537,6 +607,7 @@
           "kind": "segment",
           "description": "15min seuil",
           "descriptionEn": "15min threshold",
+          "descriptionIt": "15min soglia",
           "durationSec": 900,
           "zone": "Z4",
           "intensityType": "T",
@@ -547,6 +618,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -557,6 +629,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -573,6 +646,11 @@
         "The second block should be at the same pace",
         "Key session for half-marathon"
       ],
+      "coachingTipsIt": [
+        "30 minuti totali alla soglia",
+        "Il secondo blocco deve essere allo stesso ritmo",
+        "Seduta chiave per la mezza maratona"
+      ],
       "commonMistakes": [
         "Partir trop vite sur le premier bloc",
         "Craquer sur le deuxième bloc"
@@ -580,6 +658,10 @@
       "commonMistakesEn": [
         "Starting too fast on the first block",
         "Cracking on the second block"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte nel primo blocco",
+        "Cedere nel secondo blocco"
       ],
       "variationIds": [
         "THR-001",
@@ -608,8 +690,10 @@
       "id": "THR-005",
       "name": "Seuil pyramide",
       "nameEn": "Threshold Pyramid",
+      "nameIt": "Soglia a piramide",
       "description": "Intervalles au seuil en pyramide : 4-6-8-6-4 minutes.",
       "descriptionEn": "Threshold intervals in pyramid: 4-6-8-6-4 minutes.",
+      "descriptionIt": "Ripetute alla soglia a piramide: 4-6-8-6-4 minuti.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -627,6 +711,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -637,6 +722,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -647,6 +733,7 @@
         {
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
+          "descriptionIt": "4min soglia",
           "durationMin": 4,
           "zone": "Z4",
           "intensityType": "T"
@@ -654,6 +741,7 @@
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -661,6 +749,7 @@
         {
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
+          "descriptionIt": "6min soglia",
           "durationMin": 6,
           "zone": "Z4",
           "intensityType": "T"
@@ -668,6 +757,7 @@
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -675,6 +765,7 @@
         {
           "description": "8min seuil",
           "descriptionEn": "8min threshold",
+          "descriptionIt": "8min soglia",
           "durationMin": 8,
           "zone": "Z4",
           "intensityType": "T"
@@ -682,6 +773,7 @@
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -689,6 +781,7 @@
         {
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
+          "descriptionIt": "6min soglia",
           "durationMin": 6,
           "zone": "Z4",
           "intensityType": "T"
@@ -696,6 +789,7 @@
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -703,6 +797,7 @@
         {
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
+          "descriptionIt": "4min soglia",
           "durationMin": 4,
           "zone": "Z4",
           "intensityType": "T"
@@ -713,6 +808,7 @@
           "kind": "segment",
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
+          "descriptionIt": "4min soglia",
           "durationSec": 240,
           "zone": "Z4",
           "intensityType": "T",
@@ -722,6 +818,7 @@
           "kind": "segment",
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -731,6 +828,7 @@
           "kind": "segment",
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
+          "descriptionIt": "6min soglia",
           "durationSec": 360,
           "zone": "Z4",
           "intensityType": "T",
@@ -740,6 +838,7 @@
           "kind": "segment",
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -749,6 +848,7 @@
           "kind": "segment",
           "description": "8min seuil",
           "descriptionEn": "8min threshold",
+          "descriptionIt": "8min soglia",
           "durationSec": 480,
           "zone": "Z4",
           "intensityType": "T",
@@ -758,6 +858,7 @@
           "kind": "segment",
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -767,6 +868,7 @@
           "kind": "segment",
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
+          "descriptionIt": "6min soglia",
           "durationSec": 360,
           "zone": "Z4",
           "intensityType": "T",
@@ -776,6 +878,7 @@
           "kind": "segment",
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -785,6 +888,7 @@
           "kind": "segment",
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
+          "descriptionIt": "4min soglia",
           "durationSec": 240,
           "zone": "Z4",
           "intensityType": "T",
@@ -795,6 +899,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -805,6 +910,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -821,6 +927,11 @@
         "Same pace throughout",
         "Varied and motivating session"
       ],
+      "coachingTipsIt": [
+        "Il blocco centrale è il più duro",
+        "Stesso ritmo per tutta la seduta",
+        "Seduta varia e motivante"
+      ],
       "commonMistakes": [
         "Accélérer sur les blocs courts",
         "Ralentir sur le bloc de 8min"
@@ -828,6 +939,10 @@
       "commonMistakesEn": [
         "Speeding up on short blocks",
         "Slowing down on the 8-minute block"
+      ],
+      "commonMistakesIt": [
+        "Accelerare nei blocchi brevi",
+        "Rallentare nel blocco da 8 minuti"
       ],
       "variationIds": [
         "THR-002"
@@ -854,8 +969,10 @@
       "id": "THR-006",
       "name": "Seuil progressif",
       "nameEn": "Progressive Threshold",
+      "nameIt": "Soglia progressiva",
       "description": "Bloc au seuil avec intensité légèrement croissante du début à la fin.",
       "descriptionEn": "Threshold block with slightly increasing intensity from start to finish.",
+      "descriptionIt": "Blocco alla soglia con intensità leggermente crescente dall'inizio alla fine.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -873,6 +990,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -883,6 +1001,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -893,6 +1012,7 @@
         {
           "description": "Seuil progressif : bas Z4 vers haut Z4",
           "descriptionEn": "Progressive threshold: low Z4 to high Z4",
+          "descriptionIt": "Soglia progressiva: da Z4 bassa a Z4 alta",
           "durationMin": 20,
           "zone": "Z4",
           "intensityType": "T"
@@ -903,6 +1023,7 @@
           "kind": "segment",
           "description": "Seuil progressif : bas Z4 vers haut Z4",
           "descriptionEn": "Progressive threshold: low Z4 to high Z4",
+          "descriptionIt": "Soglia progressiva: da Z4 bassa a Z4 alta",
           "durationSec": 1200,
           "zone": "Z4",
           "intensityType": "T",
@@ -913,6 +1034,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -923,6 +1045,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -939,6 +1062,11 @@
         "Very gradual progression",
         "Prepares for fast race finishes"
       ],
+      "coachingTipsIt": [
+        "Inizia in Z4 bassa, finisci in Z4 alta",
+        "Progressione molto graduale",
+        "Prepara ai finali di gara veloci"
+      ],
       "commonMistakes": [
         "Démarrer trop vite",
         "Accélérer trop brusquement"
@@ -946,6 +1074,10 @@
       "commonMistakesEn": [
         "Starting too fast",
         "Accelerating too abruptly"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte",
+        "Accelerare troppo bruscamente"
       ],
       "variationIds": [
         "THR-001"
@@ -978,8 +1110,10 @@
       "id": "THR-007",
       "name": "Seuil piste",
       "nameEn": "Track Threshold",
+      "nameIt": "Soglia in pista",
       "description": "Travail au seuil sur piste d'athlétisme. Contrôle parfait de l'allure.",
       "descriptionEn": "Threshold work on a track. Perfect pace control.",
+      "descriptionIt": "Lavoro alla soglia su pista di atletica. Controllo perfetto del ritmo.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -997,6 +1131,7 @@
         {
           "description": "Footing autour de la piste",
           "descriptionEn": "Jog around the track",
+          "descriptionIt": "Corsa lenta intorno alla pista",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1004,6 +1139,7 @@
         {
           "description": "Lignes droites",
           "descriptionEn": "Straights",
+          "descriptionIt": "Rettilinei",
           "durationMin": 5
         }
       ],
@@ -1012,6 +1148,7 @@
           "kind": "segment",
           "description": "Footing autour de la piste",
           "descriptionEn": "Jog around the track",
+          "descriptionIt": "Corsa lenta intorno alla pista",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1021,6 +1158,7 @@
           "kind": "segment",
           "description": "Lignes droites",
           "descriptionEn": "Straights",
+          "descriptionIt": "Rettilinei",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1029,11 +1167,13 @@
         {
           "description": "3x2000m seuil avec 400m récup",
           "descriptionEn": "3x2000m threshold with 400m recovery",
+          "descriptionIt": "3x2000m soglia con 400m di recupero",
           "distanceM": 2000,
           "zone": "Z4",
           "repetitions": 3,
           "recovery": "400m footing Z1",
           "recoveryEn": "400m jog Z1",
+          "recoveryIt": "400m corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -1047,6 +1187,7 @@
               "kind": "segment",
               "description": "2000m seuil",
               "descriptionEn": "2000m threshold",
+              "descriptionIt": "2000m soglia",
               "distanceM": 2000,
               "zone": "Z4",
               "intensityType": "T",
@@ -1058,6 +1199,7 @@
               "kind": "segment",
               "description": "400m footing Z1",
               "descriptionEn": "400m jog Z1",
+              "descriptionIt": "400m corsetta Z1",
               "distanceM": 400,
               "zone": "Z1",
               "role": "recovery"
@@ -1069,6 +1211,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1079,6 +1222,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1095,6 +1239,11 @@
         "Each 2000m at the same time",
         "Perfect for calibrating pace"
       ],
+      "coachingTipsIt": [
+        "Punta a un tempo preciso al giro",
+        "Ogni 2000m allo stesso crono",
+        "Perfetta per calibrare il ritmo"
+      ],
       "commonMistakes": [
         "Ne pas compter les tours",
         "Varier l'allure d'un bloc à l'autre"
@@ -1102,6 +1251,10 @@
       "commonMistakesEn": [
         "Not counting laps",
         "Varying pace from one block to another"
+      ],
+      "commonMistakesIt": [
+        "Non contare i giri",
+        "Variare il ritmo da un blocco all'altro"
       ],
       "variationIds": [
         "THR-002",
@@ -1136,8 +1289,10 @@
       "id": "THR-008",
       "name": "Lactate shuttle",
       "nameEn": "Lactate Shuttle",
+      "nameIt": "Lactate Shuttle",
       "description": "Alternance seuil et footing. Apprend au corps à recycler le lactate.",
       "descriptionEn": "Alternating threshold and jogging. Teaches the body to recycle lactate.",
+      "descriptionIt": "Alternanza di soglia e corsa lenta. Insegna al corpo a riciclare il lattato.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_tolerance",
@@ -1155,6 +1310,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1165,6 +1321,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1175,11 +1332,13 @@
         {
           "description": "6x(3min seuil + 2min footing Z2)",
           "descriptionEn": "6x(3min threshold + 2min Z2 jog)",
+          "descriptionIt": "6x(3min soglia + 2min corsa lenta Z2)",
           "durationMin": 3,
           "zone": "Z4",
           "repetitions": 6,
           "recovery": "2min footing Z2",
           "recoveryEn": "2min jog Z2",
+          "recoveryIt": "2min corsa lenta Z2",
           "intensityType": "T"
         }
       ],
@@ -1193,6 +1352,7 @@
               "kind": "segment",
               "description": "3min seuil",
               "descriptionEn": "3min threshold",
+              "descriptionIt": "3min soglia",
               "durationSec": 180,
               "zone": "Z4",
               "role": "effort"
@@ -1203,6 +1363,7 @@
               "kind": "segment",
               "description": "2min footing Z2",
               "descriptionEn": "2min jog Z2",
+              "descriptionIt": "2min corsa lenta Z2",
               "durationSec": 120,
               "zone": "Z2",
               "role": "recovery"
@@ -1214,6 +1375,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1224,6 +1386,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1240,6 +1403,11 @@
         "The body learns to recycle lactate",
         "Effective for improving threshold"
       ],
+      "coachingTipsIt": [
+        "Recupero in Z2, non in Z1",
+        "Il corpo impara a riciclare il lattato",
+        "Efficace per migliorare la soglia"
+      ],
       "commonMistakes": [
         "Récupérer trop lentement (Z1)",
         "Aller trop vite sur les phases seuil"
@@ -1247,6 +1415,10 @@
       "commonMistakesEn": [
         "Recovering too slowly (Z1)",
         "Going too fast on threshold phases"
+      ],
+      "commonMistakesIt": [
+        "Recuperare troppo lentamente (Z1)",
+        "Andare troppo forte nelle fasi di soglia"
       ],
       "variationIds": [
         "THR-002"
@@ -1279,8 +1451,10 @@
       "id": "THR-009",
       "name": "Tempo-seuil",
       "nameEn": "Tempo-Threshold",
+      "nameIt": "Tempo-Soglia",
       "description": "Bloc tempo suivi d'un bloc au seuil. Progression d'intensité.",
       "descriptionEn": "Tempo block followed by threshold block. Intensity progression.",
+      "descriptionIt": "Blocco a ritmo tempo seguito da un blocco alla soglia. Progressione di intensità.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -1298,6 +1472,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1308,6 +1483,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1318,6 +1494,7 @@
         {
           "description": "15min tempo Z3",
           "descriptionEn": "15min tempo Z3",
+          "descriptionIt": "15min tempo Z3",
           "durationMin": 15,
           "zone": "Z3",
           "intensityType": "M"
@@ -1325,6 +1502,7 @@
         {
           "description": "Transition",
           "descriptionEn": "Transition",
+          "descriptionIt": "Transizione",
           "durationMin": 2,
           "zone": "Z2",
           "intensityType": "E"
@@ -1332,6 +1510,7 @@
         {
           "description": "10min seuil Z4",
           "descriptionEn": "10min threshold Z4",
+          "descriptionIt": "10min soglia Z4",
           "durationMin": 10,
           "zone": "Z4",
           "intensityType": "T"
@@ -1342,6 +1521,7 @@
           "kind": "segment",
           "description": "15min tempo Z3",
           "descriptionEn": "15min tempo Z3",
+          "descriptionIt": "15min tempo Z3",
           "durationSec": 900,
           "zone": "Z3",
           "intensityType": "M",
@@ -1351,6 +1531,7 @@
           "kind": "segment",
           "description": "Transition",
           "descriptionEn": "Transition",
+          "descriptionIt": "Transizione",
           "durationSec": 120,
           "zone": "Z2",
           "intensityType": "E",
@@ -1360,6 +1541,7 @@
           "kind": "segment",
           "description": "10min seuil Z4",
           "descriptionEn": "10min threshold Z4",
+          "descriptionIt": "10min soglia Z4",
           "durationSec": 600,
           "zone": "Z4",
           "intensityType": "T",
@@ -1370,6 +1552,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -1380,6 +1563,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -1396,6 +1580,11 @@
         "Progressive transition",
         "Simulates ramping up intensity"
       ],
+      "coachingTipsIt": [
+        "Il ritmo tempo prepara alla soglia",
+        "Transizione progressiva",
+        "Simula un aumento graduale di intensità"
+      ],
       "commonMistakes": [
         "Faire le tempo trop vite",
         "Craquer sur le bloc seuil"
@@ -1403,6 +1592,10 @@
       "commonMistakesEn": [
         "Doing tempo too fast",
         "Cracking on the threshold block"
+      ],
+      "commonMistakesIt": [
+        "Fare il ritmo tempo troppo veloce",
+        "Cedere nel blocco alla soglia"
       ],
       "variationIds": [
         "THR-001",
@@ -1431,8 +1624,10 @@
       "id": "THR-010",
       "name": "Seuil 10K pace",
       "nameEn": "Threshold 10K Pace",
+      "nameIt": "Soglia ritmo 10K",
       "description": "Travail spécifique à allure 10K, légèrement au-dessus du seuil.",
       "descriptionEn": "10K-specific work, slightly above threshold.",
+      "descriptionIt": "Lavoro specifico a ritmo 10K, leggermente sopra soglia.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -1450,6 +1645,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1457,6 +1653,7 @@
         {
           "description": "Accélérations",
           "descriptionEn": "Accelerations",
+          "descriptionIt": "Accelerazioni",
           "durationMin": 5
         }
       ],
@@ -1465,6 +1662,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1474,6 +1672,7 @@
           "kind": "segment",
           "description": "Accélérations",
           "descriptionEn": "Accelerations",
+          "descriptionIt": "Accelerazioni",
           "durationSec": 300,
           "role": "effort"
         }
@@ -1482,12 +1681,14 @@
         {
           "description": "3x2km à allure 10K avec 500m récup",
           "descriptionEn": "3x2km at 10K pace with 500m recovery",
+          "descriptionIt": "3x2km a ritmo 10K con 500m di recupero",
           "distanceM": 2000,
           "zone": "Z4",
           "pace": "Allure 10K",
           "repetitions": 3,
           "recovery": "500m footing Z1",
           "recoveryEn": "500m jog Z1",
+          "recoveryIt": "500m corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -1501,6 +1702,7 @@
               "kind": "segment",
               "description": "2km à allure 10K",
               "descriptionEn": "2km at 10K pace",
+              "descriptionIt": "2km a ritmo 10K",
               "distanceM": 2000,
               "zone": "Z4",
               "intensityType": "T",
@@ -1512,6 +1714,7 @@
               "kind": "segment",
               "description": "500m footing Z1",
               "descriptionEn": "500m jog Z1",
+              "descriptionIt": "500m corsetta Z1",
               "distanceM": 500,
               "zone": "Z1",
               "role": "recovery"
@@ -1523,6 +1726,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1533,6 +1737,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1549,6 +1754,11 @@
         "Each 2km at the same time",
         "Key session for 10K prep"
       ],
+      "coachingTipsIt": [
+        "Ritmo 10K = Z4 alta",
+        "Ogni 2km allo stesso crono",
+        "Seduta chiave per la preparazione 10K"
+      ],
       "commonMistakes": [
         "Confondre allure 10K et 5K",
         "Partir trop vite"
@@ -1556,6 +1766,10 @@
       "commonMistakesEn": [
         "Confusing 10K pace with 5K pace",
         "Starting too fast"
+      ],
+      "commonMistakesIt": [
+        "Confondere il ritmo 10K con il ritmo 5K",
+        "Partire troppo forte"
       ],
       "variationIds": [
         "RP-002"
@@ -1588,8 +1802,10 @@
       "id": "THR-011",
       "name": "Seuil vallonné",
       "nameEn": "Hilly Threshold",
+      "nameIt": "Soglia collinare",
       "description": "Travail au seuil sur terrain vallonné. Force + seuil.",
       "descriptionEn": "Threshold work on hilly terrain. Strength + threshold.",
+      "descriptionIt": "Lavoro alla soglia su percorso collinare. Forza + soglia.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -1607,6 +1823,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1617,6 +1834,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1627,6 +1845,7 @@
         {
           "description": "Seuil sur parcours vallonné, effort constant",
           "descriptionEn": "Threshold on hilly course, constant effort",
+          "descriptionIt": "Soglia su percorso collinare, sforzo costante",
           "durationMin": 20,
           "zone": "Z4",
           "intensityType": "T",
@@ -1640,6 +1859,7 @@
           "kind": "segment",
           "description": "Seuil sur parcours vallonné, effort constant",
           "descriptionEn": "Threshold on hilly course, constant effort",
+          "descriptionIt": "Soglia su percorso collinare, sforzo costante",
           "durationSec": 1200,
           "zone": "Z4",
           "intensityType": "T",
@@ -1653,6 +1873,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
@@ -1663,6 +1884,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 900,
           "zone": "Z1",
           "intensityType": "E",
@@ -1679,6 +1901,11 @@
         "Slightly harder on uphills",
         "Recover on downhills without slowing too much"
       ],
+      "coachingTipsIt": [
+        "Mantieni lo sforzo, non il ritmo",
+        "Leggermente più duro in salita",
+        "Recupera in discesa senza rallentare troppo"
+      ],
       "commonMistakes": [
         "Essayer de maintenir l'allure en montée",
         "Exploser sur les premières côtes"
@@ -1686,6 +1913,10 @@
       "commonMistakesEn": [
         "Trying to maintain pace on uphills",
         "Blowing up on the first hills"
+      ],
+      "commonMistakesIt": [
+        "Cercare di mantenere il ritmo in salita",
+        "Scoppiare sulle prime salite"
       ],
       "variationIds": [
         "THR-001"
@@ -1718,8 +1949,10 @@
       "id": "THR-012",
       "name": "Seuil sandwich long",
       "nameEn": "Long Sandwich Threshold",
+      "nameIt": "Soglia sandwich lunga",
       "description": "Seuil encadré par de longues portions d'endurance. Simule une course.",
       "descriptionEn": "Threshold sandwiched between long endurance portions. Simulates a race.",
+      "descriptionIt": "Soglia inserita tra due lunghe porzioni di corsa aerobica. Simula una gara.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -1737,6 +1970,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1747,6 +1981,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1757,6 +1992,7 @@
         {
           "description": "Endurance Z2",
           "descriptionEn": "Endurance Z2",
+          "descriptionIt": "Endurance Z2",
           "durationMin": 25,
           "zone": "Z2",
           "intensityType": "E"
@@ -1764,6 +2000,7 @@
         {
           "description": "Seuil Z4",
           "descriptionEn": "Threshold Z4",
+          "descriptionIt": "Soglia Z4",
           "durationMin": 15,
           "zone": "Z4",
           "intensityType": "T"
@@ -1771,6 +2008,7 @@
         {
           "description": "Endurance Z2",
           "descriptionEn": "Endurance Z2",
+          "descriptionIt": "Endurance Z2",
           "durationMin": 20,
           "zone": "Z2",
           "intensityType": "E"
@@ -1781,6 +2019,7 @@
           "kind": "segment",
           "description": "Endurance Z2",
           "descriptionEn": "Endurance Z2",
+          "descriptionIt": "Endurance Z2",
           "durationSec": 1500,
           "zone": "Z2",
           "intensityType": "E",
@@ -1790,6 +2029,7 @@
           "kind": "segment",
           "description": "Seuil Z4",
           "descriptionEn": "Threshold Z4",
+          "descriptionIt": "Soglia Z4",
           "durationSec": 900,
           "zone": "Z4",
           "intensityType": "T",
@@ -1799,6 +2039,7 @@
           "kind": "segment",
           "description": "Endurance Z2",
           "descriptionEn": "Endurance Z2",
+          "descriptionIt": "Endurance Z2",
           "durationSec": 1200,
           "zone": "Z2",
           "intensityType": "E",
@@ -1809,6 +2050,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -1819,6 +2061,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -1835,6 +2078,11 @@
         "Simulates real race conditions",
         "Long and demanding session"
       ],
+      "coachingTipsIt": [
+        "La soglia arriva su gambe affaticate",
+        "Simula le condizioni reali di gara",
+        "Seduta lunga e impegnativa"
+      ],
       "commonMistakes": [
         "Courir l'endurance trop vite",
         "Craquer sur le bloc seuil"
@@ -1842,6 +2090,10 @@
       "commonMistakesEn": [
         "Running endurance too fast",
         "Cracking on the threshold block"
+      ],
+      "commonMistakesIt": [
+        "Correre la parte aerobica troppo veloce",
+        "Cedere nel blocco alla soglia"
       ],
       "variationIds": [
         "THR-001",
@@ -1870,8 +2122,10 @@
       "id": "THR-013",
       "name": "Seuil descending",
       "nameEn": "Descending Threshold",
+      "nameIt": "Soglia decrescente",
       "description": "Intervalles au seuil de plus en plus courts : 10-8-6-4 min.",
       "descriptionEn": "Threshold intervals getting shorter: 10-8-6-4 min.",
+      "descriptionIt": "Ripetute alla soglia sempre più brevi: 10-8-6-4 min.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -1889,6 +2143,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -1899,6 +2154,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -1909,6 +2165,7 @@
         {
           "description": "10min seuil",
           "descriptionEn": "10min threshold",
+          "descriptionIt": "10min soglia",
           "durationMin": 10,
           "zone": "Z4",
           "intensityType": "T"
@@ -1916,6 +2173,7 @@
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -1923,6 +2181,7 @@
         {
           "description": "8min seuil",
           "descriptionEn": "8min threshold",
+          "descriptionIt": "8min soglia",
           "durationMin": 8,
           "zone": "Z4",
           "intensityType": "T"
@@ -1930,6 +2189,7 @@
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -1937,6 +2197,7 @@
         {
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
+          "descriptionIt": "6min soglia",
           "durationMin": 6,
           "zone": "Z4",
           "intensityType": "T"
@@ -1944,6 +2205,7 @@
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationMin": 2,
           "zone": "Z1",
           "intensityType": "E"
@@ -1951,6 +2213,7 @@
         {
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
+          "descriptionIt": "4min soglia",
           "durationMin": 4,
           "zone": "Z4",
           "intensityType": "T"
@@ -1961,6 +2224,7 @@
           "kind": "segment",
           "description": "10min seuil",
           "descriptionEn": "10min threshold",
+          "descriptionIt": "10min soglia",
           "durationSec": 600,
           "zone": "Z4",
           "intensityType": "T",
@@ -1970,6 +2234,7 @@
           "kind": "segment",
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -1979,6 +2244,7 @@
           "kind": "segment",
           "description": "8min seuil",
           "descriptionEn": "8min threshold",
+          "descriptionIt": "8min soglia",
           "durationSec": 480,
           "zone": "Z4",
           "intensityType": "T",
@@ -1988,6 +2254,7 @@
           "kind": "segment",
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -1997,6 +2264,7 @@
           "kind": "segment",
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
+          "descriptionIt": "6min soglia",
           "durationSec": 360,
           "zone": "Z4",
           "intensityType": "T",
@@ -2006,6 +2274,7 @@
           "kind": "segment",
           "description": "Récup",
           "descriptionEn": "Recovery",
+          "descriptionIt": "Recupero",
           "durationSec": 120,
           "zone": "Z1",
           "intensityType": "E",
@@ -2015,6 +2284,7 @@
           "kind": "segment",
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
+          "descriptionIt": "4min soglia",
           "durationSec": 240,
           "zone": "Z4",
           "intensityType": "T",
@@ -2025,6 +2295,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2035,6 +2306,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2051,6 +2323,11 @@
         "Last blocks can touch high Z4",
         "Finish having given everything"
       ],
+      "coachingTipsIt": [
+        "Ogni blocco leggermente più veloce",
+        "Gli ultimi blocchi possono toccare la Z4 alta",
+        "Finire avendo dato tutto"
+      ],
       "commonMistakes": [
         "Démarrer trop vite le premier bloc",
         "Ne pas accélérer sur les derniers blocs"
@@ -2058,6 +2335,10 @@
       "commonMistakesEn": [
         "Starting the first block too fast",
         "Not accelerating on the final blocks"
+      ],
+      "commonMistakesIt": [
+        "Partire troppo forte nel primo blocco",
+        "Non accelerare negli ultimi blocchi"
       ],
       "variationIds": [
         "THR-002",
@@ -2085,8 +2366,10 @@
       "id": "THR-014",
       "name": "Seuil en duo",
       "nameEn": "Duo Threshold",
+      "nameIt": "Soglia in coppia",
       "description": "Travail au seuil avec partenaire, relais toutes les 2-3 minutes.",
       "descriptionEn": "Threshold work with a partner, relay every 2-3 minutes.",
+      "descriptionIt": "Lavoro alla soglia con un compagno, cambio ogni 2-3 minuti.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -2104,6 +2387,7 @@
         {
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
+          "descriptionIt": "Corsa lenta insieme",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2114,6 +2398,7 @@
           "kind": "segment",
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
+          "descriptionIt": "Corsa lenta insieme",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2124,6 +2409,7 @@
         {
           "description": "Seuil en relais (2min devant chacun)",
           "descriptionEn": "Threshold relay (2min leading each)",
+          "descriptionIt": "Soglia a staffetta (2min in testa ciascuno)",
           "durationMin": 20,
           "zone": "Z4",
           "intensityType": "T"
@@ -2134,6 +2420,7 @@
           "kind": "segment",
           "description": "Seuil en relais (2min devant chacun)",
           "descriptionEn": "Threshold relay (2min leading each)",
+          "descriptionIt": "Soglia a staffetta (2min in testa ciascuno)",
           "durationSec": 1200,
           "zone": "Z4",
           "intensityType": "T",
@@ -2144,6 +2431,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2154,6 +2442,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2170,6 +2459,11 @@
         "Find a partner of similar level",
         "Communicate for transitions"
       ],
+      "coachingTipsIt": [
+        "Stare in scia aiuta a mantenere il ritmo",
+        "Trova un compagno di livello simile",
+        "Comunicate per i cambi"
+      ],
       "commonMistakes": [
         "Partenaire trop rapide ou trop lent",
         "Accélérer quand on passe devant"
@@ -2177,6 +2471,10 @@
       "commonMistakesEn": [
         "Partner too fast or too slow",
         "Accelerating when taking the lead"
+      ],
+      "commonMistakesIt": [
+        "Compagno troppo veloce o troppo lento",
+        "Accelerare quando si passa in testa"
       ],
       "variationIds": [
         "THR-002"
@@ -2205,8 +2503,10 @@
       "id": "THR-015",
       "name": "Seuil pre-race",
       "nameEn": "Pre-Race Threshold",
+      "nameIt": "Soglia pre-gara",
       "description": "Rappel seuil court en semaine de compétition. Maintient les sensations.",
       "descriptionEn": "Short threshold reminder during race week. Maintains feel.",
+      "descriptionIt": "Breve richiamo alla soglia nella settimana della gara. Mantiene le sensazioni.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "aerobic_threshold",
@@ -2224,6 +2524,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2234,6 +2535,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2244,11 +2546,13 @@
         {
           "description": "2x5min seuil avec 2min récup",
           "descriptionEn": "2x5min threshold with 2min recovery",
+          "descriptionIt": "2x5min soglia con 2min di recupero",
           "durationMin": 10,
           "zone": "Z4",
           "repetitions": 2,
           "recovery": "2min footing Z1",
           "recoveryEn": "2min jog Z1",
+          "recoveryIt": "2min corsetta Z1",
           "intensityType": "T"
         }
       ],
@@ -2262,6 +2566,7 @@
               "kind": "segment",
               "description": "5min seuil",
               "descriptionEn": "5min threshold",
+              "descriptionIt": "5min soglia",
               "durationSec": 600,
               "zone": "Z4",
               "intensityType": "T",
@@ -2273,6 +2578,7 @@
               "kind": "segment",
               "description": "2min footing Z1",
               "descriptionEn": "2min jog Z1",
+              "descriptionIt": "2min corsetta Z1",
               "durationSec": 120,
               "zone": "Z1",
               "role": "recovery"
@@ -2284,6 +2590,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2294,6 +2601,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2310,6 +2618,11 @@
         "Ideal on race day -4 or -5",
         "Finish fresh and confident"
       ],
+      "coachingTipsIt": [
+        "Solo un richiamo, non una seduta dura",
+        "Ideale a -4 o -5 giorni dalla gara",
+        "Finisci fresco e fiducioso"
+      ],
       "commonMistakes": [
         "En faire trop en semaine de course",
         "Courir plus vite que l'allure seuil"
@@ -2317,6 +2630,10 @@
       "commonMistakesEn": [
         "Doing too much during race week",
         "Running faster than threshold pace"
+      ],
+      "commonMistakesIt": [
+        "Fare troppo nella settimana della gara",
+        "Correre più veloce del ritmo soglia"
       ],
       "variationIds": [
         "THR-002"
@@ -2349,8 +2666,10 @@
       "id": "THR-016",
       "name": "Double seuil norvegien",
       "nameEn": "Norwegian Double Threshold",
+      "nameIt": "Doppia soglia norvegese",
       "description": "Deux séances seuil le même jour (matin + soir). Méthode norvégienne popularisée par les frères Ingebrigtsen. Stimule fortement les adaptations au seuil.",
       "descriptionEn": "Two threshold sessions on the same day (morning + evening). Norwegian method popularized by the Ingebrigtsen brothers. Strongly stimulates threshold adaptations.",
+      "descriptionIt": "Due sedute alla soglia nello stesso giorno (mattina + sera). Metodo norvegese reso popolare dai fratelli Ingebrigtsen. Stimola fortemente gli adattamenti alla soglia.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
@@ -2368,6 +2687,7 @@
         {
           "description": "Session matin: footing + gammes",
           "descriptionEn": "Morning session: jog + drills",
+          "descriptionIt": "Seduta mattutina: corsa lenta + andature",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2378,6 +2698,7 @@
           "kind": "segment",
           "description": "Session matin: footing + gammes",
           "descriptionEn": "Morning session: jog + drills",
+          "descriptionIt": "Seduta mattutina: corsa lenta + andature",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2388,25 +2709,30 @@
         {
           "description": "Matin: 5x6min seuil avec 60s récup",
           "descriptionEn": "Morning: 5x6min threshold with 60s recovery",
+          "descriptionIt": "Mattina: 5x6min soglia con 60s di recupero",
           "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
           "recovery": "60s footing Z1",
           "recoveryEn": "60s jog Z1",
+          "recoveryIt": "60s corsa lenta Z1",
           "intensityType": "T"
         },
         {
           "description": "--- 6-8h de repos ---",
-          "descriptionEn": "--- 6-8h rest ---"
+          "descriptionEn": "--- 6-8h rest ---",
+          "descriptionIt": "--- 6-8h di riposo ---"
         },
         {
           "description": "Soir: 5x6min seuil avec 60s récup",
           "descriptionEn": "Evening: 5x6min threshold with 60s recovery",
+          "descriptionIt": "Sera: 5x6min soglia con 60s di recupero",
           "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
           "recovery": "60s footing Z1",
           "recoveryEn": "60s jog Z1",
+          "recoveryIt": "60s corsa lenta Z1",
           "intensityType": "T"
         }
       ],
@@ -2420,6 +2746,7 @@
               "kind": "segment",
               "description": "Matin: 5x6min seuil",
               "descriptionEn": "Morning: 5x6min threshold",
+              "descriptionIt": "Mattina: 5x6min soglia",
               "durationSec": 360,
               "zone": "Z4",
               "intensityType": "T",
@@ -2431,6 +2758,7 @@
               "kind": "segment",
               "description": "60s footing Z1",
               "descriptionEn": "60s jog Z1",
+              "descriptionIt": "60s corsa lenta Z1",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -2441,6 +2769,7 @@
           "kind": "segment",
           "description": "--- 6-8h de repos ---",
           "descriptionEn": "--- 6-8h rest ---",
+          "descriptionIt": "--- 6-8h di riposo ---",
           "role": "transition"
         },
         {
@@ -2452,6 +2781,7 @@
               "kind": "segment",
               "description": "Soir: 5x6min seuil",
               "descriptionEn": "Evening: 5x6min threshold",
+              "descriptionIt": "Sera: 5x6min soglia",
               "durationSec": 360,
               "zone": "Z4",
               "intensityType": "T",
@@ -2463,6 +2793,7 @@
               "kind": "segment",
               "description": "60s footing Z1",
               "descriptionEn": "60s jog Z1",
+              "descriptionIt": "60s corsa lenta Z1",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -2474,6 +2805,7 @@
         {
           "description": "Footing de récupération (chaque session)",
           "descriptionEn": "Recovery jog (each session)",
+          "descriptionIt": "Corsa lenta di defaticamento (ogni seduta)",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2484,6 +2816,7 @@
           "kind": "segment",
           "description": "Footing de récupération (chaque session)",
           "descriptionEn": "Recovery jog (each session)",
+          "descriptionIt": "Corsa lenta di defaticamento (ogni seduta)",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2502,6 +2835,12 @@
         "Only 60s recovery between intervals",
         "Reserved for very experienced runners"
       ],
+      "coachingTipsIt": [
+        "Metodo utilizzato dai runner norvegesi d'élite",
+        "Minimo 6 ore tra le due sedute",
+        "Solo 60s di recupero tra le ripetute",
+        "Riservata a runner molto esperti"
+      ],
       "commonMistakes": [
         "Sessions trop rapprochées",
         "Aller plus vite que le seuil",
@@ -2511,6 +2850,11 @@
         "Sessions too close together",
         "Going faster than threshold",
         "Lacking sleep/nutrition"
+      ],
+      "commonMistakesIt": [
+        "Sedute troppo ravvicinate tra loro",
+        "Andare più veloce della soglia",
+        "Trascurare sonno e nutrizione"
       ],
       "variationIds": [
         "THR-002",
@@ -2540,8 +2884,10 @@
       "id": "THR-017",
       "name": "Micro-intervalles Z3",
       "nameEn": "Z3 Micro-intervals",
+      "nameIt": "Micro-intervalli Z3",
       "description": "20-25x 45-60s à allure 10K avec 15-20s récup. Méthode norvégienne alternative. Accumule du temps à haute intensité avec peu de stress.",
       "descriptionEn": "20-25x 45-60s at 10K pace with 15-20s recovery. Alternative Norwegian method. Accumulates time at high intensity with little stress.",
+      "descriptionIt": "20-25x 45-60s a ritmo 10K con 15-20s di recupero. Metodo norvegese alternativo. Accumula tempo ad alta intensità con poco stress.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
@@ -2559,6 +2905,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2566,6 +2913,7 @@
         {
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationMin": 5
         }
       ],
@@ -2574,6 +2922,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2583,6 +2932,7 @@
           "kind": "segment",
           "description": "Gammes et accélérations",
           "descriptionEn": "Drills and accelerations",
+          "descriptionIt": "Andature e allunghi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -2591,10 +2941,12 @@
         {
           "description": "25x 50s allure 10K avec 15s récup",
           "descriptionEn": "25x 50s at 10K pace with 15s recovery",
+          "descriptionIt": "25x 50s a ritmo 10K con 15s di recupero",
           "zone": "Z4",
           "repetitions": 25,
           "recovery": "15s footing très lent",
           "recoveryEn": "15s very easy jog",
+          "recoveryIt": "15s corsa molto lenta",
           "intensityType": "T"
         }
       ],
@@ -2608,6 +2960,7 @@
               "kind": "segment",
               "description": "50s allure 10K",
               "descriptionEn": "50s at 10K pace",
+              "descriptionIt": "50s a ritmo 10K",
               "durationSec": 50,
               "zone": "Z4",
               "intensityType": "T",
@@ -2619,6 +2972,7 @@
               "kind": "segment",
               "description": "15s footing très lent",
               "descriptionEn": "15s very easy jog",
+              "descriptionIt": "15s corsa molto lenta",
               "durationSec": 15,
               "zone": "Z1",
               "role": "recovery"
@@ -2630,6 +2984,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2640,6 +2995,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2658,6 +3014,12 @@
         "20+ total minutes at target pace",
         "Less traumatic than continuous threshold"
       ],
+      "coachingTipsIt": [
+        "Il recupero ultra-breve mantiene elevato il carico metabolico",
+        "Ritmo 10K, non più veloce",
+        "20+ minuti totali al ritmo obiettivo",
+        "Meno traumatica rispetto alla soglia continua"
+      ],
       "commonMistakes": [
         "Aller plus vite que l'allure 10K",
         "Récupération trop longue",
@@ -2667,6 +3029,11 @@
         "Going faster than 10K pace",
         "Recovery too long",
         "Not enough repetitions"
+      ],
+      "commonMistakesIt": [
+        "Andare più veloce del ritmo 10K",
+        "Recupero troppo lungo",
+        "Troppo poche ripetute"
       ],
       "variationIds": [
         "THR-002",
@@ -2696,8 +3063,10 @@
       "id": "THR-018",
       "name": "Seuil guide lactate",
       "nameEn": "Lactate-Guided Threshold",
+      "nameIt": "Soglia guidata dal lattato",
       "description": "Séance seuil avec contrôle du lactate (2-4 mmol/L). Approche norvégienne basée sur la physiologie. Nécessite un analyseur de lactate portable.",
       "descriptionEn": "Threshold session with lactate monitoring (2-4 mmol/L). Norwegian approach based on physiology. Requires a portable lactate analyzer.",
+      "descriptionIt": "Seduta alla soglia con controllo del lattato (2-4 mmol/L). Approccio norvegese basato sulla fisiologia. Richiede un analizzatore di lattato portatile.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
@@ -2715,6 +3084,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2722,6 +3092,7 @@
         {
           "description": "Test lactate de base",
           "descriptionEn": "Baseline lactate test",
+          "descriptionIt": "Test del lattato basale",
           "durationMin": 2
         }
       ],
@@ -2730,6 +3101,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2739,6 +3111,7 @@
           "kind": "segment",
           "description": "Test lactate de base",
           "descriptionEn": "Baseline lactate test",
+          "descriptionIt": "Test del lattato basale",
           "durationSec": 120,
           "role": "effort"
         }
@@ -2747,16 +3120,19 @@
         {
           "description": "5x6min seuil en maintenant lactate 2-4 mmol/L",
           "descriptionEn": "5x6min threshold maintaining lactate 2-4 mmol/L",
+          "descriptionIt": "5x6min soglia mantenendo il lattato a 2-4 mmol/L",
           "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
           "recovery": "60s + mesure lactate",
           "recoveryEn": "60s + lactate measurement",
+          "recoveryIt": "60s + misurazione lattato",
           "intensityType": "T"
         },
         {
           "description": "Ajustez l'allure selon les mesures",
           "descriptionEn": "Adjust pace based on readings",
+          "descriptionIt": "Regola il ritmo in base alle misurazioni",
           "zone": "Z4"
         }
       ],
@@ -2770,6 +3146,7 @@
               "kind": "segment",
               "description": "6min seuil en maintenant lactate 2-4 mmol/L",
               "descriptionEn": "6min threshold maintaining lactate 2-4 mmol/L",
+              "descriptionIt": "6min soglia mantenendo il lattato a 2-4 mmol/L",
               "durationSec": 360,
               "zone": "Z4",
               "intensityType": "T",
@@ -2781,6 +3158,7 @@
               "kind": "segment",
               "description": "60s + mesure lactate",
               "descriptionEn": "60s + lactate measurement",
+              "descriptionIt": "60s + misurazione lattato",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -2791,6 +3169,7 @@
           "kind": "segment",
           "description": "Ajustez l'allure selon les mesures",
           "descriptionEn": "Adjust pace based on readings",
+          "descriptionIt": "Regola il ritmo in base alle misurazioni",
           "zone": "Z4",
           "role": "effort"
         }
@@ -2799,6 +3178,7 @@
         {
           "description": "Footing de récupération + mesure finale",
           "descriptionEn": "Recovery jog + final measurement",
+          "descriptionIt": "Corsa lenta di recupero + misurazione finale",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2809,6 +3189,7 @@
           "kind": "segment",
           "description": "Footing de récupération + mesure finale",
           "descriptionEn": "Recovery jog + final measurement",
+          "descriptionIt": "Corsa lenta di recupero + misurazione finale",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2827,6 +3208,12 @@
         "Norwegians often target 3-4 mmol/L",
         "Requires specific equipment (Lactate Pro, etc.)"
       ],
+      "coachingTipsIt": [
+        "Obiettivo: lattato tra 2 e 4 mmol/L",
+        "Regola il ritmo in tempo reale",
+        "I norvegesi puntano spesso a 3-4 mmol/L",
+        "Richiede attrezzatura specifica (Lactate Pro, ecc.)"
+      ],
       "commonMistakes": [
         "Ne pas avoir d'analyseur de lactate",
         "Ignorer les mesures et courir trop vite",
@@ -2836,6 +3223,11 @@
         "Not having a lactate analyzer",
         "Ignoring readings and running too fast",
         "Taking measurements too frequently"
+      ],
+      "commonMistakesIt": [
+        "Non avere un analizzatore di lattato",
+        "Ignorare le misurazioni e correre troppo forte",
+        "Effettuare le misurazioni troppo frequentemente"
       ],
       "variationIds": [
         "THR-016",
@@ -2866,8 +3258,10 @@
       "id": "THR-019",
       "name": "Seuil découverte",
       "nameEn": "Threshold Introduction",
+      "nameIt": "Introduzione alla soglia",
       "description": "Introduction au travail au seuil pour les débutants. Trois répétitions de 5 minutes en Z4 avec récupération complète.",
       "descriptionEn": "Introduction to threshold work for beginners. Three 5-minute repetitions in Z4 with complete recovery.",
+      "descriptionIt": "Introduzione al lavoro alla soglia per principianti. Tre ripetute da 5 minuti in Z4 con recupero completo.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
@@ -2885,6 +3279,7 @@
         {
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 10,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -2892,6 +3287,7 @@
         {
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -2900,6 +3296,7 @@
           "kind": "segment",
           "description": "Footing lent progressif",
           "descriptionEn": "Slow progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 600,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -2909,6 +3306,7 @@
           "kind": "segment",
           "description": "Étirements dynamiques et 3x accélérations progressives",
           "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "descriptionIt": "Stretching dinamico e 3x allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -2917,11 +3315,13 @@
         {
           "description": "3x 5min au seuil (Z4) / 3min récup footing",
           "descriptionEn": "3x 5min at threshold (Z4) / 3min recovery jog",
+          "descriptionIt": "3x 5min alla soglia (Z4) / 3min recupero in corsa lenta",
           "durationMin": 5,
           "zone": "Z4",
           "repetitions": 3,
           "recovery": "3min footing Z1",
           "recoveryEn": "3min jog Z1",
+          "recoveryIt": "3min corsa lenta Z1",
           "intensityType": "T"
         }
       ],
@@ -2935,6 +3335,7 @@
               "kind": "segment",
               "description": "5min au seuil (Z4)",
               "descriptionEn": "5min at threshold (Z4)",
+              "descriptionIt": "5min alla soglia (Z4)",
               "durationSec": 300,
               "zone": "Z4",
               "intensityType": "T",
@@ -2946,6 +3347,7 @@
               "kind": "segment",
               "description": "3min footing Z1",
               "descriptionEn": "3min jog Z1",
+              "descriptionIt": "3min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -2957,6 +3359,7 @@
         {
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -2967,6 +3370,7 @@
           "kind": "segment",
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
+          "descriptionIt": "Corsa di recupero e stretching",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -2985,6 +3389,12 @@
         "Stepping-stone toward continuous threshold",
         "Start with 3 repetitions then add one per week"
       ],
+      "coachingTipsIt": [
+        "Z4 = sforzo intenso ma sostenibile per 5 minuti",
+        "Il recupero di 3min permette di recuperare bene tra gli sforzi",
+        "Seduta ponte verso la soglia continua",
+        "Inizia con 3 ripetute poi aggiungine una a settimana"
+      ],
       "commonMistakes": [
         "Courir en Z5 au lieu de Z4",
         "Partir trop vite sur la première répétition",
@@ -2994,6 +3404,11 @@
         "Running in Z5 instead of Z4",
         "Starting too fast on the first repetition",
         "Shortening the recovery"
+      ],
+      "commonMistakesIt": [
+        "Correre in Z5 invece che in Z4",
+        "Partire troppo forte nella prima ripetuta",
+        "Accorciare il recupero"
       ],
       "variationIds": [
         "THR-001",
@@ -3021,8 +3436,10 @@
       "id": "THR-020",
       "name": "Intervalles vitesse critique (CV Tinman)",
       "nameEn": "Critical Velocity Intervals (Tinman)",
+      "nameIt": "Ripetute a velocità critica (Tinman)",
       "description": "5-6 répétitions de 1 000 m à l'allure de vitesse critique (environ allure de course sur 30 minutes) avec 60-90 secondes de récupération en trot. Développe spécifiquement les fibres musculaires de Type IIa.",
       "descriptionEn": "5-6 repetitions of 1,000m at critical velocity pace (roughly 30-minute race pace) with 60-90 seconds jog recovery. Specifically develops Type IIa muscle fibers.",
+      "descriptionIt": "5-6 ripetute da 1.000m a velocità critica (circa il ritmo gara sui 30 minuti) con 60-90 secondi di recupero in corsa leggera. Sviluppa specificamente le fibre muscolari di Tipo IIa.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
@@ -3040,6 +3457,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3047,6 +3465,7 @@
         {
           "description": "Gammes et 3× accélérations progressives",
           "descriptionEn": "Drills and 3× progressive accelerations",
+          "descriptionIt": "Andature e 3× allunghi progressivi",
           "durationMin": 5
         }
       ],
@@ -3055,6 +3474,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3064,6 +3484,7 @@
           "kind": "segment",
           "description": "Gammes et 3× accélérations progressives",
           "descriptionEn": "Drills and 3× progressive accelerations",
+          "descriptionIt": "Andature e 3× allunghi progressivi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -3072,11 +3493,13 @@
         {
           "description": "6 × 1 000 m à l'allure CV (allure course ~30min), récup 60-90s trot",
           "descriptionEn": "6 × 1,000m at CV pace (~30min race pace), 60-90s jog recovery",
+          "descriptionIt": "6 × 1.000m a ritmo CV (ritmo gara ~30min), 60-90s recupero in corsa leggera",
           "zone": "Z4",
           "repetitions": 6,
           "distanceM": 1000,
           "recovery": "60-90s trot léger",
           "recoveryEn": "60-90s light jog",
+          "recoveryIt": "60-90s corsa leggera",
           "intensityType": "T"
         }
       ],
@@ -3090,6 +3513,7 @@
               "kind": "segment",
               "description": "1 000 m à l'allure CV (allure course ~30min)",
               "descriptionEn": "1,000m at CV pace (~30min race pace), 60-90s jog recovery",
+              "descriptionIt": "1.000m a ritmo CV (ritmo gara ~30min), 60-90s recupero in corsa leggera",
               "distanceM": 1000,
               "zone": "Z4",
               "intensityType": "T",
@@ -3101,6 +3525,7 @@
               "kind": "segment",
               "description": "60-90s trot léger",
               "descriptionEn": "60-90s light jog",
+              "descriptionIt": "60-90s corsa leggera",
               "durationSec": 60,
               "zone": "Z1",
               "role": "recovery"
@@ -3112,6 +3537,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3122,6 +3548,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3140,6 +3567,12 @@
         "All repetitions should be at the same pace, no pace progression",
         "If you don't know your CV, use your 8-10K pace as an approximation"
       ],
+      "coachingTipsIt": [
+        "Il ritmo CV si colloca tra soglia e VO2max, circa il tuo ritmo gara sui 30 minuti",
+        "Il recupero breve (60-90s) è volutamente insufficiente per evitare l'esaurimento di D'",
+        "Tutte le ripetute devono essere allo stesso ritmo, nessuna progressione",
+        "Se non conosci la tua CV, usa il ritmo 8-10K come approssimazione"
+      ],
       "commonMistakes": [
         "Courir les répétitions à allure VMA au lieu de l'allure CV, plus modérée",
         "Allonger la récupération au-delà de 90 secondes",
@@ -3149,6 +3582,11 @@
         "Running repetitions at VO2max pace instead of the more moderate CV pace",
         "Extending recovery beyond 90 seconds",
         "Accelerating on the last repetitions instead of maintaining a constant pace"
+      ],
+      "commonMistakesIt": [
+        "Correre le ripetute a ritmo VO2max invece del ritmo CV più moderato",
+        "Allungare il recupero oltre i 90 secondi",
+        "Accelerare nelle ultime ripetute invece di mantenere un ritmo costante"
       ],
       "variationIds": [
         "THR-010",
@@ -3179,8 +3617,10 @@
       "id": "THR-021",
       "name": "Sur/sous-seuil (Over/Under)",
       "nameEn": "Over/Under Threshold Intervals",
+      "nameIt": "Soglia Over/Under",
       "description": "3 blocs de 12 minutes alternant 2 minutes à 105% de l'allure seuil et 2 minutes à 95% de l'allure seuil, avec 3 minutes de récupération entre les blocs. Entraîne le cycle production-résorption du lactate sans jamais descendre sous le seuil.",
       "descriptionEn": "3 blocks of 12 minutes alternating 2 minutes at 105% of threshold pace and 2 minutes at 95% of threshold pace, with 3 minutes recovery between blocks. Trains the lactate production-clearance cycle without ever dropping below threshold.",
+      "descriptionIt": "3 blocchi da 12 minuti alternando 2 minuti al 105% del ritmo soglia e 2 minuti al 95% del ritmo soglia, con 3 minuti di recupero tra i blocchi. Allena il ciclo produzione-smaltimento del lattato senza mai scendere sotto soglia.",
       "category": "threshold",
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
@@ -3198,6 +3638,7 @@
         {
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationMin": 15,
           "zone": "Z1-Z2",
           "intensityType": "E"
@@ -3205,6 +3646,7 @@
         {
           "description": "Gammes et 3× accélérations",
           "descriptionEn": "Drills and 3× accelerations",
+          "descriptionIt": "Andature e 3× allunghi",
           "durationMin": 5
         }
       ],
@@ -3213,6 +3655,7 @@
           "kind": "segment",
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
+          "descriptionIt": "Corsa lenta progressiva",
           "durationSec": 900,
           "zone": "Z1-Z2",
           "intensityType": "E",
@@ -3222,6 +3665,7 @@
           "kind": "segment",
           "description": "Gammes et 3× accélérations",
           "descriptionEn": "Drills and 3× accelerations",
+          "descriptionIt": "Andature e 3× allunghi",
           "durationSec": 300,
           "role": "effort"
         }
@@ -3230,11 +3674,13 @@
         {
           "description": "3 × 12min : alternance 2min à 105% allure seuil (Z4 haut) / 2min à 95% allure seuil (Z4 bas). Récup 3min trot Z1 entre les blocs",
           "descriptionEn": "3 × 12min: alternating 2min at 105% threshold pace (high Z4) / 2min at 95% threshold pace (low Z4). 3min jog Z1 recovery between blocks",
+          "descriptionIt": "3 × 12min: alternanza 2min al 105% ritmo soglia (Z4 alta) / 2min al 95% ritmo soglia (Z4 bassa). Recupero 3min corsa leggera Z1 tra i blocchi",
           "zone": "Z4",
           "repetitions": 3,
           "durationMin": 12,
           "recovery": "3min trot Z1",
           "recoveryEn": "3min jog Z1",
+          "recoveryIt": "3min corsa lenta Z1",
           "intensityType": "T"
         }
       ],
@@ -3248,6 +3694,7 @@
               "kind": "segment",
               "description": "12min : alternance 2min à 105% allure seuil (Z4 haut)",
               "descriptionEn": "12min: alternating 2min at 105% threshold pace (high Z4)",
+              "descriptionIt": "12min: alternanza 2min al 105% ritmo soglia (Z4 alta)",
               "durationSec": 720,
               "zone": "Z4",
               "intensityType": "T",
@@ -3259,6 +3706,7 @@
               "kind": "segment",
               "description": "3min trot Z1",
               "descriptionEn": "3min jog Z1",
+              "descriptionIt": "3min corsa lenta Z1",
               "durationSec": 180,
               "zone": "Z1",
               "role": "recovery"
@@ -3270,6 +3718,7 @@
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
@@ -3280,6 +3729,7 @@
           "kind": "segment",
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
+          "descriptionIt": "Corsa di recupero",
           "durationSec": 600,
           "zone": "Z1",
           "intensityType": "E",
@@ -3298,6 +3748,12 @@
         "Use GPS or a watch to precisely control paces ±5%",
         "Difficulty increases block after block, this is normal and intentional"
       ],
+      "coachingTipsIt": [
+        "Le fasi 'under' al 95% della soglia NON sono recupero, resti sotto carico",
+        "Le fasi 'over' al 105% della soglia devono inondare il sistema di lattato che le fasi 'under' smaltiranno",
+        "Usa il GPS o l'orologio per controllare con precisione i ritmi ±5%",
+        "La difficoltà aumenta blocco dopo blocco, è normale e voluto"
+      ],
       "commonMistakes": [
         "Ralentir trop pendant les phases sous en les traitant comme de la récupération",
         "Dépasser 110% du seuil pendant les phases sur, transformant la séance en VMA",
@@ -3307,6 +3763,11 @@
         "Slowing too much during 'under' phases by treating them as recovery",
         "Exceeding 110% of threshold during 'over' phases, turning the session into VO2max work",
         "Not respecting the quick transitions between 'over' and 'under' phases"
+      ],
+      "commonMistakesIt": [
+        "Rallentare troppo durante le fasi 'under' trattandole come recupero",
+        "Superare il 110% della soglia durante le fasi 'over', trasformando la seduta in lavoro VO2max",
+        "Non rispettare le transizioni rapide tra le fasi 'over' e 'under'"
       ],
       "variationIds": [
         "THR-008",

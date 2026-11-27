@@ -4,7 +4,7 @@ import { Check } from "@/components/icons";
 import { Stamp } from "@/components/ui/stamp";
 import { useJustChanged } from "@/hooks/useJustChanged";
 import { useWakeLock } from "@/hooks/useWakeLock";
-import { usePickLang } from "@/lib/i18n-utils";
+import { getDateLocale, usePickLang } from "@/lib/i18n-utils";
 import { formatPaceDisplay } from "@/lib/splits";
 import type { RacePlan } from "@/lib/raceSimulator";
 import { dayState, dayStepsFromPlan, hmToMinutes, isRaceToday, minutesToHm, type DayStep } from "@/lib/raceDay";
@@ -53,7 +53,7 @@ export function RaceDayNow({
   done: Record<string, boolean>;
   onToggleDone: (key: string) => void;
 }) {
-  const { t, i18n } = useTranslation("simulator");
+  const { t } = useTranslation("simulator");
   const pick = usePickLang();
   const steps = useMemo(() => dayStepsFromPlan(plan), [plan]);
   const todayIso = isoDateOnly(new Date());
@@ -110,7 +110,7 @@ export function RaceDayNow({
 
   const days = raceDate ? daysBetween(todayIso, raceDate) : undefined;
   const raceDayLabel = raceDate
-    ? new Date(`${raceDate}T12:00:00`).toLocaleDateString(i18n.language.startsWith("en") ? "en-GB" : "fr-FR", {
+    ? new Date(`${raceDate}T12:00:00`).toLocaleDateString(getDateLocale(), {
         day: "numeric",
         month: "long",
       })

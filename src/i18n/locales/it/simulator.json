@@ -1,0 +1,297 @@
+{
+  "title": "Simulatore giorno gara",
+  "kicker": "Giorno gara",
+  "description": "Genera il tuo piano completo del giorno gara: passaggi chilometrici, nutrizione, riscaldamento, tabella oraria e checklist.",
+  "inputs": {
+    "title": "Parametri di gara",
+    "distance": "Distanza",
+    "targetTime": "Tempo obiettivo",
+    "startTime": "Ora di partenza",
+    "strategy": "Strategia di ritmo",
+    "weight": "Peso (facoltativo)",
+    "weightUnit": "kg",
+    "weightHint": "Usato per calibrare nutrizione e idratazione.",
+    "timeHint": "Digita le cifre, si sistemano da sole: 4500 vale 45:00, 33000 vale 3:30:00.",
+    "timeInvalid": "Questo tempo non si legge. Prova 4500 per 45:00.",
+    "timeReading": "Cioè {{time}} · {{pace}}",
+    "startInvalid": "Un orario di partenza va da 0:00 a 23:59, ad esempio 830 per le 8:30.",
+    "generate": "Genera il mio piano gara",
+    "regenerate": "Rigenera piano",
+    "adjust": "Adatta",
+    "close": "Nascondi parametri",
+    "custom": "Altra distanza",
+    "even": "Regolare",
+    "negative": "Negativo",
+    "positive": "Positivo",
+    "evenDesc": "Tutti i passaggi allo stesso ritmo.",
+    "negativeDesc": "Parti più piano, chiudi più forte.",
+    "positiveDesc": "Parti più forte, chiudi più piano.",
+    "unset": "da impostare"
+  },
+  "view": {
+    "label": "Modalità di visualizzazione",
+    "prepare": "Prepara",
+    "raceDay": "Giorno gara",
+    "prepareHint": "Il piano completo, da leggere con calma.",
+    "raceDayHint": "L'essenziale, in ordine, sull'orologio."
+  },
+  "nav": {
+    "title": "Il piano",
+    "expandAll": "Espandi tutto",
+    "collapseAll": "Comprimi tutto",
+    "timeline": "Orari",
+    "dayBefore": "Vigilia",
+    "packing": "Borsa",
+    "morning": "Mattino",
+    "warmup": "Riscaldamento",
+    "race": "La gara",
+    "nutrition": "Nutrizione",
+    "mental": "Mentale",
+    "recovery": "Dopo"
+  },
+  "sections": {
+    "dayBefore": "Vigilia (G-1)",
+    "packing": "Borsa e logistica",
+    "morning": "Mattino",
+    "warmup": "Riscaldamento",
+    "race": "La gara: strategia di ritmo",
+    "nutrition": "Nutrizione di gara",
+    "mental": "Appigli mentali",
+    "recovery": "Dopo la gara",
+    "timeline": "Tabella oraria",
+    "checklist": "Checklist",
+    "splits": "Tabella passaggi"
+  },
+  "labels": {
+    "wakeUp": "Sveglia",
+    "breakfast": "Colazione",
+    "warmupStart": "Inizio riscaldamento",
+    "raceStart": "Partenza",
+    "estimatedFinish": "Arrivo stimato",
+    "targetPace": "Ritmo obiettivo",
+    "perKm": "/km",
+    "km": "km",
+    "total": "Totale",
+    "split": "Parziale",
+    "pace": "Ritmo",
+    "cumulative": "Cumul.",
+    "dist": "Dist."
+  },
+  "summary": {
+    "startAt": "partenza {{time}}"
+  },
+  "timeline": {
+    "now": "Adesso"
+  },
+  "meta": {
+    "items_one": "{{count}} elemento",
+    "items_other": "{{count}} elementi",
+    "segments_one": "{{count}} segmento",
+    "segments_other": "{{count}} segmenti",
+    "carbs": "{{amount}} g di carboidrati",
+    "hydrationOnly": "solo idratazione"
+  },
+  "splits": {
+    "evenSummary": "Ritmo costante: {{pace}}, dalla partenza all'arrivo.",
+    "negativeSummary": "Acceleri: {{first}} al primo passaggio, {{last}} all'ultimo.",
+    "positiveSummary": "Rallenti: {{first}} al primo passaggio, {{last}} all'ultimo.",
+    "showTable": "Mostra dettaglio passaggio per passaggio",
+    "hideTable": "Nascondi dettaglio",
+    "curve": "Curva del ritmo",
+    "curveAria": "Curva del ritmo, da {{fastest}} a {{slowest}}",
+    "curveStart": "Partenza",
+    "curveEnd": "Arrivo",
+    "curveFaster": "↑ più veloce"
+  },
+  "warmup": {
+    "window": "{{start}} → {{end}}, {{minutes}} min totali"
+  },
+  "raceDay": {
+    "nextUp": "Prossima tappa",
+    "notToday": "Non è ancora il giorno della gara",
+    "startsAt": "Il piano inizia alle {{time}}.",
+    "inNow": "adesso",
+    "inMin": "tra {{min}} min",
+    "inH": "tra {{h}} h",
+    "inHM": "tra {{h}} h {{min}}"
+  },
+  "shared": {
+    "banner": "Questa simulazione è stata condivisa con te. Adatta i parametri alla tua gara.",
+    "invalid": "Questo link di condivisione non è valido o è incompleto."
+  },
+  "actions": {
+    "share": "Condividi",
+    "save": "Salva",
+    "exportPdf": "Esporta PDF",
+    "delete": "Elimina",
+    "load": "Carica",
+    "newSimulation": "Nuova simulazione",
+    "deleteMenu": "Elimina…",
+    "wristband": "Braccialetto"
+  },
+  "saved": {
+    "title": "Simulazioni salvate",
+    "empty": "Nessuna simulazione salvata",
+    "maxReached": "Raggiunto il massimo di 10 simulazioni",
+    "saveFailed": "La simulazione non è stata salvata.",
+    "actionsLabel": "Azioni per la simulazione {{name}}",
+    "done": "Simulazione salvata."
+  },
+  "nutrition": {
+    "carbsPerHour": "Carboidrati/ora",
+    "fluidPerHour": "Liquidi/ora",
+    "gelCount": "Numero di gel",
+    "gelFrequency": "Frequenza gel",
+    "everyMin": "ogni {{min}} min",
+    "totalCarbs": "{{total}} g totali",
+    "totalFluid": "{{total}} ml totali",
+    "noCarbs": "Su {{duration}} di sforzo, non serve alcun apporto di carboidrati. Concentrati sull'idratazione.",
+    "toThirst": "A sete, senza forzare.",
+    "durationMin": "{{min}} min",
+    "durationH": "{{h}} h",
+    "durationHM": "{{h}} h {{min}}",
+    "tips": "Consigli nutrizionali"
+  },
+  "empty": "Inserisci i parametri di gara per generare il tuo piano.",
+  "emptyState": {
+    "timeline": "La tabella oraria della giornata, dalla sveglia all'arrivo",
+    "splits": "Il tuo ritmo, passaggio per passaggio",
+    "nutrition": "Cosa bere e mangiare, e quando",
+    "mental": "Appigli mentali suddivisi per segmento"
+  },
+  "titleOther": "Una gara",
+  "descriptionShort": "Scegli una gara dal tuo piano o descrivine una: tutta la giornata si regola su di essa, dalla vigilia all'arrivo.",
+  "pick": {
+    "label": "Gara",
+    "fromPlan": "dal tuo piano",
+    "daysLeft_one": "tra {{count}} giorno",
+    "daysLeft_other": "tra {{count}} giorni",
+    "other": "Altra"
+  },
+  "band": {
+    "target": "Obiettivo",
+    "pace": "Ritmo",
+    "start": "Partenza",
+    "missing": "Imposta l'obiettivo e l'ora di partenza: tutta la giornata si regola su di essi.",
+    "saveFailed": "I tuoi tempi non sono stati salvati su questo dispositivo.",
+    "missingStart": "Imposta l'ora di partenza: tutta la giornata si regola su di essa."
+  },
+  "doc": {
+    "chapters": "Capitoli",
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "eve": {
+      "name": "La vigilia",
+      "dayBefore": "Vigilia",
+      "title": "Prepara la borsa, dormi",
+      "bag_one": "La borsa, {{count}} oggetto",
+      "bag_other": "La borsa, {{count}} oggetti"
+    },
+    "morning": {
+      "name": "Il mattino",
+      "title": "Mangia presto, arriva in anticipo",
+      "wake": "Sveglia",
+      "breakfast": "Colazione",
+      "venue": "Sul posto, ritiro pettorale, raggiungi la griglia"
+    },
+    "warmup": {
+      "name": "Riscaldamento",
+      "title_one": "{{minutes}} min, in {{count}} parte",
+      "title_other": "{{minutes}} min, in {{count}} parti",
+      "jog": "Corsa lenta",
+      "drills": "Andature: {{list}}",
+      "strides": "Da 4 a 6 allunghi a {{pace}}",
+      "rest": "In griglia, respirazione lenta",
+      "stridesTrail": "Da 4 a 6 allunghi, sciolti"
+    },
+    "race": {
+      "name": "La gara",
+      "titleTrail": "Obiettivo {{time}}",
+      "titleEven": "Tieni {{pace}} dall'inizio alla fine",
+      "titleSplit": "Parti a {{first}}, chiudi a {{last}}",
+      "chart": "Ritmo al chilometro, da {{first}} a {{last}}",
+      "halfway": "metà gara",
+      "trailSoon": "I ritmi al chilometro per il trail arriveranno: la salita decide tutto, quindi non sono ancora suddivisi.",
+      "fuel": "Rifornimento: {{carbs}} g di carboidrati all'ora, {{gels}} gel, uno ogni {{every}} min, e {{fluid}} ml d'acqua all'ora.",
+      "fuelWater": "Rifornimento: acqua a sete, nient'altro su {{minutes}} min.",
+      "passages_one": "Il passaggio",
+      "passages_other": "Tutti i {{count}} passaggi"
+    },
+    "after": {
+      "name": "Dopo",
+      "title": "Cammina, bevi, mangia",
+      "body": "Entro 2 h: carboidrati e proteine, almeno 200 ml d'acqua."
+    },
+    "table": {
+      "km": "Km",
+      "split": "Parziale",
+      "passage": "Trascorso",
+      "clock": "Ora"
+    },
+    "passagesTitle": "Passaggi · {{strategy}}",
+    "passagesHint": "Ora all'orologio a ogni passaggio, partenza alle {{time}}."
+  },
+  "day": {
+    "rehearsal": "Prova generale.",
+    "rehearsalIn_one": "La tua gara è domani. Scorri l'orario per vedere cosa ti aspetta; il {{date}}, l'orologio sarà quello vero.",
+    "rehearsalIn_other": "La tua gara è tra {{count}} giorni. Scorri l'orario per vedere cosa ti aspetta; il {{date}}, l'orologio sarà quello vero.",
+    "rehearsalNoDate": "Senza data di gara, l'orologio non è mai quello vero: scorri l'orario per percorrere la giornata.",
+    "itIs": "Sono le",
+    "now": "Adesso",
+    "next": "Dopo",
+    "notStarted": "La giornata non è iniziata",
+    "startsAt": "Inizia alle {{time}}.",
+    "left_one": "{{count}} min restante",
+    "left_other": "{{count}} min restanti",
+    "over": "è finita, bravo!",
+    "kmNow": "km {{km}} · punta a {{pace}}",
+    "passage": "passaggio km {{km}} alle {{time}}",
+    "done": "Segna fatto",
+    "doneDone": "Fatto",
+    "nothingElse": "Nient'altro oggi",
+    "inMin_one": "tra {{count}} min",
+    "inMin_other": "tra {{count}} min",
+    "list": "La giornata",
+    "lastSip": "Ultimo sorso verso le {{time}}.",
+    "steps": {
+      "wake": {
+        "title": "Sveglia",
+        "detail": "Un bicchiere d'acqua, alzati senza indugiare."
+      },
+      "breakfast": {
+        "title": "Colazione",
+        "detail": ""
+      },
+      "venue": {
+        "title": "Sul posto",
+        "detail": "Ritiro pettorale, trova la griglia e i bagni."
+      },
+      "jog": {
+        "title": "Corsa lenta",
+        "detail": "10 minuti facili per scaldarsi."
+      },
+      "drills": {
+        "title": "Andature",
+        "detail": ""
+      },
+      "strides": {
+        "title": "Allunghi",
+        "detail": "Da 4 a 6 accelerazioni di 80 m a {{pace}}, rientro al passo.",
+        "detailTrail": "Da 4 a 6 accelerazioni sciolte di 80 m, rientro al passo."
+      },
+      "rest": {
+        "title": "In griglia",
+        "detail": "Cammina, respira lentamente. Orologio pronto."
+      },
+      "race": {
+        "title": "La gara",
+        "detail": "Corri il tuo ritmo, non quello degli altri."
+      },
+      "finish": {
+        "title": "Arrivo",
+        "detail": "Cammina, stretching leggero, bevi. Mangia entro 2 ore."
+      }
+    }
+  },
+  "descriptionNoPlan": "Descrivi la tua gara: tutta la giornata si regola su di essa, dalla vigilia all'arrivo."
+}

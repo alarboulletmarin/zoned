@@ -9,19 +9,25 @@ export const allureSpecifique: PrebuiltWeek = {
   slug: "allure-specifique",
   name: "Allure spécifique",
   nameEn: "Race-Pace Week",
+  nameIt: "Settimana ritmo gara",
   description:
     "Deux séances à l'allure visée et une longue terminée plus vite qu'elle n'a commencé : la semaine qui apprend au corps le rythme du jour J.",
   descriptionEn:
     "Two sessions at goal pace and a long run finished faster than it started: the week that teaches the body race-day rhythm.",
+  descriptionIt:
+    "Due sedute al ritmo obiettivo e un lungo concluso più velocemente di come è iniziato: la settimana che insegna al corpo il ritmo del giorno della gara.",
   icon: "Target",
   difficulty: "intermediate",
   category: "peak",
   provenance: "Spécificité de l'entraînement, Daniels (Running Formula)",
   provenanceEn: "Training specificity, Daniels (Running Formula)",
+  provenanceIt: "Specificità dell'allenamento, Daniels (Running Formula)",
   whyItWorks:
     "Plus la course approche, plus l'entraînement doit ressembler à la course. Répéter l'allure visée sur des blocs longs installe le geste, la respiration et la gestion de l'effort à ce rythme précis, et la sortie longue progressive apprend à finir vite sur des jambes déjà entamées. C'est la spécificité qui prime ici, pas le volume ni l'intensité maximale.",
   whyItWorksEn:
     "The closer the race, the more training should resemble the race. Repeating goal pace over long blocks embeds the stride, the breathing and the effort management at that exact rhythm, while the progressive long run teaches you to finish fast on tired legs. Specificity is what matters here, not volume or top-end intensity.",
+  whyItWorksIt:
+    "Più la gara si avvicina, più l'allenamento deve assomigliare alla gara. Ripetere il ritmo obiettivo su blocchi lunghi consolida il gesto, la respirazione e la gestione dello sforzo a quella cadenza precisa, mentre il lungo progressivo insegna a chiudere forte con le gambe già affaticate. Qui conta la specificità, non il volume né l'intensità massima.",
   settings: {
     sessions: 5,
     targetVolumeH: 5,
@@ -39,6 +45,7 @@ export const allureSpecifique: PrebuiltWeek = {
       estimatedDurationMin: 50,
       why: "Endurance fondamentale : la seule séance sans contrainte d'allure de la semaine.",
       whyEn: "Fundamental endurance: the week's only session with no pace constraint.",
+      whyIt: "Fondo lento: l'unica seduta della settimana senza vincoli di ritmo.",
     },
     {
       dayOfWeek: 1,
@@ -48,6 +55,7 @@ export const allureSpecifique: PrebuiltWeek = {
       estimatedDurationMin: 70,
       why: "Allure semi-marathon : le bloc spécifique le plus long de la semaine, celui qui installe le rythme.",
       whyEn: "Half-marathon pace: the week's longest specific block, the one that sets the rhythm.",
+      whyIt: "Ritmo mezza maratona: il blocco specifico più lungo della settimana, quello che imposta il ritmo.",
     },
     {
       dayOfWeek: 3,
@@ -57,6 +65,7 @@ export const allureSpecifique: PrebuiltWeek = {
       estimatedDurationMin: 50,
       why: "Tempo marathon : deuxième rappel d'allure, plus court, avec un jour de repos avant et après.",
       whyEn: "Marathon tempo: a second, shorter pace reminder, with a rest day either side.",
+      whyIt: "Tempo maratona: secondo richiamo di ritmo, più breve, con un giorno di riposo prima e dopo.",
     },
     {
       dayOfWeek: 5,
@@ -66,6 +75,7 @@ export const allureSpecifique: PrebuiltWeek = {
       estimatedDurationMin: 100,
       why: "Sortie longue progressive : finir plus vite qu'on a commencé, exactement ce qu'on demandera le jour J.",
       whyEn: "Progressive long run: finish faster than you started, exactly what race day will ask for.",
+      whyIt: "Lungo progressivo: chiudere più forte di come si è partiti, esattamente ciò che richiederà il giorno della gara.",
     },
     {
       dayOfWeek: 6,
@@ -75,6 +85,7 @@ export const allureSpecifique: PrebuiltWeek = {
       estimatedDurationMin: 40,
       why: "Récupération nature au lendemain de la longue : jambes légères pour aborder la semaine suivante.",
       whyEn: "Nature recovery the day after the long run: light legs going into the next week.",
+      whyIt: "Recupero nella natura il giorno dopo il lungo: gambe leggere per affrontare la settimana successiva.",
     },
   ],
 };

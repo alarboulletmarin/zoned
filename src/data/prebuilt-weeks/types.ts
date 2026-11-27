@@ -22,6 +22,8 @@ export interface PrebuiltWeekSession {
   why: string;
   /** Why this session, one short line, EN. */
   whyEn: string;
+  /** Perché questa sessione, una breve riga, IT. */
+  whyIt?: string;
 }
 
 /**
@@ -35,8 +37,10 @@ export interface PrebuiltWeek {
   slug: string;
   name: string;
   nameEn: string;
+  nameIt?: string;
   description: string;
   descriptionEn: string;
+  descriptionIt?: string;
   /** A lucide icon name present in @/components/icons. */
   icon: string;
   difficulty: Difficulty;
@@ -44,10 +48,13 @@ export interface PrebuiltWeek {
   /** Short sourced attribution, e.g. "Polarisé 80/20, Stephen Seiler". */
   provenance?: string;
   provenanceEn?: string;
+  provenanceIt?: string;
   /** Pourquoi cette semaine, 1-3 sentences of pedagogy, FR. */
   whyItWorks: string;
   /** Why this week works, 1-3 sentences of pedagogy, EN. */
   whyItWorksEn: string;
+  /** Perché questa settimana funziona, 1-3 frasi di pedagogia, IT. */
+  whyItWorksIt?: string;
   /** Generator settings this week was authored around. */
   settings: WeekSettings;
   sessions: PrebuiltWeekSession[];

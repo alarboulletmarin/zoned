@@ -1,7 +1,7 @@
 import { DayPicker, type DayPickerProps } from "react-day-picker";
-import { fr, enGB } from "date-fns/locale";
+import { fr, enGB, it } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { useLanguage } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 import {
   ChevronDown,
@@ -15,8 +15,8 @@ type CalendarProps = DayPickerProps & {
 };
 
 function Calendar({ className, ...props }: CalendarProps) {
-  const isEn = useIsEnglish();
-  const locale = isEn ? enGB : fr;
+  const lang = useLanguage();
+  const locale = lang === "it" ? it : lang === "en" ? enGB : fr;
   const { t } = useTranslation("common");
 
   /* Les noms accessibles par défaut de react-day-picker sont en anglais

@@ -1,0 +1,493 @@
+{
+  "title": "Libreria delle sedute",
+  "catalogueIndex": "Indice di tutte le sedute",
+  "catalogue": "{{workouts}} sedute · {{categories}} categorie · {{disciplines}} discipline",
+  "catalogueFamilies": "{{workouts}} sedute · {{families}} famiglie",
+  "results": {
+    "all": "Sedute",
+    "forQuery": "Risultati per {{query}}",
+    "backToFamilies": "Tutte le famiglie"
+  },
+  "shortcuts": {
+    "label": "Scorciatoie",
+    "favorites": "Preferiti"
+  },
+  "families": {
+    "label": "Famiglie",
+    "all": "Tutte"
+  },
+  "index": {
+    "title": "Per famiglia",
+    "otherSports": "Altri sport",
+    "meta_one": "{{count}} seduta · {{duration}}",
+    "meta_other": "{{count}} sedute · {{duration}}",
+    "durationRange": "da {{min}} a {{max}}"
+  },
+  "durationBucket": {
+    "le30": "30 min o meno",
+    "30_45": "da 30 a 45 min",
+    "45_60": "da 45 a 60 min",
+    "60_90": "da 1 h a 1 h 30",
+    "gt90": "Oltre"
+  },
+  "subtitle": "{{count}} sedute di allenamento scientifiche",
+  "subtitleStrength": "{{count}} sedute di potenziamento",
+  "subtitleAll": "{{count}} sedute in totale",
+  "activityToggle": {
+    "all": "Tutto",
+    "running": "Corsa",
+    "cycling": "Ciclismo",
+    "swimming": "Nuoto",
+    "strength": "Potenziamento"
+  },
+  "activityToggleShort": {
+    "all": "Tutto",
+    "running": "Corsa",
+    "cycling": "Bici",
+    "swimming": "Nuoto",
+    "strength": "Forza"
+  },
+  "meta": {
+    "results_one": "{{count}} seduta",
+    "results_other": "{{count}} sedute"
+  },
+  "filters": {
+    "title": "Filtri",
+    "duration": "Durata",
+    "terrain": "Terreno",
+    "searchPlaceholder": "Cerca: “30/30”, “soglia”, “salite”…",
+    "searchLabel": "Cerca sedute",
+    "seeResults_one": "Mostra {{count}} seduta",
+    "seeResults_other": "Mostra {{count}} sedute",
+    "peak": "Picco d'intensità",
+    "sport": "Sport",
+    "level": "Livello"
+  },
+  "emptyState": {
+    "noResults": "Nessuna seduta trovata",
+    "noResultsDescription": "Prova a modificare i filtri per trovare delle sedute.",
+    "noFavorites": "Ancora nessun preferito",
+    "noFavoritesDescription": "Aggiungi delle sedute ai preferiti per ritrovarle facilmente qui.",
+    "filteredOut_one": "{{count}} filtro attivo esclude tutte le {{total}} sedute. Rimuoverlo le riporta tutte.",
+    "filteredOut_other": "{{count}} filtri attivi escludono tutte le {{total}} sedute. Rimuoverli le riporta tutte.",
+    "noMatchForQuery": "“{{query}}” non corrisponde a nessuna delle {{total}} sedute del catalogo."
+  },
+  "terrain": {
+    "no_track": "Senza pista",
+    "climb": "Con dislivello",
+    "no_hills": "Senza salite"
+  },
+  "categories": {
+    "recovery": "Recupero",
+    "endurance": "Resistenza",
+    "tempo": "Tempo",
+    "threshold": "Soglia",
+    "vma_intervals": "VO2max / VAM",
+    "long_run": "Lungo",
+    "hills": "Salite",
+    "fartlek": "Fartlek",
+    "race_pace": "Ritmo gara",
+    "mixed": "Misto",
+    "assessment": "Test",
+    "trail": "Trail"
+  },
+  "trail": {
+    "elevationGain": "+{{value}} m D+",
+    "elevationLoss": "-{{value}} m D-",
+    "verticalDensity": "{{value}} m/km",
+    "gradientAvg": "pendenza media {{value}}%",
+    "terrainType": {
+      "road": "Strada",
+      "trail_runnable": "Trail corribile",
+      "trail_technical": "Trail tecnico",
+      "mountain": "Montagna"
+    }
+  },
+  "zoneBar": {
+    "of": "profilo di {{name}}"
+  },
+  "row": {
+    "favorite": "Nei tuoi preferiti",
+    "track": "Pista"
+  },
+  "table": {
+    "session": "Seduta",
+    "profile": "Profilo",
+    "peak": "Picco",
+    "climb": "D+"
+  },
+  "difficulty": {
+    "beginner": "Principiante",
+    "intermediate": "Intermedio",
+    "advanced": "Avanzato",
+    "elite": "Élite"
+  },
+  "sort": {
+    "by": {
+      "duration": "Durata",
+      "intensity": "Intensità",
+      "level": "Livello"
+    },
+    "word": {
+      "duration": "durata",
+      "intensity": "intensità",
+      "level": "livello"
+    },
+    "cycle": "Ordinato per {{current}}. Tocca per ordinare per {{next}}"
+  },
+  "noResults": "Nessuna seduta corrisponde ai tuoi criteri",
+  "clearFilters": "Cancella filtri",
+  "clearSearch": "Cancella la ricerca",
+  "showMore_one": "Mostra l'altra seduta",
+  "showMore_other": "Mostra le altre {{count}}",
+  "showingCount": "{{visible}} su {{total}} sedute",
+  "draw": {
+    "title": "Estrai una seduta",
+    "subtitle": "Lascia che il caso scelga la tua prossima seduta dal catalogo",
+    "draw": "Estrai una seduta",
+    "redraw": "Estrai di nuovo",
+    "surprise": "Sorprendimi (tutto il catalogo)",
+    "spaceHint": "oppure premi la barra Spazio",
+    "start": "Inizia la seduta",
+    "viewDetail": "Vedi dettagli",
+    "filters": {
+      "title": "Filtri",
+      "discipline": "Disciplina",
+      "zone": "Obiettivo · zona target",
+      "maxDuration": "Durata massima",
+      "level": "Livello",
+      "reset": "Reimposta"
+    },
+    "zoneChips": {
+      "1": "Z1 · Recupero",
+      "2": "Z2 · Resistenza",
+      "3": "Z3 · Tempo",
+      "4": "Z4 · Soglia",
+      "5": "Z5 · VO₂max",
+      "6": "Z6 · Sprint"
+    },
+    "counter": {
+      "match_one": "seduta corrispondente",
+      "match_other": "sedute corrispondenti",
+      "short_one": "{{count}} seduta",
+      "short_other": "{{count}} sedute",
+      "ofTotal": "su {{total}} nel catalogo"
+    },
+    "metrics": {
+      "duration": "Durata",
+      "tss": "TSS",
+      "zone": "Zona",
+      "level": "Livello"
+    },
+    "recent": {
+      "title": "Estrazioni recenti",
+      "avoidRepeats": "Evita ripetizioni"
+    },
+    "placeholder": {
+      "title": "Pronto per estrarre?",
+      "description": "Imposta i filtri a sinistra, poi estrai una seduta o lascia decidere al caso."
+    },
+    "empty": {
+      "title": "Nessuna seduta corrisponde",
+      "description": "Allarga i filtri o reimpostali per estrarre di nuovo.",
+      "reset": "Reimposta filtri"
+    },
+    "toWeek": "Costruisci la mia settimana"
+  },
+  "weekly": {
+    "title": "La mia settimana",
+    "subtitle": "Componi una settimana polarizzata 80/20: da 3 a 6 sedute complementari, bilanciate tra facile e qualità.",
+    "presets": {
+      "title": "Settimane tipo",
+      "options": {
+        "recovery": "Recupero",
+        "base": "Base",
+        "build": "Costruzione",
+        "volume": "Volume",
+        "sharpening": "Rifinitura"
+      },
+      "label": "Scorciatoie"
+    },
+    "list": {
+      "title": "Le mie settimane",
+      "subtitle": "Le tue settimane di allenamento, generate o costruite a mano.",
+      "create": "Crea una settimana",
+      "empty": "Una settimana autonoma è fatta di sette giorni senza un piano alle spalle: una ripresa dolce, un blocco salite o il generatore in prova senza impegno. Arriva nella schermata Oggi appena esiste.",
+      "emptyAction": "Costruisci la mia settimana",
+      "emptyHint": "Esistono anche dieci settimane pronte all'uso.",
+      "emptyHintLink": "Vedi le settimane pronte",
+      "sessionsCount_one": "{{count}} seduta",
+      "sessionsCount_other": "{{count}} sedute",
+      "delete": "Elimina",
+      "filterAll": "Tutte",
+      "deleteTitle": "Eliminare questa settimana?",
+      "deleteConfirm": "\"{{name}}\" sarà eliminata definitivamente. Questa azione non può essere annullata.",
+      "import": "Importa",
+      "saved_one": "{{count}} settimana salvata",
+      "saved_other": "{{count}} settimane salvate",
+      "emptyTitle": "Nessuna settimana al momento",
+      "filteredOut": "Nessuna delle tue {{total}} settimane appartiene a questa categoria."
+    },
+    "category": {
+      "label": "Categoria",
+      "none": "Nessuna categoria"
+    },
+    "cockpit": {
+      "label": "Seguita",
+      "place": "Segui questa settimana",
+      "placed": "Seguita · settimana del {{date}}",
+      "thisWeek": "Questa settimana",
+      "nextWeek": "Prossima settimana",
+      "remove": "Smetti di seguire",
+      "listPlaced": "seguita · settimana del {{date}}",
+      "toastPlaced": "Seguita nella settimana del {{date}}",
+      "toastRemoved": "Non più seguita"
+    },
+    "merge": {
+      "into": "In {{plan}}, settimana {{n}}",
+      "add": "Aggiungi alle sedute del piano",
+      "replace": "Sostituisci le sedute del piano",
+      "done": "Aggiunta al piano. Annulla dalla pagina del piano.",
+      "failed": "Impossibile salvare l'aggiunta.",
+      "label": "{{week}} aggiunta alla settimana {{n}}"
+    },
+    "budget": {
+      "label": "Budget",
+      "none": "Nessun budget",
+      "hours": "{{hours}} h",
+      "set": "Budget {{hours}} h"
+    },
+    "share": {
+      "action": "Condividi"
+    },
+    "shared": {
+      "title": "Settimana condivisa",
+      "subtitle": "Qualcuno ha condiviso questa settimana con te: aggiungila per farla tua.",
+      "invalid": "Questo link di condivisione non è valido o è incompleto.",
+      "add": "Aggiungi alle mie settimane",
+      "unknownCount_one": "{{count}} seduta manca dal tuo catalogo e sarà saltata.",
+      "unknownCount_other": "{{count}} sedute mancano dal tuo catalogo e saranno saltate.",
+      "invalidHelp": "Il link è troncato o scaduto. Le tue settimane salvate sono intatte, chiedine uno nuovo.",
+      "unknownHelp": "Le altre {{count}} sedute verranno aggiunte così come sono."
+    },
+    "new": {
+      "title": "Crea una settimana",
+      "creating": "Preparazione della settimana…"
+    },
+    "prebuilt": {
+      "title": "Settimane pronte",
+      "subtitle": "Settimane tipo documentate: scegline una, capisci perché funziona, falla tua.",
+      "back": "Torna alla creazione",
+      "backToList": "Tutte le settimane pronte",
+      "available": "{{count}} settimane disponibili",
+      "notFound": "Settimana non trovata.",
+      "sessions": "{{count}} sedute",
+      "volume": "{{hours}} h",
+      "whyTitle": "Perché funziona questa settimana",
+      "whySessionTitle": "Perché queste sedute",
+      "useThisWeek": "Usa questa settimana",
+      "weekAdded": "Settimana aggiunta alle tue settimane",
+      "preview": "Anteprima settimana",
+      "category": {
+        "base": "Base",
+        "build": "Costruzione",
+        "peak": "Picco",
+        "recovery": "Recupero",
+        "sharpening": "Rifinitura"
+      },
+      "notFoundHelp": "Questo link punta a una settimana che non esiste più. Le tue settimane salvate sono intatte."
+    },
+    "generate": {
+      "title": "Genera la mia settimana",
+      "subtitle": "Regola le impostazioni, genera, poi crea la settimana per modificarla.",
+      "action": "Genera la mia settimana",
+      "actionShort": "Genera",
+      "busy": "Generazione…",
+      "hint": "Compone automaticamente 3-6 sedute equilibrate 80/20 dai tuoi parametri.",
+      "hintRegen": "Ricompone una nuova settimana dai parametri attuali.",
+      "create": "Crea settimana",
+      "namePlaceholder": "Nome settimana",
+      "defaultName": "La mia settimana",
+      "hintLocked_one": "{{count}} seduta bloccata sarà mantenuta, il resto viene ricomposto.",
+      "hintLocked_other": "{{count}} sedute bloccate saranno mantenute, il resto viene ricomposto."
+    },
+    "settings": {
+      "title": "Impostazioni",
+      "sessions": "Sedute",
+      "volume": "Volume obiettivo",
+      "quality": "Seduta di qualità",
+      "qualityOptions": {
+        "random": "Casuale",
+        "tempo": "Tempo",
+        "threshold": "Soglia",
+        "vo2vma": "VO₂ · VAM"
+      },
+      "disciplines": "Discipline",
+      "levels": "Livello",
+      "longRunDay": "Giorno del lungo",
+      "show": "Mostra impostazioni",
+      "hide": "Nascondi impostazioni",
+      "allDisciplines": "Tutte",
+      "allLevels": "Tutti"
+    },
+    "actions": {
+      "regenerate": "Rigenera",
+      "adjust": "Adatta",
+      "unlockAll": "Sblocca tutto",
+      "export": "Esporta settimana",
+      "exportIcs": "Calendario (.ics)",
+      "exportPdf": "Documento (.pdf)",
+      "exportJson": "Dati (.json)",
+      "save": "Salva settimana",
+      "addSession": "Aggiungi una seduta"
+    },
+    "table": {
+      "day": "Giorno",
+      "type": "Tipo",
+      "session": "Seduta",
+      "duration": "Durata",
+      "zone": "Zona"
+    },
+    "summary": {
+      "title": "Riepilogo settimana",
+      "sessions": "Sedute",
+      "volume": "Volume",
+      "load": "Carico",
+      "hard": "Sedute intense",
+      "polarisation": "Facile {{low}} % · Tempo {{mid}} % · Intenso {{high}} %",
+      "balanced": "Equilibrio 80/20",
+      "overBudget": "Oltre il budget di {{target}} h",
+      "details": "Dettagli",
+      "strip": "{{sessions}} sedute · {{hours}} h · {{tss}} TSS",
+      "stripBudget": "{{sessions}} sedute · {{hours}}/{{target}} h · {{tss}} TSS"
+    },
+    "gauge": {
+      "title": "Polarizzazione",
+      "easy": "Facile",
+      "tempo": "Tempo",
+      "intense": "Intenso",
+      "target": "Obiettivo 80 %",
+      "balanced": "Equilibrio 80/20",
+      "tooEasy": "Poca intensità",
+      "tooHard": "Troppa intensità",
+      "tooEasyHint": "Poca qualità questa settimana, aggiungi una seduta tempo/soglia per avvicinarti al ~20 %.",
+      "tooHardHint": "Molta intensità, aggiungi volume facile o alleggerisci una seduta dura.",
+      "tolerance": "Equilibrata tra {{min}} e {{max}} % di intensità"
+    },
+    "rhythm": {
+      "title": "Ritmo della settimana"
+    },
+    "daysShort": {
+      "0": "Lun",
+      "1": "Mar",
+      "2": "Mer",
+      "3": "Gio",
+      "4": "Ven",
+      "5": "Sab",
+      "6": "Dom"
+    },
+    "kinds": {
+      "easy": "Facile",
+      "quality": "Qualità",
+      "long": "Lungo",
+      "rest": "Riposo"
+    },
+    "slot": {
+      "lock": "Blocca",
+      "unlock": "Sblocca",
+      "reroll": "Cambia",
+      "moveUp": "Sposta su nel giorno",
+      "moveDown": "Sposta giù nel giorno",
+      "duplicate": "Duplica",
+      "viewDetail": "Vedi dettaglio",
+      "rest": "Giorno di riposo",
+      "lockedHint": "Bloccata: mantenuta alla rigenerazione",
+      "adjust": "Adatta la seduta",
+      "loose": "libera",
+      "fixed": "fissa"
+    },
+    "days": {
+      "0": "Lunedì",
+      "1": "Martedì",
+      "2": "Mercoledì",
+      "3": "Giovedì",
+      "4": "Venerdì",
+      "5": "Sabato",
+      "6": "Domenica"
+    },
+    "empty": {
+      "title": "Nessuna seduta corrisponde",
+      "description": "Allarga discipline o livelli, poi rigenera la settimana."
+    },
+    "saved": {
+      "title": "Settimane salvate",
+      "empty": "Nessuna settimana salvata.",
+      "restore": "Carica",
+      "duplicate": "Duplica",
+      "delete": "Elimina",
+      "copySuffix": "(copia)"
+    },
+    "toast": {
+      "sessionDuplicated": "Seduta duplicata · trascina la copia dove preferisci",
+      "saved": "Settimana salvata",
+      "exported": "Esportazione pronta",
+      "exportError": "Esportazione non riuscita",
+      "duplicateError": "La settimana non è stata duplicata.",
+      "saveFailed": "La settimana non è stata salvata.",
+      "importError": "Importazione non riuscita: file non valido",
+      "importNotWeek": "Questo file contiene un piano completo, non una settimana",
+      "rerollEmpty": "Nessun'altra seduta disponibile con questi parametri"
+    },
+    "boardHint": "Clicca una seduta per modificarla · trascinala per spostarla o rimuoverla",
+    "boardHintTouch": "Tocca una seduta per adattarla · trascinala per spostarla",
+    "card": {
+      "zone": "Zona {{zone}}"
+    },
+    "keySession": "Seduta chiave",
+    "sheet": {
+      "how": "Come conta",
+      "loose": "Libera",
+      "fixed": "Fissa",
+      "looseTitle": "A sensazione, tra {{min}} e {{max}} min",
+      "looseCounts": "La settimana conta {{minutes}} min, la metà dell'intervallo.",
+      "looseCountsKm": "La settimana conta {{minutes}} min, la metà dell'intervallo, e circa {{km}} km al tuo ritmo.",
+      "looseHint": "Fissa: imposti una durata e dei chilometri, ed è ciò che conta. È la forma di una settimana vissuta o condivisa.",
+      "fixedHint": "Libera: la seduta mantiene la sua forcella e si corre a sensazione. È la forma di una settimana tipo.",
+      "duration": "Durata",
+      "distance": "Distanza",
+      "distanceUnit": "km",
+      "distanceOptional": "facoltativa",
+      "view": "Vedi la seduta",
+      "move": "Sposta in un altro giorno",
+      "moveTo": "Sposta a…",
+      "remove": "Rimuovi dalla settimana",
+      "save": "Salva",
+      "cancel": "Annulla"
+    }
+  },
+  "practice": {
+    "label": "Disciplina",
+    "all": "Tutte"
+  },
+  "metaLine": {
+    "category": {
+      "recovery": "Seduta di recupero",
+      "endurance": "Seduta di resistenza",
+      "tempo": "Seduta tempo",
+      "threshold": "Seduta di soglia",
+      "vma_intervals": "Seduta VAM",
+      "long_run": "Uscita lunga",
+      "hills": "Seduta in salita",
+      "fartlek": "Fartlek",
+      "race_pace": "Seduta ritmo gara",
+      "mixed": "Seduta mista",
+      "assessment": "Test",
+      "trail": "Seduta trail"
+    },
+    "terrain": {
+      "flat": "Preferibile terreno pianeggiante",
+      "hills": "Salite richieste",
+      "track": "Pista richiesta"
+    }
+  }
+}

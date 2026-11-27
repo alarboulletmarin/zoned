@@ -26,7 +26,7 @@ import { ACTIVITY_STORAGE_SOFT_LIMIT, activitiesBetween } from "@/lib/activitySt
 import { summarizeActivities } from "@/lib/activityStats";
 import { focusSessionsBetween, pickTodayFocus } from "@/lib/cockpit";
 import { loadTodayComposition } from "@/lib/todayComposition";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { getDateLocale, useIsEnglish } from "@/lib/i18n-utils";
 import { buildWeekReview, calendarWeekRange } from "@/lib/weekReview";
 import {
   ACTIVITY_DISCIPLINE_META,
@@ -120,7 +120,7 @@ export function ActivitiesPage() {
     return Array.from(groups.entries()).map(([key, items]) => ({
       key,
       label: new Date(Number(key.slice(0, 4)), Number(key.slice(5, 7)) - 1, 1).toLocaleDateString(
-        isEn ? "en-GB" : "fr-FR",
+        getDateLocale(),
         { month: "long", year: "numeric" },
       ),
       items,

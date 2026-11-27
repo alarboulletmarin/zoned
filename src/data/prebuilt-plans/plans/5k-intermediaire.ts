@@ -5,8 +5,10 @@ export const plan5kIntermediaire: PrebuiltPlan = {
   "slug": "5k-intermediaire",
   "name": "5K intermédiaire",
   "nameEn": "5K Intermediate",
+  "nameIt": "5K intermedio",
   "description": "Plan de 10 semaines pour améliorer votre temps sur 5K. Séances de qualité incluses.",
   "descriptionEn": "10-week plan to improve your 5K time. Quality sessions included.",
+  "descriptionIt": "Piano di 10 settimane per migliorare il tuo tempo sui 5K. Sedute di qualità incluse.",
   "icon": "Zap",
   "difficulty": "intermediate",
   "raceDistance": "5K",
@@ -49,6 +51,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 30,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 30,
           "loadScore": 31.5,
           "paceNotes": [
@@ -57,7 +60,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 4.5
@@ -70,6 +74,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 49,
           "notes": "Allure vitesse : 4:16 - 4:26/km",
           "notesEn": "Repetition pace: 4:16 - 4:26/km",
+          "notesIt": "Ritmo ripetute: 4:16 - 4:26/km",
           "targetDurationMin": 62,
           "loadScore": 80.6,
           "paceNotes": [
@@ -78,7 +83,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.27,
               "paceMaxKm": 4.44,
               "description": "Allure vitesse",
-              "descriptionEn": "Repetition pace"
+              "descriptionEn": "Repetition pace",
+              "descriptionIt": "Ritmo ripetute"
             }
           ],
           "targetDistanceKm": 8
@@ -91,6 +97,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 33,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 33,
           "loadScore": 29.2,
           "paceNotes": [
@@ -99,7 +106,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 5
@@ -112,6 +120,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 64,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 7 km (~46 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 7 km (~46 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 7 km (~46 min)",
           "targetDurationMin": 46,
           "loadScore": 44.8,
           "paceNotes": [
@@ -120,7 +129,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 7
@@ -137,6 +147,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S1",
       "weekLabelEn": "W1",
+      "weekLabelIt": "S1",
       "targetKm": 25,
       "targetLongRunKm": 7,
       "weeklyLoadScore": 204
@@ -155,6 +166,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 49,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 49,
           "loadScore": 43.8,
           "paceNotes": [
@@ -163,7 +175,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 7.5
@@ -176,6 +189,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 38,
           "notes": "Allure seuil : 5:08 - 5:22/km\n5 répétitions",
           "notesEn": "Threshold pace: 5:08 - 5:22/km\n5 repetitions",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km\n5 ripetute",
           "targetDurationMin": 45,
           "loadScore": 58.5,
           "paceNotes": [
@@ -184,7 +198,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "scaledRepetitions": 5,
@@ -198,6 +213,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 23,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 23,
           "loadScore": 21.2,
           "paceNotes": [
@@ -206,14 +222,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 3.5
@@ -226,6 +244,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 71,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 8 km (~53 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 8 km (~53 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 8 km (~53 min)",
           "targetDurationMin": 53,
           "loadScore": 49.7,
           "paceNotes": [
@@ -234,14 +253,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 8
@@ -258,6 +279,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S2",
       "weekLabelEn": "W2",
+      "weekLabelIt": "S2",
       "targetKm": 25,
       "targetLongRunKm": 8,
       "weeklyLoadScore": 181
@@ -276,6 +298,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 30,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 30,
           "loadScore": 26.3,
           "paceNotes": [
@@ -284,14 +307,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 4.5
@@ -304,6 +329,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 48,
           "notes": "Allure vitesse : 4:16 - 4:26/km\n8 répétitions",
           "notesEn": "Repetition pace: 4:16 - 4:26/km\n8 repetitions",
+          "notesIt": "Ritmo ripetute: 4:16 - 4:26/km\n8 ripetute",
           "targetDurationMin": 54,
           "loadScore": 91.8,
           "paceNotes": [
@@ -312,7 +338,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.27,
               "paceMaxKm": 4.44,
               "description": "Allure vitesse",
-              "descriptionEn": "Repetition pace"
+              "descriptionEn": "Repetition pace",
+              "descriptionIt": "Ritmo ripetute"
             }
           ],
           "scaledRepetitions": 8,
@@ -326,6 +353,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 48,
           "notes": "Allure seuil : 5:08 - 5:22/km\n2 répétitions",
           "notesEn": "Threshold pace: 5:08 - 5:22/km\n2 repetitions",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km\n2 ripetute",
           "targetDurationMin": 56,
           "loadScore": 72.8,
           "paceNotes": [
@@ -334,7 +362,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "scaledRepetitions": 2,
@@ -348,6 +377,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 75,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 7 km (~46 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 7 km (~46 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 7 km (~46 min)",
           "targetDurationMin": 46,
           "loadScore": 52.5,
           "paceNotes": [
@@ -356,14 +386,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 7
@@ -380,6 +412,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S3",
       "weekLabelEn": "W3",
+      "weekLabelIt": "S3",
       "targetKm": 27,
       "targetLongRunKm": 7,
       "weeklyLoadScore": 267
@@ -398,6 +431,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 30,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 30,
           "loadScore": 21,
           "paceNotes": [
@@ -406,7 +440,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 4.5
@@ -419,6 +454,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 43,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 43,
           "loadScore": 45.5,
           "paceNotes": [
@@ -427,7 +463,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 6.5
@@ -440,6 +477,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 30,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 30,
           "loadScore": 27.3,
           "paceNotes": [
@@ -448,14 +486,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 4.5
@@ -468,6 +508,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 62,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 7 km (~44 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 7 km (~44 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 7 km (~44 min)",
           "targetDurationMin": 44,
           "loadScore": 43.4,
           "paceNotes": [
@@ -476,7 +517,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 7
@@ -493,6 +535,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
+      "weekLabelIt": "Settimana di scarico",
       "targetKm": 23,
       "targetLongRunKm": 7,
       "weeklyLoadScore": 147
@@ -511,6 +554,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 40,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 40,
           "loadScore": 33.6,
           "paceNotes": [
@@ -519,7 +563,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 6
@@ -532,6 +577,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 32,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 35,
           "loadScore": 59.5,
           "paceNotes": [
@@ -540,14 +586,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             },
             {
               "zone": "E",
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 5
@@ -560,6 +608,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 52,
           "notes": "Allure VMA : 4:37 - 4:52/km\n16 répétitions",
           "notesEn": "VO2max pace: 4:37 - 4:52/km\n16 repetitions",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km\n16 ripetute",
           "targetDurationMin": 61,
           "loadScore": 103.4,
           "paceNotes": [
@@ -568,7 +617,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "scaledRepetitions": 16,
@@ -582,6 +632,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 76,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 10.5 km (~69 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 10.5 km (~69 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 10.5 km (~69 min)",
           "targetDurationMin": 69,
           "loadScore": 53.2,
           "paceNotes": [
@@ -590,7 +641,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 10.5
@@ -607,6 +659,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S5",
       "weekLabelEn": "W5",
+      "weekLabelIt": "S5",
       "targetKm": 30,
       "targetLongRunKm": 10.5,
       "weeklyLoadScore": 262
@@ -625,6 +678,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 40,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 40,
           "loadScore": 31.5,
           "paceNotes": [
@@ -633,7 +687,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 6
@@ -646,6 +701,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 50,
           "notes": "Allure VMA : 4:37 - 4:52/km\n10 répétitions",
           "notesEn": "VO2max pace: 4:37 - 4:52/km\n10 repetitions",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km\n10 ripetute",
           "targetDurationMin": 56,
           "loadScore": 95.4,
           "paceNotes": [
@@ -654,7 +710,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "scaledRepetitions": 10,
@@ -668,6 +725,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 60,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 68,
           "loadScore": 87.9,
           "paceNotes": [
@@ -676,7 +734,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 10
@@ -689,6 +748,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 82,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 8.5 km (~56 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 8.5 km (~56 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 8.5 km (~56 min)",
           "targetDurationMin": 56,
           "loadScore": 57.4,
           "paceNotes": [
@@ -697,7 +757,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 8.5
@@ -714,6 +775,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S6",
       "weekLabelEn": "W6",
+      "weekLabelIt": "S6",
       "targetKm": 33,
       "targetLongRunKm": 8.5,
       "weeklyLoadScore": 313
@@ -732,6 +794,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 63,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 63,
           "loadScore": 47.5,
           "paceNotes": [
@@ -740,7 +803,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 9.5
@@ -753,6 +817,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 33,
           "notes": "Allure VMA : 4:37 - 4:52/km",
           "notesEn": "VO2max pace: 4:37 - 4:52/km",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km",
           "targetDurationMin": 34,
           "loadScore": 57.8,
           "paceNotes": [
@@ -761,7 +826,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "targetDistanceKm": 5.5
@@ -774,6 +840,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 53,
           "notes": "Allure seuil : 5:08 - 5:22/km\n2 répétitions",
           "notesEn": "Threshold pace: 5:08 - 5:22/km\n2 repetitions",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km\n2 ripetute",
           "targetDurationMin": 56,
           "loadScore": 72.8,
           "paceNotes": [
@@ -782,7 +849,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "scaledRepetitions": 2,
@@ -796,6 +864,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 11 km (~72 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 11 km (~72 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 11 km (~72 min)",
           "targetDurationMin": 72,
           "loadScore": 50.4,
           "paceNotes": [
@@ -804,7 +873,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -821,6 +891,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S7",
       "weekLabelEn": "W7",
+      "weekLabelIt": "S7",
       "targetKm": 35,
       "targetLongRunKm": 11,
       "weeklyLoadScore": 243
@@ -839,6 +910,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 33,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 33,
           "loadScore": 25,
           "paceNotes": [
@@ -847,7 +919,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 5
@@ -860,6 +933,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 52,
           "notes": "Allure seuil : 5:08 - 5:22/km\n3 répétitions",
           "notesEn": "Threshold pace: 5:08 - 5:22/km\n3 repetitions",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km\n3 ripetute",
           "targetDurationMin": 54,
           "loadScore": 70.2,
           "paceNotes": [
@@ -868,7 +942,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "scaledRepetitions": 3,
@@ -882,6 +957,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 65,
           "notes": "Allure VMA : 4:37 - 4:52/km\n16 répétitions",
           "notesEn": "VO2max pace: 4:37 - 4:52/km\n16 repetitions",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km\n16 ripetute",
           "targetDurationMin": 68,
           "loadScore": 115.6,
           "paceNotes": [
@@ -890,7 +966,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "scaledRepetitions": 16,
@@ -904,6 +981,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 85,
           "notes": "Allure seuil : 5:08 - 5:22/km\nSortie longue : 12.5 km (~82 min)",
           "notesEn": "Threshold pace: 5:08 - 5:22/km\nLong run: 12.5 km (~82 min)",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km\nLungo: 12.5 km (~82 min)",
           "targetDurationMin": 82,
           "loadScore": 59.5,
           "paceNotes": [
@@ -912,14 +990,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 12.5
@@ -936,6 +1016,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S8",
       "weekLabelEn": "W8",
+      "weekLabelIt": "S8",
       "targetKm": 37,
       "targetLongRunKm": 12.5,
       "weeklyLoadScore": 302
@@ -954,6 +1035,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 72,
           "loadScore": 51.3,
           "paceNotes": [
@@ -962,7 +1044,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -975,6 +1058,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 58,
           "notes": "Allure vitesse : 4:16 - 4:26/km\n15 répétitions",
           "notesEn": "Repetition pace: 4:16 - 4:26/km\n15 repetitions",
+          "notesIt": "Ritmo ripetute: 4:16 - 4:26/km\n15 ripetute",
           "targetDurationMin": 58,
           "loadScore": 98.6,
           "paceNotes": [
@@ -983,7 +1067,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.27,
               "paceMaxKm": 4.44,
               "description": "Allure vitesse",
-              "descriptionEn": "Repetition pace"
+              "descriptionEn": "Repetition pace",
+              "descriptionIt": "Ritmo ripetute"
             }
           ],
           "scaledRepetitions": 15,
@@ -997,6 +1082,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 34,
           "notes": "Allure VMA : 4:37 - 4:52/km",
           "notesEn": "VO2max pace: 4:37 - 4:52/km",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km",
           "targetDurationMin": 34,
           "loadScore": 57.8,
           "paceNotes": [
@@ -1005,7 +1091,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "targetDistanceKm": 5.5
@@ -1018,6 +1105,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 100,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 10.5 km (~69 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 10.5 km (~69 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 10.5 km (~69 min)",
           "targetDurationMin": 69,
           "loadScore": 70,
           "paceNotes": [
@@ -1026,14 +1114,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 10.5
@@ -1050,6 +1140,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "S9",
       "weekLabelEn": "W9",
+      "weekLabelIt": "S9",
       "targetKm": 37,
       "targetLongRunKm": 10.5,
       "weeklyLoadScore": 292
@@ -1068,6 +1159,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 57,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week",
+          "notesIt": "Corsa facile - settimana gara",
           "targetDistanceKm": 8.5,
           "loadScore": 39.9
         },
@@ -1079,6 +1171,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 57,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week",
+          "notesIt": "Corsa facile - settimana gara",
           "targetDistanceKm": 8.5,
           "loadScore": 39.9
         },
@@ -1090,6 +1183,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 25,
           "notes": "Activation pré-course : footing léger + quelques accélérations",
           "notesEn": "Pre-race activation: easy jog + a few strides",
+          "notesIt": "Attivazione pre-gara: corsa facile + qualche allungo",
           "targetDistanceKm": 4,
           "loadScore": 17.5
         },
@@ -1100,7 +1194,8 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "isKeySession": true,
           "estimatedDurationMin": 0,
           "notes": "Jour de course - 5K",
-          "notesEn": "Race day - 5K"
+          "notesEn": "Race day - 5K",
+          "notesIt": "Giorno di gara - 5K"
         },
         {
           "dayOfWeek": 2,
@@ -1114,6 +1209,7 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de course",
       "weekLabelEn": "Race week",
+      "weekLabelIt": "Settimana gara",
       "targetKm": 21,
       "weeklyLoadScore": 104
     }

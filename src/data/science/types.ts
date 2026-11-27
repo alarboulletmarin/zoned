@@ -11,9 +11,11 @@ export interface ScientificReference {
 export interface TargetSystemScience {
   rationale: string;
   rationaleEn: string;
-  zoneRationale: { zone: ZoneNumber; why: string; whyEn: string }[];
+  rationaleIt?: string;
+  zoneRationale: { zone: ZoneNumber; why: string; whyEn: string; whyIt?: string }[];
   adaptations: string[];
   adaptationsEn: string[];
+  adaptationsIt?: string[];
   references: ScientificReference[];
 }
 

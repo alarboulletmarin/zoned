@@ -666,6 +666,7 @@ function buildSeoBlock(route: RouteMeta): string {
     `<link data-default-seo rel="canonical" href="${attr(url)}" />`,
     `<link data-default-seo rel="alternate" hreflang="fr-FR" href="${attr(url)}" />`,
     `<link data-default-seo rel="alternate" hreflang="en-US" href="${attr(`${url}?lang=en`)}" />`,
+    `<link data-default-seo rel="alternate" hreflang="it-IT" href="${attr(`${url}?lang=it`)}" />`,
     `<link data-default-seo rel="alternate" hreflang="x-default" href="${attr(url)}" />`,
     `<meta data-default-seo property="og:type" content="${route.ogType ?? "website"}" />`,
     `<meta data-default-seo property="og:site_name" content="Zoned" />`,

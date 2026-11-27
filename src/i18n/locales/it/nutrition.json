@@ -1,0 +1,334 @@
+{
+  "hub": {
+    "pageTitle": "Nutrizione del Runner",
+    "title": "Mangia come corri",
+    "subtitle": "L'essenziale, senza gergo: ogni giorno, prima della gara, durante lo sforzo, dopo.",
+    "eyebrow": "Hub nutrizione",
+    "seoDescription": "Hub nutrizione per runner, dal principiante all'esperto: cosa mangiare ogni giorno, settimana della gara, caffè, idratazione, integratori che funzionano davvero, falsi miti.",
+
+    "cta": {
+      "calculator": "Calcolatore di rifornimento",
+      "calculatorSub": "Quanti carboidrati, gel e acqua servono per la tua gara"
+    },
+
+    "toc": { "heading": "In questa pagina" },
+    "breadcrumbs": { "home": "Home" },
+
+    "themes": {
+      "daily":       { "title": "Tutti i giorni",     "tagline": "Cosa mangiare quotidianamente" },
+      "carbs":       { "title": "Carboidrati in gara","tagline": "La regola 1:0,8, spiegata semplice" },
+      "protein":     { "title": "Proteine",           "tagline": "Quante, quando, in che forma" },
+      "caffeine":    { "title": "Caffè",              "tagline": "Quando prenderlo prima di una gara" },
+      "hydration":   { "title": "Bere",               "tagline": "Quanto, quando, cosa esattamente" },
+      "raceWeek":    { "title": "Settimana di gara",  "tagline": "Cosa fare negli ultimi 7 giorni" },
+      "before":      { "title": "Prima dello sforzo", "tagline": "Fare il pieno prima di partire" },
+      "during":      { "title": "Durante lo sforzo",  "tagline": "Mangiare correndo, senza disturbi" },
+      "recovery":    { "title": "Dopo lo sforzo",     "tagline": "Recuperare bene in 3 passi" },
+      "supplements": { "title": "Integratori",        "tagline": "Quali funzionano davvero" },
+      "cramps":      { "title": "Crampi",             "tagline": "La vera causa (non è l'acqua)" },
+      "heat":        { "title": "Caldo",              "tagline": "Adattarsi per correre meglio d'estate" },
+      "women":       { "title": "Donne",              "tagline": "Cosa cambia per le runner" },
+      "myths":       { "title": "10 falsi miti",      "tagline": "Ciò che la scienza ha smentito" }
+    },
+
+    "daily": {
+      "title": "Alimentazione quotidiana",
+      "lede": "Mangiare bene per correre significa fare bene le cose semplici: abbastanza pasta, riso e pane per l'energia, carne/pesce/uova/legumi per riparare i muscoli, acqua tutto il giorno. Nessuna magia. Solo costanza.",
+      "chips": {
+        "carbs":   { "label": "Carboidrati", "value": "5-7 g/kg",    "helper": "Il tuo peso × 5-7. Es: 70 kg → 350-490 g/giorno di pasta, riso, pane" },
+        "protein": { "label": "Proteine",    "value": "1,8 g/kg",    "helper": "Es: 70 kg → 126 g/giorno. Una porzione di carne/pesce = 25-30 g" },
+        "fat":     { "label": "Grassi",      "value": "1 g/kg",      "helper": "Olio d'oliva, avocado, frutta secca, pesce azzurro prima di tutto" },
+        "water":   { "label": "Acqua",       "value": "30-35 ml/kg", "helper": "Es: 70 kg → 2-2,5 L/giorno. Aggiungi 500 ml per ogni ora di corsa" }
+      }
+    },
+
+    "carbs": {
+      "title": "Il rapporto 1:0,8, la nuova regola dei carboidrati",
+      "lede": "Negli sforzi lunghi, il tuo corpo assorbe meglio due tipi di zucchero insieme rispetto a uno solo. È così che i pro arrivano fino a 120 g di zuccheri all'ora senza problemi di stomaco. Il mix giusto: un po' più di glucosio che fruttosio, in rapporto 1 a 0,8. Maurten, Precision Fuel, SiS Beta Fuel usano tutti questo principio.",
+      "ratios": {
+        "recommended": "Migliore",
+        "glucose":  { "label": "Solo glucosio", "capacity": "60 g/h max, si arriva subito al tetto" },
+        "classic":  { "label": "Mix 2:1",       "capacity": "90 g/h, il vecchio riferimento" },
+        "modern":   { "label": "Mix 1:0,8",     "capacity": "120 g/h, il massimo per i pro" },
+        "footnote": "Ricetta casalinga: 50 g maltodestrine + 40 g fruttosio + un pizzico di sale in 500 ml d'acqua. Il sale non è un dettaglio: aiuta davvero il corpo ad assorbire più velocemente lo zucchero."
+      }
+    },
+
+    "protein": {
+      "title": "Proteine: 1,8 g/kg, in 4 dosi",
+      "lede": "Le vecchie raccomandazioni (1,2-1,6 g/kg) sono superate. Chi corre ha bisogno di più proteine di quanto si pensasse: circa 1,8 g per chilo di peso corporeo. Ancora più importante: distribuirle su 4 pasti nell'arco della giornata invece che in 1 o 2 grandi pasti. I muscoli si riparano meglio così.",
+      "targets": {
+        "headers": {
+          "profile": "Tipo di runner",
+          "volume": "Ore a settimana",
+          "target": "Obiettivo quotidiano"
+        },
+        "amateur": { "profile": "Amatore",         "hours": "3-5 h/sett.", "target": "1,4-1,6 g/kg",   "helper": "Corse facili, nessuna preparazione gara" },
+        "serious": { "profile": "Regolare",        "hours": "6-10 h/sett.","target": "1,6-1,8 g/kg",   "helper": "Preparazione gara lunga o doppie sedute" },
+        "elite":   { "profile": "Molto allenato",  "hours": "15+ h/sett.", "target": "1,8-2,2 g/kg",   "helper": "Carico elevato, più sedute al giorno" },
+        "ultra":   { "profile": "Dopo un'ultra",   "hours": "Recupero",    "target": "Fino a 2,5 g/kg","helper": "Per 5-7 giorni dopo una gara di 50 km+" }
+      },
+      "timeline": {
+        "morning":  { "label": "Colazione",    "value": "30 g",          "helper": "Uova, fiocchi di latte, skyr, non solo pane e marmellata" },
+        "lunch":    { "label": "Pranzo",       "value": "30-40 g",       "helper": "Carne, pesce o legumi + un carboidrato" },
+        "snack":    { "label": "Spuntino",     "value": "20-25 g",       "helper": "Yogurt greco o shake proteico se ti sei allenato" },
+        "dinner":   { "label": "Cena",         "value": "30-40 g",       "helper": "Fonte proteica + verdure" },
+        "bedtime":  { "label": "Prima di dormire","value": "40 g di caseina","helper": "Anche i fiocchi di latte vanno bene. Nutrono i muscoli tutta la notte" },
+        "footnote": "Per riparare bene i muscoli servono almeno 25-30 g di proteine complete a pasto (carne, pesce, uova, latticini magri, mix legumi+cereali). Sotto questa soglia l'effetto è debole. Sopra si stabilizza."
+      }
+    },
+
+    "caffeine": {
+      "title": "Il caffè prima di una gara",
+      "lede": "Il caffè (o la caffeina) è uno dei pochi prodotti che funziona davvero per correre meglio. Calcola da 3 a 6 mg per chilo di peso, presi 60 minuti prima del via. Per 70 kg sono 210-420 mg, cioè 2-4 tazzine. In capsula il dosaggio è più preciso. Una cosa da sapere: alcune persone metabolizzano il caffè lentamente (genetica) e sentono l'effetto opposto: tachicardia, mal di stomaco. Se è il tuo caso, scendi a 1-2 mg/kg o evita.",
+      "steps": {
+        "t90": { "label": "T-90 min", "action": "Caffè o capsula. Se non lo bevi tutti i giorni: 3 mg/kg. Se sei abituato: 6 mg/kg." },
+        "t60": { "label": "T-60 min", "action": "La caffeina raggiunge il picco nel sangue. Usa questo tempo per finire di idratarti e andare in bagno." },
+        "t30": { "label": "T-30 min", "action": "Inizi il riscaldamento. Niente più caffè ora, farebbe effetto troppo tardi." },
+        "t0":  { "label": "Partenza", "action": "Effetto pieno per 3-4 ore. In un'ultra puoi prendere una piccola dose a metà gara." }
+      },
+      "contraindications": {
+        "heading": "Quando fare attenzione",
+        "items": {
+          "evening": "Niente caffè dopo le 14:00 se corri presto il giorno dopo. Il corpo impiega 5 ore per smaltirne metà.",
+          "sensitive": "Se senti tachicardia, ansia o mal di stomaco: è troppo per te. Riduci o smetti.",
+          "gi": "Abbinato a uno sforzo lungo, il caffè può accelerare l'intestino (urgenze). Testalo in allenamento, non il giorno della gara.",
+          "untested": "Regola d'oro: mai provare una nuova dose il giorno della gara. Testa sempre 2-3 volte prima.",
+          "cyp1a2": "Se il caffè ti agita anche a piccole dosi, potresti essere un metabolizzatore lento. Prova 1-2 mg/kg o evita."
+        }
+      }
+    },
+
+    "hydration": {
+      "title": "Idratazione: bevi quando hai sete",
+      "lede": "Per molto tempo la regola era «bevi prima di avere sete». È sbagliato, e perfino pericoloso. Dal 2015 la scienza dice l'opposto: la sete è un buon segnale, fidati. Bere troppo è diventato più rischioso che bere troppo poco (una runner è morta alla Maratona di Boston nel 2002 per iperidratazione). Trucco semplice: il colore delle urine al mattino dice tutto. Giallo pallido = ok. Scuro = bevi di più. Trasparente = bevi meno.",
+      "morning":  { "label": "Al risveglio",       "value": "400-500 ml",   "helper": "Un bel bicchiere d'acqua semplice dopo 8 ore di digiuno" },
+      "day":      { "label": "Durante il giorno",  "value": "1,5 - 2 L",    "helper": "Piccoli sorsi regolari, non grandi bevute" },
+      "evening":  { "label": "Sera",               "value": "200-300 ml",   "helper": "Smetti 1 ora prima di dormire per non svegliarti la notte" },
+      "footnote": "Durante la corsa: da 500 a 800 ml all'ora in base a quanto sudi. Oltre 1 ora di sforzo, aggiungi sale (0,5-0,7 g per litro, circa un pizzico). In un'ultra, fino a 1 g di sale all'ora. Mai superare 800 ml di sola acqua all'ora: rischio di intossicazione da acqua (raro ma grave). Niente ibuprofene o antinfiammatori in gara: bloccano l'eliminazione renale dell'acqua."
+    },
+
+    "raceWeek": {
+      "title": "La settimana prima della gara",
+      "lede": "L'obiettivo di questa settimana: riempire i muscoli di energia (glicogeno) senza affaticarli. Il metodo degli anni '80 (3 giorni di scarico totale poi 3 giorni di carico) è superato. Oggi: riduci il volume di allenamento, aumenta gradualmente pasta/riso/pane e dormi. Guadagnerai 1-2 kg sulla bilancia negli ultimi giorni: è normale. Ogni grammo di glicogeno trattiene 3 grammi d'acqua.",
+      "timelineLabel": "Sequenza settimana di gara",
+      "stepLabel": "Tappa {{current}} di {{total}}",
+      "dayLabels": {
+        "j7": "G-7", "j6": "G-6", "j5": "G-5", "j4": "G-4",
+        "j3": "G-3", "j2": "G-2", "j1": "G-1", "j0": "Giorno G"
+      },
+      "j7": { "title": "Taglia il volume",       "detail": "Volume diviso per 5. Mantieni brevi richiami di ritmo. Pasti regolari ed equilibrati." },
+      "j6": { "title": "Taglia gli eccessi",     "detail": "Niente alcol (ostacola la riparazione muscolare). Niente fritti o pasti pesanti." },
+      "j5": { "title": "Più carboidrati",        "detail": "Pasta, riso, patate dolci, pane. Punta a 6-8 g di carboidrati per chilo di peso." },
+      "j4": { "title": "Idratati bene",          "detail": "1,5-2 L d'acqua + una bevanda leggermente salata. Urine giallo pallido." },
+      "j3": { "title": "Carico glucidico",       "detail": "Ora 10-12 g di carboidrati per chilo (700-800 g per 70 kg). Preferisci fonti semplici: pasta bianca, riso bianco, pane bianco." },
+      "j2": { "title": "Uscita di rifinitura",    "detail": "20-30 min facili. Niente di nuovo: niente gel, scarpe o completo mai usati." },
+      "j1": { "title": "Pasto e preparazione",   "detail": "Cena familiare, ricca di carboidrati, poche fibre. A letto presto. Pettorale, gel, scarpe e orologio pronti." },
+      "j0": { "title": "Colazione 3 h prima",    "detail": "1-3 g di carboidrati per chilo, facili da digerire. 500 ml d'acqua. Ultimo caffè 90 min prima del via." }
+    },
+
+    "before": {
+      "title": "Prima dello sforzo",
+      "lede": "Più ti avvicini alla partenza, più servono zuccheri rapidi in piccole quantità. Lo stomaco deve restare tranquillo al via. Regola d'oro: nulla di nuovo il giorno della gara. Ciò che mangi quel giorno l'hai già testato nei lunghi, più volte.",
+      "chips": {
+        "t3h":    { "label": "T-3 h",    "value": "1-3 g/kg di carboidrati", "helper": "Pasto familiare, poche fibre e grassi. Es: pasta in bianco + pollo + banana matura" },
+        "t1h":    { "label": "T-1 h",    "value": "30-60 g di carboidrati",  "helper": "Spuntino leggero: banana matura, composta di mele, pane bianco con miele" },
+        "t15min": { "label": "T-15 min", "value": "Gel o bevanda",           "helper": "Facoltativo. Utile soprattutto se la gara dura più di 1 h 30" }
+      }
+    },
+
+    "during": {
+      "title": "Durante lo sforzo",
+      "lede": "Oltre 1 ora di sforzo, mangiare fa davvero la differenza. Punta a 60-90 g di zuccheri all'ora (1 gel = 25 g in media). I pro salgono a 120 g/h, ma servono settimane di allenamento digestivo. La trappola: non aspettare di avere fame o sete. Inizia al minuto 30, a piccole dosi regolari.",
+      "headers": {
+        "distance":     "Distanza",
+        "carbsPerHour": "Zuccheri all'ora",
+        "ratio":        "Mix consigliato",
+        "total":        "Totale tipico"
+      },
+      "rows": {
+        "short":    { "distance": "5 km (sotto 30 min)",    "ratio": "-",     "total": "Basta sola acqua" },
+        "tenK":     { "distance": "10 km (40-60 min)",      "ratio": "1:0",   "total": "1-2 gel o 500 ml di bevanda" },
+        "semi":     { "distance": "Mezza (~1 h 30)",        "ratio": "2:1",   "total": "2-3 gel + bevanda" },
+        "marathon": { "distance": "Maratona (3-4 h)",       "ratio": "1:0,8", "total": "5-7 gel + bevanda isotonica" },
+        "elite":    { "distance": "Élite (sotto 3 h)",      "ratio": "1:0,8", "total": "120 g/h, stomaco allenato" },
+        "ultra":    { "distance": "Ultra (oltre 4 h)",      "ratio": "1:0,8", "total": "Mix solidi + gel + bevanda + brodo salato" }
+      },
+      "gut": {
+        "heading": "Allena lo stomaco, protocollo da 6 a 12 settimane",
+        "phase1": { "weeks": "Sett. 1-2", "detail": "Inizia piano, nelle uscite oltre 1 h 30." },
+        "phase2": { "weeks": "Sett. 3-4", "detail": "Lo stomaco si adatta gradualmente." },
+        "phase3": { "weeks": "Sett. 5-6", "detail": "Raggiungi l'obiettivo standard." },
+        "phase4": { "weeks": "Sett. 7+",  "detail": "Livello pro. Mix 1:0,8 obbligatorio." }
+      }
+    },
+
+    "recovery": {
+      "title": "Dopo lo sforzo",
+      "lede": "Si è creduto a lungo di dover mangiare entro 30 minuti dalla fine. Falso: la finestra reale è più ampia. Il corpo assorbe per 4-6 ore per gli zuccheri e 24-48 ore per le proteine. Se torni a casa e mangi normalmente entro 2 ore, sei a posto. La finestra breve conta davvero solo se hai una 2ª seduta lo stesso giorno.",
+      "phases": {
+        "immediate": { "window": "0 - 30 min", "title": "Ricarica rapida",   "detail": "Altra seduta entro 4 h: 1 g di zuccheri + 0,3 g di proteine per chilo. Altrimenti basta il pasto successivo." },
+        "short":     { "window": "0 - 2 h",    "title": "Pasto completo",    "detail": "Carboidrati + proteine + un po' di grassi + verdure. Bevi 1,5x il peso perso sudando." },
+        "long":      { "window": "24 - 48 h",  "title": "Riparazione profonda","detail": "4 dosi da 25-30 g di proteine. Dormi bene. Evita l'alcol: riduce del 24% la riparazione muscolare." }
+      }
+    },
+
+    "supplements": {
+      "title": "Integratori, cosa funziona davvero",
+      "lede": "L'Australian Institute of Sport ha classificato tutti gli integratori popolari in 4 livelli in base alle prove scientifiche. Su 28 prodotti comuni tra i runner, solo 5 hanno prove solide. Gli altri vanno da «interessante in alcuni casi» a «puro marketing». Ecco i 17 da conoscere.",
+      "aisFootnote": "Classe A: più prove solide. B: prove discrete ma in casi specifici. C: prove limitate, caso per caso. D: poche o nessuna prova.",
+      "aisLabel": {
+        "A": "Livello A, Prove solide",
+        "B": "Livello B, Prove discrete",
+        "C": "Livello C, Prove limitate",
+        "D": "Livello D, Nessuna prova"
+      },
+      "doseLabel": "Dose",
+      "whenLabel": "Quando",
+      "verdicts": {
+        "proven": "Funziona",
+        "conditional": "Dipende",
+        "marketing": "Marketing"
+      },
+      "caffeine":    { "name": "Caffeina",         "dose": "3-6 mg/kg",        "when": "60 min prima",          "rationale": "L'integratore più dimostrato per la corsa. Migliora la performance del 2-7% sugli sforzi lunghi. In capsula il dosaggio è preciso." },
+      "creatine":    { "name": "Creatina",         "dose": "3-5 g/giorno",     "when": "Tutto l'anno",          "rationale": "Il +1 kg è acqua trattenuta nei muscoli, non massa da culturista. Utile per ultra, trail e dopo i 40 anni." },
+      "bicarbonate": { "name": "Bicarbonato",      "dose": "0,2-0,3 g/kg",     "when": "Dai 1.500 m ai 10 km",  "rationale": "Aiuta a tamponare l'acidità muscolare sugli sforzi brevi e intensi. Maurten Bicarb System evita i disturbi gastrici. Inutile oltre la maratona." },
+      "betaalanine": { "name": "Beta-alanina",     "dose": "4-6 g/g ×4-12 sett.","when": "Dagli 800 m ai 5 km", "rationale": "Aiuta i muscoli a gestire meglio la fatica su sforzi da 1 a 10 minuti. Possibile formicolio se presa in una dose unica grande." },
+      "beetroot":    { "name": "Succo di barbabietola","dose": "5-15 mmol nitrati","when": "2-3 h prima",       "rationale": "Migliora l'economia di corsa (+1-3%) negli amatori. Niente collutorio antisettico il giorno gara: uccide i batteri che lo attivano." },
+      "collagen":    { "name": "Collagene + vit. C","dose": "15 g + 50 mg",    "when": "30-60 min prima seduta","rationale": "Raddoppia la produzione di collagene tendineo. Utile in caso di tendinite cronica o sedute con balzi/pliometria." },
+      "tartcherry":  { "name": "Amarena (Tart cherry)","dose": "30 ml × 2/g",  "when": "5-7 g prima + dopo gara","rationale": "Riduce indolenzimento e infiammazione muscolare. Utile dopo maratona o ultra. Non prendere tutto l'anno (può frenare gli adattamenti)." },
+      "curcumin":    { "name": "Curcuma",          "dose": "200-1500 mg/g",    "when": "Intorno alla gara",     "rationale": "Antinfiammatorio naturale. Per essere assorbita serve una forma speciale (con pepe nero o fitosoma). Non per uso continuo." },
+      "probiotics":  { "name": "Probiotici",       "dose": "10-30 mld batteri/g","when": "4 sett. prima gara",  "rationale": "Riduce raffreddori e disturbi intestinali in maratona/ultra. Mix di batteri Lactobacillus + Bifidobacterium." },
+      "omega3":      { "name": "Omega-3",          "dose": "2 g/giorno",       "when": "Tutto l'anno",          "rationale": "Antinfiammatorio naturale. Riduce gli infortuni e accelera il recupero. Se mangi pesce azzurro due volte a settimana puoi farne a meno." },
+      "vitD":        { "name": "Vitamina D",       "dose": "2000-4000 UI",     "when": "Inverno",               "rationale": "1 atleta su 2 è carente d'inverno alle nostre latitudini. Fai le analisi del sangue. Obiettivo: minimo 30 ng/mL, ideale 40-50." },
+      "iron":        { "name": "Ferro",            "dose": "60-120 mg ×3/sett.","when": "Se ferritina < 35",   "rationale": "1 runner donna su 3 è carente di ferro. Mai integrare senza analisi. Al mattino, con vitamina C, lontano dal caffè." },
+      "magnesium":   { "name": "Magnesio",         "dose": "200-400 mg",       "when": "Sera",                  "rationale": "Forma bisglicinata (meglio assorbita, delicata sullo stomaco). Aiuta sonno e recupero. Inutile contro i crampi (studio Cochrane 2020)." },
+      "bcaa":        { "name": "BCAA (aminoacidi ramificati)", "dose": "-",    "when": "Da evitare",            "rationale": "Inutili se mangi abbastanza proteine. Uno yogurt greco ne ha altrettanti, in forma migliore. Marketing per il 99% dei runner." },
+      "lcarnitine":  { "name": "L-carnitina",      "dose": "-",                "when": "Da evitare",            "rationale": "Non assorbita efficacemente per via orale. Gli studi concludono nessun effetto sulla corsa. Risparmia per integratori che funzionano." },
+      "ketones":     { "name": "Chetoni",          "dose": "-",                "when": "Da evitare",            "rationale": "Molto di moda dal 2018 al 2022, ma nessuna prova di miglioramento nella corsa (rassegna 2024). Costosi, sapore sgradevole, possibili disturbi." },
+      "antioxidants":{ "name": "Antiossidanti ad alte dosi","dose": "-",       "when": "Da evitare",            "rationale": "Vitamina C 1.000 mg + vitamina E ad alte dosi ogni giorno BLOCCA i progressi dell'allenamento (studio 2014). Mangia frutta e verdura." }
+    },
+
+    "cramps": {
+      "title": "Crampi: la vera causa (non è l'acqua)",
+      "lede": "Per un secolo abbiamo creduto che i crampi dipendessero da disidratazione e mancanza di sali. È sbagliato. Gli studi moderni hanno dimostrato che la causa è nervosa: i muscoli si affaticano, il sistema che li controlla va in tilt e scatta il crampo. La prova più eclatante: un sorso di salamoia di cetrioli ferma un crampo in meno di 90 secondi, troppo in fretta per cambiare il sangue. È un riflesso nervoso innescato dal gusto acido in bocca.",
+      "old": {
+        "label": "Vecchia teoria",
+        "title": "Mancanza d'acqua e sali minerali",
+        "detail": "Mai dimostrata scientificamente. Il magnesio non ha alcun effetto sui crampi (studio Cochrane 2020)."
+      },
+      "new": {
+        "label": "Teoria attuale",
+        "title": "Affaticamento nervoso e muscolare",
+        "detail": "A fine sforzo, il sistema che regola i muscoli perde precisione. I crampi arrivano quando spingi oltre il tuo livello di allenamento, non quando sei disidratato."
+      },
+      "fix": {
+        "label": "Cosa funziona",
+        "title": "Stretching + salamoia di cetrioli",
+        "detail": "Allungare il muscolo lo calma quasi sempre. La vera prevenzione: non partire troppo forte e costruire bene l'allenamento."
+      }
+    },
+
+    "heat": {
+      "title": "Caldo: adattarsi per correre meglio d'estate",
+      "lede": "Adattarsi al caldo è probabilmente il modo più sottovalutato per correre meglio. In 10-14 giorni puoi guadagnare il 5-10% di volume plasmatico, sudare in modo più efficiente e perdere meno sale. Bonus: migliora le prestazioni anche col fresco. Sauna o bagno caldo dopo l'allenamento sono i metodi più semplici.",
+      "sauna":     { "title": "Sauna dopo l'allenamento", "duration": "12-15 sedute",  "detail": "30 min a circa 87°C subito dopo l'allenamento, su 3 settimane. Studi: +7% volume plasmatico, +1,9% sui 5 km." },
+      "bath":      { "title": "Bagno caldo",              "duration": "6 giorni di fila","detail": "40°C per 40 minuti dopo l'allenamento. Effetti paragonabili alla sauna. Più accessibile." },
+      "icySlush":  { "title": "Granita prima della gara", "duration": "30 min prima",   "detail": "Mangia 7-14 g di ghiaccio tritato per chilo di peso. Abbassa la temperatura interna di 0,3-0,5°C. Permette di reggere il 19% più a lungo al caldo." },
+      "altitude":  { "title": "Altitudine",               "duration": "Stage 2-4 sett.","detail": "Dormi in alto, allenati in basso, attorno ai 2200-2500 m. Prima: fai il dosaggio della ferritina. Se è sotto 50 ng/mL, lo stage in quota è sprecato." }
+    },
+
+    "women": {
+      "title": "Runner donne: cosa cambia",
+      "lede": "Le raccomandazioni standard derivano spesso da studi su uomini. Per le donne, 4 punti meritano attenzione: ferro (1 su 3 ne è carente), proteine in base al ciclo, calcio e vitamina D per le ossa e rischio di deficit energetico cronico (8 atlete d'élite su 10 hanno almeno un segnale).",
+      "iron":     { "title": "Ferro e ferritina",         "detail": "Controlla il ferro una volta l'anno. Obiettivo: ferritina sopra 50 ng/mL (non 30, come si legge spesso). Se carente: 60-100 mg di ferro a giorni alterni, al mattino, con vitamina C, senza caffè né tè vicino." },
+      "protein":  { "title": "Proteine nella seconda metà del ciclo", "detail": "Aumenta di 0,1-0,2 g/kg nelle 2 settimane prima del ciclo. Preferisci carne, uova, pesce (ricchi di lisina). Niente digiuno intermittente in questa fase." },
+      "calcium":  { "title": "Calcio e vitamina D",       "detail": "1300-1500 mg di calcio al giorno in caso di disturbi del ciclo. 800-2000 UI di vitamina D. Cruciale per le ossa: le fratture da stress sono 4,5 volte più frequenti in amenorrea." },
+      "reds":     { "title": "Deficit energetico cronico, segnali d'allarme", "detail": "Se assumi meno di 30 calorie per chilo di massa magra al giorno, entri in zona a rischio. Segnali: assenza di ciclo, stanchezza cronica, infortuni ripetuti, difese basse, sonno scarso. Consulta un medico." }
+    },
+
+    "myths": {
+      "title": "10 falsi miti smontati dalla scienza",
+      "lede": "Il marketing sportivo diffonde idee che gli studi recenti hanno smentito. Ecco le più dure a morire, con ciò che dice davvero la scienza oggi.",
+      "mythLabel": "Falso mito",
+      "truthLabel": "Cosa dice la scienza",
+      "window30": {
+        "myth": "Bisogna assolutamente mangiare entro 30 minuti dallo sforzo",
+        "truth": "La finestra reale è di 4-6 ore per ricaricare le scorte energetiche e 24-48 ore per riparare i muscoli. Il pasto successivo basta in 9 casi su 10.",
+        "source": "Studi Aragon & Schoenfeld 2013, Margolis 2021"
+      },
+      "ratio4to1": {
+        "myth": "Il mix 4 zuccheri per 1 proteina è ideale per recuperare",
+        "truth": "Le proteine non aiutano a ripristinare il glicogeno se assumi già abbastanza zuccheri. L'effetto apparente deriva solo dalle calorie extra.",
+        "source": "Sintesi di 19 studi (Margolis 2021)"
+      },
+      "magnesium": {
+        "myth": "Il magnesio previene i crampi",
+        "truth": "Nessun effetto provato sui crampi negli sportivi. Effetto placebo. I crampi derivano da fatica nervosa, non da carenza di minerali.",
+        "source": "Studio Cochrane 2020, lavori di Schwellnus"
+      },
+      "coffee": {
+        "myth": "Il caffè disidrata",
+        "truth": "Falso per chi lo beve regolarmente. Studio di riferimento: 4 tazze al giorno idratano quanto l'acqua. Il caffè conta nel totale idrico quotidiano.",
+        "source": "Studio Killer 2014 (PLOS One)"
+      },
+      "thirst": {
+        "myth": "Se hai sete sei già disidratato",
+        "truth": "La sete scatta esattamente quando la performance inizia a calare (1-2% di disidratazione). È un segnale affidabile da ascoltare.",
+        "source": "Consenso internazionale sull'idratazione 2015"
+      },
+      "creatine": {
+        "myth": "La creatina appesantisce e danneggia i runner",
+        "truth": "Il +0,5-1,5 kg è acqua nei muscoli, non grasso. Molto utile per ultra, trail, over 40 o periodi di doppie sedute.",
+        "source": "Studi Forbes 2023, Davies 2024"
+      },
+      "bcaa": {
+        "myth": "I BCAA aiutano il recupero",
+        "truth": "Inutili se mangi abbastanza proteine. Uno yogurt greco o una porzione di pollo hanno tanti BCAA quanto un integratore, insieme agli altri aminoacidi essenziali.",
+        "source": "Posizione ufficiale ISSN 2024"
+      },
+      "carbload3d": {
+        "myth": "Per una maratona: 3 giorni senza zuccheri poi 3 giorni di carico",
+        "truth": "Metodo superato dal 2002. Oggi: 36-48 ore a 10-12 g di carboidrati per chilo, senza fase di privazione. Più efficace e molto meno pesante.",
+        "source": "Studi Bussau 2002, Burke 2019"
+      },
+      "drinkmore": {
+        "myth": "Più si beve, meglio è",
+        "truth": "Falso e pericoloso. Bere troppo diluisce il sodio nel sangue e può uccidere (Cynthia Lucero, Maratona di Boston 2002). Bevi a sete. Max ~800 ml all'ora.",
+        "source": "Studio NEJM 2005, Hew-Butler 2017"
+      },
+      "antiox": {
+        "myth": "Gli antiossidanti ad alte dosi accelerano il recupero",
+        "truth": "Vitamina C ed E ad alte dosi, prese ogni giorno, BLOCCANO i progressi dell'allenamento. I radicali liberi prodotti dallo sforzo sono segnali che attivano l'adattamento.",
+        "source": "Studio Paulsen 2014 (J Physiol)"
+      }
+    },
+
+    "ctaStrip": {
+      "heading": "Approfondisci",
+      "guide":     { "title": "Guida pratica",         "subtitle": "Calcolatore + 7 sezioni dettagliate" },
+      "glossary":  { "title": "Glossario nutrizione",  "subtitle": "Tutti i termini essenziali" },
+      "article":   { "title": "Articolo completo",     "subtitle": "Il perché dietro al come" },
+      "simulator": { "title": "Simulatore gara",       "subtitle": "Piano chilometro per chilometro" }
+    },
+
+    "faq": {
+      "q1": { "question": "Quante proteine servono davvero quando si corre?",
+              "answer": "Le vecchie raccomandazioni (1,2-1,6 g per chilo) sono superate. Oggi si consiglia 1,8 g per chilo, con 2 g e oltre nei giorni di riposo. Per 70 kg sono 126 g al giorno. Ancora più importante del totale: distribuirli su 4 pasti (25-30 g a pasto). Una porzione di pollo, yogurt greco o fiocchi di latte va benissimo. 40 g di fiocchi di latte o caseina prima di dormire nutrono i muscoli tutta la notte." },
+      "q2": { "question": "Il famoso rapporto 1:0,8, cosa cambia davvero?",
+              "answer": "Negli sforzi lunghi (oltre 90 g di zuccheri all'ora), mescolare glucosio e fruttosio in rapporto 1 a 0,8 permette di assorbire il 45% di zuccheri in più senza disturbi gastrici. Perché funziona? Il corpo usa due porte d'ingresso diverse per questi due zuccheri, in parallelo. Maurten, Precision Fuel, SiS Beta Fuel e Styrkr usano tutti questo principio. Sotto i 90 g/h, il classico 2:1 funziona altrettanto bene." },
+      "q3": { "question": "La creatina appesantisce un runner?",
+              "answer": "Sì leggermente (0,5-1,5 kg) ma è acqua trattenuta nei muscoli, non grasso. Per un maratoneta che punta a scendere sotto le 3 ore quel peso extra non aiuta. Per chi fa ultra, trail, ha più di 40 anni o fa doppie sedute, i benefici (recupero, cambi di ritmo, prevenzione della perdita muscolare con l'età) compensano ampiamente. Dose: 3-5 g al giorno, continuativi, senza fase di carico." },
+      "q4": { "question": "Quanti gel servono per una maratona?",
+              "answer": "Punta a 60-90 g di zuccheri all'ora, quindi 5-7 gel su tutta la distanza. Meglio: inizia presto (km 8-10), distanzia ogni 25-30 minuti, alterna con bevanda isotonica. Per arrivare a 120 g/h (livello pro) servono 8-12 settimane di allenamento digestivo e un mix 1:0,8 obbligatorio. Gel idrogel Maurten: utili soprattutto sopra i 150 g/h, non magici sotto." },
+      "q5": { "question": "Il caffè prima di una gara aiuta o stanca?",
+              "answer": "A 3 mg/kg in capsula, preso 60 minuti prima della partenza, il caffè migliora la performance del 2-7% sugli sforzi lunghi. Le capsule sono più precise del caffè normale (il dosaggio varia da 50 a 300 mg a seconda della macchina). Attenzione: alcuni metabolizzano il caffè lentamente per genetica e ad alte dosi possono peggiorare. Se il caffè ti agita, scendi a 1-2 mg/kg o evita. Niente caffè dopo le 14:00 se corri presto il giorno dopo." },
+      "q6": { "question": "Come evitare il muro della maratona?",
+              "answer": "Tre leve: fai carico di carboidrati per 36-48 ore prima della gara (non 3 giorni), mangia regolarmente in gara (60-90 g/h dall'inizio con mix 1:0,8), dosati all'inizio. Il muro non è nella testa: è il fegato che esaurisce le riserve. Allenare lo stomaco a mangiare correndo nelle 6-12 settimane precedenti è essenziale." },
+      "q7": { "question": "Quali integratori dovrebbe prendere davvero un runner?",
+              "answer": "5 hanno prove solide per la corsa: caffeina, creatina, bicarbonato (per gare brevi dai 1.500 m ai 10 km), beta-alanina (sforzi intensi 1-10 min), succo di barbabietola (negli amatori). Aggiungi in base al tuo caso: omega-3, vitamina D in inverno, ferro se carente (analisi obbligatorie). Evita: BCAA, L-carnitina, chetoni e soprattutto antiossidanti ad alte dosi ogni giorno (bloccano i progressi)." },
+      "q8": { "question": "I crampi vengono davvero dalla disidratazione?",
+              "answer": "No. Questa idea è stata smentita dagli studi (Schwellnus 2009-2018). La vera causa è nervosa: la fatica altera il sistema che controlla i muscoli. Prova più evidente: un sorso di salamoia di cetrioli ferma un crampo in meno di un minuto, troppo in fretta per aver cambiato il sangue. È un riflesso nervoso. Il magnesio non ha effetto (studio Cochrane 2020). Vera prevenzione: non partire troppo forte e allenarsi in modo progressivo." }
+    }
+  }
+}

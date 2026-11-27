@@ -5,8 +5,10 @@ export const planSemiMarathon: PrebuiltPlan = {
   "slug": "semi-marathon",
   "name": "Semi-marathon",
   "nameEn": "Half Marathon",
+  "nameIt": "Mezza maratona",
   "description": "Plan de 14 semaines pour le semi-marathon. Sorties longues progressives et travail au seuil.",
   "descriptionEn": "14-week half marathon plan. Progressive long runs and threshold work.",
+  "descriptionIt": "Piano di 14 settimane per la mezza maratona. Lunghi progressivi e lavoro alla soglia.",
   "icon": "Route",
   "difficulty": "intermediate",
   "raceDistance": "semi",
@@ -49,6 +51,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 66,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 66,
           "loadScore": 58.3,
           "paceNotes": [
@@ -57,7 +60,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 10
@@ -70,6 +74,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 43,
           "notes": "Allure VMA : 4:37 - 4:52/km",
           "notesEn": "VO2max pace: 4:37 - 4:52/km",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km",
           "targetDurationMin": 55,
           "loadScore": 93.5,
           "paceNotes": [
@@ -78,7 +83,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "targetDistanceKm": 8
@@ -91,6 +97,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 76,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 76,
           "loadScore": 69,
           "paceNotes": [
@@ -99,7 +106,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11.5
@@ -112,6 +120,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 73,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 9.5 km (~63 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 9.5 km (~63 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 9.5 km (~63 min)",
           "targetDurationMin": 63,
           "loadScore": 51.1,
           "paceNotes": [
@@ -120,14 +129,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 9.5
@@ -144,6 +155,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S1",
       "weekLabelEn": "W1",
+      "weekLabelIt": "S1",
       "targetKm": 39,
       "targetLongRunKm": 9.5,
       "weeklyLoadScore": 303
@@ -162,6 +174,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 69,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 69,
           "loadScore": 61.3,
           "paceNotes": [
@@ -170,7 +183,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 10.5
@@ -183,6 +197,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 50,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 59,
           "loadScore": 76.7,
           "paceNotes": [],
@@ -196,6 +211,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 79,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 79,
           "loadScore": 72,
           "paceNotes": [
@@ -204,7 +220,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 12
@@ -217,6 +234,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 75,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 11 km (~72 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 11 km (~72 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 11 km (~72 min)",
           "targetDurationMin": 72,
           "loadScore": 52.5,
           "paceNotes": [
@@ -225,14 +243,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 11
@@ -249,6 +269,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S2",
       "weekLabelEn": "W2",
+      "weekLabelIt": "S2",
       "targetKm": 41,
       "targetLongRunKm": 11,
       "weeklyLoadScore": 281
@@ -267,6 +288,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 72,
           "loadScore": 59.2,
           "paceNotes": [
@@ -275,7 +297,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -288,6 +311,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 52,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 61,
           "loadScore": 60.7,
           "paceNotes": [
@@ -296,7 +320,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 8.5
@@ -309,6 +334,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 66,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 66,
           "loadScore": 57.3,
           "paceNotes": [
@@ -317,7 +343,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 10
@@ -330,6 +357,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 75,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 9 km (~59 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 9 km (~59 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 9 km (~59 min)",
           "targetDurationMin": 59,
           "loadScore": 52.5,
           "paceNotes": [
@@ -338,7 +366,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 9
@@ -355,6 +384,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S3",
       "weekLabelEn": "W3",
+      "weekLabelIt": "S3",
       "targetKm": 39,
       "targetLongRunKm": 9,
       "weeklyLoadScore": 237
@@ -373,6 +403,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 46,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 46,
           "loadScore": 44.5,
           "paceNotes": [
@@ -381,7 +412,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 7
@@ -394,6 +426,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 49,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 49,
           "loadScore": 43.8,
           "paceNotes": [
@@ -402,7 +435,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 7.5
@@ -415,6 +449,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 56,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 56,
           "loadScore": 54.9,
           "paceNotes": [
@@ -423,7 +458,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 8.5
@@ -436,6 +472,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 64,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 9 km (~59 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 9 km (~59 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 9 km (~59 min)",
           "targetDurationMin": 59,
           "loadScore": 44.8,
           "paceNotes": [
@@ -444,7 +481,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 9
@@ -461,6 +499,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
+      "weekLabelIt": "Settimana di scarico",
       "targetKm": 32,
       "targetLongRunKm": 9,
       "weeklyLoadScore": 198
@@ -479,6 +518,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 72,
           "loadScore": 59.2,
           "paceNotes": [
@@ -487,7 +527,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -500,6 +541,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 52,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 59,
           "loadScore": 76.7,
           "paceNotes": [],
@@ -513,6 +555,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 66,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 66,
           "loadScore": 57.3,
           "paceNotes": [
@@ -521,7 +564,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 10
@@ -534,6 +578,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 89,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 13.5 km (~89 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 13.5 km (~89 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 13.5 km (~89 min)",
           "targetDurationMin": 89,
           "loadScore": 62.3,
           "paceNotes": [
@@ -542,14 +587,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 13.5
@@ -566,6 +613,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S5",
       "weekLabelEn": "W5",
+      "weekLabelIt": "S5",
       "targetKm": 43,
       "targetLongRunKm": 13.5,
       "weeklyLoadScore": 281
@@ -584,6 +632,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 72,
           "loadScore": 59.2,
           "paceNotes": [
@@ -592,7 +641,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -605,6 +655,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 52,
           "notes": "Allure seuil : 5:08 - 5:22/km\n2 répétitions",
           "notesEn": "Threshold pace: 5:08 - 5:22/km\n2 repetitions",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km\n2 ripetute",
           "targetDurationMin": 56,
           "loadScore": 72.6,
           "paceNotes": [
@@ -613,7 +664,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "scaledRepetitions": 2,
@@ -627,6 +679,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 59,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 65,
           "loadScore": 65.3,
           "paceNotes": [
@@ -635,7 +688,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 9.5
@@ -648,6 +702,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 84,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 11.5 km (~76 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 11.5 km (~76 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 11.5 km (~76 min)",
           "targetDurationMin": 76,
           "loadScore": 58.8,
           "paceNotes": [
@@ -656,14 +711,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 11.5
@@ -680,6 +737,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S6",
       "weekLabelEn": "W6",
+      "weekLabelIt": "S6",
       "targetKm": 41,
       "targetLongRunKm": 11.5,
       "weeklyLoadScore": 280
@@ -698,6 +756,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 53,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 53,
           "loadScore": 42,
           "paceNotes": [
@@ -706,7 +765,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 8
@@ -719,6 +779,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 74,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 85,
           "loadScore": 85,
           "paceNotes": [
@@ -727,14 +788,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 12
@@ -747,6 +810,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 58,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 65,
           "loadScore": 84.5,
           "paceNotes": [
@@ -755,7 +819,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 10
@@ -768,6 +833,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 99,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 15 km (~99 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 15 km (~99 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 15 km (~99 min)",
           "targetDurationMin": 99,
           "loadScore": 69.3,
           "paceNotes": [
@@ -776,7 +842,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 15
@@ -793,6 +860,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S7",
       "weekLabelEn": "W7",
+      "weekLabelIt": "S7",
       "targetKm": 45,
       "targetLongRunKm": 15,
       "weeklyLoadScore": 295
@@ -811,6 +879,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 63,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 63,
           "loadScore": 57,
           "paceNotes": [
@@ -819,7 +888,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 9.5
@@ -832,6 +902,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 56,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 56,
           "loadScore": 45.8,
           "paceNotes": [
@@ -840,7 +911,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 8.5
@@ -853,6 +925,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 43,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 43,
           "loadScore": 41,
           "paceNotes": [
@@ -861,7 +934,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 6.5
@@ -874,6 +948,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 82,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 12.5 km (~82 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 12.5 km (~82 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 12.5 km (~82 min)",
           "targetDurationMin": 82,
           "loadScore": 57.4,
           "paceNotes": [
@@ -882,7 +957,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 12.5
@@ -899,6 +975,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
+      "weekLabelIt": "Settimana di scarico",
       "targetKm": 37,
       "targetLongRunKm": 12.5,
       "weeklyLoadScore": 209
@@ -917,6 +994,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 86,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 86,
           "loadScore": 64.2,
           "paceNotes": [
@@ -925,7 +1003,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 13
@@ -938,6 +1017,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 66,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 71,
           "loadScore": 92.3,
           "paceNotes": [
@@ -946,7 +1026,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 11
@@ -959,6 +1040,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 51,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 55,
           "loadScore": 55,
           "paceNotes": [
@@ -967,7 +1049,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 8
@@ -980,6 +1063,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 92,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 14 km (~92 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 14 km (~92 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 14 km (~92 min)",
           "targetDurationMin": 92,
           "loadScore": 64.4,
           "paceNotes": [
@@ -988,14 +1072,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 14
@@ -1012,6 +1098,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S9",
       "weekLabelEn": "W9",
+      "weekLabelIt": "S9",
       "targetKm": 46,
       "targetLongRunKm": 14,
       "weeklyLoadScore": 304
@@ -1030,6 +1117,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 66,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 66,
           "loadScore": 48.5,
           "paceNotes": [
@@ -1038,7 +1126,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 10
@@ -1051,6 +1140,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 62,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 65,
           "loadScore": 64.7,
           "paceNotes": [
@@ -1059,7 +1149,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 10
@@ -1072,6 +1163,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 54,
           "notes": "Allure VMA : 4:37 - 4:52/km\n8 répétitions",
           "notesEn": "VO2max pace: 4:37 - 4:52/km\n8 repetitions",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km\n8 ripetute",
           "targetDurationMin": 55,
           "loadScore": 93.8,
           "paceNotes": [
@@ -1080,7 +1172,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "scaledRepetitions": 8,
@@ -1094,6 +1187,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 123,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 17.5 km (~115 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 17.5 km (~115 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 17.5 km (~115 min)",
           "targetDurationMin": 115,
           "loadScore": 86.1,
           "paceNotes": [
@@ -1102,7 +1196,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 17.5
@@ -1119,6 +1214,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S10",
       "weekLabelEn": "W10",
+      "weekLabelIt": "S10",
       "targetKm": 47,
       "targetLongRunKm": 17.5,
       "weeklyLoadScore": 325
@@ -1137,6 +1233,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 72,
           "loadScore": 51.3,
           "paceNotes": [
@@ -1145,7 +1242,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -1158,6 +1256,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 66,
           "notes": "Allure VMA : 4:37 - 4:52/km\n12 répétitions",
           "notesEn": "VO2max pace: 4:37 - 4:52/km\n12 repetitions",
+          "notesIt": "Ritmo VO2max: 4:37 - 4:52/km\n12 ripetute",
           "targetDurationMin": 66,
           "loadScore": 112.2,
           "paceNotes": [
@@ -1166,7 +1265,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 4.62,
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "descriptionEn": "VO2max pace",
+              "descriptionIt": "Ritmo VO2max"
             }
           ],
           "scaledRepetitions": 12,
@@ -1180,6 +1280,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 59,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 59,
           "loadScore": 76.5,
           "paceNotes": [
@@ -1188,14 +1289,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             },
             {
               "zone": "E",
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 10
@@ -1208,6 +1311,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 125,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 19 km (~125 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 19 km (~125 min)",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km\nLungo: 19 km (~125 min)",
           "targetDurationMin": 125,
           "loadScore": 87.5,
           "paceNotes": [
@@ -1216,14 +1320,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "M",
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 19
@@ -1240,6 +1346,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S11",
       "weekLabelEn": "W11",
+      "weekLabelIt": "S11",
       "targetKm": 51,
       "targetLongRunKm": 19,
       "weeklyLoadScore": 340
@@ -1258,6 +1365,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 72,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km",
           "targetDurationMin": 72,
           "loadScore": 51.3,
           "paceNotes": [
@@ -1266,7 +1374,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 11
@@ -1279,6 +1388,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 57,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 59,
           "loadScore": 77.2,
           "paceNotes": [
@@ -1287,14 +1397,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             },
             {
               "zone": "E",
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 9.5
@@ -1307,6 +1419,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 83,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 86,
           "loadScore": 112.4,
           "paceNotes": [
@@ -1315,7 +1428,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 14
@@ -1328,6 +1442,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 118,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 16 km (~105 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 16 km (~105 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 16 km (~105 min)",
           "targetDurationMin": 105,
           "loadScore": 82.6,
           "paceNotes": [
@@ -1336,7 +1451,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 16
@@ -1353,6 +1469,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S12",
       "weekLabelEn": "W12",
+      "weekLabelIt": "S12",
       "targetKm": 51,
       "targetLongRunKm": 16,
       "weeklyLoadScore": 338
@@ -1371,6 +1488,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 40,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "notesIt": "Ritmo soglia: 5:08 - 5:22/km",
           "targetDurationMin": 40,
           "loadScore": 35,
           "paceNotes": [
@@ -1379,14 +1497,16 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "descriptionEn": "Threshold pace",
+              "descriptionIt": "Ritmo soglia"
             }
           ],
           "targetDistanceKm": 6
@@ -1399,6 +1519,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 41,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 44,
           "loadScore": 44.4,
           "paceNotes": [
@@ -1407,7 +1528,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 6
@@ -1420,6 +1542,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 41,
           "notes": "Allure marathon : 5:53 - 6:07/km",
           "notesEn": "Marathon pace: 5:53 - 6:07/km",
+          "notesIt": "Ritmo maratona: 5:53 - 6:07/km",
           "targetDurationMin": 44,
           "loadScore": 44.4,
           "paceNotes": [
@@ -1428,7 +1551,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 5.88,
               "paceMaxKm": 6.11,
               "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "descriptionEn": "Marathon pace",
+              "descriptionIt": "Ritmo maratona"
             }
           ],
           "targetDistanceKm": 6
@@ -1441,6 +1565,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 82,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 12.5 km (~82 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 12.5 km (~82 min)",
+          "notesIt": "Ritmo facile: 6:04 - 7:06/km\nLungo: 12.5 km (~82 min)",
           "targetDurationMin": 82,
           "loadScore": 57.4,
           "paceNotes": [
@@ -1449,7 +1574,8 @@ export const planSemiMarathon: PrebuiltPlan = {
               "paceMinKm": 6.07,
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
+              "descriptionEn": "Easy pace",
+              "descriptionIt": "Ritmo facile"
             }
           ],
           "targetDistanceKm": 12.5
@@ -1466,6 +1592,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "S13",
       "weekLabelEn": "W13",
+      "weekLabelIt": "S13",
       "targetKm": 31,
       "targetLongRunKm": 12.5,
       "weeklyLoadScore": 191
@@ -1484,6 +1611,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 60,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week",
+          "notesIt": "Corsa facile - settimana gara",
           "targetDistanceKm": 9,
           "loadScore": 42
         },
@@ -1495,6 +1623,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 60,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week",
+          "notesIt": "Corsa facile - settimana gara",
           "targetDistanceKm": 9,
           "loadScore": 42
         },
@@ -1506,6 +1635,7 @@ export const planSemiMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 25,
           "notes": "Activation pré-course : footing léger + quelques accélérations",
           "notesEn": "Pre-race activation: easy jog + a few strides",
+          "notesIt": "Attivazione pre-gara: corsa facile + qualche allungo",
           "targetDistanceKm": 4,
           "loadScore": 17.5
         },
@@ -1516,7 +1646,8 @@ export const planSemiMarathon: PrebuiltPlan = {
           "isKeySession": true,
           "estimatedDurationMin": 0,
           "notes": "Jour de course - Semi-marathon",
-          "notesEn": "Race day - Half Marathon"
+          "notesEn": "Race day - Half Marathon",
+          "notesIt": "Giorno di gara - Mezza maratona"
         },
         {
           "dayOfWeek": 2,
@@ -1530,6 +1661,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de course",
       "weekLabelEn": "Race week",
+      "weekLabelIt": "Settimana gara",
       "targetKm": 22,
       "weeklyLoadScore": 110
     }

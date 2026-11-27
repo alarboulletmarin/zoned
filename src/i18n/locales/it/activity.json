@@ -1,0 +1,112 @@
+{
+  "page": {
+    "title": "Attività complementari",
+    "description": "Ciò che fai in aggiunta al piano: tragitti in bici, spostamenti, sedute fuori programma.",
+    "kicker_one": "{{count}} attività registrata",
+    "kicker_other": "{{count}} attività registrate",
+    "lede": "Tragitti in bici, spostamenti e sedute che il tuo piano non conosce. Registrali qui e il tuo volume dirà finalmente la verità.",
+    "add": "Registra un'attività",
+    "added": "Attività aggiunta",
+    "edit": "Modifica questa attività",
+    "back": "Indietro",
+    "allTime": "Da sempre",
+    "softLimitTitle": "Il diario sta diventando lungo",
+    "softLimit": "Ti stai avvicinando a {{limit}} attività. Nulla va perso, ma la lista diventa difficile da leggere: valuta un backup dalle impostazioni."
+  },
+  "empty": {
+    "title": "Ancora nulla di extra",
+    "description": "Se vai al lavoro in bici, usi la bici per una commissione o fai una seduta fuori dal piano, registrala qui. Basta una durata."
+  },
+  "discipline": {
+    "cycling": "Ciclismo",
+    "running": "Corsa",
+    "swimming": "Nuoto",
+    "other": "Altro"
+  },
+  "purpose": {
+    "commute": "Tragitto",
+    "commuteCycling": "Casa-lavoro in bici",
+    "transport": "Spostamento",
+    "training": "Allenamento"
+  },
+  "purposeHint": {
+    "commute": "Il tragitto verso il lavoro, quello che si ripete ogni settimana",
+    "commuteCycling": "Il tragitto in bici verso il lavoro, quello che si ripete ogni settimana",
+    "transport": "Qualsiasi altro spostamento: commissioni, stazione",
+    "training": "Una vera seduta, svolta fuori dal piano"
+  },
+  "form": {
+    "title": "Registra un'attività",
+    "editTitle": "Modifica attività",
+    "sub": "Solo la durata è obbligatoria. Il resto affina, non pretende nulla.",
+    "date": "Data",
+    "discipline": "Disciplina",
+    "purpose": "Tipo",
+    "duration": "Durata (h:min)",
+    "durationPlaceholder": "0:00",
+    "more": "Aggiungi dettagli",
+    "moreNote": "Aggiungi una nota",
+    "distanceKm": "Distanza (km)",
+    "distanceMeters": "Distanza (m)",
+    "elevation": "Dislivello + (m)",
+    "watts": "Watt medi",
+    "rpe": "Sforzo percepito",
+    "note": "Nota",
+    "notePlaceholder": "Vento contrario, zaino carico...",
+    "save": "Salva",
+    "delete": "Elimina"
+  },
+  "summary": {
+    "time": "Tempo",
+    "load": "Carico",
+    "loadUnit": "durata x sforzo",
+    "elevation": "Dislivello +",
+    "share": "Sul volume",
+    "shareFoot": "quota sul tempo totale",
+    "activities_one": "{{count}} attività",
+    "activities_other": "{{count}} attività",
+    "split": "Di cui {{travel}} di spostamento e {{training}} di allenamento."
+  },
+  "review": {
+    "kicker": "Bilancio della settimana",
+    "kickerWeek": "Bilancio settimana {{n}}",
+    "headDone": "sedute svolte",
+    "headPlanned": "sedute pianificate",
+    "headExtra": "oltre al piano",
+    "noPlan": "Nessun piano questa settimana. Ciò che hai fatto conta comunque.",
+    "nothingClosed": "Nulla è stato chiuso. Chiudi le tue sedute per ottenere un bilancio.",
+    "barDone": "{{time}} dal piano",
+    "barExtra": "{{time}} come complemento",
+    "barPlanned": "{{time}} pianificate",
+    "legendDone": "dal piano",
+    "legendExtra": "come complemento",
+    "legendPlanned": "pianificato",
+    "total": "totale",
+    "keySessions": "chiave",
+    "km": "km",
+    "kmRun": "km corsa",
+    "sport": "Sport",
+    "colTime": "Tempo",
+    "colDistance": "Distanza",
+    "colElevation": "D+",
+    "ofWhichExtra": "di cui {{time}} come complemento",
+    "skipped": "saltate",
+    "avgRpe": "rpe",
+    "pending_one": "Una seduta è ancora aperta.",
+    "pending_other": "{{count}} sedute sono ancora aperte."
+  },
+  "cockpit": {
+    "add": "Ho fatto qualcos'altro",
+    "journal": "Il mio diario",
+    "reviewLink": "Apri il diario",
+    "dayExtra": "{{minutes}} oltre al piano"
+  },
+  "toast": {
+    "saveFailed": "Impossibile salvare l'attività"
+  },
+  "plan": {
+    "title": "Attività complementari",
+    "note": "Ciò che hai fatto in aggiunta a questo piano, nelle sue date. Il tempo si somma al volume, i chilometri restano nella rispettiva disciplina.",
+    "empty": "Nessuna attività complementare nelle date di questo piano."
+  }
+}

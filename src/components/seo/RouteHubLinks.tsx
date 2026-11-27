@@ -70,7 +70,11 @@ function sourceFor(pathname: string): LinkSource | null {
 export function RouteHubLinks() {
   const { pathname } = useLocation();
   const { i18n } = useTranslation("common");
-  const lang: HubLang = i18n.language?.startsWith("en") ? "en" : "fr";
+  const lang: HubLang = i18n.language?.startsWith("it")
+    ? "it"
+    : i18n.language?.startsWith("en")
+      ? "en"
+      : "fr";
   const [version, setVersion] = useState(0);
 
   useEffect(() => {

@@ -44,7 +44,7 @@ import { secondsToTimeDigits, hmsParamsToSeconds } from "@/lib/paceFields";
 import { minutesToDurationDigits } from "@/lib/durationFields";
 import { toast } from "@/components/ui/toast";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
-import { useIsEnglish, formatDate } from "@/lib/i18n-utils";
+import { useIsEnglish, useLanguage, usePickLang, formatDate } from "@/lib/i18n-utils";
 import { failureReason } from "@/lib/failure";
 import { useMyNumbers } from "@/hooks/useMyNumbers";
 import { minutesToHm } from "@/lib/raceDay";
@@ -111,6 +111,8 @@ export function RaceSimulatorPage() {
   const { t } = useTranslation("simulator");
   const { t: tCommon } = useTranslation("common");
   const isEn = useIsEnglish();
+  const lang = useLanguage();
+  const pickLang = usePickLang();
   const { numbers, ready } = useMyNumbers();
   const [searchParams] = useSearchParams();
 
@@ -216,15 +218,18 @@ export function RaceSimulatorPage() {
       : t("titleOther");
 
   const raceDateLong = race
-    ? new Date(`${race.date}T12:00:00`).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-      })
+    ? new Date(`${race.date}T12:00:00`).toLocaleDateString(
+        lang === "it" ? "it-IT" : lang === "en" ? "en-GB" : "fr-FR",
+        {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+        },
+      )
     : "";
   const subline = race
     ? [
-        isEn ? RACE_DISTANCE_META[race.distance].labelEn : RACE_DISTANCE_META[race.distance].label,
+        pickLang(RACE_DISTANCE_META[race.distance], "label"),
         race.elevationGain ? `${race.elevationGain} D+` : null,
         raceDateLong,
         t("pick.fromPlan"),

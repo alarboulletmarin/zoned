@@ -26,7 +26,7 @@ import {
   type TodayComposition,
   type TodaySource,
 } from "@/lib/todayComposition";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { getDateLocale, useIsEnglish } from "@/lib/i18n-utils";
 import type { TrainingPlan } from "@/types/plan";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -143,7 +143,7 @@ export function TodayComposePanel({
 
   const formatMonday = (iso: string) => {
     const [y, m, d] = iso.split("-").map(Number);
-    return new Date(y, m - 1, d).toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+    return new Date(y, m - 1, d).toLocaleDateString(getDateLocale(), {
       day: "numeric",
       month: "short",
     });

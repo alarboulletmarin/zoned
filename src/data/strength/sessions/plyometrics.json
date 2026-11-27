@@ -6,8 +6,10 @@
       "kind": "strength",
       "name": "Intro pliométrie",
       "nameEn": "Plyometric Introduction",
+      "nameIt": "Introduzione alla pliometria",
       "description": "Introduction progressive à la pliométrie pour coureurs. Exercices à faible impact pour développer la réactivité musculaire et préparer les tendons aux contraintes explosives. Prérequis : au moins 3 mois de renforcement régulier.",
       "descriptionEn": "Progressive introduction to plyometrics for runners. Low-impact exercises to develop muscle reactivity and prepare tendons for explosive demands. Prérequisite: at least 3 months of regular strength training.",
+      "descriptionIt": "Introduzione progressiva alla pliometria per runner. Esercizi a basso impatto per sviluppare la reattività muscolare e preparare i tendini alle sollecitazioni esplosive. Prerequisito: almeno 3 mesi di potenziamento regolare.",
       "category": "plyometrics",
       "difficulty": "intermediate",
       "typicalDuration": { "min": 30, "max": 35 },
@@ -22,6 +24,7 @@
           "intensity": "mobility",
           "notes": "Squats poids du corps comme échauffement articulaire des membres inférieurs",
           "notesEn": "Bodyweight squats as lower body joint warmup",
+          "notesIt": "Squat a corpo libero come riscaldamento articolare degli arti inferiori",
           "rpe": 3
         },
         {
@@ -32,6 +35,7 @@
           "intensity": "mobility",
           "notes": "Mobilité des chevilles essentielles pour les réceptions de sauts",
           "notesEn": "Ankle mobility essential for jump landings",
+          "notesIt": "Mobilità delle caviglie essenziale per gli atterraggi dai salti",
           "rpe": 2
         }
       ],
@@ -44,6 +48,7 @@
           "intensity": "power",
           "notes": "Squat complet suivi d'un saut vertical maximal, atterrir en douceur genoux fléchis",
           "notesEn": "Full squat followed by maximal vertical jump, land softly with bent knees",
+          "notesIt": "Squat completo seguito da un salto verticale massimale, atterrare morbidamente a ginocchia flesse",
           "rpe": 6
         },
         {
@@ -54,6 +59,7 @@
           "intensity": "power",
           "notes": "Sauter sur une box de 40-50 cm, réceptionner pieds à plat, redescendre en marchant",
           "notesEn": "Jump onto a 40-50 cm box, land with flat feet, step down",
+          "notesIt": "Saltare su un box da 40-50 cm, atterrare con i piedi piatti, scendere un passo alla volta",
           "rpe": 6
         },
         {
@@ -64,6 +70,7 @@
           "intensity": "power",
           "notes": "Skippings hauts sur 20 metres, rechercher l'elevation maximale des genoux",
           "notesEn": "High skips over 20 meters, seek maximum knee elevation",
+          "notesIt": "Skip alti su 20 metri, ricercare la massima elevazione delle ginocchia",
           "rpe": 6
         },
         {
@@ -74,6 +81,7 @@
           "intensity": "power",
           "notes": "Sauts latéraux par-dessus une ligne, rechercher la stabilité à la reception",
           "notesEn": "Lateral jumps over a line, focus on landing stability",
+          "notesIt": "Salti laterali oltre una linea, concentrarsi sulla stabilità in atterraggio",
           "rpe": 6
         }
       ],
@@ -86,6 +94,7 @@
           "intensity": "mobility",
           "notes": "Foam roller ischio-jambiers pour commencer la récupération",
           "notesEn": "Foam roller hamstrings to start recovery",
+          "notesIt": "Foam roller sugli ischiocrurali per iniziare il recupero",
           "rpe": 2
         },
         {
@@ -96,6 +105,7 @@
           "intensity": "mobility",
           "notes": "Foam roller quadriceps, mouvements lents",
           "notesEn": "Foam roller quadriceps, slow movements",
+          "notesIt": "Foam roller sui quadricipiti, movimenti lenti",
           "rpe": 2
         }
       ],
@@ -112,6 +122,12 @@
         "Full rest between sets: at least 90 seconds to allow nervous system recovery",
         "Start with a low box (30 cm) and progressively increase height over several weeks"
       ],
+      "coachingTipsIt": [
+        "La qualità viene prima della quantità: ogni salto deve essere massimale e ben controllato in atterraggio",
+        "Se la qualità dei salti cala, fermate la serie anche prima di raggiungere le ripetizioni previste",
+        "Recupero completo tra le serie: almeno 90 secondi per consentire il recupero del sistema nervoso",
+        "Iniziate con un box basso (30 cm) e aumentate progressivamente l'altezza nell'arco di più settimane"
+      ],
       "commonMistakes": [
         "Enchainer les sauts trop rapidement sans récupération complète entre les séries",
         "Réceptionner les sauts genoux raides au lieu de fléchir pour absorber l'impact",
@@ -121,6 +137,11 @@
         "Chaining jumps too quickly without full recovery between sets",
         "Landing with stiff knees instead of flexing to absorb impact",
         "Attempting box heights that are too high before mastering landing technique"
+      ],
+      "commonMistakesIt": [
+        "Eseguire i salti troppo in fretta senza recupero completo tra le serie",
+        "Atterrare a ginocchia rigide invece di fletterle per assorbire l'impatto",
+        "Provare altezze di box eccessive prima di padroneggiare la tecnica di atterraggio"
       ],
       "variationIds": ["STR-012", "STR-013"],
       "suitablePhases": ["build"],
@@ -137,8 +158,10 @@
       "kind": "strength",
       "name": "Pliométrie running avancée",
       "nameEn": "Advanced Running Plyometrics",
+      "nameIt": "Pliometria avanzata per la corsa",
       "description": "Séance de pliométrie avancée pour coureurs expérimentés visant le pic de performance. Inclut des sauts en profondeur et des bonds unilatéraux pour maximiser la raideur musculo-tendineuse et le taux de développement de la force.",
       "descriptionEn": "Advanced plyometric session for experienced runners targeting peak performance. Includes depth jumps and unilateral bounds to maximize musculotendinous stiffness and rate of force development.",
+      "descriptionIt": "Sessione di pliometria avanzata per runner esperti orientata al picco di forma. Include depth jump e balzi unilaterali per massimizzare la stiffness muscolo-tendinea e il tasso di sviluppo della forza.",
       "category": "plyometrics",
       "difficulty": "advanced",
       "typicalDuration": { "min": 35, "max": 40 },
@@ -153,6 +176,7 @@
           "intensity": "mobility",
           "notes": "Squats dynamiques pour activer les membres inférieurs",
           "notesEn": "Dynamic squats to activate lower limbs",
+          "notesIt": "Squat dinamici per attivare gli arti inferiori",
           "rpe": 3
         },
         {
@@ -163,6 +187,7 @@
           "intensity": "power",
           "notes": "Squat jumps sous-maximaux comme échauffement spécifique",
           "notesEn": "Submaximal squat jumps as specific warmup",
+          "notesIt": "Squat jump submassimali come riscaldamento specifico",
           "rpe": 4
         }
       ],
@@ -175,6 +200,7 @@
           "intensity": "power",
           "notes": "Chute d'une box de 30-40 cm, reception et saut immédiat. Minimiser le temps au sol",
           "notesEn": "Drop from a 30-40 cm box, land and immediately jump. Minimize ground contact time",
+          "notesIt": "Caduta da un box di 30-40 cm, atterraggio e salto immediato. Ridurre al minimo il tempo a terra",
           "rpe": 8
         },
         {
@@ -185,6 +211,7 @@
           "intensity": "power",
           "notes": "8 bonds alternant jambe gauche et droite sur 30 metres, rechercher l'amplitude et le temps de vol",
           "notesEn": "8 bounds alternating left and right leg over 30 meters, seek amplitude and flight time",
+          "notesIt": "8 balzi alternando gamba sinistra e destra su 30 metri, ricercare ampiezza e tempo di volo",
           "rpe": 8
         },
         {
@@ -195,6 +222,7 @@
           "intensity": "power",
           "notes": "6 sauts par jambe, reception stable sur une jambe avant le saut suivant",
           "notesEn": "6 hops per leg, stable single-leg landing before the next hop",
+          "notesIt": "6 saltelli per gamba, atterraggio stabile su una gamba prima del saltello successivo",
           "rpe": 8
         },
         {
@@ -205,6 +233,7 @@
           "intensity": "power",
           "notes": "Saut vertical en ramenant les genoux vers la poitrine, atterrir en position athlétique",
           "notesEn": "Vertical jump bringing knees to chest, land in athletic position",
+          "notesIt": "Salto verticale portando le ginocchia al petto, atterrare in posizione atletica",
           "rpe": 7
         }
       ],
@@ -217,6 +246,7 @@
           "intensity": "mobility",
           "notes": "Foam roller complet sur les ischio-jambiers",
           "notesEn": "Complete foam roller on hamstrings",
+          "notesIt": "Foam roller completo sugli ischiocrurali",
           "rpe": 2
         },
         {
@@ -227,6 +257,7 @@
           "intensity": "mobility",
           "notes": "Foam roller complet sur les quadriceps",
           "notesEn": "Complete foam roller on quadriceps",
+          "notesIt": "Foam roller completo sui quadricipiti",
           "rpe": 2
         },
         {
@@ -237,6 +268,7 @@
           "intensity": "mobility",
           "notes": "Étirement psoas, 30 secondes par côté",
           "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "notesIt": "Allungamento dello psoas, 30 secondi per lato",
           "rpe": 2
         }
       ],
@@ -253,6 +285,12 @@
         "Only perform this session when fresh: never after intervals or a long run",
         "Allow at least 72h between this and any intense running session"
       ],
+      "coachingTipsIt": [
+        "I depth jump sono l'esercizio più impegnativo: iniziate con un box alto al massimo 30 cm",
+        "Il tempo di contatto a terra deve essere minimo (<200 ms) nei depth jump: se non rimbalzate subito, il box è troppo alto",
+        "Eseguite questa sessione solo quando siete freschi: mai dopo ripetute o un lungo",
+        "Lasciate almeno 72 ore tra questa sessione e qualsiasi allenamento di corsa intenso"
+      ],
       "commonMistakes": [
         "Utiliser une box trop haute pour les depth jumps, transformant un exercice reactif en exercice de force",
         "Ne pas récupérer suffisamment entre les séries, dégradant la qualité des sauts",
@@ -262,6 +300,11 @@
         "Using a box that is too high for depth jumps, turning a reactive exercise into a strength exercise",
         "Not recovering enough between sets, degrading jump quality",
         "Performing this session the day after an intense running session"
+      ],
+      "commonMistakesIt": [
+        "Usare un box troppo alto per i depth jump, trasformando un esercizio reattivo in un esercizio di forza",
+        "Non recuperare abbastanza tra le serie, peggiorando la qualità dei salti",
+        "Svolgere questa sessione il giorno dopo un allenamento di corsa intenso"
       ],
       "variationIds": ["STR-011", "STR-013"],
       "suitablePhases": ["peak"],
@@ -278,8 +321,10 @@
       "kind": "strength",
       "name": "Sprint et bonds",
       "nameEn": "Sprint & Bounds",
+      "nameIt": "Sprint e balzi",
       "description": "Séance axée sur les gammes athlétiques et les bonds pour développer la puissance horizontale du coureur. Combine skippings hauts, bonds et sauts unilatéraux pour améliorer la foulée et la fréquence de pas.",
       "descriptionEn": "Session focused on athletic drills and bounds to develop horizontal power for runners. Combines high skips, bounds, and single-leg hops to improve stride and step frequency.",
+      "descriptionIt": "Sessione incentrata su andature tecniche e balzi per sviluppare la potenza orizzontale del runner. Combina skip alti, balzi e saltelli monopodalici per migliorare falcata e cadenza.",
       "category": "plyometrics",
       "difficulty": "intermediate",
       "typicalDuration": { "min": 25, "max": 30 },
@@ -294,6 +339,7 @@
           "intensity": "mobility",
           "notes": "Squats dynamiques poids du corps",
           "notesEn": "Dynamic bodyweight squats",
+          "notesIt": "Squat dinamici a corpo libero",
           "rpe": 3
         },
         {
@@ -304,6 +350,7 @@
           "intensity": "mobility",
           "notes": "Fentes avec rotation pour ouvrir les hanches et activer la chaine posterieure",
           "notesEn": "Lunges with rotation to open hips and activate posterior chain",
+          "notesIt": "Affondi con rotazione per aprire le anche e attivare la catena posteriore",
           "rpe": 3
         },
         {
@@ -314,6 +361,7 @@
           "intensity": "mobility",
           "notes": "Mobilité chevilles avant les sauts et bonds",
           "notesEn": "Ankle mobility before jumps and bounds",
+          "notesIt": "Mobilità delle caviglie prima di salti e balzi",
           "rpe": 2
         }
       ],
@@ -326,6 +374,7 @@
           "intensity": "power",
           "notes": "Skippings hauts sur 30 metres, monter les genoux le plus haut possible avec un bras dynamique",
           "notesEn": "High skips over 30 meters, drive knees as high as possible with dynamic arm action",
+          "notesIt": "Skip alti su 30 metri, portare le ginocchia più in alto possibile con azione dinamica delle braccia",
           "rpe": 7
         },
         {
@@ -336,6 +385,7 @@
           "intensity": "power",
           "notes": "Bonds alternants sur 30 metres, rechercher l'amplitude et la puissance horizontale",
           "notesEn": "Alternating bounds over 30 meters, seek amplitude and horizontal power",
+          "notesIt": "Balzi alternati su 30 metri, ricercare ampiezza e potenza orizzontale",
           "rpe": 7
         },
         {
@@ -346,6 +396,7 @@
           "intensity": "power",
           "notes": "6 sauts consecutifs par jambe, reception stable avant chaque impulsion",
           "notesEn": "6 consecutive hops per leg, stable landing before each takeoff",
+          "notesIt": "6 saltelli consecutivi per gamba, atterraggio stabile prima di ogni spinta",
           "rpe": 7
         },
         {
@@ -356,6 +407,7 @@
           "intensity": "power",
           "notes": "Squat jumps reactifs, minimiser le temps au sol entre chaque saut",
           "notesEn": "Reactive squat jumps, minimize ground contact time between jumps",
+          "notesIt": "Squat jump reattivi, ridurre al minimo il tempo di contatto a terra tra i salti",
           "rpe": 7
         }
       ],
@@ -368,6 +420,7 @@
           "intensity": "mobility",
           "notes": "Foam roller ischio-jambiers",
           "notesEn": "Foam roller hamstrings",
+          "notesIt": "Foam roller ischiocrurali",
           "rpe": 2
         },
         {
@@ -378,6 +431,7 @@
           "intensity": "mobility",
           "notes": "Étirement psoas, 30 secondes par côté",
           "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "notesIt": "Allungamento dello psoas, 30 secondi per lato",
           "rpe": 2
         }
       ],
@@ -394,6 +448,12 @@
         "Keep upright posture and dynamic arms during bounds and skips",
         "If you feel Achilles tendon pain, stop bounds immediately"
       ],
+      "coachingTipsIt": [
+        "Questa sessione può essere svolta in pista di atletica o su un prato pianeggiante",
+        "Pensate alla corsa: i balzi imitano la fase di spinta della falcata amplificandola",
+        "Mantenete il busto eretto e le braccia dinamiche durante balzi e skip",
+        "Se avvertite dolore al tendine d'Achille, interrompete subito i balzi"
+      ],
       "commonMistakes": [
         "Se pencher en avant pendant les bonds au lieu de rester droit",
         "Négliger le travail des bras : les bras génèrent une part significative de la puissance",
@@ -403,6 +463,11 @@
         "Leaning forward during bounds instead of staying upright",
         "Neglecting arm work: arms generate a significant portion of power",
         "Chaining reps without sufficient recovery, turning a power exercise into endurance"
+      ],
+      "commonMistakesIt": [
+        "Inclinarsi in avanti durante i balzi invece di restare dritti",
+        "Trascurare il lavoro delle braccia: le braccia generano una parte significativa della spinta",
+        "Concatenare le ripetizioni senza recupero sufficiente, trasformando un esercizio di potenza in resistenza"
       ],
       "variationIds": ["STR-011", "STR-012"],
       "suitablePhases": ["build", "peak"],

@@ -28,12 +28,14 @@ export const PRACTICES: readonly Practice[] = ["road", "trail"] as const;
 
 export interface PracticeMeta {
   id: Practice;
-  /** FR/EN en ligne, comme RACE_DISTANCE_META, CALCULATEURS et collections/data.ts. */
+  /** FR/EN/IT en ligne, comme RACE_DISTANCE_META, CALCULATEURS et collections/data.ts. */
   label: string;
   labelEn: string;
+  labelIt?: string;
   /** Une ligne, au tutoiement. Pas un paragraphe. */
   blurb: string;
   blurbEn: string;
+  blurbIt?: string;
   /** Les distances que le parcours propose pour cette pratique. */
   raceDistances: readonly RaceDistance[];
   /** Les modalités dont la bibliothèque montre les séances sous cette pratique. */
@@ -45,8 +47,10 @@ export const PRACTICE_META: Record<Practice, PracticeMeta> = {
     id: "road",
     label: "Route",
     labelEn: "Road",
+    labelIt: "Strada",
     blurb: "Du 5 km au marathon, sur le bitume.",
     blurbEn: "From 5K to the marathon, on the road.",
+    blurbIt: "Dai 5 km alla maratona, su strada.",
     raceDistances: ["5K", "10K", "semi", "marathon"],
     disciplines: ["running"],
   },
@@ -54,8 +58,10 @@ export const PRACTICE_META: Record<Practice, PracticeMeta> = {
     id: "trail",
     label: "Trail",
     labelEn: "Trail",
+    labelIt: "Trail",
     blurb: "Du trail court au 60 km : dénivelé, terrain, descente.",
     blurbEn: "From short trail to 60K: elevation, terrain, descent.",
+    blurbIt: "Dal trail corto ai 60 km: dislivello, terreno, discesa.",
     raceDistances: ["trail_short", "trail"],
     disciplines: ["running"],
   },

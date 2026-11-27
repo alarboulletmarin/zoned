@@ -432,6 +432,219 @@ If you come from a model where you run everything moderately fast, the transitio
 **Week 5+:** Adjust distribution toward 80/20.
 
 It takes time to recalibrate. But once you feel the benefits - fresh legs, successful quality sessions, consistent progress - you won't go back.`,
+  contentIt: `## Il modello 80/20: correre piano per migliorare velocemente
+
+Probabilmente hai sentito questo consiglio: "Corri a un ritmo a cui riesci a chiacchierare." Ma la maggior parte dei runner amatori lo ignora. Corrono i lenti troppo veloci, le sedute intense non abbastanza forte e finiscono per passare gran parte del tempo in una zona di intensità mediocre.
+
+L'[[entraînement-polarise]] propone un approccio radicalmente diverso: 80% del tuo allenamento a bassa intensità, 20% ad alta intensità e quasi nulla nel mezzo.
+
+---
+
+## L'origine: gli atleti d'élite fanno davvero così?
+
+All'inizio degli anni 2000, il ricercatore norvegese Stephen Seiler si pose una domanda semplice: come si allenano davvero i migliori atleti di endurance al mondo?
+
+Analizzando i diari di allenamento di fondisti, ciclisti e canottieri olimpici, scoprì uno schema sorprendente. Questi atleti, che immaginiamo soffrire costantemente, trascorrono in realtà la stragrande maggioranza del tempo a intensità molto bassa.
+
+### I numeri
+
+| Atleta | Sport | % bassa intensità | % alta intensità |
+|--------|-------|-------------------|------------------|
+| Élite endurance | Multi-sport | 75-85% | 15-20% |
+| Maratoneti keniani | Corsa | 80-85% | 15-20% |
+| Ciclisti pro (off-season) | Ciclismo | 80-90% | 10-15% |
+
+L'80/20 non è un'invenzione teorica. È l'osservazione di ciò che i migliori fanno naturalmente.
+
+> 📊 Gli studi di Stephen Seiler mostrano che il 75-85% del tempo di allenamento degli atleti d'élite si svolge a bassa intensità. Questo rapporto è sorprendentemente costante tra diversi sport di endurance.
+
+---
+
+## Le tre zone del modello polarizzato
+
+L'allenamento polarizzato semplifica le zone in tre categorie:
+
+### Zona 1: Sotto la soglia aerobica
+
+Sono la tua [[zone-1]] e la tua [[zone-2]]. Sforzo facile, conversazione possibile. Il respiro è calmo, potresti andare avanti per ore.
+
+**Percezione**: RPE 1-4 su 10
+**Test della parola**: frasi complete senza problemi
+
+### Zona 2: Tra le due soglie (la "zona grigia")
+
+È la [[zone-3]] — il ritmo tempo/medio, moderatamente impegnativo. Senti di lavorare, ma è gestibile. È proprio questa la zona che il modello polarizzato raccomanda di... ridurre al minimo.
+
+**Percezione**: RPE 5-7 su 10
+**Test della parola**: frasi brevi, conversazione spezzettata
+
+> 📌 Il principio fondamentale del polarizzato: o corri facile (conversazione agevole) o corri forte (impossibile parlare). Evita la via di mezzo.
+
+### Zona 3: Sopra la soglia lattacida
+
+Sono la tua [[zone-4]], [[zone-5]] e [[zone-6]]. Sforzo da duro a massimale. Il respiro è profondo, riesci a dire solo poche parole.
+
+**Percezione**: RPE 8-10 su 10
+**Test della parola**: impossibile parlare
+
+---
+
+## Perché evitare la zona grigia?
+
+È controintuitivo. La zona grigia sembra "produttiva": sudi, ti stanchi, hai la sensazione di lavorare. Ma è proprio questo il problema.
+
+### Troppo dura per recuperare
+
+Le sedute in zona grigia generano una fatica significativa senza offrire uno stimolo di adattamento superiore alla resistenza facile.
+
+Risultato: ci metti più tempo a recuperare rispetto a un lento facile, ma non ottieni i benefici di una vera seduta intensa.
+
+### Non abbastanza dura per il massimo progresso
+
+La zona grigia non sollecita abbastanza i tuoi sistemi per innescare gli adattamenti più potenti:
+- Non abbastanza intensa per migliorare il tuo [[vo2max]]
+- Non abbastanza prolungata per massimizzare gli adattamenti di resistenza
+- Sei in una "terra di nessuno" fisiologica
+
+### Il costo cumulativo
+
+Passare troppo tempo in zona grigia accumula fatica senza i benefici corrispondenti. Alla lunga porta a:
+- Stagnazione delle prestazioni
+- Stanchezza cronica
+- Maggiore rischio di infortunio
+- Perdita del piacere di correre
+
+---
+
+## I benefici della polarizzazione
+
+### 1. Migliore sviluppo aerobico
+
+Correre piano (davvero piano) permette di accumulare molto volume senza affaticarsi eccessivamente. Questo volume sviluppa:
+- La densità capillare (più vasi sanguigni nei muscoli)
+- Il numero di mitocondri (le "centrali energetiche" cellulari)
+- L'efficienza cardiaca (più sangue pompato a ogni battito)
+- L'utilizzo dei grassi come carburante
+
+### 2. Sedute intense di qualità superiore
+
+Quando i giorni facili sono davvero facili, arrivi fresco alle sedute di qualità. Puoi dare di più, a ritmi migliori, con una tecnica migliore.
+
+### 3. Recupero accelerato
+
+Meno stress cumulativo = recupero più rapido = capacità di assorbire più lavoro nel lungo periodo.
+
+### 4. Riduzione del rischio di infortuni
+
+Il volume a bassa intensità sollecita le strutture (tendini, ossa) senza sovraccaricarle. Costruisci resilienza progressivamente.
+
+### 5. Longevità nello sport
+
+I runner che seguono un approccio polarizzato restano attivi più a lungo. Meno esaurimento, meno infortuni, più piacere.
+
+---
+
+## Come applicare l'80/20
+
+### Passo 1: Definisci le tue zone
+
+Usa la frequenza cardiaca o le sensazioni:
+
+| Zona polarizzata | FC (% FCmax) | Sensazione |
+|------------------|--------------|------------|
+| Zona 1 (facile) | 50-75% | Conversazione agevole |
+| Zona 2 (grigia) | 75-85% | Conversazione difficile |
+| Zona 3 (intensa) | >85% | Impossibile parlare |
+
+### Passo 2: Conta in tempo, non in distanza
+
+L'80/20 si applica al tempo di allenamento, non ai chilometri. Una seduta di ripetute può fare pochi chilometri ma molto tempo in zona 3.
+
+### Passo 3: Rallenta i tuoi lenti
+
+È la parte più difficile per la maggior parte dei runner. Se oggi corri i lenti a 5:30/km, forse dovresti stare a 6:00-6:30/km.
+
+**Test:** Riesci a sostenere una conversazione completa per tutta la durata del lento? Se no, stai andando troppo forte.
+
+### Passo 4: Intensifica le sedute dure
+
+Quando fai una seduta di qualità, impegnati davvero. Niente mezze misure. O è facile, o è dura.
+
+### Passo 5: Riduci al minimo la zona grigia
+
+Le sedute tempo/medio (zona 3) hanno un loro posto, ma non dovrebbero dominare il programma. Riservane l'uso alla preparazione specifica prima di una gara.
+
+---
+
+## Settimana tipo polarizzata
+
+Per un runner che si allena 5 volte a settimana (circa 5-6 ore):
+
+| Giorno | Seduta | Zona | Durata |
+|--------|--------|------|--------|
+| Lunedì | Riposo | - | - |
+| Martedì | Ripetute | Zona 3 (intensa) | 50 min |
+| Mercoledì | Corsa lenta | Zona 1 (facile) | 45 min |
+| Giovedì | Corsa lenta | Zona 1 (facile) | 40 min |
+| Venerdì | Riposo o corsa leggera | Zona 1 | 0-30 min |
+| Sabato | Corsa lenta | Zona 1 (facile) | 45 min |
+| Domenica | Lungo | Zona 1 (facile) | 90 min |
+
+**Ripartizione:** ~4h30 in zona 1 (80%), ~50 min in zona 3 (20%), 0 min in zona 2.
+
+---
+
+## Gli errori da evitare
+
+> ⚠️ L'errore più comune: correre i giorni facili troppo forte e i giorni duri non abbastanza forte. Il risultato è un allenamento mediocre che non produce né recupero né adattamento.
+
+### Errore 1: "Facile" non è abbastanza facile
+
+La maggior parte dei runner sottovaluta quanto dovrebbero essere lenti i propri lenti. Se guardi l'orologio e pensi "è troppo piano", probabilmente sei al ritmo giusto.
+
+### Errore 2: Sentirsi in colpa a correre piano
+
+"I miei amici vanno più forte su Strava." E allora? Lo scopo del tuo lento non è impressionare. È costruire la tua base aerobica.
+
+### Errore 3: Aggiungere accelerazioni ai lenti
+
+Finire un lento con 3x100m veloci trasforma una seduta di recupero in una seduta mista. Se l'obiettivo è recuperare, recupera.
+
+### Errore 4: Contare le percentuali su una sola settimana
+
+L'80/20 è una media su più settimane. Una settimana con una gara può avere il 30% di alta intensità, compensata da settimane al 90% facile.
+
+---
+
+## Caso particolare: la maratona
+
+Per i maratoneti, l'approccio polarizzato funziona particolarmente bene. Il ritmo maratona (attorno alla zona grigia) viene allenato in modo specifico nelle ultime settimane di preparazione, non lungo tutto il piano.
+
+I lunghi restano in zona 1-2, anche se viene la tentazione di accelerare. Le sedute di qualità mirano o alla soglia (zona 3-4) o alla VAM (zona 5).
+
+---
+
+## La scienza conferma
+
+Diversi studi che confrontano l'allenamento polarizzato con l'allenamento "threshold" (più zona grigia) mostrano risultati a favore della polarizzazione:
+
+- **Stöggl & Sperlich (2014)**: L'allenamento polarizzato produce miglioramenti superiori di VO2max e prestazione sui 10 km rispetto all'approccio threshold.
+- **Neal et al. (2013)**: Ciclisti amatori che hanno seguito 6 settimane di polarizzato vs threshold. Il gruppo polarizzato ha mostrato una progressione superiore.
+- **Studi longitudinali sugli élite**: Gli atleti che mantengono una distribuzione polarizzata per più anni migliorano con maggiore regolarità.
+
+---
+
+## Iniziare gradualmente
+
+Se arrivi da un modello in cui corri tutto moderatamente veloce, la transizione al polarizzato può essere psicologicamente difficile.
+
+**Settimana 1-2:** Rallenta solo i tuoi lenti. Nessun cambiamento alle sedute di qualità.
+
+**Settimana 3-4:** Intensifica le sedute di qualità. Davvero dure quando devono essere dure.
+
+**Settimana 5+:** Regola la distribuzione verso l'80/20.
+
+Ci vuole tempo per ricalibrarsi. Ma una volta sentiti i benefici — gambe fresche, sedute di qualità riuscite, progressi costanti — non tornerai più indietro.`,
 };
 
 export default content;

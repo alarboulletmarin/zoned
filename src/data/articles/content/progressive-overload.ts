@@ -502,6 +502,256 @@ Progressive overload is a marathon, not a sprint (ironically). The runners who p
 - Structural adaptations (tendons, bones) take longer than cardiovascular adaptations
 
 The temptation to push is strong. But each injury costs you weeks, even months. Better to progress slowly and steadily than fast and erratically.`,
+  contentIt: `## Il principio fondamentale del miglioramento
+
+Perché miglioriamo? Perché il nostro corpo si adatta agli stimoli che gli imponiamo. Ma c'è un dettaglio: una volta adattato, bisogna aumentare lo stimolo per continuare a progredire.
+
+È il [[progressive-overload]] — il sovraccarico progressivo. Un principio semplice in apparenza, ma la cui corretta applicazione fa tutta la differenza tra crescita costante e stallo cronico.
+
+---
+
+## Come funziona il sovraccarico progressivo
+
+Il tuo corpo è una straordinaria macchina di adattamento. Quando gli imponi uno stress (una seduta di allenamento), risponde diventando più forte per gestire meglio quello stress la volta successiva. È la [[surcompensation]].
+
+Ma questo adattamento ha un limite: una volta che il corpo si è adattato a uno stimolo, quello stesso stimolo non lo farà più migliorare. Devi aumentare la difficoltà.
+
+### Il ciclo virtuoso
+
+1. **Imponi uno stress**: seduta di allenamento
+2. **Il corpo si adatta**: diventa più forte/resistente
+3. **Lo stesso stress diventa insufficiente**: il corpo lo gestisce con facilità
+4. **Aumenti lo stress**: si torna al passo 1
+
+È una scala che si sale un gradino alla volta, non un ascensore espresso.
+
+---
+
+## Le quattro dimensioni del sovraccarico
+
+Il sovraccarico progressivo non si riduce a "correre di più". Puoi aumentare la difficoltà su quattro assi:
+
+### 1. Il volume
+
+Il più evidente: correre più chilometri o più a lungo.
+
+**Esempi:**
+- Passare da 30 km/settimana a 35 km
+- Allungare il lungo da 1h30 a 1h45
+- Aggiungere una seduta extra nella settimana
+
+**Vantaggi:** Sviluppa la resistenza di base, rinforza le strutture
+**Limiti:** Il più rischioso per gli infortuni se aumentato troppo in fretta
+
+### 2. L'intensità
+
+Correre più veloce o a percentuali più alte delle tue zone.
+
+**Esempi:**
+- Portare le frazioni dal 90% VAM al 95% VAM
+- Aumentare il ritmo del tempo run da 4:30/km a 4:20/km
+- Inserire una frazione a ritmo gara nel lungo
+
+**Vantaggi:** Sviluppa velocità e soglia lattacida
+**Limiti:** Molto impegnativo, richiede più recupero
+
+### 3. La frequenza
+
+Allenarsi più spesso.
+
+**Esempi:**
+- Passare da 3 a 4 sedute a settimana
+- Aggiungere una corsa di recupero il giorno dopo una seduta dura
+- Introdurre il "doppio" (due sedute nello stesso giorno)
+
+**Vantaggi:** Aumenta il tempo totale di adattamento
+**Limiti:** Meno recupero tra le sedute
+
+### 4. La densità
+
+Ridurre i tempi di recupero o aumentare il lavoro per unità di tempo.
+
+**Esempi:**
+- Ripetute: passare da 2 min di recupero tra le prove a 1 min 30
+- Tempo run: concatenare i blocchi invece di recuperare tra l'uno e l'altro
+- Seduta: ridurre riscaldamento/defaticamento a favore di più lavoro effettivo
+
+**Vantaggi:** Migliora la capacità di recupero durante lo sforzo
+**Limiti:** Aumenta sensibilmente la difficoltà percepita
+
+---
+
+## La regola del 10%
+
+> 📌 La regola del 10%: non aumentare il volume settimanale di oltre il 10% a settimana. È un argine semplice ed efficace per evitare infortuni da sovraccarico.
+
+Una raccomandazione classica: non aumentare il carico di oltre il 10% a settimana. Questa regola riguarda principalmente il volume.
+
+**Esempio:**
+- Settimana 1: 40 km
+- Settimana 2: 44 km max (+10%)
+- Settimana 3: 48 km max (+10%)
+- Settimana 4: scarico a 35-40 km
+
+### Perché il 10%?
+
+Questa soglia nasce dall'osservazione che aumenti superiori sono correlati a un maggior rischio di infortunio, soprattutto nei runner amatori.
+
+### Limiti della regola
+
+- Si applica al volume, non all'intensità
+- I runner esperti possono talvolta aumentare più rapidamente
+- A basso volume, il 10% è poco (4 km su 40 km)
+- Non tiene conto dei fattori individuali
+
+**Da ricordare:** È una linea guida, non una legge assoluta.
+
+---
+
+## Periodizzare il sovraccarico
+
+Sovraccarico progressivo non significa un aumento lineare infinito. Il tuo corpo ha bisogno di pause per consolidare gli adattamenti.
+
+### Lo schema di carico classico
+
+La maggior parte dei piani segue uno schema 3:1 o 2:1:
+
+**Schema 3:1:**
+- Settimana 1: carico base (100%)
+- Settimana 2: carico aumentato (+5-10%)
+- Settimana 3: carico massimo (+10-15%)
+- Settimana 4: [[deload]] (-30-40%)
+
+**Schema 2:1:**
+- Settimana 1: carico aumentato
+- Settimana 2: carico massimo
+- Settimana 3: scarico
+
+Lo schema 2:1 è più adatto ai runner più maturi o soggetti a infortuni.
+
+### L'importanza dello scarico (deload)
+
+> 💡 Programma in anticipo le settimane di scarico (ogni 3-4 settimane). Non sono negoziabili: è durante il riposo che gli adattamenti si consolidano.
+
+La settimana di [[deload]] non è tempo perso. In questa fase:
+- I tessuti si riparano completamente
+- Le riserve si ricostituiscono
+- Gli adattamenti si consolidano
+- Il sistema nervoso recupera
+
+Senza scarico accumuli un debito di fatica che prima o poi ti presenta il conto.
+
+---
+
+## Segnali che è ora di aumentare il carico
+
+Come capire se sei pronto per il gradino successivo?
+
+### Segnali positivi
+
+- Le sedute ti sembrano facili (stesso ritmo, minore sforzo percepito)
+- La frequenza cardiaca a parità di sforzo diminuisce
+- Recuperi più in fretta tra le sedute
+- Finisci gli allenamenti senza essere completamente svuotato
+- I tuoi tempi sui percorsi di riferimento migliorano
+
+### Sei pronto per un sovraccarico quando...
+
+Puoi spuntare diverse di queste caselle:
+- [ ] Ultima settimana ben assimilata
+- [ ] Sonno ed energia buoni
+- [ ] Nessun dolore persistente
+- [ ] Motivazione intatta
+- [ ] FC a riposo normale
+
+---
+
+## Segnali d'allarme: troppo, troppo in fretta
+
+Al contrario, alcuni segnali indicano che stai forzando troppo:
+
+### Segnali fisici
+
+- **Stanchezza persistente**: anche dopo una buona notte di sonno, sei esausto
+- **Dolori articolari o tendinei**: che non spariscono dopo il riscaldamento
+- **Prestazioni in calo**: nonostante l'allenamento, rallenti
+- **Malanni frequenti**: raffreddori, infezioni ripetute
+- **Disturbi del sonno**: difficoltà ad addormentarti o risvegli notturni
+
+### Segnali psicologici
+
+- **Perdita di motivazione**: l'allenamento diventa un peso
+- **Irritabilità**: sei costantemente nervoso
+- **Timore**: temi le sedute
+- **Ossessione**: pensi solo ai numeri
+
+Se riconosci diversi di questi segnali, potresti essere in [[overreaching-non-fonctionnel]] o sulla strada verso l'[[overtraining]]. La soluzione: fare un passo indietro, non spingere di più.
+
+---
+
+## Applicazione pratica: progressione su 3 mesi
+
+Ecco un esempio di sovraccarico progressivo per un runner intermedio che punta a passare da 35 km/settimana a 50 km/settimana in 12 settimane:
+
+| Settimana | Volume | Sedute | Nota |
+|-----------|--------|--------|------|
+| 1 | 35 km | 4 | Base di partenza |
+| 2 | 38 km | 4 | +8% |
+| 3 | 42 km | 4 | +10% |
+| 4 | 35 km | 4 | Scarico |
+| 5 | 40 km | 4-5 | Nuovo gradino |
+| 6 | 44 km | 5 | +10% |
+| 7 | 48 km | 5 | +9% |
+| 8 | 40 km | 4 | Scarico |
+| 9 | 45 km | 5 | Consolidamento |
+| 10 | 48 km | 5 | +7% |
+| 11 | 52 km | 5 | +8% |
+| 12 | 42 km | 4 | Scarico |
+
+Nota: le progressioni non sono perfettamente lineari. Si avanza a gradini con fasi di consolidamento.
+
+---
+
+## Errori frequenti
+
+### Errore 1: Aumentare tutto insieme
+
+> ⚠️ Aumentare volume, intensità e frequenza nello stesso momento è la ricetta garantita per l'infortunio o l'esaurimento. Aumenta solo una dimensione alla volta.
+
+Vuoi più volume E più intensità E più frequenza. Troppo stress tutto insieme = infortunio o esaurimento.
+
+**Soluzione:** Aumenta solo una dimensione alla volta.
+
+### Errore 2: Ignorare i segnali di fatica
+
+"Ho male ma la tabella dice di aumentare." La tabella non conosce il tuo corpo.
+
+**Soluzione:** Adatta il piano alle tue sensazioni, non il contrario.
+
+### Errore 3: Confrontarsi con gli altri
+
+"Il mio amico corre 80 km a settimana, dovrei riuscirci anch'io." Ogni corpo è diverso.
+
+**Soluzione:** Il tuo unico riferimento sei tu stesso nel passato.
+
+### Errore 4: Dimenticare lo scarico
+
+Settimana dopo settimana, aumenti senza mai tirare il fiato.
+
+**Soluzione:** Programma in anticipo le settimane di scarico. Non sono negoziabili.
+
+---
+
+## La pazienza come strategia
+
+Il sovraccarico progressivo è una maratona, non uno sprint (ironia della sorte). I runner che migliorano di più nel lungo periodo sono quelli che accettano una progressione lenta e regolare.
+
+**Qualche cifra:**
+- Un runner amatore può migliorare del 5-10% all'anno sui tempi in gara
+- Servono 2-3 anni per raggiungere un livello di chilometraggio "maturo"
+- Gli adattamenti strutturali (tendini, ossa) richiedono più tempo degli adattamenti cardiovascolari
+
+La tentazione di forzare è forte. Ma ogni infortunio ti fa perdere settimane, se non mesi. Meglio progredire piano e con costanza che veloce e a strappi.`,
 };
 
 export default content;

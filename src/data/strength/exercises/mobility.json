@@ -5,8 +5,10 @@
       "id": "EX-MO-001",
       "name": "Ouverture de hanches 90/90",
       "nameEn": "90/90 Hip Opener",
+      "nameIt": "Apertura anche 90/90",
       "description": "Position assise avec les deux jambes à 90 degrés, rotation interne et externe de hanche alternée. Exercice de mobilité fondamental qui cible la rotation des hanches, souvent limitée chez les coureurs. Une bonne rotation de hanche est essentielle pour une foulée fluide et sans compensation.",
       "descriptionEn": "Seated position with both legs at 90 degrees, alternating internal and external hip rotation. A fundamental mobility exercise targeting hip rotation, often restricted in runners. Good hip rotation is essential for a fluid stride without compensation.",
+      "descriptionIt": "Posizione seduta con entrambe le gambe a 90 gradi, alternando rotazione interna ed esterna dell'anca. Esercizio di mobilità fondamentale che lavora sulla rotazione delle anche, spesso limitata nei runner. Una buona rotazione dell'anca è essenziale per una falcata fluida e senza compensazioni.",
       "primaryMuscles": ["glutes", "hip_flexors"],
       "secondaryMuscles": ["adductors"],
       "equipment": ["none"],
@@ -25,6 +27,13 @@
         "Keep torso upright, gently lean toward the front knee",
         "Alternate sides by pivoting both legs simultaneously"
       ],
+      "formCuesIt": [
+        "Seduti a terra, gamba anteriore a 90 gradi davanti, gamba posteriore a 90 gradi di lato",
+        "Ginocchio e caviglia anteriori a terra (rotazione esterna)",
+        "Ginocchio e caviglia posteriori a terra (rotazione interna)",
+        "Mantenere il busto eretto, inclinarsi dolcemente verso il ginocchio anteriore",
+        "Alternare i lati ruotando entrambe le gambe contemporaneamente"
+      ],
       "regressionId": null,
       "progressionId": null,
       "imageSlug": "90-90-hip-opener"
@@ -33,8 +42,10 @@
       "id": "EX-MO-002",
       "name": "Mobilité cheville",
       "nameEn": "Ankle Mobility",
+      "nameIt": "Mobilità della caviglia",
       "description": "Mobilisation de la dorsiflexion de cheville contre un mur. Une dorsiflexion limitée est une cause fréquente de blessures chez le coureur (fasciite plantaire, tendinopathie d'Achille, douleurs de genou). Cet exercice améliore progressivement l'amplitude de mouvement de la cheville.",
       "descriptionEn": "Wall-based ankle dorsiflexion mobilization. Limited dorsiflexion is a frequent cause of injury in runners (plantar fasciitis, Achilles tendinopathy, knee pain). This exercise progressively improves ankle range of motion.",
+      "descriptionIt": "Mobilizzazione della dorsiflessione della caviglia al muro. Una dorsiflessione limitata è una causa frequente di infortuni nei runner (fascite plantare, tendinopatia achillea, dolori al ginocchio). Questo esercizio migliora progressivamente l'ampiezza di movimento della caviglia.",
       "primaryMuscles": ["calves"],
       "secondaryMuscles": [],
       "equipment": ["none"],
@@ -53,6 +64,13 @@
         "Increase foot-to-wall distance to progress",
         "Perform small back-and-forth movements (oscillations)"
       ],
+      "formCuesIt": [
+        "Di fronte a un muro, un piede avanti con le dita a pochi centimetri dalla parete",
+        "Spingere il ginocchio in avanti verso il muro",
+        "Il tallone deve rimanere a terra per tutto il movimento",
+        "Aumentare la distanza tra piede e muro per progredire",
+        "Eseguire piccoli movimenti avanti e indietro (oscillazioni)"
+      ],
       "regressionId": null,
       "progressionId": null,
       "imageSlug": "ankle-mobility"
@@ -61,8 +79,10 @@
       "id": "EX-MO-003",
       "name": "Étirement psoas à genoux",
       "nameEn": "Kneeling Hip Flexor Stretch",
+      "nameIt": "Stretching dello psoas in ginocchio",
       "description": "Étirement du psoas et du droit fémoral en position de fente au sol. Les fléchisseurs de hanches sont souvent raccourcis chez les coureurs et les personnes sédentaires. Un psoas raccourci limite l'extension de hanche, réduisant la longueur de foulée et l'efficacité de course.",
       "descriptionEn": "Psoas and rectus femoris stretch in a kneeling lunge position. Hip flexors are often shortened in runners and sedentary individuals. A shortened psoas limits hip extension, reducing stride length and running efficiency.",
+      "descriptionIt": "Allungamento dello psoas e del retto femorale in posizione di affondo in ginocchio. I flessori dell'anca sono spesso accorciati nei runner e in chi sta molto seduto. Uno psoas accorciato limita l'estensione dell'anca, riducendo la lunghezza della falcata e l'efficienza di corsa.",
       "primaryMuscles": ["hip_flexors"],
       "secondaryMuscles": ["quadriceps"],
       "equipment": ["none"],
@@ -81,6 +101,13 @@
         "Feel the stretch at the front of the back leg's hip",
         "Do not arch the back, keep core engaged"
       ],
+      "formCuesIt": [
+        "Un ginocchio a terra, l'altro piede piatto davanti (posizione di mezzo inginocchiamento)",
+        "Mantenere il busto eretto, portare leggermente il bacino in retroversione",
+        "Spostare dolcemente i fianchi in avanti",
+        "Sentire l'allungamento nella parte anteriore dell'anca della gamba posteriore",
+        "Non inarcare la schiena, mantenere il core attivo"
+      ],
       "regressionId": null,
       "progressionId": "EX-MO-004",
       "imageSlug": "kneeling-hip-flexor-stretch"
@@ -89,8 +116,10 @@
       "id": "EX-MO-004",
       "name": "Fente avec rotation",
       "nameEn": "Lunge with Rotation",
+      "nameIt": "Affondo con rotazione",
       "description": "Fente avant avec rotation du tronc vers la jambe avant. Combine mobilité de hanche, étirement du psoas et mobilité thoracique en un seul mouvement. La rotation thoracique est souvent limitée chez les coureurs, ce qui réduit l'efficacité du balancement des bras.",
       "descriptionEn": "Forward lunge with trunk rotation toward the front leg. Combines hip mobility, psoas stretch and thoracic mobility in one movement. Thoracic rotation is often limited in runners, reducing arm swing efficiency.",
+      "descriptionIt": "Affondo anteriore con rotazione del tronco verso la gamba davanti. Combina mobilità dell'anca, allungamento dello psoas e mobilità toracica in un unico movimento. La rotazione toracica è spesso limitata nei runner, riducendo l'efficienza dell'oscillazione delle braccia.",
       "primaryMuscles": ["hip_flexors", "core_lateral"],
       "secondaryMuscles": ["glutes", "quadriceps", "upper_back"],
       "equipment": ["none"],
@@ -109,6 +138,13 @@
         "Keep hips facing forward, only the trunk rotates",
         "Return to center then alternate sides"
       ],
+      "formCuesIt": [
+        "Fare un lungo passo in avanti in posizione di affondo",
+        "Abbassare il ginocchio posteriore verso terra",
+        "Ruotare il busto verso la gamba anteriore, braccia tese o mani unite",
+        "Mantenere i fianchi rivolti in avanti, ruota solo il tronco",
+        "Tornare al centro poi alternare lato"
+      ],
       "regressionId": "EX-MO-003",
       "progressionId": null,
       "imageSlug": "lunge-rotation"
@@ -117,8 +153,10 @@
       "id": "EX-MO-005",
       "name": "Rouleau ischio-jambiers",
       "nameEn": "Foam Roll Hamstrings",
+      "nameIt": "Foam roller ischiocrurali",
       "description": "Auto-massage des ischio-jambiers avec rouleau de mousse. Réduit les tensions musculaires et les adhésions fasciales accumulées par les entraînements répétés. Améliore la qualité tissulaire et la tolérance à l'étirement des ischio-jambiers, souvent raides chez les coureurs.",
       "descriptionEn": "Self-massage of hamstrings with a foam roller. Reduces muscular tension and fascial adhesions accumulated from repeated training. Improves tissue quality and stretch tolerance of the hamstrings, often tight in runners.",
+      "descriptionIt": "Automassaggio dei muscoli ischiocrurali con foam roller. Riduce le tensioni muscolari e le aderenze fasciali accumulate con gli allenamenti ripetuti. Migliora la qualità tissutale e la tolleranza all'allungamento degli ischiocrurali, spesso rigidi nei runner.",
       "primaryMuscles": ["hamstrings"],
       "secondaryMuscles": [],
       "equipment": ["foam_roller"],
@@ -137,6 +175,13 @@
         "Pause on tender spots (trigger points) for 20-30 seconds",
         "Slightly rotate the leg to target inner and outer hamstrings"
       ],
+      "formCuesIt": [
+        "Seduti a terra, rullo sotto i muscoli posteriori della coscia",
+        "Mani a terra dietro per sostenersi",
+        "Rullare lentamente da appena sopra il ginocchio fino ai glutei",
+        "Fermarsi sui punti più sensibili (trigger point) per 20-30 secondi",
+        "Ruotare leggermente la gamba per lavorare parte interna ed esterna"
+      ],
       "regressionId": null,
       "progressionId": null,
       "imageSlug": "foam-roll-hamstrings"
@@ -145,8 +190,10 @@
       "id": "EX-MO-006",
       "name": "Rouleau quadriceps",
       "nameEn": "Foam Roll Quads",
+      "nameIt": "Foam roller quadricipiti",
       "description": "Auto-massage des quadriceps avec rouleau de mousse. Libère les tensions accumulées dans les quadriceps, sollicités lors de chaque phase d'amortissement en course. Cible particulièrement le vaste externe et le droit fémoral, souvent surchargés chez les coureurs.",
       "descriptionEn": "Self-massage of quadriceps with a foam roller. Releases tension accumulated in the quads, loaded during every landing phase in running. Particularly targets the vastus lateralis and rectus femoris, often overloaded in runners.",
+      "descriptionIt": "Automassaggio dei quadricipiti con foam roller. Rilascia le tensioni accumulate nei quadricipiti, sollecitati in ogni fase di ammortizzazione nella corsa. Lavora in particolare su vasto laterale e retto femorale, spesso sovraccaricati nei runner.",
       "primaryMuscles": ["quadriceps"],
       "secondaryMuscles": ["hip_flexors"],
       "equipment": ["foam_roller"],
@@ -165,6 +212,13 @@
         "Bend and straighten the knee on a tender spot for extra release",
         "Slightly rotate the body to target inner and outer thigh"
       ],
+      "formCuesIt": [
+        "In appoggio sugli avambracci, pancia in giù, rullo sotto le cosce",
+        "Rullare lentamente dalla parte alta del ginocchio fino all'anca",
+        "Fermarsi sui punti sensibili per 20-30 secondi",
+        "Piegare ed estendere il ginocchio su un punto sensibile per un rilascio maggiore",
+        "Ruotare leggermente il corpo per lavorare interno ed esterno coscia"
+      ],
       "regressionId": null,
       "progressionId": null,
       "imageSlug": "foam-roll-quads"
@@ -173,8 +227,10 @@
       "id": "EX-MO-007",
       "name": "Rouleau ITB",
       "nameEn": "Foam Roll IT Band",
+      "nameIt": "Foam roller bandelletta ileotibiale",
       "description": "Auto-massage de la bandelette iliotibiale avec rouleau de mousse. La bandelette IT est fréquemment source de douleurs latérales de genou chez les coureurs (syndrome de l'essuie-glace). Le rouleau cible les tensions du vaste externe et du TFL qui tirent sur la bandelette.",
       "descriptionEn": "Self-massage of the iliotibial band with a foam roller. The IT band is frequently a source of lateral knee pain in runners (IT band syndrome). The roller targets tensions in the vastus lateralis and TFL that pull on the band.",
+      "descriptionIt": "Automassaggio della bandelletta ileotibiale con foam roller. La bandelletta IT è spesso fonte di dolore laterale al ginocchio nei runner (sindrome della bandelletta ileotibiale). Il rullo agisce sulle tensioni di vasto laterale e tensore della fascia lata che tirano sulla bandelletta.",
       "primaryMuscles": ["quadriceps"],
       "secondaryMuscles": ["glutes"],
       "equipment": ["foam_roller"],
@@ -193,6 +249,13 @@
         "Pause on tender spots for 20-30 seconds",
         "Moderate intensity: this can be painful, do not force"
       ],
+      "formCuesIt": [
+        "Su un fianco, rullo sotto la parte esterna della coscia",
+        "Braccio d'appoggio a terra, gamba superiore appoggiata davanti per controllare la pressione",
+        "Rullare lentamente dall'anca fino a poco sopra il ginocchio",
+        "Fermarsi sui punti sensibili per 20-30 secondi",
+        "Intensità moderata: può risultare fastidioso, non forzare"
+      ],
       "regressionId": null,
       "progressionId": null,
       "imageSlug": "foam-roll-itb"
@@ -201,8 +264,10 @@
       "id": "EX-MO-008",
       "name": "Pigeon stretch",
       "nameEn": "Pigeon Stretch",
+      "nameIt": "Stretching del piccione",
       "description": "Étirement profond de la hanche en position du pigeon. Cible le piriforme et les rotateurs externes de hanche, souvent tendus chez les coureurs. Soulage les tensions profondes de la hanche et peut aider à prévenir le syndrome du piriforme, cause fréquente de douleurs sciatiques chez les coureurs.",
       "descriptionEn": "Deep hip stretch in pigeon position. Targets the piriformis and external hip rotators, often tight in runners. Relieves deep hip tension and can help prevent piriformis syndrome, a common cause of sciatic pain in runners.",
+      "descriptionIt": "Allungamento profondo dell'anca nella posizione del piccione. Agisce sul piriforme e sugli extrarotatori dell'anca, spesso contratti nei runner. Allevia le tensioni profonde dell'anca e aiuta a prevenire la sindrome del piriforme, causa frequente di dolore sciatico nei runner.",
       "primaryMuscles": ["glutes"],
       "secondaryMuscles": ["hip_flexors", "adductors"],
       "equipment": ["none"],
@@ -220,6 +285,13 @@
         "Back leg is extended straight behind, top of foot on the floor",
         "Gently lean forward over the front leg",
         "Breathe deeply and hold 30-60 seconds on each side"
+      ],
+      "formCuesIt": [
+        "Dalla quadrupedia, portare un ginocchio in avanti",
+        "La tibia anteriore è inclinata (non necessariamente parallela al bordo del tappetino)",
+        "La gamba posteriore è distesa dritta dietro, dorso del piede a terra",
+        "Inclinarsi dolcemente in avanti sopra la gamba anteriore",
+        "Respirare profondamente e mantenere 30-60 secondi per lato"
       ],
       "regressionId": null,
       "progressionId": null,
