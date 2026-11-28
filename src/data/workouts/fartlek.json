@@ -2732,7 +2732,8 @@
           "5k",
           "10k",
           "half-marathon",
-          "pyramid"
+          "pyramid",
+          "expert"
         ],
         "priorityScore": 80
       },

@@ -986,6 +986,7 @@
         ],
         "relativeLoad": "key",
         "tags": [
+          "situational",
           "mixed",
           "double",
           "elite"
@@ -2267,6 +2268,7 @@
         ],
         "relativeLoad": "moderate",
         "tags": [
+          "expert",
           "plyometric",
           "running-economy",
           "tendon-stiffness",

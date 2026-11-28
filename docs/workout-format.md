@@ -12,11 +12,11 @@ Kept in English because it names code, and shared by both halves of [CONTRIBUTIN
 
 | Path | Root shape | Files | Templates |
 |---|---|---|---|
-| `src/data/workouts/<category>.json` | `{ "category": WorkoutCategory, "templates": WorkoutTemplate[] }` | 12 | 230 |
+| `src/data/workouts/<category>.json` | `{ "category": WorkoutCategory, "templates": WorkoutTemplate[] }` | 12 | 237 |
 | `src/data/workouts/{cycling,swimming}.json` | `{ "discipline": Discipline, "templates": WorkoutTemplate[] }` | 2 | 20 |
 | `src/data/strength/sessions/*.json` | `{ "category": StrengthCategory, "templates": StrengthWorkoutTemplate[] }` | 5 | 17 |
 
-That is 267 templates across 19 files. The validator reports reading 24 files, because it also loads the 5 exercise-library files under `src/data/strength/exercises/` (`{ "category": StrengthCategory, "exercises": StrengthExercise[] }`). Those hold no templates; strength blocks reference them by id.
+That is 274 templates across 19 files. The validator reports reading 24 files, because it also loads the 5 exercise-library files under `src/data/strength/exercises/` (`{ "category": StrengthCategory, "exercises": StrengthExercise[] }`). Those hold no templates; strength blocks reference them by id.
 
 Which schema a template is held to is decided by the file's **location**, not by the template's own `kind`. `src/data/strength/sessions/` is the strength schema, `src/data/workouts/` the running one.
 

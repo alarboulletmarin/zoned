@@ -2493,7 +2493,8 @@
           "canova",
           "progressive",
           "marathon-specific",
-          "fractions"
+          "fractions",
+          "expert"
         ],
         "priorityScore": 80
       },
@@ -2620,7 +2621,8 @@
           "strength-run",
           "cumulative-fatigue",
           "marathon",
-          "mp-minus"
+          "mp-minus",
+          "expert"
         ],
         "priorityScore": 75
       },

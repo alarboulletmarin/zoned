@@ -143,8 +143,8 @@ describe("le catalogue réel", () => {
     ]);
     const counts = countByPractice([...run, ...bike, ...swim, ...strength]);
 
-    expect(run).toHaveLength(230);
-    expect(counts.road).toBe(197);
+    expect(run).toHaveLength(237);
+    expect(counts.road).toBe(204);
     expect(counts.trail).toBe(33);
     expect(Object.keys(counts).sort()).toEqual(["road", "trail"]);
 

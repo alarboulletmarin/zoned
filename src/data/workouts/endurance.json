@@ -782,7 +782,8 @@
         "tags": [
           "endurance",
           "fasted",
-          "fat-burning"
+          "fat-burning",
+          "situational"
         ],
         "priorityScore": 55
       },
@@ -1280,7 +1281,8 @@
         "relativeLoad": "moderate",
         "tags": [
           "endurance",
-          "cross-training"
+          "cross-training",
+          "situational"
         ],
         "priorityScore": 50
       },
@@ -1519,7 +1521,8 @@
         "tags": [
           "endurance",
           "mental",
-          "tough"
+          "tough",
+          "situational"
         ],
         "priorityScore": 45
       },
@@ -1889,7 +1892,8 @@
           "heat",
           "acclimatization",
           "plasma-volume",
-          "thermoregulation"
+          "thermoregulation",
+          "situational"
         ],
         "priorityScore": 65
       },
@@ -2015,7 +2019,8 @@
           "sleep-low",
           "glycogen-depletion",
           "metabolic",
-          "fasted"
+          "fasted",
+          "situational"
         ],
         "priorityScore": 65
       },
@@ -2143,7 +2148,8 @@
           "aerobic-threshold",
           "polarized",
           "lt1",
-          "biofeedback"
+          "biofeedback",
+          "situational"
         ],
         "priorityScore": 70
       },
@@ -2845,6 +2851,243 @@
       },
       "weeklyFrequencyMax": 2,
       "minimumRecoveryDays": 0
+    },
+    {
+      "id": "END-023",
+      "name": "Footing en endurance fondamentale",
+      "nameEn": "Easy Aerobic Run",
+      "description": "Le footing de tous les jours : une course tranquille sur terrain plat, à une allure où l'on peut parler. C'est l'essentiel du volume d'une semaine bien construite.",
+      "descriptionEn": "The everyday run: easy running on flat ground at a pace you can talk at. It is most of the volume of a well built week.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 35,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Départ en trottinant",
+          "descriptionEn": "Start at a jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Départ en trottinant",
+          "descriptionEn": "Start at a jog",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Course continue en endurance",
+          "descriptionEn": "Continuous easy running",
+          "durationMin": 35,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue en endurance",
+          "descriptionEn": "Continuous easy running",
+          "durationSec": 2100,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Si vous ne pouvez plus parler, ralentissez",
+        "Le plat ou le roulant suffit"
+      ],
+      "coachingTipsEn": [
+        "If you cannot talk any more, slow down",
+        "Flat or rolling ground is enough"
+      ],
+      "commonMistakes": [
+        "Courir ses footings trop vite",
+        "Ajouter des accélérations non prévues"
+      ],
+      "commonMistakesEn": [
+        "Running easy days too fast",
+        "Adding unplanned surges"
+      ],
+      "variationIds": [
+        "END-001",
+        "END-014"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "taper"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "endurance",
+          "easy",
+          "flat"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "END-024",
+      "name": "Footing de volume",
+      "nameEn": "Steady Aerobic Run",
+      "description": "Footing en endurance pour semaines chargées : une durée plus longue, toujours à allure facile, pour accumuler du volume sans fatigue inutile.",
+      "descriptionEn": "Easy run for heavy weeks: a longer duration, still at an easy pace, to build volume without needless fatigue.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 45,
+        "max": 75
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Départ en trottinant",
+          "descriptionEn": "Start at a jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Départ en trottinant",
+          "descriptionEn": "Start at a jog",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Course continue en endurance",
+          "descriptionEn": "Continuous easy running",
+          "durationMin": 50,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue en endurance",
+          "descriptionEn": "Continuous easy running",
+          "durationSec": 3000,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "L'allure reste facile, c'est la durée qui travaille",
+        "Un terrain plat ou roulant suffit"
+      ],
+      "coachingTipsEn": [
+        "Keep the pace easy, the duration does the work",
+        "Flat or rolling ground is enough"
+      ],
+      "commonMistakes": [
+        "Courir à allure marathon par habitude"
+      ],
+      "commonMistakesEn": [
+        "Running marathon pace out of habit"
+      ],
+      "variationIds": [
+        "END-018",
+        "END-023"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "taper"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "endurance",
+          "easy",
+          "volume",
+          "flat"
+        ],
+        "priorityScore": 75
+      }
     }
   ]
 }

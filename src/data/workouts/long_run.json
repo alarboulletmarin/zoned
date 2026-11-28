@@ -394,7 +394,8 @@
       "selectionCriteria": {
         "phases": [
           "base",
-          "build"
+          "build",
+          "peak"
         ],
         "weekPositions": [
           "late"
@@ -1173,7 +1174,8 @@
         "tags": [
           "long",
           "fasted",
-          "fat-burning"
+          "fat-burning",
+          "situational"
         ],
         "priorityScore": 55
       },
@@ -1641,7 +1643,8 @@
       "selectionCriteria": {
         "phases": [
           "base",
-          "build"
+          "build",
+          "peak"
         ],
         "weekPositions": [
           "late"
@@ -1897,7 +1900,8 @@
           "cardiac-drift",
           "monitoring",
           "marathon-predictor",
-          "long-run"
+          "long-run",
+          "expert"
         ],
         "priorityScore": 75
       },
@@ -2030,6 +2034,550 @@
           "long-run"
         ],
         "priorityScore": 70
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "LR-017",
+      "name": "Sortie longue en endurance",
+      "nameEn": "Easy Long Run",
+      "description": "La sortie longue de base : une durée à tenir en aisance respiratoire, sans changement d'allure. C'est elle qui construit l'endurance du semi et du marathon, pas la vitesse.",
+      "descriptionEn": "The everyday long run: a duration held at a conversational effort, with no change of pace. This is what builds half and full marathon endurance, not speed.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 75,
+        "max": 120
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Départ très tranquille",
+          "descriptionEn": "Very easy start",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Départ très tranquille",
+          "descriptionEn": "Very easy start",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Course continue en endurance, capable de parler",
+          "descriptionEn": "Continuous easy running, able to talk",
+          "durationMin": 70,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue en endurance, capable de parler",
+          "descriptionEn": "Continuous easy running, able to talk",
+          "durationSec": 4200,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Partez plus lentement que vous ne le pensez, la fin doit rester facile",
+        "Emportez de l'eau au-delà d'une heure",
+        "Un terrain plat ou roulant suffit"
+      ],
+      "coachingTipsEn": [
+        "Start slower than you think, the end should still feel easy",
+        "Carry water beyond an hour",
+        "Flat or rolling ground is enough"
+      ],
+      "commonMistakes": [
+        "Accélérer sur la fin pour gagner du temps",
+        "Transformer la sortie en séance d'allure"
+      ],
+      "commonMistakesEn": [
+        "Speeding up at the end to save time",
+        "Turning the run into a pace session"
+      ],
+      "variationIds": [
+        "SL-003",
+        "SL-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "long",
+          "endurance",
+          "base",
+          "flat"
+        ],
+        "priorityScore": 88
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "LR-018",
+      "name": "Sortie longue, fin un peu plus soutenue",
+      "nameEn": "Long Run with a Steady Finish",
+      "description": "Une sortie longue tranquille dont les dix dernières minutes passent un cran au-dessus, sans jamais forcer. Première façon d'apprendre à courir vite sur des jambes fatiguées.",
+      "descriptionEn": "An easy long run whose last ten minutes move up one notch, never forced. A first way to learn to run well on tired legs.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": {
+        "min": 60,
+        "max": 95
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Départ très tranquille",
+          "descriptionEn": "Very easy start",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Départ très tranquille",
+          "descriptionEn": "Very easy start",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Course continue en endurance",
+          "descriptionEn": "Continuous easy running",
+          "durationMin": 45,
+          "zone": "Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Un cran plus vite, phrases courtes possibles",
+          "descriptionEn": "One notch quicker, short sentences still possible",
+          "durationMin": 10,
+          "zone": "Z3",
+          "intensityType": "M"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue en endurance",
+          "descriptionEn": "Continuous easy running",
+          "durationSec": 2700,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Un cran plus vite, phrases courtes possibles",
+          "descriptionEn": "One notch quicker, short sentences still possible",
+          "durationSec": 600,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "La fin soutenue doit rester contrôlée, vous pourriez continuer",
+        "Si la fatigue est là, restez en endurance jusqu'au bout"
+      ],
+      "coachingTipsEn": [
+        "The steady finish stays controlled, you could keep going",
+        "If you feel tired, stay easy all the way"
+      ],
+      "commonMistakes": [
+        "Partir trop vite et ne plus pouvoir accélérer",
+        "Finir au sprint"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast and having nothing left",
+        "Sprinting the end"
+      ],
+      "variationIds": [
+        "SL-008",
+        "SL-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "long",
+          "progression",
+          "steady-finish"
+        ],
+        "priorityScore": 80
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "LR-019",
+      "name": "Sortie longue avec deux blocs soutenus",
+      "nameEn": "Long Run with Two Steady Blocks",
+      "description": "Sortie longue en endurance avec deux blocs de dix minutes à allure soutenue, séparés par cinq minutes faciles. Habitue le corps à l'allure de course sans transformer la sortie en compétition.",
+      "descriptionEn": "Easy long run with two ten-minute blocks at a steady pace, five easy minutes between them. Gets the body used to race effort without turning the run into a race.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 85,
+        "max": 120
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Départ très tranquille",
+          "descriptionEn": "Very easy start",
+          "durationMin": 15,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Départ très tranquille",
+          "descriptionEn": "Very easy start",
+          "durationSec": 900,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Course continue en endurance",
+          "descriptionEn": "Continuous easy running",
+          "durationMin": 40,
+          "zone": "Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "2x10min allure soutenue, 5min footing entre les deux",
+          "descriptionEn": "2x10min at a steady pace, 5min jog between",
+          "durationMin": 10,
+          "zone": "Z3",
+          "repetitions": 2,
+          "recovery": "5min footing",
+          "recoveryEn": "5min jog",
+          "intensityType": "M"
+        },
+        {
+          "description": "Retour en endurance",
+          "descriptionEn": "Back to easy running",
+          "durationMin": 10,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue en endurance",
+          "descriptionEn": "Continuous easy running",
+          "durationSec": 2400,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "10min allure soutenue",
+              "descriptionEn": "10min steady pace",
+              "durationSec": 600,
+              "zone": "Z3",
+              "intensityType": "M",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "5min footing",
+              "descriptionEn": "5min jog",
+              "durationSec": 300,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
+        },
+        {
+          "kind": "segment",
+          "description": "Retour en endurance",
+          "descriptionEn": "Back to easy running",
+          "durationSec": 600,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme en trottinant",
+          "descriptionEn": "Cool down at a jog",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Les blocs se courent à l'aisance, pas à la limite",
+        "Gardez la même allure sur les deux blocs"
+      ],
+      "coachingTipsEn": [
+        "Run the blocks with ease, not at the limit",
+        "Keep the same pace on both blocks"
+      ],
+      "commonMistakes": [
+        "Courir le second bloc plus vite que le premier",
+        "Raccourcir la partie facile pour finir plus tôt"
+      ],
+      "commonMistakesEn": [
+        "Running the second block faster than the first",
+        "Cutting the easy part short to finish sooner"
+      ],
+      "variationIds": [
+        "LR-017",
+        "SL-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "long",
+          "steady-blocks",
+          "race-prep"
+        ],
+        "priorityScore": 80
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "LR-020",
+      "name": "Sortie longue de volume",
+      "nameEn": "Aerobic Volume Long Run",
+      "description": "Sortie longue en endurance pour coureurs habitués aux gros volumes : de longues minutes à effort constant, sans bloc d'allure. Le socle sur lequel reposent les sorties spécifiques.",
+      "descriptionEn": "Easy long run for runners used to high mileage: long minutes at a constant effort, with no pace block. The base the specific long runs stand on.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 100,
+        "max": 150
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Départ très tranquille",
+          "descriptionEn": "Very easy start",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Départ très tranquille",
+          "descriptionEn": "Very easy start",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Course continue en endurance, effort constant",
+          "descriptionEn": "Continuous easy running, constant effort",
+          "durationMin": 100,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue en endurance, effort constant",
+          "descriptionEn": "Continuous easy running, constant effort",
+          "durationSec": 6000,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
+      "coachingTips": [
+        "Ravitaillez-vous toutes les 30 à 40 minutes",
+        "Restez en endurance même si les jambes vont bien"
+      ],
+      "coachingTipsEn": [
+        "Fuel every 30 to 40 minutes",
+        "Stay easy even when the legs feel good"
+      ],
+      "commonMistakes": [
+        "Glisser vers l'allure marathon sans s'en rendre compte"
+      ],
+      "commonMistakesEn": [
+        "Drifting into marathon pace without noticing"
+      ],
+      "variationIds": [
+        "SL-003",
+        "SL-007"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "long",
+          "endurance",
+          "volume",
+          "flat"
+        ],
+        "priorityScore": 85
       },
       "weeklyFrequencyMax": 1,
       "minimumRecoveryDays": 1

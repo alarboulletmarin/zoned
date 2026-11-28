@@ -2529,7 +2529,8 @@
           "norwegian",
           "double",
           "elite",
-          "ingebrigtsen"
+          "ingebrigtsen",
+          "situational"
         ],
         "priorityScore": 60
       },
@@ -3168,7 +3169,8 @@
           "critical-velocity",
           "type-iia",
           "cv-pace",
-          "track"
+          "track",
+          "expert"
         ],
         "priorityScore": 80
       },

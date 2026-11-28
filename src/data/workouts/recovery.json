@@ -563,7 +563,8 @@
         "tags": [
           "recovery",
           "double",
-          "activation"
+          "activation",
+          "situational"
         ],
         "priorityScore": 60
       },
@@ -993,7 +994,8 @@
           "yoga",
           "stretching",
           "holistic",
-          "flexibility"
+          "flexibility",
+          "situational"
         ],
         "priorityScore": 70
       },
@@ -1398,7 +1400,8 @@
           "recovery",
           "barefoot",
           "proprioception",
-          "grounding"
+          "grounding",
+          "situational"
         ],
         "priorityScore": 70
       },
@@ -1523,7 +1526,8 @@
           "aqua",
           "cross-training",
           "zero-impact",
-          "injury-prevention"
+          "injury-prevention",
+          "situational"
         ],
         "priorityScore": 80
       },

@@ -96,8 +96,8 @@ rate les deux tiers.
 découpé en chunks chargés à la demande : il n'existe aucun instant où toutes
 les séances sont là.
 
-Mesuré, jamais écrit en dur (`practiceIndex.test.ts` le garde) : 197 séances
-de route, 33 de trail, qui partitionnent les 230 de course.
+Mesuré, jamais écrit en dur (`practiceIndex.test.ts` le garde) : 204 séances
+de route, 33 de trail, qui partitionnent les 237 de course.
 
 **Ids brûlés.** TRL-013, TRL-014 et TRL-016 ont été écrits puis retirés le
 même jour, parce qu'ils doublaient des archétypes déjà au catalogue ; un

@@ -16,7 +16,7 @@ Free running training plans and workouts, explained by the science. No account, 
 ## Why Zoned
 
 - **A plan for your race.** 5K to marathon, road or trail. Pick one of 10 ready-made plans or let the generator build one from your date, level and days per week. Drag sessions around, block days off, and the rest of the plan reschedules.
-- **267 sessions, each explained.** 230 running sessions in 12 families, plus cycling, swimming and strength. Every one shows its structure block by block, the time spent in each zone, its method and the published reference behind it (Seiler, Billat, Daniels, Coggan, Bangsbo).
+- **274 sessions, each explained.** 237 running sessions in 12 families, plus cycling, swimming and strength. Every one shows its structure block by block, the time spent in each zone, its method and the published reference behind it (Seiler, Billat, Daniels, Coggan, Bangsbo).
 - **Today, at a glance.** The cockpit shows what to run today and how the week is going: endurance, quality and strength, done against planned.
 - **Your numbers.** VMA from a race time, zones, paces, treadmill, cycling FTP and swimming CSS. One model everywhere, and your numbers carry into every session and plan.
 - **Race day.** A km-by-km pacing plan with gel, water and electrolyte timing, checklists and a PDF to print.
@@ -28,7 +28,7 @@ Free running training plans and workouts, explained by the science. No account, 
 <table>
   <tr>
     <td width="50%"><img src="assets/workout_en_light.png" alt="A session page: structure, zone distribution, tips" /></td>
-    <td width="50%"><img src="assets/library_en_light.png" alt="The library: 267 sessions by family, with their profile and peak zone" /></td>
+    <td width="50%"><img src="assets/library_en_light.png" alt="The library: 274 sessions by family, with their profile and peak zone" /></td>
   </tr>
   <tr>
     <td align="center"><sub>A session, block by block</sub></td>
