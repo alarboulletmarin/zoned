@@ -1075,13 +1075,14 @@
     },
     "you": {
       "title": "You and your week",
-      "lede": "Everything is filled in with common values. Change what doesn't fit you.",
+      "lede": "Almost everything is filled in. Tell us your level and what you run these days, change the rest if needed.",
       "level": "Your level",
       "levelHint": {
         "beginner": "under 15 km a week",
         "intermediate": "20 to 40 km a week",
         "advanced": "40 to 70 km a week",
-        "elite": "over 70 km a week"
+        "elite": "over 70 km a week",
+        "none": "Pick the one that sounds like you, from what you run these days."
       },
       "vma": "VMA, if you know it",
       "aim": "What you're aiming for",
@@ -1096,7 +1097,9 @@
         "time": "Balance between quality and endurance.",
         "compete": "More intensity, more volume."
       },
-      "see": "See my plan"
+      "see": "See my plan",
+      "weeklyKmHint": "Your plan starts from there. Left empty, it starts from your level's usual volume.",
+      "chooseLevel": "Pick your level to see your plan."
     },
     "preview": {
       "custom": "Tailored",

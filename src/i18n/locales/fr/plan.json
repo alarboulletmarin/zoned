@@ -1075,13 +1075,14 @@
     },
     "you": {
       "title": "Toi et ta semaine",
-      "lede": "Tout est déjà rempli avec des valeurs courantes. Change ce qui ne te ressemble pas.",
+      "lede": "Presque tout est déjà rempli. Dis-nous ton niveau et ce que tu cours aujourd'hui, change le reste si besoin.",
       "level": "Ton niveau",
       "levelHint": {
         "beginner": "moins de 15 km par semaine",
         "intermediate": "20 à 40 km par semaine",
         "advanced": "40 à 70 km par semaine",
-        "elite": "plus de 70 km par semaine"
+        "elite": "plus de 70 km par semaine",
+        "none": "Choisis celui qui te ressemble, d'après ce que tu cours aujourd'hui."
       },
       "vma": "VMA, si tu la connais",
       "aim": "Ce que tu vises",
@@ -1096,7 +1097,9 @@
         "time": "Équilibre entre qualité et endurance.",
         "compete": "Plus d'intensité, plus de volume."
       },
-      "see": "Voir mon plan"
+      "see": "Voir mon plan",
+      "weeklyKmHint": "Ton plan démarre de là. Sans réponse, il part du repère de ton niveau.",
+      "chooseLevel": "Choisis ton niveau pour voir ton plan."
     },
     "preview": {
       "custom": "Sur mesure",

@@ -24,7 +24,9 @@ interface YouScreenProps {
 
 /**
  * 2.4 Toi et ta semaine, sur mesure seulement. Un seul écran, déjà rempli :
- * le profil et Mes zones d'abord, des valeurs courantes sinon.
+ * le profil et Mes zones d'abord, des valeurs courantes sinon. Deux réponses
+ * restent au coureur : son niveau, jamais coché d'office, et ce qu'il court
+ * aujourd'hui, d'où le plan démarre.
  */
 export function YouScreen({ form, patch, onContinue }: YouScreenProps) {
   const { t } = useTranslation("plan");
@@ -57,7 +59,26 @@ export function YouScreen({ form, patch, onContinue }: YouScreenProps) {
             </button>
           ))}
         </div>
-        <p className="zn-pc__hint">{t(`parcours.you.levelHint.${form.runnerLevel}`)}</p>
+        <p className="zn-pc__hint">{t(`parcours.you.levelHint.${form.runnerLevel ?? "none"}`)}</p>
+        <div className="zn-pc__inline">
+          <label htmlFor={`${uid}-weekly`}>{t("parcours.refine.weeklyKm")}</label>
+          <span className="zn-pc__unit">
+            <input
+              id={`${uid}-weekly`}
+              className="zn-pc__input zn-pc__input--short"
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={300}
+              placeholder="25"
+              value={form.currentWeeklyKm}
+              aria-describedby={`${uid}-weekly-hint`}
+              onChange={(e) => patch({ currentWeeklyKm: e.target.value })}
+            />
+            {t("parcours.refine.weeklyKmUnit")}
+          </span>
+        </div>
+        <p id={`${uid}-weekly-hint`} className="zn-pc__hint">{t("parcours.you.weeklyKmHint")}</p>
         <div className="zn-pc__inline">
           <label htmlFor={`${uid}-vma`}>{t("parcours.you.vma")}</label>
           <span className="zn-pc__unit">
@@ -134,10 +155,18 @@ export function YouScreen({ form, patch, onContinue }: YouScreenProps) {
       </fieldset>
 
       <div className="zn-pc__actions">
-        <Button size="lg" onClick={onContinue}>
+        <Button
+          size="lg"
+          onClick={onContinue}
+          disabled={!form.runnerLevel}
+          aria-describedby={form.runnerLevel ? undefined : `${uid}-ready`}
+        >
           {t("parcours.you.see")}
           <ArrowRight />
         </Button>
+        {!form.runnerLevel && (
+          <p id={`${uid}-ready`} className="zn-pc__hint">{t("parcours.you.chooseLevel")}</p>
+        )}
       </div>
     </>
   );

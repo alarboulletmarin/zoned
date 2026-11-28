@@ -111,7 +111,7 @@ export function PlanCreatePage() {
     return {
       ...emptyPlanForm(),
       practice: presetPractice,
-      runnerLevel: rp?.runnerLevel ?? "intermediate",
+      runnerLevel: rp?.runnerLevel ?? null,
       vma: vmaToInput(userPrefs?.vma ?? rp?.vma),
       currentWeeklyKm: rp?.currentWeeklyKm != null ? String(rp.currentWeeklyKm) : "",
       currentLongRunKm: rp?.currentLongRunKm != null ? String(rp.currentLongRunKm) : "",

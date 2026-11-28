@@ -40,7 +40,12 @@ export interface PlanForm {
   raceName: string;
   /** Commencer cette semaine plutôt que lundi prochain (Affiner). */
   startThisWeek: boolean;
-  runnerLevel: Difficulty;
+  /**
+   * Le niveau, choisi par le coureur : rien n'est coché d'office. Un plan
+   * pré-coché intermédiaire partait d'un volume que l'amateur qui
+   * validait sans lire n'avait pas.
+   */
+  runnerLevel: Difficulty | null;
   /** La VMA telle que tapée (`14,5`). */
   vma: string;
   daysPerWeek: number;
@@ -81,7 +86,7 @@ export function emptyPlanForm(): PlanForm {
     raceDate: "",
     raceName: "",
     startThisWeek: false,
-    runnerLevel: "intermediate",
+    runnerLevel: null,
     vma: "",
     daysPerWeek: 4,
     longRunDay: 6,
@@ -132,6 +137,28 @@ export function earliestRaceDate(minWeeks: number, today: string, startThisWeek 
   return addDaysToDate(monday, (minWeeks - 1) * 7);
 }
 
+/**
+ * Le niveau des réponses. Tant qu'il n'est pas choisi (l'aperçu à côté du
+ * formulaire se calcule déjà), on le déduit de ce que le coureur court
+ * aujourd'hui, puis de sa VMA, sur les mêmes repères que l'écran.
+ */
+export function levelOf(form: Pick<PlanForm, "runnerLevel" | "currentWeeklyKm" | "vma">): Difficulty {
+  if (form.runnerLevel) return form.runnerLevel;
+  const km = toInt(form.currentWeeklyKm);
+  if (km !== undefined) return levelFromWeeklyKm(km);
+  const vma = parseVma(form.vma);
+  if (vma) return vma < 12 ? "beginner" : vma <= 15 ? "intermediate" : vma <= 18 ? "advanced" : "elite";
+  return "intermediate";
+}
+
+/** Le niveau dont l'écran annonce ce volume : moins de 15, 20 à 40, 40 à 70, plus de 70 km */
+export function levelFromWeeklyKm(km: number): Difficulty {
+  if (km < 18) return "beginner";
+  if (km <= 40) return "intermediate";
+  if (km <= 70) return "advanced";
+  return "elite";
+}
+
 /** L'allure "M:SS" en secondes, ou null. */
 export function parsePace(pace: string): number | null {
   const match = pace.match(/^(\d{1,2}):(\d{2})$/);
@@ -168,7 +195,7 @@ export function buildAssistedConfig(
     raceDistance: form.raceDistance ?? "10K",
     raceDate: endDate,
     raceName: race ? form.raceName.trim() || undefined : undefined,
-    runnerLevel: form.runnerLevel,
+    runnerLevel: levelOf(form),
     daysPerWeek: form.daysPerWeek,
     longRunDay: form.longRunDay,
     vma: parseVma(form.vma),

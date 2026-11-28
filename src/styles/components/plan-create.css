@@ -298,6 +298,8 @@
 .zn-pc__unit { display: inline-flex; align-items: center; gap: var(--sp-3); color: var(--text-muted); }
 
 .zn-pc__actions { display: flex; gap: var(--sp-4); padding-block-start: var(--sp-4); }
+/* Ce qui manque pour continuer, à côté du bouton qui attend. */
+.zn-pc__actions > .zn-pc__hint { align-self: center; margin: 0; }
 @media (max-width: 600px) {
   .zn-pc__actions > * { flex: 1; }
 }

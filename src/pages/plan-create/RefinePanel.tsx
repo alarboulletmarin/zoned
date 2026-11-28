@@ -114,15 +114,6 @@ export function RefinePanel({ form, patch, today, start, isTrail, goalsValidatio
           </div>
 
           <NumberRow
-            id={`${uid}-weekly`}
-            label={t("parcours.refine.weeklyKm")}
-            unit={t("parcours.refine.weeklyKmUnit")}
-            value={form.currentWeeklyKm}
-            max={300}
-            placeholder="30"
-            onChange={(v) => patch({ currentWeeklyKm: v })}
-          />
-          <NumberRow
             id={`${uid}-long`}
             label={t("parcours.refine.longRunKm")}
             unit={t("parcours.refine.longRunKmUnit")}

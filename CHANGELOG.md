@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+- Seven catalogue sessions that plans were missing: an easy long run for intermediates (`LR-017`) and for advanced runners (`LR-020`), a long run with a steady finish for beginners (`LR-018`), a long run with two steady blocks for intermediates (`LR-019`), a plain easy run for intermediates (`END-023`) and advanced runners (`END-024`), and a pre-race pace reminder for beginners (`RP-023`)
+- A ready-made First Half Marathon plan (`semi-debutant`): beginner, 14 weeks, four runs a week. The half-marathon one is renamed Intermediate Half Marathon
+- `scripts/plan-matrix.ts` generates every profile (distance, level, goal, days a week, with and without a declared volume, the non-race purposes: 704 plans) and measures hard days, hidden hill work, templates above the level, the first week against the level, easy runs longer than the long run, expert sessions and the audit. `--compare before.json after.json` prints the difference, group by group
+- `difficulty.properties.test.ts` holds each of those rules on the whole grid of race profiles
+
+### Changed
+- A long run with a block at marathon pace or faster now counts as a hard day. A week holds one hard day in the base, two in build and peak, three only for advanced and elite runners who compete on five days or more. The quality long run comes every other eligible week at most, never in the base or a drop-back week, never on 5K and 10K plans, never at the cost of the week's only key session. The default half-marathon plan (intermediate, a time, 4 days) went from three hard days out of four in build and peak to two
+- No session comes from a level above the runner's any more, long runs and easy runs included: intermediates were drawn advanced race simulations as long runs, beginners intermediate long runs. A catalogue gap at the runner's level is filled from a neighbouring phase first
+- Road plans keep their hill work in their hill sessions: hilly easy runs and hilly long runs (twelve sessions out of fifty-six in the default half-marathon plan) are no longer drawn
+- Plans no longer draw sessions that need a pool, heat, bad weather, a fasted morning, a heart-rate strap, a partner or a second run the same day, nor openers and post-race jogs outside the taper. Named methods (Canova, critical velocity, NRRs, Hanson, Hudson) are kept for advanced and elite runners. All stay in the library
+- Beginners and intermediates run the same key session two weeks in a row, a little longer the second time, before the rotation moves on
+- Without a declared weekly volume, a plan starts from the level's usual volume (15, 30, 55, 85 km) rather than the distance table: a 4-day intermediate half-marathon plan opened at 39 km, the top of the "20 to 40 km" its level promised
+- The plan wizard asks what you run these days on the You and your week screen instead of in Refine, and no longer preselects a level
+- Race week: jogs capped by distance (45 minutes before a half), no walk-run, and a few minutes at race pace replace the first jog when the goal is a time
+- The ready-made plans are regenerated with these rules
+- The plan guide (`/plans/methodology`) states the hard-day budget, the level rule and the starting volume
+
+### Fixed
+- An easy run could last longer than the week's long run (an 86-minute Friday before a 78-minute Sunday): easy runs are now capped at the long run, and the opening long run follows the opening week's volume
+- A half-marathon plan could draw "Sortie longue simulation course", 100 minutes at marathon pace, as its peak long run
+
 ## [1.3.1] - 2026-11-26
 
 ### Added
