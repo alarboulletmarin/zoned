@@ -43,14 +43,14 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "END-014",
+          "workoutId": "END-023",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 43,
+          "estimatedDurationMin": 49,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 43,
-          "loadScore": 41,
+          "targetDurationMin": 49,
+          "loadScore": 47.3,
           "paceNotes": [
             {
               "zone": "E",
@@ -60,7 +60,113 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 6.5
+          "targetDistanceKm": 7.5
+        },
+        {
+          "dayOfWeek": 2,
+          "workoutId": "FAR-010",
+          "sessionType": "fartlek",
+          "isKeySession": true,
+          "estimatedDurationMin": 35,
+          "notes": "Allure seuil : 5:08 - 5:22/km",
+          "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "targetDurationMin": 41,
+          "loadScore": 69.7,
+          "paceNotes": [
+            {
+              "zone": "T",
+              "paceMinKm": 5.13,
+              "paceMaxKm": 5.37,
+              "description": "Allure seuil",
+              "descriptionEn": "Threshold pace"
+            }
+          ],
+          "targetDistanceKm": 5.5
+        },
+        {
+          "dayOfWeek": 4,
+          "workoutId": "END-014",
+          "sessionType": "endurance",
+          "isKeySession": false,
+          "estimatedDurationMin": 49,
+          "notes": "Allure endurance : 6:04 - 7:06/km",
+          "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "targetDurationMin": 49,
+          "loadScore": 47.3,
+          "paceNotes": [
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
+            }
+          ],
+          "targetDistanceKm": 7.5
+        },
+        {
+          "dayOfWeek": 6,
+          "workoutId": "LR-017",
+          "sessionType": "long_run",
+          "isKeySession": false,
+          "estimatedDurationMin": 66,
+          "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 10 km (~66 min)",
+          "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 10 km (~66 min)",
+          "targetDurationMin": 66,
+          "loadScore": 46.2,
+          "paceNotes": [
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
+            }
+          ],
+          "targetDistanceKm": 10
+        },
+        {
+          "dayOfWeek": 3,
+          "workoutId": "STR-015",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "isSuggestion": true,
+          "estimatedDurationMin": 25,
+          "loadScore": 8
+        }
+      ],
+      "weekLabel": "S1",
+      "weekLabelEn": "W1",
+      "targetKm": 31,
+      "targetLongRunKm": 10,
+      "weeklyLoadScore": 219
+    },
+    {
+      "weekNumber": 2,
+      "phase": "base",
+      "isRecoveryWeek": false,
+      "volumePercent": 68,
+      "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "END-023",
+          "sessionType": "endurance",
+          "isKeySession": false,
+          "estimatedDurationMin": 49,
+          "notes": "Allure endurance : 6:04 - 7:06/km",
+          "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "targetDurationMin": 49,
+          "loadScore": 47.3,
+          "paceNotes": [
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
+            }
+          ],
+          "targetDistanceKm": 7.5
         },
         {
           "dayOfWeek": 2,
@@ -99,128 +205,14 @@ export const plan10kIntermediaire: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "END-004",
-          "sessionType": "endurance",
-          "isKeySession": false,
-          "estimatedDurationMin": 59,
-          "notes": "Allure endurance : 6:04 - 7:06/km",
-          "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 59,
-          "loadScore": 54,
-          "paceNotes": [
-            {
-              "zone": "E",
-              "paceMinKm": 6.07,
-              "paceMaxKm": 7.1,
-              "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
-            }
-          ],
-          "targetDistanceKm": 9
-        },
-        {
-          "dayOfWeek": 6,
-          "workoutId": "SL-001",
-          "sessionType": "long_run",
-          "isKeySession": false,
-          "estimatedDurationMin": 73,
-          "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 10 km (~66 min)",
-          "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 10 km (~66 min)",
-          "targetDurationMin": 66,
-          "loadScore": 51.1,
-          "paceNotes": [
-            {
-              "zone": "E",
-              "paceMinKm": 6.07,
-              "paceMaxKm": 7.1,
-              "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
-            },
-            {
-              "zone": "M",
-              "paceMinKm": 5.88,
-              "paceMaxKm": 6.11,
-              "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
-            }
-          ],
-          "targetDistanceKm": 10
-        },
-        {
-          "dayOfWeek": 3,
-          "workoutId": "STR-008",
-          "sessionType": "strength",
-          "isKeySession": false,
-          "isSuggestion": true,
-          "estimatedDurationMin": 28,
-          "loadScore": 14
-        }
-      ],
-      "weekLabel": "S1",
-      "weekLabelEn": "W1",
-      "targetKm": 31,
-      "targetLongRunKm": 10,
-      "weeklyLoadScore": 211
-    },
-    {
-      "weekNumber": 2,
-      "phase": "base",
-      "isRecoveryWeek": false,
-      "volumePercent": 70,
-      "sessions": [
-        {
-          "dayOfWeek": 0,
-          "workoutId": "END-012",
-          "sessionType": "endurance",
-          "isKeySession": false,
-          "estimatedDurationMin": 56,
-          "notes": "Allure endurance : 6:04 - 7:06/km",
-          "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 56,
-          "loadScore": 49.6,
-          "paceNotes": [
-            {
-              "zone": "E",
-              "paceMinKm": 6.07,
-              "paceMaxKm": 7.1,
-              "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
-            }
-          ],
-          "targetDistanceKm": 8.5
-        },
-        {
-          "dayOfWeek": 2,
-          "workoutId": "THR-003",
-          "sessionType": "threshold",
-          "isKeySession": true,
-          "estimatedDurationMin": 36,
-          "notes": "Allure seuil : 5:08 - 5:22/km\n4 répétitions",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km\n4 repetitions",
-          "targetDurationMin": 41,
-          "loadScore": 53.3,
-          "paceNotes": [
-            {
-              "zone": "T",
-              "paceMinKm": 5.13,
-              "paceMaxKm": 5.37,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
-            }
-          ],
-          "scaledRepetitions": 4,
-          "targetDistanceKm": 6
-        },
-        {
-          "dayOfWeek": 4,
           "workoutId": "END-014",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 46,
+          "estimatedDurationMin": 49,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 46,
-          "loadScore": 44.1,
+          "targetDurationMin": 49,
+          "loadScore": 47.3,
           "paceNotes": [
             {
               "zone": "E",
@@ -230,11 +222,11 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 7
+          "targetDistanceKm": 7.5
         },
         {
           "dayOfWeek": 6,
-          "workoutId": "SL-005",
+          "workoutId": "LR-017",
           "sessionType": "long_run",
           "isKeySession": false,
           "estimatedDurationMin": 76,
@@ -255,36 +247,36 @@ export const plan10kIntermediaire: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 3,
-          "workoutId": "STR-009",
+          "workoutId": "STR-002",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 35,
-          "loadScore": 25
+          "estimatedDurationMin": 45,
+          "loadScore": 31
         }
       ],
       "weekLabel": "S2",
       "weekLabelEn": "W2",
-      "targetKm": 33,
+      "targetKm": 32,
       "targetLongRunKm": 11.5,
-      "weeklyLoadScore": 225
+      "weeklyLoadScore": 230
     },
     {
       "weekNumber": 3,
       "phase": "base",
       "isRecoveryWeek": false,
-      "volumePercent": 74,
+      "volumePercent": 72,
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "END-004",
+          "workoutId": "END-005",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 66,
+          "estimatedDurationMin": 63,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 66,
-          "loadScore": 56,
+          "targetDurationMin": 63,
+          "loadScore": 51.2,
           "paceNotes": [
             {
               "zone": "E",
@@ -294,18 +286,18 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 10
+          "targetDistanceKm": 9.5
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "FAR-015",
-          "sessionType": "fartlek",
+          "workoutId": "HIL-018",
+          "sessionType": "hills",
           "isKeySession": true,
-          "estimatedDurationMin": 44,
-          "notes": "Allure seuil : 5:08 - 5:22/km",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km",
-          "targetDurationMin": 50,
-          "loadScore": 85,
+          "estimatedDurationMin": 36,
+          "notes": "Allure VMA : 4:37 - 4:52/km",
+          "notesEn": "VO2max pace: 4:37 - 4:52/km",
+          "targetDurationMin": 39,
+          "loadScore": 50.7,
           "paceNotes": [
             {
               "zone": "T",
@@ -313,42 +305,7 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
               "descriptionEn": "Threshold pace"
-            }
-          ],
-          "targetDistanceKm": 7.5
-        },
-        {
-          "dayOfWeek": 4,
-          "workoutId": "END-012",
-          "sessionType": "endurance",
-          "isKeySession": false,
-          "estimatedDurationMin": 53,
-          "notes": "Allure endurance : 6:04 - 7:06/km",
-          "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 53,
-          "loadScore": 46.7,
-          "paceNotes": [
-            {
-              "zone": "E",
-              "paceMinKm": 6.07,
-              "paceMaxKm": 7.1,
-              "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
-            }
-          ],
-          "targetDistanceKm": 8
-        },
-        {
-          "dayOfWeek": 6,
-          "workoutId": "SL-001",
-          "sessionType": "long_run",
-          "isKeySession": false,
-          "estimatedDurationMin": 79,
-          "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 9.5 km (~63 min)",
-          "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 9.5 km (~63 min)",
-          "targetDurationMin": 63,
-          "loadScore": 55.3,
-          "paceNotes": [
+            },
             {
               "zone": "E",
               "paceMinKm": 6.07,
@@ -357,103 +314,89 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             },
             {
-              "zone": "M",
-              "paceMinKm": 5.88,
-              "paceMaxKm": 6.11,
-              "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "zone": "I",
+              "paceMinKm": 4.62,
+              "paceMaxKm": 4.86,
+              "description": "Allure VMA",
+              "descriptionEn": "VO2max pace"
+            }
+          ],
+          "targetDistanceKm": 6
+        },
+        {
+          "dayOfWeek": 4,
+          "workoutId": "END-014",
+          "sessionType": "endurance",
+          "isKeySession": false,
+          "estimatedDurationMin": 56,
+          "notes": "Allure endurance : 6:04 - 7:06/km",
+          "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "targetDurationMin": 56,
+          "loadScore": 48.7,
+          "paceNotes": [
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
+            }
+          ],
+          "targetDistanceKm": 8.5
+        },
+        {
+          "dayOfWeek": 6,
+          "workoutId": "LR-017",
+          "sessionType": "long_run",
+          "isKeySession": false,
+          "estimatedDurationMin": 65,
+          "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 9.5 km (~63 min)",
+          "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 9.5 km (~63 min)",
+          "targetDurationMin": 63,
+          "loadScore": 45.5,
+          "paceNotes": [
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
             }
           ],
           "targetDistanceKm": 9.5
         },
         {
           "dayOfWeek": 3,
-          "workoutId": "STR-001",
+          "workoutId": "STR-008",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 35,
-          "loadScore": 18
+          "estimatedDurationMin": 28,
+          "loadScore": 14
         }
       ],
       "weekLabel": "S3",
       "weekLabelEn": "W3",
-      "targetKm": 35,
+      "targetKm": 34,
       "targetLongRunKm": 9.5,
-      "weeklyLoadScore": 261
+      "weeklyLoadScore": 210
     },
     {
       "weekNumber": 4,
       "phase": "build",
       "isRecoveryWeek": true,
-      "volumePercent": 64,
+      "volumePercent": 60,
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "REC-012",
-          "sessionType": "endurance",
-          "isKeySession": false,
-          "estimatedDurationMin": 33,
-          "notes": "Allure seuil : 5:08 - 5:22/km",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km",
-          "targetDurationMin": 33,
-          "loadScore": 30.3,
-          "paceNotes": [
-            {
-              "zone": "E",
-              "paceMinKm": 6.07,
-              "paceMaxKm": 7.1,
-              "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
-            },
-            {
-              "zone": "T",
-              "paceMinKm": 5.13,
-              "paceMaxKm": 5.37,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
-            }
-          ],
-          "targetDistanceKm": 5
-        },
-        {
-          "dayOfWeek": 2,
-          "workoutId": "REC-007",
-          "sessionType": "endurance",
-          "isKeySession": false,
-          "estimatedDurationMin": 33,
-          "notes": "Allure seuil : 5:08 - 5:22/km",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km",
-          "targetDurationMin": 33,
-          "loadScore": 29.2,
-          "paceNotes": [
-            {
-              "zone": "E",
-              "paceMinKm": 6.07,
-              "paceMaxKm": 7.1,
-              "description": "Allure endurance",
-              "descriptionEn": "Easy pace"
-            },
-            {
-              "zone": "T",
-              "paceMinKm": 5.13,
-              "paceMaxKm": 5.37,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
-            }
-          ],
-          "targetDistanceKm": 5
-        },
-        {
-          "dayOfWeek": 4,
           "workoutId": "END-005",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 66,
+          "estimatedDurationMin": 49,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 66,
-          "loadScore": 58.3,
+          "targetDurationMin": 49,
+          "loadScore": 43.8,
           "paceNotes": [
             {
               "zone": "E",
@@ -463,18 +406,60 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 10
+          "targetDistanceKm": 7.5
+        },
+        {
+          "dayOfWeek": 2,
+          "workoutId": "END-014",
+          "sessionType": "endurance",
+          "isKeySession": false,
+          "estimatedDurationMin": 36,
+          "notes": "Allure endurance : 6:04 - 7:06/km",
+          "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "targetDurationMin": 36,
+          "loadScore": 38.5,
+          "paceNotes": [
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
+            }
+          ],
+          "targetDistanceKm": 5.5
+        },
+        {
+          "dayOfWeek": 4,
+          "workoutId": "END-023",
+          "sessionType": "endurance",
+          "isKeySession": false,
+          "estimatedDurationMin": 36,
+          "notes": "Allure endurance : 6:04 - 7:06/km",
+          "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "targetDurationMin": 36,
+          "loadScore": 38.5,
+          "paceNotes": [
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
+            }
+          ],
+          "targetDistanceKm": 5.5
         },
         {
           "dayOfWeek": 6,
-          "workoutId": "SL-005",
+          "workoutId": "LR-017",
           "sessionType": "long_run",
           "isKeySession": false,
-          "estimatedDurationMin": 67,
+          "estimatedDurationMin": 62,
           "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 9.5 km (~62 min)",
           "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 9.5 km (~62 min)",
           "targetDurationMin": 62,
-          "loadScore": 46.9,
+          "loadScore": 43.4,
           "paceNotes": [
             {
               "zone": "E",
@@ -498,26 +483,26 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       ],
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
-      "targetKm": 30,
+      "targetKm": 28,
       "targetLongRunKm": 9.5,
-      "weeklyLoadScore": 172
+      "weeklyLoadScore": 171
     },
     {
       "weekNumber": 5,
       "phase": "build",
       "isRecoveryWeek": false,
-      "volumePercent": 81,
+      "volumePercent": 79,
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "END-004",
+          "workoutId": "END-005",
           "sessionType": "endurance",
           "isKeySession": false,
           "estimatedDurationMin": 59,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
           "targetDurationMin": 59,
-          "loadScore": 47.3,
+          "loadScore": 45,
           "paceNotes": [
             {
               "zone": "E",
@@ -531,21 +516,21 @@ export const plan10kIntermediaire: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "FAR-012",
+          "workoutId": "FAR-014",
           "sessionType": "fartlek",
           "isKeySession": true,
-          "estimatedDurationMin": 47,
+          "estimatedDurationMin": 41,
           "notes": "Allure VMA : 4:37 - 4:52/km",
           "notesEn": "VO2max pace: 4:37 - 4:52/km",
-          "targetDurationMin": 51,
-          "loadScore": 86.7,
+          "targetDurationMin": 45,
+          "loadScore": 76.5,
           "paceNotes": [
             {
-              "zone": "M",
-              "paceMinKm": 5.88,
-              "paceMaxKm": 6.11,
-              "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
+              "zone": "I",
+              "paceMinKm": 4.62,
+              "paceMaxKm": 4.86,
+              "description": "Allure VMA",
+              "descriptionEn": "VO2max pace"
             },
             {
               "zone": "E",
@@ -562,21 +547,21 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Threshold pace"
             },
             {
-              "zone": "I",
-              "paceMinKm": 4.62,
-              "paceMaxKm": 4.86,
-              "description": "Allure VMA",
-              "descriptionEn": "VO2max pace"
+              "zone": "M",
+              "paceMinKm": 5.88,
+              "paceMaxKm": 6.11,
+              "description": "Allure marathon",
+              "descriptionEn": "Marathon pace"
             }
           ],
-          "targetDistanceKm": 7.5
+          "targetDistanceKm": 6.5
         },
         {
           "dayOfWeek": 4,
           "workoutId": "VMA-008",
           "sessionType": "vo2max",
           "isKeySession": true,
-          "estimatedDurationMin": 47,
+          "estimatedDurationMin": 46,
           "notes": "Allure VMA : 4:37 - 4:52/km",
           "notesEn": "VO2max pace: 4:37 - 4:52/km",
           "targetDurationMin": 50,
@@ -594,12 +579,12 @@ export const plan10kIntermediaire: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 6,
-          "workoutId": "SL-001",
+          "workoutId": "LR-017",
           "sessionType": "long_run",
           "isKeySession": false,
           "estimatedDurationMin": 92,
-          "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 14 km (~92 min)",
-          "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 14 km (~92 min)",
+          "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 14 km (~92 min)",
+          "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 14 km (~92 min)",
           "targetDurationMin": 92,
           "loadScore": 64.4,
           "paceNotes": [
@@ -609,32 +594,25 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
               "descriptionEn": "Easy pace"
-            },
-            {
-              "zone": "M",
-              "paceMinKm": 5.88,
-              "paceMaxKm": 6.11,
-              "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
             }
           ],
           "targetDistanceKm": 14
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-002",
+          "workoutId": "STR-013",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 45,
-          "loadScore": 31
+          "estimatedDurationMin": 28,
+          "loadScore": 24
         }
       ],
       "weekLabel": "S5",
       "weekLabelEn": "W5",
-      "targetKm": 38,
+      "targetKm": 37,
       "targetLongRunKm": 14,
-      "weeklyLoadScore": 314
+      "weeklyLoadScore": 295
     },
     {
       "weekNumber": 6,
@@ -644,14 +622,14 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "END-012",
+          "workoutId": "END-023",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 72,
+          "estimatedDurationMin": 76,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 72,
-          "loadScore": 55,
+          "targetDurationMin": 76,
+          "loadScore": 60.4,
           "paceNotes": [
             {
               "zone": "E",
@@ -661,18 +639,18 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 11
+          "targetDistanceKm": 11.5
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "VMA-006",
-          "sessionType": "vo2max",
+          "workoutId": "FAR-014",
+          "sessionType": "fartlek",
           "isKeySession": true,
-          "estimatedDurationMin": 51,
-          "notes": "Allure VMA : 4:37 - 4:52/km\n12 répétitions",
-          "notesEn": "VO2max pace: 4:37 - 4:52/km\n12 repetitions",
-          "targetDurationMin": 54,
-          "loadScore": 91.8,
+          "estimatedDurationMin": 42,
+          "notes": "Allure VMA : 4:37 - 4:52/km",
+          "notesEn": "VO2max pace: 4:37 - 4:52/km",
+          "targetDurationMin": 45,
+          "loadScore": 76.5,
           "paceNotes": [
             {
               "zone": "I",
@@ -680,43 +658,62 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "paceMaxKm": 4.86,
               "description": "Allure VMA",
               "descriptionEn": "VO2max pace"
-            }
-          ],
-          "scaledRepetitions": 12,
-          "targetDistanceKm": 8.5
-        },
-        {
-          "dayOfWeek": 4,
-          "workoutId": "THR-002",
-          "sessionType": "threshold",
-          "isKeySession": true,
-          "estimatedDurationMin": 51,
-          "notes": "Allure seuil : 5:08 - 5:22/km\n3 répétitions",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km\n3 repetitions",
-          "targetDurationMin": 54,
-          "loadScore": 70.2,
-          "paceNotes": [
+            },
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
+            },
             {
               "zone": "T",
               "paceMinKm": 5.13,
               "paceMaxKm": 5.37,
               "description": "Allure seuil",
               "descriptionEn": "Threshold pace"
+            },
+            {
+              "zone": "M",
+              "paceMinKm": 5.88,
+              "paceMaxKm": 6.11,
+              "description": "Allure marathon",
+              "descriptionEn": "Marathon pace"
             }
           ],
-          "scaledRepetitions": 3,
-          "targetDistanceKm": 8.5
+          "targetDistanceKm": 6.5
+        },
+        {
+          "dayOfWeek": 4,
+          "workoutId": "END-014",
+          "sessionType": "endurance",
+          "isKeySession": false,
+          "estimatedDurationMin": 66,
+          "notes": "Allure endurance : 6:04 - 7:06/km",
+          "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "targetDurationMin": 66,
+          "loadScore": 52.5,
+          "paceNotes": [
+            {
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
+            }
+          ],
+          "targetDistanceKm": 10
         },
         {
           "dayOfWeek": 6,
           "workoutId": "SL-001",
           "sessionType": "long_run",
           "isKeySession": false,
-          "estimatedDurationMin": 90,
+          "estimatedDurationMin": 88,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 12 km (~79 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 12 km (~79 min)",
           "targetDurationMin": 79,
-          "loadScore": 63,
+          "loadScore": 61.6,
           "paceNotes": [
             {
               "zone": "E",
@@ -736,20 +733,20 @@ export const plan10kIntermediaire: PrebuiltPlan = {
           "targetDistanceKm": 12
         },
         {
-          "dayOfWeek": 0,
-          "workoutId": "STR-010",
+          "dayOfWeek": 3,
+          "workoutId": "STR-003",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 23,
-          "loadScore": 12
+          "estimatedDurationMin": 50,
+          "loadScore": 45
         }
       ],
       "weekLabel": "S6",
       "weekLabelEn": "W6",
       "targetKm": 40,
       "targetLongRunKm": 12,
-      "weeklyLoadScore": 292
+      "weeklyLoadScore": 296
     },
     {
       "weekNumber": 7,
@@ -762,11 +759,11 @@ export const plan10kIntermediaire: PrebuiltPlan = {
           "workoutId": "END-005",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 53,
+          "estimatedDurationMin": 56,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 53,
-          "loadScore": 43.1,
+          "targetDurationMin": 56,
+          "loadScore": 45.8,
           "paceNotes": [
             {
               "zone": "E",
@@ -776,18 +773,18 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 8
+          "targetDistanceKm": 8.5
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "END-014",
+          "workoutId": "END-023",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 40,
+          "estimatedDurationMin": 43,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 40,
-          "loadScore": 37.8,
+          "targetDurationMin": 43,
+          "loadScore": 41,
           "paceNotes": [
             {
               "zone": "E",
@@ -797,18 +794,18 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 6
+          "targetDistanceKm": 6.5
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "END-012",
+          "workoutId": "END-014",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 49,
+          "estimatedDurationMin": 43,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 49,
-          "loadScore": 43.8,
+          "targetDurationMin": 43,
+          "loadScore": 41,
           "paceNotes": [
             {
               "zone": "E",
@@ -818,11 +815,11 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 7.5
+          "targetDistanceKm": 6.5
         },
         {
           "dayOfWeek": 6,
-          "workoutId": "SL-005",
+          "workoutId": "LR-017",
           "sessionType": "long_run",
           "isKeySession": false,
           "estimatedDurationMin": 77,
@@ -855,13 +852,13 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "weekLabelEn": "Recovery Week",
       "targetKm": 33,
       "targetLongRunKm": 11.5,
-      "weeklyLoadScore": 189
+      "weeklyLoadScore": 192
     },
     {
       "weekNumber": 8,
       "phase": "peak",
       "isRecoveryWeek": false,
-      "volumePercent": 91,
+      "volumePercent": 85,
       "sessions": [
         {
           "dayOfWeek": 0,
@@ -886,28 +883,6 @@ export const plan10kIntermediaire: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "THR-010",
-          "sessionType": "threshold",
-          "isKeySession": true,
-          "estimatedDurationMin": 55,
-          "notes": "Allure seuil : 5:08 - 5:22/km\n2 répétitions",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km\n2 repetitions",
-          "targetDurationMin": 57,
-          "loadScore": 74.1,
-          "paceNotes": [
-            {
-              "zone": "T",
-              "paceMinKm": 5.13,
-              "paceMaxKm": 5.37,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
-            }
-          ],
-          "scaledRepetitions": 2,
-          "targetDistanceKm": 9
-        },
-        {
-          "dayOfWeek": 4,
           "workoutId": "VMA-006",
           "sessionType": "vo2max",
           "isKeySession": true,
@@ -926,16 +901,37 @@ export const plan10kIntermediaire: PrebuiltPlan = {
             }
           ],
           "scaledRepetitions": 8,
-          "targetDistanceKm": 7.5
+          "targetDistanceKm": 7
+        },
+        {
+          "dayOfWeek": 4,
+          "workoutId": "RP-018",
+          "sessionType": "race_specific",
+          "isKeySession": true,
+          "estimatedDurationMin": 39,
+          "notes": "Allure seuil : 5:08 - 5:22/km",
+          "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "targetDurationMin": 40,
+          "loadScore": 52,
+          "paceNotes": [
+            {
+              "zone": "T",
+              "paceMinKm": 5.13,
+              "paceMaxKm": 5.37,
+              "description": "Allure seuil",
+              "descriptionEn": "Threshold pace"
+            }
+          ],
+          "targetDistanceKm": 6.5
         },
         {
           "dayOfWeek": 6,
-          "workoutId": "SL-004",
+          "workoutId": "LR-017",
           "sessionType": "long_run",
           "isKeySession": false,
           "estimatedDurationMin": 109,
-          "notes": "Allure seuil : 5:08 - 5:22/km\nSortie longue : 16.5 km (~109 min)",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km\nLong run: 16.5 km (~109 min)",
+          "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 16.5 km (~109 min)",
+          "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 16.5 km (~109 min)",
           "targetDurationMin": 109,
           "loadScore": 76.3,
           "paceNotes": [
@@ -945,32 +941,25 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
               "descriptionEn": "Easy pace"
-            },
-            {
-              "zone": "T",
-              "paceMinKm": 5.13,
-              "paceMaxKm": 5.37,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
             }
           ],
           "targetDistanceKm": 16.5
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-013",
+          "workoutId": "STR-017",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
           "estimatedDurationMin": 28,
-          "loadScore": 24
+          "loadScore": 14
         }
       ],
       "weekLabel": "S8",
       "weekLabelEn": "W8",
-      "targetKm": 43,
+      "targetKm": 40,
       "targetLongRunKm": 16.5,
-      "weeklyLoadScore": 301
+      "weeklyLoadScore": 269
     },
     {
       "weekNumber": 9,
@@ -980,14 +969,14 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "END-014",
+          "workoutId": "END-023",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 63,
+          "estimatedDurationMin": 76,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 63,
-          "loadScore": 46,
+          "targetDurationMin": 76,
+          "loadScore": 55.7,
           "paceNotes": [
             {
               "zone": "E",
@@ -997,18 +986,18 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 9.5
+          "targetDistanceKm": 11.5
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "VMA-001",
+          "workoutId": "VMA-006",
           "sessionType": "vo2max",
           "isKeySession": true,
-          "estimatedDurationMin": 55,
+          "estimatedDurationMin": 53,
           "notes": "Allure VMA : 4:37 - 4:52/km\n12 répétitions",
           "notesEn": "VO2max pace: 4:37 - 4:52/km\n12 repetitions",
-          "targetDurationMin": 57,
-          "loadScore": 96.9,
+          "targetDurationMin": 54,
+          "loadScore": 91.8,
           "paceNotes": [
             {
               "zone": "I",
@@ -1019,39 +1008,39 @@ export const plan10kIntermediaire: PrebuiltPlan = {
             }
           ],
           "scaledRepetitions": 12,
-          "targetDistanceKm": 9
+          "targetDistanceKm": 8.5
         },
         {
           "dayOfWeek": 4,
-          "workoutId": "RP-002",
-          "sessionType": "race_specific",
-          "isKeySession": true,
-          "estimatedDurationMin": 68,
-          "notes": "Allure seuil : 5:08 - 5:22/km",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km",
-          "targetDurationMin": 71,
-          "loadScore": 92.3,
+          "workoutId": "END-014",
+          "sessionType": "endurance",
+          "isKeySession": false,
+          "estimatedDurationMin": 66,
+          "notes": "Allure endurance : 6:04 - 7:06/km",
+          "notesEn": "Easy pace: 6:04 - 7:06/km",
+          "targetDurationMin": 66,
+          "loadScore": 48.5,
           "paceNotes": [
             {
-              "zone": "T",
-              "paceMinKm": 5.13,
-              "paceMaxKm": 5.37,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "zone": "E",
+              "paceMinKm": 6.07,
+              "paceMaxKm": 7.1,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 11.5
+          "targetDistanceKm": 10
         },
         {
           "dayOfWeek": 6,
-          "workoutId": "SL-002",
+          "workoutId": "SL-001",
           "sessionType": "long_run",
           "isKeySession": false,
-          "estimatedDurationMin": 105,
+          "estimatedDurationMin": 95,
           "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 14 km (~92 min)",
           "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 14 km (~92 min)",
           "targetDurationMin": 92,
-          "loadScore": 73.5,
+          "loadScore": 66.5,
           "paceNotes": [
             {
               "zone": "E",
@@ -1071,7 +1060,7 @@ export const plan10kIntermediaire: PrebuiltPlan = {
           "targetDistanceKm": 14
         },
         {
-          "dayOfWeek": 0,
+          "dayOfWeek": 3,
           "workoutId": "STR-012",
           "sessionType": "strength",
           "isKeySession": false,
@@ -1084,7 +1073,7 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "weekLabelEn": "W9",
       "targetKm": 44,
       "targetLongRunKm": 14,
-      "weeklyLoadScore": 341
+      "weeklyLoadScore": 295
     },
     {
       "weekNumber": 10,
@@ -1094,14 +1083,14 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "END-004",
+          "workoutId": "END-023",
           "sessionType": "endurance",
           "isKeySession": false,
-          "estimatedDurationMin": 82,
+          "estimatedDurationMin": 46,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 82,
-          "loadScore": 58.3,
+          "targetDurationMin": 46,
+          "loadScore": 31.5,
           "paceNotes": [
             {
               "zone": "E",
@@ -1111,18 +1100,18 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 12.5
+          "targetDistanceKm": 7
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "RP-018",
+          "workoutId": "RP-002",
           "sessionType": "race_specific",
           "isKeySession": true,
-          "estimatedDurationMin": 40,
+          "estimatedDurationMin": 71,
           "notes": "Allure seuil : 5:08 - 5:22/km",
           "notesEn": "Threshold pace: 5:08 - 5:22/km",
-          "targetDurationMin": 40,
-          "loadScore": 52,
+          "targetDurationMin": 71,
+          "loadScore": 92.3,
           "paceNotes": [
             {
               "zone": "T",
@@ -1132,7 +1121,7 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Threshold pace"
             }
           ],
-          "targetDistanceKm": 6.5
+          "targetDistanceKm": 12
         },
         {
           "dayOfWeek": 4,
@@ -1164,12 +1153,12 @@ export const plan10kIntermediaire: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 6,
-          "workoutId": "SL-002",
+          "workoutId": "LR-017",
           "sessionType": "long_run",
           "isKeySession": false,
           "estimatedDurationMin": 119,
-          "notes": "Allure marathon : 5:53 - 6:07/km\nSortie longue : 18 km (~119 min)",
-          "notesEn": "Marathon pace: 5:53 - 6:07/km\nLong run: 18 km (~119 min)",
+          "notes": "Allure endurance : 6:04 - 7:06/km\nSortie longue : 18 km (~119 min)",
+          "notesEn": "Easy pace: 6:04 - 7:06/km\nLong run: 18 km (~119 min)",
           "targetDurationMin": 119,
           "loadScore": 83.3,
           "paceNotes": [
@@ -1179,32 +1168,25 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "paceMaxKm": 7.1,
               "description": "Allure endurance",
               "descriptionEn": "Easy pace"
-            },
-            {
-              "zone": "M",
-              "paceMinKm": 5.88,
-              "paceMaxKm": 6.11,
-              "description": "Allure marathon",
-              "descriptionEn": "Marathon pace"
             }
           ],
           "targetDistanceKm": 18
         },
         {
           "dayOfWeek": 0,
-          "workoutId": "STR-017",
+          "workoutId": "STR-010",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 28,
-          "loadScore": 14
+          "estimatedDurationMin": 23,
+          "loadScore": 12
         }
       ],
       "weekLabel": "S10",
       "weekLabelEn": "W10",
       "targetKm": 47,
       "targetLongRunKm": 18,
-      "weeklyLoadScore": 284
+      "weeklyLoadScore": 296
     },
     {
       "weekNumber": 11,
@@ -1214,14 +1196,14 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "REC-006",
+          "workoutId": "REC-005",
           "sessionType": "recovery",
           "isKeySession": false,
-          "estimatedDurationMin": 33,
+          "estimatedDurationMin": 46,
           "notes": "Allure endurance : 6:04 - 7:06/km",
           "notesEn": "Easy pace: 6:04 - 7:06/km",
-          "targetDurationMin": 33,
-          "loadScore": 23.3,
+          "targetDurationMin": 46,
+          "loadScore": 36.8,
           "paceNotes": [
             {
               "zone": "E",
@@ -1231,18 +1213,39 @@ export const plan10kIntermediaire: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ],
-          "targetDistanceKm": 5
+          "targetDistanceKm": 7
         },
         {
           "dayOfWeek": 2,
+          "workoutId": "RP-015",
+          "sessionType": "race_specific",
+          "isKeySession": true,
+          "estimatedDurationMin": 58,
+          "notes": "Allure seuil : 5:08 - 5:22/km",
+          "notesEn": "Threshold pace: 5:08 - 5:22/km",
+          "targetDurationMin": 67,
+          "loadScore": 87.1,
+          "paceNotes": [
+            {
+              "zone": "T",
+              "paceMinKm": 5.13,
+              "paceMaxKm": 5.37,
+              "description": "Allure seuil",
+              "descriptionEn": "Threshold pace"
+            }
+          ],
+          "targetDistanceKm": 9.5
+        },
+        {
+          "dayOfWeek": 4,
           "workoutId": "VMA-020",
           "sessionType": "vo2max",
           "isKeySession": true,
-          "estimatedDurationMin": 34,
+          "estimatedDurationMin": 27,
           "notes": "Allure VMA : 4:37 - 4:52/km\n3 répétitions",
           "notesEn": "VO2max pace: 4:37 - 4:52/km\n3 repetitions",
-          "targetDurationMin": 35,
-          "loadScore": 59.5,
+          "targetDurationMin": 28,
+          "loadScore": 47.6,
           "paceNotes": [
             {
               "zone": "I",
@@ -1253,28 +1256,7 @@ export const plan10kIntermediaire: PrebuiltPlan = {
             }
           ],
           "scaledRepetitions": 3,
-          "targetDistanceKm": 5
-        },
-        {
-          "dayOfWeek": 4,
-          "workoutId": "RP-015",
-          "sessionType": "race_specific",
-          "isKeySession": true,
-          "estimatedDurationMin": 67,
-          "notes": "Allure seuil : 5:08 - 5:22/km",
-          "notesEn": "Threshold pace: 5:08 - 5:22/km",
-          "targetDurationMin": 78,
-          "loadScore": 100.9,
-          "paceNotes": [
-            {
-              "zone": "T",
-              "paceMinKm": 5.13,
-              "paceMaxKm": 5.37,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
-            }
-          ],
-          "targetDistanceKm": 11
+          "targetDistanceKm": 4
         },
         {
           "dayOfWeek": 6,
@@ -1311,35 +1293,35 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "weekLabelEn": "W11",
       "targetKm": 33,
       "targetLongRunKm": 12,
-      "weeklyLoadScore": 247
+      "weeklyLoadScore": 235
     },
     {
       "weekNumber": 12,
       "phase": "taper",
       "isRecoveryWeek": false,
-      "volumePercent": 45,
+      "volumePercent": 34,
       "sessions": [
         {
           "dayOfWeek": 0,
-          "workoutId": "REC-001",
-          "sessionType": "recovery",
-          "isKeySession": false,
-          "estimatedDurationMin": 57,
-          "notes": "Footing léger - semaine de course",
-          "notesEn": "Easy jog - race week",
-          "targetDistanceKm": 8.5,
-          "loadScore": 39.9
+          "workoutId": "RP-008",
+          "sessionType": "race_specific",
+          "isKeySession": true,
+          "estimatedDurationMin": 40,
+          "notes": "Rappel d'allure : quelques minutes à l'allure de course, rien de plus",
+          "notesEn": "Pace reminder: a few minutes at race pace, nothing more",
+          "targetDistanceKm": 6,
+          "loadScore": 28
         },
         {
           "dayOfWeek": 1,
-          "workoutId": "REC-002",
+          "workoutId": "REC-001",
           "sessionType": "recovery",
           "isKeySession": false,
-          "estimatedDurationMin": 57,
+          "estimatedDurationMin": 40,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week",
-          "targetDistanceKm": 8.5,
-          "loadScore": 39.9
+          "targetDistanceKm": 6,
+          "loadScore": 28
         },
         {
           "dayOfWeek": 4,
@@ -1363,18 +1345,18 @@ export const plan10kIntermediaire: PrebuiltPlan = {
         },
         {
           "dayOfWeek": 2,
-          "workoutId": "STR-015",
+          "workoutId": "STR-016",
           "sessionType": "strength",
           "isKeySession": false,
           "isSuggestion": true,
-          "estimatedDurationMin": 25,
-          "loadScore": 8
+          "estimatedDurationMin": 33,
+          "loadScore": 10
         }
       ],
       "weekLabel": "Semaine de course",
       "weekLabelEn": "Race week",
-      "targetKm": 21,
-      "weeklyLoadScore": 105
+      "targetKm": 16,
+      "weeklyLoadScore": 84
     }
   ],
   "tags": [

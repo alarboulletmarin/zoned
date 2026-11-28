@@ -214,6 +214,24 @@ export const WEEKLY_KM_TARGETS: Record<RaceDistance, Record<Difficulty, [number,
 };
 
 /**
+ * Weekly km a runner of each level is doing today, the middle of what the
+ * wizard's level hint names (intermediate "20 to 40", advanced "40 to 70",
+ * elite "more than 70"); the beginner hint, "less than 15 km", has no middle
+ * and keeps its top, a beginner aiming at a race is rarely at zero. It caps where a plan starts
+ * when the runner has not said how much they run: the distance table opened a
+ * 4-day intermediate half-marathon plan at 39 km, the top of the range the
+ * hint had just promised, and a beginner one at 17 km for "less than 15".
+ * The peak still comes from the distance table: ambition sets where the plan
+ * goes, not where it starts.
+ */
+export const LEVEL_TYPICAL_WEEKLY_KM: Record<Difficulty, number> = {
+  beginner: 15,
+  intermediate: 30,
+  advanced: 55,
+  elite: 85,
+};
+
+/**
  * Weekly volume below which the distance becomes a survival exercise, in km.
  * The volume model uses it as a floor on the peak (a 4-day "finish" marathon
  * plan otherwise topped out at 43 km, below what its own audit accepts), and
@@ -338,6 +356,76 @@ export const DISTANCE_TAGS: Record<RaceDistance, string[]> = {
 
 /** Largest share of running sessions a plan may schedule as key sessions */
 export const MAX_KEY_SESSION_FRACTION = 0.40;
+
+// ── Hard-day budget ────────────────────────────────────────────────
+// A long run with a block at marathon pace or faster is a hard day, whatever
+// the slot is called. Counting only the key slots let a 4-day half-marathon
+// plan announce 34 % hard sessions while its build and peak weeks held two
+// key sessions plus a race-pace long run: three hard days out of four.
+//
+// The budget counts every hard day of the week, the quality long run
+// included. Daniels and Pfitzinger both cap the week at two quality days plus
+// a long run that is mostly easy; the third hard day is for advanced runners
+// on five days or more who ask for it (Pfitzinger 18/55, where the long run
+// holds marathon-pace miles on top of two quality sessions).
+
+const LEVEL_RANK: Record<Difficulty, number> = { beginner: 1, intermediate: 2, advanced: 3, elite: 4 };
+
+/** Hard days a week may hold, quality long run included */
+export function hardDayBudget(
+  phase: TrainingPhase,
+  goal: TrainingGoal | undefined,
+  level: Difficulty,
+  daysPerWeek: number,
+): number {
+  if (phase === "base") return daysPerWeek <= 5 ? 1 : 2;
+  if (phase === "taper") return 2;
+  switch (goal ?? "time") {
+    case "finish":
+      // One quality session; the peak adds a steady-finish long run on
+      // alternate weeks, from four days a week.
+      return phase === "peak" && daysPerWeek >= 4 ? 2 : 1;
+    case "compete":
+      if (daysPerWeek <= 3) return 2;
+      return LEVEL_RANK[level] >= LEVEL_RANK.advanced && daysPerWeek >= 5 ? 3 : 2;
+    default:
+      return daysPerWeek <= 3 ? 1 : 2;
+  }
+}
+
+/**
+ * Whether this week may hold a quality long run at all. Never in the base:
+ * the long run there builds time on feet (Daniels phase I, Pfitzinger's
+ * endurance block). Beginners and "finish" plans wait for the peak.
+ */
+export function qualityLongRunAllowed(
+  phase: TrainingPhase,
+  goal: TrainingGoal | undefined,
+  level: Difficulty,
+  raceDistance: RaceDistance,
+  daysPerWeek: number,
+): boolean {
+  if (phase !== "build" && phase !== "peak") return false;
+  // 5K and 10K draw their quality from intervals and threshold work, the
+  // long run stays aerobic (Daniels, Pfitzinger's 5K-10K schedules).
+  if (DISTANCE_PROFILE[raceDistance] === "short") return false;
+  // Never at the cost of the week's only key session: on a 3-day "time" plan
+  // it replaced the intervals every other week.
+  if (hardDayBudget(phase, goal, level, daysPerWeek) < 2) return false;
+  if (level === "beginner" || goal === "finish") return phase === "peak";
+  return true;
+}
+
+/**
+ * Weeks a key session type stays in place before the rotation moves on.
+ * Beginners and intermediates repeat a session the following week, a little
+ * longer, rather than meeting a new structure every week: a new name each
+ * week is what an amateur reads as "complicated". Advanced runners rotate
+ * every week.
+ */
+export function keyRotationPeriod(level: Difficulty): number {
+  return LEVEL_RANK[level] <= LEVEL_RANK.intermediate ? 2 : 1;
+}
 
 // ── Training goal modifiers ────────────────────────────────────────
 // Adjusts plan generation based on the runner's mindset/ambition.

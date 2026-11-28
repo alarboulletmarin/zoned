@@ -1,12 +1,28 @@
-import type { RaceDistance, PlanWeek, PlanSession } from "@/types/plan";
+import type { RaceDistance, PlanWeek, PlanSession, TrainingGoal } from "@/types/plan";
 import type { Difficulty, WorkoutTemplate } from "@/types";
-import { OPENER_DAYS_BEFORE_RACE } from "./constants";
+import { DISTANCE_TAGS, OPENER_DAYS_BEFORE_RACE } from "./constants";
 import { computeBlockLoad } from "./paceEngine";
 
 /** Floor for race-week jogs, shorter than this is not a run, it's a warm-up */
 const RACE_WEEK_MIN_SESSION_MIN = 25;
-/** Ceiling for a race-week jog, above it the week stops being a taper */
-const RACE_WEEK_MAX_SESSION_MIN = 60;
+/**
+ * Ceiling for a race-week jog, above it the week stops being a taper. By
+ * distance for beginners and intermediates: a 60-minute jog and a 60-minute
+ * walk-run in the week of a half marathon read as a training week. Advanced
+ * runners on big volumes keep the hour (Pfitzinger's race weeks).
+ */
+const RACE_WEEK_MAX_SESSION_MIN: Record<RaceDistance, number> = {
+  "5K": 35,
+  "10K": 40,
+  semi: 45,
+  marathon: 50,
+  trail_short: 45,
+  trail: 50,
+  ultra: 55,
+};
+const RACE_WEEK_MAX_SESSION_MIN_ADVANCED = 60;
+/** A race-pace reminder sits at least this many days before the race */
+const SHARPENER_MIN_DAYS_BEFORE_RACE = 4;
 /** The pre-race opener, easy jog plus strides */
 const OPENER_MIN = 25;
 
@@ -34,6 +50,7 @@ export function generateRaceWeek(
   easyPaceMinKm?: number,
   /** Training km the volume model plans for race week (the race excluded) */
   targetKm?: number,
+  trainingGoal?: TrainingGoal,
 ): PlanWeek {
   const sessions: PlanSession[] = [];
 
@@ -74,11 +91,18 @@ export function generateRaceWeek(
   const dayBeforeRace = (longRunDay - 1 + 7) % 7;
   usedDays.add(dayBeforeRace); // Keep day before race free (rest)
 
-  const recoveryWorkouts = allWorkouts.filter(
+  // A plain jog: no walk-run, nothing meant for after a race, nothing that
+  // needs a pool or a yoga mat.
+  const lightRecovery = allWorkouts.filter(
     w => w.category === "recovery" &&
     w.selectionCriteria.relativeLoad === "light" &&
     getDifficultyLevel(w.difficulty) <= getDifficultyLevel(difficulty)
   );
+  const plainJogs = lightRecovery.filter((w) => {
+    const tags = w.selectionCriteria.tags;
+    return !tags.includes("walk-run") && !tags.includes("post-race") && !tags.includes("situational");
+  });
+  const recoveryWorkouts = plainJogs.length > 0 ? plainJogs : lightRecovery;
 
   // Only add easy runs on non-consecutive days, well before the race
   const candidateDays = [0, 1, 2, 3, 4, 5, 6]
@@ -107,9 +131,34 @@ export function generateRaceWeek(
     const perJogKm = Math.max(0, targetKm - openerKm) / easyDays.length;
     jogMinutes = Math.round(perJogKm * easyPaceMinKm);
   }
-  jogMinutes = Math.min(RACE_WEEK_MAX_SESSION_MIN, Math.max(RACE_WEEK_MIN_SESSION_MIN, jogMinutes));
+  const maxJog = getDifficultyLevel(difficulty) >= 3
+    ? RACE_WEEK_MAX_SESSION_MIN_ADVANCED
+    : RACE_WEEK_MAX_SESSION_MIN[raceDistance];
+  jogMinutes = Math.min(maxJog, Math.max(RACE_WEEK_MIN_SESSION_MIN, jogMinutes));
 
-  easyDays.forEach((day, i) => {
+  // Intensity is kept through the taper, volume is what drops (Bosquet 2007).
+  // A runner chasing a time gets a few minutes at race pace early in the
+  // week instead of a jog; "finish" plans and 3-day weeks keep their jogs.
+  const sharpener = trainingGoal && trainingGoal !== "finish" && daysPerWeek >= 4
+    ? findSharpenerWorkout(allWorkouts, difficulty, raceDistance)
+    : undefined;
+  const sharpenerDay = sharpener
+    ? easyDays.find((d) => (longRunDay - d + 7) % 7 >= SHARPENER_MIN_DAYS_BEFORE_RACE)
+    : undefined;
+  if (sharpener && sharpenerDay !== undefined) {
+    const minutes = Math.round((sharpener.typicalDuration.min + sharpener.typicalDuration.max) / 2);
+    sessions.push({
+      dayOfWeek: sharpenerDay,
+      workoutId: sharpener.id,
+      sessionType: "race_specific",
+      isKeySession: true,
+      estimatedDurationMin: Math.min(maxJog, minutes),
+      notes: "Rappel d'allure : quelques minutes à l'allure de course, rien de plus",
+      notesEn: "Pace reminder: a few minutes at race pace, nothing more",
+    });
+  }
+
+  easyDays.filter((d) => d !== sharpenerDay).forEach((day, i) => {
     // Rotate through the pool so race week isn't the same jog three days running
     const workout = recoveryWorkouts[i % Math.max(1, recoveryWorkouts.length)];
     if (workout) {
@@ -149,6 +198,36 @@ export function generateRaceWeek(
     weekLabel: "Semaine de course",
     weekLabelEn: "Race week",
   };
+}
+
+/** A short race-pace session written for the taper, at or below the runner's level */
+function findSharpenerWorkout(
+  workouts: WorkoutTemplate[],
+  difficulty: Difficulty,
+  raceDistance: RaceDistance,
+): WorkoutTemplate | undefined {
+  const level = getDifficultyLevel(difficulty);
+  const allDistanceTags = new Set(Object.values(DISTANCE_TAGS).flat());
+  const ownTags = new Set(DISTANCE_TAGS[raceDistance]);
+  // A template written for one distance ("6km confiance 10K") stays with it
+  const fitsDistance = (w: WorkoutTemplate) => {
+    const tagged = w.selectionCriteria.tags.filter((t) => allDistanceTags.has(t));
+    return tagged.length === 0 || tagged.some((t) => ownTags.has(t));
+  };
+  return workouts
+    .filter((w) =>
+      w.category === "race_pace" &&
+      w.selectionCriteria.phases.includes("taper") &&
+      w.selectionCriteria.tags.includes("taper") &&
+      w.selectionCriteria.tags.includes("pre-race") &&
+      fitsDistance(w) &&
+      !w.selectionCriteria.tags.includes("situational") &&
+      getDifficultyLevel(w.difficulty) <= level,
+    )
+    .sort((a, b) =>
+      getDifficultyLevel(b.difficulty) - getDifficultyLevel(a.difficulty)
+      || b.selectionCriteria.priorityScore - a.selectionCriteria.priorityScore,
+    )[0];
 }
 
 function findOpenerWorkout(workouts: WorkoutTemplate[], difficulty: Difficulty): WorkoutTemplate | undefined {

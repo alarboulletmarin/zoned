@@ -22,6 +22,7 @@ import { getPhaseForWeek } from "./phases";
 import {
   WEEKLY_KM_TARGETS,
   WEEKLY_VOLUME_FLOOR_KM,
+  LEVEL_TYPICAL_WEEKLY_KM,
   MAX_WEEKLY_VOLUME_INCREASE,
   MIN_WEEKLY_VOLUME_INCREASE,
   RECOVERY_WEEK_VOLUME_PCT,
@@ -107,7 +108,12 @@ export function calculateVolumeProgression(
     7: 1.05,
   };
   const daysAdjustment = DAYS_VOLUME_SHARE[daysPerWeek] ?? 0.90;
-  const startKm = currentWeeklyKm ?? Math.round(defaultStartKm * startScale * daysAdjustment);
+  // Without a declared volume, never start above what the chosen level says
+  // the runner does today.
+  const startKm = currentWeeklyKm ?? Math.min(
+    Math.round(defaultStartKm * startScale * daysAdjustment),
+    LEVEL_TYPICAL_WEEKLY_KM[difficulty],
+  );
   const peakKm = Math.round(defaultPeakKm * peakScale * goalDemandFactor);
   const tablePeakKm = Math.round(peakKm * daysAdjustment);
 

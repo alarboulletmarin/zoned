@@ -51,6 +51,12 @@ export function fitWeeklyVolume(
   targetKm: number,
   easyPaceMinKm: number,
   bounds?: DurationBounds,
+  /**
+   * No easy run lasts longer than this, in minutes: the week's long run. An
+   * easy Friday of 86 minutes before a 78-minute Sunday long run made the
+   * long run pointless and the week harder than it read.
+   */
+  maxEasyMin?: number,
 ): void {
   if (targetKm <= 0 || easyPaceMinKm <= 0) return;
 
@@ -75,12 +81,14 @@ export function fitWeeklyVolume(
 
   // Per-session km window: a session stays within reach of its own reference
   // duration, so the week's volume never rewrites what the session is.
+  const longRunCapKm = maxEasyMin && maxEasyMin > 0 ? maxEasyMin / easyPaceMinKm : Infinity;
   const windowOf = (s: PlanSession): { lo: number; hi: number } => {
     const ref = bounds?.(s.workoutId);
-    if (!ref) return { lo: MIN_EASY_KM, hi: maxEasyKm };
+    const ceiling = Math.min(maxEasyKm, longRunCapKm);
+    if (!ref) return { lo: Math.min(MIN_EASY_KM, ceiling), hi: ceiling };
     const lo = Math.max(MIN_EASY_KM, (ref.min * MAX_SHRINK) / easyPaceMinKm);
-    const hi = Math.min(maxEasyKm, (ref.max * MAX_STRETCH) / easyPaceMinKm);
-    return lo <= hi ? { lo, hi } : { lo: hi, hi: lo };
+    const hi = Math.min(ceiling, (ref.max * MAX_STRETCH) / easyPaceMinKm);
+    return lo <= hi ? { lo, hi } : { lo: hi, hi };
   };
 
   // What the easy runs need to cover for the week to hit its target
@@ -114,7 +122,7 @@ export function fitWeeklyVolume(
   }
 
   for (const s of adjustable) {
-    const km = roundHalf(assigned.get(s) ?? 0);
+    const km = Math.min(roundHalf(assigned.get(s) ?? 0), Math.floor(longRunCapKm * 2) / 2);
     const previousKm = s.targetDistanceKm ?? 0;
     const durationMin = Math.max(20, Math.round(km * easyPaceMinKm));
 

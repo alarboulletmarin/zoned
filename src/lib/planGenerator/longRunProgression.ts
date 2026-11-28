@@ -135,6 +135,11 @@ export const MAX_LONG_RUN_MINUTES: Record<RaceDistance, number> = {
   ultra: 300,
 };
 
+/** Opening long run as a share of the opening week, at least */
+const LONG_RUN_START_SHARE = 0.22;
+/** A long run this share of the week is within reach of whoever runs that week */
+const LONG_RUN_START_COMFORT_SHARE = 0.25;
+
 const MAX_COMFORTABLE_START: Record<Difficulty, number> = {
   beginner: 8,
   intermediate: 14,
@@ -167,6 +172,8 @@ export function calculateLongRunProgression(
   intermediateRaceWeeks?: number[],
   /** Peak weekly km of the volume model, lifts the long run with the volume */
   peakWeeklyKm?: number,
+  /** First-week km of the volume model, lifts the opening long run with it */
+  startWeeklyKm?: number,
 ): LongRunTarget[] {
   const config = LONG_RUN_CONFIG[raceDistance];
   const raceDistanceKm = getRaceDistanceKm(raceDistance);
@@ -183,8 +190,13 @@ export function calculateLongRunProgression(
     config.absoluteMaxKm,
     durationCapKm,
   ));
-  const comfortCap = currentLongRunKm ?? MAX_COMFORTABLE_START[difficulty];
-  const startKm = Math.min(peakKm * config.startFraction, comfortCap);
+  // The opening long run follows the opening week too. A runner starting at
+  // 107 km a week was handed a 17 km long run and five easy runs of 25 km
+  // each, every one of them longer than the long run.
+  const openingShare = (startWeeklyKm ?? 0) * LONG_RUN_START_SHARE;
+  const comfortCap = currentLongRunKm
+    ?? Math.max(MAX_COMFORTABLE_START[difficulty], (startWeeklyKm ?? 0) * LONG_RUN_START_COMFORT_SHARE);
+  const startKm = Math.min(peakKm, comfortCap, Math.max(peakKm * config.startFraction, openingShare));
 
   // 2. Calculate the ideal increment to reach peak exactly on time.
   // The taper window and the "peak N weeks before race" window overlap, they

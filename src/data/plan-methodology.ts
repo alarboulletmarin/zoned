@@ -69,25 +69,25 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     title: "Distribution d'intensité pyramidale",
     titleEn: "Pyramidal Intensity Distribution",
     summary:
-      "Une séance clé par semaine en base, deux en build et en peak, jamais plus. Le reste est facile : environ 80 % de ton temps de course en Z1-Z2.",
+      "Un jour dur par semaine en base, deux en build et en peak, sortie longue à allure comprise. Le reste est facile : environ 80 % de ton temps de course en Z1-Z2.",
     summaryEn:
-      "One key session a week in base, two in build and peak, never more. Everything else is easy: about 80% of your running time in Z1-Z2.",
+      "One hard day a week in base, two in build and peak, a race-pace long run included. Everything else is easy: about 80% of your running time in Z1-Z2.",
     details:
-      "Le 80/20 de Seiler compte des séances : environ 80 % des séances sont faciles, 2 à 3 séances dures pour 10 à 14. Zoned l'applique par un budget de séances clés : une seule en phase de base jusqu'à 5 jours par semaine (Pfitzinger n'a qu'une séance de seuil dans son bloc d'endurance, Daniels seulement des lignes droites en phase I), deux à partir du build, jamais plus de deux plus la sortie longue. Sur un plan complet, cela donne 25 à 35 % de séances dures et environ 80 % du temps de course en Z1-Z2, avec du tempo et du seuil au milieu : une distribution pyramidale, celle qu'on observe chez les coureurs de fond bien entraînés la plupart de l'année (Casado 2022, Kenneally 2021). L'objectif finir limite à une séance clé par semaine tout le plan.",
+      "Le 80/20 de Seiler compte des séances : environ 80 % des séances sont faciles, 2 à 3 séances dures pour 10 à 14. Zoned l'applique par un budget de jours durs, où une sortie longue avec un bloc à allure de course compte comme un jour dur : un seul en phase de base jusqu'à 5 jours par semaine (Pfitzinger n'a qu'une séance de seuil dans son bloc d'endurance, Daniels seulement des lignes droites en phase I), deux à partir du build. Une semaine qui porte une sortie longue à allure garde donc une seule séance clé. La sortie longue reste facile en base et en décharge ; en build et en peak, elle prend un bloc à allure une semaine sur deux au plus, jamais sur 5K et 10K, où la qualité vient du fractionné. Un troisième jour dur n'existe que pour les coureurs avancés et élites qui visent la performance sur 5 jours ou plus (le 18/55 de Pfitzinger). Sur un plan complet, cela donne 25 à 30 % de séances dures et environ 80 % du temps de course en Z1-Z2, avec du tempo et du seuil au milieu : une distribution pyramidale, celle qu'on observe chez les coureurs de fond bien entraînés la plupart de l'année (Casado 2022, Kenneally 2021). L'objectif finir limite à une séance clé par semaine tout le plan, la sortie longue à allure n'arrivant qu'en peak.",
     detailsEn:
-      "Seiler's 80/20 counts sessions: about 80% of sessions are easy, 2 to 3 hard sessions in 10 to 14. Zoned applies it through a key-session budget: one in the base phase up to 5 days a week (Pfitzinger's endurance block has a single threshold session, Daniels' phase I only strides), two from the build phase on, never more than two plus the long run. Over a full plan that lands at 25-35% hard sessions and about 80% of running time in Z1-Z2, with tempo and threshold in between: a pyramidal distribution, the one well-trained distance runners show most of the year (Casado 2022, Kenneally 2021). The \"finish\" goal keeps one key session a week for the whole plan.",
+      "Seiler's 80/20 counts sessions: about 80% of sessions are easy, 2 to 3 hard sessions in 10 to 14. Zoned applies it through a hard-day budget, where a long run with a race-pace block counts as a hard day: one in the base phase up to 5 days a week (Pfitzinger's endurance block has a single threshold session, Daniels' phase I only strides), two from the build phase on. A week that holds a race-pace long run therefore keeps a single key session. The long run stays easy in the base and in drop-back weeks; in build and peak it carries a pace block every other week at most, never for 5K and 10K, where quality comes from intervals. A third hard day only exists for advanced and elite runners who compete on 5 days or more (Pfitzinger's 18/55). Over a full plan that lands at 25-30% hard sessions and about 80% of running time in Z1-Z2, with tempo and threshold in between: a pyramidal distribution, the one well-trained distance runners show most of the year (Casado 2022, Kenneally 2021). The \"finish\" goal keeps one key session a week for the whole plan, the race-pace long run only arriving in the peak.",
     rules: [
       {
-        text: "Base : 1 séance clé par semaine (2 à partir de 6 jours) ; Build et Peak : 2 séances clés",
-        textEn: "Base: 1 key session a week (2 from 6 days); Build and Peak: 2 key sessions",
+        text: "Base : 1 jour dur par semaine (2 à partir de 6 jours) ; Build et Peak : 2 jours durs",
+        textEn: "Base: 1 hard day a week (2 from 6 days); Build and Peak: 2 hard days",
       },
       {
-        text: "Jamais plus de 2 séances clés + la sortie longue, espacées de 48 h",
-        textEn: "Never more than 2 key sessions + the long run, 48 h apart",
+        text: "Une sortie longue à allure est un jour dur : elle prend la place d'une séance clé, une semaine sur deux au plus",
+        textEn: "A race-pace long run is a hard day: it takes a key session's place, every other week at most",
       },
       {
-        text: "3 jours/sem. : 1 clé + 1 sortie longue + 1 facile",
-        textEn: "3 days/wk: 1 key + 1 long run + 1 easy",
+        text: "3 jours/sem. : 1 clé + 1 sortie longue facile + 1 facile",
+        textEn: "3 days/wk: 1 key + 1 easy long run + 1 easy",
       },
       {
         text: "5 jours/sem. : 1 puis 2 clés + 1 sortie longue + 2 ou 3 faciles",
@@ -96,6 +96,10 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
       {
         text: "Objectif finir : 1 seule séance clé par semaine, tout le plan",
         textEn: "\"Finish\" goal: a single key session a week, the whole plan",
+      },
+      {
+        text: "3 jours durs seulement pour un coureur avancé ou élite qui vise la performance sur 5 jours ou plus",
+        textEn: "3 hard days only for an advanced or elite runner who competes on 5 days or more",
       },
     ],
     references: [
@@ -155,10 +159,14 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     summaryEn:
       "The slope is computed so the peak lands 2 to 3 weeks before the taper. Never more than +10% a week, but that is only a ceiling.",
     details:
-      "Le générateur calcule des cibles en km réels à partir de ta distance, ton niveau, tes jours par semaine et le volume que tu déclares (un marathonien intermédiaire passe de 55 à 90 km par semaine, comme le plan 18/55 de Pfitzinger). L'augmentation hebdomadaire est celle qui mène du départ au pic dans les semaines de charge disponibles, pour que le pic arrive 2 semaines (5K à semi) ou 3 semaines (marathon) avant l'affûtage, puis ondule entre 93 et 100 %. Le +10 % est un plafond de sécurité, pas une consigne : la règle des 10 % n'a pas de preuve expérimentale (Buist 2008), ce que les données montrent, c'est le risque des sauts de plus de 20 à 30 %. Chaque distance impose aussi un volume de pic minimal (50 km sur marathon, 35 sur semi), que le nombre de jours ou l'objectif finir ne peuvent pas faire descendre.",
+      "Le générateur calcule des cibles en km réels à partir de ta distance, ton niveau, tes jours par semaine et le volume que tu déclares (un marathonien intermédiaire monte jusqu'à 90 km par semaine, comme le plan 18/55 de Pfitzinger). Le plan part de ce que tu cours aujourd'hui ; sans réponse, il part du repère de ton niveau (15 km pour un débutant, 30 pour un intermédiaire, 55 pour un avancé, 85 pour un élite), jamais d'au-dessus. L'augmentation hebdomadaire est celle qui mène du départ au pic dans les semaines de charge disponibles, pour que le pic arrive 2 semaines (5K à semi) ou 3 semaines (marathon) avant l'affûtage, puis ondule entre 93 et 100 %. Le +10 % est un plafond de sécurité, pas une consigne : la règle des 10 % n'a pas de preuve expérimentale (Buist 2008), ce que les données montrent, c'est le risque des sauts de plus de 20 à 30 %. Chaque distance impose aussi un volume de pic minimal (50 km sur marathon, 35 sur semi), que le nombre de jours ou l'objectif finir ne peuvent pas faire descendre.",
     detailsEn:
-      "The generator computes real km targets from your distance, level, days per week and the volume you declare (an intermediate marathoner goes from 55 to 90 km a week, like Pfitzinger's 18/55). The weekly increase is the one that gets from start to peak in the load weeks available, so the peak lands 2 weeks (5K to half) or 3 weeks (marathon) before the taper, then undulates between 93 and 100%. The +10% is a safety ceiling, not a prescription: the 10% rule has no experimental support (Buist 2008), what the data shows is the risk of jumps above 20-30%. Each distance also sets a minimum peak volume (50 km for a marathon, 35 for a half) that the number of days or the \"finish\" goal cannot lower.",
+      "The generator computes real km targets from your distance, level, days per week and the volume you declare (an intermediate marathoner goes up to 90 km a week, like Pfitzinger's 18/55). The plan starts from what you run today; left empty, it starts from your level's usual volume (15 km for a beginner, 30 for an intermediate, 55 for an advanced runner, 85 for an elite), never above. The weekly increase is the one that gets from start to peak in the load weeks available, so the peak lands 2 weeks (5K to half) or 3 weeks (marathon) before the taper, then undulates between 93 and 100%. The +10% is a safety ceiling, not a prescription: the 10% rule has no experimental support (Buist 2008), what the data shows is the risk of jumps above 20-30%. Each distance also sets a minimum peak volume (50 km for a marathon, 35 for a half) that the number of days or the \"finish\" goal cannot lower.",
     rules: [
+      {
+        text: "Départ : ton volume déclaré, sinon le repère de ton niveau",
+        textEn: "Start: the volume you declare, or your level's usual volume",
+      },
       {
         text: "Pente calculée pour atteindre le pic 2-3 semaines avant l'affûtage ; +10 % par semaine en plafond",
         textEn: "Slope computed to reach the peak 2-3 weeks before the taper; +10% a week as a ceiling",
@@ -195,9 +203,9 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     summaryEn:
       "A 3-week cycle: 2 build weeks + 1 step-back at 85%. Peak arrives 2 to 4 weeks before the race, and the run follows your volume.",
     details:
-      "La sortie longue suit un schéma de step-back toutes les 3 semaines : 2 semaines de construction puis 1 semaine à 85 %, avec reprise au niveau d'avant. Son pic est le plus grand de deux repères : la cible par distance (78 % du marathon, 90 % du semi, 1,8 fois le 10K) et 27 % de ton volume hebdomadaire de pic (Daniels : 25-30 % de la semaine). Deux plafonds s'appliquent : en km (36 km sur marathon, 30 sur semi) et en durée à allure facile (150 min sur route, 3 h 15 sur marathon, 4 h en trail), pour qu'un coureur lent ne se voie pas prescrire quatre heures de course. Dans la semaine, la sortie longue ne dépasse pas 35 à 40 % du volume, 45 à 50 % sur les petites semaines de marathon (Higdon fait courir 32 km dans 64). En trail, la cible ajoute un dénivelé et une durée ajustée.",
+      "La sortie longue suit un schéma de step-back toutes les 3 semaines : 2 semaines de construction puis 1 semaine à 85 %, avec reprise au niveau d'avant. Son pic est le plus grand de deux repères : la cible par distance (78 % du marathon, 90 % du semi, 1,8 fois le 10K) et 27 % de ton volume hebdomadaire de pic (Daniels : 25-30 % de la semaine). Deux plafonds s'appliquent : en km (36 km sur marathon, 30 sur semi) et en durée à allure facile (150 min sur route, 3 h 15 sur marathon, 4 h en trail), pour qu'un coureur lent ne se voie pas prescrire quatre heures de course. Dans la semaine, la sortie longue ne dépasse pas 35 à 40 % du volume, 45 à 50 % sur les petites semaines de marathon (Higdon fait courir 32 km dans 64). En trail, la cible ajoute un dénivelé et une durée ajustée. Aucun footing de la semaine ne dure plus longtemps que la sortie longue, et sur route la sortie longue reste sur terrain plat ou roulant : le travail en côte est dans les séances de côtes.",
     detailsEn:
-      "The long run follows a 3-week step-back pattern: 2 build weeks then 1 week at 85%, resuming at the previous level. Its peak is the larger of two marks: the distance target (78% of the marathon, 90% of the half, 1.8 times the 10K) and 27% of your peak weekly volume (Daniels: 25-30% of the week). Two caps apply: in km (36 km for a marathon, 30 for a half) and in duration at easy pace (150 min on the road, 3 h 15 for a marathon, 4 h on trail), so a slow runner is not prescribed a four-hour outing. Within the week, the long run stays under 35-40% of the volume, 45-50% on small marathon weeks (Higdon runs 32 km inside 64). On trail, the target adds climb and an adjusted duration.",
+      "The long run follows a 3-week step-back pattern: 2 build weeks then 1 week at 85%, resuming at the previous level. Its peak is the larger of two marks: the distance target (78% of the marathon, 90% of the half, 1.8 times the 10K) and 27% of your peak weekly volume (Daniels: 25-30% of the week). Two caps apply: in km (36 km for a marathon, 30 for a half) and in duration at easy pace (150 min on the road, 3 h 15 for a marathon, 4 h on trail), so a slow runner is not prescribed a four-hour outing. Within the week, the long run stays under 35-40% of the volume, 45-50% on small marathon weeks (Higdon runs 32 km inside 64). On trail, the target adds climb and an adjusted duration. No easy run of the week lasts longer than the long run, and on the road the long run stays on flat or rolling ground: hill work lives in the hill sessions.",
     rules: [
       {
         text: "Cycle 3 semaines : montée, montée, step-back à 85 %",
@@ -214,6 +222,10 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
       {
         text: "Pic 2 semaines avant la course (5K/10K), 3 (semi), 4 (marathon)",
         textEn: "Peak 2 weeks before the race (5K/10K), 3 (half), 4 (marathon)",
+      },
+      {
+        text: "Facile en base et en décharge ; un bloc à allure une semaine sur deux au plus ensuite",
+        textEn: "Easy in base and drop-back weeks; a pace block every other week at most after that",
       },
     ],
     references: [
@@ -234,9 +246,9 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     summaryEn:
       "The limiting factor differs between a 5K and a marathon: VO2max for short distances, threshold and race pace for long ones. Every key session comes from your level.",
     details:
-      "Sur 5K et 10K, le build travaille VO2max et seuil, le peak garde VO2max et allure de course (Pfitzinger programme du VO2max chaque semaine de la seconde moitié). Sur semi et marathon, le seuil et le tempo précèdent l'allure spécifique, et le VO2max n'arrive qu'en fin de peak (Pfitzinger : seuil avant VO2max, allure marathon comme travail spécifique). En trail, les côtes dominent. La séance à allure spécifique est prise dans le catalogue de ta distance, jamais dans celui d'une autre, et son allure dépend de la distance : allure VMA sur 5K, seuil sur 10K et semi, allure marathon sur marathon. Une séance clé ne vient jamais d'un gabarit d'un niveau supérieur au tien : un débutant reçoit des séances débutant. Les séances clés sont espacées de la sortie longue et entre elles.",
+      "Sur 5K et 10K, le build travaille VO2max et seuil, le peak garde VO2max et allure de course (Pfitzinger programme du VO2max chaque semaine de la seconde moitié). Sur semi et marathon, le seuil et le tempo précèdent l'allure spécifique, et le VO2max n'arrive qu'en fin de peak (Pfitzinger : seuil avant VO2max, allure marathon comme travail spécifique). En trail, les côtes dominent. La séance à allure spécifique est prise dans le catalogue de ta distance, jamais dans celui d'une autre, et son allure dépend de la distance : allure VMA sur 5K, seuil sur 10K et semi, allure marathon sur marathon. Aucune séance, clé, facile ou sortie longue, ne vient d'un gabarit d'un niveau supérieur au tien : un débutant reçoit des séances débutant. Débutants et intermédiaires retrouvent la même séance clé deux semaines de suite, un peu plus longue la seconde, plutôt qu'une structure nouvelle chaque semaine. Le générateur ne programme jamais de lui-même une séance qui demande une piscine, de la chaleur, un partenaire, un réveil à jeun ou une ceinture cardio ; les méthodes nommées (Canova, vitesse critique, NRR) sont réservées aux avancés. Elles restent dans la bibliothèque. Les séances clés sont espacées de la sortie longue et entre elles.",
     detailsEn:
-      "For 5K and 10K, the build works VO2max and threshold, the peak keeps VO2max and race pace (Pfitzinger schedules VO2max every week of the second half). For half and marathon, threshold and tempo precede race-specific work, and VO2max only arrives late in the peak (Pfitzinger: threshold before VO2max, marathon pace as the specific work). On trail, hills dominate. The race-pace session is drawn from your distance's catalogue, never another one's, and its pace depends on the distance: VO2max pace for a 5K, threshold for 10K and half, marathon pace for a marathon. A key session never comes from a template above your level: a beginner gets beginner sessions. Key sessions are spaced from the long run and from each other.",
+      "For 5K and 10K, the build works VO2max and threshold, the peak keeps VO2max and race pace (Pfitzinger schedules VO2max every week of the second half). For half and marathon, threshold and tempo precede race-specific work, and VO2max only arrives late in the peak (Pfitzinger: threshold before VO2max, marathon pace as the specific work). On trail, hills dominate. The race-pace session is drawn from your distance's catalogue, never another one's, and its pace depends on the distance: VO2max pace for a 5K, threshold for 10K and half, marathon pace for a marathon. No session, key, easy or long, comes from a template above your level: a beginner gets beginner sessions. Beginners and intermediates meet the same key session two weeks running, a little longer the second time, rather than a new structure every week. The generator never prescribes on its own a session that needs a pool, heat, a partner, a fasted morning or a heart-rate strap; named methods (Canova, critical velocity, NRRs) are kept for advanced runners. They stay in the library. Key sessions are spaced from the long run and from each other.",
     rules: [
       {
         text: "5K / 10K : base fartlek et côtes, build VO2max et seuil, peak VO2max et allure de course",
@@ -251,8 +263,12 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
         textEn: "Trail: hills in base and build, race pace and hills in peak",
       },
       {
-        text: "Séance clé toujours de ton niveau ou en dessous, jamais au-dessus",
-        textEn: "Key session always at or below your level, never above",
+        text: "Toute séance de ton niveau ou en dessous, jamais au-dessus",
+        textEn: "Every session at or below your level, never above",
+      },
+      {
+        text: "Débutant et intermédiaire : la même séance clé deux semaines de suite, puis la suivante",
+        textEn: "Beginner and intermediate: the same key session two weeks running, then the next one",
       },
       {
         text: "Retour de blessure et reprise : marche-course les premières semaines, aucune séance dure avant la 4e ou 5e",
@@ -277,9 +293,9 @@ export const PLAN_PRINCIPLES: PlanPrinciple[] = [
     summaryEn:
       "Volume steps down along published ladders (78%, 60%, then 40% in race week for a marathon), intensity stays. You arrive fresh, not detrained.",
     details:
-      "La méta-analyse de Bosquet (2007) donne la recette : réduire le volume de 41 à 60 % au total, progressivement plutôt qu'en marche, sur environ deux semaines, en gardant l'intensité et la fréquence. Zoned suit les paliers des plans de référence : sur marathon 78 % du pic à J−21, 60 % à J−14, 40 % en semaine de course (Pfitzinger : 75 / 60 / 40 ; Higdon : 73 / 53 / 23), et un affûtage de trois semaines discipliné, qui est ce qui marche le mieux chez les amateurs (Smyth & Lawlor 2021). Sur 10K et semi, 72 % puis 45 % ; sur 5K, une semaine de course à 55 %. Les séances clés restent, raccourcies ; la sortie longue descend avec le volume. En semaine de course, les footings sont dimensionnés sur la cible, la course elle-même n'est pas comptée.",
+      "La méta-analyse de Bosquet (2007) donne la recette : réduire le volume de 41 à 60 % au total, progressivement plutôt qu'en marche, sur environ deux semaines, en gardant l'intensité et la fréquence. Zoned suit les paliers des plans de référence : sur marathon 78 % du pic à J−21, 60 % à J−14, 40 % en semaine de course (Pfitzinger : 75 / 60 / 40 ; Higdon : 73 / 53 / 23), et un affûtage de trois semaines discipliné, qui est ce qui marche le mieux chez les amateurs (Smyth & Lawlor 2021). Sur 10K et semi, 72 % puis 45 % ; sur 5K, une semaine de course à 55 %. Les séances clés restent, raccourcies ; la sortie longue descend avec le volume. En semaine de course, les footings sont dimensionnés sur la cible et plafonnés (45 minutes avant un semi), la course elle-même n'est pas comptée ; si tu vises un temps, un rappel de quelques minutes à l'allure de course remplace le premier footing.",
     detailsEn:
-      "Bosquet's meta-analysis (2007) gives the recipe: cut volume by 41-60% in total, progressively rather than in one step, over about two weeks, keeping intensity and frequency. Zoned follows the ladders of the reference plans: for a marathon 78% of peak at day −21, 60% at day −14, 40% in race week (Pfitzinger: 75 / 60 / 40; Higdon: 73 / 53 / 23), and a disciplined three-week taper, which is what works best for recreational runners (Smyth & Lawlor 2021). For 10K and half, 72% then 45%; for a 5K, a race week at 55%. Key sessions stay, shortened; the long run comes down with the volume. In race week the jogs are sized on the target, the race itself is not counted.",
+      "Bosquet's meta-analysis (2007) gives the recipe: cut volume by 41-60% in total, progressively rather than in one step, over about two weeks, keeping intensity and frequency. Zoned follows the ladders of the reference plans: for a marathon 78% of peak at day −21, 60% at day −14, 40% in race week (Pfitzinger: 75 / 60 / 40; Higdon: 73 / 53 / 23), and a disciplined three-week taper, which is what works best for recreational runners (Smyth & Lawlor 2021). For 10K and half, 72% then 45%; for a 5K, a race week at 55%. Key sessions stay, shortened; the long run comes down with the volume. In race week the jogs are sized on the target and capped (45 minutes before a half), the race itself is not counted; when you chase a time, a few minutes at race pace replace the first jog.",
     rules: [
       {
         text: "Marathon : 78 % → 60 % → 40 % du pic (semaine de course)",

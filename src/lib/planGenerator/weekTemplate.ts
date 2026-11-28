@@ -12,6 +12,10 @@ export interface WeekSlot {
   sessionTypes: SessionType[]; // Preferred types for this slot, in priority order
   /** Template tags to prefer when they leave candidates (e.g. "walk-run") */
   preferTags?: string[];
+  /** Long run slot: easy throughout, or with a block above easy pace */
+  longRunIntent?: "easy" | "quality";
+  /** Reuse this template when it still fits the slot */
+  preferWorkoutId?: string;
 }
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -126,6 +130,15 @@ function pickBestDay(
  * @param raceDistance - Optional: weights key session types toward the distance
  * @param weekNumber - Optional: rotates key session types across weeks
  */
+export interface WeekTemplateOptions {
+  /** Hard days this week may hold, the quality long run included */
+  hardDayBudget?: number;
+  /** This week's long run carries a block above easy pace */
+  qualityLongRun?: boolean;
+  /** Index driving the key-type rotation, defaults to the week number */
+  rotationIndex?: number;
+}
+
 export function buildWeekTemplate(
   daysPerWeek: number,
   longRunDay: number,
@@ -134,6 +147,7 @@ export function buildWeekTemplate(
   trainingGoal?: TrainingGoal,
   raceDistance?: RaceDistance,
   weekNumber: number = 0,
+  options: WeekTemplateOptions = {},
 ): WeekSlot[] {
   // Determine slot distribution by days per week
   // Format: { key count, easy count, recovery count }, long_run is always 1
@@ -170,7 +184,13 @@ export function buildWeekTemplate(
   const requestedKey = goalMods.maxQualitySessions > 0
     ? goalMods.maxQualitySessions
     : dist.key;
-  const adjustedKey = Math.min(requestedKey, spacingCap, phaseCap, daysPerWeek - 1);
+  // The hard-day budget counts the quality long run: on a week that holds
+  // one, a key session gives its place to an easy run.
+  const qualityLongRun = !isRecoveryWeek && options.qualityLongRun === true;
+  const budgetCap = options.hardDayBudget !== undefined
+    ? Math.max(0, options.hardDayBudget - (qualityLongRun ? 1 : 0))
+    : Infinity;
+  const adjustedKey = Math.min(requestedKey, spacingCap, phaseCap, budgetCap, daysPerWeek - 1);
   const adjustedEasy = dist.easy + (dist.key - adjustedKey); // Reassign reduced key → easy
   const adjustedRecovery = dist.recovery;
 
@@ -200,15 +220,17 @@ export function buildWeekTemplate(
     dayOfWeek: longRunDay,
     slotType: "long_run",
     sessionTypes: ["long_run"],
+    longRunIntent: qualityLongRun ? "quality" : "easy",
   });
 
   // 2. Key quality sessions (spaced apart from long run and each other).
   // Rotate the priority order week to week: the selector takes the first type
   // that matches, so a fixed order gave 3-day plans the same stimulus every
   // single week (VO2max only, never a threshold session in the whole plan).
+  const rotation = options.rotationIndex ?? weekNumber;
   for (let i = 0; i < keyCount; i++) {
     const day = pickBestDay(otherDays, longRunDay, slots);
-    const offset = (weekNumber + i) % keyTypes.length;
+    const offset = (rotation + i) % keyTypes.length;
     slots.push({
       dayOfWeek: day,
       slotType: "key_quality",

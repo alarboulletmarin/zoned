@@ -56,7 +56,7 @@ import { buildPlanCardModel } from "@/lib/planCardModel";
 import { getPlanMonday, getSessionCalendarDate, isoDateOnly } from "@/lib/planDates";
 import { auditPlan } from "@/lib/planGenerator/audit";
 import { getAllPlans, undoLastChange } from "@/lib/planStorage";
-import { selectWorkout } from "@/lib/planGenerator/selector";
+import { isQualityLongRun, selectWorkout } from "@/lib/planGenerator/selector";
 import { typicalMinutes } from "@/lib/rankAlternatives";
 import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
 import { buildPlanWeekModel, defaultPlanWeek } from "@/lib/planWeekModel";
@@ -502,11 +502,18 @@ export function PlanViewPage() {
       const weekData = plan.weeks.find((w) => w.weekNumber === week);
       if (!session || !weekData) return;
       const all = await loadAllWorkouts();
+      // Une sortie longue tranquille se retire en sortie longue tranquille,
+      // une sortie longue à allure en sortie longue à allure.
+      const current = all.find((w) => w.id === session.workoutId);
       const pick = selectWorkout(
         {
           dayOfWeek: session.dayOfWeek,
           slotType: session.sessionType === "long_run" ? "long_run" : session.isKeySession ? "key_quality" : "easy",
           sessionTypes: [session.sessionType],
+          longRunIntent:
+            session.sessionType === "long_run" && current
+              ? isQualityLongRun(current) ? "quality" : "easy"
+              : undefined,
         },
         weekData.phase,
         plan.config.runnerLevel ?? "intermediate",

@@ -45,6 +45,71 @@ const DIFFICULTY_LEVELS: Record<Difficulty, number> = {
   elite: 4,
 };
 
+/** Where to look when a phase has nothing at the runner's level */
+const NEIGHBOUR_PHASES: Partial<Record<TrainingPhase, TrainingPhase[]>> = {
+  base: ["build"],
+  build: ["base", "peak"],
+  peak: ["build", "taper"],
+  taper: ["peak"],
+};
+
+/** Tags of the jogs written for the days around a race */
+const RACE_AROUND_TAGS = new Set(["opener", "shakeout", "pre-race", "race-prep", "race-day", "post-race"]);
+
+const ROAD_DISTANCES = new Set<RaceDistance>(["5K", "10K", "semi", "marathon"]);
+const QUALITY_INTENSITIES = new Set(["M", "T", "I", "R"]);
+
+/**
+ * A long run is a quality one when its main set asks for anything above easy
+ * pace. Read from the blocks, never from the name or the load tag: "Sortie
+ * longue vallonnée" is tagged hard and is an easy run on hills, "Sortie longue
+ * progressive" ends at marathon pace.
+ */
+export function isQualityLongRun(w: Pick<WorkoutTemplate, "mainSetTemplate">): boolean {
+  return w.mainSetTemplate.some((b) => !!b.intensityType && QUALITY_INTENSITIES.has(b.intensityType));
+}
+
+/** The template only makes sense on hills: stated, tagged, or climbing in its blocks */
+export function isHillyTemplate(w: Pick<WorkoutTemplate, "environment" | "selectionCriteria" | "mainSetTemplate">): boolean {
+  return w.environment.requiresHills
+    || w.selectionCriteria.tags.includes("hills")
+    || w.mainSetTemplate.some((b) => (b.elevationGainM ?? 0) > 0);
+}
+
+/**
+ * A long run written for a longer race: three quarters of an hour or more at
+ * marathon pace. "Sortie longue simulation course" (100 minutes at marathon
+ * pace with aid stations) was the peak long run of half-marathon plans.
+ */
+export function isOffDistanceLongRun(w: Pick<WorkoutTemplate, "mainSetTemplate">, raceDistance: RaceDistance): boolean {
+  if (raceDistance !== "5K" && raceDistance !== "10K" && raceDistance !== "semi") return false;
+  return w.mainSetTemplate.some((b) => b.intensityType === "M" && (b.durationMin ?? 0) * (b.repetitions ?? 1) >= 45);
+}
+
+/**
+ * Catalogue entries a generated plan never prescribes on its own. They stay in
+ * the library for whoever looks for them.
+ *   - "situational": needs a pool, a bike, heat, bad weather, a fasted morning
+ *     or a second run the same day, nothing a plan can assume.
+ *   - "expert": a named method or an advanced concept (critical velocity,
+ *     DFA alpha1, Canova, NRRs), only for advanced and elite runners.
+ *   - "social": relays with a partner, a group run.
+ */
+export function isPlanEligible(w: Pick<WorkoutTemplate, "selectionCriteria">, difficulty: Difficulty): boolean {
+  const tags = w.selectionCriteria.tags;
+  if (tags.includes("situational")) return false;
+  // Run with a partner or a group: a plan cannot promise one.
+  if (tags.includes("social")) return false;
+  if (tags.includes("expert") && DIFFICULTY_LEVELS[difficulty] <= DIFFICULTY_LEVELS.intermediate) return false;
+  return true;
+}
+
+/** Keep the filtered pool only when it leaves something to pick from */
+function soft<T>(pool: T[], keep: (item: T) => boolean): T[] {
+  const kept = pool.filter(keep);
+  return kept.length > 0 ? kept : pool;
+}
+
 // ── Types ──────────────────────────────────────────────────────────
 
 interface WorkoutSelection {
@@ -140,6 +205,13 @@ function estimateWorkoutDuration(workout: WorkoutTemplate): number {
 
 // ── Internal selector ──────────────────────────────────────────────
 
+export interface SelectionOptions {
+  /** Long run slots: an easy long run, or one with a block above easy pace */
+  longRunIntent?: "easy" | "quality";
+  /** Take this template when it survives every filter (same session two weeks running) */
+  preferWorkoutId?: string;
+}
+
 function findBestWorkout(
   sessionType: SessionType,
   phase: TrainingPhase,
@@ -160,6 +232,7 @@ function findBestWorkout(
    * tant qu'une autre de la même catégorie existe au catalogue.
    */
   excludeEarly = false,
+  options: SelectionOptions = {},
 ): WorkoutSelection | null {
   const categories = SESSION_TO_CATEGORY[sessionType] ?? [];
   const diffLevel = DIFFICULTY_LEVELS[difficulty];
@@ -220,11 +293,38 @@ function findBestWorkout(
     );
   }
 
+  // Situational templates never, expert ones only from advanced up.
+  candidates = soft(candidates, (w) => isPlanEligible(w, difficulty));
+
+  // A road plan holds its hill work in its hill sessions. Easy runs and long
+  // runs on hills turned a half-marathon plan into twelve hilly outings out of
+  // fifty-six, two of them actual hill sessions.
+  const isEasyOrLong = slotType === "easy" || slotType === "recovery" || slotType === "long_run";
+  if (ROAD_DISTANCES.has(raceDistance) && isEasyOrLong) {
+    candidates = soft(candidates, (w) => !isHillyTemplate(w));
+  }
+
+  // Openers, shakeouts and post-race jogs belong around a race. Drawn into
+  // an easy slot they put an "Activation pré-course" in week 1 of a plan.
+  if ((slotType === "easy" || slotType === "recovery") && phase !== "taper") {
+    candidates = soft(candidates, (w) => !w.selectionCriteria.tags.some((t) => RACE_AROUND_TAGS.has(t)));
+  }
+
+  if (slotType === "long_run") {
+    candidates = soft(candidates, (w) => !isOffDistanceLongRun(w, raceDistance));
+    if (options.longRunIntent) {
+      const wantQuality = options.longRunIntent === "quality";
+      candidates = soft(candidates, (w) => w.category !== "long_run" || isQualityLongRun(w) === wantQuality);
+    }
+  }
+
   if (excludeEarly && excludeWorkoutIds.length > 0) {
     const excluded = new Set(excludeWorkoutIds);
     candidates = candidates.filter((w) => !excluded.has(w.id));
     if (candidates.length === 0) return null;
   }
+
+  const beforePhaseFilter = candidates;
 
   // Step 2: Filter by phase
   // For easy/recovery slots, relax the phase filter, low-intensity
@@ -255,34 +355,61 @@ function findBestWorkout(
   // pool wide enough to fill a week without repeating: an exact-level pool of
   // one or two workouts is why 6-day plans ran the same session five times.
   //
-  // A key session never comes from a level above the runner's. The tolerance
-  // goes downward (an intermediate may run a beginner tempo in base), and a
-  // template from the level above is only acceptable when it is tagged
-  // moderate, i.e. softer than what the runner's own level would prescribe.
+  // Nothing comes from a level above the runner's. The tolerance only goes
+  // downward: an intermediate may run a beginner tempo in base, a beginner
+  // never runs an intermediate long run. Intermediate long runs drawn into
+  // beginner plans, and advanced "simulation" long runs drawn into
+  // intermediate ones, were most of what made those plans too hard.
   const MIN_POOL_FOR_VARIETY = 4;
   const exactLevel = candidates.filter((w) => w.difficulty === difficulty);
+  const within = (down: number) => candidates.filter((w) => {
+    const gap = diffLevel - DIFFICULTY_LEVELS[w.difficulty];
+    return gap >= 0 && gap <= down;
+  });
   if (exactLevel.length >= MIN_POOL_FOR_VARIETY) {
     candidates = exactLevel;
-  } else if (slotType === "key_quality") {
-    const atOrBelow = candidates.filter((w) => DIFFICULTY_LEVELS[w.difficulty] <= diffLevel);
-    if (atOrBelow.length > 0) {
+  } else {
+    // An easy run is an easy run: a recovery jog may come from any level
+    // below, an easy run from two levels below. Holding advanced runners to
+    // their own two recovery templates repeated one of them thirteen times.
+    const down = slotType === "recovery" ? 3 : slotType === "easy" ? 2 : slotType === "long_run" ? 2 : 3;
+    const band = within(down);
+    const atOrBelow = within(3);
+    // A catalogue gap at this level and phase (no beginner tempo for the
+    // taper, no beginner trail session for the peak) is filled from the
+    // neighbouring phase at the runner's level before anything from above.
+    const neighbours = NEIGHBOUR_PHASES[phase] ?? [];
+    const fromNeighbourPhase = beforePhaseFilter.filter((w) =>
+      DIFFICULTY_LEVELS[w.difficulty] <= diffLevel
+      && w.selectionCriteria.phases.some((p) => neighbours.includes(p))
+      && loadFilter.includes(w.selectionCriteria.relativeLoad),
+    );
+    // Then from any phase, minus what this week already holds: the beginner
+    // taper tempo slot found its only beginner tempo taken by the race-pace
+    // slot and fell back on an intermediate template.
+    const weekIds = new Set(excludeWorkoutIds);
+    const anyPhaseAtOrBelow = beforePhaseFilter.filter((w) =>
+      DIFFICULTY_LEVELS[w.difficulty] <= diffLevel
+      && loadFilter.includes(w.selectionCriteria.relativeLoad)
+      && !weekIds.has(w.id),
+    );
+    if (band.length > 0) {
+      candidates = band;
+    } else if (atOrBelow.length > 0) {
       candidates = atOrBelow;
-    } else {
+    } else if (fromNeighbourPhase.length > 0) {
+      candidates = fromNeighbourPhase;
+    } else if (anyPhaseAtOrBelow.length > 0) {
+      candidates = anyPhaseAtOrBelow;
+    } else if (slotType === "key_quality") {
+      // Last resort, a catalogue gap: one level up, and only a template tagged
+      // moderate, i.e. softer than what the runner's own level would prescribe.
       const softerAbove = candidates.filter(
         (w) => DIFFICULTY_LEVELS[w.difficulty] === diffLevel + 1
           && w.selectionCriteria.relativeLoad === "moderate",
       );
       if (softerAbove.length > 0) candidates = softerAbove;
     }
-  } else {
-    // An easy run is an easy run: a recovery jog may come from any level, an
-    // easy run from two levels away. Holding advanced runners to their own
-    // two recovery templates repeated one of them thirteen times in a plan.
-    const tolerance = slotType === "recovery" ? 3 : slotType === "easy" ? 2 : 1;
-    const tolerant = candidates.filter(
-      (w) => Math.abs(DIFFICULTY_LEVELS[w.difficulty] - diffLevel) <= tolerance,
-    );
-    if (tolerant.length > 0) candidates = tolerant;
   }
 
   // Step 4b: Cap duration for easy/recovery slots on low-day plans
@@ -354,6 +481,13 @@ function findBestWorkout(
     }
   }
 
+  // A long run named for the runner's own level when one fits: "Sortie longue
+  // débutant" in an intermediate plan reads as a mistake even when the
+  // session itself is right.
+  if (slotType === "long_run") {
+    candidates = soft(candidates, (w) => w.difficulty === difficulty);
+  }
+
   // Step 6: Drop workouts already placed this week. Giving up here lets the
   // caller try the slot's next session type, which usually has a fresh pool,
   // keeping the duplicate instead is what put the same run on three days.
@@ -361,6 +495,17 @@ function findBestWorkout(
     const excluded = new Set(excludeWorkoutIds);
     candidates = candidates.filter((w) => !excluded.has(w.id));
     if (candidates.length === 0) return null;
+  }
+
+  if (options.preferWorkoutId) {
+    const preferred = candidates.find((w) => w.id === options.preferWorkoutId);
+    if (preferred) {
+      return {
+        workoutId: preferred.id,
+        estimatedDurationMin: Math.max(20, estimateWorkoutDuration(preferred)),
+        sessionType,
+      };
+    }
   }
 
   const scoreOf = (w: WorkoutTemplate): number => {
@@ -437,6 +582,10 @@ export function selectWorkout(
   targetDurationMin?: number, // Target duration for this slot (long runs)
 ): WorkoutSelection | null {
   const preferTags = slot.preferTags ?? [];
+  const options: SelectionOptions = {
+    longRunIntent: slot.longRunIntent,
+    preferWorkoutId: slot.preferWorkoutId,
+  };
   // Try each preferred session type in order
   for (const sessionType of slot.sessionTypes) {
     const result = findBestWorkout(
@@ -452,6 +601,8 @@ export function selectWorkout(
       excludeWorkoutIds,
       targetDurationMin,
       preferTags,
+      false,
+      options,
     );
     if (result) return result;
   }
@@ -476,6 +627,7 @@ export function selectWorkout(
         targetDurationMin,
         preferTags,
         true,
+        options,
       );
       if (result) return result;
     }
@@ -498,6 +650,8 @@ export function selectWorkout(
         [],
         targetDurationMin,
         preferTags,
+        false,
+        options,
       );
       if (result) return result;
     }

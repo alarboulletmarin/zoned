@@ -3,6 +3,7 @@ import { plan5kDebutant } from "./plans/5k-debutant";
 import { plan5kIntermediaire } from "./plans/5k-intermediaire";
 import { plan10kDebutant } from "./plans/10k-debutant";
 import { plan10kIntermediaire } from "./plans/10k-intermediaire";
+import { planSemiDebutant } from "./plans/semi-debutant";
 import { planSemiMarathon } from "./plans/semi-marathon";
 import { planMarathon } from "./plans/marathon";
 import { planTrailCourtIntermediaire } from "./plans/trail-court-intermediaire";
@@ -15,6 +16,7 @@ const allPlans: PrebuiltPlan[] = [
   plan5kIntermediaire,
   plan10kDebutant,
   plan10kIntermediaire,
+  planSemiDebutant,
   planSemiMarathon,
   planMarathon,
   planTrailCourtIntermediaire,

@@ -26,6 +26,9 @@ import {
   RECOVERY_WEEK_VOLUME_PCT,
   MAX_WEEKLY_VOLUME_INCREASE,
   getGoalModifiers,
+  hardDayBudget,
+  qualityLongRunAllowed,
+  keyRotationPeriod,
 } from "./constants";
 import {
   calculateTrainingPaces,
@@ -269,6 +272,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     trainingGoal,
     intermediateRaceWeeks,
     Math.max(0, ...volumeProgression.map((v) => v.targetKm)),
+    volumeProgression[0]?.targetKm,
   );
 
   // Step 8: Load all workouts
@@ -285,6 +289,16 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
   const goalMods = getGoalModifiers(trainingGoal);
   const recoveryPct = goalMods.recoveryVolumePct > 0 ? goalMods.recoveryVolumePct : RECOVERY_WEEK_VOLUME_PCT;
   let peakLongRunKm = 0;
+  /** Weeks that could hold a quality long run so far, every other one does */
+  let qualityLongRunSlots = 0;
+  /** Load weeks so far, drives the key-type rotation */
+  let loadWeeks = 0;
+  const rotationPeriod = keyRotationPeriod(config.runnerLevel);
+  /** Last key template per session type, and how many weeks in a row it ran */
+  const lastKey = new Map<SessionType, { id: string; week: number; streak: number }>();
+  let previousLoadWeek = 0;
+  // Non-race purposes keep their long runs easy, except base building.
+  const qualityLongRunsOn = isRacePlan || purpose === "base_building";
 
   for (let weekNum = 1; weekNum <= totalWeeks; weekNum++) {
     const phase = getPhaseForWeek(weekNum, phases);
@@ -339,6 +353,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
         allWorkouts,
         (paces.E.min + paces.E.max) / 2,
         targetKm,
+        trainingGoal,
       );
       // Report what is actually scheduled, not the model's target: race week
       // announced 30 km for two 25-minute jogs. The race itself is an event,
@@ -358,6 +373,17 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       continue;
     }
 
+    // Hard-day budget and quality long run. A quality long run lands on
+    // every other eligible week, never on a recovery week, and spends one of
+    // the week's hard days.
+    let qualityLongRun = false;
+    if (!isRecoveryWeek && qualityLongRunsOn
+      && qualityLongRunAllowed(phase, trainingGoal, config.runnerLevel, effectiveDistance, config.daysPerWeek)) {
+      qualityLongRunSlots++;
+      qualityLongRun = qualityLongRunSlots % 2 === 0;
+    }
+    if (!isRecoveryWeek) loadWeeks++;
+
     // Build week template (slot distribution, goal-adjusted)
     const slots = buildWeekTemplate(
       config.daysPerWeek,
@@ -367,7 +393,25 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       trainingGoal,
       effectiveDistance,
       weekNum,
+      {
+        hardDayBudget: hardDayBudget(phase, trainingGoal, config.runnerLevel, config.daysPerWeek),
+        qualityLongRun,
+        rotationIndex: Math.floor(loadWeeks / rotationPeriod),
+      },
     );
+
+    // Beginners and intermediates run the same key session two weeks in a
+    // row, the second time a little longer (scaleWorkout follows the week in
+    // the phase), before the rotation moves on.
+    if (rotationPeriod > 1 && !isRecoveryWeek) {
+      for (const slot of slots) {
+        if (slot.slotType !== "key_quality") continue;
+        const previous = lastKey.get(slot.sessionTypes[0]);
+        if (previous && previous.week === previousLoadWeek && previous.streak < rotationPeriod) {
+          slot.preferWorkoutId = previous.id;
+        }
+      }
+    }
 
     // Non-race plans have their own quality budget and intensity ceiling.
     // Key slots stay easy until firstKeySessionWeek (a return from injury
@@ -447,8 +491,18 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
         sessions.push(result.session);
         weekUsedIds.push(result.workout.id);
         weeklyLoadScore += result.session.loadScore ?? 0;
+        if (slot.slotType === "key_quality" && result.session.isKeySession) {
+          const previous = lastKey.get(result.session.sessionType);
+          const repeated = previous?.id === result.workout.id && previous.week === previousLoadWeek;
+          lastKey.set(result.session.sessionType, {
+            id: result.workout.id,
+            week: weekNum,
+            streak: repeated ? previous.streak + 1 : 1,
+          });
+        }
       }
     }
+    if (!isRecoveryWeek) previousLoadWeek = weekNum;
 
     // Update rolling used IDs (keep last 6 weeks worth for better variety)
     usedWorkoutIds.push(...weekUsedIds);
@@ -484,8 +538,13 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     }
 
     const easyPace = (paces.E.min + paces.E.max) / 2;
-    fitWeeklyVolume(sessions, fitTargetKm, easyPace, (id) =>
-      allWorkouts.find((w) => w.id === id)?.typicalDuration,
+    const longRunMin = sessions.find((s) => s.sessionType === "long_run")?.estimatedDurationMin;
+    fitWeeklyVolume(
+      sessions,
+      fitTargetKm,
+      easyPace,
+      (id) => allWorkouts.find((w) => w.id === id)?.typicalDuration,
+      longRunMin,
     );
 
     // Recompute from the fitted sessions
